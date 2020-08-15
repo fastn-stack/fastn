@@ -22,6 +22,31 @@ some body
 - caption is optional, if not passed it should be set to empty string.
 - keys can contain alphanumeric, `-` and `_`.
 
+
+## Body starts after first empty line 
+
+If no key value is provided, there must be one empty line before `--` line and body.
+
+```
+-- amitu/table: Some table
+key: value
+
+columns: l | c | r 
+
+some body
+```
+
+```json
+[{
+    "section": "amitu/table",
+    "caption": "Some table",
+    "key": "value",
+    "body": "columns: l | c | r\n\nsome body"
+}]
+```
+
+
+
 ## With Nested Object
 
 ```
@@ -190,3 +215,5 @@ the body
     "body": "the body\n; comments can be escaped with backslash"
 }]
 ```
+
+- Comments can be inserted between key value pairs in header.
