@@ -11,12 +11,12 @@ some body
 ```
 
 ```json
-{
+[{
     "section": "amitu/table",
     "caption": "Some table",
     "columns": "l | c | r",
     "body": "some body"
-}
+}]
 ```
 
 - caption is optional, if not passed it should be set to empty string.
@@ -37,7 +37,7 @@ something body
 ```
 
 ```json
-{
+[{
     "section": "amitu/table",
     "caption": "Some table",
     "columns": "l | c | r",
@@ -47,7 +47,7 @@ something body
         "s_key": "yo",
         "body": "something body"
     }
-}
+}]
 ```
 
 ## With Arrays:
@@ -75,7 +75,7 @@ row 2's body
 ```
 
 ```json
-{
+[{
     "section": "amitu/table",
     "caption": "Some table",
     "columns": "l | c | r",
@@ -97,7 +97,7 @@ row 2's body
             "body": "row 2's body"
         }
     ]
-}
+}]
 ```
 
 ## On Body
@@ -115,11 +115,11 @@ some body
 ```
 
 ```json
-{
+[{
     "section": "amitu/table",
     "caption": "Some table",
     "body": "some body"
-}
+}]
 ```
 
 ## Escaping in Body
@@ -141,10 +141,34 @@ yo yo yo
 ```
 
 ```json
-{
+[{
     "section": "amitu/table",
     "caption": "Some table",
     "body": "-- yo\n\nthis is cool\n\n--- something\n\nyo yo yo"
-}
+}]
+```
+
+## FTD Is An Array Of Sections
+
+```
+-- section1:
+-- section2:
+
+some body
+```
+
+```json
+[
+    { 
+        "section": "section1",
+        "caption": ""
+        "body": ""
+    },
+    { 
+        "section": "section2",
+        "caption": ""
+        "body": "some1 body"
+    }
+]
 ```
 
