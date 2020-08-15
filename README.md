@@ -19,6 +19,9 @@ some body
 }
 ```
 
+- caption is optional, if not passed it should be set to empty string.
+- keys can contain alphanumeric, `-` and `_`.
+
 ## With Nested Object
 
 ```
@@ -144,3 +147,4 @@ yo yo yo
     "body": "-- yo\n\nthis is cool\n\n--- something\n\nyo yo yo"
 }
 ```
+
