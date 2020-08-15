@@ -99,7 +99,7 @@ row 2's body
 
 ## On Body
 
-- Body should have single space before and after it.
+- Body should have at least single empty line before and after it.
 - Empty lines before and after the body would be removed.
 
 ```
