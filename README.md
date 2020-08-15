@@ -161,12 +161,12 @@ some body
 [
     { 
         "section": "section1",
-        "caption": ""
+        "caption": "",
         "body": ""
     },
     { 
         "section": "section2",
-        "caption": ""
+        "caption": "",
         "body": "some1 body"
     }
 ]
