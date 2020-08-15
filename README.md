@@ -172,3 +172,21 @@ some body
 ]
 ```
 
+## Comments
+
+```
+; this is a comment
+-- some/section:
+
+; this is our body
+the body
+\; comments can be escaped with backslash
+```
+
+```json
+[{
+    "section": "some/section",
+    "caption": "",
+    "body": "the body\n; comments can be escaped with backslash"
+}]
+```
