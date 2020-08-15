@@ -141,6 +141,6 @@ yo yo yo
 {
     "section": "amitu/table",
     "caption": "Some table",
-    "body": "-- yo\nthis is cool\n\n--- something\n\nyo yo yo"
+    "body": "-- yo\n\nthis is cool\n\n--- something\n\nyo yo yo"
 }
 ```
