@@ -110,7 +110,7 @@ row 2's body
         "s_key": "yo",
         "body": "something body"
     },
-    "rows[]": [
+    "row[]": [
         { 
             "caption": "row 1",
             "r": "row1's r",
