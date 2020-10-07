@@ -1,0 +1,39 @@
+fifthtry_column = { "column"}
+fifthtry_row = { "row" }
+fifthtry_components_list = { fifthtry_row | fifthtry_column }
+
+fifthtry_component = { "fifthtry" ~ "/" ~ (fifthtry_components_list) }
+align = { fifthtry_component ~ ":" }
+
+childname = { (ASCII_ALPHANUMERIC | "-")+ }
+childname_pattern = {"@/" ~ childname }
+childclass = { (childname_pattern) ~ (" | " ~ childname_pattern)* }
+
+declaration_line = { ("--") ~ (" ")* ~ (align) ~ (" ")* ~ (childclass)* }
+
+
+id_value = { (ASCII_ALPHANUMERIC | "-")+ }
+id_line = {"id" ~ (" ")* ~ ":" ~ (" ")* ~ ("@") ~ id_value}
+
+
+parameter_value = { (ASCII_ALPHANUMERIC)+ }
+parameter_name = { (ASCII_ALPHANUMERIC)+ }
+parameter_lines = { "$" ~ parameter_name ~ (" ")* ~ ":" ~ (" ")* ~ "$" ~ parameter_value ~ "$"}
+
+
+style_value = { (ASCII_ALPHANUMERIC | " ")+ }
+style_name = { (ASCII_ALPHANUMERIC)+ }
+style_lines = { style_name ~ (" ")* ~ ":" ~ (" ")* ~ style_value }
+
+
+record = { declaration_line ~ ("\r\n" | "\n") ~ id_line ~ ("\r\n" | "\n") ~ (parameter_lines ~ ("\r\n" | "\n"))* ~ (style_lines ~ ("\r\n" | "\n"))* }
+
+
+child_id_line = {"id" ~ (" ")* ~ ":" ~ (" ")* ~ ("@/") ~ id_value}
+child_declaration_line = { ("---") ~ (" ")* ~ (align) ~ (" ")* ~ (childclass)* }
+
+child_record = { child_declaration_line ~ ("\r\n" | "\n") ~ child_id_line ~ ("\r\n" | "\n") ~ (parameter_lines ~ ("\r\n" | "\n"))* ~ (style_lines ~ ("\r\n" | "\n"))* }
+
+main = { record ~ ("\r\n" | "\n")* ~ (child_record ~ ("\r\n" | "\n")*)* }
+
+file = { SOI ~  ("\n")* ~ (main)+ ~ EOI }

@@ -1,0 +1,9 @@
+
+-- fifthtry/row: @/t1 | @/t2
+id: @hello
+
+--- fifthtry/text: Hello World!
+id: @/t1
+
+--- fifthtry/text: Hello World 2!
+id: @/t2

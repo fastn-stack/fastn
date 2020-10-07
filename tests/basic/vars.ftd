@@ -1,0 +1,5 @@
+-- msg:string=Hello World!
+
+-- fifthtry/text:
+id: @hello
+text: =msg

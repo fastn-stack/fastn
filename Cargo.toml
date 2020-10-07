@@ -1,12 +1,23 @@
 [package]
 name = "ftd"
 version = "0.1.0"
-authors = ["AbrarNitk <abrar.nitk@gmail.com>"]
+authors = ["Amit Upadhyay <upadhyay@gmail.com>", "AbrarNitk <abrar.nitk@gmail.com>"]
+
 edition = "2018"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [dependencies]
+comrak = "0.7.0"
+failure = "0.1"
+lazy_static = "1"
+percent-encoding = "2.1.0"
+pest = "2"
+pest_derive = "2"
 serde = "1"
-serde_json = "1"
 serde_derive = "1"
+syntect = "4"
+unindent = "0.1.3"
+Inflector = "0.11.4"
+
+[dev-dependencies]
+indoc = "0.3"
+pretty_assertions = "0.6"
