@@ -1,8 +1,7 @@
 [package]
 name = "ftd"
 version = "0.1.0"
-authors = ["Amit Upadhyay <upadhyay@gmail.com>", "AbrarNitk <abrar.nitk@gmail.com>"]
-
+authors = ["Amit Upadhyay <upadhyay@gmail.com>"]
 edition = "2018"
 
 [dependencies]
