@@ -22,6 +22,7 @@ pub struct ParameterLines {
     pub parameter_value: String,
 }
 
+#[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub enum FifthtryComponentsList {
     ROW,
@@ -80,6 +81,7 @@ pub struct File {
     pub main: Vec<Main>,
 }
 
+#[allow(dead_code)]
 fn main() {
     let unparsed_file = fs::read_to_string("Lib/try.ftd").expect("cannot read file");
     //    fs::write("foo.txt", b"Lorem ipsum")?;
