@@ -1,8 +1,18 @@
 [package]
 name = "ftd"
-version = "0.1.0"
-authors = ["Amit Upadhyay <upadhyay@gmail.com>"]
+version = "0.1.1"
+authors = [
+    "Amit Upadhyay <upadhyay@gmail.com>",
+    "mxfunc <deepak@fifthtry.com>",
+    "Abrar Khan <abrar.nitk@gmail.com>"
+]
+description = "FifthTry Document Language"
+license-file = "LICENSE"
+include = ["src/**/*", "Cargo.toml"]
+readme = "README.md"
+keywords = ["fifthtry"]
 edition = "2018"
+repository = "https://github.com/fifthtry/ftd"
 
 [dependencies]
 Inflector = "0.11.4"
@@ -18,8 +28,8 @@ unindent = "0.1.3"
 css-color-parser = "0.1.2"
 slug = "0.1.4"
 katex = "0.3"
-realm-lang = { path = "../realm-lang" }
-observer = { path = "../observer/observer" }
+realm-lang = "0.1.0"
+observer = "0.2.5"
 
 [dev-dependencies]
 diffy = "0.2.0"
