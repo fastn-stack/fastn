@@ -1,7 +1,7 @@
 use inflector::cases::*;
 use pest::{iterators::Pair, Parser};
 use std::{
-    fmt::{self, Debug},
+    fmt::Debug,
     fs,
     io::Write,
 };

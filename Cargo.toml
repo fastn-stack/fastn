@@ -1,8 +1,18 @@
 [package]
 name = "ftd"
 version = "0.1.0"
-authors = ["Amit Upadhyay <upadhyay@gmail.com>"]
+authors = [
+    "Amit Upadhyay <upadhyay@gmail.com>",
+    "mxfunc <deepak@fifthtry.com>",
+    "Abrar Khan <abrar.nitk@gmail.com>"
+]
+description = "FifthTry Document Language"
+license-file = "LICENSE"
+include = ["src/**/*", "Cargo.toml"]
+readme = "README.md"
+keywords = ["fifthtry"]
 edition = "2018"
+"repository" = "https://github.com/fifthtry/ftd"
 
 [dependencies]
 comrak = "0.7.0"
