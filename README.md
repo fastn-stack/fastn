@@ -1,5 +1,3 @@
-# FTD Components
-
 FTD stands for Fifthtry Document Format. Documents on FifthTry are stored in this
 format.
 
