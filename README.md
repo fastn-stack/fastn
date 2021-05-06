@@ -9,7 +9,7 @@ as a JSON/YML replacement.
 
 Discord: Join our [`ftd` channel](https://discord.gg/xN3uD8P7WA).
 
-License: BSD
+License: BSD.
 
 Checkout the [Roadmap](https://www.fifthtry.com/fifthtry/ftd/roadmap/) and 
 [Changelog](https://www.fifthtry.com/fifthtry/ftd/changelog/).
