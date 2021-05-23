@@ -1,5 +1,6 @@
-#[derive(PartialEq, Debug, Clone, Serialize)]
+#[derive(PartialEq, Debug, Clone, serde_derive::Serialize)]
 pub struct Markdown {
+    pub id: Option<String>,
     pub body: crate::Rendered,
     pub caption: Option<crate::Rendered>,
     pub hard_breaks: bool,
@@ -10,25 +11,10 @@ pub struct Markdown {
     pub collapsed: bool,
 }
 
-impl ToString for Markdown {
-    fn to_string(&self) -> String {
-        format!(
-            "-- markdown:{}\n{}{}{}{}{}{}\n{}",
-            self.caption_string(),
-            self.auto_links_str(),
-            self.hard_breaks_str(),
-            self.align_str(),
-            self.direction_str(),
-            self.two_columns_str(),
-            self.collapsed_str(),
-            self.body.original,
-        )
-    }
-}
-
 impl Default for Markdown {
     fn default() -> Markdown {
         Markdown {
+            id: None,
             body: crate::Rendered::default(),
             caption: None,
             hard_breaks: false,
@@ -47,6 +33,10 @@ impl Markdown {
             .and_optional_caption(&self.caption)
             .and_body(self.body.original.as_str());
 
+        if let Some(id) = &self.id {
+            p1 = p1.add_header("id", id)
+        }
+
         if self.hard_breaks {
             p1 = p1.add_header("hard_breaks", "true");
         }
@@ -56,8 +46,8 @@ impl Markdown {
         if self.collapsed {
             p1 = p1.add_header("collapsed", "true");
         }
-        if self.auto_links {
-            p1 = p1.add_header("auto_links", "true");
+        if !self.auto_links {
+            p1 = p1.add_header("auto_links", "false");
         }
         if self.direction != crate::TextDirection::default() {
             p1 = p1.add_header("direction", self.direction.as_str());
@@ -81,7 +71,7 @@ impl Markdown {
                 ))
             }
         }
-
+        m.id = p1.header.string_optional("id")?;
         m.hard_breaks = p1.header.bool_with_default("hard_breaks", m.hard_breaks)?;
         m.auto_links = p1.header.bool_with_default("auto_links", m.auto_links)?;
         m.align = p1
@@ -97,54 +87,10 @@ impl Markdown {
         Ok(m)
     }
 
-    fn two_columns_str(&self) -> &'static str {
-        if self.two_columns {
-            "two_columns: true\n"
-        } else {
-            ""
-        }
-    }
-
-    fn caption_string(&self) -> String {
-        match self.caption {
-            Some(ref c) => format!(" {}", c.original.as_str()),
-            None => "".to_string(),
-        }
-    }
-
-    fn collapsed_str(&self) -> &'static str {
-        if self.collapsed {
-            "collapsed: true\n"
-        } else {
-            ""
-        }
-    }
-
-    fn hard_breaks_str(&self) -> &'static str {
-        if self.hard_breaks {
-            "hard_breaks: true\n"
-        } else {
-            ""
-        }
-    }
-    fn auto_links_str(&self) -> &'static str {
-        if self.auto_links {
-            ""
-        } else {
-            "auto_links: false\n"
-        }
-    }
-    fn align_str(&self) -> &'static str {
-        match self.align {
-            crate::Align::Left => "",
-            crate::Align::Center => "align: center\n",
-            crate::Align::Right => "align: right\n",
-        }
-    }
-    fn direction_str(&self) -> &'static str {
-        match self.direction {
-            crate::TextDirection::LeftToRight => "",
-            crate::TextDirection::RightToLeft => "direction: rtl\n",
+    pub fn from_body(body: &str) -> Self {
+        Self {
+            body: crate::Rendered::from(body),
+            ..Default::default()
         }
     }
 }
@@ -157,8 +103,9 @@ mod test {
     #[test]
     fn markdown() {
         assert_eq!(
-            "-- markdown:\n\nhello world is\n\n    not enough\n\n    lol",
+            "-- markdown:\n\nhello world is\n\n    not enough\n\n    lol\n",
             crate::Markdown {
+                id: None,
                 body: crate::Rendered::from("hello world is\n\n    not enough\n\n    lol"),
                 hard_breaks: false,
                 auto_links: true,
@@ -168,12 +115,14 @@ mod test {
                 collapsed: false,
                 caption: None,
             }
+            .to_p1()
             .to_string()
         );
 
         assert_eq!(
-            "-- markdown:\nhard_breaks: true\n\nhello world is\n\n    not enough\n\n    lol",
+            "-- markdown:\nhard_breaks: true\n\nhello world is\n\n    not enough\n\n    lol\n",
             crate::Markdown {
+                id: None,
                 body: crate::Rendered::from("hello world is\n\n    not enough\n\n    lol"),
                 hard_breaks: true,
                 auto_links: true,
@@ -183,12 +132,14 @@ mod test {
                 collapsed: false,
                 caption: None,
             }
+            .to_p1()
             .to_string()
         );
 
         assert_eq!(
-            "-- markdown:\nauto_links: false\n\nhello world is\n\n    not enough\n\n    lol",
+            "-- markdown:\nauto_links: false\n\nhello world is\n\n    not enough\n\n    lol\n",
             crate::Markdown {
+                id: None,
                 body: crate::Rendered::from("hello world is\n\n    not enough\n\n    lol"),
                 hard_breaks: false,
                 auto_links: false,
@@ -198,12 +149,14 @@ mod test {
                 collapsed: false,
                 caption: None,
             }
+            .to_p1()
             .to_string()
         );
 
         assert_eq!(
-            "-- markdown:\nalign: right\n\nhello world is\n\n    not enough\n\n    lol",
+            "-- markdown:\nalign: right\n\nhello world is\n\n    not enough\n\n    lol\n",
             crate::Markdown {
+                id: None,
                 body: crate::Rendered::from("hello world is\n\n    not enough\n\n    lol"),
                 hard_breaks: false,
                 auto_links: true,
@@ -213,12 +166,14 @@ mod test {
                 collapsed: false,
                 caption: None,
             }
+            .to_p1()
             .to_string()
         );
 
         assert_eq!(
-            "-- markdown:\ndirection: rtl\n\nhello world is\n\n    not enough\n\n    lol",
+            "-- markdown:\ndirection: rtl\n\nhello world is\n\n    not enough\n\n    lol\n",
             crate::Markdown {
+                id: None,
                 body: crate::Rendered::from("hello world is\n\n    not enough\n\n    lol"),
                 hard_breaks: false,
                 auto_links: true,
@@ -228,12 +183,14 @@ mod test {
                 collapsed: false,
                 caption: None,
             }
+            .to_p1()
             .to_string()
         );
 
         assert_eq!(
-            "-- markdown:\ntwo_columns: true\n\nhello world is\n\n    not enough\n\n    lol",
+            "-- markdown:\ntwo_columns: true\n\nhello world is\n\n    not enough\n\n    lol\n",
             crate::Markdown {
+                id: None,
                 body: crate::Rendered::from("hello world is\n\n    not enough\n\n    lol"),
                 hard_breaks: false,
                 auto_links: true,
@@ -243,13 +200,15 @@ mod test {
                 collapsed: false,
                 caption: None,
             }
+            .to_p1()
             .to_string()
         );
 
         p(
-            &indoc!(
+            &indoc::indoc!(
                 "
                  -- markdown:
+                 id: temp
                  hello world is
 
                      not enough
@@ -258,6 +217,7 @@ mod test {
             "
             ),
             &vec![crate::Section::Markdown(crate::Markdown {
+                id: Some("temp".to_string()),
                 body: crate::Rendered::from("hello world is\n\n    not enough\n\n    lol"),
                 hard_breaks: false,
                 auto_links: true,
@@ -270,9 +230,10 @@ mod test {
         );
 
         p(
-            &indoc!(
+            &indoc::indoc!(
                 "
                  -- markdown:
+                 id: temp
                  auto_links: false
                  hard_breaks: true
 
@@ -284,6 +245,7 @@ mod test {
             "
             ),
             &vec![crate::Section::Markdown(crate::Markdown {
+                id: Some("temp".to_string()),
                 body: crate::Rendered::from("hello world is\n\n    not enough\n\n    lol"),
                 hard_breaks: true,
                 auto_links: false,
@@ -296,7 +258,7 @@ mod test {
         );
 
         p(
-            &indoc!(
+            &indoc::indoc!(
                 "
                  -- markdown:
                  direction: rtl
@@ -306,6 +268,7 @@ mod test {
             "
             ),
             &vec![crate::Section::Markdown(crate::Markdown {
+                id: None,
                 body: crate::Rendered::from("hello world"),
                 hard_breaks: false,
                 auto_links: true,
@@ -318,7 +281,7 @@ mod test {
         );
 
         p(
-            &indoc!(
+            &indoc::indoc!(
                 "
                  -- markdown:
                  direction: rtl
@@ -328,6 +291,7 @@ mod test {
             "
             ),
             &vec![crate::Section::Markdown(crate::Markdown {
+                id: None,
                 body: crate::Rendered::from("hello world"),
                 hard_breaks: false,
                 auto_links: true,
@@ -340,7 +304,7 @@ mod test {
         );
 
         p(
-            &indoc!(
+            &indoc::indoc!(
                 "
                  -- markdown:
                  direction: ltr
@@ -350,6 +314,7 @@ mod test {
             "
             ),
             &vec![crate::Section::Markdown(crate::Markdown {
+                id: None,
                 body: crate::Rendered::from("hello world"),
                 hard_breaks: false,
                 auto_links: true,
@@ -362,7 +327,7 @@ mod test {
         );
 
         p(
-            &indoc!(
+            &indoc::indoc!(
                 "
                  -- markdown:
                  two_columns: true
@@ -371,6 +336,7 @@ mod test {
             "
             ),
             &vec![crate::Section::Markdown(crate::Markdown {
+                id: None,
                 body: crate::Rendered::from("hello world"),
                 hard_breaks: false,
                 auto_links: true,
@@ -383,7 +349,7 @@ mod test {
         );
 
         p(
-            &indoc!(
+            &indoc::indoc!(
                 "
                  -- markdown:
                  collapsed: true
@@ -392,6 +358,7 @@ mod test {
             "
             ),
             &vec![crate::Section::Markdown(crate::Markdown {
+                id: None,
                 body: crate::Rendered::from("hello world"),
                 hard_breaks: false,
                 auto_links: true,

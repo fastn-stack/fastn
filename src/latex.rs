@@ -1,19 +1,8 @@
-#[derive(PartialEq, Debug, Clone, Serialize, Default)]
+#[derive(PartialEq, Debug, Clone, serde_derive::Serialize, Default)]
 pub struct Latex {
+    pub id: Option<String>,
     pub caption: Option<crate::Rendered>,
     pub body: crate::Rendered,
-}
-
-impl ToString for Latex {
-    fn to_string(&self) -> String {
-        format!(
-            "-- latex:{}\n\n{}",
-            self.caption
-                .as_ref()
-                .map_or_else(|| "", |r| r.original.as_str()),
-            self.body.original
-        )
-    }
 }
 
 impl Latex {
@@ -21,6 +10,7 @@ impl Latex {
         crate::p1::Section::with_name("latex")
             .and_body(self.body.original.as_str())
             .and_optional_caption(&self.caption)
+            .add_optional_header("id", &self.id)
     }
 
     pub fn from_p1(p1: &crate::p1::Section) -> Result<Self, crate::document::ParseError> {
@@ -34,6 +24,7 @@ impl Latex {
         };
 
         Ok(Latex {
+            id: p1.header.string_optional("id")?,
             caption: p1
                 .caption
                 .as_ref()
@@ -61,14 +52,21 @@ mod tests {
     #[test]
     fn latex() {
         assert_eq!(
-            "-- latex:\n\n\\int_0^\\infty x^2 dx\n",
+            indoc::indoc!(
+                "
+                -- latex:
+
+                \\int_0^\\infty x^2 dx
+                "
+            ),
             crate::Latex::default()
-                .with_body("\\int_0^\\infty x^2 dx\n")
+                .with_body("\\int_0^\\infty x^2 dx")
                 .unwrap()
+                .to_p1()
                 .to_string()
         );
         p(
-            &indoc!(
+            &indoc::indoc!(
                 "
                 -- latex: some caption
 

@@ -1,8 +1,9 @@
 use crate::document::{Align, ParseError};
 
-#[derive(PartialEq, Debug, Clone, Serialize)]
+#[derive(PartialEq, Debug, Clone, serde_derive::Serialize)]
 pub struct Image {
     pub caption: Option<crate::Rendered>,
+    pub id: Option<String>,
     pub src: String,
     // for mobile this will be shown when user taps on the image
     pub alt: Option<crate::Rendered>,
@@ -17,43 +18,15 @@ impl Default for Image {
     fn default() -> Image {
         Image {
             caption: None,
+            id: None,
             src: "".to_string(),
             alt: None,
-            align: crate::Align::Center,
+            align: crate::Align::default(),
             link: None,
             width: None,
             height: None,
             float: None,
         }
-    }
-}
-
-impl ToString for Image {
-    fn to_string(&self) -> String {
-        format!(
-            "-- image:{}\nsrc: {}\n{}{}{}{}{}{}",
-            self.caption
-                .as_ref()
-                .map(|c| format!(" {}", c.original))
-                .unwrap_or_else(|| "".to_string()),
-            self.src.as_str(),
-            self.alt
-                .as_ref()
-                .map(|v| format!("alt: {}\n", v.original))
-                .unwrap_or_else(|| "".to_string()),
-            self.align_str(),
-            self.link
-                .as_ref()
-                .map(|v| format!("link: {}\n", v))
-                .unwrap_or_else(|| "".to_string()),
-            self.width
-                .map(|v| format!("width: {}\n", v))
-                .unwrap_or_else(|| "".to_string()),
-            self.height
-                .map(|v| format!("height: {}\n", v))
-                .unwrap_or_else(|| "".to_string()),
-            self.float_str()
-        )
     }
 }
 
@@ -63,15 +36,27 @@ impl Image {
         if let Some(ref c) = self.caption {
             p1 = p1.and_caption(c.original.as_str())
         }
+
+        if let Some(id) = &self.id {
+            p1 = p1.add_header("id", &id);
+        }
+
         if let Some(h) = self.height {
             p1 = p1.add_header("height", h.to_string().as_str());
         }
+
         if let Some(w) = self.width {
             p1 = p1.add_header("width", w.to_string().as_str());
         }
+
         if let Some(ref a) = self.alt {
             p1 = p1.add_header("alt", a.original.as_str());
         }
+
+        if let Some(ref a) = self.link {
+            p1 = p1.add_header("link", a);
+        }
+
         if self.align != crate::Align::default() {
             p1 = p1.add_header("align", self.align.as_str());
         }
@@ -87,22 +72,27 @@ impl Image {
         }
 
         let mut img = Image {
+            id: p1.header.string_optional("id")?,
             src: p1.header.str("src")?.to_string(),
             height: p1.header.i32_optional("height")?,
             width: p1.header.i32_optional("width")?,
             float: p1.header.str_optional("float")?.map(|v| v == "left"),
             ..Default::default()
         };
+
         img.align = p1
             .header
             .str_with_default("align", img.align.as_str())?
             .parse()?;
+
         if let Some(ref caption) = p1.caption {
             img.caption = Some(crate::Rendered::line(caption.as_str()));
         }
+
         if let Some(alt) = p1.header.str_optional("alt")? {
             img.alt = Some(crate::Rendered::line(alt));
         }
+
         if let Some(link) = p1.header.str_optional("link")? {
             img.link = Some(link.to_string());
         }
@@ -112,21 +102,6 @@ impl Image {
         }
 
         Ok(img)
-    }
-
-    fn float_str(&self) -> &'static str {
-        match self.float {
-            Some(true) => "float: left\n",
-            Some(false) => "float: right\n",
-            None => "",
-        }
-    }
-    fn align_str(&self) -> &'static str {
-        match self.align {
-            Align::Left => "align: left\n",
-            Align::Center => "",
-            Align::Right => "align: right\n",
-        }
     }
 
     pub fn with_caption(mut self, caption: &str) -> Self {
@@ -168,6 +143,10 @@ impl Image {
         self.float = Some(float);
         self
     }
+    pub fn with_id(mut self, id: &str) -> Self {
+        self.id = Some(id.to_string());
+        self
+    }
 }
 
 #[cfg(test)]
@@ -182,6 +161,7 @@ mod test {
             crate::Image::default()
                 .with_src("foo.gif")
                 .with_caption("foo")
+                .to_p1()
                 .to_string()
         );
 
@@ -190,14 +170,16 @@ mod test {
             crate::Image::default()
                 .with_src("foo.gif")
                 .with_alt("alt text")
+                .to_p1()
                 .to_string()
         );
 
         assert_eq!(
-            "-- image:\nsrc: foo.gif\nalign: left\n",
+            "-- image:\nsrc: foo.gif\n",
             crate::Image::default()
                 .with_src("foo.gif")
                 .with_align(crate::Align::Left)
+                .to_p1()
                 .to_string()
         );
 
@@ -206,6 +188,7 @@ mod test {
             crate::Image::default()
                 .with_src("foo.gif")
                 .with_link("https://www.google.com")
+                .to_p1()
                 .to_string()
         );
 
@@ -214,6 +197,7 @@ mod test {
             crate::Image::default()
                 .with_src("foo.gif")
                 .with_width(80)
+                .to_p1()
                 .to_string()
         );
 
@@ -222,21 +206,24 @@ mod test {
             crate::Image::default()
                 .with_src("foo.gif")
                 .with_height(24)
+                .to_p1()
                 .to_string()
         );
 
         assert_eq!(
-            "-- image:\nsrc: foo.gif\nfloat: left\n",
+            "-- image:\nsrc: foo.gif\n",
             crate::Image::default()
                 .with_src("foo.gif")
                 .with_float(true)
+                .to_p1()
                 .to_string()
         );
 
         p(
-            &indoc!(
+            &indoc::indoc!(
                 "
                  -- image: some caption
+                 id: temp
                  src: img src
                  alt: alt tag
             "
@@ -245,15 +232,17 @@ mod test {
                 crate::Image::default()
                     .with_caption("some caption")
                     .with_src("img src")
-                    .with_align(super::Align::Center)
-                    .with_alt("alt tag"),
+                    .with_align(super::Align::Left)
+                    .with_alt("alt tag")
+                    .with_id("temp"),
             )],
         );
 
         p(
-            &indoc!(
+            &indoc::indoc!(
                 "
                  -- image: some caption
+                 id: temp
                  src: img src
                  align: center
                  float: left
@@ -270,7 +259,8 @@ mod test {
                     .with_float(true)
                     .with_width(20)
                     .with_height(30)
-                    .with_link("foo.com"),
+                    .with_link("foo.com")
+                    .with_id("temp"),
             )],
         );
 

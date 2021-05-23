@@ -1,4 +1,4 @@
-#[derive(PartialEq, Debug, Default, Serialize, Clone)]
+#[derive(PartialEq, Debug, Default, serde_derive::Serialize, Clone)]
 pub struct TocItem {
     pub id: String,
     pub url: String,
@@ -147,7 +147,7 @@ impl TocItem {
     }
 }
 
-#[derive(PartialEq, Debug, Default, Clone, Serialize)]
+#[derive(PartialEq, Debug, Default, Clone, serde_derive::Serialize)]
 pub struct ToC {
     pub items: Vec<TocItem>,
 }
@@ -315,7 +315,7 @@ impl ToC {
 
     pub fn from_p1(p1: &crate::p1::Section) -> Result<Self, ParseError> {
         match p1.body {
-            Some(ref b) => Self::parse(b.as_str()),
+            Some(ref b) => Ok(Self::parse(b.as_str())?),
             None => Err(ParseError::InputError(
                 "caption must be present for heading".to_string(),
             )),

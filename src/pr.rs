@@ -1,6 +1,6 @@
 use std::convert::{TryFrom, TryInto};
 
-#[derive(PartialEq, Debug, Clone, Serialize, Default)]
+#[derive(PartialEq, Debug, Clone, serde_derive::Serialize, Default)]
 pub struct PR {
     pub title: crate::Rendered,
     pub number: i32,
@@ -16,13 +16,7 @@ impl PR {
     }
 }
 
-impl ToString for PR {
-    fn to_string(&self) -> String {
-        self.to_p1().to_string().trim_end().to_string()
-    }
-}
-
-#[derive(PartialEq, Debug, Clone, Serialize, Deserialize)]
+#[derive(PartialEq, Debug, Clone, serde_derive::Serialize, serde_derive::Deserialize)]
 #[serde(tag = "type")]
 pub enum Status {
     UnderDevelopment,
@@ -61,7 +55,7 @@ impl Default for Status {
     }
 }
 
-#[derive(PartialEq, Debug, Clone, Serialize)]
+#[derive(PartialEq, Debug, Clone, serde_derive::Serialize)]
 #[serde(tag = "type")]
 pub enum OpenStatus {
     Open,

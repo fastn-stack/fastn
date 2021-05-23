@@ -1,16 +1,10 @@
 use crate::document::ParseError;
 
-#[derive(PartialEq, Debug, Default, Clone, Serialize)]
+#[derive(PartialEq, Debug, Default, Clone, serde_derive::Serialize)]
 pub struct Heading {
     pub level: u8,
     pub title: crate::Rendered,
     pub id: crate::ValueWithDefault<String>,
-}
-
-impl ToString for Heading {
-    fn to_string(&self) -> String {
-        self.to_p1().to_string().trim_end().to_string()
-    }
 }
 
 impl Heading {
@@ -84,17 +78,18 @@ mod test {
     #[test]
     fn headings() {
         assert_eq!(
-            "-- h27: hello world",
+            "-- h27: hello world\n",
             crate::Heading {
                 level: 27,
                 title: crate::Rendered::line("hello world"),
                 id: crate::ValueWithDefault::Default("hello-world".to_string()),
             }
+            .to_p1()
             .to_string()
         );
 
         p(
-            &indoc!(
+            &indoc::indoc!(
                 "
                  -- heading: hello world2
             "
@@ -108,7 +103,7 @@ mod test {
 
         // NOT: this is no longer supported
         // p(
-        //     &indoc!(
+        //     &indoc::indoc!(
         //         "
         //          -- heading: hello world2
         //          this is the body
@@ -136,7 +131,7 @@ mod test {
 
         // NOT: this is no longer supported
         // p(
-        //     &indoc!(
+        //     &indoc::indoc!(
         //         "
         //          -- heading: hello world2
         //          this is the body
@@ -169,7 +164,7 @@ mod test {
 
         p(
             // should this be syntax error?
-            &indoc!(
+            &indoc::indoc!(
                 "
                  -- heading:12 hello world
             "
@@ -184,7 +179,7 @@ mod test {
         // NOTE: this is no longer supported
         // p(
         //     // level must follow right after colon, without space, else its part of title
-        //     &indoc!(
+        //     &indoc::indoc!(
         //         "
         //          -- heading: 12 hello world
         //     "
@@ -206,6 +201,7 @@ mod test {
                     id: crate::ValueWithDefault::Default("yo".to_string()),
                 }),
                 crate::Section::Markdown(crate::Markdown {
+                    id: None,
                     body: crate::Rendered::from("hello"),
                     caption: None,
                     hard_breaks: false,

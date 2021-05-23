@@ -1,4 +1,4 @@
-lazy_static! {
+lazy_static::lazy_static! {
     pub static ref SS: syntect::parsing::SyntaxSet = {
         let mut builder = syntect::parsing::SyntaxSet::load_defaults_newlines().into_builder();
         builder.add_from_folder("syntax", true).unwrap();

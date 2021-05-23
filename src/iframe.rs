@@ -1,7 +1,8 @@
 use crate::document::ParseError;
 
-#[derive(PartialEq, Debug, Clone, Serialize, Default)]
+#[derive(PartialEq, Debug, Clone, serde_derive::Serialize, Default)]
 pub struct IFrame {
+    pub id: Option<String>,
     pub caption: Option<crate::Rendered>,
     pub src: String,
     pub height: Option<i32>,
@@ -14,6 +15,7 @@ pub struct IFrame {
 impl IFrame {
     pub fn to_p1(&self) -> crate::p1::Section {
         let mut p1 = crate::p1::Section::with_name("iframe")
+            .add_optional_header("id", &self.id)
             .add_header("src", self.src.as_str())
             .add_optional_header("desktop", &self.desktop)
             .add_optional_header("tablet", &self.tablet)
@@ -38,6 +40,7 @@ impl IFrame {
         }
 
         let f = IFrame {
+            id: p1.header.string_optional("id")?,
             src: p1.header.str("src")?.to_string(),
             height: p1.header.i32_optional("height")?,
             width: p1.header.i32_optional("width")?,
@@ -55,6 +58,11 @@ impl IFrame {
         }
 
         Ok(f)
+    }
+
+    pub fn with_id(mut self, id: &str) -> Self {
+        self.id = Some(id.to_string());
+        self
     }
 
     pub fn with_caption(mut self, caption: &str) -> Self {
@@ -78,25 +86,6 @@ impl IFrame {
     }
 }
 
-impl ToString for IFrame {
-    fn to_string(&self) -> String {
-        format!(
-            "-- iframe:{}\nsrc: {}\n{}{}",
-            self.caption
-                .as_ref()
-                .map(|c| format!(" {}", c.original))
-                .unwrap_or_else(|| "".to_string()),
-            self.src.as_str(),
-            self.height
-                .map(|v| format!("height: {}\n", v))
-                .unwrap_or_else(|| "".to_string()),
-            self.width
-                .map(|v| format!("width: {}\n", v))
-                .unwrap_or_else(|| "".to_string()),
-        )
-    }
-}
-
 #[cfg(test)]
 mod tests {
     use crate::prelude::*;
@@ -104,10 +93,12 @@ mod tests {
     #[test]
     fn iframe() {
         assert_eq!(
-            "-- iframe: google\nsrc: https://google.com\n",
+            "-- iframe: google\nid: foo\nsrc: https://google.com\n",
             crate::IFrame::default()
                 .with_src("https://google.com")
                 .with_caption("google")
+                .with_id("foo")
+                .to_p1()
                 .to_string()
         );
 
@@ -117,6 +108,7 @@ mod tests {
                 .with_src("https://google.com")
                 .with_caption("google")
                 .with_height(24)
+                .to_p1()
                 .to_string()
         );
 
@@ -126,6 +118,7 @@ mod tests {
                 .with_src("https://google.com")
                 .with_caption("google")
                 .with_width(24)
+                .to_p1()
                 .to_string()
         );
 

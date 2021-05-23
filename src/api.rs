@@ -1,6 +1,6 @@
 use crate::document::ParseError;
 
-#[derive(PartialEq, Debug, Clone, Serialize)]
+#[derive(PartialEq, Debug, Clone, serde_derive::Serialize)]
 pub enum Method {
     Get,
     Post,
@@ -93,8 +93,9 @@ code: 404
 
  */
 
-#[derive(PartialEq, Debug, Clone, Serialize, Default)]
+#[derive(PartialEq, Debug, Clone, serde_derive::Serialize, Default)]
 pub struct Api {
+    pub id: Option<String>,
     pub title: String,
     pub method: Method,
     pub url: String,
@@ -116,7 +117,8 @@ impl Api {
         let mut p1 = crate::p1::Section::with_name("api")
             .and_caption(self.title.as_str())
             .add_header("method", self.method.as_str())
-            .add_header("url", self.url.as_str());
+            .add_header("url", self.url.as_str())
+            .add_optional_header("id", &self.id);
 
         if let Some(c) = self.description.get("") {
             p1 = p1.and_body(c.as_str())
@@ -148,6 +150,7 @@ impl Api {
 
     pub fn from_p1(p1: &crate::p1::Section) -> Result<Self, crate::document::ParseError> {
         let mut m = Api::default();
+        m.id = p1.header.string_optional("id")?;
         m.title = match p1.caption {
             Some(ref c) => c.clone(),
             None => return Err("title is required".into()),
@@ -189,8 +192,9 @@ impl Api {
 // top: after i open vim
 // bottom: asd
 
-#[derive(PartialEq, Debug, Clone, Serialize, Default)]
+#[derive(PartialEq, Debug, Clone, serde_derive::Serialize, Default)]
 pub struct ApiObject {
+    pub id: Option<String>,
     pub title: Option<String>,
     pub name: String,
     pub description: String,
@@ -206,6 +210,7 @@ impl ToString for ApiObject {
 impl ApiObject {
     pub fn from_p1(p1: &crate::p1::Section) -> Result<Self, crate::document::ParseError> {
         let mut m = ApiObject {
+            id: p1.header.string_optional("id")?,
             title: p1.caption.clone(),
             name: p1.header.string("name")?,
             description: p1.body.clone().unwrap_or_else(|| "".to_string()),
@@ -222,7 +227,7 @@ impl ApiObject {
     }
 }
 
-#[derive(PartialEq, Debug, Clone, Serialize, Default)]
+#[derive(PartialEq, Debug, Clone, serde_derive::Serialize, Default)]
 pub struct Parameter {
     pub name: String,
     #[serde(rename = "type")]
@@ -253,7 +258,7 @@ impl Parameter {
     }
 }
 
-#[derive(PartialEq, Debug, Clone, Serialize, Default)]
+#[derive(PartialEq, Debug, Clone, serde_derive::Serialize, Default)]
 pub struct Example {
     pub title: Option<String>,
     pub description: Option<String>,
@@ -278,7 +283,7 @@ impl Example {
     }
 }
 
-#[derive(PartialEq, Debug, Clone, Serialize, Default)]
+#[derive(PartialEq, Debug, Clone, serde_derive::Serialize, Default)]
 pub struct Error {
     code: String,
     message: String,

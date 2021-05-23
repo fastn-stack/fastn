@@ -1,8 +1,9 @@
 use crate::document::ParseError;
 
-#[derive(PartialEq, Debug, Clone, Serialize)]
+#[derive(PartialEq, Debug, Clone, serde_derive::Serialize)]
 pub struct Code {
-    pub caption: crate::Rendered,
+    pub id: Option<String>,
+    pub caption: Option<crate::Rendered>,
     pub lang: String,                       // file extension
     pub break_lines: bool,                  // default false
     pub show_line_numbers: ShowLineNumbers, // default No
@@ -31,25 +32,11 @@ fn fix_body(body: &str) -> String {
     body
 }
 
-impl ToString for Code {
-    fn to_string(&self) -> String {
-        format!(
-            "-- code:{}\nlang: {}\n\n{}",
-            if self.caption.original.is_empty() {
-                "".to_string()
-            } else {
-                format!(" {}", self.caption.original)
-            },
-            self.lang,
-            fix_body(self.code.original.as_str()),
-        )
-    }
-}
-
 impl Default for Code {
     fn default() -> Code {
         Code {
-            caption: crate::Rendered::default(),
+            id: None,
+            caption: None,
             lang: "".to_string(),
             break_lines: false,
             show_line_numbers: ShowLineNumbers::No,
@@ -68,8 +55,9 @@ impl Default for Code {
 impl Code {
     pub fn to_p1(&self) -> crate::p1::Section {
         crate::p1::Section::with_name("code")
-            .and_caption(self.caption.original.as_str())
+            .and_optional_caption(&self.caption)
             .add_header("lang", self.lang.as_str())
+            .add_optional_header("id", &self.id)
             .and_body(fix_body(self.code.original.as_str()).as_str())
     }
 
@@ -79,7 +67,7 @@ impl Code {
             ..Default::default()
         };
         if let Some(ref caption) = p1.caption {
-            c.caption = crate::Rendered::line(caption.as_str());
+            c.caption = Some(crate::Rendered::line(caption.as_str()));
         }
         match p1.body {
             Some(ref b) => c.code = crate::Rendered::code(b, c.lang.as_str()),
@@ -90,6 +78,7 @@ impl Code {
             }
         }
 
+        c.id = p1.header.string_optional("id")?;
         c.break_lines = p1.header.bool_with_default("break_lines", c.break_lines)?;
         c.show_line_numbers = p1
             .header
@@ -113,13 +102,18 @@ impl Code {
     }
 
     pub fn with_caption(mut self, caption: &str) -> Self {
-        self.caption = crate::Rendered::line(caption);
+        self.caption = Some(crate::Rendered::line(caption));
         self
     }
 
     pub fn with_code(mut self, code: &str) -> Self {
         // use .lang to render
         self.code = crate::Rendered::code(code, self.lang.as_str());
+        self
+    }
+
+    pub fn with_id(mut self, id: &str) -> Self {
+        self.id = Some(id.to_string());
         self
     }
 
@@ -160,14 +154,14 @@ impl Code {
     }
 }
 
-#[derive(PartialEq, Debug, Clone, Serialize)]
+#[derive(PartialEq, Debug, Clone, serde_derive::Serialize)]
 pub struct Highlight {
     pub line: i32,
     pub start: Option<i32>,
     pub end: Option<i32>,
 }
 
-#[derive(PartialEq, Debug, Clone, Serialize)]
+#[derive(PartialEq, Debug, Clone, serde_derive::Serialize)]
 pub enum ShowLineNumbers {
     Yes,
     No,
@@ -218,15 +212,17 @@ mod tests {
         assert_eq!(
             "-- code:\nlang: py\n\nimport os\nprint('hello world')\n",
             crate::Code::default()
-                .with_code("import os\nprint('hello world')\n")
+                .with_code("import os\nprint('hello world')")
                 .with_lang("py")
+                .to_p1()
                 .to_string()
         );
 
         p(
-            &indoc!(
+            &indoc::indoc!(
                 "
                  -- code: some caption
+                 id: temp
                  import os
                  print('hello world')
             "
@@ -234,14 +230,16 @@ mod tests {
             &vec![crate::Section::Code(
                 crate::Code::default()
                     .with_caption("some caption")
-                    .with_code("import os\nprint('hello world')"),
+                    .with_code("import os\nprint('hello world')")
+                    .with_id("temp"),
             )],
         );
 
         p(
-            &indoc!(
+            &indoc::indoc!(
                 "
                  -- code: some caption
+                 id: temp
                  lang: rs
                  break_lines: true
 
@@ -254,12 +252,13 @@ mod tests {
                     .with_caption("some caption")
                     .with_lang("rs")
                     .with_break_lines(true)
-                    .with_code("import os\nprint('hello world')"),
+                    .with_code("import os\nprint('hello world')")
+                    .with_id("temp"),
             )],
         );
 
         p(
-            &indoc!(
+            &indoc::indoc!(
                 "
                  -- code: some caption
                  lang: rs
@@ -281,7 +280,7 @@ mod tests {
         );
 
         p(
-            &indoc!(
+            &indoc::indoc!(
                 "
                  -- code: some caption
                  lang: rs
@@ -301,7 +300,7 @@ mod tests {
         );
 
         p(
-            &indoc!(
+            &indoc::indoc!(
                 "
                  -- code: some caption
                  lang: rs
@@ -319,7 +318,7 @@ mod tests {
         );
 
         p(
-            &indoc!(
+            &indoc::indoc!(
                 "
                  -- code: some caption
                  lang: rs
@@ -337,9 +336,8 @@ mod tests {
         );
 
         let f = crate::Code::default()
-            .with_caption("")
             .with_lang("5d")
-            .with_code(&indoc!(
+            .with_code(&indoc::indoc!(
                 "
                 -- amitu/pricing: Simple pricing
                 ---- plan: Unlimited
@@ -349,7 +347,7 @@ mod tests {
             ));
 
         p(
-            &indoc!(
+            &indoc::indoc!(
                 "
         -- code:
         lang: 5d
@@ -364,7 +362,7 @@ mod tests {
         );
 
         assert_eq!(
-            indoc!(
+            indoc::indoc!(
                 "
         -- code:
         lang: 5d
@@ -373,9 +371,10 @@ mod tests {
         ---- plan: Unlimited
         -monthly: $49
         -annual: $40
-        -link: /buy-something/?"
+        -link: /buy-something/?
+        "
             ),
-            f.to_string(),
+            f.to_p1().to_string(),
         )
     }
 }

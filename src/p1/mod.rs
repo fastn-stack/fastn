@@ -10,9 +10,7 @@ pub use section::Section;
 pub use sub_section::{SubSection, SubSections};
 pub use to_string::to_string;
 
-use thiserror::Error as Error_;
-
-#[derive(Error_, Debug)]
+#[derive(thiserror::Error, Debug)]
 pub enum Error {
     #[error("invalid input: {message}")]
     InvalidInput { message: String, context: String },
@@ -33,8 +31,6 @@ pub enum Error {
         #[from]
         source: std::num::ParseFloatError,
     },
-    #[error("container contains duplicate keys")]
-    DuplicateKeys,
 }
 
 pub type Result<T> = std::result::Result<T, Error>;

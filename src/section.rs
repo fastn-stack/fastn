@@ -1,18 +1,17 @@
-use crate::document::ParseError;
-use crate::{Code, DefinitionList, Heading, IFrame, Image, Latex, Markdown, Table, YouTube};
-
 #[allow(clippy::large_enum_variant)]
-#[derive(PartialEq, Debug, Clone, Serialize)]
+#[allow(clippy::upper_case_acronyms)]
+#[derive(PartialEq, Debug, Clone, serde_derive::Serialize)]
 pub enum Section {
-    Heading(Heading),
-    DefinitionList(DefinitionList),
-    Markdown(Markdown),
-    Latex(Latex),
-    Code(Code),
-    Image(Image),
-    Table(Table),
-    YouTube(YouTube),
-    IFrame(IFrame),
+    Heading(crate::Heading),
+    DefinitionList(crate::DefinitionList),
+    Markdown(crate::Markdown),
+    Rst(crate::Rst),
+    Latex(crate::Latex),
+    Code(crate::Code),
+    Image(crate::Image),
+    Table(crate::Table),
+    YouTube(crate::YouTube),
+    IFrame(crate::IFrame),
     ToC(crate::ToC),
     Header(crate::ToC),
     Second(crate::ToC),
@@ -20,34 +19,35 @@ pub enum Section {
     Api(crate::api::Api),
     ApiObject(crate::api::ApiObject),
     PR(crate::pr::PR),
-}
-
-impl ToString for Section {
-    fn to_string(&self) -> String {
-        match self {
-            Section::Heading(i) => i.to_string(),
-            Section::DefinitionList(i) => i.to_string(),
-            Section::Markdown(i) => i.to_string(),
-            Section::Latex(i) => i.to_string(),
-            Section::Code(i) => i.to_string(),
-            Section::Image(i) => i.to_string(),
-            Section::Table(i) => i.to_string(),
-            Section::YouTube(i) => i.to_string(),
-            Section::IFrame(i) => i.to_string(),
-            Section::ToC(i) => i.to_string("toc"),
-            Section::Meta(t) => t.to_string(),
-            Section::Header(t) => t.to_string("header"),
-            Section::Second(t) => t.to_string("second"),
-            Section::Api(a) => a.to_string(),
-            Section::ApiObject(a) => a.to_string(),
-            Section::PR(a) => a.to_string(),
-        }
-    }
+    Include(crate::include::Include),
 }
 
 impl Section {
     pub fn is_heading(&self) -> bool {
         matches!(self, Section::Heading(_))
+    }
+
+    pub fn id(&self) -> Option<String> {
+        match self {
+            Section::Heading(i) => Some(i.id.inner().to_string()),
+            Section::DefinitionList(i) => i.id.clone(),
+            Section::Markdown(i) => i.id.clone(),
+            Section::Rst(i) => i.id.clone(),
+            Section::Latex(i) => i.id.clone(),
+            Section::Code(i) => i.id.clone(),
+            Section::Image(i) => i.id.clone(),
+            Section::Table(i) => i.id.clone(),
+            Section::YouTube(i) => i.id.clone(),
+            Section::IFrame(i) => i.id.clone(),
+            Section::Api(i) => i.id.clone(),
+            Section::ApiObject(i) => i.id.clone(),
+            Section::PR(_) => None,
+            Section::Header(_) => None,
+            Section::Second(_) => None,
+            Section::ToC(_) => None,
+            Section::Meta(_) => None,
+            Section::Include(_) => None,
+        }
     }
 
     pub fn is_meta(&self) -> bool {
@@ -62,6 +62,10 @@ impl Section {
         matches!(self, Section::Second(_))
     }
 
+    pub fn is_include(&self) -> bool {
+        matches!(self, Section::Include(_))
+    }
+
     pub fn is_toc(&self) -> bool {
         matches!(self, Section::ToC(_))
     }
@@ -73,21 +77,22 @@ impl Section {
         }
     }
 
-    pub fn from_p1(p1: &crate::p1::Section) -> Result<Self, ParseError> {
+    pub fn from_p1(p1: &crate::p1::Section) -> Result<Self, crate::document::ParseError> {
         Ok(match p1.name.as_str() {
-            "h0" => Section::Heading(Heading::with_level(p1, 0)?),
-            "h1" => Section::Heading(Heading::with_level(p1, 1)?),
-            "h2" => Section::Heading(Heading::with_level(p1, 2)?),
-            "h3" => Section::Heading(Heading::with_level(p1, 3)?),
-            "h4" => Section::Heading(Heading::with_level(p1, 4)?),
-            "h5" => Section::Heading(Heading::with_level(p1, 5)?),
-            "heading" => Section::Heading(Heading::from_p1(p1)?),
-            "markdown" => Section::Markdown(Markdown::from_p1(p1)?),
-            "code" => Section::Code(Code::from_p1(p1)?),
-            "image" => Section::Image(Image::from_p1(p1)?),
-            "iframe" => Section::IFrame(IFrame::from_p1(p1)?),
-            "latex" => Section::Latex(Latex::from_p1(p1)?),
-            "youtube" => Section::YouTube(YouTube::from_p1(p1)?),
+            "h0" => Section::Heading(crate::Heading::with_level(p1, 0)?),
+            "h1" => Section::Heading(crate::Heading::with_level(p1, 1)?),
+            "h2" => Section::Heading(crate::Heading::with_level(p1, 2)?),
+            "h3" => Section::Heading(crate::Heading::with_level(p1, 3)?),
+            "h4" => Section::Heading(crate::Heading::with_level(p1, 4)?),
+            "h5" => Section::Heading(crate::Heading::with_level(p1, 5)?),
+            "heading" => Section::Heading(crate::Heading::from_p1(p1)?),
+            "markdown" => Section::Markdown(crate::Markdown::from_p1(p1)?),
+            "rst" => Section::Rst(crate::Rst::from_p1(p1)?),
+            "code" => Section::Code(crate::Code::from_p1(p1)?),
+            "image" => Section::Image(crate::Image::from_p1(p1)?),
+            "iframe" => Section::IFrame(crate::IFrame::from_p1(p1)?),
+            "latex" => Section::Latex(crate::Latex::from_p1(p1)?),
+            "youtube" => Section::YouTube(crate::YouTube::from_p1(p1)?),
             "toc" => Section::ToC(crate::ToC::from_p1(p1)?),
             "meta" => Section::Meta(crate::Meta::from_p1(p1)?),
             "header" => Section::Header(crate::ToC::from_p1(p1)?),
@@ -95,8 +100,9 @@ impl Section {
             "api" => Section::Api(crate::api::Api::from_p1(p1)?),
             "api-object" => Section::ApiObject(crate::api::ApiObject::from_p1(p1)?),
             "pr" => Section::PR(crate::pr::PR::from_p1(p1)?),
+            "include" => Section::Include(crate::include::Include::from_p1(p1)?),
             t => {
-                return Err(ParseError::ValidationError(format!(
+                return Err(crate::document::ParseError::ValidationError(format!(
                     "unknown section {}",
                     t
                 )))
@@ -110,6 +116,7 @@ impl Section {
             Section::Code(c) => c.to_p1(),
             Section::DefinitionList(d) => d.to_p1(),
             Section::Markdown(d) => d.to_p1(),
+            Section::Rst(d) => d.to_p1(),
             Section::Latex(d) => d.to_p1(),
             Section::Image(d) => d.to_p1(),
             Section::Table(d) => d.to_p1(),
@@ -122,6 +129,7 @@ impl Section {
             Section::Api(d) => d.to_p1(),
             Section::ApiObject(d) => d.to_p1(),
             Section::PR(d) => d.to_p1(),
+            Section::Include(d) => d.to_p1(),
         }
     }
 }
@@ -132,7 +140,7 @@ mod test {
 
     #[test]
     fn test_unknown_section() {
-        let s = indoc! {"
+        let s = indoc::indoc! {"
                         -- markdown:
 
                         Hello World!

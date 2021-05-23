@@ -1,18 +1,18 @@
 use crate::document::ParseError;
 
-#[derive(PartialEq, Debug, Clone, Serialize)]
+#[derive(PartialEq, Debug, Clone, serde_derive::Serialize)]
 pub struct YouTube {
+    pub id: Option<String>,
     pub caption: Option<crate::Rendered>,
     pub src: String,
 }
 
 impl YouTube {
     pub fn to_p1(&self) -> crate::p1::Section {
-        let mut p1 = crate::p1::Section::with_name("youtube").add_header("src", self.src.as_str());
-        if let Some(ref c) = self.caption {
-            p1 = p1.and_caption(c.original.as_str())
-        }
-        p1
+        crate::p1::Section::with_name("youtube")
+            .and_optional_caption(&self.caption)
+            .add_optional_header("id", &self.id)
+            .add_header("src", self.src.as_str())
     }
 
     pub fn from_p1(p1: &crate::p1::Section) -> Result<Self, ParseError> {
@@ -23,6 +23,7 @@ impl YouTube {
         }
 
         let mut yt = YouTube {
+            id: p1.header.string_optional("id")?,
             src: p1.header.str("src")?.to_string(),
             ..Default::default()
         };
@@ -43,6 +44,11 @@ impl YouTube {
         self
     }
 
+    pub fn with_id(mut self, id: &str) -> Self {
+        self.id = Some(id.to_string());
+        self
+    }
+
     pub fn with_src(mut self, src: &str) -> Self {
         self.src = src.to_string();
         self
@@ -52,22 +58,10 @@ impl YouTube {
 impl Default for YouTube {
     fn default() -> YouTube {
         YouTube {
+            id: None,
             caption: None,
             src: "".to_string(),
         }
-    }
-}
-
-impl ToString for YouTube {
-    fn to_string(&self) -> String {
-        format!(
-            "-- youtube:{}\nsrc: {}\n",
-            self.caption
-                .as_ref()
-                .map(|c| format!(" {}", c.original))
-                .unwrap_or_else(|| "".to_string()),
-            self.src.as_str(),
-        )
     }
 }
 
@@ -79,10 +73,12 @@ mod tests {
     #[test]
     fn youtube() {
         assert_eq!(
-            "-- youtube: foo\nsrc: foo.gif\n",
+            "-- youtube: foo\nid: temp\nsrc: foo.gif\n",
             crate::YouTube::default()
                 .with_src("foo.gif")
                 .with_caption("foo")
+                .with_id("temp")
+                .to_p1()
                 .to_string()
         );
 

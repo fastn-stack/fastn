@@ -9,6 +9,7 @@ enum ParsingState {
     ReadingSubSectionBody,
 }
 
+#[derive(Debug)]
 pub struct State {
     state: ParsingState,
     section: Option<Section>,
@@ -40,7 +41,7 @@ fn colon_separated_values(line: &str) -> Result<(String, Option<String>)> {
 fn to_body(b: Option<String>) -> Option<String> {
     match b {
         Some(b) if b.trim().is_empty() => None,
-        Some(b) => Some(b.trim().to_string()),
+        Some(b) => Some(b.trim_end().to_string()),
         None => None,
     }
 }
@@ -86,20 +87,23 @@ impl State {
     }
 
     fn reading_header(&mut self, line: &str) -> Result<()> {
-        let line = line.trim();
         if line.trim().is_empty() {
             self.state = ParsingState::ReadingBody;
             return Ok(());
         }
+
         if line.starts_with("-- ") {
             return self.waiting_for_section(line);
         }
+
         if line.starts_with("--- ") {
             return self.read_subsection(line);
         }
+
         if !line.contains(':') {
             return self.reading_body(line);
         }
+
         let (name, value) = colon_separated_values(line)?;
         if let Some(mut s) = self.section.take() {
             s.header.add(
@@ -157,6 +161,12 @@ impl State {
         };
 
         if let Some(mut s) = self.section.take() {
+            // empty lines at the beginning are ignore
+            if line.trim().is_empty() && s.body.as_ref().map(|ref v| v.is_empty()).unwrap_or(true) {
+                self.section = Some(s);
+                return Ok(());
+            }
+
             s.body = Some(match s.body {
                 Some(ref b) => b.to_string() + line + "\n",
                 None => line.to_string() + "\n",
@@ -179,6 +189,11 @@ impl State {
         }
 
         if let Some(mut s) = self.sub_section.take() {
+            if line.trim().is_empty() && s.body.as_ref().map(|ref v| v.is_empty()).unwrap_or(true) {
+                self.sub_section = Some(s);
+                return Ok(());
+            }
+
             s.body = Some(match s.body {
                 Some(ref b) => b.to_string() + line + "\n",
                 None => line.to_string() + "\n",
@@ -188,6 +203,7 @@ impl State {
 
         Ok(())
     }
+
     fn read_subsection(&mut self, line: &str) -> Result<()> {
         if let Some(mut sub) = self.sub_section.take() {
             sub.body = to_body(sub.body.take());
@@ -257,8 +273,7 @@ pub fn parse(s: &str) -> Result<Vec<Section>> {
 
 #[cfg(test)]
 mod test {
-    use indoc::indoc; // macro
-    use pretty_assertions::assert_eq; // macro
+    use {indoc::indoc, pretty_assertions::assert_eq}; // macro
 
     // these are macros instead of functions so stack trace top points to actual
     // invocation of these, instead of inside these, so jumping to failing test
@@ -679,7 +694,80 @@ mod test {
                 .and_body("hello world is\n\n    not enough\n\n    lol")
                 .list(),
         );
+        p!(
+            indoc!(
+                "
+            -- foo:
+
+              body ho
+
+            yo
+
+            -- bar:
+
+                bar body
+
+            "
+            ),
+            vec![
+                super::Section::with_name("foo").and_body("  body ho\n\nyo"),
+                super::Section::with_name("bar").and_body("    bar body")
+            ],
+        );
     }
+
+    #[test]
+    fn body_with_empty_lines() {
+        p!(
+            indoc!(
+                "
+            -- foo:
+
+
+
+
+
+            hello
+
+
+
+
+
+
+
+
+
+            "
+            ),
+            vec![super::Section::with_name("foo").and_body("hello"),],
+        );
+
+        p!(
+            indoc!(
+                "
+            -- foo:
+            --- bar:
+
+
+
+
+            hello
+
+
+
+
+
+
+
+
+
+            "
+            ),
+            vec![super::Section::with_name("foo")
+                .add_sub_section(super::SubSection::with_name("bar").and_body("hello"))],
+        );
+    }
+
     #[test]
     fn basic() {
         p!(
@@ -745,6 +833,17 @@ mod test {
                 super::Section::with_name("foo").and_body("body ho\n\nyo"),
                 super::Section::with_name("bar").and_body("bar body")
             ],
+        );
+
+        p!(
+            indoc!(
+                "
+            -- foo:
+
+            hello
+            "
+            ),
+            vec![super::Section::with_name("foo").and_body("hello"),],
         );
 
         f!("invalid", "invalid input: Expecting -- , found: invalid")

@@ -1,23 +1,17 @@
-#[derive(PartialEq, Debug, Serialize, Default, Clone)]
+#[derive(PartialEq, Debug, serde_derive::Serialize, Default, Clone)]
 pub struct Document {
     pub sections: Vec<crate::Section>,
     pub pr_sections: linked_hash_map::LinkedHashMap<String, crate::pr::PR>,
 }
 
-impl ToString for Document {
-    fn to_string(&self) -> String {
-        Self::to_string(&self.sections)
-    }
-}
-
-pub fn get_title(sections: &[crate::Section]) -> String {
+pub fn get_title(sections: &[crate::Section]) -> crate::Rendered {
     sections
         .iter()
         .filter(|s| crate::Section::is_heading(s))
         .collect::<Vec<_>>()
         .first()
-        .map(|s| s.title())
-        .unwrap_or_else(|| "".to_string())
+        .map(|s| crate::Rendered::line(s.title().as_str()))
+        .unwrap_or_else(crate::Rendered::default)
 }
 
 pub fn get_no_index(sections: &[crate::Section]) -> bool {
@@ -32,6 +26,16 @@ pub fn get_no_index(sections: &[crate::Section]) -> bool {
 }
 
 impl Document {
+    pub fn convert_to_string(&self) -> String {
+        crate::p1::to_string(&self.sections.iter().map(|v| v.to_p1()).collect::<Vec<_>>())
+    }
+
+    pub fn get_section_by_id(&self, id: &str) -> Option<&crate::Section> {
+        self.sections
+            .iter()
+            .find(|x| x.id().eq(&Some(id.to_string())))
+    }
+
     pub fn new(sections: &[crate::Section]) -> Self {
         Self {
             sections: sections.to_vec(),
@@ -112,16 +116,6 @@ impl Document {
         false
     }
 
-    pub fn without_special(mut self) -> Self {
-        self.sections = self
-            .sections
-            .into_iter()
-            .filter(|s| !s.is_meta() && !s.is_header() && !s.is_second())
-            .collect();
-
-        self
-    }
-
     pub fn get_toc(&self) -> Option<crate::ToC> {
         for section in self.sections.iter() {
             if let crate::Section::ToC(toc) = section {
@@ -190,7 +184,7 @@ impl Document {
             .map(|ref x| (x.get_translation(), x.get_lang().inner()))
     }
 
-    pub fn get_title(&self) -> String {
+    pub fn get_title(&self) -> crate::Rendered {
         get_title(&self.sections)
     }
 
@@ -243,6 +237,7 @@ impl Document {
             sections.push(section);
             if let Some(b) = body {
                 sections.push(crate::Section::Markdown(crate::Markdown {
+                    id: None,
                     body: crate::Rendered::from(b.as_str()),
                     hard_breaks: false,
                     auto_links: true,
@@ -261,16 +256,15 @@ impl Document {
         })
     }
 
-    pub fn to_string(sections: &[crate::Section]) -> String {
-        sections
-            .iter()
-            .map(ToString::to_string)
-            .collect::<Vec<String>>()
-            .join("\n\n\n")
+    pub fn is_deleted(&self) -> bool {
+        match self.get_meta_ref() {
+            Some(x) => x.deleted,
+            None => false,
+        }
     }
 }
 
-#[derive(PartialEq, Debug, Clone, Serialize)]
+#[derive(PartialEq, Debug, Clone, serde_derive::Serialize)]
 #[serde(tag = "type")]
 pub enum Align {
     Left,
@@ -312,7 +306,7 @@ impl std::str::FromStr for Align {
     }
 }
 
-#[derive(PartialEq, Debug, Clone, Serialize)]
+#[derive(PartialEq, Debug, Clone, serde_derive::Serialize)]
 #[serde(tag = "type")]
 pub enum TextDirection {
     RightToLeft,
@@ -348,8 +342,9 @@ impl TextDirection {
     }
 }
 
-#[derive(PartialEq, Debug, Clone, Serialize)]
+#[derive(PartialEq, Debug, Clone, serde_derive::Serialize)]
 pub struct Table {
+    pub id: Option<String>,
     pub caption: crate::Rendered,
     pub header: Vec<crate::Rendered>,
     pub rows: Vec<Vec<crate::Rendered>>,
@@ -435,7 +430,7 @@ pub fn p(s: &str, t: &[crate::Section]) {
 
     assert_eq!(
         Document::parse(s, "foo/bar")
-            .unwrap_or_else(|e| panic!("{}", e))
+            .unwrap_or_else(|e| panic!("{:?}", e))
             .sections,
         t
     )
@@ -465,7 +460,7 @@ mod test {
     #[test]
     fn escaping() {
         p(
-            &indoc!(
+            &indoc::indoc!(
                 "
             -- code:
             lang: py
@@ -486,7 +481,7 @@ mod test {
     #[ignore]
     fn definition_list() {
         p(
-            &indoc!(
+            &indoc::indoc!(
                 "
                  -- definition-list: hello list
                  hello:
@@ -502,6 +497,7 @@ mod test {
             "
             ),
             &vec![crate::Section::DefinitionList(crate::DefinitionList {
+                id: None,
                 caption: crate::Rendered::line("hello list"),
                 list: vec![
                     (
@@ -520,13 +516,14 @@ mod test {
             })],
         );
         p(
-            &indoc!(
+            &indoc::indoc!(
                 "
                  -- definition-list:
                  without: title
             "
             ),
             &vec![crate::Section::DefinitionList(crate::DefinitionList {
+                id: None,
                 caption: crate::Rendered::default(),
                 list: vec![(
                     crate::Rendered::line("without"),
@@ -537,7 +534,7 @@ mod test {
 
         f(
             "-- definition-list: items are required",
-            indoc!(
+            indoc::indoc!(
                 "
                  PestError:  --> 1:1
                    |
@@ -554,7 +551,7 @@ mod test {
     #[allow(dead_code)]
     fn latex() {
         p(
-            &indoc!(
+            &indoc::indoc!(
                 "
                  -- latex:
                  hello world is
@@ -565,15 +562,17 @@ mod test {
             "
             ),
             &vec![crate::Section::Latex(crate::Latex {
-                caption: Some(crate::Rendered::default()),
+                id: None,
+                caption: None,
                 body: crate::Rendered::from("hello world is\n\n    not enough\n\n    lol\n"),
             })],
         );
 
         p(
-            &indoc!(
+            &indoc::indoc!(
                 "
                  -- latex: some title
+                 id: temp
                  hello world is
 
                      not enough
@@ -582,6 +581,7 @@ mod test {
             "
             ),
             &vec![crate::Section::Latex(crate::Latex {
+                id: Some("temp".to_string()),
                 caption: Some(crate::Rendered::line("some title")),
                 body: crate::Rendered::from("hello world is\n\n    not enough\n\n    lol\n"),
             })],
@@ -589,7 +589,7 @@ mod test {
 
         f(
             "-- latex: without body",
-            indoc!(
+            indoc::indoc!(
                 "
                    --> 1:1
                    |
@@ -602,7 +602,7 @@ mod test {
         );
         f(
             "-- latex:\n-- latex:",
-            indoc!(
+            indoc::indoc!(
                 "
                    --> 1:10
                    |
@@ -615,7 +615,7 @@ mod test {
         );
         f(
             "-- latex:  \n-- latex:",
-            indoc!(
+            indoc::indoc!(
                 "
                    --> 1:1
                    |

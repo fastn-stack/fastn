@@ -1,4 +1,4 @@
-#[derive(PartialEq, Debug, Clone, Serialize, Default)]
+#[derive(PartialEq, Debug, Clone, serde_derive::Serialize, Default)]
 pub struct Meta {
     pub surfers: Vec<Surfer>,
     pub readers: Vec<Reader>,
@@ -10,9 +10,11 @@ pub struct Meta {
     pub no_index: bool,
     pub(crate) lang: crate::ValueWithDefault<realm_lang::Language>,
     translation: Translation,
+    pub git_repo: Option<String>,
+    pub deleted: bool,
 }
 
-#[derive(PartialEq, Debug, Clone, Serialize)]
+#[derive(PartialEq, Debug, Clone, serde_derive::Serialize)]
 pub enum Translation {
     NoTranslation,
     ItIsTranslationOf { id: String },
@@ -79,14 +81,11 @@ impl Translation {
     }
 
     pub fn is_translation_of(&self) -> bool {
-        match self {
-            Self::ItIsTranslationOf { .. } => true,
-            _ => false,
-        }
+        matches!(self, Self::ItIsTranslationOf { .. })
     }
 }
 
-#[derive(PartialEq, Debug, Clone, Serialize)]
+#[derive(PartialEq, Debug, Clone, serde_derive::Serialize)]
 pub struct WidgetColors {
     background: Color,
     text: Color,
@@ -95,7 +94,7 @@ pub struct WidgetColors {
     hover: Color,
 }
 
-#[derive(PartialEq, Debug, Clone, Serialize)]
+#[derive(PartialEq, Debug, Clone, serde_derive::Serialize)]
 pub struct ColumnColors {
     background: Color,
     text: Color,
@@ -114,7 +113,7 @@ pub enum Theme {
     Darkula,
 }
 
-#[derive(PartialEq, Debug, Clone, Serialize)]
+#[derive(PartialEq, Debug, Clone, serde_derive::Serialize)]
 pub struct ThemeConfig {
     brand: Color,
     accent: Color,
@@ -404,7 +403,7 @@ impl std::str::FromStr for Color {
     }
 }
 
-#[derive(PartialEq, Debug, Clone, Serialize)]
+#[derive(PartialEq, Debug, Clone, serde_derive::Serialize)]
 pub enum Layout {
     OneColumn,
     TwoColumn,
@@ -507,7 +506,8 @@ impl Design {
     }
 }
 
-#[derive(PartialEq, Debug, Clone, Serialize)]
+#[derive(PartialEq, Debug, Clone, serde_derive::Serialize)]
+#[allow(clippy::upper_case_acronyms)]
 pub struct CR {
     pub status: CRStatus,
     pub reviewers: Vec<Reviewer>,
@@ -592,14 +592,15 @@ impl std::fmt::Display for CRStatus {
     }
 }
 
-#[derive(PartialEq, Debug, Clone, Serialize, Copy)]
+#[derive(PartialEq, Debug, Clone, serde_derive::Serialize, Copy)]
+#[allow(clippy::upper_case_acronyms)]
 pub enum CRStatus {
     Open,
     WIP,
     Closed,
 }
 
-#[derive(PartialEq, Debug, Clone, Serialize)]
+#[derive(PartialEq, Debug, Clone, serde_derive::Serialize)]
 #[serde(tag = "type")]
 pub enum Reviewer {
     AssignedTo { username: String },
@@ -608,7 +609,7 @@ pub enum Reviewer {
     ChangesRequestedBy { username: String },
 }
 
-#[derive(PartialEq, Debug, Clone, Serialize)]
+#[derive(PartialEq, Debug, Clone, serde_derive::Serialize)]
 #[serde(tag = "type")]
 pub enum ReviewStatus {
     NotRequired,
@@ -618,16 +619,10 @@ pub enum ReviewStatus {
     ApprovalRequired { required: i32 },
 }
 
-#[derive(PartialEq, Debug, Clone, Serialize)]
+#[derive(PartialEq, Debug, Clone, serde_derive::Serialize)]
 pub enum Delta {
     UserAdded { username: String },
     UserRemoved { username: String },
-}
-
-impl ToString for Meta {
-    fn to_string(&self) -> String {
-        self.to_p1().to_string().trim_end().to_string()
-    }
 }
 
 impl Meta {
@@ -795,8 +790,12 @@ impl Meta {
 
     pub fn to_p1(&self) -> crate::p1::Section {
         let mut p1 = crate::p1::Section::with_name("meta");
+
         if let Some(ref cr) = self.cr {
             p1 = p1.add_sub_section(cr.to_p1());
+        }
+        if let Some(ref v) = self.git_repo {
+            p1 = p1.add_header("git-repo", v);
         }
         if self.no_index {
             p1 = p1.add_header("no-index", "true");
@@ -825,6 +824,11 @@ impl Meta {
         if let crate::ValueWithDefault::Found(lang) = self.lang {
             p1 = p1.add_header(LANG_KEY, lang.id());
         }
+
+        if self.deleted {
+            p1 = p1.add_header("deleted", "true");
+        }
+
         self.translation.to_p1(&mut p1);
         p1
     }
@@ -850,6 +854,8 @@ impl Meta {
             meta.lang = crate::ValueWithDefault::Found(lang.parse()?);
         }
         meta.translation = Translation::from_p1(p1)?;
+        meta.git_repo = p1.header.string_optional("git-repo")?;
+        meta.deleted = p1.header.bool_with_default("deleted", false)?;
         Ok(meta)
     }
 
@@ -884,9 +890,18 @@ impl Meta {
         self.lang = crate::ValueWithDefault::found(lang);
         self
     }
+
+    pub fn git_repo(&self) -> Option<String> {
+        self.git_repo.as_ref().map(|x| x.to_string())
+    }
+
+    pub fn with_deleted(mut self) -> Self {
+        self.deleted = true;
+        self
+    }
 }
 
-#[derive(PartialEq, Debug, Clone, Serialize)]
+#[derive(PartialEq, Debug, Clone, serde_derive::Serialize)]
 pub struct Surfer {
     who: Someone,
     can_see_toc: bool,
@@ -911,7 +926,7 @@ impl Surfer {
     }
 }
 
-#[derive(PartialEq, Debug, Clone, Serialize)]
+#[derive(PartialEq, Debug, Clone, serde_derive::Serialize)]
 pub struct Reader {
     who: Someone,
     can_create_cr: bool,
@@ -953,7 +968,7 @@ impl Default for Reader {
     }
 }
 
-#[derive(PartialEq, Debug, Clone, Serialize)]
+#[derive(PartialEq, Debug, Clone, serde_derive::Serialize)]
 pub struct Writer {
     who: Someone,
 }
@@ -972,7 +987,7 @@ impl Writer {
     }
 }
 
-#[derive(PartialEq, Debug, Clone, Serialize)]
+#[derive(PartialEq, Debug, Clone, serde_derive::Serialize)]
 pub struct Admin {
     who: Someone,
 }
@@ -997,7 +1012,7 @@ impl Admin {
     }
 }
 
-#[derive(PartialEq, Debug, Clone, Serialize)]
+#[derive(PartialEq, Debug, Clone, serde_derive::Serialize)]
 pub enum Someone {
     Everyone,
     Followers,
@@ -1156,7 +1171,7 @@ mod test {
     #[test]
     fn basic() {
         p(
-            &indoc!(
+            &indoc::indoc!(
                 "
             -- meta:
 
@@ -1222,7 +1237,7 @@ mod test {
     #[test]
     fn no_index() {
         p(
-            &indoc!(
+            &indoc::indoc!(
                 "
             -- meta:
             no-index: true
@@ -1234,7 +1249,7 @@ mod test {
             })],
         );
         p(
-            &indoc!(
+            &indoc::indoc!(
                 "
             -- meta:
             "
@@ -1249,7 +1264,7 @@ mod test {
     #[test]
     fn cr_reviewers_1() {
         p(
-            &indoc!(
+            &indoc::indoc!(
                 "
             -- meta:
 
@@ -1273,7 +1288,7 @@ mod test {
     #[test]
     fn cr_reviewers_2() {
         p(
-            &indoc!(
+            &indoc::indoc!(
                 "
             -- meta:
 
@@ -1297,7 +1312,7 @@ mod test {
     #[test]
     fn cr_assigned_to_3() {
         p(
-            &indoc!(
+            &indoc::indoc!(
                 "
             -- meta:
 
@@ -1318,7 +1333,7 @@ mod test {
     #[test]
     fn cr_assigned_to_4() {
         p(
-            &indoc!(
+            &indoc::indoc!(
                 "
             -- meta:
 
@@ -1343,7 +1358,7 @@ mod test {
     #[test]
     fn cr_assigned_to_5() {
         p(
-            &indoc!(
+            &indoc::indoc!(
                 "
             -- meta:
 
@@ -1367,7 +1382,7 @@ mod test {
     #[test]
     fn lang() {
         p(
-            &indoc!(
+            &indoc::indoc!(
                 "
             -- meta:
             lang: hi
@@ -1383,7 +1398,7 @@ mod test {
     #[test]
     fn translation() {
         p(
-            &indoc!(
+            &indoc::indoc!(
                 "
             -- meta:
             translation: foo/bar
@@ -1399,7 +1414,7 @@ mod test {
         );
 
         p(
-            &indoc!(
+            &indoc::indoc!(
                 "
             -- meta:
             translation-of: foo/bar
@@ -1414,7 +1429,7 @@ mod test {
         );
 
         f(
-            &indoc!(
+            &indoc::indoc!(
                 "
             -- meta:
             translation-of: foo/bar

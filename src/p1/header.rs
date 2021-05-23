@@ -115,16 +115,4 @@ impl Header {
     pub fn string_with_default(&self, name: &str, def: &str) -> Result<String> {
         self.str_with_default(name, def).map(ToString::to_string)
     }
-
-    pub fn get_map(&self) -> Result<std::collections::HashMap<String, String>> {
-        let unique_keys: std::collections::HashSet<&String> = self.0.iter().map(|(x, _)| x).collect();
-        if unique_keys.len() != self.0.len() {
-            return Err(Error::DuplicateKeys);
-        }
-        Ok(self.0.iter().map(|(x, y)| (x.to_string(), y.to_string())).collect())
-    }
-
-    pub fn get(&self) -> &[(String, String)] {
-        self.0.as_slice()
-    }
 }

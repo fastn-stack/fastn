@@ -1,13 +1,8 @@
-#[derive(PartialEq, Debug, Default, Clone, Serialize)]
+#[derive(PartialEq, Debug, Default, Clone, serde_derive::Serialize)]
 pub struct DefinitionList {
+    pub id: Option<String>,
     pub caption: crate::Rendered,
     pub list: Vec<(crate::Rendered, crate::Rendered)>,
-}
-
-impl ToString for DefinitionList {
-    fn to_string(&self) -> String {
-        todo!()
-    }
 }
 
 impl DefinitionList {
