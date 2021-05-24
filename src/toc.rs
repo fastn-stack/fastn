@@ -17,21 +17,27 @@ impl TocItem {
             .starts_with(format!("{}/", without_cr.as_str()).as_str())
         {
             self.id = self.id.replacen(without_cr.as_str(), collection, 1);
-            self.url = format!("/{}/", self.id.as_str());
+            self.url = crate::utils::if_true(
+                crate::utils::has_extension(self.id.as_str()),
+                || format!("/{}", self.id.as_str()),
+                || format!("/{}/", self.id.as_str()),
+            );
         }
     }
 
     pub fn with_collection(mut self, collection: &str) -> Self {
         self.fix_id(collection);
         if !self.id.starts_with(format!("{}/", collection).as_str()) {
-            self.url = format!(
-                "/{}/?collection={}",
-                self.id.as_str(),
-                percent_encoding::utf8_percent_encode(
-                    collection,
-                    percent_encoding::NON_ALPHANUMERIC
-                )
-                .to_string()
+            let e = percent_encoding::utf8_percent_encode(
+                collection,
+                percent_encoding::NON_ALPHANUMERIC,
+            )
+            .to_string();
+
+            self.url = crate::utils::if_true(
+                crate::utils::has_extension(self.id.as_str()),
+                || format!("/{}?collection={}", self.id.as_str(), e),
+                || format!("/{}/?collection={}", self.id.as_str(), e),
             );
         }
         self.children = self
@@ -65,7 +71,11 @@ impl TocItem {
 
     pub fn with_title_and_id(title: &str, id: &str) -> Self {
         TocItem {
-            url: format!("/{}/", id),
+            url: crate::utils::if_true(
+                crate::utils::has_extension(id),
+                || format!("/{}", id),
+                || format!("/{}/", id),
+            ),
             id: id.to_string(),
             title: crate::Rendered::line(title),
             children: vec![],
@@ -102,7 +112,11 @@ impl TocItem {
         let id = id.trim().to_string();
         (
             TocItem {
-                url: format!("/{}/", id.as_str()),
+                url: crate::utils::if_true(
+                    crate::utils::has_extension(id.as_str()),
+                    || format!("/{}", id.as_str()),
+                    || format!("/{}/", id.as_str()),
+                ),
                 id,
                 title: crate::Rendered::line(title.as_str()),
                 children: vec![],
@@ -256,7 +270,11 @@ impl Parser {
                 {
                     id.to_string()
                 } else {
-                    format!("/{}/", id.as_str())
+                    crate::utils::if_true(
+                        crate::utils::has_extension(id.as_str()),
+                        || format!("/{}", id.as_str()),
+                        || format!("/{}/", id.as_str()),
+                    )
                 },
                 id,
                 title: crate::Rendered::line(rest.trim()),

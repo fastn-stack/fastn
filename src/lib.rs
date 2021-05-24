@@ -38,6 +38,8 @@ pub mod section;
 #[cfg(feature = "fifthtry")]
 pub mod toc;
 #[cfg(feature = "fifthtry")]
+pub mod utils;
+#[cfg(feature = "fifthtry")]
 mod value_with_default;
 #[cfg(feature = "fifthtry")]
 pub mod youtube;

@@ -1,7 +1,10 @@
 lazy_static::lazy_static! {
     pub static ref SS: syntect::parsing::SyntaxSet = {
         let mut builder = syntect::parsing::SyntaxSet::load_defaults_newlines().into_builder();
-        builder.add_from_folder("syntax", true).unwrap();
+        let path = std::path::Path::new("syntax");
+        if path.exists() {
+            builder.add_from_folder(path, true).unwrap();
+        }
         builder.build()
     };
     pub static ref TS: syntect::highlighting::ThemeSet =

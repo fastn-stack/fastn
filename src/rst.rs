@@ -39,7 +39,7 @@ impl Rst {
             m.caption = Some(crate::Rendered::line(c));
         }
         match p1.body {
-            Some(ref b) => m.body = crate::Rendered::from(b),
+            Some(ref b) => m.body = crate::Rendered::rst(b),
             _ => {
                 return Err(crate::document::ParseError::ValidationError(
                     "body must be present for rst".to_string(),
@@ -70,7 +70,7 @@ mod test {
             "-- rst:\n\nhello world is\n\n    not enough\n\n    lol\n",
             crate::Rst {
                 id: None,
-                body: crate::Rendered::from("hello world is\n\n    not enough\n\n    lol"),
+                body: crate::Rendered::rst("hello world is\n\n    not enough\n\n    lol"),
                 collapsed: false,
                 caption: None,
             }
@@ -92,7 +92,7 @@ mod test {
             ),
             &vec![crate::Section::Rst(crate::Rst {
                 id: Some("temp".to_string()),
-                body: crate::Rendered::from("hello world is\n\n    not enough\n\n    lol"),
+                body: crate::Rendered::rst("hello world is\n\n    not enough\n\n    lol"),
                 collapsed: false,
                 caption: None,
             })],
