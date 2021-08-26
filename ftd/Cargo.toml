@@ -8,43 +8,19 @@ license = "MIT"
 repository = "https://github.com/fifthtry/ftd"
 homepage = "https://www.fifthtry.com/fifthtry/ftd/"
 
-[features]
-default = []
-fifthtry = [
-    "comrak",
-    "lazy_static",
-    "linked-hash-map",
-    "percent-encoding",
-    "serde",
-    "serde_derive",
-    "syntect",
-    "css-color-parser",
-    "slug",
-    "katex",
-    "realm-lang",
-    "observer",
-    "rst_renderer",
-    "rst_parser",
-]
-
 [dependencies]
+css-color-parser = { version = "0.1.2" }
+serde = { version = "1", features = ["derive"] }
+serde_json = { version = "1" }
 thiserror = "1"
+comrak = { version = "0.7.0" }
+katex = { version = "0.3" }
+syntect = { version = "4.5.0", default-features = false, features = ["default-fancy"] }
+lazy_static = { version = "1" }
+regex = { version = "1.5.4" }
+format_num = { version = "0.1.0" }
+ftd-rt = { path = "../ftd-rt" }
 
-realm-lang = { path = "../realm/realm-lang", optional = true, version = "0.1.0" }
-observer = { path = "../observer/observer", optional = true, version = "0.2.4" }
-
-comrak = { version = "0.7.0", optional = true }
-lazy_static = { version = "1", optional = true }
-linked-hash-map = { version = "0.5.4", features = ["serde_impl"], optional = true}
-percent-encoding = { version = "2.1.0", optional = true }
-serde = { version = "1", optional = true }
-serde_derive = { version = "1", optional = true }
-syntect = { version = "4", optional = true }
-css-color-parser = { version = "0.1.2", optional = true }
-slug = { version = "0.1.4", optional = true }
-katex = { version = "0.3", optional = true }
-rst_renderer = {  version = '0.4', optional = true }
-rst_parser = { version = '0.4', optional = true }
 
 [dev-dependencies]
 diffy = "0.2.0"

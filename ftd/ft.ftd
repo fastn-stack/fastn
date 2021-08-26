@@ -1,0 +1,485 @@
+-- import: fifthtry/ft
+
+
+-- ft.meta:
+fullscreen: true
+
+--- reader.who: everyone
+
+
+-- ft.toc:
+
+- sourabh/Intercom/hello-world
+  Hello World
+
+
+-- component card:
+component: ftd.column
+width: portion 1
+border-width: 1
+border-radius: 4
+padding: 20
+border-color: #e2e2e2
+
+
+-- component toc-heading:
+component: ftd.text
+$text: caption
+text: ref $text
+size: 16
+color: black
+align: left
+padding-left: 20
+padding-top: 25
+padding-bottom: 12
+style: semi-bold
+
+
+-- component table-of-content:
+component: ftd.column
+$id: string
+id: ref $id
+width: 250
+align: top-left
+padding-left: 5
+padding-top: 10
+
+
+-- component parent:
+component: ftd.column
+$id: string
+$name: caption
+$active: optional boolean
+id: ref $id
+align: left
+padding-left: 10
+width: fill
+
+--- ftd.text:
+if: $active is not null
+text: ref $name
+size: 14
+color: white
+align: left
+padding-left: 10
+padding-top: 5
+padding-bottom: 5
+width: fill
+background-color: #286efa
+border-radius: 4
+style: semi-bold
+
+--- ftd.text:
+if: $active is null
+text: ref $name
+size: 14
+color: #637280
+align: left
+padding-left: 10
+padding-top: 7
+padding-bottom: 7
+
+
+-- component markdown:
+component: ftd.text
+$body: body
+$collapsed: optional boolean
+$title: optional caption
+$two_columns: optional boolean
+text: ref $body
+size: 15
+color: #4d4d4d
+padding-bottom: 34
+font-url: https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,300&display=swap
+font: Roboto
+
+
+-- component page-title:
+component: ftd.text
+$title: caption
+text: ref $title
+color: black
+size: 46
+font-url: https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,300&display=swap
+font: Roboto
+padding-top: 30
+padding-bottom: 20
+border-bottom: 1
+margin-bottom: 30
+border-color: #e2e2e2
+width: fill
+
+
+-- component h0:
+component: ftd.column
+$title: caption
+$body: optional body
+width: fill
+
+--- ftd.text:
+text: ref $title
+size: 36
+color: black
+style: bold
+padding-bottom: 24
+font-url: https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,300&display=swap
+font: Roboto
+
+--- markdown:
+if: $body is not null
+body: ref $body
+
+
+-- component h1:
+component: ftd.column
+$title: caption
+$body: optional body
+width: fill
+
+--- ftd.text:
+text: ref $title
+$title: caption
+text: ref $title
+size: 30
+color: #0C3C26
+style: bold
+padding-bottom: 12
+padding-top: 12
+font-url: https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,300&display=swap
+font: Roboto
+
+--- markdown:
+if: $body is not null
+body: ref $body
+
+
+-- component h2:
+component: ftd.column
+$title: caption
+$body: optional body
+width: fill
+
+--- ftd.text:
+$title: caption
+text: ref $title
+size: 24
+color: #0C3C26
+style: bold
+padding-bottom: 12
+padding-top: 12
+font-url: https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,300&display=swap
+font: Roboto
+
+--- markdown:
+if: $body is not null
+body: ref $body
+
+
+-- component h3:
+component: ftd.column
+$title: caption
+$body: optional body
+width: fill
+
+--- ftd.text:
+$title: caption
+text: ref $title
+size: 20
+color: #0c3c26
+style: regular
+padding-bottom: 12
+padding-top: 12
+font-url: https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,300&display=swap
+font: Roboto
+
+--- markdown:
+if: $body is not null
+body: ref $body
+
+
+-- component h4:
+component: ftd.column
+$title: caption
+$body: optional body
+width: fill
+
+--- ftd.text:
+$title: caption
+text: ref $title
+size: 17
+color: black
+style: bold
+padding-bottom: 12
+padding-top: 12
+font-url: https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,300&display=swap
+font: Roboto
+
+--- markdown:
+if: $body is not null
+body: ref $body
+
+
+-- component links_title:
+component: ftd.text
+$title: caption
+text: ref $title
+size: 16
+color: white
+style: semi-bold
+padding-bottom: 18
+font-url: https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,300&display=swap
+font: Roboto
+
+
+-- component footer_links:
+component: ftd.text
+$title: caption
+text: ref $title
+size: 14
+color: #F1FFF7
+padding-top: 10
+padding-bottom: 10
+font-url: https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,300&display=swap
+font: Roboto
+
+
+-- component text:
+component: ftd.text
+$caption: caption
+text: ref $caption
+size: 15
+color: #637280
+font-url: https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,300&display=swap
+font: Roboto
+style: light
+flex-basis: auto
+
+
+-- ftd.column:
+width: fill
+align: top
+
+
+-- ftd.row:
+id: header
+width: fill
+background-color: white
+padding-left: 20
+padding-right: 20
+padding-top: 10
+padding-bottom: 10
+
+
+-- ftd.image:
+src: https://intercom.github.io/developer-hub/public/img/Intercom_Logo_Horizontal_Black.svg
+width: 120
+align: left
+
+
+-- ftd.column:
+align: left
+width: 200
+
+
+-- ftd.text: | Developer Hub
+size: 16
+style: light
+color: black
+line-height: 18
+font-url: https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,300&display=swap
+font: Roboto
+
+
+-- container: header
+
+
+-- ftd.row:
+align: right
+spacing: 30
+
+
+-- text: Docs
+
+
+-- text: App Store
+
+
+-- text: Forum
+
+
+-- text: Blog
+
+
+-- text: Your Apps
+
+
+-- container: ftd.main
+
+
+-- ftd.row:
+id: sub_header
+width: fill
+background-color: #f6f7f8
+padding-left: 25
+padding-right: 25
+padding-top: 10
+padding-bottom: 10
+border-width: 1
+border-color: #e2e2e2
+spacing: 30
+
+
+-- text: Building Apps
+
+
+-- text: API & Webhooks Reference
+
+
+-- text: Installing Intercom
+
+
+-- container: ftd.main
+
+
+-- ftd.row:
+width: fill
+id: content
+
+
+-- table-of-content:
+id: toc_main
+
+
+-- toc-heading: GETTING STARTED
+
+
+-- parent:
+id: /welcome/
+name: Welcome
+active: true
+
+
+-- parent:
+id: /Building/
+name: Building Successful Apps
+
+
+-- parent:
+id: /Platform/
+name: Intercom Platform Guidlines
+
+
+-- parent:
+id: /Changelog/
+name: API Changelog
+
+
+-- toc-heading: AUTHENTICATION
+
+
+-- parent:
+id: /Authentication/
+name: Authentication Types
+
+
+-- parent:
+id: /Scopes/
+name: OAuth Scopes
+
+
+-- parent:
+id: /Installing/
+name: Installing & Uninstalling Apps
+
+
+-- toc-heading: CAPABILITIES
+
+
+-- parent: Canvas kit
+id: /canvas/
+
+
+-- container: /canvas/
+
+
+-- parent:
+id: /reference/
+name: Canvas kit reference
+
+
+-- parent:
+id: /builder/
+name: Canvas kit builder
+
+
+-- container: toc_main
+
+
+-- parent:
+id: /api/
+name: REST API
+
+
+-- container: /api/
+
+
+-- parent:
+id: /Plugin/
+name: SDK & Plugin
+
+
+-- parent:
+id: /rest-reference/
+name: REST API Reference
+
+
+-- container: content
+
+
+-- ftd.column:
+padding-left: 30
+padding-right: 40
+width: fill
+id: content-text
+
+
+-- page-title: Welcome
+
+
+-- markdown:
+
+Discover all the incredible capabilities of our platform so that you can build context-relevant, action-oriented apps directly on top of Intercom with ease - whether you're publicly integrating your service with ours, or you're building for your own team's private usage.
+
+See what others have built on the Intercom App Store, chat with developers in our Community, and explore our documentation to get a sense of what you can do.
+
+
+-- ftd.row:
+id: content-row
+spacing: 30
+
+
+-- card:
+
+
+-- h2: Getting Started
+
+It's easy to begin building on Intercom. All you need is a workspace and to create an app in our Developer Hub.
+
+
+-- container: content-row
+
+
+-- card:
+
+
+-- h2: Canvas Kit
+
+Bring your products directly into the Intercom UI with our Canvas Kit,
+making it easy for teammates or customers to see information and take
+actions without needing to navigate away from Intercom.
+
+- Canvas Kit Guide
+- Canvas Kit Reference
+- Build an app for the conversations sidebar
+- Build an app for the Messenger
+- Try out our Canvas Kit app builder

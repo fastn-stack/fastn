@@ -162,7 +162,7 @@ impl State {
 
         if let Some(mut s) = self.section.take() {
             // empty lines at the beginning are ignore
-            if line.trim().is_empty() && s.body.as_ref().map(|ref v| v.is_empty()).unwrap_or(true) {
+            if line.trim().is_empty() && s.body.as_ref().map(|v| v.is_empty()).unwrap_or(true) {
                 self.section = Some(s);
                 return Ok(());
             }
@@ -189,7 +189,7 @@ impl State {
         }
 
         if let Some(mut s) = self.sub_section.take() {
-            if line.trim().is_empty() && s.body.as_ref().map(|ref v| v.is_empty()).unwrap_or(true) {
+            if line.trim().is_empty() && s.body.as_ref().map(|v| v.is_empty()).unwrap_or(true) {
                 self.sub_section = Some(s);
                 return Ok(());
             }

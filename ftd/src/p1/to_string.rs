@@ -1,6 +1,6 @@
 pub fn to_string(p1: &[crate::p1::Section]) -> String {
     p1.iter()
-        .map(ToString::to_string)
+        .map(|v| v.to_string().trim().to_string())
         .collect::<Vec<String>>()
         .join("\n\n\n")
 }
@@ -19,7 +19,7 @@ impl std::fmt::Display for crate::p1::Section {
         writeln!(f)?;
 
         if let Some(ref body) = self.body {
-            write!(f, "\n{}\n", body)?;
+            write!(f, "\n{}\n", escape_body(body))?;
         }
 
         for sub in self.sub_sections.0.iter() {
@@ -42,11 +42,17 @@ impl std::fmt::Display for crate::p1::SubSection {
         }
 
         if let Some(ref body) = self.body {
-            write!(f, "\n{}", body)?;
+            write!(f, "\n{}", escape_body(body))?;
         }
 
         writeln!(f)
     }
+}
+
+fn escape_body(body: &str) -> String {
+    let body = "\n".to_string() + body;
+    let body = body.replace("\n-- ", "\n\\-- ");
+    body.replace("\n--- ", "\n\\--- ").trim().to_string()
 }
 
 #[cfg(test)]
@@ -70,11 +76,9 @@ mod test {
             foo: bar
 
 
-
             -- bar:
 
-            bar body
-            "
+            bar body"
             ),
             super::to_string(&vec![
                 crate::p1::Section::with_name("foo")
@@ -97,11 +101,11 @@ mod test {
                 "
             -- foo:
 
-            body ho
-            "
+            \\-- yo:
+            body ho"
             ),
             super::to_string(&vec![
-                crate::p1::Section::with_name("foo").and_body("body ho")
+                crate::p1::Section::with_name("foo").and_body("-- yo:\nbody ho")
             ]),
         );
 
@@ -110,8 +114,7 @@ mod test {
                 "
             -- foo:
 
-            --- bar:
-            "
+            --- bar:"
             ),
             super::to_string(&vec![crate::p1::Section::with_name("foo")
                 .add_sub_section(crate::p1::SubSection::with_name("bar")),]),

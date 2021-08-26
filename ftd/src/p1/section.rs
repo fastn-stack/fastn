@@ -1,6 +1,6 @@
 pub use crate::p1::{Error, Header, Result, SubSection, SubSections};
 
-#[derive(Debug, PartialEq, Default)]
+#[derive(Debug, PartialEq, Clone, Default, serde::Serialize, serde::Deserialize)]
 pub struct Section {
     pub name: String,
     pub caption: Option<String>,
@@ -10,6 +10,37 @@ pub struct Section {
 }
 
 impl Section {
+    pub fn caption(&self) -> Result<String> {
+        match self.caption {
+            Some(ref v) => Ok(v.to_string()),
+            None => Err(Error::InvalidInput {
+                message: "caption is missing".to_string(),
+                context: "".to_string(),
+            }),
+        }
+    }
+
+    pub fn body(&self) -> Result<String> {
+        match self.body {
+            Some(ref v) => Ok(v.to_string()),
+            None => Err(Error::InvalidInput {
+                message: "body is missing".to_string(),
+                context: "".to_string(),
+            }),
+        }
+    }
+
+    pub fn assert_missing(&self, key: &str) -> Result<()> {
+        if self.header.str_optional(key)?.is_some() {
+            return Err(Error::InvalidInput {
+                message: format!("'{}' is not expected", key),
+                context: "".to_string(),
+            });
+        }
+
+        Ok(())
+    }
+
     pub fn with_name(name: &str) -> Self {
         Self {
             name: name.to_string(),
@@ -24,7 +55,8 @@ impl Section {
         self.caption = Some(caption.to_string());
         self
     }
-    pub fn and_optional_caption(mut self, value: &Option<crate::Rendered>) -> Self {
+
+    pub fn and_optional_caption(mut self, value: &Option<ftd_rt::Rendered>) -> Self {
         if let Some(v) = value {
             self = self.and_caption(v.original.as_str());
         }
@@ -80,6 +112,30 @@ impl Section {
     pub fn add_sub_section(mut self, sub: SubSection) -> Self {
         self.sub_sections.0.push(sub);
         self
+    }
+
+    pub fn sub_section_by_name(&self, name: &str) -> crate::p1::Result<&crate::p1::SubSection> {
+        let mut count = 0;
+        for s in self.sub_sections.0.iter() {
+            if s.name == name {
+                count += 1;
+            }
+        }
+        if count > 1 {
+            return Err(crate::p1::Error::MoreThanOneSubSections {
+                key: name.to_string(),
+            });
+        }
+
+        for s in self.sub_sections.0.iter() {
+            if s.name == name {
+                return Ok(s);
+            }
+        }
+
+        Err(crate::p1::Error::NotFound {
+            key: name.to_string(),
+        })
     }
 
     #[cfg(test)]

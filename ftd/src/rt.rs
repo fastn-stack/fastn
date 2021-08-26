@@ -1,0 +1,165 @@
+#[derive(Debug, PartialEq, Clone, serde::Serialize, serde::Deserialize)]
+pub struct RT {
+    pub name: String,
+    pub aliases: std::collections::BTreeMap<String, String>,
+    pub bag: std::collections::BTreeMap<String, crate::p2::Thing>,
+    pub instructions: Vec<ftd::Instruction>,
+}
+
+impl RT {
+    pub fn from(
+        name: &str,
+        aliases: std::collections::BTreeMap<String, String>,
+        bag: std::collections::BTreeMap<String, crate::p2::Thing>,
+        instructions: Vec<ftd::Instruction>,
+    ) -> Self {
+        Self {
+            name: name.to_string(),
+            aliases,
+            bag,
+            instructions,
+        }
+    }
+
+    pub fn set_bool(&mut self, variable: &str, value: bool) -> crate::p1::Result<bool> {
+        match self.bag.get(variable) {
+            Some(ftd::p2::Thing::Variable(v)) => match v.value {
+                ftd::Value::Boolean { value: old } => {
+                    self.bag.insert(
+                        variable.to_string(),
+                        ftd::p2::Thing::Variable(ftd::Variable {
+                            name: variable.to_string(),
+                            value: ftd::Value::Boolean { value },
+                        }),
+                    );
+                    Ok(old)
+                }
+                ref t => crate::e2(
+                    format!("{} is not a boolean", variable),
+                    format!("{:?}", t).as_str(),
+                ),
+            },
+            Some(t) => crate::e2(
+                format!("{} is not a variable", variable),
+                format!("{:?}", t).as_str(),
+            ),
+            None => crate::e(format!("{} not found", variable)),
+        }
+    }
+
+    pub fn render(&mut self) -> crate::p1::Result<ftd_rt::Column> {
+        let mut main = ftd::p2::interpreter::default_column();
+        let mut invocations = Default::default();
+        main.container.children = execute(
+            self.name.as_str(),
+            &self.aliases,
+            &self.bag,
+            &self.instructions,
+            &Default::default(),
+            &mut invocations,
+        )?;
+        store_invocations(&mut self.bag, invocations);
+        Ok(main)
+    }
+}
+
+pub(crate) fn execute(
+    name: &str,
+    aliases: &std::collections::BTreeMap<String, String>,
+    bag: &std::collections::BTreeMap<String, crate::p2::Thing>,
+    instructions: &[ftd::Instruction],
+    arguments: &std::collections::BTreeMap<String, crate::Value>,
+    invocations: &mut std::collections::BTreeMap<
+        String,
+        Vec<std::collections::BTreeMap<String, crate::Value>>,
+    >,
+) -> crate::p1::Result<Vec<ftd_rt::Element>> {
+    let mut current_container: Vec<usize> = Default::default();
+    let mut named_containers: std::collections::BTreeMap<String, Vec<usize>> = Default::default();
+    let mut children = vec![];
+    for instruction in instructions.iter() {
+        let doc = crate::p2::TDoc { name, aliases, bag };
+        match instruction {
+            ftd::Instruction::ChangeContainer { name: c } => {
+                change_container(c, &mut current_container, &mut named_containers)?
+            }
+            ftd::Instruction::Component {
+                parent,
+                children: inner,
+            } => {
+                assert!(arguments.is_empty()); // This clause cant have arguments
+                let e = parent.super_call(inner, &doc, arguments, invocations)?;
+                children = add_element(children, &mut current_container, &mut named_containers, e)
+            }
+            ftd::Instruction::ChildComponent { child: f } => {
+                let e = f.call(&doc, arguments, invocations, true)?;
+                children = add_element(children, &mut current_container, &mut named_containers, e)
+            }
+        }
+    }
+    Ok(children)
+}
+
+pub(crate) fn store_invocations(
+    bag: &mut std::collections::BTreeMap<String, crate::p2::Thing>,
+    invocations: std::collections::BTreeMap<
+        String,
+        Vec<std::collections::BTreeMap<String, crate::Value>>,
+    >,
+) {
+    for (k, v) in invocations.into_iter() {
+        match bag.get_mut(k.as_str()).unwrap() {
+            crate::p2::Thing::Component(ref mut c) => {
+                if !c.kernel {
+                    c.invocations.extend(v)
+                }
+            }
+            _ => unreachable!(),
+        }
+    }
+}
+
+fn add_element(
+    mut main: Vec<ftd_rt::Element>,
+    current_container: &mut Vec<usize>,
+    named_containers: &mut std::collections::BTreeMap<String, Vec<usize>>,
+    e: ftd_rt::Element,
+) -> Vec<ftd_rt::Element> {
+    let mut current = &mut main;
+    for i in current_container.iter() {
+        current = match &mut current[*i] {
+            ftd_rt::Element::Row(ref mut r) => &mut r.container.children,
+            ftd_rt::Element::Column(ref mut r) => &mut r.container.children,
+            _ => unreachable!(),
+        };
+    }
+    let len = current.len();
+    if let Some(v) = e.container_id() {
+        let mut c = current_container.clone();
+        c.push(len);
+        named_containers.insert(v, c);
+    }
+    if e.is_open_container() {
+        current_container.push(len)
+    }
+    current.push(e);
+    main
+}
+
+fn change_container(
+    name: &str,
+    current_container: &mut Vec<usize>,
+    named_containers: &mut std::collections::BTreeMap<String, Vec<usize>>,
+) -> crate::p1::Result<()> {
+    if name == "ftd#main" {
+        *current_container = vec![];
+        return Ok(());
+    }
+    *current_container = match named_containers.get(name) {
+        Some(v) => v.to_owned(),
+        None => {
+            return crate::e2("no such container", name);
+        }
+    };
+    Ok(())
+}
