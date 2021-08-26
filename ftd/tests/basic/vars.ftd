@@ -1,4 +1,4 @@
--- const: message
+-- const: msg
 type: string
 value: Hello World!
 
@@ -29,18 +29,18 @@ default_value: []
 
 
 -- record: Someone
-username: $string: =emtpy$
-email: $string: =emtpy$
+username: $string=$
+email: $string=$
 
 -- record: Person
-name: $String$
-age: $Int$
+name: $string$
+age: $int$
 
 -- record: meta
 reader: Vec<Someone>
 writer: Vec<Writer>
-foo: $bool: true$
-bar: $string: =empty$
+foo: $bool=true$
+bar: $string=$
 person1: Person
 person2: Person
 

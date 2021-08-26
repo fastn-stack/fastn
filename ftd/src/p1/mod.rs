@@ -19,6 +19,8 @@ pub enum Error {
     EmptyFile,
     #[error("key not found: {key}")]
     NotFound { key: String },
+    #[error("got more than one sub-sections")]
+    MoreThanOneSubSections { key: String },
     #[error("cant parse integer")]
     CantParseInt {
         #[from]
@@ -30,6 +32,11 @@ pub enum Error {
     CantParseFloat {
         #[from]
         source: std::num::ParseFloatError,
+    },
+    #[error("ftd-rt error")]
+    FtdRT {
+        #[from]
+        source: ftd_rt::Error,
     },
 }
 

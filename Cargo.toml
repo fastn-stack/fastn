@@ -1,0 +1,32 @@
+[package]
+name = "amitu_heroku"
+version = "0.1.0"
+authors = [
+    "amit upadhyay <upadhyay@gmail.com"
+]
+edition = "2018"
+
+[build-dependencies]
+vergen = "3"
+
+[profile.dev]
+split-debuginfo = "unpacked"
+incremental = true
+
+[workspace]
+members = [ "ftd", "ftd-rt"]
+
+[dependencies]
+colored = "1"
+diffy = "0.2.1"
+encrypted_id = "0.1.5"
+failure = "0.1"
+ftd = { path = "ftd" }
+futures = "0.1.29"
+http = "0.1.17"
+hyper = "0.12.33"
+sentry = { version = "0.21.0", features = ["failure", "debug-images"]}
+serde = { version = "1" }
+serde_json = "1"
+crossbeam-channel = "0.3.9"
+url = "2.2.1"

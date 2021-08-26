@@ -21,8 +21,8 @@ lazy_static::lazy_static! {
         }
     };
 }
-
 const MAGIC: &str = "MMMMMMMMMAMMAMSMASMDASMDAMSDMASMDASDMASMDASDMAASD";
+pub const DEFAULT_THEME: &str = "base16-ocean.dark";
 
 fn strip_image(s: &str) -> String {
     s.replace("![", MAGIC)
@@ -61,7 +61,6 @@ pub fn inline(s: &str) -> String {
 
 #[cfg(test)]
 mod tests {
-
     #[test]
     fn inline() {
         assert_eq!(super::inline("hello"), "hello");
@@ -72,10 +71,21 @@ mod tests {
 }
 
 pub fn code(code: &str, ext: &str) -> String {
+    code_with_theme(code, ext, DEFAULT_THEME).unwrap()
+}
+
+pub fn code_with_theme(code: &str, ext: &str, theme: &str) -> crate::p1::Result<String> {
     let syntax = SS
         .find_syntax_by_extension(ext)
         .unwrap_or_else(|| SS.find_syntax_plain_text());
-    let theme = &TS.themes["base16-ocean.dark"];
+    if !TS.themes.contains_key(theme) {
+        return Err(crate::p1::Error::InvalidInput {
+            message: format!("'{}' is not a valid theme", theme),
+            context: "".to_string(),
+        });
+    }
+
+    let theme = &TS.themes[theme];
 
     let code = code
         .lines()
@@ -87,6 +97,8 @@ pub fn code(code: &str, ext: &str) -> String {
         + "\n";
 
     // TODO: handle various params
-    syntect::html::highlighted_html_for_string(code.as_str(), &SS, syntax, theme)
-        .replacen("\n", "", 1)
+    Ok(
+        syntect::html::highlighted_html_for_string(code.as_str(), &SS, syntax, theme)
+            .replacen("\n", "", 1),
+    )
 }

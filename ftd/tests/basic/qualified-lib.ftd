@@ -13,4 +13,4 @@ text: $arg
 
 -- fifthtry/text:
 id: @hello3
-text: =hello
+text: =msg

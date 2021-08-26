@@ -1,7 +1,7 @@
 pub use crate::p1::{Error, Result};
 
-#[derive(Debug, PartialEq, Default)]
-pub struct Header(pub(crate) Vec<(String, String)>);
+#[derive(Debug, PartialEq, Default, Clone, serde::Serialize, serde::Deserialize)]
+pub struct Header(pub Vec<(String, String)>);
 
 impl Header {
     pub fn add(&mut self, name: &str, value: &str) {
@@ -66,6 +66,25 @@ impl Header {
         })
     }
 
+    pub fn i64(&self, name: &str) -> Result<i64> {
+        for (k, v) in self.0.iter() {
+            if k == name {
+                return Ok(v.parse()?);
+            }
+        }
+        Err(Error::NotFound {
+            key: name.to_string(),
+        })
+    }
+
+    pub fn i64_optional(&self, name: &str) -> Result<Option<i64>> {
+        match self.i64(name) {
+            Ok(b) => Ok(Some(b)),
+            Err(Error::NotFound { key: _ }) => Ok(None),
+            Err(e) => Err(e),
+        }
+    }
+
     pub fn f64(&self, name: &str) -> Result<f64> {
         for (k, v) in self.0.iter() {
             if k == name {
@@ -75,6 +94,14 @@ impl Header {
         Err(Error::NotFound {
             key: name.to_string(),
         })
+    }
+
+    pub fn f64_optional(&self, name: &str) -> Result<Option<f64>> {
+        match self.f64(name) {
+            Ok(b) => Ok(Some(b)),
+            Err(Error::NotFound { key: _ }) => Ok(None),
+            Err(e) => Err(e),
+        }
     }
 
     pub fn str_with_default<'a>(&'a self, name: &str, def: &'a str) -> Result<&'a str> {
@@ -90,6 +117,30 @@ impl Header {
             Ok(b) => Ok(Some(b)),
             Err(Error::NotFound { key: _ }) => Ok(None),
             Err(e) => Err(e),
+        }
+    }
+
+    pub fn conditional_str(&self, name: &str) -> Result<Vec<(&str, Option<&str>)>> {
+        let mut conditional_vector = vec![];
+        for (k, v) in self.0.iter() {
+            if k == name {
+                conditional_vector.push((v.as_str(), None));
+            }
+            if k.contains(" if ") {
+                let mut parts = k.splitn(2, " if ");
+                let property_name = parts.next().unwrap().trim();
+                if property_name == name {
+                    let conditional_attribute = parts.next().unwrap().trim();
+                    conditional_vector.push((v.as_str(), Some(conditional_attribute)));
+                }
+            }
+        }
+        if conditional_vector.is_empty() {
+            Err(Error::NotFound {
+                key: name.to_string(),
+            })
+        } else {
+            Ok(conditional_vector)
         }
     }
 

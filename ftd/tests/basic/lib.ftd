@@ -2,3 +2,6 @@
 hello: Hello World!
 bye: Good Bye!
 
+-- const: msg
+type: string
+value: Hello World!

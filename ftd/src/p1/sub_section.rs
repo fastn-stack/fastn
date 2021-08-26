@@ -1,9 +1,9 @@
 pub use crate::p1::{Error, Header, Result};
 
-#[derive(Debug, PartialEq, Default)]
+#[derive(Debug, PartialEq, Clone, Default, serde::Serialize, serde::Deserialize)]
 pub struct SubSections(pub Vec<SubSection>);
 
-#[derive(Debug, PartialEq, Default)]
+#[derive(Debug, PartialEq, Default, Clone, serde::Serialize, serde::Deserialize)]
 pub struct SubSection {
     pub name: String,
     pub caption: Option<String>,
@@ -12,6 +12,16 @@ pub struct SubSection {
 }
 
 impl SubSection {
+    pub fn caption(&self) -> Result<String> {
+        match self.caption {
+            Some(ref v) => Ok(v.to_string()),
+            None => Err(Error::InvalidInput {
+                message: "caption is missing".to_string(),
+                context: "".to_string(),
+            }),
+        }
+    }
+
     pub fn body(&self) -> Result<String> {
         match self.body {
             Some(ref body) => Ok(body.to_string()),

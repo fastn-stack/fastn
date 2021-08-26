@@ -1,161 +1,117 @@
-#[cfg(feature = "fifthtry")]
-pub mod api;
-#[cfg(feature = "fifthtry")]
-pub mod code;
-#[cfg(feature = "fifthtry")]
-pub mod definition_list;
-#[cfg(feature = "fifthtry")]
-pub mod document;
-#[cfg(feature = "fifthtry")]
-pub mod heading;
-#[cfg(feature = "fifthtry")]
-pub mod iframe;
-#[cfg(feature = "fifthtry")]
-pub mod image;
-#[cfg(feature = "fifthtry")]
-pub mod include;
-#[cfg(feature = "fifthtry")]
-pub mod latex;
-#[cfg(feature = "fifthtry")]
-pub mod markdown;
-#[cfg(feature = "fifthtry")]
-pub mod meta;
+extern crate self as ftd;
+
+#[cfg(test)]
+#[macro_use]
+pub(crate) mod test;
+
+mod component;
+pub mod main;
+mod or_type;
 pub mod p1;
-#[cfg(feature = "fifthtry")]
 pub mod p2;
-#[cfg(feature = "fifthtry")]
-pub mod pr;
-#[cfg(feature = "fifthtry")]
-pub mod prelude;
-#[cfg(feature = "fifthtry")]
-pub mod raw;
-#[cfg(feature = "fifthtry")]
 pub mod render;
-#[cfg(feature = "fifthtry")]
-pub mod rst;
-#[cfg(feature = "fifthtry")]
-pub mod section;
-#[cfg(feature = "fifthtry")]
-pub mod toc;
-#[cfg(feature = "fifthtry")]
-pub mod utils;
-#[cfg(feature = "fifthtry")]
+mod rt;
 mod value_with_default;
-#[cfg(feature = "fifthtry")]
-pub mod youtube;
+pub(crate) mod variable;
+mod youtube_id;
 
-#[cfg(feature = "fifthtry")]
-pub use crate::code::{Code, Highlight, ShowLineNumbers};
-#[cfg(feature = "fifthtry")]
-pub use crate::definition_list::DefinitionList;
-#[cfg(feature = "fifthtry")]
-pub use crate::document::{Align, Document, Table, TextDirection};
-#[cfg(feature = "fifthtry")]
-pub use crate::heading::Heading;
-#[cfg(feature = "fifthtry")]
-pub use crate::iframe::IFrame;
-#[cfg(feature = "fifthtry")]
-pub use crate::image::Image;
-#[cfg(feature = "fifthtry")]
-pub use crate::latex::Latex;
-#[cfg(feature = "fifthtry")]
-pub use crate::markdown::Markdown;
-#[cfg(feature = "fifthtry")]
-pub use crate::meta::{Admin, Meta, Reader, Someone, Surfer, Writer};
-#[cfg(feature = "fifthtry")]
-pub use crate::rst::Rst;
-#[cfg(feature = "fifthtry")]
-pub use crate::section::Section;
-#[cfg(feature = "fifthtry")]
-pub use crate::toc::{ToC, TocItem};
-#[cfg(feature = "fifthtry")]
 pub use crate::value_with_default::ValueWithDefault;
-#[cfg(feature = "fifthtry")]
-pub use crate::youtube::YouTube;
+pub use component::{ChildComponent, Component, Instruction};
+pub use or_type::OrType;
+pub use rt::RT;
+pub use variable::{PropertyValue, TextSource, Value, Variable};
 
-#[cfg(feature = "fifthtry")]
-#[derive(serde_derive::Serialize, Eq, PartialEq, Debug, Default, Clone)]
-pub struct Rendered {
-    pub original: String,
-    pub rendered: String,
+pub fn rst(s: &str) -> ftd_rt::Rendered {
+    // TODO: use pandoc to render
+    ftd_rt::Rendered {
+        original: s.to_string(),
+        rendered: s.to_string(),
+    }
 }
 
-#[cfg(not(feature = "fifthtry"))]
-#[derive(Eq, PartialEq, Debug, Default, Clone)]
-pub struct Rendered {
-    pub original: String,
-    pub rendered: String,
+pub fn markdown(s: &str) -> ftd_rt::Rendered {
+    ftd_rt::Rendered {
+        original: s.to_string(),
+        rendered: render::render(s, true, false),
+    }
 }
 
-#[cfg(feature = "fifthtry")]
-impl Rendered {
-    pub fn rst(s: &str) -> Rendered {
-        let p = match rst_parser::parse(s) {
-            Ok(p) => p,
-            Err(e) => return Rendered::line(format!("invalid rst: {}", e).as_str()),
-        };
+pub fn markdown_extra(s: &str, auto_links: bool, hard_breaks: bool) -> ftd_rt::Rendered {
+    ftd_rt::Rendered {
+        original: s.to_string(),
+        rendered: render::render(s, auto_links, hard_breaks),
+    }
+}
 
-        let mut o: Vec<u8> = Vec::new();
+pub fn latex(s: &str) -> Result<ftd_rt::Rendered, crate::p1::Error> {
+    let opts = katex::Opts::builder()
+        .throw_on_error(false)
+        .display_mode(true)
+        .build()
+        .unwrap();
 
-        if let Err(e) = rst_renderer::render_html(&p, &mut o, true) {
-            return Rendered::line(format!("invalid rst: {}", e).as_str());
-        };
-
-        Rendered {
-            original: s.to_string(),
-            rendered: match std::str::from_utf8(&o) {
-                Ok(v) => v.to_string(),
-                Err(e) => return Rendered::line(format!("invalid rst: {}", e).as_str()),
+    Ok(ftd_rt::Rendered {
+        original: s.to_string(),
+        rendered: katex::render_with_opts(s, &opts).map_err(|e| match e {
+            katex::Error::JsValueError(e)
+            | katex::Error::JsExecError(e)
+            | katex::Error::JsInitError(e) => crate::p1::Error::InvalidInput {
+                message: e,
+                context: s.to_string(),
             },
-        }
+            _ => todo!(),
+        })?,
+    })
+}
+
+pub fn code(code: &str, ext: &str) -> ftd_rt::Rendered {
+    code_with_theme(code, ext, crate::render::DEFAULT_THEME).unwrap()
+}
+
+pub fn code_with_theme(code: &str, ext: &str, theme: &str) -> crate::p1::Result<ftd_rt::Rendered> {
+    Ok(ftd_rt::Rendered {
+        original: code.to_string(),
+        rendered: render::code_with_theme(code.replace("\n\\-- ", "\n-- ").as_str(), ext, theme)?,
+    })
+}
+
+pub fn markdown_line(s: &str) -> ftd_rt::Rendered {
+    ftd_rt::Rendered {
+        original: s.to_string(),
+        rendered: render::inline(s),
+    }
+}
+
+pub fn e<T, S>(m: S) -> crate::p1::Result<T>
+where
+    S: Into<String>,
+{
+    Err(crate::p1::Error::InvalidInput {
+        message: m.into(),
+        context: "".to_string(),
+    })
+}
+
+pub fn e2<T, S>(m: S, c: &str) -> crate::p1::Result<T>
+where
+    S: Into<String>,
+{
+    Err(crate::p1::Error::InvalidInput {
+        message: m.into(),
+        context: c.to_string(),
+    })
+}
+
+pub fn split_module(id: &str) -> crate::p1::Result<(Option<&str>, &str, Option<&str>)> {
+    if id.chars().filter(|v| *v == '.').count() > 2 {
+        return crate::e("id contains more than two dots".to_string());
     }
 
-    pub fn from(s: &str) -> Rendered {
-        Rendered {
-            original: s.to_string(),
-            rendered: render::render(s, true, false),
-        }
-    }
-
-    pub fn from_extra(s: &str, auto_links: bool, hard_breaks: bool) -> Rendered {
-        Rendered {
-            original: s.to_string(),
-            rendered: render::render(s, auto_links, hard_breaks),
-        }
-    }
-
-    pub fn latex(s: &str) -> Result<Rendered, crate::document::ParseError> {
-        let opts = katex::Opts::builder()
-            .throw_on_error(false)
-            .display_mode(true)
-            .build()
-            .unwrap();
-
-        Ok(Rendered {
-            original: s.to_string(),
-            rendered: katex::render_with_opts(s, &opts).map_err(|e| match e {
-                katex::Error::JsValueError(s) | katex::Error::JsExecError(s) => {
-                    crate::document::ParseError::ValidationError(s)
-                }
-                katex::Error::JsInitError(s) => {
-                    panic!("{}", s)
-                }
-                _ => todo!(),
-            })?,
-        })
-    }
-
-    pub fn code(code: &str, ext: &str) -> Rendered {
-        Rendered {
-            original: code.to_string(),
-            rendered: render::code(code.replace("\n\\-- ", "\n-- ").as_str(), ext),
-        }
-    }
-
-    pub fn line(s: &str) -> Rendered {
-        Rendered {
-            original: s.to_string(),
-            rendered: render::inline(s),
-        }
+    match id.split_once('.') {
+        Some((p1, p2)) => match p2.split_once(".") {
+            Some((p21, p22)) => Ok((Some(p1), p21, Some(p22))),
+            None => Ok((Some(p1), p2, None)),
+        },
+        None => Ok((None, id, None)),
     }
 }

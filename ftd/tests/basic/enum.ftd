@@ -1,4 +1,4 @@
--- enum:string message=hello
+-- enum:Msg@string=hello
 hello: Hello World!
 bye: Good Bye!
 
