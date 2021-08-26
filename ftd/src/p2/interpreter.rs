@@ -281,7 +281,6 @@ mod test {
 
             -- var x: 10
             ",
-            &test_library(),
             (bag, super::default_column()),
         );
     }
@@ -420,11 +419,137 @@ mod test {
                 -- foo: hello
                 "
             ),
-            &test_library(),
+            &ftd::p2::TestLibrary {},
         )
         .expect("found error");
         pretty_assertions::assert_eq!(g_bag, bag);
         pretty_assertions::assert_eq!(g_col, main);
+    }
+
+    #[test]
+    #[ignore]
+    fn test() {
+        let (g_bag, g_col) = crate::p2::interpreter::interpret(
+            "foo/bar",
+            indoc::indoc!(
+                "
+                -- component toc-heading:
+                component: ftd.text
+                $text: caption
+                text: ref $text
+                size: 16
+                color: black
+                align: left
+                padding-left: 20
+                padding-top: 25
+                padding-bottom: 12
+                style: semi-bold
+
+
+                -- component table-of-content:
+                component: ftd.column
+                $id: string
+                id: ref $id
+                width: 300
+                align: top-left
+                padding-left: 10
+                padding-top: 30
+                padding-right: 20
+                border-right: 1
+                border-color: #ebedef
+                height: fill
+
+
+                -- component parent:
+                component: ftd.column
+                $id: string
+                $name: caption
+                $active: optional boolean
+                id: ref $id
+                align: left
+                padding-left: 10
+                padding-top: 2
+                padding-bottom: 2
+                width: fill
+                open: true
+
+                --- ftd.text:
+                if: $active is not null
+                text: ref $name
+                size: 14
+                color: white
+                align: left
+                padding-left: 10
+                padding-top: 4
+                padding-bottom: 4
+                width: fill
+                background-color: #6a7c95
+                border-radius: 2
+                style: semi-bold
+
+                --- ftd.text:
+                if: $active is null
+                text: ref $name
+                size: 14
+                color: #4D4D4D
+                align: left
+                padding-left: 10
+                padding-top: 7
+                padding-bottom: 7
+
+
+                -- component ft_toc:
+                component: ftd.column
+
+                --- table-of-content:
+                id: toc_main
+
+                --- parent:
+                id: /welcome/
+                name: 5PM Tasks
+                active: true
+
+                --- parent:
+                id: /Building/
+                name: Log
+
+                --- parent:
+                id: /ChildBuilding/
+                name: ChildLog
+
+                --- container: /welcome/
+
+                --- parent:
+                id: /Building2/
+                name: Log2
+
+
+                -- ft_toc:
+                "
+            ),
+            &ftd::p2::TestLibrary {},
+        )
+        .expect("found error");
+        pretty_assertions::assert_eq!(g_bag, super::default_bag());
+        pretty_assertions::assert_eq!(g_col, super::default_column());
+    }
+
+    #[test]
+    #[ignore]
+    fn test2() {
+        let (g_bag, g_col) = crate::p2::interpreter::interpret(
+            "foo/bar",
+            indoc::indoc!(
+                "
+                -- import: fifthtry/creating-a-tree as ft
+                -- ft.ft_toc:
+                "
+            ),
+            &ftd::p2::TestLibrary {},
+        )
+        .expect("found error");
+        pretty_assertions::assert_eq!(g_bag, super::default_bag());
+        pretty_assertions::assert_eq!(g_col, super::default_column());
     }
 
     #[test]
@@ -530,7 +655,7 @@ mod test {
                 yo yo
                 "
             ),
-            &test_library(),
+            &ftd::p2::TestLibrary {},
         )
         .expect("found error");
 
@@ -599,7 +724,6 @@ mod test {
             -- ftd.text:
             text: row child three
         ",
-            &test_library(),
             (super::default_bag(), main),
         );
     }
@@ -644,7 +768,6 @@ mod test {
             -- ftd.text:
             text: back in main
         ",
-            &test_library(),
             (super::default_bag(), main),
         );
     }
@@ -807,7 +930,6 @@ mod test {
             -- foo:
             x: 10
         ",
-            &test_library(),
             (bag, main),
         );
     }
@@ -837,7 +959,6 @@ mod test {
             -- numbers: 20
             -- numbers: 30
             ",
-            &test_library(),
             (bag, super::default_column()),
         );
     }
@@ -925,7 +1046,6 @@ mod test {
             x: 0
             y: 0
             ",
-            &test_library(),
             (bag, super::default_column()),
         );
     }
@@ -968,7 +1088,6 @@ mod test {
 
             -- numbers: ref x
             ",
-            &test_library(),
             (bag, super::default_column()),
         );
     }
@@ -1190,7 +1309,6 @@ mod test {
             contribute to, deploy, or monitor microservice, everything that
             makes web or mobile product teams productive.
             ",
-            &test_library(),
             (white_two_image_bag(false), main),
         );
     }
@@ -1296,7 +1414,6 @@ mod test {
             -- white-two-image: second call
             src: second-image.png
             ",
-            &test_library(),
             (white_two_image_bag(true), main),
         );
     }
@@ -1426,7 +1543,6 @@ mod test {
 
             -- white-two-image: third call
             ",
-            &test_library(),
             (white_two_image_bag(true), main),
         );
     }
@@ -1462,6 +1578,16 @@ mod test {
             ftd::p2::Thing::Variable(ftd::Variable {
                 name: s("dark-mode"),
                 value: ftd::Value::Boolean { value: true },
+            }),
+        );
+        bag.insert(
+            s("fifthtry/ft#toc"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("toc"),
+                value: ftd::Value::String {
+                    text: "not set".to_string(),
+                    source: ftd::TextSource::Caption,
+                },
             }),
         );
         bag.insert(
@@ -1592,7 +1718,6 @@ mod test {
 
             -- h0: heading without body
             ",
-            &test_library(),
             (bag, main),
         );
     }
@@ -1695,7 +1820,6 @@ mod test {
             src: bar.png
             width: 300
             ",
-            &test_library(),
             (bag, main),
         );
     }
@@ -1797,7 +1921,6 @@ mod test {
             -- foo:
             x: 10
         ",
-            &test_library(),
             (bag, main),
         );
     }
@@ -1899,7 +2022,6 @@ mod test {
             -- foo:
             x: 10
         ",
-            &test_library(),
             (bag, main),
         );
     }
@@ -2042,7 +2164,6 @@ mod test {
             -- foo:
             x: 10
         ",
-            &test_library(),
             (bag, main),
         );
     }
@@ -2284,7 +2405,6 @@ mod test {
             -- ftd.text: never see light of the day
             if: false
         ",
-            &test_library(),
             (Default::default(), main),
         );
     }

@@ -443,7 +443,6 @@ mod test {
 
             yo yo
             ",
-            &test_library(),
             (bag, default_column()),
         );
     }

@@ -68,20 +68,20 @@ impl ChildComponent {
             Vec<std::collections::BTreeMap<String, crate::Value>>,
         >,
     ) -> crate::p1::Result<ftd_rt::Element> {
-        let mut parent = self.call(doc, arguments, invocations)?;
+        let mut parent = self.call(doc, arguments, invocations, false)?;
         match (&mut parent, children.is_empty()) {
             (ftd_rt::Element::Column(c), _) => {
                 for child in children.iter() {
                     c.container
                         .children
-                        .push(child.call(doc, arguments, invocations)?)
+                        .push(child.call(doc, arguments, invocations, false)?)
                 }
             }
             (ftd_rt::Element::Row(c), _) => {
                 for child in children.iter() {
                     c.container
                         .children
-                        .push(child.call(doc, arguments, invocations)?)
+                        .push(child.call(doc, arguments, invocations, false)?)
                 }
             }
             (t, false) => {
@@ -100,6 +100,7 @@ impl ChildComponent {
             String,
             Vec<std::collections::BTreeMap<String, crate::Value>>,
         >,
+        is_child: bool,
     ) -> crate::p1::Result<ftd_rt::Element> {
         if let Some(ref b) = self.condition {
             if b.is_constant() && !b.eval(arguments, doc)? {
@@ -112,7 +113,13 @@ impl ChildComponent {
             // must have validated everything, and must not fail at run time
             doc.get_component(self.root.as_str()).unwrap()
         };
-        let root_properties = resolve_properties(&self.properties, arguments, doc)?;
+        let root_properties = resolve_properties(&self.properties, arguments, doc, {
+            if is_child {
+                Some(&self.root)
+            } else {
+                None
+            }
+        })?;
         root.call(&root_properties, doc, invocations, &self.condition)
     }
 
@@ -155,6 +162,7 @@ fn resolve_properties(
     self_properties: &std::collections::BTreeMap<String, Property>,
     arguments: &std::collections::BTreeMap<String, crate::Value>,
     doc: &crate::p2::TDoc,
+    root: Option<&str>,
 ) -> crate::p1::Result<std::collections::BTreeMap<String, crate::Value>> {
     let mut properties: std::collections::BTreeMap<String, crate::Value> = Default::default();
 
@@ -162,6 +170,19 @@ fn resolve_properties(
         if let Ok(property_value) = value.eval(name, arguments, doc) {
             properties.insert(name.to_string(), property_value.resolve(arguments, doc)?);
         }
+    }
+    if let Some(value) = arguments.get("root") {
+        properties.insert("root".to_string(), value.clone());
+    }
+    if let Some(root_id) = root {
+        let mut parts = root_id.splitn(2, '#');
+        properties.insert(
+            "root".to_string(),
+            crate::Value::String {
+                text: parts.next().unwrap().trim().to_string(),
+                source: crate::TextSource::Header,
+            },
+        );
     }
     Ok(properties)
 }
@@ -284,9 +305,7 @@ impl Component {
                 // must have validated everything, and must not fail at run time
                 doc.get_component(self.root.as_str()).unwrap()
             };
-
-            let root_properties = resolve_properties(&self.properties, arguments, doc)?;
-
+            let root_properties = resolve_properties(&self.properties, arguments, doc, None)?;
             let mut element = root.call(&root_properties, doc, invocations, condition)?;
 
             match &mut element {
@@ -676,7 +695,6 @@ mod test {
             -- ftd.text:
             text: ref name
             ",
-            &test_library(),
             (bag.clone(), main.clone()),
         );
 
@@ -686,7 +704,6 @@ mod test {
 
             -- ftd.text: ref name
             ",
-            &test_library(),
             (bag.clone(), main.clone()),
         );
 
@@ -698,7 +715,6 @@ mod test {
 
             ref name
             ",
-            &test_library(),
             (bag, main),
         );
     }
@@ -762,7 +778,6 @@ mod test {
             -- ftd.text:
             text: ref abrar.name
             ",
-            &test_library(),
             (bag.clone(), main.clone()),
         );
     }

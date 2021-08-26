@@ -473,7 +473,6 @@ mod test {
 
             Software developer working at fifthtry2.
             ",
-            &crate::test::test_library(),
             (bag, crate::p2::interpreter::default_column()),
         );
     }
@@ -559,7 +558,6 @@ mod test {
             friends: Amit Upadhyay
             friends: Saurabh Garg
             ",
-            &test_library(),
             (b(ftd::TextSource::Header), default_column()),
         );
 
@@ -576,7 +574,6 @@ mod test {
             --- friends: Amit Upadhyay
             --- friends: Saurabh Garg
             ",
-            &test_library(),
             (b(ftd::TextSource::Caption), default_column()),
         );
     }
@@ -731,7 +728,6 @@ mod test {
             x: 1
             y: 22
             ",
-            &test_library(),
             (bag, default_column()),
         );
     }
@@ -887,7 +883,6 @@ mod test {
             --- party.company: Acme Inc
             industry: Widgets
             ",
-            &test_library(),
             (bag, default_column()),
         );
     }

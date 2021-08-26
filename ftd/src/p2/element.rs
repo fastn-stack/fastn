@@ -30,8 +30,12 @@ pub fn common_from_properties(
         )?)?,
         border_width: crate::p2::utils::int_with_default("border-width", 0, properties)?,
         border_radius: crate::p2::utils::int_with_default("border-radius", 0, properties)?,
-        id: crate::p2::utils::string_optional("id", properties)?
-            .map(|v| format!("{}#{}", doc.name, v)),
+        id: crate::p2::utils::string_optional("id", properties)?.map(|v| {
+            match crate::p2::utils::string_optional("root", properties) {
+                Ok(Some(root)) => format!("{}#{}", root, v),
+                _ => format!("{}#{}", doc.name, v),
+            }
+        }),
         overflow_x: ftd_rt::Overflow::from(crate::p2::utils::string_optional(
             "overflow-x",
             properties,

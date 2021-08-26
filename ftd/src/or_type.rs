@@ -93,7 +93,6 @@ mod test {
 
             Software developer working at fifthtry2.
             ",
-            &test_library(),
             (bag, default_column()),
         );
     }

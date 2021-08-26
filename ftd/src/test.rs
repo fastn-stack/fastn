@@ -1,11 +1,15 @@
 macro_rules! p {
-    ($s:expr, $lib: expr, $t: expr,) => {
-        p!($s, $lib, $t)
+    ($s:expr, $t: expr,) => {
+        p!($s, $t)
     };
-    ($s:expr, $lib: expr, $t: expr) => {
+    ($s:expr, $t: expr) => {
         let (ebag, ecol): (std::collections::BTreeMap<String, crate::p2::Thing>, _) = $t;
-        let (mut bag, col) = crate::p2::interpreter::interpret("foo/bar", indoc::indoc!($s), $lib)
-            .expect("found error");
+        let (mut bag, col) = crate::p2::interpreter::interpret(
+            "foo/bar",
+            indoc::indoc!($s),
+            &ftd::p2::TestLibrary {},
+        )
+        .expect("found error");
         for v in bag.values_mut() {
             if let crate::p2::Thing::Component(c) = v {
                 c.invocations.clear();
@@ -16,24 +20,6 @@ macro_rules! p {
         }
         pretty_assertions::assert_eq!(col, ecol);
     };
-}
-
-pub fn test_library() -> impl crate::p2::Library {
-    let mut t = crate::p2::TestLibrary::default();
-    t.libs.insert(
-        s("fifthtry/ft"),
-        indoc::indoc!(
-            "
-            -- component markdown:
-            component: ftd.text
-            $body: body
-            text: ref $body
-
-            -- var dark-mode: true"
-        )
-        .to_string(),
-    );
-    t
 }
 
 pub fn s(s: &str) -> String {

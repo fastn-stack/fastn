@@ -380,6 +380,7 @@ impl ftd_rt::Common {
         d.insert(s("border-width"), format!("{}px", self.border_width));
         d.insert(s("border-radius"), format!("{}px", self.border_radius));
         d.insert(s("box-sizing"), s("border-box"));
+        d.insert(s("white-space"), s("initial"));
 
         d
     }

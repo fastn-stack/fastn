@@ -413,15 +413,6 @@ mod test {
 
     #[test]
     fn variable_from_other_doc() {
-        let lib = {
-            let mut t = crate::p2::TestLibrary::default();
-            t.libs.insert(
-                "fifthtry/ft".to_string(),
-                std::fs::read_to_string("../ft.ftd").unwrap(),
-            );
-            t
-        };
-
         let bag = super::Document::from(
             "foo/bar",
             indoc::indoc!(
@@ -432,7 +423,7 @@ mod test {
             foo is the toc
             "
             ),
-            &lib,
+            &ftd::p2::TestLibrary {},
         )
         .unwrap();
 
@@ -483,7 +474,7 @@ mod test {
                 --- reader.Who: everyone
             "
             ),
-            &test_library(),
+            &ftd::p2::TestLibrary {},
         )
         .unwrap();
 
@@ -524,7 +515,7 @@ mod test {
                 number: 224
                 "
             ),
-            &test_library(),
+            &ftd::p2::TestLibrary {},
         )
         .unwrap();
 
@@ -566,7 +557,7 @@ mod test {
                 number: 224
                 "
             ),
-            &test_library(),
+            &ftd::p2::TestLibrary {},
         )
         .unwrap();
 

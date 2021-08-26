@@ -8,13 +8,10 @@ pub trait Library {
     }
 }
 
-#[derive(Default)]
-pub struct TestLibrary {
-    pub libs: std::collections::HashMap<String, String>,
-}
+pub struct TestLibrary {}
 
 impl Library for TestLibrary {
     fn get(&self, name: &str) -> Option<String> {
-        self.libs.get(name).map(ToString::to_string)
+        std::fs::read_to_string(format!("./tests/{}.ftd", name)).ok()
     }
 }

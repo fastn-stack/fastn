@@ -77,7 +77,6 @@ pub(crate) fn execute(
     let mut current_container: Vec<usize> = Default::default();
     let mut named_containers: std::collections::BTreeMap<String, Vec<usize>> = Default::default();
     let mut children = vec![];
-
     for instruction in instructions.iter() {
         let doc = crate::p2::TDoc { name, aliases, bag };
         match instruction {
@@ -93,7 +92,7 @@ pub(crate) fn execute(
                 children = add_element(children, &mut current_container, &mut named_containers, e)
             }
             ftd::Instruction::ChildComponent { child: f } => {
-                let e = f.call(&doc, arguments, invocations)?;
+                let e = f.call(&doc, arguments, invocations, true)?;
                 children = add_element(children, &mut current_container, &mut named_containers, e)
             }
         }
