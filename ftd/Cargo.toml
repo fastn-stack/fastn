@@ -19,7 +19,7 @@ syntect = { version = "4.5.0", default-features = false, features = ["default-fa
 lazy_static = { version = "1" }
 regex = { version = "1.5.4" }
 format_num = { version = "0.1.0" }
-ftd-rt = { path = "../ftd-rt" }
+ftd-rt = { path = "../ftd-rt", version = "0.1.0" }
 
 
 [dev-dependencies]
