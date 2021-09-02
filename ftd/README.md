@@ -1,32 +1,36 @@
-# FTD Components
+# FTD
 
-## ftd/text
+## How to run ftd
 
-This component is to be used to create new text. It accepts
-the following arguments:
+### 1. Build ftd-rt wasm
 
-text[string]: Text to be displayed.
+```bash
+cd ftd-rt
+wasm-pack build --target web -- --features=wasm
+```
+This commmand will create `pkg` folder inside `ftd-rt`
 
-size[int=12]: Size in pixels.
+### 2. Build FTD Files
 
+```bash
+cd ftd
+cargo run
+```
+This will create HTML (`.html` and `-rt.html`) files inside `ftd/build` folder for all `.ftd` files inside `ftd/examples` folder
 
+1. `-rt.html`: It is runtime file rendered using wasm.
+2. `.html`: It is static html file.
 
+### 3. View Files
 
+Run a local server:
 
+```bash
+cd ftd/build
+python -m http.server 8000
+```
+And visit: `http://localhost:8000/`.
 
--- var intro:
-fn: ftd.text
+## Documentation
 
-[founder|Amit [surname|Upadhyay]] is the CEO of [Fifthtry]. [founder|Deepak
-[surname|Angrula]].
-
-
---- surname:
-underline: true
-
---- founder:
-color: red
-background: yellow
-
---- Fifthtry:
-link: https://www.fifthtry.com
+Docs: [fifthtry.com/fifthtry/ftd/](https://www.fifthtry.com/fifthtry/ftd/)

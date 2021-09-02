@@ -160,10 +160,14 @@ impl Node {
 
         let mut children_style = common.children_style();
         children_style.extend(container.children_style());
+        let node = match common.link {
+            Some(_) => "a",
+            None => "div",
+        };
 
         Node {
             condition: common.condition.clone(),
-            node: s("div"), // TODO: use better tags based on common.region
+            node: s(node), // TODO: use better tags based on common.region
             attrs,
             style,
             classes,
@@ -230,7 +234,11 @@ impl ftd_rt::Text {
     pub fn to_node(&self) -> Node {
         // TODO: proper tag based on self.common.region
         // TODO: if format is not markdown use pre
-        let mut n = Node::from_common("div", &self.common);
+        let node = match &self.common.link {
+            Some(_) => "a",
+            None => "div",
+        };
+        let mut n = Node::from_common(node, &self.common);
         n.text = Some(self.text.rendered.clone());
         let (key, value) = text_align(&self.align);
         n.style.insert(s(key.as_str()), value);
@@ -389,6 +397,9 @@ impl ftd_rt::Common {
         let mut d: ftd_rt::Map = Default::default();
         if let Some(ref id) = self.id {
             d.insert(s("id"), escape(id));
+        }
+        if let Some(ref link) = self.link {
+            d.insert(s("href"), escape(link));
         }
         if self.open_in_new_tab {
             d.insert(s("target"), escape("_blank"));

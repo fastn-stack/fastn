@@ -174,18 +174,25 @@ pub fn bool(
     }
 }
 
-pub fn bool_optional(
+pub fn string_bool_optional(
     name: &str,
     properties: &std::collections::BTreeMap<String, crate::Value>,
-) -> crate::p1::Result<Option<bool>> {
+) -> crate::p1::Result<(Option<bool>, Option<String>)> {
     match properties.get(name) {
-        Some(crate::Value::Boolean { value: v }) => Ok(Some(*v)),
+        Some(crate::Value::Boolean { value: v }) => Ok((Some(*v), None)),
         Some(crate::Value::None {
             kind: crate::p2::Kind::Boolean { .. },
-        }) => Ok(None),
-        Some(ftd::Value::None { .. }) => Ok(None),
+        }) => Ok((None, None)),
+        Some(ftd::Value::None { .. }) => Ok((None, None)),
+        Some(crate::Value::String { text: v, .. }) => {
+            if let Ok(b) = v.parse::<bool>() {
+                Ok((Some(b), None))
+            } else {
+                Ok((None, Some(v.to_string())))
+            }
+        }
         Some(v) => crate::e2(format!("expected bool, found: {:?}", v), "bool_optional"),
-        None => Ok(None),
+        None => Ok((None, None)),
     }
 }
 

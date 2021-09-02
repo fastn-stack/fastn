@@ -72,7 +72,8 @@ impl<'a> Interpreter<'a> {
                 // }
             } else if p1.name == "container" {
                 instructions.push(ftd::Instruction::ChangeContainer {
-                    name: doc.resolve_name(p1.caption()?.as_str())?,
+                    name: doc
+                        .resolve_name_with_instruction(p1.caption()?.as_str(), &instructions)?,
                 });
             } else {
                 // cloning because https://github.com/rust-lang/rust/issues/59159
@@ -427,8 +428,696 @@ mod test {
     }
 
     #[test]
-    #[ignore]
-    fn test() {
+    fn creating_a_tree() {
+        let mut bag = super::default_bag();
+
+        bag.insert(
+            "foo/bar#ft_toc".to_string(),
+            crate::p2::Thing::Component(crate::Component {
+                root: "ftd.column".to_string(),
+                full_name: "foo/bar#ft_toc".to_string(),
+                arguments: Default::default(),
+                properties: Default::default(),
+                instructions: vec![
+                    crate::component::Instruction::ChildComponent {
+                        child: crate::component::ChildComponent {
+                            root: "foo/bar#table-of-content".to_string(),
+                            condition: None,
+                            properties: std::array::IntoIter::new([(
+                                s("id"),
+                                crate::component::Property {
+                                    default: Some(crate::PropertyValue::Value {
+                                        value: crate::variable::Value::String {
+                                            text: "toc_main".to_string(),
+                                            source: crate::TextSource::Header,
+                                        },
+                                    }),
+                                    conditions: vec![],
+                                },
+                            )])
+                            .collect(),
+                        },
+                    },
+                    crate::component::Instruction::ChildComponent {
+                        child: crate::component::ChildComponent {
+                            root: "foo/bar#parent".to_string(),
+                            condition: None,
+                            properties: std::array::IntoIter::new([
+                                (
+                                    s("active"),
+                                    crate::component::Property {
+                                        default: Some(crate::PropertyValue::Value {
+                                            value: crate::variable::Value::Boolean { value: true },
+                                        }),
+                                        conditions: vec![],
+                                    },
+                                ),
+                                (
+                                    s("id"),
+                                    crate::component::Property {
+                                        default: Some(crate::PropertyValue::Value {
+                                            value: crate::variable::Value::String {
+                                                text: "/welcome/".to_string(),
+                                                source: crate::TextSource::Header,
+                                            },
+                                        }),
+                                        conditions: vec![],
+                                    },
+                                ),
+                                (
+                                    s("name"),
+                                    crate::component::Property {
+                                        default: Some(crate::PropertyValue::Value {
+                                            value: crate::variable::Value::String {
+                                                text: "5PM Tasks".to_string(),
+                                                source: crate::TextSource::Header,
+                                            },
+                                        }),
+                                        conditions: vec![],
+                                    },
+                                ),
+                            ])
+                            .collect(),
+                        },
+                    },
+                    crate::component::Instruction::ChildComponent {
+                        child: crate::component::ChildComponent {
+                            root: "foo/bar#parent".to_string(),
+                            condition: None,
+                            properties: std::array::IntoIter::new([
+                                (
+                                    s("id"),
+                                    crate::component::Property {
+                                        default: Some(crate::PropertyValue::Value {
+                                            value: crate::variable::Value::String {
+                                                text: "/Building/".to_string(),
+                                                source: crate::TextSource::Header,
+                                            },
+                                        }),
+                                        conditions: vec![],
+                                    },
+                                ),
+                                (
+                                    s("name"),
+                                    crate::component::Property {
+                                        default: Some(crate::PropertyValue::Value {
+                                            value: crate::variable::Value::String {
+                                                text: "Log".to_string(),
+                                                source: crate::TextSource::Header,
+                                            },
+                                        }),
+                                        conditions: vec![],
+                                    },
+                                ),
+                            ])
+                            .collect(),
+                        },
+                    },
+                    crate::component::Instruction::ChildComponent {
+                        child: crate::component::ChildComponent {
+                            root: "foo/bar#parent".to_string(),
+                            condition: None,
+                            properties: std::array::IntoIter::new([
+                                (
+                                    s("id"),
+                                    crate::component::Property {
+                                        default: Some(crate::PropertyValue::Value {
+                                            value: crate::variable::Value::String {
+                                                text: "/ChildBuilding/".to_string(),
+                                                source: crate::TextSource::Header,
+                                            },
+                                        }),
+                                        conditions: vec![],
+                                    },
+                                ),
+                                (
+                                    s("name"),
+                                    crate::component::Property {
+                                        default: Some(crate::PropertyValue::Value {
+                                            value: crate::variable::Value::String {
+                                                text: "ChildLog".to_string(),
+                                                source: crate::TextSource::Header,
+                                            },
+                                        }),
+                                        conditions: vec![],
+                                    },
+                                ),
+                            ])
+                            .collect(),
+                        },
+                    },
+                    crate::component::Instruction::ChangeContainer {
+                        name: "/welcome/".to_string(),
+                    },
+                    crate::component::Instruction::ChildComponent {
+                        child: crate::component::ChildComponent {
+                            root: "foo/bar#parent".to_string(),
+                            condition: None,
+                            properties: std::array::IntoIter::new([
+                                (
+                                    s("id"),
+                                    crate::component::Property {
+                                        default: Some(crate::PropertyValue::Value {
+                                            value: crate::variable::Value::String {
+                                                text: "/Building2/".to_string(),
+                                                source: crate::TextSource::Header,
+                                            },
+                                        }),
+                                        conditions: vec![],
+                                    },
+                                ),
+                                (
+                                    s("name"),
+                                    crate::component::Property {
+                                        default: Some(crate::PropertyValue::Value {
+                                            value: crate::variable::Value::String {
+                                                text: "Log2".to_string(),
+                                                source: crate::TextSource::Header,
+                                            },
+                                        }),
+                                        conditions: vec![],
+                                    },
+                                ),
+                            ])
+                            .collect(),
+                        },
+                    },
+                ],
+                kernel: false,
+                invocations: vec![std::collections::BTreeMap::new()],
+            }),
+        );
+
+        bag.insert(
+            "foo/bar#parent".to_string(),
+            crate::p2::Thing::Component(crate::Component {
+                root: "ftd.column".to_string(),
+                full_name: "foo/bar#parent".to_string(),
+                arguments: std::array::IntoIter::new([
+                    (
+                        s("active"),
+                        crate::p2::Kind::Optional {
+                            kind: Box::new(crate::p2::Kind::Boolean),
+                        },
+                    ),
+                    (
+                        s("id"),
+                        crate::p2::Kind::String {
+                            caption: false,
+                            body: false,
+                        },
+                    ),
+                    (
+                        s("name"),
+                        crate::p2::Kind::String {
+                            caption: true,
+                            body: false,
+                        },
+                    ),
+                ])
+                .collect(),
+                properties: std::array::IntoIter::new([
+                    (
+                        s("id"),
+                        crate::component::Property {
+                            default: Some(crate::PropertyValue::Argument {
+                                name: "id".to_string(),
+                                kind: crate::p2::Kind::Optional {
+                                    kind: Box::new(crate::p2::Kind::String {
+                                        caption: false,
+                                        body: false,
+                                    }),
+                                },
+                            }),
+                            conditions: vec![],
+                        },
+                    ),
+                    (
+                        s("open"),
+                        crate::component::Property {
+                            default: Some(crate::PropertyValue::Value {
+                                value: crate::variable::Value::String {
+                                    text: "true".to_string(),
+                                    source: crate::TextSource::Header,
+                                },
+                            }),
+                            conditions: vec![],
+                        },
+                    ),
+                    (
+                        s("width"),
+                        crate::component::Property {
+                            default: Some(crate::PropertyValue::Value {
+                                value: crate::variable::Value::String {
+                                    text: "fill".to_string(),
+                                    source: crate::TextSource::Header,
+                                },
+                            }),
+                            conditions: vec![],
+                        },
+                    ),
+                ])
+                .collect(),
+                instructions: vec![
+                    crate::component::Instruction::ChildComponent {
+                        child: crate::component::ChildComponent {
+                            root: "ftd#text".to_string(),
+                            condition: Some(ftd::p2::Boolean::IsNotNull {
+                                value: ftd::PropertyValue::Argument {
+                                    name: "active".to_string(),
+                                    kind: crate::p2::Kind::Optional {
+                                        kind: Box::new(crate::p2::Kind::Boolean),
+                                    },
+                                },
+                            }),
+                            properties: std::array::IntoIter::new([
+                                (
+                                    s("color"),
+                                    crate::component::Property {
+                                        default: Some(crate::PropertyValue::Value {
+                                            value: crate::variable::Value::String {
+                                                text: "white".to_string(),
+                                                source: crate::TextSource::Header,
+                                            },
+                                        }),
+                                        conditions: vec![],
+                                    },
+                                ),
+                                (
+                                    s("size"),
+                                    crate::component::Property {
+                                        default: Some(crate::PropertyValue::Value {
+                                            value: crate::variable::Value::Integer { value: 14 },
+                                        }),
+                                        conditions: vec![],
+                                    },
+                                ),
+                                (
+                                    s("text"),
+                                    crate::component::Property {
+                                        default: Some(crate::PropertyValue::Argument {
+                                            name: "name".to_string(),
+                                            kind: crate::p2::Kind::String {
+                                                caption: true,
+                                                body: true,
+                                            },
+                                        }),
+                                        conditions: vec![],
+                                    },
+                                ),
+                            ])
+                            .collect(),
+                        },
+                    },
+                    crate::component::Instruction::ChildComponent {
+                        child: crate::component::ChildComponent {
+                            root: "ftd#text".to_string(),
+                            condition: Some(ftd::p2::Boolean::IsNull {
+                                value: ftd::PropertyValue::Argument {
+                                    name: "active".to_string(),
+                                    kind: crate::p2::Kind::Optional {
+                                        kind: Box::new(crate::p2::Kind::Boolean),
+                                    },
+                                },
+                            }),
+                            properties: std::array::IntoIter::new([
+                                (
+                                    s("color"),
+                                    crate::component::Property {
+                                        default: Some(crate::PropertyValue::Value {
+                                            value: crate::variable::Value::String {
+                                                text: "#4D4D4D".to_string(),
+                                                source: crate::TextSource::Header,
+                                            },
+                                        }),
+                                        conditions: vec![],
+                                    },
+                                ),
+                                (
+                                    s("size"),
+                                    crate::component::Property {
+                                        default: Some(crate::PropertyValue::Value {
+                                            value: crate::variable::Value::Integer { value: 14 },
+                                        }),
+                                        conditions: vec![],
+                                    },
+                                ),
+                                (
+                                    s("text"),
+                                    crate::component::Property {
+                                        default: Some(crate::PropertyValue::Argument {
+                                            name: "name".to_string(),
+                                            kind: crate::p2::Kind::String {
+                                                caption: true,
+                                                body: true,
+                                            },
+                                        }),
+                                        conditions: vec![],
+                                    },
+                                ),
+                            ])
+                            .collect(),
+                        },
+                    },
+                ],
+                kernel: false,
+                invocations: vec![
+                    std::array::IntoIter::new([
+                        (s("active"), crate::Value::Boolean { value: true }),
+                        (
+                            s("id"),
+                            crate::Value::String {
+                                text: "/welcome/".to_string(),
+                                source: crate::TextSource::Header,
+                            },
+                        ),
+                        (
+                            s("name"),
+                            crate::Value::String {
+                                text: "5PM Tasks".to_string(),
+                                source: crate::TextSource::Header,
+                            },
+                        ),
+                    ])
+                    .collect(),
+                    std::array::IntoIter::new([
+                        (
+                            s("id"),
+                            crate::Value::String {
+                                text: "/Building/".to_string(),
+                                source: crate::TextSource::Header,
+                            },
+                        ),
+                        (
+                            s("name"),
+                            crate::Value::String {
+                                text: "Log".to_string(),
+                                source: crate::TextSource::Header,
+                            },
+                        ),
+                    ])
+                    .collect(),
+                    std::array::IntoIter::new([
+                        (
+                            s("id"),
+                            crate::Value::String {
+                                text: "/ChildBuilding/".to_string(),
+                                source: crate::TextSource::Header,
+                            },
+                        ),
+                        (
+                            s("name"),
+                            crate::Value::String {
+                                text: "ChildLog".to_string(),
+                                source: crate::TextSource::Header,
+                            },
+                        ),
+                    ])
+                    .collect(),
+                    std::array::IntoIter::new([
+                        (
+                            s("id"),
+                            crate::Value::String {
+                                text: "/Building2/".to_string(),
+                                source: crate::TextSource::Header,
+                            },
+                        ),
+                        (
+                            s("name"),
+                            crate::Value::String {
+                                text: "Log2".to_string(),
+                                source: crate::TextSource::Header,
+                            },
+                        ),
+                    ])
+                    .collect(),
+                ],
+            }),
+        );
+
+        bag.insert(
+            "foo/bar#table-of-content".to_string(),
+            crate::p2::Thing::Component(crate::Component {
+                root: "ftd.column".to_string(),
+                full_name: "foo/bar#table-of-content".to_string(),
+                arguments: std::array::IntoIter::new([(
+                    s("id"),
+                    crate::p2::Kind::String {
+                        caption: false,
+                        body: false,
+                    },
+                )])
+                .collect(),
+                properties: std::array::IntoIter::new([
+                    (
+                        s("height"),
+                        crate::component::Property {
+                            default: Some(crate::PropertyValue::Value {
+                                value: crate::variable::Value::String {
+                                    text: "fill".to_string(),
+                                    source: crate::TextSource::Header,
+                                },
+                            }),
+                            conditions: vec![],
+                        },
+                    ),
+                    (
+                        s("id"),
+                        crate::component::Property {
+                            default: Some(crate::PropertyValue::Argument {
+                                name: "id".to_string(),
+                                kind: crate::p2::Kind::Optional {
+                                    kind: Box::new(crate::p2::Kind::String {
+                                        caption: false,
+                                        body: false,
+                                    }),
+                                },
+                            }),
+                            conditions: vec![],
+                        },
+                    ),
+                    (
+                        s("width"),
+                        crate::component::Property {
+                            default: Some(crate::PropertyValue::Value {
+                                value: crate::variable::Value::String {
+                                    text: "300".to_string(),
+                                    source: crate::TextSource::Header,
+                                },
+                            }),
+                            conditions: vec![],
+                        },
+                    ),
+                ])
+                .collect(),
+                instructions: vec![],
+                kernel: false,
+                invocations: vec![std::array::IntoIter::new([(
+                    s("id"),
+                    crate::Value::String {
+                        text: "toc_main".to_string(),
+                        source: crate::TextSource::Header,
+                    },
+                )])
+                .collect()],
+            }),
+        );
+
+        bag.insert(
+            "foo/bar#toc-heading".to_string(),
+            crate::p2::Thing::Component(crate::Component {
+                root: "ftd.text".to_string(),
+                full_name: "foo/bar#toc-heading".to_string(),
+                arguments: std::array::IntoIter::new([(
+                    s("text"),
+                    crate::p2::Kind::String {
+                        caption: true,
+                        body: false,
+                    },
+                )])
+                .collect(),
+                properties: std::array::IntoIter::new([
+                    (
+                        s("size"),
+                        crate::component::Property {
+                            default: Some(crate::PropertyValue::Value {
+                                value: crate::variable::Value::Integer { value: 16 },
+                            }),
+                            conditions: vec![],
+                        },
+                    ),
+                    (
+                        s("text"),
+                        crate::component::Property {
+                            default: Some(crate::PropertyValue::Argument {
+                                name: "text".to_string(),
+                                kind: crate::p2::Kind::String {
+                                    caption: true,
+                                    body: true,
+                                },
+                            }),
+                            conditions: vec![],
+                        },
+                    ),
+                ])
+                .collect(),
+                instructions: vec![],
+                kernel: false,
+                invocations: vec![],
+            }),
+        );
+
+        let mut main = super::default_column();
+        main.container
+            .children
+            .push(ftd_rt::Element::Column(ftd_rt::Column {
+                container: ftd_rt::Container {
+                    children: vec![ftd_rt::Element::Column(ftd_rt::Column {
+                        container: ftd_rt::Container {
+                            children: vec![ftd_rt::Element::Column(ftd_rt::Column {
+                                container: ftd_rt::Container {
+                                    children: vec![
+                                        ftd_rt::Element::Text(ftd_rt::Text {
+                                            text: ftd::markdown_line("5PM Tasks"),
+                                            line: true,
+                                            common: ftd_rt::Common {
+                                                color: Some(ftd_rt::Color {
+                                                    r: 255,
+                                                    g: 255,
+                                                    b: 255,
+                                                    alpha: 1.0,
+                                                }),
+                                                ..Default::default()
+                                            },
+                                            size: Some(14),
+                                            ..Default::default()
+                                        }),
+                                        ftd_rt::Element::Null,
+                                        ftd_rt::Element::Column(ftd_rt::Column {
+                                            container: ftd_rt::Container {
+                                                children: vec![
+                                                    ftd_rt::Element::Null,
+                                                    ftd_rt::Element::Text(ftd_rt::Text {
+                                                        text: ftd::markdown_line("Log"),
+                                                        line: true,
+                                                        common: ftd_rt::Common {
+                                                            color: Some(ftd_rt::Color {
+                                                                r: 77,
+                                                                g: 77,
+                                                                b: 77,
+                                                                alpha: 1.0,
+                                                            }),
+                                                            ..Default::default()
+                                                        },
+                                                        size: Some(14),
+                                                        ..Default::default()
+                                                    }),
+                                                    ftd_rt::Element::Column(ftd_rt::Column {
+                                                        container: ftd_rt::Container {
+                                                            children: vec![
+                                                                ftd_rt::Element::Null,
+                                                                ftd_rt::Element::Text(
+                                                                    ftd_rt::Text {
+                                                                        text: ftd::markdown_line(
+                                                                            "ChildLog",
+                                                                        ),
+                                                                        line: true,
+                                                                        common: ftd_rt::Common {
+                                                                            color: Some(
+                                                                                ftd_rt::Color {
+                                                                                    r: 77,
+                                                                                    g: 77,
+                                                                                    b: 77,
+                                                                                    alpha: 1.0,
+                                                                                },
+                                                                            ),
+                                                                            ..Default::default()
+                                                                        },
+                                                                        size: Some(14),
+                                                                        ..Default::default()
+                                                                    },
+                                                                ),
+                                                            ],
+                                                            open: (Some(true), None),
+                                                            spacing: None,
+                                                            align: Default::default(),
+                                                            wrap: false,
+                                                        },
+                                                        common: ftd_rt::Common {
+                                                            id: Some(s("/ChildBuilding/")),
+                                                            width: Some(ftd_rt::Length::Fill),
+                                                            ..Default::default()
+                                                        },
+                                                    }),
+                                                ],
+                                                open: (Some(true), None),
+                                                spacing: None,
+                                                align: Default::default(),
+                                                wrap: false,
+                                            },
+                                            common: ftd_rt::Common {
+                                                id: Some(s("/Building/")),
+                                                width: Some(ftd_rt::Length::Fill),
+                                                ..Default::default()
+                                            },
+                                        }),
+                                        ftd_rt::Element::Column(ftd_rt::Column {
+                                            container: ftd_rt::Container {
+                                                children: vec![
+                                                    ftd_rt::Element::Null,
+                                                    ftd_rt::Element::Text(ftd_rt::Text {
+                                                        text: ftd::markdown_line("Log2"),
+                                                        line: true,
+                                                        common: ftd_rt::Common {
+                                                            color: Some(ftd_rt::Color {
+                                                                r: 77,
+                                                                g: 77,
+                                                                b: 77,
+                                                                alpha: 1.0,
+                                                            }),
+                                                            ..Default::default()
+                                                        },
+                                                        size: Some(14),
+                                                        ..Default::default()
+                                                    }),
+                                                ],
+                                                open: (Some(true), None),
+                                                spacing: None,
+                                                align: Default::default(),
+                                                wrap: false,
+                                            },
+                                            common: ftd_rt::Common {
+                                                id: Some(s("/Building2/")),
+                                                width: Some(ftd_rt::Length::Fill),
+                                                ..Default::default()
+                                            },
+                                        }),
+                                    ],
+                                    open: (Some(true), None),
+                                    spacing: None,
+                                    align: Default::default(),
+                                    wrap: false,
+                                },
+                                common: ftd_rt::Common {
+                                    id: Some(s("/welcome/")),
+                                    width: Some(ftd_rt::Length::Fill),
+                                    ..Default::default()
+                                },
+                            })],
+                            ..Default::default()
+                        },
+                        common: ftd_rt::Common {
+                            id: Some(s("toc_main")),
+                            height: Some(ftd_rt::Length::Fill),
+                            width: Some(ftd_rt::Length::Px { value: 300 }),
+                            ..Default::default()
+                        },
+                    })],
+                    ..Default::default()
+                },
+                ..Default::default()
+            }));
+
         let (g_bag, g_col) = crate::p2::interpreter::interpret(
             "foo/bar",
             indoc::indoc!(
@@ -438,12 +1127,6 @@ mod test {
                 $text: caption
                 text: ref $text
                 size: 16
-                color: black
-                align: left
-                padding-left: 20
-                padding-top: 25
-                padding-bottom: 12
-                style: semi-bold
 
 
                 -- component table-of-content:
@@ -451,12 +1134,6 @@ mod test {
                 $id: string
                 id: ref $id
                 width: 300
-                align: top-left
-                padding-left: 10
-                padding-top: 30
-                padding-right: 20
-                border-right: 1
-                border-color: #ebedef
                 height: fill
 
 
@@ -466,10 +1143,6 @@ mod test {
                 $name: caption
                 $active: optional boolean
                 id: ref $id
-                align: left
-                padding-left: 10
-                padding-top: 2
-                padding-bottom: 2
                 width: fill
                 open: true
 
@@ -478,24 +1151,12 @@ mod test {
                 text: ref $name
                 size: 14
                 color: white
-                align: left
-                padding-left: 10
-                padding-top: 4
-                padding-bottom: 4
-                width: fill
-                background-color: #6a7c95
-                border-radius: 2
-                style: semi-bold
 
                 --- ftd.text:
                 if: $active is null
                 text: ref $name
                 size: 14
                 color: #4D4D4D
-                align: left
-                padding-left: 10
-                padding-top: 7
-                padding-bottom: 7
 
 
                 -- component ft_toc:
@@ -530,26 +1191,879 @@ mod test {
             &ftd::p2::TestLibrary {},
         )
         .expect("found error");
-        pretty_assertions::assert_eq!(g_bag, super::default_bag());
-        pretty_assertions::assert_eq!(g_col, super::default_column());
+        pretty_assertions::assert_eq!(g_bag, bag);
+        pretty_assertions::assert_eq!(g_col, main);
     }
 
     #[test]
-    #[ignore]
-    fn test2() {
+    fn creating_a_tree_using_import() {
+        let mut bag = super::default_bag();
+
+        bag.insert(
+            "creating-a-tree#ft_toc".to_string(),
+            crate::p2::Thing::Component(crate::Component {
+                root: "ftd.column".to_string(),
+                full_name: "creating-a-tree#ft_toc".to_string(),
+                arguments: Default::default(),
+                properties: Default::default(),
+                instructions: vec![
+                    crate::component::Instruction::ChildComponent {
+                        child: crate::component::ChildComponent {
+                            root: "creating-a-tree#table-of-content".to_string(),
+                            condition: None,
+                            properties: std::array::IntoIter::new([(
+                                s("id"),
+                                crate::component::Property {
+                                    default: Some(crate::PropertyValue::Value {
+                                        value: crate::variable::Value::String {
+                                            text: "toc_main".to_string(),
+                                            source: crate::TextSource::Header,
+                                        },
+                                    }),
+                                    conditions: vec![],
+                                },
+                            )])
+                            .collect(),
+                        },
+                    },
+                    crate::component::Instruction::ChildComponent {
+                        child: crate::component::ChildComponent {
+                            root: "creating-a-tree#parent".to_string(),
+                            condition: None,
+                            properties: std::array::IntoIter::new([
+                                (
+                                    s("active"),
+                                    crate::component::Property {
+                                        default: Some(crate::PropertyValue::Value {
+                                            value: crate::variable::Value::Boolean { value: true },
+                                        }),
+                                        conditions: vec![],
+                                    },
+                                ),
+                                (
+                                    s("id"),
+                                    crate::component::Property {
+                                        default: Some(crate::PropertyValue::Value {
+                                            value: crate::variable::Value::String {
+                                                text: "/welcome/".to_string(),
+                                                source: crate::TextSource::Header,
+                                            },
+                                        }),
+                                        conditions: vec![],
+                                    },
+                                ),
+                                (
+                                    s("name"),
+                                    crate::component::Property {
+                                        default: Some(crate::PropertyValue::Value {
+                                            value: crate::variable::Value::String {
+                                                text: "5PM Tasks".to_string(),
+                                                source: crate::TextSource::Header,
+                                            },
+                                        }),
+                                        conditions: vec![],
+                                    },
+                                ),
+                            ])
+                            .collect(),
+                        },
+                    },
+                    crate::component::Instruction::ChildComponent {
+                        child: crate::component::ChildComponent {
+                            root: "creating-a-tree#parent".to_string(),
+                            condition: None,
+                            properties: std::array::IntoIter::new([
+                                (
+                                    s("id"),
+                                    crate::component::Property {
+                                        default: Some(crate::PropertyValue::Value {
+                                            value: crate::variable::Value::String {
+                                                text: "/Building/".to_string(),
+                                                source: crate::TextSource::Header,
+                                            },
+                                        }),
+                                        conditions: vec![],
+                                    },
+                                ),
+                                (
+                                    s("name"),
+                                    crate::component::Property {
+                                        default: Some(crate::PropertyValue::Value {
+                                            value: crate::variable::Value::String {
+                                                text: "Log".to_string(),
+                                                source: crate::TextSource::Header,
+                                            },
+                                        }),
+                                        conditions: vec![],
+                                    },
+                                ),
+                            ])
+                            .collect(),
+                        },
+                    },
+                    crate::component::Instruction::ChildComponent {
+                        child: crate::component::ChildComponent {
+                            root: "creating-a-tree#parent".to_string(),
+                            condition: None,
+                            properties: std::array::IntoIter::new([
+                                (
+                                    s("id"),
+                                    crate::component::Property {
+                                        default: Some(crate::PropertyValue::Value {
+                                            value: crate::variable::Value::String {
+                                                text: "/ChildBuilding/".to_string(),
+                                                source: crate::TextSource::Header,
+                                            },
+                                        }),
+                                        conditions: vec![],
+                                    },
+                                ),
+                                (
+                                    s("name"),
+                                    crate::component::Property {
+                                        default: Some(crate::PropertyValue::Value {
+                                            value: crate::variable::Value::String {
+                                                text: "ChildLog".to_string(),
+                                                source: crate::TextSource::Header,
+                                            },
+                                        }),
+                                        conditions: vec![],
+                                    },
+                                ),
+                            ])
+                            .collect(),
+                        },
+                    },
+                    crate::component::Instruction::ChangeContainer {
+                        name: "/welcome/".to_string(),
+                    },
+                    crate::component::Instruction::ChildComponent {
+                        child: crate::component::ChildComponent {
+                            root: "creating-a-tree#parent".to_string(),
+                            condition: None,
+                            properties: std::array::IntoIter::new([
+                                (
+                                    s("id"),
+                                    crate::component::Property {
+                                        default: Some(crate::PropertyValue::Value {
+                                            value: crate::variable::Value::String {
+                                                text: "/Building2/".to_string(),
+                                                source: crate::TextSource::Header,
+                                            },
+                                        }),
+                                        conditions: vec![],
+                                    },
+                                ),
+                                (
+                                    s("name"),
+                                    crate::component::Property {
+                                        default: Some(crate::PropertyValue::Value {
+                                            value: crate::variable::Value::String {
+                                                text: "Log2".to_string(),
+                                                source: crate::TextSource::Header,
+                                            },
+                                        }),
+                                        conditions: vec![],
+                                    },
+                                ),
+                            ])
+                            .collect(),
+                        },
+                    },
+                ],
+                kernel: false,
+                invocations: vec![std::collections::BTreeMap::new()],
+            }),
+        );
+
+        bag.insert(
+            "creating-a-tree#parent".to_string(),
+            crate::p2::Thing::Component(crate::Component {
+                root: "ftd.column".to_string(),
+                full_name: "creating-a-tree#parent".to_string(),
+                arguments: std::array::IntoIter::new([
+                    (
+                        s("active"),
+                        crate::p2::Kind::Optional {
+                            kind: Box::new(crate::p2::Kind::Boolean),
+                        },
+                    ),
+                    (
+                        s("id"),
+                        crate::p2::Kind::String {
+                            caption: false,
+                            body: false,
+                        },
+                    ),
+                    (
+                        s("name"),
+                        crate::p2::Kind::String {
+                            caption: true,
+                            body: false,
+                        },
+                    ),
+                ])
+                .collect(),
+                properties: std::array::IntoIter::new([
+                    (
+                        s("id"),
+                        crate::component::Property {
+                            default: Some(crate::PropertyValue::Argument {
+                                name: "id".to_string(),
+                                kind: crate::p2::Kind::Optional {
+                                    kind: Box::new(crate::p2::Kind::String {
+                                        caption: false,
+                                        body: false,
+                                    }),
+                                },
+                            }),
+                            conditions: vec![],
+                        },
+                    ),
+                    (
+                        s("open"),
+                        crate::component::Property {
+                            default: Some(crate::PropertyValue::Value {
+                                value: crate::variable::Value::String {
+                                    text: "true".to_string(),
+                                    source: crate::TextSource::Header,
+                                },
+                            }),
+                            conditions: vec![],
+                        },
+                    ),
+                    (
+                        s("width"),
+                        crate::component::Property {
+                            default: Some(crate::PropertyValue::Value {
+                                value: crate::variable::Value::String {
+                                    text: "fill".to_string(),
+                                    source: crate::TextSource::Header,
+                                },
+                            }),
+                            conditions: vec![],
+                        },
+                    ),
+                ])
+                .collect(),
+                instructions: vec![
+                    crate::component::Instruction::ChildComponent {
+                        child: crate::component::ChildComponent {
+                            root: "ftd#text".to_string(),
+                            condition: Some(ftd::p2::Boolean::IsNotNull {
+                                value: ftd::PropertyValue::Argument {
+                                    name: "active".to_string(),
+                                    kind: crate::p2::Kind::Optional {
+                                        kind: Box::new(crate::p2::Kind::Boolean),
+                                    },
+                                },
+                            }),
+                            properties: std::array::IntoIter::new([
+                                (
+                                    s("color"),
+                                    crate::component::Property {
+                                        default: Some(crate::PropertyValue::Value {
+                                            value: crate::variable::Value::String {
+                                                text: "white".to_string(),
+                                                source: crate::TextSource::Header,
+                                            },
+                                        }),
+                                        conditions: vec![],
+                                    },
+                                ),
+                                (
+                                    s("size"),
+                                    crate::component::Property {
+                                        default: Some(crate::PropertyValue::Value {
+                                            value: crate::variable::Value::Integer { value: 14 },
+                                        }),
+                                        conditions: vec![],
+                                    },
+                                ),
+                                (
+                                    s("text"),
+                                    crate::component::Property {
+                                        default: Some(crate::PropertyValue::Argument {
+                                            name: "name".to_string(),
+                                            kind: crate::p2::Kind::String {
+                                                caption: true,
+                                                body: true,
+                                            },
+                                        }),
+                                        conditions: vec![],
+                                    },
+                                ),
+                            ])
+                            .collect(),
+                        },
+                    },
+                    crate::component::Instruction::ChildComponent {
+                        child: crate::component::ChildComponent {
+                            root: "ftd#text".to_string(),
+                            condition: Some(ftd::p2::Boolean::IsNull {
+                                value: ftd::PropertyValue::Argument {
+                                    name: "active".to_string(),
+                                    kind: crate::p2::Kind::Optional {
+                                        kind: Box::new(crate::p2::Kind::Boolean),
+                                    },
+                                },
+                            }),
+                            properties: std::array::IntoIter::new([
+                                (
+                                    s("color"),
+                                    crate::component::Property {
+                                        default: Some(crate::PropertyValue::Value {
+                                            value: crate::variable::Value::String {
+                                                text: "#4D4D4D".to_string(),
+                                                source: crate::TextSource::Header,
+                                            },
+                                        }),
+                                        conditions: vec![],
+                                    },
+                                ),
+                                (
+                                    s("size"),
+                                    crate::component::Property {
+                                        default: Some(crate::PropertyValue::Value {
+                                            value: crate::variable::Value::Integer { value: 14 },
+                                        }),
+                                        conditions: vec![],
+                                    },
+                                ),
+                                (
+                                    s("text"),
+                                    crate::component::Property {
+                                        default: Some(crate::PropertyValue::Argument {
+                                            name: "name".to_string(),
+                                            kind: crate::p2::Kind::String {
+                                                caption: true,
+                                                body: true,
+                                            },
+                                        }),
+                                        conditions: vec![],
+                                    },
+                                ),
+                            ])
+                            .collect(),
+                        },
+                    },
+                ],
+                kernel: false,
+                invocations: vec![
+                    std::array::IntoIter::new([
+                        (s("active"), crate::Value::Boolean { value: true }),
+                        (
+                            s("id"),
+                            crate::Value::String {
+                                text: "/welcome/".to_string(),
+                                source: crate::TextSource::Header,
+                            },
+                        ),
+                        (
+                            s("name"),
+                            crate::Value::String {
+                                text: "5PM Tasks".to_string(),
+                                source: crate::TextSource::Header,
+                            },
+                        ),
+                    ])
+                    .collect(),
+                    std::array::IntoIter::new([
+                        (
+                            s("id"),
+                            crate::Value::String {
+                                text: "/Building/".to_string(),
+                                source: crate::TextSource::Header,
+                            },
+                        ),
+                        (
+                            s("name"),
+                            crate::Value::String {
+                                text: "Log".to_string(),
+                                source: crate::TextSource::Header,
+                            },
+                        ),
+                    ])
+                    .collect(),
+                    std::array::IntoIter::new([
+                        (
+                            s("id"),
+                            crate::Value::String {
+                                text: "/ChildBuilding/".to_string(),
+                                source: crate::TextSource::Header,
+                            },
+                        ),
+                        (
+                            s("name"),
+                            crate::Value::String {
+                                text: "ChildLog".to_string(),
+                                source: crate::TextSource::Header,
+                            },
+                        ),
+                    ])
+                    .collect(),
+                    std::array::IntoIter::new([
+                        (
+                            s("id"),
+                            crate::Value::String {
+                                text: "/Building2/".to_string(),
+                                source: crate::TextSource::Header,
+                            },
+                        ),
+                        (
+                            s("name"),
+                            crate::Value::String {
+                                text: "Log2".to_string(),
+                                source: crate::TextSource::Header,
+                            },
+                        ),
+                    ])
+                    .collect(),
+                ],
+            }),
+        );
+
+        bag.insert(
+            "creating-a-tree#table-of-content".to_string(),
+            crate::p2::Thing::Component(crate::Component {
+                root: "ftd.column".to_string(),
+                full_name: "creating-a-tree#table-of-content".to_string(),
+                arguments: std::array::IntoIter::new([(
+                    s("id"),
+                    crate::p2::Kind::String {
+                        caption: false,
+                        body: false,
+                    },
+                )])
+                .collect(),
+                properties: std::array::IntoIter::new([
+                    (
+                        s("height"),
+                        crate::component::Property {
+                            default: Some(crate::PropertyValue::Value {
+                                value: crate::variable::Value::String {
+                                    text: "fill".to_string(),
+                                    source: crate::TextSource::Header,
+                                },
+                            }),
+                            conditions: vec![],
+                        },
+                    ),
+                    (
+                        s("id"),
+                        crate::component::Property {
+                            default: Some(crate::PropertyValue::Argument {
+                                name: "id".to_string(),
+                                kind: crate::p2::Kind::Optional {
+                                    kind: Box::new(crate::p2::Kind::String {
+                                        caption: false,
+                                        body: false,
+                                    }),
+                                },
+                            }),
+                            conditions: vec![],
+                        },
+                    ),
+                    (
+                        s("width"),
+                        crate::component::Property {
+                            default: Some(crate::PropertyValue::Value {
+                                value: crate::variable::Value::String {
+                                    text: "300".to_string(),
+                                    source: crate::TextSource::Header,
+                                },
+                            }),
+                            conditions: vec![],
+                        },
+                    ),
+                ])
+                .collect(),
+                instructions: vec![],
+                kernel: false,
+                invocations: vec![std::array::IntoIter::new([(
+                    s("id"),
+                    crate::Value::String {
+                        text: "toc_main".to_string(),
+                        source: crate::TextSource::Header,
+                    },
+                )])
+                .collect()],
+            }),
+        );
+
+        bag.insert(
+            "creating-a-tree#toc-heading".to_string(),
+            crate::p2::Thing::Component(crate::Component {
+                root: "ftd.text".to_string(),
+                full_name: "creating-a-tree#toc-heading".to_string(),
+                arguments: std::array::IntoIter::new([(
+                    s("text"),
+                    crate::p2::Kind::String {
+                        caption: true,
+                        body: false,
+                    },
+                )])
+                .collect(),
+                properties: std::array::IntoIter::new([
+                    (
+                        s("size"),
+                        crate::component::Property {
+                            default: Some(crate::PropertyValue::Value {
+                                value: crate::variable::Value::Integer { value: 16 },
+                            }),
+                            conditions: vec![],
+                        },
+                    ),
+                    (
+                        s("text"),
+                        crate::component::Property {
+                            default: Some(crate::PropertyValue::Argument {
+                                name: "text".to_string(),
+                                kind: crate::p2::Kind::String {
+                                    caption: true,
+                                    body: true,
+                                },
+                            }),
+                            conditions: vec![],
+                        },
+                    ),
+                ])
+                .collect(),
+                instructions: vec![],
+                kernel: false,
+                invocations: vec![],
+            }),
+        );
+
+        let mut main = super::default_column();
+        main.container
+            .children
+            .push(ftd_rt::Element::Column(ftd_rt::Column {
+                container: ftd_rt::Container {
+                    children: vec![ftd_rt::Element::Column(ftd_rt::Column {
+                        container: ftd_rt::Container {
+                            children: vec![ftd_rt::Element::Column(ftd_rt::Column {
+                                container: ftd_rt::Container {
+                                    children: vec![
+                                        ftd_rt::Element::Text(ftd_rt::Text {
+                                            text: ftd::markdown_line("5PM Tasks"),
+                                            line: true,
+                                            common: ftd_rt::Common {
+                                                color: Some(ftd_rt::Color {
+                                                    r: 255,
+                                                    g: 255,
+                                                    b: 255,
+                                                    alpha: 1.0,
+                                                }),
+                                                ..Default::default()
+                                            },
+                                            size: Some(14),
+                                            ..Default::default()
+                                        }),
+                                        ftd_rt::Element::Null,
+                                        ftd_rt::Element::Column(ftd_rt::Column {
+                                            container: ftd_rt::Container {
+                                                children: vec![
+                                                    ftd_rt::Element::Null,
+                                                    ftd_rt::Element::Text(ftd_rt::Text {
+                                                        text: ftd::markdown_line("Log"),
+                                                        line: true,
+                                                        common: ftd_rt::Common {
+                                                            color: Some(ftd_rt::Color {
+                                                                r: 77,
+                                                                g: 77,
+                                                                b: 77,
+                                                                alpha: 1.0,
+                                                            }),
+                                                            ..Default::default()
+                                                        },
+                                                        size: Some(14),
+                                                        ..Default::default()
+                                                    }),
+                                                    ftd_rt::Element::Column(ftd_rt::Column {
+                                                        container: ftd_rt::Container {
+                                                            children: vec![
+                                                                ftd_rt::Element::Null,
+                                                                ftd_rt::Element::Text(
+                                                                    ftd_rt::Text {
+                                                                        text: ftd::markdown_line(
+                                                                            "ChildLog",
+                                                                        ),
+                                                                        line: true,
+                                                                        common: ftd_rt::Common {
+                                                                            color: Some(
+                                                                                ftd_rt::Color {
+                                                                                    r: 77,
+                                                                                    g: 77,
+                                                                                    b: 77,
+                                                                                    alpha: 1.0,
+                                                                                },
+                                                                            ),
+                                                                            ..Default::default()
+                                                                        },
+                                                                        size: Some(14),
+                                                                        ..Default::default()
+                                                                    },
+                                                                ),
+                                                            ],
+                                                            open: (Some(true), None),
+                                                            spacing: None,
+                                                            align: Default::default(),
+                                                            wrap: false,
+                                                        },
+                                                        common: ftd_rt::Common {
+                                                            id: Some(s("/ChildBuilding/")),
+                                                            width: Some(ftd_rt::Length::Fill),
+                                                            ..Default::default()
+                                                        },
+                                                    }),
+                                                ],
+                                                open: (Some(true), None),
+                                                spacing: None,
+                                                align: Default::default(),
+                                                wrap: false,
+                                            },
+                                            common: ftd_rt::Common {
+                                                id: Some(s("/Building/")),
+                                                width: Some(ftd_rt::Length::Fill),
+                                                ..Default::default()
+                                            },
+                                        }),
+                                        ftd_rt::Element::Column(ftd_rt::Column {
+                                            container: ftd_rt::Container {
+                                                children: vec![
+                                                    ftd_rt::Element::Null,
+                                                    ftd_rt::Element::Text(ftd_rt::Text {
+                                                        text: ftd::markdown_line("Log2"),
+                                                        line: true,
+                                                        common: ftd_rt::Common {
+                                                            color: Some(ftd_rt::Color {
+                                                                r: 77,
+                                                                g: 77,
+                                                                b: 77,
+                                                                alpha: 1.0,
+                                                            }),
+                                                            ..Default::default()
+                                                        },
+                                                        size: Some(14),
+                                                        ..Default::default()
+                                                    }),
+                                                ],
+                                                open: (Some(true), None),
+                                                spacing: None,
+                                                align: Default::default(),
+                                                wrap: false,
+                                            },
+                                            common: ftd_rt::Common {
+                                                id: Some(s("/Building2/")),
+                                                width: Some(ftd_rt::Length::Fill),
+                                                ..Default::default()
+                                            },
+                                        }),
+                                    ],
+                                    open: (Some(true), None),
+                                    spacing: None,
+                                    align: Default::default(),
+                                    wrap: false,
+                                },
+                                common: ftd_rt::Common {
+                                    id: Some(s("/welcome/")),
+                                    width: Some(ftd_rt::Length::Fill),
+                                    ..Default::default()
+                                },
+                            })],
+                            ..Default::default()
+                        },
+                        common: ftd_rt::Common {
+                            id: Some(s("toc_main")),
+                            height: Some(ftd_rt::Length::Fill),
+                            width: Some(ftd_rt::Length::Px { value: 300 }),
+                            ..Default::default()
+                        },
+                    })],
+                    ..Default::default()
+                },
+                ..Default::default()
+            }));
+
         let (g_bag, g_col) = crate::p2::interpreter::interpret(
             "foo/bar",
             indoc::indoc!(
                 "
-                -- import: fifthtry/creating-a-tree as ft
+                -- import: creating-a-tree as ft
                 -- ft.ft_toc:
                 "
             ),
             &ftd::p2::TestLibrary {},
         )
         .expect("found error");
-        pretty_assertions::assert_eq!(g_bag, super::default_bag());
-        pretty_assertions::assert_eq!(g_col, super::default_column());
+
+        pretty_assertions::assert_eq!(g_bag, bag);
+        pretty_assertions::assert_eq!(g_col, main);
+    }
+
+    #[test]
+    fn reference() {
+        let mut bag = super::default_bag();
+
+        bag.insert(
+            "fifthtry/ft#dark-mode".to_string(),
+            crate::p2::Thing::Variable(crate::Variable {
+                name: "dark-mode".to_string(),
+                value: crate::Value::Boolean { value: true },
+            }),
+        );
+
+        bag.insert(
+            "fifthtry/ft#toc".to_string(),
+            crate::p2::Thing::Variable(crate::Variable {
+                name: "toc".to_string(),
+                value: crate::Value::String {
+                    text: "not set".to_string(),
+                    source: crate::TextSource::Caption,
+                },
+            }),
+        );
+
+        bag.insert(
+            "fifthtry/ft#markdown".to_string(),
+            crate::p2::Thing::Component(crate::Component {
+                root: "ftd.text".to_string(),
+                full_name: "fifthtry/ft#markdown".to_string(),
+                arguments: std::array::IntoIter::new([(
+                    s("body"),
+                    crate::p2::Kind::String {
+                        caption: false,
+                        body: true,
+                    },
+                )])
+                .collect(),
+                properties: std::array::IntoIter::new([(
+                    s("text"),
+                    crate::component::Property {
+                        default: Some(crate::PropertyValue::Argument {
+                            name: "body".to_string(),
+                            kind: crate::p2::Kind::String {
+                                caption: true,
+                                body: true,
+                            },
+                        }),
+                        conditions: vec![],
+                    },
+                )])
+                .collect(),
+                instructions: Default::default(),
+                kernel: false,
+                invocations: Default::default(),
+            }),
+        );
+
+        bag.insert(
+            "reference#name".to_string(),
+            crate::p2::Thing::Variable(crate::Variable {
+                name: "name".to_string(),
+                value: crate::Value::String {
+                    text: "John smith".to_string(),
+                    source: crate::TextSource::Caption,
+                },
+            }),
+        );
+
+        bag.insert(
+            "reference#test-component".to_string(),
+            crate::p2::Thing::Component(crate::Component {
+                root: "ftd.column".to_string(),
+                full_name: "reference#test-component".to_string(),
+                arguments: Default::default(),
+                properties: std::array::IntoIter::new([
+                    (
+                        s("background-color"),
+                        crate::component::Property {
+                            default: Some(crate::PropertyValue::Value {
+                                value: crate::variable::Value::String {
+                                    text: "#f3f3f3".to_string(),
+                                    source: crate::TextSource::Header,
+                                },
+                            }),
+                            conditions: vec![],
+                        },
+                    ),
+                    (
+                        s("width"),
+                        crate::component::Property {
+                            default: Some(crate::PropertyValue::Value {
+                                value: crate::variable::Value::String {
+                                    text: "200".to_string(),
+                                    source: crate::TextSource::Header,
+                                },
+                            }),
+                            conditions: vec![],
+                        },
+                    ),
+                ])
+                .collect(),
+                instructions: vec![crate::component::Instruction::ChildComponent {
+                    child: crate::component::ChildComponent {
+                        root: "ftd#text".to_string(),
+                        condition: None,
+                        properties: std::array::IntoIter::new([(
+                            s("text"),
+                            crate::component::Property {
+                                default: Some(crate::PropertyValue::Reference {
+                                    name: "name".to_string(),
+                                    kind: crate::p2::Kind::String {
+                                        caption: true,
+                                        body: true,
+                                    },
+                                }),
+                                conditions: vec![],
+                            },
+                        )])
+                        .collect(),
+                    },
+                }],
+                kernel: false,
+                invocations: vec![std::collections::BTreeMap::new()],
+            }),
+        );
+        let title = ftd_rt::Text {
+            text: ftd::markdown_line("John smith"),
+            line: true,
+            ..Default::default()
+        };
+
+        let mut main = super::default_column();
+        main.container
+            .children
+            .push(ftd_rt::Element::Column(ftd_rt::Column {
+                common: ftd_rt::Common {
+                    width: Some(ftd_rt::Length::Px { value: 200 }),
+                    background_color: Some(ftd_rt::Color {
+                        r: 243,
+                        g: 243,
+                        b: 243,
+                        alpha: 1.0,
+                    }),
+                    ..Default::default()
+                },
+                container: ftd_rt::Container {
+                    children: vec![ftd_rt::Element::Text(title)],
+                    ..Default::default()
+                },
+            }));
+        let (g_bag, g_col) = crate::p2::interpreter::interpret(
+            "foo/bar",
+            indoc::indoc!(
+                "
+                -- import: reference as ct
+                -- ct.test-component:
+                "
+            ),
+            &ftd::p2::TestLibrary {},
+        )
+        .expect("found error");
+        pretty_assertions::assert_eq!(g_bag, bag);
+        pretty_assertions::assert_eq!(g_col, main);
     }
 
     #[test]
@@ -668,7 +2182,7 @@ mod test {
         let mut main = super::default_column();
         let mut row = ftd_rt::Row {
             common: ftd_rt::Common {
-                id: Some("foo/bar#the-row".to_string()),
+                id: Some("the-row".to_string()),
                 ..Default::default()
             },
             ..Default::default()
@@ -2407,5 +3921,515 @@ mod test {
         ",
             (Default::default(), main),
         );
+    }
+
+    #[test]
+    fn inner_container() {
+        let mut bag = super::default_bag();
+
+        bag.insert(
+            "foo/bar#foo".to_string(),
+            crate::p2::Thing::Component(crate::Component {
+                root: "ftd.column".to_string(),
+                full_name: "foo/bar#foo".to_string(),
+                arguments: Default::default(),
+                properties: Default::default(),
+                instructions: vec![
+                    crate::component::Instruction::ChildComponent {
+                        child: crate::component::ChildComponent {
+                            root: "ftd#row".to_string(),
+                            condition: None,
+                            properties: std::array::IntoIter::new([(
+                                s("id"),
+                                crate::component::Property {
+                                    default: Some(crate::PropertyValue::Value {
+                                        value: crate::variable::Value::String {
+                                            text: "r1".to_string(),
+                                            source: crate::TextSource::Header,
+                                        },
+                                    }),
+                                    conditions: vec![],
+                                },
+                            )])
+                            .collect(),
+                        },
+                    },
+                    crate::component::Instruction::ChildComponent {
+                        child: crate::component::ChildComponent {
+                            root: "ftd#row".to_string(),
+                            condition: None,
+                            properties: std::array::IntoIter::new([(
+                                s("id"),
+                                crate::component::Property {
+                                    default: Some(crate::PropertyValue::Value {
+                                        value: crate::variable::Value::String {
+                                            text: "r2".to_string(),
+                                            source: crate::TextSource::Header,
+                                        },
+                                    }),
+                                    conditions: vec![],
+                                },
+                            )])
+                            .collect(),
+                        },
+                    },
+                ],
+                kernel: false,
+                invocations: vec![
+                    std::array::IntoIter::new([(
+                        s("id"),
+                        crate::Value::String {
+                            text: s("foo-1"),
+                            source: crate::TextSource::Header,
+                        },
+                    )])
+                    .collect(),
+                    std::array::IntoIter::new([(
+                        s("id"),
+                        crate::Value::String {
+                            text: s("foo-2"),
+                            source: crate::TextSource::Header,
+                        },
+                    )])
+                    .collect(),
+                ],
+            }),
+        );
+        let mut main = super::default_column();
+        main.container
+            .children
+            .push(ftd_rt::Element::Column(ftd_rt::Column {
+                container: ftd_rt::Container {
+                    children: vec![ftd_rt::Element::Row(ftd_rt::Row {
+                        container: ftd_rt::Container {
+                            children: vec![
+                                ftd_rt::Element::Row(ftd_rt::Row {
+                                    common: ftd_rt::Common {
+                                        id: Some(s("r2")),
+                                        ..Default::default()
+                                    },
+                                    ..Default::default()
+                                }),
+                                ftd_rt::Element::Text(ftd_rt::Text {
+                                    text: ftd::markdown_line("hello"),
+                                    line: true,
+                                    ..Default::default()
+                                }),
+                            ],
+                            ..Default::default()
+                        },
+                        common: ftd_rt::Common {
+                            id: Some(s("r1")),
+                            ..Default::default()
+                        },
+                    })],
+                    ..Default::default()
+                },
+                common: ftd_rt::Common {
+                    id: Some(s("foo-1")),
+                    ..Default::default()
+                },
+            }));
+
+        main.container
+            .children
+            .push(ftd_rt::Element::Column(ftd_rt::Column {
+                container: ftd_rt::Container {
+                    children: vec![ftd_rt::Element::Row(ftd_rt::Row {
+                        container: ftd_rt::Container {
+                            children: vec![ftd_rt::Element::Row(ftd_rt::Row {
+                                common: ftd_rt::Common {
+                                    id: Some(s("r2")),
+                                    ..Default::default()
+                                },
+                                ..Default::default()
+                            })],
+                            ..Default::default()
+                        },
+                        common: ftd_rt::Common {
+                            id: Some(s("r1")),
+                            ..Default::default()
+                        },
+                    })],
+                    ..Default::default()
+                },
+                common: ftd_rt::Common {
+                    id: Some(s("foo-2")),
+                    ..Default::default()
+                },
+            }));
+        let (g_bag, g_col) = crate::p2::interpreter::interpret(
+            "foo/bar",
+            indoc::indoc!(
+                "
+                -- component foo:
+                component: ftd.column
+
+                --- ftd.row:
+                id: r1
+
+                --- ftd.row:
+                id: r2
+
+                -- foo:
+                id: foo-1
+
+                -- foo:
+                id: foo-2
+
+                -- container: foo-1.r1
+
+                -- ftd.text: hello
+                "
+            ),
+            &ftd::p2::TestLibrary {},
+        )
+        .expect("found error");
+        pretty_assertions::assert_eq!(g_bag, bag);
+        pretty_assertions::assert_eq!(g_col, main);
+    }
+
+    #[test]
+    fn inner_container_using_import() {
+        let mut bag = super::default_bag();
+
+        bag.insert(
+            "inner_container#foo".to_string(),
+            crate::p2::Thing::Component(crate::Component {
+                root: "ftd.column".to_string(),
+                full_name: "inner_container#foo".to_string(),
+                arguments: Default::default(),
+                properties: Default::default(),
+                instructions: vec![
+                    crate::component::Instruction::ChildComponent {
+                        child: crate::component::ChildComponent {
+                            root: "ftd#row".to_string(),
+                            condition: None,
+                            properties: std::array::IntoIter::new([(
+                                s("id"),
+                                crate::component::Property {
+                                    default: Some(crate::PropertyValue::Value {
+                                        value: crate::variable::Value::String {
+                                            text: "r1".to_string(),
+                                            source: crate::TextSource::Header,
+                                        },
+                                    }),
+                                    conditions: vec![],
+                                },
+                            )])
+                            .collect(),
+                        },
+                    },
+                    crate::component::Instruction::ChildComponent {
+                        child: crate::component::ChildComponent {
+                            root: "ftd#row".to_string(),
+                            condition: None,
+                            properties: std::array::IntoIter::new([(
+                                s("id"),
+                                crate::component::Property {
+                                    default: Some(crate::PropertyValue::Value {
+                                        value: crate::variable::Value::String {
+                                            text: "r2".to_string(),
+                                            source: crate::TextSource::Header,
+                                        },
+                                    }),
+                                    conditions: vec![],
+                                },
+                            )])
+                            .collect(),
+                        },
+                    },
+                ],
+                kernel: false,
+                invocations: vec![
+                    std::array::IntoIter::new([(
+                        s("id"),
+                        crate::Value::String {
+                            text: s("foo-1"),
+                            source: crate::TextSource::Header,
+                        },
+                    )])
+                    .collect(),
+                    std::array::IntoIter::new([(
+                        s("id"),
+                        crate::Value::String {
+                            text: s("foo-2"),
+                            source: crate::TextSource::Header,
+                        },
+                    )])
+                    .collect(),
+                ],
+            }),
+        );
+        let mut main = super::default_column();
+        main.container
+            .children
+            .push(ftd_rt::Element::Column(ftd_rt::Column {
+                container: ftd_rt::Container {
+                    children: vec![ftd_rt::Element::Row(ftd_rt::Row {
+                        container: ftd_rt::Container {
+                            children: vec![
+                                ftd_rt::Element::Row(ftd_rt::Row {
+                                    common: ftd_rt::Common {
+                                        id: Some(s("r2")),
+                                        ..Default::default()
+                                    },
+                                    ..Default::default()
+                                }),
+                                ftd_rt::Element::Text(ftd_rt::Text {
+                                    text: ftd::markdown_line("hello"),
+                                    line: true,
+                                    ..Default::default()
+                                }),
+                            ],
+                            ..Default::default()
+                        },
+                        common: ftd_rt::Common {
+                            id: Some(s("r1")),
+                            ..Default::default()
+                        },
+                    })],
+                    ..Default::default()
+                },
+                common: ftd_rt::Common {
+                    id: Some(s("foo-1")),
+                    ..Default::default()
+                },
+            }));
+
+        main.container
+            .children
+            .push(ftd_rt::Element::Column(ftd_rt::Column {
+                container: ftd_rt::Container {
+                    children: vec![ftd_rt::Element::Row(ftd_rt::Row {
+                        container: ftd_rt::Container {
+                            children: vec![ftd_rt::Element::Row(ftd_rt::Row {
+                                common: ftd_rt::Common {
+                                    id: Some(s("r2")),
+                                    ..Default::default()
+                                },
+                                ..Default::default()
+                            })],
+                            ..Default::default()
+                        },
+                        common: ftd_rt::Common {
+                            id: Some(s("r1")),
+                            ..Default::default()
+                        },
+                    })],
+                    ..Default::default()
+                },
+                common: ftd_rt::Common {
+                    id: Some(s("foo-2")),
+                    ..Default::default()
+                },
+            }));
+
+        let (g_bag, g_col) = crate::p2::interpreter::interpret(
+            "foo/bar",
+            indoc::indoc!(
+                "
+                -- import: inner_container as ic
+
+                -- ic.foo:
+                id: foo-1
+
+                -- ic.foo:
+                id: foo-2
+
+                -- container: foo-1.r1
+
+                -- ftd.text: hello
+                "
+            ),
+            &ftd::p2::TestLibrary {},
+        )
+        .expect("found error");
+        pretty_assertions::assert_eq!(g_bag, bag);
+        pretty_assertions::assert_eq!(g_col, main);
+    }
+
+    #[test]
+    fn open_container_with_id() {
+        let mut main = super::default_column();
+        main.container
+            .children
+            .push(ftd_rt::Element::Column(ftd_rt::Column {
+                container: ftd_rt::Container {
+                    children: vec![ftd_rt::Element::Row(ftd_rt::Row {
+                        container: ftd_rt::Container {
+                            children: vec![
+                                ftd_rt::Element::Row(ftd_rt::Row {
+                                    ..Default::default()
+                                }),
+                                ftd_rt::Element::Text(ftd_rt::Text {
+                                    text: ftd::markdown_line("hello"),
+                                    line: true,
+                                    ..Default::default()
+                                }),
+                            ],
+                            ..Default::default()
+                        },
+                        common: ftd_rt::Common {
+                            id: Some(s("some-child")),
+                            ..Default::default()
+                        },
+                    })],
+                    open: (None, Some(s("some-child"))),
+                    spacing: None,
+                    align: Default::default(),
+                    wrap: false,
+                },
+                ..Default::default()
+            }));
+
+        let mut bag = super::default_bag();
+
+        bag.insert(
+            "foo/bar#foo".to_string(),
+            crate::p2::Thing::Component(crate::Component {
+                root: "ftd.column".to_string(),
+                full_name: s("foo/bar#foo"),
+                properties: std::array::IntoIter::new([(
+                    s("open"),
+                    crate::component::Property {
+                        default: Some(crate::PropertyValue::Value {
+                            value: crate::Value::String {
+                                text: s("some-child"),
+                                source: crate::TextSource::Header,
+                            },
+                        }),
+                        conditions: vec![],
+                    },
+                )])
+                .collect(),
+                instructions: vec![
+                    crate::component::Instruction::ChildComponent {
+                        child: crate::component::ChildComponent {
+                            root: "ftd#row".to_string(),
+                            condition: None,
+                            properties: std::array::IntoIter::new([(
+                                s("id"),
+                                crate::component::Property {
+                                    default: Some(crate::PropertyValue::Value {
+                                        value: crate::variable::Value::String {
+                                            text: "some-child".to_string(),
+                                            source: crate::TextSource::Header,
+                                        },
+                                    }),
+                                    conditions: vec![],
+                                },
+                            )])
+                            .collect(),
+                        },
+                    },
+                    crate::component::Instruction::ChildComponent {
+                        child: crate::component::ChildComponent {
+                            root: "ftd#row".to_string(),
+                            condition: None,
+                            ..Default::default()
+                        },
+                    },
+                ],
+                invocations: vec![std::collections::BTreeMap::new()],
+                ..Default::default()
+            }),
+        );
+
+        let (g_bag, g_col) = crate::p2::interpreter::interpret(
+            "foo/bar",
+            indoc::indoc!(
+                "
+                -- component foo:
+                open: some-child
+                component: ftd.column
+
+                --- ftd.row:
+                id: some-child
+
+                --- ftd.row:
+
+                -- foo:
+
+                -- ftd.text: hello
+                "
+            ),
+            &ftd::p2::TestLibrary {},
+        )
+        .expect("found error");
+        pretty_assertions::assert_eq!(g_bag, bag);
+        pretty_assertions::assert_eq!(g_col, main);
+    }
+
+    #[test]
+    fn open_container_id() {
+        let mut main = self::default_column();
+        main.container
+            .children
+            .push(ftd_rt::Element::Row(ftd_rt::Row {
+                common: ftd_rt::Common {
+                    id: Some(s("r1")),
+                    ..Default::default()
+                },
+                container: ftd_rt::Container {
+                    open: (Some(false), None),
+                    ..Default::default()
+                },
+            }));
+        main.container
+            .children
+            .push(ftd_rt::Element::Row(ftd_rt::Row {
+                container: ftd_rt::Container {
+                    children: vec![
+                        ftd_rt::Element::Text(ftd_rt::Text {
+                            text: ftd::markdown_line("hello"),
+                            line: true,
+                            ..Default::default()
+                        }),
+                        ftd_rt::Element::Row(ftd_rt::Row {
+                            container: ftd_rt::Container {
+                                open: (Some(false), None),
+                                ..Default::default()
+                            },
+                            common: ftd_rt::Common {
+                                id: Some(s("r3")),
+                                ..Default::default()
+                            },
+                        }),
+                    ],
+                    open: (Some(true), None),
+                    spacing: None,
+                    align: Default::default(),
+                    wrap: false,
+                },
+                common: ftd_rt::Common {
+                    id: Some(s("r2")),
+                    ..Default::default()
+                },
+            }));
+        let (g_bag, g_col) = crate::p2::interpreter::interpret(
+            "foo/bar",
+            indoc::indoc!(
+                "
+                -- ftd.row:
+                id: r1
+                open: false
+
+                -- ftd.row:
+                id: r2
+                open: true
+
+                --- ftd.text: hello
+
+                -- ftd.row:
+                id: r3
+                open: false
+                "
+            ),
+            &ftd::p2::TestLibrary {},
+        )
+        .expect("found error");
+        pretty_assertions::assert_eq!(g_bag, super::default_bag());
+        pretty_assertions::assert_eq!(g_col, main);
     }
 }

@@ -10,6 +10,52 @@ impl<'a> TDoc<'a> {
         format!("{}#{}", self.name, name)
     }
 
+    pub fn resolve_name_without_full_path(&self, name: &str) -> crate::p1::Result<String> {
+        if name.contains('#') {
+            return Ok(name.to_string());
+        }
+
+        Ok(match ftd::split_module(name)? {
+            (Some(m), v, None) => match self.aliases.get(m) {
+                Some(m) => format!("{}#{}", m, v),
+                None => return self.err("alias not found", m, "resolve_name_without_full_path"),
+            },
+            (_, _, Some(_)) => unimplemented!(),
+            (None, v, None) => v.to_string(),
+        })
+    }
+
+    pub fn resolve_name_with_instruction(
+        &self,
+        name: &str,
+        instructions: &[ftd::Instruction],
+    ) -> crate::p1::Result<String> {
+        if name.contains('#') {
+            return Ok(name.to_string());
+        }
+        let mut available_components: std::collections::BTreeMap<String, String> =
+            std::collections::BTreeMap::new();
+        for instruction in instructions {
+            if let Some(text) = instruction.resolve_id() {
+                available_components.insert(text.to_string(), text.to_string());
+            }
+        }
+
+        Ok(match ftd::split_module(name)? {
+            (Some(m), v, None) => match self.aliases.get(m) {
+                Some(m) => format!("{}#{}", m, v),
+                None => match available_components.get(m) {
+                    Some(a) => format!("{}#{}", a, v),
+                    None => {
+                        return self.err("alias not found", m, "resolve_name_with_instruction");
+                    }
+                },
+            },
+            (_, _, Some(_)) => unimplemented!(),
+            (None, v, None) => v.to_string(),
+        })
+    }
+
     pub fn resolve_name(&self, name: &str) -> crate::p1::Result<String> {
         if name.contains('#') {
             return Ok(name.to_string());
@@ -41,7 +87,16 @@ impl<'a> TDoc<'a> {
 
     pub fn get_value(&self, name: &str) -> crate::p1::Result<crate::Value> {
         // TODO: name can be a.b.c, and a and a.b are records with right fields
-        match self.get_thing(name)? {
+        self.get_value_with_root(name, None)
+    }
+
+    pub fn get_value_with_root(
+        &self,
+        name: &str,
+        root_name: Option<&str>,
+    ) -> crate::p1::Result<crate::Value> {
+        // TODO: name can be a.b.c, and a and a.b are records with right fields
+        match self.get_thing_with_root(name, root_name)? {
             crate::p2::Thing::Variable(v) => Ok(v.value),
             v => self.err("not a variable", v, "get_value"),
         }
@@ -57,9 +112,43 @@ impl<'a> TDoc<'a> {
             v => self.err("not a component", v, "get_component"),
         }
     }
-
+    pub fn get_root(&'a self, name: &'a str) -> crate::p1::Result<Option<&str>> {
+        if name.contains('#') {
+            match name.split_once('#') {
+                Some((p1, _)) => {
+                    for (k, v) in self.aliases.iter() {
+                        if p1 == v.as_str() {
+                            return Ok(Some(k.as_str()));
+                        }
+                    }
+                }
+                _ => {
+                    return Ok(None);
+                }
+            }
+            return Ok(None);
+        }
+        match ftd::split_module(name)? {
+            (Some(m), _, _) => {
+                if self.aliases.contains_key(m) {
+                    Ok(Some(m))
+                } else {
+                    Ok(None)
+                }
+            }
+            _ => Ok(None),
+        }
+    }
     // name = foo | alias.foo | a/b#foo
     pub fn get_thing(&'a self, name: &'a str) -> crate::p1::Result<crate::p2::Thing> {
+        self.get_thing_with_root(name, None)
+    }
+
+    pub fn get_thing_with_root(
+        &'a self,
+        name: &'a str,
+        root_name: Option<&'a str>,
+    ) -> crate::p1::Result<crate::p2::Thing> {
         match if name.contains('#') {
             self.bag.get(name).map(ToOwned::to_owned)
         } else {
@@ -94,10 +183,25 @@ impl<'a> TDoc<'a> {
                     },
                     None => return self.err("not found", name, "get_thing4"),
                 },
-                (None, v, None) => self
-                    .bag
-                    .get(format!("{}#{}", self.name, v).as_str())
-                    .map(|v| v.to_owned()),
+                (None, v, None) => {
+                    match self
+                        .bag
+                        .get(format!("{}#{}", self.name, v).as_str())
+                        .map(|v| v.to_owned())
+                    {
+                        Some(a) => Some(a),
+                        None => match root_name {
+                            Some(name) => match self.aliases.get(name) {
+                                Some(g) => self
+                                    .bag
+                                    .get(format!("{}#{}", g, v).as_str())
+                                    .map(|b| b.to_owned()),
+                                None => None,
+                            },
+                            None => None,
+                        },
+                    }
+                }
                 (None, e, Some(v)) => match self.bag.get(format!("{}#{}", self.name, e).as_str()) {
                     Some(crate::p2::Thing::OrType(e)) => {
                         Some(crate::p2::Thing::OrTypeWithVariant {

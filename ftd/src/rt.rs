@@ -50,14 +50,17 @@ impl RT {
     pub fn render(&mut self) -> crate::p1::Result<ftd_rt::Column> {
         let mut main = ftd::p2::interpreter::default_column();
         let mut invocations = Default::default();
-        main.container.children = execute(
+        let element = execute(
             self.name.as_str(),
             &self.aliases,
             &self.bag,
             &self.instructions,
             &Default::default(),
             &mut invocations,
-        )?;
+            None,
+        )?
+        .children;
+        main.container.children = element;
         store_invocations(&mut self.bag, invocations);
         Ok(main)
     }
@@ -73,7 +76,8 @@ pub(crate) fn execute(
         String,
         Vec<std::collections::BTreeMap<String, crate::Value>>,
     >,
-) -> crate::p1::Result<Vec<ftd_rt::Element>> {
+    root_name: Option<&str>,
+) -> crate::p1::Result<crate::component::ElementWithContainer> {
     let mut current_container: Vec<usize> = Default::default();
     let mut named_containers: std::collections::BTreeMap<String, Vec<usize>> = Default::default();
     let mut children = vec![];
@@ -88,16 +92,38 @@ pub(crate) fn execute(
                 children: inner,
             } => {
                 assert!(arguments.is_empty()); // This clause cant have arguments
-                let e = parent.super_call(inner, &doc, arguments, invocations)?;
-                children = add_element(children, &mut current_container, &mut named_containers, e)
+                let crate::component::ElementWithContainer {
+                    element,
+                    child_container,
+                    ..
+                } = parent.super_call(inner, &doc, arguments, invocations)?;
+                children = add_element(
+                    children,
+                    &mut current_container,
+                    &mut named_containers,
+                    element,
+                    child_container,
+                )?
             }
             ftd::Instruction::ChildComponent { child: f } => {
-                let e = f.call(&doc, arguments, invocations, true)?;
-                children = add_element(children, &mut current_container, &mut named_containers, e)
+                let e = f
+                    .call(&doc, arguments, invocations, true, root_name)?
+                    .element;
+                children = add_element(
+                    children,
+                    &mut current_container,
+                    &mut named_containers,
+                    e,
+                    None,
+                )?
             }
         }
     }
-    Ok(children)
+    Ok(crate::component::ElementWithContainer {
+        element: ftd_rt::Element::Null,
+        children,
+        child_container: Some(named_containers),
+    })
 }
 
 pub(crate) fn store_invocations(
@@ -124,7 +150,8 @@ fn add_element(
     current_container: &mut Vec<usize>,
     named_containers: &mut std::collections::BTreeMap<String, Vec<usize>>,
     e: ftd_rt::Element,
-) -> Vec<ftd_rt::Element> {
+    container: Option<std::collections::BTreeMap<String, Vec<usize>>>,
+) -> crate::p1::Result<Vec<ftd_rt::Element>> {
     let mut current = &mut main;
     for i in current_container.iter() {
         current = match &mut current[*i] {
@@ -134,16 +161,44 @@ fn add_element(
         };
     }
     let len = current.len();
+    let mut container_id = None;
     if let Some(v) = e.container_id() {
         let mut c = current_container.clone();
         c.push(len);
+        container_id = Some(v.clone());
         named_containers.insert(v, c);
     }
-    if e.is_open_container() {
+    if e.is_open_container().0 {
         current_container.push(len)
     }
+    if let Some(child_container) = container {
+        let mut c = current_container.clone();
+        c.push(len);
+        for (key, value) in child_container.into_iter() {
+            let mut hierarchy = c.clone();
+            let mut p2 = value.clone();
+            hierarchy.append(&mut p2);
+            named_containers.insert(
+                container_id
+                    .clone()
+                    .map_or(key.clone(), |v| format!("{}#{}", v, key)),
+                hierarchy,
+            );
+        }
+    }
+    if let Some(id) = e.is_open_container().1 {
+        change_container(
+            {
+                e.container_id()
+                    .map_or(id.clone(), |v| format!("{}#{}", v, id))
+                    .as_str()
+            },
+            current_container,
+            named_containers,
+        )?;
+    }
     current.push(e);
-    main
+    Ok(main)
 }
 
 fn change_container(
@@ -163,3 +218,24 @@ fn change_container(
     };
     Ok(())
 }
+
+/*instruction = Component {
+    parent: ChildComponent {
+        root: "foo/bar#foo",
+        condition: None,
+        properties: {
+            "id": Property {
+                default: Some(
+                    Value {
+                        value: String {
+                            text: "foo-1",
+                            source: Header,
+                        },
+                    },
+                ),
+                conditions: [],
+            },
+        },
+    },
+    children: [],
+}*/

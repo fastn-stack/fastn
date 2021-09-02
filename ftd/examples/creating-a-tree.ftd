@@ -1,0 +1,208 @@
+-- component table-of-content:
+component: ftd.column
+$id: string
+id: ref $id
+width: 300
+align: top-left
+padding-left: 10
+padding-top: 30
+padding-right: 20
+border-right: 1
+border-color: #ebedef
+height: fill
+
+
+-- component parent:
+component: ftd.column
+$id: string
+$name: caption
+$active: optional boolean
+id: ref $id
+align: left
+padding-left: 10
+padding-top: 2
+padding-bottom: 2
+width: fill
+open: true
+
+--- ftd.text:
+if: $active is not null
+text: ref $name
+size: 14
+color: white
+align: left
+padding-left: 10
+padding-top: 4
+padding-bottom: 4
+width: fill
+background-color: #6a7c95
+border-radius: 2
+style: semi-bold
+
+--- ftd.text:
+if: $active is null
+text: ref $name
+size: 14
+color: #4D4D4D
+align: left
+padding-left: 10
+padding-top: 7
+padding-bottom: 7
+
+
+-- component ft_toc:
+component: ftd.column
+
+--- table-of-content:
+id: toc_main
+
+--- parent:
+id: /welcome/
+name: 5PM Tasks
+active: true
+
+--- parent:
+id: /Building/
+name: Log
+
+--- container: /welcome/
+
+--- parent:
+id: /Platform/
+name: DB Tables
+
+--- parent:
+id: /Changelog/
+name: API Changelog
+
+
+-- component primary-button:
+component: ftd.row
+$text: string
+$link: string
+padding-top: 8
+padding-bottom: 8
+border-radius: 2
+background-color: #1a936f
+link: ref $link
+padding-left: 20
+padding-right: 20
+
+--- ftd.text: ref $text
+color: white
+size: 14
+align: center
+width: fill
+
+
+-- component danger-chevron:
+component: ftd.row
+$text: string
+$link: string
+padding-top: 8
+padding-bottom: 8
+border-radius: 2
+background-color: white
+border-color: #e87f85
+border-width: 1
+link: ref $link
+padding-left: 20
+padding-right: 20
+
+--- ftd.text: ref $text
+color: #e87f85
+size: 14
+align: center
+width: fill
+
+
+-- component danger-button:
+component: ftd.row
+$text: string
+$link: string
+padding-top: 8
+padding-bottom: 8
+padding-left: 20
+padding-right: 20
+border-radius: 2
+background-color: #e87f85
+link: ref $link
+
+--- ftd.text: ref $text
+color: white
+size: 14
+align: center
+width: fill
+
+
+-- component diff:
+component: ftd.column
+$merge-link: optional string
+$discard-link: optional string
+$resolve-conflict-link: optional string
+$edit-link: optional string
+open: true
+width: fill
+
+--- ftd.row:
+align: right
+spacing: 20
+margin-bottom: 15
+
+--- primary-button:
+if: $merge-link is not null
+text: Merge Changes
+link: $ref merge-link
+
+--- primary-button:
+if: $edit-link is not null
+text: Edit
+link: ref $edit-link
+
+--- danger-chevron:
+if: $discard-link is not null
+text: Discard Changes
+link: ref $discard-link
+
+--- danger-button:
+if: $resolve-conflict-link is not null
+text: Resolve Conflict
+link: ref $resolve-conflict-link
+
+--- container: ftd.main
+
+
+-- component new-page:
+component: ftd.column
+$merge-link: optional string
+$discard-link: optional string
+$edit-link: optional string
+open: true
+width: fill
+
+--- ftd.row:
+align: right
+spacing: 20
+margin-bottom: 15
+
+--- primary-button:
+if: $merge-link is not null
+text: Merge Changes
+link: $ref merge-link
+
+--- primary-button:
+if: $edit-link is not null
+text: Edit
+link: ref $edit-link
+
+--- danger-chevron:
+if: $discard-link is not null
+text: Discard Changes
+link: ref $discard-link
+
+--- container: ftd.main
+
+--- ftd.text: This is a new page
+size: 17
+
+-- ft_toc:
