@@ -1,6 +1,12 @@
 pub fn main() {
     let dir = std::path::Path::new("./examples/");
 
+    std::fs::copy("../ftd-rt/pkg/ftd_rt.js", "./build/ftd_rt.js")
+        .expect("cant copy ftd_rt.js file");
+
+    std::fs::copy("../ftd-rt/pkg/ftd_rt_bg.wasm", "./build/ftd_rt_bg.wasm")
+        .expect("cant copy ftd_rt.js file");
+
     let mut write_doc =
         "-- ftd.text: Examples Index\nsize: 50\npadding-bottom: 20\nstyle: bold\n".to_string();
 
