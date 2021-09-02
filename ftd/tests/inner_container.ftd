@@ -1,0 +1,8 @@
+-- component foo:
+component: ftd.column
+
+--- ftd.row:
+id: r1
+
+--- ftd.row:
+id: r2
