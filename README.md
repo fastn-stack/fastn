@@ -35,4 +35,4 @@ And visit: `http://localhost:8000/`.
 
 Docs: [fifthtry.com/fifthtry/ftd/](https://www.fifthtry.com/fifthtry/ftd/)
 
-amitu_heroku commit-id: 4d86bfe32349cf8ae89f3c21b96132380d530ced
+amitu_heroku commit-id: 2f185788f0a8db301717ce7ef476ebd2bd39bae6
