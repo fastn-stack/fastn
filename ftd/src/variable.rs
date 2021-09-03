@@ -20,11 +20,19 @@ impl PropertyValue {
             Self::Argument { kind, .. } => kind.to_owned(),
         }
     }
-
     pub fn resolve(
         &self,
         arguments: &std::collections::BTreeMap<String, crate::Value>,
         doc: &crate::p2::TDoc,
+    ) -> crate::p1::Result<Value> {
+        self.resolve_with_root(arguments, doc, None)
+    }
+
+    pub fn resolve_with_root(
+        &self,
+        arguments: &std::collections::BTreeMap<String, crate::Value>,
+        doc: &crate::p2::TDoc,
+        root_name: Option<&str>,
     ) -> crate::p1::Result<Value> {
         Ok(match self {
             crate::PropertyValue::Value { value: v } => v.to_owned(),
@@ -48,7 +56,7 @@ impl PropertyValue {
                 kind: reference_kind,
             } => {
                 assert_eq!(self.kind(), *reference_kind);
-                doc.get_value(reference_name.as_str())?
+                doc.get_value_with_root(reference_name.as_str(), root_name)?
             }
         })
     }

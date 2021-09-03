@@ -160,7 +160,6 @@ impl Kind {
                     self
                 ));
             }
-
             return Ok(crate::PropertyValue::Reference {
                 name: doc.resolve_name(reference)?,
                 kind: self.to_owned(),

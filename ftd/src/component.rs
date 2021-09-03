@@ -24,6 +24,25 @@ pub enum Instruction {
     },
 }
 
+impl Instruction {
+    pub fn resolve_id(&self) -> Option<&str> {
+        let id = match self {
+            Instruction::ChildComponent { child } => child.properties.get("id"),
+            Instruction::Component { parent, .. } => parent.properties.get("id"),
+            _ => None,
+        };
+        if let Some(property) = id {
+            if let Some(crate::PropertyValue::Value {
+                value: crate::variable::Value::String { text, .. },
+            }) = &property.default
+            {
+                return Some(text.as_str());
+            }
+        }
+        None
+    }
+}
+
 #[derive(Default, Debug, Clone, PartialEq, serde::Serialize, serde::Deserialize)]
 pub struct ChildComponent {
     pub root: String,
@@ -35,6 +54,12 @@ pub struct ChildComponent {
 pub struct Property {
     pub default: Option<crate::PropertyValue>,
     pub conditions: Vec<(crate::p2::Boolean, crate::PropertyValue)>,
+}
+
+pub struct ElementWithContainer {
+    pub element: ftd_rt::Element,
+    pub children: Vec<ftd_rt::Element>,
+    pub child_container: Option<std::collections::BTreeMap<String, Vec<usize>>>,
 }
 
 impl Property {
@@ -67,21 +92,33 @@ impl ChildComponent {
             String,
             Vec<std::collections::BTreeMap<String, crate::Value>>,
         >,
-    ) -> crate::p1::Result<ftd_rt::Element> {
-        let mut parent = self.call(doc, arguments, invocations, false)?;
-        match (&mut parent, children.is_empty()) {
+    ) -> crate::p1::Result<ElementWithContainer> {
+        let ElementWithContainer {
+            mut element,
+            child_container,
+            ..
+        } = self.call(doc, arguments, invocations, false, None)?;
+        element.set_container_id(crate::p2::utils::string_optional(
+            "id",
+            &resolve_properties(&self.properties, arguments, doc, None)?,
+        )?);
+        match (&mut element, children.is_empty()) {
             (ftd_rt::Element::Column(c), _) => {
                 for child in children.iter() {
-                    c.container
-                        .children
-                        .push(child.call(doc, arguments, invocations, false)?)
+                    c.container.children.push(
+                        child
+                            .call(doc, arguments, invocations, false, None)?
+                            .element,
+                    )
                 }
             }
             (ftd_rt::Element::Row(c), _) => {
                 for child in children.iter() {
-                    c.container
-                        .children
-                        .push(child.call(doc, arguments, invocations, false)?)
+                    c.container.children.push(
+                        child
+                            .call(doc, arguments, invocations, false, None)?
+                            .element,
+                    )
                 }
             }
             (t, false) => {
@@ -89,7 +126,11 @@ impl ChildComponent {
             }
             (_, true) => {}
         }
-        Ok(parent)
+        Ok(ElementWithContainer {
+            element,
+            children: vec![],
+            child_container,
+        })
     }
 
     pub fn call(
@@ -101,10 +142,15 @@ impl ChildComponent {
             Vec<std::collections::BTreeMap<String, crate::Value>>,
         >,
         is_child: bool,
-    ) -> crate::p1::Result<ftd_rt::Element> {
+        root_name: Option<&str>,
+    ) -> crate::p1::Result<ElementWithContainer> {
         if let Some(ref b) = self.condition {
             if b.is_constant() && !b.eval(arguments, doc)? {
-                return Ok(ftd_rt::Element::Null);
+                return Ok(ElementWithContainer {
+                    element: ftd_rt::Element::Null,
+                    children: vec![],
+                    child_container: None,
+                });
             }
         }
 
@@ -113,14 +159,15 @@ impl ChildComponent {
             // must have validated everything, and must not fail at run time
             doc.get_component(self.root.as_str()).unwrap()
         };
-        let root_properties = resolve_properties(&self.properties, arguments, doc, {
-            if is_child {
-                Some(&self.root)
-            } else {
-                None
-            }
-        })?;
-        root.call(&root_properties, doc, invocations, &self.condition)
+        let root_properties = resolve_properties(&self.properties, arguments, doc, root_name)?;
+        root.call(
+            &root_properties,
+            doc,
+            invocations,
+            &self.condition,
+            is_child,
+            doc.get_root(self.root.as_str())?,
+        )
     }
 
     pub fn from_p1(
@@ -133,8 +180,8 @@ impl ChildComponent {
         arguments: &std::collections::BTreeMap<String, crate::p2::Kind>,
     ) -> crate::p1::Result<Self> {
         let root = doc.get_component(name)?;
-        let root_arguments = &root.arguments;
-        assert_no_extra_properties(p1, root.full_name.as_str(), root_arguments)?;
+        let mut root_arguments = root.arguments;
+        assert_no_extra_properties(p1, root.full_name.as_str(), &root_arguments, name)?;
 
         Ok(Self {
             properties: read_properties(
@@ -143,7 +190,7 @@ impl ChildComponent {
                 body,
                 "",
                 root.full_name.as_str(),
-                root_arguments,
+                &mut root_arguments,
                 arguments,
                 doc,
             )?,
@@ -162,27 +209,16 @@ fn resolve_properties(
     self_properties: &std::collections::BTreeMap<String, Property>,
     arguments: &std::collections::BTreeMap<String, crate::Value>,
     doc: &crate::p2::TDoc,
-    root: Option<&str>,
+    root_name: Option<&str>,
 ) -> crate::p1::Result<std::collections::BTreeMap<String, crate::Value>> {
     let mut properties: std::collections::BTreeMap<String, crate::Value> = Default::default();
-
     for (name, value) in self_properties.iter() {
         if let Ok(property_value) = value.eval(name, arguments, doc) {
-            properties.insert(name.to_string(), property_value.resolve(arguments, doc)?);
+            properties.insert(
+                name.to_string(),
+                property_value.resolve_with_root(arguments, doc, root_name)?,
+            );
         }
-    }
-    if let Some(value) = arguments.get("root") {
-        properties.insert("root".to_string(), value.clone());
-    }
-    if let Some(root_id) = root {
-        let mut parts = root_id.splitn(2, '#');
-        properties.insert(
-            "root".to_string(),
-            crate::Value::String {
-                text: parts.next().unwrap().trim().to_string(),
-                source: crate::TextSource::Header,
-            },
-        );
     }
     Ok(properties)
 }
@@ -196,7 +232,8 @@ impl Component {
             String,
             Vec<std::collections::BTreeMap<String, crate::Value>>,
         >,
-    ) -> crate::p1::Result<Vec<ftd_rt::Element>> {
+        root_name: Option<&str>,
+    ) -> crate::p1::Result<ElementWithContainer> {
         ftd::rt::execute(
             doc.name,
             doc.aliases,
@@ -204,21 +241,22 @@ impl Component {
             &self.instructions,
             arguments,
             invocations,
+            root_name,
         )
     }
 
     pub fn from_p1(p1: &crate::p1::Section, doc: &crate::p2::TDoc) -> crate::p1::Result<Self> {
         let name = ftd_rt::get_name("component", p1.name.as_str())?.to_string();
         let root = p1.header.string("component")?;
-        let root_arguments = &doc.get_component(root.as_str())?.arguments;
+        let mut root_arguments = doc.get_component(root.as_str())?.arguments;
         let (arguments, _inherits) =
-            read_arguments(&p1.header, root.as_str(), root_arguments, doc)?;
-        assert_no_extra_properties(&p1.header, root.as_str(), root_arguments)?;
+            read_arguments(&p1.header, root.as_str(), &root_arguments, doc)?;
+        assert_no_extra_properties(&p1.header, root.as_str(), &root_arguments, &p1.name)?;
         let mut instructions: Vec<Instruction> = Default::default();
         for sub in p1.sub_sections.0.iter() {
             instructions.push(if sub.name == "container" {
                 Instruction::ChangeContainer {
-                    name: doc.resolve_name(sub.caption()?.as_str())?,
+                    name: doc.resolve_name_without_full_path(sub.caption()?.as_str())?,
                 }
             } else {
                 let s = ChildComponent::from_p1(
@@ -242,7 +280,7 @@ impl Component {
                 &p1.body,
                 name.as_str(),
                 root.as_str(),
-                root_arguments,
+                &mut root_arguments,
                 &arguments,
                 doc,
             )?,
@@ -263,41 +301,48 @@ impl Component {
             Vec<std::collections::BTreeMap<String, crate::Value>>,
         >,
         condition: &Option<ftd::p2::Boolean>,
-    ) -> crate::p1::Result<ftd_rt::Element> {
+        is_child: bool,
+        root_name: Option<&str>,
+    ) -> crate::p1::Result<ElementWithContainer> {
         invocations
             .entry(self.full_name.clone())
             .or_default()
             .push(arguments.to_owned());
         if self.root == "ftd.kernel" {
-            Ok(match self.full_name.as_str() {
+            let element = match self.full_name.as_str() {
                 "ftd#text" => ftd_rt::Element::Text(ftd::p2::element::text_from_properties(
-                    arguments, doc, condition,
+                    arguments, doc, condition, is_child,
                 )?),
                 "ftd#image" => ftd_rt::Element::Image(ftd::p2::element::image_from_properties(
-                    arguments, doc, condition,
+                    arguments, doc, condition, is_child,
                 )?),
                 "ftd#row" => ftd_rt::Element::Row(ftd::p2::element::row_from_properties(
-                    arguments, doc, condition,
+                    arguments, doc, condition, is_child,
                 )?),
                 "ftd#column" => ftd_rt::Element::Column(ftd::p2::element::column_from_properties(
-                    arguments, doc, condition,
+                    arguments, doc, condition, is_child,
                 )?),
                 "ftd#iframe" => ftd_rt::Element::IFrame(ftd::p2::element::iframe_from_properties(
-                    arguments, doc, condition,
+                    arguments, doc, condition, is_child,
                 )?),
                 "ftd#integer" => ftd_rt::Element::Integer(
-                    ftd::p2::element::integer_from_properties(arguments, doc, condition)?,
+                    ftd::p2::element::integer_from_properties(arguments, doc, condition, is_child)?,
                 ),
                 "ftd#decimal" => ftd_rt::Element::Decimal(
-                    ftd::p2::element::decimal_from_properties(arguments, doc, condition)?,
+                    ftd::p2::element::decimal_from_properties(arguments, doc, condition, is_child)?,
                 ),
                 "ftd#boolean" => ftd_rt::Element::Boolean(
-                    ftd::p2::element::boolean_from_properties(arguments, doc, condition)?,
+                    ftd::p2::element::boolean_from_properties(arguments, doc, condition, is_child)?,
                 ),
                 "ftd#input" => ftd_rt::Element::Input(ftd::p2::element::input_from_properties(
-                    arguments, doc, condition,
+                    arguments, doc, condition, is_child,
                 )?),
                 _ => unreachable!(),
+            };
+            Ok(ElementWithContainer {
+                element,
+                children: vec![],
+                child_container: None,
             })
         } else {
             let root = {
@@ -305,9 +350,18 @@ impl Component {
                 // must have validated everything, and must not fail at run time
                 doc.get_component(self.root.as_str()).unwrap()
             };
-            let root_properties = resolve_properties(&self.properties, arguments, doc, None)?;
-            let mut element = root.call(&root_properties, doc, invocations, condition)?;
-
+            let root_properties = resolve_properties(&self.properties, arguments, doc, root_name)?;
+            let mut element = root
+                .call(
+                    &root_properties,
+                    doc,
+                    invocations,
+                    condition,
+                    is_child,
+                    root_name,
+                )?
+                .element;
+            let mut containers = None;
             match &mut element {
                 ftd_rt::Element::Text(_)
                 | ftd_rt::Element::Image(_)
@@ -318,22 +372,58 @@ impl Component {
                 | ftd_rt::Element::Boolean(_)
                 | ftd_rt::Element::Null => {}
                 ftd_rt::Element::Column(ref mut e) => {
-                    e.container.children = self.call_sub_functions(arguments, doc, invocations)?
+                    let ElementWithContainer {
+                        children,
+                        child_container,
+                        ..
+                    } = self.call_sub_functions(arguments, doc, invocations, root_name)?;
+                    containers = child_container;
+                    e.container.children = children
                 }
                 ftd_rt::Element::Row(ref mut e) => {
-                    e.container.children = self.call_sub_functions(arguments, doc, invocations)?
+                    let ElementWithContainer {
+                        children,
+                        child_container,
+                        ..
+                    } = self.call_sub_functions(arguments, doc, invocations, root_name)?;
+                    containers = child_container;
+                    e.container.children = children
                 }
             }
 
-            Ok(element)
+            Ok(ElementWithContainer {
+                element,
+                children: vec![],
+                child_container: containers,
+            })
         }
     }
+}
+
+fn is_component(name: &str) -> bool {
+    !(name.starts_with("component ")
+        || name.starts_with("var ")
+        || name.starts_with("record ")
+        || name.starts_with("or-type")
+        || name.starts_with("list ")
+        || name.starts_with("map ")
+        || (name == "container")
+        || (name == "ftd.text")
+        || (name == "ftd.image")
+        || (name == "ftd.row")
+        || (name == "ftd.column")
+        || (name == "ftd.iframe")
+        || (name == "ftd.integer")
+        || (name == "ftd.decimal")
+        || (name == "ftd.boolean")
+        || (name == "ftd.input"))
 }
 
 fn assert_no_extra_properties(
     p1: &crate::p1::Header,
     root: &str,
     root_arguments: &std::collections::BTreeMap<String, crate::p2::Kind>,
+    name: &str,
 ) -> crate::p1::Result<()> {
     for (k, _) in p1.0.iter() {
         if k == "component" || k.starts_with('$') || k == "if" {
@@ -346,7 +436,7 @@ fn assert_no_extra_properties(
             k
         };
 
-        if !root_arguments.contains_key(key) {
+        if !(root_arguments.contains_key(key) || (is_component(name) && key == "id")) {
             return crate::e(format!(
                 "unknown key found: {}, {} has: {}",
                 k,
@@ -448,12 +538,24 @@ fn read_properties(
     body: &Option<String>,
     fn_name: &str,
     root: &str,
-    root_arguments: &std::collections::BTreeMap<String, crate::p2::Kind>,
+    root_arguments: &mut std::collections::BTreeMap<String, crate::p2::Kind>,
     arguments: &std::collections::BTreeMap<String, crate::p2::Kind>,
     doc: &crate::p2::TDoc,
 ) -> crate::p1::Result<std::collections::BTreeMap<String, Property>> {
     let mut properties: std::collections::BTreeMap<String, Property> = Default::default();
-
+    let id_already_present = root_arguments.contains_key("id");
+    if !id_already_present {
+        // to add "id" property by default for component as "-- component foo:"
+        root_arguments.insert(
+            "id".to_string(),
+            crate::p2::Kind::Optional {
+                kind: Box::new(crate::p2::Kind::String {
+                    caption: false,
+                    body: false,
+                }),
+            },
+        );
+    }
     for (name, kind) in root_arguments.iter() {
         let (conditional_vector, source) = match (p1.conditional_str(name), kind.inner()) {
             (Ok(v), _) => (v, ftd::TextSource::Header),

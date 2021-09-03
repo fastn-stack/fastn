@@ -2,6 +2,7 @@ pub fn common_from_properties(
     properties: &std::collections::BTreeMap<String, crate::Value>,
     doc: &crate::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
+    is_child: bool,
 ) -> crate::p1::Result<ftd_rt::Common> {
     Ok(ftd_rt::Common {
         condition: match condition {
@@ -31,9 +32,10 @@ pub fn common_from_properties(
         border_width: crate::p2::utils::int_with_default("border-width", 0, properties)?,
         border_radius: crate::p2::utils::int_with_default("border-radius", 0, properties)?,
         id: crate::p2::utils::string_optional("id", properties)?.map(|v| {
-            match crate::p2::utils::string_optional("root", properties) {
-                Ok(Some(root)) => format!("{}#{}", root, v),
-                _ => format!("{}#{}", doc.name, v),
+            if is_child {
+                v
+            } else {
+                format!("{}#{}", doc.name, v)
             }
         }),
         overflow_x: ftd_rt::Overflow::from(crate::p2::utils::string_optional(
@@ -190,7 +192,7 @@ pub fn container_from_properties(
 ) -> crate::p1::Result<ftd_rt::Container> {
     Ok(ftd_rt::Container {
         children: Default::default(),
-        open: crate::p2::utils::bool_optional("open", properties)?,
+        open: crate::p2::utils::string_bool_optional("open", properties)?,
         spacing: crate::p2::utils::int_optional("spacing", properties)?,
         align: ftd_rt::Align::from(crate::p2::utils::string_optional("align", properties)?)?,
         wrap: crate::p2::utils::bool_with_default("wrap", false, properties)?,
@@ -199,7 +201,10 @@ pub fn container_from_properties(
 
 fn container_arguments() -> Vec<(String, crate::p2::Kind)> {
     vec![
-        ("open".to_string(), crate::p2::Kind::Boolean.into_optional()),
+        (
+            "open".to_string(),
+            crate::p2::Kind::string().into_optional(),
+        ),
         (
             "spacing".to_string(),
             crate::p2::Kind::Integer.into_optional(),
@@ -244,12 +249,13 @@ pub fn image_from_properties(
     properties: &std::collections::BTreeMap<String, crate::Value>,
     doc: &crate::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
+    is_child: bool,
 ) -> crate::p1::Result<ftd_rt::Image> {
     Ok(ftd_rt::Image {
         src: crate::p2::utils::string("src", properties)?,
         description: crate::p2::utils::string_optional("description", properties)?
             .unwrap_or_else(|| "".to_string()),
-        common: common_from_properties(properties, doc, condition)?,
+        common: common_from_properties(properties, doc, condition, is_child)?,
         align: ftd_rt::Align::from(crate::p2::utils::string_optional("align", properties)?)?,
     })
 }
@@ -273,9 +279,10 @@ pub fn row_from_properties(
     properties: &std::collections::BTreeMap<String, crate::Value>,
     doc: &crate::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
+    is_child: bool,
 ) -> crate::p1::Result<ftd_rt::Row> {
     Ok(ftd_rt::Row {
-        common: common_from_properties(properties, doc, condition)?,
+        common: common_from_properties(properties, doc, condition, is_child)?,
         container: container_from_properties(properties, doc)?,
     })
 }
@@ -298,9 +305,10 @@ pub fn column_from_properties(
     properties: &std::collections::BTreeMap<String, crate::Value>,
     doc: &crate::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
+    is_child: bool,
 ) -> crate::p1::Result<ftd_rt::Column> {
     Ok(ftd_rt::Column {
-        common: common_from_properties(properties, doc, condition)?,
+        common: common_from_properties(properties, doc, condition, is_child)?,
         container: container_from_properties(properties, doc)?,
     })
 }
@@ -378,6 +386,7 @@ pub fn iframe_from_properties(
     properties: &std::collections::BTreeMap<String, crate::Value>,
     doc: &crate::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
+    is_child: bool,
 ) -> crate::p1::Result<ftd_rt::IFrame> {
     let src = match (
         crate::p2::utils::string_optional("src", properties)?,
@@ -392,7 +401,7 @@ pub fn iframe_from_properties(
 
     Ok(ftd_rt::IFrame {
         src,
-        common: common_from_properties(properties, doc, condition)?,
+        common: common_from_properties(properties, doc, condition, is_child)?,
     })
 }
 
@@ -400,6 +409,7 @@ pub fn text_from_properties(
     properties: &std::collections::BTreeMap<String, crate::Value>,
     doc: &crate::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
+    is_child: bool,
 ) -> crate::p1::Result<ftd_rt::Text> {
     let format = ftd_rt::TextFormat::from(
         crate::p2::utils::string_optional("format", properties)?,
@@ -427,7 +437,7 @@ pub fn text_from_properties(
                 properties,
             )?,
         )?,
-        common: common_from_properties(properties, doc, condition)?,
+        common: common_from_properties(properties, doc, condition, is_child)?,
         align: ftd_rt::TextAlign::from(crate::p2::utils::string_optional("align", properties)?)?,
         style: ftd_rt::Style::from(crate::p2::utils::string_optional("style", properties)?)?,
         format,
@@ -442,6 +452,7 @@ pub fn integer_from_properties(
     properties: &std::collections::BTreeMap<String, crate::Value>,
     doc: &crate::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
+    is_child: bool,
 ) -> crate::p1::Result<ftd_rt::Text> {
     let font_str = crate::p2::utils::string_optional("font", properties)?;
     let num = format_num::NumberFormat::new();
@@ -464,7 +475,7 @@ pub fn integer_from_properties(
     Ok(ftd_rt::Text {
         text: crate::markdown_line(text.as_str()),
         line: false,
-        common: common_from_properties(properties, doc, condition)?,
+        common: common_from_properties(properties, doc, condition, is_child)?,
         align: ftd_rt::TextAlign::from(crate::p2::utils::string_optional("align", properties)?)?,
         style: ftd_rt::Style::from(crate::p2::utils::string_optional("style", properties)?)?,
         format: Default::default(),
@@ -479,6 +490,7 @@ pub fn decimal_from_properties(
     properties: &std::collections::BTreeMap<String, crate::Value>,
     doc: &crate::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
+    is_child: bool,
 ) -> crate::p1::Result<ftd_rt::Text> {
     let font_str = crate::p2::utils::string_optional("font", properties)?;
     let num = format_num::NumberFormat::new();
@@ -497,7 +509,7 @@ pub fn decimal_from_properties(
     Ok(ftd_rt::Text {
         text: crate::markdown_line(text.as_str()),
         line: false,
-        common: common_from_properties(properties, doc, condition)?,
+        common: common_from_properties(properties, doc, condition, is_child)?,
         align: ftd_rt::TextAlign::from(crate::p2::utils::string_optional("align", properties)?)?,
         style: ftd_rt::Style::from(crate::p2::utils::string_optional("style", properties)?)?,
         format: Default::default(),
@@ -531,6 +543,7 @@ pub fn boolean_from_properties(
     properties: &std::collections::BTreeMap<String, crate::Value>,
     doc: &crate::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
+    is_child: bool,
 ) -> crate::p1::Result<ftd_rt::Text> {
     let font_str = crate::p2::utils::string_optional("font", properties)?;
     let value = crate::p2::utils::bool("value", properties)?;
@@ -550,7 +563,7 @@ pub fn boolean_from_properties(
     Ok(ftd_rt::Text {
         text: crate::markdown_line(text.as_str()),
         line: false,
-        common: common_from_properties(properties, doc, condition)?,
+        common: common_from_properties(properties, doc, condition, is_child)?,
         align: ftd_rt::TextAlign::from(crate::p2::utils::string_optional("align", properties)?)?,
         style: ftd_rt::Style::from(crate::p2::utils::string_optional("style", properties)?)?,
         format: Default::default(),
@@ -804,9 +817,10 @@ pub fn input_from_properties(
     properties: &std::collections::BTreeMap<String, crate::Value>,
     doc: &crate::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
+    is_child: bool,
 ) -> crate::p1::Result<ftd_rt::Input> {
     Ok(ftd_rt::Input {
-        common: common_from_properties(properties, doc, condition)?,
+        common: common_from_properties(properties, doc, condition, is_child)?,
         placeholder: crate::p2::utils::string_optional("placeholder", properties)?,
     })
 }

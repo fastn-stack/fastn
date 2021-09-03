@@ -18,32 +18,26 @@ pub enum Element {
 }
 
 impl Element {
-    pub fn is_open_container(&self) -> bool {
+    pub fn is_open_container(&self) -> (bool, Option<String>) {
         match self {
-            Self::Text(_) => false,
-            Self::Input(_) => false,
-            Self::Image(_) => false,
-            Self::IFrame(_) => false,
-            Self::Integer(_) => false,
-            Self::Boolean(_) => false,
-            Self::Decimal(_) => false,
-            Self::Null => false,
             Self::Column(e) => e.container.is_open(),
             Self::Row(e) => e.container.is_open(),
+            _ => (false, None),
         }
     }
     pub fn container_id(&self) -> Option<String> {
         match self {
-            Self::Text(_) => None,
-            Self::Input(_) => None,
-            Self::Image(_) => None,
-            Self::IFrame(_) => None,
-            Self::Integer(_) => None,
-            Self::Boolean(_) => None,
-            Self::Decimal(_) => None,
-            Self::Null => None,
             Self::Column(e) => e.common.id.clone(),
             Self::Row(e) => e.common.id.clone(),
+            _ => None,
+        }
+    }
+
+    pub fn set_container_id(&mut self, name: Option<String>) {
+        match self {
+            Self::Column(e) => e.common.id = name,
+            Self::Row(e) => e.common.id = name,
+            _ => {}
         }
     }
 }
@@ -294,15 +288,18 @@ pub struct Common {
 )]
 pub struct Container {
     pub children: Vec<ftd_rt::Element>,
-    pub open: Option<bool>,
+    pub open: (Option<bool>, Option<String>),
     pub spacing: Option<i64>,
     pub align: Align,
     pub wrap: bool,
 }
 
 impl Container {
-    pub fn is_open(&self) -> bool {
-        self.open.unwrap_or_else(|| self.children.is_empty())
+    pub fn is_open(&self) -> (bool, Option<String>) {
+        (
+            self.open.0.unwrap_or_else(|| self.children.is_empty()),
+            self.open.1.clone(),
+        )
     }
 }
 
