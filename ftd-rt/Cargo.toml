@@ -1,6 +1,6 @@
 [package]
 name = "ftd-rt"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Amit Upadhyay <amitu@fifthtry.com>"]
 edition = "2018"
 description = "ftd-rt: FifthTry Document Format parser at Run Time"
