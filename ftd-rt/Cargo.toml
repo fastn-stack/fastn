@@ -12,8 +12,9 @@ homepage = "https://www.fifthtry.com/fifthtry/ftd/"
 crate-type = ["cdylib", "rlib"]
 
 [features]
-default = []
+default = ["realm"]
 wasm = ["console_error_panic_hook", "wasm-bindgen", "web-sys"]
+realm = []
 
 [dependencies]
 serde = { version = "1", features = ["derive"] }

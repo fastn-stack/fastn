@@ -1,0 +1,54 @@
+-- component foo:
+component: ftd.column
+$name: caption
+$body: string
+border-width: 1
+border-color: grey
+padding: 10
+width: fill
+margin-top: 10
+
+--- ftd.text: ref $name
+size: 20
+color: red
+
+--- ftd.text: ref $body
+color: green
+
+-- record person:
+name: caption
+bio: body
+
+-- list people:
+type: person
+
+-- people: Amit Upadhyay
+
+Amit is CEO of FifthTry.
+
+-- var name: Arpita Jaiswal
+
+-- people: ref name
+
+Arpita is developer at Fifthtry
+
+-- people: Asit
+
+Asit is developer at Fifthtry
+
+-- people: Sourabh
+
+Sourabh is developer at Fifthtry
+
+-- ftd.text: People at Fifthtry
+size: 40
+style: bold
+
+-- var get: world
+
+-- foo: hello
+body: ref get
+
+-- foo: ref obj.name
+$loop$: people as obj
+body: ref obj.bio

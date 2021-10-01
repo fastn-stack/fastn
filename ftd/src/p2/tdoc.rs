@@ -85,6 +85,13 @@ impl<'a> TDoc<'a> {
         }
     }
 
+    pub fn is_variable_record_type(&self, name: &str) -> crate::p1::Result<bool> {
+        match self.get_value(name)? {
+            crate::Value::Record { .. } => Ok(true),
+            _ => Ok(false),
+        }
+    }
+
     pub fn get_value(&self, name: &str) -> crate::p1::Result<crate::Value> {
         // TODO: name can be a.b.c, and a and a.b are records with right fields
         self.get_value_with_root(name, None)
@@ -112,6 +119,18 @@ impl<'a> TDoc<'a> {
             v => self.err("not a component", v, "get_component"),
         }
     }
+
+    pub fn get_component_with_root(
+        &self,
+        name: &str,
+        root_name: Option<&str>,
+    ) -> crate::p1::Result<crate::Component> {
+        match self.get_thing_with_root(name, root_name)? {
+            crate::p2::Thing::Component(v) => Ok(v),
+            v => self.err("not a component", v, "get_component"),
+        }
+    }
+
     pub fn get_root(&'a self, name: &'a str) -> crate::p1::Result<Option<&str>> {
         if name.contains('#') {
             match name.split_once('#') {
@@ -158,15 +177,48 @@ impl<'a> TDoc<'a> {
                         .bag
                         .get(format!("{}#{}", m, v).as_str())
                         .map(ToOwned::to_owned),
-                    None => match self.get_thing(m)? {
-                        crate::p2::Thing::OrType(e) => Some(crate::p2::Thing::OrTypeWithVariant {
-                            e,
-                            variant: v.to_string(),
-                        }),
-                        t => {
-                            return self.err("not an or-type", t, "get_thing");
+                    None => {
+                        let thing = self.get_thing(m)?;
+                        match thing.clone() {
+                            crate::p2::Thing::OrType(e) => {
+                                Some(crate::p2::Thing::OrTypeWithVariant {
+                                    e,
+                                    variant: v.to_string(),
+                                })
+                            }
+                            crate::p2::Thing::Variable(crate::Variable { name, value }) => {
+                                let fields = match value {
+                                    crate::Value::Record { fields, .. } => fields,
+                                    crate::Value::OrType { fields, .. } => fields,
+                                    _ => {
+                                        return self.err(
+                                            "not an record or or-type",
+                                            thing,
+                                            "get_thing",
+                                        )
+                                    }
+                                };
+                                if let Some(crate::PropertyValue::Value { value: val }) =
+                                    fields.get(v)
+                                {
+                                    return Ok(crate::p2::Thing::Variable(crate::Variable {
+                                        name,
+                                        value: val.clone(),
+                                    }));
+                                } else if let Some(crate::PropertyValue::Reference {
+                                    name, ..
+                                }) = fields.get(v)
+                                {
+                                    self.bag.get(name).map(ToOwned::to_owned)
+                                } else {
+                                    Some(thing)
+                                }
+                            }
+                            _ => {
+                                return self.err("not an or-type", thing, "get_thing");
+                            }
                         }
-                    },
+                    }
                 },
                 (Some(m), e, Some(v)) => match self.aliases.get(m) {
                     Some(m) => match self.bag.get(format!("{}#{}", m, e).as_str()) {

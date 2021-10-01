@@ -15,6 +15,12 @@ pub enum Error {
     #[error("invalid input: {message}")]
     InvalidInput { message: String, context: String },
 
+    #[error("unknown processor: {message}")]
+    UnknownProcessor { message: String },
+
+    #[error("processor error: {message}")]
+    ProcessorError { message: String },
+
     #[error("file was empty")]
     EmptyFile,
     #[error("key not found: {key}")]

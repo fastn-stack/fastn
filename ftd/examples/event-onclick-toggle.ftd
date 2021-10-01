@@ -1,0 +1,15 @@
+-- var mobile: true
+
+-- component foo:
+component: ftd.column
+
+--- ftd.text: Mobile
+if: mobile
+
+--- ftd.text: Desktop
+if: not mobile
+
+-- foo:
+
+-- ftd.text: Click here!
+$event-click$: toggle mobile

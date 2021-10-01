@@ -69,8 +69,23 @@ impl Record {
                             },
                         }
                     }
-                    crate::p2::Kind::Record { name: _ } => {
-                        todo!()
+                    crate::p2::Kind::Record { .. } => {
+                        let mut list = crate::Value::List {
+                            kind: list_kind.inner().to_owned(),
+                            data: vec![],
+                        };
+                        for (k, v) in p1.header.0.iter() {
+                            if *k != *name {
+                                continue;
+                            }
+                            let reference = if v.starts_with("ref ") {
+                                ftd_rt::get_name("ref", v)?
+                            } else {
+                                v
+                            };
+                            list = doc.get_value(reference)?;
+                        }
+                        crate::PropertyValue::Value { value: list }
                     }
                     crate::p2::Kind::String { .. } => {
                         let mut values: Vec<crate::Value> = vec![];
@@ -113,16 +128,18 @@ impl Record {
                                     fields: record.fields_from_sub_section(s, doc)?,
                                 }
                             }
-                            k => match k.read_section(
-                                &s.header,
-                                &s.caption,
-                                &s.body,
-                                s.name.as_str(),
-                                doc,
-                            )? {
-                                crate::PropertyValue::Value { value: v } => v,
-                                _ => unimplemented!(),
-                            },
+                            k => {
+                                match k.read_section(
+                                    &s.header,
+                                    &s.caption,
+                                    &s.body,
+                                    s.name.as_str(),
+                                    doc,
+                                )? {
+                                    crate::PropertyValue::Value { value: v } => v,
+                                    _ => unimplemented!(),
+                                }
+                            }
                         };
                         values.push(v);
                     }
@@ -137,7 +154,6 @@ impl Record {
             };
             fields.insert(name.to_string(), value);
         }
-
         Ok(fields)
     }
 
@@ -208,16 +224,26 @@ impl Record {
         p1_header: &crate::p1::Header,
         doc: &crate::p2::TDoc,
     ) -> crate::p1::Result<Self> {
-        let name = doc.format_name(ftd_rt::get_name("record", p1_name)?);
+        let name = ftd_rt::get_name("record", p1_name)?;
+        let full_name = doc.format_name(name);
         let mut fields = std::collections::BTreeMap::new();
+        let object_kind = (
+            name,
+            crate::p2::Kind::Record {
+                name: full_name.clone(),
+            },
+        );
         for (k, v) in p1_header.0.iter() {
             let v = normalise_value(v)?;
             validate_key(k)?;
-            fields.insert(k.to_string(), crate::p2::Kind::from(v.as_str(), doc)?);
+            fields.insert(
+                k.to_string(),
+                crate::p2::Kind::from(v.as_str(), doc, Some(object_kind.clone()))?,
+            );
         }
         assert_fields_valid(&fields)?;
         return Ok(Record {
-            name,
+            name: full_name,
             fields,
             instances: Default::default(),
         });
@@ -240,7 +266,7 @@ fn assert_fields_valid(
     let mut caption_field: Option<String> = None;
     let mut body_field: Option<String> = None;
     for (name, kind) in fields.iter() {
-        if let crate::p2::Kind::String { caption, body } = kind {
+        if let crate::p2::Kind::String { caption, body, .. } = kind {
             if *caption {
                 match &caption_field {
                     Some(c) => {
@@ -587,8 +613,8 @@ mod test {
             crate::p2::Thing::Record(crate::p2::Record {
                 name: s("foo/bar#point"),
                 fields: std::array::IntoIter::new([
-                    (s("x"), crate::p2::Kind::Integer),
-                    (s("y"), crate::p2::Kind::Integer),
+                    (s("x"), crate::p2::Kind::integer()),
+                    (s("y"), crate::p2::Kind::integer()),
                 ])
                 .collect(),
                 instances: Default::default(),
@@ -750,7 +776,7 @@ mod test {
                             }),
                         },
                     ),
-                    (s("value"), crate::p2::Kind::Integer),
+                    (s("value"), crate::p2::Kind::integer()),
                 ])
                 .collect(),
                 instances: Default::default(),

@@ -1,0 +1,19 @@
+
+
+-- fifthtry/row: @/left-border | @/main
+id: @anon-page
+$sign: $msg$
+$child: $element$
+width: fill
+height: fill
+
+--- fifthtry/column: @/header | @/body
+id: @/main
+width: fill
+height: fill
+paddingXY: 0 50
+centerY: true
+spacing: 20
+
+-- fifthtry/column: @/left-border | @/main
+id: @anon-page

@@ -1,0 +1,65 @@
+-- component ft_container:
+component: ftd.column
+$id: optional string
+id: ref $id
+width: fill
+padding-top: 30
+padding-left: 100
+align: top
+
+-- component markdown:
+component: ftd.text
+$body: body
+$collapsed: optional boolean
+$title: optional caption
+$two_columns: optional boolean
+text: ref $body
+size: 17
+color: #4d4d4d
+padding-bottom: 34
+
+-- component h1:
+component: ftd.column
+$title: caption
+$body: optional body
+width: fill
+
+--- ftd.text:
+text: ref $title
+$title: caption
+text: ref $title
+size: 30
+color: black
+style: bold
+padding-bottom: 12
+padding-top: 12
+
+--- markdown:
+if: $body is not null
+body: ref $body
+
+-- component page:
+component: ftd.column
+open: main-container
+
+--- ftd.row:
+width: fill
+
+--- ftd.text: Start Page
+
+--- ft_container:
+id: main-container
+
+--- ftd.text: End of Page
+
+-- page:
+
+-- h1: qweq
+
+-- markdown:
+
+This is your main project. You can make it private on clicking on the button above.
+
+You can edit things by double clicking.
+
+Update the table of content by editing the 'toc' section

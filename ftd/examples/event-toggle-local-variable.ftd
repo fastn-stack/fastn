@@ -1,0 +1,17 @@
+-- component foo:
+component: ftd.text
+$name: caption
+@open: boolean with default true
+text: ref $name
+if: @open
+$event-click$: toggle @open
+
+-- ftd.text: gg
+
+-- ftd.column:
+
+-- ftd.column:
+
+-- foo: Hello
+
+-- ftd.text: Hello Again

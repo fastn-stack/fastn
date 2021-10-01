@@ -32,7 +32,7 @@ pub fn person_fields() -> std::collections::BTreeMap<String, crate::p2::Kind> {
     std::array::IntoIter::new([
         (s("address"), crate::p2::Kind::string()),
         (s("bio"), crate::p2::Kind::body()),
-        (s("age"), crate::p2::Kind::Integer),
+        (s("age"), crate::p2::Kind::integer()),
         (s("name"), crate::p2::Kind::caption()),
     ])
     .collect()
@@ -70,7 +70,7 @@ pub fn abrar() -> std::collections::BTreeMap<String, crate::PropertyValue> {
         (
             s("age"),
             crate::PropertyValue::Reference {
-                kind: crate::p2::Kind::Integer,
+                kind: crate::p2::Kind::integer(),
                 name: s("foo/bar#x"),
             },
         ),

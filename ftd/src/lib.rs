@@ -5,6 +5,7 @@ extern crate self as ftd;
 pub(crate) mod test;
 
 mod component;
+mod execute_doc;
 pub mod main;
 mod or_type;
 pub mod p1;
@@ -97,9 +98,16 @@ where
     S: Into<String>,
 {
     Err(crate::p1::Error::InvalidInput {
-        message: m.into(),
+        message: format!("{}: {}", m.into(), c),
         context: c.to_string(),
     })
+}
+
+pub fn unknown_processor_error<T, S>(m: S) -> crate::p1::Result<T>
+where
+    S: Into<String>,
+{
+    Err(crate::p1::Error::UnknownProcessor { message: m.into() })
 }
 
 pub fn split_module(id: &str) -> crate::p1::Result<(Option<&str>, &str, Option<&str>)> {
@@ -113,5 +121,13 @@ pub fn split_module(id: &str) -> crate::p1::Result<(Option<&str>, &str, Option<&
             None => Ok((Some(p1), p2, None)),
         },
         None => Ok((None, id, None)),
+    }
+}
+
+pub struct ExampleLibrary {}
+
+impl ftd::p2::Library for ExampleLibrary {
+    fn get(&self, name: &str) -> Option<String> {
+        std::fs::read_to_string(format!("./examples/{}.ftd", name)).ok()
     }
 }

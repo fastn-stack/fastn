@@ -15,6 +15,33 @@ impl ToString for Document {
 }
 
 impl Document {
+    fn rt_data(&self) -> ftd_rt::Map {
+        let mut d: ftd_rt::Map = Default::default();
+        for (k, v) in self.data.iter() {
+            if let ftd::p2::Thing::Variable(ftd::Variable {
+                value: ftd::Value::Boolean { value },
+                ..
+            }) = v
+            {
+                d.insert(k.to_string(), value.to_string());
+            }
+        }
+        d
+    }
+
+    pub fn to_rt(&self) -> ftd_rt::Document {
+        ftd_rt::Document {
+            data: self.rt_data(),
+            tree: self.main.to_node(),
+        }
+    }
+
+    pub fn html(&self) -> String {
+        self.main
+            .to_node()
+            .to_html(&Default::default(), &self.rt_data())
+    }
+
     pub fn set_string(&mut self, name: &str, value: &str) {
         let thing = ftd::p2::Thing::Variable(ftd::Variable {
             name: name.to_string(),
@@ -25,6 +52,7 @@ impl Document {
         });
         self.data.insert(name.to_string(), thing);
     }
+
     pub fn set_bool(&mut self, name: &str, value: bool) {
         let thing = ftd::p2::Thing::Variable(ftd::Variable {
             name: name.to_string(),
@@ -32,6 +60,7 @@ impl Document {
         });
         self.data.insert(name.to_string(), thing);
     }
+
     pub fn rt(self) -> ftd::p1::Result<ftd_rt::Document> {
         let data = {
             let mut d: ftd_rt::Map = Default::default();
@@ -70,7 +99,7 @@ impl Document {
         None
     }
 
-    pub fn find<T, F>(&self, f: &F) -> Option<T>
+    pub fn find<T, F>(children: &[ftd_rt::Element], f: &F) -> Option<T>
     where
         F: Fn(&ftd_rt::Element) -> Option<T>,
     {
@@ -139,14 +168,14 @@ impl Document {
             None
         }
 
-        finder(&self.main.container.children, f)
+        finder(children, f)
     }
 
-    pub fn find_text<T, F>(&self, f: F) -> Option<T>
+    pub fn find_text<T, F>(children: &[ftd_rt::Element], f: F) -> Option<T>
     where
         F: Fn(&ftd_rt::Text) -> Option<T>,
     {
-        self.find(&|e: &ftd_rt::Element| -> Option<T> {
+        Self::find(children, &|e: &ftd_rt::Element| -> Option<T> {
             match e {
                 ftd_rt::Element::Text(t) => f(t),
                 _ => None,
@@ -182,17 +211,17 @@ impl Document {
         })
     }
 
-    pub fn from(
+    pub fn without_render(
         name: &str,
         source: &str,
         lib: &dyn crate::p2::Library,
     ) -> crate::p1::Result<Document> {
         let mut interpreter = crate::p2::interpreter::Interpreter::new(lib);
         let instructions = interpreter.interpret(name, source)?;
-        let mut rt = ftd::RT::from(name, interpreter.aliases, interpreter.bag, instructions);
+        let rt = ftd::RT::from(name, interpreter.aliases, interpreter.bag, instructions);
 
         Ok(Document {
-            main: rt.render()?,
+            main: Default::default(),
             data: rt.bag,
             instructions: rt.instructions,
             p1: interpreter.p1,
@@ -201,41 +230,94 @@ impl Document {
         })
     }
 
-    pub fn title(&self) -> Option<ftd_rt::Rendered> {
-        // find the text of first primary heading
-        if let Some(t) = self.find_text(|t| {
-            if t.common
-                .region
-                .as_ref()
-                .map(|r| r.is_primary_heading())
-                .unwrap_or(false)
-            {
+    pub fn from(
+        name: &str,
+        source: &str,
+        lib: &dyn crate::p2::Library,
+    ) -> crate::p1::Result<Document> {
+        let mut d = Self::without_render(name, source, lib)?;
+
+        let mut rt = ftd::RT::from(
+            d.name.as_str(),
+            d.aliases.clone(),
+            d.data.clone(),
+            d.instructions.clone(),
+        );
+
+        d.main = rt.render()?;
+        Ok(d)
+    }
+
+    fn get_heading<F>(children: &[ftd_rt::Element], f: &F) -> Option<ftd_rt::Rendered>
+    where
+        F: Fn(&ftd_rt::Region) -> bool,
+    {
+        if let Some(t) = Self::find_text(children, |t| {
+            if t.common.region.as_ref().map(f).unwrap_or(false) {
                 Some(t.text.clone())
             } else {
                 None
             }
         }) {
+            return Some(t);
+        }
+        if let Some(t) = Self::find(children, &|e| match e {
+            ftd_rt::Element::Column(t) => {
+                if t.common.region.as_ref().map(f).unwrap_or(false) {
+                    Some(t.container.children.clone())
+                } else {
+                    None
+                }
+            }
+            ftd_rt::Element::Row(t) => {
+                if t.common.region.as_ref().map(f).unwrap_or(false) {
+                    Some(t.container.children.clone())
+                } else {
+                    None
+                }
+            }
+            _ => None,
+        }) {
+            if let Some(t) = Self::find_text(&t, |t| {
+                if t.common
+                    .region
+                    .as_ref()
+                    .map(|r| r.is_title())
+                    .unwrap_or(false)
+                {
+                    Some(t.text.clone())
+                } else {
+                    None
+                }
+            }) {
+                return Some(t);
+            };
+            return Self::find_text(&t, |t| if t.line { Some(t.text.clone()) } else { None });
+        }
+        None
+    }
+
+    pub fn title(&self) -> Option<ftd_rt::Rendered> {
+        // find the text of first primary heading
+        if let Some(t) =
+            Self::get_heading(&self.main.container.children, &|r| r.is_primary_heading())
+        {
             return Some(t);
         }
 
         // find any heading
-        if let Some(t) = self.find_text(|t| {
-            if t.common
-                .region
-                .as_ref()
-                .map(|r| r.is_heading())
-                .unwrap_or(false)
-            {
+        if let Some(t) = Self::get_heading(&self.main.container.children, &|r| r.is_heading()) {
+            return Some(t);
+        }
+
+        // find any text with caption
+        if let Some(t) = Self::find_text(&self.main.container.children, |t| {
+            if t.line {
                 Some(t.text.clone())
             } else {
                 None
             }
         }) {
-            return Some(t);
-        }
-
-        // find any text with caption
-        if let Some(t) = self.find_text(|t| if t.line { Some(t.text.clone()) } else { None }) {
             return Some(t);
         }
 
@@ -243,7 +325,8 @@ impl Document {
     }
 
     pub fn get<T: serde::de::DeserializeOwned>(&self, key: &str) -> crate::p1::Result<T> {
-        Ok(serde_json::from_value(self.json(key)?).unwrap()) // TODO: remove unwrap
+        let v = self.json(key)?;
+        Ok(serde_json::from_value(v).unwrap()) // TODO: remove unwrap
     }
 
     pub fn name(&self, k: &str) -> String {
@@ -299,6 +382,7 @@ impl Document {
         Ok(serde_json::from_value(json).unwrap()) // TODO: remove unwrap
     }
 
+    #[cfg(calls)]
     pub fn calls<T: serde::de::DeserializeOwned>(
         &self,
         component: &str,
@@ -369,6 +453,7 @@ impl Document {
         Ok(serde_json::Value::Array(list))
     }
 
+    #[cfg(calls)]
     fn object2_to_json(
         &self,
         fields: &std::collections::BTreeMap<String, crate::Value>,
@@ -402,7 +487,7 @@ impl Document {
         match v {
             crate::PropertyValue::Value { value, .. } => self.value_to_json(value),
             crate::PropertyValue::Reference { name, .. } => self.json(name),
-            crate::PropertyValue::Argument { .. } => unreachable!(),
+            _ => unreachable!(),
         }
     }
 }
@@ -491,6 +576,8 @@ mod test {
     }
 
     #[test]
+    #[cfg(calls)]
+    #[ignore] // TODO: this is buggy
     fn calls() {
         #[derive(Debug, PartialEq, serde::Deserialize)]
         struct PR {
@@ -520,7 +607,7 @@ mod test {
         .unwrap();
 
         pretty_assertions::assert_eq!(
-            bag.calls::<PR>("pr").unwrap(),
+            bag.instances::<PR>("pr").unwrap(),
             vec![
                 PR {
                     number: 24,

@@ -8,6 +8,10 @@ license = "MIT"
 repository = "https://github.com/fifthtry/ftd"
 homepage = "https://www.fifthtry.com/fifthtry/ftd/"
 
+[features]
+default = []
+calls = []
+
 [dependencies]
 css-color-parser = { version = "0.1.2" }
 serde = { version = "1", features = ["derive"] }
@@ -19,7 +23,7 @@ syntect = { version = "4.5.0", default-features = false, features = ["default-fa
 lazy_static = { version = "1" }
 regex = { version = "1.5.4" }
 format_num = { version = "0.1.0" }
-ftd-rt = { path = "../ftd-rt", version = "0.1.0" }
+ftd-rt = { path = "../ftd-rt" }
 
 
 [dev-dependencies]

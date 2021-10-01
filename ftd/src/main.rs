@@ -38,7 +38,7 @@ pub fn main() {
 fn write(id: &str, doc: String) {
     use std::io::Write;
 
-    let lib = ftd::p2::TestLibrary {};
+    let lib = ftd::ExampleLibrary {};
     let b = match ftd::p2::Document::from(id, &*doc, &lib) {
         Ok(v) => v,
         Err(e) => {
@@ -46,24 +46,8 @@ fn write(id: &str, doc: String) {
             return;
         }
     };
-    let data = {
-        let mut d: ftd_rt::Map = Default::default();
-        for (k, v) in b.data.iter() {
-            if let ftd::p2::Thing::Variable(ftd::Variable {
-                value: ftd::Value::Boolean { value },
-                ..
-            }) = v
-            {
-                d.insert(k.to_string(), value.to_string());
-            }
-        }
-        d
-    };
-    let doc = ftd_rt::Document {
-        data,
-        tree: b.main.to_node(),
-    };
-    let _dir = std::fs::create_dir_all("./build").expect("failed to create build folder");
+
+    std::fs::create_dir_all("./build").expect("failed to create build folder");
     let mut f = std::fs::File::create(format!("./build/{}", id.replace(".ftd", ".html")))
         .expect("failed to create .html file");
 
@@ -71,16 +55,12 @@ fn write(id: &str, doc: String) {
     f.write_all(
         std::fs::read_to_string("ftd.html")
             .expect("cant read ftd.html")
-            .replace(
-                "___ftd___",
-                b.main
-                    .to_node()
-                    .to_html(&Default::default(), &Default::default())
-                    .as_str(),
-            )
+            .replace("___ftd___", b.html().as_str())
             .as_bytes(),
     )
     .expect("failed to write to .html file");
+
+    let doc = b.to_rt();
 
     let mut rt = std::fs::File::create(format!("./build/{}", id.replace(".ftd", "-rt.html")))
         .expect("failed to create .html file");

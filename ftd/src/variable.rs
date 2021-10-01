@@ -10,6 +10,7 @@ pub enum PropertyValue {
     Value { value: crate::variable::Value },
     Reference { name: String, kind: crate::p2::Kind },
     Argument { name: String, kind: crate::p2::Kind },
+    LocalVariable { name: String, kind: crate::p2::Kind },
 }
 
 impl PropertyValue {
@@ -18,6 +19,7 @@ impl PropertyValue {
             Self::Value { value: v } => v.kind(),
             Self::Reference { kind, .. } => kind.to_owned(),
             Self::Argument { kind, .. } => kind.to_owned(),
+            Self::LocalVariable { kind, .. } => kind.to_owned(),
         }
     }
     pub fn resolve(
@@ -41,15 +43,40 @@ impl PropertyValue {
                 kind: argument_kind,
             } => {
                 assert_eq!(self.kind(), *argument_kind);
-                match (arguments.get(name.as_str()), argument_kind.is_optional()) {
-                    (Some(v), _) => v.to_owned(),
-                    (None, true) => Value::None {
-                        kind: argument_kind.to_owned(),
-                    },
-                    (None, false) => {
-                        return ftd::e2("is required", name);
+                if name.contains('.') {
+                    let mut part = name.splitn(2, '.');
+                    let part_1 = part.next().unwrap().trim();
+                    let part_2 = part.next().unwrap().trim();
+                    match arguments.get(part_1) {
+                        Some(Value::Record { name, fields }) => match fields.get(part_2) {
+                            Some(crate::PropertyValue::Value { value }) => return Ok(value.clone()),
+                            None => {
+                                return ftd::e2(
+                                    format!("{} is not present in record {}", part_2, part_1),
+                                    name,
+                                );
+                            }
+                            _ => unimplemented!(),
+                        },
+                        None => {
+                            return ftd::e2(format!("{} is not present in argument", part_1), name);
+                        }
+                        _ => return ftd::e2(format!("{} is not a record", part_1), name),
+                    }
+                } else {
+                    match (arguments.get(name.as_str()), argument_kind.is_optional()) {
+                        (Some(v), _) => v.to_owned(),
+                        (None, true) => Value::None {
+                            kind: argument_kind.to_owned(),
+                        },
+                        (None, false) => {
+                            return ftd::e2("is required", name);
+                        }
                     }
                 }
+            }
+            crate::PropertyValue::LocalVariable { name, kind } => {
+                unreachable!("Property can't be local variable: {} {:?}", name, kind)
             }
             crate::PropertyValue::Reference {
                 name: reference_name,
@@ -68,6 +95,7 @@ pub enum TextSource {
     Header,
     Caption,
     Body,
+    Default,
 }
 
 #[derive(Debug, PartialEq, Clone, serde::Serialize, serde::Deserialize)]
@@ -120,10 +148,11 @@ impl Value {
             Value::String { source, .. } => crate::p2::Kind::String {
                 caption: *source == TextSource::Caption,
                 body: *source == TextSource::Body,
+                default: None,
             },
-            Value::Integer { .. } => crate::p2::Kind::Integer,
-            Value::Decimal { .. } => crate::p2::Kind::Decimal,
-            Value::Boolean { .. } => crate::p2::Kind::Boolean,
+            Value::Integer { .. } => crate::p2::Kind::integer(),
+            Value::Decimal { .. } => crate::p2::Kind::decimal(),
+            Value::Boolean { .. } => crate::p2::Kind::boolean(),
             Value::Record { name: id, .. } => crate::p2::Kind::Record {
                 name: id.to_string(),
             },
@@ -147,7 +176,7 @@ impl Variable {
             name,
             value: Value::List {
                 data: Default::default(),
-                kind: crate::p2::Kind::from(p1.header.str("type")?, doc)?,
+                kind: crate::p2::Kind::from(p1.header.str("type")?, doc, None)?,
             },
         })
     }
@@ -158,7 +187,7 @@ impl Variable {
             name,
             value: Value::Map {
                 data: Default::default(),
-                kind: crate::p2::Kind::from(p1.header.str("type")?, doc)?,
+                kind: crate::p2::Kind::from(p1.header.str("type")?, doc, None)?,
             },
         })
     }
@@ -174,9 +203,9 @@ impl Variable {
             doc: &crate::p2::TDoc,
         ) -> crate::p1::Result<crate::Value> {
             Ok(match kind {
-                crate::p2::Kind::Integer => read_integer(p1)?,
-                crate::p2::Kind::Decimal => read_decimal(p1)?,
-                crate::p2::Kind::Boolean => read_boolean(p1)?,
+                crate::p2::Kind::Integer { .. } => read_integer(p1)?,
+                crate::p2::Kind::Decimal { .. } => read_decimal(p1)?,
+                crate::p2::Kind::Boolean { .. } => read_boolean(p1)?,
                 crate::p2::Kind::String { .. } => read_string(p1)?,
                 crate::p2::Kind::Record { name } => doc.get_record(name)?.create(p1, doc)?,
                 _ => unimplemented!("{:?}", kind),
@@ -199,7 +228,6 @@ impl Variable {
 
     pub fn from_p1(p1: &crate::p1::Section, doc: &crate::p2::TDoc) -> crate::p1::Result<Self> {
         let name = ftd_rt::get_name("var", p1.name.as_str())?.to_string();
-
         let value = match p1.header.str_optional("type")? {
             Some("string") => read_string(p1)?,
             Some("integer") => read_integer(p1)?,

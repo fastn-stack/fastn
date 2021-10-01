@@ -1,0 +1,6 @@
+
+-- fifthtry/text:
+id: @hello
+$arg: $int$
+text: Hello World!
+size: $arg

@@ -1,0 +1,70 @@
+
+-- component desktop:
+component: ftd.column
+width: fill
+$id: optional string
+id: ref $id
+open: desktop-container
+
+--- ftd.text: Desktop says Hello
+
+--- ftd.column:
+id: desktop-container
+
+
+
+-- component mobile:
+component: ftd.column
+width: fill
+$id: optional string
+id: ref $id
+open: mobile-container
+
+--- ftd.text: Mobile says Hello
+
+--- ftd.column:
+id: mobile-container
+
+
+
+-- var is-mobile: true
+
+-- component page:
+component: ftd.column
+open: main-container
+
+--- desktop:
+if: not is-mobile
+id: main-container
+
+--- container: ftd.main
+
+--- mobile:
+if: is-mobile
+id: main-container
+
+
+-- page:
+
+-- ftd.column:
+padding-left: 10
+id: outer
+
+-- ftd.column:
+padding-left: 10
+
+-- ftd.text: Hello
+
+-- ftd.column:
+padding-left: 10
+color: red
+
+-- ftd.text: Hello again
+
+-- container: outer
+
+-- ftd.row:
+
+-- ftd.text:
+
+We support **markdown** as well.

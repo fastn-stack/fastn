@@ -40,6 +40,63 @@ impl Element {
             _ => {}
         }
     }
+
+    pub fn set_condition(&mut self, condition: Option<ftd_rt::Condition>) {
+        match self {
+            Self::Column(ftd_rt::Column { common, .. }) => common,
+            Self::Row(ftd_rt::Row { common, .. }) => common,
+            Self::Text(ftd_rt::Text { common, .. }) => common,
+            Self::Image(ftd_rt::Image { common, .. }) => common,
+            Self::IFrame(ftd_rt::IFrame { common, .. }) => common,
+            Self::Input(ftd_rt::Input { common, .. }) => common,
+            Self::Integer(ftd_rt::Text { common, .. }) => common,
+            Self::Boolean(ftd_rt::Text { common, .. }) => common,
+            Self::Decimal(ftd_rt::Text { common, .. }) => common,
+            Self::Null => return,
+        }
+        .condition = condition;
+    }
+
+    pub fn set_locals(&mut self, locals: ftd_rt::Map) {
+        match self {
+            Self::Column(ftd_rt::Column { common, .. }) => common,
+            Self::Row(ftd_rt::Row { common, .. }) => common,
+            Self::Text(ftd_rt::Text { common, .. }) => common,
+            Self::Image(ftd_rt::Image { common, .. }) => common,
+            Self::IFrame(ftd_rt::IFrame { common, .. }) => common,
+            Self::Input(ftd_rt::Input { common, .. }) => common,
+            Self::Integer(ftd_rt::Text { common, .. }) => common,
+            Self::Boolean(ftd_rt::Text { common, .. }) => common,
+            Self::Decimal(ftd_rt::Text { common, .. }) => common,
+            Self::Null => return,
+        }
+        .locals = locals;
+    }
+
+    pub fn set_events(&mut self, events: &mut Vec<ftd_rt::Event>) {
+        match self {
+            Self::Column(ftd_rt::Column { common, .. }) => common,
+            Self::Row(ftd_rt::Row { common, .. }) => common,
+            Self::Text(ftd_rt::Text { common, .. }) => common,
+            Self::Image(ftd_rt::Image { common, .. }) => common,
+            Self::IFrame(ftd_rt::IFrame { common, .. }) => common,
+            Self::Input(ftd_rt::Input { common, .. }) => common,
+            Self::Integer(ftd_rt::Text { common, .. }) => common,
+            Self::Boolean(ftd_rt::Text { common, .. }) => common,
+            Self::Decimal(ftd_rt::Text { common, .. }) => common,
+            Self::Null => return,
+        }
+        .events
+        .append(events)
+    }
+
+    pub fn get_heading_region(&self) -> Option<&ftd_rt::Region> {
+        match self {
+            Self::Column(e) => e.common.region.as_ref().filter(|v| v.is_heading()),
+            Self::Row(e) => e.common.region.as_ref().filter(|v| v.is_heading()),
+            _ => None,
+        }
+    }
 }
 
 #[derive(serde::Deserialize, PartialEq)]
@@ -49,11 +106,11 @@ pub enum Length {
     Fill,
     Shrink,
     Auto,
+    FitContent,
     Px { value: i64 },
     Portion { value: i64 },
-    Max { value: i64 },
-    Min { value: i64 },
     Percent { value: i64 },
+    Calc { value: String },
 }
 
 impl Length {
@@ -74,20 +131,16 @@ impl Length {
             return Ok(Some(Length::Auto));
         }
 
-        if l.starts_with("maximum ") {
-            let v = crate::get_name("maximum", l.as_str())?;
+        if l.starts_with("calc ") {
+            let v = crate::get_name("calc", l.as_str())?;
             return match v.parse() {
-                Ok(v) => Ok(Some(Length::Max { value: v })),
+                Ok(v) => Ok(Some(Length::Calc { value: v })),
                 Err(_) => crate::e(format!("{} is not a valid integer", v)),
             };
         }
 
-        if l.starts_with("minimum ") {
-            let v = crate::get_name("minimum", l.as_str())?;
-            return match v.parse() {
-                Ok(v) => Ok(Some(Length::Min { value: v })),
-                Err(_) => crate::e(format!("{} is not a valid integer", v)),
-            };
+        if l == "fit-content" {
+            return Ok(Some(Length::FitContent));
         }
 
         if l.starts_with("portion ") {
@@ -169,6 +222,7 @@ pub enum Region {
     H5,
     H6,
     H7,
+    Title,
     MainContent,
     Navigation,
     Aside,
@@ -176,6 +230,30 @@ pub enum Region {
     Description,
     Announce,
     AnnounceUrgently,
+}
+
+impl ToString for Region {
+    fn to_string(&self) -> String {
+        match self {
+            Self::H0 => "h0",
+            Self::H1 => "h1",
+            Self::H2 => "h2",
+            Self::H3 => "h3",
+            Self::H4 => "h4",
+            Self::H5 => "h5",
+            Self::H6 => "h6",
+            Self::H7 => "h7",
+            Self::Title => "title",
+            Self::MainContent => "main",
+            Self::Navigation => "navigation",
+            Self::Aside => "aside",
+            Self::Footer => "footer",
+            Self::Description => "description",
+            Self::Announce => "announce",
+            Self::AnnounceUrgently => "announce-urgently",
+        }
+        .to_string()
+    }
 }
 
 impl Region {
@@ -189,6 +267,7 @@ impl Region {
             Some("h5") => Self::H5,
             Some("h6") => Self::H6,
             Some("h7") => Self::H7,
+            Some("title") => Self::Title,
             Some("main") => Self::MainContent,
             Some("navigation") => Self::Navigation,
             Some("aside") => Self::Aside,
@@ -210,6 +289,42 @@ impl Region {
 
     pub fn is_primary_heading(&self) -> bool {
         matches!(self, Self::H0 | Self::H1)
+    }
+
+    pub fn is_title(&self) -> bool {
+        matches!(self, Self::Title)
+    }
+
+    pub fn get_lower_priority_heading(&self) -> Vec<Self> {
+        let mut list = vec![];
+        if matches!(
+            self,
+            Self::Title
+                | Self::MainContent
+                | Self::Navigation
+                | Self::Aside
+                | Self::Footer
+                | Self::Description
+                | Self::Announce
+                | Self::AnnounceUrgently
+        ) {
+            return list;
+        }
+        for region in [
+            Self::H7,
+            Self::H6,
+            Self::H5,
+            Self::H4,
+            Self::H3,
+            Self::H2,
+            Self::H1,
+        ] {
+            if self.to_string() == region.to_string() {
+                return list;
+            }
+            list.push(region);
+        }
+        list
     }
 }
 
@@ -245,7 +360,9 @@ impl Overflow {
     derive(Debug, PartialEq, Clone, serde::Serialize, Default)
 )]
 pub struct Common {
+    pub locals: ftd_rt::Map,
     pub condition: Option<ftd_rt::Condition>,
+    pub events: Vec<ftd_rt::Event>,
     pub region: Option<Region>,
     pub padding: Option<i64>,
     pub padding_left: Option<i64>,
@@ -255,7 +372,11 @@ pub struct Common {
     pub border_top_radius: Option<i64>,
     pub border_bottom_radius: Option<i64>,
     pub width: Option<Length>,
+    pub max_width: Option<Length>,
+    pub min_width: Option<Length>,
     pub height: Option<Length>,
+    pub min_height: Option<Length>,
+    pub max_height: Option<Length>,
     pub explain: bool,
     pub color: Option<Color>,
     pub background_color: Option<Color>,
@@ -275,6 +396,9 @@ pub struct Common {
     pub margin_bottom: Option<i64>,
     pub link: Option<String>,
     pub open_in_new_tab: bool,
+    pub sticky: bool,
+    pub top: Option<i64>,
+    pub submit: Option<String>,
     // TODO: background-gradient
     // TODO: background-image, un-cropped, tiled, tiled{X, Y}
     // TODO: border-style: solid, dashed, dotted
@@ -288,6 +412,7 @@ pub struct Common {
 )]
 pub struct Container {
     pub children: Vec<ftd_rt::Element>,
+    pub external_children: Option<(String, Vec<Vec<usize>>, Vec<ftd_rt::Element>)>,
     pub open: (Option<bool>, Option<String>),
     pub spacing: Option<i64>,
     pub align: Align,

@@ -1,0 +1,4 @@
+-- Msg@enum:string=hello
+hello: How are you?
+greeting: Thank you
+

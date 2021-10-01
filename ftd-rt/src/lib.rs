@@ -1,22 +1,34 @@
 extern crate self as ftd_rt;
 
 mod condition;
+mod dnode;
+mod event;
 mod html;
 mod ui;
 #[cfg(feature = "wasm")]
 mod wasm;
 
 pub use condition::Condition;
+pub use event::{Action, Event};
 pub use html::Node;
 pub use ui::{
     Align, Color, Column, Common, Container, Element, ExternalFont, FontDisplay, IFrame, Image,
-    Input, Length, NamedFont, Overflow, Region, Row, Style, Text, TextAlign, TextFormat,
+    Input, Length, NamedFont, Overflow, Region, Row, Style, Text, TextAlign, TextFormat, Weight,
 };
 
 #[derive(serde::Serialize, serde::Deserialize, Eq, PartialEq, Debug, Default, Clone)]
 pub struct Rendered {
     pub original: String,
     pub rendered: String,
+}
+
+impl From<&str> for Rendered {
+    fn from(item: &str) -> Self {
+        Rendered {
+            original: item.to_string(),
+            rendered: item.to_string(),
+        }
+    }
 }
 
 #[derive(thiserror::Error, Debug)]
@@ -35,10 +47,11 @@ pub struct Document {
     pub data: ftd_rt::Map,
 }
 
-pub fn e<T, S>(_m: S) -> Result<T>
+pub fn e<T, S>(m: S) -> Result<T>
 where
     S: Into<String>,
 {
+    let _s = m.into();
     todo!()
 }
 

@@ -11,7 +11,9 @@
 
     async function run() {
         await init();
-        create("main", JSON.parse(document.getElementById("ftd-source").innerText)).render();
+        window.ftd_handles = {};
+        window.ftd_handles["main"] = create("main", JSON.parse(document.getElementById("ftd-source").innerText));
+        window.ftd_handles["main"].render();
     }
 
     run();

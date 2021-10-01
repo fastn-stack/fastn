@@ -1,19 +1,19 @@
 pub fn parse_import(c: &Option<String>) -> crate::p1::Result<(String, String)> {
     let v = match c {
         Some(v) => v.trim(),
-        None => return crate::e("caption is missing in using statement".to_string()),
+        None => return crate::e("caption is missing in import statement".to_string()),
     };
 
     if v.contains(" as ") {
         let mut parts = v.splitn(2, " as ");
         return match (parts.next(), parts.next()) {
             (Some(n), Some(a)) => Ok((n.to_string(), a.to_string())),
-            _ => crate::e("invalid use of keyword as in using statement".to_string()),
+            _ => crate::e("invalid use of keyword as in import statement".to_string()),
         };
     }
 
     if !v.contains('/') {
-        return crate::e("doc id must contain /".to_string());
+        return Ok((v.to_string(), v.to_string()));
     }
 
     let mut parts = v.rsplitn(2, '/');
@@ -106,7 +106,7 @@ pub fn int_optional(
     match properties.get(name) {
         Some(crate::Value::Integer { value: v }) => Ok(Some(*v)),
         Some(crate::Value::None {
-            kind: crate::p2::Kind::Integer,
+            kind: crate::p2::Kind::Integer { .. },
         }) => Ok(None),
         Some(ftd::Value::None { .. }) => Ok(None),
         Some(v) => crate::e2(format!("expected int, found: {:?}", v), "int_optional"),
@@ -122,7 +122,7 @@ pub fn int_with_default(
     match properties.get(name) {
         Some(crate::Value::Integer { value: v }) => Ok(*v),
         Some(crate::Value::None {
-            kind: crate::p2::Kind::Integer,
+            kind: crate::p2::Kind::Integer { .. },
         }) => Ok(def),
         Some(ftd::Value::None { .. }) => Ok(def),
         Some(v) => crate::e2(format!("expected int, found: {:?}", v), "int_with_default"),
@@ -149,7 +149,7 @@ pub fn bool_with_default(
     match properties.get(name) {
         Some(crate::Value::Boolean { value: v }) => Ok(*v),
         Some(crate::Value::None {
-            kind: crate::p2::Kind::Boolean,
+            kind: crate::p2::Kind::Boolean { .. },
         }) => Ok(def),
         Some(ftd::Value::None { .. }) => Ok(def),
         Some(v) => crate::e2(
@@ -213,6 +213,8 @@ mod test {
         p!("a/b as foo", "a/b", "foo");
         p!("a/b/c", "a/b/c", "c");
         p!("a/b", "a/b", "b");
+        p!("a", "a", "a");
+        p!("a as b", "a", "b");
     }
 }
 
@@ -228,4 +230,11 @@ pub fn decimal(
         ),
         None => crate::e2(format!("'{}' not found", name), "decimal"),
     }
+}
+
+pub fn split(name: String, split_at: &str) -> crate::p1::Result<(String, String)> {
+    let mut part = name.splitn(2, split_at);
+    let part_1 = part.next().unwrap().trim();
+    let part_2 = part.next().unwrap().trim();
+    Ok((part_1.to_string(), part_2.to_string()))
 }

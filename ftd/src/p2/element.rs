@@ -3,12 +3,25 @@ pub fn common_from_properties(
     doc: &crate::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
+    events: &[ftd::p2::expression::Event],
+    all_locals: &ftd_rt::Map,
 ) -> crate::p1::Result<ftd_rt::Common> {
+    let submit = crate::p2::utils::string_optional("submit", properties)?;
+    let link = crate::p2::utils::string_optional("link", properties)?;
+    if let (Some(_), Some(_)) = (&submit, &link) {
+        return crate::e2(
+            "Cannot have both submit and link together",
+            "common_from_properties",
+        );
+    }
+
     Ok(ftd_rt::Common {
+        locals: Default::default(),
         condition: match condition {
-            Some(c) if !c.is_constant() => Some(c.to_condition()),
+            Some(c) if !c.is_constant() => Some(c.to_condition(all_locals)?),
             _ => None,
         },
+        events: ftd::p2::expression::Event::get_events(events, all_locals)?,
         region: ftd_rt::Region::from(crate::p2::utils::string_optional("region", properties)?)?,
         padding: crate::p2::utils::int_optional("padding", properties)?,
         padding_left: crate::p2::utils::int_optional("padding-left", properties)?,
@@ -18,7 +31,23 @@ pub fn common_from_properties(
         border_top_radius: crate::p2::utils::int_optional("border-top-radius", properties)?,
         border_bottom_radius: crate::p2::utils::int_optional("border-bottom-radius", properties)?,
         width: ftd_rt::Length::from(crate::p2::utils::string_optional("width", properties)?)?,
+        min_width: ftd_rt::Length::from(crate::p2::utils::string_optional(
+            "min-width",
+            properties,
+        )?)?,
+        max_width: ftd_rt::Length::from(crate::p2::utils::string_optional(
+            "max-width",
+            properties,
+        )?)?,
         height: ftd_rt::Length::from(crate::p2::utils::string_optional("height", properties)?)?,
+        min_height: ftd_rt::Length::from(crate::p2::utils::string_optional(
+            "min-height",
+            properties,
+        )?)?,
+        max_height: ftd_rt::Length::from(crate::p2::utils::string_optional(
+            "max-height",
+            properties,
+        )?)?,
         explain: crate::p2::utils::bool_with_default("explain", false, properties)?,
         color: color_from(crate::p2::utils::string_optional("color", properties)?)?,
         background_color: color_from(crate::p2::utils::string_optional(
@@ -54,8 +83,11 @@ pub fn common_from_properties(
         margin_bottom: crate::p2::utils::int_optional("margin-bottom", properties)?,
         margin_left: crate::p2::utils::int_optional("margin-left", properties)?,
         margin_right: crate::p2::utils::int_optional("margin-right", properties)?,
-        link: crate::p2::utils::string_optional("link", properties)?,
+        link,
         open_in_new_tab: crate::p2::utils::bool_with_default("open-in-new-tab", false, properties)?,
+        sticky: crate::p2::utils::bool_with_default("sticky", false, properties)?,
+        top: crate::p2::utils::int_optional("top", properties)?,
+        submit,
     })
 }
 
@@ -63,34 +95,42 @@ fn common_arguments() -> Vec<(String, crate::p2::Kind)> {
     vec![
         (
             "padding".to_string(),
-            crate::p2::Kind::Integer.into_optional(),
+            crate::p2::Kind::integer().into_optional(),
         ),
         (
             "padding-left".to_string(),
-            crate::p2::Kind::Integer.into_optional(),
+            crate::p2::Kind::integer().into_optional(),
         ),
         (
             "padding-right".to_string(),
-            crate::p2::Kind::Integer.into_optional(),
+            crate::p2::Kind::integer().into_optional(),
         ),
         (
             "padding-top".to_string(),
-            crate::p2::Kind::Integer.into_optional(),
+            crate::p2::Kind::integer().into_optional(),
         ),
         (
             "padding-bottom".to_string(),
-            crate::p2::Kind::Integer.into_optional(),
+            crate::p2::Kind::integer().into_optional(),
         ),
         (
             "border-top-radius".to_string(),
-            crate::p2::Kind::Integer.into_optional(),
+            crate::p2::Kind::integer().into_optional(),
         ),
         (
             "border-bottom-radius".to_string(),
-            crate::p2::Kind::Integer.into_optional(),
+            crate::p2::Kind::integer().into_optional(),
         ),
         (
             "width".to_string(),
+            crate::p2::Kind::string().into_optional(),
+        ),
+        (
+            "min-width".to_string(),
+            crate::p2::Kind::string().into_optional(),
+        ),
+        (
+            "max-width".to_string(),
             crate::p2::Kind::string().into_optional(),
         ),
         (
@@ -98,8 +138,16 @@ fn common_arguments() -> Vec<(String, crate::p2::Kind)> {
             crate::p2::Kind::string().into_optional(),
         ),
         (
+            "min-height".to_string(),
+            crate::p2::Kind::string().into_optional(),
+        ),
+        (
+            "max-height".to_string(),
+            crate::p2::Kind::string().into_optional(),
+        ),
+        (
             "explain".to_string(),
-            crate::p2::Kind::Boolean.into_optional(),
+            crate::p2::Kind::boolean().into_optional(),
         ),
         (
             "region".to_string(),
@@ -119,11 +167,11 @@ fn common_arguments() -> Vec<(String, crate::p2::Kind)> {
         ),
         (
             "border-width".to_string(),
-            crate::p2::Kind::Integer.into_optional(),
+            crate::p2::Kind::integer().into_optional(),
         ),
         (
             "border-radius".to_string(),
-            crate::p2::Kind::Integer.into_optional(),
+            crate::p2::Kind::integer().into_optional(),
         ),
         ("id".to_string(), crate::p2::Kind::string().into_optional()),
         (
@@ -136,43 +184,55 @@ fn common_arguments() -> Vec<(String, crate::p2::Kind)> {
         ),
         (
             "border-top".to_string(),
-            crate::p2::Kind::Integer.into_optional(),
+            crate::p2::Kind::integer().into_optional(),
         ),
         (
             "border-bottom".to_string(),
-            crate::p2::Kind::Integer.into_optional(),
+            crate::p2::Kind::integer().into_optional(),
         ),
         (
             "border-left".to_string(),
-            crate::p2::Kind::Integer.into_optional(),
+            crate::p2::Kind::integer().into_optional(),
         ),
         (
             "border-right".to_string(),
-            crate::p2::Kind::Integer.into_optional(),
+            crate::p2::Kind::integer().into_optional(),
         ),
         (
             "margin-top".to_string(),
-            crate::p2::Kind::Integer.into_optional(),
+            crate::p2::Kind::integer().into_optional(),
         ),
         (
             "margin-bottom".to_string(),
-            crate::p2::Kind::Integer.into_optional(),
+            crate::p2::Kind::integer().into_optional(),
         ),
         (
             "margin-left".to_string(),
-            crate::p2::Kind::Integer.into_optional(),
+            crate::p2::Kind::integer().into_optional(),
         ),
         (
             "margin-right".to_string(),
-            crate::p2::Kind::Integer.into_optional(),
+            crate::p2::Kind::integer().into_optional(),
         ),
         (
             "link".to_string(),
             crate::p2::Kind::string().into_optional(),
         ),
         (
+            "submit".to_string(),
+            crate::p2::Kind::string().into_optional(),
+        ),
+        (
             "open-in-new-tab".to_string(),
-            crate::p2::Kind::Boolean.into_optional(),
+            crate::p2::Kind::boolean().into_optional(),
+        ),
+        (
+            "sticky".to_string(),
+            crate::p2::Kind::boolean().into_optional(),
+        ),
+        (
+            "top".to_string(),
+            crate::p2::Kind::integer().into_optional(),
         ),
     ]
 }
@@ -192,6 +252,7 @@ pub fn container_from_properties(
 ) -> crate::p1::Result<ftd_rt::Container> {
     Ok(ftd_rt::Container {
         children: Default::default(),
+        external_children: Default::default(),
         open: crate::p2::utils::string_bool_optional("open", properties)?,
         spacing: crate::p2::utils::int_optional("spacing", properties)?,
         align: ftd_rt::Align::from(crate::p2::utils::string_optional("align", properties)?)?,
@@ -207,13 +268,16 @@ fn container_arguments() -> Vec<(String, crate::p2::Kind)> {
         ),
         (
             "spacing".to_string(),
-            crate::p2::Kind::Integer.into_optional(),
+            crate::p2::Kind::integer().into_optional(),
         ),
         (
             "align".to_string(),
             crate::p2::Kind::string().into_optional(),
         ),
-        ("wrap".to_string(), crate::p2::Kind::Boolean.into_optional()),
+        (
+            "wrap".to_string(),
+            crate::p2::Kind::boolean().into_optional(),
+        ),
     ]
 }
 
@@ -239,9 +303,12 @@ pub fn image_function() -> crate::Component {
         .concat()
         .into_iter()
         .collect(),
+        locals: Default::default(),
         properties: Default::default(),
         instructions: Default::default(),
         invocations: Default::default(),
+        condition: None,
+        events: vec![],
     }
 }
 
@@ -250,12 +317,14 @@ pub fn image_from_properties(
     doc: &crate::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
+    events: &[ftd::p2::expression::Event],
+    all_locals: &ftd_rt::Map,
 ) -> crate::p1::Result<ftd_rt::Image> {
     Ok(ftd_rt::Image {
         src: crate::p2::utils::string("src", properties)?,
         description: crate::p2::utils::string_optional("description", properties)?
             .unwrap_or_else(|| "".to_string()),
-        common: common_from_properties(properties, doc, condition, is_child)?,
+        common: common_from_properties(properties, doc, condition, is_child, events, all_locals)?,
         align: ftd_rt::Align::from(crate::p2::utils::string_optional("align", properties)?)?,
     })
 }
@@ -269,9 +338,12 @@ pub fn row_function() -> crate::Component {
             .concat()
             .into_iter()
             .collect(),
+        locals: Default::default(),
         properties: Default::default(),
         instructions: Default::default(),
         invocations: Default::default(),
+        condition: None,
+        events: vec![],
     }
 }
 
@@ -280,9 +352,11 @@ pub fn row_from_properties(
     doc: &crate::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
+    events: &[ftd::p2::expression::Event],
+    all_locals: &ftd_rt::Map,
 ) -> crate::p1::Result<ftd_rt::Row> {
     Ok(ftd_rt::Row {
-        common: common_from_properties(properties, doc, condition, is_child)?,
+        common: common_from_properties(properties, doc, condition, is_child, events, all_locals)?,
         container: container_from_properties(properties, doc)?,
     })
 }
@@ -296,9 +370,12 @@ pub fn column_function() -> crate::Component {
             .concat()
             .into_iter()
             .collect(),
+        locals: Default::default(),
         properties: Default::default(),
         instructions: Default::default(),
         invocations: Default::default(),
+        condition: None,
+        events: vec![],
     }
 }
 pub fn column_from_properties(
@@ -306,9 +383,11 @@ pub fn column_from_properties(
     doc: &crate::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
+    events: &[ftd::p2::expression::Event],
+    all_locals: &ftd_rt::Map,
 ) -> crate::p1::Result<ftd_rt::Column> {
     Ok(ftd_rt::Column {
-        common: common_from_properties(properties, doc, condition, is_child)?,
+        common: common_from_properties(properties, doc, condition, is_child, events, all_locals)?,
         container: container_from_properties(properties, doc)?,
     })
 }
@@ -376,9 +455,12 @@ pub fn iframe_function() -> crate::Component {
         .concat()
         .into_iter()
         .collect(),
+        locals: Default::default(),
         properties: Default::default(),
         instructions: Default::default(),
         invocations: Default::default(),
+        condition: None,
+        events: vec![],
     }
 }
 
@@ -387,6 +469,8 @@ pub fn iframe_from_properties(
     doc: &crate::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
+    events: &[ftd::p2::expression::Event],
+    all_locals: &ftd_rt::Map,
 ) -> crate::p1::Result<ftd_rt::IFrame> {
     let src = match (
         crate::p2::utils::string_optional("src", properties)?,
@@ -401,7 +485,7 @@ pub fn iframe_from_properties(
 
     Ok(ftd_rt::IFrame {
         src,
-        common: common_from_properties(properties, doc, condition, is_child)?,
+        common: common_from_properties(properties, doc, condition, is_child, events, all_locals)?,
     })
 }
 
@@ -410,6 +494,8 @@ pub fn text_from_properties(
     doc: &crate::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
+    events: &[ftd::p2::expression::Event],
+    all_locals: &ftd_rt::Map,
 ) -> crate::p1::Result<ftd_rt::Text> {
     let format = ftd_rt::TextFormat::from(
         crate::p2::utils::string_optional("format", properties)?,
@@ -437,7 +523,7 @@ pub fn text_from_properties(
                 properties,
             )?,
         )?,
-        common: common_from_properties(properties, doc, condition, is_child)?,
+        common: common_from_properties(properties, doc, condition, is_child, events, all_locals)?,
         align: ftd_rt::TextAlign::from(crate::p2::utils::string_optional("align", properties)?)?,
         style: ftd_rt::Style::from(crate::p2::utils::string_optional("style", properties)?)?,
         format,
@@ -453,6 +539,8 @@ pub fn integer_from_properties(
     doc: &crate::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
+    events: &[ftd::p2::expression::Event],
+    all_locals: &ftd_rt::Map,
 ) -> crate::p1::Result<ftd_rt::Text> {
     let font_str = crate::p2::utils::string_optional("font", properties)?;
     let num = format_num::NumberFormat::new();
@@ -475,7 +563,7 @@ pub fn integer_from_properties(
     Ok(ftd_rt::Text {
         text: crate::markdown_line(text.as_str()),
         line: false,
-        common: common_from_properties(properties, doc, condition, is_child)?,
+        common: common_from_properties(properties, doc, condition, is_child, events, all_locals)?,
         align: ftd_rt::TextAlign::from(crate::p2::utils::string_optional("align", properties)?)?,
         style: ftd_rt::Style::from(crate::p2::utils::string_optional("style", properties)?)?,
         format: Default::default(),
@@ -491,6 +579,8 @@ pub fn decimal_from_properties(
     doc: &crate::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
+    events: &[ftd::p2::expression::Event],
+    all_locals: &ftd_rt::Map,
 ) -> crate::p1::Result<ftd_rt::Text> {
     let font_str = crate::p2::utils::string_optional("font", properties)?;
     let num = format_num::NumberFormat::new();
@@ -509,7 +599,7 @@ pub fn decimal_from_properties(
     Ok(ftd_rt::Text {
         text: crate::markdown_line(text.as_str()),
         line: false,
-        common: common_from_properties(properties, doc, condition, is_child)?,
+        common: common_from_properties(properties, doc, condition, is_child, events, all_locals)?,
         align: ftd_rt::TextAlign::from(crate::p2::utils::string_optional("align", properties)?)?,
         style: ftd_rt::Style::from(crate::p2::utils::string_optional("style", properties)?)?,
         format: Default::default(),
@@ -544,6 +634,8 @@ pub fn boolean_from_properties(
     doc: &crate::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
+    events: &[ftd::p2::expression::Event],
+    all_locals: &ftd_rt::Map,
 ) -> crate::p1::Result<ftd_rt::Text> {
     let font_str = crate::p2::utils::string_optional("font", properties)?;
     let value = crate::p2::utils::bool("value", properties)?;
@@ -563,7 +655,7 @@ pub fn boolean_from_properties(
     Ok(ftd_rt::Text {
         text: crate::markdown_line(text.as_str()),
         line: false,
-        common: common_from_properties(properties, doc, condition, is_child)?,
+        common: common_from_properties(properties, doc, condition, is_child, events, all_locals)?,
         align: ftd_rt::TextAlign::from(crate::p2::utils::string_optional("align", properties)?)?,
         style: ftd_rt::Style::from(crate::p2::utils::string_optional("style", properties)?)?,
         format: Default::default(),
@@ -581,13 +673,7 @@ pub fn text_function() -> crate::Component {
         full_name: "ftd#text".to_string(),
         arguments: [
             vec![
-                (
-                    "text".to_string(),
-                    crate::p2::Kind::String {
-                        caption: true,
-                        body: true,
-                    },
-                ),
+                ("text".to_string(), crate::p2::Kind::caption_or_body()),
                 (
                     "align".to_string(),
                     crate::p2::Kind::string().into_optional(),
@@ -608,7 +694,10 @@ pub fn text_function() -> crate::Component {
                     "theme".to_string(),
                     crate::p2::Kind::string().into_optional(),
                 ),
-                ("size".to_string(), crate::p2::Kind::Integer.into_optional()),
+                (
+                    "size".to_string(),
+                    crate::p2::Kind::integer().into_optional(),
+                ),
                 (
                     "font-url".to_string(),
                     crate::p2::Kind::string().into_optional(),
@@ -631,9 +720,12 @@ pub fn text_function() -> crate::Component {
         .concat()
         .into_iter()
         .collect(),
+        locals: Default::default(),
         properties: Default::default(),
         instructions: Default::default(),
         invocations: Default::default(),
+        condition: None,
+        events: vec![],
     }
 }
 
@@ -644,7 +736,7 @@ pub fn integer_function() -> crate::Component {
         full_name: "ftd#integer".to_string(),
         arguments: [
             vec![
-                ("value".to_string(), crate::p2::Kind::Integer),
+                ("value".to_string(), crate::p2::Kind::integer()),
                 (
                     "align".to_string(),
                     crate::p2::Kind::string().into_optional(),
@@ -657,7 +749,10 @@ pub fn integer_function() -> crate::Component {
                     "format".to_string(),
                     crate::p2::Kind::string().into_optional(),
                 ),
-                ("size".to_string(), crate::p2::Kind::Integer.into_optional()),
+                (
+                    "size".to_string(),
+                    crate::p2::Kind::integer().into_optional(),
+                ),
                 (
                     "font-url".to_string(),
                     crate::p2::Kind::string().into_optional(),
@@ -680,9 +775,12 @@ pub fn integer_function() -> crate::Component {
         .concat()
         .into_iter()
         .collect(),
+        locals: Default::default(),
         properties: Default::default(),
         instructions: Default::default(),
         invocations: Default::default(),
+        condition: None,
+        events: vec![],
     }
 }
 
@@ -693,7 +791,7 @@ pub fn decimal_function() -> crate::Component {
         full_name: "ftd#decimal".to_string(),
         arguments: [
             vec![
-                ("value".to_string(), crate::p2::Kind::Decimal),
+                ("value".to_string(), crate::p2::Kind::decimal()),
                 (
                     "align".to_string(),
                     crate::p2::Kind::string().into_optional(),
@@ -706,7 +804,10 @@ pub fn decimal_function() -> crate::Component {
                     "format".to_string(),
                     crate::p2::Kind::string().into_optional(),
                 ),
-                ("size".to_string(), crate::p2::Kind::Integer.into_optional()),
+                (
+                    "size".to_string(),
+                    crate::p2::Kind::integer().into_optional(),
+                ),
                 (
                     "font-url".to_string(),
                     crate::p2::Kind::string().into_optional(),
@@ -729,9 +830,12 @@ pub fn decimal_function() -> crate::Component {
         .concat()
         .into_iter()
         .collect(),
+        locals: Default::default(),
         properties: Default::default(),
         instructions: Default::default(),
         invocations: Default::default(),
+        condition: None,
+        events: vec![],
     }
 }
 
@@ -742,7 +846,7 @@ pub fn boolean_function() -> crate::Component {
         full_name: "ftd#boolean".to_string(),
         arguments: [
             vec![
-                ("value".to_string(), crate::p2::Kind::Boolean),
+                ("value".to_string(), crate::p2::Kind::boolean()),
                 (
                     "align".to_string(),
                     crate::p2::Kind::string().into_optional(),
@@ -755,7 +859,10 @@ pub fn boolean_function() -> crate::Component {
                     "format".to_string(),
                     crate::p2::Kind::string().into_optional(),
                 ),
-                ("size".to_string(), crate::p2::Kind::Integer.into_optional()),
+                (
+                    "size".to_string(),
+                    crate::p2::Kind::integer().into_optional(),
+                ),
                 (
                     "font-url".to_string(),
                     crate::p2::Kind::string().into_optional(),
@@ -786,9 +893,12 @@ pub fn boolean_function() -> crate::Component {
         .concat()
         .into_iter()
         .collect(),
+        locals: Default::default(),
         properties: Default::default(),
         instructions: Default::default(),
         invocations: Default::default(),
+        condition: None,
+        events: vec![],
     }
 }
 
@@ -807,9 +917,12 @@ pub fn input_function() -> crate::Component {
         .concat()
         .into_iter()
         .collect(),
+        locals: Default::default(),
         properties: Default::default(),
         instructions: Default::default(),
         invocations: Default::default(),
+        condition: None,
+        events: vec![],
     }
 }
 
@@ -818,9 +931,11 @@ pub fn input_from_properties(
     doc: &crate::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
+    events: &[ftd::p2::expression::Event],
+    all_locals: &ftd_rt::Map,
 ) -> crate::p1::Result<ftd_rt::Input> {
     Ok(ftd_rt::Input {
-        common: common_from_properties(properties, doc, condition, is_child)?,
+        common: common_from_properties(properties, doc, condition, is_child, events, all_locals)?,
         placeholder: crate::p2::utils::string_optional("placeholder", properties)?,
     })
 }

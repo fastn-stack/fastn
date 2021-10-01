@@ -1,0 +1,88 @@
+-- component h1:
+component: ftd.column
+region: h1
+padding-left: 10
+$title: caption
+
+--- ftd.text:
+text: ref $title
+$title: caption
+region: title
+size: 34
+
+-- component h2:
+component: ftd.column
+region: h2
+padding-left: 10
+$title: caption
+
+--- ftd.text:
+text: ref $title
+$title: caption
+region: title
+size: 28
+
+-- component h3:
+component: ftd.column
+region: h3
+padding-left: 10
+$title: caption
+
+--- ftd.text:
+text: ref $title
+$title: caption
+region: title
+size: 24
+
+-- component foo:
+component: ftd.column
+color: red
+
+--- ftd.text: foo says hello
+
+-- component page:
+component: ftd.column
+color: green
+open: page-id
+
+--- ftd.text: Page
+
+--- ftd.column:
+color: blue
+padding-left: 10
+id: page-id
+
+--- container: ftd.main
+
+--- ftd.text: Page End
+
+
+-- page:
+
+-- ftd.text: Page start
+
+-- h3: Heading 3
+
+-- h1: Heading 1
+
+-- h2: Heading 2
+
+-- h3: Heading 3
+
+-- foo:
+
+-- h2: Heading 2
+
+-- h2: Heading 2
+
+-- h1: Heading 1
+
+-- h3: Heading 3
+
+-- foo:
+
+-- h2: Heading 2
+
+-- ftd.text: Heading
+
+-- foo:
