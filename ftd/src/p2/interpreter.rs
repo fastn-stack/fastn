@@ -7,6 +7,7 @@ pub(crate) struct Interpreter<'a> {
 }
 
 impl<'a> Interpreter<'a> {
+    // #[observed(with_result, namespace = "ftd")]
     pub(crate) fn interpret(
         &mut self,
         name: &str,
@@ -75,7 +76,11 @@ impl<'a> Interpreter<'a> {
                     let start = std::time::Instant::now();
                     let value = self.lib.process(p1, &doc)?;
                     *d_processor = d_processor.saturating_add(std::time::Instant::now() - start);
-                    crate::Variable { name, value }
+                    crate::Variable {
+                        name,
+                        value,
+                        conditions: vec![],
+                    }
                 } else {
                     crate::Variable::from_p1(p1, &doc)?
                 };
@@ -94,7 +99,11 @@ impl<'a> Interpreter<'a> {
                     let start = std::time::Instant::now();
                     let value = self.lib.process(p1, &doc)?;
                     *d_processor = d_processor.saturating_add(std::time::Instant::now() - start);
-                    crate::Variable { name, value }
+                    crate::Variable {
+                        name,
+                        value,
+                        conditions: vec![],
+                    }
                 } else {
                     crate::Variable::list_from_p1(p1, &doc)?
                 };
@@ -115,16 +124,31 @@ impl<'a> Interpreter<'a> {
                 // cloning because https://github.com/rust-lang/rust/issues/59159
                 match (doc.get_thing(p1.name.as_str())?).clone() {
                     crate::p2::Thing::Variable(mut v) => {
-                        match p1.header.str_optional("$processor$")? {
-                            Some(_) => {
-                                let start = std::time::Instant::now();
-                                let value = self.lib.process(p1, &doc)?;
-                                *d_processor =
-                                    d_processor.saturating_add(std::time::Instant::now() - start);
-                                v.value = value
-                            }
-                            None => v.update_from_p1(p1, &doc)?,
-                        };
+                        assert!(
+                            !(p1.header.str_optional("if")?.is_some()
+                                && p1.header.str_optional("$processor$")?.is_some())
+                        );
+                        if let Some(expr) = p1.header.str_optional("if")? {
+                            let val = v.get_value(p1, &doc)?;
+                            v.conditions.push((
+                                crate::p2::Boolean::from_expression(
+                                    expr,
+                                    &doc,
+                                    p1.name.as_str(),
+                                    &Default::default(),
+                                    &Default::default(),
+                                )?,
+                                val,
+                            ));
+                        } else if p1.header.str_optional("$processor$")?.is_some() {
+                            let start = std::time::Instant::now();
+                            let value = self.lib.process(p1, &doc)?;
+                            *d_processor =
+                                d_processor.saturating_add(std::time::Instant::now() - start);
+                            v.value = value;
+                        } else {
+                            v.update_from_p1(p1, &doc)?;
+                        }
                         thing = Some((p1.name.to_string(), crate::p2::Thing::Variable(v)));
                     }
                     crate::p2::Thing::Component(_) => {
@@ -225,7 +249,7 @@ pub fn interpret(
     let mut interpreter = Interpreter::new(lib);
     let instructions = interpreter.interpret(name, source)?;
     let mut rt = ftd::RT::from(name, interpreter.aliases, interpreter.bag, instructions);
-    let main = rt.render()?;
+    let main = rt.render_()?;
     Ok((rt.bag, main))
 }
 
@@ -406,7 +430,7 @@ pub fn default_column() -> ftd_rt::Column {
 #[cfg(test)]
 mod test {
     use crate::test::*;
-    use crate::Instruction;
+    use crate::{markdown_line, Instruction};
 
     #[test]
     fn basic() {
@@ -437,6 +461,7 @@ mod test {
             crate::p2::Thing::Variable(crate::Variable {
                 name: "x".to_string(),
                 value: crate::Value::Integer { value: 10 },
+                conditions: vec![],
             }),
         );
 
@@ -539,6 +564,7 @@ mod test {
             crate::p2::Thing::Variable(crate::Variable {
                 name: "present".to_string(),
                 value: crate::Value::Boolean { value: false },
+                conditions: vec![],
             }),
         );
 
@@ -2014,6 +2040,7 @@ mod test {
             crate::p2::Thing::Variable(crate::Variable {
                 name: "dark-mode".to_string(),
                 value: crate::Value::Boolean { value: true },
+                conditions: vec![],
             }),
         );
 
@@ -2025,6 +2052,7 @@ mod test {
                     text: "not set".to_string(),
                     source: crate::TextSource::Caption,
                 },
+                conditions: vec![],
             }),
         );
 
@@ -2058,6 +2086,7 @@ mod test {
                     text: "John smith".to_string(),
                     source: crate::TextSource::Caption,
                 },
+                conditions: vec![],
             }),
         );
 
@@ -2548,6 +2577,7 @@ mod test {
                     ],
                     kind: crate::p2::Kind::integer(),
                 },
+                conditions: vec![],
             }),
         );
 
@@ -2626,6 +2656,7 @@ mod test {
                         name: s("foo/bar#point"),
                     },
                 },
+                conditions: vec![],
             }),
         );
 
@@ -2666,6 +2697,7 @@ mod test {
                     ],
                     kind: crate::p2::Kind::integer(),
                 },
+                conditions: vec![],
             }),
         );
         bag.insert(
@@ -2673,6 +2705,7 @@ mod test {
             crate::p2::Thing::Variable(crate::Variable {
                 name: "x".to_string(),
                 value: crate::Value::Integer { value: 20 },
+                conditions: vec![],
             }),
         );
 
@@ -3166,6 +3199,7 @@ mod test {
             ftd::p2::Thing::Variable(ftd::Variable {
                 name: s("dark-mode"),
                 value: ftd::Value::Boolean { value: true },
+                conditions: vec![],
             }),
         );
         bag.insert(
@@ -3176,6 +3210,7 @@ mod test {
                     text: "not set".to_string(),
                     source: ftd::TextSource::Caption,
                 },
+                conditions: vec![],
             }),
         );
         bag.insert(
@@ -4320,6 +4355,13 @@ mod test {
 
     #[test]
     fn open_container_with_id() {
+        let mut external_children = super::default_column();
+        external_children.container.children = vec![ftd_rt::Element::Text(ftd_rt::Text {
+            text: ftd::markdown_line("hello"),
+            line: true,
+            ..Default::default()
+        })];
+
         let mut main = super::default_column();
         main.container
             .children
@@ -4328,11 +4370,7 @@ mod test {
                     external_children: Some((
                         s("some-child"),
                         vec![vec![0, 0]],
-                        vec![ftd_rt::Element::Text(ftd_rt::Text {
-                            text: ftd::markdown_line("hello"),
-                            line: true,
-                            ..Default::default()
-                        })],
+                        vec![ftd_rt::Element::Column(external_children)],
                     )),
                     children: vec![ftd_rt::Element::Row(ftd_rt::Row {
                         container: ftd_rt::Container {
@@ -4437,6 +4475,20 @@ mod test {
 
     #[test]
     fn open_container_with_if() {
+        let mut external_children = super::default_column();
+        external_children.container.children = vec![
+            ftd_rt::Element::Text(ftd_rt::Text {
+                text: ftd::markdown_line("hello"),
+                line: true,
+                ..Default::default()
+            }),
+            ftd_rt::Element::Text(ftd_rt::Text {
+                text: ftd::markdown_line("hello1"),
+                line: true,
+                ..Default::default()
+            }),
+        ];
+
         let mut main = super::default_column();
         main.container
             .children
@@ -4499,18 +4551,7 @@ mod test {
                                     external_children: Some((
                                         s("some-child"),
                                         vec![vec![0], vec![1]],
-                                        vec![
-                                            ftd_rt::Element::Text(ftd_rt::Text {
-                                                text: ftd::markdown_line("hello"),
-                                                line: true,
-                                                ..Default::default()
-                                            }),
-                                            ftd_rt::Element::Text(ftd_rt::Text {
-                                                text: ftd::markdown_line("hello1"),
-                                                line: true,
-                                                ..Default::default()
-                                            }),
-                                        ],
+                                        vec![ftd_rt::Element::Column(external_children)],
                                     )),
                                     open: (None, Some(s("some-child"))),
                                     ..Default::default()
@@ -4674,6 +4715,7 @@ mod test {
             crate::p2::Thing::Variable(ftd::Variable {
                 name: s("mobile"),
                 value: ftd::variable::Value::Boolean { value: true },
+                conditions: vec![],
             }),
         );
 
@@ -4789,6 +4831,20 @@ mod test {
 
     #[test]
     fn nested_open_container() {
+        let mut external_children = super::default_column();
+        external_children.container.children = vec![
+            ftd_rt::Element::Text(ftd_rt::Text {
+                text: ftd::markdown_line("hello"),
+                line: true,
+                ..Default::default()
+            }),
+            ftd_rt::Element::Text(ftd_rt::Text {
+                text: ftd::markdown_line("hello again"),
+                line: true,
+                ..Default::default()
+            }),
+        ];
+
         let mut main = super::default_column();
         main.container
             .children
@@ -4863,18 +4919,7 @@ mod test {
                     external_children: Some((
                         s("main-container"),
                         vec![vec![0, 0], vec![0, 1]],
-                        vec![
-                            ftd_rt::Element::Text(ftd_rt::Text {
-                                text: ftd::markdown_line("hello"),
-                                line: true,
-                                ..Default::default()
-                            }),
-                            ftd_rt::Element::Text(ftd_rt::Text {
-                                text: ftd::markdown_line("hello again"),
-                                line: true,
-                                ..Default::default()
-                            }),
-                        ],
+                        vec![ftd_rt::Element::Column(external_children)],
                     )),
                     open: (None, Some(s("main-container"))),
                     ..Default::default()
@@ -4935,6 +4980,20 @@ mod test {
 
     #[test]
     fn deep_open_container_call() {
+        let mut external_children = super::default_column();
+        external_children.container.children = vec![
+            ftd_rt::Element::Text(ftd_rt::Text {
+                text: ftd::markdown_line("hello"),
+                line: true,
+                ..Default::default()
+            }),
+            ftd_rt::Element::Text(ftd_rt::Text {
+                text: ftd::markdown_line("hello again"),
+                line: true,
+                ..Default::default()
+            }),
+        ];
+
         let mut main = super::default_column();
 
         main.container
@@ -4986,18 +5045,7 @@ mod test {
                     external_children: Some((
                         s("foo"),
                         vec![vec![0, 0], vec![1, 0]],
-                        vec![
-                            ftd_rt::Element::Text(ftd_rt::Text {
-                                text: ftd::markdown_line("hello"),
-                                line: true,
-                                ..Default::default()
-                            }),
-                            ftd_rt::Element::Text(ftd_rt::Text {
-                                text: ftd::markdown_line("hello again"),
-                                line: true,
-                                ..Default::default()
-                            }),
-                        ],
+                        vec![ftd_rt::Element::Column(external_children)],
                     )),
                     open: (None, Some(s("main-container.foo"))),
                     ..Default::default()
@@ -5055,8 +5103,51 @@ mod test {
 
     #[test]
     fn deep_nested_open_container_call() {
-        let mut main = super::default_column();
+        let mut nested_external_children = super::default_column();
+        nested_external_children.container.children = vec![
+            ftd_rt::Element::Text(ftd_rt::Text {
+                text: ftd::markdown_line("hello"),
+                line: true,
+                ..Default::default()
+            }),
+            ftd_rt::Element::Text(ftd_rt::Text {
+                text: ftd::markdown_line("hello again"),
+                line: true,
+                ..Default::default()
+            }),
+        ];
 
+        let mut external_children = super::default_column();
+        external_children.container.children = vec![ftd_rt::Element::Column(ftd_rt::Column {
+            container: ftd_rt::Container {
+                children: vec![ftd_rt::Element::Row(ftd_rt::Row {
+                    container: ftd_rt::Container {
+                        children: vec![ftd_rt::Element::Column(ftd_rt::Column {
+                            common: ftd_rt::Common {
+                                id: Some(s("foo")),
+                                ..Default::default()
+                            },
+                            ..Default::default()
+                        })],
+                        ..Default::default()
+                    },
+                    common: ftd_rt::Common {
+                        id: Some(s("desktop-container")),
+                        ..Default::default()
+                    },
+                })],
+                external_children: Some((
+                    s("desktop-container"),
+                    vec![vec![0]],
+                    vec![ftd_rt::Element::Column(nested_external_children)],
+                )),
+                open: (None, Some(s("desktop-container"))),
+                ..Default::default()
+            },
+            ..Default::default()
+        })];
+
+        let mut main = super::default_column();
         main.container
             .children
             .push(ftd_rt::Element::Column(ftd_rt::Column {
@@ -5137,45 +5228,7 @@ mod test {
                     external_children: Some((
                         s("foo"),
                         vec![vec![0, 0, 0], vec![1, 0, 0]],
-                        vec![ftd_rt::Element::Column(ftd_rt::Column {
-                            container: ftd_rt::Container {
-                                children: vec![ftd_rt::Element::Row(ftd_rt::Row {
-                                    container: ftd_rt::Container {
-                                        children: vec![ftd_rt::Element::Column(ftd_rt::Column {
-                                            common: ftd_rt::Common {
-                                                id: Some(s("foo")),
-                                                ..Default::default()
-                                            },
-                                            ..Default::default()
-                                        })],
-                                        ..Default::default()
-                                    },
-                                    common: ftd_rt::Common {
-                                        id: Some(s("desktop-container")),
-                                        ..Default::default()
-                                    },
-                                })],
-                                external_children: Some((
-                                    s("desktop-container"),
-                                    vec![vec![0]],
-                                    vec![
-                                        ftd_rt::Element::Text(ftd_rt::Text {
-                                            text: ftd::markdown_line("hello"),
-                                            line: true,
-                                            ..Default::default()
-                                        }),
-                                        ftd_rt::Element::Text(ftd_rt::Text {
-                                            text: ftd::markdown_line("hello again"),
-                                            line: true,
-                                            ..Default::default()
-                                        }),
-                                    ],
-                                )),
-                                open: (None, Some(s("desktop-container"))),
-                                ..Default::default()
-                            },
-                            ..Default::default()
-                        })],
+                        vec![ftd_rt::Element::Column(external_children)],
                     )),
                     open: (None, Some(s("main-container.foo"))),
                     ..Default::default()
@@ -5263,6 +5316,20 @@ mod test {
 
     #[test]
     fn invalid_deep_open_container() {
+        let mut external_children = super::default_column();
+        external_children.container.children = vec![
+            ftd_rt::Element::Text(ftd_rt::Text {
+                text: ftd::markdown_line("hello"),
+                line: true,
+                ..Default::default()
+            }),
+            ftd_rt::Element::Text(ftd_rt::Text {
+                text: ftd::markdown_line("hello again"),
+                line: true,
+                ..Default::default()
+            }),
+        ];
+
         let mut main = super::default_column();
         main.container
             .children
@@ -5323,18 +5390,7 @@ mod test {
                     external_children: Some((
                         s("main-container"),
                         vec![],
-                        vec![
-                            ftd_rt::Element::Text(ftd_rt::Text {
-                                text: ftd::markdown_line("hello"),
-                                line: true,
-                                ..Default::default()
-                            }),
-                            ftd_rt::Element::Text(ftd_rt::Text {
-                                text: ftd::markdown_line("hello again"),
-                                line: true,
-                                ..Default::default()
-                            }),
-                        ],
+                        vec![ftd_rt::Element::Column(external_children)],
                     )),
                     open: (None, Some(s("main-container"))),
                     ..Default::default()
@@ -5676,6 +5732,7 @@ mod test {
                     text: "world".to_string(),
                     source: crate::TextSource::Caption,
                 },
+                conditions: vec![],
             }),
         );
 
@@ -5687,6 +5744,7 @@ mod test {
                     text: "Arpita Jaiswal".to_string(),
                     source: crate::TextSource::Caption,
                 },
+                conditions: vec![],
             }),
         );
 
@@ -5747,6 +5805,7 @@ mod test {
                         name: "foo/bar#person".to_string(),
                     },
                 },
+                conditions: vec![],
             }),
         );
 
@@ -5977,6 +6036,7 @@ mod test {
                         name: "foo/bar#person".to_string(),
                     },
                 },
+                conditions: vec![],
             }),
         );
 
@@ -6088,6 +6148,7 @@ mod test {
                     ],
                     kind: crate::p2::Kind::string(),
                 },
+                conditions: vec![],
             }),
         );
         let (g_bag, g_col) = crate::p2::interpreter::interpret(
@@ -6312,6 +6373,7 @@ mod test {
                         name: "foo/bar#person".to_string(),
                     },
                 },
+                conditions: vec![],
             }),
         );
 
@@ -6392,6 +6454,7 @@ mod test {
                     text: "\"0.1.4\"".to_string(),
                     source: crate::TextSource::Header,
                 },
+                conditions: vec![],
             }),
         );
 
@@ -6434,6 +6497,7 @@ mod test {
                     text: "\"0.1.4\"".to_string(),
                     source: crate::TextSource::Header,
                 },
+                conditions: vec![],
             }),
         );
 
@@ -6567,6 +6631,7 @@ mod test {
                     ],
                     kind: crate::p2::Kind::string(),
                 },
+                conditions: vec![],
             }),
         );
 
@@ -7175,6 +7240,7 @@ mod test {
                         }),
                     },
                 },
+                conditions: vec![],
             }),
         );
 
@@ -7356,6 +7422,7 @@ mod test {
                         name: s("foo/bar#toc-record"),
                     },
                 },
+                conditions: vec![],
             }),
         );
 
@@ -7474,6 +7541,7 @@ mod test {
                         name: s("foo/bar#toc-record"),
                     },
                 },
+                conditions: vec![],
             }),
         );
 
@@ -7677,6 +7745,7 @@ mod test {
                     text: s("Hello World"),
                     source: ftd::TextSource::Caption,
                 },
+                conditions: vec![],
             }),
         );
 
@@ -7890,6 +7959,7 @@ mod test {
                     ])
                     .collect(),
                 },
+                conditions: vec![],
             }),
         );
         bag.insert(
@@ -7900,6 +7970,7 @@ mod test {
                     text: s("Abrar Khan"),
                     source: crate::TextSource::Caption,
                 },
+                conditions: vec![],
             }),
         );
         bag.insert(
@@ -7907,6 +7978,7 @@ mod test {
             crate::p2::Thing::Variable(ftd::Variable {
                 name: s("default-age"),
                 value: crate::variable::Value::Integer { value: 20 },
+                conditions: vec![],
             }),
         );
         bag.insert(
@@ -8023,6 +8095,7 @@ mod test {
                     text: s("Arpita"),
                     source: crate::TextSource::Caption,
                 },
+                conditions: vec![],
             }),
         );
         bag.insert(
@@ -8030,6 +8103,7 @@ mod test {
             crate::p2::Thing::Variable(ftd::Variable {
                 name: s("default-size"),
                 value: crate::Value::Integer { value: 10 },
+                conditions: vec![],
             }),
         );
         bag.insert(
@@ -8215,6 +8289,7 @@ mod test {
                     ])
                     .collect(),
                 },
+                conditions: vec![],
             }),
         );
         bag.insert(
@@ -8245,6 +8320,7 @@ mod test {
                     ])
                     .collect(),
                 },
+                conditions: vec![],
             }),
         );
         bag.insert(
@@ -8255,6 +8331,7 @@ mod test {
                     text: s("1000"),
                     source: ftd::TextSource::Caption,
                 },
+                conditions: vec![],
             }),
         );
         bag.insert(
@@ -9215,6 +9292,108 @@ mod test {
             &ftd::p2::TestLibrary {},
         )
         .expect("found error");
+        pretty_assertions::assert_eq!(g_col, main);
+    }
+
+    #[test]
+    fn if_on_var_integer() {
+        let mut main = super::default_column();
+        main.container
+            .children
+            .push(ftd_rt::Element::Integer(ftd_rt::Text {
+                text: markdown_line("20"),
+                ..Default::default()
+            }));
+
+        let (_g_bag, g_col) = crate::p2::interpreter::interpret(
+            "foo/bar",
+            indoc::indoc!(
+                "
+                -- var foo: false
+
+                -- var bar: 10
+
+                -- bar: 20
+                if: not foo
+
+                -- ftd.integer:
+                value: ref bar
+
+                "
+            ),
+            &ftd::p2::TestLibrary {},
+        )
+        .expect("found error");
+
+        pretty_assertions::assert_eq!(g_col, main);
+    }
+
+    #[test]
+    fn if_on_var_text() {
+        let mut main = super::default_column();
+        main.container
+            .children
+            .push(ftd_rt::Element::Text(ftd_rt::Text {
+                text: markdown_line("other-foo says hello"),
+                line: true,
+                ..Default::default()
+            }));
+
+        let (_g_bag, g_col) = crate::p2::interpreter::interpret(
+            "foo/bar",
+            indoc::indoc!(
+                "
+                -- var foo: false
+
+                -- var other-foo: true
+
+                -- var bar: hello
+
+                -- bar: foo says hello
+                if: not foo
+
+                -- bar: other-foo says hello
+                if: other-foo
+
+                -- ftd.text: ref bar
+
+                "
+            ),
+            &ftd::p2::TestLibrary {},
+        )
+        .expect("found error");
+
+        pretty_assertions::assert_eq!(g_col, main);
+    }
+
+    #[test]
+    fn cursor_pointer() {
+        let mut main = super::default_column();
+        main.container
+            .children
+            .push(ftd_rt::Element::Text(ftd_rt::Text {
+                text: markdown_line("hello"),
+                line: true,
+                common: ftd_rt::Common {
+                    cursor: Some(s("pointer")),
+                    ..Default::default()
+                },
+                ..Default::default()
+            }));
+
+        let (_g_bag, g_col) = crate::p2::interpreter::interpret(
+            "foo/bar",
+            indoc::indoc!(
+                "
+                -- ftd.text: hello
+                cursor: pointer
+
+                "
+            ),
+            &ftd::p2::TestLibrary {},
+        )
+        .expect("found error");
+
         pretty_assertions::assert_eq!(g_col, main);
     }
 

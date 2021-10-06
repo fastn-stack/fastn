@@ -6,6 +6,104 @@ pub struct TDoc<'a> {
 }
 
 impl<'a> TDoc<'a> {
+    pub fn from_json<T>(&self, json: &T, section: &ftd::p1::Section) -> ftd::p1::Result<ftd::Value>
+    where
+        T: serde::Serialize + std::fmt::Debug,
+    {
+        let json = serde_json::to_value(json).map_err(|e| ftd::p1::Error::InvalidInput {
+            message: format!("Can't serialize to json: {:?}", e),
+            context: format!("{:?}", json),
+        })?;
+
+        if let Ok(v) = self.get_value(section.name.as_str()) {
+            return from_json_(self, &json, v.kind());
+        }
+        if let Ok(list) = ftd::Variable::list_from_p1(section, self) {
+            return from_json_(self, &json, list.value.kind());
+        }
+        if let Ok(var) = ftd::Variable::from_p1(section, self) {
+            return from_json_(self, &json, var.value.kind());
+        }
+
+        return ftd::e("component should be var or list");
+        fn from_json_(
+            doc: &TDoc,
+            json: &serde_json::Value,
+            kind: ftd::p2::Kind,
+        ) -> ftd::p1::Result<ftd::Value> {
+            Ok(match kind {
+                ftd::p2::Kind::String { .. } => ftd::Value::String {
+                    text: serde_json::from_value::<String>(json.to_owned()).map_err(|_| {
+                        ftd::p1::Error::InvalidInput {
+                            message: "Can't parse to string".into(),
+                            context: format!("found: {}", json),
+                        }
+                    })?,
+                    source: ftd::TextSource::Header,
+                },
+                ftd::p2::Kind::Integer { .. } => ftd::Value::Integer {
+                    value: serde_json::from_value::<i64>(json.to_owned()).map_err(|_| {
+                        ftd::p1::Error::InvalidInput {
+                            message: "Can't parse to integer".into(),
+                            context: format!("found: {}", json),
+                        }
+                    })?,
+                },
+                ftd::p2::Kind::Decimal { .. } => ftd::Value::Decimal {
+                    value: serde_json::from_value::<f64>(json.to_owned()).map_err(|_| {
+                        ftd::p1::Error::InvalidInput {
+                            message: "Can't parse to decimal".into(),
+                            context: format!("found: {}", json),
+                        }
+                    })?,
+                },
+                ftd::p2::Kind::Boolean { .. } => ftd::Value::Boolean {
+                    value: serde_json::from_value::<bool>(json.to_owned()).map_err(|_| {
+                        ftd::p1::Error::InvalidInput {
+                            message: "Can't parse to boolean".into(),
+                            context: format!("found: {}", json),
+                        }
+                    })?,
+                },
+                ftd::p2::Kind::Record { name, .. } => {
+                    let rec_fields = doc.get_record(&name)?.fields;
+                    let mut fields: std::collections::BTreeMap<String, ftd::PropertyValue> =
+                        Default::default();
+                    if let serde_json::Value::Object(o) = json {
+                        for (key, kind) in rec_fields {
+                            let val = o.get(&key).unwrap();
+                            fields.insert(
+                                key,
+                                ftd::PropertyValue::Value {
+                                    value: from_json_(doc, val, kind)?,
+                                },
+                            );
+                        }
+                    } else {
+                        return ftd::e(format!("expected object of record type, found: {}", json));
+                    }
+                    ftd::Value::Record { name, fields }
+                }
+                ftd::p2::Kind::List { kind } => {
+                    let kind = kind.as_ref();
+                    let mut data: Vec<ftd::Value> = vec![];
+                    if let serde_json::Value::Array(list) = json {
+                        for item in list {
+                            data.push(from_json_(doc, item, kind.to_owned())?);
+                        }
+                    } else {
+                        return ftd::e(format!("expected object of list type, found: {}", json));
+                    }
+                    ftd::Value::List {
+                        data,
+                        kind: kind.to_owned(),
+                    }
+                }
+                t => unimplemented!("{:?} not yet implemented", t),
+            })
+        }
+    }
+
     pub fn format_name(&self, name: &str) -> String {
         format!("{}#{}", self.name, name)
     }
@@ -89,6 +187,17 @@ impl<'a> TDoc<'a> {
         match self.get_value(name)? {
             crate::Value::Record { .. } => Ok(true),
             _ => Ok(false),
+        }
+    }
+
+    pub fn get_value_and_conditions_with_root(
+        &self,
+        name: &str,
+        root_name: Option<&str>,
+    ) -> crate::p1::Result<(crate::Value, Vec<(crate::p2::Boolean, crate::Value)>)> {
+        match self.get_thing_with_root(name, root_name)? {
+            crate::p2::Thing::Variable(v) => Ok((v.value, v.conditions)),
+            v => self.err("not a variable", v, "get_value"),
         }
     }
 
@@ -186,7 +295,11 @@ impl<'a> TDoc<'a> {
                                     variant: v.to_string(),
                                 })
                             }
-                            crate::p2::Thing::Variable(crate::Variable { name, value }) => {
+                            crate::p2::Thing::Variable(crate::Variable {
+                                name,
+                                value,
+                                conditions,
+                            }) => {
                                 let fields = match value {
                                     crate::Value::Record { fields, .. } => fields,
                                     crate::Value::OrType { fields, .. } => fields,
@@ -204,6 +317,7 @@ impl<'a> TDoc<'a> {
                                     return Ok(crate::p2::Thing::Variable(crate::Variable {
                                         name,
                                         value: val.clone(),
+                                        conditions,
                                     }));
                                 } else if let Some(crate::PropertyValue::Reference {
                                     name, ..

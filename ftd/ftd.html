@@ -3,11 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <title>ftd</title>
-    <style>
-
-    </style>
+    <script type="ftd" id="ftd-data">
+        ___ftd_data___
+    </script>
+    <script type="ftd" id="ftd-external-children">
+        ___ftd_external_children___
+    </script>
+    <script>
+        ___ftd_js___
+    </script>
 </head>
     <body>
+
         ___ftd___
+
+
+    <script>
+        window.ftd.init(
+            "main",
+            JSON.parse(document.getElementById("ftd-data").innerText),
+            JSON.parse(document.getElementById("ftd-external-children").innerText)
+        );
+    </script>
     </body>
 </html>

@@ -15,7 +15,7 @@ impl ToString for Document {
 }
 
 impl Document {
-    fn rt_data(&self) -> ftd_rt::Map {
+    fn get_data(&self) -> ftd_rt::Map {
         let mut d: ftd_rt::Map = Default::default();
         for (k, v) in self.data.iter() {
             if let ftd::p2::Thing::Variable(ftd::Variable {
@@ -29,17 +29,64 @@ impl Document {
         d
     }
 
-    pub fn to_rt(&self) -> ftd_rt::Document {
+    fn get_locals(&self) -> ftd_rt::Map {
+        ftd_rt::Element::get_locals(&self.main.container.children)
+    }
+
+    fn rt_data(&self) -> ftd_rt::DataDependenciesMap {
+        let mut d: ftd_rt::Map = self.get_data();
+        for (k, v) in self.get_locals() {
+            d.insert(format!("@{}", k), v.to_string());
+        }
+        let mut data = ftd_rt::Element::get_event_dependencies(&self.main.container.children, &d);
+        for (k, v) in d {
+            if data.contains_key(&k) {
+                continue;
+            }
+            data.insert(
+                k.to_string(),
+                ftd_rt::Data {
+                    value: v.to_string(),
+                    dependencies: Default::default(),
+                },
+            );
+        }
+        data
+    }
+
+    pub fn rerender(&mut self, id: &str) -> crate::p1::Result<ftd_rt::Document> {
+        let mut rt = ftd::RT::from(
+            self.name.as_str(),
+            self.aliases.clone(),
+            self.data.clone(),
+            self.instructions.clone(),
+        );
+        self.main = rt.render()?;
+        let data = self.rt_data();
+        Ok(ftd_rt::Document {
+            data,
+            html: self.html(id),
+            external_children: ftd_rt::Element::get_external_children_dependencies(
+                &self.main.container.children,
+            ),
+        })
+    }
+
+    pub fn to_rt(&self, id: &str) -> ftd_rt::Document {
+        let external_children =
+            ftd_rt::Element::get_external_children_dependencies(&self.main.container.children);
+
         ftd_rt::Document {
             data: self.rt_data(),
-            tree: self.main.to_node(),
+            html: self.html(id),
+            external_children,
         }
     }
 
-    pub fn html(&self) -> String {
+    pub fn html(&self, id: &str) -> String {
         self.main
             .to_node()
-            .to_html(&Default::default(), &self.rt_data())
+            .to_html(&Default::default(), &self.rt_data(), id)
     }
 
     pub fn set_string(&mut self, name: &str, value: &str) {
@@ -49,6 +96,7 @@ impl Document {
                 text: value.to_string(),
                 source: ftd::TextSource::Header,
             },
+            conditions: vec![],
         });
         self.data.insert(name.to_string(), thing);
     }
@@ -57,36 +105,9 @@ impl Document {
         let thing = ftd::p2::Thing::Variable(ftd::Variable {
             name: name.to_string(),
             value: ftd::Value::Boolean { value },
+            conditions: vec![],
         });
         self.data.insert(name.to_string(), thing);
-    }
-
-    pub fn rt(self) -> ftd::p1::Result<ftd_rt::Document> {
-        let data = {
-            let mut d: ftd_rt::Map = Default::default();
-            for (k, v) in self.data.iter() {
-                if let ftd::p2::Thing::Variable(ftd::Variable {
-                    value: ftd::Value::Boolean { value },
-                    ..
-                }) = v
-                {
-                    d.insert(k.to_string(), value.to_string());
-                }
-            }
-            d
-        };
-        let rt = ftd::RT {
-            name: self.name,
-            aliases: self.aliases,
-            instructions: self.instructions,
-            bag: self.data,
-        }
-        .render()?;
-
-        Ok(ftd_rt::Document {
-            data,
-            tree: rt.to_node(),
-        })
     }
 
     pub fn alias(&self, doc: &str) -> Option<&str> {
@@ -180,34 +201,6 @@ impl Document {
                 ftd_rt::Element::Text(t) => f(t),
                 _ => None,
             }
-        })
-    }
-
-    pub fn rerender(&mut self) -> crate::p1::Result<ftd_rt::Document> {
-        let data = {
-            let mut d: ftd_rt::Map = Default::default();
-            for (k, v) in self.data.iter() {
-                if let ftd::p2::Thing::Variable(ftd::Variable {
-                    value: ftd::Value::Boolean { value },
-                    ..
-                }) = v
-                {
-                    d.insert(k.to_string(), value.to_string());
-                }
-            }
-            d
-        };
-
-        let mut rt = ftd::RT::from(
-            self.name.as_str(),
-            self.aliases.clone(),
-            self.data.clone(),
-            self.instructions.clone(),
-        );
-        self.main = rt.render()?;
-        Ok(ftd_rt::Document {
-            data,
-            tree: self.main.to_node(),
         })
     }
 

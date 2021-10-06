@@ -4,10 +4,10 @@ impl ftd_rt::Node {
     pub fn to_dom(
         &self,
         style: &ftd_rt::Map,
-        data: &ftd_rt::Map,
+        data: &ftd_rt::DataDependenciesMap,
         id: &str,
     ) -> Result<web_sys::Element, wasm_bindgen::JsValue> {
-        self.to_dnode(style, data, &mut None, &None, &[], &self.locals)
+        self.to_dnode(style, data, &mut None, &None, &[], true, id)
             .to_dom(id)
     }
 }
@@ -19,18 +19,14 @@ impl ftd_rt::dnode::DNode {
         for (k, v) in self.attrs.iter() {
             e.set_attribute(k, v)?;
         }
-        e.set_attribute("style", self.style_to_html().as_str())?;
+        e.set_attribute("style", self.style_to_html(self.visible).as_str())?;
         e.set_attribute("class", self.class_to_html().as_str())?;
 
         let events = ftd_rt::event::group_by_js_event(&self.events);
         for (name, actions) in events {
             e.set_attribute(
                 name.as_str(),
-                format!(
-                    "window.ftd_handles[\"{}\"].handle_event(\"{}\")",
-                    id, actions
-                )
-                .as_str(),
+                format!("window.ftd.handle_event(\"{}\", \"{}\")", id, actions).as_str(),
             )?;
         }
 
@@ -86,9 +82,19 @@ impl Drop for Document {
 impl Document {
     pub fn set_bool(&mut self, variable: &str, value: bool) {
         console_log!("setting {} to {}", variable, value);
-        self.document
-            .data
-            .insert(variable.to_string(), value.to_string());
+        let dependencies = if let Some(data) = self.document.data.get(variable) {
+            data.dependencies.clone()
+        } else {
+            Default::default()
+        };
+
+        self.document.data.insert(
+            variable.to_string(),
+            ftd_rt::Data {
+                value: value.to_string(),
+                dependencies,
+            },
+        );
         self.render()
     }
 
@@ -108,7 +114,19 @@ impl Document {
                 }
             };
             console_log!("setting {} to {}", variable, value);
-            self.document.data.insert(variable, value);
+            let dependencies = if let Some(data) = self.document.data.get(&variable) {
+                data.dependencies.clone()
+            } else {
+                Default::default()
+            };
+
+            self.document.data.insert(
+                variable.to_string(),
+                ftd_rt::Data {
+                    value: value.to_string(),
+                    dependencies,
+                },
+            );
         }
         self.render()
     }

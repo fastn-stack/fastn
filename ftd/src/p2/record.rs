@@ -340,6 +340,7 @@ mod test {
                     name: "foo/bar#person".to_string(),
                     fields: abrar(),
                 },
+                conditions: vec![],
             }),
         );
         bag.insert(
@@ -359,6 +360,7 @@ mod test {
             crate::p2::Thing::Variable(crate::Variable {
                 name: "x".to_string(),
                 value: crate::Value::Integer { value: 20 },
+                conditions: vec![],
             }),
         );
         bag.insert(
@@ -406,6 +408,7 @@ mod test {
                     ])
                     .collect(),
                 },
+                conditions: vec![],
             }),
         );
 
@@ -437,6 +440,7 @@ mod test {
                     ])
                     .collect(),
                 },
+                conditions: vec![],
             }),
         );
 
@@ -567,6 +571,7 @@ mod test {
                         ])
                         .collect(),
                     },
+                    conditions: vec![],
                 }),
             );
             bag
@@ -726,6 +731,7 @@ mod test {
                     ])
                     .collect(),
                 },
+                conditions: vec![],
             }),
         );
 
@@ -875,6 +881,7 @@ mod test {
                     ])
                     .collect(),
                 },
+                conditions: vec![],
             }),
         );
 

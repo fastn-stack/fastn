@@ -2,6 +2,7 @@
 pub struct Variable {
     pub name: String,
     pub value: Value,
+    pub conditions: Vec<(crate::p2::Boolean, crate::Value)>,
 }
 
 #[derive(Debug, Clone, PartialEq, serde::Serialize, serde::Deserialize)]
@@ -83,7 +84,15 @@ impl PropertyValue {
                 kind: reference_kind,
             } => {
                 assert_eq!(self.kind(), *reference_kind);
-                doc.get_value_with_root(reference_name.as_str(), root_name)?
+                let (default, condition) =
+                    doc.get_value_and_conditions_with_root(reference_name.as_str(), root_name)?;
+                let mut value = default;
+                for (boolean, property) in condition {
+                    if boolean.eval(arguments, doc)? {
+                        value = property;
+                    }
+                }
+                value
             }
         })
     }
@@ -178,6 +187,7 @@ impl Variable {
                 data: Default::default(),
                 kind: crate::p2::Kind::from(p1.header.str("type")?, doc, None)?,
             },
+            conditions: vec![],
         })
     }
 
@@ -189,6 +199,7 @@ impl Variable {
                 data: Default::default(),
                 kind: crate::p2::Kind::from(p1.header.str("type")?, doc, None)?,
             },
+            conditions: vec![],
         })
     }
 
@@ -241,7 +252,33 @@ impl Variable {
             None => guess_type(p1)?,
         };
 
-        Ok(Variable { name, value })
+        Ok(Variable {
+            name,
+            value,
+            conditions: vec![],
+        })
+    }
+
+    pub fn get_value(
+        &self,
+        p1: &crate::p1::Section,
+        doc: &crate::p2::TDoc,
+    ) -> ftd::p1::Result<ftd::Value> {
+        match self.value.kind() {
+            ftd::p2::Kind::String { .. } => read_string(p1),
+            ftd::p2::Kind::Integer { .. } => read_integer(p1),
+            ftd::p2::Kind::Decimal { .. } => read_decimal(p1),
+            ftd::p2::Kind::Boolean { .. } => read_boolean(p1),
+            ftd::p2::Kind::Record { name } => match doc.get_thing(&name)? {
+                crate::p2::Thing::Record(r) => r.create(p1, doc),
+                t => crate::e(format!("expected record type, found: {:?}", t)),
+            },
+            ftd::p2::Kind::OrType { name } => match doc.get_thing(&name)? {
+                crate::p2::Thing::OrTypeWithVariant { e, variant } => e.create(p1, variant, doc),
+                t => crate::e(format!("expected or-type type, found: {:?}", t)),
+            },
+            t => crate::e(format!("unexpected type found: {:?}", t)),
+        }
     }
 }
 
@@ -319,10 +356,10 @@ mod test {
     use crate::test::*;
 
     macro_rules! p2 {
-        ($s:expr, $n: expr, $v: expr,) => {
-            p2!($s, $n, $v)
+        ($s:expr, $n: expr, $v: expr, $c: expr,) => {
+            p2!($s, $n, $v, $c)
         };
-        ($s:expr, $n: expr, $v: expr) => {
+        ($s:expr, $n: expr, $v: expr, $c: expr) => {
             let p1 = crate::p1::parse(indoc::indoc!($s)).unwrap();
             let mut bag = std::collections::BTreeMap::new();
             let aliases = std::collections::BTreeMap::new();
@@ -335,7 +372,8 @@ mod test {
                 super::Variable::from_p1(&p1[0], &mut d).unwrap(),
                 super::Variable {
                     name: $n.to_string(),
-                    value: $v
+                    value: $v,
+                    conditions: $c
                 }
             )
         };
@@ -344,25 +382,36 @@ mod test {
     #[test]
     fn int() {
         use super::Value::Integer;
-        p2!("-- var x: 10", "x", Integer { value: 10 },);
-        p2!("-- var x: 10\ntype: integer", "x", Integer { value: 10 },);
+        p2!("-- var x: 10", "x", Integer { value: 10 }, vec![],);
+        p2!(
+            "-- var x: 10\ntype: integer",
+            "x",
+            Integer { value: 10 },
+            vec![],
+        );
     }
 
     #[test]
     fn float() {
         use super::Value::Decimal;
-        p2!("-- var x: 10.0", "x", Decimal { value: 10.0 },);
-        p2!("-- var x: 10\ntype: decimal", "x", Decimal { value: 10.0 },);
+        p2!("-- var x: 10.0", "x", Decimal { value: 10.0 }, vec![],);
+        p2!(
+            "-- var x: 10\ntype: decimal",
+            "x",
+            Decimal { value: 10.0 },
+            vec![],
+        );
     }
 
     #[test]
     fn bool() {
         use super::Value::Boolean;
-        p2!("-- var x: true", "x", Boolean { value: true },);
+        p2!("-- var x: true", "x", Boolean { value: true }, vec![],);
         p2!(
             "-- var x: false\ntype: boolean",
             "x",
             Boolean { value: false },
+            vec![],
         );
     }
 
@@ -376,6 +425,7 @@ mod test {
                 text: "hello".to_string(),
                 source: crate::TextSource::Caption
             },
+            vec![],
         );
         p2!(
             "-- var x:\n\nhello world\nyo!",
@@ -384,6 +434,7 @@ mod test {
                 text: "hello world\nyo!".to_string(),
                 source: crate::TextSource::Body
             },
+            vec![],
         );
         p2!(
             "-- var x: 10\ntype: string",
@@ -391,7 +442,8 @@ mod test {
             String {
                 text: "10".to_string(),
                 source: crate::TextSource::Caption
-            }
+            },
+            vec![],
         );
         p2!(
             "-- var x: true\ntype: string",
@@ -399,7 +451,8 @@ mod test {
             String {
                 text: "true".to_string(),
                 source: crate::TextSource::Caption
-            }
+            },
+            vec![],
         );
     }
 
@@ -453,6 +506,7 @@ mod test {
                         name: s("foo/bar#pull-request"),
                     },
                 },
+                conditions: vec![],
             }),
         );
 

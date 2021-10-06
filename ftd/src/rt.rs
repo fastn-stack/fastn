@@ -25,11 +25,13 @@ impl RT {
         match self.bag.get(variable) {
             Some(ftd::p2::Thing::Variable(v)) => match v.value {
                 ftd::Value::Boolean { value: old } => {
+                    let conditions = v.conditions.to_vec();
                     self.bag.insert(
                         variable.to_string(),
                         ftd::p2::Thing::Variable(ftd::Variable {
                             name: variable.to_string(),
                             value: ftd::Value::Boolean { value },
+                            conditions,
                         }),
                     );
                     Ok(old)
@@ -48,6 +50,14 @@ impl RT {
     }
 
     pub fn render(&mut self) -> crate::p1::Result<ftd_rt::Column> {
+        let mut main = self.render_();
+        if let Ok(main) = &mut main {
+            ftd_rt::Element::set_id(&mut main.container.children, &[], None);
+        }
+        main
+    }
+
+    pub fn render_(&mut self) -> crate::p1::Result<ftd_rt::Column> {
         let mut main = ftd::p2::interpreter::default_column();
         let mut invocations = Default::default();
         let element = ftd::execute_doc::ExecuteDoc {

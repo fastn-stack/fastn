@@ -43,9 +43,6 @@ impl<'a> ExecuteDoc<'a> {
                 bag: self.bag,
             };
             let local_container = {
-                /*let mut local_container = parent_container.to_vec();
-                local_container.push(children.len());
-                local_container*/
                 let mut local_container = parent_container.to_vec();
                 local_container.append(&mut current_container.to_vec());
                 let current_length = {
@@ -285,13 +282,31 @@ impl<'a> ExecuteDoc<'a> {
                     *index += 1;
                     let child =
                         self.execute_(index, true, &new_parent_container, &Default::default())?;
-                    r.container.external_children = Some((id, container, child.children));
+                    let external_children = {
+                        if child.children.is_empty() {
+                            vec![]
+                        } else {
+                            let mut main = ftd::p2::interpreter::default_column();
+                            main.container.children = child.children;
+                            vec![ftd_rt::Element::Column(main)]
+                        }
+                    };
+                    r.container.external_children = Some((id, container, external_children));
                 }
                 Some(ftd_rt::Element::Row(ref mut r)) => {
                     *index += 1;
                     let child =
                         self.execute_(index, true, &new_parent_container, &Default::default())?;
-                    r.container.external_children = Some((id, container, child.children));
+                    let external_children = {
+                        if child.children.is_empty() {
+                            vec![]
+                        } else {
+                            let mut main = ftd::p2::interpreter::default_column();
+                            main.container.children = child.children;
+                            vec![ftd_rt::Element::Column(main)]
+                        }
+                    };
+                    r.container.external_children = Some((id, container, external_children));
                 }
                 _ => unreachable!(),
             }

@@ -18,6 +18,456 @@ pub enum Element {
 }
 
 impl Element {
+    pub fn set_id(children: &mut [Self], index_vec: &[usize], external_id: Option<String>) {
+        for (idx, child) in children.iter_mut().enumerate() {
+            let index_string: String = {
+                let mut index_vec = index_vec.to_vec();
+                index_vec.push(idx);
+                index_vec
+                    .iter()
+                    .map(|v| v.to_string())
+                    .collect::<Vec<String>>()
+                    .join(",")
+            };
+            let mut id = match child {
+                Self::Text(ftd_rt::Text {
+                    common: ftd_rt::Common { id, .. },
+                    ..
+                }) => id,
+                Self::Image(ftd_rt::Image {
+                    common: ftd_rt::Common { id, .. },
+                    ..
+                }) => id,
+                Self::Row(ftd_rt::Row {
+                    common: ftd_rt::Common { id, .. },
+                    container,
+                }) => {
+                    let mut index_vec = index_vec.to_vec();
+                    index_vec.push(idx);
+                    Self::set_id(&mut container.children, &index_vec, external_id.clone());
+                    if let Some((id, container, external_children)) =
+                        &mut container.external_children
+                    {
+                        if let Some(ftd_rt::Element::Column(col)) = external_children.first_mut() {
+                            let index_string: String = index_vec
+                                .iter()
+                                .map(|v| v.to_string())
+                                .collect::<Vec<String>>()
+                                .join(",");
+
+                            let external_id = Some({
+                                if let Some(ref ext_id) = external_id {
+                                    format!("{}.{}-external:{}", ext_id, id, index_string)
+                                } else {
+                                    format!("{}-external:{}", id, index_string)
+                                }
+                            });
+                            col.common.id = external_id.clone();
+                            if let Some(val) = container.first_mut() {
+                                index_vec.append(&mut val.to_vec());
+                                Self::set_id(&mut col.container.children, &index_vec, external_id);
+                            }
+                        }
+                    }
+                    id
+                }
+                Self::Column(ftd_rt::Column {
+                    common: ftd_rt::Common { id, .. },
+                    container,
+                }) => {
+                    let mut index_vec = index_vec.to_vec();
+                    index_vec.push(idx);
+                    Self::set_id(&mut container.children, &index_vec, external_id.clone());
+                    if let Some((id, container, external_children)) =
+                        &mut container.external_children
+                    {
+                        if let Some(ftd_rt::Element::Column(col)) = external_children.first_mut() {
+                            let index_string: String = index_vec
+                                .iter()
+                                .map(|v| v.to_string())
+                                .collect::<Vec<String>>()
+                                .join(",");
+
+                            let external_id = Some({
+                                if let Some(ref ext_id) = external_id {
+                                    format!("{}.{}-external:{}", ext_id, id, index_string)
+                                } else {
+                                    format!("{}-external:{}", id, index_string)
+                                }
+                            });
+                            col.common.id = external_id.clone();
+                            if let Some(val) = container.first_mut() {
+                                index_vec.append(&mut val.to_vec());
+                                Self::set_id(&mut col.container.children, &index_vec, external_id);
+                            }
+                        }
+                    }
+                    id
+                }
+                Self::IFrame(ftd_rt::IFrame {
+                    common: ftd_rt::Common { id, .. },
+                    ..
+                }) => id,
+                Self::Input(ftd_rt::Input {
+                    common: ftd_rt::Common { id, .. },
+                    ..
+                }) => id,
+                Self::Integer(ftd_rt::Text {
+                    common: ftd_rt::Common { id, .. },
+                    ..
+                }) => id,
+                Self::Boolean(ftd_rt::Text {
+                    common: ftd_rt::Common { id, .. },
+                    ..
+                }) => id,
+                Self::Decimal(ftd_rt::Text {
+                    common: ftd_rt::Common { id, .. },
+                    ..
+                }) => id,
+                Self::Null => continue,
+            };
+
+            let external_id = {
+                if let Some(ref external_id) = external_id {
+                    format!(":{}", external_id)
+                } else {
+                    "".to_string()
+                }
+            };
+
+            if let Some(id) = &mut id {
+                *id = format!("{}:{}{}", id, index_string, external_id);
+            } else {
+                *id = Some(format!("{}{}", index_string, external_id));
+            }
+        }
+    }
+
+    pub fn get_external_children_condition(
+        &self,
+        external_open_id: &Option<String>,
+        external_children_container: &[Vec<usize>],
+    ) -> Vec<ftd_rt::ExternalChildrenCondition> {
+        let mut d: Vec<ftd_rt::ExternalChildrenCondition> = vec![];
+        let mut ext_child_condition = None;
+        let (id, open_id, children_container, children) = match self {
+            Self::Row(ftd_rt::Row {
+                common: ftd_rt::Common { id, .. },
+                container:
+                    ftd_rt::Container {
+                        external_children,
+                        children,
+                        ..
+                    },
+            }) => (
+                id,
+                external_children
+                    .as_ref()
+                    .map(|(open_id, _, _)| open_id.to_string()),
+                external_children
+                    .as_ref()
+                    .map(|(_, children_container, _)| children_container.to_vec()),
+                children,
+            ),
+            Self::Column(ftd_rt::Column {
+                common: ftd_rt::Common { id, .. },
+                container:
+                    ftd_rt::Container {
+                        external_children,
+                        children,
+                        ..
+                    },
+            }) => (
+                id,
+                external_children
+                    .as_ref()
+                    .map(|(open_id, _, _)| open_id.to_string()),
+                external_children
+                    .as_ref()
+                    .map(|(_, children_container, _)| children_container.to_vec()),
+                children,
+            ),
+            _ => return d,
+        };
+
+        #[allow(clippy::blocks_in_if_conditions)]
+        if *external_open_id
+            == id.as_ref().map(|v| {
+                if v.contains(':') {
+                    let mut part = v.splitn(2, ':');
+                    part.next().unwrap().trim().to_string()
+                } else {
+                    v.to_string()
+                }
+            })
+            && external_children_container.is_empty()
+        {
+            ext_child_condition = id.clone();
+            if open_id.is_none() {
+                let id = ext_child_condition.expect("");
+                d.push(ftd_rt::ExternalChildrenCondition {
+                    condition: vec![id.to_string()],
+                    set_at: id,
+                });
+                return d;
+            }
+        }
+
+        let (open_id, external_children_container) =
+            if open_id.is_some() && external_children_container.is_empty() {
+                (open_id, {
+                    if let Some(c) = children_container {
+                        c
+                    } else {
+                        vec![]
+                    }
+                })
+            } else {
+                (
+                    external_open_id.clone(),
+                    external_children_container.to_vec(),
+                )
+            };
+
+        let mut index = 0;
+        for (i, v) in children.iter().enumerate() {
+            let external_container = {
+                let mut external_container = vec![];
+                while index < external_children_container.len() {
+                    if let Some(container) = external_children_container[index].get(0) {
+                        if container < &i {
+                            index += 1;
+                            continue;
+                        }
+                        let external_child_container =
+                            external_children_container[index][1..].to_vec();
+                        if container == &i && !external_child_container.is_empty() {
+                            external_container.push(external_child_container)
+                        } else {
+                            break;
+                        }
+                    }
+                    index += 1;
+                }
+                external_container
+            };
+            let conditions =
+                v.get_external_children_condition(&open_id, external_container.as_slice());
+            for mut condition in conditions {
+                if let Some(e) = &ext_child_condition {
+                    condition.condition.push(e.to_string());
+                }
+                d.push(condition);
+            }
+        }
+        d
+    }
+
+    pub fn get_external_children_dependencies(
+        children: &[Self],
+    ) -> ftd_rt::ExternalChildrenDependenciesMap {
+        let mut d: ftd_rt::ExternalChildrenDependenciesMap = Default::default();
+        for child in children {
+            let container = match child {
+                ftd_rt::Element::Row(ftd_rt::Row { container, .. }) => container,
+                ftd_rt::Element::Column(ftd_rt::Column { container, .. }) => container,
+                _ => continue,
+            };
+            let all_locals = Self::get_external_children_dependencies(&container.children);
+            for (k, v) in all_locals {
+                d.insert(k.to_string(), v);
+            }
+            if let Some((external_open_id, external_children_container, external_children)) =
+                &container.external_children
+            {
+                if let Some(ftd_rt::Element::Column(col)) = external_children.first() {
+                    let external_children_condition: Vec<ftd_rt::ExternalChildrenCondition> = child
+                        .get_external_children_condition(
+                            &Some(external_open_id.to_string()),
+                            external_children_container,
+                        );
+                    d.insert(
+                        col.common.id.as_ref().expect("").to_string(),
+                        external_children_condition,
+                    );
+                    let all_locals =
+                        Self::get_external_children_dependencies(&col.container.children);
+                    for (k, v) in all_locals {
+                        d.insert(k.to_string(), v);
+                    }
+                }
+            }
+        }
+        d
+    }
+
+    pub fn get_event_dependencies(
+        children: &[Self],
+        data: &ftd_rt::Map,
+    ) -> ftd_rt::DataDependenciesMap {
+        let mut d: ftd_rt::DataDependenciesMap = Default::default();
+        for child in children {
+            let (condition, id) = match child {
+                ftd_rt::Element::Column(ftd_rt::Column {
+                    common: ftd_rt::Common { condition, id, .. },
+                    container,
+                })
+                | ftd_rt::Element::Row(ftd_rt::Row {
+                    common: ftd_rt::Common { condition, id, .. },
+                    container,
+                }) => {
+                    let all_locals = Self::get_event_dependencies(&container.children, data);
+                    for (k, v) in all_locals {
+                        if let Some(d) = d.get_mut(&k) {
+                            for (k, v) in v.dependencies {
+                                d.dependencies.insert(k, v);
+                            }
+                        } else {
+                            d.insert(k.to_string(), v);
+                        }
+                    }
+                    if let Some((_, _, external_children)) = &container.external_children {
+                        let all_locals = Self::get_event_dependencies(external_children, data);
+                        for (k, v) in all_locals {
+                            if let Some(d) = d.get_mut(&k) {
+                                for (k, v) in v.dependencies {
+                                    d.dependencies.insert(k, v);
+                                }
+                            } else {
+                                d.insert(k.to_string(), v);
+                            }
+                        }
+                    }
+                    (condition, id)
+                }
+                ftd_rt::Element::Image(ftd_rt::Image {
+                    common: ftd_rt::Common { condition, id, .. },
+                    ..
+                })
+                | ftd_rt::Element::Text(ftd_rt::Text {
+                    common: ftd_rt::Common { condition, id, .. },
+                    ..
+                })
+                | ftd_rt::Element::IFrame(ftd_rt::IFrame {
+                    common: ftd_rt::Common { condition, id, .. },
+                    ..
+                })
+                | ftd_rt::Element::Input(ftd_rt::Input {
+                    common: ftd_rt::Common { condition, id, .. },
+                    ..
+                })
+                | ftd_rt::Element::Integer(ftd_rt::Text {
+                    common: ftd_rt::Common { condition, id, .. },
+                    ..
+                })
+                | ftd_rt::Element::Boolean(ftd_rt::Text {
+                    common: ftd_rt::Common { condition, id, .. },
+                    ..
+                })
+                | ftd_rt::Element::Decimal(ftd_rt::Text {
+                    common: ftd_rt::Common { condition, id, .. },
+                    ..
+                }) => (condition, id),
+                ftd_rt::Element::Null => continue,
+            };
+            if let Some(condition) = condition {
+                let id = id.clone().expect("universal id should be present");
+                let data_value = data
+                    .get(&condition.variable)
+                    .unwrap_or_else(|| panic!("{} should be declared", condition.variable));
+
+                if let Some(ftd_rt::Data { dependencies, .. }) = d.get_mut(&condition.variable) {
+                    dependencies.insert(id, condition.value.to_string());
+                } else {
+                    d.insert(
+                        condition.variable.to_string(),
+                        ftd_rt::Data {
+                            value: data_value.to_string(),
+                            dependencies: std::array::IntoIter::new([(
+                                id,
+                                condition.value.to_string(),
+                            )])
+                            .collect(),
+                        },
+                    );
+                }
+            }
+        }
+        d
+    }
+
+    pub fn get_locals(children: &[ftd_rt::Element]) -> ftd_rt::Map {
+        let mut d: ftd_rt::Map = Default::default();
+        for child in children {
+            let locals = match child {
+                ftd_rt::Element::Text(ftd_rt::Text {
+                    common: ftd_rt::Common { locals, .. },
+                    ..
+                }) => locals.clone(),
+                ftd_rt::Element::Image(ftd_rt::Image {
+                    common: ftd_rt::Common { locals, .. },
+                    ..
+                }) => locals.clone(),
+                ftd_rt::Element::Row(ftd_rt::Row {
+                    common: ftd_rt::Common { locals, .. },
+                    container,
+                }) => {
+                    let mut all_locals = Self::get_locals(&container.children);
+                    for (k, v) in locals {
+                        all_locals.insert(k.to_string(), v.to_string());
+                    }
+                    if let Some((_, _, ref c)) = container.external_children {
+                        for (k, v) in Self::get_locals(c) {
+                            all_locals.insert(k.to_string(), v.to_string());
+                        }
+                    }
+                    all_locals
+                }
+                ftd_rt::Element::Column(ftd_rt::Column {
+                    common: ftd_rt::Common { locals, .. },
+                    container,
+                }) => {
+                    let mut all_locals = Self::get_locals(&container.children);
+                    for (k, v) in locals {
+                        all_locals.insert(k.to_string(), v.to_string());
+                    }
+                    if let Some((_, _, ref c)) = container.external_children {
+                        for (k, v) in Self::get_locals(c) {
+                            all_locals.insert(k.to_string(), v.to_string());
+                        }
+                    }
+                    all_locals
+                }
+                ftd_rt::Element::IFrame(ftd_rt::IFrame {
+                    common: ftd_rt::Common { locals, .. },
+                    ..
+                }) => locals.clone(),
+                ftd_rt::Element::Input(ftd_rt::Input {
+                    common: ftd_rt::Common { locals, .. },
+                    ..
+                }) => locals.clone(),
+                ftd_rt::Element::Integer(ftd_rt::Text {
+                    common: ftd_rt::Common { locals, .. },
+                    ..
+                }) => locals.clone(),
+                ftd_rt::Element::Boolean(ftd_rt::Text {
+                    common: ftd_rt::Common { locals, .. },
+                    ..
+                }) => locals.clone(),
+                ftd_rt::Element::Decimal(ftd_rt::Text {
+                    common: ftd_rt::Common { locals, .. },
+                    ..
+                }) => locals.clone(),
+                ftd_rt::Element::Null => Default::default(),
+            };
+
+            for (k, v) in locals {
+                d.insert(k.to_string(), v.to_string());
+            }
+        }
+        d
+    }
+
     pub fn is_open_container(&self) -> (bool, Option<String>) {
         match self {
             Self::Column(e) => e.container.is_open(),
@@ -25,6 +475,7 @@ impl Element {
             _ => (false, None),
         }
     }
+
     pub fn container_id(&self) -> Option<String> {
         match self {
             Self::Column(e) => e.common.id.clone(),
@@ -371,13 +822,14 @@ pub struct Common {
     pub padding_bottom: Option<i64>,
     pub border_top_radius: Option<i64>,
     pub border_bottom_radius: Option<i64>,
+    pub border_left_radius: Option<i64>,
+    pub border_right_radius: Option<i64>,
     pub width: Option<Length>,
     pub max_width: Option<Length>,
     pub min_width: Option<Length>,
     pub height: Option<Length>,
     pub min_height: Option<Length>,
     pub max_height: Option<Length>,
-    pub explain: bool,
     pub color: Option<Color>,
     pub background_color: Option<Color>,
     pub border_color: Option<Color>,
@@ -399,6 +851,7 @@ pub struct Common {
     pub sticky: bool,
     pub top: Option<i64>,
     pub submit: Option<String>,
+    pub cursor: Option<String>,
     // TODO: background-gradient
     // TODO: background-image, un-cropped, tiled, tiled{X, Y}
     // TODO: border-style: solid, dashed, dotted

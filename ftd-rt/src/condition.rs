@@ -5,18 +5,9 @@ pub struct Condition {
 }
 
 impl Condition {
-    pub fn is_true(&self, data: &ftd_rt::Map, locals: &ftd_rt::Map) -> bool {
-        match self.variable.strip_prefix('@') {
-            Some(val) => {
-                if let Some(v) = locals.get(val) {
-                    return v == &self.value;
-                }
-            }
-            None => {
-                if let Some(v) = data.get(self.variable.as_str()) {
-                    return v == &self.value;
-                }
-            }
+    pub fn is_true(&self, data: &ftd_rt::DataDependenciesMap) -> bool {
+        if let Some(ftd_rt::Data { value: v, .. }) = data.get(self.variable.as_str()) {
+            return v == &self.value;
         }
 
         true

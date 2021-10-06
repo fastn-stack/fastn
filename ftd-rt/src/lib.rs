@@ -43,16 +43,16 @@ type Result<T> = std::result::Result<T, Error>;
     derive(serde::Serialize, PartialEq, Debug, Default, Clone)
 )]
 pub struct Document {
-    pub tree: ftd_rt::Node,
-    pub data: ftd_rt::Map,
+    pub html: String,
+    pub data: ftd_rt::DataDependenciesMap,
+    pub external_children: ExternalChildrenDependenciesMap,
 }
 
 pub fn e<T, S>(m: S) -> Result<T>
 where
     S: Into<String>,
 {
-    let _s = m.into();
-    todo!()
+    todo!("{}", m.into())
 }
 
 pub fn get_name<'a, 'b>(prefix: &'a str, s: &'b str) -> ftd_rt::Result<&'b str> {
@@ -63,8 +63,33 @@ pub fn get_name<'a, 'b>(prefix: &'a str, s: &'b str) -> ftd_rt::Result<&'b str> 
             }
             Ok(p2)
         }
-        None => ftd_rt::e("' ' is missing".to_string()),
+        None => ftd_rt::e(format!("{} does not contain space (prefix={})", s, prefix)),
     }
+}
+
+pub type DataDependenciesMap = std::collections::BTreeMap<String, Data>;
+
+#[derive(serde::Deserialize)]
+#[cfg_attr(
+    not(feature = "wasm"),
+    derive(serde::Serialize, PartialEq, Debug, Default, Clone)
+)]
+pub struct Data {
+    pub value: String,
+    pub dependencies: ftd_rt::Map,
+}
+
+pub type ExternalChildrenDependenciesMap =
+    std::collections::BTreeMap<String, Vec<ExternalChildrenCondition>>;
+
+#[derive(serde::Deserialize)]
+#[cfg_attr(
+    not(feature = "wasm"),
+    derive(serde::Serialize, PartialEq, Debug, Default, Clone)
+)]
+pub struct ExternalChildrenCondition {
+    pub condition: Vec<String>,
+    pub set_at: String,
 }
 
 #[cfg(test)]

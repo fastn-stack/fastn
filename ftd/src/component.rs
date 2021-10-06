@@ -1436,6 +1436,7 @@ mod test {
                     text: s("Amit"),
                     source: crate::TextSource::Caption,
                 },
+                conditions: vec![],
             }),
         );
         let mut main = default_column();
@@ -1491,6 +1492,7 @@ mod test {
             crate::p2::Thing::Variable(crate::Variable {
                 name: "x".to_string(),
                 value: crate::Value::Integer { value: 20 },
+                conditions: vec![],
             }),
         );
         bag.insert(
@@ -1501,6 +1503,7 @@ mod test {
                     name: "foo/bar#person".to_string(),
                     fields: abrar(),
                 },
+                conditions: vec![],
             }),
         );
 

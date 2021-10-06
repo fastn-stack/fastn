@@ -111,3 +111,10 @@ bio: Good Mobile 2
 -- container: ftd.main
 
 -- ftd.text: end of display
+<<<<<<< Updated upstream
+
+-- ftd.text: Click here!
+$event-click$: toggle mobile
+=======
+$event-click$: toggle mobile
+>>>>>>> Stashed changes

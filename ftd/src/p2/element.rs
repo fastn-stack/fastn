@@ -30,6 +30,8 @@ pub fn common_from_properties(
         padding_bottom: crate::p2::utils::int_optional("padding-bottom", properties)?,
         border_top_radius: crate::p2::utils::int_optional("border-top-radius", properties)?,
         border_bottom_radius: crate::p2::utils::int_optional("border-bottom-radius", properties)?,
+        border_left_radius: crate::p2::utils::int_optional("border-left-radius", properties)?,
+        border_right_radius: crate::p2::utils::int_optional("border-right-radius", properties)?,
         width: ftd_rt::Length::from(crate::p2::utils::string_optional("width", properties)?)?,
         min_width: ftd_rt::Length::from(crate::p2::utils::string_optional(
             "min-width",
@@ -48,7 +50,6 @@ pub fn common_from_properties(
             "max-height",
             properties,
         )?)?,
-        explain: crate::p2::utils::bool_with_default("explain", false, properties)?,
         color: color_from(crate::p2::utils::string_optional("color", properties)?)?,
         background_color: color_from(crate::p2::utils::string_optional(
             "background-color",
@@ -87,6 +88,7 @@ pub fn common_from_properties(
         open_in_new_tab: crate::p2::utils::bool_with_default("open-in-new-tab", false, properties)?,
         sticky: crate::p2::utils::bool_with_default("sticky", false, properties)?,
         top: crate::p2::utils::int_optional("top", properties)?,
+        cursor: crate::p2::utils::string_optional("cursor", properties)?,
         submit,
     })
 }
@@ -122,6 +124,14 @@ fn common_arguments() -> Vec<(String, crate::p2::Kind)> {
             crate::p2::Kind::integer().into_optional(),
         ),
         (
+            "border-left-radius".to_string(),
+            crate::p2::Kind::integer().into_optional(),
+        ),
+        (
+            "border-right-radius".to_string(),
+            crate::p2::Kind::integer().into_optional(),
+        ),
+        (
             "width".to_string(),
             crate::p2::Kind::string().into_optional(),
         ),
@@ -146,6 +156,7 @@ fn common_arguments() -> Vec<(String, crate::p2::Kind)> {
             crate::p2::Kind::string().into_optional(),
         ),
         (
+            // TODO: remove this after verifying that no existing document is using this
             "explain".to_string(),
             crate::p2::Kind::boolean().into_optional(),
         ),
@@ -233,6 +244,10 @@ fn common_arguments() -> Vec<(String, crate::p2::Kind)> {
         (
             "top".to_string(),
             crate::p2::Kind::integer().into_optional(),
+        ),
+        (
+            "cursor".to_string(),
+            crate::p2::Kind::string().into_optional(),
         ),
     ]
 }

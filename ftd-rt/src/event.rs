@@ -10,7 +10,6 @@ pub struct Event {
     pub action: Action,
 }
 
-#[cfg(feature = "wasm")]
 pub(crate) fn group_by_js_event(evts: &[Event]) -> std::collections::HashMap<String, String> {
     // key: onclick
     // value: after group by for onclick find all actions, and call to_js_event()
@@ -33,8 +32,8 @@ pub struct Action {
     pub target: String, // foo
 }
 
-#[cfg(feature = "wasm")]
 impl Action {
+    #[cfg(feature = "wasm")]
     fn to_action(a: &str) -> crate::Result<Self> {
         match a {
             _ if a.starts_with("toggle") => {
@@ -54,6 +53,7 @@ impl Action {
         format!("{} {};", self.action, self.target)
     }
 
+    #[cfg(feature = "wasm")]
     pub(crate) fn parse_js_event(s: &str) -> Vec<Action> {
         // input: "toggle x; set-true y"
         // output: { action: toggle, target: x }, { action: set-true, target: y }
@@ -68,41 +68,28 @@ impl Action {
         actions
     }
 
+    #[cfg(feature = "wasm")]
     pub(crate) fn handle_action(&self, doc: &mut ftd_rt::Document) {
         match self.action.as_str() {
-            "toggle" => match self.target.strip_prefix('@') {
-                None => {
-                    let value = !doc
-                        .data
-                        .get(&self.target)
-                        .expect(format!("{} should be present", self.target).as_str())
-                        .parse::<bool>()
-                        .expect(
-                            format!("Can't parse value for {} into bool", self.target).as_str(),
-                        );
+            "toggle" => {
+                let data = doc
+                    .data
+                    .get(&self.target)
+                    .expect(format!("{} should be present", self.target).as_str());
+                let value = !data
+                    .value
+                    .parse::<bool>()
+                    .expect(format!("Can't parse value for {} into bool", self.target).as_str());
+                let dependencies = data.dependencies.to_owned();
 
-                    doc.data.insert(self.target.to_string(), value.to_string());
-                }
-                Some(target) => {
-                    let mut part = target.splitn(2, '@');
-                    let part_1 = part.next().unwrap().trim();
-                    let part_2 = part.next().unwrap().trim();
-                    let container: Vec<_> = part_2
-                        .split(',')
-                        .map(|v| v.parse::<usize>().expect(""))
-                        .collect();
-                    let target_doc = doc.tree.get_target_node(container);
-                    let value = !target_doc
-                        .locals
-                        .get(target)
-                        .expect(format!("{} should be present", part_1).as_str())
-                        .parse::<bool>()
-                        .expect(format!("Can't parse value for {} into bool", part_1).as_str());
-                    target_doc
-                        .locals
-                        .insert(target.to_string(), value.to_string());
-                }
-            },
+                doc.data.insert(
+                    self.target.to_string(),
+                    ftd_rt::Data {
+                        value: value.to_string(),
+                        dependencies,
+                    },
+                );
+            }
             _ => unimplemented!(),
         }
     }

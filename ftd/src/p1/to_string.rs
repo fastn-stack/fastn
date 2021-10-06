@@ -42,7 +42,7 @@ impl std::fmt::Display for crate::p1::SubSection {
         }
 
         if let Some(ref body) = self.body {
-            write!(f, "\n{}", escape_body(body))?;
+            write!(f, "\n\n{}", escape_body(body))?;
         }
 
         writeln!(f)
@@ -58,6 +58,31 @@ fn escape_body(body: &str) -> String {
 #[cfg(test)]
 mod test {
     use {indoc::indoc, pretty_assertions::assert_eq}; // macro
+
+    #[test]
+    pub fn subsection_formatter() {
+        let s = indoc!(
+            "
+            -- ftd.row:
+
+            --- ftd.text:
+
+
+            hello world
+            "
+        );
+        let sections = ftd::p1::parse(s).expect("Cannot parse to section");
+        assert_eq!(
+            indoc!(
+                "-- ftd.row:
+
+                --- ftd.text:
+
+                hello world"
+            ),
+            super::to_string(&sections)
+        )
+    }
 
     #[test]
     pub fn to_string() {

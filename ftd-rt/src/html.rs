@@ -36,13 +36,13 @@ impl Node {
         }
     }
 
-    pub fn is_visible(&self, data: &ftd_rt::Map, locals: &ftd_rt::Map) -> bool {
+    pub fn is_visible(&self, data: &ftd_rt::DataDependenciesMap) -> bool {
         if self.null {
             return false;
         }
 
         match self.condition {
-            Some(ref v) => v.is_true(data, locals),
+            Some(ref v) => v.is_true(data),
             None => true,
         }
     }
@@ -50,23 +50,37 @@ impl Node {
     pub fn to_dnode<'a>(
         &'a self,
         style: &ftd_rt::Map,
-        data: &ftd_rt::Map,
+        data: &ftd_rt::DataDependenciesMap,
         external_children: &mut Option<&'a Vec<Self>>,
         external_open_id: &Option<String>,
         external_children_container: &[Vec<usize>],
-        locals: &ftd_rt::Map,
+        is_parent_visible: bool,
+        parent_id: &str,
     ) -> ftd_rt::dnode::DNode {
         let style = {
             let mut s = self.style.clone();
+            if !self.events.is_empty() && !s.contains_key("cursor") {
+                s.insert("cursor".to_string(), "pointer".to_string());
+            }
             s.extend(style.clone());
             s
         };
 
         let all_children = {
             let mut children: Vec<&ftd_rt::Node> = self.children.iter().collect();
+            #[allow(clippy::blocks_in_if_conditions)]
             if let Some(ext_children) = external_children {
-                if *external_open_id == self.attrs.get("id").map(|v| v.to_string())
-                    && self.is_visible(data, locals)
+                if *external_open_id
+                    == self.attrs.get("id").map(|v| {
+                        if v.contains(':') {
+                            let mut part = v.splitn(2, ':');
+                            part.next().unwrap().trim().to_string()
+                        } else {
+                            v.to_string()
+                        }
+                    })
+                    && self.is_visible(data)
+                    && is_parent_visible
                     && self.open_id.is_none()
                     && external_children_container.is_empty()
                 {
@@ -105,15 +119,7 @@ impl Node {
         let children = {
             let mut children: Vec<ftd_rt::dnode::DNode> = vec![];
             for (i, v) in all_children.iter().enumerate() {
-                let locals = {
-                    let mut new_locals = locals.clone();
-                    for (k, v) in &v.locals {
-                        new_locals.insert(k.to_string(), v.to_string());
-                    }
-                    new_locals
-                };
-
-                if !v.is_visible(data, &locals) {
+                if v.node.is_empty() {
                     continue;
                 }
 
@@ -143,28 +149,48 @@ impl Node {
                     ext_child,
                     open_id,
                     external_container.as_slice(),
-                    &locals,
+                    is_parent_visible && self.is_visible(data),
+                    parent_id,
                 ));
-                index_of_visible_children += 1;
+                if v.is_visible(data) {
+                    index_of_visible_children += 1;
+                }
             }
             children
+        };
+
+        let attrs = {
+            let mut attrs = self.attrs.to_owned();
+            let oid = if let Some(oid) = attrs.get("id") {
+                format!("{}:{}", oid, parent_id)
+            } else {
+                format!("{}:root", parent_id)
+            };
+            attrs.insert("id".to_string(), oid);
+            attrs
         };
 
         ftd_rt::dnode::DNode {
             classes: self.classes.to_owned(),
             node: self.node.to_owned(),
-            attrs: self.attrs.to_owned(),
+            attrs,
             style,
             children,
             text: self.text.to_owned(),
             null: self.null.to_owned(),
             events: self.events.to_owned(),
+            visible: self.is_visible(data),
         }
     }
 
-    pub fn to_html(&self, style: &ftd_rt::Map, data: &ftd_rt::Map) -> String {
-        self.to_dnode(style, data, &mut None, &None, &[], &self.locals)
-            .to_html()
+    pub fn to_html(
+        &self,
+        style: &ftd_rt::Map,
+        data: &ftd_rt::DataDependenciesMap,
+        id: &str,
+    ) -> String {
+        self.to_dnode(style, data, &mut None, &None, &[], true, id)
+            .to_html(id)
     }
 
     pub fn get_target_node(&mut self, container: Vec<usize>) -> &mut Self {
@@ -363,9 +389,6 @@ impl ftd_rt::Text {
         if self.style.strike {
             n.style.insert(s("text-decoration"), s("line-through"));
         }
-        if self.style.strike {
-            n.style.insert(s("text-decoration"), s("line-through"));
-        }
 
         let (key, value) = style(&self.style.weight);
         n.style.insert(s(key.as_str()), value);
@@ -428,6 +451,9 @@ impl ftd_rt::Common {
         if let Some(p) = self.padding_left {
             d.insert(s("padding-left"), format!("{}px", p));
         }
+        if let Some(ref cursor) = self.cursor {
+            d.insert(s("cursor"), s(cursor));
+        }
         if let Some(p) = self.padding_right {
             d.insert(s("padding-right"), format!("{}px", p));
         }
@@ -443,6 +469,22 @@ impl ftd_rt::Common {
             d.insert(s("border-top-right-radius"), format!("{}px !important", p));
         }
 
+        if let Some(p) = self.border_left_radius {
+            d.insert(s("border-top-left-radius"), format!("{}px !important", p));
+            d.insert(
+                s("border-bottom-left-radius"),
+                format!("{}px !important", p),
+            );
+        }
+
+        if let Some(p) = self.border_right_radius {
+            d.insert(s("border-top-right-radius"), format!("{}px !important", p));
+            d.insert(
+                s("border-bottom-right-radius"),
+                format!("{}px !important", p),
+            );
+        }
+
         if let Some(p) = self.border_bottom_radius {
             d.insert(
                 s("border-bottom-right-radius"),
@@ -453,6 +495,7 @@ impl ftd_rt::Common {
                 format!("{}px !important", p),
             );
         }
+
         if let Some(p) = &self.width {
             let (key, value) = length(p, "width");
             d.insert(s(key.as_str()), value);
@@ -555,7 +598,7 @@ impl ftd_rt::Common {
             if cfg!(feature = "realm") {
                 d.insert(
                     s("onclick"),
-                    format!("window.REALM_SUBMIT(\"{}\");", escape(link)),
+                    format!("window.REALM_SUBMIT('{}');", escape(link)),
                 );
             } else {
                 d.insert(s("onclick"), "this.submit()".to_string());
@@ -666,7 +709,7 @@ fn text_align(l: &ftd_rt::TextAlign) -> (String, String) {
         ftd_rt::TextAlign::Center => ("text-align".to_string(), "center".to_string()),
         ftd_rt::TextAlign::Left => ("text-align".to_string(), "left".to_string()),
         ftd_rt::TextAlign::Right => ("text-align".to_string(), "right".to_string()),
-        ftd_rt::TextAlign::Justify => ("text-align".to_string(), "center".to_string()),
+        ftd_rt::TextAlign::Justify => ("text-align".to_string(), "justify".to_string()),
     }
 }
 
