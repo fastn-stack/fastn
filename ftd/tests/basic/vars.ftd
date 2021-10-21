@@ -1,0 +1,162 @@
+-- const: msg
+type: string
+value: Hello World!
+
+-- fifthtry/text:
+id: @hello
+text: =msg
+
+
+-- record: Link
+title: $string$
+url: $url$
+
+
+-- var: main_link
+type: Link
+title: Home
+url: /
+
+-- record: User   ; this is not supported
+homepage: $Link$
+name: $string$
+
+
+
+-- var: links
+type: Vec<Link>
+default_value: []
+
+
+-- record: Someone
+username: $string=$
+email: $string=$
+
+-- record: Person
+name: $string$
+age: $int$
+
+-- record: meta
+reader: Vec<Someone>
+writer: Vec<Writer>
+foo: $bool=true$
+bar: $string=$
+person1: Person
+person2: Person
+
+
+-- var: meta
+type: Meta
+
+
+-- meta:
+foo: false
+
+--- reader:
+username: amitu
+
+--- reader:
+email: foo@bar.com
+
+--- writer:
+username: nikita
+
+--- person1:
+name: Mr Foo
+age: 20
+
+--- person2:
+name: John Doe
+age: 30
+
+-- h1: $message
+
+-- message: Good bye!
+
+
+-- links:
+
+--- link:
+title: Google
+url: https://www.google.com
+
+--- link:
+title: Google
+url: https://www.google.com
+
+
+-- fifthtry/column:
+id: page
+children: $main_link_view(main_link)$  $$display-link(links)$$
+
+-- fifthtry/text:
+id: display-link
+$link: $Link$
+text: $link.text
+link: $link.url
+
+
+
+-- fifthtry/text:
+id: main_link_view
+$link: $Link$
+text: $link.title
+link: $link.url
+size: 18
+
+-- fifthtry/text:
+id: $title
+text: =message
+
+
+
+-- fifthtry/text:
+id: markdown
+text-processor: markdown
+
+-- var: toc
+value: Vec<TocItem>
+text-processor: toc
+
+
+-- toc:
+
+- url
+  title
+- url2
+  title2
+
+
+-- elm:
+id: amitu/toc
+$arg: Vec<TocItem>
+
+
+-- fifthtry/text:
+id: toc_item_view
+$item: $TocItem$
+background: yellow
+font-size: 18
+link: $item.url
+text: $item.title
+
+-- fifthtry/row:
+id: toc_item_list
+spacing: 20
+
+
+------- 30th Dec 2020
+
+- instead of const, we will call it var
+- var can be over-ridden by `-- <name-of-var>: value` syntax
+- new concept: record (eg Link above)
+- new concept: var that is list of Record, eg `-- var: links`
+- new concept: if a list of record var is defined, eg links, `-- links` can be
+  used to populate that list, each item must come as `--- item:`.
+  Note: We cant do arbitrarily nexted stuff (record can have only primitive
+  fields)
+- if we have a list of some record, we can call a function with members of that
+  list, as children of either row of column using $$ syntax
+- if we have a single record as a variable (not list)
+- we have function call with variable syntax: only for children
+- we have function call for each item in a list syntax: only for children

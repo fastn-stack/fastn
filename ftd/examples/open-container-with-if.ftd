@@ -1,0 +1,120 @@
+-- component iphone-display:
+component: ftd.column
+$id: optional string
+id: ref $id
+color: green
+
+--- ftd.text: iPhone Display
+
+-- component desktop-display:
+component: ftd.column
+$id: optional string
+id: ref $id
+color: red
+
+--- ftd.text: Desktop Display
+
+-- component android-display:
+component: ftd.column
+$id: optional string
+id: ref $id
+color: blue
+
+--- ftd.text: Android Display
+
+-- var mobile: true
+
+-- component foo:
+open: some-child
+component: ftd.column
+padding-left: 20
+id: foo
+
+--- iphone-display:
+if: mobile
+id: some-child
+
+--- android-display:
+if: mobile
+id: some-child
+
+--- desktop-display:
+if: not mobile
+id: some-child
+
+-- component parent:
+component: ftd.column
+$id: string
+$name: caption
+id: ref $id
+width: fill
+open: true
+padding-left: 10
+
+--- ftd.text:
+text: ref $name
+size: 14
+color: grey
+
+-- component items:
+component: ftd.column
+$name: caption
+$price: string
+$bio: string
+color: orange
+
+--- parent:
+id: /welcome/
+name: ref $name
+
+--- parent:
+id: /Building/
+name: ref $price
+
+--- parent:
+id: /ChildBuilding/
+name: Awesome Mobile
+
+--- container: /welcome/
+
+--- parent:
+id: /Building2/
+name: ref $bio
+
+
+
+-- ftd.text: Start Display
+size: 30
+
+-- ftd.column:
+id: hello
+padding-left: 20
+
+-- ftd.text: Show Room
+
+-- ftd.column:
+id: kk
+padding-left: 30
+
+-- ftd.text: Welcome!!
+
+-- foo:
+
+-- items: Mobile 1
+price: Rs. 340
+bio: Good Mobile 1
+
+-- items: Mobile 2
+price: Rs. 350
+bio: Good Mobile 2
+
+-- container: ftd.main
+
+-- ftd.text: end of display
+<<<<<<< Updated upstream
+
+-- ftd.text: Click here!
+$event-click$: toggle mobile
+=======
+$event-click$: toggle mobile
+>>>>>>> Stashed changes

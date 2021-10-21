@@ -4,27 +4,38 @@ impl ftd_rt::Node {
     pub fn to_dom(
         &self,
         style: &ftd_rt::Map,
-        data: &ftd_rt::Map,
+        data: &ftd_rt::DataDependenciesMap,
+        id: &str,
     ) -> Result<web_sys::Element, wasm_bindgen::JsValue> {
+        self.to_dnode(style, data, &mut None, &None, &[], true, id)
+            .to_dom(id)
+    }
+}
+
+impl ftd_rt::dnode::DNode {
+    fn to_dom(&self, id: &str) -> Result<web_sys::Element, wasm_bindgen::JsValue> {
         let doc = document();
         let e = doc.create_element(self.node.as_str())?;
         for (k, v) in self.attrs.iter() {
             e.set_attribute(k, v)?;
         }
-        e.set_attribute("style", self.style_to_html(style).as_str())?;
+        e.set_attribute("style", self.style_to_html(self.visible).as_str())?;
         e.set_attribute("class", self.class_to_html().as_str())?;
+
+        let events = ftd_rt::event::group_by_js_event(&self.events);
+        for (name, actions) in events {
+            e.set_attribute(
+                name.as_str(),
+                format!("window.ftd.handle_event(\"{}\", \"{}\")", id, actions).as_str(),
+            )?;
+        }
+
         if let Some(ref v) = self.text {
             e.set_inner_html(v);
             return Ok(e);
         }
-        for (i, c) in self.children.iter().enumerate() {
-            if !c.is_visible(data) {
-                continue;
-            }
-
-            e.append_child(&web_sys::Node::from(
-                c.to_dom(&self.fixed_children_style(i), data)?,
-            ))?;
+        for c in self.children.iter() {
+            e.append_child(&web_sys::Node::from(c.to_dom(id)?))?;
         }
         Ok(e)
     }
@@ -71,15 +82,62 @@ impl Drop for Document {
 impl Document {
     pub fn set_bool(&mut self, variable: &str, value: bool) {
         console_log!("setting {} to {}", variable, value);
-        self.document
-            .data
-            .insert(variable.to_string(), value.to_string());
+        let dependencies = if let Some(data) = self.document.data.get(variable) {
+            data.dependencies.clone()
+        } else {
+            Default::default()
+        };
+
+        self.document.data.insert(
+            variable.to_string(),
+            ftd_rt::Data {
+                value: value.to_string(),
+                dependencies,
+            },
+        );
+        self.render()
+    }
+
+    pub fn set_multi_value(&mut self, list: Vec<wasm_bindgen::JsValue>) {
+        for items in list.iter() {
+            let (variable, value) = {
+                if let Ok((variable, value)) = items.into_serde::<(String, bool)>() {
+                    (variable, value.to_string())
+                } else if let Ok((variable, value)) = items.into_serde::<(String, i64)>() {
+                    (variable, value.to_string())
+                } else if let Ok((variable, value)) = items.into_serde::<(String, f64)>() {
+                    (variable, value.to_string())
+                } else {
+                    items
+                        .into_serde::<(String, String)>()
+                        .expect("failed to parse variable and value")
+                }
+            };
+            console_log!("setting {} to {}", variable, value);
+            let dependencies = if let Some(data) = self.document.data.get(&variable) {
+                data.dependencies.clone()
+            } else {
+                Default::default()
+            };
+
+            self.document.data.insert(
+                variable.to_string(),
+                ftd_rt::Data {
+                    value: value.to_string(),
+                    dependencies,
+                },
+            );
+        }
         self.render()
     }
 
     pub fn render(&mut self) {
         let container = match document().get_element_by_id(self.id.as_str()) {
-            Some(v) => v,
+            Some(v) => {
+                console_log!("Document::drop: emptying {}", self.id.as_str());
+                v.set_inner_html("");
+                v
+            }
             None => {
                 console_log!("no such container: {}", self.id.as_str());
                 return;
@@ -87,14 +145,26 @@ impl Document {
         };
 
         console_log!("rendering into {}", self.id.as_str());
-        container
-            .append_child(&web_sys::Node::from(
-                self.document
-                    .tree
-                    .to_dom(&Default::default(), &self.document.data)
-                    .expect("failed to render dom"),
-            ))
-            .unwrap(); // why would append_child fail?
+        let rendered_dom = web_sys::Node::from(
+            self.document
+                .tree
+                .to_dom(&Default::default(), &self.document.data, &self.id)
+                .expect("failed to render dom"),
+        );
+
+        container.append_child(&rendered_dom).unwrap(); // why would append_child fail?
+    }
+
+    pub fn handle_event(&mut self, event: &str) {
+        // $event-click$: toggle foo
+        // value of event: "toggle foo"
+        console_log!("event: {}", event);
+        let actions = ftd_rt::event::Action::parse_js_event(event);
+        for action in actions {
+            action.handle_action(&mut self.document);
+        }
+        console_log!("rendering event: {}", event);
+        self.render()
     }
 }
 

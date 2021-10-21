@@ -15,6 +15,82 @@ impl ToString for Document {
 }
 
 impl Document {
+    fn get_data(&self) -> ftd_rt::Map {
+        let mut d: ftd_rt::Map = Default::default();
+        for (k, v) in self.data.iter() {
+            if let ftd::p2::Thing::Variable(ftd::Variable { value, .. }) = v {
+                let value = match value {
+                    ftd::Value::Boolean { value } => value.to_string(),
+                    ftd::Value::Integer { value } => value.to_string(),
+                    _ => continue,
+                };
+                d.insert(k.to_string(), value);
+            }
+        }
+        d
+    }
+
+    fn get_locals(&self) -> ftd_rt::Map {
+        ftd_rt::Element::get_locals(&self.main.container.children)
+    }
+
+    fn rt_data(&self) -> ftd_rt::DataDependenciesMap {
+        let mut d: ftd_rt::Map = self.get_data();
+        for (k, v) in self.get_locals() {
+            d.insert(format!("@{}", k), v.to_string());
+        }
+
+        let mut data: ftd_rt::DataDependenciesMap = Default::default();
+        for (k, v) in d {
+            data.insert(
+                k.to_string(),
+                ftd_rt::Data {
+                    value: v.to_string(),
+                    dependencies: Default::default(),
+                },
+            );
+        }
+        ftd_rt::Element::get_visible_event_dependencies(&self.main.container.children, &mut data);
+        ftd_rt::Element::get_value_event_dependencies(&self.main.container.children, &mut data);
+
+        data
+    }
+
+    pub fn rerender(&mut self, id: &str) -> crate::p1::Result<ftd_rt::Document> {
+        let mut rt = ftd::RT::from(
+            self.name.as_str(),
+            self.aliases.clone(),
+            self.data.clone(),
+            self.instructions.clone(),
+        );
+        self.main = rt.render()?;
+        let data = self.rt_data();
+        Ok(ftd_rt::Document {
+            data,
+            html: self.html(id),
+            external_children: ftd_rt::Element::get_external_children_dependencies(
+                &self.main.container.children,
+            ),
+        })
+    }
+
+    pub fn to_rt(&self, id: &str) -> ftd_rt::Document {
+        let external_children =
+            ftd_rt::Element::get_external_children_dependencies(&self.main.container.children);
+
+        ftd_rt::Document {
+            data: self.rt_data(),
+            html: self.html(id),
+            external_children,
+        }
+    }
+
+    pub fn html(&self, id: &str) -> String {
+        self.main
+            .to_node()
+            .to_html(&Default::default(), &self.rt_data(), id)
+    }
+
     pub fn set_string(&mut self, name: &str, value: &str) {
         let thing = ftd::p2::Thing::Variable(ftd::Variable {
             name: name.to_string(),
@@ -22,42 +98,18 @@ impl Document {
                 text: value.to_string(),
                 source: ftd::TextSource::Header,
             },
+            conditions: vec![],
         });
         self.data.insert(name.to_string(), thing);
     }
+
     pub fn set_bool(&mut self, name: &str, value: bool) {
         let thing = ftd::p2::Thing::Variable(ftd::Variable {
             name: name.to_string(),
             value: ftd::Value::Boolean { value },
+            conditions: vec![],
         });
         self.data.insert(name.to_string(), thing);
-    }
-    pub fn rt(self) -> ftd::p1::Result<ftd_rt::Document> {
-        let data = {
-            let mut d: ftd_rt::Map = Default::default();
-            for (k, v) in self.data.iter() {
-                if let ftd::p2::Thing::Variable(ftd::Variable {
-                    value: ftd::Value::Boolean { value },
-                    ..
-                }) = v
-                {
-                    d.insert(k.to_string(), value.to_string());
-                }
-            }
-            d
-        };
-        let rt = ftd::RT {
-            name: self.name,
-            aliases: self.aliases,
-            instructions: self.instructions,
-            bag: self.data,
-        }
-        .render()?;
-
-        Ok(ftd_rt::Document {
-            data,
-            tree: rt.to_node(),
-        })
     }
 
     pub fn alias(&self, doc: &str) -> Option<&str> {
@@ -70,7 +122,7 @@ impl Document {
         None
     }
 
-    pub fn find<T, F>(&self, f: &F) -> Option<T>
+    pub fn find<T, F>(children: &[ftd_rt::Element], f: &F) -> Option<T>
     where
         F: Fn(&ftd_rt::Element) -> Option<T>,
     {
@@ -139,14 +191,14 @@ impl Document {
             None
         }
 
-        finder(&self.main.container.children, f)
+        finder(children, f)
     }
 
-    pub fn find_text<T, F>(&self, f: F) -> Option<T>
+    pub fn find_text<T, F>(children: &[ftd_rt::Element], f: F) -> Option<T>
     where
         F: Fn(&ftd_rt::Text) -> Option<T>,
     {
-        self.find(&|e: &ftd_rt::Element| -> Option<T> {
+        Self::find(children, &|e: &ftd_rt::Element| -> Option<T> {
             match e {
                 ftd_rt::Element::Text(t) => f(t),
                 _ => None,
@@ -154,45 +206,17 @@ impl Document {
         })
     }
 
-    pub fn rerender(&mut self) -> crate::p1::Result<ftd_rt::Document> {
-        let data = {
-            let mut d: ftd_rt::Map = Default::default();
-            for (k, v) in self.data.iter() {
-                if let ftd::p2::Thing::Variable(ftd::Variable {
-                    value: ftd::Value::Boolean { value },
-                    ..
-                }) = v
-                {
-                    d.insert(k.to_string(), value.to_string());
-                }
-            }
-            d
-        };
-
-        let mut rt = ftd::RT::from(
-            self.name.as_str(),
-            self.aliases.clone(),
-            self.data.clone(),
-            self.instructions.clone(),
-        );
-        self.main = rt.render()?;
-        Ok(ftd_rt::Document {
-            data,
-            tree: self.main.to_node(),
-        })
-    }
-
-    pub fn from(
+    pub fn without_render(
         name: &str,
         source: &str,
         lib: &dyn crate::p2::Library,
     ) -> crate::p1::Result<Document> {
         let mut interpreter = crate::p2::interpreter::Interpreter::new(lib);
         let instructions = interpreter.interpret(name, source)?;
-        let mut rt = ftd::RT::from(name, interpreter.aliases, interpreter.bag, instructions);
+        let rt = ftd::RT::from(name, interpreter.aliases, interpreter.bag, instructions);
 
         Ok(Document {
-            main: rt.render()?,
+            main: Default::default(),
             data: rt.bag,
             instructions: rt.instructions,
             p1: interpreter.p1,
@@ -201,41 +225,94 @@ impl Document {
         })
     }
 
-    pub fn title(&self) -> Option<ftd_rt::Rendered> {
-        // find the text of first primary heading
-        if let Some(t) = self.find_text(|t| {
-            if t.common
-                .region
-                .as_ref()
-                .map(|r| r.is_primary_heading())
-                .unwrap_or(false)
-            {
+    pub fn from(
+        name: &str,
+        source: &str,
+        lib: &dyn crate::p2::Library,
+    ) -> crate::p1::Result<Document> {
+        let mut d = Self::without_render(name, source, lib)?;
+
+        let mut rt = ftd::RT::from(
+            d.name.as_str(),
+            d.aliases.clone(),
+            d.data.clone(),
+            d.instructions.clone(),
+        );
+
+        d.main = rt.render()?;
+        Ok(d)
+    }
+
+    fn get_heading<F>(children: &[ftd_rt::Element], f: &F) -> Option<ftd_rt::Rendered>
+    where
+        F: Fn(&ftd_rt::Region) -> bool,
+    {
+        if let Some(t) = Self::find_text(children, |t| {
+            if t.common.region.as_ref().map(f).unwrap_or(false) {
                 Some(t.text.clone())
             } else {
                 None
             }
         }) {
+            return Some(t);
+        }
+        if let Some(t) = Self::find(children, &|e| match e {
+            ftd_rt::Element::Column(t) => {
+                if t.common.region.as_ref().map(f).unwrap_or(false) {
+                    Some(t.container.children.clone())
+                } else {
+                    None
+                }
+            }
+            ftd_rt::Element::Row(t) => {
+                if t.common.region.as_ref().map(f).unwrap_or(false) {
+                    Some(t.container.children.clone())
+                } else {
+                    None
+                }
+            }
+            _ => None,
+        }) {
+            if let Some(t) = Self::find_text(&t, |t| {
+                if t.common
+                    .region
+                    .as_ref()
+                    .map(|r| r.is_title())
+                    .unwrap_or(false)
+                {
+                    Some(t.text.clone())
+                } else {
+                    None
+                }
+            }) {
+                return Some(t);
+            };
+            return Self::find_text(&t, |t| if t.line { Some(t.text.clone()) } else { None });
+        }
+        None
+    }
+
+    pub fn title(&self) -> Option<ftd_rt::Rendered> {
+        // find the text of first primary heading
+        if let Some(t) =
+            Self::get_heading(&self.main.container.children, &|r| r.is_primary_heading())
+        {
             return Some(t);
         }
 
         // find any heading
-        if let Some(t) = self.find_text(|t| {
-            if t.common
-                .region
-                .as_ref()
-                .map(|r| r.is_heading())
-                .unwrap_or(false)
-            {
+        if let Some(t) = Self::get_heading(&self.main.container.children, &|r| r.is_heading()) {
+            return Some(t);
+        }
+
+        // find any text with caption
+        if let Some(t) = Self::find_text(&self.main.container.children, |t| {
+            if t.line {
                 Some(t.text.clone())
             } else {
                 None
             }
         }) {
-            return Some(t);
-        }
-
-        // find any text with caption
-        if let Some(t) = self.find_text(|t| if t.line { Some(t.text.clone()) } else { None }) {
             return Some(t);
         }
 
@@ -243,7 +320,8 @@ impl Document {
     }
 
     pub fn get<T: serde::de::DeserializeOwned>(&self, key: &str) -> crate::p1::Result<T> {
-        Ok(serde_json::from_value(self.json(key)?).unwrap()) // TODO: remove unwrap
+        let v = self.json(key)?;
+        Ok(serde_json::from_value(v)?)
     }
 
     pub fn name(&self, k: &str) -> String {
@@ -293,12 +371,13 @@ impl Document {
                 }
                 serde_json::Value::Array(a)
             }
-            t => panic!("{:?} is not a record", t),
+            t => return ftd::e2("not a record", t),
         };
 
-        Ok(serde_json::from_value(json).unwrap()) // TODO: remove unwrap
+        Ok(serde_json::from_value(json)?)
     }
 
+    #[cfg(calls)]
     pub fn calls<T: serde::de::DeserializeOwned>(
         &self,
         component: &str,
@@ -320,7 +399,7 @@ impl Document {
             t => panic!("{:?} is not a component", t),
         };
 
-        Ok(serde_json::from_value(json).unwrap()) // TODO: remove unwrap
+        Ok(serde_json::from_value(json)?)
     }
 
     pub fn json(&self, key: &str) -> crate::p1::Result<serde_json::Value> {
@@ -357,7 +436,7 @@ impl Document {
             } => self.object_to_json(Some(variant), fields)?,
             crate::Value::List { data, .. } => self.list_to_json(data)?,
             crate::Value::None { .. } => serde_json::Value::Null,
-            _ => todo!(),
+            _ => return ftd::e2("unhandled value found(value_to_json)", v),
         })
     }
 
@@ -369,6 +448,7 @@ impl Document {
         Ok(serde_json::Value::Array(list))
     }
 
+    #[cfg(calls)]
     fn object2_to_json(
         &self,
         fields: &std::collections::BTreeMap<String, crate::Value>,
@@ -402,7 +482,7 @@ impl Document {
         match v {
             crate::PropertyValue::Value { value, .. } => self.value_to_json(value),
             crate::PropertyValue::Reference { name, .. } => self.json(name),
-            crate::PropertyValue::Argument { .. } => unreachable!(),
+            _ => unreachable!(),
         }
     }
 }
@@ -491,6 +571,8 @@ mod test {
     }
 
     #[test]
+    #[cfg(calls)]
+    #[ignore] // TODO: this is buggy
     fn calls() {
         #[derive(Debug, PartialEq, serde::Deserialize)]
         struct PR {
@@ -520,7 +602,7 @@ mod test {
         .unwrap();
 
         pretty_assertions::assert_eq!(
-            bag.calls::<PR>("pr").unwrap(),
+            bag.instances::<PR>("pr").unwrap(),
             vec![
                 PR {
                     number: 24,

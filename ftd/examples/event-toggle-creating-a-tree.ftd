@@ -1,0 +1,52 @@
+-- component display-item1:
+component: ftd.column
+$name: string
+padding-left: 10
+open: some-child
+@visible: boolean with default true
+
+--- ftd.row:
+$event-click$: toggle @visible
+
+--- ftd.text: ✌️
+
+--- ftd.text: ref $name
+
+--- container: ftd.main
+
+--- ftd.column:
+if: @visible
+id: some-child
+
+
+-- ftd.column:
+id: main
+
+
+-- display-item1:
+name: Beverage
+id: beverage
+
+
+-- display-item1:
+name: Water
+
+
+-- container: beverage
+
+
+-- display-item1:
+name: Juice
+
+
+-- display-item1:
+name: Mango Juice
+
+-- container: main
+
+
+-- display-item1:
+name: Snacks
+
+-- display-item1:
+name: Samosa

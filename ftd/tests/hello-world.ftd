@@ -1,0 +1,6 @@
+-- import: hello-world-variable as hwv
+
+-- component foo:
+component: ftd.row
+
+--- ftd.text: ref hwv.hello-world

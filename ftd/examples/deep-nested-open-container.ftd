@@ -1,0 +1,112 @@
+-- component ft_container:
+component: ftd.column
+$id: optional string
+id: ref $id
+padding-top: 30
+padding-left: 100
+align: center
+color: red
+
+--- ftd.text: Inside ft container
+
+
+
+-- component ft_container_mobile:
+component: ftd.column
+$id: optional string
+id: ref $id
+width: fill
+padding-top: 10
+padding-left: 20
+padding-right: 20
+padding-bottom: 60
+align: top
+color: green
+
+--- ftd.text: Inside ft container
+
+
+
+-- component desktop:
+component: ftd.column
+width: fill
+open: desktop-container
+$id: optional string
+id: ref $id
+color: orange
+
+--- ftd.text: Desktop Main
+
+--- ftd.column:
+width: fill
+padding-left: 20
+id: desktop-container
+
+--- ftd.text: Desktop
+
+--- ft_container:
+id: foo
+
+
+
+-- component mobile:
+component: ftd.column
+width: fill
+open: mobile-container
+$id: optional string
+id: ref $id
+color: blue
+
+--- ftd.text: Mobile Main
+
+--- ftd.column:
+width: fill
+padding-left: 20
+id: mobile-container
+
+--- ftd.text: Mobile
+
+--- ft_container_mobile:
+id: foo
+
+
+
+
+-- var is-mobile: true
+
+
+-- component page:
+component: ftd.column
+width: fill
+open: main-container.foo
+
+--- ftd.text: Page
+
+--- desktop:
+if: not is-mobile
+id: main-container
+
+--- container: ftd.main
+
+--- mobile:
+if: is-mobile
+id: main-container
+
+
+
+-- page:
+
+-- ftd.column:
+id: start
+
+-- ftd.text: hello
+
+-- ftd.text: hello again
+
+-- container: start
+
+-- desktop:
+
+-- ftd.text: hello
+
+-- ftd.text: hello again

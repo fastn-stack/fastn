@@ -1,0 +1,65 @@
+-- record toc-record:
+title: string
+children: list toc-record
+
+-- component toc-item:
+component: ftd.column
+$toc: toc-record
+padding-left: 10
+@open: boolean with default true
+
+--- ftd.row:
+spacing: 10
+
+--- ftd.text: ref $toc.title
+
+--- ftd.text: Close
+if: @open
+$event-click$: toggle @open
+
+--- ftd.text: Open
+if: not @open
+$event-click$: toggle @open
+
+--- container: ftd.main
+
+--- toc-item:
+if: @open
+$loop$: $toc.children as obj
+toc: ref obj
+
+-- list bb:
+type: toc-record
+
+-- bb:
+title: bb title
+
+-- bb:
+title: bbb title
+
+
+-- list aa:
+type: toc-record
+
+-- aa:
+title: aa title
+children: ref bb
+
+-- aa:
+title: aaa title
+children: ref bb
+
+-- list toc:
+type: toc-record
+
+-- toc:
+title: ab title
+children: ref aa
+
+-- toc:
+title: abb title
+children: ref bb
+
+-- toc-item:
+$loop$: toc as obj
+toc: ref obj

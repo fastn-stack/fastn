@@ -4,6 +4,9 @@
     <script type="ftd" id="ftd-source">
         ___ftd_json___
     </script>
+    <script type="ftd" id="ftd-external-children">
+        ___ftd_external_children___
+    </script>
 </head>
 <body>
 <script type="module">
@@ -11,11 +14,127 @@
 
     async function run() {
         await init();
-        create("main", JSON.parse(document.getElementById("ftd-source").innerText)).render();
+        window.ftd_data = {};
+        window.ftd_data["main"] = JSON.parse(document.getElementById("ftd-source").innerText).data;
+        window.ftd_handles = {};
+        window.ftd_handles["main"] = create("main", JSON.parse(document.getElementById("ftd-source").innerText));
+        window.ftd_external_children = {};
+        window.ftd_external_children["main"] = JSON.parse(document.getElementById("ftd-external-children").innerText);
+        window.ftd_handles["main"].render();
     }
 
     run();
 </script>
 <div id="main"></div>
+<script>
+
+    window.ftd_events = function (id) {
+        function to_action(a) {
+            if (a.startsWith("toggle")) {
+                let target = a.replace("toggle ", "");
+                return {action: "toggle", target: target};
+            }
+            return {};
+        }
+
+        function parse_js_event(action) {
+            const actions_string = action.split(";");
+            const actions = [];
+            for (const action in actions_string) {
+                let a = actions_string[action].trim();
+                if (a !== "") {
+                    let get_action = to_action(a)
+                    if (Object.keys(get_action).length !== 0) {
+                        actions.push(get_action);
+                    }
+                }
+            }
+            return actions;
+        }
+
+        function is_visible(affected_id) {
+            return (document.getElementById(`${affected_id}:${id}`).style.display !== "none");
+        }
+
+        function external_children_replace() {
+            let external_children = window.ftd_external_children[id];
+            for (const object in external_children) {
+                let conditions = external_children[object];
+                for (const idx in conditions) {
+                    let condition = conditions[idx].condition;
+                    let set_at = conditions[idx].set_at;
+                    let display = true;
+                    for (const i in condition) {
+                        display &= is_visible(conditions[idx].condition[i], id)
+                        if (!display) {
+                            break;
+                        }
+                    }
+                    if (display) {
+                        let get_element_set_at = document.getElementById(`${set_at}:${id}`);
+                        let object_to_set = document.getElementById(`${object}:${id}`);
+                        get_element_set_at.appendChild(object_to_set);
+                        return;
+                    }
+                }
+
+            }
+        }
+
+        function handle_event(ftd_data, action) {
+            let act = action["action"];
+            if (act === "toggle") {
+                let target = action["target"];
+                if (ftd_data[target].value === 'true') {
+                    ftd_data[target].value = 'false';
+                } else {
+                    ftd_data[target].value = 'true';
+                }
+                let dependencies = ftd_data[target].dependencies;
+                for (const dependency in dependencies) {
+                    let display = "none";
+                    if (ftd_data[target].value === dependencies[dependency]) {
+                        display = "block";
+                    }
+                    document.getElementById(`${dependency}:${id}`).style.display = display;
+                }
+            }
+            external_children_replace();
+        }
+
+        let exports = {};
+
+        exports.handle_event = function (event) {
+            let actions = parse_js_event(event);
+            for (const action in actions) {
+                handle_event(window.ftd_data[id], actions[action])
+            }
+        }
+
+        exports.set_bool = function (variable, value) {
+            let ftd_data = window.ftd_data[id];
+            ftd_data[variable].value = value.toString();
+            let dependencies = ftd_data[variable].dependencies;
+            for (const dependency in dependencies) {
+                let display = "none";
+                if (ftd_data[variable].value === dependencies[dependency]) {
+                    display = "block";
+                }
+                document.getElementById(`${dependency}:${id}`).style.display = display;
+            }
+        }
+
+        exports.set_multi_value = function (list) {
+            for (const idx in list) {
+                let item = list[idx];
+                let [variable, value] = item;
+                this.set_bool(variable, value);
+            }
+        }
+
+        return exports;
+    }
+
+</script>
 </body>
 </html>

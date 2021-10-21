@@ -1,0 +1,17 @@
+-- import: fifthtry/ft
+
+-- component foo:
+component: ftd.column
+@open: boolean with default true
+
+--- ftd.text: toggle me
+$event-click$: toggle @open
+
+--- ftd.text: some body
+if: @open
+
+
+-- foo:
+
+
+-- foo:

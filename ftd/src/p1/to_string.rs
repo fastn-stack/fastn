@@ -7,7 +7,11 @@ pub fn to_string(p1: &[crate::p1::Section]) -> String {
 
 impl std::fmt::Display for crate::p1::Section {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "-- {}:", self.name.as_str())?;
+        if self.is_commented {
+            write!(f, "/-- {}:", self.name.as_str())?;
+        } else {
+            write!(f, "-- {}:", self.name.as_str())?;
+        }
         if let Some(ref caption) = self.caption {
             write!(f, " {}", caption)?;
         }
@@ -32,7 +36,11 @@ impl std::fmt::Display for crate::p1::Section {
 
 impl std::fmt::Display for crate::p1::SubSection {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "--- {}:", self.name.as_str())?;
+        if self.is_commented {
+            write!(f, "/--- {}:", self.name.as_str())?;
+        } else {
+            write!(f, "--- {}:", self.name.as_str())?;
+        }
         if let Some(ref caption) = self.caption {
             write!(f, " {}", caption)?;
         }
@@ -42,7 +50,7 @@ impl std::fmt::Display for crate::p1::SubSection {
         }
 
         if let Some(ref body) = self.body {
-            write!(f, "\n{}", escape_body(body))?;
+            write!(f, "\n\n{}", escape_body(body))?;
         }
 
         writeln!(f)
@@ -50,14 +58,105 @@ impl std::fmt::Display for crate::p1::SubSection {
 }
 
 fn escape_body(body: &str) -> String {
+    fn remove_newline_start(body: String) -> String {
+        match body.strip_prefix('\n') {
+            Some(body) => remove_newline_start(body.to_string()),
+            None => body,
+        }
+    }
+
     let body = "\n".to_string() + body;
-    let body = body.replace("\n-- ", "\n\\-- ");
-    body.replace("\n--- ", "\n\\--- ").trim().to_string()
+    let body = body
+        .replace("\n-- ", "\n\\-- ")
+        .replace("\n--- ", "\n\\--- ");
+
+    remove_newline_start(body).trim_end().to_string()
 }
 
 #[cfg(test)]
 mod test {
     use {indoc::indoc, pretty_assertions::assert_eq}; // macro
+
+    #[test]
+    pub fn test_comments() {
+        assert_eq!(
+            indoc!(
+                "/-- ftd.row:
+                /color: red
+
+                --- ftd.text:
+
+                hello world"
+            ),
+            super::to_string(
+                &ftd::p1::parse(indoc!(
+                    "
+                    /-- ftd.row:
+                    /color: red
+
+                    --- ftd.text:
+
+
+
+                    hello world
+                    "
+                ))
+                .expect("Cannot parse to section")
+            )
+        );
+    }
+
+    #[test]
+    pub fn subsection_formatter() {
+        assert_eq!(
+            indoc!(
+                "-- ftd.row:
+
+                --- ftd.text:
+
+                hello world"
+            ),
+            super::to_string(
+                &ftd::p1::parse(indoc!(
+                    "
+                -- ftd.row:
+
+                --- ftd.text:
+
+
+
+                hello world
+                "
+                ))
+                .expect("Cannot parse to section")
+            )
+        );
+
+        assert_eq!(
+            indoc!(
+                "
+             -- ftd.text:
+
+                hello world
+                hello world again"
+            ),
+            super::to_string(
+                &ftd::p1::parse(indoc!(
+                    "
+                     -- ftd.text:
+
+
+
+
+
+                        hello world
+                        hello world again
+                     "
+                ))
+                .expect("Cannot parse to section")
+            )
+        );
+    }
 
     #[test]
     pub fn to_string() {

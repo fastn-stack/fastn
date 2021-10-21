@@ -26,6 +26,9 @@ impl Header {
 
     pub fn bool(&self, name: &str) -> Result<bool> {
         for (k, v) in self.0.iter() {
+            if k.starts_with('/') {
+                continue;
+            }
             if k == name {
                 return if v == "true" || v == "false" {
                     Ok(v == "true")
@@ -57,6 +60,9 @@ impl Header {
 
     pub fn i32(&self, name: &str) -> Result<i32> {
         for (k, v) in self.0.iter() {
+            if k.starts_with('/') {
+                continue;
+            }
             if k == name {
                 return Ok(v.parse()?);
             }
@@ -68,6 +74,10 @@ impl Header {
 
     pub fn i64(&self, name: &str) -> Result<i64> {
         for (k, v) in self.0.iter() {
+            if k.starts_with('/') {
+                continue;
+            }
+
             if k == name {
                 return Ok(v.parse()?);
             }
@@ -87,6 +97,10 @@ impl Header {
 
     pub fn f64(&self, name: &str) -> Result<f64> {
         for (k, v) in self.0.iter() {
+            if k.starts_with('/') {
+                continue;
+            }
+
             if k == name {
                 return Ok(v.parse()?);
             }
@@ -112,6 +126,30 @@ impl Header {
         }
     }
 
+    pub fn get_events(
+        &self,
+        doc: &crate::p2::TDoc,
+        locals: &std::collections::BTreeMap<String, crate::p2::Kind>,
+        arguments: &std::collections::BTreeMap<String, crate::p2::Kind>,
+    ) -> ftd::p1::Result<Vec<ftd::p2::Event>> {
+        let events = {
+            let mut events = vec![];
+            for (k, v) in self.0.iter() {
+                if k.starts_with("$event-") && k.ends_with('$') {
+                    let mut event = k.replace("$event-", "");
+                    event = event[..event.len() - 1].to_string();
+                    events.push((event, v.to_string()));
+                }
+            }
+            events
+        };
+        let mut event = vec![];
+        for (e, a) in events {
+            event.push(ftd::p2::Event::to_event(&e, &a, doc, locals, arguments)?);
+        }
+        Ok(event)
+    }
+
     pub fn str_optional(&self, name: &str) -> Result<Option<&str>> {
         match self.str(name) {
             Ok(b) => Ok(Some(b)),
@@ -120,18 +158,18 @@ impl Header {
         }
     }
 
-    pub fn conditional_str(&self, name: &str) -> Result<Vec<(&str, Option<&str>)>> {
+    pub fn conditional_str(&self, name: &str) -> Result<Vec<(String, Option<&str>)>> {
         let mut conditional_vector = vec![];
         for (k, v) in self.0.iter() {
             if k == name {
-                conditional_vector.push((v.as_str(), None));
+                conditional_vector.push((v.to_string(), None));
             }
             if k.contains(" if ") {
                 let mut parts = k.splitn(2, " if ");
                 let property_name = parts.next().unwrap().trim();
                 if property_name == name {
                     let conditional_attribute = parts.next().unwrap().trim();
-                    conditional_vector.push((v.as_str(), Some(conditional_attribute)));
+                    conditional_vector.push((v.to_string(), Some(conditional_attribute)));
                 }
             }
         }
@@ -146,6 +184,9 @@ impl Header {
 
     pub fn str(&self, name: &str) -> Result<&str> {
         for (k, v) in self.0.iter() {
+            if k.starts_with('/') {
+                continue;
+            }
             if k == name {
                 return Ok(v.as_str());
             }

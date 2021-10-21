@@ -1,10 +1,23 @@
 pub fn main() {
+    let id = std::env::args().nth(1);
+
     let dir = std::path::Path::new("./examples/");
 
     let mut write_doc =
         "-- ftd.text: Examples Index\nsize: 50\npadding-bottom: 20\nstyle: bold\n".to_string();
 
-    if dir.is_dir() {
+    if let Some(id) = id {
+        let path = format!("./examples/{}.ftd", id);
+        let id = format!("{}.ftd", id);
+        let doc = std::fs::read_to_string(path).expect("cant read file");
+        write(&id, doc);
+        write_doc = format!(
+            "{}\n-- ftd.text: {} \n link: /{}\n\n",
+            write_doc,
+            id.replace(".ftd", ""),
+            id.replace(".ftd", ".html"),
+        );
+    } else if dir.is_dir() {
         for entry in std::fs::read_dir(dir).expect("./examples is not a directory") {
             let path = entry.expect("no files inside ./examples").path();
             let source = path
@@ -16,12 +29,10 @@ pub fn main() {
                 let doc = std::fs::read_to_string(source).expect("cant read file");
                 write(id, doc);
                 write_doc = format!(
-                    "{}\n-- ftd.text: {} \n link: /{}\n\n \n-- ftd.text: {}-rt \n link: /{}\n",
+                    "{}\n-- ftd.text: {} \n link: /{}\n\n",
                     write_doc,
                     id.replace(".ftd", ""),
                     id.replace(".ftd", ".html"),
-                    id.replace(".ftd", ""),
-                    id.replace(".ftd", "-rt.html")
                 );
             }
         }
@@ -38,7 +49,7 @@ pub fn main() {
 fn write(id: &str, doc: String) {
     use std::io::Write;
 
-    let lib = ftd::p2::TestLibrary {};
+    let lib = ftd::ExampleLibrary {};
     let b = match ftd::p2::Document::from(id, &*doc, &lib) {
         Ok(v) => v,
         Err(e) => {
@@ -46,53 +57,32 @@ fn write(id: &str, doc: String) {
             return;
         }
     };
-    let data = {
-        let mut d: ftd_rt::Map = Default::default();
-        for (k, v) in b.data.iter() {
-            if let ftd::p2::Thing::Variable(ftd::Variable {
-                value: ftd::Value::Boolean { value },
-                ..
-            }) = v
-            {
-                d.insert(k.to_string(), value.to_string());
-            }
-        }
-        d
-    };
-    let doc = ftd_rt::Document {
-        data,
-        tree: b.main.to_node(),
-    };
-    let _dir = std::fs::create_dir_all("./build").expect("failed to create build folder");
+
+    std::fs::create_dir_all("./build").expect("failed to create build folder");
     let mut f = std::fs::File::create(format!("./build/{}", id.replace(".ftd", ".html")))
         .expect("failed to create .html file");
 
-    // TODO: indent things properly
+    let doc = b.to_rt("main");
+
+    let ftd_js = std::fs::read_to_string("ftd.js").expect("ftd.js not found");
+
     f.write_all(
         std::fs::read_to_string("ftd.html")
             .expect("cant read ftd.html")
             .replace(
-                "___ftd___",
-                b.main
-                    .to_node()
-                    .to_html(&Default::default(), &Default::default())
-                    .as_str(),
-            )
-            .as_bytes(),
-    )
-    .expect("failed to write to .html file");
-
-    let mut rt = std::fs::File::create(format!("./build/{}", id.replace(".ftd", "-rt.html")))
-        .expect("failed to create .html file");
-    rt.write_all(
-        std::fs::read_to_string("rt.html")
-            .expect("cant read rt.html")
-            .replace(
-                "___ftd_json___",
-                serde_json::to_string(&doc)
+                "___ftd_data___",
+                serde_json::to_string_pretty(&doc.data)
                     .expect("failed to convert document to json")
                     .as_str(),
             )
+            .replace(
+                "___ftd_external_children___",
+                serde_json::to_string_pretty(&doc.external_children)
+                    .expect("failed to convert document to json")
+                    .as_str(),
+            )
+            .replace("___ftd___", b.html("main").as_str())
+            .replace("___ftd_js___", ftd_js.as_str())
             .as_bytes(),
     )
     .expect("failed to write to .html file");

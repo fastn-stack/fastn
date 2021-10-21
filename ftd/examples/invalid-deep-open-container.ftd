@@ -1,0 +1,77 @@
+-- component ft_container:
+component: ftd.column
+$id: optional string
+id: ref $id
+padding-top: 30
+padding-left: 100
+align: center
+color: red
+
+-- component ft_container_mobile:
+component: ftd.column
+$id: optional string
+id: ref $id
+width: fill
+padding-top: 10
+padding-left: 20
+padding-right: 20
+padding-bottom: 60
+align: top
+color: green
+
+
+-- component desktop:
+component: ftd.column
+width: fill
+$id: optional string
+id: ref $id
+
+--- ftd.text: Desktop Main
+
+--- ftd.row:
+width: fill
+padding-left: 20
+
+--- ftd.text: Desktop
+
+--- ft_container:
+id: main-container
+
+
+
+-- component mobile:
+component: ftd.column
+width: fill
+$id: optional string
+id: ref $id
+
+--- ftd.text: Mobile
+
+--- ft_container_mobile:
+id: main-container
+
+
+-- var is-mobile: false
+
+-- component page:
+component: ftd.column
+width: fill
+open: main-container
+
+--- ftd.column:
+id: start
+
+--- desktop:
+if: not is-mobile
+
+--- container: start
+
+--- mobile:
+if: is-mobile
+
+
+-- page:
+
+-- ftd.text: hello
+
+-- ftd.text: hello again

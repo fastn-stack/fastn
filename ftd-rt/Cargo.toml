@@ -1,19 +1,20 @@
 [package]
 name = "ftd-rt"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Amit Upadhyay <amitu@fifthtry.com>"]
 edition = "2018"
-description = "ftd-rt: FifthTry Document Format parser at Run Time"
+description = "ftd-rt: Utility crate for ftd"
 license = "MIT"
 repository = "https://github.com/fifthtry/ftd"
-homepage = "https://www.fifthtry.com/fifthtry/ftd/"
+homepage = "https://www.fifthtry.com/fifthtry/ftd-rt/"
 
 [lib]
 crate-type = ["cdylib", "rlib"]
 
 [features]
-default = []
+default = ["realm"]
 wasm = ["console_error_panic_hook", "wasm-bindgen", "web-sys"]
+realm = []
 
 [dependencies]
 serde = { version = "1", features = ["derive"] }

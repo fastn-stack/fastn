@@ -5,6 +5,7 @@ extern crate self as ftd;
 pub(crate) mod test;
 
 mod component;
+mod execute_doc;
 pub mod main;
 mod or_type;
 pub mod p1;
@@ -43,7 +44,7 @@ pub fn markdown_extra(s: &str, auto_links: bool, hard_breaks: bool) -> ftd_rt::R
     }
 }
 
-pub fn latex(s: &str) -> Result<ftd_rt::Rendered, crate::p1::Error> {
+pub fn latex(s: &str) -> ftd::p1::Result<ftd_rt::Rendered> {
     let opts = katex::Opts::builder()
         .throw_on_error(false)
         .display_mode(true)
@@ -52,15 +53,20 @@ pub fn latex(s: &str) -> Result<ftd_rt::Rendered, crate::p1::Error> {
 
     Ok(ftd_rt::Rendered {
         original: s.to_string(),
-        rendered: katex::render_with_opts(s, &opts).map_err(|e| match e {
-            katex::Error::JsValueError(e)
-            | katex::Error::JsExecError(e)
-            | katex::Error::JsInitError(e) => crate::p1::Error::InvalidInput {
-                message: e,
-                context: s.to_string(),
+        rendered: match katex::render_with_opts(s, &opts) {
+            Ok(v) => v,
+            Err(e) => match e {
+                katex::Error::JsValueError(e)
+                | katex::Error::JsExecError(e)
+                | katex::Error::JsInitError(e) => {
+                    return Err(ftd::p1::Error::InvalidInput {
+                        message: e,
+                        context: s.to_string(),
+                    })
+                }
+                _ => return ftd::e2("katex error", e),
             },
-            _ => todo!(),
-        })?,
+        },
     })
 }
 
@@ -84,22 +90,30 @@ pub fn markdown_line(s: &str) -> ftd_rt::Rendered {
 
 pub fn e<T, S>(m: S) -> crate::p1::Result<T>
 where
-    S: Into<String>,
+    S: std::fmt::Debug,
 {
     Err(crate::p1::Error::InvalidInput {
-        message: m.into(),
+        message: format!("{:?}", m),
         context: "".to_string(),
     })
 }
 
-pub fn e2<T, S>(m: S, c: &str) -> crate::p1::Result<T>
+pub fn e2<T, S1, S2>(m: S1, c: S2) -> crate::p1::Result<T>
+where
+    S1: std::fmt::Debug,
+    S2: std::fmt::Debug,
+{
+    Err(crate::p1::Error::InvalidInput {
+        message: format!("{:?}: {:?}", m, c),
+        context: format!("{:?}", c),
+    })
+}
+
+pub fn unknown_processor_error<T, S>(m: S) -> crate::p1::Result<T>
 where
     S: Into<String>,
 {
-    Err(crate::p1::Error::InvalidInput {
-        message: m.into(),
-        context: c.to_string(),
-    })
+    Err(crate::p1::Error::UnknownProcessor { message: m.into() })
 }
 
 pub fn split_module(id: &str) -> crate::p1::Result<(Option<&str>, &str, Option<&str>)> {
@@ -113,5 +127,20 @@ pub fn split_module(id: &str) -> crate::p1::Result<(Option<&str>, &str, Option<&
             None => Ok((Some(p1), p2, None)),
         },
         None => Ok((None, id, None)),
+    }
+}
+
+pub struct ExampleLibrary {}
+
+impl ftd::p2::Library for ExampleLibrary {
+    fn get(&self, name: &str) -> Option<String> {
+        if name == "fifthtry/ft" {
+            return Some(std::fs::read_to_string("../ft.ftd").unwrap());
+        }
+        if name == "fifthtry/ft-core" {
+            return Some(std::fs::read_to_string("../ft-core.ftd").unwrap());
+        }
+
+        std::fs::read_to_string(format!("./examples/{}.ftd", name)).ok()
     }
 }
