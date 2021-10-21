@@ -44,7 +44,7 @@ pub fn markdown_extra(s: &str, auto_links: bool, hard_breaks: bool) -> ftd_rt::R
     }
 }
 
-pub fn latex(s: &str) -> Result<ftd_rt::Rendered, crate::p1::Error> {
+pub fn latex(s: &str) -> ftd::p1::Result<ftd_rt::Rendered> {
     let opts = katex::Opts::builder()
         .throw_on_error(false)
         .display_mode(true)
@@ -53,15 +53,20 @@ pub fn latex(s: &str) -> Result<ftd_rt::Rendered, crate::p1::Error> {
 
     Ok(ftd_rt::Rendered {
         original: s.to_string(),
-        rendered: katex::render_with_opts(s, &opts).map_err(|e| match e {
-            katex::Error::JsValueError(e)
-            | katex::Error::JsExecError(e)
-            | katex::Error::JsInitError(e) => crate::p1::Error::InvalidInput {
-                message: e,
-                context: s.to_string(),
+        rendered: match katex::render_with_opts(s, &opts) {
+            Ok(v) => v,
+            Err(e) => match e {
+                katex::Error::JsValueError(e)
+                | katex::Error::JsExecError(e)
+                | katex::Error::JsInitError(e) => {
+                    return Err(ftd::p1::Error::InvalidInput {
+                        message: e,
+                        context: s.to_string(),
+                    })
+                }
+                _ => return ftd::e2("katex error", e),
             },
-            _ => todo!(),
-        })?,
+        },
     })
 }
 
@@ -85,21 +90,22 @@ pub fn markdown_line(s: &str) -> ftd_rt::Rendered {
 
 pub fn e<T, S>(m: S) -> crate::p1::Result<T>
 where
-    S: Into<String>,
+    S: std::fmt::Debug,
 {
     Err(crate::p1::Error::InvalidInput {
-        message: m.into(),
+        message: format!("{:?}", m),
         context: "".to_string(),
     })
 }
 
-pub fn e2<T, S>(m: S, c: &str) -> crate::p1::Result<T>
+pub fn e2<T, S1, S2>(m: S1, c: S2) -> crate::p1::Result<T>
 where
-    S: Into<String>,
+    S1: std::fmt::Debug,
+    S2: std::fmt::Debug,
 {
     Err(crate::p1::Error::InvalidInput {
-        message: format!("{}: {}", m.into(), c),
-        context: c.to_string(),
+        message: format!("{:?}: {:?}", m, c),
+        context: format!("{:?}", c),
     })
 }
 
@@ -128,6 +134,13 @@ pub struct ExampleLibrary {}
 
 impl ftd::p2::Library for ExampleLibrary {
     fn get(&self, name: &str) -> Option<String> {
+        if name == "fifthtry/ft" {
+            return Some(std::fs::read_to_string("../ft.ftd").unwrap());
+        }
+        if name == "fifthtry/ft-core" {
+            return Some(std::fs::read_to_string("../ft-core.ftd").unwrap());
+        }
+
         std::fs::read_to_string(format!("./examples/{}.ftd", name)).ok()
     }
 }

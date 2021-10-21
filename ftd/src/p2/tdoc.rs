@@ -380,7 +380,6 @@ impl<'a> TDoc<'a> {
                     }
                     None => return self.err("not found", name, "get_thing6"),
                 },
-                // None => return crate::e2(format!("{} not found", name), "get_thing"),
             }
         } {
             Some(v) => Ok(v),

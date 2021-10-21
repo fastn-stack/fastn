@@ -51,6 +51,9 @@ impl Record {
                         let e = doc.get_or_type(or_type_name)?;
                         let mut values: Vec<crate::Value> = vec![];
                         for s in p1.sub_sections.0.iter() {
+                            if s.is_commented {
+                                continue;
+                            }
                             for v in e.variants.iter() {
                                 let variant = v.variant_name().expect("record.fields").to_string();
                                 if s.name == format!("{}.{}", name, variant.as_str()) {
@@ -75,7 +78,7 @@ impl Record {
                             data: vec![],
                         };
                         for (k, v) in p1.header.0.iter() {
-                            if *k != *name {
+                            if *k != *name || k.starts_with('/') {
                                 continue;
                             }
                             let reference = if v.starts_with("ref ") {
@@ -90,7 +93,7 @@ impl Record {
                     crate::p2::Kind::String { .. } => {
                         let mut values: Vec<crate::Value> = vec![];
                         for (k, v) in p1.header.0.iter() {
-                            if *k != *name {
+                            if *k != *name || k.starts_with('/') {
                                 continue;
                             }
                             values.push(crate::Value::String {
@@ -105,19 +108,23 @@ impl Record {
                             },
                         }
                     }
-                    crate::p2::Kind::Integer { .. } => todo!(),
-                    t => unimplemented!("{:?}", t),
+                    crate::p2::Kind::Integer { .. } => return ftd::e("unexpected integer"),
+                    t => return ftd::e2("not yet implemented 123", t),
                 },
-                (Err(crate::p1::Error::NotFound { .. }), _) => {
-                    kind.read_section(&p1.header, &p1.caption, &p1.body, name, doc)?
-                }
+                (Err(crate::p1::Error::NotFound { .. }), _) => kind.read_section(
+                    &p1.header,
+                    &p1.caption,
+                    &p1.body_without_comment(),
+                    name,
+                    doc,
+                )?,
                 (
                     Err(crate::p1::Error::MoreThanOneSubSections { .. }),
                     crate::p2::Kind::List { kind: list_kind },
                 ) => {
                     let mut values: Vec<crate::Value> = vec![];
                     for s in p1.sub_sections.0.iter() {
-                        if s.name != *name {
+                        if s.name != *name || s.is_commented {
                             continue;
                         }
                         let v = match list_kind.inner().string_any() {
@@ -132,7 +139,7 @@ impl Record {
                                 match k.read_section(
                                     &s.header,
                                     &s.caption,
-                                    &s.body,
+                                    &s.body_without_comment(),
                                     s.name.as_str(),
                                     doc,
                                 )? {
@@ -192,7 +199,13 @@ impl Record {
         for (name, kind) in self.fields.iter() {
             fields.insert(
                 name.to_string(),
-                kind.read_section(&p1.header, &p1.caption, &p1.body, name, doc)?,
+                kind.read_section(
+                    &p1.header,
+                    &p1.caption,
+                    &p1.body_without_comment(),
+                    name,
+                    doc,
+                )?,
             );
         }
         Ok(fields)
@@ -207,6 +220,10 @@ impl Record {
         // TODO: handle caption
         // TODO: handle body
         for (k, _) in p1.0.iter() {
+            if k.starts_with('/') {
+                continue;
+            }
+
             if !self.fields.contains_key(k) && k != "type" {
                 return crate::e(format!(
                     "unknown key passed: '{}' to '{}', allowed: {:?}",
@@ -234,6 +251,9 @@ impl Record {
             },
         );
         for (k, v) in p1_header.0.iter() {
+            if k.starts_with('/') {
+                continue;
+            }
             let v = normalise_value(v)?;
             validate_key(k)?;
             fields.insert(

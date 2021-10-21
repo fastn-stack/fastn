@@ -18,12 +18,13 @@ impl Document {
     fn get_data(&self) -> ftd_rt::Map {
         let mut d: ftd_rt::Map = Default::default();
         for (k, v) in self.data.iter() {
-            if let ftd::p2::Thing::Variable(ftd::Variable {
-                value: ftd::Value::Boolean { value },
-                ..
-            }) = v
-            {
-                d.insert(k.to_string(), value.to_string());
+            if let ftd::p2::Thing::Variable(ftd::Variable { value, .. }) = v {
+                let value = match value {
+                    ftd::Value::Boolean { value } => value.to_string(),
+                    ftd::Value::Integer { value } => value.to_string(),
+                    _ => continue,
+                };
+                d.insert(k.to_string(), value);
             }
         }
         d
@@ -38,11 +39,9 @@ impl Document {
         for (k, v) in self.get_locals() {
             d.insert(format!("@{}", k), v.to_string());
         }
-        let mut data = ftd_rt::Element::get_event_dependencies(&self.main.container.children, &d);
+
+        let mut data: ftd_rt::DataDependenciesMap = Default::default();
         for (k, v) in d {
-            if data.contains_key(&k) {
-                continue;
-            }
             data.insert(
                 k.to_string(),
                 ftd_rt::Data {
@@ -51,6 +50,9 @@ impl Document {
                 },
             );
         }
+        ftd_rt::Element::get_visible_event_dependencies(&self.main.container.children, &mut data);
+        ftd_rt::Element::get_value_event_dependencies(&self.main.container.children, &mut data);
+
         data
     }
 
@@ -319,7 +321,7 @@ impl Document {
 
     pub fn get<T: serde::de::DeserializeOwned>(&self, key: &str) -> crate::p1::Result<T> {
         let v = self.json(key)?;
-        Ok(serde_json::from_value(v).unwrap()) // TODO: remove unwrap
+        Ok(serde_json::from_value(v)?)
     }
 
     pub fn name(&self, k: &str) -> String {
@@ -369,10 +371,10 @@ impl Document {
                 }
                 serde_json::Value::Array(a)
             }
-            t => panic!("{:?} is not a record", t),
+            t => return ftd::e2("not a record", t),
         };
 
-        Ok(serde_json::from_value(json).unwrap()) // TODO: remove unwrap
+        Ok(serde_json::from_value(json)?)
     }
 
     #[cfg(calls)]
@@ -397,7 +399,7 @@ impl Document {
             t => panic!("{:?} is not a component", t),
         };
 
-        Ok(serde_json::from_value(json).unwrap()) // TODO: remove unwrap
+        Ok(serde_json::from_value(json)?)
     }
 
     pub fn json(&self, key: &str) -> crate::p1::Result<serde_json::Value> {
@@ -434,7 +436,7 @@ impl Document {
             } => self.object_to_json(Some(variant), fields)?,
             crate::Value::List { data, .. } => self.list_to_json(data)?,
             crate::Value::None { .. } => serde_json::Value::Null,
-            _ => todo!(),
+            _ => return ftd::e2("unhandled value found(value_to_json)", v),
         })
     }
 

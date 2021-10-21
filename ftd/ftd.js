@@ -1,35 +1,6 @@
+// all ftd_utils are meant to be pure functions only: they can only depend on the
+// input passed, not on closures or global data etc
 let ftd_utils = {
-    to_action: function (a) {
-        // pure function (only operates on input)
-
-        if (a.startsWith("toggle")) {
-            let target = a.replace("toggle ", "");
-            return {action: "toggle", target: target};
-        }
-        return {};
-    },
-
-    parse_js_event: function (action) {
-        // pure function (only operates on input)
-
-        const actions_string = action.split(";");
-        const actions = [];
-        for (const action in actions_string) {
-            if (!actions_string.hasOwnProperty(action)) {
-                continue;
-            }
-
-            let a = actions_string[action].trim();
-            if (a !== "") {
-                let get_action = ftd_utils.to_action(a)
-                if (Object.keys(get_action).length !== 0) {
-                    actions.push(get_action);
-                }
-            }
-        }
-        return actions;
-    },
-
     is_visible: function (id, affected_id) {
         return (document.getElementById(`${affected_id}:${id}`).style.display !== "none");
     }
@@ -38,8 +9,6 @@ let ftd_utils = {
 window.ftd = (function () {
     let ftd_data = {};
     let ftd_external_children = {};
-
-
 
     function external_children_replace(id) {
         let external_children = ftd_external_children[id];
@@ -85,23 +54,110 @@ window.ftd = (function () {
     function handle_event(id, action) {
         let act = action["action"];
         let data = ftd_data[id];
-        if (act !== "toggle") {
+        if (act === "toggle") {
+            let target = action["target"];
+            exports.set_bool(id, target, data[target].value !== 'true');
+        } else if (act === "increment") {
+            let target = action["target"];
+            let increment = 1;
+            if (action["parameters"].by !== undefined) {
+                increment = parseInt(action["parameters"].by[0]);
+            }
+            let clamp_max = undefined;
+            let clamp_min = undefined;
+            if (action["parameters"]["clamp"] !== undefined) {
+                let clamp_value = action["parameters"]["clamp"];
+                if (clamp_value.length === 1) {
+                    clamp_max = parseInt(clamp_value[0]);
+                }
+                if (clamp_value.length === 2) {
+                    clamp_min = parseInt(clamp_value[0]);
+                    clamp_max = parseInt(clamp_value[1]);
+                }
+            }
+            exports.increment_decrement_value(id, target, increment, clamp_min, clamp_max);
+
+        } else if (act === "decrement") {
+            let target = action["target"];
+            let decrement = -1;
+            if (action["parameters"].by !== undefined) {
+                decrement = -parseInt(action["parameters"].by[0]);
+            }
+
+            let clamp_max = undefined;
+            let clamp_min = undefined;
+            if (action["parameters"]["clamp"] !== undefined) {
+                let clamp_value = action["parameters"]["clamp"];
+                if (clamp_value.length === 1) {
+                    clamp_max = parseInt(clamp_value[0]);
+                }
+                if (clamp_value.length === 2) {
+                    clamp_min = parseInt(clamp_value[0]);
+                    clamp_max = parseInt(clamp_value[1]);
+                }
+            }
+
+            exports.increment_decrement_value(id, target, decrement, clamp_min, clamp_max);
+        } else {
             console.log("unknown action:", act);
             return;
         }
 
-        let target = action["target"];
-        exports.set_bool(id, target, data[target].value !== 'true');
     }
 
     let exports = {};
 
     exports.handle_event = function (id, event) {
         console.log(id, event);
-        let actions = ftd_utils.parse_js_event(event);
+        let actions = JSON.parse(event);
         for (const action in actions) {
             handle_event(id, actions[action])
         }
+    }
+
+    exports.increment_decrement_value = function (id, variable, increment_by, clamp_min, clamp_max) {
+        let data = ftd_data[id];
+
+        if (!data[variable]) {
+            console.log(variable, "is not in data, ignoring");
+            return;
+        }
+
+        let value = parseInt(data[variable].value);
+        value += increment_by;
+
+        if (clamp_max !== undefined) {
+            let min = (clamp_min === undefined) ? 0: clamp_min
+            if (clamp_max < value) {
+                value = min;
+            }
+            if (clamp_min > value) {
+                value = clamp_max;
+            }
+        }
+        data[variable].value = value.toString();
+
+        let dependencies = data[variable].dependencies;
+        for (const dependency in dependencies) {
+            if (!dependencies.hasOwnProperty(dependency)) {
+                continue;
+            }
+            if (dependencies[dependency] === "value") {
+                document.getElementById(`${dependency}:${id}`).innerText = data[variable].value;
+            } else {
+                let display = "none";
+                if (data[variable].value === dependencies[dependency]) {
+                    let is_flex = document.getElementById(`${dependency}:${id}`).style.flexDirection.length;
+                    if (is_flex) {
+                        display = "flex";
+                    } else {
+                        display = "block";
+                    }
+                }
+                document.getElementById(`${dependency}:${id}`).style.display = display;
+            }
+        }
+
     }
 
     exports.set_bool = function (id, variable, value) {
@@ -123,7 +179,12 @@ window.ftd = (function () {
 
             let display = "none";
             if (data[variable].value === dependencies[dependency]) {
-                display = "block";
+                let is_flex = document.getElementById(`${dependency}:${id}`).style.flexDirection.length;
+                if (is_flex) {
+                    display = "flex";
+                } else {
+                    display = "block";
+                }
             }
             document.getElementById(`${dependency}:${id}`).style.display = display;
         }

@@ -7,9 +7,64 @@ pub struct Section {
     pub header: Header,
     pub body: Option<String>,
     pub sub_sections: SubSections,
+    pub is_commented: bool,
 }
 
 impl Section {
+    pub fn body_without_comment(&self) -> Option<String> {
+        let body = match &self.body {
+            None => return None,
+            Some(b) => b,
+        };
+        match body {
+            _ if body.starts_with(r"\/") =>
+            {
+                #[allow(clippy::single_char_pattern)]
+                Some(body.strip_prefix(r"\").expect("").to_string())
+            }
+            _ if body.starts_with('/') => None,
+            _ => Some(body.to_string()),
+        }
+    }
+
+    pub fn remove_comments(&self) -> Section {
+        let mut headers = vec![];
+        for (k, v) in self.header.0.iter() {
+            if !k.starts_with('/') {
+                headers.push((k.to_string(), v.to_string()));
+            }
+        }
+
+        let body = match &self.body {
+            None => None,
+            Some(body) => match body {
+                _ if body.starts_with(r"\/") =>
+                {
+                    #[allow(clippy::single_char_pattern)]
+                    Some(body.strip_prefix(r"\").expect("").to_string())
+                }
+                _ if body.starts_with('/') => None,
+                _ => self.body.clone(),
+            },
+        };
+
+        Section {
+            name: self.name.to_string(),
+            caption: self.caption.to_owned(),
+            header: Header(headers),
+            body,
+            sub_sections: SubSections(
+                self.sub_sections
+                    .0
+                    .iter()
+                    .filter(|s| !s.is_commented)
+                    .map(|s| s.remove_comments())
+                    .collect::<Vec<SubSection>>(),
+            ),
+            is_commented: false,
+        }
+    }
+
     pub fn caption(&self) -> Result<String> {
         match self.caption {
             Some(ref v) => Ok(v.to_string()),
@@ -21,7 +76,7 @@ impl Section {
     }
 
     pub fn body(&self) -> Result<String> {
-        match self.body {
+        match self.body_without_comment() {
             Some(ref v) => Ok(v.to_string()),
             None => Err(Error::InvalidInput {
                 message: "body is missing".to_string(),
@@ -48,6 +103,7 @@ impl Section {
             header: Header::default(),
             body: None,
             sub_sections: SubSections::default(),
+            is_commented: false,
         }
     }
 
@@ -117,6 +173,9 @@ impl Section {
     pub fn sub_section_by_name(&self, name: &str) -> crate::p1::Result<&crate::p1::SubSection> {
         let mut count = 0;
         for s in self.sub_sections.0.iter() {
+            if s.is_commented {
+                continue;
+            }
             if s.name == name {
                 count += 1;
             }
@@ -128,6 +187,9 @@ impl Section {
         }
 
         for s in self.sub_sections.0.iter() {
+            if s.is_commented {
+                continue;
+            }
             if s.name == name {
                 return Ok(s);
             }

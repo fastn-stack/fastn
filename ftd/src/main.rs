@@ -8,6 +8,7 @@ pub fn main() {
 
     if let Some(id) = id {
         let path = format!("./examples/{}.ftd", id);
+        let id = format!("{}.ftd", id);
         let doc = std::fs::read_to_string(path).expect("cant read file");
         write(&id, doc);
         write_doc = format!(

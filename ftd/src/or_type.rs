@@ -10,6 +10,9 @@ impl OrType {
         let name = doc.format_name(or_type_name);
         let mut variants: Vec<crate::p2::Record> = Default::default();
         for s in p1.sub_sections.0.iter() {
+            if s.is_commented {
+                continue;
+            }
             variants.push(crate::p2::Record::from_p1(
                 format!("record {}.{}", or_type_name, s.name.as_str()).as_str(),
                 &s.header,

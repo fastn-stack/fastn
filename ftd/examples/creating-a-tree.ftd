@@ -688,7 +688,7 @@ margin-bottom: 15
 --- primary-button:
 if: $merge-link is not null
 text: Merge Changes
-link: $ref merge-link
+link: ref $merge-link
 
 --- primary-button:
 if: $edit-link is not null
@@ -724,7 +724,7 @@ margin-bottom: 15
 --- primary-button:
 if: $merge-link is not null
 text: Merge Changes
-link: $ref merge-link
+link: ref $merge-link
 
 --- primary-button:
 if: $edit-link is not null

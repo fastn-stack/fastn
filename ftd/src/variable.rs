@@ -15,6 +15,176 @@ pub enum PropertyValue {
 }
 
 impl PropertyValue {
+    pub fn resolve_value(
+        value: &str,
+        expected_kind: Option<ftd::p2::Kind>,
+        doc: &ftd::p2::TDoc,
+        arguments: &std::collections::BTreeMap<String, ftd::p2::Kind>,
+        locals: &std::collections::BTreeMap<String, ftd::p2::Kind>,
+        source: Option<ftd::TextSource>,
+        is_data: bool,
+    ) -> ftd::p1::Result<ftd::PropertyValue> {
+        let property_type = if is_data {
+            PropertyType::Value(value.to_string())
+        } else if let Some(arg) = value.strip_prefix('$') {
+            PropertyType::Argument(arg.to_string())
+        } else if let Some(lv) = value.strip_prefix('@') {
+            PropertyType::LocalVariable(lv.to_string())
+        } else if doc.get_value(value).is_ok() {
+            PropertyType::Reference(value.to_string())
+        } else {
+            let value = if (value.starts_with('\"') && value.ends_with('\"'))
+                || (value.starts_with('\'') && value.ends_with('\''))
+            {
+                value[1..value.len() - 1].to_string()
+            } else {
+                value.to_string()
+            };
+            PropertyType::Value(value)
+        };
+
+        let (part1, part2) = get_parts(&property_type.string())?;
+
+        return Ok(match property_type {
+            PropertyType::Reference(string) => {
+                let kind = match doc.get_value(&string) {
+                    Ok(val) => val.kind(),
+                    Err(e) => return ftd::e(format!("{} in not present in doc, {:?}", part1, e)),
+                };
+
+                let found_kind = get_kind(&kind, part2, doc, &expected_kind)?;
+
+                PropertyValue::Reference {
+                    name: doc.resolve_name(string.as_str()).unwrap_or(string),
+                    kind: found_kind,
+                }
+            }
+            PropertyType::Argument(string) => {
+                let kind = match arguments.get(&part1) {
+                    None => return ftd::e(format!("{} in not present in locals", part1)),
+                    Some(kind) => kind.to_owned(),
+                };
+
+                let found_kind = get_kind(&kind, part2, doc, &expected_kind)?;
+
+                PropertyValue::Argument {
+                    name: string,
+                    kind: found_kind,
+                }
+            }
+            PropertyType::LocalVariable(string) => {
+                let kind = match locals.get(&part1) {
+                    None => return ftd::e(format!("{} in not present in locals", part1)),
+                    Some(kind) => kind.to_owned(),
+                };
+                let found_kind = get_kind(&kind, part2, doc, &expected_kind)?;
+
+                PropertyValue::LocalVariable {
+                    name: string,
+                    kind: found_kind.set_default(kind.get_default_value_str()),
+                }
+            }
+            PropertyType::Value(string) => {
+                if expected_kind.is_none() {
+                    return ftd::e("expected expected_kind while calling resolve_value");
+                }
+                let expected_kind = expected_kind.unwrap();
+                match expected_kind.inner() {
+                    ftd::p2::Kind::Integer { .. } => crate::PropertyValue::Value {
+                        value: crate::Value::Integer {
+                            value: string
+                                .parse::<i64>()
+                                .map_err(|e| crate::p1::Error::CantParseInt { source: e })?,
+                        },
+                    },
+                    ftd::p2::Kind::Decimal { .. } => crate::PropertyValue::Value {
+                        value: crate::Value::Decimal {
+                            value: string
+                                .parse::<f64>()
+                                .map_err(|e| crate::p1::Error::CantParseFloat { source: e })?,
+                        },
+                    },
+                    ftd::p2::Kind::Boolean { .. } => crate::PropertyValue::Value {
+                        value: crate::Value::Boolean {
+                            value: string
+                                .parse::<bool>()
+                                .map_err(|_| crate::p1::Error::CantParseBool)?,
+                        },
+                    },
+                    ftd::p2::Kind::String { .. } => crate::PropertyValue::Value {
+                        value: crate::Value::String {
+                            text: string,
+                            source: source.unwrap_or(ftd::TextSource::Header),
+                        },
+                    },
+                    t => {
+                        return ftd::e(format!(
+                            "can't resolve value {} to expected kind {:?}",
+                            string, t
+                        ))
+                    }
+                }
+            }
+        });
+
+        enum PropertyType {
+            Value(String),
+            Reference(String),
+            Argument(String),
+            LocalVariable(String),
+        }
+
+        impl PropertyType {
+            fn string(&self) -> String {
+                match self {
+                    PropertyType::Value(s)
+                    | PropertyType::Reference(s)
+                    | PropertyType::Argument(s)
+                    | PropertyType::LocalVariable(s) => s.to_string(),
+                }
+            }
+        }
+
+        fn get_parts(s: &str) -> ftd::p1::Result<(String, Option<String>)> {
+            Ok(if s.contains('.') {
+                let (p1, p2) = ftd::p2::utils::split(s.to_string(), ".")?;
+                (p1, Some(p2))
+            } else {
+                (s.to_string(), None)
+            })
+        }
+
+        fn get_kind(
+            kind: &ftd::p2::Kind,
+            p2: Option<String>,
+            doc: &ftd::p2::TDoc,
+            expected_kind: &Option<ftd::p2::Kind>,
+        ) -> crate::p1::Result<ftd::p2::Kind> {
+            let mut found_kind = kind.to_owned();
+            if let ftd::p2::Kind::Record { ref name } = kind {
+                if let Some(p2) = p2 {
+                    let rec = doc.get_record(&doc.resolve_name(name)?)?;
+                    found_kind = match rec.fields.get(p2.as_str()) {
+                        Some(kind) => kind.to_owned(),
+                        _ => {
+                            return ftd::e(format!(
+                                "{} is not present in {} of type {:?}",
+                                p2, name, rec
+                            ));
+                        }
+                    };
+                }
+            }
+            if let Some(e_kind) = expected_kind {
+                if !e_kind.is_same_as(&found_kind) {
+                    return ftd::e(format!("expected {:?} found {:?}", found_kind, e_kind,));
+                }
+                return Ok(e_kind.to_owned());
+            }
+            Ok(found_kind)
+        }
+    }
+
     pub fn kind(&self) -> crate::p2::Kind {
         match self {
             Self::Value { value: v } => v.kind(),
@@ -45,19 +215,16 @@ impl PropertyValue {
             } => {
                 assert_eq!(self.kind(), *argument_kind);
                 if name.contains('.') {
-                    let mut part = name.splitn(2, '.');
-                    let part_1 = part.next().unwrap().trim();
-                    let part_2 = part.next().unwrap().trim();
-                    match arguments.get(part_1) {
-                        Some(Value::Record { name, fields }) => match fields.get(part_2) {
-                            Some(crate::PropertyValue::Value { value }) => return Ok(value.clone()),
+                    let (part_1, part_2) = ftd::p2::utils::split(name.to_string(), ".")?;
+                    match arguments.get(&part_1) {
+                        Some(Value::Record { name, fields }) => match fields.get(&part_2) {
+                            Some(pv) => return pv.resolve_with_root(arguments, doc, root_name),
                             None => {
                                 return ftd::e2(
                                     format!("{} is not present in record {}", part_2, part_1),
                                     name,
-                                );
+                                )
                             }
-                            _ => unimplemented!(),
                         },
                         None => {
                             return ftd::e2(format!("{} is not present in argument", part_1), name);
@@ -67,25 +234,36 @@ impl PropertyValue {
                 } else {
                     match (arguments.get(name.as_str()), argument_kind.is_optional()) {
                         (Some(v), _) => v.to_owned(),
-                        (None, true) => Value::None {
-                            kind: argument_kind.to_owned(),
-                        },
-                        (None, false) => {
-                            return ftd::e2("is required", name);
+                        (None, t) => {
+                            if let Ok(val) = argument_kind.to_value() {
+                                val
+                            } else {
+                                if !t {
+                                    return ftd::e2("is required", name);
+                                }
+                                Value::None {
+                                    kind: argument_kind.to_owned(),
+                                }
+                            }
                         }
                     }
                 }
             }
-            crate::PropertyValue::LocalVariable { name, kind } => {
-                unreachable!("Property can't be local variable: {} {:?}", name, kind)
+            crate::PropertyValue::LocalVariable { kind, .. } => {
+                assert_eq!(self.kind(), *kind);
+                kind.to_value()?
             }
             crate::PropertyValue::Reference {
                 name: reference_name,
                 kind: reference_kind,
             } => {
                 assert_eq!(self.kind(), *reference_kind);
-                let (default, condition) =
-                    doc.get_value_and_conditions_with_root(reference_name.as_str(), root_name)?;
+                let (default, condition) = match doc
+                    .get_value_and_conditions_with_root(reference_name.as_str(), root_name)
+                {
+                    Ok(d) => d,
+                    _ => return reference_kind.to_value(),
+                };
                 let mut value = default;
                 for (boolean, property) in condition {
                     if boolean.eval(arguments, doc)? {
@@ -176,6 +354,16 @@ impl Value {
             },
         }
     }
+
+    pub fn to_string(&self) -> Option<String> {
+        match self {
+            Value::String { text, .. } => Some(text.to_string()),
+            Value::Integer { value } => Some(value.to_string()),
+            Value::Decimal { value } => Some(value.to_string()),
+            Value::Boolean { value } => Some(value.to_string()),
+            _ => None,
+        }
+    }
 }
 
 impl Variable {
@@ -230,7 +418,7 @@ impl Variable {
             (ftd::p2::Kind::List { kind }, crate::Value::List { data, .. }) => {
                 data.push(read_value(kind, p1, doc)?);
             }
-            (ftd::p2::Kind::Map { .. }, _) => todo!(),
+            (ftd::p2::Kind::Map { .. }, _) => return ftd::e("unexpected map"),
             (k, _) => self.value = read_value(k, p1, doc)?,
         };
 
@@ -247,7 +435,7 @@ impl Variable {
             Some(t) => match doc.get_thing(t)? {
                 crate::p2::Thing::Record(r) => r.create(p1, doc)?,
                 crate::p2::Thing::OrTypeWithVariant { e, variant } => e.create(p1, variant, doc)?,
-                t => todo!("{:?}", t),
+                t => return ftd::e2("unexpected thing found", t),
             },
             None => guess_type(p1)?,
         };
@@ -310,7 +498,7 @@ fn guess_type(p1: &crate::p1::Section) -> crate::p1::Result<Value> {
 }
 
 fn read_string(p1: &crate::p1::Section) -> crate::p1::Result<Value> {
-    match (&p1.caption, &p1.body) {
+    match (&p1.caption, &p1.body_without_comment()) {
         (Some(_), Some(_)) => crate::e("' ' is missing".to_string()),
         (Some(caption), None) => Ok(Value::String {
             text: caption.to_string(),

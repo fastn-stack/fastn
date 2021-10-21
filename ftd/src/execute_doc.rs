@@ -19,7 +19,7 @@ impl<'a> ExecuteDoc<'a> {
         all_locals: &ftd_rt::Map,
     ) -> crate::p1::Result<crate::component::ElementWithContainer> {
         let mut index = 0;
-        self.execute_(&mut index, false, parent_container, all_locals)
+        self.execute_(&mut index, false, parent_container, all_locals, None)
     }
 
     fn execute_(
@@ -28,11 +28,10 @@ impl<'a> ExecuteDoc<'a> {
         is_external: bool,
         parent_container: &[usize],
         all_locals: &ftd_rt::Map,
+        parent_id: Option<String>,
     ) -> crate::p1::Result<crate::component::ElementWithContainer> {
         let mut current_container: Vec<usize> = Default::default();
         let mut named_containers: std::collections::BTreeMap<String, Vec<Vec<usize>>> =
-            Default::default();
-        let mut region_containers: std::collections::BTreeMap<String, Vec<usize>> =
             Default::default();
         let mut children: Vec<ftd_rt::Element> = vec![];
 
@@ -42,6 +41,7 @@ impl<'a> ExecuteDoc<'a> {
                 aliases: self.aliases,
                 bag: self.bag,
             };
+
             let local_container = {
                 let mut local_container = parent_container.to_vec();
                 local_container.append(&mut current_container.to_vec());
@@ -62,7 +62,10 @@ impl<'a> ExecuteDoc<'a> {
 
             match &self.instructions[*index] {
                 ftd::Instruction::ChangeContainer { name: c } => {
-                    if !named_containers.contains_key(c) && is_external {
+                    if !named_containers.contains_key(c)
+                        && is_external
+                        && !match_parent_id(c, &parent_id)
+                    {
                         *index -= 1;
                         return Ok(crate::component::ElementWithContainer {
                             element: ftd_rt::Element::Null,
@@ -70,7 +73,7 @@ impl<'a> ExecuteDoc<'a> {
                             child_container: Some(named_containers),
                         });
                     }
-                    change_container(c, &mut current_container, &mut named_containers)?;
+                    change_container(c, &mut current_container, &mut named_containers, &parent_id)?;
                 }
                 ftd::Instruction::Component {
                     parent,
@@ -90,19 +93,10 @@ impl<'a> ExecuteDoc<'a> {
                         &local_container,
                     )?;
 
-                    if let Some(region) = element.get_heading_region() {
-                        change_container_by_region(
-                            region,
-                            &mut current_container,
-                            &mut region_containers,
-                        );
-                    }
-
                     children = self.add_element(
                         children,
                         &mut current_container,
                         &mut named_containers,
-                        &mut region_containers,
                         element,
                         child_container,
                         index,
@@ -124,19 +118,11 @@ impl<'a> ExecuteDoc<'a> {
                         all_locals,
                         &local_container,
                     )?;
-                    if let Some(region) = e.get_heading_region() {
-                        change_container_by_region(
-                            region,
-                            &mut current_container,
-                            &mut region_containers,
-                        );
-                    }
 
                     children = self.add_element(
                         children,
                         &mut current_container,
                         &mut named_containers,
-                        &mut region_containers,
                         e,
                         child_container,
                         index,
@@ -159,7 +145,6 @@ impl<'a> ExecuteDoc<'a> {
                             children,
                             &mut current_container,
                             &mut named_containers,
-                            &mut region_containers,
                             e.element,
                             None,
                             index,
@@ -185,7 +170,6 @@ impl<'a> ExecuteDoc<'a> {
         mut main: Vec<ftd_rt::Element>,
         current_container: &mut Vec<usize>,
         named_containers: &mut std::collections::BTreeMap<String, Vec<Vec<usize>>>,
-        region_containers: &mut std::collections::BTreeMap<String, Vec<usize>>,
         e: ftd_rt::Element,
         container: Option<std::collections::BTreeMap<String, Vec<Vec<usize>>>>,
         index: &mut usize,
@@ -202,20 +186,16 @@ impl<'a> ExecuteDoc<'a> {
         }
         let len = current.len();
         let mut container_id = None;
-        if let Some(v) = e.container_id() {
+        let parent_id = e.container_id();
+        if let Some(ref v) = parent_id {
             let mut c = current_container.clone();
             c.push(len);
             container_id = Some(v.clone());
             if let Some(val) = named_containers.get_mut(v.as_str()) {
                 val.push(c);
             } else {
-                named_containers.insert(v, vec![c]);
+                named_containers.insert(v.to_string(), vec![c]);
             }
-        }
-
-        if let Some(region) = e.get_heading_region() {
-            current_container.push(len);
-            region_containers.insert(region.to_string(), current_container.clone());
         }
 
         if let Some(child_container) = container {
@@ -236,16 +216,21 @@ impl<'a> ExecuteDoc<'a> {
             new_parent_container.append(&mut current_container.to_vec());
 
             let container = match current.last_mut() {
-                Some(ftd_rt::Element::Column(ref mut r)) => {
+                Some(ftd_rt::Element::Column(ftd_rt::Column {
+                    ref mut container, ..
+                }))
+                | Some(ftd_rt::Element::Row(ftd_rt::Row {
+                    ref mut container, ..
+                })) => {
                     *index += 1;
-                    let child = self.execute_(index, true, &new_parent_container, all_locals)?;
-                    r.container.children.extend(child.children);
-                    child.child_container
-                }
-                Some(ftd_rt::Element::Row(ref mut r)) => {
-                    *index += 1;
-                    let child = self.execute_(index, true, &new_parent_container, all_locals)?;
-                    r.container.children.extend(child.children);
+                    let child = self.execute_(
+                        index,
+                        true,
+                        &new_parent_container,
+                        all_locals,
+                        parent_id.clone(),
+                    )?;
+                    container.children.extend(child.children);
                     child.child_container
                 }
                 _ => unreachable!(),
@@ -274,14 +259,27 @@ impl<'a> ExecuteDoc<'a> {
                 id
             };
 
+            current_container.push(len);
             let mut new_parent_container = parent_container.to_vec();
             new_parent_container.append(&mut current_container.to_vec());
 
             match current.last_mut() {
-                Some(ftd_rt::Element::Column(ref mut r)) => {
+                Some(ftd_rt::Element::Column(ftd_rt::Column {
+                    container: ref mut c,
+                    ..
+                }))
+                | Some(ftd_rt::Element::Row(ftd_rt::Row {
+                    container: ref mut c,
+                    ..
+                })) => {
                     *index += 1;
-                    let child =
-                        self.execute_(index, true, &new_parent_container, &Default::default())?;
+                    let child = self.execute_(
+                        index,
+                        true,
+                        &new_parent_container,
+                        &Default::default(),
+                        parent_id,
+                    )?;
                     let external_children = {
                         if child.children.is_empty() {
                             vec![]
@@ -291,22 +289,7 @@ impl<'a> ExecuteDoc<'a> {
                             vec![ftd_rt::Element::Column(main)]
                         }
                     };
-                    r.container.external_children = Some((id, container, external_children));
-                }
-                Some(ftd_rt::Element::Row(ref mut r)) => {
-                    *index += 1;
-                    let child =
-                        self.execute_(index, true, &new_parent_container, &Default::default())?;
-                    let external_children = {
-                        if child.children.is_empty() {
-                            vec![]
-                        } else {
-                            let mut main = ftd::p2::interpreter::default_column();
-                            main.container.children = child.children;
-                            vec![ftd_rt::Element::Column(main)]
-                        }
-                    };
-                    r.container.external_children = Some((id, container, external_children));
+                    c.external_children = Some((id, container, external_children));
                 }
                 _ => unreachable!(),
             }
@@ -349,12 +332,22 @@ fn get_external_children(
     container
 }
 
+fn match_parent_id(c: &str, parent_id: &Option<String>) -> bool {
+    if let Some(p) = parent_id {
+        if c == p {
+            return true;
+        }
+    }
+    false
+}
+
 fn change_container(
     name: &str,
     current_container: &mut Vec<usize>,
     named_containers: &mut std::collections::BTreeMap<String, Vec<Vec<usize>>>,
+    parent_id: &Option<String>,
 ) -> crate::p1::Result<()> {
-    if name == "ftd#main" {
+    if name == "ftd#main" || match_parent_id(name, parent_id) {
         *current_container = vec![];
         return Ok(());
     }
@@ -365,26 +358,6 @@ fn change_container(
         }
     };
     Ok(())
-}
-
-fn change_container_by_region(
-    region: &ftd_rt::Region,
-    current_container: &mut Vec<usize>,
-    region_containers: &mut std::collections::BTreeMap<String, Vec<usize>>,
-) {
-    for r in region.get_lower_priority_heading() {
-        if let Some(container) = region_containers.get(&r.to_string()) {
-            let len = container.len();
-            if current_container.len() > len - 1 {
-                *current_container = container[..len - 1].to_vec();
-            }
-        }
-        region_containers.remove(&r.to_string());
-    }
-    if let Some(container) = region_containers.get(&region.to_string()) {
-        let len = container.len();
-        *current_container = container[..len - 1].to_vec();
-    }
 }
 
 fn update_named_container(

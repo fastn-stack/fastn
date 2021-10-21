@@ -52,7 +52,11 @@ impl DNode {
             let mut attr = self.attrs_to_html();
             let events = ftd_rt::event::group_by_js_event(&self.events);
             for (name, actions) in events {
-                let event = format!("window.ftd.handle_event('{}', '{}')", id, actions);
+                let event = format!(
+                    "window.ftd.handle_event('{}', '{}')",
+                    id,
+                    actions.replace("\"", "&quot;")
+                );
                 attr.push(' ');
                 attr.push_str(&format!("{}={}", name, quote(&event)));
             }

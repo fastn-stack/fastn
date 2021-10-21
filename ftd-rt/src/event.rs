@@ -13,27 +13,31 @@ pub struct Event {
 pub(crate) fn group_by_js_event(evts: &[Event]) -> std::collections::HashMap<String, String> {
     // key: onclick
     // value: after group by for onclick find all actions, and call to_js_event()
-    let mut events: std::collections::HashMap<String, String> = Default::default();
+    let mut events: std::collections::HashMap<String, Vec<Action>> = Default::default();
     for event in evts {
         if let Some(actions) = events.get_mut(&event.name) {
-            actions.push(' ');
-            actions.push_str(&event.action.from_action());
+            actions.push(event.action.to_owned());
         } else {
-            events.insert(event.name.to_string(), event.action.from_action());
+            events.insert(event.name.to_string(), vec![event.action.to_owned()]);
         }
     }
-    events
+    let mut string_events: std::collections::HashMap<String, String> = Default::default();
+    for (k, v) in events {
+        string_events.insert(k, serde_json::to_string(&v).expect(""));
+    }
+    string_events
 }
 
-#[derive(serde::Deserialize, Clone, Debug)]
-#[cfg_attr(not(feature = "wasm"), derive(serde::Serialize, PartialEq, Default))]
+#[derive(serde::Deserialize, Clone, Debug, serde::Serialize)]
+#[cfg_attr(not(feature = "wasm"), derive(PartialEq, Default))]
 pub struct Action {
     pub action: String, // toggle
     pub target: String, // foo
+    pub parameters: std::collections::BTreeMap<String, Vec<String>>,
 }
 
+#[cfg(feature = "wasm")]
 impl Action {
-    #[cfg(feature = "wasm")]
     fn to_action(a: &str) -> crate::Result<Self> {
         match a {
             _ if a.starts_with("toggle") => {
@@ -41,6 +45,7 @@ impl Action {
                 Ok(Self {
                     action: "toggle".to_string(),
                     target,
+                    parameters: Default::default(),
                 })
             }
             t => return crate::e(format!("{} is not a valid action", t)),
@@ -53,7 +58,6 @@ impl Action {
         format!("{} {};", self.action, self.target)
     }
 
-    #[cfg(feature = "wasm")]
     pub(crate) fn parse_js_event(s: &str) -> Vec<Action> {
         // input: "toggle x; set-true y"
         // output: { action: toggle, target: x }, { action: set-true, target: y }
@@ -68,7 +72,6 @@ impl Action {
         actions
     }
 
-    #[cfg(feature = "wasm")]
     pub(crate) fn handle_action(&self, doc: &mut ftd_rt::Document) {
         match self.action.as_str() {
             "toggle" => {

@@ -38,10 +38,15 @@ impl<'a> Interpreter<'a> {
         d_processor: &mut std::time::Duration,
     ) -> crate::p1::Result<Vec<ftd::Instruction>> {
         let p1 = crate::p1::parse(s)?;
+        let new_p1 = ftd::p2::utils::reorder(&p1)?;
+
         let mut aliases = default_aliases();
         let mut instructions: Vec<ftd::Instruction> = Default::default();
 
-        for p1 in p1.iter() {
+        for p1 in new_p1.iter() {
+            if p1.is_commented {
+                continue;
+            }
             if p1.name == "import" {
                 let (library_name, alias) = crate::p2::utils::parse_import(&p1.caption)?;
                 aliases.insert(alias, library_name.clone());
@@ -69,6 +74,7 @@ impl<'a> Interpreter<'a> {
                 // declare a function
                 let d = crate::Component::from_p1(p1, &doc)?;
                 thing = Some((d.full_name.to_string(), crate::p2::Thing::Component(d)));
+                // processed_p1.push(p1.name.to_string());
             } else if p1.name.starts_with("var ") {
                 // declare and instantiate a variable
                 let d = if p1.header.str("$processor$").is_ok() {
@@ -134,9 +140,9 @@ impl<'a> Interpreter<'a> {
                                 crate::p2::Boolean::from_expression(
                                     expr,
                                     &doc,
-                                    p1.name.as_str(),
                                     &Default::default(),
                                     &Default::default(),
+                                    (None, None),
                                 )?,
                                 val,
                             ));
@@ -155,32 +161,48 @@ impl<'a> Interpreter<'a> {
                         let mut children = vec![];
 
                         for sub in p1.sub_sections.0.iter() {
+                            if sub.is_commented {
+                                continue;
+                            }
                             if let Ok(loop_data) = sub.header.str("$loop$") {
-                                insert_children_from_loop(
+                                children.push(ftd::component::recursive_child_component(
                                     loop_data,
-                                    &mut children,
-                                    &doc,
                                     sub,
+                                    &doc,
                                     &Default::default(),
-                                )?;
+                                    None,
+                                    &Default::default(),
+                                )?);
                             } else {
                                 children.push(ftd::ChildComponent::from_p1(
                                     sub.name.as_str(),
                                     &sub.header,
                                     &sub.caption,
-                                    &sub.body,
+                                    &sub.body_without_comment(),
                                     &doc,
-                                    sub.name.as_str(),
                                     &Default::default(),
-                                    &std::collections::BTreeMap::new(),
-                                    None,
                                     &Default::default(),
                                 )?);
                             }
                         }
-                        //todo
                         if let Ok(loop_data) = p1.header.str("$loop$") {
-                            insert_instruction_from_loop(loop_data, &mut instructions, &doc, p1)?;
+                            let section_to_subsection = ftd::p1::SubSection {
+                                name: p1.name.to_string(),
+                                caption: p1.caption.to_owned(),
+                                header: p1.header.to_owned(),
+                                body: p1.body.to_owned(),
+                                is_commented: p1.is_commented,
+                            };
+                            instructions.push(ftd::Instruction::RecursiveChildComponent {
+                                child: ftd::component::recursive_child_component(
+                                    loop_data,
+                                    &section_to_subsection,
+                                    &doc,
+                                    &Default::default(),
+                                    None,
+                                    &Default::default(),
+                                )?,
+                            });
                         } else {
                             instructions.push(ftd::Instruction::Component {
                                 children,
@@ -188,12 +210,9 @@ impl<'a> Interpreter<'a> {
                                     p1.name.as_str(),
                                     &p1.header,
                                     &p1.caption,
-                                    &p1.body,
+                                    &p1.body_without_comment(),
                                     &doc,
-                                    p1.name.as_str(),
                                     &Default::default(),
-                                    &std::collections::BTreeMap::new(),
-                                    None,
                                     &Default::default(),
                                 )?,
                             })
@@ -262,84 +281,7 @@ pub enum Thing {
     Record(ftd::p2::Record),
     OrType(ftd::OrType),
     OrTypeWithVariant { e: ftd::OrType, variant: String },
-    // Library -> Name of library sucessfully parsed
-}
-
-pub fn insert_children_from_loop(
-    loop_data: &str,
-    children: &mut Vec<ftd::ChildComponent>,
-    doc: &crate::p2::TDoc,
-    sub: &crate::p1::SubSection,
-    arguments: &std::collections::BTreeMap<String, crate::p2::Kind>,
-) -> crate::p1::Result<()> {
-    let mut loop_ref = "object";
-    let mut loop_on_component = loop_data;
-    if loop_data.contains("as") {
-        let mut parts = loop_data.splitn(2, "as");
-        loop_on_component = parts.next().unwrap().trim();
-        loop_ref = parts.next().unwrap().trim();
-    }
-
-    let component_loop = doc.resolve_name(loop_on_component)?;
-    let value = doc.get_value(&*component_loop)?;
-
-    let root = doc.get_component(&sub.name)?;
-
-    let p1 = crate::p1::Section {
-        name: sub.name.clone(),
-        caption: sub.caption.clone(),
-        header: sub.header.clone(),
-        body: sub.body.clone(),
-        sub_sections: Default::default(),
-    };
-
-    if let crate::Value::List { data, kind: _ } = value {
-        for d in data {
-            children.push(crate::ChildComponent::children_for_loop(
-                d, &p1, &root, doc, loop_ref, arguments,
-            )?);
-        }
-    } else {
-        return crate::e("Object should be list");
-    }
-    Ok(())
-}
-
-pub fn insert_instruction_from_loop(
-    loop_data: &str,
-    instructions: &mut Vec<ftd::Instruction>,
-    doc: &crate::p2::TDoc,
-    p1: &crate::p1::Section,
-) -> crate::p1::Result<()> {
-    let mut loop_ref = "object";
-    let mut loop_on_component = loop_data;
-    if loop_data.contains("as") {
-        let mut parts = loop_data.splitn(2, "as");
-        loop_on_component = parts.next().unwrap().trim();
-        loop_ref = parts.next().unwrap().trim();
-    }
-    let component_loop = doc.resolve_name(loop_on_component)?;
-    let value = doc.get_value(&*component_loop)?;
-    let root = doc.get_component(&p1.name)?;
-    if let crate::Value::List { data, kind: _ } = value {
-        for d in data {
-            let instruction = ftd::Instruction::Component {
-                children: vec![],
-                parent: crate::ChildComponent::children_for_loop(
-                    d,
-                    p1,
-                    &root,
-                    doc,
-                    loop_ref,
-                    &Default::default(),
-                )?,
-            };
-            instructions.push(instruction);
-        }
-    } else {
-        return crate::e("Object should be list");
-    }
-    Ok(())
+    // Library -> Name of library successfully parsed
 }
 
 pub fn default_bag() -> std::collections::BTreeMap<String, crate::p2::Thing> {
@@ -640,10 +582,12 @@ mod test {
                                 },
                             )])
                             .collect(),
+                            is_recursive: false,
                         },
                     },
                     crate::component::Instruction::ChildComponent {
                         child: crate::component::ChildComponent {
+                            is_recursive: false,
                             events: vec![],
                             root: "foo/bar#parent".to_string(),
                             condition: None,
@@ -687,6 +631,7 @@ mod test {
                     },
                     crate::component::Instruction::ChildComponent {
                         child: crate::component::ChildComponent {
+                            is_recursive: false,
                             events: vec![],
                             root: "foo/bar#parent".to_string(),
                             condition: None,
@@ -721,6 +666,7 @@ mod test {
                     },
                     crate::component::Instruction::ChildComponent {
                         child: crate::component::ChildComponent {
+                            is_recursive: false,
                             events: vec![],
                             root: "foo/bar#parent".to_string(),
                             condition: None,
@@ -758,6 +704,7 @@ mod test {
                     },
                     crate::component::Instruction::ChildComponent {
                         child: crate::component::ChildComponent {
+                            is_recursive: false,
                             events: vec![],
                             root: "foo/bar#parent".to_string(),
                             condition: None,
@@ -855,6 +802,7 @@ mod test {
                 instructions: vec![
                     crate::component::Instruction::ChildComponent {
                         child: crate::component::ChildComponent {
+                            is_recursive: false,
                             events: vec![],
                             root: "ftd#text".to_string(),
                             condition: Some(ftd::p2::Boolean::IsNotNull {
@@ -903,6 +851,7 @@ mod test {
                     },
                     crate::component::Instruction::ChildComponent {
                         child: crate::component::ChildComponent {
+                            is_recursive: false,
                             events: vec![],
                             root: "ftd#text".to_string(),
                             condition: Some(ftd::p2::Boolean::IsNull {
@@ -1365,6 +1314,7 @@ mod test {
                 instructions: vec![
                     crate::component::Instruction::ChildComponent {
                         child: crate::component::ChildComponent {
+                            is_recursive: false,
                             events: vec![],
                             root: "creating-a-tree#table-of-content".to_string(),
                             condition: None,
@@ -1385,6 +1335,7 @@ mod test {
                     },
                     crate::component::Instruction::ChildComponent {
                         child: crate::component::ChildComponent {
+                            is_recursive: false,
                             events: vec![],
                             root: "creating-a-tree#parent".to_string(),
                             condition: None,
@@ -1428,6 +1379,7 @@ mod test {
                     },
                     crate::component::Instruction::ChildComponent {
                         child: crate::component::ChildComponent {
+                            is_recursive: false,
                             events: vec![],
                             root: "creating-a-tree#parent".to_string(),
                             condition: None,
@@ -1462,6 +1414,7 @@ mod test {
                     },
                     crate::component::Instruction::ChildComponent {
                         child: crate::component::ChildComponent {
+                            is_recursive: false,
                             events: vec![],
                             root: "creating-a-tree#parent".to_string(),
                             condition: None,
@@ -1499,6 +1452,7 @@ mod test {
                     },
                     crate::component::Instruction::ChildComponent {
                         child: crate::component::ChildComponent {
+                            is_recursive: false,
                             events: vec![],
                             root: "creating-a-tree#parent".to_string(),
                             condition: None,
@@ -1596,6 +1550,7 @@ mod test {
                 instructions: vec![
                     crate::component::Instruction::ChildComponent {
                         child: crate::component::ChildComponent {
+                            is_recursive: false,
                             events: vec![],
                             root: "ftd#text".to_string(),
                             condition: Some(ftd::p2::Boolean::IsNotNull {
@@ -1644,6 +1599,7 @@ mod test {
                     },
                     crate::component::Instruction::ChildComponent {
                         child: crate::component::ChildComponent {
+                            is_recursive: false,
                             events: vec![],
                             root: "ftd#text".to_string(),
                             condition: Some(ftd::p2::Boolean::IsNull {
@@ -2125,6 +2081,7 @@ mod test {
                 .collect(),
                 instructions: vec![crate::component::Instruction::ChildComponent {
                     child: crate::component::ChildComponent {
+                        is_recursive: false,
                         events: vec![],
                         root: "ftd#text".to_string(),
                         condition: None,
@@ -2149,6 +2106,10 @@ mod test {
         let title = ftd_rt::Text {
             text: ftd::markdown_line("John smith"),
             line: true,
+            common: ftd_rt::Common {
+                reference: Some(s("reference#name")),
+                ..Default::default()
+            },
             ..Default::default()
         };
 
@@ -2507,6 +2468,7 @@ mod test {
                         ),
                     ])
                     .collect(),
+                    ..Default::default()
                 }}],
                 arguments: std::array::IntoIter::new([(s("x"), crate::p2::Kind::integer())]).collect(),
                 ..Default::default()
@@ -2797,6 +2759,7 @@ mod test {
                                 ),
                             ])
                             .collect(),
+                            ..Default::default()
                         },
                     },
                     crate::Instruction::ChildComponent {
@@ -2824,6 +2787,7 @@ mod test {
                                 },
                             )])
                             .collect(),
+                            ..Default::default()
                         },
                     },
                     crate::Instruction::ChildComponent {
@@ -2851,6 +2815,7 @@ mod test {
                                 },
                             )])
                             .collect(),
+                            ..Default::default()
                         },
                     },
                 ],
@@ -3241,6 +3206,7 @@ mod test {
                                 },
                             )])
                             .collect(),
+                            ..Default::default()
                         },
                     },
                     crate::Instruction::ChildComponent {
@@ -3264,6 +3230,7 @@ mod test {
                                 },
                             )])
                             .collect(),
+                            ..Default::default()
                         },
                     },
                 ],
@@ -3377,6 +3344,7 @@ mod test {
                             ),
                         ])
                         .collect(),
+                        ..Default::default()
                     },
                 }],
                 ..Default::default()
@@ -3475,6 +3443,7 @@ mod test {
                                 ),
                             ])
                             .collect(),
+                            ..Default::default()
                         },
                     },
                     crate::Instruction::ChildComponent {
@@ -3492,6 +3461,7 @@ mod test {
                                 },
                             )])
                             .collect(),
+                            ..Default::default()
                         },
                     },
                 ],
@@ -3578,6 +3548,7 @@ mod test {
                                 ),
                             ])
                             .collect(),
+                            ..Default::default()
                         },
                     },
                     crate::Instruction::ChildComponent {
@@ -3595,6 +3566,7 @@ mod test {
                                 },
                             )])
                             .collect(),
+                            ..Default::default()
                         },
                     },
                 ],
@@ -3693,6 +3665,7 @@ mod test {
                                 ),
                             ])
                             .collect(),
+                            ..Default::default()
                         },
                     },
                     crate::Instruction::ChildComponent {
@@ -3736,6 +3709,7 @@ mod test {
                                 ),
                             ])
                             .collect(),
+                            ..Default::default()
                         },
                     },
                 ],
@@ -4039,6 +4013,7 @@ mod test {
                 instructions: vec![
                     crate::component::Instruction::ChildComponent {
                         child: crate::component::ChildComponent {
+                            is_recursive: false,
                             events: vec![],
                             root: "ftd#row".to_string(),
                             condition: None,
@@ -4059,6 +4034,7 @@ mod test {
                     },
                     crate::component::Instruction::ChildComponent {
                         child: crate::component::ChildComponent {
+                            is_recursive: false,
                             events: vec![],
                             root: "ftd#row".to_string(),
                             condition: None,
@@ -4205,6 +4181,7 @@ mod test {
                 instructions: vec![
                     crate::component::Instruction::ChildComponent {
                         child: crate::component::ChildComponent {
+                            is_recursive: false,
                             events: vec![],
                             root: "ftd#row".to_string(),
                             condition: None,
@@ -4225,6 +4202,7 @@ mod test {
                     },
                     crate::component::Instruction::ChildComponent {
                         child: crate::component::ChildComponent {
+                            is_recursive: false,
                             events: vec![],
                             root: "ftd#row".to_string(),
                             condition: None,
@@ -4424,6 +4402,7 @@ mod test {
                     },
                     crate::component::Instruction::ChildComponent {
                         child: crate::component::ChildComponent {
+                            is_recursive: false,
                             events: vec![],
                             root: "ftd#row".to_string(),
                             condition: None,
@@ -4599,6 +4578,7 @@ mod test {
                 .collect(),
                 instructions: vec![crate::component::Instruction::ChildComponent {
                     child: crate::component::ChildComponent {
+                        is_recursive: false,
                         events: vec![],
                         root: "ftd#text".to_string(),
                         condition: None,
@@ -4650,6 +4630,7 @@ mod test {
                 instructions: vec![
                     crate::component::Instruction::ChildComponent {
                         child: crate::component::ChildComponent {
+                            is_recursive: false,
                             events: vec![],
                             root: "foo/bar#mobile-display".to_string(),
                             condition: Some(ftd::p2::Boolean::Equal {
@@ -4678,6 +4659,7 @@ mod test {
                     },
                     crate::component::Instruction::ChildComponent {
                         child: crate::component::ChildComponent {
+                            is_recursive: false,
                             events: vec![],
                             root: "foo/bar#desktop-display".to_string(),
                             condition: Some(ftd::p2::Boolean::Equal {
@@ -4744,6 +4726,7 @@ mod test {
                 .collect(),
                 instructions: vec![crate::component::Instruction::ChildComponent {
                     child: crate::component::ChildComponent {
+                        is_recursive: false,
                         events: vec![],
                         root: "ftd#text".to_string(),
                         condition: None,
@@ -5632,6 +5615,7 @@ mod test {
                 instructions: vec![
                     crate::component::Instruction::ChildComponent {
                         child: crate::component::ChildComponent {
+                            is_recursive: false,
                             events: vec![],
                             root: "ftd#text".to_string(),
                             condition: None,
@@ -5650,6 +5634,7 @@ mod test {
                     },
                     crate::component::Instruction::ChildComponent {
                         child: crate::component::ChildComponent {
+                            is_recursive: false,
                             events: vec![],
                             root: "ftd#text".to_string(),
                             condition: None,
@@ -5909,6 +5894,7 @@ mod test {
                 instructions: vec![
                     crate::component::Instruction::ChildComponent {
                         child: crate::component::ChildComponent {
+                            is_recursive: false,
                             events: vec![],
                             root: "ftd#text".to_string(),
                             condition: None,
@@ -5927,6 +5913,7 @@ mod test {
                     },
                     crate::component::Instruction::ChildComponent {
                         child: crate::component::ChildComponent {
+                            is_recursive: false,
                             events: vec![],
                             root: "ftd#text".to_string(),
                             condition: None,
@@ -6239,6 +6226,7 @@ mod test {
                 instructions: vec![
                     crate::component::Instruction::ChildComponent {
                         child: crate::component::ChildComponent {
+                            is_recursive: false,
                             events: vec![],
                             root: "ftd#text".to_string(),
                             condition: None,
@@ -6257,6 +6245,7 @@ mod test {
                     },
                     crate::component::Instruction::ChildComponent {
                         child: crate::component::ChildComponent {
+                            is_recursive: false,
                             events: vec![],
                             root: "ftd#text".to_string(),
                             condition: None,
@@ -6441,6 +6430,10 @@ mod test {
             .push(ftd_rt::Element::Text(ftd_rt::Text {
                 text: ftd::markdown_line("\"0.1.4\""),
                 line: true,
+                common: ftd_rt::Common {
+                    reference: Some(s("foo/bar#test")),
+                    ..Default::default()
+                },
                 ..Default::default()
             }));
 
@@ -6484,6 +6477,10 @@ mod test {
             .push(ftd_rt::Element::Text(ftd_rt::Text {
                 text: ftd::markdown_line("\"0.1.4\""),
                 line: true,
+                common: ftd_rt::Common {
+                    reference: Some(s("foo/bar#test")),
+                    ..Default::default()
+                },
                 ..Default::default()
             }));
 
@@ -6855,6 +6852,7 @@ mod test {
                 instructions: vec![
                     crate::component::Instruction::ChildComponent {
                         child: crate::component::ChildComponent {
+                            is_recursive: false,
                             events: vec![],
                             root: "ftd#text".to_string(),
                             condition: None,
@@ -6873,6 +6871,7 @@ mod test {
                     },
                     crate::component::Instruction::ChildComponent {
                         child: crate::component::ChildComponent {
+                            is_recursive: false,
                             events: vec![],
                             root: "ftd#text".to_string(),
                             condition: None,
@@ -7234,10 +7233,8 @@ mod test {
                             .collect(),
                         },
                     ],
-                    kind: crate::p2::Kind::List {
-                        kind: Box::new(crate::p2::Kind::Record {
-                            name: s("foo/bar#data"),
-                        }),
+                    kind: crate::p2::Kind::Record {
+                        name: s("foo/bar#data"),
                     },
                 },
                 conditions: vec![],
@@ -7590,10 +7587,12 @@ mod test {
                                 ),
                             ])
                             .collect(),
+                            ..Default::default()
                         },
                     },
                     Instruction::RecursiveChildComponent {
                         child: ftd::ChildComponent {
+                            is_recursive: true,
                             events: vec![],
                             root: "toc-item".to_string(),
                             condition: None,
@@ -7702,6 +7701,10 @@ mod test {
                     children: vec![ftd_rt::Element::Text(ftd_rt::Text {
                         text: ftd::markdown_line("Hello World"),
                         line: true,
+                        common: ftd_rt::Common {
+                            reference: Some(s("hello-world-variable#hello-world")),
+                            ..Default::default()
+                        },
                         ..Default::default()
                     })],
                     ..Default::default()
@@ -7731,6 +7734,7 @@ mod test {
                             },
                         )])
                         .collect(),
+                        ..Default::default()
                     },
                 }],
                 invocations: vec![std::collections::BTreeMap::new()],
@@ -7805,7 +7809,7 @@ mod test {
                 arguments: std::array::IntoIter::new([
                     (
                         s("name"),
-                        crate::p2::Kind::caption().set_default(Some("hello world")),
+                        crate::p2::Kind::caption().set_default(Some(s("hello world"))),
                     ),
                     (
                         s("size"),
@@ -7988,7 +7992,7 @@ mod test {
                 fields: std::array::IntoIter::new([
                     (
                         s("address"),
-                        crate::p2::Kind::string().set_default(Some("Bihar")),
+                        crate::p2::Kind::string().set_default(Some(s("Bihar"))),
                     ),
                     (
                         s("age"),
@@ -7998,7 +8002,7 @@ mod test {
                     ),
                     (
                         s("bio"),
-                        crate::p2::Kind::body().set_default(Some("Some Bio")),
+                        crate::p2::Kind::body().set_default(Some(s("Some Bio"))),
                     ),
                     (s("name"), crate::p2::Kind::caption()),
                     (
@@ -8019,6 +8023,10 @@ mod test {
             .push(ftd_rt::Element::Text(ftd_rt::Text {
                 text: ftd::markdown("Software developer working at fifthtry."),
                 size: Some(20),
+                common: ftd_rt::Common {
+                    reference: Some(s("abrar.bio")),
+                    ..Default::default()
+                },
                 ..Default::default()
             }));
 
@@ -8114,7 +8122,7 @@ mod test {
                 arguments: std::array::IntoIter::new([
                     (
                         s("name"),
-                        crate::p2::Kind::string().set_default(Some("ref default-name")),
+                        crate::p2::Kind::string().set_default(Some(s("ref default-name"))),
                     ),
                     (
                         s("text-size"),
@@ -8156,6 +8164,7 @@ mod test {
                             ),
                         ])
                         .collect(),
+                        ..Default::default()
                     },
                 }],
                 kernel: false,
@@ -8226,6 +8235,10 @@ mod test {
             .push(ftd_rt::Element::Text(ftd_rt::Text {
                 text: ftd::markdown_line("Amit Upadhyay"),
                 line: true,
+                common: ftd_rt::Common {
+                    reference: Some(s("amitu.name")),
+                    ..Default::default()
+                },
                 ..Default::default()
             }));
         main.container
@@ -8233,6 +8246,10 @@ mod test {
             .push(ftd_rt::Element::Text(ftd_rt::Text {
                 text: ftd::markdown_line("1000"),
                 line: true,
+                common: ftd_rt::Common {
+                    reference: Some(s("amitu.phone")),
+                    ..Default::default()
+                },
                 ..Default::default()
             }));
         main.container
@@ -8241,6 +8258,10 @@ mod test {
                 text: ftd::markdown_line("John Doe"),
                 line: true,
                 size: Some(50),
+                common: ftd_rt::Common {
+                    reference: Some(s("acme.contact")),
+                    ..Default::default()
+                },
                 ..Default::default()
             }));
 
@@ -8314,7 +8335,7 @@ mod test {
                             ftd::PropertyValue::Reference {
                                 name: s("foo/bar#default-phone"),
                                 kind: ftd::p2::Kind::string()
-                                    .set_default(Some("ref default-phone")),
+                                    .set_default(Some(s("ref default-phone"))),
                             },
                         ),
                     ])
@@ -8345,7 +8366,7 @@ mod test {
                             (s("name"), ftd::p2::Kind::caption()),
                             (
                                 s("phone"),
-                                ftd::p2::Kind::string().set_default(Some("ref default-phone")),
+                                ftd::p2::Kind::string().set_default(Some(s("ref default-phone"))),
                             ),
                         ])
                         .collect(),
@@ -8356,13 +8377,13 @@ mod test {
                         fields: std::array::IntoIter::new([
                             (
                                 s("contact"),
-                                ftd::p2::Kind::string().set_default(Some("1001")),
+                                ftd::p2::Kind::string().set_default(Some(s("1001"))),
                             ),
                             (s("fax"), ftd::p2::Kind::string()),
                             (s("name"), ftd::p2::Kind::caption()),
                             (
                                 s("no-of-employees"),
-                                ftd::p2::Kind::integer().set_default(Some("50")),
+                                ftd::p2::Kind::integer().set_default(Some(s("50"))),
                             ),
                         ])
                         .collect(),
@@ -8576,15 +8597,22 @@ mod test {
                                     }),
                                     ftd_rt::Element::Column(ftd_rt::Column {
                                         container: ftd_rt::Container {
-                                            children: vec![ftd_rt::Element::Text(ftd_rt::Text {
-                                                text: ftd::markdown_line("Heading 32"),
-                                                line: true,
-                                                common: ftd_rt::Common {
-                                                    region: Some(ftd_rt::Region::Title),
+                                            children: vec![
+                                                ftd_rt::Element::Text(ftd_rt::Text {
+                                                    text: ftd::markdown_line("Heading 32"),
+                                                    line: true,
+                                                    common: ftd_rt::Common {
+                                                        region: Some(ftd_rt::Region::Title),
+                                                        ..Default::default()
+                                                    },
                                                     ..Default::default()
-                                                },
-                                                ..Default::default()
-                                            })],
+                                                }),
+                                                ftd_rt::Element::Text(ftd_rt::Text {
+                                                    text: ftd::markdown_line("hello"),
+                                                    line: true,
+                                                    ..Default::default()
+                                                }),
+                                            ],
                                             ..Default::default()
                                         },
                                         common: ftd_rt::Common {
@@ -8746,6 +8774,8 @@ mod test {
 
                 -- h3: Heading 32
 
+                -- ftd.text: hello
+
                 -- h2: Heading 22
 
                 -- h2: Heading 23
@@ -8814,6 +8844,7 @@ mod test {
                         action: ftd_rt::Action {
                             action: s("toggle"),
                             target: s("foo/bar#mobile"),
+                            parameters: Default::default(),
                         },
                     }],
                     ..Default::default()
@@ -8868,6 +8899,7 @@ mod test {
                         action: ftd_rt::Action {
                             action: s("toggle"),
                             target: s("@open@0"),
+                            parameters: Default::default(),
                         },
                     }],
                     ..Default::default()
@@ -8885,7 +8917,7 @@ mod test {
                     .collect(),
                 locals: std::array::IntoIter::new([(
                     s("open"),
-                    ftd::p2::Kind::boolean().set_default(Some("true")),
+                    ftd::p2::Kind::boolean().set_default(Some(s("true"))),
                 )])
                 .collect(),
                 properties: std::array::IntoIter::new([(
@@ -8904,11 +8936,12 @@ mod test {
                 )])
                 .collect(),
                 instructions: vec![],
-                events: vec![ftd::p2::expression::Event {
-                    name: ftd::p2::expression::EventName::OnClick,
-                    action: ftd::p2::expression::Action {
-                        action: ftd::p2::expression::ActionKind::Toggle,
+                events: vec![ftd::p2::Event {
+                    name: ftd::p2::EventName::OnClick,
+                    action: ftd::p2::Action {
+                        action: ftd::p2::ActionKind::Toggle,
                         target: s("@open"),
+                        parameters: Default::default(),
                     },
                 }],
                 condition: Some(ftd::p2::Boolean::Equal {
@@ -8974,6 +9007,7 @@ mod test {
                                     action: ftd_rt::Action {
                                         action: s("toggle"),
                                         target: s("@open@0"),
+                                        parameters: Default::default(),
                                     },
                                 }],
                                 ..Default::default()
@@ -9057,6 +9091,7 @@ mod test {
                                     action: ftd_rt::Action {
                                         action: s("toggle"),
                                         target: s("@open@0"),
+                                        parameters: Default::default(),
                                     },
                                 }],
                                 ..Default::default()
@@ -9074,6 +9109,7 @@ mod test {
                                             action: ftd_rt::Action {
                                                 action: s("toggle"),
                                                 target: s("@open@0,1"),
+                                                parameters: Default::default(),
                                             },
                                         }],
                                         ..Default::default()
@@ -9103,6 +9139,7 @@ mod test {
                                             action: ftd_rt::Action {
                                                 action: s("toggle"),
                                                 target: s("@open@0,2"),
+                                                parameters: Default::default(),
                                             },
                                         }],
                                         ..Default::default()
@@ -9201,6 +9238,7 @@ mod test {
                                                         action: ftd_rt::Action {
                                                             action: s("toggle"),
                                                             target: s("@open@0"),
+                                                            parameters: Default::default(),
                                                         },
                                                     }],
                                                     ..Default::default()
@@ -9302,6 +9340,10 @@ mod test {
             .children
             .push(ftd_rt::Element::Integer(ftd_rt::Text {
                 text: markdown_line("20"),
+                common: ftd_rt::Common {
+                    reference: Some(s("foo/bar#bar")),
+                    ..Default::default()
+                },
                 ..Default::default()
             }));
 
@@ -9336,6 +9378,10 @@ mod test {
             .push(ftd_rt::Element::Text(ftd_rt::Text {
                 text: markdown_line("other-foo says hello"),
                 line: true,
+                common: ftd_rt::Common {
+                    reference: Some(s("foo/bar#bar")),
+                    ..Default::default()
+                },
                 ..Default::default()
             }));
 
@@ -9388,6 +9434,1022 @@ mod test {
                 -- ftd.text: hello
                 cursor: pointer
 
+                "
+            ),
+            &ftd::p2::TestLibrary {},
+        )
+        .expect("found error");
+
+        pretty_assertions::assert_eq!(g_col, main);
+    }
+
+    #[test]
+    fn comments() {
+        let mut main = super::default_column();
+        main.container
+            .children
+            .push(ftd_rt::Element::Text(ftd_rt::Text {
+                text: ftd::markdown("hello2"),
+                ..Default::default()
+            }));
+
+        main.container
+            .children
+            .push(ftd_rt::Element::Text(ftd_rt::Text {
+                text: ftd::markdown("/hello3"),
+                line: false,
+                common: ftd_rt::Common {
+                    color: Some(ftd_rt::Color {
+                        r: 255,
+                        g: 0,
+                        b: 0,
+                        alpha: 1.0,
+                    }),
+                    ..Default::default()
+                },
+                ..Default::default()
+            }));
+
+        main.container
+            .children
+            .push(ftd_rt::Element::Row(ftd_rt::Row {
+                container: ftd_rt::Container {
+                    children: vec![ftd_rt::Element::Text(ftd_rt::Text {
+                        text: ftd::markdown_line("hello5"),
+                        line: true,
+                        common: ftd_rt::Common {
+                            color: Some(ftd_rt::Color {
+                                r: 0,
+                                g: 128,
+                                b: 0,
+                                alpha: 1.0,
+                            }),
+                            ..Default::default()
+                        },
+                        ..Default::default()
+                    })],
+                    ..Default::default()
+                },
+                ..Default::default()
+            }));
+
+        main.container
+            .children
+            .push(ftd_rt::Element::Row(ftd_rt::Row {
+                container: ftd_rt::Container {
+                    children: vec![ftd_rt::Element::Text(ftd_rt::Text {
+                        text: ftd::markdown("/foo says hello"),
+                        ..Default::default()
+                    })],
+                    ..Default::default()
+                },
+                ..Default::default()
+            }));
+
+        let (_g_bag, g_col) = crate::p2::interpreter::interpret(
+            "foo/bar",
+            indoc::indoc!(
+                r"
+                /-- ftd.text:
+                cursor: pointer
+
+                hello1
+
+                -- ftd.text:
+                /color: red
+
+                hello2
+
+                -- ftd.text:
+                color: red
+
+                \/hello3
+
+                -- ftd.row:
+
+                /--- ftd.text: hello4
+
+                --- ftd.text: hello5
+                color: green
+                /padding-left: 20
+
+                -- component foo:
+                component: ftd.row
+                /color: red
+
+                --- ftd.text:
+
+                \/foo says hello
+
+                /--- ftd.text: foo says hello again
+
+                -- foo:
+
+                /-- foo:
+                "
+            ),
+            &ftd::p2::TestLibrary {},
+        )
+        .expect("found error");
+
+        pretty_assertions::assert_eq!(g_col, main);
+    }
+
+    #[test]
+    fn component_declaration_anywhere_2() {
+        let mut main = super::default_column();
+        main.container
+            .children
+            .push(ftd_rt::Element::Column(ftd_rt::Column {
+                container: ftd_rt::Container {
+                    children: vec![
+                        ftd_rt::Element::Column(ftd_rt::Column {
+                            container: ftd_rt::Container {
+                                children: vec![
+                                    ftd_rt::Element::Text(ftd_rt::Text {
+                                        text: ftd::markdown_line("Bar says hello"),
+                                        line: true,
+                                        ..Default::default()
+                                    }),
+                                    ftd_rt::Element::Text(ftd_rt::Text {
+                                        text: ftd::markdown_line("Hello"),
+                                        line: true,
+                                        common: ftd_rt::Common {
+                                            reference: Some(s("foo/bar#greeting")),
+                                            ..Default::default()
+                                        },
+                                        ..Default::default()
+                                    }),
+                                ],
+                                ..Default::default()
+                            },
+                            ..Default::default()
+                        }),
+                        ftd_rt::Element::Text(ftd_rt::Text {
+                            text: ftd::markdown_line("foo says hello"),
+                            line: true,
+                            ..Default::default()
+                        }),
+                        ftd_rt::Element::Text(ftd_rt::Text {
+                            text: ftd::markdown_line("Hello"),
+                            line: true,
+                            common: ftd_rt::Common {
+                                reference: Some(s("foo/bar#greeting")),
+                                ..Default::default()
+                            },
+                            ..Default::default()
+                        }),
+                    ],
+                    ..Default::default()
+                },
+                ..Default::default()
+            }));
+
+        let (_g_bag, g_col) = crate::p2::interpreter::interpret(
+            "foo/bar",
+            indoc::indoc!(
+                "
+                -- foo:
+
+                -- component foo:
+                component: ftd.column
+
+                --- bar: Bar says hello
+
+                --- ftd.text: foo says hello
+
+                --- ftd.text: ref greeting
+
+                -- var greeting: Hello
+
+                -- component bar:
+                component: ftd.column
+                $name: caption
+
+                --- ftd.text: ref $name
+
+                --- ftd.text: ref greeting
+                "
+            ),
+            &ftd::p2::TestLibrary {},
+        )
+        .expect("found error");
+
+        pretty_assertions::assert_eq!(g_col, main);
+    }
+
+    #[test]
+    fn action_increment_decrement_condition() {
+        let mut main = super::default_column();
+        main.container
+            .children
+            .push(ftd_rt::Element::Integer(ftd_rt::Text {
+                text: ftd::markdown_line("0"),
+                common: ftd_rt::Common {
+                    reference: Some(s("foo/bar#count")),
+                    ..Default::default()
+                },
+                ..Default::default()
+            }));
+
+        main.container
+            .children
+            .push(ftd_rt::Element::Text(ftd_rt::Text {
+                text: ftd::markdown_line("Hello on 8"),
+                line: true,
+                common: ftd_rt::Common {
+                    condition: Some(ftd_rt::Condition {
+                        variable: s("foo/bar#count"),
+                        value: s("8"),
+                    }),
+                    is_not_visible: true,
+                    ..Default::default()
+                },
+                ..Default::default()
+            }));
+
+        main.container
+            .children
+            .push(ftd_rt::Element::Text(ftd_rt::Text {
+                text: ftd::markdown_line("increment counter"),
+                line: true,
+                common: ftd_rt::Common {
+                    events: vec![ftd_rt::Event {
+                        name: s("onclick"),
+                        action: ftd_rt::Action {
+                            action: s("increment"),
+                            target: s("foo/bar#count"),
+                            parameters: Default::default(),
+                        },
+                    }],
+                    ..Default::default()
+                },
+                ..Default::default()
+            }));
+
+        main.container
+            .children
+            .push(ftd_rt::Element::Text(ftd_rt::Text {
+                text: ftd::markdown_line("decrement counter"),
+                line: true,
+                common: ftd_rt::Common {
+                    events: vec![ftd_rt::Event {
+                        name: s("onclick"),
+                        action: ftd_rt::Action {
+                            action: s("decrement"),
+                            target: s("foo/bar#count"),
+                            parameters: Default::default(),
+                        },
+                    }],
+                    ..Default::default()
+                },
+                ..Default::default()
+            }));
+
+        main.container
+            .children
+            .push(ftd_rt::Element::Text(ftd_rt::Text {
+                text: ftd::markdown_line("increment counter"),
+                line: true,
+                common: ftd_rt::Common {
+                    events: vec![ftd_rt::Event {
+                        name: s("onclick"),
+                        action: ftd_rt::Action {
+                            action: s("increment"),
+                            target: s("foo/bar#count"),
+                            parameters: std::array::IntoIter::new([(s("by"), vec![s("2")])])
+                                .collect(),
+                        },
+                    }],
+                    ..Default::default()
+                },
+                ..Default::default()
+            }));
+
+        main.container
+            .children
+            .push(ftd_rt::Element::Text(ftd_rt::Text {
+                text: ftd::markdown_line("increment counter by 2 clamp 2 10"),
+                line: true,
+                common: ftd_rt::Common {
+                    events: vec![ftd_rt::Event {
+                        name: s("onclick"),
+                        action: ftd_rt::Action {
+                            action: s("increment"),
+                            target: s("foo/bar#count"),
+                            parameters: std::array::IntoIter::new([
+                                (s("by"), vec![s("2")]),
+                                (s("clamp"), vec![s("2"), s("10")]),
+                            ])
+                            .collect(),
+                        },
+                    }],
+                    ..Default::default()
+                },
+                ..Default::default()
+            }));
+
+        main.container
+            .children
+            .push(ftd_rt::Element::Text(ftd_rt::Text {
+                text: ftd::markdown_line("decrement count clamp 2 10"),
+                line: true,
+                common: ftd_rt::Common {
+                    events: vec![ftd_rt::Event {
+                        name: s("onclick"),
+                        action: ftd_rt::Action {
+                            action: s("decrement"),
+                            target: s("foo/bar#count"),
+                            parameters: std::array::IntoIter::new([(
+                                s("clamp"),
+                                vec![s("2"), s("10")],
+                            )])
+                            .collect(),
+                        },
+                    }],
+                    ..Default::default()
+                },
+                ..Default::default()
+            }));
+
+        let (_g_bag, g_col) = crate::p2::interpreter::interpret(
+            "foo/bar",
+            indoc::indoc!(
+                "
+                -- var count: 0
+
+                -- ftd.integer:
+                value: ref count
+
+                -- ftd.text: Hello on 8
+                if: count == 8
+
+                -- ftd.text: increment counter
+                $event-click$: increment count
+
+                -- ftd.text: decrement counter
+                $event-click$: decrement count
+
+                -- ftd.text: increment counter
+                $event-click$: increment count by 2
+
+                -- ftd.text: increment counter by 2 clamp 2 10
+                $event-click$: increment count by 2 clamp 2 10
+
+                -- ftd.text: decrement count clamp 2 10
+                $event-click$: decrement count clamp 2 10
+                "
+            ),
+            &ftd::p2::TestLibrary {},
+        )
+        .expect("found error");
+        pretty_assertions::assert_eq!(g_col, main);
+    }
+
+    #[test]
+    fn action_increment_decrement_local_variable() {
+        let mut main = super::default_column();
+        main.container
+            .children
+            .push(ftd_rt::Element::Column(ftd_rt::Column {
+                container: ftd_rt::Container {
+                    children: vec![
+                        ftd_rt::Element::Integer(ftd_rt::Text {
+                            text: ftd::markdown_line("0"),
+                            common: ftd_rt::Common {
+                                reference: Some(s("@count@0")),
+                                ..Default::default()
+                            },
+                            ..Default::default()
+                        }),
+                        ftd_rt::Element::Text(ftd_rt::Text {
+                            text: ftd::markdown_line("increment counter"),
+                            line: true,
+                            common: ftd_rt::Common {
+                                events: vec![ftd_rt::Event {
+                                    name: s("onclick"),
+                                    action: ftd_rt::Action {
+                                        action: s("increment"),
+                                        target: s("@count@0"),
+                                        parameters: std::array::IntoIter::new([(
+                                            s("by"),
+                                            vec![s("3")],
+                                        )])
+                                        .collect(),
+                                    },
+                                }],
+                                ..Default::default()
+                            },
+                            ..Default::default()
+                        }),
+                        ftd_rt::Element::Text(ftd_rt::Text {
+                            text: ftd::markdown_line("decrement counter"),
+                            line: true,
+                            common: ftd_rt::Common {
+                                events: vec![ftd_rt::Event {
+                                    name: s("onclick"),
+                                    action: ftd_rt::Action {
+                                        action: s("decrement"),
+                                        target: s("@count@0"),
+                                        parameters: std::array::IntoIter::new([(
+                                            s("by"),
+                                            vec![s("2")],
+                                        )])
+                                        .collect(),
+                                    },
+                                }],
+                                ..Default::default()
+                            },
+                            ..Default::default()
+                        }),
+                    ],
+                    ..Default::default()
+                },
+                common: ftd_rt::Common {
+                    locals: std::array::IntoIter::new([(s("count@0"), s("0"))]).collect(),
+                    ..Default::default()
+                },
+            }));
+
+        let (_g_bag, g_col) = crate::p2::interpreter::interpret(
+            "foo/bar",
+            indoc::indoc!(
+                "
+                -- var decrement-by: 2
+
+                -- component foo:
+                component: ftd.column
+                $by: integer with default 4
+                @count: integer with default 0
+
+                --- ftd.integer:
+                value: ref @count
+
+                --- ftd.text: increment counter
+                $event-click$: increment @count by $by
+
+                --- ftd.text: decrement counter
+                $event-click$: decrement @count by decrement-by
+
+                -- foo:
+                by: 3
+
+                "
+            ),
+            &ftd::p2::TestLibrary {},
+        )
+        .expect("found error");
+        pretty_assertions::assert_eq!(g_col, main);
+    }
+
+    #[test]
+    fn nested_component() {
+        let mut main = super::default_column();
+        main.container
+            .children
+            .push(ftd_rt::Element::Row(ftd_rt::Row {
+                ..Default::default()
+            }));
+
+        let (_g_bag, g_col) = crate::p2::interpreter::interpret(
+            "foo/bar",
+            indoc::indoc!(
+                "
+                -- secondary-button: CTA says Hello
+
+                -- component secondary-button:
+                component: secondary-button-1
+                $cta: caption
+                cta: ref $cta
+
+
+                -- component secondary-button-1:
+                component: ftd.row
+                $cta: caption
+
+                --- ftd.text: ref $cta
+                "
+            ),
+            &ftd::p2::TestLibrary {},
+        )
+        .expect("found error");
+
+        pretty_assertions::assert_eq!(g_col, main);
+    }
+
+    #[test]
+    fn action_increment_decrement_on_component() {
+        let mut main = super::default_column();
+        main.container
+            .children
+            .push(ftd_rt::Element::Image(ftd_rt::Image {
+                src: s("https://www.liveabout.com/thmb/YCJmu1khSJo8kMYM090QCd9W78U=/1250x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/powerpuff_girls-56a00bc45f9b58eba4aea61d.jpg"),
+                common: ftd_rt::Common {
+                    condition: Some(
+                        ftd_rt::Condition {
+                            variable: s("foo/bar#count"),
+                            value: s("0"),
+                        },
+                    ),
+                    is_not_visible: false,
+                    events: vec![
+                        ftd_rt::Event {
+                            name: s("onclick"),
+                            action: ftd_rt::Action {
+                                action: s("increment"),
+                                target: s("foo/bar#count"),
+                                parameters: std::array::IntoIter::new([(s("clamp"), vec![s("0"), s("1")])])
+                                    .collect(),
+                            },
+                        },
+                    ],
+                    ..Default::default()
+                },
+                ..Default::default()
+            }));
+
+        main.container
+            .children
+            .push(ftd_rt::Element::Image(ftd_rt::Image {
+                src: s("https://upload.wikimedia.org/wikipedia/en/d/d4/Mickey_Mouse.png"),
+                common: ftd_rt::Common {
+                    condition: Some(ftd_rt::Condition {
+                        variable: s("foo/bar#count"),
+                        value: s("1"),
+                    }),
+                    is_not_visible: true,
+                    events: vec![ftd_rt::Event {
+                        name: s("onclick"),
+                        action: ftd_rt::Action {
+                            action: s("increment"),
+                            target: s("foo/bar#count"),
+                            parameters: std::array::IntoIter::new([(
+                                s("clamp"),
+                                vec![s("0"), s("1")],
+                            )])
+                            .collect(),
+                        },
+                    }],
+                    ..Default::default()
+                },
+                ..Default::default()
+            }));
+
+        let (_g_bag, g_col) = crate::p2::interpreter::interpret(
+            "foo/bar",
+            indoc::indoc!(
+                "
+                -- var count: 0
+
+                -- component slide:
+                component: ftd.image
+                $src: string
+                $idx: integer
+                src: ref $src
+                if: count == $idx
+                $event-click$: increment count clamp 0 1
+
+                -- slide:
+                src: https://www.liveabout.com/thmb/YCJmu1khSJo8kMYM090QCd9W78U=/1250x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/powerpuff_girls-56a00bc45f9b58eba4aea61d.jpg
+                idx: 0
+
+                -- slide:
+                src: https://upload.wikimedia.org/wikipedia/en/d/d4/Mickey_Mouse.png
+                idx: 1
+                "
+            ),
+            &ftd::p2::TestLibrary {},
+        )
+        .expect("found error");
+
+        pretty_assertions::assert_eq!(g_col, main);
+    }
+
+    #[test]
+    fn loop_on_list_string() {
+        let mut main = super::default_column();
+        main.container
+            .children
+            .push(ftd_rt::Element::Column(ftd_rt::Column {
+                container: ftd_rt::Container {
+                    children: vec![
+                        ftd_rt::Element::Text(ftd_rt::Text {
+                            text: ftd::markdown_line("Arpita"),
+                            line: true,
+                            ..Default::default()
+                        }),
+                        ftd_rt::Element::Text(ftd_rt::Text {
+                            text: ftd::markdown_line("Ayushi"),
+                            line: true,
+                            ..Default::default()
+                        }),
+                        ftd_rt::Element::Text(ftd_rt::Text {
+                            text: ftd::markdown_line("AmitU"),
+                            line: true,
+                            ..Default::default()
+                        }),
+                    ],
+                    ..Default::default()
+                },
+                ..Default::default()
+            }));
+
+        let (_g_bag, g_col) = crate::p2::interpreter::interpret(
+            "foo/bar",
+            indoc::indoc!(
+                "
+                -- component foo:
+                component: ftd.column
+                $bar: list string
+
+                --- ftd.text: ref obj
+                $loop$: $bar as obj
+
+                -- list names:
+                type: string
+
+                -- names: Arpita
+
+                -- names: Ayushi
+
+                -- names: AmitU
+
+                -- foo:
+                bar: ref names
+                "
+            ),
+            &ftd::p2::TestLibrary {},
+        )
+        .expect("found error");
+
+        pretty_assertions::assert_eq!(g_col, main);
+    }
+
+    #[test]
+    fn open_container_with_parent_id() {
+        let mut main = super::default_column();
+        let beverage_external_children = vec![ftd_rt::Element::Column(ftd_rt::Column {
+            container: ftd_rt::Container {
+                children: vec![
+                    ftd_rt::Element::Column(ftd_rt::Column {
+                        container: ftd_rt::Container {
+                            children: vec![
+                                ftd_rt::Element::Text(ftd_rt::Text {
+                                    text: ftd::markdown_line("Water"),
+                                    line: true,
+                                    common: ftd_rt::Common {
+                                        events: vec![ftd_rt::Event {
+                                            name: s("onclick"),
+                                            action: ftd_rt::Action {
+                                                action: s("toggle"),
+                                                target: s("@visible@0,0,0"),
+                                                ..Default::default()
+                                            },
+                                        }],
+                                        ..Default::default()
+                                    },
+                                    ..Default::default()
+                                }),
+                                ftd_rt::Element::Column(ftd_rt::Column {
+                                    common: ftd_rt::Common {
+                                        condition: Some(ftd_rt::Condition {
+                                            variable: s("@visible@0,0,0"),
+                                            value: s("true"),
+                                        }),
+                                        id: Some(s("some-child")),
+                                        ..Default::default()
+                                    },
+                                    ..Default::default()
+                                }),
+                            ],
+                            external_children: Some((s("some-child"), vec![vec![1]], vec![])),
+                            open: (None, Some(s("some-child"))),
+                            ..Default::default()
+                        },
+                        common: ftd_rt::Common {
+                            locals: std::array::IntoIter::new([(s("visible@0,0,0"), s("true"))])
+                                .collect(),
+                            ..Default::default()
+                        },
+                    }),
+                    ftd_rt::Element::Column(ftd_rt::Column {
+                        container: ftd_rt::Container {
+                            children: vec![
+                                ftd_rt::Element::Text(ftd_rt::Text {
+                                    text: ftd::markdown_line("Juice"),
+                                    line: true,
+                                    common: ftd_rt::Common {
+                                        events: vec![ftd_rt::Event {
+                                            name: s("onclick"),
+                                            action: ftd_rt::Action {
+                                                action: s("toggle"),
+                                                target: s("@visible@0,0,1"),
+                                                ..Default::default()
+                                            },
+                                        }],
+                                        ..Default::default()
+                                    },
+                                    ..Default::default()
+                                }),
+                                ftd_rt::Element::Column(ftd_rt::Column {
+                                    common: ftd_rt::Common {
+                                        condition: Some(ftd_rt::Condition {
+                                            variable: s("@visible@0,0,1"),
+                                            value: s("true"),
+                                        }),
+                                        id: Some(s("some-child")),
+                                        ..Default::default()
+                                    },
+                                    ..Default::default()
+                                }),
+                            ],
+                            external_children: Some((
+                                s("some-child"),
+                                vec![vec![1]],
+                                vec![ftd_rt::Element::Column(ftd_rt::Column {
+                                    container: ftd_rt::Container {
+                                        children: vec![ftd_rt::Element::Column(ftd_rt::Column {
+                                            container: ftd_rt::Container {
+                                                children: vec![
+                                                    ftd_rt::Element::Text(ftd_rt::Text {
+                                                        text: ftd::markdown_line("Mango Juice"),
+                                                        line: true,
+                                                        common: ftd_rt::Common {
+                                                            events: vec![ftd_rt::Event {
+                                                                name: s("onclick"),
+                                                                action: ftd_rt::Action {
+                                                                    action: s("toggle"),
+                                                                    target: s("@visible@0,0,1,0"),
+                                                                    ..Default::default()
+                                                                },
+                                                            }],
+                                                            ..Default::default()
+                                                        },
+                                                        ..Default::default()
+                                                    }),
+                                                    ftd_rt::Element::Column(ftd_rt::Column {
+                                                        common: ftd_rt::Common {
+                                                            condition: Some(ftd_rt::Condition {
+                                                                variable: s("@visible@0,0,1,0"),
+                                                                value: s("true"),
+                                                            }),
+                                                            id: Some(s("some-child")),
+                                                            ..Default::default()
+                                                        },
+                                                        ..Default::default()
+                                                    }),
+                                                ],
+                                                external_children: Some((
+                                                    s("some-child"),
+                                                    vec![vec![1]],
+                                                    vec![],
+                                                )),
+                                                open: (None, Some(s("some-child"))),
+                                                ..Default::default()
+                                            },
+                                            common: ftd_rt::Common {
+                                                locals: std::array::IntoIter::new([(
+                                                    s("visible@0,0,1,0"),
+                                                    s("true"),
+                                                )])
+                                                .collect(),
+                                                ..Default::default()
+                                            },
+                                        })],
+                                        align: ftd_rt::Align::Center,
+                                        wrap: true,
+                                        ..Default::default()
+                                    },
+                                    common: ftd_rt::Common {
+                                        width: Some(ftd_rt::Length::Fill),
+                                        height: Some(ftd_rt::Length::Fill),
+                                        ..Default::default()
+                                    },
+                                })],
+                            )),
+                            open: (None, Some(s("some-child"))),
+                            ..Default::default()
+                        },
+                        common: ftd_rt::Common {
+                            locals: std::array::IntoIter::new([(s("visible@0,0,1"), s("true"))])
+                                .collect(),
+                            ..Default::default()
+                        },
+                    }),
+                ],
+                align: ftd_rt::Align::Center,
+                wrap: true,
+                ..Default::default()
+            },
+            common: ftd_rt::Common {
+                width: Some(ftd_rt::Length::Fill),
+                height: Some(ftd_rt::Length::Fill),
+                ..Default::default()
+            },
+        })];
+
+        main.container
+            .children
+            .push(ftd_rt::Element::Column(ftd_rt::Column {
+                container: ftd_rt::Container {
+                    children: vec![ftd_rt::Element::Column(ftd_rt::Column {
+                        container: ftd_rt::Container {
+                            children: vec![
+                                ftd_rt::Element::Text(ftd_rt::Text {
+                                    text: ftd::markdown_line("Beverage"),
+                                    line: true,
+                                    common: ftd_rt::Common {
+                                        events: vec![ftd_rt::Event {
+                                            name: s("onclick"),
+                                            action: ftd_rt::Action {
+                                                action: s("toggle"),
+                                                target: s("@visible@0,0"),
+                                                ..Default::default()
+                                            },
+                                        }],
+                                        ..Default::default()
+                                    },
+                                    ..Default::default()
+                                }),
+                                ftd_rt::Element::Column(ftd_rt::Column {
+                                    common: ftd_rt::Common {
+                                        condition: Some(ftd_rt::Condition {
+                                            variable: s("@visible@0,0"),
+                                            value: s("true"),
+                                        }),
+                                        id: Some(s("some-child")),
+                                        ..Default::default()
+                                    },
+                                    ..Default::default()
+                                }),
+                            ],
+                            external_children: Some((
+                                s("some-child"),
+                                vec![vec![1]],
+                                beverage_external_children,
+                            )),
+                            open: (None, Some(s("some-child"))),
+                            ..Default::default()
+                        },
+                        common: ftd_rt::Common {
+                            locals: std::array::IntoIter::new([(s("visible@0,0"), s("true"))])
+                                .collect(),
+                            id: Some(s("beverage")),
+                            ..Default::default()
+                        },
+                    })],
+                    ..Default::default()
+                },
+                ..Default::default()
+            }));
+
+        let (_g_bag, g_col) = crate::p2::interpreter::interpret(
+            "foo/bar",
+            indoc::indoc!(
+                "
+            -- component display-item1:
+            component: ftd.column
+            $name: string
+            open: some-child
+            @visible: boolean with default true
+
+            --- ftd.text: ref $name
+            $event-click$: toggle @visible
+
+            --- ftd.column:
+            if: @visible
+            id: some-child
+
+            -- ftd.column:
+
+            -- display-item1:
+            name: Beverage
+            id: beverage
+
+
+            -- display-item1:
+            name: Water
+
+
+            -- container: beverage
+
+
+            -- display-item1:
+            name: Juice
+
+
+            -- display-item1:
+            name: Mango Juice
+            "
+            ),
+            &ftd::p2::TestLibrary {},
+        )
+        .expect("found error");
+
+        pretty_assertions::assert_eq!(g_col, main);
+    }
+
+    #[test]
+    fn text_check() {
+        let mut main = super::default_column();
+        main.container
+            .children
+            .push(ftd_rt::Element::Column(ftd_rt::Column {
+                container: ftd_rt::Container {
+                    children: vec![
+                        ftd_rt::Element::Text(ftd_rt::Text {
+                            text: ftd::markdown_line("$hello"),
+                            line: true,
+                            ..Default::default()
+                        }),
+                        ftd_rt::Element::Text(ftd_rt::Text {
+                            text: ftd::markdown_line("hello"),
+                            line: true,
+                            ..Default::default()
+                        }),
+                        ftd_rt::Element::Text(ftd_rt::Text {
+                            text: ftd::markdown_line("hello"),
+                            line: true,
+                            common: ftd_rt::Common {
+                                reference: Some(s("foo/bar#hello")),
+                                ..Default::default()
+                            },
+                            ..Default::default()
+                        }),
+                        ftd_rt::Element::Text(ftd_rt::Text {
+                            text: ftd::markdown_line("hello"),
+                            line: true,
+                            ..Default::default()
+                        }),
+                    ],
+                    ..Default::default()
+                },
+                ..Default::default()
+            }));
+
+        let (_g_bag, g_col) = crate::p2::interpreter::interpret(
+            "foo/bar",
+            indoc::indoc!(
+                r"
+                -- var hello: hello
+
+                -- component foo:
+                component: ftd.column
+                $hello: string
+
+                --- ftd.text: $hello
+
+                --- ftd.text: ref $hello
+
+                --- ftd.text: ref hello
+
+                --- ftd.text: ref 'hello'
+
+                -- foo:
+                hello: ref hello
+                "
+            ),
+            &ftd::p2::TestLibrary {},
+        )
+        .expect("found error");
+
+        pretty_assertions::assert_eq!(g_col, main);
+    }
+
+    #[test]
+    fn caption() {
+        let mut main = super::default_column();
+
+        main.container
+            .children
+            .push(ftd_rt::Element::Integer(ftd_rt::Text {
+                text: ftd::markdown_line("32"),
+                ..Default::default()
+            }));
+
+        main.container
+            .children
+            .push(ftd_rt::Element::Boolean(ftd_rt::Text {
+                text: ftd::markdown_line("true"),
+                ..Default::default()
+            }));
+
+        main.container
+            .children
+            .push(ftd_rt::Element::Decimal(ftd_rt::Text {
+                text: ftd::markdown_line("0.06"),
+                ..Default::default()
+            }));
+
+        let (_g_bag, g_col) = crate::p2::interpreter::interpret(
+            "foo/bar",
+            indoc::indoc!(
+                "
+                -- ftd.integer: 32
+
+                -- ftd.boolean: true
+
+                -- ftd.decimal: 0.06
                 "
             ),
             &ftd::p2::TestLibrary {},

@@ -3,8 +3,10 @@ pub fn common_from_properties(
     doc: &crate::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
-    events: &[ftd::p2::expression::Event],
+    events: &[ftd::p2::Event],
     all_locals: &ftd_rt::Map,
+    root_name: Option<&str>,
+    reference: Option<String>,
 ) -> crate::p1::Result<ftd_rt::Common> {
     let submit = crate::p2::utils::string_optional("submit", properties)?;
     let link = crate::p2::utils::string_optional("link", properties)?;
@@ -14,16 +16,29 @@ pub fn common_from_properties(
             "common_from_properties",
         );
     }
+    let gradient_color_str = crate::p2::utils::string_optional("gradient-colors", properties)?;
+
+    let gradient_colors: Vec<ftd_rt::Color> = match gradient_color_str {
+        Some(f) => f
+            .split(',')
+            .flat_map(|x| color_from(Some(x.to_string())).ok()?)
+            .collect(),
+        None => vec![],
+    };
 
     Ok(ftd_rt::Common {
         locals: Default::default(),
         condition: match condition {
-            Some(c) if !c.is_constant() => Some(c.to_condition(all_locals)?),
+            Some(c) if !c.is_constant() => Some(c.to_condition(all_locals, &Default::default())?),
             _ => None,
         },
-        events: ftd::p2::expression::Event::get_events(events, all_locals)?,
+        is_not_visible: false,
+        events: ftd::p2::Event::get_events(events, all_locals, properties, doc, root_name)?,
+        reference,
         region: ftd_rt::Region::from(crate::p2::utils::string_optional("region", properties)?)?,
         padding: crate::p2::utils::int_optional("padding", properties)?,
+        padding_vertical: crate::p2::utils::int_optional("padding-vertical", properties)?,
+        padding_horizontal: crate::p2::utils::int_optional("padding-horizontal", properties)?,
         padding_left: crate::p2::utils::int_optional("padding-left", properties)?,
         padding_right: crate::p2::utils::int_optional("padding-right", properties)?,
         padding_top: crate::p2::utils::int_optional("padding-top", properties)?,
@@ -90,6 +105,19 @@ pub fn common_from_properties(
         top: crate::p2::utils::int_optional("top", properties)?,
         cursor: crate::p2::utils::string_optional("cursor", properties)?,
         submit,
+        shadow_offset_x: crate::p2::utils::int_optional("shadow-offset-x", properties)?,
+        shadow_offset_y: crate::p2::utils::int_optional("shadow-offset-y", properties)?,
+        shadow_size: crate::p2::utils::int_optional("shadow-size", properties)?,
+        shadow_blur: crate::p2::utils::int_optional("shadow-blur", properties)?,
+        shadow_color: color_from(crate::p2::utils::string_optional(
+            "shadow-color",
+            properties,
+        )?)?,
+        gradient_direction: ftd_rt::GradientDirection::from(crate::p2::utils::string_optional(
+            "gradient-direction",
+            properties,
+        )?)?,
+        gradient_colors,
     })
 }
 
@@ -97,6 +125,14 @@ fn common_arguments() -> Vec<(String, crate::p2::Kind)> {
     vec![
         (
             "padding".to_string(),
+            crate::p2::Kind::integer().into_optional(),
+        ),
+        (
+            "padding-vertical".to_string(),
+            crate::p2::Kind::integer().into_optional(),
+        ),
+        (
+            "padding-horizontal".to_string(),
             crate::p2::Kind::integer().into_optional(),
         ),
         (
@@ -249,6 +285,34 @@ fn common_arguments() -> Vec<(String, crate::p2::Kind)> {
             "cursor".to_string(),
             crate::p2::Kind::string().into_optional(),
         ),
+        (
+            "gradient-direction".to_string(),
+            crate::p2::Kind::string().into_optional(),
+        ),
+        (
+            "gradient-colors".to_string(),
+            crate::p2::Kind::string().into_optional(),
+        ),
+        (
+            "shadow-offset-x".to_string(),
+            crate::p2::Kind::integer().into_optional(),
+        ),
+        (
+            "shadow-offset-y".to_string(),
+            crate::p2::Kind::integer().into_optional(),
+        ),
+        (
+            "shadow-blur".to_string(),
+            crate::p2::Kind::integer().into_optional(),
+        ),
+        (
+            "shadow-size".to_string(),
+            crate::p2::Kind::integer().into_optional(),
+        ),
+        (
+            "shadow-color".to_string(),
+            crate::p2::Kind::string().into_optional(),
+        ),
     ]
 }
 
@@ -328,18 +392,24 @@ pub fn image_function() -> crate::Component {
 }
 
 pub fn image_from_properties(
-    properties: &std::collections::BTreeMap<String, crate::Value>,
+    properties_with_ref: &std::collections::BTreeMap<String, (crate::Value, Option<String>)>,
     doc: &crate::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
-    events: &[ftd::p2::expression::Event],
+    events: &[ftd::p2::Event],
     all_locals: &ftd_rt::Map,
+    root_name: Option<&str>,
 ) -> crate::p1::Result<ftd_rt::Image> {
+    let (src, reference) =
+        crate::p2::utils::string_and_ref("src", properties_with_ref, all_locals)?;
+    let properties = &ftd::p2::utils::properties(properties_with_ref);
     Ok(ftd_rt::Image {
-        src: crate::p2::utils::string("src", properties)?,
+        src,
         description: crate::p2::utils::string_optional("description", properties)?
             .unwrap_or_else(|| "".to_string()),
-        common: common_from_properties(properties, doc, condition, is_child, events, all_locals)?,
+        common: common_from_properties(
+            properties, doc, condition, is_child, events, all_locals, root_name, reference,
+        )?,
         align: ftd_rt::Align::from(crate::p2::utils::string_optional("align", properties)?)?,
     })
 }
@@ -363,15 +433,19 @@ pub fn row_function() -> crate::Component {
 }
 
 pub fn row_from_properties(
-    properties: &std::collections::BTreeMap<String, crate::Value>,
+    properties_with_ref: &std::collections::BTreeMap<String, (crate::Value, Option<String>)>,
     doc: &crate::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
-    events: &[ftd::p2::expression::Event],
+    events: &[ftd::p2::Event],
     all_locals: &ftd_rt::Map,
+    root_name: Option<&str>,
 ) -> crate::p1::Result<ftd_rt::Row> {
+    let properties = &ftd::p2::utils::properties(properties_with_ref);
     Ok(ftd_rt::Row {
-        common: common_from_properties(properties, doc, condition, is_child, events, all_locals)?,
+        common: common_from_properties(
+            properties, doc, condition, is_child, events, all_locals, root_name, None,
+        )?,
         container: container_from_properties(properties, doc)?,
     })
 }
@@ -394,15 +468,19 @@ pub fn column_function() -> crate::Component {
     }
 }
 pub fn column_from_properties(
-    properties: &std::collections::BTreeMap<String, crate::Value>,
+    properties_with_ref: &std::collections::BTreeMap<String, (crate::Value, Option<String>)>,
     doc: &crate::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
-    events: &[ftd::p2::expression::Event],
+    events: &[ftd::p2::Event],
     all_locals: &ftd_rt::Map,
+    root_name: Option<&str>,
 ) -> crate::p1::Result<ftd_rt::Column> {
+    let properties = &ftd::p2::utils::properties(properties_with_ref);
     Ok(ftd_rt::Column {
-        common: common_from_properties(properties, doc, condition, is_child, events, all_locals)?,
+        common: common_from_properties(
+            properties, doc, condition, is_child, events, all_locals, root_name, None,
+        )?,
         container: container_from_properties(properties, doc)?,
     })
 }
@@ -449,6 +527,10 @@ pub fn text_render(
         (_, ftd_rt::TextFormat::Code { lang }) => {
             ftd::code_with_theme(text.as_str(), lang.as_str(), theme.as_str())?
         }
+        (_, ftd_rt::TextFormat::Text) => ftd_rt::Rendered {
+            original: text.clone(),
+            rendered: text,
+        },
     })
 }
 
@@ -480,13 +562,15 @@ pub fn iframe_function() -> crate::Component {
 }
 
 pub fn iframe_from_properties(
-    properties: &std::collections::BTreeMap<String, crate::Value>,
+    properties_with_ref: &std::collections::BTreeMap<String, (crate::Value, Option<String>)>,
     doc: &crate::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
-    events: &[ftd::p2::expression::Event],
+    events: &[ftd::p2::Event],
     all_locals: &ftd_rt::Map,
+    root_name: Option<&str>,
 ) -> crate::p1::Result<ftd_rt::IFrame> {
+    let properties = &ftd::p2::utils::properties(properties_with_ref);
     let src = match (
         crate::p2::utils::string_optional("src", properties)?,
         crate::p2::utils::string_optional("youtube", properties)?
@@ -500,23 +584,29 @@ pub fn iframe_from_properties(
 
     Ok(ftd_rt::IFrame {
         src,
-        common: common_from_properties(properties, doc, condition, is_child, events, all_locals)?,
+        common: common_from_properties(
+            properties, doc, condition, is_child, events, all_locals, root_name, None,
+        )?,
     })
 }
 
 pub fn text_from_properties(
-    properties: &std::collections::BTreeMap<String, crate::Value>,
+    properties_with_ref: &std::collections::BTreeMap<String, (crate::Value, Option<String>)>,
     doc: &crate::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
-    events: &[ftd::p2::expression::Event],
+    events: &[ftd::p2::Event],
     all_locals: &ftd_rt::Map,
+    root_name: Option<&str>,
 ) -> crate::p1::Result<ftd_rt::Text> {
+    let properties = &ftd::p2::utils::properties(properties_with_ref);
     let format = ftd_rt::TextFormat::from(
         crate::p2::utils::string_optional("format", properties)?,
         crate::p2::utils::string_optional("lang", properties)?,
     )?;
-    let (text, source) = crate::p2::utils::string_and_source("text", properties)?;
+
+    let (text, source, reference) =
+        crate::p2::utils::string_and_source_and_ref("text", properties_with_ref, all_locals)?;
     let font_str = crate::p2::utils::string_optional("font", properties)?;
 
     let font: Vec<ftd_rt::NamedFont> = match font_str {
@@ -538,25 +628,29 @@ pub fn text_from_properties(
                 properties,
             )?,
         )?,
-        common: common_from_properties(properties, doc, condition, is_child, events, all_locals)?,
+        common: common_from_properties(
+            properties, doc, condition, is_child, events, all_locals, root_name, reference,
+        )?,
         align: ftd_rt::TextAlign::from(crate::p2::utils::string_optional("align", properties)?)?,
         style: ftd_rt::Style::from(crate::p2::utils::string_optional("style", properties)?)?,
         format,
         size: crate::p2::utils::int_optional("size", properties)?,
         external_font: external_font_from_properties(properties, doc)?,
         font,
-        line_height: crate::p2::utils::string_optional("line-height", properties)?,
+        line_height: crate::p2::utils::int_optional("line-height", properties)?,
     })
 }
 
 pub fn integer_from_properties(
-    properties: &std::collections::BTreeMap<String, crate::Value>,
+    properties_with_ref: &std::collections::BTreeMap<String, (crate::Value, Option<String>)>,
     doc: &crate::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
-    events: &[ftd::p2::expression::Event],
+    events: &[ftd::p2::Event],
     all_locals: &ftd_rt::Map,
+    root_name: Option<&str>,
 ) -> crate::p1::Result<ftd_rt::Text> {
+    let properties = &ftd::p2::utils::properties(properties_with_ref);
     let font_str = crate::p2::utils::string_optional("font", properties)?;
     let num = format_num::NumberFormat::new();
     let text = match crate::p2::utils::string_optional("format", properties)? {
@@ -566,6 +660,10 @@ pub fn integer_from_properties(
         ),
         None => crate::p2::utils::int("value", properties)?.to_string(),
     };
+    let reference = ftd::p2::utils::complete_reference(
+        &properties_with_ref.get("value").expect("").1,
+        all_locals,
+    );
 
     let font: Vec<ftd_rt::NamedFont> = match font_str {
         Some(f) => f
@@ -578,25 +676,29 @@ pub fn integer_from_properties(
     Ok(ftd_rt::Text {
         text: crate::markdown_line(text.as_str()),
         line: false,
-        common: common_from_properties(properties, doc, condition, is_child, events, all_locals)?,
+        common: common_from_properties(
+            properties, doc, condition, is_child, events, all_locals, root_name, reference,
+        )?,
         align: ftd_rt::TextAlign::from(crate::p2::utils::string_optional("align", properties)?)?,
         style: ftd_rt::Style::from(crate::p2::utils::string_optional("style", properties)?)?,
         format: Default::default(),
         size: crate::p2::utils::int_optional("size", properties)?,
         external_font: external_font_from_properties(properties, doc)?,
         font,
-        line_height: crate::p2::utils::string_optional("line-height", properties)?,
+        line_height: crate::p2::utils::int_optional("line-height", properties)?,
     })
 }
 
 pub fn decimal_from_properties(
-    properties: &std::collections::BTreeMap<String, crate::Value>,
+    properties_with_ref: &std::collections::BTreeMap<String, (crate::Value, Option<String>)>,
     doc: &crate::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
-    events: &[ftd::p2::expression::Event],
+    events: &[ftd::p2::Event],
     all_locals: &ftd_rt::Map,
+    root_name: Option<&str>,
 ) -> crate::p1::Result<ftd_rt::Text> {
+    let properties = &ftd::p2::utils::properties(properties_with_ref);
     let font_str = crate::p2::utils::string_optional("font", properties)?;
     let num = format_num::NumberFormat::new();
     let text = match crate::p2::utils::string_optional("format", properties)? {
@@ -604,6 +706,11 @@ pub fn decimal_from_properties(
         None => crate::p2::utils::decimal("value", properties)?.to_string(),
     };
 
+    let reference = ftd::p2::utils::complete_reference(
+        &properties_with_ref.get("value").expect("").1,
+        all_locals,
+    );
+
     let font: Vec<ftd_rt::NamedFont> = match font_str {
         Some(f) => f
             .split(',')
@@ -614,14 +721,16 @@ pub fn decimal_from_properties(
     Ok(ftd_rt::Text {
         text: crate::markdown_line(text.as_str()),
         line: false,
-        common: common_from_properties(properties, doc, condition, is_child, events, all_locals)?,
+        common: common_from_properties(
+            properties, doc, condition, is_child, events, all_locals, root_name, reference,
+        )?,
         align: ftd_rt::TextAlign::from(crate::p2::utils::string_optional("align", properties)?)?,
         style: ftd_rt::Style::from(crate::p2::utils::string_optional("style", properties)?)?,
         format: Default::default(),
         size: crate::p2::utils::int_optional("size", properties)?,
         external_font: external_font_from_properties(properties, doc)?,
         font,
-        line_height: crate::p2::utils::string_optional("line-height", properties)?,
+        line_height: crate::p2::utils::int_optional("line-height", properties)?,
     })
 }
 
@@ -645,13 +754,15 @@ pub fn color_from(l: Option<String>) -> ftd::p1::Result<Option<ftd_rt::Color>> {
 }
 
 pub fn boolean_from_properties(
-    properties: &std::collections::BTreeMap<String, crate::Value>,
+    properties_with_ref: &std::collections::BTreeMap<String, (crate::Value, Option<String>)>,
     doc: &crate::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
-    events: &[ftd::p2::expression::Event],
+    events: &[ftd::p2::Event],
     all_locals: &ftd_rt::Map,
+    root_name: Option<&str>,
 ) -> crate::p1::Result<ftd_rt::Text> {
+    let properties = &ftd::p2::utils::properties(properties_with_ref);
     let font_str = crate::p2::utils::string_optional("font", properties)?;
     let value = crate::p2::utils::bool("value", properties)?;
     let text = if value {
@@ -659,6 +770,12 @@ pub fn boolean_from_properties(
     } else {
         crate::p2::utils::string_with_default("false", "false", properties)?
     };
+
+    let reference = ftd::p2::utils::complete_reference(
+        &properties_with_ref.get("value").expect("").1,
+        all_locals,
+    );
+
     let font: Vec<ftd_rt::NamedFont> = match font_str {
         Some(f) => f
             .split(',')
@@ -670,14 +787,16 @@ pub fn boolean_from_properties(
     Ok(ftd_rt::Text {
         text: crate::markdown_line(text.as_str()),
         line: false,
-        common: common_from_properties(properties, doc, condition, is_child, events, all_locals)?,
+        common: common_from_properties(
+            properties, doc, condition, is_child, events, all_locals, root_name, reference,
+        )?,
         align: ftd_rt::TextAlign::from(crate::p2::utils::string_optional("align", properties)?)?,
         style: ftd_rt::Style::from(crate::p2::utils::string_optional("style", properties)?)?,
         format: Default::default(),
         size: crate::p2::utils::int_optional("size", properties)?,
         external_font: external_font_from_properties(properties, doc)?,
         font,
-        line_height: crate::p2::utils::string_optional("line-height", properties)?,
+        line_height: crate::p2::utils::int_optional("line-height", properties)?,
     })
 }
 
@@ -727,7 +846,7 @@ pub fn text_function() -> crate::Component {
                 ),
                 (
                     "line-height".to_string(),
-                    crate::p2::Kind::string().into_optional(),
+                    crate::p2::Kind::integer().into_optional(),
                 ),
             ],
             common_arguments(),
@@ -942,15 +1061,19 @@ pub fn input_function() -> crate::Component {
 }
 
 pub fn input_from_properties(
-    properties: &std::collections::BTreeMap<String, crate::Value>,
+    properties_with_ref: &std::collections::BTreeMap<String, (crate::Value, Option<String>)>,
     doc: &crate::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
-    events: &[ftd::p2::expression::Event],
+    events: &[ftd::p2::Event],
     all_locals: &ftd_rt::Map,
+    root_name: Option<&str>,
 ) -> crate::p1::Result<ftd_rt::Input> {
+    let properties = &ftd::p2::utils::properties(properties_with_ref);
     Ok(ftd_rt::Input {
-        common: common_from_properties(properties, doc, condition, is_child, events, all_locals)?,
+        common: common_from_properties(
+            properties, doc, condition, is_child, events, all_locals, root_name, None,
+        )?,
         placeholder: crate::p2::utils::string_optional("placeholder", properties)?,
     })
 }

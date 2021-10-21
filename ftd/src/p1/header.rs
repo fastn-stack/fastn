@@ -26,6 +26,9 @@ impl Header {
 
     pub fn bool(&self, name: &str) -> Result<bool> {
         for (k, v) in self.0.iter() {
+            if k.starts_with('/') {
+                continue;
+            }
             if k == name {
                 return if v == "true" || v == "false" {
                     Ok(v == "true")
@@ -57,6 +60,9 @@ impl Header {
 
     pub fn i32(&self, name: &str) -> Result<i32> {
         for (k, v) in self.0.iter() {
+            if k.starts_with('/') {
+                continue;
+            }
             if k == name {
                 return Ok(v.parse()?);
             }
@@ -68,6 +74,10 @@ impl Header {
 
     pub fn i64(&self, name: &str) -> Result<i64> {
         for (k, v) in self.0.iter() {
+            if k.starts_with('/') {
+                continue;
+            }
+
             if k == name {
                 return Ok(v.parse()?);
             }
@@ -87,6 +97,10 @@ impl Header {
 
     pub fn f64(&self, name: &str) -> Result<f64> {
         for (k, v) in self.0.iter() {
+            if k.starts_with('/') {
+                continue;
+            }
+
             if k == name {
                 return Ok(v.parse()?);
             }
@@ -116,7 +130,8 @@ impl Header {
         &self,
         doc: &crate::p2::TDoc,
         locals: &std::collections::BTreeMap<String, crate::p2::Kind>,
-    ) -> ftd::p1::Result<Vec<ftd::p2::expression::Event>> {
+        arguments: &std::collections::BTreeMap<String, crate::p2::Kind>,
+    ) -> ftd::p1::Result<Vec<ftd::p2::Event>> {
         let events = {
             let mut events = vec![];
             for (k, v) in self.0.iter() {
@@ -130,7 +145,7 @@ impl Header {
         };
         let mut event = vec![];
         for (e, a) in events {
-            event.push(ftd::p2::expression::Event::to_event(&e, &a, doc, locals)?);
+            event.push(ftd::p2::Event::to_event(&e, &a, doc, locals, arguments)?);
         }
         Ok(event)
     }
@@ -169,6 +184,9 @@ impl Header {
 
     pub fn str(&self, name: &str) -> Result<&str> {
         for (k, v) in self.0.iter() {
+            if k.starts_with('/') {
+                continue;
+            }
             if k == name {
                 return Ok(v.as_str());
             }

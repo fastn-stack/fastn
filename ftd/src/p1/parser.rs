@@ -52,7 +52,9 @@ impl State {
             return Ok(());
         }
 
-        if !line.starts_with("-- ") {
+        let is_commented = line.starts_with("/-- ");
+
+        if !line.starts_with("-- ") && !line.starts_with("/-- ") {
             return Err(crate::p1::Error::InvalidInput {
                 message: format!("Expecting -- , found: {}", line),
                 // TODO: context should be a few lines before and after the input
@@ -70,7 +72,7 @@ impl State {
             self.sections.push(s);
         }
 
-        let line = &line[2..];
+        let line = if is_commented { &line[3..] } else { &line[2..] };
         let (name, caption) = colon_separated_values(line)?;
 
         self.section = Some(Section {
@@ -79,6 +81,7 @@ impl State {
             header: Default::default(),
             body: None,
             sub_sections: Default::default(),
+            is_commented,
         });
 
         self.state = ParsingState::ReadingHeader;
@@ -92,11 +95,11 @@ impl State {
             return Ok(());
         }
 
-        if line.starts_with("-- ") {
+        if line.starts_with("-- ") || line.starts_with("/-- ") {
             return self.waiting_for_section(line);
         }
 
-        if line.starts_with("--- ") {
+        if line.starts_with("--- ") || line.starts_with("/--- ") {
             return self.read_subsection(line);
         }
 
@@ -122,10 +125,10 @@ impl State {
             self.state = ParsingState::ReadingSubSectionBody;
             return Ok(());
         }
-        if line.starts_with("-- ") {
+        if line.starts_with("-- ") || line.starts_with("/-- ") {
             return self.waiting_for_section(line);
         }
-        if line.starts_with("--- ") {
+        if line.starts_with("--- ") || line.starts_with("/--- ") {
             return self.read_subsection(line);
         }
         if !line.contains(':') {
@@ -146,11 +149,11 @@ impl State {
     fn reading_body(&mut self, line: &str) -> Result<()> {
         self.state = ParsingState::ReadingBody;
 
-        if line.starts_with("-- ") {
+        if line.starts_with("-- ") || line.starts_with("/-- ") {
             return self.waiting_for_section(line);
         }
 
-        if line.starts_with("--- ") {
+        if line.starts_with("--- ") || line.starts_with("/--- ") {
             return self.read_subsection(line);
         }
 
@@ -180,13 +183,19 @@ impl State {
     fn reading_sub_body(&mut self, line: &str) -> Result<()> {
         self.state = ParsingState::ReadingSubSectionBody;
 
-        if line.starts_with("-- ") {
+        if line.starts_with("-- ") || line.starts_with("/-- ") {
             return self.waiting_for_section(line);
         }
 
-        if line.starts_with("--- ") {
+        if line.starts_with("--- ") || line.starts_with("/--- ") {
             return self.read_subsection(line);
         }
+
+        let line = if line.starts_with("\\-- ") || line.starts_with("\\--- ") {
+            &line[1..]
+        } else {
+            line
+        };
 
         if let Some(mut s) = self.sub_section.take() {
             if line.trim().is_empty() && s.body.as_ref().map(|v| v.is_empty()).unwrap_or(true) {
@@ -213,7 +222,9 @@ impl State {
             }
         };
 
-        let line = &line[3..];
+        let is_commented = line.starts_with("/--- ");
+
+        let line = if is_commented { &line[4..] } else { &line[3..] };
         let (name, caption) = colon_separated_values(line)?;
 
         self.sub_section = Some(SubSection {
@@ -221,6 +232,7 @@ impl State {
             caption,
             header: Default::default(),
             body: None,
+            is_commented,
         });
 
         self.state = ParsingState::ReadingSubsectionHeader;

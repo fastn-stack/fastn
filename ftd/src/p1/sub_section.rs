@@ -9,9 +9,56 @@ pub struct SubSection {
     pub caption: Option<String>,
     pub header: Header,
     pub body: Option<String>,
+    pub is_commented: bool,
 }
 
 impl SubSection {
+    pub fn body_without_comment(&self) -> Option<String> {
+        let body = match &self.body {
+            None => return None,
+            Some(b) => b,
+        };
+        match body {
+            _ if body.starts_with(r"\/") =>
+            {
+                #[allow(clippy::single_char_pattern)]
+                Some(body.strip_prefix(r"\").expect("").to_string())
+            }
+            _ if body.starts_with('/') => None,
+            _ => Some(body.to_string()),
+        }
+    }
+
+    pub fn remove_comments(&self) -> SubSection {
+        let mut headers = vec![];
+        for (k, v) in self.header.0.iter() {
+            if !k.starts_with('/') {
+                headers.push((k.to_string(), v.to_string()));
+            }
+        }
+
+        let body = match &self.body {
+            None => None,
+            Some(body) => match body {
+                _ if body.starts_with(r"\/") =>
+                {
+                    #[allow(clippy::single_char_pattern)]
+                    Some(body.strip_prefix(r"\").expect("").to_string())
+                }
+                _ if body.starts_with('/') => None,
+                _ => self.body.clone(),
+            },
+        };
+
+        SubSection {
+            name: self.name.to_string(),
+            caption: self.caption.to_owned(),
+            header: Header(headers),
+            body,
+            is_commented: false,
+        }
+    }
+
     pub fn caption(&self) -> Result<String> {
         match self.caption {
             Some(ref v) => Ok(v.to_string()),
@@ -37,6 +84,7 @@ impl SubSection {
             caption: None,
             header: Header::default(),
             body: None,
+            is_commented: false,
         }
     }
 
@@ -89,6 +137,10 @@ impl SubSection {
 impl SubSections {
     pub fn by_name(&self, name: &str) -> Result<&SubSection> {
         for s in self.0.iter() {
+            if s.is_commented {
+                continue;
+            }
+
             if s.name == name {
                 return Ok(s);
             }
@@ -113,6 +165,7 @@ impl SubSections {
             caption: None,
             header: Header::default(),
             body: Some(value.to_string()),
+            is_commented: false,
         })
     }
 

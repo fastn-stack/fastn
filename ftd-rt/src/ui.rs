@@ -1,8 +1,5 @@
-#[derive(serde::Deserialize)]
-#[cfg_attr(
-    not(feature = "wasm"),
-    derive(Debug, PartialEq, Clone, serde::Serialize)
-)]
+#[derive(serde::Deserialize, Clone)]
+#[cfg_attr(not(feature = "wasm"), derive(Debug, PartialEq, serde::Serialize))]
 #[serde(tag = "type")]
 pub enum Element {
     Text(Text),
@@ -18,7 +15,11 @@ pub enum Element {
 }
 
 impl Element {
-    pub fn set_id(children: &mut [Self], index_vec: &[usize], external_id: Option<String>) {
+    pub fn set_id(
+        children: &mut [ftd_rt::Element],
+        index_vec: &[usize],
+        external_id: Option<String>,
+    ) {
         for (idx, child) in children.iter_mut().enumerate() {
             let index_string: String = {
                 let mut index_vec = index_vec.to_vec();
@@ -264,7 +265,7 @@ impl Element {
     }
 
     pub fn get_external_children_dependencies(
-        children: &[Self],
+        children: &[ftd_rt::Element],
     ) -> ftd_rt::ExternalChildrenDependenciesMap {
         let mut d: ftd_rt::ExternalChildrenDependenciesMap = Default::default();
         for child in children {
@@ -273,7 +274,8 @@ impl Element {
                 ftd_rt::Element::Column(ftd_rt::Column { container, .. }) => container,
                 _ => continue,
             };
-            let all_locals = Self::get_external_children_dependencies(&container.children);
+            let all_locals =
+                ftd_rt::Element::get_external_children_dependencies(&container.children);
             for (k, v) in all_locals {
                 d.insert(k.to_string(), v);
             }
@@ -290,8 +292,9 @@ impl Element {
                         col.common.id.as_ref().expect("").to_string(),
                         external_children_condition,
                     );
-                    let all_locals =
-                        Self::get_external_children_dependencies(&col.container.children);
+                    let all_locals = ftd_rt::Element::get_external_children_dependencies(
+                        &col.container.children,
+                    );
                     for (k, v) in all_locals {
                         d.insert(k.to_string(), v);
                     }
@@ -301,11 +304,51 @@ impl Element {
         d
     }
 
-    pub fn get_event_dependencies(
-        children: &[Self],
-        data: &ftd_rt::Map,
-    ) -> ftd_rt::DataDependenciesMap {
-        let mut d: ftd_rt::DataDependenciesMap = Default::default();
+    pub fn get_value_event_dependencies(
+        children: &[ftd_rt::Element],
+        data: &mut ftd_rt::DataDependenciesMap,
+    ) {
+        for child in children {
+            let (reference, id) = match child {
+                ftd_rt::Element::Column(ftd_rt::Column {
+                    common: ftd_rt::Common { reference, id, .. },
+                    container,
+                })
+                | ftd_rt::Element::Row(ftd_rt::Row {
+                    common: ftd_rt::Common { reference, id, .. },
+                    container,
+                }) => {
+                    ftd_rt::Element::get_value_event_dependencies(&container.children, data);
+                    if let Some((_, _, external_children)) = &container.external_children {
+                        ftd_rt::Element::get_value_event_dependencies(external_children, data);
+                    }
+                    (reference, id)
+                }
+                ftd_rt::Element::Image(ftd_rt::Image { common, .. })
+                | ftd_rt::Element::Text(ftd_rt::Text { common, .. })
+                | ftd_rt::Element::IFrame(ftd_rt::IFrame { common, .. })
+                | ftd_rt::Element::Input(ftd_rt::Input { common, .. })
+                | ftd_rt::Element::Integer(ftd_rt::Text { common, .. })
+                | ftd_rt::Element::Boolean(ftd_rt::Text { common, .. })
+                | ftd_rt::Element::Decimal(ftd_rt::Text { common, .. }) => {
+                    (&common.reference, &common.id)
+                }
+                ftd_rt::Element::Null => continue,
+            };
+            if let Some(reference) = reference {
+                let id = id.clone().expect("universal id should be present");
+
+                if let Some(ftd_rt::Data { dependencies, .. }) = data.get_mut(reference) {
+                    dependencies.insert(id, "value".to_string());
+                }
+            }
+        }
+    }
+
+    pub fn get_visible_event_dependencies(
+        children: &[ftd_rt::Element],
+        data: &mut ftd_rt::DataDependenciesMap,
+    ) {
         for child in children {
             let (condition, id) = match child {
                 ftd_rt::Element::Column(ftd_rt::Column {
@@ -316,148 +359,65 @@ impl Element {
                     common: ftd_rt::Common { condition, id, .. },
                     container,
                 }) => {
-                    let all_locals = Self::get_event_dependencies(&container.children, data);
-                    for (k, v) in all_locals {
-                        if let Some(d) = d.get_mut(&k) {
-                            for (k, v) in v.dependencies {
-                                d.dependencies.insert(k, v);
-                            }
-                        } else {
-                            d.insert(k.to_string(), v);
-                        }
-                    }
+                    ftd_rt::Element::get_visible_event_dependencies(&container.children, data);
                     if let Some((_, _, external_children)) = &container.external_children {
-                        let all_locals = Self::get_event_dependencies(external_children, data);
-                        for (k, v) in all_locals {
-                            if let Some(d) = d.get_mut(&k) {
-                                for (k, v) in v.dependencies {
-                                    d.dependencies.insert(k, v);
-                                }
-                            } else {
-                                d.insert(k.to_string(), v);
-                            }
-                        }
+                        ftd_rt::Element::get_visible_event_dependencies(external_children, data);
                     }
                     (condition, id)
                 }
-                ftd_rt::Element::Image(ftd_rt::Image {
-                    common: ftd_rt::Common { condition, id, .. },
-                    ..
-                })
-                | ftd_rt::Element::Text(ftd_rt::Text {
-                    common: ftd_rt::Common { condition, id, .. },
-                    ..
-                })
-                | ftd_rt::Element::IFrame(ftd_rt::IFrame {
-                    common: ftd_rt::Common { condition, id, .. },
-                    ..
-                })
-                | ftd_rt::Element::Input(ftd_rt::Input {
-                    common: ftd_rt::Common { condition, id, .. },
-                    ..
-                })
-                | ftd_rt::Element::Integer(ftd_rt::Text {
-                    common: ftd_rt::Common { condition, id, .. },
-                    ..
-                })
-                | ftd_rt::Element::Boolean(ftd_rt::Text {
-                    common: ftd_rt::Common { condition, id, .. },
-                    ..
-                })
-                | ftd_rt::Element::Decimal(ftd_rt::Text {
-                    common: ftd_rt::Common { condition, id, .. },
-                    ..
-                }) => (condition, id),
+                ftd_rt::Element::Image(ftd_rt::Image { common, .. })
+                | ftd_rt::Element::Text(ftd_rt::Text { common, .. })
+                | ftd_rt::Element::IFrame(ftd_rt::IFrame { common, .. })
+                | ftd_rt::Element::Input(ftd_rt::Input { common, .. })
+                | ftd_rt::Element::Integer(ftd_rt::Text { common, .. })
+                | ftd_rt::Element::Boolean(ftd_rt::Text { common, .. })
+                | ftd_rt::Element::Decimal(ftd_rt::Text { common, .. }) => {
+                    (&common.condition, &common.id)
+                }
                 ftd_rt::Element::Null => continue,
             };
             if let Some(condition) = condition {
                 let id = id.clone().expect("universal id should be present");
-                let data_value = data
-                    .get(&condition.variable)
-                    .unwrap_or_else(|| panic!("{} should be declared", condition.variable));
 
-                if let Some(ftd_rt::Data { dependencies, .. }) = d.get_mut(&condition.variable) {
+                if let Some(ftd_rt::Data { dependencies, .. }) = data.get_mut(&condition.variable) {
                     dependencies.insert(id, condition.value.to_string());
                 } else {
-                    d.insert(
-                        condition.variable.to_string(),
-                        ftd_rt::Data {
-                            value: data_value.to_string(),
-                            dependencies: std::array::IntoIter::new([(
-                                id,
-                                condition.value.to_string(),
-                            )])
-                            .collect(),
-                        },
-                    );
+                    panic!("{} should be declared", condition.variable)
                 }
             }
         }
-        d
     }
 
     pub fn get_locals(children: &[ftd_rt::Element]) -> ftd_rt::Map {
         let mut d: ftd_rt::Map = Default::default();
         for child in children {
             let locals = match child {
-                ftd_rt::Element::Text(ftd_rt::Text {
-                    common: ftd_rt::Common { locals, .. },
-                    ..
-                }) => locals.clone(),
-                ftd_rt::Element::Image(ftd_rt::Image {
-                    common: ftd_rt::Common { locals, .. },
-                    ..
-                }) => locals.clone(),
                 ftd_rt::Element::Row(ftd_rt::Row {
                     common: ftd_rt::Common { locals, .. },
                     container,
-                }) => {
-                    let mut all_locals = Self::get_locals(&container.children);
-                    for (k, v) in locals {
-                        all_locals.insert(k.to_string(), v.to_string());
-                    }
-                    if let Some((_, _, ref c)) = container.external_children {
-                        for (k, v) in Self::get_locals(c) {
-                            all_locals.insert(k.to_string(), v.to_string());
-                        }
-                    }
-                    all_locals
-                }
-                ftd_rt::Element::Column(ftd_rt::Column {
+                })
+                | ftd_rt::Element::Column(ftd_rt::Column {
                     common: ftd_rt::Common { locals, .. },
                     container,
                 }) => {
-                    let mut all_locals = Self::get_locals(&container.children);
+                    let mut all_locals = ftd_rt::Element::get_locals(&container.children);
                     for (k, v) in locals {
                         all_locals.insert(k.to_string(), v.to_string());
                     }
                     if let Some((_, _, ref c)) = container.external_children {
-                        for (k, v) in Self::get_locals(c) {
+                        for (k, v) in ftd_rt::Element::get_locals(c) {
                             all_locals.insert(k.to_string(), v.to_string());
                         }
                     }
                     all_locals
                 }
-                ftd_rt::Element::IFrame(ftd_rt::IFrame {
-                    common: ftd_rt::Common { locals, .. },
-                    ..
-                }) => locals.clone(),
-                ftd_rt::Element::Input(ftd_rt::Input {
-                    common: ftd_rt::Common { locals, .. },
-                    ..
-                }) => locals.clone(),
-                ftd_rt::Element::Integer(ftd_rt::Text {
-                    common: ftd_rt::Common { locals, .. },
-                    ..
-                }) => locals.clone(),
-                ftd_rt::Element::Boolean(ftd_rt::Text {
-                    common: ftd_rt::Common { locals, .. },
-                    ..
-                }) => locals.clone(),
-                ftd_rt::Element::Decimal(ftd_rt::Text {
-                    common: ftd_rt::Common { locals, .. },
-                    ..
-                }) => locals.clone(),
+                ftd_rt::Element::Decimal(ftd_rt::Text { common, .. })
+                | ftd_rt::Element::Text(ftd_rt::Text { common, .. })
+                | ftd_rt::Element::Image(ftd_rt::Image { common, .. })
+                | ftd_rt::Element::IFrame(ftd_rt::IFrame { common, .. })
+                | ftd_rt::Element::Input(ftd_rt::Input { common, .. })
+                | ftd_rt::Element::Integer(ftd_rt::Text { common, .. })
+                | ftd_rt::Element::Boolean(ftd_rt::Text { common, .. }) => common.locals.clone(),
                 ftd_rt::Element::Null => Default::default(),
             };
 
@@ -470,72 +430,88 @@ impl Element {
 
     pub fn is_open_container(&self) -> (bool, Option<String>) {
         match self {
-            Self::Column(e) => e.container.is_open(),
-            Self::Row(e) => e.container.is_open(),
+            ftd_rt::Element::Column(e) => e.container.is_open(),
+            ftd_rt::Element::Row(e) => e.container.is_open(),
             _ => (false, None),
         }
     }
 
     pub fn container_id(&self) -> Option<String> {
         match self {
-            Self::Column(e) => e.common.id.clone(),
-            Self::Row(e) => e.common.id.clone(),
+            ftd_rt::Element::Column(e) => e.common.id.clone(),
+            ftd_rt::Element::Row(e) => e.common.id.clone(),
             _ => None,
         }
     }
 
     pub fn set_container_id(&mut self, name: Option<String>) {
         match self {
-            Self::Column(e) => e.common.id = name,
-            Self::Row(e) => e.common.id = name,
+            ftd_rt::Element::Column(e) => e.common.id = name,
+            ftd_rt::Element::Row(e) => e.common.id = name,
             _ => {}
         }
     }
 
     pub fn set_condition(&mut self, condition: Option<ftd_rt::Condition>) {
         match self {
-            Self::Column(ftd_rt::Column { common, .. }) => common,
-            Self::Row(ftd_rt::Row { common, .. }) => common,
-            Self::Text(ftd_rt::Text { common, .. }) => common,
-            Self::Image(ftd_rt::Image { common, .. }) => common,
-            Self::IFrame(ftd_rt::IFrame { common, .. }) => common,
-            Self::Input(ftd_rt::Input { common, .. }) => common,
-            Self::Integer(ftd_rt::Text { common, .. }) => common,
-            Self::Boolean(ftd_rt::Text { common, .. }) => common,
-            Self::Decimal(ftd_rt::Text { common, .. }) => common,
-            Self::Null => return,
+            ftd_rt::Element::Column(ftd_rt::Column { common, .. }) => common,
+            ftd_rt::Element::Row(ftd_rt::Row { common, .. }) => common,
+            ftd_rt::Element::Text(ftd_rt::Text { common, .. }) => common,
+            ftd_rt::Element::Image(ftd_rt::Image { common, .. }) => common,
+            ftd_rt::Element::IFrame(ftd_rt::IFrame { common, .. }) => common,
+            ftd_rt::Element::Input(ftd_rt::Input { common, .. }) => common,
+            ftd_rt::Element::Integer(ftd_rt::Text { common, .. }) => common,
+            ftd_rt::Element::Boolean(ftd_rt::Text { common, .. }) => common,
+            ftd_rt::Element::Decimal(ftd_rt::Text { common, .. }) => common,
+            ftd_rt::Element::Null => return,
         }
         .condition = condition;
     }
 
+    pub fn set_non_visibility(&mut self, is_not_visible: bool) {
+        match self {
+            ftd_rt::Element::Column(ftd_rt::Column { common, .. }) => common,
+            ftd_rt::Element::Row(ftd_rt::Row { common, .. }) => common,
+            ftd_rt::Element::Text(ftd_rt::Text { common, .. }) => common,
+            ftd_rt::Element::Image(ftd_rt::Image { common, .. }) => common,
+            ftd_rt::Element::IFrame(ftd_rt::IFrame { common, .. }) => common,
+            ftd_rt::Element::Input(ftd_rt::Input { common, .. }) => common,
+            ftd_rt::Element::Integer(ftd_rt::Text { common, .. }) => common,
+            ftd_rt::Element::Boolean(ftd_rt::Text { common, .. }) => common,
+            ftd_rt::Element::Decimal(ftd_rt::Text { common, .. }) => common,
+            ftd_rt::Element::Null => return,
+        }
+        .is_not_visible = is_not_visible;
+    }
+
     pub fn set_locals(&mut self, locals: ftd_rt::Map) {
         match self {
-            Self::Column(ftd_rt::Column { common, .. }) => common,
-            Self::Row(ftd_rt::Row { common, .. }) => common,
-            Self::Text(ftd_rt::Text { common, .. }) => common,
-            Self::Image(ftd_rt::Image { common, .. }) => common,
-            Self::IFrame(ftd_rt::IFrame { common, .. }) => common,
-            Self::Input(ftd_rt::Input { common, .. }) => common,
-            Self::Integer(ftd_rt::Text { common, .. }) => common,
-            Self::Boolean(ftd_rt::Text { common, .. }) => common,
-            Self::Decimal(ftd_rt::Text { common, .. }) => common,
-            Self::Null => return,
+            ftd_rt::Element::Column(ftd_rt::Column { common, .. }) => common,
+            ftd_rt::Element::Row(ftd_rt::Row { common, .. }) => common,
+            ftd_rt::Element::Text(ftd_rt::Text { common, .. }) => common,
+            ftd_rt::Element::Image(ftd_rt::Image { common, .. }) => common,
+            ftd_rt::Element::IFrame(ftd_rt::IFrame { common, .. }) => common,
+            ftd_rt::Element::Input(ftd_rt::Input { common, .. }) => common,
+            ftd_rt::Element::Integer(ftd_rt::Text { common, .. }) => common,
+            ftd_rt::Element::Boolean(ftd_rt::Text { common, .. }) => common,
+            ftd_rt::Element::Decimal(ftd_rt::Text { common, .. }) => common,
+            ftd_rt::Element::Null => return,
         }
         .locals = locals;
     }
 
     pub fn set_events(&mut self, events: &mut Vec<ftd_rt::Event>) {
         match self {
-            Self::Column(ftd_rt::Column { common, .. }) => common,
-            Self::Row(ftd_rt::Row { common, .. }) => common,
-            Self::Text(ftd_rt::Text { common, .. }) => common,
-            Self::Image(ftd_rt::Image { common, .. }) => common,
-            Self::IFrame(ftd_rt::IFrame { common, .. }) => common,
-            Self::Input(ftd_rt::Input { common, .. }) => common,
-            Self::Integer(ftd_rt::Text { common, .. }) => common,
-            Self::Boolean(ftd_rt::Text { common, .. }) => common,
-            Self::Decimal(ftd_rt::Text { common, .. }) => common,
-            Self::Null => return,
+            ftd_rt::Element::Column(ftd_rt::Column { common, .. }) => common,
+            ftd_rt::Element::Row(ftd_rt::Row { common, .. }) => common,
+            ftd_rt::Element::Text(ftd_rt::Text { common, .. }) => common,
+            ftd_rt::Element::Image(ftd_rt::Image { common, .. }) => common,
+            ftd_rt::Element::IFrame(ftd_rt::IFrame { common, .. }) => common,
+            ftd_rt::Element::Input(ftd_rt::Input { common, .. }) => common,
+            ftd_rt::Element::Integer(ftd_rt::Text { common, .. }) => common,
+            ftd_rt::Element::Boolean(ftd_rt::Text { common, .. }) => common,
+            ftd_rt::Element::Decimal(ftd_rt::Text { common, .. }) => common,
+            ftd_rt::Element::Null => return,
         }
         .events
         .append(events)
@@ -543,9 +519,71 @@ impl Element {
 
     pub fn get_heading_region(&self) -> Option<&ftd_rt::Region> {
         match self {
-            Self::Column(e) => e.common.region.as_ref().filter(|v| v.is_heading()),
-            Self::Row(e) => e.common.region.as_ref().filter(|v| v.is_heading()),
+            ftd_rt::Element::Column(e) => e.common.region.as_ref().filter(|v| v.is_heading()),
+            ftd_rt::Element::Row(e) => e.common.region.as_ref().filter(|v| v.is_heading()),
             _ => None,
+        }
+    }
+
+    pub fn renesting_on_region(elements: &mut Vec<ftd_rt::Element>) {
+        let mut region: Option<(usize, &Region)> = None;
+        let mut insert: Vec<(usize, usize)> = Default::default();
+        for (idx, element) in elements.iter().enumerate() {
+            match element {
+                ftd_rt::Element::Column(ftd_rt::Column { common, .. })
+                | ftd_rt::Element::Row(ftd_rt::Row { common, .. }) => {
+                    let r = common.region.as_ref().filter(|v| v.is_heading());
+                    if let Some(r) = r {
+                        if let Some((place_at, r1)) = region {
+                            if r.get_lower_priority_heading().contains(r1) || r == r1 {
+                                insert.push((place_at, idx));
+                                region = Some((idx, r));
+                            }
+                        } else {
+                            region = Some((idx, r));
+                        }
+                    }
+                }
+                _ => continue,
+            }
+        }
+        if let Some((place_at, _)) = region {
+            insert.push((place_at, elements.len()));
+        }
+
+        for (place_at, end) in insert.iter().rev() {
+            let mut children = elements[place_at + 1..*end].to_vec();
+            match elements[*place_at] {
+                ftd_rt::Element::Column(ftd_rt::Column {
+                    ref mut container, ..
+                })
+                | ftd_rt::Element::Row(ftd_rt::Row {
+                    ref mut container, ..
+                }) => {
+                    container.children.append(&mut children);
+                }
+                _ => continue,
+            }
+            for idx in (place_at + 1..*end).rev() {
+                elements.remove(idx);
+            }
+        }
+
+        for element in &mut *elements {
+            match element {
+                ftd_rt::Element::Column(ftd_rt::Column {
+                    ref mut container, ..
+                })
+                | ftd_rt::Element::Row(ftd_rt::Row {
+                    ref mut container, ..
+                }) => {
+                    if let Some((_, _, ref mut e)) = container.external_children {
+                        ftd_rt::Element::renesting_on_region(e);
+                    }
+                    ftd_rt::Element::renesting_on_region(&mut container.children);
+                }
+                _ => continue,
+            }
         }
     }
 }
@@ -565,7 +603,7 @@ pub enum Length {
 }
 
 impl Length {
-    pub fn from(l: Option<String>) -> crate::Result<Option<Self>> {
+    pub fn from(l: Option<String>) -> ftd_rt::Result<Option<ftd_rt::Length>> {
         let l = match l {
             Some(l) => l,
             None => return Ok(None),
@@ -635,13 +673,13 @@ pub enum Align {
 }
 
 impl Default for Align {
-    fn default() -> Self {
+    fn default() -> ftd_rt::Align {
         Self::TopLeft
     }
 }
 
 impl Align {
-    pub fn from(l: Option<String>) -> crate::Result<Self> {
+    pub fn from(l: Option<String>) -> ftd_rt::Result<ftd_rt::Align> {
         Ok(match l.as_deref() {
             Some("center") => Self::Center,
             Some("top") => Self::Top,
@@ -708,7 +746,7 @@ impl ToString for Region {
 }
 
 impl Region {
-    pub fn from(l: Option<String>) -> crate::Result<Option<Self>> {
+    pub fn from(l: Option<String>) -> ftd_rt::Result<Option<ftd_rt::Region>> {
         Ok(Some(match l.as_deref() {
             Some("h0") => Self::H0,
             Some("h1") => Self::H1,
@@ -734,41 +772,48 @@ impl Region {
     pub fn is_heading(&self) -> bool {
         matches!(
             self,
-            Self::H0 | Self::H1 | Self::H2 | Self::H3 | Self::H4 | Self::H5 | Self::H6 | Self::H7
+            ftd_rt::Region::H0
+                | ftd_rt::Region::H1
+                | ftd_rt::Region::H2
+                | ftd_rt::Region::H3
+                | ftd_rt::Region::H4
+                | ftd_rt::Region::H5
+                | ftd_rt::Region::H6
+                | ftd_rt::Region::H7
         )
     }
 
     pub fn is_primary_heading(&self) -> bool {
-        matches!(self, Self::H0 | Self::H1)
+        matches!(self, ftd_rt::Region::H0 | ftd_rt::Region::H1)
     }
 
     pub fn is_title(&self) -> bool {
-        matches!(self, Self::Title)
+        matches!(self, ftd_rt::Region::Title)
     }
 
-    pub fn get_lower_priority_heading(&self) -> Vec<Self> {
+    pub fn get_lower_priority_heading(&self) -> Vec<ftd_rt::Region> {
         let mut list = vec![];
         if matches!(
             self,
-            Self::Title
-                | Self::MainContent
-                | Self::Navigation
-                | Self::Aside
-                | Self::Footer
-                | Self::Description
-                | Self::Announce
-                | Self::AnnounceUrgently
+            ftd_rt::Region::Title
+                | ftd_rt::Region::MainContent
+                | ftd_rt::Region::Navigation
+                | ftd_rt::Region::Aside
+                | ftd_rt::Region::Footer
+                | ftd_rt::Region::Description
+                | ftd_rt::Region::Announce
+                | ftd_rt::Region::AnnounceUrgently
         ) {
             return list;
         }
         for region in [
-            Self::H7,
-            Self::H6,
-            Self::H5,
-            Self::H4,
-            Self::H3,
-            Self::H2,
-            Self::H1,
+            ftd_rt::Region::H7,
+            ftd_rt::Region::H6,
+            ftd_rt::Region::H5,
+            ftd_rt::Region::H4,
+            ftd_rt::Region::H3,
+            ftd_rt::Region::H2,
+            ftd_rt::Region::H1,
         ] {
             if self.to_string() == region.to_string() {
                 return list;
@@ -793,7 +838,7 @@ pub enum Overflow {
 }
 
 impl Overflow {
-    pub fn from(l: Option<String>) -> crate::Result<Option<Self>> {
+    pub fn from(l: Option<String>) -> ftd_rt::Result<Option<ftd_rt::Overflow>> {
         Ok(Option::from(match l.as_deref() {
             Some("hidden") => Self::Hidden,
             Some("visible") => Self::Visible,
@@ -808,14 +853,82 @@ impl Overflow {
 #[derive(serde::Deserialize)]
 #[cfg_attr(
     not(feature = "wasm"),
+    derive(Debug, PartialEq, Clone, serde::Serialize)
+)]
+#[serde(tag = "type")]
+pub enum GradientDirection {
+    BottomToTop,
+    TopToBottom,
+    RightToLeft,
+    LeftToRight,
+    BottomRightToTopLeft,
+    BottomLeftToTopRight,
+    TopRightToBottomLeft,
+    TopLeftBottomRight,
+    Center,
+    Angle { value: i64 },
+}
+
+impl GradientDirection {
+    pub fn from(l: Option<String>) -> ftd_rt::Result<Option<ftd_rt::GradientDirection>> {
+        let l = match l {
+            Some(l) => l,
+            None => return Ok(None),
+        };
+
+        if l == "bottom to top" {
+            return Ok(Some(GradientDirection::BottomToTop));
+        }
+        if l == "top to bottom" {
+            return Ok(Some(GradientDirection::TopToBottom));
+        }
+        if l == "right to left" {
+            return Ok(Some(GradientDirection::RightToLeft));
+        }
+        if l == "left to right" {
+            return Ok(Some(GradientDirection::LeftToRight));
+        }
+        if l == "bottom-left to top-right" {
+            return Ok(Some(GradientDirection::BottomLeftToTopRight));
+        }
+        if l == "bottom-right to top-left" {
+            return Ok(Some(GradientDirection::BottomRightToTopLeft));
+        }
+        if l == "top-right to bottom-left" {
+            return Ok(Some(GradientDirection::TopRightToBottomLeft));
+        }
+        if l == "top-left to bottom-right" {
+            return Ok(Some(GradientDirection::TopLeftBottomRight));
+        }
+        if l == "center" {
+            return Ok(Some(GradientDirection::Center));
+        }
+        if l.starts_with("angle ") {
+            let v = crate::get_name("angle", l.as_str())?;
+            return match v.parse() {
+                Ok(v) => Ok(Some(GradientDirection::Angle { value: v })),
+                Err(_) => crate::e(format!("{} is not a valid integer", v)),
+            };
+        }
+        Ok(None)
+    }
+}
+
+#[derive(serde::Deserialize)]
+#[cfg_attr(
+    not(feature = "wasm"),
     derive(Debug, PartialEq, Clone, serde::Serialize, Default)
 )]
 pub struct Common {
     pub locals: ftd_rt::Map,
     pub condition: Option<ftd_rt::Condition>,
+    pub is_not_visible: bool,
     pub events: Vec<ftd_rt::Event>,
+    pub reference: Option<String>,
     pub region: Option<Region>,
     pub padding: Option<i64>,
+    pub padding_vertical: Option<i64>,
+    pub padding_horizontal: Option<i64>,
     pub padding_left: Option<i64>,
     pub padding_right: Option<i64>,
     pub padding_top: Option<i64>,
@@ -852,7 +965,13 @@ pub struct Common {
     pub top: Option<i64>,
     pub submit: Option<String>,
     pub cursor: Option<String>,
-    // TODO: background-gradient
+    pub shadow_offset_x: Option<i64>,
+    pub shadow_offset_y: Option<i64>,
+    pub shadow_size: Option<i64>,
+    pub shadow_blur: Option<i64>,
+    pub shadow_color: Option<Color>,
+    pub gradient_direction: Option<GradientDirection>,
+    pub gradient_colors: Vec<Color>,
     // TODO: background-image, un-cropped, tiled, tiled{X, Y}
     // TODO: border-style: solid, dashed, dotted
     // TODO: border-{shadow, glow}
@@ -928,19 +1047,19 @@ pub enum TextAlign {
 
 impl Default for TextAlign {
     fn default() -> Self {
-        Self::Left
+        ftd_rt::TextAlign::Left
     }
 }
 
 impl TextAlign {
-    pub fn from(l: Option<String>) -> crate::Result<Self> {
+    pub fn from(l: Option<String>) -> ftd_rt::Result<ftd_rt::TextAlign> {
         Ok(match l.as_deref() {
-            Some("center") => Self::Center,
-            Some("left") => Self::Left,
-            Some("right") => Self::Right,
-            Some("justify") => Self::Justify,
+            Some("center") => ftd_rt::TextAlign::Center,
+            Some("left") => ftd_rt::TextAlign::Left,
+            Some("right") => ftd_rt::TextAlign::Right,
+            Some("justify") => ftd_rt::TextAlign::Justify,
             Some(t) => return crate::e(format!("{} is not a valid alignment", t)),
-            None => return Ok(Self::Left),
+            None => return Ok(ftd_rt::TextAlign::Left),
         })
     }
 }
@@ -955,19 +1074,19 @@ pub enum FontDisplay {
     Swap,
     Block,
 }
-impl Default for FontDisplay {
+impl Default for ftd_rt::FontDisplay {
     fn default() -> Self {
-        Self::Block
+        ftd_rt::FontDisplay::Block
     }
 }
 
 impl FontDisplay {
-    pub fn from(l: Option<String>) -> crate::Result<Self> {
+    pub fn from(l: Option<String>) -> ftd_rt::Result<ftd_rt::FontDisplay> {
         Ok(match l.as_deref() {
-            Some("swap") => Self::Swap,
-            Some("block") => Self::Block,
+            Some("swap") => ftd_rt::FontDisplay::Swap,
+            Some("block") => ftd_rt::FontDisplay::Block,
             Some(t) => return crate::e(format!("{} is not a valid alignment", t)),
-            None => return Ok(Self::Block),
+            None => return Ok(ftd_rt::FontDisplay::Block),
         })
     }
 }
@@ -986,15 +1105,15 @@ pub enum NamedFont {
 }
 
 impl NamedFont {
-    pub fn from(l: Option<String>) -> crate::Result<Self> {
+    pub fn from(l: Option<String>) -> ftd_rt::Result<ftd_rt::NamedFont> {
         Ok(match l.as_deref() {
-            Some("monospace") => Self::Monospace,
-            Some("serif") => Self::Serif,
-            Some("sansSerif") => Self::SansSerif,
-            Some(t) => Self::Named {
+            Some("monospace") => ftd_rt::NamedFont::Monospace,
+            Some("serif") => ftd_rt::NamedFont::Serif,
+            Some("sansSerif") => ftd_rt::NamedFont::SansSerif,
+            Some(t) => ftd_rt::NamedFont::Named {
                 value: t.to_string(),
             },
-            None => return Ok(Self::Serif),
+            None => return Ok(ftd_rt::NamedFont::Serif),
         })
     }
 }
@@ -1030,7 +1149,7 @@ pub enum Weight {
 
 impl Default for Weight {
     fn default() -> Self {
-        Self::Regular
+        ftd_rt::Weight::Regular
     }
 }
 
@@ -1043,16 +1162,16 @@ pub struct Style {
     pub italic: bool,
     pub underline: bool,
     pub strike: bool,
-    pub weight: Weight,
+    pub weight: ftd_rt::Weight,
 }
 
 impl Style {
-    pub fn from(l: Option<String>) -> crate::Result<Self> {
+    pub fn from(l: Option<String>) -> ftd_rt::Result<ftd_rt::Style> {
         let mut s = Style {
             italic: false,
             underline: false,
             strike: false,
-            weight: Weight::default(),
+            weight: Default::default(),
         };
         let l = match l {
             Some(v) => v,
@@ -1064,15 +1183,15 @@ impl Style {
                 "italic" => s.italic = true,
                 "underline" => s.underline = true,
                 "strike" => s.strike = true,
-                "heavy" => s.weight = Weight::Heavy,
-                "extra-bold" => s.weight = Weight::ExtraBold,
-                "bold" => s.weight = Weight::Bold,
-                "semi-bold" => s.weight = Weight::SemiBold,
-                "medium" => s.weight = Weight::Medium,
-                "regular" => s.weight = Weight::Regular,
-                "light" => s.weight = Weight::Light,
-                "extra-light" => s.weight = Weight::ExtraLight,
-                "hairline" => s.weight = Weight::HairLine,
+                "heavy" => s.weight = ftd_rt::Weight::Heavy,
+                "extra-bold" => s.weight = ftd_rt::Weight::ExtraBold,
+                "bold" => s.weight = ftd_rt::Weight::Bold,
+                "semi-bold" => s.weight = ftd_rt::Weight::SemiBold,
+                "medium" => s.weight = ftd_rt::Weight::Medium,
+                "regular" => s.weight = ftd_rt::Weight::Regular,
+                "light" => s.weight = ftd_rt::Weight::Light,
+                "extra-light" => s.weight = ftd_rt::Weight::ExtraLight,
+                "hairline" => s.weight = ftd_rt::Weight::HairLine,
                 t => return crate::e(format!("{} is not a valid style", t)),
             }
         }
@@ -1091,24 +1210,26 @@ pub enum TextFormat {
     Markdown,
     Latex,
     Code { lang: String },
+    Text,
 }
 
-impl Default for TextFormat {
-    fn default() -> Self {
-        Self::Markdown
+impl Default for ftd_rt::TextFormat {
+    fn default() -> ftd_rt::TextFormat {
+        ftd_rt::TextFormat::Markdown
     }
 }
 
 impl TextFormat {
-    pub fn from(l: Option<String>, lang: Option<String>) -> crate::Result<Self> {
+    pub fn from(l: Option<String>, lang: Option<String>) -> ftd_rt::Result<ftd_rt::TextFormat> {
         Ok(match l.as_deref() {
-            Some("markdown") => Self::Markdown,
-            Some("latex") => Self::Latex,
-            Some("code") => Self::Code {
+            Some("markdown") => ftd_rt::TextFormat::Markdown,
+            Some("latex") => ftd_rt::TextFormat::Latex,
+            Some("code") => ftd_rt::TextFormat::Code {
                 lang: lang.unwrap_or_else(|| "txt".to_string()),
             },
-            Some(t) => return crate::e(format!("{} is not a valid format", t)),
-            None => return Ok(Self::Markdown),
+            Some("text") => ftd_rt::TextFormat::Text,
+            Some(t) => return ftd_rt::e(format!("{} is not a valid format", t)),
+            None => return Ok(ftd_rt::TextFormat::Markdown),
         })
     }
 }
@@ -1129,7 +1250,7 @@ pub struct IFrame {
     derive(Debug, PartialEq, Clone, serde::Serialize, Default)
 )]
 pub struct Text {
-    pub text: crate::Rendered,
+    pub text: ftd_rt::Rendered,
     pub line: bool,
     pub common: Common,
     pub align: TextAlign,
@@ -1138,7 +1259,7 @@ pub struct Text {
     pub size: Option<i64>,
     pub font: Vec<NamedFont>,
     pub external_font: Option<ExternalFont>,
-    pub line_height: Option<String>,
+    pub line_height: Option<i64>,
     // TODO: line-height
     // TODO: region (https://package.elm-lang.org/packages/mdgriffith/elm-ui/latest/Element-Region)
     // TODO: family (maybe we need a type to represent font-family?)

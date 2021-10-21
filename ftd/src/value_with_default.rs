@@ -1,4 +1,4 @@
-#[derive(PartialEq, Debug, Clone)]
+#[derive(PartialEq, Debug, Clone, serde::Deserialize)]
 pub enum ValueWithDefault<T> {
     Default(T),
     Found(T),

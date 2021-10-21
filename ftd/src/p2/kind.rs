@@ -41,6 +41,16 @@ impl Kind {
     pub fn is_optional(&self) -> bool {
         matches!(self, Kind::Optional { .. })
     }
+
+    pub fn to_value(&self) -> ftd::p1::Result<ftd::Value> {
+        Ok(match self {
+            ftd::p2::Kind::String { default: Some(d), .. } => ftd::Value::String {text: d.to_string(), source: ftd::TextSource::Default} ,
+            ftd::p2::Kind::Integer { default: Some(d) } => ftd::Value::Integer { value: d.parse::<i64>().map_err(|e| crate::p1::Error::CantParseInt { source: e })?, } ,
+            ftd::p2::Kind::Decimal { default: Some(d) } => ftd::Value::Decimal { value: d.parse::<f64>().map_err(|e| crate::p1::Error::CantParseFloat { source: e })?, } ,
+            ftd::p2::Kind::Boolean { default: Some(d) } => ftd::Value::Boolean { value: d.parse::<bool>().map_err(|_| crate::p1::Error::CantParseBool)?, } ,
+            _ => return ftd::e(format!("Kind supported for default value are string, integer, decimal and boolean with default value, found: kind `{:?}`", &self)),
+        })
+    }
 }
 
 impl Kind {
@@ -97,22 +107,17 @@ impl Kind {
         .clone()
     }
 
-    pub fn set_default(self, default: Option<&str>) -> Self {
+    pub fn set_default(self, default: Option<String>) -> Self {
         match self {
             Kind::String { caption, body, .. } => Kind::String {
                 caption,
                 body,
-                default: default.map(|v| v.to_string()),
+                default,
             },
-            Kind::Integer { .. } => Kind::Integer {
-                default: default.map(|v| v.to_string()),
-            },
-            Kind::Decimal { .. } => Kind::Decimal {
-                default: default.map(|v| v.to_string()),
-            },
-            Kind::Boolean { .. } => Kind::Boolean {
-                default: default.map(|v| v.to_string()),
-            },
+            Kind::Integer { .. } => Kind::Integer { default },
+            Kind::Decimal { .. } => Kind::Decimal { default },
+            Kind::Boolean { .. } => Kind::Boolean { default },
+            Kind::Optional { kind } => kind.set_default(default),
             _ => self,
         }
     }
@@ -245,30 +250,15 @@ impl Kind {
 
         if v.starts_with("ref ") {
             let reference = ftd_rt::get_name("ref", &v)?;
-            let is_record = if reference.contains('.') {
-                let mut part = reference.splitn(2, '.');
-                let part_1 = part.next().unwrap().trim();
-                doc.is_variable_record_type(part_1).unwrap_or(false)
-            } else {
-                false
-            };
-            let referred = doc.get_value(reference)?;
-            if is_record {
-                return Ok(crate::PropertyValue::Value { value: referred });
-            }
-            if referred.kind().string_any().without_default() != self.string_any().without_default()
-            {
-                return crate::e(format!(
-                    "`{}` is of wrong kind: {:?}, expected: {:?}",
-                    name,
-                    referred.kind(),
-                    self
-                ));
-            }
-            return Ok(crate::PropertyValue::Reference {
-                name: doc.resolve_name(reference)?,
-                kind: self.to_owned(),
-            });
+            return ftd::PropertyValue::resolve_value(
+                reference,
+                Some(self.to_owned()),
+                doc,
+                &Default::default(),
+                &Default::default(),
+                None,
+                false,
+            );
         }
 
         match self.inner() {
@@ -299,7 +289,7 @@ impl Kind {
             Kind::String { .. } => Ok(crate::PropertyValue::Value {
                 value: crate::Value::String { text: v, source },
             }),
-            _ => todo!(),
+            v => ftd::e2("unknown kind found", v),
         }
     }
 
@@ -331,7 +321,7 @@ impl Kind {
                 let mut parts = k.splitn(2, " with default");
                 let k = parts.next().unwrap().trim();
                 let d = parts.next().unwrap().trim();
-                (k, Some(d))
+                (k, Some(d.to_string()))
             } else {
                 (k, None)
             }

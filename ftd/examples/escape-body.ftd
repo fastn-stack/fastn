@@ -1,0 +1,18 @@
+-- component source-box:
+component: ftd.column
+$file: caption
+$code: body
+
+--- ftd.text: ref $file
+
+--- ftd.row:
+
+--- ftd.text:
+
+\--- ftd.text:
+
+ref $code
+
+-- source-box: main.ftd
+
+\-- ftd.row:

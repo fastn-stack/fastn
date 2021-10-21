@@ -32,6 +32,11 @@ pub enum Error {
         #[from]
         source: std::num::ParseIntError,
     },
+    #[error("serde error: {source}")]
+    Serde {
+        #[from]
+        source: serde_json::Error,
+    },
     #[error("cant parse bool")]
     CantParseBool,
     #[error("cant parse float")]
@@ -39,10 +44,15 @@ pub enum Error {
         #[from]
         source: std::num::ParseFloatError,
     },
-    #[error("ftd-rt error")]
+    #[error("{source}")]
     FtdRT {
         #[from]
         source: ftd_rt::Error,
+    },
+    #[error("{source}")]
+    Failure {
+        #[from]
+        source: failure::Compat<failure::Error>,
     },
 }
 

@@ -135,7 +135,7 @@ fn read_records(section: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Res
         }
         Ok(ftd::Value::List {
             data,
-            kind: var.value.kind(),
+            kind: ftd::p2::Kind::Record { name },
         })
     } else {
         crate::unknown_processor_error(format!(

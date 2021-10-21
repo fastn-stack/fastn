@@ -12,8 +12,9 @@ pub use condition::Condition;
 pub use event::{Action, Event};
 pub use html::Node;
 pub use ui::{
-    Align, Color, Column, Common, Container, Element, ExternalFont, FontDisplay, IFrame, Image,
-    Input, Length, NamedFont, Overflow, Region, Row, Style, Text, TextAlign, TextFormat, Weight,
+    Align, Color, Column, Common, Container, Element, ExternalFont, FontDisplay, GradientDirection,
+    IFrame, Image, Input, Length, NamedFont, Overflow, Region, Row, Style, Text, TextAlign,
+    TextFormat, Weight,
 };
 
 #[derive(serde::Serialize, serde::Deserialize, Eq, PartialEq, Debug, Default, Clone)]
@@ -32,7 +33,10 @@ impl From<&str> for Rendered {
 }
 
 #[derive(thiserror::Error, Debug)]
-pub enum Error {}
+pub enum Error {
+    #[error("invalid input: {message}")]
+    InvalidInput { message: String, context: String },
+}
 
 pub type Map = std::collections::BTreeMap<String, String>;
 type Result<T> = std::result::Result<T, Error>;
@@ -52,7 +56,10 @@ pub fn e<T, S>(m: S) -> Result<T>
 where
     S: Into<String>,
 {
-    todo!("{}", m.into())
+    Err(Error::InvalidInput {
+        message: m.into(),
+        context: "".to_string(),
+    })
 }
 
 pub fn get_name<'a, 'b>(prefix: &'a str, s: &'b str) -> ftd_rt::Result<&'b str> {

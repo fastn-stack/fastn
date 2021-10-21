@@ -60,7 +60,7 @@ impl RT {
     pub fn render_(&mut self) -> crate::p1::Result<ftd_rt::Column> {
         let mut main = ftd::p2::interpreter::default_column();
         let mut invocations = Default::default();
-        let element = ftd::execute_doc::ExecuteDoc {
+        let mut element = ftd::execute_doc::ExecuteDoc {
             name: self.name.as_str(),
             aliases: &self.aliases,
             bag: &self.bag,
@@ -71,6 +71,8 @@ impl RT {
         }
         .execute(&[], &Default::default())?
         .children;
+
+        ftd_rt::Element::renesting_on_region(&mut element);
 
         main.container.children = element;
         store_invocations(&mut self.bag, invocations);

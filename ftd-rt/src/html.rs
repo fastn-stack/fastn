@@ -59,9 +59,6 @@ impl Node {
     ) -> ftd_rt::dnode::DNode {
         let style = {
             let mut s = self.style.clone();
-            if !self.events.is_empty() && !s.contains_key("cursor") {
-                s.insert("cursor".to_string(), "pointer".to_string());
-            }
             s.extend(style.clone());
             s
         };
@@ -377,9 +374,12 @@ impl ftd_rt::Text {
         if let Some(p) = self.size {
             n.style.insert(s("font-size"), format!("{}px", p));
         }
-        if let Some(p) = &self.line_height {
+        if let Some(p) = self.line_height {
             n.style.insert(s("line-height"), format!("{}px", p));
+        } else if !&self.line {
+            n.style.insert(s("line-height"), s("26px"));
         }
+
         if self.style.italic {
             n.style.insert(s("font-style"), s("italic"));
         }
@@ -445,6 +445,13 @@ impl ftd_rt::Common {
     fn style(&self) -> ftd_rt::Map {
         let mut d: ftd_rt::Map = Default::default();
 
+        if !self.events.is_empty() && self.cursor.is_none() {
+            d.insert(s("cursor"), s("pointer"));
+        }
+        if self.is_not_visible {
+            d.insert(s("display"), s("none"));
+        }
+
         if let Some(p) = self.padding {
             d.insert(s("padding"), format!("{}px", p));
         }
@@ -453,6 +460,14 @@ impl ftd_rt::Common {
         }
         if let Some(ref cursor) = self.cursor {
             d.insert(s("cursor"), s(cursor));
+        }
+        if let Some(p) = self.padding_vertical {
+            d.insert(s("padding-top"), format!("{}px", p));
+            d.insert(s("padding-bottom"), format!("{}px", p));
+        }
+        if let Some(p) = self.padding_horizontal {
+            d.insert(s("padding-left"), format!("{}px", p));
+            d.insert(s("padding-right"), format!("{}px", p));
         }
         if let Some(p) = self.padding_right {
             d.insert(s("padding-right"), format!("{}px", p));
@@ -573,6 +588,37 @@ impl ftd_rt::Common {
         if self.link.is_some() {
             d.insert(s("cursor"), s("pointer"));
         }
+        if self.shadow_size.is_some()
+            || self.shadow_blur.is_some()
+            || self.shadow_offset_x.is_some()
+            || self.shadow_offset_y.is_some()
+        {
+            let shadow_color = match &self.shadow_color {
+                Some(p) => p,
+                None => &ftd_rt::Color {
+                    r: 0,
+                    g: 0,
+                    b: 0,
+                    alpha: 0.25,
+                },
+            };
+
+            d.insert(
+                s("box-shadow"),
+                format!(
+                    "{}px {}px {}px {}px {}",
+                    self.shadow_offset_x.unwrap_or(0),
+                    self.shadow_offset_y.unwrap_or(0),
+                    self.shadow_blur.unwrap_or(0),
+                    self.shadow_size.unwrap_or(0),
+                    color(shadow_color),
+                ),
+            );
+        }
+        if let Some(p) = &self.gradient_direction {
+            d.insert(s("background-image"), gradient(p, &self.gradient_colors));
+        }
+
         d.insert(s("border-style"), s("solid"));
         d.insert(s("border-width"), format!("{}px", self.border_width));
         d.insert(s("border-radius"), format!("{}px", self.border_radius));
@@ -735,4 +781,33 @@ fn overflow(l: &ftd_rt::Overflow, f: &str) -> (String, String) {
         ftd_rt::Overflow::Scroll => (s, "scroll".to_string()),
         ftd_rt::Overflow::Visible => (s, "visible".to_string()),
     }
+}
+
+fn gradient(d: &ftd_rt::GradientDirection, c: &[ftd_rt::Color]) -> String {
+    let color = c
+        .iter()
+        .map(|v| color(v))
+        .collect::<Vec<String>>()
+        .join(",");
+    let gradient_style = match d {
+        ftd_rt::GradientDirection::BottomToTop => "linear-gradient(to top ".to_string(),
+        ftd_rt::GradientDirection::TopToBottom => "linear-gradient(to bottom ".to_string(),
+        ftd_rt::GradientDirection::LeftToRight => "linear-gradient(to right".to_string(),
+        ftd_rt::GradientDirection::RightToLeft => "linear-gradient(to left".to_string(),
+        ftd_rt::GradientDirection::BottomRightToTopLeft => {
+            "linear-gradient(to top left".to_string()
+        }
+        ftd_rt::GradientDirection::TopLeftBottomRight => {
+            "linear-gradient(to bottom right".to_string()
+        }
+        ftd_rt::GradientDirection::BottomLeftToTopRight => {
+            "linear-gradient(to top right".to_string()
+        }
+        ftd_rt::GradientDirection::TopRightToBottomLeft => {
+            "linear-gradient(to bottom left".to_string()
+        }
+        ftd_rt::GradientDirection::Center => "radial-gradient(circle ".to_string(),
+        ftd_rt::GradientDirection::Angle { value } => format!("linear-gradient({}deg", value),
+    };
+    format!("{}, {} )", gradient_style, color)
 }
