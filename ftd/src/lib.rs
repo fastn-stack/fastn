@@ -132,15 +132,20 @@ pub fn split_module(id: &str) -> crate::p1::Result<(Option<&str>, &str, Option<&
 
 pub struct ExampleLibrary {}
 
+#[cfg(feature = "async")]
+use async_trait::async_trait;
+
+#[cfg(feature = "async")]
+#[async_trait]
+impl ftd::p2::Library for ExampleLibrary {
+    async fn get(&self, name: &str) -> Option<String> {
+        std::fs::read_to_string(format!("./examples/{}.ftd", name)).ok()
+    }
+}
+
+#[cfg(not(feature = "async"))]
 impl ftd::p2::Library for ExampleLibrary {
     fn get(&self, name: &str) -> Option<String> {
-        if name == "fifthtry/ft" {
-            return Some(std::fs::read_to_string("../ft.ftd").unwrap());
-        }
-        if name == "fifthtry/ft-core" {
-            return Some(std::fs::read_to_string("../ft-core.ftd").unwrap());
-        }
-
         std::fs::read_to_string(format!("./examples/{}.ftd", name)).ok()
     }
 }

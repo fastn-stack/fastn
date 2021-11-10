@@ -3,4 +3,4 @@
 
 Docs: [FifthTry.com/ftd/](https://www.fifthtry.com/ftd/)
 
-amitu_heroku commit-id: ab79aded4e203a99e94459c335dcf7a9994f7fae
+amitu_heroku commit-id: 25d3a34fd1bf8fcf66207a97027aabf051b2de45

@@ -42,6 +42,20 @@ impl Kind {
         matches!(self, Kind::Optional { .. })
     }
 
+    pub fn is_list(&self) -> bool {
+        matches!(self, Kind::List { .. })
+    }
+
+    pub fn to_string(&self) -> ftd::p1::Result<String> {
+        Ok(match self {
+            ftd::p2::Kind::String { .. } => "string",
+            ftd::p2::Kind::Integer { .. } => "integer",
+            ftd::p2::Kind::Decimal { .. } => "decimal",
+            ftd::p2::Kind::Boolean { .. } => "boolean",
+            _ => return ftd::e(format!("Kind supported for default value are string, integer, decimal and boolean with default value, found: kind `{:?}`", &self)),
+        }.to_string())
+    }
+
     pub fn to_value(&self) -> ftd::p1::Result<ftd::Value> {
         Ok(match self {
             ftd::p2::Kind::String { default: Some(d), .. } => ftd::Value::String {text: d.to_string(), source: ftd::TextSource::Default} ,

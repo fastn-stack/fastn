@@ -16,10 +16,11 @@ impl<'a> ExecuteDoc<'a> {
     pub(crate) fn execute(
         &mut self,
         parent_container: &[usize],
-        all_locals: &ftd_rt::Map,
+        all_locals: &mut ftd_rt::Map,
+        id: Option<String>,
     ) -> crate::p1::Result<crate::component::ElementWithContainer> {
         let mut index = 0;
-        self.execute_(&mut index, false, parent_container, all_locals, None)
+        self.execute_(&mut index, false, parent_container, all_locals, None, id)
     }
 
     fn execute_(
@@ -27,8 +28,9 @@ impl<'a> ExecuteDoc<'a> {
         index: &mut usize,
         is_external: bool,
         parent_container: &[usize],
-        all_locals: &ftd_rt::Map,
+        all_locals: &mut ftd_rt::Map,
         parent_id: Option<String>,
+        id: Option<String>,
     ) -> crate::p1::Result<crate::component::ElementWithContainer> {
         let mut current_container: Vec<usize> = Default::default();
         let mut named_containers: std::collections::BTreeMap<String, Vec<Vec<usize>>> =
@@ -51,6 +53,7 @@ impl<'a> ExecuteDoc<'a> {
                         current = match &current[*i] {
                             ftd_rt::Element::Row(ref r) => &r.container.children,
                             ftd_rt::Element::Column(ref r) => &r.container.children,
+                            ftd_rt::Element::Scene(ref r) => &r.container.children,
                             _ => unreachable!(),
                         };
                     }
@@ -82,8 +85,8 @@ impl<'a> ExecuteDoc<'a> {
                     assert!(self.arguments.is_empty()); // This clause cant have arguments
                     let crate::component::ElementWithContainer {
                         element,
+                        children: container_children,
                         child_container,
-                        ..
                     } = parent.super_call(
                         inner,
                         &doc,
@@ -93,6 +96,7 @@ impl<'a> ExecuteDoc<'a> {
                         &local_container,
                     )?;
 
+                    let mut temp_locals: ftd_rt::Map = Default::default();
                     children = self.add_element(
                         children,
                         &mut current_container,
@@ -101,12 +105,39 @@ impl<'a> ExecuteDoc<'a> {
                         child_container,
                         index,
                         parent_container,
-                        &Default::default(),
+                        &mut temp_locals,
+                        None,
+                        container_children,
                     )?;
                 }
-                ftd::Instruction::ChildComponent { child: f } => {
+                ftd::Instruction::ChildComponent { child: f } if !f.is_recursive => {
+                    let new_id = {
+                        if f.condition.is_some()
+                            && f.condition.as_ref().unwrap().is_constant()
+                            && !f.condition.as_ref().unwrap().eval(self.arguments, &doc)?
+                            && f.condition.as_ref().unwrap().set_null()?
+                        {
+                            None
+                        } else {
+                            let new_id = crate::p2::utils::string_optional(
+                                "id",
+                                &ftd::component::resolve_properties(
+                                    &f.properties,
+                                    self.arguments,
+                                    &doc,
+                                    None,
+                                )?,
+                            )?;
+                            if new_id.is_some() && id.is_some() {
+                                Some(format!("{}:{}", id.as_ref().unwrap(), new_id.unwrap()))
+                            } else {
+                                None
+                            }
+                        }
+                    };
+
                     let crate::component::ElementWithContainer {
-                        element: e,
+                        element: mut e,
                         child_container,
                         ..
                     } = f.call(
@@ -117,7 +148,9 @@ impl<'a> ExecuteDoc<'a> {
                         self.root_name,
                         all_locals,
                         &local_container,
+                        new_id.clone(),
                     )?;
+                    e.set_element_id(new_id);
 
                     children = self.add_element(
                         children,
@@ -128,9 +161,12 @@ impl<'a> ExecuteDoc<'a> {
                         index,
                         parent_container,
                         all_locals,
+                        id.clone(),
+                        vec![],
                     )?;
                 }
-                ftd::Instruction::RecursiveChildComponent { child: f } => {
+                ftd::Instruction::RecursiveChildComponent { child: f }
+                | ftd::Instruction::ChildComponent { child: f } => {
                     let elements = f.recursive_call(
                         &doc,
                         self.arguments,
@@ -150,6 +186,8 @@ impl<'a> ExecuteDoc<'a> {
                             index,
                             parent_container,
                             all_locals,
+                            None,
+                            vec![],
                         )?
                     }
                 }
@@ -174,13 +212,16 @@ impl<'a> ExecuteDoc<'a> {
         container: Option<std::collections::BTreeMap<String, Vec<Vec<usize>>>>,
         index: &mut usize,
         parent_container: &[usize],
-        all_locals: &ftd_rt::Map,
+        all_locals: &mut ftd_rt::Map,
+        id: Option<String>,
+        container_children: Vec<ftd_rt::Element>,
     ) -> crate::p1::Result<Vec<ftd_rt::Element>> {
         let mut current = &mut main;
         for i in current_container.iter() {
             current = match &mut current[*i] {
                 ftd_rt::Element::Row(ref mut r) => &mut r.container.children,
                 ftd_rt::Element::Column(ref mut r) => &mut r.container.children,
+                ftd_rt::Element::Scene(ref mut r) => &mut r.container.children,
                 _ => unreachable!(),
             };
         }
@@ -204,48 +245,11 @@ impl<'a> ExecuteDoc<'a> {
             update_named_container(&c, named_containers, &child_container, container_id, true);
         }
 
-        let open_id = e.is_open_container().1;
+        let open_id = e.is_open_container(container_children.is_empty()).1;
         let container_id = e.container_id();
-        let is_open = e.is_open_container().0;
+        let is_open = e.is_open_container(container_children.is_empty()).0;
 
         current.push(e);
-
-        if is_open {
-            current_container.push(len);
-            let mut new_parent_container = parent_container.to_vec();
-            new_parent_container.append(&mut current_container.to_vec());
-
-            let container = match current.last_mut() {
-                Some(ftd_rt::Element::Column(ftd_rt::Column {
-                    ref mut container, ..
-                }))
-                | Some(ftd_rt::Element::Row(ftd_rt::Row {
-                    ref mut container, ..
-                })) => {
-                    *index += 1;
-                    let child = self.execute_(
-                        index,
-                        true,
-                        &new_parent_container,
-                        all_locals,
-                        parent_id.clone(),
-                    )?;
-                    container.children.extend(child.children);
-                    child.child_container
-                }
-                _ => unreachable!(),
-            };
-
-            if let Some(child_container) = container {
-                update_named_container(
-                    current_container,
-                    named_containers,
-                    &child_container,
-                    None,
-                    false,
-                );
-            }
-        }
 
         if let Some(id) = open_id {
             let open_id = container_id.map_or(id.clone(), |v| format!("{}#{}", v, id));
@@ -259,10 +263,6 @@ impl<'a> ExecuteDoc<'a> {
                 id
             };
 
-            current_container.push(len);
-            let mut new_parent_container = parent_container.to_vec();
-            new_parent_container.append(&mut current_container.to_vec());
-
             match current.last_mut() {
                 Some(ftd_rt::Element::Column(ftd_rt::Column {
                     container: ref mut c,
@@ -271,27 +271,93 @@ impl<'a> ExecuteDoc<'a> {
                 | Some(ftd_rt::Element::Row(ftd_rt::Row {
                     container: ref mut c,
                     ..
+                }))
+                | Some(ftd_rt::Element::Scene(ftd_rt::Scene {
+                    container: ref mut c,
+                    ..
                 })) => {
-                    *index += 1;
-                    let child = self.execute_(
-                        index,
-                        true,
-                        &new_parent_container,
-                        &Default::default(),
-                        parent_id,
-                    )?;
+                    let child = if container_children.is_empty() {
+                        current_container.push(len);
+                        let mut new_parent_container = parent_container.to_vec();
+                        new_parent_container.append(&mut current_container.to_vec());
+
+                        let mut temp_locals: ftd_rt::Map = Default::default();
+
+                        *index += 1;
+                        self.execute_(
+                            index,
+                            true,
+                            &new_parent_container,
+                            &mut temp_locals,
+                            parent_id,
+                            None,
+                        )?
+                        .children
+                    } else {
+                        container_children
+                    };
+
                     let external_children = {
-                        if child.children.is_empty() {
+                        if child.is_empty() {
                             vec![]
                         } else {
                             let mut main = ftd::p2::interpreter::default_column();
-                            main.container.children = child.children;
+                            main.container.children = child;
                             vec![ftd_rt::Element::Column(main)]
                         }
                     };
                     c.external_children = Some((id, container, external_children));
                 }
                 _ => unreachable!(),
+            }
+        } else {
+            let container = match current.last_mut() {
+                Some(ftd_rt::Element::Column(ftd_rt::Column {
+                    ref mut container, ..
+                }))
+                | Some(ftd_rt::Element::Row(ftd_rt::Row {
+                    ref mut container, ..
+                }))
+                | Some(ftd_rt::Element::Scene(ftd_rt::Scene {
+                    ref mut container, ..
+                })) => {
+                    container.children.extend(container_children);
+                    Some(container)
+                }
+                _ => None,
+            };
+
+            if is_open {
+                current_container.push(len);
+                let mut new_parent_container = parent_container.to_vec();
+                new_parent_container.append(&mut current_container.to_vec());
+
+                let container = match container {
+                    Some(container) => {
+                        *index += 1;
+                        let child = self.execute_(
+                            index,
+                            true,
+                            &new_parent_container,
+                            all_locals,
+                            parent_id.clone(),
+                            id,
+                        )?;
+                        container.children.extend(child.children);
+                        child.child_container
+                    }
+                    _ => unreachable!(),
+                };
+
+                if let Some(child_container) = container {
+                    update_named_container(
+                        current_container,
+                        named_containers,
+                        &child_container,
+                        None,
+                        false,
+                    );
+                }
             }
         }
         Ok(main)

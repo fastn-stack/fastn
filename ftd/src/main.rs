@@ -70,19 +70,19 @@ fn write(id: &str, doc: String) {
         std::fs::read_to_string("ftd.html")
             .expect("cant read ftd.html")
             .replace(
-                "___ftd_data___",
+                "__ftd_data__",
                 serde_json::to_string_pretty(&doc.data)
                     .expect("failed to convert document to json")
                     .as_str(),
             )
             .replace(
-                "___ftd_external_children___",
+                "__ftd_external_children__",
                 serde_json::to_string_pretty(&doc.external_children)
                     .expect("failed to convert document to json")
                     .as_str(),
             )
-            .replace("___ftd___", b.html("main").as_str())
-            .replace("___ftd_js___", ftd_js.as_str())
+            .replace("__ftd__", b.html("main").as_str())
+            .replace("__ftd_js__", ftd_js.as_str())
             .as_bytes(),
     )
     .expect("failed to write to .html file");

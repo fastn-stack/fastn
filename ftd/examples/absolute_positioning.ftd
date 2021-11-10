@@ -1,0 +1,25 @@
+/-- ftd.text: hello world
+anchor: parent
+right: 0
+top: 100
+
+/-- ftd.text: hello world without absolute
+
+-- ftd.column:
+color: red
+width: fill
+
+--- ftd.text: Text inside column with anchor: parent
+anchor: parent
+right: 0
+top: 100
+
+--- ftd.text: Text inside column without absolute
+
+
+-- ftd.text: Text with anchor: window
+anchor: window
+left: 40
+top: 100
+
+-- ftd.text: Text without absolute

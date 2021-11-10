@@ -32,10 +32,11 @@ impl Event {
 
     pub fn get_events(
         events: &[Self],
-        all_locals: &ftd_rt::Map,
+        all_locals: &mut ftd_rt::Map,
         arguments: &std::collections::BTreeMap<String, crate::Value>,
         doc: &crate::p2::TDoc,
         root_name: Option<&str>,
+        mouse_event: bool,
     ) -> crate::p1::Result<Vec<ftd_rt::Event>> {
         let arguments = {
             //remove properties
@@ -55,6 +56,10 @@ impl Event {
                 Some(value) => {
                     if let Some(val) = all_locals.get(value) {
                         format!("@{}@{}", value, val)
+                    } else if value.eq("mouse-in") {
+                        let string_container = all_locals.get("mouse-in-temp").unwrap().clone();
+                        all_locals.insert("mouse-in".to_string(), string_container.to_string());
+                        format!("@mouse-in@{}", string_container)
                     } else {
                         return crate::e(format!("Can't find the local variable {}", value));
                     }
@@ -75,6 +80,34 @@ impl Event {
                     )?,
                 },
             });
+        }
+        if mouse_event {
+            if let Some(val) = all_locals.get("mouse-in") {
+                event.push(ftd_rt::Event {
+                    name: "onmouseenter".to_string(),
+                    action: ftd_rt::Action {
+                        action: "set-value".to_string(),
+                        target: format!("@mouse-in@{}", val),
+                        parameters: std::array::IntoIter::new([(
+                            "value".to_string(),
+                            vec!["true".to_string(), "boolean".to_string()],
+                        )])
+                        .collect(),
+                    },
+                });
+                event.push(ftd_rt::Event {
+                    name: "onmouseleave".to_string(),
+                    action: ftd_rt::Action {
+                        action: "set-value".to_string(),
+                        target: format!("@mouse-in@{}", val),
+                        parameters: std::array::IntoIter::new([(
+                            "value".to_string(),
+                            vec!["false".to_string(), "boolean".to_string()],
+                        )])
+                        .collect(),
+                    },
+                });
+            }
         }
         Ok(event)
     }
@@ -135,6 +168,9 @@ pub enum ActionKind {
     Toggle,
     Increment,
     Decrement,
+    StopPropagation,
+    PreventDefault,
+    SetValue,
 }
 
 impl serde::Serialize for ActionKind {
@@ -152,6 +188,9 @@ impl ActionKind {
             Self::Toggle => "toggle",
             Self::Increment => "increment",
             Self::Decrement => "decrement",
+            Self::StopPropagation => "stop-propagation",
+            Self::PreventDefault => "prevent-default",
+            Self::SetValue => "set-value",
         }
     }
 
@@ -160,6 +199,9 @@ impl ActionKind {
             "toggle" => Ok(Self::Toggle),
             "increment" => Ok(Self::Increment),
             "decrement" => Ok(Self::Decrement),
+            "stop-propagation" => Ok(Self::StopPropagation),
+            "prevent-default" => Ok(Self::PreventDefault),
+            "set-value" => Ok(Self::SetValue),
             t => return crate::e(format!("{} is not a valid action kind", t)),
         }
     }
@@ -168,7 +210,10 @@ impl ActionKind {
         let mut parameters: std::collections::BTreeMap<String, ftd::p2::event::Parameter> =
             Default::default();
         match self {
-            ftd::p2::ActionKind::Toggle => {}
+            ftd::p2::ActionKind::Toggle
+            | ftd::p2::ActionKind::StopPropagation
+            | ftd::p2::ActionKind::PreventDefault
+            | ftd::p2::ActionKind::SetValue => {}
             ftd::p2::ActionKind::Increment | ftd::p2::ActionKind::Decrement => {
                 parameters.insert(
                     "by".to_string(),
@@ -203,7 +248,14 @@ impl Action {
         return match a {
             _ if a.starts_with("toggle ") => {
                 let value = a.replace("toggle ", "");
-                let target = get_target(value, doc, locals, arguments, ftd::p2::Kind::boolean())?;
+                let target = get_target(
+                    value,
+                    doc,
+                    locals,
+                    arguments,
+                    Some(ftd::p2::Kind::boolean()),
+                )?
+                .0;
                 Ok(Self {
                     action: ActionKind::Toggle,
                     target,
@@ -226,7 +278,14 @@ impl Action {
                         &format!("expected `{} something` found: {}", action_string, a),
                     );
                 };
-                let target = get_target(value, doc, locals, arguments, ftd::p2::Kind::integer())?;
+                let target = get_target(
+                    value,
+                    doc,
+                    locals,
+                    arguments,
+                    Some(ftd::p2::Kind::integer()),
+                )?
+                .0;
 
                 let parameters = {
                     let mut parameters: std::collections::BTreeMap<
@@ -280,6 +339,45 @@ impl Action {
                     parameters,
                 })
             }
+            _ if a.eq("stop-propagation") => Ok(Self {
+                action: ActionKind::StopPropagation,
+                target: "".to_string(),
+                parameters: Default::default(),
+            }),
+            _ if a.eq("prevent-default") => Ok(Self {
+                action: ActionKind::PreventDefault,
+                target: "".to_string(),
+                parameters: Default::default(),
+            }),
+            _ if a.contains('=') => {
+                let (part_1, part_2) = ftd::p2::utils::split(a, "=")?;
+                let (target, kind) = get_target(part_1, doc, locals, arguments, None)?;
+                let mut parameters: std::collections::BTreeMap<String, Vec<ftd::PropertyValue>> =
+                    Default::default();
+
+                let value = ftd::PropertyValue::resolve_value(
+                    &part_2,
+                    Some(kind.clone()),
+                    doc,
+                    arguments,
+                    locals,
+                    None,
+                    false,
+                )?;
+                let kind = ftd::PropertyValue::Value {
+                    value: ftd::variable::Value::String {
+                        text: kind.to_string()?,
+                        source: ftd::TextSource::Header,
+                    },
+                };
+
+                parameters.insert("value".to_string(), vec![value, kind]);
+                Ok(Self {
+                    action: ActionKind::SetValue,
+                    target,
+                    parameters,
+                })
+            }
             t => return crate::e(format!("{} is not a valid action", t)),
         };
 
@@ -288,22 +386,19 @@ impl Action {
             doc: &crate::p2::TDoc,
             locals: &std::collections::BTreeMap<String, crate::p2::Kind>,
             arguments: &std::collections::BTreeMap<String, crate::p2::Kind>,
-            kind: crate::p2::Kind,
-        ) -> ftd::p1::Result<String> {
+            kind: Option<crate::p2::Kind>,
+        ) -> ftd::p1::Result<(String, ftd::p2::Kind)> {
             let pv = ftd::PropertyValue::resolve_value(
-                &value,
-                Some(kind),
-                doc,
-                arguments,
-                locals,
-                None,
-                false,
+                &value, kind, doc, arguments, locals, None, false,
             )?;
-            Ok(match pv {
-                ftd::PropertyValue::Reference { name, .. } => name,
-                ftd::PropertyValue::LocalVariable { name, .. } => format!("@{}", name),
-                t => return crate::e(format!("value not expected {:?}", t)),
-            })
+            Ok((
+                match pv {
+                    ftd::PropertyValue::Reference { ref name, .. } => name.to_string(),
+                    ftd::PropertyValue::LocalVariable { ref name, .. } => format!("@{}", name),
+                    t => return crate::e(format!("value not expected {:?}", t)),
+                },
+                pv.kind(),
+            ))
         }
     }
 }

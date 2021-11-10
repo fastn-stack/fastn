@@ -1,3 +1,26 @@
+#[cfg(feature = "async")]
+#[async_trait::async_trait]
+pub trait Library: Sync {
+    async fn get(&self, name: &str) -> Option<String>;
+    async fn get_with_result(&self, name: &str) -> crate::p1::Result<String> {
+        match self.get(name).await {
+            Some(v) => Ok(v),
+            None => crate::e(format!("library not found: {}", name)),
+        }
+    }
+    async fn process(
+        &self,
+        section: &ftd::p1::Section,
+        doc: &ftd::p2::TDoc,
+    ) -> crate::p1::Result<ftd::Value> {
+        crate::unknown_processor_error(format!(
+            "unimplemented for section {:?} and doc {:?}",
+            section, doc
+        ))
+    }
+}
+
+#[cfg(not(feature = "async"))]
 pub trait Library {
     fn get(&self, name: &str) -> Option<String>;
     fn get_with_result(&self, name: &str) -> crate::p1::Result<String> {
@@ -145,6 +168,28 @@ fn read_records(section: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Res
     }
 }
 
+#[cfg(feature = "async")]
+#[async_trait::async_trait]
+impl Library for TestLibrary {
+    async fn get(&self, name: &str) -> Option<String> {
+        std::fs::read_to_string(format!("./tests/{}.ftd", name)).ok()
+    }
+
+    async fn process(
+        &self,
+        section: &ftd::p1::Section,
+        doc: &ftd::p2::TDoc,
+    ) -> crate::p1::Result<ftd::Value> {
+        match section.header.str("$processor$")? {
+            "read_version_from_cargo_toml" => read_version(),
+            "read_package_from_cargo_toml" => read_package(section, doc),
+            "read_package_records_from_cargo_toml" => read_records(section, doc),
+            t => crate::e2(format!("unknown processor: {}", t), "TestLibrary.process"),
+        }
+    }
+}
+
+#[cfg(not(feature = "async"))]
 impl Library for TestLibrary {
     fn get(&self, name: &str) -> Option<String> {
         std::fs::read_to_string(format!("./tests/{}.ftd", name)).ok()

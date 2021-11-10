@@ -1,10 +1,19 @@
+-- var iphone: false
+
+-- var android: false
+
 -- component iphone-display:
 component: ftd.column
 $id: optional string
 id: ref $id
 color: green
+open: iphone-id
 
 --- ftd.text: iPhone Display
+
+--- ftd.column:
+id: iphone-id
+if: iphone
 
 -- component desktop-display:
 component: ftd.column
@@ -19,8 +28,13 @@ component: ftd.column
 $id: optional string
 id: ref $id
 color: blue
+open: android-id
 
 --- ftd.text: Android Display
+
+--- ftd.column:
+id: android-id
+if: android
 
 -- var mobile: true
 
@@ -34,9 +48,13 @@ id: foo
 if: mobile
 id: some-child
 
+--- container: ftd.main
+
 --- android-display:
 if: mobile
 id: some-child
+
+--- container: ftd.main
 
 --- desktop-display:
 if: not mobile
@@ -111,10 +129,12 @@ bio: Good Mobile 2
 -- container: ftd.main
 
 -- ftd.text: end of display
-<<<<<<< Updated upstream
 
 -- ftd.text: Click here!
 $event-click$: toggle mobile
-=======
-$event-click$: toggle mobile
->>>>>>> Stashed changes
+
+-- ftd.text: Click here Android!
+$event-click$: toggle android
+
+-- ftd.text: Click here iPhone!
+$event-click$: toggle iphone

@@ -71,7 +71,10 @@ impl<'a> TDoc<'a> {
                         Default::default();
                     if let serde_json::Value::Object(o) = json {
                         for (key, kind) in rec_fields {
-                            let val = o.get(&key).unwrap();
+                            let val = match o.get(&key) {
+                                Some(v) => v,
+                                None => return ftd::e(format!("key not found: {}", key.as_str())),
+                            };
                             fields.insert(
                                 key,
                                 ftd::PropertyValue::Value {

@@ -3,7 +3,7 @@ component: ftd.column
 $name: string
 padding-left: 10
 open: some-child
-@visible: boolean with default true
+@visible: boolean with default false
 
 --- ftd.row:
 $event-click$: toggle @visible

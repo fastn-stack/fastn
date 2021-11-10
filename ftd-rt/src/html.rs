@@ -56,6 +56,7 @@ impl Node {
         external_children_container: &[Vec<usize>],
         is_parent_visible: bool,
         parent_id: &str,
+        is_last: bool,
     ) -> ftd_rt::dnode::DNode {
         let style = {
             let mut s = self.style.clone();
@@ -68,7 +69,7 @@ impl Node {
             #[allow(clippy::blocks_in_if_conditions)]
             if let Some(ext_children) = external_children {
                 if *external_open_id
-                    == self.attrs.get("id").map(|v| {
+                    == self.attrs.get("data-id").map(|v| {
                         if v.contains(':') {
                             let mut part = v.splitn(2, ':');
                             part.next().unwrap().trim().to_string()
@@ -76,10 +77,9 @@ impl Node {
                             v.to_string()
                         }
                     })
-                    && self.is_visible(data)
-                    && is_parent_visible
                     && self.open_id.is_none()
                     && external_children_container.is_empty()
+                    && ((self.is_visible(data) && is_parent_visible) || is_last)
                 {
                     for child in ext_children.iter() {
                         children.push(child);
@@ -98,6 +98,7 @@ impl Node {
             };
 
         let mut ext_child = None;
+        let mut is_borrowed_ext_child = false;
 
         let ext_child: &mut Option<&Vec<Self>> = {
             if external_children_container.is_empty() {
@@ -106,6 +107,7 @@ impl Node {
                 ext_child = Some(&self.external_children);
                 &mut ext_child
             } else {
+                is_borrowed_ext_child = true;
                 external_children
             }
         };
@@ -120,7 +122,7 @@ impl Node {
                     continue;
                 }
 
-                let external_container = {
+                let (external_container, is_last) = {
                     let mut external_container = vec![];
                     while index < external_children_container.len() {
                         if let Some(container) = external_children_container[index].get(0) {
@@ -130,16 +132,34 @@ impl Node {
                             }
                             let external_child_container =
                                 external_children_container[index][1..].to_vec();
-                            if container == &i && !external_child_container.is_empty() {
-                                external_container.push(external_child_container)
+                            if container == &i {
+                                if !external_child_container.is_empty() {
+                                    external_container.push(external_child_container)
+                                }
                             } else {
                                 break;
                             }
                         }
                         index += 1;
                     }
-                    external_container
+                    let is_last = {
+                        let mut last = external_container.is_empty()
+                            && (index >= external_children_container.len()
+                                || !is_other_sibling_visible(
+                                    i,
+                                    &all_children,
+                                    index,
+                                    external_children_container,
+                                ));
+                        if is_borrowed_ext_child {
+                            last = is_last && last;
+                        }
+                        last
+                    };
+
+                    (external_container, is_last)
                 };
+
                 children.push(v.to_dnode(
                     &self.fixed_children_style(index_of_visible_children),
                     data,
@@ -148,6 +168,7 @@ impl Node {
                     external_container.as_slice(),
                     is_parent_visible && self.is_visible(data),
                     parent_id,
+                    is_last,
                 ));
                 if v.is_visible(data) {
                     index_of_visible_children += 1;
@@ -158,16 +179,16 @@ impl Node {
 
         let attrs = {
             let mut attrs = self.attrs.to_owned();
-            let oid = if let Some(oid) = attrs.get("id") {
+            let oid = if let Some(oid) = attrs.get("data-id") {
                 format!("{}:{}", oid, parent_id)
             } else {
                 format!("{}:root", parent_id)
             };
-            attrs.insert("id".to_string(), oid);
+            attrs.insert("data-id".to_string(), oid);
             attrs
         };
 
-        ftd_rt::dnode::DNode {
+        return ftd_rt::dnode::DNode {
             classes: self.classes.to_owned(),
             node: self.node.to_owned(),
             attrs,
@@ -177,6 +198,30 @@ impl Node {
             null: self.null.to_owned(),
             events: self.events.to_owned(),
             visible: self.is_visible(data),
+        };
+
+        fn is_other_sibling_visible(
+            index: usize,
+            all_children: &[&Node],
+            ext_child_container_index: usize,
+            external_children_container: &[Vec<usize>],
+        ) -> bool {
+            for external_child_container in external_children_container
+                .iter()
+                .skip(ext_child_container_index)
+            {
+                if let Some(container) = external_child_container.get(0) {
+                    if container < &index {
+                        continue;
+                    }
+                    if let Some(child) = all_children.get(*container) {
+                        if !child.node.is_empty() {
+                            return true;
+                        }
+                    }
+                }
+            }
+            false
         }
     }
 
@@ -186,7 +231,7 @@ impl Node {
         data: &ftd_rt::DataDependenciesMap,
         id: &str,
     ) -> String {
-        self.to_dnode(style, data, &mut None, &None, &[], true, id)
+        self.to_dnode(style, data, &mut None, &None, &[], true, id, false)
             .to_html(id)
     }
 
@@ -203,6 +248,7 @@ impl ftd_rt::Element {
     pub fn to_node(&self) -> Node {
         match self {
             Self::Row(i) => (i.to_node()),
+            Self::Scene(i) => (i.to_node()),
             Self::Text(i) => (i.to_node()),
             Self::Image(i) => (i.to_node()),
             Self::Column(i) => (i.to_node()),
@@ -305,19 +351,116 @@ impl Node {
     }
 }
 
+impl ftd_rt::Scene {
+    pub fn to_node(&self) -> Node {
+        let node = {
+            let mut node = Node {
+                node: s("div"),
+                ..Default::default()
+            };
+            if let Some(ref data_id) = self.common.data_id {
+                node.attrs
+                    .insert(s("data-id"), format!("{}:scene", data_id));
+            } else {
+                node.attrs.insert(s("data-id"), s("scene:root"));
+            }
+            node.style.insert(s("position"), s("relative"));
+            let children = {
+                let parent = {
+                    let mut node = if let Some(ref img) = self.common.background_image {
+                        let mut n = Node {
+                            node: s("img"),
+                            ..Default::default()
+                        };
+                        n.attrs.insert(s("src"), s(img));
+                        n.attrs.insert(s("alt"), escape("Scene"));
+                        n
+                    } else {
+                        Node {
+                            node: s("div"),
+                            ..Default::default()
+                        }
+                    };
+                    node.style.insert(s("width"), s("100%"));
+                    if !self.common.is_not_visible {
+                        node.style.insert(s("display"), s("block"));
+                    }
+                    node.style.insert(s("height"), s("auto"));
+                    if let Some(ref data_id) = self.common.data_id {
+                        node.attrs
+                            .insert(s("data-id"), format!("{}:scene-bg", data_id));
+                    }
+                    node
+                };
+                let mut children: Vec<Node> = self
+                    .container
+                    .children
+                    .iter()
+                    .map(|v| {
+                        let mut n = v.to_node();
+                        n.style.insert(s("position"), s("absolute"));
+                        n
+                    })
+                    .collect();
+                children.insert(0, parent);
+                children
+            };
+
+            let (id, external_children_container, external_children) = {
+                if let Some((id, external_children_container, child)) =
+                    &self.container.external_children
+                {
+                    (
+                        Some(id.to_string()),
+                        external_children_container.clone(),
+                        child
+                            .iter()
+                            .map(|v| {
+                                let mut n = v.to_node();
+                                n.style.insert(s("position"), s("absolute"));
+                                n
+                            })
+                            .collect(),
+                    )
+                } else {
+                    (None, vec![], vec![])
+                }
+            };
+
+            node.children = children;
+            node.open_id = id;
+            node.external_children = external_children;
+            node.external_children_container = external_children_container;
+            node
+        };
+
+        let mut main_node = Node::from_common("div", &self.common);
+        if self.common.width.is_none() {
+            main_node.style.insert(s("width"), s("1000px"));
+        }
+        if let Some(p) = self.container.spacing {
+            main_node
+                .children_style
+                .insert(s("margin-left"), format!("{}px", p));
+        }
+        main_node.children = vec![node];
+        main_node
+    }
+}
+
 impl ftd_rt::Row {
     pub fn to_node(&self) -> Node {
         let mut n = Node::from_container(&self.common, &self.container);
-        n.style.insert(s("display"), s("flex"));
+        if !self.common.is_not_visible {
+            n.style.insert(s("display"), s("flex"));
+        }
         n.style.insert(s("flex-direction"), s("row"));
         if self.container.wrap {
             n.style.insert(s("flex-wrap"), s("wrap"));
         } else {
             n.style.insert(s("flex-wrap"), s("nowrap"));
         }
-        for (key, value) in container_align(&self.container.align) {
-            n.style.insert(s(key.as_str()), value);
-        }
+
         n.style.insert(s("align-items"), s("flex-start"));
 
         n.style.insert(s("justify-content"), s("flex-start"));
@@ -334,15 +477,14 @@ impl ftd_rt::Row {
 impl ftd_rt::Column {
     pub fn to_node(&self) -> Node {
         let mut n = Node::from_container(&self.common, &self.container);
-        n.style.insert(s("display"), s("flex"));
+        if !self.common.is_not_visible {
+            n.style.insert(s("display"), s("flex"));
+        }
         n.style.insert(s("flex-direction"), s("column"));
         if self.container.wrap {
             n.style.insert(s("flex-wrap"), s("wrap"));
         } else {
             n.style.insert(s("flex-wrap"), s("nowrap"));
-        }
-        for (key, value) in container_align(&self.container.align) {
-            n.style.insert(s(key.as_str()), value);
         }
         n.style.insert(s("align-items"), s("flex-start"));
 
@@ -369,7 +511,7 @@ impl ftd_rt::Text {
         };
         let mut n = Node::from_common(node, &self.common);
         n.text = Some(self.text.rendered.clone());
-        let (key, value) = text_align(&self.align);
+        let (key, value) = text_align(&self.text_align);
         n.style.insert(s(key.as_str()), value);
         if let Some(p) = self.size {
             n.style.insert(s("font-size"), format!("{}px", p));
@@ -390,6 +532,14 @@ impl ftd_rt::Text {
             n.style.insert(s("text-decoration"), s("line-through"));
         }
 
+        if let Some(p) = &self.line_clamp {
+            n.style.insert(s("display"), "-webkit-box".to_string());
+            n.style.insert(s("overflow"), "hidden".to_string());
+            n.style.insert(s("-webkit-line-clamp"), format!("{}", p));
+            n.style
+                .insert(s("-webkit-box-orient"), "vertical".to_string());
+        }
+
         let (key, value) = style(&self.style.weight);
         n.style.insert(s(key.as_str()), value);
 
@@ -406,8 +556,9 @@ impl ftd_rt::Image {
         }
         n.attrs.insert(s("src"), escape(self.src.as_str()));
         n.attrs.insert(s("alt"), escape(self.description.as_str()));
-        for (key, value) in container_align(&self.align) {
-            n.style.insert(s(key.as_str()), value);
+        if self.crop {
+            n.style.insert(s("object-fit"), s("cover"));
+            n.style.insert(s("object-position"), s("0 0"));
         }
 
         n
@@ -582,6 +733,15 @@ impl ftd_rt::Common {
         if let Some(p) = &self.top {
             d.insert(s("top"), format!("{}px", p));
         }
+        if let Some(p) = &self.bottom {
+            d.insert(s("bottom"), format!("{}px", p));
+        }
+        if let Some(p) = &self.left {
+            d.insert(s("left"), format!("{}px", p));
+        }
+        if let Some(p) = &self.right {
+            d.insert(s("right"), format!("{}px", p));
+        }
         if self.submit.is_some() {
             d.insert(s("cursor"), s("pointer"));
         }
@@ -615,8 +775,57 @@ impl ftd_rt::Common {
                 ),
             );
         }
+        if let Some(p) = &self.anchor {
+            d.insert(s("position"), p.to_postion());
+        }
         if let Some(p) = &self.gradient_direction {
             d.insert(s("background-image"), gradient(p, &self.gradient_colors));
+        }
+        if let Some(p) = &self.background_image {
+            d.insert(s("background-image"), format!("url({})", p));
+            if self.background_repeat {
+                d.insert(s("background-repeat"), s("repeat"));
+            } else {
+                d.insert(s("background-size"), s("cover"));
+                d.insert(s("background-position"), s("center"));
+            }
+            if self.background_parallax {
+                d.insert(s("background-attachment"), s("fixed"));
+            }
+        }
+
+        match &self.anchor {
+            Some(_) => {
+                for (key, value) in non_static_container_align(&self.position, self.inner) {
+                    d.insert(s(key.as_str()), value);
+                }
+            }
+            None => {
+                for (key, value) in container_align(&self.position) {
+                    d.insert(s(key.as_str()), value);
+                }
+            }
+        }
+
+        let translate = get_translate(
+            &self.move_left,
+            &self.move_right,
+            &self.move_up,
+            &self.move_down,
+            &self.scale,
+            &self.scale_x,
+            &self.scale_y,
+            &self.rotate,
+        )
+        .unwrap();
+
+        if let Some(p) = translate {
+            let data = if let Some(d) = d.get_mut("transform") {
+                format!("{} {}", d, p)
+            } else {
+                p
+            };
+            d.insert(s("transform"), data);
         }
 
         d.insert(s("border-style"), s("solid"));
@@ -630,6 +839,9 @@ impl ftd_rt::Common {
 
     fn attrs(&self) -> ftd_rt::Map {
         let mut d: ftd_rt::Map = Default::default();
+        if let Some(ref id) = self.data_id {
+            d.insert(s("data-id"), escape(id));
+        }
         if let Some(ref id) = self.id {
             d.insert(s("id"), escape(id));
         }
@@ -655,8 +867,30 @@ impl ftd_rt::Common {
 }
 impl ftd_rt::Container {
     fn style(&self) -> ftd_rt::Map {
-        let d: ftd_rt::Map = Default::default();
-        d
+        let mut d: ftd_rt::Map = Default::default();
+        let mut count = count_children_with_absolute_parent(&self.children);
+        if let Some((_, _, ref ext_children)) = self.external_children {
+            count += count_children_with_absolute_parent(ext_children);
+        }
+        if count != 0 {
+            d.insert(s("position"), s("relative"));
+        }
+        return d;
+
+        fn count_children_with_absolute_parent(children: &[ftd_rt::Element]) -> usize {
+            children
+                .iter()
+                .filter(|v| {
+                    let mut bool = false;
+                    if let Some(common) = v.get_common() {
+                        if Some(ftd_rt::Anchor::Parent) == common.anchor {
+                            bool = true;
+                        }
+                    }
+                    bool
+                })
+                .count()
+        }
     }
     fn children_style(&self) -> ftd_rt::Map {
         let d: ftd_rt::Map = Default::default();
@@ -683,12 +917,12 @@ fn s(s: &str) -> String {
     s.to_string()
 }
 
-fn color(c: &ftd_rt::Color) -> String {
+pub fn color(c: &ftd_rt::Color) -> String {
     let ftd_rt::Color { r, g, b, alpha } = c;
     format!("rgba({},{},{},{})", r, g, b, alpha)
 }
 
-fn length(l: &ftd_rt::Length, f: &str) -> (String, String) {
+pub fn length(l: &ftd_rt::Length, f: &str) -> (String, String) {
     let s = f.to_string();
     match l {
         ftd_rt::Length::Fill => (s, "100%".to_string()),
@@ -701,52 +935,6 @@ fn length(l: &ftd_rt::Length, f: &str) -> (String, String) {
 
         _ => (s, "100%".to_string()),
         //        ftd_rt::Length::Shrink => (s, "width".to_string()),   TODO
-    }
-}
-
-fn container_align(l: &ftd_rt::Align) -> Vec<(String, String)> {
-    match l {
-        ftd_rt::Align::Center => vec![
-            ("align-self".to_string(), "center".to_string()),
-            ("margin-bottom".to_string(), "auto".to_string()),
-            ("margin-top".to_string(), "auto".to_string()),
-        ],
-        ftd_rt::Align::Top => vec![
-            ("align-self".to_string(), "center".to_string()),
-            ("margin-bottom".to_string(), "auto".to_string()),
-        ],
-        ftd_rt::Align::Left => vec![
-            ("align-self".to_string(), "flex-start".to_string()),
-            ("margin-bottom".to_string(), "auto".to_string()),
-            ("margin-top".to_string(), "auto".to_string()),
-        ],
-        ftd_rt::Align::Right => vec![
-            ("align-self".to_string(), "flex-end".to_string()),
-            ("margin-bottom".to_string(), "auto".to_string()),
-            ("margin-top".to_string(), "auto".to_string()),
-            ("margin-left".to_string(), "auto".to_string()),
-        ],
-        ftd_rt::Align::Bottom => vec![
-            ("align-self".to_string(), "center".to_string()),
-            ("margin-bottom".to_string(), "0".to_string()),
-            ("margin-top".to_string(), "auto".to_string()),
-        ],
-        ftd_rt::Align::TopLeft => vec![("align-self".to_string(), "flex-start".to_string())],
-        ftd_rt::Align::TopRight => vec![
-            ("align-self".to_string(), "flex-end".to_string()),
-            ("margin-left".to_string(), "auto".to_string()),
-        ],
-        ftd_rt::Align::BottomLeft => vec![
-            ("align-self".to_string(), "flex-start".to_string()),
-            ("margin-bottom".to_string(), "0".to_string()),
-            ("margin-top".to_string(), "auto".to_string()),
-        ],
-        ftd_rt::Align::BottomRight => vec![
-            ("align-self".to_string(), "flex-end".to_string()),
-            ("margin-bottom".to_string(), "0".to_string()),
-            ("margin-top".to_string(), "auto".to_string()),
-            ("margin-left".to_string(), "auto".to_string()),
-        ],
     }
 }
 
@@ -773,7 +961,7 @@ fn style(l: &ftd_rt::Weight) -> (String, String) {
     }
 }
 
-fn overflow(l: &ftd_rt::Overflow, f: &str) -> (String, String) {
+pub fn overflow(l: &ftd_rt::Overflow, f: &str) -> (String, String) {
     let s = f.to_string();
     match l {
         ftd_rt::Overflow::Auto => (s, "auto".to_string()),
@@ -810,4 +998,243 @@ fn gradient(d: &ftd_rt::GradientDirection, c: &[ftd_rt::Color]) -> String {
         ftd_rt::GradientDirection::Angle { value } => format!("linear-gradient({}deg", value),
     };
     format!("{}, {} )", gradient_style, color)
+}
+
+pub fn anchor(l: &ftd_rt::Anchor) -> String {
+    match l {
+        ftd_rt::Anchor::Parent => ("absolute".to_string()),
+        ftd_rt::Anchor::Window => ("fixed".to_string()),
+    }
+}
+
+fn container_align(l: &ftd_rt::Position) -> Vec<(String, String)> {
+    match l {
+        ftd_rt::Position::Center => vec![
+            ("align-self".to_string(), "center".to_string()),
+            ("margin-bottom".to_string(), "auto".to_string()),
+            ("margin-top".to_string(), "auto".to_string()),
+        ],
+        ftd_rt::Position::Top => vec![
+            ("align-self".to_string(), "center".to_string()),
+            ("margin-bottom".to_string(), "auto".to_string()),
+        ],
+        ftd_rt::Position::Left => vec![
+            ("align-self".to_string(), "flex-start".to_string()),
+            ("margin-bottom".to_string(), "auto".to_string()),
+            ("margin-top".to_string(), "auto".to_string()),
+        ],
+        ftd_rt::Position::Right => vec![
+            ("align-self".to_string(), "flex-end".to_string()),
+            ("margin-bottom".to_string(), "auto".to_string()),
+            ("margin-top".to_string(), "auto".to_string()),
+            ("margin-left".to_string(), "auto".to_string()),
+        ],
+        ftd_rt::Position::Bottom => vec![
+            ("align-self".to_string(), "center".to_string()),
+            ("margin-bottom".to_string(), "0".to_string()),
+            ("margin-top".to_string(), "auto".to_string()),
+        ],
+        ftd_rt::Position::TopLeft => vec![("align-self".to_string(), "flex-start".to_string())],
+        ftd_rt::Position::TopRight => vec![
+            ("align-self".to_string(), "flex-end".to_string()),
+            ("margin-left".to_string(), "auto".to_string()),
+        ],
+        ftd_rt::Position::BottomLeft => vec![
+            ("align-self".to_string(), "flex-start".to_string()),
+            ("margin-bottom".to_string(), "0".to_string()),
+            ("margin-top".to_string(), "auto".to_string()),
+        ],
+        ftd_rt::Position::BottomRight => vec![
+            ("align-self".to_string(), "flex-end".to_string()),
+            ("margin-bottom".to_string(), "0".to_string()),
+            ("margin-top".to_string(), "auto".to_string()),
+            ("margin-left".to_string(), "auto".to_string()),
+        ],
+    }
+}
+
+fn non_static_container_align(l: &ftd_rt::Position, inner: bool) -> Vec<(String, String)> {
+    match l {
+        ftd_rt::Position::Center => vec![
+            ("left".to_string(), "50%".to_string()),
+            ("top".to_string(), "50%".to_string()),
+            ("transform".to_string(), "translate(-50%,-50%)".to_string()),
+        ],
+        ftd_rt::Position::Top => {
+            if inner {
+                vec![
+                    ("top".to_string(), "0".to_string()),
+                    ("left".to_string(), "50%".to_string()),
+                    ("transform".to_string(), "translateX(-50%)".to_string()),
+                ]
+            } else {
+                vec![
+                    ("bottom".to_string(), "100%".to_string()),
+                    ("left".to_string(), "50%".to_string()),
+                    ("transform".to_string(), "translateX(-50%)".to_string()),
+                ]
+            }
+        }
+        ftd_rt::Position::Left => {
+            if inner {
+                vec![
+                    ("left".to_string(), "0".to_string()),
+                    ("top".to_string(), "50%".to_string()),
+                    ("transform".to_string(), "translateY(-50%)".to_string()),
+                ]
+            } else {
+                vec![
+                    ("right".to_string(), "100%".to_string()),
+                    ("top".to_string(), "50%".to_string()),
+                    ("transform".to_string(), "translateY(-50%)".to_string()),
+                ]
+            }
+        }
+        ftd_rt::Position::Right => {
+            if inner {
+                vec![
+                    ("right".to_string(), "0".to_string()),
+                    ("top".to_string(), "50%".to_string()),
+                    ("transform".to_string(), "translate(-50%)".to_string()),
+                ]
+            } else {
+                vec![
+                    ("left".to_string(), "100%".to_string()),
+                    ("top".to_string(), "50%".to_string()),
+                    ("transform".to_string(), "translate(-50%)".to_string()),
+                ]
+            }
+        }
+        ftd_rt::Position::Bottom => {
+            if inner {
+                vec![
+                    ("bottom".to_string(), "0".to_string()),
+                    ("left".to_string(), "50".to_string()),
+                    ("transform".to_string(), "translateX(-50%)".to_string()),
+                ]
+            } else {
+                vec![
+                    ("top".to_string(), "100%".to_string()),
+                    ("left".to_string(), "50".to_string()),
+                    ("transform".to_string(), "translateX(-50%)".to_string()),
+                ]
+            }
+        }
+        ftd_rt::Position::TopLeft => {
+            if inner {
+                vec![
+                    ("top".to_string(), "0".to_string()),
+                    ("left".to_string(), "0".to_string()),
+                ]
+            } else {
+                vec![
+                    ("bottom".to_string(), "100%".to_string()),
+                    ("right".to_string(), "100%".to_string()),
+                ]
+            }
+        }
+        ftd_rt::Position::TopRight => {
+            if inner {
+                vec![
+                    ("top".to_string(), "0".to_string()),
+                    ("right".to_string(), "0".to_string()),
+                ]
+            } else {
+                vec![
+                    ("bottom".to_string(), "100%".to_string()),
+                    ("left".to_string(), "100%".to_string()),
+                ]
+            }
+        }
+        ftd_rt::Position::BottomLeft => {
+            if inner {
+                vec![
+                    ("bottom".to_string(), "0".to_string()),
+                    ("left".to_string(), "0".to_string()),
+                ]
+            } else {
+                vec![
+                    ("top".to_string(), "100%".to_string()),
+                    ("right".to_string(), "100%".to_string()),
+                ]
+            }
+        }
+        ftd_rt::Position::BottomRight => {
+            if inner {
+                vec![
+                    ("bottom".to_string(), "0".to_string()),
+                    ("right".to_string(), "0".to_string()),
+                ]
+            } else {
+                vec![
+                    ("top".to_string(), "100%".to_string()),
+                    ("left".to_string(), "100%".to_string()),
+                ]
+            }
+        }
+    }
+}
+
+fn get_translate(
+    left: &Option<i64>,
+    right: &Option<i64>,
+    up: &Option<i64>,
+    down: &Option<i64>,
+    scale: &Option<f64>,
+    scale_x: &Option<f64>,
+    scale_y: &Option<f64>,
+    rotate: &Option<i64>,
+) -> ftd_rt::Result<Option<String>> {
+    let mut translate = match (left, right, up, down) {
+        (Some(_), Some(_), Some(_), Some(_)) => {
+            return ftd_rt::e(
+                "move-up, move-down, move-left and move-right all 4 can't be used at once!",
+            )
+        }
+        (Some(_), Some(_), _, _) => {
+            return ftd_rt::e("move-left, move-right both can't be used at once!")
+        }
+        (_, _, Some(_), Some(_)) => {
+            return ftd_rt::e("move-up, move-down both can't be used at once!")
+        }
+        (Some(l), None, None, None) => Some(format!("translateX(-{}px) ", l)),
+        (Some(l), None, Some(u), None) => Some(format!("translate(-{}px, -{}px) ", l, u)),
+        (Some(l), None, None, Some(d)) => Some(format!("translate(-{}px, {}px) ", l, d)),
+        (None, Some(r), None, None) => Some(format!("translateX({}px) ", r)),
+        (None, Some(r), Some(u), None) => Some(format!("translate({}px, -{}px) ", r, u)),
+        (None, Some(r), None, Some(d)) => Some(format!("translate({}px, {}px) ", r, d)),
+        (None, None, Some(u), None) => Some(format!("translateY(-{}px) ", u)),
+        (None, None, None, Some(d)) => Some(format!("translateY({}px) ", d)),
+        _ => None,
+    };
+
+    if let Some(ref scale) = scale {
+        if let Some(d) = translate {
+            translate = Some(format!("{} scale({})", d, scale));
+        } else {
+            translate = Some(format!("scale({})", scale));
+        };
+    }
+    if let Some(ref scale) = scale_x {
+        if let Some(d) = translate {
+            translate = Some(format!("{} scaleX({})", d, scale));
+        } else {
+            translate = Some(format!("scaleX({})", scale));
+        };
+    }
+    if let Some(ref scale) = scale_y {
+        if let Some(d) = translate {
+            translate = Some(format!("{} scaleY({})", d, scale));
+        } else {
+            translate = Some(format!("scaleY({})", scale));
+        };
+    }
+    if let Some(ref rotate) = rotate {
+        if let Some(d) = translate {
+            translate = Some(format!("{} rotate({}deg)", d, rotate));
+        } else {
+            translate = Some(format!("rotate({}deg)", rotate));
+        };
+    }
+    Ok(translate)
 }

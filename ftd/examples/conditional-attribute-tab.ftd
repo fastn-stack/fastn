@@ -1,0 +1,22 @@
+-- var current: one
+
+-- ftd.text: ref current
+
+-- ftd.row:
+
+--- ftd.text: One
+padding: 10
+$event-click$: current = "one"
+color if current == "one": red
+
+
+--- ftd.text: Two
+padding: 10
+$event-click$: current = "two"
+color if current == "two": red
+
+
+--- ftd.text: Three
+padding: 10
+$event-click$: current = "three"
+color if current == "three": red

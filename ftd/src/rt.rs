@@ -69,10 +69,12 @@ impl RT {
             invocations: &mut invocations,
             root_name: None,
         }
-        .execute(&[], &Default::default())?
+        .execute(&[], &mut Default::default(), None)?
         .children;
 
         ftd_rt::Element::renesting_on_region(&mut element);
+        ftd::p2::document::set_region_id(&mut element);
+        ftd::p2::document::default_scene_children_position(&mut element);
 
         main.container.children = element;
         store_invocations(&mut self.bag, invocations);

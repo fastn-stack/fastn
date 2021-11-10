@@ -1,0 +1,66 @@
+-- var present: false
+
+-- component foo:
+$name: body
+component: ftd.text
+color if present: red
+padding-horizontal if present: 10
+height if present: 50
+background-color if present: yellow
+border-left if present: 2
+cursor if present: cell
+border-top-radius if present: 5
+overflow-y if present: scroll
+sticky if present: true
+shadow-offset-x if present: 2
+shadow-offset-y if present: 4
+shadow-blur: 4
+shadow-blur if present: 10
+shadow-color: green
+shadow-color if present: #6b223a
+shadow-size if present: 5
+text: ref $name
+
+-- foo:
+
+hello
+
+scroll down
+
+scroll down
+
+more down
+
+more down
+
+more down
+
+down
+
+dahown
+
+😴
+
+
+-- ftd.text: Click Here!
+$event-click$: toggle present
+
+
+-- component bar:
+component: ftd.column
+@present: boolean with default true
+border-width: 2
+padding: 10
+align if not @present: center
+align if @present: top-right
+
+--- ftd.text: Bar says hello
+color: white
+color if @present: green
+color if not @present: red
+padding if @present: 5
+
+--- ftd.text: Click Here!
+$event-click$: toggle @present
+
+-- bar: hello

@@ -1,0 +1,14 @@
+-- var current: some value
+
+-- ftd.text: Start...
+if: current == "some value"
+
+-- ftd.text: ref current
+
+-- ftd.text: change message
+$event-click$: current = "hello world"
+
+-- var msg: good bye
+
+-- ftd.text: change message again
+$event-click$: current = msg

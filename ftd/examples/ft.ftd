@@ -1,0 +1,182 @@
+-- component markdown:
+component: ftd.text
+$body: body
+$collapsed: optional boolean
+$title: optional caption
+$two_columns: optional boolean
+text: ref $body
+size: 17
+color: #4d4d4d
+padding-bottom: 8
+
+
+-- component h0:
+component: ftd.column
+$title: caption
+$body: optional body
+width: fill
+region: h0
+
+--- ftd.text:
+text: ref $title
+region: title
+size: 40
+line-height: 50
+color: black
+style: bold
+padding-bottom: 12
+
+--- markdown:
+if: $body is not null
+body: ref $body
+
+
+
+-- component h1:
+component: ftd.column
+$title: caption
+$body: optional body
+width: fill
+region: h1
+
+--- ftd.text:
+text: ref $title
+$title: caption
+region: title
+text: ref $title
+size: 34
+line-height: 42
+color: black
+style: bold
+padding-bottom: 12
+padding-top: 34
+
+
+--- markdown:
+if: $body is not null
+body: ref $body
+
+
+-- component h2:
+component: ftd.column
+$title: caption
+$body: optional body
+width: fill
+region: h2
+
+--- ftd.text:
+$title: caption
+text: ref $title
+region: title
+size: 28
+line-height: 34
+color: black
+style: bold
+padding-bottom: 12
+padding-top: 34
+
+--- markdown:
+if: $body is not null
+body: ref $body
+
+
+-- component h3:
+component: ftd.column
+$title: caption
+$body: optional body
+width: fill
+region: h3
+
+--- ftd.text:
+$title: caption
+text: ref $title
+region: title
+size: 24
+line-height: 30
+color: black
+style: bold
+padding-bottom: 12
+padding-top: 34
+
+--- markdown:
+if: $body is not null
+body: ref $body
+
+
+
+-- component h4:
+component: ftd.column
+$title: caption
+$body: optional body
+width: fill
+region: h4
+
+--- ftd.text:
+$title: caption
+text: ref $title
+region: title
+size: 19
+line-height: 25
+color: black
+style: bold
+padding-bottom: 12
+padding-top: 34
+
+--- markdown:
+if: $body is not null
+body: ref $body
+
+
+-- component h5:
+component: ftd.column
+$title: caption
+$body: optional body
+width: fill
+region: h5
+
+--- ftd.text:
+$title: caption
+text: ref $title
+region: title
+size: 16
+line-height: 21
+color: black
+style: bold
+padding-bottom: 12
+padding-top: 34
+
+--- markdown:
+if: $body is not null
+body: ref $body
+
+
+-- component h6:
+component: ftd.column
+$title: caption
+$body: optional body
+width: fill
+region: h6
+
+--- ftd.text:
+$title: caption
+text: ref $title
+region: title
+size: 14
+line-height: 19
+color: black
+style: bold
+padding-bottom: 12
+padding-top: 34
+
+--- markdown:
+if: $body is not null
+body: ref $body
+
+
+-- component youtube:
+component: ftd.iframe
+$id: string
+youtube: ref $id
+height: 400
+width: fill
+margin-bottom: 34
