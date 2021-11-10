@@ -1,6 +1,6 @@
 [package]
 name = "ftd-rt"
-version = "0.1.1"
+version = "0.1.2"
 authors = ["Amit Upadhyay <amitu@fifthtry.com>"]
 edition = "2018"
 description = "ftd-rt: Utility crate for ftd"
