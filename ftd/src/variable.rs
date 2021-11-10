@@ -24,6 +24,7 @@ impl PropertyValue {
         source: Option<ftd::TextSource>,
         is_data: bool,
     ) -> ftd::p1::Result<ftd::PropertyValue> {
+        let mut double_quote_present = false;
         let property_type = if is_data {
             PropertyType::Value(value.to_string())
         } else if let Some(arg) = value.strip_prefix('$') {
@@ -33,9 +34,8 @@ impl PropertyValue {
         } else if doc.get_value(value).is_ok() {
             PropertyType::Reference(value.to_string())
         } else {
-            let value = if (value.starts_with('\"') && value.ends_with('\"'))
-                || (value.starts_with('\'') && value.ends_with('\''))
-            {
+            let value = if value.starts_with('\"') && value.ends_with('\"') {
+                double_quote_present = true;
                 value[1..value.len() - 1].to_string()
             } else {
                 value.to_string()
@@ -49,7 +49,7 @@ impl PropertyValue {
             PropertyType::Reference(string) => {
                 let kind = match doc.get_value(&string) {
                     Ok(val) => val.kind(),
-                    Err(e) => return ftd::e(format!("{} in not present in doc, {:?}", part1, e)),
+                    Err(e) => return ftd::e(format!("{} is not present in doc, {:?}", part1, e)),
                 };
 
                 let found_kind = get_kind(&kind, part2, doc, &expected_kind)?;
@@ -61,7 +61,7 @@ impl PropertyValue {
             }
             PropertyType::Argument(string) => {
                 let kind = match arguments.get(&part1) {
-                    None => return ftd::e(format!("{} in not present in locals", part1)),
+                    None => return ftd::e(format!("{} is not present in arguments", part1)),
                     Some(kind) => kind.to_owned(),
                 };
 
@@ -74,7 +74,10 @@ impl PropertyValue {
             }
             PropertyType::LocalVariable(string) => {
                 let kind = match locals.get(&part1) {
-                    None => return ftd::e(format!("{} in not present in locals", part1)),
+                    _ if part1.eq("mouse-in") => ftd::p2::Kind::Boolean {
+                        default: Some("false".to_string()),
+                    },
+                    None => return ftd::e(format!("{} is not present in locals", part1)),
                     Some(kind) => kind.to_owned(),
                 };
                 let found_kind = get_kind(&kind, part2, doc, &expected_kind)?;
@@ -111,12 +114,17 @@ impl PropertyValue {
                                 .map_err(|_| crate::p1::Error::CantParseBool)?,
                         },
                     },
-                    ftd::p2::Kind::String { .. } => crate::PropertyValue::Value {
-                        value: crate::Value::String {
-                            text: string,
-                            source: source.unwrap_or(ftd::TextSource::Header),
-                        },
-                    },
+                    ftd::p2::Kind::String { .. } => {
+                        if !is_data && !double_quote_present {
+                            return ftd::e(format!("put string `{}` inside double quote", string));
+                        }
+                        crate::PropertyValue::Value {
+                            value: crate::Value::String {
+                                text: string,
+                                source: source.unwrap_or(ftd::TextSource::Header),
+                            },
+                        }
+                    }
                     t => {
                         return ftd::e(format!(
                             "can't resolve value {} to expected kind {:?}",
@@ -127,6 +135,7 @@ impl PropertyValue {
             }
         });
 
+        #[derive(Debug)]
         enum PropertyType {
             Value(String),
             Reference(String),
@@ -329,6 +338,15 @@ impl Value {
         matches!(self, Self::None { .. })
     }
 
+    pub fn is_empty(&self) -> bool {
+        if let Self::List { data, .. } = self {
+            if data.is_empty() {
+                return true;
+            }
+        }
+        false
+    }
+
     pub fn kind(&self) -> crate::p2::Kind {
         match self {
             Value::None { kind: k } => k.to_owned(),
@@ -352,6 +370,13 @@ impl Value {
             Value::Map { kind, .. } => crate::p2::Kind::Map {
                 kind: Box::new(kind.to_owned()),
             },
+        }
+    }
+
+    pub fn is_equal(&self, other: &Self) -> bool {
+        match (self, other) {
+            (Value::String { text: a, .. }, Value::String { text: b, .. }) => a == b,
+            (a, b) => a == b,
         }
     }
 

@@ -11,6 +11,7 @@ pub enum Element {
     Integer(Text),
     Boolean(Text),
     Decimal(Text),
+    Scene(Scene),
     Null,
 }
 
@@ -32,16 +33,25 @@ impl Element {
             };
             let mut id = match child {
                 Self::Text(ftd_rt::Text {
-                    common: ftd_rt::Common { id, .. },
+                    common: ftd_rt::Common { data_id: id, .. },
                     ..
                 }) => id,
                 Self::Image(ftd_rt::Image {
-                    common: ftd_rt::Common { id, .. },
+                    common: ftd_rt::Common { data_id: id, .. },
                     ..
                 }) => id,
                 Self::Row(ftd_rt::Row {
-                    common: ftd_rt::Common { id, .. },
+                    common: ftd_rt::Common { data_id: id, .. },
                     container,
+                })
+                | Self::Column(ftd_rt::Column {
+                    common: ftd_rt::Common { data_id: id, .. },
+                    container,
+                })
+                | Self::Scene(ftd_rt::Scene {
+                    common: ftd_rt::Common { data_id: id, .. },
+                    container,
+                    ..
                 }) => {
                     let mut index_vec = index_vec.to_vec();
                     index_vec.push(idx);
@@ -63,40 +73,7 @@ impl Element {
                                     format!("{}-external:{}", id, index_string)
                                 }
                             });
-                            col.common.id = external_id.clone();
-                            if let Some(val) = container.first_mut() {
-                                index_vec.append(&mut val.to_vec());
-                                Self::set_id(&mut col.container.children, &index_vec, external_id);
-                            }
-                        }
-                    }
-                    id
-                }
-                Self::Column(ftd_rt::Column {
-                    common: ftd_rt::Common { id, .. },
-                    container,
-                }) => {
-                    let mut index_vec = index_vec.to_vec();
-                    index_vec.push(idx);
-                    Self::set_id(&mut container.children, &index_vec, external_id.clone());
-                    if let Some((id, container, external_children)) =
-                        &mut container.external_children
-                    {
-                        if let Some(ftd_rt::Element::Column(col)) = external_children.first_mut() {
-                            let index_string: String = index_vec
-                                .iter()
-                                .map(|v| v.to_string())
-                                .collect::<Vec<String>>()
-                                .join(",");
-
-                            let external_id = Some({
-                                if let Some(ref ext_id) = external_id {
-                                    format!("{}.{}-external:{}", ext_id, id, index_string)
-                                } else {
-                                    format!("{}-external:{}", id, index_string)
-                                }
-                            });
-                            col.common.id = external_id.clone();
+                            col.common.data_id = external_id.clone();
                             if let Some(val) = container.first_mut() {
                                 index_vec.append(&mut val.to_vec());
                                 Self::set_id(&mut col.container.children, &index_vec, external_id);
@@ -106,23 +83,23 @@ impl Element {
                     id
                 }
                 Self::IFrame(ftd_rt::IFrame {
-                    common: ftd_rt::Common { id, .. },
+                    common: ftd_rt::Common { data_id: id, .. },
                     ..
                 }) => id,
                 Self::Input(ftd_rt::Input {
-                    common: ftd_rt::Common { id, .. },
+                    common: ftd_rt::Common { data_id: id, .. },
                     ..
                 }) => id,
                 Self::Integer(ftd_rt::Text {
-                    common: ftd_rt::Common { id, .. },
+                    common: ftd_rt::Common { data_id: id, .. },
                     ..
                 }) => id,
                 Self::Boolean(ftd_rt::Text {
-                    common: ftd_rt::Common { id, .. },
+                    common: ftd_rt::Common { data_id: id, .. },
                     ..
                 }) => id,
                 Self::Decimal(ftd_rt::Text {
-                    common: ftd_rt::Common { id, .. },
+                    common: ftd_rt::Common { data_id: id, .. },
                     ..
                 }) => id,
                 Self::Null => continue,
@@ -153,31 +130,32 @@ impl Element {
         let mut ext_child_condition = None;
         let (id, open_id, children_container, children) = match self {
             Self::Row(ftd_rt::Row {
-                common: ftd_rt::Common { id, .. },
+                common: ftd_rt::Common { data_id: id, .. },
                 container:
                     ftd_rt::Container {
                         external_children,
                         children,
                         ..
                     },
-            }) => (
-                id,
-                external_children
-                    .as_ref()
-                    .map(|(open_id, _, _)| open_id.to_string()),
-                external_children
-                    .as_ref()
-                    .map(|(_, children_container, _)| children_container.to_vec()),
-                children,
-            ),
-            Self::Column(ftd_rt::Column {
-                common: ftd_rt::Common { id, .. },
+            })
+            | Self::Column(ftd_rt::Column {
+                common: ftd_rt::Common { data_id: id, .. },
                 container:
                     ftd_rt::Container {
                         external_children,
                         children,
                         ..
                     },
+            })
+            | Self::Scene(ftd_rt::Scene {
+                common: ftd_rt::Common { data_id: id, .. },
+                container:
+                    ftd_rt::Container {
+                        external_children,
+                        children,
+                        ..
+                    },
+                ..
             }) => (
                 id,
                 external_children
@@ -272,6 +250,7 @@ impl Element {
             let container = match child {
                 ftd_rt::Element::Row(ftd_rt::Row { container, .. }) => container,
                 ftd_rt::Element::Column(ftd_rt::Column { container, .. }) => container,
+                ftd_rt::Element::Scene(ftd_rt::Scene { container, .. }) => container,
                 _ => continue,
             };
             let all_locals =
@@ -289,7 +268,7 @@ impl Element {
                             external_children_container,
                         );
                     d.insert(
-                        col.common.id.as_ref().expect("").to_string(),
+                        col.common.data_id.as_ref().expect("").to_string(),
                         external_children_condition,
                     );
                     let all_locals = ftd_rt::Element::get_external_children_dependencies(
@@ -304,6 +283,99 @@ impl Element {
         d
     }
 
+    pub fn get_style_event_dependencies(
+        children: &[ftd_rt::Element],
+        data: &mut ftd_rt::DataDependenciesMap,
+    ) {
+        for child in children {
+            let (conditional_attributes, id) = match child {
+                ftd_rt::Element::Column(ftd_rt::Column {
+                    common:
+                        ftd_rt::Common {
+                            conditional_attribute,
+                            data_id: id,
+                            ..
+                        },
+                    container,
+                })
+                | ftd_rt::Element::Row(ftd_rt::Row {
+                    common:
+                        ftd_rt::Common {
+                            conditional_attribute,
+                            data_id: id,
+                            ..
+                        },
+                    container,
+                })
+                | ftd_rt::Element::Scene(ftd_rt::Scene {
+                    common:
+                        ftd_rt::Common {
+                            conditional_attribute,
+                            data_id: id,
+                            ..
+                        },
+                    container,
+                }) => {
+                    ftd_rt::Element::get_style_event_dependencies(&container.children, data);
+                    if let Some((_, _, external_children)) = &container.external_children {
+                        ftd_rt::Element::get_style_event_dependencies(external_children, data);
+                    }
+                    (conditional_attribute, id)
+                }
+                ftd_rt::Element::Image(ftd_rt::Image { common, .. })
+                | ftd_rt::Element::Text(ftd_rt::Text { common, .. })
+                | ftd_rt::Element::IFrame(ftd_rt::IFrame { common, .. })
+                | ftd_rt::Element::Input(ftd_rt::Input { common, .. })
+                | ftd_rt::Element::Integer(ftd_rt::Text { common, .. })
+                | ftd_rt::Element::Boolean(ftd_rt::Text { common, .. })
+                | ftd_rt::Element::Decimal(ftd_rt::Text { common, .. }) => {
+                    (&common.conditional_attribute, &common.data_id)
+                }
+                ftd_rt::Element::Null => continue,
+            };
+            for (k, v) in conditional_attributes {
+                if let ftd_rt::ConditionalAttribute {
+                    attribute_type: ftd_rt::AttributeType::Style,
+                    conditions_with_value,
+                    default,
+                } = v
+                {
+                    for (condition, value) in conditions_with_value {
+                        let id = id.clone().expect("universal id should be present");
+                        if let Some(ftd_rt::Data { dependencies, .. }) =
+                            data.get_mut(&condition.variable)
+                        {
+                            let json = ftd_rt::Dependencies {
+                                dependency_type: ftd_rt::DependencyType::Style,
+                                condition: Some(condition.value.to_string()),
+                                parameters: std::array::IntoIter::new([(
+                                    k.to_string(),
+                                    ftd_rt::ValueWithDefault {
+                                        value: value.clone(),
+                                        default: default.clone(),
+                                    },
+                                )])
+                                .collect(),
+                            };
+                            if let Some(dependencies) = dependencies.get_mut(&id) {
+                                let mut d =
+                                    serde_json::from_str::<Vec<ftd_rt::Dependencies>>(dependencies)
+                                        .unwrap();
+                                d.push(json);
+                                *dependencies = serde_json::to_string(&d).unwrap();
+                            } else {
+                                dependencies
+                                    .insert(id, serde_json::to_string(&vec![json]).unwrap());
+                            }
+                        } else {
+                            panic!("{} should be declared", condition.variable)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     pub fn get_value_event_dependencies(
         children: &[ftd_rt::Element],
         data: &mut ftd_rt::DataDependenciesMap,
@@ -311,11 +383,30 @@ impl Element {
         for child in children {
             let (reference, id) = match child {
                 ftd_rt::Element::Column(ftd_rt::Column {
-                    common: ftd_rt::Common { reference, id, .. },
+                    common:
+                        ftd_rt::Common {
+                            reference,
+                            data_id: id,
+                            ..
+                        },
                     container,
                 })
                 | ftd_rt::Element::Row(ftd_rt::Row {
-                    common: ftd_rt::Common { reference, id, .. },
+                    common:
+                        ftd_rt::Common {
+                            reference,
+                            data_id: id,
+                            ..
+                        },
+                    container,
+                })
+                | ftd_rt::Element::Scene(ftd_rt::Scene {
+                    common:
+                        ftd_rt::Common {
+                            reference,
+                            data_id: id,
+                            ..
+                        },
                     container,
                 }) => {
                     ftd_rt::Element::get_value_event_dependencies(&container.children, data);
@@ -331,7 +422,7 @@ impl Element {
                 | ftd_rt::Element::Integer(ftd_rt::Text { common, .. })
                 | ftd_rt::Element::Boolean(ftd_rt::Text { common, .. })
                 | ftd_rt::Element::Decimal(ftd_rt::Text { common, .. }) => {
-                    (&common.reference, &common.id)
+                    (&common.reference, &common.data_id)
                 }
                 ftd_rt::Element::Null => continue,
             };
@@ -339,7 +430,19 @@ impl Element {
                 let id = id.clone().expect("universal id should be present");
 
                 if let Some(ftd_rt::Data { dependencies, .. }) = data.get_mut(reference) {
-                    dependencies.insert(id, "value".to_string());
+                    let json = ftd_rt::Dependencies {
+                        dependency_type: ftd_rt::DependencyType::Value,
+                        condition: None,
+                        parameters: Default::default(),
+                    };
+                    if let Some(dependencies) = dependencies.get_mut(&id) {
+                        let mut d = serde_json::from_str::<Vec<ftd_rt::Dependencies>>(dependencies)
+                            .unwrap();
+                        d.push(json);
+                        *dependencies = serde_json::to_string(&d).unwrap();
+                    } else {
+                        dependencies.insert(id, serde_json::to_string(&vec![json]).unwrap());
+                    }
                 }
             }
         }
@@ -352,11 +455,30 @@ impl Element {
         for child in children {
             let (condition, id) = match child {
                 ftd_rt::Element::Column(ftd_rt::Column {
-                    common: ftd_rt::Common { condition, id, .. },
+                    common:
+                        ftd_rt::Common {
+                            condition,
+                            data_id: id,
+                            ..
+                        },
                     container,
                 })
                 | ftd_rt::Element::Row(ftd_rt::Row {
-                    common: ftd_rt::Common { condition, id, .. },
+                    common:
+                        ftd_rt::Common {
+                            condition,
+                            data_id: id,
+                            ..
+                        },
+                    container,
+                })
+                | ftd_rt::Element::Scene(ftd_rt::Scene {
+                    common:
+                        ftd_rt::Common {
+                            condition,
+                            data_id: id,
+                            ..
+                        },
                     container,
                 }) => {
                     ftd_rt::Element::get_visible_event_dependencies(&container.children, data);
@@ -372,7 +494,7 @@ impl Element {
                 | ftd_rt::Element::Integer(ftd_rt::Text { common, .. })
                 | ftd_rt::Element::Boolean(ftd_rt::Text { common, .. })
                 | ftd_rt::Element::Decimal(ftd_rt::Text { common, .. }) => {
-                    (&common.condition, &common.id)
+                    (&common.condition, &common.data_id)
                 }
                 ftd_rt::Element::Null => continue,
             };
@@ -380,7 +502,19 @@ impl Element {
                 let id = id.clone().expect("universal id should be present");
 
                 if let Some(ftd_rt::Data { dependencies, .. }) = data.get_mut(&condition.variable) {
-                    dependencies.insert(id, condition.value.to_string());
+                    let json = ftd_rt::Dependencies {
+                        dependency_type: ftd_rt::DependencyType::Visible,
+                        condition: Some(condition.value.to_string()),
+                        parameters: Default::default(),
+                    };
+                    if let Some(dependencies) = dependencies.get_mut(&id) {
+                        let mut d = serde_json::from_str::<Vec<ftd_rt::Dependencies>>(dependencies)
+                            .unwrap();
+                        d.push(json);
+                        *dependencies = serde_json::to_string(&d).unwrap();
+                    } else {
+                        dependencies.insert(id, serde_json::to_string(&vec![json]).unwrap());
+                    }
                 } else {
                     panic!("{} should be declared", condition.variable)
                 }
@@ -397,6 +531,10 @@ impl Element {
                     container,
                 })
                 | ftd_rt::Element::Column(ftd_rt::Column {
+                    common: ftd_rt::Common { locals, .. },
+                    container,
+                })
+                | ftd_rt::Element::Scene(ftd_rt::Scene {
                     common: ftd_rt::Common { locals, .. },
                     container,
                 }) => {
@@ -428,41 +566,61 @@ impl Element {
         d
     }
 
-    pub fn is_open_container(&self) -> (bool, Option<String>) {
+    pub fn is_open_container(&self, is_container_children_empty: bool) -> (bool, Option<String>) {
         match self {
-            ftd_rt::Element::Column(e) => e.container.is_open(),
-            ftd_rt::Element::Row(e) => e.container.is_open(),
+            ftd_rt::Element::Column(e) => e.container.is_open(is_container_children_empty),
+            ftd_rt::Element::Row(e) => e.container.is_open(is_container_children_empty),
+            ftd_rt::Element::Scene(e) => e.container.is_open(is_container_children_empty),
             _ => (false, None),
         }
     }
 
     pub fn container_id(&self) -> Option<String> {
         match self {
-            ftd_rt::Element::Column(e) => e.common.id.clone(),
-            ftd_rt::Element::Row(e) => e.common.id.clone(),
+            ftd_rt::Element::Column(e) => e.common.data_id.clone(),
+            ftd_rt::Element::Row(e) => e.common.data_id.clone(),
+            ftd_rt::Element::Scene(e) => e.common.data_id.clone(),
             _ => None,
         }
     }
 
     pub fn set_container_id(&mut self, name: Option<String>) {
         match self {
-            ftd_rt::Element::Column(e) => e.common.id = name,
-            ftd_rt::Element::Row(e) => e.common.id = name,
+            ftd_rt::Element::Column(e) => e.common.data_id = name,
+            ftd_rt::Element::Row(e) => e.common.data_id = name,
+            ftd_rt::Element::Scene(e) => e.common.data_id = name,
             _ => {}
+        }
+    }
+
+    pub fn set_element_id(&mut self, name: Option<String>) {
+        match self {
+            ftd_rt::Element::Column(ftd_rt::Column { common, .. })
+            | ftd_rt::Element::Row(ftd_rt::Row { common, .. })
+            | ftd_rt::Element::Text(ftd_rt::Text { common, .. })
+            | ftd_rt::Element::Image(ftd_rt::Image { common, .. })
+            | ftd_rt::Element::IFrame(ftd_rt::IFrame { common, .. })
+            | ftd_rt::Element::Input(ftd_rt::Input { common, .. })
+            | ftd_rt::Element::Integer(ftd_rt::Text { common, .. })
+            | ftd_rt::Element::Boolean(ftd_rt::Text { common, .. })
+            | ftd_rt::Element::Decimal(ftd_rt::Text { common, .. })
+            | ftd_rt::Element::Scene(ftd_rt::Scene { common, .. }) => common.id = name,
+            ftd_rt::Element::Null => {}
         }
     }
 
     pub fn set_condition(&mut self, condition: Option<ftd_rt::Condition>) {
         match self {
-            ftd_rt::Element::Column(ftd_rt::Column { common, .. }) => common,
-            ftd_rt::Element::Row(ftd_rt::Row { common, .. }) => common,
-            ftd_rt::Element::Text(ftd_rt::Text { common, .. }) => common,
-            ftd_rt::Element::Image(ftd_rt::Image { common, .. }) => common,
-            ftd_rt::Element::IFrame(ftd_rt::IFrame { common, .. }) => common,
-            ftd_rt::Element::Input(ftd_rt::Input { common, .. }) => common,
-            ftd_rt::Element::Integer(ftd_rt::Text { common, .. }) => common,
-            ftd_rt::Element::Boolean(ftd_rt::Text { common, .. }) => common,
-            ftd_rt::Element::Decimal(ftd_rt::Text { common, .. }) => common,
+            ftd_rt::Element::Column(ftd_rt::Column { common, .. })
+            | ftd_rt::Element::Row(ftd_rt::Row { common, .. })
+            | ftd_rt::Element::Text(ftd_rt::Text { common, .. })
+            | ftd_rt::Element::Image(ftd_rt::Image { common, .. })
+            | ftd_rt::Element::IFrame(ftd_rt::IFrame { common, .. })
+            | ftd_rt::Element::Input(ftd_rt::Input { common, .. })
+            | ftd_rt::Element::Integer(ftd_rt::Text { common, .. })
+            | ftd_rt::Element::Boolean(ftd_rt::Text { common, .. })
+            | ftd_rt::Element::Decimal(ftd_rt::Text { common, .. })
+            | ftd_rt::Element::Scene(ftd_rt::Scene { common, .. }) => common,
             ftd_rt::Element::Null => return,
         }
         .condition = condition;
@@ -470,15 +628,16 @@ impl Element {
 
     pub fn set_non_visibility(&mut self, is_not_visible: bool) {
         match self {
-            ftd_rt::Element::Column(ftd_rt::Column { common, .. }) => common,
-            ftd_rt::Element::Row(ftd_rt::Row { common, .. }) => common,
-            ftd_rt::Element::Text(ftd_rt::Text { common, .. }) => common,
-            ftd_rt::Element::Image(ftd_rt::Image { common, .. }) => common,
-            ftd_rt::Element::IFrame(ftd_rt::IFrame { common, .. }) => common,
-            ftd_rt::Element::Input(ftd_rt::Input { common, .. }) => common,
-            ftd_rt::Element::Integer(ftd_rt::Text { common, .. }) => common,
-            ftd_rt::Element::Boolean(ftd_rt::Text { common, .. }) => common,
-            ftd_rt::Element::Decimal(ftd_rt::Text { common, .. }) => common,
+            ftd_rt::Element::Column(ftd_rt::Column { common, .. })
+            | ftd_rt::Element::Row(ftd_rt::Row { common, .. })
+            | ftd_rt::Element::Text(ftd_rt::Text { common, .. })
+            | ftd_rt::Element::Image(ftd_rt::Image { common, .. })
+            | ftd_rt::Element::IFrame(ftd_rt::IFrame { common, .. })
+            | ftd_rt::Element::Input(ftd_rt::Input { common, .. })
+            | ftd_rt::Element::Integer(ftd_rt::Text { common, .. })
+            | ftd_rt::Element::Boolean(ftd_rt::Text { common, .. })
+            | ftd_rt::Element::Decimal(ftd_rt::Text { common, .. })
+            | ftd_rt::Element::Scene(ftd_rt::Scene { common, .. }) => common,
             ftd_rt::Element::Null => return,
         }
         .is_not_visible = is_not_visible;
@@ -486,15 +645,16 @@ impl Element {
 
     pub fn set_locals(&mut self, locals: ftd_rt::Map) {
         match self {
-            ftd_rt::Element::Column(ftd_rt::Column { common, .. }) => common,
-            ftd_rt::Element::Row(ftd_rt::Row { common, .. }) => common,
-            ftd_rt::Element::Text(ftd_rt::Text { common, .. }) => common,
-            ftd_rt::Element::Image(ftd_rt::Image { common, .. }) => common,
-            ftd_rt::Element::IFrame(ftd_rt::IFrame { common, .. }) => common,
-            ftd_rt::Element::Input(ftd_rt::Input { common, .. }) => common,
-            ftd_rt::Element::Integer(ftd_rt::Text { common, .. }) => common,
-            ftd_rt::Element::Boolean(ftd_rt::Text { common, .. }) => common,
-            ftd_rt::Element::Decimal(ftd_rt::Text { common, .. }) => common,
+            ftd_rt::Element::Column(ftd_rt::Column { common, .. })
+            | ftd_rt::Element::Row(ftd_rt::Row { common, .. })
+            | ftd_rt::Element::Text(ftd_rt::Text { common, .. })
+            | ftd_rt::Element::Image(ftd_rt::Image { common, .. })
+            | ftd_rt::Element::IFrame(ftd_rt::IFrame { common, .. })
+            | ftd_rt::Element::Input(ftd_rt::Input { common, .. })
+            | ftd_rt::Element::Integer(ftd_rt::Text { common, .. })
+            | ftd_rt::Element::Boolean(ftd_rt::Text { common, .. })
+            | ftd_rt::Element::Decimal(ftd_rt::Text { common, .. })
+            | ftd_rt::Element::Scene(ftd_rt::Scene { common, .. }) => common,
             ftd_rt::Element::Null => return,
         }
         .locals = locals;
@@ -502,15 +662,16 @@ impl Element {
 
     pub fn set_events(&mut self, events: &mut Vec<ftd_rt::Event>) {
         match self {
-            ftd_rt::Element::Column(ftd_rt::Column { common, .. }) => common,
-            ftd_rt::Element::Row(ftd_rt::Row { common, .. }) => common,
-            ftd_rt::Element::Text(ftd_rt::Text { common, .. }) => common,
-            ftd_rt::Element::Image(ftd_rt::Image { common, .. }) => common,
-            ftd_rt::Element::IFrame(ftd_rt::IFrame { common, .. }) => common,
-            ftd_rt::Element::Input(ftd_rt::Input { common, .. }) => common,
-            ftd_rt::Element::Integer(ftd_rt::Text { common, .. }) => common,
-            ftd_rt::Element::Boolean(ftd_rt::Text { common, .. }) => common,
-            ftd_rt::Element::Decimal(ftd_rt::Text { common, .. }) => common,
+            ftd_rt::Element::Column(ftd_rt::Column { common, .. })
+            | ftd_rt::Element::Row(ftd_rt::Row { common, .. })
+            | ftd_rt::Element::Text(ftd_rt::Text { common, .. })
+            | ftd_rt::Element::Image(ftd_rt::Image { common, .. })
+            | ftd_rt::Element::IFrame(ftd_rt::IFrame { common, .. })
+            | ftd_rt::Element::Input(ftd_rt::Input { common, .. })
+            | ftd_rt::Element::Integer(ftd_rt::Text { common, .. })
+            | ftd_rt::Element::Boolean(ftd_rt::Text { common, .. })
+            | ftd_rt::Element::Decimal(ftd_rt::Text { common, .. })
+            | ftd_rt::Element::Scene(ftd_rt::Scene { common, .. }) => common,
             ftd_rt::Element::Null => return,
         }
         .events
@@ -521,6 +682,38 @@ impl Element {
         match self {
             ftd_rt::Element::Column(e) => e.common.region.as_ref().filter(|v| v.is_heading()),
             ftd_rt::Element::Row(e) => e.common.region.as_ref().filter(|v| v.is_heading()),
+            _ => None,
+        }
+    }
+
+    pub fn get_mut_common(&mut self) -> Option<&mut ftd_rt::Common> {
+        match self {
+            ftd_rt::Element::Column(e) => Some(&mut e.common),
+            ftd_rt::Element::Row(e) => Some(&mut e.common),
+            ftd_rt::Element::Text(e) => Some(&mut e.common),
+            ftd_rt::Element::Image(e) => Some(&mut e.common),
+            ftd_rt::Element::IFrame(e) => Some(&mut e.common),
+            ftd_rt::Element::Input(e) => Some(&mut e.common),
+            ftd_rt::Element::Integer(e) => Some(&mut e.common),
+            ftd_rt::Element::Boolean(e) => Some(&mut e.common),
+            ftd_rt::Element::Decimal(e) => Some(&mut e.common),
+            ftd_rt::Element::Scene(e) => Some(&mut e.common),
+            _ => None,
+        }
+    }
+
+    pub fn get_common(&self) -> Option<&ftd_rt::Common> {
+        match self {
+            ftd_rt::Element::Column(e) => Some(&e.common),
+            ftd_rt::Element::Row(e) => Some(&e.common),
+            ftd_rt::Element::Text(e) => Some(&e.common),
+            ftd_rt::Element::Image(e) => Some(&e.common),
+            ftd_rt::Element::IFrame(e) => Some(&e.common),
+            ftd_rt::Element::Input(e) => Some(&e.common),
+            ftd_rt::Element::Integer(e) => Some(&e.common),
+            ftd_rt::Element::Boolean(e) => Some(&e.common),
+            ftd_rt::Element::Decimal(e) => Some(&e.common),
+            ftd_rt::Element::Scene(e) => Some(&e.common),
             _ => None,
         }
     }
@@ -660,7 +853,7 @@ impl Length {
     derive(Debug, PartialEq, Clone, serde::Serialize)
 )]
 #[serde(tag = "type")]
-pub enum Align {
+pub enum Position {
     Center,
     Top,
     Bottom,
@@ -672,14 +865,14 @@ pub enum Align {
     BottomRight,
 }
 
-impl Default for Align {
-    fn default() -> ftd_rt::Align {
+impl Default for Position {
+    fn default() -> ftd_rt::Position {
         Self::TopLeft
     }
 }
 
-impl Align {
-    pub fn from(l: Option<String>) -> ftd_rt::Result<ftd_rt::Align> {
+impl Position {
+    pub fn from(l: Option<String>) -> ftd_rt::Result<ftd_rt::Position> {
         Ok(match l.as_deref() {
             Some("center") => Self::Center,
             Some("top") => Self::Top,
@@ -856,6 +1049,45 @@ impl Overflow {
     derive(Debug, PartialEq, Clone, serde::Serialize)
 )]
 #[serde(tag = "type")]
+pub enum Anchor {
+    Window,
+    Parent,
+}
+
+impl Anchor {
+    pub fn from(l: Option<String>) -> ftd_rt::Result<Option<ftd_rt::Anchor>> {
+        let l = match l {
+            Some(l) => l,
+            None => return Ok(None),
+        };
+
+        Ok(Some(match l.as_str() {
+            "window" => ftd_rt::Anchor::Window,
+            "parent" => ftd_rt::Anchor::Parent,
+            t => {
+                return ftd_rt::e(format!(
+                    "invalid value for `absolute` expected `window` or `parent` found: {}",
+                    t
+                ))
+            }
+        }))
+    }
+
+    pub fn to_postion(&self) -> String {
+        match self {
+            ftd_rt::Anchor::Window => "fixed",
+            ftd_rt::Anchor::Parent => "absolute",
+        }
+        .to_string()
+    }
+}
+
+#[derive(serde::Deserialize)]
+#[cfg_attr(
+    not(feature = "wasm"),
+    derive(Debug, PartialEq, Clone, serde::Serialize)
+)]
+#[serde(tag = "type")]
 pub enum GradientDirection {
     BottomToTop,
     TopToBottom,
@@ -917,9 +1149,38 @@ impl GradientDirection {
 #[derive(serde::Deserialize)]
 #[cfg_attr(
     not(feature = "wasm"),
+    derive(Debug, PartialEq, Clone, serde::Serialize)
+)]
+pub enum AttributeType {
+    Style,
+    Attribute,
+}
+
+#[derive(serde::Deserialize)]
+#[cfg_attr(
+    not(feature = "wasm"),
+    derive(Debug, PartialEq, Clone, serde::Serialize)
+)]
+pub struct ConditionalAttribute {
+    pub attribute_type: AttributeType,
+    pub conditions_with_value: Vec<(ftd_rt::Condition, ConditionalValue)>,
+    pub default: Option<ConditionalValue>,
+}
+
+#[derive(serde::Deserialize, Clone)]
+#[cfg_attr(not(feature = "wasm"), derive(Debug, PartialEq, serde::Serialize))]
+pub struct ConditionalValue {
+    pub value: String,
+    pub important: bool,
+}
+
+#[derive(serde::Deserialize)]
+#[cfg_attr(
+    not(feature = "wasm"),
     derive(Debug, PartialEq, Clone, serde::Serialize, Default)
 )]
 pub struct Common {
+    pub conditional_attribute: std::collections::BTreeMap<String, ConditionalAttribute>,
     pub locals: ftd_rt::Map,
     pub condition: Option<ftd_rt::Condition>,
     pub is_not_visible: bool,
@@ -949,6 +1210,7 @@ pub struct Common {
     pub border_width: i64,
     pub border_radius: i64,
     pub id: Option<String>,
+    pub data_id: Option<String>,
     pub overflow_x: Option<Overflow>,
     pub overflow_y: Option<Overflow>,
     pub border_top: Option<i64>,
@@ -963,6 +1225,9 @@ pub struct Common {
     pub open_in_new_tab: bool,
     pub sticky: bool,
     pub top: Option<i64>,
+    pub bottom: Option<i64>,
+    pub left: Option<i64>,
+    pub right: Option<i64>,
     pub submit: Option<String>,
     pub cursor: Option<String>,
     pub shadow_offset_x: Option<i64>,
@@ -970,8 +1235,22 @@ pub struct Common {
     pub shadow_size: Option<i64>,
     pub shadow_blur: Option<i64>,
     pub shadow_color: Option<Color>,
+    pub anchor: Option<ftd_rt::Anchor>,
     pub gradient_direction: Option<GradientDirection>,
     pub gradient_colors: Vec<Color>,
+    pub background_image: Option<String>,
+    pub background_repeat: bool,
+    pub background_parallax: bool,
+    pub scale: Option<f64>,
+    pub scale_x: Option<f64>,
+    pub scale_y: Option<f64>,
+    pub rotate: Option<i64>,
+    pub move_up: Option<i64>,
+    pub move_down: Option<i64>,
+    pub move_left: Option<i64>,
+    pub move_right: Option<i64>,
+    pub position: Position,
+    pub inner: bool,
     // TODO: background-image, un-cropped, tiled, tiled{X, Y}
     // TODO: border-style: solid, dashed, dotted
     // TODO: border-{shadow, glow}
@@ -987,14 +1266,15 @@ pub struct Container {
     pub external_children: Option<(String, Vec<Vec<usize>>, Vec<ftd_rt::Element>)>,
     pub open: (Option<bool>, Option<String>),
     pub spacing: Option<i64>,
-    pub align: Align,
     pub wrap: bool,
 }
 
 impl Container {
-    pub fn is_open(&self) -> (bool, Option<String>) {
+    pub fn is_open(&self, is_container_children_empty: bool) -> (bool, Option<String>) {
         (
-            self.open.0.unwrap_or_else(|| self.children.is_empty()),
+            self.open
+                .0
+                .unwrap_or_else(|| (self.children.is_empty() && is_container_children_empty)),
             self.open.1.clone(),
         )
     }
@@ -1009,7 +1289,7 @@ pub struct Image {
     pub src: String,
     pub description: String,
     pub common: Common,
-    pub align: Align,
+    pub crop: bool,
 }
 
 #[derive(serde::Deserialize)]
@@ -1018,6 +1298,16 @@ pub struct Image {
     derive(Debug, PartialEq, Clone, serde::Serialize, Default)
 )]
 pub struct Row {
+    pub container: Container,
+    pub common: Common,
+}
+
+#[derive(serde::Deserialize)]
+#[cfg_attr(
+    not(feature = "wasm"),
+    derive(Debug, PartialEq, Clone, serde::Serialize, Default)
+)]
+pub struct Scene {
     pub container: Container,
     pub common: Common,
 }
@@ -1253,20 +1543,21 @@ pub struct Text {
     pub text: ftd_rt::Rendered,
     pub line: bool,
     pub common: Common,
-    pub align: TextAlign,
+    pub text_align: TextAlign,
+
     pub style: Style,
     pub format: TextFormat,
     pub size: Option<i64>,
     pub font: Vec<NamedFont>,
     pub external_font: Option<ExternalFont>,
     pub line_height: Option<i64>,
-    // TODO: line-height
-    // TODO: region (https://package.elm-lang.org/packages/mdgriffith/elm-ui/latest/Element-Region)
-    // TODO: family (maybe we need a type to represent font-family?)
-    // TODO: letter-spacing
-    // TODO: word-spacing
-    // TODO: font-variants [small-caps, slashed-zero, feature/index etc]
-    // TODO: shadow, glow
+    pub line_clamp: Option<i64>, // TODO: line-height
+                                 // TODO: region (https://package.elm-lang.org/packages/mdgriffith/elm-ui/latest/Element-Region)
+                                 // TODO: family (maybe we need a type to represent font-family?)
+                                 // TODO: letter-spacing
+                                 // TODO: word-spacing
+                                 // TODO: font-variants [small-caps, slashed-zero, feature/index etc]
+                                 // TODO: shadow, glow
 }
 
 #[derive(serde::Deserialize)]

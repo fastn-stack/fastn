@@ -9,6 +9,14 @@ pub enum Boolean {
     IsNull {
         value: ftd::PropertyValue,
     },
+    // if: $list is not empty
+    IsNotEmpty {
+        value: ftd::PropertyValue,
+    },
+    // if: $list is empty
+    IsEmpty {
+        value: ftd::PropertyValue,
+    },
     // if: $caption == hello | if: $foo
     Equal {
         left: ftd::PropertyValue,
@@ -36,7 +44,7 @@ pub enum Boolean {
 impl Boolean {
     pub fn to_condition(
         &self,
-        all_locals: &ftd_rt::Map,
+        all_locals: &mut ftd_rt::Map,
         arguments: &std::collections::BTreeMap<String, crate::Value>,
     ) -> ftd::p1::Result<ftd_rt::Condition> {
         let (variable, value) = match self {
@@ -46,6 +54,10 @@ impl Boolean {
                     ftd::PropertyValue::LocalVariable { name, .. } => {
                         if let Some(string_container) = all_locals.get(name) {
                             format!("@{}@{}", name, string_container)
+                        } else if name.eq("mouse-in") {
+                            let string_container = all_locals.get("mouse-in-temp").unwrap().clone();
+                            all_locals.insert("mouse-in".to_string(), string_container.to_string());
+                            format!("@mouse-in@{}", string_container)
                         } else {
                             return crate::e(format!("Can't find the local variable {}", name));
                         }
@@ -107,6 +119,8 @@ impl Boolean {
         Ok(match rest {
             "is not null" => ("IsNotNull".to_string(), left.to_string(), None),
             "is null" => ("IsNull".to_string(), left.to_string(), None),
+            "is not empty" => ("IsNotEmpty".to_string(), left.to_string(), None),
+            "is empty" => ("IsEmpty".to_string(), left.to_string(), None),
             _ if rest.starts_with("==") => (
                 "Equal".to_string(),
                 left.to_string(),
@@ -144,6 +158,24 @@ impl Boolean {
                     Boolean::IsNotNull { value }
                 } else {
                     Boolean::IsNull { value }
+                }
+            }
+            "IsNotEmpty" | "IsEmpty" => {
+                let value = property_value(
+                    &left,
+                    None,
+                    doc,
+                    arguments,
+                    locals,
+                    left_right_resolved_property.0,
+                )?;
+                if !value.kind().is_list() {
+                    return crate::e(format!("'{}' is not to a list", left));
+                }
+                if boolean.as_str() == "IsNotEmpty" {
+                    Boolean::IsNotEmpty { value }
+                } else {
+                    Boolean::IsEmpty { value }
                 }
             }
             "NotEqual" | "Equal" => {
@@ -223,18 +255,14 @@ impl Boolean {
             self,
             Self::Equal {
                 left: ftd::PropertyValue::Reference { .. },
-                right: ftd::PropertyValue::Value {
-                    value: ftd::Value::Boolean { .. }
-                },
+                right: ftd::PropertyValue::Value { .. },
                 ..
             }
         ) && !matches!(
             self,
             Self::Equal {
                 left: ftd::PropertyValue::LocalVariable { .. },
-                right: ftd::PropertyValue::Value {
-                    value: ftd::Value::Boolean { .. }
-                },
+                right: ftd::PropertyValue::Value { .. },
                 ..
             }
         )
@@ -245,18 +273,14 @@ impl Boolean {
             self,
             Self::Equal {
                 left: ftd::PropertyValue::Reference { .. },
-                right: ftd::PropertyValue::Value {
-                    value: ftd::Value::Boolean { .. }
-                },
+                right: ftd::PropertyValue::Value { .. },
                 ..
             }
         ) && !matches!(
             self,
             Self::Equal {
                 left: ftd::PropertyValue::LocalVariable { .. },
-                right: ftd::PropertyValue::Value {
-                    value: ftd::Value::Boolean { .. }
-                },
+                right: ftd::PropertyValue::Value { .. },
                 ..
             }
         ) && !matches!(
@@ -285,18 +309,22 @@ impl Boolean {
             Self::Literal { value } => *value,
             Self::IsNotNull { value } => !value.resolve(arguments, doc)?.is_null(),
             Self::IsNull { value } => value.resolve(arguments, doc)?.is_null(),
-            Self::Equal { left, right } => {
-                left.resolve(arguments, doc)? == right.resolve(arguments, doc)?
-            }
+            Self::IsNotEmpty { value } => !value.resolve(arguments, doc)?.is_empty(),
+            Self::IsEmpty { value } => value.resolve(arguments, doc)?.is_empty(),
+            Self::Equal { left, right } => left
+                .resolve(arguments, doc)?
+                .is_equal(&right.resolve(arguments, doc)?),
             _ => return ftd::e2("unknown Boolean found", self),
         })
     }
 
     pub fn set_null(&self) -> crate::p1::Result<bool> {
         Ok(match self {
-            Self::Literal { .. } => true,
-            Self::IsNotNull { .. } => true,
-            Self::IsNull { .. } => true,
+            Self::Literal { .. }
+            | Self::IsNotNull { .. }
+            | Self::IsNull { .. }
+            | Self::IsNotEmpty { .. }
+            | Self::IsEmpty { .. } => true,
             Self::Equal { left, right } => match (left, right) {
                 (ftd::PropertyValue::Value { .. }, ftd::PropertyValue::Value { .. })
                 | (ftd::PropertyValue::Value { .. }, ftd::PropertyValue::Argument { .. })

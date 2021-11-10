@@ -1,0 +1,48 @@
+-- import: ft
+
+-- ft.h0: Once upon a time...
+
+-- ftd.scene:
+align: center
+background-image: https://image.shutterstock.com/z/stock-&lt;!&ndash;&ndash;&gt;vector-vector-illustration-of-a-beautiful-summer-landscape-143054302.jpg
+
+--- ethan_says:
+
+-- ft.h1: The End!!
+
+-- component ethan_says:
+component: ftd.scene
+left: 0
+top: 0
+
+--- ftd.text: Hello Everyone! I am Ethan
+border-radius: 150
+background-color: white
+padding: 10
+left: 250
+top: 70
+size: 40
+
+--- ethan-happy-facing-side:
+left: 0
+top: 0
+
+-- component ethan-happy-facing-side:
+component: ftd.scene
+$left: integer
+$top: integer
+left: ref $left
+top: ref $top
+scale: 1.2
+
+--- ftd.image:
+src: https://media.githubusercontent.com/media/gramener/comicgen/v1/svg/aryan/pose/handsfolded.svg
+top: 0
+left: 0
+height: 560
+crop: true
+
+--- ftd.image:
+src: https://media.githubusercontent.com/media/gramener/comicgen/v1/svg/aryan/emotion/smile.svg
+top: 0
+left: 0

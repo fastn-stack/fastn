@@ -1,7 +1,3 @@
--- import: fifthtry/ft
-
--- ft.page:
-
 -- var mobile: true
 
 -- component foo:

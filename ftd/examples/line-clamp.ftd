@@ -1,0 +1,21 @@
+-- component card:
+component: ftd.column
+$text: body
+width: 300
+min-height: 300
+@read_more: boolean with default true
+$max_lines: integer
+
+--- ftd.text: ref $text
+line-clamp if not @read_more: ref $max_lines
+
+
+--- ftd.text: Read More
+$event-click$: toggle @read_more
+$event-click$: prevent-default
+
+
+-- card:
+max_lines: 1
+
+this is amplepr asd askfjkjsdfkjasdjkasd asdjaskdjaksjd kajsd kasjd askjdkasjd kasjd kasjd kasjdkasjd kasjd

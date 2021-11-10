@@ -224,7 +224,7 @@ impl Record {
                 continue;
             }
 
-            if !self.fields.contains_key(k) && k != "type" {
+            if !self.fields.contains_key(k) && k != "type" && k != "$processor$" {
                 return crate::e(format!(
                     "unknown key passed: '{}' to '{}', allowed: {:?}",
                     k,

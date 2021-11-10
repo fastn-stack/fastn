@@ -132,9 +132,13 @@ impl ChildComponent {
             String,
             Vec<std::collections::BTreeMap<String, crate::Value>>,
         >,
-        all_locals: &ftd_rt::Map,
+        all_locals: &mut ftd_rt::Map,
         local_container: &[usize],
     ) -> crate::p1::Result<ElementWithContainer> {
+        let id = crate::p2::utils::string_optional(
+            "id",
+            &resolve_properties(&self.properties, arguments, doc, None)?,
+        )?;
         let ElementWithContainer {
             mut element,
             child_container,
@@ -147,52 +151,51 @@ impl ChildComponent {
             None,
             all_locals,
             local_container,
+            id.clone(),
         )?;
-        element.set_container_id(crate::p2::utils::string_optional(
-            "id",
-            &resolve_properties(&self.properties, arguments, doc, None)?,
-        )?);
+        element.set_container_id(id.clone());
+        element.set_element_id(id);
 
+        let mut container_children = vec![];
         match (&mut element, children.is_empty()) {
-            (ftd_rt::Element::Column(ftd_rt::Column { container, .. }), _)
-            | (ftd_rt::Element::Row(ftd_rt::Row { container, .. }), _) => {
-                for (i, child) in children.iter().enumerate() {
-                    let local_container = {
-                        let mut local_container = local_container.to_vec();
-                        local_container.push(i);
-                        local_container
-                    };
-                    if child.is_recursive {
-                        container.children.extend(
-                            child
-                                .recursive_call(
-                                    doc,
-                                    arguments,
-                                    invocations,
-                                    false,
-                                    None,
-                                    all_locals,
-                                    &local_container,
-                                )?
-                                .iter()
-                                .map(|c| c.element.clone())
-                                .collect::<Vec<ftd_rt::Element>>(),
-                        );
-                        continue;
-                    }
-                    container.children.push(
-                        child
-                            .call(
-                                doc,
-                                arguments,
-                                invocations,
-                                false,
-                                None,
-                                all_locals,
-                                &local_container,
-                            )?
-                            .element,
-                    )
+            (ftd_rt::Element::Column(_), _)
+            | (ftd_rt::Element::Row(_), _)
+            | (ftd_rt::Element::Scene(_), _) => {
+                let instructions = children
+                    .iter()
+                    .map(|child| {
+                        if child.is_recursive {
+                            ftd::Instruction::RecursiveChildComponent {
+                                child: child.clone(),
+                            }
+                        } else {
+                            ftd::Instruction::ChildComponent {
+                                child: child.clone(),
+                            }
+                        }
+                    })
+                    .collect::<Vec<ftd::Instruction>>();
+                let elements = ftd::execute_doc::ExecuteDoc {
+                    name: doc.name,
+                    aliases: doc.aliases,
+                    bag: doc.bag,
+                    instructions: &instructions,
+                    arguments,
+                    invocations,
+                    root_name: None,
+                }
+                .execute(local_container, all_locals, None)?
+                .children;
+                container_children.extend(elements);
+            }
+            (ftd_rt::Element::Null, false) => {
+                let mut root = doc.get_component(self.root.as_str()).unwrap();
+                while root.root != "ftd.kernel" {
+                    root = doc.get_component(self.root.as_str()).unwrap();
+                }
+                match root.full_name.as_str() {
+                    "ftd#row" | "ftd#column" | "ftd#scene" => {}
+                    t => return crate::e2(format!("{:?}", t), "cant have children"),
                 }
             }
             (t, false) => {
@@ -202,7 +205,7 @@ impl ChildComponent {
         }
         Ok(ElementWithContainer {
             element,
-            children: vec![],
+            children: container_children,
             child_container,
         })
     }
@@ -217,7 +220,7 @@ impl ChildComponent {
         >,
         is_child: bool,
         root_name: Option<&str>,
-        all_locals: &ftd_rt::Map,
+        all_locals: &mut ftd_rt::Map,
         local_container: &[usize],
     ) -> crate::p1::Result<Vec<ElementWithContainer>> {
         let root = {
@@ -237,6 +240,13 @@ impl ChildComponent {
                 new_arguments.insert("$loop$".to_string(), d.clone());
                 let new_properties =
                     resolve_properties_with_ref(&self.properties, &new_arguments, doc, root_name)?;
+                let mut temp_locals: ftd_rt::Map = Default::default();
+                let conditional_attribute = get_conditional_attributes(
+                    &self.properties,
+                    &new_arguments,
+                    doc,
+                    &mut temp_locals,
+                )?;
                 let local_container = {
                     let mut container = local_container[..local_container.len() - 1].to_vec();
                     match local_container.last() {
@@ -273,6 +283,7 @@ impl ChildComponent {
                     &self.events,
                     all_locals,
                     local_container.as_slice(),
+                    None,
                 )?;
 
                 if let Some(condition) = &self.condition {
@@ -282,6 +293,9 @@ impl ChildComponent {
                 }
                 if !is_visible {
                     element.element.set_non_visibility(!is_visible);
+                }
+                if let Some(common) = element.element.get_mut_common() {
+                    common.conditional_attribute.extend(conditional_attribute);
                 }
                 elements.push(element);
             }
@@ -299,14 +313,15 @@ impl ChildComponent {
         >,
         is_child: bool,
         root_name: Option<&str>,
-        all_locals: &ftd_rt::Map,
+        all_locals: &mut ftd_rt::Map,
         local_container: &[usize],
+        id: Option<String>,
     ) -> crate::p1::Result<ElementWithContainer> {
         let is_visible = {
             let mut visible = true;
             if let Some(ref b) = self.condition {
-                if b.is_constant() && !b.eval(arguments, doc)? {
-                    visible = false;
+                visible = b.eval(arguments, doc)?;
+                if b.is_constant() && !visible {
                     if let Ok(true) = b.set_null() {
                         return Ok(ElementWithContainer {
                             element: ftd_rt::Element::Null,
@@ -337,6 +352,9 @@ impl ChildComponent {
             root_properties
         };
 
+        let conditional_attribute =
+            get_conditional_attributes(&self.properties, arguments, doc, all_locals)?;
+
         let mut element = root.call(
             &root_properties,
             doc,
@@ -347,6 +365,7 @@ impl ChildComponent {
             &self.events,
             all_locals,
             local_container,
+            id,
         )?;
 
         if let Some(condition) = &self.condition {
@@ -356,6 +375,9 @@ impl ChildComponent {
         }
         if !is_visible {
             element.element.set_non_visibility(!is_visible);
+        }
+        if let Some(common) = element.element.get_mut_common() {
+            common.conditional_attribute.extend(conditional_attribute);
         }
 
         Ok(element)
@@ -374,7 +396,6 @@ impl ChildComponent {
         let mut root_arguments = root.arguments;
         assert_no_extra_properties(p1, root.full_name.as_str(), &root_arguments, name)?;
         let root_property = get_root_property(name, caption, doc);
-
         return Ok(Self {
             properties: read_properties(
                 p1,
@@ -458,7 +479,7 @@ fn resolve_recursive_property(
     ))
 }
 
-fn resolve_properties(
+pub fn resolve_properties(
     self_properties: &std::collections::BTreeMap<String, Property>,
     arguments: &std::collections::BTreeMap<String, crate::Value>,
     doc: &crate::p2::TDoc,
@@ -477,6 +498,251 @@ fn resolve_properties(
         }
     }
     Ok(properties)
+}
+
+fn get_conditional_attributes(
+    properties: &std::collections::BTreeMap<String, Property>,
+    arguments: &std::collections::BTreeMap<String, crate::Value>,
+    doc: &crate::p2::TDoc,
+    all_locals: &mut ftd_rt::Map,
+) -> ftd::p1::Result<std::collections::BTreeMap<String, ftd_rt::ConditionalAttribute>> {
+    let mut conditional_attribute: std::collections::BTreeMap<
+        String,
+        ftd_rt::ConditionalAttribute,
+    > = Default::default();
+
+    let mut dictionary: std::collections::BTreeMap<String, Vec<String>> = Default::default();
+    dictionary.insert(
+        "padding-vertical".to_string(),
+        vec!["padding-top".to_string(), "padding-bottom".to_string()],
+    );
+    dictionary.insert(
+        "padding-horizontal".to_string(),
+        vec!["padding-left".to_string(), "padding-right".to_string()],
+    );
+    dictionary.insert(
+        "border-left".to_string(),
+        vec!["border-left-width".to_string()],
+    );
+    dictionary.insert(
+        "border-right".to_string(),
+        vec!["border-right-width".to_string()],
+    );
+    dictionary.insert(
+        "border-top".to_string(),
+        vec!["border-top-width".to_string()],
+    );
+    dictionary.insert("size".to_string(), vec!["font-size".to_string()]);
+    dictionary.insert(
+        "border-bottom".to_string(),
+        vec!["border-bottom-width".to_string()],
+    );
+    dictionary.insert(
+        "border-top-radius".to_string(),
+        vec![
+            "border-top-left-radius".to_string(),
+            "border-top-right-radius".to_string(),
+        ],
+    );
+    dictionary.insert(
+        "border-left-radius".to_string(),
+        vec![
+            "border-top-left-radius".to_string(),
+            "border-bottom-left-radius".to_string(),
+        ],
+    );
+    dictionary.insert(
+        "border-right-radius".to_string(),
+        vec![
+            "border-bottom-right-radius".to_string(),
+            "border-top-right-radius".to_string(),
+        ],
+    );
+    dictionary.insert(
+        "border-bottom-radius".to_string(),
+        vec![
+            "border-bottom-left-radius".to_string(),
+            "border-bottom-right-radius".to_string(),
+        ],
+    );
+
+    for (name, value) in properties {
+        if !value.conditions.is_empty() {
+            let styles = if let Some(styles) = dictionary.get(name) {
+                styles.to_owned()
+            } else {
+                vec![name.to_string()]
+            };
+
+            for name in styles {
+                let mut conditions_with_value = vec![];
+                for (condition, pv) in &value.conditions {
+                    if !condition.is_arg_constant() {
+                        let cond = condition.to_condition(all_locals, &Default::default())?;
+                        let value = pv.resolve(arguments, doc)?;
+                        let string = get_string_value(&name, value)?;
+                        conditions_with_value.push((cond, string));
+                    }
+                }
+                let default = {
+                    let mut default = None;
+                    if let Some(pv) = &value.default {
+                        let value = pv.resolve(arguments, doc)?;
+                        let string = get_string_value(&name, value)?;
+                        default = Some(string);
+                    }
+                    default
+                };
+
+                conditional_attribute.insert(
+                    get_style_name(name),
+                    ftd_rt::ConditionalAttribute {
+                        attribute_type: ftd_rt::AttributeType::Style,
+                        conditions_with_value,
+                        default,
+                    },
+                );
+            }
+        }
+    }
+    return Ok(conditional_attribute);
+
+    fn get_style_name(name: String) -> String {
+        match name.as_str() {
+            "sticky" => "position",
+            t => t,
+        }
+        .to_string()
+    }
+
+    fn get_string_value(
+        name: &str,
+        value: ftd::Value,
+    ) -> ftd::p1::Result<ftd_rt::ConditionalValue> {
+        let style_integer = vec![
+            "padding",
+            "padding-left",
+            "padding-right",
+            "padding-top",
+            "padding-bottom",
+            "margin-left",
+            "margin-right",
+            "margin-top",
+            "margin-bottom",
+            "top",
+            "bottom",
+            "left",
+            "right",
+            "shadow-offset-x",
+            "shadow-offset-y",
+            "shadow-size",
+            "shadow-blur",
+            "font-size",
+        ];
+
+        let style_length = vec![
+            "width",
+            "min-width",
+            "max-width",
+            "height",
+            "min-height",
+            "max-height",
+        ];
+
+        let style_color = vec!["background-color", "color", "border-color", "shadow-color"];
+
+        let style_integer_important = vec![
+            "border-left-width",
+            "border-right-width",
+            "border-top-width",
+            "border-bottom-width",
+            "border-top-left-radius",
+            "border-top-right-radius",
+            "border-bottom-left-radius",
+            "border-bottom-right-radius",
+        ];
+
+        let style_overflow = vec!["overflow-x", "overflow-y"];
+
+        Ok(if style_integer.contains(&name) {
+            match value {
+                ftd::Value::Integer { value: v } => ftd_rt::ConditionalValue {
+                    value: format!("{}px", v),
+                    important: false,
+                },
+                v => return ftd::e2(format!("expected int, found: {:?}", v), "int_optional"),
+            }
+        } else if style_integer_important.contains(&name) {
+            match value {
+                ftd::Value::Integer { value: v } => ftd_rt::ConditionalValue {
+                    value: format!("{}px", v),
+                    important: true,
+                },
+                v => return ftd::e2(format!("expected int, found: {:?}", v), "int_optional"),
+            }
+        } else if style_length.contains(&name) {
+            match value {
+                ftd::Value::String { text: v, .. } => ftd_rt::ConditionalValue {
+                    value: ftd_rt::length(&ftd_rt::Length::from(Some(v))?.unwrap(), name).1,
+                    important: false,
+                },
+                v => return ftd::e2(format!("expected string, found: {:?}", v), "string"),
+            }
+        } else if style_color.contains(&name) {
+            match value {
+                ftd::Value::String { text: v, .. } => ftd_rt::ConditionalValue {
+                    value: ftd_rt::color(&ftd::p2::element::color_from(Some(v))?.unwrap()),
+                    important: false,
+                },
+                v => return ftd::e2(format!("expected string, found: {:?}", v), "string"),
+            }
+        } else if style_overflow.contains(&name) {
+            match value {
+                ftd::Value::String { text: v, .. } => ftd_rt::ConditionalValue {
+                    value: ftd_rt::overflow(&ftd_rt::Overflow::from(Some(v))?.unwrap(), name).1,
+                    important: false,
+                },
+                v => return ftd::e2(format!("expected string, found: {:?}", v), "string"),
+            }
+        } else if name.eq("cursor") {
+            match value {
+                ftd::Value::String { text: v, .. } => ftd_rt::ConditionalValue {
+                    value: v,
+                    important: false,
+                },
+                v => return ftd::e2(format!("expected string, found: {:?}", v), "string"),
+            }
+        } else if name.eq("sticky") {
+            match value {
+                ftd::Value::Boolean { value: v } => ftd_rt::ConditionalValue {
+                    value: { if v { "sticky" } else { "inherit" }.to_string() },
+                    important: false,
+                },
+                v => return ftd::e2(format!("expected boolean, found: {:?}", v), "boolean"),
+            }
+        } else if name.eq("position") || name.eq("align") {
+            match value {
+                ftd::Value::String { text: v, .. } => ftd_rt::ConditionalValue {
+                    value: v,
+                    important: false,
+                },
+                v => return ftd::e2(format!("expected string, found: {:?}", v), "string"),
+            }
+        } else if name.eq("line-clamp") {
+            match value {
+                ftd::Value::Integer { value: v } => ftd_rt::ConditionalValue {
+                    value: v.to_string(),
+                    important: false,
+                },
+                v => return ftd::e2(format!("expected int, found: {:?}", v), "int_optional"),
+            }
+        } else {
+            return ftd::e2(
+                format!("unknown style name: `{}` value:`{:?}`", name, value),
+                "get_string_value",
+            );
+        })
+    }
 }
 
 fn resolve_properties_with_ref(
@@ -520,7 +786,8 @@ impl Component {
         >,
         root_name: Option<&str>,
         call_container: &[usize],
-        all_locals: &ftd_rt::Map,
+        all_locals: &mut ftd_rt::Map,
+        id: Option<String>,
     ) -> crate::p1::Result<ElementWithContainer> {
         ftd::execute_doc::ExecuteDoc {
             name: doc.name,
@@ -531,7 +798,7 @@ impl Component {
             invocations,
             root_name,
         }
-        .execute(call_container, all_locals)
+        .execute(call_container, all_locals, id)
     }
 
     pub fn get_caption(&self) -> Option<String> {
@@ -551,7 +818,7 @@ impl Component {
         let root = p1.header.string("component")?;
         let root_component = doc.get_component(root.as_str())?;
         let mut root_arguments = root_component.arguments.clone();
-        let (arguments, _inherits) =
+        let (arguments, inherits) =
             read_arguments(&p1.header, root.as_str(), &root_arguments, doc)?;
         let locals = read_locals(&p1.header, doc)?;
 
@@ -607,7 +874,7 @@ impl Component {
 
         let events = p1.header.get_events(doc, &locals, &arguments)?;
 
-        Ok(Component {
+        return Ok(Component {
             full_name: doc.resolve_name(&name)?,
             properties: read_properties(
                 &p1.header,
@@ -619,7 +886,7 @@ impl Component {
                 &arguments,
                 &locals,
                 doc,
-                &std::collections::BTreeMap::new(),
+                &root_properties_from_inherits(&arguments, inherits, doc)?,
             )?,
             arguments,
             locals,
@@ -629,7 +896,35 @@ impl Component {
             invocations: Default::default(),
             condition,
             events,
-        })
+        });
+
+        fn root_properties_from_inherits(
+            arguments: &std::collections::BTreeMap<String, crate::p2::Kind>,
+            inherits: Vec<String>,
+            doc: &crate::p2::TDoc,
+        ) -> ftd::p1::Result<std::collections::BTreeMap<String, Property>> {
+            let mut root_properties: std::collections::BTreeMap<String, Property> =
+                Default::default();
+            for inherit in inherits {
+                let pv = ftd::PropertyValue::resolve_value(
+                    &format!("${}", inherit),
+                    None,
+                    doc,
+                    arguments,
+                    &Default::default(),
+                    None,
+                    false,
+                )?;
+                root_properties.insert(
+                    inherit,
+                    Property {
+                        default: Some(pv),
+                        conditions: vec![],
+                    },
+                );
+            }
+            Ok(root_properties)
+        }
     }
 
     #[allow(clippy::too_many_arguments)]
@@ -645,15 +940,15 @@ impl Component {
         is_child: bool,
         root_name: Option<&str>,
         events: &[ftd::p2::Event],
-        all_locals: &ftd_rt::Map,
+        all_locals: &mut ftd_rt::Map,
         local_container: &[usize],
+        id: Option<String>,
     ) -> crate::p1::Result<ElementWithContainer> {
         let argument = ftd::p2::utils::properties(arguments);
         invocations
             .entry(self.full_name.clone())
             .or_default()
             .push(argument.to_owned());
-
         if self.root == "ftd.kernel" {
             let element = match self.full_name.as_str() {
                 "ftd#text" => ftd_rt::Element::Text(ftd::p2::element::text_from_properties(
@@ -689,6 +984,9 @@ impl Component {
                 "ftd#input" => ftd_rt::Element::Input(ftd::p2::element::input_from_properties(
                     arguments, doc, condition, is_child, events, all_locals, root_name,
                 )?),
+                "ftd#scene" => ftd_rt::Element::Scene(ftd::p2::element::scene_from_properties(
+                    arguments, doc, condition, is_child, events, all_locals, root_name,
+                )?),
                 _ => unreachable!(),
             };
             Ok(ElementWithContainer {
@@ -706,13 +1004,10 @@ impl Component {
             let root_properties = {
                 let mut properties =
                     resolve_properties_with_ref(&self.properties, &argument, doc, root_name)?;
-                if !properties.contains_key("id") {
-                    if let Some(id) = arguments.get("id") {
-                        properties.insert("id".to_string(), (id.to_owned(), None));
-                    }
-                }
+                update_properties(&mut properties, &argument);
                 properties
             };
+
             let mut element = root
                 .call(
                     &root_properties,
@@ -724,6 +1019,7 @@ impl Component {
                     events,
                     all_locals,
                     local_container,
+                    None,
                 )?
                 .element;
 
@@ -735,17 +1031,21 @@ impl Component {
 
             let mut all_locals: ftd_rt::Map = Default::default();
 
-            element.set_locals(self.get_locals_map(&local_string_container, &mut all_locals)?);
+            self.get_locals_map(&local_string_container, &mut all_locals);
 
             if condition.is_none() {
                 let mut is_visible = true;
                 element.set_condition({
                     match &self.condition {
-                        Some(c) if !c.is_arg_constant() => {
+                        Some(c) => {
                             if !c.eval(&arguments, doc)? {
                                 is_visible = false;
                             }
-                            Some(c.to_condition(&all_locals, &arguments)?)
+                            if !c.is_arg_constant() {
+                                Some(c.to_condition(&mut all_locals, &arguments)?)
+                            } else {
+                                None
+                            }
                         }
                         _ => None,
                     }
@@ -753,13 +1053,12 @@ impl Component {
                 element.set_non_visibility(!is_visible);
             }
 
-            element.set_events(&mut ftd::p2::Event::get_events(
-                &self.events,
-                &all_locals,
-                &arguments,
-                doc,
-                root_name,
-            )?);
+            let conditional_attribute =
+                get_conditional_attributes(&self.properties, &argument, doc, &mut all_locals)?;
+
+            if let Some(common) = element.get_mut_common() {
+                common.conditional_attribute.extend(conditional_attribute);
+            }
 
             let mut containers = None;
             match &mut element {
@@ -776,6 +1075,9 @@ impl Component {
                 })
                 | ftd_rt::Element::Row(ftd_rt::Row {
                     ref mut container, ..
+                })
+                | ftd_rt::Element::Scene(ftd_rt::Scene {
+                    ref mut container, ..
                 }) => {
                     let ElementWithContainer {
                         children,
@@ -787,12 +1089,24 @@ impl Component {
                         invocations,
                         root_name,
                         local_container,
-                        &all_locals,
+                        &mut all_locals,
+                        id,
                     )?;
                     containers = child_container;
                     container.children = children;
                 }
             }
+
+            element.set_locals(self.get_all_locals(&local_string_container, &all_locals)?);
+
+            element.set_events(&mut ftd::p2::Event::get_events(
+                &self.events,
+                &mut all_locals,
+                &arguments,
+                doc,
+                root_name,
+                true,
+            )?);
 
             Ok(ElementWithContainer {
                 element,
@@ -802,10 +1116,10 @@ impl Component {
         }
     }
 
-    fn get_locals_map(
+    fn get_all_locals(
         &self,
         string_container: &str,
-        all_locals: &mut ftd_rt::Map,
+        all_locals: &ftd_rt::Map,
     ) -> crate::p1::Result<ftd_rt::Map> {
         let mut locals: ftd_rt::Map = Default::default();
 
@@ -818,9 +1132,21 @@ impl Component {
                 _ => return crate::e("local variable supports string, integer, boolean and decimal type with default value"),
             };
             locals.insert(format!("{}@{}", k, string_container), value.to_string());
-            all_locals.insert(k.to_string(), string_container.to_string());
+        }
+        if let Some(string_container) = all_locals.get("mouse-in") {
+            locals.insert(
+                format!("mouse-in@{}", string_container),
+                "false".to_string(),
+            );
         }
         Ok(locals)
+    }
+
+    fn get_locals_map(&self, string_container: &str, all_locals: &mut ftd_rt::Map) {
+        for k in self.locals.keys() {
+            all_locals.insert(k.to_string(), string_container.to_string());
+        }
+        all_locals.insert("mouse-in-temp".to_string(), string_container.to_string());
     }
 }
 
@@ -1005,6 +1331,22 @@ pub fn recursive_child_component(
     }
 }
 
+fn update_properties(
+    properties: &mut std::collections::BTreeMap<String, (crate::Value, Option<String>)>,
+    arguments: &std::collections::BTreeMap<String, crate::Value>,
+) {
+    let default_property = vec![
+        "id", "top", "bottom", "left", "right", "align", "scale", "rotate", "scale-x", "scale-y",
+    ];
+    for p in default_property {
+        if !properties.contains_key(p) {
+            if let Some(v) = arguments.get(p) {
+                properties.insert(p.to_string(), (v.to_owned(), None));
+            }
+        }
+    }
+}
+
 fn is_component(name: &str) -> bool {
     !(name.starts_with("component ")
         || name.starts_with("var ")
@@ -1021,7 +1363,8 @@ fn is_component(name: &str) -> bool {
         || (name == "ftd.integer")
         || (name == "ftd.decimal")
         || (name == "ftd.boolean")
-        || (name == "ftd.input"))
+        || (name == "ftd.input")
+        || (name == "ftd.scene"))
 }
 
 fn assert_no_extra_properties(
@@ -1046,7 +1389,14 @@ fn assert_no_extra_properties(
             k
         };
 
-        if !(root_arguments.contains_key(key) || (is_component(name) && key == "id")) {
+        if !(root_arguments.contains_key(key)
+            || (is_component(name)
+                && vec![
+                    "id", "top", "bottom", "left", "right", "align", "scale", "rotate", "scale-x",
+                    "scale-y",
+                ]
+                .contains(&key)))
+        {
             return crate::e(format!(
                 "unknown key found: {}, {} has: {}",
                 k,
@@ -1077,16 +1427,7 @@ fn read_properties(
     root_properties: &std::collections::BTreeMap<String, Property>,
 ) -> crate::p1::Result<std::collections::BTreeMap<String, Property>> {
     let mut properties: std::collections::BTreeMap<String, Property> = Default::default();
-    let id_already_present = root_arguments.contains_key("id");
-    if !id_already_present {
-        // to add "id" property by default for component as "-- component foo:"
-        root_arguments.insert(
-            "id".to_string(),
-            crate::p2::Kind::Optional {
-                kind: Box::new(crate::p2::Kind::string()),
-            },
-        );
-    }
+    update_root_arguments(root_arguments);
 
     for (name, kind) in root_arguments.iter() {
         if let Some(prop) = root_properties.get(name) {
@@ -1185,7 +1526,55 @@ fn read_properties(
             }
         }
     }
-    Ok(properties)
+    return Ok(properties);
+
+    fn update_root_arguments(
+        root_arguments: &mut std::collections::BTreeMap<String, crate::p2::Kind>,
+    ) {
+        let mut default_argument: std::collections::BTreeMap<String, crate::p2::Kind> =
+            Default::default();
+        default_argument.insert("id".to_string(), crate::p2::Kind::string().into_optional());
+        default_argument.insert(
+            "top".to_string(),
+            crate::p2::Kind::integer().into_optional(),
+        );
+        default_argument.insert(
+            "bottom".to_string(),
+            crate::p2::Kind::integer().into_optional(),
+        );
+        default_argument.insert(
+            "left".to_string(),
+            crate::p2::Kind::integer().into_optional(),
+        );
+        default_argument.insert(
+            "right".to_string(),
+            crate::p2::Kind::integer().into_optional(),
+        );
+        default_argument.insert(
+            "align".to_string(),
+            crate::p2::Kind::string().into_optional(),
+        );
+        default_argument.insert(
+            "scale".to_string(),
+            crate::p2::Kind::decimal().into_optional(),
+        );
+        default_argument.insert(
+            "rotate".to_string(),
+            crate::p2::Kind::integer().into_optional(),
+        );
+        default_argument.insert(
+            "scale-x".to_string(),
+            crate::p2::Kind::decimal().into_optional(),
+        );
+        default_argument.insert(
+            "scale-y".to_string(),
+            crate::p2::Kind::decimal().into_optional(),
+        );
+
+        for (key, arg) in default_argument {
+            root_arguments.entry(key).or_insert(arg);
+        }
+    }
 }
 
 fn read_arguments(

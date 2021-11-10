@@ -7,7 +7,7 @@ impl ftd_rt::Node {
         data: &ftd_rt::DataDependenciesMap,
         id: &str,
     ) -> Result<web_sys::Element, wasm_bindgen::JsValue> {
-        self.to_dnode(style, data, &mut None, &None, &[], true, id)
+        self.to_dnode(style, data, &mut None, &None, &[], true, id, false)
             .to_dom(id)
     }
 }
@@ -26,7 +26,11 @@ impl ftd_rt::dnode::DNode {
         for (name, actions) in events {
             e.set_attribute(
                 name.as_str(),
-                format!("window.ftd.handle_event(\"{}\", \"{}\")", id, actions).as_str(),
+                format!(
+                    "window.ftd.handle_event(event, \"{}\", \"{}\")",
+                    id, actions
+                )
+                .as_str(),
             )?;
         }
 

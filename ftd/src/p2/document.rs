@@ -22,6 +22,7 @@ impl Document {
                 let value = match value {
                     ftd::Value::Boolean { value } => value.to_string(),
                     ftd::Value::Integer { value } => value.to_string(),
+                    ftd::Value::String { text: value, .. } => value.to_string(),
                     _ => continue,
                 };
                 d.insert(k.to_string(), value);
@@ -52,6 +53,7 @@ impl Document {
         }
         ftd_rt::Element::get_visible_event_dependencies(&self.main.container.children, &mut data);
         ftd_rt::Element::get_value_event_dependencies(&self.main.container.children, &mut data);
+        ftd_rt::Element::get_style_event_dependencies(&self.main.container.children, &mut data);
 
         data
     }
@@ -160,6 +162,15 @@ impl Document {
                             return Some(t);
                         }
                     }
+                    ftd_rt::Element::Scene(c) => {
+                        if let Some(v) = f(e) {
+                            return Some(v);
+                        }
+
+                        if let Some(t) = finder(&c.container.children, f) {
+                            return Some(t);
+                        }
+                    }
                     ftd_rt::Element::Image(_) => {
                         if let Some(v) = f(e) {
                             return Some(v);
@@ -243,7 +254,7 @@ impl Document {
         Ok(d)
     }
 
-    fn get_heading<F>(children: &[ftd_rt::Element], f: &F) -> Option<ftd_rt::Rendered>
+    pub fn get_heading<F>(children: &[ftd_rt::Element], f: &F) -> Option<ftd_rt::Rendered>
     where
         F: Fn(&ftd_rt::Region) -> bool,
     {
@@ -483,6 +494,82 @@ impl Document {
             crate::PropertyValue::Value { value, .. } => self.value_to_json(value),
             crate::PropertyValue::Reference { name, .. } => self.json(name),
             _ => unreachable!(),
+        }
+    }
+}
+
+pub fn set_region_id(elements: &mut Vec<ftd_rt::Element>) {
+    let mut map: std::collections::BTreeMap<usize, String> = Default::default();
+    for element in elements.iter_mut() {
+        match element {
+            ftd_rt::Element::Column(ftd_rt::Column { container, .. })
+            | ftd_rt::Element::Row(ftd_rt::Row { container, .. }) => {
+                set_region_id(&mut container.children);
+                if let Some((_, _, ref mut e)) = container.external_children {
+                    set_region_id(e);
+                }
+            }
+            _ => continue,
+        }
+    }
+
+    for (idx, element) in elements.iter().enumerate() {
+        match element {
+            ftd_rt::Element::Column(ftd_rt::Column { common, .. })
+            | ftd_rt::Element::Row(ftd_rt::Row { common, .. }) => {
+                if common.region.as_ref().filter(|v| v.is_heading()).is_some()
+                    && common.data_id.is_none()
+                {
+                    if let Some(h) =
+                        ftd::p2::Document::get_heading(vec![element.clone()].as_slice(), &|r| {
+                            r.is_heading()
+                        })
+                    {
+                        map.insert(idx, slug::slugify(h.original));
+                    }
+                }
+            }
+            _ => continue,
+        }
+    }
+    for (idx, s) in map {
+        elements[idx].get_mut_common().unwrap().id = Some(s);
+    }
+}
+
+pub fn default_scene_children_position(elements: &mut Vec<ftd_rt::Element>) {
+    for element in elements {
+        if let ftd_rt::Element::Scene(scene) = element {
+            for child in &mut scene.container.children {
+                check_and_set_default_position(child);
+            }
+            if let Some((_, _, ref mut ext_children)) = scene.container.external_children {
+                for child in ext_children {
+                    check_and_set_default_position(child);
+                }
+            }
+        }
+        match element {
+            ftd_rt::Element::Scene(ftd_rt::Scene { container, .. })
+            | ftd_rt::Element::Row(ftd_rt::Row { container, .. })
+            | ftd_rt::Element::Column(ftd_rt::Column { container, .. }) => {
+                default_scene_children_position(&mut container.children);
+                if let Some((_, _, ref mut ext_children)) = container.external_children {
+                    default_scene_children_position(ext_children);
+                }
+            }
+            _ => {}
+        }
+    }
+
+    fn check_and_set_default_position(child: &mut ftd_rt::Element) {
+        if let Some(common) = child.get_mut_common() {
+            if common.top.is_none() && common.bottom.is_none() {
+                common.top = Some(0);
+            }
+            if common.left.is_none() && common.right.is_none() {
+                common.left = Some(0);
+            }
         }
     }
 }

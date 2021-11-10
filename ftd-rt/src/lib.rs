@@ -10,11 +10,11 @@ mod wasm;
 
 pub use condition::Condition;
 pub use event::{Action, Event};
-pub use html::Node;
+pub use html::{anchor, color, length, overflow, Node};
 pub use ui::{
-    Align, Color, Column, Common, Container, Element, ExternalFont, FontDisplay, GradientDirection,
-    IFrame, Image, Input, Length, NamedFont, Overflow, Region, Row, Style, Text, TextAlign,
-    TextFormat, Weight,
+    Anchor, AttributeType, Color, Column, Common, ConditionalAttribute, ConditionalValue,
+    Container, Element, ExternalFont, FontDisplay, GradientDirection, IFrame, Image, Input, Length,
+    NamedFont, Overflow, Position, Region, Row, Scene, Style, Text, TextAlign, TextFormat, Weight,
 };
 
 #[derive(serde::Serialize, serde::Deserialize, Eq, PartialEq, Debug, Default, Clone)]
@@ -97,6 +97,38 @@ pub type ExternalChildrenDependenciesMap =
 pub struct ExternalChildrenCondition {
     pub condition: Vec<String>,
     pub set_at: String,
+}
+
+#[derive(serde::Deserialize)]
+#[cfg_attr(
+    not(feature = "wasm"),
+    derive(PartialEq, Debug, Clone, serde::Serialize)
+)]
+pub enum DependencyType {
+    Style,
+    Visible,
+    Value,
+}
+
+#[derive(serde::Deserialize)]
+#[cfg_attr(
+    not(feature = "wasm"),
+    derive(serde::Serialize, PartialEq, Debug, Clone)
+)]
+pub struct Dependencies {
+    pub dependency_type: DependencyType,
+    pub condition: Option<String>,
+    pub parameters: std::collections::BTreeMap<String, ValueWithDefault>,
+}
+
+#[derive(serde::Deserialize)]
+#[cfg_attr(
+    not(feature = "wasm"),
+    derive(serde::Serialize, PartialEq, Debug, Clone)
+)]
+pub struct ValueWithDefault {
+    pub value: ConditionalValue,
+    pub default: Option<ConditionalValue>,
 }
 
 #[cfg(test)]

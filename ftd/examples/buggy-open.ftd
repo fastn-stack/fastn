@@ -1,5 +1,3 @@
--- import: fifthtry/ft
-
 -- component foo:
 component: ftd.column
 @open: boolean with default true

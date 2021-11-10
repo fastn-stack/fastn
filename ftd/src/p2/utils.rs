@@ -26,7 +26,7 @@ pub fn parse_import(c: &Option<String>) -> crate::p1::Result<(String, String)> {
 pub fn string_and_ref(
     name: &str,
     properties: &std::collections::BTreeMap<String, (crate::Value, Option<String>)>,
-    all_locals: &ftd_rt::Map,
+    all_locals: &mut ftd_rt::Map,
 ) -> crate::p1::Result<(String, Option<String>)> {
     match properties.get(name) {
         Some((crate::Value::String { text, .. }, reference)) => {
@@ -43,7 +43,7 @@ pub fn string_and_ref(
 pub fn string_and_source_and_ref(
     name: &str,
     properties: &std::collections::BTreeMap<String, (crate::Value, Option<String>)>,
-    all_locals: &ftd_rt::Map,
+    all_locals: &mut ftd_rt::Map,
 ) -> crate::p1::Result<(String, crate::TextSource, Option<String>)> {
     match properties.get(name) {
         Some((crate::Value::String { text, source }, reference)) => Ok((
@@ -59,12 +59,19 @@ pub fn string_and_source_and_ref(
     }
 }
 
-pub fn complete_reference(reference: &Option<String>, all_locals: &ftd_rt::Map) -> Option<String> {
+pub fn complete_reference(
+    reference: &Option<String>,
+    all_locals: &mut ftd_rt::Map,
+) -> Option<String> {
     let mut reference = reference.to_owned();
     if let Some(ref r) = reference {
         if let Some(name) = r.strip_prefix('@') {
             if let Some(string_container) = all_locals.get(name) {
                 reference = Some(format!("@{}@{}", name, string_container));
+            } else if name.eq("mouse-in") {
+                let string_container = all_locals.get("mouse-in-temp").unwrap().clone();
+                all_locals.insert("mouse-in".to_string(), string_container.to_string());
+                reference = Some(format!("@mouse-in@{}", string_container));
             }
         }
     }
@@ -252,6 +259,24 @@ pub fn decimal(
     }
 }
 
+pub fn decimal_optional(
+    name: &str,
+    properties: &std::collections::BTreeMap<String, crate::Value>,
+) -> crate::p1::Result<Option<f64>> {
+    match properties.get(name) {
+        Some(crate::Value::Decimal { value: v }) => Ok(Some(*v)),
+        Some(crate::Value::None {
+            kind: crate::p2::Kind::Decimal { .. },
+        }) => Ok(None),
+        Some(ftd::Value::None { .. }) => Ok(None),
+        Some(v) => crate::e2(
+            format!("expected decimal, found: {:?}", v),
+            "decimal_optional",
+        ),
+        None => Ok(None),
+    }
+}
+
 pub fn split(name: String, split_at: &str) -> crate::p1::Result<(String, String)> {
     let mut part = name.splitn(2, split_at);
     let part_1 = part.next().unwrap().trim();
@@ -319,6 +344,7 @@ pub fn reorder(p1: &[ftd::p1::Section]) -> ftd::p1::Result<Vec<ftd::p1::Section>
     let mut p1_map: std::collections::BTreeMap<String, ftd::p1::Section> = Default::default();
     let mut inserted_p1 = vec![];
     let mut new_p1 = vec![];
+    let mut list_or_var = vec![];
     for (idx, p1) in p1.iter().enumerate() {
         if p1.name == "import"
             || p1.name.starts_with("var ")
@@ -327,6 +353,19 @@ pub fn reorder(p1: &[ftd::p1::Section]) -> ftd::p1::Result<Vec<ftd::p1::Section>
             || p1.name.starts_with("list ")
             || p1.name.starts_with("map ")
         {
+            inserted_p1.push(idx);
+            new_p1.push(p1.to_owned());
+            if p1.name.starts_with("list ") {
+                let list = ftd_rt::get_name("list", p1.name.as_str())?.to_string();
+                list_or_var.push(list);
+            }
+            if p1.name.starts_with("var ") {
+                let var = ftd_rt::get_name("var", p1.name.as_str())?.to_string();
+                list_or_var.push(var);
+            }
+        }
+
+        if list_or_var.contains(&p1.name) {
             inserted_p1.push(idx);
             new_p1.push(p1.to_owned());
         }

@@ -1,0 +1,29 @@
+-- foo:
+
+-- component foo:
+component: ftd.column
+@open: boolean with default true
+$event-click$: toggle @open
+padding: 50
+background-color: red
+align: center
+cursor: pointer
+
+--- ftd.text: Hello
+if: @open
+
+--- bar:
+
+
+-- component bar:
+component: ftd.column
+@open: boolean with default true
+$event-click$: toggle @open
+$event-click$: stop-propagation
+padding: 50
+background-color: green
+align: center
+cursor: pointer
+
+--- ftd.text: Hello Again
+if: @open
