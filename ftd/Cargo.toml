@@ -1,6 +1,6 @@
 [package]
 name = "ftd"
-version = "0.1.6"
+version = "0.1.7"
 authors = ["Amit Upadhyay <upadhyay@gmail.com>"]
 edition = "2018"
 description = "ftd: FifthTry Document Format parser"
@@ -24,7 +24,7 @@ syntect = { version = "4.5.0", default-features = false, features = ["default-fa
 lazy_static = { version = "1" }
 regex = { version = "1.5.4" }
 format_num = { version = "0.1.0" }
-ftd-rt = { path = "../ftd-rt" }
+ftd-rt = { version = "0.1.2" }
 failure = "0.1"
 slug = { version = "0.1.4" }
 futures = { version = "0.3", optional = true }
