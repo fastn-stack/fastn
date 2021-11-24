@@ -2,7 +2,12 @@
 name = "fpm"
 version = "0.1.0"
 authors = ["Amit Upadhyay <upadhyay@gmail.com>"]
-edition = "2018"
+edition = "2021"
+description = "fpm: FTD Package Manager"
+license = "MIT"
+repository = "https://github.com/fifthtry/fpm"
+homepage = "https://www.fifthtry.com/fpm/"
+
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
