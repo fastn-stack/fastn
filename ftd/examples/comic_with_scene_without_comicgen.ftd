@@ -1,4 +1,4 @@
--- import: ft
+-- import: fifthtry/ft
 
 -- ft.h0: Once upon a time...
 
@@ -22,10 +22,10 @@ top: 70
 -- component ethan-happy-facing-side:
 component: ftd.scene
 width: 500
-$left: integer
-$top: integer
-left: ref $left
-top: ref $top
+integer $left:
+integer $top:
+left: $left
+top: $top
 
 --- ftd.image:
 src: https://media.githubusercontent.com/media/gramener/comicgen/v1/svg/aryan/pose/handsfolded.svg

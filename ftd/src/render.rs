@@ -70,18 +70,24 @@ mod tests {
     }
 }
 
-pub fn code(code: &str, ext: &str) -> String {
-    code_with_theme(code, ext, DEFAULT_THEME).unwrap()
+pub fn code(code: &str, ext: &str, doc_id: &str) -> String {
+    code_with_theme(code, ext, DEFAULT_THEME, doc_id).unwrap()
 }
 
-pub fn code_with_theme(code: &str, ext: &str, theme: &str) -> crate::p1::Result<String> {
+pub fn code_with_theme(
+    code: &str,
+    ext: &str,
+    theme: &str,
+    doc_id: &str,
+) -> crate::p1::Result<String> {
     let syntax = SS
         .find_syntax_by_extension(ext)
         .unwrap_or_else(|| SS.find_syntax_plain_text());
     if !TS.themes.contains_key(theme) {
-        return Err(crate::p1::Error::InvalidInput {
+        return Err(crate::p1::Error::ParseError {
             message: format!("'{}' is not a valid theme", theme),
-            context: "".to_string(),
+            doc_id: doc_id.to_string(),
+            line_number: 0,
         });
     }
 

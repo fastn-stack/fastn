@@ -1,0 +1,14 @@
+-- component foo:
+component: ftd.row
+integer $a:
+boolean $b: false
+$event-click$: toggle $b
+$event-click$: increment $a by 2
+
+--- ftd.integer:
+value: $a
+color if $b: black
+color if $a == 30: red
+
+-- foo:
+a: 20

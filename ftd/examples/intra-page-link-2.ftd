@@ -1,5 +1,5 @@
 -- ftd.text: Go to Hello
-link: #page-id:inside-page-id:display-text-id:hello-id
+link: \#page-id:inside-page-id:display-text-id:hello-id
 
 -- page:
 

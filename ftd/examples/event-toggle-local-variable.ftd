@@ -1,10 +1,10 @@
 -- component foo:
 component: ftd.text
-$name: caption
-@open: boolean with default true
-text: ref $name
-if: @open
-$event-click$: toggle @open
+caption $name:
+boolean $open: true
+text: $name
+if: $open
+$event-click$: toggle $open
 
 -- ftd.text: gg
 

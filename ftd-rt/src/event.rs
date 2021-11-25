@@ -38,7 +38,7 @@ pub struct Action {
 
 #[cfg(feature = "wasm")]
 impl Action {
-    fn to_action(a: &str) -> crate::Result<Self> {
+    fn to_action(a: &str, doc_id: &str) -> crate::Result<Self> {
         match a {
             _ if a.starts_with("toggle") => {
                 let target = a.replace("toggle ", "");
@@ -48,7 +48,7 @@ impl Action {
                     parameters: Default::default(),
                 })
             }
-            t => return crate::e(format!("{} is not a valid action", t)),
+            t => return crate::e(format!("{} is not a valid action", t), doc_id),
         }
     }
 
@@ -58,7 +58,7 @@ impl Action {
         format!("{} {};", self.action, self.target)
     }
 
-    pub(crate) fn parse_js_event(s: &str) -> Vec<Action> {
+    pub(crate) fn parse_js_event(s: &str, doc_id: &str) -> Vec<Action> {
         // input: "toggle x; set-true y"
         // output: { action: toggle, target: x }, { action: set-true, target: y }
         let actions_string: Vec<_> = s.split(";").collect();
@@ -66,7 +66,7 @@ impl Action {
         for action in actions_string {
             let a = action.trim();
             if !a.is_empty() {
-                actions.push(Action::to_action(action).expect("Can't convert to action"));
+                actions.push(Action::to_action(action, doc_id).expect("Can't convert to action"));
             }
         }
         actions

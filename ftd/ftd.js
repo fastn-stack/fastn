@@ -136,16 +136,64 @@ let ftd_utils = {
     },
 
     line_clamp: function (data_id, value) {
+        let doc = document.querySelector(`[data-id="${data_id}"]`);
         if (value == null) {
-            document.querySelector(`[data-id="${data_id}"]`).style.setProperty('display', null);
-            document.querySelector(`[data-id="${data_id}"]`).style.setProperty('overflow', null);
-            document.querySelector(`[data-id="${data_id}"]`).style.setProperty('-webkit-line-clamp', null);
-            document.querySelector(`[data-id="${data_id}"]`).style.setProperty('-webkit-box-orient', null);
+            doc.style.setProperty('display', null);
+            doc.style.setProperty('overflow', null);
+            doc.style.setProperty('-webkit-line-clamp', null);
+            doc.style.setProperty('-webkit-box-orient', null);
         } else {
-            document.querySelector(`[data-id="${data_id}"]`).style.setProperty('display', '-webkit-box');
-            document.querySelector(`[data-id="${data_id}"]`).style.setProperty('overflow', 'hidden');
-            document.querySelector(`[data-id="${data_id}"]`).style.setProperty('-webkit-line-clamp', value);
-            document.querySelector(`[data-id="${data_id}"]`).style.setProperty('-webkit-box-orient', 'vertical');
+            doc.style.setProperty('display', '-webkit-box');
+            doc.style.setProperty('overflow', 'hidden');
+            doc.style.setProperty('-webkit-line-clamp', value);
+            doc.style.setProperty('-webkit-box-orient', 'vertical');
+        }
+    },
+
+    background_image: function (data_id, value) {
+        let background_repeat = document.querySelector(`[data-id="${data_id}"]`).style.getPropertyValue('background-repeat');
+        let doc = document.querySelector(`[data-id="${data_id}"]`);
+        if (value == null) {
+            doc.style.setProperty('background-image', null);
+            doc.style.setProperty('background-size', null);
+            doc.style.setProperty('background-position', null);
+        } else {
+            doc.style.setProperty('background-image', `url(${value})`);
+            if (background_repeat.length === 0) {
+                doc.style.setProperty('background-size', 'cover');
+                doc.style.setProperty('background-position', 'center');
+            }
+        }
+    },
+
+    background_repeat: function (data_id, value) {
+        let doc = document.querySelector(`[data-id="${data_id}"]`);
+        if (value == null) {
+            doc.style.setProperty('background-repeat', null);
+            doc.style.setProperty('background-size', 'cover');
+            doc.style.setProperty('background-position', 'center');
+        } else {
+            doc.style.setProperty('background-repeat', 'repeat');
+            doc.style.setProperty('background-size', null);
+            doc.style.setProperty('background-position', null);
+        }
+    },
+
+    first_child_styling: function (data_id) {
+        let parent = document.querySelector(`[data-id="${data_id}"]`).parentElement;
+        if (parent.dataset.spacing !== undefined) {
+            let spacing = parent.dataset.spacing.split(":");
+            let property = spacing[0].trim();
+            let value = spacing[1].trim();
+            let first_child = true;
+            for (let i = 0; i < parent.children.length; i++) {
+                if (!first_child) {
+                    parent.children[i].style.setProperty(property, value);
+                } else if (parent.children[i].style.display !== 'none') {
+                    parent.children[i].style.setProperty(property, null);
+                    first_child = false;
+                }
+            }
         }
     },
 
@@ -158,6 +206,10 @@ let ftd_utils = {
             ftd_utils.align_value(data_id, value);
         } else if (parameter === "line-clamp") {
             ftd_utils.line_clamp(data_id, value);
+        } else if (parameter === "background-image") {
+            ftd_utils.background_image(data_id, value);
+        } else if (parameter === "background-repeat") {
+            ftd_utils.background_repeat(data_id, value);
         } else if (important) {
             document.querySelector(`[data-id="${data_id}"]`).style.setProperty(`${parameter}`, value, 'important');
         } else {
@@ -193,6 +245,8 @@ let ftd_utils = {
                         }
                     }
                     document.querySelector(`[data-id="${dependency}:${id}"]`).style.display = display;
+                    ftd_utils.first_child_styling(`${dependency}:${id}`);
+
                 } else if (json_dependency.dependency_type === "Style") {
                     if (data[target].value === json_dependency.condition) {
                         for (const parameter in json_dependency.parameters) {
@@ -261,10 +315,13 @@ window.ftd = (function () {
                 if (display) {
                     console.log(`${object}::: ${set_at}`);
                     let get_element_set_at = document.querySelector(`[data-id="${set_at}:${id}"]`);
-                    let object_to_set = document.querySelector(`[data-id="${object}:${id}"]`);
-                    let parent = object_to_set.parentElement;
-                    if (parent !== get_element_set_at) {
-                        get_element_set_at.appendChild(object_to_set);
+                    let objects_to_set = document.querySelectorAll(`[data-ext-id="${object}:${id}"]`);
+                    for (let i = 0; i < objects_to_set.length; i++) {
+                        let object_to_set = objects_to_set[i];
+                        let parent = object_to_set.parentElement;
+                        if (parent !== get_element_set_at) {
+                            get_element_set_at.appendChild(object_to_set);
+                        }
                     }
                     return;
                 }
@@ -342,6 +399,7 @@ window.ftd = (function () {
             console.log("unknown action:", act);
             return;
         }
+        external_children_replace(id);
 
     }
 
@@ -388,7 +446,6 @@ window.ftd = (function () {
         }
 
         ftd_utils.handle_action(id, variable, value, data);
-        external_children_replace(id);
     }
 
     exports.set_multi_value = function (id, list) {

@@ -13,6 +13,10 @@ macro_rules! p {
         for v in bag.values_mut() {
             if let crate::p2::Thing::Component(c) = v {
                 c.invocations.clear();
+                c.line_number = 0;
+                for instruction in &mut c.instructions {
+                    instruction.without_line_number()
+                }
             }
         }
         if !ebag.is_empty() {

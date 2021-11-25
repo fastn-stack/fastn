@@ -1,6 +1,6 @@
 -- component markdown:
 component: ftd.text
 $body: body
-text: ref $body
+text: $body
 
--- var dark-mode: true
+-- $dark-mode: true

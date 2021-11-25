@@ -8,24 +8,30 @@ pub fn common_from_properties(
     root_name: Option<&str>,
     reference: Option<String>,
 ) -> crate::p1::Result<ftd_rt::Common> {
-    let submit = crate::p2::utils::string_optional("submit", properties)?;
-    let link = crate::p2::utils::string_optional("link", properties)?;
+    let submit = crate::p2::utils::string_optional("submit", properties, doc.name, 0)?;
+    let link = crate::p2::utils::string_optional("link", properties, doc.name, 0)?;
     if let (Some(_), Some(_)) = (&submit, &link) {
-        return crate::e2(
+        return ftd::e2(
             "Cannot have both submit and link together",
             "common_from_properties",
+            doc.name.to_string(),
+            0,
         );
     }
-    let gradient_color_str = crate::p2::utils::string_optional("gradient-colors", properties)?;
+    let gradient_color_str =
+        crate::p2::utils::string_optional("gradient-colors", properties, doc.name, 0)?;
 
     let gradient_colors: Vec<ftd_rt::Color> = match gradient_color_str {
         Some(f) => f
             .split(',')
-            .flat_map(|x| color_from(Some(x.to_string())).ok()?)
+            .flat_map(|x| color_from(Some(x.to_string()), doc.name).ok()?)
             .collect(),
         None => vec![],
     };
-    let anchor = ftd_rt::Anchor::from(crate::p2::utils::string_optional("anchor", properties)?)?;
+    let anchor = ftd_rt::Anchor::from(
+        crate::p2::utils::string_optional("anchor", properties, doc.name, 0)?,
+        doc.name,
+    )?;
 
     let inner_default = match anchor {
         Some(ref p) => match p {
@@ -35,58 +41,139 @@ pub fn common_from_properties(
         None => false,
     };
 
+    let arguments = {
+        //remove properties
+        let mut arguments_without_properties: std::collections::BTreeMap<String, crate::Value> =
+            Default::default();
+        for (k, v) in properties {
+            if let Some(k) = k.strip_prefix('$') {
+                arguments_without_properties.insert(k.to_string(), v.to_owned());
+            }
+        }
+        arguments_without_properties
+    };
+
+    let (cond, is_visible) = match condition {
+        Some(c) => {
+            let mut is_visible = true;
+            if !c.eval(0, &arguments, doc)? {
+                is_visible = false;
+            }
+            if !c.is_arg_constant() {
+                (
+                    Some(c.to_condition(0, all_locals, &arguments, doc.name)?),
+                    is_visible,
+                )
+            } else {
+                (None, is_visible)
+            }
+        }
+        _ => (None, true),
+    };
+
     Ok(ftd_rt::Common {
         conditional_attribute: Default::default(),
         locals: Default::default(),
-        condition: match condition {
-            Some(c) if !c.is_constant() => Some(c.to_condition(all_locals, &Default::default())?),
-            _ => None,
-        },
-        is_not_visible: false,
-        events: ftd::p2::Event::get_events(events, all_locals, properties, doc, root_name, false)?,
+        condition: cond,
+        is_not_visible: !is_visible,
+        events: ftd::p2::Event::get_events(0, events, all_locals, properties, doc, root_name)?,
         reference,
-        region: ftd_rt::Region::from(crate::p2::utils::string_optional("region", properties)?)?,
-        padding: crate::p2::utils::int_optional("padding", properties)?,
-        padding_vertical: crate::p2::utils::int_optional("padding-vertical", properties)?,
-        padding_horizontal: crate::p2::utils::int_optional("padding-horizontal", properties)?,
-        padding_left: crate::p2::utils::int_optional("padding-left", properties)?,
-        padding_right: crate::p2::utils::int_optional("padding-right", properties)?,
-        padding_top: crate::p2::utils::int_optional("padding-top", properties)?,
-        padding_bottom: crate::p2::utils::int_optional("padding-bottom", properties)?,
-        border_top_radius: crate::p2::utils::int_optional("border-top-radius", properties)?,
-        border_bottom_radius: crate::p2::utils::int_optional("border-bottom-radius", properties)?,
-        border_left_radius: crate::p2::utils::int_optional("border-left-radius", properties)?,
-        border_right_radius: crate::p2::utils::int_optional("border-right-radius", properties)?,
-        width: ftd_rt::Length::from(crate::p2::utils::string_optional("width", properties)?)?,
-        min_width: ftd_rt::Length::from(crate::p2::utils::string_optional(
-            "min-width",
+        region: ftd_rt::Region::from(
+            crate::p2::utils::string_optional("region", properties, doc.name, 0)?,
+            doc.name,
+        )?,
+        padding: crate::p2::utils::int_optional("padding", properties, doc.name, 0)?,
+        padding_vertical: crate::p2::utils::int_optional(
+            "padding-vertical",
             properties,
-        )?)?,
-        max_width: ftd_rt::Length::from(crate::p2::utils::string_optional(
-            "max-width",
+            doc.name,
+            0,
+        )?,
+        padding_horizontal: crate::p2::utils::int_optional(
+            "padding-horizontal",
             properties,
-        )?)?,
-        height: ftd_rt::Length::from(crate::p2::utils::string_optional("height", properties)?)?,
-        min_height: ftd_rt::Length::from(crate::p2::utils::string_optional(
-            "min-height",
+            doc.name,
+            0,
+        )?,
+        padding_left: crate::p2::utils::int_optional("padding-left", properties, doc.name, 0)?,
+        padding_right: crate::p2::utils::int_optional("padding-right", properties, doc.name, 0)?,
+        padding_top: crate::p2::utils::int_optional("padding-top", properties, doc.name, 0)?,
+        padding_bottom: crate::p2::utils::int_optional("padding-bottom", properties, doc.name, 0)?,
+        border_top_radius: crate::p2::utils::int_optional(
+            "border-top-radius",
             properties,
-        )?)?,
-        max_height: ftd_rt::Length::from(crate::p2::utils::string_optional(
-            "max-height",
+            doc.name,
+            0,
+        )?,
+        border_bottom_radius: crate::p2::utils::int_optional(
+            "border-bottom-radius",
             properties,
-        )?)?,
-        color: color_from(crate::p2::utils::string_optional("color", properties)?)?,
-        background_color: color_from(crate::p2::utils::string_optional(
-            "background-color",
+            doc.name,
+            0,
+        )?,
+        border_left_radius: crate::p2::utils::int_optional(
+            "border-left-radius",
             properties,
-        )?)?,
-        border_color: color_from(crate::p2::utils::string_optional(
-            "border-color",
+            doc.name,
+            0,
+        )?,
+        border_right_radius: crate::p2::utils::int_optional(
+            "border-right-radius",
             properties,
-        )?)?,
-        border_width: crate::p2::utils::int_with_default("border-width", 0, properties)?,
-        border_radius: crate::p2::utils::int_with_default("border-radius", 0, properties)?,
-        data_id: crate::p2::utils::string_optional("id", properties)?.map(|v| {
+            doc.name,
+            0,
+        )?,
+        width: ftd_rt::Length::from(
+            crate::p2::utils::string_optional("width", properties, doc.name, 0)?,
+            doc.name,
+        )?,
+        min_width: ftd_rt::Length::from(
+            crate::p2::utils::string_optional("min-width", properties, doc.name, 0)?,
+            doc.name,
+        )?,
+        max_width: ftd_rt::Length::from(
+            crate::p2::utils::string_optional("max-width", properties, doc.name, 0)?,
+            doc.name,
+        )?,
+        height: ftd_rt::Length::from(
+            crate::p2::utils::string_optional("height", properties, doc.name, 0)?,
+            doc.name,
+        )?,
+        min_height: ftd_rt::Length::from(
+            crate::p2::utils::string_optional("min-height", properties, doc.name, 0)?,
+            doc.name,
+        )?,
+        max_height: ftd_rt::Length::from(
+            crate::p2::utils::string_optional("max-height", properties, doc.name, 0)?,
+            doc.name,
+        )?,
+        color: color_from(
+            crate::p2::utils::string_optional("color", properties, doc.name, 0)?,
+            doc.name,
+        )?,
+        background_color: color_from(
+            crate::p2::utils::string_optional("background-color", properties, doc.name, 0)?,
+            doc.name,
+        )?,
+        border_color: color_from(
+            crate::p2::utils::string_optional("border-color", properties, doc.name, 0)?,
+            doc.name,
+        )?,
+        border_width: crate::p2::utils::int_with_default(
+            "border-width",
+            0,
+            properties,
+            doc.name,
+            0,
+        )?,
+        border_radius: crate::p2::utils::int_with_default(
+            "border-radius",
+            0,
+            properties,
+            doc.name,
+            0,
+        )?,
+        data_id: crate::p2::utils::string_optional("id", properties, doc.name, 0)?.map(|v| {
             if is_child {
                 v
             } else {
@@ -94,71 +181,103 @@ pub fn common_from_properties(
             }
         }),
         id: None,
-        overflow_x: ftd_rt::Overflow::from(crate::p2::utils::string_optional(
-            "overflow-x",
-            properties,
-        )?)?,
-        overflow_y: ftd_rt::Overflow::from(crate::p2::utils::string_optional(
-            "overflow-y",
-            properties,
-        )?)?,
-        border_top: crate::p2::utils::int_optional("border-top", properties)?,
-        border_left: crate::p2::utils::int_optional("border-left", properties)?,
-        border_right: crate::p2::utils::int_optional("border-right", properties)?,
-        border_bottom: crate::p2::utils::int_optional("border-bottom", properties)?,
-        margin_top: crate::p2::utils::int_optional("margin-top", properties)?,
-        margin_bottom: crate::p2::utils::int_optional("margin-bottom", properties)?,
-        margin_left: crate::p2::utils::int_optional("margin-left", properties)?,
-        margin_right: crate::p2::utils::int_optional("margin-right", properties)?,
+        overflow_x: ftd_rt::Overflow::from(
+            crate::p2::utils::string_optional("overflow-x", properties, doc.name, 0)?,
+            doc.name,
+        )?,
+        overflow_y: ftd_rt::Overflow::from(
+            crate::p2::utils::string_optional("overflow-y", properties, doc.name, 0)?,
+            doc.name,
+        )?,
+        border_top: crate::p2::utils::int_optional("border-top", properties, doc.name, 0)?,
+        border_left: crate::p2::utils::int_optional("border-left", properties, doc.name, 0)?,
+        border_right: crate::p2::utils::int_optional("border-right", properties, doc.name, 0)?,
+        border_bottom: crate::p2::utils::int_optional("border-bottom", properties, doc.name, 0)?,
+        margin_top: crate::p2::utils::int_optional("margin-top", properties, doc.name, 0)?,
+        margin_bottom: crate::p2::utils::int_optional("margin-bottom", properties, doc.name, 0)?,
+        margin_left: crate::p2::utils::int_optional("margin-left", properties, doc.name, 0)?,
+        margin_right: crate::p2::utils::int_optional("margin-right", properties, doc.name, 0)?,
         link,
-        open_in_new_tab: crate::p2::utils::bool_with_default("open-in-new-tab", false, properties)?,
-        sticky: crate::p2::utils::bool_with_default("sticky", false, properties)?,
-        top: crate::p2::utils::int_optional("top", properties)?,
-        bottom: crate::p2::utils::int_optional("bottom", properties)?,
-        left: crate::p2::utils::int_optional("left", properties)?,
-        right: crate::p2::utils::int_optional("right", properties)?,
-        cursor: crate::p2::utils::string_optional("cursor", properties)?,
+        open_in_new_tab: crate::p2::utils::bool_with_default(
+            "open-in-new-tab",
+            false,
+            properties,
+            doc.name,
+            0,
+        )?,
+        sticky: crate::p2::utils::bool_with_default("sticky", false, properties, doc.name, 0)?,
+        top: crate::p2::utils::int_optional("top", properties, doc.name, 0)?,
+        bottom: crate::p2::utils::int_optional("bottom", properties, doc.name, 0)?,
+        left: crate::p2::utils::int_optional("left", properties, doc.name, 0)?,
+        right: crate::p2::utils::int_optional("right", properties, doc.name, 0)?,
+        cursor: crate::p2::utils::string_optional("cursor", properties, doc.name, 0)?,
         submit,
-        shadow_offset_x: crate::p2::utils::int_optional("shadow-offset-x", properties)?,
-        shadow_offset_y: crate::p2::utils::int_optional("shadow-offset-y", properties)?,
-        shadow_size: crate::p2::utils::int_optional("shadow-size", properties)?,
-        shadow_blur: crate::p2::utils::int_optional("shadow-blur", properties)?,
-        shadow_color: color_from(crate::p2::utils::string_optional(
-            "shadow-color",
+        shadow_offset_x: crate::p2::utils::int_optional(
+            "shadow-offset-x",
             properties,
-        )?)?,
-        gradient_direction: ftd_rt::GradientDirection::from(crate::p2::utils::string_optional(
-            "gradient-direction",
+            doc.name,
+            0,
+        )?,
+        shadow_offset_y: crate::p2::utils::int_optional(
+            "shadow-offset-y",
             properties,
-        )?)?,
+            doc.name,
+            0,
+        )?,
+        shadow_size: crate::p2::utils::int_optional("shadow-size", properties, doc.name, 0)?,
+        shadow_blur: crate::p2::utils::int_optional("shadow-blur", properties, doc.name, 0)?,
+        shadow_color: color_from(
+            crate::p2::utils::string_optional("shadow-color", properties, doc.name, 0)?,
+            doc.name,
+        )?,
+        gradient_direction: ftd_rt::GradientDirection::from(
+            crate::p2::utils::string_optional("gradient-direction", properties, doc.name, 0)?,
+            doc.name,
+        )?,
         anchor,
         gradient_colors,
-        background_image: crate::p2::utils::string_optional("background-image", properties)?,
+        background_image: crate::p2::utils::string_optional(
+            "background-image",
+            properties,
+            doc.name,
+            0,
+        )?,
         background_repeat: crate::p2::utils::bool_with_default(
             "background-repeat",
             false,
             properties,
+            doc.name,
+            0,
         )?,
         background_parallax: crate::p2::utils::bool_with_default(
             "background-parallax",
             false,
             properties,
+            doc.name,
+            0,
         )?,
-        scale: crate::p2::utils::decimal_optional("scale", properties)?,
-        scale_x: crate::p2::utils::decimal_optional("scale-x", properties)?,
-        scale_y: crate::p2::utils::decimal_optional("scale-y", properties)?,
-        rotate: crate::p2::utils::int_optional("rotate", properties)?,
-        move_up: crate::p2::utils::int_optional("move-up", properties)?,
-        move_down: crate::p2::utils::int_optional("move-down", properties)?,
-        move_left: crate::p2::utils::int_optional("move-left", properties)?,
-        move_right: crate::p2::utils::int_optional("move-right", properties)?,
+        scale: crate::p2::utils::decimal_optional("scale", properties, doc.name, 0)?,
+        scale_x: crate::p2::utils::decimal_optional("scale-x", properties, doc.name, 0)?,
+        scale_y: crate::p2::utils::decimal_optional("scale-y", properties, doc.name, 0)?,
+        rotate: crate::p2::utils::int_optional("rotate", properties, doc.name, 0)?,
+        move_up: crate::p2::utils::int_optional("move-up", properties, doc.name, 0)?,
+        move_down: crate::p2::utils::int_optional("move-down", properties, doc.name, 0)?,
+        move_left: crate::p2::utils::int_optional("move-left", properties, doc.name, 0)?,
+        move_right: crate::p2::utils::int_optional("move-right", properties, doc.name, 0)?,
         position: ftd_rt::Position::from(
-            match crate::p2::utils::string_optional("position", properties)? {
-                None => crate::p2::utils::string_optional("align", properties)?,
+            match crate::p2::utils::string_optional("position", properties, doc.name, 0)? {
+                None => crate::p2::utils::string_optional("align", properties, doc.name, 0)?,
                 Some(v) => Some(v),
             },
+            doc.name,
         )?,
-        inner: crate::p2::utils::bool_with_default("inner", inner_default, properties)?,
+        inner: crate::p2::utils::bool_with_default(
+            "inner",
+            inner_default,
+            properties,
+            doc.name,
+            0,
+        )?,
     })
 }
 
@@ -436,14 +555,14 @@ pub fn null() -> ftd::Component {
 
 pub fn container_from_properties(
     properties: &std::collections::BTreeMap<String, crate::Value>,
-    _doc: &crate::p2::TDoc,
+    doc: &crate::p2::TDoc,
 ) -> crate::p1::Result<ftd_rt::Container> {
     Ok(ftd_rt::Container {
         children: Default::default(),
         external_children: Default::default(),
-        open: crate::p2::utils::string_bool_optional("open", properties)?,
-        spacing: crate::p2::utils::int_optional("spacing", properties)?,
-        wrap: crate::p2::utils::bool_with_default("wrap", false, properties)?,
+        open: crate::p2::utils::string_bool_optional("open", properties, doc.name, 0)?,
+        spacing: crate::p2::utils::int_optional("spacing", properties, doc.name, 0)?,
+        wrap: crate::p2::utils::bool_with_default("wrap", false, properties, doc.name, 0)?,
     })
 }
 
@@ -500,6 +619,7 @@ pub fn image_function() -> crate::Component {
         invocations: Default::default(),
         condition: None,
         events: vec![],
+        line_number: 0,
     }
 }
 
@@ -513,16 +633,16 @@ pub fn image_from_properties(
     root_name: Option<&str>,
 ) -> crate::p1::Result<ftd_rt::Image> {
     let (src, reference) =
-        crate::p2::utils::string_and_ref("src", properties_with_ref, all_locals)?;
+        crate::p2::utils::string_and_ref(0, "src", properties_with_ref, all_locals, doc.name)?;
     let properties = &ftd::p2::utils::properties(properties_with_ref);
     Ok(ftd_rt::Image {
         src,
-        description: crate::p2::utils::string_optional("description", properties)?
+        description: crate::p2::utils::string_optional("description", properties, doc.name, 0)?
             .unwrap_or_else(|| "".to_string()),
         common: common_from_properties(
             properties, doc, condition, is_child, events, all_locals, root_name, reference,
         )?,
-        crop: crate::p2::utils::bool_with_default("crop", false, properties)?,
+        crop: crate::p2::utils::bool_with_default("crop", false, properties, doc.name, 0)?,
     })
 }
 
@@ -541,6 +661,7 @@ pub fn row_function() -> crate::Component {
         invocations: Default::default(),
         condition: None,
         events: vec![],
+        line_number: 0,
     }
 }
 
@@ -564,6 +685,7 @@ pub fn row_from_properties(
 
 pub fn column_function() -> crate::Component {
     crate::Component {
+        line_number: 0,
         kernel: true,
         full_name: "ftd#column".to_string(),
         root: "ftd.kernel".to_string(),
@@ -599,25 +721,32 @@ pub fn column_from_properties(
 
 pub fn external_font_from_properties(
     properties: &std::collections::BTreeMap<String, crate::Value>,
-    _doc: &crate::p2::TDoc,
+    doc: &crate::p2::TDoc,
 ) -> crate::p1::Result<Option<ftd_rt::ExternalFont>> {
-    let font_option = crate::p2::utils::string_optional("font", properties)?;
-    let font_url_option = crate::p2::utils::string_optional("font-url", properties)?;
+    let font_option = crate::p2::utils::string_optional("font", properties, doc.name, 0)?;
+    let font_url_option = crate::p2::utils::string_optional("font-url", properties, doc.name, 0)?;
 
     match (font_option, font_url_option) {
         (Some(font), Some(font_url)) => {
             let name_opt = font.split(',').next();
             let name = match name_opt {
                 Some(f) => f.to_string(),
-                None => return crate::e("Something went wrong while parsing font vector"),
+                None => {
+                    return ftd::e2(
+                        "Something went wrong while parsing font vector",
+                        doc.name,
+                        doc.name.to_string(),
+                        0,
+                    )
+                }
             };
 
             Ok(Some(ftd_rt::ExternalFont {
                 url: font_url,
-                display: ftd_rt::FontDisplay::from(crate::p2::utils::string_optional(
-                    "font-display",
-                    properties,
-                )?)?,
+                display: ftd_rt::FontDisplay::from(
+                    crate::p2::utils::string_optional("font-display", properties, doc.name, 0)?,
+                    doc.name,
+                )?,
                 name,
             }))
         }
@@ -625,19 +754,21 @@ pub fn external_font_from_properties(
     }
 }
 
+#[allow(dead_code)]
 #[allow(unused_variables)]
 pub fn text_render(
     tf: &ftd_rt::TextFormat,
     text: String,
     source: crate::TextSource,
     theme: String,
+    doc_id: &str,
 ) -> crate::p1::Result<ftd_rt::Rendered> {
     Ok(match (source, tf) {
         (ftd::TextSource::Body, ftd_rt::TextFormat::Markdown) => ftd::markdown(text.as_str()),
         (_, ftd_rt::TextFormat::Markdown) => ftd::markdown_line(text.as_str()),
-        (_, ftd_rt::TextFormat::Latex) => ftd::latex(text.as_str())?,
+        (_, ftd_rt::TextFormat::Latex) => ftd::latex(text.as_str(), doc_id)?,
         (_, ftd_rt::TextFormat::Code { lang }) => {
-            ftd::code_with_theme(text.as_str(), lang.as_str(), theme.as_str())?
+            ftd::code_with_theme(text.as_str(), lang.as_str(), theme.as_str(), doc_id)?
         }
         (_, ftd_rt::TextFormat::Text) => ftd_rt::Rendered {
             original: text.clone(),
@@ -648,6 +779,7 @@ pub fn text_render(
 
 pub fn iframe_function() -> crate::Component {
     crate::Component {
+        line_number: 0,
         kernel: true,
         root: "ftd.kernel".to_string(),
         full_name: "ftd#iframe".to_string(),
@@ -684,14 +816,28 @@ pub fn iframe_from_properties(
 ) -> crate::p1::Result<ftd_rt::IFrame> {
     let properties = &ftd::p2::utils::properties(properties_with_ref);
     let src = match (
-        crate::p2::utils::string_optional("src", properties)?,
-        crate::p2::utils::string_optional("youtube", properties)?
+        crate::p2::utils::string_optional("src", properties, doc.name, 0)?,
+        crate::p2::utils::string_optional("youtube", properties, doc.name, 0)?
             .and_then(|id| crate::youtube_id::from_raw(id.as_str())),
     ) {
         (Some(src), None) => src,
         (None, Some(id)) => id,
-        (Some(_), Some(_)) => return crate::e("both src and youtube id provided"),
-        (None, None) => return crate::e("src or youtube id is required"),
+        (Some(_), Some(_)) => {
+            return ftd::e2(
+                "both src and youtube id provided",
+                doc.name,
+                doc.name.to_string(),
+                0,
+            )
+        }
+        (None, None) => {
+            return ftd::e2(
+                "src or youtube id is required",
+                doc.name,
+                doc.name.to_string(),
+                0,
+            )
+        }
     };
 
     Ok(ftd_rt::IFrame {
@@ -712,14 +858,15 @@ pub fn text_from_properties(
     root_name: Option<&str>,
 ) -> crate::p1::Result<ftd_rt::Text> {
     let properties = &ftd::p2::utils::properties(properties_with_ref);
-    let format = ftd_rt::TextFormat::from(
-        crate::p2::utils::string_optional("format", properties)?,
-        crate::p2::utils::string_optional("lang", properties)?,
-    )?;
 
-    let (text, source, reference) =
-        crate::p2::utils::string_and_source_and_ref("text", properties_with_ref, all_locals)?;
-    let font_str = crate::p2::utils::string_optional("font", properties)?;
+    let (text, source, reference) = crate::p2::utils::string_and_source_and_ref(
+        0,
+        "text",
+        properties_with_ref,
+        all_locals,
+        doc.name,
+    )?;
+    let font_str = crate::p2::utils::string_optional("font", properties, doc.name, 0)?;
 
     let font: Vec<ftd_rt::NamedFont> = match font_str {
         Some(f) => f
@@ -730,30 +877,143 @@ pub fn text_from_properties(
     };
     Ok(ftd_rt::Text {
         line: source != ftd::TextSource::Body,
-        text: text_render(
-            &format,
-            text,
-            source,
+        text: if source == ftd::TextSource::Body {
+            ftd::markdown(text.as_str())
+        } else {
+            ftd::markdown_line(text.as_str())
+        },
+        common: common_from_properties(
+            properties, doc, condition, is_child, events, all_locals, root_name, reference,
+        )?,
+        text_align: ftd_rt::TextAlign::from(
+            crate::p2::utils::string_optional("text-align", properties, doc.name, 0)?,
+            doc.name,
+        )?,
+        style: ftd_rt::Style::from(
+            crate::p2::utils::string_optional("style", properties, doc.name, 0)?,
+            doc.name,
+        )?,
+        size: crate::p2::utils::int_optional("size", properties, doc.name, 0)?,
+        external_font: external_font_from_properties(properties, doc)?,
+        font,
+        line_height: crate::p2::utils::int_optional("line-height", properties, doc.name, 0)?,
+        line_clamp: crate::p2::utils::int_optional("line-clamp", properties, doc.name, 0)?,
+    })
+}
+
+pub fn text_block_from_properties(
+    properties_with_ref: &std::collections::BTreeMap<String, (crate::Value, Option<String>)>,
+    doc: &crate::p2::TDoc,
+    condition: &Option<ftd::p2::Boolean>,
+    is_child: bool,
+    events: &[ftd::p2::Event],
+    all_locals: &mut ftd_rt::Map,
+    root_name: Option<&str>,
+) -> crate::p1::Result<ftd_rt::TextBlock> {
+    let properties = &ftd::p2::utils::properties(properties_with_ref);
+
+    let (text, source, reference) = crate::p2::utils::string_and_source_and_ref(
+        0,
+        "text",
+        properties_with_ref,
+        all_locals,
+        doc.name,
+    )?;
+    let font_str = crate::p2::utils::string_optional("font", properties, doc.name, 0)?;
+
+    let font: Vec<ftd_rt::NamedFont> = match font_str {
+        Some(f) => f
+            .split(',')
+            .flat_map(|x| ftd_rt::NamedFont::from(Some(x.to_string())))
+            .collect(),
+        None => vec![],
+    };
+    Ok(ftd_rt::TextBlock {
+        line: source != ftd::TextSource::Body,
+        text: if source == ftd::TextSource::Body {
+            ftd::markdown(text.as_str())
+        } else {
+            ftd::markdown_line(text.as_str())
+        },
+        common: common_from_properties(
+            properties, doc, condition, is_child, events, all_locals, root_name, reference,
+        )?,
+        text_align: ftd_rt::TextAlign::from(
+            crate::p2::utils::string_optional("text-align", properties, doc.name, 0)?,
+            doc.name,
+        )?,
+        style: ftd_rt::Style::from(
+            crate::p2::utils::string_optional("style", properties, doc.name, 0)?,
+            doc.name,
+        )?,
+        size: crate::p2::utils::int_optional("size", properties, doc.name, 0)?,
+        external_font: external_font_from_properties(properties, doc)?,
+        font,
+        line_height: crate::p2::utils::int_optional("line-height", properties, doc.name, 0)?,
+        line_clamp: crate::p2::utils::int_optional("line-clamp", properties, doc.name, 0)?,
+    })
+}
+
+pub fn code_from_properties(
+    properties_with_ref: &std::collections::BTreeMap<String, (crate::Value, Option<String>)>,
+    doc: &crate::p2::TDoc,
+    condition: &Option<ftd::p2::Boolean>,
+    is_child: bool,
+    events: &[ftd::p2::Event],
+    all_locals: &mut ftd_rt::Map,
+    root_name: Option<&str>,
+) -> crate::p1::Result<ftd_rt::Code> {
+    let properties = &ftd::p2::utils::properties(properties_with_ref);
+
+    let (text, _, reference) = crate::p2::utils::string_and_source_and_ref(
+        0,
+        "text",
+        properties_with_ref,
+        all_locals,
+        doc.name,
+    )?;
+    let font_str = crate::p2::utils::string_optional("font", properties, doc.name, 0)?;
+
+    let font: Vec<ftd_rt::NamedFont> = match font_str {
+        Some(f) => f
+            .split(',')
+            .flat_map(|x| ftd_rt::NamedFont::from(Some(x.to_string())))
+            .collect(),
+        None => vec![],
+    };
+
+    Ok(ftd_rt::Code {
+        text: ftd::code_with_theme(
+            text.as_str(),
+            crate::p2::utils::string_optional("lang", properties, doc.name, 0)?
+                .unwrap_or_else(|| "txt".to_string())
+                .as_str(),
             crate::p2::utils::string_with_default(
                 "theme",
                 crate::render::DEFAULT_THEME,
                 properties,
-            )?,
+                doc.name,
+                0,
+            )?
+            .as_str(),
+            doc.name,
         )?,
         common: common_from_properties(
             properties, doc, condition, is_child, events, all_locals, root_name, reference,
         )?,
-        text_align: ftd_rt::TextAlign::from(crate::p2::utils::string_optional(
-            "text-align",
-            properties,
-        )?)?,
-        style: ftd_rt::Style::from(crate::p2::utils::string_optional("style", properties)?)?,
-        format,
-        size: crate::p2::utils::int_optional("size", properties)?,
+        text_align: ftd_rt::TextAlign::from(
+            crate::p2::utils::string_optional("text-align", properties, doc.name, 0)?,
+            doc.name,
+        )?,
+        style: ftd_rt::Style::from(
+            crate::p2::utils::string_optional("style", properties, doc.name, 0)?,
+            doc.name,
+        )?,
+        size: crate::p2::utils::int_optional("size", properties, doc.name, 0)?,
         external_font: external_font_from_properties(properties, doc)?,
         font,
-        line_height: crate::p2::utils::int_optional("line-height", properties)?,
-        line_clamp: crate::p2::utils::int_optional("line-clamp", properties)?,
+        line_height: crate::p2::utils::int_optional("line-height", properties, doc.name, 0)?,
+        line_clamp: crate::p2::utils::int_optional("line-clamp", properties, doc.name, 0)?,
     })
 }
 
@@ -767,14 +1027,14 @@ pub fn integer_from_properties(
     root_name: Option<&str>,
 ) -> crate::p1::Result<ftd_rt::Text> {
     let properties = &ftd::p2::utils::properties(properties_with_ref);
-    let font_str = crate::p2::utils::string_optional("font", properties)?;
+    let font_str = crate::p2::utils::string_optional("font", properties, doc.name, 0)?;
     let num = format_num::NumberFormat::new();
-    let text = match crate::p2::utils::string_optional("format", properties)? {
+    let text = match crate::p2::utils::string_optional("format", properties, doc.name, 0)? {
         Some(f) => num.format(
             f.as_str(),
-            crate::p2::utils::int("value", properties)? as f64,
+            crate::p2::utils::int("value", properties, doc.name, 0)? as f64,
         ),
-        None => crate::p2::utils::int("value", properties)?.to_string(),
+        None => crate::p2::utils::int("value", properties, doc.name, 0)?.to_string(),
     };
     let reference = ftd::p2::utils::complete_reference(
         &properties_with_ref.get("value").expect("").1,
@@ -795,17 +1055,19 @@ pub fn integer_from_properties(
         common: common_from_properties(
             properties, doc, condition, is_child, events, all_locals, root_name, reference,
         )?,
-        text_align: ftd_rt::TextAlign::from(crate::p2::utils::string_optional(
-            "text-align",
-            properties,
-        )?)?,
-        style: ftd_rt::Style::from(crate::p2::utils::string_optional("style", properties)?)?,
-        format: Default::default(),
-        size: crate::p2::utils::int_optional("size", properties)?,
+        text_align: ftd_rt::TextAlign::from(
+            crate::p2::utils::string_optional("text-align", properties, doc.name, 0)?,
+            doc.name,
+        )?,
+        style: ftd_rt::Style::from(
+            crate::p2::utils::string_optional("style", properties, doc.name, 0)?,
+            doc.name,
+        )?,
+        size: crate::p2::utils::int_optional("size", properties, doc.name, 0)?,
         external_font: external_font_from_properties(properties, doc)?,
         font,
-        line_height: crate::p2::utils::int_optional("line-height", properties)?,
-        line_clamp: crate::p2::utils::int_optional("line-clamp", properties)?,
+        line_height: crate::p2::utils::int_optional("line-height", properties, doc.name, 0)?,
+        line_clamp: crate::p2::utils::int_optional("line-clamp", properties, doc.name, 0)?,
     })
 }
 
@@ -819,11 +1081,14 @@ pub fn decimal_from_properties(
     root_name: Option<&str>,
 ) -> crate::p1::Result<ftd_rt::Text> {
     let properties = &ftd::p2::utils::properties(properties_with_ref);
-    let font_str = crate::p2::utils::string_optional("font", properties)?;
+    let font_str = crate::p2::utils::string_optional("font", properties, doc.name, 0)?;
     let num = format_num::NumberFormat::new();
-    let text = match crate::p2::utils::string_optional("format", properties)? {
-        Some(f) => num.format(f.as_str(), crate::p2::utils::decimal("value", properties)?),
-        None => crate::p2::utils::decimal("value", properties)?.to_string(),
+    let text = match crate::p2::utils::string_optional("format", properties, doc.name, 0)? {
+        Some(f) => num.format(
+            f.as_str(),
+            crate::p2::utils::decimal("value", properties, doc.name, 0)?,
+        ),
+        None => crate::p2::utils::decimal("value", properties, doc.name, 0)?.to_string(),
     };
 
     let reference = ftd::p2::utils::complete_reference(
@@ -844,21 +1109,23 @@ pub fn decimal_from_properties(
         common: common_from_properties(
             properties, doc, condition, is_child, events, all_locals, root_name, reference,
         )?,
-        text_align: ftd_rt::TextAlign::from(crate::p2::utils::string_optional(
-            "text-align",
-            properties,
-        )?)?,
-        style: ftd_rt::Style::from(crate::p2::utils::string_optional("style", properties)?)?,
-        format: Default::default(),
-        size: crate::p2::utils::int_optional("size", properties)?,
+        text_align: ftd_rt::TextAlign::from(
+            crate::p2::utils::string_optional("text-align", properties, doc.name, 0)?,
+            doc.name,
+        )?,
+        style: ftd_rt::Style::from(
+            crate::p2::utils::string_optional("style", properties, doc.name, 0)?,
+            doc.name,
+        )?,
+        size: crate::p2::utils::int_optional("size", properties, doc.name, 0)?,
         external_font: external_font_from_properties(properties, doc)?,
         font,
-        line_height: crate::p2::utils::int_optional("line-height", properties)?,
-        line_clamp: crate::p2::utils::int_optional("line-clamp", properties)?,
+        line_height: crate::p2::utils::int_optional("line-height", properties, doc.name, 0)?,
+        line_clamp: crate::p2::utils::int_optional("line-clamp", properties, doc.name, 0)?,
     })
 }
 
-pub fn color_from(l: Option<String>) -> ftd::p1::Result<Option<ftd_rt::Color>> {
+pub fn color_from(l: Option<String>, doc_id: &str) -> ftd::p1::Result<Option<ftd_rt::Color>> {
     use std::str::FromStr;
 
     let v = match l {
@@ -873,7 +1140,14 @@ pub fn color_from(l: Option<String>) -> ftd::p1::Result<Option<ftd_rt::Color>> {
             b: v.b,
             alpha: v.a,
         })),
-        Err(e) => return crate::e(format!("{} is not a valid color: {:?}", v, e)),
+        Err(e) => {
+            return ftd::e2(
+                format!("{} is not a valid color: {:?}", v, e),
+                doc_id,
+                doc_id.to_string(),
+                0,
+            )
+        }
     }
 }
 
@@ -887,12 +1161,12 @@ pub fn boolean_from_properties(
     root_name: Option<&str>,
 ) -> crate::p1::Result<ftd_rt::Text> {
     let properties = &ftd::p2::utils::properties(properties_with_ref);
-    let font_str = crate::p2::utils::string_optional("font", properties)?;
-    let value = crate::p2::utils::bool("value", properties)?;
+    let font_str = crate::p2::utils::string_optional("font", properties, doc.name, 0)?;
+    let value = crate::p2::utils::bool("value", properties, doc.name, 0)?;
     let text = if value {
-        crate::p2::utils::string_with_default("true", "true", properties)?
+        crate::p2::utils::string_with_default("true", "true", properties, doc.name, 0)?
     } else {
-        crate::p2::utils::string_with_default("false", "false", properties)?
+        crate::p2::utils::string_with_default("false", "false", properties, doc.name, 0)?
     };
 
     let reference = ftd::p2::utils::complete_reference(
@@ -914,25 +1188,34 @@ pub fn boolean_from_properties(
         common: common_from_properties(
             properties, doc, condition, is_child, events, all_locals, root_name, reference,
         )?,
-        text_align: ftd_rt::TextAlign::from(crate::p2::utils::string_optional(
-            "text-align",
-            properties,
-        )?)?,
-        style: ftd_rt::Style::from(crate::p2::utils::string_optional("style", properties)?)?,
-        format: Default::default(),
-        size: crate::p2::utils::int_optional("size", properties)?,
+        text_align: ftd_rt::TextAlign::from(
+            crate::p2::utils::string_optional("text-align", properties, doc.name, 0)?,
+            doc.name,
+        )?,
+        style: ftd_rt::Style::from(
+            crate::p2::utils::string_optional("style", properties, doc.name, 0)?,
+            doc.name,
+        )?,
+        size: crate::p2::utils::int_optional("size", properties, doc.name, 0)?,
         external_font: external_font_from_properties(properties, doc)?,
         font,
-        line_height: crate::p2::utils::int_optional("line-height", properties)?,
-        line_clamp: crate::p2::utils::int_optional("line-clamp", properties)?,
+        line_height: crate::p2::utils::int_optional("line-height", properties, doc.name, 0)?,
+        line_clamp: crate::p2::utils::int_optional("line-clamp", properties, doc.name, 0)?,
     })
 }
 
-pub fn text_function() -> crate::Component {
+pub fn text_function(is_text_block: bool) -> crate::Component {
+    let full_name = if is_text_block {
+        "ftd#text-block"
+    } else {
+        "ftd#text"
+    };
+
     crate::Component {
+        line_number: 0,
         kernel: true,
         root: "ftd.kernel".to_string(),
-        full_name: "ftd#text".to_string(),
+        full_name: full_name.to_string(),
         arguments: [
             vec![
                 ("text".to_string(), crate::p2::Kind::caption_or_body()),
@@ -945,7 +1228,63 @@ pub fn text_function() -> crate::Component {
                     crate::p2::Kind::string().into_optional(),
                 ),
                 (
-                    "format".to_string(),
+                    "size".to_string(),
+                    crate::p2::Kind::integer().into_optional(),
+                ),
+                (
+                    "font-url".to_string(),
+                    crate::p2::Kind::string().into_optional(),
+                ),
+                (
+                    "font".to_string(),
+                    crate::p2::Kind::string().into_optional(),
+                ),
+                (
+                    "font-display".to_string(),
+                    crate::p2::Kind::string().into_optional(),
+                ),
+                (
+                    "line-height".to_string(),
+                    crate::p2::Kind::integer().into_optional(),
+                ),
+                (
+                    "line-clamp".to_string(),
+                    crate::p2::Kind::integer().into_optional(),
+                ),
+                (
+                    "text-align".to_string(),
+                    crate::p2::Kind::string().into_optional(),
+                ),
+            ],
+            common_arguments(),
+        ]
+        .concat()
+        .into_iter()
+        .collect(),
+        locals: Default::default(),
+        properties: Default::default(),
+        instructions: Default::default(),
+        invocations: Default::default(),
+        condition: None,
+        events: vec![],
+    }
+}
+
+pub fn code_function() -> crate::Component {
+    crate::Component {
+        line_number: 0,
+        kernel: true,
+        root: "ftd.kernel".to_string(),
+        full_name: "ftd#code".to_string(),
+        arguments: [
+            vec![
+                ("text".to_string(), crate::p2::Kind::caption_or_body()),
+                (
+                    "align".to_string(),
+                    crate::p2::Kind::string().into_optional(),
+                ),
+                (
+                    "style".to_string(),
                     crate::p2::Kind::string().into_optional(),
                 ),
                 (
@@ -1001,6 +1340,7 @@ pub fn text_function() -> crate::Component {
 
 pub fn integer_function() -> crate::Component {
     crate::Component {
+        line_number: 0,
         kernel: true,
         root: "ftd.kernel".to_string(),
         full_name: "ftd#integer".to_string(),
@@ -1056,6 +1396,7 @@ pub fn integer_function() -> crate::Component {
 
 pub fn decimal_function() -> crate::Component {
     crate::Component {
+        line_number: 0,
         kernel: true,
         root: "ftd.kernel".to_string(),
         full_name: "ftd#decimal".to_string(),
@@ -1122,6 +1463,7 @@ pub fn scene_function() -> crate::Component {
     };
 
     crate::Component {
+        line_number: 0,
         kernel: true,
         root: "ftd.kernel".to_string(),
         full_name: "ftd#scene".to_string(),
@@ -1137,6 +1479,7 @@ pub fn scene_function() -> crate::Component {
 
 pub fn boolean_function() -> crate::Component {
     crate::Component {
+        line_number: 0,
         kernel: true,
         root: "ftd.kernel".to_string(),
         full_name: "ftd#boolean".to_string(),
@@ -1200,6 +1543,7 @@ pub fn boolean_function() -> crate::Component {
 
 pub fn input_function() -> crate::Component {
     crate::Component {
+        line_number: 0,
         kernel: true,
         root: "ftd.kernel".to_string(),
         full_name: "ftd#input".to_string(),
@@ -1236,7 +1580,7 @@ pub fn input_from_properties(
         common: common_from_properties(
             properties, doc, condition, is_child, events, all_locals, root_name, None,
         )?,
-        placeholder: crate::p2::utils::string_optional("placeholder", properties)?,
+        placeholder: crate::p2::utils::string_optional("placeholder", properties, doc.name, 0)?,
     })
 }
 

@@ -12,38 +12,33 @@ pub use to_string::to_string;
 
 #[derive(thiserror::Error, Debug)]
 pub enum Error {
-    #[error("invalid input: {message}")]
-    InvalidInput { message: String, context: String },
-
-    #[error("unknown processor: {message}")]
-    UnknownProcessor { message: String },
-
-    #[error("processor error: {message}")]
-    ProcessorError { message: String },
-
-    #[error("file was empty")]
-    EmptyFile,
-    #[error("key not found: {key}")]
-    NotFound { key: String },
-    #[error("got more than one sub-sections")]
-    MoreThanOneSubSections { key: String },
-    #[error("cant parse integer")]
-    CantParseInt {
-        #[from]
-        source: std::num::ParseIntError,
+    #[error("{doc_id}:{line_number} -> {message}")]
+    ParseError {
+        message: String,
+        doc_id: String,
+        line_number: usize,
     },
+
+    #[error("key not found: {key}, line number: {line_number}, doc: {doc_id}")]
+    NotFound {
+        doc_id: String,
+        line_number: usize,
+        key: String,
+    },
+
+    #[error("got more than one sub-sections: {key}, line number: {line_number}, doc: {doc_id}")]
+    MoreThanOneSubSections {
+        key: String,
+        doc_id: String,
+        line_number: usize,
+    },
+
     #[error("serde error: {source}")]
     Serde {
         #[from]
         source: serde_json::Error,
     },
-    #[error("cant parse bool")]
-    CantParseBool,
-    #[error("cant parse float")]
-    CantParseFloat {
-        #[from]
-        source: std::num::ParseFloatError,
-    },
+
     #[error("{source}")]
     FtdRT {
         #[from]

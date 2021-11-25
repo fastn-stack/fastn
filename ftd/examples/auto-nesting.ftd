@@ -2,11 +2,11 @@
 component: ftd.column
 region: h1
 padding-left: 10
-$title: caption
+caption $title:
 
 --- ftd.text:
-text: ref $title
-$title: caption
+text: $title
+caption $title:
 region: title
 size: 34
 
@@ -14,11 +14,11 @@ size: 34
 component: ftd.column
 region: h2
 padding-left: 10
-$title: caption
+caption $title:
 
 --- ftd.text:
-text: ref $title
-$title: caption
+text: $title
+caption $title:
 region: title
 size: 28
 
@@ -26,11 +26,11 @@ size: 28
 component: ftd.column
 region: h3
 padding-left: 10
-$title: caption
+caption $title:
 
 --- ftd.text:
-text: ref $title
-$title: caption
+text: $title
+caption $title:
 region: title
 size: 24
 

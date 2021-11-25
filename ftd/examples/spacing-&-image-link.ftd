@@ -1,0 +1,64 @@
+-- ftd.image:
+src: https://www.w3schools.com/cssref/img_tree.gif
+link: https://www.amitu.com/fifthtry/amitu/
+width: 200
+
+
+-- ftd.row:
+spacing: 20
+
+--- ftd.text: hello
+
+--- ftd.text: world
+
+-- component foo:
+component: ftd.column
+open: some-id
+
+--- ftd.text: Row Title
+
+--- ftd.row:
+spacing: 20
+id: some-id
+color: red
+border-width: 2
+border-color: yellow
+
+-- component bar:
+component: ftd.column
+open: some-id
+padding-top: 20
+
+--- ftd.text: Column Title
+
+--- ftd.column:
+spacing: 20
+id: some-id
+color: green
+border-width: 2
+border-color: \#ebedef
+
+
+-- $show: true
+
+-- foo:
+
+--- ftd.text: hello
+if: $show
+
+--- ftd.text: world
+
+--- ftd.text: again
+
+-- bar:
+
+--- ftd.text: hello
+if: $show
+
+--- ftd.text: world
+
+--- ftd.text: again
+
+-- ftd.text: Click here!
+padding-top: 20
+$event-click$: toggle $show

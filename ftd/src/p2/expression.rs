@@ -44,67 +44,110 @@ pub enum Boolean {
 impl Boolean {
     pub fn to_condition(
         &self,
+        line_number: usize,
         all_locals: &mut ftd_rt::Map,
         arguments: &std::collections::BTreeMap<String, crate::Value>,
+        doc_id: &str,
     ) -> ftd::p1::Result<ftd_rt::Condition> {
         let (variable, value) = match self {
             Self::Equal { left, right } => {
                 let variable = match left {
                     ftd::PropertyValue::Reference { name, .. } => name.to_string(),
-                    ftd::PropertyValue::LocalVariable { name, .. } => {
+                    ftd::PropertyValue::Variable { name, .. } => {
                         if let Some(string_container) = all_locals.get(name) {
                             format!("@{}@{}", name, string_container)
-                        } else if name.eq("mouse-in") {
-                            let string_container = all_locals.get("mouse-in-temp").unwrap().clone();
-                            all_locals.insert("mouse-in".to_string(), string_container.to_string());
-                            format!("@mouse-in@{}", string_container)
+                        } else if name.eq("MOUSE-IN") {
+                            let string_container = all_locals.get("MOUSE-IN-TEMP").unwrap().clone();
+                            all_locals.insert("MOUSE-IN".to_string(), string_container.to_string());
+                            format!("@MOUSE-IN@{}", string_container)
                         } else {
-                            return crate::e(format!("Can't find the local variable {}", name));
+                            return ftd::e2(
+                                format!("Can't find the local variable {}", name),
+                                doc_id,
+                                doc_id.to_string(),
+                                line_number,
+                            );
                         }
                     }
                     _ => {
-                        return crate::e(format!("{:?} must be variable or local variable", left));
+                        return ftd::e2(
+                            format!("{:?} must be variable or local variable", left),
+                            doc_id,
+                            doc_id.to_string(),
+                            line_number,
+                        );
                     }
                 };
 
                 let value = match right {
                     ftd::PropertyValue::Value { value } => value.to_owned(),
-                    ftd::PropertyValue::Argument { name, kind } => {
+                    ftd::PropertyValue::Variable { name, kind } => {
                         if let Some(arg) = arguments.get(name) {
                             if arg.kind().is_same_as(kind) {
                                 arg.to_owned()
                             } else {
-                                return crate::e(format!(
-                                    "kind mismatch expected: {:?} found: {:?}",
-                                    kind,
-                                    arg.kind()
-                                ));
+                                return ftd::e2(
+                                    format!(
+                                        "kind mismatch expected: {:?} found: {:?}",
+                                        kind,
+                                        arg.kind()
+                                    ),
+                                    doc_id,
+                                    doc_id.to_string(),
+                                    line_number,
+                                );
                             }
                         } else {
-                            return crate::e(format!("argument not found {}", name));
+                            return ftd::e2(
+                                format!("argument not found {}", name),
+                                doc_id,
+                                doc_id.to_string(),
+                                line_number,
+                            );
                         }
                     }
                     _ => {
-                        return crate::e(format!("{:?} must be value or argument", right));
+                        return ftd::e2(
+                            format!("{:?} must be value or argument", right),
+                            doc_id,
+                            doc_id.to_string(),
+                            line_number,
+                        );
                     }
                 };
 
                 (variable, value)
             }
-            _ => return crate::e(format!("{:?} must not happen", self)),
+            _ => {
+                return ftd::e2(
+                    format!("{:?} must not happen", self),
+                    doc_id,
+                    doc_id.to_string(),
+                    line_number,
+                )
+            }
         };
         match value.to_string() {
             None => {
-                return crate::e(format!(
-                    "expected value of type String, Integer, Decimal or Boolean, found: {:?}",
-                    value
-                ))
+                return ftd::e2(
+                    format!(
+                        "expected value of type String, Integer, Decimal or Boolean, found: {:?}",
+                        value
+                    ),
+                    doc_id,
+                    doc_id.to_string(),
+                    line_number,
+                )
             }
             Some(value) => Ok(ftd_rt::Condition { variable, value }),
         }
     }
 
-    pub fn boolean_left_right(expr: &str) -> ftd::p1::Result<(String, String, Option<String>)> {
+    pub fn boolean_left_right(
+        line_number: usize,
+        expr: &str,
+        doc_id: &str,
+    ) -> ftd::p1::Result<(String, String, Option<String>)> {
         let expr: String = expr.split_whitespace().collect::<Vec<&str>>().join(" ");
         if expr == "true" || expr == "false" {
             return Ok(("Literal".to_string(), expr, None));
@@ -126,7 +169,14 @@ impl Boolean {
                 left.to_string(),
                 Some(rest.replace("==", "").trim().to_string()),
             ),
-            _ => return crate::e(format!("'{}' is not valid condition", rest)),
+            _ => {
+                return ftd::e2(
+                    format!("'{}' is not valid condition", rest),
+                    doc_id,
+                    doc_id.to_string(),
+                    line_number,
+                )
+            }
         })
     }
 
@@ -134,10 +184,11 @@ impl Boolean {
         expr: &str,
         doc: &crate::p2::TDoc,
         arguments: &std::collections::BTreeMap<String, crate::p2::Kind>,
-        locals: &std::collections::BTreeMap<String, crate::p2::Kind>,
         left_right_resolved_property: (Option<crate::PropertyValue>, Option<crate::PropertyValue>),
+        line_number: usize,
     ) -> ftd::p1::Result<Self> {
-        let (boolean, left, right) = ftd::p2::Boolean::boolean_left_right(expr)?;
+        let (boolean, left, right) =
+            ftd::p2::Boolean::boolean_left_right(line_number, expr, doc.name)?;
         return Ok(match boolean.as_str() {
             "Literal" => Boolean::Literal {
                 value: left == "true",
@@ -148,11 +199,16 @@ impl Boolean {
                     None,
                     doc,
                     arguments,
-                    locals,
                     left_right_resolved_property.0,
+                    line_number,
                 )?;
                 if !value.kind().is_optional() {
-                    return crate::e(format!("'{}' is not to an optional", left));
+                    return ftd::e2(
+                        format!("'{}' is not to an optional", left),
+                        doc.name,
+                        doc.name.to_string(),
+                        line_number,
+                    );
                 }
                 if boolean.as_str() == "IsNotNull" {
                     Boolean::IsNotNull { value }
@@ -166,11 +222,16 @@ impl Boolean {
                     None,
                     doc,
                     arguments,
-                    locals,
                     left_right_resolved_property.0,
+                    line_number,
                 )?;
                 if !value.kind().is_list() {
-                    return crate::e(format!("'{}' is not to a list", left));
+                    return ftd::e2(
+                        format!("'{}' is not to a list", left),
+                        doc.name,
+                        doc.name.to_string(),
+                        line_number,
+                    );
                 }
                 if boolean.as_str() == "IsNotEmpty" {
                     Boolean::IsNotEmpty { value }
@@ -185,8 +246,8 @@ impl Boolean {
                         None,
                         doc,
                         arguments,
-                        locals,
                         left_right_resolved_property.0,
+                        line_number,
                     )?;
                     Boolean::Equal {
                         left: left.to_owned(),
@@ -195,8 +256,8 @@ impl Boolean {
                             Some(left.kind()),
                             doc,
                             arguments,
-                            locals,
                             left_right_resolved_property.1,
+                            line_number,
                         )?,
                     }
                 } else {
@@ -206,8 +267,8 @@ impl Boolean {
                             Some(ftd::p2::Kind::boolean()),
                             doc,
                             arguments,
-                            locals,
                             left_right_resolved_property.0,
+                            line_number,
                         )?,
                         right: ftd::PropertyValue::Value {
                             value: ftd::Value::Boolean {
@@ -217,7 +278,14 @@ impl Boolean {
                     }
                 }
             }
-            _ => return crate::e(format!("'{}' is not valid condition", expr)),
+            _ => {
+                return ftd::e2(
+                    format!("'{}' is not valid condition", expr),
+                    doc.name,
+                    doc.name.to_string(),
+                    line_number,
+                )
+            }
         });
 
         fn property_value(
@@ -225,22 +293,21 @@ impl Boolean {
             expected_kind: Option<ftd::p2::Kind>,
             doc: &ftd::p2::TDoc,
             arguments: &std::collections::BTreeMap<String, ftd::p2::Kind>,
-            locals: &std::collections::BTreeMap<String, ftd::p2::Kind>,
             loop_already_resolved_property: Option<crate::PropertyValue>,
+            line_number: usize,
         ) -> ftd::p1::Result<ftd::PropertyValue> {
             Ok(
                 match ftd::PropertyValue::resolve_value(
+                    line_number,
                     value,
                     expected_kind,
                     doc,
                     arguments,
-                    locals,
                     None,
-                    false,
                 ) {
                     Ok(v) => v,
                     Err(e) => match &loop_already_resolved_property {
-                        Some(crate::PropertyValue::Argument { .. }) => {
+                        Some(crate::PropertyValue::Variable { .. }) => {
                             loop_already_resolved_property.clone().expect("")
                         }
                         _ => return Err(e),
@@ -251,7 +318,20 @@ impl Boolean {
     }
 
     pub fn is_constant(&self) -> bool {
-        !matches!(
+        let is_loop_constant = {
+            let mut constant = false;
+            if let ftd::p2::Boolean::Equal {
+                left: ftd::PropertyValue::Variable { name, .. },
+                right: ftd::PropertyValue::Value { .. },
+            } = self
+            {
+                if name.starts_with("$loop$") {
+                    constant = true;
+                }
+            }
+            constant
+        };
+        (!matches!(
             self,
             Self::Equal {
                 left: ftd::PropertyValue::Reference { .. },
@@ -261,15 +341,28 @@ impl Boolean {
         ) && !matches!(
             self,
             Self::Equal {
-                left: ftd::PropertyValue::LocalVariable { .. },
+                left: ftd::PropertyValue::Variable { .. },
                 right: ftd::PropertyValue::Value { .. },
                 ..
             }
-        )
+        )) || is_loop_constant
     }
 
     pub fn is_arg_constant(&self) -> bool {
-        !matches!(
+        let is_loop_constant = {
+            let mut constant = false;
+            if let ftd::p2::Boolean::Equal {
+                left: ftd::PropertyValue::Variable { name, .. },
+                right: ftd::PropertyValue::Value { .. },
+            } = self
+            {
+                if name.starts_with("$loop$") {
+                    constant = true;
+                }
+            }
+            constant
+        };
+        (!matches!(
             self,
             Self::Equal {
                 left: ftd::PropertyValue::Reference { .. },
@@ -279,7 +372,7 @@ impl Boolean {
         ) && !matches!(
             self,
             Self::Equal {
-                left: ftd::PropertyValue::LocalVariable { .. },
+                left: ftd::PropertyValue::Variable { .. },
                 right: ftd::PropertyValue::Value { .. },
                 ..
             }
@@ -287,38 +380,39 @@ impl Boolean {
             self,
             Self::Equal {
                 left: ftd::PropertyValue::Reference { .. },
-                right: ftd::PropertyValue::Argument { .. },
+                right: ftd::PropertyValue::Variable { .. },
                 ..
             }
-        ) && !matches!(
-            self,
-            Self::Equal {
-                left: ftd::PropertyValue::LocalVariable { .. },
-                right: ftd::PropertyValue::Argument { .. },
-                ..
-            }
-        )
+        )) || is_loop_constant
     }
 
     pub fn eval(
         &self,
+        line_number: usize,
         arguments: &std::collections::BTreeMap<String, crate::Value>,
         doc: &crate::p2::TDoc,
     ) -> crate::p1::Result<bool> {
         Ok(match self {
             Self::Literal { value } => *value,
-            Self::IsNotNull { value } => !value.resolve(arguments, doc)?.is_null(),
-            Self::IsNull { value } => value.resolve(arguments, doc)?.is_null(),
-            Self::IsNotEmpty { value } => !value.resolve(arguments, doc)?.is_empty(),
-            Self::IsEmpty { value } => value.resolve(arguments, doc)?.is_empty(),
+            Self::IsNotNull { value } => !value.resolve(line_number, arguments, doc)?.is_null(),
+            Self::IsNull { value } => value.resolve(line_number, arguments, doc)?.is_null(),
+            Self::IsNotEmpty { value } => !value.resolve(line_number, arguments, doc)?.is_empty(),
+            Self::IsEmpty { value } => value.resolve(line_number, arguments, doc)?.is_empty(),
             Self::Equal { left, right } => left
-                .resolve(arguments, doc)?
-                .is_equal(&right.resolve(arguments, doc)?),
-            _ => return ftd::e2("unknown Boolean found", self),
+                .resolve(line_number, arguments, doc)?
+                .is_equal(&right.resolve(line_number, arguments, doc)?),
+            _ => {
+                return ftd::e2(
+                    "unknown Boolean found",
+                    self,
+                    doc.name.to_string(),
+                    line_number,
+                )
+            }
         })
     }
 
-    pub fn set_null(&self) -> crate::p1::Result<bool> {
+    pub fn set_null(&self, line_number: usize, doc_id: &str) -> crate::p1::Result<bool> {
         Ok(match self {
             Self::Literal { .. }
             | Self::IsNotNull { .. }
@@ -327,14 +421,21 @@ impl Boolean {
             | Self::IsEmpty { .. } => true,
             Self::Equal { left, right } => match (left, right) {
                 (ftd::PropertyValue::Value { .. }, ftd::PropertyValue::Value { .. })
-                | (ftd::PropertyValue::Value { .. }, ftd::PropertyValue::Argument { .. })
-                | (ftd::PropertyValue::Argument { .. }, ftd::PropertyValue::Value { .. })
-                | (ftd::PropertyValue::Argument { .. }, ftd::PropertyValue::Argument { .. }) => {
+                | (ftd::PropertyValue::Value { .. }, ftd::PropertyValue::Variable { .. })
+                | (ftd::PropertyValue::Variable { .. }, ftd::PropertyValue::Value { .. })
+                | (ftd::PropertyValue::Variable { .. }, ftd::PropertyValue::Variable { .. }) => {
                     true
                 }
                 _ => false,
             },
-            _ => return crate::e(format!("unimplemented for type: {:?}", self)),
+            _ => {
+                return ftd::e2(
+                    format!("unimplemented for type: {:?}", self),
+                    doc_id,
+                    doc_id.to_string(),
+                    line_number,
+                )
+            }
         })
     }
 }

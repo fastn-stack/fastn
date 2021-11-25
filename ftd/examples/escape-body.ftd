@@ -1,9 +1,9 @@
 -- component source-box:
 component: ftd.column
-$file: caption
-$code: body
+caption $file:
+body $code:
 
---- ftd.text: ref $file
+--- ftd.text: $file
 
 --- ftd.row:
 
@@ -11,7 +11,7 @@ $code: body
 
 \--- ftd.text:
 
-ref $code
+$code
 
 -- source-box: main.ftd
 

@@ -1,65 +1,65 @@
 -- record toc-record:
-title: string
-children: list toc-record
+string title:
+toc-record list children:
 
 -- component toc-item:
 component: ftd.column
-$toc: toc-record
+toc-record $toc:
 padding-left: 10
-@open: boolean with default true
+boolean $open: true
 
 --- ftd.row:
 spacing: 10
 
---- ftd.text: ref $toc.title
+--- ftd.text: $toc.title
 
 --- ftd.text: Close
-if: @open
-$event-click$: toggle @open
+if: $open
+$event-click$: toggle $open
 
 --- ftd.text: Open
-if: not @open
-$event-click$: toggle @open
+if: not $open
+$event-click$: toggle $open
 
 --- container: ftd.main
 
 --- toc-item:
-if: @open
-$loop$: $toc.children as obj
-toc: ref obj
+if: $open
+$loop$: $toc.children as $obj
+toc: $obj
 
--- list bb:
-type: toc-record
+-- toc-record list $bb:
 
--- bb:
+
+-- $bb:
 title: bb title
 
--- bb:
+-- $bb:
 title: bbb title
 
 
--- list aa:
-type: toc-record
+-- toc-record list $aa:
 
--- aa:
+
+-- $aa:
 title: aa title
-children: ref bb
+children: $bb
 
--- aa:
+-- $aa:
 title: aaa title
-children: ref bb
+children: $bb
 
--- list toc:
-type: toc-record
+-- toc-record list $toc:
 
--- toc:
+
+-- $toc:
 title: ab title
-children: ref aa
+children: $aa
 
--- toc:
+-- $toc:
 title: abb title
-children: ref bb
+children: $bb
 
 -- toc-item:
-$loop$: toc as obj
-toc: ref obj
+$loop$: $toc as $obj
+toc: $obj

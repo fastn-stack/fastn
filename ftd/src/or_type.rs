@@ -6,7 +6,7 @@ pub struct OrType {
 
 impl OrType {
     pub fn from_p1(p1: &crate::p1::Section, doc: &crate::p2::TDoc) -> crate::p1::Result<Self> {
-        let or_type_name = ftd_rt::get_name("or-type", p1.name.as_str())?;
+        let or_type_name = ftd_rt::get_name("or-type", p1.name.as_str(), doc.name)?;
         let name = doc.format_name(or_type_name);
         let mut variants: Vec<crate::p2::Record> = Default::default();
         for s in p1.sub_sections.0.iter() {
@@ -17,6 +17,7 @@ impl OrType {
                 format!("record {}.{}", or_type_name, s.name.as_str()).as_str(),
                 &s.header,
                 doc,
+                p1.line_number,
             )?);
         }
         Ok(OrType { name, variants })
@@ -29,7 +30,12 @@ impl OrType {
         doc: &crate::p2::TDoc,
     ) -> crate::p1::Result<crate::Value> {
         for v in self.variants.iter() {
-            if v.name == doc.resolve_name(format!("{}.{}", self.name, variant.as_str()).as_str())? {
+            if v.name
+                == doc.resolve_name(
+                    p1.line_number,
+                    format!("{}.{}", self.name, variant.as_str()).as_str(),
+                )?
+            {
                 return Ok(crate::Value::OrType {
                     variant,
                     name: self.name.to_string(),
@@ -38,10 +44,12 @@ impl OrType {
             }
         }
 
-        crate::e(format!(
-            "{} is not a valid variant for {}",
-            variant, self.name
-        ))
+        ftd::e2(
+            format!("{} is not a valid variant for {}", variant, self.name),
+            doc.name,
+            doc.name.to_string(),
+            p1.line_number,
+        )
     }
 }
 
@@ -77,23 +85,22 @@ mod test {
 
         p!(
             "
-            -- var x: 10
+            -- $x: 10
 
             -- or-type entity:
 
             --- person:
-            name: caption
-            address: string
-            bio: body
-            age: integer
+            caption name:
+            string address:
+            body bio:
+            integer age:
 
             --- company:
-            name: caption
-            industry: string
+            caption name:
+            string industry:
 
-            -- var abrar: Abrar Khan2
-            type: entity.person
-            age: ref x
+            -- entity.person $abrar: Abrar Khan2
+            age: $x
             address: Bihar2
 
             Software developer working at fifthtry2.

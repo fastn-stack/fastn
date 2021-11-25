@@ -17,12 +17,17 @@ pub struct State {
     sections: Vec<Section>,
 }
 
-fn colon_separated_values(line: &str) -> Result<(String, Option<String>)> {
+fn colon_separated_values(
+    line_number: usize,
+    line: &str,
+    doc_id: &str,
+) -> Result<(String, Option<String>)> {
     if !line.contains(':') {
-        return Err(crate::p1::Error::InvalidInput {
+        return Err(crate::p1::Error::ParseError {
             message: format!(": is missing in: {}", line),
             // TODO: context should be a few lines before and after the input
-            context: "".to_string(),
+            doc_id: doc_id.to_string(),
+            line_number,
         });
     }
 
@@ -38,16 +43,16 @@ fn colon_separated_values(line: &str) -> Result<(String, Option<String>)> {
     Ok((name, caption))
 }
 
-fn to_body(b: Option<String>) -> Option<String> {
+fn to_body(b: Option<(usize, String)>) -> Option<(usize, String)> {
     match b {
-        Some(b) if b.trim().is_empty() => None,
-        Some(b) => Some(b.trim_end().to_string()),
+        Some(b) if b.1.trim().is_empty() => None,
+        Some(b) => Some((b.0, b.1.trim_end().to_string())),
         None => None,
     }
 }
 
 impl State {
-    fn waiting_for_section(&mut self, line: &str) -> Result<()> {
+    fn waiting_for_section(&mut self, line_number: usize, line: &str, doc_id: &str) -> Result<()> {
         if line.trim().is_empty() {
             return Ok(());
         }
@@ -55,10 +60,11 @@ impl State {
         let is_commented = line.starts_with("/-- ");
 
         if !line.starts_with("-- ") && !line.starts_with("/-- ") {
-            return Err(crate::p1::Error::InvalidInput {
-                message: format!("Expecting -- , found: {}", line),
+            return Err(crate::p1::Error::ParseError {
+                message: format!("Expecting -- , found: {}", line,),
                 // TODO: context should be a few lines before and after the input
-                context: "".to_string(),
+                doc_id: doc_id.to_string(),
+                line_number,
             });
         }
 
@@ -73,7 +79,7 @@ impl State {
         }
 
         let line = if is_commented { &line[3..] } else { &line[2..] };
-        let (name, caption) = colon_separated_values(line)?;
+        let (name, caption) = colon_separated_values(line_number, line, doc_id)?;
 
         self.section = Some(Section {
             name,
@@ -82,6 +88,7 @@ impl State {
             body: None,
             sub_sections: Default::default(),
             is_commented,
+            line_number,
         });
 
         self.state = ParsingState::ReadingHeader;
@@ -89,27 +96,28 @@ impl State {
         Ok(())
     }
 
-    fn reading_header(&mut self, line: &str) -> Result<()> {
+    fn reading_header(&mut self, line_number: usize, line: &str, doc_id: &str) -> Result<()> {
         if line.trim().is_empty() {
             self.state = ParsingState::ReadingBody;
             return Ok(());
         }
 
         if line.starts_with("-- ") || line.starts_with("/-- ") {
-            return self.waiting_for_section(line);
+            return self.waiting_for_section(line_number, line, doc_id);
         }
 
         if line.starts_with("--- ") || line.starts_with("/--- ") {
-            return self.read_subsection(line);
+            return self.read_subsection(line_number, line, doc_id);
         }
 
         if !line.contains(':') {
-            return self.reading_body(line);
+            return self.reading_body(line_number, line, doc_id);
         }
 
-        let (name, value) = colon_separated_values(line)?;
+        let (name, value) = colon_separated_values(line_number, line, doc_id)?;
         if let Some(mut s) = self.section.take() {
             s.header.add(
+                &line_number,
                 name.as_str(),
                 value.unwrap_or_else(|| "".to_string()).as_str(),
             );
@@ -119,24 +127,25 @@ impl State {
         Ok(())
     }
 
-    fn reading_sub_header(&mut self, line: &str) -> Result<()> {
+    fn reading_sub_header(&mut self, line_number: usize, line: &str, doc_id: &str) -> Result<()> {
         let line = line.trim();
         if line.trim().is_empty() {
             self.state = ParsingState::ReadingSubSectionBody;
             return Ok(());
         }
         if line.starts_with("-- ") || line.starts_with("/-- ") {
-            return self.waiting_for_section(line);
+            return self.waiting_for_section(line_number, line, doc_id);
         }
         if line.starts_with("--- ") || line.starts_with("/--- ") {
-            return self.read_subsection(line);
+            return self.read_subsection(line_number, line, doc_id);
         }
         if !line.contains(':') {
-            return self.reading_sub_body(line);
+            return self.reading_sub_body(line_number, line, doc_id);
         }
-        let (name, value) = colon_separated_values(line)?;
+        let (name, value) = colon_separated_values(line_number, line, doc_id)?;
         if let Some(mut s) = self.sub_section.take() {
             s.header.add(
+                &line_number,
                 name.as_str(),
                 value.unwrap_or_else(|| "".to_string()).as_str(),
             );
@@ -146,15 +155,15 @@ impl State {
         Ok(())
     }
 
-    fn reading_body(&mut self, line: &str) -> Result<()> {
+    fn reading_body(&mut self, line_number: usize, line: &str, doc_id: &str) -> Result<()> {
         self.state = ParsingState::ReadingBody;
 
         if line.starts_with("-- ") || line.starts_with("/-- ") {
-            return self.waiting_for_section(line);
+            return self.waiting_for_section(line_number, line, doc_id);
         }
 
         if line.starts_with("--- ") || line.starts_with("/--- ") {
-            return self.read_subsection(line);
+            return self.read_subsection(line_number, line, doc_id);
         }
 
         let line = if line.starts_with("\\-- ") || line.starts_with("\\--- ") {
@@ -165,14 +174,14 @@ impl State {
 
         if let Some(mut s) = self.section.take() {
             // empty lines at the beginning are ignore
-            if line.trim().is_empty() && s.body.as_ref().map(|v| v.is_empty()).unwrap_or(true) {
+            if line.trim().is_empty() && s.body.as_ref().map(|v| v.1.is_empty()).unwrap_or(true) {
                 self.section = Some(s);
                 return Ok(());
             }
 
             s.body = Some(match s.body {
-                Some(ref b) => b.to_string() + line + "\n",
-                None => line.to_string() + "\n",
+                Some(ref b) => (b.0.to_owned(), b.1.to_string() + line + "\n"),
+                None => (line_number, line.to_string() + "\n"),
             });
             self.section = Some(s);
         }
@@ -180,15 +189,15 @@ impl State {
         Ok(())
     }
 
-    fn reading_sub_body(&mut self, line: &str) -> Result<()> {
+    fn reading_sub_body(&mut self, line_number: usize, line: &str, doc_id: &str) -> Result<()> {
         self.state = ParsingState::ReadingSubSectionBody;
 
         if line.starts_with("-- ") || line.starts_with("/-- ") {
-            return self.waiting_for_section(line);
+            return self.waiting_for_section(line_number, line, doc_id);
         }
 
         if line.starts_with("--- ") || line.starts_with("/--- ") {
-            return self.read_subsection(line);
+            return self.read_subsection(line_number, line, doc_id);
         }
 
         let line = if line.starts_with("\\-- ") || line.starts_with("\\--- ") {
@@ -198,14 +207,14 @@ impl State {
         };
 
         if let Some(mut s) = self.sub_section.take() {
-            if line.trim().is_empty() && s.body.as_ref().map(|v| v.is_empty()).unwrap_or(true) {
+            if line.trim().is_empty() && s.body.as_ref().map(|v| v.1.is_empty()).unwrap_or(true) {
                 self.sub_section = Some(s);
                 return Ok(());
             }
 
             s.body = Some(match s.body {
-                Some(ref b) => b.to_string() + line + "\n",
-                None => line.to_string() + "\n",
+                Some(ref b) => (b.0.to_owned(), b.1.to_string() + line + "\n"),
+                None => (line_number, line.to_string() + "\n"),
             });
             self.sub_section = Some(s);
         }
@@ -213,7 +222,7 @@ impl State {
         Ok(())
     }
 
-    fn read_subsection(&mut self, line: &str) -> Result<()> {
+    fn read_subsection(&mut self, line_number: usize, line: &str, doc_id: &str) -> Result<()> {
         if let Some(mut sub) = self.sub_section.take() {
             sub.body = to_body(sub.body.take());
             if let Some(mut s) = self.section.take() {
@@ -225,7 +234,7 @@ impl State {
         let is_commented = line.starts_with("/--- ");
 
         let line = if is_commented { &line[4..] } else { &line[3..] };
-        let (name, caption) = colon_separated_values(line)?;
+        let (name, caption) = colon_separated_values(line_number, line, doc_id)?;
 
         self.sub_section = Some(SubSection {
             name,
@@ -233,6 +242,7 @@ impl State {
             header: Default::default(),
             body: None,
             is_commented,
+            line_number,
         });
 
         self.state = ParsingState::ReadingSubsectionHeader;
@@ -256,7 +266,7 @@ impl State {
     }
 }
 
-pub fn parse(s: &str) -> Result<Vec<Section>> {
+pub fn parse(s: &str, doc_id: &str) -> Result<Vec<Section>> {
     let mut state = State {
         state: ParsingState::WaitingForSection,
         section: None,
@@ -264,7 +274,7 @@ pub fn parse(s: &str) -> Result<Vec<Section>> {
         sections: vec![],
     };
 
-    for mut line in s.split('\n') {
+    for (line_number, mut line) in s.split('\n').enumerate() {
         if line.starts_with(';') {
             continue;
         }
@@ -272,11 +282,17 @@ pub fn parse(s: &str) -> Result<Vec<Section>> {
             line = &line[1..];
         }
         match state.state {
-            ParsingState::WaitingForSection => state.waiting_for_section(line)?,
-            ParsingState::ReadingHeader => state.reading_header(line)?,
-            ParsingState::ReadingBody => state.reading_body(line)?,
-            ParsingState::ReadingSubsectionHeader => state.reading_sub_header(line)?,
-            ParsingState::ReadingSubSectionBody => state.reading_sub_body(line)?,
+            ParsingState::WaitingForSection => {
+                state.waiting_for_section(line_number, line, doc_id)?
+            }
+            ParsingState::ReadingHeader => state.reading_header(line_number, line, doc_id)?,
+            ParsingState::ReadingBody => state.reading_body(line_number, line, doc_id)?,
+            ParsingState::ReadingSubsectionHeader => {
+                state.reading_sub_header(line_number, line, doc_id)?
+            }
+            ParsingState::ReadingSubSectionBody => {
+                state.reading_sub_body(line_number, line, doc_id)?
+            }
         }
     }
 
@@ -295,7 +311,14 @@ mod test {
             p!($s, $t)
         };
         ($s:expr, $t: expr) => {
-            assert_eq!(super::parse($s).unwrap_or_else(|e| panic!("{}", e)), $t)
+            assert_eq!(
+                super::parse($s, "foo")
+                    .unwrap_or_else(|e| panic!("{}", e))
+                    .iter()
+                    .map(|v| v.without_line_number())
+                    .collect::<Vec<ftd::p1::Section>>(),
+                $t
+            )
         };
     }
 
@@ -304,7 +327,7 @@ mod test {
             f!($s, $m)
         };
         ($s:expr, $m: expr) => {
-            match super::parse($s) {
+            match super::parse($s, "foo") {
                 Ok(r) => panic!("expected failure, found: {:?}", r),
                 Err(e) => {
                     let expected = $m.trim();
@@ -858,6 +881,6 @@ mod test {
             vec![super::Section::with_name("foo").and_body("hello"),],
         );
 
-        f!("invalid", "invalid input: Expecting -- , found: invalid")
+        f!("invalid", "foo:0 -> Expecting -- , found: invalid")
     }
 }

@@ -1,21 +1,21 @@
 -- component foo:
 component: ftd.text
 text: Hello World
-color if @mouse-in: red
-background-color if @mouse-in: yellow
-size if @mouse-in: 40
+color if $MOUSE-IN: red
+background-color if $MOUSE-IN: yellow
+size if $MOUSE-IN: 40
 
 -- foo:
 
 -- component bar:
 component: ftd.row
-color if @mouse-in: red
-background-color if @mouse-in: orange
+color if $MOUSE-IN: red
+background-color if $MOUSE-IN: orange
 
 --- ftd.text: Hello
 
 --- ftd.text: World
 padding-left: 10
-if: @mouse-in
+if: $MOUSE-IN
 
 -- bar:

@@ -22,7 +22,7 @@ pub struct Node {
 
 impl Node {
     pub fn fixed_children_style(&self, index: usize) -> ftd_rt::Map {
-        if index == 0 {
+        if index == 1 {
             let mut list: ftd_rt::Map = Default::default();
             for (key, value) in self.children_style.iter() {
                 if key == "margin-left" || key == "margin-top" {
@@ -47,11 +47,11 @@ impl Node {
         }
     }
 
-    pub fn to_dnode<'a>(
-        &'a self,
+    pub fn to_dnode(
+        &self,
         style: &ftd_rt::Map,
         data: &ftd_rt::DataDependenciesMap,
-        external_children: &mut Option<&'a Vec<Self>>,
+        external_children: &mut Option<Vec<Self>>,
         external_open_id: &Option<String>,
         external_children_container: &[Vec<usize>],
         is_parent_visible: bool,
@@ -65,7 +65,7 @@ impl Node {
         };
 
         let all_children = {
-            let mut children: Vec<&ftd_rt::Node> = self.children.iter().collect();
+            let mut children: Vec<ftd_rt::Node> = self.children.to_vec();
             #[allow(clippy::blocks_in_if_conditions)]
             if let Some(ext_children) = external_children {
                 if *external_open_id
@@ -82,7 +82,16 @@ impl Node {
                     && ((self.is_visible(data) && is_parent_visible) || is_last)
                 {
                     for child in ext_children.iter() {
-                        children.push(child);
+                        if let Some(data_id) = child.attrs.get("data-id") {
+                            for child in child.children.iter() {
+                                let mut child = child.clone();
+                                child.attrs.insert(
+                                    "data-ext-id".to_string(),
+                                    format!("{}:{}", data_id, parent_id),
+                                );
+                                children.push(child);
+                            }
+                        }
                     }
                     *external_children = None;
                 }
@@ -100,11 +109,11 @@ impl Node {
         let mut ext_child = None;
         let mut is_borrowed_ext_child = false;
 
-        let ext_child: &mut Option<&Vec<Self>> = {
+        let ext_child: &mut Option<Vec<Self>> = {
             if external_children_container.is_empty() {
                 &mut ext_child
             } else if self.open_id.is_some() && !self.external_children.is_empty() {
-                ext_child = Some(&self.external_children);
+                ext_child = Some(self.external_children.clone());
                 &mut ext_child
             } else {
                 is_borrowed_ext_child = true;
@@ -160,6 +169,10 @@ impl Node {
                     (external_container, is_last)
                 };
 
+                if v.is_visible(data) {
+                    index_of_visible_children += 1;
+                }
+
                 children.push(v.to_dnode(
                     &self.fixed_children_style(index_of_visible_children),
                     data,
@@ -170,9 +183,6 @@ impl Node {
                     parent_id,
                     is_last,
                 ));
-                if v.is_visible(data) {
-                    index_of_visible_children += 1;
-                }
             }
             children
         };
@@ -202,7 +212,7 @@ impl Node {
 
         fn is_other_sibling_visible(
             index: usize,
-            all_children: &[&Node],
+            all_children: &[Node],
             ext_child_container_index: usize,
             external_children_container: &[Vec<usize>],
         ) -> bool {
@@ -245,18 +255,20 @@ impl Node {
 }
 
 impl ftd_rt::Element {
-    pub fn to_node(&self) -> Node {
+    pub fn to_node(&self, doc_id: &str) -> Node {
         match self {
-            Self::Row(i) => (i.to_node()),
-            Self::Scene(i) => (i.to_node()),
-            Self::Text(i) => (i.to_node()),
-            Self::Image(i) => (i.to_node()),
-            Self::Column(i) => (i.to_node()),
-            Self::IFrame(i) => (i.to_node()),
-            Self::Input(i) => (i.to_node()),
-            Self::Integer(i) => (i.to_node()),
-            Self::Boolean(i) => (i.to_node()),
-            Self::Decimal(i) => (i.to_node()),
+            Self::Row(i) => (i.to_node(doc_id)),
+            Self::Scene(i) => (i.to_node(doc_id)),
+            Self::Text(i) => (i.to_node(doc_id)),
+            Self::TextBlock(i) => (i.to_node(doc_id)),
+            Self::Code(i) => (i.to_node(doc_id)),
+            Self::Image(i) => (i.to_node(doc_id)),
+            Self::Column(i) => (i.to_node(doc_id)),
+            Self::IFrame(i) => (i.to_node(doc_id)),
+            Self::Input(i) => (i.to_node(doc_id)),
+            Self::Integer(i) => (i.to_node(doc_id)),
+            Self::Boolean(i) => (i.to_node(doc_id)),
+            Self::Decimal(i) => (i.to_node(doc_id)),
             Self::Null => Node {
                 condition: None,
                 events: vec![],
@@ -283,12 +295,12 @@ impl ftd_rt::Element {
 }
 
 impl Node {
-    fn from_common(node: &str, common: &ftd_rt::Common) -> Self {
+    fn from_common(node: &str, common: &ftd_rt::Common, doc_id: &str) -> Self {
         Node {
             condition: common.condition.clone(),
             node: s(node),
             attrs: common.attrs(),
-            style: common.style(),
+            style: common.style(doc_id),
             children: vec![],
             external_children: Default::default(),
             open_id: None,
@@ -302,10 +314,14 @@ impl Node {
         }
     }
 
-    fn from_container(common: &ftd_rt::Common, container: &ftd_rt::Container) -> Self {
+    fn from_container(
+        common: &ftd_rt::Common,
+        container: &ftd_rt::Container,
+        doc_id: &str,
+    ) -> Self {
         let mut attrs = common.attrs();
         attrs.extend(container.attrs());
-        let mut style = common.style();
+        let mut style = common.style(doc_id);
         style.extend(container.style());
         let mut classes = common.add_class();
         classes.extend(container.add_class());
@@ -325,7 +341,7 @@ impl Node {
                 (
                     Some(id.to_string()),
                     external_children_container.clone(),
-                    child.iter().map(|v| v.to_node()).collect(),
+                    child.iter().map(|v| v.to_node(doc_id)).collect(),
                 )
             } else {
                 (None, vec![], vec![])
@@ -340,7 +356,11 @@ impl Node {
             classes,
             children_style,
             text: None,
-            children: container.children.iter().map(|v| v.to_node()).collect(),
+            children: container
+                .children
+                .iter()
+                .map(|v| v.to_node(doc_id))
+                .collect(),
             external_children,
             open_id: id,
             external_children_container,
@@ -352,7 +372,7 @@ impl Node {
 }
 
 impl ftd_rt::Scene {
-    pub fn to_node(&self) -> Node {
+    pub fn to_node(&self, doc_id: &str) -> Node {
         let node = {
             let mut node = Node {
                 node: s("div"),
@@ -397,7 +417,7 @@ impl ftd_rt::Scene {
                     .children
                     .iter()
                     .map(|v| {
-                        let mut n = v.to_node();
+                        let mut n = v.to_node(doc_id);
                         n.style.insert(s("position"), s("absolute"));
                         n
                     })
@@ -416,7 +436,7 @@ impl ftd_rt::Scene {
                         child
                             .iter()
                             .map(|v| {
-                                let mut n = v.to_node();
+                                let mut n = v.to_node(doc_id);
                                 n.style.insert(s("position"), s("absolute"));
                                 n
                             })
@@ -434,7 +454,7 @@ impl ftd_rt::Scene {
             node
         };
 
-        let mut main_node = Node::from_common("div", &self.common);
+        let mut main_node = Node::from_common("div", &self.common, doc_id);
         if self.common.width.is_none() {
             main_node.style.insert(s("width"), s("1000px"));
         }
@@ -449,8 +469,8 @@ impl ftd_rt::Scene {
 }
 
 impl ftd_rt::Row {
-    pub fn to_node(&self) -> Node {
-        let mut n = Node::from_container(&self.common, &self.container);
+    pub fn to_node(&self, doc_id: &str) -> Node {
+        let mut n = Node::from_container(&self.common, &self.container, doc_id);
         if !self.common.is_not_visible {
             n.style.insert(s("display"), s("flex"));
         }
@@ -468,6 +488,8 @@ impl ftd_rt::Row {
         if let Some(p) = self.container.spacing {
             n.children_style
                 .insert(s("margin-left"), format!("{}px", p));
+            n.attrs
+                .insert(s("data-spacing"), format!("margin-left:{}px", p));
         }
 
         n
@@ -475,8 +497,8 @@ impl ftd_rt::Row {
 }
 
 impl ftd_rt::Column {
-    pub fn to_node(&self) -> Node {
-        let mut n = Node::from_container(&self.common, &self.container);
+    pub fn to_node(&self, doc_id: &str) -> Node {
+        let mut n = Node::from_container(&self.common, &self.container, doc_id);
         if !self.common.is_not_visible {
             n.style.insert(s("display"), s("flex"));
         }
@@ -492,6 +514,8 @@ impl ftd_rt::Column {
 
         if let Some(p) = self.container.spacing {
             n.children_style.insert(s("margin-top"), format!("{}px", p));
+            n.attrs
+                .insert(s("data-spacing"), format!("margin-top:{}px", p));
         }
 
         n
@@ -499,7 +523,7 @@ impl ftd_rt::Column {
 }
 
 impl ftd_rt::Text {
-    pub fn to_node(&self) -> Node {
+    pub fn to_node(&self, doc_id: &str) -> Node {
         // TODO: proper tag based on self.common.region
         // TODO: if format is not markdown use pre
         let node = match &self.common.link {
@@ -509,7 +533,7 @@ impl ftd_rt::Text {
                 _ => "div",
             },
         };
-        let mut n = Node::from_common(node, &self.common);
+        let mut n = Node::from_common(node, &self.common, doc_id);
         n.text = Some(self.text.rendered.clone());
         let (key, value) = text_align(&self.text_align);
         n.style.insert(s(key.as_str()), value);
@@ -548,17 +572,142 @@ impl ftd_rt::Text {
     }
 }
 
+impl ftd_rt::TextBlock {
+    pub fn to_node(&self, doc_id: &str) -> Node {
+        // TODO: proper tag based on self.common.region
+        // TODO: if format is not markdown use pre
+        let node = match &self.common.link {
+            Some(_) => "a",
+            None => match &self.common.submit {
+                Some(_) => "form",
+                _ => "div",
+            },
+        };
+        let mut n = Node::from_common(node, &self.common, doc_id);
+        n.text = Some(self.text.rendered.clone());
+        let (key, value) = text_align(&self.text_align);
+        n.style.insert(s(key.as_str()), value);
+        if let Some(p) = self.size {
+            n.style.insert(s("font-size"), format!("{}px", p));
+        }
+        if let Some(p) = self.line_height {
+            n.style.insert(s("line-height"), format!("{}px", p));
+        } else if !&self.line {
+            n.style.insert(s("line-height"), s("26px"));
+        }
+
+        if self.style.italic {
+            n.style.insert(s("font-style"), s("italic"));
+        }
+        if self.style.underline {
+            n.style.insert(s("text-decoration"), s("underline"));
+        }
+        if self.style.strike {
+            n.style.insert(s("text-decoration"), s("line-through"));
+        }
+
+        if let Some(p) = &self.line_clamp {
+            n.style.insert(s("display"), "-webkit-box".to_string());
+            n.style.insert(s("overflow"), "hidden".to_string());
+            n.style.insert(s("-webkit-line-clamp"), format!("{}", p));
+            n.style
+                .insert(s("-webkit-box-orient"), "vertical".to_string());
+        }
+
+        let (key, value) = style(&self.style.weight);
+        n.style.insert(s(key.as_str()), value);
+
+        // TODO: text styles
+        n
+    }
+}
+
+impl ftd_rt::Code {
+    pub fn to_node(&self, doc_id: &str) -> Node {
+        let node = match &self.common.link {
+            Some(_) => "a",
+            None => match &self.common.submit {
+                Some(_) => "form",
+                _ => "div",
+            },
+        };
+        let mut n = Node::from_common(node, &self.common, doc_id);
+        n.text = Some(self.text.rendered.clone());
+        let (key, value) = text_align(&self.text_align);
+        n.style.insert(s(key.as_str()), value);
+        if let Some(p) = self.size {
+            n.style.insert(s("font-size"), format!("{}px", p));
+        }
+        if let Some(p) = self.line_height {
+            n.style.insert(s("line-height"), format!("{}px", p));
+        } else {
+            n.style.insert(s("line-height"), s("26px"));
+        }
+
+        if self.style.italic {
+            n.style.insert(s("font-style"), s("italic"));
+        }
+        if self.style.underline {
+            n.style.insert(s("text-decoration"), s("underline"));
+        }
+        if self.style.strike {
+            n.style.insert(s("text-decoration"), s("line-through"));
+        }
+
+        if let Some(p) = &self.line_clamp {
+            n.style.insert(s("display"), "-webkit-box".to_string());
+            n.style.insert(s("overflow"), "hidden".to_string());
+            n.style.insert(s("-webkit-line-clamp"), format!("{}", p));
+            n.style
+                .insert(s("-webkit-box-orient"), "vertical".to_string());
+        }
+
+        let (key, value) = style(&self.style.weight);
+        n.style.insert(s(key.as_str()), value);
+        n
+    }
+}
+
 impl ftd_rt::Image {
-    pub fn to_node(&self) -> Node {
-        let mut n = Node::from_common("img", &self.common);
+    pub fn to_node(&self, doc_id: &str) -> Node {
+        let mut n = Node::from_common("img", &self.common, doc_id);
+        if self.common.link.is_some() {
+            n.node = s("a");
+            let mut img = Node {
+                condition: None,
+                events: vec![],
+                classes: vec![],
+                node: s("img"),
+                attrs: Default::default(),
+                style: Default::default(),
+                children: vec![],
+                external_children: vec![],
+                open_id: None,
+                external_children_container: vec![],
+                children_style: Default::default(),
+                text: None,
+                null: false,
+                locals: Default::default(),
+            };
+            img.style.insert(s("width"), s("100%"));
+            img.attrs.insert(s("src"), escape(self.src.as_str()));
+            img.attrs
+                .insert(s("alt"), escape(self.description.as_str()));
+            if self.crop {
+                img.style.insert(s("object-fit"), s("cover"));
+                img.style.insert(s("object-position"), s("0 0"));
+            }
+            n.children.push(img);
+        } else {
+            n.attrs.insert(s("src"), escape(self.src.as_str()));
+            n.attrs.insert(s("alt"), escape(self.description.as_str()));
+            if self.crop {
+                n.style.insert(s("object-fit"), s("cover"));
+                n.style.insert(s("object-position"), s("0 0"));
+            }
+        }
         if self.common.width == None {
             n.style.insert(s("width"), s("100%"));
-        }
-        n.attrs.insert(s("src"), escape(self.src.as_str()));
-        n.attrs.insert(s("alt"), escape(self.description.as_str()));
-        if self.crop {
-            n.style.insert(s("object-fit"), s("cover"));
-            n.style.insert(s("object-position"), s("0 0"));
         }
 
         n
@@ -566,16 +715,18 @@ impl ftd_rt::Image {
 }
 
 impl ftd_rt::IFrame {
-    pub fn to_node(&self) -> Node {
-        let mut n = Node::from_common("iframe", &self.common);
+    pub fn to_node(&self, doc_id: &str) -> Node {
+        let mut n = Node::from_common("iframe", &self.common, doc_id);
         n.attrs.insert(s("src"), escape(self.src.as_str()));
+        n.attrs.insert(s("allow"), s("fullscreen"));
+        n.attrs.insert(s("allowfullscreen"), s("allowfullscreen"));
         n
     }
 }
 
 impl ftd_rt::Input {
-    pub fn to_node(&self) -> Node {
-        let mut n = Node::from_common("input", &self.common);
+    pub fn to_node(&self, doc_id: &str) -> Node {
+        let mut n = Node::from_common("input", &self.common, doc_id);
         if let Some(ref p) = self.placeholder {
             n.attrs.insert(s("placeholder"), escape(p));
         }
@@ -593,7 +744,7 @@ impl ftd_rt::Common {
         d
     }
 
-    fn style(&self) -> ftd_rt::Map {
+    fn style(&self, doc_id: &str) -> ftd_rt::Map {
         let mut d: ftd_rt::Map = Default::default();
 
         if !self.events.is_empty() && self.cursor.is_none() {
@@ -816,6 +967,7 @@ impl ftd_rt::Common {
             &self.scale_x,
             &self.scale_y,
             &self.rotate,
+            doc_id,
         )
         .unwrap();
 
@@ -1184,18 +1336,20 @@ fn get_translate(
     scale_x: &Option<f64>,
     scale_y: &Option<f64>,
     rotate: &Option<i64>,
+    doc_id: &str,
 ) -> ftd_rt::Result<Option<String>> {
     let mut translate = match (left, right, up, down) {
         (Some(_), Some(_), Some(_), Some(_)) => {
             return ftd_rt::e(
                 "move-up, move-down, move-left and move-right all 4 can't be used at once!",
+                doc_id,
             )
         }
         (Some(_), Some(_), _, _) => {
-            return ftd_rt::e("move-left, move-right both can't be used at once!")
+            return ftd_rt::e("move-left, move-right both can't be used at once!", doc_id)
         }
         (_, _, Some(_), Some(_)) => {
-            return ftd_rt::e("move-up, move-down both can't be used at once!")
+            return ftd_rt::e("move-up, move-down both can't be used at once!", doc_id)
         }
         (Some(l), None, None, None) => Some(format!("translateX(-{}px) ", l)),
         (Some(l), None, Some(u), None) => Some(format!("translate(-{}px, -{}px) ", l, u)),

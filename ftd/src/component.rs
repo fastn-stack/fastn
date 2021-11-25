@@ -10,6 +10,7 @@ pub struct Component {
     pub condition: Option<ftd::p2::Boolean>,
     pub kernel: bool,
     pub invocations: Vec<std::collections::BTreeMap<String, crate::Value>>,
+    pub line_number: usize,
 }
 
 #[derive(Debug, Clone, PartialEq, serde::Serialize, serde::Deserialize)]
@@ -31,6 +32,24 @@ pub enum Instruction {
 }
 
 impl Instruction {
+    pub fn without_line_number(&mut self) {
+        match self {
+            Instruction::ChildComponent { child } => {
+                child.line_number = 0;
+            }
+            Instruction::Component { parent, children } => {
+                parent.line_number = 0;
+                for mut child in children {
+                    child.line_number = 0;
+                }
+            }
+            Instruction::RecursiveChildComponent { child } => {
+                child.line_number = 0;
+            }
+            _ => {}
+        };
+    }
+
     pub fn resolve_id(&self) -> Option<&str> {
         let id = match self {
             Instruction::ChildComponent { child } => child.properties.get("id"),
@@ -54,8 +73,10 @@ pub struct ChildComponent {
     pub root: String,
     pub condition: Option<ftd::p2::Boolean>,
     pub properties: std::collections::BTreeMap<String, Property>,
+    pub arguments: std::collections::BTreeMap<String, crate::p2::Kind>,
     pub events: Vec<ftd::p2::Event>,
     pub is_recursive: bool,
+    pub line_number: usize,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, serde::Serialize, serde::Deserialize)]
@@ -74,51 +95,26 @@ pub struct ElementWithContainer {
 impl Property {
     fn eval(
         &self,
+        line_number: usize,
         name: &str,
         arguments: &std::collections::BTreeMap<String, crate::Value>,
         doc: &crate::p2::TDoc,
     ) -> crate::p1::Result<&crate::PropertyValue> {
-        let mut property_value = ftd::e2(format!("{:?}", name), "condition is not complete");
+        let mut property_value = ftd::e2(
+            name.to_string(),
+            "condition is not complete",
+            doc.name.to_string(),
+            line_number,
+        );
         if let Some(property) = &self.default {
             property_value = Ok(property);
         }
         for (boolean, property) in &self.conditions {
-            if boolean.eval(arguments, doc)? {
+            if boolean.eval(line_number, arguments, doc)? {
                 property_value = Ok(property);
             }
         }
         property_value
-    }
-
-    pub fn get_property_for_loop(
-        reference: String,
-        fields: &std::collections::BTreeMap<String, crate::PropertyValue>,
-        property_title: &str,
-        property_kind: Option<&crate::p2::Kind>,
-    ) -> crate::p1::Result<Self> {
-        let kind = match property_kind {
-            Some(kind) => kind,
-            None => return crate::e(format!("{} property is not required", property_title)),
-        };
-
-        let (part_1, part_2) = ftd::p2::utils::split(reference, ".")?;
-
-        let property_value = match fields.get(&*part_2) {
-            Some(property_value) => property_value,
-            None => return crate::e(format!("{} not found", part_1)),
-        };
-
-        if !property_value.clone().kind().is_same_as(kind) {
-            return crate::e(format!(
-                "'{}' is expected to be {:?}, but its of {:?}",
-                property_title, property_kind, kind
-            ));
-        }
-
-        Ok(crate::component::Property {
-            default: Some(property_value.clone()),
-            conditions: vec![],
-        })
     }
 }
 
@@ -137,8 +133,21 @@ impl ChildComponent {
     ) -> crate::p1::Result<ElementWithContainer> {
         let id = crate::p2::utils::string_optional(
             "id",
-            &resolve_properties(&self.properties, arguments, doc, None)?,
+            &resolve_properties(self.line_number, &self.properties, arguments, doc, None)?,
+            doc.name,
+            self.line_number,
         )?;
+
+        let string_container: String = local_container
+            .iter()
+            .map(|v| v.to_string())
+            .collect::<Vec<String>>()
+            .join(",");
+
+        for k in self.arguments.keys() {
+            all_locals.insert(k.to_string(), string_container.to_string());
+        }
+
         let ElementWithContainer {
             mut element,
             child_container,
@@ -155,6 +164,18 @@ impl ChildComponent {
         )?;
         element.set_container_id(id.clone());
         element.set_element_id(id);
+
+        if let Some(common) = element.get_mut_common() {
+            for (k, v) in &self.arguments {
+                if let Ok(v) = v.to_value(self.line_number, doc.name) {
+                    if let Some(v) = v.to_string() {
+                        common
+                            .locals
+                            .insert(format!("{}@{}", k, string_container), v.to_string());
+                    }
+                }
+            }
+        }
 
         let mut container_children = vec![];
         match (&mut element, children.is_empty()) {
@@ -189,17 +210,33 @@ impl ChildComponent {
                 container_children.extend(elements);
             }
             (ftd_rt::Element::Null, false) => {
-                let mut root = doc.get_component(self.root.as_str()).unwrap();
+                let mut root = doc
+                    .get_component(self.line_number, self.root.as_str())
+                    .unwrap();
                 while root.root != "ftd.kernel" {
-                    root = doc.get_component(self.root.as_str()).unwrap();
+                    root = doc
+                        .get_component(self.line_number, self.root.as_str())
+                        .unwrap();
                 }
                 match root.full_name.as_str() {
                     "ftd#row" | "ftd#column" | "ftd#scene" => {}
-                    t => return crate::e2(format!("{:?}", t), "cant have children"),
+                    t => {
+                        return ftd::e2(
+                            t,
+                            "cant have children",
+                            doc.name.to_string(),
+                            self.line_number,
+                        )
+                    }
                 }
             }
             (t, false) => {
-                return crate::e2(format!("{:?}", t), "cant have children");
+                return ftd::e2(
+                    format!("{:?}", t),
+                    "cant have children",
+                    doc.name.to_string(),
+                    self.line_number,
+                );
             }
             (_, true) => {}
         }
@@ -226,11 +263,16 @@ impl ChildComponent {
         let root = {
             // NOTE: doing unwrap to force bug report if we following fails, this function
             // must have validated everything, and must not fail at run time
-            doc.get_component_with_root(self.root.as_str(), root_name)
+            doc.get_component_with_root(self.line_number, self.root.as_str(), root_name)
                 .unwrap()
         };
-        let loop_property =
-            resolve_recursive_property(&self.properties, arguments, doc, root_name)?;
+        let loop_property = resolve_recursive_property(
+            self.line_number,
+            &self.properties,
+            arguments,
+            doc,
+            root_name,
+        )?;
         let mut elements = vec![];
 
         if let crate::Value::List { data, .. } = loop_property {
@@ -238,10 +280,16 @@ impl ChildComponent {
                 let mut new_arguments: std::collections::BTreeMap<String, crate::Value> =
                     arguments.clone();
                 new_arguments.insert("$loop$".to_string(), d.clone());
-                let new_properties =
-                    resolve_properties_with_ref(&self.properties, &new_arguments, doc, root_name)?;
+                let new_properties = resolve_properties_with_ref(
+                    self.line_number,
+                    &self.properties,
+                    &new_arguments,
+                    doc,
+                    root_name,
+                )?;
                 let mut temp_locals: ftd_rt::Map = Default::default();
                 let conditional_attribute = get_conditional_attributes(
+                    self.line_number,
                     &self.properties,
                     &new_arguments,
                     doc,
@@ -258,9 +306,9 @@ impl ChildComponent {
                 let is_visible = {
                     let mut visible = true;
                     if let Some(ref b) = self.condition {
-                        if b.is_constant() && !b.eval(&new_arguments, doc)? {
+                        if b.is_constant() && !b.eval(self.line_number, &new_arguments, doc)? {
                             visible = false;
-                            if let Ok(true) = b.set_null() {
+                            if let Ok(true) = b.set_null(self.line_number, doc.name) {
                                 elements.push(ElementWithContainer {
                                     element: ftd_rt::Element::Null,
                                     children: vec![],
@@ -273,22 +321,37 @@ impl ChildComponent {
                     visible
                 };
 
+                let mut all_old_locals = all_locals.clone();
+
                 let mut element = root.call(
                     &new_properties,
                     doc,
                     invocations,
-                    &self.condition,
+                    &None,
                     is_child,
-                    doc.get_root(self.root.as_str())?.or(root_name),
+                    doc.get_root(self.root.as_str(), self.line_number)?
+                        .or(root_name),
                     &self.events,
-                    all_locals,
+                    &mut all_old_locals,
                     local_container.as_slice(),
                     None,
                 )?;
 
                 if let Some(condition) = &self.condition {
+                    element.element.set_non_visibility(!condition.eval(
+                        self.line_number,
+                        &new_arguments,
+                        doc,
+                    )?);
                     element.element.set_condition(
-                        condition.to_condition(all_locals, &Default::default()).ok(),
+                        condition
+                            .to_condition(
+                                self.line_number,
+                                all_locals,
+                                &Default::default(),
+                                doc.name,
+                            )
+                            .ok(),
                     );
                 }
                 if !is_visible {
@@ -317,43 +380,52 @@ impl ChildComponent {
         local_container: &[usize],
         id: Option<String>,
     ) -> crate::p1::Result<ElementWithContainer> {
-        let is_visible = {
-            let mut visible = true;
-            if let Some(ref b) = self.condition {
-                visible = b.eval(arguments, doc)?;
-                if b.is_constant() && !visible {
-                    if let Ok(true) = b.set_null() {
-                        return Ok(ElementWithContainer {
-                            element: ftd_rt::Element::Null,
-                            children: vec![],
-                            child_container: None,
-                        });
-                    }
+        if let Some(ref b) = self.condition {
+            if b.is_constant() && !b.eval(self.line_number, arguments, doc)? {
+                if let Ok(true) = b.set_null(self.line_number, doc.name) {
+                    return Ok(ElementWithContainer {
+                        element: ftd_rt::Element::Null,
+                        children: vec![],
+                        child_container: None,
+                    });
                 }
             }
-            visible
-        };
+        }
 
         let root = {
             // NOTE: doing unwrap to force bug report if we following fails, this function
             // must have validated everything, and must not fail at run time
-            doc.get_component(self.root.as_str()).unwrap()
+            doc.get_component(self.line_number, self.root.as_str())
+                .unwrap()
         };
 
         let root_properties = {
-            let mut root_properties =
-                resolve_properties_with_ref(&self.properties, arguments, doc, root_name)?;
+            let mut root_properties = resolve_properties_with_ref(
+                self.line_number,
+                &self.properties,
+                arguments,
+                doc,
+                root_name,
+            )?;
             //pass argument of component to its children
             for (k, v) in arguments {
-                if !root_properties.contains_key(k) {
+                root_properties.insert(format!("${}", k), (v.to_owned(), None));
+            }
+            for (k, v) in &self.arguments {
+                if let Ok(v) = v.to_value(self.line_number, doc.name) {
                     root_properties.insert(format!("${}", k), (v.to_owned(), None));
                 }
             }
             root_properties
         };
 
-        let conditional_attribute =
-            get_conditional_attributes(&self.properties, arguments, doc, all_locals)?;
+        let conditional_attribute = get_conditional_attributes(
+            self.line_number,
+            &self.properties,
+            arguments,
+            doc,
+            all_locals,
+        )?;
 
         let mut element = root.call(
             &root_properties,
@@ -361,21 +433,13 @@ impl ChildComponent {
             invocations,
             &self.condition,
             is_child,
-            doc.get_root(self.root.as_str())?,
+            doc.get_root(self.root.as_str(), self.line_number)?,
             &self.events,
             all_locals,
             local_container,
             id,
         )?;
 
-        if let Some(condition) = &self.condition {
-            element
-                .element
-                .set_condition(condition.to_condition(all_locals, &Default::default()).ok());
-        }
-        if !is_visible {
-            element.element.set_non_visibility(!is_visible);
-        }
         if let Some(common) = element.element.get_mut_common() {
             common.conditional_attribute.extend(conditional_attribute);
         }
@@ -384,68 +448,87 @@ impl ChildComponent {
     }
 
     pub fn from_p1(
+        line_number: usize,
         name: &str,
         p1: &crate::p1::Header,
         caption: &Option<String>,
-        body: &Option<String>,
+        body: &Option<(usize, String)>,
         doc: &crate::p2::TDoc,
         arguments: &std::collections::BTreeMap<String, crate::p2::Kind>,
-        locals: &std::collections::BTreeMap<String, crate::p2::Kind>,
     ) -> crate::p1::Result<Self> {
-        let root = doc.get_component(name)?;
+        let root = doc.get_component(line_number, name)?;
         let mut root_arguments = root.arguments;
-        assert_no_extra_properties(p1, root.full_name.as_str(), &root_arguments, name)?;
-        let root_property = get_root_property(name, caption, doc);
+        assert_no_extra_properties(
+            line_number,
+            p1,
+            root.full_name.as_str(),
+            &root_arguments,
+            name,
+            doc.name,
+        )?;
+        let (local_arguments, inherits) = read_arguments(p1, name, &root_arguments, doc)?;
+
+        let mut all_arguments = local_arguments.clone();
+        all_arguments.extend(arguments.clone());
+
+        let root_property =
+            get_root_property(line_number, name, caption, doc, &all_arguments, inherits)?;
+
         return Ok(Self {
+            line_number,
             properties: read_properties(
+                line_number,
                 p1,
                 caption,
                 body,
                 "",
                 root.full_name.as_str(),
                 &mut root_arguments,
-                arguments,
-                locals,
+                &all_arguments,
                 doc,
                 &root_property,
             )?,
-            condition: match p1.str_optional("if")? {
+            condition: match p1.str_optional(doc.name.to_string(), line_number, "if")? {
                 Some(expr) => Some(crate::p2::Boolean::from_expression(
                     expr,
                     doc,
-                    arguments,
-                    locals,
+                    &all_arguments,
                     (None, None),
+                    line_number,
                 )?),
                 None => None,
             },
             root: root.full_name.clone(),
-            events: p1.get_events(doc, locals, arguments)?,
+            events: p1.get_events(line_number, doc, &all_arguments)?,
             is_recursive: false,
+            arguments: local_arguments,
         });
 
         fn get_root_property(
+            line_number: usize,
             name: &str,
             caption: &Option<String>,
             doc: &ftd::p2::TDoc,
-        ) -> std::collections::BTreeMap<String, Property> {
-            let mut properties: std::collections::BTreeMap<String, Property> = Default::default();
+            arguments: &std::collections::BTreeMap<String, crate::p2::Kind>,
+            inherits: Vec<String>,
+        ) -> ftd::p1::Result<std::collections::BTreeMap<String, Property>> {
+            let mut properties: std::collections::BTreeMap<String, Property> =
+                root_properties_from_inherits(line_number, arguments, inherits, doc)?;
             if let Some(caption) = caption {
-                if let Ok(name) = doc.resolve_name(name) {
+                if let Ok(name) = doc.resolve_name(line_number, name) {
                     let kind = match name.as_str() {
                         "ftd#integer" => ftd::p2::Kind::integer(),
                         "ftd#boolean" => ftd::p2::Kind::boolean(),
                         "ftd#decimal" => ftd::p2::Kind::decimal(),
-                        _ => return properties,
+                        _ => return Ok(properties),
                     };
                     if let Ok(property_value) = ftd::PropertyValue::resolve_value(
+                        line_number,
                         caption,
                         Some(kind),
                         doc,
-                        &Default::default(),
-                        &Default::default(),
+                        arguments,
                         None,
-                        true,
                     ) {
                         properties.insert(
                             "value".to_string(),
@@ -457,29 +540,33 @@ impl ChildComponent {
                     }
                 }
             }
-            properties
+            Ok(properties)
         }
     }
 }
 
 fn resolve_recursive_property(
+    line_number: usize,
     self_properties: &std::collections::BTreeMap<String, Property>,
     arguments: &std::collections::BTreeMap<String, crate::Value>,
     doc: &crate::p2::TDoc,
     root_name: Option<&str>,
 ) -> crate::p1::Result<crate::Value> {
     if let Some(value) = self_properties.get("$loop$") {
-        if let Ok(property_value) = value.eval("$loop$", arguments, doc) {
-            return property_value.resolve_with_root(arguments, doc, root_name);
+        if let Ok(property_value) = value.eval(line_number, "$loop$", arguments, doc) {
+            return property_value.resolve_with_root(line_number, arguments, doc, root_name);
         }
     }
-    crate::e(format!(
-        "$loop$ not found in properties {:?}",
-        self_properties
-    ))
+    ftd::e2(
+        format!("$loop$ not found in properties {:?}", self_properties),
+        doc.name,
+        doc.name.to_string(),
+        line_number,
+    )
 }
 
 pub fn resolve_properties(
+    line_number: usize,
     self_properties: &std::collections::BTreeMap<String, Property>,
     arguments: &std::collections::BTreeMap<String, crate::Value>,
     doc: &crate::p2::TDoc,
@@ -490,10 +577,10 @@ pub fn resolve_properties(
         if name == "$loop$" {
             continue;
         }
-        if let Ok(property_value) = value.eval(name, arguments, doc) {
+        if let Ok(property_value) = value.eval(line_number, name, arguments, doc) {
             properties.insert(
                 name.to_string(),
-                property_value.resolve_with_root(arguments, doc, root_name)?,
+                property_value.resolve_with_root(line_number, arguments, doc, root_name)?,
             );
         }
     }
@@ -501,6 +588,7 @@ pub fn resolve_properties(
 }
 
 fn get_conditional_attributes(
+    line_number: usize,
     properties: &std::collections::BTreeMap<String, Property>,
     arguments: &std::collections::BTreeMap<String, crate::Value>,
     doc: &crate::p2::TDoc,
@@ -531,6 +619,10 @@ fn get_conditional_attributes(
     dictionary.insert(
         "border-top".to_string(),
         vec!["border-top-width".to_string()],
+    );
+    dictionary.insert(
+        "background-parallax".to_string(),
+        vec!["background-attachment".to_string()],
     );
     dictionary.insert("size".to_string(), vec!["font-size".to_string()]);
     dictionary.insert(
@@ -578,17 +670,22 @@ fn get_conditional_attributes(
                 let mut conditions_with_value = vec![];
                 for (condition, pv) in &value.conditions {
                     if !condition.is_arg_constant() {
-                        let cond = condition.to_condition(all_locals, &Default::default())?;
-                        let value = pv.resolve(arguments, doc)?;
-                        let string = get_string_value(&name, value)?;
+                        let cond = condition.to_condition(
+                            line_number,
+                            all_locals,
+                            &Default::default(),
+                            doc.name,
+                        )?;
+                        let value = pv.resolve(line_number, arguments, doc)?;
+                        let string = get_string_value(&name, value, doc.name, line_number)?;
                         conditions_with_value.push((cond, string));
                     }
                 }
                 let default = {
                     let mut default = None;
                     if let Some(pv) = &value.default {
-                        let value = pv.resolve(arguments, doc)?;
-                        let string = get_string_value(&name, value)?;
+                        let value = pv.resolve(line_number, arguments, doc)?;
+                        let string = get_string_value(&name, value, doc.name, line_number)?;
                         default = Some(string);
                     }
                     default
@@ -618,6 +715,8 @@ fn get_conditional_attributes(
     fn get_string_value(
         name: &str,
         value: ftd::Value,
+        doc_id: &str,
+        line_number: usize,
     ) -> ftd::p1::Result<ftd_rt::ConditionalValue> {
         let style_integer = vec![
             "padding",
@@ -638,6 +737,7 @@ fn get_conditional_attributes(
             "shadow-size",
             "shadow-blur",
             "font-size",
+            "border-width",
         ];
 
         let style_length = vec![
@@ -662,7 +762,11 @@ fn get_conditional_attributes(
             "border-bottom-right-radius",
         ];
 
+        let style_string = vec!["cursor", "position", "align", "background-image"];
+
         let style_overflow = vec!["overflow-x", "overflow-y"];
+
+        let style_boolean = vec!["background-repeat"];
 
         Ok(if style_integer.contains(&name) {
             match value {
@@ -670,7 +774,14 @@ fn get_conditional_attributes(
                     value: format!("{}px", v),
                     important: false,
                 },
-                v => return ftd::e2(format!("expected int, found: {:?}", v), "int_optional"),
+                v => {
+                    return ftd::e2(
+                        format!("expected int, found: {:?}", v),
+                        "int_optional",
+                        doc_id.to_string(),
+                        line_number,
+                    )
+                }
             }
         } else if style_integer_important.contains(&name) {
             match value {
@@ -678,39 +789,93 @@ fn get_conditional_attributes(
                     value: format!("{}px", v),
                     important: true,
                 },
-                v => return ftd::e2(format!("expected int, found: {:?}", v), "int_optional"),
+                v => {
+                    return ftd::e2(
+                        format!("expected int, found: {:?}", v),
+                        "int_optional",
+                        doc_id.to_string(),
+                        line_number,
+                    )
+                }
             }
         } else if style_length.contains(&name) {
             match value {
                 ftd::Value::String { text: v, .. } => ftd_rt::ConditionalValue {
-                    value: ftd_rt::length(&ftd_rt::Length::from(Some(v))?.unwrap(), name).1,
+                    value: ftd_rt::length(&ftd_rt::Length::from(Some(v), doc_id)?.unwrap(), name).1,
                     important: false,
                 },
-                v => return ftd::e2(format!("expected string, found: {:?}", v), "string"),
+                v => {
+                    return ftd::e2(
+                        format!("expected string, found: {:?}", v),
+                        "string",
+                        doc_id.to_string(),
+                        line_number,
+                    )
+                }
             }
         } else if style_color.contains(&name) {
             match value {
                 ftd::Value::String { text: v, .. } => ftd_rt::ConditionalValue {
-                    value: ftd_rt::color(&ftd::p2::element::color_from(Some(v))?.unwrap()),
+                    value: ftd_rt::color(&ftd::p2::element::color_from(Some(v), doc_id)?.unwrap()),
                     important: false,
                 },
-                v => return ftd::e2(format!("expected string, found: {:?}", v), "string"),
+                v => {
+                    return ftd::e2(
+                        format!("expected string, found: {:?}", v),
+                        "string",
+                        doc_id.to_string(),
+                        line_number,
+                    )
+                }
             }
         } else if style_overflow.contains(&name) {
             match value {
                 ftd::Value::String { text: v, .. } => ftd_rt::ConditionalValue {
-                    value: ftd_rt::overflow(&ftd_rt::Overflow::from(Some(v))?.unwrap(), name).1,
+                    value: ftd_rt::overflow(
+                        &ftd_rt::Overflow::from(Some(v), doc_id)?.unwrap(),
+                        name,
+                    )
+                    .1,
                     important: false,
                 },
-                v => return ftd::e2(format!("expected string, found: {:?}", v), "string"),
+                v => {
+                    return ftd::e2(
+                        format!("expected string, found: {:?}", v),
+                        "string",
+                        doc_id.to_string(),
+                        line_number,
+                    )
+                }
             }
-        } else if name.eq("cursor") {
+        } else if style_string.contains(&name) {
             match value {
                 ftd::Value::String { text: v, .. } => ftd_rt::ConditionalValue {
                     value: v,
                     important: false,
                 },
-                v => return ftd::e2(format!("expected string, found: {:?}", v), "string"),
+                v => {
+                    return ftd::e2(
+                        format!("expected string, found: {:?}", v),
+                        "string",
+                        doc_id.to_string(),
+                        line_number,
+                    )
+                }
+            }
+        } else if style_boolean.contains(&name) {
+            match value {
+                ftd::Value::Boolean { value: v } => ftd_rt::ConditionalValue {
+                    value: v.to_string(),
+                    important: false,
+                },
+                v => {
+                    return ftd::e2(
+                        format!("expected string, found: {:?}", v),
+                        "string",
+                        doc_id.to_string(),
+                        line_number,
+                    )
+                }
             }
         } else if name.eq("sticky") {
             match value {
@@ -718,15 +883,29 @@ fn get_conditional_attributes(
                     value: { if v { "sticky" } else { "inherit" }.to_string() },
                     important: false,
                 },
-                v => return ftd::e2(format!("expected boolean, found: {:?}", v), "boolean"),
+                v => {
+                    return ftd::e2(
+                        format!("expected boolean, found: {:?}", v),
+                        "boolean",
+                        doc_id.to_string(),
+                        line_number,
+                    )
+                }
             }
-        } else if name.eq("position") || name.eq("align") {
+        } else if name.eq("background-attachment") {
             match value {
-                ftd::Value::String { text: v, .. } => ftd_rt::ConditionalValue {
-                    value: v,
+                ftd::Value::Boolean { value: v } => ftd_rt::ConditionalValue {
+                    value: { if v { "fixed" } else { "inherit" }.to_string() },
                     important: false,
                 },
-                v => return ftd::e2(format!("expected string, found: {:?}", v), "string"),
+                v => {
+                    return ftd::e2(
+                        format!("expected boolean, found: {:?}", v),
+                        "boolean",
+                        doc_id.to_string(),
+                        line_number,
+                    )
+                }
             }
         } else if name.eq("line-clamp") {
             match value {
@@ -734,18 +913,28 @@ fn get_conditional_attributes(
                     value: v.to_string(),
                     important: false,
                 },
-                v => return ftd::e2(format!("expected int, found: {:?}", v), "int_optional"),
+                v => {
+                    return ftd::e2(
+                        format!("expected int, found: {:?}", v),
+                        "int_optional",
+                        doc_id.to_string(),
+                        line_number,
+                    )
+                }
             }
         } else {
             return ftd::e2(
                 format!("unknown style name: `{}` value:`{:?}`", name, value),
                 "get_string_value",
+                doc_id.to_string(),
+                line_number,
             );
         })
     }
 }
 
 fn resolve_properties_with_ref(
+    line_number: usize,
     self_properties: &std::collections::BTreeMap<String, Property>,
     arguments: &std::collections::BTreeMap<String, crate::Value>,
     doc: &crate::p2::TDoc,
@@ -757,16 +946,16 @@ fn resolve_properties_with_ref(
         if name == "$loop$" {
             continue;
         }
-        if let Ok(property_value) = value.eval(name, arguments, doc) {
+        if let Ok(property_value) = value.eval(line_number, name, arguments, doc) {
             let reference = match property_value {
                 ftd::PropertyValue::Reference { name, .. } => Some(name.to_string()),
-                ftd::PropertyValue::LocalVariable { name, .. } => Some(format!("@{}", name)),
+                ftd::PropertyValue::Variable { name, .. } => Some(format!("@{}", name)),
                 _ => None,
             };
             properties.insert(
                 name.to_string(),
                 (
-                    property_value.resolve_with_root(arguments, doc, root_name)?,
+                    property_value.resolve_with_root(line_number, arguments, doc, root_name)?,
                     reference,
                 ),
             );
@@ -814,22 +1003,33 @@ impl Component {
     }
 
     pub fn from_p1(p1: &crate::p1::Section, doc: &crate::p2::TDoc) -> crate::p1::Result<Self> {
-        let name = ftd_rt::get_name("component", p1.name.as_str())?.to_string();
-        let root = p1.header.string("component")?;
-        let root_component = doc.get_component(root.as_str())?;
+        let name = ftd_rt::get_name("component", p1.name.as_str(), doc.name)?.to_string();
+        let root = p1
+            .header
+            .string(doc.name.to_string(), p1.line_number, "component")?;
+        let root_component = doc.get_component(p1.line_number, root.as_str())?;
         let mut root_arguments = root_component.arguments.clone();
         let (arguments, inherits) =
             read_arguments(&p1.header, root.as_str(), &root_arguments, doc)?;
-        let locals = read_locals(&p1.header, doc)?;
 
-        assert_no_extra_properties(&p1.header, root.as_str(), &root_arguments, &p1.name)?;
+        assert_no_extra_properties(
+            p1.line_number,
+            &p1.header,
+            root.as_str(),
+            &root_arguments,
+            &p1.name,
+            doc.name,
+        )?;
         let mut instructions: Vec<Instruction> = Default::default();
 
         for sub in p1.sub_sections.0.iter() {
             if sub.is_commented {
                 continue;
             }
-            if let Ok(loop_data) = sub.header.str("$loop$") {
+            if let Ok(loop_data) = sub
+                .header
+                .str(doc.name.to_string(), p1.line_number, "$loop$")
+            {
                 instructions.push(Instruction::RecursiveChildComponent {
                     child: recursive_child_component(
                         loop_data,
@@ -837,7 +1037,6 @@ impl Component {
                         doc,
                         &arguments,
                         Some((name.to_string(), root_component.to_owned())),
-                        &locals,
                     )?,
                 });
                 continue;
@@ -845,38 +1044,45 @@ impl Component {
 
             instructions.push(if sub.name == "container" {
                 Instruction::ChangeContainer {
-                    name: doc.resolve_name_without_full_path(sub.caption()?.as_str())?,
+                    name: doc.resolve_name_without_full_path(
+                        sub.line_number,
+                        sub.caption(doc.name)?.as_str(),
+                    )?,
                 }
             } else {
                 let s = ChildComponent::from_p1(
+                    sub.line_number,
                     sub.name.as_str(),
                     &sub.header,
                     &sub.caption,
                     &sub.body_without_comment(),
                     doc,
                     &arguments,
-                    &locals,
                 )?;
                 Instruction::ChildComponent { child: s }
             });
         }
 
-        let condition = match p1.header.str_optional("if")? {
+        let condition = match p1
+            .header
+            .str_optional(doc.name.to_string(), p1.line_number, "if")?
+        {
             Some(expr) => Some(crate::p2::Boolean::from_expression(
                 expr,
                 doc,
                 &arguments,
-                &locals,
                 (None, None),
+                p1.line_number,
             )?),
             None => None,
         };
 
-        let events = p1.header.get_events(doc, &locals, &arguments)?;
+        let events = p1.header.get_events(p1.line_number, doc, &arguments)?;
 
         return Ok(Component {
-            full_name: doc.resolve_name(&name)?,
+            full_name: doc.resolve_name(p1.line_number, &name)?,
             properties: read_properties(
+                p1.line_number,
                 &p1.header,
                 &p1.caption,
                 &p1.body_without_comment(),
@@ -884,47 +1090,19 @@ impl Component {
                 root.as_str(),
                 &mut root_arguments,
                 &arguments,
-                &locals,
                 doc,
-                &root_properties_from_inherits(&arguments, inherits, doc)?,
+                &root_properties_from_inherits(p1.line_number, &arguments, inherits, doc)?,
             )?,
             arguments,
-            locals,
+            locals: Default::default(),
             root,
             instructions,
             kernel: false,
             invocations: Default::default(),
             condition,
             events,
+            line_number: p1.line_number,
         });
-
-        fn root_properties_from_inherits(
-            arguments: &std::collections::BTreeMap<String, crate::p2::Kind>,
-            inherits: Vec<String>,
-            doc: &crate::p2::TDoc,
-        ) -> ftd::p1::Result<std::collections::BTreeMap<String, Property>> {
-            let mut root_properties: std::collections::BTreeMap<String, Property> =
-                Default::default();
-            for inherit in inherits {
-                let pv = ftd::PropertyValue::resolve_value(
-                    &format!("${}", inherit),
-                    None,
-                    doc,
-                    arguments,
-                    &Default::default(),
-                    None,
-                    false,
-                )?;
-                root_properties.insert(
-                    inherit,
-                    Property {
-                        default: Some(pv),
-                        conditions: vec![],
-                    },
-                );
-            }
-            Ok(root_properties)
-        }
     }
 
     #[allow(clippy::too_many_arguments)]
@@ -944,14 +1122,33 @@ impl Component {
         local_container: &[usize],
         id: Option<String>,
     ) -> crate::p1::Result<ElementWithContainer> {
-        let argument = ftd::p2::utils::properties(arguments);
+        let property = {
+            //remove arguments
+            let mut properties_without_arguments: std::collections::BTreeMap<String, crate::Value> =
+                Default::default();
+            for (k, v) in &ftd::p2::utils::properties(arguments) {
+                if k.starts_with('$') {
+                    continue;
+                }
+                properties_without_arguments.insert(k.to_string(), v.to_owned());
+            }
+            properties_without_arguments
+        };
         invocations
             .entry(self.full_name.clone())
             .or_default()
-            .push(argument.to_owned());
+            .push(property.to_owned());
         if self.root == "ftd.kernel" {
             let element = match self.full_name.as_str() {
                 "ftd#text" => ftd_rt::Element::Text(ftd::p2::element::text_from_properties(
+                    arguments, doc, condition, is_child, events, all_locals, root_name,
+                )?),
+                "ftd#text-block" => {
+                    ftd_rt::Element::TextBlock(ftd::p2::element::text_block_from_properties(
+                        arguments, doc, condition, is_child, events, all_locals, root_name,
+                    )?)
+                }
+                "ftd#code" => ftd_rt::Element::Code(ftd::p2::element::code_from_properties(
                     arguments, doc, condition, is_child, events, all_locals, root_name,
                 )?),
                 "ftd#image" => ftd_rt::Element::Image(ftd::p2::element::image_from_properties(
@@ -998,71 +1195,126 @@ impl Component {
             let root = {
                 // NOTE: doing unwrap to force bug report if we following fails, this function
                 // must have validated everything, and must not fail at run time
-                doc.get_component(self.root.as_str()).unwrap()
+                doc.get_component(self.line_number, self.root.as_str())
+                    .unwrap()
             };
             let arguments = ftd::p2::utils::properties(arguments);
             let root_properties = {
-                let mut properties =
-                    resolve_properties_with_ref(&self.properties, &argument, doc, root_name)?;
-                update_properties(&mut properties, &argument);
+                let mut properties = resolve_properties_with_ref(
+                    self.line_number,
+                    &self.properties,
+                    &property,
+                    doc,
+                    root_name,
+                )?;
+                update_properties(&mut properties, &property, &self.arguments);
                 properties
             };
 
-            let mut element = root
-                .call(
-                    &root_properties,
-                    doc,
-                    invocations,
-                    condition,
-                    is_child,
-                    root_name,
-                    events,
-                    all_locals,
-                    local_container,
-                    None,
-                )?
-                .element;
-
-            let local_string_container: String = local_container
+            let string_container: String = local_container
                 .iter()
                 .map(|v| v.to_string())
                 .collect::<Vec<String>>()
                 .join(",");
 
-            let mut all_locals: ftd_rt::Map = Default::default();
+            let mut all_new_locals: ftd_rt::Map = self.get_locals_map(&string_container);
 
-            self.get_locals_map(&local_string_container, &mut all_locals);
-
-            if condition.is_none() {
-                let mut is_visible = true;
-                element.set_condition({
-                    match &self.condition {
-                        Some(c) => {
-                            if !c.eval(&arguments, doc)? {
-                                is_visible = false;
-                            }
-                            if !c.is_arg_constant() {
-                                Some(c.to_condition(&mut all_locals, &arguments)?)
-                            } else {
-                                None
+            let (get_condition, is_visible, is_null_element) = match condition {
+                Some(c) => {
+                    let arguments = {
+                        //remove properties
+                        let mut arguments_without_properties: std::collections::BTreeMap<
+                            String,
+                            crate::Value,
+                        > = Default::default();
+                        for (k, v) in &arguments {
+                            if let Some(k) = k.strip_prefix('$') {
+                                arguments_without_properties.insert(k.to_string(), v.to_owned());
                             }
                         }
-                        _ => None,
+                        arguments_without_properties
+                    };
+                    let is_visible = c.eval(self.line_number, &arguments, doc)?;
+                    if !c.is_arg_constant() {
+                        (
+                            Some(c.to_condition(
+                                self.line_number,
+                                all_locals,
+                                &arguments,
+                                doc.name,
+                            )?),
+                            is_visible,
+                            false,
+                        )
+                    } else {
+                        (
+                            None,
+                            is_visible,
+                            !is_visible
+                                && c.set_null(self.line_number, doc.name).is_ok()
+                                && c.set_null(self.line_number, doc.name)?,
+                        )
                     }
-                });
+                }
+                _ => (None, true, false),
+            };
+
+            let events = ftd::p2::Event::get_events(
+                self.line_number,
+                events,
+                all_locals,
+                &arguments,
+                doc,
+                root_name,
+            )?;
+
+            // let mut all_locals = all_locals.clone();
+            all_locals.extend(all_new_locals.clone());
+
+            let mut element = if !is_null_element {
+                root.call(
+                    &root_properties,
+                    doc,
+                    invocations,
+                    &self.condition,
+                    is_child,
+                    root_name,
+                    &self.events,
+                    /*&mut */ all_locals,
+                    local_container,
+                    None,
+                )?
+            } else {
+                ElementWithContainer {
+                    element: ftd_rt::Element::Null,
+                    children: vec![],
+                    child_container: None,
+                }
+            }
+            .element;
+
+            if get_condition.is_some() {
+                let mut is_visible = is_visible;
+                if let Some(common) = element.get_common() {
+                    is_visible &= !common.is_not_visible;
+                }
+                element.set_condition(get_condition);
                 element.set_non_visibility(!is_visible);
             }
 
-            let conditional_attribute =
-                get_conditional_attributes(&self.properties, &argument, doc, &mut all_locals)?;
-
-            if let Some(common) = element.get_mut_common() {
-                common.conditional_attribute.extend(conditional_attribute);
-            }
+            let conditional_attribute = get_conditional_attributes(
+                self.line_number,
+                &self.properties,
+                &property,
+                doc,
+                &mut all_new_locals,
+            )?;
 
             let mut containers = None;
             match &mut element {
                 ftd_rt::Element::Text(_)
+                | ftd_rt::Element::TextBlock(_)
+                | ftd_rt::Element::Code(_)
                 | ftd_rt::Element::Image(_)
                 | ftd_rt::Element::IFrame(_)
                 | ftd_rt::Element::Input(_)
@@ -1084,12 +1336,12 @@ impl Component {
                         child_container,
                         ..
                     } = self.call_sub_functions(
-                        &argument,
+                        &property,
                         doc,
                         invocations,
                         root_name,
                         local_container,
-                        &mut all_locals,
+                        &mut all_new_locals,
                         id,
                     )?;
                     containers = child_container;
@@ -1097,16 +1349,19 @@ impl Component {
                 }
             }
 
-            element.set_locals(self.get_all_locals(&local_string_container, &all_locals)?);
-
-            element.set_events(&mut ftd::p2::Event::get_events(
-                &self.events,
-                &mut all_locals,
+            element.set_locals(self.get_all_locals(
+                &all_new_locals,
                 &arguments,
-                doc,
-                root_name,
-                true,
+                &string_container,
             )?);
+
+            if let Some(common) = element.get_mut_common() {
+                common.conditional_attribute.extend(conditional_attribute);
+                common.events.extend(events);
+                common
+                    .events
+                    .extend(ftd::p2::Event::mouse_event(&mut all_new_locals)?);
+            }
 
             Ok(ElementWithContainer {
                 element,
@@ -1118,35 +1373,51 @@ impl Component {
 
     fn get_all_locals(
         &self,
-        string_container: &str,
         all_locals: &ftd_rt::Map,
+        arguments: &std::collections::BTreeMap<String, crate::Value>,
+        string_container: &str,
     ) -> crate::p1::Result<ftd_rt::Map> {
         let mut locals: ftd_rt::Map = Default::default();
 
-        for (k, v) in &self.locals {
-            let value = match v {
-                ftd::p2::Kind::String { default: Some(d), .. } |
-                ftd::p2::Kind::Integer { default: Some(d) } |
-                ftd::p2::Kind::Decimal { default: Some(d) } |
-                ftd::p2::Kind::Boolean { default: Some(d) } => d,
-                _ => return crate::e("local variable supports string, integer, boolean and decimal type with default value"),
-            };
-            locals.insert(format!("{}@{}", k, string_container), value.to_string());
-        }
-        if let Some(string_container) = all_locals.get("mouse-in") {
-            locals.insert(
-                format!("mouse-in@{}", string_container),
-                "false".to_string(),
-            );
+        for k in all_locals.keys() {
+            if k.eq("MOUSE-IN-TEMP") {
+                continue;
+            }
+            if k.eq("MOUSE-IN") {
+                locals.insert(
+                    format!("MOUSE-IN@{}", string_container),
+                    "false".to_string(),
+                );
+            }
+            if let Some(arg) = arguments.get(k) {
+                if let Some(value) = arg.to_string() {
+                    locals.insert(format!("{}@{}", k, string_container), value.to_string());
+                }
+            } else if let Some(arg) = self.arguments.get(k) {
+                match arg {
+                    ftd::p2::Kind::String {
+                        default: Some(d), ..
+                    }
+                    | ftd::p2::Kind::Integer { default: Some(d) }
+                    | ftd::p2::Kind::Decimal { default: Some(d) }
+                    | ftd::p2::Kind::Boolean { default: Some(d) } => {
+                        locals.insert(format!("{}@{}", k, string_container), d.to_string());
+                    }
+                    _ => {}
+                };
+            }
         }
         Ok(locals)
     }
 
-    fn get_locals_map(&self, string_container: &str, all_locals: &mut ftd_rt::Map) {
-        for k in self.locals.keys() {
+    fn get_locals_map(&self, string_container: &str) -> ftd_rt::Map {
+        let mut all_locals: ftd_rt::Map = Default::default();
+
+        for k in self.arguments.keys() {
             all_locals.insert(k.to_string(), string_container.to_string());
         }
-        all_locals.insert("mouse-in-temp".to_string(), string_container.to_string());
+        all_locals.insert("MOUSE-IN-TEMP".to_string(), string_container.to_string());
+        all_locals
     }
 }
 
@@ -1156,7 +1427,6 @@ pub fn recursive_child_component(
     doc: &ftd::p2::TDoc,
     arguments: &std::collections::BTreeMap<String, ftd::p2::Kind>,
     name_with_component: Option<(String, ftd::Component)>,
-    locals: &std::collections::BTreeMap<String, ftd::p2::Kind>,
 ) -> ftd::p1::Result<ftd::ChildComponent> {
     let mut loop_ref = "object".to_string();
     let mut loop_on_component = loop_data.to_string();
@@ -1164,26 +1434,39 @@ pub fn recursive_child_component(
     if loop_data.contains("as") {
         let parts = ftd::p2::utils::split(loop_data.to_string(), "as")?;
         loop_on_component = parts.0;
-        loop_ref = parts.1;
+        loop_ref = if let Some(loop_ref) = parts.1.strip_prefix('$') {
+            loop_ref.to_string()
+        } else {
+            return ftd::e2(
+                "loop variable should start with $, found",
+                parts.1,
+                doc.name.to_string(),
+                sub.line_number,
+            );
+        };
     }
 
     let recursive_property_value = ftd::PropertyValue::resolve_value(
+        sub.line_number,
         &loop_on_component,
         None,
         doc,
         arguments,
-        locals,
         None,
-        false,
     )?;
 
     let recursive_kind = if let ftd::p2::Kind::List { kind } = recursive_property_value.kind() {
         kind.as_ref().to_owned()
     } else {
-        return ftd::e(format!(
-            "expected list for loop, found: {:?}",
-            recursive_property_value.kind()
-        ));
+        return ftd::e2(
+            format!(
+                "expected list for loop, found: {:?}",
+                recursive_property_value.kind(),
+            ),
+            doc.name,
+            doc.name.to_string(),
+            sub.line_number,
+        );
     };
 
     let mut properties: std::collections::BTreeMap<String, Property> = Default::default();
@@ -1198,32 +1481,31 @@ pub fn recursive_child_component(
 
     let mut new_header = ftd::p1::Header(vec![]);
     let (mut left_boolean, mut right_boolean) = (None, None);
-    for (k, v) in &sub.header.0 {
+    for (i, k, v) in &sub.header.0 {
         if k == "$loop$" || k.starts_with('/') {
             continue;
         }
 
         if k == "if" && contains_loop_ref(&loop_ref, v) {
-            let v = v.replace(&loop_ref, "$loop$");
-            let (_, left, right) = ftd::p2::Boolean::boolean_left_right(&v)?;
+            let v = v.replace(&format!("${}", loop_ref), "$loop$");
+            let (_, left, right) =
+                ftd::p2::Boolean::boolean_left_right(i.to_owned(), &v, doc.name)?;
             if left.contains("$loop$") {
-                left_boolean = resolve_loop_reference(&recursive_kind, doc, left)?.default;
+                left_boolean = resolve_loop_reference(i, &recursive_kind, doc, left)?.default;
             }
             if let Some(r) = right {
                 if r.contains("$loop$") {
-                    right_boolean = resolve_loop_reference(&recursive_kind, doc, r)?.default;
+                    right_boolean = resolve_loop_reference(i, &recursive_kind, doc, r)?.default;
                 }
             }
         }
 
-        if contains_loop_ref(&loop_ref, v) && v.starts_with("ref ") {
-            let reference = ftd_rt::get_name("ref", &*v)?
-                .to_string()
-                .replace(&loop_ref, "$loop$");
-            let value = resolve_loop_reference(&recursive_kind, doc, reference)?;
+        if contains_loop_ref(&loop_ref, v) && v.starts_with(&format!("${}", loop_ref)) {
+            let reference = v.to_string().replace(&format!("${}", loop_ref), "$loop$");
+            let value = resolve_loop_reference(i, &recursive_kind, doc, reference)?;
             properties.insert(k.to_string(), value);
         } else {
-            new_header.add(k, v);
+            new_header.add(i, k, v);
         }
     }
 
@@ -1236,13 +1518,15 @@ pub fn recursive_child_component(
                 root_component.get_caption(),
             )
         } else {
-            let root = doc.get_component(sub.name.as_str())?;
+            let root = doc.get_component(sub.line_number, sub.name.as_str())?;
             let root_arguments = root.arguments.clone();
             assert_no_extra_properties(
+                sub.line_number,
                 &new_header,
                 root.full_name.as_str(),
                 &root_arguments,
                 sub.name.as_str(),
+                doc.name,
             )?;
             (
                 root_arguments,
@@ -1253,17 +1537,16 @@ pub fn recursive_child_component(
 
     let mut new_caption = sub.caption.clone();
     if let (Some(caption), Some(caption_arg)) = (sub.caption.clone(), caption) {
-        if caption.starts_with("ref ") && contains_loop_ref(&loop_ref, &caption) {
-            let reference = ftd_rt::get_name("ref", &*caption)?
-                .to_string()
-                .replace(&loop_ref, "$loop$");
-            let value = resolve_loop_reference(&recursive_kind, doc, reference)?;
+        if contains_loop_ref(&loop_ref, &caption) {
+            let reference = caption.replace(&format!("${}", loop_ref), "$loop$");
+            let value = resolve_loop_reference(&sub.line_number, &recursive_kind, doc, reference)?;
             properties.insert(caption_arg, value);
             new_caption = None;
         }
     }
 
     properties.extend(read_properties(
+        sub.line_number,
         &new_header,
         &new_caption,
         &sub.body_without_comment(),
@@ -1271,29 +1554,34 @@ pub fn recursive_child_component(
         full_name.as_str(),
         &mut root_arguments,
         arguments,
-        locals,
         doc,
         &properties,
     )?);
 
     return Ok(ftd::ChildComponent {
         root: sub.name.to_string(),
-        condition: match sub.header.str_optional("if")? {
+        condition: match sub
+            .header
+            .str_optional(doc.name.to_string(), sub.line_number, "if")?
+        {
             Some(expr) => Some(ftd::p2::Boolean::from_expression(
                 expr,
                 doc,
                 arguments,
-                locals,
                 (left_boolean, right_boolean),
+                sub.line_number,
             )?),
             None => None,
         },
         properties,
+        arguments: Default::default(),
         events: vec![],
         is_recursive: true,
+        line_number: sub.line_number,
     });
 
     fn resolve_loop_reference(
+        line_number: &usize,
         recursive_kind: &ftd::p2::Kind,
         doc: &ftd::p2::TDoc,
         reference: String,
@@ -1301,13 +1589,12 @@ pub fn recursive_child_component(
         let mut arguments: std::collections::BTreeMap<String, ftd::p2::Kind> = Default::default();
         arguments.insert("$loop$".to_string(), recursive_kind.to_owned());
         let property = ftd::PropertyValue::resolve_value(
+            *line_number,
             &format!("${}", reference),
             None,
             doc,
             &arguments,
-            &Default::default(),
             None,
-            false,
         )?;
         Ok(ftd::component::Property {
             default: Some(property),
@@ -1316,11 +1603,11 @@ pub fn recursive_child_component(
     }
 
     fn contains_loop_ref(loop_ref: &str, pattern: &str) -> bool {
-        let ref1 = format!("{}.", loop_ref);
+        let ref1 = format!("${}.", loop_ref);
         let pattern_vec: Vec<&str> = pattern.split(' ').collect();
         let partern_bool = pattern_vec
             .iter()
-            .map(|v| v.contains(&ref1) || v == &loop_ref)
+            .map(|v| v.contains(&ref1) || v == &format!("${}", loop_ref))
             .collect::<Vec<bool>>();
         for p in partern_bool {
             if p {
@@ -1333,16 +1620,22 @@ pub fn recursive_child_component(
 
 fn update_properties(
     properties: &mut std::collections::BTreeMap<String, (crate::Value, Option<String>)>,
-    arguments: &std::collections::BTreeMap<String, crate::Value>,
+    arguments_value: &std::collections::BTreeMap<String, crate::Value>,
+    arguments: &std::collections::BTreeMap<String, crate::p2::Kind>,
 ) {
     let default_property = vec![
         "id", "top", "bottom", "left", "right", "align", "scale", "rotate", "scale-x", "scale-y",
     ];
     for p in default_property {
         if !properties.contains_key(p) {
-            if let Some(v) = arguments.get(p) {
+            if let Some(v) = arguments_value.get(p) {
                 properties.insert(p.to_string(), (v.to_owned(), None));
             }
+        }
+    }
+    for p in arguments.keys() {
+        if let Some(v) = arguments_value.get(p) {
+            properties.insert(format!("${}", p), (v.to_owned(), None));
         }
     }
 }
@@ -1356,6 +1649,8 @@ fn is_component(name: &str) -> bool {
         || name.starts_with("map ")
         || (name == "container")
         || (name == "ftd.text")
+        || (name == "ftd.text-block")
+        || (name == "ftd.code")
         || (name == "ftd.image")
         || (name == "ftd.row")
         || (name == "ftd.column")
@@ -1368,17 +1663,20 @@ fn is_component(name: &str) -> bool {
 }
 
 fn assert_no_extra_properties(
+    line_number: usize,
     p1: &crate::p1::Header,
     root: &str,
     root_arguments: &std::collections::BTreeMap<String, crate::p2::Kind>,
     name: &str,
+    doc_id: &str,
 ) -> crate::p1::Result<()> {
-    for (k, _) in p1.0.iter() {
+    for (i, k, _) in p1.0.iter() {
         if k == "component"
             || k.starts_with('$')
             || k.starts_with('@')
             || k == "if"
             || k.starts_with('/')
+            || ftd::variable::VariableData::get_name_kind(k, doc_id, line_number, true).is_ok()
         {
             continue;
         }
@@ -1397,16 +1695,21 @@ fn assert_no_extra_properties(
                 ]
                 .contains(&key)))
         {
-            return crate::e(format!(
-                "unknown key found: {}, {} has: {}",
-                k,
-                root,
-                root_arguments
-                    .keys()
-                    .map(ToString::to_string)
-                    .collect::<Vec<_>>()
-                    .join(", ")
-            ));
+            return ftd::e2(
+                format!(
+                    "unknown key found: {}, {} has: {}",
+                    k,
+                    root,
+                    root_arguments
+                        .keys()
+                        .map(ToString::to_string)
+                        .collect::<Vec<_>>()
+                        .join(", ")
+                ),
+                doc_id,
+                doc_id.to_string(),
+                i.to_owned(),
+            );
         }
     }
 
@@ -1415,14 +1718,14 @@ fn assert_no_extra_properties(
 
 #[allow(clippy::too_many_arguments)]
 fn read_properties(
+    line_number: usize,
     p1: &crate::p1::Header,
     caption: &Option<String>,
-    body: &Option<String>,
+    body: &Option<(usize, String)>,
     fn_name: &str,
     root: &str,
     root_arguments: &mut std::collections::BTreeMap<String, crate::p2::Kind>,
     arguments: &std::collections::BTreeMap<String, crate::p2::Kind>,
-    locals: &std::collections::BTreeMap<String, crate::p2::Kind>,
     doc: &crate::p2::TDoc,
     root_properties: &std::collections::BTreeMap<String, Property>,
 ) -> crate::p1::Result<std::collections::BTreeMap<String, Property>> {
@@ -1434,7 +1737,10 @@ fn read_properties(
             properties.insert(name.to_string(), prop.clone());
             continue;
         }
-        let (conditional_vector, source) = match (p1.conditional_str(name), kind.inner()) {
+        let (conditional_vector, source) = match (
+            p1.conditional_str(doc.name.to_string(), line_number, name),
+            kind.inner(),
+        ) {
             (Ok(v), _) => (v, ftd::TextSource::Header),
             (
                 Err(crate::p1::Error::NotFound { .. }),
@@ -1451,7 +1757,7 @@ fn read_properties(
                     )
                 } else if *b && body.is_some() {
                     (
-                        vec![(body.as_ref().unwrap().to_string(), None)],
+                        vec![(body.as_ref().unwrap().1.to_string(), None)],
                         ftd::TextSource::Body,
                     )
                 } else if matches!(kind, crate::p2::Kind::Optional { .. }) {
@@ -1459,10 +1765,15 @@ fn read_properties(
                 } else if let Some(d) = d {
                     (vec![(d.to_string(), None)], ftd::TextSource::Default)
                 } else {
-                    return crate::e(format!(
-                        "{} is calling {}, without a required argument `{}`",
-                        fn_name, root, name,
-                    ));
+                    return ftd::e2(
+                        format!(
+                            "{} is calling {}, without a required argument `{}`",
+                            fn_name, root, name
+                        ),
+                        doc.name,
+                        doc.name.to_string(),
+                        line_number,
+                    );
                 }
             }
             (Err(crate::p1::Error::NotFound { .. }), k) => {
@@ -1473,10 +1784,15 @@ fn read_properties(
                 if let Some(d) = k.get_default_value_str() {
                     (vec![(d.to_string(), None)], ftd::TextSource::Default)
                 } else {
-                    return crate::e(format!(
-                        "{} is calling {}, without a required argument `{}`",
-                        fn_name, root, name,
-                    ));
+                    return ftd::e2(
+                        format!(
+                            "{} is calling {}, without a required argument `{}`",
+                            fn_name, root, name
+                        ),
+                        doc.name,
+                        doc.name.to_string(),
+                        line_number,
+                    );
                 }
             }
             (Err(e), _) => {
@@ -1484,28 +1800,21 @@ fn read_properties(
             }
         };
         for (value, conditional_attribute) in conditional_vector {
-            let (reference, is_data) = if value.starts_with("ref ") {
-                (ftd_rt::get_name("ref", &value)?, false)
-            } else {
-                (value.as_str(), true)
-            };
-
             let property_value = ftd::PropertyValue::resolve_value(
-                reference,
+                line_number,
+                value.as_str(),
                 Some(kind.to_owned()),
                 doc,
                 arguments,
-                locals,
                 Some(source.clone()),
-                is_data,
             )?;
             let (condition_value, default_value) = if let Some(attribute) = conditional_attribute {
                 let condition = crate::p2::Boolean::from_expression(
                     attribute,
                     doc,
                     arguments,
-                    locals,
                     (None, None),
+                    line_number,
                 )?;
                 (vec![(condition, property_value)], None)
             } else {
@@ -1577,6 +1886,33 @@ fn read_properties(
     }
 }
 
+fn root_properties_from_inherits(
+    line_number: usize,
+    arguments: &std::collections::BTreeMap<String, crate::p2::Kind>,
+    inherits: Vec<String>,
+    doc: &crate::p2::TDoc,
+) -> ftd::p1::Result<std::collections::BTreeMap<String, Property>> {
+    let mut root_properties: std::collections::BTreeMap<String, Property> = Default::default();
+    for inherit in inherits {
+        let pv = ftd::PropertyValue::resolve_value(
+            line_number,
+            &format!("${}", inherit),
+            None,
+            doc,
+            arguments,
+            None,
+        )?;
+        root_properties.insert(
+            inherit,
+            Property {
+                default: Some(pv),
+                conditions: vec![],
+            },
+        );
+    }
+    Ok(root_properties)
+}
+
 fn read_arguments(
     p1: &crate::p1::Header,
     root: &str,
@@ -1589,56 +1925,46 @@ fn read_arguments(
     let mut args: std::collections::BTreeMap<String, crate::p2::Kind> = Default::default();
     let mut inherits: Vec<String> = Default::default();
 
-    for (k, v) in p1.0.iter() {
+    for (i, k, v) in p1.0.iter() {
         if (k.starts_with('$') && k.ends_with('$')) || k.starts_with('/') {
             // event and loop matches
             continue;
         }
 
-        let name = match k.strip_prefix('$') {
-            Some(v) => v,
-            None => {
-                continue;
-            }
+        let var_data =
+            match ftd::variable::VariableData::get_name_kind(k, doc.name, i.to_owned(), true) {
+                Ok(v) => v,
+                _ => continue,
+            };
+
+        let v = if v.is_empty() {
+            None
+        } else {
+            Some(v.to_string())
         };
 
-        let kind = if v == "inherit" {
-            match root_arguments.get(name) {
-                Some(v) => {
-                    inherits.push(name.to_string());
-                    v.clone()
+        let kind = if var_data.kind.is_some() && var_data.kind.unwrap().eq("inherit") {
+            match root_arguments.get(&var_data.name) {
+                Some(kind) => {
+                    inherits.push(var_data.name.to_string());
+                    kind.clone().set_default(v)
                 }
-                None => return crate::e(format!("'{}' is not an argument of {}", name, root)),
+                None => {
+                    return ftd::e2(
+                        format!("'{}' is not an argument of {}", var_data.name, root),
+                        doc.name,
+                        doc.name.to_string(),
+                        i.to_owned(),
+                    )
+                }
             }
         } else {
-            crate::p2::Kind::from(v, doc, None)?
+            crate::p2::Kind::for_variable(i.to_owned(), k, v, doc, None, true)?
         };
-        args.insert(name.to_string(), kind);
+        args.insert(var_data.name.to_string(), kind);
     }
 
     Ok((args, inherits))
-}
-
-fn read_locals(
-    p1: &crate::p1::Header,
-    doc: &crate::p2::TDoc,
-) -> crate::p1::Result<std::collections::BTreeMap<String, crate::p2::Kind>> {
-    let mut args: std::collections::BTreeMap<String, crate::p2::Kind> = Default::default();
-
-    for (k, v) in p1.0.iter() {
-        if k.starts_with('/') {
-            continue;
-        }
-        let name = match k.strip_prefix('@') {
-            Some(v) => v,
-            None => {
-                continue;
-            }
-        };
-        let kind = crate::p2::Kind::from(v, doc, None)?;
-        args.insert(name.to_string(), kind);
-    }
-    Ok(args)
 }
 
 #[cfg(test)]
@@ -1651,7 +1977,7 @@ mod test {
             p2!($s, $doc, $t)
         };
         ($s:expr, $doc: expr, $t: expr) => {
-            let p1 = crate::p1::parse(indoc::indoc!($s)).unwrap();
+            let p1 = crate::p1::parse(indoc::indoc!($s), $doc.name).unwrap();
             pretty_assertions::assert_eq!(super::Component::from_p1(&p1[0], &$doc).unwrap(), $t)
         };
     }
@@ -1672,8 +1998,8 @@ mod test {
         p2!(
             "-- component foo:
             component: ftd.text
-            $foo: string
-            $bar: optional integer
+            string $foo:
+            optional integer $bar:
             text: hello
             ",
             d,
@@ -1771,26 +2097,26 @@ mod test {
 
         p!(
             "
-            -- var name: Amit
+            -- $name: Amit
             -- ftd.text:
-            text: ref name
+            text: $name
             ",
             (bag.clone(), main.clone()),
         );
 
         p!(
             "
-            -- var name: Amit
-            -- ftd.text: ref name
+            -- $name: Amit
+            -- ftd.text: $name
             ",
             (bag.clone(), main.clone()),
         );
 
         p!(
             "
-            -- var name: Amit
+            -- $name: Amit
             -- ftd.text:
-            ref name
+            $name
             ",
             (bag, main),
         );
@@ -1840,22 +2166,21 @@ mod test {
         p!(
             "
             -- record person:
-            name: caption
-            address: string
-            bio: body
-            age: integer
+            caption name:
+            string address:
+            body bio:
+            integer age:
 
-            -- var x: 10
+            -- $x: 10
 
-            -- var abrar: Abrar Khan
-            type: person
+            -- person $abrar: Abrar Khan
             address: Bihar
             age: ref x
 
             Software developer working at fifthtry.
 
             -- ftd.text:
-            text: ref abrar.name
+            text: $abrar.name
             ",
             (bag.clone(), main.clone()),
         );

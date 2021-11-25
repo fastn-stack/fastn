@@ -19,36 +19,41 @@ impl Record {
     ) -> crate::p1::Result<std::collections::BTreeMap<String, crate::PropertyValue>> {
         let mut fields: std::collections::BTreeMap<String, crate::PropertyValue> =
             Default::default();
-        self.assert_no_extra_fields(&p1.header, &p1.caption, &p1.body)?;
+        self.assert_no_extra_fields(doc.name, &p1.header, &p1.caption, &p1.body)?;
         for (name, kind) in self.fields.iter() {
-            let value = match (p1.sub_section_by_name(name), kind.inner()) {
+            let value = match (
+                p1.sub_section_by_name(name, doc.name.to_string()),
+                kind.inner(),
+            ) {
                 (Ok(v), crate::p2::Kind::String { .. }) => crate::PropertyValue::Value {
                     value: crate::Value::String {
-                        text: v.body()?,
+                        text: v.body(doc.name)?,
                         source: crate::TextSource::Body,
                     },
                 },
                 (Ok(v), crate::p2::Kind::Record { name }) => {
-                    let record = doc.get_record(name)?;
+                    let record = doc.get_record(p1.line_number, name)?;
                     crate::PropertyValue::Value {
                         value: crate::Value::Record {
-                            name: doc.resolve_name(record.name.as_str())?,
+                            name: doc.resolve_name(p1.line_number, record.name.as_str())?,
                             fields: record.fields_from_sub_section(v, doc)?,
                         },
                     }
                 }
                 (Ok(_), _) => {
-                    return crate::e(format!(
-                        "'{:?}' ('{}') can not be a sub-section",
-                        kind, name
-                    ));
+                    return ftd::e2(
+                        format!("'{:?}' ('{}') can not be a sub-section", kind, name),
+                        doc.name,
+                        doc.name.to_string(),
+                        p1.line_number,
+                    );
                 }
                 (
                     Err(crate::p1::Error::NotFound { .. }),
                     crate::p2::Kind::List { kind: list_kind },
                 ) => match list_kind.as_ref() {
                     crate::p2::Kind::OrType { name: or_type_name } => {
-                        let e = doc.get_or_type(or_type_name)?;
+                        let e = doc.get_or_type(p1.line_number, or_type_name)?;
                         let mut values: Vec<crate::Value> = vec![];
                         for s in p1.sub_sections.0.iter() {
                             if s.is_commented {
@@ -77,22 +82,17 @@ impl Record {
                             kind: list_kind.inner().to_owned(),
                             data: vec![],
                         };
-                        for (k, v) in p1.header.0.iter() {
+                        for (i, k, v) in p1.header.0.iter() {
                             if *k != *name || k.starts_with('/') {
                                 continue;
                             }
-                            let reference = if v.starts_with("ref ") {
-                                ftd_rt::get_name("ref", v)?
-                            } else {
-                                v
-                            };
-                            list = doc.get_value(reference)?;
+                            list = doc.get_value(i.to_owned(), v)?;
                         }
                         crate::PropertyValue::Value { value: list }
                     }
                     crate::p2::Kind::String { .. } => {
                         let mut values: Vec<crate::Value> = vec![];
-                        for (k, v) in p1.header.0.iter() {
+                        for (_, k, v) in p1.header.0.iter() {
                             if *k != *name || k.starts_with('/') {
                                 continue;
                             }
@@ -108,10 +108,25 @@ impl Record {
                             },
                         }
                     }
-                    crate::p2::Kind::Integer { .. } => return ftd::e("unexpected integer"),
-                    t => return ftd::e2("not yet implemented 123", t),
+                    crate::p2::Kind::Integer { .. } => {
+                        return ftd::e2(
+                            "unexpected integer",
+                            doc.name,
+                            doc.name.to_string(),
+                            p1.line_number,
+                        );
+                    }
+                    t => {
+                        return ftd::e2(
+                            "not yet implemented",
+                            t,
+                            doc.name.to_string(),
+                            p1.line_number,
+                        )
+                    }
                 },
                 (Err(crate::p1::Error::NotFound { .. }), _) => kind.read_section(
+                    p1.line_number,
                     &p1.header,
                     &p1.caption,
                     &p1.body_without_comment(),
@@ -129,14 +144,15 @@ impl Record {
                         }
                         let v = match list_kind.inner().string_any() {
                             crate::p2::Kind::Record { name } => {
-                                let record = doc.get_record(name.as_str())?;
+                                let record = doc.get_record(p1.line_number, name.as_str())?;
                                 crate::Value::Record {
-                                    name: doc.resolve_name(record.name.as_str())?,
+                                    name: doc.resolve_name(s.line_number, record.name.as_str())?,
                                     fields: record.fields_from_sub_section(s, doc)?,
                                 }
                             }
                             k => {
                                 match k.read_section(
+                                    s.line_number,
                                     &s.header,
                                     &s.caption,
                                     &s.body_without_comment(),
@@ -183,7 +199,7 @@ impl Record {
         doc: &crate::p2::TDoc,
     ) -> crate::p1::Result<crate::Value> {
         Ok(crate::Value::Record {
-            name: doc.resolve_name(self.name.as_str())?,
+            name: doc.resolve_name(p1.line_number, self.name.as_str())?,
             fields: self.fields(p1, doc)?,
         })
     }
@@ -195,11 +211,12 @@ impl Record {
     ) -> crate::p1::Result<std::collections::BTreeMap<String, crate::PropertyValue>> {
         let mut fields: std::collections::BTreeMap<String, crate::PropertyValue> =
             Default::default();
-        self.assert_no_extra_fields(&p1.header, &p1.caption, &p1.body)?;
+        self.assert_no_extra_fields(doc.name, &p1.header, &p1.caption, &p1.body)?;
         for (name, kind) in self.fields.iter() {
             fields.insert(
                 name.to_string(),
                 kind.read_section(
+                    p1.line_number,
                     &p1.header,
                     &p1.caption,
                     &p1.body_without_comment(),
@@ -213,24 +230,30 @@ impl Record {
 
     fn assert_no_extra_fields(
         &self,
+        id: &str,
         p1: &crate::p1::Header,
         _caption: &Option<String>,
-        _body: &Option<String>,
+        _body: &Option<(usize, String)>,
     ) -> crate::p1::Result<()> {
         // TODO: handle caption
         // TODO: handle body
-        for (k, _) in p1.0.iter() {
+        for (i, k, _) in p1.0.iter() {
             if k.starts_with('/') {
                 continue;
             }
 
             if !self.fields.contains_key(k) && k != "type" && k != "$processor$" {
-                return crate::e(format!(
-                    "unknown key passed: '{}' to '{}', allowed: {:?}",
-                    k,
-                    self.name,
-                    self.fields.keys()
-                ));
+                return ftd::e2(
+                    format!(
+                        "unknown key passed: '{}' to '{}', allowed: {:?}",
+                        k,
+                        self.name,
+                        self.fields.keys()
+                    ),
+                    id,
+                    id.to_string(),
+                    i.to_owned(),
+                );
             }
         }
         Ok(())
@@ -240,8 +263,9 @@ impl Record {
         p1_name: &str,
         p1_header: &crate::p1::Header,
         doc: &crate::p2::TDoc,
+        line_number: usize,
     ) -> crate::p1::Result<Self> {
-        let name = ftd_rt::get_name("record", p1_name)?;
+        let name = ftd_rt::get_name("record", p1_name, doc.name)?;
         let full_name = doc.format_name(name);
         let mut fields = std::collections::BTreeMap::new();
         let object_kind = (
@@ -250,18 +274,39 @@ impl Record {
                 name: full_name.clone(),
             },
         );
-        for (k, v) in p1_header.0.iter() {
+        for (i, k, v) in p1_header.0.iter() {
             if k.starts_with('/') {
                 continue;
             }
+            let var_data = match ftd::variable::VariableData::get_name_kind(
+                k,
+                doc.name,
+                i.to_owned(),
+                false,
+            ) {
+                Ok(v) => v,
+                _ => continue,
+            };
             let v = normalise_value(v)?;
             validate_key(k)?;
+            let v = if v.is_empty() {
+                None
+            } else {
+                Some(v.to_string())
+            };
             fields.insert(
-                k.to_string(),
-                crate::p2::Kind::from(v.as_str(), doc, Some(object_kind.clone()))?,
+                var_data.name.to_string(),
+                crate::p2::Kind::for_variable(
+                    i.to_owned(),
+                    k,
+                    v,
+                    doc,
+                    Some(object_kind.clone()),
+                    false,
+                )?,
             );
         }
-        assert_fields_valid(&fields)?;
+        assert_fields_valid(line_number, &fields, doc.name)?;
         return Ok(Record {
             name: full_name,
             fields,
@@ -281,7 +326,9 @@ impl Record {
 }
 
 fn assert_fields_valid(
+    line_number: usize,
     fields: &std::collections::BTreeMap<String, crate::p2::Kind>,
+    doc_id: &str,
 ) -> crate::p1::Result<()> {
     let mut caption_field: Option<String> = None;
     let mut body_field: Option<String> = None;
@@ -290,7 +337,12 @@ fn assert_fields_valid(
             if *caption {
                 match &caption_field {
                     Some(c) => {
-                        return crate::e(format!("both {} and {} are caption fields", name, c));
+                        return ftd::e2(
+                            format!("both {} and {} are caption fields", name, c),
+                            doc_id,
+                            doc_id.to_string(),
+                            line_number,
+                        );
                     }
                     None => caption_field = Some(name.to_string()),
                 }
@@ -298,7 +350,12 @@ fn assert_fields_valid(
             if *body {
                 match &body_field {
                     Some(c) => {
-                        return crate::e(format!("both {} and {} are body fields", name, c));
+                        return ftd::e2(
+                            format!("both {} and {} are body fields", name, c),
+                            doc_id,
+                            doc_id.to_string(),
+                            line_number,
+                        );
                     }
                     None => body_field = Some(name.to_string()),
                 }
@@ -467,16 +524,16 @@ mod test {
         p!(
             "
             -- record person:
-            name: caption
-            address: string
-            bio: body
-            age: integer
+            caption name:
+            string address:
+            body bio:
+            integer age:
 
-            -- var x: 10
+            -- $x: 10
 
             -- person: Abrar Khan2
             address: Bihar2
-            age: ref x
+            age: $x
 
             Software developer working at fifthtry2.
 
@@ -486,24 +543,21 @@ mod test {
 
             Frontend developer at fifthtry.
 
-            -- var abrar: Abrar Khan
-            type: person
+            -- person $abrar: Abrar Khan
             address: Bihar
-            age: ref x
+            age: $x
 
             Software developer working at fifthtry.
 
             -- record employee:
-            eid: string
-            who: person
+            string eid:
+            person who:
 
-            -- var abrar_e:
-            type: employee
+            -- employee $abrar_e:
             eid: E04
-            who: ref abrar
+            who: $abrar
 
-            -- var sourabh:
-            type: employee
+            -- employee $sourabh:
 
             --- eid:
 
@@ -515,11 +569,11 @@ mod test {
 
             Frontend developer at fifthtry.
 
-            -- x: 20
+            -- $x: 20
 
-            -- abrar: Abrar Khan2
+            -- $abrar: Abrar Khan2
             address: Bihar2
-            age: ref x
+            age: $x
 
             Software developer working at fifthtry2.
             ",
@@ -600,11 +654,10 @@ mod test {
         p!(
             "
             -- record person:
-            name: caption
-            friends: list string
+            caption name:
+            string list friends:
 
-            -- var abrar: Abrar Khan
-            type: person
+            -- person $abrar: Abrar Khan
             friends: Deepak Angrula
             friends: Amit Upadhyay
             friends: Saurabh Garg
@@ -615,11 +668,10 @@ mod test {
         p!(
             "
             -- record person:
-            name: caption
-            friends: list string
+            caption name:
+            string list friends:
 
-            -- var abrar: Abrar Khan
-            type: person
+            -- person $abrar: Abrar Khan
 
             --- friends: Deepak Angrula
             --- friends: Amit Upadhyay
@@ -758,15 +810,14 @@ mod test {
         p!(
             "
             -- record point:
-            x: integer
-            y: integer
+            integer x:
+            integer y:
 
             -- record person:
-            name: caption
-            points: list point
+            caption name:
+            point list points:
 
-            -- var abrar: Abrar Khan
-            type: person
+            -- person $abrar: Abrar Khan
 
             --- points:
             x: 10
@@ -910,21 +961,20 @@ mod test {
             -- or-type entity:
 
             --- person:
-            name: caption
-            address: string
-            bio: body
-            age: integer
+            caption name:
+            string address:
+            body bio:
+            integer age:
 
             --- company:
-            name: caption
-            industry: string
+            caption name:
+            string industry:
 
             -- record sale:
-            party: list entity
-            value: integer
+            entity list party:
+            integer value:
 
-            -- var jan:
-            type: sale
+            -- sale $jan:
             value: 2000
 
             --- party.person: Jack Russo

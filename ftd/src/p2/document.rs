@@ -58,7 +58,7 @@ impl Document {
         data
     }
 
-    pub fn rerender(&mut self, id: &str) -> crate::p1::Result<ftd_rt::Document> {
+    pub fn rerender(&mut self, id: &str, doc_id: &str) -> crate::p1::Result<ftd_rt::Document> {
         let mut rt = ftd::RT::from(
             self.name.as_str(),
             self.aliases.clone(),
@@ -69,27 +69,27 @@ impl Document {
         let data = self.rt_data();
         Ok(ftd_rt::Document {
             data,
-            html: self.html(id),
+            html: self.html(id, doc_id),
             external_children: ftd_rt::Element::get_external_children_dependencies(
                 &self.main.container.children,
             ),
         })
     }
 
-    pub fn to_rt(&self, id: &str) -> ftd_rt::Document {
+    pub fn to_rt(&self, id: &str, doc_id: &str) -> ftd_rt::Document {
         let external_children =
             ftd_rt::Element::get_external_children_dependencies(&self.main.container.children);
 
         ftd_rt::Document {
             data: self.rt_data(),
-            html: self.html(id),
+            html: self.html(id, doc_id),
             external_children,
         }
     }
 
-    pub fn html(&self, id: &str) -> String {
+    pub fn html(&self, id: &str, doc_id: &str) -> String {
         self.main
-            .to_node()
+            .to_node(doc_id)
             .to_html(&Default::default(), &self.rt_data(), id)
     }
 
@@ -135,6 +135,16 @@ impl Document {
             for e in elements.iter() {
                 match e {
                     ftd_rt::Element::Text(_) => {
+                        if let Some(v) = f(e) {
+                            return Some(v);
+                        }
+                    }
+                    ftd_rt::Element::TextBlock(_) => {
+                        if let Some(v) = f(e) {
+                            return Some(v);
+                        }
+                    }
+                    ftd_rt::Element::Code(_) => {
                         if let Some(v) = f(e) {
                             return Some(v);
                         }
@@ -352,11 +362,12 @@ impl Document {
             return Ok(None);
         }
         if v.len() > 1 {
-            return crate::e(format!(
-                "more than one instances({}) of {} found",
-                v.len(),
-                record
-            ));
+            return ftd::e2(
+                format!("more than one instances({}) of {} found", v.len(), record),
+                self.name.as_str(),
+                self.name.to_string(),
+                0,
+            );
         }
         Ok(Some(v.into_iter().next().unwrap())) // unwrap okay because v not empty
     }
@@ -382,7 +393,7 @@ impl Document {
                 }
                 serde_json::Value::Array(a)
             }
-            t => return ftd::e2("not a record", t),
+            t => return ftd::e2("not a record", t, self.name.to_string(), 0),
         };
 
         Ok(serde_json::from_value(json)?)
@@ -419,6 +430,8 @@ impl Document {
             Some(v) => v,
             None => {
                 return Err(crate::p1::Error::NotFound {
+                    doc_id: "".to_string(),
+                    line_number: 0,
                     key: key.to_string(),
                 })
             }
@@ -447,7 +460,7 @@ impl Document {
             } => self.object_to_json(Some(variant), fields)?,
             crate::Value::List { data, .. } => self.list_to_json(data)?,
             crate::Value::None { .. } => serde_json::Value::Null,
-            _ => return ftd::e2("unhandled value found(value_to_json)", v),
+            _ => return ftd::e2("unhandled value found(value_to_json)", v, "".to_string(), 0),
         })
     }
 
@@ -585,7 +598,7 @@ mod test {
             indoc::indoc!(
                 "
             -- import: fifthtry/ft
-            -- ft.toc:
+            -- $ft.toc:
 
             foo is the toc
             "
@@ -628,13 +641,12 @@ mod test {
                 who: caption
 
                 -- record meta_type:
-                license: string
-                reader: list someone
+                string license:
+                someone list reader:
 
-                -- list meta:
-                type: meta_type
+                -- meta_type list $meta:
 
-                -- meta:
+                -- $meta:
                 license: BSD
 
                 --- reader.Username: foo
@@ -716,8 +728,8 @@ mod test {
             indoc::indoc!(
                 "
                 -- record pr:
-                number: integer
-                title: caption
+                integer number:
+                caption title:
 
                 -- pr: some pr
                 number: 24

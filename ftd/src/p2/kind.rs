@@ -46,23 +46,34 @@ impl Kind {
         matches!(self, Kind::List { .. })
     }
 
-    pub fn to_string(&self) -> ftd::p1::Result<String> {
+    pub fn to_string(&self, line_number: usize, id: &str) -> ftd::p1::Result<String> {
         Ok(match self {
             ftd::p2::Kind::String { .. } => "string",
             ftd::p2::Kind::Integer { .. } => "integer",
             ftd::p2::Kind::Decimal { .. } => "decimal",
             ftd::p2::Kind::Boolean { .. } => "boolean",
-            _ => return ftd::e(format!("Kind supported for default value are string, integer, decimal and boolean with default value, found: kind `{:?}`", &self)),
+            _ => return ftd::e2(format!("Kind supported for default value are string, integer, decimal and boolean with default value, found: kind `{:?}`", &self), id,id.to_string(), line_number),
         }.to_string())
     }
 
-    pub fn to_value(&self) -> ftd::p1::Result<ftd::Value> {
+    pub fn to_value(&self, line_number: usize, id: &str) -> ftd::p1::Result<ftd::Value> {
         Ok(match self {
             ftd::p2::Kind::String { default: Some(d), .. } => ftd::Value::String {text: d.to_string(), source: ftd::TextSource::Default} ,
-            ftd::p2::Kind::Integer { default: Some(d) } => ftd::Value::Integer { value: d.parse::<i64>().map_err(|e| crate::p1::Error::CantParseInt { source: e })?, } ,
-            ftd::p2::Kind::Decimal { default: Some(d) } => ftd::Value::Decimal { value: d.parse::<f64>().map_err(|e| crate::p1::Error::CantParseFloat { source: e })?, } ,
-            ftd::p2::Kind::Boolean { default: Some(d) } => ftd::Value::Boolean { value: d.parse::<bool>().map_err(|_| crate::p1::Error::CantParseBool)?, } ,
-            _ => return ftd::e(format!("Kind supported for default value are string, integer, decimal and boolean with default value, found: kind `{:?}`", &self)),
+            ftd::p2::Kind::Integer { default: Some(d) } => ftd::Value::Integer { value: match d.parse::<i64>() {
+                Ok(v) => v,
+                Err(_) => return ftd::e2("is not an integer", d, id.to_string(), line_number),
+            },},
+            ftd::p2::Kind::Decimal { default: Some(d) } => ftd::Value::Decimal { value: d.parse::<f64>().map_err(|e| crate::p1::Error::ParseError {
+                message: e.to_string(),
+                doc_id: id.to_string(),
+                line_number,
+            })?, } ,
+            ftd::p2::Kind::Boolean { default: Some(d) } => ftd::Value::Boolean { value: d.parse::<bool>().map_err(|e|crate::p1::Error::ParseError {
+                message: e.to_string(),
+                doc_id: id.to_string(),
+                line_number,
+            })?, } ,
+            _ => return ftd::e2(format!("Kind supported for default value are string, integer, decimal and boolean with default value, found: kind `{:?}`", &self), id, id.to_string(), line_number),
         })
     }
 }
@@ -131,7 +142,9 @@ impl Kind {
             Kind::Integer { .. } => Kind::Integer { default },
             Kind::Decimal { .. } => Kind::Decimal { default },
             Kind::Boolean { .. } => Kind::Boolean { default },
-            Kind::Optional { kind } => kind.set_default(default),
+            Kind::Optional { kind } => Kind::Optional {
+                kind: Box::from(kind.set_default(default)),
+            },
             _ => self,
         }
     }
@@ -189,6 +202,13 @@ impl Kind {
         }
     }
 
+    pub fn list_kind(&self) -> &Self {
+        match self {
+            Kind::List { kind } => kind,
+            _ => self,
+        }
+    }
+
     pub fn string_any(&self) -> Self {
         match self {
             Self::String { .. } => Self::String {
@@ -202,13 +222,14 @@ impl Kind {
 
     pub fn read_section(
         &self,
+        line_number: usize,
         p1: &crate::p1::Header,
         p1_caption: &Option<String>,
-        p1_body: &Option<String>,
+        p1_body: &Option<(usize, String)>,
         name: &str,
         doc: &crate::p2::TDoc,
     ) -> crate::p1::Result<crate::PropertyValue> {
-        let (v, source) = match p1.str_optional(name)? {
+        let (v, source) = match p1.str_optional(doc.name.to_string(), line_number, name)? {
             Some(v) => (v.to_string(), crate::TextSource::Header),
             None => {
                 let optional = match self {
@@ -229,7 +250,14 @@ impl Kind {
                     | crate::p2::Kind::Integer { .. }
                     | crate::p2::Kind::Decimal { .. }
                     | crate::p2::Kind::Boolean { .. } => false,
-                    t => return crate::e2(format!("`{}` is {:?}", name, t), "two"),
+                    t => {
+                        return ftd::e2(
+                            format!("`{}` is {:?}", name, t),
+                            "two",
+                            doc.name.to_string(),
+                            line_number,
+                        )
+                    }
                 };
 
                 let (caption, body) = if let Kind::String { caption, body, .. } = self.inner() {
@@ -245,7 +273,7 @@ impl Kind {
                     )
                 } else if body && p1_body.is_some() {
                     (
-                        p1_body.as_ref().expect("asd").to_string(),
+                        p1_body.as_ref().expect("asd").1.to_string(),
                         crate::TextSource::Body,
                     )
                 } else if optional {
@@ -257,70 +285,89 @@ impl Kind {
                 } else if let Some(default) = self.get_default_value_str() {
                     (default, crate::TextSource::Default)
                 } else {
-                    return crate::e2(format!("`{}` is required", name), "one");
+                    return ftd::e2(
+                        format!("`{}` is required", name),
+                        "one",
+                        doc.name.to_string(),
+                        line_number,
+                    );
                 }
             }
         };
 
-        if v.starts_with("ref ") {
-            let reference = ftd_rt::get_name("ref", &v)?;
+        if v.starts_with('$') {
             return ftd::PropertyValue::resolve_value(
-                reference,
+                line_number,
+                &v,
                 Some(self.to_owned()),
                 doc,
                 &Default::default(),
-                &Default::default(),
                 None,
-                false,
             );
         }
 
         match self.inner() {
             Kind::Integer { .. } => Ok(crate::PropertyValue::Value {
                 value: crate::Value::Integer {
-                    value: p1.i64(name).unwrap_or(
-                        v.parse::<i64>()
-                            .map_err(|e| crate::p1::Error::CantParseInt { source: e })?,
+                    value: p1.i64(doc.name.to_string(), line_number, name).unwrap_or(
+                        v.parse::<i64>().map_err(|e| crate::p1::Error::ParseError {
+                            message: e.to_string(),
+                            doc_id: doc.name.to_string(),
+                            line_number,
+                        })?,
                     ),
                 },
             }),
             Kind::Decimal { .. } => Ok(crate::PropertyValue::Value {
                 value: crate::Value::Decimal {
-                    value: p1.f64(name).unwrap_or(
-                        v.parse::<f64>()
-                            .map_err(|e| crate::p1::Error::CantParseFloat { source: e })?,
+                    value: p1.f64(doc.name.to_string(), line_number, name).unwrap_or(
+                        v.parse::<f64>().map_err(|e| crate::p1::Error::ParseError {
+                            message: e.to_string(),
+                            doc_id: doc.name.to_string(),
+                            line_number,
+                        })?,
                     ),
                 },
             }),
             Kind::Boolean { .. } => Ok(crate::PropertyValue::Value {
                 value: crate::Value::Boolean {
-                    value: p1.bool(name).unwrap_or(
+                    value: p1.bool(doc.name.to_string(), line_number, name).unwrap_or(
                         v.parse::<bool>()
-                            .map_err(|_| crate::p1::Error::CantParseBool)?,
+                            .map_err(|e| crate::p1::Error::ParseError {
+                                message: e.to_string(),
+                                doc_id: doc.name.to_string(),
+                                line_number,
+                            })?,
                     ),
                 },
             }),
             Kind::String { .. } => Ok(crate::PropertyValue::Value {
                 value: crate::Value::String { text: v, source },
             }),
-            v => ftd::e2("unknown kind found", v),
+            v => ftd::e2("unknown kind found", v, doc.name.to_string(), line_number),
         }
     }
 
     pub fn from(
+        line_number: usize,
         s: &str,
         doc: &crate::p2::TDoc,
         object_kind: Option<(&str, Self)>,
     ) -> crate::p1::Result<Self> {
         let (optional, k) = if s.starts_with("optional ") {
-            (true, ftd_rt::get_name("optional", s)?)
+            (true, ftd_rt::get_name("optional", s, doc.name)?)
         } else {
             (false, s)
         };
 
         if k.starts_with("list ") {
             return Ok(Kind::List {
-                kind: Box::new(Self::from(ftd_rt::get_name("list", k)?, doc, object_kind)?),
+                kind: Box::new(Self::from(
+                    line_number,
+                    ftd_rt::get_name("list", k, doc.name)?,
+                    doc,
+                    object_kind,
+                )?),
             });
         }
 
@@ -354,14 +401,77 @@ impl Kind {
             "message" => Kind::Message,
             "string-message" => Kind::StringMessage,
             "int-message" => Kind::IntMessage,
-            _ => match doc.get_thing(k)? {
+            _ => match doc.get_thing(line_number, k)? {
                 crate::p2::Thing::Record(r) => Kind::Record { name: r.name },
                 crate::p2::Thing::OrType(e) => Kind::OrType { name: e.name },
-                t => unimplemented!("{} is {:?}", k, t),
+                t => unimplemented!(
+                    "{} is {:?}, line number: {}, doc: {}",
+                    k,
+                    t,
+                    line_number,
+                    doc.name.to_string()
+                ),
             },
         }
         .set_default(default);
 
         Ok(if optional { Self::optional(k) } else { k })
+    }
+
+    pub fn for_variable(
+        line_number: usize,
+        s: &str,
+        default: Option<String>,
+        doc: &crate::p2::TDoc,
+        object_kind: Option<(&str, Self)>,
+        is_variable: bool,
+    ) -> crate::p1::Result<Self> {
+        let var_data =
+            ftd::variable::VariableData::get_name_kind(s, doc.name, line_number, is_variable)?;
+
+        let kind = var_data.kind.clone().unwrap_or_else(|| "".to_string());
+
+        let k = match object_kind {
+            Some(object_kind) if kind.eq(object_kind.0) => object_kind.1,
+            _ => match kind.as_str() {
+                "string" => Kind::string(),
+                "caption" => Kind::caption(),
+                "body" => Kind::body(),
+                "body or caption" | "caption or body" => Kind::caption_or_body(),
+                "integer" => Kind::integer(),
+                "decimal" => Kind::decimal(),
+                "boolean" => Kind::boolean(),
+                "element" => Kind::Element,
+                "elements" => Kind::Elements,
+                "message" => Kind::Message,
+                "string-message" => Kind::StringMessage,
+                "int-message" => Kind::IntMessage,
+                k => match doc.get_thing(line_number, k) {
+                    Ok(crate::p2::Thing::Record(r)) => Kind::Record { name: r.name },
+                    Ok(crate::p2::Thing::OrType(e)) => Kind::OrType { name: e.name },
+                    t => match default {
+                        None => unimplemented!(
+                            "{} is {:?}, line number: {}, doc: {}",
+                            var_data.name,
+                            t,
+                            line_number,
+                            doc.name.to_string()
+                        ),
+                        Some(ref d) => ftd::variable::guess_type(d, false)?.kind(),
+                    },
+                },
+            },
+        }
+        .set_default(default);
+
+        if var_data.is_list() {
+            return Ok(Kind::List { kind: Box::new(k) });
+        }
+
+        Ok(if var_data.is_optional() {
+            Self::optional(k)
+        } else {
+            k
+        })
     }
 }

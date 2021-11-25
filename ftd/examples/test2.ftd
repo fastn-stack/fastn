@@ -1,0 +1,15 @@
+-- import: fifthtry/ft-core
+
+-- component foo:
+component: ftd.column
+width: fill
+
+--- ftd.text: Page
+
+--- ftd.text: Mobile
+if: $ft-core.mobile
+
+--- ftd.text: Desktop
+if: not $ft-core.mobile
+
+-- foo:

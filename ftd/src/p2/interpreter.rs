@@ -26,7 +26,7 @@ impl<'a> Interpreter<'a> {
         let mut d_get = std::time::Duration::new(0, 0);
         let mut d_processor = std::time::Duration::new(0, 0);
         let v = self
-            .interpret_(name, s, true, &mut d_get, &mut d_processor)
+            .async_interpret_(name, s, true, &mut d_get, &mut d_processor)
             .await?;
         // observer::observe_string("time_get", elapsed(d_get).as_str());
         // observer::observe_string("time_processor", elapsed(d_processor).as_str());
@@ -59,7 +59,7 @@ impl<'a> Interpreter<'a> {
 
     #[cfg(feature = "async")]
     #[async_recursion::async_recursion(?Send)]
-    async fn interpret_(
+    async fn async_interpret_(
         &mut self,
         name: &str,
         s: &str,
@@ -67,8 +67,8 @@ impl<'a> Interpreter<'a> {
         d_get: &mut std::time::Duration,
         d_processor: &mut std::time::Duration,
     ) -> crate::p1::Result<Vec<ftd::Instruction>> {
-        let p1 = crate::p1::parse(s)?;
-        let new_p1 = ftd::p2::utils::reorder(&p1)?;
+        let p1 = crate::p1::parse(s, name)?;
+        let new_p1 = ftd::p2::utils::reorder(&p1, name)?;
 
         let mut aliases = default_aliases();
         let mut instructions: Vec<ftd::Instruction> = Default::default();
@@ -77,15 +77,25 @@ impl<'a> Interpreter<'a> {
             if p1.is_commented {
                 continue;
             }
+
+            let var_data =
+                ftd::variable::VariableData::get_name_kind(&p1.name, name, p1.line_number, true);
             if p1.name == "import" {
-                let (library_name, alias) = crate::p2::utils::parse_import(&p1.caption)?;
+                let (library_name, alias) =
+                    crate::p2::utils::parse_import(&p1.caption, name, p1.line_number)?;
                 aliases.insert(alias, library_name.clone());
                 let start = std::time::Instant::now();
                 let s = self.lib.get_with_result(library_name.as_str()).await?;
                 *d_get = d_get.saturating_add(std::time::Instant::now() - start);
                 if !self.library_in_the_bag(library_name.as_str()) {
-                    self.interpret_(library_name.as_str(), s.as_str(), false, d_get, d_processor)
-                        .await?;
+                    self.async_interpret_(
+                        library_name.as_str(),
+                        s.as_str(),
+                        false,
+                        d_get,
+                        d_processor,
+                    )
+                    .await?;
                     self.add_library_to_bag(library_name.as_str())
                 }
                 continue;
@@ -99,130 +109,169 @@ impl<'a> Interpreter<'a> {
                 bag: &self.bag,
             };
 
-            let mut thing = None;
+            let mut thing = vec![];
 
             if p1.name.starts_with("component ") {
                 // declare a function
                 let d = crate::Component::from_p1(p1, &doc)?;
-                thing = Some((d.full_name.to_string(), crate::p2::Thing::Component(d)));
+                thing.push((
+                    doc.resolve_name(p1.line_number, &d.full_name.to_string())?,
+                    crate::p2::Thing::Component(d),
+                ));
                 // processed_p1.push(p1.name.to_string());
-            } else if p1.name.starts_with("var ") {
-                // declare and instantiate a variable
-                let d = if p1.header.str("$processor$").is_ok() {
-                    let name = ftd_rt::get_name("var", p1.name.as_str())?.to_string();
-                    let start = std::time::Instant::now();
-                    let value = self.lib.process(p1, &doc).await?;
-                    *d_processor = d_processor.saturating_add(std::time::Instant::now() - start);
-                    crate::Variable {
-                        name,
-                        value,
-                        conditions: vec![],
-                    }
-                } else {
-                    crate::Variable::from_p1(p1, &doc)?
-                };
-                thing = Some((d.name.to_string(), crate::p2::Thing::Variable(d)));
             } else if p1.name.starts_with("record ") {
                 // declare a record
-                let d = crate::p2::Record::from_p1(p1.name.as_str(), &p1.header, &doc)?;
-                thing = Some((d.name.to_string(), crate::p2::Thing::Record(d)));
+                let d =
+                    crate::p2::Record::from_p1(p1.name.as_str(), &p1.header, &doc, p1.line_number)?;
+                thing.push((
+                    doc.resolve_name(p1.line_number, &d.name.to_string())?,
+                    crate::p2::Thing::Record(d),
+                ));
             } else if p1.name.starts_with("or-type ") {
                 // declare a record
                 let d = crate::OrType::from_p1(p1, &doc)?;
-                thing = Some((d.name.to_string(), crate::p2::Thing::OrType(d)));
-            } else if p1.name.starts_with("list ") {
-                let d = if p1.header.str("$processor$").is_ok() {
-                    let name = doc.resolve_name(ftd_rt::get_name("list", p1.name.as_str())?)?;
-                    let start = std::time::Instant::now();
-                    let value = self.lib.process(p1, &doc).await?;
-                    *d_processor = d_processor.saturating_add(std::time::Instant::now() - start);
-                    crate::Variable {
-                        name,
-                        value,
-                        conditions: vec![],
-                    }
-                } else {
-                    crate::Variable::list_from_p1(p1, &doc)?
-                };
-                thing = Some((d.name.to_string(), crate::p2::Thing::Variable(d)));
+                thing.push((
+                    doc.resolve_name(p1.line_number, &d.name.to_string())?,
+                    crate::p2::Thing::OrType(d),
+                ));
             } else if p1.name.starts_with("map ") {
                 let d = crate::Variable::map_from_p1(p1, &doc)?;
-                thing = Some((d.name.to_string(), crate::p2::Thing::Variable(d)));
+                thing.push((
+                    doc.resolve_name(p1.line_number, &d.name.to_string())?,
+                    crate::p2::Thing::Variable(d),
+                ));
                 // } else if_two_words(p1.name.as_str() {
                 //   TODO: <record-name> <variable-name>: foo can be used to create a variable/
                 //         Not sure if its a good idea tho.
                 // }
             } else if p1.name == "container" {
                 instructions.push(ftd::Instruction::ChangeContainer {
-                    name: doc
-                        .resolve_name_with_instruction(p1.caption()?.as_str(), &instructions)?,
+                    name: doc.resolve_name_with_instruction(
+                        p1.line_number,
+                        p1.caption(p1.line_number, doc.name)?.as_str(),
+                        &instructions,
+                    )?,
                 });
-            } else {
-                // cloning because https://github.com/rust-lang/rust/issues/59159
-                match (doc.get_thing(p1.name.as_str())?).clone() {
-                    crate::p2::Thing::Variable(mut v) => {
-                        assert!(
-                            !(p1.header.str_optional("if")?.is_some()
-                                && p1.header.str_optional("$processor$")?.is_some())
-                        );
-                        if let Some(expr) = p1.header.str_optional("if")? {
-                            let val = v.get_value(p1, &doc)?;
-                            v.conditions.push((
-                                crate::p2::Boolean::from_expression(
-                                    expr,
-                                    &doc,
-                                    &Default::default(),
-                                    &Default::default(),
-                                    (None, None),
-                                )?,
-                                val,
-                            ));
-                        } else if p1.header.str_optional("$processor$")?.is_some() {
+            } else if let Ok(ref var_data) = var_data {
+                if var_data.kind.is_some() || doc.get_thing(p1.line_number, &var_data.name).is_err()
+                {
+                    if var_data.is_none() || var_data.is_optional() {
+                        // declare and instantiate a variable
+                        let d = if p1
+                            .header
+                            .str(doc.name.to_string(), p1.line_number, "$processor$")
+                            .is_ok()
+                        {
+                            let name = var_data.name.to_string();
                             let start = std::time::Instant::now();
                             let value = self.lib.process(p1, &doc).await?;
                             *d_processor =
                                 d_processor.saturating_add(std::time::Instant::now() - start);
-                            v.value = value;
+                            crate::Variable {
+                                name,
+                                value,
+                                conditions: vec![],
+                            }
                         } else {
-                            v.update_from_p1(p1, &doc)?;
-                        }
-                        thing = Some((p1.name.to_string(), crate::p2::Thing::Variable(v)));
+                            crate::Variable::from_p1(p1, &doc)?
+                        };
+                        thing.push((
+                            doc.resolve_name(p1.line_number, &d.name.to_string())?,
+                            crate::p2::Thing::Variable(d),
+                        ));
+                    } else {
+                        // declare and instantiate a list
+                        let d = if p1
+                            .header
+                            .str(doc.name.to_string(), p1.line_number, "$processor$")
+                            .is_ok()
+                        {
+                            let name = doc.resolve_name(p1.line_number, &var_data.name)?;
+                            let start = std::time::Instant::now();
+                            let value = self.lib.process(p1, &doc).await?;
+                            *d_processor =
+                                d_processor.saturating_add(std::time::Instant::now() - start);
+                            crate::Variable {
+                                name,
+                                value,
+                                conditions: vec![],
+                            }
+                        } else {
+                            crate::Variable::list_from_p1(p1, &doc)?
+                        };
+                        thing.push((
+                            doc.resolve_name(p1.line_number, &d.name.to_string())?,
+                            crate::p2::Thing::Variable(d),
+                        ));
+                    }
+                } else if let crate::p2::Thing::Variable(mut v) =
+                    doc.get_thing(p1.line_number, var_data.name.as_str())?
+                {
+                    assert!(
+                        !(p1.header
+                            .str_optional(doc.name.to_string(), p1.line_number, "if")?
+                            .is_some()
+                            && p1
+                                .header
+                                .str_optional(doc.name.to_string(), p1.line_number, "$processor$")?
+                                .is_some())
+                    );
+                    if let Some(expr) =
+                        p1.header
+                            .str_optional(doc.name.to_string(), p1.line_number, "if")?
+                    {
+                        let val = v.get_value(p1, &doc)?;
+                        v.conditions.push((
+                            crate::p2::Boolean::from_expression(
+                                expr,
+                                &doc,
+                                &Default::default(),
+                                (None, None),
+                                p1.line_number,
+                            )?,
+                            val,
+                        ));
+                    } else if p1
+                        .header
+                        .str_optional(doc.name.to_string(), p1.line_number, "$processor$")?
+                        .is_some()
+                    {
+                        let start = std::time::Instant::now();
+                        let value = self.lib.process(p1, &doc).await?;
+                        *d_processor =
+                            d_processor.saturating_add(std::time::Instant::now() - start);
+                        v.value = value;
+                    } else {
+                        v.update_from_p1(p1, &doc)?;
+                    }
+                    thing.push((
+                        doc.resolve_name(p1.line_number, &var_data.name.to_string())?,
+                        crate::p2::Thing::Variable(v),
+                    ));
+                }
+            } else {
+                // cloning because https://github.com/rust-lang/rust/issues/59159
+                match (doc.get_thing(p1.line_number, p1.name.as_str())?).clone() {
+                    crate::p2::Thing::Variable(_) => {
+                        return ftd::e2(
+                            format!("variable should have prefix $, found: `{}`", p1.name),
+                            doc.name,
+                            doc.name.to_string(),
+                            p1.line_number,
+                        );
                     }
                     crate::p2::Thing::Component(_) => {
-                        let mut children = vec![];
-
-                        for sub in p1.sub_sections.0.iter() {
-                            if sub.is_commented {
-                                continue;
-                            }
-                            if let Ok(loop_data) = sub.header.str("$loop$") {
-                                children.push(ftd::component::recursive_child_component(
-                                    loop_data,
-                                    sub,
-                                    &doc,
-                                    &Default::default(),
-                                    None,
-                                    &Default::default(),
-                                )?);
-                            } else {
-                                children.push(ftd::ChildComponent::from_p1(
-                                    sub.name.as_str(),
-                                    &sub.header,
-                                    &sub.caption,
-                                    &sub.body_without_comment(),
-                                    &doc,
-                                    &Default::default(),
-                                    &Default::default(),
-                                )?);
-                            }
-                        }
-                        if let Ok(loop_data) = p1.header.str("$loop$") {
+                        if let Ok(loop_data) =
+                            p1.header
+                                .str(doc.name.to_string(), p1.line_number, "$loop$")
+                        {
                             let section_to_subsection = ftd::p1::SubSection {
                                 name: p1.name.to_string(),
                                 caption: p1.caption.to_owned(),
                                 header: p1.header.to_owned(),
                                 body: p1.body.to_owned(),
                                 is_commented: p1.is_commented,
+                                line_number: p1.line_number,
                             };
                             instructions.push(ftd::Instruction::RecursiveChildComponent {
                                 child: ftd::component::recursive_child_component(
@@ -231,43 +280,80 @@ impl<'a> Interpreter<'a> {
                                     &doc,
                                     &Default::default(),
                                     None,
-                                    &Default::default(),
                                 )?,
                             });
                         } else {
-                            instructions.push(ftd::Instruction::Component {
-                                children,
-                                parent: ftd::ChildComponent::from_p1(
-                                    p1.name.as_str(),
-                                    &p1.header,
-                                    &p1.caption,
-                                    &p1.body_without_comment(),
-                                    &doc,
-                                    &Default::default(),
-                                    &Default::default(),
-                                )?,
-                            })
+                            let parent = ftd::ChildComponent::from_p1(
+                                p1.line_number,
+                                p1.name.as_str(),
+                                &p1.header,
+                                &p1.caption,
+                                &p1.body_without_comment(),
+                                &doc,
+                                &Default::default(),
+                            )?;
+
+                            let mut children = vec![];
+
+                            for sub in p1.sub_sections.0.iter() {
+                                if sub.is_commented {
+                                    continue;
+                                }
+                                if let Ok(loop_data) =
+                                    sub.header
+                                        .str(doc.name.to_string(), p1.line_number, "$loop$")
+                                {
+                                    children.push(ftd::component::recursive_child_component(
+                                        loop_data,
+                                        sub,
+                                        &doc,
+                                        &parent.arguments,
+                                        None,
+                                    )?);
+                                } else {
+                                    children.push(ftd::ChildComponent::from_p1(
+                                        sub.line_number,
+                                        sub.name.as_str(),
+                                        &sub.header,
+                                        &sub.caption,
+                                        &sub.body_without_comment(),
+                                        &doc,
+                                        &parent.arguments,
+                                    )?);
+                                }
+                            }
+
+                            instructions.push(ftd::Instruction::Component { children, parent })
                         }
                     }
                     crate::p2::Thing::Record(mut r) => {
                         r.add_instance(p1, &doc)?;
-                        thing = Some((p1.name.to_string(), crate::p2::Thing::Record(r)));
+                        thing.push((
+                            doc.resolve_name(p1.line_number, &p1.name.to_string())?,
+                            crate::p2::Thing::Record(r),
+                        ));
                     }
                     crate::p2::Thing::OrType(_r) => {
                         // do we allow initialization of a record by name? nopes
-                        return crate::e(format!("'{}' is an or-type", p1.name.as_str()));
+                        return ftd::e2(
+                            format!("'{}' is an or-type", p1.name.as_str()),
+                            doc.name,
+                            doc.name.to_string(),
+                            p1.line_number,
+                        );
                     }
                     crate::p2::Thing::OrTypeWithVariant { .. } => {
                         // do we allow initialization of a record by name? nopes
-                        return crate::e(format!("'{}' is an or-type variant", p1.name.as_str()));
+                        return ftd::e2(
+                            format!("'{}' is an or-type variant", p1.name.as_str(),),
+                            doc.name,
+                            doc.name.to_string(),
+                            p1.line_number,
+                        );
                     }
                 };
             }
-
-            if let Some((name, thing)) = thing {
-                let name = doc.resolve_name(name.as_str())?;
-                self.bag.insert(name, thing);
-            }
+            self.bag.extend(thing);
         }
 
         if is_main {
@@ -286,8 +372,8 @@ impl<'a> Interpreter<'a> {
         d_get: &mut std::time::Duration,
         d_processor: &mut std::time::Duration,
     ) -> crate::p1::Result<Vec<ftd::Instruction>> {
-        let p1 = crate::p1::parse(s)?;
-        let new_p1 = ftd::p2::utils::reorder(&p1)?;
+        let p1 = crate::p1::parse(s, name)?;
+        let new_p1 = ftd::p2::utils::reorder(&p1, name)?;
 
         let mut aliases = default_aliases();
         let mut instructions: Vec<ftd::Instruction> = Default::default();
@@ -296,8 +382,12 @@ impl<'a> Interpreter<'a> {
             if p1.is_commented {
                 continue;
             }
+
+            let var_data =
+                ftd::variable::VariableData::get_name_kind(&p1.name, name, p1.line_number, true);
             if p1.name == "import" {
-                let (library_name, alias) = crate::p2::utils::parse_import(&p1.caption)?;
+                let (library_name, alias) =
+                    crate::p2::utils::parse_import(&p1.caption, name, p1.line_number)?;
                 aliases.insert(alias, library_name.clone());
                 let start = std::time::Instant::now();
                 let s = self.lib.get_with_result(library_name.as_str())?;
@@ -317,130 +407,169 @@ impl<'a> Interpreter<'a> {
                 bag: &self.bag,
             };
 
-            let mut thing = None;
+            let mut thing = vec![];
 
             if p1.name.starts_with("component ") {
                 // declare a function
                 let d = crate::Component::from_p1(p1, &doc)?;
-                thing = Some((d.full_name.to_string(), crate::p2::Thing::Component(d)));
+                thing.push((
+                    doc.resolve_name(p1.line_number, &d.full_name.to_string())?,
+                    crate::p2::Thing::Component(d),
+                ));
                 // processed_p1.push(p1.name.to_string());
-            } else if p1.name.starts_with("var ") {
-                // declare and instantiate a variable
-                let d = if p1.header.str("$processor$").is_ok() {
-                    let name = ftd_rt::get_name("var", p1.name.as_str())?.to_string();
-                    let start = std::time::Instant::now();
-                    let value = self.lib.process(p1, &doc)?;
-                    *d_processor = d_processor.saturating_add(std::time::Instant::now() - start);
-                    crate::Variable {
-                        name,
-                        value,
-                        conditions: vec![],
-                    }
-                } else {
-                    crate::Variable::from_p1(p1, &doc)?
-                };
-                thing = Some((d.name.to_string(), crate::p2::Thing::Variable(d)));
             } else if p1.name.starts_with("record ") {
                 // declare a record
-                let d = crate::p2::Record::from_p1(p1.name.as_str(), &p1.header, &doc)?;
-                thing = Some((d.name.to_string(), crate::p2::Thing::Record(d)));
+                let d =
+                    crate::p2::Record::from_p1(p1.name.as_str(), &p1.header, &doc, p1.line_number)?;
+                thing.push((
+                    doc.resolve_name(p1.line_number, &d.name.to_string())?,
+                    crate::p2::Thing::Record(d),
+                ));
             } else if p1.name.starts_with("or-type ") {
                 // declare a record
                 let d = crate::OrType::from_p1(p1, &doc)?;
-                thing = Some((d.name.to_string(), crate::p2::Thing::OrType(d)));
-            } else if p1.name.starts_with("list ") {
-                let d = if p1.header.str("$processor$").is_ok() {
-                    let name = doc.resolve_name(ftd_rt::get_name("list", p1.name.as_str())?)?;
-                    let start = std::time::Instant::now();
-                    let value = self.lib.process(p1, &doc)?;
-                    *d_processor = d_processor.saturating_add(std::time::Instant::now() - start);
-                    crate::Variable {
-                        name,
-                        value,
-                        conditions: vec![],
-                    }
-                } else {
-                    crate::Variable::list_from_p1(p1, &doc)?
-                };
-                thing = Some((d.name.to_string(), crate::p2::Thing::Variable(d)));
+                thing.push((
+                    doc.resolve_name(p1.line_number, &d.name.to_string())?,
+                    crate::p2::Thing::OrType(d),
+                ));
             } else if p1.name.starts_with("map ") {
                 let d = crate::Variable::map_from_p1(p1, &doc)?;
-                thing = Some((d.name.to_string(), crate::p2::Thing::Variable(d)));
+                thing.push((
+                    doc.resolve_name(p1.line_number, &d.name.to_string())?,
+                    crate::p2::Thing::Variable(d),
+                ));
                 // } else if_two_words(p1.name.as_str() {
                 //   TODO: <record-name> <variable-name>: foo can be used to create a variable/
                 //         Not sure if its a good idea tho.
                 // }
             } else if p1.name == "container" {
                 instructions.push(ftd::Instruction::ChangeContainer {
-                    name: doc
-                        .resolve_name_with_instruction(p1.caption()?.as_str(), &instructions)?,
+                    name: doc.resolve_name_with_instruction(
+                        p1.line_number,
+                        p1.caption(p1.line_number, doc.name)?.as_str(),
+                        &instructions,
+                    )?,
                 });
-            } else {
-                // cloning because https://github.com/rust-lang/rust/issues/59159
-                match (doc.get_thing(p1.name.as_str())?).clone() {
-                    crate::p2::Thing::Variable(mut v) => {
-                        assert!(
-                            !(p1.header.str_optional("if")?.is_some()
-                                && p1.header.str_optional("$processor$")?.is_some())
-                        );
-                        if let Some(expr) = p1.header.str_optional("if")? {
-                            let val = v.get_value(p1, &doc)?;
-                            v.conditions.push((
-                                crate::p2::Boolean::from_expression(
-                                    expr,
-                                    &doc,
-                                    &Default::default(),
-                                    &Default::default(),
-                                    (None, None),
-                                )?,
-                                val,
-                            ));
-                        } else if p1.header.str_optional("$processor$")?.is_some() {
+            } else if let Ok(ref var_data) = var_data {
+                if var_data.kind.is_some() || doc.get_thing(p1.line_number, &var_data.name).is_err()
+                {
+                    if var_data.is_none() || var_data.is_optional() {
+                        // declare and instantiate a variable
+                        let d = if p1
+                            .header
+                            .str(doc.name.to_string(), p1.line_number, "$processor$")
+                            .is_ok()
+                        {
+                            let name = var_data.name.to_string();
                             let start = std::time::Instant::now();
                             let value = self.lib.process(p1, &doc)?;
                             *d_processor =
                                 d_processor.saturating_add(std::time::Instant::now() - start);
-                            v.value = value;
+                            crate::Variable {
+                                name,
+                                value,
+                                conditions: vec![],
+                            }
                         } else {
-                            v.update_from_p1(p1, &doc)?;
-                        }
-                        thing = Some((p1.name.to_string(), crate::p2::Thing::Variable(v)));
+                            crate::Variable::from_p1(p1, &doc)?
+                        };
+                        thing.push((
+                            doc.resolve_name(p1.line_number, &d.name.to_string())?,
+                            crate::p2::Thing::Variable(d),
+                        ));
+                    } else {
+                        // declare and instantiate a list
+                        let d = if p1
+                            .header
+                            .str(doc.name.to_string(), p1.line_number, "$processor$")
+                            .is_ok()
+                        {
+                            let name = doc.resolve_name(p1.line_number, &var_data.name)?;
+                            let start = std::time::Instant::now();
+                            let value = self.lib.process(p1, &doc)?;
+                            *d_processor =
+                                d_processor.saturating_add(std::time::Instant::now() - start);
+                            crate::Variable {
+                                name,
+                                value,
+                                conditions: vec![],
+                            }
+                        } else {
+                            crate::Variable::list_from_p1(p1, &doc)?
+                        };
+                        thing.push((
+                            doc.resolve_name(p1.line_number, &d.name.to_string())?,
+                            crate::p2::Thing::Variable(d),
+                        ));
+                    }
+                } else if let crate::p2::Thing::Variable(mut v) =
+                    doc.get_thing(p1.line_number, var_data.name.as_str())?
+                {
+                    assert!(
+                        !(p1.header
+                            .str_optional(doc.name.to_string(), p1.line_number, "if")?
+                            .is_some()
+                            && p1
+                                .header
+                                .str_optional(doc.name.to_string(), p1.line_number, "$processor$")?
+                                .is_some())
+                    );
+                    if let Some(expr) =
+                        p1.header
+                            .str_optional(doc.name.to_string(), p1.line_number, "if")?
+                    {
+                        let val = v.get_value(p1, &doc)?;
+                        v.conditions.push((
+                            crate::p2::Boolean::from_expression(
+                                expr,
+                                &doc,
+                                &Default::default(),
+                                (None, None),
+                                p1.line_number,
+                            )?,
+                            val,
+                        ));
+                    } else if p1
+                        .header
+                        .str_optional(doc.name.to_string(), p1.line_number, "$processor$")?
+                        .is_some()
+                    {
+                        let start = std::time::Instant::now();
+                        let value = self.lib.process(p1, &doc)?;
+                        *d_processor =
+                            d_processor.saturating_add(std::time::Instant::now() - start);
+                        v.value = value;
+                    } else {
+                        v.update_from_p1(p1, &doc)?;
+                    }
+                    thing.push((
+                        doc.resolve_name(p1.line_number, &var_data.name.to_string())?,
+                        crate::p2::Thing::Variable(v),
+                    ));
+                }
+            } else {
+                // cloning because https://github.com/rust-lang/rust/issues/59159
+                match (doc.get_thing(p1.line_number, p1.name.as_str())?).clone() {
+                    crate::p2::Thing::Variable(_) => {
+                        return ftd::e2(
+                            format!("variable should have prefix $, found: `{}`", p1.name),
+                            doc.name,
+                            doc.name.to_string(),
+                            p1.line_number,
+                        );
                     }
                     crate::p2::Thing::Component(_) => {
-                        let mut children = vec![];
-
-                        for sub in p1.sub_sections.0.iter() {
-                            if sub.is_commented {
-                                continue;
-                            }
-                            if let Ok(loop_data) = sub.header.str("$loop$") {
-                                children.push(ftd::component::recursive_child_component(
-                                    loop_data,
-                                    sub,
-                                    &doc,
-                                    &Default::default(),
-                                    None,
-                                    &Default::default(),
-                                )?);
-                            } else {
-                                children.push(ftd::ChildComponent::from_p1(
-                                    sub.name.as_str(),
-                                    &sub.header,
-                                    &sub.caption,
-                                    &sub.body_without_comment(),
-                                    &doc,
-                                    &Default::default(),
-                                    &Default::default(),
-                                )?);
-                            }
-                        }
-                        if let Ok(loop_data) = p1.header.str("$loop$") {
+                        if let Ok(loop_data) =
+                            p1.header
+                                .str(doc.name.to_string(), p1.line_number, "$loop$")
+                        {
                             let section_to_subsection = ftd::p1::SubSection {
                                 name: p1.name.to_string(),
                                 caption: p1.caption.to_owned(),
                                 header: p1.header.to_owned(),
                                 body: p1.body.to_owned(),
                                 is_commented: p1.is_commented,
+                                line_number: p1.line_number,
                             };
                             instructions.push(ftd::Instruction::RecursiveChildComponent {
                                 child: ftd::component::recursive_child_component(
@@ -449,43 +578,80 @@ impl<'a> Interpreter<'a> {
                                     &doc,
                                     &Default::default(),
                                     None,
-                                    &Default::default(),
                                 )?,
                             });
                         } else {
-                            instructions.push(ftd::Instruction::Component {
-                                children,
-                                parent: ftd::ChildComponent::from_p1(
-                                    p1.name.as_str(),
-                                    &p1.header,
-                                    &p1.caption,
-                                    &p1.body_without_comment(),
-                                    &doc,
-                                    &Default::default(),
-                                    &Default::default(),
-                                )?,
-                            })
+                            let parent = ftd::ChildComponent::from_p1(
+                                p1.line_number,
+                                p1.name.as_str(),
+                                &p1.header,
+                                &p1.caption,
+                                &p1.body_without_comment(),
+                                &doc,
+                                &Default::default(),
+                            )?;
+
+                            let mut children = vec![];
+
+                            for sub in p1.sub_sections.0.iter() {
+                                if sub.is_commented {
+                                    continue;
+                                }
+                                if let Ok(loop_data) =
+                                    sub.header
+                                        .str(doc.name.to_string(), p1.line_number, "$loop$")
+                                {
+                                    children.push(ftd::component::recursive_child_component(
+                                        loop_data,
+                                        sub,
+                                        &doc,
+                                        &parent.arguments,
+                                        None,
+                                    )?);
+                                } else {
+                                    children.push(ftd::ChildComponent::from_p1(
+                                        sub.line_number,
+                                        sub.name.as_str(),
+                                        &sub.header,
+                                        &sub.caption,
+                                        &sub.body_without_comment(),
+                                        &doc,
+                                        &parent.arguments,
+                                    )?);
+                                }
+                            }
+
+                            instructions.push(ftd::Instruction::Component { children, parent })
                         }
                     }
                     crate::p2::Thing::Record(mut r) => {
                         r.add_instance(p1, &doc)?;
-                        thing = Some((p1.name.to_string(), crate::p2::Thing::Record(r)));
+                        thing.push((
+                            doc.resolve_name(p1.line_number, &p1.name.to_string())?,
+                            crate::p2::Thing::Record(r),
+                        ));
                     }
                     crate::p2::Thing::OrType(_r) => {
                         // do we allow initialization of a record by name? nopes
-                        return crate::e(format!("'{}' is an or-type", p1.name.as_str()));
+                        return ftd::e2(
+                            format!("'{}' is an or-type", p1.name.as_str()),
+                            doc.name,
+                            doc.name.to_string(),
+                            p1.line_number,
+                        );
                     }
                     crate::p2::Thing::OrTypeWithVariant { .. } => {
                         // do we allow initialization of a record by name? nopes
-                        return crate::e(format!("'{}' is an or-type variant", p1.name.as_str()));
+                        return ftd::e2(
+                            format!("'{}' is an or-type variant", p1.name.as_str(),),
+                            doc.name,
+                            doc.name.to_string(),
+                            p1.line_number,
+                        );
                     }
                 };
             }
-
-            if let Some((name, thing)) = thing {
-                let name = doc.resolve_name(name.as_str())?;
-                self.bag.insert(name, thing);
-            }
+            self.bag.extend(thing);
         }
 
         if is_main {
@@ -545,7 +711,15 @@ pub fn default_bag() -> std::collections::BTreeMap<String, crate::p2::Thing> {
         ),
         (
             "ftd#text".to_string(),
-            crate::p2::Thing::Component(ftd::p2::element::text_function()),
+            crate::p2::Thing::Component(ftd::p2::element::text_function(false)),
+        ),
+        (
+            "ftd#text-block".to_string(),
+            crate::p2::Thing::Component(ftd::p2::element::text_function(true)),
+        ),
+        (
+            "ftd#code".to_string(),
+            crate::p2::Thing::Component(ftd::p2::element::code_function()),
         ),
         (
             "ftd#image".to_string(),
@@ -666,7 +840,7 @@ mod test {
             component: ftd.text
             text: hello
 
-            -- var x: 10
+            -- $x: 10
             ",
             (bag, super::default_column()),
         );
@@ -733,7 +907,7 @@ mod test {
                     (
                         s("text"),
                         crate::component::Property {
-                            default: Some(crate::PropertyValue::Argument {
+                            default: Some(crate::PropertyValue::Variable {
                                 name: "name".to_string(),
                                 kind: crate::p2::Kind::caption_or_body(),
                             }),
@@ -742,14 +916,6 @@ mod test {
                     ),
                 ])
                 .collect(),
-                invocations: vec![std::array::IntoIter::new([(
-                    s("name"),
-                    crate::Value::String {
-                        text: s("hello"),
-                        source: crate::TextSource::Caption,
-                    },
-                )])
-                .collect()],
                 ..Default::default()
             }),
         );
@@ -809,33 +975,29 @@ mod test {
                         },
                     )])
                     .collect(),
+                    locals: std::array::IntoIter::new([(s("name@0"), s("hello"))]).collect(),
+                    reference: Some(s("@name@0")),
                     ..Default::default()
                 },
                 ..Default::default()
             }));
 
-        let (g_bag, g_col) = crate::p2::interpreter::interpret(
-            "foo/bar",
-            indoc::indoc!(
-                "
-                -- var present: false
+        p!(
+            "
+            -- $present: false
 
-                -- component foo:
-                $name: caption
-                component: ftd.text
-                color: white
-                color if present: green
-                color if not present: red
-                text: ref $name
+            -- component foo:
+            caption $name:
+            component: ftd.text
+            color: white
+            color if $present: green
+            color if not $present: red
+            text: $name
 
-                -- foo: hello
-                "
-            ),
-            &ftd::p2::TestLibrary {},
-        )
-        .expect("found error");
-        pretty_assertions::assert_eq!(g_bag, bag);
-        pretty_assertions::assert_eq!(g_col, main);
+            -- foo: hello
+            ",
+            (bag, main),
+        );
     }
 
     #[test]
@@ -868,7 +1030,9 @@ mod test {
                                 },
                             )])
                             .collect(),
+                            arguments: Default::default(),
                             is_recursive: false,
+                            ..Default::default()
                         },
                     },
                     crate::component::Instruction::ChildComponent {
@@ -913,6 +1077,7 @@ mod test {
                                 ),
                             ])
                             .collect(),
+                            ..Default::default()
                         },
                     },
                     crate::component::Instruction::ChildComponent {
@@ -948,6 +1113,7 @@ mod test {
                                 ),
                             ])
                             .collect(),
+                            ..Default::default()
                         },
                     },
                     crate::component::Instruction::ChildComponent {
@@ -983,6 +1149,7 @@ mod test {
                                 ),
                             ])
                             .collect(),
+                            ..Default::default()
                         },
                     },
                     crate::component::Instruction::ChangeContainer {
@@ -1021,11 +1188,11 @@ mod test {
                                 ),
                             ])
                             .collect(),
+                            ..Default::default()
                         },
                     },
                 ],
                 kernel: false,
-                invocations: vec![std::collections::BTreeMap::new()],
                 ..Default::default()
             }),
         );
@@ -1050,7 +1217,7 @@ mod test {
                     (
                         s("id"),
                         crate::component::Property {
-                            default: Some(crate::PropertyValue::Argument {
+                            default: Some(crate::PropertyValue::Variable {
                                 name: "id".to_string(),
                                 kind: crate::p2::Kind::Optional {
                                     kind: Box::new(crate::p2::Kind::string()),
@@ -1092,7 +1259,7 @@ mod test {
                             events: vec![],
                             root: "ftd#text".to_string(),
                             condition: Some(ftd::p2::Boolean::IsNotNull {
-                                value: ftd::PropertyValue::Argument {
+                                value: ftd::PropertyValue::Variable {
                                     name: "active".to_string(),
                                     kind: crate::p2::Kind::Optional {
                                         kind: Box::new(crate::p2::Kind::boolean()),
@@ -1124,7 +1291,7 @@ mod test {
                                 (
                                     s("text"),
                                     crate::component::Property {
-                                        default: Some(crate::PropertyValue::Argument {
+                                        default: Some(crate::PropertyValue::Variable {
                                             name: "name".to_string(),
                                             kind: crate::p2::Kind::caption_or_body(),
                                         }),
@@ -1133,6 +1300,7 @@ mod test {
                                 ),
                             ])
                             .collect(),
+                            ..Default::default()
                         },
                     },
                     crate::component::Instruction::ChildComponent {
@@ -1141,7 +1309,7 @@ mod test {
                             events: vec![],
                             root: "ftd#text".to_string(),
                             condition: Some(ftd::p2::Boolean::IsNull {
-                                value: ftd::PropertyValue::Argument {
+                                value: ftd::PropertyValue::Variable {
                                     name: "active".to_string(),
                                     kind: crate::p2::Kind::Optional {
                                         kind: Box::new(crate::p2::Kind::boolean()),
@@ -1173,7 +1341,7 @@ mod test {
                                 (
                                     s("text"),
                                     crate::component::Property {
-                                        default: Some(crate::PropertyValue::Argument {
+                                        default: Some(crate::PropertyValue::Variable {
                                             name: "name".to_string(),
                                             kind: crate::p2::Kind::caption_or_body(),
                                         }),
@@ -1182,81 +1350,11 @@ mod test {
                                 ),
                             ])
                             .collect(),
+                            ..Default::default()
                         },
                     },
                 ],
                 kernel: false,
-                invocations: vec![
-                    std::array::IntoIter::new([
-                        (s("active"), crate::Value::Boolean { value: true }),
-                        (
-                            s("id"),
-                            crate::Value::String {
-                                text: "/welcome/".to_string(),
-                                source: crate::TextSource::Header,
-                            },
-                        ),
-                        (
-                            s("name"),
-                            crate::Value::String {
-                                text: "5PM Tasks".to_string(),
-                                source: crate::TextSource::Header,
-                            },
-                        ),
-                    ])
-                    .collect(),
-                    std::array::IntoIter::new([
-                        (
-                            s("id"),
-                            crate::Value::String {
-                                text: "/Building/".to_string(),
-                                source: crate::TextSource::Header,
-                            },
-                        ),
-                        (
-                            s("name"),
-                            crate::Value::String {
-                                text: "Log".to_string(),
-                                source: crate::TextSource::Header,
-                            },
-                        ),
-                    ])
-                    .collect(),
-                    std::array::IntoIter::new([
-                        (
-                            s("id"),
-                            crate::Value::String {
-                                text: "/ChildBuilding/".to_string(),
-                                source: crate::TextSource::Header,
-                            },
-                        ),
-                        (
-                            s("name"),
-                            crate::Value::String {
-                                text: "ChildLog".to_string(),
-                                source: crate::TextSource::Header,
-                            },
-                        ),
-                    ])
-                    .collect(),
-                    std::array::IntoIter::new([
-                        (
-                            s("id"),
-                            crate::Value::String {
-                                text: "/Building2/".to_string(),
-                                source: crate::TextSource::Header,
-                            },
-                        ),
-                        (
-                            s("name"),
-                            crate::Value::String {
-                                text: "Log2".to_string(),
-                                source: crate::TextSource::Header,
-                            },
-                        ),
-                    ])
-                    .collect(),
-                ],
                 ..Default::default()
             }),
         );
@@ -1284,7 +1382,7 @@ mod test {
                     (
                         s("id"),
                         crate::component::Property {
-                            default: Some(crate::PropertyValue::Argument {
+                            default: Some(crate::PropertyValue::Variable {
                                 name: "id".to_string(),
                                 kind: crate::p2::Kind::Optional {
                                     kind: Box::new(crate::p2::Kind::string()),
@@ -1309,14 +1407,6 @@ mod test {
                 .collect(),
                 instructions: vec![],
                 kernel: false,
-                invocations: vec![std::array::IntoIter::new([(
-                    s("id"),
-                    crate::Value::String {
-                        text: "toc_main".to_string(),
-                        source: crate::TextSource::Header,
-                    },
-                )])
-                .collect()],
                 ..Default::default()
             }),
         );
@@ -1341,7 +1431,7 @@ mod test {
                     (
                         s("text"),
                         crate::component::Property {
-                            default: Some(crate::PropertyValue::Argument {
+                            default: Some(crate::PropertyValue::Variable {
                                 name: "text".to_string(),
                                 kind: crate::p2::Kind::caption_or_body(),
                             }),
@@ -1374,6 +1464,7 @@ mod test {
                                                     b: 255,
                                                     alpha: 1.0,
                                                 }),
+                                                reference: Some(s("@name@0,0,0")),
                                                 ..Default::default()
                                             },
                                             size: Some(14),
@@ -1394,6 +1485,7 @@ mod test {
                                                                 b: 77,
                                                                 alpha: 1.0,
                                                             }),
+                                                            reference: Some(s("@name@0,0,0,0")),
                                                             ..Default::default()
                                                         },
                                                         size: Some(14),
@@ -1419,6 +1511,9 @@ mod test {
                                                                                     alpha: 1.0,
                                                                                 },
                                                                             ),
+                                                                            reference: Some(s(
+                                                                                "@name@0,0,0,0,0",
+                                                                            )),
                                                                             ..Default::default()
                                                                         },
                                                                         size: Some(14),
@@ -1430,6 +1525,17 @@ mod test {
                                                             ..Default::default()
                                                         },
                                                         common: ftd_rt::Common {
+                                                            locals: std::array::IntoIter::new([
+                                                                (
+                                                                    s("id@0,0,0,0,0"),
+                                                                    s("/ChildBuilding/"),
+                                                                ),
+                                                                (
+                                                                    s("name@0,0,0,0,0"),
+                                                                    s("ChildLog"),
+                                                                ),
+                                                            ])
+                                                            .collect(),
                                                             data_id: Some(s("/ChildBuilding/")),
                                                             width: Some(ftd_rt::Length::Fill),
                                                             ..Default::default()
@@ -1441,6 +1547,11 @@ mod test {
                                                 ..Default::default()
                                             },
                                             common: ftd_rt::Common {
+                                                locals: std::array::IntoIter::new([
+                                                    (s("id@0,0,0,0"), s("/Building/")),
+                                                    (s("name@0,0,0,0"), s("Log")),
+                                                ])
+                                                .collect(),
                                                 data_id: Some(s("/Building/")),
                                                 width: Some(ftd_rt::Length::Fill),
                                                 ..Default::default()
@@ -1461,6 +1572,7 @@ mod test {
                                                                 b: 77,
                                                                 alpha: 1.0,
                                                             }),
+                                                            reference: Some(s("@name@0,0,0,1")),
                                                             ..Default::default()
                                                         },
                                                         size: Some(14),
@@ -1471,6 +1583,11 @@ mod test {
                                                 ..Default::default()
                                             },
                                             common: ftd_rt::Common {
+                                                locals: std::array::IntoIter::new([
+                                                    (s("id@0,0,0,1"), s("/Building2/")),
+                                                    (s("name@0,0,0,1"), s("Log2")),
+                                                ])
+                                                .collect(),
                                                 data_id: Some(s("/Building2/")),
                                                 width: Some(ftd_rt::Length::Fill),
                                                 ..Default::default()
@@ -1482,6 +1599,12 @@ mod test {
                                     ..Default::default()
                                 },
                                 common: ftd_rt::Common {
+                                    locals: std::array::IntoIter::new([
+                                        (s("active@0,0,0"), s("true")),
+                                        (s("id@0,0,0"), s("/welcome/")),
+                                        (s("name@0,0,0"), s("5PM Tasks")),
+                                    ])
+                                    .collect(),
                                     data_id: Some(s("/welcome/")),
                                     width: Some(ftd_rt::Length::Fill),
                                     ..Default::default()
@@ -1490,6 +1613,8 @@ mod test {
                             ..Default::default()
                         },
                         common: ftd_rt::Common {
+                            locals: std::array::IntoIter::new([(s("id@0,0"), s("toc_main"))])
+                                .collect(),
                             data_id: Some(s("toc_main")),
                             height: Some(ftd_rt::Length::Fill),
                             width: Some(ftd_rt::Length::Px { value: 300 }),
@@ -1501,81 +1626,75 @@ mod test {
                 ..Default::default()
             }));
 
-        let (g_bag, g_col) = crate::p2::interpreter::interpret(
-            "foo/bar",
-            indoc::indoc!(
-                "
-                -- component toc-heading:
-                component: ftd.text
-                $text: caption
-                text: ref $text
-                size: 16
+        p!(
+            r"
+            -- component toc-heading:
+            component: ftd.text
+            caption $text:
+            text: $text
+            size: 16
 
 
-                -- component table-of-content:
-                component: ftd.column
-                $id: string
-                id: ref $id
-                width: 300
-                height: fill
+            -- component table-of-content:
+            component: ftd.column
+            string $id:
+            id: $id
+            width: 300
+            height: fill
 
 
-                -- component parent:
-                component: ftd.column
-                $id: string
-                $name: caption
-                $active: optional boolean
-                id: ref $id
-                width: fill
-                open: true
+            -- component parent:
+            component: ftd.column
+            string $id:
+            caption $name:
+            optional boolean $active:
+            id: $id
+            width: fill
+            open: true
 
-                --- ftd.text:
-                if: $active is not null
-                text: ref $name
-                size: 14
-                color: white
+            --- ftd.text:
+            if: $active is not null
+            text: $name
+            size: 14
+            color: white
 
-                --- ftd.text:
-                if: $active is null
-                text: ref $name
-                size: 14
-                color: #4D4D4D
-
-
-                -- component ft_toc:
-                component: ftd.column
-
-                --- table-of-content:
-                id: toc_main
-
-                --- parent:
-                id: /welcome/
-                name: 5PM Tasks
-                active: true
-
-                --- parent:
-                id: /Building/
-                name: Log
-
-                --- parent:
-                id: /ChildBuilding/
-                name: ChildLog
-
-                --- container: /welcome/
-
-                --- parent:
-                id: /Building2/
-                name: Log2
+            --- ftd.text:
+            if: $active is null
+            text: $name
+            size: 14
+            color: \#4D4D4D
 
 
-                -- ft_toc:
-                "
-            ),
-            &ftd::p2::TestLibrary {},
-        )
-        .expect("found error");
-        pretty_assertions::assert_eq!(g_bag, bag);
-        pretty_assertions::assert_eq!(g_col, main);
+            -- component ft_toc:
+            component: ftd.column
+
+            --- table-of-content:
+            id: toc_main
+
+            --- parent:
+            id: /welcome/
+            name: 5PM Tasks
+            active: true
+
+            --- parent:
+            id: /Building/
+            name: Log
+
+            --- parent:
+            id: /ChildBuilding/
+            name: ChildLog
+
+            --- container: /welcome/
+
+            --- parent:
+            id: /Building2/
+            name: Log2
+
+
+            -- ft_toc:
+            ",
+            (bag, main),
+        );
     }
 
     #[test]
@@ -1609,6 +1728,7 @@ mod test {
                                 },
                             )])
                             .collect(),
+                            ..Default::default()
                         },
                     },
                     crate::component::Instruction::ChildComponent {
@@ -1653,6 +1773,7 @@ mod test {
                                 ),
                             ])
                             .collect(),
+                            ..Default::default()
                         },
                     },
                     crate::component::Instruction::ChildComponent {
@@ -1688,6 +1809,7 @@ mod test {
                                 ),
                             ])
                             .collect(),
+                            ..Default::default()
                         },
                     },
                     crate::component::Instruction::ChildComponent {
@@ -1723,6 +1845,7 @@ mod test {
                                 ),
                             ])
                             .collect(),
+                            ..Default::default()
                         },
                     },
                     crate::component::Instruction::ChangeContainer {
@@ -1761,11 +1884,11 @@ mod test {
                                 ),
                             ])
                             .collect(),
+                            ..Default::default()
                         },
                     },
                 ],
                 kernel: false,
-                invocations: vec![std::collections::BTreeMap::new()],
                 ..Default::default()
             }),
         );
@@ -1790,7 +1913,7 @@ mod test {
                     (
                         s("id"),
                         crate::component::Property {
-                            default: Some(crate::PropertyValue::Argument {
+                            default: Some(crate::PropertyValue::Variable {
                                 name: "id".to_string(),
                                 kind: crate::p2::Kind::Optional {
                                     kind: Box::new(crate::p2::Kind::string()),
@@ -1832,7 +1955,7 @@ mod test {
                             events: vec![],
                             root: "ftd#text".to_string(),
                             condition: Some(ftd::p2::Boolean::IsNotNull {
-                                value: ftd::PropertyValue::Argument {
+                                value: ftd::PropertyValue::Variable {
                                     name: "active".to_string(),
                                     kind: crate::p2::Kind::Optional {
                                         kind: Box::new(crate::p2::Kind::boolean()),
@@ -1864,7 +1987,7 @@ mod test {
                                 (
                                     s("text"),
                                     crate::component::Property {
-                                        default: Some(crate::PropertyValue::Argument {
+                                        default: Some(crate::PropertyValue::Variable {
                                             name: "name".to_string(),
                                             kind: crate::p2::Kind::caption_or_body(),
                                         }),
@@ -1873,6 +1996,7 @@ mod test {
                                 ),
                             ])
                             .collect(),
+                            ..Default::default()
                         },
                     },
                     crate::component::Instruction::ChildComponent {
@@ -1881,7 +2005,7 @@ mod test {
                             events: vec![],
                             root: "ftd#text".to_string(),
                             condition: Some(ftd::p2::Boolean::IsNull {
-                                value: ftd::PropertyValue::Argument {
+                                value: ftd::PropertyValue::Variable {
                                     name: "active".to_string(),
                                     kind: crate::p2::Kind::Optional {
                                         kind: Box::new(crate::p2::Kind::boolean()),
@@ -1913,7 +2037,7 @@ mod test {
                                 (
                                     s("text"),
                                     crate::component::Property {
-                                        default: Some(crate::PropertyValue::Argument {
+                                        default: Some(crate::PropertyValue::Variable {
                                             name: "name".to_string(),
                                             kind: crate::p2::Kind::caption_or_body(),
                                         }),
@@ -1922,81 +2046,11 @@ mod test {
                                 ),
                             ])
                             .collect(),
+                            ..Default::default()
                         },
                     },
                 ],
                 kernel: false,
-                invocations: vec![
-                    std::array::IntoIter::new([
-                        (s("active"), crate::Value::Boolean { value: true }),
-                        (
-                            s("id"),
-                            crate::Value::String {
-                                text: "/welcome/".to_string(),
-                                source: crate::TextSource::Header,
-                            },
-                        ),
-                        (
-                            s("name"),
-                            crate::Value::String {
-                                text: "5PM Tasks".to_string(),
-                                source: crate::TextSource::Header,
-                            },
-                        ),
-                    ])
-                    .collect(),
-                    std::array::IntoIter::new([
-                        (
-                            s("id"),
-                            crate::Value::String {
-                                text: "/Building/".to_string(),
-                                source: crate::TextSource::Header,
-                            },
-                        ),
-                        (
-                            s("name"),
-                            crate::Value::String {
-                                text: "Log".to_string(),
-                                source: crate::TextSource::Header,
-                            },
-                        ),
-                    ])
-                    .collect(),
-                    std::array::IntoIter::new([
-                        (
-                            s("id"),
-                            crate::Value::String {
-                                text: "/ChildBuilding/".to_string(),
-                                source: crate::TextSource::Header,
-                            },
-                        ),
-                        (
-                            s("name"),
-                            crate::Value::String {
-                                text: "ChildLog".to_string(),
-                                source: crate::TextSource::Header,
-                            },
-                        ),
-                    ])
-                    .collect(),
-                    std::array::IntoIter::new([
-                        (
-                            s("id"),
-                            crate::Value::String {
-                                text: "/Building2/".to_string(),
-                                source: crate::TextSource::Header,
-                            },
-                        ),
-                        (
-                            s("name"),
-                            crate::Value::String {
-                                text: "Log2".to_string(),
-                                source: crate::TextSource::Header,
-                            },
-                        ),
-                    ])
-                    .collect(),
-                ],
                 ..Default::default()
             }),
         );
@@ -2024,7 +2078,7 @@ mod test {
                     (
                         s("id"),
                         crate::component::Property {
-                            default: Some(crate::PropertyValue::Argument {
+                            default: Some(crate::PropertyValue::Variable {
                                 name: "id".to_string(),
                                 kind: crate::p2::Kind::Optional {
                                     kind: Box::new(crate::p2::Kind::string()),
@@ -2049,14 +2103,6 @@ mod test {
                 .collect(),
                 instructions: vec![],
                 kernel: false,
-                invocations: vec![std::array::IntoIter::new([(
-                    s("id"),
-                    crate::Value::String {
-                        text: "toc_main".to_string(),
-                        source: crate::TextSource::Header,
-                    },
-                )])
-                .collect()],
                 ..Default::default()
             }),
         );
@@ -2081,7 +2127,7 @@ mod test {
                     (
                         s("text"),
                         crate::component::Property {
-                            default: Some(crate::PropertyValue::Argument {
+                            default: Some(crate::PropertyValue::Variable {
                                 name: "text".to_string(),
                                 kind: crate::p2::Kind::caption_or_body(),
                             }),
@@ -2114,6 +2160,7 @@ mod test {
                                                     b: 255,
                                                     alpha: 1.0,
                                                 }),
+                                                reference: Some(s("@name@0,0,0")),
                                                 ..Default::default()
                                             },
                                             size: Some(14),
@@ -2122,7 +2169,6 @@ mod test {
                                         ftd_rt::Element::Null,
                                         ftd_rt::Element::Column(ftd_rt::Column {
                                             container: ftd_rt::Container {
-                                                external_children: Default::default(),
                                                 children: vec![
                                                     ftd_rt::Element::Null,
                                                     ftd_rt::Element::Text(ftd_rt::Text {
@@ -2135,6 +2181,7 @@ mod test {
                                                                 b: 77,
                                                                 alpha: 1.0,
                                                             }),
+                                                            reference: Some(s("@name@0,0,0,0")),
                                                             ..Default::default()
                                                         },
                                                         size: Some(14),
@@ -2160,6 +2207,9 @@ mod test {
                                                                                     alpha: 1.0,
                                                                                 },
                                                                             ),
+                                                                            reference: Some(s(
+                                                                                "@name@0,0,0,0,0",
+                                                                            )),
                                                                             ..Default::default()
                                                                         },
                                                                         size: Some(14),
@@ -2171,16 +2221,33 @@ mod test {
                                                             ..Default::default()
                                                         },
                                                         common: ftd_rt::Common {
+                                                            locals: std::array::IntoIter::new([
+                                                                (
+                                                                    s("id@0,0,0,0,0"),
+                                                                    s("/ChildBuilding/"),
+                                                                ),
+                                                                (
+                                                                    s("name@0,0,0,0,0"),
+                                                                    s("ChildLog"),
+                                                                ),
+                                                            ])
+                                                            .collect(),
                                                             data_id: Some(s("/ChildBuilding/")),
                                                             width: Some(ftd_rt::Length::Fill),
                                                             ..Default::default()
                                                         },
                                                     }),
                                                 ],
+                                                external_children: Default::default(),
                                                 open: (Some(true), None),
                                                 ..Default::default()
                                             },
                                             common: ftd_rt::Common {
+                                                locals: std::array::IntoIter::new([
+                                                    (s("id@0,0,0,0"), s("/Building/")),
+                                                    (s("name@0,0,0,0"), s("Log")),
+                                                ])
+                                                .collect(),
                                                 data_id: Some(s("/Building/")),
                                                 width: Some(ftd_rt::Length::Fill),
                                                 ..Default::default()
@@ -2201,6 +2268,7 @@ mod test {
                                                                 b: 77,
                                                                 alpha: 1.0,
                                                             }),
+                                                            reference: Some(s("@name@0,0,0,1")),
                                                             ..Default::default()
                                                         },
                                                         size: Some(14),
@@ -2211,6 +2279,11 @@ mod test {
                                                 ..Default::default()
                                             },
                                             common: ftd_rt::Common {
+                                                locals: std::array::IntoIter::new([
+                                                    (s("id@0,0,0,1"), s("/Building2/")),
+                                                    (s("name@0,0,0,1"), s("Log2")),
+                                                ])
+                                                .collect(),
                                                 data_id: Some(s("/Building2/")),
                                                 width: Some(ftd_rt::Length::Fill),
                                                 ..Default::default()
@@ -2222,6 +2295,12 @@ mod test {
                                     ..Default::default()
                                 },
                                 common: ftd_rt::Common {
+                                    locals: std::array::IntoIter::new([
+                                        (s("active@0,0,0"), s("true")),
+                                        (s("id@0,0,0"), s("/welcome/")),
+                                        (s("name@0,0,0"), s("5PM Tasks")),
+                                    ])
+                                    .collect(),
                                     data_id: Some(s("/welcome/")),
                                     width: Some(ftd_rt::Length::Fill),
                                     ..Default::default()
@@ -2230,6 +2309,8 @@ mod test {
                             ..Default::default()
                         },
                         common: ftd_rt::Common {
+                            locals: std::array::IntoIter::new([(s("id@0,0"), s("toc_main"))])
+                                .collect(),
                             data_id: Some(s("toc_main")),
                             height: Some(ftd_rt::Length::Fill),
                             width: Some(ftd_rt::Length::Px { value: 300 }),
@@ -2241,20 +2322,14 @@ mod test {
                 ..Default::default()
             }));
 
-        let (g_bag, g_col) = crate::p2::interpreter::interpret(
-            "foo/bar",
-            indoc::indoc!(
-                "
-                -- import: creating-a-tree as ft
-                -- ft.ft_toc:
-                "
-            ),
-            &ftd::p2::TestLibrary {},
-        )
-        .expect("found error");
+        p!(
+            "
+            -- import: creating-a-tree as ft
 
-        pretty_assertions::assert_eq!(g_bag, bag);
-        pretty_assertions::assert_eq!(g_col, main);
+            -- ft.ft_toc:
+            ",
+            (bag, main),
+        );
     }
 
     #[test]
@@ -2292,7 +2367,7 @@ mod test {
                 properties: std::array::IntoIter::new([(
                     s("text"),
                     crate::component::Property {
-                        default: Some(crate::PropertyValue::Argument {
+                        default: Some(crate::PropertyValue::Variable {
                             name: "body".to_string(),
                             kind: crate::p2::Kind::caption_or_body(),
                         }),
@@ -2366,10 +2441,10 @@ mod test {
                             },
                         )])
                         .collect(),
+                        ..Default::default()
                     },
                 }],
                 kernel: false,
-                invocations: vec![std::collections::BTreeMap::new()],
                 ..Default::default()
             }),
         );
@@ -2402,19 +2477,15 @@ mod test {
                     ..Default::default()
                 },
             }));
-        let (g_bag, g_col) = crate::p2::interpreter::interpret(
-            "foo/bar",
-            indoc::indoc!(
-                "
-                -- import: reference as ct
-                -- ct.test-component:
-                "
-            ),
-            &ftd::p2::TestLibrary {},
-        )
-        .expect("found error");
-        pretty_assertions::assert_eq!(g_bag, bag);
-        pretty_assertions::assert_eq!(g_col, main);
+
+        p!(
+            "
+            -- import: reference as ct
+
+            -- ct.test-component:
+            ",
+            (bag, main),
+        );
     }
 
     #[test]
@@ -2434,7 +2505,7 @@ mod test {
                 properties: std::array::IntoIter::new([(
                     s("text"),
                     crate::component::Property {
-                        default: Some(crate::PropertyValue::Argument {
+                        default: Some(crate::PropertyValue::Variable {
                             name: "name".to_string(),
                             kind: crate::p2::Kind::caption_or_body(),
                         }),
@@ -2478,6 +2549,11 @@ mod test {
             .push(ftd_rt::Element::Text(ftd_rt::Text {
                 text: ftd::markdown_line("hello"),
                 line: true,
+                common: ftd_rt::Common {
+                    locals: std::array::IntoIter::new([(s("name@0"), s("hello"))]).collect(),
+                    reference: Some(s("@name@0")),
+                    ..Default::default()
+                },
                 ..Default::default()
             }));
         main.container
@@ -2485,6 +2561,11 @@ mod test {
             .push(ftd_rt::Element::Text(ftd_rt::Text {
                 text: ftd::markdown_line("world"),
                 line: true,
+                common: ftd_rt::Common {
+                    locals: std::array::IntoIter::new([(s("name@1"), s("world"))]).collect(),
+                    reference: Some(s("@name@1")),
+                    ..Default::default()
+                },
                 ..Default::default()
             }));
         main.container
@@ -2492,6 +2573,11 @@ mod test {
             .push(ftd_rt::Element::Text(ftd_rt::Text {
                 text: ftd::markdown("yo yo"),
                 line: false,
+                common: ftd_rt::Common {
+                    locals: std::array::IntoIter::new([(s("name@2"), s("yo yo"))]).collect(),
+                    reference: Some(s("@name@2")),
+                    ..Default::default()
+                },
                 ..Default::default()
             }));
 
@@ -2500,9 +2586,9 @@ mod test {
             indoc::indoc!(
                 "
                 -- component foo:
-                $name: caption or body
+                caption or body $name:
                 component: ftd.text
-                text: ref $name
+                text: $name
 
                 -- foo: hello
 
@@ -2706,7 +2792,7 @@ mod test {
                         (
                             s("border-width"),
                             crate::component::Property {
-                                default: Some(crate::PropertyValue::Argument {
+                                default: Some(crate::PropertyValue::Variable {
                                     name: s("x"),
                                     kind: crate::p2::Kind::integer().into_optional(),
                                 }),
@@ -2772,17 +2858,22 @@ mod test {
                 },
                 ..Default::default()
             }));
+        row.common = ftd_rt::Common {
+            locals: std::array::IntoIter::new([(s("x@0"), s("10"))]).collect(),
+            ..Default::default()
+        };
+
         main.container.children.push(ftd_rt::Element::Row(row));
         p!(
             "
             -- component foo:
             component: ftd.row
-            $x: integer
+            integer $x:
 
             --- ftd.text:
             text: hello
             size: 14
-            border-width: ref $x
+            border-width: $x
             font-url: https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap
             font: Roboto
             font-display: swap
@@ -2816,11 +2907,10 @@ mod test {
 
         p!(
             "
-            -- list numbers:
-            type: integer
+            -- integer list $numbers:
 
-            -- numbers: 20
-            -- numbers: 30
+            -- $numbers: 20
+            -- $numbers: 30
             ",
             (bag, super::default_column()),
         );
@@ -2896,17 +2986,16 @@ mod test {
         p!(
             "
             -- record point:
-            x: integer
-            y: integer
+            integer x:
+            integer y:
 
-            -- list points:
-            type: point
+            -- point list $points:
 
-            -- points:
+            -- $points:
             x: 10
             y: 20
 
-            -- points:
+            -- $points:
             x: 0
             y: 0
             ",
@@ -2944,15 +3033,14 @@ mod test {
 
         p!(
             "
-            -- list numbers:
-            type: integer
+            -- integer list $numbers:
 
             -- numbers: 20
             -- numbers: 30
 
-            -- var x: 20
+            -- $x: 20
 
-            -- numbers: ref x
+            -- numbers: $x
             ",
             (bag, super::default_column()),
         );
@@ -3009,7 +3097,7 @@ mod test {
                                 (
                                     s("text"),
                                     crate::component::Property {
-                                        default: Some(crate::PropertyValue::Argument {
+                                        default: Some(crate::PropertyValue::Variable {
                                             name: s("title"),
                                             kind: crate::p2::Kind::caption_or_body(),
                                         }),
@@ -3038,7 +3126,7 @@ mod test {
                             events: vec![],
                             condition: if about_optional {
                                 Some(ftd::p2::Boolean::IsNotNull {
-                                    value: crate::PropertyValue::Argument {
+                                    value: crate::PropertyValue::Variable {
                                         name: s("about"),
                                         kind: crate::p2::Kind::body().into_optional(),
                                     },
@@ -3050,7 +3138,7 @@ mod test {
                             properties: std::array::IntoIter::new([(
                                 s("text"),
                                 crate::component::Property {
-                                    default: Some(crate::PropertyValue::Argument {
+                                    default: Some(crate::PropertyValue::Variable {
                                         name: s("about"),
                                         kind: crate::p2::Kind::caption_or_body(),
                                     }),
@@ -3066,7 +3154,7 @@ mod test {
                             events: vec![],
                             condition: if about_optional {
                                 Some(ftd::p2::Boolean::IsNotNull {
-                                    value: crate::PropertyValue::Argument {
+                                    value: crate::PropertyValue::Variable {
                                         name: s("src"),
                                         kind: crate::p2::Kind::string().into_optional(),
                                     },
@@ -3078,7 +3166,7 @@ mod test {
                             properties: std::array::IntoIter::new([(
                                 s("src"),
                                 crate::component::Property {
-                                    default: Some(crate::PropertyValue::Argument {
+                                    default: Some(crate::PropertyValue::Variable {
                                         name: s("src"),
                                         kind: crate::p2::Kind::string(),
                                     }),
@@ -3103,6 +3191,7 @@ mod test {
             line: true,
             common: ftd_rt::Common {
                 position: ftd_rt::Position::Center,
+                reference: Some(s("@title@0")),
                 ..Default::default()
             },
             ..Default::default()
@@ -3118,11 +3207,19 @@ mod test {
                 )
                 .trim(),
             ),
+            common: ftd_rt::Common {
+                reference: Some(s("@about@0")),
+                ..Default::default()
+            },
             ..Default::default()
         };
 
         let image = ftd_rt::Image {
             src: s("/static/home/document-type-min.png"),
+            common: ftd_rt::Common {
+                reference: Some(s("@src@0")),
+                ..Default::default()
+            },
             ..Default::default()
         };
 
@@ -3132,6 +3229,15 @@ mod test {
             .push(ftd_rt::Element::Column(ftd_rt::Column {
                 common: ftd_rt::Common {
                     padding: Some(30),
+                    locals: std::array::IntoIter::new([
+                        (s("about@0"), s("UI screens, behaviour and journeys, database tables, APIs, how to\ncontribute to, deploy, or monitor microservice, everything that\nmakes web or mobile product teams productive.")),
+                        (
+                            s("src@0"),
+                            s("/static/home/document-type-min.png"),
+                        ),
+                        (s("title@0"), s("What kind of documentation?")),
+                    ])
+                    .collect(),
                     ..Default::default()
                 },
                 container: ftd_rt::Container {
@@ -3148,20 +3254,20 @@ mod test {
             "
             -- component white-two-image:
             component: ftd.column
-            $title: caption
-            $about: body
-            $src: string
+            caption $title:
+            body $about:
+            string $src:
             padding: 30
 
             --- ftd.text:
-            text: ref $title
+            text: $title
             align: center
 
             --- ftd.text:
-            text: ref $about
+            text: $about
 
             --- ftd.image:
-            src: ref $src
+            src: $src
 
             -- white-two-image: What kind of documentation?
             src: /static/home/document-type-min.png
@@ -3180,6 +3286,7 @@ mod test {
             text: ftd::markdown_line("What kind of documentation?"),
             common: ftd_rt::Common {
                 position: ftd_rt::Position::Center,
+                reference: Some(s("@title@0")),
                 ..Default::default()
             },
             line: true,
@@ -3189,6 +3296,7 @@ mod test {
             text: ftd::markdown_line("second call"),
             common: ftd_rt::Common {
                 position: ftd_rt::Position::Center,
+                reference: Some(s("@title@1")),
                 ..Default::default()
             },
             line: true,
@@ -3205,14 +3313,26 @@ mod test {
                 )
                 .trim(),
             ),
+            common: ftd_rt::Common {
+                reference: Some(s("@about@0")),
+                ..Default::default()
+            },
             ..Default::default()
         };
         let image = ftd_rt::Image {
             src: s("/static/home/document-type-min.png"),
+            common: ftd_rt::Common {
+                reference: Some(s("@src@0")),
+                ..Default::default()
+            },
             ..Default::default()
         };
         let second_image = ftd_rt::Image {
             src: s("second-image.png"),
+            common: ftd_rt::Common {
+                reference: Some(s("@src@1")),
+                ..Default::default()
+            },
             ..Default::default()
         };
 
@@ -3222,6 +3342,18 @@ mod test {
             .push(ftd_rt::Element::Column(ftd_rt::Column {
                 common: ftd_rt::Common {
                     padding: Some(30),
+                    locals: std::array::IntoIter::new([
+                        (s("about@0"), s("UI screens, behaviour and journeys, database tables, APIs, how to\ncontribute to, deploy, or monitor microservice, everything that\nmakes web or mobile product teams productive.")),
+                        (
+                            s("src@0"),
+                            s("/static/home/document-type-min.png"),
+                        ),
+                        (
+                            s("title@0"),
+                            s("What kind of documentation?"),
+                        ),
+                    ])
+                    .collect(),
                     ..Default::default()
                 },
                 container: ftd_rt::Container {
@@ -3238,6 +3370,11 @@ mod test {
             .push(ftd_rt::Element::Column(ftd_rt::Column {
                 common: ftd_rt::Common {
                     padding: Some(30),
+                    locals: std::array::IntoIter::new([
+                        (s("src@1"), s("second-image.png")),
+                        (s("title@1"), s("second call")),
+                    ])
+                    .collect(),
                     ..Default::default()
                 },
                 container: ftd_rt::Container {
@@ -3254,22 +3391,22 @@ mod test {
             "
             -- component white-two-image:
             component: ftd.column
-            $title: caption
-            $about: optional body
-            $src: optional string
+            caption $title:
+            optional body $about:
+            optional string $src:
             padding: 30
 
             --- ftd.text:
-            text: ref $title
+            text: $title
             align: center
 
             --- ftd.text:
             if: $about is not null
-            text: ref $about
+            text: $about
 
             --- ftd.image:
             if: $src is not null
-            src: ref $src
+            src: $src
 
             -- white-two-image: What kind of documentation?
             src: /static/home/document-type-min.png
@@ -3291,6 +3428,7 @@ mod test {
             text: ftd::markdown_line("What kind of documentation?"),
             common: ftd_rt::Common {
                 position: ftd_rt::Position::Center,
+                reference: Some(s("@title@0")),
                 ..Default::default()
             },
             line: true,
@@ -3300,6 +3438,7 @@ mod test {
             text: ftd::markdown_line("second call"),
             common: ftd_rt::Common {
                 position: ftd_rt::Position::Center,
+                reference: Some(s("@title@1")),
                 ..Default::default()
             },
             line: true,
@@ -3309,6 +3448,7 @@ mod test {
             text: ftd::markdown_line("third call"),
             common: ftd_rt::Common {
                 position: ftd_rt::Position::Center,
+                reference: Some(s("@title@2")),
                 ..Default::default()
             },
             line: true,
@@ -3325,14 +3465,26 @@ mod test {
                 )
                 .trim(),
             ),
+            common: ftd_rt::Common {
+                reference: Some(s("@about@0")),
+                ..Default::default()
+            },
             ..Default::default()
         };
         let image = ftd_rt::Image {
             src: s("/static/home/document-type-min.png"),
+            common: ftd_rt::Common {
+                reference: Some(s("@src@0")),
+                ..Default::default()
+            },
             ..Default::default()
         };
         let second_image = ftd_rt::Image {
             src: s("second-image.png"),
+            common: ftd_rt::Common {
+                reference: Some(s("@src@1")),
+                ..Default::default()
+            },
             ..Default::default()
         };
 
@@ -3342,6 +3494,18 @@ mod test {
             .push(ftd_rt::Element::Column(ftd_rt::Column {
                 common: ftd_rt::Common {
                     padding: Some(30),
+                    locals: std::array::IntoIter::new([
+                        (s("about@0"), s("UI screens, behaviour and journeys, database tables, APIs, how to\ncontribute to, deploy, or monitor microservice, everything that\nmakes web or mobile product teams productive.")),
+                        (
+                            s("src@0"),
+                            s("/static/home/document-type-min.png"),
+                        ),
+                        (
+                            s("title@0"),
+                            s("What kind of documentation?"),
+                        ),
+                    ])
+                    .collect(),
                     ..Default::default()
                 },
                 container: ftd_rt::Container {
@@ -3358,6 +3522,11 @@ mod test {
             .push(ftd_rt::Element::Column(ftd_rt::Column {
                 common: ftd_rt::Common {
                     padding: Some(30),
+                    locals: std::array::IntoIter::new([
+                        (s("src@1"), s("second-image.png")),
+                        (s("title@1"), s("second call")),
+                    ])
+                    .collect(),
                     ..Default::default()
                 },
                 container: ftd_rt::Container {
@@ -3374,6 +3543,7 @@ mod test {
             .push(ftd_rt::Element::Column(ftd_rt::Column {
                 common: ftd_rt::Common {
                     padding: Some(30),
+                    locals: std::array::IntoIter::new([(s("title@2"), s("third call"))]).collect(),
                     ..Default::default()
                 },
                 container: ftd_rt::Container {
@@ -3390,22 +3560,22 @@ mod test {
             "
             -- component white-two-image:
             component: ftd.column
-            $title: caption
-            $about: optional body
-            $src: optional string
+            caption $title:
+            optional body $about:
+            optional string $src:
             padding: 30
 
             --- ftd.text:
-            text: ref $title
+            text: $title
             align: center
 
             --- ftd.text:
             if: $about is not null
-            text: ref $about
+            text: $about
 
             --- ftd.image:
             if: $src is not null
-            src: ref $src
+            src: $src
 
             -- white-two-image: What kind of documentation?
             src: /static/home/document-type-min.png
@@ -3437,7 +3607,7 @@ mod test {
                 properties: std::array::IntoIter::new([(
                     s("text"),
                     crate::component::Property {
-                        default: Some(crate::PropertyValue::Argument {
+                        default: Some(crate::PropertyValue::Variable {
                             name: s("body"),
                             kind: crate::p2::Kind::string().string_any(),
                         }),
@@ -3487,7 +3657,7 @@ mod test {
                             properties: std::array::IntoIter::new([(
                                 s("text"),
                                 crate::component::Property {
-                                    default: Some(crate::PropertyValue::Argument {
+                                    default: Some(crate::PropertyValue::Variable {
                                         name: s("title"),
                                         kind: crate::p2::Kind::caption_or_body(),
                                     }),
@@ -3502,7 +3672,7 @@ mod test {
                         child: crate::ChildComponent {
                             events: vec![],
                             condition: Some(ftd::p2::Boolean::IsNotNull {
-                                value: crate::PropertyValue::Argument {
+                                value: crate::PropertyValue::Variable {
                                     name: s("body"),
                                     kind: crate::p2::Kind::body().into_optional(),
                                 },
@@ -3511,7 +3681,7 @@ mod test {
                             properties: std::array::IntoIter::new([(
                                 s("body"),
                                 crate::component::Property {
-                                    default: Some(crate::PropertyValue::Argument {
+                                    default: Some(crate::PropertyValue::Variable {
                                         name: s("body"),
                                         kind: crate::p2::Kind::body(),
                                     }),
@@ -3536,16 +3706,36 @@ mod test {
                         ftd_rt::Element::Text(ftd_rt::Text {
                             text: ftd::markdown_line("hello"),
                             line: true,
+                            common: ftd_rt::Common {
+                                reference: Some(s("@title@0")),
+                                ..Default::default()
+                            },
                             ..Default::default()
                         }),
                         ftd_rt::Element::Text(ftd_rt::Text {
                             text: ftd::markdown("what about the body?"),
+                            common: ftd_rt::Common {
+                                locals: std::array::IntoIter::new([(
+                                    s("body@0,1"),
+                                    s("what about the body?"),
+                                )])
+                                .collect(),
+                                reference: Some(s("@body@0,1")),
+                                ..Default::default()
+                            },
                             ..Default::default()
                         }),
                     ],
                     ..Default::default()
                 },
-                ..Default::default()
+                common: ftd_rt::Common {
+                    locals: std::array::IntoIter::new([
+                        (s("body@0"), s("what about the body?")),
+                        (s("title@0"), s("hello")),
+                    ])
+                    .collect(),
+                    ..Default::default()
+                },
             }));
         main.container
             .children
@@ -3555,13 +3745,21 @@ mod test {
                         ftd_rt::Element::Text(ftd_rt::Text {
                             text: ftd::markdown_line("heading without body"),
                             line: true,
+                            common: ftd_rt::Common {
+                                reference: Some(s("@title@1")),
+                                ..Default::default()
+                            },
                             ..Default::default()
                         }),
                         ftd_rt::Element::Null,
                     ],
                     ..Default::default()
                 },
-                ..Default::default()
+                common: ftd_rt::Common {
+                    locals: std::array::IntoIter::new([(s("title@1"), s("heading without body"))])
+                        .collect(),
+                    ..Default::default()
+                },
             }));
 
         p!(
@@ -3570,15 +3768,15 @@ mod test {
 
             -- component h0:
             component: ftd.column
-            $title: caption
-            $body: optional body
+            caption $title:
+            optional body $body:
 
             --- ftd.text:
-            text: ref $title
+            text: $title
 
             --- ft.markdown:
             if: $body is not null
-            body: ref $body
+            body: $body
 
             -- h0: hello
 
@@ -3614,7 +3812,7 @@ mod test {
                             (
                                 s("src"),
                                 crate::component::Property {
-                                    default: Some(crate::PropertyValue::Argument {
+                                    default: Some(crate::PropertyValue::Variable {
                                         name: s("src"),
                                         kind: crate::p2::Kind::string(),
                                     }),
@@ -3624,7 +3822,7 @@ mod test {
                             (
                                 s("width"),
                                 crate::component::Property {
-                                    default: Some(crate::PropertyValue::Argument {
+                                    default: Some(crate::PropertyValue::Variable {
                                         name: s("width"),
                                         kind: crate::p2::Kind::string().into_optional(),
                                     }),
@@ -3648,11 +3846,18 @@ mod test {
                 container: ftd_rt::Container {
                     children: vec![ftd_rt::Element::Image(ftd_rt::Image {
                         src: s("foo.png"),
+                        common: ftd_rt::Common {
+                            reference: Some(s("@src@0")),
+                            ..Default::default()
+                        },
                         ..Default::default()
                     })],
                     ..Default::default()
                 },
-                ..Default::default()
+                common: ftd_rt::Common {
+                    locals: std::array::IntoIter::new([(s("src@0"), s("foo.png"))]).collect(),
+                    ..Default::default()
+                },
             }));
         main.container
             .children
@@ -3661,6 +3866,7 @@ mod test {
                     children: vec![ftd_rt::Element::Image(ftd_rt::Image {
                         src: s("bar.png"),
                         common: ftd_rt::Common {
+                            reference: Some(s("@src@1")),
                             width: Some(ftd_rt::Length::Px { value: 300 }),
                             ..Default::default()
                         },
@@ -3668,19 +3874,26 @@ mod test {
                     })],
                     ..Default::default()
                 },
-                ..Default::default()
+                common: ftd_rt::Common {
+                    locals: std::array::IntoIter::new([
+                        (s("src@1"), s("bar.png")),
+                        (s("width@1"), s("300")),
+                    ])
+                    .collect(),
+                    ..Default::default()
+                },
             }));
 
         p!(
             "
             -- component image:
             component: ftd.column
-            $src: string
-            $width: optional string
+            string $src:
+            optional string $width:
 
             --- ftd.image:
-            src: ref $src
-            width: ref $width
+            src: $src
+            width: $width
 
             -- image:
             src: foo.png
@@ -3776,13 +3989,17 @@ mod test {
                 line: false,
                 ..Default::default()
             }));
+        row.common = ftd_rt::Common {
+            locals: std::array::IntoIter::new([(s("x@0"), s("10"))]).collect(),
+            ..Default::default()
+        };
         main.container.children.push(ftd_rt::Element::Row(row));
 
         p!(
             "
             -- component foo:
             component: ftd.row
-            $x: integer
+            integer $x:
 
             --- ftd.decimal:
             value: 0.06
@@ -3881,13 +4098,19 @@ mod test {
                 line: false,
                 ..Default::default()
             }));
+
+        row.common = ftd_rt::Common {
+            locals: std::array::IntoIter::new([(s("x@0"), s("10"))]).collect(),
+            ..Default::default()
+        };
+
         main.container.children.push(ftd_rt::Element::Row(row));
 
         p!(
             "
             -- component foo:
             component: ftd.row
-            $x: integer
+            integer $x:
 
             --- ftd.integer:
             value: 3
@@ -4024,13 +4247,17 @@ mod test {
                 line: false,
                 ..Default::default()
             }));
+        row.common = ftd_rt::Common {
+            locals: std::array::IntoIter::new([(s("x@0"), s("10"))]).collect(),
+            ..Default::default()
+        };
         main.container.children.push(ftd_rt::Element::Row(row));
 
         p!(
             "
             -- component foo:
             component: ftd.row
-            $x: integer
+            integer $x:
 
             --- ftd.boolean:
             value: true
@@ -4159,24 +4386,79 @@ mod test {
             .push(ftd_rt::Element::Text(ftd_rt::Text {
                 text: ftd::markdown_line("argument present false"),
                 line: true,
+                common: ftd_rt::Common {
+                    condition: Some(ftd_rt::Condition {
+                        variable: s("@present@5"),
+                        value: s("false"),
+                    }),
+                    ..Default::default()
+                },
                 ..Default::default()
             }));
-        column.container.children.push(ftd_rt::Element::Null);
-
-        main.container
-            .children
-            .push(ftd_rt::Element::Column(column));
-
-        let mut column: ftd_rt::Column = Default::default();
-        column.container.children.push(ftd_rt::Element::Null);
         column
             .container
             .children
             .push(ftd_rt::Element::Text(ftd_rt::Text {
                 text: ftd::markdown_line("argument present true"),
                 line: true,
+                common: ftd_rt::Common {
+                    condition: Some(ftd_rt::Condition {
+                        variable: s("@present@5"),
+                        value: s("true"),
+                    }),
+                    is_not_visible: true,
+                    ..Default::default()
+                },
                 ..Default::default()
             }));
+
+        column.common = ftd_rt::Common {
+            locals: std::array::IntoIter::new([(s("present@5"), s("false"))]).collect(),
+            ..Default::default()
+        };
+
+        main.container
+            .children
+            .push(ftd_rt::Element::Column(column));
+
+        let mut column: ftd_rt::Column = Default::default();
+        column
+            .container
+            .children
+            .push(ftd_rt::Element::Text(ftd_rt::Text {
+                text: ftd::markdown_line("argument present false"),
+                line: true,
+                common: ftd_rt::Common {
+                    condition: Some(ftd_rt::Condition {
+                        variable: s("@present@6"),
+                        value: s("false"),
+                    }),
+                    is_not_visible: true,
+                    ..Default::default()
+                },
+                ..Default::default()
+            }));
+        column
+            .container
+            .children
+            .push(ftd_rt::Element::Text(ftd_rt::Text {
+                text: ftd::markdown_line("argument present true"),
+                line: true,
+                common: ftd_rt::Common {
+                    condition: Some(ftd_rt::Condition {
+                        variable: s("@present@6"),
+                        value: s("true"),
+                    }),
+                    ..Default::default()
+                },
+                ..Default::default()
+            }));
+
+        column.common = ftd_rt::Common {
+            locals: std::array::IntoIter::new([(s("present@6"), s("true"))]).collect(),
+            ..Default::default()
+        };
+
         main.container
             .children
             .push(ftd_rt::Element::Column(column));
@@ -4232,34 +4514,34 @@ mod test {
         p!(
             "
             -- import: fifthtry/ft
-            -- var present: true
+            -- $present: true
 
             -- ftd.text: present is true
-            if: present
+            if: $present
 
             -- ftd.text: present is false
-            if: not present
+            if: not $present
 
             -- ftd.text: dark-mode is true
-            if: ft.dark-mode
+            if: $ft.dark-mode
 
             -- ftd.text: dark-mode is false
-            if: not ft.dark-mode
+            if: not $ft.dark-mode
 
             -- component foo:
             component: ftd.column
 
             --- ftd.text: inner present false
-            if: not present
+            if: not $present
 
             --- ftd.text: inner present true
-            if: present
+            if: $present
 
             -- foo:
 
             -- component bar:
             component: ftd.column
-            $present: boolean
+            boolean $present:
 
             --- ftd.text: argument present false
             if: not $present
@@ -4271,16 +4553,16 @@ mod test {
             present: false
 
             -- bar:
-            present: ref ft.dark-mode
+            present: $ft.dark-mode
 
             -- component foo2:
             component: ftd.column
 
             --- ftd.text: foo2 dark-mode is true
-            if: ft.dark-mode
+            if: $ft.dark-mode
 
             --- ftd.text: foo2 dark-mode is false
-            if: not ft.dark-mode
+            if: not $ft.dark-mode
 
             -- foo2:
 
@@ -4323,6 +4605,7 @@ mod test {
                                 },
                             )])
                             .collect(),
+                            ..Default::default()
                         },
                     },
                     crate::component::Instruction::ChildComponent {
@@ -4344,26 +4627,9 @@ mod test {
                                 },
                             )])
                             .collect(),
+                            ..Default::default()
                         },
                     },
-                ],
-                invocations: vec![
-                    std::array::IntoIter::new([(
-                        s("id"),
-                        crate::Value::String {
-                            text: s("foo-1"),
-                            source: crate::TextSource::Header,
-                        },
-                    )])
-                    .collect(),
-                    std::array::IntoIter::new([(
-                        s("id"),
-                        crate::Value::String {
-                            text: s("foo-2"),
-                            source: crate::TextSource::Header,
-                        },
-                    )])
-                    .collect(),
                 ],
                 ..Default::default()
             }),
@@ -4437,35 +4703,30 @@ mod test {
                     ..Default::default()
                 },
             }));
-        let (g_bag, g_col) = crate::p2::interpreter::interpret(
-            "foo/bar",
-            indoc::indoc!(
-                "
-                -- component foo:
-                component: ftd.column
 
-                --- ftd.row:
-                id: r1
+        p!(
+            "
+            -- component foo:
+            component: ftd.column
 
-                --- ftd.row:
-                id: r2
+            --- ftd.row:
+            id: r1
 
-                -- foo:
-                id: foo-1
+            --- ftd.row:
+            id: r2
 
-                -- foo:
-                id: foo-2
+            -- foo:
+            id: foo-1
 
-                -- container: foo-1.r1
+            -- foo:
+            id: foo-2
 
-                -- ftd.text: hello
-                "
-            ),
-            &ftd::p2::TestLibrary {},
-        )
-        .expect("found error");
-        pretty_assertions::assert_eq!(g_bag, bag);
-        pretty_assertions::assert_eq!(g_col, main);
+            -- container: foo-1.r1
+
+            -- ftd.text: hello
+            ",
+            (bag, main),
+        );
     }
 
     #[test]
@@ -4497,6 +4758,7 @@ mod test {
                                 },
                             )])
                             .collect(),
+                            ..Default::default()
                         },
                     },
                     crate::component::Instruction::ChildComponent {
@@ -4518,26 +4780,9 @@ mod test {
                                 },
                             )])
                             .collect(),
+                            ..Default::default()
                         },
                     },
-                ],
-                invocations: vec![
-                    std::array::IntoIter::new([(
-                        s("id"),
-                        crate::Value::String {
-                            text: s("foo-1"),
-                            source: crate::TextSource::Header,
-                        },
-                    )])
-                    .collect(),
-                    std::array::IntoIter::new([(
-                        s("id"),
-                        crate::Value::String {
-                            text: s("foo-2"),
-                            source: crate::TextSource::Header,
-                        },
-                    )])
-                    .collect(),
                 ],
                 ..Default::default()
             }),
@@ -4612,28 +4857,22 @@ mod test {
                 },
             }));
 
-        let (g_bag, g_col) = crate::p2::interpreter::interpret(
-            "foo/bar",
-            indoc::indoc!(
-                "
-                -- import: inner_container as ic
+        p!(
+            "
+            -- import: inner_container as ic
 
-                -- ic.foo:
-                id: foo-1
+            -- ic.foo:
+            id: foo-1
 
-                -- ic.foo:
-                id: foo-2
+            -- ic.foo:
+            id: foo-2
 
-                -- container: foo-1.r1
+            -- container: foo-1.r1
 
-                -- ftd.text: hello
-                "
-            ),
-            &ftd::p2::TestLibrary {},
-        )
-        .expect("found error");
-        pretty_assertions::assert_eq!(g_bag, bag);
-        pretty_assertions::assert_eq!(g_col, main);
+            -- ftd.text: hello
+            ",
+            (bag, main),
+        );
     }
 
     #[test]
@@ -4722,37 +4961,31 @@ mod test {
                                 },
                             )])
                             .collect(),
+                            ..Default::default()
                         },
                     },
                 ],
-                invocations: vec![std::collections::BTreeMap::new()],
                 ..Default::default()
             }),
         );
 
-        let (g_bag, g_col) = crate::p2::interpreter::interpret(
-            "foo/bar",
-            indoc::indoc!(
-                "
-                -- component foo:
-                open: some-child
-                component: ftd.column
+        p!(
+            "
+            -- component foo:
+            open: some-child
+            component: ftd.column
 
-                --- ftd.row:
+            --- ftd.row:
 
-                --- ftd.row:
-                id: some-child
+            --- ftd.row:
+            id: some-child
 
-                -- foo:
+            -- foo:
 
-                -- ftd.text: hello
-                "
-            ),
-            &ftd::p2::TestLibrary {},
-        )
-        .expect("found error");
-        pretty_assertions::assert_eq!(g_bag, bag);
-        pretty_assertions::assert_eq!(g_col, main);
+            -- ftd.text: hello
+            ",
+            (bag, main),
+        );
     }
 
     #[test]
@@ -4808,6 +5041,11 @@ mod test {
                                                 ..Default::default()
                                             },
                                             common: ftd_rt::Common {
+                                                locals: std::array::IntoIter::new([(
+                                                    s("id@1,0,0,0"),
+                                                    s("some-child"),
+                                                )])
+                                                .collect(),
                                                 condition: Some(ftd_rt::Condition {
                                                     variable: s("foo/bar#mobile"),
                                                     value: s("true"),
@@ -4829,6 +5067,11 @@ mod test {
                                                 ..Default::default()
                                             },
                                             common: ftd_rt::Common {
+                                                locals: std::array::IntoIter::new([(
+                                                    s("id@1,0,0,1"),
+                                                    s("some-child"),
+                                                )])
+                                                .collect(),
                                                 condition: Some(ftd_rt::Condition {
                                                     variable: s("foo/bar#mobile"),
                                                     value: s("false"),
@@ -4849,6 +5092,11 @@ mod test {
                                     ..Default::default()
                                 },
                                 common: ftd_rt::Common {
+                                    locals: std::array::IntoIter::new([(
+                                        s("id@1,0,0"),
+                                        s("foo-id"),
+                                    )])
+                                    .collect(),
                                     id: Some(s("foo-id")),
                                     data_id: Some(s("foo-id")),
                                     ..Default::default()
@@ -4885,7 +5133,7 @@ mod test {
                 properties: std::array::IntoIter::new([(
                     s("id"),
                     ftd::component::Property {
-                        default: Some(crate::PropertyValue::Argument {
+                        default: Some(crate::PropertyValue::Variable {
                             name: "id".to_string(),
                             kind: crate::p2::Kind::Optional {
                                 kind: Box::new(crate::p2::Kind::string()),
@@ -4914,16 +5162,9 @@ mod test {
                             },
                         )])
                         .collect(),
+                        ..Default::default()
                     },
                 }],
-                invocations: vec![std::array::IntoIter::new([(
-                    s("id"),
-                    crate::Value::String {
-                        text: s("some-child"),
-                        source: crate::TextSource::Header,
-                    },
-                )])
-                .collect()],
                 ..Default::default()
             }),
         );
@@ -4974,6 +5215,7 @@ mod test {
                                 },
                             )])
                             .collect(),
+                            ..Default::default()
                         },
                     },
                     crate::component::Instruction::ChildComponent {
@@ -5003,17 +5245,10 @@ mod test {
                                 },
                             )])
                             .collect(),
+                            ..Default::default()
                         },
                     },
                 ],
-                invocations: vec![std::array::IntoIter::new([(
-                    s("id"),
-                    crate::Value::String {
-                        text: s("foo-id"),
-                        source: crate::TextSource::Header,
-                    },
-                )])
-                .collect()],
                 ..Default::default()
             }),
         );
@@ -5040,7 +5275,7 @@ mod test {
                 properties: std::array::IntoIter::new([(
                     s("id"),
                     ftd::component::Property {
-                        default: Some(crate::PropertyValue::Argument {
+                        default: Some(crate::PropertyValue::Variable {
                             name: "id".to_string(),
                             kind: crate::p2::Kind::Optional {
                                 kind: Box::new(crate::p2::Kind::string()),
@@ -5083,75 +5318,61 @@ mod test {
                             ),
                         ])
                         .collect(),
+                        ..Default::default()
                     },
                 }],
-                invocations: vec![std::array::IntoIter::new([(
-                    s("id"),
-                    crate::Value::String {
-                        text: s("some-child"),
-                        source: crate::TextSource::Header,
-                    },
-                )])
-                .collect()],
                 ..Default::default()
             }),
         );
 
-        let (g_bag, g_col) = crate::p2::interpreter::interpret(
-            "foo/bar",
-            indoc::indoc!(
-                "
-                -- component mobile-display:
-                component: ftd.column
-                $id: optional string
-                id: ref $id
+        p!(
+            "
+            -- component mobile-display:
+            component: ftd.column
+            optional string $id:
+            id: $id
 
-                --- ftd.text: Mobile Display
-                id: mobile-display
+            --- ftd.text: Mobile Display
+            id: mobile-display
 
-                -- component desktop-display:
-                component: ftd.column
-                $id: optional string
-                id: ref $id
+            -- component desktop-display:
+            component: ftd.column
+            optional string $id:
+            id: $id
 
-                --- ftd.text: Desktop Display
+            --- ftd.text: Desktop Display
 
-                -- var mobile: true
+            -- $mobile: true
 
-                -- component foo:
-                open: some-child
-                component: ftd.column
+            -- component foo:
+            open: some-child
+            component: ftd.column
 
-                --- mobile-display:
-                if: mobile
-                id: some-child
+            --- mobile-display:
+            if: $mobile
+            id: some-child
 
-                --- desktop-display:
-                if: not mobile
-                id: some-child
+            --- desktop-display:
+            if: not $mobile
+            id: some-child
 
-                -- ftd.text: Start Browser
+            -- ftd.text: Start Browser
 
-                -- ftd.column:
-                id: c1
+            -- ftd.column:
+            id: c1
 
-                -- ftd.column:
-                id: c2
+            -- ftd.column:
+            id: c2
 
-                -- foo:
-                id: foo-id
+            -- foo:
+            id: foo-id
 
-                -- ftd.text: hello
+            -- ftd.text: hello
 
-                -- ftd.text: hello1
-                "
-            ),
-            &ftd::p2::TestLibrary {},
-        )
-        .expect("found error");
-
-        pretty_assertions::assert_eq!(g_bag, bag);
-        pretty_assertions::assert_eq!(g_col, main);
+            -- ftd.text: hello1
+            ",
+            (bag, main),
+        );
     }
 
     #[test]
@@ -5271,7 +5492,7 @@ mod test {
                 --- ftd.column:
                 id: mobile-container
 
-                -- var is-mobile: true
+                -- $is-mobile: true
 
                 -- component page:
                 component: ftd.column
@@ -5281,13 +5502,13 @@ mod test {
                 id: start
 
                 --- desktop:
-                if: not is-mobile
+                if: not $is-mobile
                 id: main-container
 
                 --- container: start
 
                 --- mobile:
-                if: is-mobile
+                if: $is-mobile
                 id: main-container
 
                 -- page:
@@ -5339,6 +5560,11 @@ mod test {
                                 ..Default::default()
                             },
                             common: ftd_rt::Common {
+                                locals: std::array::IntoIter::new([(
+                                    s("id@0,0"),
+                                    s("main-container"),
+                                )])
+                                .collect(),
                                 condition: Some(ftd_rt::Condition {
                                     variable: s("foo/bar#is-mobile"),
                                     value: s("false"),
@@ -5360,6 +5586,11 @@ mod test {
                                 ..Default::default()
                             },
                             common: ftd_rt::Common {
+                                locals: std::array::IntoIter::new([(
+                                    s("id@0,1"),
+                                    s("main-container"),
+                                )])
+                                .collect(),
                                 condition: Some(ftd_rt::Condition {
                                     variable: s("foo/bar#is-mobile"),
                                     value: s("true"),
@@ -5386,32 +5617,32 @@ mod test {
                 "
                 -- component desktop:
                 component: ftd.column
-                $id: optional string
-                id: ref $id
+                optional string $id:
+                id: $id
 
                 --- ftd.column:
                 id: foo
 
                 -- component mobile:
                 component: ftd.column
-                $id: optional string
-                id: ref $id
+                optional string $id:
+                id: $id
 
                 --- ftd.column:
                 id: foo
 
-                -- var is-mobile: true
+                -- $is-mobile: true
 
                 -- component page:
                 component: ftd.column
                 open: main-container.foo
 
                 --- desktop:
-                if: not is-mobile
+                if: not $is-mobile
                 id: main-container
 
                 --- mobile:
-                if: is-mobile
+                if: $is-mobile
                 id: main-container
 
                 -- page:
@@ -5451,6 +5682,8 @@ mod test {
                     container: ftd_rt::Container {
                         children: vec![ftd_rt::Element::Column(ftd_rt::Column {
                             common: ftd_rt::Common {
+                                locals: std::array::IntoIter::new([(s("id@0,0,0,0"), s("foo"))])
+                                    .collect(),
                                 data_id: Some(s("foo")),
                                 ..Default::default()
                             },
@@ -5486,6 +5719,11 @@ mod test {
                                     container: ftd_rt::Container {
                                         children: vec![ftd_rt::Element::Column(ftd_rt::Column {
                                             common: ftd_rt::Common {
+                                                locals: std::array::IntoIter::new([(
+                                                    s("id@0,0,0,0"),
+                                                    s("foo"),
+                                                )])
+                                                .collect(),
                                                 data_id: Some(s("foo")),
                                                 ..Default::default()
                                             },
@@ -5507,6 +5745,11 @@ mod test {
                                 ..Default::default()
                             },
                             common: ftd_rt::Common {
+                                locals: std::array::IntoIter::new([(
+                                    s("id@0,0"),
+                                    s("main-container"),
+                                )])
+                                .collect(),
                                 condition: Some(ftd_rt::Condition {
                                     variable: s("foo/bar#is-mobile"),
                                     value: s("false"),
@@ -5522,6 +5765,11 @@ mod test {
                                     container: ftd_rt::Container {
                                         children: vec![ftd_rt::Element::Column(ftd_rt::Column {
                                             common: ftd_rt::Common {
+                                                locals: std::array::IntoIter::new([(
+                                                    s("id@0,1,0,0"),
+                                                    s("foo"),
+                                                )])
+                                                .collect(),
                                                 data_id: Some(s("foo")),
                                                 ..Default::default()
                                             },
@@ -5543,6 +5791,11 @@ mod test {
                                 ..Default::default()
                             },
                             common: ftd_rt::Common {
+                                locals: std::array::IntoIter::new([(
+                                    s("id@0,1"),
+                                    s("main-container"),
+                                )])
+                                .collect(),
                                 condition: Some(ftd_rt::Condition {
                                     variable: s("foo/bar#is-mobile"),
                                     value: s("true"),
@@ -5570,20 +5823,20 @@ mod test {
                 "
                 -- component ft_container:
                 component: ftd.column
-                $id: optional string
-                id: ref $id
+                optional string $id:
+                id: $id
 
                 -- component ft_container_mobile:
                 component: ftd.column
-                $id: optional string
-                id: ref $id
+                optional string $id:
+                id: $id
 
 
                 -- component desktop:
                 component: ftd.column
                 open: desktop-container
-                $id: optional string
-                id: ref $id
+                optional string $id:
+                id: $id
 
                 --- ftd.row:
                 id: desktop-container
@@ -5596,8 +5849,8 @@ mod test {
                 -- component mobile:
                 component: ftd.column
                 open: mobile-container
-                $id: optional string
-                id: ref $id
+                optional string $id:
+                id: $id
 
                 --- ftd.row:
                 id: mobile-container
@@ -5606,7 +5859,7 @@ mod test {
                 id: foo
 
 
-                -- var is-mobile: false
+                -- $is-mobile: false
 
 
                 -- component page:
@@ -5614,13 +5867,13 @@ mod test {
                 open: main-container.foo
 
                 --- desktop:
-                if: not is-mobile
+                if: not $is-mobile
                 id: main-container
 
                 --- container: ftd.main
 
                 --- mobile:
-                if: is-mobile
+                if: $is-mobile
                 id: main-container
 
 
@@ -5733,21 +5986,21 @@ mod test {
                 "
                 -- component desktop:
                 component: ftd.column
-                $id: optional string
-                id: ref $id
+                optional string $id:
+                id: $id
 
                 --- ftd.column:
                 id: main-container
 
                 -- component mobile:
                 component: ftd.column
-                $id: optional string
-                id: ref $id
+                optional string $id:
+                id: $id
 
                 --- ftd.column:
                 id: main-container
 
-                -- var is-mobile: true
+                -- $is-mobile: true
 
                 -- component page:
                 component: ftd.column
@@ -5757,12 +6010,12 @@ mod test {
                 id: start
 
                 --- desktop:
-                if: not is-mobile
+                if: not $is-mobile
 
                 --- container: start
 
                 --- mobile:
-                if: is-mobile
+                if: $is-mobile
 
                 -- page:
 
@@ -5779,7 +6032,7 @@ mod test {
     }
 
     #[test]
-    fn open_container_id() {
+    fn open_container_id_1() {
         let mut main = self::default_column();
         main.container
             .children
@@ -5884,7 +6137,7 @@ mod test {
     }
 
     #[test]
-    fn basic_loop_on_record() {
+    fn basic_loop_on_record_1() {
         let mut main = super::default_column();
         main.container
             .children
@@ -5894,17 +6147,32 @@ mod test {
                         ftd_rt::Element::Text(ftd_rt::Text {
                             text: ftd::markdown_line("hello"),
                             line: true,
+                            common: ftd_rt::Common {
+                                reference: Some(s("@name@0")),
+                                ..Default::default()
+                            },
                             ..Default::default()
                         }),
                         ftd_rt::Element::Text(ftd_rt::Text {
                             text: ftd::markdown_line("world"),
                             line: true,
+                            common: ftd_rt::Common {
+                                reference: Some(s("@body@0")),
+                                ..Default::default()
+                            },
                             ..Default::default()
                         }),
                     ],
                     ..Default::default()
                 },
-                ..Default::default()
+                common: ftd_rt::Common {
+                    locals: std::array::IntoIter::new([
+                        (s("body@0"), s("world")),
+                        (s("name@0"), s("hello")),
+                    ])
+                    .collect(),
+                    ..Default::default()
+                },
             }));
 
         main.container
@@ -5915,16 +6183,31 @@ mod test {
                         ftd_rt::Element::Text(ftd_rt::Text {
                             text: ftd::markdown_line("Arpita Jaiswal"),
                             line: true,
+                            common: ftd_rt::Common {
+                                reference: Some(s("@name@1")),
+                                ..Default::default()
+                            },
                             ..Default::default()
                         }),
                         ftd_rt::Element::Text(ftd_rt::Text {
                             text: ftd::markdown("Arpita is developer at Fifthtry"),
+                            common: ftd_rt::Common {
+                                reference: Some(s("@body@1")),
+                                ..Default::default()
+                            },
                             ..Default::default()
                         }),
                     ],
                     ..Default::default()
                 },
-                ..Default::default()
+                common: ftd_rt::Common {
+                    locals: std::array::IntoIter::new([
+                        (s("body@1"), s("Arpita is developer at Fifthtry")),
+                        (s("name@1"), s("Arpita Jaiswal")),
+                    ])
+                    .collect(),
+                    ..Default::default()
+                },
             }));
 
         main.container
@@ -5935,16 +6218,31 @@ mod test {
                         ftd_rt::Element::Text(ftd_rt::Text {
                             text: ftd::markdown_line("Amit Upadhyay"),
                             line: true,
+                            common: ftd_rt::Common {
+                                reference: Some(s("@name@2")),
+                                ..Default::default()
+                            },
                             ..Default::default()
                         }),
                         ftd_rt::Element::Text(ftd_rt::Text {
                             text: ftd::markdown("Amit is CEO of FifthTry."),
+                            common: ftd_rt::Common {
+                                reference: Some(s("@body@2")),
+                                ..Default::default()
+                            },
                             ..Default::default()
                         }),
                     ],
                     ..Default::default()
                 },
-                ..Default::default()
+                common: ftd_rt::Common {
+                    locals: std::array::IntoIter::new([
+                        (s("body@2"), s("Amit is CEO of FifthTry.")),
+                        (s("name@2"), s("Amit Upadhyay")),
+                    ])
+                    .collect(),
+                    ..Default::default()
+                },
             }));
 
         let mut bag = super::default_bag();
@@ -5969,7 +6267,7 @@ mod test {
                             properties: std::array::IntoIter::new([(
                                 s("text"),
                                 crate::component::Property {
-                                    default: Some(crate::PropertyValue::Argument {
+                                    default: Some(crate::PropertyValue::Variable {
                                         name: "name".to_string(),
                                         kind: crate::p2::Kind::caption_or_body(),
                                     }),
@@ -5977,6 +6275,7 @@ mod test {
                                 },
                             )])
                             .collect(),
+                            ..Default::default()
                         },
                     },
                     crate::component::Instruction::ChildComponent {
@@ -5988,7 +6287,7 @@ mod test {
                             properties: std::array::IntoIter::new([(
                                 s("text"),
                                 crate::component::Property {
-                                    default: Some(crate::PropertyValue::Argument {
+                                    default: Some(crate::PropertyValue::Variable {
                                         name: "body".to_string(),
                                         kind: crate::p2::Kind::caption_or_body(),
                                     }),
@@ -5996,61 +6295,9 @@ mod test {
                                 },
                             )])
                             .collect(),
+                            ..Default::default()
                         },
                     },
-                ],
-                invocations: vec![
-                    std::array::IntoIter::new([
-                        (
-                            s("body"),
-                            crate::Value::String {
-                                text: s("world"),
-                                source: crate::TextSource::Caption,
-                            },
-                        ),
-                        (
-                            s("name"),
-                            crate::Value::String {
-                                text: s("hello"),
-                                source: crate::TextSource::Caption,
-                            },
-                        ),
-                    ])
-                    .collect(),
-                    std::array::IntoIter::new([
-                        (
-                            s("body"),
-                            crate::Value::String {
-                                text: s("Arpita is developer at Fifthtry"),
-                                source: crate::TextSource::Body,
-                            },
-                        ),
-                        (
-                            s("name"),
-                            crate::Value::String {
-                                text: s("Arpita Jaiswal"),
-                                source: crate::TextSource::Caption,
-                            },
-                        ),
-                    ])
-                    .collect(),
-                    std::array::IntoIter::new([
-                        (
-                            s("body"),
-                            crate::Value::String {
-                                text: s("Amit is CEO of FifthTry."),
-                                source: crate::TextSource::Body,
-                            },
-                        ),
-                        (
-                            s("name"),
-                            crate::Value::String {
-                                text: s("Amit Upadhyay"),
-                                source: crate::TextSource::Caption,
-                            },
-                        ),
-                    ])
-                    .collect(),
                 ],
                 ..Default::default()
             }),
@@ -6154,51 +6401,44 @@ mod test {
             }),
         );
 
-        let (g_bag, g_col) = crate::p2::interpreter::interpret(
-            "foo/bar",
-            indoc::indoc!(
-                "
-                -- component foo:
-                component: ftd.row
-                $name: caption
-                $body: string
+        p!(
+            "
+            -- component foo:
+            component: ftd.row
+            caption $name:
+            string $body:
 
-                --- ftd.text: ref $name
+            --- ftd.text: $name
 
-                --- ftd.text: ref $body
+            --- ftd.text: $body
 
-                -- record person:
-                name: caption
-                bio: body
+            -- record person:
+            caption name:
+            body bio:
 
-                -- list people:
-                type: person
+            -- person list $people:
 
-                -- var name: Arpita Jaiswal
+            -- $name: Arpita Jaiswal
 
-                -- people: ref name
+            -- $people: $name
 
-                Arpita is developer at Fifthtry
+            Arpita is developer at Fifthtry
 
-                -- people: Amit Upadhyay
+            -- $people: Amit Upadhyay
 
-                Amit is CEO of FifthTry.
+            Amit is CEO of FifthTry.
 
-                -- var get: world
+            -- $get: world
 
-                -- foo: hello
-                body: ref get
+            -- foo: hello
+            body: $get
 
-                -- foo: ref obj.name
-                $loop$: people as obj
-                body: ref obj.bio
-                "
-            ),
-            &ftd::p2::TestLibrary {},
-        )
-        .expect("found error");
-        pretty_assertions::assert_eq!(g_bag, bag);
-        pretty_assertions::assert_eq!(g_col, main);
+            -- foo: $obj.name
+            $loop$: $people as $obj
+            body: $obj.bio
+            ",
+            (bag, main),
+        );
     }
 
     #[test]
@@ -6214,13 +6454,29 @@ mod test {
                         ftd_rt::Element::Text(ftd_rt::Text {
                             text: ftd::markdown_line("Amit Upadhyay"),
                             line: true,
+                            common: ftd_rt::Common {
+                                reference: Some(s("@name@1")),
+                                ..Default::default()
+                            },
                             ..Default::default()
                         }),
                         ftd_rt::Element::Text(ftd_rt::Text {
                             text: ftd::markdown("Amit is CEO of FifthTry."),
+                            common: ftd_rt::Common {
+                                reference: Some(s("@body@1")),
+                                ..Default::default()
+                            },
                             ..Default::default()
                         }),
                     ],
+                    ..Default::default()
+                },
+                common: ftd_rt::Common {
+                    locals: std::array::IntoIter::new([
+                        (s("name@1"), s("Amit Upadhyay")),
+                        (s("body@1"), s("Amit is CEO of FifthTry.")),
+                    ])
+                    .collect(),
                     ..Default::default()
                 },
                 ..Default::default()
@@ -6248,7 +6504,7 @@ mod test {
                             properties: std::array::IntoIter::new([(
                                 s("text"),
                                 crate::component::Property {
-                                    default: Some(crate::PropertyValue::Argument {
+                                    default: Some(crate::PropertyValue::Variable {
                                         name: "name".to_string(),
                                         kind: crate::p2::Kind::caption_or_body(),
                                     }),
@@ -6256,6 +6512,7 @@ mod test {
                                 },
                             )])
                             .collect(),
+                            ..Default::default()
                         },
                     },
                     crate::component::Instruction::ChildComponent {
@@ -6267,7 +6524,7 @@ mod test {
                             properties: std::array::IntoIter::new([(
                                 s("text"),
                                 crate::component::Property {
-                                    default: Some(crate::PropertyValue::Argument {
+                                    default: Some(crate::PropertyValue::Variable {
                                         name: "body".to_string(),
                                         kind: crate::p2::Kind::caption_or_body(),
                                     }),
@@ -6275,26 +6532,10 @@ mod test {
                                 },
                             )])
                             .collect(),
+                            ..Default::default()
                         },
                     },
                 ],
-                invocations: vec![std::array::IntoIter::new([
-                    (
-                        s("body"),
-                        crate::Value::String {
-                            text: s("Amit is CEO of FifthTry."),
-                            source: crate::TextSource::Body,
-                        },
-                    ),
-                    (
-                        s("name"),
-                        crate::Value::String {
-                            text: s("Amit Upadhyay"),
-                            source: crate::TextSource::Caption,
-                        },
-                    ),
-                ])
-                .collect()],
                 ..Default::default()
             }),
         );
@@ -6388,48 +6629,41 @@ mod test {
             }),
         );
 
-        let (g_bag, g_col) = crate::p2::interpreter::interpret(
-            "foo/bar",
-            indoc::indoc!(
-                "
-                -- component foo:
-                component: ftd.row
-                $name: caption
-                $body: string
+        p!(
+            "
+            -- component foo:
+            component: ftd.row
+            caption $name:
+            string $body:
 
-                --- ftd.text: ref $name
+            --- ftd.text: $name
 
-                --- ftd.text: ref $body
+            --- ftd.text: $body
 
-                -- record person:
-                name: caption
-                bio: body
-                ceo: boolean
+            -- record person:
+            caption name:
+            body bio:
+            boolean ceo:
 
-                -- list people:
-                type: person
+            -- person list $people:
 
-                -- people: Arpita Jaiswal
-                ceo: false
+            -- $people: Arpita Jaiswal
+            ceo: false
 
-                Arpita is developer at Fifthtry
+            Arpita is developer at Fifthtry
 
-                -- people: Amit Upadhyay
-                ceo: true
+            -- $people: Amit Upadhyay
+            ceo: true
 
-                Amit is CEO of FifthTry.
+            Amit is CEO of FifthTry.
 
-                -- foo: ref obj.name
-                $loop$: people as obj
-                if: obj.ceo
-                body: ref obj.bio
-                "
-            ),
-            &ftd::p2::TestLibrary {},
-        )
-        .expect("found error");
-        pretty_assertions::assert_eq!(g_bag, bag);
-        pretty_assertions::assert_eq!(g_col, main);
+            -- foo: $obj.name
+            $loop$: $people as $obj
+            if: $obj.ceo
+            body: $obj.bio
+            ",
+            (bag, main),
+        );
     }
 
     #[test]
@@ -6489,17 +6723,16 @@ mod test {
             "foo/bar",
             indoc::indoc!(
                 "
-                -- list people:
-                type: string
+                -- string list $people:
 
-                -- people: Arpita
+                -- $people: Arpita
 
-                -- people: Asit
+                -- $people: Asit
 
-                -- people: Sourabh
+                -- $people: Sourabh
 
-                -- ftd.text: ref obj
-                $loop$: people as obj
+                -- ftd.text: $obj
+                $loop$: $people as $obj
                 "
             ),
             &ftd::p2::TestLibrary {},
@@ -6524,16 +6757,31 @@ mod test {
                         ftd_rt::Element::Text(ftd_rt::Text {
                             text: ftd::markdown_line("Arpita Jaiswal"),
                             line: true,
+                            common: ftd_rt::Common {
+                                reference: Some(s("@name@0,0")),
+                                ..Default::default()
+                            },
                             ..Default::default()
                         }),
                         ftd_rt::Element::Text(ftd_rt::Text {
                             text: ftd::markdown("Arpita is developer at Fifthtry"),
+                            common: ftd_rt::Common {
+                                reference: Some(s("@body@0,0")),
+                                ..Default::default()
+                            },
                             ..Default::default()
                         }),
                     ],
                     ..Default::default()
                 },
-                ..Default::default()
+                common: ftd_rt::Common {
+                    locals: std::array::IntoIter::new([
+                        (s("body@0,0"), s("Arpita is developer at Fifthtry")),
+                        (s("name@0,0"), s("Arpita Jaiswal")),
+                    ])
+                    .collect(),
+                    ..Default::default()
+                },
             }));
 
         col.container
@@ -6544,16 +6792,31 @@ mod test {
                         ftd_rt::Element::Text(ftd_rt::Text {
                             text: ftd::markdown_line("Amit Upadhyay"),
                             line: true,
+                            common: ftd_rt::Common {
+                                reference: Some(s("@name@0,1")),
+                                ..Default::default()
+                            },
                             ..Default::default()
                         }),
                         ftd_rt::Element::Text(ftd_rt::Text {
                             text: ftd::markdown("Amit is CEO of FifthTry."),
+                            common: ftd_rt::Common {
+                                reference: Some(s("@body@0,1")),
+                                ..Default::default()
+                            },
                             ..Default::default()
                         }),
                     ],
                     ..Default::default()
                 },
-                ..Default::default()
+                common: ftd_rt::Common {
+                    locals: std::array::IntoIter::new([
+                        (s("body@0,1"), s("Amit is CEO of FifthTry.")),
+                        (s("name@0,1"), s("Amit Upadhyay")),
+                    ])
+                    .collect(),
+                    ..Default::default()
+                },
             }));
 
         main.container.children.push(ftd_rt::Element::Column(col));
@@ -6580,7 +6843,7 @@ mod test {
                             properties: std::array::IntoIter::new([(
                                 s("text"),
                                 crate::component::Property {
-                                    default: Some(crate::PropertyValue::Argument {
+                                    default: Some(crate::PropertyValue::Variable {
                                         name: "name".to_string(),
                                         kind: crate::p2::Kind::caption_or_body(),
                                     }),
@@ -6588,6 +6851,7 @@ mod test {
                                 },
                             )])
                             .collect(),
+                            ..Default::default()
                         },
                     },
                     crate::component::Instruction::ChildComponent {
@@ -6599,7 +6863,7 @@ mod test {
                             properties: std::array::IntoIter::new([(
                                 s("text"),
                                 crate::component::Property {
-                                    default: Some(crate::PropertyValue::Argument {
+                                    default: Some(crate::PropertyValue::Variable {
                                         name: "body".to_string(),
                                         kind: crate::p2::Kind::caption_or_body(),
                                     }),
@@ -6607,6 +6871,7 @@ mod test {
                                 },
                             )])
                             .collect(),
+                            ..Default::default()
                         },
                     },
                 ],
@@ -6732,33 +6997,32 @@ mod test {
                 "
                 -- component foo:
                 component: ftd.row
-                $name: caption
-                $body: string
+                caption $name:
+                string $body:
 
-                --- ftd.text: ref $name
+                --- ftd.text: $name
 
-                --- ftd.text: ref $body
+                --- ftd.text: $body
 
                 -- record person:
-                name: caption
-                bio: body
+                caption name:
+                body bio:
 
-                -- list people:
-                type: person
+                -- person list $people:
 
-                -- people: Arpita Jaiswal
+                -- $people: Arpita Jaiswal
 
                 Arpita is developer at Fifthtry
 
-                -- people: Amit Upadhyay
+                -- $people: Amit Upadhyay
 
                 Amit is CEO of FifthTry.
 
                 -- ftd.column:
 
-                --- foo: ref obj.name
-                $loop$: people as obj
-                body: ref obj.bio
+                --- foo: $obj.name
+                $loop$: $people as $obj
+                body: $obj.bio
                 "
             ),
             &ftd::p2::TestLibrary {},
@@ -6775,7 +7039,7 @@ mod test {
         main.container
             .children
             .push(ftd_rt::Element::Text(ftd_rt::Text {
-                text: ftd::markdown_line("\"0.1.7\""),
+                text: ftd::markdown_line("\"0.1.4\""),
                 line: true,
                 common: ftd_rt::Common {
                     reference: Some(s("foo/bar#test")),
@@ -6791,7 +7055,7 @@ mod test {
             crate::p2::Thing::Variable(crate::Variable {
                 name: "test".to_string(),
                 value: crate::Value::String {
-                    text: "\"0.1.7\"".to_string(),
+                    text: "\"0.1.4\"".to_string(),
                     source: crate::TextSource::Header,
                 },
                 conditions: vec![],
@@ -6802,10 +7066,10 @@ mod test {
             "foo/bar",
             indoc::indoc!(
                 "
-                -- var test:
+                -- $test:
                 $processor$: read_version_from_cargo_toml
 
-                -- ftd.text: ref test
+                -- ftd.text: $test
                 "
             ),
             &ftd::p2::TestLibrary {},
@@ -6822,7 +7086,7 @@ mod test {
         main.container
             .children
             .push(ftd_rt::Element::Text(ftd_rt::Text {
-                text: ftd::markdown_line("\"0.1.7\""),
+                text: ftd::markdown_line("\"0.1.4\""),
                 line: true,
                 common: ftd_rt::Common {
                     reference: Some(s("foo/bar#test")),
@@ -6838,7 +7102,7 @@ mod test {
             crate::p2::Thing::Variable(crate::Variable {
                 name: "test".to_string(),
                 value: crate::Value::String {
-                    text: "\"0.1.7\"".to_string(),
+                    text: "\"0.1.4\"".to_string(),
                     source: crate::TextSource::Header,
                 },
                 conditions: vec![],
@@ -6849,12 +7113,12 @@ mod test {
             "foo/bar",
             indoc::indoc!(
                 "
-                -- var test: yo
+                -- $test: yo
 
-                -- test:
+                -- $test:
                 $processor$: read_version_from_cargo_toml
 
-                -- ftd.text: ref test
+                -- ftd.text: $test
                 "
             ),
             &ftd::p2::TestLibrary {},
@@ -6879,7 +7143,7 @@ mod test {
         main.container
             .children
             .push(ftd_rt::Element::Text(ftd_rt::Text {
-                text: ftd::markdown_line("\"0.1.7\""),
+                text: ftd::markdown_line("\"0.1.4\""),
                 line: true,
                 ..Default::default()
             }));
@@ -6945,7 +7209,7 @@ mod test {
                             source: crate::TextSource::Header,
                         },
                         crate::Value::String {
-                            text: "\"0.1.7\"".to_string(),
+                            text: "\"0.1.4\"".to_string(),
                             source: crate::TextSource::Header,
                         },
                         crate::Value::String {
@@ -6983,12 +7247,11 @@ mod test {
             "foo/bar",
             indoc::indoc!(
                 "
-                -- list test:
-                type: string
+                -- string list $test:
                 $processor$: read_package_from_cargo_toml
 
-                -- ftd.text: ref obj
-                $loop$: test as obj
+                -- ftd.text: $obj
+                $loop$: $test as $obj
                 "
             ),
             &ftd::p2::TestLibrary {},
@@ -7011,17 +7274,32 @@ mod test {
                         ftd_rt::Element::Text(ftd_rt::Text {
                             text: ftd::markdown_line("\"ftd\""),
                             line: true,
+                            common: ftd_rt::Common {
+                                reference: Some(s("@name@0")),
+                                ..Default::default()
+                            },
                             ..Default::default()
                         }),
                         ftd_rt::Element::Text(ftd_rt::Text {
                             text: ftd::markdown_line("name"),
                             line: true,
+                            common: ftd_rt::Common {
+                                reference: Some(s("@body@0")),
+                                ..Default::default()
+                            },
                             ..Default::default()
                         }),
                     ],
                     ..Default::default()
                 },
-                ..Default::default()
+                common: ftd_rt::Common {
+                    locals: std::array::IntoIter::new([
+                        (s("name@0"), s("\"ftd\"")),
+                        (s("body@0"), s("name")),
+                    ])
+                    .collect(),
+                    ..Default::default()
+                },
             }));
 
         main.container
@@ -7030,19 +7308,34 @@ mod test {
                 container: ftd_rt::Container {
                     children: vec![
                         ftd_rt::Element::Text(ftd_rt::Text {
-                            text: ftd::markdown_line("\"0.1.7\""),
+                            text: ftd::markdown_line("\"0.1.4\""),
                             line: true,
+                            common: ftd_rt::Common {
+                                reference: Some(s("@name@1")),
+                                ..Default::default()
+                            },
                             ..Default::default()
                         }),
                         ftd_rt::Element::Text(ftd_rt::Text {
                             text: ftd::markdown_line("version"),
                             line: true,
+                            common: ftd_rt::Common {
+                                reference: Some(s("@body@1")),
+                                ..Default::default()
+                            },
                             ..Default::default()
                         }),
                     ],
                     ..Default::default()
                 },
-                ..Default::default()
+                common: ftd_rt::Common {
+                    locals: std::array::IntoIter::new([
+                        (s("name@1"), s("\"0.1.4\"")),
+                        (s("body@1"), s("version")),
+                    ])
+                    .collect(),
+                    ..Default::default()
+                },
             }));
 
         main.container
@@ -7053,17 +7346,32 @@ mod test {
                         ftd_rt::Element::Text(ftd_rt::Text {
                             text: ftd::markdown_line("[\"Amit Upadhyay <upadhyay@gmail.com>\"]"),
                             line: true,
+                            common: ftd_rt::Common {
+                                reference: Some(s("@name@2")),
+                                ..Default::default()
+                            },
                             ..Default::default()
                         }),
                         ftd_rt::Element::Text(ftd_rt::Text {
                             text: ftd::markdown_line("authors"),
                             line: true,
+                            common: ftd_rt::Common {
+                                reference: Some(s("@body@2")),
+                                ..Default::default()
+                            },
                             ..Default::default()
                         }),
                     ],
                     ..Default::default()
                 },
-                ..Default::default()
+                common: ftd_rt::Common {
+                    locals: std::array::IntoIter::new([
+                        (s("name@2"), s("[\"Amit Upadhyay <upadhyay@gmail.com>\"]")),
+                        (s("body@2"), s("authors")),
+                    ])
+                    .collect(),
+                    ..Default::default()
+                },
             }));
 
         main.container
@@ -7074,17 +7382,32 @@ mod test {
                         ftd_rt::Element::Text(ftd_rt::Text {
                             text: ftd::markdown_line("\"2018\""),
                             line: true,
+                            common: ftd_rt::Common {
+                                reference: Some(s("@name@3")),
+                                ..Default::default()
+                            },
                             ..Default::default()
                         }),
                         ftd_rt::Element::Text(ftd_rt::Text {
                             text: ftd::markdown_line("edition"),
                             line: true,
+                            common: ftd_rt::Common {
+                                reference: Some(s("@body@3")),
+                                ..Default::default()
+                            },
                             ..Default::default()
                         }),
                     ],
                     ..Default::default()
                 },
-                ..Default::default()
+                common: ftd_rt::Common {
+                    locals: std::array::IntoIter::new([
+                        (s("name@3"), s("\"2018\"")),
+                        (s("body@3"), s("edition")),
+                    ])
+                    .collect(),
+                    ..Default::default()
+                },
             }));
 
         main.container
@@ -7095,17 +7418,32 @@ mod test {
                         ftd_rt::Element::Text(ftd_rt::Text {
                             text: ftd::markdown_line("\"ftd: FifthTry Document Format parser\""),
                             line: true,
+                            common: ftd_rt::Common {
+                                reference: Some(s("@name@4")),
+                                ..Default::default()
+                            },
                             ..Default::default()
                         }),
                         ftd_rt::Element::Text(ftd_rt::Text {
                             text: ftd::markdown_line("description"),
                             line: true,
+                            common: ftd_rt::Common {
+                                reference: Some(s("@body@4")),
+                                ..Default::default()
+                            },
                             ..Default::default()
                         }),
                     ],
                     ..Default::default()
                 },
-                ..Default::default()
+                common: ftd_rt::Common {
+                    locals: std::array::IntoIter::new([
+                        (s("name@4"), s("\"ftd: FifthTry Document Format parser\"")),
+                        (s("body@4"), s("description")),
+                    ])
+                    .collect(),
+                    ..Default::default()
+                },
             }));
 
         main.container
@@ -7116,17 +7454,32 @@ mod test {
                         ftd_rt::Element::Text(ftd_rt::Text {
                             text: ftd::markdown_line("\"MIT\""),
                             line: true,
+                            common: ftd_rt::Common {
+                                reference: Some(s("@name@5")),
+                                ..Default::default()
+                            },
                             ..Default::default()
                         }),
                         ftd_rt::Element::Text(ftd_rt::Text {
                             text: ftd::markdown_line("license"),
                             line: true,
+                            common: ftd_rt::Common {
+                                reference: Some(s("@body@5")),
+                                ..Default::default()
+                            },
                             ..Default::default()
                         }),
                     ],
                     ..Default::default()
                 },
-                ..Default::default()
+                common: ftd_rt::Common {
+                    locals: std::array::IntoIter::new([
+                        (s("name@5"), s("\"MIT\"")),
+                        (s("body@5"), s("license")),
+                    ])
+                    .collect(),
+                    ..Default::default()
+                },
             }));
 
         main.container
@@ -7137,17 +7490,32 @@ mod test {
                         ftd_rt::Element::Text(ftd_rt::Text {
                             text: ftd::markdown_line("\"https://github.com/fifthtry/ftd\""),
                             line: true,
+                            common: ftd_rt::Common {
+                                reference: Some(s("@name@6")),
+                                ..Default::default()
+                            },
                             ..Default::default()
                         }),
                         ftd_rt::Element::Text(ftd_rt::Text {
                             text: ftd::markdown_line("repository"),
                             line: true,
+                            common: ftd_rt::Common {
+                                reference: Some(s("@body@6")),
+                                ..Default::default()
+                            },
                             ..Default::default()
                         }),
                     ],
                     ..Default::default()
                 },
-                ..Default::default()
+                common: ftd_rt::Common {
+                    locals: std::array::IntoIter::new([
+                        (s("name@6"), s("\"https://github.com/fifthtry/ftd\"")),
+                        (s("body@6"), s("repository")),
+                    ])
+                    .collect(),
+                    ..Default::default()
+                },
             }));
 
         main.container
@@ -7158,17 +7526,32 @@ mod test {
                         ftd_rt::Element::Text(ftd_rt::Text {
                             text: ftd::markdown_line("\"https://www.fifthtry.com/fifthtry/ftd/\""),
                             line: true,
+                            common: ftd_rt::Common {
+                                reference: Some(s("@name@7")),
+                                ..Default::default()
+                            },
                             ..Default::default()
                         }),
                         ftd_rt::Element::Text(ftd_rt::Text {
                             text: ftd::markdown_line("homepage"),
                             line: true,
+                            common: ftd_rt::Common {
+                                reference: Some(s("@body@7")),
+                                ..Default::default()
+                            },
                             ..Default::default()
                         }),
                     ],
                     ..Default::default()
                 },
-                ..Default::default()
+                common: ftd_rt::Common {
+                    locals: std::array::IntoIter::new([
+                        (s("name@7"), s("\"https://www.fifthtry.com/fifthtry/ftd/\"")),
+                        (s("body@7"), s("homepage")),
+                    ])
+                    .collect(),
+                    ..Default::default()
+                },
             }));
 
         let mut bag = super::default_bag();
@@ -7206,7 +7589,7 @@ mod test {
                             properties: std::array::IntoIter::new([(
                                 s("text"),
                                 crate::component::Property {
-                                    default: Some(crate::PropertyValue::Argument {
+                                    default: Some(crate::PropertyValue::Variable {
                                         name: "name".to_string(),
                                         kind: crate::p2::Kind::caption_or_body(),
                                     }),
@@ -7214,6 +7597,7 @@ mod test {
                                 },
                             )])
                             .collect(),
+                            ..Default::default()
                         },
                     },
                     crate::component::Instruction::ChildComponent {
@@ -7225,7 +7609,7 @@ mod test {
                             properties: std::array::IntoIter::new([(
                                 s("text"),
                                 crate::component::Property {
-                                    default: Some(crate::PropertyValue::Argument {
+                                    default: Some(crate::PropertyValue::Variable {
                                         name: "body".to_string(),
                                         kind: crate::p2::Kind::caption_or_body(),
                                     }),
@@ -7233,146 +7617,9 @@ mod test {
                                 },
                             )])
                             .collect(),
+                            ..Default::default()
                         },
                     },
-                ],
-                invocations: vec![
-                    std::array::IntoIter::new([
-                        (
-                            s("body"),
-                            crate::Value::String {
-                                text: s("name"),
-                                source: crate::TextSource::Header,
-                            },
-                        ),
-                        (
-                            s("name"),
-                            crate::Value::String {
-                                text: s("\"ftd\""),
-                                source: crate::TextSource::Header,
-                            },
-                        ),
-                    ])
-                    .collect(),
-                    std::array::IntoIter::new([
-                        (
-                            s("body"),
-                            crate::Value::String {
-                                text: s("version"),
-                                source: crate::TextSource::Header,
-                            },
-                        ),
-                        (
-                            s("name"),
-                            crate::Value::String {
-                                text: s("\"0.1.7\""),
-                                source: crate::TextSource::Header,
-                            },
-                        ),
-                    ])
-                    .collect(),
-                    std::array::IntoIter::new([
-                        (
-                            s("body"),
-                            crate::Value::String {
-                                text: s("authors"),
-                                source: crate::TextSource::Header,
-                            },
-                        ),
-                        (
-                            s("name"),
-                            crate::Value::String {
-                                text: s("[\"Amit Upadhyay <upadhyay@gmail.com>\"]"),
-                                source: crate::TextSource::Header,
-                            },
-                        ),
-                    ])
-                    .collect(),
-                    std::array::IntoIter::new([
-                        (
-                            s("body"),
-                            crate::Value::String {
-                                text: s("edition"),
-                                source: crate::TextSource::Header,
-                            },
-                        ),
-                        (
-                            s("name"),
-                            crate::Value::String {
-                                text: s("\"2018\""),
-                                source: crate::TextSource::Header,
-                            },
-                        ),
-                    ])
-                    .collect(),
-                    std::array::IntoIter::new([
-                        (
-                            s("body"),
-                            crate::Value::String {
-                                text: s("description"),
-                                source: crate::TextSource::Header,
-                            },
-                        ),
-                        (
-                            s("name"),
-                            crate::Value::String {
-                                text: s("\"ftd: FifthTry Document Format parser\""),
-                                source: crate::TextSource::Header,
-                            },
-                        ),
-                    ])
-                    .collect(),
-                    std::array::IntoIter::new([
-                        (
-                            s("body"),
-                            crate::Value::String {
-                                text: s("license"),
-                                source: crate::TextSource::Header,
-                            },
-                        ),
-                        (
-                            s("name"),
-                            crate::Value::String {
-                                text: s("\"MIT\""),
-                                source: crate::TextSource::Header,
-                            },
-                        ),
-                    ])
-                    .collect(),
-                    std::array::IntoIter::new([
-                        (
-                            s("body"),
-                            crate::Value::String {
-                                text: s("repository"),
-                                source: crate::TextSource::Header,
-                            },
-                        ),
-                        (
-                            s("name"),
-                            crate::Value::String {
-                                text: s("\"https://github.com/fifthtry/ftd\""),
-                                source: crate::TextSource::Header,
-                            },
-                        ),
-                    ])
-                    .collect(),
-                    std::array::IntoIter::new([
-                        (
-                            s("body"),
-                            crate::Value::String {
-                                text: s("homepage"),
-                                source: crate::TextSource::Header,
-                            },
-                        ),
-                        (
-                            s("name"),
-                            crate::Value::String {
-                                text: s("\"https://www.fifthtry.com/fifthtry/ftd/\""),
-                                source: crate::TextSource::Header,
-                            },
-                        ),
-                    ])
-                    .collect(),
                 ],
                 ..Default::default()
             }),
@@ -7424,7 +7671,7 @@ mod test {
                                     s("title"),
                                     crate::PropertyValue::Value {
                                         value: crate::variable::Value::String {
-                                            text: "\"0.1.7\"".to_string(),
+                                            text: "\"0.1.4\"".to_string(),
                                             source: crate::TextSource::Header,
                                         },
                                     },
@@ -7588,38 +7835,30 @@ mod test {
             }),
         );
 
-        let (g_bag, g_col) = crate::p2::interpreter::interpret(
-            "foo/bar",
-            indoc::indoc!(
-                "
-                -- component foo:
-                component: ftd.row
-                $name: caption
-                $body: string
+        p!(
+            "
+            -- component foo:
+            component: ftd.row
+            caption $name:
+            string $body:
 
-                --- ftd.text: ref $name
+            --- ftd.text: $name
 
-                --- ftd.text: ref $body
+            --- ftd.text: $body
 
-                -- record data:
-                title: string
-                description: string
+            -- record data:
+            string title:
+            string description:
 
-                -- list test:
-                type: data
-                $processor$: read_package_records_from_cargo_toml
+            -- data list $test:
+            $processor$: read_package_records_from_cargo_toml
 
-                -- foo: ref obj.title
-                $loop$: test as obj
-                body: ref obj.description
-                "
-            ),
-            &ftd::p2::TestLibrary {},
-        )
-        .expect("found error");
-
-        pretty_assertions::assert_eq!(g_bag, bag);
-        pretty_assertions::assert_eq!(g_col, main);
+            -- foo: $obj.title
+            $loop$: $test as $obj
+            body: $obj.description
+            ",
+            (bag, main),
+        );
     }
 
     #[test]
@@ -7632,6 +7871,7 @@ mod test {
                         text: ftd::markdown_line("ab title"),
                         line: true,
                         common: ftd_rt::Common {
+                            reference: Some(s("@toc.title")),
                             link: Some(s("ab link")),
                             ..Default::default()
                         },
@@ -7643,6 +7883,7 @@ mod test {
                                 text: ftd::markdown_line("aa title"),
                                 line: true,
                                 common: ftd_rt::Common {
+                                    reference: Some(s("@toc.title")),
                                     link: Some(s("aa link")),
                                     ..Default::default()
                                 },
@@ -7658,6 +7899,7 @@ mod test {
                                 text: ftd::markdown_line("aaa title"),
                                 line: true,
                                 common: ftd_rt::Common {
+                                    reference: Some(s("@toc.title")),
                                     link: Some(s("aaa link")),
                                     ..Default::default()
                                 },
@@ -7911,7 +8153,7 @@ mod test {
                                 (
                                     s("link"),
                                     crate::component::Property {
-                                        default: Some(crate::PropertyValue::Argument {
+                                        default: Some(crate::PropertyValue::Variable {
                                             name: "toc.link".to_string(),
                                             kind: crate::p2::Kind::Optional {
                                                 kind: Box::new(crate::p2::Kind::string()),
@@ -7923,7 +8165,7 @@ mod test {
                                 (
                                     s("text"),
                                     crate::component::Property {
-                                        default: Some(crate::PropertyValue::Argument {
+                                        default: Some(crate::PropertyValue::Variable {
                                             name: "toc.title".to_string(),
                                             kind: crate::p2::Kind::Optional {
                                                 kind: Box::new(crate::p2::Kind::caption_or_body()),
@@ -7947,7 +8189,7 @@ mod test {
                                 (
                                     s("$loop$"),
                                     crate::component::Property {
-                                        default: Some(crate::PropertyValue::Argument {
+                                        default: Some(crate::PropertyValue::Variable {
                                             name: "toc.children".to_string(),
                                             kind: crate::p2::Kind::Record {
                                                 name: s("foo/bar#toc-record"),
@@ -7959,7 +8201,7 @@ mod test {
                                 (
                                     s("toc"),
                                     crate::component::Property {
-                                        default: Some(crate::PropertyValue::Argument {
+                                        default: Some(crate::PropertyValue::Variable {
                                             name: "$loop$".to_string(),
                                             kind: crate::p2::Kind::Record {
                                                 name: s("foo/bar#toc-record"),
@@ -7970,6 +8212,7 @@ mod test {
                                 ),
                             ])
                             .collect(),
+                            ..Default::default()
                         },
                     },
                 ],
@@ -7982,50 +8225,48 @@ mod test {
             indoc::indoc!(
                 "
                 -- record toc-record:
-                title: string
-                link: string
-                children: list toc-record
+                string title:
+                string link:
+                toc-record list children:
 
                 -- component toc-item:
                 component: ftd.column
-                $toc: toc-record
+                toc-record $toc:
 
-                --- ftd.text: ref $toc.title
-                link: ref $toc.link
+                --- ftd.text: $toc.title
+                link: $toc.link
 
                 --- toc-item:
-                $loop$: $toc.children as obj
-                toc: ref obj
+                $loop$: $toc.children as $obj
+                toc: $obj
 
-                -- list aa:
-                type: toc-record
+                -- toc-record list $aa:
 
-                -- aa:
+                -- $aa:
                 title: aa title
                 link: aa link
 
-                -- aa:
+                -- $aa:
                 title: aaa title
                 link: aaa link
 
-                -- list toc:
-                type: toc-record
+                -- toc-record list $toc:
 
-                -- toc:
+                -- $toc:
                 title: ab title
                 link: ab link
-                children: ref aa
+                children: $aa
 
                 -- component foo:
                 component: ftd.row
 
                 --- toc-item:
-                $loop$: toc as obj
-                toc: ref obj
+                $loop$: $toc as $obj
+                toc: $obj
 
                 -- toc-item:
-                $loop$: toc as obj
-                toc: ref obj
+                $loop$: $toc as $obj
+                toc: $obj
 
                 -- foo:
                 "
@@ -8084,7 +8325,7 @@ mod test {
                         ..Default::default()
                     },
                 }],
-                invocations: vec![std::collections::BTreeMap::new()],
+                invocations: vec![],
                 ..Default::default()
             }),
         );
@@ -8100,21 +8341,14 @@ mod test {
             }),
         );
 
-        let (g_bag, g_col) = crate::p2::interpreter::interpret(
-            "foo/bar",
-            indoc::indoc!(
-                "
-                -- import: hello-world as hw
+        p!(
+            "
+            -- import: hello-world as hw
 
-                -- hw.foo:
-                "
-            ),
-            &ftd::p2::TestLibrary {},
-        )
-        .expect("found error");
-
-        pretty_assertions::assert_eq!(g_bag, bag);
-        pretty_assertions::assert_eq!(g_col, main);
+            -- hw.foo:
+            ",
+            (bag, main),
+        );
     }
 
     #[test]
@@ -8126,6 +8360,15 @@ mod test {
                 text: ftd::markdown_line("hello world"),
                 line: true,
                 size: Some(10),
+                common: ftd_rt::Common {
+                    locals: std::array::IntoIter::new([
+                        (s("name@0"), s("hello world")),
+                        (s("size@0"), s("10")),
+                    ])
+                    .collect(),
+                    reference: Some(s("@name@0")),
+                    ..Default::default()
+                },
                 ..Default::default()
             }));
 
@@ -8135,6 +8378,15 @@ mod test {
                 text: ftd::markdown_line("hello"),
                 line: true,
                 size: Some(10),
+                common: ftd_rt::Common {
+                    locals: std::array::IntoIter::new([
+                        (s("name@1"), s("hello")),
+                        (s("size@1"), s("10")),
+                    ])
+                    .collect(),
+                    reference: Some(s("@name@1")),
+                    ..Default::default()
+                },
                 ..Default::default()
             }));
 
@@ -8144,6 +8396,15 @@ mod test {
                 text: ftd::markdown_line("this is nice"),
                 line: true,
                 size: Some(20),
+                common: ftd_rt::Common {
+                    locals: std::array::IntoIter::new([
+                        (s("name@2"), s("this is nice")),
+                        (s("size@2"), s("20")),
+                    ])
+                    .collect(),
+                    reference: Some(s("@name@2")),
+                    ..Default::default()
+                },
                 ..Default::default()
             }));
 
@@ -8170,10 +8431,12 @@ mod test {
                     (
                         s("size"),
                         crate::component::Property {
-                            default: Some(crate::PropertyValue::Argument {
+                            default: Some(crate::PropertyValue::Variable {
                                 name: s("size"),
                                 kind: crate::p2::Kind::Optional {
-                                    kind: Box::from(crate::p2::Kind::Integer { default: None }),
+                                    kind: Box::from(crate::p2::Kind::Integer {
+                                        default: Some(s("10")),
+                                    }),
                                 },
                             }),
                             conditions: vec![],
@@ -8182,9 +8445,10 @@ mod test {
                     (
                         s("text"),
                         crate::component::Property {
-                            default: Some(crate::PropertyValue::Argument {
+                            default: Some(crate::PropertyValue::Variable {
                                 name: s("name"),
-                                kind: crate::p2::Kind::caption_or_body(),
+                                kind: crate::p2::Kind::caption_or_body()
+                                    .set_default(Some(s("hello world"))),
                             }),
                             conditions: vec![],
                         },
@@ -8236,10 +8500,10 @@ mod test {
                 "
                 -- component foo:
                 component: ftd.text
-                $name: caption with default hello world
-                $size: integer with default 10
-                text: ref $name
-                size: ref $size
+                caption $name: hello world
+                integer $size: 10
+                text: $name
+                size: $size
 
                 -- foo:
 
@@ -8281,7 +8545,7 @@ mod test {
                             crate::PropertyValue::Reference {
                                 name: s("foo/bar#default-age"),
                                 kind: crate::p2::Kind::Integer {
-                                    default: Some(s("ref default-age")),
+                                    default: Some(s("$default-age")),
                                 },
                             },
                         ),
@@ -8344,7 +8608,7 @@ mod test {
                     (
                         s("age"),
                         crate::p2::Kind::Integer {
-                            default: Some(s("ref default-age")),
+                            default: Some(s("$default-age")),
                         },
                     ),
                     (
@@ -8381,24 +8645,23 @@ mod test {
             "foo/bar",
             indoc::indoc!(
                 "
-                -- var default-age: 20
+                -- $default-age: 20
 
                 -- record person:
-                name: caption
-                address: string with default Bihar
-                bio: body with default Some Bio
-                age: integer with default ref default-age
-                size: integer with default 10
+                caption name:
+                string address: Bihar
+                body bio: Some Bio
+                integer age: $default-age
+                integer size: 10
 
-                -- var abrar-name: Abrar Khan
+                -- $abrar-name: Abrar Khan
 
-                -- var abrar: ref abrar-name
-                type: person
+                -- person $abrar: $abrar-name
 
                 Software developer working at fifthtry.
 
-                -- ftd.text: ref abrar.bio
-                size: ref abrar.age
+                -- ftd.text: $abrar.bio
+                size: $abrar.age
                 "
             ),
             &ftd::p2::TestLibrary {},
@@ -8420,11 +8683,22 @@ mod test {
                         text: ftd::markdown_line("Arpita"),
                         line: true,
                         size: Some(10),
+                        common: ftd_rt::Common {
+                            reference: Some(s("@name@0")),
+                            ..Default::default()
+                        },
                         ..Default::default()
                     })],
                     ..Default::default()
                 },
-                ..Default::default()
+                common: ftd_rt::Common {
+                    locals: std::array::IntoIter::new([
+                        (s("name@0"), s("Arpita")),
+                        (s("text-size@0"), s("10")),
+                    ])
+                    .collect(),
+                    ..Default::default()
+                },
             }));
         main.container
             .children
@@ -8434,11 +8708,22 @@ mod test {
                         text: ftd::markdown_line("Amit Upadhayay"),
                         line: true,
                         size: Some(20),
+                        common: ftd_rt::Common {
+                            reference: Some(s("@name@1")),
+                            ..Default::default()
+                        },
                         ..Default::default()
                     })],
                     ..Default::default()
                 },
-                ..Default::default()
+                common: ftd_rt::Common {
+                    locals: std::array::IntoIter::new([
+                        (s("name@1"), s("Amit Upadhayay")),
+                        (s("text-size@1"), s("20")),
+                    ])
+                    .collect(),
+                    ..Default::default()
+                },
             }));
 
         let mut bag = super::default_bag();
@@ -8469,12 +8754,12 @@ mod test {
                 arguments: std::array::IntoIter::new([
                     (
                         s("name"),
-                        crate::p2::Kind::string().set_default(Some(s("ref default-name"))),
+                        crate::p2::Kind::string().set_default(Some(s("$default-name"))),
                     ),
                     (
                         s("text-size"),
                         crate::p2::Kind::Integer {
-                            default: Some(s("ref default-size")),
+                            default: Some(s("$default-size")),
                         },
                     ),
                 ])
@@ -8488,11 +8773,11 @@ mod test {
                             (
                                 s("size"),
                                 crate::component::Property {
-                                    default: Some(ftd::PropertyValue::Argument {
+                                    default: Some(ftd::PropertyValue::Variable {
                                         name: s("text-size"),
                                         kind: ftd::p2::Kind::Optional {
                                             kind: Box::new(ftd::p2::Kind::Integer {
-                                                default: None,
+                                                default: Some(s("$default-size")),
                                             }),
                                         },
                                     }),
@@ -8502,9 +8787,10 @@ mod test {
                             (
                                 s("text"),
                                 crate::component::Property {
-                                    default: Some(ftd::PropertyValue::Argument {
+                                    default: Some(ftd::PropertyValue::Variable {
                                         name: s("name"),
-                                        kind: ftd::p2::Kind::caption_or_body(),
+                                        kind: ftd::p2::Kind::caption_or_body()
+                                            .set_default(Some(s("$default-name"))),
                                     }),
                                     conditions: vec![],
                                 },
@@ -8515,63 +8801,32 @@ mod test {
                     },
                 }],
                 kernel: false,
-                invocations: vec![
-                    std::array::IntoIter::new([
-                        (
-                            s("name"),
-                            ftd::Value::String {
-                                text: s("Arpita"),
-                                source: ftd::TextSource::Caption,
-                            },
-                        ),
-                        (s("text-size"), ftd::Value::Integer { value: 10 }),
-                    ])
-                    .collect(),
-                    std::array::IntoIter::new([
-                        (
-                            s("name"),
-                            ftd::Value::String {
-                                text: s("Amit Upadhayay"),
-                                source: ftd::TextSource::Header,
-                            },
-                        ),
-                        (s("text-size"), ftd::Value::Integer { value: 20 }),
-                    ])
-                    .collect(),
-                ],
                 ..Default::default()
             }),
         );
 
-        let (g_bag, g_col) = crate::p2::interpreter::interpret(
-            "foo/bar",
-            indoc::indoc!(
-                "
-                -- var default-name: Arpita
+        p!(
+            "
+            -- $default-name: Arpita
 
-                -- var default-size: 10
+            -- $default-size: 10
 
-                -- component foo:
-                component: ftd.row
-                $name: string with default ref default-name
-                $text-size: integer with default ref default-size
+            -- component foo:
+            component: ftd.row
+            string $name: $default-name
+            integer $text-size: $default-size
 
-                --- ftd.text: ref $name
-                size: ref $text-size
+            --- ftd.text: $name
+            size: $text-size
 
-                -- foo:
+            -- foo:
 
-                -- foo:
-                name: Amit Upadhayay
-                text-size: 20
-                "
-            ),
-            &ftd::p2::TestLibrary {},
-        )
-        .expect("found error");
-
-        pretty_assertions::assert_eq!(g_bag, bag);
-        pretty_assertions::assert_eq!(g_col, main);
+            -- foo:
+            name: Amit Upadhayay
+            text-size: 20
+            ",
+            (bag, main),
+        );
     }
 
     #[test]
@@ -8682,7 +8937,7 @@ mod test {
                             ftd::PropertyValue::Reference {
                                 name: s("foo/bar#default-phone"),
                                 kind: ftd::p2::Kind::string()
-                                    .set_default(Some(s("ref default-phone"))),
+                                    .set_default(Some(s("$default-phone"))),
                             },
                         ),
                     ])
@@ -8713,7 +8968,7 @@ mod test {
                             (s("name"), ftd::p2::Kind::caption()),
                             (
                                 s("phone"),
-                                ftd::p2::Kind::string().set_default(Some(s("ref default-phone"))),
+                                ftd::p2::Kind::string().set_default(Some(s("$default-phone"))),
                             ),
                         ])
                         .collect(),
@@ -8744,35 +8999,32 @@ mod test {
             "foo/bar",
             indoc::indoc!(
                 "
-                -- var default-phone: 1000
-                type: string
+                -- string $default-phone: 1000
 
                 -- or-type lead:
 
                 --- individual:
-                name: caption
-                phone: string with default ref default-phone
+                caption name:
+                string phone: $default-phone
 
                 --- company:
-                name: caption
-                contact: string with default 1001
-                fax: string
-                no-of-employees: integer with default 50
+                caption name:
+                string contact: 1001
+                string fax:
+                integer no-of-employees: 50
 
-                -- var amitu: Amit Upadhyay
-                type: lead.individual
+                -- lead.individual $amitu: Amit Upadhyay
 
-                -- var acme: Acme Inc.
-                type: lead.company
+                -- lead.company $acme: Acme Inc.
                 contact: John Doe
                 fax: +1-234-567890
 
-                -- ftd.text: ref amitu.name
+                -- ftd.text: $amitu.name
 
-                -- ftd.text: ref amitu.phone
+                -- ftd.text: $amitu.phone
 
-                -- ftd.text: ref acme.contact
-                size: ref acme.no-of-employees
+                -- ftd.text: $acme.contact
+                size: $acme.no-of-employees
 
                 "
             ),
@@ -8949,6 +9201,7 @@ mod test {
                         line: true,
                         common: ftd_rt::Common {
                             region: Some(ftd_rt::Region::Title),
+                            reference: Some(s("@title@0")),
                             ..Default::default()
                         },
                         ..Default::default()
@@ -8956,6 +9209,7 @@ mod test {
                     ..Default::default()
                 },
                 common: ftd_rt::Common {
+                    locals: std::array::IntoIter::new([(s("title@0"), s("Heading 31"))]).collect(),
                     region: Some(ftd_rt::Region::H3),
                     id: Some(s("heading-31")),
                     ..Default::default()
@@ -8972,6 +9226,7 @@ mod test {
                             line: true,
                             common: ftd_rt::Common {
                                 region: Some(ftd_rt::Region::Title),
+                                reference: Some(s("@title@1")),
                                 ..Default::default()
                             },
                             ..Default::default()
@@ -8984,6 +9239,7 @@ mod test {
                                         line: true,
                                         common: ftd_rt::Common {
                                             region: Some(ftd_rt::Region::Title),
+                                            reference: Some(s("@title@2")),
                                             ..Default::default()
                                         },
                                         ..Default::default()
@@ -8996,6 +9252,7 @@ mod test {
                                                     line: true,
                                                     common: ftd_rt::Common {
                                                         region: Some(ftd_rt::Region::Title),
+                                                        reference: Some(s("@title@3")),
                                                         ..Default::default()
                                                     },
                                                     ..Default::default()
@@ -9009,6 +9266,11 @@ mod test {
                                             ..Default::default()
                                         },
                                         common: ftd_rt::Common {
+                                            locals: std::array::IntoIter::new([(
+                                                s("title@3"),
+                                                s("Heading 32"),
+                                            )])
+                                            .collect(),
                                             region: Some(ftd_rt::Region::H3),
                                             id: Some(s("heading-32")),
                                             ..Default::default()
@@ -9018,6 +9280,11 @@ mod test {
                                 ..Default::default()
                             },
                             common: ftd_rt::Common {
+                                locals: std::array::IntoIter::new([(
+                                    s("title@2"),
+                                    s("Heading 21"),
+                                )])
+                                .collect(),
                                 region: Some(ftd_rt::Region::H2),
                                 id: Some(s("heading-21")),
                                 ..Default::default()
@@ -9029,6 +9296,7 @@ mod test {
                                     text: ftd::markdown_line("Heading 22"),
                                     line: true,
                                     common: ftd_rt::Common {
+                                        reference: Some(s("@title@5")),
                                         region: Some(ftd_rt::Region::Title),
                                         ..Default::default()
                                     },
@@ -9037,6 +9305,11 @@ mod test {
                                 ..Default::default()
                             },
                             common: ftd_rt::Common {
+                                locals: std::array::IntoIter::new([(
+                                    s("title@5"),
+                                    s("Heading 22"),
+                                )])
+                                .collect(),
                                 region: Some(ftd_rt::Region::H2),
                                 id: Some(s("heading-22")),
                                 ..Default::default()
@@ -9049,6 +9322,7 @@ mod test {
                                     line: true,
                                     common: ftd_rt::Common {
                                         region: Some(ftd_rt::Region::Title),
+                                        reference: Some(s("@title@6")),
                                         ..Default::default()
                                     },
                                     ..Default::default()
@@ -9056,6 +9330,11 @@ mod test {
                                 ..Default::default()
                             },
                             common: ftd_rt::Common {
+                                locals: std::array::IntoIter::new([(
+                                    s("title@6"),
+                                    s("Heading 23"),
+                                )])
+                                .collect(),
                                 region: Some(ftd_rt::Region::H2),
                                 id: Some(s("heading-23")),
                                 ..Default::default()
@@ -9065,6 +9344,7 @@ mod test {
                     ..Default::default()
                 },
                 common: ftd_rt::Common {
+                    locals: std::array::IntoIter::new([(s("title@1"), s("Heading 11"))]).collect(),
                     region: Some(ftd_rt::Region::H1),
                     id: Some(s("heading-11")),
                     ..Default::default()
@@ -9080,6 +9360,7 @@ mod test {
                             text: ftd::markdown_line("Heading 12"),
                             line: true,
                             common: ftd_rt::Common {
+                                reference: Some(s("@title@7")),
                                 region: Some(ftd_rt::Region::Title),
                                 ..Default::default()
                             },
@@ -9091,6 +9372,7 @@ mod test {
                                     text: ftd::markdown_line("Heading 33"),
                                     line: true,
                                     common: ftd_rt::Common {
+                                        reference: Some(s("@title@8")),
                                         region: Some(ftd_rt::Region::Title),
                                         ..Default::default()
                                     },
@@ -9099,6 +9381,11 @@ mod test {
                                 ..Default::default()
                             },
                             common: ftd_rt::Common {
+                                locals: std::array::IntoIter::new([(
+                                    s("title@8"),
+                                    s("Heading 33"),
+                                )])
+                                .collect(),
                                 region: Some(ftd_rt::Region::H3),
                                 id: Some(s("heading-33")),
                                 ..Default::default()
@@ -9110,6 +9397,7 @@ mod test {
                                     text: ftd::markdown_line("Heading 24"),
                                     line: true,
                                     common: ftd_rt::Common {
+                                        reference: Some(s("@title@9")),
                                         region: Some(ftd_rt::Region::Title),
                                         ..Default::default()
                                     },
@@ -9118,6 +9406,11 @@ mod test {
                                 ..Default::default()
                             },
                             common: ftd_rt::Common {
+                                locals: std::array::IntoIter::new([(
+                                    s("title@9"),
+                                    s("Heading 24"),
+                                )])
+                                .collect(),
                                 region: Some(ftd_rt::Region::H2),
                                 id: Some(s("heading-24")),
                                 ..Default::default()
@@ -9127,6 +9420,7 @@ mod test {
                     ..Default::default()
                 },
                 common: ftd_rt::Common {
+                    locals: std::array::IntoIter::new([(s("title@7"), s("Heading 12"))]).collect(),
                     region: Some(ftd_rt::Region::H1),
                     id: Some(s("heading-12")),
                     ..Default::default()
@@ -9140,31 +9434,31 @@ mod test {
                 -- component h1:
                 component: ftd.column
                 region: h1
-                $title: caption
+                caption $title:
 
                 --- ftd.text:
-                text: ref $title
-                $title: caption
+                text: $title
+                caption $title:
                 region: title
 
                 -- component h2:
                 component: ftd.column
                 region: h2
-                $title: caption
+                caption $title:
 
                 --- ftd.text:
-                text: ref $title
-                $title: caption
+                text: $title
+                caption $title:
                 region: title
 
                 -- component h3:
                 component: ftd.column
                 region: h3
-                $title: caption
+                caption $title:
 
                 --- ftd.text:
-                text: ref $title
-                $title: caption
+                text: $title
+                caption $title:
                 region: title
 
                 -- h3: Heading 31
@@ -9258,21 +9552,21 @@ mod test {
             "foo/bar",
             indoc::indoc!(
                 "
-                -- var mobile: true
+                -- $mobile: true
 
                 -- component foo:
                 component: ftd.column
 
                 --- ftd.text: Mobile
-                if: mobile
+                if: $mobile
 
                 --- ftd.text: Desktop
-                if: not mobile
+                if: not $mobile
 
                 -- foo:
 
                 -- ftd.text: Click Here!
-                $event-click$: toggle mobile
+                $event-click$: toggle $mobile
                 "
             ),
             &ftd::p2::TestLibrary {},
@@ -9291,7 +9585,12 @@ mod test {
                 text: ftd::markdown_line("Hello"),
                 line: true,
                 common: ftd_rt::Common {
-                    locals: std::array::IntoIter::new([(s("open@0"), s("true"))]).collect(),
+                    locals: std::array::IntoIter::new([
+                        (s("name@0"), s("Hello")),
+                        (s("open@0"), s("true")),
+                    ])
+                    .collect(),
+                    reference: Some(s("@name@0")),
                     condition: Some(ftd_rt::Condition {
                         variable: s("@open@0"),
                         value: s("true"),
@@ -9315,17 +9614,18 @@ mod test {
             ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd.text".to_string(),
                 full_name: "foo/bar#foo".to_string(),
-                arguments: std::array::IntoIter::new([(s("name"), ftd::p2::Kind::caption())])
-                    .collect(),
-                locals: std::array::IntoIter::new([(
-                    s("open"),
-                    ftd::p2::Kind::boolean().set_default(Some(s("true"))),
-                )])
+                arguments: std::array::IntoIter::new([
+                    (s("name"), ftd::p2::Kind::caption()),
+                    (
+                        s("open"),
+                        ftd::p2::Kind::boolean().set_default(Some(s("true"))),
+                    ),
+                ])
                 .collect(),
                 properties: std::array::IntoIter::new([(
                     s("text"),
                     ftd::component::Property {
-                        default: Some(ftd::PropertyValue::Argument {
+                        default: Some(ftd::PropertyValue::Variable {
                             name: s("name"),
                             kind: ftd::p2::Kind::String {
                                 caption: true,
@@ -9347,25 +9647,27 @@ mod test {
                     },
                 }],
                 condition: Some(ftd::p2::Boolean::Equal {
-                    left: ftd::PropertyValue::LocalVariable {
+                    left: ftd::PropertyValue::Variable {
                         name: s("open"),
-                        kind: ftd::p2::Kind::Boolean {
-                            default: Some(s("true")),
-                        },
+                        kind: ftd::p2::Kind::boolean().set_default(Some(s("true"))),
                     },
                     right: ftd::PropertyValue::Value {
                         value: crate::variable::Value::Boolean { value: true },
                     },
                 }),
                 kernel: false,
-                invocations: vec![std::array::IntoIter::new([(
-                    s("name"),
-                    ftd::Value::String {
-                        text: s("Hello"),
-                        source: ftd::TextSource::Caption,
-                    },
-                )])
+                invocations: vec![std::array::IntoIter::new([
+                    (
+                        s("name"),
+                        ftd::Value::String {
+                            text: s("Hello"),
+                            source: ftd::TextSource::Caption,
+                        },
+                    ),
+                    (s("open"), ftd::Value::Boolean { value: true }),
+                ])
                 .collect()],
+                ..Default::default()
             }),
         );
 
@@ -9375,11 +9677,11 @@ mod test {
                 "
                 -- component foo:
                 component: ftd.text
-                $name: caption
-                @open: boolean with default true
-                text: ref $name
-                if: @open
-                $event-click$: toggle @open
+                caption $name:
+                boolean $open: true
+                text: $name
+                if: $open
+                $event-click$: toggle $open
 
                 -- foo: Hello
                 "
@@ -9456,16 +9758,16 @@ mod test {
                 "
                 -- component foo:
                 component: ftd.column
-                @open: boolean with default true
+                boolean $open: true
 
                 --- ftd.text: Click here
-                $event-click$: toggle @open
+                $event-click$: toggle $open
 
                 --- ftd.text: Open True
-                if: @open
+                if: $open
 
                 --- ftd.text: Open False
-                if: not @open
+                if: not $open
 
                 -- foo:
                 "
@@ -9497,6 +9799,7 @@ mod test {
                                         parameters: Default::default(),
                                     },
                                 }],
+                                reference: Some(s("@toc.title")),
                                 ..Default::default()
                             },
                             ..Default::default()
@@ -9515,6 +9818,7 @@ mod test {
                                                 parameters: Default::default(),
                                             },
                                         }],
+                                        reference: Some(s("@toc.title")),
                                         ..Default::default()
                                     },
                                     ..Default::default()
@@ -9545,6 +9849,7 @@ mod test {
                                                 parameters: Default::default(),
                                             },
                                         }],
+                                        reference: Some(s("@toc.title")),
                                         ..Default::default()
                                     },
                                     ..Default::default()
@@ -9575,41 +9880,39 @@ mod test {
             indoc::indoc!(
                 "
                 -- record toc-record:
-                title: string
-                children: list toc-record
+                string title:
+                toc-record list children:
 
                 -- component toc-item:
                 component: ftd.column
-                $toc: toc-record
-                @open: boolean with default true
+                toc-record $toc:
+                boolean $open: true
 
-                --- ftd.text: ref $toc.title
-                $event-click$: toggle @open
+                --- ftd.text: $toc.title
+                $event-click$: toggle $open
 
                 --- toc-item:
-                if: @open
-                $loop$: $toc.children as obj
-                toc: ref obj
+                if: $open
+                $loop$: $toc.children as $obj
+                toc: $obj
 
-                -- list aa:
-                type: toc-record
+                -- toc-record list $aa:
 
-                -- aa:
+                -- $aa:
                 title: aa title
 
-                -- aa:
+                -- $aa:
                 title: aaa title
 
-                -- list toc:
-                type: toc-record
+                -- toc-record list $toc:
 
-                -- toc:
+                -- $toc:
                 title: ab title
-                children: ref aa
+                children: $aa
 
                 -- toc-item:
-                $loop$: toc as obj
-                toc: ref obj
+                $loop$: $toc as $obj
+                toc: $obj
                 "
             ),
             &ftd::p2::TestLibrary {},
@@ -9702,14 +10005,14 @@ mod test {
                 "
                 -- component bar:
                 component: ftd.column
-                @open-bar: boolean with default true
+                boolean $open-bar: true
 
                 --- ftd.text: Hello Bar
 
 
                 -- component foo:
                 component: ftd.column
-                @open: boolean with default true
+                boolean $open: true
 
                 --- ftd.column:
                 id: foo-id
@@ -9717,14 +10020,14 @@ mod test {
                 --- ftd.column:
 
                 --- ftd.text: Click here!
-                $event-click$: toggle @open
+                $event-click$: toggle $open
 
                 --- ftd.text: Hello
 
                 --- container: foo-id
 
                 --- bar:
-                if: @open
+                if: $open
 
 
                 -- foo:
@@ -9754,15 +10057,15 @@ mod test {
             "foo/bar",
             indoc::indoc!(
                 "
-                -- var foo: false
+                -- $foo: false
 
-                -- var bar: 10
+                -- $bar: 10
 
-                -- bar: 20
-                if: not foo
+                -- $bar: 20
+                if: not $foo
 
                 -- ftd.integer:
-                value: ref bar
+                value: $bar
 
                 "
             ),
@@ -9792,19 +10095,19 @@ mod test {
             "foo/bar",
             indoc::indoc!(
                 "
-                -- var foo: false
+                -- $foo: false
 
-                -- var other-foo: true
+                -- $other-foo: true
 
-                -- var bar: hello
+                -- $bar: hello
 
-                -- bar: foo says hello
-                if: not foo
+                -- $bar: foo says hello
+                if: not $foo
 
-                -- bar: other-foo says hello
-                if: other-foo
+                -- $bar: other-foo says hello
+                if: $other-foo
 
-                -- ftd.text: ref bar
+                -- ftd.text: $bar
 
                 "
             ),
@@ -9972,6 +10275,10 @@ mod test {
                                     ftd_rt::Element::Text(ftd_rt::Text {
                                         text: ftd::markdown_line("Bar says hello"),
                                         line: true,
+                                        common: ftd_rt::Common {
+                                            reference: Some(s("@name@0,0")),
+                                            ..Default::default()
+                                        },
                                         ..Default::default()
                                     }),
                                     ftd_rt::Element::Text(ftd_rt::Text {
@@ -9984,6 +10291,14 @@ mod test {
                                         ..Default::default()
                                     }),
                                 ],
+                                ..Default::default()
+                            },
+                            common: ftd_rt::Common {
+                                locals: std::array::IntoIter::new([(
+                                    s("name@0,0"),
+                                    s("Bar says hello"),
+                                )])
+                                .collect(),
                                 ..Default::default()
                             },
                             ..Default::default()
@@ -10021,17 +10336,17 @@ mod test {
 
                 --- ftd.text: foo says hello
 
-                --- ftd.text: ref greeting
+                --- ftd.text: $greeting
 
-                -- var greeting: Hello
+                -- $greeting: Hello
 
                 -- component bar:
                 component: ftd.column
-                $name: caption
+                caption $name:
 
-                --- ftd.text: ref $name
+                --- ftd.text: $name
 
-                --- ftd.text: ref greeting
+                --- ftd.text: $greeting
                 "
             ),
             &ftd::p2::TestLibrary {},
@@ -10179,28 +10494,28 @@ mod test {
             "foo/bar",
             indoc::indoc!(
                 "
-                -- var count: 0
+                -- $count: 0
 
                 -- ftd.integer:
-                value: ref count
+                value: $count
 
                 -- ftd.text: Hello on 8
-                if: count == 8
+                if: $count == 8
 
                 -- ftd.text: increment counter
-                $event-click$: increment count
+                $event-click$: increment $count
 
                 -- ftd.text: decrement counter
-                $event-click$: decrement count
+                $event-click$: decrement $count
 
                 -- ftd.text: increment counter
-                $event-click$: increment count by 2
+                $event-click$: increment $count by 2
 
                 -- ftd.text: increment counter by 2 clamp 2 10
-                $event-click$: increment count by 2 clamp 2 10
+                $event-click$: increment $count by 2 clamp 2 10
 
                 -- ftd.text: decrement count clamp 2 10
-                $event-click$: decrement count clamp 2 10
+                $event-click$: decrement $count clamp 2 10
                 "
             ),
             &ftd::p2::TestLibrary {},
@@ -10269,7 +10584,11 @@ mod test {
                     ..Default::default()
                 },
                 common: ftd_rt::Common {
-                    locals: std::array::IntoIter::new([(s("count@0"), s("0"))]).collect(),
+                    locals: std::array::IntoIter::new([
+                        (s("by@0"), s("3")),
+                        (s("count@0"), s("0")),
+                    ])
+                    .collect(),
                     ..Default::default()
                 },
             }));
@@ -10278,21 +10597,21 @@ mod test {
             "foo/bar",
             indoc::indoc!(
                 "
-                -- var decrement-by: 2
+                -- $decrement-by: 2
 
                 -- component foo:
                 component: ftd.column
-                $by: integer with default 4
-                @count: integer with default 0
+                integer $by: 4
+                integer $count: 0
 
                 --- ftd.integer:
-                value: ref @count
+                value: $count
 
                 --- ftd.text: increment counter
-                $event-click$: increment @count by $by
+                $event-click$: increment $count by $by
 
                 --- ftd.text: decrement counter
-                $event-click$: decrement @count by decrement-by
+                $event-click$: decrement $count by $decrement-by
 
                 -- foo:
                 by: 3
@@ -10311,6 +10630,11 @@ mod test {
         main.container
             .children
             .push(ftd_rt::Element::Row(ftd_rt::Row {
+                common: ftd_rt::Common {
+                    locals: std::array::IntoIter::new([(s("cta@0"), s("CTA says Hello"))])
+                        .collect(),
+                    ..Default::default()
+                },
                 ..Default::default()
             }));
 
@@ -10322,15 +10646,15 @@ mod test {
 
                 -- component secondary-button:
                 component: secondary-button-1
-                $cta: caption
-                cta: ref $cta
+                caption $cta:
+                cta: $cta
 
 
                 -- component secondary-button-1:
                 component: ftd.row
-                $cta: caption
+                caption $cta:
 
-                --- ftd.text: ref $cta
+                --- ftd.text: $cta
                 "
             ),
             &ftd::p2::TestLibrary {},
@@ -10366,6 +10690,11 @@ mod test {
                             },
                         },
                     ],
+                    locals: std::array::IntoIter::new([
+                        (s("idx@0"), s("0")),
+                        (s("src@0"), s("https://www.liveabout.com/thmb/YCJmu1khSJo8kMYM090QCd9W78U=/1250x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/powerpuff_girls-56a00bc45f9b58eba4aea61d.jpg"))
+                    ]).collect(),
+                    reference: Some(s("@src@0")),
                     ..Default::default()
                 },
                 ..Default::default()
@@ -10393,6 +10722,15 @@ mod test {
                             .collect(),
                         },
                     }],
+                    locals: std::array::IntoIter::new([
+                        (s("idx@1"), s("1")),
+                        (
+                            s("src@1"),
+                            s("https://upload.wikimedia.org/wikipedia/en/d/d4/Mickey_Mouse.png"),
+                        ),
+                    ])
+                    .collect(),
+                    reference: Some(s("@src@1")),
                     ..Default::default()
                 },
                 ..Default::default()
@@ -10402,15 +10740,15 @@ mod test {
             "foo/bar",
             indoc::indoc!(
                 "
-                -- var count: 0
+                -- $count: 0
 
                 -- component slide:
                 component: ftd.image
-                $src: string
-                $idx: integer
-                src: ref $src
-                if: count == $idx
-                $event-click$: increment count clamp 0 1
+                string $src:
+                integer $idx:
+                src: $src
+                if: $count == $idx
+                $event-click$: increment $count clamp 0 1
 
                 -- slide:
                 src: https://www.liveabout.com/thmb/YCJmu1khSJo8kMYM090QCd9W78U=/1250x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/powerpuff_girls-56a00bc45f9b58eba4aea61d.jpg
@@ -10463,22 +10801,21 @@ mod test {
                 "
                 -- component foo:
                 component: ftd.column
-                $bar: list string
+                string list $bar:
 
-                --- ftd.text: ref obj
-                $loop$: $bar as obj
+                --- ftd.text: $obj
+                $loop$: $bar as $obj
 
-                -- list names:
-                type: string
+                -- string list $names:
 
-                -- names: Arpita
+                -- $names: Arpita
 
-                -- names: Ayushi
+                -- $names: Ayushi
 
-                -- names: AmitU
+                -- $names: AmitU
 
                 -- foo:
-                bar: ref names
+                bar: $names
                 "
             ),
             &ftd::p2::TestLibrary {},
@@ -10509,6 +10846,7 @@ mod test {
                                                 ..Default::default()
                                             },
                                         }],
+                                        reference: Some(s("@name@0,0,0")),
                                         ..Default::default()
                                     },
                                     ..Default::default()
@@ -10530,8 +10868,11 @@ mod test {
                             ..Default::default()
                         },
                         common: ftd_rt::Common {
-                            locals: std::array::IntoIter::new([(s("visible@0,0,0"), s("true"))])
-                                .collect(),
+                            locals: std::array::IntoIter::new([
+                                (s("name@0,0,0"), s("Water")),
+                                (s("visible@0,0,0"), s("true")),
+                            ])
+                            .collect(),
                             ..Default::default()
                         },
                     }),
@@ -10550,6 +10891,7 @@ mod test {
                                                 ..Default::default()
                                             },
                                         }],
+                                        reference: Some(s("@name@0,0,1")),
                                         ..Default::default()
                                     },
                                     ..Default::default()
@@ -10586,6 +10928,7 @@ mod test {
                                                                     ..Default::default()
                                                                 },
                                                             }],
+                                                            reference: Some(s("@name@0,0,1,0")),
                                                             ..Default::default()
                                                         },
                                                         ..Default::default()
@@ -10611,10 +10954,10 @@ mod test {
                                                 ..Default::default()
                                             },
                                             common: ftd_rt::Common {
-                                                locals: std::array::IntoIter::new([(
-                                                    s("visible@0,0,1,0"),
-                                                    s("true"),
-                                                )])
+                                                locals: std::array::IntoIter::new([
+                                                    (s("name@0,0,1,0"), s("Mango Juice")),
+                                                    (s("visible@0,0,1,0"), s("true")),
+                                                ])
                                                 .collect(),
                                                 ..Default::default()
                                             },
@@ -10634,8 +10977,11 @@ mod test {
                             ..Default::default()
                         },
                         common: ftd_rt::Common {
-                            locals: std::array::IntoIter::new([(s("visible@0,0,1"), s("true"))])
-                                .collect(),
+                            locals: std::array::IntoIter::new([
+                                (s("name@0,0,1"), s("Juice")),
+                                (s("visible@0,0,1"), s("true")),
+                            ])
+                            .collect(),
                             ..Default::default()
                         },
                     }),
@@ -10670,6 +11016,7 @@ mod test {
                                                 ..Default::default()
                                             },
                                         }],
+                                        reference: Some(s("@name@0,0")),
                                         ..Default::default()
                                     },
                                     ..Default::default()
@@ -10696,8 +11043,11 @@ mod test {
                             ..Default::default()
                         },
                         common: ftd_rt::Common {
-                            locals: std::array::IntoIter::new([(s("visible@0,0"), s("true"))])
-                                .collect(),
+                            locals: std::array::IntoIter::new([
+                                (s("name@0,0"), s("Beverage")),
+                                (s("visible@0,0"), s("true")),
+                            ])
+                            .collect(),
                             data_id: Some(s("beverage")),
                             id: Some(s("beverage")),
                             ..Default::default()
@@ -10714,15 +11064,15 @@ mod test {
                 "
             -- component display-item1:
             component: ftd.column
-            $name: string
+            string $name:
             open: some-child
-            @visible: boolean with default true
+            boolean $visible: true
 
-            --- ftd.text: ref $name
-            $event-click$: toggle @visible
+            --- ftd.text: $name
+            $event-click$: toggle $visible
 
             --- ftd.column:
-            if: @visible
+            if: $visible
             id: some-child
 
             -- ftd.column:
@@ -10770,6 +11120,10 @@ mod test {
                         ftd_rt::Element::Text(ftd_rt::Text {
                             text: ftd::markdown_line("hello"),
                             line: true,
+                            common: ftd_rt::Common {
+                                reference: Some(s("@hello2@0")),
+                                ..Default::default()
+                            },
                             ..Default::default()
                         }),
                         ftd_rt::Element::Text(ftd_rt::Text {
@@ -10789,29 +11143,32 @@ mod test {
                     ],
                     ..Default::default()
                 },
-                ..Default::default()
+                common: ftd_rt::Common {
+                    locals: std::array::IntoIter::new([(s("hello2@0"), s("hello"))]).collect(),
+                    ..Default::default()
+                },
             }));
 
         let (_g_bag, g_col) = crate::p2::interpreter::interpret(
             "foo/bar",
             indoc::indoc!(
-                "
-                -- var hello: hello
+                r"
+                -- $hello: hello
 
                 -- component foo:
                 component: ftd.column
-                $hello: string
+                string $hello2:
+
+                --- ftd.text: \$hello
+
+                --- ftd.text: $hello2
 
                 --- ftd.text: $hello
 
-                --- ftd.text: ref $hello
-
-                --- ftd.text: ref hello
-
-                --- ftd.text: ref \"hello\"
+                --- ftd.text: hello
 
                 -- foo:
-                hello: ref hello
+                hello2: $hello
                 "
             ),
             &ftd::p2::TestLibrary {},
@@ -10877,6 +11234,7 @@ mod test {
                             line: true,
                             common: ftd_rt::Common {
                                 region: Some(ftd_rt::Region::Title),
+                                reference: Some(s("@title@0")),
                                 ..Default::default()
                             },
                             ..Default::default()
@@ -10886,6 +11244,12 @@ mod test {
                             common: ftd_rt::Common {
                                 id: Some(s("one:markdown-id")),
                                 data_id: Some(s("markdown-id")),
+                                locals: std::array::IntoIter::new([(
+                                    s("body@0,1"),
+                                    s("Heading 00 body"),
+                                )])
+                                .collect(),
+                                reference: Some(s("@body@0,1")),
                                 ..Default::default()
                             },
                             ..Default::default()
@@ -10897,6 +11261,11 @@ mod test {
                     region: Some(ftd_rt::Region::H0),
                     id: Some(s("one")),
                     data_id: Some(s("one")),
+                    locals: std::array::IntoIter::new([
+                        (s("body@0"), s("Heading 00 body")),
+                        (s("title@0"), s("Heading 00")),
+                    ])
+                    .collect(),
                     ..Default::default()
                 },
             }));
@@ -10911,6 +11280,7 @@ mod test {
                             line: true,
                             common: ftd_rt::Common {
                                 region: Some(ftd_rt::Region::Title),
+                                reference: Some(s("@title@1")),
                                 ..Default::default()
                             },
                             ..Default::default()
@@ -10919,6 +11289,12 @@ mod test {
                             text: ftd::markdown("Heading 01 body"),
                             common: ftd_rt::Common {
                                 data_id: Some(s("markdown-id")),
+                                locals: std::array::IntoIter::new([(
+                                    s("body@1,1"),
+                                    s("Heading 01 body"),
+                                )])
+                                .collect(),
+                                reference: Some(s("@body@1,1")),
                                 ..Default::default()
                             },
                             ..Default::default()
@@ -10929,6 +11305,11 @@ mod test {
                 common: ftd_rt::Common {
                     region: Some(ftd_rt::Region::H0),
                     id: Some(s("heading-01")),
+                    locals: std::array::IntoIter::new([
+                        (s("body@1"), s("Heading 01 body")),
+                        (s("title@1"), s("Heading 01")),
+                    ])
+                    .collect(),
                     ..Default::default()
                 },
             }));
@@ -10948,23 +11329,23 @@ mod test {
 
                 -- component h0:
                 component: ftd.column
-                $title: caption
-                $body: optional body
+                caption $title:
+                optional body $body:
                 region: h0
 
                 --- ftd.text:
-                text: ref $title
+                text: $title
                 region: title
 
                 --- markdown:
                 if: $body is not null
-                body: ref $body
+                body: $body
                 id: markdown-id
 
                 -- component markdown:
                 component: ftd.text
-                $body: body
-                text: ref $body
+                body $body:
+                text: $body
                 "
             ),
             &ftd::p2::TestLibrary {},
@@ -11091,27 +11472,25 @@ mod test {
             "foo/bar",
             indoc::indoc!(
                 "
-                -- list people:
-                type: string
+                -- string list $people:
 
-                -- people: Ayushi
+                -- $people: Ayushi
 
-                -- people: Arpita
+                -- $people: Arpita
 
                 -- ftd.text: Hello people
-                if: people is not empty
+                if: $people is not empty
 
                 -- ftd.text: Hello nobody
-                if: people is empty
+                if: $people is empty
 
 
-                -- list empty-list:
-                type: string
+                -- string list $empty-list:
 
 
                 -- component foo:
                 component: ftd.column
-                $string-list: list string
+                string list $string-list:
 
                 --- ftd.text: Hello list
                 if: $string-list is not empty
@@ -11120,10 +11499,10 @@ mod test {
                 if: $string-list is empty
 
                 -- foo:
-                string-list: ref empty-list
+                string-list: $empty-list
 
                 -- foo:
-                string-list: ref people
+                string-list: $people
                 "
             ),
             &ftd::p2::TestLibrary {},
@@ -11157,11 +11536,10 @@ mod test {
             "foo/bar",
             indoc::indoc!(
                 "
-                -- list empty-list:
-                type: string
+                -- string list $empty-list:
 
                 -- ftd.column:
-                if: empty-list is not empty
+                if: $empty-list is not empty
 
                 --- ftd.text: Hello
 
@@ -11169,7 +11547,7 @@ mod test {
 
                 -- component foo:
                 component: ftd.column
-                if: empty-list is not empty
+                if: $empty-list is not empty
 
                 --- ftd.text: Hello
                 "
@@ -11279,6 +11657,10 @@ mod test {
                                 children: vec![ftd_rt::Element::Text(ftd_rt::Text {
                                     text: ftd::markdown_line("commit message 1"),
                                     line: true,
+                                    common: ftd_rt::Common {
+                                        reference: Some(s("@commit.message")),
+                                        ..Default::default()
+                                    },
                                     ..Default::default()
                                 })],
                                 ..Default::default()
@@ -11290,6 +11672,10 @@ mod test {
                                 children: vec![ftd_rt::Element::Text(ftd_rt::Text {
                                     text: ftd::markdown_line("commit message 2"),
                                     line: true,
+                                    common: ftd_rt::Common {
+                                        reference: Some(s("@commit.message")),
+                                        ..Default::default()
+                                    },
                                     ..Default::default()
                                 })],
                                 ..Default::default()
@@ -11301,6 +11687,10 @@ mod test {
                                 children: vec![ftd_rt::Element::Text(ftd_rt::Text {
                                     text: ftd::markdown_line("file filename 1"),
                                     line: true,
+                                    common: ftd_rt::Common {
+                                        reference: Some(s("@file.filename")),
+                                        ..Default::default()
+                                    },
                                     ..Default::default()
                                 })],
                                 ..Default::default()
@@ -11312,6 +11702,10 @@ mod test {
                                 children: vec![ftd_rt::Element::Text(ftd_rt::Text {
                                     text: ftd::markdown_line("file filename 2"),
                                     line: true,
+                                    common: ftd_rt::Common {
+                                        reference: Some(s("@file.filename")),
+                                        ..Default::default()
+                                    },
                                     ..Default::default()
                                 })],
                                 ..Default::default()
@@ -11329,72 +11723,69 @@ mod test {
             indoc::indoc!(
                 "
                 -- record commit:
-                message: string
+                string message:
 
                 -- record file:
-                filename: string
+                string filename:
 
                 -- record changes:
-                commits: list commit
-                files: list file
+                commit list commits:
+                file list files:
 
 
-                -- list commit-list:
-                type: commit
+                -- commit list $commit-list:
 
-                -- commit-list:
+                -- $commit-list:
                 message: commit message 1
 
-                -- commit-list:
+                -- $commit-list:
                 message: commit message 2
 
 
-                -- list file-list:
-                type: file
+                -- file list $file-list:
 
-                -- file-list:
+                -- $file-list:
                 filename: file filename 1
 
-                -- file-list:
+                -- $file-list:
                 filename: file filename 2
 
 
-                -- var rec-changes:
-                type: changes
-                commits: ref commit-list
-                files: ref file-list
+                -- changes $rec-changes:
+                commits: $commit-list
+                files: $file-list
 
                 -- display:
-                changes: ref rec-changes
+                changes: $rec-changes
 
 
 
 
                 -- component display:
                 component: ftd.column
-                $changes: changes
+                changes $changes:
 
                 --- display-commit:
-                $loop$: $changes.commits as obj
-                commit: ref obj
+                $loop$: $changes.commits as $obj
+                commit: $obj
 
                 --- display-file:
-                $loop$: $changes.files as obj
-                file: ref obj
+                $loop$: $changes.files as $obj
+                file: $obj
 
 
                 -- component display-commit:
                 component: ftd.column
-                $commit: commit
+                commit $commit:
 
-                --- ftd.text: ref $commit.message
+                --- ftd.text: $commit.message
 
 
                 -- component display-file:
                 component: ftd.column
-                $file: file
+                file $file:
 
-                --- ftd.text: ref $file.filename
+                --- ftd.text: $file.filename
                 "
             ),
             &ftd::p2::TestLibrary {},
@@ -11560,20 +11951,20 @@ mod test {
             "foo/bar",
             indoc::indoc!(
                 "
-                -- var current: some value
+                -- $current: some value
 
                 -- ftd.text: Start...
-                if: current == \"some value\"
+                if: $current == some value
 
-                -- ftd.text: ref current
+                -- ftd.text: $current
 
                 -- ftd.text: change message
-                $event-click$: current = \"hello world\"
+                $event-click$: $current = hello world
 
-                -- var msg: good bye
+                -- $msg: good bye
 
                 -- ftd.text: change message again
-                $event-click$: current = msg
+                $event-click$: $current = $msg
                 "
             ),
             &ftd::p2::TestLibrary {},
@@ -11624,6 +12015,10 @@ mod test {
                 text: ftd::markdown_line("hello"),
                 line: true,
                 size: Some(50),
+                common: ftd_rt::Common {
+                    locals: std::array::IntoIter::new([(s("size@0"), s("50"))]).collect(),
+                    ..Default::default()
+                },
                 ..Default::default()
             }));
 
@@ -11641,7 +12036,7 @@ mod test {
                 "
                 -- component foo: hello
                 component: ftd.text
-                $size: inherit
+                inherit $size:
 
                 -- foo:
                 size: 50
@@ -11726,14 +12121,14 @@ mod test {
                 text: ftd::markdown_line("Hello World"),
                 line: true,
                 common: ftd_rt::Common {
-                    locals: std::array::IntoIter::new([(s("mouse-in@0"), s("false"))]).collect(),
+                    locals: std::array::IntoIter::new([(s("MOUSE-IN@0"), s("false"))]).collect(),
                     conditional_attribute: std::array::IntoIter::new([(
                         s("color"),
                         ftd_rt::ConditionalAttribute {
                             attribute_type: ftd_rt::AttributeType::Style,
                             conditions_with_value: vec![(
                                 ftd_rt::Condition {
-                                    variable: s("@mouse-in@0"),
+                                    variable: s("@MOUSE-IN@0"),
                                     value: s("true"),
                                 },
                                 ftd_rt::ConditionalValue {
@@ -11750,7 +12145,7 @@ mod test {
                             name: s("onmouseenter"),
                             action: ftd_rt::Action {
                                 action: s("set-value"),
-                                target: s("@mouse-in@0"),
+                                target: s("@MOUSE-IN@0"),
                                 parameters: std::array::IntoIter::new([(
                                     s("value"),
                                     vec![s("true"), s("boolean")],
@@ -11762,7 +12157,7 @@ mod test {
                             name: s("onmouseleave"),
                             action: ftd_rt::Action {
                                 action: s("set-value"),
-                                target: s("@mouse-in@0"),
+                                target: s("@MOUSE-IN@0"),
                                 parameters: std::array::IntoIter::new([(
                                     s("value"),
                                     vec![s("false"), s("boolean")],
@@ -11783,9 +12178,638 @@ mod test {
                 -- component foo:
                 component: ftd.text
                 text: Hello World
-                color if @mouse-in: red
+                color if $MOUSE-IN: red
 
                 -- foo:
+                "
+            ),
+            &ftd::p2::TestLibrary {},
+        )
+        .expect("found error");
+        pretty_assertions::assert_eq!(g_col, main);
+    }
+
+    #[test]
+    fn event_stop_propagation() {
+        let mut main = super::default_column();
+        main.container
+            .children
+            .push(ftd_rt::Element::Column(ftd_rt::Column {
+                container: ftd_rt::Container {
+                    children: vec![
+                        ftd_rt::Element::Text(ftd_rt::Text {
+                            text: ftd::markdown_line("Hello"),
+                            line: true,
+                            common: ftd_rt::Common {
+                                condition: Some(ftd_rt::Condition {
+                                    variable: s("@open@0"),
+                                    value: s("true"),
+                                }),
+                                ..Default::default()
+                            },
+                            ..Default::default()
+                        }),
+                        ftd_rt::Element::Column(ftd_rt::Column {
+                            container: ftd_rt::Container {
+                                children: vec![ftd_rt::Element::Text(ftd_rt::Text {
+                                    text: ftd::markdown_line("Hello Again"),
+                                    line: true,
+                                    common: ftd_rt::Common {
+                                        condition: Some(ftd_rt::Condition {
+                                            variable: s("@open@0,1"),
+                                            value: s("true"),
+                                        }),
+                                        ..Default::default()
+                                    },
+                                    ..Default::default()
+                                })],
+                                ..Default::default()
+                            },
+                            common: ftd_rt::Common {
+                                locals: std::array::IntoIter::new([(s("open@0,1"), s("true"))])
+                                    .collect(),
+                                events: vec![
+                                    ftd_rt::Event {
+                                        name: s("onclick"),
+                                        action: ftd_rt::Action {
+                                            action: s("toggle"),
+                                            target: s("@open@0,1"),
+                                            parameters: Default::default(),
+                                        },
+                                    },
+                                    ftd_rt::Event {
+                                        name: s("onclick"),
+                                        action: ftd_rt::Action {
+                                            action: s("stop-propagation"),
+                                            target: s(""),
+                                            parameters: Default::default(),
+                                        },
+                                    },
+                                ],
+                                ..Default::default()
+                            },
+                        }),
+                    ],
+                    ..Default::default()
+                },
+                common: ftd_rt::Common {
+                    locals: std::array::IntoIter::new([(s("open@0"), s("true"))]).collect(),
+                    events: vec![ftd_rt::Event {
+                        name: s("onclick"),
+                        action: ftd_rt::Action {
+                            action: s("toggle"),
+                            target: s("@open@0"),
+                            parameters: Default::default(),
+                        },
+                    }],
+                    ..Default::default()
+                },
+            }));
+
+        let (_g_bag, g_col) = crate::p2::interpreter::interpret(
+            "foo/bar",
+            indoc::indoc!(
+                "
+                -- foo:
+
+                -- component foo:
+                component: ftd.column
+                boolean $open: true
+                $event-click$: toggle $open
+
+                --- ftd.text: Hello
+                if: $open
+
+                --- bar:
+
+
+                -- component bar:
+                component: ftd.column
+                boolean $open: true
+                $event-click$: toggle $open
+                $event-click$: stop-propagation
+
+                --- ftd.text: Hello Again
+                if: $open
+
+                "
+            ),
+            &ftd::p2::TestLibrary {},
+        )
+        .expect("found error");
+        pretty_assertions::assert_eq!(g_col, main);
+    }
+
+    #[test]
+    fn new_syntax() {
+        let mut main = super::default_column();
+        main.container
+            .children
+            .push(ftd_rt::Element::Row(ftd_rt::Row {
+                container: ftd_rt::Container {
+                    children: vec![ftd_rt::Element::Integer(ftd_rt::Text {
+                        text: ftd::markdown_line("20"),
+                        common: ftd_rt::Common {
+                            conditional_attribute: std::array::IntoIter::new([(
+                                s("color"),
+                                ftd_rt::ConditionalAttribute {
+                                    attribute_type: ftd_rt::AttributeType::Style,
+                                    conditions_with_value: vec![
+                                        (
+                                            ftd_rt::Condition {
+                                                variable: s("@b@0"),
+                                                value: s("true"),
+                                            },
+                                            ftd_rt::ConditionalValue {
+                                                value: s("rgba(0,0,0,1)"),
+                                                important: false,
+                                            },
+                                        ),
+                                        (
+                                            ftd_rt::Condition {
+                                                variable: s("@a@0"),
+                                                value: s("30"),
+                                            },
+                                            ftd_rt::ConditionalValue {
+                                                value: s("rgba(255,0,0,1)"),
+                                                important: false,
+                                            },
+                                        ),
+                                    ],
+                                    default: None,
+                                },
+                            )])
+                            .collect(),
+                            reference: Some(s("@a@0")),
+                            ..Default::default()
+                        },
+                        ..Default::default()
+                    })],
+                    ..Default::default()
+                },
+                common: ftd_rt::Common {
+                    locals: std::array::IntoIter::new([
+                        (s("a@0"), s("20")),
+                        (s("b@0"), s("false")),
+                    ])
+                    .collect(),
+                    events: vec![
+                        ftd_rt::Event {
+                            name: s("onclick"),
+                            action: ftd_rt::Action {
+                                action: s("toggle"),
+                                target: s("@b@0"),
+                                parameters: Default::default(),
+                            },
+                        },
+                        ftd_rt::Event {
+                            name: s("onclick"),
+                            action: ftd_rt::Action {
+                                action: s("increment"),
+                                target: s("@a@0"),
+                                parameters: std::array::IntoIter::new([(s("by"), vec![s("2")])])
+                                    .collect(),
+                            },
+                        },
+                    ],
+                    ..Default::default()
+                },
+            }));
+
+        let (_g_bag, g_col) = crate::p2::interpreter::interpret(
+            "foo/bar",
+            indoc::indoc!(
+                "
+                -- component foo:
+                component: ftd.row
+                integer $a:
+                boolean $b: false
+                $event-click$: toggle $b
+                $event-click$: increment $a by 2
+
+                --- ftd.integer:
+                value: $a
+                color if $b: black
+                color if $a == 30: red
+
+                -- foo:
+                a: 20
+                "
+            ),
+            &ftd::p2::TestLibrary {},
+        )
+        .expect("found error");
+        pretty_assertions::assert_eq!(g_col, main);
+    }
+
+    #[test]
+    fn condition_check() {
+        let mut main = super::default_column();
+        main.container
+            .children
+            .push(ftd_rt::Element::Row(ftd_rt::Row {
+                container: ftd_rt::Container {
+                    children: vec![ftd_rt::Element::Column(ftd_rt::Column {
+                        container: ftd_rt::Container {
+                            children: vec![ftd_rt::Element::Text(ftd_rt::Text {
+                                text: ftd::markdown_line("Hello"),
+                                line: true,
+                                common: ftd_rt::Common {
+                                    condition: Some(ftd_rt::Condition {
+                                        variable: s("@b@0,0"),
+                                        value: s("true"),
+                                    }),
+                                    is_not_visible: true,
+                                    ..Default::default()
+                                },
+                                ..Default::default()
+                            })],
+                            ..Default::default()
+                        },
+                        common: ftd_rt::Common {
+                            locals: std::array::IntoIter::new([
+                                (s("a@0,0"), s("true")),
+                                (s("b@0,0"), s("false")),
+                            ])
+                            .collect(),
+                            condition: Some(ftd_rt::Condition {
+                                variable: s("@b@0"),
+                                value: s("true"),
+                            }),
+                            ..Default::default()
+                        },
+                    })],
+                    ..Default::default()
+                },
+                common: ftd_rt::Common {
+                    locals: std::array::IntoIter::new([(s("b@0"), s("true"))]).collect(),
+                    ..Default::default()
+                },
+            }));
+
+        let (_g_bag, g_col) = crate::p2::interpreter::interpret(
+            "foo/bar",
+            indoc::indoc!(
+                "
+                -- $present: true
+
+                -- component bar:
+                component: ftd.column
+                boolean $a: true
+                if: $a
+                boolean $b: false
+
+                --- ftd.text: Hello
+                if: $b
+
+                -- component foo:
+                component: ftd.row
+                boolean $b: true
+
+                --- bar:
+                if: $b
+
+                -- foo:
+                "
+            ),
+            &ftd::p2::TestLibrary {},
+        )
+        .expect("found error");
+        pretty_assertions::assert_eq!(g_col, main);
+    }
+
+    #[test]
+    fn external_variable() {
+        let mut main = super::default_column();
+        main.container
+            .children
+            .push(ftd_rt::Element::Column(ftd_rt::Column {
+                container: ftd_rt::Container {
+                    children: vec![
+                        ftd_rt::Element::Integer(ftd_rt::Text {
+                            text: ftd::markdown_line("20"),
+                            common: ftd_rt::Common {
+                                conditional_attribute: std::array::IntoIter::new([(
+                                    s("color"),
+                                    ftd_rt::ConditionalAttribute {
+                                        attribute_type: ftd_rt::AttributeType::Style,
+                                        conditions_with_value: vec![(
+                                            ftd_rt::Condition {
+                                                variable: s("@b@0"),
+                                                value: s("true"),
+                                            },
+                                            ftd_rt::ConditionalValue {
+                                                value: s("rgba(0,0,0,1)"),
+                                                important: false,
+                                            },
+                                        )],
+                                        default: None,
+                                    },
+                                )])
+                                .collect(),
+                                reference: Some(s("@a@0")),
+                                ..Default::default()
+                            },
+                            ..Default::default()
+                        }),
+                        ftd_rt::Element::Text(ftd_rt::Text {
+                            text: ftd::markdown_line("whatever"),
+                            line: true,
+                            common: ftd_rt::Common {
+                                reference: Some(s("@some-text@0")),
+                                ..Default::default()
+                            },
+                            ..Default::default()
+                        }),
+                    ],
+                    ..Default::default()
+                },
+                common: ftd_rt::Common {
+                    locals: std::array::IntoIter::new([
+                        (s("a@0"), s("20")),
+                        (s("b@0"), s("false")),
+                        (s("some-text@0"), s("whatever")),
+                    ])
+                    .collect(),
+                    events: vec![
+                        ftd_rt::Event {
+                            name: s("onclick"),
+                            action: ftd_rt::Action {
+                                action: s("toggle"),
+                                target: s("@b@0"),
+                                parameters: Default::default(),
+                            },
+                        },
+                        ftd_rt::Event {
+                            name: s("onclick"),
+                            action: ftd_rt::Action {
+                                action: s("increment"),
+                                target: s("@a@0"),
+                                parameters: Default::default(),
+                            },
+                        },
+                        ftd_rt::Event {
+                            name: s("onclick"),
+                            action: ftd_rt::Action {
+                                action: s("set-value"),
+                                target: s("@some-text@0"),
+                                parameters: std::array::IntoIter::new([(
+                                    "value".to_string(),
+                                    vec!["hello".to_string(), "string".to_string()],
+                                )])
+                                .collect(),
+                            },
+                        },
+                    ],
+                    ..Default::default()
+                },
+            }));
+
+        main.container
+            .children
+            .push(ftd_rt::Element::Row(ftd_rt::Row {
+                container: ftd_rt::Container {
+                    children: vec![ftd_rt::Element::Text(ftd_rt::Text {
+                        text: ftd::markdown_line("hello"),
+                        line: true,
+                        common: ftd_rt::Common {
+                            conditional_attribute: std::array::IntoIter::new([(
+                                s("color"),
+                                ftd_rt::ConditionalAttribute {
+                                    attribute_type: ftd_rt::AttributeType::Style,
+                                    conditions_with_value: vec![(
+                                        ftd_rt::Condition {
+                                            variable: s("@foo@1"),
+                                            value: s("true"),
+                                        },
+                                        ftd_rt::ConditionalValue {
+                                            value: s("rgba(255,0,0,1)"),
+                                            important: false,
+                                        },
+                                    )],
+                                    default: None,
+                                },
+                            )])
+                            .collect(),
+                            ..Default::default()
+                        },
+                        ..Default::default()
+                    })],
+                    ..Default::default()
+                },
+                common: ftd_rt::Common {
+                    locals: std::array::IntoIter::new([(s("foo@1"), s("false"))]).collect(),
+                    events: vec![ftd_rt::Event {
+                        name: s("onclick"),
+                        action: ftd_rt::Action {
+                            action: s("toggle"),
+                            target: s("@foo@1"),
+                            parameters: Default::default(),
+                        },
+                    }],
+                    ..Default::default()
+                },
+            }));
+
+        let (_g_bag, g_col) = crate::p2::interpreter::interpret(
+            "foo/bar",
+            indoc::indoc!(
+                "
+                -- component foo:
+                component: ftd.column
+                integer $a:
+                boolean $b: false
+                $event-click$: toggle $b
+                $event-click$: increment $a
+
+                --- ftd.integer:
+                value: $a
+                color if $b: black
+
+                -- $current: hello
+
+                -- foo:
+                a: 20
+                string $some-text: whatever
+                $event-click$: $some-text = $current
+
+                --- ftd.text: $some-text
+
+                -- ftd.row:
+                boolean $foo: false
+                $event-click$: toggle $foo
+
+                --- ftd.text: hello
+                color if $foo: red
+                "
+            ),
+            &ftd::p2::TestLibrary {},
+        )
+        .expect("found error");
+        pretty_assertions::assert_eq!(g_col, main);
+    }
+
+    #[test]
+    fn new_var_syntax() {
+        let mut main = super::default_column();
+        main.container
+            .children
+            .push(ftd_rt::Element::Text(ftd_rt::Text {
+                text: ftd::markdown_line("hello"),
+                line: true,
+                size: Some(30),
+                common: ftd_rt::Common {
+                    conditional_attribute: std::array::IntoIter::new([(
+                        s("color"),
+                        ftd_rt::ConditionalAttribute {
+                            attribute_type: ftd_rt::AttributeType::Style,
+                            conditions_with_value: vec![(
+                                ftd_rt::Condition {
+                                    variable: s("@t@0"),
+                                    value: s("true"),
+                                },
+                                ftd_rt::ConditionalValue {
+                                    value: s("rgba(255,0,0,1)"),
+                                    important: false,
+                                },
+                            )],
+                            default: None,
+                        },
+                    )])
+                    .collect(),
+                    locals: std::array::IntoIter::new([
+                        (s("f@0"), s("hello")),
+                        (s("t@0"), s("true")),
+                    ])
+                    .collect(),
+                    reference: Some(s("foo/bar#bar")),
+                    color: Some(ftd_rt::Color {
+                        r: 255,
+                        g: 0,
+                        b: 0,
+                        alpha: 1.0,
+                    }),
+                    ..Default::default()
+                },
+                ..Default::default()
+            }));
+
+        main.container
+            .children
+            .push(ftd_rt::Element::Column(ftd_rt::Column {
+                container: ftd_rt::Container {
+                    children: vec![
+                        ftd_rt::Element::Text(ftd_rt::Text {
+                            text: ftd::markdown_line("hello"),
+                            line: true,
+                            common: ftd_rt::Common {
+                                reference: Some(s("@ff@1")),
+                                ..Default::default()
+                            },
+                            ..Default::default()
+                        }),
+                        ftd_rt::Element::Integer(ftd_rt::Text {
+                            text: ftd::markdown_line("20"),
+                            common: ftd_rt::Common {
+                                reference: Some(s("@i@1")),
+                                ..Default::default()
+                            },
+                            ..Default::default()
+                        }),
+                    ],
+                    ..Default::default()
+                },
+                common: ftd_rt::Common {
+                    locals: std::array::IntoIter::new([
+                        (s("ff@1"), s("hello")),
+                        (s("i@1"), s("20")),
+                    ])
+                    .collect(),
+                    ..Default::default()
+                },
+            }));
+
+        let (_g_bag, g_col) = crate::p2::interpreter::interpret(
+            "foo/bar",
+            indoc::indoc!(
+                "
+                -- component col:
+                component: ftd.column
+                integer $i:
+                $ff: hello
+
+                --- ftd.text: $ff
+
+                --- ftd.integer: $i
+
+                -- integer $foo: 20
+
+                -- $foo: 30
+
+                -- $bar: hello
+
+                -- ftd.text: $bar
+                boolean $t: true
+                $f: hello
+                size: $foo
+                color if $t: red
+
+                -- col:
+                i: 20
+                "
+            ),
+            &ftd::p2::TestLibrary {},
+        )
+        .expect("found error");
+        pretty_assertions::assert_eq!(g_col, main);
+    }
+
+    #[test]
+    fn text_block() {
+        let mut main = super::default_column();
+        main.container
+            .children
+            .push(ftd_rt::Element::TextBlock(ftd_rt::TextBlock {
+                text: ftd::markdown_line("hello"),
+                line: true,
+                ..Default::default()
+            }));
+
+        main.container
+            .children
+            .push(ftd_rt::Element::TextBlock(ftd_rt::TextBlock {
+                text: ftd::markdown_line("hello"),
+                line: true,
+                ..Default::default()
+            }));
+
+        main.container
+            .children
+            .push(ftd_rt::Element::Code(ftd_rt::Code {
+                text: ftd::code_with_theme(
+                    "This is text",
+                    "txt",
+                    ftd::render::DEFAULT_THEME,
+                    "foo/bar",
+                )
+                .unwrap(),
+                ..Default::default()
+            }));
+
+        let (_g_bag, g_col) = crate::p2::interpreter::interpret(
+            "foo/bar",
+            indoc::indoc!(
+                "
+                -- ftd.text-block: hello
+
+                -- component b: hello
+                component: ftd.text-block
+
+                -- b:
+
+                -- ftd.code:
+
+                This is text
                 "
             ),
             &ftd::p2::TestLibrary {},
@@ -11807,32 +12831,29 @@ mod test {
 
                 -- component toc-item:
                 component: ftd.column
-                $toc: toc-record
+                toc-record $toc:
                 padding-left: 10
 
                 --- ftd.text: ref $toc.title
                 link: ref $toc.link
 
                 --- toc-item:
-                $loop$: $toc.children as obj
-                toc: ref obj
+                $loop$: $toc.children as $obj
+                toc: $obj
 
 
-                -- list toc:
-                type: toc-record
+                -- toc-record list $toc:
 
-                -- toc:
+                -- $toc:
                 title: ref ab.title
                 link: ref ab.link
                 children: ref ab.children
 
-                -- var ab:
-                type: toc-record
+                -- toc-record $ab:
                 title: ab title
                 link: ab link
 
-                -- var first_ab
-                type: ab.children
+                -- ab.children $first_ab
                 title: aa title
                 link: aa link
 
@@ -11846,8 +12867,8 @@ mod test {
 
 
                 -- toc-item:
-                $loop$: toc as obj
-                toc: ref obj
+                $loop$: toc as $obj
+                toc: $obj
                 "
             ),
             &ftd::p2::TestLibrary {},
@@ -11856,8 +12877,8 @@ mod test {
         // pretty_assertions::assert_eq!(g_bag, bag);
         // pretty_assertions::assert_eq!(g_col, main);
         // --- toc-item:
-        //                 $loop$: $toc.children as t
-        //                 toc: ref t
+        //                 $loop$: $toc.children as $t
+        //                 toc: $t
     }
 
     #[test]
@@ -11873,19 +12894,18 @@ mod test {
 
                 -- component toc-item:
                 component: ftd.column
-                $toc: toc-record
+                toc-record $toc:
                 padding-left: 10
 
                 --- ftd.text: ref $toc.title
                 link: ref $toc.link
 
                 --- toc-item:
-                $loop$: $toc.children as obj
-                toc: ref obj
+                $loop$: $toc.children as $obj
+                toc: $obj
 
 
-                -- list toc:
-                type: toc-record
+                -- toc-record list $toc:
                 $processor$: ft.toc
 
                 - fifthtry/ftd/p1
@@ -11899,8 +12919,8 @@ mod test {
 
 
                 -- toc-item:
-                $loop$: toc as obj
-                toc: ref obj
+                $loop$: $toc as $obj
+                toc: $obj
                 "
             ),
             &ftd::p2::TestLibrary {},
@@ -11909,7 +12929,7 @@ mod test {
         // pretty_assertions::assert_eq!(g_bag, bag);
         // pretty_assertions::assert_eq!(g_col, main);
         // --- toc-item:
-        //                 $loop$: $toc.children as t
-        //                 toc: ref t
+        //                 $loop$: $toc.children as $t
+        //                 toc: $t
     }*/
 }

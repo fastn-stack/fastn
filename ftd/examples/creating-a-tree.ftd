@@ -1,54 +1,54 @@
--- var dark-mode: false
+-- $dark-mode: false
 
 
--- var toc: not set
-type: string
+-- string $toc: not set
 
 
--- var header: not set
-type: string
+
+-- string $header: not set
 
 
--- var second: not set
-type: string
+
+-- string $second: not set
+
 
 
 -- record tldr:
-id: optional string
-image: optional string
-body: optional caption
+optional string id:
+optional string image:
+optional caption body:
 
 
 -- or-type someone:
 
 --- username:
-username: caption
+caption username:
 
 --- who:
-who: caption
+caption who:
 
 
 -- record meta:
-reader: list someone
-writer: list someone
-admin: list someone
-git-repo: optional string
-minimum-cr-approvals: optional integer
-lang: optional string
-deleted: optional boolean
-translation: list string
-translation-of: optional string
-no-index: optional boolean
-fullscreen: optional boolean
+someone list reader:
+someone list writer:
+someone list admin:
+optional string git-repo:
+optional integer minimum-cr-approvals:
+optional string lang:
+optional boolean deleted:
+string list translation:
+optional string translation-of:
+optional boolean no-index:
+optional boolean fullscreen:
 
 
 -- or-type reviewer:
 
 --- assigned-to:
-username: caption
+caption username:
 
 --- approved-by:
-username: caption
+caption username:
 
 --- rejected-by:
 username: caption
@@ -58,18 +58,18 @@ username: caption
 
 
 -- record cr:
-status: optional string
-review: list reviewer
+optional string status:
+reviewer list review:
 
 
 -- record concept:
-dependency: list string
-about: optional body
+string list dependency:
+optional body about:
 
 
 -- component repo-link:
 component: ftd.row
-$github-repo: string
+string $github-repo:
 width: fill
 padding-left: 20
 padding-right: 20
@@ -82,16 +82,16 @@ width: 18
 height: 18
 
 --- ftd.text:
-text: ref $github-repo
-color: #4D4D4D
+text: $github-repo
+color: \#4D4D4D
 size: 14
 
 
 -- component pr-title:
 component: ftd.row
-$title: string
-$status: optional string
-$number: integer
+string $title:
+optional string $status:
+integer $number:
 width: fill
 padding-left: 20
 padding-right: 20
@@ -100,37 +100,37 @@ spacing: 5
 
 --- ftd.text:
 text: \#
-color: #4D4D4D
+color: \#4D4D4D
 size: 16
 style: bold
 
 --- ftd.integer:
-value: ref $number
-color: #4D4D4D
+value: $number
+color: \#4D4D4D
 size: 16
 style: bold
 
 --- ftd.text:
 text: \-
-color: #4D4D4D
+color: \#4D4D4D
 size: 16
 style: bold
 
 --- ftd.text:
-text: ref $title
+text: $title
 width: fill
-color: #4D4D4D
+color: \#4D4D4D
 size: 16
 style: bold
 
 --- ftd.text:
 if: $status is not null
-text: ref $status
+text: $status
 align: right
 size: 12
-color: #5E7CEC
+color: \#5E7CEC
 width: auto
-background-color: #DEE3F4
+background-color: \#DEE3F4
 padding-left: 10
 padding-right: 10
 padding-top: 4
@@ -140,57 +140,57 @@ border-radius: 10
 
 -- component pr:
 component: ftd.column
-$title: caption
-$number: integer
-$status: optional string
-$open-status: optional string
-$open_status: optional string
-$body: optional body
-$github-repo: string
+caption $title:
+integer $number:
+optional string $status:
+optional string $open-status:
+optional string $open_status:
+optional body $body:
+string $github-repo:
 width: fill
 border-radius: 5
-background-color: #F5F5F5
+background-color: \#F5F5F5
 margin-bottom: 20
 padding-top: 10
 
 --- pr-title:
-title: ref $title
-number: ref $number
-status: ref $status
+title: $title
+number: $number
+status: $status
 
 --- repo-link:
-github-repo: ref $github-repo
+github-repo: $github-repo
 
 --- ftd.text:
 padding-left: 20
 padding-right: 20
 padding-bottom: 10
 if: $body is not null
-text: ref $body
-color: #4D4D4D
+text: $body
+color: \#4D4D4D
 size: 14
 
 
 -- component markdown:
 component: ftd.text
-$body: body
-$collapsed: optional boolean
-$title: optional caption
-$two_columns: optional boolean
-text: ref $body
+body $body:
+optional boolean $collapsed:
+optional caption $title:
+optional boolean $two_columns:
+text: $body
 size: 17
-color: #4d4d4d
+color: \#4d4d4d
 padding-bottom: 34
 
 
 -- component h0:
 component: ftd.column
-$title: caption
-$body: optional body
+caption $title:
+optional body $body:
 width: fill
 
 --- ftd.text:
-text: ref $title
+text: $title
 size: 36
 color: black
 style: bold
@@ -198,19 +198,19 @@ padding-bottom: 24
 
 --- markdown:
 if: $body is not null
-body: ref $body
+body: $body
 
 
 -- component h1:
 component: ftd.column
-$title: caption
-$body: optional body
+caption $title:
+optional body $body:
 width: fill
 
 --- ftd.text:
-text: ref $title
-$title: caption
-text: ref $title
+text: $title
+caption $title:
+text: $title
 size: 30
 color: black
 style: bold
@@ -219,18 +219,18 @@ padding-top: 12
 
 --- markdown:
 if: $body is not null
-body: ref $body
+body: $body
 
 
 -- component h2:
 component: ftd.column
-$title: caption
-$body: optional body
+caption $title:
+optional body $body:
 width: fill
 
 --- ftd.text:
-$title: caption
-text: ref $title
+caption $title:
+text: $title
 size: 24
 color: black
 style: bold
@@ -239,18 +239,18 @@ padding-top: 12
 
 --- markdown:
 if: $body is not null
-body: ref $body
+body: $body
 
 
 -- component h3:
 component: ftd.column
-$title: caption
-$body: optional body
+caption $title:
+optional body $body:
 width: fill
 
 --- ftd.text:
-$title: caption
-text: ref $title
+caption $title:
+text: $title
 size: 21
 color: black
 style: bold
@@ -259,18 +259,18 @@ padding-top: 12
 
 --- markdown:
 if: $body is not null
-body: ref $body
+body: $body
 
 
 -- component h4:
 component: ftd.column
-$title: caption
-$body: optional body
+caption $title:
+optional body $body:
 width: fill
 
 --- ftd.text:
-$title: caption
-text: ref $title
+caption $title:
+text: $title
 size: 17
 color: black
 style: bold
@@ -279,18 +279,18 @@ padding-top: 12
 
 --- markdown:
 if: $body is not null
-body: ref $body
+body: $body
 
 
 -- component h5:
 component: ftd.column
-$title: caption
-$body: optional body
+caption $title:
+optional body $body:
 width: fill
 
 --- ftd.text:
-$title: caption
-text: ref $title
+caption $title:
+text: $title
 size: 14
 color: black
 style: bold
@@ -299,18 +299,18 @@ padding-top: 12
 
 --- markdown:
 if: $body is not null
-body: ref $body
+body: $body
 
 
 -- component h6:
 component: ftd.column
-$title: caption
-$body: optional body
+caption $title:
+optional body $body:
 width: fill
 
 --- ftd.text:
-$title: caption
-text: ref $title
+caption $title:
+text: $title
 size: 12
 color: black
 style: bold
@@ -319,33 +319,33 @@ padding-top: 12
 
 --- markdown:
 if: $body is not null
-body: ref $body
+body: $body
 
 
 -- component image:
 component: ftd.column
-$src: string
-$caption: optional caption
-$body: optional body
-$link: optional string
-$align: optional string
-$width: optional string
-$height: optional string
+string $src:
+optional caption $caption:
+optional body $body:
+optional string $link:
+optional string $align:
+optional string $width:
+optional string $height:
 width: fill
 height: fill
 padding-bottom: 34
 
 --- ftd.image:
-src: ref $src
+src: $src
 padding-bottom: 15
-width: ref $width
-height: ref $height
-align: ref $align
+width: $width
+height: $height
+align: $align
 
 --- ftd.text:
 if: $caption is not null
-text: ref $caption
-color: #4D4D4D
+text: $caption
+color: \#4D4D4D
 align: center
 width: fill
 size: 17
@@ -353,39 +353,38 @@ style: italic
 
 --- markdown:
 if: $body is not null
-body: ref $body
+body: $body
 
 
 -- component code:
 component: ftd.column
-$caption: optional caption
-$body: body
-$lang: string
-$filename: optional string
-$full: optional string
+optional caption $caption:
+body $body:
+string $lang:
+optional string $filename:
+optional string $full:
 padding-bottom: 34
 padding-top: 12
 width: fill
 
 --- ftd.text:
 if: $caption is not null
-text: ref $caption
-color: #DCDCDC
+text: $caption
+color: \#DCDCDC
 width: fill
 size: 14
-background-color: #3a404e
+background-color: \#3a404e
 padding-top: 10
 padding-bottom: 10
 padding-left: 20
 padding-right: 20
 border-top-radius: 4
 
---- ftd.text:
+--- ftd.code:
 if: $caption is not null
-text: ref $body
-lang: ref $lang
-color: #4D4D4D
-format: code
+text: $body
+lang: $lang
+color: \#4D4D4D
 width: fill
 size: 17
 line-height: 25
@@ -393,16 +392,15 @@ padding-top: 10
 padding-left: 20
 padding-bottom: 10
 padding-right: 20
-background-color: #2b303b
+background-color: \#2b303b
 border-bottom-radius: 4
 overflow-x: auto
 
---- ftd.text:
+--- ftd.code:
 if: $caption is null
-text: ref $body
-lang: ref $lang
-color: #4D4D4D
-format: code
+text: $body
+lang: $lang
+color: \#4D4D4D
 width: fill
 size: 17
 line-height: 25
@@ -410,39 +408,17 @@ padding-top: 10
 padding-left: 20
 padding-bottom: 10
 padding-right: 20
-background-color: #2b303b
+background-color: \#2b303b
 border-bottom-radius: 4
 border-top-radius: 4
 overflow-x: auto
 
-
--- component latex:
-component: ftd.column
-$caption: optional caption
-$body: body
-padding-bottom: 24
-
---- ftd.text:
-text: ref $body
-color: #DCDCDC
-format: latex
-width: fill
-size: 16
-
---- ftd.text:
-if: $caption is not null
-text: ref $caption
-color: #4D4D4D
-align: center
-width: fill
-size: 17
-style: italic
 
 
 -- component iframe:
 component: ftd.iframe
-$src: string
-src: ref $src
+string $src:
+src: $src
 height: 400
 width: fill
 margin-bottom: 34
@@ -450,8 +426,8 @@ margin-bottom: 34
 
 -- component youtube:
 component: ftd.iframe
-$id: string
-youtube: ref $id
+string $id:
+youtube: $id
 height: 400
 width: fill
 margin-bottom: 34
@@ -462,7 +438,7 @@ component: ftd.row
 padding-top: 8
 padding-bottom: 8
 border-radius: 2
-background-color: #1a936f
+background-color: \#1a936f
 link: ~/edit/
 width: 170
 align: right
@@ -477,7 +453,7 @@ width: fill
 -- component ft_header:
 component: ftd.row
 width: fill
-background-color: #1b2e47
+background-color: \#1b2e47
 padding-left: 30
 padding-right: 30
 padding-top: 19
@@ -523,8 +499,8 @@ align: center
 
 -- component toc-heading:
 component: ftd.text
-$text: caption
-text: ref $text
+caption $text:
+text: $text
 size: 16
 color: black
 align: left
@@ -536,24 +512,24 @@ style: semi-bold
 
 -- component table-of-content:
 component: ftd.column
-$id: string
-id: ref $id
+string $id:
+id: $id
 width: 300
 align: top-left
 padding-left: 10
 padding-top: 30
 padding-right: 20
 border-right: 1
-border-color: #ebedef
+border-color: \#ebedef
 height: fill
 
 
 -- component parent:
 component: ftd.column
-$id: string
-$name: caption
-$active: optional boolean
-id: ref $id
+string $id:
+caption $name:
+optional boolean $active:
+id: $id
 align: left
 padding-left: 10
 padding-top: 2
@@ -563,7 +539,7 @@ open: true
 
 --- ftd.text:
 if: $active is not null
-text: ref $name
+text: $name
 size: 14
 color: white
 align: left
@@ -571,15 +547,15 @@ padding-left: 10
 padding-top: 4
 padding-bottom: 4
 width: fill
-background-color: #6a7c95
+background-color: \#6a7c95
 border-radius: 2
 style: semi-bold
 
 --- ftd.text:
 if: $active is null
-text: ref $name
+text: $name
 size: 14
-color: #4D4D4D
+color: \#4D4D4D
 align: left
 padding-left: 10
 padding-top: 7
@@ -614,17 +590,17 @@ name: API Changelog
 
 -- component primary-button:
 component: ftd.row
-$text: string
-$link: string
+string $text:
+string $link:
 padding-top: 8
 padding-bottom: 8
 border-radius: 2
-background-color: #1a936f
-link: ref $link
+background-color: \#1a936f
+link: $link
 padding-left: 20
 padding-right: 20
 
---- ftd.text: ref $text
+--- ftd.text: $text
 color: white
 size: 14
 align: center
@@ -633,20 +609,20 @@ width: fill
 
 -- component danger-chevron:
 component: ftd.row
-$text: string
-$link: string
+string $text:
+string $link:
 padding-top: 8
 padding-bottom: 8
 border-radius: 2
 background-color: white
-border-color: #e87f85
+border-color: \#e87f85
 border-width: 1
-link: ref $link
+link: $link
 padding-left: 20
 padding-right: 20
 
---- ftd.text: ref $text
-color: #e87f85
+--- ftd.text: $text
+color: \#e87f85
 size: 14
 align: center
 width: fill
@@ -654,17 +630,17 @@ width: fill
 
 -- component danger-button:
 component: ftd.row
-$text: string
-$link: string
+string $text:
+string $link:
 padding-top: 8
 padding-bottom: 8
 padding-left: 20
 padding-right: 20
 border-radius: 2
-background-color: #e87f85
-link: ref $link
+background-color: \#e87f85
+link: $link
 
---- ftd.text: ref $text
+--- ftd.text: $text
 color: white
 size: 14
 align: center
@@ -673,10 +649,10 @@ width: fill
 
 -- component diff:
 component: ftd.column
-$merge-link: optional string
-$discard-link: optional string
-$resolve-conflict-link: optional string
-$edit-link: optional string
+optional string $merge-link:
+optional string $discard-link:
+optional string $resolve-conflict-link:
+optional string $edit-link:
 open: true
 width: fill
 
@@ -688,31 +664,31 @@ margin-bottom: 15
 --- primary-button:
 if: $merge-link is not null
 text: Merge Changes
-link: ref $merge-link
+link: $merge-link
 
 --- primary-button:
 if: $edit-link is not null
 text: Edit
-link: ref $edit-link
+link: $edit-link
 
 --- danger-chevron:
 if: $discard-link is not null
 text: Discard Changes
-link: ref $discard-link
+link: $discard-link
 
 --- danger-button:
 if: $resolve-conflict-link is not null
 text: Resolve Conflict
-link: ref $resolve-conflict-link
+link: $resolve-conflict-link
 
 --- container: ftd.main
 
 
 -- component new-page:
 component: ftd.column
-$merge-link: optional string
-$discard-link: optional string
-$edit-link: optional string
+optional string $merge-link:
+optional string $discard-link:
+optional string $edit-link:
 open: true
 width: fill
 
@@ -724,17 +700,17 @@ margin-bottom: 15
 --- primary-button:
 if: $merge-link is not null
 text: Merge Changes
-link: ref $merge-link
+link: $merge-link
 
 --- primary-button:
 if: $edit-link is not null
 text: Edit
-link: ref $edit-link
+link: $edit-link
 
 --- danger-chevron:
 if: $discard-link is not null
 text: Discard Changes
-link: ref $discard-link
+link: $discard-link
 
 --- container: ftd.main
 

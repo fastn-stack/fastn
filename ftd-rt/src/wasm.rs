@@ -159,7 +159,7 @@ impl Document {
         container.append_child(&rendered_dom).unwrap(); // why would append_child fail?
     }
 
-    pub fn handle_event(&mut self, event: &str) {
+    pub fn handle_event(&mut self, event: &str, doc_id: &str) {
         // $event-click$: toggle foo
         // value of event: "toggle foo"
         console_log!("event: {}", event);

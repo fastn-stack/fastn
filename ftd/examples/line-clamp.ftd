@@ -1,18 +1,22 @@
 -- component card:
 component: ftd.column
-$text: body
+body $text:
 width: 300
 min-height: 300
-@read_more: boolean with default true
-$max_lines: integer
+boolean $read_more: true
+integer $max_lines:
 
---- ftd.text: ref $text
-line-clamp if not @read_more: ref $max_lines
+--- ftd.text: $text
+line-clamp if $read_more: $max_lines
 
 
 --- ftd.text: Read More
-$event-click$: toggle @read_more
-$event-click$: prevent-default
+$event-click$: toggle $read_more
+if: $read_more
+
+--- ftd.text: Read Less
+$event-click$: toggle $read_more
+if: not $read_more
 
 
 -- card:

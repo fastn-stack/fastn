@@ -8,6 +8,7 @@ pub struct Event {
 
 impl Event {
     fn to_value(
+        line_number: usize,
         property: &std::collections::BTreeMap<String, Vec<ftd::PropertyValue>>,
         arguments: &std::collections::BTreeMap<String, crate::Value>,
         doc: &crate::p2::TDoc,
@@ -18,11 +19,17 @@ impl Event {
         for (s, property_values) in property {
             let mut property_values_string = vec![];
             for property_value in property_values {
-                let value = property_value.resolve_with_root(arguments, doc, root_name)?;
+                let value =
+                    property_value.resolve_with_root(line_number, arguments, doc, root_name)?;
                 if let Some(v) = value.to_string() {
                     property_values_string.push(v);
                 } else {
-                    return ftd::e(format!("Can't convert value to string {:?}", value));
+                    return ftd::e2(
+                        format!("Can't convert value to string {:?}", value),
+                        doc.name,
+                        doc.name.to_string(),
+                        line_number,
+                    );
                 }
             }
             property_string.insert(s.to_string(), property_values_string);
@@ -31,12 +38,12 @@ impl Event {
     }
 
     pub fn get_events(
+        line_number: usize,
         events: &[Self],
         all_locals: &mut ftd_rt::Map,
         arguments: &std::collections::BTreeMap<String, crate::Value>,
         doc: &crate::p2::TDoc,
         root_name: Option<&str>,
-        mouse_event: bool,
     ) -> crate::p1::Result<Vec<ftd_rt::Event>> {
         let arguments = {
             //remove properties
@@ -56,12 +63,17 @@ impl Event {
                 Some(value) => {
                     if let Some(val) = all_locals.get(value) {
                         format!("@{}@{}", value, val)
-                    } else if value.eq("mouse-in") {
-                        let string_container = all_locals.get("mouse-in-temp").unwrap().clone();
-                        all_locals.insert("mouse-in".to_string(), string_container.to_string());
-                        format!("@mouse-in@{}", string_container)
+                    } else if value.eq("MOUSE-IN") {
+                        let string_container = all_locals.get("MOUSE-IN-TEMP").unwrap().clone();
+                        all_locals.insert("MOUSE-IN".to_string(), string_container.to_string());
+                        format!("@MOUSE-IN@{}", string_container)
                     } else {
-                        return crate::e(format!("Can't find the local variable {}", value));
+                        return ftd::e2(
+                            format!("Can't find the local variable {}", value),
+                            doc.name,
+                            doc.name.to_string(),
+                            line_number,
+                        );
                     }
                 }
                 None => e.action.target.to_string(),
@@ -73,6 +85,7 @@ impl Event {
                     action: e.action.action.to_str().to_string(),
                     target,
                     parameters: ftd::p2::Event::to_value(
+                        line_number,
                         &e.action.parameters,
                         &arguments,
                         doc,
@@ -81,33 +94,36 @@ impl Event {
                 },
             });
         }
-        if mouse_event {
-            if let Some(val) = all_locals.get("mouse-in") {
-                event.push(ftd_rt::Event {
-                    name: "onmouseenter".to_string(),
-                    action: ftd_rt::Action {
-                        action: "set-value".to_string(),
-                        target: format!("@mouse-in@{}", val),
-                        parameters: std::array::IntoIter::new([(
-                            "value".to_string(),
-                            vec!["true".to_string(), "boolean".to_string()],
-                        )])
-                        .collect(),
-                    },
-                });
-                event.push(ftd_rt::Event {
-                    name: "onmouseleave".to_string(),
-                    action: ftd_rt::Action {
-                        action: "set-value".to_string(),
-                        target: format!("@mouse-in@{}", val),
-                        parameters: std::array::IntoIter::new([(
-                            "value".to_string(),
-                            vec!["false".to_string(), "boolean".to_string()],
-                        )])
-                        .collect(),
-                    },
-                });
-            }
+        Ok(event)
+    }
+
+    pub fn mouse_event(all_locals: &mut ftd_rt::Map) -> crate::p1::Result<Vec<ftd_rt::Event>> {
+        let mut event: Vec<ftd_rt::Event> = vec![];
+        if let Some(val) = all_locals.get("MOUSE-IN") {
+            event.push(ftd_rt::Event {
+                name: "onmouseenter".to_string(),
+                action: ftd_rt::Action {
+                    action: "set-value".to_string(),
+                    target: format!("@MOUSE-IN@{}", val),
+                    parameters: std::array::IntoIter::new([(
+                        "value".to_string(),
+                        vec!["true".to_string(), "boolean".to_string()],
+                    )])
+                    .collect(),
+                },
+            });
+            event.push(ftd_rt::Event {
+                name: "onmouseleave".to_string(),
+                action: ftd_rt::Action {
+                    action: "set-value".to_string(),
+                    target: format!("@MOUSE-IN@{}", val),
+                    parameters: std::array::IntoIter::new([(
+                        "value".to_string(),
+                        vec!["false".to_string(), "boolean".to_string()],
+                    )])
+                    .collect(),
+                },
+            });
         }
         Ok(event)
     }
@@ -125,24 +141,31 @@ impl EventName {
         }
     }
 
-    pub fn from_string(s: &str) -> ftd::p1::Result<Self> {
+    pub fn from_string(s: &str, doc_id: &str) -> ftd::p1::Result<Self> {
         match s {
             "click" => Ok(Self::OnClick),
-            t => return crate::e(format!("{} is not a valid event", t)),
+            t => {
+                return ftd::e2(
+                    format!("{} is not a valid event", t),
+                    doc_id,
+                    doc_id.to_string(),
+                    0,
+                )
+            }
         }
     }
 }
 
 impl Event {
     pub fn to_event(
+        line_number: usize,
         event_name: &str,
         action: &str,
         doc: &crate::p2::TDoc,
-        locals: &std::collections::BTreeMap<String, crate::p2::Kind>,
         arguments: &std::collections::BTreeMap<String, crate::p2::Kind>,
     ) -> ftd::p1::Result<Self> {
-        let event_name = EventName::from_string(event_name)?;
-        let action = Action::to_action(action, doc, locals, arguments)?;
+        let event_name = EventName::from_string(event_name, doc.name)?;
+        let action = Action::to_action(line_number, action, doc, arguments)?;
         Ok(Self {
             name: event_name,
             action,
@@ -194,17 +217,17 @@ impl ActionKind {
         }
     }
 
-    pub fn from_string(s: &str) -> ftd::p1::Result<Self> {
-        match s {
-            "toggle" => Ok(Self::Toggle),
-            "increment" => Ok(Self::Increment),
-            "decrement" => Ok(Self::Decrement),
-            "stop-propagation" => Ok(Self::StopPropagation),
-            "prevent-default" => Ok(Self::PreventDefault),
-            "set-value" => Ok(Self::SetValue),
-            t => return crate::e(format!("{} is not a valid action kind", t)),
-        }
-    }
+    // pub fn from_string(s: &str, doc_id: &str) -> ftd::p1::Result<Self> {
+    //     match s {
+    //         "toggle" => Ok(Self::Toggle),
+    //         "increment" => Ok(Self::Increment),
+    //         "decrement" => Ok(Self::Decrement),
+    //         "stop-propagation" => Ok(Self::StopPropagation),
+    //         "prevent-default" => Ok(Self::PreventDefault),
+    //         "set-value" => Ok(Self::SetValue),
+    //         t => return crate::e2(format!("{} is not a valid action kind", t), doc_id),
+    //     }
+    // }
 
     pub fn parameters(&self) -> std::collections::BTreeMap<String, ftd::p2::event::Parameter> {
         let mut parameters: std::collections::BTreeMap<String, ftd::p2::event::Parameter> =
@@ -239,9 +262,9 @@ impl ActionKind {
 
 impl Action {
     fn to_action(
+        line_number: usize,
         a: &str,
         doc: &crate::p2::TDoc,
-        locals: &std::collections::BTreeMap<String, crate::p2::Kind>,
         arguments: &std::collections::BTreeMap<String, crate::p2::Kind>,
     ) -> ftd::p1::Result<Self> {
         let a: String = a.split_whitespace().collect::<Vec<&str>>().join(" ");
@@ -249,9 +272,9 @@ impl Action {
             _ if a.starts_with("toggle ") => {
                 let value = a.replace("toggle ", "");
                 let target = get_target(
+                    line_number,
                     value,
                     doc,
-                    locals,
                     arguments,
                     Some(ftd::p2::Kind::boolean()),
                 )?
@@ -273,15 +296,20 @@ impl Action {
                 let value = if let Some(val) = vector.get(1) {
                     val.to_string()
                 } else {
-                    return crate::e2(
-                        "target not found",
-                        &format!("expected `{} something` found: {}", action_string, a),
+                    return ftd::e2(
+                        format!(
+                            "target not found, expected `{} something` found: {}",
+                            action_string, a
+                        ),
+                        doc.name,
+                        doc.name.to_string(),
+                        line_number,
                     );
                 };
                 let target = get_target(
+                    line_number,
                     value,
                     doc,
-                    locals,
                     arguments,
                     Some(ftd::p2::Kind::integer()),
                 )?
@@ -298,10 +326,15 @@ impl Action {
                     for parameter in vector[2..].iter() {
                         if let Some(p) = action_kind.parameters().get(*parameter) {
                             if min > idx {
-                                return crate::e(format!(
-                                    "minumum number of arguments for {} are {}, found: {}",
-                                    current_parameter, min, idx
-                                ));
+                                return ftd::e2(
+                                    format!(
+                                        "minumum number of arguments for {} are {}, found: {}",
+                                        current_parameter, min, idx
+                                    ),
+                                    doc.name,
+                                    doc.name.to_string(),
+                                    line_number,
+                                );
                             }
                             current_parameter = parameter.to_string();
                             min = p.min;
@@ -311,21 +344,25 @@ impl Action {
                             parameters.insert(current_parameter.to_string(), vec![]);
                         } else if let Some(p) = parameters.get_mut(&current_parameter) {
                             if idx >= max {
-                                return crate::e(format!(
-                                    "maximum number of arguments for {} are {}, found: {}",
-                                    current_parameter,
-                                    max,
-                                    max + 1
-                                ));
+                                return ftd::e2(
+                                    format!(
+                                        "maximum number of arguments for {} are {}, found: {}",
+                                        current_parameter,
+                                        max,
+                                        max + 1
+                                    ),
+                                    doc.name,
+                                    doc.name.to_string(),
+                                    line_number,
+                                );
                             }
                             p.push(ftd::PropertyValue::resolve_value(
+                                line_number,
                                 parameter,
                                 pkind.get(idx).map(|k| k.to_owned()),
                                 doc,
                                 arguments,
-                                locals,
                                 None,
-                                false,
                             )?);
                             idx += 1;
                         }
@@ -351,22 +388,21 @@ impl Action {
             }),
             _ if a.contains('=') => {
                 let (part_1, part_2) = ftd::p2::utils::split(a, "=")?;
-                let (target, kind) = get_target(part_1, doc, locals, arguments, None)?;
+                let (target, kind) = get_target(line_number, part_1, doc, arguments, None)?;
                 let mut parameters: std::collections::BTreeMap<String, Vec<ftd::PropertyValue>> =
                     Default::default();
 
                 let value = ftd::PropertyValue::resolve_value(
+                    line_number,
                     &part_2,
                     Some(kind.clone()),
                     doc,
                     arguments,
-                    locals,
                     None,
-                    false,
                 )?;
                 let kind = ftd::PropertyValue::Value {
                     value: ftd::variable::Value::String {
-                        text: kind.to_string()?,
+                        text: kind.to_string(line_number, doc.name)?,
                         source: ftd::TextSource::Header,
                     },
                 };
@@ -378,24 +414,37 @@ impl Action {
                     parameters,
                 })
             }
-            t => return crate::e(format!("{} is not a valid action", t)),
+            t => {
+                return ftd::e2(
+                    format!("{} is not a valid action", t),
+                    doc.name,
+                    doc.name.to_string(),
+                    line_number,
+                )
+            }
         };
 
         fn get_target(
+            line_number: usize,
             value: String,
             doc: &crate::p2::TDoc,
-            locals: &std::collections::BTreeMap<String, crate::p2::Kind>,
             arguments: &std::collections::BTreeMap<String, crate::p2::Kind>,
             kind: Option<crate::p2::Kind>,
         ) -> ftd::p1::Result<(String, ftd::p2::Kind)> {
-            let pv = ftd::PropertyValue::resolve_value(
-                &value, kind, doc, arguments, locals, None, false,
-            )?;
+            let pv =
+                ftd::PropertyValue::resolve_value(line_number, &value, kind, doc, arguments, None)?;
             Ok((
                 match pv {
                     ftd::PropertyValue::Reference { ref name, .. } => name.to_string(),
-                    ftd::PropertyValue::LocalVariable { ref name, .. } => format!("@{}", name),
-                    t => return crate::e(format!("value not expected {:?}", t)),
+                    ftd::PropertyValue::Variable { ref name, .. } => format!("@{}", name),
+                    t => {
+                        return ftd::e2(
+                            format!("value not expected {:?}", t),
+                            doc.name,
+                            doc.name.to_string(),
+                            line_number,
+                        )
+                    }
                 },
                 pv.kind(),
             ))

@@ -1,4 +1,4 @@
--- var color-bg: green
+-- $color-bg: green
 
 
 -- ftd.column:
@@ -12,11 +12,11 @@ spacing: 30
 align: center
 
 
--- var open: true
+-- $open: true
 
 
 -- ftd.text: toggle
-$event-click$: toggle open
+$event-click$: toggle $open
 
 
 -- component gate-pass:
@@ -25,13 +25,13 @@ width: 400
 align: center
 border-color: yellow
 border-width: 5
-$title: caption
-$body: body
-$code: integer
-@open: boolean with default true
+caption $title:
+body $body:
+integer $code:
+boolean $open: true
 
 --- ftd.column:
-background-color: ref color-bg
+background-color: $color-bg
 width: fill
 padding-top: 40
 
@@ -39,7 +39,7 @@ padding-top: 40
 align: center
 width: 100
 
---- ftd.text: ref $title
+--- ftd.text: $title
 color: red
 width: 100
 background-color: white
@@ -48,7 +48,7 @@ border-left: 4
 border-right: 4
 align: center
 padding: 5
-$event-click$: toggle @open
+$event-click$: toggle $open
 
 --- container: ftd.main
 
@@ -63,11 +63,10 @@ padding-top: 2
 open: false
 
 --- ftd.text:
-format: markdown
 align: center
 padding-top: 20
 padding-bottom: 20
-ref $body
+$body
 
 --- ftd.text: frequent entry code
 align: center
@@ -78,10 +77,10 @@ padding: 20
 align: center
 background-color: orange
 padding: 20
-if: @open
+if: $open
 
 --- ftd.integer:
-value: ref $code
+value: $code
 size: 50
 align: center
 color: white
@@ -108,7 +107,7 @@ height: 20
 
 --- ftd.row:
 width: fill
-background-color: ref color-bg
+background-color: $color-bg
 padding: 20
 
 --- ftd.text: www-mygate-com
@@ -118,14 +117,14 @@ color: white
 
 
 -- gate-pass: Invitation
-if: open
+if: $open
 code: 123123
 
 **Amit Upadhyay** has added you as a frequent...
 
 
 -- gate-pass: Yo Yo Honey Singh
-if: open
+if: $open
 code: 998822
 
 The Gateway Protection Programme was operated by the British government.

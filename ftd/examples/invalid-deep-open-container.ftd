@@ -1,7 +1,7 @@
 -- component ft_container:
 component: ftd.column
-$id: optional string
-id: ref $id
+optional string $id:
+id: $id
 padding-top: 30
 padding-left: 100
 align: center
@@ -9,8 +9,8 @@ color: red
 
 -- component ft_container_mobile:
 component: ftd.column
-$id: optional string
-id: ref $id
+optional string $id:
+id: $id
 width: fill
 padding-top: 10
 padding-left: 20
@@ -23,8 +23,8 @@ color: green
 -- component desktop:
 component: ftd.column
 width: fill
-$id: optional string
-id: ref $id
+optional string $id:
+id: $id
 
 --- ftd.text: Desktop Main
 
@@ -42,8 +42,8 @@ id: main-container
 -- component mobile:
 component: ftd.column
 width: fill
-$id: optional string
-id: ref $id
+optional string $id:
+id: $id
 
 --- ftd.text: Mobile
 
@@ -51,7 +51,7 @@ id: ref $id
 id: main-container
 
 
--- var is-mobile: false
+-- $is-mobile: false
 
 -- component page:
 component: ftd.column
@@ -62,12 +62,12 @@ open: main-container
 id: start
 
 --- desktop:
-if: not is-mobile
+if: not $is-mobile
 
 --- container: start
 
 --- mobile:
-if: is-mobile
+if: $is-mobile
 
 
 -- page:

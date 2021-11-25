@@ -1,42 +1,41 @@
 -- component foo:
 component: ftd.column
-$name: caption
-$body: string
+caption $name:
+string $body:
 border-width: 1
 border-color: grey
 padding: 10
 width: fill
 margin-top: 10
 
---- ftd.text: ref $name
+--- ftd.text: $name
 size: 20
 color: red
 
---- ftd.text: ref $body
+--- ftd.text: $body
 color: green
 
 -- record person:
-name: caption
-bio: body
+caption name:
+body bio:
 
--- list people:
-type: person
+-- person list $people:
 
--- people: Amit Upadhyay
+-- $people: Amit Upadhyay
 
 Amit is CEO of FifthTry.
 
--- var name: Arpita Jaiswal
+-- $name: Arpita Jaiswal
 
--- people: ref name
+-- $people: $name
 
 Arpita is developer at Fifthtry
 
--- people: Asit
+-- $people: Asit
 
 Asit is developer at Fifthtry
 
--- people: Sourabh
+-- $people: Sourabh
 
 Sourabh is developer at Fifthtry
 
@@ -44,11 +43,11 @@ Sourabh is developer at Fifthtry
 size: 40
 style: bold
 
--- var get: world
+-- $get: world
 
 -- foo: hello
-body: ref get
+body: $get
 
--- foo: ref obj.name
-$loop$: people as obj
-body: ref obj.bio
+-- foo: $obj.name
+$loop$: $people as $obj
+body: $obj.bio

@@ -1,5 +1,8 @@
 extern crate self as ftd;
 
+#[macro_use]
+extern crate observer_attribute;
+
 #[cfg(test)]
 #[macro_use]
 pub(crate) mod test;
@@ -44,7 +47,7 @@ pub fn markdown_extra(s: &str, auto_links: bool, hard_breaks: bool) -> ftd_rt::R
     }
 }
 
-pub fn latex(s: &str) -> ftd::p1::Result<ftd_rt::Rendered> {
+pub fn latex(s: &str, doc_id: &str) -> ftd::p1::Result<ftd_rt::Rendered> {
     let opts = katex::Opts::builder()
         .throw_on_error(false)
         .display_mode(true)
@@ -59,25 +62,36 @@ pub fn latex(s: &str) -> ftd::p1::Result<ftd_rt::Rendered> {
                 katex::Error::JsValueError(e)
                 | katex::Error::JsExecError(e)
                 | katex::Error::JsInitError(e) => {
-                    return Err(ftd::p1::Error::InvalidInput {
-                        message: e,
-                        context: s.to_string(),
+                    return Err(ftd::p1::Error::ParseError {
+                        message: format!("{}: {}", e, s),
+                        doc_id: doc_id.to_string(),
+                        line_number: 0,
                     })
                 }
-                _ => return ftd::e2("katex error", e),
+                _ => return ftd::e2("katex error", e, doc_id.to_string(), 0),
             },
         },
     })
 }
 
-pub fn code(code: &str, ext: &str) -> ftd_rt::Rendered {
-    code_with_theme(code, ext, crate::render::DEFAULT_THEME).unwrap()
+pub fn code(code: &str, ext: &str, doc_id: &str) -> ftd_rt::Rendered {
+    code_with_theme(code, ext, crate::render::DEFAULT_THEME, doc_id).unwrap()
 }
 
-pub fn code_with_theme(code: &str, ext: &str, theme: &str) -> crate::p1::Result<ftd_rt::Rendered> {
+pub fn code_with_theme(
+    code: &str,
+    ext: &str,
+    theme: &str,
+    doc_id: &str,
+) -> crate::p1::Result<ftd_rt::Rendered> {
     Ok(ftd_rt::Rendered {
         original: code.to_string(),
-        rendered: render::code_with_theme(code.replace("\n\\-- ", "\n-- ").as_str(), ext, theme)?,
+        rendered: render::code_with_theme(
+            code.replace("\n\\-- ", "\n-- ").as_str(),
+            ext,
+            theme,
+            doc_id,
+        )?,
     })
 }
 
@@ -88,37 +102,44 @@ pub fn markdown_line(s: &str) -> ftd_rt::Rendered {
     }
 }
 
-pub fn e<T, S>(m: S) -> crate::p1::Result<T>
-where
-    S: std::fmt::Debug,
-{
-    Err(crate::p1::Error::InvalidInput {
-        message: format!("{:?}", m),
-        context: "".to_string(),
-    })
-}
-
-pub fn e2<T, S1, S2>(m: S1, c: S2) -> crate::p1::Result<T>
+pub fn e2<T, S1, S2>(m: S1, c: S2, doc_id: String, line_number: usize) -> crate::p1::Result<T>
 where
     S1: std::fmt::Debug,
     S2: std::fmt::Debug,
 {
-    Err(crate::p1::Error::InvalidInput {
+    Err(crate::p1::Error::ParseError {
         message: format!("{:?}: {:?}", m, c),
-        context: format!("{:?}", c),
+        doc_id,
+        line_number,
     })
 }
 
-pub fn unknown_processor_error<T, S>(m: S) -> crate::p1::Result<T>
+pub fn unknown_processor_error<T, S>(
+    m: S,
+    doc_id: String,
+    line_number: usize,
+) -> crate::p1::Result<T>
 where
     S: Into<String>,
 {
-    Err(crate::p1::Error::UnknownProcessor { message: m.into() })
+    Err(crate::p1::Error::ParseError {
+        message: m.into(),
+        doc_id,
+        line_number,
+    })
 }
 
-pub fn split_module(id: &str) -> crate::p1::Result<(Option<&str>, &str, Option<&str>)> {
+pub fn split_module(
+    id: &str,
+    line_number: usize,
+) -> crate::p1::Result<(Option<&str>, &str, Option<&str>)> {
     if id.chars().filter(|v| *v == '.').count() > 2 {
-        return crate::e("id contains more than two dots".to_string());
+        return ftd::e2(
+            "id contains more than two dots",
+            id,
+            "".to_string(),
+            line_number,
+        );
     }
 
     match id.split_once('.') {
@@ -139,6 +160,13 @@ use async_trait::async_trait;
 #[async_trait]
 impl ftd::p2::Library for ExampleLibrary {
     async fn get(&self, name: &str) -> Option<String> {
+        if name == "fifthtry/ft" {
+            return Some(std::fs::read_to_string("../ft.ftd").unwrap());
+        }
+        if name == "fifthtry/ft-core" {
+            return Some(std::fs::read_to_string("../ft-core.ftd").unwrap());
+        }
+
         std::fs::read_to_string(format!("./examples/{}.ftd", name)).ok()
     }
 }
@@ -146,6 +174,13 @@ impl ftd::p2::Library for ExampleLibrary {
 #[cfg(not(feature = "async"))]
 impl ftd::p2::Library for ExampleLibrary {
     fn get(&self, name: &str) -> Option<String> {
+        if name == "fifthtry/ft" {
+            return Some(std::fs::read_to_string("../ft.ftd").unwrap());
+        }
+        if name == "fifthtry/ft-core" {
+            return Some(std::fs::read_to_string("../ft-core.ftd").unwrap());
+        }
+
         std::fs::read_to_string(format!("./examples/{}.ftd", name)).ok()
     }
 }

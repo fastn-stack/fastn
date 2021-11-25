@@ -1,13 +1,13 @@
 -- import: fifthtry/ft
 
--- var name: John smith
+-- $name: John smith
 
 
 -- component test-component:
 component: ftd.column
 width: 200
-background-color: #f3f3f3
+background-color: \#f3f3f3
 
---- ftd.text: ref name
+--- ftd.text: $name
 
 -- test-component:

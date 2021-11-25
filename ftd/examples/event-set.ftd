@@ -1,14 +1,14 @@
--- var current: some value
+-- $current: some value
 
 -- ftd.text: Start...
-if: current == "some value"
+if: $current == some value
 
--- ftd.text: ref current
+-- ftd.text: $current
 
 -- ftd.text: change message
-$event-click$: current = "hello world"
+$event-click$: $current = hello world
 
--- var msg: good bye
+-- $msg: good bye
 
 -- ftd.text: change message again
-$event-click$: current = msg
+$event-click$: $current = $msg

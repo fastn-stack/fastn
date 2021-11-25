@@ -1,31 +1,51 @@
 pub use crate::p1::{Error, Result};
 
 #[derive(Debug, PartialEq, Default, Clone, serde::Serialize, serde::Deserialize)]
-pub struct Header(pub Vec<(String, String)>);
+pub struct Header(pub Vec<(usize, String, String)>);
 
 impl Header {
-    pub fn add(&mut self, name: &str, value: &str) {
-        self.0.push((name.to_string(), value.to_string()))
+    pub fn without_line_number(&self) -> Self {
+        let mut header: Header = Default::default();
+        for (_, k, v) in self.0.iter() {
+            header.add(&0, k, v);
+        }
+        header
     }
 
-    pub fn bool_with_default(&self, name: &str, def: bool) -> Result<bool> {
-        match self.bool(name) {
+    pub fn add(&mut self, line_number: &usize, name: &str, value: &str) {
+        self.0
+            .push((*line_number, name.to_string(), value.to_string()))
+    }
+
+    pub fn bool_with_default(
+        &self,
+        doc_id: String,
+        line_number: usize,
+        name: &str,
+        def: bool,
+    ) -> Result<bool> {
+        match self.bool(doc_id, line_number, name) {
             Ok(b) => Ok(b),
-            Err(Error::NotFound { key: _ }) => Ok(def),
+            Err(Error::NotFound { .. }) => Ok(def),
             e => e,
         }
     }
 
-    pub fn bool_optional(&self, name: &str) -> Result<Option<bool>> {
-        match self.bool(name) {
+    pub fn bool_optional(
+        &self,
+        doc_id: String,
+        line_number: usize,
+        name: &str,
+    ) -> Result<Option<bool>> {
+        match self.bool(doc_id, line_number, name) {
             Ok(b) => Ok(Some(b)),
-            Err(Error::NotFound { key: _ }) => Ok(None),
+            Err(Error::NotFound { .. }) => Ok(None),
             Err(e) => Err(e),
         }
     }
 
-    pub fn bool(&self, name: &str) -> Result<bool> {
-        for (k, v) in self.0.iter() {
+    pub fn bool(&self, doc_id: String, line_number: usize, name: &str) -> Result<bool> {
+        for (_, k, v) in self.0.iter() {
             if k.starts_with('/') {
                 continue;
             }
@@ -33,108 +53,165 @@ impl Header {
                 return if v == "true" || v == "false" {
                     Ok(v == "true")
                 } else {
-                    Err(Error::CantParseBool)
+                    Err(crate::p1::Error::ParseError {
+                        message: "can't parse bool".to_string(),
+                        doc_id,
+                        line_number,
+                    })
                 };
             }
         }
         Err(Error::NotFound {
+            doc_id,
+            line_number,
             key: name.to_string(),
         })
     }
 
-    pub fn i32_with_default(&self, name: &str, def: i32) -> Result<i32> {
-        match self.i32(name) {
+    pub fn i32_with_default(
+        &self,
+        doc_id: String,
+        line_number: usize,
+        name: &str,
+        def: i32,
+    ) -> Result<i32> {
+        match self.i32(doc_id, line_number, name) {
             Ok(b) => Ok(b),
-            Err(Error::NotFound { key: _ }) => Ok(def),
+            Err(Error::NotFound { .. }) => Ok(def),
             e => e,
         }
     }
 
-    pub fn i32_optional(&self, name: &str) -> Result<Option<i32>> {
-        match self.i32(name) {
+    pub fn i32_optional(
+        &self,
+        doc_id: String,
+        line_number: usize,
+        name: &str,
+    ) -> Result<Option<i32>> {
+        match self.i32(doc_id, line_number, name) {
             Ok(b) => Ok(Some(b)),
-            Err(Error::NotFound { key: _ }) => Ok(None),
+            Err(Error::NotFound { .. }) => Ok(None),
             Err(e) => Err(e),
         }
     }
 
-    pub fn i32(&self, name: &str) -> Result<i32> {
-        for (k, v) in self.0.iter() {
+    pub fn i32(&self, doc_id: String, line_number: usize, name: &str) -> Result<i32> {
+        for (_, k, v) in self.0.iter() {
             if k.starts_with('/') {
                 continue;
             }
             if k == name {
-                return Ok(v.parse()?);
+                return v.parse().map_err(|e: std::num::ParseIntError| {
+                    ftd::p1::Error::ParseError {
+                        message: format!("{:?}", e),
+                        doc_id,
+                        line_number,
+                    }
+                });
             }
         }
         Err(Error::NotFound {
+            doc_id,
+            line_number,
             key: name.to_string(),
         })
     }
 
-    pub fn i64(&self, name: &str) -> Result<i64> {
-        for (k, v) in self.0.iter() {
-            if k.starts_with('/') {
-                continue;
-            }
-
-            if k == name {
-                return Ok(v.parse()?);
-            }
-        }
-        Err(Error::NotFound {
-            key: name.to_string(),
-        })
-    }
-
-    pub fn i64_optional(&self, name: &str) -> Result<Option<i64>> {
-        match self.i64(name) {
-            Ok(b) => Ok(Some(b)),
-            Err(Error::NotFound { key: _ }) => Ok(None),
-            Err(e) => Err(e),
-        }
-    }
-
-    pub fn f64(&self, name: &str) -> Result<f64> {
-        for (k, v) in self.0.iter() {
+    pub fn i64(&self, doc_id: String, line_number: usize, name: &str) -> Result<i64> {
+        for (_, k, v) in self.0.iter() {
             if k.starts_with('/') {
                 continue;
             }
 
             if k == name {
-                return Ok(v.parse()?);
+                return v.parse().map_err(|e: std::num::ParseIntError| {
+                    ftd::p1::Error::ParseError {
+                        message: format!("{:?}", e),
+                        doc_id,
+                        line_number,
+                    }
+                });
             }
         }
         Err(Error::NotFound {
+            doc_id,
+            line_number,
             key: name.to_string(),
         })
     }
 
-    pub fn f64_optional(&self, name: &str) -> Result<Option<f64>> {
-        match self.f64(name) {
+    pub fn i64_optional(
+        &self,
+        doc_id: String,
+        line_number: usize,
+        name: &str,
+    ) -> Result<Option<i64>> {
+        match self.i64(doc_id, line_number, name) {
             Ok(b) => Ok(Some(b)),
-            Err(Error::NotFound { key: _ }) => Ok(None),
+            Err(Error::NotFound { .. }) => Ok(None),
             Err(e) => Err(e),
         }
     }
 
-    pub fn str_with_default<'a>(&'a self, name: &str, def: &'a str) -> Result<&'a str> {
-        match self.str(name) {
+    pub fn f64(&self, doc_id: String, line_number: usize, name: &str) -> Result<f64> {
+        for (_, k, v) in self.0.iter() {
+            if k.starts_with('/') {
+                continue;
+            }
+
+            if k == name {
+                return v.parse().map_err(|e: std::num::ParseFloatError| {
+                    ftd::p1::Error::ParseError {
+                        message: format!("{:?}", e),
+                        doc_id,
+                        line_number,
+                    }
+                });
+            }
+        }
+        Err(Error::NotFound {
+            doc_id,
+            line_number,
+            key: name.to_string(),
+        })
+    }
+
+    pub fn f64_optional(
+        &self,
+        doc_id: String,
+        line_number: usize,
+        name: &str,
+    ) -> Result<Option<f64>> {
+        match self.f64(doc_id, line_number, name) {
+            Ok(b) => Ok(Some(b)),
+            Err(Error::NotFound { .. }) => Ok(None),
+            Err(e) => Err(e),
+        }
+    }
+
+    pub fn str_with_default<'a>(
+        &'a self,
+        doc_id: String,
+        line_number: usize,
+        name: &str,
+        def: &'a str,
+    ) -> Result<&'a str> {
+        match self.str(doc_id, line_number, name) {
             Ok(b) => Ok(b),
-            Err(Error::NotFound { key: _ }) => Ok(def),
+            Err(Error::NotFound { .. }) => Ok(def),
             e => e,
         }
     }
 
     pub fn get_events(
         &self,
+        line_number: usize,
         doc: &crate::p2::TDoc,
-        locals: &std::collections::BTreeMap<String, crate::p2::Kind>,
         arguments: &std::collections::BTreeMap<String, crate::p2::Kind>,
     ) -> ftd::p1::Result<Vec<ftd::p2::Event>> {
         let events = {
             let mut events = vec![];
-            for (k, v) in self.0.iter() {
+            for (_, k, v) in self.0.iter() {
                 if k.starts_with("$event-") && k.ends_with('$') {
                     let mut event = k.replace("$event-", "");
                     event = event[..event.len() - 1].to_string();
@@ -145,22 +222,38 @@ impl Header {
         };
         let mut event = vec![];
         for (e, a) in events {
-            event.push(ftd::p2::Event::to_event(&e, &a, doc, locals, arguments)?);
+            event.push(ftd::p2::Event::to_event(
+                line_number,
+                &e,
+                &a,
+                doc,
+                arguments,
+            )?);
         }
         Ok(event)
     }
 
-    pub fn str_optional(&self, name: &str) -> Result<Option<&str>> {
-        match self.str(name) {
+    pub fn str_optional(
+        &self,
+        doc_id: String,
+        line_number: usize,
+        name: &str,
+    ) -> Result<Option<&str>> {
+        match self.str(doc_id, line_number, name) {
             Ok(b) => Ok(Some(b)),
-            Err(Error::NotFound { key: _ }) => Ok(None),
+            Err(Error::NotFound { .. }) => Ok(None),
             Err(e) => Err(e),
         }
     }
 
-    pub fn conditional_str(&self, name: &str) -> Result<Vec<(String, Option<&str>)>> {
+    pub fn conditional_str(
+        &self,
+        doc_id: String,
+        line_number: usize,
+        name: &str,
+    ) -> Result<Vec<(String, Option<&str>)>> {
         let mut conditional_vector = vec![];
-        for (k, v) in self.0.iter() {
+        for (_, k, v) in self.0.iter() {
             if k == name {
                 conditional_vector.push((v.to_string(), None));
             }
@@ -175,15 +268,17 @@ impl Header {
         }
         if conditional_vector.is_empty() {
             Err(Error::NotFound {
-                key: name.to_string(),
+                doc_id,
+                line_number,
+                key: format!("`{}` header is missing", name),
             })
         } else {
             Ok(conditional_vector)
         }
     }
 
-    pub fn str(&self, name: &str) -> Result<&str> {
-        for (k, v) in self.0.iter() {
+    pub fn str(&self, doc_id: String, line_number: usize, name: &str) -> Result<&str> {
+        for (_, k, v) in self.0.iter() {
             if k.starts_with('/') {
                 continue;
             }
@@ -191,20 +286,37 @@ impl Header {
                 return Ok(v.as_str());
             }
         }
+
         Err(Error::NotFound {
-            key: name.to_string(),
+            doc_id,
+            line_number,
+            key: format!("`{}` header is missing", name),
         })
     }
 
-    pub fn string(&self, name: &str) -> Result<String> {
-        self.str(name).map(ToString::to_string)
+    pub fn string(&self, doc_id: String, line_number: usize, name: &str) -> Result<String> {
+        self.str(doc_id, line_number, name).map(ToString::to_string)
     }
 
-    pub fn string_optional(&self, name: &str) -> Result<Option<String>> {
-        Ok(self.str_optional(name)?.map(ToString::to_string))
+    pub fn string_optional(
+        &self,
+        doc_id: String,
+        line_number: usize,
+        name: &str,
+    ) -> Result<Option<String>> {
+        Ok(self
+            .str_optional(doc_id, line_number, name)?
+            .map(ToString::to_string))
     }
 
-    pub fn string_with_default(&self, name: &str, def: &str) -> Result<String> {
-        self.str_with_default(name, def).map(ToString::to_string)
+    pub fn string_with_default(
+        &self,
+        doc_id: String,
+        line_number: usize,
+        name: &str,
+        def: &str,
+    ) -> Result<String> {
+        self.str_with_default(doc_id, line_number, name, def)
+            .map(ToString::to_string)
     }
 }

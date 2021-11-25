@@ -3,6 +3,8 @@
 #[serde(tag = "type")]
 pub enum Element {
     Text(Text),
+    TextBlock(TextBlock),
+    Code(Code),
     Image(Image),
     Row(Row),
     Column(Column),
@@ -33,6 +35,14 @@ impl Element {
             };
             let mut id = match child {
                 Self::Text(ftd_rt::Text {
+                    common: ftd_rt::Common { data_id: id, .. },
+                    ..
+                }) => id,
+                Self::TextBlock(ftd_rt::TextBlock {
+                    common: ftd_rt::Common { data_id: id, .. },
+                    ..
+                }) => id,
+                Self::Code(ftd_rt::Code {
                     common: ftd_rt::Common { data_id: id, .. },
                     ..
                 }) => id,
@@ -324,6 +334,8 @@ impl Element {
                 }
                 ftd_rt::Element::Image(ftd_rt::Image { common, .. })
                 | ftd_rt::Element::Text(ftd_rt::Text { common, .. })
+                | ftd_rt::Element::TextBlock(ftd_rt::TextBlock { common, .. })
+                | ftd_rt::Element::Code(ftd_rt::Code { common, .. })
                 | ftd_rt::Element::IFrame(ftd_rt::IFrame { common, .. })
                 | ftd_rt::Element::Input(ftd_rt::Input { common, .. })
                 | ftd_rt::Element::Integer(ftd_rt::Text { common, .. })
@@ -417,6 +429,8 @@ impl Element {
                 }
                 ftd_rt::Element::Image(ftd_rt::Image { common, .. })
                 | ftd_rt::Element::Text(ftd_rt::Text { common, .. })
+                | ftd_rt::Element::TextBlock(ftd_rt::TextBlock { common, .. })
+                | ftd_rt::Element::Code(ftd_rt::Code { common, .. })
                 | ftd_rt::Element::IFrame(ftd_rt::IFrame { common, .. })
                 | ftd_rt::Element::Input(ftd_rt::Input { common, .. })
                 | ftd_rt::Element::Integer(ftd_rt::Text { common, .. })
@@ -489,6 +503,8 @@ impl Element {
                 }
                 ftd_rt::Element::Image(ftd_rt::Image { common, .. })
                 | ftd_rt::Element::Text(ftd_rt::Text { common, .. })
+                | ftd_rt::Element::TextBlock(ftd_rt::TextBlock { common, .. })
+                | ftd_rt::Element::Code(ftd_rt::Code { common, .. })
                 | ftd_rt::Element::IFrame(ftd_rt::IFrame { common, .. })
                 | ftd_rt::Element::Input(ftd_rt::Input { common, .. })
                 | ftd_rt::Element::Integer(ftd_rt::Text { common, .. })
@@ -551,6 +567,8 @@ impl Element {
                 }
                 ftd_rt::Element::Decimal(ftd_rt::Text { common, .. })
                 | ftd_rt::Element::Text(ftd_rt::Text { common, .. })
+                | ftd_rt::Element::TextBlock(ftd_rt::TextBlock { common, .. })
+                | ftd_rt::Element::Code(ftd_rt::Code { common, .. })
                 | ftd_rt::Element::Image(ftd_rt::Image { common, .. })
                 | ftd_rt::Element::IFrame(ftd_rt::IFrame { common, .. })
                 | ftd_rt::Element::Input(ftd_rt::Input { common, .. })
@@ -598,6 +616,8 @@ impl Element {
             ftd_rt::Element::Column(ftd_rt::Column { common, .. })
             | ftd_rt::Element::Row(ftd_rt::Row { common, .. })
             | ftd_rt::Element::Text(ftd_rt::Text { common, .. })
+            | ftd_rt::Element::TextBlock(ftd_rt::TextBlock { common, .. })
+            | ftd_rt::Element::Code(ftd_rt::Code { common, .. })
             | ftd_rt::Element::Image(ftd_rt::Image { common, .. })
             | ftd_rt::Element::IFrame(ftd_rt::IFrame { common, .. })
             | ftd_rt::Element::Input(ftd_rt::Input { common, .. })
@@ -614,6 +634,8 @@ impl Element {
             ftd_rt::Element::Column(ftd_rt::Column { common, .. })
             | ftd_rt::Element::Row(ftd_rt::Row { common, .. })
             | ftd_rt::Element::Text(ftd_rt::Text { common, .. })
+            | ftd_rt::Element::TextBlock(ftd_rt::TextBlock { common, .. })
+            | ftd_rt::Element::Code(ftd_rt::Code { common, .. })
             | ftd_rt::Element::Image(ftd_rt::Image { common, .. })
             | ftd_rt::Element::IFrame(ftd_rt::IFrame { common, .. })
             | ftd_rt::Element::Input(ftd_rt::Input { common, .. })
@@ -631,6 +653,8 @@ impl Element {
             ftd_rt::Element::Column(ftd_rt::Column { common, .. })
             | ftd_rt::Element::Row(ftd_rt::Row { common, .. })
             | ftd_rt::Element::Text(ftd_rt::Text { common, .. })
+            | ftd_rt::Element::TextBlock(ftd_rt::TextBlock { common, .. })
+            | ftd_rt::Element::Code(ftd_rt::Code { common, .. })
             | ftd_rt::Element::Image(ftd_rt::Image { common, .. })
             | ftd_rt::Element::IFrame(ftd_rt::IFrame { common, .. })
             | ftd_rt::Element::Input(ftd_rt::Input { common, .. })
@@ -648,6 +672,8 @@ impl Element {
             ftd_rt::Element::Column(ftd_rt::Column { common, .. })
             | ftd_rt::Element::Row(ftd_rt::Row { common, .. })
             | ftd_rt::Element::Text(ftd_rt::Text { common, .. })
+            | ftd_rt::Element::TextBlock(ftd_rt::TextBlock { common, .. })
+            | ftd_rt::Element::Code(ftd_rt::Code { common, .. })
             | ftd_rt::Element::Image(ftd_rt::Image { common, .. })
             | ftd_rt::Element::IFrame(ftd_rt::IFrame { common, .. })
             | ftd_rt::Element::Input(ftd_rt::Input { common, .. })
@@ -665,6 +691,8 @@ impl Element {
             ftd_rt::Element::Column(ftd_rt::Column { common, .. })
             | ftd_rt::Element::Row(ftd_rt::Row { common, .. })
             | ftd_rt::Element::Text(ftd_rt::Text { common, .. })
+            | ftd_rt::Element::TextBlock(ftd_rt::TextBlock { common, .. })
+            | ftd_rt::Element::Code(ftd_rt::Code { common, .. })
             | ftd_rt::Element::Image(ftd_rt::Image { common, .. })
             | ftd_rt::Element::IFrame(ftd_rt::IFrame { common, .. })
             | ftd_rt::Element::Input(ftd_rt::Input { common, .. })
@@ -691,6 +719,8 @@ impl Element {
             ftd_rt::Element::Column(e) => Some(&mut e.common),
             ftd_rt::Element::Row(e) => Some(&mut e.common),
             ftd_rt::Element::Text(e) => Some(&mut e.common),
+            ftd_rt::Element::TextBlock(e) => Some(&mut e.common),
+            ftd_rt::Element::Code(e) => Some(&mut e.common),
             ftd_rt::Element::Image(e) => Some(&mut e.common),
             ftd_rt::Element::IFrame(e) => Some(&mut e.common),
             ftd_rt::Element::Input(e) => Some(&mut e.common),
@@ -707,6 +737,8 @@ impl Element {
             ftd_rt::Element::Column(e) => Some(&e.common),
             ftd_rt::Element::Row(e) => Some(&e.common),
             ftd_rt::Element::Text(e) => Some(&e.common),
+            ftd_rt::Element::TextBlock(e) => Some(&e.common),
+            ftd_rt::Element::Code(e) => Some(&e.common),
             ftd_rt::Element::Image(e) => Some(&e.common),
             ftd_rt::Element::IFrame(e) => Some(&e.common),
             ftd_rt::Element::Input(e) => Some(&e.common),
@@ -796,7 +828,7 @@ pub enum Length {
 }
 
 impl Length {
-    pub fn from(l: Option<String>) -> ftd_rt::Result<Option<ftd_rt::Length>> {
+    pub fn from(l: Option<String>, doc_id: &str) -> ftd_rt::Result<Option<ftd_rt::Length>> {
         let l = match l {
             Some(l) => l,
             None => return Ok(None),
@@ -814,10 +846,10 @@ impl Length {
         }
 
         if l.starts_with("calc ") {
-            let v = crate::get_name("calc", l.as_str())?;
+            let v = crate::get_name("calc", l.as_str(), doc_id)?;
             return match v.parse() {
                 Ok(v) => Ok(Some(Length::Calc { value: v })),
-                Err(_) => crate::e(format!("{} is not a valid integer", v)),
+                Err(_) => crate::e(format!("{} is not a valid integer", v), doc_id),
             };
         }
 
@@ -826,23 +858,23 @@ impl Length {
         }
 
         if l.starts_with("portion ") {
-            let v = crate::get_name("portion", l.as_str())?;
+            let v = crate::get_name("portion", l.as_str(), doc_id)?;
             return match v.parse() {
                 Ok(v) => Ok(Some(Length::Portion { value: v })),
-                Err(_) => crate::e(format!("{} is not a valid integer", v)),
+                Err(_) => crate::e(format!("{} is not a valid integer", v), doc_id),
             };
         }
         if l.starts_with("percent ") {
-            let v = crate::get_name("percent", l.as_str())?;
+            let v = crate::get_name("percent", l.as_str(), doc_id)?;
             return match v.parse() {
                 Ok(v) => Ok(Some(Length::Percent { value: v })),
-                Err(_) => crate::e(format!("{} is not a valid integer", v)),
+                Err(_) => crate::e(format!("{} is not a valid integer", v), doc_id),
             };
         }
 
         match l.parse() {
             Ok(v) => Ok(Some(Length::Px { value: v })),
-            Err(_) => crate::e(format!("{} is not a valid integer", l)),
+            Err(_) => crate::e(format!("{} is not a valid integer", l), doc_id),
         }
     }
 }
@@ -872,7 +904,7 @@ impl Default for Position {
 }
 
 impl Position {
-    pub fn from(l: Option<String>) -> ftd_rt::Result<ftd_rt::Position> {
+    pub fn from(l: Option<String>, doc_id: &str) -> ftd_rt::Result<ftd_rt::Position> {
         Ok(match l.as_deref() {
             Some("center") => Self::Center,
             Some("top") => Self::Top,
@@ -883,7 +915,7 @@ impl Position {
             Some("top-right") => Self::TopRight,
             Some("bottom-left") => Self::BottomLeft,
             Some("bottom-right") => Self::BottomRight,
-            Some(t) => return crate::e(format!("{} is not a valid alignment", t)),
+            Some(t) => return crate::e(format!("{} is not a valid alignment", t), doc_id),
             None => return Ok(Self::TopLeft),
         })
     }
@@ -939,7 +971,7 @@ impl ToString for Region {
 }
 
 impl Region {
-    pub fn from(l: Option<String>) -> ftd_rt::Result<Option<ftd_rt::Region>> {
+    pub fn from(l: Option<String>, doc_id: &str) -> ftd_rt::Result<Option<ftd_rt::Region>> {
         Ok(Some(match l.as_deref() {
             Some("h0") => Self::H0,
             Some("h1") => Self::H1,
@@ -957,7 +989,7 @@ impl Region {
             Some("description") => Self::Description,
             Some("announce") => Self::Announce,
             Some("announce-urgently") => Self::AnnounceUrgently,
-            Some(t) => return crate::e(format!("{} is not a valid alignment", t)),
+            Some(t) => return crate::e(format!("{} is not a valid alignment", t), doc_id),
             None => return Ok(None),
         }))
     }
@@ -1031,13 +1063,13 @@ pub enum Overflow {
 }
 
 impl Overflow {
-    pub fn from(l: Option<String>) -> ftd_rt::Result<Option<ftd_rt::Overflow>> {
+    pub fn from(l: Option<String>, doc_id: &str) -> ftd_rt::Result<Option<ftd_rt::Overflow>> {
         Ok(Option::from(match l.as_deref() {
             Some("hidden") => Self::Hidden,
             Some("visible") => Self::Visible,
             Some("auto") => Self::Auto,
             Some("scroll") => Self::Scroll,
-            Some(t) => return crate::e(format!("{} is not a valid property", t)),
+            Some(t) => return crate::e(format!("{} is not a valid property", t), doc_id),
             None => return Ok(None),
         }))
     }
@@ -1055,7 +1087,7 @@ pub enum Anchor {
 }
 
 impl Anchor {
-    pub fn from(l: Option<String>) -> ftd_rt::Result<Option<ftd_rt::Anchor>> {
+    pub fn from(l: Option<String>, doc_id: &str) -> ftd_rt::Result<Option<ftd_rt::Anchor>> {
         let l = match l {
             Some(l) => l,
             None => return Ok(None),
@@ -1065,10 +1097,13 @@ impl Anchor {
             "window" => ftd_rt::Anchor::Window,
             "parent" => ftd_rt::Anchor::Parent,
             t => {
-                return ftd_rt::e(format!(
-                    "invalid value for `absolute` expected `window` or `parent` found: {}",
-                    t
-                ))
+                return ftd_rt::e(
+                    format!(
+                        "invalid value for `absolute` expected `window` or `parent` found: {}",
+                        t
+                    ),
+                    doc_id,
+                )
             }
         }))
     }
@@ -1102,7 +1137,10 @@ pub enum GradientDirection {
 }
 
 impl GradientDirection {
-    pub fn from(l: Option<String>) -> ftd_rt::Result<Option<ftd_rt::GradientDirection>> {
+    pub fn from(
+        l: Option<String>,
+        doc_id: &str,
+    ) -> ftd_rt::Result<Option<ftd_rt::GradientDirection>> {
         let l = match l {
             Some(l) => l,
             None => return Ok(None),
@@ -1136,10 +1174,10 @@ impl GradientDirection {
             return Ok(Some(GradientDirection::Center));
         }
         if l.starts_with("angle ") {
-            let v = crate::get_name("angle", l.as_str())?;
+            let v = crate::get_name("angle", l.as_str(), doc_id)?;
             return match v.parse() {
                 Ok(v) => Ok(Some(GradientDirection::Angle { value: v })),
-                Err(_) => crate::e(format!("{} is not a valid integer", v)),
+                Err(_) => crate::e(format!("{} is not a valid integer", v), doc_id),
             };
         }
         Ok(None)
@@ -1342,13 +1380,13 @@ impl Default for TextAlign {
 }
 
 impl TextAlign {
-    pub fn from(l: Option<String>) -> ftd_rt::Result<ftd_rt::TextAlign> {
+    pub fn from(l: Option<String>, doc_id: &str) -> ftd_rt::Result<ftd_rt::TextAlign> {
         Ok(match l.as_deref() {
             Some("center") => ftd_rt::TextAlign::Center,
             Some("left") => ftd_rt::TextAlign::Left,
             Some("right") => ftd_rt::TextAlign::Right,
             Some("justify") => ftd_rt::TextAlign::Justify,
-            Some(t) => return crate::e(format!("{} is not a valid alignment", t)),
+            Some(t) => return crate::e(format!("{} is not a valid alignment", t), doc_id),
             None => return Ok(ftd_rt::TextAlign::Left),
         })
     }
@@ -1371,11 +1409,11 @@ impl Default for ftd_rt::FontDisplay {
 }
 
 impl FontDisplay {
-    pub fn from(l: Option<String>) -> ftd_rt::Result<ftd_rt::FontDisplay> {
+    pub fn from(l: Option<String>, doc_id: &str) -> ftd_rt::Result<ftd_rt::FontDisplay> {
         Ok(match l.as_deref() {
             Some("swap") => ftd_rt::FontDisplay::Swap,
             Some("block") => ftd_rt::FontDisplay::Block,
-            Some(t) => return crate::e(format!("{} is not a valid alignment", t)),
+            Some(t) => return crate::e(format!("{} is not a valid alignment", t), doc_id),
             None => return Ok(ftd_rt::FontDisplay::Block),
         })
     }
@@ -1456,7 +1494,7 @@ pub struct Style {
 }
 
 impl Style {
-    pub fn from(l: Option<String>) -> ftd_rt::Result<ftd_rt::Style> {
+    pub fn from(l: Option<String>, doc_id: &str) -> ftd_rt::Result<ftd_rt::Style> {
         let mut s = Style {
             italic: false,
             underline: false,
@@ -1482,7 +1520,7 @@ impl Style {
                 "light" => s.weight = ftd_rt::Weight::Light,
                 "extra-light" => s.weight = ftd_rt::Weight::ExtraLight,
                 "hairline" => s.weight = ftd_rt::Weight::HairLine,
-                t => return crate::e(format!("{} is not a valid style", t)),
+                t => return crate::e(format!("{} is not a valid style", t), doc_id),
             }
         }
         Ok(s)
@@ -1510,7 +1548,11 @@ impl Default for ftd_rt::TextFormat {
 }
 
 impl TextFormat {
-    pub fn from(l: Option<String>, lang: Option<String>) -> ftd_rt::Result<ftd_rt::TextFormat> {
+    pub fn from(
+        l: Option<String>,
+        lang: Option<String>,
+        doc_id: &str,
+    ) -> ftd_rt::Result<ftd_rt::TextFormat> {
         Ok(match l.as_deref() {
             Some("markdown") => ftd_rt::TextFormat::Markdown,
             Some("latex") => ftd_rt::TextFormat::Latex,
@@ -1518,7 +1560,7 @@ impl TextFormat {
                 lang: lang.unwrap_or_else(|| "txt".to_string()),
             },
             Some("text") => ftd_rt::TextFormat::Text,
-            Some(t) => return ftd_rt::e(format!("{} is not a valid format", t)),
+            Some(t) => return ftd_rt::e(format!("{} is not a valid format", t), doc_id),
             None => return Ok(ftd_rt::TextFormat::Markdown),
         })
     }
@@ -1544,20 +1586,54 @@ pub struct Text {
     pub line: bool,
     pub common: Common,
     pub text_align: TextAlign,
-
     pub style: Style,
-    pub format: TextFormat,
     pub size: Option<i64>,
     pub font: Vec<NamedFont>,
     pub external_font: Option<ExternalFont>,
     pub line_height: Option<i64>,
-    pub line_clamp: Option<i64>, // TODO: line-height
-                                 // TODO: region (https://package.elm-lang.org/packages/mdgriffith/elm-ui/latest/Element-Region)
-                                 // TODO: family (maybe we need a type to represent font-family?)
-                                 // TODO: letter-spacing
-                                 // TODO: word-spacing
-                                 // TODO: font-variants [small-caps, slashed-zero, feature/index etc]
-                                 // TODO: shadow, glow
+    pub line_clamp: Option<i64>,
+    // TODO: line-height
+    // TODO: region (https://package.elm-lang.org/packages/mdgriffith/elm-ui/latest/Element-Region)
+    // TODO: family (maybe we need a type to represent font-family?)
+    // TODO: letter-spacing
+    // TODO: word-spacing
+    // TODO: font-variants [small-caps, slashed-zero, feature/index etc]
+    // TODO: shadow, glow
+}
+
+#[derive(serde::Deserialize)]
+#[cfg_attr(
+    not(feature = "wasm"),
+    derive(Debug, PartialEq, Clone, serde::Serialize, Default)
+)]
+pub struct TextBlock {
+    pub text: ftd_rt::Rendered,
+    pub line: bool,
+    pub common: Common,
+    pub text_align: TextAlign,
+    pub style: Style,
+    pub size: Option<i64>,
+    pub font: Vec<NamedFont>,
+    pub external_font: Option<ExternalFont>,
+    pub line_height: Option<i64>,
+    pub line_clamp: Option<i64>,
+}
+
+#[derive(serde::Deserialize)]
+#[cfg_attr(
+    not(feature = "wasm"),
+    derive(Debug, PartialEq, Clone, serde::Serialize, Default)
+)]
+pub struct Code {
+    pub text: ftd_rt::Rendered,
+    pub common: Common,
+    pub text_align: TextAlign,
+    pub style: Style,
+    pub size: Option<i64>,
+    pub font: Vec<NamedFont>,
+    pub external_font: Option<ExternalFont>,
+    pub line_height: Option<i64>,
+    pub line_clamp: Option<i64>,
 }
 
 #[derive(serde::Deserialize)]

@@ -1,21 +1,21 @@
 -- component display-item1:
 component: ftd.column
-$name: string
+string $name:
 padding-left: 10
 open: some-child
-@visible: boolean with default false
+boolean $visible: false
 
 --- ftd.row:
-$event-click$: toggle @visible
+$event-click$: toggle $visible
 
 --- ftd.text: ✌️
 
---- ftd.text: ref $name
+--- ftd.text: $name
 
 --- container: ftd.main
 
 --- ftd.column:
-if: @visible
+if: $visible
 id: some-child
 
 

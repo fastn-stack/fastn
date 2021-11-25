@@ -3,4 +3,4 @@
 -- component foo:
 component: ftd.row
 
---- ftd.text: ref hwv.hello-world
+--- ftd.text: $hwv.hello-world

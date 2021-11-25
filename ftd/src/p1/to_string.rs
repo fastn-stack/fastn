@@ -16,14 +16,14 @@ impl std::fmt::Display for crate::p1::Section {
             write!(f, " {}", caption)?;
         }
 
-        for (k, v) in self.header.0.iter() {
+        for (_, k, v) in self.header.0.iter() {
             write!(f, "\n{}: {}", k, v)?;
         }
 
         writeln!(f)?;
 
         if let Some(ref body) = self.body {
-            write!(f, "\n{}\n", escape_body(body))?;
+            write!(f, "\n{}\n", escape_body(&body.1))?;
         }
 
         for sub in self.sub_sections.0.iter() {
@@ -45,12 +45,12 @@ impl std::fmt::Display for crate::p1::SubSection {
             write!(f, " {}", caption)?;
         }
 
-        for (k, v) in self.header.0.iter() {
+        for (_, k, v) in self.header.0.iter() {
             write!(f, "\n{}: {}", k, v)?;
         }
 
         if let Some(ref body) = self.body {
-            write!(f, "\n\n{}", escape_body(body))?;
+            write!(f, "\n\n{}", escape_body(&body.1))?;
         }
 
         writeln!(f)
@@ -89,8 +89,9 @@ mod test {
                 hello world"
             ),
             super::to_string(
-                &ftd::p1::parse(indoc!(
-                    "
+                &ftd::p1::parse(
+                    indoc!(
+                        "
                     /-- ftd.row:
                     /color: red
 
@@ -100,7 +101,9 @@ mod test {
 
                     hello world
                     "
-                ))
+                    ),
+                    "foo"
+                )
                 .expect("Cannot parse to section")
             )
         );
@@ -117,8 +120,9 @@ mod test {
                 hello world"
             ),
             super::to_string(
-                &ftd::p1::parse(indoc!(
-                    "
+                &ftd::p1::parse(
+                    indoc!(
+                        "
                 -- ftd.row:
 
                 --- ftd.text:
@@ -127,7 +131,9 @@ mod test {
 
                 hello world
                 "
-                ))
+                    ),
+                    "foo"
+                )
                 .expect("Cannot parse to section")
             )
         );
@@ -141,8 +147,9 @@ mod test {
                 hello world again"
             ),
             super::to_string(
-                &ftd::p1::parse(indoc!(
-                    "
+                &ftd::p1::parse(
+                    indoc!(
+                        "
                      -- ftd.text:
 
 
@@ -152,7 +159,9 @@ mod test {
                         hello world
                         hello world again
                      "
-                ))
+                    ),
+                    "foo"
+                )
                 .expect("Cannot parse to section")
             )
         );

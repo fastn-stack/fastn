@@ -1,26 +1,26 @@
--- var count: 0
+-- $count: 0
 
 -- ftd.integer:
-value: ref count
+value: $count
 
 -- ftd.text: increment count
-$event-click$: increment count clamp 0 3
+$event-click$: increment $count clamp 0 3
 
 -- ftd.text: decrement count
-$event-click$: decrement count clamp 0 3
+$event-click$: decrement $count clamp 0 3
 
 -- ftd.image:
 src: https://www.liveabout.com/thmb/YCJmu1khSJo8kMYM090QCd9W78U=/1250x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/powerpuff_girls-56a00bc45f9b58eba4aea61d.jpg
-if: count == 0
+if: $count == 0
 
 -- ftd.image:
 src: https://upload.wikimedia.org/wikipedia/en/d/d4/Mickey_Mouse.png
-if: count == 1
+if: $count == 1
 
 -- ftd.image:
 src: https://blog.ipleaders.in/wp-content/uploads/2021/07/751589-mickey-mouse.jpg
-if: count == 2
+if: $count == 2
 
 -- ftd.image:
 src: https://blog.earlymoments.com/wp-content/uploads/2016/03/Mickey_Mouse_group_700x493.jpg
-if: count == 3
+if: $count == 3

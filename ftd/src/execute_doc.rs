@@ -114,19 +114,29 @@ impl<'a> ExecuteDoc<'a> {
                     let new_id = {
                         if f.condition.is_some()
                             && f.condition.as_ref().unwrap().is_constant()
-                            && !f.condition.as_ref().unwrap().eval(self.arguments, &doc)?
-                            && f.condition.as_ref().unwrap().set_null()?
+                            && !f.condition.as_ref().unwrap().eval(
+                                f.line_number,
+                                self.arguments,
+                                &doc,
+                            )?
+                            && f.condition
+                                .as_ref()
+                                .unwrap()
+                                .set_null(f.line_number, doc.name)?
                         {
                             None
                         } else {
                             let new_id = crate::p2::utils::string_optional(
                                 "id",
                                 &ftd::component::resolve_properties(
+                                    f.line_number,
                                     &f.properties,
                                     self.arguments,
                                     &doc,
                                     None,
                                 )?,
+                                doc.name,
+                                f.line_number,
                             )?;
                             if new_id.is_some() && id.is_some() {
                                 Some(format!("{}:{}", id.as_ref().unwrap(), new_id.unwrap()))
@@ -420,7 +430,7 @@ fn change_container(
     *current_container = match named_containers.get(name) {
         Some(v) => v.get(0).unwrap().to_owned(),
         None => {
-            return crate::e2("no such container", name);
+            return ftd::e2("no such container", name, "".to_string(), 0);
         }
     };
     Ok(())

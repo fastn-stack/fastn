@@ -5,7 +5,7 @@ pub trait Library: Sync {
     async fn get_with_result(&self, name: &str) -> crate::p1::Result<String> {
         match self.get(name).await {
             Some(v) => Ok(v),
-            None => crate::e(format!("library not found: {}", name)),
+            None => ftd::e2("library not found".to_string(), name, "".to_string(), 0),
         }
     }
     async fn process(
@@ -13,10 +13,11 @@ pub trait Library: Sync {
         section: &ftd::p1::Section,
         doc: &ftd::p2::TDoc,
     ) -> crate::p1::Result<ftd::Value> {
-        crate::unknown_processor_error(format!(
-            "unimplemented for section {:?} and doc {:?}",
-            section, doc
-        ))
+        crate::unknown_processor_error(
+            format!("unimplemented for section {:?} and doc {:?}", section, doc),
+            doc.name.to_string(),
+            section.line_number,
+        )
     }
 }
 
@@ -26,7 +27,7 @@ pub trait Library {
     fn get_with_result(&self, name: &str) -> crate::p1::Result<String> {
         match self.get(name) {
             Some(v) => Ok(v),
-            None => crate::e(format!("library not found: {}", name)),
+            None => ftd::e2("library not found".to_string(), name, "".to_string(), 0),
         }
     }
     fn process(
@@ -34,10 +35,11 @@ pub trait Library {
         section: &ftd::p1::Section,
         doc: &ftd::p2::TDoc,
     ) -> crate::p1::Result<ftd::Value> {
-        crate::unknown_processor_error(format!(
-            "unimplemented for section {:?} and doc {:?}",
-            section, doc
-        ))
+        crate::unknown_processor_error(
+            format!("unimplemented for section {:?} and doc {:?}", section, doc),
+            doc.name.to_string(),
+            section.line_number,
+        )
     }
 }
 
@@ -45,8 +47,10 @@ pub struct TestLibrary {}
 
 fn read_version() -> crate::p1::Result<ftd::Value> {
     let get =
-        std::fs::read_to_string("./Cargo.toml").map_err(|e| crate::p1::Error::ProcessorError {
+        std::fs::read_to_string("./Cargo.toml").map_err(|e| crate::p1::Error::ParseError {
             message: e.to_string(),
+            doc_id: "".to_string(),
+            line_number: 0,
         })?;
 
     let version_string = "version";
@@ -62,14 +66,16 @@ fn read_version() -> crate::p1::Result<ftd::Value> {
         }
     }
 
-    crate::unknown_processor_error("version not found")
+    crate::unknown_processor_error("version not found", "".to_string(), 0)
 }
 
 fn read_package(section: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Result<ftd::Value> {
     let var = crate::Variable::list_from_p1(section, doc)?;
     let get =
-        std::fs::read_to_string("./Cargo.toml").map_err(|e| crate::p1::Error::ProcessorError {
+        std::fs::read_to_string("./Cargo.toml").map_err(|e| crate::p1::Error::ParseError {
             message: e.to_string(),
+            doc_id: doc.name.to_string(),
+            line_number: section.line_number,
         })?;
     if let crate::Value::List {
         kind:
@@ -105,25 +111,31 @@ fn read_package(section: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Res
             },
         })
     } else {
-        crate::unknown_processor_error(format!(
-            "list should have 'string' kind, found {:?}",
-            var.value.kind()
-        ))
+        crate::unknown_processor_error(
+            format!(
+                "list should have 'string' kind, found {:?}",
+                var.value.kind()
+            ),
+            doc.name.to_string(),
+            section.line_number,
+        )
     }
 }
 
 fn read_records(section: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Result<ftd::Value> {
     let var = crate::Variable::list_from_p1(section, doc)?;
     let get =
-        std::fs::read_to_string("./Cargo.toml").map_err(|e| crate::p1::Error::ProcessorError {
+        std::fs::read_to_string("./Cargo.toml").map_err(|e| crate::p1::Error::ParseError {
             message: e.to_string(),
+            doc_id: doc.name.to_string(),
+            line_number: section.line_number,
         })?;
     if let crate::Value::List {
         kind: crate::p2::Kind::Record { name },
         ..
     } = var.value.clone()
     {
-        let rec = doc.get_record(name.as_str())?;
+        let rec = doc.get_record(section.line_number, name.as_str())?;
         let mut data = vec![];
         for line in get.split('\n') {
             if line.is_empty() {
@@ -161,10 +173,14 @@ fn read_records(section: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Res
             kind: ftd::p2::Kind::Record { name },
         })
     } else {
-        crate::unknown_processor_error(format!(
-            "list should have 'string' kind, found {:?}",
-            var.value.kind()
-        ))
+        crate::unknown_processor_error(
+            format!(
+                "list should have 'string' kind, found {:?}",
+                var.value.kind()
+            ),
+            doc.name.to_string(),
+            section.line_number,
+        )
     }
 }
 
@@ -180,11 +196,19 @@ impl Library for TestLibrary {
         section: &ftd::p1::Section,
         doc: &ftd::p2::TDoc,
     ) -> crate::p1::Result<ftd::Value> {
-        match section.header.str("$processor$")? {
+        match section
+            .header
+            .str(doc.name.to_string(), section.line_number, "$processor$")?
+        {
             "read_version_from_cargo_toml" => read_version(),
             "read_package_from_cargo_toml" => read_package(section, doc),
             "read_package_records_from_cargo_toml" => read_records(section, doc),
-            t => crate::e2(format!("unknown processor: {}", t), "TestLibrary.process"),
+            t => ftd::e2(
+                format!("unknown processor: {}", t),
+                "TestLibrary.process",
+                doc.name.to_string(),
+                section.line_number.to_owned(),
+            ),
         }
     }
 }
@@ -200,11 +224,19 @@ impl Library for TestLibrary {
         section: &ftd::p1::Section,
         doc: &ftd::p2::TDoc,
     ) -> crate::p1::Result<ftd::Value> {
-        match section.header.str("$processor$")? {
+        match section
+            .header
+            .str(doc.name.to_string(), section.line_number, "$processor$")?
+        {
             "read_version_from_cargo_toml" => read_version(),
             "read_package_from_cargo_toml" => read_package(section, doc),
             "read_package_records_from_cargo_toml" => read_records(section, doc),
-            t => crate::e2(format!("unknown processor: {}", t), "TestLibrary.process"),
+            t => ftd::e2(
+                format!("unknown processor: {}", t),
+                "TestLibrary.process",
+                doc.name.to_string(),
+                section.line_number.to_owned(),
+            ),
         }
     }
 }

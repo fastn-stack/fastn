@@ -3,49 +3,71 @@ pub use crate::p1::{Error, Header, Result};
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize, serde::Deserialize)]
 pub struct SubSections(pub Vec<SubSection>);
 
+impl SubSections {
+    pub fn without_line_number(&self) -> Self {
+        let mut subsections = vec![];
+        for subsection in self.0.iter() {
+            subsections.push(subsection.without_line_number());
+        }
+        SubSections(subsections)
+    }
+}
+
 #[derive(Debug, PartialEq, Default, Clone, serde::Serialize, serde::Deserialize)]
 pub struct SubSection {
     pub name: String,
     pub caption: Option<String>,
     pub header: Header,
-    pub body: Option<String>,
+    pub body: Option<(usize, String)>,
     pub is_commented: bool,
+    pub line_number: usize,
 }
 
 impl SubSection {
-    pub fn body_without_comment(&self) -> Option<String> {
+    pub fn without_line_number(&self) -> Self {
+        Self {
+            name: self.name.to_string(),
+            caption: self.caption.to_owned(),
+            header: self.header.without_line_number(),
+            body: self.body.to_owned().map(|v| (0, v.1)),
+            is_commented: self.is_commented.to_owned(),
+            line_number: 0,
+        }
+    }
+
+    pub fn body_without_comment(&self) -> Option<(usize, String)> {
         let body = match &self.body {
             None => return None,
             Some(b) => b,
         };
         match body {
-            _ if body.starts_with(r"\/") =>
+            _ if body.1.starts_with(r"\/") =>
             {
                 #[allow(clippy::single_char_pattern)]
-                Some(body.strip_prefix(r"\").expect("").to_string())
+                Some((body.0, body.1.strip_prefix(r"\").expect("").to_string()))
             }
-            _ if body.starts_with('/') => None,
-            _ => Some(body.to_string()),
+            _ if body.1.starts_with('/') => None,
+            _ => Some((body.0, body.1.to_string())),
         }
     }
 
     pub fn remove_comments(&self) -> SubSection {
         let mut headers = vec![];
-        for (k, v) in self.header.0.iter() {
+        for (i, k, v) in self.header.0.iter() {
             if !k.starts_with('/') {
-                headers.push((k.to_string(), v.to_string()));
+                headers.push((i.to_owned(), k.to_string(), v.to_string()));
             }
         }
 
         let body = match &self.body {
             None => None,
             Some(body) => match body {
-                _ if body.starts_with(r"\/") =>
+                _ if body.1.starts_with(r"\/") =>
                 {
                     #[allow(clippy::single_char_pattern)]
-                    Some(body.strip_prefix(r"\").expect("").to_string())
+                    Some((body.0, body.1.strip_prefix(r"\").expect("").to_string()))
                 }
-                _ if body.starts_with('/') => None,
+                _ if body.1.starts_with('/') => None,
                 _ => self.body.clone(),
             },
         };
@@ -56,24 +78,28 @@ impl SubSection {
             header: Header(headers),
             body,
             is_commented: false,
+            line_number: self.line_number,
         }
     }
 
-    pub fn caption(&self) -> Result<String> {
+    pub fn caption(&self, doc_id: &str) -> Result<String> {
         match self.caption {
             Some(ref v) => Ok(v.to_string()),
-            None => Err(Error::InvalidInput {
-                message: "caption is missing".to_string(),
-                context: "".to_string(),
+            None => Err(Error::ParseError {
+                message: format!("caption is missing in {}", self.name),
+                doc_id: doc_id.to_string(),
+                line_number: self.line_number,
             }),
         }
     }
 
-    pub fn body(&self) -> Result<String> {
+    pub fn body(&self, doc_id: &str) -> Result<String> {
         match self.body {
-            Some(ref body) => Ok(body.to_string()),
-            None => Err(Error::NotFound {
-                key: "body".to_string(),
+            Some(ref body) => Ok(body.1.to_string()),
+            None => Err(Error::ParseError {
+                message: format!("caption is missing in {}", self.name),
+                doc_id: doc_id.to_string(),
+                line_number: self.line_number,
             }),
         }
     }
@@ -85,6 +111,7 @@ impl SubSection {
             header: Header::default(),
             body: None,
             is_commented: false,
+            line_number: 0,
         }
     }
 
@@ -94,7 +121,7 @@ impl SubSection {
     }
 
     pub fn add_header(mut self, key: &str, value: &str) -> Self {
-        self.header.0.push((key.to_string(), value.to_string()));
+        self.header.0.push((0, key.to_string(), value.to_string()));
         self
     }
 
@@ -124,18 +151,18 @@ impl SubSection {
     }
 
     pub fn and_body(mut self, body: &str) -> Self {
-        self.body = Some(body.to_string());
+        self.body = Some((0, body.to_string()));
         self
     }
 
     pub fn and_optional_body(mut self, body: &Option<String>) -> Self {
-        self.body = body.as_ref().map(|v| v.to_string());
+        self.body = body.as_ref().map(|v| (0, v.to_string()));
         self
     }
 }
 
 impl SubSections {
-    pub fn by_name(&self, name: &str) -> Result<&SubSection> {
+    pub fn by_name(&self, line_number: usize, name: &str, doc_id: String) -> Result<&SubSection> {
         for s in self.0.iter() {
             if s.is_commented {
                 continue;
@@ -146,14 +173,18 @@ impl SubSections {
             }
         }
         Err(Error::NotFound {
+            doc_id,
+            line_number,
             key: name.to_string(),
         })
     }
 
-    pub fn body_for(&self, name: &str) -> Result<String> {
-        match self.by_name(name)?.body {
-            Some(ref body) => Ok(body.to_string()),
+    pub fn body_for(&self, line_number: usize, name: &str, doc_id: String) -> Result<String> {
+        match self.by_name(line_number, name, doc_id.to_string())?.body {
+            Some(ref body) => Ok(body.1.to_string()),
             None => Err(Error::NotFound {
+                doc_id,
+                line_number,
                 key: name.to_string(),
             }),
         }
@@ -164,8 +195,9 @@ impl SubSections {
             name: name.to_string(),
             caption: None,
             header: Header::default(),
-            body: Some(value.to_string()),
+            body: Some((0, value.to_string())),
             is_commented: false,
+            line_number: 0,
         })
     }
 

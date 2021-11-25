@@ -12,9 +12,10 @@ pub use condition::Condition;
 pub use event::{Action, Event};
 pub use html::{anchor, color, length, overflow, Node};
 pub use ui::{
-    Anchor, AttributeType, Color, Column, Common, ConditionalAttribute, ConditionalValue,
+    Anchor, AttributeType, Code, Color, Column, Common, ConditionalAttribute, ConditionalValue,
     Container, Element, ExternalFont, FontDisplay, GradientDirection, IFrame, Image, Input, Length,
-    NamedFont, Overflow, Position, Region, Row, Scene, Style, Text, TextAlign, TextFormat, Weight,
+    NamedFont, Overflow, Position, Region, Row, Scene, Style, Text, TextAlign, TextBlock,
+    TextFormat, Weight,
 };
 
 #[derive(serde::Serialize, serde::Deserialize, Eq, PartialEq, Debug, Default, Clone)]
@@ -52,25 +53,29 @@ pub struct Document {
     pub external_children: ExternalChildrenDependenciesMap,
 }
 
-pub fn e<T, S>(m: S) -> Result<T>
+pub fn e<T, S1, S2>(m: S1, c: S2) -> Result<T>
 where
-    S: Into<String>,
+    S1: Into<String>,
+    S2: Into<String>,
 {
     Err(Error::InvalidInput {
         message: m.into(),
-        context: "".to_string(),
+        context: c.into(),
     })
 }
 
-pub fn get_name<'a, 'b>(prefix: &'a str, s: &'b str) -> ftd_rt::Result<&'b str> {
+pub fn get_name<'a, 'b>(prefix: &'a str, s: &'b str, doc_id: &str) -> ftd_rt::Result<&'b str> {
     match s.split_once(' ') {
         Some((p1, p2)) => {
             if p1 != prefix {
-                return ftd_rt::e(format!("must start with {}", prefix));
+                return ftd_rt::e(format!("must start with {}", prefix), doc_id);
             }
             Ok(p2)
         }
-        None => ftd_rt::e(format!("{} does not contain space (prefix={})", s, prefix)),
+        None => ftd_rt::e(
+            format!("{} does not contain space (prefix={})", s, prefix),
+            doc_id,
+        ),
     }
 }
 

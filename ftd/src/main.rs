@@ -62,7 +62,7 @@ fn write(id: &str, doc: String) {
     let mut f = std::fs::File::create(format!("./build/{}", id.replace(".ftd", ".html")))
         .expect("failed to create .html file");
 
-    let doc = b.to_rt("main");
+    let doc = b.to_rt("main", id);
 
     let ftd_js = std::fs::read_to_string("ftd.js").expect("ftd.js not found");
 
@@ -81,7 +81,7 @@ fn write(id: &str, doc: String) {
                     .expect("failed to convert document to json")
                     .as_str(),
             )
-            .replace("__ftd__", b.html("main").as_str())
+            .replace("__ftd__", b.html("main", id).as_str())
             .replace("__ftd_js__", ftd_js.as_str())
             .as_bytes(),
     )

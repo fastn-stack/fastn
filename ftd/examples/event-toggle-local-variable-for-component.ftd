@@ -1,15 +1,15 @@
 -- component foo:
 component: ftd.column
-@open: boolean with default true
+boolean $open: true
 
 --- ftd.text: Click here
-$event-click$: toggle @open
+$event-click$: toggle $open
 
 --- ftd.text: Open True
-if: @open
+if: $open
 
 --- ftd.text: Open False
-if: not @open
+if: not $open
 
 -- ftd.text: Text says hello
 

@@ -1,4 +1,4 @@
--- import: ft
+-- import: fifthtry/ft
 
 -- ft.h0: Once upon a time...
 
@@ -29,10 +29,10 @@ top: 0
 
 -- component ethan-happy-facing-side:
 component: ftd.scene
-$left: integer
-$top: integer
-left: ref $left
-top: ref $top
+integer $left:
+integer $top:
+left: $left
+top: $top
 scale: 1.2
 
 --- ftd.image:

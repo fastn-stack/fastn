@@ -21,34 +21,35 @@ impl RT {
         }
     }
 
-    pub fn set_bool(&mut self, variable: &str, value: bool) -> crate::p1::Result<bool> {
-        match self.bag.get(variable) {
-            Some(ftd::p2::Thing::Variable(v)) => match v.value {
-                ftd::Value::Boolean { value: old } => {
-                    let conditions = v.conditions.to_vec();
-                    self.bag.insert(
-                        variable.to_string(),
-                        ftd::p2::Thing::Variable(ftd::Variable {
-                            name: variable.to_string(),
-                            value: ftd::Value::Boolean { value },
-                            conditions,
-                        }),
-                    );
-                    Ok(old)
-                }
-                ref t => crate::e2(
-                    format!("{} is not a boolean", variable),
-                    format!("{:?}", t).as_str(),
-                ),
-            },
-            Some(t) => crate::e2(
-                format!("{} is not a variable", variable),
-                format!("{:?}", t).as_str(),
-            ),
-            None => crate::e(format!("{} not found", variable)),
-        }
-    }
+    // pub fn set_bool(&mut self, variable: &str, value: bool, doc_id: &str) -> crate::p1::Result<bool> {
+    //     match self.bag.get(variable) {
+    //         Some(ftd::p2::Thing::Variable(v)) => match v.value {
+    //             ftd::Value::Boolean { value: old } => {
+    //                 let conditions = v.conditions.to_vec();
+    //                 self.bag.insert(
+    //                     variable.to_string(),
+    //                     ftd::p2::Thing::Variable(ftd::Variable {
+    //                         name: variable.to_string(),
+    //                         value: ftd::Value::Boolean { value },
+    //                         conditions,
+    //                     }),
+    //                 );
+    //                 Ok(old)
+    //             }
+    //             ref t => crate::e2(
+    //                 format!("{} is not a boolean", variable),
+    //                 format!("{:?}", t).as_str(),
+    //             ),
+    //         },
+    //         Some(t) => crate::e2(
+    //             format!("{} is not a variable", variable),
+    //             format!("{:?}", t).as_str(),
+    //         ),
+    //         None => crate::e2(format!("{} not found", variable), doc_id),
+    //     }
+    // }
 
+    #[observed(with_result, namespace = "ftd")]
     pub fn render(&mut self) -> crate::p1::Result<ftd_rt::Column> {
         let mut main = self.render_();
         if let Ok(main) = &mut main {

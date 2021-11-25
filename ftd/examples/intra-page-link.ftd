@@ -1,0 +1,117 @@
+-- import: fifthtry/ft
+
+-- ftd.text: Go to Next Steps
+link: \#next-steps
+
+-- ft.h0: News
+
+
+-- ft.h1: End of Daily Calls. Long live Daily Calls.
+
+19th Oct 2021
+
+
+-- ft.markdown:
+
+Today FifthTry has stopped conducting daily standup meetings. Instead of the daily
+meeting with everyone, we will have one on one daily meeting between everyone and
+their manager.
+
+The goal of the daily team meeting was so that everyone can know what everyone is
+working on, and the daily meeting is not achieving this goal, or rather the
+understanding of what someone else is working on is very superficial and fickle,
+so much so that not only can anyone attending the daily meeting can tell what
+someone else did day before yesterday or the last week, forget about that, no one
+can even tell with any reasonable detail what they themselves did a week ago and
+so on.
+
+This is a major problem as we will soon have performance appraisal process
+starting, and one of the most common feedback I have received in the manager
+giving feedback process is that manager should have given feedback more often. If
+you get a feedback at the end of a year, its too late, one should give much more
+frequent feedback so there is ample time for people to course correct and ensure
+they are making the best use of their time, bring maximum impact to the company.
+
+Two solve these two problems: and also to have a depth of conversation which is not
+suitable when everyone is waiting their turn, the pressure of lots of people
+watching forces people to be brief.
+
+To solve all this everyone is now going to have their own page. This page would be
+part of FifthTry Bible, everyone can see the page.
+
+There would be a daily one on one with the manager, which will be a 15-30 mins
+meeting. **During this meeting the manager will signup off the current days
+update**. The update has to be prepared by individual in advance, and would be
+edited during the meeting. The **meeting ends with manager sharing the link to
+person's page in `#daily-updates` channel on Slack**.
+
+The daily update must contain the following sections:
+
+
+-- ft.h2: `ft.h1`: The Date.
+
+Every daily update starts with a `ft.h1` date:
+
+
+-- ft.code:
+lang: ftd
+
+\-- ft.h1: 18th Oct 2021
+
+
+-- ft.markdown:
+
+It is 18th not 18. It is Oct, oct or Octuber or 10, and it ends with 2021.
+
+
+-- ft.h2: Did you spend 8hrs today?
+
+This is a `h2` heading.
+
+This is the first question, where everyone will give their answer to if they were
+able to spend 8 productive hours for the company.
+
+This should be personal note to the team about what did they do, like how was your
+day, when did you start, when did you finish, was there any interruptions etc.
+
+
+-- ft.h2: What did you do?
+
+This is another `h2`, and it will contain one `h3` for every task you want to talk
+about.
+
+Each task must explain what happened, what were you trying to do, who asked you
+to do it, if you chatted with people about it what was the question and what was
+the answer etc.
+
+As much detail as you can.
+
+
+-- ft.h2: Did You Uphold FifthTry Ethos?
+
+This section will invite you to understand what are FifthTry ethos, and ask you
+to mention any examples of if you upheld the ethos.
+
+This is usually: reading others daily update, trying out others work, giving them
+feedback on their PR, on their design, on the quality of their daily update etc.
+
+Reading about our ethos, what makes us the best company to work for, thinking about
+and discussing and proposing ways to improve how we work, etc are part of your job.
+
+Being too busy to think about such thing is not part of the kind of company we want
+to create.
+
+
+-- ft.h2: Did I do Extra?
+
+Extra is things beyond coding and direct responsibility. Did you write a blog or
+tweet about your work? Did you update the documentation, or write great
+documentation about what you built? Did you perfect the code? Was the PR title,
+the name of the branch really reflecting the work you are doing?
+
+Did you catch up with someone else in the team about their work?
+
+
+-- ft.h2: Next Steps
+
+Please book a 30 mins, daily one on one meeting with AmitU.
