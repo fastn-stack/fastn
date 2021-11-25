@@ -13,4 +13,4 @@ homepage = "https://www.fifthtry.com/fpm/"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 ftd = "0.1.8"
-structopt = "0.3"
+clap = "2.33.3"
