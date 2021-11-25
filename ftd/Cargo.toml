@@ -1,6 +1,6 @@
 [package]
 name = "ftd"
-version = "0.1.9"
+version = "0.1.8"
 authors = ["Amit Upadhyay <upadhyay@gmail.com>"]
 edition = "2018"
 description = "ftd: FifthTry Document Format parser"
