@@ -1,8 +1,5 @@
 extern crate self as ftd;
 
-#[macro_use]
-extern crate observer_attribute;
-
 #[cfg(test)]
 #[macro_use]
 pub(crate) mod test;

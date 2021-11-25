@@ -49,7 +49,6 @@ impl RT {
     //     }
     // }
 
-    #[observed(with_result, namespace = "ftd")]
     pub fn render(&mut self) -> crate::p1::Result<ftd_rt::Column> {
         let mut main = self.render_();
         if let Ok(main) = &mut main {
