@@ -1,9 +1,8 @@
 pub use ftd;
 use std::env::current_dir;
 use std::fs::metadata;
-use structopt::StructOpt;
 
-#[derive(StructOpt, Debug)]
+#[derive(structopt::StructOpt, Debug)]
 #[structopt(name = "fpm", about = "Fifthtry package manager usage")]
 struct Cli {
     /// The path to the file to read
