@@ -1,6 +1,6 @@
+pub use ftd;
 use std::env::current_dir;
 use std::fs::metadata;
-pub use ftd;
 use structopt::StructOpt;
 
 #[derive(StructOpt, Debug)]
@@ -23,7 +23,7 @@ fn main() {
             .to_str()
             .expect("panic")
             .to_string(),
-            0
+        0,
     );
 }
 
@@ -32,30 +32,27 @@ fn process_dir(directory: String, depth: usize) -> u32 {
     for entry in std::fs::read_dir(&directory).expect("?//") {
         let e = entry.expect("Panic: Doc not found");
         let md = metadata(e.path()).expect("Doc Metadata evaluation failed");
-        if md.is_dir() {
-            // Iterate the children
-            count += process_dir(
-                e.path()
-                    .to_str()
-                    .expect("Directory path is expected")
-                    .to_string(),
-                    depth + 1
-            );
-        } else if e
+        let doc_path = e
             .path()
             .to_str()
-            .expect("file to_str failed. Panic!")
-            .ends_with(".ftd")
-        {
+            .expect("Directory path is expected")
+            .to_string();
+        if md.is_dir() {
+            // Iterate the children
+            count += process_dir(doc_path, depth + 1);
+        } else if doc_path.as_str().ends_with(".ftd") {
             // process the document
-            let doc = std::fs::read_to_string(e.path().to_str().expect("Panic: file path to_str failed"))
-                .expect("cant read file");
+            let doc = std::fs::read_to_string(doc_path).expect("cant read file");
             let id = e.path().clone();
             let id = id.to_str().expect(">>>").split("/");
             let len = id.clone().count();
-            
+
             write(
-                id.skip(len - (depth + 1)).take_while(|_| true).collect::<Vec<&str>>().join("/").as_str(),
+                id.skip(len - (depth + 1))
+                    .take_while(|_| true)
+                    .collect::<Vec<&str>>()
+                    .join("/")
+                    .as_str(),
                 doc,
             );
             count += 1;
@@ -66,7 +63,6 @@ fn process_dir(directory: String, depth: usize) -> u32 {
 
 fn write(id: &str, doc: String) {
     use std::io::Write;
-    
 
     let lib = ftd::ExampleLibrary {};
     let b = match ftd::p2::Document::from(id, &*doc, &lib) {
@@ -76,16 +72,11 @@ fn write(id: &str, doc: String) {
             return;
         }
     };
-    
-    if id.contains("/") {
-        let mut k = id.clone().rsplitn(2, "/");
-        if let Some(v) = k.nth(1) {
-            std::fs::create_dir_all(format!("./.build/{}", v)).expect("failed to create directory folder for doc");            
-        }
-    }
-    
 
-    let mut f = std::fs::File::create(format!("./.build/{}", id.replace(".ftd", ".html")))
+    std::fs::create_dir_all(format!("./.build/{}", id.clone().replace(".ftd", "")))
+        .expect("failed to create directory folder for doc");
+
+    let mut f = std::fs::File::create(format!("./.build/{}", id.replace(".ftd", "/index.html")))
         .expect("failed to create .html file");
 
     let doc = b.to_rt("main", id);
