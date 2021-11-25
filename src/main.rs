@@ -1,16 +1,11 @@
 use std::env::current_dir;
 use std::fs::metadata;
-
 pub use ftd;
 use structopt::StructOpt;
 
 #[derive(StructOpt, Debug)]
 #[structopt(name = "fpm", about = "Fifthtry package manager usage")]
 struct Cli {
-    /// The pattern to look for Set speed
-    #[structopt(short = "c", long, default_value = "FPM.ftd")]
-    config_file: String,
-
     /// The path to the file to read
     #[structopt(short, long)]
     debug: bool,
@@ -20,42 +15,47 @@ fn main() {
     let _args = Cli::from_args();
 
     // Create output directory
-    std::fs::create_dir_all("./build").expect("failed to create build folder");
+    std::fs::create_dir_all("./.build").expect("failed to create build folder");
 
-    let total_processed = process_dir(
+    process_dir(
         current_dir()
             .expect("Panic1")
             .to_str()
-            .unwrap_or_else(|| todo!("Panic2"))
+            .expect("panic")
             .to_string(),
+            0
     );
 }
 
-fn process_dir(directory: String) -> u32 {
+fn process_dir(directory: String, depth: usize) -> u32 {
     let mut count: u32 = 0;
     for entry in std::fs::read_dir(&directory).expect("?//") {
         let e = entry.expect("Panic: Doc not found");
-        let md = metadata(e.path()).unwrap();
+        let md = metadata(e.path()).expect("Doc Metadata evaluation failed");
         if md.is_dir() {
             // Iterate the children
             count += process_dir(
                 e.path()
                     .to_str()
-                    .unwrap_or_else(|| todo!("Panic"))
+                    .expect("Directory path is expected")
                     .to_string(),
+                    depth + 1
             );
         } else if e
             .path()
             .to_str()
-            .unwrap_or_else(|| "no matches")
+            .expect("file to_str failed. Panic!")
             .ends_with(".ftd")
         {
             // process the document
-            let doc = std::fs::read_to_string(e.path().to_str().unwrap_or_else(|| todo!()))
+            let doc = std::fs::read_to_string(e.path().to_str().expect("Panic: file path to_str failed"))
                 .expect("cant read file");
+            let id = e.path().clone();
+            let id = id.to_str().expect(">>>").split("/");
+            let len = id.clone().count();
+            
             write(
-                // e.file_name().to_str().unwrap_or_else(|| todo!()).replace(".ftd", "").as_str(),
-                e.file_name().to_str().unwrap_or_else(|| todo!()),
+                id.skip(len - (depth + 1)).take_while(|_| true).collect::<Vec<&str>>().join("/").as_str(),
                 doc,
             );
             count += 1;
@@ -66,6 +66,7 @@ fn process_dir(directory: String) -> u32 {
 
 fn write(id: &str, doc: String) {
     use std::io::Write;
+    
 
     let lib = ftd::ExampleLibrary {};
     let b = match ftd::p2::Document::from(id, &*doc, &lib) {
@@ -75,8 +76,16 @@ fn write(id: &str, doc: String) {
             return;
         }
     };
+    
+    if id.contains("/") {
+        let mut k = id.clone().rsplitn(2, "/");
+        if let Some(v) = k.nth(1) {
+            std::fs::create_dir_all(format!("./.build/{}", v)).expect("failed to create directory folder for doc");            
+        }
+    }
+    
 
-    let mut f = std::fs::File::create(format!("./build/{}", id.replace(".ftd", ".html")))
+    let mut f = std::fs::File::create(format!("./.build/{}", id.replace(".ftd", ".html")))
         .expect("failed to create .html file");
 
     let doc = b.to_rt("main", id);
