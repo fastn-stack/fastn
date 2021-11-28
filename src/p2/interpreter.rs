@@ -7053,7 +7053,7 @@ mod test {
         }));
 
         main.container.children.push(ftd::Element::Text(ftd::Text {
-            text: ftd::markdown_line("\"ftd: FifthTry Document Format parser\""),
+            text: ftd::markdown_line("\"ftd: FifthTry Document Format\""),
             line: true,
             ..Default::default()
         }));
@@ -7101,7 +7101,7 @@ mod test {
                             source: crate::TextSource::Header,
                         },
                         crate::Value::String {
-                            text: "\"ftd: FifthTry Document Format parser\"".to_string(),
+                            text: "\"ftd: FifthTry Document Format\"".to_string(),
                             source: crate::TextSource::Header,
                         },
                         crate::Value::String {
@@ -7286,7 +7286,7 @@ mod test {
             container: ftd::Container {
                 children: vec![
                     ftd::Element::Text(ftd::Text {
-                        text: ftd::markdown_line("\"ftd: FifthTry Document Format parser\""),
+                        text: ftd::markdown_line("\"ftd: FifthTry Document Format\""),
                         line: true,
                         common: ftd::Common {
                             reference: Some(s("@name@4")),
@@ -7308,7 +7308,7 @@ mod test {
             },
             common: ftd::Common {
                 locals: std::array::IntoIter::new([
-                    (s("name@4"), s("\"ftd: FifthTry Document Format parser\"")),
+                    (s("name@4"), s("\"ftd: FifthTry Document Format\"")),
                     (s("body@4"), s("description")),
                 ])
                 .collect(),
@@ -7608,7 +7608,7 @@ mod test {
                                     s("title"),
                                     crate::PropertyValue::Value {
                                         value: crate::variable::Value::String {
-                                            text: "\"ftd: FifthTry Document Format parser\""
+                                            text: "\"ftd: FifthTry Document Format\""
                                                 .to_string(),
                                             source: crate::TextSource::Header,
                                         },
