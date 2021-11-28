@@ -10,7 +10,6 @@ pub fn build() {
             .to_string(),
         0,
     );
-
 }
 
 pub fn process_dir(directory: String, depth: usize) -> u32 {
@@ -85,5 +84,5 @@ fn write(id: &str, doc: String) {
             .replace("__ftd_js__", ftd::js())
             .as_bytes(),
     )
-        .expect("failed to write to .html file");
+    .expect("failed to write to .html file");
 }

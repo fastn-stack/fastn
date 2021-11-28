@@ -5,4 +5,3 @@ impl ftd::p2::Library for Library {
         std::fs::read_to_string(format!("./examples/{}.ftd", name)).ok()
     }
 }
-
