@@ -142,13 +142,7 @@ impl EventName {
     pub fn from_string(s: &str, doc_id: &str) -> ftd::p1::Result<Self> {
         match s {
             "click" => Ok(Self::OnClick),
-            t => {
-                return ftd::e2(
-                    format!("{} is not a valid event", t),
-                    doc_id,
-                    0,
-                )
-            }
+            t => return ftd::e2(format!("{} is not a valid event", t), doc_id, 0),
         }
     }
 }

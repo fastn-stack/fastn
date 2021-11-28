@@ -252,13 +252,7 @@ impl Kind {
                     | crate::p2::Kind::Integer { .. }
                     | crate::p2::Kind::Decimal { .. }
                     | crate::p2::Kind::Boolean { .. } => false,
-                    t => {
-                        return ftd::e2(
-                            format!("`{}` is {:?}", name, t),
-                            doc.name,
-                            line_number,
-                        )
-                    }
+                    t => return ftd::e2(format!("`{}` is {:?}", name, t), doc.name, line_number),
                 };
 
                 let (caption, body) = if let Kind::String { caption, body, .. } = self.inner() {
@@ -286,11 +280,7 @@ impl Kind {
                 } else if let Some(default) = self.get_default_value_str() {
                     (default, crate::TextSource::Default)
                 } else {
-                    return ftd::e2(
-                        format!("`{}` is required", name),
-                        doc.name,
-                        line_number,
-                    );
+                    return ftd::e2(format!("`{}` is required", name), doc.name, line_number);
                 }
             }
         };
@@ -344,7 +334,11 @@ impl Kind {
             Kind::String { .. } => Ok(crate::PropertyValue::Value {
                 value: crate::Value::String { text: v, source },
             }),
-            v => ftd::e2(format!("unknown kind found: {:?}", v), doc.name, line_number),
+            v => ftd::e2(
+                format!("unknown kind found: {:?}", v),
+                doc.name,
+                line_number,
+            ),
         }
     }
 

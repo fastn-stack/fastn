@@ -772,13 +772,7 @@ fn get_conditional_attributes(
                     value: format!("{}px", v),
                     important: false,
                 },
-                v => {
-                    return ftd::e2(
-                        format!("expected int, found: {:?}", v),
-                        doc_id,
-                        line_number,
-                    )
-                }
+                v => return ftd::e2(format!("expected int, found: {:?}", v), doc_id, line_number),
             }
         } else if style_integer_important.contains(&name) {
             match value {
@@ -786,13 +780,7 @@ fn get_conditional_attributes(
                     value: format!("{}px", v),
                     important: true,
                 },
-                v => {
-                    return ftd::e2(
-                        format!("expected int, found: {:?}", v),
-                        doc_id,
-                        line_number,
-                    )
-                }
+                v => return ftd::e2(format!("expected int, found: {:?}", v), doc_id, line_number),
             }
         } else if style_length.contains(&name) {
             match value {
@@ -902,13 +890,7 @@ fn get_conditional_attributes(
                     value: v.to_string(),
                     important: false,
                 },
-                v => {
-                    return ftd::e2(
-                        format!("expected int, found: {:?}", v),
-                        doc_id,
-                        line_number,
-                    )
-                }
+                v => return ftd::e2(format!("expected int, found: {:?}", v), doc_id, line_number),
             }
         } else {
             return ftd::e2(
@@ -992,9 +974,7 @@ impl Component {
 
     pub fn from_p1(p1: &crate::p1::Section, doc: &crate::p2::TDoc) -> crate::p1::Result<Self> {
         let name = ftd_rt::get_name("component", p1.name.as_str(), doc.name)?.to_string();
-        let root = p1
-            .header
-            .string(doc.name, p1.line_number, "component")?;
+        let root = p1.header.string(doc.name, p1.line_number, "component")?;
         let root_component = doc.get_component(p1.line_number, root.as_str())?;
         let mut root_arguments = root_component.arguments.clone();
         let (arguments, inherits) =
@@ -1014,10 +994,7 @@ impl Component {
             if sub.is_commented {
                 continue;
             }
-            if let Ok(loop_data) = sub
-                .header
-                .str(doc.name, p1.line_number, "$loop$")
-            {
+            if let Ok(loop_data) = sub.header.str(doc.name, p1.line_number, "$loop$") {
                 instructions.push(Instruction::RecursiveChildComponent {
                     child: recursive_child_component(
                         loop_data,
@@ -1051,10 +1028,7 @@ impl Component {
             });
         }
 
-        let condition = match p1
-            .header
-            .str_optional(doc.name, p1.line_number, "if")?
-        {
+        let condition = match p1.header.str_optional(doc.name, p1.line_number, "if")? {
             Some(expr) => Some(crate::p2::Boolean::from_expression(
                 expr,
                 doc,
@@ -1546,10 +1520,7 @@ pub fn recursive_child_component(
 
     return Ok(ftd::ChildComponent {
         root: sub.name.to_string(),
-        condition: match sub
-            .header
-            .str_optional(doc.name, sub.line_number, "if")?
-        {
+        condition: match sub.header.str_optional(doc.name, sub.line_number, "if")? {
             Some(expr) => Some(ftd::p2::Boolean::from_expression(
                 expr,
                 doc,

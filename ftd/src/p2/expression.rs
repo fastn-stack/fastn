@@ -113,13 +113,7 @@ impl Boolean {
 
                 (variable, value)
             }
-            _ => {
-                return ftd::e2(
-                    format!("{:?} must not happen", self),
-                    doc_id,
-                    line_number,
-                )
-            }
+            _ => return ftd::e2(format!("{:?} must not happen", self), doc_id, line_number),
         };
         match value.to_string() {
             None => {

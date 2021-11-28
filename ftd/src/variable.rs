@@ -238,7 +238,10 @@ impl PropertyValue {
                             }
                             None => {
                                 return ftd::e2(
-                                    format!("{} is not present in record {} [name: {}]", part_2, part_1, name),
+                                    format!(
+                                        "{} is not present in record {} [name: {}]",
+                                        part_2, part_1, name
+                                    ),
                                     doc.name,
                                     line_number,
                                 )
@@ -445,8 +448,7 @@ impl Variable {
                 data: Default::default(),
                 kind: crate::p2::Kind::from(
                     p1.line_number,
-                    p1.header
-                        .str(doc.name, p1.line_number, "type")?,
+                    p1.header.str(doc.name, p1.line_number, "type")?,
                     doc,
                     None,
                 )?,
@@ -496,11 +498,7 @@ impl Variable {
                 data.push(read_value(p1.line_number, kind, &p1, doc)?);
             }
             (ftd::p2::Kind::Map { .. }, _) => {
-                return ftd::e2(
-                    "unexpected map",
-                    doc.name,
-                    p1.line_number,
-                )
+                return ftd::e2("unexpected map", doc.name, p1.line_number)
             }
             (k, _) => self.value = read_value(p1.line_number, k, &p1, doc)?,
         };
@@ -635,11 +633,7 @@ fn read_integer(p1: &crate::p1::Section, doc_id: &str) -> crate::p1::Result<Valu
         return Ok(Value::Integer { value: v });
     }
 
-    ftd::e2(
-        "not a valid integer",
-        doc_id,
-        p1.line_number,
-    )
+    ftd::e2("not a valid integer", doc_id, p1.line_number)
 }
 
 fn read_decimal(p1: &crate::p1::Section, doc_id: &str) -> crate::p1::Result<Value> {
@@ -648,11 +642,7 @@ fn read_decimal(p1: &crate::p1::Section, doc_id: &str) -> crate::p1::Result<Valu
         return Ok(Value::Decimal { value: v });
     }
 
-    ftd::e2(
-        "not a valid float",
-        doc_id,
-        p1.line_number,
-    )
+    ftd::e2("not a valid float", doc_id, p1.line_number)
 }
 
 fn read_boolean(p1: &crate::p1::Section, doc_id: &str) -> crate::p1::Result<Value> {
@@ -661,11 +651,7 @@ fn read_boolean(p1: &crate::p1::Section, doc_id: &str) -> crate::p1::Result<Valu
         return Ok(Value::Boolean { value: v });
     }
 
-    ftd::e2(
-        "not a valid bool",
-        doc_id,
-        p1.line_number,
-    )
+    ftd::e2("not a valid bool", doc_id, p1.line_number)
 }
 
 #[derive(Debug, Clone)]

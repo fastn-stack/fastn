@@ -392,7 +392,7 @@ impl Document {
                 }
                 serde_json::Value::Array(a)
             }
-            t => return ftd::e2(format!("not a record: {:?}", t),  self.name.as_str(), 0),
+            t => return ftd::e2(format!("not a record: {:?}", t), self.name.as_str(), 0),
         };
 
         Ok(serde_json::from_value(json)?)
@@ -459,7 +459,13 @@ impl Document {
             } => self.object_to_json(Some(variant), fields)?,
             crate::Value::List { data, .. } => self.list_to_json(data)?,
             crate::Value::None { .. } => serde_json::Value::Null,
-            _ => return ftd::e2(format!("unhandled value found(value_to_json): {:?}", v), self.name.as_str(), 0),
+            _ => {
+                return ftd::e2(
+                    format!("unhandled value found(value_to_json): {:?}", v),
+                    self.name.as_str(),
+                    0,
+                )
+            }
         })
     }
 

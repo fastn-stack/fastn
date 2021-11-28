@@ -108,11 +108,7 @@ impl Record {
                         }
                     }
                     crate::p2::Kind::Integer { .. } => {
-                        return ftd::e2(
-                            "unexpected integer",
-                            doc.name,
-                            p1.line_number,
-                        );
+                        return ftd::e2("unexpected integer", doc.name, p1.line_number);
                     }
                     t => {
                         return ftd::e2(

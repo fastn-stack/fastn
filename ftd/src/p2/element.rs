@@ -12,11 +12,7 @@ pub fn common_from_properties(
     let submit = crate::p2::utils::string_optional("submit", properties, doc.name, 0)?;
     let link = crate::p2::utils::string_optional("link", properties, doc.name, 0)?;
     if let (Some(_), Some(_)) = (&submit, &link) {
-        return ftd::e2(
-            "Cannot have both submit and link together",
-            doc.name,
-            0,
-        );
+        return ftd::e2("Cannot have both submit and link together", doc.name, 0);
     }
     let gradient_color_str =
         crate::p2::utils::string_optional("gradient-colors", properties, doc.name, 0)?;
@@ -821,20 +817,8 @@ pub fn iframe_from_properties(
     ) {
         (Some(src), None) => src,
         (None, Some(id)) => id,
-        (Some(_), Some(_)) => {
-            return ftd::e2(
-                "both src and youtube id provided",
-                doc.name,
-                0,
-            )
-        }
-        (None, None) => {
-            return ftd::e2(
-                "src or youtube id is required",
-                doc.name,
-                0,
-            )
-        }
+        (Some(_), Some(_)) => return ftd::e2("both src and youtube id provided", doc.name, 0),
+        (None, None) => return ftd::e2("src or youtube id is required", doc.name, 0),
     };
 
     Ok(ftd_rt::IFrame {
@@ -1137,13 +1121,7 @@ pub fn color_from(l: Option<String>, doc_id: &str) -> ftd::p1::Result<Option<ftd
             b: v.b,
             alpha: v.a,
         })),
-        Err(e) => {
-            return ftd::e2(
-                format!("{} is not a valid color: {:?}", v, e),
-                doc_id,
-                0,
-            )
-        }
+        Err(e) => return ftd::e2(format!("{} is not a valid color: {:?}", v, e), doc_id, 0),
     }
 }
 

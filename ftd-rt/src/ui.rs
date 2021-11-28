@@ -1,5 +1,4 @@
-#[derive(serde::Deserialize, Clone, Debug)]
-#[cfg_attr(not(feature = "wasm"), derive(PartialEq, serde::Serialize))]
+#[derive(serde::Deserialize, Clone, Debug, PartialEq, serde::Serialize)]
 #[serde(tag = "type")]
 pub enum Element {
     Text(Text),
@@ -813,8 +812,7 @@ impl Element {
     }
 }
 
-#[derive(serde::Deserialize, PartialEq)]
-#[cfg_attr(not(feature = "wasm"), derive(Debug, Clone, serde::Serialize))]
+#[derive(serde::Deserialize, PartialEq, Debug, Clone, serde::Serialize)]
 #[serde(tag = "type")]
 pub enum Length {
     Fill,
@@ -879,11 +877,7 @@ impl Length {
     }
 }
 
-#[derive(serde::Deserialize)]
-#[cfg_attr(
-    not(feature = "wasm"),
-    derive(Debug, PartialEq, Clone, serde::Serialize)
-)]
+#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
 #[serde(tag = "type")]
 pub enum Position {
     Center,
@@ -922,11 +916,7 @@ impl Position {
 }
 
 // https://package.elm-lang.org/packages/mdgriffith/elm-ui/latest/Element-Region
-#[derive(serde::Deserialize)]
-#[cfg_attr(
-    not(feature = "wasm"),
-    derive(Debug, PartialEq, Clone, serde::Serialize)
-)]
+#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
 pub enum Region {
     H0,
     H1,
@@ -1049,11 +1039,7 @@ impl Region {
     }
 }
 
-#[derive(serde::Deserialize)]
-#[cfg_attr(
-    not(feature = "wasm"),
-    derive(Debug, PartialEq, Clone, serde::Serialize)
-)]
+#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
 #[serde(tag = "type")]
 pub enum Overflow {
     Hidden,
@@ -1075,11 +1061,7 @@ impl Overflow {
     }
 }
 
-#[derive(serde::Deserialize)]
-#[cfg_attr(
-    not(feature = "wasm"),
-    derive(Debug, PartialEq, Clone, serde::Serialize)
-)]
+#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
 #[serde(tag = "type")]
 pub enum Anchor {
     Window,
@@ -1117,11 +1099,7 @@ impl Anchor {
     }
 }
 
-#[derive(serde::Deserialize)]
-#[cfg_attr(
-    not(feature = "wasm"),
-    derive(Debug, PartialEq, Clone, serde::Serialize)
-)]
+#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
 #[serde(tag = "type")]
 pub enum GradientDirection {
     BottomToTop,
@@ -1184,39 +1162,26 @@ impl GradientDirection {
     }
 }
 
-#[derive(serde::Deserialize)]
-#[cfg_attr(
-    not(feature = "wasm"),
-    derive(Debug, PartialEq, Clone, serde::Serialize)
-)]
+#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
 pub enum AttributeType {
     Style,
     Attribute,
 }
 
-#[derive(serde::Deserialize)]
-#[cfg_attr(
-    not(feature = "wasm"),
-    derive(Debug, PartialEq, Clone, serde::Serialize)
-)]
+#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
 pub struct ConditionalAttribute {
     pub attribute_type: AttributeType,
     pub conditions_with_value: Vec<(ftd_rt::Condition, ConditionalValue)>,
     pub default: Option<ConditionalValue>,
 }
 
-#[derive(serde::Deserialize, Clone)]
-#[cfg_attr(not(feature = "wasm"), derive(Debug, PartialEq, serde::Serialize))]
+#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
 pub struct ConditionalValue {
     pub value: String,
     pub important: bool,
 }
 
-#[derive(serde::Deserialize)]
-#[cfg_attr(
-    not(feature = "wasm"),
-    derive(Debug, PartialEq, Clone, serde::Serialize, Default)
-)]
+#[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
 pub struct Common {
     pub conditional_attribute: std::collections::BTreeMap<String, ConditionalAttribute>,
     pub locals: ftd_rt::Map,
@@ -1294,11 +1259,7 @@ pub struct Common {
     // TODO: border-{shadow, glow}
 }
 
-#[derive(serde::Deserialize)]
-#[cfg_attr(
-    not(feature = "wasm"),
-    derive(Debug, PartialEq, Clone, serde::Serialize, Default)
-)]
+#[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
 pub struct Container {
     pub children: Vec<ftd_rt::Element>,
     pub external_children: Option<(String, Vec<Vec<usize>>, Vec<ftd_rt::Element>)>,
@@ -1318,11 +1279,7 @@ impl Container {
     }
 }
 
-#[derive(serde::Deserialize)]
-#[cfg_attr(
-    not(feature = "wasm"),
-    derive(Debug, PartialEq, Clone, serde::Serialize, Default)
-)]
+#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
 pub struct Image {
     pub src: String,
     pub description: String,
@@ -1330,41 +1287,25 @@ pub struct Image {
     pub crop: bool,
 }
 
-#[derive(serde::Deserialize)]
-#[cfg_attr(
-    not(feature = "wasm"),
-    derive(Debug, PartialEq, Clone, serde::Serialize, Default)
-)]
+#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
 pub struct Row {
     pub container: Container,
     pub common: Common,
 }
 
-#[derive(serde::Deserialize)]
-#[cfg_attr(
-    not(feature = "wasm"),
-    derive(Debug, PartialEq, Clone, serde::Serialize, Default)
-)]
+#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
 pub struct Scene {
     pub container: Container,
     pub common: Common,
 }
 
-#[derive(serde::Deserialize)]
-#[cfg_attr(
-    not(feature = "wasm"),
-    derive(Debug, PartialEq, Clone, serde::Serialize, Default)
-)]
+#[derive(serde::Deserialize, Debug, PartialEq, Clone, Default, serde::Serialize)]
 pub struct Column {
     pub container: Container,
     pub common: Common,
 }
 
-#[derive(serde::Deserialize)]
-#[cfg_attr(
-    not(feature = "wasm"),
-    derive(Debug, PartialEq, Clone, serde::Serialize)
-)]
+#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
 #[serde(tag = "type")]
 pub enum TextAlign {
     Left,
@@ -1392,11 +1333,7 @@ impl TextAlign {
     }
 }
 
-#[derive(serde::Deserialize)]
-#[cfg_attr(
-    not(feature = "wasm"),
-    derive(Debug, PartialEq, Clone, serde::Serialize)
-)]
+#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
 #[serde(tag = "type")]
 pub enum FontDisplay {
     Swap,
@@ -1419,11 +1356,7 @@ impl FontDisplay {
     }
 }
 
-#[derive(serde::Deserialize)]
-#[cfg_attr(
-    not(feature = "wasm"),
-    derive(Debug, PartialEq, Clone, serde::Serialize)
-)]
+#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
 #[serde(tag = "type")]
 pub enum NamedFont {
     Monospace,
@@ -1446,22 +1379,14 @@ impl NamedFont {
     }
 }
 
-#[derive(serde::Deserialize)]
-#[cfg_attr(
-    not(feature = "wasm"),
-    derive(Debug, PartialEq, Clone, serde::Serialize, Default)
-)]
+#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
 pub struct ExternalFont {
     pub url: String,
     pub name: String,
     pub display: FontDisplay,
 }
 
-#[derive(serde::Deserialize)]
-#[cfg_attr(
-    not(feature = "wasm"),
-    derive(Debug, PartialEq, Clone, serde::Serialize)
-)]
+#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
 #[serde(tag = "type")]
 pub enum Weight {
     Heavy,
@@ -1481,11 +1406,7 @@ impl Default for Weight {
     }
 }
 
-#[derive(serde::Deserialize)]
-#[cfg_attr(
-    not(feature = "wasm"),
-    derive(Debug, PartialEq, Clone, serde::Serialize, Default)
-)]
+#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
 pub struct Style {
     pub italic: bool,
     pub underline: bool,
@@ -1527,11 +1448,7 @@ impl Style {
     }
 }
 
-#[derive(serde::Deserialize)]
-#[cfg_attr(
-    not(feature = "wasm"),
-    derive(Debug, PartialEq, Clone, serde::Serialize)
-)]
+#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
 #[serde(tag = "type")]
 pub enum TextFormat {
     // FTD, // TODO
@@ -1566,21 +1483,13 @@ impl TextFormat {
     }
 }
 
-#[derive(serde::Deserialize)]
-#[cfg_attr(
-    not(feature = "wasm"),
-    derive(Debug, PartialEq, Clone, serde::Serialize, Default)
-)]
+#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
 pub struct IFrame {
     pub src: String,
     pub common: Common,
 }
 
-#[derive(serde::Deserialize)]
-#[cfg_attr(
-    not(feature = "wasm"),
-    derive(Debug, PartialEq, Clone, serde::Serialize, Default)
-)]
+#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
 pub struct Text {
     pub text: ftd_rt::Rendered,
     pub line: bool,
@@ -1601,11 +1510,7 @@ pub struct Text {
     // TODO: shadow, glow
 }
 
-#[derive(serde::Deserialize)]
-#[cfg_attr(
-    not(feature = "wasm"),
-    derive(Debug, PartialEq, Clone, serde::Serialize, Default)
-)]
+#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
 pub struct TextBlock {
     pub text: ftd_rt::Rendered,
     pub line: bool,
@@ -1619,11 +1524,7 @@ pub struct TextBlock {
     pub line_clamp: Option<i64>,
 }
 
-#[derive(serde::Deserialize)]
-#[cfg_attr(
-    not(feature = "wasm"),
-    derive(Debug, PartialEq, Clone, serde::Serialize, Default)
-)]
+#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
 pub struct Code {
     pub text: ftd_rt::Rendered,
     pub common: Common,
@@ -1636,11 +1537,7 @@ pub struct Code {
     pub line_clamp: Option<i64>,
 }
 
-#[derive(serde::Deserialize)]
-#[cfg_attr(
-    not(feature = "wasm"),
-    derive(Debug, PartialEq, Clone, serde::Serialize, Default)
-)]
+#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
 pub struct Color {
     pub r: u8,
     pub g: u8,
@@ -1648,11 +1545,7 @@ pub struct Color {
     pub alpha: f32,
 }
 
-#[derive(serde::Deserialize)]
-#[cfg_attr(
-    not(feature = "wasm"),
-    derive(Debug, PartialEq, Clone, serde::Serialize, Default)
-)]
+#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
 pub struct Input {
     pub common: Common,
     pub placeholder: Option<String>,
