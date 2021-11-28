@@ -219,11 +219,7 @@ impl<'a> TDoc<'a> {
         })
     }
 
-    pub fn get_record(
-        &self,
-        line_number: usize,
-        name: &str,
-    ) -> ftd::p1::Result<ftd::p2::Record> {
+    pub fn get_record(&self, line_number: usize, name: &str) -> ftd::p1::Result<ftd::p2::Record> {
         match self.get_thing(line_number, name)? {
             ftd::p2::Thing::Record(v) => Ok(v),
             v => self.err("not a record", v, "get_record", line_number),
@@ -237,11 +233,7 @@ impl<'a> TDoc<'a> {
         }
     }
 
-    pub fn is_variable_record_type(
-        &self,
-        line_number: usize,
-        name: &str,
-    ) -> ftd::p1::Result<bool> {
+    pub fn is_variable_record_type(&self, line_number: usize, name: &str) -> ftd::p1::Result<bool> {
         match self.get_value(line_number, name)? {
             ftd::Value::Record { .. } => Ok(true),
             _ => Ok(false),
@@ -292,11 +284,7 @@ impl<'a> TDoc<'a> {
         )
     }
 
-    pub fn get_component(
-        &self,
-        line_number: usize,
-        name: &str,
-    ) -> ftd::p1::Result<ftd::Component> {
+    pub fn get_component(&self, line_number: usize, name: &str) -> ftd::p1::Result<ftd::Component> {
         match self.get_thing(line_number, name)? {
             ftd::p2::Thing::Component(v) => Ok(v),
             v => self.err("not a component", v, "get_component", line_number),
@@ -315,11 +303,7 @@ impl<'a> TDoc<'a> {
         }
     }
 
-    pub fn get_root(
-        &'a self,
-        name: &'a str,
-        line_number: usize,
-    ) -> ftd::p1::Result<Option<&str>> {
+    pub fn get_root(&'a self, name: &'a str, line_number: usize) -> ftd::p1::Result<Option<&str>> {
         if name.contains('#') {
             match name.split_once('#') {
                 Some((p1, _)) => {
@@ -387,12 +371,10 @@ impl<'a> TDoc<'a> {
                     None => {
                         let thing = self.get_thing(line_number, m)?;
                         match thing.clone() {
-                            ftd::p2::Thing::OrType(e) => {
-                                Some(ftd::p2::Thing::OrTypeWithVariant {
-                                    e,
-                                    variant: v.to_string(),
-                                })
-                            }
+                            ftd::p2::Thing::OrType(e) => Some(ftd::p2::Thing::OrTypeWithVariant {
+                                e,
+                                variant: v.to_string(),
+                            }),
                             ftd::p2::Thing::Variable(ftd::Variable {
                                 name,
                                 value,
@@ -418,9 +400,8 @@ impl<'a> TDoc<'a> {
                                         value: val.clone(),
                                         conditions,
                                     }));
-                                } else if let Some(ftd::PropertyValue::Reference {
-                                    name, ..
-                                }) = fields.get(v)
+                                } else if let Some(ftd::PropertyValue::Reference { name, .. }) =
+                                    fields.get(v)
                                 {
                                     self.bag.get(name).map(ToOwned::to_owned)
                                 } else {
@@ -475,12 +456,10 @@ impl<'a> TDoc<'a> {
                     }
                 }
                 (None, e, Some(v)) => match self.bag.get(format!("{}#{}", self.name, e).as_str()) {
-                    Some(ftd::p2::Thing::OrType(e)) => {
-                        Some(ftd::p2::Thing::OrTypeWithVariant {
-                            e: e.to_owned(),
-                            variant: v.to_string(),
-                        })
-                    }
+                    Some(ftd::p2::Thing::OrType(e)) => Some(ftd::p2::Thing::OrTypeWithVariant {
+                        e: e.to_owned(),
+                        variant: v.to_string(),
+                    }),
                     Some(t) => {
                         return self.err("expected or-type, found", t, "get_thing", line_number);
                     }

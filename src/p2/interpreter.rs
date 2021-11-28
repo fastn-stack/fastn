@@ -7608,8 +7608,7 @@ mod test {
                                     s("title"),
                                     ftd::PropertyValue::Value {
                                         value: ftd::variable::Value::String {
-                                            text: "\"ftd: FifthTry Document Format\""
-                                                .to_string(),
+                                            text: "\"ftd: FifthTry Document Format\"".to_string(),
                                             source: ftd::TextSource::Header,
                                         },
                                     },

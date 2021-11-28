@@ -246,11 +246,7 @@ impl Document {
         })
     }
 
-    pub fn from(
-        name: &str,
-        source: &str,
-        lib: &dyn ftd::p2::Library,
-    ) -> ftd::p1::Result<Document> {
+    pub fn from(name: &str, source: &str, lib: &dyn ftd::p2::Library) -> ftd::p1::Result<Document> {
         let mut d = Self::without_render(name, source, lib)?;
 
         let mut rt = ftd::RT::from(
@@ -504,10 +500,7 @@ impl Document {
         Ok(serde_json::Value::Object(map))
     }
 
-    fn property_value_to_json(
-        &self,
-        v: &ftd::PropertyValue,
-    ) -> ftd::p1::Result<serde_json::Value> {
+    fn property_value_to_json(&self, v: &ftd::PropertyValue) -> ftd::p1::Result<serde_json::Value> {
         match v {
             ftd::PropertyValue::Value { value, .. } => self.value_to_json(value),
             ftd::PropertyValue::Reference { name, .. } => self.json(name),

@@ -1785,26 +1785,17 @@ fn read_properties(
         let mut default_argument: std::collections::BTreeMap<String, ftd::p2::Kind> =
             Default::default();
         default_argument.insert("id".to_string(), ftd::p2::Kind::string().into_optional());
-        default_argument.insert(
-            "top".to_string(),
-            ftd::p2::Kind::integer().into_optional(),
-        );
+        default_argument.insert("top".to_string(), ftd::p2::Kind::integer().into_optional());
         default_argument.insert(
             "bottom".to_string(),
             ftd::p2::Kind::integer().into_optional(),
         );
-        default_argument.insert(
-            "left".to_string(),
-            ftd::p2::Kind::integer().into_optional(),
-        );
+        default_argument.insert("left".to_string(), ftd::p2::Kind::integer().into_optional());
         default_argument.insert(
             "right".to_string(),
             ftd::p2::Kind::integer().into_optional(),
         );
-        default_argument.insert(
-            "align".to_string(),
-            ftd::p2::Kind::string().into_optional(),
-        );
+        default_argument.insert("align".to_string(), ftd::p2::Kind::string().into_optional());
         default_argument.insert(
             "scale".to_string(),
             ftd::p2::Kind::decimal().into_optional(),
@@ -1949,10 +1940,7 @@ mod test {
                 root: "ftd.text".to_string(),
                 arguments: std::array::IntoIter::new([
                     (s("foo"), ftd::p2::Kind::string()),
-                    (
-                        s("bar"),
-                        ftd::p2::Kind::optional(ftd::p2::Kind::integer())
-                    )
+                    (s("bar"), ftd::p2::Kind::optional(ftd::p2::Kind::integer()))
                 ])
                 .collect(),
                 properties: std::array::IntoIter::new([(

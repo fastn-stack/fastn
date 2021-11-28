@@ -21,10 +21,10 @@ mod value_with_default;
 pub(crate) mod variable;
 mod youtube_id;
 
-pub use ftd::value_with_default::ValueWithDefault;
 pub use component::{ChildComponent, Component, Instruction};
 pub use condition::Condition;
 pub use event::{Action, Event};
+pub use ftd::value_with_default::ValueWithDefault;
 pub use html::{anchor, color, length, overflow, Node};
 pub use or_type::OrType;
 pub use rt::RT;
@@ -210,11 +210,7 @@ where
     })
 }
 
-pub fn unknown_processor_error<T, S>(
-    m: S,
-    doc_id: String,
-    line_number: usize,
-) -> ftd::p1::Result<T>
+pub fn unknown_processor_error<T, S>(m: S, doc_id: String, line_number: usize) -> ftd::p1::Result<T>
 where
     S: Into<String>,
 {

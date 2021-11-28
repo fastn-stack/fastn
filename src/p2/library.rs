@@ -46,12 +46,11 @@ pub trait Library {
 pub struct TestLibrary {}
 
 fn read_version() -> ftd::p1::Result<ftd::Value> {
-    let get =
-        std::fs::read_to_string("./Cargo.toml").map_err(|e| ftd::p1::Error::ParseError {
-            message: e.to_string(),
-            doc_id: "".to_string(),
-            line_number: 0,
-        })?;
+    let get = std::fs::read_to_string("./Cargo.toml").map_err(|e| ftd::p1::Error::ParseError {
+        message: e.to_string(),
+        doc_id: "".to_string(),
+        line_number: 0,
+    })?;
 
     let version_string = "version";
     for line in get.split('\n') {
@@ -71,12 +70,11 @@ fn read_version() -> ftd::p1::Result<ftd::Value> {
 
 fn read_package(section: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Result<ftd::Value> {
     let var = ftd::Variable::list_from_p1(section, doc)?;
-    let get =
-        std::fs::read_to_string("./Cargo.toml").map_err(|e| ftd::p1::Error::ParseError {
-            message: e.to_string(),
-            doc_id: doc.name.to_string(),
-            line_number: section.line_number,
-        })?;
+    let get = std::fs::read_to_string("./Cargo.toml").map_err(|e| ftd::p1::Error::ParseError {
+        message: e.to_string(),
+        doc_id: doc.name.to_string(),
+        line_number: section.line_number,
+    })?;
     if let ftd::Value::List {
         kind:
             ftd::p2::Kind::String {
@@ -124,12 +122,11 @@ fn read_package(section: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Res
 
 fn read_records(section: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Result<ftd::Value> {
     let var = ftd::Variable::list_from_p1(section, doc)?;
-    let get =
-        std::fs::read_to_string("./Cargo.toml").map_err(|e| ftd::p1::Error::ParseError {
-            message: e.to_string(),
-            doc_id: doc.name.to_string(),
-            line_number: section.line_number,
-        })?;
+    let get = std::fs::read_to_string("./Cargo.toml").map_err(|e| ftd::p1::Error::ParseError {
+        message: e.to_string(),
+        doc_id: doc.name.to_string(),
+        line_number: section.line_number,
+    })?;
     if let ftd::Value::List {
         kind: ftd::p2::Kind::Record { name },
         ..

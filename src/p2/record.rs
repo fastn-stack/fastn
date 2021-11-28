@@ -17,8 +17,7 @@ impl Record {
         p1: &ftd::p1::Section,
         doc: &ftd::p2::TDoc,
     ) -> ftd::p1::Result<std::collections::BTreeMap<String, ftd::PropertyValue>> {
-        let mut fields: std::collections::BTreeMap<String, ftd::PropertyValue> =
-            Default::default();
+        let mut fields: std::collections::BTreeMap<String, ftd::PropertyValue> = Default::default();
         self.assert_no_extra_fields(doc.name, &p1.header, &p1.caption, &p1.body)?;
         for (name, kind) in self.fields.iter() {
             let value = match (
@@ -47,77 +46,77 @@ impl Record {
                         p1.line_number,
                     );
                 }
-                (
-                    Err(ftd::p1::Error::NotFound { .. }),
-                    ftd::p2::Kind::List { kind: list_kind },
-                ) => match list_kind.as_ref() {
-                    ftd::p2::Kind::OrType { name: or_type_name } => {
-                        let e = doc.get_or_type(p1.line_number, or_type_name)?;
-                        let mut values: Vec<ftd::Value> = vec![];
-                        for s in p1.sub_sections.0.iter() {
-                            if s.is_commented {
-                                continue;
-                            }
-                            for v in e.variants.iter() {
-                                let variant = v.variant_name().expect("record.fields").to_string();
-                                if s.name == format!("{}.{}", name, variant.as_str()) {
-                                    values.push(ftd::Value::OrType {
-                                        variant,
-                                        name: e.name.to_string(),
-                                        fields: v.fields_from_sub_section(s, doc)?,
-                                    })
+                (Err(ftd::p1::Error::NotFound { .. }), ftd::p2::Kind::List { kind: list_kind }) => {
+                    match list_kind.as_ref() {
+                        ftd::p2::Kind::OrType { name: or_type_name } => {
+                            let e = doc.get_or_type(p1.line_number, or_type_name)?;
+                            let mut values: Vec<ftd::Value> = vec![];
+                            for s in p1.sub_sections.0.iter() {
+                                if s.is_commented {
+                                    continue;
+                                }
+                                for v in e.variants.iter() {
+                                    let variant =
+                                        v.variant_name().expect("record.fields").to_string();
+                                    if s.name == format!("{}.{}", name, variant.as_str()) {
+                                        values.push(ftd::Value::OrType {
+                                            variant,
+                                            name: e.name.to_string(),
+                                            fields: v.fields_from_sub_section(s, doc)?,
+                                        })
+                                    }
                                 }
                             }
-                        }
-                        ftd::PropertyValue::Value {
-                            value: ftd::Value::List {
-                                kind: list_kind.inner().to_owned(),
-                                data: values,
-                            },
-                        }
-                    }
-                    ftd::p2::Kind::Record { .. } => {
-                        let mut list = ftd::Value::List {
-                            kind: list_kind.inner().to_owned(),
-                            data: vec![],
-                        };
-                        for (i, k, v) in p1.header.0.iter() {
-                            if *k != *name || k.starts_with('/') {
-                                continue;
+                            ftd::PropertyValue::Value {
+                                value: ftd::Value::List {
+                                    kind: list_kind.inner().to_owned(),
+                                    data: values,
+                                },
                             }
-                            list = doc.get_value(i.to_owned(), v)?;
                         }
-                        ftd::PropertyValue::Value { value: list }
-                    }
-                    ftd::p2::Kind::String { .. } => {
-                        let mut values: Vec<ftd::Value> = vec![];
-                        for (_, k, v) in p1.header.0.iter() {
-                            if *k != *name || k.starts_with('/') {
-                                continue;
-                            }
-                            values.push(ftd::Value::String {
-                                text: v.to_string(),
-                                source: ftd::TextSource::Header,
-                            });
-                        }
-                        ftd::PropertyValue::Value {
-                            value: ftd::Value::List {
+                        ftd::p2::Kind::Record { .. } => {
+                            let mut list = ftd::Value::List {
                                 kind: list_kind.inner().to_owned(),
-                                data: values,
-                            },
+                                data: vec![],
+                            };
+                            for (i, k, v) in p1.header.0.iter() {
+                                if *k != *name || k.starts_with('/') {
+                                    continue;
+                                }
+                                list = doc.get_value(i.to_owned(), v)?;
+                            }
+                            ftd::PropertyValue::Value { value: list }
+                        }
+                        ftd::p2::Kind::String { .. } => {
+                            let mut values: Vec<ftd::Value> = vec![];
+                            for (_, k, v) in p1.header.0.iter() {
+                                if *k != *name || k.starts_with('/') {
+                                    continue;
+                                }
+                                values.push(ftd::Value::String {
+                                    text: v.to_string(),
+                                    source: ftd::TextSource::Header,
+                                });
+                            }
+                            ftd::PropertyValue::Value {
+                                value: ftd::Value::List {
+                                    kind: list_kind.inner().to_owned(),
+                                    data: values,
+                                },
+                            }
+                        }
+                        ftd::p2::Kind::Integer { .. } => {
+                            return ftd::e2("unexpected integer", doc.name, p1.line_number);
+                        }
+                        t => {
+                            return ftd::e2(
+                                format!("not yet implemented: {:?}", t),
+                                doc.name,
+                                p1.line_number,
+                            )
                         }
                     }
-                    ftd::p2::Kind::Integer { .. } => {
-                        return ftd::e2("unexpected integer", doc.name, p1.line_number);
-                    }
-                    t => {
-                        return ftd::e2(
-                            format!("not yet implemented: {:?}", t),
-                            doc.name,
-                            p1.line_number,
-                        )
-                    }
-                },
+                }
                 (Err(ftd::p1::Error::NotFound { .. }), _) => kind.read_section(
                     p1.line_number,
                     &p1.header,
@@ -202,8 +201,7 @@ impl Record {
         p1: &ftd::p1::SubSection,
         doc: &ftd::p2::TDoc,
     ) -> ftd::p1::Result<std::collections::BTreeMap<String, ftd::PropertyValue>> {
-        let mut fields: std::collections::BTreeMap<String, ftd::PropertyValue> =
-            Default::default();
+        let mut fields: std::collections::BTreeMap<String, ftd::PropertyValue> = Default::default();
         self.assert_no_extra_fields(doc.name, &p1.header, &p1.caption, &p1.body)?;
         for (name, kind) in self.fields.iter() {
             fields.insert(

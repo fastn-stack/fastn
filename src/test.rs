@@ -9,12 +9,9 @@ macro_rules! p {
     };
     ($s:expr, $t: expr) => {
         let (ebag, ecol): (std::collections::BTreeMap<String, ftd::p2::Thing>, _) = $t;
-        let (mut bag, col) = ftd::p2::interpreter::interpret(
-            "foo/bar",
-            indoc::indoc!($s),
-            &ftd::p2::TestLibrary {},
-        )
-        .expect("found error");
+        let (mut bag, col) =
+            ftd::p2::interpreter::interpret("foo/bar", indoc::indoc!($s), &ftd::p2::TestLibrary {})
+                .expect("found error");
         for v in bag.values_mut() {
             if let ftd::p2::Thing::Component(c) = v {
                 c.invocations.clear();

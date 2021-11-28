@@ -155,13 +155,7 @@ pub fn common_from_properties(
             ftd::p2::utils::string_optional("border-color", properties, doc.name, 0)?,
             doc.name,
         )?,
-        border_width: ftd::p2::utils::int_with_default(
-            "border-width",
-            0,
-            properties,
-            doc.name,
-            0,
-        )?,
+        border_width: ftd::p2::utils::int_with_default("border-width", 0, properties, doc.name, 0)?,
         border_radius: ftd::p2::utils::int_with_default(
             "border-radius",
             0,
@@ -208,18 +202,8 @@ pub fn common_from_properties(
         right: ftd::p2::utils::int_optional("right", properties, doc.name, 0)?,
         cursor: ftd::p2::utils::string_optional("cursor", properties, doc.name, 0)?,
         submit,
-        shadow_offset_x: ftd::p2::utils::int_optional(
-            "shadow-offset-x",
-            properties,
-            doc.name,
-            0,
-        )?,
-        shadow_offset_y: ftd::p2::utils::int_optional(
-            "shadow-offset-y",
-            properties,
-            doc.name,
-            0,
-        )?,
+        shadow_offset_x: ftd::p2::utils::int_optional("shadow-offset-x", properties, doc.name, 0)?,
+        shadow_offset_y: ftd::p2::utils::int_optional("shadow-offset-y", properties, doc.name, 0)?,
         shadow_size: ftd::p2::utils::int_optional("shadow-size", properties, doc.name, 0)?,
         shadow_blur: ftd::p2::utils::int_optional("shadow-blur", properties, doc.name, 0)?,
         shadow_color: color_from(
@@ -267,13 +251,7 @@ pub fn common_from_properties(
             },
             doc.name,
         )?,
-        inner: ftd::p2::utils::bool_with_default(
-            "inner",
-            inner_default,
-            properties,
-            doc.name,
-            0,
-        )?,
+        inner: ftd::p2::utils::bool_with_default("inner", inner_default, properties, doc.name, 0)?,
     })
 }
 
@@ -323,10 +301,7 @@ fn common_arguments() -> Vec<(String, ftd::p2::Kind)> {
             "border-right-radius".to_string(),
             ftd::p2::Kind::integer().into_optional(),
         ),
-        (
-            "width".to_string(),
-            ftd::p2::Kind::string().into_optional(),
-        ),
+        ("width".to_string(), ftd::p2::Kind::string().into_optional()),
         (
             "min-width".to_string(),
             ftd::p2::Kind::string().into_optional(),
@@ -356,10 +331,7 @@ fn common_arguments() -> Vec<(String, ftd::p2::Kind)> {
             "region".to_string(),
             ftd::p2::Kind::string().into_optional(),
         ),
-        (
-            "color".to_string(),
-            ftd::p2::Kind::string().into_optional(),
-        ),
+        ("color".to_string(), ftd::p2::Kind::string().into_optional()),
         (
             "background-color".to_string(),
             ftd::p2::Kind::string().into_optional(),
@@ -417,10 +389,7 @@ fn common_arguments() -> Vec<(String, ftd::p2::Kind)> {
             "margin-right".to_string(),
             ftd::p2::Kind::integer().into_optional(),
         ),
-        (
-            "link".to_string(),
-            ftd::p2::Kind::string().into_optional(),
-        ),
+        ("link".to_string(), ftd::p2::Kind::string().into_optional()),
         (
             "submit".to_string(),
             ftd::p2::Kind::string().into_optional(),
@@ -433,18 +402,12 @@ fn common_arguments() -> Vec<(String, ftd::p2::Kind)> {
             "sticky".to_string(),
             ftd::p2::Kind::boolean().into_optional(),
         ),
-        (
-            "top".to_string(),
-            ftd::p2::Kind::integer().into_optional(),
-        ),
+        ("top".to_string(), ftd::p2::Kind::integer().into_optional()),
         (
             "bottom".to_string(),
             ftd::p2::Kind::integer().into_optional(),
         ),
-        (
-            "left".to_string(),
-            ftd::p2::Kind::integer().into_optional(),
-        ),
+        ("left".to_string(), ftd::p2::Kind::integer().into_optional()),
         (
             "right".to_string(),
             ftd::p2::Kind::integer().into_optional(),
@@ -564,22 +527,13 @@ pub fn container_from_properties(
 
 fn container_arguments() -> Vec<(String, ftd::p2::Kind)> {
     vec![
-        (
-            "open".to_string(),
-            ftd::p2::Kind::string().into_optional(),
-        ),
+        ("open".to_string(), ftd::p2::Kind::string().into_optional()),
         (
             "spacing".to_string(),
             ftd::p2::Kind::integer().into_optional(),
         ),
-        (
-            "align".to_string(),
-            ftd::p2::Kind::string().into_optional(),
-        ),
-        (
-            "wrap".to_string(),
-            ftd::p2::Kind::boolean().into_optional(),
-        ),
+        ("align".to_string(), ftd::p2::Kind::string().into_optional()),
+        ("wrap".to_string(), ftd::p2::Kind::boolean().into_optional()),
     ]
 }
 
@@ -595,14 +549,8 @@ pub fn image_function() -> ftd::Component {
                     "description".to_string(),
                     ftd::p2::Kind::string().into_optional(),
                 ),
-                (
-                    "align".to_string(),
-                    ftd::p2::Kind::string().into_optional(),
-                ),
-                (
-                    "crop".to_string(),
-                    ftd::p2::Kind::boolean().into_optional(),
-                ),
+                ("align".to_string(), ftd::p2::Kind::string().into_optional()),
+                ("crop".to_string(), ftd::p2::Kind::boolean().into_optional()),
             ],
             common_arguments(),
         ]
@@ -1193,26 +1141,14 @@ pub fn text_function(is_text_block: bool) -> ftd::Component {
         arguments: [
             vec![
                 ("text".to_string(), ftd::p2::Kind::caption_or_body()),
-                (
-                    "align".to_string(),
-                    ftd::p2::Kind::string().into_optional(),
-                ),
-                (
-                    "style".to_string(),
-                    ftd::p2::Kind::string().into_optional(),
-                ),
-                (
-                    "size".to_string(),
-                    ftd::p2::Kind::integer().into_optional(),
-                ),
+                ("align".to_string(), ftd::p2::Kind::string().into_optional()),
+                ("style".to_string(), ftd::p2::Kind::string().into_optional()),
+                ("size".to_string(), ftd::p2::Kind::integer().into_optional()),
                 (
                     "font-url".to_string(),
                     ftd::p2::Kind::string().into_optional(),
                 ),
-                (
-                    "font".to_string(),
-                    ftd::p2::Kind::string().into_optional(),
-                ),
+                ("font".to_string(), ftd::p2::Kind::string().into_optional()),
                 (
                     "font-display".to_string(),
                     ftd::p2::Kind::string().into_optional(),
@@ -1253,34 +1189,16 @@ pub fn code_function() -> ftd::Component {
         arguments: [
             vec![
                 ("text".to_string(), ftd::p2::Kind::caption_or_body()),
-                (
-                    "align".to_string(),
-                    ftd::p2::Kind::string().into_optional(),
-                ),
-                (
-                    "style".to_string(),
-                    ftd::p2::Kind::string().into_optional(),
-                ),
-                (
-                    "lang".to_string(),
-                    ftd::p2::Kind::string().into_optional(),
-                ),
-                (
-                    "theme".to_string(),
-                    ftd::p2::Kind::string().into_optional(),
-                ),
-                (
-                    "size".to_string(),
-                    ftd::p2::Kind::integer().into_optional(),
-                ),
+                ("align".to_string(), ftd::p2::Kind::string().into_optional()),
+                ("style".to_string(), ftd::p2::Kind::string().into_optional()),
+                ("lang".to_string(), ftd::p2::Kind::string().into_optional()),
+                ("theme".to_string(), ftd::p2::Kind::string().into_optional()),
+                ("size".to_string(), ftd::p2::Kind::integer().into_optional()),
                 (
                     "font-url".to_string(),
                     ftd::p2::Kind::string().into_optional(),
                 ),
-                (
-                    "font".to_string(),
-                    ftd::p2::Kind::string().into_optional(),
-                ),
+                ("font".to_string(), ftd::p2::Kind::string().into_optional()),
                 (
                     "font-display".to_string(),
                     ftd::p2::Kind::string().into_optional(),
@@ -1321,30 +1239,18 @@ pub fn integer_function() -> ftd::Component {
         arguments: [
             vec![
                 ("value".to_string(), ftd::p2::Kind::integer()),
-                (
-                    "align".to_string(),
-                    ftd::p2::Kind::string().into_optional(),
-                ),
-                (
-                    "style".to_string(),
-                    ftd::p2::Kind::string().into_optional(),
-                ),
+                ("align".to_string(), ftd::p2::Kind::string().into_optional()),
+                ("style".to_string(), ftd::p2::Kind::string().into_optional()),
                 (
                     "format".to_string(),
                     ftd::p2::Kind::string().into_optional(),
                 ),
-                (
-                    "size".to_string(),
-                    ftd::p2::Kind::integer().into_optional(),
-                ),
+                ("size".to_string(), ftd::p2::Kind::integer().into_optional()),
                 (
                     "font-url".to_string(),
                     ftd::p2::Kind::string().into_optional(),
                 ),
-                (
-                    "font".to_string(),
-                    ftd::p2::Kind::string().into_optional(),
-                ),
+                ("font".to_string(), ftd::p2::Kind::string().into_optional()),
                 (
                     "font-display".to_string(),
                     ftd::p2::Kind::string().into_optional(),
@@ -1377,30 +1283,18 @@ pub fn decimal_function() -> ftd::Component {
         arguments: [
             vec![
                 ("value".to_string(), ftd::p2::Kind::decimal()),
-                (
-                    "align".to_string(),
-                    ftd::p2::Kind::string().into_optional(),
-                ),
-                (
-                    "style".to_string(),
-                    ftd::p2::Kind::string().into_optional(),
-                ),
+                ("align".to_string(), ftd::p2::Kind::string().into_optional()),
+                ("style".to_string(), ftd::p2::Kind::string().into_optional()),
                 (
                     "format".to_string(),
                     ftd::p2::Kind::string().into_optional(),
                 ),
-                (
-                    "size".to_string(),
-                    ftd::p2::Kind::integer().into_optional(),
-                ),
+                ("size".to_string(), ftd::p2::Kind::integer().into_optional()),
                 (
                     "font-url".to_string(),
                     ftd::p2::Kind::string().into_optional(),
                 ),
-                (
-                    "font".to_string(),
-                    ftd::p2::Kind::string().into_optional(),
-                ),
+                ("font".to_string(), ftd::p2::Kind::string().into_optional()),
                 (
                     "font-display".to_string(),
                     ftd::p2::Kind::string().into_optional(),
@@ -1460,30 +1354,18 @@ pub fn boolean_function() -> ftd::Component {
         arguments: [
             vec![
                 ("value".to_string(), ftd::p2::Kind::boolean()),
-                (
-                    "align".to_string(),
-                    ftd::p2::Kind::string().into_optional(),
-                ),
-                (
-                    "style".to_string(),
-                    ftd::p2::Kind::string().into_optional(),
-                ),
+                ("align".to_string(), ftd::p2::Kind::string().into_optional()),
+                ("style".to_string(), ftd::p2::Kind::string().into_optional()),
                 (
                     "format".to_string(),
                     ftd::p2::Kind::string().into_optional(),
                 ),
-                (
-                    "size".to_string(),
-                    ftd::p2::Kind::integer().into_optional(),
-                ),
+                ("size".to_string(), ftd::p2::Kind::integer().into_optional()),
                 (
                     "font-url".to_string(),
                     ftd::p2::Kind::string().into_optional(),
                 ),
-                (
-                    "font".to_string(),
-                    ftd::p2::Kind::string().into_optional(),
-                ),
+                ("font".to_string(), ftd::p2::Kind::string().into_optional()),
                 (
                     "font-display".to_string(),
                     ftd::p2::Kind::string().into_optional(),
@@ -1492,14 +1374,8 @@ pub fn boolean_function() -> ftd::Component {
                     "line-height".to_string(),
                     ftd::p2::Kind::string().into_optional(),
                 ),
-                (
-                    "true".to_string(),
-                    ftd::p2::Kind::string().into_optional(),
-                ),
-                (
-                    "false".to_string(),
-                    ftd::p2::Kind::string().into_optional(),
-                ),
+                ("true".to_string(), ftd::p2::Kind::string().into_optional()),
+                ("false".to_string(), ftd::p2::Kind::string().into_optional()),
             ],
             common_arguments(),
         ]

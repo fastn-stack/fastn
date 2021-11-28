@@ -322,12 +322,11 @@ impl Kind {
             Kind::Boolean { .. } => Ok(ftd::PropertyValue::Value {
                 value: ftd::Value::Boolean {
                     value: p1.bool(doc.name, line_number, name).unwrap_or(
-                        v.parse::<bool>()
-                            .map_err(|e| ftd::p1::Error::ParseError {
-                                message: e.to_string(),
-                                doc_id: doc.name.to_string(),
-                                line_number,
-                            })?,
+                        v.parse::<bool>().map_err(|e| ftd::p1::Error::ParseError {
+                            message: e.to_string(),
+                            doc_id: doc.name.to_string(),
+                            line_number,
+                        })?,
                     ),
                 },
             }),
