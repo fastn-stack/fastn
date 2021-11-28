@@ -7039,7 +7039,7 @@ mod test {
         main.container
             .children
             .push(ftd_rt::Element::Text(ftd_rt::Text {
-                text: ftd::markdown_line("\"0.1.4\""),
+                text: ftd::markdown_line("\"0.1.8\""),
                 line: true,
                 common: ftd_rt::Common {
                     reference: Some(s("foo/bar#test")),
@@ -7055,7 +7055,7 @@ mod test {
             crate::p2::Thing::Variable(crate::Variable {
                 name: "test".to_string(),
                 value: crate::Value::String {
-                    text: "\"0.1.4\"".to_string(),
+                    text: "\"0.1.8\"".to_string(),
                     source: crate::TextSource::Header,
                 },
                 conditions: vec![],
@@ -7086,7 +7086,7 @@ mod test {
         main.container
             .children
             .push(ftd_rt::Element::Text(ftd_rt::Text {
-                text: ftd::markdown_line("\"0.1.4\""),
+                text: ftd::markdown_line("\"0.1.8\""),
                 line: true,
                 common: ftd_rt::Common {
                     reference: Some(s("foo/bar#test")),
@@ -7102,7 +7102,7 @@ mod test {
             crate::p2::Thing::Variable(crate::Variable {
                 name: "test".to_string(),
                 value: crate::Value::String {
-                    text: "\"0.1.4\"".to_string(),
+                    text: "\"0.1.8\"".to_string(),
                     source: crate::TextSource::Header,
                 },
                 conditions: vec![],
@@ -7143,7 +7143,7 @@ mod test {
         main.container
             .children
             .push(ftd_rt::Element::Text(ftd_rt::Text {
-                text: ftd::markdown_line("\"0.1.4\""),
+                text: ftd::markdown_line("\"0.1.8\""),
                 line: true,
                 ..Default::default()
             }));
@@ -7159,7 +7159,7 @@ mod test {
         main.container
             .children
             .push(ftd_rt::Element::Text(ftd_rt::Text {
-                text: ftd::markdown_line("\"2018\""),
+                text: ftd::markdown_line("\"2021\""),
                 line: true,
                 ..Default::default()
             }));
@@ -7191,7 +7191,7 @@ mod test {
         main.container
             .children
             .push(ftd_rt::Element::Text(ftd_rt::Text {
-                text: ftd::markdown_line("\"https://www.fifthtry.com/fifthtry/ftd/\""),
+                text: ftd::markdown_line("\"https://ftd.dev\""),
                 line: true,
                 ..Default::default()
             }));
@@ -7209,7 +7209,7 @@ mod test {
                             source: crate::TextSource::Header,
                         },
                         crate::Value::String {
-                            text: "\"0.1.4\"".to_string(),
+                            text: "\"0.1.8\"".to_string(),
                             source: crate::TextSource::Header,
                         },
                         crate::Value::String {
@@ -7217,7 +7217,7 @@ mod test {
                             source: crate::TextSource::Header,
                         },
                         crate::Value::String {
-                            text: "\"2018\"".to_string(),
+                            text: "\"2021\"".to_string(),
                             source: crate::TextSource::Header,
                         },
                         crate::Value::String {
@@ -7233,7 +7233,7 @@ mod test {
                             source: crate::TextSource::Header,
                         },
                         crate::Value::String {
-                            text: "\"https://www.fifthtry.com/fifthtry/ftd/\"".to_string(),
+                            text: "\"https://ftd.dev\"".to_string(),
                             source: crate::TextSource::Header,
                         },
                     ],
@@ -7308,7 +7308,7 @@ mod test {
                 container: ftd_rt::Container {
                     children: vec![
                         ftd_rt::Element::Text(ftd_rt::Text {
-                            text: ftd::markdown_line("\"0.1.4\""),
+                            text: ftd::markdown_line("\"0.1.8\""),
                             line: true,
                             common: ftd_rt::Common {
                                 reference: Some(s("@name@1")),
@@ -7330,7 +7330,7 @@ mod test {
                 },
                 common: ftd_rt::Common {
                     locals: std::array::IntoIter::new([
-                        (s("name@1"), s("\"0.1.4\"")),
+                        (s("name@1"), s("\"0.1.8\"")),
                         (s("body@1"), s("version")),
                     ])
                     .collect(),
@@ -7380,7 +7380,7 @@ mod test {
                 container: ftd_rt::Container {
                     children: vec![
                         ftd_rt::Element::Text(ftd_rt::Text {
-                            text: ftd::markdown_line("\"2018\""),
+                            text: ftd::markdown_line("\"2021\""),
                             line: true,
                             common: ftd_rt::Common {
                                 reference: Some(s("@name@3")),
@@ -7402,7 +7402,7 @@ mod test {
                 },
                 common: ftd_rt::Common {
                     locals: std::array::IntoIter::new([
-                        (s("name@3"), s("\"2018\"")),
+                        (s("name@3"), s("\"2021\"")),
                         (s("body@3"), s("edition")),
                     ])
                     .collect(),
@@ -7524,7 +7524,7 @@ mod test {
                 container: ftd_rt::Container {
                     children: vec![
                         ftd_rt::Element::Text(ftd_rt::Text {
-                            text: ftd::markdown_line("\"https://www.fifthtry.com/fifthtry/ftd/\""),
+                            text: ftd::markdown_line("\"https://ftd.dev\""),
                             line: true,
                             common: ftd_rt::Common {
                                 reference: Some(s("@name@7")),
@@ -7546,7 +7546,7 @@ mod test {
                 },
                 common: ftd_rt::Common {
                     locals: std::array::IntoIter::new([
-                        (s("name@7"), s("\"https://www.fifthtry.com/fifthtry/ftd/\"")),
+                        (s("name@7"), s("\"https://ftd.dev\"")),
                         (s("body@7"), s("homepage")),
                     ])
                     .collect(),
@@ -7671,7 +7671,7 @@ mod test {
                                     s("title"),
                                     crate::PropertyValue::Value {
                                         value: crate::variable::Value::String {
-                                            text: "\"0.1.4\"".to_string(),
+                                            text: "\"0.1.8\"".to_string(),
                                             source: crate::TextSource::Header,
                                         },
                                     },
@@ -7720,7 +7720,7 @@ mod test {
                                     s("title"),
                                     crate::PropertyValue::Value {
                                         value: crate::variable::Value::String {
-                                            text: "\"2018\"".to_string(),
+                                            text: "\"2021\"".to_string(),
                                             source: crate::TextSource::Header,
                                         },
                                     },
@@ -7817,7 +7817,7 @@ mod test {
                                     s("title"),
                                     crate::PropertyValue::Value {
                                         value: crate::variable::Value::String {
-                                            text: "\"https://www.fifthtry.com/fifthtry/ftd/\""
+                                            text: "\"https://ftd.dev\""
                                                 .to_string(),
                                             source: crate::TextSource::Header,
                                         },

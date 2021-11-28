@@ -2,11 +2,11 @@
 name = "ftd-rt"
 version = "0.1.4"
 authors = ["Amit Upadhyay <amitu@fifthtry.com>"]
-edition = "2018"
+edition = "2021"
 description = "ftd-rt: Utility crate for ftd"
 license = "MIT"
 repository = "https://github.com/fifthtry/ftd"
-homepage = "https://www.fifthtry.com/fifthtry/ftd-rt/"
+homepage = "https://ftd.dev/"
 
 [lib]
 crate-type = ["cdylib", "rlib"]

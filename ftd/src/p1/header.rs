@@ -45,7 +45,7 @@ impl Header {
     }
 
     pub fn bool(&self, doc_id: String, line_number: usize, name: &str) -> Result<bool> {
-        for (_, k, v) in self.0.iter() {
+        for (l, k, v) in self.0.iter() {
             if k.starts_with('/') {
                 continue;
             }
@@ -56,7 +56,7 @@ impl Header {
                     Err(crate::p1::Error::ParseError {
                         message: "can't parse bool".to_string(),
                         doc_id,
-                        line_number,
+                        line_number: *l,
                     })
                 };
             }
@@ -96,7 +96,7 @@ impl Header {
     }
 
     pub fn i32(&self, doc_id: String, line_number: usize, name: &str) -> Result<i32> {
-        for (_, k, v) in self.0.iter() {
+        for (l, k, v) in self.0.iter() {
             if k.starts_with('/') {
                 continue;
             }
@@ -105,7 +105,7 @@ impl Header {
                     ftd::p1::Error::ParseError {
                         message: format!("{:?}", e),
                         doc_id,
-                        line_number,
+                        line_number: *l,
                     }
                 });
             }
@@ -118,7 +118,7 @@ impl Header {
     }
 
     pub fn i64(&self, doc_id: String, line_number: usize, name: &str) -> Result<i64> {
-        for (_, k, v) in self.0.iter() {
+        for (l, k, v) in self.0.iter() {
             if k.starts_with('/') {
                 continue;
             }
@@ -128,7 +128,7 @@ impl Header {
                     ftd::p1::Error::ParseError {
                         message: format!("{:?}", e),
                         doc_id,
-                        line_number,
+                        line_number: *l,
                     }
                 });
             }
@@ -154,7 +154,7 @@ impl Header {
     }
 
     pub fn f64(&self, doc_id: String, line_number: usize, name: &str) -> Result<f64> {
-        for (_, k, v) in self.0.iter() {
+        for (l, k, v) in self.0.iter() {
             if k.starts_with('/') {
                 continue;
             }
@@ -164,7 +164,7 @@ impl Header {
                     ftd::p1::Error::ParseError {
                         message: format!("{:?}", e),
                         doc_id,
-                        line_number,
+                        line_number: *l,
                     }
                 });
             }

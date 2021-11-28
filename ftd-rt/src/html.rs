@@ -47,6 +47,7 @@ impl Node {
         }
     }
 
+    #[allow(clippy::too_many_arguments)]
     pub fn to_dnode(
         &self,
         style: &ftd_rt::Map,
@@ -1327,6 +1328,7 @@ fn non_static_container_align(l: &ftd_rt::Position, inner: bool) -> Vec<(String,
     }
 }
 
+#[allow(clippy::too_many_arguments)]
 fn get_translate(
     left: &Option<i64>,
     right: &Option<i64>,

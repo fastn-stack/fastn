@@ -1,3 +1,4 @@
+#[allow(clippy::too_many_arguments)]
 pub fn common_from_properties(
     properties: &std::collections::BTreeMap<String, crate::Value>,
     doc: &crate::p2::TDoc,

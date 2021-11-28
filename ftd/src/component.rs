@@ -247,6 +247,7 @@ impl ChildComponent {
         })
     }
 
+    #[allow(clippy::too_many_arguments)]
     pub fn recursive_call(
         &self,
         doc: &crate::p2::TDoc,
@@ -366,6 +367,7 @@ impl ChildComponent {
         Ok(elements)
     }
 
+    #[allow(clippy::too_many_arguments)]
     pub fn call(
         &self,
         doc: &crate::p2::TDoc,
@@ -965,6 +967,7 @@ fn resolve_properties_with_ref(
 }
 
 impl Component {
+    #[allow(clippy::too_many_arguments)]
     fn call_sub_functions(
         &self,
         arguments: &std::collections::BTreeMap<String, crate::Value>,
