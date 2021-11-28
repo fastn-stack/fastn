@@ -349,7 +349,7 @@ impl Kind {
         object_kind: Option<(&str, Self)>,
     ) -> crate::p1::Result<Self> {
         let (optional, k) = if s.starts_with("optional ") {
-            (true, ftd_rt::get_name("optional", s, doc.name)?)
+            (true, ftd::get_name("optional", s, doc.name)?)
         } else {
             (false, s)
         };
@@ -358,7 +358,7 @@ impl Kind {
             return Ok(Kind::List {
                 kind: Box::new(Self::from(
                     line_number,
-                    ftd_rt::get_name("list", k, doc.name)?,
+                    ftd::get_name("list", k, doc.name)?,
                     doc,
                     object_kind,
                 )?),

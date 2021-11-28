@@ -658,7 +658,7 @@ pub fn interpret(
     lib: &dyn crate::p2::Library,
 ) -> crate::p1::Result<(
     std::collections::BTreeMap<String, crate::p2::Thing>,
-    ftd_rt::Column,
+    ftd::Column,
 )> {
     let mut interpreter = Interpreter::new(lib);
     let instructions = interpreter.interpret(name, source)?;
@@ -741,15 +741,15 @@ pub fn default_aliases() -> std::collections::BTreeMap<String, String> {
     std::array::IntoIter::new([("ftd".to_string(), "ftd".to_string())]).collect()
 }
 
-pub fn default_column() -> ftd_rt::Column {
-    ftd_rt::Column {
-        common: ftd_rt::Common {
-            width: Some(ftd_rt::Length::Fill),
-            height: Some(ftd_rt::Length::Fill),
-            position: ftd_rt::Position::Center,
+pub fn default_column() -> ftd::Column {
+    ftd::Column {
+        common: ftd::Common {
+            width: Some(ftd::Length::Fill),
+            height: Some(ftd::Length::Fill),
+            position: ftd::Position::Center,
             ..Default::default()
         },
-        container: ftd_rt::Container {
+        container: ftd::Container {
             wrap: true,
             ..Default::default()
         },
@@ -910,57 +910,55 @@ mod test {
         );
 
         let mut main = super::default_column();
-        main.container
-            .children
-            .push(ftd_rt::Element::Text(ftd_rt::Text {
-                text: ftd::markdown_line("hello"),
-                line: true,
-                common: ftd_rt::Common {
-                    color: Some(ftd_rt::Color {
-                        r: 255,
-                        g: 0,
-                        b: 0,
-                        alpha: 1.0,
-                    }),
-                    conditional_attribute: std::array::IntoIter::new([(
-                        s("color"),
-                        ftd_rt::ConditionalAttribute {
-                            attribute_type: ftd_rt::AttributeType::Style,
-                            conditions_with_value: vec![
-                                (
-                                    ftd_rt::Condition {
-                                        variable: s("foo/bar#present"),
-                                        value: s("true"),
-                                    },
-                                    ftd_rt::ConditionalValue {
-                                        value: s("rgba(0,128,0,1)"),
-                                        important: false,
-                                    },
-                                ),
-                                (
-                                    ftd_rt::Condition {
-                                        variable: s("foo/bar#present"),
-                                        value: s("false"),
-                                    },
-                                    ftd_rt::ConditionalValue {
-                                        value: s("rgba(255,0,0,1)"),
-                                        important: false,
-                                    },
-                                ),
-                            ],
-                            default: Some(ftd_rt::ConditionalValue {
-                                value: s("rgba(255,255,255,1)"),
-                                important: false,
-                            }),
-                        },
-                    )])
-                    .collect(),
-                    locals: std::array::IntoIter::new([(s("name@0"), s("hello"))]).collect(),
-                    reference: Some(s("@name@0")),
-                    ..Default::default()
-                },
+        main.container.children.push(ftd::Element::Text(ftd::Text {
+            text: ftd::markdown_line("hello"),
+            line: true,
+            common: ftd::Common {
+                color: Some(ftd::Color {
+                    r: 255,
+                    g: 0,
+                    b: 0,
+                    alpha: 1.0,
+                }),
+                conditional_attribute: std::array::IntoIter::new([(
+                    s("color"),
+                    ftd::ConditionalAttribute {
+                        attribute_type: ftd::AttributeType::Style,
+                        conditions_with_value: vec![
+                            (
+                                ftd::Condition {
+                                    variable: s("foo/bar#present"),
+                                    value: s("true"),
+                                },
+                                ftd::ConditionalValue {
+                                    value: s("rgba(0,128,0,1)"),
+                                    important: false,
+                                },
+                            ),
+                            (
+                                ftd::Condition {
+                                    variable: s("foo/bar#present"),
+                                    value: s("false"),
+                                },
+                                ftd::ConditionalValue {
+                                    value: s("rgba(255,0,0,1)"),
+                                    important: false,
+                                },
+                            ),
+                        ],
+                        default: Some(ftd::ConditionalValue {
+                            value: s("rgba(255,255,255,1)"),
+                            important: false,
+                        }),
+                    },
+                )])
+                .collect(),
+                locals: std::array::IntoIter::new([(s("name@0"), s("hello"))]).collect(),
+                reference: Some(s("@name@0")),
                 ..Default::default()
-            }));
+            },
+            ..Default::default()
+        }));
 
         p!(
             "
@@ -1427,18 +1425,18 @@ mod test {
         let mut main = super::default_column();
         main.container
             .children
-            .push(ftd_rt::Element::Column(ftd_rt::Column {
-                container: ftd_rt::Container {
-                    children: vec![ftd_rt::Element::Column(ftd_rt::Column {
-                        container: ftd_rt::Container {
-                            children: vec![ftd_rt::Element::Column(ftd_rt::Column {
-                                container: ftd_rt::Container {
+            .push(ftd::Element::Column(ftd::Column {
+                container: ftd::Container {
+                    children: vec![ftd::Element::Column(ftd::Column {
+                        container: ftd::Container {
+                            children: vec![ftd::Element::Column(ftd::Column {
+                                container: ftd::Container {
                                     children: vec![
-                                        ftd_rt::Element::Text(ftd_rt::Text {
+                                        ftd::Element::Text(ftd::Text {
                                             text: ftd::markdown_line("5PM Tasks"),
                                             line: true,
-                                            common: ftd_rt::Common {
-                                                color: Some(ftd_rt::Color {
+                                            common: ftd::Common {
+                                                color: Some(ftd::Color {
                                                     r: 255,
                                                     g: 255,
                                                     b: 255,
@@ -1450,16 +1448,16 @@ mod test {
                                             size: Some(14),
                                             ..Default::default()
                                         }),
-                                        ftd_rt::Element::Null,
-                                        ftd_rt::Element::Column(ftd_rt::Column {
-                                            container: ftd_rt::Container {
+                                        ftd::Element::Null,
+                                        ftd::Element::Column(ftd::Column {
+                                            container: ftd::Container {
                                                 children: vec![
-                                                    ftd_rt::Element::Null,
-                                                    ftd_rt::Element::Text(ftd_rt::Text {
+                                                    ftd::Element::Null,
+                                                    ftd::Element::Text(ftd::Text {
                                                         text: ftd::markdown_line("Log"),
                                                         line: true,
-                                                        common: ftd_rt::Common {
-                                                            color: Some(ftd_rt::Color {
+                                                        common: ftd::Common {
+                                                            color: Some(ftd::Color {
                                                                 r: 77,
                                                                 g: 77,
                                                                 b: 77,
@@ -1471,40 +1469,36 @@ mod test {
                                                         size: Some(14),
                                                         ..Default::default()
                                                     }),
-                                                    ftd_rt::Element::Column(ftd_rt::Column {
-                                                        container: ftd_rt::Container {
+                                                    ftd::Element::Column(ftd::Column {
+                                                        container: ftd::Container {
                                                             external_children: Default::default(),
                                                             children: vec![
-                                                                ftd_rt::Element::Null,
-                                                                ftd_rt::Element::Text(
-                                                                    ftd_rt::Text {
-                                                                        text: ftd::markdown_line(
-                                                                            "ChildLog",
-                                                                        ),
-                                                                        line: true,
-                                                                        common: ftd_rt::Common {
-                                                                            color: Some(
-                                                                                ftd_rt::Color {
-                                                                                    r: 77,
-                                                                                    g: 77,
-                                                                                    b: 77,
-                                                                                    alpha: 1.0,
-                                                                                },
-                                                                            ),
-                                                                            reference: Some(s(
-                                                                                "@name@0,0,0,0,0",
-                                                                            )),
-                                                                            ..Default::default()
-                                                                        },
-                                                                        size: Some(14),
+                                                                ftd::Element::Null,
+                                                                ftd::Element::Text(ftd::Text {
+                                                                    text: ftd::markdown_line(
+                                                                        "ChildLog",
+                                                                    ),
+                                                                    line: true,
+                                                                    common: ftd::Common {
+                                                                        color: Some(ftd::Color {
+                                                                            r: 77,
+                                                                            g: 77,
+                                                                            b: 77,
+                                                                            alpha: 1.0,
+                                                                        }),
+                                                                        reference: Some(s(
+                                                                            "@name@0,0,0,0,0",
+                                                                        )),
                                                                         ..Default::default()
                                                                     },
-                                                                ),
+                                                                    size: Some(14),
+                                                                    ..Default::default()
+                                                                }),
                                                             ],
                                                             open: (Some(true), None),
                                                             ..Default::default()
                                                         },
-                                                        common: ftd_rt::Common {
+                                                        common: ftd::Common {
                                                             locals: std::array::IntoIter::new([
                                                                 (
                                                                     s("id@0,0,0,0,0"),
@@ -1517,7 +1511,7 @@ mod test {
                                                             ])
                                                             .collect(),
                                                             data_id: Some(s("/ChildBuilding/")),
-                                                            width: Some(ftd_rt::Length::Fill),
+                                                            width: Some(ftd::Length::Fill),
                                                             ..Default::default()
                                                         },
                                                     }),
@@ -1526,27 +1520,27 @@ mod test {
                                                 open: (Some(true), None),
                                                 ..Default::default()
                                             },
-                                            common: ftd_rt::Common {
+                                            common: ftd::Common {
                                                 locals: std::array::IntoIter::new([
                                                     (s("id@0,0,0,0"), s("/Building/")),
                                                     (s("name@0,0,0,0"), s("Log")),
                                                 ])
                                                 .collect(),
                                                 data_id: Some(s("/Building/")),
-                                                width: Some(ftd_rt::Length::Fill),
+                                                width: Some(ftd::Length::Fill),
                                                 ..Default::default()
                                             },
                                         }),
-                                        ftd_rt::Element::Column(ftd_rt::Column {
-                                            container: ftd_rt::Container {
+                                        ftd::Element::Column(ftd::Column {
+                                            container: ftd::Container {
                                                 external_children: Default::default(),
                                                 children: vec![
-                                                    ftd_rt::Element::Null,
-                                                    ftd_rt::Element::Text(ftd_rt::Text {
+                                                    ftd::Element::Null,
+                                                    ftd::Element::Text(ftd::Text {
                                                         text: ftd::markdown_line("Log2"),
                                                         line: true,
-                                                        common: ftd_rt::Common {
-                                                            color: Some(ftd_rt::Color {
+                                                        common: ftd::Common {
+                                                            color: Some(ftd::Color {
                                                                 r: 77,
                                                                 g: 77,
                                                                 b: 77,
@@ -1562,14 +1556,14 @@ mod test {
                                                 open: (Some(true), None),
                                                 ..Default::default()
                                             },
-                                            common: ftd_rt::Common {
+                                            common: ftd::Common {
                                                 locals: std::array::IntoIter::new([
                                                     (s("id@0,0,0,1"), s("/Building2/")),
                                                     (s("name@0,0,0,1"), s("Log2")),
                                                 ])
                                                 .collect(),
                                                 data_id: Some(s("/Building2/")),
-                                                width: Some(ftd_rt::Length::Fill),
+                                                width: Some(ftd::Length::Fill),
                                                 ..Default::default()
                                             },
                                         }),
@@ -1578,7 +1572,7 @@ mod test {
                                     open: (Some(true), None),
                                     ..Default::default()
                                 },
-                                common: ftd_rt::Common {
+                                common: ftd::Common {
                                     locals: std::array::IntoIter::new([
                                         (s("active@0,0,0"), s("true")),
                                         (s("id@0,0,0"), s("/welcome/")),
@@ -1586,18 +1580,18 @@ mod test {
                                     ])
                                     .collect(),
                                     data_id: Some(s("/welcome/")),
-                                    width: Some(ftd_rt::Length::Fill),
+                                    width: Some(ftd::Length::Fill),
                                     ..Default::default()
                                 },
                             })],
                             ..Default::default()
                         },
-                        common: ftd_rt::Common {
+                        common: ftd::Common {
                             locals: std::array::IntoIter::new([(s("id@0,0"), s("toc_main"))])
                                 .collect(),
                             data_id: Some(s("toc_main")),
-                            height: Some(ftd_rt::Length::Fill),
-                            width: Some(ftd_rt::Length::Px { value: 300 }),
+                            height: Some(ftd::Length::Fill),
+                            width: Some(ftd::Length::Px { value: 300 }),
                             ..Default::default()
                         },
                     })],
@@ -2123,18 +2117,18 @@ mod test {
         let mut main = super::default_column();
         main.container
             .children
-            .push(ftd_rt::Element::Column(ftd_rt::Column {
-                container: ftd_rt::Container {
-                    children: vec![ftd_rt::Element::Column(ftd_rt::Column {
-                        container: ftd_rt::Container {
-                            children: vec![ftd_rt::Element::Column(ftd_rt::Column {
-                                container: ftd_rt::Container {
+            .push(ftd::Element::Column(ftd::Column {
+                container: ftd::Container {
+                    children: vec![ftd::Element::Column(ftd::Column {
+                        container: ftd::Container {
+                            children: vec![ftd::Element::Column(ftd::Column {
+                                container: ftd::Container {
                                     children: vec![
-                                        ftd_rt::Element::Text(ftd_rt::Text {
+                                        ftd::Element::Text(ftd::Text {
                                             text: ftd::markdown_line("5PM Tasks"),
                                             line: true,
-                                            common: ftd_rt::Common {
-                                                color: Some(ftd_rt::Color {
+                                            common: ftd::Common {
+                                                color: Some(ftd::Color {
                                                     r: 255,
                                                     g: 255,
                                                     b: 255,
@@ -2146,16 +2140,16 @@ mod test {
                                             size: Some(14),
                                             ..Default::default()
                                         }),
-                                        ftd_rt::Element::Null,
-                                        ftd_rt::Element::Column(ftd_rt::Column {
-                                            container: ftd_rt::Container {
+                                        ftd::Element::Null,
+                                        ftd::Element::Column(ftd::Column {
+                                            container: ftd::Container {
                                                 children: vec![
-                                                    ftd_rt::Element::Null,
-                                                    ftd_rt::Element::Text(ftd_rt::Text {
+                                                    ftd::Element::Null,
+                                                    ftd::Element::Text(ftd::Text {
                                                         text: ftd::markdown_line("Log"),
                                                         line: true,
-                                                        common: ftd_rt::Common {
-                                                            color: Some(ftd_rt::Color {
+                                                        common: ftd::Common {
+                                                            color: Some(ftd::Color {
                                                                 r: 77,
                                                                 g: 77,
                                                                 b: 77,
@@ -2167,40 +2161,36 @@ mod test {
                                                         size: Some(14),
                                                         ..Default::default()
                                                     }),
-                                                    ftd_rt::Element::Column(ftd_rt::Column {
-                                                        container: ftd_rt::Container {
+                                                    ftd::Element::Column(ftd::Column {
+                                                        container: ftd::Container {
                                                             external_children: Default::default(),
                                                             children: vec![
-                                                                ftd_rt::Element::Null,
-                                                                ftd_rt::Element::Text(
-                                                                    ftd_rt::Text {
-                                                                        text: ftd::markdown_line(
-                                                                            "ChildLog",
-                                                                        ),
-                                                                        line: true,
-                                                                        common: ftd_rt::Common {
-                                                                            color: Some(
-                                                                                ftd_rt::Color {
-                                                                                    r: 77,
-                                                                                    g: 77,
-                                                                                    b: 77,
-                                                                                    alpha: 1.0,
-                                                                                },
-                                                                            ),
-                                                                            reference: Some(s(
-                                                                                "@name@0,0,0,0,0",
-                                                                            )),
-                                                                            ..Default::default()
-                                                                        },
-                                                                        size: Some(14),
+                                                                ftd::Element::Null,
+                                                                ftd::Element::Text(ftd::Text {
+                                                                    text: ftd::markdown_line(
+                                                                        "ChildLog",
+                                                                    ),
+                                                                    line: true,
+                                                                    common: ftd::Common {
+                                                                        color: Some(ftd::Color {
+                                                                            r: 77,
+                                                                            g: 77,
+                                                                            b: 77,
+                                                                            alpha: 1.0,
+                                                                        }),
+                                                                        reference: Some(s(
+                                                                            "@name@0,0,0,0,0",
+                                                                        )),
                                                                         ..Default::default()
                                                                     },
-                                                                ),
+                                                                    size: Some(14),
+                                                                    ..Default::default()
+                                                                }),
                                                             ],
                                                             open: (Some(true), None),
                                                             ..Default::default()
                                                         },
-                                                        common: ftd_rt::Common {
+                                                        common: ftd::Common {
                                                             locals: std::array::IntoIter::new([
                                                                 (
                                                                     s("id@0,0,0,0,0"),
@@ -2213,7 +2203,7 @@ mod test {
                                                             ])
                                                             .collect(),
                                                             data_id: Some(s("/ChildBuilding/")),
-                                                            width: Some(ftd_rt::Length::Fill),
+                                                            width: Some(ftd::Length::Fill),
                                                             ..Default::default()
                                                         },
                                                     }),
@@ -2222,27 +2212,27 @@ mod test {
                                                 open: (Some(true), None),
                                                 ..Default::default()
                                             },
-                                            common: ftd_rt::Common {
+                                            common: ftd::Common {
                                                 locals: std::array::IntoIter::new([
                                                     (s("id@0,0,0,0"), s("/Building/")),
                                                     (s("name@0,0,0,0"), s("Log")),
                                                 ])
                                                 .collect(),
                                                 data_id: Some(s("/Building/")),
-                                                width: Some(ftd_rt::Length::Fill),
+                                                width: Some(ftd::Length::Fill),
                                                 ..Default::default()
                                             },
                                         }),
-                                        ftd_rt::Element::Column(ftd_rt::Column {
-                                            container: ftd_rt::Container {
+                                        ftd::Element::Column(ftd::Column {
+                                            container: ftd::Container {
                                                 external_children: Default::default(),
                                                 children: vec![
-                                                    ftd_rt::Element::Null,
-                                                    ftd_rt::Element::Text(ftd_rt::Text {
+                                                    ftd::Element::Null,
+                                                    ftd::Element::Text(ftd::Text {
                                                         text: ftd::markdown_line("Log2"),
                                                         line: true,
-                                                        common: ftd_rt::Common {
-                                                            color: Some(ftd_rt::Color {
+                                                        common: ftd::Common {
+                                                            color: Some(ftd::Color {
                                                                 r: 77,
                                                                 g: 77,
                                                                 b: 77,
@@ -2258,14 +2248,14 @@ mod test {
                                                 open: (Some(true), None),
                                                 ..Default::default()
                                             },
-                                            common: ftd_rt::Common {
+                                            common: ftd::Common {
                                                 locals: std::array::IntoIter::new([
                                                     (s("id@0,0,0,1"), s("/Building2/")),
                                                     (s("name@0,0,0,1"), s("Log2")),
                                                 ])
                                                 .collect(),
                                                 data_id: Some(s("/Building2/")),
-                                                width: Some(ftd_rt::Length::Fill),
+                                                width: Some(ftd::Length::Fill),
                                                 ..Default::default()
                                             },
                                         }),
@@ -2274,7 +2264,7 @@ mod test {
                                     open: (Some(true), None),
                                     ..Default::default()
                                 },
-                                common: ftd_rt::Common {
+                                common: ftd::Common {
                                     locals: std::array::IntoIter::new([
                                         (s("active@0,0,0"), s("true")),
                                         (s("id@0,0,0"), s("/welcome/")),
@@ -2282,18 +2272,18 @@ mod test {
                                     ])
                                     .collect(),
                                     data_id: Some(s("/welcome/")),
-                                    width: Some(ftd_rt::Length::Fill),
+                                    width: Some(ftd::Length::Fill),
                                     ..Default::default()
                                 },
                             })],
                             ..Default::default()
                         },
-                        common: ftd_rt::Common {
+                        common: ftd::Common {
                             locals: std::array::IntoIter::new([(s("id@0,0"), s("toc_main"))])
                                 .collect(),
                             data_id: Some(s("toc_main")),
-                            height: Some(ftd_rt::Length::Fill),
-                            width: Some(ftd_rt::Length::Px { value: 300 }),
+                            height: Some(ftd::Length::Fill),
+                            width: Some(ftd::Length::Px { value: 300 }),
                             ..Default::default()
                         },
                     })],
@@ -2428,10 +2418,10 @@ mod test {
                 ..Default::default()
             }),
         );
-        let title = ftd_rt::Text {
+        let title = ftd::Text {
             text: ftd::markdown_line("John smith"),
             line: true,
-            common: ftd_rt::Common {
+            common: ftd::Common {
                 reference: Some(s("reference#name")),
                 ..Default::default()
             },
@@ -2441,10 +2431,10 @@ mod test {
         let mut main = super::default_column();
         main.container
             .children
-            .push(ftd_rt::Element::Column(ftd_rt::Column {
-                common: ftd_rt::Common {
-                    width: Some(ftd_rt::Length::Px { value: 200 }),
-                    background_color: Some(ftd_rt::Color {
+            .push(ftd::Element::Column(ftd::Column {
+                common: ftd::Common {
+                    width: Some(ftd::Length::Px { value: 200 }),
+                    background_color: Some(ftd::Color {
                         r: 243,
                         g: 243,
                         b: 243,
@@ -2452,8 +2442,8 @@ mod test {
                     }),
                     ..Default::default()
                 },
-                container: ftd_rt::Container {
-                    children: vec![ftd_rt::Element::Text(title)],
+                container: ftd::Container {
+                    children: vec![ftd::Element::Text(title)],
                     ..Default::default()
                 },
             }));
@@ -2524,42 +2514,36 @@ mod test {
         );
 
         let mut main = super::default_column();
-        main.container
-            .children
-            .push(ftd_rt::Element::Text(ftd_rt::Text {
-                text: ftd::markdown_line("hello"),
-                line: true,
-                common: ftd_rt::Common {
-                    locals: std::array::IntoIter::new([(s("name@0"), s("hello"))]).collect(),
-                    reference: Some(s("@name@0")),
-                    ..Default::default()
-                },
+        main.container.children.push(ftd::Element::Text(ftd::Text {
+            text: ftd::markdown_line("hello"),
+            line: true,
+            common: ftd::Common {
+                locals: std::array::IntoIter::new([(s("name@0"), s("hello"))]).collect(),
+                reference: Some(s("@name@0")),
                 ..Default::default()
-            }));
-        main.container
-            .children
-            .push(ftd_rt::Element::Text(ftd_rt::Text {
-                text: ftd::markdown_line("world"),
-                line: true,
-                common: ftd_rt::Common {
-                    locals: std::array::IntoIter::new([(s("name@1"), s("world"))]).collect(),
-                    reference: Some(s("@name@1")),
-                    ..Default::default()
-                },
+            },
+            ..Default::default()
+        }));
+        main.container.children.push(ftd::Element::Text(ftd::Text {
+            text: ftd::markdown_line("world"),
+            line: true,
+            common: ftd::Common {
+                locals: std::array::IntoIter::new([(s("name@1"), s("world"))]).collect(),
+                reference: Some(s("@name@1")),
                 ..Default::default()
-            }));
-        main.container
-            .children
-            .push(ftd_rt::Element::Text(ftd_rt::Text {
-                text: ftd::markdown("yo yo"),
-                line: false,
-                common: ftd_rt::Common {
-                    locals: std::array::IntoIter::new([(s("name@2"), s("yo yo"))]).collect(),
-                    reference: Some(s("@name@2")),
-                    ..Default::default()
-                },
+            },
+            ..Default::default()
+        }));
+        main.container.children.push(ftd::Element::Text(ftd::Text {
+            text: ftd::markdown("yo yo"),
+            line: false,
+            common: ftd::Common {
+                locals: std::array::IntoIter::new([(s("name@2"), s("yo yo"))]).collect(),
+                reference: Some(s("@name@2")),
                 ..Default::default()
-            }));
+            },
+            ..Default::default()
+        }));
 
         let (g_bag, g_col) = crate::p2::interpreter::interpret(
             "foo/bar",
@@ -2591,43 +2575,35 @@ mod test {
     #[test]
     fn row() {
         let mut main = super::default_column();
-        let mut row = ftd_rt::Row {
-            common: ftd_rt::Common {
+        let mut row = ftd::Row {
+            common: ftd::Common {
                 data_id: Some("the-row".to_string()),
                 id: Some("the-row".to_string()),
                 ..Default::default()
             },
             ..Default::default()
         };
-        row.container
-            .children
-            .push(ftd_rt::Element::Text(ftd_rt::Text {
-                text: ftd::markdown_line("hello"),
-                line: true,
-                ..Default::default()
-            }));
-        row.container
-            .children
-            .push(ftd_rt::Element::Text(ftd_rt::Text {
-                text: ftd::markdown_line("world"),
-                line: true,
-                ..Default::default()
-            }));
-        row.container
-            .children
-            .push(ftd_rt::Element::Text(ftd_rt::Text {
-                text: ftd::markdown_line("row child three"),
-                line: true,
-                ..Default::default()
-            }));
-        main.container.children.push(ftd_rt::Element::Row(row));
-        main.container
-            .children
-            .push(ftd_rt::Element::Text(ftd_rt::Text {
-                text: ftd::markdown_line("back in main"),
-                line: true,
-                ..Default::default()
-            }));
+        row.container.children.push(ftd::Element::Text(ftd::Text {
+            text: ftd::markdown_line("hello"),
+            line: true,
+            ..Default::default()
+        }));
+        row.container.children.push(ftd::Element::Text(ftd::Text {
+            text: ftd::markdown_line("world"),
+            line: true,
+            ..Default::default()
+        }));
+        row.container.children.push(ftd::Element::Text(ftd::Text {
+            text: ftd::markdown_line("row child three"),
+            line: true,
+            ..Default::default()
+        }));
+        main.container.children.push(ftd::Element::Row(row));
+        main.container.children.push(ftd::Element::Text(ftd::Text {
+            text: ftd::markdown_line("back in main"),
+            line: true,
+            ..Default::default()
+        }));
 
         p!(
             "
@@ -2657,29 +2633,23 @@ mod test {
     #[test]
     fn sub_function() {
         let mut main = super::default_column();
-        let mut row: ftd_rt::Row = Default::default();
-        row.container
-            .children
-            .push(ftd_rt::Element::Text(ftd_rt::Text {
-                text: ftd::markdown_line("hello"),
-                line: true,
-                ..Default::default()
-            }));
-        row.container
-            .children
-            .push(ftd_rt::Element::Text(ftd_rt::Text {
-                text: ftd::markdown_line("world"),
-                line: true,
-                ..Default::default()
-            }));
-        main.container.children.push(ftd_rt::Element::Row(row));
-        main.container
-            .children
-            .push(ftd_rt::Element::Text(ftd_rt::Text {
-                text: ftd::markdown_line("back in main"),
-                line: true,
-                ..Default::default()
-            }));
+        let mut row: ftd::Row = Default::default();
+        row.container.children.push(ftd::Element::Text(ftd::Text {
+            text: ftd::markdown_line("hello"),
+            line: true,
+            ..Default::default()
+        }));
+        row.container.children.push(ftd::Element::Text(ftd::Text {
+            text: ftd::markdown_line("world"),
+            line: true,
+            ..Default::default()
+        }));
+        main.container.children.push(ftd::Element::Row(row));
+        main.container.children.push(ftd::Element::Text(ftd::Text {
+            text: ftd::markdown_line("back in main"),
+            line: true,
+            ..Default::default()
+        }));
 
         p!(
             "
@@ -2813,37 +2783,35 @@ mod test {
         );
 
         let mut main = super::default_column();
-        let mut row: ftd_rt::Row = Default::default();
-        row.container
-            .children
-            .push(ftd_rt::Element::Text(ftd_rt::Text {
-                text: ftd::markdown_line("hello"),
-                size: Some(14),
-                external_font: Some(ftd_rt::ExternalFont {
-                    url: "https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap"
-                        .to_string(),
-                    display: ftd_rt::FontDisplay::Swap,
-                    name: "Roboto".to_string(),
-                }),
-                font: vec![ftd_rt::NamedFont::Named {
-                    value: "Roboto".to_string(),
-                }],
+        let mut row: ftd::Row = Default::default();
+        row.container.children.push(ftd::Element::Text(ftd::Text {
+            text: ftd::markdown_line("hello"),
+            size: Some(14),
+            external_font: Some(ftd::ExternalFont {
+                url: "https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap"
+                    .to_string(),
+                display: ftd::FontDisplay::Swap,
+                name: "Roboto".to_string(),
+            }),
+            font: vec![ftd::NamedFont::Named {
+                value: "Roboto".to_string(),
+            }],
 
-                line: true,
-                common: ftd_rt::Common {
-                    border_width: 10,
-                    overflow_x: Some(ftd_rt::Overflow::Auto),
-                    overflow_y: Some(ftd_rt::Overflow::Auto),
-                    ..Default::default()
-                },
+            line: true,
+            common: ftd::Common {
+                border_width: 10,
+                overflow_x: Some(ftd::Overflow::Auto),
+                overflow_y: Some(ftd::Overflow::Auto),
                 ..Default::default()
-            }));
-        row.common = ftd_rt::Common {
+            },
+            ..Default::default()
+        }));
+        row.common = ftd::Common {
             locals: std::array::IntoIter::new([(s("x@0"), s("10"))]).collect(),
             ..Default::default()
         };
 
-        main.container.children.push(ftd_rt::Element::Row(row));
+        main.container.children.push(ftd::Element::Row(row));
         p!(
             "
             -- component foo:
@@ -3166,17 +3134,17 @@ mod test {
 
     #[test]
     fn components() {
-        let title = ftd_rt::Text {
+        let title = ftd::Text {
             text: ftd::markdown_line("What kind of documentation?"),
             line: true,
-            common: ftd_rt::Common {
-                position: ftd_rt::Position::Center,
+            common: ftd::Common {
+                position: ftd::Position::Center,
                 reference: Some(s("@title@0")),
                 ..Default::default()
             },
             ..Default::default()
         };
-        let about = ftd_rt::Text {
+        let about = ftd::Text {
             text: ftd::markdown(
                 indoc::indoc!(
                     "
@@ -3187,16 +3155,16 @@ mod test {
                 )
                 .trim(),
             ),
-            common: ftd_rt::Common {
+            common: ftd::Common {
                 reference: Some(s("@about@0")),
                 ..Default::default()
             },
             ..Default::default()
         };
 
-        let image = ftd_rt::Image {
+        let image = ftd::Image {
             src: s("/static/home/document-type-min.png"),
-            common: ftd_rt::Common {
+            common: ftd::Common {
                 reference: Some(s("@src@0")),
                 ..Default::default()
             },
@@ -3206,8 +3174,8 @@ mod test {
         let mut main = super::default_column();
         main.container
             .children
-            .push(ftd_rt::Element::Column(ftd_rt::Column {
-                common: ftd_rt::Common {
+            .push(ftd::Element::Column(ftd::Column {
+                common: ftd::Common {
                     padding: Some(30),
                     locals: std::array::IntoIter::new([
                         (s("about@0"), s("UI screens, behaviour and journeys, database tables, APIs, how to\ncontribute to, deploy, or monitor microservice, everything that\nmakes web or mobile product teams productive.")),
@@ -3220,11 +3188,11 @@ mod test {
                     .collect(),
                     ..Default::default()
                 },
-                container: ftd_rt::Container {
+                container: ftd::Container {
                     children: vec![
-                        ftd_rt::Element::Text(title),
-                        ftd_rt::Element::Text(about),
-                        ftd_rt::Element::Image(image),
+                        ftd::Element::Text(title),
+                        ftd::Element::Text(about),
+                        ftd::Element::Image(image),
                     ],
                     ..Default::default()
                 },
@@ -3262,27 +3230,27 @@ mod test {
 
     #[test]
     fn conditional_body() {
-        let title = ftd_rt::Text {
+        let title = ftd::Text {
             text: ftd::markdown_line("What kind of documentation?"),
-            common: ftd_rt::Common {
-                position: ftd_rt::Position::Center,
+            common: ftd::Common {
+                position: ftd::Position::Center,
                 reference: Some(s("@title@0")),
                 ..Default::default()
             },
             line: true,
             ..Default::default()
         };
-        let second_title = ftd_rt::Text {
+        let second_title = ftd::Text {
             text: ftd::markdown_line("second call"),
-            common: ftd_rt::Common {
-                position: ftd_rt::Position::Center,
+            common: ftd::Common {
+                position: ftd::Position::Center,
                 reference: Some(s("@title@1")),
                 ..Default::default()
             },
             line: true,
             ..Default::default()
         };
-        let about = ftd_rt::Text {
+        let about = ftd::Text {
             text: ftd::markdown(
                 indoc::indoc!(
                     "
@@ -3293,23 +3261,23 @@ mod test {
                 )
                 .trim(),
             ),
-            common: ftd_rt::Common {
+            common: ftd::Common {
                 reference: Some(s("@about@0")),
                 ..Default::default()
             },
             ..Default::default()
         };
-        let image = ftd_rt::Image {
+        let image = ftd::Image {
             src: s("/static/home/document-type-min.png"),
-            common: ftd_rt::Common {
+            common: ftd::Common {
                 reference: Some(s("@src@0")),
                 ..Default::default()
             },
             ..Default::default()
         };
-        let second_image = ftd_rt::Image {
+        let second_image = ftd::Image {
             src: s("second-image.png"),
-            common: ftd_rt::Common {
+            common: ftd::Common {
                 reference: Some(s("@src@1")),
                 ..Default::default()
             },
@@ -3319,8 +3287,8 @@ mod test {
         let mut main = super::default_column();
         main.container
             .children
-            .push(ftd_rt::Element::Column(ftd_rt::Column {
-                common: ftd_rt::Common {
+            .push(ftd::Element::Column(ftd::Column {
+                common: ftd::Common {
                     padding: Some(30),
                     locals: std::array::IntoIter::new([
                         (s("about@0"), s("UI screens, behaviour and journeys, database tables, APIs, how to\ncontribute to, deploy, or monitor microservice, everything that\nmakes web or mobile product teams productive.")),
@@ -3336,19 +3304,19 @@ mod test {
                     .collect(),
                     ..Default::default()
                 },
-                container: ftd_rt::Container {
+                container: ftd::Container {
                     children: vec![
-                        ftd_rt::Element::Text(title),
-                        ftd_rt::Element::Text(about),
-                        ftd_rt::Element::Image(image),
+                        ftd::Element::Text(title),
+                        ftd::Element::Text(about),
+                        ftd::Element::Image(image),
                     ],
                     ..Default::default()
                 },
             }));
         main.container
             .children
-            .push(ftd_rt::Element::Column(ftd_rt::Column {
-                common: ftd_rt::Common {
+            .push(ftd::Element::Column(ftd::Column {
+                common: ftd::Common {
                     padding: Some(30),
                     locals: std::array::IntoIter::new([
                         (s("src@1"), s("second-image.png")),
@@ -3357,11 +3325,11 @@ mod test {
                     .collect(),
                     ..Default::default()
                 },
-                container: ftd_rt::Container {
+                container: ftd::Container {
                     children: vec![
-                        ftd_rt::Element::Text(second_title),
-                        ftd_rt::Element::Null,
-                        ftd_rt::Element::Image(second_image),
+                        ftd::Element::Text(second_title),
+                        ftd::Element::Null,
+                        ftd::Element::Image(second_image),
                     ],
                     ..Default::default()
                 },
@@ -3404,37 +3372,37 @@ mod test {
 
     #[test]
     fn conditional_header() {
-        let title = ftd_rt::Text {
+        let title = ftd::Text {
             text: ftd::markdown_line("What kind of documentation?"),
-            common: ftd_rt::Common {
-                position: ftd_rt::Position::Center,
+            common: ftd::Common {
+                position: ftd::Position::Center,
                 reference: Some(s("@title@0")),
                 ..Default::default()
             },
             line: true,
             ..Default::default()
         };
-        let second_title = ftd_rt::Text {
+        let second_title = ftd::Text {
             text: ftd::markdown_line("second call"),
-            common: ftd_rt::Common {
-                position: ftd_rt::Position::Center,
+            common: ftd::Common {
+                position: ftd::Position::Center,
                 reference: Some(s("@title@1")),
                 ..Default::default()
             },
             line: true,
             ..Default::default()
         };
-        let third_title = ftd_rt::Text {
+        let third_title = ftd::Text {
             text: ftd::markdown_line("third call"),
-            common: ftd_rt::Common {
-                position: ftd_rt::Position::Center,
+            common: ftd::Common {
+                position: ftd::Position::Center,
                 reference: Some(s("@title@2")),
                 ..Default::default()
             },
             line: true,
             ..Default::default()
         };
-        let about = ftd_rt::Text {
+        let about = ftd::Text {
             text: ftd::markdown(
                 indoc::indoc!(
                     "
@@ -3445,23 +3413,23 @@ mod test {
                 )
                 .trim(),
             ),
-            common: ftd_rt::Common {
+            common: ftd::Common {
                 reference: Some(s("@about@0")),
                 ..Default::default()
             },
             ..Default::default()
         };
-        let image = ftd_rt::Image {
+        let image = ftd::Image {
             src: s("/static/home/document-type-min.png"),
-            common: ftd_rt::Common {
+            common: ftd::Common {
                 reference: Some(s("@src@0")),
                 ..Default::default()
             },
             ..Default::default()
         };
-        let second_image = ftd_rt::Image {
+        let second_image = ftd::Image {
             src: s("second-image.png"),
-            common: ftd_rt::Common {
+            common: ftd::Common {
                 reference: Some(s("@src@1")),
                 ..Default::default()
             },
@@ -3471,8 +3439,8 @@ mod test {
         let mut main = super::default_column();
         main.container
             .children
-            .push(ftd_rt::Element::Column(ftd_rt::Column {
-                common: ftd_rt::Common {
+            .push(ftd::Element::Column(ftd::Column {
+                common: ftd::Common {
                     padding: Some(30),
                     locals: std::array::IntoIter::new([
                         (s("about@0"), s("UI screens, behaviour and journeys, database tables, APIs, how to\ncontribute to, deploy, or monitor microservice, everything that\nmakes web or mobile product teams productive.")),
@@ -3488,19 +3456,19 @@ mod test {
                     .collect(),
                     ..Default::default()
                 },
-                container: ftd_rt::Container {
+                container: ftd::Container {
                     children: vec![
-                        ftd_rt::Element::Text(title),
-                        ftd_rt::Element::Text(about),
-                        ftd_rt::Element::Image(image),
+                        ftd::Element::Text(title),
+                        ftd::Element::Text(about),
+                        ftd::Element::Image(image),
                     ],
                     ..Default::default()
                 },
             }));
         main.container
             .children
-            .push(ftd_rt::Element::Column(ftd_rt::Column {
-                common: ftd_rt::Common {
+            .push(ftd::Element::Column(ftd::Column {
+                common: ftd::Common {
                     padding: Some(30),
                     locals: std::array::IntoIter::new([
                         (s("src@1"), s("second-image.png")),
@@ -3509,28 +3477,28 @@ mod test {
                     .collect(),
                     ..Default::default()
                 },
-                container: ftd_rt::Container {
+                container: ftd::Container {
                     children: vec![
-                        ftd_rt::Element::Text(second_title),
-                        ftd_rt::Element::Null,
-                        ftd_rt::Element::Image(second_image),
+                        ftd::Element::Text(second_title),
+                        ftd::Element::Null,
+                        ftd::Element::Image(second_image),
                     ],
                     ..Default::default()
                 },
             }));
         main.container
             .children
-            .push(ftd_rt::Element::Column(ftd_rt::Column {
-                common: ftd_rt::Common {
+            .push(ftd::Element::Column(ftd::Column {
+                common: ftd::Common {
                     padding: Some(30),
                     locals: std::array::IntoIter::new([(s("title@2"), s("third call"))]).collect(),
                     ..Default::default()
                 },
-                container: ftd_rt::Container {
+                container: ftd::Container {
                     children: vec![
-                        ftd_rt::Element::Text(third_title),
-                        ftd_rt::Element::Null,
-                        ftd_rt::Element::Null,
+                        ftd::Element::Text(third_title),
+                        ftd::Element::Null,
+                        ftd::Element::Null,
                     ],
                     ..Default::default()
                 },
@@ -3680,21 +3648,21 @@ mod test {
         let mut main = super::default_column();
         main.container
             .children
-            .push(ftd_rt::Element::Column(ftd_rt::Column {
-                container: ftd_rt::Container {
+            .push(ftd::Element::Column(ftd::Column {
+                container: ftd::Container {
                     children: vec![
-                        ftd_rt::Element::Text(ftd_rt::Text {
+                        ftd::Element::Text(ftd::Text {
                             text: ftd::markdown_line("hello"),
                             line: true,
-                            common: ftd_rt::Common {
+                            common: ftd::Common {
                                 reference: Some(s("@title@0")),
                                 ..Default::default()
                             },
                             ..Default::default()
                         }),
-                        ftd_rt::Element::Text(ftd_rt::Text {
+                        ftd::Element::Text(ftd::Text {
                             text: ftd::markdown("what about the body?"),
-                            common: ftd_rt::Common {
+                            common: ftd::Common {
                                 locals: std::array::IntoIter::new([(
                                     s("body@0,1"),
                                     s("what about the body?"),
@@ -3708,7 +3676,7 @@ mod test {
                     ],
                     ..Default::default()
                 },
-                common: ftd_rt::Common {
+                common: ftd::Common {
                     locals: std::array::IntoIter::new([
                         (s("body@0"), s("what about the body?")),
                         (s("title@0"), s("hello")),
@@ -3719,23 +3687,23 @@ mod test {
             }));
         main.container
             .children
-            .push(ftd_rt::Element::Column(ftd_rt::Column {
-                container: ftd_rt::Container {
+            .push(ftd::Element::Column(ftd::Column {
+                container: ftd::Container {
                     children: vec![
-                        ftd_rt::Element::Text(ftd_rt::Text {
+                        ftd::Element::Text(ftd::Text {
                             text: ftd::markdown_line("heading without body"),
                             line: true,
-                            common: ftd_rt::Common {
+                            common: ftd::Common {
                                 reference: Some(s("@title@1")),
                                 ..Default::default()
                             },
                             ..Default::default()
                         }),
-                        ftd_rt::Element::Null,
+                        ftd::Element::Null,
                     ],
                     ..Default::default()
                 },
-                common: ftd_rt::Common {
+                common: ftd::Common {
                     locals: std::array::IntoIter::new([(s("title@1"), s("heading without body"))])
                         .collect(),
                     ..Default::default()
@@ -3822,11 +3790,11 @@ mod test {
 
         main.container
             .children
-            .push(ftd_rt::Element::Column(ftd_rt::Column {
-                container: ftd_rt::Container {
-                    children: vec![ftd_rt::Element::Image(ftd_rt::Image {
+            .push(ftd::Element::Column(ftd::Column {
+                container: ftd::Container {
+                    children: vec![ftd::Element::Image(ftd::Image {
                         src: s("foo.png"),
-                        common: ftd_rt::Common {
+                        common: ftd::Common {
                             reference: Some(s("@src@0")),
                             ..Default::default()
                         },
@@ -3834,27 +3802,27 @@ mod test {
                     })],
                     ..Default::default()
                 },
-                common: ftd_rt::Common {
+                common: ftd::Common {
                     locals: std::array::IntoIter::new([(s("src@0"), s("foo.png"))]).collect(),
                     ..Default::default()
                 },
             }));
         main.container
             .children
-            .push(ftd_rt::Element::Column(ftd_rt::Column {
-                container: ftd_rt::Container {
-                    children: vec![ftd_rt::Element::Image(ftd_rt::Image {
+            .push(ftd::Element::Column(ftd::Column {
+                container: ftd::Container {
+                    children: vec![ftd::Element::Image(ftd::Image {
                         src: s("bar.png"),
-                        common: ftd_rt::Common {
+                        common: ftd::Common {
                             reference: Some(s("@src@1")),
-                            width: Some(ftd_rt::Length::Px { value: 300 }),
+                            width: Some(ftd::Length::Px { value: 300 }),
                             ..Default::default()
                         },
                         ..Default::default()
                     })],
                     ..Default::default()
                 },
-                common: ftd_rt::Common {
+                common: ftd::Common {
                     locals: std::array::IntoIter::new([
                         (s("src@1"), s("bar.png")),
                         (s("width@1"), s("300")),
@@ -3954,26 +3922,26 @@ mod test {
         );
 
         let mut main = super::default_column();
-        let mut row: ftd_rt::Row = Default::default();
+        let mut row: ftd::Row = Default::default();
         row.container
             .children
-            .push(ftd_rt::Element::Decimal(ftd_rt::Text {
+            .push(ftd::Element::Decimal(ftd::Text {
                 text: ftd::markdown_line("0.1"),
                 line: false,
                 ..Default::default()
             }));
         row.container
             .children
-            .push(ftd_rt::Element::Decimal(ftd_rt::Text {
+            .push(ftd::Element::Decimal(ftd::Text {
                 text: ftd::markdown_line("0.01"),
                 line: false,
                 ..Default::default()
             }));
-        row.common = ftd_rt::Common {
+        row.common = ftd::Common {
             locals: std::array::IntoIter::new([(s("x@0"), s("10"))]).collect(),
             ..Default::default()
         };
-        main.container.children.push(ftd_rt::Element::Row(row));
+        main.container.children.push(ftd::Element::Row(row));
 
         p!(
             "
@@ -4063,28 +4031,28 @@ mod test {
         );
 
         let mut main = super::default_column();
-        let mut row: ftd_rt::Row = Default::default();
+        let mut row: ftd::Row = Default::default();
         row.container
             .children
-            .push(ftd_rt::Element::Integer(ftd_rt::Text {
+            .push(ftd::Element::Integer(ftd::Text {
                 text: ftd::markdown_line("11"),
                 line: false,
                 ..Default::default()
             }));
         row.container
             .children
-            .push(ftd_rt::Element::Integer(ftd_rt::Text {
+            .push(ftd::Element::Integer(ftd::Text {
                 text: ftd::markdown_line("14"),
                 line: false,
                 ..Default::default()
             }));
 
-        row.common = ftd_rt::Common {
+        row.common = ftd::Common {
             locals: std::array::IntoIter::new([(s("x@0"), s("10"))]).collect(),
             ..Default::default()
         };
 
-        main.container.children.push(ftd_rt::Element::Row(row));
+        main.container.children.push(ftd::Element::Row(row));
 
         p!(
             "
@@ -4212,26 +4180,26 @@ mod test {
         );
 
         let mut main = super::default_column();
-        let mut row: ftd_rt::Row = Default::default();
+        let mut row: ftd::Row = Default::default();
         row.container
             .children
-            .push(ftd_rt::Element::Boolean(ftd_rt::Text {
+            .push(ftd::Element::Boolean(ftd::Text {
                 text: ftd::markdown_line("show this when value is true"),
                 line: false,
                 ..Default::default()
             }));
         row.container
             .children
-            .push(ftd_rt::Element::Boolean(ftd_rt::Text {
+            .push(ftd::Element::Boolean(ftd::Text {
                 text: ftd::markdown_line("show this when value is false"),
                 line: false,
                 ..Default::default()
             }));
-        row.common = ftd_rt::Common {
+        row.common = ftd::Common {
             locals: std::array::IntoIter::new([(s("x@0"), s("10"))]).collect(),
             ..Default::default()
         };
-        main.container.children.push(ftd_rt::Element::Row(row));
+        main.container.children.push(ftd::Element::Row(row));
 
         p!(
             "
@@ -4259,77 +4227,69 @@ mod test {
     #[test]
     fn boolean_expression() {
         let mut main = super::default_column();
-        main.container
-            .children
-            .push(ftd_rt::Element::Text(ftd_rt::Text {
-                text: ftd::markdown_line("present is true"),
-                line: true,
-                common: ftd_rt::Common {
-                    condition: Some(ftd_rt::Condition {
-                        variable: "foo/bar#present".to_string(),
-                        value: "true".to_string(),
-                    }),
-                    ..Default::default()
-                },
+        main.container.children.push(ftd::Element::Text(ftd::Text {
+            text: ftd::markdown_line("present is true"),
+            line: true,
+            common: ftd::Common {
+                condition: Some(ftd::Condition {
+                    variable: "foo/bar#present".to_string(),
+                    value: "true".to_string(),
+                }),
                 ..Default::default()
-            }));
+            },
+            ..Default::default()
+        }));
 
-        main.container
-            .children
-            .push(ftd_rt::Element::Text(ftd_rt::Text {
-                text: ftd::markdown_line("present is false"),
-                line: true,
-                common: ftd_rt::Common {
-                    condition: Some(ftd_rt::Condition {
-                        variable: "foo/bar#present".to_string(),
-                        value: "false".to_string(),
-                    }),
-                    is_not_visible: true,
-                    ..Default::default()
-                },
+        main.container.children.push(ftd::Element::Text(ftd::Text {
+            text: ftd::markdown_line("present is false"),
+            line: true,
+            common: ftd::Common {
+                condition: Some(ftd::Condition {
+                    variable: "foo/bar#present".to_string(),
+                    value: "false".to_string(),
+                }),
+                is_not_visible: true,
                 ..Default::default()
-            }));
+            },
+            ..Default::default()
+        }));
 
-        main.container
-            .children
-            .push(ftd_rt::Element::Text(ftd_rt::Text {
-                text: ftd::markdown_line("dark-mode is true"),
-                line: true,
-                common: ftd_rt::Common {
-                    condition: Some(ftd_rt::Condition {
-                        variable: "fifthtry/ft#dark-mode".to_string(),
-                        value: "true".to_string(),
-                    }),
-                    ..Default::default()
-                },
+        main.container.children.push(ftd::Element::Text(ftd::Text {
+            text: ftd::markdown_line("dark-mode is true"),
+            line: true,
+            common: ftd::Common {
+                condition: Some(ftd::Condition {
+                    variable: "fifthtry/ft#dark-mode".to_string(),
+                    value: "true".to_string(),
+                }),
                 ..Default::default()
-            }));
+            },
+            ..Default::default()
+        }));
 
-        main.container
-            .children
-            .push(ftd_rt::Element::Text(ftd_rt::Text {
-                text: ftd::markdown_line("dark-mode is false"),
-                line: true,
-                common: ftd_rt::Common {
-                    condition: Some(ftd_rt::Condition {
-                        variable: "fifthtry/ft#dark-mode".to_string(),
-                        value: "false".to_string(),
-                    }),
-                    is_not_visible: true,
-                    ..Default::default()
-                },
+        main.container.children.push(ftd::Element::Text(ftd::Text {
+            text: ftd::markdown_line("dark-mode is false"),
+            line: true,
+            common: ftd::Common {
+                condition: Some(ftd::Condition {
+                    variable: "fifthtry/ft#dark-mode".to_string(),
+                    value: "false".to_string(),
+                }),
+                is_not_visible: true,
                 ..Default::default()
-            }));
+            },
+            ..Default::default()
+        }));
 
-        let mut column: ftd_rt::Column = Default::default();
+        let mut column: ftd::Column = Default::default();
         column
             .container
             .children
-            .push(ftd_rt::Element::Text(ftd_rt::Text {
+            .push(ftd::Element::Text(ftd::Text {
                 text: ftd::markdown_line("inner present false"),
                 line: true,
-                common: ftd_rt::Common {
-                    condition: Some(ftd_rt::Condition {
+                common: ftd::Common {
+                    condition: Some(ftd::Condition {
                         variable: "foo/bar#present".to_string(),
                         value: "false".to_string(),
                     }),
@@ -4342,11 +4302,11 @@ mod test {
         column
             .container
             .children
-            .push(ftd_rt::Element::Text(ftd_rt::Text {
+            .push(ftd::Element::Text(ftd::Text {
                 text: ftd::markdown_line("inner present true"),
                 line: true,
-                common: ftd_rt::Common {
-                    condition: Some(ftd_rt::Condition {
+                common: ftd::Common {
+                    condition: Some(ftd::Condition {
                         variable: "foo/bar#present".to_string(),
                         value: "true".to_string(),
                     }),
@@ -4355,19 +4315,17 @@ mod test {
                 ..Default::default()
             }));
 
-        main.container
-            .children
-            .push(ftd_rt::Element::Column(column));
+        main.container.children.push(ftd::Element::Column(column));
 
-        let mut column: ftd_rt::Column = Default::default();
+        let mut column: ftd::Column = Default::default();
         column
             .container
             .children
-            .push(ftd_rt::Element::Text(ftd_rt::Text {
+            .push(ftd::Element::Text(ftd::Text {
                 text: ftd::markdown_line("argument present false"),
                 line: true,
-                common: ftd_rt::Common {
-                    condition: Some(ftd_rt::Condition {
+                common: ftd::Common {
+                    condition: Some(ftd::Condition {
                         variable: s("@present@5"),
                         value: s("false"),
                     }),
@@ -4378,11 +4336,11 @@ mod test {
         column
             .container
             .children
-            .push(ftd_rt::Element::Text(ftd_rt::Text {
+            .push(ftd::Element::Text(ftd::Text {
                 text: ftd::markdown_line("argument present true"),
                 line: true,
-                common: ftd_rt::Common {
-                    condition: Some(ftd_rt::Condition {
+                common: ftd::Common {
+                    condition: Some(ftd::Condition {
                         variable: s("@present@5"),
                         value: s("true"),
                     }),
@@ -4392,24 +4350,22 @@ mod test {
                 ..Default::default()
             }));
 
-        column.common = ftd_rt::Common {
+        column.common = ftd::Common {
             locals: std::array::IntoIter::new([(s("present@5"), s("false"))]).collect(),
             ..Default::default()
         };
 
-        main.container
-            .children
-            .push(ftd_rt::Element::Column(column));
+        main.container.children.push(ftd::Element::Column(column));
 
-        let mut column: ftd_rt::Column = Default::default();
+        let mut column: ftd::Column = Default::default();
         column
             .container
             .children
-            .push(ftd_rt::Element::Text(ftd_rt::Text {
+            .push(ftd::Element::Text(ftd::Text {
                 text: ftd::markdown_line("argument present false"),
                 line: true,
-                common: ftd_rt::Common {
-                    condition: Some(ftd_rt::Condition {
+                common: ftd::Common {
+                    condition: Some(ftd::Condition {
                         variable: s("@present@6"),
                         value: s("false"),
                     }),
@@ -4421,11 +4377,11 @@ mod test {
         column
             .container
             .children
-            .push(ftd_rt::Element::Text(ftd_rt::Text {
+            .push(ftd::Element::Text(ftd::Text {
                 text: ftd::markdown_line("argument present true"),
                 line: true,
-                common: ftd_rt::Common {
-                    condition: Some(ftd_rt::Condition {
+                common: ftd::Common {
+                    condition: Some(ftd::Condition {
                         variable: s("@present@6"),
                         value: s("true"),
                     }),
@@ -4434,24 +4390,22 @@ mod test {
                 ..Default::default()
             }));
 
-        column.common = ftd_rt::Common {
+        column.common = ftd::Common {
             locals: std::array::IntoIter::new([(s("present@6"), s("true"))]).collect(),
             ..Default::default()
         };
 
-        main.container
-            .children
-            .push(ftd_rt::Element::Column(column));
+        main.container.children.push(ftd::Element::Column(column));
 
-        let mut column: ftd_rt::Column = Default::default();
+        let mut column: ftd::Column = Default::default();
         column
             .container
             .children
-            .push(ftd_rt::Element::Text(ftd_rt::Text {
+            .push(ftd::Element::Text(ftd::Text {
                 text: ftd::markdown_line("foo2 dark-mode is true"),
                 line: true,
-                common: ftd_rt::Common {
-                    condition: Some(ftd_rt::Condition {
+                common: ftd::Common {
+                    condition: Some(ftd::Condition {
                         variable: "fifthtry/ft#dark-mode".to_string(),
                         value: "true".to_string(),
                     }),
@@ -4463,11 +4417,11 @@ mod test {
         column
             .container
             .children
-            .push(ftd_rt::Element::Text(ftd_rt::Text {
+            .push(ftd::Element::Text(ftd::Text {
                 text: ftd::markdown_line("foo2 dark-mode is false"),
                 line: true,
-                common: ftd_rt::Common {
-                    condition: Some(ftd_rt::Condition {
+                common: ftd::Common {
+                    condition: Some(ftd::Condition {
                         variable: "fifthtry/ft#dark-mode".to_string(),
                         value: "false".to_string(),
                     }),
@@ -4477,19 +4431,15 @@ mod test {
                 ..Default::default()
             }));
 
-        main.container
-            .children
-            .push(ftd_rt::Element::Column(column));
+        main.container.children.push(ftd::Element::Column(column));
 
-        main.container
-            .children
-            .push(ftd_rt::Element::Text(ftd_rt::Text {
-                text: ftd::markdown_line("hello literal truth"),
-                line: true,
-                ..Default::default()
-            }));
+        main.container.children.push(ftd::Element::Text(ftd::Text {
+            text: ftd::markdown_line("hello literal truth"),
+            line: true,
+            ..Default::default()
+        }));
 
-        main.container.children.push(ftd_rt::Element::Null);
+        main.container.children.push(ftd::Element::Null);
 
         p!(
             "
@@ -4617,20 +4567,20 @@ mod test {
         let mut main = super::default_column();
         main.container
             .children
-            .push(ftd_rt::Element::Column(ftd_rt::Column {
-                container: ftd_rt::Container {
-                    children: vec![ftd_rt::Element::Row(ftd_rt::Row {
-                        container: ftd_rt::Container {
+            .push(ftd::Element::Column(ftd::Column {
+                container: ftd::Container {
+                    children: vec![ftd::Element::Row(ftd::Row {
+                        container: ftd::Container {
                             children: vec![
-                                ftd_rt::Element::Row(ftd_rt::Row {
-                                    common: ftd_rt::Common {
+                                ftd::Element::Row(ftd::Row {
+                                    common: ftd::Common {
                                         data_id: Some(s("r2")),
                                         id: Some(s("foo-1:r2")),
                                         ..Default::default()
                                     },
                                     ..Default::default()
                                 }),
-                                ftd_rt::Element::Text(ftd_rt::Text {
+                                ftd::Element::Text(ftd::Text {
                                     text: ftd::markdown_line("hello"),
                                     line: true,
                                     ..Default::default()
@@ -4638,7 +4588,7 @@ mod test {
                             ],
                             ..Default::default()
                         },
-                        common: ftd_rt::Common {
+                        common: ftd::Common {
                             data_id: Some(s("r1")),
                             id: Some(s("foo-1:r1")),
                             ..Default::default()
@@ -4646,7 +4596,7 @@ mod test {
                     })],
                     ..Default::default()
                 },
-                common: ftd_rt::Common {
+                common: ftd::Common {
                     data_id: Some(s("foo-1")),
                     id: Some(s("foo-1")),
                     ..Default::default()
@@ -4655,12 +4605,12 @@ mod test {
 
         main.container
             .children
-            .push(ftd_rt::Element::Column(ftd_rt::Column {
-                container: ftd_rt::Container {
-                    children: vec![ftd_rt::Element::Row(ftd_rt::Row {
-                        container: ftd_rt::Container {
-                            children: vec![ftd_rt::Element::Row(ftd_rt::Row {
-                                common: ftd_rt::Common {
+            .push(ftd::Element::Column(ftd::Column {
+                container: ftd::Container {
+                    children: vec![ftd::Element::Row(ftd::Row {
+                        container: ftd::Container {
+                            children: vec![ftd::Element::Row(ftd::Row {
+                                common: ftd::Common {
                                     data_id: Some(s("r2")),
                                     id: Some(s("foo-2:r2")),
                                     ..Default::default()
@@ -4669,7 +4619,7 @@ mod test {
                             })],
                             ..Default::default()
                         },
-                        common: ftd_rt::Common {
+                        common: ftd::Common {
                             data_id: Some(s("r1")),
                             id: Some(s("foo-2:r1")),
                             ..Default::default()
@@ -4677,7 +4627,7 @@ mod test {
                     })],
                     ..Default::default()
                 },
-                common: ftd_rt::Common {
+                common: ftd::Common {
                     data_id: Some(s("foo-2")),
                     id: Some(s("foo-2")),
                     ..Default::default()
@@ -4770,20 +4720,20 @@ mod test {
         let mut main = super::default_column();
         main.container
             .children
-            .push(ftd_rt::Element::Column(ftd_rt::Column {
-                container: ftd_rt::Container {
-                    children: vec![ftd_rt::Element::Row(ftd_rt::Row {
-                        container: ftd_rt::Container {
+            .push(ftd::Element::Column(ftd::Column {
+                container: ftd::Container {
+                    children: vec![ftd::Element::Row(ftd::Row {
+                        container: ftd::Container {
                             children: vec![
-                                ftd_rt::Element::Row(ftd_rt::Row {
-                                    common: ftd_rt::Common {
+                                ftd::Element::Row(ftd::Row {
+                                    common: ftd::Common {
                                         data_id: Some(s("r2")),
                                         id: Some(s("foo-1:r2")),
                                         ..Default::default()
                                     },
                                     ..Default::default()
                                 }),
-                                ftd_rt::Element::Text(ftd_rt::Text {
+                                ftd::Element::Text(ftd::Text {
                                     text: ftd::markdown_line("hello"),
                                     line: true,
                                     ..Default::default()
@@ -4791,7 +4741,7 @@ mod test {
                             ],
                             ..Default::default()
                         },
-                        common: ftd_rt::Common {
+                        common: ftd::Common {
                             data_id: Some(s("r1")),
                             id: Some(s("foo-1:r1")),
                             ..Default::default()
@@ -4799,7 +4749,7 @@ mod test {
                     })],
                     ..Default::default()
                 },
-                common: ftd_rt::Common {
+                common: ftd::Common {
                     data_id: Some(s("foo-1")),
                     id: Some(s("foo-1")),
                     ..Default::default()
@@ -4808,12 +4758,12 @@ mod test {
 
         main.container
             .children
-            .push(ftd_rt::Element::Column(ftd_rt::Column {
-                container: ftd_rt::Container {
-                    children: vec![ftd_rt::Element::Row(ftd_rt::Row {
-                        container: ftd_rt::Container {
-                            children: vec![ftd_rt::Element::Row(ftd_rt::Row {
-                                common: ftd_rt::Common {
+            .push(ftd::Element::Column(ftd::Column {
+                container: ftd::Container {
+                    children: vec![ftd::Element::Row(ftd::Row {
+                        container: ftd::Container {
+                            children: vec![ftd::Element::Row(ftd::Row {
+                                common: ftd::Common {
                                     data_id: Some(s("r2")),
                                     id: Some(s("foo-2:r2")),
                                     ..Default::default()
@@ -4822,7 +4772,7 @@ mod test {
                             })],
                             ..Default::default()
                         },
-                        common: ftd_rt::Common {
+                        common: ftd::Common {
                             data_id: Some(s("r1")),
                             id: Some(s("foo-2:r1")),
                             ..Default::default()
@@ -4830,7 +4780,7 @@ mod test {
                     })],
                     ..Default::default()
                 },
-                common: ftd_rt::Common {
+                common: ftd::Common {
                     data_id: Some(s("foo-2")),
                     id: Some(s("foo-2")),
                     ..Default::default()
@@ -4858,7 +4808,7 @@ mod test {
     #[test]
     fn open_container_with_id() {
         let mut external_children = super::default_column();
-        external_children.container.children = vec![ftd_rt::Element::Text(ftd_rt::Text {
+        external_children.container.children = vec![ftd::Element::Text(ftd::Text {
             text: ftd::markdown_line("hello"),
             line: true,
             ..Default::default()
@@ -4867,17 +4817,17 @@ mod test {
         let mut main = super::default_column();
         main.container
             .children
-            .push(ftd_rt::Element::Column(ftd_rt::Column {
-                container: ftd_rt::Container {
+            .push(ftd::Element::Column(ftd::Column {
+                container: ftd::Container {
                     external_children: Some((
                         s("some-child"),
                         vec![vec![0, 0]],
-                        vec![ftd_rt::Element::Column(external_children)],
+                        vec![ftd::Element::Column(external_children)],
                     )),
-                    children: vec![ftd_rt::Element::Row(ftd_rt::Row {
-                        container: ftd_rt::Container {
-                            children: vec![ftd_rt::Element::Row(ftd_rt::Row {
-                                common: ftd_rt::Common {
+                    children: vec![ftd::Element::Row(ftd::Row {
+                        container: ftd::Container {
+                            children: vec![ftd::Element::Row(ftd::Row {
+                                common: ftd::Common {
                                     data_id: Some(s("some-child")),
                                     ..Default::default()
                                 },
@@ -4972,12 +4922,12 @@ mod test {
     fn open_container_with_if() {
         let mut external_children = super::default_column();
         external_children.container.children = vec![
-            ftd_rt::Element::Text(ftd_rt::Text {
+            ftd::Element::Text(ftd::Text {
                 text: ftd::markdown_line("hello"),
                 line: true,
                 ..Default::default()
             }),
-            ftd_rt::Element::Text(ftd_rt::Text {
+            ftd::Element::Text(ftd::Text {
                 text: ftd::markdown_line("hello1"),
                 line: true,
                 ..Default::default()
@@ -4985,48 +4935,44 @@ mod test {
         ];
 
         let mut main = super::default_column();
-        main.container
-            .children
-            .push(ftd_rt::Element::Text(ftd_rt::Text {
-                text: ftd::markdown_line("Start Browser"),
-                line: true,
-                ..Default::default()
-            }));
+        main.container.children.push(ftd::Element::Text(ftd::Text {
+            text: ftd::markdown_line("Start Browser"),
+            line: true,
+            ..Default::default()
+        }));
 
         main.container
             .children
-            .push(ftd_rt::Element::Column(ftd_rt::Column {
-                container: ftd_rt::Container {
-                    children: vec![ftd_rt::Element::Column(ftd_rt::Column {
-                        container: ftd_rt::Container {
-                            children: vec![ftd_rt::Element::Column(ftd_rt::Column {
-                                container: ftd_rt::Container {
+            .push(ftd::Element::Column(ftd::Column {
+                container: ftd::Container {
+                    children: vec![ftd::Element::Column(ftd::Column {
+                        container: ftd::Container {
+                            children: vec![ftd::Element::Column(ftd::Column {
+                                container: ftd::Container {
                                     children: vec![
-                                        ftd_rt::Element::Column(ftd_rt::Column {
-                                            container: ftd_rt::Container {
-                                                children: vec![ftd_rt::Element::Text(
-                                                    ftd_rt::Text {
-                                                        text: ftd::markdown_line("Mobile Display"),
-                                                        line: true,
-                                                        common: ftd_rt::Common {
-                                                            data_id: Some(s("mobile-display")),
-                                                            id: Some(s(
-                                                                "foo-id:some-child:mobile-display",
-                                                            )),
-                                                            ..Default::default()
-                                                        },
+                                        ftd::Element::Column(ftd::Column {
+                                            container: ftd::Container {
+                                                children: vec![ftd::Element::Text(ftd::Text {
+                                                    text: ftd::markdown_line("Mobile Display"),
+                                                    line: true,
+                                                    common: ftd::Common {
+                                                        data_id: Some(s("mobile-display")),
+                                                        id: Some(s(
+                                                            "foo-id:some-child:mobile-display",
+                                                        )),
                                                         ..Default::default()
                                                     },
-                                                )],
+                                                    ..Default::default()
+                                                })],
                                                 ..Default::default()
                                             },
-                                            common: ftd_rt::Common {
+                                            common: ftd::Common {
                                                 locals: std::array::IntoIter::new([(
                                                     s("id@1,0,0,0"),
                                                     s("some-child"),
                                                 )])
                                                 .collect(),
-                                                condition: Some(ftd_rt::Condition {
+                                                condition: Some(ftd::Condition {
                                                     variable: s("foo/bar#mobile"),
                                                     value: s("true"),
                                                 }),
@@ -5035,24 +4981,22 @@ mod test {
                                                 ..Default::default()
                                             },
                                         }),
-                                        ftd_rt::Element::Column(ftd_rt::Column {
-                                            container: ftd_rt::Container {
-                                                children: vec![ftd_rt::Element::Text(
-                                                    ftd_rt::Text {
-                                                        text: ftd::markdown_line("Desktop Display"),
-                                                        line: true,
-                                                        ..Default::default()
-                                                    },
-                                                )],
+                                        ftd::Element::Column(ftd::Column {
+                                            container: ftd::Container {
+                                                children: vec![ftd::Element::Text(ftd::Text {
+                                                    text: ftd::markdown_line("Desktop Display"),
+                                                    line: true,
+                                                    ..Default::default()
+                                                })],
                                                 ..Default::default()
                                             },
-                                            common: ftd_rt::Common {
+                                            common: ftd::Common {
                                                 locals: std::array::IntoIter::new([(
                                                     s("id@1,0,0,1"),
                                                     s("some-child"),
                                                 )])
                                                 .collect(),
-                                                condition: Some(ftd_rt::Condition {
+                                                condition: Some(ftd::Condition {
                                                     variable: s("foo/bar#mobile"),
                                                     value: s("false"),
                                                 }),
@@ -5066,12 +5010,12 @@ mod test {
                                     external_children: Some((
                                         s("some-child"),
                                         vec![vec![0], vec![1]],
-                                        vec![ftd_rt::Element::Column(external_children)],
+                                        vec![ftd::Element::Column(external_children)],
                                     )),
                                     open: (None, Some(s("some-child"))),
                                     ..Default::default()
                                 },
-                                common: ftd_rt::Common {
+                                common: ftd::Common {
                                     locals: std::array::IntoIter::new([(
                                         s("id@1,0,0"),
                                         s("foo-id"),
@@ -5084,7 +5028,7 @@ mod test {
                             })],
                             ..Default::default()
                         },
-                        common: ftd_rt::Common {
+                        common: ftd::Common {
                             data_id: Some(s("c2")),
                             id: Some(s("c2")),
                             ..Default::default()
@@ -5092,7 +5036,7 @@ mod test {
                     })],
                     ..Default::default()
                 },
-                common: ftd_rt::Common {
+                common: ftd::Common {
                     data_id: Some(s("c1")),
                     id: Some(s("c1")),
                     ..Default::default()
@@ -5359,12 +5303,12 @@ mod test {
     fn nested_open_container() {
         let mut external_children = super::default_column();
         external_children.container.children = vec![
-            ftd_rt::Element::Text(ftd_rt::Text {
+            ftd::Element::Text(ftd::Text {
                 text: ftd::markdown_line("hello"),
                 line: true,
                 ..Default::default()
             }),
-            ftd_rt::Element::Text(ftd_rt::Text {
+            ftd::Element::Text(ftd::Text {
                 text: ftd::markdown_line("hello again"),
                 line: true,
                 ..Default::default()
@@ -5374,19 +5318,19 @@ mod test {
         let mut main = super::default_column();
         main.container
             .children
-            .push(ftd_rt::Element::Column(ftd_rt::Column {
-                container: ftd_rt::Container {
-                    children: vec![ftd_rt::Element::Column(ftd_rt::Column {
-                        container: ftd_rt::Container {
+            .push(ftd::Element::Column(ftd::Column {
+                container: ftd::Container {
+                    children: vec![ftd::Element::Column(ftd::Column {
+                        container: ftd::Container {
                             children: vec![
-                                ftd_rt::Element::Column(ftd_rt::Column {
-                                    container: ftd_rt::Container {
-                                        children: vec![ftd_rt::Element::Column(ftd_rt::Column {
-                                            container: ftd_rt::Container {
+                                ftd::Element::Column(ftd::Column {
+                                    container: ftd::Container {
+                                        children: vec![ftd::Element::Column(ftd::Column {
+                                            container: ftd::Container {
                                                 children: vec![],
                                                 ..Default::default()
                                             },
-                                            common: ftd_rt::Common {
+                                            common: ftd::Common {
                                                 data_id: Some(s("desktop-container")),
                                                 ..Default::default()
                                             },
@@ -5399,8 +5343,8 @@ mod test {
                                         open: (None, Some(s("desktop-container"))),
                                         ..Default::default()
                                     },
-                                    common: ftd_rt::Common {
-                                        condition: Some(ftd_rt::Condition {
+                                    common: ftd::Common {
+                                        condition: Some(ftd::Condition {
                                             variable: s("foo/bar#is-mobile"),
                                             value: s("false"),
                                         }),
@@ -5409,10 +5353,10 @@ mod test {
                                         ..Default::default()
                                     },
                                 }),
-                                ftd_rt::Element::Column(ftd_rt::Column {
-                                    container: ftd_rt::Container {
-                                        children: vec![ftd_rt::Element::Column(ftd_rt::Column {
-                                            common: ftd_rt::Common {
+                                ftd::Element::Column(ftd::Column {
+                                    container: ftd::Container {
+                                        children: vec![ftd::Element::Column(ftd::Column {
+                                            common: ftd::Common {
                                                 data_id: Some(s("mobile-container")),
                                                 ..Default::default()
                                             },
@@ -5426,8 +5370,8 @@ mod test {
                                         open: (None, Some(s("mobile-container"))),
                                         ..Default::default()
                                     },
-                                    common: ftd_rt::Common {
-                                        condition: Some(ftd_rt::Condition {
+                                    common: ftd::Common {
+                                        condition: Some(ftd::Condition {
                                             variable: s("foo/bar#is-mobile"),
                                             value: s("true"),
                                         }),
@@ -5438,7 +5382,7 @@ mod test {
                             ],
                             ..Default::default()
                         },
-                        common: ftd_rt::Common {
+                        common: ftd::Common {
                             data_id: Some(s("start")),
                             ..Default::default()
                         },
@@ -5446,7 +5390,7 @@ mod test {
                     external_children: Some((
                         s("main-container"),
                         vec![vec![0, 0], vec![0, 1]],
-                        vec![ftd_rt::Element::Column(external_children)],
+                        vec![ftd::Element::Column(external_children)],
                     )),
                     open: (None, Some(s("main-container"))),
                     ..Default::default()
@@ -5509,12 +5453,12 @@ mod test {
     fn deep_open_container_call() {
         let mut external_children = super::default_column();
         external_children.container.children = vec![
-            ftd_rt::Element::Text(ftd_rt::Text {
+            ftd::Element::Text(ftd::Text {
                 text: ftd::markdown_line("hello"),
                 line: true,
                 ..Default::default()
             }),
-            ftd_rt::Element::Text(ftd_rt::Text {
+            ftd::Element::Text(ftd::Text {
                 text: ftd::markdown_line("hello again"),
                 line: true,
                 ..Default::default()
@@ -5525,13 +5469,13 @@ mod test {
 
         main.container
             .children
-            .push(ftd_rt::Element::Column(ftd_rt::Column {
-                container: ftd_rt::Container {
+            .push(ftd::Element::Column(ftd::Column {
+                container: ftd::Container {
                     children: vec![
-                        ftd_rt::Element::Column(ftd_rt::Column {
-                            container: ftd_rt::Container {
-                                children: vec![ftd_rt::Element::Column(ftd_rt::Column {
-                                    common: ftd_rt::Common {
+                        ftd::Element::Column(ftd::Column {
+                            container: ftd::Container {
+                                children: vec![ftd::Element::Column(ftd::Column {
+                                    common: ftd::Common {
                                         data_id: Some(s("foo")),
                                         ..Default::default()
                                     },
@@ -5539,13 +5483,13 @@ mod test {
                                 })],
                                 ..Default::default()
                             },
-                            common: ftd_rt::Common {
+                            common: ftd::Common {
                                 locals: std::array::IntoIter::new([(
                                     s("id@0,0"),
                                     s("main-container"),
                                 )])
                                 .collect(),
-                                condition: Some(ftd_rt::Condition {
+                                condition: Some(ftd::Condition {
                                     variable: s("foo/bar#is-mobile"),
                                     value: s("false"),
                                 }),
@@ -5554,10 +5498,10 @@ mod test {
                                 ..Default::default()
                             },
                         }),
-                        ftd_rt::Element::Column(ftd_rt::Column {
-                            container: ftd_rt::Container {
-                                children: vec![ftd_rt::Element::Column(ftd_rt::Column {
-                                    common: ftd_rt::Common {
+                        ftd::Element::Column(ftd::Column {
+                            container: ftd::Container {
+                                children: vec![ftd::Element::Column(ftd::Column {
+                                    common: ftd::Common {
                                         data_id: Some(s("foo")),
                                         ..Default::default()
                                     },
@@ -5565,13 +5509,13 @@ mod test {
                                 })],
                                 ..Default::default()
                             },
-                            common: ftd_rt::Common {
+                            common: ftd::Common {
                                 locals: std::array::IntoIter::new([(
                                     s("id@0,1"),
                                     s("main-container"),
                                 )])
                                 .collect(),
-                                condition: Some(ftd_rt::Condition {
+                                condition: Some(ftd::Condition {
                                     variable: s("foo/bar#is-mobile"),
                                     value: s("true"),
                                 }),
@@ -5583,7 +5527,7 @@ mod test {
                     external_children: Some((
                         s("foo"),
                         vec![vec![0, 0], vec![1, 0]],
-                        vec![ftd_rt::Element::Column(external_children)],
+                        vec![ftd::Element::Column(external_children)],
                     )),
                     open: (None, Some(s("main-container.foo"))),
                     ..Default::default()
@@ -5643,12 +5587,12 @@ mod test {
     fn deep_nested_open_container_call() {
         let mut nested_external_children = super::default_column();
         nested_external_children.container.children = vec![
-            ftd_rt::Element::Text(ftd_rt::Text {
+            ftd::Element::Text(ftd::Text {
                 text: ftd::markdown_line("hello"),
                 line: true,
                 ..Default::default()
             }),
-            ftd_rt::Element::Text(ftd_rt::Text {
+            ftd::Element::Text(ftd::Text {
                 text: ftd::markdown_line("hello again"),
                 line: true,
                 ..Default::default()
@@ -5656,12 +5600,12 @@ mod test {
         ];
 
         let mut external_children = super::default_column();
-        external_children.container.children = vec![ftd_rt::Element::Column(ftd_rt::Column {
-            container: ftd_rt::Container {
-                children: vec![ftd_rt::Element::Row(ftd_rt::Row {
-                    container: ftd_rt::Container {
-                        children: vec![ftd_rt::Element::Column(ftd_rt::Column {
-                            common: ftd_rt::Common {
+        external_children.container.children = vec![ftd::Element::Column(ftd::Column {
+            container: ftd::Container {
+                children: vec![ftd::Element::Row(ftd::Row {
+                    container: ftd::Container {
+                        children: vec![ftd::Element::Column(ftd::Column {
+                            common: ftd::Common {
                                 locals: std::array::IntoIter::new([(s("id@0,0,0,0"), s("foo"))])
                                     .collect(),
                                 data_id: Some(s("foo")),
@@ -5671,7 +5615,7 @@ mod test {
                         })],
                         ..Default::default()
                     },
-                    common: ftd_rt::Common {
+                    common: ftd::Common {
                         data_id: Some(s("desktop-container")),
                         ..Default::default()
                     },
@@ -5679,7 +5623,7 @@ mod test {
                 external_children: Some((
                     s("desktop-container"),
                     vec![vec![0]],
-                    vec![ftd_rt::Element::Column(nested_external_children)],
+                    vec![ftd::Element::Column(nested_external_children)],
                 )),
                 open: (None, Some(s("desktop-container"))),
                 ..Default::default()
@@ -5690,15 +5634,15 @@ mod test {
         let mut main = super::default_column();
         main.container
             .children
-            .push(ftd_rt::Element::Column(ftd_rt::Column {
-                container: ftd_rt::Container {
+            .push(ftd::Element::Column(ftd::Column {
+                container: ftd::Container {
                     children: vec![
-                        ftd_rt::Element::Column(ftd_rt::Column {
-                            container: ftd_rt::Container {
-                                children: vec![ftd_rt::Element::Row(ftd_rt::Row {
-                                    container: ftd_rt::Container {
-                                        children: vec![ftd_rt::Element::Column(ftd_rt::Column {
-                                            common: ftd_rt::Common {
+                        ftd::Element::Column(ftd::Column {
+                            container: ftd::Container {
+                                children: vec![ftd::Element::Row(ftd::Row {
+                                    container: ftd::Container {
+                                        children: vec![ftd::Element::Column(ftd::Column {
+                                            common: ftd::Common {
                                                 locals: std::array::IntoIter::new([(
                                                     s("id@0,0,0,0"),
                                                     s("foo"),
@@ -5711,7 +5655,7 @@ mod test {
                                         })],
                                         ..Default::default()
                                     },
-                                    common: ftd_rt::Common {
+                                    common: ftd::Common {
                                         data_id: Some(s("desktop-container")),
                                         ..Default::default()
                                     },
@@ -5724,13 +5668,13 @@ mod test {
                                 open: (None, Some(s("desktop-container"))),
                                 ..Default::default()
                             },
-                            common: ftd_rt::Common {
+                            common: ftd::Common {
                                 locals: std::array::IntoIter::new([(
                                     s("id@0,0"),
                                     s("main-container"),
                                 )])
                                 .collect(),
-                                condition: Some(ftd_rt::Condition {
+                                condition: Some(ftd::Condition {
                                     variable: s("foo/bar#is-mobile"),
                                     value: s("false"),
                                 }),
@@ -5739,12 +5683,12 @@ mod test {
                             },
                             ..Default::default()
                         }),
-                        ftd_rt::Element::Column(ftd_rt::Column {
-                            container: ftd_rt::Container {
-                                children: vec![ftd_rt::Element::Row(ftd_rt::Row {
-                                    container: ftd_rt::Container {
-                                        children: vec![ftd_rt::Element::Column(ftd_rt::Column {
-                                            common: ftd_rt::Common {
+                        ftd::Element::Column(ftd::Column {
+                            container: ftd::Container {
+                                children: vec![ftd::Element::Row(ftd::Row {
+                                    container: ftd::Container {
+                                        children: vec![ftd::Element::Column(ftd::Column {
+                                            common: ftd::Common {
                                                 locals: std::array::IntoIter::new([(
                                                     s("id@0,1,0,0"),
                                                     s("foo"),
@@ -5757,7 +5701,7 @@ mod test {
                                         })],
                                         ..Default::default()
                                     },
-                                    common: ftd_rt::Common {
+                                    common: ftd::Common {
                                         data_id: Some(s("mobile-container")),
                                         ..Default::default()
                                     },
@@ -5770,13 +5714,13 @@ mod test {
                                 open: (None, Some(s("mobile-container"))),
                                 ..Default::default()
                             },
-                            common: ftd_rt::Common {
+                            common: ftd::Common {
                                 locals: std::array::IntoIter::new([(
                                     s("id@0,1"),
                                     s("main-container"),
                                 )])
                                 .collect(),
-                                condition: Some(ftd_rt::Condition {
+                                condition: Some(ftd::Condition {
                                     variable: s("foo/bar#is-mobile"),
                                     value: s("true"),
                                 }),
@@ -5789,7 +5733,7 @@ mod test {
                     external_children: Some((
                         s("foo"),
                         vec![vec![0, 0, 0], vec![1, 0, 0]],
-                        vec![ftd_rt::Element::Column(external_children)],
+                        vec![ftd::Element::Column(external_children)],
                     )),
                     open: (None, Some(s("main-container.foo"))),
                     ..Default::default()
@@ -5879,12 +5823,12 @@ mod test {
     fn invalid_deep_open_container() {
         let mut external_children = super::default_column();
         external_children.container.children = vec![
-            ftd_rt::Element::Text(ftd_rt::Text {
+            ftd::Element::Text(ftd::Text {
                 text: ftd::markdown_line("hello"),
                 line: true,
                 ..Default::default()
             }),
-            ftd_rt::Element::Text(ftd_rt::Text {
+            ftd::Element::Text(ftd::Text {
                 text: ftd::markdown_line("hello again"),
                 line: true,
                 ..Default::default()
@@ -5894,27 +5838,27 @@ mod test {
         let mut main = super::default_column();
         main.container
             .children
-            .push(ftd_rt::Element::Column(ftd_rt::Column {
-                container: ftd_rt::Container {
-                    children: vec![ftd_rt::Element::Column(ftd_rt::Column {
-                        container: ftd_rt::Container {
+            .push(ftd::Element::Column(ftd::Column {
+                container: ftd::Container {
+                    children: vec![ftd::Element::Column(ftd::Column {
+                        container: ftd::Container {
                             children: vec![
-                                ftd_rt::Element::Column(ftd_rt::Column {
-                                    container: ftd_rt::Container {
-                                        children: vec![ftd_rt::Element::Column(ftd_rt::Column {
-                                            container: ftd_rt::Container {
+                                ftd::Element::Column(ftd::Column {
+                                    container: ftd::Container {
+                                        children: vec![ftd::Element::Column(ftd::Column {
+                                            container: ftd::Container {
                                                 children: vec![],
                                                 ..Default::default()
                                             },
-                                            common: ftd_rt::Common {
+                                            common: ftd::Common {
                                                 data_id: Some(s("main-container")),
                                                 ..Default::default()
                                             },
                                         })],
                                         ..Default::default()
                                     },
-                                    common: ftd_rt::Common {
-                                        condition: Some(ftd_rt::Condition {
+                                    common: ftd::Common {
+                                        condition: Some(ftd::Condition {
                                             variable: s("foo/bar#is-mobile"),
                                             value: s("false"),
                                         }),
@@ -5922,10 +5866,10 @@ mod test {
                                         ..Default::default()
                                     },
                                 }),
-                                ftd_rt::Element::Column(ftd_rt::Column {
-                                    container: ftd_rt::Container {
-                                        children: vec![ftd_rt::Element::Column(ftd_rt::Column {
-                                            common: ftd_rt::Common {
+                                ftd::Element::Column(ftd::Column {
+                                    container: ftd::Container {
+                                        children: vec![ftd::Element::Column(ftd::Column {
+                                            common: ftd::Common {
                                                 data_id: Some(s("main-container")),
                                                 ..Default::default()
                                             },
@@ -5933,8 +5877,8 @@ mod test {
                                         })],
                                         ..Default::default()
                                     },
-                                    common: ftd_rt::Common {
-                                        condition: Some(ftd_rt::Condition {
+                                    common: ftd::Common {
+                                        condition: Some(ftd::Condition {
                                             variable: s("foo/bar#is-mobile"),
                                             value: s("true"),
                                         }),
@@ -5944,7 +5888,7 @@ mod test {
                             ],
                             ..Default::default()
                         },
-                        common: ftd_rt::Common {
+                        common: ftd::Common {
                             data_id: Some(s("start")),
                             ..Default::default()
                         },
@@ -5952,7 +5896,7 @@ mod test {
                     external_children: Some((
                         s("main-container"),
                         vec![],
-                        vec![ftd_rt::Element::Column(external_children)],
+                        vec![ftd::Element::Column(external_children)],
                     )),
                     open: (None, Some(s("main-container"))),
                     ..Default::default()
@@ -6014,51 +5958,47 @@ mod test {
     #[test]
     fn open_container_id_1() {
         let mut main = self::default_column();
-        main.container
-            .children
-            .push(ftd_rt::Element::Row(ftd_rt::Row {
-                common: ftd_rt::Common {
-                    data_id: Some(s("r1")),
-                    id: Some(s("r1")),
-                    ..Default::default()
-                },
-                container: ftd_rt::Container {
-                    open: (Some(false), None),
-                    ..Default::default()
-                },
-            }));
-        main.container
-            .children
-            .push(ftd_rt::Element::Row(ftd_rt::Row {
-                container: ftd_rt::Container {
-                    external_children: Default::default(),
-                    children: vec![
-                        ftd_rt::Element::Text(ftd_rt::Text {
-                            text: ftd::markdown_line("hello"),
-                            line: true,
+        main.container.children.push(ftd::Element::Row(ftd::Row {
+            common: ftd::Common {
+                data_id: Some(s("r1")),
+                id: Some(s("r1")),
+                ..Default::default()
+            },
+            container: ftd::Container {
+                open: (Some(false), None),
+                ..Default::default()
+            },
+        }));
+        main.container.children.push(ftd::Element::Row(ftd::Row {
+            container: ftd::Container {
+                external_children: Default::default(),
+                children: vec![
+                    ftd::Element::Text(ftd::Text {
+                        text: ftd::markdown_line("hello"),
+                        line: true,
+                        ..Default::default()
+                    }),
+                    ftd::Element::Row(ftd::Row {
+                        container: ftd::Container {
+                            open: (Some(false), None),
                             ..Default::default()
-                        }),
-                        ftd_rt::Element::Row(ftd_rt::Row {
-                            container: ftd_rt::Container {
-                                open: (Some(false), None),
-                                ..Default::default()
-                            },
-                            common: ftd_rt::Common {
-                                data_id: Some(s("r3")),
-                                id: Some(s("r3")),
-                                ..Default::default()
-                            },
-                        }),
-                    ],
-                    open: (Some(true), None),
-                    ..Default::default()
-                },
-                common: ftd_rt::Common {
-                    data_id: Some(s("r2")),
-                    id: Some(s("r2")),
-                    ..Default::default()
-                },
-            }));
+                        },
+                        common: ftd::Common {
+                            data_id: Some(s("r3")),
+                            id: Some(s("r3")),
+                            ..Default::default()
+                        },
+                    }),
+                ],
+                open: (Some(true), None),
+                ..Default::default()
+            },
+            common: ftd::Common {
+                data_id: Some(s("r2")),
+                id: Some(s("r2")),
+                ..Default::default()
+            },
+        }));
         let (g_bag, g_col) = crate::p2::interpreter::interpret(
             "foo/bar",
             indoc::indoc!(
@@ -6089,17 +6029,15 @@ mod test {
     fn submit() {
         let mut main = super::default_column();
 
-        main.container
-            .children
-            .push(ftd_rt::Element::Text(ftd_rt::Text {
-                text: ftd::markdown_line("hello"),
-                line: true,
-                common: ftd_rt::Common {
-                    submit: Some("https://httpbin.org/post?x=10".to_string()),
-                    ..Default::default()
-                },
+        main.container.children.push(ftd::Element::Text(ftd::Text {
+            text: ftd::markdown_line("hello"),
+            line: true,
+            common: ftd::Common {
+                submit: Some("https://httpbin.org/post?x=10".to_string()),
                 ..Default::default()
-            }));
+            },
+            ..Default::default()
+        }));
 
         let (g_bag, g_col) = crate::p2::interpreter::interpret(
             "foo/bar",
@@ -6119,111 +6057,105 @@ mod test {
     #[test]
     fn basic_loop_on_record_1() {
         let mut main = super::default_column();
-        main.container
-            .children
-            .push(ftd_rt::Element::Row(ftd_rt::Row {
-                container: ftd_rt::Container {
-                    children: vec![
-                        ftd_rt::Element::Text(ftd_rt::Text {
-                            text: ftd::markdown_line("hello"),
-                            line: true,
-                            common: ftd_rt::Common {
-                                reference: Some(s("@name@0")),
-                                ..Default::default()
-                            },
+        main.container.children.push(ftd::Element::Row(ftd::Row {
+            container: ftd::Container {
+                children: vec![
+                    ftd::Element::Text(ftd::Text {
+                        text: ftd::markdown_line("hello"),
+                        line: true,
+                        common: ftd::Common {
+                            reference: Some(s("@name@0")),
                             ..Default::default()
-                        }),
-                        ftd_rt::Element::Text(ftd_rt::Text {
-                            text: ftd::markdown_line("world"),
-                            line: true,
-                            common: ftd_rt::Common {
-                                reference: Some(s("@body@0")),
-                                ..Default::default()
-                            },
+                        },
+                        ..Default::default()
+                    }),
+                    ftd::Element::Text(ftd::Text {
+                        text: ftd::markdown_line("world"),
+                        line: true,
+                        common: ftd::Common {
+                            reference: Some(s("@body@0")),
                             ..Default::default()
-                        }),
-                    ],
-                    ..Default::default()
-                },
-                common: ftd_rt::Common {
-                    locals: std::array::IntoIter::new([
-                        (s("body@0"), s("world")),
-                        (s("name@0"), s("hello")),
-                    ])
-                    .collect(),
-                    ..Default::default()
-                },
-            }));
+                        },
+                        ..Default::default()
+                    }),
+                ],
+                ..Default::default()
+            },
+            common: ftd::Common {
+                locals: std::array::IntoIter::new([
+                    (s("body@0"), s("world")),
+                    (s("name@0"), s("hello")),
+                ])
+                .collect(),
+                ..Default::default()
+            },
+        }));
 
-        main.container
-            .children
-            .push(ftd_rt::Element::Row(ftd_rt::Row {
-                container: ftd_rt::Container {
-                    children: vec![
-                        ftd_rt::Element::Text(ftd_rt::Text {
-                            text: ftd::markdown_line("Arpita Jaiswal"),
-                            line: true,
-                            common: ftd_rt::Common {
-                                reference: Some(s("@name@1")),
-                                ..Default::default()
-                            },
+        main.container.children.push(ftd::Element::Row(ftd::Row {
+            container: ftd::Container {
+                children: vec![
+                    ftd::Element::Text(ftd::Text {
+                        text: ftd::markdown_line("Arpita Jaiswal"),
+                        line: true,
+                        common: ftd::Common {
+                            reference: Some(s("@name@1")),
                             ..Default::default()
-                        }),
-                        ftd_rt::Element::Text(ftd_rt::Text {
-                            text: ftd::markdown("Arpita is developer at Fifthtry"),
-                            common: ftd_rt::Common {
-                                reference: Some(s("@body@1")),
-                                ..Default::default()
-                            },
+                        },
+                        ..Default::default()
+                    }),
+                    ftd::Element::Text(ftd::Text {
+                        text: ftd::markdown("Arpita is developer at Fifthtry"),
+                        common: ftd::Common {
+                            reference: Some(s("@body@1")),
                             ..Default::default()
-                        }),
-                    ],
-                    ..Default::default()
-                },
-                common: ftd_rt::Common {
-                    locals: std::array::IntoIter::new([
-                        (s("body@1"), s("Arpita is developer at Fifthtry")),
-                        (s("name@1"), s("Arpita Jaiswal")),
-                    ])
-                    .collect(),
-                    ..Default::default()
-                },
-            }));
+                        },
+                        ..Default::default()
+                    }),
+                ],
+                ..Default::default()
+            },
+            common: ftd::Common {
+                locals: std::array::IntoIter::new([
+                    (s("body@1"), s("Arpita is developer at Fifthtry")),
+                    (s("name@1"), s("Arpita Jaiswal")),
+                ])
+                .collect(),
+                ..Default::default()
+            },
+        }));
 
-        main.container
-            .children
-            .push(ftd_rt::Element::Row(ftd_rt::Row {
-                container: ftd_rt::Container {
-                    children: vec![
-                        ftd_rt::Element::Text(ftd_rt::Text {
-                            text: ftd::markdown_line("Amit Upadhyay"),
-                            line: true,
-                            common: ftd_rt::Common {
-                                reference: Some(s("@name@2")),
-                                ..Default::default()
-                            },
+        main.container.children.push(ftd::Element::Row(ftd::Row {
+            container: ftd::Container {
+                children: vec![
+                    ftd::Element::Text(ftd::Text {
+                        text: ftd::markdown_line("Amit Upadhyay"),
+                        line: true,
+                        common: ftd::Common {
+                            reference: Some(s("@name@2")),
                             ..Default::default()
-                        }),
-                        ftd_rt::Element::Text(ftd_rt::Text {
-                            text: ftd::markdown("Amit is CEO of FifthTry."),
-                            common: ftd_rt::Common {
-                                reference: Some(s("@body@2")),
-                                ..Default::default()
-                            },
+                        },
+                        ..Default::default()
+                    }),
+                    ftd::Element::Text(ftd::Text {
+                        text: ftd::markdown("Amit is CEO of FifthTry."),
+                        common: ftd::Common {
+                            reference: Some(s("@body@2")),
                             ..Default::default()
-                        }),
-                    ],
-                    ..Default::default()
-                },
-                common: ftd_rt::Common {
-                    locals: std::array::IntoIter::new([
-                        (s("body@2"), s("Amit is CEO of FifthTry.")),
-                        (s("name@2"), s("Amit Upadhyay")),
-                    ])
-                    .collect(),
-                    ..Default::default()
-                },
-            }));
+                        },
+                        ..Default::default()
+                    }),
+                ],
+                ..Default::default()
+            },
+            common: ftd::Common {
+                locals: std::array::IntoIter::new([
+                    (s("body@2"), s("Amit is CEO of FifthTry.")),
+                    (s("name@2"), s("Amit Upadhyay")),
+                ])
+                .collect(),
+                ..Default::default()
+            },
+        }));
 
         let mut bag = super::default_bag();
 
@@ -6424,43 +6356,41 @@ mod test {
     #[test]
     fn basic_loop_on_record_with_if_condition() {
         let mut main = super::default_column();
-        main.container.children.push(ftd_rt::Element::Null);
+        main.container.children.push(ftd::Element::Null);
 
-        main.container
-            .children
-            .push(ftd_rt::Element::Row(ftd_rt::Row {
-                container: ftd_rt::Container {
-                    children: vec![
-                        ftd_rt::Element::Text(ftd_rt::Text {
-                            text: ftd::markdown_line("Amit Upadhyay"),
-                            line: true,
-                            common: ftd_rt::Common {
-                                reference: Some(s("@name@1")),
-                                ..Default::default()
-                            },
+        main.container.children.push(ftd::Element::Row(ftd::Row {
+            container: ftd::Container {
+                children: vec![
+                    ftd::Element::Text(ftd::Text {
+                        text: ftd::markdown_line("Amit Upadhyay"),
+                        line: true,
+                        common: ftd::Common {
+                            reference: Some(s("@name@1")),
                             ..Default::default()
-                        }),
-                        ftd_rt::Element::Text(ftd_rt::Text {
-                            text: ftd::markdown("Amit is CEO of FifthTry."),
-                            common: ftd_rt::Common {
-                                reference: Some(s("@body@1")),
-                                ..Default::default()
-                            },
+                        },
+                        ..Default::default()
+                    }),
+                    ftd::Element::Text(ftd::Text {
+                        text: ftd::markdown("Amit is CEO of FifthTry."),
+                        common: ftd::Common {
+                            reference: Some(s("@body@1")),
                             ..Default::default()
-                        }),
-                    ],
-                    ..Default::default()
-                },
-                common: ftd_rt::Common {
-                    locals: std::array::IntoIter::new([
-                        (s("name@1"), s("Amit Upadhyay")),
-                        (s("body@1"), s("Amit is CEO of FifthTry.")),
-                    ])
-                    .collect(),
-                    ..Default::default()
-                },
+                        },
+                        ..Default::default()
+                    }),
+                ],
                 ..Default::default()
-            }));
+            },
+            common: ftd::Common {
+                locals: std::array::IntoIter::new([
+                    (s("name@1"), s("Amit Upadhyay")),
+                    (s("body@1"), s("Amit is CEO of FifthTry.")),
+                ])
+                .collect(),
+                ..Default::default()
+            },
+            ..Default::default()
+        }));
 
         let mut bag = super::default_bag();
 
@@ -6649,29 +6579,23 @@ mod test {
     #[test]
     fn basic_loop_on_string() {
         let mut main = super::default_column();
-        main.container
-            .children
-            .push(ftd_rt::Element::Text(ftd_rt::Text {
-                text: ftd::markdown_line("Arpita"),
-                line: true,
-                ..Default::default()
-            }));
+        main.container.children.push(ftd::Element::Text(ftd::Text {
+            text: ftd::markdown_line("Arpita"),
+            line: true,
+            ..Default::default()
+        }));
 
-        main.container
-            .children
-            .push(ftd_rt::Element::Text(ftd_rt::Text {
-                text: ftd::markdown_line("Asit"),
-                line: true,
-                ..Default::default()
-            }));
+        main.container.children.push(ftd::Element::Text(ftd::Text {
+            text: ftd::markdown_line("Asit"),
+            line: true,
+            ..Default::default()
+        }));
 
-        main.container
-            .children
-            .push(ftd_rt::Element::Text(ftd_rt::Text {
-                text: ftd::markdown_line("Sourabh"),
-                line: true,
-                ..Default::default()
-            }));
+        main.container.children.push(ftd::Element::Text(ftd::Text {
+            text: ftd::markdown_line("Sourabh"),
+            line: true,
+            ..Default::default()
+        }));
 
         let mut bag = super::default_bag();
 
@@ -6725,81 +6649,77 @@ mod test {
     #[test]
     fn loop_inside_subsection() {
         let mut main = super::default_column();
-        let mut col = ftd_rt::Column {
+        let mut col = ftd::Column {
             ..Default::default()
         };
 
-        col.container
-            .children
-            .push(ftd_rt::Element::Row(ftd_rt::Row {
-                container: ftd_rt::Container {
-                    children: vec![
-                        ftd_rt::Element::Text(ftd_rt::Text {
-                            text: ftd::markdown_line("Arpita Jaiswal"),
-                            line: true,
-                            common: ftd_rt::Common {
-                                reference: Some(s("@name@0,0")),
-                                ..Default::default()
-                            },
+        col.container.children.push(ftd::Element::Row(ftd::Row {
+            container: ftd::Container {
+                children: vec![
+                    ftd::Element::Text(ftd::Text {
+                        text: ftd::markdown_line("Arpita Jaiswal"),
+                        line: true,
+                        common: ftd::Common {
+                            reference: Some(s("@name@0,0")),
                             ..Default::default()
-                        }),
-                        ftd_rt::Element::Text(ftd_rt::Text {
-                            text: ftd::markdown("Arpita is developer at Fifthtry"),
-                            common: ftd_rt::Common {
-                                reference: Some(s("@body@0,0")),
-                                ..Default::default()
-                            },
+                        },
+                        ..Default::default()
+                    }),
+                    ftd::Element::Text(ftd::Text {
+                        text: ftd::markdown("Arpita is developer at Fifthtry"),
+                        common: ftd::Common {
+                            reference: Some(s("@body@0,0")),
                             ..Default::default()
-                        }),
-                    ],
-                    ..Default::default()
-                },
-                common: ftd_rt::Common {
-                    locals: std::array::IntoIter::new([
-                        (s("body@0,0"), s("Arpita is developer at Fifthtry")),
-                        (s("name@0,0"), s("Arpita Jaiswal")),
-                    ])
-                    .collect(),
-                    ..Default::default()
-                },
-            }));
+                        },
+                        ..Default::default()
+                    }),
+                ],
+                ..Default::default()
+            },
+            common: ftd::Common {
+                locals: std::array::IntoIter::new([
+                    (s("body@0,0"), s("Arpita is developer at Fifthtry")),
+                    (s("name@0,0"), s("Arpita Jaiswal")),
+                ])
+                .collect(),
+                ..Default::default()
+            },
+        }));
 
-        col.container
-            .children
-            .push(ftd_rt::Element::Row(ftd_rt::Row {
-                container: ftd_rt::Container {
-                    children: vec![
-                        ftd_rt::Element::Text(ftd_rt::Text {
-                            text: ftd::markdown_line("Amit Upadhyay"),
-                            line: true,
-                            common: ftd_rt::Common {
-                                reference: Some(s("@name@0,1")),
-                                ..Default::default()
-                            },
+        col.container.children.push(ftd::Element::Row(ftd::Row {
+            container: ftd::Container {
+                children: vec![
+                    ftd::Element::Text(ftd::Text {
+                        text: ftd::markdown_line("Amit Upadhyay"),
+                        line: true,
+                        common: ftd::Common {
+                            reference: Some(s("@name@0,1")),
                             ..Default::default()
-                        }),
-                        ftd_rt::Element::Text(ftd_rt::Text {
-                            text: ftd::markdown("Amit is CEO of FifthTry."),
-                            common: ftd_rt::Common {
-                                reference: Some(s("@body@0,1")),
-                                ..Default::default()
-                            },
+                        },
+                        ..Default::default()
+                    }),
+                    ftd::Element::Text(ftd::Text {
+                        text: ftd::markdown("Amit is CEO of FifthTry."),
+                        common: ftd::Common {
+                            reference: Some(s("@body@0,1")),
                             ..Default::default()
-                        }),
-                    ],
-                    ..Default::default()
-                },
-                common: ftd_rt::Common {
-                    locals: std::array::IntoIter::new([
-                        (s("body@0,1"), s("Amit is CEO of FifthTry.")),
-                        (s("name@0,1"), s("Amit Upadhyay")),
-                    ])
-                    .collect(),
-                    ..Default::default()
-                },
-            }));
+                        },
+                        ..Default::default()
+                    }),
+                ],
+                ..Default::default()
+            },
+            common: ftd::Common {
+                locals: std::array::IntoIter::new([
+                    (s("body@0,1"), s("Amit is CEO of FifthTry.")),
+                    (s("name@0,1"), s("Amit Upadhyay")),
+                ])
+                .collect(),
+                ..Default::default()
+            },
+        }));
 
-        main.container.children.push(ftd_rt::Element::Column(col));
+        main.container.children.push(ftd::Element::Column(col));
 
         let mut bag = super::default_bag();
 
@@ -7016,17 +6936,15 @@ mod test {
     fn basic_processor() {
         let mut main = super::default_column();
 
-        main.container
-            .children
-            .push(ftd_rt::Element::Text(ftd_rt::Text {
-                text: ftd::markdown_line("\"0.1.9\""),
-                line: true,
-                common: ftd_rt::Common {
-                    reference: Some(s("foo/bar#test")),
-                    ..Default::default()
-                },
+        main.container.children.push(ftd::Element::Text(ftd::Text {
+            text: ftd::markdown_line("\"0.1.9\""),
+            line: true,
+            common: ftd::Common {
+                reference: Some(s("foo/bar#test")),
                 ..Default::default()
-            }));
+            },
+            ..Default::default()
+        }));
 
         let mut bag = super::default_bag();
 
@@ -7063,17 +6981,15 @@ mod test {
     fn basic_processor_that_overwrites() {
         let mut main = super::default_column();
 
-        main.container
-            .children
-            .push(ftd_rt::Element::Text(ftd_rt::Text {
-                text: ftd::markdown_line("\"0.1.9\""),
-                line: true,
-                common: ftd_rt::Common {
-                    reference: Some(s("foo/bar#test")),
-                    ..Default::default()
-                },
+        main.container.children.push(ftd::Element::Text(ftd::Text {
+            text: ftd::markdown_line("\"0.1.9\""),
+            line: true,
+            common: ftd::Common {
+                reference: Some(s("foo/bar#test")),
                 ..Default::default()
-            }));
+            },
+            ..Default::default()
+        }));
 
         let mut bag = super::default_bag();
 
@@ -7112,69 +7028,53 @@ mod test {
     fn basic_processor_for_list() {
         let mut main = super::default_column();
 
-        main.container
-            .children
-            .push(ftd_rt::Element::Text(ftd_rt::Text {
-                text: ftd::markdown_line("\"ftd\""),
-                line: true,
-                ..Default::default()
-            }));
+        main.container.children.push(ftd::Element::Text(ftd::Text {
+            text: ftd::markdown_line("\"ftd\""),
+            line: true,
+            ..Default::default()
+        }));
 
-        main.container
-            .children
-            .push(ftd_rt::Element::Text(ftd_rt::Text {
-                text: ftd::markdown_line("\"0.1.9\""),
-                line: true,
-                ..Default::default()
-            }));
+        main.container.children.push(ftd::Element::Text(ftd::Text {
+            text: ftd::markdown_line("\"0.1.9\""),
+            line: true,
+            ..Default::default()
+        }));
 
-        main.container
-            .children
-            .push(ftd_rt::Element::Text(ftd_rt::Text {
-                text: ftd::markdown_line("[\"Amit Upadhyay <upadhyay@gmail.com>\"]"),
-                line: true,
-                ..Default::default()
-            }));
+        main.container.children.push(ftd::Element::Text(ftd::Text {
+            text: ftd::markdown_line("[\"Amit Upadhyay <upadhyay@gmail.com>\"]"),
+            line: true,
+            ..Default::default()
+        }));
 
-        main.container
-            .children
-            .push(ftd_rt::Element::Text(ftd_rt::Text {
-                text: ftd::markdown_line("\"2021\""),
-                line: true,
-                ..Default::default()
-            }));
+        main.container.children.push(ftd::Element::Text(ftd::Text {
+            text: ftd::markdown_line("\"2021\""),
+            line: true,
+            ..Default::default()
+        }));
 
-        main.container
-            .children
-            .push(ftd_rt::Element::Text(ftd_rt::Text {
-                text: ftd::markdown_line("\"ftd: FifthTry Document Format parser\""),
-                line: true,
-                ..Default::default()
-            }));
+        main.container.children.push(ftd::Element::Text(ftd::Text {
+            text: ftd::markdown_line("\"ftd: FifthTry Document Format parser\""),
+            line: true,
+            ..Default::default()
+        }));
 
-        main.container
-            .children
-            .push(ftd_rt::Element::Text(ftd_rt::Text {
-                text: ftd::markdown_line("\"MIT\""),
-                line: true,
-                ..Default::default()
-            }));
+        main.container.children.push(ftd::Element::Text(ftd::Text {
+            text: ftd::markdown_line("\"MIT\""),
+            line: true,
+            ..Default::default()
+        }));
 
-        main.container
-            .children
-            .push(ftd_rt::Element::Text(ftd_rt::Text {
-                text: ftd::markdown_line("\"https://github.com/fifthtry/ftd\""),
-                line: true,
-                ..Default::default()
-            }));
+        main.container.children.push(ftd::Element::Text(ftd::Text {
+            text: ftd::markdown_line("\"https://github.com/fifthtry/ftd\""),
+            line: true,
+            ..Default::default()
+        }));
 
-        main.container
-            .children
-            .push(ftd_rt::Element::Text(ftd_rt::Text {
-                text: ftd::markdown_line("\"https://ftd.dev\""),
-                line: true,
-                ..Default::default()
-            }));
+        main.container.children.push(ftd::Element::Text(ftd::Text {
+            text: ftd::markdown_line("\"https://ftd.dev\""),
+            line: true,
+            ..Default::default()
+        }));
 
         let mut bag = super::default_bag();
 
@@ -7246,293 +7146,277 @@ mod test {
     fn processor_for_list_of_record() {
         let mut main = super::default_column();
 
-        main.container
-            .children
-            .push(ftd_rt::Element::Row(ftd_rt::Row {
-                container: ftd_rt::Container {
-                    children: vec![
-                        ftd_rt::Element::Text(ftd_rt::Text {
-                            text: ftd::markdown_line("\"ftd\""),
-                            line: true,
-                            common: ftd_rt::Common {
-                                reference: Some(s("@name@0")),
-                                ..Default::default()
-                            },
+        main.container.children.push(ftd::Element::Row(ftd::Row {
+            container: ftd::Container {
+                children: vec![
+                    ftd::Element::Text(ftd::Text {
+                        text: ftd::markdown_line("\"ftd\""),
+                        line: true,
+                        common: ftd::Common {
+                            reference: Some(s("@name@0")),
                             ..Default::default()
-                        }),
-                        ftd_rt::Element::Text(ftd_rt::Text {
-                            text: ftd::markdown_line("name"),
-                            line: true,
-                            common: ftd_rt::Common {
-                                reference: Some(s("@body@0")),
-                                ..Default::default()
-                            },
+                        },
+                        ..Default::default()
+                    }),
+                    ftd::Element::Text(ftd::Text {
+                        text: ftd::markdown_line("name"),
+                        line: true,
+                        common: ftd::Common {
+                            reference: Some(s("@body@0")),
                             ..Default::default()
-                        }),
-                    ],
-                    ..Default::default()
-                },
-                common: ftd_rt::Common {
-                    locals: std::array::IntoIter::new([
-                        (s("name@0"), s("\"ftd\"")),
-                        (s("body@0"), s("name")),
-                    ])
-                    .collect(),
-                    ..Default::default()
-                },
-            }));
+                        },
+                        ..Default::default()
+                    }),
+                ],
+                ..Default::default()
+            },
+            common: ftd::Common {
+                locals: std::array::IntoIter::new([
+                    (s("name@0"), s("\"ftd\"")),
+                    (s("body@0"), s("name")),
+                ])
+                .collect(),
+                ..Default::default()
+            },
+        }));
 
-        main.container
-            .children
-            .push(ftd_rt::Element::Row(ftd_rt::Row {
-                container: ftd_rt::Container {
-                    children: vec![
-                        ftd_rt::Element::Text(ftd_rt::Text {
-                            text: ftd::markdown_line("\"0.1.9\""),
-                            line: true,
-                            common: ftd_rt::Common {
-                                reference: Some(s("@name@1")),
-                                ..Default::default()
-                            },
+        main.container.children.push(ftd::Element::Row(ftd::Row {
+            container: ftd::Container {
+                children: vec![
+                    ftd::Element::Text(ftd::Text {
+                        text: ftd::markdown_line("\"0.1.9\""),
+                        line: true,
+                        common: ftd::Common {
+                            reference: Some(s("@name@1")),
                             ..Default::default()
-                        }),
-                        ftd_rt::Element::Text(ftd_rt::Text {
-                            text: ftd::markdown_line("version"),
-                            line: true,
-                            common: ftd_rt::Common {
-                                reference: Some(s("@body@1")),
-                                ..Default::default()
-                            },
+                        },
+                        ..Default::default()
+                    }),
+                    ftd::Element::Text(ftd::Text {
+                        text: ftd::markdown_line("version"),
+                        line: true,
+                        common: ftd::Common {
+                            reference: Some(s("@body@1")),
                             ..Default::default()
-                        }),
-                    ],
-                    ..Default::default()
-                },
-                common: ftd_rt::Common {
-                    locals: std::array::IntoIter::new([
-                        (s("name@1"), s("\"0.1.9\"")),
-                        (s("body@1"), s("version")),
-                    ])
-                    .collect(),
-                    ..Default::default()
-                },
-            }));
+                        },
+                        ..Default::default()
+                    }),
+                ],
+                ..Default::default()
+            },
+            common: ftd::Common {
+                locals: std::array::IntoIter::new([
+                    (s("name@1"), s("\"0.1.9\"")),
+                    (s("body@1"), s("version")),
+                ])
+                .collect(),
+                ..Default::default()
+            },
+        }));
 
-        main.container
-            .children
-            .push(ftd_rt::Element::Row(ftd_rt::Row {
-                container: ftd_rt::Container {
-                    children: vec![
-                        ftd_rt::Element::Text(ftd_rt::Text {
-                            text: ftd::markdown_line("[\"Amit Upadhyay <upadhyay@gmail.com>\"]"),
-                            line: true,
-                            common: ftd_rt::Common {
-                                reference: Some(s("@name@2")),
-                                ..Default::default()
-                            },
+        main.container.children.push(ftd::Element::Row(ftd::Row {
+            container: ftd::Container {
+                children: vec![
+                    ftd::Element::Text(ftd::Text {
+                        text: ftd::markdown_line("[\"Amit Upadhyay <upadhyay@gmail.com>\"]"),
+                        line: true,
+                        common: ftd::Common {
+                            reference: Some(s("@name@2")),
                             ..Default::default()
-                        }),
-                        ftd_rt::Element::Text(ftd_rt::Text {
-                            text: ftd::markdown_line("authors"),
-                            line: true,
-                            common: ftd_rt::Common {
-                                reference: Some(s("@body@2")),
-                                ..Default::default()
-                            },
+                        },
+                        ..Default::default()
+                    }),
+                    ftd::Element::Text(ftd::Text {
+                        text: ftd::markdown_line("authors"),
+                        line: true,
+                        common: ftd::Common {
+                            reference: Some(s("@body@2")),
                             ..Default::default()
-                        }),
-                    ],
-                    ..Default::default()
-                },
-                common: ftd_rt::Common {
-                    locals: std::array::IntoIter::new([
-                        (s("name@2"), s("[\"Amit Upadhyay <upadhyay@gmail.com>\"]")),
-                        (s("body@2"), s("authors")),
-                    ])
-                    .collect(),
-                    ..Default::default()
-                },
-            }));
+                        },
+                        ..Default::default()
+                    }),
+                ],
+                ..Default::default()
+            },
+            common: ftd::Common {
+                locals: std::array::IntoIter::new([
+                    (s("name@2"), s("[\"Amit Upadhyay <upadhyay@gmail.com>\"]")),
+                    (s("body@2"), s("authors")),
+                ])
+                .collect(),
+                ..Default::default()
+            },
+        }));
 
-        main.container
-            .children
-            .push(ftd_rt::Element::Row(ftd_rt::Row {
-                container: ftd_rt::Container {
-                    children: vec![
-                        ftd_rt::Element::Text(ftd_rt::Text {
-                            text: ftd::markdown_line("\"2021\""),
-                            line: true,
-                            common: ftd_rt::Common {
-                                reference: Some(s("@name@3")),
-                                ..Default::default()
-                            },
+        main.container.children.push(ftd::Element::Row(ftd::Row {
+            container: ftd::Container {
+                children: vec![
+                    ftd::Element::Text(ftd::Text {
+                        text: ftd::markdown_line("\"2021\""),
+                        line: true,
+                        common: ftd::Common {
+                            reference: Some(s("@name@3")),
                             ..Default::default()
-                        }),
-                        ftd_rt::Element::Text(ftd_rt::Text {
-                            text: ftd::markdown_line("edition"),
-                            line: true,
-                            common: ftd_rt::Common {
-                                reference: Some(s("@body@3")),
-                                ..Default::default()
-                            },
+                        },
+                        ..Default::default()
+                    }),
+                    ftd::Element::Text(ftd::Text {
+                        text: ftd::markdown_line("edition"),
+                        line: true,
+                        common: ftd::Common {
+                            reference: Some(s("@body@3")),
                             ..Default::default()
-                        }),
-                    ],
-                    ..Default::default()
-                },
-                common: ftd_rt::Common {
-                    locals: std::array::IntoIter::new([
-                        (s("name@3"), s("\"2021\"")),
-                        (s("body@3"), s("edition")),
-                    ])
-                    .collect(),
-                    ..Default::default()
-                },
-            }));
+                        },
+                        ..Default::default()
+                    }),
+                ],
+                ..Default::default()
+            },
+            common: ftd::Common {
+                locals: std::array::IntoIter::new([
+                    (s("name@3"), s("\"2021\"")),
+                    (s("body@3"), s("edition")),
+                ])
+                .collect(),
+                ..Default::default()
+            },
+        }));
 
-        main.container
-            .children
-            .push(ftd_rt::Element::Row(ftd_rt::Row {
-                container: ftd_rt::Container {
-                    children: vec![
-                        ftd_rt::Element::Text(ftd_rt::Text {
-                            text: ftd::markdown_line("\"ftd: FifthTry Document Format parser\""),
-                            line: true,
-                            common: ftd_rt::Common {
-                                reference: Some(s("@name@4")),
-                                ..Default::default()
-                            },
+        main.container.children.push(ftd::Element::Row(ftd::Row {
+            container: ftd::Container {
+                children: vec![
+                    ftd::Element::Text(ftd::Text {
+                        text: ftd::markdown_line("\"ftd: FifthTry Document Format parser\""),
+                        line: true,
+                        common: ftd::Common {
+                            reference: Some(s("@name@4")),
                             ..Default::default()
-                        }),
-                        ftd_rt::Element::Text(ftd_rt::Text {
-                            text: ftd::markdown_line("description"),
-                            line: true,
-                            common: ftd_rt::Common {
-                                reference: Some(s("@body@4")),
-                                ..Default::default()
-                            },
+                        },
+                        ..Default::default()
+                    }),
+                    ftd::Element::Text(ftd::Text {
+                        text: ftd::markdown_line("description"),
+                        line: true,
+                        common: ftd::Common {
+                            reference: Some(s("@body@4")),
                             ..Default::default()
-                        }),
-                    ],
-                    ..Default::default()
-                },
-                common: ftd_rt::Common {
-                    locals: std::array::IntoIter::new([
-                        (s("name@4"), s("\"ftd: FifthTry Document Format parser\"")),
-                        (s("body@4"), s("description")),
-                    ])
-                    .collect(),
-                    ..Default::default()
-                },
-            }));
+                        },
+                        ..Default::default()
+                    }),
+                ],
+                ..Default::default()
+            },
+            common: ftd::Common {
+                locals: std::array::IntoIter::new([
+                    (s("name@4"), s("\"ftd: FifthTry Document Format parser\"")),
+                    (s("body@4"), s("description")),
+                ])
+                .collect(),
+                ..Default::default()
+            },
+        }));
 
-        main.container
-            .children
-            .push(ftd_rt::Element::Row(ftd_rt::Row {
-                container: ftd_rt::Container {
-                    children: vec![
-                        ftd_rt::Element::Text(ftd_rt::Text {
-                            text: ftd::markdown_line("\"MIT\""),
-                            line: true,
-                            common: ftd_rt::Common {
-                                reference: Some(s("@name@5")),
-                                ..Default::default()
-                            },
+        main.container.children.push(ftd::Element::Row(ftd::Row {
+            container: ftd::Container {
+                children: vec![
+                    ftd::Element::Text(ftd::Text {
+                        text: ftd::markdown_line("\"MIT\""),
+                        line: true,
+                        common: ftd::Common {
+                            reference: Some(s("@name@5")),
                             ..Default::default()
-                        }),
-                        ftd_rt::Element::Text(ftd_rt::Text {
-                            text: ftd::markdown_line("license"),
-                            line: true,
-                            common: ftd_rt::Common {
-                                reference: Some(s("@body@5")),
-                                ..Default::default()
-                            },
+                        },
+                        ..Default::default()
+                    }),
+                    ftd::Element::Text(ftd::Text {
+                        text: ftd::markdown_line("license"),
+                        line: true,
+                        common: ftd::Common {
+                            reference: Some(s("@body@5")),
                             ..Default::default()
-                        }),
-                    ],
-                    ..Default::default()
-                },
-                common: ftd_rt::Common {
-                    locals: std::array::IntoIter::new([
-                        (s("name@5"), s("\"MIT\"")),
-                        (s("body@5"), s("license")),
-                    ])
-                    .collect(),
-                    ..Default::default()
-                },
-            }));
+                        },
+                        ..Default::default()
+                    }),
+                ],
+                ..Default::default()
+            },
+            common: ftd::Common {
+                locals: std::array::IntoIter::new([
+                    (s("name@5"), s("\"MIT\"")),
+                    (s("body@5"), s("license")),
+                ])
+                .collect(),
+                ..Default::default()
+            },
+        }));
 
-        main.container
-            .children
-            .push(ftd_rt::Element::Row(ftd_rt::Row {
-                container: ftd_rt::Container {
-                    children: vec![
-                        ftd_rt::Element::Text(ftd_rt::Text {
-                            text: ftd::markdown_line("\"https://github.com/fifthtry/ftd\""),
-                            line: true,
-                            common: ftd_rt::Common {
-                                reference: Some(s("@name@6")),
-                                ..Default::default()
-                            },
+        main.container.children.push(ftd::Element::Row(ftd::Row {
+            container: ftd::Container {
+                children: vec![
+                    ftd::Element::Text(ftd::Text {
+                        text: ftd::markdown_line("\"https://github.com/fifthtry/ftd\""),
+                        line: true,
+                        common: ftd::Common {
+                            reference: Some(s("@name@6")),
                             ..Default::default()
-                        }),
-                        ftd_rt::Element::Text(ftd_rt::Text {
-                            text: ftd::markdown_line("repository"),
-                            line: true,
-                            common: ftd_rt::Common {
-                                reference: Some(s("@body@6")),
-                                ..Default::default()
-                            },
+                        },
+                        ..Default::default()
+                    }),
+                    ftd::Element::Text(ftd::Text {
+                        text: ftd::markdown_line("repository"),
+                        line: true,
+                        common: ftd::Common {
+                            reference: Some(s("@body@6")),
                             ..Default::default()
-                        }),
-                    ],
-                    ..Default::default()
-                },
-                common: ftd_rt::Common {
-                    locals: std::array::IntoIter::new([
-                        (s("name@6"), s("\"https://github.com/fifthtry/ftd\"")),
-                        (s("body@6"), s("repository")),
-                    ])
-                    .collect(),
-                    ..Default::default()
-                },
-            }));
+                        },
+                        ..Default::default()
+                    }),
+                ],
+                ..Default::default()
+            },
+            common: ftd::Common {
+                locals: std::array::IntoIter::new([
+                    (s("name@6"), s("\"https://github.com/fifthtry/ftd\"")),
+                    (s("body@6"), s("repository")),
+                ])
+                .collect(),
+                ..Default::default()
+            },
+        }));
 
-        main.container
-            .children
-            .push(ftd_rt::Element::Row(ftd_rt::Row {
-                container: ftd_rt::Container {
-                    children: vec![
-                        ftd_rt::Element::Text(ftd_rt::Text {
-                            text: ftd::markdown_line("\"https://ftd.dev\""),
-                            line: true,
-                            common: ftd_rt::Common {
-                                reference: Some(s("@name@7")),
-                                ..Default::default()
-                            },
+        main.container.children.push(ftd::Element::Row(ftd::Row {
+            container: ftd::Container {
+                children: vec![
+                    ftd::Element::Text(ftd::Text {
+                        text: ftd::markdown_line("\"https://ftd.dev\""),
+                        line: true,
+                        common: ftd::Common {
+                            reference: Some(s("@name@7")),
                             ..Default::default()
-                        }),
-                        ftd_rt::Element::Text(ftd_rt::Text {
-                            text: ftd::markdown_line("homepage"),
-                            line: true,
-                            common: ftd_rt::Common {
-                                reference: Some(s("@body@7")),
-                                ..Default::default()
-                            },
+                        },
+                        ..Default::default()
+                    }),
+                    ftd::Element::Text(ftd::Text {
+                        text: ftd::markdown_line("homepage"),
+                        line: true,
+                        common: ftd::Common {
+                            reference: Some(s("@body@7")),
                             ..Default::default()
-                        }),
-                    ],
-                    ..Default::default()
-                },
-                common: ftd_rt::Common {
-                    locals: std::array::IntoIter::new([
-                        (s("name@7"), s("\"https://ftd.dev\"")),
-                        (s("body@7"), s("homepage")),
-                    ])
-                    .collect(),
-                    ..Default::default()
-                },
-            }));
+                        },
+                        ..Default::default()
+                    }),
+                ],
+                ..Default::default()
+            },
+            common: ftd::Common {
+                locals: std::array::IntoIter::new([
+                    (s("name@7"), s("\"https://ftd.dev\"")),
+                    (s("body@7"), s("homepage")),
+                ])
+                .collect(),
+                ..Default::default()
+            },
+        }));
 
         let mut bag = super::default_bag();
 
@@ -7843,25 +7727,25 @@ mod test {
     #[test]
     fn loop_with_tree_structure() {
         let mut main = super::default_column();
-        let col = ftd_rt::Element::Column(ftd_rt::Column {
-            container: ftd_rt::Container {
+        let col = ftd::Element::Column(ftd::Column {
+            container: ftd::Container {
                 children: vec![
-                    ftd_rt::Element::Text(ftd_rt::Text {
+                    ftd::Element::Text(ftd::Text {
                         text: ftd::markdown_line("ab title"),
                         line: true,
-                        common: ftd_rt::Common {
+                        common: ftd::Common {
                             reference: Some(s("@toc.title")),
                             link: Some(s("ab link")),
                             ..Default::default()
                         },
                         ..Default::default()
                     }),
-                    ftd_rt::Element::Column(ftd_rt::Column {
-                        container: ftd_rt::Container {
-                            children: vec![ftd_rt::Element::Text(ftd_rt::Text {
+                    ftd::Element::Column(ftd::Column {
+                        container: ftd::Container {
+                            children: vec![ftd::Element::Text(ftd::Text {
                                 text: ftd::markdown_line("aa title"),
                                 line: true,
-                                common: ftd_rt::Common {
+                                common: ftd::Common {
                                     reference: Some(s("@toc.title")),
                                     link: Some(s("aa link")),
                                     ..Default::default()
@@ -7872,12 +7756,12 @@ mod test {
                         },
                         ..Default::default()
                     }),
-                    ftd_rt::Element::Column(ftd_rt::Column {
-                        container: ftd_rt::Container {
-                            children: vec![ftd_rt::Element::Text(ftd_rt::Text {
+                    ftd::Element::Column(ftd::Column {
+                        container: ftd::Container {
+                            children: vec![ftd::Element::Text(ftd::Text {
                                 text: ftd::markdown_line("aaa title"),
                                 line: true,
-                                common: ftd_rt::Common {
+                                common: ftd::Common {
                                     reference: Some(s("@toc.title")),
                                     link: Some(s("aaa link")),
                                     ..Default::default()
@@ -7894,15 +7778,13 @@ mod test {
             ..Default::default()
         });
         main.container.children.push(col.clone());
-        main.container
-            .children
-            .push(ftd_rt::Element::Row(ftd_rt::Row {
-                container: ftd_rt::Container {
-                    children: vec![col],
-                    ..Default::default()
-                },
+        main.container.children.push(ftd::Element::Row(ftd::Row {
+            container: ftd::Container {
+                children: vec![col],
                 ..Default::default()
-            }));
+            },
+            ..Default::default()
+        }));
 
         let mut bag = super::default_bag();
 
@@ -8261,23 +8143,21 @@ mod test {
     #[test]
     fn import_check() {
         let mut main = super::default_column();
-        main.container
-            .children
-            .push(ftd_rt::Element::Row(ftd_rt::Row {
-                container: ftd_rt::Container {
-                    children: vec![ftd_rt::Element::Text(ftd_rt::Text {
-                        text: ftd::markdown_line("Hello World"),
-                        line: true,
-                        common: ftd_rt::Common {
-                            reference: Some(s("hello-world-variable#hello-world")),
-                            ..Default::default()
-                        },
+        main.container.children.push(ftd::Element::Row(ftd::Row {
+            container: ftd::Container {
+                children: vec![ftd::Element::Text(ftd::Text {
+                    text: ftd::markdown_line("Hello World"),
+                    line: true,
+                    common: ftd::Common {
+                        reference: Some(s("hello-world-variable#hello-world")),
                         ..Default::default()
-                    })],
+                    },
                     ..Default::default()
-                },
+                })],
                 ..Default::default()
-            }));
+            },
+            ..Default::default()
+        }));
 
         let mut bag = super::default_bag();
         bag.insert(
@@ -8333,59 +8213,53 @@ mod test {
     #[test]
     fn argument_with_default_value() {
         let mut main = super::default_column();
-        main.container
-            .children
-            .push(ftd_rt::Element::Text(ftd_rt::Text {
-                text: ftd::markdown_line("hello world"),
-                line: true,
-                size: Some(10),
-                common: ftd_rt::Common {
-                    locals: std::array::IntoIter::new([
-                        (s("name@0"), s("hello world")),
-                        (s("size@0"), s("10")),
-                    ])
-                    .collect(),
-                    reference: Some(s("@name@0")),
-                    ..Default::default()
-                },
+        main.container.children.push(ftd::Element::Text(ftd::Text {
+            text: ftd::markdown_line("hello world"),
+            line: true,
+            size: Some(10),
+            common: ftd::Common {
+                locals: std::array::IntoIter::new([
+                    (s("name@0"), s("hello world")),
+                    (s("size@0"), s("10")),
+                ])
+                .collect(),
+                reference: Some(s("@name@0")),
                 ..Default::default()
-            }));
+            },
+            ..Default::default()
+        }));
 
-        main.container
-            .children
-            .push(ftd_rt::Element::Text(ftd_rt::Text {
-                text: ftd::markdown_line("hello"),
-                line: true,
-                size: Some(10),
-                common: ftd_rt::Common {
-                    locals: std::array::IntoIter::new([
-                        (s("name@1"), s("hello")),
-                        (s("size@1"), s("10")),
-                    ])
-                    .collect(),
-                    reference: Some(s("@name@1")),
-                    ..Default::default()
-                },
+        main.container.children.push(ftd::Element::Text(ftd::Text {
+            text: ftd::markdown_line("hello"),
+            line: true,
+            size: Some(10),
+            common: ftd::Common {
+                locals: std::array::IntoIter::new([
+                    (s("name@1"), s("hello")),
+                    (s("size@1"), s("10")),
+                ])
+                .collect(),
+                reference: Some(s("@name@1")),
                 ..Default::default()
-            }));
+            },
+            ..Default::default()
+        }));
 
-        main.container
-            .children
-            .push(ftd_rt::Element::Text(ftd_rt::Text {
-                text: ftd::markdown_line("this is nice"),
-                line: true,
-                size: Some(20),
-                common: ftd_rt::Common {
-                    locals: std::array::IntoIter::new([
-                        (s("name@2"), s("this is nice")),
-                        (s("size@2"), s("20")),
-                    ])
-                    .collect(),
-                    reference: Some(s("@name@2")),
-                    ..Default::default()
-                },
+        main.container.children.push(ftd::Element::Text(ftd::Text {
+            text: ftd::markdown_line("this is nice"),
+            line: true,
+            size: Some(20),
+            common: ftd::Common {
+                locals: std::array::IntoIter::new([
+                    (s("name@2"), s("this is nice")),
+                    (s("size@2"), s("20")),
+                ])
+                .collect(),
+                reference: Some(s("@name@2")),
                 ..Default::default()
-            }));
+            },
+            ..Default::default()
+        }));
 
         let mut bag = super::default_bag();
         bag.insert(
@@ -8608,17 +8482,15 @@ mod test {
         );
 
         let mut main = super::default_column();
-        main.container
-            .children
-            .push(ftd_rt::Element::Text(ftd_rt::Text {
-                text: ftd::markdown("Software developer working at fifthtry."),
-                size: Some(20),
-                common: ftd_rt::Common {
-                    reference: Some(s("abrar.bio")),
-                    ..Default::default()
-                },
+        main.container.children.push(ftd::Element::Text(ftd::Text {
+            text: ftd::markdown("Software developer working at fifthtry."),
+            size: Some(20),
+            common: ftd::Common {
+                reference: Some(s("abrar.bio")),
                 ..Default::default()
-            }));
+            },
+            ..Default::default()
+        }));
 
         let (g_bag, g_col) = crate::p2::interpreter::interpret(
             "foo/bar",
@@ -8654,56 +8526,52 @@ mod test {
     #[test]
     fn default_with_reference() {
         let mut main = super::default_column();
-        main.container
-            .children
-            .push(ftd_rt::Element::Row(ftd_rt::Row {
-                container: ftd_rt::Container {
-                    children: vec![ftd_rt::Element::Text(ftd_rt::Text {
-                        text: ftd::markdown_line("Arpita"),
-                        line: true,
-                        size: Some(10),
-                        common: ftd_rt::Common {
-                            reference: Some(s("@name@0")),
-                            ..Default::default()
-                        },
+        main.container.children.push(ftd::Element::Row(ftd::Row {
+            container: ftd::Container {
+                children: vec![ftd::Element::Text(ftd::Text {
+                    text: ftd::markdown_line("Arpita"),
+                    line: true,
+                    size: Some(10),
+                    common: ftd::Common {
+                        reference: Some(s("@name@0")),
                         ..Default::default()
-                    })],
+                    },
                     ..Default::default()
-                },
-                common: ftd_rt::Common {
-                    locals: std::array::IntoIter::new([
-                        (s("name@0"), s("Arpita")),
-                        (s("text-size@0"), s("10")),
-                    ])
-                    .collect(),
-                    ..Default::default()
-                },
-            }));
-        main.container
-            .children
-            .push(ftd_rt::Element::Row(ftd_rt::Row {
-                container: ftd_rt::Container {
-                    children: vec![ftd_rt::Element::Text(ftd_rt::Text {
-                        text: ftd::markdown_line("Amit Upadhayay"),
-                        line: true,
-                        size: Some(20),
-                        common: ftd_rt::Common {
-                            reference: Some(s("@name@1")),
-                            ..Default::default()
-                        },
+                })],
+                ..Default::default()
+            },
+            common: ftd::Common {
+                locals: std::array::IntoIter::new([
+                    (s("name@0"), s("Arpita")),
+                    (s("text-size@0"), s("10")),
+                ])
+                .collect(),
+                ..Default::default()
+            },
+        }));
+        main.container.children.push(ftd::Element::Row(ftd::Row {
+            container: ftd::Container {
+                children: vec![ftd::Element::Text(ftd::Text {
+                    text: ftd::markdown_line("Amit Upadhayay"),
+                    line: true,
+                    size: Some(20),
+                    common: ftd::Common {
+                        reference: Some(s("@name@1")),
                         ..Default::default()
-                    })],
+                    },
                     ..Default::default()
-                },
-                common: ftd_rt::Common {
-                    locals: std::array::IntoIter::new([
-                        (s("name@1"), s("Amit Upadhayay")),
-                        (s("text-size@1"), s("20")),
-                    ])
-                    .collect(),
-                    ..Default::default()
-                },
-            }));
+                })],
+                ..Default::default()
+            },
+            common: ftd::Common {
+                locals: std::array::IntoIter::new([
+                    (s("name@1"), s("Amit Upadhayay")),
+                    (s("text-size@1"), s("20")),
+                ])
+                .collect(),
+                ..Default::default()
+            },
+        }));
 
         let mut bag = super::default_bag();
         bag.insert(
@@ -8811,40 +8679,34 @@ mod test {
     #[test]
     fn or_type_with_default_value() {
         let mut main = super::default_column();
-        main.container
-            .children
-            .push(ftd_rt::Element::Text(ftd_rt::Text {
-                text: ftd::markdown_line("Amit Upadhyay"),
-                line: true,
-                common: ftd_rt::Common {
-                    reference: Some(s("amitu.name")),
-                    ..Default::default()
-                },
+        main.container.children.push(ftd::Element::Text(ftd::Text {
+            text: ftd::markdown_line("Amit Upadhyay"),
+            line: true,
+            common: ftd::Common {
+                reference: Some(s("amitu.name")),
                 ..Default::default()
-            }));
-        main.container
-            .children
-            .push(ftd_rt::Element::Text(ftd_rt::Text {
-                text: ftd::markdown_line("1000"),
-                line: true,
-                common: ftd_rt::Common {
-                    reference: Some(s("amitu.phone")),
-                    ..Default::default()
-                },
+            },
+            ..Default::default()
+        }));
+        main.container.children.push(ftd::Element::Text(ftd::Text {
+            text: ftd::markdown_line("1000"),
+            line: true,
+            common: ftd::Common {
+                reference: Some(s("amitu.phone")),
                 ..Default::default()
-            }));
-        main.container
-            .children
-            .push(ftd_rt::Element::Text(ftd_rt::Text {
-                text: ftd::markdown_line("John Doe"),
-                line: true,
-                size: Some(50),
-                common: ftd_rt::Common {
-                    reference: Some(s("acme.contact")),
-                    ..Default::default()
-                },
+            },
+            ..Default::default()
+        }));
+        main.container.children.push(ftd::Element::Text(ftd::Text {
+            text: ftd::markdown_line("John Doe"),
+            line: true,
+            size: Some(50),
+            common: ftd::Common {
+                reference: Some(s("acme.contact")),
                 ..Default::default()
-            }));
+            },
+            ..Default::default()
+        }));
 
         let mut bag = super::default_bag();
         bag.insert(
@@ -9021,22 +8883,22 @@ mod test {
 
         main.container
             .children
-            .push(ftd_rt::Element::Column(ftd_rt::Column {
-                container: ftd_rt::Container {
-                    children: vec![ftd_rt::Element::Column(ftd_rt::Column {
-                        container: ftd_rt::Container {
-                            children: vec![ftd_rt::Element::Row(ftd_rt::Row {
-                                container: ftd_rt::Container {
-                                    children: vec![ftd_rt::Element::Column(ftd_rt::Column {
-                                        container: ftd_rt::Container {
-                                            children: vec![ftd_rt::Element::Text(ftd_rt::Text {
+            .push(ftd::Element::Column(ftd::Column {
+                container: ftd::Container {
+                    children: vec![ftd::Element::Column(ftd::Column {
+                        container: ftd::Container {
+                            children: vec![ftd::Element::Row(ftd::Row {
+                                container: ftd::Container {
+                                    children: vec![ftd::Element::Column(ftd::Column {
+                                        container: ftd::Container {
+                                            children: vec![ftd::Element::Text(ftd::Text {
                                                 text: ftd::markdown_line("hello"),
                                                 line: true,
                                                 ..Default::default()
                                             })],
                                             ..Default::default()
                                         },
-                                        common: ftd_rt::Common {
+                                        common: ftd::Common {
                                             data_id: Some(s("display-text-id")),
                                             ..Default::default()
                                         },
@@ -9047,7 +8909,7 @@ mod test {
                             })],
                             ..Default::default()
                         },
-                        common: ftd_rt::Common {
+                        common: ftd::Common {
                             data_id: Some(s("inside-page-id")),
                             ..Default::default()
                         },
@@ -9059,25 +8921,23 @@ mod test {
 
         main.container
             .children
-            .push(ftd_rt::Element::Column(ftd_rt::Column {
-                container: ftd_rt::Container {
+            .push(ftd::Element::Column(ftd::Column {
+                container: ftd::Container {
                     children: vec![
-                        ftd_rt::Element::Column(ftd_rt::Column {
-                            container: ftd_rt::Container {
-                                children: vec![ftd_rt::Element::Row(ftd_rt::Row {
-                                    container: ftd_rt::Container {
-                                        children: vec![ftd_rt::Element::Column(ftd_rt::Column {
-                                            container: ftd_rt::Container {
-                                                children: vec![ftd_rt::Element::Text(
-                                                    ftd_rt::Text {
-                                                        text: ftd::markdown_line("hello"),
-                                                        line: true,
-                                                        ..Default::default()
-                                                    },
-                                                )],
+                        ftd::Element::Column(ftd::Column {
+                            container: ftd::Container {
+                                children: vec![ftd::Element::Row(ftd::Row {
+                                    container: ftd::Container {
+                                        children: vec![ftd::Element::Column(ftd::Column {
+                                            container: ftd::Container {
+                                                children: vec![ftd::Element::Text(ftd::Text {
+                                                    text: ftd::markdown_line("hello"),
+                                                    line: true,
+                                                    ..Default::default()
+                                                })],
                                                 ..Default::default()
                                             },
-                                            common: ftd_rt::Common {
+                                            common: ftd::Common {
                                                 data_id: Some(s("display-text-id")),
                                                 id: Some(s(
                                                     "page-id:inside-page-id:display-text-id",
@@ -9091,14 +8951,14 @@ mod test {
                                 })],
                                 ..Default::default()
                             },
-                            common: ftd_rt::Common {
+                            common: ftd::Common {
                                 data_id: Some(s("inside-page-id")),
                                 id: Some(s("page-id:inside-page-id")),
                                 ..Default::default()
                             },
                         }),
-                        ftd_rt::Element::Row(ftd_rt::Row {
-                            common: ftd_rt::Common {
+                        ftd::Element::Row(ftd::Row {
+                            common: ftd::Common {
                                 data_id: Some(s("page-id-row")),
                                 id: Some(s("page-id-row")),
                                 ..Default::default()
@@ -9108,18 +8968,16 @@ mod test {
                     ],
                     ..Default::default()
                 },
-                common: ftd_rt::Common {
+                common: ftd::Common {
                     data_id: Some(s("page-id")),
                     id: Some(s("page-id")),
                     ..Default::default()
                 },
             }));
 
-        main.container
-            .children
-            .push(ftd_rt::Element::Row(ftd_rt::Row {
-                ..Default::default()
-            }));
+        main.container.children.push(ftd::Element::Row(ftd::Row {
+            ..Default::default()
+        }));
 
         let (_g_bag, g_col) = crate::p2::interpreter::interpret(
             "foo/bar",
@@ -9173,13 +9031,13 @@ mod test {
 
         main.container
             .children
-            .push(ftd_rt::Element::Column(ftd_rt::Column {
-                container: ftd_rt::Container {
-                    children: vec![ftd_rt::Element::Text(ftd_rt::Text {
+            .push(ftd::Element::Column(ftd::Column {
+                container: ftd::Container {
+                    children: vec![ftd::Element::Text(ftd::Text {
                         text: ftd::markdown_line("Heading 31"),
                         line: true,
-                        common: ftd_rt::Common {
-                            region: Some(ftd_rt::Region::Title),
+                        common: ftd::Common {
+                            region: Some(ftd::Region::Title),
                             reference: Some(s("@title@0")),
                             ..Default::default()
                         },
@@ -9187,9 +9045,9 @@ mod test {
                     })],
                     ..Default::default()
                 },
-                common: ftd_rt::Common {
+                common: ftd::Common {
                     locals: std::array::IntoIter::new([(s("title@0"), s("Heading 31"))]).collect(),
-                    region: Some(ftd_rt::Region::H3),
+                    region: Some(ftd::Region::H3),
                     id: Some(s("heading-31")),
                     ..Default::default()
                 },
@@ -9197,46 +9055,46 @@ mod test {
 
         main.container
             .children
-            .push(ftd_rt::Element::Column(ftd_rt::Column {
-                container: ftd_rt::Container {
+            .push(ftd::Element::Column(ftd::Column {
+                container: ftd::Container {
                     children: vec![
-                        ftd_rt::Element::Text(ftd_rt::Text {
+                        ftd::Element::Text(ftd::Text {
                             text: ftd::markdown_line("Heading 11"),
                             line: true,
-                            common: ftd_rt::Common {
-                                region: Some(ftd_rt::Region::Title),
+                            common: ftd::Common {
+                                region: Some(ftd::Region::Title),
                                 reference: Some(s("@title@1")),
                                 ..Default::default()
                             },
                             ..Default::default()
                         }),
-                        ftd_rt::Element::Column(ftd_rt::Column {
-                            container: ftd_rt::Container {
+                        ftd::Element::Column(ftd::Column {
+                            container: ftd::Container {
                                 children: vec![
-                                    ftd_rt::Element::Text(ftd_rt::Text {
+                                    ftd::Element::Text(ftd::Text {
                                         text: ftd::markdown_line("Heading 21"),
                                         line: true,
-                                        common: ftd_rt::Common {
-                                            region: Some(ftd_rt::Region::Title),
+                                        common: ftd::Common {
+                                            region: Some(ftd::Region::Title),
                                             reference: Some(s("@title@2")),
                                             ..Default::default()
                                         },
                                         ..Default::default()
                                     }),
-                                    ftd_rt::Element::Column(ftd_rt::Column {
-                                        container: ftd_rt::Container {
+                                    ftd::Element::Column(ftd::Column {
+                                        container: ftd::Container {
                                             children: vec![
-                                                ftd_rt::Element::Text(ftd_rt::Text {
+                                                ftd::Element::Text(ftd::Text {
                                                     text: ftd::markdown_line("Heading 32"),
                                                     line: true,
-                                                    common: ftd_rt::Common {
-                                                        region: Some(ftd_rt::Region::Title),
+                                                    common: ftd::Common {
+                                                        region: Some(ftd::Region::Title),
                                                         reference: Some(s("@title@3")),
                                                         ..Default::default()
                                                     },
                                                     ..Default::default()
                                                 }),
-                                                ftd_rt::Element::Text(ftd_rt::Text {
+                                                ftd::Element::Text(ftd::Text {
                                                     text: ftd::markdown_line("hello"),
                                                     line: true,
                                                     ..Default::default()
@@ -9244,13 +9102,13 @@ mod test {
                                             ],
                                             ..Default::default()
                                         },
-                                        common: ftd_rt::Common {
+                                        common: ftd::Common {
                                             locals: std::array::IntoIter::new([(
                                                 s("title@3"),
                                                 s("Heading 32"),
                                             )])
                                             .collect(),
-                                            region: Some(ftd_rt::Region::H3),
+                                            region: Some(ftd::Region::H3),
                                             id: Some(s("heading-32")),
                                             ..Default::default()
                                         },
@@ -9258,49 +9116,49 @@ mod test {
                                 ],
                                 ..Default::default()
                             },
-                            common: ftd_rt::Common {
+                            common: ftd::Common {
                                 locals: std::array::IntoIter::new([(
                                     s("title@2"),
                                     s("Heading 21"),
                                 )])
                                 .collect(),
-                                region: Some(ftd_rt::Region::H2),
+                                region: Some(ftd::Region::H2),
                                 id: Some(s("heading-21")),
                                 ..Default::default()
                             },
                         }),
-                        ftd_rt::Element::Column(ftd_rt::Column {
-                            container: ftd_rt::Container {
-                                children: vec![ftd_rt::Element::Text(ftd_rt::Text {
+                        ftd::Element::Column(ftd::Column {
+                            container: ftd::Container {
+                                children: vec![ftd::Element::Text(ftd::Text {
                                     text: ftd::markdown_line("Heading 22"),
                                     line: true,
-                                    common: ftd_rt::Common {
+                                    common: ftd::Common {
                                         reference: Some(s("@title@5")),
-                                        region: Some(ftd_rt::Region::Title),
+                                        region: Some(ftd::Region::Title),
                                         ..Default::default()
                                     },
                                     ..Default::default()
                                 })],
                                 ..Default::default()
                             },
-                            common: ftd_rt::Common {
+                            common: ftd::Common {
                                 locals: std::array::IntoIter::new([(
                                     s("title@5"),
                                     s("Heading 22"),
                                 )])
                                 .collect(),
-                                region: Some(ftd_rt::Region::H2),
+                                region: Some(ftd::Region::H2),
                                 id: Some(s("heading-22")),
                                 ..Default::default()
                             },
                         }),
-                        ftd_rt::Element::Column(ftd_rt::Column {
-                            container: ftd_rt::Container {
-                                children: vec![ftd_rt::Element::Text(ftd_rt::Text {
+                        ftd::Element::Column(ftd::Column {
+                            container: ftd::Container {
+                                children: vec![ftd::Element::Text(ftd::Text {
                                     text: ftd::markdown_line("Heading 23"),
                                     line: true,
-                                    common: ftd_rt::Common {
-                                        region: Some(ftd_rt::Region::Title),
+                                    common: ftd::Common {
+                                        region: Some(ftd::Region::Title),
                                         reference: Some(s("@title@6")),
                                         ..Default::default()
                                     },
@@ -9308,13 +9166,13 @@ mod test {
                                 })],
                                 ..Default::default()
                             },
-                            common: ftd_rt::Common {
+                            common: ftd::Common {
                                 locals: std::array::IntoIter::new([(
                                     s("title@6"),
                                     s("Heading 23"),
                                 )])
                                 .collect(),
-                                region: Some(ftd_rt::Region::H2),
+                                region: Some(ftd::Region::H2),
                                 id: Some(s("heading-23")),
                                 ..Default::default()
                             },
@@ -9322,9 +9180,9 @@ mod test {
                     ],
                     ..Default::default()
                 },
-                common: ftd_rt::Common {
+                common: ftd::Common {
                     locals: std::array::IntoIter::new([(s("title@1"), s("Heading 11"))]).collect(),
-                    region: Some(ftd_rt::Region::H1),
+                    region: Some(ftd::Region::H1),
                     id: Some(s("heading-11")),
                     ..Default::default()
                 },
@@ -9332,65 +9190,65 @@ mod test {
 
         main.container
             .children
-            .push(ftd_rt::Element::Column(ftd_rt::Column {
-                container: ftd_rt::Container {
+            .push(ftd::Element::Column(ftd::Column {
+                container: ftd::Container {
                     children: vec![
-                        ftd_rt::Element::Text(ftd_rt::Text {
+                        ftd::Element::Text(ftd::Text {
                             text: ftd::markdown_line("Heading 12"),
                             line: true,
-                            common: ftd_rt::Common {
+                            common: ftd::Common {
                                 reference: Some(s("@title@7")),
-                                region: Some(ftd_rt::Region::Title),
+                                region: Some(ftd::Region::Title),
                                 ..Default::default()
                             },
                             ..Default::default()
                         }),
-                        ftd_rt::Element::Column(ftd_rt::Column {
-                            container: ftd_rt::Container {
-                                children: vec![ftd_rt::Element::Text(ftd_rt::Text {
+                        ftd::Element::Column(ftd::Column {
+                            container: ftd::Container {
+                                children: vec![ftd::Element::Text(ftd::Text {
                                     text: ftd::markdown_line("Heading 33"),
                                     line: true,
-                                    common: ftd_rt::Common {
+                                    common: ftd::Common {
                                         reference: Some(s("@title@8")),
-                                        region: Some(ftd_rt::Region::Title),
+                                        region: Some(ftd::Region::Title),
                                         ..Default::default()
                                     },
                                     ..Default::default()
                                 })],
                                 ..Default::default()
                             },
-                            common: ftd_rt::Common {
+                            common: ftd::Common {
                                 locals: std::array::IntoIter::new([(
                                     s("title@8"),
                                     s("Heading 33"),
                                 )])
                                 .collect(),
-                                region: Some(ftd_rt::Region::H3),
+                                region: Some(ftd::Region::H3),
                                 id: Some(s("heading-33")),
                                 ..Default::default()
                             },
                         }),
-                        ftd_rt::Element::Column(ftd_rt::Column {
-                            container: ftd_rt::Container {
-                                children: vec![ftd_rt::Element::Text(ftd_rt::Text {
+                        ftd::Element::Column(ftd::Column {
+                            container: ftd::Container {
+                                children: vec![ftd::Element::Text(ftd::Text {
                                     text: ftd::markdown_line("Heading 24"),
                                     line: true,
-                                    common: ftd_rt::Common {
+                                    common: ftd::Common {
                                         reference: Some(s("@title@9")),
-                                        region: Some(ftd_rt::Region::Title),
+                                        region: Some(ftd::Region::Title),
                                         ..Default::default()
                                     },
                                     ..Default::default()
                                 })],
                                 ..Default::default()
                             },
-                            common: ftd_rt::Common {
+                            common: ftd::Common {
                                 locals: std::array::IntoIter::new([(
                                     s("title@9"),
                                     s("Heading 24"),
                                 )])
                                 .collect(),
-                                region: Some(ftd_rt::Region::H2),
+                                region: Some(ftd::Region::H2),
                                 id: Some(s("heading-24")),
                                 ..Default::default()
                             },
@@ -9398,9 +9256,9 @@ mod test {
                     ],
                     ..Default::default()
                 },
-                common: ftd_rt::Common {
+                common: ftd::Common {
                     locals: std::array::IntoIter::new([(s("title@7"), s("Heading 12"))]).collect(),
-                    region: Some(ftd_rt::Region::H1),
+                    region: Some(ftd::Region::H1),
                     id: Some(s("heading-12")),
                     ..Default::default()
                 },
@@ -9474,14 +9332,14 @@ mod test {
         let mut main = super::default_column();
         main.container
             .children
-            .push(ftd_rt::Element::Column(ftd_rt::Column {
-                container: ftd_rt::Container {
+            .push(ftd::Element::Column(ftd::Column {
+                container: ftd::Container {
                     children: vec![
-                        ftd_rt::Element::Text(ftd_rt::Text {
+                        ftd::Element::Text(ftd::Text {
                             text: ftd::markdown_line("Mobile"),
                             line: true,
-                            common: ftd_rt::Common {
-                                condition: Some(ftd_rt::Condition {
+                            common: ftd::Common {
+                                condition: Some(ftd::Condition {
                                     variable: s("foo/bar#mobile"),
                                     value: s("true"),
                                 }),
@@ -9489,11 +9347,11 @@ mod test {
                             },
                             ..Default::default()
                         }),
-                        ftd_rt::Element::Text(ftd_rt::Text {
+                        ftd::Element::Text(ftd::Text {
                             text: ftd::markdown_line("Desktop"),
                             line: true,
-                            common: ftd_rt::Common {
-                                condition: Some(ftd_rt::Condition {
+                            common: ftd::Common {
+                                condition: Some(ftd::Condition {
                                     variable: s("foo/bar#mobile"),
                                     value: s("false"),
                                 }),
@@ -9508,24 +9366,22 @@ mod test {
                 ..Default::default()
             }));
 
-        main.container
-            .children
-            .push(ftd_rt::Element::Text(ftd_rt::Text {
-                text: ftd::markdown_line("Click Here!"),
-                line: true,
-                common: ftd_rt::Common {
-                    events: vec![ftd_rt::Event {
-                        name: s("onclick"),
-                        action: ftd_rt::Action {
-                            action: s("toggle"),
-                            target: s("foo/bar#mobile"),
-                            parameters: Default::default(),
-                        },
-                    }],
-                    ..Default::default()
-                },
+        main.container.children.push(ftd::Element::Text(ftd::Text {
+            text: ftd::markdown_line("Click Here!"),
+            line: true,
+            common: ftd::Common {
+                events: vec![ftd::Event {
+                    name: s("onclick"),
+                    action: ftd::Action {
+                        action: s("toggle"),
+                        target: s("foo/bar#mobile"),
+                        parameters: Default::default(),
+                    },
+                }],
                 ..Default::default()
-            }));
+            },
+            ..Default::default()
+        }));
 
         let (_g_bag, g_col) = crate::p2::interpreter::interpret(
             "foo/bar",
@@ -9558,34 +9414,32 @@ mod test {
     #[test]
     fn event_toggle_with_local_variable() {
         let mut main = super::default_column();
-        main.container
-            .children
-            .push(ftd_rt::Element::Text(ftd_rt::Text {
-                text: ftd::markdown_line("Hello"),
-                line: true,
-                common: ftd_rt::Common {
-                    locals: std::array::IntoIter::new([
-                        (s("name@0"), s("Hello")),
-                        (s("open@0"), s("true")),
-                    ])
-                    .collect(),
-                    reference: Some(s("@name@0")),
-                    condition: Some(ftd_rt::Condition {
-                        variable: s("@open@0"),
-                        value: s("true"),
-                    }),
-                    events: vec![ftd_rt::Event {
-                        name: s("onclick"),
-                        action: ftd_rt::Action {
-                            action: s("toggle"),
-                            target: s("@open@0"),
-                            parameters: Default::default(),
-                        },
-                    }],
-                    ..Default::default()
-                },
+        main.container.children.push(ftd::Element::Text(ftd::Text {
+            text: ftd::markdown_line("Hello"),
+            line: true,
+            common: ftd::Common {
+                locals: std::array::IntoIter::new([
+                    (s("name@0"), s("Hello")),
+                    (s("open@0"), s("true")),
+                ])
+                .collect(),
+                reference: Some(s("@name@0")),
+                condition: Some(ftd::Condition {
+                    variable: s("@open@0"),
+                    value: s("true"),
+                }),
+                events: vec![ftd::Event {
+                    name: s("onclick"),
+                    action: ftd::Action {
+                        action: s("toggle"),
+                        target: s("@open@0"),
+                        parameters: Default::default(),
+                    },
+                }],
                 ..Default::default()
-            }));
+            },
+            ..Default::default()
+        }));
 
         let mut bag = super::default_bag();
         bag.insert(
@@ -9678,16 +9532,16 @@ mod test {
         let mut main = super::default_column();
         main.container
             .children
-            .push(ftd_rt::Element::Column(ftd_rt::Column {
-                container: ftd_rt::Container {
+            .push(ftd::Element::Column(ftd::Column {
+                container: ftd::Container {
                     children: vec![
-                        ftd_rt::Element::Text(ftd_rt::Text {
+                        ftd::Element::Text(ftd::Text {
                             text: ftd::markdown_line("Click here"),
                             line: true,
-                            common: ftd_rt::Common {
-                                events: vec![ftd_rt::Event {
+                            common: ftd::Common {
+                                events: vec![ftd::Event {
                                     name: s("onclick"),
-                                    action: ftd_rt::Action {
+                                    action: ftd::Action {
                                         action: s("toggle"),
                                         target: s("@open@0"),
                                         parameters: Default::default(),
@@ -9697,11 +9551,11 @@ mod test {
                             },
                             ..Default::default()
                         }),
-                        ftd_rt::Element::Text(ftd_rt::Text {
+                        ftd::Element::Text(ftd::Text {
                             text: ftd::markdown_line("Open True"),
                             line: true,
-                            common: ftd_rt::Common {
-                                condition: Some(ftd_rt::Condition {
+                            common: ftd::Common {
+                                condition: Some(ftd::Condition {
                                     variable: s("@open@0"),
                                     value: s("true"),
                                 }),
@@ -9709,11 +9563,11 @@ mod test {
                             },
                             ..Default::default()
                         }),
-                        ftd_rt::Element::Text(ftd_rt::Text {
+                        ftd::Element::Text(ftd::Text {
                             text: ftd::markdown_line("Open False"),
                             line: true,
-                            common: ftd_rt::Common {
-                                condition: Some(ftd_rt::Condition {
+                            common: ftd::Common {
+                                condition: Some(ftd::Condition {
                                     variable: s("@open@0"),
                                     value: s("false"),
                                 }),
@@ -9725,7 +9579,7 @@ mod test {
                     ],
                     ..Default::default()
                 },
-                common: ftd_rt::Common {
+                common: ftd::Common {
                     locals: std::array::IntoIter::new([(s("open@0"), s("true"))]).collect(),
                     ..Default::default()
                 },
@@ -9763,16 +9617,16 @@ mod test {
         let mut main = super::default_column();
         main.container
             .children
-            .push(ftd_rt::Element::Column(ftd_rt::Column {
-                container: ftd_rt::Container {
+            .push(ftd::Element::Column(ftd::Column {
+                container: ftd::Container {
                     children: vec![
-                        ftd_rt::Element::Text(ftd_rt::Text {
+                        ftd::Element::Text(ftd::Text {
                             text: ftd::markdown_line("ab title"),
                             line: true,
-                            common: ftd_rt::Common {
-                                events: vec![ftd_rt::Event {
+                            common: ftd::Common {
+                                events: vec![ftd::Event {
                                     name: s("onclick"),
-                                    action: ftd_rt::Action {
+                                    action: ftd::Action {
                                         action: s("toggle"),
                                         target: s("@open@0"),
                                         parameters: Default::default(),
@@ -9783,15 +9637,15 @@ mod test {
                             },
                             ..Default::default()
                         }),
-                        ftd_rt::Element::Column(ftd_rt::Column {
-                            container: ftd_rt::Container {
-                                children: vec![ftd_rt::Element::Text(ftd_rt::Text {
+                        ftd::Element::Column(ftd::Column {
+                            container: ftd::Container {
+                                children: vec![ftd::Element::Text(ftd::Text {
                                     text: ftd::markdown_line("aa title"),
                                     line: true,
-                                    common: ftd_rt::Common {
-                                        events: vec![ftd_rt::Event {
+                                    common: ftd::Common {
+                                        events: vec![ftd::Event {
                                             name: s("onclick"),
-                                            action: ftd_rt::Action {
+                                            action: ftd::Action {
                                                 action: s("toggle"),
                                                 target: s("@open@0,1"),
                                                 parameters: Default::default(),
@@ -9804,25 +9658,25 @@ mod test {
                                 })],
                                 ..Default::default()
                             },
-                            common: ftd_rt::Common {
+                            common: ftd::Common {
                                 locals: std::array::IntoIter::new([(s("open@0,1"), s("true"))])
                                     .collect(),
-                                condition: Some(ftd_rt::Condition {
+                                condition: Some(ftd::Condition {
                                     variable: s("@open@0"),
                                     value: s("true"),
                                 }),
                                 ..Default::default()
                             },
                         }),
-                        ftd_rt::Element::Column(ftd_rt::Column {
-                            container: ftd_rt::Container {
-                                children: vec![ftd_rt::Element::Text(ftd_rt::Text {
+                        ftd::Element::Column(ftd::Column {
+                            container: ftd::Container {
+                                children: vec![ftd::Element::Text(ftd::Text {
                                     text: ftd::markdown_line("aaa title"),
                                     line: true,
-                                    common: ftd_rt::Common {
-                                        events: vec![ftd_rt::Event {
+                                    common: ftd::Common {
+                                        events: vec![ftd::Event {
                                             name: s("onclick"),
-                                            action: ftd_rt::Action {
+                                            action: ftd::Action {
                                                 action: s("toggle"),
                                                 target: s("@open@0,2"),
                                                 parameters: Default::default(),
@@ -9835,10 +9689,10 @@ mod test {
                                 })],
                                 ..Default::default()
                             },
-                            common: ftd_rt::Common {
+                            common: ftd::Common {
                                 locals: std::array::IntoIter::new([(s("open@0,2"), s("true"))])
                                     .collect(),
-                                condition: Some(ftd_rt::Condition {
+                                condition: Some(ftd::Condition {
                                     variable: s("@open@0"),
                                     value: s("true"),
                                 }),
@@ -9848,7 +9702,7 @@ mod test {
                     ],
                     ..Default::default()
                 },
-                common: ftd_rt::Common {
+                common: ftd::Common {
                     locals: std::array::IntoIter::new([(s("open@0"), s("true"))]).collect(),
                     ..Default::default()
                 },
@@ -9906,21 +9760,21 @@ mod test {
         let mut main = super::default_column();
         main.container
             .children
-            .push(ftd_rt::Element::Column(ftd_rt::Column {
-                container: ftd_rt::Container {
-                    children: vec![ftd_rt::Element::Column(ftd_rt::Column {
-                        container: ftd_rt::Container {
+            .push(ftd::Element::Column(ftd::Column {
+                container: ftd::Container {
+                    children: vec![ftd::Element::Column(ftd::Column {
+                        container: ftd::Container {
                             children: vec![
-                                ftd_rt::Element::Column(ftd_rt::Column {
-                                    container: ftd_rt::Container {
+                                ftd::Element::Column(ftd::Column {
+                                    container: ftd::Container {
                                         children: vec![
-                                            ftd_rt::Element::Text(ftd_rt::Text {
+                                            ftd::Element::Text(ftd::Text {
                                                 text: ftd::markdown_line("Click here!"),
                                                 line: true,
-                                                common: ftd_rt::Common {
-                                                    events: vec![ftd_rt::Event {
+                                                common: ftd::Common {
+                                                    events: vec![ftd::Event {
                                                         name: s("onclick"),
-                                                        action: ftd_rt::Action {
+                                                        action: ftd::Action {
                                                             action: s("toggle"),
                                                             target: s("@open@0"),
                                                             parameters: Default::default(),
@@ -9930,7 +9784,7 @@ mod test {
                                                 },
                                                 ..Default::default()
                                             }),
-                                            ftd_rt::Element::Text(ftd_rt::Text {
+                                            ftd::Element::Text(ftd::Text {
                                                 text: ftd::markdown_line("Hello"),
                                                 line: true,
                                                 ..Default::default()
@@ -9940,22 +9794,22 @@ mod test {
                                     },
                                     ..Default::default()
                                 }),
-                                ftd_rt::Element::Column(ftd_rt::Column {
-                                    container: ftd_rt::Container {
-                                        children: vec![ftd_rt::Element::Text(ftd_rt::Text {
+                                ftd::Element::Column(ftd::Column {
+                                    container: ftd::Container {
+                                        children: vec![ftd::Element::Text(ftd::Text {
                                             text: ftd::markdown_line("Hello Bar"),
                                             line: true,
                                             ..Default::default()
                                         })],
                                         ..Default::default()
                                     },
-                                    common: ftd_rt::Common {
+                                    common: ftd::Common {
                                         locals: std::array::IntoIter::new([(
                                             s("open-bar@0,0,1"),
                                             s("true"),
                                         )])
                                         .collect(),
-                                        condition: Some(ftd_rt::Condition {
+                                        condition: Some(ftd::Condition {
                                             variable: s("@open@0"),
                                             value: s("true"),
                                         }),
@@ -9965,14 +9819,14 @@ mod test {
                             ],
                             ..Default::default()
                         },
-                        common: ftd_rt::Common {
+                        common: ftd::Common {
                             data_id: Some(s("foo-id")),
                             ..Default::default()
                         },
                     })],
                     ..Default::default()
                 },
-                common: ftd_rt::Common {
+                common: ftd::Common {
                     locals: std::array::IntoIter::new([(s("open@0"), s("true"))]).collect(),
                     ..Default::default()
                 },
@@ -10023,9 +9877,9 @@ mod test {
         let mut main = super::default_column();
         main.container
             .children
-            .push(ftd_rt::Element::Integer(ftd_rt::Text {
+            .push(ftd::Element::Integer(ftd::Text {
                 text: markdown_line("20"),
-                common: ftd_rt::Common {
+                common: ftd::Common {
                     reference: Some(s("foo/bar#bar")),
                     ..Default::default()
                 },
@@ -10058,17 +9912,15 @@ mod test {
     #[test]
     fn if_on_var_text() {
         let mut main = super::default_column();
-        main.container
-            .children
-            .push(ftd_rt::Element::Text(ftd_rt::Text {
-                text: markdown_line("other-foo says hello"),
-                line: true,
-                common: ftd_rt::Common {
-                    reference: Some(s("foo/bar#bar")),
-                    ..Default::default()
-                },
+        main.container.children.push(ftd::Element::Text(ftd::Text {
+            text: markdown_line("other-foo says hello"),
+            line: true,
+            common: ftd::Common {
+                reference: Some(s("foo/bar#bar")),
                 ..Default::default()
-            }));
+            },
+            ..Default::default()
+        }));
 
         let (_g_bag, g_col) = crate::p2::interpreter::interpret(
             "foo/bar",
@@ -10100,17 +9952,15 @@ mod test {
     #[test]
     fn cursor_pointer() {
         let mut main = super::default_column();
-        main.container
-            .children
-            .push(ftd_rt::Element::Text(ftd_rt::Text {
-                text: markdown_line("hello"),
-                line: true,
-                common: ftd_rt::Common {
-                    cursor: Some(s("pointer")),
-                    ..Default::default()
-                },
+        main.container.children.push(ftd::Element::Text(ftd::Text {
+            text: markdown_line("hello"),
+            line: true,
+            common: ftd::Common {
+                cursor: Some(s("pointer")),
                 ..Default::default()
-            }));
+            },
+            ..Default::default()
+        }));
 
         let (_g_bag, g_col) = crate::p2::interpreter::interpret(
             "foo/bar",
@@ -10131,65 +9981,57 @@ mod test {
     #[test]
     fn comments() {
         let mut main = super::default_column();
-        main.container
-            .children
-            .push(ftd_rt::Element::Text(ftd_rt::Text {
-                text: ftd::markdown("hello2"),
-                ..Default::default()
-            }));
+        main.container.children.push(ftd::Element::Text(ftd::Text {
+            text: ftd::markdown("hello2"),
+            ..Default::default()
+        }));
 
-        main.container
-            .children
-            .push(ftd_rt::Element::Text(ftd_rt::Text {
-                text: ftd::markdown("/hello3"),
-                line: false,
-                common: ftd_rt::Common {
-                    color: Some(ftd_rt::Color {
-                        r: 255,
-                        g: 0,
-                        b: 0,
-                        alpha: 1.0,
-                    }),
-                    ..Default::default()
-                },
+        main.container.children.push(ftd::Element::Text(ftd::Text {
+            text: ftd::markdown("/hello3"),
+            line: false,
+            common: ftd::Common {
+                color: Some(ftd::Color {
+                    r: 255,
+                    g: 0,
+                    b: 0,
+                    alpha: 1.0,
+                }),
                 ..Default::default()
-            }));
+            },
+            ..Default::default()
+        }));
 
-        main.container
-            .children
-            .push(ftd_rt::Element::Row(ftd_rt::Row {
-                container: ftd_rt::Container {
-                    children: vec![ftd_rt::Element::Text(ftd_rt::Text {
-                        text: ftd::markdown_line("hello5"),
-                        line: true,
-                        common: ftd_rt::Common {
-                            color: Some(ftd_rt::Color {
-                                r: 0,
-                                g: 128,
-                                b: 0,
-                                alpha: 1.0,
-                            }),
-                            ..Default::default()
-                        },
+        main.container.children.push(ftd::Element::Row(ftd::Row {
+            container: ftd::Container {
+                children: vec![ftd::Element::Text(ftd::Text {
+                    text: ftd::markdown_line("hello5"),
+                    line: true,
+                    common: ftd::Common {
+                        color: Some(ftd::Color {
+                            r: 0,
+                            g: 128,
+                            b: 0,
+                            alpha: 1.0,
+                        }),
                         ..Default::default()
-                    })],
+                    },
                     ..Default::default()
-                },
+                })],
                 ..Default::default()
-            }));
+            },
+            ..Default::default()
+        }));
 
-        main.container
-            .children
-            .push(ftd_rt::Element::Row(ftd_rt::Row {
-                container: ftd_rt::Container {
-                    children: vec![ftd_rt::Element::Text(ftd_rt::Text {
-                        text: ftd::markdown("/foo says hello"),
-                        ..Default::default()
-                    })],
+        main.container.children.push(ftd::Element::Row(ftd::Row {
+            container: ftd::Container {
+                children: vec![ftd::Element::Text(ftd::Text {
+                    text: ftd::markdown("/foo says hello"),
                     ..Default::default()
-                },
+                })],
                 ..Default::default()
-            }));
+            },
+            ..Default::default()
+        }));
 
         let (_g_bag, g_col) = crate::p2::interpreter::interpret(
             "foo/bar",
@@ -10245,25 +10087,25 @@ mod test {
         let mut main = super::default_column();
         main.container
             .children
-            .push(ftd_rt::Element::Column(ftd_rt::Column {
-                container: ftd_rt::Container {
+            .push(ftd::Element::Column(ftd::Column {
+                container: ftd::Container {
                     children: vec![
-                        ftd_rt::Element::Column(ftd_rt::Column {
-                            container: ftd_rt::Container {
+                        ftd::Element::Column(ftd::Column {
+                            container: ftd::Container {
                                 children: vec![
-                                    ftd_rt::Element::Text(ftd_rt::Text {
+                                    ftd::Element::Text(ftd::Text {
                                         text: ftd::markdown_line("Bar says hello"),
                                         line: true,
-                                        common: ftd_rt::Common {
+                                        common: ftd::Common {
                                             reference: Some(s("@name@0,0")),
                                             ..Default::default()
                                         },
                                         ..Default::default()
                                     }),
-                                    ftd_rt::Element::Text(ftd_rt::Text {
+                                    ftd::Element::Text(ftd::Text {
                                         text: ftd::markdown_line("Hello"),
                                         line: true,
-                                        common: ftd_rt::Common {
+                                        common: ftd::Common {
                                             reference: Some(s("foo/bar#greeting")),
                                             ..Default::default()
                                         },
@@ -10272,7 +10114,7 @@ mod test {
                                 ],
                                 ..Default::default()
                             },
-                            common: ftd_rt::Common {
+                            common: ftd::Common {
                                 locals: std::array::IntoIter::new([(
                                     s("name@0,0"),
                                     s("Bar says hello"),
@@ -10282,15 +10124,15 @@ mod test {
                             },
                             ..Default::default()
                         }),
-                        ftd_rt::Element::Text(ftd_rt::Text {
+                        ftd::Element::Text(ftd::Text {
                             text: ftd::markdown_line("foo says hello"),
                             line: true,
                             ..Default::default()
                         }),
-                        ftd_rt::Element::Text(ftd_rt::Text {
+                        ftd::Element::Text(ftd::Text {
                             text: ftd::markdown_line("Hello"),
                             line: true,
-                            common: ftd_rt::Common {
+                            common: ftd::Common {
                                 reference: Some(s("foo/bar#greeting")),
                                 ..Default::default()
                             },
@@ -10340,134 +10182,121 @@ mod test {
         let mut main = super::default_column();
         main.container
             .children
-            .push(ftd_rt::Element::Integer(ftd_rt::Text {
+            .push(ftd::Element::Integer(ftd::Text {
                 text: ftd::markdown_line("0"),
-                common: ftd_rt::Common {
+                common: ftd::Common {
                     reference: Some(s("foo/bar#count")),
                     ..Default::default()
                 },
                 ..Default::default()
             }));
 
-        main.container
-            .children
-            .push(ftd_rt::Element::Text(ftd_rt::Text {
-                text: ftd::markdown_line("Hello on 8"),
-                line: true,
-                common: ftd_rt::Common {
-                    condition: Some(ftd_rt::Condition {
-                        variable: s("foo/bar#count"),
-                        value: s("8"),
-                    }),
-                    is_not_visible: true,
-                    ..Default::default()
-                },
+        main.container.children.push(ftd::Element::Text(ftd::Text {
+            text: ftd::markdown_line("Hello on 8"),
+            line: true,
+            common: ftd::Common {
+                condition: Some(ftd::Condition {
+                    variable: s("foo/bar#count"),
+                    value: s("8"),
+                }),
+                is_not_visible: true,
                 ..Default::default()
-            }));
+            },
+            ..Default::default()
+        }));
 
-        main.container
-            .children
-            .push(ftd_rt::Element::Text(ftd_rt::Text {
-                text: ftd::markdown_line("increment counter"),
-                line: true,
-                common: ftd_rt::Common {
-                    events: vec![ftd_rt::Event {
-                        name: s("onclick"),
-                        action: ftd_rt::Action {
-                            action: s("increment"),
-                            target: s("foo/bar#count"),
-                            parameters: Default::default(),
-                        },
-                    }],
-                    ..Default::default()
-                },
+        main.container.children.push(ftd::Element::Text(ftd::Text {
+            text: ftd::markdown_line("increment counter"),
+            line: true,
+            common: ftd::Common {
+                events: vec![ftd::Event {
+                    name: s("onclick"),
+                    action: ftd::Action {
+                        action: s("increment"),
+                        target: s("foo/bar#count"),
+                        parameters: Default::default(),
+                    },
+                }],
                 ..Default::default()
-            }));
+            },
+            ..Default::default()
+        }));
 
-        main.container
-            .children
-            .push(ftd_rt::Element::Text(ftd_rt::Text {
-                text: ftd::markdown_line("decrement counter"),
-                line: true,
-                common: ftd_rt::Common {
-                    events: vec![ftd_rt::Event {
-                        name: s("onclick"),
-                        action: ftd_rt::Action {
-                            action: s("decrement"),
-                            target: s("foo/bar#count"),
-                            parameters: Default::default(),
-                        },
-                    }],
-                    ..Default::default()
-                },
+        main.container.children.push(ftd::Element::Text(ftd::Text {
+            text: ftd::markdown_line("decrement counter"),
+            line: true,
+            common: ftd::Common {
+                events: vec![ftd::Event {
+                    name: s("onclick"),
+                    action: ftd::Action {
+                        action: s("decrement"),
+                        target: s("foo/bar#count"),
+                        parameters: Default::default(),
+                    },
+                }],
                 ..Default::default()
-            }));
+            },
+            ..Default::default()
+        }));
 
-        main.container
-            .children
-            .push(ftd_rt::Element::Text(ftd_rt::Text {
-                text: ftd::markdown_line("increment counter"),
-                line: true,
-                common: ftd_rt::Common {
-                    events: vec![ftd_rt::Event {
-                        name: s("onclick"),
-                        action: ftd_rt::Action {
-                            action: s("increment"),
-                            target: s("foo/bar#count"),
-                            parameters: std::array::IntoIter::new([(s("by"), vec![s("2")])])
-                                .collect(),
-                        },
-                    }],
-                    ..Default::default()
-                },
+        main.container.children.push(ftd::Element::Text(ftd::Text {
+            text: ftd::markdown_line("increment counter"),
+            line: true,
+            common: ftd::Common {
+                events: vec![ftd::Event {
+                    name: s("onclick"),
+                    action: ftd::Action {
+                        action: s("increment"),
+                        target: s("foo/bar#count"),
+                        parameters: std::array::IntoIter::new([(s("by"), vec![s("2")])]).collect(),
+                    },
+                }],
                 ..Default::default()
-            }));
+            },
+            ..Default::default()
+        }));
 
-        main.container
-            .children
-            .push(ftd_rt::Element::Text(ftd_rt::Text {
-                text: ftd::markdown_line("increment counter by 2 clamp 2 10"),
-                line: true,
-                common: ftd_rt::Common {
-                    events: vec![ftd_rt::Event {
-                        name: s("onclick"),
-                        action: ftd_rt::Action {
-                            action: s("increment"),
-                            target: s("foo/bar#count"),
-                            parameters: std::array::IntoIter::new([
-                                (s("by"), vec![s("2")]),
-                                (s("clamp"), vec![s("2"), s("10")]),
-                            ])
-                            .collect(),
-                        },
-                    }],
-                    ..Default::default()
-                },
+        main.container.children.push(ftd::Element::Text(ftd::Text {
+            text: ftd::markdown_line("increment counter by 2 clamp 2 10"),
+            line: true,
+            common: ftd::Common {
+                events: vec![ftd::Event {
+                    name: s("onclick"),
+                    action: ftd::Action {
+                        action: s("increment"),
+                        target: s("foo/bar#count"),
+                        parameters: std::array::IntoIter::new([
+                            (s("by"), vec![s("2")]),
+                            (s("clamp"), vec![s("2"), s("10")]),
+                        ])
+                        .collect(),
+                    },
+                }],
                 ..Default::default()
-            }));
+            },
+            ..Default::default()
+        }));
 
-        main.container
-            .children
-            .push(ftd_rt::Element::Text(ftd_rt::Text {
-                text: ftd::markdown_line("decrement count clamp 2 10"),
-                line: true,
-                common: ftd_rt::Common {
-                    events: vec![ftd_rt::Event {
-                        name: s("onclick"),
-                        action: ftd_rt::Action {
-                            action: s("decrement"),
-                            target: s("foo/bar#count"),
-                            parameters: std::array::IntoIter::new([(
-                                s("clamp"),
-                                vec![s("2"), s("10")],
-                            )])
-                            .collect(),
-                        },
-                    }],
-                    ..Default::default()
-                },
+        main.container.children.push(ftd::Element::Text(ftd::Text {
+            text: ftd::markdown_line("decrement count clamp 2 10"),
+            line: true,
+            common: ftd::Common {
+                events: vec![ftd::Event {
+                    name: s("onclick"),
+                    action: ftd::Action {
+                        action: s("decrement"),
+                        target: s("foo/bar#count"),
+                        parameters: std::array::IntoIter::new([(
+                            s("clamp"),
+                            vec![s("2"), s("10")],
+                        )])
+                        .collect(),
+                    },
+                }],
                 ..Default::default()
-            }));
+            },
+            ..Default::default()
+        }));
 
         let (_g_bag, g_col) = crate::p2::interpreter::interpret(
             "foo/bar",
@@ -10508,24 +10337,24 @@ mod test {
         let mut main = super::default_column();
         main.container
             .children
-            .push(ftd_rt::Element::Column(ftd_rt::Column {
-                container: ftd_rt::Container {
+            .push(ftd::Element::Column(ftd::Column {
+                container: ftd::Container {
                     children: vec![
-                        ftd_rt::Element::Integer(ftd_rt::Text {
+                        ftd::Element::Integer(ftd::Text {
                             text: ftd::markdown_line("0"),
-                            common: ftd_rt::Common {
+                            common: ftd::Common {
                                 reference: Some(s("@count@0")),
                                 ..Default::default()
                             },
                             ..Default::default()
                         }),
-                        ftd_rt::Element::Text(ftd_rt::Text {
+                        ftd::Element::Text(ftd::Text {
                             text: ftd::markdown_line("increment counter"),
                             line: true,
-                            common: ftd_rt::Common {
-                                events: vec![ftd_rt::Event {
+                            common: ftd::Common {
+                                events: vec![ftd::Event {
                                     name: s("onclick"),
-                                    action: ftd_rt::Action {
+                                    action: ftd::Action {
                                         action: s("increment"),
                                         target: s("@count@0"),
                                         parameters: std::array::IntoIter::new([(
@@ -10539,13 +10368,13 @@ mod test {
                             },
                             ..Default::default()
                         }),
-                        ftd_rt::Element::Text(ftd_rt::Text {
+                        ftd::Element::Text(ftd::Text {
                             text: ftd::markdown_line("decrement counter"),
                             line: true,
-                            common: ftd_rt::Common {
-                                events: vec![ftd_rt::Event {
+                            common: ftd::Common {
+                                events: vec![ftd::Event {
                                     name: s("onclick"),
-                                    action: ftd_rt::Action {
+                                    action: ftd::Action {
                                         action: s("decrement"),
                                         target: s("@count@0"),
                                         parameters: std::array::IntoIter::new([(
@@ -10562,7 +10391,7 @@ mod test {
                     ],
                     ..Default::default()
                 },
-                common: ftd_rt::Common {
+                common: ftd::Common {
                     locals: std::array::IntoIter::new([
                         (s("by@0"), s("3")),
                         (s("count@0"), s("0")),
@@ -10606,16 +10435,13 @@ mod test {
     #[test]
     fn nested_component() {
         let mut main = super::default_column();
-        main.container
-            .children
-            .push(ftd_rt::Element::Row(ftd_rt::Row {
-                common: ftd_rt::Common {
-                    locals: std::array::IntoIter::new([(s("cta@0"), s("CTA says Hello"))])
-                        .collect(),
-                    ..Default::default()
-                },
+        main.container.children.push(ftd::Element::Row(ftd::Row {
+            common: ftd::Common {
+                locals: std::array::IntoIter::new([(s("cta@0"), s("CTA says Hello"))]).collect(),
                 ..Default::default()
-            }));
+            },
+            ..Default::default()
+        }));
 
         let (_g_bag, g_col) = crate::p2::interpreter::interpret(
             "foo/bar",
@@ -10648,20 +10474,20 @@ mod test {
         let mut main = super::default_column();
         main.container
             .children
-            .push(ftd_rt::Element::Image(ftd_rt::Image {
+            .push(ftd::Element::Image(ftd::Image {
                 src: s("https://www.liveabout.com/thmb/YCJmu1khSJo8kMYM090QCd9W78U=/1250x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/powerpuff_girls-56a00bc45f9b58eba4aea61d.jpg"),
-                common: ftd_rt::Common {
+                common: ftd::Common {
                     condition: Some(
-                        ftd_rt::Condition {
+                        ftd::Condition {
                             variable: s("foo/bar#count"),
                             value: s("0"),
                         },
                     ),
                     is_not_visible: false,
                     events: vec![
-                        ftd_rt::Event {
+                        ftd::Event {
                             name: s("onclick"),
-                            action: ftd_rt::Action {
+                            action: ftd::Action {
                                 action: s("increment"),
                                 target: s("foo/bar#count"),
                                 parameters: std::array::IntoIter::new([(s("clamp"), vec![s("0"), s("1")])])
@@ -10681,17 +10507,17 @@ mod test {
 
         main.container
             .children
-            .push(ftd_rt::Element::Image(ftd_rt::Image {
+            .push(ftd::Element::Image(ftd::Image {
                 src: s("https://upload.wikimedia.org/wikipedia/en/d/d4/Mickey_Mouse.png"),
-                common: ftd_rt::Common {
-                    condition: Some(ftd_rt::Condition {
+                common: ftd::Common {
+                    condition: Some(ftd::Condition {
                         variable: s("foo/bar#count"),
                         value: s("1"),
                     }),
                     is_not_visible: true,
-                    events: vec![ftd_rt::Event {
+                    events: vec![ftd::Event {
                         name: s("onclick"),
-                        action: ftd_rt::Action {
+                        action: ftd::Action {
                             action: s("increment"),
                             target: s("foo/bar#count"),
                             parameters: std::array::IntoIter::new([(
@@ -10750,20 +10576,20 @@ mod test {
         let mut main = super::default_column();
         main.container
             .children
-            .push(ftd_rt::Element::Column(ftd_rt::Column {
-                container: ftd_rt::Container {
+            .push(ftd::Element::Column(ftd::Column {
+                container: ftd::Container {
                     children: vec![
-                        ftd_rt::Element::Text(ftd_rt::Text {
+                        ftd::Element::Text(ftd::Text {
                             text: ftd::markdown_line("Arpita"),
                             line: true,
                             ..Default::default()
                         }),
-                        ftd_rt::Element::Text(ftd_rt::Text {
+                        ftd::Element::Text(ftd::Text {
                             text: ftd::markdown_line("Ayushi"),
                             line: true,
                             ..Default::default()
                         }),
-                        ftd_rt::Element::Text(ftd_rt::Text {
+                        ftd::Element::Text(ftd::Text {
                             text: ftd::markdown_line("AmitU"),
                             line: true,
                             ..Default::default()
@@ -10807,19 +10633,19 @@ mod test {
     #[test]
     fn open_container_with_parent_id() {
         let mut main = super::default_column();
-        let beverage_external_children = vec![ftd_rt::Element::Column(ftd_rt::Column {
-            container: ftd_rt::Container {
+        let beverage_external_children = vec![ftd::Element::Column(ftd::Column {
+            container: ftd::Container {
                 children: vec![
-                    ftd_rt::Element::Column(ftd_rt::Column {
-                        container: ftd_rt::Container {
+                    ftd::Element::Column(ftd::Column {
+                        container: ftd::Container {
                             children: vec![
-                                ftd_rt::Element::Text(ftd_rt::Text {
+                                ftd::Element::Text(ftd::Text {
                                     text: ftd::markdown_line("Water"),
                                     line: true,
-                                    common: ftd_rt::Common {
-                                        events: vec![ftd_rt::Event {
+                                    common: ftd::Common {
+                                        events: vec![ftd::Event {
                                             name: s("onclick"),
-                                            action: ftd_rt::Action {
+                                            action: ftd::Action {
                                                 action: s("toggle"),
                                                 target: s("@visible@0,0,0"),
                                                 ..Default::default()
@@ -10830,9 +10656,9 @@ mod test {
                                     },
                                     ..Default::default()
                                 }),
-                                ftd_rt::Element::Column(ftd_rt::Column {
-                                    common: ftd_rt::Common {
-                                        condition: Some(ftd_rt::Condition {
+                                ftd::Element::Column(ftd::Column {
+                                    common: ftd::Common {
+                                        condition: Some(ftd::Condition {
                                             variable: s("@visible@0,0,0"),
                                             value: s("true"),
                                         }),
@@ -10846,7 +10672,7 @@ mod test {
                             open: (None, Some(s("some-child"))),
                             ..Default::default()
                         },
-                        common: ftd_rt::Common {
+                        common: ftd::Common {
                             locals: std::array::IntoIter::new([
                                 (s("name@0,0,0"), s("Water")),
                                 (s("visible@0,0,0"), s("true")),
@@ -10855,16 +10681,16 @@ mod test {
                             ..Default::default()
                         },
                     }),
-                    ftd_rt::Element::Column(ftd_rt::Column {
-                        container: ftd_rt::Container {
+                    ftd::Element::Column(ftd::Column {
+                        container: ftd::Container {
                             children: vec![
-                                ftd_rt::Element::Text(ftd_rt::Text {
+                                ftd::Element::Text(ftd::Text {
                                     text: ftd::markdown_line("Juice"),
                                     line: true,
-                                    common: ftd_rt::Common {
-                                        events: vec![ftd_rt::Event {
+                                    common: ftd::Common {
+                                        events: vec![ftd::Event {
                                             name: s("onclick"),
-                                            action: ftd_rt::Action {
+                                            action: ftd::Action {
                                                 action: s("toggle"),
                                                 target: s("@visible@0,0,1"),
                                                 ..Default::default()
@@ -10875,9 +10701,9 @@ mod test {
                                     },
                                     ..Default::default()
                                 }),
-                                ftd_rt::Element::Column(ftd_rt::Column {
-                                    common: ftd_rt::Common {
-                                        condition: Some(ftd_rt::Condition {
+                                ftd::Element::Column(ftd::Column {
+                                    common: ftd::Common {
+                                        condition: Some(ftd::Condition {
                                             variable: s("@visible@0,0,1"),
                                             value: s("true"),
                                         }),
@@ -10890,18 +10716,18 @@ mod test {
                             external_children: Some((
                                 s("some-child"),
                                 vec![vec![1]],
-                                vec![ftd_rt::Element::Column(ftd_rt::Column {
-                                    container: ftd_rt::Container {
-                                        children: vec![ftd_rt::Element::Column(ftd_rt::Column {
-                                            container: ftd_rt::Container {
+                                vec![ftd::Element::Column(ftd::Column {
+                                    container: ftd::Container {
+                                        children: vec![ftd::Element::Column(ftd::Column {
+                                            container: ftd::Container {
                                                 children: vec![
-                                                    ftd_rt::Element::Text(ftd_rt::Text {
+                                                    ftd::Element::Text(ftd::Text {
                                                         text: ftd::markdown_line("Mango Juice"),
                                                         line: true,
-                                                        common: ftd_rt::Common {
-                                                            events: vec![ftd_rt::Event {
+                                                        common: ftd::Common {
+                                                            events: vec![ftd::Event {
                                                                 name: s("onclick"),
-                                                                action: ftd_rt::Action {
+                                                                action: ftd::Action {
                                                                     action: s("toggle"),
                                                                     target: s("@visible@0,0,1,0"),
                                                                     ..Default::default()
@@ -10912,9 +10738,9 @@ mod test {
                                                         },
                                                         ..Default::default()
                                                     }),
-                                                    ftd_rt::Element::Column(ftd_rt::Column {
-                                                        common: ftd_rt::Common {
-                                                            condition: Some(ftd_rt::Condition {
+                                                    ftd::Element::Column(ftd::Column {
+                                                        common: ftd::Common {
+                                                            condition: Some(ftd::Condition {
                                                                 variable: s("@visible@0,0,1,0"),
                                                                 value: s("true"),
                                                             }),
@@ -10932,7 +10758,7 @@ mod test {
                                                 open: (None, Some(s("some-child"))),
                                                 ..Default::default()
                                             },
-                                            common: ftd_rt::Common {
+                                            common: ftd::Common {
                                                 locals: std::array::IntoIter::new([
                                                     (s("name@0,0,1,0"), s("Mango Juice")),
                                                     (s("visible@0,0,1,0"), s("true")),
@@ -10944,10 +10770,10 @@ mod test {
                                         wrap: true,
                                         ..Default::default()
                                     },
-                                    common: ftd_rt::Common {
-                                        width: Some(ftd_rt::Length::Fill),
-                                        height: Some(ftd_rt::Length::Fill),
-                                        position: ftd_rt::Position::Center,
+                                    common: ftd::Common {
+                                        width: Some(ftd::Length::Fill),
+                                        height: Some(ftd::Length::Fill),
+                                        position: ftd::Position::Center,
                                         ..Default::default()
                                     },
                                 })],
@@ -10955,7 +10781,7 @@ mod test {
                             open: (None, Some(s("some-child"))),
                             ..Default::default()
                         },
-                        common: ftd_rt::Common {
+                        common: ftd::Common {
                             locals: std::array::IntoIter::new([
                                 (s("name@0,0,1"), s("Juice")),
                                 (s("visible@0,0,1"), s("true")),
@@ -10968,28 +10794,28 @@ mod test {
                 wrap: true,
                 ..Default::default()
             },
-            common: ftd_rt::Common {
-                width: Some(ftd_rt::Length::Fill),
-                height: Some(ftd_rt::Length::Fill),
-                position: ftd_rt::Position::Center,
+            common: ftd::Common {
+                width: Some(ftd::Length::Fill),
+                height: Some(ftd::Length::Fill),
+                position: ftd::Position::Center,
                 ..Default::default()
             },
         })];
 
         main.container
             .children
-            .push(ftd_rt::Element::Column(ftd_rt::Column {
-                container: ftd_rt::Container {
-                    children: vec![ftd_rt::Element::Column(ftd_rt::Column {
-                        container: ftd_rt::Container {
+            .push(ftd::Element::Column(ftd::Column {
+                container: ftd::Container {
+                    children: vec![ftd::Element::Column(ftd::Column {
+                        container: ftd::Container {
                             children: vec![
-                                ftd_rt::Element::Text(ftd_rt::Text {
+                                ftd::Element::Text(ftd::Text {
                                     text: ftd::markdown_line("Beverage"),
                                     line: true,
-                                    common: ftd_rt::Common {
-                                        events: vec![ftd_rt::Event {
+                                    common: ftd::Common {
+                                        events: vec![ftd::Event {
                                             name: s("onclick"),
-                                            action: ftd_rt::Action {
+                                            action: ftd::Action {
                                                 action: s("toggle"),
                                                 target: s("@visible@0,0"),
                                                 ..Default::default()
@@ -11000,9 +10826,9 @@ mod test {
                                     },
                                     ..Default::default()
                                 }),
-                                ftd_rt::Element::Column(ftd_rt::Column {
-                                    common: ftd_rt::Common {
-                                        condition: Some(ftd_rt::Condition {
+                                ftd::Element::Column(ftd::Column {
+                                    common: ftd::Common {
+                                        condition: Some(ftd::Condition {
                                             variable: s("@visible@0,0"),
                                             value: s("true"),
                                         }),
@@ -11021,7 +10847,7 @@ mod test {
                             open: (None, Some(s("some-child"))),
                             ..Default::default()
                         },
-                        common: ftd_rt::Common {
+                        common: ftd::Common {
                             locals: std::array::IntoIter::new([
                                 (s("name@0,0"), s("Beverage")),
                                 (s("visible@0,0"), s("true")),
@@ -11088,33 +10914,33 @@ mod test {
         let mut main = super::default_column();
         main.container
             .children
-            .push(ftd_rt::Element::Column(ftd_rt::Column {
-                container: ftd_rt::Container {
+            .push(ftd::Element::Column(ftd::Column {
+                container: ftd::Container {
                     children: vec![
-                        ftd_rt::Element::Text(ftd_rt::Text {
+                        ftd::Element::Text(ftd::Text {
                             text: ftd::markdown_line("$hello"),
                             line: true,
                             ..Default::default()
                         }),
-                        ftd_rt::Element::Text(ftd_rt::Text {
+                        ftd::Element::Text(ftd::Text {
                             text: ftd::markdown_line("hello"),
                             line: true,
-                            common: ftd_rt::Common {
+                            common: ftd::Common {
                                 reference: Some(s("@hello2@0")),
                                 ..Default::default()
                             },
                             ..Default::default()
                         }),
-                        ftd_rt::Element::Text(ftd_rt::Text {
+                        ftd::Element::Text(ftd::Text {
                             text: ftd::markdown_line("hello"),
                             line: true,
-                            common: ftd_rt::Common {
+                            common: ftd::Common {
                                 reference: Some(s("foo/bar#hello")),
                                 ..Default::default()
                             },
                             ..Default::default()
                         }),
-                        ftd_rt::Element::Text(ftd_rt::Text {
+                        ftd::Element::Text(ftd::Text {
                             text: ftd::markdown_line("hello"),
                             line: true,
                             ..Default::default()
@@ -11122,7 +10948,7 @@ mod test {
                     ],
                     ..Default::default()
                 },
-                common: ftd_rt::Common {
+                common: ftd::Common {
                     locals: std::array::IntoIter::new([(s("hello2@0"), s("hello"))]).collect(),
                     ..Default::default()
                 },
@@ -11163,21 +10989,21 @@ mod test {
 
         main.container
             .children
-            .push(ftd_rt::Element::Integer(ftd_rt::Text {
+            .push(ftd::Element::Integer(ftd::Text {
                 text: ftd::markdown_line("32"),
                 ..Default::default()
             }));
 
         main.container
             .children
-            .push(ftd_rt::Element::Boolean(ftd_rt::Text {
+            .push(ftd::Element::Boolean(ftd::Text {
                 text: ftd::markdown_line("true"),
                 ..Default::default()
             }));
 
         main.container
             .children
-            .push(ftd_rt::Element::Decimal(ftd_rt::Text {
+            .push(ftd::Element::Decimal(ftd::Text {
                 text: ftd::markdown_line("0.06"),
                 ..Default::default()
             }));
@@ -11205,22 +11031,22 @@ mod test {
         let mut main = super::default_column();
         main.container
             .children
-            .push(ftd_rt::Element::Column(ftd_rt::Column {
-                container: ftd_rt::Container {
+            .push(ftd::Element::Column(ftd::Column {
+                container: ftd::Container {
                     children: vec![
-                        ftd_rt::Element::Text(ftd_rt::Text {
+                        ftd::Element::Text(ftd::Text {
                             text: ftd::markdown_line("Heading 00"),
                             line: true,
-                            common: ftd_rt::Common {
-                                region: Some(ftd_rt::Region::Title),
+                            common: ftd::Common {
+                                region: Some(ftd::Region::Title),
                                 reference: Some(s("@title@0")),
                                 ..Default::default()
                             },
                             ..Default::default()
                         }),
-                        ftd_rt::Element::Text(ftd_rt::Text {
+                        ftd::Element::Text(ftd::Text {
                             text: ftd::markdown("Heading 00 body"),
-                            common: ftd_rt::Common {
+                            common: ftd::Common {
                                 id: Some(s("one:markdown-id")),
                                 data_id: Some(s("markdown-id")),
                                 locals: std::array::IntoIter::new([(
@@ -11236,8 +11062,8 @@ mod test {
                     ],
                     ..Default::default()
                 },
-                common: ftd_rt::Common {
-                    region: Some(ftd_rt::Region::H0),
+                common: ftd::Common {
+                    region: Some(ftd::Region::H0),
                     id: Some(s("one")),
                     data_id: Some(s("one")),
                     locals: std::array::IntoIter::new([
@@ -11251,22 +11077,22 @@ mod test {
 
         main.container
             .children
-            .push(ftd_rt::Element::Column(ftd_rt::Column {
-                container: ftd_rt::Container {
+            .push(ftd::Element::Column(ftd::Column {
+                container: ftd::Container {
                     children: vec![
-                        ftd_rt::Element::Text(ftd_rt::Text {
+                        ftd::Element::Text(ftd::Text {
                             text: ftd::markdown_line("Heading 01"),
                             line: true,
-                            common: ftd_rt::Common {
-                                region: Some(ftd_rt::Region::Title),
+                            common: ftd::Common {
+                                region: Some(ftd::Region::Title),
                                 reference: Some(s("@title@1")),
                                 ..Default::default()
                             },
                             ..Default::default()
                         }),
-                        ftd_rt::Element::Text(ftd_rt::Text {
+                        ftd::Element::Text(ftd::Text {
                             text: ftd::markdown("Heading 01 body"),
-                            common: ftd_rt::Common {
+                            common: ftd::Common {
                                 data_id: Some(s("markdown-id")),
                                 locals: std::array::IntoIter::new([(
                                     s("body@1,1"),
@@ -11281,8 +11107,8 @@ mod test {
                     ],
                     ..Default::default()
                 },
-                common: ftd_rt::Common {
-                    region: Some(ftd_rt::Region::H0),
+                common: ftd::Common {
+                    region: Some(ftd::Region::H0),
                     id: Some(s("heading-01")),
                     locals: std::array::IntoIter::new([
                         (s("body@1"), s("Heading 01 body")),
@@ -11339,12 +11165,12 @@ mod test {
         let mut main = super::default_column();
         main.container
             .children
-            .push(ftd_rt::Element::Column(ftd_rt::Column {
-                container: ftd_rt::Container {
-                    children: vec![ftd_rt::Element::Text(ftd_rt::Text {
+            .push(ftd::Element::Column(ftd::Column {
+                container: ftd::Container {
+                    children: vec![ftd::Element::Text(ftd::Text {
                         text: ftd::markdown_line("hello"),
                         line: true,
-                        common: ftd_rt::Common {
+                        common: ftd::Common {
                             data_id: Some(s("hello")),
                             ..Default::default()
                         },
@@ -11357,12 +11183,12 @@ mod test {
 
         main.container
             .children
-            .push(ftd_rt::Element::Column(ftd_rt::Column {
-                container: ftd_rt::Container {
-                    children: vec![ftd_rt::Element::Text(ftd_rt::Text {
+            .push(ftd::Element::Column(ftd::Column {
+                container: ftd::Container {
+                    children: vec![ftd::Element::Text(ftd::Text {
                         text: ftd::markdown_line("hello"),
                         line: true,
-                        common: ftd_rt::Common {
+                        common: ftd::Common {
                             data_id: Some(s("hello")),
                             id: Some(s("asd:hello")),
                             ..Default::default()
@@ -11371,7 +11197,7 @@ mod test {
                     })],
                     ..Default::default()
                 },
-                common: ftd_rt::Common {
+                common: ftd::Common {
                     data_id: Some(s("asd")),
                     id: Some(s("asd")),
                     ..Default::default()
@@ -11404,23 +11230,21 @@ mod test {
     #[test]
     fn list_is_empty_check() {
         let mut main = super::default_column();
-        main.container
-            .children
-            .push(ftd_rt::Element::Text(ftd_rt::Text {
-                text: ftd::markdown_line("Hello people"),
-                line: true,
-                ..Default::default()
-            }));
+        main.container.children.push(ftd::Element::Text(ftd::Text {
+            text: ftd::markdown_line("Hello people"),
+            line: true,
+            ..Default::default()
+        }));
 
-        main.container.children.push(ftd_rt::Element::Null);
+        main.container.children.push(ftd::Element::Null);
 
         main.container
             .children
-            .push(ftd_rt::Element::Column(ftd_rt::Column {
-                container: ftd_rt::Container {
+            .push(ftd::Element::Column(ftd::Column {
+                container: ftd::Container {
                     children: vec![
-                        ftd_rt::Element::Null,
-                        ftd_rt::Element::Text(ftd_rt::Text {
+                        ftd::Element::Null,
+                        ftd::Element::Text(ftd::Text {
                             text: ftd::markdown_line("Hello empty list"),
                             line: true,
                             ..Default::default()
@@ -11433,15 +11257,15 @@ mod test {
 
         main.container
             .children
-            .push(ftd_rt::Element::Column(ftd_rt::Column {
-                container: ftd_rt::Container {
+            .push(ftd::Element::Column(ftd::Column {
+                container: ftd::Container {
                     children: vec![
-                        ftd_rt::Element::Text(ftd_rt::Text {
+                        ftd::Element::Text(ftd::Text {
                             text: ftd::markdown_line("Hello list"),
                             line: true,
                             ..Default::default()
                         }),
-                        ftd_rt::Element::Null,
+                        ftd::Element::Null,
                     ],
                     ..Default::default()
                 },
@@ -11493,19 +11317,19 @@ mod test {
     #[test]
     fn parent_with_unsatified_condition() {
         let mut main = super::default_column();
-        main.container.children.push(ftd_rt::Element::Null);
+        main.container.children.push(ftd::Element::Null);
         main.container
             .children
-            .push(ftd_rt::Element::Column(ftd_rt::Column {
-                container: ftd_rt::Container {
-                    children: vec![ftd_rt::Element::Text(ftd_rt::Text {
+            .push(ftd::Element::Column(ftd::Column {
+                container: ftd::Container {
+                    children: vec![ftd::Element::Text(ftd::Text {
                         text: ftd::markdown_line("Hello"),
                         line: true,
                         ..Default::default()
                     })],
                     ..Default::default()
                 },
-                common: ftd_rt::Common {
+                common: ftd::Common {
                     is_not_visible: true,
                     ..Default::default()
                 },
@@ -11544,7 +11368,7 @@ mod test {
         external_children
             .container
             .children
-            .push(ftd_rt::Element::Text(ftd_rt::Text {
+            .push(ftd::Element::Text(ftd::Text {
                 text: ftd::markdown_line("hello"),
                 line: true,
                 ..Default::default()
@@ -11552,7 +11376,7 @@ mod test {
         external_children
             .container
             .children
-            .push(ftd_rt::Element::Text(ftd_rt::Text {
+            .push(ftd::Element::Text(ftd::Text {
                 text: ftd::markdown_line("world"),
                 line: true,
                 ..Default::default()
@@ -11561,10 +11385,10 @@ mod test {
         let mut main = super::default_column();
         main.container
             .children
-            .push(ftd_rt::Element::Column(ftd_rt::Column {
-                container: ftd_rt::Container {
-                    children: vec![ftd_rt::Element::Column(ftd_rt::Column {
-                        common: ftd_rt::Common {
+            .push(ftd::Element::Column(ftd::Column {
+                container: ftd::Container {
+                    children: vec![ftd::Element::Column(ftd::Column {
+                        common: ftd::Common {
                             id: Some(s("foo-id:some-id")),
                             data_id: Some(s("some-id")),
                             ..Default::default()
@@ -11574,25 +11398,23 @@ mod test {
                     external_children: Some((
                         s("some-id"),
                         vec![vec![0]],
-                        vec![ftd_rt::Element::Column(external_children)],
+                        vec![ftd::Element::Column(external_children)],
                     )),
                     open: (None, Some(s("some-id"))),
                     ..Default::default()
                 },
-                common: ftd_rt::Common {
+                common: ftd::Common {
                     id: Some(s("foo-id")),
                     data_id: Some(s("foo-id")),
                     ..Default::default()
                 },
             }));
 
-        main.container
-            .children
-            .push(ftd_rt::Element::Text(ftd_rt::Text {
-                text: ftd::markdown_line("Outside"),
-                line: true,
-                ..Default::default()
-            }));
+        main.container.children.push(ftd::Element::Text(ftd::Text {
+            text: ftd::markdown_line("Outside"),
+            line: true,
+            ..Default::default()
+        }));
 
         let (_g_bag, g_col) = crate::p2::interpreter::interpret(
             "foo/bar",
@@ -11628,15 +11450,15 @@ mod test {
         let mut main = super::default_column();
         main.container
             .children
-            .push(ftd_rt::Element::Column(ftd_rt::Column {
-                container: ftd_rt::Container {
+            .push(ftd::Element::Column(ftd::Column {
+                container: ftd::Container {
                     children: vec![
-                        ftd_rt::Element::Column(ftd_rt::Column {
-                            container: ftd_rt::Container {
-                                children: vec![ftd_rt::Element::Text(ftd_rt::Text {
+                        ftd::Element::Column(ftd::Column {
+                            container: ftd::Container {
+                                children: vec![ftd::Element::Text(ftd::Text {
                                     text: ftd::markdown_line("commit message 1"),
                                     line: true,
-                                    common: ftd_rt::Common {
+                                    common: ftd::Common {
                                         reference: Some(s("@commit.message")),
                                         ..Default::default()
                                     },
@@ -11646,12 +11468,12 @@ mod test {
                             },
                             ..Default::default()
                         }),
-                        ftd_rt::Element::Column(ftd_rt::Column {
-                            container: ftd_rt::Container {
-                                children: vec![ftd_rt::Element::Text(ftd_rt::Text {
+                        ftd::Element::Column(ftd::Column {
+                            container: ftd::Container {
+                                children: vec![ftd::Element::Text(ftd::Text {
                                     text: ftd::markdown_line("commit message 2"),
                                     line: true,
-                                    common: ftd_rt::Common {
+                                    common: ftd::Common {
                                         reference: Some(s("@commit.message")),
                                         ..Default::default()
                                     },
@@ -11661,12 +11483,12 @@ mod test {
                             },
                             ..Default::default()
                         }),
-                        ftd_rt::Element::Column(ftd_rt::Column {
-                            container: ftd_rt::Container {
-                                children: vec![ftd_rt::Element::Text(ftd_rt::Text {
+                        ftd::Element::Column(ftd::Column {
+                            container: ftd::Container {
+                                children: vec![ftd::Element::Text(ftd::Text {
                                     text: ftd::markdown_line("file filename 1"),
                                     line: true,
-                                    common: ftd_rt::Common {
+                                    common: ftd::Common {
                                         reference: Some(s("@file.filename")),
                                         ..Default::default()
                                     },
@@ -11676,12 +11498,12 @@ mod test {
                             },
                             ..Default::default()
                         }),
-                        ftd_rt::Element::Column(ftd_rt::Column {
-                            container: ftd_rt::Container {
-                                children: vec![ftd_rt::Element::Text(ftd_rt::Text {
+                        ftd::Element::Column(ftd::Column {
+                            container: ftd::Container {
+                                children: vec![ftd::Element::Text(ftd::Text {
                                     text: ftd::markdown_line("file filename 2"),
                                     line: true,
-                                    common: ftd_rt::Common {
+                                    common: ftd::Common {
                                         reference: Some(s("@file.filename")),
                                         ..Default::default()
                                     },
@@ -11778,37 +11600,37 @@ mod test {
         let mut main = super::default_column();
         main.container
             .children
-            .push(ftd_rt::Element::Scene(ftd_rt::Scene {
-                container: ftd_rt::Container {
-                    children: vec![ftd_rt::Element::Text(ftd_rt::Text {
+            .push(ftd::Element::Scene(ftd::Scene {
+                container: ftd::Container {
+                    children: vec![ftd::Element::Text(ftd::Text {
                         text: ftd::markdown_line("Hello"),
                         line: true,
-                        common: ftd_rt::Common {
+                        common: ftd::Common {
                             top: Some(0),
                             left: Some(0),
                             ..Default::default()
                         },
                         ..Default::default()
-                    }), ftd_rt::Element::Text(ftd_rt::Text {
+                    }), ftd::Element::Text(ftd::Text {
                         text: ftd::markdown_line("World"),
                         line: true,
-                        common: ftd_rt::Common {
+                        common: ftd::Common {
                             top: Some(10),
                             right: Some(30),
                             scale: Some(1.5),
                             scale_x: Some(-1.0),
                             scale_y: Some(-1.0),
                             rotate: Some(45),
-                            position: ftd_rt::Position::Center,
+                            position: ftd::Position::Center,
                             ..Default::default()
                         },
                         ..Default::default()
                     })],
                     ..Default::default()
                 },
-                common: ftd_rt::Common {
+                common: ftd::Common {
                     width: Some(
-                        ftd_rt::Length::Px {
+                        ftd::Length::Px {
                             value: 1000,
                         },
                     ),
@@ -11853,78 +11675,70 @@ mod test {
     #[test]
     fn event_set() {
         let mut main = super::default_column();
-        main.container
-            .children
-            .push(ftd_rt::Element::Text(ftd_rt::Text {
-                text: ftd::markdown_line("Start..."),
-                line: true,
-                common: ftd_rt::Common {
-                    condition: Some(ftd_rt::Condition {
-                        variable: s("foo/bar#current"),
-                        value: s("some value"),
-                    }),
-                    ..Default::default()
-                },
+        main.container.children.push(ftd::Element::Text(ftd::Text {
+            text: ftd::markdown_line("Start..."),
+            line: true,
+            common: ftd::Common {
+                condition: Some(ftd::Condition {
+                    variable: s("foo/bar#current"),
+                    value: s("some value"),
+                }),
                 ..Default::default()
-            }));
+            },
+            ..Default::default()
+        }));
 
-        main.container
-            .children
-            .push(ftd_rt::Element::Text(ftd_rt::Text {
-                text: ftd::markdown_line("some value"),
-                line: true,
-                common: ftd_rt::Common {
-                    reference: Some(s("foo/bar#current")),
-                    ..Default::default()
-                },
+        main.container.children.push(ftd::Element::Text(ftd::Text {
+            text: ftd::markdown_line("some value"),
+            line: true,
+            common: ftd::Common {
+                reference: Some(s("foo/bar#current")),
                 ..Default::default()
-            }));
+            },
+            ..Default::default()
+        }));
 
-        main.container
-            .children
-            .push(ftd_rt::Element::Text(ftd_rt::Text {
-                text: ftd::markdown_line("change message"),
-                line: true,
-                common: ftd_rt::Common {
-                    events: vec![ftd_rt::Event {
-                        name: s("onclick"),
-                        action: ftd_rt::Action {
-                            action: s("set-value"),
-                            target: s("foo/bar#current"),
-                            parameters: std::array::IntoIter::new([(
-                                s("value"),
-                                vec![s("hello world"), s("string")],
-                            )])
-                            .collect(),
-                        },
-                    }],
-                    ..Default::default()
-                },
+        main.container.children.push(ftd::Element::Text(ftd::Text {
+            text: ftd::markdown_line("change message"),
+            line: true,
+            common: ftd::Common {
+                events: vec![ftd::Event {
+                    name: s("onclick"),
+                    action: ftd::Action {
+                        action: s("set-value"),
+                        target: s("foo/bar#current"),
+                        parameters: std::array::IntoIter::new([(
+                            s("value"),
+                            vec![s("hello world"), s("string")],
+                        )])
+                        .collect(),
+                    },
+                }],
                 ..Default::default()
-            }));
+            },
+            ..Default::default()
+        }));
 
-        main.container
-            .children
-            .push(ftd_rt::Element::Text(ftd_rt::Text {
-                text: ftd::markdown_line("change message again"),
-                line: true,
-                common: ftd_rt::Common {
-                    events: vec![ftd_rt::Event {
-                        name: s("onclick"),
-                        action: ftd_rt::Action {
-                            action: s("set-value"),
-                            target: s("foo/bar#current"),
-                            parameters: std::array::IntoIter::new([(
-                                s("value"),
-                                vec![s("good bye"), s("string")],
-                            )])
-                            .collect(),
-                        },
-                    }],
-                    ..Default::default()
-                },
+        main.container.children.push(ftd::Element::Text(ftd::Text {
+            text: ftd::markdown_line("change message again"),
+            line: true,
+            common: ftd::Common {
+                events: vec![ftd::Event {
+                    name: s("onclick"),
+                    action: ftd::Action {
+                        action: s("set-value"),
+                        target: s("foo/bar#current"),
+                        parameters: std::array::IntoIter::new([(
+                            s("value"),
+                            vec![s("good bye"), s("string")],
+                        )])
+                        .collect(),
+                    },
+                }],
                 ..Default::default()
-            }));
+            },
+            ..Default::default()
+        }));
 
         let (_g_bag, g_col) = crate::p2::interpreter::interpret(
             "foo/bar",
@@ -11955,19 +11769,17 @@ mod test {
     #[test]
     fn absolute_positioning() {
         let mut main = super::default_column();
-        main.container
-            .children
-            .push(ftd_rt::Element::Text(ftd_rt::Text {
-                text: ftd::markdown_line("hello world"),
-                line: true,
-                common: ftd_rt::Common {
-                    anchor: Some(ftd_rt::Anchor::Parent),
-                    right: Some(0),
-                    top: Some(100),
-                    ..Default::default()
-                },
+        main.container.children.push(ftd::Element::Text(ftd::Text {
+            text: ftd::markdown_line("hello world"),
+            line: true,
+            common: ftd::Common {
+                anchor: Some(ftd::Anchor::Parent),
+                right: Some(0),
+                top: Some(100),
                 ..Default::default()
-            }));
+            },
+            ..Default::default()
+        }));
 
         let (_g_bag, g_col) = crate::p2::interpreter::interpret(
             "foo/bar",
@@ -11988,26 +11800,22 @@ mod test {
     #[test]
     fn inherit_check() {
         let mut main = super::default_column();
-        main.container
-            .children
-            .push(ftd_rt::Element::Text(ftd_rt::Text {
-                text: ftd::markdown_line("hello"),
-                line: true,
-                size: Some(50),
-                common: ftd_rt::Common {
-                    locals: std::array::IntoIter::new([(s("size@0"), s("50"))]).collect(),
-                    ..Default::default()
-                },
+        main.container.children.push(ftd::Element::Text(ftd::Text {
+            text: ftd::markdown_line("hello"),
+            line: true,
+            size: Some(50),
+            common: ftd::Common {
+                locals: std::array::IntoIter::new([(s("size@0"), s("50"))]).collect(),
                 ..Default::default()
-            }));
+            },
+            ..Default::default()
+        }));
 
-        main.container
-            .children
-            .push(ftd_rt::Element::Text(ftd_rt::Text {
-                text: ftd::markdown_line("hello"),
-                line: true,
-                ..Default::default()
-            }));
+        main.container.children.push(ftd::Element::Text(ftd::Text {
+            text: ftd::markdown_line("hello"),
+            line: true,
+            ..Default::default()
+        }));
 
         let (_g_bag, g_col) = crate::p2::interpreter::interpret(
             "foo/bar",
@@ -12032,16 +11840,16 @@ mod test {
     #[test]
     fn inner_container_check() {
         let mut main = super::default_column();
-        let col = ftd_rt::Element::Column(ftd_rt::Column {
-            container: ftd_rt::Container {
-                children: vec![ftd_rt::Element::Column(ftd_rt::Column {
-                    container: ftd_rt::Container {
+        let col = ftd::Element::Column(ftd::Column {
+            container: ftd::Container {
+                children: vec![ftd::Element::Column(ftd::Column {
+                    container: ftd::Container {
                         children: vec![
-                            ftd_rt::Element::Image(ftd_rt::Image {
+                            ftd::Element::Image(ftd::Image {
                                 src: s("https://www.nilinswap.com/static/img/dp.jpeg"),
                                 ..Default::default()
                             }),
-                            ftd_rt::Element::Text(ftd_rt::Text {
+                            ftd::Element::Text(ftd::Text {
                                 text: ftd::markdown_line("Swapnil Sharma"),
                                 line: true,
                                 ..Default::default()
@@ -12094,61 +11902,59 @@ mod test {
     #[test]
     fn mouse_in() {
         let mut main = super::default_column();
-        main.container
-            .children
-            .push(ftd_rt::Element::Text(ftd_rt::Text {
-                text: ftd::markdown_line("Hello World"),
-                line: true,
-                common: ftd_rt::Common {
-                    locals: std::array::IntoIter::new([(s("MOUSE-IN@0"), s("false"))]).collect(),
-                    conditional_attribute: std::array::IntoIter::new([(
-                        s("color"),
-                        ftd_rt::ConditionalAttribute {
-                            attribute_type: ftd_rt::AttributeType::Style,
-                            conditions_with_value: vec![(
-                                ftd_rt::Condition {
-                                    variable: s("@MOUSE-IN@0"),
-                                    value: s("true"),
-                                },
-                                ftd_rt::ConditionalValue {
-                                    value: s("rgba(255,0,0,1)"),
-                                    important: false,
-                                },
-                            )],
-                            default: None,
-                        },
-                    )])
-                    .collect(),
-                    events: vec![
-                        ftd_rt::Event {
-                            name: s("onmouseenter"),
-                            action: ftd_rt::Action {
-                                action: s("set-value"),
-                                target: s("@MOUSE-IN@0"),
-                                parameters: std::array::IntoIter::new([(
-                                    s("value"),
-                                    vec![s("true"), s("boolean")],
-                                )])
-                                .collect(),
+        main.container.children.push(ftd::Element::Text(ftd::Text {
+            text: ftd::markdown_line("Hello World"),
+            line: true,
+            common: ftd::Common {
+                locals: std::array::IntoIter::new([(s("MOUSE-IN@0"), s("false"))]).collect(),
+                conditional_attribute: std::array::IntoIter::new([(
+                    s("color"),
+                    ftd::ConditionalAttribute {
+                        attribute_type: ftd::AttributeType::Style,
+                        conditions_with_value: vec![(
+                            ftd::Condition {
+                                variable: s("@MOUSE-IN@0"),
+                                value: s("true"),
                             },
-                        },
-                        ftd_rt::Event {
-                            name: s("onmouseleave"),
-                            action: ftd_rt::Action {
-                                action: s("set-value"),
-                                target: s("@MOUSE-IN@0"),
-                                parameters: std::array::IntoIter::new([(
-                                    s("value"),
-                                    vec![s("false"), s("boolean")],
-                                )])
-                                .collect(),
+                            ftd::ConditionalValue {
+                                value: s("rgba(255,0,0,1)"),
+                                important: false,
                             },
+                        )],
+                        default: None,
+                    },
+                )])
+                .collect(),
+                events: vec![
+                    ftd::Event {
+                        name: s("onmouseenter"),
+                        action: ftd::Action {
+                            action: s("set-value"),
+                            target: s("@MOUSE-IN@0"),
+                            parameters: std::array::IntoIter::new([(
+                                s("value"),
+                                vec![s("true"), s("boolean")],
+                            )])
+                            .collect(),
                         },
-                    ],
-                    ..Default::default()
-                },
+                    },
+                    ftd::Event {
+                        name: s("onmouseleave"),
+                        action: ftd::Action {
+                            action: s("set-value"),
+                            target: s("@MOUSE-IN@0"),
+                            parameters: std::array::IntoIter::new([(
+                                s("value"),
+                                vec![s("false"), s("boolean")],
+                            )])
+                            .collect(),
+                        },
+                    },
+                ],
                 ..Default::default()
-            }));
+            },
+            ..Default::default()
+        }));
 
         let (_g_bag, g_col) = crate::p2::interpreter::interpret(
             "foo/bar",
@@ -12173,14 +11979,14 @@ mod test {
         let mut main = super::default_column();
         main.container
             .children
-            .push(ftd_rt::Element::Column(ftd_rt::Column {
-                container: ftd_rt::Container {
+            .push(ftd::Element::Column(ftd::Column {
+                container: ftd::Container {
                     children: vec![
-                        ftd_rt::Element::Text(ftd_rt::Text {
+                        ftd::Element::Text(ftd::Text {
                             text: ftd::markdown_line("Hello"),
                             line: true,
-                            common: ftd_rt::Common {
-                                condition: Some(ftd_rt::Condition {
+                            common: ftd::Common {
+                                condition: Some(ftd::Condition {
                                     variable: s("@open@0"),
                                     value: s("true"),
                                 }),
@@ -12188,13 +11994,13 @@ mod test {
                             },
                             ..Default::default()
                         }),
-                        ftd_rt::Element::Column(ftd_rt::Column {
-                            container: ftd_rt::Container {
-                                children: vec![ftd_rt::Element::Text(ftd_rt::Text {
+                        ftd::Element::Column(ftd::Column {
+                            container: ftd::Container {
+                                children: vec![ftd::Element::Text(ftd::Text {
                                     text: ftd::markdown_line("Hello Again"),
                                     line: true,
-                                    common: ftd_rt::Common {
-                                        condition: Some(ftd_rt::Condition {
+                                    common: ftd::Common {
+                                        condition: Some(ftd::Condition {
                                             variable: s("@open@0,1"),
                                             value: s("true"),
                                         }),
@@ -12204,21 +12010,21 @@ mod test {
                                 })],
                                 ..Default::default()
                             },
-                            common: ftd_rt::Common {
+                            common: ftd::Common {
                                 locals: std::array::IntoIter::new([(s("open@0,1"), s("true"))])
                                     .collect(),
                                 events: vec![
-                                    ftd_rt::Event {
+                                    ftd::Event {
                                         name: s("onclick"),
-                                        action: ftd_rt::Action {
+                                        action: ftd::Action {
                                             action: s("toggle"),
                                             target: s("@open@0,1"),
                                             parameters: Default::default(),
                                         },
                                     },
-                                    ftd_rt::Event {
+                                    ftd::Event {
                                         name: s("onclick"),
-                                        action: ftd_rt::Action {
+                                        action: ftd::Action {
                                             action: s("stop-propagation"),
                                             target: s(""),
                                             parameters: Default::default(),
@@ -12231,11 +12037,11 @@ mod test {
                     ],
                     ..Default::default()
                 },
-                common: ftd_rt::Common {
+                common: ftd::Common {
                     locals: std::array::IntoIter::new([(s("open@0"), s("true"))]).collect(),
-                    events: vec![ftd_rt::Event {
+                    events: vec![ftd::Event {
                         name: s("onclick"),
-                        action: ftd_rt::Action {
+                        action: ftd::Action {
                             action: s("toggle"),
                             target: s("@open@0"),
                             parameters: Default::default(),
@@ -12282,78 +12088,73 @@ mod test {
     #[test]
     fn new_syntax() {
         let mut main = super::default_column();
-        main.container
-            .children
-            .push(ftd_rt::Element::Row(ftd_rt::Row {
-                container: ftd_rt::Container {
-                    children: vec![ftd_rt::Element::Integer(ftd_rt::Text {
-                        text: ftd::markdown_line("20"),
-                        common: ftd_rt::Common {
-                            conditional_attribute: std::array::IntoIter::new([(
-                                s("color"),
-                                ftd_rt::ConditionalAttribute {
-                                    attribute_type: ftd_rt::AttributeType::Style,
-                                    conditions_with_value: vec![
-                                        (
-                                            ftd_rt::Condition {
-                                                variable: s("@b@0"),
-                                                value: s("true"),
-                                            },
-                                            ftd_rt::ConditionalValue {
-                                                value: s("rgba(0,0,0,1)"),
-                                                important: false,
-                                            },
-                                        ),
-                                        (
-                                            ftd_rt::Condition {
-                                                variable: s("@a@0"),
-                                                value: s("30"),
-                                            },
-                                            ftd_rt::ConditionalValue {
-                                                value: s("rgba(255,0,0,1)"),
-                                                important: false,
-                                            },
-                                        ),
-                                    ],
-                                    default: None,
-                                },
-                            )])
-                            .collect(),
-                            reference: Some(s("@a@0")),
-                            ..Default::default()
-                        },
+        main.container.children.push(ftd::Element::Row(ftd::Row {
+            container: ftd::Container {
+                children: vec![ftd::Element::Integer(ftd::Text {
+                    text: ftd::markdown_line("20"),
+                    common: ftd::Common {
+                        conditional_attribute: std::array::IntoIter::new([(
+                            s("color"),
+                            ftd::ConditionalAttribute {
+                                attribute_type: ftd::AttributeType::Style,
+                                conditions_with_value: vec![
+                                    (
+                                        ftd::Condition {
+                                            variable: s("@b@0"),
+                                            value: s("true"),
+                                        },
+                                        ftd::ConditionalValue {
+                                            value: s("rgba(0,0,0,1)"),
+                                            important: false,
+                                        },
+                                    ),
+                                    (
+                                        ftd::Condition {
+                                            variable: s("@a@0"),
+                                            value: s("30"),
+                                        },
+                                        ftd::ConditionalValue {
+                                            value: s("rgba(255,0,0,1)"),
+                                            important: false,
+                                        },
+                                    ),
+                                ],
+                                default: None,
+                            },
+                        )])
+                        .collect(),
+                        reference: Some(s("@a@0")),
                         ..Default::default()
-                    })],
+                    },
                     ..Default::default()
-                },
-                common: ftd_rt::Common {
-                    locals: std::array::IntoIter::new([
-                        (s("a@0"), s("20")),
-                        (s("b@0"), s("false")),
-                    ])
+                })],
+                ..Default::default()
+            },
+            common: ftd::Common {
+                locals: std::array::IntoIter::new([(s("a@0"), s("20")), (s("b@0"), s("false"))])
                     .collect(),
-                    events: vec![
-                        ftd_rt::Event {
-                            name: s("onclick"),
-                            action: ftd_rt::Action {
-                                action: s("toggle"),
-                                target: s("@b@0"),
-                                parameters: Default::default(),
-                            },
+                events: vec![
+                    ftd::Event {
+                        name: s("onclick"),
+                        action: ftd::Action {
+                            action: s("toggle"),
+                            target: s("@b@0"),
+                            parameters: Default::default(),
                         },
-                        ftd_rt::Event {
-                            name: s("onclick"),
-                            action: ftd_rt::Action {
-                                action: s("increment"),
-                                target: s("@a@0"),
-                                parameters: std::array::IntoIter::new([(s("by"), vec![s("2")])])
-                                    .collect(),
-                            },
+                    },
+                    ftd::Event {
+                        name: s("onclick"),
+                        action: ftd::Action {
+                            action: s("increment"),
+                            target: s("@a@0"),
+                            parameters: std::array::IntoIter::new([(s("by"), vec![s("2")])])
+                                .collect(),
                         },
-                    ],
-                    ..Default::default()
-                },
-            }));
+                    },
+                ],
+                ..Default::default()
+            },
+        }));
 
         let (_g_bag, g_col) = crate::p2::interpreter::interpret(
             "foo/bar",
@@ -12384,47 +12185,45 @@ mod test {
     #[test]
     fn condition_check() {
         let mut main = super::default_column();
-        main.container
-            .children
-            .push(ftd_rt::Element::Row(ftd_rt::Row {
-                container: ftd_rt::Container {
-                    children: vec![ftd_rt::Element::Column(ftd_rt::Column {
-                        container: ftd_rt::Container {
-                            children: vec![ftd_rt::Element::Text(ftd_rt::Text {
-                                text: ftd::markdown_line("Hello"),
-                                line: true,
-                                common: ftd_rt::Common {
-                                    condition: Some(ftd_rt::Condition {
-                                        variable: s("@b@0,0"),
-                                        value: s("true"),
-                                    }),
-                                    is_not_visible: true,
-                                    ..Default::default()
-                                },
+        main.container.children.push(ftd::Element::Row(ftd::Row {
+            container: ftd::Container {
+                children: vec![ftd::Element::Column(ftd::Column {
+                    container: ftd::Container {
+                        children: vec![ftd::Element::Text(ftd::Text {
+                            text: ftd::markdown_line("Hello"),
+                            line: true,
+                            common: ftd::Common {
+                                condition: Some(ftd::Condition {
+                                    variable: s("@b@0,0"),
+                                    value: s("true"),
+                                }),
+                                is_not_visible: true,
                                 ..Default::default()
-                            })],
+                            },
                             ..Default::default()
-                        },
-                        common: ftd_rt::Common {
-                            locals: std::array::IntoIter::new([
-                                (s("a@0,0"), s("true")),
-                                (s("b@0,0"), s("false")),
-                            ])
-                            .collect(),
-                            condition: Some(ftd_rt::Condition {
-                                variable: s("@b@0"),
-                                value: s("true"),
-                            }),
-                            ..Default::default()
-                        },
-                    })],
-                    ..Default::default()
-                },
-                common: ftd_rt::Common {
-                    locals: std::array::IntoIter::new([(s("b@0"), s("true"))]).collect(),
-                    ..Default::default()
-                },
-            }));
+                        })],
+                        ..Default::default()
+                    },
+                    common: ftd::Common {
+                        locals: std::array::IntoIter::new([
+                            (s("a@0,0"), s("true")),
+                            (s("b@0,0"), s("false")),
+                        ])
+                        .collect(),
+                        condition: Some(ftd::Condition {
+                            variable: s("@b@0"),
+                            value: s("true"),
+                        }),
+                        ..Default::default()
+                    },
+                })],
+                ..Default::default()
+            },
+            common: ftd::Common {
+                locals: std::array::IntoIter::new([(s("b@0"), s("true"))]).collect(),
+                ..Default::default()
+            },
+        }));
 
         let (_g_bag, g_col) = crate::p2::interpreter::interpret(
             "foo/bar",
@@ -12462,22 +12261,22 @@ mod test {
         let mut main = super::default_column();
         main.container
             .children
-            .push(ftd_rt::Element::Column(ftd_rt::Column {
-                container: ftd_rt::Container {
+            .push(ftd::Element::Column(ftd::Column {
+                container: ftd::Container {
                     children: vec![
-                        ftd_rt::Element::Integer(ftd_rt::Text {
+                        ftd::Element::Integer(ftd::Text {
                             text: ftd::markdown_line("20"),
-                            common: ftd_rt::Common {
+                            common: ftd::Common {
                                 conditional_attribute: std::array::IntoIter::new([(
                                     s("color"),
-                                    ftd_rt::ConditionalAttribute {
-                                        attribute_type: ftd_rt::AttributeType::Style,
+                                    ftd::ConditionalAttribute {
+                                        attribute_type: ftd::AttributeType::Style,
                                         conditions_with_value: vec![(
-                                            ftd_rt::Condition {
+                                            ftd::Condition {
                                                 variable: s("@b@0"),
                                                 value: s("true"),
                                             },
-                                            ftd_rt::ConditionalValue {
+                                            ftd::ConditionalValue {
                                                 value: s("rgba(0,0,0,1)"),
                                                 important: false,
                                             },
@@ -12491,10 +12290,10 @@ mod test {
                             },
                             ..Default::default()
                         }),
-                        ftd_rt::Element::Text(ftd_rt::Text {
+                        ftd::Element::Text(ftd::Text {
                             text: ftd::markdown_line("whatever"),
                             line: true,
-                            common: ftd_rt::Common {
+                            common: ftd::Common {
                                 reference: Some(s("@some-text@0")),
                                 ..Default::default()
                             },
@@ -12503,7 +12302,7 @@ mod test {
                     ],
                     ..Default::default()
                 },
-                common: ftd_rt::Common {
+                common: ftd::Common {
                     locals: std::array::IntoIter::new([
                         (s("a@0"), s("20")),
                         (s("b@0"), s("false")),
@@ -12511,25 +12310,25 @@ mod test {
                     ])
                     .collect(),
                     events: vec![
-                        ftd_rt::Event {
+                        ftd::Event {
                             name: s("onclick"),
-                            action: ftd_rt::Action {
+                            action: ftd::Action {
                                 action: s("toggle"),
                                 target: s("@b@0"),
                                 parameters: Default::default(),
                             },
                         },
-                        ftd_rt::Event {
+                        ftd::Event {
                             name: s("onclick"),
-                            action: ftd_rt::Action {
+                            action: ftd::Action {
                                 action: s("increment"),
                                 target: s("@a@0"),
                                 parameters: Default::default(),
                             },
                         },
-                        ftd_rt::Event {
+                        ftd::Event {
                             name: s("onclick"),
-                            action: ftd_rt::Action {
+                            action: ftd::Action {
                                 action: s("set-value"),
                                 target: s("@some-text@0"),
                                 parameters: std::array::IntoIter::new([(
@@ -12544,51 +12343,49 @@ mod test {
                 },
             }));
 
-        main.container
-            .children
-            .push(ftd_rt::Element::Row(ftd_rt::Row {
-                container: ftd_rt::Container {
-                    children: vec![ftd_rt::Element::Text(ftd_rt::Text {
-                        text: ftd::markdown_line("hello"),
-                        line: true,
-                        common: ftd_rt::Common {
-                            conditional_attribute: std::array::IntoIter::new([(
-                                s("color"),
-                                ftd_rt::ConditionalAttribute {
-                                    attribute_type: ftd_rt::AttributeType::Style,
-                                    conditions_with_value: vec![(
-                                        ftd_rt::Condition {
-                                            variable: s("@foo@1"),
-                                            value: s("true"),
-                                        },
-                                        ftd_rt::ConditionalValue {
-                                            value: s("rgba(255,0,0,1)"),
-                                            important: false,
-                                        },
-                                    )],
-                                    default: None,
-                                },
-                            )])
-                            .collect(),
-                            ..Default::default()
-                        },
+        main.container.children.push(ftd::Element::Row(ftd::Row {
+            container: ftd::Container {
+                children: vec![ftd::Element::Text(ftd::Text {
+                    text: ftd::markdown_line("hello"),
+                    line: true,
+                    common: ftd::Common {
+                        conditional_attribute: std::array::IntoIter::new([(
+                            s("color"),
+                            ftd::ConditionalAttribute {
+                                attribute_type: ftd::AttributeType::Style,
+                                conditions_with_value: vec![(
+                                    ftd::Condition {
+                                        variable: s("@foo@1"),
+                                        value: s("true"),
+                                    },
+                                    ftd::ConditionalValue {
+                                        value: s("rgba(255,0,0,1)"),
+                                        important: false,
+                                    },
+                                )],
+                                default: None,
+                            },
+                        )])
+                        .collect(),
                         ..Default::default()
-                    })],
+                    },
                     ..Default::default()
-                },
-                common: ftd_rt::Common {
-                    locals: std::array::IntoIter::new([(s("foo@1"), s("false"))]).collect(),
-                    events: vec![ftd_rt::Event {
-                        name: s("onclick"),
-                        action: ftd_rt::Action {
-                            action: s("toggle"),
-                            target: s("@foo@1"),
-                            parameters: Default::default(),
-                        },
-                    }],
-                    ..Default::default()
-                },
-            }));
+                })],
+                ..Default::default()
+            },
+            common: ftd::Common {
+                locals: std::array::IntoIter::new([(s("foo@1"), s("false"))]).collect(),
+                events: vec![ftd::Event {
+                    name: s("onclick"),
+                    action: ftd::Action {
+                        action: s("toggle"),
+                        target: s("@foo@1"),
+                        parameters: Default::default(),
+                    },
+                }],
+                ..Default::default()
+            },
+        }));
 
         let (_g_bag, g_col) = crate::p2::interpreter::interpret(
             "foo/bar",
@@ -12631,65 +12428,60 @@ mod test {
     #[test]
     fn new_var_syntax() {
         let mut main = super::default_column();
-        main.container
-            .children
-            .push(ftd_rt::Element::Text(ftd_rt::Text {
-                text: ftd::markdown_line("hello"),
-                line: true,
-                size: Some(30),
-                common: ftd_rt::Common {
-                    conditional_attribute: std::array::IntoIter::new([(
-                        s("color"),
-                        ftd_rt::ConditionalAttribute {
-                            attribute_type: ftd_rt::AttributeType::Style,
-                            conditions_with_value: vec![(
-                                ftd_rt::Condition {
-                                    variable: s("@t@0"),
-                                    value: s("true"),
-                                },
-                                ftd_rt::ConditionalValue {
-                                    value: s("rgba(255,0,0,1)"),
-                                    important: false,
-                                },
-                            )],
-                            default: None,
-                        },
-                    )])
+        main.container.children.push(ftd::Element::Text(ftd::Text {
+            text: ftd::markdown_line("hello"),
+            line: true,
+            size: Some(30),
+            common: ftd::Common {
+                conditional_attribute: std::array::IntoIter::new([(
+                    s("color"),
+                    ftd::ConditionalAttribute {
+                        attribute_type: ftd::AttributeType::Style,
+                        conditions_with_value: vec![(
+                            ftd::Condition {
+                                variable: s("@t@0"),
+                                value: s("true"),
+                            },
+                            ftd::ConditionalValue {
+                                value: s("rgba(255,0,0,1)"),
+                                important: false,
+                            },
+                        )],
+                        default: None,
+                    },
+                )])
+                .collect(),
+                locals: std::array::IntoIter::new([(s("f@0"), s("hello")), (s("t@0"), s("true"))])
                     .collect(),
-                    locals: std::array::IntoIter::new([
-                        (s("f@0"), s("hello")),
-                        (s("t@0"), s("true")),
-                    ])
-                    .collect(),
-                    reference: Some(s("foo/bar#bar")),
-                    color: Some(ftd_rt::Color {
-                        r: 255,
-                        g: 0,
-                        b: 0,
-                        alpha: 1.0,
-                    }),
-                    ..Default::default()
-                },
+                reference: Some(s("foo/bar#bar")),
+                color: Some(ftd::Color {
+                    r: 255,
+                    g: 0,
+                    b: 0,
+                    alpha: 1.0,
+                }),
                 ..Default::default()
-            }));
+            },
+            ..Default::default()
+        }));
 
         main.container
             .children
-            .push(ftd_rt::Element::Column(ftd_rt::Column {
-                container: ftd_rt::Container {
+            .push(ftd::Element::Column(ftd::Column {
+                container: ftd::Container {
                     children: vec![
-                        ftd_rt::Element::Text(ftd_rt::Text {
+                        ftd::Element::Text(ftd::Text {
                             text: ftd::markdown_line("hello"),
                             line: true,
-                            common: ftd_rt::Common {
+                            common: ftd::Common {
                                 reference: Some(s("@ff@1")),
                                 ..Default::default()
                             },
                             ..Default::default()
                         }),
-                        ftd_rt::Element::Integer(ftd_rt::Text {
+                        ftd::Element::Integer(ftd::Text {
                             text: ftd::markdown_line("20"),
-                            common: ftd_rt::Common {
+                            common: ftd::Common {
                                 reference: Some(s("@i@1")),
                                 ..Default::default()
                             },
@@ -12698,7 +12490,7 @@ mod test {
                     ],
                     ..Default::default()
                 },
-                common: ftd_rt::Common {
+                common: ftd::Common {
                     locals: std::array::IntoIter::new([
                         (s("ff@1"), s("hello")),
                         (s("i@1"), s("20")),
@@ -12748,7 +12540,7 @@ mod test {
         let mut main = super::default_column();
         main.container
             .children
-            .push(ftd_rt::Element::TextBlock(ftd_rt::TextBlock {
+            .push(ftd::Element::TextBlock(ftd::TextBlock {
                 text: ftd::markdown_line("hello"),
                 line: true,
                 ..Default::default()
@@ -12756,24 +12548,22 @@ mod test {
 
         main.container
             .children
-            .push(ftd_rt::Element::TextBlock(ftd_rt::TextBlock {
+            .push(ftd::Element::TextBlock(ftd::TextBlock {
                 text: ftd::markdown_line("hello"),
                 line: true,
                 ..Default::default()
             }));
 
-        main.container
-            .children
-            .push(ftd_rt::Element::Code(ftd_rt::Code {
-                text: ftd::code_with_theme(
-                    "This is text",
-                    "txt",
-                    ftd::render::DEFAULT_THEME,
-                    "foo/bar",
-                )
-                .unwrap(),
-                ..Default::default()
-            }));
+        main.container.children.push(ftd::Element::Code(ftd::Code {
+            text: ftd::code_with_theme(
+                "This is text",
+                "txt",
+                ftd::render::DEFAULT_THEME,
+                "foo/bar",
+            )
+            .unwrap(),
+            ..Default::default()
+        }));
 
         let (_g_bag, g_col) = crate::p2::interpreter::interpret(
             "foo/bar",

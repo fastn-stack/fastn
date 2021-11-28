@@ -16,7 +16,7 @@ impl<'a> ExecuteDoc<'a> {
     pub(crate) fn execute(
         &mut self,
         parent_container: &[usize],
-        all_locals: &mut ftd_rt::Map,
+        all_locals: &mut ftd::Map,
         id: Option<String>,
     ) -> crate::p1::Result<crate::component::ElementWithContainer> {
         let mut index = 0;
@@ -28,14 +28,14 @@ impl<'a> ExecuteDoc<'a> {
         index: &mut usize,
         is_external: bool,
         parent_container: &[usize],
-        all_locals: &mut ftd_rt::Map,
+        all_locals: &mut ftd::Map,
         parent_id: Option<String>,
         id: Option<String>,
     ) -> crate::p1::Result<crate::component::ElementWithContainer> {
         let mut current_container: Vec<usize> = Default::default();
         let mut named_containers: std::collections::BTreeMap<String, Vec<Vec<usize>>> =
             Default::default();
-        let mut children: Vec<ftd_rt::Element> = vec![];
+        let mut children: Vec<ftd::Element> = vec![];
 
         while *index < self.instructions.len() {
             let doc = crate::p2::TDoc {
@@ -51,9 +51,9 @@ impl<'a> ExecuteDoc<'a> {
                     let mut current = &children;
                     for i in current_container.iter() {
                         current = match &current[*i] {
-                            ftd_rt::Element::Row(ref r) => &r.container.children,
-                            ftd_rt::Element::Column(ref r) => &r.container.children,
-                            ftd_rt::Element::Scene(ref r) => &r.container.children,
+                            ftd::Element::Row(ref r) => &r.container.children,
+                            ftd::Element::Column(ref r) => &r.container.children,
+                            ftd::Element::Scene(ref r) => &r.container.children,
                             _ => unreachable!(),
                         };
                     }
@@ -71,7 +71,7 @@ impl<'a> ExecuteDoc<'a> {
                     {
                         *index -= 1;
                         return Ok(crate::component::ElementWithContainer {
-                            element: ftd_rt::Element::Null,
+                            element: ftd::Element::Null,
                             children,
                             child_container: Some(named_containers),
                         });
@@ -102,7 +102,7 @@ impl<'a> ExecuteDoc<'a> {
                         &local_container,
                     )?;
 
-                    let mut temp_locals: ftd_rt::Map = Default::default();
+                    let mut temp_locals: ftd::Map = Default::default();
                     children = self.add_element(
                         children,
                         &mut current_container,
@@ -212,7 +212,7 @@ impl<'a> ExecuteDoc<'a> {
         }
 
         Ok(crate::component::ElementWithContainer {
-            element: ftd_rt::Element::Null,
+            element: ftd::Element::Null,
             children,
             child_container: Some(named_containers),
         })
@@ -221,23 +221,23 @@ impl<'a> ExecuteDoc<'a> {
     #[allow(clippy::too_many_arguments)]
     fn add_element(
         &mut self,
-        mut main: Vec<ftd_rt::Element>,
+        mut main: Vec<ftd::Element>,
         current_container: &mut Vec<usize>,
         named_containers: &mut std::collections::BTreeMap<String, Vec<Vec<usize>>>,
-        e: ftd_rt::Element,
+        e: ftd::Element,
         container: Option<std::collections::BTreeMap<String, Vec<Vec<usize>>>>,
         index: &mut usize,
         parent_container: &[usize],
-        all_locals: &mut ftd_rt::Map,
+        all_locals: &mut ftd::Map,
         id: Option<String>,
-        container_children: Vec<ftd_rt::Element>,
-    ) -> crate::p1::Result<Vec<ftd_rt::Element>> {
+        container_children: Vec<ftd::Element>,
+    ) -> crate::p1::Result<Vec<ftd::Element>> {
         let mut current = &mut main;
         for i in current_container.iter() {
             current = match &mut current[*i] {
-                ftd_rt::Element::Row(ref mut r) => &mut r.container.children,
-                ftd_rt::Element::Column(ref mut r) => &mut r.container.children,
-                ftd_rt::Element::Scene(ref mut r) => &mut r.container.children,
+                ftd::Element::Row(ref mut r) => &mut r.container.children,
+                ftd::Element::Column(ref mut r) => &mut r.container.children,
+                ftd::Element::Scene(ref mut r) => &mut r.container.children,
                 _ => unreachable!(),
             };
         }
@@ -280,15 +280,15 @@ impl<'a> ExecuteDoc<'a> {
             };
 
             match current.last_mut() {
-                Some(ftd_rt::Element::Column(ftd_rt::Column {
+                Some(ftd::Element::Column(ftd::Column {
                     container: ref mut c,
                     ..
                 }))
-                | Some(ftd_rt::Element::Row(ftd_rt::Row {
+                | Some(ftd::Element::Row(ftd::Row {
                     container: ref mut c,
                     ..
                 }))
-                | Some(ftd_rt::Element::Scene(ftd_rt::Scene {
+                | Some(ftd::Element::Scene(ftd::Scene {
                     container: ref mut c,
                     ..
                 })) => {
@@ -297,7 +297,7 @@ impl<'a> ExecuteDoc<'a> {
                         let mut new_parent_container = parent_container.to_vec();
                         new_parent_container.append(&mut current_container.to_vec());
 
-                        let mut temp_locals: ftd_rt::Map = Default::default();
+                        let mut temp_locals: ftd::Map = Default::default();
 
                         *index += 1;
                         self.execute_(
@@ -319,7 +319,7 @@ impl<'a> ExecuteDoc<'a> {
                         } else {
                             let mut main = ftd::p2::interpreter::default_column();
                             main.container.children = child;
-                            vec![ftd_rt::Element::Column(main)]
+                            vec![ftd::Element::Column(main)]
                         }
                     };
                     c.external_children = Some((id, container, external_children));
@@ -328,13 +328,13 @@ impl<'a> ExecuteDoc<'a> {
             }
         } else {
             let container = match current.last_mut() {
-                Some(ftd_rt::Element::Column(ftd_rt::Column {
+                Some(ftd::Element::Column(ftd::Column {
                     ref mut container, ..
                 }))
-                | Some(ftd_rt::Element::Row(ftd_rt::Row {
+                | Some(ftd::Element::Row(ftd::Row {
                     ref mut container, ..
                 }))
-                | Some(ftd_rt::Element::Scene(ftd_rt::Scene {
+                | Some(ftd::Element::Scene(ftd::Scene {
                     ref mut container, ..
                 })) => {
                     container.children.extend(container_children);
@@ -381,7 +381,7 @@ impl<'a> ExecuteDoc<'a> {
 }
 
 fn get_external_children(
-    children: &[ftd_rt::Element],
+    children: &[ftd::Element],
     open_id: &str,
     named_containers: &std::collections::BTreeMap<String, Vec<Vec<usize>>>,
     current_container: &[usize],

@@ -45,10 +45,10 @@ impl Boolean {
     pub fn to_condition(
         &self,
         line_number: usize,
-        all_locals: &mut ftd_rt::Map,
+        all_locals: &mut ftd::Map,
         arguments: &std::collections::BTreeMap<String, crate::Value>,
         doc_id: &str,
-    ) -> ftd::p1::Result<ftd_rt::Condition> {
+    ) -> ftd::p1::Result<ftd::Condition> {
         let (variable, value) = match self {
             Self::Equal { left, right } => {
                 let variable = match left {
@@ -126,7 +126,7 @@ impl Boolean {
                     line_number,
                 )
             }
-            Some(value) => Ok(ftd_rt::Condition { variable, value }),
+            Some(value) => Ok(ftd::Condition { variable, value }),
         }
     }
 

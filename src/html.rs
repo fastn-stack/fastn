@@ -1,29 +1,25 @@
-#[derive(serde::Deserialize)]
-#[cfg_attr(
-    not(feature = "wasm"),
-    derive(serde::Serialize, PartialEq, Debug, Default, Clone)
-)]
+#[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
 pub struct Node {
-    pub condition: Option<ftd_rt::Condition>,
-    pub events: Vec<ftd_rt::Event>,
+    pub condition: Option<ftd::Condition>,
+    pub events: Vec<ftd::Event>,
     pub classes: Vec<String>,
     pub node: String,
-    pub attrs: ftd_rt::Map,
-    pub style: ftd_rt::Map,
+    pub attrs: ftd::Map,
+    pub style: ftd::Map,
     pub children: Vec<Node>,
     pub external_children: Vec<Node>,
     pub open_id: Option<String>,
     pub external_children_container: Vec<Vec<usize>>,
-    pub children_style: ftd_rt::Map,
+    pub children_style: ftd::Map,
     pub text: Option<String>,
     pub null: bool,
-    pub locals: ftd_rt::Map,
+    pub locals: ftd::Map,
 }
 
 impl Node {
-    pub fn fixed_children_style(&self, index: usize) -> ftd_rt::Map {
+    pub fn fixed_children_style(&self, index: usize) -> ftd::Map {
         if index == 1 {
-            let mut list: ftd_rt::Map = Default::default();
+            let mut list: ftd::Map = Default::default();
             for (key, value) in self.children_style.iter() {
                 if key == "margin-left" || key == "margin-top" {
                     continue;
@@ -36,7 +32,7 @@ impl Node {
         }
     }
 
-    pub fn is_visible(&self, data: &ftd_rt::DataDependenciesMap) -> bool {
+    pub fn is_visible(&self, data: &ftd::DataDependenciesMap) -> bool {
         if self.null {
             return false;
         }
@@ -50,15 +46,15 @@ impl Node {
     #[allow(clippy::too_many_arguments)]
     pub fn to_dnode(
         &self,
-        style: &ftd_rt::Map,
-        data: &ftd_rt::DataDependenciesMap,
+        style: &ftd::Map,
+        data: &ftd::DataDependenciesMap,
         external_children: &mut Option<Vec<Self>>,
         external_open_id: &Option<String>,
         external_children_container: &[Vec<usize>],
         is_parent_visible: bool,
         parent_id: &str,
         is_last: bool,
-    ) -> ftd_rt::dnode::DNode {
+    ) -> ftd::dnode::DNode {
         let style = {
             let mut s = self.style.clone();
             s.extend(style.clone());
@@ -66,7 +62,7 @@ impl Node {
         };
 
         let all_children = {
-            let mut children: Vec<ftd_rt::Node> = self.children.to_vec();
+            let mut children: Vec<ftd::Node> = self.children.to_vec();
             #[allow(clippy::blocks_in_if_conditions)]
             if let Some(ext_children) = external_children {
                 if *external_open_id
@@ -126,7 +122,7 @@ impl Node {
         let mut index_of_visible_children = 0;
 
         let children = {
-            let mut children: Vec<ftd_rt::dnode::DNode> = vec![];
+            let mut children: Vec<ftd::dnode::DNode> = vec![];
             for (i, v) in all_children.iter().enumerate() {
                 if v.node.is_empty() {
                     continue;
@@ -199,7 +195,7 @@ impl Node {
             attrs
         };
 
-        return ftd_rt::dnode::DNode {
+        return ftd::dnode::DNode {
             classes: self.classes.to_owned(),
             node: self.node.to_owned(),
             attrs,
@@ -236,12 +232,7 @@ impl Node {
         }
     }
 
-    pub fn to_html(
-        &self,
-        style: &ftd_rt::Map,
-        data: &ftd_rt::DataDependenciesMap,
-        id: &str,
-    ) -> String {
+    pub fn to_html(&self, style: &ftd::Map, data: &ftd::DataDependenciesMap, id: &str) -> String {
         self.to_dnode(style, data, &mut None, &None, &[], true, id, false)
             .to_html(id)
     }
@@ -255,7 +246,7 @@ impl Node {
     }
 }
 
-impl ftd_rt::Element {
+impl ftd::Element {
     pub fn to_node(&self, doc_id: &str) -> Node {
         match self {
             Self::Row(i) => (i.to_node(doc_id)),
@@ -296,7 +287,7 @@ impl ftd_rt::Element {
 }
 
 impl Node {
-    fn from_common(node: &str, common: &ftd_rt::Common, doc_id: &str) -> Self {
+    fn from_common(node: &str, common: &ftd::Common, doc_id: &str) -> Self {
         Node {
             condition: common.condition.clone(),
             node: s(node),
@@ -315,11 +306,7 @@ impl Node {
         }
     }
 
-    fn from_container(
-        common: &ftd_rt::Common,
-        container: &ftd_rt::Container,
-        doc_id: &str,
-    ) -> Self {
+    fn from_container(common: &ftd::Common, container: &ftd::Container, doc_id: &str) -> Self {
         let mut attrs = common.attrs();
         attrs.extend(container.attrs());
         let mut style = common.style(doc_id);
@@ -372,7 +359,7 @@ impl Node {
     }
 }
 
-impl ftd_rt::Scene {
+impl ftd::Scene {
     pub fn to_node(&self, doc_id: &str) -> Node {
         let node = {
             let mut node = Node {
@@ -469,7 +456,7 @@ impl ftd_rt::Scene {
     }
 }
 
-impl ftd_rt::Row {
+impl ftd::Row {
     pub fn to_node(&self, doc_id: &str) -> Node {
         let mut n = Node::from_container(&self.common, &self.container, doc_id);
         if !self.common.is_not_visible {
@@ -497,7 +484,7 @@ impl ftd_rt::Row {
     }
 }
 
-impl ftd_rt::Column {
+impl ftd::Column {
     pub fn to_node(&self, doc_id: &str) -> Node {
         let mut n = Node::from_container(&self.common, &self.container, doc_id);
         if !self.common.is_not_visible {
@@ -523,7 +510,7 @@ impl ftd_rt::Column {
     }
 }
 
-impl ftd_rt::Text {
+impl ftd::Text {
     pub fn to_node(&self, doc_id: &str) -> Node {
         // TODO: proper tag based on self.common.region
         // TODO: if format is not markdown use pre
@@ -573,7 +560,7 @@ impl ftd_rt::Text {
     }
 }
 
-impl ftd_rt::TextBlock {
+impl ftd::TextBlock {
     pub fn to_node(&self, doc_id: &str) -> Node {
         // TODO: proper tag based on self.common.region
         // TODO: if format is not markdown use pre
@@ -623,7 +610,7 @@ impl ftd_rt::TextBlock {
     }
 }
 
-impl ftd_rt::Code {
+impl ftd::Code {
     pub fn to_node(&self, doc_id: &str) -> Node {
         let node = match &self.common.link {
             Some(_) => "a",
@@ -669,7 +656,7 @@ impl ftd_rt::Code {
     }
 }
 
-impl ftd_rt::Image {
+impl ftd::Image {
     pub fn to_node(&self, doc_id: &str) -> Node {
         let mut n = Node::from_common("img", &self.common, doc_id);
         if self.common.link.is_some() {
@@ -715,7 +702,7 @@ impl ftd_rt::Image {
     }
 }
 
-impl ftd_rt::IFrame {
+impl ftd::IFrame {
     pub fn to_node(&self, doc_id: &str) -> Node {
         let mut n = Node::from_common("iframe", &self.common, doc_id);
         n.attrs.insert(s("src"), escape(self.src.as_str()));
@@ -725,7 +712,7 @@ impl ftd_rt::IFrame {
     }
 }
 
-impl ftd_rt::Input {
+impl ftd::Input {
     pub fn to_node(&self, doc_id: &str) -> Node {
         let mut n = Node::from_common("input", &self.common, doc_id);
         if let Some(ref p) = self.placeholder {
@@ -735,18 +722,18 @@ impl ftd_rt::Input {
     }
 }
 
-impl ftd_rt::Common {
+impl ftd::Common {
     fn add_class(&self) -> Vec<String> {
         let d: Vec<String> = vec![s("ft_md")];
         d
     }
-    fn children_style(&self) -> ftd_rt::Map {
-        let d: ftd_rt::Map = Default::default();
+    fn children_style(&self) -> ftd::Map {
+        let d: ftd::Map = Default::default();
         d
     }
 
-    fn style(&self, doc_id: &str) -> ftd_rt::Map {
-        let mut d: ftd_rt::Map = Default::default();
+    fn style(&self, doc_id: &str) -> ftd::Map {
+        let mut d: ftd::Map = Default::default();
 
         if !self.events.is_empty() && self.cursor.is_none() {
             d.insert(s("cursor"), s("pointer"));
@@ -907,7 +894,7 @@ impl ftd_rt::Common {
         {
             let shadow_color = match &self.shadow_color {
                 Some(p) => p,
-                None => &ftd_rt::Color {
+                None => &ftd::Color {
                     r: 0,
                     g: 0,
                     b: 0,
@@ -990,8 +977,8 @@ impl ftd_rt::Common {
         d
     }
 
-    fn attrs(&self) -> ftd_rt::Map {
-        let mut d: ftd_rt::Map = Default::default();
+    fn attrs(&self) -> ftd::Map {
+        let mut d: ftd::Map = Default::default();
         if let Some(ref id) = self.data_id {
             d.insert(s("data-id"), escape(id));
         }
@@ -1018,9 +1005,9 @@ impl ftd_rt::Common {
         d
     }
 }
-impl ftd_rt::Container {
-    fn style(&self) -> ftd_rt::Map {
-        let mut d: ftd_rt::Map = Default::default();
+impl ftd::Container {
+    fn style(&self) -> ftd::Map {
+        let mut d: ftd::Map = Default::default();
         let mut count = count_children_with_absolute_parent(&self.children);
         if let Some((_, _, ref ext_children)) = self.external_children {
             count += count_children_with_absolute_parent(ext_children);
@@ -1030,13 +1017,13 @@ impl ftd_rt::Container {
         }
         return d;
 
-        fn count_children_with_absolute_parent(children: &[ftd_rt::Element]) -> usize {
+        fn count_children_with_absolute_parent(children: &[ftd::Element]) -> usize {
             children
                 .iter()
                 .filter(|v| {
                     let mut bool = false;
                     if let Some(common) = v.get_common() {
-                        if Some(ftd_rt::Anchor::Parent) == common.anchor {
+                        if Some(ftd::Anchor::Parent) == common.anchor {
                             bool = true;
                         }
                     }
@@ -1045,13 +1032,13 @@ impl ftd_rt::Container {
                 .count()
         }
     }
-    fn children_style(&self) -> ftd_rt::Map {
-        let d: ftd_rt::Map = Default::default();
+    fn children_style(&self) -> ftd::Map {
+        let d: ftd::Map = Default::default();
         d
     }
 
-    fn attrs(&self) -> ftd_rt::Map {
-        let d: ftd_rt::Map = Default::default();
+    fn attrs(&self) -> ftd::Map {
+        let d: ftd::Map = Default::default();
         d
     }
     fn add_class(&self) -> Vec<String> {
@@ -1070,134 +1057,128 @@ fn s(s: &str) -> String {
     s.to_string()
 }
 
-pub fn color(c: &ftd_rt::Color) -> String {
-    let ftd_rt::Color { r, g, b, alpha } = c;
+pub fn color(c: &ftd::Color) -> String {
+    let ftd::Color { r, g, b, alpha } = c;
     format!("rgba({},{},{},{})", r, g, b, alpha)
 }
 
-pub fn length(l: &ftd_rt::Length, f: &str) -> (String, String) {
+pub fn length(l: &ftd::Length, f: &str) -> (String, String) {
     let s = f.to_string();
     match l {
-        ftd_rt::Length::Fill => (s, "100%".to_string()),
-        ftd_rt::Length::Auto => (s, "auto".to_string()),
-        ftd_rt::Length::Px { value } => (s, format!("{}px", value)),
-        ftd_rt::Length::Portion { value } => ("flex-grow".to_string(), value.to_string()),
-        ftd_rt::Length::Percent { value } => (s, format!("{}%", value)),
-        ftd_rt::Length::FitContent => (s, "fit-content".to_string()),
-        ftd_rt::Length::Calc { value } => (s, format!("calc({})", value)),
+        ftd::Length::Fill => (s, "100%".to_string()),
+        ftd::Length::Auto => (s, "auto".to_string()),
+        ftd::Length::Px { value } => (s, format!("{}px", value)),
+        ftd::Length::Portion { value } => ("flex-grow".to_string(), value.to_string()),
+        ftd::Length::Percent { value } => (s, format!("{}%", value)),
+        ftd::Length::FitContent => (s, "fit-content".to_string()),
+        ftd::Length::Calc { value } => (s, format!("calc({})", value)),
 
         _ => (s, "100%".to_string()),
-        //        ftd_rt::Length::Shrink => (s, "width".to_string()),   TODO
+        //        ftd::Length::Shrink => (s, "width".to_string()),   TODO
     }
 }
 
-fn text_align(l: &ftd_rt::TextAlign) -> (String, String) {
+fn text_align(l: &ftd::TextAlign) -> (String, String) {
     match l {
-        ftd_rt::TextAlign::Center => ("text-align".to_string(), "center".to_string()),
-        ftd_rt::TextAlign::Left => ("text-align".to_string(), "left".to_string()),
-        ftd_rt::TextAlign::Right => ("text-align".to_string(), "right".to_string()),
-        ftd_rt::TextAlign::Justify => ("text-align".to_string(), "justify".to_string()),
+        ftd::TextAlign::Center => ("text-align".to_string(), "center".to_string()),
+        ftd::TextAlign::Left => ("text-align".to_string(), "left".to_string()),
+        ftd::TextAlign::Right => ("text-align".to_string(), "right".to_string()),
+        ftd::TextAlign::Justify => ("text-align".to_string(), "justify".to_string()),
     }
 }
 
-fn style(l: &ftd_rt::Weight) -> (String, String) {
+fn style(l: &ftd::Weight) -> (String, String) {
     match l {
-        ftd_rt::Weight::Heavy => ("font-weight".to_string(), "900".to_string()),
-        ftd_rt::Weight::ExtraBold => ("font-weight".to_string(), "800".to_string()),
-        ftd_rt::Weight::Bold => ("font-weight".to_string(), "700".to_string()),
-        ftd_rt::Weight::SemiBold => ("font-weight".to_string(), "600".to_string()),
-        ftd_rt::Weight::Medium => ("font-weight".to_string(), "500".to_string()),
-        ftd_rt::Weight::Regular => ("font-weight".to_string(), "400".to_string()),
-        ftd_rt::Weight::Light => ("font-weight".to_string(), "300".to_string()),
-        ftd_rt::Weight::ExtraLight => ("font-weight".to_string(), "200".to_string()),
-        ftd_rt::Weight::HairLine => ("font-weight".to_string(), "100".to_string()),
+        ftd::Weight::Heavy => ("font-weight".to_string(), "900".to_string()),
+        ftd::Weight::ExtraBold => ("font-weight".to_string(), "800".to_string()),
+        ftd::Weight::Bold => ("font-weight".to_string(), "700".to_string()),
+        ftd::Weight::SemiBold => ("font-weight".to_string(), "600".to_string()),
+        ftd::Weight::Medium => ("font-weight".to_string(), "500".to_string()),
+        ftd::Weight::Regular => ("font-weight".to_string(), "400".to_string()),
+        ftd::Weight::Light => ("font-weight".to_string(), "300".to_string()),
+        ftd::Weight::ExtraLight => ("font-weight".to_string(), "200".to_string()),
+        ftd::Weight::HairLine => ("font-weight".to_string(), "100".to_string()),
     }
 }
 
-pub fn overflow(l: &ftd_rt::Overflow, f: &str) -> (String, String) {
+pub fn overflow(l: &ftd::Overflow, f: &str) -> (String, String) {
     let s = f.to_string();
     match l {
-        ftd_rt::Overflow::Auto => (s, "auto".to_string()),
-        ftd_rt::Overflow::Hidden => (s, "hidden".to_string()),
-        ftd_rt::Overflow::Scroll => (s, "scroll".to_string()),
-        ftd_rt::Overflow::Visible => (s, "visible".to_string()),
+        ftd::Overflow::Auto => (s, "auto".to_string()),
+        ftd::Overflow::Hidden => (s, "hidden".to_string()),
+        ftd::Overflow::Scroll => (s, "scroll".to_string()),
+        ftd::Overflow::Visible => (s, "visible".to_string()),
     }
 }
 
-fn gradient(d: &ftd_rt::GradientDirection, c: &[ftd_rt::Color]) -> String {
+fn gradient(d: &ftd::GradientDirection, c: &[ftd::Color]) -> String {
     let color = c
         .iter()
         .map(|v| color(v))
         .collect::<Vec<String>>()
         .join(",");
     let gradient_style = match d {
-        ftd_rt::GradientDirection::BottomToTop => "linear-gradient(to top ".to_string(),
-        ftd_rt::GradientDirection::TopToBottom => "linear-gradient(to bottom ".to_string(),
-        ftd_rt::GradientDirection::LeftToRight => "linear-gradient(to right".to_string(),
-        ftd_rt::GradientDirection::RightToLeft => "linear-gradient(to left".to_string(),
-        ftd_rt::GradientDirection::BottomRightToTopLeft => {
-            "linear-gradient(to top left".to_string()
-        }
-        ftd_rt::GradientDirection::TopLeftBottomRight => {
-            "linear-gradient(to bottom right".to_string()
-        }
-        ftd_rt::GradientDirection::BottomLeftToTopRight => {
-            "linear-gradient(to top right".to_string()
-        }
-        ftd_rt::GradientDirection::TopRightToBottomLeft => {
+        ftd::GradientDirection::BottomToTop => "linear-gradient(to top ".to_string(),
+        ftd::GradientDirection::TopToBottom => "linear-gradient(to bottom ".to_string(),
+        ftd::GradientDirection::LeftToRight => "linear-gradient(to right".to_string(),
+        ftd::GradientDirection::RightToLeft => "linear-gradient(to left".to_string(),
+        ftd::GradientDirection::BottomRightToTopLeft => "linear-gradient(to top left".to_string(),
+        ftd::GradientDirection::TopLeftBottomRight => "linear-gradient(to bottom right".to_string(),
+        ftd::GradientDirection::BottomLeftToTopRight => "linear-gradient(to top right".to_string(),
+        ftd::GradientDirection::TopRightToBottomLeft => {
             "linear-gradient(to bottom left".to_string()
         }
-        ftd_rt::GradientDirection::Center => "radial-gradient(circle ".to_string(),
-        ftd_rt::GradientDirection::Angle { value } => format!("linear-gradient({}deg", value),
+        ftd::GradientDirection::Center => "radial-gradient(circle ".to_string(),
+        ftd::GradientDirection::Angle { value } => format!("linear-gradient({}deg", value),
     };
     format!("{}, {} )", gradient_style, color)
 }
 
-pub fn anchor(l: &ftd_rt::Anchor) -> String {
+pub fn anchor(l: &ftd::Anchor) -> String {
     match l {
-        ftd_rt::Anchor::Parent => ("absolute".to_string()),
-        ftd_rt::Anchor::Window => ("fixed".to_string()),
+        ftd::Anchor::Parent => ("absolute".to_string()),
+        ftd::Anchor::Window => ("fixed".to_string()),
     }
 }
 
-fn container_align(l: &ftd_rt::Position) -> Vec<(String, String)> {
+fn container_align(l: &ftd::Position) -> Vec<(String, String)> {
     match l {
-        ftd_rt::Position::Center => vec![
+        ftd::Position::Center => vec![
             ("align-self".to_string(), "center".to_string()),
             ("margin-bottom".to_string(), "auto".to_string()),
             ("margin-top".to_string(), "auto".to_string()),
         ],
-        ftd_rt::Position::Top => vec![
+        ftd::Position::Top => vec![
             ("align-self".to_string(), "center".to_string()),
             ("margin-bottom".to_string(), "auto".to_string()),
         ],
-        ftd_rt::Position::Left => vec![
+        ftd::Position::Left => vec![
             ("align-self".to_string(), "flex-start".to_string()),
             ("margin-bottom".to_string(), "auto".to_string()),
             ("margin-top".to_string(), "auto".to_string()),
         ],
-        ftd_rt::Position::Right => vec![
+        ftd::Position::Right => vec![
             ("align-self".to_string(), "flex-end".to_string()),
             ("margin-bottom".to_string(), "auto".to_string()),
             ("margin-top".to_string(), "auto".to_string()),
             ("margin-left".to_string(), "auto".to_string()),
         ],
-        ftd_rt::Position::Bottom => vec![
+        ftd::Position::Bottom => vec![
             ("align-self".to_string(), "center".to_string()),
             ("margin-bottom".to_string(), "0".to_string()),
             ("margin-top".to_string(), "auto".to_string()),
         ],
-        ftd_rt::Position::TopLeft => vec![("align-self".to_string(), "flex-start".to_string())],
-        ftd_rt::Position::TopRight => vec![
+        ftd::Position::TopLeft => vec![("align-self".to_string(), "flex-start".to_string())],
+        ftd::Position::TopRight => vec![
             ("align-self".to_string(), "flex-end".to_string()),
             ("margin-left".to_string(), "auto".to_string()),
         ],
-        ftd_rt::Position::BottomLeft => vec![
+        ftd::Position::BottomLeft => vec![
             ("align-self".to_string(), "flex-start".to_string()),
             ("margin-bottom".to_string(), "0".to_string()),
             ("margin-top".to_string(), "auto".to_string()),
         ],
-        ftd_rt::Position::BottomRight => vec![
+        ftd::Position::BottomRight => vec![
             ("align-self".to_string(), "flex-end".to_string()),
             ("margin-bottom".to_string(), "0".to_string()),
             ("margin-top".to_string(), "auto".to_string()),
@@ -1206,14 +1187,14 @@ fn container_align(l: &ftd_rt::Position) -> Vec<(String, String)> {
     }
 }
 
-fn non_static_container_align(l: &ftd_rt::Position, inner: bool) -> Vec<(String, String)> {
+fn non_static_container_align(l: &ftd::Position, inner: bool) -> Vec<(String, String)> {
     match l {
-        ftd_rt::Position::Center => vec![
+        ftd::Position::Center => vec![
             ("left".to_string(), "50%".to_string()),
             ("top".to_string(), "50%".to_string()),
             ("transform".to_string(), "translate(-50%,-50%)".to_string()),
         ],
-        ftd_rt::Position::Top => {
+        ftd::Position::Top => {
             if inner {
                 vec![
                     ("top".to_string(), "0".to_string()),
@@ -1228,7 +1209,7 @@ fn non_static_container_align(l: &ftd_rt::Position, inner: bool) -> Vec<(String,
                 ]
             }
         }
-        ftd_rt::Position::Left => {
+        ftd::Position::Left => {
             if inner {
                 vec![
                     ("left".to_string(), "0".to_string()),
@@ -1243,7 +1224,7 @@ fn non_static_container_align(l: &ftd_rt::Position, inner: bool) -> Vec<(String,
                 ]
             }
         }
-        ftd_rt::Position::Right => {
+        ftd::Position::Right => {
             if inner {
                 vec![
                     ("right".to_string(), "0".to_string()),
@@ -1258,7 +1239,7 @@ fn non_static_container_align(l: &ftd_rt::Position, inner: bool) -> Vec<(String,
                 ]
             }
         }
-        ftd_rt::Position::Bottom => {
+        ftd::Position::Bottom => {
             if inner {
                 vec![
                     ("bottom".to_string(), "0".to_string()),
@@ -1273,7 +1254,7 @@ fn non_static_container_align(l: &ftd_rt::Position, inner: bool) -> Vec<(String,
                 ]
             }
         }
-        ftd_rt::Position::TopLeft => {
+        ftd::Position::TopLeft => {
             if inner {
                 vec![
                     ("top".to_string(), "0".to_string()),
@@ -1286,7 +1267,7 @@ fn non_static_container_align(l: &ftd_rt::Position, inner: bool) -> Vec<(String,
                 ]
             }
         }
-        ftd_rt::Position::TopRight => {
+        ftd::Position::TopRight => {
             if inner {
                 vec![
                     ("top".to_string(), "0".to_string()),
@@ -1299,7 +1280,7 @@ fn non_static_container_align(l: &ftd_rt::Position, inner: bool) -> Vec<(String,
                 ]
             }
         }
-        ftd_rt::Position::BottomLeft => {
+        ftd::Position::BottomLeft => {
             if inner {
                 vec![
                     ("bottom".to_string(), "0".to_string()),
@@ -1312,7 +1293,7 @@ fn non_static_container_align(l: &ftd_rt::Position, inner: bool) -> Vec<(String,
                 ]
             }
         }
-        ftd_rt::Position::BottomRight => {
+        ftd::Position::BottomRight => {
             if inner {
                 vec![
                     ("bottom".to_string(), "0".to_string()),
@@ -1339,19 +1320,25 @@ fn get_translate(
     scale_y: &Option<f64>,
     rotate: &Option<i64>,
     doc_id: &str,
-) -> ftd_rt::Result<Option<String>> {
+) -> ftd::p1::Result<Option<String>> {
     let mut translate = match (left, right, up, down) {
         (Some(_), Some(_), Some(_), Some(_)) => {
-            return ftd_rt::e(
+            return ftd::e2(
                 "move-up, move-down, move-left and move-right all 4 can't be used at once!",
                 doc_id,
-            )
+                0, // TODO
+            );
         }
         (Some(_), Some(_), _, _) => {
-            return ftd_rt::e("move-left, move-right both can't be used at once!", doc_id)
+            return ftd::e2(
+                "move-left, move-right both can't be used at once!",
+                doc_id,
+                0, // TODO
+            );
         }
         (_, _, Some(_), Some(_)) => {
-            return ftd_rt::e("move-up, move-down both can't be used at once!", doc_id)
+            // TODO
+            return ftd::e2("move-up, move-down both can't be used at once!", doc_id, 0);
         }
         (Some(l), None, None, None) => Some(format!("translateX(-{}px) ", l)),
         (Some(l), None, Some(u), None) => Some(format!("translate(-{}px, -{}px) ", l, u)),

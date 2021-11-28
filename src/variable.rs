@@ -440,7 +440,7 @@ impl Variable {
     pub fn map_from_p1(p1: &crate::p1::Section, doc: &crate::p2::TDoc) -> crate::p1::Result<Self> {
         let name = doc.resolve_name(
             p1.line_number,
-            ftd_rt::get_name("map", p1.name.as_str(), doc.name)?,
+            ftd::get_name("map", p1.name.as_str(), doc.name)?,
         )?;
         Ok(Variable {
             name,

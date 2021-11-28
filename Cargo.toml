@@ -1,3 +1,36 @@
-[workspace]
-members = ["ftd", "ftd-rt"]
+[package]
+name = "ftd"
+version = "0.1.9"
+authors = ["Amit Upadhyay <upadhyay@gmail.com>"]
+edition = "2021"
+description = "ftd: FifthTry Document Format parser"
+license = "MIT"
+repository = "https://github.com/fifthtry/ftd"
+homepage = "https://ftd.dev"
 
+[features]
+default = []
+calls = []
+async = ["async-recursion", "async-trait", "futures"]
+
+[dependencies]
+css-color-parser = { version = "0.1.2" }
+serde = { version = "1", features = ["derive"] }
+serde_json = { version = "1" }
+thiserror = "1"
+comrak = { version = "0.7.0" }
+katex = { version = "0.4" }
+syntect = { version = "4.5.0", default-features = false, features = ["default-fancy"] }
+lazy_static = { version = "1" }
+regex = { version = "1.5.4" }
+format_num = { version = "0.1.0" }
+failure = "0.1"
+slug = { version = "0.1.4" }
+futures = { version = "0.3", optional = true }
+async-recursion = { version = "0.3.2", optional = true }
+async-trait = { version = "0.1.51", optional = true }
+
+[dev-dependencies]
+diffy = "0.2.0"
+indoc = "0.3"
+pretty_assertions = "0.6"

@@ -39,11 +39,11 @@ impl Event {
     pub fn get_events(
         line_number: usize,
         events: &[Self],
-        all_locals: &mut ftd_rt::Map,
+        all_locals: &mut ftd::Map,
         arguments: &std::collections::BTreeMap<String, crate::Value>,
         doc: &crate::p2::TDoc,
         root_name: Option<&str>,
-    ) -> crate::p1::Result<Vec<ftd_rt::Event>> {
+    ) -> crate::p1::Result<Vec<ftd::Event>> {
         let arguments = {
             //remove properties
             let mut arguments_without_properties: std::collections::BTreeMap<String, crate::Value> =
@@ -56,7 +56,7 @@ impl Event {
             arguments_without_properties
         };
 
-        let mut event: Vec<ftd_rt::Event> = vec![];
+        let mut event: Vec<ftd::Event> = vec![];
         for e in events {
             let target = match e.action.target.strip_prefix('@') {
                 Some(value) => {
@@ -77,9 +77,9 @@ impl Event {
                 None => e.action.target.to_string(),
             };
 
-            event.push(ftd_rt::Event {
+            event.push(ftd::Event {
                 name: e.name.to_str().to_string(),
-                action: ftd_rt::Action {
+                action: ftd::Action {
                     action: e.action.action.to_str().to_string(),
                     target,
                     parameters: ftd::p2::Event::to_value(
@@ -95,12 +95,12 @@ impl Event {
         Ok(event)
     }
 
-    pub fn mouse_event(all_locals: &mut ftd_rt::Map) -> crate::p1::Result<Vec<ftd_rt::Event>> {
-        let mut event: Vec<ftd_rt::Event> = vec![];
+    pub fn mouse_event(all_locals: &mut ftd::Map) -> crate::p1::Result<Vec<ftd::Event>> {
+        let mut event: Vec<ftd::Event> = vec![];
         if let Some(val) = all_locals.get("MOUSE-IN") {
-            event.push(ftd_rt::Event {
+            event.push(ftd::Event {
                 name: "onmouseenter".to_string(),
-                action: ftd_rt::Action {
+                action: ftd::Action {
                     action: "set-value".to_string(),
                     target: format!("@MOUSE-IN@{}", val),
                     parameters: std::array::IntoIter::new([(
@@ -110,9 +110,9 @@ impl Event {
                     .collect(),
                 },
             });
-            event.push(ftd_rt::Event {
+            event.push(ftd::Event {
                 name: "onmouseleave".to_string(),
-                action: ftd_rt::Action {
+                action: ftd::Action {
                     action: "set-value".to_string(),
                     target: format!("@MOUSE-IN@{}", val),
                     parameters: std::array::IntoIter::new([(

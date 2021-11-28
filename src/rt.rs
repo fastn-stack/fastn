@@ -49,15 +49,15 @@ impl RT {
     //     }
     // }
 
-    pub fn render(&mut self) -> crate::p1::Result<ftd_rt::Column> {
+    pub fn render(&mut self) -> crate::p1::Result<ftd::Column> {
         let mut main = self.render_();
         if let Ok(main) = &mut main {
-            ftd_rt::Element::set_id(&mut main.container.children, &[], None);
+            ftd::Element::set_id(&mut main.container.children, &[], None);
         }
         main
     }
 
-    pub fn render_(&mut self) -> crate::p1::Result<ftd_rt::Column> {
+    pub fn render_(&mut self) -> crate::p1::Result<ftd::Column> {
         let mut main = ftd::p2::interpreter::default_column();
         let mut invocations = Default::default();
         let mut element = ftd::execute_doc::ExecuteDoc {
@@ -72,7 +72,7 @@ impl RT {
         .execute(&[], &mut Default::default(), None)?
         .children;
 
-        ftd_rt::Element::renesting_on_region(&mut element);
+        ftd::Element::renesting_on_region(&mut element);
         ftd::p2::document::set_region_id(&mut element);
         ftd::p2::document::default_scene_children_position(&mut element);
 

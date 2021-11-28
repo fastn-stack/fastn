@@ -6,7 +6,7 @@ pub struct OrType {
 
 impl OrType {
     pub fn from_p1(p1: &crate::p1::Section, doc: &crate::p2::TDoc) -> crate::p1::Result<Self> {
-        let or_type_name = ftd_rt::get_name("or-type", p1.name.as_str(), doc.name)?;
+        let or_type_name = ftd::get_name("or-type", p1.name.as_str(), doc.name)?;
         let name = doc.format_name(or_type_name);
         let mut variants: Vec<crate::p2::Record> = Default::default();
         for s in p1.sub_sections.0.iter() {

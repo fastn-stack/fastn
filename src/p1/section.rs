@@ -134,7 +134,7 @@ impl Section {
         self
     }
 
-    pub fn and_optional_caption(mut self, value: &Option<ftd_rt::Rendered>) -> Self {
+    pub fn and_optional_caption(mut self, value: &Option<ftd::Rendered>) -> Self {
         if let Some(v) = value {
             self = self.and_caption(v.original.as_str());
         }

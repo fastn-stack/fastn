@@ -257,7 +257,7 @@ impl Record {
         doc: &crate::p2::TDoc,
         line_number: usize,
     ) -> crate::p1::Result<Self> {
-        let name = ftd_rt::get_name("record", p1_name, doc.name)?;
+        let name = ftd::get_name("record", p1_name, doc.name)?;
         let full_name = doc.format_name(name);
         let mut fields = std::collections::BTreeMap::new();
         let object_kind = (

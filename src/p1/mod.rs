@@ -40,11 +40,6 @@ pub enum Error {
     },
 
     #[error("{source}")]
-    FtdRT {
-        #[from]
-        source: ftd_rt::Error,
-    },
-    #[error("{source}")]
     Failure {
         #[from]
         source: failure::Compat<failure::Error>,

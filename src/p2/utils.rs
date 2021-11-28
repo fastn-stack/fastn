@@ -41,7 +41,7 @@ pub fn string_and_ref(
     line_number: usize,
     name: &str,
     properties: &std::collections::BTreeMap<String, (crate::Value, Option<String>)>,
-    all_locals: &mut ftd_rt::Map,
+    all_locals: &mut ftd::Map,
     doc_id: &str,
 ) -> crate::p1::Result<(String, Option<String>)> {
     match properties.get(name) {
@@ -61,7 +61,7 @@ pub fn string_and_source_and_ref(
     line_number: usize,
     name: &str,
     properties: &std::collections::BTreeMap<String, (crate::Value, Option<String>)>,
-    all_locals: &mut ftd_rt::Map,
+    all_locals: &mut ftd::Map,
     doc_id: &str,
 ) -> crate::p1::Result<(String, crate::TextSource, Option<String>)> {
     match properties.get(name) {
@@ -79,10 +79,7 @@ pub fn string_and_source_and_ref(
     }
 }
 
-pub fn complete_reference(
-    reference: &Option<String>,
-    all_locals: &mut ftd_rt::Map,
-) -> Option<String> {
+pub fn complete_reference(reference: &Option<String>, all_locals: &mut ftd::Map) -> Option<String> {
     let mut reference = reference.to_owned();
     if let Some(ref r) = reference {
         if let Some(name) = r.strip_prefix('@') {
@@ -199,7 +196,7 @@ pub fn int_with_default(
 // pub fn elements(
 //     name: &str,
 //     properties: &std::collections::BTreeMap<String, crate::Value>,
-// ) -> crate::p1::Result<Vec<ftd_rt::Element>> {
+// ) -> crate::p1::Result<Vec<ftd::Element>> {
 //     match properties.get(name) {
 //         Some(crate::Value::Elements(v)) => Ok((*v).clone()),
 //         Some(v) => crate::e(format!("expected elements, found: {:?}", v)),
@@ -428,11 +425,11 @@ pub fn reorder(p1: &[ftd::p1::Section], doc_id: &str) -> ftd::p1::Result<Vec<ftd
             inserted_p1.push(idx);
             new_p1.push(p1.to_owned());
             if p1.name.starts_with("list ") {
-                let list = ftd_rt::get_name("list", p1.name.as_str(), doc_id)?.to_string();
+                let list = ftd::get_name("list", p1.name.as_str(), doc_id)?.to_string();
                 list_or_var.push(list);
             }
             if p1.name.starts_with("var ") {
-                let var = ftd_rt::get_name("var", p1.name.as_str(), doc_id)?.to_string();
+                let var = ftd::get_name("var", p1.name.as_str(), doc_id)?.to_string();
                 list_or_var.push(var);
             }
         }
@@ -444,7 +441,7 @@ pub fn reorder(p1: &[ftd::p1::Section], doc_id: &str) -> ftd::p1::Result<Vec<ftd
 
         if p1.name.starts_with("component ") {
             p1_map.insert(
-                ftd_rt::get_name("component", p1.name.as_str(), doc_id)?.to_string(),
+                ftd::get_name("component", p1.name.as_str(), doc_id)?.to_string(),
                 p1.to_owned(),
             );
             inserted_p1.push(idx);

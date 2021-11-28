@@ -1,18 +1,14 @@
-#[derive(serde::Deserialize)]
-#[cfg_attr(
-    not(feature = "wasm"),
-    derive(serde::Serialize, PartialEq, Debug, Default, Clone)
-)]
+#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize, Default)]
 pub struct DNode {
     pub classes: Vec<String>,
     pub node: String,
-    pub attrs: ftd_rt::Map,
-    pub style: ftd_rt::Map,
+    pub attrs: ftd::Map,
+    pub style: ftd::Map,
     pub children: Vec<DNode>,
     pub text: Option<String>,
     pub null: bool,
     pub visible: bool,
-    pub events: Vec<ftd_rt::Event>, // $event-click$: toggle foo | "click: toggle foo"
+    pub events: Vec<ftd::Event>, // $event-click$: toggle foo | "click: toggle foo"
 }
 
 impl DNode {
@@ -31,7 +27,7 @@ impl DNode {
         }
         styles
             .iter()
-            .map(|(k, v)| format!("{}: {}", *k, ftd_rt::html::escape(v))) // TODO: escape needed?
+            .map(|(k, v)| format!("{}: {}", *k, ftd::html::escape(v))) // TODO: escape needed?
             .collect::<Vec<String>>()
             .join("; ")
     }
@@ -50,7 +46,7 @@ impl DNode {
 
         let attrs = {
             let mut attr = self.attrs_to_html();
-            let events = ftd_rt::event::group_by_js_event(&self.events);
+            let events = ftd::event::group_by_js_event(&self.events);
             for (name, actions) in events {
                 let event = format!(
                     "window.ftd.handle_event(event, '{}', '{}')",

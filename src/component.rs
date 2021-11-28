@@ -87,8 +87,8 @@ pub struct Property {
 
 #[derive(Debug, Clone)]
 pub struct ElementWithContainer {
-    pub element: ftd_rt::Element,
-    pub children: Vec<ftd_rt::Element>,
+    pub element: ftd::Element,
+    pub children: Vec<ftd::Element>,
     pub child_container: Option<std::collections::BTreeMap<String, Vec<Vec<usize>>>>,
 }
 
@@ -127,7 +127,7 @@ impl ChildComponent {
             String,
             Vec<std::collections::BTreeMap<String, crate::Value>>,
         >,
-        all_locals: &mut ftd_rt::Map,
+        all_locals: &mut ftd::Map,
         local_container: &[usize],
     ) -> crate::p1::Result<ElementWithContainer> {
         let id = crate::p2::utils::string_optional(
@@ -178,9 +178,9 @@ impl ChildComponent {
 
         let mut container_children = vec![];
         match (&mut element, children.is_empty()) {
-            (ftd_rt::Element::Column(_), _)
-            | (ftd_rt::Element::Row(_), _)
-            | (ftd_rt::Element::Scene(_), _) => {
+            (ftd::Element::Column(_), _)
+            | (ftd::Element::Row(_), _)
+            | (ftd::Element::Scene(_), _) => {
                 let instructions = children
                     .iter()
                     .map(|child| {
@@ -208,7 +208,7 @@ impl ChildComponent {
                 .children;
                 container_children.extend(elements);
             }
-            (ftd_rt::Element::Null, false) => {
+            (ftd::Element::Null, false) => {
                 let mut root = doc
                     .get_component(self.line_number, self.root.as_str())
                     .unwrap();
@@ -255,7 +255,7 @@ impl ChildComponent {
         >,
         is_child: bool,
         root_name: Option<&str>,
-        all_locals: &mut ftd_rt::Map,
+        all_locals: &mut ftd::Map,
         local_container: &[usize],
     ) -> crate::p1::Result<Vec<ElementWithContainer>> {
         let root = {
@@ -285,7 +285,7 @@ impl ChildComponent {
                     doc,
                     root_name,
                 )?;
-                let mut temp_locals: ftd_rt::Map = Default::default();
+                let mut temp_locals: ftd::Map = Default::default();
                 let conditional_attribute = get_conditional_attributes(
                     self.line_number,
                     &self.properties,
@@ -308,7 +308,7 @@ impl ChildComponent {
                             visible = false;
                             if let Ok(true) = b.set_null(self.line_number, doc.name) {
                                 elements.push(ElementWithContainer {
-                                    element: ftd_rt::Element::Null,
+                                    element: ftd::Element::Null,
                                     children: vec![],
                                     child_container: None,
                                 });
@@ -375,7 +375,7 @@ impl ChildComponent {
         >,
         is_child: bool,
         root_name: Option<&str>,
-        all_locals: &mut ftd_rt::Map,
+        all_locals: &mut ftd::Map,
         local_container: &[usize],
         id: Option<String>,
     ) -> crate::p1::Result<ElementWithContainer> {
@@ -383,7 +383,7 @@ impl ChildComponent {
             if b.is_constant() && !b.eval(self.line_number, arguments, doc)? {
                 if let Ok(true) = b.set_null(self.line_number, doc.name) {
                     return Ok(ElementWithContainer {
-                        element: ftd_rt::Element::Null,
+                        element: ftd::Element::Null,
                         children: vec![],
                         child_container: None,
                     });
@@ -590,12 +590,10 @@ fn get_conditional_attributes(
     properties: &std::collections::BTreeMap<String, Property>,
     arguments: &std::collections::BTreeMap<String, crate::Value>,
     doc: &crate::p2::TDoc,
-    all_locals: &mut ftd_rt::Map,
-) -> ftd::p1::Result<std::collections::BTreeMap<String, ftd_rt::ConditionalAttribute>> {
-    let mut conditional_attribute: std::collections::BTreeMap<
-        String,
-        ftd_rt::ConditionalAttribute,
-    > = Default::default();
+    all_locals: &mut ftd::Map,
+) -> ftd::p1::Result<std::collections::BTreeMap<String, ftd::ConditionalAttribute>> {
+    let mut conditional_attribute: std::collections::BTreeMap<String, ftd::ConditionalAttribute> =
+        Default::default();
 
     let mut dictionary: std::collections::BTreeMap<String, Vec<String>> = Default::default();
     dictionary.insert(
@@ -691,8 +689,8 @@ fn get_conditional_attributes(
 
                 conditional_attribute.insert(
                     get_style_name(name),
-                    ftd_rt::ConditionalAttribute {
-                        attribute_type: ftd_rt::AttributeType::Style,
+                    ftd::ConditionalAttribute {
+                        attribute_type: ftd::AttributeType::Style,
                         conditions_with_value,
                         default,
                     },
@@ -715,7 +713,7 @@ fn get_conditional_attributes(
         value: ftd::Value,
         doc_id: &str,
         line_number: usize,
-    ) -> ftd::p1::Result<ftd_rt::ConditionalValue> {
+    ) -> ftd::p1::Result<ftd::ConditionalValue> {
         let style_integer = vec![
             "padding",
             "padding-left",
@@ -768,7 +766,7 @@ fn get_conditional_attributes(
 
         Ok(if style_integer.contains(&name) {
             match value {
-                ftd::Value::Integer { value: v } => ftd_rt::ConditionalValue {
+                ftd::Value::Integer { value: v } => ftd::ConditionalValue {
                     value: format!("{}px", v),
                     important: false,
                 },
@@ -776,7 +774,7 @@ fn get_conditional_attributes(
             }
         } else if style_integer_important.contains(&name) {
             match value {
-                ftd::Value::Integer { value: v } => ftd_rt::ConditionalValue {
+                ftd::Value::Integer { value: v } => ftd::ConditionalValue {
                     value: format!("{}px", v),
                     important: true,
                 },
@@ -784,8 +782,8 @@ fn get_conditional_attributes(
             }
         } else if style_length.contains(&name) {
             match value {
-                ftd::Value::String { text: v, .. } => ftd_rt::ConditionalValue {
-                    value: ftd_rt::length(&ftd_rt::Length::from(Some(v), doc_id)?.unwrap(), name).1,
+                ftd::Value::String { text: v, .. } => ftd::ConditionalValue {
+                    value: ftd::length(&ftd::Length::from(Some(v), doc_id)?.unwrap(), name).1,
                     important: false,
                 },
                 v => {
@@ -798,8 +796,8 @@ fn get_conditional_attributes(
             }
         } else if style_color.contains(&name) {
             match value {
-                ftd::Value::String { text: v, .. } => ftd_rt::ConditionalValue {
-                    value: ftd_rt::color(&ftd::p2::element::color_from(Some(v), doc_id)?.unwrap()),
+                ftd::Value::String { text: v, .. } => ftd::ConditionalValue {
+                    value: ftd::color(&ftd::p2::element::color_from(Some(v), doc_id)?.unwrap()),
                     important: false,
                 },
                 v => {
@@ -812,12 +810,8 @@ fn get_conditional_attributes(
             }
         } else if style_overflow.contains(&name) {
             match value {
-                ftd::Value::String { text: v, .. } => ftd_rt::ConditionalValue {
-                    value: ftd_rt::overflow(
-                        &ftd_rt::Overflow::from(Some(v), doc_id)?.unwrap(),
-                        name,
-                    )
-                    .1,
+                ftd::Value::String { text: v, .. } => ftd::ConditionalValue {
+                    value: ftd::overflow(&ftd::Overflow::from(Some(v), doc_id)?.unwrap(), name).1,
                     important: false,
                 },
                 v => {
@@ -830,7 +824,7 @@ fn get_conditional_attributes(
             }
         } else if style_string.contains(&name) {
             match value {
-                ftd::Value::String { text: v, .. } => ftd_rt::ConditionalValue {
+                ftd::Value::String { text: v, .. } => ftd::ConditionalValue {
                     value: v,
                     important: false,
                 },
@@ -844,7 +838,7 @@ fn get_conditional_attributes(
             }
         } else if style_boolean.contains(&name) {
             match value {
-                ftd::Value::Boolean { value: v } => ftd_rt::ConditionalValue {
+                ftd::Value::Boolean { value: v } => ftd::ConditionalValue {
                     value: v.to_string(),
                     important: false,
                 },
@@ -858,7 +852,7 @@ fn get_conditional_attributes(
             }
         } else if name.eq("sticky") {
             match value {
-                ftd::Value::Boolean { value: v } => ftd_rt::ConditionalValue {
+                ftd::Value::Boolean { value: v } => ftd::ConditionalValue {
                     value: { if v { "sticky" } else { "inherit" }.to_string() },
                     important: false,
                 },
@@ -872,7 +866,7 @@ fn get_conditional_attributes(
             }
         } else if name.eq("background-attachment") {
             match value {
-                ftd::Value::Boolean { value: v } => ftd_rt::ConditionalValue {
+                ftd::Value::Boolean { value: v } => ftd::ConditionalValue {
                     value: { if v { "fixed" } else { "inherit" }.to_string() },
                     important: false,
                 },
@@ -886,7 +880,7 @@ fn get_conditional_attributes(
             }
         } else if name.eq("line-clamp") {
             match value {
-                ftd::Value::Integer { value: v } => ftd_rt::ConditionalValue {
+                ftd::Value::Integer { value: v } => ftd::ConditionalValue {
                     value: v.to_string(),
                     important: false,
                 },
@@ -945,7 +939,7 @@ impl Component {
         >,
         root_name: Option<&str>,
         call_container: &[usize],
-        all_locals: &mut ftd_rt::Map,
+        all_locals: &mut ftd::Map,
         id: Option<String>,
     ) -> crate::p1::Result<ElementWithContainer> {
         ftd::execute_doc::ExecuteDoc {
@@ -973,7 +967,7 @@ impl Component {
     }
 
     pub fn from_p1(p1: &crate::p1::Section, doc: &crate::p2::TDoc) -> crate::p1::Result<Self> {
-        let name = ftd_rt::get_name("component", p1.name.as_str(), doc.name)?.to_string();
+        let name = ftd::get_name("component", p1.name.as_str(), doc.name)?.to_string();
         let root = p1.header.string(doc.name, p1.line_number, "component")?;
         let root_component = doc.get_component(p1.line_number, root.as_str())?;
         let mut root_arguments = root_component.arguments.clone();
@@ -1080,7 +1074,7 @@ impl Component {
         is_child: bool,
         root_name: Option<&str>,
         events: &[ftd::p2::Event],
-        all_locals: &mut ftd_rt::Map,
+        all_locals: &mut ftd::Map,
         local_container: &[usize],
         id: Option<String>,
     ) -> crate::p1::Result<ElementWithContainer> {
@@ -1102,48 +1096,42 @@ impl Component {
             .push(property.to_owned());
         if self.root == "ftd.kernel" {
             let element = match self.full_name.as_str() {
-                "ftd#text" => ftd_rt::Element::Text(ftd::p2::element::text_from_properties(
+                "ftd#text" => ftd::Element::Text(ftd::p2::element::text_from_properties(
                     arguments, doc, condition, is_child, events, all_locals, root_name,
                 )?),
                 "ftd#text-block" => {
-                    ftd_rt::Element::TextBlock(ftd::p2::element::text_block_from_properties(
+                    ftd::Element::TextBlock(ftd::p2::element::text_block_from_properties(
                         arguments, doc, condition, is_child, events, all_locals, root_name,
                     )?)
                 }
-                "ftd#code" => ftd_rt::Element::Code(ftd::p2::element::code_from_properties(
+                "ftd#code" => ftd::Element::Code(ftd::p2::element::code_from_properties(
                     arguments, doc, condition, is_child, events, all_locals, root_name,
                 )?),
-                "ftd#image" => ftd_rt::Element::Image(ftd::p2::element::image_from_properties(
+                "ftd#image" => ftd::Element::Image(ftd::p2::element::image_from_properties(
                     arguments, doc, condition, is_child, events, all_locals, root_name,
                 )?),
-                "ftd#row" => ftd_rt::Element::Row(ftd::p2::element::row_from_properties(
+                "ftd#row" => ftd::Element::Row(ftd::p2::element::row_from_properties(
                     arguments, doc, condition, is_child, events, all_locals, root_name,
                 )?),
-                "ftd#column" => ftd_rt::Element::Column(ftd::p2::element::column_from_properties(
+                "ftd#column" => ftd::Element::Column(ftd::p2::element::column_from_properties(
                     arguments, doc, condition, is_child, events, all_locals, root_name,
                 )?),
-                "ftd#iframe" => ftd_rt::Element::IFrame(ftd::p2::element::iframe_from_properties(
+                "ftd#iframe" => ftd::Element::IFrame(ftd::p2::element::iframe_from_properties(
                     arguments, doc, condition, is_child, events, all_locals, root_name,
                 )?),
-                "ftd#integer" => {
-                    ftd_rt::Element::Integer(ftd::p2::element::integer_from_properties(
-                        arguments, doc, condition, is_child, events, all_locals, root_name,
-                    )?)
-                }
-                "ftd#decimal" => {
-                    ftd_rt::Element::Decimal(ftd::p2::element::decimal_from_properties(
-                        arguments, doc, condition, is_child, events, all_locals, root_name,
-                    )?)
-                }
-                "ftd#boolean" => {
-                    ftd_rt::Element::Boolean(ftd::p2::element::boolean_from_properties(
-                        arguments, doc, condition, is_child, events, all_locals, root_name,
-                    )?)
-                }
-                "ftd#input" => ftd_rt::Element::Input(ftd::p2::element::input_from_properties(
+                "ftd#integer" => ftd::Element::Integer(ftd::p2::element::integer_from_properties(
                     arguments, doc, condition, is_child, events, all_locals, root_name,
                 )?),
-                "ftd#scene" => ftd_rt::Element::Scene(ftd::p2::element::scene_from_properties(
+                "ftd#decimal" => ftd::Element::Decimal(ftd::p2::element::decimal_from_properties(
+                    arguments, doc, condition, is_child, events, all_locals, root_name,
+                )?),
+                "ftd#boolean" => ftd::Element::Boolean(ftd::p2::element::boolean_from_properties(
+                    arguments, doc, condition, is_child, events, all_locals, root_name,
+                )?),
+                "ftd#input" => ftd::Element::Input(ftd::p2::element::input_from_properties(
+                    arguments, doc, condition, is_child, events, all_locals, root_name,
+                )?),
+                "ftd#scene" => ftd::Element::Scene(ftd::p2::element::scene_from_properties(
                     arguments, doc, condition, is_child, events, all_locals, root_name,
                 )?),
                 _ => unreachable!(),
@@ -1179,7 +1167,7 @@ impl Component {
                 .collect::<Vec<String>>()
                 .join(",");
 
-            let mut all_new_locals: ftd_rt::Map = self.get_locals_map(&string_container);
+            let mut all_new_locals: ftd::Map = self.get_locals_map(&string_container);
 
             let (get_condition, is_visible, is_null_element) = match condition {
                 Some(c) => {
@@ -1248,7 +1236,7 @@ impl Component {
                 )?
             } else {
                 ElementWithContainer {
-                    element: ftd_rt::Element::Null,
+                    element: ftd::Element::Null,
                     children: vec![],
                     child_container: None,
                 }
@@ -1274,23 +1262,23 @@ impl Component {
 
             let mut containers = None;
             match &mut element {
-                ftd_rt::Element::Text(_)
-                | ftd_rt::Element::TextBlock(_)
-                | ftd_rt::Element::Code(_)
-                | ftd_rt::Element::Image(_)
-                | ftd_rt::Element::IFrame(_)
-                | ftd_rt::Element::Input(_)
-                | ftd_rt::Element::Integer(_)
-                | ftd_rt::Element::Decimal(_)
-                | ftd_rt::Element::Boolean(_)
-                | ftd_rt::Element::Null => {}
-                ftd_rt::Element::Column(ftd_rt::Column {
+                ftd::Element::Text(_)
+                | ftd::Element::TextBlock(_)
+                | ftd::Element::Code(_)
+                | ftd::Element::Image(_)
+                | ftd::Element::IFrame(_)
+                | ftd::Element::Input(_)
+                | ftd::Element::Integer(_)
+                | ftd::Element::Decimal(_)
+                | ftd::Element::Boolean(_)
+                | ftd::Element::Null => {}
+                ftd::Element::Column(ftd::Column {
                     ref mut container, ..
                 })
-                | ftd_rt::Element::Row(ftd_rt::Row {
+                | ftd::Element::Row(ftd::Row {
                     ref mut container, ..
                 })
-                | ftd_rt::Element::Scene(ftd_rt::Scene {
+                | ftd::Element::Scene(ftd::Scene {
                     ref mut container, ..
                 }) => {
                     let ElementWithContainer {
@@ -1335,11 +1323,11 @@ impl Component {
 
     fn get_all_locals(
         &self,
-        all_locals: &ftd_rt::Map,
+        all_locals: &ftd::Map,
         arguments: &std::collections::BTreeMap<String, crate::Value>,
         string_container: &str,
-    ) -> crate::p1::Result<ftd_rt::Map> {
-        let mut locals: ftd_rt::Map = Default::default();
+    ) -> crate::p1::Result<ftd::Map> {
+        let mut locals: ftd::Map = Default::default();
 
         for k in all_locals.keys() {
             if k.eq("MOUSE-IN-TEMP") {
@@ -1372,8 +1360,8 @@ impl Component {
         Ok(locals)
     }
 
-    fn get_locals_map(&self, string_container: &str) -> ftd_rt::Map {
-        let mut all_locals: ftd_rt::Map = Default::default();
+    fn get_locals_map(&self, string_container: &str) -> ftd::Map {
+        let mut all_locals: ftd::Map = Default::default();
 
         for k in self.arguments.keys() {
             all_locals.insert(k.to_string(), string_container.to_string());
@@ -2036,17 +2024,15 @@ mod test {
             }),
         );
         let mut main = default_column();
-        main.container
-            .children
-            .push(ftd_rt::Element::Text(ftd_rt::Text {
-                text: ftd::markdown_line("Amit"),
-                line: true,
-                common: ftd_rt::Common {
-                    reference: Some(s("foo/bar#name")),
-                    ..Default::default()
-                },
+        main.container.children.push(ftd::Element::Text(ftd::Text {
+            text: ftd::markdown_line("Amit"),
+            line: true,
+            common: ftd::Common {
+                reference: Some(s("foo/bar#name")),
                 ..Default::default()
-            }));
+            },
+            ..Default::default()
+        }));
 
         p!(
             "
@@ -2108,13 +2094,11 @@ mod test {
         );
 
         let mut main = default_column();
-        main.container
-            .children
-            .push(ftd_rt::Element::Text(ftd_rt::Text {
-                text: ftd::markdown_line("Abrar Khan"),
-                line: true,
-                ..Default::default()
-            }));
+        main.container.children.push(ftd::Element::Text(ftd::Text {
+            text: ftd::markdown_line("Abrar Khan"),
+            line: true,
+            ..Default::default()
+        }));
 
         p!(
             "

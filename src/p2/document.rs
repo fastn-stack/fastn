@@ -3,7 +3,7 @@ pub struct Document {
     pub data: std::collections::BTreeMap<String, ftd::p2::Thing>,
     pub name: String,
     pub instructions: Vec<ftd::Instruction>,
-    pub main: ftd_rt::Column,
+    pub main: ftd::Column,
     pub p1: Vec<ftd::p1::Section>,
     pub aliases: std::collections::BTreeMap<String, String>,
 }
@@ -15,8 +15,8 @@ impl ToString for Document {
 }
 
 impl Document {
-    fn get_data(&self) -> ftd_rt::Map {
-        let mut d: ftd_rt::Map = Default::default();
+    fn get_data(&self) -> ftd::Map {
+        let mut d: ftd::Map = Default::default();
         for (k, v) in self.data.iter() {
             if let ftd::p2::Thing::Variable(ftd::Variable { value, .. }) = v {
                 let value = match value {
@@ -31,34 +31,34 @@ impl Document {
         d
     }
 
-    fn get_locals(&self) -> ftd_rt::Map {
-        ftd_rt::Element::get_locals(&self.main.container.children)
+    fn get_locals(&self) -> ftd::Map {
+        ftd::Element::get_locals(&self.main.container.children)
     }
 
-    fn rt_data(&self) -> ftd_rt::DataDependenciesMap {
-        let mut d: ftd_rt::Map = self.get_data();
+    fn rt_data(&self) -> ftd::DataDependenciesMap {
+        let mut d: ftd::Map = self.get_data();
         for (k, v) in self.get_locals() {
             d.insert(format!("@{}", k), v.to_string());
         }
 
-        let mut data: ftd_rt::DataDependenciesMap = Default::default();
+        let mut data: ftd::DataDependenciesMap = Default::default();
         for (k, v) in d {
             data.insert(
                 k.to_string(),
-                ftd_rt::Data {
+                ftd::Data {
                     value: v.to_string(),
                     dependencies: Default::default(),
                 },
             );
         }
-        ftd_rt::Element::get_visible_event_dependencies(&self.main.container.children, &mut data);
-        ftd_rt::Element::get_value_event_dependencies(&self.main.container.children, &mut data);
-        ftd_rt::Element::get_style_event_dependencies(&self.main.container.children, &mut data);
+        ftd::Element::get_visible_event_dependencies(&self.main.container.children, &mut data);
+        ftd::Element::get_value_event_dependencies(&self.main.container.children, &mut data);
+        ftd::Element::get_style_event_dependencies(&self.main.container.children, &mut data);
 
         data
     }
 
-    pub fn rerender(&mut self, id: &str, doc_id: &str) -> crate::p1::Result<ftd_rt::Document> {
+    pub fn rerender(&mut self, id: &str, doc_id: &str) -> crate::p1::Result<ftd::Document> {
         let mut rt = ftd::RT::from(
             self.name.as_str(),
             self.aliases.clone(),
@@ -67,20 +67,20 @@ impl Document {
         );
         self.main = rt.render()?;
         let data = self.rt_data();
-        Ok(ftd_rt::Document {
+        Ok(ftd::Document {
             data,
             html: self.html(id, doc_id),
-            external_children: ftd_rt::Element::get_external_children_dependencies(
+            external_children: ftd::Element::get_external_children_dependencies(
                 &self.main.container.children,
             ),
         })
     }
 
-    pub fn to_rt(&self, id: &str, doc_id: &str) -> ftd_rt::Document {
+    pub fn to_rt(&self, id: &str, doc_id: &str) -> ftd::Document {
         let external_children =
-            ftd_rt::Element::get_external_children_dependencies(&self.main.container.children);
+            ftd::Element::get_external_children_dependencies(&self.main.container.children);
 
-        ftd_rt::Document {
+        ftd::Document {
             data: self.rt_data(),
             html: self.html(id, doc_id),
             external_children,
@@ -124,46 +124,37 @@ impl Document {
         None
     }
 
-    pub fn find<T, F>(children: &[ftd_rt::Element], f: &F) -> Option<T>
+    pub fn find<T, F>(children: &[ftd::Element], f: &F) -> Option<T>
     where
-        F: Fn(&ftd_rt::Element) -> Option<T>,
+        F: Fn(&ftd::Element) -> Option<T>,
     {
-        fn finder<T2, F2>(elements: &[ftd_rt::Element], f: &F2) -> Option<T2>
+        fn finder<T2, F2>(elements: &[ftd::Element], f: &F2) -> Option<T2>
         where
-            F2: Fn(&ftd_rt::Element) -> Option<T2>,
+            F2: Fn(&ftd::Element) -> Option<T2>,
         {
             for e in elements.iter() {
                 match e {
-                    ftd_rt::Element::Text(_) => {
+                    ftd::Element::Text(_) => {
                         if let Some(v) = f(e) {
                             return Some(v);
                         }
                     }
-                    ftd_rt::Element::TextBlock(_) => {
+                    ftd::Element::TextBlock(_) => {
                         if let Some(v) = f(e) {
                             return Some(v);
                         }
                     }
-                    ftd_rt::Element::Code(_) => {
+                    ftd::Element::Code(_) => {
                         if let Some(v) = f(e) {
                             return Some(v);
                         }
                     }
-                    ftd_rt::Element::Input(_) => {
+                    ftd::Element::Input(_) => {
                         if let Some(v) = f(e) {
                             return Some(v);
                         }
                     }
-                    ftd_rt::Element::Column(c) => {
-                        if let Some(v) = f(e) {
-                            return Some(v);
-                        }
-
-                        if let Some(t) = finder(&c.container.children, f) {
-                            return Some(t);
-                        }
-                    }
-                    ftd_rt::Element::Row(c) => {
+                    ftd::Element::Column(c) => {
                         if let Some(v) = f(e) {
                             return Some(v);
                         }
@@ -172,7 +163,7 @@ impl Document {
                             return Some(t);
                         }
                     }
-                    ftd_rt::Element::Scene(c) => {
+                    ftd::Element::Row(c) => {
                         if let Some(v) = f(e) {
                             return Some(v);
                         }
@@ -181,32 +172,41 @@ impl Document {
                             return Some(t);
                         }
                     }
-                    ftd_rt::Element::Image(_) => {
+                    ftd::Element::Scene(c) => {
+                        if let Some(v) = f(e) {
+                            return Some(v);
+                        }
+
+                        if let Some(t) = finder(&c.container.children, f) {
+                            return Some(t);
+                        }
+                    }
+                    ftd::Element::Image(_) => {
                         if let Some(v) = f(e) {
                             return Some(v);
                         }
                     }
-                    ftd_rt::Element::IFrame(_) => {
+                    ftd::Element::IFrame(_) => {
                         if let Some(v) = f(e) {
                             return Some(v);
                         }
                     }
-                    ftd_rt::Element::Decimal(_) => {
+                    ftd::Element::Decimal(_) => {
                         if let Some(v) = f(e) {
                             return Some(v);
                         }
                     }
-                    ftd_rt::Element::Integer(_) => {
+                    ftd::Element::Integer(_) => {
                         if let Some(v) = f(e) {
                             return Some(v);
                         }
                     }
-                    ftd_rt::Element::Boolean(_) => {
+                    ftd::Element::Boolean(_) => {
                         if let Some(v) = f(e) {
                             return Some(v);
                         }
                     }
-                    ftd_rt::Element::Null => {}
+                    ftd::Element::Null => {}
                 }
             }
             None
@@ -215,13 +215,13 @@ impl Document {
         finder(children, f)
     }
 
-    pub fn find_text<T, F>(children: &[ftd_rt::Element], f: F) -> Option<T>
+    pub fn find_text<T, F>(children: &[ftd::Element], f: F) -> Option<T>
     where
-        F: Fn(&ftd_rt::Text) -> Option<T>,
+        F: Fn(&ftd::Text) -> Option<T>,
     {
-        Self::find(children, &|e: &ftd_rt::Element| -> Option<T> {
+        Self::find(children, &|e: &ftd::Element| -> Option<T> {
             match e {
-                ftd_rt::Element::Text(t) => f(t),
+                ftd::Element::Text(t) => f(t),
                 _ => None,
             }
         })
@@ -264,9 +264,9 @@ impl Document {
         Ok(d)
     }
 
-    pub fn get_heading<F>(children: &[ftd_rt::Element], f: &F) -> Option<ftd_rt::Rendered>
+    pub fn get_heading<F>(children: &[ftd::Element], f: &F) -> Option<ftd::Rendered>
     where
-        F: Fn(&ftd_rt::Region) -> bool,
+        F: Fn(&ftd::Region) -> bool,
     {
         if let Some(t) = Self::find_text(children, |t| {
             if t.common.region.as_ref().map(f).unwrap_or(false) {
@@ -278,14 +278,14 @@ impl Document {
             return Some(t);
         }
         if let Some(t) = Self::find(children, &|e| match e {
-            ftd_rt::Element::Column(t) => {
+            ftd::Element::Column(t) => {
                 if t.common.region.as_ref().map(f).unwrap_or(false) {
                     Some(t.container.children.clone())
                 } else {
                     None
                 }
             }
-            ftd_rt::Element::Row(t) => {
+            ftd::Element::Row(t) => {
                 if t.common.region.as_ref().map(f).unwrap_or(false) {
                     Some(t.container.children.clone())
                 } else {
@@ -313,7 +313,7 @@ impl Document {
         None
     }
 
-    pub fn title(&self) -> Option<ftd_rt::Rendered> {
+    pub fn title(&self) -> Option<ftd::Rendered> {
         // find the text of first primary heading
         if let Some(t) =
             Self::get_heading(&self.main.container.children, &|r| r.is_primary_heading())
@@ -516,12 +516,12 @@ impl Document {
     }
 }
 
-pub fn set_region_id(elements: &mut Vec<ftd_rt::Element>) {
+pub fn set_region_id(elements: &mut Vec<ftd::Element>) {
     let mut map: std::collections::BTreeMap<usize, String> = Default::default();
     for element in elements.iter_mut() {
         match element {
-            ftd_rt::Element::Column(ftd_rt::Column { container, .. })
-            | ftd_rt::Element::Row(ftd_rt::Row { container, .. }) => {
+            ftd::Element::Column(ftd::Column { container, .. })
+            | ftd::Element::Row(ftd::Row { container, .. }) => {
                 set_region_id(&mut container.children);
                 if let Some((_, _, ref mut e)) = container.external_children {
                     set_region_id(e);
@@ -533,8 +533,8 @@ pub fn set_region_id(elements: &mut Vec<ftd_rt::Element>) {
 
     for (idx, element) in elements.iter().enumerate() {
         match element {
-            ftd_rt::Element::Column(ftd_rt::Column { common, .. })
-            | ftd_rt::Element::Row(ftd_rt::Row { common, .. }) => {
+            ftd::Element::Column(ftd::Column { common, .. })
+            | ftd::Element::Row(ftd::Row { common, .. }) => {
                 if common.region.as_ref().filter(|v| v.is_heading()).is_some()
                     && common.data_id.is_none()
                 {
@@ -555,9 +555,9 @@ pub fn set_region_id(elements: &mut Vec<ftd_rt::Element>) {
     }
 }
 
-pub fn default_scene_children_position(elements: &mut Vec<ftd_rt::Element>) {
+pub fn default_scene_children_position(elements: &mut Vec<ftd::Element>) {
     for element in elements {
-        if let ftd_rt::Element::Scene(scene) = element {
+        if let ftd::Element::Scene(scene) = element {
             for child in &mut scene.container.children {
                 check_and_set_default_position(child);
             }
@@ -568,9 +568,9 @@ pub fn default_scene_children_position(elements: &mut Vec<ftd_rt::Element>) {
             }
         }
         match element {
-            ftd_rt::Element::Scene(ftd_rt::Scene { container, .. })
-            | ftd_rt::Element::Row(ftd_rt::Row { container, .. })
-            | ftd_rt::Element::Column(ftd_rt::Column { container, .. }) => {
+            ftd::Element::Scene(ftd::Scene { container, .. })
+            | ftd::Element::Row(ftd::Row { container, .. })
+            | ftd::Element::Column(ftd::Column { container, .. }) => {
                 default_scene_children_position(&mut container.children);
                 if let Some((_, _, ref mut ext_children)) = container.external_children {
                     default_scene_children_position(ext_children);
@@ -580,7 +580,7 @@ pub fn default_scene_children_position(elements: &mut Vec<ftd_rt::Element>) {
         }
     }
 
-    fn check_and_set_default_position(child: &mut ftd_rt::Element) {
+    fn check_and_set_default_position(child: &mut ftd::Element) {
         if let Some(common) = child.get_mut_common() {
             if common.top.is_none() && common.bottom.is_none() {
                 common.top = Some(0);

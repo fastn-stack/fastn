@@ -1,3 +1,8 @@
+#[test]
+fn get_name() {
+    assert_eq!(ftd::get_name("fn", "fn foo", "test").unwrap(), "foo")
+}
+
 macro_rules! p {
     ($s:expr, $t: expr,) => {
         p!($s, $t)
