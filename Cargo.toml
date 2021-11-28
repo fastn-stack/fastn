@@ -12,5 +12,5 @@ homepage = "https://www.fifthtry.com/fpm/"
 [dependencies]
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
-ftd = "0.1.8"
+ftd = { version = "0.1.8", path = "../ftd/ftd" }
 clap = "2.33.3"

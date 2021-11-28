@@ -52,11 +52,8 @@ fn write(id: &str, doc: String) {
 
     let doc = b.to_rt("main", id);
 
-    let ftd_js = std::fs::read_to_string("ftd.js").expect("ftd.js not found");
-
     f.write_all(
-        std::fs::read_to_string("ftd.html")
-            .expect("cant read ftd.html")
+        ftd::html()
             .replace(
                 "__ftd_data__",
                 serde_json::to_string_pretty(&doc.data)
@@ -70,7 +67,7 @@ fn write(id: &str, doc: String) {
                     .as_str(),
             )
             .replace("__ftd__", b.html("main", id).as_str())
-            .replace("__ftd_js__", ftd_js.as_str())
+            .replace("__ftd_js__", ftd::js())
             .as_bytes(),
     )
     .expect("failed to write to .html file");
