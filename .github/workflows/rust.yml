@@ -1,0 +1,86 @@
+name: Rust Checks
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - '**.rs'
+  pull_request:
+    branches:
+      - master
+    paths:
+      - '**.rs'
+jobs:
+  everything:
+    name: Rust Checks
+    runs-on: ubuntu-latest
+    env:
+      REALM_SITE_URL: https://www.ftlocal.com
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          override: true
+          components: rustfmt, clippy
+      - uses: actions/cache@v2  # there is also https://github.com/Swatinem/rust-cache
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+            ftd/target
+            fifthtry_content/target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+      - name: Run cargo fmt
+        id: fmt
+        continue-on-error: true
+        uses: actions-rs/cargo@v1
+        with:
+          command: fmt
+          args: --all -- --check
+      - name: Run cargo clippy
+        id: clippy
+        continue-on-error: true
+        uses: actions-rs/cargo@v1
+        with:
+          command: clippy
+          args: --all -- -D warnings
+      - name: testing ftd
+        id: ftd
+        continue-on-error: true
+        uses: actions-rs/cargo@v1
+        with:
+          command: test
+          args: --manifest-path ftd/Cargo.toml
+      - name: testing async ftd
+        id: ftd-async
+        continue-on-error: true
+        uses: actions-rs/cargo@v1
+        with:
+          command: test
+          args: --manifest-path ftd/Cargo.toml --features async
+      - name: clippy async ftd
+        id: ftd-clippy-async
+        continue-on-error: true
+        uses: actions-rs/cargo@v1
+        with:
+          command: clippy
+          args: --manifest-path ftd/Cargo.toml --features async
+      - name: Check on failure fmt
+        if: steps.fmt.outcome != 'success'
+        run: exit 1
+      - name: Check on failure clippy
+        if: steps.clippy.outcome != 'success'
+        run: exit 1
+      - name: Check on failure ftd
+        if: steps.ftd.outcome != 'success'
+        run: exit 1
+      - name: Check on failure of async ftd
+        if: steps.ftd-async.outcome != 'success'
+        run: exit 1
+      - name: Check clippy of async ftd
+        if: steps.ftd-clippy-async.outcome != 'success'
+        run: exit 1
+
