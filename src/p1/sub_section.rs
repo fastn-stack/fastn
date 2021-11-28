@@ -162,7 +162,7 @@ impl SubSection {
 }
 
 impl SubSections {
-    pub fn by_name(&self, line_number: usize, name: &str, doc_id: String) -> Result<&SubSection> {
+    pub fn by_name(&self, line_number: usize, name: &str, doc_id: &str) -> Result<&SubSection> {
         for s in self.0.iter() {
             if s.is_commented {
                 continue;
@@ -173,17 +173,17 @@ impl SubSections {
             }
         }
         Err(Error::NotFound {
-            doc_id,
+            doc_id: doc_id.to_string(),
             line_number,
             key: name.to_string(),
         })
     }
 
-    pub fn body_for(&self, line_number: usize, name: &str, doc_id: String) -> Result<String> {
-        match self.by_name(line_number, name, doc_id.to_string())?.body {
+    pub fn body_for(&self, line_number: usize, name: &str, doc_id: &str) -> Result<String> {
+        match self.by_name(line_number, name, doc_id)?.body {
             Some(ref body) => Ok(body.1.to_string()),
             None => Err(Error::NotFound {
-                doc_id,
+                doc_id: doc_id.to_string(),
                 line_number,
                 key: name.to_string(),
             }),
