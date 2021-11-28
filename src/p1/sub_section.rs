@@ -1,4 +1,4 @@
-pub use crate::p1::{Error, Header, Result};
+pub use ftd::p1::{Error, Header, Result};
 
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize, serde::Deserialize)]
 pub struct SubSections(pub Vec<SubSection>);

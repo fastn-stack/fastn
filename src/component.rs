@@ -2,14 +2,14 @@
 pub struct Component {
     pub root: String,
     pub full_name: String,
-    pub arguments: std::collections::BTreeMap<String, crate::p2::Kind>,
-    pub locals: std::collections::BTreeMap<String, crate::p2::Kind>,
+    pub arguments: std::collections::BTreeMap<String, ftd::p2::Kind>,
+    pub locals: std::collections::BTreeMap<String, ftd::p2::Kind>,
     pub properties: std::collections::BTreeMap<String, Property>,
     pub instructions: Vec<Instruction>,
     pub events: Vec<ftd::p2::Event>,
     pub condition: Option<ftd::p2::Boolean>,
     pub kernel: bool,
-    pub invocations: Vec<std::collections::BTreeMap<String, crate::Value>>,
+    pub invocations: Vec<std::collections::BTreeMap<String, ftd::Value>>,
     pub line_number: usize,
 }
 
@@ -57,8 +57,8 @@ impl Instruction {
             _ => None,
         };
         if let Some(property) = id {
-            if let Some(crate::PropertyValue::Value {
-                value: crate::variable::Value::String { text, .. },
+            if let Some(ftd::PropertyValue::Value {
+                value: ftd::variable::Value::String { text, .. },
             }) = &property.default
             {
                 return Some(text.as_str());
@@ -73,7 +73,7 @@ pub struct ChildComponent {
     pub root: String,
     pub condition: Option<ftd::p2::Boolean>,
     pub properties: std::collections::BTreeMap<String, Property>,
-    pub arguments: std::collections::BTreeMap<String, crate::p2::Kind>,
+    pub arguments: std::collections::BTreeMap<String, ftd::p2::Kind>,
     pub events: Vec<ftd::p2::Event>,
     pub is_recursive: bool,
     pub line_number: usize,
@@ -81,8 +81,8 @@ pub struct ChildComponent {
 
 #[derive(Default, Debug, Clone, PartialEq, serde::Serialize, serde::Deserialize)]
 pub struct Property {
-    pub default: Option<crate::PropertyValue>,
-    pub conditions: Vec<(crate::p2::Boolean, crate::PropertyValue)>,
+    pub default: Option<ftd::PropertyValue>,
+    pub conditions: Vec<(ftd::p2::Boolean, ftd::PropertyValue)>,
 }
 
 #[derive(Debug, Clone)]
@@ -97,9 +97,9 @@ impl Property {
         &self,
         line_number: usize,
         name: &str,
-        arguments: &std::collections::BTreeMap<String, crate::Value>,
-        doc: &crate::p2::TDoc,
-    ) -> crate::p1::Result<&crate::PropertyValue> {
+        arguments: &std::collections::BTreeMap<String, ftd::Value>,
+        doc: &ftd::p2::TDoc,
+    ) -> ftd::p1::Result<&ftd::PropertyValue> {
         let mut property_value = ftd::e2(
             format!("condition is not complete, name: {}", name),
             doc.name,
@@ -121,16 +121,16 @@ impl ChildComponent {
     pub fn super_call(
         &self,
         children: &[Self],
-        doc: &crate::p2::TDoc,
-        arguments: &std::collections::BTreeMap<String, crate::Value>,
+        doc: &ftd::p2::TDoc,
+        arguments: &std::collections::BTreeMap<String, ftd::Value>,
         invocations: &mut std::collections::BTreeMap<
             String,
-            Vec<std::collections::BTreeMap<String, crate::Value>>,
+            Vec<std::collections::BTreeMap<String, ftd::Value>>,
         >,
         all_locals: &mut ftd::Map,
         local_container: &[usize],
-    ) -> crate::p1::Result<ElementWithContainer> {
-        let id = crate::p2::utils::string_optional(
+    ) -> ftd::p1::Result<ElementWithContainer> {
+        let id = ftd::p2::utils::string_optional(
             "id",
             &resolve_properties(self.line_number, &self.properties, arguments, doc, None)?,
             doc.name,
@@ -247,17 +247,17 @@ impl ChildComponent {
     #[allow(clippy::too_many_arguments)]
     pub fn recursive_call(
         &self,
-        doc: &crate::p2::TDoc,
-        arguments: &std::collections::BTreeMap<String, crate::Value>,
+        doc: &ftd::p2::TDoc,
+        arguments: &std::collections::BTreeMap<String, ftd::Value>,
         invocations: &mut std::collections::BTreeMap<
             String,
-            Vec<std::collections::BTreeMap<String, crate::Value>>,
+            Vec<std::collections::BTreeMap<String, ftd::Value>>,
         >,
         is_child: bool,
         root_name: Option<&str>,
         all_locals: &mut ftd::Map,
         local_container: &[usize],
-    ) -> crate::p1::Result<Vec<ElementWithContainer>> {
+    ) -> ftd::p1::Result<Vec<ElementWithContainer>> {
         let root = {
             // NOTE: doing unwrap to force bug report if we following fails, this function
             // must have validated everything, and must not fail at run time
@@ -273,9 +273,9 @@ impl ChildComponent {
         )?;
         let mut elements = vec![];
 
-        if let crate::Value::List { data, .. } = loop_property {
+        if let ftd::Value::List { data, .. } = loop_property {
             for (i, d) in data.iter().enumerate() {
-                let mut new_arguments: std::collections::BTreeMap<String, crate::Value> =
+                let mut new_arguments: std::collections::BTreeMap<String, ftd::Value> =
                     arguments.clone();
                 new_arguments.insert("$loop$".to_string(), d.clone());
                 let new_properties = resolve_properties_with_ref(
@@ -367,18 +367,18 @@ impl ChildComponent {
     #[allow(clippy::too_many_arguments)]
     pub fn call(
         &self,
-        doc: &crate::p2::TDoc,
-        arguments: &std::collections::BTreeMap<String, crate::Value>,
+        doc: &ftd::p2::TDoc,
+        arguments: &std::collections::BTreeMap<String, ftd::Value>,
         invocations: &mut std::collections::BTreeMap<
             String,
-            Vec<std::collections::BTreeMap<String, crate::Value>>,
+            Vec<std::collections::BTreeMap<String, ftd::Value>>,
         >,
         is_child: bool,
         root_name: Option<&str>,
         all_locals: &mut ftd::Map,
         local_container: &[usize],
         id: Option<String>,
-    ) -> crate::p1::Result<ElementWithContainer> {
+    ) -> ftd::p1::Result<ElementWithContainer> {
         if let Some(ref b) = self.condition {
             if b.is_constant() && !b.eval(self.line_number, arguments, doc)? {
                 if let Ok(true) = b.set_null(self.line_number, doc.name) {
@@ -449,12 +449,12 @@ impl ChildComponent {
     pub fn from_p1(
         line_number: usize,
         name: &str,
-        p1: &crate::p1::Header,
+        p1: &ftd::p1::Header,
         caption: &Option<String>,
         body: &Option<(usize, String)>,
-        doc: &crate::p2::TDoc,
-        arguments: &std::collections::BTreeMap<String, crate::p2::Kind>,
-    ) -> crate::p1::Result<Self> {
+        doc: &ftd::p2::TDoc,
+        arguments: &std::collections::BTreeMap<String, ftd::p2::Kind>,
+    ) -> ftd::p1::Result<Self> {
         let root = doc.get_component(line_number, name)?;
         let mut root_arguments = root.arguments;
         assert_no_extra_properties(
@@ -488,7 +488,7 @@ impl ChildComponent {
                 &root_property,
             )?,
             condition: match p1.str_optional(doc.name, line_number, "if")? {
-                Some(expr) => Some(crate::p2::Boolean::from_expression(
+                Some(expr) => Some(ftd::p2::Boolean::from_expression(
                     expr,
                     doc,
                     &all_arguments,
@@ -508,7 +508,7 @@ impl ChildComponent {
             name: &str,
             caption: &Option<String>,
             doc: &ftd::p2::TDoc,
-            arguments: &std::collections::BTreeMap<String, crate::p2::Kind>,
+            arguments: &std::collections::BTreeMap<String, ftd::p2::Kind>,
             inherits: Vec<String>,
         ) -> ftd::p1::Result<std::collections::BTreeMap<String, Property>> {
             let mut properties: std::collections::BTreeMap<String, Property> =
@@ -547,10 +547,10 @@ impl ChildComponent {
 fn resolve_recursive_property(
     line_number: usize,
     self_properties: &std::collections::BTreeMap<String, Property>,
-    arguments: &std::collections::BTreeMap<String, crate::Value>,
-    doc: &crate::p2::TDoc,
+    arguments: &std::collections::BTreeMap<String, ftd::Value>,
+    doc: &ftd::p2::TDoc,
     root_name: Option<&str>,
-) -> crate::p1::Result<crate::Value> {
+) -> ftd::p1::Result<ftd::Value> {
     if let Some(value) = self_properties.get("$loop$") {
         if let Ok(property_value) = value.eval(line_number, "$loop$", arguments, doc) {
             return property_value.resolve_with_root(line_number, arguments, doc, root_name);
@@ -566,11 +566,11 @@ fn resolve_recursive_property(
 pub fn resolve_properties(
     line_number: usize,
     self_properties: &std::collections::BTreeMap<String, Property>,
-    arguments: &std::collections::BTreeMap<String, crate::Value>,
-    doc: &crate::p2::TDoc,
+    arguments: &std::collections::BTreeMap<String, ftd::Value>,
+    doc: &ftd::p2::TDoc,
     root_name: Option<&str>,
-) -> crate::p1::Result<std::collections::BTreeMap<String, crate::Value>> {
-    let mut properties: std::collections::BTreeMap<String, crate::Value> = Default::default();
+) -> ftd::p1::Result<std::collections::BTreeMap<String, ftd::Value>> {
+    let mut properties: std::collections::BTreeMap<String, ftd::Value> = Default::default();
     for (name, value) in self_properties.iter() {
         if name == "$loop$" {
             continue;
@@ -588,8 +588,8 @@ pub fn resolve_properties(
 fn get_conditional_attributes(
     line_number: usize,
     properties: &std::collections::BTreeMap<String, Property>,
-    arguments: &std::collections::BTreeMap<String, crate::Value>,
-    doc: &crate::p2::TDoc,
+    arguments: &std::collections::BTreeMap<String, ftd::Value>,
+    doc: &ftd::p2::TDoc,
     all_locals: &mut ftd::Map,
 ) -> ftd::p1::Result<std::collections::BTreeMap<String, ftd::ConditionalAttribute>> {
     let mut conditional_attribute: std::collections::BTreeMap<String, ftd::ConditionalAttribute> =
@@ -899,11 +899,11 @@ fn get_conditional_attributes(
 fn resolve_properties_with_ref(
     line_number: usize,
     self_properties: &std::collections::BTreeMap<String, Property>,
-    arguments: &std::collections::BTreeMap<String, crate::Value>,
-    doc: &crate::p2::TDoc,
+    arguments: &std::collections::BTreeMap<String, ftd::Value>,
+    doc: &ftd::p2::TDoc,
     root_name: Option<&str>,
-) -> crate::p1::Result<std::collections::BTreeMap<String, (crate::Value, Option<String>)>> {
-    let mut properties: std::collections::BTreeMap<String, (crate::Value, Option<String>)> =
+) -> ftd::p1::Result<std::collections::BTreeMap<String, (ftd::Value, Option<String>)>> {
+    let mut properties: std::collections::BTreeMap<String, (ftd::Value, Option<String>)> =
         Default::default();
     for (name, value) in self_properties.iter() {
         if name == "$loop$" {
@@ -931,17 +931,17 @@ impl Component {
     #[allow(clippy::too_many_arguments)]
     fn call_sub_functions(
         &self,
-        arguments: &std::collections::BTreeMap<String, crate::Value>,
-        doc: &crate::p2::TDoc,
+        arguments: &std::collections::BTreeMap<String, ftd::Value>,
+        doc: &ftd::p2::TDoc,
         invocations: &mut std::collections::BTreeMap<
             String,
-            Vec<std::collections::BTreeMap<String, crate::Value>>,
+            Vec<std::collections::BTreeMap<String, ftd::Value>>,
         >,
         root_name: Option<&str>,
         call_container: &[usize],
         all_locals: &mut ftd::Map,
         id: Option<String>,
-    ) -> crate::p1::Result<ElementWithContainer> {
+    ) -> ftd::p1::Result<ElementWithContainer> {
         ftd::execute_doc::ExecuteDoc {
             name: doc.name,
             aliases: doc.aliases,
@@ -957,7 +957,7 @@ impl Component {
     pub fn get_caption(&self) -> Option<String> {
         let mut new_caption_title = None;
         for (arg, arg_kind) in self.arguments.clone() {
-            if let crate::p2::Kind::String { caption, .. } = arg_kind {
+            if let ftd::p2::Kind::String { caption, .. } = arg_kind {
                 if caption {
                     new_caption_title = Some(arg);
                 }
@@ -966,7 +966,7 @@ impl Component {
         new_caption_title
     }
 
-    pub fn from_p1(p1: &crate::p1::Section, doc: &crate::p2::TDoc) -> crate::p1::Result<Self> {
+    pub fn from_p1(p1: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Result<Self> {
         let name = ftd::get_name("component", p1.name.as_str(), doc.name)?.to_string();
         let root = p1.header.string(doc.name, p1.line_number, "component")?;
         let root_component = doc.get_component(p1.line_number, root.as_str())?;
@@ -1023,7 +1023,7 @@ impl Component {
         }
 
         let condition = match p1.header.str_optional(doc.name, p1.line_number, "if")? {
-            Some(expr) => Some(crate::p2::Boolean::from_expression(
+            Some(expr) => Some(ftd::p2::Boolean::from_expression(
                 expr,
                 doc,
                 &arguments,
@@ -1064,11 +1064,11 @@ impl Component {
     #[allow(clippy::too_many_arguments)]
     fn call(
         &self,
-        arguments: &std::collections::BTreeMap<String, (crate::Value, Option<String>)>,
-        doc: &crate::p2::TDoc,
+        arguments: &std::collections::BTreeMap<String, (ftd::Value, Option<String>)>,
+        doc: &ftd::p2::TDoc,
         invocations: &mut std::collections::BTreeMap<
             String,
-            Vec<std::collections::BTreeMap<String, crate::Value>>,
+            Vec<std::collections::BTreeMap<String, ftd::Value>>,
         >,
         condition: &Option<ftd::p2::Boolean>,
         is_child: bool,
@@ -1077,10 +1077,10 @@ impl Component {
         all_locals: &mut ftd::Map,
         local_container: &[usize],
         id: Option<String>,
-    ) -> crate::p1::Result<ElementWithContainer> {
+    ) -> ftd::p1::Result<ElementWithContainer> {
         let property = {
             //remove arguments
-            let mut properties_without_arguments: std::collections::BTreeMap<String, crate::Value> =
+            let mut properties_without_arguments: std::collections::BTreeMap<String, ftd::Value> =
                 Default::default();
             for (k, v) in &ftd::p2::utils::properties(arguments) {
                 if k.starts_with('$') {
@@ -1175,7 +1175,7 @@ impl Component {
                         //remove properties
                         let mut arguments_without_properties: std::collections::BTreeMap<
                             String,
-                            crate::Value,
+                            ftd::Value,
                         > = Default::default();
                         for (k, v) in &arguments {
                             if let Some(k) = k.strip_prefix('$') {
@@ -1324,9 +1324,9 @@ impl Component {
     fn get_all_locals(
         &self,
         all_locals: &ftd::Map,
-        arguments: &std::collections::BTreeMap<String, crate::Value>,
+        arguments: &std::collections::BTreeMap<String, ftd::Value>,
         string_container: &str,
-    ) -> crate::p1::Result<ftd::Map> {
+    ) -> ftd::p1::Result<ftd::Map> {
         let mut locals: ftd::Map = Default::default();
 
         for k in all_locals.keys() {
@@ -1564,9 +1564,9 @@ pub fn recursive_child_component(
 }
 
 fn update_properties(
-    properties: &mut std::collections::BTreeMap<String, (crate::Value, Option<String>)>,
-    arguments_value: &std::collections::BTreeMap<String, crate::Value>,
-    arguments: &std::collections::BTreeMap<String, crate::p2::Kind>,
+    properties: &mut std::collections::BTreeMap<String, (ftd::Value, Option<String>)>,
+    arguments_value: &std::collections::BTreeMap<String, ftd::Value>,
+    arguments: &std::collections::BTreeMap<String, ftd::p2::Kind>,
 ) {
     let default_property = vec![
         "id", "top", "bottom", "left", "right", "align", "scale", "rotate", "scale-x", "scale-y",
@@ -1609,12 +1609,12 @@ fn is_component(name: &str) -> bool {
 
 fn assert_no_extra_properties(
     line_number: usize,
-    p1: &crate::p1::Header,
+    p1: &ftd::p1::Header,
     root: &str,
-    root_arguments: &std::collections::BTreeMap<String, crate::p2::Kind>,
+    root_arguments: &std::collections::BTreeMap<String, ftd::p2::Kind>,
     name: &str,
     doc_id: &str,
-) -> crate::p1::Result<()> {
+) -> ftd::p1::Result<()> {
     for (i, k, _) in p1.0.iter() {
         if k == "component"
             || k.starts_with('$')
@@ -1663,16 +1663,16 @@ fn assert_no_extra_properties(
 #[allow(clippy::too_many_arguments)]
 fn read_properties(
     line_number: usize,
-    p1: &crate::p1::Header,
+    p1: &ftd::p1::Header,
     caption: &Option<String>,
     body: &Option<(usize, String)>,
     fn_name: &str,
     root: &str,
-    root_arguments: &mut std::collections::BTreeMap<String, crate::p2::Kind>,
-    arguments: &std::collections::BTreeMap<String, crate::p2::Kind>,
-    doc: &crate::p2::TDoc,
+    root_arguments: &mut std::collections::BTreeMap<String, ftd::p2::Kind>,
+    arguments: &std::collections::BTreeMap<String, ftd::p2::Kind>,
+    doc: &ftd::p2::TDoc,
     root_properties: &std::collections::BTreeMap<String, Property>,
-) -> crate::p1::Result<std::collections::BTreeMap<String, Property>> {
+) -> ftd::p1::Result<std::collections::BTreeMap<String, Property>> {
     let mut properties: std::collections::BTreeMap<String, Property> = Default::default();
     update_root_arguments(root_arguments);
 
@@ -1687,8 +1687,8 @@ fn read_properties(
         ) {
             (Ok(v), _) => (v, ftd::TextSource::Header),
             (
-                Err(crate::p1::Error::NotFound { .. }),
-                crate::p2::Kind::String {
+                Err(ftd::p1::Error::NotFound { .. }),
+                ftd::p2::Kind::String {
                     caption: c,
                     body: b,
                     default: d,
@@ -1704,7 +1704,7 @@ fn read_properties(
                         vec![(body.as_ref().unwrap().1.to_string(), None)],
                         ftd::TextSource::Body,
                     )
-                } else if matches!(kind, crate::p2::Kind::Optional { .. }) {
+                } else if matches!(kind, ftd::p2::Kind::Optional { .. }) {
                     continue;
                 } else if let Some(d) = d {
                     (vec![(d.to_string(), None)], ftd::TextSource::Default)
@@ -1719,8 +1719,8 @@ fn read_properties(
                     );
                 }
             }
-            (Err(crate::p1::Error::NotFound { .. }), k) => {
-                if matches!(kind, crate::p2::Kind::Optional { .. }) {
+            (Err(ftd::p1::Error::NotFound { .. }), k) => {
+                if matches!(kind, ftd::p2::Kind::Optional { .. }) {
                     continue;
                 }
 
@@ -1751,7 +1751,7 @@ fn read_properties(
                 Some(source.clone()),
             )?;
             let (condition_value, default_value) = if let Some(attribute) = conditional_attribute {
-                let condition = crate::p2::Boolean::from_expression(
+                let condition = ftd::p2::Boolean::from_expression(
                     attribute,
                     doc,
                     arguments,
@@ -1780,46 +1780,46 @@ fn read_properties(
     return Ok(properties);
 
     fn update_root_arguments(
-        root_arguments: &mut std::collections::BTreeMap<String, crate::p2::Kind>,
+        root_arguments: &mut std::collections::BTreeMap<String, ftd::p2::Kind>,
     ) {
-        let mut default_argument: std::collections::BTreeMap<String, crate::p2::Kind> =
+        let mut default_argument: std::collections::BTreeMap<String, ftd::p2::Kind> =
             Default::default();
-        default_argument.insert("id".to_string(), crate::p2::Kind::string().into_optional());
+        default_argument.insert("id".to_string(), ftd::p2::Kind::string().into_optional());
         default_argument.insert(
             "top".to_string(),
-            crate::p2::Kind::integer().into_optional(),
+            ftd::p2::Kind::integer().into_optional(),
         );
         default_argument.insert(
             "bottom".to_string(),
-            crate::p2::Kind::integer().into_optional(),
+            ftd::p2::Kind::integer().into_optional(),
         );
         default_argument.insert(
             "left".to_string(),
-            crate::p2::Kind::integer().into_optional(),
+            ftd::p2::Kind::integer().into_optional(),
         );
         default_argument.insert(
             "right".to_string(),
-            crate::p2::Kind::integer().into_optional(),
+            ftd::p2::Kind::integer().into_optional(),
         );
         default_argument.insert(
             "align".to_string(),
-            crate::p2::Kind::string().into_optional(),
+            ftd::p2::Kind::string().into_optional(),
         );
         default_argument.insert(
             "scale".to_string(),
-            crate::p2::Kind::decimal().into_optional(),
+            ftd::p2::Kind::decimal().into_optional(),
         );
         default_argument.insert(
             "rotate".to_string(),
-            crate::p2::Kind::integer().into_optional(),
+            ftd::p2::Kind::integer().into_optional(),
         );
         default_argument.insert(
             "scale-x".to_string(),
-            crate::p2::Kind::decimal().into_optional(),
+            ftd::p2::Kind::decimal().into_optional(),
         );
         default_argument.insert(
             "scale-y".to_string(),
-            crate::p2::Kind::decimal().into_optional(),
+            ftd::p2::Kind::decimal().into_optional(),
         );
 
         for (key, arg) in default_argument {
@@ -1830,9 +1830,9 @@ fn read_properties(
 
 fn root_properties_from_inherits(
     line_number: usize,
-    arguments: &std::collections::BTreeMap<String, crate::p2::Kind>,
+    arguments: &std::collections::BTreeMap<String, ftd::p2::Kind>,
     inherits: Vec<String>,
-    doc: &crate::p2::TDoc,
+    doc: &ftd::p2::TDoc,
 ) -> ftd::p1::Result<std::collections::BTreeMap<String, Property>> {
     let mut root_properties: std::collections::BTreeMap<String, Property> = Default::default();
     for inherit in inherits {
@@ -1856,15 +1856,15 @@ fn root_properties_from_inherits(
 }
 
 fn read_arguments(
-    p1: &crate::p1::Header,
+    p1: &ftd::p1::Header,
     root: &str,
-    root_arguments: &std::collections::BTreeMap<String, crate::p2::Kind>,
-    doc: &crate::p2::TDoc,
-) -> crate::p1::Result<(
-    std::collections::BTreeMap<String, crate::p2::Kind>,
+    root_arguments: &std::collections::BTreeMap<String, ftd::p2::Kind>,
+    doc: &ftd::p2::TDoc,
+) -> ftd::p1::Result<(
+    std::collections::BTreeMap<String, ftd::p2::Kind>,
     Vec<String>,
 )> {
-    let mut args: std::collections::BTreeMap<String, crate::p2::Kind> = Default::default();
+    let mut args: std::collections::BTreeMap<String, ftd::p2::Kind> = Default::default();
     let mut inherits: Vec<String> = Default::default();
 
     for (i, k, v) in p1.0.iter() {
@@ -1900,7 +1900,7 @@ fn read_arguments(
                 }
             }
         } else {
-            crate::p2::Kind::for_variable(i.to_owned(), k, v, doc, None, true)?
+            ftd::p2::Kind::for_variable(i.to_owned(), k, v, doc, None, true)?
         };
         args.insert(var_data.name.to_string(), kind);
     }
@@ -1910,15 +1910,15 @@ fn read_arguments(
 
 #[cfg(test)]
 mod test {
-    use crate::component::Property;
-    use crate::test::*;
+    use ftd::component::Property;
+    use ftd::test::*;
 
     macro_rules! p2 {
         ($s:expr, $doc: expr, $t: expr,) => {
             p2!($s, $doc, $t)
         };
         ($s:expr, $doc: expr, $t: expr) => {
-            let p1 = crate::p1::parse(indoc::indoc!($s), $doc.name).unwrap();
+            let p1 = ftd::p1::parse(indoc::indoc!($s), $doc.name).unwrap();
             pretty_assertions::assert_eq!(super::Component::from_p1(&p1[0], &$doc).unwrap(), $t)
         };
     }
@@ -1929,9 +1929,9 @@ mod test {
 
     #[test]
     fn component() {
-        let mut bag = crate::p2::interpreter::default_bag();
-        let aliases = crate::p2::interpreter::default_aliases();
-        let d = crate::p2::TDoc {
+        let mut bag = ftd::p2::interpreter::default_bag();
+        let aliases = ftd::p2::interpreter::default_aliases();
+        let d = ftd::p2::TDoc {
             name: "foo",
             bag: &mut bag,
             aliases: &aliases,
@@ -1948,20 +1948,20 @@ mod test {
                 full_name: s("foo#foo"),
                 root: "ftd.text".to_string(),
                 arguments: std::array::IntoIter::new([
-                    (s("foo"), crate::p2::Kind::string()),
+                    (s("foo"), ftd::p2::Kind::string()),
                     (
                         s("bar"),
-                        crate::p2::Kind::optional(crate::p2::Kind::integer())
+                        ftd::p2::Kind::optional(ftd::p2::Kind::integer())
                     )
                 ])
                 .collect(),
                 properties: std::array::IntoIter::new([(
                     s("text"),
                     Property {
-                        default: Some(crate::PropertyValue::Value {
-                            value: crate::Value::String {
+                        default: Some(ftd::PropertyValue::Value {
+                            value: ftd::Value::String {
                                 text: s("hello"),
-                                source: crate::TextSource::Header
+                                source: ftd::TextSource::Header
                             }
                         }),
                         conditions: vec![]
@@ -1975,9 +1975,9 @@ mod test {
 
     #[test]
     fn properties() {
-        let mut bag = crate::p2::interpreter::default_bag();
-        let aliases = crate::p2::interpreter::default_aliases();
-        let d = crate::p2::TDoc {
+        let mut bag = ftd::p2::interpreter::default_bag();
+        let aliases = ftd::p2::interpreter::default_aliases();
+        let d = ftd::p2::TDoc {
             name: "foo",
             bag: &mut bag,
             aliases: &aliases,
@@ -1994,10 +1994,10 @@ mod test {
                 properties: std::array::IntoIter::new([(
                     s("text"),
                     Property {
-                        default: Some(crate::PropertyValue::Value {
-                            value: crate::Value::String {
+                        default: Some(ftd::PropertyValue::Value {
+                            value: ftd::Value::String {
                                 text: s("hello"),
-                                source: crate::TextSource::Header
+                                source: ftd::TextSource::Header
                             }
                         }),
                         conditions: vec![]
@@ -2014,11 +2014,11 @@ mod test {
         let mut bag = default_bag();
         bag.insert(
             "foo/bar#name".to_string(),
-            crate::p2::Thing::Variable(crate::Variable {
+            ftd::p2::Thing::Variable(ftd::Variable {
                 name: "name".to_string(),
-                value: crate::Value::String {
+                value: ftd::Value::String {
                     text: s("Amit"),
-                    source: crate::TextSource::Caption,
+                    source: ftd::TextSource::Caption,
                 },
                 conditions: vec![],
             }),
@@ -2067,7 +2067,7 @@ mod test {
         let mut bag = default_bag();
         bag.insert(
             "foo/bar#person".to_string(),
-            crate::p2::Thing::Record(crate::p2::Record {
+            ftd::p2::Thing::Record(ftd::p2::Record {
                 name: "foo/bar#person".to_string(),
                 fields: person_fields(),
                 instances: Default::default(),
@@ -2075,17 +2075,17 @@ mod test {
         );
         bag.insert(
             "foo/bar#x".to_string(),
-            crate::p2::Thing::Variable(crate::Variable {
+            ftd::p2::Thing::Variable(ftd::Variable {
                 name: "x".to_string(),
-                value: crate::Value::Integer { value: 20 },
+                value: ftd::Value::Integer { value: 20 },
                 conditions: vec![],
             }),
         );
         bag.insert(
             "foo/bar#abrar".to_string(),
-            crate::p2::Thing::Variable(crate::Variable {
+            ftd::p2::Thing::Variable(ftd::Variable {
                 name: "abrar".to_string(),
-                value: crate::Value::Record {
+                value: ftd::Value::Record {
                     name: "foo/bar#person".to_string(),
                     fields: abrar(),
                 },

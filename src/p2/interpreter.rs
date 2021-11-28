@@ -1,6 +1,6 @@
 pub(crate) struct Interpreter<'a> {
-    lib: &'a dyn crate::p2::Library,
-    pub bag: std::collections::BTreeMap<String, crate::p2::Thing>,
+    lib: &'a dyn ftd::p2::Library,
+    pub bag: std::collections::BTreeMap<String, ftd::p2::Thing>,
     pub p1: Vec<ftd::p1::Section>,
     pub aliases: std::collections::BTreeMap<String, String>,
     pub parsed_libs: Vec<String>,
@@ -12,7 +12,7 @@ impl<'a> Interpreter<'a> {
         &mut self,
         name: &str,
         s: &str,
-    ) -> crate::p1::Result<Vec<ftd::Instruction>> {
+    ) -> ftd::p1::Result<Vec<ftd::Instruction>> {
         futures::executor::block_on(self.async_interpret(name, s))
     }
 
@@ -22,7 +22,7 @@ impl<'a> Interpreter<'a> {
         &mut self,
         name: &str,
         s: &str,
-    ) -> crate::p1::Result<Vec<ftd::Instruction>> {
+    ) -> ftd::p1::Result<Vec<ftd::Instruction>> {
         let mut d_get = std::time::Duration::new(0, 0);
         let mut d_processor = std::time::Duration::new(0, 0);
         let v = self
@@ -38,7 +38,7 @@ impl<'a> Interpreter<'a> {
         &mut self,
         name: &str,
         s: &str,
-    ) -> crate::p1::Result<Vec<ftd::Instruction>> {
+    ) -> ftd::p1::Result<Vec<ftd::Instruction>> {
         let mut d_get = std::time::Duration::new(0, 0);
         let mut d_processor = std::time::Duration::new(0, 0);
         let v = self.interpret_(name, s, true, &mut d_get, &mut d_processor)?;
@@ -66,8 +66,8 @@ impl<'a> Interpreter<'a> {
         is_main: bool,
         d_get: &mut std::time::Duration,
         d_processor: &mut std::time::Duration,
-    ) -> crate::p1::Result<Vec<ftd::Instruction>> {
-        let p1 = crate::p1::parse(s, name)?;
+    ) -> ftd::p1::Result<Vec<ftd::Instruction>> {
+        let p1 = ftd::p1::parse(s, name)?;
         let new_p1 = ftd::p2::utils::reorder(&p1, name)?;
 
         let mut aliases = default_aliases();
@@ -82,7 +82,7 @@ impl<'a> Interpreter<'a> {
                 ftd::variable::VariableData::get_name_kind(&p1.name, name, p1.line_number, true);
             if p1.name == "import" {
                 let (library_name, alias) =
-                    crate::p2::utils::parse_import(&p1.caption, name, p1.line_number)?;
+                    ftd::p2::utils::parse_import(&p1.caption, name, p1.line_number)?;
                 aliases.insert(alias, library_name.clone());
                 let start = std::time::Instant::now();
                 let s = self.lib.get_with_result(library_name.as_str()).await?;
@@ -103,7 +103,7 @@ impl<'a> Interpreter<'a> {
 
             // while this is a specific to entire document, we are still creating it in a loop
             // because otherwise the self.interpret() call wont compile.
-            let doc = crate::p2::TDoc {
+            let doc = ftd::p2::TDoc {
                 name,
                 aliases: &aliases,
                 bag: &self.bag,
@@ -113,32 +113,32 @@ impl<'a> Interpreter<'a> {
 
             if p1.name.starts_with("component ") {
                 // declare a function
-                let d = crate::Component::from_p1(p1, &doc)?;
+                let d = ftd::Component::from_p1(p1, &doc)?;
                 thing.push((
                     doc.resolve_name(p1.line_number, &d.full_name.to_string())?,
-                    crate::p2::Thing::Component(d),
+                    ftd::p2::Thing::Component(d),
                 ));
                 // processed_p1.push(p1.name.to_string());
             } else if p1.name.starts_with("record ") {
                 // declare a record
                 let d =
-                    crate::p2::Record::from_p1(p1.name.as_str(), &p1.header, &doc, p1.line_number)?;
+                    ftd::p2::Record::from_p1(p1.name.as_str(), &p1.header, &doc, p1.line_number)?;
                 thing.push((
                     doc.resolve_name(p1.line_number, &d.name.to_string())?,
-                    crate::p2::Thing::Record(d),
+                    ftd::p2::Thing::Record(d),
                 ));
             } else if p1.name.starts_with("or-type ") {
                 // declare a record
-                let d = crate::OrType::from_p1(p1, &doc)?;
+                let d = ftd::OrType::from_p1(p1, &doc)?;
                 thing.push((
                     doc.resolve_name(p1.line_number, &d.name.to_string())?,
-                    crate::p2::Thing::OrType(d),
+                    ftd::p2::Thing::OrType(d),
                 ));
             } else if p1.name.starts_with("map ") {
-                let d = crate::Variable::map_from_p1(p1, &doc)?;
+                let d = ftd::Variable::map_from_p1(p1, &doc)?;
                 thing.push((
                     doc.resolve_name(p1.line_number, &d.name.to_string())?,
-                    crate::p2::Thing::Variable(d),
+                    ftd::p2::Thing::Variable(d),
                 ));
                 // } else if_two_words(p1.name.as_str() {
                 //   TODO: <record-name> <variable-name>: foo can be used to create a variable/
@@ -167,17 +167,17 @@ impl<'a> Interpreter<'a> {
                             let value = self.lib.process(p1, &doc).await?;
                             *d_processor =
                                 d_processor.saturating_add(std::time::Instant::now() - start);
-                            crate::Variable {
+                            ftd::Variable {
                                 name,
                                 value,
                                 conditions: vec![],
                             }
                         } else {
-                            crate::Variable::from_p1(p1, &doc)?
+                            ftd::Variable::from_p1(p1, &doc)?
                         };
                         thing.push((
                             doc.resolve_name(p1.line_number, &d.name.to_string())?,
-                            crate::p2::Thing::Variable(d),
+                            ftd::p2::Thing::Variable(d),
                         ));
                     } else {
                         // declare and instantiate a list
@@ -191,20 +191,20 @@ impl<'a> Interpreter<'a> {
                             let value = self.lib.process(p1, &doc).await?;
                             *d_processor =
                                 d_processor.saturating_add(std::time::Instant::now() - start);
-                            crate::Variable {
+                            ftd::Variable {
                                 name,
                                 value,
                                 conditions: vec![],
                             }
                         } else {
-                            crate::Variable::list_from_p1(p1, &doc)?
+                            ftd::Variable::list_from_p1(p1, &doc)?
                         };
                         thing.push((
                             doc.resolve_name(p1.line_number, &d.name.to_string())?,
-                            crate::p2::Thing::Variable(d),
+                            ftd::p2::Thing::Variable(d),
                         ));
                     }
-                } else if let crate::p2::Thing::Variable(mut v) =
+                } else if let ftd::p2::Thing::Variable(mut v) =
                     doc.get_thing(p1.line_number, var_data.name.as_str())?
                 {
                     assert!(
@@ -219,7 +219,7 @@ impl<'a> Interpreter<'a> {
                     if let Some(expr) = p1.header.str_optional(doc.name, p1.line_number, "if")? {
                         let val = v.get_value(p1, &doc)?;
                         v.conditions.push((
-                            crate::p2::Boolean::from_expression(
+                            ftd::p2::Boolean::from_expression(
                                 expr,
                                 &doc,
                                 &Default::default(),
@@ -243,20 +243,20 @@ impl<'a> Interpreter<'a> {
                     }
                     thing.push((
                         doc.resolve_name(p1.line_number, &var_data.name.to_string())?,
-                        crate::p2::Thing::Variable(v),
+                        ftd::p2::Thing::Variable(v),
                     ));
                 }
             } else {
                 // cloning because https://github.com/rust-lang/rust/issues/59159
                 match (doc.get_thing(p1.line_number, p1.name.as_str())?).clone() {
-                    crate::p2::Thing::Variable(_) => {
+                    ftd::p2::Thing::Variable(_) => {
                         return ftd::e2(
                             format!("variable should have prefix $, found: `{}`", p1.name),
                             doc.name,
                             p1.line_number,
                         );
                     }
-                    crate::p2::Thing::Component(_) => {
+                    ftd::p2::Thing::Component(_) => {
                         if let Ok(loop_data) = p1.header.str(doc.name, p1.line_number, "$loop$") {
                             let section_to_subsection = ftd::p1::SubSection {
                                 name: p1.name.to_string(),
@@ -318,14 +318,14 @@ impl<'a> Interpreter<'a> {
                             instructions.push(ftd::Instruction::Component { children, parent })
                         }
                     }
-                    crate::p2::Thing::Record(mut r) => {
+                    ftd::p2::Thing::Record(mut r) => {
                         r.add_instance(p1, &doc)?;
                         thing.push((
                             doc.resolve_name(p1.line_number, &p1.name.to_string())?,
-                            crate::p2::Thing::Record(r),
+                            ftd::p2::Thing::Record(r),
                         ));
                     }
-                    crate::p2::Thing::OrType(_r) => {
+                    ftd::p2::Thing::OrType(_r) => {
                         // do we allow initialization of a record by name? nopes
                         return ftd::e2(
                             format!("'{}' is an or-type", p1.name.as_str()),
@@ -333,7 +333,7 @@ impl<'a> Interpreter<'a> {
                             p1.line_number,
                         );
                     }
-                    crate::p2::Thing::OrTypeWithVariant { .. } => {
+                    ftd::p2::Thing::OrTypeWithVariant { .. } => {
                         // do we allow initialization of a record by name? nopes
                         return ftd::e2(
                             format!("'{}' is an or-type variant", p1.name.as_str(),),
@@ -361,8 +361,8 @@ impl<'a> Interpreter<'a> {
         is_main: bool,
         d_get: &mut std::time::Duration,
         d_processor: &mut std::time::Duration,
-    ) -> crate::p1::Result<Vec<ftd::Instruction>> {
-        let p1 = crate::p1::parse(s, name)?;
+    ) -> ftd::p1::Result<Vec<ftd::Instruction>> {
+        let p1 = ftd::p1::parse(s, name)?;
         let new_p1 = ftd::p2::utils::reorder(&p1, name)?;
 
         let mut aliases = default_aliases();
@@ -377,7 +377,7 @@ impl<'a> Interpreter<'a> {
                 ftd::variable::VariableData::get_name_kind(&p1.name, name, p1.line_number, true);
             if p1.name == "import" {
                 let (library_name, alias) =
-                    crate::p2::utils::parse_import(&p1.caption, name, p1.line_number)?;
+                    ftd::p2::utils::parse_import(&p1.caption, name, p1.line_number)?;
                 aliases.insert(alias, library_name.clone());
                 let start = std::time::Instant::now();
                 let s = self.lib.get_with_result(library_name.as_str())?;
@@ -391,7 +391,7 @@ impl<'a> Interpreter<'a> {
 
             // while this is a specific to entire document, we are still creating it in a loop
             // because otherwise the self.interpret() call wont compile.
-            let doc = crate::p2::TDoc {
+            let doc = ftd::p2::TDoc {
                 name,
                 aliases: &aliases,
                 bag: &self.bag,
@@ -401,32 +401,32 @@ impl<'a> Interpreter<'a> {
 
             if p1.name.starts_with("component ") {
                 // declare a function
-                let d = crate::Component::from_p1(p1, &doc)?;
+                let d = ftd::Component::from_p1(p1, &doc)?;
                 thing.push((
                     doc.resolve_name(p1.line_number, &d.full_name.to_string())?,
-                    crate::p2::Thing::Component(d),
+                    ftd::p2::Thing::Component(d),
                 ));
                 // processed_p1.push(p1.name.to_string());
             } else if p1.name.starts_with("record ") {
                 // declare a record
                 let d =
-                    crate::p2::Record::from_p1(p1.name.as_str(), &p1.header, &doc, p1.line_number)?;
+                    ftd::p2::Record::from_p1(p1.name.as_str(), &p1.header, &doc, p1.line_number)?;
                 thing.push((
                     doc.resolve_name(p1.line_number, &d.name.to_string())?,
-                    crate::p2::Thing::Record(d),
+                    ftd::p2::Thing::Record(d),
                 ));
             } else if p1.name.starts_with("or-type ") {
                 // declare a record
-                let d = crate::OrType::from_p1(p1, &doc)?;
+                let d = ftd::OrType::from_p1(p1, &doc)?;
                 thing.push((
                     doc.resolve_name(p1.line_number, &d.name.to_string())?,
-                    crate::p2::Thing::OrType(d),
+                    ftd::p2::Thing::OrType(d),
                 ));
             } else if p1.name.starts_with("map ") {
-                let d = crate::Variable::map_from_p1(p1, &doc)?;
+                let d = ftd::Variable::map_from_p1(p1, &doc)?;
                 thing.push((
                     doc.resolve_name(p1.line_number, &d.name.to_string())?,
-                    crate::p2::Thing::Variable(d),
+                    ftd::p2::Thing::Variable(d),
                 ));
                 // } else if_two_words(p1.name.as_str() {
                 //   TODO: <record-name> <variable-name>: foo can be used to create a variable/
@@ -455,17 +455,17 @@ impl<'a> Interpreter<'a> {
                             let value = self.lib.process(p1, &doc)?;
                             *d_processor =
                                 d_processor.saturating_add(std::time::Instant::now() - start);
-                            crate::Variable {
+                            ftd::Variable {
                                 name,
                                 value,
                                 conditions: vec![],
                             }
                         } else {
-                            crate::Variable::from_p1(p1, &doc)?
+                            ftd::Variable::from_p1(p1, &doc)?
                         };
                         thing.push((
                             doc.resolve_name(p1.line_number, &d.name.to_string())?,
-                            crate::p2::Thing::Variable(d),
+                            ftd::p2::Thing::Variable(d),
                         ));
                     } else {
                         // declare and instantiate a list
@@ -479,20 +479,20 @@ impl<'a> Interpreter<'a> {
                             let value = self.lib.process(p1, &doc)?;
                             *d_processor =
                                 d_processor.saturating_add(std::time::Instant::now() - start);
-                            crate::Variable {
+                            ftd::Variable {
                                 name,
                                 value,
                                 conditions: vec![],
                             }
                         } else {
-                            crate::Variable::list_from_p1(p1, &doc)?
+                            ftd::Variable::list_from_p1(p1, &doc)?
                         };
                         thing.push((
                             doc.resolve_name(p1.line_number, &d.name.to_string())?,
-                            crate::p2::Thing::Variable(d),
+                            ftd::p2::Thing::Variable(d),
                         ));
                     }
-                } else if let crate::p2::Thing::Variable(mut v) =
+                } else if let ftd::p2::Thing::Variable(mut v) =
                     doc.get_thing(p1.line_number, var_data.name.as_str())?
                 {
                     assert!(
@@ -507,7 +507,7 @@ impl<'a> Interpreter<'a> {
                     if let Some(expr) = p1.header.str_optional(doc.name, p1.line_number, "if")? {
                         let val = v.get_value(p1, &doc)?;
                         v.conditions.push((
-                            crate::p2::Boolean::from_expression(
+                            ftd::p2::Boolean::from_expression(
                                 expr,
                                 &doc,
                                 &Default::default(),
@@ -531,20 +531,20 @@ impl<'a> Interpreter<'a> {
                     }
                     thing.push((
                         doc.resolve_name(p1.line_number, &var_data.name.to_string())?,
-                        crate::p2::Thing::Variable(v),
+                        ftd::p2::Thing::Variable(v),
                     ));
                 }
             } else {
                 // cloning because https://github.com/rust-lang/rust/issues/59159
                 match (doc.get_thing(p1.line_number, p1.name.as_str())?).clone() {
-                    crate::p2::Thing::Variable(_) => {
+                    ftd::p2::Thing::Variable(_) => {
                         return ftd::e2(
                             format!("variable should have prefix $, found: `{}`", p1.name),
                             doc.name,
                             p1.line_number,
                         );
                     }
-                    crate::p2::Thing::Component(_) => {
+                    ftd::p2::Thing::Component(_) => {
                         if let Ok(loop_data) = p1.header.str(doc.name, p1.line_number, "$loop$") {
                             let section_to_subsection = ftd::p1::SubSection {
                                 name: p1.name.to_string(),
@@ -606,14 +606,14 @@ impl<'a> Interpreter<'a> {
                             instructions.push(ftd::Instruction::Component { children, parent })
                         }
                     }
-                    crate::p2::Thing::Record(mut r) => {
+                    ftd::p2::Thing::Record(mut r) => {
                         r.add_instance(p1, &doc)?;
                         thing.push((
                             doc.resolve_name(p1.line_number, &p1.name.to_string())?,
-                            crate::p2::Thing::Record(r),
+                            ftd::p2::Thing::Record(r),
                         ));
                     }
-                    crate::p2::Thing::OrType(_r) => {
+                    ftd::p2::Thing::OrType(_r) => {
                         // do we allow initialization of a record by name? nopes
                         return ftd::e2(
                             format!("'{}' is an or-type", p1.name.as_str()),
@@ -621,7 +621,7 @@ impl<'a> Interpreter<'a> {
                             p1.line_number,
                         );
                     }
-                    crate::p2::Thing::OrTypeWithVariant { .. } => {
+                    ftd::p2::Thing::OrTypeWithVariant { .. } => {
                         // do we allow initialization of a record by name? nopes
                         return ftd::e2(
                             format!("'{}' is an or-type variant", p1.name.as_str(),),
@@ -641,7 +641,7 @@ impl<'a> Interpreter<'a> {
         Ok(instructions)
     }
 
-    pub(crate) fn new(lib: &'a dyn crate::p2::Library) -> Self {
+    pub(crate) fn new(lib: &'a dyn ftd::p2::Library) -> Self {
         Self {
             lib,
             bag: default_bag(),
@@ -655,9 +655,9 @@ impl<'a> Interpreter<'a> {
 pub fn interpret(
     name: &str,
     source: &str,
-    lib: &dyn crate::p2::Library,
-) -> crate::p1::Result<(
-    std::collections::BTreeMap<String, crate::p2::Thing>,
+    lib: &dyn ftd::p2::Library,
+) -> ftd::p1::Result<(
+    std::collections::BTreeMap<String, ftd::p2::Thing>,
     ftd::Column,
 )> {
     let mut interpreter = Interpreter::new(lib);
@@ -679,59 +679,59 @@ pub enum Thing {
     // Library -> Name of library successfully parsed
 }
 
-pub fn default_bag() -> std::collections::BTreeMap<String, crate::p2::Thing> {
+pub fn default_bag() -> std::collections::BTreeMap<String, ftd::p2::Thing> {
     std::array::IntoIter::new([
         (
             "ftd#row".to_string(),
-            crate::p2::Thing::Component(ftd::p2::element::row_function()),
+            ftd::p2::Thing::Component(ftd::p2::element::row_function()),
         ),
         (
             "ftd#column".to_string(),
-            crate::p2::Thing::Component(ftd::p2::element::column_function()),
+            ftd::p2::Thing::Component(ftd::p2::element::column_function()),
         ),
         (
             "ftd#text".to_string(),
-            crate::p2::Thing::Component(ftd::p2::element::text_function(false)),
+            ftd::p2::Thing::Component(ftd::p2::element::text_function(false)),
         ),
         (
             "ftd#text-block".to_string(),
-            crate::p2::Thing::Component(ftd::p2::element::text_function(true)),
+            ftd::p2::Thing::Component(ftd::p2::element::text_function(true)),
         ),
         (
             "ftd#code".to_string(),
-            crate::p2::Thing::Component(ftd::p2::element::code_function()),
+            ftd::p2::Thing::Component(ftd::p2::element::code_function()),
         ),
         (
             "ftd#image".to_string(),
-            crate::p2::Thing::Component(ftd::p2::element::image_function()),
+            ftd::p2::Thing::Component(ftd::p2::element::image_function()),
         ),
         (
             "ftd#iframe".to_string(),
-            crate::p2::Thing::Component(ftd::p2::element::iframe_function()),
+            ftd::p2::Thing::Component(ftd::p2::element::iframe_function()),
         ),
         (
             "ftd#integer".to_string(),
-            crate::p2::Thing::Component(ftd::p2::element::integer_function()),
+            ftd::p2::Thing::Component(ftd::p2::element::integer_function()),
         ),
         (
             "ftd#decimal".to_string(),
-            crate::p2::Thing::Component(ftd::p2::element::decimal_function()),
+            ftd::p2::Thing::Component(ftd::p2::element::decimal_function()),
         ),
         (
             "ftd#boolean".to_string(),
-            crate::p2::Thing::Component(ftd::p2::element::boolean_function()),
+            ftd::p2::Thing::Component(ftd::p2::element::boolean_function()),
         ),
         (
             "ftd#scene".to_string(),
-            crate::p2::Thing::Component(ftd::p2::element::scene_function()),
+            ftd::p2::Thing::Component(ftd::p2::element::scene_function()),
         ),
         (
             "ftd#input".to_string(),
-            crate::p2::Thing::Component(ftd::p2::element::input_function()),
+            ftd::p2::Thing::Component(ftd::p2::element::input_function()),
         ),
         (
             "ftd#null".to_string(),
-            crate::p2::Thing::Component(ftd::p2::element::null()),
+            ftd::p2::Thing::Component(ftd::p2::element::null()),
         ),
     ])
     .collect()
@@ -778,24 +778,24 @@ pub fn default_column() -> ftd::Column {
 
 #[cfg(test)]
 mod test {
-    use crate::test::*;
-    use crate::{markdown_line, Instruction};
+    use ftd::test::*;
+    use ftd::{markdown_line, Instruction};
 
     #[test]
     fn basic() {
         let mut bag = super::default_bag();
         bag.insert(
             "foo/bar#foo".to_string(),
-            crate::p2::Thing::Component(crate::Component {
+            ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd.text".to_string(),
                 full_name: s("foo/bar#foo"),
                 properties: std::array::IntoIter::new([(
                     s("text"),
-                    crate::component::Property {
-                        default: Some(crate::PropertyValue::Value {
-                            value: crate::Value::String {
+                    ftd::component::Property {
+                        default: Some(ftd::PropertyValue::Value {
+                            value: ftd::Value::String {
                                 text: s("hello"),
-                                source: crate::TextSource::Header,
+                                source: ftd::TextSource::Header,
                             },
                         }),
                         conditions: vec![],
@@ -807,9 +807,9 @@ mod test {
         );
         bag.insert(
             "foo/bar#x".to_string(),
-            crate::p2::Thing::Variable(crate::Variable {
+            ftd::p2::Thing::Variable(ftd::Variable {
                 name: "x".to_string(),
-                value: crate::Value::Integer { value: 10 },
+                value: ftd::Value::Integer { value: 10 },
                 conditions: vec![],
             }),
         );
@@ -831,53 +831,53 @@ mod test {
         let mut bag = super::default_bag();
         bag.insert(
             "foo/bar#foo".to_string(),
-            crate::p2::Thing::Component(crate::Component {
+            ftd::p2::Thing::Component(ftd::Component {
                 full_name: s("foo/bar#foo"),
                 root: "ftd.text".to_string(),
-                arguments: std::array::IntoIter::new([(s("name"), crate::p2::Kind::caption())])
+                arguments: std::array::IntoIter::new([(s("name"), ftd::p2::Kind::caption())])
                     .collect(),
                 properties: std::array::IntoIter::new([
                     (
                         s("color"),
-                        crate::component::Property {
-                            default: Some(crate::PropertyValue::Value {
-                                value: crate::Value::String {
+                        ftd::component::Property {
+                            default: Some(ftd::PropertyValue::Value {
+                                value: ftd::Value::String {
                                     text: "white".to_string(),
-                                    source: crate::TextSource::Header,
+                                    source: ftd::TextSource::Header,
                                 },
                             }),
                             conditions: vec![
                                 (
-                                    crate::p2::Boolean::Equal {
-                                        left: crate::PropertyValue::Reference {
+                                    ftd::p2::Boolean::Equal {
+                                        left: ftd::PropertyValue::Reference {
                                             name: "foo/bar#present".to_string(),
-                                            kind: crate::p2::Kind::boolean(),
+                                            kind: ftd::p2::Kind::boolean(),
                                         },
-                                        right: crate::PropertyValue::Value {
-                                            value: crate::Value::Boolean { value: true },
+                                        right: ftd::PropertyValue::Value {
+                                            value: ftd::Value::Boolean { value: true },
                                         },
                                     },
-                                    crate::PropertyValue::Value {
-                                        value: crate::Value::String {
+                                    ftd::PropertyValue::Value {
+                                        value: ftd::Value::String {
                                             text: "green".to_string(),
-                                            source: crate::TextSource::Header,
+                                            source: ftd::TextSource::Header,
                                         },
                                     },
                                 ),
                                 (
-                                    crate::p2::Boolean::Equal {
-                                        left: crate::PropertyValue::Reference {
+                                    ftd::p2::Boolean::Equal {
+                                        left: ftd::PropertyValue::Reference {
                                             name: "foo/bar#present".to_string(),
-                                            kind: crate::p2::Kind::boolean(),
+                                            kind: ftd::p2::Kind::boolean(),
                                         },
-                                        right: crate::PropertyValue::Value {
-                                            value: crate::Value::Boolean { value: false },
+                                        right: ftd::PropertyValue::Value {
+                                            value: ftd::Value::Boolean { value: false },
                                         },
                                     },
-                                    crate::PropertyValue::Value {
-                                        value: crate::Value::String {
+                                    ftd::PropertyValue::Value {
+                                        value: ftd::Value::String {
                                             text: "red".to_string(),
-                                            source: crate::TextSource::Header,
+                                            source: ftd::TextSource::Header,
                                         },
                                     },
                                 ),
@@ -886,10 +886,10 @@ mod test {
                     ),
                     (
                         s("text"),
-                        crate::component::Property {
-                            default: Some(crate::PropertyValue::Variable {
+                        ftd::component::Property {
+                            default: Some(ftd::PropertyValue::Variable {
                                 name: "name".to_string(),
-                                kind: crate::p2::Kind::caption_or_body(),
+                                kind: ftd::p2::Kind::caption_or_body(),
                             }),
                             conditions: vec![],
                         },
@@ -902,9 +902,9 @@ mod test {
 
         bag.insert(
             "foo/bar#present".to_string(),
-            crate::p2::Thing::Variable(crate::Variable {
+            ftd::p2::Thing::Variable(ftd::Variable {
                 name: "present".to_string(),
-                value: crate::Value::Boolean { value: false },
+                value: ftd::Value::Boolean { value: false },
                 conditions: vec![],
             }),
         );
@@ -984,24 +984,24 @@ mod test {
 
         bag.insert(
             "foo/bar#ft_toc".to_string(),
-            crate::p2::Thing::Component(crate::Component {
+            ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd.column".to_string(),
                 full_name: "foo/bar#ft_toc".to_string(),
                 arguments: Default::default(),
                 properties: Default::default(),
                 instructions: vec![
-                    crate::component::Instruction::ChildComponent {
-                        child: crate::component::ChildComponent {
+                    ftd::component::Instruction::ChildComponent {
+                        child: ftd::component::ChildComponent {
                             events: vec![],
                             root: "foo/bar#table-of-content".to_string(),
                             condition: None,
                             properties: std::array::IntoIter::new([(
                                 s("id"),
-                                crate::component::Property {
-                                    default: Some(crate::PropertyValue::Value {
-                                        value: crate::variable::Value::String {
+                                ftd::component::Property {
+                                    default: Some(ftd::PropertyValue::Value {
+                                        value: ftd::variable::Value::String {
                                             text: "toc_main".to_string(),
-                                            source: crate::TextSource::Header,
+                                            source: ftd::TextSource::Header,
                                         },
                                     }),
                                     conditions: vec![],
@@ -1013,8 +1013,8 @@ mod test {
                             ..Default::default()
                         },
                     },
-                    crate::component::Instruction::ChildComponent {
-                        child: crate::component::ChildComponent {
+                    ftd::component::Instruction::ChildComponent {
+                        child: ftd::component::ChildComponent {
                             is_recursive: false,
                             events: vec![],
                             root: "foo/bar#parent".to_string(),
@@ -1022,20 +1022,20 @@ mod test {
                             properties: std::array::IntoIter::new([
                                 (
                                     s("active"),
-                                    crate::component::Property {
-                                        default: Some(crate::PropertyValue::Value {
-                                            value: crate::variable::Value::Boolean { value: true },
+                                    ftd::component::Property {
+                                        default: Some(ftd::PropertyValue::Value {
+                                            value: ftd::variable::Value::Boolean { value: true },
                                         }),
                                         conditions: vec![],
                                     },
                                 ),
                                 (
                                     s("id"),
-                                    crate::component::Property {
-                                        default: Some(crate::PropertyValue::Value {
-                                            value: crate::variable::Value::String {
+                                    ftd::component::Property {
+                                        default: Some(ftd::PropertyValue::Value {
+                                            value: ftd::variable::Value::String {
                                                 text: "/welcome/".to_string(),
-                                                source: crate::TextSource::Header,
+                                                source: ftd::TextSource::Header,
                                             },
                                         }),
                                         conditions: vec![],
@@ -1043,11 +1043,11 @@ mod test {
                                 ),
                                 (
                                     s("name"),
-                                    crate::component::Property {
-                                        default: Some(crate::PropertyValue::Value {
-                                            value: crate::variable::Value::String {
+                                    ftd::component::Property {
+                                        default: Some(ftd::PropertyValue::Value {
+                                            value: ftd::variable::Value::String {
                                                 text: "5PM Tasks".to_string(),
-                                                source: crate::TextSource::Header,
+                                                source: ftd::TextSource::Header,
                                             },
                                         }),
                                         conditions: vec![],
@@ -1058,8 +1058,8 @@ mod test {
                             ..Default::default()
                         },
                     },
-                    crate::component::Instruction::ChildComponent {
-                        child: crate::component::ChildComponent {
+                    ftd::component::Instruction::ChildComponent {
+                        child: ftd::component::ChildComponent {
                             is_recursive: false,
                             events: vec![],
                             root: "foo/bar#parent".to_string(),
@@ -1067,11 +1067,11 @@ mod test {
                             properties: std::array::IntoIter::new([
                                 (
                                     s("id"),
-                                    crate::component::Property {
-                                        default: Some(crate::PropertyValue::Value {
-                                            value: crate::variable::Value::String {
+                                    ftd::component::Property {
+                                        default: Some(ftd::PropertyValue::Value {
+                                            value: ftd::variable::Value::String {
                                                 text: "/Building/".to_string(),
-                                                source: crate::TextSource::Header,
+                                                source: ftd::TextSource::Header,
                                             },
                                         }),
                                         conditions: vec![],
@@ -1079,11 +1079,11 @@ mod test {
                                 ),
                                 (
                                     s("name"),
-                                    crate::component::Property {
-                                        default: Some(crate::PropertyValue::Value {
-                                            value: crate::variable::Value::String {
+                                    ftd::component::Property {
+                                        default: Some(ftd::PropertyValue::Value {
+                                            value: ftd::variable::Value::String {
                                                 text: "Log".to_string(),
-                                                source: crate::TextSource::Header,
+                                                source: ftd::TextSource::Header,
                                             },
                                         }),
                                         conditions: vec![],
@@ -1094,8 +1094,8 @@ mod test {
                             ..Default::default()
                         },
                     },
-                    crate::component::Instruction::ChildComponent {
-                        child: crate::component::ChildComponent {
+                    ftd::component::Instruction::ChildComponent {
+                        child: ftd::component::ChildComponent {
                             is_recursive: false,
                             events: vec![],
                             root: "foo/bar#parent".to_string(),
@@ -1103,11 +1103,11 @@ mod test {
                             properties: std::array::IntoIter::new([
                                 (
                                     s("id"),
-                                    crate::component::Property {
-                                        default: Some(crate::PropertyValue::Value {
-                                            value: crate::variable::Value::String {
+                                    ftd::component::Property {
+                                        default: Some(ftd::PropertyValue::Value {
+                                            value: ftd::variable::Value::String {
                                                 text: "/ChildBuilding/".to_string(),
-                                                source: crate::TextSource::Header,
+                                                source: ftd::TextSource::Header,
                                             },
                                         }),
                                         conditions: vec![],
@@ -1115,11 +1115,11 @@ mod test {
                                 ),
                                 (
                                     s("name"),
-                                    crate::component::Property {
-                                        default: Some(crate::PropertyValue::Value {
-                                            value: crate::variable::Value::String {
+                                    ftd::component::Property {
+                                        default: Some(ftd::PropertyValue::Value {
+                                            value: ftd::variable::Value::String {
                                                 text: "ChildLog".to_string(),
-                                                source: crate::TextSource::Header,
+                                                source: ftd::TextSource::Header,
                                             },
                                         }),
                                         conditions: vec![],
@@ -1130,11 +1130,11 @@ mod test {
                             ..Default::default()
                         },
                     },
-                    crate::component::Instruction::ChangeContainer {
+                    ftd::component::Instruction::ChangeContainer {
                         name: "/welcome/".to_string(),
                     },
-                    crate::component::Instruction::ChildComponent {
-                        child: crate::component::ChildComponent {
+                    ftd::component::Instruction::ChildComponent {
+                        child: ftd::component::ChildComponent {
                             is_recursive: false,
                             events: vec![],
                             root: "foo/bar#parent".to_string(),
@@ -1142,11 +1142,11 @@ mod test {
                             properties: std::array::IntoIter::new([
                                 (
                                     s("id"),
-                                    crate::component::Property {
-                                        default: Some(crate::PropertyValue::Value {
-                                            value: crate::variable::Value::String {
+                                    ftd::component::Property {
+                                        default: Some(ftd::PropertyValue::Value {
+                                            value: ftd::variable::Value::String {
                                                 text: "/Building2/".to_string(),
-                                                source: crate::TextSource::Header,
+                                                source: ftd::TextSource::Header,
                                             },
                                         }),
                                         conditions: vec![],
@@ -1154,11 +1154,11 @@ mod test {
                                 ),
                                 (
                                     s("name"),
-                                    crate::component::Property {
-                                        default: Some(crate::PropertyValue::Value {
-                                            value: crate::variable::Value::String {
+                                    ftd::component::Property {
+                                        default: Some(ftd::PropertyValue::Value {
+                                            value: ftd::variable::Value::String {
                                                 text: "Log2".to_string(),
-                                                source: crate::TextSource::Header,
+                                                source: ftd::TextSource::Header,
                                             },
                                         }),
                                         conditions: vec![],
@@ -1177,28 +1177,28 @@ mod test {
 
         bag.insert(
             "foo/bar#parent".to_string(),
-            crate::p2::Thing::Component(crate::Component {
+            ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd.column".to_string(),
                 full_name: "foo/bar#parent".to_string(),
                 arguments: std::array::IntoIter::new([
                     (
                         s("active"),
-                        crate::p2::Kind::Optional {
-                            kind: Box::new(crate::p2::Kind::boolean()),
+                        ftd::p2::Kind::Optional {
+                            kind: Box::new(ftd::p2::Kind::boolean()),
                         },
                     ),
-                    (s("id"), crate::p2::Kind::string()),
-                    (s("name"), crate::p2::Kind::caption()),
+                    (s("id"), ftd::p2::Kind::string()),
+                    (s("name"), ftd::p2::Kind::caption()),
                 ])
                 .collect(),
                 properties: std::array::IntoIter::new([
                     (
                         s("id"),
-                        crate::component::Property {
-                            default: Some(crate::PropertyValue::Variable {
+                        ftd::component::Property {
+                            default: Some(ftd::PropertyValue::Variable {
                                 name: "id".to_string(),
-                                kind: crate::p2::Kind::Optional {
-                                    kind: Box::new(crate::p2::Kind::string()),
+                                kind: ftd::p2::Kind::Optional {
+                                    kind: Box::new(ftd::p2::Kind::string()),
                                 },
                             }),
                             conditions: vec![],
@@ -1206,11 +1206,11 @@ mod test {
                     ),
                     (
                         s("open"),
-                        crate::component::Property {
-                            default: Some(crate::PropertyValue::Value {
-                                value: crate::variable::Value::String {
+                        ftd::component::Property {
+                            default: Some(ftd::PropertyValue::Value {
+                                value: ftd::variable::Value::String {
                                     text: "true".to_string(),
-                                    source: crate::TextSource::Header,
+                                    source: ftd::TextSource::Header,
                                 },
                             }),
                             conditions: vec![],
@@ -1218,11 +1218,11 @@ mod test {
                     ),
                     (
                         s("width"),
-                        crate::component::Property {
-                            default: Some(crate::PropertyValue::Value {
-                                value: crate::variable::Value::String {
+                        ftd::component::Property {
+                            default: Some(ftd::PropertyValue::Value {
+                                value: ftd::variable::Value::String {
                                     text: "fill".to_string(),
-                                    source: crate::TextSource::Header,
+                                    source: ftd::TextSource::Header,
                                 },
                             }),
                             conditions: vec![],
@@ -1231,27 +1231,27 @@ mod test {
                 ])
                 .collect(),
                 instructions: vec![
-                    crate::component::Instruction::ChildComponent {
-                        child: crate::component::ChildComponent {
+                    ftd::component::Instruction::ChildComponent {
+                        child: ftd::component::ChildComponent {
                             is_recursive: false,
                             events: vec![],
                             root: "ftd#text".to_string(),
                             condition: Some(ftd::p2::Boolean::IsNotNull {
                                 value: ftd::PropertyValue::Variable {
                                     name: "active".to_string(),
-                                    kind: crate::p2::Kind::Optional {
-                                        kind: Box::new(crate::p2::Kind::boolean()),
+                                    kind: ftd::p2::Kind::Optional {
+                                        kind: Box::new(ftd::p2::Kind::boolean()),
                                     },
                                 },
                             }),
                             properties: std::array::IntoIter::new([
                                 (
                                     s("color"),
-                                    crate::component::Property {
-                                        default: Some(crate::PropertyValue::Value {
-                                            value: crate::variable::Value::String {
+                                    ftd::component::Property {
+                                        default: Some(ftd::PropertyValue::Value {
+                                            value: ftd::variable::Value::String {
                                                 text: "white".to_string(),
-                                                source: crate::TextSource::Header,
+                                                source: ftd::TextSource::Header,
                                             },
                                         }),
                                         conditions: vec![],
@@ -1259,19 +1259,19 @@ mod test {
                                 ),
                                 (
                                     s("size"),
-                                    crate::component::Property {
-                                        default: Some(crate::PropertyValue::Value {
-                                            value: crate::variable::Value::Integer { value: 14 },
+                                    ftd::component::Property {
+                                        default: Some(ftd::PropertyValue::Value {
+                                            value: ftd::variable::Value::Integer { value: 14 },
                                         }),
                                         conditions: vec![],
                                     },
                                 ),
                                 (
                                     s("text"),
-                                    crate::component::Property {
-                                        default: Some(crate::PropertyValue::Variable {
+                                    ftd::component::Property {
+                                        default: Some(ftd::PropertyValue::Variable {
                                             name: "name".to_string(),
-                                            kind: crate::p2::Kind::caption_or_body(),
+                                            kind: ftd::p2::Kind::caption_or_body(),
                                         }),
                                         conditions: vec![],
                                     },
@@ -1281,27 +1281,27 @@ mod test {
                             ..Default::default()
                         },
                     },
-                    crate::component::Instruction::ChildComponent {
-                        child: crate::component::ChildComponent {
+                    ftd::component::Instruction::ChildComponent {
+                        child: ftd::component::ChildComponent {
                             is_recursive: false,
                             events: vec![],
                             root: "ftd#text".to_string(),
                             condition: Some(ftd::p2::Boolean::IsNull {
                                 value: ftd::PropertyValue::Variable {
                                     name: "active".to_string(),
-                                    kind: crate::p2::Kind::Optional {
-                                        kind: Box::new(crate::p2::Kind::boolean()),
+                                    kind: ftd::p2::Kind::Optional {
+                                        kind: Box::new(ftd::p2::Kind::boolean()),
                                     },
                                 },
                             }),
                             properties: std::array::IntoIter::new([
                                 (
                                     s("color"),
-                                    crate::component::Property {
-                                        default: Some(crate::PropertyValue::Value {
-                                            value: crate::variable::Value::String {
+                                    ftd::component::Property {
+                                        default: Some(ftd::PropertyValue::Value {
+                                            value: ftd::variable::Value::String {
                                                 text: "#4D4D4D".to_string(),
-                                                source: crate::TextSource::Header,
+                                                source: ftd::TextSource::Header,
                                             },
                                         }),
                                         conditions: vec![],
@@ -1309,19 +1309,19 @@ mod test {
                                 ),
                                 (
                                     s("size"),
-                                    crate::component::Property {
-                                        default: Some(crate::PropertyValue::Value {
-                                            value: crate::variable::Value::Integer { value: 14 },
+                                    ftd::component::Property {
+                                        default: Some(ftd::PropertyValue::Value {
+                                            value: ftd::variable::Value::Integer { value: 14 },
                                         }),
                                         conditions: vec![],
                                     },
                                 ),
                                 (
                                     s("text"),
-                                    crate::component::Property {
-                                        default: Some(crate::PropertyValue::Variable {
+                                    ftd::component::Property {
+                                        default: Some(ftd::PropertyValue::Variable {
                                             name: "name".to_string(),
-                                            kind: crate::p2::Kind::caption_or_body(),
+                                            kind: ftd::p2::Kind::caption_or_body(),
                                         }),
                                         conditions: vec![],
                                     },
@@ -1339,19 +1339,19 @@ mod test {
 
         bag.insert(
             "foo/bar#table-of-content".to_string(),
-            crate::p2::Thing::Component(crate::Component {
+            ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd.column".to_string(),
                 full_name: "foo/bar#table-of-content".to_string(),
-                arguments: std::array::IntoIter::new([(s("id"), crate::p2::Kind::string())])
+                arguments: std::array::IntoIter::new([(s("id"), ftd::p2::Kind::string())])
                     .collect(),
                 properties: std::array::IntoIter::new([
                     (
                         s("height"),
-                        crate::component::Property {
-                            default: Some(crate::PropertyValue::Value {
-                                value: crate::variable::Value::String {
+                        ftd::component::Property {
+                            default: Some(ftd::PropertyValue::Value {
+                                value: ftd::variable::Value::String {
                                     text: "fill".to_string(),
-                                    source: crate::TextSource::Header,
+                                    source: ftd::TextSource::Header,
                                 },
                             }),
                             conditions: vec![],
@@ -1359,11 +1359,11 @@ mod test {
                     ),
                     (
                         s("id"),
-                        crate::component::Property {
-                            default: Some(crate::PropertyValue::Variable {
+                        ftd::component::Property {
+                            default: Some(ftd::PropertyValue::Variable {
                                 name: "id".to_string(),
-                                kind: crate::p2::Kind::Optional {
-                                    kind: Box::new(crate::p2::Kind::string()),
+                                kind: ftd::p2::Kind::Optional {
+                                    kind: Box::new(ftd::p2::Kind::string()),
                                 },
                             }),
                             conditions: vec![],
@@ -1371,11 +1371,11 @@ mod test {
                     ),
                     (
                         s("width"),
-                        crate::component::Property {
-                            default: Some(crate::PropertyValue::Value {
-                                value: crate::variable::Value::String {
+                        ftd::component::Property {
+                            default: Some(ftd::PropertyValue::Value {
+                                value: ftd::variable::Value::String {
                                     text: "300".to_string(),
-                                    source: crate::TextSource::Header,
+                                    source: ftd::TextSource::Header,
                                 },
                             }),
                             conditions: vec![],
@@ -1391,27 +1391,27 @@ mod test {
 
         bag.insert(
             "foo/bar#toc-heading".to_string(),
-            crate::p2::Thing::Component(crate::Component {
+            ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd.text".to_string(),
                 full_name: "foo/bar#toc-heading".to_string(),
-                arguments: std::array::IntoIter::new([(s("text"), crate::p2::Kind::caption())])
+                arguments: std::array::IntoIter::new([(s("text"), ftd::p2::Kind::caption())])
                     .collect(),
                 properties: std::array::IntoIter::new([
                     (
                         s("size"),
-                        crate::component::Property {
-                            default: Some(crate::PropertyValue::Value {
-                                value: crate::variable::Value::Integer { value: 16 },
+                        ftd::component::Property {
+                            default: Some(ftd::PropertyValue::Value {
+                                value: ftd::variable::Value::Integer { value: 16 },
                             }),
                             conditions: vec![],
                         },
                     ),
                     (
                         s("text"),
-                        crate::component::Property {
-                            default: Some(crate::PropertyValue::Variable {
+                        ftd::component::Property {
+                            default: Some(ftd::PropertyValue::Variable {
                                 name: "text".to_string(),
-                                kind: crate::p2::Kind::caption_or_body(),
+                                kind: ftd::p2::Kind::caption_or_body(),
                             }),
                             conditions: vec![],
                         },
@@ -1677,25 +1677,25 @@ mod test {
 
         bag.insert(
             "creating-a-tree#ft_toc".to_string(),
-            crate::p2::Thing::Component(crate::Component {
+            ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd.column".to_string(),
                 full_name: "creating-a-tree#ft_toc".to_string(),
                 arguments: Default::default(),
                 properties: Default::default(),
                 instructions: vec![
-                    crate::component::Instruction::ChildComponent {
-                        child: crate::component::ChildComponent {
+                    ftd::component::Instruction::ChildComponent {
+                        child: ftd::component::ChildComponent {
                             is_recursive: false,
                             events: vec![],
                             root: "creating-a-tree#table-of-content".to_string(),
                             condition: None,
                             properties: std::array::IntoIter::new([(
                                 s("id"),
-                                crate::component::Property {
-                                    default: Some(crate::PropertyValue::Value {
-                                        value: crate::variable::Value::String {
+                                ftd::component::Property {
+                                    default: Some(ftd::PropertyValue::Value {
+                                        value: ftd::variable::Value::String {
                                             text: "toc_main".to_string(),
-                                            source: crate::TextSource::Header,
+                                            source: ftd::TextSource::Header,
                                         },
                                     }),
                                     conditions: vec![],
@@ -1705,8 +1705,8 @@ mod test {
                             ..Default::default()
                         },
                     },
-                    crate::component::Instruction::ChildComponent {
-                        child: crate::component::ChildComponent {
+                    ftd::component::Instruction::ChildComponent {
+                        child: ftd::component::ChildComponent {
                             is_recursive: false,
                             events: vec![],
                             root: "creating-a-tree#parent".to_string(),
@@ -1714,20 +1714,20 @@ mod test {
                             properties: std::array::IntoIter::new([
                                 (
                                     s("active"),
-                                    crate::component::Property {
-                                        default: Some(crate::PropertyValue::Value {
-                                            value: crate::variable::Value::Boolean { value: true },
+                                    ftd::component::Property {
+                                        default: Some(ftd::PropertyValue::Value {
+                                            value: ftd::variable::Value::Boolean { value: true },
                                         }),
                                         conditions: vec![],
                                     },
                                 ),
                                 (
                                     s("id"),
-                                    crate::component::Property {
-                                        default: Some(crate::PropertyValue::Value {
-                                            value: crate::variable::Value::String {
+                                    ftd::component::Property {
+                                        default: Some(ftd::PropertyValue::Value {
+                                            value: ftd::variable::Value::String {
                                                 text: "/welcome/".to_string(),
-                                                source: crate::TextSource::Header,
+                                                source: ftd::TextSource::Header,
                                             },
                                         }),
                                         conditions: vec![],
@@ -1735,11 +1735,11 @@ mod test {
                                 ),
                                 (
                                     s("name"),
-                                    crate::component::Property {
-                                        default: Some(crate::PropertyValue::Value {
-                                            value: crate::variable::Value::String {
+                                    ftd::component::Property {
+                                        default: Some(ftd::PropertyValue::Value {
+                                            value: ftd::variable::Value::String {
                                                 text: "5PM Tasks".to_string(),
-                                                source: crate::TextSource::Header,
+                                                source: ftd::TextSource::Header,
                                             },
                                         }),
                                         conditions: vec![],
@@ -1750,8 +1750,8 @@ mod test {
                             ..Default::default()
                         },
                     },
-                    crate::component::Instruction::ChildComponent {
-                        child: crate::component::ChildComponent {
+                    ftd::component::Instruction::ChildComponent {
+                        child: ftd::component::ChildComponent {
                             is_recursive: false,
                             events: vec![],
                             root: "creating-a-tree#parent".to_string(),
@@ -1759,11 +1759,11 @@ mod test {
                             properties: std::array::IntoIter::new([
                                 (
                                     s("id"),
-                                    crate::component::Property {
-                                        default: Some(crate::PropertyValue::Value {
-                                            value: crate::variable::Value::String {
+                                    ftd::component::Property {
+                                        default: Some(ftd::PropertyValue::Value {
+                                            value: ftd::variable::Value::String {
                                                 text: "/Building/".to_string(),
-                                                source: crate::TextSource::Header,
+                                                source: ftd::TextSource::Header,
                                             },
                                         }),
                                         conditions: vec![],
@@ -1771,11 +1771,11 @@ mod test {
                                 ),
                                 (
                                     s("name"),
-                                    crate::component::Property {
-                                        default: Some(crate::PropertyValue::Value {
-                                            value: crate::variable::Value::String {
+                                    ftd::component::Property {
+                                        default: Some(ftd::PropertyValue::Value {
+                                            value: ftd::variable::Value::String {
                                                 text: "Log".to_string(),
-                                                source: crate::TextSource::Header,
+                                                source: ftd::TextSource::Header,
                                             },
                                         }),
                                         conditions: vec![],
@@ -1786,8 +1786,8 @@ mod test {
                             ..Default::default()
                         },
                     },
-                    crate::component::Instruction::ChildComponent {
-                        child: crate::component::ChildComponent {
+                    ftd::component::Instruction::ChildComponent {
+                        child: ftd::component::ChildComponent {
                             is_recursive: false,
                             events: vec![],
                             root: "creating-a-tree#parent".to_string(),
@@ -1795,11 +1795,11 @@ mod test {
                             properties: std::array::IntoIter::new([
                                 (
                                     s("id"),
-                                    crate::component::Property {
-                                        default: Some(crate::PropertyValue::Value {
-                                            value: crate::variable::Value::String {
+                                    ftd::component::Property {
+                                        default: Some(ftd::PropertyValue::Value {
+                                            value: ftd::variable::Value::String {
                                                 text: "/ChildBuilding/".to_string(),
-                                                source: crate::TextSource::Header,
+                                                source: ftd::TextSource::Header,
                                             },
                                         }),
                                         conditions: vec![],
@@ -1807,11 +1807,11 @@ mod test {
                                 ),
                                 (
                                     s("name"),
-                                    crate::component::Property {
-                                        default: Some(crate::PropertyValue::Value {
-                                            value: crate::variable::Value::String {
+                                    ftd::component::Property {
+                                        default: Some(ftd::PropertyValue::Value {
+                                            value: ftd::variable::Value::String {
                                                 text: "ChildLog".to_string(),
-                                                source: crate::TextSource::Header,
+                                                source: ftd::TextSource::Header,
                                             },
                                         }),
                                         conditions: vec![],
@@ -1822,11 +1822,11 @@ mod test {
                             ..Default::default()
                         },
                     },
-                    crate::component::Instruction::ChangeContainer {
+                    ftd::component::Instruction::ChangeContainer {
                         name: "/welcome/".to_string(),
                     },
-                    crate::component::Instruction::ChildComponent {
-                        child: crate::component::ChildComponent {
+                    ftd::component::Instruction::ChildComponent {
+                        child: ftd::component::ChildComponent {
                             is_recursive: false,
                             events: vec![],
                             root: "creating-a-tree#parent".to_string(),
@@ -1834,11 +1834,11 @@ mod test {
                             properties: std::array::IntoIter::new([
                                 (
                                     s("id"),
-                                    crate::component::Property {
-                                        default: Some(crate::PropertyValue::Value {
-                                            value: crate::variable::Value::String {
+                                    ftd::component::Property {
+                                        default: Some(ftd::PropertyValue::Value {
+                                            value: ftd::variable::Value::String {
                                                 text: "/Building2/".to_string(),
-                                                source: crate::TextSource::Header,
+                                                source: ftd::TextSource::Header,
                                             },
                                         }),
                                         conditions: vec![],
@@ -1846,11 +1846,11 @@ mod test {
                                 ),
                                 (
                                     s("name"),
-                                    crate::component::Property {
-                                        default: Some(crate::PropertyValue::Value {
-                                            value: crate::variable::Value::String {
+                                    ftd::component::Property {
+                                        default: Some(ftd::PropertyValue::Value {
+                                            value: ftd::variable::Value::String {
                                                 text: "Log2".to_string(),
-                                                source: crate::TextSource::Header,
+                                                source: ftd::TextSource::Header,
                                             },
                                         }),
                                         conditions: vec![],
@@ -1869,28 +1869,28 @@ mod test {
 
         bag.insert(
             "creating-a-tree#parent".to_string(),
-            crate::p2::Thing::Component(crate::Component {
+            ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd.column".to_string(),
                 full_name: "creating-a-tree#parent".to_string(),
                 arguments: std::array::IntoIter::new([
                     (
                         s("active"),
-                        crate::p2::Kind::Optional {
-                            kind: Box::new(crate::p2::Kind::boolean()),
+                        ftd::p2::Kind::Optional {
+                            kind: Box::new(ftd::p2::Kind::boolean()),
                         },
                     ),
-                    (s("id"), crate::p2::Kind::string()),
-                    (s("name"), crate::p2::Kind::caption()),
+                    (s("id"), ftd::p2::Kind::string()),
+                    (s("name"), ftd::p2::Kind::caption()),
                 ])
                 .collect(),
                 properties: std::array::IntoIter::new([
                     (
                         s("id"),
-                        crate::component::Property {
-                            default: Some(crate::PropertyValue::Variable {
+                        ftd::component::Property {
+                            default: Some(ftd::PropertyValue::Variable {
                                 name: "id".to_string(),
-                                kind: crate::p2::Kind::Optional {
-                                    kind: Box::new(crate::p2::Kind::string()),
+                                kind: ftd::p2::Kind::Optional {
+                                    kind: Box::new(ftd::p2::Kind::string()),
                                 },
                             }),
                             conditions: vec![],
@@ -1898,11 +1898,11 @@ mod test {
                     ),
                     (
                         s("open"),
-                        crate::component::Property {
-                            default: Some(crate::PropertyValue::Value {
-                                value: crate::variable::Value::String {
+                        ftd::component::Property {
+                            default: Some(ftd::PropertyValue::Value {
+                                value: ftd::variable::Value::String {
                                     text: "true".to_string(),
-                                    source: crate::TextSource::Header,
+                                    source: ftd::TextSource::Header,
                                 },
                             }),
                             conditions: vec![],
@@ -1910,11 +1910,11 @@ mod test {
                     ),
                     (
                         s("width"),
-                        crate::component::Property {
-                            default: Some(crate::PropertyValue::Value {
-                                value: crate::variable::Value::String {
+                        ftd::component::Property {
+                            default: Some(ftd::PropertyValue::Value {
+                                value: ftd::variable::Value::String {
                                     text: "fill".to_string(),
-                                    source: crate::TextSource::Header,
+                                    source: ftd::TextSource::Header,
                                 },
                             }),
                             conditions: vec![],
@@ -1923,27 +1923,27 @@ mod test {
                 ])
                 .collect(),
                 instructions: vec![
-                    crate::component::Instruction::ChildComponent {
-                        child: crate::component::ChildComponent {
+                    ftd::component::Instruction::ChildComponent {
+                        child: ftd::component::ChildComponent {
                             is_recursive: false,
                             events: vec![],
                             root: "ftd#text".to_string(),
                             condition: Some(ftd::p2::Boolean::IsNotNull {
                                 value: ftd::PropertyValue::Variable {
                                     name: "active".to_string(),
-                                    kind: crate::p2::Kind::Optional {
-                                        kind: Box::new(crate::p2::Kind::boolean()),
+                                    kind: ftd::p2::Kind::Optional {
+                                        kind: Box::new(ftd::p2::Kind::boolean()),
                                     },
                                 },
                             }),
                             properties: std::array::IntoIter::new([
                                 (
                                     s("color"),
-                                    crate::component::Property {
-                                        default: Some(crate::PropertyValue::Value {
-                                            value: crate::variable::Value::String {
+                                    ftd::component::Property {
+                                        default: Some(ftd::PropertyValue::Value {
+                                            value: ftd::variable::Value::String {
                                                 text: "white".to_string(),
-                                                source: crate::TextSource::Header,
+                                                source: ftd::TextSource::Header,
                                             },
                                         }),
                                         conditions: vec![],
@@ -1951,19 +1951,19 @@ mod test {
                                 ),
                                 (
                                     s("size"),
-                                    crate::component::Property {
-                                        default: Some(crate::PropertyValue::Value {
-                                            value: crate::variable::Value::Integer { value: 14 },
+                                    ftd::component::Property {
+                                        default: Some(ftd::PropertyValue::Value {
+                                            value: ftd::variable::Value::Integer { value: 14 },
                                         }),
                                         conditions: vec![],
                                     },
                                 ),
                                 (
                                     s("text"),
-                                    crate::component::Property {
-                                        default: Some(crate::PropertyValue::Variable {
+                                    ftd::component::Property {
+                                        default: Some(ftd::PropertyValue::Variable {
                                             name: "name".to_string(),
-                                            kind: crate::p2::Kind::caption_or_body(),
+                                            kind: ftd::p2::Kind::caption_or_body(),
                                         }),
                                         conditions: vec![],
                                     },
@@ -1973,27 +1973,27 @@ mod test {
                             ..Default::default()
                         },
                     },
-                    crate::component::Instruction::ChildComponent {
-                        child: crate::component::ChildComponent {
+                    ftd::component::Instruction::ChildComponent {
+                        child: ftd::component::ChildComponent {
                             is_recursive: false,
                             events: vec![],
                             root: "ftd#text".to_string(),
                             condition: Some(ftd::p2::Boolean::IsNull {
                                 value: ftd::PropertyValue::Variable {
                                     name: "active".to_string(),
-                                    kind: crate::p2::Kind::Optional {
-                                        kind: Box::new(crate::p2::Kind::boolean()),
+                                    kind: ftd::p2::Kind::Optional {
+                                        kind: Box::new(ftd::p2::Kind::boolean()),
                                     },
                                 },
                             }),
                             properties: std::array::IntoIter::new([
                                 (
                                     s("color"),
-                                    crate::component::Property {
-                                        default: Some(crate::PropertyValue::Value {
-                                            value: crate::variable::Value::String {
+                                    ftd::component::Property {
+                                        default: Some(ftd::PropertyValue::Value {
+                                            value: ftd::variable::Value::String {
                                                 text: "#4D4D4D".to_string(),
-                                                source: crate::TextSource::Header,
+                                                source: ftd::TextSource::Header,
                                             },
                                         }),
                                         conditions: vec![],
@@ -2001,19 +2001,19 @@ mod test {
                                 ),
                                 (
                                     s("size"),
-                                    crate::component::Property {
-                                        default: Some(crate::PropertyValue::Value {
-                                            value: crate::variable::Value::Integer { value: 14 },
+                                    ftd::component::Property {
+                                        default: Some(ftd::PropertyValue::Value {
+                                            value: ftd::variable::Value::Integer { value: 14 },
                                         }),
                                         conditions: vec![],
                                     },
                                 ),
                                 (
                                     s("text"),
-                                    crate::component::Property {
-                                        default: Some(crate::PropertyValue::Variable {
+                                    ftd::component::Property {
+                                        default: Some(ftd::PropertyValue::Variable {
                                             name: "name".to_string(),
-                                            kind: crate::p2::Kind::caption_or_body(),
+                                            kind: ftd::p2::Kind::caption_or_body(),
                                         }),
                                         conditions: vec![],
                                     },
@@ -2031,19 +2031,19 @@ mod test {
 
         bag.insert(
             "creating-a-tree#table-of-content".to_string(),
-            crate::p2::Thing::Component(crate::Component {
+            ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd.column".to_string(),
                 full_name: "creating-a-tree#table-of-content".to_string(),
-                arguments: std::array::IntoIter::new([(s("id"), crate::p2::Kind::string())])
+                arguments: std::array::IntoIter::new([(s("id"), ftd::p2::Kind::string())])
                     .collect(),
                 properties: std::array::IntoIter::new([
                     (
                         s("height"),
-                        crate::component::Property {
-                            default: Some(crate::PropertyValue::Value {
-                                value: crate::variable::Value::String {
+                        ftd::component::Property {
+                            default: Some(ftd::PropertyValue::Value {
+                                value: ftd::variable::Value::String {
                                     text: "fill".to_string(),
-                                    source: crate::TextSource::Header,
+                                    source: ftd::TextSource::Header,
                                 },
                             }),
                             conditions: vec![],
@@ -2051,11 +2051,11 @@ mod test {
                     ),
                     (
                         s("id"),
-                        crate::component::Property {
-                            default: Some(crate::PropertyValue::Variable {
+                        ftd::component::Property {
+                            default: Some(ftd::PropertyValue::Variable {
                                 name: "id".to_string(),
-                                kind: crate::p2::Kind::Optional {
-                                    kind: Box::new(crate::p2::Kind::string()),
+                                kind: ftd::p2::Kind::Optional {
+                                    kind: Box::new(ftd::p2::Kind::string()),
                                 },
                             }),
                             conditions: vec![],
@@ -2063,11 +2063,11 @@ mod test {
                     ),
                     (
                         s("width"),
-                        crate::component::Property {
-                            default: Some(crate::PropertyValue::Value {
-                                value: crate::variable::Value::String {
+                        ftd::component::Property {
+                            default: Some(ftd::PropertyValue::Value {
+                                value: ftd::variable::Value::String {
                                     text: "300".to_string(),
-                                    source: crate::TextSource::Header,
+                                    source: ftd::TextSource::Header,
                                 },
                             }),
                             conditions: vec![],
@@ -2083,27 +2083,27 @@ mod test {
 
         bag.insert(
             "creating-a-tree#toc-heading".to_string(),
-            crate::p2::Thing::Component(crate::Component {
+            ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd.text".to_string(),
                 full_name: "creating-a-tree#toc-heading".to_string(),
-                arguments: std::array::IntoIter::new([(s("text"), crate::p2::Kind::caption())])
+                arguments: std::array::IntoIter::new([(s("text"), ftd::p2::Kind::caption())])
                     .collect(),
                 properties: std::array::IntoIter::new([
                     (
                         s("size"),
-                        crate::component::Property {
-                            default: Some(crate::PropertyValue::Value {
-                                value: crate::variable::Value::Integer { value: 16 },
+                        ftd::component::Property {
+                            default: Some(ftd::PropertyValue::Value {
+                                value: ftd::variable::Value::Integer { value: 16 },
                             }),
                             conditions: vec![],
                         },
                     ),
                     (
                         s("text"),
-                        crate::component::Property {
-                            default: Some(crate::PropertyValue::Variable {
+                        ftd::component::Property {
+                            default: Some(ftd::PropertyValue::Variable {
                                 name: "text".to_string(),
-                                kind: crate::p2::Kind::caption_or_body(),
+                                kind: ftd::p2::Kind::caption_or_body(),
                             }),
                             conditions: vec![],
                         },
@@ -2308,20 +2308,20 @@ mod test {
 
         bag.insert(
             "fifthtry/ft#dark-mode".to_string(),
-            crate::p2::Thing::Variable(crate::Variable {
+            ftd::p2::Thing::Variable(ftd::Variable {
                 name: "dark-mode".to_string(),
-                value: crate::Value::Boolean { value: true },
+                value: ftd::Value::Boolean { value: true },
                 conditions: vec![],
             }),
         );
 
         bag.insert(
             "fifthtry/ft#toc".to_string(),
-            crate::p2::Thing::Variable(crate::Variable {
+            ftd::p2::Thing::Variable(ftd::Variable {
                 name: "toc".to_string(),
-                value: crate::Value::String {
+                value: ftd::Value::String {
                     text: "not set".to_string(),
-                    source: crate::TextSource::Caption,
+                    source: ftd::TextSource::Caption,
                 },
                 conditions: vec![],
             }),
@@ -2329,17 +2329,17 @@ mod test {
 
         bag.insert(
             "fifthtry/ft#markdown".to_string(),
-            crate::p2::Thing::Component(crate::Component {
+            ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd.text".to_string(),
                 full_name: "fifthtry/ft#markdown".to_string(),
-                arguments: std::array::IntoIter::new([(s("body"), crate::p2::Kind::body())])
+                arguments: std::array::IntoIter::new([(s("body"), ftd::p2::Kind::body())])
                     .collect(),
                 properties: std::array::IntoIter::new([(
                     s("text"),
-                    crate::component::Property {
-                        default: Some(crate::PropertyValue::Variable {
+                    ftd::component::Property {
+                        default: Some(ftd::PropertyValue::Variable {
                             name: "body".to_string(),
-                            kind: crate::p2::Kind::caption_or_body(),
+                            kind: ftd::p2::Kind::caption_or_body(),
                         }),
                         conditions: vec![],
                     },
@@ -2351,11 +2351,11 @@ mod test {
 
         bag.insert(
             "reference#name".to_string(),
-            crate::p2::Thing::Variable(crate::Variable {
+            ftd::p2::Thing::Variable(ftd::Variable {
                 name: "name".to_string(),
-                value: crate::Value::String {
+                value: ftd::Value::String {
                     text: "John smith".to_string(),
-                    source: crate::TextSource::Caption,
+                    source: ftd::TextSource::Caption,
                 },
                 conditions: vec![],
             }),
@@ -2363,18 +2363,18 @@ mod test {
 
         bag.insert(
             "reference#test-component".to_string(),
-            crate::p2::Thing::Component(crate::Component {
+            ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd.column".to_string(),
                 full_name: "reference#test-component".to_string(),
                 arguments: Default::default(),
                 properties: std::array::IntoIter::new([
                     (
                         s("background-color"),
-                        crate::component::Property {
-                            default: Some(crate::PropertyValue::Value {
-                                value: crate::variable::Value::String {
+                        ftd::component::Property {
+                            default: Some(ftd::PropertyValue::Value {
+                                value: ftd::variable::Value::String {
                                     text: "#f3f3f3".to_string(),
-                                    source: crate::TextSource::Header,
+                                    source: ftd::TextSource::Header,
                                 },
                             }),
                             conditions: vec![],
@@ -2382,11 +2382,11 @@ mod test {
                     ),
                     (
                         s("width"),
-                        crate::component::Property {
-                            default: Some(crate::PropertyValue::Value {
-                                value: crate::variable::Value::String {
+                        ftd::component::Property {
+                            default: Some(ftd::PropertyValue::Value {
+                                value: ftd::variable::Value::String {
                                     text: "200".to_string(),
-                                    source: crate::TextSource::Header,
+                                    source: ftd::TextSource::Header,
                                 },
                             }),
                             conditions: vec![],
@@ -2394,18 +2394,18 @@ mod test {
                     ),
                 ])
                 .collect(),
-                instructions: vec![crate::component::Instruction::ChildComponent {
-                    child: crate::component::ChildComponent {
+                instructions: vec![ftd::component::Instruction::ChildComponent {
+                    child: ftd::component::ChildComponent {
                         is_recursive: false,
                         events: vec![],
                         root: "ftd#text".to_string(),
                         condition: None,
                         properties: std::array::IntoIter::new([(
                             s("text"),
-                            crate::component::Property {
-                                default: Some(crate::PropertyValue::Reference {
+                            ftd::component::Property {
+                                default: Some(ftd::PropertyValue::Reference {
                                     name: "reference#name".to_string(),
-                                    kind: crate::p2::Kind::caption_or_body(),
+                                    kind: ftd::p2::Kind::caption_or_body(),
                                 }),
                                 conditions: vec![],
                             },
@@ -2464,20 +2464,20 @@ mod test {
 
         bag.insert(
             "foo/bar#foo".to_string(),
-            crate::p2::Thing::Component(crate::Component {
+            ftd::p2::Thing::Component(ftd::Component {
                 full_name: s("foo/bar#foo"),
                 root: "ftd.text".to_string(),
                 arguments: std::array::IntoIter::new([(
                     s("name"),
-                    crate::p2::Kind::caption_or_body(),
+                    ftd::p2::Kind::caption_or_body(),
                 )])
                 .collect(),
                 properties: std::array::IntoIter::new([(
                     s("text"),
-                    crate::component::Property {
-                        default: Some(crate::PropertyValue::Variable {
+                    ftd::component::Property {
+                        default: Some(ftd::PropertyValue::Variable {
                             name: "name".to_string(),
-                            kind: crate::p2::Kind::caption_or_body(),
+                            kind: ftd::p2::Kind::caption_or_body(),
                         }),
                         conditions: vec![],
                     },
@@ -2486,25 +2486,25 @@ mod test {
                 invocations: vec![
                     std::array::IntoIter::new([(
                         s("name"),
-                        crate::Value::String {
+                        ftd::Value::String {
                             text: s("hello"),
-                            source: crate::TextSource::Caption,
+                            source: ftd::TextSource::Caption,
                         },
                     )])
                     .collect(),
                     std::array::IntoIter::new([(
                         s("name"),
-                        crate::Value::String {
+                        ftd::Value::String {
                             text: s("world"),
-                            source: crate::TextSource::Header,
+                            source: ftd::TextSource::Header,
                         },
                     )])
                     .collect(),
                     std::array::IntoIter::new([(
                         s("name"),
-                        crate::Value::String {
+                        ftd::Value::String {
                             text: s("yo yo"),
-                            source: crate::TextSource::Body,
+                            source: ftd::TextSource::Body,
                         },
                     )])
                     .collect(),
@@ -2545,7 +2545,7 @@ mod test {
             ..Default::default()
         }));
 
-        let (g_bag, g_col) = crate::p2::interpreter::interpret(
+        let (g_bag, g_col) = ftd::p2::interpreter::interpret(
             "foo/bar",
             indoc::indoc!(
                 "
@@ -2674,21 +2674,21 @@ mod test {
 
         bag.insert(
             "foo/bar#foo".to_string(),
-            crate::p2::Thing::Component(crate::Component {
+            ftd::p2::Thing::Component(ftd::Component {
                 full_name: s("foo/bar#foo"),
                 root: "ftd.row".to_string(),
-                instructions: vec![crate::Instruction::ChildComponent{child: crate::ChildComponent {
+                instructions: vec![ftd::Instruction::ChildComponent{child: ftd::ChildComponent {
                     events: vec![],
                     condition: None,
                     root: s("ftd#text"),
                     properties: std::array::IntoIter::new([
                         (
                             s("text"),
-                            crate::component::Property {
-                                default: Some(crate::PropertyValue::Value {
-                                    value: crate::Value::String {
+                            ftd::component::Property {
+                                default: Some(ftd::PropertyValue::Value {
+                                    value: ftd::Value::String {
                                         text: s("hello"),
-                                        source: crate::TextSource::Header,
+                                        source: ftd::TextSource::Header,
                                     },
                                 }),
                                 conditions: vec![],
@@ -2696,20 +2696,20 @@ mod test {
                         ),
                         (
                             s("size"),
-                            crate::component::Property {
-                                default: Some(crate::PropertyValue::Value {
-                                    value: crate::Value::Integer { value: 14 },
+                            ftd::component::Property {
+                                default: Some(ftd::PropertyValue::Value {
+                                    value: ftd::Value::Integer { value: 14 },
                                 }),
                                 conditions: vec![],
                             },
                         ),
                         (
                             s("font"),
-                            crate::component::Property {
-                                default: Some(crate::PropertyValue::Value {
-                                    value: crate::Value::String {
+                            ftd::component::Property {
+                                default: Some(ftd::PropertyValue::Value {
+                                    value: ftd::Value::String {
                                         text: s("Roboto"),
-                                        source: crate::TextSource::Header,
+                                        source: ftd::TextSource::Header,
                                     },
                                 }),
                                 conditions: vec![],
@@ -2717,11 +2717,11 @@ mod test {
                         ),
                         (
                             s("font-url"),
-                            crate::component::Property {
-                                default: Some(crate::PropertyValue::Value {
-                                    value: crate::Value::String {
+                            ftd::component::Property {
+                                default: Some(ftd::PropertyValue::Value {
+                                    value: ftd::Value::String {
                                         text: s("https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap"),
-                                        source: crate::TextSource::Header,
+                                        source: ftd::TextSource::Header,
                                     },
                                 }),
                                 conditions: vec![],
@@ -2729,11 +2729,11 @@ mod test {
                         ),
                         (
                             s("font-display"),
-                            crate::component::Property {
-                                default: Some(crate::PropertyValue::Value {
-                                    value: crate::Value::String {
+                            ftd::component::Property {
+                                default: Some(ftd::PropertyValue::Value {
+                                    value: ftd::Value::String {
                                         text: s("swap"),
-                                        source: crate::TextSource::Header,
+                                        source: ftd::TextSource::Header,
                                     },
                                 }),
                                 conditions: vec![],
@@ -2741,21 +2741,21 @@ mod test {
                         ),
                         (
                             s("border-width"),
-                            crate::component::Property {
-                                default: Some(crate::PropertyValue::Variable {
+                            ftd::component::Property {
+                                default: Some(ftd::PropertyValue::Variable {
                                     name: s("x"),
-                                    kind: crate::p2::Kind::integer().into_optional(),
+                                    kind: ftd::p2::Kind::integer().into_optional(),
                                 }),
                                 conditions: vec![],
                             },
                         ),
                         (
                             s("overflow-x"),
-                            crate::component::Property {
-                                default: Some(crate::PropertyValue::Value {
-                                    value: crate::Value::String {
+                            ftd::component::Property {
+                                default: Some(ftd::PropertyValue::Value {
+                                    value: ftd::Value::String {
                                         text: s("auto"),
-                                        source: crate::TextSource::Header,
+                                        source: ftd::TextSource::Header,
                                     },
                                 }),
                                 conditions: vec![],
@@ -2763,11 +2763,11 @@ mod test {
                         ),
                         (
                             s("overflow-y"),
-                            crate::component::Property {
-                                default: Some(crate::PropertyValue::Value {
-                                    value: crate::Value::String {
+                            ftd::component::Property {
+                                default: Some(ftd::PropertyValue::Value {
+                                    value: ftd::Value::String {
                                         text: s("auto"),
-                                        source: crate::TextSource::Header,
+                                        source: ftd::TextSource::Header,
                                     },
                                 }),
                                 conditions: vec![],
@@ -2777,7 +2777,7 @@ mod test {
                     .collect(),
                     ..Default::default()
                 }}],
-                arguments: std::array::IntoIter::new([(s("x"), crate::p2::Kind::integer())]).collect(),
+                arguments: std::array::IntoIter::new([(s("x"), ftd::p2::Kind::integer())]).collect(),
                 ..Default::default()
             }),
         );
@@ -2840,14 +2840,14 @@ mod test {
         let mut bag = super::default_bag();
         bag.insert(
             "foo/bar#numbers".to_string(),
-            crate::p2::Thing::Variable(crate::Variable {
+            ftd::p2::Thing::Variable(ftd::Variable {
                 name: "foo/bar#numbers".to_string(),
-                value: crate::Value::List {
+                value: ftd::Value::List {
                     data: vec![
-                        crate::Value::Integer { value: 20 },
-                        crate::Value::Integer { value: 30 },
+                        ftd::Value::Integer { value: 20 },
+                        ftd::Value::Integer { value: 30 },
                     ],
-                    kind: crate::p2::Kind::integer(),
+                    kind: ftd::p2::Kind::integer(),
                 },
                 conditions: vec![],
             }),
@@ -2869,11 +2869,11 @@ mod test {
         let mut bag = super::default_bag();
         bag.insert(
             "foo/bar#point".to_string(),
-            crate::p2::Thing::Record(crate::p2::Record {
+            ftd::p2::Thing::Record(ftd::p2::Record {
                 name: "foo/bar#point".to_string(),
                 fields: std::array::IntoIter::new([
-                    (s("x"), crate::p2::Kind::integer()),
-                    (s("y"), crate::p2::Kind::integer()),
+                    (s("x"), ftd::p2::Kind::integer()),
+                    (s("y"), ftd::p2::Kind::integer()),
                 ])
                 .collect(),
                 instances: Default::default(),
@@ -2882,48 +2882,48 @@ mod test {
 
         bag.insert(
             "foo/bar#points".to_string(),
-            crate::p2::Thing::Variable(crate::Variable {
+            ftd::p2::Thing::Variable(ftd::Variable {
                 name: "foo/bar#points".to_string(),
-                value: crate::Value::List {
+                value: ftd::Value::List {
                     data: vec![
-                        crate::Value::Record {
+                        ftd::Value::Record {
                             name: s("foo/bar#point"),
                             fields: std::array::IntoIter::new([
                                 (
                                     s("x"),
-                                    crate::PropertyValue::Value {
-                                        value: crate::Value::Integer { value: 10 },
+                                    ftd::PropertyValue::Value {
+                                        value: ftd::Value::Integer { value: 10 },
                                     },
                                 ),
                                 (
                                     s("y"),
-                                    crate::PropertyValue::Value {
-                                        value: crate::Value::Integer { value: 20 },
+                                    ftd::PropertyValue::Value {
+                                        value: ftd::Value::Integer { value: 20 },
                                     },
                                 ),
                             ])
                             .collect(),
                         },
-                        crate::Value::Record {
+                        ftd::Value::Record {
                             name: s("foo/bar#point"),
                             fields: std::array::IntoIter::new([
                                 (
                                     s("x"),
-                                    crate::PropertyValue::Value {
-                                        value: crate::Value::Integer { value: 0 },
+                                    ftd::PropertyValue::Value {
+                                        value: ftd::Value::Integer { value: 0 },
                                     },
                                 ),
                                 (
                                     s("y"),
-                                    crate::PropertyValue::Value {
-                                        value: crate::Value::Integer { value: 0 },
+                                    ftd::PropertyValue::Value {
+                                        value: ftd::Value::Integer { value: 0 },
                                     },
                                 ),
                             ])
                             .collect(),
                         },
                     ],
-                    kind: crate::p2::Kind::Record {
+                    kind: ftd::p2::Kind::Record {
                         name: s("foo/bar#point"),
                     },
                 },
@@ -2957,24 +2957,24 @@ mod test {
         let mut bag = super::default_bag();
         bag.insert(
             "foo/bar#numbers".to_string(),
-            crate::p2::Thing::Variable(crate::Variable {
+            ftd::p2::Thing::Variable(ftd::Variable {
                 name: "foo/bar#numbers".to_string(),
-                value: crate::Value::List {
+                value: ftd::Value::List {
                     data: vec![
-                        crate::Value::Integer { value: 20 },
-                        crate::Value::Integer { value: 30 },
+                        ftd::Value::Integer { value: 20 },
+                        ftd::Value::Integer { value: 30 },
                         // TODO: third element
                     ],
-                    kind: crate::p2::Kind::integer(),
+                    kind: ftd::p2::Kind::integer(),
                 },
                 conditions: vec![],
             }),
         );
         bag.insert(
             "foo/bar#x".to_string(),
-            crate::p2::Thing::Variable(crate::Variable {
+            ftd::p2::Thing::Variable(ftd::Variable {
                 name: "x".to_string(),
-                value: crate::Value::Integer { value: 20 },
+                value: ftd::Value::Integer { value: 20 },
                 conditions: vec![],
             }),
         );
@@ -2996,17 +2996,17 @@ mod test {
 
     fn white_two_image_bag(
         about_optional: bool,
-    ) -> std::collections::BTreeMap<String, crate::p2::Thing> {
+    ) -> std::collections::BTreeMap<String, ftd::p2::Thing> {
         let mut bag = super::default_bag();
         bag.insert(
             s("foo/bar#white-two-image"),
-            crate::p2::Thing::Component(crate::Component {
+            ftd::p2::Thing::Component(ftd::Component {
                 invocations: Default::default(),
                 full_name: "foo/bar#white-two-image".to_string(),
                 root: s("ftd.column"),
                 arguments: std::array::IntoIter::new([
                     (s("about"), {
-                        let s = crate::p2::Kind::body();
+                        let s = ftd::p2::Kind::body();
                         if about_optional {
                             s.into_optional()
                         } else {
@@ -3014,21 +3014,21 @@ mod test {
                         }
                     }),
                     (s("src"), {
-                        let s = crate::p2::Kind::string();
+                        let s = ftd::p2::Kind::string();
                         if about_optional {
                             s.into_optional()
                         } else {
                             s
                         }
                     }),
-                    (s("title"), crate::p2::Kind::caption()),
+                    (s("title"), ftd::p2::Kind::caption()),
                 ])
                 .collect(),
                 properties: std::array::IntoIter::new([(
                     s("padding"),
-                    crate::component::Property {
-                        default: Some(crate::PropertyValue::Value {
-                            value: crate::Value::Integer { value: 30 },
+                    ftd::component::Property {
+                        default: Some(ftd::PropertyValue::Value {
+                            value: ftd::Value::Integer { value: 30 },
                         }),
                         conditions: vec![],
                     },
@@ -3036,28 +3036,28 @@ mod test {
                 .collect(),
                 kernel: false,
                 instructions: vec![
-                    crate::Instruction::ChildComponent {
-                        child: crate::ChildComponent {
+                    ftd::Instruction::ChildComponent {
+                        child: ftd::ChildComponent {
                             events: vec![],
                             condition: None,
                             root: s("ftd#text"),
                             properties: std::array::IntoIter::new([
                                 (
                                     s("text"),
-                                    crate::component::Property {
-                                        default: Some(crate::PropertyValue::Variable {
+                                    ftd::component::Property {
+                                        default: Some(ftd::PropertyValue::Variable {
                                             name: s("title"),
-                                            kind: crate::p2::Kind::caption_or_body(),
+                                            kind: ftd::p2::Kind::caption_or_body(),
                                         }),
                                         conditions: vec![],
                                     },
                                 ),
                                 (
                                     s("align"),
-                                    crate::component::Property {
-                                        default: Some(crate::PropertyValue::Value {
-                                            value: crate::Value::String {
-                                                source: crate::TextSource::Header,
+                                    ftd::component::Property {
+                                        default: Some(ftd::PropertyValue::Value {
+                                            value: ftd::Value::String {
+                                                source: ftd::TextSource::Header,
                                                 text: s("center"),
                                             },
                                         }),
@@ -3069,14 +3069,14 @@ mod test {
                             ..Default::default()
                         },
                     },
-                    crate::Instruction::ChildComponent {
-                        child: crate::ChildComponent {
+                    ftd::Instruction::ChildComponent {
+                        child: ftd::ChildComponent {
                             events: vec![],
                             condition: if about_optional {
                                 Some(ftd::p2::Boolean::IsNotNull {
-                                    value: crate::PropertyValue::Variable {
+                                    value: ftd::PropertyValue::Variable {
                                         name: s("about"),
-                                        kind: crate::p2::Kind::body().into_optional(),
+                                        kind: ftd::p2::Kind::body().into_optional(),
                                     },
                                 })
                             } else {
@@ -3085,10 +3085,10 @@ mod test {
                             root: s("ftd#text"),
                             properties: std::array::IntoIter::new([(
                                 s("text"),
-                                crate::component::Property {
-                                    default: Some(crate::PropertyValue::Variable {
+                                ftd::component::Property {
+                                    default: Some(ftd::PropertyValue::Variable {
                                         name: s("about"),
-                                        kind: crate::p2::Kind::caption_or_body(),
+                                        kind: ftd::p2::Kind::caption_or_body(),
                                     }),
                                     conditions: vec![],
                                 },
@@ -3097,14 +3097,14 @@ mod test {
                             ..Default::default()
                         },
                     },
-                    crate::Instruction::ChildComponent {
-                        child: crate::ChildComponent {
+                    ftd::Instruction::ChildComponent {
+                        child: ftd::ChildComponent {
                             events: vec![],
                             condition: if about_optional {
                                 Some(ftd::p2::Boolean::IsNotNull {
-                                    value: crate::PropertyValue::Variable {
+                                    value: ftd::PropertyValue::Variable {
                                         name: s("src"),
-                                        kind: crate::p2::Kind::string().into_optional(),
+                                        kind: ftd::p2::Kind::string().into_optional(),
                                     },
                                 })
                             } else {
@@ -3113,10 +3113,10 @@ mod test {
                             root: s("ftd#image"),
                             properties: std::array::IntoIter::new([(
                                 s("src"),
-                                crate::component::Property {
-                                    default: Some(crate::PropertyValue::Variable {
+                                ftd::component::Property {
+                                    default: Some(ftd::PropertyValue::Variable {
                                         name: s("src"),
-                                        kind: crate::p2::Kind::string(),
+                                        kind: ftd::p2::Kind::string(),
                                     }),
                                     conditions: vec![],
                                 },
@@ -3546,18 +3546,18 @@ mod test {
         let mut bag = super::default_bag();
         bag.insert(
             s("fifthtry/ft#markdown"),
-            crate::p2::Thing::Component(crate::Component {
+            ftd::p2::Thing::Component(ftd::Component {
                 invocations: Default::default(),
                 full_name: "fifthtry/ft#markdown".to_string(),
                 root: s("ftd.text"),
-                arguments: std::array::IntoIter::new([(s("body"), crate::p2::Kind::body())])
+                arguments: std::array::IntoIter::new([(s("body"), ftd::p2::Kind::body())])
                     .collect(),
                 properties: std::array::IntoIter::new([(
                     s("text"),
-                    crate::component::Property {
-                        default: Some(crate::PropertyValue::Variable {
+                    ftd::component::Property {
+                        default: Some(ftd::PropertyValue::Variable {
                             name: s("body"),
-                            kind: crate::p2::Kind::string().string_any(),
+                            kind: ftd::p2::Kind::string().string_any(),
                         }),
                         conditions: vec![],
                     },
@@ -3587,27 +3587,27 @@ mod test {
         );
         bag.insert(
             s("foo/bar#h0"),
-            crate::p2::Thing::Component(crate::Component {
+            ftd::p2::Thing::Component(ftd::Component {
                 invocations: Default::default(),
                 full_name: "foo/bar#h0".to_string(),
                 root: s("ftd.column"),
                 arguments: std::array::IntoIter::new([
-                    (s("body"), crate::p2::Kind::body().into_optional()),
-                    (s("title"), crate::p2::Kind::caption()),
+                    (s("body"), ftd::p2::Kind::body().into_optional()),
+                    (s("title"), ftd::p2::Kind::caption()),
                 ])
                 .collect(),
                 instructions: vec![
-                    crate::Instruction::ChildComponent {
-                        child: crate::ChildComponent {
+                    ftd::Instruction::ChildComponent {
+                        child: ftd::ChildComponent {
                             events: vec![],
                             condition: None,
                             root: s("ftd#text"),
                             properties: std::array::IntoIter::new([(
                                 s("text"),
-                                crate::component::Property {
-                                    default: Some(crate::PropertyValue::Variable {
+                                ftd::component::Property {
+                                    default: Some(ftd::PropertyValue::Variable {
                                         name: s("title"),
-                                        kind: crate::p2::Kind::caption_or_body(),
+                                        kind: ftd::p2::Kind::caption_or_body(),
                                     }),
                                     conditions: vec![],
                                 },
@@ -3616,22 +3616,22 @@ mod test {
                             ..Default::default()
                         },
                     },
-                    crate::Instruction::ChildComponent {
-                        child: crate::ChildComponent {
+                    ftd::Instruction::ChildComponent {
+                        child: ftd::ChildComponent {
                             events: vec![],
                             condition: Some(ftd::p2::Boolean::IsNotNull {
-                                value: crate::PropertyValue::Variable {
+                                value: ftd::PropertyValue::Variable {
                                     name: s("body"),
-                                    kind: crate::p2::Kind::body().into_optional(),
+                                    kind: ftd::p2::Kind::body().into_optional(),
                                 },
                             }),
                             root: s("fifthtry/ft#markdown"),
                             properties: std::array::IntoIter::new([(
                                 s("body"),
-                                crate::component::Property {
-                                    default: Some(crate::PropertyValue::Variable {
+                                ftd::component::Property {
+                                    default: Some(ftd::PropertyValue::Variable {
                                         name: s("body"),
-                                        kind: crate::p2::Kind::body(),
+                                        kind: ftd::p2::Kind::body(),
                                     }),
                                     conditions: vec![],
                                 },
@@ -3742,37 +3742,37 @@ mod test {
 
         bag.insert(
             s("foo/bar#image"),
-            crate::p2::Thing::Component(crate::Component {
+            ftd::p2::Thing::Component(ftd::Component {
                 invocations: Default::default(),
                 full_name: "foo/bar#image".to_string(),
                 root: s("ftd.column"),
                 arguments: std::array::IntoIter::new([
-                    (s("width"), crate::p2::Kind::string().into_optional()),
-                    (s("src"), crate::p2::Kind::string()),
+                    (s("width"), ftd::p2::Kind::string().into_optional()),
+                    (s("src"), ftd::p2::Kind::string()),
                 ])
                 .collect(),
-                instructions: vec![crate::Instruction::ChildComponent {
-                    child: crate::ChildComponent {
+                instructions: vec![ftd::Instruction::ChildComponent {
+                    child: ftd::ChildComponent {
                         events: vec![],
                         condition: None,
                         root: s("ftd#image"),
                         properties: std::array::IntoIter::new([
                             (
                                 s("src"),
-                                crate::component::Property {
-                                    default: Some(crate::PropertyValue::Variable {
+                                ftd::component::Property {
+                                    default: Some(ftd::PropertyValue::Variable {
                                         name: s("src"),
-                                        kind: crate::p2::Kind::string(),
+                                        kind: ftd::p2::Kind::string(),
                                     }),
                                     conditions: vec![],
                                 },
                             ),
                             (
                                 s("width"),
-                                crate::component::Property {
-                                    default: Some(crate::PropertyValue::Variable {
+                                ftd::component::Property {
+                                    default: Some(ftd::PropertyValue::Variable {
                                         name: s("width"),
-                                        kind: crate::p2::Kind::string().into_optional(),
+                                        kind: ftd::p2::Kind::string().into_optional(),
                                     }),
                                     conditions: vec![],
                                 },
@@ -3860,32 +3860,32 @@ mod test {
 
         bag.insert(
             "foo/bar#foo".to_string(),
-            crate::p2::Thing::Component(crate::Component {
+            ftd::p2::Thing::Component(ftd::Component {
                 full_name: s("foo/bar#foo"),
                 root: "ftd.row".to_string(),
                 instructions: vec![
-                    crate::Instruction::ChildComponent {
-                        child: crate::ChildComponent {
+                    ftd::Instruction::ChildComponent {
+                        child: ftd::ChildComponent {
                             events: vec![],
                             condition: None,
                             root: s("ftd#decimal"),
                             properties: std::array::IntoIter::new([
                                 (
                                     s("value"),
-                                    crate::component::Property {
-                                        default: Some(crate::PropertyValue::Value {
-                                            value: crate::Value::Decimal { value: 0.06 },
+                                    ftd::component::Property {
+                                        default: Some(ftd::PropertyValue::Value {
+                                            value: ftd::Value::Decimal { value: 0.06 },
                                         }),
                                         conditions: vec![],
                                     },
                                 ),
                                 (
                                     s("format"),
-                                    crate::component::Property {
-                                        default: Some(crate::PropertyValue::Value {
-                                            value: crate::Value::String {
+                                    ftd::component::Property {
+                                        default: Some(ftd::PropertyValue::Value {
+                                            value: ftd::Value::String {
                                                 text: s(".1f"),
-                                                source: crate::TextSource::Header,
+                                                source: ftd::TextSource::Header,
                                             },
                                         }),
                                         conditions: vec![],
@@ -3896,16 +3896,16 @@ mod test {
                             ..Default::default()
                         },
                     },
-                    crate::Instruction::ChildComponent {
-                        child: crate::ChildComponent {
+                    ftd::Instruction::ChildComponent {
+                        child: ftd::ChildComponent {
                             events: vec![],
                             condition: None,
                             root: s("ftd#decimal"),
                             properties: std::array::IntoIter::new([(
                                 s("value"),
-                                crate::component::Property {
-                                    default: Some(crate::PropertyValue::Value {
-                                        value: crate::Value::Decimal { value: 0.01 },
+                                ftd::component::Property {
+                                    default: Some(ftd::PropertyValue::Value {
+                                        value: ftd::Value::Decimal { value: 0.01 },
                                     }),
                                     conditions: vec![],
                                 },
@@ -3915,7 +3915,7 @@ mod test {
                         },
                     },
                 ],
-                arguments: std::array::IntoIter::new([(s("x"), crate::p2::Kind::integer())])
+                arguments: std::array::IntoIter::new([(s("x"), ftd::p2::Kind::integer())])
                     .collect(),
                 ..Default::default()
             }),
@@ -3969,32 +3969,32 @@ mod test {
 
         bag.insert(
             "foo/bar#foo".to_string(),
-            crate::p2::Thing::Component(crate::Component {
+            ftd::p2::Thing::Component(ftd::Component {
                 full_name: s("foo/bar#foo"),
                 root: "ftd.row".to_string(),
                 instructions: vec![
-                    crate::Instruction::ChildComponent {
-                        child: crate::ChildComponent {
+                    ftd::Instruction::ChildComponent {
+                        child: ftd::ChildComponent {
                             events: vec![],
                             condition: None,
                             root: s("ftd#integer"),
                             properties: std::array::IntoIter::new([
                                 (
                                     s("value"),
-                                    crate::component::Property {
-                                        default: Some(crate::PropertyValue::Value {
-                                            value: crate::Value::Integer { value: 3 },
+                                    ftd::component::Property {
+                                        default: Some(ftd::PropertyValue::Value {
+                                            value: ftd::Value::Integer { value: 3 },
                                         }),
                                         conditions: vec![],
                                     },
                                 ),
                                 (
                                     s("format"),
-                                    crate::component::Property {
-                                        default: Some(crate::PropertyValue::Value {
-                                            value: crate::Value::String {
+                                    ftd::component::Property {
+                                        default: Some(ftd::PropertyValue::Value {
+                                            value: ftd::Value::String {
                                                 text: s("b"),
-                                                source: crate::TextSource::Header,
+                                                source: ftd::TextSource::Header,
                                             },
                                         }),
                                         conditions: vec![],
@@ -4005,16 +4005,16 @@ mod test {
                             ..Default::default()
                         },
                     },
-                    crate::Instruction::ChildComponent {
-                        child: crate::ChildComponent {
+                    ftd::Instruction::ChildComponent {
+                        child: ftd::ChildComponent {
                             events: vec![],
                             condition: None,
                             root: s("ftd#integer"),
                             properties: std::array::IntoIter::new([(
                                 s("value"),
-                                crate::component::Property {
-                                    default: Some(crate::PropertyValue::Value {
-                                        value: crate::Value::Integer { value: 14 },
+                                ftd::component::Property {
+                                    default: Some(ftd::PropertyValue::Value {
+                                        value: ftd::Value::Integer { value: 14 },
                                     }),
                                     conditions: vec![],
                                 },
@@ -4024,7 +4024,7 @@ mod test {
                         },
                     },
                 ],
-                arguments: std::array::IntoIter::new([(s("x"), crate::p2::Kind::integer())])
+                arguments: std::array::IntoIter::new([(s("x"), ftd::p2::Kind::integer())])
                     .collect(),
                 ..Default::default()
             }),
@@ -4080,32 +4080,32 @@ mod test {
 
         bag.insert(
             "foo/bar#foo".to_string(),
-            crate::p2::Thing::Component(crate::Component {
+            ftd::p2::Thing::Component(ftd::Component {
                 full_name: s("foo/bar#foo"),
                 root: "ftd.row".to_string(),
                 instructions: vec![
-                    crate::Instruction::ChildComponent {
-                        child: crate::ChildComponent {
+                    ftd::Instruction::ChildComponent {
+                        child: ftd::ChildComponent {
                             events: vec![],
                             condition: None,
                             root: s("ftd#boolean"),
                             properties: std::array::IntoIter::new([
                                 (
                                     s("value"),
-                                    crate::component::Property {
-                                        default: Some(crate::PropertyValue::Value {
-                                            value: crate::Value::Boolean { value: true },
+                                    ftd::component::Property {
+                                        default: Some(ftd::PropertyValue::Value {
+                                            value: ftd::Value::Boolean { value: true },
                                         }),
                                         conditions: vec![],
                                     },
                                 ),
                                 (
                                     s("true"),
-                                    crate::component::Property {
-                                        default: Some(crate::PropertyValue::Value {
-                                            value: crate::Value::String {
+                                    ftd::component::Property {
+                                        default: Some(ftd::PropertyValue::Value {
+                                            value: ftd::Value::String {
                                                 text: s("show this when value is true"),
-                                                source: crate::TextSource::Header,
+                                                source: ftd::TextSource::Header,
                                             },
                                         }),
                                         conditions: vec![],
@@ -4113,11 +4113,11 @@ mod test {
                                 ),
                                 (
                                     s("false"),
-                                    crate::component::Property {
-                                        default: Some(crate::PropertyValue::Value {
-                                            value: crate::Value::String {
+                                    ftd::component::Property {
+                                        default: Some(ftd::PropertyValue::Value {
+                                            value: ftd::Value::String {
                                                 text: s("show this when value is false"),
-                                                source: crate::TextSource::Header,
+                                                source: ftd::TextSource::Header,
                                             },
                                         }),
                                         conditions: vec![],
@@ -4128,28 +4128,28 @@ mod test {
                             ..Default::default()
                         },
                     },
-                    crate::Instruction::ChildComponent {
-                        child: crate::ChildComponent {
+                    ftd::Instruction::ChildComponent {
+                        child: ftd::ChildComponent {
                             events: vec![],
                             condition: None,
                             root: s("ftd#boolean"),
                             properties: std::array::IntoIter::new([
                                 (
                                     s("value"),
-                                    crate::component::Property {
-                                        default: Some(crate::PropertyValue::Value {
-                                            value: crate::Value::Boolean { value: false },
+                                    ftd::component::Property {
+                                        default: Some(ftd::PropertyValue::Value {
+                                            value: ftd::Value::Boolean { value: false },
                                         }),
                                         conditions: vec![],
                                     },
                                 ),
                                 (
                                     s("true"),
-                                    crate::component::Property {
-                                        default: Some(crate::PropertyValue::Value {
-                                            value: crate::Value::String {
+                                    ftd::component::Property {
+                                        default: Some(ftd::PropertyValue::Value {
+                                            value: ftd::Value::String {
                                                 text: s("show this when value is true"),
-                                                source: crate::TextSource::Header,
+                                                source: ftd::TextSource::Header,
                                             },
                                         }),
                                         conditions: vec![],
@@ -4157,11 +4157,11 @@ mod test {
                                 ),
                                 (
                                     s("false"),
-                                    crate::component::Property {
-                                        default: Some(crate::PropertyValue::Value {
-                                            value: crate::Value::String {
+                                    ftd::component::Property {
+                                        default: Some(ftd::PropertyValue::Value {
+                                            value: ftd::Value::String {
                                                 text: s("show this when value is false"),
-                                                source: crate::TextSource::Header,
+                                                source: ftd::TextSource::Header,
                                             },
                                         }),
                                         conditions: vec![],
@@ -4173,7 +4173,7 @@ mod test {
                         },
                     },
                 ],
-                arguments: std::array::IntoIter::new([(s("x"), crate::p2::Kind::integer())])
+                arguments: std::array::IntoIter::new([(s("x"), ftd::p2::Kind::integer())])
                     .collect(),
                 ..Default::default()
             }),
@@ -4512,23 +4512,23 @@ mod test {
 
         bag.insert(
             "foo/bar#foo".to_string(),
-            crate::p2::Thing::Component(crate::Component {
+            ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd.column".to_string(),
                 full_name: "foo/bar#foo".to_string(),
                 instructions: vec![
-                    crate::component::Instruction::ChildComponent {
-                        child: crate::component::ChildComponent {
+                    ftd::component::Instruction::ChildComponent {
+                        child: ftd::component::ChildComponent {
                             is_recursive: false,
                             events: vec![],
                             root: "ftd#row".to_string(),
                             condition: None,
                             properties: std::array::IntoIter::new([(
                                 s("id"),
-                                crate::component::Property {
-                                    default: Some(crate::PropertyValue::Value {
-                                        value: crate::variable::Value::String {
+                                ftd::component::Property {
+                                    default: Some(ftd::PropertyValue::Value {
+                                        value: ftd::variable::Value::String {
                                             text: "r1".to_string(),
-                                            source: crate::TextSource::Header,
+                                            source: ftd::TextSource::Header,
                                         },
                                     }),
                                     conditions: vec![],
@@ -4538,19 +4538,19 @@ mod test {
                             ..Default::default()
                         },
                     },
-                    crate::component::Instruction::ChildComponent {
-                        child: crate::component::ChildComponent {
+                    ftd::component::Instruction::ChildComponent {
+                        child: ftd::component::ChildComponent {
                             is_recursive: false,
                             events: vec![],
                             root: "ftd#row".to_string(),
                             condition: None,
                             properties: std::array::IntoIter::new([(
                                 s("id"),
-                                crate::component::Property {
-                                    default: Some(crate::PropertyValue::Value {
-                                        value: crate::variable::Value::String {
+                                ftd::component::Property {
+                                    default: Some(ftd::PropertyValue::Value {
+                                        value: ftd::variable::Value::String {
                                             text: "r2".to_string(),
-                                            source: crate::TextSource::Header,
+                                            source: ftd::TextSource::Header,
                                         },
                                     }),
                                     conditions: vec![],
@@ -4665,23 +4665,23 @@ mod test {
 
         bag.insert(
             "inner_container#foo".to_string(),
-            crate::p2::Thing::Component(crate::Component {
+            ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd.column".to_string(),
                 full_name: "inner_container#foo".to_string(),
                 instructions: vec![
-                    crate::component::Instruction::ChildComponent {
-                        child: crate::component::ChildComponent {
+                    ftd::component::Instruction::ChildComponent {
+                        child: ftd::component::ChildComponent {
                             is_recursive: false,
                             events: vec![],
                             root: "ftd#row".to_string(),
                             condition: None,
                             properties: std::array::IntoIter::new([(
                                 s("id"),
-                                crate::component::Property {
-                                    default: Some(crate::PropertyValue::Value {
-                                        value: crate::variable::Value::String {
+                                ftd::component::Property {
+                                    default: Some(ftd::PropertyValue::Value {
+                                        value: ftd::variable::Value::String {
                                             text: "r1".to_string(),
-                                            source: crate::TextSource::Header,
+                                            source: ftd::TextSource::Header,
                                         },
                                     }),
                                     conditions: vec![],
@@ -4691,19 +4691,19 @@ mod test {
                             ..Default::default()
                         },
                     },
-                    crate::component::Instruction::ChildComponent {
-                        child: crate::component::ChildComponent {
+                    ftd::component::Instruction::ChildComponent {
+                        child: ftd::component::ChildComponent {
                             is_recursive: false,
                             events: vec![],
                             root: "ftd#row".to_string(),
                             condition: None,
                             properties: std::array::IntoIter::new([(
                                 s("id"),
-                                crate::component::Property {
-                                    default: Some(crate::PropertyValue::Value {
-                                        value: crate::variable::Value::String {
+                                ftd::component::Property {
+                                    default: Some(ftd::PropertyValue::Value {
+                                        value: ftd::variable::Value::String {
                                             text: "r2".to_string(),
-                                            source: crate::TextSource::Header,
+                                            source: ftd::TextSource::Header,
                                         },
                                     }),
                                     conditions: vec![],
@@ -4847,16 +4847,16 @@ mod test {
 
         bag.insert(
             "foo/bar#foo".to_string(),
-            crate::p2::Thing::Component(crate::Component {
+            ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd.column".to_string(),
                 full_name: s("foo/bar#foo"),
                 properties: std::array::IntoIter::new([(
                     s("open"),
-                    crate::component::Property {
-                        default: Some(crate::PropertyValue::Value {
-                            value: crate::Value::String {
+                    ftd::component::Property {
+                        default: Some(ftd::PropertyValue::Value {
+                            value: ftd::Value::String {
                                 text: s("some-child"),
-                                source: crate::TextSource::Header,
+                                source: ftd::TextSource::Header,
                             },
                         }),
                         conditions: vec![],
@@ -4864,27 +4864,27 @@ mod test {
                 )])
                 .collect(),
                 instructions: vec![
-                    crate::component::Instruction::ChildComponent {
-                        child: crate::component::ChildComponent {
+                    ftd::component::Instruction::ChildComponent {
+                        child: ftd::component::ChildComponent {
                             events: vec![],
                             root: "ftd#row".to_string(),
                             condition: None,
                             ..Default::default()
                         },
                     },
-                    crate::component::Instruction::ChildComponent {
-                        child: crate::component::ChildComponent {
+                    ftd::component::Instruction::ChildComponent {
+                        child: ftd::component::ChildComponent {
                             is_recursive: false,
                             events: vec![],
                             root: "ftd#row".to_string(),
                             condition: None,
                             properties: std::array::IntoIter::new([(
                                 s("id"),
-                                crate::component::Property {
-                                    default: Some(crate::PropertyValue::Value {
-                                        value: crate::variable::Value::String {
+                                ftd::component::Property {
+                                    default: Some(ftd::PropertyValue::Value {
+                                        value: ftd::variable::Value::String {
                                             text: "some-child".to_string(),
-                                            source: crate::TextSource::Header,
+                                            source: ftd::TextSource::Header,
                                         },
                                     }),
                                     conditions: vec![],
@@ -5046,38 +5046,38 @@ mod test {
         let mut bag = super::default_bag();
         bag.insert(
             s("foo/bar#desktop-display"),
-            crate::p2::Thing::Component(crate::Component {
+            ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd.column".to_string(),
                 full_name: s("foo/bar#desktop-display"),
                 arguments: std::array::IntoIter::new([(
                     s("id"),
-                    crate::p2::Kind::optional(ftd::p2::Kind::string()),
+                    ftd::p2::Kind::optional(ftd::p2::Kind::string()),
                 )])
                 .collect(),
                 properties: std::array::IntoIter::new([(
                     s("id"),
                     ftd::component::Property {
-                        default: Some(crate::PropertyValue::Variable {
+                        default: Some(ftd::PropertyValue::Variable {
                             name: "id".to_string(),
-                            kind: crate::p2::Kind::Optional {
-                                kind: Box::new(crate::p2::Kind::string()),
+                            kind: ftd::p2::Kind::Optional {
+                                kind: Box::new(ftd::p2::Kind::string()),
                             },
                         }),
                         conditions: vec![],
                     },
                 )])
                 .collect(),
-                instructions: vec![crate::component::Instruction::ChildComponent {
-                    child: crate::component::ChildComponent {
+                instructions: vec![ftd::component::Instruction::ChildComponent {
+                    child: ftd::component::ChildComponent {
                         is_recursive: false,
                         events: vec![],
                         root: "ftd#text".to_string(),
                         condition: None,
                         properties: std::array::IntoIter::new([(
                             s("text"),
-                            crate::component::Property {
-                                default: Some(crate::PropertyValue::Value {
-                                    value: crate::variable::Value::String {
+                            ftd::component::Property {
+                                default: Some(ftd::PropertyValue::Value {
+                                    value: ftd::variable::Value::String {
                                         text: s("Desktop Display"),
                                         source: ftd::TextSource::Caption,
                                     },
@@ -5095,14 +5095,14 @@ mod test {
 
         bag.insert(
             s("foo/bar#foo"),
-            crate::p2::Thing::Component(crate::Component {
+            ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd.column".to_string(),
                 full_name: s("foo/bar#foo"),
                 properties: std::array::IntoIter::new([(
                     s("open"),
                     ftd::component::Property {
-                        default: Some(crate::PropertyValue::Value {
-                            value: crate::variable::Value::String {
+                        default: Some(ftd::PropertyValue::Value {
+                            value: ftd::variable::Value::String {
                                 text: s("some-child"),
                                 source: ftd::TextSource::Header,
                             },
@@ -5112,8 +5112,8 @@ mod test {
                 )])
                 .collect(),
                 instructions: vec![
-                    crate::component::Instruction::ChildComponent {
-                        child: crate::component::ChildComponent {
+                    ftd::component::Instruction::ChildComponent {
+                        child: ftd::component::ChildComponent {
                             is_recursive: false,
                             events: vec![],
                             root: "foo/bar#mobile-display".to_string(),
@@ -5128,9 +5128,9 @@ mod test {
                             }),
                             properties: std::array::IntoIter::new([(
                                 s("id"),
-                                crate::component::Property {
-                                    default: Some(crate::PropertyValue::Value {
-                                        value: crate::variable::Value::String {
+                                ftd::component::Property {
+                                    default: Some(ftd::PropertyValue::Value {
+                                        value: ftd::variable::Value::String {
                                             text: s("some-child"),
                                             source: ftd::TextSource::Header,
                                         },
@@ -5142,8 +5142,8 @@ mod test {
                             ..Default::default()
                         },
                     },
-                    crate::component::Instruction::ChildComponent {
-                        child: crate::component::ChildComponent {
+                    ftd::component::Instruction::ChildComponent {
+                        child: ftd::component::ChildComponent {
                             is_recursive: false,
                             events: vec![],
                             root: "foo/bar#desktop-display".to_string(),
@@ -5158,9 +5158,9 @@ mod test {
                             }),
                             properties: std::array::IntoIter::new([(
                                 s("id"),
-                                crate::component::Property {
-                                    default: Some(crate::PropertyValue::Value {
-                                        value: crate::variable::Value::String {
+                                ftd::component::Property {
+                                    default: Some(ftd::PropertyValue::Value {
+                                        value: ftd::variable::Value::String {
                                             text: s("some-child"),
                                             source: ftd::TextSource::Header,
                                         },
@@ -5179,7 +5179,7 @@ mod test {
 
         bag.insert(
             s("foo/bar#mobile"),
-            crate::p2::Thing::Variable(ftd::Variable {
+            ftd::p2::Thing::Variable(ftd::Variable {
                 name: s("mobile"),
                 value: ftd::variable::Value::Boolean { value: true },
                 conditions: vec![],
@@ -5188,29 +5188,29 @@ mod test {
 
         bag.insert(
             s("foo/bar#mobile-display"),
-            crate::p2::Thing::Component(crate::Component {
+            ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd.column".to_string(),
                 full_name: s("foo/bar#mobile-display"),
                 arguments: std::array::IntoIter::new([(
                     s("id"),
-                    crate::p2::Kind::optional(ftd::p2::Kind::string()),
+                    ftd::p2::Kind::optional(ftd::p2::Kind::string()),
                 )])
                 .collect(),
                 properties: std::array::IntoIter::new([(
                     s("id"),
                     ftd::component::Property {
-                        default: Some(crate::PropertyValue::Variable {
+                        default: Some(ftd::PropertyValue::Variable {
                             name: "id".to_string(),
-                            kind: crate::p2::Kind::Optional {
-                                kind: Box::new(crate::p2::Kind::string()),
+                            kind: ftd::p2::Kind::Optional {
+                                kind: Box::new(ftd::p2::Kind::string()),
                             },
                         }),
                         conditions: vec![],
                     },
                 )])
                 .collect(),
-                instructions: vec![crate::component::Instruction::ChildComponent {
-                    child: crate::component::ChildComponent {
+                instructions: vec![ftd::component::Instruction::ChildComponent {
+                    child: ftd::component::ChildComponent {
                         is_recursive: false,
                         events: vec![],
                         root: "ftd#text".to_string(),
@@ -5218,9 +5218,9 @@ mod test {
                         properties: std::array::IntoIter::new([
                             (
                                 s("id"),
-                                crate::component::Property {
-                                    default: Some(crate::PropertyValue::Value {
-                                        value: crate::variable::Value::String {
+                                ftd::component::Property {
+                                    default: Some(ftd::PropertyValue::Value {
+                                        value: ftd::variable::Value::String {
                                             text: s("mobile-display"),
                                             source: ftd::TextSource::Header,
                                         },
@@ -5230,9 +5230,9 @@ mod test {
                             ),
                             (
                                 s("text"),
-                                crate::component::Property {
-                                    default: Some(crate::PropertyValue::Value {
-                                        value: crate::variable::Value::String {
+                                ftd::component::Property {
+                                    default: Some(ftd::PropertyValue::Value {
+                                        value: ftd::variable::Value::String {
                                             text: s("Mobile Display"),
                                             source: ftd::TextSource::Caption,
                                         },
@@ -5398,7 +5398,7 @@ mod test {
                 ..Default::default()
             }));
 
-        let (_g_bag, g_col) = crate::p2::interpreter::interpret(
+        let (_g_bag, g_col) = ftd::p2::interpreter::interpret(
             "foo/bar",
             indoc::indoc!(
                 "
@@ -5535,7 +5535,7 @@ mod test {
                 ..Default::default()
             }));
 
-        let (_g_bag, g_col) = crate::p2::interpreter::interpret(
+        let (_g_bag, g_col) = ftd::p2::interpreter::interpret(
             "foo/bar",
             indoc::indoc!(
                 "
@@ -5741,7 +5741,7 @@ mod test {
                 ..Default::default()
             }));
 
-        let (_g_bag, g_col) = crate::p2::interpreter::interpret(
+        let (_g_bag, g_col) = ftd::p2::interpreter::interpret(
             "foo/bar",
             indoc::indoc!(
                 "
@@ -5904,7 +5904,7 @@ mod test {
                 ..Default::default()
             }));
 
-        let (_g_bag, g_col) = crate::p2::interpreter::interpret(
+        let (_g_bag, g_col) = ftd::p2::interpreter::interpret(
             "foo/bar",
             indoc::indoc!(
                 "
@@ -5999,7 +5999,7 @@ mod test {
                 ..Default::default()
             },
         }));
-        let (g_bag, g_col) = crate::p2::interpreter::interpret(
+        let (g_bag, g_col) = ftd::p2::interpreter::interpret(
             "foo/bar",
             indoc::indoc!(
                 "
@@ -6039,7 +6039,7 @@ mod test {
             ..Default::default()
         }));
 
-        let (g_bag, g_col) = crate::p2::interpreter::interpret(
+        let (g_bag, g_col) = ftd::p2::interpreter::interpret(
             "foo/bar",
             indoc::indoc!(
                 "
@@ -6161,27 +6161,27 @@ mod test {
 
         bag.insert(
             "foo/bar#foo".to_string(),
-            crate::p2::Thing::Component(crate::Component {
+            ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd.row".to_string(),
                 full_name: s("foo/bar#foo"),
                 arguments: std::array::IntoIter::new([
-                    (s("body"), crate::p2::Kind::string()),
-                    (s("name"), crate::p2::Kind::caption()),
+                    (s("body"), ftd::p2::Kind::string()),
+                    (s("name"), ftd::p2::Kind::caption()),
                 ])
                 .collect(),
                 instructions: vec![
-                    crate::component::Instruction::ChildComponent {
-                        child: crate::component::ChildComponent {
+                    ftd::component::Instruction::ChildComponent {
+                        child: ftd::component::ChildComponent {
                             is_recursive: false,
                             events: vec![],
                             root: "ftd#text".to_string(),
                             condition: None,
                             properties: std::array::IntoIter::new([(
                                 s("text"),
-                                crate::component::Property {
-                                    default: Some(crate::PropertyValue::Variable {
+                                ftd::component::Property {
+                                    default: Some(ftd::PropertyValue::Variable {
                                         name: "name".to_string(),
-                                        kind: crate::p2::Kind::caption_or_body(),
+                                        kind: ftd::p2::Kind::caption_or_body(),
                                     }),
                                     conditions: vec![],
                                 },
@@ -6190,18 +6190,18 @@ mod test {
                             ..Default::default()
                         },
                     },
-                    crate::component::Instruction::ChildComponent {
-                        child: crate::component::ChildComponent {
+                    ftd::component::Instruction::ChildComponent {
+                        child: ftd::component::ChildComponent {
                             is_recursive: false,
                             events: vec![],
                             root: "ftd#text".to_string(),
                             condition: None,
                             properties: std::array::IntoIter::new([(
                                 s("text"),
-                                crate::component::Property {
-                                    default: Some(crate::PropertyValue::Variable {
+                                ftd::component::Property {
+                                    default: Some(ftd::PropertyValue::Variable {
                                         name: "body".to_string(),
-                                        kind: crate::p2::Kind::caption_or_body(),
+                                        kind: ftd::p2::Kind::caption_or_body(),
                                     }),
                                     conditions: vec![],
                                 },
@@ -6217,11 +6217,11 @@ mod test {
 
         bag.insert(
             "foo/bar#get".to_string(),
-            crate::p2::Thing::Variable(crate::Variable {
+            ftd::p2::Thing::Variable(ftd::Variable {
                 name: "get".to_string(),
-                value: crate::Value::String {
+                value: ftd::Value::String {
                     text: "world".to_string(),
-                    source: crate::TextSource::Caption,
+                    source: ftd::TextSource::Caption,
                 },
                 conditions: vec![],
             }),
@@ -6229,11 +6229,11 @@ mod test {
 
         bag.insert(
             "foo/bar#name".to_string(),
-            crate::p2::Thing::Variable(crate::Variable {
+            ftd::p2::Thing::Variable(ftd::Variable {
                 name: "name".to_string(),
-                value: crate::Value::String {
+                value: ftd::Value::String {
                     text: "Arpita Jaiswal".to_string(),
-                    source: crate::TextSource::Caption,
+                    source: ftd::TextSource::Caption,
                 },
                 conditions: vec![],
             }),
@@ -6241,50 +6241,50 @@ mod test {
 
         bag.insert(
             "foo/bar#people".to_string(),
-            crate::p2::Thing::Variable(crate::Variable {
+            ftd::p2::Thing::Variable(ftd::Variable {
                 name: "foo/bar#people".to_string(),
-                value: crate::Value::List {
+                value: ftd::Value::List {
                     data: vec![
-                        crate::Value::Record {
+                        ftd::Value::Record {
                             name: "foo/bar#person".to_string(),
                             fields: std::array::IntoIter::new([
                                 (
                                     s("bio"),
-                                    crate::PropertyValue::Value {
-                                        value: crate::Value::String {
+                                    ftd::PropertyValue::Value {
+                                        value: ftd::Value::String {
                                             text: "Arpita is developer at Fifthtry".to_string(),
-                                            source: crate::TextSource::Body,
+                                            source: ftd::TextSource::Body,
                                         },
                                     },
                                 ),
                                 (
                                     s("name"),
-                                    crate::PropertyValue::Reference {
+                                    ftd::PropertyValue::Reference {
                                         name: "foo/bar#name".to_string(),
-                                        kind: crate::p2::Kind::caption(),
+                                        kind: ftd::p2::Kind::caption(),
                                     },
                                 ),
                             ])
                             .collect(),
                         },
-                        crate::Value::Record {
+                        ftd::Value::Record {
                             name: "foo/bar#person".to_string(),
                             fields: std::array::IntoIter::new([
                                 (
                                     s("bio"),
-                                    crate::PropertyValue::Value {
-                                        value: crate::Value::String {
+                                    ftd::PropertyValue::Value {
+                                        value: ftd::Value::String {
                                             text: "Amit is CEO of FifthTry.".to_string(),
-                                            source: crate::TextSource::Body,
+                                            source: ftd::TextSource::Body,
                                         },
                                     },
                                 ),
                                 (
                                     s("name"),
-                                    crate::PropertyValue::Value {
-                                        value: crate::Value::String {
+                                    ftd::PropertyValue::Value {
+                                        value: ftd::Value::String {
                                             text: "Amit Upadhyay".to_string(),
-                                            source: crate::TextSource::Caption,
+                                            source: ftd::TextSource::Caption,
                                         },
                                     },
                                 ),
@@ -6292,7 +6292,7 @@ mod test {
                             .collect(),
                         },
                     ],
-                    kind: crate::p2::Kind::Record {
+                    kind: ftd::p2::Kind::Record {
                         name: "foo/bar#person".to_string(),
                     },
                 },
@@ -6302,11 +6302,11 @@ mod test {
 
         bag.insert(
             "foo/bar#person".to_string(),
-            crate::p2::Thing::Record(crate::p2::Record {
+            ftd::p2::Thing::Record(ftd::p2::Record {
                 name: "foo/bar#person".to_string(),
                 fields: std::array::IntoIter::new([
-                    (s("bio"), crate::p2::Kind::body()),
-                    (s("name"), crate::p2::Kind::caption()),
+                    (s("bio"), ftd::p2::Kind::body()),
+                    (s("name"), ftd::p2::Kind::caption()),
                 ])
                 .collect(),
                 instances: Default::default(),
@@ -6396,27 +6396,27 @@ mod test {
 
         bag.insert(
             "foo/bar#foo".to_string(),
-            crate::p2::Thing::Component(crate::Component {
+            ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd.row".to_string(),
                 full_name: s("foo/bar#foo"),
                 arguments: std::array::IntoIter::new([
-                    (s("body"), crate::p2::Kind::string()),
-                    (s("name"), crate::p2::Kind::caption()),
+                    (s("body"), ftd::p2::Kind::string()),
+                    (s("name"), ftd::p2::Kind::caption()),
                 ])
                 .collect(),
                 instructions: vec![
-                    crate::component::Instruction::ChildComponent {
-                        child: crate::component::ChildComponent {
+                    ftd::component::Instruction::ChildComponent {
+                        child: ftd::component::ChildComponent {
                             is_recursive: false,
                             events: vec![],
                             root: "ftd#text".to_string(),
                             condition: None,
                             properties: std::array::IntoIter::new([(
                                 s("text"),
-                                crate::component::Property {
-                                    default: Some(crate::PropertyValue::Variable {
+                                ftd::component::Property {
+                                    default: Some(ftd::PropertyValue::Variable {
                                         name: "name".to_string(),
-                                        kind: crate::p2::Kind::caption_or_body(),
+                                        kind: ftd::p2::Kind::caption_or_body(),
                                     }),
                                     conditions: vec![],
                                 },
@@ -6425,18 +6425,18 @@ mod test {
                             ..Default::default()
                         },
                     },
-                    crate::component::Instruction::ChildComponent {
-                        child: crate::component::ChildComponent {
+                    ftd::component::Instruction::ChildComponent {
+                        child: ftd::component::ChildComponent {
                             is_recursive: false,
                             events: vec![],
                             root: "ftd#text".to_string(),
                             condition: None,
                             properties: std::array::IntoIter::new([(
                                 s("text"),
-                                crate::component::Property {
-                                    default: Some(crate::PropertyValue::Variable {
+                                ftd::component::Property {
+                                    default: Some(ftd::PropertyValue::Variable {
                                         name: "body".to_string(),
-                                        kind: crate::p2::Kind::caption_or_body(),
+                                        kind: ftd::p2::Kind::caption_or_body(),
                                     }),
                                     conditions: vec![],
                                 },
@@ -6452,64 +6452,64 @@ mod test {
 
         bag.insert(
             "foo/bar#people".to_string(),
-            crate::p2::Thing::Variable(crate::Variable {
+            ftd::p2::Thing::Variable(ftd::Variable {
                 name: "foo/bar#people".to_string(),
-                value: crate::Value::List {
+                value: ftd::Value::List {
                     data: vec![
-                        crate::Value::Record {
+                        ftd::Value::Record {
                             name: "foo/bar#person".to_string(),
                             fields: std::array::IntoIter::new([
                                 (
                                     s("bio"),
-                                    crate::PropertyValue::Value {
-                                        value: crate::Value::String {
+                                    ftd::PropertyValue::Value {
+                                        value: ftd::Value::String {
                                             text: "Arpita is developer at Fifthtry".to_string(),
-                                            source: crate::TextSource::Body,
+                                            source: ftd::TextSource::Body,
                                         },
                                     },
                                 ),
                                 (
                                     s("ceo"),
-                                    crate::PropertyValue::Value {
-                                        value: crate::Value::Boolean { value: false },
+                                    ftd::PropertyValue::Value {
+                                        value: ftd::Value::Boolean { value: false },
                                     },
                                 ),
                                 (
                                     s("name"),
-                                    crate::PropertyValue::Value {
-                                        value: crate::Value::String {
+                                    ftd::PropertyValue::Value {
+                                        value: ftd::Value::String {
                                             text: "Arpita Jaiswal".to_string(),
-                                            source: crate::TextSource::Caption,
+                                            source: ftd::TextSource::Caption,
                                         },
                                     },
                                 ),
                             ])
                             .collect(),
                         },
-                        crate::Value::Record {
+                        ftd::Value::Record {
                             name: "foo/bar#person".to_string(),
                             fields: std::array::IntoIter::new([
                                 (
                                     s("bio"),
-                                    crate::PropertyValue::Value {
-                                        value: crate::Value::String {
+                                    ftd::PropertyValue::Value {
+                                        value: ftd::Value::String {
                                             text: "Amit is CEO of FifthTry.".to_string(),
-                                            source: crate::TextSource::Body,
+                                            source: ftd::TextSource::Body,
                                         },
                                     },
                                 ),
                                 (
                                     s("ceo"),
-                                    crate::PropertyValue::Value {
-                                        value: crate::Value::Boolean { value: true },
+                                    ftd::PropertyValue::Value {
+                                        value: ftd::Value::Boolean { value: true },
                                     },
                                 ),
                                 (
                                     s("name"),
-                                    crate::PropertyValue::Value {
-                                        value: crate::Value::String {
+                                    ftd::PropertyValue::Value {
+                                        value: ftd::Value::String {
                                             text: "Amit Upadhyay".to_string(),
-                                            source: crate::TextSource::Caption,
+                                            source: ftd::TextSource::Caption,
                                         },
                                     },
                                 ),
@@ -6517,7 +6517,7 @@ mod test {
                             .collect(),
                         },
                     ],
-                    kind: crate::p2::Kind::Record {
+                    kind: ftd::p2::Kind::Record {
                         name: "foo/bar#person".to_string(),
                     },
                 },
@@ -6527,12 +6527,12 @@ mod test {
 
         bag.insert(
             "foo/bar#person".to_string(),
-            crate::p2::Thing::Record(crate::p2::Record {
+            ftd::p2::Thing::Record(ftd::p2::Record {
                 name: "foo/bar#person".to_string(),
                 fields: std::array::IntoIter::new([
-                    (s("bio"), crate::p2::Kind::body()),
-                    (s("name"), crate::p2::Kind::caption()),
-                    (s("ceo"), crate::p2::Kind::boolean()),
+                    (s("bio"), ftd::p2::Kind::body()),
+                    (s("name"), ftd::p2::Kind::caption()),
+                    (s("ceo"), ftd::p2::Kind::boolean()),
                 ])
                 .collect(),
                 instances: Default::default(),
@@ -6601,29 +6601,29 @@ mod test {
 
         bag.insert(
             "foo/bar#people".to_string(),
-            crate::p2::Thing::Variable(crate::Variable {
+            ftd::p2::Thing::Variable(ftd::Variable {
                 name: "foo/bar#people".to_string(),
-                value: crate::Value::List {
+                value: ftd::Value::List {
                     data: vec![
-                        crate::Value::String {
+                        ftd::Value::String {
                             text: "Arpita".to_string(),
-                            source: crate::TextSource::Caption,
+                            source: ftd::TextSource::Caption,
                         },
-                        crate::Value::String {
+                        ftd::Value::String {
                             text: "Asit".to_string(),
-                            source: crate::TextSource::Caption,
+                            source: ftd::TextSource::Caption,
                         },
-                        crate::Value::String {
+                        ftd::Value::String {
                             text: "Sourabh".to_string(),
-                            source: crate::TextSource::Caption,
+                            source: ftd::TextSource::Caption,
                         },
                     ],
-                    kind: crate::p2::Kind::string(),
+                    kind: ftd::p2::Kind::string(),
                 },
                 conditions: vec![],
             }),
         );
-        let (g_bag, g_col) = crate::p2::interpreter::interpret(
+        let (g_bag, g_col) = ftd::p2::interpreter::interpret(
             "foo/bar",
             indoc::indoc!(
                 "
@@ -6725,27 +6725,27 @@ mod test {
 
         bag.insert(
             "foo/bar#foo".to_string(),
-            crate::p2::Thing::Component(crate::Component {
+            ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd.row".to_string(),
                 full_name: s("foo/bar#foo"),
                 arguments: std::array::IntoIter::new([
-                    (s("body"), crate::p2::Kind::string()),
-                    (s("name"), crate::p2::Kind::caption()),
+                    (s("body"), ftd::p2::Kind::string()),
+                    (s("name"), ftd::p2::Kind::caption()),
                 ])
                 .collect(),
                 instructions: vec![
-                    crate::component::Instruction::ChildComponent {
-                        child: crate::component::ChildComponent {
+                    ftd::component::Instruction::ChildComponent {
+                        child: ftd::component::ChildComponent {
                             is_recursive: false,
                             events: vec![],
                             root: "ftd#text".to_string(),
                             condition: None,
                             properties: std::array::IntoIter::new([(
                                 s("text"),
-                                crate::component::Property {
-                                    default: Some(crate::PropertyValue::Variable {
+                                ftd::component::Property {
+                                    default: Some(ftd::PropertyValue::Variable {
                                         name: "name".to_string(),
-                                        kind: crate::p2::Kind::caption_or_body(),
+                                        kind: ftd::p2::Kind::caption_or_body(),
                                     }),
                                     conditions: vec![],
                                 },
@@ -6754,18 +6754,18 @@ mod test {
                             ..Default::default()
                         },
                     },
-                    crate::component::Instruction::ChildComponent {
-                        child: crate::component::ChildComponent {
+                    ftd::component::Instruction::ChildComponent {
+                        child: ftd::component::ChildComponent {
                             is_recursive: false,
                             events: vec![],
                             root: "ftd#text".to_string(),
                             condition: None,
                             properties: std::array::IntoIter::new([(
                                 s("text"),
-                                crate::component::Property {
-                                    default: Some(crate::PropertyValue::Variable {
+                                ftd::component::Property {
+                                    default: Some(ftd::PropertyValue::Variable {
                                         name: "body".to_string(),
-                                        kind: crate::p2::Kind::caption_or_body(),
+                                        kind: ftd::p2::Kind::caption_or_body(),
                                     }),
                                     conditions: vec![],
                                 },
@@ -6779,16 +6779,16 @@ mod test {
                     std::array::IntoIter::new([
                         (
                             s("body"),
-                            crate::Value::String {
+                            ftd::Value::String {
                                 text: s("Arpita is developer at Fifthtry"),
-                                source: crate::TextSource::Body,
+                                source: ftd::TextSource::Body,
                             },
                         ),
                         (
                             s("name"),
-                            crate::Value::String {
+                            ftd::Value::String {
                                 text: s("Arpita Jaiswal"),
-                                source: crate::TextSource::Caption,
+                                source: ftd::TextSource::Caption,
                             },
                         ),
                     ])
@@ -6796,16 +6796,16 @@ mod test {
                     std::array::IntoIter::new([
                         (
                             s("body"),
-                            crate::Value::String {
+                            ftd::Value::String {
                                 text: s("Amit is CEO of FifthTry."),
-                                source: crate::TextSource::Body,
+                                source: ftd::TextSource::Body,
                             },
                         ),
                         (
                             s("name"),
-                            crate::Value::String {
+                            ftd::Value::String {
                                 text: s("Amit Upadhyay"),
-                                source: crate::TextSource::Caption,
+                                source: ftd::TextSource::Caption,
                             },
                         ),
                     ])
@@ -6817,52 +6817,52 @@ mod test {
 
         bag.insert(
             "foo/bar#people".to_string(),
-            crate::p2::Thing::Variable(crate::Variable {
+            ftd::p2::Thing::Variable(ftd::Variable {
                 name: "foo/bar#people".to_string(),
-                value: crate::Value::List {
+                value: ftd::Value::List {
                     data: vec![
-                        crate::Value::Record {
+                        ftd::Value::Record {
                             name: "foo/bar#person".to_string(),
                             fields: std::array::IntoIter::new([
                                 (
                                     s("bio"),
-                                    crate::PropertyValue::Value {
-                                        value: crate::Value::String {
+                                    ftd::PropertyValue::Value {
+                                        value: ftd::Value::String {
                                             text: "Arpita is developer at Fifthtry".to_string(),
-                                            source: crate::TextSource::Body,
+                                            source: ftd::TextSource::Body,
                                         },
                                     },
                                 ),
                                 (
                                     s("name"),
-                                    crate::PropertyValue::Value {
-                                        value: crate::Value::String {
+                                    ftd::PropertyValue::Value {
+                                        value: ftd::Value::String {
                                             text: "Arpita Jaiswal".to_string(),
-                                            source: crate::TextSource::Caption,
+                                            source: ftd::TextSource::Caption,
                                         },
                                     },
                                 ),
                             ])
                             .collect(),
                         },
-                        crate::Value::Record {
+                        ftd::Value::Record {
                             name: "foo/bar#person".to_string(),
                             fields: std::array::IntoIter::new([
                                 (
                                     s("bio"),
-                                    crate::PropertyValue::Value {
-                                        value: crate::Value::String {
+                                    ftd::PropertyValue::Value {
+                                        value: ftd::Value::String {
                                             text: "Amit is CEO of FifthTry.".to_string(),
-                                            source: crate::TextSource::Body,
+                                            source: ftd::TextSource::Body,
                                         },
                                     },
                                 ),
                                 (
                                     s("name"),
-                                    crate::PropertyValue::Value {
-                                        value: crate::Value::String {
+                                    ftd::PropertyValue::Value {
+                                        value: ftd::Value::String {
                                             text: "Amit Upadhyay".to_string(),
-                                            source: crate::TextSource::Caption,
+                                            source: ftd::TextSource::Caption,
                                         },
                                     },
                                 ),
@@ -6870,7 +6870,7 @@ mod test {
                             .collect(),
                         },
                     ],
-                    kind: crate::p2::Kind::Record {
+                    kind: ftd::p2::Kind::Record {
                         name: "foo/bar#person".to_string(),
                     },
                 },
@@ -6880,18 +6880,18 @@ mod test {
 
         bag.insert(
             "foo/bar#person".to_string(),
-            crate::p2::Thing::Record(crate::p2::Record {
+            ftd::p2::Thing::Record(ftd::p2::Record {
                 name: "foo/bar#person".to_string(),
                 fields: std::array::IntoIter::new([
-                    (s("bio"), crate::p2::Kind::body()),
-                    (s("name"), crate::p2::Kind::caption()),
+                    (s("bio"), ftd::p2::Kind::body()),
+                    (s("name"), ftd::p2::Kind::caption()),
                 ])
                 .collect(),
                 instances: Default::default(),
             }),
         );
 
-        let (_g_bag, g_col) = crate::p2::interpreter::interpret(
+        let (_g_bag, g_col) = ftd::p2::interpreter::interpret(
             "foo/bar",
             indoc::indoc!(
                 "
@@ -6950,17 +6950,17 @@ mod test {
 
         bag.insert(
             "foo/bar#test".to_string(),
-            crate::p2::Thing::Variable(crate::Variable {
+            ftd::p2::Thing::Variable(ftd::Variable {
                 name: "test".to_string(),
-                value: crate::Value::String {
+                value: ftd::Value::String {
                     text: "\"0.1.11\"".to_string(),
-                    source: crate::TextSource::Header,
+                    source: ftd::TextSource::Header,
                 },
                 conditions: vec![],
             }),
         );
 
-        let (g_bag, g_col) = crate::p2::interpreter::interpret(
+        let (g_bag, g_col) = ftd::p2::interpreter::interpret(
             "foo/bar",
             indoc::indoc!(
                 "
@@ -6995,17 +6995,17 @@ mod test {
 
         bag.insert(
             "foo/bar#test".to_string(),
-            crate::p2::Thing::Variable(crate::Variable {
+            ftd::p2::Thing::Variable(ftd::Variable {
                 name: "test".to_string(),
-                value: crate::Value::String {
+                value: ftd::Value::String {
                     text: "\"0.1.11\"".to_string(),
-                    source: crate::TextSource::Header,
+                    source: ftd::TextSource::Header,
                 },
                 conditions: vec![],
             }),
         );
 
-        let (g_bag, g_col) = crate::p2::interpreter::interpret(
+        let (g_bag, g_col) = ftd::p2::interpreter::interpret(
             "foo/bar",
             indoc::indoc!(
                 "
@@ -7080,50 +7080,50 @@ mod test {
 
         bag.insert(
             "foo/bar#test".to_string(),
-            crate::p2::Thing::Variable(crate::Variable {
+            ftd::p2::Thing::Variable(ftd::Variable {
                 name: "foo/bar#test".to_string(),
-                value: crate::Value::List {
+                value: ftd::Value::List {
                     data: vec![
-                        crate::Value::String {
+                        ftd::Value::String {
                             text: "\"ftd\"".to_string(),
-                            source: crate::TextSource::Header,
+                            source: ftd::TextSource::Header,
                         },
-                        crate::Value::String {
+                        ftd::Value::String {
                             text: "\"0.1.11\"".to_string(),
-                            source: crate::TextSource::Header,
+                            source: ftd::TextSource::Header,
                         },
-                        crate::Value::String {
+                        ftd::Value::String {
                             text: "[\"Amit Upadhyay <upadhyay@gmail.com>\"]".to_string(),
-                            source: crate::TextSource::Header,
+                            source: ftd::TextSource::Header,
                         },
-                        crate::Value::String {
+                        ftd::Value::String {
                             text: "\"2021\"".to_string(),
-                            source: crate::TextSource::Header,
+                            source: ftd::TextSource::Header,
                         },
-                        crate::Value::String {
+                        ftd::Value::String {
                             text: "\"ftd: FifthTry Document Format\"".to_string(),
-                            source: crate::TextSource::Header,
+                            source: ftd::TextSource::Header,
                         },
-                        crate::Value::String {
+                        ftd::Value::String {
                             text: "\"MIT\"".to_string(),
-                            source: crate::TextSource::Header,
+                            source: ftd::TextSource::Header,
                         },
-                        crate::Value::String {
+                        ftd::Value::String {
                             text: "\"https://github.com/fifthtry/ftd\"".to_string(),
-                            source: crate::TextSource::Header,
+                            source: ftd::TextSource::Header,
                         },
-                        crate::Value::String {
+                        ftd::Value::String {
                             text: "\"https://ftd.dev\"".to_string(),
-                            source: crate::TextSource::Header,
+                            source: ftd::TextSource::Header,
                         },
                     ],
-                    kind: crate::p2::Kind::string(),
+                    kind: ftd::p2::Kind::string(),
                 },
                 conditions: vec![],
             }),
         );
 
-        let (g_bag, g_col) = crate::p2::interpreter::interpret(
+        let (g_bag, g_col) = ftd::p2::interpreter::interpret(
             "foo/bar",
             indoc::indoc!(
                 "
@@ -7422,11 +7422,11 @@ mod test {
 
         bag.insert(
             "foo/bar#data".to_string(),
-            crate::p2::Thing::Record(crate::p2::Record {
+            ftd::p2::Thing::Record(ftd::p2::Record {
                 name: "foo/bar#data".to_string(),
                 fields: std::array::IntoIter::new([
-                    (s("description"), crate::p2::Kind::string()),
-                    (s("title"), crate::p2::Kind::string()),
+                    (s("description"), ftd::p2::Kind::string()),
+                    (s("title"), ftd::p2::Kind::string()),
                 ])
                 .collect(),
                 instances: Default::default(),
@@ -7435,27 +7435,27 @@ mod test {
 
         bag.insert(
             "foo/bar#foo".to_string(),
-            crate::p2::Thing::Component(ftd::Component {
+            ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd.row".to_string(),
                 full_name: "foo/bar#foo".to_string(),
                 arguments: std::array::IntoIter::new([
-                    (s("body"), crate::p2::Kind::string()),
-                    (s("name"), crate::p2::Kind::caption()),
+                    (s("body"), ftd::p2::Kind::string()),
+                    (s("name"), ftd::p2::Kind::caption()),
                 ])
                 .collect(),
                 instructions: vec![
-                    crate::component::Instruction::ChildComponent {
-                        child: crate::component::ChildComponent {
+                    ftd::component::Instruction::ChildComponent {
+                        child: ftd::component::ChildComponent {
                             is_recursive: false,
                             events: vec![],
                             root: "ftd#text".to_string(),
                             condition: None,
                             properties: std::array::IntoIter::new([(
                                 s("text"),
-                                crate::component::Property {
-                                    default: Some(crate::PropertyValue::Variable {
+                                ftd::component::Property {
+                                    default: Some(ftd::PropertyValue::Variable {
                                         name: "name".to_string(),
-                                        kind: crate::p2::Kind::caption_or_body(),
+                                        kind: ftd::p2::Kind::caption_or_body(),
                                     }),
                                     conditions: vec![],
                                 },
@@ -7464,18 +7464,18 @@ mod test {
                             ..Default::default()
                         },
                     },
-                    crate::component::Instruction::ChildComponent {
-                        child: crate::component::ChildComponent {
+                    ftd::component::Instruction::ChildComponent {
+                        child: ftd::component::ChildComponent {
                             is_recursive: false,
                             events: vec![],
                             root: "ftd#text".to_string(),
                             condition: None,
                             properties: std::array::IntoIter::new([(
                                 s("text"),
-                                crate::component::Property {
-                                    default: Some(crate::PropertyValue::Variable {
+                                ftd::component::Property {
+                                    default: Some(ftd::PropertyValue::Variable {
                                         name: "body".to_string(),
-                                        kind: crate::p2::Kind::caption_or_body(),
+                                        kind: ftd::p2::Kind::caption_or_body(),
                                     }),
                                     conditions: vec![],
                                 },
@@ -7491,198 +7491,198 @@ mod test {
 
         bag.insert(
             "foo/bar#test".to_string(),
-            crate::p2::Thing::Variable(ftd::Variable {
+            ftd::p2::Thing::Variable(ftd::Variable {
                 name: "foo/bar#test".to_string(),
-                value: crate::Value::List {
+                value: ftd::Value::List {
                     data: vec![
-                        crate::Value::Record {
+                        ftd::Value::Record {
                             name: "foo/bar#data".to_string(),
                             fields: std::array::IntoIter::new([
                                 (
                                     s("description"),
-                                    crate::PropertyValue::Value {
-                                        value: crate::variable::Value::String {
+                                    ftd::PropertyValue::Value {
+                                        value: ftd::variable::Value::String {
                                             text: "name".to_string(),
-                                            source: crate::TextSource::Header,
+                                            source: ftd::TextSource::Header,
                                         },
                                     },
                                 ),
                                 (
                                     s("title"),
-                                    crate::PropertyValue::Value {
-                                        value: crate::variable::Value::String {
+                                    ftd::PropertyValue::Value {
+                                        value: ftd::variable::Value::String {
                                             text: "\"ftd\"".to_string(),
-                                            source: crate::TextSource::Header,
+                                            source: ftd::TextSource::Header,
                                         },
                                     },
                                 ),
                             ])
                             .collect(),
                         },
-                        crate::Value::Record {
+                        ftd::Value::Record {
                             name: "foo/bar#data".to_string(),
                             fields: std::array::IntoIter::new([
                                 (
                                     s("description"),
-                                    crate::PropertyValue::Value {
-                                        value: crate::variable::Value::String {
+                                    ftd::PropertyValue::Value {
+                                        value: ftd::variable::Value::String {
                                             text: "version".to_string(),
-                                            source: crate::TextSource::Header,
+                                            source: ftd::TextSource::Header,
                                         },
                                     },
                                 ),
                                 (
                                     s("title"),
-                                    crate::PropertyValue::Value {
-                                        value: crate::variable::Value::String {
+                                    ftd::PropertyValue::Value {
+                                        value: ftd::variable::Value::String {
                                             text: "\"0.1.11\"".to_string(),
-                                            source: crate::TextSource::Header,
+                                            source: ftd::TextSource::Header,
                                         },
                                     },
                                 ),
                             ])
                             .collect(),
                         },
-                        crate::Value::Record {
+                        ftd::Value::Record {
                             name: "foo/bar#data".to_string(),
                             fields: std::array::IntoIter::new([
                                 (
                                     s("description"),
-                                    crate::PropertyValue::Value {
-                                        value: crate::variable::Value::String {
+                                    ftd::PropertyValue::Value {
+                                        value: ftd::variable::Value::String {
                                             text: "authors".to_string(),
-                                            source: crate::TextSource::Header,
+                                            source: ftd::TextSource::Header,
                                         },
                                     },
                                 ),
                                 (
                                     s("title"),
-                                    crate::PropertyValue::Value {
-                                        value: crate::variable::Value::String {
+                                    ftd::PropertyValue::Value {
+                                        value: ftd::variable::Value::String {
                                             text: "[\"Amit Upadhyay <upadhyay@gmail.com>\"]"
                                                 .to_string(),
-                                            source: crate::TextSource::Header,
+                                            source: ftd::TextSource::Header,
                                         },
                                     },
                                 ),
                             ])
                             .collect(),
                         },
-                        crate::Value::Record {
+                        ftd::Value::Record {
                             name: "foo/bar#data".to_string(),
                             fields: std::array::IntoIter::new([
                                 (
                                     s("description"),
-                                    crate::PropertyValue::Value {
-                                        value: crate::variable::Value::String {
+                                    ftd::PropertyValue::Value {
+                                        value: ftd::variable::Value::String {
                                             text: "edition".to_string(),
-                                            source: crate::TextSource::Header,
+                                            source: ftd::TextSource::Header,
                                         },
                                     },
                                 ),
                                 (
                                     s("title"),
-                                    crate::PropertyValue::Value {
-                                        value: crate::variable::Value::String {
+                                    ftd::PropertyValue::Value {
+                                        value: ftd::variable::Value::String {
                                             text: "\"2021\"".to_string(),
-                                            source: crate::TextSource::Header,
+                                            source: ftd::TextSource::Header,
                                         },
                                     },
                                 ),
                             ])
                             .collect(),
                         },
-                        crate::Value::Record {
+                        ftd::Value::Record {
                             name: "foo/bar#data".to_string(),
                             fields: std::array::IntoIter::new([
                                 (
                                     s("description"),
-                                    crate::PropertyValue::Value {
-                                        value: crate::variable::Value::String {
+                                    ftd::PropertyValue::Value {
+                                        value: ftd::variable::Value::String {
                                             text: "description".to_string(),
-                                            source: crate::TextSource::Header,
+                                            source: ftd::TextSource::Header,
                                         },
                                     },
                                 ),
                                 (
                                     s("title"),
-                                    crate::PropertyValue::Value {
-                                        value: crate::variable::Value::String {
+                                    ftd::PropertyValue::Value {
+                                        value: ftd::variable::Value::String {
                                             text: "\"ftd: FifthTry Document Format\""
                                                 .to_string(),
-                                            source: crate::TextSource::Header,
+                                            source: ftd::TextSource::Header,
                                         },
                                     },
                                 ),
                             ])
                             .collect(),
                         },
-                        crate::Value::Record {
+                        ftd::Value::Record {
                             name: "foo/bar#data".to_string(),
                             fields: std::array::IntoIter::new([
                                 (
                                     s("description"),
-                                    crate::PropertyValue::Value {
-                                        value: crate::variable::Value::String {
+                                    ftd::PropertyValue::Value {
+                                        value: ftd::variable::Value::String {
                                             text: "license".to_string(),
-                                            source: crate::TextSource::Header,
+                                            source: ftd::TextSource::Header,
                                         },
                                     },
                                 ),
                                 (
                                     s("title"),
-                                    crate::PropertyValue::Value {
-                                        value: crate::variable::Value::String {
+                                    ftd::PropertyValue::Value {
+                                        value: ftd::variable::Value::String {
                                             text: "\"MIT\"".to_string(),
-                                            source: crate::TextSource::Header,
+                                            source: ftd::TextSource::Header,
                                         },
                                     },
                                 ),
                             ])
                             .collect(),
                         },
-                        crate::Value::Record {
+                        ftd::Value::Record {
                             name: "foo/bar#data".to_string(),
                             fields: std::array::IntoIter::new([
                                 (
                                     s("description"),
-                                    crate::PropertyValue::Value {
-                                        value: crate::variable::Value::String {
+                                    ftd::PropertyValue::Value {
+                                        value: ftd::variable::Value::String {
                                             text: "repository".to_string(),
-                                            source: crate::TextSource::Header,
+                                            source: ftd::TextSource::Header,
                                         },
                                     },
                                 ),
                                 (
                                     s("title"),
-                                    crate::PropertyValue::Value {
-                                        value: crate::variable::Value::String {
+                                    ftd::PropertyValue::Value {
+                                        value: ftd::variable::Value::String {
                                             text: "\"https://github.com/fifthtry/ftd\"".to_string(),
-                                            source: crate::TextSource::Header,
+                                            source: ftd::TextSource::Header,
                                         },
                                     },
                                 ),
                             ])
                             .collect(),
                         },
-                        crate::Value::Record {
+                        ftd::Value::Record {
                             name: "foo/bar#data".to_string(),
                             fields: std::array::IntoIter::new([
                                 (
                                     s("description"),
-                                    crate::PropertyValue::Value {
-                                        value: crate::variable::Value::String {
+                                    ftd::PropertyValue::Value {
+                                        value: ftd::variable::Value::String {
                                             text: "homepage".to_string(),
-                                            source: crate::TextSource::Header,
+                                            source: ftd::TextSource::Header,
                                         },
                                     },
                                 ),
                                 (
                                     s("title"),
-                                    crate::PropertyValue::Value {
-                                        value: crate::variable::Value::String {
+                                    ftd::PropertyValue::Value {
+                                        value: ftd::variable::Value::String {
                                             text: "\"https://ftd.dev\"".to_string(),
-                                            source: crate::TextSource::Header,
+                                            source: ftd::TextSource::Header,
                                         },
                                     },
                                 ),
@@ -7690,7 +7690,7 @@ mod test {
                             .collect(),
                         },
                     ],
-                    kind: crate::p2::Kind::Record {
+                    kind: ftd::p2::Kind::Record {
                         name: s("foo/bar#data"),
                     },
                 },
@@ -7790,7 +7790,7 @@ mod test {
 
         bag.insert(
             s("foo/bar#aa"),
-            crate::p2::Thing::Variable(ftd::Variable {
+            ftd::p2::Thing::Variable(ftd::Variable {
                 name: s("foo/bar#aa"),
                 value: ftd::Value::List {
                     data: vec![
@@ -7799,10 +7799,10 @@ mod test {
                             fields: std::array::IntoIter::new([
                                 (
                                     s("children"),
-                                    crate::PropertyValue::Value {
-                                        value: crate::variable::Value::List {
+                                    ftd::PropertyValue::Value {
+                                        value: ftd::variable::Value::List {
                                             data: vec![],
-                                            kind: crate::p2::Kind::Record {
+                                            kind: ftd::p2::Kind::Record {
                                                 name: s("foo/bar#toc-record"),
                                             },
                                         },
@@ -7810,19 +7810,19 @@ mod test {
                                 ),
                                 (
                                     s("link"),
-                                    crate::PropertyValue::Value {
-                                        value: crate::variable::Value::String {
+                                    ftd::PropertyValue::Value {
+                                        value: ftd::variable::Value::String {
                                             text: s("aa link"),
-                                            source: crate::TextSource::Header,
+                                            source: ftd::TextSource::Header,
                                         },
                                     },
                                 ),
                                 (
                                     s("title"),
-                                    crate::PropertyValue::Value {
-                                        value: crate::variable::Value::String {
+                                    ftd::PropertyValue::Value {
+                                        value: ftd::variable::Value::String {
                                             text: s("aa title"),
-                                            source: crate::TextSource::Header,
+                                            source: ftd::TextSource::Header,
                                         },
                                     },
                                 ),
@@ -7834,10 +7834,10 @@ mod test {
                             fields: std::array::IntoIter::new([
                                 (
                                     s("children"),
-                                    crate::PropertyValue::Value {
-                                        value: crate::variable::Value::List {
+                                    ftd::PropertyValue::Value {
+                                        value: ftd::variable::Value::List {
                                             data: vec![],
-                                            kind: crate::p2::Kind::Record {
+                                            kind: ftd::p2::Kind::Record {
                                                 name: s("foo/bar#toc-record"),
                                             },
                                         },
@@ -7845,19 +7845,19 @@ mod test {
                                 ),
                                 (
                                     s("link"),
-                                    crate::PropertyValue::Value {
-                                        value: crate::variable::Value::String {
+                                    ftd::PropertyValue::Value {
+                                        value: ftd::variable::Value::String {
                                             text: s("aaa link"),
-                                            source: crate::TextSource::Header,
+                                            source: ftd::TextSource::Header,
                                         },
                                     },
                                 ),
                                 (
                                     s("title"),
-                                    crate::PropertyValue::Value {
-                                        value: crate::variable::Value::String {
+                                    ftd::PropertyValue::Value {
+                                        value: ftd::variable::Value::String {
                                             text: s("aaa title"),
-                                            source: crate::TextSource::Header,
+                                            source: ftd::TextSource::Header,
                                         },
                                     },
                                 ),
@@ -7865,7 +7865,7 @@ mod test {
                             .collect(),
                         },
                     ],
-                    kind: crate::p2::Kind::Record {
+                    kind: ftd::p2::Kind::Record {
                         name: s("foo/bar#toc-record"),
                     },
                 },
@@ -7875,7 +7875,7 @@ mod test {
 
         bag.insert(
             s("foo/bar#toc"),
-            crate::p2::Thing::Variable(ftd::Variable {
+            ftd::p2::Thing::Variable(ftd::Variable {
                 name: s("foo/bar#toc"),
                 value: ftd::Value::List {
                     data: vec![ftd::Value::Record {
@@ -7883,18 +7883,18 @@ mod test {
                         fields: std::array::IntoIter::new([
                             (
                                 s("children"),
-                                crate::PropertyValue::Value {
-                                    value: crate::variable::Value::List {
+                                ftd::PropertyValue::Value {
+                                    value: ftd::variable::Value::List {
                                         data: vec![
                                             ftd::Value::Record {
                                                 name: s("foo/bar#toc-record"),
                                                 fields: std::array::IntoIter::new([
                                                     (
                                                         s("children"),
-                                                        crate::PropertyValue::Value {
-                                                            value: crate::variable::Value::List {
+                                                        ftd::PropertyValue::Value {
+                                                            value: ftd::variable::Value::List {
                                                                 data: vec![],
-                                                                kind: crate::p2::Kind::Record {
+                                                                kind: ftd::p2::Kind::Record {
                                                                     name: s("foo/bar#toc-record"),
                                                                 },
                                                             },
@@ -7902,19 +7902,19 @@ mod test {
                                                     ),
                                                     (
                                                         s("link"),
-                                                        crate::PropertyValue::Value {
-                                                            value: crate::variable::Value::String {
+                                                        ftd::PropertyValue::Value {
+                                                            value: ftd::variable::Value::String {
                                                                 text: s("aa link"),
-                                                                source: crate::TextSource::Header,
+                                                                source: ftd::TextSource::Header,
                                                             },
                                                         },
                                                     ),
                                                     (
                                                         s("title"),
-                                                        crate::PropertyValue::Value {
-                                                            value: crate::variable::Value::String {
+                                                        ftd::PropertyValue::Value {
+                                                            value: ftd::variable::Value::String {
                                                                 text: s("aa title"),
-                                                                source: crate::TextSource::Header,
+                                                                source: ftd::TextSource::Header,
                                                             },
                                                         },
                                                     ),
@@ -7926,10 +7926,10 @@ mod test {
                                                 fields: std::array::IntoIter::new([
                                                     (
                                                         s("children"),
-                                                        crate::PropertyValue::Value {
-                                                            value: crate::variable::Value::List {
+                                                        ftd::PropertyValue::Value {
+                                                            value: ftd::variable::Value::List {
                                                                 data: vec![],
-                                                                kind: crate::p2::Kind::Record {
+                                                                kind: ftd::p2::Kind::Record {
                                                                     name: s("foo/bar#toc-record"),
                                                                 },
                                                             },
@@ -7937,19 +7937,19 @@ mod test {
                                                     ),
                                                     (
                                                         s("link"),
-                                                        crate::PropertyValue::Value {
-                                                            value: crate::variable::Value::String {
+                                                        ftd::PropertyValue::Value {
+                                                            value: ftd::variable::Value::String {
                                                                 text: s("aaa link"),
-                                                                source: crate::TextSource::Header,
+                                                                source: ftd::TextSource::Header,
                                                             },
                                                         },
                                                     ),
                                                     (
                                                         s("title"),
-                                                        crate::PropertyValue::Value {
-                                                            value: crate::variable::Value::String {
+                                                        ftd::PropertyValue::Value {
+                                                            value: ftd::variable::Value::String {
                                                                 text: s("aaa title"),
-                                                                source: crate::TextSource::Header,
+                                                                source: ftd::TextSource::Header,
                                                             },
                                                         },
                                                     ),
@@ -7957,7 +7957,7 @@ mod test {
                                                 .collect(),
                                             },
                                         ],
-                                        kind: crate::p2::Kind::Record {
+                                        kind: ftd::p2::Kind::Record {
                                             name: s("foo/bar#toc-record"),
                                         },
                                     },
@@ -7965,26 +7965,26 @@ mod test {
                             ),
                             (
                                 s("link"),
-                                crate::PropertyValue::Value {
-                                    value: crate::variable::Value::String {
+                                ftd::PropertyValue::Value {
+                                    value: ftd::variable::Value::String {
                                         text: s("ab link"),
-                                        source: crate::TextSource::Header,
+                                        source: ftd::TextSource::Header,
                                     },
                                 },
                             ),
                             (
                                 s("title"),
-                                crate::PropertyValue::Value {
-                                    value: crate::variable::Value::String {
+                                ftd::PropertyValue::Value {
+                                    value: ftd::variable::Value::String {
                                         text: s("ab title"),
-                                        source: crate::TextSource::Header,
+                                        source: ftd::TextSource::Header,
                                     },
                                 },
                             ),
                         ])
                         .collect(),
                     }],
-                    kind: crate::p2::Kind::Record {
+                    kind: ftd::p2::Kind::Record {
                         name: s("foo/bar#toc-record"),
                     },
                 },
@@ -7994,12 +7994,12 @@ mod test {
 
         bag.insert(
             s("foo/bar#toc"),
-            crate::p2::Thing::Component(ftd::Component {
+            ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd.column".to_string(),
                 full_name: "foo/bar#toc-item".to_string(),
                 arguments: std::array::IntoIter::new([(
                     s("toc"),
-                    crate::p2::Kind::Record {
+                    ftd::p2::Kind::Record {
                         name: "foo/bar#toc-record".to_string(),
                     },
                 )])
@@ -8013,11 +8013,11 @@ mod test {
                             properties: std::array::IntoIter::new([
                                 (
                                     s("link"),
-                                    crate::component::Property {
-                                        default: Some(crate::PropertyValue::Variable {
+                                    ftd::component::Property {
+                                        default: Some(ftd::PropertyValue::Variable {
                                             name: "toc.link".to_string(),
-                                            kind: crate::p2::Kind::Optional {
-                                                kind: Box::new(crate::p2::Kind::string()),
+                                            kind: ftd::p2::Kind::Optional {
+                                                kind: Box::new(ftd::p2::Kind::string()),
                                             },
                                         }),
                                         conditions: vec![],
@@ -8025,11 +8025,11 @@ mod test {
                                 ),
                                 (
                                     s("text"),
-                                    crate::component::Property {
-                                        default: Some(crate::PropertyValue::Variable {
+                                    ftd::component::Property {
+                                        default: Some(ftd::PropertyValue::Variable {
                                             name: "toc.title".to_string(),
-                                            kind: crate::p2::Kind::Optional {
-                                                kind: Box::new(crate::p2::Kind::caption_or_body()),
+                                            kind: ftd::p2::Kind::Optional {
+                                                kind: Box::new(ftd::p2::Kind::caption_or_body()),
                                             },
                                         }),
                                         conditions: vec![],
@@ -8049,10 +8049,10 @@ mod test {
                             properties: std::array::IntoIter::new([
                                 (
                                     s("$loop$"),
-                                    crate::component::Property {
-                                        default: Some(crate::PropertyValue::Variable {
+                                    ftd::component::Property {
+                                        default: Some(ftd::PropertyValue::Variable {
                                             name: "toc.children".to_string(),
-                                            kind: crate::p2::Kind::Record {
+                                            kind: ftd::p2::Kind::Record {
                                                 name: s("foo/bar#toc-record"),
                                             },
                                         }),
@@ -8061,10 +8061,10 @@ mod test {
                                 ),
                                 (
                                     s("toc"),
-                                    crate::component::Property {
-                                        default: Some(crate::PropertyValue::Variable {
+                                    ftd::component::Property {
+                                        default: Some(ftd::PropertyValue::Variable {
                                             name: "$loop$".to_string(),
-                                            kind: crate::p2::Kind::Record {
+                                            kind: ftd::p2::Kind::Record {
                                                 name: s("foo/bar#toc-record"),
                                             },
                                         }),
@@ -8081,7 +8081,7 @@ mod test {
             }),
         );
 
-        let (_g_bag, g_col) = crate::p2::interpreter::interpret(
+        let (_g_bag, g_col) = ftd::p2::interpreter::interpret(
             "foo/bar",
             indoc::indoc!(
                 "
@@ -8162,7 +8162,7 @@ mod test {
         let mut bag = super::default_bag();
         bag.insert(
             s("hello-world#foo"),
-            crate::p2::Thing::Component(ftd::Component {
+            ftd::p2::Thing::Component(ftd::Component {
                 root: s("ftd.row"),
                 full_name: s("hello-world#foo"),
                 instructions: vec![ftd::Instruction::ChildComponent {
@@ -8172,10 +8172,10 @@ mod test {
                         condition: None,
                         properties: std::array::IntoIter::new([(
                             s("text"),
-                            crate::component::Property {
-                                default: Some(crate::PropertyValue::Reference {
+                            ftd::component::Property {
+                                default: Some(ftd::PropertyValue::Reference {
                                     name: "hello-world-variable#hello-world".to_string(),
-                                    kind: crate::p2::Kind::caption_or_body(),
+                                    kind: ftd::p2::Kind::caption_or_body(),
                                 }),
                                 conditions: vec![],
                             },
@@ -8190,7 +8190,7 @@ mod test {
         );
         bag.insert(
             s("hello-world-variable#hello-world"),
-            crate::p2::Thing::Variable(ftd::Variable {
+            ftd::p2::Thing::Variable(ftd::Variable {
                 name: s("hello-world"),
                 value: ftd::Value::String {
                     text: s("Hello World"),
@@ -8264,17 +8264,17 @@ mod test {
         let mut bag = super::default_bag();
         bag.insert(
             s("foo/bar#foo"),
-            crate::p2::Thing::Component(ftd::Component {
+            ftd::p2::Thing::Component(ftd::Component {
                 root: s("ftd.text"),
                 full_name: s("foo/bar#foo"),
                 arguments: std::array::IntoIter::new([
                     (
                         s("name"),
-                        crate::p2::Kind::caption().set_default(Some(s("hello world"))),
+                        ftd::p2::Kind::caption().set_default(Some(s("hello world"))),
                     ),
                     (
                         s("size"),
-                        crate::p2::Kind::Integer {
+                        ftd::p2::Kind::Integer {
                             default: Some(s("10")),
                         },
                     ),
@@ -8283,11 +8283,11 @@ mod test {
                 properties: std::array::IntoIter::new([
                     (
                         s("size"),
-                        crate::component::Property {
-                            default: Some(crate::PropertyValue::Variable {
+                        ftd::component::Property {
+                            default: Some(ftd::PropertyValue::Variable {
                                 name: s("size"),
-                                kind: crate::p2::Kind::Optional {
-                                    kind: Box::from(crate::p2::Kind::Integer {
+                                kind: ftd::p2::Kind::Optional {
+                                    kind: Box::from(ftd::p2::Kind::Integer {
                                         default: Some(s("10")),
                                     }),
                                 },
@@ -8297,10 +8297,10 @@ mod test {
                     ),
                     (
                         s("text"),
-                        crate::component::Property {
-                            default: Some(crate::PropertyValue::Variable {
+                        ftd::component::Property {
+                            default: Some(ftd::PropertyValue::Variable {
                                 name: s("name"),
-                                kind: crate::p2::Kind::caption_or_body()
+                                kind: ftd::p2::Kind::caption_or_body()
                                     .set_default(Some(s("hello world"))),
                             }),
                             conditions: vec![],
@@ -8312,34 +8312,34 @@ mod test {
                     std::array::IntoIter::new([
                         (
                             s("name"),
-                            crate::Value::String {
+                            ftd::Value::String {
                                 text: s("hello world"),
-                                source: crate::TextSource::Default,
+                                source: ftd::TextSource::Default,
                             },
                         ),
-                        (s("size"), crate::Value::Integer { value: 10 }),
+                        (s("size"), ftd::Value::Integer { value: 10 }),
                     ])
                     .collect(),
                     std::array::IntoIter::new([
                         (
                             s("name"),
-                            crate::Value::String {
+                            ftd::Value::String {
                                 text: s("hello"),
-                                source: crate::TextSource::Caption,
+                                source: ftd::TextSource::Caption,
                             },
                         ),
-                        (s("size"), crate::Value::Integer { value: 10 }),
+                        (s("size"), ftd::Value::Integer { value: 10 }),
                     ])
                     .collect(),
                     std::array::IntoIter::new([
                         (
                             s("name"),
-                            crate::Value::String {
+                            ftd::Value::String {
                                 text: s("this is nice"),
-                                source: crate::TextSource::Caption,
+                                source: ftd::TextSource::Caption,
                             },
                         ),
-                        (s("size"), crate::Value::Integer { value: 20 }),
+                        (s("size"), ftd::Value::Integer { value: 20 }),
                     ])
                     .collect(),
                 ],
@@ -8347,7 +8347,7 @@ mod test {
             }),
         );
 
-        let (g_bag, g_col) = crate::p2::interpreter::interpret(
+        let (g_bag, g_col) = ftd::p2::interpreter::interpret(
             "foo/bar",
             indoc::indoc!(
                 "
@@ -8379,49 +8379,49 @@ mod test {
         let mut bag = super::default_bag();
         bag.insert(
             s("foo/bar#abrar"),
-            crate::p2::Thing::Variable(ftd::Variable {
+            ftd::p2::Thing::Variable(ftd::Variable {
                 name: s("abrar"),
                 value: ftd::Value::Record {
                     name: s("foo/bar#person"),
                     fields: std::array::IntoIter::new([
                         (
                             s("address"),
-                            crate::PropertyValue::Value {
-                                value: crate::variable::Value::String {
+                            ftd::PropertyValue::Value {
+                                value: ftd::variable::Value::String {
                                     text: s("Bihar"),
-                                    source: crate::TextSource::Default,
+                                    source: ftd::TextSource::Default,
                                 },
                             },
                         ),
                         (
                             s("age"),
-                            crate::PropertyValue::Reference {
+                            ftd::PropertyValue::Reference {
                                 name: s("foo/bar#default-age"),
-                                kind: crate::p2::Kind::Integer {
+                                kind: ftd::p2::Kind::Integer {
                                     default: Some(s("$default-age")),
                                 },
                             },
                         ),
                         (
                             s("bio"),
-                            crate::PropertyValue::Value {
-                                value: crate::variable::Value::String {
+                            ftd::PropertyValue::Value {
+                                value: ftd::variable::Value::String {
                                     text: s("Software developer working at fifthtry."),
-                                    source: crate::TextSource::Body,
+                                    source: ftd::TextSource::Body,
                                 },
                             },
                         ),
                         (
                             s("name"),
-                            crate::PropertyValue::Reference {
+                            ftd::PropertyValue::Reference {
                                 name: s("foo/bar#abrar-name"),
-                                kind: crate::p2::Kind::caption(),
+                                kind: ftd::p2::Kind::caption(),
                             },
                         ),
                         (
                             s("size"),
-                            crate::PropertyValue::Value {
-                                value: crate::variable::Value::Integer { value: 10 },
+                            ftd::PropertyValue::Value {
+                                value: ftd::variable::Value::Integer { value: 10 },
                             },
                         ),
                     ])
@@ -8432,46 +8432,46 @@ mod test {
         );
         bag.insert(
             s("foo/bar#abrar-name"),
-            crate::p2::Thing::Variable(ftd::Variable {
+            ftd::p2::Thing::Variable(ftd::Variable {
                 name: s("abrar-name"),
-                value: crate::variable::Value::String {
+                value: ftd::variable::Value::String {
                     text: s("Abrar Khan"),
-                    source: crate::TextSource::Caption,
+                    source: ftd::TextSource::Caption,
                 },
                 conditions: vec![],
             }),
         );
         bag.insert(
             s("foo/bar#default-age"),
-            crate::p2::Thing::Variable(ftd::Variable {
+            ftd::p2::Thing::Variable(ftd::Variable {
                 name: s("default-age"),
-                value: crate::variable::Value::Integer { value: 20 },
+                value: ftd::variable::Value::Integer { value: 20 },
                 conditions: vec![],
             }),
         );
         bag.insert(
             s("foo/bar#person"),
-            crate::p2::Thing::Record(ftd::p2::Record {
+            ftd::p2::Thing::Record(ftd::p2::Record {
                 name: s("foo/bar#person"),
                 fields: std::array::IntoIter::new([
                     (
                         s("address"),
-                        crate::p2::Kind::string().set_default(Some(s("Bihar"))),
+                        ftd::p2::Kind::string().set_default(Some(s("Bihar"))),
                     ),
                     (
                         s("age"),
-                        crate::p2::Kind::Integer {
+                        ftd::p2::Kind::Integer {
                             default: Some(s("$default-age")),
                         },
                     ),
                     (
                         s("bio"),
-                        crate::p2::Kind::body().set_default(Some(s("Some Bio"))),
+                        ftd::p2::Kind::body().set_default(Some(s("Some Bio"))),
                     ),
-                    (s("name"), crate::p2::Kind::caption()),
+                    (s("name"), ftd::p2::Kind::caption()),
                     (
                         s("size"),
-                        crate::p2::Kind::Integer {
+                        ftd::p2::Kind::Integer {
                             default: Some(s("10")),
                         },
                     ),
@@ -8492,7 +8492,7 @@ mod test {
             ..Default::default()
         }));
 
-        let (g_bag, g_col) = crate::p2::interpreter::interpret(
+        let (g_bag, g_col) = ftd::p2::interpreter::interpret(
             "foo/bar",
             indoc::indoc!(
                 "
@@ -8576,36 +8576,36 @@ mod test {
         let mut bag = super::default_bag();
         bag.insert(
             s("foo/bar#default-name"),
-            crate::p2::Thing::Variable(ftd::Variable {
+            ftd::p2::Thing::Variable(ftd::Variable {
                 name: s("default-name"),
-                value: crate::Value::String {
+                value: ftd::Value::String {
                     text: s("Arpita"),
-                    source: crate::TextSource::Caption,
+                    source: ftd::TextSource::Caption,
                 },
                 conditions: vec![],
             }),
         );
         bag.insert(
             s("foo/bar#default-size"),
-            crate::p2::Thing::Variable(ftd::Variable {
+            ftd::p2::Thing::Variable(ftd::Variable {
                 name: s("default-size"),
-                value: crate::Value::Integer { value: 10 },
+                value: ftd::Value::Integer { value: 10 },
                 conditions: vec![],
             }),
         );
         bag.insert(
             s("foo/bar#foo"),
-            crate::p2::Thing::Component(ftd::Component {
+            ftd::p2::Thing::Component(ftd::Component {
                 root: s("ftd.row"),
                 full_name: s("foo/bar#foo"),
                 arguments: std::array::IntoIter::new([
                     (
                         s("name"),
-                        crate::p2::Kind::string().set_default(Some(s("$default-name"))),
+                        ftd::p2::Kind::string().set_default(Some(s("$default-name"))),
                     ),
                     (
                         s("text-size"),
-                        crate::p2::Kind::Integer {
+                        ftd::p2::Kind::Integer {
                             default: Some(s("$default-size")),
                         },
                     ),
@@ -8619,7 +8619,7 @@ mod test {
                         properties: std::array::IntoIter::new([
                             (
                                 s("size"),
-                                crate::component::Property {
+                                ftd::component::Property {
                                     default: Some(ftd::PropertyValue::Variable {
                                         name: s("text-size"),
                                         kind: ftd::p2::Kind::Optional {
@@ -8633,7 +8633,7 @@ mod test {
                             ),
                             (
                                 s("text"),
-                                crate::component::Property {
+                                ftd::component::Property {
                                     default: Some(ftd::PropertyValue::Variable {
                                         name: s("name"),
                                         kind: ftd::p2::Kind::caption_or_body()
@@ -8836,7 +8836,7 @@ mod test {
             }),
         );
 
-        let (g_bag, g_col) = crate::p2::interpreter::interpret(
+        let (g_bag, g_col) = ftd::p2::interpreter::interpret(
             "foo/bar",
             indoc::indoc!(
                 "
@@ -8979,7 +8979,7 @@ mod test {
             ..Default::default()
         }));
 
-        let (_g_bag, g_col) = crate::p2::interpreter::interpret(
+        let (_g_bag, g_col) = ftd::p2::interpreter::interpret(
             "foo/bar",
             indoc::indoc!(
                 "
@@ -9264,7 +9264,7 @@ mod test {
                 },
             }));
 
-        let (_g_bag, g_col) = crate::p2::interpreter::interpret(
+        let (_g_bag, g_col) = ftd::p2::interpreter::interpret(
             "foo/bar",
             indoc::indoc!(
                 "
@@ -9383,7 +9383,7 @@ mod test {
             ..Default::default()
         }));
 
-        let (_g_bag, g_col) = crate::p2::interpreter::interpret(
+        let (_g_bag, g_col) = ftd::p2::interpreter::interpret(
             "foo/bar",
             indoc::indoc!(
                 "
@@ -9485,7 +9485,7 @@ mod test {
                         kind: ftd::p2::Kind::boolean().set_default(Some(s("true"))),
                     },
                     right: ftd::PropertyValue::Value {
-                        value: crate::variable::Value::Boolean { value: true },
+                        value: ftd::variable::Value::Boolean { value: true },
                     },
                 }),
                 kernel: false,
@@ -9504,7 +9504,7 @@ mod test {
             }),
         );
 
-        let (g_bag, g_col) = crate::p2::interpreter::interpret(
+        let (g_bag, g_col) = ftd::p2::interpreter::interpret(
             "foo/bar",
             indoc::indoc!(
                 "
@@ -9585,7 +9585,7 @@ mod test {
                 },
             }));
 
-        let (_g_bag, g_col) = crate::p2::interpreter::interpret(
+        let (_g_bag, g_col) = ftd::p2::interpreter::interpret(
             "foo/bar",
             indoc::indoc!(
                 "
@@ -9708,7 +9708,7 @@ mod test {
                 },
             }));
 
-        let (_g_bag, g_col) = crate::p2::interpreter::interpret(
+        let (_g_bag, g_col) = ftd::p2::interpreter::interpret(
             "foo/bar",
             indoc::indoc!(
                 "
@@ -9832,7 +9832,7 @@ mod test {
                 },
             }));
 
-        let (_g_bag, g_col) = crate::p2::interpreter::interpret(
+        let (_g_bag, g_col) = ftd::p2::interpreter::interpret(
             "foo/bar",
             indoc::indoc!(
                 "
@@ -9886,7 +9886,7 @@ mod test {
                 ..Default::default()
             }));
 
-        let (_g_bag, g_col) = crate::p2::interpreter::interpret(
+        let (_g_bag, g_col) = ftd::p2::interpreter::interpret(
             "foo/bar",
             indoc::indoc!(
                 "
@@ -9922,7 +9922,7 @@ mod test {
             ..Default::default()
         }));
 
-        let (_g_bag, g_col) = crate::p2::interpreter::interpret(
+        let (_g_bag, g_col) = ftd::p2::interpreter::interpret(
             "foo/bar",
             indoc::indoc!(
                 "
@@ -9962,7 +9962,7 @@ mod test {
             ..Default::default()
         }));
 
-        let (_g_bag, g_col) = crate::p2::interpreter::interpret(
+        let (_g_bag, g_col) = ftd::p2::interpreter::interpret(
             "foo/bar",
             indoc::indoc!(
                 "
@@ -10033,7 +10033,7 @@ mod test {
             ..Default::default()
         }));
 
-        let (_g_bag, g_col) = crate::p2::interpreter::interpret(
+        let (_g_bag, g_col) = ftd::p2::interpreter::interpret(
             "foo/bar",
             indoc::indoc!(
                 r"
@@ -10144,7 +10144,7 @@ mod test {
                 ..Default::default()
             }));
 
-        let (_g_bag, g_col) = crate::p2::interpreter::interpret(
+        let (_g_bag, g_col) = ftd::p2::interpreter::interpret(
             "foo/bar",
             indoc::indoc!(
                 "
@@ -10298,7 +10298,7 @@ mod test {
             ..Default::default()
         }));
 
-        let (_g_bag, g_col) = crate::p2::interpreter::interpret(
+        let (_g_bag, g_col) = ftd::p2::interpreter::interpret(
             "foo/bar",
             indoc::indoc!(
                 "
@@ -10401,7 +10401,7 @@ mod test {
                 },
             }));
 
-        let (_g_bag, g_col) = crate::p2::interpreter::interpret(
+        let (_g_bag, g_col) = ftd::p2::interpreter::interpret(
             "foo/bar",
             indoc::indoc!(
                 "
@@ -10443,7 +10443,7 @@ mod test {
             ..Default::default()
         }));
 
-        let (_g_bag, g_col) = crate::p2::interpreter::interpret(
+        let (_g_bag, g_col) = ftd::p2::interpreter::interpret(
             "foo/bar",
             indoc::indoc!(
                 "
@@ -10541,7 +10541,7 @@ mod test {
                 ..Default::default()
             }));
 
-        let (_g_bag, g_col) = crate::p2::interpreter::interpret(
+        let (_g_bag, g_col) = ftd::p2::interpreter::interpret(
             "foo/bar",
             indoc::indoc!(
                 "
@@ -10600,7 +10600,7 @@ mod test {
                 ..Default::default()
             }));
 
-        let (_g_bag, g_col) = crate::p2::interpreter::interpret(
+        let (_g_bag, g_col) = ftd::p2::interpreter::interpret(
             "foo/bar",
             indoc::indoc!(
                 "
@@ -10863,7 +10863,7 @@ mod test {
                 ..Default::default()
             }));
 
-        let (_g_bag, g_col) = crate::p2::interpreter::interpret(
+        let (_g_bag, g_col) = ftd::p2::interpreter::interpret(
             "foo/bar",
             indoc::indoc!(
                 "
@@ -10954,7 +10954,7 @@ mod test {
                 },
             }));
 
-        let (_g_bag, g_col) = crate::p2::interpreter::interpret(
+        let (_g_bag, g_col) = ftd::p2::interpreter::interpret(
             "foo/bar",
             indoc::indoc!(
                 r"
@@ -11008,7 +11008,7 @@ mod test {
                 ..Default::default()
             }));
 
-        let (_g_bag, g_col) = crate::p2::interpreter::interpret(
+        let (_g_bag, g_col) = ftd::p2::interpreter::interpret(
             "foo/bar",
             indoc::indoc!(
                 "
@@ -11119,7 +11119,7 @@ mod test {
                 },
             }));
 
-        let (_g_bag, g_col) = crate::p2::interpreter::interpret(
+        let (_g_bag, g_col) = ftd::p2::interpreter::interpret(
             "foo/bar",
             indoc::indoc!(
                 "
@@ -11204,7 +11204,7 @@ mod test {
                 },
             }));
 
-        let (_g_bag, g_col) = crate::p2::interpreter::interpret(
+        let (_g_bag, g_col) = ftd::p2::interpreter::interpret(
             "foo/bar",
             indoc::indoc!(
                 "
@@ -11271,7 +11271,7 @@ mod test {
                 },
                 ..Default::default()
             }));
-        let (_g_bag, g_col) = crate::p2::interpreter::interpret(
+        let (_g_bag, g_col) = ftd::p2::interpreter::interpret(
             "foo/bar",
             indoc::indoc!(
                 "
@@ -11335,7 +11335,7 @@ mod test {
                 },
             }));
 
-        let (_g_bag, g_col) = crate::p2::interpreter::interpret(
+        let (_g_bag, g_col) = ftd::p2::interpreter::interpret(
             "foo/bar",
             indoc::indoc!(
                 "
@@ -11416,7 +11416,7 @@ mod test {
             ..Default::default()
         }));
 
-        let (_g_bag, g_col) = crate::p2::interpreter::interpret(
+        let (_g_bag, g_col) = ftd::p2::interpreter::interpret(
             "foo/bar",
             indoc::indoc!(
                 "
@@ -11519,7 +11519,7 @@ mod test {
                 ..Default::default()
             }));
 
-        let (_g_bag, g_col) = crate::p2::interpreter::interpret(
+        let (_g_bag, g_col) = ftd::p2::interpreter::interpret(
             "foo/bar",
             indoc::indoc!(
                 "
@@ -11641,7 +11641,7 @@ mod test {
                 }
             }));
 
-        let (_g_bag, g_col) = crate::p2::interpreter::interpret(
+        let (_g_bag, g_col) = ftd::p2::interpreter::interpret(
             "foo/bar",
             indoc::indoc!(
                 "
@@ -11740,7 +11740,7 @@ mod test {
             ..Default::default()
         }));
 
-        let (_g_bag, g_col) = crate::p2::interpreter::interpret(
+        let (_g_bag, g_col) = ftd::p2::interpreter::interpret(
             "foo/bar",
             indoc::indoc!(
                 "
@@ -11781,7 +11781,7 @@ mod test {
             ..Default::default()
         }));
 
-        let (_g_bag, g_col) = crate::p2::interpreter::interpret(
+        let (_g_bag, g_col) = ftd::p2::interpreter::interpret(
             "foo/bar",
             indoc::indoc!(
                 "
@@ -11817,7 +11817,7 @@ mod test {
             ..Default::default()
         }));
 
-        let (_g_bag, g_col) = crate::p2::interpreter::interpret(
+        let (_g_bag, g_col) = ftd::p2::interpreter::interpret(
             "foo/bar",
             indoc::indoc!(
                 "
@@ -11866,7 +11866,7 @@ mod test {
         main.container.children.push(col.clone());
         main.container.children.push(col);
 
-        let (_g_bag, g_col) = crate::p2::interpreter::interpret(
+        let (_g_bag, g_col) = ftd::p2::interpreter::interpret(
             "foo/bar",
             indoc::indoc!(
                 "
@@ -11956,7 +11956,7 @@ mod test {
             ..Default::default()
         }));
 
-        let (_g_bag, g_col) = crate::p2::interpreter::interpret(
+        let (_g_bag, g_col) = ftd::p2::interpreter::interpret(
             "foo/bar",
             indoc::indoc!(
                 "
@@ -12051,7 +12051,7 @@ mod test {
                 },
             }));
 
-        let (_g_bag, g_col) = crate::p2::interpreter::interpret(
+        let (_g_bag, g_col) = ftd::p2::interpreter::interpret(
             "foo/bar",
             indoc::indoc!(
                 "
@@ -12156,7 +12156,7 @@ mod test {
             },
         }));
 
-        let (_g_bag, g_col) = crate::p2::interpreter::interpret(
+        let (_g_bag, g_col) = ftd::p2::interpreter::interpret(
             "foo/bar",
             indoc::indoc!(
                 "
@@ -12225,7 +12225,7 @@ mod test {
             },
         }));
 
-        let (_g_bag, g_col) = crate::p2::interpreter::interpret(
+        let (_g_bag, g_col) = ftd::p2::interpreter::interpret(
             "foo/bar",
             indoc::indoc!(
                 "
@@ -12387,7 +12387,7 @@ mod test {
             },
         }));
 
-        let (_g_bag, g_col) = crate::p2::interpreter::interpret(
+        let (_g_bag, g_col) = ftd::p2::interpreter::interpret(
             "foo/bar",
             indoc::indoc!(
                 "
@@ -12500,7 +12500,7 @@ mod test {
                 },
             }));
 
-        let (_g_bag, g_col) = crate::p2::interpreter::interpret(
+        let (_g_bag, g_col) = ftd::p2::interpreter::interpret(
             "foo/bar",
             indoc::indoc!(
                 "
@@ -12565,7 +12565,7 @@ mod test {
             ..Default::default()
         }));
 
-        let (_g_bag, g_col) = crate::p2::interpreter::interpret(
+        let (_g_bag, g_col) = ftd::p2::interpreter::interpret(
             "foo/bar",
             indoc::indoc!(
                 "
@@ -12589,7 +12589,7 @@ mod test {
 
     /*#[test]
     fn loop_with_tree_structure_1() {
-        let (g_bag, g_col) = crate::p2::interpreter::interpret(
+        let (g_bag, g_col) = ftd::p2::interpreter::interpret(
             "foo/bar",
             indoc::indoc!(
                 "
@@ -12652,7 +12652,7 @@ mod test {
 
     #[test]
     fn loop_with_tree_structure_2() {
-        let (g_bag, g_col) = crate::p2::interpreter::interpret(
+        let (g_bag, g_col) = ftd::p2::interpreter::interpret(
             "foo/bar",
             indoc::indoc!(
                 "

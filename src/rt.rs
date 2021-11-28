@@ -2,7 +2,7 @@
 pub struct RT {
     pub name: String,
     pub aliases: std::collections::BTreeMap<String, String>,
-    pub bag: std::collections::BTreeMap<String, crate::p2::Thing>,
+    pub bag: std::collections::BTreeMap<String, ftd::p2::Thing>,
     pub instructions: Vec<ftd::Instruction>,
 }
 
@@ -10,7 +10,7 @@ impl RT {
     pub fn from(
         name: &str,
         aliases: std::collections::BTreeMap<String, String>,
-        bag: std::collections::BTreeMap<String, crate::p2::Thing>,
+        bag: std::collections::BTreeMap<String, ftd::p2::Thing>,
         instructions: Vec<ftd::Instruction>,
     ) -> Self {
         Self {
@@ -21,7 +21,7 @@ impl RT {
         }
     }
 
-    // pub fn set_bool(&mut self, variable: &str, value: bool, doc_id: &str) -> crate::p1::Result<bool> {
+    // pub fn set_bool(&mut self, variable: &str, value: bool, doc_id: &str) -> ftd::p1::Result<bool> {
     //     match self.bag.get(variable) {
     //         Some(ftd::p2::Thing::Variable(v)) => match v.value {
     //             ftd::Value::Boolean { value: old } => {
@@ -36,20 +36,20 @@ impl RT {
     //                 );
     //                 Ok(old)
     //             }
-    //             ref t => crate::e2(
+    //             ref t => ftd::e2(
     //                 format!("{} is not a boolean", variable),
     //                 format!("{:?}", t).as_str(),
     //             ),
     //         },
-    //         Some(t) => crate::e2(
+    //         Some(t) => ftd::e2(
     //             format!("{} is not a variable", variable),
     //             format!("{:?}", t).as_str(),
     //         ),
-    //         None => crate::e2(format!("{} not found", variable), doc_id),
+    //         None => ftd::e2(format!("{} not found", variable), doc_id),
     //     }
     // }
 
-    pub fn render(&mut self) -> crate::p1::Result<ftd::Column> {
+    pub fn render(&mut self) -> ftd::p1::Result<ftd::Column> {
         let mut main = self.render_();
         if let Ok(main) = &mut main {
             ftd::Element::set_id(&mut main.container.children, &[], None);
@@ -57,7 +57,7 @@ impl RT {
         main
     }
 
-    pub fn render_(&mut self) -> crate::p1::Result<ftd::Column> {
+    pub fn render_(&mut self) -> ftd::p1::Result<ftd::Column> {
         let mut main = ftd::p2::interpreter::default_column();
         let mut invocations = Default::default();
         let mut element = ftd::execute_doc::ExecuteDoc {
@@ -83,15 +83,15 @@ impl RT {
 }
 
 pub(crate) fn store_invocations(
-    bag: &mut std::collections::BTreeMap<String, crate::p2::Thing>,
+    bag: &mut std::collections::BTreeMap<String, ftd::p2::Thing>,
     invocations: std::collections::BTreeMap<
         String,
-        Vec<std::collections::BTreeMap<String, crate::Value>>,
+        Vec<std::collections::BTreeMap<String, ftd::Value>>,
     >,
 ) {
     for (k, v) in invocations.into_iter() {
         match bag.get_mut(k.as_str()).unwrap() {
-            crate::p2::Thing::Component(ref mut c) => {
+            ftd::p2::Thing::Component(ref mut c) => {
                 if !c.kernel {
                     c.invocations.extend(v)
                 }

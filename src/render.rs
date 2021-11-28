@@ -31,7 +31,7 @@ fn strip_image(s: &str) -> String {
 pub fn render(s: &str, auto_links: bool, hard_breaks: bool) -> String {
     let s = strip_image(s);
     let o = if auto_links && !hard_breaks {
-        comrak::markdown_to_html(s.as_str(), &crate::render::MD)
+        comrak::markdown_to_html(s.as_str(), &ftd::render::MD)
     } else {
         let mut md = MD.clone();
         md.hardbreaks = hard_breaks;
@@ -79,12 +79,12 @@ pub fn code_with_theme(
     ext: &str,
     theme: &str,
     doc_id: &str,
-) -> crate::p1::Result<String> {
+) -> ftd::p1::Result<String> {
     let syntax = SS
         .find_syntax_by_extension(ext)
         .unwrap_or_else(|| SS.find_syntax_plain_text());
     if !TS.themes.contains_key(theme) {
-        return Err(crate::p1::Error::ParseError {
+        return Err(ftd::p1::Error::ParseError {
             message: format!("'{}' is not a valid theme", theme),
             doc_id: doc_id.to_string(),
             line_number: 0,

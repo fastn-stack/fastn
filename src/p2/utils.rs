@@ -2,7 +2,7 @@ pub fn parse_import(
     c: &Option<String>,
     doc_id: &str,
     line_number: usize,
-) -> crate::p1::Result<(String, String)> {
+) -> ftd::p1::Result<(String, String)> {
     let v = match c {
         Some(v) => v.trim(),
         None => {
@@ -40,12 +40,12 @@ pub fn parse_import(
 pub fn string_and_ref(
     line_number: usize,
     name: &str,
-    properties: &std::collections::BTreeMap<String, (crate::Value, Option<String>)>,
+    properties: &std::collections::BTreeMap<String, (ftd::Value, Option<String>)>,
     all_locals: &mut ftd::Map,
     doc_id: &str,
-) -> crate::p1::Result<(String, Option<String>)> {
+) -> ftd::p1::Result<(String, Option<String>)> {
     match properties.get(name) {
-        Some((crate::Value::String { text, .. }, reference)) => {
+        Some((ftd::Value::String { text, .. }, reference)) => {
             Ok((text.to_string(), complete_reference(reference, all_locals)))
         }
         Some(v) => ftd::e2(
@@ -60,12 +60,12 @@ pub fn string_and_ref(
 pub fn string_and_source_and_ref(
     line_number: usize,
     name: &str,
-    properties: &std::collections::BTreeMap<String, (crate::Value, Option<String>)>,
+    properties: &std::collections::BTreeMap<String, (ftd::Value, Option<String>)>,
     all_locals: &mut ftd::Map,
     doc_id: &str,
-) -> crate::p1::Result<(String, crate::TextSource, Option<String>)> {
+) -> ftd::p1::Result<(String, ftd::TextSource, Option<String>)> {
     match properties.get(name) {
-        Some((crate::Value::String { text, source }, reference)) => Ok((
+        Some((ftd::Value::String { text, source }, reference)) => Ok((
             text.to_string(),
             source.to_owned(),
             complete_reference(reference, all_locals),
@@ -100,14 +100,14 @@ pub fn complete_reference(reference: &Option<String>, all_locals: &mut ftd::Map)
 
 pub fn string_optional(
     name: &str,
-    properties: &std::collections::BTreeMap<String, crate::Value>,
+    properties: &std::collections::BTreeMap<String, ftd::Value>,
     doc_id: &str,
     line_number: usize,
-) -> crate::p1::Result<Option<String>> {
+) -> ftd::p1::Result<Option<String>> {
     match properties.get(name) {
-        Some(crate::Value::String { text: v, .. }) => Ok(Some(v.to_string())),
-        Some(crate::Value::None {
-            kind: crate::p2::Kind::String { .. },
+        Some(ftd::Value::String { text: v, .. }) => Ok(Some(v.to_string())),
+        Some(ftd::Value::None {
+            kind: ftd::p2::Kind::String { .. },
         }) => Ok(None),
         Some(ftd::Value::None { .. }) => Ok(None),
         Some(v) => ftd::e2(
@@ -122,14 +122,14 @@ pub fn string_optional(
 pub fn string_with_default(
     name: &str,
     def: &str,
-    properties: &std::collections::BTreeMap<String, crate::Value>,
+    properties: &std::collections::BTreeMap<String, ftd::Value>,
     doc_id: &str,
     line_number: usize,
-) -> crate::p1::Result<String> {
+) -> ftd::p1::Result<String> {
     match properties.get(name) {
-        Some(crate::Value::String { text: v, .. }) => Ok(v.to_string()),
-        Some(crate::Value::None {
-            kind: crate::p2::Kind::String { .. },
+        Some(ftd::Value::String { text: v, .. }) => Ok(v.to_string()),
+        Some(ftd::Value::None {
+            kind: ftd::p2::Kind::String { .. },
         }) => Ok(def.to_string()),
         Some(ftd::Value::None { .. }) => Ok(def.to_string()),
         Some(v) => ftd::e2(
@@ -143,12 +143,12 @@ pub fn string_with_default(
 
 pub fn int(
     name: &str,
-    properties: &std::collections::BTreeMap<String, crate::Value>,
+    properties: &std::collections::BTreeMap<String, ftd::Value>,
     doc_id: &str,
     line_number: usize,
-) -> crate::p1::Result<i64> {
+) -> ftd::p1::Result<i64> {
     match properties.get(name) {
-        Some(crate::Value::Integer { value: v, .. }) => Ok(*v),
+        Some(ftd::Value::Integer { value: v, .. }) => Ok(*v),
         Some(v) => ftd::e2(
             format!("[{}] expected int, found: {:?}", name, v),
             doc_id,
@@ -160,14 +160,14 @@ pub fn int(
 
 pub fn int_optional(
     name: &str,
-    properties: &std::collections::BTreeMap<String, crate::Value>,
+    properties: &std::collections::BTreeMap<String, ftd::Value>,
     doc_id: &str,
     line_number: usize,
-) -> crate::p1::Result<Option<i64>> {
+) -> ftd::p1::Result<Option<i64>> {
     match properties.get(name) {
-        Some(crate::Value::Integer { value: v }) => Ok(Some(*v)),
-        Some(crate::Value::None {
-            kind: crate::p2::Kind::Integer { .. },
+        Some(ftd::Value::Integer { value: v }) => Ok(Some(*v)),
+        Some(ftd::Value::None {
+            kind: ftd::p2::Kind::Integer { .. },
         }) => Ok(None),
         Some(ftd::Value::None { .. }) => Ok(None),
         Some(v) => ftd::e2(format!("expected int, found: {:?}", v), doc_id, line_number),
@@ -178,14 +178,14 @@ pub fn int_optional(
 pub fn int_with_default(
     name: &str,
     def: i64,
-    properties: &std::collections::BTreeMap<String, crate::Value>,
+    properties: &std::collections::BTreeMap<String, ftd::Value>,
     doc_id: &str,
     line_number: usize,
-) -> crate::p1::Result<i64> {
+) -> ftd::p1::Result<i64> {
     match properties.get(name) {
-        Some(crate::Value::Integer { value: v }) => Ok(*v),
-        Some(crate::Value::None {
-            kind: crate::p2::Kind::Integer { .. },
+        Some(ftd::Value::Integer { value: v }) => Ok(*v),
+        Some(ftd::Value::None {
+            kind: ftd::p2::Kind::Integer { .. },
         }) => Ok(def),
         Some(ftd::Value::None { .. }) => Ok(def),
         Some(v) => ftd::e2(format!("expected int, found: {:?}", v), doc_id, line_number),
@@ -195,26 +195,26 @@ pub fn int_with_default(
 
 // pub fn elements(
 //     name: &str,
-//     properties: &std::collections::BTreeMap<String, crate::Value>,
-// ) -> crate::p1::Result<Vec<ftd::Element>> {
+//     properties: &std::collections::BTreeMap<String, ftd::Value>,
+// ) -> ftd::p1::Result<Vec<ftd::Element>> {
 //     match properties.get(name) {
-//         Some(crate::Value::Elements(v)) => Ok((*v).clone()),
-//         Some(v) => crate::e(format!("expected elements, found: {:?}", v)),
-//         None => crate::e(format!("'{}' not found", name)),
+//         Some(ftd::Value::Elements(v)) => Ok((*v).clone()),
+//         Some(v) => ftd::e(format!("expected elements, found: {:?}", v)),
+//         None => ftd::e(format!("'{}' not found", name)),
 //     }
 // }
 
 pub fn bool_with_default(
     name: &str,
     def: bool,
-    properties: &std::collections::BTreeMap<String, crate::Value>,
+    properties: &std::collections::BTreeMap<String, ftd::Value>,
     doc_id: &str,
     line_number: usize,
-) -> crate::p1::Result<bool> {
+) -> ftd::p1::Result<bool> {
     match properties.get(name) {
-        Some(crate::Value::Boolean { value: v }) => Ok(*v),
-        Some(crate::Value::None {
-            kind: crate::p2::Kind::Boolean { .. },
+        Some(ftd::Value::Boolean { value: v }) => Ok(*v),
+        Some(ftd::Value::None {
+            kind: ftd::p2::Kind::Boolean { .. },
         }) => Ok(def),
         Some(ftd::Value::None { .. }) => Ok(def),
         Some(v) => ftd::e2(
@@ -228,12 +228,12 @@ pub fn bool_with_default(
 
 pub fn bool(
     name: &str,
-    properties: &std::collections::BTreeMap<String, crate::Value>,
+    properties: &std::collections::BTreeMap<String, ftd::Value>,
     doc_id: &str,
     line_number: usize,
-) -> crate::p1::Result<bool> {
+) -> ftd::p1::Result<bool> {
     match properties.get(name) {
-        Some(crate::Value::Boolean { value: v, .. }) => Ok(*v),
+        Some(ftd::Value::Boolean { value: v, .. }) => Ok(*v),
         Some(v) => ftd::e2(
             format!("[{}] expected bool, found: {:?}", name, v),
             doc_id,
@@ -245,17 +245,17 @@ pub fn bool(
 
 pub fn string_bool_optional(
     name: &str,
-    properties: &std::collections::BTreeMap<String, crate::Value>,
+    properties: &std::collections::BTreeMap<String, ftd::Value>,
     doc_id: &str,
     line_number: usize,
-) -> crate::p1::Result<(Option<bool>, Option<String>)> {
+) -> ftd::p1::Result<(Option<bool>, Option<String>)> {
     match properties.get(name) {
-        Some(crate::Value::Boolean { value: v }) => Ok((Some(*v), None)),
-        Some(crate::Value::None {
-            kind: crate::p2::Kind::Boolean { .. },
+        Some(ftd::Value::Boolean { value: v }) => Ok((Some(*v), None)),
+        Some(ftd::Value::None {
+            kind: ftd::p2::Kind::Boolean { .. },
         }) => Ok((None, None)),
         Some(ftd::Value::None { .. }) => Ok((None, None)),
-        Some(crate::Value::String { text: v, .. }) => {
+        Some(ftd::Value::String { text: v, .. }) => {
             if let Ok(b) = v.parse::<bool>() {
                 Ok((Some(b), None))
             } else {
@@ -296,12 +296,12 @@ mod test {
 
 pub fn decimal(
     name: &str,
-    properties: &std::collections::BTreeMap<String, crate::Value>,
+    properties: &std::collections::BTreeMap<String, ftd::Value>,
     doc_id: &str,
     line_number: usize,
-) -> crate::p1::Result<f64> {
+) -> ftd::p1::Result<f64> {
     match properties.get(name) {
-        Some(crate::Value::Decimal { value: v, .. }) => Ok(*v),
+        Some(ftd::Value::Decimal { value: v, .. }) => Ok(*v),
         Some(v) => ftd::e2(
             format!("[{}] expected Decimal, found: {:?}", name, v),
             doc_id,
@@ -313,14 +313,14 @@ pub fn decimal(
 
 pub fn decimal_optional(
     name: &str,
-    properties: &std::collections::BTreeMap<String, crate::Value>,
+    properties: &std::collections::BTreeMap<String, ftd::Value>,
     doc_id: &str,
     line_number: usize,
-) -> crate::p1::Result<Option<f64>> {
+) -> ftd::p1::Result<Option<f64>> {
     match properties.get(name) {
-        Some(crate::Value::Decimal { value: v }) => Ok(Some(*v)),
-        Some(crate::Value::None {
-            kind: crate::p2::Kind::Decimal { .. },
+        Some(ftd::Value::Decimal { value: v }) => Ok(Some(*v)),
+        Some(ftd::Value::None {
+            kind: ftd::p2::Kind::Decimal { .. },
         }) => Ok(None),
         Some(ftd::Value::None { .. }) => Ok(None),
         Some(v) => ftd::e2(
@@ -332,7 +332,7 @@ pub fn decimal_optional(
     }
 }
 
-pub fn split(name: String, split_at: &str) -> crate::p1::Result<(String, String)> {
+pub fn split(name: String, split_at: &str) -> ftd::p1::Result<(String, String)> {
     let mut part = name.splitn(2, split_at);
     let part_1 = part.next().unwrap().trim();
     let part_2 = part.next().unwrap().trim();
@@ -462,9 +462,9 @@ pub fn reorder(p1: &[ftd::p1::Section], doc_id: &str) -> ftd::p1::Result<Vec<ftd
 }
 
 pub fn properties(
-    properties_with_ref: &std::collections::BTreeMap<String, (crate::Value, Option<String>)>,
-) -> std::collections::BTreeMap<String, crate::Value> {
-    let mut properties: std::collections::BTreeMap<String, crate::Value> = Default::default();
+    properties_with_ref: &std::collections::BTreeMap<String, (ftd::Value, Option<String>)>,
+) -> std::collections::BTreeMap<String, ftd::Value> {
+    let mut properties: std::collections::BTreeMap<String, ftd::Value> = Default::default();
     for (k, (v, _)) in properties_with_ref {
         properties.insert(k.to_string(), v.to_owned());
     }

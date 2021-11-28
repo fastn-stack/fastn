@@ -838,7 +838,7 @@ impl Length {
         }
 
         if l.starts_with("calc ") {
-            let v = crate::get_name("calc", l.as_str(), doc_id)?;
+            let v = ftd::get_name("calc", l.as_str(), doc_id)?;
             return match v.parse() {
                 Ok(v) => Ok(Some(Length::Calc { value: v })),
                 Err(_) => ftd::e2(format!("{} is not a valid integer", v), doc_id, 0), // TODO
@@ -850,14 +850,14 @@ impl Length {
         }
 
         if l.starts_with("portion ") {
-            let v = crate::get_name("portion", l.as_str(), doc_id)?;
+            let v = ftd::get_name("portion", l.as_str(), doc_id)?;
             return match v.parse() {
                 Ok(v) => Ok(Some(Length::Portion { value: v })),
                 Err(_) => ftd::e2(format!("{} is not a valid integer", v), doc_id, 0), // TODO
             };
         }
         if l.starts_with("percent ") {
-            let v = crate::get_name("percent", l.as_str(), doc_id)?;
+            let v = ftd::get_name("percent", l.as_str(), doc_id)?;
             return match v.parse() {
                 Ok(v) => Ok(Some(Length::Percent { value: v })),
                 Err(_) => ftd::e2(format!("{} is not a valid integer", v), doc_id, 0), // TODO
@@ -866,7 +866,7 @@ impl Length {
 
         match l.parse() {
             Ok(v) => Ok(Some(Length::Px { value: v })),
-            Err(_) => crate::e2(format!("{} is not a valid integer", l), doc_id, 0),
+            Err(_) => ftd::e2(format!("{} is not a valid integer", l), doc_id, 0),
         }
     }
 }
@@ -1147,7 +1147,7 @@ impl GradientDirection {
             return Ok(Some(GradientDirection::Center));
         }
         if l.starts_with("angle ") {
-            let v = crate::get_name("angle", l.as_str(), doc_id)?;
+            let v = ftd::get_name("angle", l.as_str(), doc_id)?;
             return match v.parse() {
                 Ok(v) => Ok(Some(GradientDirection::Angle { value: v })),
                 Err(_) => ftd::e2(format!("{} is not a valid integer", v), doc_id, 0),

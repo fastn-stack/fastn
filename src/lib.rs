@@ -21,7 +21,7 @@ mod value_with_default;
 pub(crate) mod variable;
 mod youtube_id;
 
-pub use crate::value_with_default::ValueWithDefault;
+pub use ftd::value_with_default::ValueWithDefault;
 pub use component::{ChildComponent, Component, Instruction};
 pub use condition::Condition;
 pub use event::{Action, Event};
@@ -172,7 +172,7 @@ pub fn latex(s: &str, doc_id: &str) -> ftd::p1::Result<ftd::Rendered> {
 }
 
 pub fn code(code: &str, ext: &str, doc_id: &str) -> ftd::Rendered {
-    code_with_theme(code, ext, crate::render::DEFAULT_THEME, doc_id).unwrap()
+    code_with_theme(code, ext, ftd::render::DEFAULT_THEME, doc_id).unwrap()
 }
 
 pub fn code_with_theme(
@@ -180,7 +180,7 @@ pub fn code_with_theme(
     ext: &str,
     theme: &str,
     doc_id: &str,
-) -> crate::p1::Result<ftd::Rendered> {
+) -> ftd::p1::Result<ftd::Rendered> {
     Ok(ftd::Rendered {
         original: code.to_string(),
         rendered: render::code_with_theme(
@@ -199,11 +199,11 @@ pub fn markdown_line(s: &str) -> ftd::Rendered {
     }
 }
 
-pub fn e2<T, S1>(m: S1, doc_id: &str, line_number: usize) -> crate::p1::Result<T>
+pub fn e2<T, S1>(m: S1, doc_id: &str, line_number: usize) -> ftd::p1::Result<T>
 where
     S1: Into<String>,
 {
-    Err(crate::p1::Error::ParseError {
+    Err(ftd::p1::Error::ParseError {
         message: m.into(),
         doc_id: doc_id.to_string(),
         line_number,
@@ -214,11 +214,11 @@ pub fn unknown_processor_error<T, S>(
     m: S,
     doc_id: String,
     line_number: usize,
-) -> crate::p1::Result<T>
+) -> ftd::p1::Result<T>
 where
     S: Into<String>,
 {
-    Err(crate::p1::Error::ParseError {
+    Err(ftd::p1::Error::ParseError {
         message: m.into(),
         doc_id,
         line_number,
@@ -229,7 +229,7 @@ pub fn split_module<'a>(
     id: &'a str,
     doc_id: &str,
     line_number: usize,
-) -> crate::p1::Result<(Option<&'a str>, &'a str, Option<&'a str>)> {
+) -> ftd::p1::Result<(Option<&'a str>, &'a str, Option<&'a str>)> {
     if id.chars().filter(|v| *v == '.').count() > 2 {
         return ftd::e2(
             format!("id contains more than two dots: {}", id),

@@ -1,4 +1,4 @@
-pub use crate::p1::{Error, Header, Result, SubSection, SubSections};
+pub use ftd::p1::{Error, Header, Result, SubSection, SubSections};
 
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize, serde::Deserialize)]
 pub struct Section {
@@ -196,7 +196,7 @@ impl Section {
         &self,
         name: &str,
         doc_id: String,
-    ) -> crate::p1::Result<&crate::p1::SubSection> {
+    ) -> ftd::p1::Result<&ftd::p1::SubSection> {
         let mut count = 0;
         for s in self.sub_sections.0.iter() {
             if s.is_commented {
@@ -207,7 +207,7 @@ impl Section {
             }
         }
         if count > 1 {
-            return Err(crate::p1::Error::MoreThanOneSubSections {
+            return Err(ftd::p1::Error::MoreThanOneSubSections {
                 key: name.to_string(),
                 doc_id,
                 line_number: self.line_number,
@@ -223,7 +223,7 @@ impl Section {
             }
         }
 
-        Err(crate::p1::Error::NotFound {
+        Err(ftd::p1::Error::NotFound {
             doc_id,
             line_number: self.line_number,
             key: name.to_string(),

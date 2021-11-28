@@ -2,7 +2,7 @@
 pub struct TDoc<'a> {
     pub name: &'a str,
     pub aliases: &'a std::collections::BTreeMap<String, String>,
-    pub bag: &'a std::collections::BTreeMap<String, crate::p2::Thing>,
+    pub bag: &'a std::collections::BTreeMap<String, ftd::p2::Thing>,
 }
 
 impl<'a> TDoc<'a> {
@@ -145,7 +145,7 @@ impl<'a> TDoc<'a> {
         &self,
         line_number: usize,
         name: &str,
-    ) -> crate::p1::Result<String> {
+    ) -> ftd::p1::Result<String> {
         if name.contains('#') {
             return Ok(name.to_string());
         }
@@ -172,7 +172,7 @@ impl<'a> TDoc<'a> {
         line_number: usize,
         name: &str,
         instructions: &[ftd::Instruction],
-    ) -> crate::p1::Result<String> {
+    ) -> ftd::p1::Result<String> {
         if name.contains('#') {
             return Ok(name.to_string());
         }
@@ -204,7 +204,7 @@ impl<'a> TDoc<'a> {
         })
     }
 
-    pub fn resolve_name(&self, line_number: usize, name: &str) -> crate::p1::Result<String> {
+    pub fn resolve_name(&self, line_number: usize, name: &str) -> ftd::p1::Result<String> {
         if name.contains('#') {
             return Ok(name.to_string());
         }
@@ -223,16 +223,16 @@ impl<'a> TDoc<'a> {
         &self,
         line_number: usize,
         name: &str,
-    ) -> crate::p1::Result<crate::p2::Record> {
+    ) -> ftd::p1::Result<ftd::p2::Record> {
         match self.get_thing(line_number, name)? {
-            crate::p2::Thing::Record(v) => Ok(v),
+            ftd::p2::Thing::Record(v) => Ok(v),
             v => self.err("not a record", v, "get_record", line_number),
         }
     }
 
-    pub fn get_or_type(&self, line_number: usize, name: &str) -> crate::p1::Result<crate::OrType> {
+    pub fn get_or_type(&self, line_number: usize, name: &str) -> ftd::p1::Result<ftd::OrType> {
         match self.get_thing(line_number, name)? {
-            crate::p2::Thing::OrType(v) => Ok(v),
+            ftd::p2::Thing::OrType(v) => Ok(v),
             v => self.err("not an or-type", v, "get_or_type", line_number),
         }
     }
@@ -241,9 +241,9 @@ impl<'a> TDoc<'a> {
         &self,
         line_number: usize,
         name: &str,
-    ) -> crate::p1::Result<bool> {
+    ) -> ftd::p1::Result<bool> {
         match self.get_value(line_number, name)? {
-            crate::Value::Record { .. } => Ok(true),
+            ftd::Value::Record { .. } => Ok(true),
             _ => Ok(false),
         }
     }
@@ -253,14 +253,14 @@ impl<'a> TDoc<'a> {
         line_number: usize,
         name: &str,
         root_name: Option<&str>,
-    ) -> crate::p1::Result<(crate::Value, Vec<(crate::p2::Boolean, crate::Value)>)> {
+    ) -> ftd::p1::Result<(ftd::Value, Vec<(ftd::p2::Boolean, ftd::Value)>)> {
         match self.get_thing_with_root(line_number, name, root_name)? {
-            crate::p2::Thing::Variable(v) => Ok((v.value, v.conditions)),
+            ftd::p2::Thing::Variable(v) => Ok((v.value, v.conditions)),
             v => self.err("not a variable", v, "get_value", line_number),
         }
     }
 
-    pub fn get_value(&self, line_number: usize, name: &str) -> crate::p1::Result<crate::Value> {
+    pub fn get_value(&self, line_number: usize, name: &str) -> ftd::p1::Result<ftd::Value> {
         // TODO: name can be a.b.c, and a and a.b are records with right fields
         self.get_value_with_root(line_number, name, None)
     }
@@ -270,10 +270,10 @@ impl<'a> TDoc<'a> {
         line_number: usize,
         name: &str,
         root_name: Option<&str>,
-    ) -> crate::p1::Result<crate::Value> {
+    ) -> ftd::p1::Result<ftd::Value> {
         // TODO: name can be a.b.c, and a and a.b are records with right fields
         match self.get_thing_with_root(line_number, name, root_name)? {
-            crate::p2::Thing::Variable(v) => Ok(v.value),
+            ftd::p2::Thing::Variable(v) => Ok(v.value),
             v => self.err("not a variable", v, "get_value", line_number),
         }
     }
@@ -284,8 +284,8 @@ impl<'a> TDoc<'a> {
         ctx: T2,
         f: &str,
         line_number: usize,
-    ) -> crate::p1::Result<T> {
-        crate::e2(
+    ) -> ftd::p1::Result<T> {
+        ftd::e2(
             format!("{}: {} ({:?}), f: {}", self.name, msg, ctx, f),
             self.name,
             line_number,
@@ -296,9 +296,9 @@ impl<'a> TDoc<'a> {
         &self,
         line_number: usize,
         name: &str,
-    ) -> crate::p1::Result<crate::Component> {
+    ) -> ftd::p1::Result<ftd::Component> {
         match self.get_thing(line_number, name)? {
-            crate::p2::Thing::Component(v) => Ok(v),
+            ftd::p2::Thing::Component(v) => Ok(v),
             v => self.err("not a component", v, "get_component", line_number),
         }
     }
@@ -308,9 +308,9 @@ impl<'a> TDoc<'a> {
         line_number: usize,
         name: &str,
         root_name: Option<&str>,
-    ) -> crate::p1::Result<crate::Component> {
+    ) -> ftd::p1::Result<ftd::Component> {
         match self.get_thing_with_root(line_number, name, root_name)? {
-            crate::p2::Thing::Component(v) => Ok(v),
+            ftd::p2::Thing::Component(v) => Ok(v),
             v => self.err("not a component", v, "get_component", line_number),
         }
     }
@@ -319,7 +319,7 @@ impl<'a> TDoc<'a> {
         &'a self,
         name: &'a str,
         line_number: usize,
-    ) -> crate::p1::Result<Option<&str>> {
+    ) -> ftd::p1::Result<Option<&str>> {
         if name.contains('#') {
             match name.split_once('#') {
                 Some((p1, _)) => {
@@ -351,7 +351,7 @@ impl<'a> TDoc<'a> {
         &'a self,
         line_number: usize,
         name: &'a str,
-    ) -> crate::p1::Result<crate::p2::Thing> {
+    ) -> ftd::p1::Result<ftd::p2::Thing> {
         self.get_thing_with_root(line_number, name, None)
     }
 
@@ -360,7 +360,7 @@ impl<'a> TDoc<'a> {
         line_number: usize,
         name: &'a str,
         root_name: Option<&'a str>,
-    ) -> crate::p1::Result<crate::p2::Thing> {
+    ) -> ftd::p1::Result<ftd::p2::Thing> {
         let name = if let Some(name) = name.strip_prefix('$') {
             name
         } else {
@@ -387,20 +387,20 @@ impl<'a> TDoc<'a> {
                     None => {
                         let thing = self.get_thing(line_number, m)?;
                         match thing.clone() {
-                            crate::p2::Thing::OrType(e) => {
-                                Some(crate::p2::Thing::OrTypeWithVariant {
+                            ftd::p2::Thing::OrType(e) => {
+                                Some(ftd::p2::Thing::OrTypeWithVariant {
                                     e,
                                     variant: v.to_string(),
                                 })
                             }
-                            crate::p2::Thing::Variable(crate::Variable {
+                            ftd::p2::Thing::Variable(ftd::Variable {
                                 name,
                                 value,
                                 conditions,
                             }) => {
                                 let fields = match value {
-                                    crate::Value::Record { fields, .. } => fields,
-                                    crate::Value::OrType { fields, .. } => fields,
+                                    ftd::Value::Record { fields, .. } => fields,
+                                    ftd::Value::OrType { fields, .. } => fields,
                                     _ => {
                                         return self.err(
                                             "not an record or or-type",
@@ -410,15 +410,15 @@ impl<'a> TDoc<'a> {
                                         )
                                     }
                                 };
-                                if let Some(crate::PropertyValue::Value { value: val }) =
+                                if let Some(ftd::PropertyValue::Value { value: val }) =
                                     fields.get(v)
                                 {
-                                    return Ok(crate::p2::Thing::Variable(crate::Variable {
+                                    return Ok(ftd::p2::Thing::Variable(ftd::Variable {
                                         name,
                                         value: val.clone(),
                                         conditions,
                                     }));
-                                } else if let Some(crate::PropertyValue::Reference {
+                                } else if let Some(ftd::PropertyValue::Reference {
                                     name, ..
                                 }) = fields.get(v)
                                 {
@@ -435,8 +435,8 @@ impl<'a> TDoc<'a> {
                 },
                 (Some(m), e, Some(v)) => match self.aliases.get(m) {
                     Some(m) => match self.bag.get(format!("{}#{}", m, e).as_str()) {
-                        Some(crate::p2::Thing::OrType(e)) => {
-                            Some(crate::p2::Thing::OrTypeWithVariant {
+                        Some(ftd::p2::Thing::OrType(e)) => {
+                            Some(ftd::p2::Thing::OrTypeWithVariant {
                                 e: e.to_owned(),
                                 variant: v.to_string(),
                             })
@@ -475,8 +475,8 @@ impl<'a> TDoc<'a> {
                     }
                 }
                 (None, e, Some(v)) => match self.bag.get(format!("{}#{}", self.name, e).as_str()) {
-                    Some(crate::p2::Thing::OrType(e)) => {
-                        Some(crate::p2::Thing::OrTypeWithVariant {
+                    Some(ftd::p2::Thing::OrType(e)) => {
+                        Some(ftd::p2::Thing::OrTypeWithVariant {
                             e: e.to_owned(),
                             variant: v.to_string(),
                         })

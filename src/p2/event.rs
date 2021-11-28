@@ -10,8 +10,8 @@ impl Event {
     fn to_value(
         line_number: usize,
         property: &std::collections::BTreeMap<String, Vec<ftd::PropertyValue>>,
-        arguments: &std::collections::BTreeMap<String, crate::Value>,
-        doc: &crate::p2::TDoc,
+        arguments: &std::collections::BTreeMap<String, ftd::Value>,
+        doc: &ftd::p2::TDoc,
         root_name: Option<&str>,
     ) -> ftd::p1::Result<std::collections::BTreeMap<String, Vec<String>>> {
         let mut property_string: std::collections::BTreeMap<String, Vec<String>> =
@@ -40,13 +40,13 @@ impl Event {
         line_number: usize,
         events: &[Self],
         all_locals: &mut ftd::Map,
-        arguments: &std::collections::BTreeMap<String, crate::Value>,
-        doc: &crate::p2::TDoc,
+        arguments: &std::collections::BTreeMap<String, ftd::Value>,
+        doc: &ftd::p2::TDoc,
         root_name: Option<&str>,
-    ) -> crate::p1::Result<Vec<ftd::Event>> {
+    ) -> ftd::p1::Result<Vec<ftd::Event>> {
         let arguments = {
             //remove properties
-            let mut arguments_without_properties: std::collections::BTreeMap<String, crate::Value> =
+            let mut arguments_without_properties: std::collections::BTreeMap<String, ftd::Value> =
                 Default::default();
             for (k, v) in arguments {
                 if let Some(k) = k.strip_prefix('$') {
@@ -95,7 +95,7 @@ impl Event {
         Ok(event)
     }
 
-    pub fn mouse_event(all_locals: &mut ftd::Map) -> crate::p1::Result<Vec<ftd::Event>> {
+    pub fn mouse_event(all_locals: &mut ftd::Map) -> ftd::p1::Result<Vec<ftd::Event>> {
         let mut event: Vec<ftd::Event> = vec![];
         if let Some(val) = all_locals.get("MOUSE-IN") {
             event.push(ftd::Event {
@@ -152,8 +152,8 @@ impl Event {
         line_number: usize,
         event_name: &str,
         action: &str,
-        doc: &crate::p2::TDoc,
-        arguments: &std::collections::BTreeMap<String, crate::p2::Kind>,
+        doc: &ftd::p2::TDoc,
+        arguments: &std::collections::BTreeMap<String, ftd::p2::Kind>,
     ) -> ftd::p1::Result<Self> {
         let event_name = EventName::from_string(event_name, doc.name)?;
         let action = Action::to_action(line_number, action, doc, arguments)?;
@@ -216,7 +216,7 @@ impl ActionKind {
     //         "stop-propagation" => Ok(Self::StopPropagation),
     //         "prevent-default" => Ok(Self::PreventDefault),
     //         "set-value" => Ok(Self::SetValue),
-    //         t => return crate::e2(format!("{} is not a valid action kind", t), doc_id),
+    //         t => return ftd::e2(format!("{} is not a valid action kind", t), doc_id),
     //     }
     // }
 
@@ -255,8 +255,8 @@ impl Action {
     fn to_action(
         line_number: usize,
         a: &str,
-        doc: &crate::p2::TDoc,
-        arguments: &std::collections::BTreeMap<String, crate::p2::Kind>,
+        doc: &ftd::p2::TDoc,
+        arguments: &std::collections::BTreeMap<String, ftd::p2::Kind>,
     ) -> ftd::p1::Result<Self> {
         let a: String = a.split_whitespace().collect::<Vec<&str>>().join(" ");
         return match a {
@@ -414,9 +414,9 @@ impl Action {
         fn get_target(
             line_number: usize,
             value: String,
-            doc: &crate::p2::TDoc,
-            arguments: &std::collections::BTreeMap<String, crate::p2::Kind>,
-            kind: Option<crate::p2::Kind>,
+            doc: &ftd::p2::TDoc,
+            arguments: &std::collections::BTreeMap<String, ftd::p2::Kind>,
+            kind: Option<ftd::p2::Kind>,
         ) -> ftd::p1::Result<(String, ftd::p2::Kind)> {
             let pv =
                 ftd::PropertyValue::resolve_value(line_number, &value, kind, doc, arguments, None)?;

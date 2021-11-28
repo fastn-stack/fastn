@@ -58,7 +58,7 @@ impl Document {
         data
     }
 
-    pub fn rerender(&mut self, id: &str, doc_id: &str) -> crate::p1::Result<ftd::Document> {
+    pub fn rerender(&mut self, id: &str, doc_id: &str) -> ftd::p1::Result<ftd::Document> {
         let mut rt = ftd::RT::from(
             self.name.as_str(),
             self.aliases.clone(),
@@ -230,9 +230,9 @@ impl Document {
     pub fn without_render(
         name: &str,
         source: &str,
-        lib: &dyn crate::p2::Library,
-    ) -> crate::p1::Result<Document> {
-        let mut interpreter = crate::p2::interpreter::Interpreter::new(lib);
+        lib: &dyn ftd::p2::Library,
+    ) -> ftd::p1::Result<Document> {
+        let mut interpreter = ftd::p2::interpreter::Interpreter::new(lib);
         let instructions = interpreter.interpret(name, source)?;
         let rt = ftd::RT::from(name, interpreter.aliases, interpreter.bag, instructions);
 
@@ -249,8 +249,8 @@ impl Document {
     pub fn from(
         name: &str,
         source: &str,
-        lib: &dyn crate::p2::Library,
-    ) -> crate::p1::Result<Document> {
+        lib: &dyn ftd::p2::Library,
+    ) -> ftd::p1::Result<Document> {
         let mut d = Self::without_render(name, source, lib)?;
 
         let mut rt = ftd::RT::from(
@@ -340,7 +340,7 @@ impl Document {
         None
     }
 
-    pub fn get<T: serde::de::DeserializeOwned>(&self, key: &str) -> crate::p1::Result<T> {
+    pub fn get<T: serde::de::DeserializeOwned>(&self, key: &str) -> ftd::p1::Result<T> {
         let v = self.json(key)?;
         Ok(serde_json::from_value(v)?)
     }
@@ -353,7 +353,7 @@ impl Document {
         }
     }
 
-    pub fn only_instance<T>(&self, record: &str) -> crate::p1::Result<Option<T>>
+    pub fn only_instance<T>(&self, record: &str) -> ftd::p1::Result<Option<T>>
     where
         T: serde::de::DeserializeOwned,
     {
@@ -371,7 +371,7 @@ impl Document {
         Ok(Some(v.into_iter().next().unwrap())) // unwrap okay because v not empty
     }
 
-    pub fn instances<T>(&self, record: &str) -> crate::p1::Result<Vec<T>>
+    pub fn instances<T>(&self, record: &str) -> ftd::p1::Result<Vec<T>>
     where
         T: serde::de::DeserializeOwned,
     {
@@ -382,7 +382,7 @@ impl Document {
         };
 
         let json = match thing {
-            crate::p2::Thing::Record(r) => {
+            ftd::p2::Thing::Record(r) => {
                 let mut a = vec![];
                 for c in match r.instances.get(self.name.as_str()) {
                     Some(v) => v.iter(),
@@ -402,7 +402,7 @@ impl Document {
     pub fn calls<T: serde::de::DeserializeOwned>(
         &self,
         component: &str,
-    ) -> crate::p1::Result<Vec<T>> {
+    ) -> ftd::p1::Result<Vec<T>> {
         let component = self.name(component);
         let thing = match self.data.get(component.as_str()) {
             Some(t) => t,
@@ -410,7 +410,7 @@ impl Document {
         };
 
         let json = match thing {
-            crate::p2::Thing::Component(c) => {
+            ftd::p2::Thing::Component(c) => {
                 let mut a = vec![];
                 for c in c.invocations.iter() {
                     a.push(self.object2_to_json(c)?);
@@ -423,12 +423,12 @@ impl Document {
         Ok(serde_json::from_value(json)?)
     }
 
-    pub fn json(&self, key: &str) -> crate::p1::Result<serde_json::Value> {
+    pub fn json(&self, key: &str) -> ftd::p1::Result<serde_json::Value> {
         let key = self.name(key);
         let thing = match self.data.get(key.as_str()) {
             Some(v) => v,
             None => {
-                return Err(crate::p1::Error::NotFound {
+                return Err(ftd::p1::Error::NotFound {
                     doc_id: "".to_string(),
                     line_number: 0,
                     key: key.to_string(),
@@ -437,28 +437,28 @@ impl Document {
         };
 
         match thing {
-            crate::p2::Thing::Variable(v) => self.value_to_json(&v.value),
+            ftd::p2::Thing::Variable(v) => self.value_to_json(&v.value),
             t => panic!("{:?} is not a variable", t),
         }
     }
 
-    fn value_to_json(&self, v: &crate::Value) -> crate::p1::Result<serde_json::Value> {
+    fn value_to_json(&self, v: &ftd::Value) -> ftd::p1::Result<serde_json::Value> {
         Ok(match v {
-            crate::Value::Integer { value } => {
+            ftd::Value::Integer { value } => {
                 serde_json::Value::Number(serde_json::Number::from(*value))
             }
-            crate::Value::Boolean { value } => serde_json::Value::Bool(*value),
-            crate::Value::Decimal { value } => {
+            ftd::Value::Boolean { value } => serde_json::Value::Bool(*value),
+            ftd::Value::Decimal { value } => {
                 serde_json::Value::Number(serde_json::Number::from_f64(*value).unwrap())
                 // TODO: remove unwrap
             }
-            crate::Value::String { text, .. } => serde_json::Value::String(text.to_owned()),
-            crate::Value::Record { fields, .. } => self.object_to_json(None, fields)?,
-            crate::Value::OrType {
+            ftd::Value::String { text, .. } => serde_json::Value::String(text.to_owned()),
+            ftd::Value::Record { fields, .. } => self.object_to_json(None, fields)?,
+            ftd::Value::OrType {
                 variant, fields, ..
             } => self.object_to_json(Some(variant), fields)?,
-            crate::Value::List { data, .. } => self.list_to_json(data)?,
-            crate::Value::None { .. } => serde_json::Value::Null,
+            ftd::Value::List { data, .. } => self.list_to_json(data)?,
+            ftd::Value::None { .. } => serde_json::Value::Null,
             _ => {
                 return ftd::e2(
                     format!("unhandled value found(value_to_json): {:?}", v),
@@ -469,7 +469,7 @@ impl Document {
         })
     }
 
-    fn list_to_json(&self, data: &[crate::Value]) -> crate::p1::Result<serde_json::Value> {
+    fn list_to_json(&self, data: &[ftd::Value]) -> ftd::p1::Result<serde_json::Value> {
         let mut list = vec![];
         for item in data.iter() {
             list.push(self.value_to_json(item)?)
@@ -480,8 +480,8 @@ impl Document {
     #[cfg(calls)]
     fn object2_to_json(
         &self,
-        fields: &std::collections::BTreeMap<String, crate::Value>,
-    ) -> crate::p1::Result<serde_json::Value> {
+        fields: &std::collections::BTreeMap<String, ftd::Value>,
+    ) -> ftd::p1::Result<serde_json::Value> {
         let mut map = serde_json::Map::new();
         for (k, v) in fields.iter() {
             map.insert(k.to_string(), self.value_to_json(v)?);
@@ -492,8 +492,8 @@ impl Document {
     fn object_to_json(
         &self,
         variant: Option<&String>,
-        fields: &std::collections::BTreeMap<String, crate::PropertyValue>,
-    ) -> crate::p1::Result<serde_json::Value> {
+        fields: &std::collections::BTreeMap<String, ftd::PropertyValue>,
+    ) -> ftd::p1::Result<serde_json::Value> {
         let mut map = serde_json::Map::new();
         if let Some(v) = variant {
             map.insert("type".to_string(), serde_json::Value::String(v.to_owned()));
@@ -506,11 +506,11 @@ impl Document {
 
     fn property_value_to_json(
         &self,
-        v: &crate::PropertyValue,
-    ) -> crate::p1::Result<serde_json::Value> {
+        v: &ftd::PropertyValue,
+    ) -> ftd::p1::Result<serde_json::Value> {
         match v {
-            crate::PropertyValue::Value { value, .. } => self.value_to_json(value),
-            crate::PropertyValue::Reference { name, .. } => self.json(name),
+            ftd::PropertyValue::Value { value, .. } => self.value_to_json(value),
+            ftd::PropertyValue::Reference { name, .. } => self.json(name),
             _ => unreachable!(),
         }
     }
@@ -594,7 +594,7 @@ pub fn default_scene_children_position(elements: &mut Vec<ftd::Element>) {
 
 #[cfg(test)]
 mod test {
-    use crate::test::*;
+    use ftd::test::*;
 
     #[test]
     fn variable_from_other_doc() {

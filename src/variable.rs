@@ -2,15 +2,15 @@
 pub struct Variable {
     pub name: String,
     pub value: Value,
-    pub conditions: Vec<(crate::p2::Boolean, crate::Value)>,
+    pub conditions: Vec<(ftd::p2::Boolean, ftd::Value)>,
 }
 
 #[derive(Debug, Clone, PartialEq, serde::Serialize, serde::Deserialize)]
 #[serde(tag = "type")]
 pub enum PropertyValue {
-    Value { value: crate::variable::Value },
-    Reference { name: String, kind: crate::p2::Kind },
-    Variable { name: String, kind: crate::p2::Kind },
+    Value { value: ftd::variable::Value },
+    Reference { name: String, kind: ftd::p2::Kind },
+    Variable { name: String, kind: ftd::p2::Kind },
 }
 
 impl PropertyValue {
@@ -83,10 +83,10 @@ impl PropertyValue {
                 }
                 let expected_kind = expected_kind.unwrap();
                 match expected_kind.inner() {
-                    ftd::p2::Kind::Integer { .. } => crate::PropertyValue::Value {
-                        value: crate::Value::Integer {
+                    ftd::p2::Kind::Integer { .. } => ftd::PropertyValue::Value {
+                        value: ftd::Value::Integer {
                             value: string.parse::<i64>().map_err(|e| {
-                                crate::p1::Error::ParseError {
+                                ftd::p1::Error::ParseError {
                                     message: e.to_string(),
                                     doc_id: doc.name.to_string(),
                                     line_number,
@@ -94,10 +94,10 @@ impl PropertyValue {
                             })?,
                         },
                     },
-                    ftd::p2::Kind::Decimal { .. } => crate::PropertyValue::Value {
-                        value: crate::Value::Decimal {
+                    ftd::p2::Kind::Decimal { .. } => ftd::PropertyValue::Value {
+                        value: ftd::Value::Decimal {
                             value: string.parse::<f64>().map_err(|e| {
-                                crate::p1::Error::ParseError {
+                                ftd::p1::Error::ParseError {
                                     message: e.to_string(),
                                     doc_id: doc.name.to_string(),
                                     line_number,
@@ -105,10 +105,10 @@ impl PropertyValue {
                             })?,
                         },
                     },
-                    ftd::p2::Kind::Boolean { .. } => crate::PropertyValue::Value {
-                        value: crate::Value::Boolean {
+                    ftd::p2::Kind::Boolean { .. } => ftd::PropertyValue::Value {
+                        value: ftd::Value::Boolean {
                             value: string.parse::<bool>().map_err(|e| {
-                                crate::p1::Error::ParseError {
+                                ftd::p1::Error::ParseError {
                                     message: e.to_string(),
                                     doc_id: doc.name.to_string(),
                                     line_number,
@@ -116,8 +116,8 @@ impl PropertyValue {
                             })?,
                         },
                     },
-                    ftd::p2::Kind::String { .. } => crate::PropertyValue::Value {
-                        value: crate::Value::String {
+                    ftd::p2::Kind::String { .. } => ftd::PropertyValue::Value {
+                        value: ftd::Value::String {
                             text: string,
                             source: source.unwrap_or(ftd::TextSource::Header),
                         },
@@ -162,7 +162,7 @@ impl PropertyValue {
             p2: Option<String>,
             doc: &ftd::p2::TDoc,
             expected_kind: &Option<ftd::p2::Kind>,
-        ) -> crate::p1::Result<ftd::p2::Kind> {
+        ) -> ftd::p1::Result<ftd::p2::Kind> {
             let mut found_kind = kind.to_owned();
             if let ftd::p2::Kind::Record { ref name } = kind {
                 if let Some(p2) = p2 {
@@ -199,7 +199,7 @@ impl PropertyValue {
         }
     }
 
-    pub fn kind(&self) -> crate::p2::Kind {
+    pub fn kind(&self) -> ftd::p2::Kind {
         match self {
             Self::Value { value: v } => v.kind(),
             Self::Reference { kind, .. } => kind.to_owned(),
@@ -209,22 +209,22 @@ impl PropertyValue {
     pub fn resolve(
         &self,
         line_number: usize,
-        arguments: &std::collections::BTreeMap<String, crate::Value>,
-        doc: &crate::p2::TDoc,
-    ) -> crate::p1::Result<Value> {
+        arguments: &std::collections::BTreeMap<String, ftd::Value>,
+        doc: &ftd::p2::TDoc,
+    ) -> ftd::p1::Result<Value> {
         self.resolve_with_root(line_number, arguments, doc, None)
     }
 
     pub fn resolve_with_root(
         &self,
         line_number: usize,
-        arguments: &std::collections::BTreeMap<String, crate::Value>,
-        doc: &crate::p2::TDoc,
+        arguments: &std::collections::BTreeMap<String, ftd::Value>,
+        doc: &ftd::p2::TDoc,
         root_name: Option<&str>,
-    ) -> crate::p1::Result<Value> {
+    ) -> ftd::p1::Result<Value> {
         Ok(match self {
-            crate::PropertyValue::Value { value: v } => v.to_owned(),
-            crate::PropertyValue::Variable {
+            ftd::PropertyValue::Value { value: v } => v.to_owned(),
+            ftd::PropertyValue::Variable {
                 name,
                 kind: argument_kind,
             } => {
@@ -284,7 +284,7 @@ impl PropertyValue {
                     }
                 }
             }
-            crate::PropertyValue::Reference {
+            ftd::PropertyValue::Reference {
                 name: reference_name,
                 kind: reference_kind,
             } => {
@@ -322,7 +322,7 @@ pub enum TextSource {
 #[allow(clippy::large_enum_variant)]
 pub enum Value {
     None {
-        kind: crate::p2::Kind,
+        kind: ftd::p2::Kind,
     },
     String {
         text: String,
@@ -348,11 +348,11 @@ pub enum Value {
     },
     List {
         data: Vec<Value>,
-        kind: crate::p2::Kind,
+        kind: ftd::p2::Kind,
     },
     Map {
         data: std::collections::BTreeMap<String, Value>,
-        kind: crate::p2::Kind,
+        kind: ftd::p2::Kind,
     },
 }
 
@@ -370,27 +370,27 @@ impl Value {
         false
     }
 
-    pub fn kind(&self) -> crate::p2::Kind {
+    pub fn kind(&self) -> ftd::p2::Kind {
         match self {
             Value::None { kind: k } => k.to_owned(),
-            Value::String { source, .. } => crate::p2::Kind::String {
+            Value::String { source, .. } => ftd::p2::Kind::String {
                 caption: *source == TextSource::Caption,
                 body: *source == TextSource::Body,
                 default: None,
             },
-            Value::Integer { .. } => crate::p2::Kind::integer(),
-            Value::Decimal { .. } => crate::p2::Kind::decimal(),
-            Value::Boolean { .. } => crate::p2::Kind::boolean(),
-            Value::Record { name: id, .. } => crate::p2::Kind::Record {
+            Value::Integer { .. } => ftd::p2::Kind::integer(),
+            Value::Decimal { .. } => ftd::p2::Kind::decimal(),
+            Value::Boolean { .. } => ftd::p2::Kind::boolean(),
+            Value::Record { name: id, .. } => ftd::p2::Kind::Record {
                 name: id.to_string(),
             },
-            Value::OrType { name: id, .. } => crate::p2::Kind::OrType {
+            Value::OrType { name: id, .. } => ftd::p2::Kind::OrType {
                 name: id.to_string(),
             },
-            Value::List { kind, .. } => crate::p2::Kind::List {
+            Value::List { kind, .. } => ftd::p2::Kind::List {
                 kind: Box::new(kind.to_owned()),
             },
-            Value::Map { kind, .. } => crate::p2::Kind::Map {
+            Value::Map { kind, .. } => ftd::p2::Kind::Map {
                 kind: Box::new(kind.to_owned()),
             },
         }
@@ -415,11 +415,11 @@ impl Value {
 }
 
 impl Variable {
-    pub fn list_from_p1(p1: &crate::p1::Section, doc: &crate::p2::TDoc) -> crate::p1::Result<Self> {
+    pub fn list_from_p1(p1: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Result<Self> {
         let var_data =
             ftd::variable::VariableData::get_name_kind(&p1.name, doc.name, p1.line_number, true)?;
         let name = doc.resolve_name(p1.line_number, &var_data.name)?;
-        let kind = crate::p2::Kind::for_variable(p1.line_number, &p1.name, None, doc, None, true)?;
+        let kind = ftd::p2::Kind::for_variable(p1.line_number, &p1.name, None, doc, None, true)?;
         if !kind.is_list() {
             return ftd::e2(
                 format!("Expected list found: {:?}", p1),
@@ -437,7 +437,7 @@ impl Variable {
         })
     }
 
-    pub fn map_from_p1(p1: &crate::p1::Section, doc: &crate::p2::TDoc) -> crate::p1::Result<Self> {
+    pub fn map_from_p1(p1: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Result<Self> {
         let name = doc.resolve_name(
             p1.line_number,
             ftd::get_name("map", p1.name.as_str(), doc.name)?,
@@ -446,7 +446,7 @@ impl Variable {
             name,
             value: Value::Map {
                 data: Default::default(),
-                kind: crate::p2::Kind::from(
+                kind: ftd::p2::Kind::from(
                     p1.line_number,
                     p1.header.str(doc.name, p1.line_number, "type")?,
                     doc,
@@ -459,21 +459,21 @@ impl Variable {
 
     pub fn update_from_p1(
         &mut self,
-        p1: &crate::p1::Section,
-        doc: &crate::p2::TDoc,
-    ) -> crate::p1::Result<()> {
+        p1: &ftd::p1::Section,
+        doc: &ftd::p2::TDoc,
+    ) -> ftd::p1::Result<()> {
         fn read_value(
             line_number: usize,
-            kind: &crate::p2::Kind,
-            p1: &crate::p1::Section,
-            doc: &crate::p2::TDoc,
-        ) -> crate::p1::Result<crate::Value> {
+            kind: &ftd::p2::Kind,
+            p1: &ftd::p1::Section,
+            doc: &ftd::p2::TDoc,
+        ) -> ftd::p1::Result<ftd::Value> {
             Ok(match kind {
-                crate::p2::Kind::Integer { .. } => read_integer(p1, doc.name)?,
-                crate::p2::Kind::Decimal { .. } => read_decimal(p1, doc.name)?,
-                crate::p2::Kind::Boolean { .. } => read_boolean(p1, doc.name)?,
-                crate::p2::Kind::String { .. } => read_string(p1, doc.name)?,
-                crate::p2::Kind::Record { name } => {
+                ftd::p2::Kind::Integer { .. } => read_integer(p1, doc.name)?,
+                ftd::p2::Kind::Decimal { .. } => read_decimal(p1, doc.name)?,
+                ftd::p2::Kind::Boolean { .. } => read_boolean(p1, doc.name)?,
+                ftd::p2::Kind::String { .. } => read_string(p1, doc.name)?,
+                ftd::p2::Kind::Record { name } => {
                     doc.get_record(line_number, name)?.create(p1, doc)?
                 }
                 _ => unimplemented!("{:?}", kind),
@@ -494,7 +494,7 @@ impl Variable {
             (ftd::p2::Kind::Record { name }, _) => {
                 self.value = doc.get_record(p1.line_number, name)?.create(&p1, doc)?
             }
-            (ftd::p2::Kind::List { kind }, crate::Value::List { data, .. }) => {
+            (ftd::p2::Kind::List { kind }, ftd::Value::List { data, .. }) => {
                 data.push(read_value(p1.line_number, kind, &p1, doc)?);
             }
             (ftd::p2::Kind::Map { .. }, _) => {
@@ -506,7 +506,7 @@ impl Variable {
         Ok(())
     }
 
-    pub fn from_p1(p1: &crate::p1::Section, doc: &crate::p2::TDoc) -> crate::p1::Result<Self> {
+    pub fn from_p1(p1: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Result<Self> {
         let var_data =
             ftd::variable::VariableData::get_name_kind(&p1.name, doc.name, p1.line_number, true)?;
         let name = var_data.name;
@@ -516,8 +516,8 @@ impl Variable {
             Some("decimal") => read_decimal(p1, doc.name)?,
             Some("boolean") => read_boolean(p1, doc.name)?,
             Some(t) => match doc.get_thing(p1.line_number, t)? {
-                crate::p2::Thing::Record(r) => r.create(p1, doc)?,
-                crate::p2::Thing::OrTypeWithVariant { e, variant } => e.create(p1, variant, doc)?,
+                ftd::p2::Thing::Record(r) => r.create(p1, doc)?,
+                ftd::p2::Thing::OrTypeWithVariant { e, variant } => e.create(p1, variant, doc)?,
                 t => {
                     return ftd::e2(
                         format!("unexpected thing found: {:?}", t),
@@ -544,8 +544,8 @@ impl Variable {
 
     pub fn get_value(
         &self,
-        p1: &crate::p1::Section,
-        doc: &crate::p2::TDoc,
+        p1: &ftd::p1::Section,
+        doc: &ftd::p2::TDoc,
     ) -> ftd::p1::Result<ftd::Value> {
         match self.value.kind() {
             ftd::p2::Kind::String { .. } => read_string(p1, doc.name),
@@ -553,7 +553,7 @@ impl Variable {
             ftd::p2::Kind::Decimal { .. } => read_decimal(p1, doc.name),
             ftd::p2::Kind::Boolean { .. } => read_boolean(p1, doc.name),
             ftd::p2::Kind::Record { name } => match doc.get_thing(p1.line_number, &name)? {
-                crate::p2::Thing::Record(r) => r.create(p1, doc),
+                ftd::p2::Thing::Record(r) => r.create(p1, doc),
                 t => ftd::e2(
                     format!("expected record type, found: {:?}", t),
                     doc.name,
@@ -561,7 +561,7 @@ impl Variable {
                 ),
             },
             ftd::p2::Kind::OrType { name } => match doc.get_thing(p1.line_number, &name)? {
-                crate::p2::Thing::OrTypeWithVariant { e, variant } => e.create(p1, variant, doc),
+                ftd::p2::Thing::OrTypeWithVariant { e, variant } => e.create(p1, variant, doc),
                 t => ftd::e2(
                     format!("expected or-type type, found: {:?}", t),
                     doc.name,
@@ -577,7 +577,7 @@ impl Variable {
     }
 }
 
-pub fn guess_type(s: &str, is_body: bool) -> crate::p1::Result<Value> {
+pub fn guess_type(s: &str, is_body: bool) -> ftd::p1::Result<Value> {
     if is_body {
         return Ok(Value::String {
             text: s.to_string(),
@@ -604,7 +604,7 @@ pub fn guess_type(s: &str, is_body: bool) -> crate::p1::Result<Value> {
     })
 }
 
-fn read_string(p1: &crate::p1::Section, doc_id: &str) -> crate::p1::Result<Value> {
+fn read_string(p1: &ftd::p1::Section, doc_id: &str) -> ftd::p1::Result<Value> {
     match (&p1.caption, &p1.body_without_comment()) {
         (Some(c), Some(b)) => ftd::e2(
             format!("both caption: `{}` and body: `{}` present", c, b.1),
@@ -627,7 +627,7 @@ fn read_string(p1: &crate::p1::Section, doc_id: &str) -> crate::p1::Result<Value
     }
 }
 
-fn read_integer(p1: &crate::p1::Section, doc_id: &str) -> crate::p1::Result<Value> {
+fn read_integer(p1: &ftd::p1::Section, doc_id: &str) -> ftd::p1::Result<Value> {
     let caption = p1.caption(p1.line_number, doc_id)?;
     if let Ok(v) = caption.parse::<i64>() {
         return Ok(Value::Integer { value: v });
@@ -636,7 +636,7 @@ fn read_integer(p1: &crate::p1::Section, doc_id: &str) -> crate::p1::Result<Valu
     ftd::e2("not a valid integer", doc_id, p1.line_number)
 }
 
-fn read_decimal(p1: &crate::p1::Section, doc_id: &str) -> crate::p1::Result<Value> {
+fn read_decimal(p1: &ftd::p1::Section, doc_id: &str) -> ftd::p1::Result<Value> {
     let caption = p1.caption(p1.line_number, doc_id)?;
     if let Ok(v) = caption.parse::<f64>() {
         return Ok(Value::Decimal { value: v });
@@ -645,7 +645,7 @@ fn read_decimal(p1: &crate::p1::Section, doc_id: &str) -> crate::p1::Result<Valu
     ftd::e2("not a valid float", doc_id, p1.line_number)
 }
 
-fn read_boolean(p1: &crate::p1::Section, doc_id: &str) -> crate::p1::Result<Value> {
+fn read_boolean(p1: &ftd::p1::Section, doc_id: &str) -> ftd::p1::Result<Value> {
     let caption = p1.caption(p1.line_number, doc_id)?;
     if let Ok(v) = caption.parse::<bool>() {
         return Ok(Value::Boolean { value: v });
@@ -769,17 +769,17 @@ impl VariableData {
 }
 #[cfg(test)]
 mod test {
-    use crate::test::*;
+    use ftd::test::*;
 
     macro_rules! p2 {
         ($s:expr, $n: expr, $v: expr, $c: expr,) => {
             p2!($s, $n, $v, $c)
         };
         ($s:expr, $n: expr, $v: expr, $c: expr) => {
-            let p1 = crate::p1::parse(indoc::indoc!($s), "foo").unwrap();
+            let p1 = ftd::p1::parse(indoc::indoc!($s), "foo").unwrap();
             let mut bag = std::collections::BTreeMap::new();
             let aliases = std::collections::BTreeMap::new();
-            let mut d = crate::p2::TDoc {
+            let mut d = ftd::p2::TDoc {
                 name: "foo",
                 bag: &mut bag,
                 aliases: &aliases,
@@ -829,7 +829,7 @@ mod test {
             "x",
             String {
                 text: "hello".to_string(),
-                source: crate::TextSource::Caption
+                source: ftd::TextSource::Caption
             },
             vec![],
         );
@@ -838,7 +838,7 @@ mod test {
             "x",
             String {
                 text: "hello world\nyo!".to_string(),
-                source: crate::TextSource::Body
+                source: ftd::TextSource::Body
             },
             vec![],
         );
@@ -847,7 +847,7 @@ mod test {
             "x",
             String {
                 text: "10".to_string(),
-                source: crate::TextSource::Caption
+                source: ftd::TextSource::Caption
             },
             vec![],
         );
@@ -856,7 +856,7 @@ mod test {
             "x",
             String {
                 text: "true".to_string(),
-                source: crate::TextSource::Caption
+                source: ftd::TextSource::Caption
             },
             vec![],
         );
@@ -868,11 +868,11 @@ mod test {
         let mut bag = default_bag();
         bag.insert(
             s("foo/bar#pull-request"),
-            crate::p2::Thing::Record(crate::p2::Record {
+            ftd::p2::Thing::Record(ftd::p2::Record {
                 name: s("foo/bar#pull-request"),
                 fields: std::array::IntoIter::new([
-                    (s("title"), crate::p2::Kind::caption()),
-                    (s("about"), crate::p2::Kind::body()),
+                    (s("title"), ftd::p2::Kind::caption()),
+                    (s("about"), ftd::p2::Kind::body()),
                 ])
                 .collect(),
                 instances: Default::default(),
@@ -881,34 +881,34 @@ mod test {
 
         bag.insert(
             "foo/bar#pr".to_string(),
-            crate::p2::Thing::Variable(crate::Variable {
+            ftd::p2::Thing::Variable(ftd::Variable {
                 name: "foo/bar#pr".to_string(),
-                value: crate::Value::List {
-                    data: vec![crate::Value::Record {
+                value: ftd::Value::List {
+                    data: vec![ftd::Value::Record {
                         name: s("foo/bar#pull-request"),
                         fields: std::array::IntoIter::new([
                             (
                                 s("title"),
-                                crate::PropertyValue::Value {
-                                    value: crate::Value::String {
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::String {
                                         text: "some pr".to_string(),
-                                        source: crate::TextSource::Caption,
+                                        source: ftd::TextSource::Caption,
                                     },
                                 },
                             ),
                             (
                                 s("about"),
-                                crate::PropertyValue::Value {
-                                    value: crate::Value::String {
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::String {
                                         text: "yo yo".to_string(),
-                                        source: crate::TextSource::Body,
+                                        source: ftd::TextSource::Body,
                                     },
                                 },
                             ),
                         ])
                         .collect(),
                     }],
-                    kind: crate::p2::Kind::Record {
+                    kind: ftd::p2::Kind::Record {
                         name: s("foo/bar#pull-request"),
                     },
                 },

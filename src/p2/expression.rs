@@ -46,7 +46,7 @@ impl Boolean {
         &self,
         line_number: usize,
         all_locals: &mut ftd::Map,
-        arguments: &std::collections::BTreeMap<String, crate::Value>,
+        arguments: &std::collections::BTreeMap<String, ftd::Value>,
         doc_id: &str,
     ) -> ftd::p1::Result<ftd::Condition> {
         let (variable, value) = match self {
@@ -168,9 +168,9 @@ impl Boolean {
 
     pub fn from_expression(
         expr: &str,
-        doc: &crate::p2::TDoc,
-        arguments: &std::collections::BTreeMap<String, crate::p2::Kind>,
-        left_right_resolved_property: (Option<crate::PropertyValue>, Option<crate::PropertyValue>),
+        doc: &ftd::p2::TDoc,
+        arguments: &std::collections::BTreeMap<String, ftd::p2::Kind>,
+        left_right_resolved_property: (Option<ftd::PropertyValue>, Option<ftd::PropertyValue>),
         line_number: usize,
     ) -> ftd::p1::Result<Self> {
         let (boolean, left, right) =
@@ -276,7 +276,7 @@ impl Boolean {
             expected_kind: Option<ftd::p2::Kind>,
             doc: &ftd::p2::TDoc,
             arguments: &std::collections::BTreeMap<String, ftd::p2::Kind>,
-            loop_already_resolved_property: Option<crate::PropertyValue>,
+            loop_already_resolved_property: Option<ftd::PropertyValue>,
             line_number: usize,
         ) -> ftd::p1::Result<ftd::PropertyValue> {
             Ok(
@@ -290,7 +290,7 @@ impl Boolean {
                 ) {
                     Ok(v) => v,
                     Err(e) => match &loop_already_resolved_property {
-                        Some(crate::PropertyValue::Variable { .. }) => {
+                        Some(ftd::PropertyValue::Variable { .. }) => {
                             loop_already_resolved_property.clone().expect("")
                         }
                         _ => return Err(e),
@@ -372,9 +372,9 @@ impl Boolean {
     pub fn eval(
         &self,
         line_number: usize,
-        arguments: &std::collections::BTreeMap<String, crate::Value>,
-        doc: &crate::p2::TDoc,
-    ) -> crate::p1::Result<bool> {
+        arguments: &std::collections::BTreeMap<String, ftd::Value>,
+        doc: &ftd::p2::TDoc,
+    ) -> ftd::p1::Result<bool> {
         Ok(match self {
             Self::Literal { value } => *value,
             Self::IsNotNull { value } => !value.resolve(line_number, arguments, doc)?.is_null(),
@@ -394,7 +394,7 @@ impl Boolean {
         })
     }
 
-    pub fn set_null(&self, line_number: usize, doc_id: &str) -> crate::p1::Result<bool> {
+    pub fn set_null(&self, line_number: usize, doc_id: &str) -> ftd::p1::Result<bool> {
         Ok(match self {
             Self::Literal { .. }
             | Self::IsNotNull { .. }

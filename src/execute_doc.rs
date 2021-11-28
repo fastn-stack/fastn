@@ -2,12 +2,12 @@
 pub struct ExecuteDoc<'a> {
     pub name: &'a str,
     pub aliases: &'a std::collections::BTreeMap<String, String>,
-    pub bag: &'a std::collections::BTreeMap<String, crate::p2::Thing>,
+    pub bag: &'a std::collections::BTreeMap<String, ftd::p2::Thing>,
     pub instructions: &'a [ftd::Instruction],
-    pub arguments: &'a std::collections::BTreeMap<String, crate::Value>,
+    pub arguments: &'a std::collections::BTreeMap<String, ftd::Value>,
     pub invocations: &'a mut std::collections::BTreeMap<
         String,
-        Vec<std::collections::BTreeMap<String, crate::Value>>,
+        Vec<std::collections::BTreeMap<String, ftd::Value>>,
     >,
     pub root_name: Option<&'a str>,
 }
@@ -18,7 +18,7 @@ impl<'a> ExecuteDoc<'a> {
         parent_container: &[usize],
         all_locals: &mut ftd::Map,
         id: Option<String>,
-    ) -> crate::p1::Result<crate::component::ElementWithContainer> {
+    ) -> ftd::p1::Result<ftd::component::ElementWithContainer> {
         let mut index = 0;
         self.execute_(&mut index, false, parent_container, all_locals, None, id)
     }
@@ -31,14 +31,14 @@ impl<'a> ExecuteDoc<'a> {
         all_locals: &mut ftd::Map,
         parent_id: Option<String>,
         id: Option<String>,
-    ) -> crate::p1::Result<crate::component::ElementWithContainer> {
+    ) -> ftd::p1::Result<ftd::component::ElementWithContainer> {
         let mut current_container: Vec<usize> = Default::default();
         let mut named_containers: std::collections::BTreeMap<String, Vec<Vec<usize>>> =
             Default::default();
         let mut children: Vec<ftd::Element> = vec![];
 
         while *index < self.instructions.len() {
-            let doc = crate::p2::TDoc {
+            let doc = ftd::p2::TDoc {
                 name: self.name,
                 aliases: self.aliases,
                 bag: self.bag,
@@ -70,7 +70,7 @@ impl<'a> ExecuteDoc<'a> {
                         && !match_parent_id(c, &parent_id)
                     {
                         *index -= 1;
-                        return Ok(crate::component::ElementWithContainer {
+                        return Ok(ftd::component::ElementWithContainer {
                             element: ftd::Element::Null,
                             children,
                             child_container: Some(named_containers),
@@ -89,7 +89,7 @@ impl<'a> ExecuteDoc<'a> {
                     children: inner,
                 } => {
                     assert!(self.arguments.is_empty()); // This clause cant have arguments
-                    let crate::component::ElementWithContainer {
+                    let ftd::component::ElementWithContainer {
                         element,
                         children: container_children,
                         child_container,
@@ -132,7 +132,7 @@ impl<'a> ExecuteDoc<'a> {
                         {
                             None
                         } else {
-                            let new_id = crate::p2::utils::string_optional(
+                            let new_id = ftd::p2::utils::string_optional(
                                 "id",
                                 &ftd::component::resolve_properties(
                                     f.line_number,
@@ -152,7 +152,7 @@ impl<'a> ExecuteDoc<'a> {
                         }
                     };
 
-                    let crate::component::ElementWithContainer {
+                    let ftd::component::ElementWithContainer {
                         element: mut e,
                         child_container,
                         ..
@@ -211,7 +211,7 @@ impl<'a> ExecuteDoc<'a> {
             *index += 1;
         }
 
-        Ok(crate::component::ElementWithContainer {
+        Ok(ftd::component::ElementWithContainer {
             element: ftd::Element::Null,
             children,
             child_container: Some(named_containers),
@@ -231,7 +231,7 @@ impl<'a> ExecuteDoc<'a> {
         all_locals: &mut ftd::Map,
         id: Option<String>,
         container_children: Vec<ftd::Element>,
-    ) -> crate::p1::Result<Vec<ftd::Element>> {
+    ) -> ftd::p1::Result<Vec<ftd::Element>> {
         let mut current = &mut main;
         for i in current_container.iter() {
             current = match &mut current[*i] {
@@ -429,7 +429,7 @@ fn change_container(
     named_containers: &mut std::collections::BTreeMap<String, Vec<Vec<usize>>>,
     parent_id: &Option<String>,
     doc_id: &str,
-) -> crate::p1::Result<()> {
+) -> ftd::p1::Result<()> {
     if name == "ftd#main" || match_parent_id(name, parent_id) {
         *current_container = vec![];
         return Ok(());

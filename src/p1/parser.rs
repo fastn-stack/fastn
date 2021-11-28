@@ -1,4 +1,4 @@
-pub use crate::p1::{Error, Header, Result, Section, SubSection, SubSections};
+pub use ftd::p1::{Error, Header, Result, Section, SubSection, SubSections};
 
 #[derive(Debug)]
 enum ParsingState {
@@ -23,7 +23,7 @@ fn colon_separated_values(
     doc_id: &str,
 ) -> Result<(String, Option<String>)> {
     if !line.contains(':') {
-        return Err(crate::p1::Error::ParseError {
+        return Err(ftd::p1::Error::ParseError {
             message: format!(": is missing in: {}", line),
             // TODO: context should be a few lines before and after the input
             doc_id: doc_id.to_string(),
@@ -60,7 +60,7 @@ impl State {
         let is_commented = line.starts_with("/-- ");
 
         if !line.starts_with("-- ") && !line.starts_with("/-- ") {
-            return Err(crate::p1::Error::ParseError {
+            return Err(ftd::p1::Error::ParseError {
                 message: format!("Expecting -- , found: {}", line,),
                 // TODO: context should be a few lines before and after the input
                 doc_id: doc_id.to_string(),
