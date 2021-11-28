@@ -22,6 +22,14 @@ pub use or_type::OrType;
 pub use rt::RT;
 pub use variable::{PropertyValue, TextSource, Value, Variable};
 
+pub fn js() -> &'static str {
+    include_str!("../ftd.js")
+}
+
+pub fn html() -> &'static str {
+    include_str!("../ftd.html")
+}
+
 pub fn rst(s: &str) -> ftd_rt::Rendered {
     // TODO: use pandoc to render
     ftd_rt::Rendered {
