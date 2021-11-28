@@ -19,7 +19,7 @@ impl Header {
 
     pub fn bool_with_default(
         &self,
-        doc_id: String,
+        doc_id: &str,
         line_number: usize,
         name: &str,
         def: bool,
@@ -33,7 +33,7 @@ impl Header {
 
     pub fn bool_optional(
         &self,
-        doc_id: String,
+        doc_id: &str,
         line_number: usize,
         name: &str,
     ) -> Result<Option<bool>> {
@@ -44,7 +44,7 @@ impl Header {
         }
     }
 
-    pub fn bool(&self, doc_id: String, line_number: usize, name: &str) -> Result<bool> {
+    pub fn bool(&self, doc_id: &str, line_number: usize, name: &str) -> Result<bool> {
         for (l, k, v) in self.0.iter() {
             if k.starts_with('/') {
                 continue;
@@ -55,14 +55,14 @@ impl Header {
                 } else {
                     Err(crate::p1::Error::ParseError {
                         message: "can't parse bool".to_string(),
-                        doc_id,
+                        doc_id: doc_id.to_string(),
                         line_number: *l,
                     })
                 };
             }
         }
         Err(Error::NotFound {
-            doc_id,
+            doc_id: doc_id.to_string(),
             line_number,
             key: name.to_string(),
         })
@@ -70,7 +70,7 @@ impl Header {
 
     pub fn i32_with_default(
         &self,
-        doc_id: String,
+        doc_id: &str,
         line_number: usize,
         name: &str,
         def: i32,
@@ -84,7 +84,7 @@ impl Header {
 
     pub fn i32_optional(
         &self,
-        doc_id: String,
+        doc_id: &str,
         line_number: usize,
         name: &str,
     ) -> Result<Option<i32>> {
@@ -95,7 +95,7 @@ impl Header {
         }
     }
 
-    pub fn i32(&self, doc_id: String, line_number: usize, name: &str) -> Result<i32> {
+    pub fn i32(&self, doc_id: &str, line_number: usize, name: &str) -> Result<i32> {
         for (l, k, v) in self.0.iter() {
             if k.starts_with('/') {
                 continue;
@@ -104,20 +104,20 @@ impl Header {
                 return v.parse().map_err(|e: std::num::ParseIntError| {
                     ftd::p1::Error::ParseError {
                         message: format!("{:?}", e),
-                        doc_id,
+                        doc_id: doc_id.to_string(),
                         line_number: *l,
                     }
                 });
             }
         }
         Err(Error::NotFound {
-            doc_id,
+            doc_id: doc_id.to_string(),
             line_number,
             key: name.to_string(),
         })
     }
 
-    pub fn i64(&self, doc_id: String, line_number: usize, name: &str) -> Result<i64> {
+    pub fn i64(&self, doc_id: &str, line_number: usize, name: &str) -> Result<i64> {
         for (l, k, v) in self.0.iter() {
             if k.starts_with('/') {
                 continue;
@@ -127,14 +127,14 @@ impl Header {
                 return v.parse().map_err(|e: std::num::ParseIntError| {
                     ftd::p1::Error::ParseError {
                         message: format!("{:?}", e),
-                        doc_id,
+                        doc_id: doc_id.to_string(),
                         line_number: *l,
                     }
                 });
             }
         }
         Err(Error::NotFound {
-            doc_id,
+            doc_id: doc_id.to_string(),
             line_number,
             key: name.to_string(),
         })
@@ -142,7 +142,7 @@ impl Header {
 
     pub fn i64_optional(
         &self,
-        doc_id: String,
+        doc_id: &str,
         line_number: usize,
         name: &str,
     ) -> Result<Option<i64>> {
@@ -153,7 +153,7 @@ impl Header {
         }
     }
 
-    pub fn f64(&self, doc_id: String, line_number: usize, name: &str) -> Result<f64> {
+    pub fn f64(&self, doc_id: &str, line_number: usize, name: &str) -> Result<f64> {
         for (l, k, v) in self.0.iter() {
             if k.starts_with('/') {
                 continue;
@@ -163,14 +163,14 @@ impl Header {
                 return v.parse().map_err(|e: std::num::ParseFloatError| {
                     ftd::p1::Error::ParseError {
                         message: format!("{:?}", e),
-                        doc_id,
+                        doc_id: doc_id.to_string(),
                         line_number: *l,
                     }
                 });
             }
         }
         Err(Error::NotFound {
-            doc_id,
+            doc_id: doc_id.to_string(),
             line_number,
             key: name.to_string(),
         })
@@ -178,7 +178,7 @@ impl Header {
 
     pub fn f64_optional(
         &self,
-        doc_id: String,
+        doc_id: &str,
         line_number: usize,
         name: &str,
     ) -> Result<Option<f64>> {
@@ -191,7 +191,7 @@ impl Header {
 
     pub fn str_with_default<'a>(
         &'a self,
-        doc_id: String,
+        doc_id: &str,
         line_number: usize,
         name: &str,
         def: &'a str,
@@ -235,7 +235,7 @@ impl Header {
 
     pub fn str_optional(
         &self,
-        doc_id: String,
+        doc_id: &str,
         line_number: usize,
         name: &str,
     ) -> Result<Option<&str>> {
@@ -248,7 +248,7 @@ impl Header {
 
     pub fn conditional_str(
         &self,
-        doc_id: String,
+        doc_id: &str,
         line_number: usize,
         name: &str,
     ) -> Result<Vec<(String, Option<&str>)>> {
@@ -268,7 +268,7 @@ impl Header {
         }
         if conditional_vector.is_empty() {
             Err(Error::NotFound {
-                doc_id,
+                doc_id: doc_id.to_string(),
                 line_number,
                 key: format!("`{}` header is missing", name),
             })
@@ -277,7 +277,7 @@ impl Header {
         }
     }
 
-    pub fn str(&self, doc_id: String, line_number: usize, name: &str) -> Result<&str> {
+    pub fn str(&self, doc_id: &str, line_number: usize, name: &str) -> Result<&str> {
         for (_, k, v) in self.0.iter() {
             if k.starts_with('/') {
                 continue;
@@ -288,19 +288,19 @@ impl Header {
         }
 
         Err(Error::NotFound {
-            doc_id,
+            doc_id: doc_id.to_string(),
             line_number,
             key: format!("`{}` header is missing", name),
         })
     }
 
-    pub fn string(&self, doc_id: String, line_number: usize, name: &str) -> Result<String> {
+    pub fn string(&self, doc_id: &str, line_number: usize, name: &str) -> Result<String> {
         self.str(doc_id, line_number, name).map(ToString::to_string)
     }
 
     pub fn string_optional(
         &self,
-        doc_id: String,
+        doc_id: &str,
         line_number: usize,
         name: &str,
     ) -> Result<Option<String>> {
@@ -311,7 +311,7 @@ impl Header {
 
     pub fn string_with_default(
         &self,
-        doc_id: String,
+        doc_id: &str,
         line_number: usize,
         name: &str,
         def: &str,

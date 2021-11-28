@@ -64,7 +64,6 @@ impl Boolean {
                             return ftd::e2(
                                 format!("Can't find the local variable {}", name),
                                 doc_id,
-                                doc_id.to_string(),
                                 line_number,
                             );
                         }
@@ -73,7 +72,6 @@ impl Boolean {
                         return ftd::e2(
                             format!("{:?} must be variable or local variable", left),
                             doc_id,
-                            doc_id.to_string(),
                             line_number,
                         );
                     }
@@ -93,7 +91,6 @@ impl Boolean {
                                         arg.kind()
                                     ),
                                     doc_id,
-                                    doc_id.to_string(),
                                     line_number,
                                 );
                             }
@@ -101,7 +98,6 @@ impl Boolean {
                             return ftd::e2(
                                 format!("argument not found {}", name),
                                 doc_id,
-                                doc_id.to_string(),
                                 line_number,
                             );
                         }
@@ -110,7 +106,6 @@ impl Boolean {
                         return ftd::e2(
                             format!("{:?} must be value or argument", right),
                             doc_id,
-                            doc_id.to_string(),
                             line_number,
                         );
                     }
@@ -122,7 +117,6 @@ impl Boolean {
                 return ftd::e2(
                     format!("{:?} must not happen", self),
                     doc_id,
-                    doc_id.to_string(),
                     line_number,
                 )
             }
@@ -135,7 +129,6 @@ impl Boolean {
                         value
                     ),
                     doc_id,
-                    doc_id.to_string(),
                     line_number,
                 )
             }
@@ -173,7 +166,6 @@ impl Boolean {
                 return ftd::e2(
                     format!("'{}' is not valid condition", rest),
                     doc_id,
-                    doc_id.to_string(),
                     line_number,
                 )
             }
@@ -206,7 +198,6 @@ impl Boolean {
                     return ftd::e2(
                         format!("'{}' is not to an optional", left),
                         doc.name,
-                        doc.name.to_string(),
                         line_number,
                     );
                 }
@@ -229,7 +220,6 @@ impl Boolean {
                     return ftd::e2(
                         format!("'{}' is not to a list", left),
                         doc.name,
-                        doc.name.to_string(),
                         line_number,
                     );
                 }
@@ -282,7 +272,6 @@ impl Boolean {
                 return ftd::e2(
                     format!("'{}' is not valid condition", expr),
                     doc.name,
-                    doc.name.to_string(),
                     line_number,
                 )
             }
@@ -403,9 +392,8 @@ impl Boolean {
                 .is_equal(&right.resolve(line_number, arguments, doc)?),
             _ => {
                 return ftd::e2(
-                    "unknown Boolean found",
-                    self,
-                    doc.name.to_string(),
+                    format!("unknown Boolean found: {:?}", self),
+                    doc.name,
                     line_number,
                 )
             }
@@ -432,7 +420,6 @@ impl Boolean {
                 return ftd::e2(
                     format!("unimplemented for type: {:?}", self),
                     doc_id,
-                    doc_id.to_string(),
                     line_number,
                 )
             }

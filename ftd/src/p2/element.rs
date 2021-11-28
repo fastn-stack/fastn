@@ -14,8 +14,7 @@ pub fn common_from_properties(
     if let (Some(_), Some(_)) = (&submit, &link) {
         return ftd::e2(
             "Cannot have both submit and link together",
-            "common_from_properties",
-            doc.name.to_string(),
+            doc.name,
             0,
         );
     }
@@ -736,7 +735,6 @@ pub fn external_font_from_properties(
                     return ftd::e2(
                         "Something went wrong while parsing font vector",
                         doc.name,
-                        doc.name.to_string(),
                         0,
                     )
                 }
@@ -827,7 +825,6 @@ pub fn iframe_from_properties(
             return ftd::e2(
                 "both src and youtube id provided",
                 doc.name,
-                doc.name.to_string(),
                 0,
             )
         }
@@ -835,7 +832,6 @@ pub fn iframe_from_properties(
             return ftd::e2(
                 "src or youtube id is required",
                 doc.name,
-                doc.name.to_string(),
                 0,
             )
         }
@@ -1145,7 +1141,6 @@ pub fn color_from(l: Option<String>, doc_id: &str) -> ftd::p1::Result<Option<ftd
             return ftd::e2(
                 format!("{} is not a valid color: {:?}", v, e),
                 doc_id,
-                doc_id.to_string(),
                 0,
             )
         }

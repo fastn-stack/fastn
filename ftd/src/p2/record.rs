@@ -44,7 +44,6 @@ impl Record {
                     return ftd::e2(
                         format!("'{:?}' ('{}') can not be a sub-section", kind, name),
                         doc.name,
-                        doc.name.to_string(),
                         p1.line_number,
                     );
                 }
@@ -112,15 +111,13 @@ impl Record {
                         return ftd::e2(
                             "unexpected integer",
                             doc.name,
-                            doc.name.to_string(),
                             p1.line_number,
                         );
                     }
                     t => {
                         return ftd::e2(
-                            "not yet implemented",
-                            t,
-                            doc.name.to_string(),
+                            format!("not yet implemented: {:?}", t),
+                            doc.name,
                             p1.line_number,
                         )
                     }
@@ -230,7 +227,7 @@ impl Record {
 
     fn assert_no_extra_fields(
         &self,
-        id: &str,
+        doc_id: &str,
         p1: &crate::p1::Header,
         _caption: &Option<String>,
         _body: &Option<(usize, String)>,
@@ -250,8 +247,7 @@ impl Record {
                         self.name,
                         self.fields.keys()
                     ),
-                    id,
-                    id.to_string(),
+                    doc_id,
                     i.to_owned(),
                 );
             }
@@ -340,7 +336,6 @@ fn assert_fields_valid(
                         return ftd::e2(
                             format!("both {} and {} are caption fields", name, c),
                             doc_id,
-                            doc_id.to_string(),
                             line_number,
                         );
                     }
@@ -353,7 +348,6 @@ fn assert_fields_valid(
                         return ftd::e2(
                             format!("both {} and {} are body fields", name, c),
                             doc_id,
-                            doc_id.to_string(),
                             line_number,
                         );
                     }

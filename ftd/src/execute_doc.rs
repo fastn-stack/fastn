@@ -76,7 +76,7 @@ impl<'a> ExecuteDoc<'a> {
                             child_container: Some(named_containers),
                         });
                     }
-                    change_container(c, &mut current_container, &mut named_containers, &parent_id)?;
+                    change_container(c, &mut current_container, &mut named_containers, &parent_id, self.name)?;
                 }
                 ftd::Instruction::Component {
                     parent,
@@ -422,6 +422,7 @@ fn change_container(
     current_container: &mut Vec<usize>,
     named_containers: &mut std::collections::BTreeMap<String, Vec<Vec<usize>>>,
     parent_id: &Option<String>,
+    doc_id: &str
 ) -> crate::p1::Result<()> {
     if name == "ftd#main" || match_parent_id(name, parent_id) {
         *current_container = vec![];
@@ -430,7 +431,7 @@ fn change_container(
     *current_container = match named_containers.get(name) {
         Some(v) => v.get(0).unwrap().to_owned(),
         None => {
-            return ftd::e2("no such container", name, "".to_string(), 0);
+            return ftd::e2("no such container", doc_id,  0);
         }
     };
     Ok(())

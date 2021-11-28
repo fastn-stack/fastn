@@ -1,6 +1,6 @@
 pub fn parse_import(
     c: &Option<String>,
-    id: &str,
+    doc_id: &str,
     line_number: usize,
 ) -> crate::p1::Result<(String, String)> {
     let v = match c {
@@ -8,8 +8,7 @@ pub fn parse_import(
         None => {
             return ftd::e2(
                 "caption is missing in import statement",
-                id,
-                id.to_string(),
+                doc_id,
                 line_number,
             )
         }
@@ -21,8 +20,7 @@ pub fn parse_import(
             (Some(n), Some(a)) => Ok((n.to_string(), a.to_string())),
             _ => ftd::e2(
                 "invalid use of keyword as in import statement",
-                id,
-                id.to_string(),
+                doc_id,
                 line_number,
             ),
         };
@@ -35,7 +33,7 @@ pub fn parse_import(
     let mut parts = v.rsplitn(2, '/');
     match (parts.next(), parts.next()) {
         (Some(t), Some(_)) => Ok((v.to_string(), t.to_string())),
-        _ => ftd::e2("doc id must contain /", id, id.to_string(), line_number),
+        _ => ftd::e2("doc id must contain /", doc_id, line_number),
     }
 }
 
@@ -52,16 +50,10 @@ pub fn string_and_ref(
         }
         Some(v) => ftd::e2(
             format!("expected string, found: {:?}", v),
-            "string_and_source",
-            doc_id.to_string(),
+            doc_id,
             line_number,
         ),
-        None => ftd::e2(
-            format!("'{}' not found", name),
-            "string_and_source",
-            doc_id.to_string(),
-            line_number,
-        ),
+        None => ftd::e2(format!("'{}' not found", name), doc_id, line_number),
     }
 }
 
@@ -80,16 +72,10 @@ pub fn string_and_source_and_ref(
         )),
         Some(v) => ftd::e2(
             format!("expected string, found: {:?}", v),
-            "string_and_source",
-            doc_id.to_string(),
+            doc_id,
             line_number,
         ),
-        None => ftd::e2(
-            format!("'{}' not found", name),
-            "string_and_source",
-            doc_id.to_string(),
-            line_number,
-        ),
+        None => ftd::e2(format!("'{}' not found", name), doc_id, line_number),
     }
 }
 
@@ -129,8 +115,7 @@ pub fn string_optional(
         Some(ftd::Value::None { .. }) => Ok(None),
         Some(v) => ftd::e2(
             format!("expected string, found: {:?}", v),
-            "string_optional",
-            doc_id.to_string(),
+            doc_id,
             line_number,
         ),
         None => Ok(None),
@@ -152,8 +137,7 @@ pub fn string_with_default(
         Some(ftd::Value::None { .. }) => Ok(def.to_string()),
         Some(v) => ftd::e2(
             format!("expected bool, found: {:?}", v),
-            "string_with_default",
-            doc_id.to_string(),
+            doc_id,
             line_number,
         ),
         None => Ok(def.to_string()),
@@ -170,16 +154,10 @@ pub fn int(
         Some(crate::Value::Integer { value: v, .. }) => Ok(*v),
         Some(v) => ftd::e2(
             format!("[{}] expected int, found: {:?}", name, v),
-            "int",
-            doc_id.to_string(),
+            doc_id,
             line_number,
         ),
-        None => ftd::e2(
-            format!("'{}' not found", name),
-            "int",
-            doc_id.to_string(),
-            line_number,
-        ),
+        None => ftd::e2(format!("'{}' not found", name), doc_id, line_number),
     }
 }
 
@@ -195,12 +173,7 @@ pub fn int_optional(
             kind: crate::p2::Kind::Integer { .. },
         }) => Ok(None),
         Some(ftd::Value::None { .. }) => Ok(None),
-        Some(v) => ftd::e2(
-            format!("expected int, found: {:?}", v),
-            "int_optional",
-            doc_id.to_string(),
-            line_number,
-        ),
+        Some(v) => ftd::e2(format!("expected int, found: {:?}", v), doc_id, line_number),
         None => Ok(None),
     }
 }
@@ -218,12 +191,7 @@ pub fn int_with_default(
             kind: crate::p2::Kind::Integer { .. },
         }) => Ok(def),
         Some(ftd::Value::None { .. }) => Ok(def),
-        Some(v) => ftd::e2(
-            format!("expected int, found: {:?}", v),
-            "int_with_default",
-            doc_id.to_string(),
-            line_number,
-        ),
+        Some(v) => ftd::e2(format!("expected int, found: {:?}", v), doc_id, line_number),
         None => Ok(def),
     }
 }
@@ -254,8 +222,7 @@ pub fn bool_with_default(
         Some(ftd::Value::None { .. }) => Ok(def),
         Some(v) => ftd::e2(
             format!("expected bool, found: {:?}", v),
-            "bool_with_default",
-            doc_id.to_string(),
+            doc_id,
             line_number,
         ),
         None => Ok(def),
@@ -272,16 +239,10 @@ pub fn bool(
         Some(crate::Value::Boolean { value: v, .. }) => Ok(*v),
         Some(v) => ftd::e2(
             format!("[{}] expected bool, found: {:?}", name, v),
-            "string",
-            doc_id.to_string(),
+            doc_id,
             line_number,
         ),
-        None => ftd::e2(
-            format!("'{}' not found", name),
-            "bool",
-            doc_id.to_string(),
-            line_number,
-        ),
+        None => ftd::e2(format!("'{}' not found", name), doc_id, line_number),
     }
 }
 
@@ -306,8 +267,7 @@ pub fn string_bool_optional(
         }
         Some(v) => ftd::e2(
             format!("expected bool, found: {:?}", v),
-            "bool_optional",
-            doc_id.to_string(),
+            doc_id,
             line_number,
         ),
         None => Ok((None, None)),
@@ -347,16 +307,10 @@ pub fn decimal(
         Some(crate::Value::Decimal { value: v, .. }) => Ok(*v),
         Some(v) => ftd::e2(
             format!("[{}] expected Decimal, found: {:?}", name, v),
-            "string",
-            doc_id.to_string(),
+            doc_id,
             line_number,
         ),
-        None => ftd::e2(
-            format!("'{}' not found", name),
-            "decimal",
-            doc_id.to_string(),
-            line_number,
-        ),
+        None => ftd::e2(format!("'{}' not found", name), doc_id, line_number),
     }
 }
 
@@ -374,8 +328,7 @@ pub fn decimal_optional(
         Some(ftd::Value::None { .. }) => Ok(None),
         Some(v) => ftd::e2(
             format!("expected decimal, found: {:?}", v),
-            "decimal_optional",
-            doc_id.to_string(),
+            doc_id,
             line_number,
         ),
         None => Ok(None),
@@ -421,10 +374,7 @@ pub fn reorder(p1: &[ftd::p1::Section], doc_id: &str) -> ftd::p1::Result<Vec<ftd
                         doc_id,
                     );
                 }
-                if let Ok(root) = v
-                    .header
-                    .string(doc_id.to_string(), v.line_number, "component")
-                {
+                if let Ok(root) = v.header.string(doc_id, v.line_number, "component") {
                     if !is_kernel_component(root.to_string()) && !inserted.contains(&root) {
                         reorder_component(p1_map, new_p1, Some(root), inserted, doc_id);
                     }
@@ -451,10 +401,7 @@ pub fn reorder(p1: &[ftd::p1::Section], doc_id: &str) -> ftd::p1::Result<Vec<ftd
                     doc_id,
                 );
             }
-            if let Ok(root) = v
-                .header
-                .string(doc_id.to_string(), v.line_number, "component")
-            {
+            if let Ok(root) = v.header.string(doc_id, v.line_number, "component") {
                 if !is_kernel_component(root.to_string()) && !inserted.contains(&root) {
                     reorder_component(p1_map, new_p1, Some(root), inserted, doc_id);
                 }

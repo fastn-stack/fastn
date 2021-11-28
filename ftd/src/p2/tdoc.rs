@@ -29,7 +29,6 @@ impl<'a> TDoc<'a> {
         return ftd::e2(
             "component should be var or list",
             self.name,
-            self.name.to_string(),
             section.line_number,
         );
 
@@ -89,7 +88,6 @@ impl<'a> TDoc<'a> {
                                     return ftd::e2(
                                         format!("key not found: {}", key.as_str()),
                                         doc.name,
-                                        doc.name.to_string(),
                                         line_number,
                                     )
                                 }
@@ -105,7 +103,6 @@ impl<'a> TDoc<'a> {
                         return ftd::e2(
                             format!("expected object of record type, found: {}", json),
                             doc.name,
-                            doc.name.to_string(),
                             line_number,
                         );
                     }
@@ -122,7 +119,6 @@ impl<'a> TDoc<'a> {
                         return ftd::e2(
                             format!("expected object of list type, found: {}", json),
                             doc.name,
-                            doc.name.to_string(),
                             line_number,
                         );
                     }
@@ -154,7 +150,7 @@ impl<'a> TDoc<'a> {
             return Ok(name.to_string());
         }
 
-        Ok(match ftd::split_module(name, line_number)? {
+        Ok(match ftd::split_module(name, self.name, line_number)? {
             (Some(m), v, None) => match self.aliases.get(m) {
                 Some(m) => format!("{}#{}", m, v),
                 None => {
@@ -188,7 +184,7 @@ impl<'a> TDoc<'a> {
             }
         }
 
-        Ok(match ftd::split_module(name, line_number)? {
+        Ok(match ftd::split_module(name, self.name, line_number)? {
             (Some(m), v, None) => match self.aliases.get(m) {
                 Some(m) => format!("{}#{}", m, v),
                 None => match available_components.get(m) {
@@ -213,7 +209,7 @@ impl<'a> TDoc<'a> {
             return Ok(name.to_string());
         }
 
-        Ok(match ftd::split_module(name, line_number)? {
+        Ok(match ftd::split_module(name, self.name, line_number)? {
             (Some(m), v, None) => match self.aliases.get(m) {
                 Some(m) => format!("{}#{}", m, v),
                 None => return self.err("alias not found", m, "resolve_name", line_number),
@@ -290,9 +286,8 @@ impl<'a> TDoc<'a> {
         line_number: usize,
     ) -> crate::p1::Result<T> {
         crate::e2(
-            format!("{}: {} ({:?})", self.name, msg, ctx),
-            f,
-            self.name.to_string(),
+            format!("{}: {} ({:?}), f: {}", self.name, msg, ctx, f),
+            self.name,
             line_number,
         )
     }
@@ -340,7 +335,7 @@ impl<'a> TDoc<'a> {
             }
             return Ok(None);
         }
-        match ftd::split_module(name, line_number)? {
+        match ftd::split_module(name, self.name, line_number)? {
             (Some(m), _, _) => {
                 if self.aliases.contains_key(m) {
                     Ok(Some(m))
@@ -383,7 +378,7 @@ impl<'a> TDoc<'a> {
                 .get(format!("{}#{}", self.name, name).as_str())
                 .map(ToOwned::to_owned)
         } else {
-            match ftd::split_module(name, line_number)? {
+            match ftd::split_module(name, self.name, line_number)? {
                 (Some(m), v, None) => match self.aliases.get(m) {
                     Some(m) => self
                         .bag

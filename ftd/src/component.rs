@@ -101,9 +101,8 @@ impl Property {
         doc: &crate::p2::TDoc,
     ) -> crate::p1::Result<&crate::PropertyValue> {
         let mut property_value = ftd::e2(
-            name.to_string(),
-            "condition is not complete",
-            doc.name.to_string(),
+            format!("condition is not complete, name: {}", name),
+            doc.name,
             line_number,
         );
         if let Some(property) = &self.default {
@@ -222,9 +221,8 @@ impl ChildComponent {
                     "ftd#row" | "ftd#column" | "ftd#scene" => {}
                     t => {
                         return ftd::e2(
-                            t,
-                            "cant have children",
-                            doc.name.to_string(),
+                            format!("{} cant have children", t),
+                            doc.name,
                             self.line_number,
                         )
                     }
@@ -232,9 +230,8 @@ impl ChildComponent {
             }
             (t, false) => {
                 return ftd::e2(
-                    format!("{:?}", t),
-                    "cant have children",
-                    doc.name.to_string(),
+                    format!("cant have children: {:?}", t),
+                    doc.name,
                     self.line_number,
                 );
             }
@@ -490,7 +487,7 @@ impl ChildComponent {
                 doc,
                 &root_property,
             )?,
-            condition: match p1.str_optional(doc.name.to_string(), line_number, "if")? {
+            condition: match p1.str_optional(doc.name, line_number, "if")? {
                 Some(expr) => Some(crate::p2::Boolean::from_expression(
                     expr,
                     doc,
@@ -562,7 +559,6 @@ fn resolve_recursive_property(
     ftd::e2(
         format!("$loop$ not found in properties {:?}", self_properties),
         doc.name,
-        doc.name.to_string(),
         line_number,
     )
 }
@@ -779,8 +775,7 @@ fn get_conditional_attributes(
                 v => {
                     return ftd::e2(
                         format!("expected int, found: {:?}", v),
-                        "int_optional",
-                        doc_id.to_string(),
+                        doc_id,
                         line_number,
                     )
                 }
@@ -794,8 +789,7 @@ fn get_conditional_attributes(
                 v => {
                     return ftd::e2(
                         format!("expected int, found: {:?}", v),
-                        "int_optional",
-                        doc_id.to_string(),
+                        doc_id,
                         line_number,
                     )
                 }
@@ -809,8 +803,7 @@ fn get_conditional_attributes(
                 v => {
                     return ftd::e2(
                         format!("expected string, found: {:?}", v),
-                        "string",
-                        doc_id.to_string(),
+                        doc_id,
                         line_number,
                     )
                 }
@@ -824,8 +817,7 @@ fn get_conditional_attributes(
                 v => {
                     return ftd::e2(
                         format!("expected string, found: {:?}", v),
-                        "string",
-                        doc_id.to_string(),
+                        doc_id,
                         line_number,
                     )
                 }
@@ -843,8 +835,7 @@ fn get_conditional_attributes(
                 v => {
                     return ftd::e2(
                         format!("expected string, found: {:?}", v),
-                        "string",
-                        doc_id.to_string(),
+                        doc_id,
                         line_number,
                     )
                 }
@@ -858,8 +849,7 @@ fn get_conditional_attributes(
                 v => {
                     return ftd::e2(
                         format!("expected string, found: {:?}", v),
-                        "string",
-                        doc_id.to_string(),
+                        doc_id,
                         line_number,
                     )
                 }
@@ -873,8 +863,7 @@ fn get_conditional_attributes(
                 v => {
                     return ftd::e2(
                         format!("expected string, found: {:?}", v),
-                        "string",
-                        doc_id.to_string(),
+                        doc_id,
                         line_number,
                     )
                 }
@@ -888,8 +877,7 @@ fn get_conditional_attributes(
                 v => {
                     return ftd::e2(
                         format!("expected boolean, found: {:?}", v),
-                        "boolean",
-                        doc_id.to_string(),
+                        doc_id,
                         line_number,
                     )
                 }
@@ -903,8 +891,7 @@ fn get_conditional_attributes(
                 v => {
                     return ftd::e2(
                         format!("expected boolean, found: {:?}", v),
-                        "boolean",
-                        doc_id.to_string(),
+                        doc_id,
                         line_number,
                     )
                 }
@@ -918,8 +905,7 @@ fn get_conditional_attributes(
                 v => {
                     return ftd::e2(
                         format!("expected int, found: {:?}", v),
-                        "int_optional",
-                        doc_id.to_string(),
+                        doc_id,
                         line_number,
                     )
                 }
@@ -927,8 +913,7 @@ fn get_conditional_attributes(
         } else {
             return ftd::e2(
                 format!("unknown style name: `{}` value:`{:?}`", name, value),
-                "get_string_value",
-                doc_id.to_string(),
+                doc_id,
                 line_number,
             );
         })
@@ -1009,7 +994,7 @@ impl Component {
         let name = ftd_rt::get_name("component", p1.name.as_str(), doc.name)?.to_string();
         let root = p1
             .header
-            .string(doc.name.to_string(), p1.line_number, "component")?;
+            .string(doc.name, p1.line_number, "component")?;
         let root_component = doc.get_component(p1.line_number, root.as_str())?;
         let mut root_arguments = root_component.arguments.clone();
         let (arguments, inherits) =
@@ -1031,7 +1016,7 @@ impl Component {
             }
             if let Ok(loop_data) = sub
                 .header
-                .str(doc.name.to_string(), p1.line_number, "$loop$")
+                .str(doc.name, p1.line_number, "$loop$")
             {
                 instructions.push(Instruction::RecursiveChildComponent {
                     child: recursive_child_component(
@@ -1068,7 +1053,7 @@ impl Component {
 
         let condition = match p1
             .header
-            .str_optional(doc.name.to_string(), p1.line_number, "if")?
+            .str_optional(doc.name, p1.line_number, "if")?
         {
             Some(expr) => Some(crate::p2::Boolean::from_expression(
                 expr,
@@ -1441,9 +1426,8 @@ pub fn recursive_child_component(
             loop_ref.to_string()
         } else {
             return ftd::e2(
-                "loop variable should start with $, found",
-                parts.1,
-                doc.name.to_string(),
+                format!("loop variable should start with $, found: {}", parts.1),
+                doc.name,
                 sub.line_number,
             );
         };
@@ -1467,7 +1451,6 @@ pub fn recursive_child_component(
                 recursive_property_value.kind(),
             ),
             doc.name,
-            doc.name.to_string(),
             sub.line_number,
         );
     };
@@ -1565,7 +1548,7 @@ pub fn recursive_child_component(
         root: sub.name.to_string(),
         condition: match sub
             .header
-            .str_optional(doc.name.to_string(), sub.line_number, "if")?
+            .str_optional(doc.name, sub.line_number, "if")?
         {
             Some(expr) => Some(ftd::p2::Boolean::from_expression(
                 expr,
@@ -1710,7 +1693,6 @@ fn assert_no_extra_properties(
                         .join(", ")
                 ),
                 doc_id,
-                doc_id.to_string(),
                 i.to_owned(),
             );
         }
@@ -1741,7 +1723,7 @@ fn read_properties(
             continue;
         }
         let (conditional_vector, source) = match (
-            p1.conditional_str(doc.name.to_string(), line_number, name),
+            p1.conditional_str(doc.name, line_number, name),
             kind.inner(),
         ) {
             (Ok(v), _) => (v, ftd::TextSource::Header),
@@ -1774,7 +1756,6 @@ fn read_properties(
                             fn_name, root, name
                         ),
                         doc.name,
-                        doc.name.to_string(),
                         line_number,
                     );
                 }
@@ -1793,7 +1774,6 @@ fn read_properties(
                             fn_name, root, name
                         ),
                         doc.name,
-                        doc.name.to_string(),
                         line_number,
                     );
                 }
@@ -1956,7 +1936,6 @@ fn read_arguments(
                     return ftd::e2(
                         format!("'{}' is not an argument of {}", var_data.name, root),
                         doc.name,
-                        doc.name.to_string(),
                         i.to_owned(),
                     )
                 }

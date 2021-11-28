@@ -50,7 +50,6 @@ impl PropertyValue {
                             return ftd::e2(
                                 format!("{} is not present in doc, {:?}", part1, e),
                                 doc.name,
-                                doc.name.to_string(),
                                 line_number,
                             )
                         }
@@ -79,7 +78,6 @@ impl PropertyValue {
                     return ftd::e2(
                         "expected expected_kind while calling resolve_value",
                         doc.name,
-                        doc.name.to_string(),
                         line_number,
                     );
                 }
@@ -128,7 +126,6 @@ impl PropertyValue {
                         return ftd::e2(
                             format!("can't resolve value {} to expected kind {:?}", string, t),
                             doc.name,
-                            doc.name.to_string(),
                             line_number,
                         )
                     }
@@ -176,7 +173,6 @@ impl PropertyValue {
                             return ftd::e2(
                                 format!("{} is not present in {} of type {:?}", p2, name, rec),
                                 doc.name,
-                                doc.name.to_string(),
                                 line_number,
                             );
                         }
@@ -188,7 +184,6 @@ impl PropertyValue {
                     return ftd::e2(
                         format!("expected {:?} found {:?}", found_kind, e_kind),
                         doc.name,
-                        doc.name.to_string(),
                         line_number,
                     );
                 }
@@ -243,26 +238,23 @@ impl PropertyValue {
                             }
                             None => {
                                 return ftd::e2(
-                                    format!("{} is not present in record {}", part_2, part_1),
-                                    name,
-                                    doc.name.to_string(),
+                                    format!("{} is not present in record {} [name: {}]", part_2, part_1, name),
+                                    doc.name,
                                     line_number,
                                 )
                             }
                         },
                         None => {
                             return ftd::e2(
-                                format!("{} is not present in argument", part_1),
-                                name,
-                                doc.name.to_string(),
+                                format!("{} is not present in argument [name: {}]", part_1, name),
+                                doc.name,
                                 line_number,
                             );
                         }
                         _ => {
                             return ftd::e2(
-                                format!("{} is not a record", part_1),
-                                name,
-                                doc.name.to_string(),
+                                format!("{} is not a record [name: {}]", part_1, name),
+                                doc.name,
                                 line_number,
                             )
                         }
@@ -277,8 +269,7 @@ impl PropertyValue {
                                 if !t {
                                     return ftd::e2(
                                         format!("{} is required", name),
-                                        name,
-                                        doc.name.to_string(),
+                                        doc.name,
                                         line_number,
                                     );
                                 }
@@ -430,7 +421,6 @@ impl Variable {
             return ftd::e2(
                 format!("Expected list found: {:?}", p1),
                 doc.name,
-                doc.name.to_string(),
                 p1.line_number,
             );
         }
@@ -456,7 +446,7 @@ impl Variable {
                 kind: crate::p2::Kind::from(
                     p1.line_number,
                     p1.header
-                        .str(doc.name.to_string(), p1.line_number, "type")?,
+                        .str(doc.name, p1.line_number, "type")?,
                     doc,
                     None,
                 )?,
@@ -509,7 +499,6 @@ impl Variable {
                 return ftd::e2(
                     "unexpected map",
                     doc.name,
-                    doc.name.to_string(),
                     p1.line_number,
                 )
             }
@@ -533,9 +522,8 @@ impl Variable {
                 crate::p2::Thing::OrTypeWithVariant { e, variant } => e.create(p1, variant, doc)?,
                 t => {
                     return ftd::e2(
-                        "unexpected thing found",
-                        t,
-                        doc.name.to_string(),
+                        format!("unexpected thing found: {:?}", t),
+                        doc.name,
                         p1.line_number,
                     )
                 }
@@ -571,7 +559,6 @@ impl Variable {
                 t => ftd::e2(
                     format!("expected record type, found: {:?}", t),
                     doc.name,
-                    doc.name.to_string(),
                     p1.line_number,
                 ),
             },
@@ -580,14 +567,12 @@ impl Variable {
                 t => ftd::e2(
                     format!("expected or-type type, found: {:?}", t),
                     doc.name,
-                    doc.name.to_string(),
                     p1.line_number,
                 ),
             },
             t => ftd::e2(
                 format!("unexpected type found: {:?}", t),
                 doc.name,
-                doc.name.to_string(),
                 p1.line_number,
             ),
         }
@@ -626,7 +611,6 @@ fn read_string(p1: &crate::p1::Section, doc_id: &str) -> crate::p1::Result<Value
         (Some(c), Some(b)) => ftd::e2(
             format!("both caption: `{}` and body: `{}` present", c, b.1),
             doc_id,
-            doc_id.to_string(),
             p1.line_number,
         ),
         (Some(caption), None) => Ok(Value::String {
@@ -640,7 +624,6 @@ fn read_string(p1: &crate::p1::Section, doc_id: &str) -> crate::p1::Result<Value
         (None, None) => ftd::e2(
             "either body or caption is required for string",
             doc_id,
-            doc_id.to_string(),
             p1.line_number,
         ),
     }
@@ -655,7 +638,6 @@ fn read_integer(p1: &crate::p1::Section, doc_id: &str) -> crate::p1::Result<Valu
     ftd::e2(
         "not a valid integer",
         doc_id,
-        doc_id.to_string(),
         p1.line_number,
     )
 }
@@ -669,7 +651,6 @@ fn read_decimal(p1: &crate::p1::Section, doc_id: &str) -> crate::p1::Result<Valu
     ftd::e2(
         "not a valid float",
         doc_id,
-        doc_id.to_string(),
         p1.line_number,
     )
 }
@@ -683,7 +664,6 @@ fn read_boolean(p1: &crate::p1::Section, doc_id: &str) -> crate::p1::Result<Valu
     ftd::e2(
         "not a valid bool",
         doc_id,
-        doc_id.to_string(),
         p1.line_number,
     )
 }
@@ -714,7 +694,6 @@ impl VariableData {
             return ftd::e2(
                 format!("invalid variable or list declaration, found: `{}`", s),
                 doc_id,
-                doc_id.to_string(),
                 line_number,
             );
         }
@@ -729,7 +708,6 @@ impl VariableData {
                 return ftd::e2(
                     format!("invalid variable or list declaration, found: `{}`", s),
                     doc_id,
-                    doc_id.to_string(),
                     line_number,
                 );
             }
@@ -746,7 +724,6 @@ impl VariableData {
                 return ftd::e2(
                     format!("invalid variable or list declaration, found: `{}`", s),
                     doc_id,
-                    doc_id.to_string(),
                     line_number,
                 );
             }
@@ -766,7 +743,6 @@ impl VariableData {
                     format!("name should not start with $, found: `{}`", s)
                 },
                 doc_id,
-                doc_id.to_string(),
                 line_number,
             );
             if name.is_none() {

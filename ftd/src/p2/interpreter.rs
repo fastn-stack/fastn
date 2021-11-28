@@ -159,7 +159,7 @@ impl<'a> Interpreter<'a> {
                         // declare and instantiate a variable
                         let d = if p1
                             .header
-                            .str(doc.name.to_string(), p1.line_number, "$processor$")
+                            .str(doc.name, p1.line_number, "$processor$")
                             .is_ok()
                         {
                             let name = var_data.name.to_string();
@@ -183,7 +183,7 @@ impl<'a> Interpreter<'a> {
                         // declare and instantiate a list
                         let d = if p1
                             .header
-                            .str(doc.name.to_string(), p1.line_number, "$processor$")
+                            .str(doc.name, p1.line_number, "$processor$")
                             .is_ok()
                         {
                             let name = doc.resolve_name(p1.line_number, &var_data.name)?;
@@ -209,17 +209,14 @@ impl<'a> Interpreter<'a> {
                 {
                     assert!(
                         !(p1.header
-                            .str_optional(doc.name.to_string(), p1.line_number, "if")?
+                            .str_optional(doc.name, p1.line_number, "if")?
                             .is_some()
                             && p1
                                 .header
-                                .str_optional(doc.name.to_string(), p1.line_number, "$processor$")?
+                                .str_optional(doc.name, p1.line_number, "$processor$")?
                                 .is_some())
                     );
-                    if let Some(expr) =
-                        p1.header
-                            .str_optional(doc.name.to_string(), p1.line_number, "if")?
-                    {
+                    if let Some(expr) = p1.header.str_optional(doc.name, p1.line_number, "if")? {
                         let val = v.get_value(p1, &doc)?;
                         v.conditions.push((
                             crate::p2::Boolean::from_expression(
@@ -233,7 +230,7 @@ impl<'a> Interpreter<'a> {
                         ));
                     } else if p1
                         .header
-                        .str_optional(doc.name.to_string(), p1.line_number, "$processor$")?
+                        .str_optional(doc.name, p1.line_number, "$processor$")?
                         .is_some()
                     {
                         let start = std::time::Instant::now();
@@ -256,15 +253,11 @@ impl<'a> Interpreter<'a> {
                         return ftd::e2(
                             format!("variable should have prefix $, found: `{}`", p1.name),
                             doc.name,
-                            doc.name.to_string(),
                             p1.line_number,
                         );
                     }
                     crate::p2::Thing::Component(_) => {
-                        if let Ok(loop_data) =
-                            p1.header
-                                .str(doc.name.to_string(), p1.line_number, "$loop$")
-                        {
+                        if let Ok(loop_data) = p1.header.str(doc.name, p1.line_number, "$loop$") {
                             let section_to_subsection = ftd::p1::SubSection {
                                 name: p1.name.to_string(),
                                 caption: p1.caption.to_owned(),
@@ -300,8 +293,7 @@ impl<'a> Interpreter<'a> {
                                     continue;
                                 }
                                 if let Ok(loop_data) =
-                                    sub.header
-                                        .str(doc.name.to_string(), p1.line_number, "$loop$")
+                                    sub.header.str(doc.name, p1.line_number, "$loop$")
                                 {
                                     children.push(ftd::component::recursive_child_component(
                                         loop_data,
@@ -338,7 +330,6 @@ impl<'a> Interpreter<'a> {
                         return ftd::e2(
                             format!("'{}' is an or-type", p1.name.as_str()),
                             doc.name,
-                            doc.name.to_string(),
                             p1.line_number,
                         );
                     }
@@ -347,7 +338,6 @@ impl<'a> Interpreter<'a> {
                         return ftd::e2(
                             format!("'{}' is an or-type variant", p1.name.as_str(),),
                             doc.name,
-                            doc.name.to_string(),
                             p1.line_number,
                         );
                     }
@@ -457,7 +447,7 @@ impl<'a> Interpreter<'a> {
                         // declare and instantiate a variable
                         let d = if p1
                             .header
-                            .str(doc.name.to_string(), p1.line_number, "$processor$")
+                            .str(doc.name, p1.line_number, "$processor$")
                             .is_ok()
                         {
                             let name = var_data.name.to_string();
@@ -481,7 +471,7 @@ impl<'a> Interpreter<'a> {
                         // declare and instantiate a list
                         let d = if p1
                             .header
-                            .str(doc.name.to_string(), p1.line_number, "$processor$")
+                            .str(doc.name, p1.line_number, "$processor$")
                             .is_ok()
                         {
                             let name = doc.resolve_name(p1.line_number, &var_data.name)?;
@@ -507,17 +497,14 @@ impl<'a> Interpreter<'a> {
                 {
                     assert!(
                         !(p1.header
-                            .str_optional(doc.name.to_string(), p1.line_number, "if")?
+                            .str_optional(doc.name, p1.line_number, "if")?
                             .is_some()
                             && p1
                                 .header
-                                .str_optional(doc.name.to_string(), p1.line_number, "$processor$")?
+                                .str_optional(doc.name, p1.line_number, "$processor$")?
                                 .is_some())
                     );
-                    if let Some(expr) =
-                        p1.header
-                            .str_optional(doc.name.to_string(), p1.line_number, "if")?
-                    {
+                    if let Some(expr) = p1.header.str_optional(doc.name, p1.line_number, "if")? {
                         let val = v.get_value(p1, &doc)?;
                         v.conditions.push((
                             crate::p2::Boolean::from_expression(
@@ -531,7 +518,7 @@ impl<'a> Interpreter<'a> {
                         ));
                     } else if p1
                         .header
-                        .str_optional(doc.name.to_string(), p1.line_number, "$processor$")?
+                        .str_optional(doc.name, p1.line_number, "$processor$")?
                         .is_some()
                     {
                         let start = std::time::Instant::now();
@@ -554,15 +541,11 @@ impl<'a> Interpreter<'a> {
                         return ftd::e2(
                             format!("variable should have prefix $, found: `{}`", p1.name),
                             doc.name,
-                            doc.name.to_string(),
                             p1.line_number,
                         );
                     }
                     crate::p2::Thing::Component(_) => {
-                        if let Ok(loop_data) =
-                            p1.header
-                                .str(doc.name.to_string(), p1.line_number, "$loop$")
-                        {
+                        if let Ok(loop_data) = p1.header.str(doc.name, p1.line_number, "$loop$") {
                             let section_to_subsection = ftd::p1::SubSection {
                                 name: p1.name.to_string(),
                                 caption: p1.caption.to_owned(),
@@ -598,8 +581,7 @@ impl<'a> Interpreter<'a> {
                                     continue;
                                 }
                                 if let Ok(loop_data) =
-                                    sub.header
-                                        .str(doc.name.to_string(), p1.line_number, "$loop$")
+                                    sub.header.str(doc.name, p1.line_number, "$loop$")
                                 {
                                     children.push(ftd::component::recursive_child_component(
                                         loop_data,
@@ -636,7 +618,6 @@ impl<'a> Interpreter<'a> {
                         return ftd::e2(
                             format!("'{}' is an or-type", p1.name.as_str()),
                             doc.name,
-                            doc.name.to_string(),
                             p1.line_number,
                         );
                     }
@@ -645,7 +626,6 @@ impl<'a> Interpreter<'a> {
                         return ftd::e2(
                             format!("'{}' is an or-type variant", p1.name.as_str(),),
                             doc.name,
-                            doc.name.to_string(),
                             p1.line_number,
                         );
                     }
@@ -7817,8 +7797,7 @@ mod test {
                                     s("title"),
                                     crate::PropertyValue::Value {
                                         value: crate::variable::Value::String {
-                                            text: "\"https://ftd.dev\""
-                                                .to_string(),
+                                            text: "\"https://ftd.dev\"".to_string(),
                                             source: crate::TextSource::Header,
                                         },
                                     },

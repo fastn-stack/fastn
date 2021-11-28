@@ -27,7 +27,6 @@ impl Event {
                     return ftd::e2(
                         format!("Can't convert value to string {:?}", value),
                         doc.name,
-                        doc.name.to_string(),
                         line_number,
                     );
                 }
@@ -71,7 +70,6 @@ impl Event {
                         return ftd::e2(
                             format!("Can't find the local variable {}", value),
                             doc.name,
-                            doc.name.to_string(),
                             line_number,
                         );
                     }
@@ -148,7 +146,6 @@ impl EventName {
                 return ftd::e2(
                     format!("{} is not a valid event", t),
                     doc_id,
-                    doc_id.to_string(),
                     0,
                 )
             }
@@ -302,7 +299,6 @@ impl Action {
                             action_string, a
                         ),
                         doc.name,
-                        doc.name.to_string(),
                         line_number,
                     );
                 };
@@ -332,7 +328,6 @@ impl Action {
                                         current_parameter, min, idx
                                     ),
                                     doc.name,
-                                    doc.name.to_string(),
                                     line_number,
                                 );
                             }
@@ -352,7 +347,6 @@ impl Action {
                                         max + 1
                                     ),
                                     doc.name,
-                                    doc.name.to_string(),
                                     line_number,
                                 );
                             }
@@ -418,7 +412,6 @@ impl Action {
                 return ftd::e2(
                     format!("{} is not a valid action", t),
                     doc.name,
-                    doc.name.to_string(),
                     line_number,
                 )
             }
@@ -441,7 +434,6 @@ impl Action {
                         return ftd::e2(
                             format!("value not expected {:?}", t),
                             doc.name,
-                            doc.name.to_string(),
                             line_number,
                         )
                     }

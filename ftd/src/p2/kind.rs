@@ -46,34 +46,36 @@ impl Kind {
         matches!(self, Kind::List { .. })
     }
 
-    pub fn to_string(&self, line_number: usize, id: &str) -> ftd::p1::Result<String> {
+    pub fn to_string(&self, line_number: usize, doc_id: &str) -> ftd::p1::Result<String> {
         Ok(match self {
             ftd::p2::Kind::String { .. } => "string",
             ftd::p2::Kind::Integer { .. } => "integer",
             ftd::p2::Kind::Decimal { .. } => "decimal",
             ftd::p2::Kind::Boolean { .. } => "boolean",
-            _ => return ftd::e2(format!("Kind supported for default value are string, integer, decimal and boolean with default value, found: kind `{:?}`", &self), id,id.to_string(), line_number),
+            _ => return ftd::e2(format!("Kind supported for default value are string, integer, decimal and boolean with default value, found: kind `{:?}`", &self), doc_id, line_number),
         }.to_string())
     }
 
-    pub fn to_value(&self, line_number: usize, id: &str) -> ftd::p1::Result<ftd::Value> {
+    pub fn to_value(&self, line_number: usize, doc_id: &str) -> ftd::p1::Result<ftd::Value> {
         Ok(match self {
             ftd::p2::Kind::String { default: Some(d), .. } => ftd::Value::String {text: d.to_string(), source: ftd::TextSource::Default} ,
             ftd::p2::Kind::Integer { default: Some(d) } => ftd::Value::Integer { value: match d.parse::<i64>() {
                 Ok(v) => v,
-                Err(_) => return ftd::e2("is not an integer", d, id.to_string(), line_number),
+                Err(_) => return ftd::e2(format!("{} is not an integer", d), doc_id, line_number),
             },},
             ftd::p2::Kind::Decimal { default: Some(d) } => ftd::Value::Decimal { value: d.parse::<f64>().map_err(|e| crate::p1::Error::ParseError {
                 message: e.to_string(),
-                doc_id: id.to_string(),
+                doc_id: doc_id.to_string(),
                 line_number,
             })?, } ,
             ftd::p2::Kind::Boolean { default: Some(d) } => ftd::Value::Boolean { value: d.parse::<bool>().map_err(|e|crate::p1::Error::ParseError {
                 message: e.to_string(),
-                doc_id: id.to_string(),
+                doc_id: doc_id.to_string(),
                 line_number,
             })?, } ,
-            _ => return ftd::e2(format!("Kind supported for default value are string, integer, decimal and boolean with default value, found: kind `{:?}`", &self), id, id.to_string(), line_number),
+            _ => return ftd::e2(
+                format!("Kind supported for default value are string, integer, decimal and boolean with default value, found: kind `{:?}`", &self),
+                doc_id,  line_number),
         })
     }
 }
@@ -229,7 +231,7 @@ impl Kind {
         name: &str,
         doc: &crate::p2::TDoc,
     ) -> crate::p1::Result<crate::PropertyValue> {
-        let (v, source) = match p1.str_optional(doc.name.to_string(), line_number, name)? {
+        let (v, source) = match p1.str_optional(doc.name, line_number, name)? {
             Some(v) => (v.to_string(), crate::TextSource::Header),
             None => {
                 let optional = match self {
@@ -253,8 +255,7 @@ impl Kind {
                     t => {
                         return ftd::e2(
                             format!("`{}` is {:?}", name, t),
-                            "two",
-                            doc.name.to_string(),
+                            doc.name,
                             line_number,
                         )
                     }
@@ -287,8 +288,7 @@ impl Kind {
                 } else {
                     return ftd::e2(
                         format!("`{}` is required", name),
-                        "one",
-                        doc.name.to_string(),
+                        doc.name,
                         line_number,
                     );
                 }
@@ -309,7 +309,7 @@ impl Kind {
         match self.inner() {
             Kind::Integer { .. } => Ok(crate::PropertyValue::Value {
                 value: crate::Value::Integer {
-                    value: p1.i64(doc.name.to_string(), line_number, name).unwrap_or(
+                    value: p1.i64(doc.name, line_number, name).unwrap_or(
                         v.parse::<i64>().map_err(|e| crate::p1::Error::ParseError {
                             message: e.to_string(),
                             doc_id: doc.name.to_string(),
@@ -320,7 +320,7 @@ impl Kind {
             }),
             Kind::Decimal { .. } => Ok(crate::PropertyValue::Value {
                 value: crate::Value::Decimal {
-                    value: p1.f64(doc.name.to_string(), line_number, name).unwrap_or(
+                    value: p1.f64(doc.name, line_number, name).unwrap_or(
                         v.parse::<f64>().map_err(|e| crate::p1::Error::ParseError {
                             message: e.to_string(),
                             doc_id: doc.name.to_string(),
@@ -331,7 +331,7 @@ impl Kind {
             }),
             Kind::Boolean { .. } => Ok(crate::PropertyValue::Value {
                 value: crate::Value::Boolean {
-                    value: p1.bool(doc.name.to_string(), line_number, name).unwrap_or(
+                    value: p1.bool(doc.name, line_number, name).unwrap_or(
                         v.parse::<bool>()
                             .map_err(|e| crate::p1::Error::ParseError {
                                 message: e.to_string(),
@@ -344,7 +344,7 @@ impl Kind {
             Kind::String { .. } => Ok(crate::PropertyValue::Value {
                 value: crate::Value::String { text: v, source },
             }),
-            v => ftd::e2("unknown kind found", v, doc.name.to_string(), line_number),
+            v => ftd::e2(format!("unknown kind found: {:?}", v), doc.name, line_number),
         }
     }
 

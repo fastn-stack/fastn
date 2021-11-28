@@ -140,6 +140,6 @@ pub struct ValueWithDefault {
 mod test {
     #[test]
     fn get_name() {
-        assert_eq!(super::get_name("fn", "fn foo").unwrap(), "foo")
+        assert_eq!(super::get_name("fn", "fn foo", "test").unwrap(), "foo")
     }
 }

@@ -5,7 +5,7 @@ pub trait Library: Sync {
     async fn get_with_result(&self, name: &str) -> crate::p1::Result<String> {
         match self.get(name).await {
             Some(v) => Ok(v),
-            None => ftd::e2("library not found".to_string(), name, "".to_string(), 0),
+            None => ftd::e2(format!("library not found: {}", name), "TODO", 0), // TODO
         }
     }
     async fn process(
@@ -27,7 +27,7 @@ pub trait Library {
     fn get_with_result(&self, name: &str) -> crate::p1::Result<String> {
         match self.get(name) {
             Some(v) => Ok(v),
-            None => ftd::e2("library not found".to_string(), name, "".to_string(), 0),
+            None => ftd::e2(format!("library not found: {}", name), "", 0),
         }
     }
     fn process(
@@ -198,15 +198,14 @@ impl Library for TestLibrary {
     ) -> crate::p1::Result<ftd::Value> {
         match section
             .header
-            .str(doc.name.to_string(), section.line_number, "$processor$")?
+            .str(doc.name, section.line_number, "$processor$")?
         {
             "read_version_from_cargo_toml" => read_version(),
             "read_package_from_cargo_toml" => read_package(section, doc),
             "read_package_records_from_cargo_toml" => read_records(section, doc),
             t => ftd::e2(
                 format!("unknown processor: {}", t),
-                "TestLibrary.process",
-                doc.name.to_string(),
+                doc.name,
                 section.line_number.to_owned(),
             ),
         }
@@ -226,15 +225,14 @@ impl Library for TestLibrary {
     ) -> crate::p1::Result<ftd::Value> {
         match section
             .header
-            .str(doc.name.to_string(), section.line_number, "$processor$")?
+            .str(doc.name, section.line_number, "$processor$")?
         {
             "read_version_from_cargo_toml" => read_version(),
             "read_package_from_cargo_toml" => read_package(section, doc),
             "read_package_records_from_cargo_toml" => read_records(section, doc),
             t => ftd::e2(
                 format!("unknown processor: {}", t),
-                "TestLibrary.process",
-                doc.name.to_string(),
+                doc.name,
                 section.line_number.to_owned(),
             ),
         }

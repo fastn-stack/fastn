@@ -1,5 +1,5 @@
-#[derive(serde::Deserialize, Clone)]
-#[cfg_attr(not(feature = "wasm"), derive(Debug, PartialEq, serde::Serialize))]
+#[derive(serde::Deserialize, Clone, Debug)]
+#[cfg_attr(not(feature = "wasm"), derive(PartialEq, serde::Serialize))]
 #[serde(tag = "type")]
 pub enum Element {
     Text(Text),

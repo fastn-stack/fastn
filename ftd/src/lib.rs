@@ -73,7 +73,7 @@ pub fn latex(s: &str, doc_id: &str) -> ftd::p1::Result<ftd_rt::Rendered> {
                         line_number: 0,
                     })
                 }
-                _ => return ftd::e2("katex error", e, doc_id.to_string(), 0),
+                _ => return ftd::e2(format!("katex error: {:?}", e), doc_id, 0),
             },
         },
     })
@@ -107,14 +107,13 @@ pub fn markdown_line(s: &str) -> ftd_rt::Rendered {
     }
 }
 
-pub fn e2<T, S1, S2>(m: S1, c: S2, doc_id: String, line_number: usize) -> crate::p1::Result<T>
+pub fn e2<T, S1>(m: S1, doc_id: &str, line_number: usize) -> crate::p1::Result<T>
 where
-    S1: std::fmt::Debug,
-    S2: std::fmt::Debug,
+    S1: Into<String>,
 {
     Err(crate::p1::Error::ParseError {
-        message: format!("{:?}: {:?}", m, c),
-        doc_id,
+        message: m.into(),
+        doc_id: doc_id.to_string(),
         line_number,
     })
 }
@@ -134,15 +133,15 @@ where
     })
 }
 
-pub fn split_module(
-    id: &str,
+pub fn split_module<'a>(
+    id: &'a str,
+    doc_id: &str,
     line_number: usize,
-) -> crate::p1::Result<(Option<&str>, &str, Option<&str>)> {
+) -> crate::p1::Result<(Option<&'a str>, &'a str, Option<&'a str>)> {
     if id.chars().filter(|v| *v == '.').count() > 2 {
         return ftd::e2(
-            "id contains more than two dots",
-            id,
-            "".to_string(),
+            format!("id contains more than two dots: {}", id),
+            doc_id,
             line_number,
         );
     }

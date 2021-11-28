@@ -92,7 +92,7 @@ impl Section {
     pub fn assert_missing(&self, line_number: usize, key: &str, doc_id: &str) -> Result<()> {
         if self
             .header
-            .str_optional(doc_id.to_string(), line_number, key)?
+            .str_optional(doc_id, line_number, key)?
             .is_some()
         {
             return Err(Error::ParseError {
