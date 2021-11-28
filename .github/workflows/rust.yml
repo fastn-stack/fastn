@@ -53,21 +53,20 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           command: test
-          args: --manifest-path ftd/Cargo.toml
       - name: testing async ftd
         id: ftd-async
         continue-on-error: true
         uses: actions-rs/cargo@v1
         with:
           command: test
-          args: --manifest-path ftd/Cargo.toml --features async
+          args: --features async
       - name: clippy async ftd
         id: ftd-clippy-async
         continue-on-error: true
         uses: actions-rs/cargo@v1
         with:
           command: clippy
-          args: --manifest-path ftd/Cargo.toml --features async
+          args: --features async
       - name: Check on failure fmt
         if: steps.fmt.outcome != 'success'
         run: exit 1
