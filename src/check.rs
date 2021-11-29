@@ -10,7 +10,7 @@ pub fn check() -> fpm::Config {
 }
 
 fn find_fpm_file(dir: String) -> (bool, String) {
-    if std::path::Path::new(format!("{}/.FPM.ftd", dir).as_str()).exists() {
+    if std::path::Path::new(format!("{}/FPM.ftd", dir).as_str()).exists() {
         (true, dir)
     } else {
         if let Some((parent_dir, _)) = dir.rsplit_once("/") {

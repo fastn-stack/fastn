@@ -1,3 +1,6 @@
+// Remove this
+
+// $FPM_HOME
 pub fn setup() {
     match home::home_dir() {
         Some(path) => {

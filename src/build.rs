@@ -17,7 +17,9 @@ pub fn process_dir(directory: String, depth: usize, base_path: String) -> u32 {
             .to_str()
             .expect("Directory path is expected")
             .to_string();
-        if md.is_dir() {
+        if depth == 0 && doc_path.as_str().ends_with("FPM.ftd") {
+            // pass the FPM.ftd file at the base level
+        } else if md.is_dir() {
             // Iterate the children
             count += process_dir(doc_path, depth + 1, base_path.as_str().to_string());
         } else if doc_path.as_str().ends_with(".ftd") {
@@ -35,6 +37,7 @@ pub fn process_dir(directory: String, depth: usize, base_path: String) -> u32 {
                     .as_str(),
                 doc,
                 base_path.as_str().to_string(),
+                depth,
             );
             count += 1;
         }
@@ -42,7 +45,7 @@ pub fn process_dir(directory: String, depth: usize, base_path: String) -> u32 {
     count
 }
 
-fn write(id: &str, doc: String, base_path: String) {
+fn write(id: &str, doc: String, base_path: String, depth: usize) {
     use std::io::Write;
 
     let lib = fpm::Library {};
@@ -53,18 +56,20 @@ fn write(id: &str, doc: String, base_path: String) {
             return;
         }
     };
-
-    std::fs::create_dir_all(format!(
-        "{}/.build/{}",
-        base_path.as_str(),
-        id.replace(".ftd", "")
-    ))
-    .expect("failed to create directory folder for doc");
+    if !(depth == 0 && id == "index.ftd") {
+        std::fs::create_dir_all(format!(
+            "{}/.build/{}",
+            base_path.as_str(),
+            id.replace(".ftd", "")
+        ))
+        .expect("failed to create directory folder for doc");
+    }
 
     let mut f = std::fs::File::create(format!(
         "{}/.build/{}",
         base_path.as_str(),
-        id.replace(".ftd", "/index.html")
+        id.replace("index.ftd", ".ftd")
+            .replace(".ftd", "/index.html")
     ))
     .expect("failed to create .html file");
 
