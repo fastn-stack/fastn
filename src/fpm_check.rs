@@ -1,12 +1,9 @@
-pub fn fpm_check(base_dir: Option<&str>) -> fpm::FPMConfig {
+pub fn fpm_check() -> fpm::FPMConfig {
     let (is_okay, base_dir) = find_fpm_file(
-        base_dir
-            .unwrap_or(
-                std::env::current_dir()
-                    .expect("Panic1")
-                    .to_str()
-                    .expect("panic"),
-            )
+        std::env::current_dir()
+            .expect("Panic1")
+            .to_str()
+            .expect("panic")
             .to_string(),
     );
     fpm::FPMConfig::parse(base_dir)

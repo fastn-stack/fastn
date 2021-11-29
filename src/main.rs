@@ -12,18 +12,22 @@ fn main() {
         .subcommand(
             clap::SubCommand::with_name("build")
                 .about("Builds the current directory")
-                .version(env!("CARGO_PKG_VERSION"))
-                .arg(
-                    clap::Arg::with_name("base_dir")
-                        .short("-d")
-                        .long("base-dir")
-                        .takes_value(true)
-                        .help("Provide the base directory for building"),
-                ),
+                .version(env!("CARGO_PKG_VERSION")),
+        )
+        .subcommand(
+            clap::SubCommand::with_name("check")
+                .about("Checks the folder structure of the current .FPM.ftd file")
+                .version(env!("CARGO_PKG_VERSION")),
+        )
+        .subcommand(
+            clap::SubCommand::with_name("setup")
+                .about("Sets up the folder structure and required variables for FPM usage")
+                .version(env!("CARGO_PKG_VERSION")),
         )
         .get_matches();
 
-    if let Some(ref matches) = matches.subcommand_matches("build") {
-        fpm::build(matches.value_of("base_dir"));
+    if matches.subcommand_matches("build").is_some() {
+        fpm::build();
     }
+    if matches.subcommand_matches("setup").is_some() {}
 }

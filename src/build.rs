@@ -1,5 +1,5 @@
-pub fn build(user_dir: Option<&str>) {
-    let fpm_config = fpm::fpm_check(user_dir);
+pub fn build() {
+    let fpm_config = fpm::fpm_check();
     println!("Building... {}", fpm_config.base_dir.as_str());
     std::fs::create_dir_all(format!("{}/.build", &fpm_config.base_dir).as_str())
         .expect("failed to create build folder");
