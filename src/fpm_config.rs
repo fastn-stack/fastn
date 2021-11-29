@@ -23,13 +23,14 @@ impl FPMConfig {
             }
         };
 
-        let config = {
-            match b.only_instance::<ConfigFromFile>("fpm#config").expect("") {
-                Some(v) => Some(v),
-                None => None,
-            }
-        };
-        let config = config.expect("Unable to find fpm#config");
+        let config = { b.only_instance::<ConfigFromFile>("fpm#config").expect("") };
+        let config = config.expect(
+            format!(
+                "Parsing of {} failed. Unable to find fpm#config",
+                format!("{}/.FPM.ftd", base_dir.as_str())
+            )
+            .as_str(),
+        );
         FPMConfig {
             package: config.package,
             base_dir,
