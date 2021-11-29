@@ -1,15 +1,10 @@
-pub fn build() {
-    let (is_okay, base_dir) = fpm::fpm_check();
-    if is_okay {
-        println!("Building...");
-        std::fs::create_dir_all(format!("{}/.build", &base_dir).as_str())
-            .expect("failed to create build folder");
+pub fn build(user_dir: Option<&str>) {
+    let fpm_config = fpm::fpm_check(user_dir);
+    println!("Building... {}", fpm_config.base_dir.as_str());
+    std::fs::create_dir_all(format!("{}/.build", &fpm_config.base_dir).as_str())
+        .expect("failed to create build folder");
 
-        process_dir(base_dir.clone(), 0, base_dir);
-    } else {
-        // TODO(main): Better error
-        println!("Build check failed. Please fix the .FPM.ftd file")
-    }
+    process_dir(fpm_config.base_dir.clone(), 0, fpm_config.base_dir);
 }
 
 pub fn process_dir(directory: String, depth: usize, base_path: String) -> u32 {
