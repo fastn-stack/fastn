@@ -16,9 +16,8 @@ impl Config {
                 todo!();
             }
         };
+
         // TODO(main): Error handling
-        b.only_instance::<Config>("fpm#config")
-            .expect("")
-            .expect("")
+        b.only_instance::<Config>("fpm#config").unwrap().unwrap()
     }
 }

@@ -18,4 +18,4 @@ home = "0.5.3"
 
 [dev-dependencies]
 rusty-hook = "^0.11.2"
-fbt-lib = "0.1.11"
+fbt-lib = { version = "0.1.11", path = "../fbt/fbt_lib" }
