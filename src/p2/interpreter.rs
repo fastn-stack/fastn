@@ -12629,7 +12629,7 @@ mod test {
 
                 -- component bar:
                 component: ftd.column
-                ftd.text $t:
+                ftd.ui $t:
 
                 --- ftd.text: amitu
 

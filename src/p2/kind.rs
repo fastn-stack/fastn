@@ -88,6 +88,7 @@ impl Kind {
     pub fn is_same_as(&self, other: &Self) -> bool {
         match (self, other) {
             (Self::String { .. }, Self::String { .. }) => matches!(other, Self::String { .. }),
+            (Self::UI { .. }, Self::UI { .. }) => matches!(other, Self::UI { .. }),
             (Self::Optional { kind }, _) => kind.is_same_as(other),
             (_, Self::Optional { kind: other }) => self.is_same_as(other),
             _ => self.without_default() == other.without_default(),
@@ -448,6 +449,10 @@ impl Kind {
                 "message" => Kind::Message,
                 "string-message" => Kind::StringMessage,
                 "int-message" => Kind::IntMessage,
+                "ftd.ui" => Kind::UI {
+                    name: "ftd.ui".to_string(),
+                    default: None,
+                },
                 k if ftd::component::is_kernel_component(k) => Kind::UI {
                     name: k.to_string(),
                     default: None,

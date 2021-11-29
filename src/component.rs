@@ -469,7 +469,19 @@ impl ChildComponent {
                     default: default.clone(),
                 },
             ));
-            doc.get_component(line_number, ui_name)?
+            ftd::Component {
+                root: "ftd.kernel".to_string(),
+                full_name: "ftd#ui".to_string(),
+                arguments: Default::default(),
+                locals: Default::default(),
+                properties: Default::default(),
+                instructions: vec![],
+                events: vec![],
+                condition: None,
+                kernel: false,
+                invocations: vec![],
+                line_number,
+            }
         } else {
             doc.get_component(line_number, name)?
         };
