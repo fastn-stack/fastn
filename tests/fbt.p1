@@ -1,3 +1,2 @@
 -- fbt:
 build: cargo build
-output: out
