@@ -1,7 +1,4 @@
--- import: fifthtry/ft
--- import: fifthtry/ft-core
-
--- ft.page:
+-- import: ft
 
 -- ft.h1: Test video
 
@@ -10,7 +7,7 @@
 -- ftd.text: Click here
 $event-click$: toggle $foo
 
--- ft.image: Sample Image
+-- ftd.image: Sample Image
 src: https://upload.wikimedia.org/wikipedia/en/e/ef/RD-S_sample_graph.png
 if: $foo
 

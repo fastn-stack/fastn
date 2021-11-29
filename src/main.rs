@@ -38,12 +38,6 @@ pub fn main() {
         }
     }
     write("index.ftd", write_doc);
-
-    std::fs::copy("../ftd-rt/pkg/ftd_rt.js", "./build/ftd_rt.js")
-        .expect("cant copy ftd_rt.js file");
-
-    std::fs::copy("../ftd-rt/pkg/ftd_rt_bg.wasm", "./build/ftd_rt_bg.wasm")
-        .expect("cant copy ftd_rt.js file");
 }
 
 fn write(id: &str, doc: String) {
