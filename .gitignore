@@ -17,3 +17,5 @@ Cargo.lock
 /build
 /.build
 .idea
+
+/tests/**/.build
