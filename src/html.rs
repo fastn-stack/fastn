@@ -1072,6 +1072,8 @@ pub fn length(l: &ftd::Length, f: &str) -> (String, String) {
         ftd::Length::Percent { value } => (s, format!("{}%", value)),
         ftd::Length::FitContent => (s, "fit-content".to_string()),
         ftd::Length::Calc { value } => (s, format!("calc({})", value)),
+        ftd::Length::VH { value } => (s, format!("{}vh", value)),
+        ftd::Length::VW { value } => (s, format!("{}vw", value)),
 
         _ => (s, "100%".to_string()),
         //        ftd::Length::Shrink => (s, "width".to_string()),   TODO

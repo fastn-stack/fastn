@@ -817,6 +817,8 @@ pub enum Length {
     Portion { value: i64 },
     Percent { value: i64 },
     Calc { value: String },
+    VH { value: i64 },
+    VW { value: i64 },
 }
 
 impl Length {
@@ -860,6 +862,20 @@ impl Length {
             let v = ftd::get_name("percent", l.as_str(), doc_id)?;
             return match v.parse() {
                 Ok(v) => Ok(Some(Length::Percent { value: v })),
+                Err(_) => ftd::e2(format!("{} is not a valid integer", v), doc_id, 0), // TODO
+            };
+        }
+        if l.starts_with("vh ") {
+            let v = ftd::get_name("vh", l.as_str(), doc_id)?;
+            return match v.parse() {
+                Ok(v) => Ok(Some(Length::VH { value: v })),
+                Err(_) => ftd::e2(format!("{} is not a valid integer", v), doc_id, 0), // TODO
+            };
+        }
+        if l.starts_with("vw ") {
+            let v = ftd::get_name("vw", l.as_str(), doc_id)?;
+            return match v.parse() {
+                Ok(v) => Ok(Some(Length::VW { value: v })),
                 Err(_) => ftd::e2(format!("{} is not a valid integer", v), doc_id, 0), // TODO
             };
         }
