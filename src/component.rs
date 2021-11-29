@@ -77,6 +77,7 @@ pub struct ChildComponent {
     pub events: Vec<ftd::p2::Event>,
     pub is_recursive: bool,
     pub line_number: usize,
+    pub reference: Option<(String, ftd::p2::Kind)>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, serde::Serialize, serde::Deserialize)]
@@ -455,7 +456,23 @@ impl ChildComponent {
         doc: &ftd::p2::TDoc,
         arguments: &std::collections::BTreeMap<String, ftd::p2::Kind>,
     ) -> ftd::p1::Result<Self> {
-        let root = doc.get_component(line_number, name)?;
+        let mut reference = None;
+        let root = if let Some(ftd::p2::Kind::UI {
+            name: ui_name,
+            default,
+        }) = arguments.get(name)
+        {
+            reference = Some((
+                name.to_string(),
+                ftd::p2::Kind::UI {
+                    name: ui_name.to_string(),
+                    default: default.clone(),
+                },
+            ));
+            doc.get_component(line_number, ui_name)?
+        } else {
+            doc.get_component(line_number, name)?
+        };
         let mut root_arguments = root.arguments;
         assert_no_extra_properties(
             line_number,
@@ -480,12 +497,13 @@ impl ChildComponent {
                 p1,
                 caption,
                 body,
-                "",
+                name,
                 root.full_name.as_str(),
                 &mut root_arguments,
                 &all_arguments,
                 doc,
                 &root_property,
+                reference.is_some(),
             )?,
             condition: match p1.str_optional(doc.name, line_number, "if")? {
                 Some(expr) => Some(ftd::p2::Boolean::from_expression(
@@ -501,6 +519,7 @@ impl ChildComponent {
             events: p1.get_events(line_number, doc, &all_arguments)?,
             is_recursive: false,
             arguments: local_arguments,
+            reference,
         });
 
         fn get_root_property(
@@ -942,16 +961,88 @@ impl Component {
         all_locals: &mut ftd::Map,
         id: Option<String>,
     ) -> ftd::p1::Result<ElementWithContainer> {
-        ftd::execute_doc::ExecuteDoc {
+        let new_instruction = {
+            let mut instructions: Vec<Instruction> = self.instructions.clone();
+            for instruction in instructions.iter_mut() {
+                match instruction {
+                    Instruction::ChildComponent { child } => reference_to_child_component(
+                        child,
+                        arguments,
+                        self.line_number,
+                        doc,
+                        root_name,
+                    )?,
+                    Instruction::Component { parent, children } => {
+                        reference_to_child_component(
+                            parent,
+                            arguments,
+                            self.line_number,
+                            doc,
+                            root_name,
+                        )?;
+                        for child in children.iter_mut() {
+                            reference_to_child_component(
+                                child,
+                                arguments,
+                                self.line_number,
+                                doc,
+                                root_name,
+                            )?;
+                        }
+                    }
+                    Instruction::ChangeContainer { .. } => {}
+                    Instruction::RecursiveChildComponent { child } => reference_to_child_component(
+                        child,
+                        arguments,
+                        self.line_number,
+                        doc,
+                        root_name,
+                    )?,
+                }
+            }
+            instructions
+        };
+
+        return ftd::execute_doc::ExecuteDoc {
             name: doc.name,
             aliases: doc.aliases,
             bag: doc.bag,
-            instructions: &self.instructions,
+            instructions: &new_instruction,
             arguments,
             invocations,
             root_name,
         }
-        .execute(call_container, all_locals, id)
+        .execute(call_container, all_locals, id);
+
+        fn reference_to_child_component(
+            child: &mut ChildComponent,
+            arguments: &std::collections::BTreeMap<String, crate::Value>,
+            line_number: usize,
+            doc: &ftd::p2::TDoc,
+            root_name: Option<&str>,
+        ) -> crate::p1::Result<()> {
+            if let Some(ref c) = child.reference {
+                if let Some(ftd::Value::UI { name, .. }) = arguments.get(&c.0) {
+                    *child = doc
+                        .get_component_with_root(line_number, name, root_name)?
+                        .reference_to_child_component();
+                }
+            }
+            Ok(())
+        }
+    }
+
+    fn reference_to_child_component(&self) -> ChildComponent {
+        ChildComponent {
+            root: self.root.to_string(),
+            condition: self.condition.to_owned(),
+            properties: self.properties.to_owned(),
+            arguments: self.arguments.to_owned(),
+            events: self.events.to_owned(),
+            is_recursive: false,
+            line_number: self.line_number,
+            reference: None,
+        }
     }
 
     pub fn get_caption(&self) -> Option<String> {
@@ -1048,6 +1139,7 @@ impl Component {
                 &arguments,
                 doc,
                 &root_properties_from_inherits(p1.line_number, &arguments, inherits, doc)?,
+                false,
             )?,
             arguments,
             locals: Default::default(),
@@ -1369,6 +1461,13 @@ impl Component {
         all_locals.insert("MOUSE-IN-TEMP".to_string(), string_container.to_string());
         all_locals
     }
+
+    pub fn to_value(&self, kind: &ftd::p2::Kind) -> ftd::p1::Result<ftd::Value> {
+        Ok(ftd::Value::UI {
+            name: self.full_name.to_string(),
+            kind: kind.to_owned(),
+        })
+    }
 }
 
 pub fn recursive_child_component(
@@ -1457,6 +1556,8 @@ pub fn recursive_child_component(
         }
     }
 
+    let mut reference = None;
+
     let (mut root_arguments, full_name, caption) =
         if name_with_component.is_some() && sub.name == name_with_component.clone().expect("").0 {
             let root_component = name_with_component.expect("").1;
@@ -1466,7 +1567,22 @@ pub fn recursive_child_component(
                 root_component.get_caption(),
             )
         } else {
-            let root = doc.get_component(sub.line_number, sub.name.as_str())?;
+            let root = if let Some(ftd::p2::Kind::UI {
+                name: ui_name,
+                default,
+            }) = arguments.get(&sub.name)
+            {
+                reference = Some((
+                    sub.name.to_string(),
+                    ftd::p2::Kind::UI {
+                        name: ui_name.to_string(),
+                        default: default.clone(),
+                    },
+                ));
+                doc.get_component(sub.line_number, ui_name)?
+            } else {
+                doc.get_component(sub.line_number, sub.name.as_str())?
+            };
             let root_arguments = root.arguments.clone();
             assert_no_extra_properties(
                 sub.line_number,
@@ -1498,12 +1614,13 @@ pub fn recursive_child_component(
         &new_header,
         &new_caption,
         &sub.body_without_comment(),
-        "",
+        &sub.name,
         full_name.as_str(),
         &mut root_arguments,
         arguments,
         doc,
         &properties,
+        reference.is_some(),
     )?);
 
     return Ok(ftd::ChildComponent {
@@ -1523,6 +1640,7 @@ pub fn recursive_child_component(
         events: vec![],
         is_recursive: true,
         line_number: sub.line_number,
+        reference,
     });
 
     fn resolve_loop_reference(
@@ -1607,6 +1725,21 @@ fn is_component(name: &str) -> bool {
         || (name == "ftd.scene"))
 }
 
+pub fn is_kernel_component(name: &str) -> bool {
+    (name == "ftd.text")
+        || (name == "ftd.text-block")
+        || (name == "ftd.code")
+        || (name == "ftd.image")
+        || (name == "ftd.row")
+        || (name == "ftd.column")
+        || (name == "ftd.iframe")
+        || (name == "ftd.integer")
+        || (name == "ftd.decimal")
+        || (name == "ftd.boolean")
+        || (name == "ftd.input")
+        || (name == "ftd.scene")
+}
+
 fn assert_no_extra_properties(
     line_number: usize,
     p1: &ftd::p1::Header,
@@ -1672,6 +1805,7 @@ fn read_properties(
     arguments: &std::collections::BTreeMap<String, ftd::p2::Kind>,
     doc: &ftd::p2::TDoc,
     root_properties: &std::collections::BTreeMap<String, Property>,
+    is_reference: bool,
 ) -> ftd::p1::Result<std::collections::BTreeMap<String, Property>> {
     let mut properties: std::collections::BTreeMap<String, Property> = Default::default();
     update_root_arguments(root_arguments);
@@ -1708,6 +1842,8 @@ fn read_properties(
                     continue;
                 } else if let Some(d) = d {
                     (vec![(d.to_string(), None)], ftd::TextSource::Default)
+                } else if is_reference {
+                    continue;
                 } else {
                     return ftd::e2(
                         format!(
@@ -1726,6 +1862,8 @@ fn read_properties(
 
                 if let Some(d) = k.get_default_value_str() {
                     (vec![(d.to_string(), None)], ftd::TextSource::Default)
+                } else if is_reference {
+                    continue;
                 } else {
                     return ftd::e2(
                         format!(

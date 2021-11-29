@@ -35,6 +35,10 @@ pub enum Kind {
     Optional {
         kind: Box<Kind>,
     },
+    UI {
+        name: String,
+        default: Option<String>,
+    },
 }
 
 impl Kind {
@@ -141,6 +145,7 @@ impl Kind {
                 body,
                 default,
             },
+            Kind::UI { name, .. } => Kind::UI { name, default },
             Kind::Integer { .. } => Kind::Integer { default },
             Kind::Decimal { .. } => Kind::Decimal { default },
             Kind::Boolean { .. } => Kind::Boolean { default },
@@ -394,6 +399,10 @@ impl Kind {
             "message" => Kind::Message,
             "string-message" => Kind::StringMessage,
             "int-message" => Kind::IntMessage,
+            k if ftd::component::is_kernel_component(k) => Kind::UI {
+                name: k.to_string(),
+                default: None,
+            },
             _ => match doc.get_thing(line_number, k)? {
                 ftd::p2::Thing::Record(r) => Kind::Record { name: r.name },
                 ftd::p2::Thing::OrType(e) => Kind::OrType { name: e.name },
@@ -439,6 +448,10 @@ impl Kind {
                 "message" => Kind::Message,
                 "string-message" => Kind::StringMessage,
                 "int-message" => Kind::IntMessage,
+                k if ftd::component::is_kernel_component(k) => Kind::UI {
+                    name: k.to_string(),
+                    default: None,
+                },
                 k => match doc.get_thing(line_number, k) {
                     Ok(ftd::p2::Thing::Record(r)) => Kind::Record { name: r.name },
                     Ok(ftd::p2::Thing::OrType(e)) => Kind::OrType { name: e.name },
