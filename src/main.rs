@@ -25,17 +25,9 @@ fn main() {
                 .about("Checks the folder structure of the current .FPM.ftd file")
                 .version(env!("CARGO_PKG_VERSION")),
         )
-        .subcommand(
-            clap::SubCommand::with_name("setup")
-                .about("Sets up the folder structure and required variables for FPM usage")
-                .version(env!("CARGO_PKG_VERSION")),
-        )
         .get_matches();
 
     if matches.subcommand_matches("build").is_some() {
         fpm::build();
-    }
-    if matches.subcommand_matches("setup").is_some() {
-        fpm::setup();
     }
 }
