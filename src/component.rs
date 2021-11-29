@@ -1737,21 +1737,6 @@ fn is_component(name: &str) -> bool {
         || (name == "ftd.scene"))
 }
 
-pub fn is_kernel_component(name: &str) -> bool {
-    (name == "ftd.text")
-        || (name == "ftd.text-block")
-        || (name == "ftd.code")
-        || (name == "ftd.image")
-        || (name == "ftd.row")
-        || (name == "ftd.column")
-        || (name == "ftd.iframe")
-        || (name == "ftd.integer")
-        || (name == "ftd.decimal")
-        || (name == "ftd.boolean")
-        || (name == "ftd.input")
-        || (name == "ftd.scene")
-}
-
 fn assert_no_extra_properties(
     line_number: usize,
     p1: &ftd::p1::Header,

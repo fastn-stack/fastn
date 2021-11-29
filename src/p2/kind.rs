@@ -400,8 +400,8 @@ impl Kind {
             "message" => Kind::Message,
             "string-message" => Kind::StringMessage,
             "int-message" => Kind::IntMessage,
-            k if ftd::component::is_kernel_component(k) => Kind::UI {
-                name: k.to_string(),
+            "ftd.ui" => Kind::UI {
+                name: "ftd.ui".to_string(),
                 default: None,
             },
             _ => match doc.get_thing(line_number, k)? {
@@ -451,10 +451,6 @@ impl Kind {
                 "int-message" => Kind::IntMessage,
                 "ftd.ui" => Kind::UI {
                     name: "ftd.ui".to_string(),
-                    default: None,
-                },
-                k if ftd::component::is_kernel_component(k) => Kind::UI {
-                    name: k.to_string(),
                     default: None,
                 },
                 k => match doc.get_thing(line_number, k) {
