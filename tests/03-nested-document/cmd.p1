@@ -1,0 +1,10 @@
+-- fbt:
+cmd: cd amitu && $FBT_CWD/target/debug/fpm --test build
+output: amitu/.build
+
+
+-- stdout:
+
+Generated <cwd>/amitu/.build/index.html [<cwd>/amitu/index.ftd]
+Generated <cwd>/amitu/.build/nested/index/index.html [<cwd>/amitu/nested/index.ftd]
+Generated <cwd>/amitu/.build/nested/document/index.html [<cwd>/amitu/nested/document.ftd]

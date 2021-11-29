@@ -1,7 +1,6 @@
 pub fn build() {
     let (_fpm_config, base_dir) = fpm::check();
 
-    println!("Building... {}", base_dir.as_str());
     std::fs::create_dir_all(format!("{}/.build", base_dir.as_str()).as_str())
         .expect("failed to create build folder");
 
@@ -65,14 +64,16 @@ fn write(id: &str, doc: String, base_path: String, depth: usize) {
         ))
         .expect("failed to create directory folder for doc");
     }
-
-    let mut f = std::fs::File::create(format!(
+    let new_file_path = format!(
         "{}/.build/{}",
         base_path.as_str(),
-        id.replace("index.ftd", ".ftd")
-            .replace(".ftd", "/index.html")
-    ))
-    .expect("failed to create .html file");
+        if id == "index.ftd" {
+            "index.html".to_string()
+        } else {
+            id.replace(".ftd", "/index.html")
+        }
+    );
+    let mut f = std::fs::File::create(new_file_path.as_str()).expect("failed to create .html file");
 
     let doc = b.to_rt("main", id);
 
@@ -95,4 +96,9 @@ fn write(id: &str, doc: String, base_path: String, depth: usize) {
             .as_bytes(),
     )
     .expect("failed to write to .html file");
+    println!(
+        "Generated {} [{}]",
+        new_file_path,
+        format!("{}/{}", base_path, id)
+    );
 }

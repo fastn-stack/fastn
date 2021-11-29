@@ -5,4 +5,4 @@ output: amitu/.build
 
 -- stdout:
 
-Building... <cwd>/amitu
+Generated <cwd>/amitu/.build/index.html [<cwd>/amitu/index.ftd]
