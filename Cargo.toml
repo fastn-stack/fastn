@@ -14,6 +14,7 @@ serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 ftd = { version = "0.1.8", path = "../ftd/ftd" }
 clap = "2.33.3"
+home = "0.5.3"
 
 [dev-dependencies]
 rusty-hook = "^0.11.2"

@@ -29,5 +29,7 @@ fn main() {
     if matches.subcommand_matches("build").is_some() {
         fpm::build();
     }
-    if matches.subcommand_matches("setup").is_some() {}
+    if matches.subcommand_matches("setup").is_some() {
+        fpm::setup();
+    }
 }
