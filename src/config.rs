@@ -1,5 +1,5 @@
 #[derive(serde::Deserialize, Debug)]
-pub struct FPMConfig {
+pub struct Config {
     pub package: String,
     pub base_dir: String,
 }
@@ -9,8 +9,8 @@ pub struct ConfigFromFile {
     package: String,
 }
 
-impl FPMConfig {
-    pub fn parse(base_dir: String) -> FPMConfig {
+impl Config {
+    pub fn parse(base_dir: String) -> Config {
         let lib = fpm::Library {};
         let id = "fpm".to_string();
         let doc = std::fs::read_to_string(format!("{}/.FPM.ftd", base_dir.as_str()))
@@ -30,7 +30,7 @@ impl FPMConfig {
                 format!("{}/.FPM.ftd", base_dir.as_str())
             )
         });
-        FPMConfig {
+        Config {
             package: config.package,
             base_dir,
         }
