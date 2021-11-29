@@ -1032,28 +1032,27 @@ impl Component {
             line_number: usize,
             doc: &ftd::p2::TDoc,
             root_name: Option<&str>,
-        ) -> crate::p1::Result<()> {
+        ) -> ftd::p1::Result<()> {
             if let Some(ref c) = child.reference {
                 if let Some(ftd::Value::UI { name, .. }) = arguments.get(&c.0) {
-                    *child = doc
-                        .get_component_with_root(line_number, name, root_name)?
-                        .reference_to_child_component();
+                    match doc.get_component_with_root(line_number, name, root_name) {
+                        Ok(_) => {
+                            *child = ChildComponent {
+                                root: name.to_string(),
+                                condition: None,
+                                properties: Default::default(),
+                                arguments: Default::default(),
+                                events: vec![],
+                                is_recursive: false,
+                                line_number,
+                                reference: None,
+                            };
+                        }
+                        Err(e) => return ftd::e2(format!("{:?}", e), doc.name, line_number),
+                    }
                 }
             }
             Ok(())
-        }
-    }
-
-    fn reference_to_child_component(&self) -> ChildComponent {
-        ChildComponent {
-            root: self.root.to_string(),
-            condition: self.condition.to_owned(),
-            properties: self.properties.to_owned(),
-            arguments: self.arguments.to_owned(),
-            events: self.events.to_owned(),
-            is_recursive: false,
-            line_number: self.line_number,
-            reference: None,
         }
     }
 

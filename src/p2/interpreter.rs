@@ -12613,6 +12613,17 @@ mod test {
                             },
                             ..Default::default()
                         }),
+                        ftd::Element::Column(ftd::Column {
+                            container: ftd::Container {
+                                children: vec![ftd::Element::Text(ftd::Text {
+                                    text: ftd::markdown_line("world"),
+                                    line: true,
+                                    ..Default::default()
+                                })],
+                                ..Default::default()
+                            },
+                            ..Default::default()
+                        }),
                     ],
                     ..Default::default()
                 },
@@ -12627,16 +12638,25 @@ mod test {
                 component: ftd.text
                 color: red
 
+                -- component moo: 
+                component: ftd.column
+                
+                --- ftd.text: world
+
                 -- component bar:
                 component: ftd.column
                 ftd.ui $t:
+                ftd.ui $g:
 
                 --- ftd.text: amitu
 
                 --- t:
 
+                --- g:
+
                 -- bar:
                 t: $foo
+                g: $moo
                 "
             ),
             &ftd::p2::TestLibrary {},
