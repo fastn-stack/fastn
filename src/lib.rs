@@ -252,13 +252,6 @@ use async_trait::async_trait;
 #[async_trait]
 impl ftd::p2::Library for ExampleLibrary {
     async fn get(&self, name: &str) -> Option<String> {
-        if name == "fifthtry/ft" {
-            return Some(std::fs::read_to_string("../ft.ftd").unwrap());
-        }
-        if name == "fifthtry/ft-core" {
-            return Some(std::fs::read_to_string("../ft-core.ftd").unwrap());
-        }
-
         std::fs::read_to_string(format!("./examples/{}.ftd", name)).ok()
     }
 }
@@ -266,13 +259,6 @@ impl ftd::p2::Library for ExampleLibrary {
 #[cfg(not(feature = "async"))]
 impl ftd::p2::Library for ExampleLibrary {
     fn get(&self, name: &str) -> Option<String> {
-        if name == "fifthtry/ft" {
-            return Some(std::fs::read_to_string("../ft.ftd").unwrap());
-        }
-        if name == "fifthtry/ft-core" {
-            return Some(std::fs::read_to_string("../ft-core.ftd").unwrap());
-        }
-
         std::fs::read_to_string(format!("./examples/{}.ftd", name)).ok()
     }
 }
