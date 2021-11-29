@@ -29,7 +29,7 @@ impl FPMConfig {
                 None => None,
             }
         };
-        let config = config.expect("");
+        let config = config.expect("Unable to find fpm#config");
         FPMConfig {
             package: config.package,
             base_dir,

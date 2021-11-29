@@ -1,5 +1,5 @@
 pub fn fpm_check() -> fpm::FPMConfig {
-    let (is_okay, base_dir) = find_fpm_file(
+    let (_is_okay, base_dir) = find_fpm_file(
         std::env::current_dir()
             .expect("Panic1")
             .to_str()
