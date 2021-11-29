@@ -1,0 +1,24 @@
+-- fbt:
+cmd: $FBT_CWD/target/debug/fpm --test --help
+
+Will have to be updated every time version changes.
+
+-- stdout:
+
+FTD Package Manager 0.1.0
+Shobhit S. <shobhit@fifthtry.com>
+Description...
+
+USAGE:
+    fpm [FLAGS] [SUBCOMMAND]
+
+FLAGS:
+    -h, --help       Prints help information
+    -V, --version    Prints version information
+    -v               Sets the level of verbosity
+
+SUBCOMMANDS:
+    build    Builds the current directory
+    check    Checks the folder structure of the current .FPM.ftd file
+    help     Prints this message or the help of the given subcommand(s)
+    setup    Sets up the folder structure and required variables for FPM usage

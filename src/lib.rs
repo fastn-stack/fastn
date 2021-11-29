@@ -9,3 +9,14 @@ pub use build::build;
 pub use fpm_check::fpm_check;
 pub use fpm_config::FPMConfig;
 pub use library::Library;
+
+#[cfg(test)]
+mod tests {
+
+    #[test]
+    fn fbt() {
+        if fbt_lib::main().is_some() {
+            panic!("test failed")
+        }
+    }
+}

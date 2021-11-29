@@ -51,12 +51,12 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           command: test
-      - name: Check on failure fmt
+      - name: Check if code is properly formatted
         if: steps.fmt.outcome != 'success'
         run: exit 1
-      - name: Check on failure clippy
+      - name: Check if clippy is happy
         if: steps.clippy.outcome != 'success'
         run: exit 1
-      - name: Check on failure ftd
+      - name: Check if test succeeded
         if: steps.test.outcome != 'success'
         run: exit 1
