@@ -24,13 +24,12 @@ impl FPMConfig {
         };
 
         let config = { b.only_instance::<ConfigFromFile>("fpm#config").expect("") };
-        let config = config.expect(
-            format!(
+        let config = config.unwrap_or_else(|| {
+            panic!(
                 "Parsing of {} failed. Unable to find fpm#config",
                 format!("{}/.FPM.ftd", base_dir.as_str())
             )
-            .as_str(),
-        );
+        });
         FPMConfig {
             package: config.package,
             base_dir,

@@ -9,6 +9,12 @@ fn main() {
                 .multiple(true)
                 .help("Sets the level of verbosity"),
         )
+        .arg(
+            clap::Arg::with_name("test")
+                .long("--test")
+                .help("Runs the command in test mode")
+                .hidden(true),
+        )
         .subcommand(
             clap::SubCommand::with_name("build")
                 .about("Builds the current directory")

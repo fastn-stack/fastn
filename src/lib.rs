@@ -15,3 +15,14 @@ pub use setup::setup;
 pub fn fpm_ftd() -> &'static str {
     include_str!("../fpm.ftd")
 }
+
+#[cfg(test)]
+mod tests {
+
+    #[test]
+    fn fbt() {
+        if fbt_lib::main().is_some() {
+            panic!("test failed")
+        }
+    }
+}

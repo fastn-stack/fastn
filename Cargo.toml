@@ -5,16 +5,17 @@ authors = ["Amit Upadhyay <upadhyay@gmail.com>", "Shobhit Sharma <shobhit@fiftht
 edition = "2021"
 description = "fpm: FTD Package Manager"
 license = "MIT"
-repository = "https://github.com/fifthtry/fpm"
+repository = "https://github.com/FifthTry/fpm"
 homepage = "https://www.fifthtry.com/fpm/"
 
 
 [dependencies]
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
-ftd = { version = "0.1.8", path = "../ftd/ftd" }
+ftd = { version = "0.1.11", path = "../ftd" }
 clap = "2.33.3"
 home = "0.5.3"
 
 [dev-dependencies]
 rusty-hook = "^0.11.2"
+fbt-lib = "0.1.11"
