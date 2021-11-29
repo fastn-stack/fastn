@@ -1,20 +1,20 @@
 pub fn build() {
-    println!("Building...");
-    std::fs::create_dir_all("./.build").expect("failed to create build folder");
+    let (is_okay, base_dir) = fpm::fpm_check();
+    if is_okay {
+        println!("Building...");
+        std::fs::create_dir_all(format!("{}/.build", &base_dir).as_str())
+            .expect("failed to create build folder");
 
-    process_dir(
-        std::env::current_dir()
-            .expect("Panic1")
-            .to_str()
-            .expect("panic")
-            .to_string(),
-        0,
-    );
+        process_dir(base_dir.clone(), 0, base_dir);
+    } else {
+        // TODO(main): Better error
+        println!("Build check failed. Please fix the .FPM.ftd file")
+    }
 }
 
-pub fn process_dir(directory: String, depth: usize) -> u32 {
+pub fn process_dir(directory: String, depth: usize, base_path: String) -> u32 {
     let mut count: u32 = 0;
-    for entry in std::fs::read_dir(&directory).expect("?//") {
+    for entry in std::fs::read_dir(&directory).expect("Panic! Unable to process the directory") {
         let e = entry.expect("Panic: Doc not found");
         let md = std::fs::metadata(e.path()).expect("Doc Metadata evaluation failed");
         let doc_path = e
@@ -24,7 +24,7 @@ pub fn process_dir(directory: String, depth: usize) -> u32 {
             .to_string();
         if md.is_dir() {
             // Iterate the children
-            count += process_dir(doc_path, depth + 1);
+            count += process_dir(doc_path, depth + 1, base_path.as_str().to_string());
         } else if doc_path.as_str().ends_with(".ftd") {
             // process the document
             let doc = std::fs::read_to_string(doc_path).expect("cant read file");
@@ -39,6 +39,7 @@ pub fn process_dir(directory: String, depth: usize) -> u32 {
                     .join("/")
                     .as_str(),
                 doc,
+                base_path.as_str().to_string(),
             );
             count += 1;
         }
@@ -46,7 +47,7 @@ pub fn process_dir(directory: String, depth: usize) -> u32 {
     count
 }
 
-fn write(id: &str, doc: String) {
+fn write(id: &str, doc: String, base_path: String) {
     use std::io::Write;
 
     let lib = fpm::Library {};
@@ -58,11 +59,19 @@ fn write(id: &str, doc: String) {
         }
     };
 
-    std::fs::create_dir_all(format!("./.build/{}", id.replace(".ftd", "")))
-        .expect("failed to create directory folder for doc");
+    std::fs::create_dir_all(format!(
+        "{}/.build/{}",
+        base_path.as_str(),
+        id.replace(".ftd", "")
+    ))
+    .expect("failed to create directory folder for doc");
 
-    let mut f = std::fs::File::create(format!("./.build/{}", id.replace(".ftd", "/index.html")))
-        .expect("failed to create .html file");
+    let mut f = std::fs::File::create(format!(
+        "{}/.build/{}",
+        base_path.as_str(),
+        id.replace(".ftd", "/index.html")
+    ))
+    .expect("failed to create .html file");
 
     let doc = b.to_rt("main", id);
 
