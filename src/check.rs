@@ -1,4 +1,4 @@
-pub fn fpm_check() -> fpm::FPMConfig {
+pub fn check() -> fpm::Config {
     let (_is_okay, base_dir) = find_fpm_file(
         std::env::current_dir()
             .expect("Panic1")
@@ -6,7 +6,7 @@ pub fn fpm_check() -> fpm::FPMConfig {
             .expect("panic")
             .to_string(),
     );
-    fpm::FPMConfig::parse(base_dir)
+    fpm::Config::parse(base_dir)
 }
 
 fn find_fpm_file(dir: String) -> (bool, String) {
