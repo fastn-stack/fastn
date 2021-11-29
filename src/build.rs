@@ -1,10 +1,11 @@
 pub fn build() {
-    let fpm_config = fpm::check();
-    println!("Building... {}", fpm_config.base_dir.as_str());
-    std::fs::create_dir_all(format!("{}/.build", &fpm_config.base_dir).as_str())
+    let (_fpm_config, base_dir) = fpm::check();
+
+    println!("Building... {}", base_dir.as_str());
+    std::fs::create_dir_all(format!("{}/.build", base_dir.as_str()).as_str())
         .expect("failed to create build folder");
 
-    process_dir(fpm_config.base_dir.clone(), 0, fpm_config.base_dir);
+    process_dir(base_dir.clone(), 0, base_dir);
 }
 
 pub fn process_dir(directory: String, depth: usize, base_path: String) -> u32 {

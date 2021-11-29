@@ -1,12 +1,6 @@
 #[derive(serde::Deserialize, Debug)]
 pub struct Config {
     pub package: String,
-    pub base_dir: String,
-}
-
-#[derive(serde::Deserialize, Debug)]
-pub struct ConfigFromFile {
-    package: String,
 }
 
 impl Config {
@@ -22,17 +16,9 @@ impl Config {
                 todo!();
             }
         };
-
-        let config = { b.only_instance::<ConfigFromFile>("fpm#config").expect("") };
-        let config = config.unwrap_or_else(|| {
-            panic!(
-                "Parsing of {} failed. Unable to find fpm#config",
-                format!("{}/FPM.ftd", base_dir.as_str())
-            )
-        });
-        Config {
-            package: config.package,
-            base_dir,
-        }
+        // TODO(main): Error handling
+        b.only_instance::<Config>("fpm#config")
+            .expect("")
+            .expect("")
     }
 }
