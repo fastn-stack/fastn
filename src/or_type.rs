@@ -84,7 +84,7 @@ mod test {
 
         p!(
             "
-            -- $x: 10
+            -- integer x: 10
 
             -- or-type entity:
 
@@ -98,7 +98,7 @@ mod test {
             caption name:
             string industry:
 
-            -- entity.person $abrar: Abrar Khan2
+            -- entity.person abrar: Abrar Khan2
             age: $x
             address: Bihar2
 

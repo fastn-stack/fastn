@@ -1,23 +1,20 @@
--- component toc-heading:
-component: ftd.text
-caption $text:
+-- ftd.text toc-heading:
+caption text:
 text: $text
 size: 16
 
 
--- component table-of-content:
-component: ftd.column
-string $id:
+-- ftd.column table-of-content:
+string id:
 id: $id
 width: 300
 height: fill
 
 
--- component parent:
-component: ftd.column
-string $id:
-caption $name:
-optional boolean $active:
+-- ftd.column parent:
+string id:
+caption name:
+optional boolean active:
 id: $id
 width: fill
 open: true
@@ -35,8 +32,7 @@ size: 14
 color: \#4D4D4D
 
 
--- component ft_toc:
-component: ftd.column
+-- ftd.column ft_toc:
 
 --- table-of-content:
 id: toc_main
@@ -59,3 +55,6 @@ name: ChildLog
 --- parent:
 id: /Building2/
 name: Log2
+
+
+-- ft_toc:

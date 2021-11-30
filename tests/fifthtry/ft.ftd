@@ -1,8 +1,7 @@
--- component markdown:
-component: ftd.text
-body $body:
+-- ftd.text markdown:
+body body:
 text: $body
 
--- $dark-mode: true
+-- boolean dark-mode: true
 
--- string $toc: not set
+-- string toc: not set

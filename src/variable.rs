@@ -432,10 +432,14 @@ impl Value {
 
 impl Variable {
     pub fn list_from_p1(p1: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Result<Self> {
-        let var_data =
-            ftd::variable::VariableData::get_name_kind(&p1.name, doc.name, p1.line_number, true)?;
+        let var_data = ftd::variable::VariableData::get_name_kind(
+            &p1.name,
+            doc,
+            p1.line_number,
+            vec![].as_slice(),
+        )?;
         let name = doc.resolve_name(p1.line_number, &var_data.name)?;
-        let kind = ftd::p2::Kind::for_variable(p1.line_number, &p1.name, None, doc, None, true)?;
+        let kind = ftd::p2::Kind::for_variable(p1.line_number, &p1.name, None, doc, None)?;
         if !kind.is_list() {
             return ftd::e2(
                 format!("Expected list found: {:?}", p1),
@@ -523,15 +527,26 @@ impl Variable {
     }
 
     pub fn from_p1(p1: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Result<Self> {
-        let var_data =
-            ftd::variable::VariableData::get_name_kind(&p1.name, doc.name, p1.line_number, true)?;
+        let var_data = ftd::variable::VariableData::get_name_kind(
+            &p1.name,
+            doc,
+            p1.line_number,
+            vec![].as_slice(),
+        )?;
+        if !var_data.is_variable() {
+            return ftd::e2(
+                format!("expected variable, found: {}", p1.name),
+                doc.name,
+                p1.line_number,
+            );
+        }
         let name = var_data.name;
-        let value = match var_data.kind.as_deref() {
-            Some("string") => read_string(p1, doc.name)?,
-            Some("integer") => read_integer(p1, doc.name)?,
-            Some("decimal") => read_decimal(p1, doc.name)?,
-            Some("boolean") => read_boolean(p1, doc.name)?,
-            Some(t) => match doc.get_thing(p1.line_number, t)? {
+        let value = match var_data.kind.as_str() {
+            "string" => read_string(p1, doc.name)?,
+            "integer" => read_integer(p1, doc.name)?,
+            "decimal" => read_decimal(p1, doc.name)?,
+            "boolean" => read_boolean(p1, doc.name)?,
+            t => match doc.get_thing(p1.line_number, t)? {
                 ftd::p2::Thing::Record(r) => r.create(p1, doc)?,
                 ftd::p2::Thing::OrTypeWithVariant { e, variant } => e.create(p1, variant, doc)?,
                 t => {
@@ -542,13 +557,6 @@ impl Variable {
                     )
                 }
             },
-            None => {
-                let (caption, is_body) = match p1.caption.as_deref() {
-                    Some(v) => (v.to_string(), false),
-                    None => (p1.body(p1.line_number, doc.name)?, true),
-                };
-                guess_type(&caption, is_body)?
-            }
         };
 
         Ok(Variable {
@@ -673,8 +681,9 @@ fn read_boolean(p1: &ftd::p1::Section, doc_id: &str) -> ftd::p1::Result<Value> {
 #[derive(Debug, Clone)]
 pub struct VariableData {
     pub name: String,
-    pub kind: Option<String>,
+    pub kind: String,
     pub modifier: VariableModifier,
+    pub type_: Type,
 }
 
 #[derive(Debug, Clone)]
@@ -684,23 +693,40 @@ pub enum VariableModifier {
     Optional,
 }
 
+#[derive(Debug, Clone)]
+pub enum Type {
+    Variable,
+    Component,
+}
+
 impl VariableData {
     pub fn get_name_kind(
         s: &str,
-        doc_id: &str,
+        doc: &ftd::p2::TDoc,
         line_number: usize,
-        is_variable: bool,
+        var_types: &[String],
     ) -> ftd::p1::Result<VariableData> {
-        let expr = s.split_whitespace().collect::<Vec<&str>>();
-        if expr.len() > 4 {
+        if s.starts_with("record ")
+            || s.starts_with("or-type ")
+            || s.starts_with("map ")
+            || s == "container"
+        {
             return ftd::e2(
-                format!("invalid variable or list declaration, found: `{}`", s),
-                doc_id,
+                format!("invalid declaration, found: `{}`", s),
+                doc.name,
                 line_number,
             );
         }
-        let mut name = expr.get(0);
-        let mut kind = None;
+        let expr = s.split_whitespace().collect::<Vec<&str>>();
+        if expr.len() > 4 || expr.len() <= 1 {
+            return ftd::e2(
+                format!("invalid declaration, found: `{}`", s),
+                doc.name,
+                line_number,
+            );
+        }
+        let mut name = expr.get(1);
+        let mut kind = expr.get(0).map(|k| k.to_string());
         let mut modifier = VariableModifier::None;
         if expr.len() == 4 {
             if expr.get(1).unwrap().eq(&"or") {
@@ -709,7 +735,7 @@ impl VariableData {
             } else {
                 return ftd::e2(
                     format!("invalid variable or list declaration, found: `{}`", s),
-                    doc_id,
+                    doc.name,
                     line_number,
                 );
             }
@@ -725,50 +751,48 @@ impl VariableData {
             } else {
                 return ftd::e2(
                     format!("invalid variable or list declaration, found: `{}`", s),
-                    doc_id,
+                    doc.name,
                     line_number,
                 );
             }
-        } else if expr.len() == 2 {
-            name = expr.get(1);
-            kind = expr.get(0).map(|k| k.to_string());
         }
 
-        let var_name = {
-            let error = ftd::e2(
-                if is_variable {
-                    format!(
-                        "list name should be present and should start with $, found: `{}`",
-                        s
-                    )
-                } else {
-                    format!("name should not start with $, found: `{}`", s)
-                },
-                doc_id,
-                line_number,
-            );
-            if name.is_none() {
-                return error;
-            }
+        let var_kind = kind.ok_or(ftd::p1::Error::ParseError {
+            message: format!("kind not found `{}`", s),
+            doc_id: doc.name.to_string(),
+            line_number,
+        })?;
+        // dbg!("get_name_kind", &var_kind);
 
-            let name = name.unwrap();
-            let mut var_name = name.to_string();
-            if let Some(n) = name.strip_prefix('$') {
-                if !is_variable {
-                    return error;
-                }
-                var_name = n.to_string();
-            } else if is_variable {
-                return error;
+        let type_ = match var_kind.as_str() {
+            "string" | "caption" | "body" | "body or caption" | "caption or body" | "integer"
+            | "decimal" | "boolean" => Type::Variable,
+            a if doc.get_record(line_number, a).is_ok()
+                || doc.get_or_type(line_number, a).is_ok()
+                || doc.get_or_type_with_variant(line_number, a).is_ok()
+                || var_types.contains(&a.to_string()) =>
+            {
+                Type::Variable
             }
-            var_name
+            _ => Type::Component,
         };
 
         Ok(VariableData {
-            name: var_name,
-            kind,
+            name: name
+                .ok_or(ftd::p1::Error::ParseError {
+                    message: format!("name not found `{}`", s),
+                    doc_id: doc.name.to_string(),
+                    line_number,
+                })?
+                .to_string(),
+            kind: var_kind,
             modifier,
+            type_,
         })
+    }
+
+    pub fn is_variable(&self) -> bool {
+        matches!(self.type_, Type::Variable)
     }
 
     pub fn is_none(&self) -> bool {
@@ -814,34 +838,27 @@ mod test {
     #[test]
     fn int() {
         use super::Value::Integer;
-        p2!("-- $x: 10", "x", Integer { value: 10 }, vec![],);
-        p2!("-- integer $x: 10", "x", Integer { value: 10 }, vec![],);
+        p2!("-- integer x: 10", "x", Integer { value: 10 }, vec![],);
     }
 
     #[test]
     fn float() {
         use super::Value::Decimal;
-        p2!("-- $x: 10.0", "x", Decimal { value: 10.0 }, vec![],);
-        p2!("-- decimal $x: 10", "x", Decimal { value: 10.0 }, vec![],);
+        p2!("-- decimal x: 10", "x", Decimal { value: 10.0 }, vec![],);
     }
 
     #[test]
     fn bool() {
         use super::Value::Boolean;
-        p2!("-- $x: true", "x", Boolean { value: true }, vec![],);
-        p2!(
-            "-- boolean $x: false",
-            "x",
-            Boolean { value: false },
-            vec![],
-        );
+        p2!("-- boolean x: true", "x", Boolean { value: true }, vec![],);
+        p2!("-- boolean x: false", "x", Boolean { value: false }, vec![],);
     }
 
     #[test]
     fn str() {
         use super::Value::String;
         p2!(
-            "-- $x: hello",
+            "-- string x: hello",
             "x",
             String {
                 text: "hello".to_string(),
@@ -850,7 +867,7 @@ mod test {
             vec![],
         );
         p2!(
-            "-- $x:\n\nhello world\nyo!",
+            "-- string x:\n\nhello world\nyo!",
             "x",
             String {
                 text: "hello world\nyo!".to_string(),
@@ -859,7 +876,7 @@ mod test {
             vec![],
         );
         p2!(
-            "-- string $x: 10",
+            "-- string x: 10",
             "x",
             String {
                 text: "10".to_string(),
@@ -868,7 +885,7 @@ mod test {
             vec![],
         );
         p2!(
-            "-- string $x: true",
+            "-- string x: true",
             "x",
             String {
                 text: "true".to_string(),
@@ -938,9 +955,8 @@ mod test {
             caption title:
             body about:
 
-            -- component pr-view:
-            pull-request $pr:
-            component: ftd.column
+            -- ftd.column pr-view:
+            pull-request pr:
 
             --- ftd.text:
             text: $pr.title

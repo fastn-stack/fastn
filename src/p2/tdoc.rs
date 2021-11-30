@@ -233,6 +233,17 @@ impl<'a> TDoc<'a> {
         }
     }
 
+    pub fn get_or_type_with_variant(
+        &self,
+        line_number: usize,
+        name: &str,
+    ) -> ftd::p1::Result<ftd::OrType> {
+        match self.get_thing(line_number, name)? {
+            ftd::p2::Thing::OrTypeWithVariant { e, .. } => Ok(e),
+            v => self.err("not an or-type", v, "get_or_type", line_number),
+        }
+    }
+
     pub fn is_variable_record_type(&self, line_number: usize, name: &str) -> ftd::p1::Result<bool> {
         match self.get_value(line_number, name)? {
             ftd::Value::Record { .. } => Ok(true),

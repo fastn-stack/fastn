@@ -1,10 +1,11 @@
 -- import: fifthtry/ft
 
--- $name: John smith
+-- string name: Sherlock Holmes
+
+-- name: John smith
 
 
--- component test-component:
-component: ftd.column
+-- ftd.column test-component:
 width: 200
 background-color: \#f3f3f3
 
