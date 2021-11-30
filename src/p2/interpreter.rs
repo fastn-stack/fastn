@@ -12586,6 +12586,85 @@ mod test {
         pretty_assertions::assert_eq!(g_col, main);
     }
 
+    #[test]
+    fn variable_component() {
+        let mut main = super::default_column();
+        main.container
+            .children
+            .push(ftd::Element::Column(ftd::Column {
+                container: ftd::Container {
+                    children: vec![
+                        ftd::Element::Text(ftd::Text {
+                            text: ftd::markdown_line("amitu"),
+                            line: true,
+                            ..Default::default()
+                        }),
+                        ftd::Element::Text(ftd::Text {
+                            text: ftd::markdown_line("hello"),
+                            line: true,
+                            common: ftd::Common {
+                                color: Some(ftd::Color {
+                                    r: 255,
+                                    g: 0,
+                                    b: 0,
+                                    alpha: 1.0,
+                                }),
+                                ..Default::default()
+                            },
+                            ..Default::default()
+                        }),
+                        ftd::Element::Column(ftd::Column {
+                            container: ftd::Container {
+                                children: vec![ftd::Element::Text(ftd::Text {
+                                    text: ftd::markdown_line("world"),
+                                    line: true,
+                                    ..Default::default()
+                                })],
+                                ..Default::default()
+                            },
+                            ..Default::default()
+                        }),
+                    ],
+                    ..Default::default()
+                },
+                ..Default::default()
+            }));
+
+        let (_g_bag, g_col) = crate::p2::interpreter::interpret(
+            "foo/bar",
+            indoc::indoc!(
+                "
+                -- component foo: hello
+                component: ftd.text
+                color: red
+
+                -- component moo: 
+                component: ftd.column
+                
+                --- ftd.text: world
+
+                -- component bar:
+                component: ftd.column
+                ftd.ui $t:
+                ftd.ui $g:
+
+                --- ftd.text: amitu
+
+                --- t:
+
+                --- g:
+
+                -- bar:
+                t: $foo
+                g: $moo
+                "
+            ),
+            &ftd::p2::TestLibrary {},
+        )
+        .expect("found error");
+        pretty_assertions::assert_eq!(g_col, main);
+    }
+
     /*#[test]
     fn loop_with_tree_structure_1() {
         let (g_bag, g_col) = ftd::p2::interpreter::interpret(

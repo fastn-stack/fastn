@@ -44,9 +44,16 @@ impl PropertyValue {
                         },
                         false,
                     ),
-                    None => match doc.get_value(line_number, &string) {
-                        Ok(val) => (val.kind(), true),
-                        Err(e) => {
+                    None => match doc.get_thing(line_number, &string) {
+                        Ok(ftd::p2::Thing::Variable(v)) => (v.value.kind(), true),
+                        Ok(ftd::p2::Thing::Component(c)) => (
+                            ftd::p2::Kind::UI {
+                                name: c.root,
+                                default: None,
+                            },
+                            true,
+                        ),
+                        e => {
                             return ftd::e2(
                                 format!("{} is not present in doc, {:?}", part1, e),
                                 doc.name,
@@ -289,12 +296,16 @@ impl PropertyValue {
                 kind: reference_kind,
             } => {
                 assert_eq!(self.kind(), *reference_kind);
-                let (default, condition) = match doc
-                    .
-                        get_value_and_conditions_with_root(0, reference_name.as_str(), root_name) //todo
+                let (default, condition) = if let Ok(d) =
+                    doc.get_value_and_conditions_with_root(0, reference_name.as_str(), root_name)
                 {
-                    Ok(d) => d,
-                    _ => return reference_kind.to_value(line_number, doc.name),
+                    d
+                } else if let Ok(d) =
+                    doc.get_component_with_root(0, reference_name.as_str(), root_name)
+                {
+                    return d.to_value(reference_kind);
+                } else {
+                    return reference_kind.to_value(line_number, doc.name);
                 };
                 let mut value = default;
                 for (boolean, property) in condition {
@@ -354,6 +365,10 @@ pub enum Value {
         data: std::collections::BTreeMap<String, Value>,
         kind: ftd::p2::Kind,
     },
+    UI {
+        name: String,
+        kind: crate::p2::Kind,
+    },
 }
 
 impl Value {
@@ -393,6 +408,7 @@ impl Value {
             Value::Map { kind, .. } => ftd::p2::Kind::Map {
                 kind: Box::new(kind.to_owned()),
             },
+            Value::UI { kind, .. } => kind.to_owned(),
         }
     }
 
