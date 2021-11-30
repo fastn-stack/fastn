@@ -6,9 +6,9 @@ impl ftd::p2::Library for Library {
             return Some(fpm::fpm_ftd().to_string());
         }
         if let Ok(v) = std::fs::read_to_string(format!("./{}.ftd", name)) {
-            return Some(v);
+            Some(v)
         } else {
-            return std::fs::read_to_string(format!("./.packages/{}.ftd", name)).ok();
+            std::fs::read_to_string(format!("./.packages/{}.ftd", name)).ok()
         }
     }
 }
