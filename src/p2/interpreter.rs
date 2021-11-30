@@ -811,6 +811,7 @@ mod test {
                             },
                         }),
                         conditions: vec![],
+                        ..Default::default()
                     },
                 )])
                 .collect(),
@@ -893,6 +894,7 @@ mod test {
                                     },
                                 ),
                             ],
+                            ..Default::default()
                         },
                     ),
                     (
@@ -903,6 +905,7 @@ mod test {
                                 kind: ftd::p2::Kind::caption_or_body(),
                             }),
                             conditions: vec![],
+                            ..Default::default()
                         },
                     ),
                 ])
@@ -1015,6 +1018,7 @@ mod test {
                                         },
                                     }),
                                     conditions: vec![],
+                                    ..Default::default()
                                 },
                             )])
                             .collect(),
@@ -1037,6 +1041,7 @@ mod test {
                                             value: ftd::variable::Value::Boolean { value: true },
                                         }),
                                         conditions: vec![],
+                                        ..Default::default()
                                     },
                                 ),
                                 (
@@ -1049,6 +1054,7 @@ mod test {
                                             },
                                         }),
                                         conditions: vec![],
+                                        ..Default::default()
                                     },
                                 ),
                                 (
@@ -1061,6 +1067,7 @@ mod test {
                                             },
                                         }),
                                         conditions: vec![],
+                                        ..Default::default()
                                     },
                                 ),
                             ])
@@ -1085,6 +1092,7 @@ mod test {
                                             },
                                         }),
                                         conditions: vec![],
+                                        ..Default::default()
                                     },
                                 ),
                                 (
@@ -1097,6 +1105,7 @@ mod test {
                                             },
                                         }),
                                         conditions: vec![],
+                                        ..Default::default()
                                     },
                                 ),
                             ])
@@ -1121,6 +1130,7 @@ mod test {
                                             },
                                         }),
                                         conditions: vec![],
+                                        ..Default::default()
                                     },
                                 ),
                                 (
@@ -1133,6 +1143,7 @@ mod test {
                                             },
                                         }),
                                         conditions: vec![],
+                                        ..Default::default()
                                     },
                                 ),
                             ])
@@ -1160,6 +1171,7 @@ mod test {
                                             },
                                         }),
                                         conditions: vec![],
+                                        ..Default::default()
                                     },
                                 ),
                                 (
@@ -1172,6 +1184,7 @@ mod test {
                                             },
                                         }),
                                         conditions: vec![],
+                                        ..Default::default()
                                     },
                                 ),
                             ])
@@ -1212,6 +1225,7 @@ mod test {
                                 },
                             }),
                             conditions: vec![],
+                            ..Default::default()
                         },
                     ),
                     (
@@ -1224,6 +1238,7 @@ mod test {
                                 },
                             }),
                             conditions: vec![],
+                            ..Default::default()
                         },
                     ),
                     (
@@ -1236,6 +1251,7 @@ mod test {
                                 },
                             }),
                             conditions: vec![],
+                            ..Default::default()
                         },
                     ),
                 ])
@@ -1265,6 +1281,7 @@ mod test {
                                             },
                                         }),
                                         conditions: vec![],
+                                        ..Default::default()
                                     },
                                 ),
                                 (
@@ -1274,6 +1291,7 @@ mod test {
                                             value: ftd::variable::Value::Integer { value: 14 },
                                         }),
                                         conditions: vec![],
+                                        ..Default::default()
                                     },
                                 ),
                                 (
@@ -1284,6 +1302,7 @@ mod test {
                                             kind: ftd::p2::Kind::caption_or_body(),
                                         }),
                                         conditions: vec![],
+                                        ..Default::default()
                                     },
                                 ),
                             ])
@@ -1315,6 +1334,7 @@ mod test {
                                             },
                                         }),
                                         conditions: vec![],
+                                        ..Default::default()
                                     },
                                 ),
                                 (
@@ -1324,6 +1344,7 @@ mod test {
                                             value: ftd::variable::Value::Integer { value: 14 },
                                         }),
                                         conditions: vec![],
+                                        ..Default::default()
                                     },
                                 ),
                                 (
@@ -1334,6 +1355,7 @@ mod test {
                                             kind: ftd::p2::Kind::caption_or_body(),
                                         }),
                                         conditions: vec![],
+                                        ..Default::default()
                                     },
                                 ),
                             ])
@@ -1365,6 +1387,7 @@ mod test {
                                 },
                             }),
                             conditions: vec![],
+                            ..Default::default()
                         },
                     ),
                     (
@@ -1377,6 +1400,7 @@ mod test {
                                 },
                             }),
                             conditions: vec![],
+                            ..Default::default()
                         },
                     ),
                     (
@@ -1389,6 +1413,7 @@ mod test {
                                 },
                             }),
                             conditions: vec![],
+                            ..Default::default()
                         },
                     ),
                 ])
@@ -1414,6 +1439,7 @@ mod test {
                                 value: ftd::variable::Value::Integer { value: 16 },
                             }),
                             conditions: vec![],
+                            ..Default::default()
                         },
                     ),
                     (
@@ -1424,6 +1450,7 @@ mod test {
                                 kind: ftd::p2::Kind::caption_or_body(),
                             }),
                             conditions: vec![],
+                            ..Default::default()
                         },
                     ),
                 ])
@@ -1705,6 +1732,7 @@ mod test {
                                         },
                                     }),
                                     conditions: vec![],
+                                    ..Default::default()
                                 },
                             )])
                             .collect(),
@@ -1725,6 +1753,7 @@ mod test {
                                             value: ftd::variable::Value::Boolean { value: true },
                                         }),
                                         conditions: vec![],
+                                        ..Default::default()
                                     },
                                 ),
                                 (
@@ -1737,6 +1766,7 @@ mod test {
                                             },
                                         }),
                                         conditions: vec![],
+                                        ..Default::default()
                                     },
                                 ),
                                 (
@@ -1749,6 +1779,7 @@ mod test {
                                             },
                                         }),
                                         conditions: vec![],
+                                        ..Default::default()
                                     },
                                 ),
                             ])
@@ -1773,6 +1804,7 @@ mod test {
                                             },
                                         }),
                                         conditions: vec![],
+                                        ..Default::default()
                                     },
                                 ),
                                 (
@@ -1785,6 +1817,7 @@ mod test {
                                             },
                                         }),
                                         conditions: vec![],
+                                        ..Default::default()
                                     },
                                 ),
                             ])
@@ -1809,6 +1842,7 @@ mod test {
                                             },
                                         }),
                                         conditions: vec![],
+                                        ..Default::default()
                                     },
                                 ),
                                 (
@@ -1821,6 +1855,7 @@ mod test {
                                             },
                                         }),
                                         conditions: vec![],
+                                        ..Default::default()
                                     },
                                 ),
                             ])
@@ -1848,6 +1883,7 @@ mod test {
                                             },
                                         }),
                                         conditions: vec![],
+                                        ..Default::default()
                                     },
                                 ),
                                 (
@@ -1860,6 +1896,7 @@ mod test {
                                             },
                                         }),
                                         conditions: vec![],
+                                        ..Default::default()
                                     },
                                 ),
                             ])
@@ -1900,6 +1937,7 @@ mod test {
                                 },
                             }),
                             conditions: vec![],
+                            ..Default::default()
                         },
                     ),
                     (
@@ -1912,6 +1950,7 @@ mod test {
                                 },
                             }),
                             conditions: vec![],
+                            ..Default::default()
                         },
                     ),
                     (
@@ -1924,6 +1963,7 @@ mod test {
                                 },
                             }),
                             conditions: vec![],
+                            ..Default::default()
                         },
                     ),
                 ])
@@ -1953,6 +1993,7 @@ mod test {
                                             },
                                         }),
                                         conditions: vec![],
+                                        ..Default::default()
                                     },
                                 ),
                                 (
@@ -1962,6 +2003,7 @@ mod test {
                                             value: ftd::variable::Value::Integer { value: 14 },
                                         }),
                                         conditions: vec![],
+                                        ..Default::default()
                                     },
                                 ),
                                 (
@@ -1972,6 +2014,7 @@ mod test {
                                             kind: ftd::p2::Kind::caption_or_body(),
                                         }),
                                         conditions: vec![],
+                                        ..Default::default()
                                     },
                                 ),
                             ])
@@ -2003,6 +2046,7 @@ mod test {
                                             },
                                         }),
                                         conditions: vec![],
+                                        ..Default::default()
                                     },
                                 ),
                                 (
@@ -2012,6 +2056,7 @@ mod test {
                                             value: ftd::variable::Value::Integer { value: 14 },
                                         }),
                                         conditions: vec![],
+                                        ..Default::default()
                                     },
                                 ),
                                 (
@@ -2022,6 +2067,7 @@ mod test {
                                             kind: ftd::p2::Kind::caption_or_body(),
                                         }),
                                         conditions: vec![],
+                                        ..Default::default()
                                     },
                                 ),
                             ])
@@ -2053,6 +2099,7 @@ mod test {
                                 },
                             }),
                             conditions: vec![],
+                            ..Default::default()
                         },
                     ),
                     (
@@ -2065,6 +2112,7 @@ mod test {
                                 },
                             }),
                             conditions: vec![],
+                            ..Default::default()
                         },
                     ),
                     (
@@ -2077,6 +2125,7 @@ mod test {
                                 },
                             }),
                             conditions: vec![],
+                            ..Default::default()
                         },
                     ),
                 ])
@@ -2102,6 +2151,7 @@ mod test {
                                 value: ftd::variable::Value::Integer { value: 16 },
                             }),
                             conditions: vec![],
+                            ..Default::default()
                         },
                     ),
                     (
@@ -2112,6 +2162,7 @@ mod test {
                                 kind: ftd::p2::Kind::caption_or_body(),
                             }),
                             conditions: vec![],
+                            ..Default::default()
                         },
                     ),
                 ])
@@ -2348,6 +2399,7 @@ mod test {
                             kind: ftd::p2::Kind::caption_or_body(),
                         }),
                         conditions: vec![],
+                        ..Default::default()
                     },
                 )])
                 .collect(),
@@ -2384,6 +2436,7 @@ mod test {
                                 },
                             }),
                             conditions: vec![],
+                            ..Default::default()
                         },
                     ),
                     (
@@ -2396,6 +2449,7 @@ mod test {
                                 },
                             }),
                             conditions: vec![],
+                            ..Default::default()
                         },
                     ),
                 ])
@@ -2414,6 +2468,7 @@ mod test {
                                     kind: ftd::p2::Kind::caption_or_body(),
                                 }),
                                 conditions: vec![],
+                                ..Default::default()
                             },
                         )])
                         .collect(),
@@ -2486,6 +2541,7 @@ mod test {
                             kind: ftd::p2::Kind::caption_or_body(),
                         }),
                         conditions: vec![],
+                        ..Default::default()
                     },
                 )])
                 .collect(),
@@ -2697,6 +2753,7 @@ mod test {
                                     },
                                 }),
                                 conditions: vec![],
+                                ..Default::default()
                             },
                         ),
                         (
@@ -2706,6 +2763,7 @@ mod test {
                                     value: ftd::Value::Integer { value: 14 },
                                 }),
                                 conditions: vec![],
+                                ..Default::default()
                             },
                         ),
                         (
@@ -2718,6 +2776,7 @@ mod test {
                                     },
                                 }),
                                 conditions: vec![],
+                                ..Default::default()
                             },
                         ),
                         (
@@ -2730,6 +2789,7 @@ mod test {
                                     },
                                 }),
                                 conditions: vec![],
+                                ..Default::default()
                             },
                         ),
                         (
@@ -2742,6 +2802,7 @@ mod test {
                                     },
                                 }),
                                 conditions: vec![],
+                                ..Default::default()
                             },
                         ),
                         (
@@ -2752,6 +2813,7 @@ mod test {
                                     kind: ftd::p2::Kind::integer().into_optional(),
                                 }),
                                 conditions: vec![],
+                                ..Default::default()
                             },
                         ),
                         (
@@ -2764,6 +2826,7 @@ mod test {
                                     },
                                 }),
                                 conditions: vec![],
+                                ..Default::default()
                             },
                         ),
                         (
@@ -2776,6 +2839,7 @@ mod test {
                                     },
                                 }),
                                 conditions: vec![],
+                                ..Default::default()
                             },
                         ),
                     ])
@@ -3035,6 +3099,7 @@ mod test {
                             value: ftd::Value::Integer { value: 30 },
                         }),
                         conditions: vec![],
+                        ..Default::default()
                     },
                 )])
                 .collect(),
@@ -3054,6 +3119,7 @@ mod test {
                                             kind: ftd::p2::Kind::caption_or_body(),
                                         }),
                                         conditions: vec![],
+                                        ..Default::default()
                                     },
                                 ),
                                 (
@@ -3066,6 +3132,7 @@ mod test {
                                             },
                                         }),
                                         conditions: vec![],
+                                        ..Default::default()
                                     },
                                 ),
                             ])
@@ -3095,6 +3162,7 @@ mod test {
                                         kind: ftd::p2::Kind::caption_or_body(),
                                     }),
                                     conditions: vec![],
+                                    ..Default::default()
                                 },
                             )])
                             .collect(),
@@ -3123,6 +3191,7 @@ mod test {
                                         kind: ftd::p2::Kind::string(),
                                     }),
                                     conditions: vec![],
+                                    ..Default::default()
                                 },
                             )])
                             .collect(),
@@ -3561,6 +3630,7 @@ mod test {
                             kind: ftd::p2::Kind::string().string_any(),
                         }),
                         conditions: vec![],
+                        ..Default::default()
                     },
                 )])
                 .collect(),
@@ -3611,6 +3681,7 @@ mod test {
                                         kind: ftd::p2::Kind::caption_or_body(),
                                     }),
                                     conditions: vec![],
+                                    ..Default::default()
                                 },
                             )])
                             .collect(),
@@ -3635,6 +3706,7 @@ mod test {
                                         kind: ftd::p2::Kind::body(),
                                     }),
                                     conditions: vec![],
+                                    ..Default::default()
                                 },
                             )])
                             .collect(),
@@ -3765,6 +3837,7 @@ mod test {
                                         kind: ftd::p2::Kind::string(),
                                     }),
                                     conditions: vec![],
+                                    ..Default::default()
                                 },
                             ),
                             (
@@ -3775,6 +3848,7 @@ mod test {
                                         kind: ftd::p2::Kind::string().into_optional(),
                                     }),
                                     conditions: vec![],
+                                    ..Default::default()
                                 },
                             ),
                         ])
@@ -3876,6 +3950,7 @@ mod test {
                                             value: ftd::Value::Decimal { value: 0.06 },
                                         }),
                                         conditions: vec![],
+                                        ..Default::default()
                                     },
                                 ),
                                 (
@@ -3888,6 +3963,7 @@ mod test {
                                             },
                                         }),
                                         conditions: vec![],
+                                        ..Default::default()
                                     },
                                 ),
                             ])
@@ -3907,6 +3983,7 @@ mod test {
                                         value: ftd::Value::Decimal { value: 0.01 },
                                     }),
                                     conditions: vec![],
+                                    ..Default::default()
                                 },
                             )])
                             .collect(),
@@ -3984,6 +4061,7 @@ mod test {
                                             value: ftd::Value::Integer { value: 3 },
                                         }),
                                         conditions: vec![],
+                                        ..Default::default()
                                     },
                                 ),
                                 (
@@ -3996,6 +4074,7 @@ mod test {
                                             },
                                         }),
                                         conditions: vec![],
+                                        ..Default::default()
                                     },
                                 ),
                             ])
@@ -4015,6 +4094,7 @@ mod test {
                                         value: ftd::Value::Integer { value: 14 },
                                     }),
                                     conditions: vec![],
+                                    ..Default::default()
                                 },
                             )])
                             .collect(),
@@ -4094,6 +4174,7 @@ mod test {
                                             value: ftd::Value::Boolean { value: true },
                                         }),
                                         conditions: vec![],
+                                        ..Default::default()
                                     },
                                 ),
                                 (
@@ -4106,6 +4187,7 @@ mod test {
                                             },
                                         }),
                                         conditions: vec![],
+                                        ..Default::default()
                                     },
                                 ),
                                 (
@@ -4118,6 +4200,7 @@ mod test {
                                             },
                                         }),
                                         conditions: vec![],
+                                        ..Default::default()
                                     },
                                 ),
                             ])
@@ -4138,6 +4221,7 @@ mod test {
                                             value: ftd::Value::Boolean { value: false },
                                         }),
                                         conditions: vec![],
+                                        ..Default::default()
                                     },
                                 ),
                                 (
@@ -4150,6 +4234,7 @@ mod test {
                                             },
                                         }),
                                         conditions: vec![],
+                                        ..Default::default()
                                     },
                                 ),
                                 (
@@ -4162,6 +4247,7 @@ mod test {
                                             },
                                         }),
                                         conditions: vec![],
+                                        ..Default::default()
                                     },
                                 ),
                             ])
@@ -4525,6 +4611,7 @@ mod test {
                                         },
                                     }),
                                     conditions: vec![],
+                                    ..Default::default()
                                 },
                             )])
                             .collect(),
@@ -4547,6 +4634,7 @@ mod test {
                                         },
                                     }),
                                     conditions: vec![],
+                                    ..Default::default()
                                 },
                             )])
                             .collect(),
@@ -4677,6 +4765,7 @@ mod test {
                                         },
                                     }),
                                     conditions: vec![],
+                                    ..Default::default()
                                 },
                             )])
                             .collect(),
@@ -4699,6 +4788,7 @@ mod test {
                                         },
                                     }),
                                     conditions: vec![],
+                                    ..Default::default()
                                 },
                             )])
                             .collect(),
@@ -4852,6 +4942,7 @@ mod test {
                             },
                         }),
                         conditions: vec![],
+                        ..Default::default()
                     },
                 )])
                 .collect(),
@@ -4880,6 +4971,7 @@ mod test {
                                         },
                                     }),
                                     conditions: vec![],
+                                    ..Default::default()
                                 },
                             )])
                             .collect(),
@@ -5055,6 +5147,7 @@ mod test {
                             },
                         }),
                         conditions: vec![],
+                        ..Default::default()
                     },
                 )])
                 .collect(),
@@ -5074,6 +5167,7 @@ mod test {
                                     },
                                 }),
                                 conditions: vec![],
+                                ..Default::default()
                             },
                         )])
                         .collect(),
@@ -5099,6 +5193,7 @@ mod test {
                             },
                         }),
                         conditions: vec![],
+                        ..Default::default()
                     },
                 )])
                 .collect(),
@@ -5127,6 +5222,7 @@ mod test {
                                         },
                                     }),
                                     conditions: vec![],
+                                    ..Default::default()
                                 },
                             )])
                             .collect(),
@@ -5157,6 +5253,7 @@ mod test {
                                         },
                                     }),
                                     conditions: vec![],
+                                    ..Default::default()
                                 },
                             )])
                             .collect(),
@@ -5197,6 +5294,7 @@ mod test {
                             },
                         }),
                         conditions: vec![],
+                        ..Default::default()
                     },
                 )])
                 .collect(),
@@ -5217,6 +5315,7 @@ mod test {
                                         },
                                     }),
                                     conditions: vec![],
+                                    ..Default::default()
                                 },
                             ),
                             (
@@ -5229,6 +5328,7 @@ mod test {
                                         },
                                     }),
                                     conditions: vec![],
+                                    ..Default::default()
                                 },
                             ),
                         ])
@@ -6158,6 +6258,7 @@ mod test {
                                         kind: ftd::p2::Kind::caption_or_body(),
                                     }),
                                     conditions: vec![],
+                                    ..Default::default()
                                 },
                             )])
                             .collect(),
@@ -6178,6 +6279,7 @@ mod test {
                                         kind: ftd::p2::Kind::caption_or_body(),
                                     }),
                                     conditions: vec![],
+                                    ..Default::default()
                                 },
                             )])
                             .collect(),
@@ -6392,6 +6494,7 @@ mod test {
                                         kind: ftd::p2::Kind::caption_or_body(),
                                     }),
                                     conditions: vec![],
+                                    ..Default::default()
                                 },
                             )])
                             .collect(),
@@ -6412,6 +6515,7 @@ mod test {
                                         kind: ftd::p2::Kind::caption_or_body(),
                                     }),
                                     conditions: vec![],
+                                    ..Default::default()
                                 },
                             )])
                             .collect(),
@@ -6720,6 +6824,7 @@ mod test {
                                         kind: ftd::p2::Kind::caption_or_body(),
                                     }),
                                     conditions: vec![],
+                                    ..Default::default()
                                 },
                             )])
                             .collect(),
@@ -6740,6 +6845,7 @@ mod test {
                                         kind: ftd::p2::Kind::caption_or_body(),
                                     }),
                                     conditions: vec![],
+                                    ..Default::default()
                                 },
                             )])
                             .collect(),
@@ -7429,6 +7535,7 @@ mod test {
                                         kind: ftd::p2::Kind::caption_or_body(),
                                     }),
                                     conditions: vec![],
+                                    ..Default::default()
                                 },
                             )])
                             .collect(),
@@ -7449,6 +7556,7 @@ mod test {
                                         kind: ftd::p2::Kind::caption_or_body(),
                                     }),
                                     conditions: vec![],
+                                    ..Default::default()
                                 },
                             )])
                             .collect(),
@@ -7990,6 +8098,7 @@ mod test {
                                             },
                                         }),
                                         conditions: vec![],
+                                        ..Default::default()
                                     },
                                 ),
                                 (
@@ -8002,6 +8111,7 @@ mod test {
                                             },
                                         }),
                                         conditions: vec![],
+                                        ..Default::default()
                                     },
                                 ),
                             ])
@@ -8026,6 +8136,7 @@ mod test {
                                             },
                                         }),
                                         conditions: vec![],
+                                        ..Default::default()
                                     },
                                 ),
                                 (
@@ -8038,6 +8149,7 @@ mod test {
                                             },
                                         }),
                                         conditions: vec![],
+                                        ..Default::default()
                                     },
                                 ),
                             ])
@@ -8145,6 +8257,7 @@ mod test {
                                     kind: ftd::p2::Kind::caption_or_body(),
                                 }),
                                 conditions: vec![],
+                                ..Default::default()
                             },
                         )])
                         .collect(),
@@ -8260,6 +8373,7 @@ mod test {
                                 },
                             }),
                             conditions: vec![],
+                            ..Default::default()
                         },
                     ),
                     (
@@ -8271,6 +8385,7 @@ mod test {
                                     .set_default(Some(s("hello world"))),
                             }),
                             conditions: vec![],
+                            ..Default::default()
                         },
                     ),
                 ])
@@ -8595,6 +8710,7 @@ mod test {
                                         },
                                     }),
                                     conditions: vec![],
+                                    ..Default::default()
                                 },
                             ),
                             (
@@ -8606,6 +8722,7 @@ mod test {
                                             .set_default(Some(s("$default-name"))),
                                     }),
                                     conditions: vec![],
+                                    ..Default::default()
                                 },
                             ),
                         ])
@@ -12539,11 +12656,19 @@ mod test {
                                 children: vec![ftd::Element::Text(ftd::Text {
                                     text: ftd::markdown_line("world"),
                                     line: true,
+                                    common: ftd::Common {
+                                        reference: Some(s("@msg@0,2")),
+                                        ..Default::default()
+                                    },
                                     ..Default::default()
                                 })],
                                 ..Default::default()
                             },
-                            ..Default::default()
+                            common: ftd::Common {
+                                locals: std::array::IntoIter::new([(s("msg@0,2"), s("world"))])
+                                    .collect(),
+                                ..Default::default()
+                            },
                         }),
                     ],
                     ..Default::default()
@@ -12559,8 +12684,9 @@ mod test {
                 color: red
 
                 -- ftd.column moo: 
+                caption msg: world
                 
-                --- ftd.text: world
+                --- ftd.text: $msg
 
                 -- ftd.column bar:
                 ftd.ui t: foo:
@@ -12573,7 +12699,7 @@ mod test {
                 --- g:
 
                 -- bar:
-                g: moo:
+                g: moo: hello again
                 "
             ),
             &ftd::p2::TestLibrary {},

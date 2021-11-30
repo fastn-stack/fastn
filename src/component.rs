@@ -84,6 +84,7 @@ pub struct ChildComponent {
 pub struct Property {
     pub default: Option<ftd::PropertyValue>,
     pub conditions: Vec<(ftd::p2::Boolean, ftd::PropertyValue)>,
+    pub nested_properties: Box<std::collections::BTreeMap<String, ftd::component::Property>>,
 }
 
 #[derive(Debug, Clone)]
@@ -557,9 +558,10 @@ impl ChildComponent {
                     ) {
                         properties.insert(
                             "value".to_string(),
-                            Property {
+                            ftd::component::Property {
                                 default: Some(property_value),
                                 conditions: vec![],
+                                ..Default::default()
                             },
                         );
                     }
@@ -1542,6 +1544,7 @@ pub fn recursive_child_component(
         ftd::component::Property {
             default: Some(recursive_property_value),
             conditions: vec![],
+            ..Default::default()
         },
     );
 
@@ -1688,6 +1691,7 @@ pub fn recursive_child_component(
         Ok(ftd::component::Property {
             default: Some(property),
             conditions: vec![],
+            ..Default::default()
         })
     }
 
@@ -1805,7 +1809,7 @@ fn assert_no_extra_properties(
 }
 
 #[allow(clippy::too_many_arguments)]
-fn read_properties(
+pub fn read_properties(
     line_number: usize,
     p1: &ftd::p1::Header,
     caption: &Option<String>,
@@ -1899,6 +1903,22 @@ fn read_properties(
                 arguments,
                 Some(source.clone()),
             )?;
+            dbg!(&property_value, &value, "hh");
+            let nested_properties = if let ftd::PropertyValue::Reference {
+                kind: ftd::p2::Kind::UI { .. },
+                ..
+            } = &property_value
+            {
+                ftd::p2::utils::structure_header_to_properties(
+                    &value,
+                    &arguments,
+                    doc,
+                    line_number,
+                )?
+            } else {
+                Default::default()
+            };
+
             let (condition_value, default_value) = if let Some(attribute) = conditional_attribute {
                 let condition = ftd::p2::Boolean::from_expression(
                     attribute,
@@ -1917,10 +1937,12 @@ fn read_properties(
                 } else {
                     property.conditions.append(&mut condition_value.clone());
                 }
+                property.nested_properties = Box::new(nested_properties);
             } else {
                 let value = Property {
                     default: default_value,
                     conditions: condition_value,
+                    nested_properties: Box::new(nested_properties),
                 };
                 properties.insert(name.to_string(), value);
             }
@@ -1986,9 +2008,10 @@ fn root_properties_from_inherits(
         )?;
         root_properties.insert(
             inherit,
-            Property {
+            ftd::component::Property {
                 default: Some(pv),
                 conditions: vec![],
+                ..Default::default()
             },
         );
     }
@@ -2097,14 +2120,15 @@ mod test {
                 .collect(),
                 properties: std::array::IntoIter::new([(
                     s("text"),
-                    Property {
+                    ftd::component::Property {
                         default: Some(ftd::PropertyValue::Value {
                             value: ftd::Value::String {
                                 text: s("hello"),
                                 source: ftd::TextSource::Header
                             }
                         }),
-                        conditions: vec![]
+                        conditions: vec![],
+                        ..Default::default()
                     }
                 ),])
                 .collect(),
@@ -2132,14 +2156,15 @@ mod test {
                 full_name: s("foo#foo"),
                 properties: std::array::IntoIter::new([(
                     s("text"),
-                    Property {
+                    ftd::component::Property {
                         default: Some(ftd::PropertyValue::Value {
                             value: ftd::Value::String {
                                 text: s("hello"),
                                 source: ftd::TextSource::Header
                             }
                         }),
-                        conditions: vec![]
+                        conditions: vec![],
+                        ..Default::default()
                     }
                 ),])
                 .collect(),
