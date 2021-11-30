@@ -339,7 +339,10 @@ pub fn split(name: String, split_at: &str) -> ftd::p1::Result<(String, String)> 
     Ok((part_1.to_string(), part_2.to_string()))
 }
 
-pub fn reorder(p1: &[ftd::p1::Section], doc_id: &str) -> ftd::p1::Result<Vec<ftd::p1::Section>> {
+pub fn reorder(
+    p1: &[ftd::p1::Section],
+    doc_id: &str,
+) -> ftd::p1::Result<(Vec<ftd::p1::Section>, Vec<String>)> {
     fn is_kernel_component(comp: String) -> bool {
         if ["ftd.row", "ftd.column"].contains(&comp.as_str()) {
             return true;
@@ -352,11 +355,12 @@ pub fn reorder(p1: &[ftd::p1::Section], doc_id: &str) -> ftd::p1::Result<Vec<ftd
         new_p1: &mut Vec<ftd::p1::Section>,
         dependent_p1: Option<String>,
         inserted: &mut Vec<String>,
-        doc_id: &str,
-    ) {
+        doc: &ftd::p2::TDoc,
+        var_types: &Vec<String>,
+    ) -> ftd::p1::Result<()> {
         if let Some(p1) = dependent_p1 {
             if inserted.contains(&p1) {
-                return;
+                return Ok(());
             }
             if let Some(v) = p1_map.get(&p1) {
                 for sub_section in v.sub_sections.0.iter() {
@@ -368,18 +372,32 @@ pub fn reorder(p1: &[ftd::p1::Section], doc_id: &str) -> ftd::p1::Result<Vec<ftd
                         new_p1,
                         Some(sub_section.name.to_string()),
                         inserted,
-                        doc_id,
-                    );
+                        doc,
+                        var_types,
+                    )?;
                 }
-                if let Ok(root) = v.header.string(doc_id, v.line_number, "component") {
-                    if !is_kernel_component(root.to_string()) && !inserted.contains(&root) {
-                        reorder_component(p1_map, new_p1, Some(root), inserted, doc_id);
-                    }
+                let var_data = ftd::variable::VariableData::get_name_kind(
+                    &v.name,
+                    doc,
+                    v.line_number,
+                    var_types,
+                )?;
+                if !is_kernel_component(var_data.kind.to_string())
+                    && !inserted.contains(&var_data.kind)
+                {
+                    reorder_component(
+                        p1_map,
+                        new_p1,
+                        Some(var_data.kind),
+                        inserted,
+                        doc,
+                        var_types,
+                    )?;
                 }
                 new_p1.push(v.to_owned());
                 inserted.push(p1.to_string());
             }
-            return;
+            return Ok(());
         }
 
         for (k, v) in p1_map {
@@ -395,42 +413,73 @@ pub fn reorder(p1: &[ftd::p1::Section], doc_id: &str) -> ftd::p1::Result<Vec<ftd
                     new_p1,
                     Some(sub_section.name.to_string()),
                     inserted,
-                    doc_id,
-                );
+                    doc,
+                    var_types,
+                )?;
             }
-            if let Ok(root) = v.header.string(doc_id, v.line_number, "component") {
-                if !is_kernel_component(root.to_string()) && !inserted.contains(&root) {
-                    reorder_component(p1_map, new_p1, Some(root), inserted, doc_id);
-                }
+            let var_data =
+                ftd::variable::VariableData::get_name_kind(&v.name, doc, v.line_number, var_types)?;
+            if !is_kernel_component(var_data.kind.to_string()) && !inserted.contains(&var_data.kind)
+            {
+                reorder_component(
+                    p1_map,
+                    new_p1,
+                    Some(var_data.kind),
+                    inserted,
+                    doc,
+                    var_types,
+                )?;
             }
 
             new_p1.push(v.to_owned());
             inserted.push(k.to_string());
         }
+        Ok(())
     }
+
+    let doc = ftd::p2::TDoc {
+        name: doc_id,
+        aliases: &Default::default(),
+        bag: &Default::default(),
+    };
 
     let mut p1_map: std::collections::BTreeMap<String, ftd::p1::Section> = Default::default();
     let mut inserted_p1 = vec![];
     let mut new_p1 = vec![];
     let mut list_or_var = vec![];
+    let mut var_types = vec![];
     for (idx, p1) in p1.iter().enumerate() {
+        let var_data =
+            ftd::variable::VariableData::get_name_kind(&p1.name, &doc, p1.line_number, &var_types);
         if p1.name == "import"
             || p1.name.starts_with("record ")
             || p1.name.starts_with("or-type ")
-            || p1.name.starts_with("list ")
             || p1.name.starts_with("map ")
-            || ftd::variable::VariableData::get_name_kind(&p1.name, doc_id, p1.line_number, true)
-                .is_ok()
         {
             inserted_p1.push(idx);
             new_p1.push(p1.to_owned());
-            if p1.name.starts_with("list ") {
-                let list = ftd::get_name("list", p1.name.as_str(), doc_id)?.to_string();
-                list_or_var.push(list);
-            }
-            if p1.name.starts_with("var ") {
-                let var = ftd::get_name("var", p1.name.as_str(), doc_id)?.to_string();
-                list_or_var.push(var);
+        }
+        if let Ok(ftd::variable::VariableData {
+            type_: ftd::variable::Type::Variable,
+            ref name,
+            ..
+        }) = var_data
+        {
+            inserted_p1.push(idx);
+            new_p1.push(p1.to_owned());
+            list_or_var.push(name.to_string());
+        }
+
+        if p1.name.starts_with("record ") {
+            let name = ftd::get_name("record", &p1.name, "")?;
+            var_types.push(name.to_string());
+        }
+
+        if p1.name.starts_with("or-type ") {
+            let name = ftd::get_name("or-type", &p1.name, "")?;
+            var_types.push(name.to_string());
+            for s in &p1.sub_sections.0 {
+                var_types.push(format!("{}.{}", name, s.name));
             }
         }
 
@@ -439,16 +488,25 @@ pub fn reorder(p1: &[ftd::p1::Section], doc_id: &str) -> ftd::p1::Result<Vec<ftd
             new_p1.push(p1.to_owned());
         }
 
-        if p1.name.starts_with("component ") {
-            p1_map.insert(
-                ftd::get_name("component", p1.name.as_str(), doc_id)?.to_string(),
-                p1.to_owned(),
-            );
+        if let Ok(ftd::variable::VariableData {
+            type_: ftd::variable::Type::Component,
+            ref name,
+            ..
+        }) = var_data
+        {
+            p1_map.insert(name.to_string(), p1.to_owned());
             inserted_p1.push(idx);
         }
     }
     let mut new_p1_component = vec![];
-    reorder_component(&p1_map, &mut new_p1_component, None, &mut vec![], doc_id);
+    reorder_component(
+        &p1_map,
+        &mut new_p1_component,
+        None,
+        &mut vec![],
+        &doc,
+        &var_types,
+    )?;
     new_p1.extend(new_p1_component);
 
     for (idx, p1) in p1.iter().enumerate() {
@@ -458,7 +516,7 @@ pub fn reorder(p1: &[ftd::p1::Section], doc_id: &str) -> ftd::p1::Result<Vec<ftd
         new_p1.push(p1.to_owned());
     }
 
-    Ok(new_p1)
+    Ok((new_p1, var_types))
 }
 
 pub fn properties(

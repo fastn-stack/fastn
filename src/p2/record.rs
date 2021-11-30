@@ -270,9 +270,9 @@ impl Record {
             }
             let var_data = match ftd::variable::VariableData::get_name_kind(
                 k,
-                doc.name,
+                doc,
                 i.to_owned(),
-                false,
+                &Default::default(),
             ) {
                 Ok(v) => v,
                 _ => continue,
@@ -286,14 +286,7 @@ impl Record {
             };
             fields.insert(
                 var_data.name.to_string(),
-                ftd::p2::Kind::for_variable(
-                    i.to_owned(),
-                    k,
-                    v,
-                    doc,
-                    Some(object_kind.clone()),
-                    false,
-                )?,
+                ftd::p2::Kind::for_variable(i.to_owned(), k, v, doc, Some(object_kind.clone()))?,
             );
         }
         assert_fields_valid(line_number, &fields, doc.name)?;
@@ -517,7 +510,7 @@ mod test {
             body bio:
             integer age:
 
-            -- $x: 10
+            -- integer x: 10
 
             -- person: Abrar Khan2
             address: Bihar2
@@ -531,7 +524,7 @@ mod test {
 
             Frontend developer at fifthtry.
 
-            -- person $abrar: Abrar Khan
+            -- person abrar: Abrar Khan
             address: Bihar
             age: $x
 
@@ -541,11 +534,11 @@ mod test {
             string eid:
             person who:
 
-            -- employee $abrar_e:
+            -- employee abrar_e:
             eid: E04
             who: $abrar
 
-            -- employee $sourabh:
+            -- employee sourabh:
 
             --- eid:
 
@@ -557,9 +550,9 @@ mod test {
 
             Frontend developer at fifthtry.
 
-            -- $x: 20
+            -- integer x: 20
 
-            -- $abrar: Abrar Khan2
+            -- abrar: Abrar Khan2
             address: Bihar2
             age: $x
 
@@ -645,7 +638,7 @@ mod test {
             caption name:
             string list friends:
 
-            -- person $abrar: Abrar Khan
+            -- person abrar: Abrar Khan
             friends: Deepak Angrula
             friends: Amit Upadhyay
             friends: Saurabh Garg
@@ -659,7 +652,7 @@ mod test {
             caption name:
             string list friends:
 
-            -- person $abrar: Abrar Khan
+            -- person abrar: Abrar Khan
 
             --- friends: Deepak Angrula
             --- friends: Amit Upadhyay
@@ -805,7 +798,7 @@ mod test {
             caption name:
             point list points:
 
-            -- person $abrar: Abrar Khan
+            -- person abrar: Abrar Khan
 
             --- points:
             x: 10
@@ -962,7 +955,7 @@ mod test {
             entity list party:
             integer value:
 
-            -- sale $jan:
+            -- sale jan:
             value: 2000
 
             --- party.person: Jack Russo

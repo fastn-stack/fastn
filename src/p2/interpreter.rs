@@ -68,7 +68,7 @@ impl<'a> Interpreter<'a> {
         d_processor: &mut std::time::Duration,
     ) -> ftd::p1::Result<Vec<ftd::Instruction>> {
         let p1 = ftd::p1::parse(s, name)?;
-        let new_p1 = ftd::p2::utils::reorder(&p1, name)?;
+        let (new_p1, var_types) = ftd::p2::utils::reorder(&p1, name)?;
 
         let mut aliases = default_aliases();
         let mut instructions: Vec<ftd::Instruction> = Default::default();
@@ -77,9 +77,6 @@ impl<'a> Interpreter<'a> {
             if p1.is_commented {
                 continue;
             }
-
-            let var_data =
-                ftd::variable::VariableData::get_name_kind(&p1.name, name, p1.line_number, true);
             if p1.name == "import" {
                 let (library_name, alias) =
                     ftd::p2::utils::parse_import(&p1.caption, name, p1.line_number)?;
@@ -109,17 +106,16 @@ impl<'a> Interpreter<'a> {
                 bag: &self.bag,
             };
 
+            let var_data = ftd::variable::VariableData::get_name_kind(
+                &p1.name,
+                &doc,
+                p1.line_number,
+                &var_types,
+            );
+
             let mut thing = vec![];
 
-            if p1.name.starts_with("component ") {
-                // declare a function
-                let d = ftd::Component::from_p1(p1, &doc)?;
-                thing.push((
-                    doc.resolve_name(p1.line_number, &d.full_name.to_string())?,
-                    ftd::p2::Thing::Component(d),
-                ));
-                // processed_p1.push(p1.name.to_string());
-            } else if p1.name.starts_with("record ") {
+            if p1.name.starts_with("record ") {
                 // declare a record
                 let d =
                     ftd::p2::Record::from_p1(p1.name.as_str(), &p1.header, &doc, p1.line_number)?;
@@ -152,100 +148,108 @@ impl<'a> Interpreter<'a> {
                         &instructions,
                     )?,
                 });
+            } else if let Ok(ftd::variable::VariableData {
+                type_: ftd::variable::Type::Component,
+                ..
+            }) = var_data
+            {
+                // declare a function
+                let d = ftd::Component::from_p1(p1, &doc)?;
+                thing.push((
+                    doc.resolve_name(p1.line_number, &d.full_name.to_string())?,
+                    ftd::p2::Thing::Component(d),
+                ));
+                // processed_p1.push(p1.name.to_string());
             } else if let Ok(ref var_data) = var_data {
-                if var_data.kind.is_some() || doc.get_thing(p1.line_number, &var_data.name).is_err()
-                {
-                    if var_data.is_none() || var_data.is_optional() {
-                        // declare and instantiate a variable
-                        let d = if p1
-                            .header
-                            .str(doc.name, p1.line_number, "$processor$")
-                            .is_ok()
-                        {
-                            let name = var_data.name.to_string();
-                            let start = std::time::Instant::now();
-                            let value = self.lib.process(p1, &doc).await?;
-                            *d_processor =
-                                d_processor.saturating_add(std::time::Instant::now() - start);
-                            ftd::Variable {
-                                name,
-                                value,
-                                conditions: vec![],
-                            }
-                        } else {
-                            ftd::Variable::from_p1(p1, &doc)?
-                        };
-                        thing.push((
-                            doc.resolve_name(p1.line_number, &d.name.to_string())?,
-                            ftd::p2::Thing::Variable(d),
-                        ));
-                    } else {
-                        // declare and instantiate a list
-                        let d = if p1
-                            .header
-                            .str(doc.name, p1.line_number, "$processor$")
-                            .is_ok()
-                        {
-                            let name = doc.resolve_name(p1.line_number, &var_data.name)?;
-                            let start = std::time::Instant::now();
-                            let value = self.lib.process(p1, &doc).await?;
-                            *d_processor =
-                                d_processor.saturating_add(std::time::Instant::now() - start);
-                            ftd::Variable {
-                                name,
-                                value,
-                                conditions: vec![],
-                            }
-                        } else {
-                            ftd::Variable::list_from_p1(p1, &doc)?
-                        };
-                        thing.push((
-                            doc.resolve_name(p1.line_number, &d.name.to_string())?,
-                            ftd::p2::Thing::Variable(d),
-                        ));
-                    }
-                } else if let ftd::p2::Thing::Variable(mut v) =
-                    doc.get_thing(p1.line_number, var_data.name.as_str())?
-                {
-                    assert!(
-                        !(p1.header
-                            .str_optional(doc.name, p1.line_number, "if")?
-                            .is_some()
-                            && p1
-                                .header
-                                .str_optional(doc.name, p1.line_number, "$processor$")?
-                                .is_some())
-                    );
-                    if let Some(expr) = p1.header.str_optional(doc.name, p1.line_number, "if")? {
-                        let val = v.get_value(p1, &doc)?;
-                        v.conditions.push((
-                            ftd::p2::Boolean::from_expression(
-                                expr,
-                                &doc,
-                                &Default::default(),
-                                (None, None),
-                                p1.line_number,
-                            )?,
-                            val,
-                        ));
-                    } else if p1
+                if var_data.is_none() || var_data.is_optional() {
+                    // declare and instantiate a variable
+                    let d = if p1
                         .header
-                        .str_optional(doc.name, p1.line_number, "$processor$")?
-                        .is_some()
+                        .str(doc.name, p1.line_number, "$processor$")
+                        .is_ok()
                     {
+                        let name = var_data.name.to_string();
                         let start = std::time::Instant::now();
                         let value = self.lib.process(p1, &doc).await?;
                         *d_processor =
                             d_processor.saturating_add(std::time::Instant::now() - start);
-                        v.value = value;
+                        ftd::Variable {
+                            name,
+                            value,
+                            conditions: vec![],
+                        }
                     } else {
-                        v.update_from_p1(p1, &doc)?;
-                    }
+                        ftd::Variable::from_p1(p1, &doc)?
+                    };
                     thing.push((
-                        doc.resolve_name(p1.line_number, &var_data.name.to_string())?,
-                        ftd::p2::Thing::Variable(v),
+                        doc.resolve_name(p1.line_number, &d.name.to_string())?,
+                        ftd::p2::Thing::Variable(d),
+                    ));
+                } else {
+                    // declare and instantiate a list
+                    let d = if p1
+                        .header
+                        .str(doc.name, p1.line_number, "$processor$")
+                        .is_ok()
+                    {
+                        let name = doc.resolve_name(p1.line_number, &var_data.name)?;
+                        let start = std::time::Instant::now();
+                        let value = self.lib.process(p1, &doc).await?;
+                        *d_processor =
+                            d_processor.saturating_add(std::time::Instant::now() - start);
+                        ftd::Variable {
+                            name,
+                            value,
+                            conditions: vec![],
+                        }
+                    } else {
+                        ftd::Variable::list_from_p1(p1, &doc)?
+                    };
+                    thing.push((
+                        doc.resolve_name(p1.line_number, &d.name.to_string())?,
+                        ftd::p2::Thing::Variable(d),
                     ));
                 }
+            } else if let ftd::p2::Thing::Variable(mut v) =
+                doc.get_thing(p1.line_number, p1.name.as_str())?
+            {
+                assert!(
+                    !(p1.header
+                        .str_optional(doc.name, p1.line_number, "if")?
+                        .is_some()
+                        && p1
+                            .header
+                            .str_optional(doc.name, p1.line_number, "$processor$")?
+                            .is_some())
+                );
+                if let Some(expr) = p1.header.str_optional(doc.name, p1.line_number, "if")? {
+                    let val = v.get_value(p1, &doc)?;
+                    v.conditions.push((
+                        ftd::p2::Boolean::from_expression(
+                            expr,
+                            &doc,
+                            &Default::default(),
+                            (None, None),
+                            p1.line_number,
+                        )?,
+                        val,
+                    ));
+                } else if p1
+                    .header
+                    .str_optional(doc.name, p1.line_number, "$processor$")?
+                    .is_some()
+                {
+                    let start = std::time::Instant::now();
+                    let value = self.lib.process(p1, &doc).await?;
+                    *d_processor = d_processor.saturating_add(std::time::Instant::now() - start);
+                    v.value = value;
+                } else {
+                    v.update_from_p1(p1, &doc)?;
+                }
+                thing.push((
+                    doc.resolve_name(p1.line_number, &p1.name.to_string())?,
+                    ftd::p2::Thing::Variable(v),
+                ));
             } else {
                 // cloning because https://github.com/rust-lang/rust/issues/59159
                 match (doc.get_thing(p1.line_number, p1.name.as_str())?).clone() {
@@ -363,7 +367,8 @@ impl<'a> Interpreter<'a> {
         d_processor: &mut std::time::Duration,
     ) -> ftd::p1::Result<Vec<ftd::Instruction>> {
         let p1 = ftd::p1::parse(s, name)?;
-        let new_p1 = ftd::p2::utils::reorder(&p1, name)?;
+        let (new_p1, var_types) = ftd::p2::utils::reorder(&p1, name)?;
+        // dbg!(&new_p1, &var_types);
 
         let mut aliases = default_aliases();
         let mut instructions: Vec<ftd::Instruction> = Default::default();
@@ -373,8 +378,6 @@ impl<'a> Interpreter<'a> {
                 continue;
             }
 
-            let var_data =
-                ftd::variable::VariableData::get_name_kind(&p1.name, name, p1.line_number, true);
             if p1.name == "import" {
                 let (library_name, alias) =
                     ftd::p2::utils::parse_import(&p1.caption, name, p1.line_number)?;
@@ -397,17 +400,17 @@ impl<'a> Interpreter<'a> {
                 bag: &self.bag,
             };
 
+            let var_data = ftd::variable::VariableData::get_name_kind(
+                &p1.name,
+                &doc,
+                p1.line_number,
+                &var_types,
+            );
+            // dbg!("p1", &p1, &var_data);
+
             let mut thing = vec![];
 
-            if p1.name.starts_with("component ") {
-                // declare a function
-                let d = ftd::Component::from_p1(p1, &doc)?;
-                thing.push((
-                    doc.resolve_name(p1.line_number, &d.full_name.to_string())?,
-                    ftd::p2::Thing::Component(d),
-                ));
-                // processed_p1.push(p1.name.to_string());
-            } else if p1.name.starts_with("record ") {
+            if p1.name.starts_with("record ") {
                 // declare a record
                 let d =
                     ftd::p2::Record::from_p1(p1.name.as_str(), &p1.header, &doc, p1.line_number)?;
@@ -440,100 +443,108 @@ impl<'a> Interpreter<'a> {
                         &instructions,
                     )?,
                 });
+            } else if let Ok(ftd::variable::VariableData {
+                type_: ftd::variable::Type::Component,
+                ..
+            }) = var_data
+            {
+                // declare a function
+                let d = ftd::Component::from_p1(p1, &doc)?;
+                thing.push((
+                    doc.resolve_name(p1.line_number, &d.full_name.to_string())?,
+                    ftd::p2::Thing::Component(d),
+                ));
+                // processed_p1.push(p1.name.to_string());
             } else if let Ok(ref var_data) = var_data {
-                if var_data.kind.is_some() || doc.get_thing(p1.line_number, &var_data.name).is_err()
-                {
-                    if var_data.is_none() || var_data.is_optional() {
-                        // declare and instantiate a variable
-                        let d = if p1
-                            .header
-                            .str(doc.name, p1.line_number, "$processor$")
-                            .is_ok()
-                        {
-                            let name = var_data.name.to_string();
-                            let start = std::time::Instant::now();
-                            let value = self.lib.process(p1, &doc)?;
-                            *d_processor =
-                                d_processor.saturating_add(std::time::Instant::now() - start);
-                            ftd::Variable {
-                                name,
-                                value,
-                                conditions: vec![],
-                            }
-                        } else {
-                            ftd::Variable::from_p1(p1, &doc)?
-                        };
-                        thing.push((
-                            doc.resolve_name(p1.line_number, &d.name.to_string())?,
-                            ftd::p2::Thing::Variable(d),
-                        ));
-                    } else {
-                        // declare and instantiate a list
-                        let d = if p1
-                            .header
-                            .str(doc.name, p1.line_number, "$processor$")
-                            .is_ok()
-                        {
-                            let name = doc.resolve_name(p1.line_number, &var_data.name)?;
-                            let start = std::time::Instant::now();
-                            let value = self.lib.process(p1, &doc)?;
-                            *d_processor =
-                                d_processor.saturating_add(std::time::Instant::now() - start);
-                            ftd::Variable {
-                                name,
-                                value,
-                                conditions: vec![],
-                            }
-                        } else {
-                            ftd::Variable::list_from_p1(p1, &doc)?
-                        };
-                        thing.push((
-                            doc.resolve_name(p1.line_number, &d.name.to_string())?,
-                            ftd::p2::Thing::Variable(d),
-                        ));
-                    }
-                } else if let ftd::p2::Thing::Variable(mut v) =
-                    doc.get_thing(p1.line_number, var_data.name.as_str())?
-                {
-                    assert!(
-                        !(p1.header
-                            .str_optional(doc.name, p1.line_number, "if")?
-                            .is_some()
-                            && p1
-                                .header
-                                .str_optional(doc.name, p1.line_number, "$processor$")?
-                                .is_some())
-                    );
-                    if let Some(expr) = p1.header.str_optional(doc.name, p1.line_number, "if")? {
-                        let val = v.get_value(p1, &doc)?;
-                        v.conditions.push((
-                            ftd::p2::Boolean::from_expression(
-                                expr,
-                                &doc,
-                                &Default::default(),
-                                (None, None),
-                                p1.line_number,
-                            )?,
-                            val,
-                        ));
-                    } else if p1
+                if var_data.is_none() || var_data.is_optional() {
+                    // declare and instantiate a variable
+                    let d = if p1
                         .header
-                        .str_optional(doc.name, p1.line_number, "$processor$")?
-                        .is_some()
+                        .str(doc.name, p1.line_number, "$processor$")
+                        .is_ok()
                     {
+                        let name = var_data.name.to_string();
                         let start = std::time::Instant::now();
                         let value = self.lib.process(p1, &doc)?;
                         *d_processor =
                             d_processor.saturating_add(std::time::Instant::now() - start);
-                        v.value = value;
+                        ftd::Variable {
+                            name,
+                            value,
+                            conditions: vec![],
+                        }
                     } else {
-                        v.update_from_p1(p1, &doc)?;
-                    }
+                        ftd::Variable::from_p1(p1, &doc)?
+                    };
                     thing.push((
-                        doc.resolve_name(p1.line_number, &var_data.name.to_string())?,
-                        ftd::p2::Thing::Variable(v),
+                        doc.resolve_name(p1.line_number, &d.name.to_string())?,
+                        ftd::p2::Thing::Variable(d),
+                    ));
+                } else {
+                    // declare and instantiate a list
+                    let d = if p1
+                        .header
+                        .str(doc.name, p1.line_number, "$processor$")
+                        .is_ok()
+                    {
+                        let name = doc.resolve_name(p1.line_number, &var_data.name)?;
+                        let start = std::time::Instant::now();
+                        let value = self.lib.process(p1, &doc)?;
+                        *d_processor =
+                            d_processor.saturating_add(std::time::Instant::now() - start);
+                        ftd::Variable {
+                            name,
+                            value,
+                            conditions: vec![],
+                        }
+                    } else {
+                        ftd::Variable::list_from_p1(p1, &doc)?
+                    };
+                    thing.push((
+                        doc.resolve_name(p1.line_number, &d.name.to_string())?,
+                        ftd::p2::Thing::Variable(d),
                     ));
                 }
+            } else if let ftd::p2::Thing::Variable(mut v) =
+                doc.get_thing(p1.line_number, p1.name.as_str())?
+            {
+                assert!(
+                    !(p1.header
+                        .str_optional(doc.name, p1.line_number, "if")?
+                        .is_some()
+                        && p1
+                            .header
+                            .str_optional(doc.name, p1.line_number, "$processor$")?
+                            .is_some())
+                );
+                if let Some(expr) = p1.header.str_optional(doc.name, p1.line_number, "if")? {
+                    let val = v.get_value(p1, &doc)?;
+                    v.conditions.push((
+                        ftd::p2::Boolean::from_expression(
+                            expr,
+                            &doc,
+                            &Default::default(),
+                            (None, None),
+                            p1.line_number,
+                        )?,
+                        val,
+                    ));
+                } else if p1
+                    .header
+                    .str_optional(doc.name, p1.line_number, "$processor$")?
+                    .is_some()
+                {
+                    let start = std::time::Instant::now();
+                    let value = self.lib.process(p1, &doc)?;
+                    *d_processor = d_processor.saturating_add(std::time::Instant::now() - start);
+                    v.value = value;
+                } else {
+                    v.update_from_p1(p1, &doc)?;
+                }
+                thing.push((
+                    doc.resolve_name(p1.line_number, &p1.name.to_string())?,
+                    ftd::p2::Thing::Variable(v),
+                ));
             } else {
                 // cloning because https://github.com/rust-lang/rust/issues/59159
                 match (doc.get_thing(p1.line_number, p1.name.as_str())?).clone() {
@@ -662,6 +673,7 @@ pub fn interpret(
 )> {
     let mut interpreter = Interpreter::new(lib);
     let instructions = interpreter.interpret(name, source)?;
+    // dbg!(&instructions);
     let mut rt = ftd::RT::from(name, interpreter.aliases, interpreter.bag, instructions);
     let main = rt.render_()?;
     Ok((rt.bag, main))
@@ -782,7 +794,7 @@ mod test {
     use ftd::{markdown_line, Instruction};
 
     #[test]
-    fn basic() {
+    fn basic_1() {
         let mut bag = super::default_bag();
         bag.insert(
             "foo/bar#foo".to_string(),
@@ -816,11 +828,10 @@ mod test {
 
         p!(
             "
-            -- component foo:
-            component: ftd.text
+            -- ftd.text foo:
             text: hello
 
-            -- $x: 10
+            -- integer x: 10
             ",
             (bag, super::default_column()),
         );
@@ -962,11 +973,10 @@ mod test {
 
         p!(
             "
-            -- $present: false
+            -- boolean present: false
 
-            -- component foo:
-            caption $name:
-            component: ftd.text
+            -- ftd.text foo:
+            caption name:
             color: white
             color if $present: green
             color if not $present: red
@@ -1602,26 +1612,23 @@ mod test {
 
         p!(
             r"
-            -- component toc-heading:
-            component: ftd.text
-            caption $text:
+            -- ftd.text toc-heading:
+            caption text:
             text: $text
             size: 16
 
 
-            -- component table-of-content:
-            component: ftd.column
-            string $id:
+            -- ftd.column table-of-content:
+            string id:
             id: $id
             width: 300
             height: fill
 
 
-            -- component parent:
-            component: ftd.column
-            string $id:
-            caption $name:
-            optional boolean $active:
+            -- ftd.column parent:
+            string id:
+            caption name:
+            optional boolean active:
             id: $id
             width: fill
             open: true
@@ -1639,8 +1646,7 @@ mod test {
             color: \#4D4D4D
 
 
-            -- component ft_toc:
-            component: ftd.column
+            -- ftd.column ft_toc:
 
             --- table-of-content:
             id: toc_main
@@ -2549,9 +2555,8 @@ mod test {
             "foo/bar",
             indoc::indoc!(
                 "
-                -- component foo:
-                caption or body $name:
-                component: ftd.text
+                -- ftd.text foo:
+                caption or body name:
                 text: $name
 
                 -- foo: hello
@@ -2814,9 +2819,8 @@ mod test {
         main.container.children.push(ftd::Element::Row(row));
         p!(
             "
-            -- component foo:
-            component: ftd.row
-            integer $x:
+            -- ftd.row foo:
+            integer x:
 
             --- ftd.text:
             text: hello
@@ -2855,10 +2859,10 @@ mod test {
 
         p!(
             "
-            -- integer list $numbers:
+            -- integer list numbers:
 
-            -- $numbers: 20
-            -- $numbers: 30
+            -- numbers: 20
+            -- numbers: 30
             ",
             (bag, super::default_column()),
         );
@@ -2937,13 +2941,13 @@ mod test {
             integer x:
             integer y:
 
-            -- point list $points:
+            -- point list points:
 
-            -- $points:
+            -- points:
             x: 10
             y: 20
 
-            -- $points:
+            -- points:
             x: 0
             y: 0
             ",
@@ -2981,12 +2985,12 @@ mod test {
 
         p!(
             "
-            -- integer list $numbers:
+            -- integer list numbers:
 
             -- numbers: 20
             -- numbers: 30
 
-            -- $x: 20
+            -- integer x: 20
 
             -- numbers: $x
             ",
@@ -3200,11 +3204,10 @@ mod test {
 
         p!(
             "
-            -- component white-two-image:
-            component: ftd.column
-            caption $title:
-            body $about:
-            string $src:
+            -- ftd.column white-two-image:
+            caption title:
+            body about:
+            string src:
             padding: 30
 
             --- ftd.text:
@@ -3337,11 +3340,10 @@ mod test {
 
         p!(
             "
-            -- component white-two-image:
-            component: ftd.column
-            caption $title:
-            optional body $about:
-            optional string $src:
+            -- ftd.column white-two-image:
+            caption title:
+            optional body about:
+            optional string src:
             padding: 30
 
             --- ftd.text:
@@ -3506,11 +3508,10 @@ mod test {
 
         p!(
             "
-            -- component white-two-image:
-            component: ftd.column
-            caption $title:
-            optional body $about:
-            optional string $src:
+            -- ftd.column white-two-image:
+            caption title:
+            optional body about:
+            optional string src:
             padding: 30
 
             --- ftd.text:
@@ -3714,10 +3715,9 @@ mod test {
             "
             -- import: fifthtry/ft
 
-            -- component h0:
-            component: ftd.column
-            caption $title:
-            optional body $body:
+            -- ftd.column h0:
+            caption title:
+            optional body body:
 
             --- ftd.text:
             text: $title
@@ -3834,10 +3834,9 @@ mod test {
 
         p!(
             "
-            -- component image:
-            component: ftd.column
-            string $src:
-            optional string $width:
+            -- ftd.column image:
+            string src:
+            optional string width:
 
             --- ftd.image:
             src: $src
@@ -3945,9 +3944,8 @@ mod test {
 
         p!(
             "
-            -- component foo:
-            component: ftd.row
-            integer $x:
+            -- ftd.row foo:
+            integer x:
 
             --- ftd.decimal:
             value: 0.06
@@ -4056,9 +4054,8 @@ mod test {
 
         p!(
             "
-            -- component foo:
-            component: ftd.row
-            integer $x:
+            -- ftd.row foo:
+            integer x:
 
             --- ftd.integer:
             value: 3
@@ -4203,9 +4200,8 @@ mod test {
 
         p!(
             "
-            -- component foo:
-            component: ftd.row
-            integer $x:
+            -- ftd.row foo:
+            integer x:
 
             --- ftd.boolean:
             value: true
@@ -4444,7 +4440,7 @@ mod test {
         p!(
             "
             -- import: fifthtry/ft
-            -- $present: true
+            -- boolean present: true
 
             -- ftd.text: present is true
             if: $present
@@ -4458,8 +4454,7 @@ mod test {
             -- ftd.text: dark-mode is false
             if: not $ft.dark-mode
 
-            -- component foo:
-            component: ftd.column
+            -- ftd.column foo:
 
             --- ftd.text: inner present false
             if: not $present
@@ -4469,9 +4464,8 @@ mod test {
 
             -- foo:
 
-            -- component bar:
-            component: ftd.column
-            boolean $present:
+            -- ftd.column bar:
+            boolean present:
 
             --- ftd.text: argument present false
             if: not $present
@@ -4485,8 +4479,7 @@ mod test {
             -- bar:
             present: $ft.dark-mode
 
-            -- component foo2:
-            component: ftd.column
+            -- ftd.column foo2:
 
             --- ftd.text: foo2 dark-mode is true
             if: $ft.dark-mode
@@ -4636,8 +4629,7 @@ mod test {
 
         p!(
             "
-            -- component foo:
-            component: ftd.column
+            -- ftd.column foo:
 
             --- ftd.row:
             id: r1
@@ -4901,9 +4893,8 @@ mod test {
 
         p!(
             "
-            -- component foo:
+            -- ftd.column foo:
             open: some-child
-            component: ftd.column
 
             --- ftd.row:
 
@@ -5251,26 +5242,23 @@ mod test {
 
         p!(
             "
-            -- component mobile-display:
-            component: ftd.column
-            optional string $id:
+            -- ftd.column mobile-display:
+            optional string id:
             id: $id
 
             --- ftd.text: Mobile Display
             id: mobile-display
 
-            -- component desktop-display:
-            component: ftd.column
-            optional string $id:
+            -- ftd.column desktop-display:
+            optional string id:
             id: $id
 
             --- ftd.text: Desktop Display
 
-            -- $mobile: true
+            -- boolean mobile: true
 
-            -- component foo:
+            -- ftd.column foo:
             open: some-child
-            component: ftd.column
 
             --- mobile-display:
             if: $mobile
@@ -5402,24 +5390,21 @@ mod test {
             "foo/bar",
             indoc::indoc!(
                 "
-                -- component desktop:
-                component: ftd.column
+                -- ftd.column desktop:
                 open: desktop-container
 
                 --- ftd.column:
                 id: desktop-container
 
-                -- component mobile:
-                component: ftd.column
+                -- ftd.column mobile:
                 open: mobile-container
 
                 --- ftd.column:
                 id: mobile-container
 
-                -- $is-mobile: true
+                -- boolean is-mobile: true
 
-                -- component page:
-                component: ftd.column
+                -- ftd.column page:
                 open: main-container
 
                 --- ftd.column:
@@ -5539,26 +5524,23 @@ mod test {
             "foo/bar",
             indoc::indoc!(
                 "
-                -- component desktop:
-                component: ftd.column
-                optional string $id:
+                -- ftd.column desktop:
+                optional string id:
                 id: $id
 
                 --- ftd.column:
                 id: foo
 
-                -- component mobile:
-                component: ftd.column
-                optional string $id:
+                -- ftd.column mobile:
+                optional string id:
                 id: $id
 
                 --- ftd.column:
                 id: foo
 
-                -- $is-mobile: true
+                -- boolean is-mobile: true
 
-                -- component page:
-                component: ftd.column
+                -- ftd.column page:
                 open: main-container.foo
 
                 --- desktop:
@@ -5745,21 +5727,18 @@ mod test {
             "foo/bar",
             indoc::indoc!(
                 "
-                -- component ft_container:
-                component: ftd.column
-                optional string $id:
+                -- ftd.column ft_container:
+                optional string id:
                 id: $id
 
-                -- component ft_container_mobile:
-                component: ftd.column
-                optional string $id:
+                -- ftd.column ft_container_mobile:
+                optional string id:
                 id: $id
 
 
-                -- component desktop:
-                component: ftd.column
+                -- ftd.column desktop:
                 open: desktop-container
-                optional string $id:
+                optional string id:
                 id: $id
 
                 --- ftd.row:
@@ -5770,10 +5749,9 @@ mod test {
 
 
 
-                -- component mobile:
-                component: ftd.column
+                -- ftd.column mobile:
                 open: mobile-container
-                optional string $id:
+                optional string id:
                 id: $id
 
                 --- ftd.row:
@@ -5783,11 +5761,10 @@ mod test {
                 id: foo
 
 
-                -- $is-mobile: false
+                -- boolean is-mobile: false
 
 
-                -- component page:
-                component: ftd.column
+                -- ftd.column page:
                 open: main-container.foo
 
                 --- desktop:
@@ -5908,26 +5885,23 @@ mod test {
             "foo/bar",
             indoc::indoc!(
                 "
-                -- component desktop:
-                component: ftd.column
-                optional string $id:
+                -- ftd.column desktop:
+                optional string id:
                 id: $id
 
                 --- ftd.column:
                 id: main-container
 
-                -- component mobile:
-                component: ftd.column
-                optional string $id:
+                -- ftd.column mobile:
+                optional string id:
                 id: $id
 
                 --- ftd.column:
                 id: main-container
 
-                -- $is-mobile: true
+                -- boolean is-mobile: true
 
-                -- component page:
-                component: ftd.column
+                -- ftd.column page:
                 open: main-container
 
                 --- ftd.column:
@@ -6315,10 +6289,9 @@ mod test {
 
         p!(
             "
-            -- component foo:
-            component: ftd.row
-            caption $name:
-            string $body:
+            -- ftd.row foo:
+            caption name:
+            string body:
 
             --- ftd.text: $name
 
@@ -6328,19 +6301,19 @@ mod test {
             caption name:
             body bio:
 
-            -- person list $people:
+            -- person list people:
 
-            -- $name: Arpita Jaiswal
+            -- string name: Arpita Jaiswal
 
-            -- $people: $name
+            -- people: $name
 
             Arpita is developer at Fifthtry
 
-            -- $people: Amit Upadhyay
+            -- people: Amit Upadhyay
 
             Amit is CEO of FifthTry.
 
-            -- $get: world
+            -- string get: world
 
             -- foo: hello
             body: $get
@@ -6541,10 +6514,9 @@ mod test {
 
         p!(
             "
-            -- component foo:
-            component: ftd.row
-            caption $name:
-            string $body:
+            -- ftd.row foo:
+            caption name:
+            string body:
 
             --- ftd.text: $name
 
@@ -6555,14 +6527,14 @@ mod test {
             body bio:
             boolean ceo:
 
-            -- person list $people:
+            -- person list people:
 
-            -- $people: Arpita Jaiswal
+            -- people: Arpita Jaiswal
             ceo: false
 
             Arpita is developer at Fifthtry
 
-            -- $people: Amit Upadhyay
+            -- people: Amit Upadhyay
             ceo: true
 
             Amit is CEO of FifthTry.
@@ -6627,13 +6599,13 @@ mod test {
             "foo/bar",
             indoc::indoc!(
                 "
-                -- string list $people:
+                -- string list people:
 
-                -- $people: Arpita
+                -- people: Arpita
 
-                -- $people: Asit
+                -- people: Asit
 
-                -- $people: Sourabh
+                -- people: Sourabh
 
                 -- ftd.text: $obj
                 $loop$: $people as $obj
@@ -6895,10 +6867,9 @@ mod test {
             "foo/bar",
             indoc::indoc!(
                 "
-                -- component foo:
-                component: ftd.row
-                caption $name:
-                string $body:
+                -- ftd.row foo:
+                caption name:
+                string body:
 
                 --- ftd.text: $name
 
@@ -6908,13 +6879,13 @@ mod test {
                 caption name:
                 body bio:
 
-                -- person list $people:
+                -- person list people:
 
-                -- $people: Arpita Jaiswal
+                -- people: Arpita Jaiswal
 
                 Arpita is developer at Fifthtry
 
-                -- $people: Amit Upadhyay
+                -- people: Amit Upadhyay
 
                 Amit is CEO of FifthTry.
 
@@ -6964,7 +6935,7 @@ mod test {
             "foo/bar",
             indoc::indoc!(
                 "
-                -- $test:
+                -- string test:
                 $processor$: read_version_from_cargo_toml
 
                 -- ftd.text: $test
@@ -7009,9 +6980,9 @@ mod test {
             "foo/bar",
             indoc::indoc!(
                 "
-                -- $test: yo
+                -- string test: yo
 
-                -- $test:
+                -- test:
                 $processor$: read_version_from_cargo_toml
 
                 -- ftd.text: $test
@@ -7127,7 +7098,7 @@ mod test {
             "foo/bar",
             indoc::indoc!(
                 "
-                -- string list $test:
+                -- string list test:
                 $processor$: read_package_from_cargo_toml
 
                 -- ftd.text: $obj
@@ -7699,10 +7670,9 @@ mod test {
 
         p!(
             "
-            -- component foo:
-            component: ftd.row
-            caption $name:
-            string $body:
+            -- ftd.row foo:
+            caption name:
+            string body:
 
             --- ftd.text: $name
 
@@ -7712,7 +7682,7 @@ mod test {
             string title:
             string description:
 
-            -- data list $test:
+            -- data list test:
             $processor$: read_package_records_from_cargo_toml
 
             -- foo: $obj.title
@@ -8089,9 +8059,8 @@ mod test {
                 string link:
                 toc-record list children:
 
-                -- component toc-item:
-                component: ftd.column
-                toc-record $toc:
+                -- ftd.column toc-item:
+                toc-record toc:
 
                 --- ftd.text: $toc.title
                 link: $toc.link
@@ -8100,25 +8069,24 @@ mod test {
                 $loop$: $toc.children as $obj
                 toc: $obj
 
-                -- toc-record list $aa:
+                -- toc-record list aa:
 
-                -- $aa:
+                -- aa:
                 title: aa title
                 link: aa link
 
-                -- $aa:
+                -- aa:
                 title: aaa title
                 link: aaa link
 
-                -- toc-record list $toc:
+                -- toc-record list toc:
 
-                -- $toc:
+                -- toc:
                 title: ab title
                 link: ab link
                 children: $aa
 
-                -- component foo:
-                component: ftd.row
+                -- ftd.row foo:
 
                 --- toc-item:
                 $loop$: $toc as $obj
@@ -8350,10 +8318,9 @@ mod test {
             "foo/bar",
             indoc::indoc!(
                 "
-                -- component foo:
-                component: ftd.text
-                caption $name: hello world
-                integer $size: 10
+                -- ftd.text foo:
+                caption name: hello world
+                integer size: 10
                 text: $name
                 size: $size
 
@@ -8495,7 +8462,7 @@ mod test {
             "foo/bar",
             indoc::indoc!(
                 "
-                -- $default-age: 20
+                -- integer default-age: 20
 
                 -- record person:
                 caption name:
@@ -8504,9 +8471,9 @@ mod test {
                 integer age: $default-age
                 integer size: 10
 
-                -- $abrar-name: Abrar Khan
+                -- string abrar-name: Abrar Khan
 
-                -- person $abrar: $abrar-name
+                -- person abrar: $abrar-name
 
                 Software developer working at fifthtry.
 
@@ -8653,14 +8620,13 @@ mod test {
 
         p!(
             "
-            -- $default-name: Arpita
+            -- string default-name: Arpita
 
-            -- $default-size: 10
+            -- integer default-size: 10
 
-            -- component foo:
-            component: ftd.row
-            string $name: $default-name
-            integer $text-size: $default-size
+            -- ftd.row foo:
+            string name: $default-name
+            integer text-size: $default-size
 
             --- ftd.text: $name
             size: $text-size
@@ -8839,7 +8805,7 @@ mod test {
             "foo/bar",
             indoc::indoc!(
                 "
-                -- string $default-phone: 1000
+                -- string default-phone: 1000
 
                 -- or-type lead:
 
@@ -8853,9 +8819,9 @@ mod test {
                 string fax:
                 integer no-of-employees: 50
 
-                -- lead.individual $amitu: Amit Upadhyay
+                -- lead.individual amitu: Amit Upadhyay
 
-                -- lead.company $acme: Acme Inc.
+                -- lead.company acme: Acme Inc.
                 contact: John Doe
                 fax: +1-234-567890
 
@@ -8982,14 +8948,12 @@ mod test {
             "foo/bar",
             indoc::indoc!(
                 "
-                -- component display-text:
-                component: ftd.column
+                -- ftd.column display-text:
 
                 --- ftd.text: hello
 
 
-                -- component inside-page:
-                component: ftd.column
+                -- ftd.column inside-page:
 
                 --- ftd.row:
 
@@ -8997,8 +8961,7 @@ mod test {
                 id: display-text-id
 
 
-                -- component page:
-                component: ftd.column
+                -- ftd.column page:
 
                 --- inside-page:
                 id: inside-page-id
@@ -9267,34 +9230,31 @@ mod test {
             "foo/bar",
             indoc::indoc!(
                 "
-                -- component h1:
-                component: ftd.column
+                -- ftd.column h1:
                 region: h1
-                caption $title:
+                caption title:
 
                 --- ftd.text:
                 text: $title
-                caption $title:
+                caption title:
                 region: title
 
-                -- component h2:
-                component: ftd.column
+                -- ftd.column h2:
                 region: h2
-                caption $title:
+                caption title:
 
                 --- ftd.text:
                 text: $title
-                caption $title:
+                caption title:
                 region: title
 
-                -- component h3:
-                component: ftd.column
+                -- ftd.column h3:
                 region: h3
-                caption $title:
+                caption title:
 
                 --- ftd.text:
                 text: $title
-                caption $title:
+                caption title:
                 region: title
 
                 -- h3: Heading 31
@@ -9386,10 +9346,9 @@ mod test {
             "foo/bar",
             indoc::indoc!(
                 "
-                -- $mobile: true
+                -- boolean mobile: true
 
-                -- component foo:
-                component: ftd.column
+                -- ftd.column foo:
 
                 --- ftd.text: Mobile
                 if: $mobile
@@ -9507,10 +9466,9 @@ mod test {
             "foo/bar",
             indoc::indoc!(
                 "
-                -- component foo:
-                component: ftd.text
-                caption $name:
-                boolean $open: true
+                -- ftd.text foo:
+                caption name:
+                boolean open: true
                 text: $name
                 if: $open
                 $event-click$: toggle $open
@@ -9588,9 +9546,8 @@ mod test {
             "foo/bar",
             indoc::indoc!(
                 "
-                -- component foo:
-                component: ftd.column
-                boolean $open: true
+                -- ftd.column foo:
+                boolean open: true
 
                 --- ftd.text: Click here
                 $event-click$: toggle $open
@@ -9715,10 +9672,9 @@ mod test {
                 string title:
                 toc-record list children:
 
-                -- component toc-item:
-                component: ftd.column
-                toc-record $toc:
-                boolean $open: true
+                -- ftd.column toc-item:
+                toc-record toc:
+                boolean open: true
 
                 --- ftd.text: $toc.title
                 $event-click$: toggle $open
@@ -9728,17 +9684,17 @@ mod test {
                 $loop$: $toc.children as $obj
                 toc: $obj
 
-                -- toc-record list $aa:
+                -- toc-record list aa:
 
-                -- $aa:
+                -- aa:
                 title: aa title
 
-                -- $aa:
+                -- aa:
                 title: aaa title
 
-                -- toc-record list $toc:
+                -- toc-record list toc:
 
-                -- $toc:
+                -- toc:
                 title: ab title
                 children: $aa
 
@@ -9835,16 +9791,14 @@ mod test {
             "foo/bar",
             indoc::indoc!(
                 "
-                -- component bar:
-                component: ftd.column
-                boolean $open-bar: true
+                -- ftd.column bar:
+                boolean open-bar: true
 
                 --- ftd.text: Hello Bar
 
 
-                -- component foo:
-                component: ftd.column
-                boolean $open: true
+                -- ftd.column foo:
+                boolean open: true
 
                 --- ftd.column:
                 id: foo-id
@@ -9889,11 +9843,11 @@ mod test {
             "foo/bar",
             indoc::indoc!(
                 "
-                -- $foo: false
+                -- boolean foo: false
 
-                -- $bar: 10
+                -- integer bar: 10
 
-                -- $bar: 20
+                -- bar: 20
                 if: not $foo
 
                 -- ftd.integer:
@@ -9925,16 +9879,16 @@ mod test {
             "foo/bar",
             indoc::indoc!(
                 "
-                -- $foo: false
+                -- boolean foo: false
 
-                -- $other-foo: true
+                -- boolean other-foo: true
 
-                -- $bar: hello
+                -- string bar: hello
 
-                -- $bar: foo says hello
+                -- bar: foo says hello
                 if: not $foo
 
-                -- $bar: other-foo says hello
+                -- bar: other-foo says hello
                 if: $other-foo
 
                 -- ftd.text: $bar
@@ -10059,8 +10013,7 @@ mod test {
                 color: green
                 /padding-left: 20
 
-                -- component foo:
-                component: ftd.row
+                -- ftd.row foo:
                 /color: red
 
                 --- ftd.text:
@@ -10149,8 +10102,7 @@ mod test {
                 "
                 -- foo:
 
-                -- component foo:
-                component: ftd.column
+                -- ftd.column foo:
 
                 --- bar: Bar says hello
 
@@ -10158,11 +10110,10 @@ mod test {
 
                 --- ftd.text: $greeting
 
-                -- $greeting: Hello
+                -- string greeting: Hello
 
-                -- component bar:
-                component: ftd.column
-                caption $name:
+                -- ftd.column bar:
+                caption name:
 
                 --- ftd.text: $name
 
@@ -10301,7 +10252,7 @@ mod test {
             "foo/bar",
             indoc::indoc!(
                 "
-                -- $count: 0
+                -- integer count: 0
 
                 -- ftd.integer:
                 value: $count
@@ -10404,12 +10355,11 @@ mod test {
             "foo/bar",
             indoc::indoc!(
                 "
-                -- $decrement-by: 2
+                -- integer decrement-by: 2
 
-                -- component foo:
-                component: ftd.column
-                integer $by: 4
-                integer $count: 0
+                -- ftd.column foo:
+                integer by: 4
+                integer count: 0
 
                 --- ftd.integer:
                 value: $count
@@ -10448,15 +10398,13 @@ mod test {
                 "
                 -- secondary-button: CTA says Hello
 
-                -- component secondary-button:
-                component: secondary-button-1
-                caption $cta:
+                -- secondary-button-1 secondary-button:
+                caption cta:
                 cta: $cta
 
 
-                -- component secondary-button-1:
-                component: ftd.row
-                caption $cta:
+                -- ftd.row secondary-button-1:
+                caption cta:
 
                 --- ftd.text: $cta
                 "
@@ -10544,12 +10492,11 @@ mod test {
             "foo/bar",
             indoc::indoc!(
                 "
-                -- $count: 0
+                -- integer count: 0
 
-                -- component slide:
-                component: ftd.image
-                string $src:
-                integer $idx:
+                -- ftd.image slide:
+                string src:
+                integer idx:
                 src: $src
                 if: $count == $idx
                 $event-click$: increment $count clamp 0 1
@@ -10603,20 +10550,19 @@ mod test {
             "foo/bar",
             indoc::indoc!(
                 "
-                -- component foo:
-                component: ftd.column
-                string list $bar:
+                -- ftd.column foo:
+                string list bar:
 
                 --- ftd.text: $obj
                 $loop$: $bar as $obj
 
-                -- string list $names:
+                -- string list names:
 
-                -- $names: Arpita
+                -- names: Arpita
 
-                -- $names: Ayushi
+                -- names: Ayushi
 
-                -- $names: AmitU
+                -- names: AmitU
 
                 -- foo:
                 bar: $names
@@ -10866,11 +10812,10 @@ mod test {
             "foo/bar",
             indoc::indoc!(
                 "
-            -- component display-item1:
-            component: ftd.column
-            string $name:
+            -- ftd.column display-item1:
+            string name:
             open: some-child
-            boolean $visible: true
+            boolean visible: true
 
             --- ftd.text: $name
             $event-click$: toggle $visible
@@ -10957,11 +10902,10 @@ mod test {
             "foo/bar",
             indoc::indoc!(
                 r"
-                -- $hello: hello
+                -- string hello: hello
 
-                -- component foo:
-                component: ftd.column
-                string $hello2:
+                -- ftd.column foo:
+                string hello2:
 
                 --- ftd.text: \$hello
 
@@ -11131,10 +11075,9 @@ mod test {
 
                 Heading 01 body
 
-                -- component h0:
-                component: ftd.column
-                caption $title:
-                optional body $body:
+                -- ftd.column h0:
+                caption title:
+                optional body body:
                 region: h0
 
                 --- ftd.text:
@@ -11146,9 +11089,8 @@ mod test {
                 body: $body
                 id: markdown-id
 
-                -- component markdown:
-                component: ftd.text
-                body $body:
+                -- ftd.text markdown:
+                body body:
                 text: $body
                 "
             ),
@@ -11207,8 +11149,7 @@ mod test {
             "foo/bar",
             indoc::indoc!(
                 "
-            --  component foo:
-            component: ftd.column
+            --  ftd.column foo:
 
             --- ftd.text: hello
             id: hello
@@ -11274,11 +11215,11 @@ mod test {
             "foo/bar",
             indoc::indoc!(
                 "
-                -- string list $people:
+                -- string list people:
 
-                -- $people: Ayushi
+                -- people: Ayushi
 
-                -- $people: Arpita
+                -- people: Arpita
 
                 -- ftd.text: Hello people
                 if: $people is not empty
@@ -11287,12 +11228,11 @@ mod test {
                 if: $people is empty
 
 
-                -- string list $empty-list:
+                -- string list empty-list:
 
 
-                -- component foo:
-                component: ftd.column
-                string list $string-list:
+                -- ftd.column foo:
+                string list string-list:
 
                 --- ftd.text: Hello list
                 if: $string-list is not empty
@@ -11338,7 +11278,7 @@ mod test {
             "foo/bar",
             indoc::indoc!(
                 "
-                -- string list $empty-list:
+                -- string list empty-list:
 
                 -- ftd.column:
                 if: $empty-list is not empty
@@ -11347,8 +11287,7 @@ mod test {
 
                 -- foo:
 
-                -- component foo:
-                component: ftd.column
+                -- ftd.column foo:
                 if: $empty-list is not empty
 
                 --- ftd.text: Hello
@@ -11429,8 +11368,7 @@ mod test {
                 -- ftd.text: Outside
 
 
-                -- component foo:
-                component: ftd.column
+                -- ftd.column foo:
                 open: some-id
 
                 --- ftd.column:
@@ -11533,25 +11471,25 @@ mod test {
                 file list files:
 
 
-                -- commit list $commit-list:
+                -- commit list commit-list:
 
-                -- $commit-list:
+                -- commit-list:
                 message: commit message 1
 
-                -- $commit-list:
+                -- commit-list:
                 message: commit message 2
 
 
-                -- file list $file-list:
+                -- file list file-list:
 
-                -- $file-list:
+                -- file-list:
                 filename: file filename 1
 
-                -- $file-list:
+                -- file-list:
                 filename: file filename 2
 
 
-                -- changes $rec-changes:
+                -- changes rec-changes:
                 commits: $commit-list
                 files: $file-list
 
@@ -11559,11 +11497,8 @@ mod test {
                 changes: $rec-changes
 
 
-
-
-                -- component display:
-                component: ftd.column
-                changes $changes:
+                -- ftd.column display:
+                changes changes:
 
                 --- display-commit:
                 $loop$: $changes.commits as $obj
@@ -11574,16 +11509,14 @@ mod test {
                 file: $obj
 
 
-                -- component display-commit:
-                component: ftd.column
-                commit $commit:
+                -- ftd.column display-commit:
+                commit commit:
 
                 --- ftd.text: $commit.message
 
 
-                -- component display-file:
-                component: ftd.column
-                file $file:
+                -- ftd.column display-file:
+                file file:
 
                 --- ftd.text: $file.filename
                 "
@@ -11659,8 +11592,7 @@ mod test {
                 scale-x: -1
                 scale-y: -1
 
-                -- component foo:
-                component: ftd.text
+                -- ftd.text foo:
                 text: World
                 "
             ),
@@ -11743,7 +11675,7 @@ mod test {
             "foo/bar",
             indoc::indoc!(
                 "
-                -- $current: some value
+                -- string current: some value
 
                 -- ftd.text: Start...
                 if: $current == some value
@@ -11753,7 +11685,7 @@ mod test {
                 -- ftd.text: change message
                 $event-click$: $current = hello world
 
-                -- $msg: good bye
+                -- string msg: good bye
 
                 -- ftd.text: change message again
                 $event-click$: $current = $msg
@@ -11820,9 +11752,8 @@ mod test {
             "foo/bar",
             indoc::indoc!(
                 "
-                -- component foo: hello
-                component: ftd.text
-                inherit $size:
+                -- ftd.text foo: hello
+                inherit size:
 
                 -- foo:
                 size: 50
@@ -11879,8 +11810,7 @@ mod test {
                 --- ftd.text: Swapnil Sharma
 
 
-                -- component foo:
-                component: ftd.column
+                -- ftd.column foo:
 
                 --- ftd.column:
 
@@ -11959,8 +11889,7 @@ mod test {
             "foo/bar",
             indoc::indoc!(
                 "
-                -- component foo:
-                component: ftd.text
+                -- ftd.text foo:
                 text: Hello World
                 color if $MOUSE-IN: red
 
@@ -12056,9 +11985,8 @@ mod test {
                 "
                 -- foo:
 
-                -- component foo:
-                component: ftd.column
-                boolean $open: true
+                -- ftd.column foo:
+                boolean open: true
                 $event-click$: toggle $open
 
                 --- ftd.text: Hello
@@ -12067,9 +11995,8 @@ mod test {
                 --- bar:
 
 
-                -- component bar:
-                component: ftd.column
-                boolean $open: true
+                -- ftd.column bar:
+                boolean open: true
                 $event-click$: toggle $open
                 $event-click$: stop-propagation
 
@@ -12159,10 +12086,9 @@ mod test {
             "foo/bar",
             indoc::indoc!(
                 "
-                -- component foo:
-                component: ftd.row
-                integer $a:
-                boolean $b: false
+                -- ftd.row foo:
+                integer a:
+                boolean b: false
                 $event-click$: toggle $b
                 $event-click$: increment $a by 2
 
@@ -12228,20 +12154,18 @@ mod test {
             "foo/bar",
             indoc::indoc!(
                 "
-                -- $present: true
+                -- boolean present: true
 
-                -- component bar:
-                component: ftd.column
-                boolean $a: true
+                -- ftd.column bar:
+                boolean a: true
                 if: $a
-                boolean $b: false
+                boolean b: false
 
                 --- ftd.text: Hello
                 if: $b
 
-                -- component foo:
-                component: ftd.row
-                boolean $b: true
+                -- ftd.row foo:
+                boolean b: true
 
                 --- bar:
                 if: $b
@@ -12390,10 +12314,9 @@ mod test {
             "foo/bar",
             indoc::indoc!(
                 "
-                -- component foo:
-                component: ftd.column
-                integer $a:
-                boolean $b: false
+                -- ftd.column foo:
+                integer a:
+                boolean b: false
                 $event-click$: toggle $b
                 $event-click$: increment $a
 
@@ -12401,17 +12324,17 @@ mod test {
                 value: $a
                 color if $b: black
 
-                -- $current: hello
+                -- string current: hello
 
                 -- foo:
                 a: 20
-                string $some-text: whatever
+                string some-text: whatever
                 $event-click$: $some-text = $current
 
                 --- ftd.text: $some-text
 
                 -- ftd.row:
-                boolean $foo: false
+                boolean foo: false
                 $event-click$: toggle $foo
 
                 --- ftd.text: hello
@@ -12503,24 +12426,23 @@ mod test {
             "foo/bar",
             indoc::indoc!(
                 "
-                -- component col:
-                component: ftd.column
-                integer $i:
-                $ff: hello
+                -- ftd.column col:
+                integer i:
+                string ff: hello
 
                 --- ftd.text: $ff
 
                 --- ftd.integer: $i
 
-                -- integer $foo: 20
+                -- integer foo: 20
 
-                -- $foo: 30
+                -- foo: 30
 
-                -- $bar: hello
+                -- string bar: hello
 
                 -- ftd.text: $bar
-                boolean $t: true
-                $f: hello
+                boolean t: true
+                string f: hello
                 size: $foo
                 color if $t: red
 
@@ -12570,8 +12492,7 @@ mod test {
                 "
                 -- ftd.text-block: hello
 
-                -- component b: hello
-                component: ftd.text-block
+                -- ftd.text-block b: hello
 
                 -- b:
 
@@ -12634,19 +12555,16 @@ mod test {
             "foo/bar",
             indoc::indoc!(
                 "
-                -- component foo: hello
-                component: ftd.text
+                -- ftd.text foo: hello
                 color: red
 
-                -- component moo: 
-                component: ftd.column
+                -- ftd.column moo: 
                 
                 --- ftd.text: world
 
-                -- component bar:
-                component: ftd.column
-                ftd.ui $t:
-                ftd.ui $g:
+                -- ftd.column bar:
+                ftd.ui t:
+                ftd.ui g:
 
                 --- ftd.text: amitu
 
@@ -12689,18 +12607,18 @@ mod test {
                 toc: $obj
 
 
-                -- toc-record list $toc:
+                -- toc-record list toc:
 
-                -- $toc:
+                -- toc:
                 title: ref ab.title
                 link: ref ab.link
                 children: ref ab.children
 
-                -- toc-record $ab:
+                -- toc-record ab:
                 title: ab title
                 link: ab link
 
-                -- ab.children $first_ab
+                -- ab.children first_ab
                 title: aa title
                 link: aa link
 
@@ -12752,7 +12670,7 @@ mod test {
                 toc: $obj
 
 
-                -- toc-record list $toc:
+                -- toc-record list toc:
                 $processor$: ft.toc
 
                 - fifthtry/ftd/p1

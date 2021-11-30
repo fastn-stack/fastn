@@ -427,16 +427,13 @@ impl Kind {
         default: Option<String>,
         doc: &ftd::p2::TDoc,
         object_kind: Option<(&str, Self)>,
-        is_variable: bool,
     ) -> ftd::p1::Result<Self> {
         let var_data =
-            ftd::variable::VariableData::get_name_kind(s, doc.name, line_number, is_variable)?;
-
-        let kind = var_data.kind.clone().unwrap_or_else(|| "".to_string());
+            ftd::variable::VariableData::get_name_kind(s, doc, line_number, &Default::default())?;
 
         let k = match object_kind {
-            Some(object_kind) if kind.eq(object_kind.0) => object_kind.1,
-            _ => match kind.as_str() {
+            Some(object_kind) if var_data.kind.eq(object_kind.0) => object_kind.1,
+            _ => match var_data.kind.as_str() {
                 "string" => Kind::string(),
                 "caption" => Kind::caption(),
                 "body" => Kind::body(),

@@ -596,7 +596,8 @@ mod test {
             indoc::indoc!(
                 "
             -- import: fifthtry/ft
-            -- $ft.toc:
+
+            -- ft.toc:
 
             foo is the toc
             "
@@ -633,18 +634,18 @@ mod test {
                 -- or-type someone:
 
                 --- Username:
-                username: caption
+                caption username:
 
                 --- Who:
-                who: caption
+                caption who:
 
                 -- record meta_type:
                 string license:
                 someone list reader:
 
-                -- meta_type list $meta:
+                -- meta_type list meta:
 
-                -- $meta:
+                -- meta:
                 license: BSD
 
                 --- reader.Username: foo

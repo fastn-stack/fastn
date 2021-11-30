@@ -492,7 +492,7 @@ impl ChildComponent {
             root.full_name.as_str(),
             &root_arguments,
             name,
-            doc.name,
+            doc,
         )?;
         let (local_arguments, inherits) = read_arguments(p1, name, &root_arguments, doc)?;
 
@@ -1069,8 +1069,21 @@ impl Component {
     }
 
     pub fn from_p1(p1: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Result<Self> {
-        let name = ftd::get_name("component", p1.name.as_str(), doc.name)?.to_string();
-        let root = p1.header.string(doc.name, p1.line_number, "component")?;
+        let var_data = ftd::variable::VariableData::get_name_kind(
+            &p1.name,
+            doc,
+            p1.line_number,
+            &Default::default(),
+        )?;
+        if var_data.is_variable() {
+            return ftd::e2(
+                format!("expected component, found: {}", p1.name),
+                doc.name,
+                p1.line_number,
+            );
+        }
+        let name = var_data.name;
+        let root = var_data.kind;
         let root_component = doc.get_component(p1.line_number, root.as_str())?;
         let mut root_arguments = root_component.arguments.clone();
         let (arguments, inherits) =
@@ -1082,7 +1095,7 @@ impl Component {
             root.as_str(),
             &root_arguments,
             &p1.name,
-            doc.name,
+            doc,
         )?;
         let mut instructions: Vec<Instruction> = Default::default();
 
@@ -1601,7 +1614,7 @@ pub fn recursive_child_component(
                 root.full_name.as_str(),
                 &root_arguments,
                 sub.name.as_str(),
-                doc.name,
+                doc,
             )?;
             (
                 root_arguments,
@@ -1742,7 +1755,7 @@ fn assert_no_extra_properties(
     root: &str,
     root_arguments: &std::collections::BTreeMap<String, ftd::p2::Kind>,
     name: &str,
-    doc_id: &str,
+    doc: &ftd::p2::TDoc,
 ) -> ftd::p1::Result<()> {
     for (i, k, _) in p1.0.iter() {
         if k == "component"
@@ -1750,7 +1763,8 @@ fn assert_no_extra_properties(
             || k.starts_with('@')
             || k == "if"
             || k.starts_with('/')
-            || ftd::variable::VariableData::get_name_kind(k, doc_id, line_number, true).is_ok()
+            || ftd::variable::VariableData::get_name_kind(k, doc, line_number, &Default::default())
+                .is_ok()
         {
             continue;
         }
@@ -1780,7 +1794,7 @@ fn assert_no_extra_properties(
                         .collect::<Vec<_>>()
                         .join(", ")
                 ),
-                doc_id,
+                doc.name,
                 i.to_owned(),
             );
         }
@@ -1998,11 +2012,15 @@ fn read_arguments(
             continue;
         }
 
-        let var_data =
-            match ftd::variable::VariableData::get_name_kind(k, doc.name, i.to_owned(), true) {
-                Ok(v) => v,
-                _ => continue,
-            };
+        let var_data = match ftd::variable::VariableData::get_name_kind(
+            k,
+            doc,
+            i.to_owned(),
+            &Default::default(),
+        ) {
+            Ok(v) => v,
+            _ => continue,
+        };
 
         let v = if v.is_empty() {
             None
@@ -2010,7 +2028,7 @@ fn read_arguments(
             Some(v.to_string())
         };
 
-        let kind = if var_data.kind.is_some() && var_data.kind.unwrap().eq("inherit") {
+        let kind = if var_data.kind.eq("inherit") {
             match root_arguments.get(&var_data.name) {
                 Some(kind) => {
                     inherits.push(var_data.name.to_string());
@@ -2025,7 +2043,7 @@ fn read_arguments(
                 }
             }
         } else {
-            ftd::p2::Kind::for_variable(i.to_owned(), k, v, doc, None, true)?
+            ftd::p2::Kind::for_variable(i.to_owned(), k, v, doc, None)?
         };
         args.insert(var_data.name.to_string(), kind);
     }
@@ -2062,10 +2080,9 @@ mod test {
             aliases: &aliases,
         };
         p2!(
-            "-- component foo:
-            component: ftd.text
-            string $foo:
-            optional integer $bar:
+            "-- ftd.text foo:
+            string foo:
+            optional integer bar:
             text: hello
             ",
             d,
@@ -2105,8 +2122,7 @@ mod test {
             aliases: &aliases,
         };
         p2!(
-            "-- component foo:
-            component: ftd.text
+            "-- ftd.text foo:
             text: hello
             ",
             d,
@@ -2158,7 +2174,8 @@ mod test {
 
         p!(
             "
-            -- $name: Amit
+            -- string name: Amit
+
             -- ftd.text:
             text: $name
             ",
@@ -2167,7 +2184,8 @@ mod test {
 
         p!(
             "
-            -- $name: Amit
+            -- string name: Amit
+
             -- ftd.text: $name
             ",
             (bag.clone(), main.clone()),
@@ -2175,7 +2193,8 @@ mod test {
 
         p!(
             "
-            -- $name: Amit
+            -- string name: Amit
+
             -- ftd.text:
             $name
             ",
@@ -2230,11 +2249,11 @@ mod test {
             body bio:
             integer age:
 
-            -- $x: 10
+            -- integer x: 10
 
-            -- person $abrar: Abrar Khan
+            -- person abrar: Abrar Khan
             address: Bihar
-            age: ref x
+            age: $x
 
             Software developer working at fifthtry.
 
