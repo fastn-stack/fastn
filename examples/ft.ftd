@@ -1,19 +1,17 @@
--- component markdown:
-component: ftd.text
-body $body:
-optional boolean $collapsed:
-optional caption $title:
-optional boolean $two_columns:
+-- ftd.text markdown:
+body body:
+optional boolean collapsed:
+optional caption title:
+optional boolean two_columns:
 text: $body
 size: 17
 color: #4d4d4d
 padding-bottom: 8
 
 
--- component h0:
-component: ftd.column
-caption $title:
-optional body $body:
+-- ftd.column h0:
+caption title:
+optional body body:
 width: fill
 region: h0
 
@@ -32,10 +30,9 @@ body: $body
 
 
 
--- component h1:
-component: ftd.column
-caption $title:
-optional body $body:
+-- ftd.column h1:
+caption title:
+optional body body:
 width: fill
 region: h1
 
@@ -57,10 +54,9 @@ if: $body is not null
 body: $body
 
 
--- component h2:
-component: ftd.column
-caption $title:
-optional body $body:
+-- ftd.column h2:
+caption title:
+optional body body:
 width: fill
 region: h2
 
@@ -80,10 +76,9 @@ if: $body is not null
 body: $body
 
 
--- component h3:
-component: ftd.column
-caption $title:
-optional body $body:
+-- ftd.column h3:
+caption title:
+optional body body:
 width: fill
 region: h3
 
@@ -104,10 +99,9 @@ body: $body
 
 
 
--- component h4:
-component: ftd.column
-caption $title:
-optional body $body:
+-- ftd.column h4:
+caption title:
+optional body body:
 width: fill
 region: h4
 
@@ -127,10 +121,9 @@ if: $body is not null
 body: $body
 
 
--- component h5:
-component: ftd.column
-caption $title:
-optional body $body:
+-- ftd.column h5:
+caption title:
+optional body body:
 width: fill
 region: h5
 
@@ -150,10 +143,9 @@ if: $body is not null
 body: $body
 
 
--- component h6:
-component: ftd.column
-caption $title:
-optional body $body:
+-- ftd.column h6:
+caption title:
+optional body body:
 width: fill
 region: h6
 
@@ -172,21 +164,19 @@ padding-top: 34
 if: $body is not null
 body: $body
 
--- component youtube:
-component: ftd.iframe
-string $id:
+-- ftd.iframe youtube:
+string id:
 youtube: $id
 height: 400
 width: fill
 margin-bottom: 34
 
--- component code:
-component: ftd.column
-optional caption $caption:
-body $body:
-string $lang:
-optional string $filename:
-optional string $full:
+-- ftd.column code:
+optional caption caption:
+body body:
+string lang:
+optional string filename:
+optional string full:
 padding-bottom: 12
 padding-top: 12
 width: fill

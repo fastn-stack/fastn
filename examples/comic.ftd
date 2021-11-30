@@ -25,8 +25,7 @@ align: center
 
 
 
--- component powerpuffgirls_says:
-component: ftd.scene
+-- ftd.scene powerpuffgirls_says:
 left: 20
 top: 20
 
@@ -45,8 +44,7 @@ top: 10
 
 
 
--- component mm_says:
-component: ftd.scene
+-- ftd.scene mm_says:
 left: 540
 top: 20
 
@@ -64,8 +62,7 @@ left: 10
 top: 10
 
 
--- component sophie_and_ethan_says:
-component: ftd.scene
+-- ftd.scene sophie_and_ethan_says:
 background-image: https://previews.123rf.com/images/blackspring/blackspring1512/blackspring151200008/49429469-cartoon-forest-background.jpg
 width: 500
 left: 20
@@ -79,8 +76,7 @@ scale-y: 1.4
 
 
 
--- component ethan_says:
-component: ftd.scene
+-- ftd.scene ethan_says:
 left: 0
 top: 0
 
@@ -94,8 +90,7 @@ top: 5
 --- ethan-happy-facing-side:
 
 
--- component ethan-happy-facing-side:
-component: ftd.scene
+-- ftd.scene ethan-happy-facing-side:
 left: 0
 top: 0
 width: 200
@@ -119,8 +114,7 @@ left: 0
 
 
 
--- component sophie_says:
-component: ftd.scene
+-- ftd.scene sophie_says:
 left: 240
 top: 0
 
@@ -134,8 +128,7 @@ top: 5
 --- sophie-excited:
 
 
--- component sophie-excited:
-component: ftd.scene
+-- ftd.scene sophie-excited:
 left: 0
 top: 73
 width: 200
@@ -155,8 +148,7 @@ left: 0
 
 
 
--- component import-ethan-scene:
-component: ftd.scene
+-- ftd.scene import-ethan-scene:
 left: 0
 top: 590
 background-image: https://image.shutterstock.com/z/stock-&lt;!&ndash;&ndash;&gt;vector-vector-illustration-of-a-beautiful-summer-landscape-143054302.jpg
@@ -165,8 +157,7 @@ scale: 0.5
 --- comic1.ethan_says:
 
 
--- component priya-dances:
-component: ftd.scene
+-- ftd.scene priya-dances:
 left: 0
 top: 700
 width: 200
@@ -183,8 +174,7 @@ top: 0
 left: 0
 
 
--- component priya-dances-again:
-component: ftd.scene
+-- ftd.scene priya-dances-again:
 left: 800
 top: 700
 width: 200

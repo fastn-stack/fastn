@@ -1,7 +1,6 @@
--- component foo:
-component: ftd.column
-caption $name:
-string $body:
+-- ftd.column foo:
+caption name:
+string body:
 border-width: 1
 border-color: grey
 padding: 10
@@ -19,23 +18,23 @@ color: green
 caption name:
 body bio:
 
--- person list $people:
+-- person list people:
 
--- $people: Amit Upadhyay
+-- people: Amit Upadhyay
 
 Amit is CEO of FifthTry.
 
--- $name: Arpita Jaiswal
+-- string name: Arpita Jaiswal
 
--- $people: $name
+-- people: $name
 
 Arpita is developer at Fifthtry
 
--- $people: Asit
+-- people: Asit
 
 Asit is developer at Fifthtry
 
--- $people: Sourabh
+-- people: Sourabh
 
 Sourabh is developer at Fifthtry
 
@@ -43,7 +42,7 @@ Sourabh is developer at Fifthtry
 size: 40
 style: bold
 
--- $get: world
+-- string get: world
 
 -- foo: hello
 body: $get

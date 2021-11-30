@@ -1,7 +1,6 @@
--- component source-box:
-component: ftd.column
-caption $file:
-body $code:
+-- ftd.column source-box:
+caption file:
+body code:
 
 --- ftd.text: $file
 

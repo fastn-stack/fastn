@@ -2,11 +2,10 @@
 string title:
 toc-record list children:
 
--- component toc-item:
-component: ftd.column
-toc-record $toc:
+-- ftd.column toc-item:
+toc-record toc:
 padding-left: 10
-boolean $open: true
+boolean open: true
 
 --- ftd.row:
 spacing: 10
@@ -28,35 +27,35 @@ if: $open
 $loop$: $toc.children as $obj
 toc: $obj
 
--- toc-record list $bb:
+-- toc-record list bb:
 
 
--- $bb:
+-- bb:
 title: bb title
 
--- $bb:
+-- bb:
 title: bbb title
 
 
--- toc-record list $aa:
+-- toc-record list aa:
 
 
--- $aa:
+-- aa:
 title: aa title
 children: $bb
 
--- $aa:
+-- aa:
 title: aaa title
 children: $bb
 
--- toc-record list $toc:
+-- toc-record list toc:
 
 
--- $toc:
+-- toc:
 title: ab title
 children: $aa
 
--- $toc:
+-- toc:
 title: abb title
 children: $bb
 

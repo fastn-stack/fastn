@@ -13,8 +13,7 @@ fullscreen: true
   Hello World
 
 
--- component card:
-component: ftd.column
+-- ftd.column card:
 width: portion 1
 border-width: 1
 border-radius: 4
@@ -22,10 +21,9 @@ padding: 20
 border-color: #e2e2e2
 
 
--- component toc-heading:
-component: ftd.text
-$text: caption
-text: ref $text
+-- ftd.text toc-heading:
+caption text:
+text: $text
 size: 16
 color: black
 align: left
@@ -35,22 +33,20 @@ padding-bottom: 12
 style: semi-bold
 
 
--- component table-of-content:
-component: ftd.column
-$id: string
-id: ref $id
+-- ftd.column table-of-content:
+string id:
+id: $id
 width: 250
 align: top-left
 padding-left: 5
 padding-top: 10
 
 
--- component parent:
-component: ftd.column
-$id: string
-$name: caption
-$active: optional boolean
-id: ref $id
+-- ftd.column parent:
+string id:
+caption name:
+optional boolean active:
+id: $id
 align: left
 padding-left: 10
 width: fill

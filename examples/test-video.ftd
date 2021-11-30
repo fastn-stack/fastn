@@ -2,7 +2,7 @@
 
 -- ft.h1: Test video
 
--- $foo: true
+-- boolean foo: true
 
 -- ftd.text: Click here
 $event-click$: toggle $foo

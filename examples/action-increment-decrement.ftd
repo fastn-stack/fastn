@@ -1,4 +1,4 @@
--- $count: 0
+-- integer count: 0
 
 -- ftd.integer:
 value: $count

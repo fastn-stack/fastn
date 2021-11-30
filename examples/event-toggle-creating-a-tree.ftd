@@ -1,9 +1,8 @@
--- component display-item1:
-component: ftd.column
-string $name:
+-- ftd.column display-item1:
+string name:
 padding-left: 10
 open: some-child
-boolean $visible: false
+boolean visible: false
 
 --- ftd.row:
 $event-click$: toggle $visible

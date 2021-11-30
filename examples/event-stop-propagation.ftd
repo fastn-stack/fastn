@@ -1,8 +1,7 @@
 -- foo:
 
--- component foo:
-component: ftd.column
-boolean $open: true
+-- ftd.column foo:
+boolean open: true
 $event-click$: toggle $open
 padding: 50
 background-color: red
@@ -15,9 +14,8 @@ if: $open
 --- bar:
 
 
--- component bar:
-component: ftd.column
-boolean $open: true
+-- ftd.column bar:
+boolean open: true
 $event-click$: toggle $open
 $event-click$: stop-propagation
 padding: 50

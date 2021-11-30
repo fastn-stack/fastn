@@ -1,7 +1,6 @@
--- component foo:
-component: ftd.column
-integer $a:
-boolean $b: false
+-- ftd.column foo:
+integer a:
+boolean b: false
 $event-click$: toggle $b
 $event-click$: increment $a
 
@@ -9,12 +8,12 @@ $event-click$: increment $a
 value: $a
 color if $b: yellow
 
--- $current: hello
+-- string current: hello
 
 -- foo:
 id: hello
 a: 20
-string $some-text: whatever
+string some-text: whatever
 $event-click$: $some-text = $current
 
 --- ftd.text: $some-text
@@ -25,7 +24,7 @@ color if $hello.b: red
 
 -- ftd.row:
 id: hello
-boolean $foo: false
+boolean foo: false
 $event-click$: toggle $foo
 
 --- ftd.text: hello

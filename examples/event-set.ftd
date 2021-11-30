@@ -1,4 +1,4 @@
--- $current: some value
+-- string current: some value
 
 -- ftd.text: Start...
 if: $current == some value
@@ -8,7 +8,7 @@ if: $current == some value
 -- ftd.text: change message
 $event-click$: $current = hello world
 
--- $msg: good bye
+-- string msg: good bye
 
 -- ftd.text: change message again
 $event-click$: $current = $msg

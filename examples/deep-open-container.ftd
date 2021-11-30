@@ -1,6 +1,5 @@
--- component ft_container:
-component: ftd.column
-optional string $id:
+-- ftd.column ft_container:
+optional string id:
 id: $id
 padding-top: 30
 padding-left: 100
@@ -11,9 +10,8 @@ color: red
 
 
 
--- component ft_container_mobile:
-component: ftd.column
-optional string $id:
+-- ftd.column ft_container_mobile:
+optional string id:
 id: $id
 width: fill
 padding-top: 10
@@ -27,10 +25,9 @@ color: green
 
 
 
--- component desktop:
-component: ftd.column
+-- ftd.column desktop:
 width: fill
-optional string $id:
+optional string id:
 id: $id
 
 --- ftd.text: Desktop Main
@@ -46,10 +43,9 @@ id: foo
 
 
 
--- component mobile:
-component: ftd.column
+-- ftd.column mobile:
 width: fill
-optional string $id:
+optional string id:
 id: $id
 
 --- ftd.text: Mobile Main
@@ -60,11 +56,10 @@ id: foo
 
 
 
--- $is-mobile: false
+-- boolean is-mobile: false
 
 
--- component page:
-component: ftd.column
+-- ftd.column page:
 width: fill
 open: main-container.foo
 

@@ -1,8 +1,7 @@
 
--- component desktop:
-component: ftd.column
+-- ftd.column desktop:
 width: fill
-optional string $id:
+optional string id:
 id: $id
 open: desktop-container
 
@@ -13,10 +12,9 @@ id: desktop-container
 
 
 
--- component mobile:
-component: ftd.column
+-- ftd.column mobile:
 width: fill
-optional string $id:
+optional string id:
 id: $id
 open: mobile-container
 
@@ -27,10 +25,9 @@ id: mobile-container
 
 
 
--- $is-mobile: true
+-- boolean is-mobile: true
 
--- component page:
-component: ftd.column
+-- ftd.column page:
 open: main-container
 
 --- desktop:

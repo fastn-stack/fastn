@@ -20,7 +20,7 @@ caption name:
 string location:
 optional body bio:
 
-\-- $amitu: Amit Upadhyay
+\-- string amitu: Amit Upadhyay
 location: Banglore, India
 
 Amit is the founder and CEO of FifthTry.
@@ -67,7 +67,7 @@ detail.
 -- ft.code: hello world ftd
 lang: ftd
 
-\-- $msg: hello world
+\-- string msg: hello world
 
 \-- ftd.text: $msg
 
@@ -78,7 +78,7 @@ This is a ftd file that defines a variable `msg` and uses it to shows
 
 ----
 
--- $msg: hello world
+-- string msg: hello world
 
 -- ftd.text: $msg
 
