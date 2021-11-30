@@ -1923,9 +1923,10 @@ pub fn read_properties(
                         let p1 = &p1.0;
                         for i in idx + 1..p1.len() {
                             let p1 = p1.get(i).unwrap();
-                            if p1.1.starts_with("> ") {
-                                let k = ftd::get_name(">", &p1.1, doc.name)?;
-                                headers.push((p1.0, k.to_string(), p1.2.to_string()));
+                            if let Some(k) = p1.1.strip_prefix('>') {
+                                headers.push((p1.0, k.trim().to_string(), p1.2.to_string()));
+                            } else {
+                                break;
                             }
                         }
                     }
