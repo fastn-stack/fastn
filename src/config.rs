@@ -1,6 +1,8 @@
 #[derive(serde::Deserialize, Debug)]
 pub struct Package {
     pub name: String,
+    pub about: Option<String>,
+    pub domain: Option<String>,
 }
 
 impl Package {

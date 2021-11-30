@@ -1,3 +1,5 @@
 
 -- record package:
-string name:
+caption name:
+optional string about:
+optional string domain:
