@@ -133,6 +133,7 @@ impl Kind {
             Kind::Boolean { default } => default,
             Kind::Decimal { default } => default,
             Kind::String { default, .. } => default,
+            Kind::UI { default, .. } => default,
             _ => &None,
         }
         .clone()

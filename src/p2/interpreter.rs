@@ -12563,7 +12563,7 @@ mod test {
                 --- ftd.text: world
 
                 -- ftd.column bar:
-                ftd.ui t:
+                ftd.ui t: foo:
                 ftd.ui g:
 
                 --- ftd.text: amitu
@@ -12573,7 +12573,6 @@ mod test {
                 --- g:
 
                 -- bar:
-                t: foo:
                 g: moo:
                 "
             ),
