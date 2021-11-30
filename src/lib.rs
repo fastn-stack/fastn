@@ -7,7 +7,7 @@ pub mod library;
 
 pub use build::build;
 pub use check::check;
-pub use config::Config;
+pub use config::Package;
 pub use library::Library;
 
 pub fn fpm_ftd() -> &'static str {

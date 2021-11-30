@@ -1,10 +1,10 @@
 #[derive(serde::Deserialize, Debug)]
-pub struct Config {
-    pub package: String,
+pub struct Package {
+    pub name: String,
 }
 
-impl Config {
-    pub fn parse(base_dir: String) -> Config {
+impl Package {
+    pub fn parse(base_dir: String) -> Package {
         let lib = fpm::Library {};
         let id = "fpm".to_string();
         let doc = std::fs::read_to_string(format!("{}/FPM.ftd", base_dir.as_str()))
@@ -18,6 +18,6 @@ impl Config {
         };
 
         // TODO(main): Error handling
-        b.only_instance::<Config>("fpm#config").unwrap().unwrap()
+        b.only_instance::<Package>("fpm#package").unwrap().unwrap()
     }
 }

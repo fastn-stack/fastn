@@ -1,4 +1,4 @@
-pub fn check() -> (fpm::Config, String) {
+pub fn check() -> (fpm::Package, String) {
     let root_dir = std::env::current_dir()
         .expect("Panic1")
         .to_str()
@@ -6,8 +6,8 @@ pub fn check() -> (fpm::Config, String) {
         .to_string();
     let (_, package_folder_name) = root_dir.as_str().rsplit_once("/").expect("");
     let (_is_okay, base_dir) = find_fpm_file(root_dir.clone());
-    let config = fpm::Config::parse(base_dir.clone());
-    if package_folder_name != config.package {
+    let config = fpm::Package::parse(base_dir.clone());
+    if package_folder_name != config.name {
         todo!("package directory name mismatch")
     }
     (config, base_dir)
