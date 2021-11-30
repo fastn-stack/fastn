@@ -12573,8 +12573,8 @@ mod test {
                 --- g:
 
                 -- bar:
-                t: $foo
-                g: $moo
+                t: foo:
+                g: moo:
                 "
             ),
             &ftd::p2::TestLibrary {},

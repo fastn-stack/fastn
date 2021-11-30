@@ -457,15 +457,10 @@ impl ChildComponent {
         arguments: &std::collections::BTreeMap<String, ftd::p2::Kind>,
     ) -> ftd::p1::Result<Self> {
         let mut reference = None;
-        let root = if let Some(ftd::p2::Kind::UI {
-            name: ui_name,
-            default,
-        }) = arguments.get(name)
-        {
+        let root = if let Some(ftd::p2::Kind::UI { default }) = arguments.get(name) {
             reference = Some((
                 name.to_string(),
                 ftd::p2::Kind::UI {
-                    name: ui_name.to_string(),
                     default: default.clone(),
                 },
             ));
@@ -1591,19 +1586,26 @@ pub fn recursive_child_component(
                 root_component.get_caption(),
             )
         } else {
-            let root = if let Some(ftd::p2::Kind::UI {
-                name: ui_name,
-                default,
-            }) = arguments.get(&sub.name)
-            {
+            let root = if let Some(ftd::p2::Kind::UI { default }) = arguments.get(&sub.name) {
                 reference = Some((
                     sub.name.to_string(),
                     ftd::p2::Kind::UI {
-                        name: ui_name.to_string(),
                         default: default.clone(),
                     },
                 ));
-                doc.get_component(sub.line_number, ui_name)?
+                ftd::Component {
+                    root: "ftd.kernel".to_string(),
+                    full_name: "ftd#ui".to_string(),
+                    arguments: Default::default(),
+                    locals: Default::default(),
+                    properties: Default::default(),
+                    instructions: vec![],
+                    events: vec![],
+                    condition: None,
+                    kernel: false,
+                    invocations: vec![],
+                    line_number: sub.line_number,
+                }
             } else {
                 doc.get_component(sub.line_number, sub.name.as_str())?
             };

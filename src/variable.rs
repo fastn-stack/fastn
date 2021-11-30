@@ -24,6 +24,16 @@ impl PropertyValue {
     ) -> ftd::p1::Result<ftd::PropertyValue> {
         let property_type = if let Some(arg) = value.strip_prefix('$') {
             PropertyType::Variable(arg.to_string())
+        } else if let Some(ftd::p2::Kind::UI { .. }) = expected_kind {
+            if !value.contains(':') {
+                return ftd::e2(
+                    format!("expected `:`, found: `{}`", value),
+                    doc.name,
+                    line_number,
+                );
+            }
+            let (name, caption) = ftd::p2::utils::split(value.to_string(), ":")?;
+            PropertyType::Component { name, caption }
         } else {
             let value = if let Some(value) = value.strip_prefix('\\') {
                 value.to_string()
@@ -36,7 +46,7 @@ impl PropertyValue {
         let (part1, part2) = get_parts(&property_type.string())?;
 
         return Ok(match property_type {
-            PropertyType::Variable(string) => {
+            PropertyType::Variable(string) | PropertyType::Component { name: string, .. } => {
                 let (kind, is_doc) = match arguments.get(&part1) {
                     _ if part1.eq("MOUSE-IN") => (
                         ftd::p2::Kind::Boolean {
@@ -46,13 +56,9 @@ impl PropertyValue {
                     ),
                     None => match doc.get_thing(line_number, &string) {
                         Ok(ftd::p2::Thing::Variable(v)) => (v.value.kind(), true),
-                        Ok(ftd::p2::Thing::Component(c)) => (
-                            ftd::p2::Kind::UI {
-                                name: c.root,
-                                default: None,
-                            },
-                            true,
-                        ),
+                        Ok(ftd::p2::Thing::Component(_)) => {
+                            (ftd::p2::Kind::UI { default: None }, true)
+                        }
                         e => {
                             return ftd::e2(
                                 format!("{} is not present in doc, {:?}", part1, e),
@@ -144,12 +150,15 @@ impl PropertyValue {
         enum PropertyType {
             Value(String),
             Variable(String),
+            Component { name: String, caption: String },
         }
 
         impl PropertyType {
             fn string(&self) -> String {
                 match self {
-                    PropertyType::Value(s) | PropertyType::Variable(s) => s.to_string(),
+                    PropertyType::Value(s)
+                    | PropertyType::Variable(s)
+                    | PropertyType::Component { name: s, .. } => s.to_string(),
                 }
             }
         }
