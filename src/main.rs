@@ -3,6 +3,7 @@ fn main() {
         .version(env!("CARGO_PKG_VERSION"))
         .author("Shobhit S. <shobhit@fifthtry.com>")
         .about("Description...")
+        .setting(clap::AppSettings::ArgRequiredElseHelp)
         .arg(
             clap::Arg::with_name("verbose")
                 .short("v")
