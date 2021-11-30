@@ -1,0 +1,31 @@
+-- ftd.text foo: hello
+integer size: 10
+color: red
+size: $size
+
+-- ftd.column moo:
+caption msg: world
+string other-msg: world again
+ftd.ui t:
+
+--- ftd.text: $msg
+
+--- ftd.text: $other-msg
+
+--- t:
+
+-- ftd.column bar:
+ftd.ui t: foo:
+ftd.ui g:
+
+--- ftd.text: amitu
+
+--- t:
+
+--- g:
+
+-- bar:
+g: moo: hello again
+> other-msg: hello world!
+> t: foo:
+>> size: 40
