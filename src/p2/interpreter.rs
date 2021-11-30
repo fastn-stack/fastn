@@ -12650,22 +12650,33 @@ mod test {
                         }),
                         ftd::Element::Column(ftd::Column {
                             container: ftd::Container {
-                                children: vec![ftd::Element::Text(ftd::Text {
-                                    text: ftd::markdown_line("hello again"),
-                                    line: true,
-                                    common: ftd::Common {
-                                        reference: Some(s("@msg@0,2")),
+                                children: vec![
+                                    ftd::Element::Text(ftd::Text {
+                                        text: ftd::markdown_line("hello again"),
+                                        line: true,
+                                        common: ftd::Common {
+                                            reference: Some(s("@msg@0,2")),
+                                            ..Default::default()
+                                        },
                                         ..Default::default()
-                                    },
-                                    ..Default::default()
-                                })],
+                                    }),
+                                    ftd::Element::Text(ftd::Text {
+                                        text: ftd::markdown_line("hello world!"),
+                                        line: true,
+                                        common: ftd::Common {
+                                            reference: Some(s("@other-msg@0,2")),
+                                            ..Default::default()
+                                        },
+                                        ..Default::default()
+                                    }),
+                                ],
                                 ..Default::default()
                             },
                             common: ftd::Common {
-                                locals: std::array::IntoIter::new([(
-                                    s("msg@0,2"),
-                                    s("hello again"),
-                                )])
+                                locals: std::array::IntoIter::new([
+                                    (s("msg@0,2"), s("hello again")),
+                                    (s("other-msg@0,2"), s("hello world!")),
+                                ])
                                 .collect(),
                                 ..Default::default()
                             },
@@ -12685,8 +12696,11 @@ mod test {
 
                 -- ftd.column moo: 
                 caption msg: world
+                string other-msg: world
                 
                 --- ftd.text: $msg
+
+                --- ftd.text: $other-msg
 
                 -- ftd.column bar:
                 ftd.ui t: foo:
@@ -12700,6 +12714,7 @@ mod test {
 
                 -- bar:
                 g: moo: hello again
+                > other-msg: hello world!
                 "
             ),
             &ftd::p2::TestLibrary {},

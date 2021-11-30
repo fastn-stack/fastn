@@ -534,12 +534,13 @@ pub fn structure_header_to_properties(
     arguments: &std::collections::BTreeMap<String, crate::p2::Kind>,
     doc: &ftd::p2::TDoc,
     line_number: usize,
+    p1: &ftd::p1::Header,
 ) -> ftd::p1::Result<std::collections::BTreeMap<String, ftd::component::Property>> {
     let (name, caption) = ftd::p2::utils::split(s.to_string(), ":")?;
     match doc.get_thing(line_number, &name) {
         Ok(ftd::p2::Thing::Component(c)) => ftd::component::read_properties(
             line_number,
-            &Default::default(),
+            p1,
             &if caption.is_empty() {
                 None
             } else {

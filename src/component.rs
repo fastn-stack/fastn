@@ -1838,7 +1838,12 @@ pub fn read_properties(
             p1.conditional_str(doc.name, line_number, name),
             kind.inner(),
         ) {
-            (Ok(v), _) => (v, ftd::TextSource::Header),
+            (Ok(v), _) => (
+                v.iter()
+                    .map(|(a, b, c)| (Some(a.to_owned()), b.to_owned(), c.to_owned()))
+                    .collect::<Vec<(Option<usize>, String, Option<&str>)>>(),
+                ftd::TextSource::Header,
+            ),
             (
                 Err(ftd::p1::Error::NotFound { .. }),
                 ftd::p2::Kind::String {
@@ -1849,18 +1854,18 @@ pub fn read_properties(
             ) => {
                 if *c && caption.is_some() {
                     (
-                        vec![(caption.as_ref().unwrap().to_string(), None)],
+                        vec![(None, caption.as_ref().unwrap().to_string(), None)],
                         ftd::TextSource::Caption,
                     )
                 } else if *b && body.is_some() {
                     (
-                        vec![(body.as_ref().unwrap().1.to_string(), None)],
+                        vec![(None, body.as_ref().unwrap().1.to_string(), None)],
                         ftd::TextSource::Body,
                     )
                 } else if matches!(kind, ftd::p2::Kind::Optional { .. }) {
                     continue;
                 } else if let Some(d) = d {
-                    (vec![(d.to_string(), None)], ftd::TextSource::Default)
+                    (vec![(None, d.to_string(), None)], ftd::TextSource::Default)
                 } else if is_reference {
                     continue;
                 } else {
@@ -1880,7 +1885,7 @@ pub fn read_properties(
                 }
 
                 if let Some(d) = k.get_default_value_str() {
-                    (vec![(d.to_string(), None)], ftd::TextSource::Default)
+                    (vec![(None, d.to_string(), None)], ftd::TextSource::Default)
                 } else if is_reference {
                     continue;
                 } else {
@@ -1898,7 +1903,7 @@ pub fn read_properties(
                 return Err(e);
             }
         };
-        for (value, conditional_attribute) in conditional_vector {
+        for (idx, value, conditional_attribute) in conditional_vector {
             let property_value = ftd::PropertyValue::resolve_value(
                 line_number,
                 value.as_str(),
@@ -1912,7 +1917,27 @@ pub fn read_properties(
                 ..
             } = &property_value
             {
-                ftd::p2::utils::structure_header_to_properties(&value, arguments, doc, line_number)?
+                let headers = {
+                    let mut headers = vec![];
+                    if let Some(idx) = idx {
+                        let p1 = &p1.0;
+                        for i in idx + 1..p1.len() {
+                            let p1 = p1.get(i).unwrap();
+                            if p1.1.starts_with("> ") {
+                                let k = ftd::get_name(">", &p1.1, doc.name)?;
+                                headers.push((p1.0, k.to_string(), p1.2.to_string()));
+                            }
+                        }
+                    }
+                    ftd::p1::Header(headers)
+                };
+                ftd::p2::utils::structure_header_to_properties(
+                    &value,
+                    arguments,
+                    doc,
+                    line_number,
+                    &headers,
+                )?
             } else {
                 Default::default()
             };
@@ -2029,7 +2054,7 @@ fn read_arguments(
     let mut inherits: Vec<String> = Default::default();
 
     for (i, k, v) in p1.0.iter() {
-        if (k.starts_with('$') && k.ends_with('$')) || k.starts_with('/') {
+        if (k.starts_with('$') && k.ends_with('$')) || k.starts_with('/') || k.starts_with('>') {
             // event and loop matches
             continue;
         }

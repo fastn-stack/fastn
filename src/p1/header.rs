@@ -251,18 +251,18 @@ impl Header {
         doc_id: &str,
         line_number: usize,
         name: &str,
-    ) -> Result<Vec<(String, Option<&str>)>> {
+    ) -> Result<Vec<(usize, String, Option<&str>)>> {
         let mut conditional_vector = vec![];
-        for (_, k, v) in self.0.iter() {
+        for (idx, (_, k, v)) in self.0.iter().enumerate() {
             if k == name {
-                conditional_vector.push((v.to_string(), None));
+                conditional_vector.push((idx, v.to_string(), None));
             }
             if k.contains(" if ") {
                 let mut parts = k.splitn(2, " if ");
                 let property_name = parts.next().unwrap().trim();
                 if property_name == name {
                     let conditional_attribute = parts.next().unwrap().trim();
-                    conditional_vector.push((v.to_string(), Some(conditional_attribute)));
+                    conditional_vector.push((idx, v.to_string(), Some(conditional_attribute)));
                 }
             }
         }
