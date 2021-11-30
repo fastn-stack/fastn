@@ -429,7 +429,7 @@ impl Kind {
         object_kind: Option<(&str, Self)>,
     ) -> ftd::p1::Result<Self> {
         let var_data =
-            ftd::variable::VariableData::get_name_kind(s, doc, line_number, &Default::default())?;
+            ftd::variable::VariableData::get_name_kind(s, doc, line_number, vec![].as_slice())?;
 
         let k = match object_kind {
             Some(object_kind) if var_data.kind.eq(object_kind.0) => object_kind.1,

@@ -1073,7 +1073,7 @@ impl Component {
             &p1.name,
             doc,
             p1.line_number,
-            &Default::default(),
+            vec![].as_slice(),
         )?;
         if var_data.is_variable() {
             return ftd::e2(
@@ -1760,10 +1760,9 @@ fn assert_no_extra_properties(
     for (i, k, _) in p1.0.iter() {
         if k == "component"
             || k.starts_with('$')
-            || k.starts_with('@')
             || k == "if"
             || k.starts_with('/')
-            || ftd::variable::VariableData::get_name_kind(k, doc, line_number, &Default::default())
+            || ftd::variable::VariableData::get_name_kind(k, doc, line_number, vec![].as_slice())
                 .is_ok()
         {
             continue;
@@ -2016,7 +2015,7 @@ fn read_arguments(
             k,
             doc,
             i.to_owned(),
-            &Default::default(),
+            vec![].as_slice(),
         ) {
             Ok(v) => v,
             _ => continue,

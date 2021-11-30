@@ -436,7 +436,7 @@ impl Variable {
             &p1.name,
             doc,
             p1.line_number,
-            &Default::default(),
+            vec![].as_slice(),
         )?;
         let name = doc.resolve_name(p1.line_number, &var_data.name)?;
         let kind = ftd::p2::Kind::for_variable(p1.line_number, &p1.name, None, doc, None)?;
@@ -531,7 +531,7 @@ impl Variable {
             &p1.name,
             doc,
             p1.line_number,
-            &Default::default(),
+            vec![].as_slice(),
         )?;
         if !var_data.is_variable() {
             return ftd::e2(
@@ -704,7 +704,7 @@ impl VariableData {
         s: &str,
         doc: &ftd::p2::TDoc,
         line_number: usize,
-        var_types: &Vec<String>,
+        var_types: &[String],
     ) -> ftd::p1::Result<VariableData> {
         if s.starts_with("record ")
             || s.starts_with("or-type ")

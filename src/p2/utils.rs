@@ -356,7 +356,7 @@ pub fn reorder(
         dependent_p1: Option<String>,
         inserted: &mut Vec<String>,
         doc: &ftd::p2::TDoc,
-        var_types: &Vec<String>,
+        var_types: &[String],
     ) -> ftd::p1::Result<()> {
         if let Some(p1) = dependent_p1 {
             if inserted.contains(&p1) {

@@ -272,7 +272,7 @@ impl Record {
                 k,
                 doc,
                 i.to_owned(),
-                &Default::default(),
+                vec![].as_slice(),
             ) {
                 Ok(v) => v,
                 _ => continue,
