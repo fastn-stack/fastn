@@ -12644,8 +12644,11 @@ mod test {
                                     b: 0,
                                     alpha: 1.0,
                                 }),
+                                locals: std::array::IntoIter::new([(s("size@0,1"), s("10"))])
+                                    .collect(),
                                 ..Default::default()
                             },
+                            size: Some(10),
                             ..Default::default()
                         }),
                         ftd::Element::Column(ftd::Column {
@@ -12667,6 +12670,26 @@ mod test {
                                             reference: Some(s("@other-msg@0,2")),
                                             ..Default::default()
                                         },
+                                        ..Default::default()
+                                    }),
+                                    ftd::Element::Text(ftd::Text {
+                                        text: ftd::markdown_line("hello"),
+                                        line: true,
+                                        common: ftd::Common {
+                                            color: Some(ftd::Color {
+                                                r: 255,
+                                                g: 0,
+                                                b: 0,
+                                                alpha: 1.0,
+                                            }),
+                                            locals: std::array::IntoIter::new([(
+                                                s("size@0,2,2"),
+                                                s("20"),
+                                            )])
+                                            .collect(),
+                                            ..Default::default()
+                                        },
+                                        size: Some(20),
                                         ..Default::default()
                                     }),
                                 ],
@@ -12692,15 +12715,20 @@ mod test {
             indoc::indoc!(
                 "
                 -- ftd.text foo: hello
+                integer size: 10
                 color: red
+                size: $size
 
                 -- ftd.column moo: 
                 caption msg: world
-                string other-msg: world
+                string other-msg: world again
+                ftd.ui t:
                 
                 --- ftd.text: $msg
 
                 --- ftd.text: $other-msg
+
+                --- t:
 
                 -- ftd.column bar:
                 ftd.ui t: foo:
@@ -12715,6 +12743,8 @@ mod test {
                 -- bar:
                 g: moo: hello again
                 > other-msg: hello world!
+                > t: foo:
+                >> size: 20
                 "
             ),
             &ftd::p2::TestLibrary {},
