@@ -1,7 +1,6 @@
--- component foo:
-component: ftd.row
-integer $a:
-boolean $b: false
+-- ftd.row foo:
+integer a:
+boolean b: false
 $event-click$: toggle $b
 $event-click$: increment $a by 2
 

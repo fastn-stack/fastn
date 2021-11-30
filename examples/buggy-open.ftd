@@ -1,6 +1,5 @@
--- component foo:
-component: ftd.column
-boolean $open: true
+-- ftd.column foo:
+boolean open: true
 
 --- ftd.text: toggle me
 $event-click$: toggle $open

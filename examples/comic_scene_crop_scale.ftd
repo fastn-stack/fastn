@@ -10,8 +10,7 @@ background-image: https://image.shutterstock.com/z/stock-&lt;!&ndash;&ndash;&gt;
 
 -- ft.h1: The End!!
 
--- component ethan_says:
-component: ftd.scene
+-- ftd.scene ethan_says:
 left: 0
 top: 0
 
@@ -27,10 +26,9 @@ size: 40
 left: 0
 top: 0
 
--- component ethan-happy-facing-side:
-component: ftd.scene
-integer $left:
-integer $top:
+-- ftd.scene ethan-happy-facing-side:
+integer left:
+integer top:
 left: $left
 top: $top
 scale: 1.2

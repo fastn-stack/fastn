@@ -20,11 +20,10 @@ Lets understand it better with few examples
 -- ft.code: Conditional Attribute using variable
 lang: ftd
 
-\-- $present: false
+\-- boolean present: false
 
-\-- component foo:
-caption $name:
-component: ftd.text
+\-- ftd.text foo:
+caption name:
 color: grey
 color if $present: green
 color if not $present: red
@@ -46,11 +45,10 @@ border-color: grey
 padding: 10
 width: fill
 
--- $present: false
+-- boolean present: false
 
--- component foo1:
-caption $name:
-component: ftd.text
+-- ftd.text foo1:
+caption name:
 color: grey
 color if $present: green
 color if not $present: red
@@ -72,11 +70,10 @@ is set (in this case, it's `red`).
 -- ft.code: Conditional Attribute with default
 lang: ftd
 
-\-- $present: false
+\-- boolean present: false
 
-\-- component foo:
-caption $name:
-component: ftd.text
+\-- ftd.text foo:
+caption name:
 color: grey
 color if $present: green
 text: $name
@@ -97,9 +94,8 @@ border-color: grey
 padding: 10
 width: fill
 
--- component foo2:
-caption $name:
-component: ftd.text
+-- ftd.text foo2:
+caption name:
 color: grey
 color if $present: green
 text: $name
@@ -118,10 +114,9 @@ style `color` is set to its default value (i.e. `grey`).
 -- ft.code: Conditional Attribute using arguments
 lang: ftd
 
-\-- component foo:
-caption $name:
-$yes: optional string
-component: ftd.text
+\-- ftd.text foo:
+caption name:
+optional string yes:
 color: grey
 color if $yes is not null: blue
 text: $name
@@ -143,10 +138,9 @@ border-color: grey
 padding: 10
 width: fill
 
--- component foo3:
-caption $name:
-optional string $yes:
-component: ftd.text
+-- ftd.text foo3:
+caption name:
+optional string yes:
 color: grey
 color if $yes is not null: blue
 text: $name
@@ -167,12 +161,11 @@ the `color` gets set to `blue`.
 -- ft.code: Conditional Attribute deciding priority
 lang: ftd
 
-\-- $present: false
+\-- boolean present: false
 
-\-- component foo:
-caption $name:
-$yes: optional string
-component: ftd.text
+\-- ftd.text foo:
+caption name:
+optional string yes:
 color: grey
 color if $present: blue
 color if not $present: red
@@ -196,10 +189,9 @@ border-color: grey
 padding: 10
 width: fill
 
--- component foo4:
-caption $name:
-optional string $yes:
-component: ftd.text
+-- ftd.text foo4:
+caption name:
+optional string yes:
 color: grey
 color if $present: blue
 color if not $present: red

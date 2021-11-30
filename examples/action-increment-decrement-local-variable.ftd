@@ -1,6 +1,5 @@
--- component foo:
-component: ftd.column
-integer $count: 0
+-- ftd.column foo:
+integer count: 0
 
 --- ftd.integer:
 value: $count

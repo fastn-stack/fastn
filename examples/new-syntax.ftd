@@ -1,21 +1,20 @@
--- component col:
-component: ftd.column
-integer $i:
-$ff: hello
+-- ftd.column col:
+integer i:
+string ff: hello
 
 --- ftd.text: $ff
 
 --- ftd.integer: $i
 
--- integer $foo: 20
+-- integer foo: 20
 
--- $foo: 30
+-- foo: 30
 
--- $bar: hello
+-- string bar: hello
 
 -- ftd.text: $bar
-boolean $t: true
-$f: hello
+boolean t: true
+string f: hello
 size: $foo
 color if $t: red
 

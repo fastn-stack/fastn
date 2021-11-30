@@ -1,8 +1,7 @@
--- component h1:
-component: ftd.column
+-- ftd.column h1:
 region: h1
 padding-left: 10
-caption $title:
+caption title:
 
 --- ftd.text:
 text: $title
@@ -10,11 +9,10 @@ caption $title:
 region: title
 size: 34
 
--- component h2:
-component: ftd.column
+-- ftd.column h2:
 region: h2
 padding-left: 10
-caption $title:
+caption title:
 
 --- ftd.text:
 text: $title
@@ -22,11 +20,10 @@ caption $title:
 region: title
 size: 28
 
--- component h3:
-component: ftd.column
+-- ftd.column h3:
 region: h3
 padding-left: 10
-caption $title:
+caption title:
 
 --- ftd.text:
 text: $title
@@ -34,14 +31,12 @@ caption $title:
 region: title
 size: 24
 
--- component foo:
-component: ftd.column
+-- ftd.column foo:
 color: red
 
 --- ftd.text: foo says hello
 
--- component page:
-component: ftd.column
+-- ftd.column page:
 color: green
 open: page-id
 

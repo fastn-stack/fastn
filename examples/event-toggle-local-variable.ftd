@@ -1,7 +1,6 @@
--- component foo:
-component: ftd.text
-caption $name:
-boolean $open: true
+-- ftd.text foo:
+caption name:
+boolean open: true
 text: $name
 if: $open
 $event-click$: toggle $open

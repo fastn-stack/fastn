@@ -1,27 +1,24 @@
--- component ft_container:
-component: ftd.column
-optional string $id:
+-- ftd.column ft_container:
+optional string id:
 id: $id
 width: fill
 padding-top: 30
 padding-left: 100
 align: top
 
--- component markdown:
-component: ftd.text
-body $body:
-optional boolean $collapsed:
-optional caption $title:
-optional boolean $two_columns:
+-- ftd.text markdown:
+body body:
+optional boolean collapsed:
+optional caption title:
+optional boolean two_columns:
 text: $body
 size: 17
 color: \#4d4d4d
 padding-bottom: 34
 
--- component h1:
-component: ftd.column
-caption $title:
-optional body $body:
+-- ftd.column h1:
+caption title:
+optional body body:
 width: fill
 
 --- ftd.text:
@@ -38,8 +35,7 @@ padding-top: 12
 if: $body is not null
 body: $body
 
--- component page:
-component: ftd.column
+-- ftd.column page:
 open: main-container
 
 --- ftd.row:

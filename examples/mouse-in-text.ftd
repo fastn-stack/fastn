@@ -1,5 +1,4 @@
--- component foo:
-component: ftd.text
+-- ftd.text foo:
 text: Hello World
 color if $MOUSE-IN: red
 background-color if $MOUSE-IN: yellow
@@ -7,8 +6,7 @@ size if $MOUSE-IN: 40
 
 -- foo:
 
--- component bar:
-component: ftd.row
+-- ftd.row bar:
 color if $MOUSE-IN: red
 background-color if $MOUSE-IN: orange
 

@@ -1,8 +1,7 @@
--- $present: false
+-- boolean present: false
 
--- component foo:
-body $name:
-component: ftd.text
+-- ftd.text foo:
+body name:
 color if $present: red
 padding-horizontal if $present: 10
 height if $present: 50
@@ -49,9 +48,8 @@ dahown
 $event-click$: toggle $present
 
 
--- component bar:
-component: ftd.column
-boolean $present: true
+-- ftd.column bar:
+boolean present: true
 border-width: 2
 padding: 10
 align if not $present: center

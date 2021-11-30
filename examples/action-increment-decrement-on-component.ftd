@@ -1,9 +1,8 @@
--- $count: 0
+-- integer count: 0
 
--- component slide:
-component: ftd.image
-string $src:
-integer $idx:
+-- ftd.image slide:
+string src:
+integer idx:
 src: $src
 if: $count == $idx
 $event-click$: increment $count clamp 0 3

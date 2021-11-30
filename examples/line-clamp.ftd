@@ -1,10 +1,9 @@
--- component card:
-component: ftd.column
-body $text:
+-- ftd.column card:
+body text:
 width: 300
 min-height: 300
-boolean $read_more: true
-integer $max_lines:
+boolean read_more: true
+integer max_lines:
 
 --- ftd.text: $text
 line-clamp if $read_more: $max_lines

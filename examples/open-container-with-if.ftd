@@ -1,10 +1,9 @@
--- $iphone: false
+-- boolean iphone: false
 
--- $android: false
+-- boolean android: false
 
--- component iphone-display:
-component: ftd.column
-optional string $id:
+-- ftd.column iphone-display:
+optional string id:
 id: $id
 color: green
 open: iphone-id
@@ -15,17 +14,15 @@ open: iphone-id
 id: iphone-id
 if: $iphone
 
--- component desktop-display:
-component: ftd.column
-optional string $id:
+-- ftd.column desktop-display:
+optional string id:
 id: $id
 color: red
 
 --- ftd.text: Desktop Display
 
--- component android-display:
-component: ftd.column
-optional string $id:
+-- ftd.column android-display:
+optional string id:
 id: $id
 color: blue
 open: android-id
@@ -36,11 +33,10 @@ open: android-id
 id: android-id
 if: $android
 
--- $mobile: true
+-- boolean mobile: true
 
--- component foo:
+-- ftd.column foo:
 open: some-child
-component: ftd.column
 padding-left: 20
 id: foo
 
@@ -60,10 +56,9 @@ id: some-child
 if: not $mobile
 id: some-child
 
--- component parent:
-component: ftd.column
-string $id:
-caption $name:
+-- ftd.column parent:
+string id:
+caption name:
 id: $id
 width: fill
 open: true
@@ -74,11 +69,10 @@ text: $name
 size: 14
 color: grey
 
--- component items:
-component: ftd.column
-caption $name:
-string $price:
-string $bio:
+-- ftd.column items:
+caption name:
+string price:
+string bio:
 color: orange
 
 --- parent:

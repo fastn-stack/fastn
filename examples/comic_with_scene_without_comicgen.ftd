@@ -19,11 +19,10 @@ top: 70
 
 -- ft.h1: The End!!
 
--- component ethan-happy-facing-side:
-component: ftd.scene
+-- ftd.scene ethan-happy-facing-side:
 width: 500
-integer $left:
-integer $top:
+integer left:
+integer top:
 left: $left
 top: $top
 

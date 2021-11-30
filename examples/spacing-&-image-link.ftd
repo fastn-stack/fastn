@@ -11,8 +11,7 @@ spacing: 20
 
 --- ftd.text: world
 
--- component foo:
-component: ftd.column
+-- ftd.column foo:
 open: some-id
 
 --- ftd.text: Row Title
@@ -24,8 +23,7 @@ color: red
 border-width: 2
 border-color: yellow
 
--- component bar:
-component: ftd.column
+-- ftd.column bar:
 open: some-id
 padding-top: 20
 
@@ -39,7 +37,7 @@ border-width: 2
 border-color: \#ebedef
 
 
--- $show: true
+-- boolean show: true
 
 -- foo:
 
