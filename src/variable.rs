@@ -71,7 +71,6 @@ impl PropertyValue {
                 };
 
                 let found_kind = get_kind(line_number, &kind, part2, doc, &expected_kind)?;
-                dbg!(&value, &found_kind, &expected_kind);
                 if is_doc {
                     PropertyValue::Reference {
                         name: doc
@@ -377,6 +376,7 @@ pub enum Value {
     UI {
         name: String,
         kind: crate::p2::Kind,
+        data: std::collections::BTreeMap<String, ftd::component::Property>,
     },
 }
 
@@ -771,7 +771,6 @@ impl VariableData {
             doc_id: doc.name.to_string(),
             line_number,
         })?;
-        // dbg!("get_name_kind", &var_kind);
 
         let type_ = match var_kind.as_str() {
             "string" | "caption" | "body" | "body or caption" | "caption or body" | "integer"

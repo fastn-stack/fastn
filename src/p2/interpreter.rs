@@ -368,7 +368,6 @@ impl<'a> Interpreter<'a> {
     ) -> ftd::p1::Result<Vec<ftd::Instruction>> {
         let p1 = ftd::p1::parse(s, name)?;
         let (new_p1, var_types) = ftd::p2::utils::reorder(&p1, name)?;
-        // dbg!(&new_p1, &var_types);
 
         let mut aliases = default_aliases();
         let mut instructions: Vec<ftd::Instruction> = Default::default();
@@ -406,7 +405,6 @@ impl<'a> Interpreter<'a> {
                 p1.line_number,
                 &var_types,
             );
-            // dbg!("p1", &p1, &var_data);
 
             let mut thing = vec![];
 
@@ -673,7 +671,6 @@ pub fn interpret(
 )> {
     let mut interpreter = Interpreter::new(lib);
     let instructions = interpreter.interpret(name, source)?;
-    dbg!(&instructions);
     let mut rt = ftd::RT::from(name, interpreter.aliases, interpreter.bag, instructions);
     let main = rt.render_()?;
     Ok((rt.bag, main))
@@ -12654,7 +12651,7 @@ mod test {
                         ftd::Element::Column(ftd::Column {
                             container: ftd::Container {
                                 children: vec![ftd::Element::Text(ftd::Text {
-                                    text: ftd::markdown_line("world"),
+                                    text: ftd::markdown_line("hello again"),
                                     line: true,
                                     common: ftd::Common {
                                         reference: Some(s("@msg@0,2")),
@@ -12665,8 +12662,11 @@ mod test {
                                 ..Default::default()
                             },
                             common: ftd::Common {
-                                locals: std::array::IntoIter::new([(s("msg@0,2"), s("world"))])
-                                    .collect(),
+                                locals: std::array::IntoIter::new([(
+                                    s("msg@0,2"),
+                                    s("hello again"),
+                                )])
+                                .collect(),
                                 ..Default::default()
                             },
                         }),

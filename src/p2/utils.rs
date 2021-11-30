@@ -537,32 +537,23 @@ pub fn structure_header_to_properties(
 ) -> ftd::p1::Result<std::collections::BTreeMap<String, ftd::component::Property>> {
     let (name, caption) = ftd::p2::utils::split(s.to_string(), ":")?;
     match doc.get_thing(line_number, &name) {
-        Ok(ftd::p2::Thing::Component(c)) => {
-            dbg!(
-                "structure_header_to_properties",
-                &c,
-                &s,
-                &arguments,
-                &caption
-            );
-            ftd::component::read_properties(
-                line_number,
-                &Default::default(),
-                &if caption.is_empty() {
-                    None
-                } else {
-                    Some(caption)
-                },
-                &None,
-                "",
-                "",
-                &mut c.arguments.clone(),
-                arguments,
-                doc,
-                &Default::default(),
-                false,
-            )
-        }
+        Ok(ftd::p2::Thing::Component(c)) => ftd::component::read_properties(
+            line_number,
+            &Default::default(),
+            &if caption.is_empty() {
+                None
+            } else {
+                Some(caption)
+            },
+            &None,
+            "",
+            "",
+            &c.arguments,
+            arguments,
+            doc,
+            &Default::default(),
+            false,
+        ),
         t => {
             return ftd::e2(
                 format!("expected component, found: {:?}", t),
@@ -571,45 +562,4 @@ pub fn structure_header_to_properties(
             )
         }
     }
-
-    /*let s: String = s.split_whitespace().collect::<Vec<&str>>().join(" ");
-    let vec = s.split(',').collect::<Vec<&str>>();
-    let mut caption = None;
-    if let Some(cap) = vec.get(0) {
-        if !cap.contains('=') {
-            caption = Some(cap.to_string());
-        }
-    }
-    let mut p1: Vec<(usize, String, String)> = vec![];
-    for (i, v) in vec.iter().enumerate() {
-        if i == 0 && caption.is_some() {
-            continue;
-        }
-        if !v.contains('=') {
-            return ftd::e2(format!("expected = , found: {}", v), doc.name, line_number);
-        }
-        let (part1, part2) = ftd::p2::utils::split(v.to_string(), "=")?;
-        p1.push((line_number, part1, part2));
-    }
-    let mut root_arguments = root_arguments.clone();
-    dbg!(
-        "structure_header_to_properties",
-        &root_arguments,
-        &p1,
-        &caption,
-        &arguments
-    );
-    ftd::component::read_properties(
-        line_number,
-        &crate::p1::Header(p1),
-        &caption,
-        &None,
-        "",
-        "",
-        &mut root_arguments,
-        arguments,
-        doc,
-        &Default::default(),
-        false,
-    )*/
 }
