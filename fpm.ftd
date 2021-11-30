@@ -3,3 +3,9 @@
 caption name:
 optional string about:
 optional string domain:
+
+-- record dependency:
+caption name:
+string repo:
+optional string version:
+optional body notes:

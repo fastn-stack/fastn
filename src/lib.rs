@@ -7,6 +7,7 @@ pub mod library;
 
 pub use build::build;
 pub use check::check;
+pub use config::Dependency;
 pub use config::Package;
 pub use library::Library;
 

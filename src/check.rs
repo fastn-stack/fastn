@@ -6,7 +6,22 @@ pub fn check() -> (fpm::Package, String) {
         .to_string();
     let (_, package_folder_name) = root_dir.as_str().rsplit_once("/").expect("");
     let (_is_okay, base_dir) = find_fpm_file(root_dir.clone());
-    let config = fpm::Package::parse(base_dir.clone());
+
+    let lib = fpm::Library {};
+    let id = "fpm".to_string();
+    let doc = std::fs::read_to_string(format!("{}/FPM.ftd", base_dir.as_str()))
+        .unwrap_or_else(|_| panic!("cant read file. {}/FPM.ftd", base_dir.as_str()));
+    let b = match ftd::p2::Document::from(id.as_str(), doc.as_str(), &lib) {
+        Ok(v) => v,
+        Err(e) => {
+            eprintln!("failed to parse {}: {:?}", id, &e);
+            todo!();
+        }
+    };
+
+    let config = fpm::Package::parse(&b);
+    let dependencies = fpm::Dependency::parse(&b);
+    dbg!(dependencies);
     if package_folder_name != config.name {
         todo!("package directory name mismatch")
     }

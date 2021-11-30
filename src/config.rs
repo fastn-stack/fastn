@@ -5,21 +5,26 @@ pub struct Package {
     pub domain: Option<String>,
 }
 
-impl Package {
-    pub fn parse(base_dir: String) -> Package {
-        let lib = fpm::Library {};
-        let id = "fpm".to_string();
-        let doc = std::fs::read_to_string(format!("{}/FPM.ftd", base_dir.as_str()))
-            .unwrap_or_else(|_| panic!("cant read file. {}/FPM.ftd", base_dir.as_str()));
-        let b = match ftd::p2::Document::from(id.as_str(), doc.as_str(), &lib) {
-            Ok(v) => v,
-            Err(e) => {
-                eprintln!("failed to parse {}: {:?}", id, &e);
-                todo!();
-            }
-        };
+#[derive(serde::Deserialize, Debug)]
+pub struct Dependency {
+    pub name: String,
+    pub version: Option<String>,
+    pub repo: String,
+    pub notes: Option<String>,
+}
 
+impl Package {
+    pub fn parse(b: &ftd::p2::Document) -> Package {
         // TODO(main): Error handling
-        b.only_instance::<Package>("fpm#package").unwrap().unwrap()
+        b.to_owned()
+            .only_instance::<Package>("fpm#package")
+            .unwrap()
+            .unwrap()
+    }
+}
+
+impl Dependency {
+    pub fn parse(b: &ftd::p2::Document) -> Vec<Dependency> {
+        b.to_owned().instances("fpm#dependency").unwrap()
     }
 }

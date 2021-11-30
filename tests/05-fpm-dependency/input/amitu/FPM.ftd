@@ -1,0 +1,8 @@
+-- import: fpm
+
+-- fpm.package:
+name: amitu
+
+
+-- fpm.dependency: theme
+repo: https://www.github.com/sharmashobhit/fpm-blog
