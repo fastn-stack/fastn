@@ -12692,6 +12692,21 @@ mod test {
                                         size: Some(20),
                                         ..Default::default()
                                     }),
+                                    ftd::Element::Text(ftd::Text {
+                                        text: ftd::markdown_line("hello amitu!"),
+                                        line: true,
+                                        common: ftd::Common {
+                                            color: Some(ftd::Color {
+                                                r: 255,
+                                                g: 0,
+                                                b: 0,
+                                                alpha: 1.0,
+                                            }),
+                                            ..Default::default()
+                                        },
+                                        size: Some(10),
+                                        ..Default::default()
+                                    }),
                                 ],
                                 ..Default::default()
                             },
@@ -12723,12 +12738,15 @@ mod test {
                 caption msg: world
                 string other-msg: world again
                 ftd.ui t:
+                ftd.ui k:
                 
                 --- ftd.text: $msg
 
                 --- ftd.text: $other-msg
 
                 --- t:
+
+                --- k:
 
                 -- ftd.column bar:
                 ftd.ui t: foo:
@@ -12745,6 +12763,9 @@ mod test {
                 > other-msg: hello world!
                 > t: foo:
                 >> size: 20
+                > k: ftd.text: hello amitu!
+                >> color: red
+                >> size: 10
                 "
             ),
             &ftd::p2::TestLibrary {},

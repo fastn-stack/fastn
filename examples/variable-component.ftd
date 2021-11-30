@@ -7,12 +7,15 @@ size: $size
 caption msg: world
 string other-msg: world again
 ftd.ui t:
+ftd.ui k:
 
 --- ftd.text: $msg
 
 --- ftd.text: $other-msg
 
 --- t:
+
+--- k:
 
 -- ftd.column bar:
 ftd.ui t: foo:
@@ -28,4 +31,7 @@ ftd.ui g:
 g: moo: hello again
 > other-msg: hello world!
 > t: foo:
->> size: 40
+>> size: 20
+> k: ftd.text: hello amitu!
+>> color: green
+>> size: 10
