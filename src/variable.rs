@@ -71,7 +71,7 @@ impl PropertyValue {
                 };
 
                 let found_kind = get_kind(line_number, &kind, part2, doc, &expected_kind)?;
-
+                dbg!(&value, &found_kind, &expected_kind);
                 if is_doc {
                     PropertyValue::Reference {
                         name: doc
