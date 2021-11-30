@@ -481,16 +481,16 @@ impl ChildComponent {
         } else {
             doc.get_component(line_number, name)?
         };
-        let mut root_arguments = root.arguments;
+
         assert_no_extra_properties(
             line_number,
             p1,
             root.full_name.as_str(),
-            &root_arguments,
+            &root.arguments,
             name,
             doc,
         )?;
-        let (local_arguments, inherits) = read_arguments(p1, name, &root_arguments, doc)?;
+        let (local_arguments, inherits) = read_arguments(p1, name, &root.arguments, doc)?;
 
         let mut all_arguments = local_arguments.clone();
         all_arguments.extend(arguments.clone());
@@ -507,7 +507,7 @@ impl ChildComponent {
                 body,
                 name,
                 root.full_name.as_str(),
-                &mut root_arguments,
+                &root.arguments,
                 &all_arguments,
                 doc,
                 &root_property,
@@ -943,13 +943,16 @@ fn resolve_properties_with_ref(
                 ftd::PropertyValue::Variable { name, .. } => Some(format!("@{}", name)),
                 _ => None,
             };
-            properties.insert(
-                name.to_string(),
-                (
-                    property_value.resolve_with_root(line_number, arguments, doc, root_name)?,
-                    reference,
-                ),
-            );
+            let resolved_value = {
+                let mut resolved_value =
+                    property_value.resolve_with_root(line_number, arguments, doc, root_name)?;
+                if let ftd::Value::UI { data, .. } = &mut resolved_value {
+                    data.extend(value.nested_properties.clone())
+                }
+                resolved_value
+            };
+
+            properties.insert(name.to_string(), (resolved_value, reference));
         }
     }
     Ok(properties)
@@ -1031,14 +1034,13 @@ impl Component {
             root_name: Option<&str>,
         ) -> ftd::p1::Result<()> {
             if let Some(ref c) = child.reference {
-                dbg!("reference_to_child_component", &c, arguments);
-                if let Some(ftd::Value::UI { name, .. }) = arguments.get(&c.0) {
+                if let Some(ftd::Value::UI { name, data, .. }) = arguments.get(&c.0) {
                     match doc.get_component_with_root(line_number, name, root_name) {
                         Ok(_) => {
                             *child = ChildComponent {
                                 root: name.to_string(),
                                 condition: None,
-                                properties: Default::default(),
+                                properties: data.clone(),
                                 arguments: Default::default(),
                                 events: vec![],
                                 is_recursive: false,
@@ -1083,15 +1085,14 @@ impl Component {
         let name = var_data.name;
         let root = var_data.kind;
         let root_component = doc.get_component(p1.line_number, root.as_str())?;
-        let mut root_arguments = root_component.arguments.clone();
         let (arguments, inherits) =
-            read_arguments(&p1.header, root.as_str(), &root_arguments, doc)?;
+            read_arguments(&p1.header, root.as_str(), &root_component.arguments, doc)?;
 
         assert_no_extra_properties(
             p1.line_number,
             &p1.header,
             root.as_str(),
-            &root_arguments,
+            &root_component.arguments,
             &p1.name,
             doc,
         )?;
@@ -1157,7 +1158,7 @@ impl Component {
                 &p1.body_without_comment(),
                 name.as_str(),
                 root.as_str(),
-                &mut root_arguments,
+                &root_component.arguments,
                 &arguments,
                 doc,
                 &root_properties_from_inherits(p1.line_number, &arguments, inherits, doc)?,
@@ -1488,6 +1489,7 @@ impl Component {
         Ok(ftd::Value::UI {
             name: self.full_name.to_string(),
             kind: kind.to_owned(),
+            data: Default::default(),
         })
     }
 }
@@ -1581,7 +1583,7 @@ pub fn recursive_child_component(
 
     let mut reference = None;
 
-    let (mut root_arguments, full_name, caption) =
+    let (root_arguments, full_name, caption) =
         if name_with_component.is_some() && sub.name == name_with_component.clone().expect("").0 {
             let root_component = name_with_component.expect("").1;
             (
@@ -1646,7 +1648,7 @@ pub fn recursive_child_component(
         &sub.body_without_comment(),
         &sub.name,
         full_name.as_str(),
-        &mut root_arguments,
+        &root_arguments,
         arguments,
         doc,
         &properties,
@@ -1817,14 +1819,15 @@ pub fn read_properties(
     body: &Option<(usize, String)>,
     fn_name: &str,
     root: &str,
-    root_arguments: &mut std::collections::BTreeMap<String, ftd::p2::Kind>,
+    root_arguments: &std::collections::BTreeMap<String, ftd::p2::Kind>,
     arguments: &std::collections::BTreeMap<String, ftd::p2::Kind>,
     doc: &ftd::p2::TDoc,
     root_properties: &std::collections::BTreeMap<String, Property>,
     is_reference: bool,
 ) -> ftd::p1::Result<std::collections::BTreeMap<String, Property>> {
     let mut properties: std::collections::BTreeMap<String, Property> = Default::default();
-    update_root_arguments(root_arguments);
+    let mut root_arguments = root_arguments.clone();
+    update_root_arguments(&mut root_arguments);
 
     for (name, kind) in root_arguments.iter() {
         if let Some(prop) = root_properties.get(name) {
@@ -1904,18 +1907,12 @@ pub fn read_properties(
                 arguments,
                 Some(source.clone()),
             )?;
-            dbg!(&property_value, &value, "hh");
             let nested_properties = if let ftd::PropertyValue::Reference {
                 kind: ftd::p2::Kind::UI { .. },
                 ..
             } = &property_value
             {
-                ftd::p2::utils::structure_header_to_properties(
-                    &value,
-                    &arguments,
-                    doc,
-                    line_number,
-                )?
+                ftd::p2::utils::structure_header_to_properties(&value, arguments, doc, line_number)?
             } else {
                 Default::default()
             };
@@ -2078,7 +2075,6 @@ fn read_arguments(
 
 #[cfg(test)]
 mod test {
-    use ftd::component::Property;
     use ftd::test::*;
 
     macro_rules! p2 {
