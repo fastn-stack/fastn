@@ -84,7 +84,7 @@ pub struct ChildComponent {
 pub struct Property {
     pub default: Option<ftd::PropertyValue>,
     pub conditions: Vec<(ftd::p2::Boolean, ftd::PropertyValue)>,
-    pub nested_properties: Box<std::collections::BTreeMap<String, ftd::component::Property>>,
+    pub nested_properties: std::collections::BTreeMap<String, ftd::component::Property>,
 }
 
 #[derive(Debug, Clone)]
@@ -1031,6 +1031,7 @@ impl Component {
             root_name: Option<&str>,
         ) -> ftd::p1::Result<()> {
             if let Some(ref c) = child.reference {
+                dbg!("reference_to_child_component", &c, arguments);
                 if let Some(ftd::Value::UI { name, .. }) = arguments.get(&c.0) {
                     match doc.get_component_with_root(line_number, name, root_name) {
                         Ok(_) => {
@@ -1937,12 +1938,12 @@ pub fn read_properties(
                 } else {
                     property.conditions.append(&mut condition_value.clone());
                 }
-                property.nested_properties = Box::new(nested_properties);
+                property.nested_properties = nested_properties;
             } else {
                 let value = Property {
                     default: default_value,
                     conditions: condition_value,
-                    nested_properties: Box::new(nested_properties),
+                    nested_properties,
                 };
                 properties.insert(name.to_string(), value);
             }

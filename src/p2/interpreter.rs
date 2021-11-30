@@ -673,7 +673,7 @@ pub fn interpret(
 )> {
     let mut interpreter = Interpreter::new(lib);
     let instructions = interpreter.interpret(name, source)?;
-    // dbg!(&instructions);
+    dbg!(&instructions);
     let mut rt = ftd::RT::from(name, interpreter.aliases, interpreter.bag, instructions);
     let main = rt.render_()?;
     Ok((rt.bag, main))
