@@ -1,4 +1,4 @@
-pub fn check() -> (fpm::Package, String) {
+pub async fn check() -> (fpm::Package, String) {
     let root_dir = std::env::current_dir()
         .expect("Panic1")
         .to_str()
@@ -20,8 +20,15 @@ pub fn check() -> (fpm::Package, String) {
     };
 
     let config = fpm::Package::parse(&b);
-    let dependencies = fpm::Dependency::parse(&b);
-    dbg!(dependencies);
+    let dep = fpm::Dependency::parse(&b);
+    let _dep = dep
+        .into_iter()
+        .map(|x| tokio::spawn(async move { x.download().await }))
+        .collect::<Vec<tokio::task::JoinHandle<bool>>>();
+    for j in _dep {
+        j.await;
+    }
+
     if package_folder_name != config.name {
         todo!("package directory name mismatch")
     }

@@ -1,5 +1,5 @@
-pub fn build() {
-    let (_fpm_config, base_dir) = fpm::check();
+pub async fn build() {
+    let (_fpm_config, base_dir) = fpm::check().await;
 
     std::fs::create_dir_all(format!("{}/.build", base_dir.as_str()).as_str())
         .expect("failed to create build folder");

@@ -1,4 +1,5 @@
-fn main() {
+#[tokio::main]
+async fn main() {
     let matches = clap::App::new("FTD Package Manager")
         .version(env!("CARGO_PKG_VERSION"))
         .author("Shobhit S. <shobhit@fifthtry.com>")
@@ -29,6 +30,6 @@ fn main() {
         .get_matches();
 
     if matches.subcommand_matches("build").is_some() {
-        fpm::build();
+        fpm::build().await;
     }
 }

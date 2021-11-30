@@ -1,4 +1,4 @@
--- import: sharmashobhit/fpm-blog/lib
+-- import: theme/lib
 
 -- lib.block:
 

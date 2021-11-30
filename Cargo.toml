@@ -15,6 +15,8 @@ serde_json = "1"
 ftd = { version = "0.1.11", path = "../ftd" }
 clap = "2.33.3"
 home = "0.5.3"
+reqwest = { version = "0.11.6"}
+tokio = { version = "1.14.0", features = ["full"] }
 
 [dev-dependencies]
 rusty-hook = "^0.11.2"
