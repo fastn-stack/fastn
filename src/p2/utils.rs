@@ -405,6 +405,22 @@ pub fn reorder(
                 continue;
             }
             for sub_section in v.sub_sections.0.iter() {
+                for (_, _, v) in sub_section.header.0.iter() {
+                    if v.contains(':') {
+                        let (name, _) = ftd::p2::utils::split(v.to_string(), ":")?;
+                        if inserted.contains(&name) || k == &name {
+                            continue;
+                        }
+                        reorder_component(
+                            p1_map,
+                            new_p1,
+                            Some(name.to_string()),
+                            inserted,
+                            doc,
+                            var_types,
+                        )?;
+                    }
+                }
                 if inserted.contains(&sub_section.name) || k == &sub_section.name {
                     continue;
                 }
@@ -416,6 +432,22 @@ pub fn reorder(
                     doc,
                     var_types,
                 )?;
+            }
+            for (_, _, v) in v.header.0.iter() {
+                if v.contains(':') {
+                    let (name, _) = ftd::p2::utils::split(v.to_string(), ":")?;
+                    if inserted.contains(&name) || k == &name {
+                        continue;
+                    }
+                    reorder_component(
+                        p1_map,
+                        new_p1,
+                        Some(name.to_string()),
+                        inserted,
+                        doc,
+                        var_types,
+                    )?;
+                }
             }
             let var_data =
                 ftd::variable::VariableData::get_name_kind(&v.name, doc, v.line_number, var_types)?;

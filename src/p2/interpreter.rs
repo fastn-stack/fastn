@@ -12644,11 +12644,11 @@ mod test {
                                     b: 0,
                                     alpha: 1.0,
                                 }),
-                                locals: std::array::IntoIter::new([(s("size@0,1"), s("10"))])
+                                locals: std::array::IntoIter::new([(s("size@0,1"), s("30"))])
                                     .collect(),
                                 ..Default::default()
                             },
-                            size: Some(10),
+                            size: Some(30),
                             ..Default::default()
                         }),
                         ftd::Element::Column(ftd::Column {
@@ -12750,6 +12750,7 @@ mod test {
 
                 -- ftd.column bar:
                 ftd.ui t: foo:
+                > size: 30
                 ftd.ui g:
 
                 --- ftd.text: amitu
