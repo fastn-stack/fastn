@@ -1917,7 +1917,16 @@ pub fn read_properties(
                 ..
             } = &property_value
             {
-                let headers = {
+                let headers = if source.eq(&ftd::TextSource::Default) {
+                    let mut headers = Default::default();
+                    if let ftd::p2::Kind::UI {
+                        default: Some((_, h)),
+                    } = kind
+                    {
+                        headers = h.clone();
+                    }
+                    headers
+                } else {
                     let mut headers = vec![];
                     if let Some(idx) = idx {
                         let p1 = &p1.0;
@@ -2054,7 +2063,7 @@ fn read_arguments(
     let mut args: std::collections::BTreeMap<String, ftd::p2::Kind> = Default::default();
     let mut inherits: Vec<String> = Default::default();
 
-    for (i, k, v) in p1.0.iter() {
+    for (idx, (i, k, v)) in p1.0.iter().enumerate() {
         if (k.starts_with('$') && k.ends_with('$')) || k.starts_with('/') || k.starts_with('>') {
             // event and loop matches
             continue;
@@ -2070,17 +2079,17 @@ fn read_arguments(
             _ => continue,
         };
 
-        let v = if v.is_empty() {
+        let option_v = if v.is_empty() {
             None
         } else {
             Some(v.to_string())
         };
 
-        let kind = if var_data.kind.eq("inherit") {
+        let mut kind = if var_data.kind.eq("inherit") {
             match root_arguments.get(&var_data.name) {
                 Some(kind) => {
                     inherits.push(var_data.name.to_string());
-                    kind.clone().set_default(v)
+                    kind.clone().set_default(option_v)
                 }
                 None => {
                     return ftd::e2(
@@ -2091,8 +2100,27 @@ fn read_arguments(
                 }
             }
         } else {
-            ftd::p2::Kind::for_variable(i.to_owned(), k, v, doc, None)?
+            ftd::p2::Kind::for_variable(i.to_owned(), k, option_v, doc, None)?
         };
+        if let ftd::p2::Kind::UI {
+            default: Some((_, h)),
+        } = &mut kind
+        {
+            let headers = {
+                let mut headers = vec![];
+                let p1 = &p1.0;
+                for i in idx + 1..p1.len() {
+                    let p1 = p1.get(i).unwrap();
+                    if let Some(k) = p1.1.strip_prefix('>') {
+                        headers.push((p1.0, k.trim().to_string(), p1.2.to_string()));
+                    } else {
+                        break;
+                    }
+                }
+                ftd::p1::Header(headers)
+            };
+            *h = headers;
+        }
         args.insert(var_data.name.to_string(), kind);
     }
 

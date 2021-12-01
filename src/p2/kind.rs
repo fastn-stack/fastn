@@ -36,7 +36,7 @@ pub enum Kind {
         kind: Box<Kind>,
     },
     UI {
-        default: Option<String>,
+        default: Option<(String, ftd::p1::Header)>,
     },
 }
 
@@ -129,14 +129,13 @@ impl Kind {
     }
     pub fn get_default_value_str(&self) -> Option<String> {
         match self {
-            Kind::Integer { default } => default,
-            Kind::Boolean { default } => default,
-            Kind::Decimal { default } => default,
-            Kind::String { default, .. } => default,
-            Kind::UI { default, .. } => default,
-            _ => &None,
+            Kind::Integer { default }
+            | Kind::Boolean { default }
+            | Kind::Decimal { default }
+            | Kind::String { default, .. } => default.clone(),
+            Kind::UI { default, .. } => default.as_ref().map(|(v, _)| v.clone()),
+            _ => None,
         }
-        .clone()
     }
 
     pub fn set_default(self, default: Option<String>) -> Self {
@@ -146,7 +145,9 @@ impl Kind {
                 body,
                 default,
             },
-            Kind::UI { .. } => Kind::UI { default },
+            Kind::UI { .. } => Kind::UI {
+                default: default.map(|v| (v, Default::default())),
+            },
             Kind::Integer { .. } => Kind::Integer { default },
             Kind::Decimal { .. } => Kind::Decimal { default },
             Kind::Boolean { .. } => Kind::Boolean { default },
