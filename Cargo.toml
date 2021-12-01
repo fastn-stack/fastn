@@ -1,6 +1,6 @@
 [package]
 name = "fpm"
-version = "0.1.1"
+version = "0.1.2"
 authors = ["Amit Upadhyay <upadhyay@gmail.com>", "Shobhit Sharma <shobhit@fifthtry.com>"]
 edition = "2021"
 description = "fpm: FTD Package Manager"
