@@ -2183,6 +2183,7 @@ mod test {
                     }
                 ),])
                 .collect(),
+                line_number: 1,
                 ..Default::default()
             }
         );
@@ -2219,6 +2220,7 @@ mod test {
                     }
                 ),])
                 .collect(),
+                line_number: 1,
                 ..Default::default()
             }
         );

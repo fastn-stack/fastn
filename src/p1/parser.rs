@@ -281,6 +281,7 @@ pub fn parse(s: &str, doc_id: &str) -> Result<Vec<Section>> {
         if line.starts_with("\\;") {
             line = &line[1..];
         }
+        let line_number = line_number + 1;
         match state.state {
             ParsingState::WaitingForSection => {
                 state.waiting_for_section(line_number, line, doc_id)?
@@ -881,6 +882,6 @@ mod test {
             vec![super::Section::with_name("foo").and_body("hello"),],
         );
 
-        f!("invalid", "foo:0 -> Expecting -- , found: invalid")
+        f!("invalid", "foo:1 -> Expecting -- , found: invalid")
     }
 }
