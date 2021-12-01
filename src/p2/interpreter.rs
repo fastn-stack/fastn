@@ -2568,6 +2568,7 @@ mod test {
                     )])
                     .collect(),
                 ],
+                line_number: 1,
                 ..Default::default()
             }),
         );
@@ -8422,6 +8423,7 @@ mod test {
                     ])
                     .collect(),
                 ],
+                line_number: 1,
                 ..Default::default()
             }),
         );
@@ -9572,6 +9574,7 @@ mod test {
                     (s("open"), ftd::Value::Boolean { value: true }),
                 ])
                 .collect()],
+                line_number: 1,
                 ..Default::default()
             }),
         );
