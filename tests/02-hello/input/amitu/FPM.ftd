@@ -1,5 +1,4 @@
 -- import: fpm
 
--- fpm.package:
-name: amitu
+-- fpm.package: amitu
 domain: www.amitu.com

@@ -6,7 +6,7 @@ edition = "2021"
 description = "fpm: FTD Package Manager"
 license = "MIT"
 repository = "https://github.com/FifthTry/fpm"
-homepage = "https://www.fifthtry.com/fpm/"
+homepage = "https://fpm.dev"
 
 
 [dependencies]
