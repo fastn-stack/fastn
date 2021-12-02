@@ -61,7 +61,7 @@ fn write(doc: &fpm::Document, style: &fpm::Style) {
                 format!(
                     "{}{}",
                     b.html("main", &doc.id).as_str(),
-                    style.to_html().unwrap_or("".to_string())
+                    style.to_html().unwrap_or_else(|| "".to_string())
                 )
                 .as_str(),
             )

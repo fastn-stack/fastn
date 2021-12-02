@@ -24,25 +24,19 @@ impl Font {
             }}
             ",
             self.name,
-            self.woff2.as_ref().unwrap_or(
-                &self
-                    .woff
-                    .as_ref()
-                    .expect("Either woff2 or woff 1 should be provided")
-            )
+            self.woff2.as_ref().unwrap_or_else(|| self
+                .woff
+                .as_ref()
+                .expect("Either woff2 or woff 1 should be provided"))
         ))
     }
 }
 
 impl Style {
     pub fn to_html(&self) -> Option<String> {
-        let generated_style = self
-            .fonts
-            .iter()
-            .fold("".to_string(), |c, f| {
-                format!("{}\n{}", c, f.to_html().unwrap_or("".to_string()))
-            })
-            .to_string();
+        let generated_style = self.fonts.iter().fold("".to_string(), |c, f| {
+            format!("{}\n{}", c, f.to_html().unwrap_or_else(|| "".to_string()))
+        });
         return match generated_style.is_empty() {
             false => Some(format!("<style>{}</style>", generated_style)),
             _ => None,
