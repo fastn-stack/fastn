@@ -19,6 +19,9 @@ reqwest = { version = "0.11.6"}
 tokio = { version = "1.14.0", features = ["full"] }
 futures = "0.3.18"
 zip = "0.5"
+thiserror = "1.0"
+serde_derive = "1.0"
+
 
 [dev-dependencies]
 rusty-hook = "^0.11.2"
