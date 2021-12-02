@@ -19,3 +19,4 @@ Cargo.lock
 .idea
 
 /tests/**/.build
+/tests/**/.packages

@@ -20,14 +20,11 @@ pub async fn check() -> (fpm::Package, String) {
     };
 
     let config = fpm::Package::parse(&b);
-    let dep = fpm::Dependency::parse(&b);
-    let _dep = dep
+    let _dep = fpm::Dependency::parse(&b)
         .into_iter()
-        .map(|x| tokio::spawn(async move { x.download().await }))
+        .map(|x| tokio::spawn(async move { x.process().await }))
         .collect::<Vec<tokio::task::JoinHandle<bool>>>();
-    for j in _dep {
-        j.await;
-    }
+    futures::future::join_all(_dep).await;
 
     if package_folder_name != config.name {
         todo!("package directory name mismatch")

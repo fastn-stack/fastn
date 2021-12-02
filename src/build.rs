@@ -21,7 +21,10 @@ pub fn process_dir(directory: String, depth: usize, base_path: String) -> u32 {
             // pass the FPM.ftd file at the base level
         } else if md.is_dir() {
             // Iterate the children
-            count += process_dir(doc_path, depth + 1, base_path.as_str().to_string());
+            // TODO: Hack to ignore the .packages for now. Should find and reject gracefully
+            if !doc_path.contains(format!("{}/.packages", base_path.as_str()).as_str()) {
+                count += process_dir(doc_path, depth + 1, base_path.as_str().to_string());
+            }
         } else if doc_path.as_str().ends_with(".ftd") {
             // process the document
             let doc = std::fs::read_to_string(doc_path).expect("cant read file");
