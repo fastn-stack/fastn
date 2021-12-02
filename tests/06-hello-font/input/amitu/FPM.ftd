@@ -1,0 +1,8 @@
+-- import: fpm
+
+-- fpm.package: amitu
+domain: www.amitu.com
+
+-- fpm.font: myFirstFont
+woff: sansation_light.woff
+woff2: sansation_light.woff

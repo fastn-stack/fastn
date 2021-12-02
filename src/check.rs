@@ -1,4 +1,4 @@
-pub async fn check() -> (fpm::Package, String) {
+pub async fn check() -> (fpm::Package, String, Vec<fpm::Font>) {
     let root_dir = std::env::current_dir()
         .expect("Panic1")
         .to_str()
@@ -24,12 +24,14 @@ pub async fn check() -> (fpm::Package, String) {
         .into_iter()
         .map(|x| tokio::spawn(async move { x.process().await }))
         .collect::<Vec<tokio::task::JoinHandle<bool>>>();
+
+    let _fonts = fpm::Font::parse(&b);
     futures::future::join_all(_dep).await;
 
     if package_folder_name != config.name {
         todo!("package directory name mismatch")
     }
-    (config, base_dir)
+    (config, base_dir, _fonts)
 }
 
 fn find_fpm_file(dir: String) -> (bool, String) {

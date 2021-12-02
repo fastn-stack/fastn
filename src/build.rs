@@ -1,15 +1,16 @@
 pub async fn build() {
-    let (_fpm_config, base_dir) = fpm::check().await;
+    let (_fpm_config, base_dir, _fonts) = fpm::check().await;
 
     std::fs::create_dir_all(format!("{}/.build", base_dir.as_str()).as_str())
         .expect("failed to create build folder");
 
+    let style = fpm::Style { fonts: _fonts };
     for doc in fpm::process_dir(base_dir.clone(), 0, base_dir) {
-        write(&doc);
+        write(&doc, &style);
     }
 }
 
-fn write(doc: &fpm::Document) {
+fn write(doc: &fpm::Document, style: &fpm::Style) {
     use std::io::Write;
 
     let lib = fpm::Library {};
@@ -55,7 +56,16 @@ fn write(doc: &fpm::Document) {
                     .expect("failed to convert document to json")
                     .as_str(),
             )
-            .replace("__ftd__", b.html("main", &doc.id).as_str())
+            .replace(
+                "__ftd__",
+                format!(
+                    "{}{}",
+                    b.html("main", &doc.id).as_str(),
+                    style.to_html().unwrap_or("".to_string())
+                )
+                .as_str(),
+            )
+            .as_str()
             .replace("__ftd_js__", ftd::js())
             .as_bytes(),
     )

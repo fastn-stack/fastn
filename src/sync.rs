@@ -1,5 +1,5 @@
 pub async fn sync() {
-    let (_fpm_config, base_dir) = fpm::check().await;
+    let (_fpm_config, base_dir, _fonts) = fpm::check().await;
 
     std::fs::create_dir_all(format!("{}/.history", base_dir.as_str()).as_str())
         .expect("failed to create build folder");
