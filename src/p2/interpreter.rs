@@ -7012,7 +7012,7 @@ mod test {
         let mut main = super::default_column();
 
         main.container.children.push(ftd::Element::Text(ftd::Text {
-            text: ftd::markdown_line("\"0.1.11\""),
+            text: ftd::markdown_line("\"0.1.13\""),
             line: true,
             common: ftd::Common {
                 reference: Some(s("foo/bar#test")),
@@ -7028,7 +7028,7 @@ mod test {
             ftd::p2::Thing::Variable(ftd::Variable {
                 name: "test".to_string(),
                 value: ftd::Value::String {
-                    text: "\"0.1.11\"".to_string(),
+                    text: "\"0.1.13\"".to_string(),
                     source: ftd::TextSource::Header,
                 },
                 conditions: vec![],
@@ -7057,7 +7057,7 @@ mod test {
         let mut main = super::default_column();
 
         main.container.children.push(ftd::Element::Text(ftd::Text {
-            text: ftd::markdown_line("\"0.1.11\""),
+            text: ftd::markdown_line("\"0.1.13\""),
             line: true,
             common: ftd::Common {
                 reference: Some(s("foo/bar#test")),
@@ -7073,7 +7073,7 @@ mod test {
             ftd::p2::Thing::Variable(ftd::Variable {
                 name: "test".to_string(),
                 value: ftd::Value::String {
-                    text: "\"0.1.11\"".to_string(),
+                    text: "\"0.1.13\"".to_string(),
                     source: ftd::TextSource::Header,
                 },
                 conditions: vec![],
@@ -7110,7 +7110,7 @@ mod test {
         }));
 
         main.container.children.push(ftd::Element::Text(ftd::Text {
-            text: ftd::markdown_line("\"0.1.11\""),
+            text: ftd::markdown_line("\"0.1.13\""),
             line: true,
             ..Default::default()
         }));
@@ -7164,7 +7164,7 @@ mod test {
                             source: ftd::TextSource::Header,
                         },
                         ftd::Value::String {
-                            text: "\"0.1.11\"".to_string(),
+                            text: "\"0.1.13\"".to_string(),
                             source: ftd::TextSource::Header,
                         },
                         ftd::Value::String {
@@ -7259,7 +7259,7 @@ mod test {
             container: ftd::Container {
                 children: vec![
                     ftd::Element::Text(ftd::Text {
-                        text: ftd::markdown_line("\"0.1.11\""),
+                        text: ftd::markdown_line("\"0.1.13\""),
                         line: true,
                         common: ftd::Common {
                             reference: Some(s("@name@1")),
@@ -7281,7 +7281,7 @@ mod test {
             },
             common: ftd::Common {
                 locals: std::array::IntoIter::new([
-                    (s("name@1"), s("\"0.1.11\"")),
+                    (s("name@1"), s("\"0.1.13\"")),
                     (s("body@1"), s("version")),
                 ])
                 .collect(),
@@ -7612,7 +7612,7 @@ mod test {
                                     s("title"),
                                     ftd::PropertyValue::Value {
                                         value: ftd::variable::Value::String {
-                                            text: "\"0.1.11\"".to_string(),
+                                            text: "\"0.1.13\"".to_string(),
                                             source: ftd::TextSource::Header,
                                         },
                                     },
