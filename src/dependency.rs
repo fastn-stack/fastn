@@ -23,7 +23,7 @@ impl Dependency {
         let fname = response
             .url()
             .path_segments()
-            .and_then(|segments| segments.skip(1).next())
+            .and_then(|mut segments| segments.nth(1))
             .and_then(|name| if name.is_empty() { None } else { Some(name) })
             .unwrap_or("tmp.bin");
         std::fs::create_dir_all("./.packages/.cache").expect("failed to create build folder");
