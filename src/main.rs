@@ -23,6 +23,11 @@ async fn main() {
                 .version(env!("CARGO_PKG_VERSION")),
         )
         .subcommand(
+            clap::SubCommand::with_name("sync")
+                .about("`sync` with `fpm-repo` or `.history` folder if not using `fpm-repo`")
+                .version(env!("CARGO_PKG_VERSION")),
+        )
+        .subcommand(
             clap::SubCommand::with_name("check")
                 .about("Checks the folder structure of the current .FPM.ftd file")
                 .version(env!("CARGO_PKG_VERSION")),
@@ -31,5 +36,8 @@ async fn main() {
 
     if matches.subcommand_matches("build").is_some() {
         fpm::build().await;
+    }
+    if matches.subcommand_matches("sync").is_some() {
+        fpm::sync().await;
     }
 }

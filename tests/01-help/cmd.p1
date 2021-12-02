@@ -21,3 +21,4 @@ SUBCOMMANDS:
     build    Builds the current directory
     check    Checks the folder structure of the current .FPM.ftd file
     help     Prints this message or the help of the given subcommand(s)
+    sync     `sync` with `fpm-repo` or `.history` folder if not using `fpm-repo`

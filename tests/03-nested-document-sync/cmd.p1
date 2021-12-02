@@ -1,0 +1,10 @@
+-- fbt:
+cmd: cd amitu && $FBT_CWD/target/debug/fpm --test sync
+output: amitu/.history
+
+
+-- stdout:
+
+Generated history [<cwd>/amitu/index.ftd]
+Generated history [<cwd>/amitu/nested/index.ftd]
+Generated history [<cwd>/amitu/nested/document.ftd]

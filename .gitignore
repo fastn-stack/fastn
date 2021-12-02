@@ -16,7 +16,9 @@ Cargo.lock
 
 /build
 /.build
+/.history
 .idea
 
 /tests/**/.build
+/tests/**/.history
 /tests/**/.packages
