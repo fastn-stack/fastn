@@ -481,10 +481,138 @@ window.ftd = (function () {
 })();
 
     </script>
+    <style>
+        pre {
+            white-space: break-spaces;
+        }
+
+        pre code {
+            overflow-x: auto;
+            display: block;
+            padding: 10px !important;
+        }
+
+        p {
+            margin: 0;
+        }
+
+        ul {
+            margin: 0;
+        }
+
+        .ft_md ul,
+        .ft_md ol,
+        .ft_md p {
+            margin: 10px 0;
+        }
+
+        .ft_md h1,
+        .ft_md h2,
+        .ft_md h3,
+        .ft_md h4,
+        .ft_md h5 {
+            margin-top: 34px;
+            margin-bottom: 0;
+            line-height: 1.2em;
+            color: #000000;
+        }
+
+        .ft_md ul ul,
+        .ft_md ul ol,
+        .ft_md ol ul,
+        .ft_md ol ol {
+            line-height: 1.5em;
+            margin: 0;
+        }
+
+        .ft_md ul li,
+        .ft_md ol li,
+        .ft_md ul ol li .ft_md ul ul li .ft_md ol ul li .ft_md ol ol li {
+            position: relative;
+            padding-left: 32px;
+            margin: 4px 0;
+        }
+
+        .ft_md ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .ft_md ol {
+            list-style: none;
+            padding-left: 0;
+            counter-reset: item;
+        }
+
+        .ft_md ol li:before,
+        .ft_md ol ol li:before,
+        .ft_md ul ol li:before {
+            content: counter(item);
+            counter-increment: item;
+            background-color: #e4e9eb;
+            color: #000000;
+            font-size: 11px;
+            line-height: 10px;
+            text-align: center;
+            padding: 4px 0;
+            height: 10px;
+            width: 18px;
+            border-radius: 10px;
+            position: absolute;
+            left: 0;
+            top: 5px;
+        }
+
+        .ft_md ul li::before,
+        .ft_md ul ul li::before,
+        .ft_md ol ul li::before {
+            content: "";
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            left: 8px;
+            top: 10px;
+            border-radius: 50%;
+            background: #c1c8ce;
+        }
+
+        .ft_md a {
+            color: #0047b4;
+            text-decoration: none;
+        }
+
+        .ft_md a:visited {
+            color: #632ec4;
+        }
+
+        .ft_md a:hover {
+            text-decoration: none;
+        }
+
+        .ft_md code {
+            font-size: 0.9em;
+            padding: 0.1em 0.25em;
+            background-color: #f0f0f0;
+            border-radius: 4px;
+        }
+
+        .ft_md blockquote {
+            padding: 0.25em 1em;
+            margin: 1em 0;
+            background-color: #f0f0f0;
+            border-radius: 3px;
+        }
+
+        .ft_md blockquote>blockquote {
+            margin: 0;
+        }
+
+        </style>
+
 </head>
     <body>
 
-        <div data-id="main:root" style="align-items: flex-start; align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: wrap; height: 100%; justify-content: flex-start; margin-bottom: auto; margin-top: auto; white-space: initial; width: 100%" class="ft_md"><div data-id="0:main" style="align-items: flex-start; align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start; white-space: initial" class="ft_md"><div data-id="0,0:main" style="align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-weight: 400; text-align: left; white-space: initial" class="ft_md">hello</div></div></div>
+        <div data-id="main:root" style="align-items: flex-start; align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: wrap; height: 100%; justify-content: flex-start; margin-bottom: auto; margin-top: auto; white-space: initial; width: 100%" class="ft_md"><div data-id="0:main" style="align-items: flex-start; align-self: flex-start; background-color: rgba(0,0,0,1); border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start; white-space: initial" class="ft_md"><div data-id="0,0:main" style="align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-weight: 400; text-align: left; white-space: initial" class="ft_md">hello</div></div></div>
 
 
     <script>

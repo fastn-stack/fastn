@@ -1,2 +1,2 @@
--- component block:
-component: ftd.row
+-- ftd.row block:
+background-color: #000000
