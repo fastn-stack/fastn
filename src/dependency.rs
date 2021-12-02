@@ -17,18 +17,22 @@ impl Dependency {
         b.to_owned().instances("fpm#dependency").unwrap()
     }
 
-    pub async fn download_zip(&self, download_url: &str) -> Result<(), std::io::Error> {
-        let response = reqwest::get(dbg!(download_url)).await.expect("");
+    pub async fn download_zip(&self) -> Result<(), std::io::Error> {
+        let download_url = match self.repo.as_str() {
+            "github" => {
+                format!(
+                    "https://github.com/{}/archive/refs/heads/main.zip",
+                    self.name
+                )
+            }
+            k => k.to_string(),
+        };
 
-        let fname = response
-            .url()
-            .path_segments()
-            .and_then(|mut segments| segments.nth(1))
-            .and_then(|name| if name.is_empty() { None } else { Some(name) })
-            .unwrap_or("tmp.bin");
+        let response = reqwest::get(download_url).await.expect("");
+
         std::fs::create_dir_all("./.packages/.cache").expect("failed to create build folder");
 
-        let download_path = format!("./.packages/.cache/{}.zip", fname);
+        let download_path = format!("./.packages/.cache/{}.zip", self.name.replace("/", "__"));
         let path = std::path::Path::new(download_path.as_str());
         let mut file = match std::fs::File::create(&path) {
             Err(why) => panic!("couldn't create {}", why),
@@ -46,15 +50,17 @@ impl Dependency {
                 Some(path) => path.to_owned(),
                 None => continue,
             };
+            let outpath_without_folder = outpath.to_str().unwrap().split_once("/").unwrap().1;
+            let new_outpath = format!("{}/{}", self.name, outpath_without_folder);
+            let file_extract_path = std::path::Path::new(new_outpath.as_str());
             if (&*c_file.name()).ends_with('/') {
                 println!("File {} extracted to \"{}\"", i, outpath.display());
                 std::fs::create_dir_all(
-                    format!("./.packages/{}", &outpath.to_str().unwrap()).as_str(),
+                    format!("./.packages/{}", file_extract_path.to_str().unwrap()).as_str(),
                 )
                 .unwrap();
             } else {
-                if let Some(p) = outpath.parent() {
-                    dbg!(p);
+                if let Some(p) = file_extract_path.parent() {
                     if !p.exists() {
                         std::fs::create_dir_all(
                             format!("./.packages/{}", &p.to_str().expect("")).as_str(),
@@ -62,9 +68,11 @@ impl Dependency {
                         .unwrap();
                     }
                 }
-                let mut outfile =
-                    std::fs::File::create(format!("./.packages/{}", &outpath.to_str().expect("")))
-                        .unwrap();
+                let mut outfile = std::fs::File::create(format!(
+                    "./.packages/{}",
+                    &file_extract_path.to_str().expect("")
+                ))
+                .unwrap();
                 std::io::copy(&mut c_file, &mut outfile).unwrap();
             }
         }
@@ -72,6 +80,6 @@ impl Dependency {
     }
 
     pub async fn process(&self) -> bool {
-        self.download_zip(self.repo.as_str()).await.is_ok()
+        self.download_zip().await.is_ok()
     }
 }

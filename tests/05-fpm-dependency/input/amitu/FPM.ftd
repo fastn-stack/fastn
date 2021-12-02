@@ -4,5 +4,5 @@
 name: amitu
 
 
--- fpm.dependency: theme
-repo: https://github.com/sharmashobhit/fpm-blog/archive/refs/heads/main.zip
+-- fpm.dependency: fifthtry/fpm-blog
+repo: github
