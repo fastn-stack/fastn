@@ -64,50 +64,6 @@ impl TocItem {
                 .collect(),
         }
     }
-
-    #[cfg(test)]
-    pub fn from(s: &str) -> (Self, usize) {
-        /*
-        possible values of s:
-            "- foo\n  Foo is awesome\n\n"          -- length = 0
-            "- bar\n    bar is crate awesome\n\n"  -- length = 1
-            "- baz\n  baz ka baaza\n"              -- length = 0
-        */
-        let s = s.trim();
-        let (id, title) = {
-            let parts: Vec<&str> = s.splitn(2, '\n').collect();
-            (parts[0], parts[1])
-        };
-        let id = id.replacen("- ", "", 1);
-        let title = title.replace("\r", "");
-        let title = title.replace("\n", "");
-        let mut title = title.chars();
-        let mut c;
-        let mut i = 0;
-        loop {
-            c = title.next().unwrap();
-            if c != ' ' {
-                break;
-            }
-            i += 1;
-        }
-        let title = c.to_string() + title.as_str();
-        let id = id.trim().to_string();
-        (
-            TocItem {
-                url: crate::utils::if_true(
-                    crate::utils::has_extension(id.as_str()),
-                    || format!("/{}", id.as_str()),
-                    || format!("/{}/", id.as_str()),
-                ),
-                id,
-                title: ftd::markdown_line(title.as_str()),
-                children: vec![],
-                number: vec![],
-            },
-            i / 2 - 1,
-        )
-    }
 }
 
 #[derive(PartialEq, Debug, Default, Clone, serde::Serialize, serde::Deserialize)]
