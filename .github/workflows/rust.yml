@@ -2,13 +2,11 @@ name: Rust Checks
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
     paths:
      - '**.rs'
   pull_request:
-    branches:
-      - main
+    branches: [ main ]
     paths:
      - '**.rs'
 jobs:
