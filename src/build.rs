@@ -1,6 +1,5 @@
 pub async fn build() -> fpm::Result<()> {
     let config = fpm::Config::read().await?;
-    // fpm::ensure_dependencies().await?;
 
     std::fs::create_dir_all(format!("{}/.build", config.root.as_str()).as_str())
         .expect("failed to create build folder");

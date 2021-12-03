@@ -26,3 +26,5 @@ serde_derive = "1.0"
 [dev-dependencies]
 rusty-hook = "^0.11.2"
 fbt-lib = "0.1.12"
+indoc = "1"
+pretty_assertions = "1"

@@ -58,12 +58,16 @@ impl Config {
         if package_folder_name != package.name {
             todo!("package directory name mismatch")
         }
-        Ok(Config {
+
+        let c = Config {
             package,
             root: base_dir,
             fonts,
             dependencies: dep,
-        })
+        };
+        c.process_dependencies().await?;
+
+        Ok(c)
     }
 }
 
