@@ -11,6 +11,8 @@ pub async fn process_dir(directory: &str) -> fpm::Result<Vec<Document>> {
     let directory = std::path::PathBuf::from(directory);
 
     process_dir_(&mut documents, &directory, 0, &directory).await?;
+    documents.sort_by_key(|v| v.id.clone());
+
     return Ok(documents);
 
     #[async_recursion::async_recursion]

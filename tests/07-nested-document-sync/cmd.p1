@@ -6,7 +6,7 @@ output: amitu/.history
 -- stdout:
 
 Repo for amitu is github, directly syncing with .history.
-index.ftd
-nested/index.ftd
-nested/document.ftd
 FPM.ftd
+index.ftd
+nested/document.ftd
+nested/index.ftd

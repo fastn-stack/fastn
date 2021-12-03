@@ -5,7 +5,7 @@ output: amitu/.build
 
 -- stdout:
 
-Generated index.html
-Generated nested/index/index.html
-Generated nested/document/index.html
 Generated FPM/index.html
+Generated index.html
+Generated nested/document/index.html
+Generated nested/index/index.html
