@@ -6,7 +6,7 @@ pub struct Document {
     pub depth: usize,
 }
 
-pub async fn process_dir(directory: &str) -> fpm::Result<Vec<Document>> {
+pub(crate) async fn process_dir(directory: &str) -> fpm::Result<Vec<Document>> {
     let mut documents: Vec<Document> = vec![];
     let directory = std::path::PathBuf::from(directory);
 
