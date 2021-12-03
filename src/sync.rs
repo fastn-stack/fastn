@@ -7,8 +7,8 @@ pub async fn sync() -> fpm::Result<()> {
     let timestamp = fpm::get_timestamp_nanosecond();
 
     let mut modified_files = vec![];
-    for doc in fpm::process_dir(config.root.as_str()) {
-        if let Some(file) = write(&doc, timestamp) {
+    for doc in fpm::process_dir(config.root.as_str())? {
+        if let Some(file) = write(&doc, timestamp)? {
             modified_files.push(file);
         }
     }
@@ -26,17 +26,16 @@ pub async fn sync() -> fpm::Result<()> {
     Ok(())
 }
 
-fn write(doc: &fpm::Document, timestamp: u128) -> Option<String> {
+fn write(doc: &fpm::Document, timestamp: u128) -> fpm::Result<Option<String>> {
     use std::io::Write;
 
     if doc.id.starts_with(".history") {
-        return None;
+        return Ok(None);
     }
 
     let (path, doc_name) = if doc.id.contains('/') {
         let (dir, doc_name) = doc.id.rsplit_once('/').unwrap();
-        std::fs::create_dir_all(format!("{}/.history/{}", doc.base_path.as_str(), dir))
-            .expect("failed to create directory folder for doc");
+        std::fs::create_dir_all(format!("{}/.history/{}", doc.base_path.as_str(), dir))?;
         (
             format!("{}/.history/{}", doc.base_path.as_str(), dir),
             doc_name.to_string(),
@@ -48,7 +47,7 @@ fn write(doc: &fpm::Document, timestamp: u128) -> Option<String> {
         )
     };
 
-    let files = std::fs::read_dir(&path).expect("Panic! Unable to process the directory");
+    let files = std::fs::read_dir(&path)?;
 
     let mut max_timestamp: Option<(String, String)> = None;
     for n in files.flatten() {
@@ -68,9 +67,9 @@ fn write(doc: &fpm::Document, timestamp: u128) -> Option<String> {
     }
 
     if let Some((_, path)) = max_timestamp {
-        let existing_doc = std::fs::read_to_string(&path).expect("cant read file");
+        let existing_doc = std::fs::read_to_string(&path)?;
         if doc.document.eq(&existing_doc) {
-            return None;
+            return Ok(None);
         }
     }
 
@@ -82,7 +81,6 @@ fn write(doc: &fpm::Document, timestamp: u128) -> Option<String> {
 
     let mut f = std::fs::File::create(new_file_path.as_str()).expect("failed to create .html file");
 
-    f.write_all(doc.document.as_bytes())
-        .expect("failed to write to .html file");
-    Some(doc.id.to_string())
+    f.write_all(doc.document.as_bytes())?;
+    Ok(Some(doc.id.to_string()))
 }

@@ -3,21 +3,23 @@ pub async fn build() -> fpm::Result<()> {
     std::fs::create_dir_all(format!("{}/.build", config.root.as_str()).as_str())
         .expect("failed to create build folder");
 
-    for doc in fpm::process_dir(config.root.as_str()) {
-        write(&doc, &config);
+    for doc in fpm::process_dir(config.root.as_str())? {
+        write(&doc, &config)?;
     }
     Ok(())
 }
 
-fn write(doc: &fpm::Document, config: &fpm::Config) {
+fn write(doc: &fpm::Document, config: &fpm::Config) -> fpm::Result<()> {
     use std::io::Write;
 
     let lib = fpm::Library {};
     let b = match ftd::p2::Document::from(&doc.id, &doc.document, &lib) {
         Ok(v) => v,
         Err(e) => {
-            eprintln!("failed to parse {}: {:?}", doc.id, &e);
-            return;
+            return Err(fpm::Error::ConfigurationParseError {
+                message: format!("failed to parse {:?}", &e),
+                line_number: 0,
+            });
         }
     };
     if !(doc.depth == 0 && doc.id.eq("index.ftd")) {
@@ -25,8 +27,7 @@ fn write(doc: &fpm::Document, config: &fpm::Config) {
             "{}/.build/{}",
             doc.base_path.as_str(),
             doc.id.replace(".ftd", "")
-        ))
-        .expect("failed to create directory folder for doc");
+        ))?;
     }
     let file_rel_path = if doc.id.eq("index.ftd") {
         "index.html".to_string()
@@ -38,7 +39,7 @@ fn write(doc: &fpm::Document, config: &fpm::Config) {
         doc.base_path.as_str(),
         file_rel_path.as_str()
     );
-    let mut f = std::fs::File::create(new_file_path.as_str()).expect("failed to create .html file");
+    let mut f = std::fs::File::create(new_file_path.as_str())?;
 
     let ftd_doc = b.to_rt("main", &doc.id);
 
@@ -68,7 +69,7 @@ fn write(doc: &fpm::Document, config: &fpm::Config) {
             .as_str()
             .replace("__ftd_js__", ftd::js())
             .as_bytes(),
-    )
-    .expect("failed to write to .html file");
+    )?;
     println!("Generated {}", file_rel_path.as_str(),);
+    Ok(())
 }
