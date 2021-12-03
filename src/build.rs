@@ -1,14 +1,14 @@
 pub async fn build() -> fpm::Result<()> {
-    let config = fpm::Config::get().await?;
-    fpm::ensure_dependencies().await?;
+    let config = fpm::Config::read().await?;
+    // fpm::ensure_dependencies().await?;
 
-    std::fs::create_dir_all(format!("{}/.build", base_dir.as_str()).as_str())
+    std::fs::create_dir_all(format!("{}/.build", config.root.as_str()).as_str())
         .expect("failed to create build folder");
 
-    let style = fpm::Style { fonts: _fonts };
-    for doc in fpm::process_dir(base_dir.clone(), 0, base_dir) {
-        write(&doc, &style);
+    for doc in fpm::process_dir(config.root.clone(), 0, config.root.clone()) {
+        write(&doc, &config);
     }
+    Ok(())
 }
 
 fn write(doc: &fpm::Document, config: &fpm::Config) {

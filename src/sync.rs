@@ -1,13 +1,14 @@
-pub async fn sync() {
-    let (_fpm_config, base_dir, _fonts) = fpm::check().await;
+pub async fn sync() -> fpm::Result<()> {
+    let config = fpm::Config::read().await?;
 
-    std::fs::create_dir_all(format!("{}/.history", base_dir.as_str()).as_str())
+    std::fs::create_dir_all(format!("{}/.history", config.root.as_str()).as_str())
         .expect("failed to create build folder");
 
     let timestamp = fpm::get_timestamp_nanosecond();
-    for doc in fpm::process_dir(base_dir.clone(), 0, base_dir) {
+    for doc in fpm::process_dir(config.root.clone(), 0, config.root) {
         write(&doc, timestamp);
     }
+    Ok(())
 }
 
 fn write(doc: &fpm::Document, timestamp: u128) {

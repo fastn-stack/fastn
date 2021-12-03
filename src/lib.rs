@@ -10,13 +10,12 @@ mod sync;
 mod utils;
 
 pub use build::build;
-pub use check::check;
+pub use config::Config;
 pub use config::Package;
 pub use dependency::{Dependency, DependencyProvider};
 pub(crate) use document::{process_dir, Document};
 pub use library::Library;
 pub use style::Font;
-pub use style::Style;
 pub use sync::sync;
 pub(crate) use utils::get_timestamp_nanosecond;
 

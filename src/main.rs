@@ -35,9 +35,9 @@ async fn main() {
         .get_matches();
 
     if matches.subcommand_matches("build").is_some() {
-        fpm::build().await;
+        fpm::build().await.expect("build failed");
     }
     if matches.subcommand_matches("sync").is_some() {
-        fpm::sync().await;
+        fpm::sync().await.expect("sync failed");
     }
 }

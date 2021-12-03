@@ -1,13 +1,27 @@
 pub struct Config {
-    package: fpm::Package,
-    root: String,
-    fonts: Vec<fpm::Font>,
+    pub package: fpm::Package,
+    pub root: String,
+    pub fonts: Vec<fpm::Font>,
+    pub dependencies: Vec<fpm::Dependency>,
 }
 
 impl Config {
-    pub fn get_font_style(&self) -> String {}
+    pub fn get_font_style(&self) -> String {
+        let generated_style = self
+            .fonts
+            .iter()
+            .fold("".to_string(), |c, f| format!("{}\n{}", c, f.to_html()));
+        return match generated_style.is_empty() {
+            false => format!("<style>{}</style>", generated_style),
+            _ => format!(""),
+        };
+    }
 
-    pub async fn read() -> Result<Config> {
+    pub async fn process_dependencies(&self) -> fpm::Result<()> {
+        Ok(())
+    }
+
+    pub async fn read() -> fpm::Result<Config> {
         let root_dir = std::env::current_dir()
             .expect("Panic1")
             .to_str()
@@ -29,18 +43,23 @@ impl Config {
         };
 
         let config = fpm::Package::parse(&b);
-        let _dep = fpm::Dependency::parse(&b)
-            .into_iter()
-            .map(|x| tokio::spawn(async move { x.process().await }))
-            .collect::<Vec<tokio::task::JoinHandle<bool>>>();
+        let dep = fpm::Dependency::parse(&b);
+        // .into_iter()
+        // .map(|x| tokio::spawn(async move { x.process().await }))
+        // .collect::<Vec<tokio::task::JoinHandle<bool>>>();
 
-        let _fonts = fpm::Font::parse(&b);
-        futures::future::join_all(_dep).await;
+        let fonts = fpm::Font::parse(&b);
+        // futures::future::join_all(dep).await;
 
         if package_folder_name != config.name {
             todo!("package directory name mismatch")
         }
-        (config, base_dir, _fonts)
+        Ok(Config {
+            package: config,
+            root: base_dir,
+            fonts,
+            dependencies: dep,
+        })
     }
 }
 
