@@ -4,7 +4,7 @@ pub trait DependencyProvider {
     fn download(&self) -> bool;
 }
 
-#[derive(serde::Deserialize, Debug)]
+#[derive(serde::Deserialize, Debug, Clone)]
 pub struct Dependency {
     pub name: String,
     pub version: Option<String>,
@@ -29,8 +29,6 @@ impl Dependency {
         };
 
         let response = reqwest::get(download_url).await?;
-
-        std::fs::create_dir_all("./.packages/.cache").expect("failed to create build folder");
 
         let download_path = format!("/tmp/{}.zip", self.name.replace("/", "__"));
         let path = std::path::Path::new(download_path.as_str());

@@ -17,10 +17,6 @@ impl Config {
         };
     }
 
-    pub async fn process_dependencies(&self) -> fpm::Result<()> {
-        Ok(())
-    }
-
     pub async fn read() -> fpm::Result<Config> {
         let root_dir = std::env::current_dir()
             .expect("Panic1")
@@ -41,10 +37,6 @@ impl Config {
                 todo!();
             }
         };
-        // fpm::Error::ConfigurationParseError {
-        //     message: "".to_string,
-        //     line_number: 1,
-        // }
         let package =
             fpm::Package::parse(&b)?.ok_or_else(|| fpm::Error::ConfigurationParseError {
                 message: "".to_string(),
@@ -63,9 +55,9 @@ impl Config {
             package,
             root: base_dir,
             fonts,
-            dependencies: dep,
+            dependencies: dep.to_vec(),
         };
-        c.process_dependencies().await?;
+        fpm::ensure_dependencies(dep).await?;
 
         Ok(c)
     }

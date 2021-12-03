@@ -44,6 +44,15 @@ pub enum Error {
 
 pub type Result<T> = std::result::Result<T, Error>;
 
+pub async fn ensure_dependencies(deps: Vec<fpm::Dependency>) -> Result<()> {
+    futures::future::join_all(
+        deps.into_iter()
+            .map(|x| tokio::spawn(async move { x.process().await }))
+            .collect::<Vec<tokio::task::JoinHandle<bool>>>(),
+    )
+    .await;
+    Ok(())
+}
 #[cfg(test)]
 mod tests {
 

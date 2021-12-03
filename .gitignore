@@ -22,3 +22,5 @@ Cargo.lock
 /tests/**/.build
 /tests/**/.history
 /tests/**/.packages
+
+**/.DS_Store
