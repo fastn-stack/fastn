@@ -28,9 +28,7 @@ pub fn process_dir(directory: String, depth: usize, base_path: String) -> Vec<Do
                 .expect("Directory path is expected")
                 .to_string();
 
-            if depth == 0 && doc_path.as_str().ends_with("FPM.ftd") {
-                // pass the FPM.ftd file at the base level
-            } else if md.is_dir() {
+            if md.is_dir() {
                 // Iterate the children
                 let id = doc_path.split('/').last();
                 if id.is_some() && [".history", ".build", ".packages"].contains(&id.unwrap()) {

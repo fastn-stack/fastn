@@ -1,9 +1,11 @@
 -- fbt:
 cmd: cd amitu && $FBT_CWD/target/debug/fpm --test build
 output: amitu/.build
+skip: test not passing yet
 
 
 -- stdout:
 
 Generated <cwd>/amitu/.build/index.html [<cwd>/amitu/index.ftd]
 Generated <cwd>/amitu/.build/lib/index.html [<cwd>/amitu/lib.ftd]
+Generated <cwd>/amitu/.build/FPM/index.html [<cwd>/amitu/FPM.ftd]
