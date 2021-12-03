@@ -3,7 +3,7 @@ pub async fn build() -> fpm::Result<()> {
     std::fs::create_dir_all(format!("{}/.build", config.root.as_str()).as_str())
         .expect("failed to create build folder");
 
-    for doc in fpm::process_dir(config.root.clone(), 0, config.root.clone()) {
+    for doc in fpm::process_dir(config.root.as_str()) {
         write(&doc, &config);
     }
     Ok(())

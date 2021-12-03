@@ -7,7 +7,7 @@ pub async fn sync() -> fpm::Result<()> {
     let timestamp = fpm::get_timestamp_nanosecond();
 
     let mut modified_files = vec![];
-    for doc in fpm::process_dir(config.root.clone(), 0, config.root) {
+    for doc in fpm::process_dir(config.root.as_str()) {
         if let Some(file) = write(&doc, timestamp) {
             modified_files.push(file);
         }

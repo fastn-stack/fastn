@@ -6,46 +6,37 @@ pub struct Document {
     pub depth: usize,
 }
 
-pub fn process_dir(directory: String, depth: usize, base_path: String) -> Vec<Document> {
+pub fn process_dir(directory: &str) -> Vec<Document> {
     let mut documents: Vec<Document> = vec![];
-    process_dir_(&mut documents, directory, depth, base_path);
+    let directory = std::path::PathBuf::from(directory);
+
+    process_dir_(&mut documents, &directory, 0, &directory);
     return documents;
 
     fn process_dir_(
         documents: &mut Vec<Document>,
-        directory: String,
+        directory: &std::path::Path,
         depth: usize,
-        base_path: String,
+        base_path: &std::path::Path,
     ) -> u32 {
         let mut count: u32 = 0;
         for entry in std::fs::read_dir(&directory).expect("Panic! Unable to process the directory")
         {
-            let e = entry.expect("Panic: Doc not found");
-            let md = std::fs::metadata(e.path()).expect("Doc Metadata evaluation failed");
-            let doc_path = e
-                .path()
-                .to_str()
-                .expect("Directory path is expected")
-                .to_string();
+            let doc_path = entry.expect("Panic: Doc not found").path();
+            let md = std::fs::metadata(&doc_path).expect("Doc Metadata evaluation failed");
 
             if md.is_dir() {
                 // Iterate the children
-                let id = doc_path.split('/').last();
+                let id = doc_path.to_str().unwrap().split('/').last();
                 if id.is_some() && [".history", ".build", ".packages"].contains(&id.unwrap()) {
                     // ignore .history and .build directory
                     continue;
                 }
-                count += process_dir_(
-                    documents,
-                    doc_path,
-                    depth + 1,
-                    base_path.as_str().to_string(),
-                );
-            } else if doc_path.as_str().ends_with(".ftd") {
+                count += process_dir_(documents, &doc_path, depth + 1, base_path);
+            } else if doc_path.to_str().unwrap_or_default().ends_with(".ftd") {
                 // process the document
-                let doc = std::fs::read_to_string(doc_path).expect("cant read file");
-                let id = e.path().clone();
-                let id = id.to_str().expect(">>>").split('/');
+                let doc = std::fs::read_to_string(&doc_path).expect("cant read file");
+                let id = doc_path.to_str().expect(">>>").split('/');
                 let len = id.clone().count();
 
                 documents.push(Document {
@@ -56,7 +47,7 @@ pub fn process_dir(directory: String, depth: usize, base_path: String) -> Vec<Do
                         .join("/")
                         .to_string(),
                     document: doc,
-                    base_path: base_path.as_str().to_string(),
+                    base_path: base_path.to_str().unwrap_or_default().to_string(),
                     depth,
                 });
                 count += 1;
