@@ -1,3 +1,3 @@
--- import: fifthtry/fpm-blog/lib
+-- import: fifthtry/blog-theme as lib
 
 -- lib.h4 : Hello world!

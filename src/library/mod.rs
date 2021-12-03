@@ -10,7 +10,11 @@ impl ftd::p2::Library for Library {
         if let Ok(v) = std::fs::read_to_string(format!("./{}.ftd", name)) {
             Some(v)
         } else {
-            std::fs::read_to_string(format!("./.packages/{}.ftd", name)).ok()
+            if let Ok(v) = std::fs::read_to_string(format!("./.packages/{}.ftd", name)) {
+                Some(v)
+            } else {
+                std::fs::read_to_string(format!("./.packages/{}/index.ftd", name)).ok()
+            }
         }
     }
 
