@@ -1,16 +1,15 @@
 pub async fn build() -> fpm::Result<()> {
     let config = fpm::Config::read().await?;
-    std::fs::create_dir_all(format!("{}/.build", config.root.as_str()).as_str())
-        .expect("failed to create build folder");
+    tokio::fs::create_dir_all(format!("{}/.build", config.root.as_str()).as_str()).await?;
 
-    for doc in fpm::process_dir(config.root.as_str())? {
-        write(&doc, &config)?;
+    for doc in fpm::process_dir(config.root.as_str()).await? {
+        write(&doc, &config).await?;
     }
     Ok(())
 }
 
-fn write(doc: &fpm::Document, config: &fpm::Config) -> fpm::Result<()> {
-    use std::io::Write;
+async fn write(doc: &fpm::Document, config: &fpm::Config) -> fpm::Result<()> {
+    use tokio::io::AsyncWriteExt;
 
     let lib = fpm::Library {};
     let b = match ftd::p2::Document::from(&doc.id, &doc.document, &lib) {
@@ -39,7 +38,7 @@ fn write(doc: &fpm::Document, config: &fpm::Config) -> fpm::Result<()> {
         doc.base_path.as_str(),
         file_rel_path.as_str()
     );
-    let mut f = std::fs::File::create(new_file_path.as_str())?;
+    let mut f = tokio::fs::File::create(new_file_path.as_str()).await?;
 
     let ftd_doc = b.to_rt("main", &doc.id);
 
@@ -69,7 +68,8 @@ fn write(doc: &fpm::Document, config: &fpm::Config) -> fpm::Result<()> {
             .as_str()
             .replace("__ftd_js__", ftd::js())
             .as_bytes(),
-    )?;
+    )
+    .await?;
     println!("Generated {}", file_rel_path.as_str(),);
     Ok(())
 }

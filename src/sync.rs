@@ -7,8 +7,8 @@ pub async fn sync() -> fpm::Result<()> {
     let timestamp = fpm::get_timestamp_nanosecond();
 
     let mut modified_files = vec![];
-    for doc in fpm::process_dir(config.root.as_str())? {
-        if let Some(file) = write(&doc, timestamp)? {
+    for doc in fpm::process_dir(config.root.as_str()).await? {
+        if let Some(file) = write(&doc, timestamp).await? {
             modified_files.push(file);
         }
     }
@@ -26,8 +26,8 @@ pub async fn sync() -> fpm::Result<()> {
     Ok(())
 }
 
-fn write(doc: &fpm::Document, timestamp: u128) -> fpm::Result<Option<String>> {
-    use std::io::Write;
+async fn write(doc: &fpm::Document, timestamp: u128) -> fpm::Result<Option<String>> {
+    use tokio::io::AsyncWriteExt;
 
     if doc.id.starts_with(".history") {
         return Ok(None);
@@ -47,10 +47,10 @@ fn write(doc: &fpm::Document, timestamp: u128) -> fpm::Result<Option<String>> {
         )
     };
 
-    let files = std::fs::read_dir(&path)?;
+    let mut files = tokio::fs::read_dir(&path).await?;
 
     let mut max_timestamp: Option<(String, String)> = None;
-    for n in files.flatten() {
+    while let Some(n) = files.next_entry().await? {
         let p = format!("{}/{}.", path, doc_name.replace(".ftd", ""));
         let file = n.path().to_str().unwrap().to_string();
         if file.starts_with(&p) {
@@ -67,7 +67,7 @@ fn write(doc: &fpm::Document, timestamp: u128) -> fpm::Result<Option<String>> {
     }
 
     if let Some((_, path)) = max_timestamp {
-        let existing_doc = std::fs::read_to_string(&path)?;
+        let existing_doc = tokio::fs::read_to_string(&path).await?;
         if doc.document.eq(&existing_doc) {
             return Ok(None);
         }
@@ -79,8 +79,8 @@ fn write(doc: &fpm::Document, timestamp: u128) -> fpm::Result<Option<String>> {
         doc.id.replace(".ftd", &format!(".{}.ftd", timestamp))
     );
 
-    let mut f = std::fs::File::create(new_file_path.as_str()).expect("failed to create .html file");
+    let mut f = tokio::fs::File::create(new_file_path.as_str()).await?;
 
-    f.write_all(doc.document.as_bytes())?;
+    f.write_all(doc.document.as_bytes()).await?;
     Ok(Some(doc.id.to_string()))
 }
