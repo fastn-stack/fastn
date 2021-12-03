@@ -7,7 +7,6 @@ mod document;
 mod library;
 mod style;
 mod sync;
-mod toc;
 mod utils;
 
 pub use build::build;

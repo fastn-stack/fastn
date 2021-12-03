@@ -1,3 +1,5 @@
+mod toc;
+
 pub struct Library {}
 
 impl ftd::p2::Library for Library {
@@ -21,7 +23,7 @@ impl ftd::p2::Library for Library {
             .header
             .str(doc.name, section.line_number, "$processor$")?
         {
-            "ft-toc" => fpm::toc::processor(section, doc),
+            "toc" => fpm::library::toc::processor(section, doc),
             t => unimplemented!("$processor$: {} is not implemented yet", t),
         }
     }
