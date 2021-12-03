@@ -32,7 +32,7 @@ impl Dependency {
 
         std::fs::create_dir_all("./.packages/.cache").expect("failed to create build folder");
 
-        let download_path = format!("./.packages/.cache/{}.zip", self.name.replace("/", "__"));
+        let download_path = format!("/tmp/{}.zip", self.name.replace("/", "__"));
         let path = std::path::Path::new(download_path.as_str());
         let mut file = std::fs::File::create(&path)?;
         let content = response.bytes().await?;

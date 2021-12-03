@@ -1,5 +1,6 @@
-pub async fn build() {
-    let (_fpm_config, base_dir, _fonts) = fpm::check().await;
+pub async fn build() -> fpm::Result<()> {
+    let config = fpm::Config::get().await?;
+    fpm::ensure_dependencies().await?;
 
     std::fs::create_dir_all(format!("{}/.build", base_dir.as_str()).as_str())
         .expect("failed to create build folder");
@@ -10,7 +11,7 @@ pub async fn build() {
     }
 }
 
-fn write(doc: &fpm::Document, style: &fpm::Style) {
+fn write(doc: &fpm::Document, config: &fpm::Config) {
     use std::io::Write;
 
     let lib = fpm::Library {};
@@ -61,7 +62,7 @@ fn write(doc: &fpm::Document, style: &fpm::Style) {
                 format!(
                     "{}{}",
                     b.html("main", &doc.id).as_str(),
-                    style.to_html().unwrap_or_else(|| "".to_string())
+                    config.get_font_style(),
                 )
                 .as_str(),
             )

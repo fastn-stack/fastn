@@ -15,20 +15,19 @@ impl Font {
         b.to_owned().instances("fpm#font").unwrap()
     }
 
-    pub fn to_html(&self) -> Option<String> {
-        Some(format!(
-            "
-            @font-face {{
-                font-family: {};
-                src: url({});
-            }}
-            ",
-            self.name,
-            self.woff2.as_ref().unwrap_or_else(|| self
-                .woff
-                .as_ref()
-                .expect("Either woff2 or woff 1 should be provided"))
-        ))
+    pub fn to_html(&self) -> String {
+        if let Some(v) = self.woff2.as_ref().or(self.woff.as_ref()) {
+            format!(
+                "
+                @font-face {{
+                    font-family: {};
+                    src: url({});
+                }}",
+                self.name, v
+            )
+        } else {
+            "".to_string()
+        }
     }
 }
 
