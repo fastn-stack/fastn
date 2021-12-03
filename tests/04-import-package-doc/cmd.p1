@@ -5,6 +5,6 @@ output: amitu/.build
 
 -- stdout:
 
-Generated <cwd>/amitu/.build/index.html [<cwd>/amitu/index.ftd]
-Generated <cwd>/amitu/.build/lib/index.html [<cwd>/amitu/lib.ftd]
-Generated <cwd>/amitu/.build/FPM/index.html [<cwd>/amitu/FPM.ftd]
+Generated index.html
+Generated lib/index.html
+Generated FPM/index.html

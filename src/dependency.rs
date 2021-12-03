@@ -18,6 +18,10 @@ impl Dependency {
     }
 
     pub async fn download_zip(&self) -> fpm::Result<()> {
+        if std::path::Path::new(format!("./.packages/{}", self.name).as_str()).exists() {
+            // TODO: Optimitisically exiting in case the path exists locally
+            return Ok(());
+        }
         let download_url = match self.repo.as_str() {
             "github" => {
                 format!(

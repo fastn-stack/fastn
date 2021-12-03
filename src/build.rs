@@ -28,14 +28,15 @@ fn write(doc: &fpm::Document, config: &fpm::Config) {
         ))
         .expect("failed to create directory folder for doc");
     }
+    let file_rel_path = if doc.id.eq("index.ftd") {
+        "index.html".to_string()
+    } else {
+        doc.id.replace(".ftd", "/index.html")
+    };
     let new_file_path = format!(
         "{}/.build/{}",
         doc.base_path.as_str(),
-        if doc.id.eq("index.ftd") {
-            "index.html".to_string()
-        } else {
-            doc.id.replace(".ftd", "/index.html")
-        }
+        file_rel_path.as_str()
     );
     let mut f = std::fs::File::create(new_file_path.as_str()).expect("failed to create .html file");
 
@@ -69,9 +70,5 @@ fn write(doc: &fpm::Document, config: &fpm::Config) {
             .as_bytes(),
     )
     .expect("failed to write to .html file");
-    println!(
-        "Generated {} [{}]",
-        new_file_path,
-        format!("{}/{}", doc.base_path, doc.id)
-    );
+    println!("Generated {}", file_rel_path.as_str(),);
 }
