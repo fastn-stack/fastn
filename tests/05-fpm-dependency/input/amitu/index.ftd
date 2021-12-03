@@ -1,5 +1,3 @@
 -- import: fifthtry/fpm-blog/lib
 
--- lib.block:
-
---- ftd.text: hello
+-- lib.h4 : Hello world!
