@@ -5,4 +5,6 @@ output: amitu/.history
 
 -- stdout:
 
-Generated history [<cwd>/amitu/index.ftd]
+Repo for amitu is github, directly syncing with .history.
+index.ftd
+FPM.ftd

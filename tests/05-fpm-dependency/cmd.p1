@@ -8,3 +8,4 @@ skip: test not passing yet
 
 Generated <cwd>/amitu/.build/index.html [<cwd>/amitu/index.ftd]
 Generated <cwd>/amitu/.build/lib/index.html [<cwd>/amitu/lib.ftd]
+Generated <cwd>/amitu/.build/FPM/index.html [<cwd>/amitu/FPM.ftd]
