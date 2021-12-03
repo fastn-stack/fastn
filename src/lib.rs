@@ -34,12 +34,11 @@ pub enum Error {
     #[error("IoError: {}", _0)]
     ZipError(#[from] zip::result::ZipError),
 
-    #[error("{doc_id}:{line_number} -> {message}")]
-    ParseError {
-        message: String,
-        doc_id: String,
-        line_number: usize,
-    },
+    #[error("FTDError: {}", _0)]
+    FTDError(#[from] ftd::p1::Error),
+
+    #[error("{line_number}: -> {message}")]
+    ConfigurationParseError { message: String, line_number: usize },
 }
 
 pub type Result<T> = std::result::Result<T, Error>;

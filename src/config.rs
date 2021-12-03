@@ -41,21 +41,25 @@ impl Config {
                 todo!();
             }
         };
-
-        let config = fpm::Package::parse(&b);
-        let dep = fpm::Dependency::parse(&b);
-        // .into_iter()
-        // .map(|x| tokio::spawn(async move { x.process().await }))
-        // .collect::<Vec<tokio::task::JoinHandle<bool>>>();
+        // fpm::Error::ConfigurationParseError {
+        //     message: "".to_string,
+        //     line_number: 1,
+        // }
+        let package =
+            fpm::Package::parse(&b)?.ok_or_else(|| fpm::Error::ConfigurationParseError {
+                message: "".to_string(),
+                line_number: 1,
+            })?;
+        let dep = fpm::Dependency::parse(&b)?;
 
         let fonts = fpm::Font::parse(&b);
         // futures::future::join_all(dep).await;
 
-        if package_folder_name != config.name {
+        if package_folder_name != package.name {
             todo!("package directory name mismatch")
         }
         Ok(Config {
-            package: config,
+            package,
             root: base_dir,
             fonts,
             dependencies: dep,
@@ -82,11 +86,7 @@ pub struct Package {
 }
 
 impl Package {
-    pub fn parse(b: &ftd::p2::Document) -> Package {
-        // TODO(main): Error handling
-        b.to_owned()
-            .only_instance::<Package>("fpm#package")
-            .unwrap()
-            .unwrap()
+    pub fn parse(b: &ftd::p2::Document) -> fpm::Result<Option<Package>> {
+        Ok(b.to_owned().only_instance::<Package>("fpm#package")?)
     }
 }

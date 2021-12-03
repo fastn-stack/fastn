@@ -13,8 +13,8 @@ pub struct Dependency {
 }
 
 impl Dependency {
-    pub fn parse(b: &ftd::p2::Document) -> Vec<Dependency> {
-        b.to_owned().instances("fpm#dependency").unwrap()
+    pub fn parse(b: &ftd::p2::Document) -> fpm::Result<Vec<Dependency>> {
+        Ok(b.to_owned().instances("fpm#dependency")?)
     }
 
     pub async fn download_zip(&self) -> fpm::Result<()> {
