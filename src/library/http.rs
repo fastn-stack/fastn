@@ -40,7 +40,7 @@ pub fn processor(section: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Re
     };
 
     for (_, k, v) in section.header.0.iter() {
-        if k == "$processor$" {
+        if k == "$processor$" || k == "url" || k == "method" {
             continue;
         }
         url.query_pairs_mut().append_pair(k, v);
