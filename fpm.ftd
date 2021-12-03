@@ -9,3 +9,8 @@ caption name:
 string repo:
 optional string version:
 optional body notes:
+
+-- record font:
+caption name:
+optional string woff:
+optional string woff2:
