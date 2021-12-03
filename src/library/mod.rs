@@ -1,3 +1,4 @@
+mod http;
 mod toc;
 //
 pub struct Library {}
@@ -26,6 +27,7 @@ impl ftd::p2::Library for Library {
             .str(doc.name, section.line_number, "$processor$")?
         {
             "toc" => fpm::library::toc::processor(section, doc),
+            "http" => fpm::library::http::processor(section, doc),
             t => unimplemented!("$processor$: {} is not implemented yet", t),
         }
     }
