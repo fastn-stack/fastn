@@ -28,6 +28,11 @@ async fn main() {
                 .version(env!("CARGO_PKG_VERSION")),
         )
         .subcommand(
+            clap::SubCommand::with_name("status")
+                .about("Shows how many files have changed, comparing it with latest version of that file in `.history` folder")
+                .version(env!("CARGO_PKG_VERSION")),
+        )
+        .subcommand(
             clap::SubCommand::with_name("check")
                 .about("Checks the folder structure of the current .FPM.ftd file")
                 .version(env!("CARGO_PKG_VERSION")),
@@ -39,5 +44,8 @@ async fn main() {
     }
     if matches.subcommand_matches("sync").is_some() {
         fpm::sync().await.expect("sync failed");
+    }
+    if matches.subcommand_matches("status").is_some() {
+        fpm::status().await.expect("status failed");
     }
 }
