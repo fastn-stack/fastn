@@ -9,24 +9,8 @@ pub async fn status() -> fpm::Result<()> {
         let status = get_file_status(&doc, &snapshots).await?;
         filestatus.insert(doc.id, status);
     }
-    for id in snapshots.keys() {
-        if let Some(status) = filestatus.get(id) {
-            if status.eq(&FileStatus::None) {
-                continue;
-            }
-            println!("{:?} {}", status, id);
-        } else {
-            println!("{:?} {}", FileStatus::Removed, id);
-        }
-    }
 
-    for (id, status) in filestatus
-        .iter()
-        .filter(|(_, f)| f.eq(&&FileStatus::Added))
-        .collect::<Vec<(&String, &FileStatus)>>()
-    {
-        println!("{:?} {}", status, id);
-    }
+    print_file_status(&snapshots, &filestatus);
     Ok(())
 }
 
@@ -48,6 +32,35 @@ async fn get_file_status(
         return Ok(FileStatus::Modified);
     }
     Ok(FileStatus::Added)
+}
+
+fn print_file_status(
+    snapshots: &std::collections::BTreeMap<String, String>,
+    filestatus: &std::collections::BTreeMap<String, FileStatus>,
+) {
+    let mut any_file_removed = false;
+    for id in snapshots.keys() {
+        if let Some(status) = filestatus.get(id) {
+            if status.eq(&FileStatus::None) {
+                continue;
+            }
+            println!("{:?}: {}", status, id);
+        } else {
+            any_file_removed = true;
+            println!("{:?}: {}", FileStatus::Removed, id);
+        }
+    }
+
+    for (id, status) in filestatus
+        .iter()
+        .filter(|(_, f)| f.eq(&&FileStatus::Added))
+        .collect::<Vec<(&String, &FileStatus)>>()
+    {
+        println!("{:?}: {}", status, id);
+    }
+    if !(filestatus.iter().any(|(_, f)| !f.eq(&&FileStatus::None)) || any_file_removed) {
+        println!("Nothing to sync, clean working tree");
+    }
 }
 
 #[derive(Debug, PartialEq)]
