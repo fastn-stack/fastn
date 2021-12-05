@@ -20,6 +20,7 @@ FLAGS:
 SUBCOMMANDS:
     build     Builds the current directory
     check     Checks the folder structure of the current .FPM.ftd file
+    diff      Show changes in files, comparing it with latest version of that file in `.history` folder
     help      Prints this message or the help of the given subcommand(s)
     status    Shows how many files have changed, comparing it with latest version of that file in `.history` folder
     sync      `sync` with `fpm-repo` or `.history` folder if not using `fpm-repo`
