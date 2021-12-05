@@ -58,7 +58,7 @@ fn print_file_status(
     {
         println!("{:?}: {}", status, id);
     }
-    if !(filestatus.iter().any(|(_, f)| !f.eq(&&FileStatus::None)) || any_file_removed) {
+    if !(filestatus.iter().any(|(_, f)| !f.eq(&FileStatus::None)) || any_file_removed) {
         println!("Nothing to sync, clean working tree");
     }
 }
