@@ -66,7 +66,13 @@ async fn get(
         }
     };
 
-    Ok(serde_json::from_str(t.as_str())?)
+    match serde_json::from_str(t.as_str()) {
+        Ok(v) => Ok(v),
+        Err(e) => {
+            eprintln!("failed to parse JSON: {}", t);
+            Err(e)?
+        }
+    }
 }
 
 async fn _get(url: url::Url) -> reqwest::Result<String> {
