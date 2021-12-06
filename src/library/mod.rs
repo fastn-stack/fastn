@@ -1,6 +1,7 @@
 mod http;
+mod sqlite;
 mod toc;
-//
+
 pub struct Library {}
 
 impl ftd::p2::Library for Library {
@@ -28,6 +29,7 @@ impl ftd::p2::Library for Library {
         {
             "toc" => fpm::library::toc::processor(section, doc),
             "http" => fpm::library::http::processor(section, doc),
+            "package-query" => fpm::library::sqlite::processor(section, doc),
             t => unimplemented!("$processor$: {} is not implemented yet", t),
         }
     }
