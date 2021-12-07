@@ -2,7 +2,7 @@
 async fn main() {
     let matches = clap::App::new("FTD Package Manager")
         .version(env!("CARGO_PKG_VERSION"))
-        .author("Shobhit S. <shobhit@fifthtry.com>")
+        .author(env!("CARGO_PKG_AUTHORS"))
         .about("Description...")
         .setting(clap::AppSettings::ArgRequiredElseHelp)
         .arg(
