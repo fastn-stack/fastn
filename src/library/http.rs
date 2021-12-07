@@ -70,7 +70,7 @@ async fn get(
         Ok(v) => Ok(v),
         Err(e) => {
             eprintln!("failed to parse JSON: {}", t);
-            Err(e)?
+            Err(e.into())
         }
     }
 }
