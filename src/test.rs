@@ -92,6 +92,7 @@ pub fn entity() -> ftd::p2::Thing {
                 name: s("foo/bar#entity.person"),
                 fields: person_fields(),
                 instances: Default::default(),
+                order: vec![s("name"), s("address"), s("bio"), s("age")],
             },
             ftd::p2::Record {
                 name: s("foo/bar#entity.company"),
@@ -101,6 +102,7 @@ pub fn entity() -> ftd::p2::Thing {
                 ])
                 .collect(),
                 instances: Default::default(),
+                order: vec![s("name"), s("industry")],
             },
         ],
     })

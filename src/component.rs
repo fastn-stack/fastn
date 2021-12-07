@@ -2291,6 +2291,7 @@ mod test {
                 name: "foo/bar#person".to_string(),
                 fields: person_fields(),
                 instances: Default::default(),
+                order: vec![s("name"), s("address"), s("bio"), s("age")],
             }),
         );
         bag.insert(
