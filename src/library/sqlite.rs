@@ -68,7 +68,7 @@ pub fn processor(section: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Re
                 }
             }
         }
-        from_json_rows(section, doc, &result)
+        doc.from_json_rows(section, &result)
     } else {
         let json = match rows.next() {
             Ok(Some(r)) => row_to_json(r, section, doc, count)?,
@@ -87,7 +87,7 @@ pub fn processor(section: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Re
                 )
             }
         };
-        from_json_row(section, doc, &json)
+        doc.from_json_row(section, &json)
     }
 }
 
@@ -99,8 +99,20 @@ fn row_to_json(
 ) -> ftd::p1::Result<Vec<serde_json::Value>> {
     let mut row: Vec<serde_json::Value> = vec![];
     for i in 0..count {
-        match r.get(i) {
-            Ok(o) => row.push(o),
+        match r.get::<usize, rusqlite::types::Value>(i) {
+            Ok(rusqlite::types::Value::Null) => row.push(serde_json::Value::Null),
+            Ok(rusqlite::types::Value::Integer(i)) => row.push(serde_json::Value::Number(i.into())),
+            Ok(rusqlite::types::Value::Real(i)) => row.push(serde_json::Value::Number(
+                serde_json::Number::from_f64(i).unwrap(),
+            )),
+            Ok(rusqlite::types::Value::Text(i)) => row.push(serde_json::Value::String(i)),
+            Ok(rusqlite::types::Value::Blob(_)) => {
+                return ftd::e2(
+                    format!("Query returned blob for column: {}", i),
+                    doc.name,
+                    section.line_number,
+                );
+            }
             Err(e) => {
                 return ftd::e2(
                     format!("Failed to read response: {:?}", e),
@@ -114,21 +126,8 @@ fn row_to_json(
 }
 
 fn is_list(section: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> bool {
-    ftd::Variable::list_from_p1(section, doc).is_ok()
-}
-
-fn from_json_rows(
-    _section: &ftd::p1::Section,
-    _doc: &ftd::p2::TDoc,
-    _rows: &[Vec<serde_json::Value>],
-) -> ftd::p1::Result<ftd::Value> {
-    todo!()
-}
-
-fn from_json_row(
-    _section: &ftd::p1::Section,
-    _doc: &ftd::p2::TDoc,
-    _row: &[serde_json::Value],
-) -> ftd::p1::Result<ftd::Value> {
-    todo!()
+    matches!(
+        doc.get_value(section.line_number, section.name.as_str()),
+        Ok(ftd::Value::List { .. })
+    )
 }
