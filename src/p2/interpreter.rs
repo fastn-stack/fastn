@@ -2943,6 +2943,7 @@ mod test {
                 ])
                 .collect(),
                 instances: Default::default(),
+                order: vec![s("x"), s("y")],
             }),
         );
 
@@ -6384,6 +6385,7 @@ mod test {
                 ])
                 .collect(),
                 instances: Default::default(),
+                order: vec![s("name"), s("bio")],
             }),
         );
 
@@ -6611,6 +6613,7 @@ mod test {
                 ])
                 .collect(),
                 instances: Default::default(),
+                order: vec![s("name"), s("bio"), s("ceo")],
             }),
         );
 
@@ -6964,6 +6967,7 @@ mod test {
                 ])
                 .collect(),
                 instances: Default::default(),
+                order: vec![s("name"), s("bio")],
             }),
         );
 
@@ -7505,6 +7509,7 @@ mod test {
                 ])
                 .collect(),
                 instances: Default::default(),
+                order: vec![s("title"), s("description")],
             }),
         );
 
@@ -8558,6 +8563,7 @@ mod test {
                 ])
                 .collect(),
                 instances: Default::default(),
+                order: vec![s("name"), s("address"), s("bio"), s("age"), s("size")],
             }),
         );
 
@@ -8895,6 +8901,7 @@ mod test {
                         ])
                         .collect(),
                         instances: Default::default(),
+                        order: vec![s("name"), s("phone")],
                     },
                     ftd::p2::Record {
                         name: s("foo/bar#lead.company"),
@@ -8912,6 +8919,7 @@ mod test {
                         ])
                         .collect(),
                         instances: Default::default(),
+                        order: vec![s("name"), s("contact"), s("fax"), s("no-of-employees")],
                     },
                 ],
             }),

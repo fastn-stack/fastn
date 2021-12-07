@@ -917,6 +917,7 @@ mod test {
                 ])
                 .collect(),
                 instances: Default::default(),
+                order: vec![s("title"), s("about")],
             }),
         );
 

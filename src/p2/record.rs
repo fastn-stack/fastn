@@ -3,6 +3,7 @@ pub struct Record {
     pub name: String,
     pub fields: std::collections::BTreeMap<String, ftd::p2::Kind>,
     pub instances: std::collections::BTreeMap<String, Vec<Invocation>>,
+    pub order: Vec<String>,
 }
 
 type Invocation = std::collections::BTreeMap<String, ftd::PropertyValue>;
@@ -258,6 +259,7 @@ impl Record {
         let name = ftd::get_name("record", p1_name, doc.name)?;
         let full_name = doc.format_name(name);
         let mut fields = std::collections::BTreeMap::new();
+        let mut order = vec![];
         let object_kind = (
             name,
             ftd::p2::Kind::Record {
@@ -288,12 +290,14 @@ impl Record {
                 var_data.name.to_string(),
                 ftd::p2::Kind::for_variable(i.to_owned(), k, v, doc, Some(object_kind.clone()))?,
             );
+            order.push(var_data.name.to_string());
         }
         assert_fields_valid(line_number, &fields, doc.name)?;
         return Ok(Record {
             name: full_name,
             fields,
             instances: Default::default(),
+            order,
         });
 
         fn normalise_value(s: &str) -> ftd::p1::Result<String> {
@@ -411,6 +415,7 @@ mod test {
                     vec![abrar(), sourabh.clone()],
                 )])
                 .collect(),
+                order: vec![s("name"), s("address"), s("bio"), s("age")],
             }),
         );
         bag.insert(
@@ -436,6 +441,7 @@ mod test {
                 ])
                 .collect(),
                 instances: Default::default(),
+                order: vec![s("eid"), s("who")],
             }),
         );
         bag.insert(
@@ -582,6 +588,7 @@ mod test {
                     ])
                     .collect(),
                     instances: Default::default(),
+                    order: vec![s("name"), s("friends")],
                 }),
             );
 
@@ -676,6 +683,7 @@ mod test {
                 ])
                 .collect(),
                 instances: Default::default(),
+                order: vec![s("x"), s("y")],
             }),
         );
 
@@ -696,6 +704,7 @@ mod test {
                 ])
                 .collect(),
                 instances: Default::default(),
+                order: vec![s("name"), s("points")],
             }),
         );
 
@@ -838,6 +847,7 @@ mod test {
                 ])
                 .collect(),
                 instances: Default::default(),
+                order: vec![s("party"), s("value")],
             }),
         );
         bag.insert(
