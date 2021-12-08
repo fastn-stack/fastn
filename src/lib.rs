@@ -6,10 +6,12 @@ mod dependency;
 mod diff;
 mod document;
 mod library;
+mod mark;
 mod snaphot;
 mod status;
 mod style;
 mod sync;
+mod tracks;
 mod utils;
 
 pub use build::build;
@@ -19,10 +21,12 @@ pub(crate) use dependency::Dependency;
 pub use diff::diff;
 pub(crate) use document::{process_dir, Document};
 pub(crate) use library::Library;
+pub use mark::mark;
 pub(crate) use snaphot::Snapshot;
 pub use status::status;
 pub(crate) use style::Font;
 pub use sync::sync;
+pub use tracks::tracks;
 pub(crate) use utils::get_timestamp_nanosecond;
 
 pub fn fpm_ftd() -> &'static str {

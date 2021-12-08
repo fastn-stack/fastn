@@ -19,4 +19,11 @@ optional string woff2:
 caption file:
 string timestamp:
 
+-- record track:
+caption document-name:
+optional string package:
+optional string version:
+optional string other-timestamp:
+string self-timestamp:
+
 -- string list ignore:

@@ -1,3 +1,4 @@
+#[derive(Debug)]
 pub struct Config {
     pub package: fpm::Package,
     pub root: String,
