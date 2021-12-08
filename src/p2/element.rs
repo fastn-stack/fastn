@@ -520,7 +520,9 @@ pub fn container_from_properties(
         children: Default::default(),
         external_children: Default::default(),
         open: ftd::p2::utils::string_bool_optional("open", properties, doc.name, 0)?,
-        spacing: ftd::Spacing::from(ftd::p2::utils::string_optional("spacing", properties, doc.name, 0)?)?,
+        spacing: ftd::Spacing::from(ftd::p2::utils::string_optional(
+            "spacing", properties, doc.name, 0,
+        )?)?,
         wrap: ftd::p2::utils::bool_with_default("wrap", false, properties, doc.name, 0)?,
     })
 }
@@ -554,9 +556,9 @@ pub fn image_function() -> ftd::Component {
             ],
             common_arguments(),
         ]
-            .concat()
-            .into_iter()
-            .collect(),
+        .concat()
+        .into_iter()
+        .collect(),
         locals: Default::default(),
         properties: Default::default(),
         instructions: Default::default(),
@@ -737,9 +739,9 @@ pub fn iframe_function() -> ftd::Component {
             ],
             common_arguments(),
         ]
-            .concat()
-            .into_iter()
-            .collect(),
+        .concat()
+        .into_iter()
+        .collect(),
         locals: Default::default(),
         properties: Default::default(),
         instructions: Default::default(),
@@ -925,7 +927,7 @@ pub fn code_from_properties(
                 doc.name,
                 0,
             )?
-                .as_str(),
+            .as_str(),
             doc.name,
         )?,
         common: common_from_properties(
@@ -1169,9 +1171,9 @@ pub fn text_function(is_text_block: bool) -> ftd::Component {
             ],
             common_arguments(),
         ]
-            .concat()
-            .into_iter()
-            .collect(),
+        .concat()
+        .into_iter()
+        .collect(),
         locals: Default::default(),
         properties: Default::default(),
         instructions: Default::default(),
@@ -1219,9 +1221,9 @@ pub fn code_function() -> ftd::Component {
             ],
             common_arguments(),
         ]
-            .concat()
-            .into_iter()
-            .collect(),
+        .concat()
+        .into_iter()
+        .collect(),
         locals: Default::default(),
         properties: Default::default(),
         instructions: Default::default(),
@@ -1263,9 +1265,9 @@ pub fn integer_function() -> ftd::Component {
             ],
             common_arguments(),
         ]
-            .concat()
-            .into_iter()
-            .collect(),
+        .concat()
+        .into_iter()
+        .collect(),
         locals: Default::default(),
         properties: Default::default(),
         instructions: Default::default(),
@@ -1307,9 +1309,9 @@ pub fn decimal_function() -> ftd::Component {
             ],
             common_arguments(),
         ]
-            .concat()
-            .into_iter()
-            .collect(),
+        .concat()
+        .into_iter()
+        .collect(),
         locals: Default::default(),
         properties: Default::default(),
         instructions: Default::default(),
@@ -1380,9 +1382,9 @@ pub fn boolean_function() -> ftd::Component {
             ],
             common_arguments(),
         ]
-            .concat()
-            .into_iter()
-            .collect(),
+        .concat()
+        .into_iter()
+        .collect(),
         locals: Default::default(),
         properties: Default::default(),
         instructions: Default::default(),
@@ -1405,9 +1407,9 @@ pub fn input_function() -> ftd::Component {
             )],
             common_arguments(),
         ]
-            .concat()
-            .into_iter()
-            .collect(),
+        .concat()
+        .into_iter()
+        .collect(),
         locals: Default::default(),
         properties: Default::default(),
         instructions: Default::default(),
