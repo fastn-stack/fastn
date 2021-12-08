@@ -1487,7 +1487,6 @@ impl Style {
 pub enum TextFormat {
     // FTD, // TODO
     Markdown,
-    Latex,
     Code { lang: String },
     Text,
 }
@@ -1506,7 +1505,6 @@ impl TextFormat {
     ) -> ftd::p1::Result<ftd::TextFormat> {
         Ok(match l.as_deref() {
             Some("markdown") => ftd::TextFormat::Markdown,
-            Some("latex") => ftd::TextFormat::Latex,
             Some("code") => ftd::TextFormat::Code {
                 lang: lang.unwrap_or_else(|| "txt".to_string()),
             },

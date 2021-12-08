@@ -712,7 +712,6 @@ pub fn text_render(
     Ok(match (source, tf) {
         (ftd::TextSource::Body, ftd::TextFormat::Markdown) => ftd::markdown(text.as_str()),
         (_, ftd::TextFormat::Markdown) => ftd::markdown_line(text.as_str()),
-        (_, ftd::TextFormat::Latex) => ftd::latex(text.as_str(), doc_id)?,
         (_, ftd::TextFormat::Code { lang }) => {
             ftd::code_with_theme(text.as_str(), lang.as_str(), theme.as_str(), doc_id)?
         }

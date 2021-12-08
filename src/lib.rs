@@ -144,33 +144,6 @@ pub fn markdown_extra(s: &str, auto_links: bool, hard_breaks: bool) -> ftd::Rend
     }
 }
 
-pub fn latex(s: &str, doc_id: &str) -> ftd::p1::Result<ftd::Rendered> {
-    let opts = katex::Opts::builder()
-        .throw_on_error(false)
-        .display_mode(true)
-        .build()
-        .unwrap();
-
-    Ok(ftd::Rendered {
-        original: s.to_string(),
-        rendered: match katex::render_with_opts(s, &opts) {
-            Ok(v) => v,
-            Err(e) => match e {
-                katex::Error::JsValueError(e)
-                | katex::Error::JsExecError(e)
-                | katex::Error::JsInitError(e) => {
-                    return Err(ftd::p1::Error::ParseError {
-                        message: format!("{}: {}", e, s),
-                        doc_id: doc_id.to_string(),
-                        line_number: 0,
-                    })
-                }
-                _ => return ftd::e2(format!("katex error: {:?}", e), doc_id, 0),
-            },
-        },
-    })
-}
-
 pub fn code(code: &str, ext: &str, doc_id: &str) -> ftd::Rendered {
     code_with_theme(code, ext, ftd::render::DEFAULT_THEME, doc_id).unwrap()
 }

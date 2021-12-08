@@ -19,7 +19,6 @@ serde = { version = "1", features = ["derive"] }
 serde_json = { version = "1" }
 thiserror = "1"
 comrak = { version = "0.7.0" }
-katex = { version = "0.4" }
 syntect = { version = "4.5.0", default-features = false, features = ["default-fancy"] }
 lazy_static = { version = "1" }
 regex = { version = "1.5.4" }
