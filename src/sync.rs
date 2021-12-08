@@ -9,14 +9,16 @@ pub async fn sync() -> fpm::Result<()> {
     let mut modified_files = vec![];
     let mut new_snapshots = vec![];
     for doc in fpm::process_dir(config.root.as_str(), &config).await? {
-        if doc.id.starts_with(".history") {
-            continue;
+        if let fpm::FileFound::FTDDocument(doc) = doc {
+            if doc.id.starts_with(".history") {
+                continue;
+            }
+            let (snapshot, is_modified) = write(&doc, timestamp, &snapshots).await?;
+            if is_modified {
+                modified_files.push(snapshot.file.to_string());
+            }
+            new_snapshots.push(snapshot);
         }
-        let (snapshot, is_modified) = write(&doc, timestamp, &snapshots).await?;
-        if is_modified {
-            modified_files.push(snapshot.file.to_string());
-        }
-        new_snapshots.push(snapshot);
     }
 
     if modified_files.is_empty() {

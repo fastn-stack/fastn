@@ -3,11 +3,13 @@ pub async fn status() -> fpm::Result<()> {
     let snapshots = fpm::snaphot::get_latest_snapshots(config.root.as_str())?;
     let mut filestatus = std::collections::BTreeMap::new();
     for doc in fpm::process_dir(config.root.as_str(), &config).await? {
-        if doc.id.starts_with(".history") {
-            continue;
+        if let fpm::FileFound::FTDDocument(doc) = doc {
+            if doc.id.starts_with(".history") {
+                continue;
+            }
+            let status = get_file_status(&doc, &snapshots).await?;
+            filestatus.insert(doc.id, status);
         }
-        let status = get_file_status(&doc, &snapshots).await?;
-        filestatus.insert(doc.id, status);
     }
 
     print_file_status(&snapshots, &filestatus);
