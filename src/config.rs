@@ -3,6 +3,7 @@ pub struct Config {
     pub root: String,
     pub fonts: Vec<fpm::Font>,
     pub dependencies: Vec<fpm::Dependency>,
+    pub ignored: ignore::overrides::Override,
 }
 
 impl Config {
@@ -33,8 +34,10 @@ impl Config {
         let b = match ftd::p2::Document::from(id.as_str(), doc.as_str(), &lib) {
             Ok(v) => v,
             Err(e) => {
-                eprintln!("failed to parse {}: {:?}", id, &e);
-                todo!();
+                return Err(fpm::Error::ConfigurationParseError {
+                    message: format!("failed to parse {}: {:?}", id, &e),
+                    line_number: 0,
+                });
             }
         };
         let package =
@@ -45,17 +48,39 @@ impl Config {
         let dep = fpm::Dependency::parse(&b)?;
 
         let fonts = fpm::Font::parse(&b);
-        // futures::future::join_all(dep).await;
 
         if package_folder_name != package.name {
             todo!("package directory name mismatch")
         }
+
+        let ignored = {
+            let mut overrides = ignore::overrides::OverrideBuilder::new("./");
+            for ig in b.get::<Vec<String>>("fpm#ignore")? {
+                if let Err(e) = overrides.add(format!("!{}", ig.as_str()).as_str()) {
+                    return Err(fpm::Error::ConfigurationParseError {
+                        message: format!("failed parse fpm.ignore: {} => {:?}", ig, e),
+                        line_number: 0,
+                    });
+                }
+            }
+
+            match overrides.build() {
+                Ok(v) => v,
+                Err(e) => {
+                    return Err(fpm::Error::ConfigurationParseError {
+                        message: format!("failed parse fpm.ignore: {:?}", e),
+                        line_number: 0,
+                    });
+                }
+            }
+        };
 
         let c = Config {
             package,
             root: base_dir,
             fonts,
             dependencies: dep.to_vec(),
+            ignored,
         };
         fpm::ensure_dependencies(dep).await?;
 
@@ -83,6 +108,6 @@ pub struct Package {
 
 impl Package {
     pub fn parse(b: &ftd::p2::Document) -> fpm::Result<Option<Package>> {
-        Ok(b.to_owned().only_instance::<Package>("fpm#package")?)
+        Ok(b.only_instance::<Package>("fpm#package")?)
     }
 }

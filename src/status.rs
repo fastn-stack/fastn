@@ -2,7 +2,7 @@ pub async fn status() -> fpm::Result<()> {
     let config = fpm::Config::read().await?;
     let snapshots = fpm::snaphot::get_latest_snapshots(config.root.as_str())?;
     let mut filestatus = std::collections::BTreeMap::new();
-    for doc in fpm::process_dir(config.root.as_str()).await? {
+    for doc in fpm::process_dir(config.root.as_str(), &config).await? {
         if doc.id.starts_with(".history") {
             continue;
         }

@@ -28,6 +28,7 @@ serde_derive = "1.0"
 url = "2.2.2"
 async-recursion = "0.3.2"
 diffy = "0.2.1"
+ignore = "0.4.18"
 rusqlite = "0.26.1"
 
 [dev-dependencies]

@@ -6,3 +6,5 @@ domain: www.amitu.com
 -- fpm.font: myFirstFont
 woff: sansation_light.woff
 woff2: sansation_light.woff
+
+-- fpm.ignore: ignored_dir/*

@@ -18,3 +18,5 @@ optional string woff2:
 -- record snapshot:
 caption file:
 string timestamp:
+
+-- string list ignore:

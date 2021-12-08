@@ -8,7 +8,7 @@ pub async fn sync() -> fpm::Result<()> {
     let timestamp = fpm::get_timestamp_nanosecond();
     let mut modified_files = vec![];
     let mut new_snapshots = vec![];
-    for doc in fpm::process_dir(config.root.as_str()).await? {
+    for doc in fpm::process_dir(config.root.as_str(), &config).await? {
         if doc.id.starts_with(".history") {
             continue;
         }
