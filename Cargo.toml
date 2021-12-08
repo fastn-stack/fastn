@@ -1,11 +1,15 @@
 [package]
 name = "ftd"
 version = "0.1.15"
-authors = ["Amit Upadhyay <upadhyay@gmail.com>"]
+authors = [
+    "Amit Upadhyay <upadhyay@gmail.com>",
+    "Arpita Jaiswal <arpita@fifthtry.com>",
+    "Sourabh Garg <sourabh@fifthtry.com>"
+]
 edition = "2021"
 description = "ftd: FifthTry Document Format"
 license = "MIT"
-repository = "https://github.com/fifthtry/ftd"
+repository = "https://github.com/FifthTry/ftd"
 homepage = "https://ftd.dev"
 
 [features]
