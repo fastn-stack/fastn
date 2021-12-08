@@ -17,7 +17,7 @@ pub(crate) use config::Config;
 pub(crate) use config::Package;
 pub(crate) use dependency::Dependency;
 pub use diff::diff;
-pub(crate) use document::{process_dir, Document, FileFound};
+pub(crate) use document::{process_dir, Document, FileFound, StaticAsset};
 pub(crate) use library::Library;
 pub(crate) use snaphot::Snapshot;
 pub use status::status;
