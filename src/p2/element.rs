@@ -520,7 +520,9 @@ pub fn container_from_properties(
         children: Default::default(),
         external_children: Default::default(),
         open: ftd::p2::utils::string_bool_optional("open", properties, doc.name, 0)?,
-        spacing: ftd::p2::utils::int_optional("spacing", properties, doc.name, 0)?,
+        spacing: ftd::Spacing::from(ftd::p2::utils::string_optional(
+            "spacing", properties, doc.name, 0,
+        )?)?,
         wrap: ftd::p2::utils::bool_with_default("wrap", false, properties, doc.name, 0)?,
     })
 }
@@ -530,7 +532,7 @@ fn container_arguments() -> Vec<(String, ftd::p2::Kind)> {
         ("open".to_string(), ftd::p2::Kind::string().into_optional()),
         (
             "spacing".to_string(),
-            ftd::p2::Kind::integer().into_optional(),
+            ftd::p2::Kind::string().into_optional(),
         ),
         ("align".to_string(), ftd::p2::Kind::string().into_optional()),
         ("wrap".to_string(), ftd::p2::Kind::boolean().into_optional()),
@@ -645,6 +647,7 @@ pub fn column_function() -> ftd::Component {
         events: vec![],
     }
 }
+
 pub fn column_from_properties(
     properties_with_ref: &std::collections::BTreeMap<String, (ftd::Value, Option<String>)>,
     doc: &ftd::p2::TDoc,
@@ -680,7 +683,7 @@ pub fn external_font_from_properties(
                         "Something went wrong while parsing font vector",
                         doc.name,
                         0,
-                    )
+                    );
                 }
             };
 

@@ -1270,12 +1270,35 @@ pub struct Common {
     // TODO: border-{shadow, glow}
 }
 
+#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
+#[serde(tag = "type")]
+pub enum Spacing {
+    SpaceEvenly,
+    SpaceBetween,
+    SpaceAround,
+    Absolute { value: String },
+}
+
+impl Spacing {
+    pub fn from(l: Option<String>) -> ftd::p1::Result<Option<ftd::Spacing>> {
+        Ok(match l.as_deref() {
+            Some("space-evenly") => Some(ftd::Spacing::SpaceEvenly),
+            Some("space-between") => Some(ftd::Spacing::SpaceBetween),
+            Some("space-around") => Some(ftd::Spacing::SpaceAround),
+            Some(t) => Some(ftd::Spacing::Absolute {
+                value: t.to_string(),
+            }),
+            None => return Ok(None),
+        })
+    }
+}
+
 #[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
 pub struct Container {
     pub children: Vec<ftd::Element>,
     pub external_children: Option<(String, Vec<Vec<usize>>, Vec<ftd::Element>)>,
     pub open: (Option<bool>, Option<String>),
-    pub spacing: Option<i64>,
+    pub spacing: Option<Spacing>,
     pub wrap: bool,
 }
 
