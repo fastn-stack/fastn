@@ -16,7 +16,7 @@ homepage = "https://fpm.dev"
 [dependencies]
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
-ftd = "0.1.14"
+ftd = "0.1.15"
 clap = "2.33.3"
 home = "0.5.3"
 reqwest = "0.11.6"
@@ -33,6 +33,6 @@ rusqlite = "0.26.1"
 
 [dev-dependencies]
 rusty-hook = "^0.11.2"
-fbt-lib = "0.1.13"
+fbt-lib = "0.1.14"
 indoc = "1"
 pretty_assertions = "1"
