@@ -239,6 +239,43 @@ impl<'a> TDoc<'a> {
                 }
                 ftd::Value::Record { name, fields }
             }
+            ftd::p2::Kind::String { .. } if row.first().is_some() => ftd::Value::String {
+                text: serde_json::from_value::<String>(row.first().unwrap().to_owned()).map_err(
+                    |_| ftd::p1::Error::ParseError {
+                        message: format!("Can't parse to string, found: {:?}", row),
+                        doc_id: self.name.to_string(),
+                        line_number,
+                    },
+                )?,
+                source: ftd::TextSource::Header,
+            },
+            ftd::p2::Kind::Integer { .. } if row.first().is_some() => ftd::Value::Integer {
+                value: serde_json::from_value::<i64>(row.first().unwrap().to_owned()).map_err(
+                    |_| ftd::p1::Error::ParseError {
+                        message: format!("Can't parse to integer, found: {:?}", row),
+                        doc_id: self.name.to_string(),
+                        line_number,
+                    },
+                )?,
+            },
+            ftd::p2::Kind::Decimal { .. } if row.first().is_some() => ftd::Value::Decimal {
+                value: serde_json::from_value::<f64>(row.first().unwrap().to_owned()).map_err(
+                    |_| ftd::p1::Error::ParseError {
+                        message: format!("Can't parse to decimal, found: {:?}", row),
+                        doc_id: self.name.to_string(),
+                        line_number,
+                    },
+                )?,
+            },
+            ftd::p2::Kind::Boolean { .. } if row.first().is_some() => ftd::Value::Boolean {
+                value: serde_json::from_value::<bool>(row.first().unwrap().to_owned()).map_err(
+                    |_| ftd::p1::Error::ParseError {
+                        message: format!("Can't parse to boolean,found: {:?}", row),
+                        doc_id: self.name.to_string(),
+                        line_number,
+                    },
+                )?,
+            },
             t => unimplemented!(
                 "{:?} not yet implemented, line number: {}, doc: {}",
                 t,
@@ -598,7 +635,47 @@ impl<'a> TDoc<'a> {
 #[cfg(test)]
 mod test {
     #[test]
-    fn from_rows() {
+    fn string_list_from_rows() {
+        let data: Vec<Vec<serde_json::Value>> = vec![
+            vec![serde_json::json!("Prayagraj")],
+            vec![serde_json::json!("Varanasi")],
+        ];
+        let doc = ftd::p2::TDoc {
+            name: "foo/bar",
+            aliases: &Default::default(),
+            bag: &Default::default(),
+        };
+        let section = ftd::p1::parse(
+            indoc::indoc!(
+                "
+            -- string list city:
+            "
+            ),
+            "foo/bar",
+        )
+        .unwrap();
+        let value_from_json = doc.from_json_rows(&section[0], &data).unwrap();
+        let value = ftd::Value::List {
+            data: vec![
+                ftd::Value::String {
+                    text: "Prayagraj".to_string(),
+                    source: ftd::TextSource::Header,
+                },
+                ftd::Value::String {
+                    text: "Varanasi".to_string(),
+                    source: ftd::TextSource::Header,
+                },
+            ],
+            kind: ftd::p2::Kind::String {
+                caption: false,
+                body: false,
+                default: None,
+            },
+        };
+        pretty_assertions::assert_eq!(value_from_json, value);
+    }
+    #[test]
+    fn record_list_from_rows() {
         let source = indoc::indoc!(
             "
             -- record person:
