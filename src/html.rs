@@ -447,16 +447,15 @@ impl ftd::Scene {
             main_node.style.insert(s("width"), s("1000px"));
         }
         if let Some(ref p) = self.container.spacing {
-            let (key,value) = spacing(&p, "margin-left");
+            let (key, value) = spacing(p, "margin-left");
             match p {
                 ftd::Spacing::Absolute { value } => {
+                    main_node.children_style.insert(key, format!("{}px", value));
                     main_node
-                        .children_style
-                        .insert(key, format!("{}px", value));
-                    main_node.attrs
+                        .attrs
                         .insert(s("data-spacing"), format!("margin-left:{}px", value))
-                },
-                _ => main_node.style.insert(key, value)
+                }
+                _ => main_node.style.insert(key, value),
             };
         }
         main_node.children = vec![node];
@@ -482,18 +481,16 @@ impl ftd::Row {
         n.style.insert(s("justify-content"), s("flex-start"));
 
         if let Some(ref p) = self.container.spacing {
-            let (key,value) = spacing(&p, "margin-left");
+            let (key, value) = spacing(p, "margin-left");
             match p {
                 ftd::Spacing::Absolute { value } => {
-                    n.children_style
-                        .insert(key, format!("{}px", value));
+                    n.children_style.insert(key, format!("{}px", value));
                     n.attrs
                         .insert(s("data-spacing"), format!("margin-left:{}px", value))
-                },
-                _ =>  n.style.insert(key, value)
+                }
+                _ => n.style.insert(key, value),
             };
         }
-
 
         n
     }
@@ -516,15 +513,14 @@ impl ftd::Column {
         n.style.insert(s("justify-content"), s("flex-start"));
 
         if let Some(ref p) = self.container.spacing {
-            let (key,value) = spacing(&p, "margin-top");
+            let (key, value) = spacing(p, "margin-top");
             match p {
                 ftd::Spacing::Absolute { value } => {
-                    n.children_style
-                        .insert(key, format!("{}px", value));
+                    n.children_style.insert(key, format!("{}px", value));
                     n.attrs
                         .insert(s("data-spacing"), format!("margin-top:{}px", value))
-                },
-                _ => n.style.insert(key, value)
+                }
+                _ => n.style.insert(key, value),
             };
         }
 
@@ -1406,13 +1402,11 @@ fn get_translate(
     Ok(translate)
 }
 
-
-pub fn spacing(l: &ftd::Spacing, f : &str ) -> (String, String) {
-    let s = f.to_string();
+pub fn spacing(l: &ftd::Spacing, f: &str) -> (String, String) {
     match l {
-        ftd::Spacing::SpaceEvenly => ("justify-content".to_string(), "space-evenly".to_string()),
-        ftd::Spacing::SpaceBetween => ("justify-content".to_string(), "space-between".to_string()),
-        ftd::Spacing::SpaceAround => ("justify-content".to_string(), "space-around".to_string()),
-        ftd::Spacing::Absolute { value } => (s, value.to_string()),
+        ftd::Spacing::SpaceEvenly => (s("justify-content"), s("space-evenly")),
+        ftd::Spacing::SpaceBetween => (s("justify-content"), s("space-between")),
+        ftd::Spacing::SpaceAround => (s("justify-content"), s("space-around")),
+        ftd::Spacing::Absolute { value } => (s(f), s(value)),
     }
 }

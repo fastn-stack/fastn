@@ -1,0 +1,9 @@
+-- ftd.row:
+spacing: space-between
+width: 400
+
+-- ftd.text: Hello
+
+-- ftd.text: World
+
+-- ftd.text: Again

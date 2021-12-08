@@ -1282,9 +1282,9 @@ pub enum Spacing {
 impl Spacing {
     pub fn from(l: Option<String>) -> ftd::p1::Result<Option<ftd::Spacing>> {
         Ok(match l.as_deref() {
-            Some("Space-evenly") => Some(ftd::Spacing::SpaceEvenly),
-            Some("Space-between") => Some(ftd::Spacing::SpaceBetween),
-            Some("Space-around") => Some(ftd::Spacing::SpaceAround),
+            Some("space-evenly") => Some(ftd::Spacing::SpaceEvenly),
+            Some("space-between") => Some(ftd::Spacing::SpaceBetween),
+            Some("space-around") => Some(ftd::Spacing::SpaceAround),
             Some(t) => Some(ftd::Spacing::Absolute {
                 value: t.to_string(),
             }),
@@ -1292,7 +1292,6 @@ impl Spacing {
         })
     }
 }
-
 
 #[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
 pub struct Container {
@@ -1585,4 +1584,3 @@ pub struct Input {
     pub common: Common,
     pub placeholder: Option<String>,
 }
-
