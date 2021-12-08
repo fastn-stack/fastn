@@ -78,7 +78,7 @@ async fn write(doc: &fpm::FileFound, config: &fpm::Config) -> fpm::Result<()> {
             println!("Generated {}", file_rel_path.as_str(),);
         }
         fpm::FileFound::StaticAsset(sa) => {
-            if !(sa.depth == 0) {
+            if sa.depth != 1 {
                 std::fs::create_dir_all(format!(
                     "{}/.build/{}",
                     sa.base_path.as_str(),

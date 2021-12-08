@@ -53,7 +53,7 @@ pub(crate) async fn process_dir(
     for x in ignore_paths.build() {
         process_file_(&mut documents, x.unwrap().into_path(), directory).await?;
     }
-    documents.sort_by_key(|v| v.get_id().clone());
+    documents.sort_by_key(|v| v.get_id());
 
     return Ok(documents);
 
