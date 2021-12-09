@@ -88,12 +88,11 @@ pub(crate) async fn process_dir(
                         base_path: dir.to_string(),
                         depth: doc_path_str.split('/').count() - 1,
                     }),
-                    Some((_, _)) => FileFound::StaticAsset(StaticAsset {
+                    _ => FileFound::StaticAsset(StaticAsset {
                         id: id.to_string(),
                         base_path: dir.to_string(),
                         depth: doc_path_str.split('/').count() - 1,
                     }),
-                    None => todo!("No extension found for file. Panic"),
                 });
             }
         }

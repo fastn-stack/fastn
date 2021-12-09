@@ -41,13 +41,11 @@ pub async fn process_doc(
         doc.id.replace(format!(".{}", ext).as_str(), "/index.html")
     };
     let lib = fpm::Library {
-        file_name: if is_md {
-            Some(doc.id.as_str().to_string())
-        } else {
-            None
-        },
-        markdown_content: if is_md {
-            Some(doc.document.as_str().to_string())
+        markdown: if is_md {
+            Some((
+                doc.id.as_str().to_string(),
+                doc.document.as_str().to_string(),
+            ))
         } else {
             None
         },
