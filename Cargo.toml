@@ -30,6 +30,7 @@ async-recursion = "0.3.2"
 diffy = "0.2.1"
 ignore = "0.4.18"
 rusqlite = "0.26.1"
+indoc = "1.0"
 
 [dev-dependencies]
 rusty-hook = "^0.11.2"

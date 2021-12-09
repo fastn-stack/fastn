@@ -19,7 +19,10 @@ pub(crate) fn get_latest_snapshots(
         return Ok(snapshots);
     }
 
-    let lib = fpm::Library {};
+    let lib = fpm::Library {
+        file_name: None,
+        markdown_content: None,
+    };
     let doc = std::fs::read_to_string(&new_file_path)?;
     let b = match ftd::p2::Document::from(base_path, doc.as_str(), &lib) {
         Ok(v) => v,

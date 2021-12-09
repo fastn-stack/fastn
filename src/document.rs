@@ -2,6 +2,7 @@
 pub enum FileFound {
     FTDDocument(Document),
     StaticAsset(StaticAsset),
+    MarkdownDocument(Document),
 }
 
 impl FileFound {
@@ -9,6 +10,7 @@ impl FileFound {
         match self {
             Self::FTDDocument(a) => a.id.as_str().to_string(),
             Self::StaticAsset(a) => a.id.as_str().to_string(),
+            Self::MarkdownDocument(a) => a.id.as_str().to_string(),
         }
     }
 }
@@ -35,11 +37,12 @@ pub(crate) async fn process_dir(
 ) -> fpm::Result<Vec<FileFound>> {
     let mut documents: Vec<FileFound> = vec![];
     let mut ignore_paths = ignore::WalkBuilder::new("./");
-    ignore_paths.standard_filters(true);
-    ignore_paths.overrides(config.ignored.clone());
+
     if let Some(ins) = ignore_patterns {
         ignore_paths.overrides(ins);
     }
+    ignore_paths.standard_filters(true);
+    ignore_paths.overrides(config.ignored.clone());
     // TODO: Get this concurrent async to work
     // let all_files = ignore_paths.build()
     //     .into_iter()
@@ -72,18 +75,25 @@ pub(crate) async fn process_dir(
                 .unwrap()
                 .rsplit_once(format!("{}/", dir).as_str())
             {
-                documents.push(match &id.ends_with(".ftd") {
-                    true => FileFound::FTDDocument(Document {
+                documents.push(match id.rsplit_once(".") {
+                    Some((_, "ftd")) => FileFound::FTDDocument(Document {
                         id: id.to_string(),
                         document: tokio::fs::read_to_string(&doc_path).await?,
                         base_path: dir.to_string(),
                         depth: doc_path_str.split('/').count() - 1,
                     }),
-                    false => FileFound::StaticAsset(StaticAsset {
+                    Some((_, "md")) => FileFound::MarkdownDocument(Document {
+                        id: id.to_string(),
+                        document: tokio::fs::read_to_string(&doc_path).await?,
+                        base_path: dir.to_string(),
+                        depth: doc_path_str.split('/').count() - 1,
+                    }),
+                    Some((_, _)) => FileFound::StaticAsset(StaticAsset {
                         id: id.to_string(),
                         base_path: dir.to_string(),
                         depth: doc_path_str.split('/').count() - 1,
                     }),
+                    None => todo!("No extension found for file. Panic"),
                 });
             }
         }

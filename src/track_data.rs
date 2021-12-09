@@ -25,7 +25,10 @@ pub(crate) fn get_track(
         return Ok(tracks);
     }
 
-    let lib = fpm::Library {};
+    let lib = fpm::Library {
+        file_name: None,
+        markdown_content: None,
+    };
     let doc = std::fs::read_to_string(&path)?;
     let b = match ftd::p2::Document::from(base_path, doc.as_str(), &lib) {
         Ok(v) => v,

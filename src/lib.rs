@@ -60,6 +60,7 @@ pub async fn ensure_dependencies(deps: Vec<fpm::Dependency>) -> Result<()> {
 pub fn ignore_history() -> Option<ignore::overrides::Override> {
     let mut overrides = ignore::overrides::OverrideBuilder::new("./");
     overrides.add("!.history").unwrap();
+    overrides.add("!FPM").unwrap();
     overrides.build().ok()
 }
 

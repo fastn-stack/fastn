@@ -28,7 +28,10 @@ impl Config {
         let (_, package_folder_name) = root_dir.as_str().rsplit_once("/").expect("");
         let (_is_okay, base_dir) = find_fpm_file(root_dir.clone());
 
-        let lib = fpm::Library {};
+        let lib = fpm::Library {
+            file_name: None,
+            markdown_content: None,
+        };
         let id = "fpm".to_string();
         let doc = std::fs::read_to_string(format!("{}/FPM.ftd", base_dir.as_str()))
             .unwrap_or_else(|_| panic!("cant read file. {}/FPM.ftd", base_dir.as_str()));
