@@ -14,17 +14,15 @@ async fn main() {
     if matches.subcommand_matches("diff").is_some() {
         fpm::diff().await.expect("diff failed");
     }
-    if let Some(tracks) = matches.subcommand_matches("tracks") {
-        let tracks: Vec<&str> = tracks.values_of("tracks").unwrap().collect();
-        fpm::tracks(tracks.first().unwrap(), tracks.last().unwrap())
-            .await
-            .expect("tracks failed");
+    if let Some(tracks) = matches.subcommand_matches("start-tracking") {
+        let source = tracks.value_of("source").unwrap();
+        let target = tracks.value_of("target").unwrap();
+        fpm::tracks(source, target).await.expect("tracks failed");
     }
-    if let Some(mark) = matches.subcommand_matches("mark") {
-        let mark: Vec<&str> = mark.values_of("mark").unwrap().collect();
-        fpm::mark(mark.first().unwrap(), mark.last().unwrap())
-            .await
-            .expect("mark failed");
+    if let Some(mark) = matches.subcommand_matches("mark-upto-date") {
+        let source = mark.value_of("source").unwrap();
+        let target = mark.value_of("target");
+        fpm::mark(source, target).await.expect("mark failed");
     }
 }
 
@@ -72,22 +70,25 @@ fn app() -> clap::App<'static, 'static> {
                 .version(env!("CARGO_PKG_VERSION")),
         )
         .subcommand(
-            clap::SubCommand::with_name("mark")
-                .arg(
-                    clap::Arg::with_name("mark")
-                        .number_of_values(2)
-                        .required(true),
-                )
+            clap::SubCommand::with_name("mark-upto-date")
+                .args(&[
+                    clap::Arg::with_name("source").required(true),
+                    clap::Arg::with_name("target")
+                        .long("--target")
+                        .takes_value(true),
+                ])
                 .about("Marks file as up to date.")
                 .version(env!("CARGO_PKG_VERSION")),
         )
         .subcommand(
-            clap::SubCommand::with_name("tracks")
-                .arg(
-                    clap::Arg::with_name("tracks")
-                        .number_of_values(2)
+            clap::SubCommand::with_name("start-tracking")
+                .args(&[
+                    clap::Arg::with_name("source").required(true),
+                    clap::Arg::with_name("target")
+                        .long("--target")
+                        .takes_value(true)
                         .required(true),
-                )
+                ])
                 .about("Add a tracking relation between two files.")
                 .version(env!("CARGO_PKG_VERSION")),
         )

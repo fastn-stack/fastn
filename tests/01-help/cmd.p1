@@ -18,13 +18,13 @@ FLAGS:
     -v               Sets the level of verbosity
 
 SUBCOMMANDS:
-    build     Build static site from this fpm package.
-    check     Check if everything is fine with current fpm package.
-    diff      Show un-synced changes to files in this fpm package.
-    help      Prints this message or the help of the given subcommand(s)
-    mark      Marks file as up to date.
-    status    Show the status of files in this fpm package.
-    sync      `sync` with `fpm-repo` or `.history` folder if not using `fpm-repo`
-    tracks    Add a tracking relation between two files.
+    build             Build static site from this fpm package.
+    check             Check if everything is fine with current fpm package.
+    diff              Show un-synced changes to files in this fpm package.
+    help              Prints this message or the help of the given subcommand(s)
+    mark-upto-date    Marks file as up to date.
+    start-tracking    Add a tracking relation between two files.
+    status            Show the status of files in this fpm package.
+    sync              `sync` with `fpm-repo` or `.history` folder if not using `fpm-repo`
 
 
