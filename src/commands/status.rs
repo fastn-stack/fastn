@@ -33,11 +33,18 @@ async fn file_status(
 
     let filestatus = get_file_status(&document, snapshots).await?;
     let trackstatus = get_track_status(&document, snapshots, base_path)?;
+
+    let mut clean = true;
     if !filestatus.eq(&FileStatus::None) {
         println!("{:?}: {}", filestatus, source);
+        clean = false;
     }
     for (i, j) in trackstatus {
         println!("{}: {} -> {}", j.to_string(), source, i);
+        clean = false;
+    }
+    if clean {
+        println!("Nothing to sync, clean working tree");
     }
     Ok(())
 }
