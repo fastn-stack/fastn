@@ -13,6 +13,21 @@ impl FileFound {
             Self::MarkdownDocument(a) => a.id.as_str().to_string(),
         }
     }
+    pub fn get_base_path(&self) -> String {
+        match self {
+            Self::FTDDocument(a) => a.base_path.to_string(),
+            Self::StaticAsset(a) => a.base_path.to_string(),
+            Self::MarkdownDocument(a) => a.base_path.to_string(),
+        }
+    }
+    pub fn get_full_path(&self) -> String {
+        let (id, base_path) = match self {
+            Self::FTDDocument(a) => (a.id.to_string(), a.base_path.to_string()),
+            Self::StaticAsset(a) => (a.id.to_string(), a.base_path.to_string()),
+            Self::MarkdownDocument(a) => (a.id.to_string(), a.base_path.to_string()),
+        };
+        format!("{}/{}", base_path, id)
+    }
 }
 
 #[derive(Debug)]
@@ -57,45 +72,49 @@ pub(crate) async fn process_dir(
     // futures::future::join_all(all_files).await;
 
     for x in ignore_paths.build() {
-        process_file_(&mut documents, x.unwrap().into_path(), directory).await?;
+        if let Ok(file_found) = process_file(x.unwrap().into_path(), directory).await {
+            documents.push(file_found);
+        }
     }
     documents.sort_by_key(|v| v.get_id());
 
-    return Ok(documents);
+    Ok(documents)
+}
 
-    async fn process_file_(
-        documents: &mut Vec<FileFound>,
-        doc_path: std::path::PathBuf,
-        dir: &str,
-    ) -> fpm::Result<()> {
-        if !&doc_path.is_dir() {
-            let doc_path_str = doc_path.to_str().unwrap();
-            if let Some((_, id)) = std::fs::canonicalize(&doc_path)?
-                .to_str()
-                .unwrap()
-                .rsplit_once(format!("{}/", dir).as_str())
-            {
-                documents.push(match id.rsplit_once(".") {
-                    Some((_, "ftd")) => FileFound::FTDDocument(Document {
-                        id: id.to_string(),
-                        document: tokio::fs::read_to_string(&doc_path).await?,
-                        base_path: dir.to_string(),
-                        depth: doc_path_str.split('/').count() - 1,
-                    }),
-                    Some((_, "md")) => FileFound::MarkdownDocument(Document {
-                        id: id.to_string(),
-                        document: tokio::fs::read_to_string(&doc_path).await?,
-                        base_path: dir.to_string(),
-                        depth: doc_path_str.split('/').count() - 1,
-                    }),
-                    _ => FileFound::StaticAsset(StaticAsset {
-                        id: id.to_string(),
-                        base_path: dir.to_string(),
-                        depth: doc_path_str.split('/').count() - 1,
-                    }),
-                });
-            }
+pub(crate) async fn process_file(
+    doc_path: std::path::PathBuf,
+    dir: &str,
+) -> fpm::Result<FileFound> {
+    if !&doc_path.is_dir() {
+        let doc_path_str = doc_path.to_str().unwrap();
+        if let Some((_, id)) = std::fs::canonicalize(&doc_path)?
+            .to_str()
+            .unwrap()
+            .rsplit_once(format!("{}/", dir).as_str())
+        {
+            return Ok(match id.rsplit_once(".") {
+                Some((_, "ftd")) => FileFound::FTDDocument(Document {
+                    id: id.to_string(),
+                    document: tokio::fs::read_to_string(&doc_path).await?,
+                    base_path: dir.to_string(),
+                    depth: doc_path_str.split('/').count() - 1,
+                }),
+                Some((_, "md")) => FileFound::MarkdownDocument(Document {
+                    id: id.to_string(),
+                    document: tokio::fs::read_to_string(&doc_path).await?,
+                    base_path: dir.to_string(),
+                    depth: doc_path_str.split('/').count() - 1,
+                }),
+                _ => FileFound::StaticAsset(StaticAsset {
+                    id: id.to_string(),
+                    base_path: dir.to_string(),
+                    depth: doc_path_str.split('/').count() - 1,
+                }),
+            });
         }
-        Ok(())
     }
+    Err(fpm::Error::ConfigurationParseError {
+        message: format!("{:?} should be a file", doc_path),
+        line_number: 0,
+    })
 }

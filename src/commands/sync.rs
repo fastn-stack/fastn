@@ -1,5 +1,32 @@
-pub async fn sync() -> fpm::Result<()> {
+pub async fn sync(files: Option<Vec<String>>) -> fpm::Result<()> {
     let config = fpm::Config::read().await?;
+
+    let documents = if let Some(ref files) = files {
+        let files = files.to_vec();
+        let d = futures::future::join_all(
+            files
+                .into_iter()
+                .map(|x| {
+                    let base = config.root.clone();
+                    tokio::spawn(async move {
+                        fpm::process_file(
+                            std::path::PathBuf::from(format!("{}/{}", base, x)),
+                            base.as_str(),
+                        )
+                        .await
+                    })
+                })
+                .collect::<Vec<tokio::task::JoinHandle<fpm::Result<fpm::FileFound>>>>(),
+        )
+        .await;
+        let mut document = vec![];
+        for doc in d.into_iter().flatten().flatten() {
+            document.push(doc);
+        }
+        document
+    } else {
+        fpm::process_dir(config.root.as_str(), &config, fpm::ignore_history()).await?
+    };
 
     tokio::fs::create_dir_all(format!("{}/.history", config.root.as_str()).as_str()).await?;
 
@@ -8,13 +35,29 @@ pub async fn sync() -> fpm::Result<()> {
     let timestamp = fpm::get_timestamp_nanosecond();
     let mut modified_files = vec![];
     let mut new_snapshots = vec![];
-    for doc in fpm::process_dir(config.root.as_str(), &config, fpm::ignore_history()).await? {
-        if let fpm::FileFound::FTDDocument(doc) = doc {
-            let (snapshot, is_modified) = write(&doc, timestamp, &snapshots).await?;
-            if is_modified {
-                modified_files.push(snapshot.file.to_string());
+    for doc in documents {
+        let (snapshot, is_modified) = write(&doc, timestamp, &snapshots).await?;
+        if is_modified {
+            modified_files.push(snapshot.file.to_string());
+        }
+        new_snapshots.push(snapshot);
+    }
+
+    if let Some(file) = files {
+        let snapshot_id = new_snapshots
+            .iter()
+            .map(|v| v.file.to_string())
+            .collect::<Vec<String>>();
+        for (k, v) in snapshots {
+            if !snapshot_id.contains(&k) && file.contains(&k) {
+                continue;
             }
-            new_snapshots.push(snapshot);
+            if !snapshot_id.contains(&k) {
+                new_snapshots.push(fpm::Snapshot {
+                    file: k.to_string(),
+                    timestamp: v.to_string(),
+                })
+            }
         }
     }
 
@@ -34,48 +77,59 @@ pub async fn sync() -> fpm::Result<()> {
 }
 
 async fn write(
-    doc: &fpm::Document,
+    doc: &fpm::FileFound,
     timestamp: u128,
     snapshots: &std::collections::BTreeMap<String, String>,
 ) -> fpm::Result<(fpm::Snapshot, bool)> {
-    use tokio::io::AsyncWriteExt;
-
-    if doc.id.contains('/') {
-        let (dir, _) = doc.id.rsplit_once('/').unwrap();
-        std::fs::create_dir_all(format!("{}/.history/{}", doc.base_path.as_str(), dir))?;
+    if doc.get_id().contains('/') {
+        let dir = doc.get_id().rsplit_once('/').unwrap().0.to_string();
+        std::fs::create_dir_all(format!("{}/.history/{}", doc.get_base_path().as_str(), dir))?;
     }
 
-    if let Some(timestamp) = snapshots.get(&doc.id) {
-        let path = format!(
-            "{}/.history/{}",
-            doc.base_path.as_str(),
-            doc.id.replace(".ftd", &format!(".{}.ftd", timestamp))
-        );
+    let file_extension = if let Some((_, b)) = doc.get_id().rsplit_once('.') {
+        Some(b.to_string())
+    } else {
+        None
+    };
 
-        let existing_doc = tokio::fs::read_to_string(&path).await?;
-        if doc.document.eq(&existing_doc) {
-            return Ok((
-                fpm::Snapshot {
-                    file: doc.id.to_string(),
-                    timestamp: timestamp.to_string(),
-                },
-                false,
-            ));
+    if let Some(timestamp) = snapshots.get(&doc.get_id()) {
+        let path = format!("{}/.history/{}", doc.get_base_path().as_str(), {
+            if let Some(ref ext) = file_extension {
+                doc.get_id()
+                    .replace(&format!(".{}", ext), &format!(".{}.{}", timestamp, ext))
+            } else {
+                format!(".{}", timestamp)
+            }
+        });
+
+        if let Ok(current_doc) = tokio::fs::read_to_string(&doc.get_full_path()).await {
+            let existing_doc = tokio::fs::read_to_string(&path).await?;
+            if current_doc.eq(&existing_doc) {
+                return Ok((
+                    fpm::Snapshot {
+                        file: doc.get_id(),
+                        timestamp: timestamp.to_string(),
+                    },
+                    false,
+                ));
+            }
         }
     }
 
-    let new_file_path = format!(
-        "{}/.history/{}",
-        doc.base_path.as_str(),
-        doc.id.replace(".ftd", &format!(".{}.ftd", timestamp))
-    );
+    let new_file_path = format!("{}/.history/{}", doc.get_base_path().as_str(), {
+        if let Some(ext) = file_extension {
+            doc.get_id()
+                .replace(&format!(".{}", ext), &format!(".{}.{}", timestamp, ext))
+        } else {
+            format!(".{}", timestamp)
+        }
+    });
 
-    let mut f = tokio::fs::File::create(new_file_path.as_str()).await?;
-    f.write_all(doc.document.as_bytes()).await?;
+    tokio::fs::copy(doc.get_full_path(), new_file_path).await?;
 
     Ok((
         fpm::Snapshot {
-            file: doc.id.to_string(),
+            file: doc.get_id(),
             timestamp: timestamp.to_string(),
         },
         true,

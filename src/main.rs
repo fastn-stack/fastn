@@ -5,8 +5,13 @@ async fn main() {
     if matches.subcommand_matches("build").is_some() {
         fpm::build().await.expect("build failed");
     }
-    if matches.subcommand_matches("sync").is_some() {
-        fpm::sync().await.expect("sync failed");
+    if let Some(sync) = matches.subcommand_matches("sync") {
+        if let Some(source) = sync.values_of("source") {
+            let vals = source.map(|v| v.to_string()).collect();
+            fpm::sync(Some(vals)).await.expect("sync failed");
+        } else {
+            fpm::sync(None).await.expect("sync failed");
+        }
     }
     if let Some(status) = matches.subcommand_matches("status") {
         let source = status.value_of("source");
@@ -52,6 +57,7 @@ fn app() -> clap::App<'static, 'static> {
         )
         .subcommand(
             clap::SubCommand::with_name("sync")
+                .arg(clap::Arg::with_name("source").multiple(true))
                 .about("`sync` with `fpm-repo` or `.history` folder if not using `fpm-repo`")
                 .version(env!("CARGO_PKG_VERSION")),
         )
