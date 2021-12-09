@@ -19,7 +19,7 @@ async fn check(
     let timestamp = snapshots.get(whom).unwrap();
 
     let file_path = format!("{}/.tracks/{}", base_path, who.replace(".ftd", ".track"));
-    let mut tracks = get_track(base_path, &file_path)?;
+    let mut tracks = fpm::track_data::get_track(base_path, &file_path)?;
     if let Some(track) = tracks.get_mut(whom) {
         track.other_timestamp = Some(timestamp.to_string());
     }
@@ -28,7 +28,7 @@ async fn check(
 }
 async fn write(
     file_path: &str,
-    tracks: &std::collections::BTreeMap<String, Tracks>,
+    tracks: &std::collections::BTreeMap<String, fpm::Tracks>,
 ) -> fpm::Result<()> {
     use tokio::io::AsyncWriteExt;
 
@@ -46,47 +46,4 @@ async fn write(
     }
     f.write_all(string.as_bytes()).await?;
     Ok(())
-}
-
-#[derive(serde::Deserialize, Debug, Clone)]
-pub struct Tracks {
-    #[serde(rename = "document-name")]
-    pub document_name: String,
-    pub package: Option<String>,
-    pub version: Option<String>,
-    #[serde(rename = "other-timestamp")]
-    pub other_timestamp: Option<String>,
-    #[serde(rename = "self-timestamp")]
-    pub self_timestamp: String,
-}
-
-impl Tracks {
-    pub fn parse(b: &ftd::p2::Document) -> fpm::Result<Vec<Tracks>> {
-        Ok(b.to_owned().instances::<Tracks>("fpm#track")?)
-    }
-}
-
-fn get_track(
-    base_path: &str,
-    path: &str,
-) -> fpm::Result<std::collections::BTreeMap<String, Tracks>> {
-    let mut tracks = std::collections::BTreeMap::new();
-    if std::fs::metadata(&path).is_err() {
-        return Ok(tracks);
-    }
-
-    let lib = fpm::Library {};
-    let doc = std::fs::read_to_string(&path)?;
-    let b = match ftd::p2::Document::from(base_path, doc.as_str(), &lib) {
-        Ok(v) => v,
-        Err(e) => {
-            eprintln!("failed to parse {}: {:?}", base_path, &e);
-            todo!();
-        }
-    };
-    let track_list = Tracks::parse(&b)?;
-    for track in track_list {
-        tracks.insert(track.document_name.to_string(), track);
-    }
-    Ok(tracks)
 }

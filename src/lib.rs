@@ -11,6 +11,7 @@ mod snaphot;
 mod status;
 mod style;
 mod sync;
+mod track_data;
 mod tracks;
 mod utils;
 
@@ -26,6 +27,7 @@ pub(crate) use snaphot::Snapshot;
 pub use status::status;
 pub(crate) use style::Font;
 pub use sync::sync;
+pub(crate) use track_data::Tracks;
 pub use tracks::tracks;
 pub(crate) use utils::get_timestamp_nanosecond;
 

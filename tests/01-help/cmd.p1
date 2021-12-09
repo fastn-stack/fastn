@@ -18,12 +18,13 @@ FLAGS:
     -v               Sets the level of verbosity
 
 SUBCOMMANDS:
-    build     Builds the current directory
-    check     Checks the folder structure of the current .FPM.ftd file
-    diff      Show changes in files, comparing it with latest version of that file in `.history` folder
+    build     Build static site from this fpm package.
+    check     Check if everything is fine with current fpm package.
+    diff      Show un-synced changes to files in this fpm package.
     help      Prints this message or the help of the given subcommand(s)
-    mark      Marks the file up to date
-    status    Shows how many files have changed, comparing it with latest version of that file in `.history` folder
+    mark      Marks file as up to date.
+    status    Show the status of files in this fpm package.
     sync      `sync` with `fpm-repo` or `.history` folder if not using `fpm-repo`
-    tracks    Tracks the document
+    tracks    Add a tracking relation between two files.
+
 
