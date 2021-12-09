@@ -8,8 +8,9 @@ async fn main() {
     if matches.subcommand_matches("sync").is_some() {
         fpm::sync().await.expect("sync failed");
     }
-    if matches.subcommand_matches("status").is_some() {
-        fpm::status().await.expect("status failed");
+    if let Some(status) = matches.subcommand_matches("status") {
+        let source = status.value_of("source");
+        fpm::status(source).await.expect("status failed");
     }
     if matches.subcommand_matches("diff").is_some() {
         fpm::diff().await.expect("diff failed");
@@ -56,6 +57,7 @@ fn app() -> clap::App<'static, 'static> {
         )
         .subcommand(
             clap::SubCommand::with_name("status")
+                .arg(clap::Arg::with_name("source"))
                 .about("Show the status of files in this fpm package.")
                 .version(env!("CARGO_PKG_VERSION")),
         )
