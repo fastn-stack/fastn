@@ -6,10 +6,6 @@ pub struct Font {
 }
 
 impl Font {
-    pub fn parse(b: &ftd::p2::Document) -> Vec<Font> {
-        b.to_owned().instances("fpm#font").unwrap()
-    }
-
     pub fn to_html(&self) -> String {
         if let Some(v) = self.woff2.as_ref().or_else(|| self.woff.as_ref()) {
             format!(

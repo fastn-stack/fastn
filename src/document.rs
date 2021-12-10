@@ -113,8 +113,7 @@ pub(crate) async fn process_file(
             });
         }
     }
-    Err(fpm::Error::ConfigurationParseError {
+    Err(fpm::Error::ConfigurationError {
         message: format!("{:?} should be a file", doc_path),
-        line_number: 0,
     })
 }

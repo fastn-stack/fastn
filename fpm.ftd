@@ -1,19 +1,24 @@
-
--- record package:
+-- record package-data:
 caption name:
 optional string about:
 optional string domain:
 
--- record dependency:
+-- package-data package: not set
+
+-- record dependency-data:
 caption name:
 string repo:
 optional string version:
 optional body notes:
 
--- record font:
+-- dependency-data list dependency:
+
+-- record font-data:
 caption name:
 optional string woff:
 optional string woff2:
+
+-- font-data list font:
 
 -- record snapshot:
 caption file:

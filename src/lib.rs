@@ -41,8 +41,8 @@ pub enum Error {
     #[error("FTDError: {}", _0)]
     FTDError(#[from] ftd::p1::Error),
 
-    #[error("{line_number}: -> {message}")]
-    ConfigurationParseError { message: String, line_number: usize },
+    #[error("ConfigurationError: {message}")]
+    ConfigurationError { message: String },
 }
 
 pub type Result<T> = std::result::Result<T, Error>;

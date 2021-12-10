@@ -13,10 +13,6 @@ pub struct Dependency {
 }
 
 impl Dependency {
-    pub fn parse(b: &ftd::p2::Document) -> fpm::Result<Vec<Dependency>> {
-        Ok(b.to_owned().instances("fpm#dependency")?)
-    }
-
     pub async fn download_zip(&self) -> fpm::Result<()> {
         if std::path::Path::new(format!("./.packages/{}", self.name).as_str()).exists() {
             // TODO: Optimitisically exiting in case the path exists locally

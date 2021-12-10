@@ -14,14 +14,14 @@ impl ftd::p2::Library for Library {
             Some(match self.markdown.as_ref() {
                 Some((filename, content)) => format!(
                     indoc::indoc! {"
-                            {fpm_base}
-                            
-                            -- string markdown-filename: {filename}
-                            
-                            -- string markdown-content:
-        
-                            {content}
-                        "},
+                        {fpm_base}
+                        
+                        -- string markdown-filename: {filename}
+                        
+                        -- string markdown-content:
+    
+                        {content}
+                    "},
                     fpm_base = fpm_base,
                     filename = filename,
                     content = content

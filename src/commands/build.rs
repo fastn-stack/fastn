@@ -69,9 +69,8 @@ pub async fn process_doc(
     let b = match ftd::p2::Document::from(&doc.id, doc_str.as_str(), &lib) {
         Ok(v) => v,
         Err(e) => {
-            return Err(fpm::Error::ConfigurationParseError {
+            return Err(fpm::Error::ConfigurationError {
                 message: format!("failed to parse {:?}", &e),
-                line_number: 0,
             });
         }
     };
