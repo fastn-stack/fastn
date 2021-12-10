@@ -37,10 +37,9 @@ async fn main() {
 }
 
 fn app(authors: &'static str) -> clap::App<'static, 'static> {
-    clap::App::new("FTD Package Manager")
+    clap::App::new("fpm: FTD Package Manager")
         .version(env!("CARGO_PKG_VERSION"))
         .author(authors)
-        .about("Description...")
         .setting(clap::AppSettings::ArgRequiredElseHelp)
         .arg(
             clap::Arg::with_name("verbose")
@@ -56,29 +55,29 @@ fn app(authors: &'static str) -> clap::App<'static, 'static> {
         )
         .subcommand(
             clap::SubCommand::with_name("build")
-                .about("Build static site from this fpm package.")
+                .about("Build static site from this fpm package")
                 .version(env!("CARGO_PKG_VERSION")),
         )
         .subcommand(
             clap::SubCommand::with_name("sync")
                 .arg(clap::Arg::with_name("source").multiple(true))
-                .about("`sync` with `fpm-repo` or `.history` folder if not using `fpm-repo`")
+                .about("Sync with fpm-repo or .history folder if not using fpm-repo")
                 .version(env!("CARGO_PKG_VERSION")),
         )
         .subcommand(
             clap::SubCommand::with_name("status")
                 .arg(clap::Arg::with_name("source"))
-                .about("Show the status of files in this fpm package.")
+                .about("Show the status of files in this fpm package")
                 .version(env!("CARGO_PKG_VERSION")),
         )
         .subcommand(
             clap::SubCommand::with_name("diff")
-                .about("Show un-synced changes to files in this fpm package.")
+                .about("Show un-synced changes to files in this fpm package")
                 .version(env!("CARGO_PKG_VERSION")),
         )
         .subcommand(
             clap::SubCommand::with_name("check")
-                .about("Check if everything is fine with current fpm package.")
+                .about("Check if everything is fine with current fpm package")
                 .version(env!("CARGO_PKG_VERSION")),
         )
         .subcommand(
@@ -101,7 +100,7 @@ fn app(authors: &'static str) -> clap::App<'static, 'static> {
                         .takes_value(true)
                         .required(true),
                 ])
-                .about("Add a tracking relation between two files.")
+                .about("Add a tracking relation between two files")
                 .version(env!("CARGO_PKG_VERSION")),
         )
 }
@@ -109,7 +108,7 @@ fn app(authors: &'static str) -> clap::App<'static, 'static> {
 pub fn authors() -> &'static str {
     Box::leak(
         env!("CARGO_PKG_AUTHORS")
-            .split(":")
+            .split(':')
             .map(|v| v.split_once('<').map(|(v, _)| v.trim()).unwrap_or_default())
             .collect::<Vec<_>>()
             .join(", ")

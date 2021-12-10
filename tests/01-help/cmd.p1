@@ -5,9 +5,8 @@ Will have to be updated every time version changes.
 
 -- stdout:
 
-FTD Package Manager 0.1.5
+fpm: FTD Package Manager 0.1.5
 Amit Upadhyay, Shobhit Sharma, Arpita Jaiswal
-Description...
 
 USAGE:
     fpm [FLAGS] [SUBCOMMAND]
@@ -18,13 +17,11 @@ FLAGS:
     -v               Sets the level of verbosity
 
 SUBCOMMANDS:
-    build             Build static site from this fpm package.
-    check             Check if everything is fine with current fpm package.
-    diff              Show un-synced changes to files in this fpm package.
+    build             Build static site from this fpm package
+    check             Check if everything is fine with current fpm package
+    diff              Show un-synced changes to files in this fpm package
     help              Prints this message or the help of the given subcommand(s)
     mark-upto-date    Marks file as up to date.
-    start-tracking    Add a tracking relation between two files.
-    status            Show the status of files in this fpm package.
-    sync              `sync` with `fpm-repo` or `.history` folder if not using `fpm-repo`
-
-
+    start-tracking    Add a tracking relation between two files
+    status            Show the status of files in this fpm package
+    sync              Sync with fpm-repo or .history folder if not using fpm-repo
