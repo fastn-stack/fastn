@@ -45,10 +45,7 @@ pub struct StaticAsset {
     pub depth: usize,
 }
 
-pub(crate) async fn process_dir(
-    directory: &str,
-    config: &fpm::Config,
-) -> fpm::Result<Vec<FileFound>> {
+pub(crate) async fn process_dir(config: &fpm::Config) -> fpm::Result<Vec<FileFound>> {
     let mut documents: Vec<FileFound> = vec![];
     let mut ignore_paths = ignore::WalkBuilder::new("./");
 
@@ -69,7 +66,7 @@ pub(crate) async fn process_dir(
     // futures::future::join_all(all_files).await;
 
     for x in ignore_paths.build() {
-        if let Ok(file_found) = process_file(x.unwrap().into_path(), directory).await {
+        if let Ok(file_found) = process_file(x.unwrap().into_path(), config.root.as_str()).await {
             documents.push(file_found);
         }
     }
