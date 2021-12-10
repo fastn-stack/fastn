@@ -39,13 +39,13 @@ impl Dependency {
         let mut archive = zip::ZipArchive::new(file)?;
         for i in 0..archive.len() {
             let mut c_file = archive.by_index(i).unwrap();
-            let outpath = match c_file.enclosed_name() {
+            let out_path = match c_file.enclosed_name() {
                 Some(path) => path.to_owned(),
                 None => continue,
             };
-            let outpath_without_folder = outpath.to_str().unwrap().split_once("/").unwrap().1;
-            let new_outpath = format!("{}/{}", self.name, outpath_without_folder);
-            let file_extract_path = std::path::Path::new(new_outpath.as_str());
+            let out_path_without_folder = out_path.to_str().unwrap().split_once("/").unwrap().1;
+            let new_out_path = format!("{}/{}", self.name, out_path_without_folder);
+            let file_extract_path = std::path::Path::new(new_out_path.as_str());
             if (&*c_file.name()).ends_with('/') {
                 std::fs::create_dir_all(
                     format!("./.packages/{}", file_extract_path.to_str().unwrap()).as_str(),

@@ -25,7 +25,7 @@ pub async fn sync(files: Option<Vec<String>>) -> fpm::Result<()> {
         }
         document
     } else {
-        fpm::process_dir(config.root.as_str(), &config, fpm::ignore_history()).await?
+        fpm::process_dir(config.root.as_str(), &config).await?
     };
 
     tokio::fs::create_dir_all(format!("{}/.history", config.root.as_str()).as_str()).await?;

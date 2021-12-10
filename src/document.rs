@@ -48,14 +48,11 @@ pub struct StaticAsset {
 pub(crate) async fn process_dir(
     directory: &str,
     config: &fpm::Config,
-    ignore_patterns: Option<ignore::overrides::Override>,
 ) -> fpm::Result<Vec<FileFound>> {
     let mut documents: Vec<FileFound> = vec![];
     let mut ignore_paths = ignore::WalkBuilder::new("./");
 
-    if let Some(ins) = ignore_patterns {
-        ignore_paths.overrides(ins);
-    }
+    ignore_paths.overrides(package_ignores().unwrap()); // unwrap ok because this we know can never fail
     ignore_paths.standard_filters(true);
     ignore_paths.overrides(config.ignored.clone());
     // TODO: Get this concurrent async to work
@@ -79,6 +76,17 @@ pub(crate) async fn process_dir(
     documents.sort_by_key(|v| v.get_id());
 
     Ok(documents)
+}
+
+pub fn package_ignores() -> Result<ignore::overrides::Override, ignore::Error> {
+    let mut overrides = ignore::overrides::OverrideBuilder::new("./");
+    overrides.add("!.history")?;
+    overrides.add("!.packages")?;
+    overrides.add("!.tracks")?;
+    overrides.add("!FPM")?;
+    overrides.add("!rust-toolchain")?;
+    overrides.add("!.build")?;
+    overrides.build()
 }
 
 pub(crate) async fn process_file(

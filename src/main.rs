@@ -7,8 +7,8 @@ async fn main() {
     }
     if let Some(sync) = matches.subcommand_matches("sync") {
         if let Some(source) = sync.values_of("source") {
-            let vals = source.map(|v| v.to_string()).collect();
-            fpm::sync(Some(vals)).await.expect("sync failed");
+            let sources = source.map(|v| v.to_string()).collect();
+            fpm::sync(Some(sources)).await.expect("sync failed");
         } else {
             fpm::sync(None).await.expect("sync failed");
         }

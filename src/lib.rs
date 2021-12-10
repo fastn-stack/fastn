@@ -48,13 +48,6 @@ pub enum Error {
 
 pub type Result<T> = std::result::Result<T, Error>;
 
-pub fn ignore_history() -> Option<ignore::overrides::Override> {
-    let mut overrides = ignore::overrides::OverrideBuilder::new("./");
-    overrides.add("!.history").unwrap();
-    overrides.add("!FPM").unwrap();
-    overrides.build().ok()
-}
-
 #[cfg(test)]
 mod tests {
 

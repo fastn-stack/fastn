@@ -2,7 +2,7 @@ pub async fn diff() -> fpm::Result<()> {
     let config = fpm::Config::read().await?;
     let snapshots = fpm::snapshot::get_latest_snapshots(config.root.as_str())?;
 
-    for doc in fpm::process_dir(config.root.as_str(), &config, fpm::ignore_history()).await? {
+    for doc in fpm::process_dir(config.root.as_str(), &config).await? {
         if let fpm::FileFound::FTDDocument(doc) = doc {
             if let Some(diff) = get_diffy(&doc, &snapshots).await? {
                 println!("diff: {}", doc.id);

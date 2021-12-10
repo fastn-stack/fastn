@@ -31,15 +31,15 @@ async fn file_status(
         depth: 0,
     };
 
-    let filestatus = get_file_status(&document, snapshots).await?;
-    let trackstatus = get_track_status(&document, snapshots, base_path)?;
+    let file_status = get_file_status(&document, snapshots).await?;
+    let track_status = get_track_status(&document, snapshots, base_path)?;
 
     let mut clean = true;
-    if !filestatus.eq(&FileStatus::None) {
-        println!("{:?}: {}", filestatus, source);
+    if !file_status.eq(&FileStatus::None) {
+        println!("{:?}: {}", file_status, source);
         clean = false;
     }
-    for (i, j) in trackstatus {
+    for (i, j) in track_status {
         println!("{}: {} -> {}", j.to_string(), source, i);
         clean = false;
     }
@@ -53,21 +53,21 @@ async fn all_status(
     config: &fpm::Config,
     snapshots: &std::collections::BTreeMap<String, String>,
 ) -> fpm::Result<()> {
-    let mut filestatus = std::collections::BTreeMap::new();
-    let mut trackstatus = std::collections::BTreeMap::new();
-    for doc in fpm::process_dir(config.root.as_str(), config, fpm::ignore_history()).await? {
+    let mut file_status = std::collections::BTreeMap::new();
+    let mut track_status = std::collections::BTreeMap::new();
+    for doc in fpm::process_dir(config.root.as_str(), config).await? {
         if let fpm::FileFound::FTDDocument(doc) = doc {
             let status = get_file_status(&doc, snapshots).await?;
             let track = get_track_status(&doc, snapshots, config.root.as_str())?;
             if !track.is_empty() {
-                trackstatus.insert(doc.id.to_string(), track);
+                track_status.insert(doc.id.to_string(), track);
             }
-            filestatus.insert(doc.id, status);
+            file_status.insert(doc.id, status);
         }
     }
 
-    let clean_file_status = print_file_status(snapshots, &filestatus);
-    let clean_track_status = print_track_status(&trackstatus);
+    let clean_file_status = print_file_status(snapshots, &file_status);
+    let clean_track_status = print_track_status(&track_status);
     if clean_file_status && clean_track_status {
         println!("Nothing to sync, clean working tree");
     }
@@ -118,10 +118,10 @@ fn get_track_status(
             continue;
         }
         let timestamp = snapshots.get(&track.document_name).unwrap();
-        let trackstatus = if track.other_timestamp.is_none() {
+        let track_status = if track.other_timestamp.is_none() {
             TrackStatus::NeverMarked
         } else if timestamp.eq(track.other_timestamp.as_ref().unwrap()) {
-            TrackStatus::Uptodate
+            TrackStatus::UptoDate
         } else {
             let now = timestamp.parse::<u128>().unwrap();
             let then = track
@@ -131,25 +131,25 @@ fn get_track_status(
                 .parse::<u128>()
                 .unwrap();
             let diff = std::time::Duration::from_nanos((now - then) as u64);
-            TrackStatus::Outofdate {
+            TrackStatus::OutOfDate {
                 days: format!("{:?}", diff.as_secs() / 86400),
             }
         };
-        track_list.insert(track.document_name.to_string(), trackstatus);
+        track_list.insert(track.document_name.to_string(), track_status);
     }
     Ok(track_list)
 }
 
 fn print_track_status(
-    trackstatus: &std::collections::BTreeMap<
+    track_status: &std::collections::BTreeMap<
         String,
         std::collections::BTreeMap<String, TrackStatus>,
     >,
 ) -> bool {
     let mut status = true;
-    for (k, v) in trackstatus {
+    for (k, v) in track_status {
         for (i, j) in v {
-            if j.eq(&TrackStatus::Uptodate) {
+            if j.eq(&TrackStatus::UptoDate) {
                 continue;
             }
             println!("{}: {} -> {}", j.to_string(), k, i);
@@ -161,11 +161,11 @@ fn print_track_status(
 
 fn print_file_status(
     snapshots: &std::collections::BTreeMap<String, String>,
-    filestatus: &std::collections::BTreeMap<String, FileStatus>,
+    file_status: &std::collections::BTreeMap<String, FileStatus>,
 ) -> bool {
     let mut any_file_removed = false;
     for id in snapshots.keys() {
-        if let Some(status) = filestatus.get(id) {
+        if let Some(status) = file_status.get(id) {
             if status.eq(&FileStatus::None) {
                 continue;
             }
@@ -176,14 +176,14 @@ fn print_file_status(
         }
     }
 
-    for (id, status) in filestatus
+    for (id, status) in file_status
         .iter()
         .filter(|(_, f)| f.eq(&&FileStatus::Added))
         .collect::<Vec<(&String, &FileStatus)>>()
     {
         println!("{:?}: {}", status, id);
     }
-    if !(filestatus.iter().any(|(_, f)| !f.eq(&FileStatus::None)) || any_file_removed) {
+    if !(file_status.iter().any(|(_, f)| !f.eq(&FileStatus::None)) || any_file_removed) {
         return true;
     }
     false
@@ -199,17 +199,17 @@ enum FileStatus {
 
 #[derive(Debug, PartialEq)]
 enum TrackStatus {
-    Uptodate,
+    UptoDate,
     NeverMarked,
-    Outofdate { days: String },
+    OutOfDate { days: String },
 }
 
 impl ToString for TrackStatus {
     fn to_string(&self) -> String {
         match self {
-            TrackStatus::Uptodate => "Up to date".to_string(),
+            TrackStatus::UptoDate => "Up to date".to_string(),
             TrackStatus::NeverMarked => "Never marked".to_string(),
-            TrackStatus::Outofdate { days } => format!("{} days out of date", days),
+            TrackStatus::OutOfDate { days } => format!("{} days out of date", days),
         }
     }
 }
