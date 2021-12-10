@@ -7,7 +7,7 @@ mod document;
 mod library;
 mod snapshot;
 mod style;
-mod track_data;
+mod tracker;
 mod utils;
 
 pub use commands::{
@@ -20,7 +20,7 @@ pub(crate) use document::{process_dir, process_file, Document, FileFound, Static
 pub(crate) use library::Library;
 pub(crate) use snapshot::Snapshot;
 pub(crate) use style::Font;
-pub(crate) use track_data::Tracks;
+pub(crate) use tracker::Track;
 pub(crate) use utils::get_timestamp_nanosecond;
 
 pub fn fpm_ftd() -> &'static str {

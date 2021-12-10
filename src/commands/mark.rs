@@ -15,7 +15,7 @@ async fn check(
     base_path: &str,
 ) -> fpm::Result<()> {
     let file_path = format!("{}/.tracks/{}", base_path, who.replace(".ftd", ".track"));
-    let mut tracks = fpm::track_data::get_track(base_path, &file_path)?;
+    let mut tracks = fpm::tracker::get_tracks(base_path, &file_path)?;
     if let Some(whom) = whom {
         if let Some(track) = tracks.get_mut(whom) {
             if let Some(timestamp) = snapshots.get(whom) {
@@ -38,7 +38,7 @@ async fn check(
 }
 async fn write(
     file_path: &str,
-    tracks: &std::collections::BTreeMap<String, fpm::Tracks>,
+    tracks: &std::collections::BTreeMap<String, fpm::Track>,
 ) -> fpm::Result<()> {
     use tokio::io::AsyncWriteExt;
 

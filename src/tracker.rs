@@ -1,5 +1,5 @@
 #[derive(serde::Deserialize, Debug, Clone)]
-pub struct Tracks {
+pub struct Track {
     #[serde(rename = "document-name")]
     pub document_name: String,
     pub package: Option<String>,
@@ -10,16 +10,10 @@ pub struct Tracks {
     pub self_timestamp: String,
 }
 
-impl Tracks {
-    pub fn parse(b: &ftd::p2::Document) -> fpm::Result<Vec<Tracks>> {
-        Ok(b.to_owned().instances::<Tracks>("fpm#track")?)
-    }
-}
-
-pub(crate) fn get_track(
+pub(crate) fn get_tracks(
     base_path: &str,
     path: &str,
-) -> fpm::Result<std::collections::BTreeMap<String, Tracks>> {
+) -> fpm::Result<std::collections::BTreeMap<String, Track>> {
     let mut tracks = std::collections::BTreeMap::new();
     if std::fs::metadata(&path).is_err() {
         return Ok(tracks);
@@ -34,7 +28,7 @@ pub(crate) fn get_track(
             todo!();
         }
     };
-    let track_list = Tracks::parse(&b)?;
+    let track_list: Vec<Track> = b.get("fpm#track")?;
     for track in track_list {
         tracks.insert(track.document_name.to_string(), track);
     }

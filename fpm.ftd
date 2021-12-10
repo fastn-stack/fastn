@@ -20,15 +20,19 @@ optional string woff2:
 
 -- font-data list font:
 
--- record snapshot:
+-- record snapshot-data:
 caption file:
 string timestamp:
 
--- record track:
+-- snapshot-data list snapshot:
+
+-- record track-data:
 caption document-name:
 optional string package:
 optional string version:
 optional string other-timestamp:
 string self-timestamp:
+
+-- track-data list track:
 
 -- string list ignore:

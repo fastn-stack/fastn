@@ -108,7 +108,7 @@ fn get_track_status(
     if std::fs::metadata(&path).is_err() {
         return Ok(track_list);
     }
-    let tracks = fpm::track_data::get_track(base_path, &path)?;
+    let tracks = fpm::tracker::get_tracks(base_path, &path)?;
     for track in tracks.values() {
         if !snapshots.contains_key(&track.document_name) {
             eprintln!(

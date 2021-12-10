@@ -52,7 +52,7 @@ async fn get_track_diff(
     if std::fs::metadata(&path).is_err() {
         return Ok(());
     }
-    let tracks = fpm::track_data::get_track(base_path, &path)?;
+    let tracks = fpm::tracker::get_tracks(base_path, &path)?;
     for track in tracks.values() {
         if let Some(timestamp) = snapshots.get(&track.document_name) {
             if track.other_timestamp.is_none() {
