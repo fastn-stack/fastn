@@ -20,23 +20,20 @@ impl Config {
     }
 
     pub async fn read() -> fpm::Result<Config> {
-        let root_dir = std::env::current_dir()
-            .expect("Panic1")
+        let root_dir = std::env::current_dir()?
             .to_str()
-            .expect("panic")
+            .unwrap_or_default()
             .to_string();
         let (_, package_folder_name) = root_dir.as_str().rsplit_once("/").expect("");
         let (_is_okay, base_dir) = find_fpm_file(root_dir.clone());
 
         let lib = fpm::Library::default();
-        let id = "fpm".to_string();
-        let doc = std::fs::read_to_string(format!("{}/FPM.ftd", base_dir.as_str()))
-            .unwrap_or_else(|_| panic!("cant read file. {}/FPM.ftd", base_dir.as_str()));
-        let b = match ftd::p2::Document::from(id.as_str(), doc.as_str(), &lib) {
+        let doc = tokio::fs::read_to_string(format!("{}/FPM.ftd", base_dir.as_str())).await?;
+        let b = match ftd::p2::Document::from("FPM", doc.as_str(), &lib) {
             Ok(v) => v,
             Err(e) => {
                 return Err(fpm::Error::ConfigurationError {
-                    message: format!("failed to parse {}: {:?}", id, &e),
+                    message: format!("failed to parse FPM.ftd: {:?}", &e),
                 });
             }
         };
@@ -77,7 +74,7 @@ impl Config {
             dependencies: dep.to_vec(),
             ignored,
         };
-        fpm::ensure_dependencies(dep).await?;
+        fpm::dependency::ensure(dep).await?;
 
         Ok(c)
     }

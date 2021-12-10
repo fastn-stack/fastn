@@ -73,3 +73,13 @@ impl Dependency {
         self.download_zip().await.is_ok()
     }
 }
+
+pub async fn ensure(deps: Vec<fpm::Dependency>) -> fpm::Result<()> {
+    futures::future::join_all(
+        deps.into_iter()
+            .map(|x| tokio::spawn(async move { x.process().await }))
+            .collect::<Vec<tokio::task::JoinHandle<bool>>>(),
+    )
+    .await;
+    Ok(())
+}
