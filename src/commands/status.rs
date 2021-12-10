@@ -26,7 +26,7 @@ async fn file_status(
     let existing_doc = tokio::fs::read_to_string(&path).await?;
     let document = fpm::Document {
         id: source.to_string(),
-        document: existing_doc,
+        content: existing_doc,
         base_path: base_path.to_string(),
         depth: 0,
     };
@@ -56,7 +56,7 @@ async fn all_status(
     let mut file_status = std::collections::BTreeMap::new();
     let mut track_status = std::collections::BTreeMap::new();
     for doc in fpm::process_dir(config).await? {
-        if let fpm::FileFound::FTDDocument(doc) = doc {
+        if let fpm::File::FTDDocument(doc) = doc {
             let status = get_file_status(&doc, snapshots).await?;
             let track = get_track_status(&doc, snapshots, config.root.as_str())?;
             if !track.is_empty() {
@@ -86,7 +86,7 @@ async fn get_file_status(
         );
 
         let existing_doc = tokio::fs::read_to_string(&path).await?;
-        if doc.document.eq(&existing_doc) {
+        if doc.content.eq(&existing_doc) {
             return Ok(FileStatus::None);
         }
         return Ok(FileStatus::Modified);

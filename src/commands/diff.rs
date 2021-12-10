@@ -3,7 +3,7 @@ pub async fn diff() -> fpm::Result<()> {
     let snapshots = fpm::snapshot::get_latest_snapshots(config.root.as_str())?;
 
     for doc in fpm::process_dir(&config).await? {
-        if let fpm::FileFound::FTDDocument(doc) = doc {
+        if let fpm::File::FTDDocument(doc) = doc {
             if let Some(diff) = get_diffy(&doc, &snapshots).await? {
                 println!("diff: {}", doc.id);
                 println!("{}", diff);
@@ -26,10 +26,10 @@ async fn get_diffy(
         );
 
         let existing_doc = tokio::fs::read_to_string(&path).await?;
-        if doc.document.eq(&existing_doc) {
+        if doc.content.eq(&existing_doc) {
             return Ok(None);
         }
-        let patch = diffy::create_patch(&existing_doc, &doc.document);
+        let patch = diffy::create_patch(&existing_doc, &doc.content);
         let diff = diffy::PatchFormatter::new()
             .with_color()
             .fmt_patch(&patch)

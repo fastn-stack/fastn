@@ -1,16 +1,16 @@
 #[derive(Debug)]
-pub enum FileFound {
+pub enum File {
     FTDDocument(Document),
     StaticAsset(StaticAsset),
     MarkdownDocument(Document),
 }
 
-impl FileFound {
+impl File {
     pub fn get_id(&self) -> String {
         match self {
-            Self::FTDDocument(a) => a.id.as_str().to_string(),
-            Self::StaticAsset(a) => a.id.as_str().to_string(),
-            Self::MarkdownDocument(a) => a.id.as_str().to_string(),
+            Self::FTDDocument(a) => a.id.clone(),
+            Self::StaticAsset(a) => a.id.clone(),
+            Self::MarkdownDocument(a) => a.id.clone(),
         }
     }
     pub fn get_base_path(&self) -> String {
@@ -33,7 +33,7 @@ impl FileFound {
 #[derive(Debug)]
 pub struct Document {
     pub id: String,
-    pub document: String,
+    pub content: String,
     pub base_path: String,
     pub depth: usize,
 }
@@ -45,8 +45,8 @@ pub struct StaticAsset {
     pub depth: usize,
 }
 
-pub(crate) async fn process_dir(config: &fpm::Config) -> fpm::Result<Vec<FileFound>> {
-    let mut documents: Vec<FileFound> = vec![];
+pub(crate) async fn process_dir(config: &fpm::Config) -> fpm::Result<Vec<File>> {
+    let mut documents: Vec<File> = vec![];
     let mut ignore_paths = ignore::WalkBuilder::new("./");
 
     ignore_paths.overrides(package_ignores().unwrap()); // unwrap ok because this we know can never fail
@@ -86,10 +86,7 @@ pub fn package_ignores() -> Result<ignore::overrides::Override, ignore::Error> {
     overrides.build()
 }
 
-pub(crate) async fn process_file(
-    doc_path: std::path::PathBuf,
-    dir: &str,
-) -> fpm::Result<FileFound> {
+pub(crate) async fn process_file(doc_path: std::path::PathBuf, dir: &str) -> fpm::Result<File> {
     if !&doc_path.is_dir() {
         let doc_path_str = doc_path.to_str().unwrap();
         if let Some((_, id)) = std::fs::canonicalize(&doc_path)?
@@ -98,13 +95,13 @@ pub(crate) async fn process_file(
             .rsplit_once(format!("{}/", dir).as_str())
         {
             return Ok(match id.rsplit_once(".") {
-                Some((_, "ftd")) => FileFound::FTDDocument(Document {
+                Some((_, "ftd")) => File::FTDDocument(Document {
                     id: id.to_string(),
-                    document: tokio::fs::read_to_string(&doc_path).await?,
+                    content: tokio::fs::read_to_string(&doc_path).await?,
                     base_path: dir.to_string(),
                     depth: doc_path_str.split('/').count() - 1,
                 }),
-                Some((doc_name, "md")) => FileFound::MarkdownDocument(Document {
+                Some((doc_name, "md")) => File::MarkdownDocument(Document {
                     id: if doc_name == "README"
                         && !(std::path::Path::new("./index.ftd").exists()
                             || std::path::Path::new("./index.md").exists())
@@ -113,11 +110,11 @@ pub(crate) async fn process_file(
                     } else {
                         id.to_string()
                     },
-                    document: tokio::fs::read_to_string(&doc_path).await?,
+                    content: tokio::fs::read_to_string(&doc_path).await?,
                     base_path: dir.to_string(),
                     depth: doc_path_str.split('/').count() - 1,
                 }),
-                _ => FileFound::StaticAsset(StaticAsset {
+                _ => File::StaticAsset(StaticAsset {
                     id: id.to_string(),
                     base_path: dir.to_string(),
                     depth: doc_path_str.split('/').count() - 1,

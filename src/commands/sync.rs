@@ -16,7 +16,7 @@ pub async fn sync(files: Option<Vec<String>>) -> fpm::Result<()> {
                         .await
                     })
                 })
-                .collect::<Vec<tokio::task::JoinHandle<fpm::Result<fpm::FileFound>>>>(),
+                .collect::<Vec<tokio::task::JoinHandle<fpm::Result<fpm::File>>>>(),
         )
         .await;
         let mut document = vec![];
@@ -77,7 +77,7 @@ pub async fn sync(files: Option<Vec<String>>) -> fpm::Result<()> {
 }
 
 async fn write(
-    doc: &fpm::FileFound,
+    doc: &fpm::File,
     timestamp: u128,
     snapshots: &std::collections::BTreeMap<String, String>,
 ) -> fpm::Result<(fpm::Snapshot, bool)> {

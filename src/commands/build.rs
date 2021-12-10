@@ -3,18 +3,18 @@ pub async fn build() -> fpm::Result<()> {
     tokio::fs::create_dir_all(format!("{}/.build", config.root.as_str()).as_str()).await?;
 
     for doc in fpm::process_dir(&config).await? {
-        write(&doc, &config).await?;
+        process_file(&doc, &config).await?;
     }
     Ok(())
 }
 
-async fn write(doc: &fpm::FileFound, config: &fpm::Config) -> fpm::Result<()> {
+async fn process_file(doc: &fpm::File, config: &fpm::Config) -> fpm::Result<()> {
     // Create the .build folder in case it doesn't exist
 
     match doc {
-        fpm::FileFound::FTDDocument(doc) => process_doc(doc, config, false).await?,
-        fpm::FileFound::StaticAsset(sa) => process_static(sa).await?,
-        fpm::FileFound::MarkdownDocument(doc) => process_doc(doc, config, true).await?,
+        fpm::File::FTDDocument(doc) => process_doc(doc, config, false).await?,
+        fpm::File::StaticAsset(sa) => process_static(sa).await?,
+        fpm::File::MarkdownDocument(doc) => process_doc(doc, config, true).await?,
     }
 
     Ok(())
@@ -42,10 +42,7 @@ pub async fn process_doc(
     };
     let lib = fpm::Library {
         markdown: if is_md {
-            Some((
-                doc.id.as_str().to_string(),
-                doc.document.as_str().to_string(),
-            ))
+            Some((doc.id.clone(), doc.content.clone()))
         } else {
             None
         },
@@ -64,7 +61,7 @@ pub async fn process_doc(
             d.to_string()
         }
     } else {
-        doc.document.clone()
+        doc.content.clone()
     };
     let b = match ftd::p2::Document::from(&doc.id, doc_str.as_str(), &lib) {
         Ok(v) => v,

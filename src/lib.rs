@@ -17,7 +17,7 @@ pub use commands::{
 pub(crate) use config::Config;
 pub(crate) use config::Package;
 pub(crate) use dependency::Dependency;
-pub(crate) use document::{process_dir, process_file, Document, FileFound, StaticAsset};
+pub(crate) use document::{process_dir, process_file, Document, File, StaticAsset};
 pub(crate) use font::Font;
 pub(crate) use library::Library;
 pub(crate) use snapshot::Snapshot;
