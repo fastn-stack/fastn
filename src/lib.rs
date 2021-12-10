@@ -4,9 +4,9 @@ mod commands;
 mod config;
 mod dependency;
 mod document;
+mod font;
 mod library;
 mod snapshot;
-mod style;
 mod tracker;
 mod utils;
 
@@ -17,9 +17,9 @@ pub(crate) use config::Config;
 pub(crate) use config::Package;
 pub(crate) use dependency::Dependency;
 pub(crate) use document::{process_dir, process_file, Document, FileFound, StaticAsset};
+pub(crate) use font::Font;
 pub(crate) use library::Library;
 pub(crate) use snapshot::Snapshot;
-pub(crate) use style::Font;
 pub(crate) use tracker::Track;
 pub(crate) use utils::get_timestamp_nanosecond;
 
