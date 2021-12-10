@@ -1,0 +1,9 @@
+-- fbt:
+cmd: cd amitu && $FBT_CWD/target/debug/fpm --test build
+output: amitu/.build
+
+
+-- stdout:
+
+Generated FPM/index.html
+Generated index.html

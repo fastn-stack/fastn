@@ -99,8 +99,15 @@ pub(crate) async fn process_file(
                     base_path: dir.to_string(),
                     depth: doc_path_str.split('/').count() - 1,
                 }),
-                Some((_, "md")) => FileFound::MarkdownDocument(Document {
-                    id: id.to_string(),
+                Some((doc_name, "md")) => FileFound::MarkdownDocument(Document {
+                    id: if doc_name == "README"
+                        && !(std::path::Path::new("./index.ftd").exists()
+                            || std::path::Path::new("./index.md").exists())
+                    {
+                        "index.md".to_string()
+                    } else {
+                        id.to_string()
+                    },
                     document: tokio::fs::read_to_string(&doc_path).await?,
                     base_path: dir.to_string(),
                     depth: doc_path_str.split('/').count() - 1,
