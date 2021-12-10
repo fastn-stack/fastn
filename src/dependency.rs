@@ -13,9 +13,8 @@ pub struct Dependency {
 }
 
 impl Dependency {
-    pub async fn download_zip(&self) -> fpm::Result<()> {
+    pub async fn process(&self) -> fpm::Result<()> {
         if std::path::Path::new(format!("./.packages/{}", self.name).as_str()).exists() {
-            // TODO: Optimitisically exiting in case the path exists locally
             return Ok(());
         }
         let download_url = match self.repo.as_str() {
@@ -68,17 +67,13 @@ impl Dependency {
         }
         Ok(())
     }
-
-    pub async fn process(&self) -> bool {
-        self.download_zip().await.is_ok()
-    }
 }
 
 pub async fn ensure(deps: Vec<fpm::Dependency>) -> fpm::Result<()> {
     futures::future::join_all(
         deps.into_iter()
             .map(|x| tokio::spawn(async move { x.process().await }))
-            .collect::<Vec<tokio::task::JoinHandle<bool>>>(),
+            .collect::<Vec<tokio::task::JoinHandle<_>>>(),
     )
     .await;
     Ok(())

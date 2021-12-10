@@ -14,26 +14,26 @@ homepage = "https://fpm.dev"
 
 
 [dependencies]
-serde = { version = "1", features = ["derive"] }
-serde_json = "1"
-ftd = "0.1.15"
-clap = "2.33.3"
-home = "0.5.3"
-reqwest = "0.11.6"
-tokio = { version = "1.14.0", features = ["full"] }
-futures = "0.3.18"
-zip = "0.5"
-thiserror = "1.0"
-serde_derive = "1.0"
-url = "2.2.2"
 async-recursion = "0.3.2"
+clap = "2.33.3"
 diffy = "0.2.1"
+ftd = "0.1.15"
+futures = "0.3.18"
+home = "0.5.3"
 ignore = "0.4.18"
-rusqlite = "0.26.1"
 indoc = "1.0"
+reqwest = "0.11.6"
+rusqlite = "0.26.1"
+serde = { version = "1", features = ["derive"] }
+serde_derive = "1.0"
+serde_json = "1"
+thiserror = "1.0"
+tokio = { version = "1.14.0", features = ["full"] }
+url = "2.2.2"
+zip = "0.5"
 
 [dev-dependencies]
-rusty-hook = "^0.11.2"
 fbt-lib = "0.1.14"
 indoc = "1"
 pretty_assertions = "1"
+rusty-hook = "^0.11.2"
