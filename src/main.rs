@@ -1,6 +1,6 @@
 #[tokio::main]
 async fn main() {
-    let matches = app().get_matches();
+    let matches = app(authors()).get_matches();
 
     if matches.subcommand_matches("build").is_some() {
         fpm::build().await.expect("build failed");
@@ -36,10 +36,10 @@ async fn main() {
     }
 }
 
-fn app() -> clap::App<'static, 'static> {
+fn app(authors: &'static str) -> clap::App<'static, 'static> {
     clap::App::new("FTD Package Manager")
         .version(env!("CARGO_PKG_VERSION"))
-        .author(env!("CARGO_PKG_AUTHORS"))
+        .author(authors)
         .about("Description...")
         .setting(clap::AppSettings::ArgRequiredElseHelp)
         .arg(
@@ -104,4 +104,15 @@ fn app() -> clap::App<'static, 'static> {
                 .about("Add a tracking relation between two files.")
                 .version(env!("CARGO_PKG_VERSION")),
         )
+}
+
+pub fn authors() -> &'static str {
+    Box::leak(
+        env!("CARGO_PKG_AUTHORS")
+            .split(":")
+            .map(|v| v.split_once('<').map(|(v, _)| v.trim()).unwrap_or_default())
+            .collect::<Vec<_>>()
+            .join(", ")
+            .into_boxed_str(),
+    )
 }
