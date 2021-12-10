@@ -23,12 +23,16 @@ async fn main() {
     if let Some(tracks) = matches.subcommand_matches("start-tracking") {
         let source = tracks.value_of("source").unwrap();
         let target = tracks.value_of("target").unwrap();
-        fpm::tracks(source, target).await.expect("tracks failed");
+        fpm::start_tracking(source, target)
+            .await
+            .expect("tracks failed");
     }
     if let Some(mark) = matches.subcommand_matches("mark-upto-date") {
         let source = mark.value_of("source").unwrap();
         let target = mark.value_of("target");
-        fpm::mark(source, target).await.expect("mark failed");
+        fpm::mark_upto_date(source, target)
+            .await
+            .expect("mark failed");
     }
 }
 

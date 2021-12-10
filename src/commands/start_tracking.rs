@@ -1,4 +1,4 @@
-pub async fn tracks(who: &str, whom: &str) -> fpm::Result<()> {
+pub async fn start_tracking(who: &str, whom: &str) -> fpm::Result<()> {
     let config = fpm::Config::read().await?;
 
     tokio::fs::create_dir_all(format!("{}/.tracks", config.root.as_str()).as_str()).await?;
