@@ -1,6 +1,6 @@
 pub async fn diff() -> fpm::Result<()> {
     let config = fpm::Config::read().await?;
-    let snapshots = fpm::snapshot::get_latest_snapshots(config.root.as_str())?;
+    let snapshots = fpm::snapshot::get_latest_snapshots(&config).await?;
 
     for doc in fpm::get_documents(&config).await? {
         if let fpm::File::FTD(doc) = doc {

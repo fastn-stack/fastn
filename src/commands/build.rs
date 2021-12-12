@@ -1,6 +1,6 @@
 pub async fn build() -> fpm::Result<()> {
     let config = fpm::Config::read().await?;
-    tokio::fs::create_dir_all(format!("{}/.build", config.root.as_str()).as_str()).await?;
+    tokio::fs::create_dir_all(config.root.join(".build")).await?;
 
     for doc in fpm::get_documents(&config).await? {
         match doc {

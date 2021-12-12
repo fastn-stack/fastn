@@ -3,7 +3,7 @@ pub async fn start_tracking(who: &str, whom: &str) -> fpm::Result<()> {
 
     tokio::fs::create_dir_all(format!("{}/.tracks", config.root.as_str()).as_str()).await?;
 
-    let snapshots = fpm::snapshot::get_latest_snapshots(config.root.as_str())?;
+    let snapshots = fpm::snapshot::get_latest_snapshots(&config).await?;
     check(config.root.as_str(), &snapshots, who, whom).await?;
     Ok(())
 }

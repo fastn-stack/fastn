@@ -1,7 +1,7 @@
 pub async fn mark_upto_date(who: &str, whom: Option<&str>) -> fpm::Result<()> {
     let config = fpm::Config::read().await?;
 
-    let snapshots = fpm::snapshot::get_latest_snapshots(config.root.as_str())?;
+    let snapshots = fpm::snapshot::get_latest_snapshots(&config).await?;
 
     check(&snapshots, who, whom, config.root.as_str()).await?;
 

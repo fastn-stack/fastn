@@ -4,21 +4,22 @@ pub struct Snapshot {
     pub timestamp: String,
 }
 
-pub(crate) fn get_latest_snapshots(
-    base_path: &str,
+pub(crate) async fn get_latest_snapshots(
+    config: &fpm::Config,
 ) -> fpm::Result<std::collections::BTreeMap<String, String>> {
     let mut snapshots = std::collections::BTreeMap::new();
-    let new_file_path = format!("{}/.history/.latest.ftd", base_path);
-    if std::fs::metadata(&new_file_path).is_err() {
+    let latest_file_path = config.latest_ftd();
+    if !latest_file_path.exists() {
+        // TODO: should we error out here?
         return Ok(snapshots);
     }
 
     let lib = fpm::Library::default();
-    let doc = std::fs::read_to_string(&new_file_path)?;
-    let b = match ftd::p2::Document::from(base_path, doc.as_str(), &lib) {
+    let doc = tokio::fs::read_to_string(&latest_file_path).await?;
+    let b = match ftd::p2::Document::from(".latest.ftd", doc.as_str(), &lib) {
         Ok(v) => v,
         Err(e) => {
-            eprintln!("failed to parse {}: {:?}", base_path, &e);
+            eprintln!("failed to parse {}: {:?}", latest_file_path, &e);
             todo!();
         }
     };

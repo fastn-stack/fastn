@@ -1,6 +1,6 @@
 pub async fn status(source: Option<&str>) -> fpm::Result<()> {
     let config = fpm::Config::read().await?;
-    let snapshots = fpm::snapshot::get_latest_snapshots(config.root.as_str())?;
+    let snapshots = fpm::snapshot::get_latest_snapshots(&config).await?;
     if let Some(source) = source {
         file_status(config.root.as_str(), source, &snapshots).await?;
         return Ok(());

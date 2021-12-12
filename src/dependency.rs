@@ -1,7 +1,3 @@
-pub trait DependencyProvider {
-    fn download(&self) -> bool;
-}
-
 #[derive(serde::Deserialize, Debug, Clone)]
 pub struct Dependency {
     pub name: String,
