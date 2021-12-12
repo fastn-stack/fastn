@@ -47,6 +47,9 @@ pub enum Error {
 
     #[error("IgnoreError: {}", _0)]
     IgnoreError(#[from] ignore::Error),
+
+    #[error("FromPathBufError: {}", _0)]
+    FromPathBufError(#[from] camino::FromPathBufError),
 }
 
 pub type Result<T> = std::result::Result<T, Error>;

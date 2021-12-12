@@ -2,6 +2,7 @@
 pub struct Config {
     pub package: fpm::Package,
     pub root: String,
+    pub original_directory: camino::Utf8PathBuf,
     pub fonts: Vec<fpm::Font>,
     pub dependencies: Vec<fpm::Dependency>,
     pub ignored: ignore::overrides::Override,
@@ -20,12 +21,16 @@ impl Config {
     }
 
     pub async fn read() -> fpm::Result<Config> {
-        let root_dir = std::env::current_dir()?
-            .to_str()
-            .unwrap_or_default()
-            .to_string();
-        let (_, package_folder_name) = root_dir.as_str().rsplit_once("/").expect("");
-        let (_is_okay, base_dir) = find_fpm_file(root_dir.clone());
+        let original_directory: camino::Utf8PathBuf =
+            std::env::current_dir()?.canonicalize()?.try_into()?;
+        let base_dir = match find_package_root(&original_directory) {
+            Some(b) => b,
+            None => {
+                return Err(fpm::Error::ConfigurationError {
+                    message: "FPM.ftd not found in any parent directory".to_string(),
+                });
+            }
+        };
 
         let lib = fpm::Library::default();
         let doc = tokio::fs::read_to_string(format!("{}/FPM.ftd", base_dir.as_str())).await?;
@@ -41,7 +46,7 @@ impl Config {
         let dep: Vec<fpm::Dependency> = b.get("fpm#dependency")?;
         let fonts: Vec<fpm::Font> = b.get("fpm#font")?;
 
-        if package_folder_name != package.name {
+        if base_dir.file_name() != Some(package.name.as_str()) {
             return Err(fpm::Error::ConfigurationError {
                 message: "package name and folder name must match".to_string(),
             });
@@ -69,7 +74,8 @@ impl Config {
 
         let c = Config {
             package,
-            root: base_dir,
+            root: base_dir.to_string(),
+            original_directory,
             fonts,
             dependencies: dep.to_vec(),
             ignored,
@@ -80,14 +86,14 @@ impl Config {
     }
 }
 
-fn find_fpm_file(dir: String) -> (bool, String) {
-    if std::path::Path::new(format!("{}/FPM.ftd", dir).as_str()).exists() {
-        (true, dir)
+fn find_package_root(dir: &camino::Utf8Path) -> Option<camino::Utf8PathBuf> {
+    if dir.join("FPM.ftd").exists() {
+        Some(dir.into())
     } else {
-        if let Some((parent_dir, _)) = dir.rsplit_once("/") {
-            return find_fpm_file(parent_dir.to_string());
+        if let Some(p) = dir.parent() {
+            return find_package_root(&p);
         };
-        (false, "".to_string())
+        None
     }
 }
 
