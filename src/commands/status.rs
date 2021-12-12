@@ -27,7 +27,7 @@ async fn file_status(
     let document = fpm::Document {
         id: source.to_string(),
         content: existing_doc,
-        base_path: base_path.to_string(),
+        parent_path: base_path.to_string(),
         depth: 0,
     };
 
@@ -55,7 +55,7 @@ async fn all_status(
 ) -> fpm::Result<()> {
     let mut file_status = std::collections::BTreeMap::new();
     let mut track_status = std::collections::BTreeMap::new();
-    for doc in fpm::process_dir(config).await? {
+    for doc in fpm::get_documents(config).await? {
         if let fpm::File::FTDDocument(doc) = doc {
             let status = get_file_status(&doc, snapshots).await?;
             let track = get_track_status(&doc, snapshots, config.root.as_str())?;
@@ -81,7 +81,7 @@ async fn get_file_status(
     if let Some(timestamp) = snapshots.get(&doc.id) {
         let path = format!(
             "{}/.history/{}",
-            doc.base_path.as_str(),
+            doc.parent_path.as_str(),
             doc.id.replace(".ftd", &format!(".{}.ftd", timestamp))
         );
 
@@ -101,7 +101,7 @@ fn get_track_status(
 ) -> fpm::Result<std::collections::BTreeMap<String, TrackStatus>> {
     let path = format!(
         "{}/.tracks/{}",
-        doc.base_path.as_str(),
+        doc.parent_path.as_str(),
         doc.id.replace(".ftd", ".track")
     );
     let mut track_list = std::collections::BTreeMap::new();

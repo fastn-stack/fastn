@@ -15,16 +15,16 @@ impl File {
     }
     pub fn get_base_path(&self) -> String {
         match self {
-            Self::FTDDocument(a) => a.base_path.to_string(),
+            Self::FTDDocument(a) => a.parent_path.to_string(),
             Self::StaticAsset(a) => a.base_path.to_string(),
-            Self::MarkdownDocument(a) => a.base_path.to_string(),
+            Self::MarkdownDocument(a) => a.parent_path.to_string(),
         }
     }
     pub fn get_full_path(&self) -> String {
         let (id, base_path) = match self {
-            Self::FTDDocument(a) => (a.id.to_string(), a.base_path.to_string()),
+            Self::FTDDocument(a) => (a.id.to_string(), a.parent_path.to_string()),
             Self::StaticAsset(a) => (a.id.to_string(), a.base_path.to_string()),
-            Self::MarkdownDocument(a) => (a.id.to_string(), a.base_path.to_string()),
+            Self::MarkdownDocument(a) => (a.id.to_string(), a.parent_path.to_string()),
         };
         format!("{}/{}", base_path, id)
     }
@@ -34,7 +34,7 @@ impl File {
 pub struct Document {
     pub id: String,
     pub content: String,
-    pub base_path: String,
+    pub parent_path: String,
     pub depth: usize,
 }
 
@@ -45,7 +45,7 @@ pub struct StaticAsset {
     pub depth: usize,
 }
 
-pub(crate) async fn process_dir(config: &fpm::Config) -> fpm::Result<Vec<File>> {
+pub(crate) async fn get_documents(config: &fpm::Config) -> fpm::Result<Vec<File>> {
     let mut documents: Vec<File> = vec![];
     let mut ignore_paths = ignore::WalkBuilder::new("./");
 
@@ -98,7 +98,7 @@ pub(crate) async fn process_file(doc_path: std::path::PathBuf, dir: &str) -> fpm
                 Some((_, "ftd")) => File::FTDDocument(Document {
                     id: id.to_string(),
                     content: tokio::fs::read_to_string(&doc_path).await?,
-                    base_path: dir.to_string(),
+                    parent_path: dir.to_string(),
                     depth: doc_path_str.split('/').count() - 1,
                 }),
                 Some((doc_name, "md")) => File::MarkdownDocument(Document {
@@ -111,7 +111,7 @@ pub(crate) async fn process_file(doc_path: std::path::PathBuf, dir: &str) -> fpm
                         id.to_string()
                     },
                     content: tokio::fs::read_to_string(&doc_path).await?,
-                    base_path: dir.to_string(),
+                    parent_path: dir.to_string(),
                     depth: doc_path_str.split('/').count() - 1,
                 }),
                 _ => File::StaticAsset(StaticAsset {

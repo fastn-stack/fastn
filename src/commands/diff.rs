@@ -2,7 +2,7 @@ pub async fn diff() -> fpm::Result<()> {
     let config = fpm::Config::read().await?;
     let snapshots = fpm::snapshot::get_latest_snapshots(config.root.as_str())?;
 
-    for doc in fpm::process_dir(&config).await? {
+    for doc in fpm::get_documents(&config).await? {
         if let fpm::File::FTDDocument(doc) = doc {
             if let Some(diff) = get_diffy(&doc, &snapshots).await? {
                 println!("diff: {}", doc.id);
@@ -21,7 +21,7 @@ async fn get_diffy(
     if let Some(timestamp) = snapshots.get(&doc.id) {
         let path = format!(
             "{}/.history/{}",
-            doc.base_path.as_str(),
+            doc.parent_path.as_str(),
             doc.id.replace(".ftd", &format!(".{}.ftd", timestamp))
         );
 
@@ -46,7 +46,7 @@ async fn get_track_diff(
 ) -> fpm::Result<()> {
     let path = format!(
         "{}/.tracks/{}",
-        doc.base_path.as_str(),
+        doc.parent_path.as_str(),
         doc.id.replace(".ftd", ".track")
     );
     if std::fs::metadata(&path).is_err() {
@@ -60,14 +60,14 @@ async fn get_track_diff(
             }
             let now_path = format!(
                 "{}/.history/{}",
-                doc.base_path.as_str(),
+                doc.parent_path.as_str(),
                 track
                     .document_name
                     .replace(".ftd", &format!(".{}.ftd", timestamp))
             );
             let then_path = format!(
                 "{}/.history/{}",
-                doc.base_path.as_str(),
+                doc.parent_path.as_str(),
                 track.document_name.replace(
                     ".ftd",
                     &format!(".{}.ftd", track.other_timestamp.as_ref().unwrap())
