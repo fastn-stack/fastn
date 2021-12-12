@@ -1,6 +1,6 @@
 #[derive(Debug)]
 pub enum File {
-    FTD(Document),
+    Ftd(Document),
     Static(Static),
     Markdown(Document),
 }
@@ -8,21 +8,21 @@ pub enum File {
 impl File {
     pub fn get_id(&self) -> String {
         match self {
-            Self::FTD(a) => a.id.clone(),
+            Self::Ftd(a) => a.id.clone(),
             Self::Static(a) => a.id.clone(),
             Self::Markdown(a) => a.id.clone(),
         }
     }
     pub fn get_base_path(&self) -> String {
         match self {
-            Self::FTD(a) => a.parent_path.to_string(),
+            Self::Ftd(a) => a.parent_path.to_string(),
             Self::Static(a) => a.base_path.to_string(),
             Self::Markdown(a) => a.parent_path.to_string(),
         }
     }
     pub fn get_full_path(&self) -> String {
         let (id, base_path) = match self {
-            Self::FTD(a) => (a.id.to_string(), a.parent_path.to_string()),
+            Self::Ftd(a) => (a.id.to_string(), a.parent_path.to_string()),
             Self::Static(a) => (a.id.to_string(), a.base_path.to_string()),
             Self::Markdown(a) => (a.id.to_string(), a.parent_path.to_string()),
         };
@@ -95,7 +95,7 @@ pub(crate) async fn process_file(doc_path: std::path::PathBuf, dir: &str) -> fpm
             .rsplit_once(format!("{}/", dir).as_str())
         {
             return Ok(match id.rsplit_once(".") {
-                Some((_, "ftd")) => File::FTD(Document {
+                Some((_, "ftd")) => File::Ftd(Document {
                     id: id.to_string(),
                     content: tokio::fs::read_to_string(&doc_path).await?,
                     parent_path: dir.to_string(),

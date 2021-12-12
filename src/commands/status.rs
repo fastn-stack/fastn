@@ -1,10 +1,10 @@
 pub async fn status(config: &fpm::Config, source: Option<&str>) -> fpm::Result<()> {
-    let snapshots = fpm::snapshot::get_latest_snapshots(&config).await?;
+    let snapshots = fpm::snapshot::get_latest_snapshots(config).await?;
     if let Some(source) = source {
         file_status(config.root.as_str(), source, &snapshots).await?;
         return Ok(());
     }
-    all_status(&config, &snapshots).await
+    all_status(config, &snapshots).await
 }
 
 async fn file_status(
@@ -55,7 +55,7 @@ async fn all_status(
     let mut file_status = std::collections::BTreeMap::new();
     let mut track_status = std::collections::BTreeMap::new();
     for doc in fpm::get_documents(config).await? {
-        if let fpm::File::FTD(doc) = doc {
+        if let fpm::File::Ftd(doc) = doc {
             let status = get_file_status(&doc, snapshots).await?;
             let track = get_track_status(&doc, snapshots, config.root.as_str())?;
             if !track.is_empty() {

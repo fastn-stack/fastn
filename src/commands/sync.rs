@@ -23,12 +23,12 @@ pub async fn sync(config: &fpm::Config, files: Option<Vec<String>>) -> fpm::Resu
         }
         document
     } else {
-        fpm::get_documents(&config).await?
+        fpm::get_documents(config).await?
     };
 
     tokio::fs::create_dir_all(format!("{}/.history", config.root.as_str()).as_str()).await?;
 
-    let snapshots = fpm::snapshot::get_latest_snapshots(&config).await?;
+    let snapshots = fpm::snapshot::get_latest_snapshots(config).await?;
 
     let timestamp = fpm::get_timestamp_nanosecond();
     let mut modified_files = vec![];
@@ -62,7 +62,7 @@ pub async fn sync(config: &fpm::Config, files: Option<Vec<String>>) -> fpm::Resu
     if modified_files.is_empty() {
         println!("Everything is upto date.");
     } else {
-        fpm::snapshot::create_latest_snapshots(&config, &new_snapshots).await?;
+        fpm::snapshot::create_latest_snapshots(config, &new_snapshots).await?;
         println!(
             "Repo for {} is github, directly syncing with .history.",
             config.package.name

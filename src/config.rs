@@ -96,7 +96,7 @@ fn find_package_root(dir: &camino::Utf8Path) -> Option<camino::Utf8PathBuf> {
         Some(dir.into())
     } else {
         if let Some(p) = dir.parent() {
-            return find_package_root(&p);
+            return find_package_root(p);
         };
         None
     }
