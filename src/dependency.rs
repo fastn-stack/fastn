@@ -1,5 +1,3 @@
-use std::io::Write;
-
 pub trait DependencyProvider {
     fn download(&self) -> bool;
 }
@@ -13,10 +11,12 @@ pub struct Dependency {
 }
 
 impl Dependency {
-    pub async fn process(&self) -> fpm::Result<()> {
-        if std::path::Path::new(format!("./.packages/{}", self.name).as_str()).exists() {
+    pub async fn process(&self, base_dir: camino::Utf8PathBuf) -> fpm::Result<()> {
+        use tokio::io::AsyncWriteExt;
+        if base_dir.join(".packages").join(self.name.as_str()).exists() {
             return Ok(());
         }
+
         let download_url = match self.repo.as_str() {
             "github" => {
                 format!(
@@ -31,10 +31,13 @@ impl Dependency {
 
         let download_path = format!("/tmp/{}.zip", self.name.replace("/", "__"));
         let path = std::path::Path::new(download_path.as_str());
-        let mut file = std::fs::File::create(&path)?;
-        let content = response.bytes().await?;
 
-        file.write_all(&content)?;
+        {
+            let mut file = tokio::fs::File::create(&path).await?;
+            let content = response.bytes().await?;
+            file.write_all(&content).await?;
+        }
+
         let file = std::fs::File::open(&path)?;
         let mut archive = zip::ZipArchive::new(file)?;
         for i in 0..archive.len() {
@@ -69,10 +72,11 @@ impl Dependency {
     }
 }
 
-pub async fn ensure(deps: Vec<fpm::Dependency>) -> fpm::Result<()> {
+pub async fn ensure(base_dir: camino::Utf8PathBuf, deps: Vec<fpm::Dependency>) -> fpm::Result<()> {
     futures::future::join_all(
         deps.into_iter()
-            .map(|x| tokio::spawn(async move { x.process().await }))
+            .map(|x| (x, base_dir.clone()))
+            .map(|(x, base_dir)| tokio::spawn(async move { x.process(base_dir).await }))
             .collect::<Vec<tokio::task::JoinHandle<_>>>(),
     )
     .await;
