@@ -9,6 +9,10 @@ pub struct Config {
 }
 
 impl Config {
+    pub fn build_dir(&self) -> camino::Utf8PathBuf {
+        self.root.join(".build")
+    }
+
     pub fn latest_ftd(&self) -> camino::Utf8PathBuf {
         self.root.join(".history/.latest.ftd")
     }
