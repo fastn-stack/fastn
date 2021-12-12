@@ -1,30 +1,30 @@
 #[derive(Debug)]
 pub enum File {
-    FTDDocument(Document),
-    StaticAsset(StaticAsset),
-    MarkdownDocument(Document),
+    FTD(Document),
+    Static(Static),
+    Markdown(Document),
 }
 
 impl File {
     pub fn get_id(&self) -> String {
         match self {
-            Self::FTDDocument(a) => a.id.clone(),
-            Self::StaticAsset(a) => a.id.clone(),
-            Self::MarkdownDocument(a) => a.id.clone(),
+            Self::FTD(a) => a.id.clone(),
+            Self::Static(a) => a.id.clone(),
+            Self::Markdown(a) => a.id.clone(),
         }
     }
     pub fn get_base_path(&self) -> String {
         match self {
-            Self::FTDDocument(a) => a.parent_path.to_string(),
-            Self::StaticAsset(a) => a.base_path.to_string(),
-            Self::MarkdownDocument(a) => a.parent_path.to_string(),
+            Self::FTD(a) => a.parent_path.to_string(),
+            Self::Static(a) => a.base_path.to_string(),
+            Self::Markdown(a) => a.parent_path.to_string(),
         }
     }
     pub fn get_full_path(&self) -> String {
         let (id, base_path) = match self {
-            Self::FTDDocument(a) => (a.id.to_string(), a.parent_path.to_string()),
-            Self::StaticAsset(a) => (a.id.to_string(), a.base_path.to_string()),
-            Self::MarkdownDocument(a) => (a.id.to_string(), a.parent_path.to_string()),
+            Self::FTD(a) => (a.id.to_string(), a.parent_path.to_string()),
+            Self::Static(a) => (a.id.to_string(), a.base_path.to_string()),
+            Self::Markdown(a) => (a.id.to_string(), a.parent_path.to_string()),
         };
         format!("{}/{}", base_path, id)
     }
@@ -39,7 +39,7 @@ pub struct Document {
 }
 
 #[derive(Debug)]
-pub struct StaticAsset {
+pub struct Static {
     pub id: String,
     pub base_path: String,
     pub depth: usize,
@@ -95,13 +95,13 @@ pub(crate) async fn process_file(doc_path: std::path::PathBuf, dir: &str) -> fpm
             .rsplit_once(format!("{}/", dir).as_str())
         {
             return Ok(match id.rsplit_once(".") {
-                Some((_, "ftd")) => File::FTDDocument(Document {
+                Some((_, "ftd")) => File::FTD(Document {
                     id: id.to_string(),
                     content: tokio::fs::read_to_string(&doc_path).await?,
                     parent_path: dir.to_string(),
                     depth: doc_path_str.split('/').count() - 1,
                 }),
-                Some((doc_name, "md")) => File::MarkdownDocument(Document {
+                Some((doc_name, "md")) => File::Markdown(Document {
                     id: if doc_name == "README"
                         && !(std::path::Path::new("./index.ftd").exists()
                             || std::path::Path::new("./index.md").exists())
@@ -114,7 +114,7 @@ pub(crate) async fn process_file(doc_path: std::path::PathBuf, dir: &str) -> fpm
                     parent_path: dir.to_string(),
                     depth: doc_path_str.split('/').count() - 1,
                 }),
-                _ => File::StaticAsset(StaticAsset {
+                _ => File::Static(Static {
                     id: id.to_string(),
                     base_path: dir.to_string(),
                     depth: doc_path_str.split('/').count() - 1,

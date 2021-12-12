@@ -4,9 +4,9 @@ pub async fn build() -> fpm::Result<()> {
 
     for doc in fpm::get_documents(&config).await? {
         match doc {
-            fpm::File::FTDDocument(doc) => process_ftd(&doc, &config).await?,
-            fpm::File::StaticAsset(sa) => process_static(&sa).await?,
-            fpm::File::MarkdownDocument(doc) => process_markdown(&doc, &config).await?,
+            fpm::File::FTD(doc) => process_ftd(&doc, &config).await?,
+            fpm::File::Static(sa) => process_static(&sa).await?,
+            fpm::File::Markdown(doc) => process_markdown(&doc, &config).await?,
         }
     }
 
@@ -95,7 +95,7 @@ pub async fn process_ftd(doc: &fpm::Document, config: &fpm::Config) -> fpm::Resu
     Ok(())
 }
 
-pub async fn process_static(sa: &fpm::StaticAsset) -> fpm::Result<()> {
+pub async fn process_static(sa: &fpm::Static) -> fpm::Result<()> {
     if sa.depth != 1 {
         std::fs::create_dir_all(format!(
             "{}/.build/{}",
