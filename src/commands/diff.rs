@@ -1,5 +1,4 @@
-pub async fn diff() -> fpm::Result<()> {
-    let config = fpm::Config::read().await?;
+pub async fn diff(config: &fpm::Config) -> fpm::Result<()> {
     let snapshots = fpm::snapshot::get_latest_snapshots(&config).await?;
 
     for doc in fpm::get_documents(&config).await? {

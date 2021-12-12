@@ -1,8 +1,6 @@
-pub async fn sync(files: Option<Vec<String>>) -> fpm::Result<()> {
-    let config = fpm::Config::read().await?;
-
+pub async fn sync(config: &fpm::Config, files: Option<Vec<String>>) -> fpm::Result<()> {
     let documents = if let Some(ref files) = files {
-        let files = files.to_vec();
+        let files = files.clone();
         let d = futures::future::join_all(
             files
                 .into_iter()
@@ -64,7 +62,7 @@ pub async fn sync(files: Option<Vec<String>>) -> fpm::Result<()> {
     if modified_files.is_empty() {
         println!("Everything is upto date.");
     } else {
-        fpm::snapshot::create_latest_snapshots(config.root.as_str(), &new_snapshots).await?;
+        fpm::snapshot::create_latest_snapshots(&config, &new_snapshots).await?;
         println!(
             "Repo for {} is github, directly syncing with .history.",
             config.package.name

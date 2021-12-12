@@ -2,35 +2,39 @@
 async fn main() {
     let matches = app(authors()).get_matches();
 
+    let config = fpm::Config::read().await.expect("failed to read config");
+
     if matches.subcommand_matches("build").is_some() {
-        fpm::build().await.expect("build failed");
+        fpm::build(&config).await.expect("build failed");
     }
     if let Some(sync) = matches.subcommand_matches("sync") {
         if let Some(source) = sync.values_of("source") {
             let sources = source.map(|v| v.to_string()).collect();
-            fpm::sync(Some(sources)).await.expect("sync failed");
+            fpm::sync(&config, Some(sources))
+                .await
+                .expect("sync failed");
         } else {
-            fpm::sync(None).await.expect("sync failed");
+            fpm::sync(&config, None).await.expect("sync failed");
         }
     }
     if let Some(status) = matches.subcommand_matches("status") {
         let source = status.value_of("source");
-        fpm::status(source).await.expect("status failed");
+        fpm::status(&config, source).await.expect("status failed");
     }
     if matches.subcommand_matches("diff").is_some() {
-        fpm::diff().await.expect("diff failed");
+        fpm::diff(&config).await.expect("diff failed");
     }
     if let Some(tracks) = matches.subcommand_matches("start-tracking") {
         let source = tracks.value_of("source").unwrap();
         let target = tracks.value_of("target").unwrap();
-        fpm::start_tracking(source, target)
+        fpm::start_tracking(&config, source, target)
             .await
             .expect("tracks failed");
     }
     if let Some(mark) = matches.subcommand_matches("mark-upto-date") {
         let source = mark.value_of("source").unwrap();
         let target = mark.value_of("target");
-        fpm::mark_upto_date(source, target)
+        fpm::mark_upto_date(&config, source, target)
             .await
             .expect("mark failed");
     }

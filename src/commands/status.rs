@@ -1,5 +1,4 @@
-pub async fn status(source: Option<&str>) -> fpm::Result<()> {
-    let config = fpm::Config::read().await?;
+pub async fn status(config: &fpm::Config, source: Option<&str>) -> fpm::Result<()> {
     let snapshots = fpm::snapshot::get_latest_snapshots(&config).await?;
     if let Some(source) = source {
         file_status(config.root.as_str(), source, &snapshots).await?;

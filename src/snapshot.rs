@@ -31,12 +31,12 @@ pub(crate) async fn get_latest_snapshots(
 }
 
 pub(crate) async fn create_latest_snapshots(
-    base_path: &str,
+    config: &fpm::Config,
     snapshots: &[Snapshot],
 ) -> fpm::Result<()> {
     use tokio::io::AsyncWriteExt;
 
-    let new_file_path = format!("{}/.history/.latest.ftd", base_path);
+    let new_file_path = config.latest_ftd();
     let mut snapshot_data = "-- import: fpm".to_string();
 
     for snapshot in snapshots {

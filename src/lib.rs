@@ -14,7 +14,7 @@ pub use commands::{
     build::build, diff::diff, mark_upto_date::mark_upto_date, start_tracking::start_tracking,
     status::status, sync::sync,
 };
-pub(crate) use config::Config;
+pub use config::Config;
 pub(crate) use config::Package;
 pub(crate) use dependency::Dependency;
 pub(crate) use document::{get_documents, process_file, Document, File, Static};
