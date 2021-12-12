@@ -49,7 +49,7 @@ pub(crate) async fn get_documents(config: &fpm::Config) -> fpm::Result<Vec<File>
     let mut documents: Vec<File> = vec![];
     let mut ignore_paths = ignore::WalkBuilder::new("./");
 
-    ignore_paths.overrides(package_ignores().unwrap()); // unwrap ok because this we know can never fail
+    ignore_paths.overrides(package_ignores()?); // unwrap ok because this we know can never fail
     ignore_paths.standard_filters(true);
     ignore_paths.overrides(config.ignored.clone());
     // TODO: Get this concurrent async to work
@@ -66,7 +66,7 @@ pub(crate) async fn get_documents(config: &fpm::Config) -> fpm::Result<Vec<File>
     // futures::future::join_all(all_files).await;
 
     for x in ignore_paths.build() {
-        if let Ok(file_found) = process_file(x.unwrap().into_path(), config.root.as_str()).await {
+        if let Ok(file_found) = process_file(x?.into_path(), config.root.as_str()).await {
             documents.push(file_found);
         }
     }

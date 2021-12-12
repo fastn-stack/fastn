@@ -44,6 +44,9 @@ pub enum Error {
 
     #[error("ConfigurationError: {message}")]
     ConfigurationError { message: String },
+
+    #[error("IgnoreError: {}", _0)]
+    IgnoreError(#[from] ignore::Error),
 }
 
 pub type Result<T> = std::result::Result<T, Error>;
