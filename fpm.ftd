@@ -30,8 +30,8 @@ integer timestamp:
 caption filename:
 optional string package:
 optional string version:
-optional string other-timestamp:
-string self-timestamp:
+optional integer other-timestamp:
+integer self-timestamp:
 
 -- track-data list track:
 

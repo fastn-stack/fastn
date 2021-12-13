@@ -19,8 +19,14 @@ async fn main() -> fpm::Result<()> {
         let source = status.value_of("source");
         fpm::status(&config, source).await?;
     }
-    if matches.subcommand_matches("diff").is_some() {
-        fpm::diff(&config).await?;
+    if let Some(diff) = matches.subcommand_matches("diff") {
+        let all = diff.is_present("all");
+        if let Some(source) = diff.values_of("source") {
+            let sources = source.map(|v| v.to_string()).collect();
+            fpm::diff(&config, Some(sources), all).await?;
+        } else {
+            fpm::diff(&config, None, all).await?;
+        }
     }
     if let Some(tracks) = matches.subcommand_matches("start-tracking") {
         let source = tracks.value_of("source").unwrap();
@@ -32,7 +38,11 @@ async fn main() -> fpm::Result<()> {
         let target = mark.value_of("target");
         fpm::mark_upto_date(&config, source, target).await?;
     }
-
+    if let Some(mark) = matches.subcommand_matches("stop-tracking") {
+        let source = mark.value_of("source").unwrap();
+        let target = mark.value_of("target");
+        fpm::stop_tracking(&config, source, target).await?;
+    }
     Ok(())
 }
 
@@ -72,6 +82,10 @@ fn app(authors: &'static str) -> clap::App<'static, 'static> {
         )
         .subcommand(
             clap::SubCommand::with_name("diff")
+                .args(&[
+                    clap::Arg::with_name("source").multiple(true),
+                    clap::Arg::with_name("all").long("--all").short("a"),
+                ])
                 .about("Show un-synced changes to files in this fpm package")
                 .version(env!("CARGO_PKG_VERSION")),
         )
@@ -101,6 +115,17 @@ fn app(authors: &'static str) -> clap::App<'static, 'static> {
                         .required(true),
                 ])
                 .about("Add a tracking relation between two files")
+                .version(env!("CARGO_PKG_VERSION")),
+        )
+        .subcommand(
+            clap::SubCommand::with_name("stop-tracking")
+                .args(&[
+                    clap::Arg::with_name("source").required(true),
+                    clap::Arg::with_name("target")
+                        .long("--target")
+                        .takes_value(true),
+                ])
+                .about("Remove a tracking relation between two files")
                 .version(env!("CARGO_PKG_VERSION")),
         )
 }

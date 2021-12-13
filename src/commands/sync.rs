@@ -1,32 +1,16 @@
 pub async fn sync(config: &fpm::Config, files: Option<Vec<String>>) -> fpm::Result<()> {
     let documents = if let Some(ref files) = files {
-        let files = files.clone();
-        let d = futures::future::join_all(
-            files
-                .into_iter()
-                .map(|x| {
-                    let base = config.root.clone();
-                    tokio::spawn(async move {
-                        fpm::process_file(
-                            std::path::PathBuf::from(format!("{}/{}", base, x)),
-                            base.as_str(),
-                        )
-                        .await
-                    })
-                })
-                .collect::<Vec<tokio::task::JoinHandle<fpm::Result<fpm::File>>>>(),
-        )
-        .await;
-        let mut document = vec![];
-        for doc in d.into_iter().flatten().flatten() {
-            document.push(doc);
-        }
-        document
+        let files = files
+            .to_vec()
+            .into_iter()
+            .map(|x| std::path::PathBuf::from(config.root.join(x)))
+            .collect::<Vec<std::path::PathBuf>>();
+        fpm::paths_to_files(files, config.root.as_str()).await?
     } else {
         fpm::get_documents(config).await?
     };
 
-    tokio::fs::create_dir_all(format!("{}/.history", config.root.as_str()).as_str()).await?;
+    tokio::fs::create_dir_all(config.history_dir()).await?;
 
     let snapshots = fpm::snapshot::get_latest_snapshots(config).await?;
 
@@ -81,25 +65,15 @@ async fn write(
 ) -> fpm::Result<(fpm::Snapshot, bool)> {
     if doc.get_id().contains('/') {
         let dir = doc.get_id().rsplit_once('/').unwrap().0.to_string();
-        std::fs::create_dir_all(format!("{}/.history/{}", doc.get_base_path().as_str(), dir))?;
+        std::fs::create_dir_all(
+            camino::Utf8PathBuf::from(doc.get_base_path())
+                .join(".history")
+                .join(dir),
+        )?;
     }
 
-    let file_extension = if let Some((_, b)) = doc.get_id().rsplit_once('.') {
-        Some(b.to_string())
-    } else {
-        None
-    };
-
     if let Some(timestamp) = snapshots.get(&doc.get_id()) {
-        let path = format!("{}/.history/{}", doc.get_base_path().as_str(), {
-            if let Some(ref ext) = file_extension {
-                doc.get_id()
-                    .replace(&format!(".{}", ext), &format!(".{}.{}", timestamp, ext))
-            } else {
-                format!(".{}", timestamp)
-            }
-        });
-
+        let path = fpm::utils::history_path(&doc.get_id(), &doc.get_base_path(), timestamp);
         if let Ok(current_doc) = tokio::fs::read_to_string(&doc.get_full_path()).await {
             let existing_doc = tokio::fs::read_to_string(&path).await?;
             if current_doc.eq(&existing_doc) {
@@ -114,14 +88,7 @@ async fn write(
         }
     }
 
-    let new_file_path = format!("{}/.history/{}", doc.get_base_path().as_str(), {
-        if let Some(ext) = file_extension {
-            doc.get_id()
-                .replace(&format!(".{}", ext), &format!(".{}.{}", timestamp, ext))
-        } else {
-            format!(".{}", timestamp)
-        }
-    });
+    let new_file_path = fpm::utils::history_path(&doc.get_id(), &doc.get_base_path(), &timestamp);
 
     tokio::fs::copy(doc.get_full_path(), new_file_path).await?;
 

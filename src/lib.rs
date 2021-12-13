@@ -12,12 +12,12 @@ mod utils;
 
 pub use commands::{
     build::build, diff::diff, mark_upto_date::mark_upto_date, start_tracking::start_tracking,
-    status::status, sync::sync,
+    status::status, stop_tracking::stop_tracking, sync::sync,
 };
 pub use config::Config;
 pub(crate) use config::Package;
 pub(crate) use dependency::Dependency;
-pub(crate) use document::{get_documents, process_file, Document, File, Static};
+pub(crate) use document::{get_documents, paths_to_files, process_file, Document, File, Static};
 pub(crate) use font::Font;
 pub(crate) use library::Library;
 pub(crate) use snapshot::Snapshot;

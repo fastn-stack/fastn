@@ -1,38 +1,27 @@
-pub async fn mark_upto_date(
-    config: &fpm::Config,
-    who: &str,
-    whom: Option<&str>,
-) -> fpm::Result<()> {
-    let snapshots = fpm::snapshot::get_latest_snapshots(config).await?;
-    check(&snapshots, who, whom, config.root.as_str()).await?;
+pub async fn stop_tracking(config: &fpm::Config, who: &str, whom: Option<&str>) -> fpm::Result<()> {
+    check(who, whom, config.root.as_str()).await?;
+
     Ok(())
 }
 
-async fn check(
-    snapshots: &std::collections::BTreeMap<String, u128>,
-    who: &str,
-    whom: Option<&str>,
-    base_path: &str,
-) -> fpm::Result<()> {
+async fn check(who: &str, whom: Option<&str>, base_path: &str) -> fpm::Result<()> {
     let file_path = fpm::utils::track_path(who, base_path);
     let mut tracks = fpm::tracker::get_tracks(base_path, &file_path)?;
     if let Some(whom) = whom {
-        if let Some(track) = tracks.get_mut(whom) {
-            if let Some(timestamp) = snapshots.get(whom) {
-                track.other_timestamp = Some(*timestamp);
-                write(&file_path, &tracks).await?;
-                println!("{} is now marked upto date with {}", who, whom);
-                return Ok(());
-            } else {
-                eprintln!("Error: {} is removed. Can't mark {} upto date", whom, who);
-            }
+        if tracks.remove(whom).is_some() {
+            write(&file_path, &tracks).await?;
+            println!("{} is now stop tracking {}", who, whom);
+            return Ok(());
         } else {
             eprintln!("Error: {} is not tracking {}", who, whom);
         }
     }
 
     if !tracks.is_empty() {
-        println!("Which file to mark? {} tracks following files", who);
+        println!(
+            "Which file to stop tracking? {} tracks following files",
+            who
+        );
     } else {
         println!("{} tracks no file", who);
     }
@@ -41,6 +30,7 @@ async fn check(
     }
     Ok(())
 }
+
 async fn write(
     file_path: &camino::Utf8PathBuf,
     tracks: &std::collections::BTreeMap<String, fpm::Track>,

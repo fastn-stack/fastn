@@ -13,6 +13,14 @@ impl Config {
         self.root.join(".build")
     }
 
+    pub fn history_dir(&self) -> camino::Utf8PathBuf {
+        self.root.join(".history")
+    }
+
+    pub fn track_dir(&self) -> camino::Utf8PathBuf {
+        self.root.join(".tracks")
+    }
+
     pub fn latest_ftd(&self) -> camino::Utf8PathBuf {
         self.root.join(".history/.latest.ftd")
     }

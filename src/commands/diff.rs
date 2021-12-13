@@ -1,12 +1,22 @@
-pub async fn diff(config: &fpm::Config) -> fpm::Result<()> {
+pub async fn diff(config: &fpm::Config, files: Option<Vec<String>>, all: bool) -> fpm::Result<()> {
     let snapshots = fpm::snapshot::get_latest_snapshots(config).await?;
-
-    for doc in fpm::get_documents(config).await? {
-        if let fpm::File::Ftd(doc) = doc {
-            if let Some(diff) = get_diffy(&doc, &snapshots).await? {
-                println!("diff: {}", doc.id);
-                println!("{}", diff);
-            }
+    let all = all || files.is_some();
+    let documents = if let Some(ref files) = files {
+        let files = files
+            .to_vec()
+            .into_iter()
+            .map(|x| config.root.join(x).into_std_path_buf())
+            .collect::<Vec<std::path::PathBuf>>();
+        fpm::paths_to_files(files, config.root.as_str()).await?
+    } else {
+        fpm::get_documents(config).await?
+    };
+    for doc in documents {
+        if let Some(diff) = get_diffy(&doc, &snapshots).await? {
+            println!("diff: {}", doc.get_id());
+            println!("{}", diff);
+        }
+        if all {
             get_track_diff(&doc, &snapshots, config.root.as_str()).await?;
         }
     }
@@ -14,21 +24,18 @@ pub async fn diff(config: &fpm::Config) -> fpm::Result<()> {
 }
 
 async fn get_diffy(
-    doc: &fpm::Document,
+    doc: &fpm::File,
     snapshots: &std::collections::BTreeMap<String, u128>,
 ) -> fpm::Result<Option<String>> {
-    if let Some(timestamp) = snapshots.get(&doc.id) {
-        let path = format!(
-            "{}/.history/{}",
-            doc.parent_path.as_str(),
-            doc.id.replace(".ftd", &format!(".{}.ftd", timestamp))
-        );
+    if let Some(timestamp) = snapshots.get(&doc.get_id()) {
+        let path = fpm::utils::history_path(&doc.get_id(), &doc.get_base_path(), timestamp);
+        let content = tokio::fs::read_to_string(&doc.get_full_path()).await?;
 
         let existing_doc = tokio::fs::read_to_string(&path).await?;
-        if doc.content.eq(&existing_doc) {
+        if content.eq(&existing_doc) {
             return Ok(None);
         }
-        let patch = diffy::create_patch(&existing_doc, &doc.content);
+        let patch = diffy::create_patch(&existing_doc, &content);
         let diff = diffy::PatchFormatter::new()
             .with_color()
             .fmt_patch(&patch)
@@ -39,15 +46,11 @@ async fn get_diffy(
 }
 
 async fn get_track_diff(
-    doc: &fpm::Document,
+    doc: &fpm::File,
     snapshots: &std::collections::BTreeMap<String, u128>,
     base_path: &str,
 ) -> fpm::Result<()> {
-    let path = format!(
-        "{}/.tracks/{}",
-        doc.parent_path.as_str(),
-        doc.id.replace(".ftd", ".track")
-    );
+    let path = fpm::utils::track_path(&doc.get_id(), &doc.get_base_path());
     if std::fs::metadata(&path).is_err() {
         return Ok(());
     }
@@ -57,21 +60,15 @@ async fn get_track_diff(
             if track.other_timestamp.is_none() {
                 continue;
             }
-            let now_path = format!(
-                "{}/.history/{}",
-                doc.parent_path.as_str(),
-                track
-                    .filename
-                    .replace(".ftd", &format!(".{}.ftd", timestamp))
+            let now_path =
+                fpm::utils::history_path(&track.filename, &doc.get_base_path(), timestamp);
+
+            let then_path = fpm::utils::history_path(
+                &track.filename,
+                &doc.get_base_path(),
+                track.other_timestamp.as_ref().unwrap(),
             );
-            let then_path = format!(
-                "{}/.history/{}",
-                doc.parent_path.as_str(),
-                track.filename.replace(
-                    ".ftd",
-                    &format!(".{}.ftd", track.other_timestamp.as_ref().unwrap())
-                )
-            );
+
             let now_doc = tokio::fs::read_to_string(&now_path).await?;
             let then_doc = tokio::fs::read_to_string(&then_path).await?;
             if now_doc.eq(&then_doc) {
@@ -84,14 +81,13 @@ async fn get_track_diff(
                 .to_string();
             println!(
                 "diff {} -> {}: {}",
-                doc.id,
-                track.filename.replace(
-                    ".ftd",
-                    &format!(".{}.ftd", track.other_timestamp.as_ref().unwrap())
-                ),
-                track
-                    .filename
-                    .replace(".ftd", &format!(".{}.ftd", timestamp))
+                doc.get_id(),
+                then_path
+                    .to_string()
+                    .replace(&format!("{}/.history/", doc.get_base_path()), ""),
+                now_path
+                    .to_string()
+                    .replace(&format!("{}/.history/", doc.get_base_path()), ""),
             );
             println!("{}", diff);
         }

@@ -46,33 +46,41 @@ pub struct Static {
 }
 
 pub(crate) async fn get_documents(config: &fpm::Config) -> fpm::Result<Vec<File>> {
-    let mut documents: Vec<File> = vec![];
     let mut ignore_paths = ignore::WalkBuilder::new("./");
 
     ignore_paths.overrides(package_ignores()?); // unwrap ok because this we know can never fail
     ignore_paths.standard_filters(true);
     ignore_paths.overrides(config.ignored.clone());
-    // TODO: Get this concurrent async to work
-    // let all_files = ignore_paths.build()
-    //     .into_iter()
-    //     .map(|x| {
-    //         tokio::spawn(process_file_(
-    //             &mut documents,
-    //             x.unwrap().into_path(),
-    //             directory,
-    //         ))
-    //     })
-    //     .collect::<Vec<tokio::task::JoinHandle<fpm::Result<()>>>>();
-    // futures::future::join_all(all_files).await;
-
-    for x in ignore_paths.build() {
-        if let Ok(file_found) = process_file(x?.into_path(), config.root.as_str()).await {
-            documents.push(file_found);
-        }
-    }
+    let all_files = ignore_paths
+        .build()
+        .into_iter()
+        .flatten()
+        .map(|x| x.into_path())
+        .collect::<Vec<std::path::PathBuf>>();
+    let mut documents = fpm::paths_to_files(all_files, config.root.as_str()).await?;
     documents.sort_by_key(|v| v.get_id());
 
     Ok(documents)
+}
+
+pub(crate) async fn paths_to_files(
+    files: Vec<std::path::PathBuf>,
+    base_path: &str,
+) -> fpm::Result<Vec<File>> {
+    Ok(futures::future::join_all(
+        files
+            .into_iter()
+            .map(|x| {
+                let base = base_path.to_string();
+                tokio::spawn(async move { fpm::process_file(x, base.as_str()).await })
+            })
+            .collect::<Vec<tokio::task::JoinHandle<fpm::Result<fpm::File>>>>(),
+    )
+    .await
+    .into_iter()
+    .flatten()
+    .flatten()
+    .collect::<Vec<fpm::File>>())
 }
 
 pub fn package_ignores() -> Result<ignore::overrides::Override, ignore::Error> {

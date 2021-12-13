@@ -11,7 +11,7 @@ pub struct Track {
 
 pub(crate) fn get_tracks(
     base_path: &str,
-    path: &str,
+    path: &camino::Utf8PathBuf,
 ) -> fpm::Result<std::collections::BTreeMap<String, Track>> {
     let mut tracks = std::collections::BTreeMap::new();
     if std::fs::metadata(&path).is_err() {

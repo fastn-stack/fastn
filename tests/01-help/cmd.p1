@@ -24,4 +24,5 @@ SUBCOMMANDS:
     mark-upto-date    Marks file as up to date.
     start-tracking    Add a tracking relation between two files
     status            Show the status of files in this fpm package
+    stop-tracking     Remove a tracking relation between two files
     sync              Sync with fpm-repo or .history folder if not using fpm-repo
