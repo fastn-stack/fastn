@@ -27,7 +27,7 @@ integer timestamp:
 -- snapshot-data list snapshot:
 
 -- record track-data:
-caption document-name:
+caption filename:
 optional string package:
 optional string version:
 optional string other-timestamp:

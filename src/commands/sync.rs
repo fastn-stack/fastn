@@ -128,7 +128,7 @@ async fn write(
     Ok((
         fpm::Snapshot {
             filename: doc.get_id(),
-            timestamp: timestamp,
+            timestamp,
         },
         true,
     ))

@@ -53,7 +53,7 @@ async fn get_track_diff(
     }
     let tracks = fpm::tracker::get_tracks(base_path, &path)?;
     for track in tracks.values() {
-        if let Some(timestamp) = snapshots.get(&track.document_name) {
+        if let Some(timestamp) = snapshots.get(&track.filename) {
             if track.other_timestamp.is_none() {
                 continue;
             }
@@ -61,13 +61,13 @@ async fn get_track_diff(
                 "{}/.history/{}",
                 doc.parent_path.as_str(),
                 track
-                    .document_name
+                    .filename
                     .replace(".ftd", &format!(".{}.ftd", timestamp))
             );
             let then_path = format!(
                 "{}/.history/{}",
                 doc.parent_path.as_str(),
-                track.document_name.replace(
+                track.filename.replace(
                     ".ftd",
                     &format!(".{}.ftd", track.other_timestamp.as_ref().unwrap())
                 )
@@ -85,12 +85,12 @@ async fn get_track_diff(
             println!(
                 "diff {} -> {}: {}",
                 doc.id,
-                track.document_name.replace(
+                track.filename.replace(
                     ".ftd",
                     &format!(".{}.ftd", track.other_timestamp.as_ref().unwrap())
                 ),
                 track
-                    .document_name
+                    .filename
                     .replace(".ftd", &format!(".{}.ftd", timestamp))
             );
             println!("{}", diff);

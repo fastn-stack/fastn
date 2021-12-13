@@ -48,7 +48,7 @@ async fn write(
     for track in tracks.values() {
         string = format!(
             "{}\n\n-- fpm.track: {}\nself-timestamp: {}",
-            string, track.document_name, track.self_timestamp
+            string, track.filename, track.self_timestamp
         );
         if let Some(ref other_timestamp) = track.other_timestamp {
             string = format!("{}\nother-timestamp: {}", string, other_timestamp);

@@ -109,14 +109,14 @@ fn get_track_status(
     }
     let tracks = fpm::tracker::get_tracks(base_path, &path)?;
     for track in tracks.values() {
-        if !snapshots.contains_key(&track.document_name) {
+        if !snapshots.contains_key(&track.filename) {
             eprintln!(
                 "Error: {} is tracked by {}, but {} is either removed or never synced",
-                track.document_name, doc.id, track.document_name
+                track.filename, doc.id, track.filename
             );
             continue;
         }
-        let timestamp = snapshots.get(&track.document_name).unwrap();
+        let timestamp = snapshots.get(&track.filename).unwrap();
         let track_status = if track.other_timestamp.is_none() {
             TrackStatus::NeverMarked
         } else if timestamp.eq(track.other_timestamp.as_ref().unwrap()) {
@@ -129,7 +129,7 @@ fn get_track_status(
                 days: format!("{:?}", diff.as_secs() / 86400),
             }
         };
-        track_list.insert(track.document_name.to_string(), track_status);
+        track_list.insert(track.filename.to_string(), track_status);
     }
     Ok(track_list)
 }
