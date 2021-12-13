@@ -2,6 +2,9 @@
 caption name:
 optional string about:
 optional string domain:
+optional string lang:
+optional string translation-of:
+string list translations:
 
 -- package-data package: not set
 
@@ -32,6 +35,7 @@ optional string package:
 optional string version:
 optional integer other-timestamp:
 integer self-timestamp:
+optional integer last-merged-version:
 
 -- track-data list track:
 

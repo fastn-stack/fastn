@@ -5,10 +5,10 @@ pub struct Snapshot {
 }
 
 pub(crate) async fn get_latest_snapshots(
-    config: &fpm::Config,
+    path: &camino::Utf8PathBuf,
 ) -> fpm::Result<std::collections::BTreeMap<String, u128>> {
     let mut snapshots = std::collections::BTreeMap::new();
-    let latest_file_path = config.latest_ftd();
+    let latest_file_path = path.join(".history/.latest.ftd");
     if !latest_file_path.exists() {
         // TODO: should we error out here?
         return Ok(snapshots);

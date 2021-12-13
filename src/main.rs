@@ -19,6 +19,9 @@ async fn main() -> fpm::Result<()> {
         let source = status.value_of("source");
         fpm::status(&config, source).await?;
     }
+    if matches.subcommand_matches("translation-status").is_some() {
+        fpm::translation_status(&config).await?;
+    }
     if let Some(diff) = matches.subcommand_matches("diff") {
         let all = diff.is_present("all");
         if let Some(source) = diff.values_of("source") {
@@ -78,6 +81,11 @@ fn app(authors: &'static str) -> clap::App<'static, 'static> {
             clap::SubCommand::with_name("status")
                 .arg(clap::Arg::with_name("source"))
                 .about("Show the status of files in this fpm package")
+                .version(env!("CARGO_PKG_VERSION")),
+        )
+        .subcommand(
+            clap::SubCommand::with_name("translation-status")
+                .about("Show the translation status of files in this fpm package")
                 .version(env!("CARGO_PKG_VERSION")),
         )
         .subcommand(

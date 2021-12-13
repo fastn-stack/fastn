@@ -1,5 +1,5 @@
 pub async fn diff(config: &fpm::Config, files: Option<Vec<String>>, all: bool) -> fpm::Result<()> {
-    let snapshots = fpm::snapshot::get_latest_snapshots(config).await?;
+    let snapshots = fpm::snapshot::get_latest_snapshots(&config.root).await?;
     let all = all || files.is_some();
     let documents = if let Some(ref files) = files {
         let files = files

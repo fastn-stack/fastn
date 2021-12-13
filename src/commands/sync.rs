@@ -12,7 +12,7 @@ pub async fn sync(config: &fpm::Config, files: Option<Vec<String>>) -> fpm::Resu
 
     tokio::fs::create_dir_all(config.history_dir()).await?;
 
-    let snapshots = fpm::snapshot::get_latest_snapshots(config).await?;
+    let snapshots = fpm::snapshot::get_latest_snapshots(&config.root).await?;
 
     let timestamp = fpm::get_timestamp_nanosecond();
     let mut modified_files = vec![];

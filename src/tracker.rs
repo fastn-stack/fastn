@@ -7,6 +7,8 @@ pub struct Track {
     pub other_timestamp: Option<u128>,
     #[serde(rename = "self-timestamp")]
     pub self_timestamp: u128,
+    #[serde(rename = "last-merged-version")]
+    pub last_merged_version: Option<u128>,
 }
 
 pub(crate) fn get_tracks(
@@ -14,7 +16,7 @@ pub(crate) fn get_tracks(
     path: &camino::Utf8PathBuf,
 ) -> fpm::Result<std::collections::BTreeMap<String, Track>> {
     let mut tracks = std::collections::BTreeMap::new();
-    if std::fs::metadata(&path).is_err() {
+    if !path.exists() {
         return Ok(tracks);
     }
 

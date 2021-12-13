@@ -1,6 +1,6 @@
 #[derive(serde::Deserialize, Debug, Clone)]
 pub struct Dependency {
-    pub name: String,
+    pub package: fpm::Package,
     pub version: Option<String>,
     pub repo: String,
     pub notes: Option<String>,
@@ -9,7 +9,11 @@ pub struct Dependency {
 impl Dependency {
     pub async fn process(&self, base_dir: camino::Utf8PathBuf) -> fpm::Result<()> {
         use tokio::io::AsyncWriteExt;
-        if base_dir.join(".packages").join(self.name.as_str()).exists() {
+        if base_dir
+            .join(".packages")
+            .join(self.package.name.as_str())
+            .exists()
+        {
             // TODO: in future we will check if we have a new version in the package's repo.
             //       for now assume if package exists we have the latest package and if you
             //       want to update a package, delete the corresponding folder and latest
@@ -17,14 +21,15 @@ impl Dependency {
             return Ok(());
         }
 
-        let path = camino::Utf8PathBuf::from(format!("/tmp/{}.zip", self.name.replace("/", "__")));
+        let path =
+            camino::Utf8PathBuf::from(format!("/tmp/{}.zip", self.package.name.replace("/", "__")));
 
         {
             let download_url = match self.repo.as_str() {
                 "github" => {
                     format!(
                         "https://github.com/{}/archive/refs/heads/main.zip",
-                        self.name
+                        self.package.name
                     )
                 }
                 k => k.to_string(),
@@ -48,7 +53,7 @@ impl Dependency {
             let out_path_without_folder = out_path.to_str().unwrap().split_once("/").unwrap().1;
             let file_extract_path = base_dir
                 .join(".packages")
-                .join(self.name.as_str())
+                .join(self.package.name.as_str())
                 .join(out_path_without_folder);
             if (&*c_file.name()).ends_with('/') {
                 std::fs::create_dir_all(&file_extract_path)?;
@@ -76,4 +81,23 @@ pub async fn ensure(base_dir: camino::Utf8PathBuf, deps: Vec<fpm::Dependency>) -
     )
     .await;
     Ok(())
+}
+
+#[derive(serde::Deserialize, Debug, Clone)]
+pub struct DependencyTemp {
+    pub name: String,
+    pub version: Option<String>,
+    pub repo: String,
+    pub notes: Option<String>,
+}
+
+impl DependencyTemp {
+    pub fn to_dependency(&self) -> fpm::Dependency {
+        fpm::Dependency {
+            package: fpm::Package::new(self.name.as_str()),
+            version: self.version.to_owned(),
+            repo: self.repo.to_owned(),
+            notes: self.notes.to_owned(),
+        }
+    }
 }

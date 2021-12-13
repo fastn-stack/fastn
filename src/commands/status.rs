@@ -1,5 +1,5 @@
 pub async fn status(config: &fpm::Config, source: Option<&str>) -> fpm::Result<()> {
-    let snapshots = fpm::snapshot::get_latest_snapshots(config).await?;
+    let snapshots = fpm::snapshot::get_latest_snapshots(&config.root).await?;
     if let Some(source) = source {
         file_status(config.root.as_str(), source, &snapshots).await?;
         return Ok(());
@@ -12,8 +12,8 @@ async fn file_status(
     source: &str,
     snapshots: &std::collections::BTreeMap<String, u128>,
 ) -> fpm::Result<()> {
-    let path = format!("{}/{}", base_path, source);
-    if std::fs::metadata(&path).is_err() {
+    let path = camino::Utf8PathBuf::from(base_path).join(source);
+    if !path.exists() {
         if snapshots.contains_key(source) {
             println!("{:?}: {}", FileStatus::Removed, source);
         } else {
@@ -90,7 +90,7 @@ fn get_track_status(
 ) -> fpm::Result<std::collections::BTreeMap<String, TrackStatus>> {
     let path = fpm::utils::track_path(&doc.get_id(), &doc.get_base_path());
     let mut track_list = std::collections::BTreeMap::new();
-    if std::fs::metadata(&path).is_err() {
+    if !path.exists() {
         return Ok(track_list);
     }
     let tracks = fpm::tracker::get_tracks(base_path, &path)?;

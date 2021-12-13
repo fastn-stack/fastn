@@ -20,13 +20,13 @@ impl File {
             Self::Markdown(a) => a.parent_path.to_string(),
         }
     }
-    pub fn get_full_path(&self) -> String {
+    pub fn get_full_path(&self) -> camino::Utf8PathBuf {
         let (id, base_path) = match self {
             Self::Ftd(a) => (a.id.to_string(), a.parent_path.to_string()),
             Self::Static(a) => (a.id.to_string(), a.base_path.to_string()),
             Self::Markdown(a) => (a.id.to_string(), a.parent_path.to_string()),
         };
-        format!("{}/{}", base_path, id)
+        camino::Utf8PathBuf::from(base_path).join(id)
     }
 }
 
@@ -45,7 +45,7 @@ pub struct Static {
     pub depth: usize,
 }
 
-pub(crate) async fn get_documents(config: &fpm::Config) -> fpm::Result<Vec<File>> {
+pub(crate) async fn get_documents(config: &fpm::Config) -> fpm::Result<Vec<fpm::File>> {
     let mut ignore_paths = ignore::WalkBuilder::new("./");
 
     ignore_paths.overrides(package_ignores()?); // unwrap ok because this we know can never fail
@@ -66,7 +66,7 @@ pub(crate) async fn get_documents(config: &fpm::Config) -> fpm::Result<Vec<File>
 pub(crate) async fn paths_to_files(
     files: Vec<std::path::PathBuf>,
     base_path: &str,
-) -> fpm::Result<Vec<File>> {
+) -> fpm::Result<Vec<fpm::File>> {
     Ok(futures::future::join_all(
         files
             .into_iter()

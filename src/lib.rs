@@ -13,6 +13,7 @@ mod utils;
 pub use commands::{
     build::build, diff::diff, mark_upto_date::mark_upto_date, start_tracking::start_tracking,
     status::status, stop_tracking::stop_tracking, sync::sync,
+    translation_status::translation_status,
 };
 pub use config::Config;
 pub(crate) use config::Package;
@@ -44,6 +45,9 @@ pub enum Error {
 
     #[error("ConfigurationError: {message}")]
     ConfigurationError { message: String },
+
+    #[error("UsageError: {message}")]
+    UsageError { message: String },
 
     #[error("IgnoreError: {}", _0)]
     IgnoreError(#[from] ignore::Error),
