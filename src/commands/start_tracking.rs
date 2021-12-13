@@ -24,17 +24,6 @@ async fn check(
         return Ok(());
     }
 
-    let who_ext = who.rsplit_once('.').unwrap_or(("", "")).1;
-    let whom_ext = whom.rsplit_once('.').unwrap_or(("", "")).1;
-
-    if !who_ext.eq(whom_ext) {
-        eprintln!(
-            "Error: file extension doesn't match. Expected target of extension `.{}` found `.{}`",
-            who_ext, whom_ext
-        );
-        return Ok(());
-    }
-
     if who.contains('/') {
         let (dir, _) = who.rsplit_once('/').unwrap();
         std::fs::create_dir_all(
