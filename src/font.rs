@@ -14,7 +14,8 @@ impl Font {
                     font-family: {};
                     src: url({});
                 }}",
-                self.name, v
+                self.name,
+                v // TODO: escape() this or do URL validation
             )
         } else {
             "".to_string()

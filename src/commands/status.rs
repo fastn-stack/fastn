@@ -10,7 +10,7 @@ pub async fn status(config: &fpm::Config, source: Option<&str>) -> fpm::Result<(
 async fn file_status(
     base_path: &str,
     source: &str,
-    snapshots: &std::collections::BTreeMap<String, String>,
+    snapshots: &std::collections::BTreeMap<String, u128>,
 ) -> fpm::Result<()> {
     let path = format!("{}/{}", base_path, source);
     if std::fs::metadata(&path).is_err() {
@@ -50,7 +50,7 @@ async fn file_status(
 
 async fn all_status(
     config: &fpm::Config,
-    snapshots: &std::collections::BTreeMap<String, String>,
+    snapshots: &std::collections::BTreeMap<String, u128>,
 ) -> fpm::Result<()> {
     let mut file_status = std::collections::BTreeMap::new();
     let mut track_status = std::collections::BTreeMap::new();
@@ -75,7 +75,7 @@ async fn all_status(
 
 async fn get_file_status(
     doc: &fpm::Document,
-    snapshots: &std::collections::BTreeMap<String, String>,
+    snapshots: &std::collections::BTreeMap<String, u128>,
 ) -> fpm::Result<FileStatus> {
     if let Some(timestamp) = snapshots.get(&doc.id) {
         let path = format!(
@@ -95,7 +95,7 @@ async fn get_file_status(
 
 fn get_track_status(
     doc: &fpm::Document,
-    snapshots: &std::collections::BTreeMap<String, String>,
+    snapshots: &std::collections::BTreeMap<String, u128>,
     base_path: &str,
 ) -> fpm::Result<std::collections::BTreeMap<String, TrackStatus>> {
     let path = format!(
@@ -122,13 +122,8 @@ fn get_track_status(
         } else if timestamp.eq(track.other_timestamp.as_ref().unwrap()) {
             TrackStatus::UptoDate
         } else {
-            let now = timestamp.parse::<u128>().unwrap();
-            let then = track
-                .other_timestamp
-                .as_ref()
-                .unwrap()
-                .parse::<u128>()
-                .unwrap();
+            let now = *timestamp;
+            let then = track.other_timestamp.as_ref().unwrap();
             let diff = std::time::Duration::from_nanos((now - then) as u64);
             TrackStatus::OutOfDate {
                 days: format!("{:?}", diff.as_secs() / 86400),
@@ -159,7 +154,7 @@ fn print_track_status(
 }
 
 fn print_file_status(
-    snapshots: &std::collections::BTreeMap<String, String>,
+    snapshots: &std::collections::BTreeMap<String, u128>,
     file_status: &std::collections::BTreeMap<String, FileStatus>,
 ) -> bool {
     let mut any_file_removed = false;

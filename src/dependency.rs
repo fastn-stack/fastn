@@ -10,8 +10,8 @@ impl Dependency {
     pub async fn process(&self, base_dir: camino::Utf8PathBuf) -> fpm::Result<()> {
         use tokio::io::AsyncWriteExt;
         if base_dir.join(".packages").join(self.name.as_str()).exists() {
-            // TODO: in future we will check if we have a new version in the package's repo
-            //       for now assume if package exists we have the package. for now if you
+            // TODO: in future we will check if we have a new version in the package's repo.
+            //       for now assume if package exists we have the latest package and if you
             //       want to update a package, delete the corresponding folder and latest
             //       version will get downloaded.
             return Ok(());

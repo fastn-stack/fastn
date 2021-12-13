@@ -5,9 +5,9 @@ pub struct Track {
     pub package: Option<String>,
     pub version: Option<String>,
     #[serde(rename = "other-timestamp")]
-    pub other_timestamp: Option<String>,
+    pub other_timestamp: Option<u128>,
     #[serde(rename = "self-timestamp")]
-    pub self_timestamp: String,
+    pub self_timestamp: u128,
 }
 
 pub(crate) fn get_tracks(

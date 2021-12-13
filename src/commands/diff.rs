@@ -15,7 +15,7 @@ pub async fn diff(config: &fpm::Config) -> fpm::Result<()> {
 
 async fn get_diffy(
     doc: &fpm::Document,
-    snapshots: &std::collections::BTreeMap<String, String>,
+    snapshots: &std::collections::BTreeMap<String, u128>,
 ) -> fpm::Result<Option<String>> {
     if let Some(timestamp) = snapshots.get(&doc.id) {
         let path = format!(
@@ -40,7 +40,7 @@ async fn get_diffy(
 
 async fn get_track_diff(
     doc: &fpm::Document,
-    snapshots: &std::collections::BTreeMap<String, String>,
+    snapshots: &std::collections::BTreeMap<String, u128>,
     base_path: &str,
 ) -> fpm::Result<()> {
     let path = format!(

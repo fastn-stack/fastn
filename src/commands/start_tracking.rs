@@ -8,7 +8,7 @@ pub async fn start_tracking(config: &fpm::Config, who: &str, whom: &str) -> fpm:
 
 async fn check(
     base_path: &str,
-    snapshots: &std::collections::BTreeMap<String, String>,
+    snapshots: &std::collections::BTreeMap<String, u128>,
     who: &str,
     whom: &str,
 ) -> fpm::Result<()> {
@@ -33,13 +33,13 @@ async fn check(
 
     let new_file_path = format!("{}/.tracks/{}", base_path, who.replace(".ftd", ".track"));
 
-    write(whom, timestamp, &new_file_path).await?;
+    write(whom, *timestamp, &new_file_path).await?;
     println!("{} is now tracking {}", who, whom);
 
     Ok(())
 }
 
-async fn write(whom: &str, timestamp: &str, path: &str) -> fpm::Result<()> {
+async fn write(whom: &str, timestamp: u128, path: &str) -> fpm::Result<()> {
     use tokio::io::AsyncWriteExt;
     let string = if tokio::fs::metadata(path).await.is_ok() {
         let existing_doc = tokio::fs::read_to_string(&path).await?;

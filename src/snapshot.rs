@@ -1,12 +1,12 @@
 #[derive(serde::Deserialize, Debug)]
 pub struct Snapshot {
-    pub file: String,
-    pub timestamp: String,
+    pub filename: String, // relative file name with respect to package root
+    pub timestamp: u128,
 }
 
 pub(crate) async fn get_latest_snapshots(
     config: &fpm::Config,
-) -> fpm::Result<std::collections::BTreeMap<String, String>> {
+) -> fpm::Result<std::collections::BTreeMap<String, u128>> {
     let mut snapshots = std::collections::BTreeMap::new();
     let latest_file_path = config.latest_ftd();
     if !latest_file_path.exists() {
@@ -25,7 +25,7 @@ pub(crate) async fn get_latest_snapshots(
     };
     let snapshot_list: Vec<fpm::Snapshot> = b.get("fpm#spanshot")?;
     for snapshot in snapshot_list {
-        snapshots.insert(snapshot.file, snapshot.timestamp);
+        snapshots.insert(snapshot.filename, snapshot.timestamp);
     }
     Ok(snapshots)
 }
@@ -42,7 +42,7 @@ pub(crate) async fn create_latest_snapshots(
     for snapshot in snapshots {
         snapshot_data = format!(
             "{}\n\n-- fpm.snapshot: {}\ntimestamp: {}",
-            snapshot_data, snapshot.file, snapshot.timestamp
+            snapshot_data, snapshot.filename, snapshot.timestamp
         );
     }
 

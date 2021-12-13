@@ -21,8 +21,8 @@ optional string woff2:
 -- font-data list font:
 
 -- record snapshot-data:
-caption file:
-string timestamp:
+caption filename:
+integer timestamp:
 
 -- snapshot-data list snapshot:
 
