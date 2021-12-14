@@ -42,7 +42,15 @@ impl Config {
 
     pub async fn get_translation_documents(&self) -> fpm::Result<Vec<fpm::File>> {
         if let Some(ref original) = self.package.translation_of.as_ref() {
-            return original.get_documents(self).await;
+            let src = self.root.join(".packages").join(original.name.as_str());
+            let dst = self.root.join(".packages/.tmp");
+            fpm::utils::copy_dir_all(&src, &dst)?;
+            let tmp_package = {
+                let mut tmp = original.clone();
+                tmp.name = dst.as_str().to_string();
+                tmp
+            };
+            return tmp_package.get_documents(self).await;
         }
         // not sure if error should be returned
         Ok(vec![])

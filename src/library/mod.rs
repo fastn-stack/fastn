@@ -32,8 +32,12 @@ impl ftd::p2::Library for Library {
             Some(v)
         } else if let Ok(v) = std::fs::read_to_string(format!("./.packages/{}.ftd", name)) {
             Some(v)
+        } else if let Ok(v) = std::fs::read_to_string(format!("./.packages/{}/index.ftd", name)) {
+            Some(v)
+        } else if let Ok(v) = std::fs::read_to_string(format!("./.packages/.tmp/{}.ftd", name)) {
+            Some(v)
         } else {
-            std::fs::read_to_string(format!("./.packages/{}/index.ftd", name)).ok()
+            std::fs::read_to_string(format!("./.packages/.tmp/{}/index.ftd", name)).ok()
         }
     }
 

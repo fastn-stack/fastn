@@ -144,18 +144,18 @@ pub(crate) async fn process_file(doc_path: std::path::PathBuf, dir: &str) -> fpm
 pub async fn get_documents_with_config(
     config: &fpm::Config,
 ) -> fpm::Result<Vec<(String, DocumentWithConfig)>> {
-    let documents = if let Some(ref original) = config.package.translation_of.as_ref() {
+    let documents = if config.is_translation_package() {
         let translation_config = config.read_translation().await?;
         let translation_snapshots = config.get_translation_snapshots().await?;
         let mut documents: std::collections::BTreeMap<String, DocumentWithConfig> =
             std::collections::BTreeMap::from_iter(
                 config.get_translation_documents().await?.iter().map(|v| {
                     (
-                        v.get_id()
-                            .replace(&format!(".packages/{}/", original.name), ""),
+                        v.get_id().replace(".packages/.tmp/", ""),
                         DocumentWithConfig {
                             file: v.to_owned(),
                             config: translation_config.clone(),
+                            in_package: true,
                         },
                     )
                 }),
@@ -171,6 +171,7 @@ pub async fn get_documents_with_config(
                         DocumentWithConfig {
                             file: v.to_owned(),
                             config: config.clone(),
+                            in_package: false,
                         },
                     )
                 }),
@@ -184,13 +185,14 @@ pub async fn get_documents_with_config(
                     DocumentWithConfig {
                         file: v.to_owned(),
                         config: config.clone(),
+                        in_package: false,
                     },
                 )
             },
         ))
     };
 
-    // need to sort it in this order: fpm::File::Static, fpm::File::Markdown, fpm::File::Ftd
+    // Need to sort it in this order: fpm::File::Static, fpm::File::Markdown, fpm::File::Ftd
     let mut document_vec = documents
         .clone()
         .into_iter()
@@ -214,4 +216,5 @@ pub async fn get_documents_with_config(
 pub struct DocumentWithConfig {
     pub file: fpm::File,
     pub config: fpm::Config,
+    pub in_package: bool,
 }
