@@ -44,7 +44,7 @@ impl Config {
         if let Some(ref original) = self.package.translation_of.as_ref() {
             let src = self.root.join(".packages").join(original.name.as_str());
             let dst = self.root.join(".packages/.tmp");
-            fpm::utils::copy_dir_all(&src, &dst)?;
+            fpm::utils::copy_dir_all(src, dst.clone()).await?;
             let tmp_package = {
                 let mut tmp = original.clone();
                 tmp.name = dst.as_str().to_string();

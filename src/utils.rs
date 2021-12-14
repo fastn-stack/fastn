@@ -1,11 +1,11 @@
-pub fn get_timestamp_nanosecond() -> u128 {
+pub(crate) fn get_timestamp_nanosecond() -> u128 {
     match std::time::SystemTime::now().duration_since(std::time::SystemTime::UNIX_EPOCH) {
         Ok(n) => n.as_nanos(),
         Err(_) => panic!("SystemTime before UNIX EPOCH!"),
     }
 }
 
-pub fn history_path(id: &str, base_path: &str, timestamp: &u128) -> camino::Utf8PathBuf {
+pub(crate) fn history_path(id: &str, base_path: &str, timestamp: &u128) -> camino::Utf8PathBuf {
     let id_with_timestamp_extension = if let Some((id, ext)) = id.rsplit_once('.') {
         format!("{}.{}.{}", id, timestamp, ext)
     } else {
@@ -15,23 +15,23 @@ pub fn history_path(id: &str, base_path: &str, timestamp: &u128) -> camino::Utf8
     base_path.join(".history").join(id_with_timestamp_extension)
 }
 
-pub fn track_path(id: &str, base_path: &str) -> camino::Utf8PathBuf {
+pub(crate) fn track_path(id: &str, base_path: &str) -> camino::Utf8PathBuf {
     let base_path = camino::Utf8PathBuf::from(base_path);
     base_path.join(".tracks").join(format!("{}.track", id))
 }
 
-pub fn copy_dir_all(
-    src: impl AsRef<std::path::Path>,
-    dst: impl AsRef<std::path::Path>,
+#[async_recursion::async_recursion(?Send)]
+pub(crate) async fn copy_dir_all(
+    src: impl AsRef<std::path::Path> + 'static,
+    dst: impl AsRef<std::path::Path> + 'static,
 ) -> std::io::Result<()> {
-    std::fs::create_dir_all(&dst)?;
-    for entry in std::fs::read_dir(src)? {
-        let entry = entry?;
-        let ty = entry.file_type()?;
-        if ty.is_dir() {
-            copy_dir_all(entry.path(), dst.as_ref().join(entry.file_name()))?;
+    tokio::fs::create_dir_all(&dst).await?;
+    let mut dir = tokio::fs::read_dir(src).await?;
+    while let Some(child) = dir.next_entry().await? {
+        if child.metadata().await?.is_dir() {
+            copy_dir_all(child.path(), dst.as_ref().join(child.file_name())).await?;
         } else {
-            std::fs::copy(entry.path(), dst.as_ref().join(entry.file_name()))?;
+            tokio::fs::copy(child.path(), dst.as_ref().join(child.file_name())).await?;
         }
     }
     Ok(())
