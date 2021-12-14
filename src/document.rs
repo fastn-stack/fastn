@@ -155,7 +155,6 @@ pub async fn get_documents_with_config(
                         DocumentWithConfig {
                             file: v.to_owned(),
                             config: translation_config.clone(),
-                            in_package: true,
                         },
                     )
                 }),
@@ -171,7 +170,6 @@ pub async fn get_documents_with_config(
                         DocumentWithConfig {
                             file: v.to_owned(),
                             config: config.clone(),
-                            in_package: false,
                         },
                     )
                 }),
@@ -185,7 +183,6 @@ pub async fn get_documents_with_config(
                     DocumentWithConfig {
                         file: v.to_owned(),
                         config: config.clone(),
-                        in_package: false,
                     },
                 )
             },
@@ -216,5 +213,4 @@ pub async fn get_documents_with_config(
 pub struct DocumentWithConfig {
     pub file: fpm::File,
     pub config: fpm::Config,
-    pub in_package: bool,
 }
