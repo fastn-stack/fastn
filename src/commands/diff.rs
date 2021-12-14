@@ -9,7 +9,7 @@ pub async fn diff(config: &fpm::Config, files: Option<Vec<String>>, all: bool) -
             .collect::<Vec<std::path::PathBuf>>();
         fpm::paths_to_files(files, config.root.as_str()).await?
     } else {
-        fpm::get_documents(config).await?
+        fpm::get_root_documents(config).await?
     };
     for doc in documents {
         if let Some(diff) = get_diffy(&doc, &snapshots).await? {

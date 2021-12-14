@@ -5,7 +5,7 @@ pub async fn translation_status(config: &fpm::Config) -> fpm::Result<()> {
     } else if !config.package.translations.is_empty() {
         original_package_status().await?
     } else {
-        return Err(fpm::Error::UsageError {
+        return Err(fpm::Error::ConfigurationError {
             message: "neither translation_of nor translations is set".to_string(),
         });
     };
@@ -49,6 +49,7 @@ async fn translation_package_status(
 
 async fn original_package_status(
 ) -> fpm::Result<std::collections::BTreeMap<String, TranslationStatus>> {
+    //todo
     Ok(std::collections::BTreeMap::new())
 }
 
@@ -56,7 +57,7 @@ fn print_translation_status(
     translation_status: &std::collections::BTreeMap<String, TranslationStatus>,
 ) {
     for (file, status) in translation_status {
-        println!("{}: {}", status.to_string(), file);
+        println!("{}: {}", status.as_str(), file);
     }
 }
 
@@ -67,13 +68,13 @@ enum TranslationStatus {
     UptoDate,
 }
 
-impl ToString for TranslationStatus {
-    fn to_string(&self) -> String {
+impl TranslationStatus {
+    fn as_str(&self) -> &'static str {
         match self {
-            TranslationStatus::Missing => "Missing".to_string(),
-            TranslationStatus::NeverMarked => "Never marked".to_string(),
-            TranslationStatus::Outdated => "Out-dated".to_string(),
-            TranslationStatus::UptoDate => "Up to date".to_string(),
+            TranslationStatus::Missing => "Missing",
+            TranslationStatus::NeverMarked => "Never marked",
+            TranslationStatus::Outdated => "Out-dated",
+            TranslationStatus::UptoDate => "Up to date",
         }
     }
 }

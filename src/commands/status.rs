@@ -1,18 +1,18 @@
 pub async fn status(config: &fpm::Config, source: Option<&str>) -> fpm::Result<()> {
     let snapshots = fpm::snapshot::get_latest_snapshots(&config.root).await?;
     if let Some(source) = source {
-        file_status(config.root.as_str(), source, &snapshots).await?;
+        file_status(&config.root, source, &snapshots).await?;
         return Ok(());
     }
     all_status(config, &snapshots).await
 }
 
 async fn file_status(
-    base_path: &str,
+    base_path: &camino::Utf8PathBuf,
     source: &str,
     snapshots: &std::collections::BTreeMap<String, u128>,
 ) -> fpm::Result<()> {
-    let path = camino::Utf8PathBuf::from(base_path).join(source);
+    let path = base_path.join(source);
     if !path.exists() {
         if snapshots.contains_key(source) {
             println!("{:?}: {}", FileStatus::Removed, source);
@@ -22,10 +22,10 @@ async fn file_status(
         return Ok(());
     }
 
-    let file = fpm::process_file(std::path::PathBuf::from(path), base_path).await?;
+    let file = fpm::process_file(std::path::PathBuf::from(path), base_path.as_str()).await?;
 
     let file_status = get_file_status(&file, snapshots).await?;
-    let track_status = get_track_status(&file, snapshots, base_path)?;
+    let track_status = get_track_status(&file, snapshots, base_path.as_str())?;
 
     let mut clean = true;
     if !file_status.eq(&FileStatus::None) {
@@ -48,7 +48,7 @@ async fn all_status(
 ) -> fpm::Result<()> {
     let mut file_status = std::collections::BTreeMap::new();
     let mut track_status = std::collections::BTreeMap::new();
-    for doc in fpm::get_documents(config).await? {
+    for doc in fpm::get_root_documents(config).await? {
         let status = get_file_status(&doc, snapshots).await?;
         let track = get_track_status(&doc, snapshots, config.root.as_str())?;
         if !track.is_empty() {

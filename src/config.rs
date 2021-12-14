@@ -64,9 +64,9 @@ impl Config {
             let root = self.root.join(".packages").join(original.name.as_str());
             return Config::read_by_path(root, self.root.clone()).await;
         }
-        return Err(fpm::Error::ConfigurationError {
+        Err(fpm::Error::ConfigurationError {
             message: "not a translation package".to_string(),
-        });
+        })
     }
 
     pub async fn read() -> fpm::Result<Config> {
@@ -103,13 +103,13 @@ impl Config {
         };
         let package = {
             let temp_package: PackageTemp = b.get("fpm#package")?;
-            temp_package.to_package()
+            temp_package.into_package()
         };
         let deps = {
             let temp_deps: Vec<fpm::dependency::DependencyTemp> = b.get("fpm#dependency")?;
             temp_deps
                 .into_iter()
-                .map(|v| v.to_dependency())
+                .map(|v| v.into_dependency())
                 .collect::<Vec<fpm::Dependency>>()
         };
 
@@ -143,7 +143,7 @@ impl Config {
 
         fpm::dependency::ensure(root.clone(), deps.clone()).await?;
         if let Some(translation_of) = package.translation_of.as_ref() {
-            translation_of.process(root.clone()).await?;
+            translation_of.process(root.clone(), "github").await?;
         }
 
         Ok(Config {
@@ -169,7 +169,7 @@ fn find_package_root(dir: &camino::Utf8Path) -> Option<camino::Utf8PathBuf> {
 }
 
 #[derive(serde::Deserialize, Debug, Clone)]
-pub struct PackageTemp {
+struct PackageTemp {
     pub name: String,
     #[serde(rename = "translation-of")]
     pub translation_of: Option<String>,
@@ -180,7 +180,7 @@ pub struct PackageTemp {
 }
 
 impl PackageTemp {
-    pub fn to_package(&self) -> fpm::Package {
+    pub fn into_package(self) -> fpm::Package {
         let translation_of = self.translation_of.as_ref().map(|v| fpm::Package::new(v));
         let translations = self
             .translations
@@ -190,12 +190,12 @@ impl PackageTemp {
             .collect::<Vec<fpm::Package>>();
 
         fpm::Package {
-            name: self.name.to_owned(),
+            name: self.name,
             translation_of: Box::new(translation_of),
             translations,
-            lang: self.lang.to_owned(),
-            about: self.about.to_owned(),
-            domain: self.domain.to_owned(),
+            lang: self.lang,
+            about: self.about,
+            domain: self.domain,
         }
     }
 }
@@ -227,20 +227,10 @@ impl Package {
         let mut ignore_paths = ignore::WalkBuilder::new(path);
         ignore_paths.standard_filters(true);
         ignore_paths.overrides(config.ignored.clone());
-        let all_files = ignore_paths
-            .build()
-            .into_iter()
-            .flatten()
-            .map(|x| x.into_path())
-            .collect::<Vec<std::path::PathBuf>>();
-        let mut documents =
-            fpm::paths_to_files(all_files, config.root.join(".packages").as_str()).await?;
-        documents.sort_by_key(|v| v.get_id());
-
-        Ok(documents)
+        fpm::get_documents(&ignore_paths, config).await
     }
 
-    pub async fn process(&self, base_dir: camino::Utf8PathBuf) -> fpm::Result<()> {
+    pub async fn process(&self, base_dir: camino::Utf8PathBuf, repo: &str) -> fpm::Result<()> {
         use tokio::io::AsyncWriteExt;
         if base_dir.join(".packages").join(self.name.as_str()).exists() {
             // TODO: in future we will check if we have a new version in the package's repo.
@@ -253,10 +243,15 @@ impl Package {
         let path = camino::Utf8PathBuf::from(format!("/tmp/{}.zip", self.name.replace("/", "__")));
 
         {
-            let download_url = format!(
-                "https://github.com/{}/archive/refs/heads/main.zip",
-                self.name
-            );
+            let download_url = match repo {
+                "github" => {
+                    format!(
+                        "https://github.com/{}/archive/refs/heads/main.zip",
+                        self.name
+                    )
+                }
+                k => k.to_string(),
+            };
             let response = reqwest::get(download_url).await?;
             let mut file = tokio::fs::File::create(&path).await?;
             // TODO: instead of reading the whole thing in memory use tokio::io::copy() somehow?

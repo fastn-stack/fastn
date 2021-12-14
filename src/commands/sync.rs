@@ -7,7 +7,7 @@ pub async fn sync(config: &fpm::Config, files: Option<Vec<String>>) -> fpm::Resu
             .collect::<Vec<std::path::PathBuf>>();
         fpm::paths_to_files(files, config.root.as_str()).await?
     } else {
-        fpm::get_documents(config).await?
+        fpm::get_root_documents(config).await?
     };
 
     tokio::fs::create_dir_all(config.history_dir()).await?;

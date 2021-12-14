@@ -13,19 +13,6 @@ impl File {
             Self::Markdown(a) => a.id.clone(),
         }
     }
-    pub fn set_id(&mut self, id: &str) {
-        match self {
-            Self::Ftd(a) => {
-                a.id = id.to_string();
-            }
-            Self::Static(a) => {
-                a.id = id.to_string();
-            }
-            Self::Markdown(a) => {
-                a.id = id.to_string();
-            }
-        }
-    }
     pub fn get_base_path(&self) -> String {
         match self {
             Self::Ftd(a) => a.parent_path.to_string(),
@@ -58,12 +45,18 @@ pub struct Static {
     pub depth: usize,
 }
 
-pub(crate) async fn get_documents(config: &fpm::Config) -> fpm::Result<Vec<fpm::File>> {
+pub(crate) async fn get_root_documents(config: &fpm::Config) -> fpm::Result<Vec<fpm::File>> {
     let mut ignore_paths = ignore::WalkBuilder::new("./");
-
     ignore_paths.overrides(package_ignores()?); // unwrap ok because this we know can never fail
     ignore_paths.standard_filters(true);
     ignore_paths.overrides(config.ignored.clone());
+    fpm::get_documents(&ignore_paths, config).await
+}
+
+pub(crate) async fn get_documents(
+    ignore_paths: &ignore::WalkBuilder,
+    config: &fpm::Config,
+) -> fpm::Result<Vec<fpm::File>> {
     let all_files = ignore_paths
         .build()
         .into_iter()
@@ -146,4 +139,79 @@ pub(crate) async fn process_file(doc_path: std::path::PathBuf, dir: &str) -> fpm
     Err(fpm::Error::ConfigurationError {
         message: format!("{:?} should be a file", doc_path),
     })
+}
+
+pub async fn get_documents_with_config(
+    config: &fpm::Config,
+) -> fpm::Result<Vec<(String, DocumentWithConfig)>> {
+    let documents = if let Some(ref original) = config.package.translation_of.as_ref() {
+        let translation_config = config.add_translation_dependencies().await?;
+        let translation_snapshots = config.get_translation_snapshots().await?;
+        let mut documents: std::collections::BTreeMap<String, DocumentWithConfig> =
+            std::collections::BTreeMap::from_iter(
+                config.get_translation_documents().await?.iter().map(|v| {
+                    (
+                        v.get_id()
+                            .replace(&format!(".packages/{}/", original.name), ""),
+                        DocumentWithConfig {
+                            file: v.to_owned(),
+                            config: translation_config.clone(),
+                        },
+                    )
+                }),
+            );
+        documents.extend(
+            fpm::get_root_documents(config)
+                .await?
+                .iter()
+                .filter(|x| translation_snapshots.contains_key(x.get_id().as_str()))
+                .map(|v| {
+                    (
+                        v.get_id(),
+                        DocumentWithConfig {
+                            file: v.to_owned(),
+                            config: config.clone(),
+                        },
+                    )
+                }),
+        );
+        documents
+    } else {
+        std::collections::BTreeMap::from_iter(fpm::get_root_documents(config).await?.iter().map(
+            |v| {
+                (
+                    v.get_id(),
+                    DocumentWithConfig {
+                        file: v.to_owned(),
+                        config: config.clone(),
+                    },
+                )
+            },
+        ))
+    };
+
+    // need to sort it in this order: fpm::File::Static, fpm::File::Markdown, fpm::File::Ftd
+    let mut document_vec = documents
+        .clone()
+        .into_iter()
+        .filter(|(_, d)| matches!(d.file, fpm::File::Static(_)))
+        .collect::<Vec<(String, DocumentWithConfig)>>();
+    document_vec.extend(
+        documents
+            .clone()
+            .into_iter()
+            .filter(|(_, d)| matches!(d.file, fpm::File::Markdown(_))),
+    );
+    document_vec.extend(
+        documents
+            .into_iter()
+            .filter(|(_, d)| matches!(d.file, fpm::File::Ftd(_))),
+    );
+    Ok(document_vec)
+}
+
+#[derive(Debug, Clone)]
+pub struct DocumentWithConfig {
+    pub file: fpm::File,
+    pub config: fpm::Config,
 }
