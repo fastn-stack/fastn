@@ -59,7 +59,7 @@ impl Config {
         };
     }
 
-    pub async fn add_translation_dependencies(&self) -> fpm::Result<Config> {
+    pub async fn read_translation(&self) -> fpm::Result<Config> {
         if let Some(ref original) = self.package.translation_of.as_ref() {
             let root = self.root.join(".packages").join(original.name.as_str());
             return Config::read_by_path(root, self.root.clone()).await;
@@ -224,10 +224,7 @@ impl Package {
 
     pub(crate) async fn get_documents(&self, config: &fpm::Config) -> fpm::Result<Vec<fpm::File>> {
         let path = config.root.join(".packages").join(self.name.as_str());
-        let mut ignore_paths = ignore::WalkBuilder::new(path);
-        ignore_paths.standard_filters(true);
-        ignore_paths.overrides(config.ignored.clone());
-        fpm::get_documents(&ignore_paths, config).await
+        fpm::get_documents(&ignore::WalkBuilder::new(path), config).await
     }
 
     pub async fn process(&self, base_dir: camino::Utf8PathBuf, repo: &str) -> fpm::Result<()> {

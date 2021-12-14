@@ -46,17 +46,17 @@ pub struct Static {
 }
 
 pub(crate) async fn get_root_documents(config: &fpm::Config) -> fpm::Result<Vec<fpm::File>> {
-    let mut ignore_paths = ignore::WalkBuilder::new("./");
-    ignore_paths.overrides(package_ignores()?); // unwrap ok because this we know can never fail
-    ignore_paths.standard_filters(true);
-    ignore_paths.overrides(config.ignored.clone());
-    fpm::get_documents(&ignore_paths, config).await
+    fpm::get_documents(&ignore::WalkBuilder::new("./"), config).await
 }
 
 pub(crate) async fn get_documents(
     ignore_paths: &ignore::WalkBuilder,
     config: &fpm::Config,
 ) -> fpm::Result<Vec<fpm::File>> {
+    let mut ignore_paths = ignore_paths.clone();
+    ignore_paths.overrides(package_ignores()?); // unwrap ok because this we know can never fail
+    ignore_paths.standard_filters(true);
+    ignore_paths.overrides(config.ignored.clone());
     let all_files = ignore_paths
         .build()
         .into_iter()
@@ -145,7 +145,7 @@ pub async fn get_documents_with_config(
     config: &fpm::Config,
 ) -> fpm::Result<Vec<(String, DocumentWithConfig)>> {
     let documents = if let Some(ref original) = config.package.translation_of.as_ref() {
-        let translation_config = config.add_translation_dependencies().await?;
+        let translation_config = config.read_translation().await?;
         let translation_snapshots = config.get_translation_snapshots().await?;
         let mut documents: std::collections::BTreeMap<String, DocumentWithConfig> =
             std::collections::BTreeMap::from_iter(
