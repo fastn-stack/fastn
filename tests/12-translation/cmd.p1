@@ -1,9 +1,10 @@
 -- fbt:
 cmd: cd amitu && $FBT_CWD/target/debug/fpm --test build
 output: amitu/.build
-skip: dependency seems to be broken during refactor
 
 -- stdout:
 
 Generated FPM/index.html
+Generated blog/index.html
+Generated db/index.html
 Generated index.html

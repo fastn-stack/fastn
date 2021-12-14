@@ -1,4 +1,4 @@
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Config {
     pub package: fpm::Package,
     pub root: camino::Utf8PathBuf,
@@ -6,7 +6,6 @@ pub struct Config {
     pub fonts: Vec<fpm::Font>,
     pub dependencies: Vec<fpm::Dependency>,
     pub ignored: ignore::overrides::Override,
-    pub is_translation_package: bool,
 }
 
 impl Config {
@@ -26,6 +25,29 @@ impl Config {
         self.root.join(".history/.latest.ftd")
     }
 
+    pub fn is_translation_package(&self) -> bool {
+        self.package.translation_of.is_some()
+    }
+
+    pub async fn get_translation_snapshots(
+        &self,
+    ) -> fpm::Result<std::collections::BTreeMap<String, u128>> {
+        if let Some(ref original) = self.package.translation_of.as_ref() {
+            let original_path = self.root.join(".packages").join(original.name.as_str());
+            return fpm::snapshot::get_latest_snapshots(&original_path).await;
+        }
+        // not sure if error should be returned
+        Ok(std::collections::BTreeMap::new())
+    }
+
+    pub async fn get_translation_documents(&self) -> fpm::Result<Vec<fpm::File>> {
+        if let Some(ref original) = self.package.translation_of.as_ref() {
+            return original.get_documents(self).await;
+        }
+        // not sure if error should be returned
+        Ok(vec![])
+    }
+
     pub fn get_font_style(&self) -> String {
         let generated_style = self
             .fonts
@@ -35,6 +57,16 @@ impl Config {
             false => format!("<style>{}</style>", generated_style),
             _ => format!(""),
         };
+    }
+
+    pub async fn add_translation_dependencies(&self) -> fpm::Result<Config> {
+        if let Some(ref original) = self.package.translation_of.as_ref() {
+            let root = self.root.join(".packages").join(original.name.as_str());
+            return Config::read_by_path(root, self.root.clone()).await;
+        }
+        return Err(fpm::Error::ConfigurationError {
+            message: "not a translation package".to_string(),
+        });
     }
 
     pub async fn read() -> fpm::Result<Config> {
@@ -48,9 +80,17 @@ impl Config {
                 });
             }
         };
+        Config::read_by_path(root.clone(), root).await
+    }
 
+    pub async fn read_by_path(
+        path: camino::Utf8PathBuf,
+        root: camino::Utf8PathBuf,
+    ) -> fpm::Result<Config> {
+        let original_directory: camino::Utf8PathBuf =
+            std::env::current_dir()?.canonicalize()?.try_into()?;
         let b = {
-            let doc = tokio::fs::read_to_string(root.join("FPM.ftd")).await?;
+            let doc = tokio::fs::read_to_string(path.join("FPM.ftd")).await?;
             let lib = fpm::Library::default();
             match ftd::p2::Document::from("FPM", doc.as_str(), &lib) {
                 Ok(v) => v,
@@ -75,7 +115,7 @@ impl Config {
 
         let fonts: Vec<fpm::Font> = b.get("fpm#font")?;
 
-        if root.file_name() != Some(package.name.as_str()) {
+        if path.file_name() != Some(package.name.as_str()) {
             return Err(fpm::Error::ConfigurationError {
                 message: "package name and folder name must match".to_string(),
             });
@@ -107,13 +147,12 @@ impl Config {
         }
 
         Ok(Config {
-            package: package.clone(),
-            root,
+            package,
+            root: path,
             original_directory,
             fonts,
             dependencies: deps,
             ignored,
-            is_translation_package: package.translation_of.is_some(),
         })
     }
 }

@@ -14,18 +14,27 @@ pub fn processor(section: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Re
     };
     let query = section.body(section.line_number, doc.name)?;
 
-    let conn =
-        match rusqlite::Connection::open_with_flags(db, rusqlite::OpenFlags::SQLITE_OPEN_READ_ONLY)
-        {
-            Ok(conn) => conn,
-            Err(e) => {
-                return ftd::e2(
-                    format!("Failed to open `{}`: {:?}", db, e),
-                    doc.name,
-                    section.line_number,
-                )
+    let conn = match rusqlite::Connection::open_with_flags(
+        format!(".build/{}", db),
+        rusqlite::OpenFlags::SQLITE_OPEN_READ_ONLY,
+    ) {
+        Ok(conn) => conn,
+        Err(_) => {
+            match rusqlite::Connection::open_with_flags(
+                db,
+                rusqlite::OpenFlags::SQLITE_OPEN_READ_ONLY,
+            ) {
+                Ok(conn) => conn,
+                Err(e) => {
+                    return ftd::e2(
+                        format!("Failed to open `{}`: {:?}", db, e),
+                        doc.name,
+                        section.line_number,
+                    );
+                }
             }
-        };
+        }
+    };
 
     let mut stmt = match conn.prepare(query.as_str()) {
         Ok(v) => v,

@@ -63,13 +63,13 @@ async fn write(
     timestamp: u128,
     snapshots: &std::collections::BTreeMap<String, u128>,
 ) -> fpm::Result<(fpm::Snapshot, bool)> {
-    if doc.get_id().contains('/') {
-        let dir = doc.get_id().rsplit_once('/').unwrap().0.to_string();
-        std::fs::create_dir_all(
+    if let Some((dir, _)) = doc.get_id().rsplit_once('/') {
+        tokio::fs::create_dir_all(
             camino::Utf8PathBuf::from(doc.get_base_path())
                 .join(".history")
                 .join(dir),
-        )?;
+        )
+        .await?;
     }
 
     if let Some(timestamp) = snapshots.get(&doc.get_id()) {

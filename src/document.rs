@@ -1,4 +1,4 @@
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum File {
     Ftd(Document),
     Static(Static),
@@ -11,6 +11,19 @@ impl File {
             Self::Ftd(a) => a.id.clone(),
             Self::Static(a) => a.id.clone(),
             Self::Markdown(a) => a.id.clone(),
+        }
+    }
+    pub fn set_id(&mut self, id: &str) {
+        match self {
+            Self::Ftd(a) => {
+                a.id = id.to_string();
+            }
+            Self::Static(a) => {
+                a.id = id.to_string();
+            }
+            Self::Markdown(a) => {
+                a.id = id.to_string();
+            }
         }
     }
     pub fn get_base_path(&self) -> String {
@@ -30,7 +43,7 @@ impl File {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Document {
     pub id: String,
     pub content: String,
@@ -38,7 +51,7 @@ pub struct Document {
     pub depth: usize,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Static {
     pub id: String,
     pub base_path: String,
