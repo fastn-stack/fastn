@@ -14,14 +14,14 @@ async fn file_status(
     let path = base_path.join(source);
     if !path.exists() {
         if snapshots.contains_key(source) {
-            println!("{:?}: {}", FileStatus::Removed, source);
+            println!("{:?}: {}", FileStatus::Deleted, source);
         } else {
             eprintln!("Error: {} does not exists", source);
         }
         return Ok(());
     }
 
-    let file = fpm::process_file(std::path::PathBuf::from(path), base_path.as_str()).await?;
+    let file = fpm::get_file(&std::path::PathBuf::from(path), base_path).await?;
 
     let file_status = get_file_status(&file, snapshots).await?;
     let track_status = get_track_status(&file, snapshots, base_path.as_str())?;
@@ -153,7 +153,7 @@ fn print_file_status(
             println!("{:?}: {}", status, id);
         } else {
             any_file_removed = true;
-            println!("{:?}: {}", FileStatus::Removed, id);
+            println!("{:?}: {}", FileStatus::Deleted, id);
         }
     }
 
@@ -164,6 +164,7 @@ fn print_file_status(
     {
         println!("{:?}: {}", status, id);
     }
+
     if !(file_status
         .iter()
         .any(|(_, f)| !f.eq(&FileStatus::Untracked))
@@ -171,6 +172,7 @@ fn print_file_status(
     {
         return true;
     }
+
     false
 }
 
@@ -178,7 +180,7 @@ fn print_file_status(
 enum FileStatus {
     Modified,
     Added,
-    Removed,
+    Deleted,
     Untracked,
 }
 

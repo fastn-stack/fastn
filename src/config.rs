@@ -132,7 +132,7 @@ impl Config {
             let root = self.root.join(".packages").join(original.name.as_str());
             return Config::read_by_path(root, self.root.clone()).await;
         }
-        Err(fpm::Error::ConfigurationError {
+        Err(fpm::Error::UsageError {
             message: "not a translation package".to_string(),
         })
     }
@@ -143,7 +143,7 @@ impl Config {
         let root = match find_package_root(&original_directory) {
             Some(b) => b,
             None => {
-                return Err(fpm::Error::ConfigurationError {
+                return Err(fpm::Error::UsageError {
                     message: "FPM.ftd not found in any parent directory".to_string(),
                 });
             }
@@ -163,7 +163,7 @@ impl Config {
             match ftd::p2::Document::from("FPM", doc.as_str(), &lib) {
                 Ok(v) => v,
                 Err(e) => {
-                    return Err(fpm::Error::ConfigurationError {
+                    return Err(fpm::Error::PackageError {
                         message: format!("failed to parse FPM.ftd: {:?}", &e),
                     });
                 }
@@ -184,7 +184,7 @@ impl Config {
         let fonts: Vec<fpm::Font> = b.get("fpm#font")?;
 
         if path.file_name() != Some(package.name.as_str()) {
-            return Err(fpm::Error::ConfigurationError {
+            return Err(fpm::Error::PackageError {
                 message: "package name and folder name must match".to_string(),
             });
         }
@@ -193,7 +193,7 @@ impl Config {
             let mut overrides = ignore::overrides::OverrideBuilder::new("./");
             for ig in b.get::<Vec<String>>("fpm#ignore")? {
                 if let Err(e) = overrides.add(format!("!{}", ig.as_str()).as_str()) {
-                    return Err(fpm::Error::ConfigurationError {
+                    return Err(fpm::Error::PackageError {
                         message: format!("failed parse fpm.ignore: {} => {:?}", ig, e),
                     });
                 }
@@ -202,7 +202,7 @@ impl Config {
             match overrides.build() {
                 Ok(v) => v,
                 Err(e) => {
-                    return Err(fpm::Error::ConfigurationError {
+                    return Err(fpm::Error::PackageError {
                         message: format!("failed parse fpm.ignore: {:?}", e),
                     });
                 }

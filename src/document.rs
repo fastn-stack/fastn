@@ -63,7 +63,7 @@ pub(crate) async fn get_documents(
         .flatten()
         .map(|x| x.into_path())
         .collect::<Vec<std::path::PathBuf>>();
-    let mut documents = fpm::paths_to_files(all_files, config.root.as_str()).await?;
+    let mut documents = fpm::paths_to_files(all_files, &config.root).await?;
     documents.sort_by_key(|v| v.get_id());
 
     Ok(documents)
@@ -71,14 +71,14 @@ pub(crate) async fn get_documents(
 
 pub(crate) async fn paths_to_files(
     files: Vec<std::path::PathBuf>,
-    base_path: &str,
+    base_path: &camino::Utf8Path,
 ) -> fpm::Result<Vec<fpm::File>> {
     Ok(futures::future::join_all(
         files
             .into_iter()
             .map(|x| {
-                let base = base_path.to_string();
-                tokio::spawn(async move { fpm::process_file(x, base.as_str()).await })
+                let base = base_path.to_path_buf();
+                tokio::spawn(async move { fpm::get_file(&x, &base).await })
             })
             .collect::<Vec<tokio::task::JoinHandle<fpm::Result<fpm::File>>>>(),
     )
@@ -100,44 +100,56 @@ pub fn package_ignores() -> Result<ignore::overrides::Override, ignore::Error> {
     overrides.build()
 }
 
-pub(crate) async fn process_file(doc_path: std::path::PathBuf, dir: &str) -> fpm::Result<File> {
-    if !&doc_path.is_dir() {
-        let doc_path_str = doc_path.to_str().unwrap();
-        if let Some((_, id)) = std::fs::canonicalize(&doc_path)?
-            .to_str()
-            .unwrap()
-            .rsplit_once(format!("{}/", dir).as_str())
-        {
-            return Ok(match id.rsplit_once(".") {
-                Some((_, "ftd")) => File::Ftd(Document {
-                    id: id.to_string(),
-                    content: tokio::fs::read_to_string(&doc_path).await?,
-                    parent_path: dir.to_string(),
-                    depth: doc_path_str.split('/').count() - 1,
-                }),
-                Some((doc_name, "md")) => File::Markdown(Document {
-                    id: if doc_name == "README"
-                        && !(std::path::Path::new("./index.ftd").exists()
-                            || std::path::Path::new("./index.md").exists())
-                    {
-                        "index.md".to_string()
-                    } else {
-                        id.to_string()
-                    },
-                    content: tokio::fs::read_to_string(&doc_path).await?,
-                    parent_path: dir.to_string(),
-                    depth: doc_path_str.split('/').count() - 1,
-                }),
-                _ => File::Static(Static {
-                    id: id.to_string(),
-                    base_path: dir.to_string(),
-                    depth: doc_path_str.split('/').count() - 1,
-                }),
+pub(crate) async fn get_file(
+    doc_path: &std::path::Path,
+    base_path: &camino::Utf8Path,
+) -> fpm::Result<File> {
+    if doc_path.is_dir() {
+        return Err(fpm::Error::UsageError {
+            message: format!("{:?} should be a file", doc_path),
+        });
+    }
+
+    let doc_path_str = doc_path.to_str().unwrap();
+
+    let id = match std::fs::canonicalize(doc_path)?
+        .to_str()
+        .unwrap()
+        .rsplit_once(format!("{}/", base_path).as_str())
+    {
+        Some((_, id)) => id.to_string(),
+        None => {
+            return Err(fpm::Error::UsageError {
+                message: format!("{:?} should be a file", doc_path),
             });
         }
-    }
-    Err(fpm::Error::ConfigurationError {
-        message: format!("{:?} should be a file", doc_path),
+    };
+
+    Ok(match id.rsplit_once(".") {
+        Some((_, "ftd")) => File::Ftd(Document {
+            id: id.to_string(),
+            content: tokio::fs::read_to_string(&doc_path).await?,
+            parent_path: base_path.to_string(),
+            depth: doc_path_str.split('/').count() - 1,
+        }),
+        Some((doc_name, "md")) => File::Markdown(Document {
+            id: if doc_name == "README"
+                && !(std::path::Path::new("./index.ftd").exists()
+                    || std::path::Path::new("./index.md").exists())
+            {
+                "index.md".to_string()
+            } else {
+                id.to_string()
+            },
+            content: tokio::fs::read_to_string(&doc_path).await?,
+            parent_path: base_path.to_string(),
+            depth: doc_path_str.split('/').count() - 1,
+        }),
+        _ => File::Static(Static {
+            id: id.to_string(),
+            base_path: base_path.to_string(),
+            depth: doc_path_str.split('/').count() - 1,
+        }),
     })
 }
 

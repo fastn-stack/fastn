@@ -19,7 +19,7 @@ pub use config::Config;
 pub(crate) use config::Package;
 pub(crate) use dependency::Dependency;
 pub(crate) use document::{
-    get_documents, get_documents_with_config, get_root_documents, paths_to_files, process_file,
+    get_documents, get_documents_with_config, get_file, get_root_documents, paths_to_files,
     Document, File, Static,
 };
 pub(crate) use font::Font;
@@ -46,8 +46,8 @@ pub enum Error {
     #[error("FTDError: {}", _0)]
     FTDError(#[from] ftd::p1::Error),
 
-    #[error("ConfigurationError: {message}")]
-    ConfigurationError { message: String },
+    #[error("PackageError: {message}")]
+    PackageError { message: String },
 
     #[error("UsageError: {message}")]
     UsageError { message: String },

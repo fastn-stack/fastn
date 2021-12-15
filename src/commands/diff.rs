@@ -7,7 +7,7 @@ pub async fn diff(config: &fpm::Config, files: Option<Vec<String>>, all: bool) -
             .into_iter()
             .map(|x| config.root.join(x).into_std_path_buf())
             .collect::<Vec<std::path::PathBuf>>();
-        fpm::paths_to_files(files, config.root.as_str()).await?
+        fpm::paths_to_files(files, config.root.as_path()).await?
     } else {
         fpm::get_root_documents(config).await?
     };

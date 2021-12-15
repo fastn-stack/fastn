@@ -5,7 +5,7 @@ pub async fn sync(config: &fpm::Config, files: Option<Vec<String>>) -> fpm::Resu
             .into_iter()
             .map(|x| std::path::PathBuf::from(config.root.join(x)))
             .collect::<Vec<std::path::PathBuf>>();
-        fpm::paths_to_files(files, config.root.as_str()).await?
+        fpm::paths_to_files(files, config.root.as_path()).await?
     } else {
         fpm::get_root_documents(config).await?
     };

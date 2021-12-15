@@ -5,8 +5,10 @@ pub async fn translation_status(config: &fpm::Config) -> fpm::Result<()> {
     } else if !config.package.translations.is_empty() {
         original_package_status().await?
     } else {
-        return Err(fpm::Error::ConfigurationError {
-            message: "neither translation_of nor translations is set".to_string(),
+        return Err(fpm::Error::UsageError {
+            message:
+                "`translation-status` only when either `translation` or `translation-of` is set."
+                    .to_string(),
         });
     };
 

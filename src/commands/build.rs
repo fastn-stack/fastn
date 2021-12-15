@@ -53,7 +53,7 @@ async fn process_ftd(
     let b = match ftd::p2::Document::from(id, doc.content.as_str(), &lib) {
         Ok(v) => v,
         Err(e) => {
-            return Err(fpm::Error::ConfigurationError {
+            return Err(fpm::Error::PackageError {
                 message: format!("failed to parse {:?}", &e),
             });
         }
