@@ -54,7 +54,7 @@ pub(crate) fn seconds_to_human(s: u64) -> String {
         if r == 0 {
             format!("{} hours ago", hours)
         } else if hours == 1 && r == 1 {
-            format!("An hour and a minute ago")
+            "An hour and a minute ago".to_string()
         } else if hours == 1 {
             format!("An hour and {} minutes ago", r)
         } else {
@@ -71,7 +71,7 @@ pub(crate) fn seconds_to_human(s: u64) -> String {
     } else if days < 7 && hours == 0 {
         format!("{} days ago", days)
     } else if months == 1 {
-        format!("A month ago")
+        "A month ago".to_string()
     } else if months < 24 {
         format!("{} months ago", months)
     } else {
