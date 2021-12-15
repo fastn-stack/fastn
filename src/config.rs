@@ -128,13 +128,16 @@ impl Config {
     }
 
     pub async fn read_translation(&self) -> fpm::Result<Config> {
-        if let Some(ref original) = self.package.translation_of.as_ref() {
-            let root = self.root.join(".packages").join(original.name.as_str());
-            return Config::read_by_path(root, self.root.clone()).await;
-        }
-        Err(fpm::Error::UsageError {
-            message: "not a translation package".to_string(),
-        })
+        let original = match self.package.translation_of.as_ref() {
+            Some(ref original) => original,
+            None => {
+                return Err(fpm::Error::UsageError {
+                    message: "not a translation package".to_string(),
+                })
+            }
+        };
+        let root = self.root.join(".packages").join(original.name.as_str());
+        return Config::read_by_path(root, self.root.clone()).await;
     }
 
     pub async fn read() -> fpm::Result<Config> {

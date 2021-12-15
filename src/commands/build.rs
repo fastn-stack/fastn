@@ -1,15 +1,13 @@
 pub async fn build(config: &fpm::Config) -> fpm::Result<()> {
     tokio::fs::create_dir_all(config.build_dir()).await?;
 
-    let documents = fpm::get_documents_with_config(config).await?;
+    let (documents, config) = fpm::get_documents_with_config(config).await?;
 
-    for (id, doc_config) in documents.iter() {
-        match &doc_config.file {
-            fpm::File::Ftd(doc) => {
-                process_ftd(doc, &doc_config.config, id, config.root.as_str()).await?
-            }
+    for (id, file) in documents.iter() {
+        match file {
+            fpm::File::Ftd(doc) => process_ftd(doc, &config, id, config.root.as_str()).await?,
             fpm::File::Static(sa) => process_static(sa, id, config.root.as_str()).await?,
-            fpm::File::Markdown(doc) => process_markdown(doc, config).await?,
+            fpm::File::Markdown(doc) => process_markdown(doc, &config).await?,
         }
     }
 

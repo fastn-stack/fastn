@@ -7,7 +7,7 @@ pub async fn translation_status(config: &fpm::Config) -> fpm::Result<()> {
     } else {
         return Err(fpm::Error::UsageError {
             message:
-                "`translation-status` only when either `translation` or `translation-of` is set."
+                "`translation-status` works only when either `translation` or `translation-of` is set."
                     .to_string(),
         });
     };

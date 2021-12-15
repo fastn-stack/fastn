@@ -155,71 +155,57 @@ pub(crate) async fn get_file(
 
 pub async fn get_documents_with_config(
     config: &fpm::Config,
-) -> fpm::Result<Vec<(String, DocumentWithConfig)>> {
-    let documents = if config.is_translation_package() {
+) -> fpm::Result<(Vec<(String, File)>, fpm::Config)> {
+    let (documents, config) = if config.is_translation_package() {
         let translation_config = config.read_translation().await?;
         let translation_snapshots =
             fpm::snapshot::get_latest_snapshots(&config.original_path()?).await?;
-        let mut documents: std::collections::BTreeMap<String, DocumentWithConfig> =
+        let mut documents: std::collections::BTreeMap<String, File> =
             std::collections::BTreeMap::from_iter(
-                config.get_translation_documents().await?.iter().map(|v| {
-                    (
-                        v.get_id().replace(".packages/.tmp/", ""),
-                        DocumentWithConfig {
-                            file: v.to_owned(),
-                            config: translation_config.clone(),
-                        },
-                    )
-                }),
+                config
+                    .get_translation_documents()
+                    .await?
+                    .iter()
+                    .map(|v| (v.get_id().replace(".packages/.tmp/", ""), v.to_owned())),
             );
         documents.extend(
             fpm::get_root_documents(config)
                 .await?
                 .iter()
                 .filter(|x| translation_snapshots.contains_key(x.get_id().as_str()))
-                .map(|v| {
-                    (
-                        v.get_id(),
-                        DocumentWithConfig {
-                            file: v.to_owned(),
-                            config: config.clone(),
-                        },
-                    )
-                }),
+                .map(|v| (v.get_id(), v.to_owned())),
         );
-        documents
+        (documents, translation_config)
     } else {
-        std::collections::BTreeMap::from_iter(fpm::get_root_documents(config).await?.iter().map(
-            |v| {
-                (
-                    v.get_id(),
-                    DocumentWithConfig {
-                        file: v.to_owned(),
-                        config: config.clone(),
-                    },
-                )
-            },
-        ))
+        (
+            std::collections::BTreeMap::from_iter(
+                fpm::get_root_documents(config)
+                    .await?
+                    .iter()
+                    .map(|v| (v.get_id(), v.to_owned())),
+            ),
+            config.to_owned(),
+        )
     };
 
     // Need to sort it in this order: fpm::File::Static, fpm::File::Markdown, fpm::File::Ftd
     let mut document_vec = documents
         .clone()
         .into_iter()
-        .filter(|(_, d)| matches!(d.file, fpm::File::Static(_)))
-        .collect::<Vec<(String, DocumentWithConfig)>>();
+        .filter(|(_, d)| matches!(d, fpm::File::Static(_)))
+        .collect::<Vec<(String, File)>>();
     document_vec.extend(
         documents
             .clone()
             .into_iter()
-            .filter(|(_, d)| matches!(d.file, fpm::File::Markdown(_))),
+            .filter(|(_, d)| matches!(d, fpm::File::Markdown(_))),
     );
     document_vec.extend(
         documents
             .into_iter()
-            .filter(|(_, d)| matches!(d.file, fpm::File::Ftd(_))),
+            .filter(|(_, d)| matches!(d, fpm::File::Ftd(_))),
     );
-    Ok(document_vec)
+    Ok((document_vec, config))
 }
 
 #[derive(Debug, Clone)]
