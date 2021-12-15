@@ -17,7 +17,7 @@ pub async fn translation_status(config: &fpm::Config) -> fpm::Result<()> {
 async fn translation_package_status(
     config: &fpm::Config,
 ) -> fpm::Result<std::collections::BTreeMap<String, TranslationStatus>> {
-    let snapshots = config.get_translation_snapshots().await?;
+    let snapshots = fpm::snapshot::get_latest_snapshots(&config.original_path()?).await?;
     let mut translation_status = std::collections::BTreeMap::new();
     for (file, timestamp) in snapshots {
         if !config.root.join(&file).exists() {
@@ -49,8 +49,8 @@ async fn translation_package_status(
 
 async fn original_package_status(
 ) -> fpm::Result<std::collections::BTreeMap<String, TranslationStatus>> {
-    //todo
-    Ok(std::collections::BTreeMap::new())
+    // TODO
+    Ok(Default::default())
 }
 
 fn print_translation_status(

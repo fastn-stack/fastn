@@ -1,43 +1,103 @@
+/// `Config` struct keeps track of a few configuration parameters that is shared with the entire
+/// program. It is constructed from the content of `FPM.ftd` file for the package.
 #[derive(Debug, Clone)]
 pub struct Config {
     pub package: fpm::Package,
+    /// `root` is the package root folder, this is the folder where `FPM.ftd` file is stored.
+    ///
+    /// Technically the rest of the program can simply call `std::env::current_dir()` and that
+    /// is guaranteed to be same as `Config.root`, but `Config.root` is camino path, instead of
+    /// std::path::Path, so we can treat `root` as a handy helper.
+    ///
+    /// A utility that returns camino version of `current_dir()` may be used in future.
     pub root: camino::Utf8PathBuf,
+    /// `original_directory` is the directory from which the `fpm` command was invoked
+    ///
+    /// During the execution of `fpm`, we change the directory to the package root so the program
+    /// can be written with the assumption that they are running from package `root`.
+    ///
+    /// When printing filenames for users consumption we want to print the paths relative to the
+    /// `original_directory`, so we keep track of the original directory.
     pub original_directory: camino::Utf8PathBuf,
+    /// `fonts` keeps track of the fonts used by the package.
+    ///
+    /// Note that this too is kind of bad design, we will move fonts to `fpm::Package` struct soon.
     pub fonts: Vec<fpm::Font>,
+    /// `dependencies` keeps track of direct dependencies of a given package. This too should be
+    /// moved to `fpm::Package` to support recursive dependencies etc.
     pub dependencies: Vec<fpm::Dependency>,
+    /// `ignored` keeps track of files that are to be ignored by `fpm build`, `fpm sync` etc.
     pub ignored: ignore::overrides::Override,
 }
 
 impl Config {
+    /// `build_dir` is where the static built files are stored. `fpm build` command creates this
+    /// folder and stores its output here.
     pub fn build_dir(&self) -> camino::Utf8PathBuf {
         self.root.join(".build")
     }
 
+    /// history of a fpm package is stored in `.history` folder.
+    ///
+    /// Current design is wrong, we should move this helper to `fpm::Package` maybe.
+    ///
+    /// History of a package is considered part of the package, and when a package is downloaded we
+    /// have to chose if we want to download its history as well. For now we do not. Eventually in
+    /// we will be able to say download the history also for some package.
+    ///
+    /// ```ftd
+    /// -- ftp.dependency: django
+    ///  with-history: true
+    /// ```
+    ///     
+    /// `.history` file is created or updated by `fpm sync` command only, no one else should edit
+    /// anything in it.
     pub fn history_dir(&self) -> camino::Utf8PathBuf {
         self.root.join(".history")
     }
 
-    pub fn track_dir(&self) -> camino::Utf8PathBuf {
-        self.root.join(".tracks")
-    }
-
+    /// every package's `.history` contains a file `.latest.ftd`. It looks a bit linke this:
+    ///
+    /// ```ftd
+    /// -- import: fpm
+    ///
+    /// -- fpm.snapshot: FPM.ftd
+    /// timestamp: 1638706756293421000
+    ///
+    /// -- fpm.snapshot: blog.ftd
+    /// timestamp: 1638706756293421000
+    ///     ```
+    ///
+    /// One `fpm.snapshot` for every file that is currently part of the package.
     pub fn latest_ftd(&self) -> camino::Utf8PathBuf {
         self.root.join(".history/.latest.ftd")
     }
 
+    /// track_dir returns the directory where track files are stored. Tracking information as well
+    /// is considered part of a package, but it is not downloaded when a package is downloaded as
+    /// a dependency of another package.
+    pub fn track_dir(&self) -> camino::Utf8PathBuf {
+        self.root.join(".tracks")
+    }
+
+    /// `is_translation_package()` is a helper to tell you if the current package is a translation
+    /// of another package. We may delete this helper soon.
     pub fn is_translation_package(&self) -> bool {
         self.package.translation_of.is_some()
     }
 
-    pub async fn get_translation_snapshots(
-        &self,
-    ) -> fpm::Result<std::collections::BTreeMap<String, u128>> {
-        if let Some(ref original) = self.package.translation_of.as_ref() {
-            let original_path = self.root.join(".packages").join(original.name.as_str());
-            return fpm::snapshot::get_latest_snapshots(&original_path).await;
-        }
-        // not sure if error should be returned
-        Ok(std::collections::BTreeMap::new())
+    /// original_path() returns the path of the original package if the current package is a
+    /// translation package. it returns the path in `.packages` folder where the
+    pub fn original_path(&self) -> fpm::Result<camino::Utf8PathBuf> {
+        let o = match self.package.translation_of.as_ref() {
+            Some(ref o) => o,
+            None => {
+                return Err(fpm::Error::UsageError {
+                    message: "This package is not a translation package".to_string(),
+                });
+            }
+        };
+        Ok(self.root.join(".packages").join(o.name.as_str()))
     }
 
     pub async fn get_translation_documents(&self) -> fpm::Result<Vec<fpm::File>> {

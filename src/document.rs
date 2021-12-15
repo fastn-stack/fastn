@@ -146,7 +146,8 @@ pub async fn get_documents_with_config(
 ) -> fpm::Result<Vec<(String, DocumentWithConfig)>> {
     let documents = if config.is_translation_package() {
         let translation_config = config.read_translation().await?;
-        let translation_snapshots = config.get_translation_snapshots().await?;
+        let translation_snapshots =
+            fpm::snapshot::get_latest_snapshots(&config.original_path()?).await?;
         let mut documents: std::collections::BTreeMap<String, DocumentWithConfig> =
             std::collections::BTreeMap::from_iter(
                 config.get_translation_documents().await?.iter().map(|v| {
