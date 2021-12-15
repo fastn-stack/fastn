@@ -1,10 +1,9 @@
 pub async fn status(config: &fpm::Config, source: Option<&str>) -> fpm::Result<()> {
     let snapshots = fpm::snapshot::get_latest_snapshots(&config.root).await?;
-    if let Some(source) = source {
-        file_status(&config.root, source, &snapshots).await?;
-        return Ok(());
+    match source {
+        Some(source) => file_status(&config.root, source, &snapshots).await,
+        None => all_status(config, &snapshots).await,
     }
-    all_status(config, &snapshots).await
 }
 
 async fn file_status(
@@ -28,7 +27,7 @@ async fn file_status(
     let track_status = get_track_status(&file, snapshots, base_path.as_str())?;
 
     let mut clean = true;
-    if !file_status.eq(&FileStatus::None) {
+    if !file_status.eq(&FileStatus::Untracked) {
         println!("{:?}: {}", file_status, source);
         clean = false;
     }
@@ -76,7 +75,7 @@ async fn get_file_status(
         let existing_doc = tokio::fs::read_to_string(&path).await?;
 
         if content.eq(&existing_doc) {
-            return Ok(FileStatus::None);
+            return Ok(FileStatus::Untracked);
         }
         return Ok(FileStatus::Modified);
     }
@@ -114,7 +113,7 @@ fn get_track_status(
             let then = track.other_timestamp.as_ref().unwrap();
             let diff = std::time::Duration::from_nanos((now - then) as u64);
             TrackStatus::OutOfDate {
-                days: format!("{:?}", diff.as_secs() / 86400),
+                seconds: diff.as_secs(),
             }
         };
         track_list.insert(track.filename.to_string(), track_status);
@@ -148,7 +147,7 @@ fn print_file_status(
     let mut any_file_removed = false;
     for id in snapshots.keys() {
         if let Some(status) = file_status.get(id) {
-            if status.eq(&FileStatus::None) {
+            if status.eq(&FileStatus::Untracked) {
                 continue;
             }
             println!("{:?}: {}", status, id);
@@ -165,7 +164,11 @@ fn print_file_status(
     {
         println!("{:?}: {}", status, id);
     }
-    if !(file_status.iter().any(|(_, f)| !f.eq(&FileStatus::None)) || any_file_removed) {
+    if !(file_status
+        .iter()
+        .any(|(_, f)| !f.eq(&FileStatus::Untracked))
+        || any_file_removed)
+    {
         return true;
     }
     false
@@ -176,14 +179,14 @@ enum FileStatus {
     Modified,
     Added,
     Removed,
-    None,
+    Untracked,
 }
 
 #[derive(Debug, PartialEq)]
 enum TrackStatus {
     UptoDate,
     NeverMarked,
-    OutOfDate { days: String },
+    OutOfDate { seconds: u64 },
 }
 
 impl ToString for TrackStatus {
@@ -191,7 +194,9 @@ impl ToString for TrackStatus {
         match self {
             TrackStatus::UptoDate => "Up to date".to_string(),
             TrackStatus::NeverMarked => "Never marked".to_string(),
-            TrackStatus::OutOfDate { days } => format!("{} days out of date", days),
+            TrackStatus::OutOfDate { seconds } => {
+                format!("Out of date({})", fpm::utils::seconds_to_human(*seconds))
+            }
         }
     }
 }

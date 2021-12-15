@@ -248,7 +248,7 @@ struct PackageTemp {
 }
 
 impl PackageTemp {
-    pub fn into_package(self) -> fpm::Package {
+    fn into_package(self) -> fpm::Package {
         let translation_of = self.translation_of.as_ref().map(|v| fpm::Package::new(v));
         let translations = self
             .translations

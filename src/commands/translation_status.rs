@@ -49,8 +49,7 @@ async fn translation_package_status(
 
 async fn original_package_status(
 ) -> fpm::Result<std::collections::BTreeMap<String, TranslationStatus>> {
-    // TODO
-    Ok(Default::default())
+    Ok(Default::default()) // TODO
 }
 
 fn print_translation_status(

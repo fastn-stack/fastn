@@ -34,7 +34,7 @@ pub(crate) struct DependencyTemp {
 }
 
 impl DependencyTemp {
-    pub fn into_dependency(self) -> fpm::Dependency {
+    pub(crate) fn into_dependency(self) -> fpm::Dependency {
         fpm::Dependency {
             package: fpm::Package::new(self.name.as_str()),
             version: self.version,
