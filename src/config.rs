@@ -66,7 +66,7 @@ impl Config {
     ///
     /// -- fpm.snapshot: blog.ftd
     /// timestamp: 1638706756293421000
-    ///     ```
+    /// ```
     ///
     /// One `fpm.snapshot` for every file that is currently part of the package.
     pub fn latest_ftd(&self) -> camino::Utf8PathBuf {

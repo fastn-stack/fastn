@@ -207,9 +207,3 @@ pub async fn get_documents_with_config(
     );
     Ok((document_vec, config))
 }
-
-#[derive(Debug, Clone)]
-pub struct DocumentWithConfig {
-    pub file: fpm::File,
-    pub config: fpm::Config,
-}
