@@ -102,15 +102,15 @@ impl Config {
 
     pub async fn get_translation_documents(&self) -> fpm::Result<Vec<fpm::File>> {
         if let Some(ref original) = self.package.translation_of.as_ref() {
-            let src = self.root.join(".packages").join(original.name.as_str());
+            /*let src = self.root.join(".packages").join(original.name.as_str());
             let dst = self.root.join(".packages/.tmp");
             fpm::utils::copy_dir_all(src, dst.clone()).await?;
             let tmp_package = {
                 let mut tmp = original.clone();
                 tmp.name = dst.as_str().to_string();
                 tmp
-            };
-            return tmp_package.get_documents(self).await;
+            };*/
+            return original.get_documents(self).await;
         }
         // not sure if error should be returned
         Ok(vec![])
@@ -212,9 +212,9 @@ impl Config {
             }
         };
 
-        fpm::dependency::ensure(root.clone(), deps.clone()).await?;
+        fpm::dependency::ensure(path.clone(), deps.clone()).await?;
         if let Some(translation_of) = package.translation_of.as_ref() {
-            translation_of.process(root.clone(), "github").await?;
+            translation_of.process(path.clone(), "github").await?;
         }
 
         Ok(Config {

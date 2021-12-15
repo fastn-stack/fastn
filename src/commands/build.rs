@@ -1,16 +1,84 @@
 pub async fn build(config: &fpm::Config) -> fpm::Result<()> {
     tokio::fs::create_dir_all(config.build_dir()).await?;
 
-    let (documents, config) = fpm::get_documents_with_config(config).await?;
+    let translation_snapshots = if let Some(ref original) = config.package.translation_of.as_ref() {
+        let translation_config = config.read_translation().await?;
+        let documents = config
+            .get_translation_documents()
+            .await?
+            .iter()
+            .map(|v| {
+                (
+                    v.get_id()
+                        .replace(&format!(".packages/{}/", original.name), ""),
+                    v.to_owned(),
+                )
+            })
+            .collect::<Vec<(String, fpm::File)>>();
 
+        std::env::set_current_dir(
+            &config
+                .original_directory
+                .join(".packages")
+                .join(original.name.as_str()),
+        )?;
+        build_(
+            &translation_config,
+            &config.original_directory,
+            documents,
+            true,
+        )
+        .await?;
+
+        // is it needed??
+        fpm::utils::copy_dir_all(".packages", config.original_directory.join(".packages")).await?;
+        std::env::set_current_dir(&config.original_directory)?;
+
+        Some(fpm::snapshot::get_latest_snapshots(&config.original_path()?).await?)
+    } else {
+        None
+    };
+
+    let documents = {
+        let mut documents = fpm::get_root_documents(config)
+            .await?
+            .into_iter()
+            .map(|v| (v.get_id(), v))
+            .collect::<Vec<(String, fpm::File)>>();
+        if let Some(translation_snapshots) = translation_snapshots {
+            documents = documents
+                .into_iter()
+                .filter(|(_, x)| translation_snapshots.contains_key(x.get_id().as_str()))
+                .collect::<Vec<(String, fpm::File)>>();
+        }
+        documents
+    };
+    build_(
+        &config,
+        &config.original_directory,
+        documents,
+        !config.is_translation_package(),
+    )
+    .await?;
+
+    Ok(())
+}
+
+async fn build_(
+    config: &fpm::Config,
+    base_path: &camino::Utf8PathBuf,
+    documents: Vec<(String, fpm::File)>,
+    print_log: bool,
+) -> fpm::Result<()> {
     for (id, file) in documents.iter() {
         match file {
-            fpm::File::Ftd(doc) => process_ftd(doc, &config, id, config.root.as_str()).await?,
-            fpm::File::Static(sa) => process_static(sa, id, config.root.as_str()).await?,
-            fpm::File::Markdown(doc) => process_markdown(doc, &config).await?,
+            fpm::File::Ftd(doc) => {
+                process_ftd(doc, config, id, base_path.as_str(), print_log).await?
+            }
+            fpm::File::Static(sa) => process_static(sa, id, base_path.as_str()).await?,
+            fpm::File::Markdown(doc) => process_markdown(doc, config).await?,
         }
     }
-
     Ok(())
 }
 
@@ -36,6 +104,7 @@ async fn process_ftd(
     config: &fpm::Config,
     id: &str,
     base_path: &str,
+    print_log: bool,
 ) -> fpm::Result<()> {
     use tokio::io::AsyncWriteExt;
 
@@ -90,7 +159,9 @@ async fn process_ftd(
             .as_bytes(),
     )
     .await?;
-    println!("Generated {}", file_rel_path.as_str(),);
+    if print_log {
+        println!("Generated {}", file_rel_path.as_str(),);
+    }
     Ok(())
 }
 
