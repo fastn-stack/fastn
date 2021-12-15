@@ -137,7 +137,7 @@ impl Config {
             }
         };
         let root = self.root.join(".packages").join(original.name.as_str());
-        return Config::read_by_path(root, self.root.clone()).await;
+        return Config::read_by_path(root).await;
     }
 
     pub async fn read() -> fpm::Result<Config> {
@@ -151,13 +151,10 @@ impl Config {
                 });
             }
         };
-        Config::read_by_path(root.clone(), root).await
+        Config::read_by_path(root).await
     }
 
-    pub async fn read_by_path(
-        path: camino::Utf8PathBuf,
-        root: camino::Utf8PathBuf,
-    ) -> fpm::Result<Config> {
+    pub async fn read_by_path(path: camino::Utf8PathBuf) -> fpm::Result<Config> {
         let original_directory: camino::Utf8PathBuf =
             std::env::current_dir()?.canonicalize()?.try_into()?;
         let b = {

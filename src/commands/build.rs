@@ -54,7 +54,7 @@ pub async fn build(config: &fpm::Config) -> fpm::Result<()> {
         documents
     };
     build_(
-        &config,
+        config,
         &config.original_directory,
         documents,
         !config.is_translation_package(),
