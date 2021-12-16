@@ -5,12 +5,12 @@ pub async fn build(config: &fpm::Config) -> fpm::Result<()> {
         config.package.translation_of.as_ref(),
         config.package.translations.is_empty(),
     ) {
-        (Some(_), false) => {
+        (Some(_), true) => {
             // No package can be both a translation of something and has its own
             // translations, when building `config` we ensured this was rejected
             unreachable!()
         }
-        (Some(original), true) => build_with_original(config, original),
+        (Some(original), false) => build_with_original(config, original),
         (None, true) => build_simple(config),
         (None, false) => build_with_translations(config),
     }
