@@ -1,16 +1,19 @@
 -- import: fpm
 
 -- fpm.snapshot: FPM.ftd
-timestamp: 1639649996028947000
+timestamp: 1639680378403270000
 
 -- fpm.snapshot: blog.ftd
-timestamp: 1639649996028947000
+timestamp: 1639680378403270000
 
 -- fpm.snapshot: db.ftd
-timestamp: 1639649996028947000
+timestamp: 1639680378403270000
 
 -- fpm.snapshot: db.sqlite
-timestamp: 1639649996028947000
+timestamp: 1639680378403270000
 
 -- fpm.snapshot: index.ftd
-timestamp: 1639649996028947000
+timestamp: 1639680378403270000
+
+-- fpm.snapshot: lib.ftd
+timestamp: 1639680378403270000

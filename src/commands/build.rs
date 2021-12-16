@@ -33,62 +33,40 @@ async fn build_with_translations(_config: &fpm::Config) -> fpm::Result<()> {
     todo!("build does not yet support translations, only translation-of")
 }
 
-#[async_recursion::async_recursion(?Send)]
-async fn build_with_original(config: &fpm::Config, original: &fpm::Package) -> fpm::Result<()> {
-    // This is the translation package then first build the original package
-    // If original package is already built then we don't need to built it again
-    // as the files in original package is not going to change.
-    let original_package = config.root.join(".packages").join(original.name.as_str());
-    if !original_package.join(".build").exists() {
-        // set current dir to original package and build it
-        // This would create .build directory inside original package
-        // This .build directory would be copied to root .build directory everytime `fpm build` is called
-        std::env::set_current_dir(&original_package)?;
-        let original_config = fpm::Config::read().await?;
+/// This is the translation package
+/// First fetch all files from the original package
+/// Then overwrite it with file in root package having same name/id as in original package
+/// ignore all those documents/files which is not in original package
+async fn build_with_original(config: &fpm::Config, _original: &fpm::Package) -> fpm::Result<()> {
+    // This is the translation package
+    // Fetch all files from the original package
+    let original_path = config.original_path()?;
+    let original_snapshots = fpm::snapshot::get_latest_snapshots(&original_path).await?;
+    let files = original_snapshots
+        .keys()
+        .into_iter()
+        .map(|v| original_path.join(v).into_std_path_buf())
+        .collect::<Vec<std::path::PathBuf>>();
 
-        println!(
-            "Building the {} package. (This is an original package)",
-            original.name
-        );
-        build(&original_config).await?;
+    let mut documents = std::collections::BTreeMap::from_iter(
+        fpm::paths_to_files(files, original_path.as_path())
+            .await?
+            .into_iter()
+            .map(|v| (v.get_id(), v)),
+    );
 
-        // copy original .package folder to root .package folder
-        // Is this needed?
-        // Yes: if we want to automatically add dependencies of original package to root package
-        // No: If we don't want anything like this
-        {
-            let src = camino::Utf8PathBuf::from(".packages");
-            if src.exists() {
-                fpm::copy_dir_all(src, config.root.join(".packages")).await?;
-            }
-        }
-        // set current dir to root again
-        std::env::set_current_dir(&config.root)?;
-    }
-
-    // Now, Building the root package
-    // First copy original .build to root .build and then overwrite with the translated one
-    let src = original_package.join(".build");
-    let dst = config.build_dir();
-    fpm::copy_dir_all(src, dst).await?;
-
-    let original_snapshots = fpm::snapshot::get_latest_snapshots(&config.original_path()?).await?;
-
+    // Fetch all files from the root package
     // ignore all those documents/files which is not in original package
-    let documents = std::collections::BTreeMap::from_iter(
+    // Overwrite the files having same name/id
+    documents.extend(
         fpm::get_documents(config)
             .await?
             .into_iter()
             .filter(|x| original_snapshots.contains_key(x.get_id().as_str()))
             .map(|v| (v.get_id(), v)),
     );
-    println!(
-        "Building the {} package. (This is the root/current package)",
-        config.package.name
-    );
 
-    // overwrite all the files in root .build directory which is translated in root package
-    // Build the root package
+    // Process all the files collected from original and root package
     process_files(config, &config.root, &documents).await
 }
 
@@ -141,7 +119,9 @@ async fn process_ftd(
     } else {
         id.replace(".ftd", "/index.html")
     };
-    let lib = fpm::Library::default();
+    let lib = fpm::Library {
+        config: config.clone(),
+    };
     let b = match ftd::p2::Document::from(id, doc.content.as_str(), &lib) {
         Ok(v) => v,
         Err(e) => {

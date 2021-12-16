@@ -20,7 +20,7 @@ pub(crate) use config::Package;
 pub(crate) use dependency::Dependency;
 pub(crate) use document::{get_documents, get_file, paths_to_files, Document, File, Static};
 pub(crate) use font::Font;
-pub(crate) use library::Library;
+pub(crate) use library::{FPMLibrary, Library};
 pub(crate) use snapshot::Snapshot;
 pub(crate) use tracker::Track;
 pub(crate) use utils::{copy_dir_all, get_timestamp_nanosecond};

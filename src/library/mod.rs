@@ -2,12 +2,55 @@ mod http;
 mod sqlite;
 mod toc;
 
-#[derive(Default)]
 pub struct Library {
-    pub markdown: Option<(String, String)>,
+    pub config: fpm::Config,
 }
 
 impl ftd::p2::Library for Library {
+    fn get(&self, name: &str) -> Option<String> {
+        if name == "fpm" {
+            return Some(fpm::fpm_ftd().to_string());
+        }
+        if let Ok(v) = std::fs::read_to_string(self.config.root.join(format!("{}.ftd", name))) {
+            return Some(v);
+        }
+
+        if let Ok(original_path) = self.config.original_path() {
+            if let Ok(v) = std::fs::read_to_string(original_path.join(format!("{}.ftd", name))) {
+                return Some(v);
+            }
+        }
+
+        let package_path = self.config.root.join(".packages");
+        if let Ok(v) = std::fs::read_to_string(package_path.join(format!("{}.ftd", name))) {
+            return Some(v);
+        }
+        return std::fs::read_to_string(package_path.join(format!("{}/index.ftd", name))).ok();
+    }
+
+    fn process(
+        &self,
+        section: &ftd::p1::Section,
+        doc: &ftd::p2::TDoc,
+    ) -> ftd::p1::Result<ftd::Value> {
+        match section
+            .header
+            .str(doc.name, section.line_number, "$processor$")?
+        {
+            "toc" => fpm::library::toc::processor(section, doc),
+            "http" => fpm::library::http::processor(section, doc),
+            "package-query" => fpm::library::sqlite::processor(section, doc, &self.config),
+            t => unimplemented!("$processor$: {} is not implemented yet", t),
+        }
+    }
+}
+
+#[derive(Default)]
+pub struct FPMLibrary {
+    pub markdown: Option<(String, String)>,
+}
+
+impl ftd::p2::Library for FPMLibrary {
     fn get(&self, name: &str) -> Option<String> {
         if name == "fpm" {
             let fpm_base = fpm::fpm_ftd().to_string();
@@ -28,28 +71,16 @@ impl ftd::p2::Library for Library {
                 ),
                 _ => fpm_base,
             })
-        } else if let Ok(v) = std::fs::read_to_string(format!("./{}.ftd", name)) {
-            Some(v)
-        } else if let Ok(v) = std::fs::read_to_string(format!("./.packages/{}.ftd", name)) {
-            Some(v)
         } else {
-            std::fs::read_to_string(format!("./.packages/{}/index.ftd", name)).ok()
+            std::fs::read_to_string(format!("./{}.ftd", name)).ok()
         }
     }
 
     fn process(
         &self,
-        section: &ftd::p1::Section,
-        doc: &ftd::p2::TDoc,
+        _section: &ftd::p1::Section,
+        _doc: &ftd::p2::TDoc,
     ) -> ftd::p1::Result<ftd::Value> {
-        match section
-            .header
-            .str(doc.name, section.line_number, "$processor$")?
-        {
-            "toc" => fpm::library::toc::processor(section, doc),
-            "http" => fpm::library::http::processor(section, doc),
-            "package-query" => fpm::library::sqlite::processor(section, doc),
-            t => unimplemented!("$processor$: {} is not implemented yet", t),
-        }
+        unimplemented!("not implemented yet");
     }
 }

@@ -14,7 +14,7 @@ pub(crate) async fn get_latest_snapshots(
         return Ok(snapshots);
     }
 
-    let lib = fpm::Library::default();
+    let lib = fpm::FPMLibrary::default();
     let doc = tokio::fs::read_to_string(&latest_file_path).await?;
     let b = match ftd::p2::Document::from(".latest.ftd", doc.as_str(), &lib) {
         Ok(v) => v,

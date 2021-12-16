@@ -1,4 +1,8 @@
-pub fn processor(section: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Result<ftd::Value> {
+pub fn processor(
+    section: &ftd::p1::Section,
+    doc: &ftd::p2::TDoc,
+    config: &fpm::Config,
+) -> ftd::p1::Result<ftd::Value> {
     let db = match section
         .header
         .str_optional(doc.name, section.line_number, "db")?
@@ -19,11 +23,30 @@ pub fn processor(section: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Re
         {
             Ok(conn) => conn,
             Err(e) => {
-                return ftd::e2(
-                    format!("Failed to open `{}`: {:?}", db, e),
-                    doc.name,
-                    section.line_number,
-                );
+                let original_path = match config.original_path() {
+                    Ok(original_path) => original_path,
+                    _ => {
+                        return ftd::e2(
+                            format!("Failed to open `{}`: {:?}", db, e),
+                            doc.name,
+                            section.line_number,
+                        );
+                    }
+                };
+                let db_path = original_path.join(db);
+                match rusqlite::Connection::open_with_flags(
+                    &db_path,
+                    rusqlite::OpenFlags::SQLITE_OPEN_READ_ONLY,
+                ) {
+                    Ok(conn) => conn,
+                    Err(e) => {
+                        return ftd::e2(
+                            format!("Failed to open `{}`: {:?}", db_path.as_str(), e),
+                            doc.name,
+                            section.line_number,
+                        )
+                    }
+                }
             }
         };
 

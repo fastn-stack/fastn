@@ -136,7 +136,7 @@ impl Config {
         };
         let b = {
             let doc = tokio::fs::read_to_string(root.join("FPM.ftd")).await?;
-            let lib = fpm::Library::default();
+            let lib = fpm::FPMLibrary::default();
             match ftd::p2::Document::from("FPM", doc.as_str(), &lib) {
                 Ok(v) => v,
                 Err(e) => {

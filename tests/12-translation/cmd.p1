@@ -4,12 +4,10 @@ output: amitu/.build
 
 -- stdout:
 
-Building the arpita-jaiswal/blog package. (This is an original package)
 Processed FPM.ftd
 Processed blog.ftd
 Processed db.ftd
 Processed db.sqlite
 Processed index.ftd
-Building the amitu package. (This is the root/current package)
-Processed FPM.ftd
-Processed blog.ftd
+Processed lib.ftd
+
