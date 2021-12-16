@@ -1,5 +1,8 @@
 /// `Config` struct keeps track of a few configuration parameters that is shared with the entire
 /// program. It is constructed from the content of `FPM.ftd` file for the package.
+///
+/// `Config` is created using `Config::read()` method, and should be constructed only once in the
+/// `main()` and passed everywhere.
 #[derive(Debug, Clone)]
 pub struct Config {
     pub package: fpm::Package,
@@ -100,7 +103,15 @@ impl Config {
         Ok(self.root.join(".packages").join(o.name.as_str()))
     }
 
+    /// `get_font_style()` returns the HTML style tag which includes all the fonts used by any
+    /// ftd document. Currently this function does not check for fonts in package dependencies
+    /// nor it tries to avoid fonts that are configured but not needed in current document.
     pub fn get_font_style(&self) -> String {
+        // TODO: accept list of actual fonts used in the current document. each document accepts
+        //       a different list of fonts and only fonts used by a given document should be
+        //       included in the HTML produced by that font
+        // TODO: fetch fonts from package dependencies as well (ideally this function should fail
+        //       if one of the fonts used by any ftd document is not found
         let generated_style = self
             .fonts
             .iter()
@@ -111,6 +122,7 @@ impl Config {
         };
     }
 
+    /// `read_translation()` is wrong and will go away soon
     pub async fn read_translation(&self) -> fpm::Result<Config> {
         let original = match self.package.translation_of.as_ref() {
             Some(ref original) => original,
@@ -124,6 +136,7 @@ impl Config {
         return Config::read_by_path(root).await;
     }
 
+    /// `read()` is the way to read a Config.
     pub async fn read() -> fpm::Result<Config> {
         let original_directory: camino::Utf8PathBuf =
             std::env::current_dir()?.canonicalize()?.try_into()?;
@@ -138,6 +151,7 @@ impl Config {
         Config::read_by_path(root).await
     }
 
+    /// `read_by_path()` will be gone soon
     pub async fn read_by_path(path: camino::Utf8PathBuf) -> fpm::Result<Config> {
         let original_directory: camino::Utf8PathBuf =
             std::env::current_dir()?.canonicalize()?.try_into()?;
@@ -209,6 +223,8 @@ impl Config {
     }
 }
 
+/// `find_package_root()` starts with the given path, which is the current directory where the
+/// application started in, and goes up till it finds a folder that contains `FPM.ftd` file.
 fn find_package_root(dir: &camino::Utf8Path) -> Option<camino::Utf8PathBuf> {
     if dir.join("FPM.ftd").exists() {
         Some(dir.into())
@@ -220,11 +236,15 @@ fn find_package_root(dir: &camino::Utf8Path) -> Option<camino::Utf8PathBuf> {
     }
 }
 
+/// PackageTemp is a struct that is used for mapping the `fpm.package` data in FPM.ftd file. It is
+/// not used elsewhere in program, it is immediately converted to `fpm::Package` struct during
+/// deserialization process
 #[derive(serde::Deserialize, Debug, Clone)]
 struct PackageTemp {
     pub name: String,
     #[serde(rename = "translation-of")]
     pub translation_of: Option<String>,
+    #[serde(rename = "translation")]
     pub translations: Vec<String>,
     pub lang: Option<String>,
     pub about: Option<String>,
@@ -233,6 +253,9 @@ struct PackageTemp {
 
 impl PackageTemp {
     fn into_package(self) -> fpm::Package {
+        // TODO: change this method to: `validate(self) -> fpm::Result<fpm::Package>` and do all
+        //       validations in it. Like a package must not have both translation-of and
+        //       `translations` set.
         let translation_of = self.translation_of.as_ref().map(|v| fpm::Package::new(v));
         let translations = self
             .translations
@@ -274,67 +297,15 @@ impl Package {
         }
     }
 
+    /// `get_documents()` returns a list of all documents in this package.
+    ///
+    /// For translation packages it does not return the documents that should exist but do not.
+    /// For translation another method should be used which gives an iterator that gives both
+    /// original file and the translated file (if found, else None). And a totally different
+    /// function that returns an iterator of files not in original package but are found in
+    /// translation package.
     pub(crate) async fn get_documents(&self, config: &fpm::Config) -> fpm::Result<Vec<fpm::File>> {
         let path = config.root.join(".packages").join(self.name.as_str());
         fpm::get_documents(&ignore::WalkBuilder::new(path), config).await
-    }
-
-    pub async fn process(&self, base_dir: camino::Utf8PathBuf, repo: &str) -> fpm::Result<()> {
-        use tokio::io::AsyncWriteExt;
-        if base_dir.join(".packages").join(self.name.as_str()).exists() {
-            // TODO: in future we will check if we have a new version in the package's repo.
-            //       for now assume if package exists we have the latest package and if you
-            //       want to update a package, delete the corresponding folder and latest
-            //       version will get downloaded.
-            return Ok(());
-        }
-
-        let path = camino::Utf8PathBuf::from(format!("/tmp/{}.zip", self.name.replace("/", "__")));
-
-        {
-            let download_url = match repo {
-                "github" => {
-                    format!(
-                        "https://github.com/{}/archive/refs/heads/main.zip",
-                        self.name
-                    )
-                }
-                k => k.to_string(),
-            };
-            let response = reqwest::get(download_url).await?;
-            let mut file = tokio::fs::File::create(&path).await?;
-            // TODO: instead of reading the whole thing in memory use tokio::io::copy() somehow?
-            let content = response.bytes().await?;
-            file.write_all(&content).await?;
-        }
-
-        let file = std::fs::File::open(&path)?;
-        // TODO: switch to async_zip crate
-        let mut archive = zip::ZipArchive::new(file)?;
-        for i in 0..archive.len() {
-            let mut c_file = archive.by_index(i).unwrap();
-            let out_path = match c_file.enclosed_name() {
-                Some(path) => path.to_owned(),
-                None => continue,
-            };
-            let out_path_without_folder = out_path.to_str().unwrap().split_once("/").unwrap().1;
-            let file_extract_path = base_dir
-                .join(".packages")
-                .join(self.name.as_str())
-                .join(out_path_without_folder);
-            if (&*c_file.name()).ends_with('/') {
-                std::fs::create_dir_all(&file_extract_path)?;
-            } else {
-                if let Some(p) = file_extract_path.parent() {
-                    if !p.exists() {
-                        std::fs::create_dir_all(p)?;
-                    }
-                }
-                // Note: we will be able to use tokio::io::copy() with async_zip
-                let mut outfile = std::fs::File::create(file_extract_path)?;
-                std::io::copy(&mut c_file, &mut outfile)?;
-            }
-        }
-        Ok(())
     }
 }

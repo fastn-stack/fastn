@@ -4,7 +4,7 @@ optional string about:
 optional string domain:
 optional string lang:
 optional string translation-of:
-string list translations:
+string list translation:
 
 -- package-data package: not set
 
