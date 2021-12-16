@@ -21,8 +21,5 @@ Cargo.lock
 .idea
 
 /tests/**/.build
-/tests/**/.history
-/tests/**/.packages
-/tests/**/.tracks
 
 **/.DS_Store
