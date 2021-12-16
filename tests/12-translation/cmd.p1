@@ -5,9 +5,9 @@ output: amitu/.build
 -- stdout:
 
 Building the arpita-jaiswal/blog package. (This is an original package)
-Generated FPM/index.html
-Generated blog/index.html
-Generated index.html
+Processed FPM.ftd
+Processed blog.ftd
+Processed index.ftd
 Building the amitu package. (This is the root/current package)
-Generated FPM/index.html
-Generated blog/index.html
+Processed FPM.ftd
+Processed blog.ftd

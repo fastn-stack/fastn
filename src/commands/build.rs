@@ -26,7 +26,7 @@ async fn build_simple(config: &fpm::Config) -> fpm::Result<()> {
             .map(|v| (v.get_id(), v)),
     );
 
-    process_files(config, &config.original_directory, &documents, true).await
+    process_files(config, &config.original_directory, &documents).await
 }
 
 async fn build_with_translations(_config: &fpm::Config) -> fpm::Result<()> {
@@ -91,24 +91,21 @@ async fn build_with_original(config: &fpm::Config, original: &fpm::Package) -> f
         "Building the {} package. (This is the root/current package)",
         config.package.name
     );
-    process_files(config, &config.root, &documents, true).await
+    process_files(config, &config.root, &documents).await
 }
 
 async fn process_files(
     config: &fpm::Config,
     base_path: &camino::Utf8PathBuf,
     documents: &std::collections::BTreeMap<String, fpm::File>,
-    print_log: bool,
 ) -> fpm::Result<()> {
-    // TODO: why is only ftd files being logged? Log all files or none.
     for (id, file) in documents.iter() {
         match file {
-            fpm::File::Ftd(doc) => {
-                process_ftd(doc, config, id, base_path.as_str(), print_log).await?
-            }
+            fpm::File::Ftd(doc) => process_ftd(doc, config, id, base_path.as_str()).await?,
             fpm::File::Static(sa) => process_static(sa, id, base_path.as_str()).await?,
             fpm::File::Markdown(doc) => process_markdown(doc, config).await?,
         }
+        println!("Processed {}", id);
     }
     Ok(())
 }
@@ -135,7 +132,6 @@ async fn process_ftd(
     config: &fpm::Config,
     id: &str,
     base_path: &str,
-    print_log: bool,
 ) -> fpm::Result<()> {
     use tokio::io::AsyncWriteExt;
 
@@ -190,9 +186,7 @@ async fn process_ftd(
             .as_bytes(),
     )
     .await?;
-    if print_log {
-        println!("Generated {}", file_rel_path.as_str(),);
-    }
+
     Ok(())
 }
 
