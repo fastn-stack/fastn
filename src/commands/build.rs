@@ -66,17 +66,12 @@ async fn build_with_original(config: &fpm::Config, original: &fpm::Package) -> f
         std::env::set_current_dir(&config.root)?;
     }
 
-    // Built the root package
+    // Now, Building the root package
     // First copy original .build to root .build and then overwrite with the translated one
-    let src = config
-        .root
-        .join(".packages")
-        .join(original.name.as_str())
-        .join(".build");
+    let src = original_package.join(".build");
     let dst = config.build_dir();
     fpm::copy_dir_all(src, dst).await?;
 
-    // overwrite all the files in root .build directory which is translated in root package
     let original_snapshots = fpm::snapshot::get_latest_snapshots(&config.original_path()?).await?;
 
     // ignore all those documents/files which is not in original package
@@ -91,6 +86,9 @@ async fn build_with_original(config: &fpm::Config, original: &fpm::Package) -> f
         "Building the {} package. (This is the root/current package)",
         config.package.name
     );
+
+    // overwrite all the files in root .build directory which is translated in root package
+    // Build the root package
     process_files(config, &config.root, &documents).await
 }
 
