@@ -6,4 +6,7 @@
 /target/
 **/*.rs.bk
 
+# fpm test
+/tests/**/.build
+
 

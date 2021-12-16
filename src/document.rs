@@ -45,15 +45,8 @@ pub struct Static {
     pub depth: usize,
 }
 
-pub(crate) async fn get_root_documents(config: &fpm::Config) -> fpm::Result<Vec<fpm::File>> {
-    fpm::get_documents(&ignore::WalkBuilder::new("./"), config).await
-}
-
-pub(crate) async fn get_documents(
-    ignore_paths: &ignore::WalkBuilder,
-    config: &fpm::Config,
-) -> fpm::Result<Vec<fpm::File>> {
-    let mut ignore_paths = ignore_paths.clone();
+pub(crate) async fn get_documents(config: &fpm::Config) -> fpm::Result<Vec<fpm::File>> {
+    let mut ignore_paths = ignore::WalkBuilder::new("./");
     ignore_paths.overrides(package_ignores()?); // unwrap ok because this we know can never fail
     ignore_paths.standard_filters(true);
     ignore_paths.overrides(config.ignored.clone());

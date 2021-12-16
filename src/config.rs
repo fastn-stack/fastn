@@ -296,16 +296,4 @@ impl Package {
             domain: None,
         }
     }
-
-    /// `get_documents()` returns a list of all documents in this package.
-    ///
-    /// For translation packages it does not return the documents that should exist but do not.
-    /// For translation another method should be used which gives an iterator that gives both
-    /// original file and the translated file (if found, else None). And a totally different
-    /// function that returns an iterator of files not in original package but are found in
-    /// translation package.
-    pub(crate) async fn get_documents(&self, config: &fpm::Config) -> fpm::Result<Vec<fpm::File>> {
-        let path = config.root.join(".packages").join(self.name.as_str());
-        fpm::get_documents(&ignore::WalkBuilder::new(path), config).await
-    }
 }

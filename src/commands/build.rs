@@ -5,19 +5,26 @@ pub async fn build(config: &fpm::Config) -> fpm::Result<()> {
         config.package.translation_of.as_ref(),
         config.package.translations.is_empty(),
     ) {
-        (Some(_), true) => {
+        (Some(_), false) => {
             // No package can be both a translation of something and has its own
             // translations, when building `config` we ensured this was rejected
             unreachable!()
         }
-        (Some(original), false) => build_with_original(config, original),
-        (None, true) => build_simple(config),
-        (None, false) => build_with_translations(config),
+        (Some(original), true) => build_with_original(config, original).await,
+        (None, true) => build_simple(config).await,
+        (None, false) => build_with_translations(config).await,
     }
 }
 
-async fn build_simple(_config: &fpm::Config) -> fpm::Result<()> {
-    todo!()
+async fn build_simple(config: &fpm::Config) -> fpm::Result<()> {
+    let documents = std::collections::BTreeMap::from_iter(
+        fpm::get_documents(config)
+            .await?
+            .into_iter()
+            .map(|v| (v.get_id(), v)),
+    );
+
+    process_files(config, &config.original_directory, &documents, true).await
 }
 
 async fn build_with_translations(_config: &fpm::Config) -> fpm::Result<()> {
@@ -25,73 +32,41 @@ async fn build_with_translations(_config: &fpm::Config) -> fpm::Result<()> {
 }
 
 async fn build_with_original(config: &fpm::Config, original: &fpm::Package) -> fpm::Result<()> {
-    let translation_snapshots = if let Some(ref original) = config.package.translation_of.as_ref() {
-        let translation_config = config.read_translation().await?;
-        let documents = original
-            .get_documents(config)
-            .await?
-            .iter()
-            .map(|v| {
-                (
-                    v.get_id()
-                        .replace(&format!(".packages/{}/", original.name), ""),
-                    v.to_owned(),
-                )
-            })
-            .collect::<Vec<(String, fpm::File)>>();
+    let translation_config = config.read_translation().await?;
 
-        std::env::set_current_dir(
-            &config
-                .original_directory
-                .join(".packages")
-                .join(original.name.as_str()),
-        )?;
-        process_files(
-            &translation_config,
-            &config.original_directory,
-            documents,
-            true,
-        )
-        .await?;
-
-        // is it needed??
-        fpm::utils::copy_dir_all(".packages", config.original_directory.join(".packages")).await?;
-        std::env::set_current_dir(&config.original_directory)?;
-
-        Some(fpm::snapshot::get_latest_snapshots(&config.original_path()?).await?)
-    } else {
-        None
-    };
-
-    let documents = {
-        let mut documents = fpm::get_root_documents(config)
+    std::env::set_current_dir(&config.root.join(".packages").join(original.name.as_str()))?;
+    let original_documents = std::collections::BTreeMap::from_iter(
+        fpm::get_documents(&translation_config)
             .await?
             .into_iter()
-            .map(|v| (v.get_id(), v))
-            .collect::<Vec<(String, fpm::File)>>();
-        if let Some(translation_snapshots) = translation_snapshots {
-            documents = documents
-                .into_iter()
-                .filter(|(_, x)| translation_snapshots.contains_key(x.get_id().as_str()))
-                .collect::<Vec<(String, fpm::File)>>();
-        }
-        documents
-    };
-    process_files(
-        config,
-        &config.original_directory,
-        documents,
-        !config.is_translation_package(),
-    )
-    .await?;
+            .map(|v| (v.get_id(), v)),
+    );
+    process_files(&translation_config, &config.root, &original_documents, true).await?;
 
-    Ok(())
+    // is it needed??
+    {
+        let src = camino::Utf8PathBuf::from(".packages");
+        if src.exists() {
+            fpm::utils::copy_dir_all(src, config.root.join(".packages")).await?;
+        }
+    }
+    std::env::set_current_dir(&config.root)?;
+
+    let documents = std::collections::BTreeMap::from_iter(
+        fpm::get_documents(config)
+            .await?
+            .into_iter()
+            .filter(|x| original_documents.contains_key(x.get_id().as_str()))
+            .map(|v| (v.get_id(), v)),
+    );
+
+    process_files(config, &config.root, &documents, false).await
 }
 
 async fn process_files(
     config: &fpm::Config,
     base_path: &camino::Utf8PathBuf,
-    documents: Vec<(String, fpm::File)>,
+    documents: &std::collections::BTreeMap<String, fpm::File>,
     print_log: bool,
 ) -> fpm::Result<()> {
     // TODO: why is only ftd files being logged? Log all files or none.
