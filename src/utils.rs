@@ -1,3 +1,11 @@
+pub trait HasElements { fn has_elements(&self) -> bool }
+
+impl<T> HasElements for Vec<T> {
+    fn has_elements(&self) -> bool {
+        !self.is_empty()
+    }
+}
+
 pub(crate) fn get_timestamp_nanosecond() -> u128 {
     match std::time::SystemTime::now().duration_since(std::time::SystemTime::UNIX_EPOCH) {
         Ok(n) => n.as_nanos(),

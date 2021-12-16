@@ -36,8 +36,12 @@ pub enum Error {
     #[error("HttpError: {}", _0)]
     HttpError(#[from] reqwest::Error),
 
-    #[error("IoError: {}", _0)]
-    IoError(#[from] std::io::Error),
+    #[error("IoError []: {}", _0)]
+    IoError {
+        inner: std::io::Error,
+        source: camino::Utf8PathBuf,
+        operation: IOOperation,
+    },
 
     #[error("IoError: {}", _0)]
     ZipError(#[from] zip::result::ZipError),
@@ -56,6 +60,13 @@ pub enum Error {
 
     #[error("FromPathBufError: {}", _0)]
     FromPathBufError(#[from] camino::FromPathBufError),
+}
+
+pub enum IOOperation {
+    Read,
+    Write,
+    Create,
+    ListDir,
 }
 
 pub type Result<T> = std::result::Result<T, Error>;

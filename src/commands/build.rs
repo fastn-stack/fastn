@@ -1,9 +1,11 @@
 pub async fn build(config: &fpm::Config) -> fpm::Result<()> {
+    use fpm::utils::HasElements;
+
     tokio::fs::create_dir_all(config.build_dir()).await?;
 
     match (
         config.package.translation_of.as_ref(),
-        config.package.translations.is_empty(),
+        config.package.translations.has_elements(),
     ) {
         (Some(_), true) => {
             // No package can be both a translation of something and has its own
@@ -11,8 +13,8 @@ pub async fn build(config: &fpm::Config) -> fpm::Result<()> {
             unreachable!()
         }
         (Some(original), false) => build_with_original(config, original),
-        (None, true) => build_simple(config),
-        (None, false) => build_with_translations(config),
+        (None, false) => build_simple(config),
+        (None, true) => build_with_translations(config),
     }
 }
 
@@ -55,7 +57,7 @@ async fn build_with_original(config: &fpm::Config, original: &fpm::Package) -> f
         .await?;
 
         // is it needed??
-        fpm::utils::copy_dir_all(".packages", config.original_directory.join(".packages")).await?;
+        fpm::utils::copy_dir_all(".packages", config.root.join(".packages")).await?;
         std::env::set_current_dir(&config.original_directory)?;
 
         Some(fpm::snapshot::get_latest_snapshots(&config.original_path()?).await?)
