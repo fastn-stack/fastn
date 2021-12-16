@@ -36,28 +36,24 @@ async fn build_with_translations(_config: &fpm::Config) -> fpm::Result<()> {
 #[async_recursion::async_recursion(?Send)]
 async fn build_with_original(config: &fpm::Config, original: &fpm::Package) -> fpm::Result<()> {
     // This is the translation package then first build the original package
-    {
-        // copy original .build to root .build
+    // If original package is already built then we don't need to built it again
+    // as the files in original package is not going to change.
+    let original_package = config.root.join(".packages").join(original.name.as_str());
+    if !original_package.join(".build").exists() {
         // set current dir to original package and build it
         // This would create .build directory inside original package
         // This .build directory would be copied to root .build directory everytime `fpm build` is called
         std::env::set_current_dir(&config.root.join(".packages").join(original.name.as_str()))?;
         let original_config = fpm::Config::read().await?;
 
-        // In this case, if original package is already built then we don't need to built it again
-        // as the files in original package is not going to change.
-        // dbg!("1", &original_config.root);
-        if !original_config.build_dir().exists() {
-            println!(
-                "Building the {} package. (This is an original package)",
-                original.name
-            );
-            // dbg!("2");
-            build(&original_config).await?;
-        }
+        println!(
+            "Building the {} package. (This is an original package)",
+            original.name
+        );
+        build(&original_config).await?;
 
         // copy original .package folder to root .package folder
-        // is this needed?
+        // Is this needed?
         {
             let src = camino::Utf8PathBuf::from(".packages");
             if src.exists() {
@@ -69,6 +65,7 @@ async fn build_with_original(config: &fpm::Config, original: &fpm::Package) -> f
     }
 
     // Built the root package
+    // First copy original .build to root .build and then overwrite the translated one
     let src = config
         .root
         .join(".packages")
