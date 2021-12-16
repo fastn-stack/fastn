@@ -1,5 +1,9 @@
 -- import: blog
 
+-- import: blog-theme as lib
+
 -- ftd.text: This is only in original so far
 
 -- blog.say-hello:
+
+-- lib.say-hello:
