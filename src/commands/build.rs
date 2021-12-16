@@ -43,7 +43,7 @@ async fn build_with_original(config: &fpm::Config, original: &fpm::Package) -> f
         // set current dir to original package and build it
         // This would create .build directory inside original package
         // This .build directory would be copied to root .build directory everytime `fpm build` is called
-        std::env::set_current_dir(&config.root.join(".packages").join(original.name.as_str()))?;
+        std::env::set_current_dir(&original_package)?;
         let original_config = fpm::Config::read().await?;
 
         println!(
