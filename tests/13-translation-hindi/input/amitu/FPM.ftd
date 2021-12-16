@@ -1,0 +1,6 @@
+-- import: fpm
+
+-- fpm.package:
+name: amitu
+lang: hi
+translation-of: arpita-jaiswal/blog
