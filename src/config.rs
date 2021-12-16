@@ -204,7 +204,7 @@ impl Config {
 
 /// `find_package_root()` starts with the given path, which is the current directory where the
 /// application started in, and goes up till it finds a folder that contains `FPM.ftd` file.
-fn find_package_root(dir: &camino::Utf8Path) -> Option<camino::Utf8PathBuf> {
+pub(crate) fn find_package_root(dir: &camino::Utf8Path) -> Option<camino::Utf8PathBuf> {
     if dir.join("FPM.ftd").exists() {
         Some(dir.into())
     } else {
@@ -219,7 +219,7 @@ fn find_package_root(dir: &camino::Utf8Path) -> Option<camino::Utf8PathBuf> {
 /// not used elsewhere in program, it is immediately converted to `fpm::Package` struct during
 /// deserialization process
 #[derive(serde::Deserialize, Debug, Clone)]
-struct PackageTemp {
+pub(crate) struct PackageTemp {
     pub name: String,
     #[serde(rename = "translation-of")]
     pub translation_of: Option<String>,
@@ -231,7 +231,7 @@ struct PackageTemp {
 }
 
 impl PackageTemp {
-    fn into_package(self) -> fpm::Package {
+    pub fn into_package(self) -> fpm::Package {
         // TODO: change this method to: `validate(self) -> fpm::Result<fpm::Package>` and do all
         //       validations in it. Like a package must not have both translation-of and
         //       `translations` set.
