@@ -18,15 +18,12 @@ pub use commands::{
 pub use config::Config;
 pub(crate) use config::Package;
 pub(crate) use dependency::Dependency;
-pub(crate) use document::{
-    get_documents, get_documents_with_config, get_file, get_root_documents, paths_to_files,
-    Document, File, Static,
-};
+pub(crate) use document::{get_documents, get_file, paths_to_files, Document, File, Static};
 pub(crate) use font::Font;
 pub(crate) use library::Library;
 pub(crate) use snapshot::Snapshot;
 pub(crate) use tracker::Track;
-pub(crate) use utils::get_timestamp_nanosecond;
+pub(crate) use utils::{copy_dir_all, get_timestamp_nanosecond};
 
 pub fn fpm_ftd() -> &'static str {
     include_str!("../fpm.ftd")

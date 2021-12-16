@@ -1,0 +1,6 @@
+-- import: fpm
+
+-- fpm.package: blog
+
+-- fpm.dependency: blog-theme
+repo: github

@@ -45,15 +45,8 @@ pub struct Static {
     pub depth: usize,
 }
 
-pub(crate) async fn get_root_documents(config: &fpm::Config) -> fpm::Result<Vec<fpm::File>> {
-    fpm::get_documents(&ignore::WalkBuilder::new("./"), config).await
-}
-
-pub(crate) async fn get_documents(
-    ignore_paths: &ignore::WalkBuilder,
-    config: &fpm::Config,
-) -> fpm::Result<Vec<fpm::File>> {
-    let mut ignore_paths = ignore_paths.clone();
+pub(crate) async fn get_documents(config: &fpm::Config) -> fpm::Result<Vec<fpm::File>> {
+    let mut ignore_paths = ignore::WalkBuilder::new("./");
     ignore_paths.overrides(package_ignores()?); // unwrap ok because this we know can never fail
     ignore_paths.standard_filters(true);
     ignore_paths.overrides(config.ignored.clone());
@@ -151,59 +144,4 @@ pub(crate) async fn get_file(
             depth: doc_path_str.split('/').count() - 1,
         }),
     })
-}
-
-pub async fn get_documents_with_config(
-    config: &fpm::Config,
-) -> fpm::Result<(Vec<(String, File)>, fpm::Config)> {
-    let (documents, config) = if config.is_translation_package() {
-        let translation_config = config.read_translation().await?;
-        let translation_snapshots =
-            fpm::snapshot::get_latest_snapshots(&config.original_path()?).await?;
-        let mut documents: std::collections::BTreeMap<String, File> =
-            std::collections::BTreeMap::from_iter(
-                config
-                    .get_translation_documents()
-                    .await?
-                    .iter()
-                    .map(|v| (v.get_id().replace(".packages/.tmp/", ""), v.to_owned())),
-            );
-        documents.extend(
-            fpm::get_root_documents(config)
-                .await?
-                .iter()
-                .filter(|x| translation_snapshots.contains_key(x.get_id().as_str()))
-                .map(|v| (v.get_id(), v.to_owned())),
-        );
-        (documents, translation_config)
-    } else {
-        (
-            std::collections::BTreeMap::from_iter(
-                fpm::get_root_documents(config)
-                    .await?
-                    .iter()
-                    .map(|v| (v.get_id(), v.to_owned())),
-            ),
-            config.to_owned(),
-        )
-    };
-
-    // Need to sort it in this order: fpm::File::Static, fpm::File::Markdown, fpm::File::Ftd
-    let mut document_vec = documents
-        .clone()
-        .into_iter()
-        .filter(|(_, d)| matches!(d, fpm::File::Static(_)))
-        .collect::<Vec<(String, File)>>();
-    document_vec.extend(
-        documents
-            .clone()
-            .into_iter()
-            .filter(|(_, d)| matches!(d, fpm::File::Markdown(_))),
-    );
-    document_vec.extend(
-        documents
-            .into_iter()
-            .filter(|(_, d)| matches!(d, fpm::File::Ftd(_))),
-    );
-    Ok((document_vec, config))
 }

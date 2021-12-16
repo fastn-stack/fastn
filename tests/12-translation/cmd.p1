@@ -1,11 +1,15 @@
 -- fbt:
 cmd: cd amitu && $FBT_CWD/target/debug/fpm --test build
 output: amitu/.build
-skip: translation not yet working
 
 -- stdout:
 
-Generated FPM/index.html
-Generated blog/index.html
-Generated db/index.html
-Generated index.html
+Building the arpita-jaiswal/blog package. (This is an original package)
+Processed FPM.ftd
+Processed blog.ftd
+Processed db.ftd
+Processed db.sqlite
+Processed index.ftd
+Building the amitu package. (This is the root/current package)
+Processed FPM.ftd
+Processed blog.ftd

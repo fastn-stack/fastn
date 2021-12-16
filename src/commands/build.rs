@@ -1,16 +1,110 @@
 pub async fn build(config: &fpm::Config) -> fpm::Result<()> {
+    use fpm::utils::HasElements;
+
     tokio::fs::create_dir_all(config.build_dir()).await?;
 
-    let (documents, config) = fpm::get_documents_with_config(config).await?;
-
-    for (id, file) in documents.iter() {
-        match file {
-            fpm::File::Ftd(doc) => process_ftd(doc, &config, id, config.root.as_str()).await?,
-            fpm::File::Static(sa) => process_static(sa, id, config.root.as_str()).await?,
-            fpm::File::Markdown(doc) => process_markdown(doc, &config).await?,
+    match (
+        config.package.translation_of.as_ref(),
+        config.package.translations.has_elements(),
+    ) {
+        (Some(_), true) => {
+            // No package can be both a translation of something and has its own
+            // translations, when building `config` we ensured this was rejected
+            unreachable!()
         }
+        (Some(original), false) => build_with_original(config, original).await,
+        (None, false) => build_simple(config).await,
+        (None, true) => build_with_translations(config).await,
+    }
+}
+
+async fn build_simple(config: &fpm::Config) -> fpm::Result<()> {
+    let documents = std::collections::BTreeMap::from_iter(
+        fpm::get_documents(config)
+            .await?
+            .into_iter()
+            .map(|v| (v.get_id(), v)),
+    );
+
+    process_files(config, &config.original_directory, &documents).await
+}
+
+async fn build_with_translations(_config: &fpm::Config) -> fpm::Result<()> {
+    todo!("build does not yet support translations, only translation-of")
+}
+
+#[async_recursion::async_recursion(?Send)]
+async fn build_with_original(config: &fpm::Config, original: &fpm::Package) -> fpm::Result<()> {
+    // This is the translation package then first build the original package
+    // If original package is already built then we don't need to built it again
+    // as the files in original package is not going to change.
+    let original_package = config.root.join(".packages").join(original.name.as_str());
+    if !original_package.join(".build").exists() {
+        // set current dir to original package and build it
+        // This would create .build directory inside original package
+        // This .build directory would be copied to root .build directory everytime `fpm build` is called
+        std::env::set_current_dir(&original_package)?;
+        let original_config = fpm::Config::read().await?;
+
+        println!(
+            "Building the {} package. (This is an original package)",
+            original.name
+        );
+        build(&original_config).await?;
+
+        // copy original .package folder to root .package folder
+        // Is this needed?
+        // Yes: if we want to automatically add dependencies of original package to root package
+        // No: If we don't want anything like this
+        {
+            let src = camino::Utf8PathBuf::from(".packages");
+            if src.exists() {
+                fpm::copy_dir_all(src, config.root.join(".packages")).await?;
+            }
+        }
+        // set current dir to root again
+        std::env::set_current_dir(&config.root)?;
     }
 
+    // Now, Building the root package
+    // First copy original .build to root .build and then overwrite with the translated one
+    let src = original_package.join(".build");
+    let dst = config.build_dir();
+    fpm::copy_dir_all(src, dst).await?;
+
+    let original_snapshots = fpm::snapshot::get_latest_snapshots(&config.original_path()?).await?;
+
+    // ignore all those documents/files which is not in original package
+    let documents = std::collections::BTreeMap::from_iter(
+        fpm::get_documents(config)
+            .await?
+            .into_iter()
+            .filter(|x| original_snapshots.contains_key(x.get_id().as_str()))
+            .map(|v| (v.get_id(), v)),
+    );
+    println!(
+        "Building the {} package. (This is the root/current package)",
+        config.package.name
+    );
+
+    // overwrite all the files in root .build directory which is translated in root package
+    // Build the root package
+    process_files(config, &config.root, &documents).await
+}
+
+async fn process_files(
+    config: &fpm::Config,
+    base_path: &camino::Utf8PathBuf,
+    documents: &std::collections::BTreeMap<String, fpm::File>,
+) -> fpm::Result<()> {
+    for (id, file) in documents.iter() {
+        match file {
+            fpm::File::Ftd(doc) => process_ftd(doc, config, id, base_path.as_str()).await?,
+            fpm::File::Static(sa) => process_static(sa, id, base_path.as_str()).await?,
+            fpm::File::Markdown(doc) => process_markdown(doc, config).await?,
+        }
+        println!("Processed {}", id);
+    }
     Ok(())
 }
 
@@ -90,7 +184,7 @@ async fn process_ftd(
             .as_bytes(),
     )
     .await?;
-    println!("Generated {}", file_rel_path.as_str(),);
+
     Ok(())
 }
 

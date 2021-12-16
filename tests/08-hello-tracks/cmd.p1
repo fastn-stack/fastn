@@ -5,7 +5,8 @@ output: amitu/.build
 
 -- stdout:
 
-Generated FPM/index.html
-Generated index-track/index.html
-Generated index.html
+Processed FPM.ftd
+Processed hello.txt
+Processed index-track.ftd
+Processed index.ftd
 
