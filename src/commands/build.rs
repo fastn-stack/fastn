@@ -1,6 +1,30 @@
 pub async fn build(config: &fpm::Config) -> fpm::Result<()> {
     tokio::fs::create_dir_all(config.build_dir()).await?;
 
+    match (
+        config.package.translation_of.as_ref(),
+        config.package.translations.is_empty(),
+    ) {
+        (Some(_), false) => {
+            // No package can be both a translation of something and has its own
+            // translations, when building `config` we ensured this was rejected
+            unreachable!()
+        }
+        (Some(original), true) => build_with_original(config, original),
+        (None, true) => build_simple(config),
+        (None, false) => build_with_translations(config),
+    }
+}
+
+async fn build_simple(_config: &fpm::Config) -> fpm::Result<()> {
+    todo!()
+}
+
+async fn build_with_translations(_config: &fpm::Config) -> fpm::Result<()> {
+    todo!("build does not yet support translations, only translation-of")
+}
+
+async fn build_with_original(config: &fpm::Config) -> fpm::Result<()> {
     let translation_snapshots = if let Some(ref original) = config.package.translation_of.as_ref() {
         let translation_config = config.read_translation().await?;
         let documents = config
@@ -22,7 +46,7 @@ pub async fn build(config: &fpm::Config) -> fpm::Result<()> {
                 .join(".packages")
                 .join(original.name.as_str()),
         )?;
-        build_(
+        process_files(
             &translation_config,
             &config.original_directory,
             documents,
@@ -53,7 +77,7 @@ pub async fn build(config: &fpm::Config) -> fpm::Result<()> {
         }
         documents
     };
-    build_(
+    process_files(
         config,
         &config.original_directory,
         documents,
@@ -64,12 +88,13 @@ pub async fn build(config: &fpm::Config) -> fpm::Result<()> {
     Ok(())
 }
 
-async fn build_(
+async fn process_files(
     config: &fpm::Config,
     base_path: &camino::Utf8PathBuf,
     documents: Vec<(String, fpm::File)>,
     print_log: bool,
 ) -> fpm::Result<()> {
+    // TODO: why is only ftd files being logged? Log all files or none.
     for (id, file) in documents.iter() {
         match file {
             fpm::File::Ftd(doc) => {
