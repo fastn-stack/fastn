@@ -100,22 +100,6 @@ impl Config {
         Ok(self.root.join(".packages").join(o.name.as_str()))
     }
 
-    pub async fn get_translation_documents(&self) -> fpm::Result<Vec<fpm::File>> {
-        if let Some(ref original) = self.package.translation_of.as_ref() {
-            /*let src = self.root.join(".packages").join(original.name.as_str());
-            let dst = self.root.join(".packages/.tmp");
-            fpm::utils::copy_dir_all(src, dst.clone()).await?;
-            let tmp_package = {
-                let mut tmp = original.clone();
-                tmp.name = dst.as_str().to_string();
-                tmp
-            };*/
-            return original.get_documents(self).await;
-        }
-        // not sure if error should be returned
-        Ok(vec![])
-    }
-
     pub fn get_font_style(&self) -> String {
         let generated_style = self
             .fonts

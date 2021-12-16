@@ -24,11 +24,11 @@ async fn build_with_translations(_config: &fpm::Config) -> fpm::Result<()> {
     todo!("build does not yet support translations, only translation-of")
 }
 
-async fn build_with_original(config: &fpm::Config) -> fpm::Result<()> {
+async fn build_with_original(config: &fpm::Config, original: &fpm::Package) -> fpm::Result<()> {
     let translation_snapshots = if let Some(ref original) = config.package.translation_of.as_ref() {
         let translation_config = config.read_translation().await?;
-        let documents = config
-            .get_translation_documents()
+        let documents = original
+            .get_documents(config)
             .await?
             .iter()
             .map(|v| {
