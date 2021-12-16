@@ -1,13 +1,5 @@
 pub async fn build(config: &fpm::Config) -> fpm::Result<()> {
-    build_(config, true).await
-}
-
-async fn build_(config: &fpm::Config, is_rebuilt_needed: bool) -> fpm::Result<()> {
     use fpm::utils::HasElements;
-
-    if config.build_dir().exists() && !is_rebuilt_needed {
-        return Ok(());
-    }
 
     tokio::fs::create_dir_all(config.build_dir()).await?;
 
@@ -54,7 +46,15 @@ async fn build_with_original(config: &fpm::Config, original: &fpm::Package) -> f
 
         // In this case, if original package is already built then we don't need to built it again
         // as the files in original package is not going to change.
-        build_(&original_config, false).await?;
+        // dbg!("1", &original_config.root);
+        if !original_config.build_dir().exists() {
+            println!(
+                "Building the {} package. (This is an original package)",
+                original.name
+            );
+            // dbg!("2");
+            build(&original_config).await?;
+        }
 
         // copy original .package folder to root .package folder
         // is this needed?
@@ -77,7 +77,7 @@ async fn build_with_original(config: &fpm::Config, original: &fpm::Package) -> f
     let dst = config.build_dir();
     fpm::copy_dir_all(src, dst).await?;
 
-    // overwrite all the files in root .build which is present in root
+    // overwrite all the files in root .build directory which is translated in root package
     let original_snapshots = fpm::snapshot::get_latest_snapshots(&config.original_path()?).await?;
 
     let documents = std::collections::BTreeMap::from_iter(
@@ -87,8 +87,11 @@ async fn build_with_original(config: &fpm::Config, original: &fpm::Package) -> f
             .filter(|x| original_snapshots.contains_key(x.get_id().as_str()))
             .map(|v| (v.get_id(), v)),
     );
-
-    process_files(config, &config.root, &documents, false).await
+    println!(
+        "Building the {} package. (This is the root/current package)",
+        config.package.name
+    );
+    process_files(config, &config.root, &documents, true).await
 }
 
 async fn process_files(
