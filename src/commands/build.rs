@@ -54,6 +54,8 @@ async fn build_with_original(config: &fpm::Config, original: &fpm::Package) -> f
 
         // copy original .package folder to root .package folder
         // Is this needed?
+        // Yes: if we want to automatically add dependencies of original package to root package
+        // No: If we don't want anything like this
         {
             let src = camino::Utf8PathBuf::from(".packages");
             if src.exists() {
@@ -65,7 +67,7 @@ async fn build_with_original(config: &fpm::Config, original: &fpm::Package) -> f
     }
 
     // Built the root package
-    // First copy original .build to root .build and then overwrite the translated one
+    // First copy original .build to root .build and then overwrite with the translated one
     let src = config
         .root
         .join(".packages")
@@ -77,6 +79,7 @@ async fn build_with_original(config: &fpm::Config, original: &fpm::Package) -> f
     // overwrite all the files in root .build directory which is translated in root package
     let original_snapshots = fpm::snapshot::get_latest_snapshots(&config.original_path()?).await?;
 
+    // ignore all those documents/files which is not in original package
     let documents = std::collections::BTreeMap::from_iter(
         fpm::get_documents(config)
             .await?
