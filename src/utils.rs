@@ -31,7 +31,7 @@ pub(crate) fn track_path(id: &str, base_path: &str) -> camino::Utf8PathBuf {
 }
 
 #[async_recursion::async_recursion(?Send)]
-pub(crate) async fn copy_dir_all(
+pub async fn copy_dir_all(
     src: impl AsRef<std::path::Path> + 'static,
     dst: impl AsRef<std::path::Path> + 'static,
 ) -> std::io::Result<()> {

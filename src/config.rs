@@ -122,20 +122,6 @@ impl Config {
         };
     }
 
-    /// `read_translation()` is wrong and will go away soon
-    pub async fn read_translation(&self) -> fpm::Result<Config> {
-        let original = match self.package.translation_of.as_ref() {
-            Some(ref original) => original,
-            None => {
-                return Err(fpm::Error::UsageError {
-                    message: "not a translation package".to_string(),
-                })
-            }
-        };
-        let root = self.root.join(".packages").join(original.name.as_str());
-        return Config::read_by_path(root).await;
-    }
-
     /// `read()` is the way to read a Config.
     pub async fn read() -> fpm::Result<Config> {
         let original_directory: camino::Utf8PathBuf =
@@ -148,15 +134,8 @@ impl Config {
                 });
             }
         };
-        Config::read_by_path(root).await
-    }
-
-    /// `read_by_path()` will be gone soon
-    pub async fn read_by_path(path: camino::Utf8PathBuf) -> fpm::Result<Config> {
-        let original_directory: camino::Utf8PathBuf =
-            std::env::current_dir()?.canonicalize()?.try_into()?;
         let b = {
-            let doc = tokio::fs::read_to_string(path.join("FPM.ftd")).await?;
+            let doc = tokio::fs::read_to_string(root.join("FPM.ftd")).await?;
             let lib = fpm::Library::default();
             match ftd::p2::Document::from("FPM", doc.as_str(), &lib) {
                 Ok(v) => v,
@@ -181,7 +160,7 @@ impl Config {
 
         let fonts: Vec<fpm::Font> = b.get("fpm#font")?;
 
-        if path.file_name() != Some(package.name.as_str()) {
+        if root.file_name() != Some(package.name.as_str()) {
             return Err(fpm::Error::PackageError {
                 message: "package name and folder name must match".to_string(),
             });
@@ -207,14 +186,14 @@ impl Config {
             }
         };
 
-        fpm::dependency::ensure(path.clone(), deps.clone()).await?;
+        fpm::dependency::ensure(root.clone(), deps.clone()).await?;
         if let Some(translation_of) = package.translation_of.as_ref() {
-            translation_of.process(path.clone(), "github").await?;
+            translation_of.process(root.clone(), "github").await?;
         }
 
         Ok(Config {
             package,
-            root: path,
+            root,
             original_directory,
             fonts,
             dependencies: deps,

@@ -23,6 +23,7 @@ pub(crate) use font::Font;
 pub(crate) use library::Library;
 pub(crate) use snapshot::Snapshot;
 pub(crate) use tracker::Track;
+pub use utils::copy_dir_all;
 pub(crate) use utils::get_timestamp_nanosecond;
 
 pub fn fpm_ftd() -> &'static str {

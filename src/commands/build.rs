@@ -1,5 +1,13 @@
 pub async fn build(config: &fpm::Config) -> fpm::Result<()> {
+    build_(config, true).await
+}
+
+async fn build_(config: &fpm::Config, is_rebuilt_needed: bool) -> fpm::Result<()> {
     use fpm::utils::HasElements;
+
+    if config.build_dir().exists() && !is_rebuilt_needed {
+        return Ok(());
+    }
 
     tokio::fs::create_dir_all(config.build_dir()).await?;
 
@@ -33,32 +41,50 @@ async fn build_with_translations(_config: &fpm::Config) -> fpm::Result<()> {
     todo!("build does not yet support translations, only translation-of")
 }
 
+#[async_recursion::async_recursion(?Send)]
 async fn build_with_original(config: &fpm::Config, original: &fpm::Package) -> fpm::Result<()> {
-    let translation_config = config.read_translation().await?;
-
-    std::env::set_current_dir(&config.root.join(".packages").join(original.name.as_str()))?;
-    let original_documents = std::collections::BTreeMap::from_iter(
-        fpm::get_documents(&translation_config)
-            .await?
-            .into_iter()
-            .map(|v| (v.get_id(), v)),
-    );
-    process_files(&translation_config, &config.root, &original_documents, true).await?;
-
-    // is it needed??
+    // This is the translation package then first build the original package
     {
-        let src = camino::Utf8PathBuf::from(".packages");
-        if src.exists() {
-            fpm::utils::copy_dir_all(src, config.root.join(".packages")).await?;
+        // copy original .build to root .build
+        // set current dir to original package and build it
+        // This would create .build directory inside original package
+        // This .build directory would be copied to root .build directory everytime `fpm build` is called
+        std::env::set_current_dir(&config.root.join(".packages").join(original.name.as_str()))?;
+        let original_config = fpm::Config::read().await?;
+
+        // In this case, if original package is already built then we don't need to built it again
+        // as the files in original package is not going to change.
+        build_(&original_config, false).await?;
+
+        // copy original .package folder to root .package folder
+        // is this needed?
+        {
+            let src = camino::Utf8PathBuf::from(".packages");
+            if src.exists() {
+                fpm::copy_dir_all(src, config.root.join(".packages")).await?;
+            }
         }
+        // set current dir to root again
+        std::env::set_current_dir(&config.root)?;
     }
-    std::env::set_current_dir(&config.root)?;
+
+    // Built the root package
+    let src = config
+        .root
+        .join(".packages")
+        .join(original.name.as_str())
+        .join(".build");
+    let dst = config.build_dir();
+    fpm::copy_dir_all(src, dst).await?;
+
+    // overwrite all the files in root .build which is present in root
+    let original_snapshots = fpm::snapshot::get_latest_snapshots(&config.original_path()?).await?;
 
     let documents = std::collections::BTreeMap::from_iter(
         fpm::get_documents(config)
             .await?
             .into_iter()
-            .filter(|x| original_documents.contains_key(x.get_id().as_str()))
+            .filter(|x| original_snapshots.contains_key(x.get_id().as_str()))
             .map(|v| (v.get_id(), v)),
     );
 
