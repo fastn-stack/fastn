@@ -1,18 +1,20 @@
 pub async fn build(config: &fpm::Config) -> fpm::Result<()> {
+    use fpm::utils::HasElements;
+
     tokio::fs::create_dir_all(config.build_dir()).await?;
 
     match (
         config.package.translation_of.as_ref(),
-        config.package.translations.is_empty(),
+        config.package.translations.has_elements(),
     ) {
-        (Some(_), false) => {
+        (Some(_), true) => {
             // No package can be both a translation of something and has its own
             // translations, when building `config` we ensured this was rejected
             unreachable!()
         }
-        (Some(original), true) => build_with_original(config, original).await,
-        (None, true) => build_simple(config).await,
-        (None, false) => build_with_translations(config).await,
+        (Some(original), false) => build_with_original(config, original).await,
+        (None, false) => build_simple(config).await,
+        (None, true) => build_with_translations(config).await,
     }
 }
 
