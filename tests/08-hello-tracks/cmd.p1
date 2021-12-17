@@ -1,12 +1,15 @@
 -- fbt:
-cmd: cd amitu && $FBT_CWD/target/debug/fpm --test build
-output: amitu/.build
+cmd: cd amitu && $FBT_CWD/target/debug/fpm --test start-tracking index-track.ftd --target index.ftd && $FBT_CWD/target/debug/fpm status && $FBT_CWD/target/debug/fpm --test mark-upto-date index-track.ftd && $FBT_CWD/target/debug/fpm --test mark-upto-date index-track.ftd --target index.ftd
+output: amitu/.tracks
 
 
 -- stdout:
 
-Processed FPM.ftd
-Processed hello.txt
-Processed index-track.ftd
-Processed index.ftd
+index-track.ftd is now tracking index.ftd
+Modified: index.ftd
+Never marked: index-track.ftd -> index.ftd
+Which file to mark? index-track.ftd tracks following files
+index.ftd
+index-track.ftd is now marked upto date with index.ftd
+
 
