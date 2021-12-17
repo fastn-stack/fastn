@@ -32,6 +32,14 @@ async fn check(
         });
     };
 
+    let track_path = fpm::utils::track_path(who, base_path);
+    let tracks = fpm::tracker::get_tracks(base_path, &track_path)?;
+
+    if tracks.contains_key(whom) {
+        println!("{} is already tracking {}", who, whom);
+        return Ok(());
+    }
+
     if let Some((dir, _)) = who.rsplit_once('/') {
         tokio::fs::create_dir_all(
             camino::Utf8PathBuf::from(base_path)
