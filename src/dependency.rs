@@ -47,6 +47,8 @@ impl DependencyTemp {
 impl fpm::Package {
     /// `process()` checks the package exists in `.packages` or `FPM_HOME` folder (`FPM_HOME` not
     /// yet implemented), and if not downloads and unpacks the method.
+    /// It then calls `process_fpm()` which checks the dependencies of the downloaded packages and
+    /// then again call `process()` if dependent package is not downloaded or available
     pub async fn process(&self, base_dir: camino::Utf8PathBuf, repo: &str) -> fpm::Result<()> {
         use tokio::io::AsyncWriteExt;
         // TODO: in future we will check if we have a new version in the package's repo.
@@ -111,6 +113,14 @@ impl fpm::Package {
         .await
     }
 
+    /// This function is called by `process()` or recursively called by itself.
+    /// It checks the `FPM.ftd` file of dependent package and find out all the dependency packages.
+    /// If dependent package is not available, it calls `process()` to download it inside `.packages` directory
+    /// and if dependent package is available, it copies it to `.packages` directory
+    /// At the end of both cases, `process_fpm()` is called again
+    ///
+    /// `process_fpm()`, together with `process()`, recursively make dependency packages available inside
+    /// `.packages` directory
     #[async_recursion::async_recursion]
     async fn process_fpm(
         root: camino::Utf8PathBuf,
@@ -160,6 +170,7 @@ impl fpm::Package {
                 .process(base_path.clone(), dep.repo.as_str())
                 .await?;
         }
+
         if let Some(translation_of) = package.translation_of.as_ref() {
             let original_path = root.join(".packages").join(translation_of.name.as_str());
             if original_path.exists() {
