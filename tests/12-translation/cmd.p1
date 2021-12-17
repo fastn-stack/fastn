@@ -1,7 +1,6 @@
 -- fbt:
 cmd: cd amitu && $FBT_CWD/target/debug/fpm --test build
 output: amitu/.build
-skip: Temporarily skipped
 
 -- stdout:
 
