@@ -48,6 +48,7 @@ async fn build_with_original(config: &fpm::Config, _original: &fpm::Package) -> 
         .map(|v| original_path.join(v).into_std_path_buf())
         .collect::<Vec<std::path::PathBuf>>();
 
+    // documents contains all the files in original package
     let mut documents = std::collections::BTreeMap::from_iter(
         fpm::paths_to_files(files, original_path.as_path())
             .await?
@@ -55,7 +56,7 @@ async fn build_with_original(config: &fpm::Config, _original: &fpm::Package) -> 
             .map(|v| (v.get_id(), v)),
     );
 
-    // Fetch all files from the root package
+    // Fetch all files from the current package
     // ignore all those documents/files which is not in original package
     // Overwrite the files having same name/id
     documents.extend(

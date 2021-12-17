@@ -47,7 +47,6 @@ impl DependencyTemp {
 impl fpm::Package {
     /// `process()` checks the package exists in `.packages` or `FPM_HOME` folder (`FPM_HOME` not
     /// yet implemented), and if not downloads and unpacks the method.
-    #[async_recursion::async_recursion]
     pub async fn process(&self, base_dir: camino::Utf8PathBuf, repo: &str) -> fpm::Result<()> {
         use tokio::io::AsyncWriteExt;
         // TODO: in future we will check if we have a new version in the package's repo.
@@ -112,6 +111,7 @@ impl fpm::Package {
         .await
     }
 
+    #[async_recursion::async_recursion]
     async fn process_fpm(
         root: camino::Utf8PathBuf,
         base_path: camino::Utf8PathBuf,
@@ -150,11 +150,11 @@ impl fpm::Package {
         for dep in deps {
             let dep_path = root.join(".packages").join(dep.package.name.as_str());
             if dep_path.exists() {
-                futures::executor::block_on(fpm::copy_dir_all(
-                    dep_path,
-                    base_path.join(".packages").join(dep.package.name.as_str()),
-                ))?;
-                continue;
+                let dst = base_path.join(".packages").join(dep.package.name.as_str());
+                if !dst.exists() {
+                    futures::executor::block_on(fpm::copy_dir_all(dep_path, dst.clone()))?;
+                }
+                fpm::Package::process_fpm(dst, base_path.clone()).await?;
             }
             dep.package
                 .process(base_path.clone(), dep.repo.as_str())
@@ -163,12 +163,13 @@ impl fpm::Package {
         if let Some(translation_of) = package.translation_of.as_ref() {
             let original_path = root.join(".packages").join(translation_of.name.as_str());
             if original_path.exists() {
-                futures::executor::block_on(fpm::copy_dir_all(
-                    original_path,
-                    base_path
-                        .join(".packages")
-                        .join(translation_of.name.as_str()),
-                ))?;
+                let dst = base_path
+                    .join(".packages")
+                    .join(translation_of.name.as_str());
+                if !dst.exists() {
+                    futures::executor::block_on(fpm::copy_dir_all(original_path, dst.clone()))?;
+                }
+                fpm::Package::process_fpm(dst, base_path.clone()).await?;
             } else {
                 translation_of.process(base_path.clone(), "github").await?;
             }

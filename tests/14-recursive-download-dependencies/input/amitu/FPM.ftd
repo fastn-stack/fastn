@@ -1,0 +1,6 @@
+-- import: fpm
+
+-- fpm.package: amitu
+
+-- fpm.dependency: arpita-jaiswal/blog
+repo: github

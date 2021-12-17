@@ -1,0 +1,9 @@
+-- import: arpita-jaiswal/blog as ajblog
+
+-- ftd.row say-hello:
+
+--- ajblog.say-hello:
+
+--- ftd.text: amitu says hello
+
+-- say-hello:
