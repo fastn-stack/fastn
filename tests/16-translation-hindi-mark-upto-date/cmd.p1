@@ -1,8 +1,0 @@
--- fbt:
-cmd: cd amitu && $FBT_CWD/target/debug/fpm --test mark-upto-date lib.ftd
-output: amitu/.tracks
-
--- stdout:
-
-lib.ftd is now marked upto date
-
