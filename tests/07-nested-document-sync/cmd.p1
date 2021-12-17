@@ -1,12 +1,14 @@
 -- fbt:
-cmd: cd amitu && $FBT_CWD/target/debug/fpm --test sync
+cmd: cd amitu && $FBT_CWD/target/debug/fpm --test sync index.ftd nested/document.ftd && $FBT_CWD/target/debug/fpm --test sync
 output: amitu/.history
 
 
 -- stdout:
 
 Repo for amitu is github, directly syncing with .history.
-FPM.ftd
 index.ftd
 nested/document.ftd
+Repo for amitu is github, directly syncing with .history.
+FPM.ftd
 nested/index.ftd
+
