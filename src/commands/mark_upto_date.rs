@@ -57,7 +57,7 @@ async fn mark_upto_date_translation(
                 package: Some(original_package.name.clone()),
                 version: None,
                 other_timestamp: None,
-                self_timestamp: self_timestamp.clone(),
+                self_timestamp: *self_timestamp,
                 last_merged_version: Some(*original_timestamp),
             },
         );
