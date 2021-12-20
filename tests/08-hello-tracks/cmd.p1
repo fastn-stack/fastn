@@ -11,7 +11,7 @@ index-track.ftd is already tracking hello.txt
 Modified: index.ftd
 Never marked: index-track.ftd -> hello.txt
 Never marked: index-track.ftd -> index.ftd
-Which file to mark? index-track.ftd tracks following files
+Which file to mark? index-track.ftd tracks following files:
 hello.txt
 index.ftd
 index-track.ftd is now marked upto date with index.ftd

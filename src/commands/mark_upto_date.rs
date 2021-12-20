@@ -74,31 +74,36 @@ async fn mark_upto_date_simple(
     let file_path = fpm::utils::track_path(who, config.root.as_str());
     let mut tracks = fpm::tracker::get_tracks(config.root.as_str(), &file_path)?;
     if let Some(whom) = whom {
-        if let Some(track) = tracks.get_mut(whom) {
+        return if let Some(track) = tracks.get_mut(whom) {
             let snapshots = fpm::snapshot::get_latest_snapshots(&config.root).await?;
             if let Some(timestamp) = snapshots.get(whom) {
                 track.other_timestamp = Some(*timestamp);
                 write(&file_path, &tracks).await?;
                 println!("{} is now marked upto date with {}", who, whom);
-                return Ok(());
+                Ok(())
             } else {
-                eprintln!("Error: {} is removed. Can't mark {} upto date", whom, who);
+                fpm::usage_error(format!(
+                    "Error: {} is removed. Can't mark {} upto date",
+                    whom, who
+                ))
             }
         } else {
-            eprintln!("Error: {} is not tracking {}", who, whom);
+            fpm::usage_error(format!("Error: {} is not tracking {}", who, whom))
+        };
+    }
+
+    if tracks.is_empty() {
+        println!("{} tracks no file", who);
+    } else {
+        println!("Which file to mark? {} tracks following files:", who);
+        for track in tracks.keys() {
+            println!("{}", track);
         }
     }
 
-    if !tracks.is_empty() {
-        println!("Which file to mark? {} tracks following files", who);
-    } else {
-        println!("{} tracks no file", who);
-    }
-    for track in tracks.keys() {
-        println!("{}", track);
-    }
     Ok(())
 }
+
 async fn write(
     file_path: &camino::Utf8PathBuf,
     tracks: &std::collections::BTreeMap<String, fpm::Track>,
