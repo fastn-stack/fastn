@@ -26,8 +26,12 @@ pub(crate) use tracker::Track;
 pub(crate) use utils::{copy_dir_all, get_timestamp_nanosecond};
 
 fn fpm_ftd() -> &'static str {
-    include_str!("../fpm.ftd")
+    include_str!("../ftd/fpm.ftd")
 }
+
+// fn default_markdown() -> &'static str {
+//     include_str!("../ftd/markdown.ftd")
+// }
 
 #[derive(thiserror::Error, Debug)]
 pub enum Error {

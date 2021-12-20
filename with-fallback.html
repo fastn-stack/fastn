@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ftd</title>
+
+    <script type="ftd" id="ftd-data-message">
+        __ftd_data_message__
+    </script>
+    <script type="ftd" id="ftd-external-children-message">
+        __ftd_external_children_message__
+    </script>
+    <script type="ftd" id="ftd-data-main">
+        __ftd_data_main__
+    </script>
+    <script type="ftd" id="ftd-external-children-main">
+        __ftd_external_children_main__
+    </script>
+    <script type="ftd" id="ftd-data-fallback">
+        __ftd_data_fallback__
+    </script>
+    <script type="ftd" id="ftd-external-children-fallback">
+        __ftd_external_children_fallback__
+    </script>
+
+    <script>
+        __ftd_js__
+    </script>
+
+    <style>
+        __ftd_css__
+    </style>
+
+</head>
+<body>
+
+<div id="message">__message__</div>
+<div id="main">__main__</div>
+<div id="fallback" style="display: none">__fallback__</div>
+
+<script>
+    function show_main() {
+        document.getElementById("main").style.display = "block";
+        document.getElementById("fallback").style.display = "none";
+    }
+
+    function show_fallback() {
+        document.getElementById("main").style.display = "none";
+        document.getElementById("fallback").style.display = "block";
+    }
+
+    window.ftd.init(
+        "message",
+        JSON.parse(document.getElementById("ftd-data-message").innerText),
+        JSON.parse(document.getElementById("ftd-external-children-message").innerText)
+    );
+    window.ftd.init(
+        "main",
+        JSON.parse(document.getElementById("ftd-data-main").innerText),
+        JSON.parse(document.getElementById("ftd-external-children-main").innerText)
+    );
+    window.ftd.init(
+        "fallback",
+        JSON.parse(document.getElementById("ftd-data-fallback").innerText),
+        JSON.parse(document.getElementById("ftd-external-children-fallback").innerText)
+    );
+</script>
+</body>
+</html>

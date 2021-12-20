@@ -77,13 +77,23 @@ async fn process_files(
     documents: &std::collections::BTreeMap<String, fpm::File>,
 ) -> fpm::Result<()> {
     for (id, file) in documents.iter() {
-        match file {
-            fpm::File::Ftd(doc) => process_ftd(doc, config, id, base_path.as_str()).await?,
-            fpm::File::Static(sa) => process_static(sa, id, base_path.as_str()).await?,
-            fpm::File::Markdown(doc) => process_markdown(doc, config).await?,
-        }
-        println!("Processed {}", id);
+        process_file(config, base_path, file, id).await?
     }
+    Ok(())
+}
+
+async fn process_file(
+    config: &fpm::Config,
+    base_path: &camino::Utf8PathBuf,
+    file: &fpm::File,
+    id: &str,
+) -> fpm::Result<()> {
+    match file {
+        fpm::File::Ftd(doc) => process_ftd(doc, config, id, base_path.as_str()).await?,
+        fpm::File::Static(sa) => process_static(sa, id, base_path.as_str()).await?,
+        fpm::File::Markdown(doc) => process_markdown(doc, config).await?,
+    }
+    println!("Processed {}", id);
     Ok(())
 }
 
@@ -91,14 +101,7 @@ async fn process_markdown(_doc: &fpm::Document, _config: &fpm::Config) -> fpm::R
     // if let Ok(c) = tokio::fs::read_to_string("./FPM/markdown.ftd").await {
     //     c
     // } else {
-    //     let d = indoc::indoc! {"
-    //         -- import: fpm
-    //
-    //         -- ftd.text:
-    //
-    //         $fpm.markdown-content
-    //         "};
-    //     d.to_string()
+    //     fpm::default_markdown().to_string()
     // }
     // todo
     Ok(())
