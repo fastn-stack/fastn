@@ -1,1 +1,7 @@
--- ftd.text: Out of date
+-- import: fpm
+
+-- ftd.row:
+spacing: 5
+
+--- ftd.text: $fpm.document-title
+-- ftd.text: is out of date
