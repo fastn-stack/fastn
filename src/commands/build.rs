@@ -163,7 +163,7 @@ async fn process_ftd(
     id: &str,
     base_path: &str,
 ) -> fpm::Result<()> {
-    if !(main.depth == 1 && main.id.eq("index.ftd")) {
+    if !main.id.eq("index.ftd") {
         std::fs::create_dir_all(format!("{}/.build/{}", base_path, id.replace(".ftd", "")))?;
     }
     let file_rel_path = if id.eq("index.ftd") {

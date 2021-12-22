@@ -89,9 +89,9 @@ impl TranslatedDocument {
                         TranslatedDocument::Outdated {
                             original: original_document.clone(),
                             translated: translated_document.clone(),
-                            last_marked_on: last_merged_version.clone(),
+                            last_marked_on: *last_merged_version,
                             original_latest: timestamp,
-                            translated_latest: self_timestamp.clone(),
+                            translated_latest: *self_timestamp,
                         },
                     );
                     continue;
