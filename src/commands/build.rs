@@ -26,7 +26,7 @@ async fn build_simple(config: &fpm::Config) -> fpm::Result<()> {
             .map(|v| (v.get_id(), v)),
     );
 
-    process_files(config, &config.original_directory, &documents).await
+    process_files(config, &documents).await
 }
 
 async fn build_with_translations(_config: &fpm::Config) -> fpm::Result<()> {
@@ -77,43 +77,35 @@ async fn build_with_original(config: &fpm::Config, _original: &fpm::Package) -> 
 
     // Process all the files collected from original and root package
     for translated_document in translated_documents.values() {
-        translated_document.html(config, &config.root).await?;
+        translated_document.html(config).await?;
     }
     Ok(())
 }
 
 async fn process_files(
     config: &fpm::Config,
-    base_path: &camino::Utf8PathBuf,
     documents: &std::collections::BTreeMap<String, fpm::File>,
 ) -> fpm::Result<()> {
     for file in documents.values() {
-        process_file(config, base_path, file, None, None).await?
+        process_file(config, file, None, None, None).await?
     }
     Ok(())
 }
 
 pub(crate) async fn process_file(
     config: &fpm::Config,
-    base_path: &camino::Utf8PathBuf,
     main: &fpm::File,
     fallback: Option<&fpm::File>,
     message: Option<&str>,
+    diff: Option<String>,
 ) -> fpm::Result<()> {
     if let Some(fallback) = fallback {
         match (main, fallback) {
             (fpm::File::Ftd(main_doc), fpm::File::Ftd(fallback_doc)) => {
-                process_ftd(
-                    main_doc,
-                    Some(fallback_doc),
-                    message,
-                    config,
-                    base_path.as_str(),
-                )
-                .await?
+                process_ftd(config, main_doc, Some(fallback_doc), message, diff).await?
             }
             (fpm::File::Static(main_sa), fpm::File::Static(_)) => {
-                process_static(main_sa, base_path.as_str()).await?
+                process_static(main_sa, config.root.as_str()).await?
             }
             (fpm::File::Markdown(main_sa), fpm::File::Markdown(_)) => {
                 process_markdown(main_sa, config).await?
@@ -131,8 +123,8 @@ pub(crate) async fn process_file(
         return Ok(());
     }
     match main {
-        fpm::File::Ftd(doc) => process_ftd(doc, None, message, config, base_path.as_str()).await?,
-        fpm::File::Static(sa) => process_static(sa, base_path.as_str()).await?,
+        fpm::File::Ftd(doc) => process_ftd(config, doc, None, message, diff).await?,
+        fpm::File::Static(sa) => process_static(sa, config.root.as_str()).await?,
         fpm::File::Markdown(doc) => process_markdown(doc, config).await?,
     }
     println!("Processed {}", main.get_id());
@@ -150,12 +142,13 @@ async fn process_markdown(_doc: &fpm::Document, _config: &fpm::Config) -> fpm::R
 }
 
 async fn process_ftd(
+    config: &fpm::Config,
     main: &fpm::Document,
     fallback: Option<&fpm::Document>,
     message: Option<&str>,
-    config: &fpm::Config,
-    base_path: &str,
+    diff: Option<String>,
 ) -> fpm::Result<()> {
+    let base_path = config.root.as_str();
     if !main.id.eq("index.ftd") {
         std::fs::create_dir_all(format!(
             "{}/.build/{}",
@@ -173,10 +166,18 @@ async fn process_ftd(
 
     match (fallback, message) {
         (Some(fallback), Some(message)) => {
-            write_with_fallback(config, main, fallback, new_file_path.as_str(), message).await?
+            write_with_fallback(
+                config,
+                main,
+                fallback,
+                new_file_path.as_str(),
+                message,
+                diff,
+            )
+            .await?
         }
         (None, Some(message)) => {
-            write_with_message(config, main, new_file_path.as_str(), message).await?
+            write_with_message(config, main, new_file_path.as_str(), message, diff).await?
         }
         _ => write_default(config, main, new_file_path.as_str()).await?,
     }
@@ -194,6 +195,7 @@ async fn process_ftd(
             config: config.clone(),
             markdown: None,
             document_id: main.id.clone(),
+            diff: None,
         };
 
         let main_ftd_doc =
@@ -239,6 +241,7 @@ async fn process_ftd(
         main: &fpm::Document,
         new_file_path: &str,
         message: &str,
+        diff: Option<String>,
     ) -> fpm::Result<()> {
         use tokio::io::AsyncWriteExt;
 
@@ -246,6 +249,7 @@ async fn process_ftd(
             config: config.clone(),
             markdown: None,
             document_id: main.id.clone(),
+            diff,
         };
 
         let main_ftd_doc =
@@ -319,6 +323,7 @@ async fn process_ftd(
         fallback: &fpm::Document,
         new_file_path: &str,
         message: &str,
+        diff: Option<String>,
     ) -> fpm::Result<()> {
         use tokio::io::AsyncWriteExt;
 
@@ -326,6 +331,7 @@ async fn process_ftd(
             config: config.clone(),
             markdown: None,
             document_id: main.id.clone(),
+            diff,
         };
 
         let main_ftd_doc =

@@ -4,4 +4,8 @@
 spacing: 5
 
 --- ftd.text: $fpm.document-title
--- ftd.text: is out of date
+--- ftd.text: is out of date
+
+-- ftd.text:
+
+$fpm.diff

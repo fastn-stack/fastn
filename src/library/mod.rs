@@ -6,21 +6,39 @@ pub struct Library {
     pub config: fpm::Config,
     pub markdown: Option<(String, String)>,
     pub document_id: String,
+    pub diff: Option<String>,
 }
 
 impl ftd::p2::Library for Library {
     fn get(&self, name: &str) -> Option<String> {
         if name == "fpm" {
-            let fpm_base = format!(
-                indoc::indoc! {"
-                    {fpm_base}
-                    
-                    -- string document-title: {document_id}
-
-                    "},
-                fpm_base = fpm::fpm_ftd().to_string(),
-                document_id = self.document_id,
-            );
+            let fpm_base = {
+                let mut fpm_base = format!(
+                    indoc::indoc! {"
+                        {fpm_base}
+                        
+                        -- string document-title: {document_id}
+    
+                        "},
+                    fpm_base = fpm::fpm_ftd().to_string(),
+                    document_id = self.document_id,
+                );
+                if let Some(ref diff) = self.diff {
+                    fpm_base = format!(
+                        indoc::indoc! {"
+                        {fpm_base}
+                        
+                        -- string diff: 
+                        
+                        {diff}
+    
+                        "},
+                        fpm_base = fpm_base,
+                        diff = diff,
+                    );
+                }
+                fpm_base
+            };
             return Some(match self.markdown.as_ref() {
                 Some((filename, content)) => format!(
                     indoc::indoc! {"
