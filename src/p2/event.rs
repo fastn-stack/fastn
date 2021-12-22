@@ -282,11 +282,11 @@ impl Action {
             _ if a.starts_with("message-host") => {
                 let value = a.replace("message-host", "").trim().to_string();
                 let target = if value.is_empty() {
-                    "ftd_message"
+                    "ftd_message".to_string()
                 } else {
                     value
-                }
-                .to_string();
+                };
+
                 Ok(Self {
                     action: ActionKind::MessageHost,
                     target,
