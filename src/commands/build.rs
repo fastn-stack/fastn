@@ -76,10 +76,8 @@ async fn build_with_original(config: &fpm::Config, _original: &fpm::Package) -> 
     .await?;
 
     // Process all the files collected from original and root package
-    for (id, translated_document) in translated_documents {
-        translated_document
-            .html(config, &config.root, id.as_str())
-            .await?;
+    for translated_document in translated_documents.values() {
+        translated_document.html(config, &config.root).await?;
     }
     Ok(())
 }
@@ -89,8 +87,8 @@ async fn process_files(
     base_path: &camino::Utf8PathBuf,
     documents: &std::collections::BTreeMap<String, fpm::File>,
 ) -> fpm::Result<()> {
-    for (id, file) in documents.iter() {
-        process_file(config, base_path, file, None, None, id).await?
+    for file in documents.values() {
+        process_file(config, base_path, file, None, None).await?
     }
     Ok(())
 }
@@ -101,7 +99,6 @@ pub(crate) async fn process_file(
     main: &fpm::File,
     fallback: Option<&fpm::File>,
     message: Option<&str>,
-    id: &str,
 ) -> fpm::Result<()> {
     if let Some(fallback) = fallback {
         match (main, fallback) {
@@ -111,13 +108,12 @@ pub(crate) async fn process_file(
                     Some(fallback_doc),
                     message,
                     config,
-                    id,
                     base_path.as_str(),
                 )
                 .await?
             }
             (fpm::File::Static(main_sa), fpm::File::Static(_)) => {
-                process_static(main_sa, id, base_path.as_str()).await?
+                process_static(main_sa, base_path.as_str()).await?
             }
             (fpm::File::Markdown(main_sa), fpm::File::Markdown(_)) => {
                 process_markdown(main_sa, config).await?
@@ -131,17 +127,15 @@ pub(crate) async fn process_file(
                 })
             }
         }
-        println!("Processed {}", id);
+        println!("Processed {}", main.get_id());
         return Ok(());
     }
     match main {
-        fpm::File::Ftd(doc) => {
-            process_ftd(doc, None, message, config, id, base_path.as_str()).await?
-        }
-        fpm::File::Static(sa) => process_static(sa, id, base_path.as_str()).await?,
+        fpm::File::Ftd(doc) => process_ftd(doc, None, message, config, base_path.as_str()).await?,
+        fpm::File::Static(sa) => process_static(sa, base_path.as_str()).await?,
         fpm::File::Markdown(doc) => process_markdown(doc, config).await?,
     }
-    println!("Processed {}", id);
+    println!("Processed {}", main.get_id());
     Ok(())
 }
 
@@ -160,34 +154,36 @@ async fn process_ftd(
     fallback: Option<&fpm::Document>,
     message: Option<&str>,
     config: &fpm::Config,
-    id: &str,
     base_path: &str,
 ) -> fpm::Result<()> {
     if !main.id.eq("index.ftd") {
-        std::fs::create_dir_all(format!("{}/.build/{}", base_path, id.replace(".ftd", "")))?;
+        std::fs::create_dir_all(format!(
+            "{}/.build/{}",
+            base_path,
+            main.id.replace(".ftd", "")
+        ))?;
     }
-    let file_rel_path = if id.eq("index.ftd") {
+    let file_rel_path = if main.id.eq("index.ftd") {
         "index.html".to_string()
     } else {
-        id.replace(".ftd", "/index.html")
+        main.id.replace(".ftd", "/index.html")
     };
 
     let new_file_path = format!("{}/.build/{}", base_path, file_rel_path.as_str());
 
     match (fallback, message) {
         (Some(fallback), Some(message)) => {
-            write_with_fallback(id, config, main, fallback, new_file_path.as_str(), message).await?
+            write_with_fallback(config, main, fallback, new_file_path.as_str(), message).await?
         }
         (None, Some(message)) => {
-            write_with_message(id, config, main, new_file_path.as_str(), message).await?
+            write_with_message(config, main, new_file_path.as_str(), message).await?
         }
-        _ => write_default(id, config, main, new_file_path.as_str()).await?,
+        _ => write_default(config, main, new_file_path.as_str()).await?,
     }
 
     return Ok(());
 
     async fn write_default(
-        id: &str,
         config: &fpm::Config,
         main: &fpm::Document,
         new_file_path: &str,
@@ -197,17 +193,18 @@ async fn process_ftd(
         let lib = fpm::Library {
             config: config.clone(),
             markdown: None,
-            document_id: id.to_string(),
+            document_id: main.id.clone(),
         };
 
-        let main_ftd_doc = match ftd::p2::Document::from(id, main.content.as_str(), &lib) {
-            Ok(v) => v,
-            Err(e) => {
-                return Err(fpm::Error::PackageError {
-                    message: format!("failed to parse {:?}", &e),
-                });
-            }
-        };
+        let main_ftd_doc =
+            match ftd::p2::Document::from(main.id.as_str(), main.content.as_str(), &lib) {
+                Ok(v) => v,
+                Err(e) => {
+                    return Err(fpm::Error::PackageError {
+                        message: format!("failed to parse {:?}", &e),
+                    });
+                }
+            };
         let ftd_doc = main_ftd_doc.to_rt("main", &main.id);
 
         let mut f = tokio::fs::File::create(new_file_path).await?;
@@ -238,7 +235,6 @@ async fn process_ftd(
     }
 
     async fn write_with_message(
-        id: &str,
         config: &fpm::Config,
         main: &fpm::Document,
         new_file_path: &str,
@@ -249,17 +245,18 @@ async fn process_ftd(
         let lib = fpm::Library {
             config: config.clone(),
             markdown: None,
-            document_id: id.to_string(),
+            document_id: main.id.clone(),
         };
 
-        let main_ftd_doc = match ftd::p2::Document::from(id, main.content.as_str(), &lib) {
-            Ok(v) => v,
-            Err(e) => {
-                return Err(fpm::Error::PackageError {
-                    message: format!("failed to parse {:?}", &e),
-                });
-            }
-        };
+        let main_ftd_doc =
+            match ftd::p2::Document::from(main.id.as_str(), main.content.as_str(), &lib) {
+                Ok(v) => v,
+                Err(e) => {
+                    return Err(fpm::Error::PackageError {
+                        message: format!("failed to parse {:?}", &e),
+                    });
+                }
+            };
         let main_rt_doc = main_ftd_doc.to_rt("main", &main.id);
 
         let message_ftd_doc = match ftd::p2::Document::from("message", message, &lib) {
@@ -317,7 +314,6 @@ async fn process_ftd(
     }
 
     async fn write_with_fallback(
-        id: &str,
         config: &fpm::Config,
         main: &fpm::Document,
         fallback: &fpm::Document,
@@ -329,17 +325,18 @@ async fn process_ftd(
         let lib = fpm::Library {
             config: config.clone(),
             markdown: None,
-            document_id: id.to_string(),
+            document_id: main.id.clone(),
         };
 
-        let main_ftd_doc = match ftd::p2::Document::from(id, main.content.as_str(), &lib) {
-            Ok(v) => v,
-            Err(e) => {
-                return Err(fpm::Error::PackageError {
-                    message: format!("failed to parse {:?}", &e),
-                });
-            }
-        };
+        let main_ftd_doc =
+            match ftd::p2::Document::from(main.id.as_str(), main.content.as_str(), &lib) {
+                Ok(v) => v,
+                Err(e) => {
+                    return Err(fpm::Error::PackageError {
+                        message: format!("failed to parse {:?}", &e),
+                    });
+                }
+            };
         let main_rt_doc = main_ftd_doc.to_rt("main", &main.id);
 
         let message_ftd_doc = match ftd::p2::Document::from("message", message, &lib) {
@@ -352,14 +349,15 @@ async fn process_ftd(
         };
         let message_rt_doc = message_ftd_doc.to_rt("message", &main.id);
 
-        let fallback_ftd_doc = match ftd::p2::Document::from(id, fallback.content.as_str(), &lib) {
-            Ok(v) => v,
-            Err(e) => {
-                return Err(fpm::Error::PackageError {
-                    message: format!("failed to parse {:?}", &e),
-                });
-            }
-        };
+        let fallback_ftd_doc =
+            match ftd::p2::Document::from(main.id.as_str(), fallback.content.as_str(), &lib) {
+                Ok(v) => v,
+                Err(e) => {
+                    return Err(fpm::Error::PackageError {
+                        message: format!("failed to parse {:?}", &e),
+                    });
+                }
+            };
         let fallback_rt_doc = fallback_ftd_doc.to_rt("fallback", &fallback.id);
 
         let mut f = tokio::fs::File::create(new_file_path).await?;
@@ -423,17 +421,13 @@ async fn process_ftd(
     }
 }
 
-async fn process_static(sa: &fpm::Static, id: &str, base_path: &str) -> fpm::Result<()> {
-    if sa.depth != 1 {
-        std::fs::create_dir_all(format!(
-            "{}/.build/{}",
-            base_path,
-            id.rsplit_once("/").unwrap_or(("", id)).0
-        ))?;
+async fn process_static(sa: &fpm::Static, base_path: &str) -> fpm::Result<()> {
+    if let Some((dir, _)) = sa.id.rsplit_once("/") {
+        std::fs::create_dir_all(format!("{}/.build/{}", base_path, dir))?;
     }
     std::fs::copy(
         format!("{}/{}", sa.base_path, sa.id),
-        format!("{}/.build/{}", base_path, id),
+        format!("{}/.build/{}", base_path, sa.id),
     )?;
     Ok(())
 }

@@ -35,14 +35,12 @@ pub struct Document {
     pub id: String,
     pub content: String,
     pub parent_path: String,
-    pub depth: usize,
 }
 
 #[derive(Debug, Clone)]
 pub struct Static {
     pub id: String,
     pub base_path: String,
-    pub depth: usize,
 }
 
 pub(crate) async fn get_documents(config: &fpm::Config) -> fpm::Result<Vec<fpm::File>> {
@@ -103,8 +101,6 @@ pub(crate) async fn get_file(
         });
     }
 
-    let doc_path_str = doc_path.to_str().unwrap();
-
     let id = match std::fs::canonicalize(doc_path)?
         .to_str()
         .unwrap()
@@ -123,7 +119,6 @@ pub(crate) async fn get_file(
             id: id.to_string(),
             content: tokio::fs::read_to_string(&doc_path).await?,
             parent_path: base_path.to_string(),
-            depth: doc_path_str.split('/').count() - 1,
         }),
         Some((doc_name, "md")) => File::Markdown(Document {
             id: if doc_name == "README"
@@ -136,12 +131,10 @@ pub(crate) async fn get_file(
             },
             content: tokio::fs::read_to_string(&doc_path).await?,
             parent_path: base_path.to_string(),
-            depth: doc_path_str.split('/').count() - 1,
         }),
         _ => File::Static(Static {
             id: id.to_string(),
             base_path: base_path.to_string(),
-            depth: doc_path_str.split('/').count() - 1,
         }),
     })
 }

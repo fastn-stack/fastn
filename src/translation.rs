@@ -23,7 +23,6 @@ impl TranslatedDocument {
         &self,
         config: &fpm::Config,
         base_path: &camino::Utf8PathBuf,
-        id: &str,
     ) -> fpm::Result<()> {
         // handle the message
         // render with-fallback or with-message
@@ -41,7 +40,7 @@ impl TranslatedDocument {
             } => (translated, Some(original)),
             TranslatedDocument::UptoDate { translated, .. } => (translated, None),
         };
-        fpm::process_file(config, base_path, main, fallback, Some(message), id).await?;
+        fpm::process_file(config, base_path, main, fallback, Some(message)).await?;
         Ok(())
     }
 
