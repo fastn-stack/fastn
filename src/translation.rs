@@ -11,6 +11,7 @@ pub(crate) enum TranslatedDocument {
         translated: fpm::File, // main
         last_marked_on: u128,
         original_latest: u128,
+        #[allow(dead_code)]
         translated_latest: u128,
     },
     UptoDate {
