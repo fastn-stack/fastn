@@ -49,7 +49,7 @@ async fn build_with_original(config: &fpm::Config, _original: &fpm::Package) -> 
         .collect::<Vec<std::path::PathBuf>>();
 
     // documents contains all the files in original package
-    let mut documents = std::collections::BTreeMap::from_iter(
+    let original_documents = std::collections::BTreeMap::from_iter(
         fpm::paths_to_files(files, original_path.as_path())
             .await?
             .into_iter()
@@ -59,7 +59,8 @@ async fn build_with_original(config: &fpm::Config, _original: &fpm::Package) -> 
     // Fetch all files from the current package
     // ignore all those documents/files which is not in original package
     // Overwrite the files having same name/id
-    documents.extend(
+
+    let translated_documents = std::collections::BTreeMap::from_iter(
         fpm::get_documents(config)
             .await?
             .into_iter()
@@ -67,8 +68,20 @@ async fn build_with_original(config: &fpm::Config, _original: &fpm::Package) -> 
             .map(|v| (v.get_id(), v)),
     );
 
+    let translated_documents = fpm::TranslatedDocument::get_translated_document(
+        config,
+        original_documents,
+        translated_documents,
+    )
+    .await?;
+
     // Process all the files collected from original and root package
-    process_files(config, &config.root, &documents).await
+    for (id, translated_document) in translated_documents {
+        translated_document
+            .html(config, &config.root, id.as_str())
+            .await?;
+    }
+    Ok(())
 }
 
 async fn process_files(
@@ -77,19 +90,54 @@ async fn process_files(
     documents: &std::collections::BTreeMap<String, fpm::File>,
 ) -> fpm::Result<()> {
     for (id, file) in documents.iter() {
-        process_file(config, base_path, file, id).await?
+        process_file(config, base_path, file, None, None, id).await?
     }
     Ok(())
 }
 
-async fn process_file(
+pub(crate) async fn process_file(
     config: &fpm::Config,
     base_path: &camino::Utf8PathBuf,
-    file: &fpm::File,
+    main: &fpm::File,
+    fallback: Option<&fpm::File>,
+    message: Option<&str>,
     id: &str,
 ) -> fpm::Result<()> {
-    match file {
-        fpm::File::Ftd(doc) => process_ftd(doc, config, id, base_path.as_str()).await?,
+    if let Some(fallback) = fallback {
+        match (main, fallback) {
+            (fpm::File::Ftd(main_doc), fpm::File::Ftd(fallback_doc)) => {
+                process_ftd(
+                    main_doc,
+                    Some(fallback_doc),
+                    message,
+                    config,
+                    id,
+                    base_path.as_str(),
+                )
+                .await?
+            }
+            (fpm::File::Static(main_sa), fpm::File::Static(_)) => {
+                process_static(main_sa, id, base_path.as_str()).await?
+            }
+            (fpm::File::Markdown(main_sa), fpm::File::Markdown(_)) => {
+                process_markdown(main_sa, config).await?
+            }
+            (main_file, fallback_file) => {
+                return Err(fpm::Error::UsageError {
+                    message: format!(
+                        "{:?} has not the same type as {:?}",
+                        main_file, fallback_file
+                    ),
+                })
+            }
+        }
+        println!("Processed {}", id);
+        return Ok(());
+    }
+    match main {
+        fpm::File::Ftd(doc) => {
+            process_ftd(doc, None, message, config, id, base_path.as_str()).await?
+        }
         fpm::File::Static(sa) => process_static(sa, id, base_path.as_str()).await?,
         fpm::File::Markdown(doc) => process_markdown(doc, config).await?,
     }
@@ -108,14 +156,14 @@ async fn process_markdown(_doc: &fpm::Document, _config: &fpm::Config) -> fpm::R
 }
 
 async fn process_ftd(
-    doc: &fpm::Document,
+    main: &fpm::Document,
+    fallback: Option<&fpm::Document>,
+    message: Option<&str>,
     config: &fpm::Config,
     id: &str,
     base_path: &str,
 ) -> fpm::Result<()> {
-    use tokio::io::AsyncWriteExt;
-
-    if !(doc.depth == 1 && doc.id.eq("index.ftd")) {
+    if !(main.depth == 1 && main.id.eq("index.ftd")) {
         std::fs::create_dir_all(format!("{}/.build/{}", base_path, id.replace(".ftd", "")))?;
     }
     let file_rel_path = if id.eq("index.ftd") {
@@ -123,53 +171,256 @@ async fn process_ftd(
     } else {
         id.replace(".ftd", "/index.html")
     };
-    let lib = fpm::Library {
-        config: config.clone(),
-    };
-    let b = match ftd::p2::Document::from(id, doc.content.as_str(), &lib) {
-        Ok(v) => v,
-        Err(e) => {
-            return Err(fpm::Error::PackageError {
-                message: format!("failed to parse {:?}", &e),
-            });
-        }
-    };
 
     let new_file_path = format!("{}/.build/{}", base_path, file_rel_path.as_str());
-    let mut f = tokio::fs::File::create(new_file_path.as_str()).await?;
 
-    let ftd_doc = b.to_rt("main", &doc.id);
+    match (fallback, message) {
+        (Some(fallback), Some(message)) => {
+            write_with_fallback(id, config, main, fallback, new_file_path.as_str(), message).await?
+        }
+        (None, Some(message)) => {
+            write_with_message(id, config, main, new_file_path.as_str(), message).await?
+        }
+        _ => write_default(id, config, main, new_file_path.as_str()).await?,
+    }
 
-    f.write_all(
-        ftd::html()
-            .replace(
-                "__ftd_data__",
-                serde_json::to_string_pretty(&ftd_doc.data)
-                    .expect("failed to convert document to json")
-                    .as_str(),
-            )
-            .replace(
-                "__ftd_external_children__",
-                serde_json::to_string_pretty(&ftd_doc.external_children)
-                    .expect("failed to convert document to json")
-                    .as_str(),
-            )
-            .replace(
-                "__ftd__",
-                format!(
-                    "{}{}",
-                    b.html("main", &doc.id).as_str(),
-                    config.get_font_style(),
+    return Ok(());
+
+    async fn write_default(
+        id: &str,
+        config: &fpm::Config,
+        main: &fpm::Document,
+        new_file_path: &str,
+    ) -> fpm::Result<()> {
+        use tokio::io::AsyncWriteExt;
+
+        let lib = fpm::Library {
+            config: config.clone(),
+            markdown: None,
+            document_id: id.to_string(),
+        };
+
+        let main_ftd_doc = match ftd::p2::Document::from(id, main.content.as_str(), &lib) {
+            Ok(v) => v,
+            Err(e) => {
+                return Err(fpm::Error::PackageError {
+                    message: format!("failed to parse {:?}", &e),
+                });
+            }
+        };
+        let ftd_doc = main_ftd_doc.to_rt("main", &main.id);
+
+        let mut f = tokio::fs::File::create(new_file_path).await?;
+        f.write_all(
+            ftd::html()
+                .replace(
+                    "__ftd_data__",
+                    serde_json::to_string_pretty(&ftd_doc.data)
+                        .expect("failed to convert document to json")
+                        .as_str(),
                 )
-                .as_str(),
-            )
-            .as_str()
-            .replace("__ftd_js__", ftd::js())
-            .as_bytes(),
-    )
-    .await?;
+                .replace(
+                    "__ftd_external_children__",
+                    serde_json::to_string_pretty(&ftd_doc.external_children)
+                        .expect("failed to convert document to json")
+                        .as_str(),
+                )
+                .replace(
+                    "__ftd__",
+                    format!("{}{}", ftd_doc.html, config.get_font_style(),).as_str(),
+                )
+                .as_str()
+                .replace("__ftd_js__", ftd::js())
+                .as_bytes(),
+        )
+        .await?;
+        Ok(())
+    }
 
-    Ok(())
+    async fn write_with_message(
+        id: &str,
+        config: &fpm::Config,
+        main: &fpm::Document,
+        new_file_path: &str,
+        message: &str,
+    ) -> fpm::Result<()> {
+        use tokio::io::AsyncWriteExt;
+
+        let lib = fpm::Library {
+            config: config.clone(),
+            markdown: None,
+            document_id: id.to_string(),
+        };
+
+        let main_ftd_doc = match ftd::p2::Document::from(id, main.content.as_str(), &lib) {
+            Ok(v) => v,
+            Err(e) => {
+                return Err(fpm::Error::PackageError {
+                    message: format!("failed to parse {:?}", &e),
+                });
+            }
+        };
+        let main_rt_doc = main_ftd_doc.to_rt("main", &main.id);
+
+        let message_ftd_doc = match ftd::p2::Document::from("message", message, &lib) {
+            Ok(v) => v,
+            Err(e) => {
+                return Err(fpm::Error::PackageError {
+                    message: format!("failed to parse {:?}", &e),
+                });
+            }
+        };
+        let message_rt_doc = message_ftd_doc.to_rt("message", &main.id);
+
+        let mut f = tokio::fs::File::create(new_file_path).await?;
+
+        f.write_all(
+            fpm::with_message()
+                .replace(
+                    "__ftd_data_message__",
+                    serde_json::to_string_pretty(&message_rt_doc.data)
+                        .expect("failed to convert document to json")
+                        .as_str(),
+                )
+                .replace(
+                    "__ftd_external_children_message__",
+                    serde_json::to_string_pretty(&message_rt_doc.external_children)
+                        .expect("failed to convert document to json")
+                        .as_str(),
+                )
+                .replace(
+                    "__message__",
+                    format!("{}{}", message_rt_doc.html, config.get_font_style(),).as_str(),
+                )
+                .replace(
+                    "__ftd_data_main__",
+                    serde_json::to_string_pretty(&main_rt_doc.data)
+                        .expect("failed to convert document to json")
+                        .as_str(),
+                )
+                .replace(
+                    "__ftd_external_children_main__",
+                    serde_json::to_string_pretty(&main_rt_doc.external_children)
+                        .expect("failed to convert document to json")
+                        .as_str(),
+                )
+                .replace(
+                    "__main__",
+                    format!("{}{}", main_rt_doc.html, config.get_font_style(),).as_str(),
+                )
+                .as_str()
+                .replace("__ftd_js__", ftd::js())
+                .as_bytes(),
+        )
+        .await?;
+        Ok(())
+    }
+
+    async fn write_with_fallback(
+        id: &str,
+        config: &fpm::Config,
+        main: &fpm::Document,
+        fallback: &fpm::Document,
+        new_file_path: &str,
+        message: &str,
+    ) -> fpm::Result<()> {
+        use tokio::io::AsyncWriteExt;
+
+        let lib = fpm::Library {
+            config: config.clone(),
+            markdown: None,
+            document_id: id.to_string(),
+        };
+
+        let main_ftd_doc = match ftd::p2::Document::from(id, main.content.as_str(), &lib) {
+            Ok(v) => v,
+            Err(e) => {
+                return Err(fpm::Error::PackageError {
+                    message: format!("failed to parse {:?}", &e),
+                });
+            }
+        };
+        let main_rt_doc = main_ftd_doc.to_rt("main", &main.id);
+
+        let message_ftd_doc = match ftd::p2::Document::from("message", message, &lib) {
+            Ok(v) => v,
+            Err(e) => {
+                return Err(fpm::Error::PackageError {
+                    message: format!("failed to parse {:?}", &e),
+                });
+            }
+        };
+        let message_rt_doc = message_ftd_doc.to_rt("message", &main.id);
+
+        let fallback_ftd_doc = match ftd::p2::Document::from(id, fallback.content.as_str(), &lib) {
+            Ok(v) => v,
+            Err(e) => {
+                return Err(fpm::Error::PackageError {
+                    message: format!("failed to parse {:?}", &e),
+                });
+            }
+        };
+        let fallback_rt_doc = fallback_ftd_doc.to_rt("fallback", &fallback.id);
+
+        let mut f = tokio::fs::File::create(new_file_path).await?;
+
+        f.write_all(
+            fpm::with_fallback()
+                .replace(
+                    "__ftd_data_message__",
+                    serde_json::to_string_pretty(&message_rt_doc.data)
+                        .expect("failed to convert document to json")
+                        .as_str(),
+                )
+                .replace(
+                    "__ftd_external_children_message__",
+                    serde_json::to_string_pretty(&message_rt_doc.external_children)
+                        .expect("failed to convert document to json")
+                        .as_str(),
+                )
+                .replace(
+                    "__message__",
+                    format!("{}{}", message_rt_doc.html, config.get_font_style(),).as_str(),
+                )
+                .replace(
+                    "__ftd_data_fallback__",
+                    serde_json::to_string_pretty(&fallback_rt_doc.data)
+                        .expect("failed to convert document to json")
+                        .as_str(),
+                )
+                .replace(
+                    "__ftd_external_children_fallback__",
+                    serde_json::to_string_pretty(&fallback_rt_doc.external_children)
+                        .expect("failed to convert document to json")
+                        .as_str(),
+                )
+                .replace(
+                    "__fallback__",
+                    format!("{}{}", fallback_rt_doc.html, config.get_font_style(),).as_str(),
+                )
+                .replace(
+                    "__ftd_data_main__",
+                    serde_json::to_string_pretty(&main_rt_doc.data)
+                        .expect("failed to convert document to json")
+                        .as_str(),
+                )
+                .replace(
+                    "__ftd_external_children_main__",
+                    serde_json::to_string_pretty(&main_rt_doc.external_children)
+                        .expect("failed to convert document to json")
+                        .as_str(),
+                )
+                .replace(
+                    "__main__",
+                    format!("{}{}", main_rt_doc.html, config.get_font_style(),).as_str(),
+                )
+                .as_str()
+                .replace("__ftd_js__", ftd::js())
+                .as_bytes(),
+        )
+        .await?;
+        Ok(())
+    }
 }
 
 async fn process_static(sa: &fpm::Static, id: &str, base_path: &str) -> fpm::Result<()> {

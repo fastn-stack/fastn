@@ -8,8 +8,10 @@ mod font;
 mod library;
 mod snapshot;
 mod tracker;
+mod translation;
 mod utils;
 
+pub(crate) use commands::build::process_file;
 pub use commands::{
     build::build, diff::diff, mark_upto_date::mark_upto_date, start_tracking::start_tracking,
     status::status, stop_tracking::stop_tracking, sync::sync,
@@ -23,10 +25,30 @@ pub(crate) use font::Font;
 pub(crate) use library::{FPMLibrary, Library};
 pub(crate) use snapshot::Snapshot;
 pub(crate) use tracker::Track;
+pub(crate) use translation::TranslatedDocument;
 pub(crate) use utils::{copy_dir_all, get_timestamp_nanosecond};
 
 fn fpm_ftd() -> &'static str {
     include_str!("../ftd/fpm.ftd")
+}
+
+fn with_fallback() -> &'static str {
+    include_str!("../with-fallback.html")
+}
+
+fn with_message() -> &'static str {
+    include_str!("../with-message.html")
+}
+
+fn get_messages(status: &fpm::TranslatedDocument) -> &'static str {
+    match status {
+        TranslatedDocument::Missing { .. } => include_str!("../ftd/translation/missing.ftd"),
+        TranslatedDocument::NeverMarked { .. } => {
+            include_str!("../ftd/translation/never-marked.ftd")
+        }
+        TranslatedDocument::Outdated { .. } => include_str!("../ftd/translation/out-of-date.ftd"),
+        TranslatedDocument::UptoDate { .. } => include_str!("../ftd/translation/upto-date.ftd"),
+    }
 }
 
 // fn default_markdown() -> &'static str {
