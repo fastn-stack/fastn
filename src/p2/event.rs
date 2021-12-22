@@ -185,6 +185,7 @@ pub enum ActionKind {
     StopPropagation,
     PreventDefault,
     SetValue,
+    MessageHost,
 }
 
 impl serde::Serialize for ActionKind {
@@ -205,6 +206,7 @@ impl ActionKind {
             Self::StopPropagation => "stop-propagation",
             Self::PreventDefault => "prevent-default",
             Self::SetValue => "set-value",
+            Self::MessageHost => "message-host",
         }
     }
 
@@ -227,7 +229,8 @@ impl ActionKind {
             ftd::p2::ActionKind::Toggle
             | ftd::p2::ActionKind::StopPropagation
             | ftd::p2::ActionKind::PreventDefault
-            | ftd::p2::ActionKind::SetValue => {}
+            | ftd::p2::ActionKind::SetValue
+            | ftd::p2::ActionKind::MessageHost => {}
             ftd::p2::ActionKind::Increment | ftd::p2::ActionKind::Decrement => {
                 parameters.insert(
                     "by".to_string(),
@@ -272,6 +275,20 @@ impl Action {
                 .0;
                 Ok(Self {
                     action: ActionKind::Toggle,
+                    target,
+                    parameters: Default::default(),
+                })
+            }
+            _ if a.starts_with("message-host") => {
+                let value = a.replace("message-host", "").trim().to_string();
+                let target = if value.is_empty() {
+                    "ftd_message".to_string()
+                } else {
+                    value
+                };
+
+                Ok(Self {
+                    action: ActionKind::MessageHost,
                     target,
                     parameters: Default::default(),
                 })
