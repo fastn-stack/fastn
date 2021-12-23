@@ -336,6 +336,33 @@ pub enum TextSource {
     Default,
 }
 
+impl TextSource {
+    pub fn from_kind(
+        kind: &ftd::p2::Kind,
+        doc_id: &str,
+        line_number: usize,
+    ) -> ftd::p1::Result<Self> {
+        Ok(match kind {
+            ftd::p2::Kind::String { caption, body, .. } => {
+                if *caption {
+                    TextSource::Caption
+                } else if *body {
+                    TextSource::Body
+                } else {
+                    TextSource::Header
+                }
+            }
+            t => {
+                return ftd::e2(
+                    format!("expected string kind, found: {:?}", t),
+                    doc_id,
+                    line_number,
+                )
+            }
+        })
+    }
+}
+
 #[derive(Debug, PartialEq, Clone, serde::Serialize, serde::Deserialize)]
 #[serde(tag = "type")]
 #[allow(clippy::large_enum_variant)]
@@ -369,6 +396,10 @@ pub enum Value {
         data: Vec<Value>,
         kind: ftd::p2::Kind,
     },
+    Optional {
+        data: Box<Option<Value>>,
+        kind: ftd::p2::Kind,
+    },
     Map {
         data: std::collections::BTreeMap<String, Value>,
         kind: ftd::p2::Kind,
@@ -382,7 +413,15 @@ pub enum Value {
 
 impl Value {
     pub fn is_null(&self) -> bool {
-        matches!(self, Self::None { .. })
+        if matches!(self, Self::None { .. }) {
+            return true;
+        }
+        if let Self::Optional { data, .. } = self {
+            if data.as_ref().eq(&None) {
+                return true;
+            }
+        }
+        false
     }
 
     pub fn is_empty(&self) -> bool {
@@ -412,6 +451,9 @@ impl Value {
                 name: id.to_string(),
             },
             Value::List { kind, .. } => ftd::p2::Kind::List {
+                kind: Box::new(kind.to_owned()),
+            },
+            Value::Optional { kind, .. } => ftd::p2::Kind::Optional {
                 kind: Box::new(kind.to_owned()),
             },
             Value::Map { kind, .. } => ftd::p2::Kind::Map {
@@ -519,12 +561,15 @@ impl Variable {
             p1
         };
 
-        match (self.value.kind().inner(), &mut self.value) {
+        match (&self.value.kind(), &mut self.value) {
             (ftd::p2::Kind::Record { name }, _) => {
                 self.value = doc.get_record(p1.line_number, name)?.create(&p1, doc)?
             }
             (ftd::p2::Kind::List { kind }, ftd::Value::List { data, .. }) => {
                 data.push(read_value(p1.line_number, kind, &p1, doc)?);
+            }
+            (ftd::p2::Kind::Optional { kind }, ftd::Value::Optional { data, .. }) => {
+                *data = Box::new(read_value(p1.line_number, kind, &p1, doc).ok());
             }
             (ftd::p2::Kind::Map { .. }, _) => {
                 return ftd::e2("unexpected map", doc.name, p1.line_number)
@@ -549,23 +594,48 @@ impl Variable {
                 p1.line_number,
             );
         }
-        let name = var_data.name;
-        let value = match var_data.kind.as_str() {
-            "string" => read_string(p1, doc.name)?,
-            "integer" => read_integer(p1, doc.name)?,
-            "decimal" => read_decimal(p1, doc.name)?,
-            "boolean" => read_boolean(p1, doc.name)?,
-            t => match doc.get_thing(p1.line_number, t)? {
-                ftd::p2::Thing::Record(r) => r.create(p1, doc)?,
-                ftd::p2::Thing::OrTypeWithVariant { e, variant } => e.create(p1, variant, doc)?,
-                t => {
-                    return ftd::e2(
-                        format!("unexpected thing found: {:?}", t),
-                        doc.name,
-                        p1.line_number,
-                    )
-                }
-            },
+        let name = var_data.name.clone();
+
+        if var_data.is_optional() && p1.caption.is_none() && p1.body.is_none() {
+            let kind = ftd::p2::Kind::for_variable(p1.line_number, &p1.name, None, doc, None)?;
+            return Ok(Variable {
+                name,
+                value: ftd::Value::Optional {
+                    data: Box::new(None),
+                    kind: kind.inner().to_owned(),
+                },
+                conditions: vec![],
+            });
+        }
+
+        let value = {
+            let mut value = match var_data.kind.as_str() {
+                "string" => read_string(p1, doc.name)?,
+                "integer" => read_integer(p1, doc.name)?,
+                "decimal" => read_decimal(p1, doc.name)?,
+                "boolean" => read_boolean(p1, doc.name)?,
+                t => match doc.get_thing(p1.line_number, t)? {
+                    ftd::p2::Thing::Record(r) => r.create(p1, doc)?,
+                    ftd::p2::Thing::OrTypeWithVariant { e, variant } => {
+                        e.create(p1, variant, doc)?
+                    }
+                    t => {
+                        return ftd::e2(
+                            format!("unexpected thing found: {:?}", t),
+                            doc.name,
+                            p1.line_number,
+                        );
+                    }
+                },
+            };
+            if var_data.is_optional() {
+                let kind = ftd::p2::Kind::for_variable(p1.line_number, &p1.name, None, doc, None)?;
+                value = ftd::Value::Optional {
+                    data: Box::new(Some(value)),
+                    kind: kind.inner().to_owned(),
+                };
+            }
+            value
         };
 
         Ok(Variable {

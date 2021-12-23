@@ -12785,6 +12785,55 @@ mod test {
         pretty_assertions::assert_eq!(g_col, main);
     }
 
+    #[test]
+    fn optional_global_variable() {
+        let mut main = super::default_column();
+        main.container.children.push(ftd::Element::Text(ftd::Text {
+            text: ftd::markdown_line("hello"),
+            line: true,
+            common: ftd::Common {
+                reference: Some(s("foo/bar#active")),
+                ..Default::default()
+            },
+            ..Default::default()
+        }));
+        main.container.children.push(ftd::Element::Null);
+        main.container.children.push(ftd::Element::Null);
+        main.container.children.push(ftd::Element::Text(ftd::Text {
+            text: ftd::markdown_line("No Flag Available"),
+            line: true,
+            ..Default::default()
+        }));
+
+        let (_g_bag, g_col) = crate::p2::interpreter::interpret(
+            "foo/bar",
+            indoc::indoc!(
+                "
+                -- optional string active:
+
+                -- active: hello
+                
+                -- ftd.text: $active
+                if: $active is not null
+
+                -- ftd.text: Not Active
+                if: $active is null
+
+                -- optional string flag:
+                
+                -- ftd.text: $flag
+                if: $flag is not null
+
+                -- ftd.text: No Flag Available
+                if: $flag is null
+                "
+            ),
+            &ftd::p2::TestLibrary {},
+        )
+        .expect("found error");
+        pretty_assertions::assert_eq!(g_col, main);
+    }
+
     /*#[test]
     fn loop_with_tree_structure_1() {
         let (g_bag, g_col) = ftd::p2::interpreter::interpret(
