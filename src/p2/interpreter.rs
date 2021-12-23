@@ -7126,7 +7126,7 @@ mod test {
         }));
 
         main.container.children.push(ftd::Element::Text(ftd::Text {
-            text: ftd::markdown_line("\"2021\""),
+            text: ftd::markdown_line("\"2018\""),
             line: true,
             ..Default::default()
         }));
@@ -7176,7 +7176,7 @@ mod test {
                             source: ftd::TextSource::Header,
                         },
                         ftd::Value::String {
-                            text: "\"2021\"".to_string(),
+                            text: "\"2018\"".to_string(),
                             source: ftd::TextSource::Header,
                         },
                         ftd::Value::String {
@@ -7331,7 +7331,7 @@ mod test {
             container: ftd::Container {
                 children: vec![
                     ftd::Element::Text(ftd::Text {
-                        text: ftd::markdown_line("\"2021\""),
+                        text: ftd::markdown_line("\"2018\""),
                         line: true,
                         common: ftd::Common {
                             reference: Some(s("@name@3")),
@@ -7353,7 +7353,7 @@ mod test {
             },
             common: ftd::Common {
                 locals: std::array::IntoIter::new([
-                    (s("name@3"), s("\"2021\"")),
+                    (s("name@3"), s("\"2018\"")),
                     (s("body@3"), s("edition")),
                 ])
                 .collect(),
@@ -7665,7 +7665,7 @@ mod test {
                                     s("title"),
                                     ftd::PropertyValue::Value {
                                         value: ftd::variable::Value::String {
-                                            text: "\"2021\"".to_string(),
+                                            text: "\"2018\"".to_string(),
                                             source: ftd::TextSource::Header,
                                         },
                                     },
