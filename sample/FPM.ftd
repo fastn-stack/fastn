@@ -3,3 +3,11 @@
 -- fpm.package: sample
 lang: hi
 translation-of: arpita-jaiswal/blog
+
+-- fpm.font: Roboto
+woff2: https://fonts.gstatic.com/s/roboto/v29/KFOlCnqEu92Fr1MmSU5fBBc4AMP6lQ.woff2
+style: normal
+
+-- fpm.font: Roboto
+woff2: https://fonts.gstatic.com/s/roboto/v29/KFOiCnqEu92Fr1Mu51QrEzAdL-vwnYg.woff2
+style: italic

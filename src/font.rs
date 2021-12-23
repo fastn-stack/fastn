@@ -51,18 +51,15 @@ impl Font {
         append_src("embedded-opentype", &self.embedded_opentype, &mut src);
         append_src("svg", &self.svg, &mut src);
 
-        if let Some(v) = self.woff2.as_ref().or_else(|| self.woff.as_ref()) {
-            format!(
-                "
-                @font-face {{
-                    font-family: {};
-                    src: url({});
-                }}",
-                self.name,
-                v // TODO: escape() this or do URL validation
-            )
-        } else {
+        if !src.is_empty() {
+            attrs.push(format!("src: {}", src.join(", ")));
+        }
+
+        if attrs.is_empty() {
             "".to_string()
+        } else {
+            attrs.push(format!("font-family: {}", self.name));
+            format!("@font-face {{ {} }}", attrs.join(";\n"))
         }
     }
 }
