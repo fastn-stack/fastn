@@ -1,0 +1,5 @@
+-- import: fpm
+
+-- fpm.package: sample
+lang: hi
+translation-of: arpita-jaiswal/blog
