@@ -87,7 +87,7 @@ async fn process_files(
     documents: &std::collections::BTreeMap<String, fpm::File>,
 ) -> fpm::Result<()> {
     for file in documents.values() {
-        process_file(config, file, None, None, None).await?
+        process_file(config, file, None, None, Default::default()).await?
     }
     Ok(())
 }
@@ -97,12 +97,19 @@ pub(crate) async fn process_file(
     main: &fpm::File,
     fallback: Option<&fpm::File>,
     message: Option<&str>,
-    diff: Option<String>,
+    translated_data: fpm::TranslationData,
 ) -> fpm::Result<()> {
     if let Some(fallback) = fallback {
         match (main, fallback) {
             (fpm::File::Ftd(main_doc), fpm::File::Ftd(fallback_doc)) => {
-                process_ftd(config, main_doc, Some(fallback_doc), message, diff).await?
+                process_ftd(
+                    config,
+                    main_doc,
+                    Some(fallback_doc),
+                    message,
+                    translated_data,
+                )
+                .await?
             }
             (fpm::File::Static(main_sa), fpm::File::Static(_)) => {
                 process_static(main_sa, config.root.as_str()).await?
@@ -123,7 +130,7 @@ pub(crate) async fn process_file(
         return Ok(());
     }
     match main {
-        fpm::File::Ftd(doc) => process_ftd(config, doc, None, message, diff).await?,
+        fpm::File::Ftd(doc) => process_ftd(config, doc, None, message, translated_data).await?,
         fpm::File::Static(sa) => process_static(sa, config.root.as_str()).await?,
         fpm::File::Markdown(doc) => process_markdown(doc, config).await?,
     }
@@ -146,7 +153,7 @@ async fn process_ftd(
     main: &fpm::Document,
     fallback: Option<&fpm::Document>,
     message: Option<&str>,
-    diff: Option<String>,
+    translated_data: fpm::TranslationData,
 ) -> fpm::Result<()> {
     let base_path = config.root.as_str();
     if !main.id.eq("index.ftd") {
@@ -172,12 +179,19 @@ async fn process_ftd(
                 fallback,
                 new_file_path.as_str(),
                 message,
-                diff,
+                translated_data,
             )
             .await?
         }
         (None, Some(message)) => {
-            write_with_message(config, main, new_file_path.as_str(), message, diff).await?
+            write_with_message(
+                config,
+                main,
+                new_file_path.as_str(),
+                message,
+                translated_data,
+            )
+            .await?
         }
         _ => write_default(config, main, new_file_path.as_str()).await?,
     }
@@ -195,7 +209,7 @@ async fn process_ftd(
             config: config.clone(),
             markdown: None,
             document_id: main.id.clone(),
-            diff: None,
+            translated_data: Default::default(),
         };
 
         let main_ftd_doc =
@@ -241,7 +255,7 @@ async fn process_ftd(
         main: &fpm::Document,
         new_file_path: &str,
         message: &str,
-        diff: Option<String>,
+        translated_data: fpm::TranslationData,
     ) -> fpm::Result<()> {
         use tokio::io::AsyncWriteExt;
 
@@ -249,7 +263,7 @@ async fn process_ftd(
             config: config.clone(),
             markdown: None,
             document_id: main.id.clone(),
-            diff,
+            translated_data,
         };
 
         let main_ftd_doc =
@@ -323,7 +337,7 @@ async fn process_ftd(
         fallback: &fpm::Document,
         new_file_path: &str,
         message: &str,
-        diff: Option<String>,
+        translated_data: fpm::TranslationData,
     ) -> fpm::Result<()> {
         use tokio::io::AsyncWriteExt;
 
@@ -331,7 +345,7 @@ async fn process_ftd(
             config: config.clone(),
             markdown: None,
             document_id: main.id.clone(),
-            diff,
+            translated_data,
         };
 
         let main_ftd_doc =

@@ -6,56 +6,13 @@ pub struct Library {
     pub config: fpm::Config,
     pub markdown: Option<(String, String)>,
     pub document_id: String,
-    pub diff: Option<String>,
+    pub translated_data: fpm::TranslationData,
 }
 
 impl ftd::p2::Library for Library {
     fn get(&self, name: &str) -> Option<String> {
         if name == "fpm" {
-            let fpm_base = {
-                let mut fpm_base = format!(
-                    indoc::indoc! {"
-                        {fpm_base}
-                        
-                        -- string document-id: {document_id}
-    
-                        "},
-                    fpm_base = fpm::fpm_ftd().to_string(),
-                    document_id = self.document_id,
-                );
-                if let Some(ref diff) = self.diff {
-                    fpm_base = format!(
-                        indoc::indoc! {"
-                        {fpm_base}
-                        
-                        -- string diff: 
-                        
-                        {diff}
-    
-                        "},
-                        fpm_base = fpm_base,
-                        diff = diff,
-                    );
-                }
-                fpm_base
-            };
-            return Some(match self.markdown.as_ref() {
-                Some((filename, content)) => format!(
-                    indoc::indoc! {"
-                        {fpm_base}
-                        
-                        -- string markdown-filename: {filename}
-                        
-                        -- string markdown-content:
-    
-                        {content}
-                    "},
-                    fpm_base = fpm_base,
-                    filename = filename,
-                    content = content
-                ),
-                _ => fpm_base,
-            });
+            return Some(construct_fpm_base(self));
         }
 
         if let Ok(v) = std::fs::read_to_string(self.config.root.join(format!("{}.ftd", name))) {
@@ -73,6 +30,87 @@ impl ftd::p2::Library for Library {
             return Some(v);
         }
         return std::fs::read_to_string(package_path.join(format!("{}/index.ftd", name))).ok();
+
+        fn construct_fpm_base(lib: &Library) -> String {
+            let mut fpm_base = format!(
+                indoc::indoc! {"
+                        {fpm_base}
+                        
+                        -- string document-id: {document_id}
+    
+                        "},
+                fpm_base = fpm::fpm_ftd().to_string(),
+                document_id = lib.document_id,
+            );
+            if let Some(ref diff) = lib.translated_data.diff {
+                fpm_base = format!(
+                    indoc::indoc! {"
+                        {fpm_base}
+                        
+                        -- string diff: 
+                        
+                        {diff}
+    
+                        "},
+                    fpm_base = fpm_base,
+                    diff = diff,
+                );
+            }
+            if let Some(ref last_marked_on) = lib.translated_data.last_marked_on {
+                fpm_base = format!(
+                    indoc::indoc! {"
+                        {fpm_base}
+                        
+                        -- integer last-marked-on: {last_marked_on}
+    
+                        "},
+                    fpm_base = fpm_base,
+                    last_marked_on = last_marked_on,
+                );
+            }
+            if let Some(ref original_latest) = lib.translated_data.original_latest {
+                fpm_base = format!(
+                    indoc::indoc! {"
+                        {fpm_base}
+                        
+                        -- integer original-latest: {original_latest}
+    
+                        "},
+                    fpm_base = fpm_base,
+                    original_latest = original_latest,
+                );
+            }
+            if let Some(ref translated_latest) = lib.translated_data.translated_latest {
+                fpm_base = format!(
+                    indoc::indoc! {"
+                        {fpm_base}
+                        
+                        -- integer translated-latest: {translated_latest}
+    
+                        "},
+                    fpm_base = fpm_base,
+                    translated_latest = translated_latest,
+                );
+            }
+            if let Some((filename, content)) = lib.markdown.as_ref() {
+                fpm_base = format!(
+                    indoc::indoc! {"
+                        {fpm_base}
+                        
+                        -- string markdown-filename: {filename}
+                        
+                        -- string markdown-content:
+    
+                        {content}
+                    "},
+                    fpm_base = fpm_base,
+                    filename = filename,
+                    content = content
+                );
+            }
+
+            fpm_base
+        }
     }
 
     fn process(

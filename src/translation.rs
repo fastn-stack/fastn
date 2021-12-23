@@ -11,7 +11,6 @@ pub(crate) enum TranslatedDocument {
         translated: fpm::File, // main
         last_marked_on: u128,
         original_latest: u128,
-        #[allow(dead_code)]
         translated_latest: u128,
     },
     UptoDate {
@@ -19,47 +18,82 @@ pub(crate) enum TranslatedDocument {
     },
 }
 
+#[derive(Debug, Default)]
+pub struct TranslationData {
+    pub diff: Option<String>,
+    pub last_marked_on: Option<u128>,
+    pub original_latest: Option<u128>,
+    pub translated_latest: Option<u128>,
+}
+
 impl TranslatedDocument {
     pub async fn html(&self, config: &fpm::Config) -> fpm::Result<()> {
         // handle the message
         // render with-fallback or with-message
         let message = fpm::get_messages(self).to_string();
-        let (main, fallback, diff) = match self {
-            TranslatedDocument::Missing { original } => (original, None, None),
+        let (main, fallback, translated_data) = match self {
+            TranslatedDocument::Missing { original } => {
+                (original, None, TranslationData::default())
+            }
             TranslatedDocument::NeverMarked {
                 original,
                 translated,
-            } => (original, Some(translated), None),
+            } => (original, Some(translated), TranslationData::default()),
             TranslatedDocument::Outdated {
                 original,
                 translated,
                 last_marked_on,
                 original_latest,
-                ..
+                translated_latest,
             } => {
-                // This adds the diff on original file between last_marked_on and original_latest timestamp
-                let last_marked_on_path = fpm::utils::history_path(
-                    original.get_id().as_str(),
-                    config.original_path()?.as_str(),
-                    last_marked_on,
-                );
-                let last_marked_on_data = tokio::fs::read_to_string(last_marked_on_path).await?;
-                let original_latest_path = fpm::utils::history_path(
-                    original.get_id().as_str(),
-                    config.original_path()?.as_str(),
-                    original_latest,
-                );
-                let original_latest_data = tokio::fs::read_to_string(original_latest_path).await?;
+                // Gets the diff on original file between last_marked_on and original_latest timestamp
+                let diff = get_diff(config, original, last_marked_on, original_latest).await?;
+                let translated_data = TranslationData {
+                    diff: Some(diff),
+                    last_marked_on: Some(*last_marked_on),
+                    original_latest: Some(*original_latest),
+                    translated_latest: Some(*translated_latest),
+                };
 
-                let patch = diffy::create_patch(&last_marked_on_data, &original_latest_data);
-                let diff = patch.to_string().replace("---", "\\---");
-
-                (translated, Some(original), Some(diff))
+                (translated, Some(original), translated_data)
             }
-            TranslatedDocument::UptoDate { translated, .. } => (translated, None, None),
+            TranslatedDocument::UptoDate { translated, .. } => {
+                (translated, None, TranslationData::default())
+            }
         };
-        fpm::process_file(config, main, fallback, Some(message.as_str()), diff).await?;
-        Ok(())
+        fpm::process_file(
+            config,
+            main,
+            fallback,
+            Some(message.as_str()),
+            translated_data,
+        )
+        .await?;
+        return Ok(());
+
+        /// Gets the diff on original file between last_marked_on and original_latest timestamp
+        async fn get_diff(
+            config: &fpm::Config,
+            original: &fpm::File,
+            last_marked_on: &u128,
+            original_latest: &u128,
+        ) -> fpm::Result<String> {
+            let last_marked_on_path = fpm::utils::history_path(
+                original.get_id().as_str(),
+                config.original_path()?.as_str(),
+                last_marked_on,
+            );
+            let last_marked_on_data = tokio::fs::read_to_string(last_marked_on_path).await?;
+            let original_latest_path = fpm::utils::history_path(
+                original.get_id().as_str(),
+                config.original_path()?.as_str(),
+                original_latest,
+            );
+            let original_latest_data = tokio::fs::read_to_string(original_latest_path).await?;
+
+            let patch = diffy::create_patch(&last_marked_on_data, &original_latest_data);
+            Ok(patch.to_string().replace("---", "\\---"))
+        }
     }
 
     pub async fn get_translated_document(
