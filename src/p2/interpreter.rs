@@ -7120,7 +7120,7 @@ mod test {
         }));
 
         main.container.children.push(ftd::Element::Text(ftd::Text {
-            text: ftd::markdown_line("[\"Amit Upadhyay <upadhyay@gmail.com>\"]"),
+            text: ftd::markdown_line("["),
             line: true,
             ..Default::default()
         }));
@@ -7144,7 +7144,7 @@ mod test {
         }));
 
         main.container.children.push(ftd::Element::Text(ftd::Text {
-            text: ftd::markdown_line("\"https://github.com/fifthtry/ftd\""),
+            text: ftd::markdown_line("\"https://github.com/FifthTry/ftd\""),
             line: true,
             ..Default::default()
         }));
@@ -7172,7 +7172,7 @@ mod test {
                             source: ftd::TextSource::Header,
                         },
                         ftd::Value::String {
-                            text: "[\"Amit Upadhyay <upadhyay@gmail.com>\"]".to_string(),
+                            text: "[".to_string(),
                             source: ftd::TextSource::Header,
                         },
                         ftd::Value::String {
@@ -7188,7 +7188,7 @@ mod test {
                             source: ftd::TextSource::Header,
                         },
                         ftd::Value::String {
-                            text: "\"https://github.com/fifthtry/ftd\"".to_string(),
+                            text: "\"https://github.com/FifthTry/ftd\"".to_string(),
                             source: ftd::TextSource::Header,
                         },
                         ftd::Value::String {
@@ -7297,7 +7297,7 @@ mod test {
             container: ftd::Container {
                 children: vec![
                     ftd::Element::Text(ftd::Text {
-                        text: ftd::markdown_line("[\"Amit Upadhyay <upadhyay@gmail.com>\"]"),
+                        text: ftd::markdown_line("["),
                         line: true,
                         common: ftd::Common {
                             reference: Some(s("@name@2")),
@@ -7319,7 +7319,7 @@ mod test {
             },
             common: ftd::Common {
                 locals: std::array::IntoIter::new([
-                    (s("name@2"), s("[\"Amit Upadhyay <upadhyay@gmail.com>\"]")),
+                    (s("name@2"), s("[")),
                     (s("body@2"), s("authors")),
                 ])
                 .collect(),
@@ -7433,7 +7433,7 @@ mod test {
             container: ftd::Container {
                 children: vec![
                     ftd::Element::Text(ftd::Text {
-                        text: ftd::markdown_line("\"https://github.com/fifthtry/ftd\""),
+                        text: ftd::markdown_line("\"https://github.com/FifthTry/ftd\""),
                         line: true,
                         common: ftd::Common {
                             reference: Some(s("@name@6")),
@@ -7455,7 +7455,7 @@ mod test {
             },
             common: ftd::Common {
                 locals: std::array::IntoIter::new([
-                    (s("name@6"), s("\"https://github.com/fifthtry/ftd\"")),
+                    (s("name@6"), s("\"https://github.com/FifthTry/ftd\"")),
                     (s("body@6"), s("repository")),
                 ])
                 .collect(),
@@ -7641,8 +7641,7 @@ mod test {
                                     s("title"),
                                     ftd::PropertyValue::Value {
                                         value: ftd::variable::Value::String {
-                                            text: "[\"Amit Upadhyay <upadhyay@gmail.com>\"]"
-                                                .to_string(),
+                                            text: "[".to_string(),
                                             source: ftd::TextSource::Header,
                                         },
                                     },
@@ -7738,7 +7737,7 @@ mod test {
                                     s("title"),
                                     ftd::PropertyValue::Value {
                                         value: ftd::variable::Value::String {
-                                            text: "\"https://github.com/fifthtry/ftd\"".to_string(),
+                                            text: "\"https://github.com/FifthTry/ftd\"".to_string(),
                                             source: ftd::TextSource::Header,
                                         },
                                     },
