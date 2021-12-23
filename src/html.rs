@@ -552,6 +552,16 @@ impl ftd::Text {
             n.style.insert(s("line-height"), s("26px"));
         }
 
+        if !self.font.is_empty() {
+            let family = self
+                .font
+                .iter()
+                .map(|v| v.to_string())
+                .collect::<Vec<String>>()
+                .join(", ");
+            n.style.insert(s("font-family"), family);
+        }
+
         if self.style.italic {
             n.style.insert(s("font-style"), s("italic"));
         }

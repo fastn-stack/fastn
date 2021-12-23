@@ -1413,6 +1413,18 @@ impl NamedFont {
     }
 }
 
+impl ToString for NamedFont {
+    fn to_string(&self) -> String {
+        match self {
+            ftd::NamedFont::Monospace => "monospace",
+            ftd::NamedFont::Serif => "serif",
+            ftd::NamedFont::SansSerif => "sansSerif",
+            ftd::NamedFont::Named { value } => value,
+        }
+        .to_string()
+    }
+}
+
 #[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
 pub struct ExternalFont {
     pub url: String,
