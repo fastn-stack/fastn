@@ -40,15 +40,41 @@ fn with_message() -> &'static str {
     include_str!("../with-message.html")
 }
 
-fn get_messages(status: &fpm::TranslatedDocument) -> &'static str {
-    match status {
-        TranslatedDocument::Missing { .. } => include_str!("../ftd/translation/missing.ftd"),
-        TranslatedDocument::NeverMarked { .. } => {
-            include_str!("../ftd/translation/never-marked.ftd")
+fn get_messages(status: &fpm::TranslatedDocument, config: &fpm::Config) -> fpm::Result<String> {
+    Ok(match status {
+        TranslatedDocument::Missing { .. } => {
+            let path = config.root.join("FPM/translation/missing.ftd");
+            if path.is_file() {
+                std::fs::read_to_string(path)?
+            } else {
+                include_str!("../ftd/translation/missing.ftd").to_string()
+            }
         }
-        TranslatedDocument::Outdated { .. } => include_str!("../ftd/translation/out-of-date.ftd"),
-        TranslatedDocument::UptoDate { .. } => include_str!("../ftd/translation/upto-date.ftd"),
-    }
+        TranslatedDocument::NeverMarked { .. } => {
+            let path = config.root.join("FPM/translation/never-marked.ftd");
+            if path.is_file() {
+                std::fs::read_to_string(path)?
+            } else {
+                include_str!("../ftd/translation/never-marked.ftd").to_string()
+            }
+        }
+        TranslatedDocument::Outdated { .. } => {
+            let path = config.root.join("FPM/translation/out-of-date.ftd");
+            if path.is_file() {
+                std::fs::read_to_string(path)?
+            } else {
+                include_str!("../ftd/translation/out-of-date.ftd").to_string()
+            }
+        }
+        TranslatedDocument::UptoDate { .. } => {
+            let path = config.root.join("FPM/translation/upto-date.ftd");
+            if path.is_file() {
+                std::fs::read_to_string(path)?
+            } else {
+                include_str!("../ftd/translation/upto-date.ftd").to_string()
+            }
+        }
+    })
 }
 
 // fn default_markdown() -> &'static str {

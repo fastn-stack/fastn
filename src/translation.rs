@@ -30,7 +30,7 @@ impl TranslatedDocument {
     pub async fn html(&self, config: &fpm::Config) -> fpm::Result<()> {
         // handle the message
         // render with-fallback or with-message
-        let message = fpm::get_messages(self).to_string();
+        let message = fpm::get_messages(self, config)?;
         let (main, fallback, translated_data) = match self {
             TranslatedDocument::Missing { original } => {
                 (original, None, TranslationData::default())

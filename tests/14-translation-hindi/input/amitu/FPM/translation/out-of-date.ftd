@@ -1,0 +1,31 @@
+-- import: fpm
+
+-- ftd.row:
+spacing: 5
+
+--- ftd.text: $fpm.document-id
+--- ftd.text: is out of date
+
+-- ftd.row:
+spacing: 5
+
+--- ftd.integer: $fpm.translated-latest
+--- ftd.text: is a translated latest timestamp in nanoseconds
+
+-- ftd.code:
+lang: diff
+
+$fpm.diff
+
+
+-- boolean show-main: true
+
+-- ftd.text: Show Fallback
+if: $show-main
+$event-click$: toggle $show-main
+$event-click$: message-host show_fallback
+
+-- ftd.text: Show Main
+if: not $show-main
+$event-click$: toggle $show-main
+$event-click$: message-host show_main
