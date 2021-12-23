@@ -52,10 +52,7 @@ impl TranslatedDocument {
                 let original_latest_data = tokio::fs::read_to_string(original_latest_path).await?;
 
                 let patch = diffy::create_patch(&last_marked_on_data, &original_latest_data);
-                let diff = patch
-                    .to_string()
-                    .replace("\n", "\n\n")
-                    .replace("---", "\\---");
+                let diff = patch.to_string().replace("---", "\\---");
 
                 (translated, Some(original), Some(diff))
             }

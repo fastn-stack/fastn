@@ -12,6 +12,13 @@
     "dependencies": {
       "0,0": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
     }
+  },
+  "message#show-main": {
+    "value": "true",
+    "dependencies": {
+      "1": "[{\"dependency_type\":\"Visible\",\"condition\":\"true\",\"parameters\":{}}]",
+      "2": "[{\"dependency_type\":\"Visible\",\"condition\":\"false\",\"parameters\":{}}]"
+    }
   }
 }
     </script>
@@ -374,6 +381,9 @@ window.ftd = (function () {
         } else if (act === "toggle") {
             let target = action["target"];
             exports.set_bool(id, target, data[target].value !== 'true');
+        } else if (act === "message-host") {
+            let target = action["target"].trim();
+            window[target]();
         } else if (act === "increment") {
             let target = action["target"];
             let increment = 1;
@@ -639,7 +649,9 @@ window.ftd = (function () {
 <body>
 
 <div id="message"><div data-id="message:root" style="align-items: flex-start; align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: wrap; height: 100%; justify-content: flex-start; margin-bottom: auto; margin-top: auto; white-space: initial; width: 100%" class="ft_md"><div data-id="0:message" data-spacing="margin-left:5px" style="align-items: flex-start; align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start; white-space: initial" class="ft_md"><div data-id="0,0:message" style="align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-weight: 400; text-align: left; white-space: initial" class="ft_md">blog.ftd</div>
-<div data-id="0,1:message" style="align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-weight: 400; margin-left: 5px; text-align: left; white-space: initial" class="ft_md">is not marked</div></div></div></div>
+<div data-id="0,1:message" style="align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-weight: 400; margin-left: 5px; text-align: left; white-space: initial" class="ft_md">is not marked</div></div>
+<div data-id="1:message" onclick="window.ftd.handle_event(event, 'message', '[{&quot;action&quot;:&quot;toggle&quot;,&quot;target&quot;:&quot;message#show-main&quot;,&quot;parameters&quot;:{}},{&quot;action&quot;:&quot;message-host&quot;,&quot;target&quot;:&quot;show_fallback&quot;,&quot;parameters&quot;:{}}]')" style="align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; text-align: left; white-space: initial" class="ft_md">Show Fallback</div>
+<div data-id="2:message" onclick="window.ftd.handle_event(event, 'message', '[{&quot;action&quot;:&quot;toggle&quot;,&quot;target&quot;:&quot;message#show-main&quot;,&quot;parameters&quot;:{}},{&quot;action&quot;:&quot;message-host&quot;,&quot;target&quot;:&quot;show_main&quot;,&quot;parameters&quot;:{}}]')" style="align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; display: none; font-weight: 400; text-align: left; white-space: initial" class="ft_md">Show Main</div></div></div>
 <div id="main"><div data-id="main:root" style="align-items: flex-start; align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: wrap; height: 100%; justify-content: flex-start; margin-bottom: auto; margin-top: auto; white-space: initial; width: 100%" class="ft_md"><div data-id="0:main" style="align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-weight: 400; text-align: left; white-space: initial" class="ft_md">This is the original blog</div></div></div>
 <div id="fallback" style="display: none"><div data-id="fallback:root" style="align-items: flex-start; align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: wrap; height: 100%; justify-content: flex-start; margin-bottom: auto; margin-top: auto; white-space: initial; width: 100%" class="ft_md"><div data-id="0:fallback" style="align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-weight: 400; text-align: left; white-space: initial" class="ft_md">This blog would override original blog… This is translated blog.</div></div></div>
 

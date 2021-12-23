@@ -368,6 +368,9 @@ window.ftd = (function () {
         } else if (act === "toggle") {
             let target = action["target"];
             exports.set_bool(id, target, data[target].value !== 'true');
+        } else if (act === "message-host") {
+            let target = action["target"].trim();
+            window[target]();
         } else if (act === "increment") {
             let target = action["target"];
             let increment = 1;

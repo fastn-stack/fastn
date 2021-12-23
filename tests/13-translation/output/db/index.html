@@ -368,6 +368,9 @@ window.ftd = (function () {
         } else if (act === "toggle") {
             let target = action["target"];
             exports.set_bool(id, target, data[target].value !== 'true');
+        } else if (act === "message-host") {
+            let target = action["target"].trim();
+            window[target]();
         } else if (act === "increment") {
             let target = action["target"];
             let increment = 1;
@@ -634,8 +637,8 @@ window.ftd = (function () {
 
 <div id="message"><div data-id="message:root" style="align-items: flex-start; align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: wrap; height: 100%; justify-content: flex-start; margin-bottom: auto; margin-top: auto; white-space: initial; width: 100%" class="ft_md"><div data-id="0:message" data-spacing="margin-left:5px" style="align-items: flex-start; align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start; white-space: initial" class="ft_md"><div data-id="0,0:message" style="align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-weight: 400; text-align: left; white-space: initial" class="ft_md">db.ftd</div>
 <div data-id="0,1:message" style="align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-weight: 400; margin-left: 5px; text-align: left; white-space: initial" class="ft_md">is not yet translated</div></div></div></div>
-<div id="main"><div data-id="main:root" style="align-items: flex-start; align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: wrap; height: 100%; justify-content: flex-start; margin-bottom: auto; margin-top: auto; white-space: initial; width: 100%" class="ft_md"><div data-id="0:main" style="align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(12,60,38,1); font-size: 30px; font-weight: 700; padding-bottom: 12px; padding-top: 12px; text-align: left; white-space: initial" class="ft_md">How to add more person in record?</div>
-<div data-id="1:main" style="align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(77,77,77,1); font-size: 15px; font-weight: 400; line-height: 26px; padding-bottom: 34px; text-align: left; white-space: initial" class="ft_md"><p>Enter the following commands:</p>
+<div id="main"><div data-id="main:root" style="align-items: flex-start; align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: wrap; height: 100%; justify-content: flex-start; margin-bottom: auto; margin-top: auto; white-space: initial; width: 100%" class="ft_md"><div data-id="0:main" style="align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(12,60,38,1); font-family: Roboto; font-size: 30px; font-weight: 700; padding-bottom: 12px; padding-top: 12px; text-align: left; white-space: initial" class="ft_md">How to add more person in record?</div>
+<div data-id="1:main" style="align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(77,77,77,1); font-family: Roboto; font-size: 15px; font-weight: 400; line-height: 26px; padding-bottom: 34px; text-align: left; white-space: initial" class="ft_md"><p>Enter the following commands:</p>
 <ol>
 <li><code>sqlite3 db.sqlite</code></li>
 <li><code>INSERT INTO user (name, department) VALUES (&quot;arpita&quot;, &quot;engg&quot;);</code></li>
