@@ -17,7 +17,7 @@ impl ftd::p2::Library for Library {
                     indoc::indoc! {"
                         {fpm_base}
                         
-                        -- string document-title: {document_id}
+                        -- string document-id: {document_id}
     
                         "},
                     fpm_base = fpm::fpm_ftd().to_string(),
