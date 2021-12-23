@@ -20,6 +20,14 @@ optional body notes:
 caption name:
 optional string woff:
 optional string woff2:
+optional string truetype:
+optional string opentype:
+optional string embedded-opentype:
+optional string svg:
+optional string unicode-range:
+optional string display:
+optional string style:
+optional string weight:
 
 -- font-data list font:
 
