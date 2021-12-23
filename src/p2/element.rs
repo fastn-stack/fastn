@@ -796,6 +796,7 @@ pub fn text_from_properties(
         properties_with_ref,
         all_locals,
         doc.name,
+        condition,
     )?;
     let font_str = ftd::p2::utils::string_optional("font", properties, doc.name, 0)?;
 
@@ -849,6 +850,7 @@ pub fn text_block_from_properties(
         properties_with_ref,
         all_locals,
         doc.name,
+        condition,
     )?;
     let font_str = ftd::p2::utils::string_optional("font", properties, doc.name, 0)?;
 
@@ -902,6 +904,7 @@ pub fn code_from_properties(
         properties_with_ref,
         all_locals,
         doc.name,
+        condition,
     )?;
     let font_str = ftd::p2::utils::string_optional("font", properties, doc.name, 0)?;
 

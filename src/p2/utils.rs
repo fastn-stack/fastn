@@ -63,6 +63,7 @@ pub fn string_and_source_and_ref(
     properties: &std::collections::BTreeMap<String, (ftd::Value, Option<String>)>,
     all_locals: &mut ftd::Map,
     doc_id: &str,
+    condition: &Option<ftd::p2::Boolean>,
 ) -> ftd::p1::Result<(String, ftd::TextSource, Option<String>)> {
     match properties.get(name) {
         Some((ftd::Value::String { text, source }, reference)) => Ok((
@@ -70,6 +71,69 @@ pub fn string_and_source_and_ref(
             source.to_owned(),
             complete_reference(reference, all_locals),
         )),
+        Some((ftd::Value::Optional { data, kind }, reference)) => {
+            let source = match kind {
+                _ if matches!(kind, ftd::p2::Kind::String { .. }) => {
+                    ftd::TextSource::from_kind(kind, doc_id, line_number)?
+                }
+                _ => {
+                    return ftd::e2(
+                        format!("expected string, found: {:?}", kind),
+                        doc_id,
+                        line_number,
+                    )
+                }
+            };
+
+            match data.as_ref() {
+                None => {
+                    let reference = match reference {
+                        Some(reference) => reference,
+                        None => {
+                            return ftd::e2(
+                                format!("expected string, found: {:?}", kind),
+                                doc_id,
+                                line_number,
+                            )
+                        }
+                    };
+
+                    if let Some(ftd::p2::Boolean::IsNotNull { value }) = condition {
+                        match value {
+                            ftd::PropertyValue::Reference { name, .. }
+                            | ftd::PropertyValue::Variable { name, .. } => {
+                                if name.eq(reference) {
+                                    return Ok((
+                                        "".to_string(),
+                                        source,
+                                        complete_reference(&Some(reference.clone()), all_locals),
+                                    ));
+                                }
+                            }
+                            _ => {}
+                        }
+                    }
+
+                    return ftd::e2(
+                        format!("expected string, found: {:?}", kind),
+                        doc_id,
+                        line_number,
+                    );
+                }
+                Some(ftd::Value::String { text, source }) => Ok((
+                    text.to_string(),
+                    source.to_owned(),
+                    complete_reference(reference, all_locals),
+                )),
+                _ => {
+                    return ftd::e2(
+                        format!("expected string, found: {:?}", kind),
+                        doc_id,
+                        line_number,
+                    )
+                }
+            }
+        }
         Some(v) => ftd::e2(
             format!("expected string, found: {:?}", v),
             doc_id,
