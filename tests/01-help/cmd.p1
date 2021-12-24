@@ -5,8 +5,8 @@ Will have to be updated every time version changes.
 
 -- stdout:
 
-fpm: FTD Package Manager 0.1.6
-Amit Upadhyay, Shobhit Sharma, Arpita Jaiswal
+fpm: FTD Package Manager 0.1.7
+Amit Upadhyay, Arpita Jaiswal, Shobhit Sharma
 
 USAGE:
     fpm [FLAGS] [SUBCOMMAND]
