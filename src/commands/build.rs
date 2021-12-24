@@ -158,18 +158,29 @@ async fn process_ftd(
     let base_path = config.root.as_str();
     if !main.id.eq("index.ftd") {
         std::fs::create_dir_all(format!(
-            "{}/.build/{}",
+            "{}{}.build{}{}",
             base_path,
+            fpm::slash_delimiter(),
+            fpm::slash_delimiter(),
             main.id.replace(".ftd", "")
         ))?;
     }
     let file_rel_path = if main.id.eq("index.ftd") {
         "index.html".to_string()
     } else {
-        main.id.replace(".ftd", "/index.html")
+        main.id.replace(
+            ".ftd",
+            format!("{}index.html", fpm::slash_delimiter()).as_str(),
+        )
     };
 
-    let new_file_path = format!("{}/.build/{}", base_path, file_rel_path.as_str());
+    let new_file_path = format!(
+        "{}{}.build{}{}",
+        base_path,
+        fpm::slash_delimiter(),
+        fpm::slash_delimiter(),
+        file_rel_path.as_str()
+    );
 
     match (fallback, message) {
         (Some(fallback), Some(message)) => {
@@ -442,12 +453,24 @@ async fn process_ftd(
 }
 
 async fn process_static(sa: &fpm::Static, base_path: &str) -> fpm::Result<()> {
-    if let Some((dir, _)) = sa.id.rsplit_once("/") {
-        std::fs::create_dir_all(format!("{}/.build/{}", base_path, dir))?;
+    if let Some((dir, _)) = sa.id.rsplit_once(fpm::slash_delimiter()) {
+        std::fs::create_dir_all(format!(
+            "{}{}.build{}{}",
+            base_path,
+            fpm::slash_delimiter(),
+            fpm::slash_delimiter(),
+            dir
+        ))?;
     }
     std::fs::copy(
-        format!("{}/{}", sa.base_path, sa.id),
-        format!("{}/.build/{}", base_path, sa.id),
+        format!("{}{}{}", sa.base_path, fpm::slash_delimiter(), sa.id),
+        format!(
+            "{}{}.build{}{}",
+            base_path,
+            fpm::slash_delimiter(),
+            fpm::slash_delimiter(),
+            sa.id
+        ),
     )?;
     Ok(())
 }

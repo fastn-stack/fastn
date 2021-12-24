@@ -104,7 +104,7 @@ pub(crate) async fn get_file(
     let id = match std::fs::canonicalize(doc_path)?
         .to_str()
         .unwrap()
-        .rsplit_once(format!("{}/", base_path).as_str())
+        .rsplit_once(format!("{}{}", base_path, fpm::slash_delimiter()).as_str())
     {
         Some((_, id)) => id.to_string(),
         None => {
@@ -122,8 +122,12 @@ pub(crate) async fn get_file(
         }),
         Some((doc_name, "md")) => File::Markdown(Document {
             id: if doc_name == "README"
-                && !(std::path::Path::new("./index.ftd").exists()
-                    || std::path::Path::new("./index.md").exists())
+                && !(std::path::Path::new(format!(".{}index.ftd", fpm::slash_delimiter()).as_str())
+                    .exists()
+                    || std::path::Path::new(
+                        format!(".{}index.md", fpm::slash_delimiter()).as_str(),
+                    )
+                    .exists())
             {
                 "index.md".to_string()
             } else {
