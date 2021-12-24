@@ -114,14 +114,6 @@ pub(crate) fn usage_error<T>(message: String) -> Result<T> {
     Err(Error::UsageError { message })
 }
 
-pub fn slash_delimiter() -> char {
-    if cfg!(windows) {
-        '\\'
-    } else {
-        '/'
-    }
-}
-
 #[cfg(test)]
 mod tests {
 

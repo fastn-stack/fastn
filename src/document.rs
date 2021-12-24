@@ -40,7 +40,7 @@ pub struct Document {
 #[derive(Debug, Clone)]
 pub struct Static {
     pub id: String,
-    pub base_path: String,
+    pub base_path: camino::Utf8PathBuf,
 }
 
 pub(crate) async fn get_documents(config: &fpm::Config) -> fpm::Result<Vec<fpm::File>> {
@@ -104,7 +104,7 @@ pub(crate) async fn get_file(
     let id = match std::fs::canonicalize(doc_path)?
         .to_str()
         .unwrap()
-        .rsplit_once(format!("{}{}", base_path, fpm::slash_delimiter()).as_str())
+        .rsplit_once(format!("{}{}", base_path, std::path::MAIN_SEPARATOR).as_str())
     {
         Some((_, id)) => id.to_string(),
         None => {
@@ -122,10 +122,12 @@ pub(crate) async fn get_file(
         }),
         Some((doc_name, "md")) => File::Markdown(Document {
             id: if doc_name == "README"
-                && !(std::path::Path::new(format!(".{}index.ftd", fpm::slash_delimiter()).as_str())
-                    .exists()
+                && !(std::path::Path::new(
+                    format!(".{}index.ftd", std::path::MAIN_SEPARATOR).as_str(),
+                )
+                .exists()
                     || std::path::Path::new(
-                        format!(".{}index.md", fpm::slash_delimiter()).as_str(),
+                        format!(".{}index.md", std::path::MAIN_SEPARATOR).as_str(),
                     )
                     .exists())
             {
@@ -138,7 +140,7 @@ pub(crate) async fn get_file(
         }),
         _ => File::Static(Static {
             id: id.to_string(),
-            base_path: base_path.to_string(),
+            base_path: base_path.to_path_buf(),
         }),
     })
 }
