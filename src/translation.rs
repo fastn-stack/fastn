@@ -27,7 +27,7 @@ pub struct TranslationData {
 }
 
 impl TranslatedDocument {
-    pub async fn html(&self, config: &fpm::Config, base_url: &str) -> fpm::Result<()> {
+    pub async fn html(&self, config: &fpm::Config, base_url: Option<&str>) -> fpm::Result<()> {
         // handle the message
         // render with-fallback or with-message
         let message = fpm::get_messages(self, config)?;

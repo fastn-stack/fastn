@@ -5,7 +5,7 @@ async fn main() -> fpm::Result<()> {
     let config = fpm::Config::read().await?;
 
     if let Some(build) = matches.subcommand_matches("build") {
-        fpm::build(&config, build.value_of("base").unwrap_or("/")).await?;
+        fpm::build(&config, build.value_of("base")).await?;
     }
 
     if let Some(sync) = matches.subcommand_matches("sync") {
@@ -74,7 +74,6 @@ fn app(authors: &'static str) -> clap::App<'static, 'static> {
                     clap::Arg::with_name("base")
                         .long("base")
                         .takes_value(true)
-                        .default_value("/")
                         .help("Base URL"),
                 )
                 .version(env!("CARGO_PKG_VERSION")),
