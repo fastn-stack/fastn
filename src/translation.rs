@@ -106,7 +106,20 @@ impl TranslatedDocument {
             fpm::snapshot::get_latest_snapshots(&config.original_path()?).await?;
         let mut translation_status = std::collections::BTreeMap::new();
         for (file, timestamp) in original_snapshots {
-            let original_document = original_documents.get(file.as_str()).unwrap();
+            let original_document =
+                if let Some(original_document) = original_documents.get(file.as_str()) {
+                    original_document
+                } else if file.eq("README.md") {
+                    original_documents
+                        .get("index.md")
+                        .ok_or(fpm::Error::PackageError {
+                            message: format!("Could not find `{}`", file),
+                        })?
+                } else {
+                    return Err(fpm::Error::PackageError {
+                        message: format!("Could not find `{}`", file),
+                    });
+                };
             if !translated_documents.contains_key(&file) {
                 translation_status.insert(
                     file,
