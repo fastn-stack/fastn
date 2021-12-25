@@ -431,9 +431,9 @@ dependencies = [
 
 [[package]]
 name = "fbt-lib"
-version = "0.1.15"
+version = "0.1.16"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "12d5942ab28a38bde690cee4f0381a9553fb25d557cdef8fb83ead407a1e311a"
+checksum = "6dcb8d6a105c26489c20701dc1a9d51b301106fae58d352d1d4e6f9ecafe45f9"
 dependencies = [
  "colored",
  "diffy",
@@ -496,7 +496,7 @@ dependencies = [
 
 [[package]]
 name = "fpm"
-version = "0.1.7"
+version = "0.1.8"
 dependencies = [
  "async-recursion",
  "camino",
@@ -529,9 +529,9 @@ checksum = "c1fd087255f739f4f1aeea69f11b72f8080e9c2e7645cd06955dad4a178a49e3"
 
 [[package]]
 name = "ftd"
-version = "0.1.16"
+version = "0.1.17"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "afde514eaeeb140acbdb2c1a37b4ecafc38c8155556ee956e0702287c373a5dc"
+checksum = "1f798674777377dca84871edbda13e49e830f0e228db6cf1a8b0b522aa6460a0"
 dependencies = [
  "comrak",
  "css-color-parser",

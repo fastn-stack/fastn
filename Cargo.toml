@@ -1,6 +1,6 @@
 [package]
 name = "fpm"
-version = "0.1.7"
+version = "0.1.8"
 authors = [
     "Amit Upadhyay <upadhyay@gmail.com>",
     "Arpita Jaiswal <arpita@fifthtry.com>",
@@ -18,7 +18,7 @@ async-recursion = "0.3.2"
 camino = "1.0.5"
 clap = "2.33.3"
 diffy = "0.2.1"
-ftd = "0.1.16"
+ftd = "0.1.17"
 futures = "0.3"
 home = "0.5.3"
 ignore = "0.4.18"
@@ -34,7 +34,7 @@ url = "2.2.2"
 zip = "0.5"
 
 [dev-dependencies]
-fbt-lib = "0.1.15"
+fbt-lib = "0.1.16"
 indoc = "1"
 pretty_assertions = "1"
 rusty-hook = "^0.11.2"
