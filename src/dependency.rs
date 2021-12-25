@@ -6,14 +6,12 @@ pub struct Dependency {
     pub notes: Option<String>,
 }
 
-impl Dependency {
-    pub async fn process(&self, base_dir: camino::Utf8PathBuf) -> fpm::Result<()> {
-        self.package.process(base_dir, self.repo.as_str()).await
-    }
-}
-
-pub async fn ensure(base_dir: camino::Utf8PathBuf, deps: Vec<fpm::Dependency>) -> fpm::Result<()> {
-    futures::future::join_all(
+pub fn ensure(
+    base_dir: &camino::Utf8PathBuf,
+    deps: Vec<fpm::Dependency>,
+    package: &fpm::Package,
+) -> fpm::Result<()> {
+    /*futures::future::join_all(
         deps.into_iter()
             .map(|x| (x, base_dir.clone()))
             .map(|(x, base_dir)| {
@@ -21,7 +19,20 @@ pub async fn ensure(base_dir: camino::Utf8PathBuf, deps: Vec<fpm::Dependency>) -
             })
             .collect::<Vec<tokio::task::JoinHandle<_>>>(),
     )
-    .await;
+    .await;*/
+    // TODO: To convert it back to async. Not sure we can or should do it as `downloaded_package` would be
+    //  referred and updated by all the dep.package.process. To make it async we have change this
+    //  function to unsafe and downloaded_package as global static variable to have longer lifetime
+
+    let mut downloaded_package = vec![package.name.clone()];
+    for dep in deps {
+        dep.package
+            .process(base_dir, dep.repo.as_str(), &mut downloaded_package, false)?;
+    }
+
+    if let Some(translation_of) = package.translation_of.as_ref() {
+        translation_of.process(base_dir, "github", &mut downloaded_package, true)?;
+    }
     Ok(())
 }
 
@@ -49,12 +60,22 @@ impl fpm::Package {
     /// yet implemented), and if not downloads and unpacks the method.
     /// It then calls `process_fpm()` which checks the dependencies of the downloaded packages and
     /// then again call `process()` if dependent package is not downloaded or available
-    pub async fn process(&self, base_dir: camino::Utf8PathBuf, repo: &str) -> fpm::Result<()> {
-        use tokio::io::AsyncWriteExt;
+    pub fn process(
+        &self,
+        base_dir: &camino::Utf8PathBuf,
+        repo: &str,
+        downloaded_package: &mut Vec<String>,
+        download_translations: bool,
+    ) -> fpm::Result<()> {
+        use std::io::Write;
         // TODO: in future we will check if we have a new version in the package's repo.
         //       for now assume if package exists we have the latest package and if you
         //       want to update a package, delete the corresponding folder and latest
         //       version will get downloaded.
+
+        if downloaded_package.contains(&self.name) {
+            return Ok(());
+        }
 
         if !base_dir.join(".packages").join(self.name.as_str()).exists() {
             let path =
@@ -70,11 +91,11 @@ impl fpm::Package {
                     }
                     k => k.to_string(),
                 };
-                let response = reqwest::get(download_url).await?;
-                let mut file = tokio::fs::File::create(&path).await?;
+                let response = futures::executor::block_on(reqwest::get(download_url))?;
+                let mut file = std::fs::File::create(&path)?;
                 // TODO: instead of reading the whole thing in memory use tokio::io::copy() somehow?
-                let content = response.bytes().await?;
-                file.write_all(&content).await?;
+                let content = futures::executor::block_on(response.bytes())?;
+                file.write_all(&content)?;
             }
 
             let file = std::fs::File::open(&path)?;
@@ -109,8 +130,10 @@ impl fpm::Package {
         fpm::Package::process_fpm(
             base_dir.join(".packages").join(self.name.as_str()),
             base_dir,
+            downloaded_package,
+            self.name.as_str(),
+            download_translations,
         )
-        .await
     }
 
     /// This function is called by `process()` or recursively called by itself.
@@ -121,10 +144,14 @@ impl fpm::Package {
     ///
     /// `process_fpm()`, together with `process()`, recursively make dependency packages available inside
     /// `.packages` directory
-    #[async_recursion::async_recursion]
-    async fn process_fpm(
+    ///
+    // #[async_recursion::async_recursion]
+    fn process_fpm(
         root: camino::Utf8PathBuf,
-        base_path: camino::Utf8PathBuf,
+        base_path: &camino::Utf8PathBuf,
+        downloaded_package: &mut Vec<String>,
+        expected_package_name: &str,
+        download_translations: bool,
     ) -> fpm::Result<()> {
         let root = match fpm::config::find_package_root(&root) {
             Some(b) => b,
@@ -133,7 +160,7 @@ impl fpm::Package {
             }
         };
         let ftd_document = {
-            let doc = tokio::fs::read_to_string(root.join("FPM.ftd")).await?;
+            let doc = std::fs::read_to_string(root.join("FPM.ftd"))?;
             let lib = fpm::FPMLibrary::default();
             match ftd::p2::Document::from("FPM", doc.as_str(), &lib) {
                 Ok(v) => v,
@@ -148,6 +175,19 @@ impl fpm::Package {
             let temp_package: fpm::config::PackageTemp = ftd_document.get("fpm#package")?;
             temp_package.into_package()
         };
+
+        if !package.name.eq(expected_package_name) {
+            warning!(format!(
+                "Could not able to download `{}` package. \
+                Because in `{}/FPM.ftd` file, the package name is given as `{}`, \
+                while expected name is `{}`",
+                expected_package_name, expected_package_name, package.name, expected_package_name
+            ));
+            std::fs::remove_dir_all(root)?;
+            return Ok(());
+        }
+        downloaded_package.push(expected_package_name.to_string());
+
         let deps = {
             let temp_deps: Vec<fpm::dependency::DependencyTemp> =
                 ftd_document.get("fpm#dependency")?;
@@ -159,30 +199,57 @@ impl fpm::Package {
 
         for dep in deps {
             let dep_path = root.join(".packages").join(dep.package.name.as_str());
+            if downloaded_package.contains(&dep.package.name) {
+                continue;
+            }
             if dep_path.exists() {
                 let dst = base_path.join(".packages").join(dep.package.name.as_str());
                 if !dst.exists() {
                     futures::executor::block_on(fpm::copy_dir_all(dep_path, dst.clone()))?;
                 }
-                fpm::Package::process_fpm(dst, base_path.clone()).await?;
+                fpm::Package::process_fpm(
+                    dst,
+                    base_path,
+                    downloaded_package,
+                    dep.package.name.as_str(),
+                    false,
+                )?;
             }
             dep.package
-                .process(base_path.clone(), dep.repo.as_str())
-                .await?;
+                .process(base_path, dep.repo.as_str(), downloaded_package, false)?;
         }
 
-        if let Some(translation_of) = package.translation_of.as_ref() {
-            let original_path = root.join(".packages").join(translation_of.name.as_str());
-            if original_path.exists() {
-                let dst = base_path
-                    .join(".packages")
-                    .join(translation_of.name.as_str());
-                if !dst.exists() {
-                    futures::executor::block_on(fpm::copy_dir_all(original_path, dst.clone()))?;
+        if download_translations {
+            if let Some(translation_of) = package.translation_of.as_ref() {
+                return Err(fpm::Error::PackageError {
+                    message: format!(
+                        "Cannot translated a translation package. \
+                    suggestion: Translated the original package instead. \
+                    Looks like `{}` is an original package",
+                        translation_of.name
+                    ),
+                });
+            }
+            for translation in package.translations {
+                let original_path = root.join(".packages").join(translation.name.as_str());
+                if downloaded_package.contains(&translation.name) {
+                    continue;
                 }
-                fpm::Package::process_fpm(dst, base_path.clone()).await?;
-            } else {
-                translation_of.process(base_path.clone(), "github").await?;
+                if original_path.exists() {
+                    let dst = base_path.join(".packages").join(translation.name.as_str());
+                    if !dst.exists() {
+                        futures::executor::block_on(fpm::copy_dir_all(original_path, dst.clone()))?;
+                    }
+                    fpm::Package::process_fpm(
+                        dst,
+                        base_path,
+                        downloaded_package,
+                        translation.name.as_str(),
+                        false,
+                    )?;
+                } else {
+                    translation.process(base_path, "github", downloaded_package, false)?;
+                }
             }
         }
         Ok(())

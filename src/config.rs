@@ -198,10 +198,7 @@ impl Config {
             }
         };
 
-        fpm::dependency::ensure(root.clone(), deps.clone()).await?;
-        if let Some(translation_of) = package.translation_of.as_ref() {
-            translation_of.process(root.clone(), "github").await?;
-        }
+        fpm::dependency::ensure(&root, deps.clone(), &package)?;
 
         Ok(Config {
             package,
