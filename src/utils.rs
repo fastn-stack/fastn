@@ -1,3 +1,19 @@
+macro_rules! warning {
+    ($s:expr,) => {
+        warning!($s)
+    };
+    ($s:expr) => {
+        use std::io::Write;
+        use termcolor::WriteColor;
+
+        let mut stdout = termcolor::StandardStream::stdout(termcolor::ColorChoice::Always);
+        stdout.set_color(termcolor::ColorSpec::new().set_fg(Some(termcolor::Color::Yellow)))?;
+
+        writeln!(&mut stdout, "{}", $s)?;
+        stdout.reset()?;
+    };
+}
+
 pub trait HasElements {
     fn has_elements(&self) -> bool;
 }
@@ -87,4 +103,23 @@ pub(crate) fn seconds_to_human(s: u64) -> String {
     } else {
         format!("{} years ago", months / 12)
     }
+}
+
+pub(crate) fn get_valid_package_name(root: &camino::Utf8PathBuf) -> fpm::Result<Option<String>> {
+    let mut package_name = root.file_name().map(|v| v.to_string());
+    let output = std::process::Command::new("git")
+        .args(["remote", "get-url", "--push", "origin"])
+        .output()
+        .unwrap();
+    if output.status.success() {
+        let github_repo_name = std::str::from_utf8(&output.stdout)
+            .unwrap()
+            .trim()
+            .replace(".git", "")
+            .replace("git@github.com:", "")
+            .replace("https://github.com/", "")
+            .to_lowercase();
+        package_name = Some(github_repo_name);
+    }
+    Ok(package_name)
 }

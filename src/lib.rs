@@ -1,5 +1,8 @@
 extern crate self as fpm;
 
+#[macro_use]
+pub(crate) mod utils;
+
 mod commands;
 mod config;
 mod dependency;
@@ -9,7 +12,6 @@ mod library;
 mod snapshot;
 mod tracker;
 mod translation;
-mod utils;
 
 pub(crate) use commands::build::process_file;
 pub use commands::{

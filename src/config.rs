@@ -162,10 +162,20 @@ impl Config {
 
         let fonts: Vec<fpm::Font> = b.get("fpm#font")?;
 
-        if root.file_name() != Some(package.name.as_str()) {
-            return Err(fpm::Error::PackageError {
-                message: "package name and folder name must match".to_string(),
-            });
+        let expected_package_name = fpm::utils::get_valid_package_name(&root)?;
+        if expected_package_name != Some(package.name.clone()) {
+            let warning_message = {
+                let mut warning_message =
+                    "warning: package name and repository/folder name must match.\n".to_string();
+                if let Some(expected_package_name) = expected_package_name {
+                    warning_message = format!(
+                        "{}suggestion: rename package to '{}'\n",
+                        warning_message, expected_package_name
+                    );
+                }
+                warning_message
+            };
+            warning!(warning_message);
         }
 
         let ignored = {
