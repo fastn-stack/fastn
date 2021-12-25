@@ -31,6 +31,11 @@ pub fn ensure(
     }
 
     if let Some(translation_of) = package.translation_of.as_ref() {
+        if package.lang.is_none() {
+            return Err(fpm::Error::UsageError {
+                message: "Translation package needs to declare the language".to_string(),
+            });
+        }
         translation_of.process(base_dir, "github", &mut downloaded_package, true)?;
     }
     Ok(())

@@ -2,5 +2,5 @@
 
 -- fpm.package:
 name: amitu
-lang: hi
+language: hi
 translation-of: arpita-jaiswal/blog

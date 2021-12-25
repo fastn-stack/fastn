@@ -1,7 +1,7 @@
 -- import: fpm
 
 -- fpm.package: sample
-lang: hi
+language: hi
 translation-of: arpita-jaiswal/blog
 
 -- fpm.font: Roboto

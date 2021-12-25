@@ -234,6 +234,7 @@ pub(crate) struct PackageTemp {
     pub translation_of: Option<String>,
     #[serde(rename = "translation")]
     pub translations: Vec<String>,
+    #[serde(rename = "language")]
     pub lang: Option<String>,
     pub about: Option<String>,
     pub domain: Option<String>,

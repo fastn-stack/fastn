@@ -2,7 +2,7 @@
 caption name:
 optional string about:
 optional string domain:
-optional string lang:
+optional string language:
 optional string translation-of:
 string list translation:
 
