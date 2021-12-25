@@ -16,7 +16,7 @@ pub async fn build(config: &fpm::Config, base_url: Option<&str>) -> fpm::Result<
         }
         (Some(original), false) => build_with_original(config, original, base_url).await,
         (None, false) => build_simple(config, base_url).await,
-        (None, true) => build_with_translations(config, base_url).await,
+        (None, true) => build_simple(config, base_url).await,
     }
 }
 
@@ -31,7 +31,7 @@ async fn build_simple(config: &fpm::Config, base_url: Option<&str>) -> fpm::Resu
     process_files(config, &documents, base_url).await
 }
 
-async fn build_with_translations(
+async fn _build_with_translations(
     _config: &fpm::Config,
     _base_url: Option<&str>,
 ) -> fpm::Result<()> {

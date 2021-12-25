@@ -148,7 +148,7 @@ impl Config {
                 }
             }
         };
-        let package = {
+        let mut package = {
             let temp_package: PackageTemp = b.get("fpm#package")?;
             temp_package.into_package()
         };
@@ -198,7 +198,7 @@ impl Config {
             }
         };
 
-        fpm::dependency::ensure(&root, deps.clone(), &package)?;
+        fpm::dependency::ensure(&root, deps.clone(), &mut package)?;
 
         Ok(Config {
             package,
