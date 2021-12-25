@@ -393,7 +393,12 @@ impl ftd::Scene {
                     if !self.common.is_not_visible {
                         node.style.insert(s("display"), s("block"));
                     }
-                    node.style.insert(s("height"), s("auto"));
+                    if let Some(p) = &self.common.height {
+                        let (key, value) = length(p, "height");
+                        node.style.insert(s(key.as_str()), value);
+                    } else {
+                        node.style.insert(s("height"), s("auto"));
+                    }
                     if let Some(ref data_id) = self.common.data_id {
                         node.attrs
                             .insert(s("data-id"), format!("{}:scene-bg", data_id));
@@ -1293,13 +1298,13 @@ fn non_static_container_align(l: &ftd::Position, inner: bool) -> Vec<(String, St
             if inner {
                 vec![
                     ("bottom".to_string(), "0".to_string()),
-                    ("left".to_string(), "50".to_string()),
+                    ("left".to_string(), "50%".to_string()),
                     ("transform".to_string(), "translateX(-50%)".to_string()),
                 ]
             } else {
                 vec![
                     ("top".to_string(), "100%".to_string()),
-                    ("left".to_string(), "50".to_string()),
+                    ("left".to_string(), "50%".to_string()),
                     ("transform".to_string(), "translateX(-50%)".to_string()),
                 ]
             }
