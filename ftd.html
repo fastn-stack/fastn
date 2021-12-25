@@ -5,30 +5,15 @@
     <base href="__base_url__">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
     <title>ftd</title>
-
-    <script type="ftd" id="ftd-data-message">
-        __ftd_data_message__
+    <script type="ftd" id="ftd-data">
+        __ftd_data__
     </script>
-    <script type="ftd" id="ftd-external-children-message">
-        __ftd_external_children_message__
+    <script type="ftd" id="ftd-external-children">
+        __ftd_external_children__
     </script>
-    <script type="ftd" id="ftd-data-main">
-        __ftd_data_main__
-    </script>
-    <script type="ftd" id="ftd-external-children-main">
-        __ftd_external_children_main__
-    </script>
-    <script type="ftd" id="ftd-data-fallback">
-        __ftd_data_fallback__
-    </script>
-    <script type="ftd" id="ftd-external-children-fallback">
-        __ftd_external_children_fallback__
-    </script>
-
     <script>
         __ftd_js__
     </script>
-
     <style>
         body {
             margin: 0;
@@ -158,41 +143,20 @@
             margin: 0;
         }
 
-    </style>
+        </style>
 
 </head>
-<body>
+    <body>
 
-<div id="message">__message__</div>
-<div id="main">__main__</div>
-<div id="fallback" style="display: none">__fallback__</div>
+        __ftd__
 
-<script>
-    function show_main() {
-        document.getElementById("main").style.display = "block";
-        document.getElementById("fallback").style.display = "none";
-    }
 
-    function show_fallback() {
-        document.getElementById("main").style.display = "none";
-        document.getElementById("fallback").style.display = "block";
-    }
-
-    window.ftd.init(
-        "message",
-        JSON.parse(document.getElementById("ftd-data-message").innerText),
-        JSON.parse(document.getElementById("ftd-external-children-message").innerText)
-    );
-    window.ftd.init(
-        "main",
-        JSON.parse(document.getElementById("ftd-data-main").innerText),
-        JSON.parse(document.getElementById("ftd-external-children-main").innerText)
-    );
-    window.ftd.init(
-        "fallback",
-        JSON.parse(document.getElementById("ftd-data-fallback").innerText),
-        JSON.parse(document.getElementById("ftd-external-children-fallback").innerText)
-    );
-</script>
-</body>
+    <script>
+        window.ftd.init(
+            "main",
+            JSON.parse(document.getElementById("ftd-data").innerText),
+            JSON.parse(document.getElementById("ftd-external-children").innerText)
+        );
+    </script>
+    </body>
 </html>

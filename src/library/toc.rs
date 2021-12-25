@@ -194,7 +194,9 @@ fn id_to_url(id: &str) -> String {
     if id.starts_with("https://")
         || id.starts_with("http://")
         || id.starts_with('/')
+        || id.ends_with('/')
         || id.starts_with("..")
+        || id.starts_with("./")
         || id.ends_with(".html")
     {
         id.to_string()

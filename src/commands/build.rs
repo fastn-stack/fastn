@@ -1,6 +1,6 @@
 use std::iter::FromIterator;
 
-pub async fn build(config: &fpm::Config) -> fpm::Result<()> {
+pub async fn build(config: &fpm::Config, base_url: &str) -> fpm::Result<()> {
     use fpm::utils::HasElements;
 
     tokio::fs::create_dir_all(config.build_dir()).await?;
@@ -14,13 +14,13 @@ pub async fn build(config: &fpm::Config) -> fpm::Result<()> {
             // translations, when building `config` we ensured this was rejected
             unreachable!()
         }
-        (Some(original), false) => build_with_original(config, original).await,
-        (None, false) => build_simple(config).await,
-        (None, true) => build_with_translations(config).await,
+        (Some(original), false) => build_with_original(config, original, base_url).await,
+        (None, false) => build_simple(config, base_url).await,
+        (None, true) => build_with_translations(config, base_url).await,
     }
 }
 
-async fn build_simple(config: &fpm::Config) -> fpm::Result<()> {
+async fn build_simple(config: &fpm::Config, base_url: &str) -> fpm::Result<()> {
     let documents = std::collections::BTreeMap::from_iter(
         fpm::get_documents(config)
             .await?
@@ -28,10 +28,10 @@ async fn build_simple(config: &fpm::Config) -> fpm::Result<()> {
             .map(|v| (v.get_id(), v)),
     );
 
-    process_files(config, &documents).await
+    process_files(config, &documents, base_url).await
 }
 
-async fn build_with_translations(_config: &fpm::Config) -> fpm::Result<()> {
+async fn build_with_translations(_config: &fpm::Config, _base_url: &str) -> fpm::Result<()> {
     todo!("build does not yet support translations, only translation-of")
 }
 
@@ -39,7 +39,11 @@ async fn build_with_translations(_config: &fpm::Config) -> fpm::Result<()> {
 /// First fetch all files from the original package
 /// Then overwrite it with file in root package having same name/id as in original package
 /// ignore all those documents/files which is not in original package
-async fn build_with_original(config: &fpm::Config, _original: &fpm::Package) -> fpm::Result<()> {
+async fn build_with_original(
+    config: &fpm::Config,
+    _original: &fpm::Package,
+    base_url: &str,
+) -> fpm::Result<()> {
     // This is the translation package
     // Fetch all files from the original package
     let original_path = config.original_path()?;
@@ -79,7 +83,7 @@ async fn build_with_original(config: &fpm::Config, _original: &fpm::Package) -> 
 
     // Process all the files collected from original and root package
     for translated_document in translated_documents.values() {
-        translated_document.html(config).await?;
+        translated_document.html(config, base_url).await?;
     }
     Ok(())
 }
@@ -87,9 +91,10 @@ async fn build_with_original(config: &fpm::Config, _original: &fpm::Package) -> 
 async fn process_files(
     config: &fpm::Config,
     documents: &std::collections::BTreeMap<String, fpm::File>,
+    base_url: &str,
 ) -> fpm::Result<()> {
     for file in documents.values() {
-        process_file(config, file, None, None, Default::default()).await?
+        process_file(config, file, None, None, Default::default(), base_url).await?
     }
     Ok(())
 }
@@ -100,6 +105,7 @@ pub(crate) async fn process_file(
     fallback: Option<&fpm::File>,
     message: Option<&str>,
     translated_data: fpm::TranslationData,
+    base_url: &str,
 ) -> fpm::Result<()> {
     if let Some(fallback) = fallback {
         match (main, fallback) {
@@ -110,6 +116,7 @@ pub(crate) async fn process_file(
                     Some(fallback_doc),
                     message,
                     translated_data,
+                    base_url,
                 )
                 .await?
             }
@@ -117,7 +124,7 @@ pub(crate) async fn process_file(
                 process_static(main_sa, &config.root).await?
             }
             (fpm::File::Markdown(main_sa), fpm::File::Markdown(_)) => {
-                process_markdown(main_sa, config).await?
+                process_markdown(main_sa, config, base_url).await?
             }
             (main_file, fallback_file) => {
                 return Err(fpm::Error::UsageError {
@@ -132,15 +139,21 @@ pub(crate) async fn process_file(
         return Ok(());
     }
     match main {
-        fpm::File::Ftd(doc) => process_ftd(config, doc, None, message, translated_data).await?,
+        fpm::File::Ftd(doc) => {
+            process_ftd(config, doc, None, message, translated_data, base_url).await?
+        }
         fpm::File::Static(sa) => process_static(sa, &config.root).await?,
-        fpm::File::Markdown(doc) => process_markdown(doc, config).await?,
+        fpm::File::Markdown(doc) => process_markdown(doc, config, base_url).await?,
     }
     println!("Processed {}", main.get_id());
     Ok(())
 }
 
-async fn process_markdown(_doc: &fpm::Document, _config: &fpm::Config) -> fpm::Result<()> {
+async fn process_markdown(
+    _doc: &fpm::Document,
+    _config: &fpm::Config,
+    _base_url: &str,
+) -> fpm::Result<()> {
     // if let Ok(c) = tokio::fs::read_to_string("./FPM/markdown.ftd").await {
     //     c
     // } else {
@@ -156,6 +169,7 @@ async fn process_ftd(
     fallback: Option<&fpm::Document>,
     message: Option<&str>,
     translated_data: fpm::TranslationData,
+    base_url: &str,
 ) -> fpm::Result<()> {
     if !main.id.eq("index.ftd") {
         std::fs::create_dir_all(config.root.join(".build").join(main.id.replace(".ftd", "")))?;
@@ -180,6 +194,7 @@ async fn process_ftd(
                 new_file_path.as_str(),
                 message,
                 translated_data,
+                base_url,
             )
             .await?
         }
@@ -190,10 +205,11 @@ async fn process_ftd(
                 new_file_path.as_str(),
                 message,
                 translated_data,
+                base_url,
             )
             .await?
         }
-        _ => write_default(config, main, new_file_path.as_str()).await?,
+        _ => write_default(config, main, new_file_path.as_str(), base_url).await?,
     }
 
     return Ok(());
@@ -202,6 +218,7 @@ async fn process_ftd(
         config: &fpm::Config,
         main: &fpm::Document,
         new_file_path: &str,
+        base_url: &str,
     ) -> fpm::Result<()> {
         use tokio::io::AsyncWriteExt;
 
@@ -225,7 +242,7 @@ async fn process_ftd(
 
         let mut f = tokio::fs::File::create(new_file_path).await?;
         f.write_all(
-            ftd::html()
+            fpm::ftd_html()
                 .replace(
                     "__ftd_data__",
                     serde_json::to_string_pretty(&ftd_doc.data)
@@ -244,6 +261,7 @@ async fn process_ftd(
                 )
                 .as_str()
                 .replace("__ftd_js__", ftd::js())
+                .replace("__base_url__", base_url)
                 .as_bytes(),
         )
         .await?;
@@ -256,6 +274,7 @@ async fn process_ftd(
         new_file_path: &str,
         message: &str,
         translated_data: fpm::TranslationData,
+        base_url: &str,
     ) -> fpm::Result<()> {
         use tokio::io::AsyncWriteExt;
 
@@ -325,6 +344,7 @@ async fn process_ftd(
                 )
                 .as_str()
                 .replace("__ftd_js__", ftd::js())
+                .replace("__base_url__", base_url)
                 .as_bytes(),
         )
         .await?;
@@ -338,6 +358,7 @@ async fn process_ftd(
         new_file_path: &str,
         message: &str,
         translated_data: fpm::TranslationData,
+        base_url: &str,
     ) -> fpm::Result<()> {
         use tokio::io::AsyncWriteExt;
 
@@ -434,6 +455,7 @@ async fn process_ftd(
                 )
                 .as_str()
                 .replace("__ftd_js__", ftd::js())
+                .replace("__base_url__", base_url)
                 .as_bytes(),
         )
         .await?;

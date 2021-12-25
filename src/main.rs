@@ -4,9 +4,10 @@ async fn main() -> fpm::Result<()> {
 
     let config = fpm::Config::read().await?;
 
-    if matches.subcommand_matches("build").is_some() {
-        fpm::build(&config).await?;
+    if let Some(build) = matches.subcommand_matches("build") {
+        fpm::build(&config, build.value_of("base").unwrap_or("/")).await?;
     }
+
     if let Some(sync) = matches.subcommand_matches("sync") {
         if let Some(source) = sync.values_of("source") {
             let sources = source.map(|v| v.to_string()).collect();
@@ -69,6 +70,13 @@ fn app(authors: &'static str) -> clap::App<'static, 'static> {
         .subcommand(
             clap::SubCommand::with_name("build")
                 .about("Build static site from this fpm package")
+                .arg(
+                    clap::Arg::with_name("base")
+                        .long("base")
+                        .takes_value(true)
+                        .default_value("/")
+                        .help("Base URL"),
+                )
                 .version(env!("CARGO_PKG_VERSION")),
         )
         .subcommand(
