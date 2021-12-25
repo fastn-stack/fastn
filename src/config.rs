@@ -1,3 +1,5 @@
+use std::convert::TryInto;
+
 /// `Config` struct keeps track of a few configuration parameters that is shared with the entire
 /// program. It is constructed from the content of `FPM.ftd` file for the package.
 ///

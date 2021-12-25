@@ -1,12 +1,12 @@
 [package]
 name = "fpm"
-version = "0.1.8"
+version = "0.1.9"
 authors = [
     "Amit Upadhyay <upadhyay@gmail.com>",
     "Arpita Jaiswal <arpita@fifthtry.com>",
     "Shobhit Sharma <shobhit@fifthtry.com>",
 ]
-edition = "2021"
+edition = "2018"
 description = "fpm: FTD Package Manager"
 license = "MIT"
 repository = "https://github.com/FifthTry/fpm"

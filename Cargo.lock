@@ -496,7 +496,7 @@ dependencies = [
 
 [[package]]
 name = "fpm"
-version = "0.1.8"
+version = "0.1.9"
 dependencies = [
  "async-recursion",
  "camino",

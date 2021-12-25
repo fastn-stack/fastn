@@ -1,3 +1,5 @@
+use std::iter::FromIterator;
+
 pub async fn build(config: &fpm::Config) -> fpm::Result<()> {
     use fpm::utils::HasElements;
 
