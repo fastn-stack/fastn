@@ -129,6 +129,12 @@ impl ftd::p2::Library for Library {
 
             if other_language_packages.has_elements() {
                 let mut languages = "".to_string();
+                let doc_id = if lib.document_id.eq("index.ftd") {
+                    "".to_string()
+                } else {
+                    lib.document_id.replace(".ftd", "/")
+                };
+
                 for lang_package in other_language_packages {
                     let language = if let Some(ref lang) = lang_package.language {
                         lang
@@ -137,7 +143,11 @@ impl ftd::p2::Library for Library {
                     };
 
                     let domain = if let Some(ref domain) = lang_package.domain {
-                        domain
+                        if domain.ends_with('/') {
+                            format!("{}{}", domain, doc_id)
+                        } else {
+                            format!("{}/{}", domain, doc_id)
+                        }
                     } else {
                         continue;
                     };
