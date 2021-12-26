@@ -46,7 +46,7 @@ pub fn ensure(
     }
 
     for translation in package.translations.iter_mut() {
-        if package.lang.is_none() {
+        if package.language.is_none() {
             return Err(fpm::Error::UsageError {
                 message: "Package needs to declare the language".to_string(),
             });
@@ -59,7 +59,7 @@ pub fn ensure(
     }
 
     if let Some(translation_of) = package.translation_of.as_mut() {
-        if package.lang.is_none() {
+        if package.language.is_none() {
             return Err(fpm::Error::UsageError {
                 message: "Translation package needs to declare the language".to_string(),
             });

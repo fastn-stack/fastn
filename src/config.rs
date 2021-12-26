@@ -257,7 +257,7 @@ impl PackageTemp {
             name: self.name,
             translation_of: Box::new(translation_of),
             translations,
-            lang: self.lang,
+            language: self.lang,
             about: self.about,
             domain: self.domain,
         }
@@ -269,7 +269,7 @@ pub struct Package {
     pub name: String,
     pub translation_of: Box<Option<Package>>,
     pub translations: Vec<Package>,
-    pub lang: Option<String>,
+    pub language: Option<String>,
     pub about: Option<String>,
     pub domain: Option<String>,
 }
@@ -280,7 +280,7 @@ impl Package {
             name: name.to_string(),
             translation_of: Box::new(None),
             translations: vec![],
-            lang: None,
+            language: None,
             about: None,
             domain: None,
         }
