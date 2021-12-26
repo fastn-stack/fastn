@@ -57,7 +57,7 @@ fn get_translation_status(
             ..
         }) = tracks.get(file)
         {
-            if last_merged_version < &timestamp {
+            if last_merged_version < timestamp {
                 translation_status.insert(file.clone(), TranslationStatus::Outdated);
                 continue;
             }
