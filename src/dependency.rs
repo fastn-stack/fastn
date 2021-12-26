@@ -1,3 +1,5 @@
+use crate::utils::HasElements;
+
 #[derive(serde::Deserialize, Debug, Clone)]
 pub struct Dependency {
     pub package: fpm::Package,
@@ -35,7 +37,20 @@ pub fn ensure(
         )?;
     }
 
+    if package.translations.has_elements() && package.translation_of.is_some() {
+        return Err(fpm::Error::UsageError {
+            message: "Package cannot be both original and translation package. \
+            suggestion: Remove either `translation-of` or `translation` from FPM.ftd"
+                .to_string(),
+        });
+    }
+
     for translation in package.translations.iter_mut() {
+        if package.lang.is_none() {
+            return Err(fpm::Error::UsageError {
+                message: "Package needs to declare the language".to_string(),
+            });
+        }
         let package =
             translation.process(base_dir, "github", &mut downloaded_package, false, false)?;
         if let Some(package) = package.first() {
