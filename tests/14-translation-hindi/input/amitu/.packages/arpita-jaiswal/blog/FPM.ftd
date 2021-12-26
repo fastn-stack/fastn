@@ -1,3 +1,5 @@
 -- import: fpm
 
 -- fpm.package: arpita-jaiswal/blog
+language: en
+domain: www.blog.com

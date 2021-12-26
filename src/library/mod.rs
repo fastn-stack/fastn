@@ -1,3 +1,5 @@
+use crate::utils::HasElements;
+
 mod http;
 mod sqlite;
 mod toc;
@@ -107,6 +109,74 @@ impl ftd::p2::Library for Library {
                     filename = filename,
                     content = content
                 );
+            }
+
+            let other_language_packages =
+                if let Some(translation_of) = lib.config.package.translation_of.as_ref() {
+                    let mut other_language_packages = translation_of
+                        .translations
+                        .iter()
+                        .collect::<Vec<&fpm::Package>>();
+                    other_language_packages.insert(0, translation_of);
+                    other_language_packages
+                } else {
+                    lib.config
+                        .package
+                        .translations
+                        .iter()
+                        .collect::<Vec<&fpm::Package>>()
+                };
+
+            if other_language_packages.has_elements() {
+                let mut languages = "".to_string();
+                for lang_package in other_language_packages {
+                    let language = if let Some(ref lang) = lang_package.language {
+                        lang
+                    } else {
+                        continue;
+                    };
+
+                    let domain = if let Some(ref domain) = lang_package.domain {
+                        domain
+                    } else {
+                        continue;
+                    };
+
+                    languages = format!(
+                        indoc::indoc! {"
+                        {languages}
+                        - {domain}
+                          {language}
+
+                        "},
+                        languages = languages,
+                        domain = domain,
+                        language = language
+                    );
+                }
+
+                if !languages.trim().is_empty() {
+                    fpm_base = format!(
+                        indoc::indoc! {"
+                        {fpm_base}
+
+                        -- record language-toc-item:
+                        caption title:
+                        string url:
+                        language-toc-item list children:
+
+                        -- language-toc-item list language-toc:
+                        
+                        -- language-toc:
+                        $processor$: toc
+
+                        {languages}
+
+                        "},
+                        fpm_base = fpm_base,
+                        languages = languages
+                    );
+                }
             }
 
             fpm_base

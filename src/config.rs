@@ -198,7 +198,7 @@ impl Config {
             }
         };
 
-        fpm::dependency::ensure(&root, deps.clone(), &mut package)?;
+        fpm::dependency::ensure(&root, &mut deps.clone(), &mut package)?;
 
         Ok(Config {
             package,

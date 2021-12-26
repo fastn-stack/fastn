@@ -10,7 +10,7 @@ pub struct Dependency {
 
 pub fn ensure(
     base_dir: &camino::Utf8PathBuf,
-    deps: Vec<fpm::Dependency>,
+    deps: &mut Vec<fpm::Dependency>,
     package: &mut fpm::Package,
 ) -> fpm::Result<()> {
     /*futures::future::join_all(
@@ -27,7 +27,7 @@ pub fn ensure(
     //  function to unsafe and downloaded_package as global static variable to have longer lifetime
 
     let mut downloaded_package = vec![package.name.clone()];
-    for dep in deps {
+    for dep in deps.iter_mut() {
         dep.package.process(
             base_dir,
             dep.repo.as_str(),
@@ -51,11 +51,7 @@ pub fn ensure(
                 message: "Package needs to declare the language".to_string(),
             });
         }
-        let package =
-            translation.process(base_dir, "github", &mut downloaded_package, false, false)?;
-        if let Some(package) = package.first() {
-            *translation = package.to_owned();
-        }
+        translation.process(base_dir, "github", &mut downloaded_package, false, false)?;
     }
 
     if let Some(translation_of) = package.translation_of.as_mut() {
@@ -64,9 +60,7 @@ pub fn ensure(
                 message: "Translation package needs to declare the language".to_string(),
             });
         }
-        let translation_packages =
-            translation_of.process(base_dir, "github", &mut downloaded_package, true, true)?;
-        translation_of.translations = translation_packages;
+        translation_of.process(base_dir, "github", &mut downloaded_package, true, true)?;
     }
     Ok(())
 }
@@ -96,13 +90,13 @@ impl fpm::Package {
     /// It then calls `process_fpm()` which checks the dependencies of the downloaded packages and
     /// then again call `process()` if dependent package is not downloaded or available
     pub fn process(
-        &self,
+        &mut self,
         base_dir: &camino::Utf8PathBuf,
         repo: &str,
         downloaded_package: &mut Vec<String>,
         download_translations: bool,
         download_dependencies: bool,
-    ) -> fpm::Result<Vec<fpm::Package>> {
+    ) -> fpm::Result<()> {
         use std::io::Write;
         // TODO: in future we will check if we have a new version in the package's repo.
         //       for now assume if package exists we have the latest package and if you
@@ -110,7 +104,7 @@ impl fpm::Package {
         //       version will get downloaded.
 
         if downloaded_package.contains(&self.name) {
-            return Ok(Default::default());
+            return Ok(());
         }
 
         if !base_dir.join(".packages").join(self.name.as_str()).exists() {
@@ -168,7 +162,7 @@ impl fpm::Package {
             base_dir.join(".packages").join(self.name.as_str()),
             base_dir,
             downloaded_package,
-            self.name.as_str(),
+            self,
             download_translations,
             download_dependencies,
         )
@@ -188,14 +182,14 @@ impl fpm::Package {
         root: camino::Utf8PathBuf,
         base_path: &camino::Utf8PathBuf,
         downloaded_package: &mut Vec<String>,
-        expected_package_name: &str,
+        mutpackage: &mut fpm::Package,
         download_translations: bool,
         download_dependencies: bool,
-    ) -> fpm::Result<Vec<fpm::Package>> {
+    ) -> fpm::Result<()> {
         let root = match fpm::config::find_package_root(&root) {
             Some(b) => b,
             None => {
-                return Ok(Default::default());
+                return Ok(());
             }
         };
         let ftd_document = {
@@ -210,24 +204,24 @@ impl fpm::Package {
                 }
             }
         };
-        let package = {
+        let mut package = {
             let temp_package: fpm::config::PackageTemp = ftd_document.get("fpm#package")?;
             temp_package.into_package()
         };
 
-        if !package.name.eq(expected_package_name) {
+        if !package.name.eq(mutpackage.name.as_str()) {
             warning!(format!(
                 "Could not able to download `{}` package. \
                 Because in `{}/FPM.ftd` file, the package name is given as `{}`, \
                 while expected name is `{}`",
-                expected_package_name, expected_package_name, package.name, expected_package_name
+                mutpackage.name, mutpackage.name, package.name, mutpackage.name
             ));
             std::fs::remove_dir_all(root)?;
-            return Ok(Default::default());
+            return Ok(());
         }
-        downloaded_package.push(expected_package_name.to_string());
+        downloaded_package.push(mutpackage.name.to_string());
 
-        let deps = {
+        let mut deps = {
             let temp_deps: Vec<fpm::dependency::DependencyTemp> =
                 ftd_document.get("fpm#dependency")?;
             temp_deps
@@ -237,7 +231,7 @@ impl fpm::Package {
         };
 
         if download_dependencies {
-            for dep in deps {
+            for dep in deps.iter_mut() {
                 let dep_path = root.join(".packages").join(dep.package.name.as_str());
                 if downloaded_package.contains(&dep.package.name) {
                     continue;
@@ -251,7 +245,7 @@ impl fpm::Package {
                         dst,
                         base_path,
                         downloaded_package,
-                        dep.package.name.as_str(),
+                        &mut dep.package,
                         false,
                         true,
                     )?;
@@ -277,8 +271,7 @@ impl fpm::Package {
                     ),
                 });
             }
-            let mut translation_packages = vec![];
-            for translation in package.translations.iter() {
+            for translation in package.translations.iter_mut() {
                 let original_path = root.join(".packages").join(translation.name.as_str());
                 if downloaded_package.contains(&translation.name) {
                     continue;
@@ -288,25 +281,20 @@ impl fpm::Package {
                     if !dst.exists() {
                         futures::executor::block_on(fpm::copy_dir_all(original_path, dst.clone()))?;
                     }
-                    translation_packages.extend(fpm::Package::process_fpm(
+                    fpm::Package::process_fpm(
                         dst,
                         base_path,
                         downloaded_package,
-                        translation.name.as_str(),
+                        translation,
                         false,
                         false,
-                    )?);
+                    )?;
                 } else {
-                    translation_packages.extend(translation.process(
-                        base_path,
-                        "github",
-                        downloaded_package,
-                        false,
-                        false,
-                    )?);
+                    translation.process(base_path, "github", downloaded_package, false, false)?;
                 }
             }
         }
-        Ok(vec![package])
+        *mutpackage = package;
+        Ok(())
     }
 }
