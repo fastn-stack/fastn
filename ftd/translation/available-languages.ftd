@@ -1,0 +1,11 @@
+-- import: fpm
+
+-- ftd.row:
+spacing: 10
+position: right
+
+--- ftd.text: Other available languages:
+
+--- ftd.text: $obj.title
+$loop$: $fpm.language-toc as $obj
+link: $obj.url

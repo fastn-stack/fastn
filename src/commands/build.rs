@@ -16,7 +16,7 @@ pub async fn build(config: &fpm::Config, base_url: Option<&str>) -> fpm::Result<
         }
         (Some(original), false) => build_with_original(config, original, base_url).await,
         (None, false) => build_simple(config, base_url).await,
-        (None, true) => build_simple(config, base_url).await,
+        (None, true) => build_with_translations(config, base_url).await,
     }
 }
 
@@ -31,11 +31,28 @@ async fn build_simple(config: &fpm::Config, base_url: Option<&str>) -> fpm::Resu
     process_files(config, &documents, base_url).await
 }
 
-async fn _build_with_translations(
-    _config: &fpm::Config,
-    _base_url: Option<&str>,
-) -> fpm::Result<()> {
-    todo!("build does not yet support translations, only translation-of")
+async fn build_with_translations(config: &fpm::Config, base_url: Option<&str>) -> fpm::Result<()> {
+    let documents = std::collections::BTreeMap::from_iter(
+        fpm::get_documents(config)
+            .await?
+            .into_iter()
+            .map(|v| (v.get_id(), v)),
+    );
+
+    let message = fpm::available_languages(config)?;
+
+    for file in documents.values() {
+        fpm::process_file(
+            config,
+            file,
+            None,
+            Some(message.as_str()),
+            Default::default(),
+            base_url,
+        )
+        .await?;
+    }
+    Ok(())
 }
 
 /// This is the translation package

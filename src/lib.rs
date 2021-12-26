@@ -45,6 +45,15 @@ fn with_message() -> &'static str {
     include_str!("../with-message.html")
 }
 
+fn available_languages(config: &fpm::Config) -> fpm::Result<String> {
+    let path = config.root.join("FPM/translation/available-languages.ftd");
+    Ok(if path.is_file() {
+        std::fs::read_to_string(path)?
+    } else {
+        include_str!("../ftd/translation/available-languages.ftd").to_string()
+    })
+}
+
 fn get_messages(status: &fpm::TranslatedDocument, config: &fpm::Config) -> fpm::Result<String> {
     Ok(match status {
         TranslatedDocument::Missing { .. } => {
