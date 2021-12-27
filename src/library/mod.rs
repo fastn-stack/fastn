@@ -39,6 +39,20 @@ impl ftd::p2::Library for Library {
                         {fpm_base}
                         
                         -- string document-id: {document_id}
+
+                        -- optional string diff:
+                        
+                        -- optional string last-marked-on: 
+
+                        -- optional string original-latest:
+
+                        -- optional string translated-latest:
+
+                        -- optional string last-marked-on-rfc3339: 
+
+                        -- optional string original-latest-rfc3339:
+
+                        -- optional string translated-latest-rfc3339:
     
                         "},
                 fpm_base = fpm::fpm_ftd().to_string(),
@@ -49,7 +63,7 @@ impl ftd::p2::Library for Library {
                     indoc::indoc! {"
                         {fpm_base}
                         
-                        -- string diff: 
+                        -- diff: 
                         
                         {diff}
     
@@ -59,39 +73,57 @@ impl ftd::p2::Library for Library {
                 );
             }
             if let Some(ref last_marked_on) = lib.translated_data.last_marked_on {
+                let time = std::time::SystemTime::UNIX_EPOCH
+                    + std::time::Duration::from_nanos(*last_marked_on as u64);
+                let rfc3339 = chrono::DateTime::<chrono::Utc>::from(time).to_rfc3339();
                 fpm_base = format!(
                     indoc::indoc! {"
                         {fpm_base}
                         
-                        -- integer last-marked-on: {last_marked_on}
+                        -- last-marked-on: {last_marked_on}
+
+                        -- last-marked-on-rfc3339: {rfc3339}
     
                         "},
                     fpm_base = fpm_base,
                     last_marked_on = last_marked_on,
+                    rfc3339 = rfc3339
                 );
             }
             if let Some(ref original_latest) = lib.translated_data.original_latest {
+                let time = std::time::SystemTime::UNIX_EPOCH
+                    + std::time::Duration::from_nanos(*original_latest as u64);
+                let rfc3339 = chrono::DateTime::<chrono::Utc>::from(time).to_rfc3339();
                 fpm_base = format!(
                     indoc::indoc! {"
                         {fpm_base}
                         
-                        -- integer original-latest: {original_latest}
+                        -- original-latest: {original_latest}
+
+                        -- original-latest-rfc3339: {rfc3339}
     
                         "},
                     fpm_base = fpm_base,
                     original_latest = original_latest,
+                    rfc3339 = rfc3339
                 );
             }
             if let Some(ref translated_latest) = lib.translated_data.translated_latest {
+                let time = std::time::SystemTime::UNIX_EPOCH
+                    + std::time::Duration::from_nanos(*translated_latest as u64);
+                let rfc3339 = chrono::DateTime::<chrono::Utc>::from(time).to_rfc3339();
                 fpm_base = format!(
                     indoc::indoc! {"
                         {fpm_base}
                         
-                        -- integer translated-latest: {translated_latest}
+                        -- translated-latest: {translated_latest}
+
+                        -- translated-latest-rfc3339: {rfc3339}
     
                         "},
                     fpm_base = fpm_base,
                     translated_latest = translated_latest,
+                    rfc3339 = rfc3339
                 );
             }
             if let Some((filename, content)) = lib.markdown.as_ref() {

@@ -8,6 +8,7 @@ spacing: 5
 
 -- ftd.code:
 lang: diff
+if: $fpm.diff is not null
 
 $fpm.diff
 

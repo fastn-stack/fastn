@@ -9,11 +9,14 @@ spacing: 5
 -- ftd.row:
 spacing: 5
 
---- ftd.integer: $fpm.translated-latest
+--- ftd.text: $fpm.translated-latest-rfc3339
+if: $fpm.translated-latest-rfc3339 is not null
+
 --- ftd.text: is a translated latest timestamp in nanoseconds
 
 -- ftd.code:
 lang: diff
+if: $fpm.diff is not null
 
 $fpm.diff
 
