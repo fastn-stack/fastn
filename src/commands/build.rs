@@ -191,6 +191,12 @@ async fn process_ftd(
     translated_data: fpm::TranslationData,
     base_url: Option<&str>,
 ) -> fpm::Result<()> {
+    if main.id.eq("FPM.ftd") {
+        std::fs::copy(
+            config.root.join(main.id.as_str()),
+            config.root.join(".build").join(main.id.as_str()),
+        )?;
+    }
     if !main.id.eq("index.ftd") {
         std::fs::create_dir_all(config.root.join(".build").join(main.id.replace(".ftd", "")))?;
     }

@@ -1,6 +1,6 @@
 -- import: fpm
 
 -- fpm.package: arpita-jaiswal/blog
+zip: arpita-jaiswal/blog
 
 -- fpm.dependency: blog-theme
-repo: github

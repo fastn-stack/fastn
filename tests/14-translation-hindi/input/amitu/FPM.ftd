@@ -1,6 +1,6 @@
 -- import: fpm
 
--- fpm.package:
-name: amitu
+-- fpm.package: amitu
+zip: amitu
 language: hi
 translation-of: arpita-jaiswal/blog

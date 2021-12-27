@@ -1,7 +1,7 @@
 -- record package-data:
 caption name:
 optional string about:
-optional string domain:
+optional string zip:
 optional string language:
 optional string translation-of:
 string list translation:
@@ -10,7 +10,6 @@ string list translation:
 
 -- record dependency-data:
 caption name:
-string repo:
 optional string version:
 optional body notes:
 

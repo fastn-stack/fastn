@@ -2,7 +2,6 @@
 
 -- fpm.package: arpita-jaiswal/blog
 language: en
-domain: www.blog.com
+zip: www.blog.com
 
 -- fpm.dependency: blog-theme
-repo: github

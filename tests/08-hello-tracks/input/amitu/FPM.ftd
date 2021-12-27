@@ -1,4 +1,4 @@
 -- import: fpm
 
--- fpm.package: amitu
-domain: www.amitu.com
+-- fpm.package: www.amitu.com
+zip: amitu

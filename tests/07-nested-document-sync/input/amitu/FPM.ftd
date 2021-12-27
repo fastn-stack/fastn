@@ -1,3 +1,4 @@
 -- import: fpm
 
 -- fpm.package: amitu
+zip: amitu

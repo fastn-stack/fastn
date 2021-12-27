@@ -4,7 +4,6 @@ use crate::utils::HasElements;
 pub struct Dependency {
     pub package: fpm::Package,
     pub version: Option<String>,
-    pub repo: String,
     pub notes: Option<String>,
 }
 
@@ -28,13 +27,8 @@ pub fn ensure(
 
     let mut downloaded_package = vec![package.name.clone()];
     for dep in deps.iter_mut() {
-        dep.package.process(
-            base_dir,
-            dep.repo.as_str(),
-            &mut downloaded_package,
-            false,
-            true,
-        )?;
+        dep.package
+            .process(base_dir, &mut downloaded_package, false, true)?;
     }
 
     if package.translations.has_elements() && package.translation_of.is_some() {
@@ -51,7 +45,7 @@ pub fn ensure(
                 message: "Package needs to declare the language".to_string(),
             });
         }
-        translation.process(base_dir, "github", &mut downloaded_package, false, false)?;
+        translation.process(base_dir, &mut downloaded_package, false, false)?;
     }
 
     if let Some(translation_of) = package.translation_of.as_mut() {
@@ -60,7 +54,7 @@ pub fn ensure(
                 message: "Translation package needs to declare the language".to_string(),
             });
         }
-        translation_of.process(base_dir, "github", &mut downloaded_package, true, true)?;
+        translation_of.process(base_dir, &mut downloaded_package, true, true)?;
     }
     Ok(())
 }
@@ -69,7 +63,6 @@ pub fn ensure(
 pub(crate) struct DependencyTemp {
     pub name: String,
     pub version: Option<String>,
-    pub repo: String,
     pub notes: Option<String>,
 }
 
@@ -78,7 +71,6 @@ impl DependencyTemp {
         fpm::Dependency {
             package: fpm::Package::new(self.name.as_str()),
             version: self.version,
-            repo: self.repo,
             notes: self.notes,
         }
     }
@@ -87,12 +79,17 @@ impl DependencyTemp {
 impl fpm::Package {
     /// `process()` checks the package exists in `.packages` or `FPM_HOME` folder (`FPM_HOME` not
     /// yet implemented), and if not downloads and unpacks the method.
+    ///
+    /// This is done in following way:
+    /// Download the FPM.ftd file first for the package to download.
+    /// From FPM.ftd file, there's zip parameter present which contains the url to download zip.
+    /// Then, unzip it and place the content into .package folder
+    ///
     /// It then calls `process_fpm()` which checks the dependencies of the downloaded packages and
     /// then again call `process()` if dependent package is not downloaded or available
     pub fn process(
         &mut self,
         base_dir: &camino::Utf8PathBuf,
-        repo: &str,
         downloaded_package: &mut Vec<String>,
         download_translations: bool,
         download_dependencies: bool,
@@ -108,21 +105,58 @@ impl fpm::Package {
         }
 
         if !base_dir.join(".packages").join(self.name.as_str()).exists() {
+            // Download the FPM.ftd file first for the package to download.
+            let response_fpm = if let Ok(response_fpm) =
+                futures::executor::block_on(reqwest::get(format!("https://{}/FPM.ftd", self.name)))
+            {
+                response_fpm
+            } else {
+                futures::executor::block_on(reqwest::get(format!("http://{}/FPM.ftd", self.name)))?
+            };
+            let fpm_string = String::from_utf8(
+                futures::executor::block_on(response_fpm.bytes())?
+                    .into_iter()
+                    .collect(),
+            )
+            .expect("");
+
+            // Read FPM.ftd and get download zip url from `zip` argument
+            let download_url = {
+                let lib = fpm::FPMLibrary::default();
+                let ftd_document = match ftd::p2::Document::from("FPM", fpm_string.as_str(), &lib) {
+                    Ok(v) => v,
+                    Err(e) => {
+                        return Err(fpm::Error::PackageError {
+                            message: format!("failed to parse FPM.ftd: {:?}", &e),
+                        });
+                    }
+                };
+
+                ftd_document
+                    .get::<fpm::config::PackageTemp>("fpm#package")?
+                    .into_package()
+                    .zip
+                    .ok_or(fpm::Error::UsageError {
+                        message: format!(
+                            "Unable to download dependency. zip is not provided for {}",
+                            self.name
+                        ),
+                    })?
+            };
+
             let path =
                 camino::Utf8PathBuf::from(format!("/tmp/{}.zip", self.name.replace("/", "__")));
 
+            // Download the zip folder
             {
-                let download_url = match repo {
-                    "github" => {
-                        format!(
-                            "https://github.com/{}/archive/refs/heads/main.zip",
-                            self.name
-                        )
-                    }
-                    k => k.to_string(),
+                let response = if let Ok(response) =
+                    futures::executor::block_on(reqwest::get(format!("https://{}", download_url)))
+                {
+                    response
+                } else {
+                    futures::executor::block_on(reqwest::get(format!("http://{}", download_url)))?
                 };
 
-                let response = futures::executor::block_on(reqwest::get(download_url))?;
                 let mut file = std::fs::File::create(&path)?;
                 // TODO: instead of reading the whole thing in memory use tokio::io::copy() somehow?
                 let content = futures::executor::block_on(response.bytes())?;
@@ -250,13 +284,8 @@ impl fpm::Package {
                         true,
                     )?;
                 }
-                dep.package.process(
-                    base_path,
-                    dep.repo.as_str(),
-                    downloaded_package,
-                    false,
-                    true,
-                )?;
+                dep.package
+                    .process(base_path, downloaded_package, false, true)?;
             }
         }
 
@@ -290,7 +319,7 @@ impl fpm::Package {
                         false,
                     )?;
                 } else {
-                    translation.process(base_path, "github", downloaded_package, false, false)?;
+                    translation.process(base_path, downloaded_package, false, false)?;
                 }
             }
         }

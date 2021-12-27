@@ -105,8 +105,13 @@ pub(crate) fn seconds_to_human(s: u64) -> String {
     }
 }
 
-pub(crate) fn get_valid_package_name(root: &camino::Utf8PathBuf) -> fpm::Result<Option<String>> {
-    let mut package_name = root.file_name().map(|v| v.to_string());
+pub(crate) fn validate_zip_url(package: &fpm::Package) -> fpm::Result<()> {
+    let zip = if let Some(ref zip) = package.zip {
+        zip
+    } else {
+        warning!("expected zip in fpm.package");
+        return Ok(());
+    };
     let output = std::process::Command::new("git")
         .args(["remote", "get-url", "--push", "origin"])
         .output()
@@ -119,7 +124,15 @@ pub(crate) fn get_valid_package_name(root: &camino::Utf8PathBuf) -> fpm::Result<
             .replace("git@github.com:", "")
             .replace("https://github.com/", "")
             .to_lowercase();
-        package_name = Some(github_repo_name);
+        let expected_zip_url = format!(
+            "github.com/{}/archive/refs/heads/main.zip",
+            github_repo_name
+        );
+        if &expected_zip_url != zip {
+            let warning_message = format!("warning: valid `zip` is expected in fpm.package.\nsuggestion: change `zip` value to '{}'\n", expected_zip_url);
+            warning!(warning_message);
+        }
     }
-    Ok(package_name)
+
+    Ok(())
 }

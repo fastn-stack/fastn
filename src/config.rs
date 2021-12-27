@@ -162,21 +162,7 @@ impl Config {
 
         let fonts: Vec<fpm::Font> = b.get("fpm#font")?;
 
-        let expected_package_name = fpm::utils::get_valid_package_name(&root)?;
-        if expected_package_name != Some(package.name.clone()) {
-            let warning_message = {
-                let mut warning_message =
-                    "warning: package name and repository/folder name must match.\n".to_string();
-                if let Some(expected_package_name) = expected_package_name {
-                    warning_message = format!(
-                        "{}suggestion: rename package to '{}'\n",
-                        warning_message, expected_package_name
-                    );
-                }
-                warning_message
-            };
-            warning!(warning_message);
-        }
+        fpm::utils::validate_zip_url(&package)?;
 
         let ignored = {
             let mut overrides = ignore::overrides::OverrideBuilder::new("./");
@@ -235,9 +221,9 @@ pub(crate) struct PackageTemp {
     #[serde(rename = "translation")]
     pub translations: Vec<String>,
     #[serde(rename = "language")]
-    pub lang: Option<String>,
+    pub language: Option<String>,
     pub about: Option<String>,
-    pub domain: Option<String>,
+    pub zip: Option<String>,
 }
 
 impl PackageTemp {
@@ -257,9 +243,9 @@ impl PackageTemp {
             name: self.name,
             translation_of: Box::new(translation_of),
             translations,
-            language: self.lang,
+            language: self.language,
             about: self.about,
-            domain: self.domain,
+            zip: self.zip,
         }
     }
 }
@@ -271,7 +257,7 @@ pub struct Package {
     pub translations: Vec<Package>,
     pub language: Option<String>,
     pub about: Option<String>,
-    pub domain: Option<String>,
+    pub zip: Option<String>,
 }
 
 impl Package {
@@ -282,7 +268,7 @@ impl Package {
             translations: vec![],
             language: None,
             about: None,
-            domain: None,
+            zip: None,
         }
     }
 }
