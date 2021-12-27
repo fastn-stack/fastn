@@ -311,15 +311,22 @@ impl Document {
 
     pub fn title(&self) -> Option<ftd::Rendered> {
         // find the text of first primary heading
-        if let Some(t) =
-            Self::get_heading(&self.main.container.children, &|r| r.is_primary_heading())
-        {
-            return Some(t);
-        }
-
-        // find any heading
-        if let Some(t) = Self::get_heading(&self.main.container.children, &|r| r.is_heading()) {
-            return Some(t);
+        for i in vec![
+            ftd::Region::H0,
+            ftd::Region::H1,
+            ftd::Region::H2,
+            ftd::Region::H3,
+            ftd::Region::H4,
+            ftd::Region::H5,
+            ftd::Region::H6,
+            ftd::Region::H7,
+        ] {
+            if let Some(t) = Self::get_heading(
+                &self.main.container.children,
+                &|r| matches!(r, r if r == &i),
+            ) {
+                return Some(t);
+            }
         }
 
         // find any text with caption
