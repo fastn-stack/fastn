@@ -4,6 +4,10 @@ async fn main() -> fpm::Result<()> {
 
     let config = fpm::Config::read().await?;
 
+    if matches.subcommand_matches("update").is_some() {
+        fpm::update(&config).await?;
+    }
+
     if let Some(build) = matches.subcommand_matches("build") {
         fpm::build(&config, build.value_of("base")).await?;
     }
@@ -76,6 +80,11 @@ fn app(authors: &'static str) -> clap::App<'static, 'static> {
                         .takes_value(true)
                         .help("Base URL"),
                 )
+                .version(env!("CARGO_PKG_VERSION")),
+        )
+        .subcommand(
+            clap::SubCommand::with_name("update")
+                .about("Reinstall all the dependency packages")
                 .version(env!("CARGO_PKG_VERSION")),
         )
         .subcommand(

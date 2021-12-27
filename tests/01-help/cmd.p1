@@ -27,3 +27,4 @@ SUBCOMMANDS:
     stop-tracking         Remove a tracking relation between two files
     sync                  Sync with fpm-repo or .history folder if not using fpm-repo
     translation-status    Show the translation status of files in this fpm package
+    update                Reinstall all the dependency packages

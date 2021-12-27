@@ -17,7 +17,7 @@ pub(crate) use commands::build::process_file;
 pub use commands::{
     build::build, diff::diff, mark_upto_date::mark_upto_date, start_tracking::start_tracking,
     status::status, stop_tracking::stop_tracking, sync::sync,
-    translation_status::translation_status,
+    translation_status::translation_status, update::update,
 };
 pub use config::Config;
 pub(crate) use config::Package;
