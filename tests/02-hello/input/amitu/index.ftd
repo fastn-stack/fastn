@@ -1,1 +1,10 @@
 -- ftd.text: hello
+
+-- ftd.text: hello_h2
+region: h2
+
+-- ftd.text: hello_h1
+region: h1
+
+-- ftd.text: hello_h0
+region: h0
