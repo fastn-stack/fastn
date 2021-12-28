@@ -149,7 +149,11 @@ impl fpm::Package {
 
             // Download the zip folder
             {
-                let response = if let Ok(response) =
+                let response = if download_url[1..].contains("://")
+                    || download_url.starts_with("//")
+                {
+                    futures::executor::block_on(reqwest::get(download_url))?
+                } else if let Ok(response) =
                     futures::executor::block_on(reqwest::get(format!("https://{}", download_url)))
                 {
                     response
