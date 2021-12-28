@@ -31,6 +31,26 @@ impl ftd::p2::Library for Library {
         if let Ok(v) = std::fs::read_to_string(package_path.join(format!("{}.ftd", name))) {
             return Some(v);
         }
+        // Check for Aliases of the packages
+        for (alias, package) in self.config.aliases().ok()? {
+            if name.starts_with(&alias) {
+                // Non index document
+                let non_alias_name = name.replacen(&alias, package.name.as_str(), 1);
+                if let Ok(v) = std::fs::read_to_string(
+                    package_path.join(format!("{}.ftd", non_alias_name.as_str())),
+                ) {
+                    return Some(v);
+                } else {
+                    // Index document check for the alias
+                    if let Ok(v) = std::fs::read_to_string(
+                        package_path.join(format!("{}/index.ftd", non_alias_name.as_str())),
+                    ) {
+                        return Some(v);
+                    }
+                }
+            }
+        }
+
         return std::fs::read_to_string(package_path.join(format!("{}/index.ftd", name))).ok();
 
         fn construct_fpm_base(lib: &Library) -> String {

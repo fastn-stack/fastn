@@ -105,6 +105,18 @@ impl Config {
         Ok(self.root.join(".packages").join(o.name.as_str()))
     }
 
+    /// aliases() returns the list of the available aliases at the package level.
+    pub fn aliases(&self) -> fpm::Result<std::collections::BTreeMap<&str, &fpm::Package>> {
+        let mut resp = std::collections::BTreeMap::new();
+        self.dependencies
+            .iter()
+            .filter(|d| d.alias.is_some())
+            .for_each(|d| {
+                resp.insert(d.alias.as_ref().unwrap().as_str(), &d.package);
+            });
+        Ok(resp)
+    }
+
     /// `get_font_style()` returns the HTML style tag which includes all the fonts used by any
     /// ftd document. Currently this function does not check for fonts in package dependencies
     /// nor it tries to avoid fonts that are configured but not needed in current document.
@@ -137,9 +149,9 @@ impl Config {
             }
         };
         let b = {
-            let doc = tokio::fs::read_to_string(root.join("FPM.ftd")).await?;
+            let doc = tokio::fs::read_to_string(root.join("FPM.ftd"));
             let lib = fpm::FPMLibrary::default();
-            match ftd::p2::Document::from("FPM", doc.as_str(), &lib) {
+            match ftd::p2::Document::from("FPM", doc.await?.as_str(), &lib) {
                 Ok(v) => v,
                 Err(e) => {
                     return Err(fpm::Error::PackageError {

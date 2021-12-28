@@ -5,6 +5,7 @@ pub struct Dependency {
     pub package: fpm::Package,
     pub version: Option<String>,
     pub notes: Option<String>,
+    pub alias: Option<String>,
 }
 
 pub fn ensure(
@@ -68,10 +69,15 @@ pub(crate) struct DependencyTemp {
 
 impl DependencyTemp {
     pub(crate) fn into_dependency(self) -> fpm::Dependency {
+        let (package_name, alias) = match self.name.as_str().split_once(" as ") {
+            Some((package, alias)) => (package, Some(alias.to_string())),
+            _ => (self.name.as_str(), None),
+        };
         fpm::Dependency {
-            package: fpm::Package::new(self.name.as_str()),
+            package: fpm::Package::new(package_name),
             version: self.version,
             notes: self.notes,
+            alias,
         }
     }
 }
