@@ -1,19 +1,58 @@
 -- import: fpm
 
--- ftd.row:
-spacing: 5
-
---- ftd.text: $fpm.document-id
---- ftd.text: is not marked
-
 -- boolean show-main: true
 
--- ftd.text: Show Fallback
+-- ftd.column:
+gradient-direction: left to right
+gradient-colors: #E87F85 , #FFADB2
+width: fill
+padding-vertical: 10
+
+--- ftd.row:
+spacing: 15
+position: top
+
+--- ftd.image:
+src: https://res.cloudinary.com/dphj6havg/image/upload/v1640696994/info-1_jowsqn.svg
+width: 16
+height: auto
+
+--- ftd.text: This document is not yet approved.
+color: white
+style: semi-bold
+font: apple-system
+padding-right: 20
+
+--- ftd.text: Show unapproved version
 if: $show-main
 $event-click$: toggle $show-main
 $event-click$: message-host show_fallback
+color: #E87F85
+background-color: white
+border-radius: 4
+padding-horizontal: 15
+padding-vertical: 4
+shadow-offset-x: 0
+shadow-offset-y: 0
+shadow-size: 0
+shadow-blur: 6
+shadow-color: rgba (0, 0, 0, 0.05)
+font: apple-system
+size: 13
 
--- ftd.text: Show Main
+--- ftd.text: Show latest version
 if: not $show-main
 $event-click$: toggle $show-main
 $event-click$: message-host show_main
+color: #E87F85
+background-color: white
+border-radius: 4
+padding-horizontal: 15
+padding-vertical: 4
+shadow-offset-x: 0
+shadow-offset-y: 0
+shadow-size: 0
+shadow-blur: 6
+shadow-color: rgba (0, 0, 0, 0.05)
+font: apple-system
+size: 13

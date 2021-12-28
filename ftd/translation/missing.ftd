@@ -2,8 +2,24 @@
 
 /-- ftd.text: {fpm.document-id} is not yet translated
 
--- ftd.row:
-spacing: 5
 
---- ftd.text: $fpm.document-id
---- ftd.text: is not yet translated
+-- ftd.column:
+gradient-direction: left to right
+gradient-colors: #E87F85 , #FFADB2
+width: fill
+padding-vertical: 10
+
+--- ftd.row:
+spacing: 15
+position: top
+
+--- ftd.image:
+src: https://res.cloudinary.com/dphj6havg/image/upload/v1640696994/info-1_jowsqn.svg
+width: 16
+height: auto
+
+--- ftd.text: This document is not yet translated.
+color: white
+style: semi-bold
+font: apple-system
+size: 15
