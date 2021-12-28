@@ -1,0 +1,32 @@
+-- import: fpm
+
+-- ftd.column print:
+fpm.status-data data:
+
+--- ftd.text: $data.language
+link: $data.url
+
+--- print-row: Never Marked :
+value: $data.never-marked
+
+--- print-row: Missing :
+value: $data.missing
+
+--- print-row: Out Dated :
+value: $data.out-dated
+
+--- print-row: Upto Date :
+value: $data.upto-date
+
+
+-- ftd.row print-row:
+caption name:
+integer value:
+spacing: 5
+
+--- ftd.text: $name
+--- ftd.integer: $value
+
+-- print:
+$loop$: $fpm.status as $obj
+data: $obj

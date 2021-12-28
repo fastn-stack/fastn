@@ -52,6 +52,24 @@ async fn build_with_translations(config: &fpm::Config, base_url: Option<&str>) -
         )
         .await?;
     }
+    // Add /~/translation-status page
+    {
+        let translation_status = fpm::Document {
+            id: "~/translation-status.ftd".to_string(),
+            content: fpm::original_package_status(config)?,
+            parent_path: config.root.as_str().to_string(),
+        };
+
+        process_ftd(
+            config,
+            &translation_status,
+            None,
+            None,
+            Default::default(),
+            base_url,
+        )
+        .await?;
+    }
     Ok(())
 }
 
@@ -104,6 +122,25 @@ async fn build_with_original(
     // Process all the files collected from original and root package
     for translated_document in translated_documents.values() {
         translated_document.html(config, base_url).await?;
+    }
+
+    // Add /~/translation-status page
+    {
+        let translation_status = fpm::Document {
+            id: "~/translation-status.ftd".to_string(),
+            content: fpm::translation_package_status(config)?,
+            parent_path: config.root.as_str().to_string(),
+        };
+
+        process_ftd(
+            config,
+            &translation_status,
+            None,
+            None,
+            Default::default(),
+            base_url,
+        )
+        .await?;
     }
     Ok(())
 }

@@ -54,6 +54,24 @@ fn available_languages(config: &fpm::Config) -> fpm::Result<String> {
     })
 }
 
+fn original_package_status(config: &fpm::Config) -> fpm::Result<String> {
+    let path = config.root.join("FPM/translation/original-status.ftd");
+    Ok(if path.is_file() {
+        std::fs::read_to_string(path)?
+    } else {
+        include_str!("../ftd/translation/original-status.ftd").to_string()
+    })
+}
+
+fn translation_package_status(config: &fpm::Config) -> fpm::Result<String> {
+    let path = config.root.join("FPM/translation/translation-status.ftd");
+    Ok(if path.is_file() {
+        std::fs::read_to_string(path)?
+    } else {
+        include_str!("../ftd/translation/translation-status.ftd").to_string()
+    })
+}
+
 fn get_messages(status: &fpm::TranslatedDocument, config: &fpm::Config) -> fpm::Result<String> {
     Ok(match status {
         TranslatedDocument::Missing { .. } => {

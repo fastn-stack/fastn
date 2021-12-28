@@ -31,7 +31,7 @@ async fn original_package_status(config: &fpm::Config) -> fpm::Result<()> {
     Ok(())
 }
 
-fn get_translation_status(
+pub(crate) fn get_translation_status(
     snapshots: &std::collections::BTreeMap<String, u128>,
     path: &camino::Utf8PathBuf,
 ) -> fpm::Result<std::collections::BTreeMap<String, TranslationStatus>> {
@@ -72,7 +72,7 @@ fn print_translation_status(
     }
 }
 
-enum TranslationStatus {
+pub(crate) enum TranslationStatus {
     Missing,
     NeverMarked,
     Outdated,
@@ -80,7 +80,7 @@ enum TranslationStatus {
 }
 
 impl TranslationStatus {
-    fn as_str(&self) -> &'static str {
+    pub(crate) fn as_str(&self) -> &'static str {
         match self {
             TranslationStatus::Missing => "Missing",
             TranslationStatus::NeverMarked => "Never marked",

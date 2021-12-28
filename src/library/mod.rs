@@ -157,6 +157,107 @@ impl ftd::p2::Library for Library {
                 );
             }
 
+            if let Ok(original_path) = lib.config.original_path() {
+                if let Ok(original_snapshots) =
+                    futures::executor::block_on(fpm::snapshot::get_latest_snapshots(&original_path))
+                {
+                    if let Ok(translation_status) =
+                        fpm::commands::translation_status::get_translation_status(
+                            &original_snapshots,
+                            &lib.config.root,
+                        )
+                    {
+                        let mut translation_status_list = "".to_string();
+
+                        for (file, status) in translation_status {
+                            translation_status_list = format!(
+                                indoc::indoc! {"
+                                    {list}
+                                    
+                                    -- status:
+                                    file: {file}
+                                    status: {status}
+                                    
+                                "},
+                                list = translation_status_list,
+                                file = file,
+                                status = status.as_str()
+                            );
+                        }
+
+                        fpm_base = format!(
+                            indoc::indoc! {"
+                                {fpm_base}
+                                
+                                -- record status-data:
+                                string file:
+                                string status:
+                                
+                                -- status-data list status:
+        
+                                {translation_status_list}
+                                
+                            "},
+                            fpm_base = fpm_base,
+                            translation_status_list = translation_status_list
+                        );
+                    }
+                }
+            }
+
+            if lib.config.package.translations.has_elements() {
+                let mut translation_status_list = "".to_string();
+                for translation in lib.config.package.translations.iter() {
+                    if let Some(ref status) = translation.translation_status {
+                        if let Some(ref language) = translation.language {
+                            let url = format!("https://{}/~/translation-status/", translation.name);
+                            translation_status_list = format!(
+                                indoc::indoc! {"
+                                    {list}
+                                    
+                                    -- status:
+                                    language: {language}
+                                    url: {url}
+                                    never-marked: {never_marked}
+                                    missing: {missing}
+                                    out-dated: {out_dated}
+                                    upto-date: {upto_date}
+                                    
+                                "},
+                                list = translation_status_list,
+                                language = language,
+                                url = url,
+                                never_marked = status.never_marked,
+                                missing = status.missing,
+                                out_dated = status.out_dated,
+                                upto_date = status.upto_date
+                            );
+                        }
+                    }
+
+                    fpm_base = format!(
+                        indoc::indoc! {"
+                        {fpm_base}
+                        
+                        -- record status-data:
+                        string language:
+                        string url:
+                        integer never-marked:
+                        integer missing:
+                        integer out-dated:
+                        integer upto-date:
+                        
+                        -- status-data list status:
+
+                        {translation_status_list}
+                        
+                    "},
+                        fpm_base = fpm_base,
+                        translation_status_list = translation_status_list
+                    );
+                }
+            }
+
             let other_language_packages =
                 if let Some(translation_of) = lib.config.package.translation_of.as_ref() {
                     let mut other_language_packages = translation_of

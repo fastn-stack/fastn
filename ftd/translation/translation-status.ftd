@@ -1,0 +1,14 @@
+-- import: fpm
+
+-- ftd.row print:
+fpm.status-data data:
+spacing: 5
+
+--- ftd.text: $data.file
+--- ftd.text: :
+--- ftd.text: $data.status
+
+
+-- print:
+$loop$: $fpm.status as $obj
+data: $obj
