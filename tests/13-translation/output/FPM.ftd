@@ -4,3 +4,11 @@
 zip: amitu
 language: hi
 translation-of: arpita-jaiswal/blog
+
+
+-- fpm.translation-status: 
+never-marked: 2
+missing: 4
+out-dated: 0
+upto-date: 0
+

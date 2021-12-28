@@ -3,21 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-    <title>ftd</title>
+    <title>This is the original blog</title>
 
     <script type="ftd" id="ftd-data-message">
         {
   "fpm#document-id": {
     "value": "blog.ftd",
-    "dependencies": {
-      "0,0": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
-    }
+    "dependencies": {}
   },
   "message#show-main": {
     "value": "true",
     "dependencies": {
-      "1": "[{\"dependency_type\":\"Visible\",\"condition\":\"true\",\"parameters\":{}}]",
-      "2": "[{\"dependency_type\":\"Visible\",\"condition\":\"false\",\"parameters\":{}}]"
+      "0,0,2": "[{\"dependency_type\":\"Visible\",\"condition\":\"true\",\"parameters\":{}}]",
+      "0,0,3": "[{\"dependency_type\":\"Visible\",\"condition\":\"false\",\"parameters\":{}}]"
     }
   }
 }
@@ -648,10 +646,10 @@ window.ftd = (function () {
 </head>
 <body>
 
-<div id="message"><div data-id="message:root" style="align-items: flex-start; align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: wrap; height: 100%; justify-content: flex-start; margin-bottom: auto; margin-top: auto; white-space: initial; width: 100%" class="ft_md"><div data-id="0:message" data-spacing="margin-left:5px" style="align-items: flex-start; align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start; white-space: initial" class="ft_md"><div data-id="0,0:message" style="align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-weight: 400; text-align: left; white-space: initial" class="ft_md">blog.ftd</div>
-<div data-id="0,1:message" style="align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-weight: 400; margin-left: 5px; text-align: left; white-space: initial" class="ft_md">is not marked</div></div>
-<div data-id="1:message" onclick="window.ftd.handle_event(event, 'message', '[{&quot;action&quot;:&quot;toggle&quot;,&quot;target&quot;:&quot;message#show-main&quot;,&quot;parameters&quot;:{}},{&quot;action&quot;:&quot;message-host&quot;,&quot;target&quot;:&quot;show_fallback&quot;,&quot;parameters&quot;:{}}]')" style="align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; text-align: left; white-space: initial" class="ft_md">Show Fallback</div>
-<div data-id="2:message" onclick="window.ftd.handle_event(event, 'message', '[{&quot;action&quot;:&quot;toggle&quot;,&quot;target&quot;:&quot;message#show-main&quot;,&quot;parameters&quot;:{}},{&quot;action&quot;:&quot;message-host&quot;,&quot;target&quot;:&quot;show_main&quot;,&quot;parameters&quot;:{}}]')" style="align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; display: none; font-weight: 400; text-align: left; white-space: initial" class="ft_md">Show Main</div></div></div>
+<div id="message"><div data-id="message:root" style="align-items: flex-start; align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: wrap; height: 100%; justify-content: flex-start; margin-bottom: auto; margin-top: auto; white-space: initial; width: 100%" class="ft_md"><div data-id="0:message" style="align-items: flex-start; align-self: flex-start; background-image: linear-gradient(to right, rgba(232,127,133,1),rgba(255,173,178,1) ); border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; padding-bottom: 10px; padding-top: 10px; white-space: initial; width: 100%" class="ft_md"><div data-id="0,0:message" data-spacing="margin-left:15px" style="align-items: flex-start; align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start; margin-bottom: auto; white-space: initial" class="ft_md"><img alt="" data-id="0,0,0:message" src="https://res.cloudinary.com/dphj6havg/image/upload/v1640696994/info-1_jowsqn.svg" style="align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; height: auto; white-space: initial; width: 16px">
+<div data-id="0,0,1:message" style="align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(255,255,255,1); font-family: apple-system; font-weight: 600; margin-left: 15px; padding-right: 20px; text-align: left; white-space: initial" class="ft_md">This document is not yet approved.</div>
+<div data-id="0,0,2:message" onclick="window.ftd.handle_event(event, 'message', '[{&quot;action&quot;:&quot;toggle&quot;,&quot;target&quot;:&quot;message#show-main&quot;,&quot;parameters&quot;:{}},{&quot;action&quot;:&quot;message-host&quot;,&quot;target&quot;:&quot;show_fallback&quot;,&quot;parameters&quot;:{}}]')" style="align-self: flex-start; background-color: rgba(255,255,255,1); border-radius: 4px; border-style: solid; border-width: 0px; box-shadow: 0px 0px 6px 0px rgba(0,0,0,0.05); box-sizing: border-box; color: rgba(232,127,133,1); cursor: pointer; font-family: apple-system; font-size: 13px; font-weight: 400; margin-left: 15px; padding-bottom: 4px; padding-left: 15px; padding-right: 15px; padding-top: 4px; text-align: left; white-space: initial" class="ft_md">Show unapproved version</div>
+<div data-id="0,0,3:message" onclick="window.ftd.handle_event(event, 'message', '[{&quot;action&quot;:&quot;toggle&quot;,&quot;target&quot;:&quot;message#show-main&quot;,&quot;parameters&quot;:{}},{&quot;action&quot;:&quot;message-host&quot;,&quot;target&quot;:&quot;show_main&quot;,&quot;parameters&quot;:{}}]')" style="align-self: flex-start; background-color: rgba(255,255,255,1); border-radius: 4px; border-style: solid; border-width: 0px; box-shadow: 0px 0px 6px 0px rgba(0,0,0,0.05); box-sizing: border-box; color: rgba(232,127,133,1); cursor: pointer; display: none; font-family: apple-system; font-size: 13px; font-weight: 400; margin-left: 15px; padding-bottom: 4px; padding-left: 15px; padding-right: 15px; padding-top: 4px; text-align: left; white-space: initial" class="ft_md">Show latest version</div></div></div></div></div>
 <div id="main"><div data-id="main:root" style="align-items: flex-start; align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: wrap; height: 100%; justify-content: flex-start; margin-bottom: auto; margin-top: auto; white-space: initial; width: 100%" class="ft_md"><div data-id="0:main" style="align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-weight: 400; text-align: left; white-space: initial" class="ft_md">This is the original blog</div></div></div>
 <div id="fallback" style="display: none"><div data-id="fallback:root" style="align-items: flex-start; align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: wrap; height: 100%; justify-content: flex-start; margin-bottom: auto; margin-top: auto; white-space: initial; width: 100%" class="ft_md"><div data-id="0:fallback" style="align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-weight: 400; text-align: left; white-space: initial" class="ft_md">This blog would override original blog… This is translated blog.</div></div></div>
 
