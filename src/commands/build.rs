@@ -192,10 +192,41 @@ async fn process_ftd(
     base_url: Option<&str>,
 ) -> fpm::Result<()> {
     if main.id.eq("FPM.ftd") {
-        std::fs::copy(
-            config.root.join(main.id.as_str()),
-            config.root.join(".build").join(main.id.as_str()),
-        )?;
+        if config.is_translation_package() {
+            use std::io::Write;
+
+            let original_snapshots =
+                fpm::snapshot::get_latest_snapshots(&config.original_path()?).await?;
+            let translation_status =
+                fpm::translation::get_translation_status_count(&original_snapshots, &config.root)?;
+            let content = std::fs::read_to_string(config.root.join(main.id.as_str()))?;
+            let fpm = format!(
+                indoc::indoc! {"
+                    {content}
+                    
+                    -- fpm.translation-status: 
+                    never-marked: {never_marked}
+                    missing: {missing}
+                    out-dated: {out_dated}
+                    upto-date: {upto_date}
+    
+                    "},
+                content = content,
+                never_marked = translation_status.never_marked,
+                missing = translation_status.missing,
+                out_dated = translation_status.out_dated,
+                upto_date = translation_status.upto_date
+            );
+
+            let mut file =
+                std::fs::File::create(config.root.join(".build").join(main.id.as_str()))?;
+            file.write_all(fpm.as_bytes())?;
+        } else {
+            std::fs::copy(
+                config.root.join(main.id.as_str()),
+                config.root.join(".build").join(main.id.as_str()),
+            )?;
+        }
     }
     if !main.id.eq("index.ftd") {
         std::fs::create_dir_all(config.root.join(".build").join(main.id.replace(".ftd", "")))?;

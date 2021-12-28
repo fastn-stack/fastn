@@ -22,16 +22,11 @@ async fn translation_package_status(config: &fpm::Config) -> fpm::Result<()> {
 }
 
 async fn original_package_status(config: &fpm::Config) -> fpm::Result<()> {
-    let snapshots = fpm::snapshot::get_latest_snapshots(&config.root).await?;
     for translation in config.package.translations.iter() {
-        let translation_path = config
-            .root
-            .join(".packages")
-            .join(translation.name.as_str());
-        let translation_status = get_translation_status(&snapshots, &translation_path)?;
-        println!("Status for `{}` package:", translation.name);
-        print_translation_status(&translation_status);
-        println!();
+        if let Some(ref status) = translation.translation_status {
+            println!("Status for `{}` package:", translation.name);
+            println!("{}", status.to_string());
+        }
     }
     Ok(())
 }

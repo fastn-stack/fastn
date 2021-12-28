@@ -180,3 +180,70 @@ impl TranslatedDocument {
         Ok(translation_status)
     }
 }
+
+pub(crate) fn get_translation_status_count(
+    snapshots: &std::collections::BTreeMap<String, u128>,
+    path: &camino::Utf8PathBuf,
+) -> fpm::Result<TranslationStatusCount> {
+    let mut translation_status_count = TranslationStatusCount {
+        never_marked: 0,
+        missing: 0,
+        out_dated: 0,
+        upto_date: 0,
+    };
+    for (file, timestamp) in snapshots {
+        if !path.join(&file).exists() {
+            translation_status_count.missing += 1;
+            continue;
+        }
+        let track_path = fpm::utils::track_path(file.as_str(), path.as_str());
+        if !track_path.exists() {
+            translation_status_count.never_marked += 1;
+            continue;
+        }
+        let tracks = fpm::tracker::get_tracks(path.as_str(), &track_path)?;
+        if let Some(fpm::Track {
+            last_merged_version: Some(last_merged_version),
+            ..
+        }) = tracks.get(file)
+        {
+            if last_merged_version < timestamp {
+                translation_status_count.out_dated += 1;
+                continue;
+            }
+            translation_status_count.upto_date += 1;
+        } else {
+            translation_status_count.never_marked += 1;
+        }
+    }
+    Ok(translation_status_count)
+}
+
+#[derive(serde::Deserialize, Debug, Clone)]
+pub struct TranslationStatusCount {
+    #[serde(rename = "never-marked")]
+    pub never_marked: i32,
+    pub missing: i32,
+    #[serde(rename = "out-dated")]
+    pub out_dated: i32,
+    #[serde(rename = "upto-date")]
+    pub upto_date: i32,
+}
+
+impl ToString for TranslationStatusCount {
+    fn to_string(&self) -> String {
+        format!(
+            indoc::indoc! {"
+                Never marked: {never_marked}
+                Missing: {missing}
+                Out-dated: {out_dated}
+                Up to date: {upto_date}
+
+                "},
+            never_marked = self.never_marked,
+            missing = self.missing,
+            out_dated = self.out_dated,
+            upto_date = self.upto_date
+        )
+    }
+}

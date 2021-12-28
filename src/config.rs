@@ -258,6 +258,7 @@ impl PackageTemp {
             language: self.language,
             about: self.about,
             zip: self.zip,
+            translation_status: None,
         }
     }
 }
@@ -270,6 +271,7 @@ pub struct Package {
     pub language: Option<String>,
     pub about: Option<String>,
     pub zip: Option<String>,
+    pub translation_status: Option<fpm::translation::TranslationStatusCount>,
 }
 
 impl Package {
@@ -281,6 +283,7 @@ impl Package {
             language: None,
             about: None,
             zip: None,
+            translation_status: None,
         }
     }
 }

@@ -47,3 +47,11 @@ optional integer last-merged-version:
 -- track-data list track:
 
 -- string list ignore:
+
+-- record translation-status-data:
+optional integer never-marked:
+optional integer missing:
+optional integer out-dated:
+optional integer upto-date:
+
+-- translation-status-data translation-status: not set
