@@ -31,6 +31,11 @@ pub(crate) fn get_timestamp_nanosecond() -> u128 {
     }
 }
 
+pub(crate) fn nanos_to_rfc3339(nanos: &u128) -> String {
+    let time = std::time::SystemTime::UNIX_EPOCH + std::time::Duration::from_nanos(*nanos as u64);
+    chrono::DateTime::<chrono::Utc>::from(time).to_rfc3339()
+}
+
 pub(crate) fn history_path(id: &str, base_path: &str, timestamp: &u128) -> camino::Utf8PathBuf {
     let id_with_timestamp_extension = if let Some((id, ext)) = id.rsplit_once('.') {
         format!("{}.{}.{}", id, timestamp, ext)

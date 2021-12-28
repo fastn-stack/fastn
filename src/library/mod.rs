@@ -73,9 +73,7 @@ impl ftd::p2::Library for Library {
                 );
             }
             if let Some(ref last_marked_on) = lib.translated_data.last_marked_on {
-                let time = std::time::SystemTime::UNIX_EPOCH
-                    + std::time::Duration::from_nanos(*last_marked_on as u64);
-                let rfc3339 = chrono::DateTime::<chrono::Utc>::from(time).to_rfc3339();
+                let rfc3339 = fpm::utils::nanos_to_rfc3339(last_marked_on);
                 fpm_base = format!(
                     indoc::indoc! {"
                         {fpm_base}
@@ -91,9 +89,7 @@ impl ftd::p2::Library for Library {
                 );
             }
             if let Some(ref original_latest) = lib.translated_data.original_latest {
-                let time = std::time::SystemTime::UNIX_EPOCH
-                    + std::time::Duration::from_nanos(*original_latest as u64);
-                let rfc3339 = chrono::DateTime::<chrono::Utc>::from(time).to_rfc3339();
+                let rfc3339 = fpm::utils::nanos_to_rfc3339(original_latest);
                 fpm_base = format!(
                     indoc::indoc! {"
                         {fpm_base}
@@ -109,9 +105,7 @@ impl ftd::p2::Library for Library {
                 );
             }
             if let Some(ref translated_latest) = lib.translated_data.translated_latest {
-                let time = std::time::SystemTime::UNIX_EPOCH
-                    + std::time::Duration::from_nanos(*translated_latest as u64);
-                let rfc3339 = chrono::DateTime::<chrono::Utc>::from(time).to_rfc3339();
+                let rfc3339 = fpm::utils::nanos_to_rfc3339(translated_latest);
                 fpm_base = format!(
                     indoc::indoc! {"
                         {fpm_base}
