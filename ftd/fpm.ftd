@@ -5,6 +5,7 @@ optional string zip:
 optional string language:
 optional string translation-of:
 string list translation:
+optional string canonical-url:
 
 -- package-data package: not set
 

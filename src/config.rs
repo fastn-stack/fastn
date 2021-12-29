@@ -236,6 +236,8 @@ pub(crate) struct PackageTemp {
     pub language: Option<String>,
     pub about: Option<String>,
     pub zip: Option<String>,
+    #[serde(rename = "canonical-url")]
+    pub canonical_url: Option<String>,
 }
 
 impl PackageTemp {
@@ -259,6 +261,7 @@ impl PackageTemp {
             about: self.about,
             zip: self.zip,
             translation_status: None,
+            canonical_url: self.canonical_url,
         }
     }
 }
@@ -272,6 +275,7 @@ pub struct Package {
     pub about: Option<String>,
     pub zip: Option<String>,
     pub translation_status: Option<fpm::translation::TranslationStatusCount>,
+    pub canonical_url: Option<String>,
 }
 
 impl Package {
@@ -284,6 +288,25 @@ impl Package {
             about: None,
             zip: None,
             translation_status: None,
+            canonical_url: None,
+        }
+    }
+
+    pub fn generate_canonical_url(&self, path: &str) -> String {
+        match &self.canonical_url {
+            Some(url) => {
+                // Ignore the FPM document as that path won't exist in the reference website
+                if path != "FPM/" {
+                    format!(
+                        "\n<link rel=\"canonical\" href=\"{canonical_base}{path}\" />",
+                        canonical_base = url,
+                        path = path
+                    )
+                } else {
+                    "".to_string()
+                }
+            }
+            None => "".to_string(),
         }
     }
 }

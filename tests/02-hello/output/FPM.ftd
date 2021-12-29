@@ -2,3 +2,4 @@
 
 -- fpm.package: www.amitu.com
 zip: amitu
+canonical-url: https://some-other-site.com/

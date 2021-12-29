@@ -266,7 +266,7 @@ async fn process_ftd(
         }
     }
     if !main.id.eq("index.ftd") {
-        std::fs::create_dir_all(config.root.join(".build").join(main.id.replace(".ftd", "")))?;
+        std::fs::create_dir_all(config.root.join(".build").join(main.id_to_path()))?;
     }
     let file_rel_path = if main.id.eq("index.ftd") {
         "index.html".to_string()
@@ -364,6 +364,13 @@ async fn process_ftd(
                 fpm::ftd_html()
                     .replace("__ftd_doc_title__", doc_title.as_str())
                     .replace(
+                        "__ftd_canonical_url__",
+                        config
+                            .package
+                            .generate_canonical_url(main.id_to_path().as_str())
+                            .as_str(),
+                    )
+                    .replace(
                         "__ftd_data__",
                         serde_json::to_string_pretty(&ftd_doc.data)
                             .expect("failed to convert document to json")
@@ -439,6 +446,13 @@ async fn process_ftd(
             fix_base(
                 fpm::with_message()
                     .replace("__ftd_doc_title__", doc_title.as_str())
+                    .replace(
+                        "__ftd_canonical_url__",
+                        config
+                            .package
+                            .generate_canonical_url(main.id_to_path().as_str())
+                            .as_str(),
+                    )
                     .replace(
                         "__ftd_data_message__",
                         serde_json::to_string_pretty(&message_rt_doc.data)
@@ -543,6 +557,13 @@ async fn process_ftd(
             fix_base(
                 fpm::with_fallback()
                     .replace("__ftd_doc_title__", doc_title.as_str())
+                    .replace(
+                        "__ftd_canonical_url__",
+                        config
+                            .package
+                            .generate_canonical_url(main.id_to_path().as_str())
+                            .as_str(),
+                    )
                     .replace(
                         "__ftd_data_message__",
                         serde_json::to_string_pretty(&message_rt_doc.data)

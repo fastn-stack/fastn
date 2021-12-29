@@ -37,6 +37,12 @@ pub struct Document {
     pub parent_path: String,
 }
 
+impl Document {
+    pub fn id_to_path(&self) -> String {
+        self.id.replace(".ftd", "/")
+    }
+}
+
 #[derive(Debug, Clone)]
 pub struct Static {
     pub id: String,
