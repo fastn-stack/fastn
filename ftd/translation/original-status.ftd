@@ -8,9 +8,18 @@ padding-horizontal: 20
 
 Here is the list of the translation status for the available languages.
 
+-- number-of-documents: $fpm.number-of-documents
+
 
 -- language-status:
 
+
+-- ftd.row number-of-documents:
+caption number:
+margin-bottom: 10
+
+--- ftd.text: Number of documents:
+--- ftd.text: $number
 
 
 -- ftd.column h0:
@@ -20,6 +29,10 @@ width: fill
 padding-horizontal: 90
 region: h0
 
+--- ftd.row:
+spacing: 60
+width: fill
+
 --- ftd.text:
 text: $title
 region: title
@@ -28,10 +41,24 @@ color: black
 style: bold
 padding-bottom: 24
 font: apple-system
+align: center
+
+--- ftd.text: $fpm.language
+if: $fpm.language is not null
+border-radius: 10
+background-color: #f3f3f3
+padding-vertical: 5
+padding-horizontal: 20
+color: #E38686
+align: center
+
+--- container: ftd.main
 
 --- markdown:
 if: $body is not null
 body: $body
+
+
 
 -- ftd.text markdown:
 body body:

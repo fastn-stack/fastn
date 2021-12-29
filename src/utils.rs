@@ -51,6 +51,10 @@ pub(crate) fn track_path(id: &str, base_path: &str) -> camino::Utf8PathBuf {
     base_path.join(".tracks").join(format!("{}.track", id))
 }
 
+pub(crate) async fn get_no_of_document(path: &camino::Utf8PathBuf) -> fpm::Result<usize> {
+    Ok(fpm::snapshot::get_latest_snapshots(path).await?.len())
+}
+
 #[async_recursion::async_recursion(?Send)]
 pub async fn copy_dir_all(
     src: impl AsRef<std::path::Path> + 'static,

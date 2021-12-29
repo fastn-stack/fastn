@@ -73,6 +73,10 @@ impl ftd::p2::Library for Library {
                         -- optional string original-latest-rfc3339:
 
                         -- optional string translated-latest-rfc3339:
+
+                        -- optional string language:
+
+                        -- optional string number-of-documents:
     
                         "},
                 fpm_base = fpm::fpm_ftd().to_string(),
@@ -92,6 +96,35 @@ impl ftd::p2::Library for Library {
                     diff = diff,
                 );
             }
+
+            if let Ok(no_of_doc) =
+                futures::executor::block_on(fpm::utils::get_no_of_document(&lib.config.root))
+            {
+                fpm_base = format!(
+                    indoc::indoc! {"
+                        {fpm_base}
+                        
+                        -- number-of-documents: {number_of_documents}
+    
+                        "},
+                    fpm_base = fpm_base,
+                    number_of_documents = no_of_doc,
+                );
+            }
+
+            if let Some(ref language) = lib.config.package.language {
+                fpm_base = format!(
+                    indoc::indoc! {"
+                        {fpm_base}
+                        
+                        -- language: {language} 
+    
+                        "},
+                    fpm_base = fpm_base,
+                    language = language,
+                );
+            }
+
             if let Some(ref last_marked_on) = lib.translated_data.last_marked_on {
                 let rfc3339 = fpm::utils::nanos_to_rfc3339(last_marked_on);
                 fpm_base = format!(
