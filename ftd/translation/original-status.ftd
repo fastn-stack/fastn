@@ -6,40 +6,45 @@ padding-horizontal: 20
 
 -- h0: Translation Status
 
+-- title: $fpm.title
+subtitle: key-value: Last modified on:
+> value: $fpm.last-modified-on
+
 Here is the list of the translation status for the available languages.
 
--- number-of-documents: $fpm.number-of-documents
-
+-- key-value: Total number of documents:
+value: $fpm.number-of-documents
 
 -- language-status:
 
 
--- ftd.row number-of-documents:
-caption number:
+
+-- ftd.row key-value:
+caption key:
+string value:
 margin-bottom: 10
+spacing: 2
 
---- ftd.text: Number of documents:
---- ftd.text: $number
+--- ftd.text: $key
+--- ftd.text: $value
 
 
--- ftd.column h0:
+-- ftd.column title:
 caption title:
 optional body body:
+ftd.ui subtitle:
 width: fill
-padding-horizontal: 90
-region: h0
+region: h1
 
 --- ftd.row:
-spacing: 60
+spacing: 25
 width: fill
 
---- ftd.text:
-text: $title
+--- ftd.text: $title
 region: title
-size: 40
-color: black
+size: 30
+color: #5A5E5D
 style: bold
-padding-bottom: 24
 font: apple-system
 align: center
 
@@ -54,6 +59,31 @@ align: center
 
 --- container: ftd.main
 
+--- subtitle:
+
+--- markdown:
+if: $body is not null
+body: $body
+
+
+-- ftd.column h0:
+caption title:
+optional body body:
+width: fill
+padding-horizontal: 90
+region: h0
+
+--- ftd.text:
+text: $title
+region: title
+size: 40
+color: black
+style: bold
+padding-bottom: 24
+font: apple-system
+
+--- container: ftd.main
+
 --- markdown:
 if: $body is not null
 body: $body
@@ -62,14 +92,12 @@ body: $body
 
 -- ftd.text markdown:
 body body:
-optional boolean collapsed:
-optional caption title:
-optional boolean two_columns:
 text: $body
 size: 19
 line-height: 30
 color: #4d4d4d
 padding-bottom: 34
+padding-top: 50
 font: apple-system
 
 

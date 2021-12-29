@@ -55,6 +55,40 @@ pub(crate) async fn get_no_of_document(path: &camino::Utf8PathBuf) -> fpm::Resul
     Ok(fpm::snapshot::get_latest_snapshots(path).await?.len())
 }
 
+pub(crate) async fn get_last_modified_on(path: &camino::Utf8PathBuf) -> Option<String> {
+    fpm::snapshot::get_latest_snapshots(path)
+        .await
+        .unwrap_or(Default::default())
+        .values()
+        .into_iter()
+        .max()
+        .map(|v| nanos_to_rfc3339(v))
+}
+
+pub(crate) fn get_package_title(config: &fpm::Config) -> String {
+    let fpm = if let Ok(fpm) = std::fs::read_to_string(config.root.join("index.ftd")) {
+        fpm
+    } else {
+        return config.package.name.clone();
+    };
+    let lib = fpm::Library {
+        config: config.clone(),
+        markdown: None,
+        document_id: "index.ftd".to_string(),
+        translated_data: Default::default(),
+    };
+    let main_ftd_doc = match ftd::p2::Document::from("index.ftd", fpm.as_str(), &lib) {
+        Ok(v) => v,
+        Err(_) => {
+            return config.package.name.clone();
+        }
+    };
+    match &main_ftd_doc.title() {
+        Some(x) => x.rendered.clone(),
+        _ => config.package.name.clone(),
+    }
+}
+
 #[async_recursion::async_recursion(?Send)]
 pub async fn copy_dir_all(
     src: impl AsRef<std::path::Path> + 'static,
