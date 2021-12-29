@@ -113,11 +113,11 @@ impl TranslatedDocument {
                     original_documents
                         .get("index.md")
                         .ok_or(fpm::Error::PackageError {
-                            message: format!("Could not find `{}`", file),
+                            message: format!("Could not find `{}` in original package", file,),
                         })?
                 } else {
                     return Err(fpm::Error::PackageError {
-                        message: format!("Could not find `{}`", file),
+                        message: format!("Could not find `{}` in original package", file),
                     });
                 };
             if !translated_documents.contains_key(&file) {
