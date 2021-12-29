@@ -21,7 +21,7 @@ async fn file_status(
         return Ok(());
     }
 
-    let file = fpm::get_file(&std::path::PathBuf::from(path), base_path).await?;
+    let file = fpm::get_file(&path, base_path).await?;
 
     let file_status = get_file_status(&file, snapshots).await?;
     let track_status = get_track_status(&file, snapshots, base_path.as_str())?;

@@ -3,8 +3,8 @@ pub async fn sync(config: &fpm::Config, files: Option<Vec<String>>) -> fpm::Resu
         let files = files
             .to_vec()
             .into_iter()
-            .map(|x| std::path::PathBuf::from(config.root.join(x)))
-            .collect::<Vec<std::path::PathBuf>>();
+            .map(|x| config.root.join(x))
+            .collect::<Vec<camino::Utf8PathBuf>>();
         fpm::paths_to_files(files, config.root.as_path()).await?
     } else {
         fpm::get_documents(config).await?

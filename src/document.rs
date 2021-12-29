@@ -58,8 +58,8 @@ pub(crate) async fn get_documents(config: &fpm::Config) -> fpm::Result<Vec<fpm::
         .build()
         .into_iter()
         .flatten()
-        .map(|x| x.into_path())
-        .collect::<Vec<std::path::PathBuf>>();
+        .map(|x| camino::Utf8PathBuf::from_path_buf(x.into_path()).unwrap()) //todo: improve error message
+        .collect::<Vec<camino::Utf8PathBuf>>();
     let mut documents = fpm::paths_to_files(all_files, &config.root).await?;
     documents.sort_by_key(|v| v.get_id());
 
@@ -67,7 +67,7 @@ pub(crate) async fn get_documents(config: &fpm::Config) -> fpm::Result<Vec<fpm::
 }
 
 pub(crate) async fn paths_to_files(
-    files: Vec<std::path::PathBuf>,
+    files: Vec<camino::Utf8PathBuf>,
     base_path: &camino::Utf8Path,
 ) -> fpm::Result<Vec<fpm::File>> {
     Ok(futures::future::join_all(
@@ -98,20 +98,26 @@ pub fn package_ignores() -> Result<ignore::overrides::Override, ignore::Error> {
 }
 
 pub(crate) async fn get_file(
-    doc_path: &std::path::Path,
+    doc_path: &camino::Utf8Path,
     base_path: &camino::Utf8Path,
 ) -> fpm::Result<File> {
     if doc_path.is_dir() {
         return Err(fpm::Error::UsageError {
-            message: format!("{:?} should be a file", doc_path),
+            message: format!("{} should be a file", doc_path.as_str()),
         });
     }
 
     let id = match std::fs::canonicalize(doc_path)?
         .to_str()
         .unwrap()
-        .rsplit_once(format!("{}{}", base_path, std::path::MAIN_SEPARATOR).as_str())
-    {
+        .rsplit_once(
+            if base_path.as_str().ends_with(std::path::MAIN_SEPARATOR) {
+                base_path.as_str().to_string()
+            } else {
+                format!("{}{}", base_path, std::path::MAIN_SEPARATOR)
+            }
+            .as_str(),
+        ) {
         Some((_, id)) => id.to_string(),
         None => {
             return Err(fpm::Error::UsageError {

@@ -89,8 +89,8 @@ async fn build_with_original(
     let files = original_snapshots
         .keys()
         .into_iter()
-        .map(|v| original_path.join(v).into_std_path_buf())
-        .collect::<Vec<std::path::PathBuf>>();
+        .map(|v| original_path.join(v))
+        .collect::<Vec<camino::Utf8PathBuf>>();
 
     // documents contains all the files in original package
     let original_documents = std::collections::BTreeMap::from_iter(
