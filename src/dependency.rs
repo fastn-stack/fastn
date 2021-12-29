@@ -153,10 +153,13 @@ impl fpm::Package {
             };
 
             if !download_translations && !download_dependencies {
-                std::fs::create_dir_all(base_dir.join(".packages"))?;
-                let file_extract_path = base_dir
-                    .join(".packages")
-                    .join(format!("{}.FPM.ftd", self.name.replace("/", ".")));
+                let (path, name) = if let Some((path, name)) = self.name.rsplit_once('/') {
+                    (base_dir.join(".packages").join(path), name)
+                } else {
+                    (base_dir.join(".packages"), self.name.as_str())
+                };
+                std::fs::create_dir_all(&path)?;
+                let file_extract_path = path.join(format!("{}.ftd", name));
                 if !file_extract_path.exists() {
                     let mut f = std::fs::File::create(&file_extract_path)?;
                     f.write_all(fpm_string.as_bytes())?;

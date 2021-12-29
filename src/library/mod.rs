@@ -210,7 +210,8 @@ impl ftd::p2::Library for Library {
                 for translation in lib.config.package.translations.iter() {
                     if let Some(ref status) = translation.translation_status {
                         if let Some(ref language) = translation.language {
-                            let url = format!("https://{}/~/translation-status/", translation.name);
+                            let url =
+                                format!("https://{}/FPM/translation-status/", translation.name);
                             translation_status_list = format!(
                                 indoc::indoc! {"
                                     {list}

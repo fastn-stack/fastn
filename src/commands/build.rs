@@ -52,10 +52,10 @@ async fn build_with_translations(config: &fpm::Config, base_url: Option<&str>) -
         )
         .await?;
     }
-    // Add /~/translation-status page
+    // Add /FPM/translation-status page
     {
         let translation_status = fpm::Document {
-            id: "~/translation-status.ftd".to_string(),
+            id: "FPM/translation-status.ftd".to_string(),
             content: fpm::original_package_status(config)?,
             parent_path: config.root.as_str().to_string(),
         };
@@ -124,10 +124,10 @@ async fn build_with_original(
         translated_document.html(config, base_url).await?;
     }
 
-    // Add /~/translation-status page
+    // Add /FPM/translation-status page
     {
         let translation_status = fpm::Document {
-            id: "~/translation-status.ftd".to_string(),
+            id: "FPM/translation-status.ftd".to_string(),
             content: fpm::translation_package_status(config)?,
             parent_path: config.root.as_str().to_string(),
         };
