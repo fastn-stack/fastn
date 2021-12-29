@@ -1,8 +1,57 @@
 -- import: fpm
 
+-- ftd.column:
+padding-vertical: 40
+padding-horizontal: 20
+
+-- h0: Translation Status
+
+Here is the list of the translation status for the available languages.
+
+
+-- language-status:
+
+
+
+-- ftd.column h0:
+caption title:
+optional body body:
+width: fill
+padding-horizontal: 90
+region: h0
+
+--- ftd.text:
+text: $title
+region: title
+size: 40
+color: black
+style: bold
+padding-bottom: 24
+font: apple-system
+
+--- markdown:
+if: $body is not null
+body: $body
+
+-- ftd.text markdown:
+body body:
+optional boolean collapsed:
+optional caption title:
+optional boolean two_columns:
+text: $body
+size: 19
+line-height: 30
+color: #4d4d4d
+padding-bottom: 34
+font: apple-system
+
+
 -- ftd.row print:
 fpm.status-data data:
 width: fill
+border-bottom: 1
+border-color: white
+padding: 10
 
 --- ftd.text: $data.language
 link: $data.url
@@ -12,37 +61,38 @@ padding: 5
 --- ftd.integer: $data.never-marked
 width: percent 20
 padding: 5
+color: blue
 
 --- ftd.integer:  $data.missing
 width: percent 20
 padding: 5
+color: red
 
 --- ftd.integer: $data.out-dated
 width: percent 20
 padding: 5
+color: blue
 
 --- ftd.integer: $data.upto-date
 width: percent 20
 padding: 5
+color: green
 
 -- ftd.column language-status:
 background-color: #f3f3f3
 width: fill
 max-width: 1000
+border-radius: 5
 
 --- ftd.row:
 width: fill
+background-color: black
+color: white
+padding: 10
+border-top-radius: 5
 
 --- ftd.text: Language
 width: percent 20
-
---- ftd.text: No of translated documents
-width: percent 20
-padding: 5
-
---- ftd.text: No of outdated documents
-width: percent 20
-padding: 5
 
 --- ftd.text: Never marked documents
 width: percent 20
@@ -52,10 +102,17 @@ padding: 5
 width: percent 20
 padding: 5
 
+--- ftd.text: No of outdated documents
+width: percent 20
+padding: 5
+
+--- ftd.text: No of translated documents
+width: percent 20
+padding: 5
+
 --- container: ftd.main
 
 --- print:
 $loop$: $fpm.status as $obj
 data: $obj
 
--- language-status:
