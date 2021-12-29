@@ -3,6 +3,7 @@
 -- ftd.column:
 padding-vertical: 40
 padding-horizontal: 20
+width: fill
 
 -- h0: Translation Status
 
@@ -142,11 +143,17 @@ width: percent 20
 padding: 5
 color: green
 
---- ftd.text: $data.language
+--- ftd.text: $data.last-modified-on
+if: $data.last-modified-on is not null
 link: $data.url
 width: percent 20
 padding: 5
 
+--- ftd.text: Never Synced
+if: $data.last-modified-on is null
+link: $data.url
+width: percent 20
+padding: 5
 
 
 
@@ -179,6 +186,10 @@ width: percent 20
 padding: 5
 
 --- ftd.text: Up-to Date
+width: percent 20
+padding: 5
+
+--- ftd.text: Last modified on
 width: percent 20
 padding: 5
 

@@ -3,6 +3,7 @@
 -- ftd.column:
 padding-vertical: 40
 padding-horizontal: 20
+width: fill
 
 -- h0: Translation Status
 
@@ -113,19 +114,18 @@ font: apple-system
 
 
 -- ftd.row print:
-fpm.status-data data:
+caption file:
+ftd.ui status:
 width: fill
 border-bottom: 1
 border-color: white
 padding: 10
 
---- ftd.text: $data.file
+--- ftd.text: $file
 width: percent 50
 padding: 5
 
---- ftd.text: $data.status
-width: percent 50
-padding: 5
+--- status:
 
 
 
@@ -151,6 +151,36 @@ padding: 5
 
 --- container: ftd.main
 
---- print:
-$loop$: $fpm.status as $obj
-data: $obj
+--- print: $obj
+$loop$: $fpm.missing-files as $obj
+status: ftd.text: Missing
+> padding: 5
+> color: #eb8489
+> background-color: #fdebeb
+> border-radius: 10
+
+--- print: $obj
+$loop$: $fpm.never-marked-files as $obj
+status: ftd.text: Never Marked
+> padding: 5
+> color: #4e4ead
+> background-color: #e0dff9
+> border-radius: 10
+
+
+--- print: $obj
+$loop$: $fpm.outdated-files as $obj
+status: ftd.text: Out-dated
+> padding: 5
+> color: #f7d06d
+> background-color: #fef7e5
+> border-radius: 10
+
+
+--- print: $obj
+$loop$: $fpm.upto-date-files as $obj
+status: ftd.text: Upto-date
+> padding: 5
+> color: #4da486
+> background-color: #e0efeb
+> border-radius: 10

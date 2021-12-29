@@ -223,9 +223,13 @@ impl ftd::p2::Library for Library {
                             &lib.config.root,
                         )
                     {
+                        let mut never_marked_files = "".to_string();
+                        let mut missing_files = "".to_string();
+                        let mut outdated_files = "".to_string();
+                        let mut upto_date_files = "".to_string();
                         let mut translation_status_list = "".to_string();
 
-                        for (file, status) in translation_status {
+                        for (file, status) in translation_status.iter() {
                             translation_status_list = format!(
                                 indoc::indoc! {"
                                     {list}
@@ -239,6 +243,57 @@ impl ftd::p2::Library for Library {
                                 file = file,
                                 status = status.as_str()
                             );
+
+                            match status {
+                                fpm::commands::translation_status::TranslationStatus::Missing => {
+                                    missing_files = format!(
+                                        indoc::indoc! {"
+                                            {list}
+                                            
+                                            -- missing-files: {file}
+                                            
+                                        "},
+                                        list = missing_files,
+                                        file = file,
+                                    );
+                                },
+                                fpm::commands::translation_status::TranslationStatus::NeverMarked => {
+                                    never_marked_files = format!(
+                                        indoc::indoc! {"
+                                            {list}
+                                            
+                                            -- never-marked-files: {file}
+                                            
+                                        "},
+                                        list = never_marked_files,
+                                        file = file,
+                                    );
+                                },
+                                fpm::commands::translation_status::TranslationStatus::Outdated => {
+                                    outdated_files = format!(
+                                        indoc::indoc! {"
+                                            {list}
+                                            
+                                            -- outdated-files: {file}
+                                            
+                                        "},
+                                        list = outdated_files,
+                                        file = file,
+                                    );
+                                }
+                                fpm::commands::translation_status::TranslationStatus::UptoDate => {
+                                    upto_date_files = format!(
+                                        indoc::indoc! {"
+                                            {list}
+                                            
+                                            -- upto-date-files: {file}
+                                            
+                                        "},
+                                        list = upto_date_files,
+                                        file = file,
+                                    );
+                                }
+                            }
                         }
 
                         fpm_base = format!(
@@ -252,10 +307,31 @@ impl ftd::p2::Library for Library {
                                 -- status-data list status:
         
                                 {translation_status_list}
+
+                                -- string list missing-files:
+                                
+                                {missing_files}
+
+                                -- string list never-marked-files:
+                                
+                                {never_marked_files}
+
+                                -- string list outdated-files:
+                                
+                                {outdated_files}
+
+                                -- string list upto-date-files:
+                                
+                                {upto_date_files}
+
                                 
                             "},
                             fpm_base = fpm_base,
-                            translation_status_list = translation_status_list
+                            translation_status_list = translation_status_list,
+                            missing_files = missing_files,
+                            never_marked_files = never_marked_files,
+                            outdated_files = outdated_files,
+                            upto_date_files = upto_date_files
                         );
                     }
                 }
