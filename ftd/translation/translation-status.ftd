@@ -2,13 +2,36 @@
 
 -- ftd.row print:
 fpm.status-data data:
-spacing: 5
+width: fill
 
 --- ftd.text: $data.file
---- ftd.text: :
+width: percent 50
+padding: 5
+
 --- ftd.text: $data.status
+width: percent 50
+padding: 5
 
+-- ftd.column files-status:
+background-color: #f3f3f3
+width: fill
+max-width: 800
 
--- print:
+--- ftd.row:
+width: fill
+
+--- ftd.text: Document
+width: percent 50
+padding: 5
+
+--- ftd.text: Status
+width: percent 50
+padding: 5
+
+--- container: ftd.main
+
+--- print:
 $loop$: $fpm.status as $obj
 data: $obj
+
+-- files-status:

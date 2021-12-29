@@ -1,32 +1,61 @@
 -- import: fpm
 
--- ftd.column print:
+-- ftd.row print:
 fpm.status-data data:
+width: fill
 
 --- ftd.text: $data.language
 link: $data.url
+width: percent 20
+padding: 5
 
---- print-row: Never Marked :
-value: $data.never-marked
+--- ftd.integer: $data.never-marked
+width: percent 20
+padding: 5
 
---- print-row: Missing :
-value: $data.missing
+--- ftd.integer:  $data.missing
+width: percent 20
+padding: 5
 
---- print-row: Out Dated :
-value: $data.out-dated
+--- ftd.integer: $data.out-dated
+width: percent 20
+padding: 5
 
---- print-row: Upto Date :
-value: $data.upto-date
+--- ftd.integer: $data.upto-date
+width: percent 20
+padding: 5
 
+-- ftd.column language-status:
+background-color: #f3f3f3
+width: fill
+max-width: 1000
 
--- ftd.row print-row:
-caption name:
-integer value:
-spacing: 5
+--- ftd.row:
+width: fill
 
---- ftd.text: $name
---- ftd.integer: $value
+--- ftd.text: Language
+width: percent 20
 
--- print:
+--- ftd.text: No of translated documents
+width: percent 20
+padding: 5
+
+--- ftd.text: No of outdated documents
+width: percent 20
+padding: 5
+
+--- ftd.text: Never marked documents
+width: percent 20
+padding: 5
+
+--- ftd.text: Missing documents
+width: percent 20
+padding: 5
+
+--- container: ftd.main
+
+--- print:
 $loop$: $fpm.status as $obj
 data: $obj
+
+-- language-status:
