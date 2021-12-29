@@ -279,11 +279,29 @@ async fn process_ftd(
 
     let new_file_path = config.root.join(".build").join(file_rel_path);
 
+    let final_main = if config.root.join("prelude.ftd").exists() && !main.id.eq("FPM.ftd") {
+        let prelude_content = tokio::fs::read_to_string(config.root.join("prelude.ftd")).await?;
+        fpm::Document {
+            id: main.id.clone(),
+            content: format!(
+                indoc::indoc! {"
+            {prelude_content}
+            {body_content}
+            ",},
+                prelude_content = prelude_content,
+                body_content = main.content.clone()
+            ),
+            parent_path: main.parent_path.clone(),
+        }
+    } else {
+        main.to_owned()
+    };
+
     match (fallback, message) {
         (Some(fallback), Some(message)) => {
             write_with_fallback(
                 config,
-                main,
+                &final_main,
                 fallback,
                 new_file_path.as_str(),
                 message,
@@ -295,7 +313,7 @@ async fn process_ftd(
         (None, Some(message)) => {
             write_with_message(
                 config,
-                main,
+                &final_main,
                 new_file_path.as_str(),
                 message,
                 translated_data,
@@ -303,7 +321,7 @@ async fn process_ftd(
             )
             .await?
         }
-        _ => write_default(config, main, new_file_path.as_str(), base_url).await?,
+        _ => write_default(config, &final_main, new_file_path.as_str(), base_url).await?,
     }
 
     return Ok(());
