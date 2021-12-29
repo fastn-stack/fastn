@@ -58,7 +58,7 @@ pub(crate) async fn get_no_of_document(path: &camino::Utf8PathBuf) -> fpm::Resul
 pub(crate) async fn get_last_modified_on(path: &camino::Utf8PathBuf) -> Option<String> {
     fpm::snapshot::get_latest_snapshots(path)
         .await
-        .unwrap_or(Default::default())
+        .unwrap_or_default()
         .values()
         .into_iter()
         .max()
