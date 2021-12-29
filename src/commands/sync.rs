@@ -30,16 +30,22 @@ pub async fn sync(config: &fpm::Config, files: Option<Vec<String>>) -> fpm::Resu
             .iter()
             .map(|v| v.filename.to_string())
             .collect::<Vec<String>>();
-        for (k, timestamp) in snapshots {
-            if !snapshot_id.contains(&k) && file.contains(&k) {
+        for (k, timestamp) in snapshots.iter() {
+            if !snapshot_id.contains(k) && file.contains(k) {
                 continue;
             }
-            if !snapshot_id.contains(&k) {
+            if !snapshot_id.contains(k) {
                 new_snapshots.push(fpm::Snapshot {
-                    filename: k.to_string(),
-                    timestamp,
+                    filename: k.clone(),
+                    timestamp: timestamp.clone(),
                 })
             }
+        }
+    }
+
+    for key in snapshots.keys() {
+        if new_snapshots.iter().filter(|v| v.filename.eq(key)).count() == 0 {
+            modified_files.push(key.clone());
         }
     }
 

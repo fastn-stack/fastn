@@ -166,19 +166,19 @@ border-top-radius: 5
 --- ftd.text: Language
 width: percent 20
 
---- ftd.text: Never marked documents
+--- ftd.text: Never marked
 width: percent 20
 padding: 5
 
---- ftd.text: Missing documents
+--- ftd.text: Missing
 width: percent 20
 padding: 5
 
---- ftd.text: No of outdated documents
+--- ftd.text: Out-dated
 width: percent 20
 padding: 5
 
---- ftd.text: No of translated documents
+--- ftd.text: Up-to Date
 width: percent 20
 padding: 5
 
