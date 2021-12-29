@@ -43,10 +43,11 @@ width: fill
 --- ftd.text: $title
 region: title
 size: 30
-color: #5A5E5D
+color: #162f78
 style: bold
 font: apple-system
 align: center
+link: $fpm.home-url
 
 --- ftd.text: $fpm.language
 if: $fpm.language is not null

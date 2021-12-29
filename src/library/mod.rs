@@ -81,11 +81,14 @@ impl ftd::p2::Library for Library {
                         -- optional string last-modified-on:
 
                         -- string title: {title}
+
+                        -- string home-url: {home_url}
     
                         "},
                 fpm_base = fpm::fpm_ftd().to_string(),
                 document_id = lib.document_id,
-                title = fpm::utils::get_package_title(&lib.config)
+                title = fpm::utils::get_package_title(&lib.config),
+                home_url = format!("//{}", lib.config.package.name)
             );
             if let Some(ref diff) = lib.translated_data.diff {
                 fpm_base = format!(
