@@ -37,7 +37,7 @@ pub async fn sync(config: &fpm::Config, files: Option<Vec<String>>) -> fpm::Resu
             if !snapshot_id.contains(k) {
                 new_snapshots.push(fpm::Snapshot {
                     filename: k.clone(),
-                    timestamp: timestamp.clone(),
+                    timestamp: *timestamp,
                 })
             }
         }

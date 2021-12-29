@@ -12,7 +12,7 @@ subtitle: key-value: Last modified on:
 > value: $fpm.last-modified-on
 > default: Never synced
 
-Here is the list of the translation status for the available languages.
+Here is the list of the translation status for all the files.
 
 -- key-value: Total number of documents:
 value: $fpm.number-of-documents
