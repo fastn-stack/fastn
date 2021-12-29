@@ -9,11 +9,13 @@ padding-horizontal: 20
 -- title: $fpm.title
 subtitle: key-value: Last modified on:
 > value: $fpm.last-modified-on
+> default: Never synced
 
 Here is the list of the translation status for the available languages.
 
 -- key-value: Total number of documents:
 value: $fpm.number-of-documents
+default: Not known
 
 -- language-status:
 
@@ -21,12 +23,18 @@ value: $fpm.number-of-documents
 
 -- ftd.row key-value:
 caption key:
-string value:
+optional string value:
+string default:
 margin-bottom: 10
 spacing: 2
 
 --- ftd.text: $key
+
 --- ftd.text: $value
+if: $value is not null
+
+--- ftd.text: $default
+if: $value is null
 
 
 -- ftd.column title:
@@ -133,6 +141,14 @@ color: blue
 width: percent 20
 padding: 5
 color: green
+
+--- ftd.text: $data.language
+link: $data.url
+width: percent 20
+padding: 5
+
+
+
 
 -- ftd.column language-status:
 background-color: #f3f3f3

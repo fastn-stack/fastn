@@ -72,14 +72,25 @@ async fn write(
         .await?;
     }
 
-    if let Some(timestamp) = snapshots.get(&doc.get_id()) {
-        let path = fpm::utils::history_path(&doc.get_id(), &doc.get_base_path(), timestamp);
-        if let Ok(current_doc) = tokio::fs::read_to_string(&doc.get_full_path()).await {
+    let base_path = camino::Utf8PathBuf::from(doc.get_base_path());
+
+    let (id, full_path) = if doc.get_id().eq("index.md")
+        && !base_path.join(doc.get_id()).exists()
+        && base_path.join("README.md").exists()
+    {
+        ("README.md".to_string(), base_path.join("README.md"))
+    } else {
+        (doc.get_id(), doc.get_full_path())
+    };
+
+    if let Some(timestamp) = snapshots.get(&id) {
+        let path = fpm::utils::history_path(&id, &doc.get_base_path(), timestamp);
+        if let Ok(current_doc) = tokio::fs::read_to_string(&full_path).await {
             let existing_doc = tokio::fs::read_to_string(&path).await?;
             if current_doc.eq(&existing_doc) {
                 return Ok((
                     fpm::Snapshot {
-                        filename: doc.get_id(),
+                        filename: id.clone(),
                         timestamp: *timestamp,
                     },
                     false,
@@ -88,13 +99,13 @@ async fn write(
         }
     }
 
-    let new_file_path = fpm::utils::history_path(&doc.get_id(), &doc.get_base_path(), &timestamp);
+    let new_file_path = fpm::utils::history_path(&id, &doc.get_base_path(), &timestamp);
 
-    tokio::fs::copy(doc.get_full_path(), new_file_path).await?;
+    tokio::fs::copy(full_path, new_file_path).await?;
 
     Ok((
         fpm::Snapshot {
-            filename: doc.get_id(),
+            filename: id.clone(),
             timestamp,
         },
         true,

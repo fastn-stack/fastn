@@ -190,6 +190,7 @@ pub(crate) fn get_translation_status_count(
         missing: 0,
         out_dated: 0,
         upto_date: 0,
+        last_modified_on: None,
     };
     for (file, timestamp) in snapshots {
         if !path.join(&file).exists() {
@@ -216,6 +217,8 @@ pub(crate) fn get_translation_status_count(
             translation_status_count.never_marked += 1;
         }
     }
+    translation_status_count.last_modified_on =
+        futures::executor::block_on(fpm::utils::get_last_modified_on(path));
     Ok(translation_status_count)
 }
 
@@ -228,6 +231,8 @@ pub struct TranslationStatusCount {
     pub out_dated: i32,
     #[serde(rename = "upto-date")]
     pub upto_date: i32,
+    #[serde(rename = "last-modified-on")]
+    pub last_modified_on: Option<String>,
 }
 
 impl ToString for TranslationStatusCount {

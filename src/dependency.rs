@@ -259,7 +259,7 @@ impl fpm::Package {
                 Ok(v) => v,
                 Err(e) => {
                     return Err(fpm::Error::PackageError {
-                        message: format!("failed to parse FPM.ftd: {:?}", &e),
+                        message: format!("failed to parse FPM.ftd 2: {:?}", &e),
                     });
                 }
             }
@@ -269,8 +269,8 @@ impl fpm::Package {
             temp_package.into_package()
         };
 
-        if let Ok(translation_status) =
-            ftd_document.get::<fpm::translation::TranslationStatusCount>("fpm#translation-status")
+        if let Ok(translation_status) = ftd_document
+            .get::<fpm::translation::TranslationStatusCount>("fpm#translation-status-count")
         {
             package.translation_status = Some(translation_status);
         }

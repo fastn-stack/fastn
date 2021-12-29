@@ -237,23 +237,41 @@ async fn process_ftd(
             let translation_status =
                 fpm::translation::get_translation_status_count(&original_snapshots, &config.root)?;
             let content = std::fs::read_to_string(config.root.join(main.id.as_str()))?;
-            let fpm = format!(
-                indoc::indoc! {"
+            let fpm = {
+                let mut translation_status_count = format!(
+                    indoc::indoc! {"
+                        -- fpm.translation-status-count: 
+                        never-marked: {never_marked}
+                        missing: {missing}
+                        out-dated: {out_dated}
+                        upto-date: {upto_date}
+                    "},
+                    never_marked = translation_status.never_marked,
+                    missing = translation_status.missing,
+                    out_dated = translation_status.out_dated,
+                    upto_date = translation_status.upto_date,
+                );
+                if let Some(last_modified_on) = translation_status.last_modified_on {
+                    translation_status_count = format!(
+                        indoc::indoc! {"
+                            {translation_status_count}last-modified-on: {last_modified_on}
+                        "},
+                        translation_status_count = translation_status_count,
+                        last_modified_on = last_modified_on
+                    );
+                }
+
+                format!(
+                    indoc::indoc! {"
                     {content}
                     
-                    -- fpm.translation-status: 
-                    never-marked: {never_marked}
-                    missing: {missing}
-                    out-dated: {out_dated}
-                    upto-date: {upto_date}
+                    {translation_status_count}
     
                     "},
-                content = content,
-                never_marked = translation_status.never_marked,
-                missing = translation_status.missing,
-                out_dated = translation_status.out_dated,
-                upto_date = translation_status.upto_date
-            );
+                    content = content,
+                    translation_status_count = translation_status_count
+                )
+            };
 
             let mut file =
                 std::fs::File::create(config.root.join(".build").join(main.id.as_str()))?;

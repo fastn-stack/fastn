@@ -1,8 +1,123 @@
 -- import: fpm
 
+-- ftd.column:
+padding-vertical: 40
+padding-horizontal: 20
+
+-- h0: Translation Status
+
+-- title: $fpm.title
+subtitle: key-value: Last modified on:
+> value: $fpm.last-modified-on
+> default: Never synced
+
+Here is the list of the translation status for the available languages.
+
+-- key-value: Total number of documents:
+value: $fpm.number-of-documents
+default: Not known
+
+-- files-status:
+
+
+
+-- ftd.row key-value:
+caption key:
+optional string value:
+string default:
+margin-bottom: 10
+spacing: 2
+
+--- ftd.text: $key
+
+--- ftd.text: $value
+if: $value is not null
+
+--- ftd.text: $default
+if: $value is null
+
+
+
+-- ftd.column title:
+caption title:
+optional body body:
+ftd.ui subtitle:
+width: fill
+region: h1
+
+--- ftd.row:
+spacing: 25
+width: fill
+
+--- ftd.text: $title
+region: title
+size: 30
+color: #162f78
+style: bold
+font: apple-system
+align: center
+link: $fpm.home-url
+
+--- ftd.text: $fpm.language
+if: $fpm.language is not null
+border-radius: 10
+background-color: #f3f3f3
+padding-vertical: 5
+padding-horizontal: 20
+color: #E38686
+align: center
+
+--- container: ftd.main
+
+--- subtitle:
+
+--- markdown:
+if: $body is not null
+body: $body
+
+
+-- ftd.column h0:
+caption title:
+optional body body:
+width: fill
+padding-horizontal: 90
+region: h0
+
+--- ftd.text:
+text: $title
+region: title
+size: 40
+color: black
+style: bold
+padding-bottom: 24
+font: apple-system
+
+--- container: ftd.main
+
+--- markdown:
+if: $body is not null
+body: $body
+
+
+
+-- ftd.text markdown:
+body body:
+text: $body
+size: 19
+line-height: 30
+color: #4d4d4d
+padding-bottom: 34
+padding-top: 50
+font: apple-system
+
+
+
 -- ftd.row print:
 fpm.status-data data:
 width: fill
+border-bottom: 1
+border-color: white
+padding: 10
 
 --- ftd.text: $data.file
 width: percent 50
@@ -12,6 +127,8 @@ padding: 5
 width: percent 50
 padding: 5
 
+
+
 -- ftd.column files-status:
 background-color: #f3f3f3
 width: fill
@@ -19,6 +136,10 @@ max-width: 800
 
 --- ftd.row:
 width: fill
+background-color: black
+color: white
+padding: 10
+border-top-radius: 5
 
 --- ftd.text: Document
 width: percent 50
@@ -33,5 +154,3 @@ padding: 5
 --- print:
 $loop$: $fpm.status as $obj
 data: $obj
-
--- files-status:

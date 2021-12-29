@@ -155,7 +155,7 @@ impl Config {
                 Ok(v) => v,
                 Err(e) => {
                     return Err(fpm::Error::PackageError {
-                        message: format!("failed to parse FPM.ftd: {:?}", &e),
+                        message: format!("failed to parse FPM.ftd 3: {:?}", &e),
                     });
                 }
             }

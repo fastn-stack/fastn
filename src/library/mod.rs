@@ -268,26 +268,44 @@ impl ftd::p2::Library for Library {
                         if let Some(ref language) = translation.language {
                             let url =
                                 format!("https://{}/FPM/translation-status/", translation.name);
+                            let status = {
+                                let mut status_data = format!(
+                                    indoc::indoc! {"
+                                        -- status:
+                                        language: {language}
+                                        url: {url}
+                                        never-marked: {never_marked}
+                                        missing: {missing}
+                                        out-dated: {out_dated}
+                                        upto-date: {upto_date}
+                                    "},
+                                    language = language,
+                                    url = url,
+                                    never_marked = status.never_marked,
+                                    missing = status.missing,
+                                    out_dated = status.out_dated,
+                                    upto_date = status.upto_date
+                                );
+                                if let Some(ref last_modified_on) = status.last_modified_on {
+                                    status_data = format!(
+                                        indoc::indoc! {"
+                                            {status}last-modified-on: {last_modified_on}
+                                        "},
+                                        status = status_data,
+                                        last_modified_on = last_modified_on
+                                    );
+                                }
+                                status_data
+                            };
                             translation_status_list = format!(
                                 indoc::indoc! {"
                                     {list}
                                     
-                                    -- status:
-                                    language: {language}
-                                    url: {url}
-                                    never-marked: {never_marked}
-                                    missing: {missing}
-                                    out-dated: {out_dated}
-                                    upto-date: {upto_date}
+                                    {status}
                                     
                                 "},
                                 list = translation_status_list,
-                                language = language,
-                                url = url,
-                                never_marked = status.never_marked,
-                                missing = status.missing,
-                                out_dated = status.out_dated,
-                                upto_date = status.upto_date
+                                status = status
                             );
                         }
                     }
@@ -303,6 +321,7 @@ impl ftd::p2::Library for Library {
                         integer missing:
                         integer out-dated:
                         integer upto-date:
+                        optional string last-modified-on:
                         
                         -- status-data list status:
 

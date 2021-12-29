@@ -54,5 +54,6 @@ optional integer never-marked:
 optional integer missing:
 optional integer out-dated:
 optional integer upto-date:
+optional string last-modified-on:
 
--- translation-status-data translation-status: not set
+-- translation-status-data translation-status-count: not set
