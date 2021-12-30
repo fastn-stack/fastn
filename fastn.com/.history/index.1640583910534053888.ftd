@@ -1,0 +1,80 @@
+-- import: fifthtry/ft
+-- import: fifthtry/ft-core
+
+
+-- ft-core.meta:
+lang: en
+
+--- reader.who: everyone
+
+--- writer.username: shobhit
+
+--- writer.username: Jaykumar
+
+--- writer.username: ArpitaJaiswal
+
+--- admin.username: amitu
+
+
+-- $ft-core.toc:
+$processor$: ft-toc
+
+- fifthtry/fpm/about
+  About `fpm`
+- fifthtry/fpm/roadmap
+  Roadmap
+- fifthtry/fpm/journal
+  Journal
+- fifthtry/fpm/fs
+  File System Organization
+  - fifthtry/fpm/FPM
+    `FPM.ftd`
+- fifthtry/fpm/ftd-host
+  FTD Host Features
+  - fifthtry/fpm/http
+    `$processor$: http`
+  - fifthtry/fpm/toc
+    `$processor$: toc`
+  - fifthtry/fpm/package-query
+    `$processor$: package-query`
+  - fifthtry/fpm/fpm
+    `import: fpm`
+- fifthtry/fpm/install
+  Install `fpm`
+- fifthtry/fpm/usage
+  `fpm` Usage
+  - fifthtry/fpm/build
+    `fpm build`
+  - fifthtry/fpm/sync
+    `fpm sync`
+  - fifthtry/fpm/status
+    `fpm status`
+  - fifthtry/fpm/diff
+    `fpm diff`
+
+
+-- $ft-core.header:
+$processor$: ft-toc
+
+- fifthtry/fpm/roadmap
+  Roadmap
+- fifthtry/fpm/journal
+  Journal
+
+
+-- ft.page:
+
+
+-- ft.h1: fpm: FTD Package Manager
+
+[What is FPM?](/fpm/about/)
+
+Checkout what is planned in [Roadmap](/fpm/roadmap/), and day to day updates in 
+the [Journal](/fpm/journal/).
+
+Github: [github.com/FifthTry/fpm](https://github.com/FifthTry/fpm)  
+Discord: [#fpm on FifthTry](https://discord.gg/a7eBUeutWD)
+
+
+-- ft.youtube:
+id: rny1EGkqw_M
