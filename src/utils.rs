@@ -51,8 +51,29 @@ pub(crate) fn track_path(id: &str, base_path: &str) -> camino::Utf8PathBuf {
     base_path.join(".tracks").join(format!("{}.track", id))
 }
 
-pub(crate) async fn get_no_of_document(path: &camino::Utf8PathBuf) -> fpm::Result<usize> {
-    Ok(fpm::snapshot::get_latest_snapshots(path).await?.len())
+pub(crate) async fn get_no_of_document(config: &fpm::Config) -> fpm::Result<String> {
+    let mut no_of_docs = fpm::snapshot::get_latest_snapshots(&config.root)
+        .await?
+        .len()
+        .to_string();
+    if let Ok(original_path) = config.original_path() {
+        let no_of_original_docs = fpm::snapshot::get_latest_snapshots(&original_path)
+            .await?
+            .len();
+        no_of_docs = format!("{} / {}", no_of_docs, no_of_original_docs);
+    }
+    Ok(no_of_docs)
+}
+
+pub(crate) async fn get_current_document_last_modified_on(
+    config: &fpm::Config,
+    document_id: &str,
+) -> Option<String> {
+    fpm::snapshot::get_latest_snapshots(&config.root)
+        .await
+        .unwrap_or_default()
+        .get(document_id)
+        .map(|v| nanos_to_rfc3339(v))
 }
 
 pub(crate) async fn get_last_modified_on(path: &camino::Utf8PathBuf) -> Option<String> {

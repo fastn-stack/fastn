@@ -80,6 +80,10 @@ impl ftd::p2::Library for Library {
 
                         -- optional string last-modified-on:
 
+                        -- optional string current-document-last-modified-on:
+
+                        -- string translation-status-url: {home_url}
+
                         -- string title: {title}
 
                         -- string home-url: {home_url}
@@ -90,6 +94,7 @@ impl ftd::p2::Library for Library {
                 title = fpm::utils::get_package_title(&lib.config),
                 home_url = format!("//{}", lib.config.package.name)
             );
+
             if let Some(ref diff) = lib.translated_data.diff {
                 fpm_base = format!(
                     indoc::indoc! {"
@@ -105,8 +110,24 @@ impl ftd::p2::Library for Library {
                 );
             }
 
+            if lib.config.package.translation_of.is_some()
+                || lib.config.package.translations.has_elements()
+            {
+                fpm_base = format!(
+                    indoc::indoc! {"
+                        {fpm_base}
+                        
+                        -- translation-status-url: {translation_status_url}
+    
+                        "},
+                    fpm_base = fpm_base,
+                    translation_status_url =
+                        format!("//{}/FPM/translation-status", lib.config.package.name),
+                );
+            }
+
             if let Ok(no_of_doc) =
-                futures::executor::block_on(fpm::utils::get_no_of_document(&lib.config.root))
+                futures::executor::block_on(fpm::utils::get_no_of_document(&lib.config))
             {
                 fpm_base = format!(
                     indoc::indoc! {"
@@ -128,6 +149,24 @@ impl ftd::p2::Library for Library {
                         {fpm_base}
                         
                         -- last-modified-on: {last_modified_on}
+    
+                        "},
+                    fpm_base = fpm_base,
+                    last_modified_on = last_modified_on,
+                );
+            }
+
+            if let Some(last_modified_on) =
+                futures::executor::block_on(fpm::utils::get_current_document_last_modified_on(
+                    &lib.config,
+                    lib.document_id.as_str(),
+                ))
+            {
+                fpm_base = format!(
+                    indoc::indoc! {"
+                        {fpm_base}
+                        
+                        -- current-document-last-modified-on: {last_modified_on}
     
                         "},
                     fpm_base = fpm_base,
