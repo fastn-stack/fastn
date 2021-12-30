@@ -17,6 +17,10 @@ impl ftd::p2::Library for Library {
             return Some(construct_fpm_base(self));
         }
 
+        if name == "fpm-lib" {
+            return Some(fpm::fpm_lib_ftd().to_string());
+        }
+
         if let Ok(v) = std::fs::read_to_string(self.config.root.join(format!("{}.ftd", name))) {
             return Some(v);
         }
@@ -87,6 +91,13 @@ impl ftd::p2::Library for Library {
                         -- string title: {title}
 
                         -- string home-url: {home_url}
+
+                        -- record language-toc-item:
+                        caption title:
+                        string url:
+                        language-toc-item list children:
+
+                        -- language-toc-item list language-toc:
     
                         "},
                 fpm_base = fpm::fpm_ftd().to_string(),
@@ -503,13 +514,6 @@ impl ftd::p2::Library for Library {
                     fpm_base = format!(
                         indoc::indoc! {"
                         {fpm_base}
-
-                        -- record language-toc-item:
-                        caption title:
-                        string url:
-                        language-toc-item list children:
-
-                        -- language-toc-item list language-toc:
                         
                         -- language-toc:
                         $processor$: toc

@@ -37,6 +37,10 @@ fn fpm_ftd() -> &'static str {
     include_str!("../ftd/fpm.ftd")
 }
 
+fn fpm_lib_ftd() -> &'static str {
+    include_str!("../ftd/fpm-lib.ftd")
+}
+
 fn with_fallback() -> &'static str {
     include_str!("../with-fallback.html")
 }
