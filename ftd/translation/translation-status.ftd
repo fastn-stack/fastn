@@ -5,7 +5,7 @@ padding-vertical: 40
 padding-horizontal: 20
 width: fill
 
--- h0: Translation Status
+-- h0: Language Detail Page
 
 -- title: $fpm.title
 subtitle: key-value: Last modified on:

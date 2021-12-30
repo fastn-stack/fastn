@@ -4,32 +4,53 @@
 
 -- boolean show-main: true
 
+-- boolean show-detail: false
+
+-- ftd.column:
+width: fill
+background-color: #f3f3f3
+id: outer-container
+
+
+-- ftd.column:
+width: fill
+padding-top: 35
+padding-horizontal: 35
+padding-bottom: 10
+
 -- ftd.column:
 /gradient-direction: left to right
 /gradient-colors: #E87F85 , #FFADB2
 width: fill
 padding-vertical: 10
 id: main-container
-background-color: #dddcdc
+/background-color: #dddcdc
+border-radius: 10
+background-color: #fef9f8
+border-width: 1
+border-color: #e77d84
 
 -- ftd.row:
 spacing: 15
 position: top
+$event-click$: toggle $show-detail
 
--- ftd.image:
+--- ftd.image:
 src: https://res.cloudinary.com/dphj6havg/image/upload/v1640696994/info-1_jowsqn.svg
 width: 16
 height: auto
 
--- ftd.text: This document is out dated.
+--- ftd.text: This document is out dated.
 /color: white
 style: semi-bold
 font: apple-system
 padding-right: 20
 
--- ftd.text: Show outdated version
+--- ftd.text: Show latest version
 if: $show-main
 $event-click$: toggle $show-main
+$event-click$: stop-propagation
+$event-click$: prevent-default
 $event-click$: message-host show_fallback
 /color: #E87F85
 /background-color: white
@@ -45,9 +66,11 @@ font: apple-system
 background-color: #d27355
 color: white
 
--- ftd.text: Show latest version
+--- ftd.text: Show outdated version
 if: not $show-main
 $event-click$: toggle $show-main
+$event-click$: stop-propagation
+$event-click$: prevent-default
 $event-click$: message-host show_main
 /color: #E87F85
 /background-color: white
@@ -63,15 +86,31 @@ font: apple-system
 background-color: #d27355
 color: white
 
--- container: main-container
+-- ftd.row:
+spacing: 2
+width: fill
+padding-horizontal: 40
+padding-vertical: 10
+align: center
+if: $show-detail
+
+--- ftd.text: This document was last translated from original document on
+size: 18
+
+--- ftd.text: $fpm.current-document-last-modified-on
+size: 18
+
+--- ftd.text: Since then, the original document has following changes.
+size: 18
 
 -- ftd.column:
 max-width: 700
 width: fill
 position: center
 padding-vertical: 15
+if: $show-detail
 
--- ftd.code:
+--- ftd.code:
 lang: diff
 if: $fpm.diff is not null
 padding: 10
@@ -80,10 +119,6 @@ background-color: #2b303b
 
 $fpm.diff
 
--- container: ftd.main
+-- container: outer-container
 
 -- fpm-lib.message:
-current-document-last-modified-on: $fpm.current-document-last-modified-on
-translation-status-url: $fpm.translation-status-url
-language: $fpm.language
-language-toc: $fpm.language-toc

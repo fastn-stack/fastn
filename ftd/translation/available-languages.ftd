@@ -1,8 +1,8 @@
 -- import: fpm
 -- import: fpm-lib
 
+-- ftd.column:
+width: fill
+background-color: #f3f3f3
+
 -- fpm-lib.message:
-current-document-last-modified-on: $fpm.current-document-last-modified-on
-translation-status-url: $fpm.translation-status-url
-language: $fpm.language
-language-toc: $fpm.language-toc
