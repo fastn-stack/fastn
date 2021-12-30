@@ -1,0 +1,30 @@
+
+
+
+-- ft.page:
+
+
+-- ft.h0: Roadmap
+
+
+-- ft.h1: FPM as kickass SSG tool
+
+- `fpm build`: [file system organization](/fpm/~/1/)
+- [package dependencies](/fpm/~/9/)
+- package cargo binary for different os/arch, and also brew, apt
+- search
+
+
+-- ft.h1: Later
+
+- figure out how to do http serving
+- `fpm serve`
+- [logical linking](/fpm/~/2/)
+- [translation tracking](/fpm/~/3/)
+- [version tracking](/fpm/~/5/)
+- `fpm-repo` & `fpm sync`
+- [history tracking](/fpm/~/4/)
+- [cr tracking](/fpm/~/6/)
+- [upstream tracking: two way sync](/fpm/~/7/)
+- [`fpm-repo` authentication](/fpm/~/8/)
+- [access control](/fpm/~/10/)

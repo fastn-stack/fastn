@@ -1,0 +1,38 @@
+
+
+
+-- ft.page:
+
+
+-- ft.h0: `fpm build`
+
+`fpm build` is used to convert `.ftd` files in a fpm package into static HTML 
+files. The generated HTML files can be uploaded on github-pages, S3 etc to publish
+your `ftd` files.
+
+
+-- ft.h1: Regarding Dynamic Features in FTD
+
+`ftd` files can be dynamic, say they can refer an HTTP endpoint, from where `ftd` 
+will fetch the content, say JSON, and pass it to `ftd` document. This happens 
+during rendering, if you use the planned `fpm serve`, or if the `fpm package` is
+published to a `fpm-repo`. 
+
+When using `fpm build`, the dynamic stuff happens during the build time, and 
+subsequently a static version is only available.
+
+`fpm build` is only to support the use case where you do not have ability to run
+custom application (`fpm-repo`) and do not want to depend on SAAS version, and want
+to use static file serving to host your website.
+
+
+-- ft.h1: `.build` folder
+
+The generated HTML files are stored in `.build` folder, which is found next to the
+`FPM.ftd` file, in the `package root`. For now this is not configurable.
+
+
+-- ft.h1: `.packages` folder
+
+`fpm build` also downloads all the dependencies specified in the `FPM.ftd` file and
+stores in `.packages` folder.

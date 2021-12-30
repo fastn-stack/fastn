@@ -1,0 +1,34 @@
+-- import: fifthtry/ft
+-- import: fifthtry/ft-core
+
+
+-- ft-core.meta:
+lang: en
+
+--- reader.who: everyone
+
+--- admin.username: amitu
+
+
+-- $ft-core.toc:
+$processor$: ft-toc
+
+- fifthtry/fpm/roadmap
+  Roadmap
+- fifthtry/fpm/journal
+  Journal
+
+
+-- $ft-core.header:
+$processor$: ft-toc
+
+- fifthtry/fpm/roadmap
+  Roadmap
+- fifthtry/fpm/journal
+  Journal
+
+
+-- ft.page:
+
+
+-- ft.h1: `fpm`: FTD Package Manager

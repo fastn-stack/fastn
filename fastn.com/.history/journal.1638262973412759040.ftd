@@ -1,0 +1,52 @@
+
+
+
+-- ft.page:
+
+
+-- ft.h0: FPM Journal
+
+
+-- ft.h1: Update for 30th Nov 2021
+
+Shobhit is working full time on FPM now. We managed to nail down quite a bit of 
+our design now.
+
+
+-- ft.h2: `fpm build` working
+
+Finally we can start using `fpm`. We have created a template repo: 
+[FifthTry/fpm-blog](https://github.comFifthTry/fpm-blog), which shows how to create
+a blog using FTD and FPM.
+
+
+-- ft.h2: Design Review With Arpita
+
+Me and Arpita recorded a detailed design review of FPM.
+
+
+-- ft.youtube:
+id: rny1EGkqw_M
+
+
+-- ft.h1: Kickoff
+
+25th Nov 2021
+
+We have started working on this project now. We have written design docs for quite
+a few elements:
+
+- `fpm build`: [file system organization](/fpm/~/1/)
+- [logical linking](/fpm/~/2/)
+- [translation tracking](/fpm/~/3/)
+- [version tracking](/fpm/~/5/)
+- [history tracking](/fpm/~/4/)
+- [cr tracking](/fpm/~/6/)
+- [upstream tracking: two way sync](/fpm/~/7/)
+- [`fpm-repo` authentication](/fpm/~/8/)
+- [package dependencies](/fpm/~/9/)
+- [access control](/fpm/~/10/)
+
+[Shobhit](https://github.com/sharmashobit) is taking the lead of implementing this.
+We are hoping to create a minimal version that can convert ftd files to HTML so
+`fpm` can be considered an alternative to static site generators.

@@ -1,0 +1,22 @@
+
+
+
+-- ft.page:
+
+
+-- ft.h0: `fpm status`
+
+Status: Planned
+
+This command shows how many files have changed. It looks for all files in the
+package dir and compare it with the latest version of that file in `.history`
+folder.
+
+
+-- ft.code:
+lang: sh
+
+fpm status
+modified    a/b.ftd
+added       f.ftd
+removed     g/f.ftd

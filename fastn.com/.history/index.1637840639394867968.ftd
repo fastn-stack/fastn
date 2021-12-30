@@ -1,0 +1,41 @@
+-- import: fifthtry/ft
+-- import: fifthtry/ft-core
+
+
+-- ft-core.meta:
+lang: en
+
+--- reader.who: everyone
+
+--- writer.username: shobhit
+
+--- admin.username: amitu
+
+
+-- $ft-core.toc:
+$processor$: ft-toc
+
+- fifthtry/fpm/roadmap
+  Roadmap
+- fifthtry/fpm/journal
+  Journal
+
+
+-- $ft-core.header:
+$processor$: ft-toc
+
+- fifthtry/fpm/roadmap
+  Roadmap
+- fifthtry/fpm/journal
+  Journal
+
+
+-- ft.page:
+
+
+-- ft.h1: fpm: FTD Package Manager
+
+Checkout what is planned in Roadmap, and day to day updates in Journal.
+
+Github: [github.com/FifthTry/fpm](https://github.com/FifthTry/fpm)  
+Discord: [#fpm on FifthTry](https://discord.gg/a7eBUeutWD)

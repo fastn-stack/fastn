@@ -1,0 +1,17 @@
+
+
+
+-- ft.page:
+
+
+-- ft.h0: Roadmap
+
+- [file system organization](/fpm/~/1/)
+- [logical linking](/fpm/~/2/)
+- [history tracking](/fpm/~/4/)
+- [translation tracking](/fpm/~/3/)
+- [version tracking](/fpm/~/5/)
+- [cr tracking](/fpm/~/6/)
+- [upstream tracking: two way sync](/fpm/~/7/)
+- [`fpm-repo` authentication](/fpm/~/8/)
+- [package dependencies](/fpm/~/9/)
