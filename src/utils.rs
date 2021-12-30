@@ -34,7 +34,7 @@ pub(crate) fn get_timestamp_nanosecond() -> u128 {
 pub(crate) fn language_to_human(language: &str) -> String {
     realm_lang::Language::from_2_letter_code(language)
         .map(|v| v.human())
-        .unwrap_or(language.to_string())
+        .unwrap_or_else(|_| language.to_string())
 }
 
 pub(crate) fn nanos_to_rfc3339(nanos: &u128) -> String {

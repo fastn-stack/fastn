@@ -72,9 +72,9 @@ impl ftd::p2::Library for Library {
                 Some(ref package) => match package.language {
                     Some(ref lang) => realm_lang::Language::from_2_letter_code(lang)
                         .unwrap_or(realm_lang::Language::English),
-                    None => lang.clone(),
+                    None => lang,
                 },
-                None => lang.clone(),
+                None => lang,
             };
 
             let current_document_last_modified_on =
@@ -97,7 +97,64 @@ impl ftd::p2::Library for Library {
                     -- string show-outdated-version: {show_outdated_version}
                     -- string out-dated-heading: {out_dated_heading}
                     -- string out-dated-body: {out_dated_body}
+                    -- string language-detail-page: {language_detail_page}
+                    -- string language-detail-page-body: {language_detail_page_body}
+                    -- string total-number-of-documents: {total_number_of_documents}
+                    -- string document: {document}
+                    -- string status: {status}
+                    -- string missing: {missing}
+                    -- string never-marked: {never_marked}
+                    -- string out-dated: {out_dated}
+                    -- string upto-date: {upto_date}
                     "},
+                upto_date = fpm::i18n::translation::search(
+                    &lang,
+                    &primary_lang,
+                    "upto-date",
+                    &current_document_last_modified_on
+                ),
+                out_dated = fpm::i18n::translation::search(
+                    &lang,
+                    &primary_lang,
+                    "out-dated",
+                    &current_document_last_modified_on
+                ),
+                never_marked = fpm::i18n::translation::search(
+                    &lang,
+                    &primary_lang,
+                    "never-marked",
+                    &current_document_last_modified_on
+                ),
+                missing = fpm::i18n::translation::search(
+                    &lang,
+                    &primary_lang,
+                    "missing",
+                    &current_document_last_modified_on
+                ),
+                status = fpm::i18n::translation::search(
+                    &lang,
+                    &primary_lang,
+                    "status",
+                    &current_document_last_modified_on
+                ),
+                document = fpm::i18n::translation::search(
+                    &lang,
+                    &primary_lang,
+                    "document",
+                    &current_document_last_modified_on
+                ),
+                total_number_of_documents = fpm::i18n::translation::search(
+                    &lang,
+                    &primary_lang,
+                    "total-number-of-documents",
+                    &current_document_last_modified_on
+                ),
+                language_detail_page_body = fpm::i18n::translation::search(
+                    &lang,
+                    &primary_lang,
+                    "language-detail-page-body",
+                    &current_document_last_modified_on
+                ),
                 last_modified_on = fpm::i18n::translation::search(
                     &lang,
                     &primary_lang,
@@ -168,6 +225,12 @@ impl ftd::p2::Library for Library {
                     &lang,
                     &primary_lang,
                     "out-dated-body",
+                    &current_document_last_modified_on
+                ),
+                language_detail_page = fpm::i18n::translation::search(
+                    &lang,
+                    &primary_lang,
+                    "language-detail-page",
                     &current_document_last_modified_on
                 ),
             )

@@ -2,11 +2,29 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">̦
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
     <title>This is only in original so far</title>
 
     <script type="ftd" id="ftd-data-message">
         {
+  "@default@0,1,0,0": {
+    "value": "कभी समन्वयित नहीं किया गया",
+    "dependencies": {
+      "0,1,0,0,2": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
+    }
+  },
+  "@key@0,1,0,0": {
+    "value": "अंतिम संशोधित तिथि :",
+    "dependencies": {
+      "0,1,0,0,0": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
+    }
+  },
+  "@show-menu@0,1,1": {
+    "value": "false",
+    "dependencies": {
+      "0,1,1,2,0": "[{\"dependency_type\":\"Visible\",\"condition\":\"true\",\"parameters\":{}}]"
+    }
+  },
   "fpm#document-id": {
     "value": "index.ftd",
     "dependencies": {}
@@ -17,6 +35,100 @@
   },
   "fpm#title": {
     "value": "amitu",
+    "dependencies": {}
+  },
+  "fpm#translation-status-url": {
+    "value": "//amitu/FPM/translation-status",
+    "dependencies": {}
+  },
+  "fpm-ui#current-language": {
+    "value": "वर्तमान भाषा :",
+    "dependencies": {
+      "0,1,1,1,0": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
+    }
+  },
+  "fpm-ui#document": {
+    "value": "दस्तावेज़",
+    "dependencies": {}
+  },
+  "fpm-ui#language-detail-page": {
+    "value": "भाषा विवरण पृष्ठ",
+    "dependencies": {}
+  },
+  "fpm-ui#language-detail-page-body": {
+    "value": "यहां सभी फाइलों की अनुवाद स्थिति की सूची दी गई है।",
+    "dependencies": {}
+  },
+  "fpm-ui#last-modified-on": {
+    "value": "अंतिम संशोधित तिथि :",
+    "dependencies": {}
+  },
+  "fpm-ui#missing": {
+    "value": "उपलब्ध नहीं है",
+    "dependencies": {}
+  },
+  "fpm-ui#never-marked": {
+    "value": "अस्वीकृत",
+    "dependencies": {}
+  },
+  "fpm-ui#never-synced": {
+    "value": "कभी समन्वयित नहीं किया गया",
+    "dependencies": {}
+  },
+  "fpm-ui#other-available-languages": {
+    "value": "अन्य उपलब्ध भाषाएं :",
+    "dependencies": {}
+  },
+  "fpm-ui#out-dated": {
+    "value": "पुराना",
+    "dependencies": {}
+  },
+  "fpm-ui#out-dated-body": {
+    "value": "⁨Hindi⁩ दस्तावेज़ को अंतिम बार ⁨Never Synced⁩ को संशोधित किया गया था। तब से, ⁨English⁩ संस्करण में निम्नलिखित परिवर्तन हुए हैं।",
+    "dependencies": {}
+  },
+  "fpm-ui#out-dated-heading": {
+    "value": "यह दस्तावेज़ पुराना है",
+    "dependencies": {}
+  },
+  "fpm-ui#show-latest-version": {
+    "value": "नवीनतम संस्करण दिखाएं",
+    "dependencies": {}
+  },
+  "fpm-ui#show-outdated-version": {
+    "value": "पुराना संस्करण दिखाएं",
+    "dependencies": {}
+  },
+  "fpm-ui#show-translation-status": {
+    "value": "अनुवाद की स्थिति दिखाएं",
+    "dependencies": {
+      "0,1,0,1": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
+    }
+  },
+  "fpm-ui#show-unapproved-version": {
+    "value": "अस्वीकृत संस्करण दिखाएं",
+    "dependencies": {}
+  },
+  "fpm-ui#status": {
+    "value": "स्थिति",
+    "dependencies": {}
+  },
+  "fpm-ui#total-number-of-documents": {
+    "value": "दस्तावेजों की कुल संख्या :",
+    "dependencies": {}
+  },
+  "fpm-ui#translation-not-available": {
+    "value": "इस दस्तावेज़ का अभी तक ⁨Hindi⁩ में अनुवाद नहीं हुआ है। आप ⁨English⁩ संस्करण देख रहे हैं।",
+    "dependencies": {
+      "0,0,0,0,1": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
+    }
+  },
+  "fpm-ui#unapproved-heading": {
+    "value": "इस दस्तावेज़ का अनुवाद अभी तक स्वीकृत नहीं हुआ है।",
+    "dependencies": {}
+  },
+  "fpm-ui#upto-date": {
+    "value": "अद्यतन",
     "dependencies": {}
   }
 }
@@ -641,8 +753,14 @@ window.ftd = (function () {
 </head>
 <body>
 
-<div id="message"><div data-id="message:root" style="align-items: flex-start; align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: wrap; height: 100%; justify-content: flex-start; margin-bottom: auto; margin-top: auto; white-space: initial; width: 100%" class="ft_md"><div data-id="0:message" style="align-items: flex-start; align-self: flex-start; background-image: linear-gradient(to right, rgba(232,127,133,1),rgba(255,173,178,1) ); border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; padding-bottom: 10px; padding-top: 10px; white-space: initial; width: 100%" class="ft_md"><div data-id="0,0:message" data-spacing="margin-left:15px" style="align-items: flex-start; align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start; margin-bottom: auto; white-space: initial" class="ft_md"><img alt="" data-id="0,0,0:message" src="https://res.cloudinary.com/dphj6havg/image/upload/v1640696994/info-1_jowsqn.svg" style="align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; height: auto; white-space: initial; width: 16px">
-<div data-id="0,0,1:message" style="align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(255,255,255,1); font-family: apple-system; font-size: 15px; font-weight: 600; margin-left: 15px; text-align: left; white-space: initial" class="ft_md">This document is not yet translated.</div></div></div></div></div>
+<div id="message"><div data-id="message:root" style="align-items: flex-start; align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: wrap; height: 100%; justify-content: flex-start; margin-bottom: auto; margin-top: auto; white-space: initial; width: 100%" class="ft_md"><div data-id="outer-container:0:message" id="outer-container" style="align-items: flex-start; align-self: flex-start; background-color: rgba(243,243,243,1); border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; white-space: initial; width: 100%" class="ft_md"><div data-id="0,0:message" style="align-items: flex-start; align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; padding-left: 35px; padding-right: 35px; padding-top: 14px; white-space: initial; width: 100%" class="ft_md"><div data-id="0,0,0:message" style="align-items: flex-start; align-self: flex-start; background-color: rgba(254,249,248,1); border-color: rgba(231,125,132,1); border-radius: 10px; border-style: solid; border-width: 1px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; padding-bottom: 10px; padding-top: 10px; white-space: initial; width: 100%" class="ft_md"><div data-id="0,0,0,0:message" data-spacing="margin-left:15px" style="align-items: flex-start; align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start; margin-bottom: auto; white-space: initial" class="ft_md"><img alt="" data-id="0,0,0,0,0:message" src="https://res.cloudinary.com/dphj6havg/image/upload/v1640696994/info-1_jowsqn.svg" style="align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; height: auto; white-space: initial; width: 16px">
+<div data-id="0,0,0,0,1:message" style="align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-family: apple-system; font-size: 15px; font-weight: 600; margin-left: 15px; text-align: left; white-space: initial" class="ft_md">इस दस्तावेज़ का अभी तक ⁨Hindi⁩ में अनुवाद नहीं हुआ है। आप ⁨English⁩ संस्करण देख रहे हैं।</div></div></div></div>
+<div data-id="0,1:message" style="align-items: flex-start; align-self: flex-start; background-color: rgba(243,243,243,1); border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between; padding: 10px; white-space: initial; width: 100%" class="ft_md"><div data-id="0,1,0:message" data-spacing="margin-top:5px" style="align-items: flex-start; align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; white-space: initial" class="ft_md"><div data-id="0,1,0,0:message" data-spacing="margin-left:2px" style="align-items: flex-start; align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start; margin-bottom: auto; margin-top: auto; white-space: initial" class="ft_md"><div data-id="0,1,0,0,0:message" style="align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-weight: 400; margin-bottom: auto; margin-top: auto; text-align: left; white-space: initial" class="ft_md">अंतिम संशोधित तिथि :</div>
+<div data-id="0,1,0,0,2:message" style="align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-weight: 400; margin-bottom: auto; margin-left: 2px; margin-top: auto; text-align: left; white-space: initial" class="ft_md">कभी समन्वयित नहीं किया गया</div></div>
+<a data-id="0,1,0,1:message" href="//amitu/FPM/translation-status" style="align-self: flex-start; background-color: rgba(210,115,85,1); border-color: rgba(38,100,79,1); border-radius: 13px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(255,255,255,1); cursor: pointer; font-weight: 400; margin-top: 5px; padding: 8px; text-align: left; white-space: initial" class="ft_md">अनुवाद की स्थिति दिखाएं</a></div>
+<div data-id="0,1,1:message" style="align-items: flex-start; align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start; margin-bottom: auto; margin-top: auto; white-space: initial" class="ft_md"><div data-id="0,1,1,1:message" style="align-items: flex-start; align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start; white-space: initial; width: 100%" class="ft_md"><div data-id="0,1,1,1,0:message" style="align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-weight: 400; margin-bottom: auto; margin-top: auto; text-align: left; white-space: initial; width: 120px" class="ft_md">वर्तमान भाषा :</div>
+<div data-id="0,1,1,1,1:message" onclick="window.ftd.handle_event(event, 'message', '[{&quot;action&quot;:&quot;toggle&quot;,&quot;target&quot;:&quot;@show-menu@0,1,1&quot;,&quot;parameters&quot;:{}}]')" style="align-self: flex-start; background-color: rgba(255,255,255,1); border-color: rgba(173,174,179,1); border-radius: 0px; border-style: solid; border-width: 1px; box-sizing: border-box; cursor: pointer; font-weight: 400; margin-bottom: 5px; margin-left: 5px; margin-right: 5px; margin-top: 5px; padding-left: 5px; padding-right: 50px; text-align: left; white-space: initial" class="ft_md">Hindi</div></div>
+<div data-id="0,1,1,2:message" style="align-items: flex-start; align-self: flex-end; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; margin-bottom: auto; margin-left: auto; margin-top: auto; position: relative; white-space: initial; width: 100%" class="ft_md"><div data-id="0,1,1,2,0:message" onclick="window.ftd.handle_event(event, 'message', '[{&quot;action&quot;:&quot;toggle&quot;,&quot;target&quot;:&quot;@show-menu@0,1,1&quot;,&quot;parameters&quot;:{}}]')" style="align-items: flex-start; background-color: rgba(241,241,241,1); border-radius: 0px; border-style: solid; border-width: 0px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.25); box-sizing: border-box; cursor: pointer; display: none; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; margin-top: 10px; min-width: 160px; position: absolute; right: 0; top: 0; white-space: initial; width: 100%" class="ft_md"><a data-id="0,1,1,2,0,0:message" href="https://arpita-jaiswal/blog/" style="align-self: flex-start; border-bottom-width: 1px !important; border-color: rgba(227,225,225,1); border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; padding: 10px; text-align: left; white-space: initial; width: 100%" class="ft_md">English</a></div></div></div></div></div></div></div>
 <div id="main"><div data-id="main:root" style="align-items: flex-start; align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: wrap; height: 100%; justify-content: flex-start; margin-bottom: auto; margin-top: auto; white-space: initial; width: 100%" class="ft_md"><div data-id="0:main" style="align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-weight: 400; text-align: left; white-space: initial" class="ft_md">This is only in original so far</div>
 <div data-id="1:main" style="align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-weight: 400; text-align: left; white-space: initial" class="ft_md">Translated Blog says hello</div>
 <div data-id="2:main" style="align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-weight: 400; text-align: left; white-space: initial" class="ft_md">blog-theme says hello</div>

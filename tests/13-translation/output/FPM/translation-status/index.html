@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-    <title>Translation Status</title>
+    <title>भाषा विवरण पृष्ठ</title>
     <script type="ftd" id="ftd-data">
         {
   "@body@0,1": {
-    "value": "Here is the list of the translation status for all the files.",
+    "value": "यहां सभी फाइलों की अनुवाद स्थिति की सूची दी गई है।",
     "dependencies": {}
   },
   "@body@0,1,2": {
-    "value": "Here is the list of the translation status for all the files.",
+    "value": "यहां सभी फाइलों की अनुवाद स्थिति की सूची दी गई है।",
     "dependencies": {
       "0,0,2,2": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
     }
@@ -63,19 +63,19 @@
     }
   },
   "@key@0,1,1": {
-    "value": "Last modified on:",
+    "value": "अंतिम संशोधित तिथि :",
     "dependencies": {
       "0,0,2,1,0": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
     }
   },
   "@key@0,2": {
-    "value": "Total number of documents:",
+    "value": "दस्तावेजों की कुल संख्या :",
     "dependencies": {
       "0,0,2,3,0": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
     }
   },
   "@title@0,0": {
-    "value": "Translation Status",
+    "value": "भाषा विवरण पृष्ठ",
     "dependencies": {
       "0,0,0": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
     }
@@ -96,6 +96,106 @@
   },
   "fpm#title": {
     "value": "amitu",
+    "dependencies": {}
+  },
+  "fpm#translation-status-url": {
+    "value": "//amitu/FPM/translation-status",
+    "dependencies": {}
+  },
+  "fpm-ui#current-language": {
+    "value": "वर्तमान भाषा :",
+    "dependencies": {}
+  },
+  "fpm-ui#document": {
+    "value": "दस्तावेज़",
+    "dependencies": {
+      "0,0,2,4,0,0": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
+    }
+  },
+  "fpm-ui#language-detail-page": {
+    "value": "भाषा विवरण पृष्ठ",
+    "dependencies": {}
+  },
+  "fpm-ui#language-detail-page-body": {
+    "value": "यहां सभी फाइलों की अनुवाद स्थिति की सूची दी गई है।",
+    "dependencies": {}
+  },
+  "fpm-ui#last-modified-on": {
+    "value": "अंतिम संशोधित तिथि :",
+    "dependencies": {}
+  },
+  "fpm-ui#missing": {
+    "value": "उपलब्ध नहीं है",
+    "dependencies": {
+      "0,0,2,4,1,1": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]",
+      "0,0,2,4,2,1": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]",
+      "0,0,2,4,3,1": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]",
+      "0,0,2,4,4,1": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
+    }
+  },
+  "fpm-ui#never-marked": {
+    "value": "अस्वीकृत",
+    "dependencies": {
+      "0,0,2,4,5,1": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]",
+      "0,0,2,4,6,1": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
+    }
+  },
+  "fpm-ui#never-synced": {
+    "value": "कभी समन्वयित नहीं किया गया",
+    "dependencies": {}
+  },
+  "fpm-ui#other-available-languages": {
+    "value": "अन्य उपलब्ध भाषाएं :",
+    "dependencies": {}
+  },
+  "fpm-ui#out-dated": {
+    "value": "पुराना",
+    "dependencies": {}
+  },
+  "fpm-ui#out-dated-body": {
+    "value": "⁨Hindi⁩ दस्तावेज़ को अंतिम बार ⁨Never Synced⁩ को संशोधित किया गया था। तब से, ⁨English⁩ संस्करण में निम्नलिखित परिवर्तन हुए हैं।",
+    "dependencies": {}
+  },
+  "fpm-ui#out-dated-heading": {
+    "value": "यह दस्तावेज़ पुराना है",
+    "dependencies": {}
+  },
+  "fpm-ui#show-latest-version": {
+    "value": "नवीनतम संस्करण दिखाएं",
+    "dependencies": {}
+  },
+  "fpm-ui#show-outdated-version": {
+    "value": "पुराना संस्करण दिखाएं",
+    "dependencies": {}
+  },
+  "fpm-ui#show-translation-status": {
+    "value": "अनुवाद की स्थिति दिखाएं",
+    "dependencies": {}
+  },
+  "fpm-ui#show-unapproved-version": {
+    "value": "अस्वीकृत संस्करण दिखाएं",
+    "dependencies": {}
+  },
+  "fpm-ui#status": {
+    "value": "स्थिति",
+    "dependencies": {
+      "0,0,2,4,0,1": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
+    }
+  },
+  "fpm-ui#total-number-of-documents": {
+    "value": "दस्तावेजों की कुल संख्या :",
+    "dependencies": {}
+  },
+  "fpm-ui#translation-not-available": {
+    "value": "इस दस्तावेज़ का अभी तक ⁨Hindi⁩ में अनुवाद नहीं हुआ है। आप ⁨English⁩ संस्करण देख रहे हैं।",
+    "dependencies": {}
+  },
+  "fpm-ui#unapproved-heading": {
+    "value": "इस दस्तावेज़ का अनुवाद अभी तक स्वीकृत नहीं हुआ है।",
+    "dependencies": {}
+  },
+  "fpm-ui#upto-date": {
+    "value": "अद्यतन",
     "dependencies": {}
   }
 }
@@ -712,29 +812,28 @@ window.ftd = (function () {
 </head>
     <body>
 
-        <div data-id="main:root" style="align-items: flex-start; align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: wrap; height: 100%; justify-content: flex-start; margin-bottom: auto; margin-top: auto; white-space: initial; width: 100%" class="ft_md"><div data-id="0:main" style="align-items: flex-start; align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; padding-bottom: 40px; padding-left: 20px; padding-right: 20px; padding-top: 40px; white-space: initial; width: 100%" class="ft_md"><div data-id="0,0:main" id="translation-status" style="align-items: flex-start; align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; padding-left: 90px; padding-right: 90px; white-space: initial; width: 100%" class="ft_md"><div data-id="0,0,0:main" style="align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(0,0,0,1); font-family: apple-system; font-size: 40px; font-weight: 700; padding-bottom: 24px; text-align: left; white-space: initial" class="ft_md">Translation Status</div>
+        <div data-id="main:root" style="align-items: flex-start; align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: wrap; height: 100%; justify-content: flex-start; margin-bottom: auto; margin-top: auto; white-space: initial; width: 100%" class="ft_md"><div data-id="0:main" style="align-items: flex-start; align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; padding-bottom: 40px; padding-left: 20px; padding-right: 20px; padding-top: 40px; white-space: initial; width: 100%" class="ft_md"><div data-id="0,0:main" id="bhaassaa-vivrnn-prsstth" style="align-items: flex-start; align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; padding-left: 90px; padding-right: 90px; white-space: initial; width: 100%" class="ft_md"><div data-id="0,0,0:main" style="align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(0,0,0,1); font-family: apple-system; font-size: 40px; font-weight: 700; padding-bottom: 24px; text-align: left; white-space: initial" class="ft_md">भाषा विवरण पृष्ठ</div>
 <div data-id="0,0,2:main" id="amitu" style="align-items: flex-start; align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; white-space: initial; width: 100%" class="ft_md"><div data-id="0,0,2,0:main" data-spacing="margin-left:25px" style="align-items: flex-start; align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start; white-space: initial; width: 100%" class="ft_md"><a data-id="0,0,2,0,0:main" href="//amitu" style="align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(22,47,120,1); cursor: pointer; font-family: apple-system; font-size: 30px; font-weight: 700; margin-bottom: auto; margin-top: auto; text-align: left; white-space: initial" class="ft_md">amitu</a>
-<div data-id="0,0,2,0,1:main" style="align-self: center; background-color: rgba(243,243,243,1); border-radius: 10px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(227,134,134,1); font-weight: 400; margin-bottom: auto; margin-left: 25px; margin-top: auto; padding-bottom: 5px; padding-left: 20px; padding-right: 20px; padding-top: 5px; text-align: left; white-space: initial" class="ft_md">hi</div></div>
-<div data-id="0,0,2,1:main" data-spacing="margin-left:2px" style="align-items: flex-start; align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start; margin-bottom: 10px; white-space: initial" class="ft_md"><div data-id="0,0,2,1,0:main" style="align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-weight: 400; text-align: left; white-space: initial" class="ft_md">Last modified on:</div>
-<div data-id="0,0,2,1,2:main" style="align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-weight: 400; margin-left: 2px; text-align: left; white-space: initial" class="ft_md">Never synced</div></div>
-<div data-id="0,0,2,2:main" style="align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(77,77,77,1); font-family: apple-system; font-size: 19px; font-weight: 400; line-height: 30px; padding-bottom: 34px; padding-top: 50px; text-align: left; white-space: initial" class="ft_md"><p>Here is the list of the translation status for all the files.</p>
-</div>
-<div data-id="0,0,2,3:main" data-spacing="margin-left:2px" style="align-items: flex-start; align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start; margin-bottom: 10px; white-space: initial" class="ft_md"><div data-id="0,0,2,3,0:main" style="align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-weight: 400; text-align: left; white-space: initial" class="ft_md">Total number of documents:</div>
-<div data-id="0,0,2,3,1:main" style="align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-weight: 400; margin-left: 2px; text-align: left; white-space: initial" class="ft_md">0</div></div>
-<div data-id="0,0,2,4:main" style="align-items: flex-start; align-self: flex-start; background-color: rgba(243,243,243,1); border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; max-width: 800px; white-space: initial; width: 100%" class="ft_md"><div data-id="0,0,2,4,0:main" style="align-items: flex-start; align-self: flex-start; background-color: rgba(0,0,0,1); border-radius: 0px; border-style: solid; border-top-left-radius: 5px !important; border-top-right-radius: 5px !important; border-width: 0px; box-sizing: border-box; color: rgba(255,255,255,1); display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start; padding: 10px; white-space: initial; width: 100%" class="ft_md"><div data-id="0,0,2,4,0,0:main" style="align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-weight: 400; padding: 5px; text-align: left; white-space: initial; width: 50%" class="ft_md">Document</div>
-<div data-id="0,0,2,4,0,1:main" style="align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-weight: 400; padding: 5px; text-align: left; white-space: initial; width: 50%" class="ft_md">Status</div></div>
+<div data-id="0,0,2,0,1:main" style="align-self: center; background-color: rgba(243,243,243,1); border-radius: 10px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(227,134,134,1); font-weight: 400; margin-bottom: auto; margin-left: 25px; margin-top: auto; padding-bottom: 5px; padding-left: 20px; padding-right: 20px; padding-top: 5px; text-align: left; white-space: initial" class="ft_md">Hindi</div></div>
+<div data-id="0,0,2,1:main" data-spacing="margin-left:2px" style="align-items: flex-start; align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start; margin-bottom: 10px; white-space: initial" class="ft_md"><div data-id="0,0,2,1,0:main" style="align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-weight: 400; margin-bottom: auto; margin-top: auto; text-align: left; white-space: initial" class="ft_md">अंतिम संशोधित तिथि :</div>
+<div data-id="0,0,2,1,2:main" style="align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-weight: 400; margin-bottom: auto; margin-left: 2px; margin-top: auto; text-align: left; white-space: initial" class="ft_md">Never synced</div></div>
+<div data-id="0,0,2,2:main" style="align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(77,77,77,1); font-family: apple-system; font-size: 19px; font-weight: 400; line-height: 30px; padding-bottom: 34px; padding-top: 50px; text-align: left; white-space: initial" class="ft_md">यहां सभी फाइलों की अनुवाद स्थिति की सूची दी गई है।</div>
+<div data-id="0,0,2,3:main" data-spacing="margin-left:2px" style="align-items: flex-start; align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start; margin-bottom: 10px; white-space: initial" class="ft_md"><div data-id="0,0,2,3,0:main" style="align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-weight: 400; margin-bottom: auto; margin-top: auto; text-align: left; white-space: initial" class="ft_md">दस्तावेजों की कुल संख्या :</div>
+<div data-id="0,0,2,3,1:main" style="align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-weight: 400; margin-bottom: auto; margin-left: 2px; margin-top: auto; text-align: left; white-space: initial" class="ft_md">0 / 6</div></div>
+<div data-id="0,0,2,4:main" style="align-items: flex-start; align-self: flex-start; background-color: rgba(243,243,243,1); border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; max-width: 800px; white-space: initial; width: 100%" class="ft_md"><div data-id="0,0,2,4,0:main" style="align-items: flex-start; align-self: flex-start; background-color: rgba(0,0,0,1); border-radius: 0px; border-style: solid; border-top-left-radius: 5px !important; border-top-right-radius: 5px !important; border-width: 0px; box-sizing: border-box; color: rgba(255,255,255,1); display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start; padding: 10px; white-space: initial; width: 100%" class="ft_md"><div data-id="0,0,2,4,0,0:main" style="align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-weight: 400; padding: 5px; text-align: left; white-space: initial; width: 50%" class="ft_md">दस्तावेज़</div>
+<div data-id="0,0,2,4,0,1:main" style="align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-weight: 400; padding: 5px; text-align: left; white-space: initial; width: 50%" class="ft_md">स्थिति</div></div>
 <div data-id="0,0,2,4,1:main" style="align-items: flex-start; align-self: flex-start; border-bottom-width: 1px !important; border-color: rgba(255,255,255,1); border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start; padding: 10px; white-space: initial; width: 100%" class="ft_md"><div data-id="0,0,2,4,1,0:main" style="align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-weight: 400; padding: 5px; text-align: left; white-space: initial; width: 50%" class="ft_md">db.ftd</div>
-<div data-id="0,0,2,4,1,1:main" style="align-self: flex-start; background-color: rgba(253,235,235,1); border-radius: 10px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(235,132,137,1); font-weight: 400; padding: 5px; text-align: left; white-space: initial" class="ft_md">Missing</div></div>
+<div data-id="0,0,2,4,1,1:main" style="align-self: flex-start; background-color: rgba(253,235,235,1); border-radius: 10px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(235,132,137,1); font-weight: 400; padding: 5px; text-align: left; white-space: initial" class="ft_md">उपलब्ध नहीं है</div></div>
 <div data-id="0,0,2,4,2:main" style="align-items: flex-start; align-self: flex-start; border-bottom-width: 1px !important; border-color: rgba(255,255,255,1); border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start; padding: 10px; white-space: initial; width: 100%" class="ft_md"><div data-id="0,0,2,4,2,0:main" style="align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-weight: 400; padding: 5px; text-align: left; white-space: initial; width: 50%" class="ft_md">db.sqlite</div>
-<div data-id="0,0,2,4,2,1:main" style="align-self: flex-start; background-color: rgba(253,235,235,1); border-radius: 10px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(235,132,137,1); font-weight: 400; padding: 5px; text-align: left; white-space: initial" class="ft_md">Missing</div></div>
+<div data-id="0,0,2,4,2,1:main" style="align-self: flex-start; background-color: rgba(253,235,235,1); border-radius: 10px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(235,132,137,1); font-weight: 400; padding: 5px; text-align: left; white-space: initial" class="ft_md">उपलब्ध नहीं है</div></div>
 <div data-id="0,0,2,4,3:main" style="align-items: flex-start; align-self: flex-start; border-bottom-width: 1px !important; border-color: rgba(255,255,255,1); border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start; padding: 10px; white-space: initial; width: 100%" class="ft_md"><div data-id="0,0,2,4,3,0:main" style="align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-weight: 400; padding: 5px; text-align: left; white-space: initial; width: 50%" class="ft_md">index.ftd</div>
-<div data-id="0,0,2,4,3,1:main" style="align-self: flex-start; background-color: rgba(253,235,235,1); border-radius: 10px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(235,132,137,1); font-weight: 400; padding: 5px; text-align: left; white-space: initial" class="ft_md">Missing</div></div>
+<div data-id="0,0,2,4,3,1:main" style="align-self: flex-start; background-color: rgba(253,235,235,1); border-radius: 10px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(235,132,137,1); font-weight: 400; padding: 5px; text-align: left; white-space: initial" class="ft_md">उपलब्ध नहीं है</div></div>
 <div data-id="0,0,2,4,4:main" style="align-items: flex-start; align-self: flex-start; border-bottom-width: 1px !important; border-color: rgba(255,255,255,1); border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start; padding: 10px; white-space: initial; width: 100%" class="ft_md"><div data-id="0,0,2,4,4,0:main" style="align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-weight: 400; padding: 5px; text-align: left; white-space: initial; width: 50%" class="ft_md">lib.ftd</div>
-<div data-id="0,0,2,4,4,1:main" style="align-self: flex-start; background-color: rgba(253,235,235,1); border-radius: 10px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(235,132,137,1); font-weight: 400; padding: 5px; text-align: left; white-space: initial" class="ft_md">Missing</div></div>
+<div data-id="0,0,2,4,4,1:main" style="align-self: flex-start; background-color: rgba(253,235,235,1); border-radius: 10px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(235,132,137,1); font-weight: 400; padding: 5px; text-align: left; white-space: initial" class="ft_md">उपलब्ध नहीं है</div></div>
 <div data-id="0,0,2,4,5:main" style="align-items: flex-start; align-self: flex-start; border-bottom-width: 1px !important; border-color: rgba(255,255,255,1); border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start; padding: 10px; white-space: initial; width: 100%" class="ft_md"><div data-id="0,0,2,4,5,0:main" style="align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-weight: 400; padding: 5px; text-align: left; white-space: initial; width: 50%" class="ft_md">FPM.ftd</div>
-<div data-id="0,0,2,4,5,1:main" style="align-self: flex-start; background-color: rgba(224,223,249,1); border-radius: 10px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(78,78,173,1); font-weight: 400; padding: 5px; text-align: left; white-space: initial" class="ft_md">Never Marked</div></div>
+<div data-id="0,0,2,4,5,1:main" style="align-self: flex-start; background-color: rgba(224,223,249,1); border-radius: 10px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(78,78,173,1); font-weight: 400; padding: 5px; text-align: left; white-space: initial" class="ft_md">अस्वीकृत</div></div>
 <div data-id="0,0,2,4,6:main" style="align-items: flex-start; align-self: flex-start; border-bottom-width: 1px !important; border-color: rgba(255,255,255,1); border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start; padding: 10px; white-space: initial; width: 100%" class="ft_md"><div data-id="0,0,2,4,6,0:main" style="align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-weight: 400; padding: 5px; text-align: left; white-space: initial; width: 50%" class="ft_md">blog.ftd</div>
-<div data-id="0,0,2,4,6,1:main" style="align-self: flex-start; background-color: rgba(224,223,249,1); border-radius: 10px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(78,78,173,1); font-weight: 400; padding: 5px; text-align: left; white-space: initial" class="ft_md">Never Marked</div></div></div></div></div></div></div>
+<div data-id="0,0,2,4,6,1:main" style="align-self: flex-start; background-color: rgba(224,223,249,1); border-radius: 10px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(78,78,173,1); font-weight: 400; padding: 5px; text-align: left; white-space: initial" class="ft_md">अस्वीकृत</div></div></div></div></div></div></div>
 
 
     <script>

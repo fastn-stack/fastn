@@ -22,19 +22,25 @@ cta-switch-to-primary = View document in { $primary-lang } ({ $lang-code }).
 
 translation-not-available = This document is not yet translated to { $lang }. You are seeing { $primary-lang } version.
 
-cta-add-translation = Add Translation
-
-heading = <p>This document is out of date.</p>
-
 out-dated-body = The { $lang } document was last modified on { $last-modified-on }. Since then, the { $primary-lang } version has the following changes.
 
-body-primary = As a fallback you are viewing the { $primary-lang } version.
+language-detail-page = Language Detail Page
 
-cta-switch-to-local = Back to the document in { $target-lang }
+language-detail-page-body = Here is the list of the translation status for all the files.
 
-cta-edit-translation = Edit
+total-number-of-documents = Total number of documents:
 
-cta-mark-up-to-date = Mark as up to date
+document = Document
+
+status = Status
+
+missing = Missing
+
+never-marked = Never Marked
+
+out-dated = Out-dated
+
+upto-date = Upto-date
 
 crs-heading =
     {$cr-count ->

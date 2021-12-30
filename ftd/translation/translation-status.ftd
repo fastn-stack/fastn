@@ -1,20 +1,21 @@
 -- import: fpm
+-- import: fpm-ui
 
 -- ftd.column:
 padding-vertical: 40
 padding-horizontal: 20
 width: fill
 
--- h0: Language Detail Page
+-- h0: $fpm-ui.language-detail-page
 
 -- title: $fpm.title
-subtitle: key-value: Last modified on:
+subtitle: key-value: $fpm-ui.last-modified-on
 > value: $fpm.last-modified-on
 > default: Never synced
 
-Here is the list of the translation status for all the files.
+$fpm-ui.language-detail-page-body
 
--- key-value: Total number of documents:
+-- key-value: $fpm-ui.total-number-of-documents
 value: $fpm.number-of-documents
 default: Not known
 
@@ -30,12 +31,15 @@ margin-bottom: 10
 spacing: 2
 
 --- ftd.text: $key
+position: center
 
 --- ftd.text: $value
 if: $value is not null
+position: center
 
 --- ftd.text: $default
 if: $value is null
+position: center
 
 
 
@@ -141,11 +145,11 @@ color: white
 padding: 10
 border-top-radius: 5
 
---- ftd.text: Document
+--- ftd.text: $fpm-ui.document
 width: percent 50
 padding: 5
 
---- ftd.text: Status
+--- ftd.text: $fpm-ui.status
 width: percent 50
 padding: 5
 
@@ -153,7 +157,7 @@ padding: 5
 
 --- print: $obj
 $loop$: $fpm.missing-files as $obj
-status: ftd.text: Missing
+status: ftd.text: $fpm-ui.missing
 > padding: 5
 > color: #eb8489
 > background-color: #fdebeb
@@ -161,7 +165,7 @@ status: ftd.text: Missing
 
 --- print: $obj
 $loop$: $fpm.never-marked-files as $obj
-status: ftd.text: Never Marked
+status: ftd.text: $fpm-ui.never-marked
 > padding: 5
 > color: #4e4ead
 > background-color: #e0dff9
@@ -170,7 +174,7 @@ status: ftd.text: Never Marked
 
 --- print: $obj
 $loop$: $fpm.outdated-files as $obj
-status: ftd.text: Out-dated
+status: ftd.text: $fpm-ui.out-dated
 > padding: 5
 > color: #f7d06d
 > background-color: #fef7e5
@@ -179,7 +183,7 @@ status: ftd.text: Out-dated
 
 --- print: $obj
 $loop$: $fpm.upto-date-files as $obj
-status: ftd.text: Upto-date
+status: ftd.text: $fpm-ui.upto-date
 > padding: 5
 > color: #4da486
 > background-color: #e0efeb

@@ -1,4 +1,3 @@
-pub mod base;
 pub mod translation;
 
 type Bundle = fluent::bundle::FluentBundle<
@@ -75,7 +74,7 @@ fn issue(lang: &realm_lang::Language, res: &str, id: Option<&str>) -> String {
     format!("issue with {}/{}/{:?}", lang.to_2_letter_code(), res, id)
 }
 
-pub fn html(base: &Base, lang: &realm_lang::Language, res: &'static str, id: &'static str) -> HTML {
+/*pub fn html(base: &Base, lang: &realm_lang::Language, res: &'static str, id: &'static str) -> HTML {
     assert!(id.ends_with("-html"));
     HTML {
         text: message(base, lang, res, id),
@@ -101,7 +100,7 @@ pub fn attribute(
     attr: &'static str,
 ) -> String {
     lookup(base, lang, res, id, Some(attr), None)
-}
+}*/
 
 // message_with_args
 
