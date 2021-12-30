@@ -5,25 +5,42 @@ $processor$: toc
 
 - index.html
   fpm: FTD Package Manager
-- about/
+
+- fifthtry/fpm/about
   About `fpm`
-- roadmap/
+  - fifthtry/fpm/why-not
+    Why Not `fpm`?
+- fifthtry/fpm/roadmap
   Roadmap
-- journal/
+- fifthtry/fpm/journal
   Journal
-- fs/
+- fifthtry/fpm/fs
   File System Organization
-  - fpm-ftd-file/
+  - fifthtry/fpm/FPM
     `FPM.ftd`
-- install/
+- fifthtry/fpm/ftd-host
+  FTD Host Features
+  - fifthtry/fpm/http
+    `$processor$: http`
+  - fifthtry/fpm/toc
+    `$processor$: toc`
+  - fifthtry/fpm/package-query
+    `$processor$: package-query`
+  - fifthtry/fpm/fpm-vars
+    `import: fpm`
+- fifthtry/fpm/install
   Install `fpm`
-- usage/
+- fifthtry/fpm/usage
   `fpm` Usage
-  - build/
+  - fifthtry/fpm/build
     `fpm build`
-  - sync/
+  - fifthtry/fpm/sync
     `fpm sync`
-  - status/
+  - fifthtry/fpm/status
     `fpm status`
-  - diff/
+  - fifthtry/fpm/diff
     `fpm diff`
+  - fifthtry/fpm/update
+    `fpm update`
+- fifthtry/fpm/known-issues
+  Known Issues
