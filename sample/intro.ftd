@@ -1,9 +1,0 @@
--- ftd.text: some intro in hindi
-font: Roboto
-color: red
-style: italic
-
-
--- ftd.text: some other text in hindi
-font: Roboto
-color: green

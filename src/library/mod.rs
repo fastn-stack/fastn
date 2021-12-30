@@ -17,6 +17,10 @@ impl ftd::p2::Library for Library {
             return Some(construct_fpm_base(self));
         }
 
+        if name == "fpm-ui" {
+            return Some(construct_fpm_ui(self));
+        }
+
         if name == "fpm-lib" {
             return Some(fpm::fpm_lib_ftd().to_string());
         }
@@ -56,6 +60,118 @@ impl ftd::p2::Library for Library {
         }
 
         return std::fs::read_to_string(package_path.join(format!("{}/index.ftd", name))).ok();
+
+        fn construct_fpm_ui(lib: &Library) -> String {
+            let lang = match lib.config.package.language {
+                Some(ref lang) => realm_lang::Language::from_2_letter_code(lang)
+                    .unwrap_or(realm_lang::Language::English),
+                None => return "".to_string(),
+            };
+
+            let primary_lang = match lib.config.package.translation_of.as_ref() {
+                Some(ref package) => match package.language {
+                    Some(ref lang) => realm_lang::Language::from_2_letter_code(lang)
+                        .unwrap_or(realm_lang::Language::English),
+                    None => lang.clone(),
+                },
+                None => lang.clone(),
+            };
+
+            let current_document_last_modified_on =
+                futures::executor::block_on(fpm::utils::get_current_document_last_modified_on(
+                    &lib.config,
+                    lib.document_id.as_str(),
+                ));
+
+            format!(
+                indoc::indoc! {"
+                    -- string last-modified-on: {last_modified_on}
+                    -- string never-synced: {never_synced}
+                    -- string show-translation-status: {show_translation_status}
+                    -- string other-available-languages: {other_available_languages}
+                    -- string current-language: {current_language}
+                    -- string translation-not-available: {translation_not_available}
+                    -- string unapproved-heading: {unapproved_heading}
+                    -- string show-unapproved-version: {show_unapproved_version}
+                    -- string show-latest-version: {show_latest_version}
+                    -- string show-outdated-version: {show_outdated_version}
+                    -- string out-dated-heading: {out_dated_heading}
+                    -- string out-dated-body: {out_dated_body}
+                    "},
+                last_modified_on = fpm::i18n::translation::search(
+                    &lang,
+                    &primary_lang,
+                    "last-modified-on",
+                    &current_document_last_modified_on
+                ),
+                never_synced = fpm::i18n::translation::search(
+                    &lang,
+                    &primary_lang,
+                    "never-synced",
+                    &current_document_last_modified_on
+                ),
+                show_translation_status = fpm::i18n::translation::search(
+                    &lang,
+                    &primary_lang,
+                    "show-translation-status",
+                    &current_document_last_modified_on
+                ),
+                other_available_languages = fpm::i18n::translation::search(
+                    &lang,
+                    &primary_lang,
+                    "other-available-languages",
+                    &current_document_last_modified_on
+                ),
+                current_language = fpm::i18n::translation::search(
+                    &lang,
+                    &primary_lang,
+                    "current-language",
+                    &current_document_last_modified_on
+                ),
+                translation_not_available = fpm::i18n::translation::search(
+                    &lang,
+                    &primary_lang,
+                    "translation-not-available",
+                    &current_document_last_modified_on
+                ),
+                unapproved_heading = fpm::i18n::translation::search(
+                    &lang,
+                    &primary_lang,
+                    "unapproved-heading",
+                    &current_document_last_modified_on
+                ),
+                show_unapproved_version = fpm::i18n::translation::search(
+                    &lang,
+                    &primary_lang,
+                    "show-unapproved-version",
+                    &current_document_last_modified_on
+                ),
+                show_latest_version = fpm::i18n::translation::search(
+                    &lang,
+                    &primary_lang,
+                    "show-latest-version",
+                    &current_document_last_modified_on
+                ),
+                show_outdated_version = fpm::i18n::translation::search(
+                    &lang,
+                    &primary_lang,
+                    "show-outdated-version",
+                    &current_document_last_modified_on
+                ),
+                out_dated_heading = fpm::i18n::translation::search(
+                    &lang,
+                    &primary_lang,
+                    "out-dated-heading",
+                    &current_document_last_modified_on
+                ),
+                out_dated_body = fpm::i18n::translation::search(
+                    &lang,
+                    &primary_lang,
+                    "out-dated-body",
+                    &current_document_last_modified_on
+                ),
+            )
+        }
 
         fn construct_fpm_base(lib: &Library) -> String {
             let mut fpm_base = format!(
@@ -194,7 +310,7 @@ impl ftd::p2::Library for Library {
     
                         "},
                     fpm_base = fpm_base,
-                    language = language,
+                    language = fpm::utils::language_to_human(language),
                 );
             }
 
@@ -486,7 +602,7 @@ impl ftd::p2::Library for Library {
 
                 for lang_package in other_language_packages {
                     let language = if let Some(ref lang) = lang_package.language {
-                        lang
+                        fpm::utils::language_to_human(lang)
                     } else {
                         continue;
                     };

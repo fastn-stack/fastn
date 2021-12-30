@@ -1,14 +1,6 @@
 pub mod base;
 pub mod translation;
 
-/*#[derive(serde::Serialize)]
-struct DateTime {
-    full: String,
-    delta: String,
-    #[serde(serialize_with = "crate::datetime_serializer")]
-    value: chrono::DateTime<chrono::Utc>,
-}*/
-
 type Bundle = fluent::bundle::FluentBundle<
     fluent::FluentResource,
     intl_memoizer::concurrent::IntlLangMemoizer,
@@ -170,11 +162,11 @@ pub fn lookup(
 
 fn read_file(lang: &realm_lang::Language, res: &'static str) -> Option<String> {
     let string = match (lang, res) {
-        (&realm_lang::Language::English, "translation") => {
-            include_str!("../../i18n/en/translation.ftl")
-        }
         (&realm_lang::Language::Hindi, "translation") => {
             include_str!("../../i18n/hi/translation.ftl")
+        }
+        (_, "translation") => {
+            include_str!("../../i18n/en/translation.ftl")
         }
         _ => panic!(),
     };

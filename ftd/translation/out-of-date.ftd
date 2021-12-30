@@ -1,5 +1,5 @@
 -- import: fpm
-
+-- import: fpm-ui
 -- import: fpm-lib
 
 -- boolean show-main: true
@@ -39,13 +39,13 @@ src: https://res.cloudinary.com/dphj6havg/image/upload/v1640696994/info-1_jowsqn
 width: 16
 height: auto
 
---- ftd.text: This document is out dated.
+--- ftd.text: $fpm-ui.out-dated-heading
 /color: white
 style: semi-bold
 font: apple-system
 padding-right: 20
 
---- ftd.text: Show latest version
+--- ftd.text: $fpm-ui.show-latest-version
 if: $show-main
 $event-click$: toggle $show-main
 $event-click$: stop-propagation
@@ -65,7 +65,7 @@ font: apple-system
 background-color: #d27355
 color: white
 
---- ftd.text: Show outdated version
+--- ftd.text: $fpm-ui.show-outdated-version
 if: not $show-main
 $event-click$: toggle $show-main
 $event-click$: stop-propagation
@@ -85,22 +85,13 @@ font: apple-system
 background-color: #d27355
 color: white
 
--- ftd.row:
-spacing: 2
-width: fill
+
+-- ftd.text: $fpm-ui.out-dated-body
+size: 18
 padding-horizontal: 40
 padding-vertical: 10
 align: center
 if: $show-detail
-
---- ftd.text: This document was last translated from original document on
-size: 18
-
---- ftd.text: $fpm.current-document-last-modified-on
-size: 18
-
---- ftd.text: Since then, the original document has following changes.
-size: 18
 
 -- ftd.column:
 max-width: 700

@@ -31,6 +31,12 @@ pub(crate) fn get_timestamp_nanosecond() -> u128 {
     }
 }
 
+pub(crate) fn language_to_human(language: &str) -> String {
+    realm_lang::Language::from_2_letter_code(language)
+        .map(|v| v.human())
+        .unwrap_or(language.to_string())
+}
+
 pub(crate) fn nanos_to_rfc3339(nanos: &u128) -> String {
     let time = std::time::SystemTime::UNIX_EPOCH + std::time::Duration::from_nanos(*nanos as u64);
     chrono::DateTime::<chrono::Utc>::from(time).to_rfc3339()

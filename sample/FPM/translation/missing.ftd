@@ -1,9 +1,0 @@
--- import: fpm
-
-/-- ftd.text: {fpm.document-id} is not yet translated
-
--- ftd.row:
-spacing: 5
-
---- ftd.text: $fpm.document-id
---- ftd.text: is not yet translated
