@@ -1,1 +1,8 @@
-/-- ftd.text: this file should be empty
+-- import: fpm
+-- import: fpm-lib
+
+-- ftd.column:
+width: fill
+background-color: #f3f3f3
+
+-- fpm-lib.message:

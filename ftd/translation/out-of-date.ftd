@@ -14,9 +14,8 @@ id: outer-container
 
 -- ftd.column:
 width: fill
-padding-top: 35
+padding-top: 14
 padding-horizontal: 35
-padding-bottom: 10
 
 -- ftd.column:
 /gradient-direction: left to right

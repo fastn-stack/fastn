@@ -1,14 +1,32 @@
 -- import: fpm
+-- import: fpm-lib
 
 -- boolean show-main: true
 
 -- ftd.column:
-gradient-direction: left to right
-gradient-colors: #E87F85 , #FFADB2
+width: fill
+background-color: #f3f3f3
+id: outer-container
+
+
+-- ftd.column:
+width: fill
+padding-top: 14
+padding-horizontal: 35
+
+-- ftd.column:
+/gradient-direction: left to right
+/gradient-colors: #E87F85 , #FFADB2
 width: fill
 padding-vertical: 10
+id: main-container
+/background-color: #dddcdc
+border-radius: 10
+background-color: #fef9f8
+border-width: 1
+border-color: #e77d84
 
---- ftd.row:
+-- ftd.row:
 spacing: 15
 position: top
 
@@ -17,8 +35,8 @@ src: https://res.cloudinary.com/dphj6havg/image/upload/v1640696994/info-1_jowsqn
 width: 16
 height: auto
 
---- ftd.text: This document is not yet approved.
-color: white
+--- ftd.text: The translation of this document is not yet approved
+/color: white
 style: semi-bold
 font: apple-system
 padding-right: 20
@@ -27,8 +45,8 @@ padding-right: 20
 if: $show-main
 $event-click$: toggle $show-main
 $event-click$: message-host show_fallback
-color: #E87F85
-background-color: white
+/color: #E87F85
+/background-color: white
 border-radius: 4
 padding-horizontal: 15
 padding-vertical: 4
@@ -38,14 +56,16 @@ shadow-size: 0
 shadow-blur: 6
 shadow-color: rgba (0, 0, 0, 0.05)
 font: apple-system
-size: 13
+/size: 13
+background-color: #d27355
+color: white
 
 --- ftd.text: Show latest version
 if: not $show-main
 $event-click$: toggle $show-main
 $event-click$: message-host show_main
-color: #E87F85
-background-color: white
+/color: #E87F85
+/background-color: white
 border-radius: 4
 padding-horizontal: 15
 padding-vertical: 4
@@ -56,3 +76,9 @@ shadow-blur: 6
 shadow-color: rgba (0, 0, 0, 0.05)
 font: apple-system
 size: 13
+background-color: #d27355
+color: white
+
+-- container: outer-container
+
+-- fpm-lib.message:

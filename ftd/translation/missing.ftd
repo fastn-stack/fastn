@@ -1,13 +1,28 @@
 -- import: fpm
+-- import: fpm-lib
 
 /-- ftd.text: {fpm.document-id} is not yet translated
 
+-- ftd.column:
+width: fill
+background-color: #f3f3f3
+id: outer-container
 
 -- ftd.column:
-gradient-direction: left to right
-gradient-colors: #E87F85 , #FFADB2
+width: fill
+padding-top: 14
+padding-horizontal: 35
+
+
+-- ftd.column:
+/gradient-direction: left to right
+/gradient-colors: #E87F85 , #FFADB2
 width: fill
 padding-vertical: 10
+border-radius: 10
+background-color: #fef9f8
+border-width: 1
+border-color: #e77d84
 
 --- ftd.row:
 spacing: 15
@@ -19,7 +34,11 @@ width: 16
 height: auto
 
 --- ftd.text: This document is not yet translated.
-color: white
+/color: white
 style: semi-bold
 font: apple-system
 size: 15
+
+-- container: outer-container
+
+-- fpm-lib.message:
