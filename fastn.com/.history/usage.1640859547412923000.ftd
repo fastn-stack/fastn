@@ -1,0 +1,18 @@
+
+
+
+-- ft.page:
+
+
+-- ft.h0: `fpm` Usage
+
+`fpm` CLI uses a few sub-commands to do different things:
+
+- `fpm -h` or `fpm --help` to print help-text and exit.
+- [`fpm build`](/fpm/build/)
+- [`fpm sync`](/fpm/sync/)
+- [`fpm status`](/fpm/status/)
+- [`fpm diff`](/fpm/diff/)
+
+Running `fpm` without any argument prints the help-text, which lists all available
+subcommands and general instructions on how to use `fpm`.
