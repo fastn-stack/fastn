@@ -1,0 +1,29 @@
+-- import: fifthtry.github.io/Flash-theme as ft
+
+-- ft.toc:
+$processor$: toc
+
+- index.html
+  fpm: FTD Package Manager
+- about/
+  About `fpm`
+- roadmap/
+  Roadmap
+- journal/
+  Journal
+- fs/
+  File System Organization
+  - fpm-ftd-file/
+    `FPM.ftd`
+- install/
+  Install `fpm`
+- usage/
+  `fpm` Usage
+  - build/
+    `fpm build`
+  - sync/
+    `fpm sync`
+  - status/
+    `fpm status`
+  - diff/
+    `fpm diff`
