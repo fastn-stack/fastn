@@ -25,7 +25,7 @@ jobs:
       - name: Build the pages with fpm
         id: build
         continue-on-error: false
-        run: fpm build --base=/rust-book-en/
+        run: fpm build --base=/fpm-dev-en/
       - uses: actions/upload-artifact@master
         with:
           name: SSR_BUILD
