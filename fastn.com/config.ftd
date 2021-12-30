@@ -3,83 +3,85 @@
 -- ft.toc:
 $processor$: toc
 
-- fifthtry/ftd/language
+- index.html
+  FTD
+- language/
   FTD Language
-  - fifthtry/ftd/p1-grammar
+  - p1-grammar/
     `ftd::p1` grammar
-  - fifthtry/ftd/philosophy
+  - philosophy/
     Philosophy
-  - fifthtry/ftd/data-modelling
+  - data-modelling/
     Data Modelling
-    - fifthtry/ftd/variables
+    - variables/
       Variables
-    - fifthtry/ftd/built-in-types
+    - built-in-types/
       Built-in Types
-    - fifthtry/ftd/record
+    - record/
       `record`
-    - fifthtry/ftd/or-type
+    - or-type/
       `or-type`
-    - fifthtry/ftd/list
+    - list/
       `list`
-    - fifthtry/ftd/reading-data
+    - reading-data/
       Reading FTD Files
-  - fifthtry/ftd/ui
+  - ui/
     UI
-    - fifthtry/ftd/component
+    - component/
       `component`
-    - fifthtry/ftd/kernel
+    - kernel/
       Kernel Components
-      - fifthtry/ftd/row
+      - row/
         `ftd.row`
-      - fifthtry/ftd/column
+      - column/
         `ftd.column`
-      - fifthtry/ftd/text
+      - text/
         `ftd.text`
-      - fifthtry/ftd/image
+      - image/
         `ftd.image`
-      - fifthtry/ftd/iframe
+      - iframe/
         `ftd.iframe`
-      - fifthtry/ftd/integer
+      - integer/
         `ftd.integer`
-      - fifthtry/ftd/decimal
+      - decimal/
         `ftd.decimal`
-      - fifthtry/ftd/boolean
+      - boolean/
         `ftd.boolean`
-      - fifthtry/ftd/common
+      - common/
         Common Attributes
-      - fifthtry/ftd/container
+      - container/
         Container Attributes
-    - fifthtry/ftd/container-management
+    - container-management/
       Container Management
-    - fifthtry/ftd/if
+    - if/
       `if`: Conditional Components
-    - fifthtry/ftd/if-attr
+    - if-attr/
       Conditional Attributes
-    - fifthtry/ftd/loop
+    - loop/
       `$loop$`: Looping Over Lists
-    - fifthtry/ftd/id
+    - id/
       ID
-    - fifthtry/ftd/event-handling
+    - event-handling/
       `$event-<event-name>$`: Event Handling
-    - fifthtry/ftd/auto-nesting
+    - auto-nesting/
       Auto Nesting
-  - fifthtry/ftd/import
+  - import/
     `import`
-  - fifthtry/ftd/examples
+  - examples/
     Examples
-    - fifthtry/ftd/creating-a-tree
+    - creating-a-tree/
       Creating a tree
-  - fifthtry/ftd/library
+  - library/
     `ftd::Library`
-  - fifthtry/ftd/comments
+  - comments/
     Comments In `ftd` Files
-- fifthtry/ftd/internals
+- internals/
   Internals
-- fifthtry/ftd/run-ftd
+- run-ftd/
   How to run ftd
-- fifthtry/ftd/p1
+- p1/
   `ftd::p1`: A JSON/YML Replacement
-- fifthtry/ftd/changelog
+- changelog/
   Changelog
-- fifthtry/ftd/roadmap
+- roadmap/
   Roadmap & RFCs
