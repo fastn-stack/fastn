@@ -34,6 +34,11 @@ url = "2.2.2"
 zip = "0.5"
 termcolor = "1.1.2"
 chrono = "0.4.19"
+fluent = "0.16"
+lazy_static = "1"
+realm-lang = "0.1.0"
+antidote = "1"
+intl-memoizer = "0.5.1"
 
 [dev-dependencies]
 fbt-lib = "0.1.16"

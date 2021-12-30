@@ -1,6 +1,9 @@
 extern crate self as fpm;
 
 #[macro_use]
+extern crate lazy_static;
+
+#[macro_use]
 pub(crate) mod utils;
 
 mod commands;
@@ -8,6 +11,7 @@ mod config;
 mod dependency;
 mod document;
 mod font;
+mod i18n;
 mod library;
 mod snapshot;
 mod tracker;
