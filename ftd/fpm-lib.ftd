@@ -52,6 +52,22 @@ position: center
 
 
 
+-- ftd.row key-value-without-default:
+caption key:
+optional string value:
+margin-bottom: 5
+spacing: 2
+if: $value is not null
+
+--- ftd.text: $key
+position: center
+
+--- ftd.text: $value
+if: $value is not null
+position: center
+
+
+
 
 -- ftd.row available-language:
 position: center
@@ -110,3 +126,39 @@ padding: 10
 width: fill
 border-bottom: 1
 border-color: #e3e1e1
+
+
+
+-- ftd.column h0:
+caption title:
+optional body body:
+width: fill
+padding-horizontal: 90
+region: h0
+
+--- ftd.text:
+text: $title
+region: title
+size: 40
+color: black
+style: bold
+padding-bottom: 24
+font: apple-system
+
+--- container: ftd.main
+
+--- markdown:
+if: $body is not null
+body: $body
+
+
+
+-- ftd.text markdown:
+body body:
+text: $body
+size: 19
+line-height: 30
+color: #4d4d4d
+padding-bottom: 34
+padding-top: 50
+font: apple-system

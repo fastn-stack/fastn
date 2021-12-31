@@ -42,6 +42,12 @@ out-dated = पुराना
 
 upto-date = अद्यतन
 
+welcome-fpm-page = FPM पैकेज पेज में आपका स्वागत है
+
+welcome-fpm-page-subtitle = यहां आपको वह सब कुछ मिलेगा जो आप इस पैकेज के बारे में जानना चाहते हैं।
+
+language = भाषा :
+
 crs-heading =
     {$cr-count ->
         [one] CR Modifying this Document

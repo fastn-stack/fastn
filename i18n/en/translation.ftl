@@ -42,6 +42,12 @@ out-dated = Out-dated
 
 upto-date = Upto-date
 
+welcome-fpm-page = Welcome to the FPM Package Page
+
+welcome-fpm-page-subtitle = Here you find everything that you want to know about this package.
+
+language = Language:
+
 crs-heading =
     {$cr-count ->
         [one] CR Modifying this Document

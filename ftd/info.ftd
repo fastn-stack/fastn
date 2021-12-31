@@ -1,0 +1,20 @@
+-- import: fpm
+-- import: fpm-lib
+-- import: fpm-ui
+
+-- ftd.column:
+width: fill
+padding: 40
+
+-- fpm-lib.h0: $fpm-ui.welcome-fpm-page
+
+$fpm-ui.welcome-fpm-page-subtitle
+
+-- ftd.text: $fpm.package-name
+size: 30
+
+-- fpm-lib.key-value-without-default: $fpm-ui.language
+value: $fpm.language
+
+-- fpm-lib.key-value-without-default: Zip:
+value: $fpm.package-zip

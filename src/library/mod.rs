@@ -65,7 +65,7 @@ impl ftd::p2::Library for Library {
             let lang = match lib.config.package.language {
                 Some(ref lang) => realm_lang::Language::from_2_letter_code(lang)
                     .unwrap_or(realm_lang::Language::English),
-                None => return "".to_string(),
+                None => realm_lang::Language::English,
             };
 
             let primary_lang = match lib.config.package.translation_of.as_ref() {
@@ -106,7 +106,28 @@ impl ftd::p2::Library for Library {
                     -- string never-marked: {never_marked}
                     -- string out-dated: {out_dated}
                     -- string upto-date: {upto_date}
+                    -- string welcome-fpm-page: {welcome_fpm_page}
+                    -- string welcome-fpm-page-subtitle: {welcome_fpm_page_subtitle}
+                    -- string language: {language}
                     "},
+                language = fpm::i18n::translation::search(
+                    &lang,
+                    &primary_lang,
+                    "language",
+                    &current_document_last_modified_on
+                ),
+                welcome_fpm_page_subtitle = fpm::i18n::translation::search(
+                    &lang,
+                    &primary_lang,
+                    "welcome-fpm-page-subtitle",
+                    &current_document_last_modified_on
+                ),
+                welcome_fpm_page = fpm::i18n::translation::search(
+                    &lang,
+                    &primary_lang,
+                    "welcome-fpm-page",
+                    &current_document_last_modified_on
+                ),
                 upto_date = fpm::i18n::translation::search(
                     &lang,
                     &primary_lang,
@@ -242,33 +263,21 @@ impl ftd::p2::Library for Library {
                         {fpm_base}
                         
                         -- string document-id: {document_id}
-
                         -- optional string diff:
-                        
-                        -- optional string last-marked-on: 
-
+                        -- optional string last-marked-on:
                         -- optional string original-latest:
-
                         -- optional string translated-latest:
-
-                        -- optional string last-marked-on-rfc3339: 
-
+                        -- optional string last-marked-on-rfc3339:
                         -- optional string original-latest-rfc3339:
-
                         -- optional string translated-latest-rfc3339:
-
                         -- optional string language:
-
                         -- optional string number-of-documents:
-
                         -- optional string last-modified-on:
-
                         -- optional string current-document-last-modified-on:
-
                         -- string translation-status-url: {home_url}
-
                         -- string title: {title}
-
+                        -- string package-name: {package_name}
+                        -- optional string package-zip:
                         -- string home-url: {home_url}
 
                         -- record language-toc-item:
@@ -282,8 +291,22 @@ impl ftd::p2::Library for Library {
                 fpm_base = fpm::fpm_ftd().to_string(),
                 document_id = lib.document_id,
                 title = fpm::utils::get_package_title(&lib.config),
+                package_name = lib.config.package.name,
                 home_url = format!("//{}", lib.config.package.name)
             );
+
+            if let Some(ref zip) = lib.config.package.zip {
+                fpm_base = format!(
+                    indoc::indoc! {"
+                        {fpm_base}
+                        
+                        -- package-zip: {package_zip}
+    
+                        "},
+                    fpm_base = fpm_base,
+                    package_zip = zip,
+                );
+            }
 
             if let Some(ref diff) = lib.translated_data.diff {
                 fpm_base = format!(

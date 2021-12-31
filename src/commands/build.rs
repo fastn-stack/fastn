@@ -311,7 +311,7 @@ async fn process_ftd(
 
     let new_file_path = config.root.join(".build").join(file_rel_path);
 
-    let final_main =
+    let mut final_main =
         if config.root.join("FPM").join("prelude.ftd").exists() && !main.id.eq("FPM.ftd") {
             let prelude_content =
                 tokio::fs::read_to_string(config.root.join("FPM").join("prelude.ftd")).await?;
@@ -330,6 +330,13 @@ async fn process_ftd(
         } else {
             main.to_owned()
         };
+
+    let (fallback, message, final_main) = if main.id.eq("FPM.ftd") {
+        final_main.content = include_str!("../../ftd/info.ftd").to_string();
+        (None, None, final_main)
+    } else {
+        (fallback, message, final_main)
+    };
 
     match (fallback, message) {
         (Some(fallback), Some(message)) => {
