@@ -1,5 +1,3 @@
--- import: fifthtry.github.io/Jupiter-theme as ft
-
 
 -- ft.doc-page:
 toc: $ft.toc

@@ -1,7 +1,7 @@
 -- import: fifthtry.github.io/Jupiter-theme as ft
 
 -- ft.site-name: FPM-DEV
--- ft.site-icon: https://fifthtry.github.io/Docusaurus-theme/static/images/logo.svg
+-- ft.site-icon: static/images/logo.svg
 -- ft.github: https://github.com/fifthtry/fpm-dev-en/
 
 -- ft.header-toc:
