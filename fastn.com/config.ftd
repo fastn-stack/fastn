@@ -1,4 +1,14 @@
--- import: fifthtry.github.io/Flash-theme as ft
+-- import: fifthtry.github.io/Jupiter-theme as ft
+
+-- ft.site-name: FPM-DEV
+-- ft.site-icon: https://fifthtry.github.io/Docusaurus-theme/static/images/logo.svg
+-- ft.github: https://github.com/fifthtry/fpm-dev-en/
+
+-- ft.header-toc:
+$processor$: toc
+
+- about/
+  Docs
 
 -- ft.toc:
 $processor$: toc
