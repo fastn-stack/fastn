@@ -2,7 +2,7 @@
 -- ft.doc-page:
 toc: $ft.toc
 
--- ft.h1: About `fpm`
+-- ft.h0: About `fpm`
 
 [`ftd`](https://ftd.dev) is a language to create web pages or documents for 
 publishing on the web. It starts with Markdown, but adds features to create full
@@ -18,7 +18,7 @@ all the dependencies of a package.
 files on github pages, S3 etc static site hosting sites.
 
 
--- ft.h2: `fpm-repo`
+-- ft.h1: `fpm-repo`
 
 `fpm` packages can be shared with others by using `.tar.gz` format defined by `fpm`
 or via Git repository (any version control system for that matter). `fpm` is 
