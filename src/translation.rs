@@ -109,12 +109,6 @@ impl TranslatedDocument {
             let original_document =
                 if let Some(original_document) = original_documents.get(file.as_str()) {
                     original_document
-                } else if file.eq("README.md") {
-                    original_documents
-                        .get("index.md")
-                        .ok_or(fpm::Error::PackageError {
-                            message: format!("Could not find `{}` in original package", file,),
-                        })?
                 } else {
                     return Err(fpm::Error::PackageError {
                         message: format!("Could not find `{}` in original package", file),

@@ -211,6 +211,20 @@ async fn process_markdown(
     _config: &fpm::Config,
     _base_url: Option<&str>,
 ) -> fpm::Result<()> {
+    /*if _doc.id == "README.md"
+        && !(std::path::Path::new(
+        format!(".{}index.ftd", std::path::MAIN_SEPARATOR).as_str(),
+    )
+        .exists()
+        || std::path::Path::new(
+        format!(".{}index.md", std::path::MAIN_SEPARATOR).as_str(),
+    )
+        .exists())
+    {
+        "index.md".to_string()
+    } else {
+        _doc.id.to_string()
+    }*/
     // if let Ok(c) = tokio::fs::read_to_string("./FPM/markdown.ftd").await {
     //     c
     // } else {

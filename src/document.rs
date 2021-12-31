@@ -132,21 +132,8 @@ pub(crate) async fn get_file(
             content: tokio::fs::read_to_string(&doc_path).await?,
             parent_path: base_path.to_string(),
         }),
-        Some((doc_name, "md")) => File::Markdown(Document {
-            id: if doc_name == "README"
-                && !(std::path::Path::new(
-                    format!(".{}index.ftd", std::path::MAIN_SEPARATOR).as_str(),
-                )
-                .exists()
-                    || std::path::Path::new(
-                        format!(".{}index.md", std::path::MAIN_SEPARATOR).as_str(),
-                    )
-                    .exists())
-            {
-                "index.md".to_string()
-            } else {
-                id.to_string()
-            },
+        Some((_, "md")) => File::Markdown(Document {
+            id: id.to_string(),
             content: tokio::fs::read_to_string(&doc_path).await?,
             parent_path: base_path.to_string(),
         }),
