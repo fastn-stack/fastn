@@ -94,6 +94,10 @@ fn get_track_status(
     }
     let tracks = fpm::tracker::get_tracks(base_path, &path)?;
     for track in tracks.values() {
+        // ignore in case of the translation package
+        if doc.get_id().eq(track.filename.as_str()) && track.last_merged_version.is_some() {
+            continue;
+        }
         if !snapshots.contains_key(&track.filename) {
             eprintln!(
                 "Error: {} is tracked by {}, but {} is either removed or never synced",
