@@ -246,6 +246,7 @@ impl Kind {
         }
     }
 
+    #[allow(clippy::too_many_arguments)]
     pub fn read_section(
         &self,
         line_number: usize,
