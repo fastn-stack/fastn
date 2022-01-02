@@ -1,3 +1,7 @@
 -- import: lib
 
 -- ftd.text: $lib.amitu.name
+
+-- ftd.text: $lib.amitu.address.first-line
+
+-- ftd.text: $lib.amitu.address.city-detail.name
