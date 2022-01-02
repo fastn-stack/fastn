@@ -109,7 +109,7 @@ impl<'a> TDoc<'a> {
                 }
                 ftd::Value::Record { name, fields }
             }
-            ftd::p2::Kind::List { kind } => {
+            ftd::p2::Kind::List { kind, .. } => {
                 let kind = kind.as_ref();
                 let mut data: Vec<ftd::Value> = vec![];
                 if let serde_json::Value::Array(list) = json {
@@ -158,7 +158,7 @@ impl<'a> TDoc<'a> {
             kind: ftd::p2::Kind,
         ) -> ftd::p1::Result<ftd::Value> {
             Ok(match kind {
-                ftd::p2::Kind::List { kind } => {
+                ftd::p2::Kind::List { kind, .. } => {
                     let kind = kind.as_ref();
                     let mut data: Vec<ftd::Value> = vec![];
                     for row in rows {
@@ -963,6 +963,7 @@ mod test {
             ],
             kind: ftd::p2::Kind::Record {
                 name: "foo/bar#person".to_string(),
+                default: None,
             },
         };
         pretty_assertions::assert_eq!(value_from_json, value);

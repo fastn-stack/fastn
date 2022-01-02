@@ -128,7 +128,7 @@ fn read_records(section: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Res
         line_number: section.line_number,
     })?;
     if let ftd::Value::List {
-        kind: ftd::p2::Kind::Record { name },
+        kind: ftd::p2::Kind::Record { name, .. },
         ..
     } = var.value.clone()
     {
@@ -167,7 +167,10 @@ fn read_records(section: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Res
         }
         Ok(ftd::Value::List {
             data,
-            kind: ftd::p2::Kind::Record { name },
+            kind: ftd::p2::Kind::Record {
+                name,
+                default: None,
+            },
         })
     } else {
         ftd::unknown_processor_error(
