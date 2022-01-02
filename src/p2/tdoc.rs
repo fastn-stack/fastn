@@ -347,8 +347,22 @@ impl<'a> TDoc<'a> {
                     }
                 },
             },
-            (_, _, Some(_)) => unimplemented!(),
+            (Some(m), v, Some(c)) => match self.aliases.get(m) {
+                Some(m) => format!("{}#{}.{}", m, v, c),
+                None => match available_components.get(m) {
+                    Some(a) => format!("{}#{}.{}", a, v, c),
+                    None => {
+                        return self.err(
+                            "alias not found",
+                            m,
+                            "resolve_name_with_instruction",
+                            line_number,
+                        );
+                    }
+                },
+            },
             (None, v, None) => v.to_string(),
+            _ => unimplemented!(),
         })
     }
 
@@ -362,8 +376,12 @@ impl<'a> TDoc<'a> {
                 Some(m) => format!("{}#{}", m, v),
                 None => return self.err("alias not found", m, "resolve_name", line_number),
             },
-            (_, _, Some(_)) => unimplemented!(),
+            (Some(m), v, Some(c)) => match self.aliases.get(m) {
+                Some(m) => format!("{}#{}.{}", m, v, c),
+                None => format!("{}#{}.{}", self.name, v, c),
+            },
             (None, v, None) => format!("{}#{}", self.name, v),
+            _ => unimplemented!(),
         })
     }
 
@@ -510,6 +528,149 @@ impl<'a> TDoc<'a> {
             name
         };
 
+        let (initial_thing, name) = get_initial_thing(self, line_number, root_name, name)?;
+
+        if let Some(remaining) = name {
+            return get_thing(self, line_number, remaining.as_str(), &initial_thing);
+        }
+        return Ok(initial_thing);
+
+        fn get_initial_thing(
+            doc: &ftd::p2::TDoc,
+            line_number: usize,
+            root_name: Option<&str>,
+            name: &str,
+        ) -> ftd::p1::Result<(ftd::p2::Thing, Option<String>)> {
+            if name.contains('#') {
+                let (name, remaining_value) = {
+                    let mut full_name = (name.to_string(), None);
+                    if let Some((s, n)) = name.split_once('#') {
+                        if let Some((v, remaining_value)) = n.split_once('.') {
+                            full_name.0 = format!("{}#{}", s, v);
+                            full_name.1 = Some(remaining_value.to_string());
+                        }
+                    }
+                    full_name
+                };
+                return match doc.bag.get(name.as_str()) {
+                    Some(a) => Ok((a.to_owned(), remaining_value)),
+                    None => doc.err("not found", name, "get_thing", line_number),
+                };
+            }
+            return Ok(match get_initial_thing_(doc, root_name, doc.name, name) {
+                Some(a) => a,
+                None => {
+                    if let Some((m, v)) = name.split_once('.') {
+                        match get_initial_thing_(doc, Some(m), m, v) {
+                            None => return doc.err("not found", name, "get_thing", line_number),
+                            Some(a) => a,
+                        }
+                    } else {
+                        return doc.err("not found", name, "get_thing", line_number);
+                    }
+                }
+            });
+
+            fn get_initial_thing_(
+                doc: &ftd::p2::TDoc,
+                root_name: Option<&str>,
+                doc_name: &str,
+                name: &str,
+            ) -> Option<(ftd::p2::Thing, Option<String>)> {
+                let (name, remaining_value) =
+                    if let Some((v, remaining_value)) = name.split_once('.') {
+                        (v, Some(remaining_value.to_string()))
+                    } else {
+                        (name, None)
+                    };
+
+                match doc
+                    .bag
+                    .get(format!("{}#{}", doc_name, name).as_str())
+                    .map(ToOwned::to_owned)
+                {
+                    Some(a) => Some((a, remaining_value)),
+                    None => match root_name {
+                        Some(doc_name) => match doc.aliases.get(doc_name) {
+                            Some(g) => doc
+                                .bag
+                                .get(format!("{}#{}", g, name).as_str())
+                                .map(|v| (v.clone(), remaining_value)),
+                            None => None,
+                        },
+                        None => None,
+                    },
+                }
+            }
+        }
+
+        fn get_thing(
+            doc: &ftd::p2::TDoc,
+            line_number: usize,
+            name: &str,
+            thing: &ftd::p2::Thing,
+        ) -> ftd::p1::Result<ftd::p2::Thing> {
+            let (v, remaining) = name
+                .split_once('.')
+                .map(|(v, n)| (v, Some(n)))
+                .unwrap_or((name, None));
+            let thing = match thing.clone() {
+                ftd::p2::Thing::OrType(e) => ftd::p2::Thing::OrTypeWithVariant {
+                    e,
+                    variant: v.to_string(),
+                },
+                ftd::p2::Thing::Variable(ftd::Variable {
+                    name,
+                    value,
+                    conditions,
+                }) => {
+                    let fields = match value {
+                        ftd::Value::Record { fields, .. } => fields,
+                        ftd::Value::OrType { fields, .. } => fields,
+                        _ => {
+                            return doc.err(
+                                "not an record or or-type",
+                                thing,
+                                "get_thing",
+                                line_number,
+                            )
+                        }
+                    };
+                    if let Some(ftd::PropertyValue::Value { value: val }) = fields.get(v) {
+                        ftd::p2::Thing::Variable(ftd::Variable {
+                            name,
+                            value: val.clone(),
+                            conditions,
+                        })
+                    } else if let Some(ftd::PropertyValue::Reference { name, .. }) = fields.get(v) {
+                        get_initial_thing(doc, line_number, None, name)?.0
+                    } else {
+                        thing.clone()
+                    }
+                }
+                _ => {
+                    return doc.err("not an or-type", thing, "get_thing", line_number);
+                }
+            };
+            if let Some(remaining) = remaining {
+                return get_thing(doc, line_number, remaining, &thing);
+            }
+            Ok(thing)
+        }
+    }
+
+    /*pub fn get_thing_with_root(
+        &'a self,
+        line_number: usize,
+        name: &'a str,
+        root_name: Option<&'a str>,
+    ) -> ftd::p1::Result<ftd::p2::Thing> {
+        let name = if let Some(name) = name.strip_prefix('$') {
+            name
+        } else {
+            name
+        };
+
         match if name.contains('#') {
             self.bag.get(name).map(ToOwned::to_owned)
         } else if self
@@ -629,7 +790,7 @@ impl<'a> TDoc<'a> {
             Some(v) => Ok(v),
             None => self.err("not found", name, "get_thing", line_number),
         }
-    }
+    }*/
 }
 
 #[cfg(test)]
