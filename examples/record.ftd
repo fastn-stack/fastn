@@ -10,4 +10,35 @@
 
 -- ftd.text: $amitu-data.name
 
-/-- ftd.text: $amitu-data.phone
+-- ftd.text: $lib.acme.name
+
+-- ftd.text: $obj.name
+$loop$: $lib.acme.employees as $obj
+
+-- record toc-item:
+caption name:
+
+-- toc-item list tocs:
+
+-- toc-item toc1: TOC 1
+
+-- tocs: TOC 1
+
+-- tocs: TOC 2
+
+
+-- string phone: 88888
+
+-- ftd.column page:
+toc-item list toc: $tocs
+toc-item toc1: $toc1
+string hello: hello world
+string phone: $phone
+
+--- ftd.text: $toc1.name
+
+--- ftd.text: $obj.name
+$loop$: $toc as $obj
+
+
+-- page:

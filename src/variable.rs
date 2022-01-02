@@ -180,7 +180,7 @@ impl PropertyValue {
             expected_kind: &Option<ftd::p2::Kind>,
         ) -> ftd::p1::Result<ftd::p2::Kind> {
             let mut found_kind = kind.to_owned();
-            if let ftd::p2::Kind::Record { ref name } = kind {
+            if let ftd::p2::Kind::Record { ref name, .. } = kind {
                 if let Some(p2) = p2 {
                     let rec = doc.get_record(line_number, &doc.resolve_name(line_number, name)?)?;
                     found_kind = match rec.fields.get(p2.as_str()) {
@@ -447,12 +447,14 @@ impl Value {
             Value::Boolean { .. } => ftd::p2::Kind::boolean(),
             Value::Record { name: id, .. } => ftd::p2::Kind::Record {
                 name: id.to_string(),
+                default: None,
             },
             Value::OrType { name: id, .. } => ftd::p2::Kind::OrType {
                 name: id.to_string(),
             },
             Value::List { kind, .. } => ftd::p2::Kind::List {
                 kind: Box::new(kind.to_owned()),
+                default: None,
             },
             Value::Optional { kind, .. } => ftd::p2::Kind::Optional {
                 kind: Box::new(kind.to_owned()),
@@ -545,7 +547,7 @@ impl Variable {
                 ftd::p2::Kind::Decimal { .. } => read_decimal(p1, doc.name)?,
                 ftd::p2::Kind::Boolean { .. } => read_boolean(p1, doc.name)?,
                 ftd::p2::Kind::String { .. } => read_string(p1, doc.name)?,
-                ftd::p2::Kind::Record { name } => {
+                ftd::p2::Kind::Record { name, .. } => {
                     doc.get_record(line_number, name)?.create(p1, doc)?
                 }
                 _ => unimplemented!("{:?}", kind),
@@ -563,10 +565,10 @@ impl Variable {
         };
 
         match (&self.value.kind(), &mut self.value) {
-            (ftd::p2::Kind::Record { name }, _) => {
+            (ftd::p2::Kind::Record { name, .. }, _) => {
                 self.value = doc.get_record(p1.line_number, name)?.create(&p1, doc)?
             }
-            (ftd::p2::Kind::List { kind }, ftd::Value::List { data, .. }) => {
+            (ftd::p2::Kind::List { kind, .. }, ftd::Value::List { data, .. }) => {
                 data.push(read_value(p1.line_number, kind, &p1, doc)?);
             }
             (ftd::p2::Kind::Optional { kind }, ftd::Value::Optional { data, .. }) => {
@@ -656,7 +658,7 @@ impl Variable {
             ftd::p2::Kind::Integer { .. } => read_integer(p1, doc.name),
             ftd::p2::Kind::Decimal { .. } => read_decimal(p1, doc.name),
             ftd::p2::Kind::Boolean { .. } => read_boolean(p1, doc.name),
-            ftd::p2::Kind::Record { name } => match doc.get_thing(p1.line_number, &name)? {
+            ftd::p2::Kind::Record { name, .. } => match doc.get_thing(p1.line_number, &name)? {
                 ftd::p2::Thing::Record(r) => r.create(p1, doc),
                 t => ftd::e2(
                     format!("expected record type, found: {:?}", t),
@@ -1023,6 +1025,7 @@ mod test {
                     }],
                     kind: ftd::p2::Kind::Record {
                         name: s("foo/bar#pull-request"),
+                        default: None,
                     },
                 },
                 conditions: vec![],

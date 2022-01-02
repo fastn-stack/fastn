@@ -31,7 +31,7 @@ impl Record {
                         source: ftd::TextSource::Body,
                     },
                 },
-                (Ok(v), ftd::p2::Kind::Record { name }) => {
+                (Ok(v), ftd::p2::Kind::Record { name, .. }) => {
                     let record = doc.get_record(p1.line_number, name)?;
                     ftd::PropertyValue::Value {
                         value: ftd::Value::Record {
@@ -47,77 +47,79 @@ impl Record {
                         p1.line_number,
                     );
                 }
-                (Err(ftd::p1::Error::NotFound { .. }), ftd::p2::Kind::List { kind: list_kind }) => {
-                    match list_kind.as_ref() {
-                        ftd::p2::Kind::OrType { name: or_type_name } => {
-                            let e = doc.get_or_type(p1.line_number, or_type_name)?;
-                            let mut values: Vec<ftd::Value> = vec![];
-                            for s in p1.sub_sections.0.iter() {
-                                if s.is_commented {
-                                    continue;
-                                }
-                                for v in e.variants.iter() {
-                                    let variant =
-                                        v.variant_name().expect("record.fields").to_string();
-                                    if s.name == format!("{}.{}", name, variant.as_str()) {
-                                        values.push(ftd::Value::OrType {
-                                            variant,
-                                            name: e.name.to_string(),
-                                            fields: v.fields_from_sub_section(s, doc)?,
-                                        })
-                                    }
-                                }
+                (
+                    Err(ftd::p1::Error::NotFound { .. }),
+                    ftd::p2::Kind::List {
+                        kind: list_kind, ..
+                    },
+                ) => match list_kind.as_ref() {
+                    ftd::p2::Kind::OrType { name: or_type_name } => {
+                        let e = doc.get_or_type(p1.line_number, or_type_name)?;
+                        let mut values: Vec<ftd::Value> = vec![];
+                        for s in p1.sub_sections.0.iter() {
+                            if s.is_commented {
+                                continue;
                             }
-                            ftd::PropertyValue::Value {
-                                value: ftd::Value::List {
-                                    kind: list_kind.inner().to_owned(),
-                                    data: values,
-                                },
+                            for v in e.variants.iter() {
+                                let variant = v.variant_name().expect("record.fields").to_string();
+                                if s.name == format!("{}.{}", name, variant.as_str()) {
+                                    values.push(ftd::Value::OrType {
+                                        variant,
+                                        name: e.name.to_string(),
+                                        fields: v.fields_from_sub_section(s, doc)?,
+                                    })
+                                }
                             }
                         }
-                        ftd::p2::Kind::Record { .. } => {
-                            let mut list = ftd::Value::List {
+                        ftd::PropertyValue::Value {
+                            value: ftd::Value::List {
                                 kind: list_kind.inner().to_owned(),
-                                data: vec![],
-                            };
-                            for (i, k, v) in p1.header.0.iter() {
-                                if *k != *name || k.starts_with('/') {
-                                    continue;
-                                }
-                                list = doc.get_value(i.to_owned(), v)?;
-                            }
-                            ftd::PropertyValue::Value { value: list }
-                        }
-                        ftd::p2::Kind::String { .. } => {
-                            let mut values: Vec<ftd::Value> = vec![];
-                            for (_, k, v) in p1.header.0.iter() {
-                                if *k != *name || k.starts_with('/') {
-                                    continue;
-                                }
-                                values.push(ftd::Value::String {
-                                    text: v.to_string(),
-                                    source: ftd::TextSource::Header,
-                                });
-                            }
-                            ftd::PropertyValue::Value {
-                                value: ftd::Value::List {
-                                    kind: list_kind.inner().to_owned(),
-                                    data: values,
-                                },
-                            }
-                        }
-                        ftd::p2::Kind::Integer { .. } => {
-                            return ftd::e2("unexpected integer", doc.name, p1.line_number);
-                        }
-                        t => {
-                            return ftd::e2(
-                                format!("not yet implemented: {:?}", t),
-                                doc.name,
-                                p1.line_number,
-                            )
+                                data: values,
+                            },
                         }
                     }
-                }
+                    ftd::p2::Kind::Record { .. } => {
+                        let mut list = ftd::Value::List {
+                            kind: list_kind.inner().to_owned(),
+                            data: vec![],
+                        };
+                        for (i, k, v) in p1.header.0.iter() {
+                            if *k != *name || k.starts_with('/') {
+                                continue;
+                            }
+                            list = doc.get_value(i.to_owned(), v)?;
+                        }
+                        ftd::PropertyValue::Value { value: list }
+                    }
+                    ftd::p2::Kind::String { .. } => {
+                        let mut values: Vec<ftd::Value> = vec![];
+                        for (_, k, v) in p1.header.0.iter() {
+                            if *k != *name || k.starts_with('/') {
+                                continue;
+                            }
+                            values.push(ftd::Value::String {
+                                text: v.to_string(),
+                                source: ftd::TextSource::Header,
+                            });
+                        }
+                        ftd::PropertyValue::Value {
+                            value: ftd::Value::List {
+                                kind: list_kind.inner().to_owned(),
+                                data: values,
+                            },
+                        }
+                    }
+                    ftd::p2::Kind::Integer { .. } => {
+                        return ftd::e2("unexpected integer", doc.name, p1.line_number);
+                    }
+                    t => {
+                        return ftd::e2(
+                            format!("not yet implemented: {:?}", t),
+                            doc.name,
+                            p1.line_number,
+                        )
+                    }
+                },
                 (Err(ftd::p1::Error::NotFound { .. }), _) => {
                     let root_name = if let Some((root, _)) = self.name.split_once('#') {
                         Some(root)
@@ -136,7 +138,9 @@ impl Record {
                 }
                 (
                     Err(ftd::p1::Error::MoreThanOneSubSections { .. }),
-                    ftd::p2::Kind::List { kind: list_kind },
+                    ftd::p2::Kind::List {
+                        kind: list_kind, ..
+                    },
                 ) => {
                     let mut values: Vec<ftd::Value> = vec![];
                     for s in p1.sub_sections.0.iter() {
@@ -144,7 +148,7 @@ impl Record {
                             continue;
                         }
                         let v = match list_kind.inner().string_any() {
-                            ftd::p2::Kind::Record { name } => {
+                            ftd::p2::Kind::Record { name, .. } => {
                                 let record = doc.get_record(p1.line_number, name.as_str())?;
                                 ftd::Value::Record {
                                     name: doc.resolve_name(s.line_number, record.name.as_str())?,
@@ -274,6 +278,7 @@ impl Record {
             name,
             ftd::p2::Kind::Record {
                 name: full_name.clone(),
+                default: None,
             },
         );
         for (i, k, v) in p1_header.0.iter() {
@@ -446,6 +451,7 @@ mod test {
                         s("who"),
                         ftd::p2::Kind::Record {
                             name: s("foo/bar#person"),
+                            default: None,
                         },
                     ),
                 ])
@@ -476,6 +482,7 @@ mod test {
                                 name: s("foo/bar#abrar"),
                                 kind: ftd::p2::Kind::Record {
                                     name: s("foo/bar#person"),
+                                    default: None,
                                 },
                             },
                         ),
@@ -593,6 +600,7 @@ mod test {
                             s("friends"),
                             ftd::p2::Kind::List {
                                 kind: Box::new(ftd::p2::Kind::string()),
+                                default: None,
                             },
                         ),
                     ])
@@ -708,7 +716,9 @@ mod test {
                         ftd::p2::Kind::List {
                             kind: Box::new(ftd::p2::Kind::Record {
                                 name: s("foo/bar#point"),
+                                default: None,
                             }),
+                            default: None,
                         },
                     ),
                 ])
@@ -740,6 +750,7 @@ mod test {
                                 value: ftd::Value::List {
                                     kind: ftd::p2::Kind::Record {
                                         name: s("foo/bar#point"),
+                                        default: None,
                                     },
                                     data: vec![
                                         ftd::Value::Record {
@@ -851,6 +862,7 @@ mod test {
                             kind: Box::new(ftd::p2::Kind::OrType {
                                 name: s("foo/bar#entity"),
                             }),
+                            default: None,
                         },
                     ),
                     (s("value"), ftd::p2::Kind::integer()),

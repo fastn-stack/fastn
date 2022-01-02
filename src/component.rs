@@ -1529,7 +1529,7 @@ pub fn recursive_child_component(
         None,
     )?;
 
-    let recursive_kind = if let ftd::p2::Kind::List { kind } = recursive_property_value.kind() {
+    let recursive_kind = if let ftd::p2::Kind::List { kind, .. } = recursive_property_value.kind() {
         kind.as_ref().to_owned()
     } else {
         return ftd::e2(

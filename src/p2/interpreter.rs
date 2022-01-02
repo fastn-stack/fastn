@@ -2992,6 +2992,7 @@ mod test {
                     ],
                     kind: ftd::p2::Kind::Record {
                         name: s("foo/bar#point"),
+                        default: None,
                     },
                 },
                 conditions: vec![],
@@ -6369,6 +6370,7 @@ mod test {
                     ],
                     kind: ftd::p2::Kind::Record {
                         name: "foo/bar#person".to_string(),
+                        default: None,
                     },
                 },
                 conditions: vec![],
@@ -6596,6 +6598,7 @@ mod test {
                     ],
                     kind: ftd::p2::Kind::Record {
                         name: "foo/bar#person".to_string(),
+                        default: None,
                     },
                 },
                 conditions: vec![],
@@ -6951,6 +6954,7 @@ mod test {
                     ],
                     kind: ftd::p2::Kind::Record {
                         name: "foo/bar#person".to_string(),
+                        default: None,
                     },
                 },
                 conditions: vec![],
@@ -7772,6 +7776,7 @@ mod test {
                     ],
                     kind: ftd::p2::Kind::Record {
                         name: s("foo/bar#data"),
+                        default: None,
                     },
                 },
                 conditions: vec![],
@@ -7883,6 +7888,7 @@ mod test {
                                             data: vec![],
                                             kind: ftd::p2::Kind::Record {
                                                 name: s("foo/bar#toc-record"),
+                                                default: None,
                                             },
                                         },
                                     },
@@ -7918,6 +7924,7 @@ mod test {
                                             data: vec![],
                                             kind: ftd::p2::Kind::Record {
                                                 name: s("foo/bar#toc-record"),
+                                                default: None,
                                             },
                                         },
                                     },
@@ -7946,6 +7953,7 @@ mod test {
                     ],
                     kind: ftd::p2::Kind::Record {
                         name: s("foo/bar#toc-record"),
+                        default: None,
                     },
                 },
                 conditions: vec![],
@@ -7975,6 +7983,7 @@ mod test {
                                                                 data: vec![],
                                                                 kind: ftd::p2::Kind::Record {
                                                                     name: s("foo/bar#toc-record"),
+                                                                    default: None,
                                                                 },
                                                             },
                                                         },
@@ -8010,6 +8019,7 @@ mod test {
                                                                 data: vec![],
                                                                 kind: ftd::p2::Kind::Record {
                                                                     name: s("foo/bar#toc-record"),
+                                                                    default: None,
                                                                 },
                                                             },
                                                         },
@@ -8038,6 +8048,7 @@ mod test {
                                         ],
                                         kind: ftd::p2::Kind::Record {
                                             name: s("foo/bar#toc-record"),
+                                            default: None,
                                         },
                                     },
                                 },
@@ -8065,6 +8076,7 @@ mod test {
                     }],
                     kind: ftd::p2::Kind::Record {
                         name: s("foo/bar#toc-record"),
+                        default: None,
                     },
                 },
                 conditions: vec![],
@@ -8080,6 +8092,7 @@ mod test {
                     s("toc"),
                     ftd::p2::Kind::Record {
                         name: "foo/bar#toc-record".to_string(),
+                        default: None,
                     },
                 )])
                 .collect(),
@@ -8135,6 +8148,7 @@ mod test {
                                             name: "toc.children".to_string(),
                                             kind: ftd::p2::Kind::Record {
                                                 name: s("foo/bar#toc-record"),
+                                                default: None,
                                             },
                                         }),
                                         conditions: vec![],
@@ -8148,6 +8162,7 @@ mod test {
                                             name: "$loop$".to_string(),
                                             kind: ftd::p2::Kind::Record {
                                                 name: s("foo/bar#toc-record"),
+                                                default: None,
                                             },
                                         }),
                                         conditions: vec![],

@@ -80,5 +80,4 @@ fn write(id: &str, doc: String) {
             .as_bytes(),
     )
     .expect("failed to write to .html file");
-    // dbg!("write end:", &id);
 }

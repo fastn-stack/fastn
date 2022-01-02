@@ -22,6 +22,7 @@ pub enum Kind {
     IntMessage,    // message that takes an int
     Record {
         name: String,
+        default: Option<String>,
     }, // the full name of the record (full document name.record name)
     OrType {
         name: String,
@@ -31,6 +32,7 @@ pub enum Kind {
     }, // map of String to Kind
     List {
         kind: Box<Kind>,
+        default: Option<String>,
     },
     Optional {
         kind: Box<Kind>,
@@ -104,6 +106,14 @@ impl Kind {
                 body: *body,
                 default: None,
             },
+            Kind::Record { name, .. } => Kind::Record {
+                name: name.clone(),
+                default: None,
+            },
+            Kind::List { kind, .. } => Kind::List {
+                kind: kind.clone(),
+                default: None,
+            },
             _ => self.clone(),
         }
     }
@@ -132,6 +142,8 @@ impl Kind {
             Kind::Integer { default }
             | Kind::Boolean { default }
             | Kind::Decimal { default }
+            | Kind::Record { default, .. }
+            | Kind::List { default, .. }
             | Kind::String { default, .. } => default.clone(),
             Kind::UI { default, .. } => default.as_ref().map(|(v, _)| v.clone()),
             _ => None,
@@ -145,6 +157,7 @@ impl Kind {
                 body,
                 default,
             },
+            Kind::Record { name, .. } => Kind::Record { name, default },
             Kind::UI { .. } => Kind::UI {
                 default: default.map(|v| (v, Default::default())),
             },
@@ -154,6 +167,7 @@ impl Kind {
             Kind::Optional { kind } => Kind::Optional {
                 kind: Box::from(kind.set_default(default)),
             },
+            Kind::List { kind, .. } => Kind::List { kind, default },
             _ => self,
         }
     }
@@ -187,7 +201,10 @@ impl Kind {
     }
 
     pub fn list(k: Self) -> Self {
-        Kind::List { kind: Box::new(k) }
+        Kind::List {
+            kind: Box::new(k),
+            default: None,
+        }
     }
 
     pub fn map(k: Self) -> Self {
@@ -213,7 +230,7 @@ impl Kind {
 
     pub fn list_kind(&self) -> &Self {
         match self {
-            Kind::List { kind } => kind,
+            Kind::List { kind, .. } => kind,
             _ => self,
         }
     }
@@ -370,6 +387,7 @@ impl Kind {
                     doc,
                     object_kind,
                 )?),
+                default: None,
             });
         }
 
@@ -405,7 +423,10 @@ impl Kind {
             "int-message" => Kind::IntMessage,
             "ftd.ui" => Kind::UI { default: None },
             _ => match doc.get_thing(line_number, k)? {
-                ftd::p2::Thing::Record(r) => Kind::Record { name: r.name },
+                ftd::p2::Thing::Record(r) => Kind::Record {
+                    name: r.name,
+                    default: None,
+                },
                 ftd::p2::Thing::OrType(e) => Kind::OrType { name: e.name },
                 t => unimplemented!(
                     "{} is {:?}, line number: {}, doc: {}",
@@ -448,7 +469,10 @@ impl Kind {
                 "int-message" => Kind::IntMessage,
                 "ftd.ui" => Kind::UI { default: None },
                 k => match doc.get_thing(line_number, k) {
-                    Ok(ftd::p2::Thing::Record(r)) => Kind::Record { name: r.name },
+                    Ok(ftd::p2::Thing::Record(r)) => Kind::Record {
+                        name: r.name,
+                        default: None,
+                    },
                     Ok(ftd::p2::Thing::OrType(e)) => Kind::OrType { name: e.name },
                     t => match default {
                         None => unimplemented!(
@@ -462,17 +486,19 @@ impl Kind {
                     },
                 },
             },
-        }
-        .set_default(default);
+        };
 
         if var_data.is_list() {
-            return Ok(Kind::List { kind: Box::new(k) });
+            return Ok(Kind::List {
+                kind: Box::new(k),
+                default,
+            });
         }
 
         Ok(if var_data.is_optional() {
-            Self::optional(k)
+            Self::optional(k.set_default(default))
         } else {
-            k
+            k.set_default(default)
         })
     }
 }

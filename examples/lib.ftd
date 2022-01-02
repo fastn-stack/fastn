@@ -46,9 +46,11 @@ caption name:
 string contact: 1001
 string fax:
 integer no-of-employees: 50
+person list employees: &people
 
 -- lead.individual amitu-data: Amit Upadhyay
 
 -- lead.company acme: Acme Inc.
 contact: John Doe
 fax: +1-234-567890
+
