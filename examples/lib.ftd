@@ -1,15 +1,30 @@
+-- record city:
+string name:
+optional string pincode:
+
 -- record address-detail:
 string first-line:
 optional string second-line:
+optional city city-detail:
 
 -- record person:
 caption name:
 optional integer phone:
 optional address-detail address:
 
+-- city amitu-city:
+name: Prayagraj
+
+
+-- address-detail amitu-address:
+first-line: Bangalore
+second-line: Karnataka
+city-detail: $amitu-city
+
 
 -- person amitu: Amit Upadhyay
 phone: 99999999
+address: $amitu-address
 
 /-- person list people:
 
