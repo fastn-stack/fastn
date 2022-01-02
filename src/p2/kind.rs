@@ -237,6 +237,7 @@ impl Kind {
         p1_body: &Option<(usize, String)>,
         name: &str,
         doc: &ftd::p2::TDoc,
+        root_name: Option<&str>,
     ) -> ftd::p1::Result<ftd::PropertyValue> {
         let (v, source) = match p1.str_optional(doc.name, line_number, name)? {
             Some(v) => (v.to_string(), ftd::TextSource::Header),
@@ -300,6 +301,7 @@ impl Kind {
                 doc,
                 &Default::default(),
                 None,
+                root_name,
             );
         }
 

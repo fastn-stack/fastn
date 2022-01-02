@@ -5,3 +5,9 @@
 -- ftd.text: $lib.amitu.address.first-line
 
 -- ftd.text: $lib.amitu.address.city-detail.name
+
+-- lib.lead.individual amitu-data: Amit Upadhyay
+
+-- ftd.text: $amitu-data.name
+
+/-- ftd.text: $amitu-data.phone

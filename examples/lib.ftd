@@ -26,29 +26,29 @@ city-detail: $amitu-city
 phone: 99999999
 address: $amitu-address
 
-/-- person list people:
+-- person list people:
 
-/-- people: Amit Upadhyay
+-- people: Amit Upadhyay
 
-/-- people: Sourabh Garg
+-- people: Sourabh Garg
 phone: 88888888
 
-/-- string default-phone: 1000
+-- string default-phone: 1000
 
-/-- or-type lead:
+-- or-type lead:
 
-/--- individual:
+--- individual:
 caption name:
 string phone: $default-phone
 
-/--- company:
+--- company:
 caption name:
 string contact: 1001
 string fax:
 integer no-of-employees: 50
 
-/-- lead.individual amitu: Amit Upadhyay
+-- lead.individual amitu-data: Amit Upadhyay
 
-/-- lead.company acme: Acme Inc.
+-- lead.company acme: Acme Inc.
 contact: John Doe
 fax: +1-234-567890
