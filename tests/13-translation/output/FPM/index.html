@@ -3,26 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-    <title>FPM.ftd</title>
-
-    <script type="ftd" id="ftd-data-message">
+    <title>FPM पैकेज पेज में आपका स्वागत है</title>
+    <script type="ftd" id="ftd-data">
         {
-  "@default@0,1,0,0": {
-    "value": "कभी समन्वयित नहीं किया गया",
+  "@body@0,0": {
+    "value": "यहां आपको वह सब कुछ मिलेगा जो आप इस पैकेज के बारे में जानना चाहते हैं।",
+    "dependencies": {}
+  },
+  "@body@0,0,1": {
+    "value": "यहां आपको वह सब कुछ मिलेगा जो आप इस पैकेज के बारे में जानना चाहते हैं।",
     "dependencies": {
-      "0,1,0,0,2": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
+      "0,0,1": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
     }
   },
-  "@key@0,1,0,0": {
-    "value": "अंतिम संशोधित तिथि :",
+  "@key@0,2": {
+    "value": "भाषा :",
     "dependencies": {
-      "0,1,0,0,0": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
+      "0,0,3,0": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
     }
   },
-  "@show-menu@0,1,1": {
-    "value": "false",
+  "@key@0,3": {
+    "value": "Zip:",
     "dependencies": {
-      "0,1,1,2,0": "[{\"dependency_type\":\"Visible\",\"condition\":\"true\",\"parameters\":{}}]"
+      "0,0,4,0": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
+    }
+  },
+  "@title@0,0": {
+    "value": "FPM पैकेज पेज में आपका स्वागत है",
+    "dependencies": {
+      "0,0,0": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
     }
   },
   "fpm#document-id": {
@@ -32,6 +41,12 @@
   "fpm#home-url": {
     "value": "//amitu",
     "dependencies": {}
+  },
+  "fpm#package-name": {
+    "value": "amitu",
+    "dependencies": {
+      "0,0,2": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
+    }
   },
   "fpm#title": {
     "value": "amitu",
@@ -43,12 +58,14 @@
   },
   "fpm-ui#current-language": {
     "value": "वर्तमान भाषा :",
-    "dependencies": {
-      "0,1,1,1,0": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
-    }
+    "dependencies": {}
   },
   "fpm-ui#document": {
     "value": "दस्तावेज़",
+    "dependencies": {}
+  },
+  "fpm-ui#language": {
+    "value": "भाषा :",
     "dependencies": {}
   },
   "fpm-ui#language-detail-page": {
@@ -93,9 +110,7 @@
   },
   "fpm-ui#show-latest-version": {
     "value": "नवीनतम संस्करण दिखाएं",
-    "dependencies": {
-      "0,0,0,0,3": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
-    }
+    "dependencies": {}
   },
   "fpm-ui#show-outdated-version": {
     "value": "पुराना संस्करण दिखाएं",
@@ -103,15 +118,11 @@
   },
   "fpm-ui#show-translation-status": {
     "value": "अनुवाद की स्थिति दिखाएं",
-    "dependencies": {
-      "0,1,0,1": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
-    }
+    "dependencies": {}
   },
   "fpm-ui#show-unapproved-version": {
     "value": "अस्वीकृत संस्करण दिखाएं",
-    "dependencies": {
-      "0,0,0,0,2": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
-    }
+    "dependencies": {}
   },
   "fpm-ui#status": {
     "value": "स्थिति",
@@ -127,73 +138,25 @@
   },
   "fpm-ui#unapproved-heading": {
     "value": "इस दस्तावेज़ का अनुवाद अभी तक स्वीकृत नहीं हुआ है।",
-    "dependencies": {
-      "0,0,0,0,1": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
-    }
+    "dependencies": {}
   },
   "fpm-ui#upto-date": {
     "value": "अद्यतन",
     "dependencies": {}
   },
-  "message#show-main": {
-    "value": "true",
-    "dependencies": {
-      "0,0,0,0,2": "[{\"dependency_type\":\"Visible\",\"condition\":\"true\",\"parameters\":{}}]",
-      "0,0,0,0,3": "[{\"dependency_type\":\"Visible\",\"condition\":\"false\",\"parameters\":{}}]"
-    }
-  }
-}
-    </script>
-    <script type="ftd" id="ftd-external-children-message">
-        {}
-    </script>
-    <script type="ftd" id="ftd-data-main">
-        {
-  "fpm#document-id": {
-    "value": "FPM.ftd",
+  "fpm-ui#welcome-fpm-page": {
+    "value": "FPM पैकेज पेज में आपका स्वागत है",
     "dependencies": {}
   },
-  "fpm#home-url": {
-    "value": "//amitu",
-    "dependencies": {}
-  },
-  "fpm#title": {
-    "value": "amitu",
-    "dependencies": {}
-  },
-  "fpm#translation-status-url": {
-    "value": "//amitu/FPM/translation-status",
+  "fpm-ui#welcome-fpm-page-subtitle": {
+    "value": "यहां आपको वह सब कुछ मिलेगा जो आप इस पैकेज के बारे में जानना चाहते हैं।",
     "dependencies": {}
   }
 }
     </script>
-    <script type="ftd" id="ftd-external-children-main">
+    <script type="ftd" id="ftd-external-children">
         {}
     </script>
-    <script type="ftd" id="ftd-data-fallback">
-        {
-  "fpm#document-id": {
-    "value": "FPM.ftd",
-    "dependencies": {}
-  },
-  "fpm#home-url": {
-    "value": "//amitu",
-    "dependencies": {}
-  },
-  "fpm#title": {
-    "value": "amitu",
-    "dependencies": {}
-  },
-  "fpm#translation-status-url": {
-    "value": "//amitu/FPM/translation-status",
-    "dependencies": {}
-  }
-}
-    </script>
-    <script type="ftd" id="ftd-external-children-fallback">
-        {}
-    </script>
-
     <script>
         // all ftd_utils are meant to be pure functions only: they can only depend on the
 // input passed, not on closures or global data etc
@@ -669,7 +632,6 @@ window.ftd = (function () {
 })();
 
     </script>
-
     <style>
         body {
             margin: 0;
@@ -799,50 +761,26 @@ window.ftd = (function () {
             margin: 0;
         }
 
-    </style>
+        </style>
 
 </head>
-<body>
+    <body>
 
-<div id="message"><div data-id="message:root" style="align-items: flex-start; align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: wrap; height: 100%; justify-content: flex-start; margin-bottom: auto; margin-top: auto; white-space: initial; width: 100%" class="ft_md"><div data-id="outer-container:0:message" id="outer-container" style="align-items: flex-start; align-self: flex-start; background-color: rgba(243,243,243,1); border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; white-space: initial; width: 100%" class="ft_md"><div data-id="0,0:message" style="align-items: flex-start; align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; padding-left: 35px; padding-right: 35px; padding-top: 14px; white-space: initial; width: 100%" class="ft_md"><div data-id="main-container:0,0,0:message" id="main-container" style="align-items: flex-start; align-self: flex-start; background-color: rgba(254,249,248,1); border-color: rgba(231,125,132,1); border-radius: 10px; border-style: solid; border-width: 1px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; padding-bottom: 10px; padding-top: 10px; white-space: initial; width: 100%" class="ft_md"><div data-id="0,0,0,0:message" data-spacing="margin-left:15px" style="align-items: flex-start; align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start; margin-bottom: auto; white-space: initial" class="ft_md"><img alt="" data-id="0,0,0,0,0:message" src="https://res.cloudinary.com/dphj6havg/image/upload/v1640696994/info-1_jowsqn.svg" style="align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; height: auto; white-space: initial; width: 16px">
-<div data-id="0,0,0,0,1:message" style="align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-family: apple-system; font-weight: 600; margin-left: 15px; padding-right: 20px; text-align: left; white-space: initial" class="ft_md">इस दस्तावेज़ का अनुवाद अभी तक स्वीकृत नहीं हुआ है।</div>
-<div data-id="0,0,0,0,2:message" onclick="window.ftd.handle_event(event, 'message', '[{&quot;action&quot;:&quot;toggle&quot;,&quot;target&quot;:&quot;message#show-main&quot;,&quot;parameters&quot;:{}},{&quot;action&quot;:&quot;message-host&quot;,&quot;target&quot;:&quot;show_fallback&quot;,&quot;parameters&quot;:{}}]')" style="align-self: flex-start; background-color: rgba(210,115,85,1); border-radius: 4px; border-style: solid; border-width: 0px; box-shadow: 0px 0px 6px 0px rgba(0,0,0,0.05); box-sizing: border-box; color: rgba(255,255,255,1); cursor: pointer; font-family: apple-system; font-weight: 400; margin-left: 15px; padding-bottom: 4px; padding-left: 15px; padding-right: 15px; padding-top: 4px; text-align: left; white-space: initial" class="ft_md">अस्वीकृत संस्करण दिखाएं</div>
-<div data-id="0,0,0,0,3:message" onclick="window.ftd.handle_event(event, 'message', '[{&quot;action&quot;:&quot;toggle&quot;,&quot;target&quot;:&quot;message#show-main&quot;,&quot;parameters&quot;:{}},{&quot;action&quot;:&quot;message-host&quot;,&quot;target&quot;:&quot;show_main&quot;,&quot;parameters&quot;:{}}]')" style="align-self: flex-start; background-color: rgba(210,115,85,1); border-radius: 4px; border-style: solid; border-width: 0px; box-shadow: 0px 0px 6px 0px rgba(0,0,0,0.05); box-sizing: border-box; color: rgba(255,255,255,1); cursor: pointer; display: none; font-family: apple-system; font-weight: 400; margin-left: 15px; padding-bottom: 4px; padding-left: 15px; padding-right: 15px; padding-top: 4px; text-align: left; white-space: initial" class="ft_md">नवीनतम संस्करण दिखाएं</div></div></div></div>
-<div data-id="0,1:message" style="align-items: flex-start; align-self: flex-start; background-color: rgba(243,243,243,1); border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between; padding: 10px; white-space: initial; width: 100%" class="ft_md"><div data-id="0,1,0:message" data-spacing="margin-top:5px" style="align-items: flex-start; align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; white-space: initial" class="ft_md"><div data-id="0,1,0,0:message" data-spacing="margin-left:2px" style="align-items: flex-start; align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start; margin-bottom: auto; margin-top: auto; white-space: initial" class="ft_md"><div data-id="0,1,0,0,0:message" style="align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-weight: 400; margin-bottom: auto; margin-top: auto; text-align: left; white-space: initial" class="ft_md">अंतिम संशोधित तिथि :</div>
-<div data-id="0,1,0,0,2:message" style="align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-weight: 400; margin-bottom: auto; margin-left: 2px; margin-top: auto; text-align: left; white-space: initial" class="ft_md">कभी समन्वयित नहीं किया गया</div></div>
-<a data-id="0,1,0,1:message" href="//amitu/FPM/translation-status" style="align-self: flex-start; background-color: rgba(210,115,85,1); border-color: rgba(38,100,79,1); border-radius: 13px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(255,255,255,1); cursor: pointer; font-weight: 400; margin-top: 5px; padding: 8px; text-align: left; white-space: initial" class="ft_md">अनुवाद की स्थिति दिखाएं</a></div>
-<div data-id="0,1,1:message" style="align-items: flex-start; align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start; margin-bottom: auto; margin-top: auto; white-space: initial" class="ft_md"><div data-id="0,1,1,1:message" style="align-items: flex-start; align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start; white-space: initial; width: 100%" class="ft_md"><div data-id="0,1,1,1,0:message" style="align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-weight: 400; margin-bottom: auto; margin-top: auto; text-align: left; white-space: initial; width: 120px" class="ft_md">वर्तमान भाषा :</div>
-<div data-id="0,1,1,1,1:message" onclick="window.ftd.handle_event(event, 'message', '[{&quot;action&quot;:&quot;toggle&quot;,&quot;target&quot;:&quot;@show-menu@0,1,1&quot;,&quot;parameters&quot;:{}}]')" style="align-self: flex-start; background-color: rgba(255,255,255,1); border-color: rgba(173,174,179,1); border-radius: 0px; border-style: solid; border-width: 1px; box-sizing: border-box; cursor: pointer; font-weight: 400; margin-bottom: 5px; margin-left: 5px; margin-right: 5px; margin-top: 5px; padding-left: 5px; padding-right: 50px; text-align: left; white-space: initial" class="ft_md">Hindi</div></div>
-<div data-id="0,1,1,2:message" style="align-items: flex-start; align-self: flex-end; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; margin-bottom: auto; margin-left: auto; margin-top: auto; position: relative; white-space: initial; width: 100%" class="ft_md"><div data-id="0,1,1,2,0:message" onclick="window.ftd.handle_event(event, 'message', '[{&quot;action&quot;:&quot;toggle&quot;,&quot;target&quot;:&quot;@show-menu@0,1,1&quot;,&quot;parameters&quot;:{}}]')" style="align-items: flex-start; background-color: rgba(241,241,241,1); border-radius: 0px; border-style: solid; border-width: 0px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.25); box-sizing: border-box; cursor: pointer; display: none; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; margin-top: 10px; min-width: 160px; position: absolute; right: 0; top: 0; white-space: initial; width: 100%" class="ft_md"><a data-id="0,1,1,2,0,0:message" href="https://arpita-jaiswal/blog/FPM/" style="align-self: flex-start; border-bottom-width: 1px !important; border-color: rgba(227,225,225,1); border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; padding: 10px; text-align: left; white-space: initial; width: 100%" class="ft_md">English</a></div></div></div></div></div></div></div>
-<div id="main"><div data-id="main:root" style="align-items: flex-start; align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: wrap; height: 100%; justify-content: flex-start; margin-bottom: auto; margin-top: auto; white-space: initial; width: 100%" class="ft_md"></div></div>
-<div id="fallback" style="display: none"><div data-id="fallback:root" style="align-items: flex-start; align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: wrap; height: 100%; justify-content: flex-start; margin-bottom: auto; margin-top: auto; white-space: initial; width: 100%" class="ft_md"></div></div>
+        <div data-id="main:root" style="align-items: flex-start; align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: wrap; height: 100%; justify-content: flex-start; margin-bottom: auto; margin-top: auto; white-space: initial; width: 100%" class="ft_md"><div data-id="0:main" style="align-items: flex-start; align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; padding: 40px; white-space: initial; width: 100%" class="ft_md"><div data-id="0,0:main" id="fpm-paikej-pej-men-aapkaa-svaagt-hai" style="align-items: flex-start; align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; padding-left: 90px; padding-right: 90px; white-space: initial; width: 100%" class="ft_md"><div data-id="0,0,0:main" style="align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(0,0,0,1); font-family: apple-system; font-size: 40px; font-weight: 700; padding-bottom: 24px; text-align: left; white-space: initial" class="ft_md">FPM पैकेज पेज में आपका स्वागत है</div>
+<div data-id="0,0,1:main" style="align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(77,77,77,1); font-family: apple-system; font-size: 19px; font-weight: 400; line-height: 30px; padding-bottom: 34px; padding-top: 50px; text-align: left; white-space: initial" class="ft_md">यहां आपको वह सब कुछ मिलेगा जो आप इस पैकेज के बारे में जानना चाहते हैं।</div>
+<div data-id="0,0,2:main" style="align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-size: 30px; font-weight: 400; text-align: left; white-space: initial" class="ft_md">amitu</div>
+<div data-id="0,0,3:main" data-spacing="margin-left:2px" style="align-items: flex-start; align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start; margin-bottom: 5px; white-space: initial" class="ft_md"><div data-id="0,0,3,0:main" style="align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-weight: 400; margin-bottom: auto; margin-top: auto; text-align: left; white-space: initial" class="ft_md">भाषा :</div>
+<div data-id="0,0,3,1:main" style="align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-weight: 400; margin-bottom: auto; margin-left: 2px; margin-top: auto; text-align: left; white-space: initial" class="ft_md">Hindi</div></div>
+<div data-id="0,0,4:main" data-spacing="margin-left:2px" style="align-items: flex-start; align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start; margin-bottom: 5px; white-space: initial" class="ft_md"><div data-id="0,0,4,0:main" style="align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-weight: 400; margin-bottom: auto; margin-top: auto; text-align: left; white-space: initial" class="ft_md">Zip:</div>
+<div data-id="0,0,4,1:main" style="align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-weight: 400; margin-bottom: auto; margin-left: 2px; margin-top: auto; text-align: left; white-space: initial" class="ft_md">amitu</div></div></div></div></div>
 
-<script>
-    function show_main() {
-        document.getElementById("main").style.display = "block";
-        document.getElementById("fallback").style.display = "none";
-    }
 
-    function show_fallback() {
-        document.getElementById("main").style.display = "none";
-        document.getElementById("fallback").style.display = "block";
-    }
-
-    window.ftd.init(
-        "message",
-        JSON.parse(document.getElementById("ftd-data-message").innerText),
-        JSON.parse(document.getElementById("ftd-external-children-message").innerText)
-    );
-    window.ftd.init(
-        "main",
-        JSON.parse(document.getElementById("ftd-data-main").innerText),
-        JSON.parse(document.getElementById("ftd-external-children-main").innerText)
-    );
-    window.ftd.init(
-        "fallback",
-        JSON.parse(document.getElementById("ftd-data-fallback").innerText),
-        JSON.parse(document.getElementById("ftd-external-children-fallback").innerText)
-    );
-</script>
-</body>
+    <script>
+        window.ftd.init(
+            "main",
+            JSON.parse(document.getElementById("ftd-data").innerText),
+            JSON.parse(document.getElementById("ftd-external-children").innerText)
+        );
+    </script>
+    </body>
 </html>

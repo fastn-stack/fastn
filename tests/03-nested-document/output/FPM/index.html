@@ -3,9 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-    <title>FPM.ftd</title>
+    <title>Welcome to the FPM Package Page</title>
     <script type="ftd" id="ftd-data">
         {
+  "@body@0,0": {
+    "value": "Here you find everything that you want to know about this package.",
+    "dependencies": {}
+  },
+  "@body@0,0,1": {
+    "value": "Here you find everything that you want to know about this package.",
+    "dependencies": {
+      "0,0,1": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
+    }
+  },
+  "@key@0,2": {
+    "value": "Language:",
+    "dependencies": {
+      "0,0,3,0": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
+    }
+  },
+  "@key@0,3": {
+    "value": "Zip:",
+    "dependencies": {
+      "0,0,4,0": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
+    }
+  },
+  "@title@0,0": {
+    "value": "Welcome to the FPM Package Page",
+    "dependencies": {
+      "0,0,0": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
+    }
+  },
   "fpm#document-id": {
     "value": "FPM.ftd",
     "dependencies": {}
@@ -14,12 +42,114 @@
     "value": "//amitu",
     "dependencies": {}
   },
+  "fpm#package-name": {
+    "value": "amitu",
+    "dependencies": {
+      "0,0,2": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
+    }
+  },
   "fpm#title": {
     "value": "hello",
     "dependencies": {}
   },
   "fpm#translation-status-url": {
     "value": "//amitu",
+    "dependencies": {}
+  },
+  "fpm-ui#current-language": {
+    "value": "Current language:",
+    "dependencies": {}
+  },
+  "fpm-ui#document": {
+    "value": "Document",
+    "dependencies": {}
+  },
+  "fpm-ui#language": {
+    "value": "Language:",
+    "dependencies": {}
+  },
+  "fpm-ui#language-detail-page": {
+    "value": "Language Detail Page",
+    "dependencies": {}
+  },
+  "fpm-ui#language-detail-page-body": {
+    "value": "Here is the list of the translation status for all the files.",
+    "dependencies": {}
+  },
+  "fpm-ui#last-modified-on": {
+    "value": "Last modified on:",
+    "dependencies": {}
+  },
+  "fpm-ui#missing": {
+    "value": "Missing",
+    "dependencies": {}
+  },
+  "fpm-ui#never-marked": {
+    "value": "Never Marked",
+    "dependencies": {}
+  },
+  "fpm-ui#never-synced": {
+    "value": "Never Synced",
+    "dependencies": {}
+  },
+  "fpm-ui#other-available-languages": {
+    "value": "Other available languages:",
+    "dependencies": {}
+  },
+  "fpm-ui#out-dated": {
+    "value": "Out-dated",
+    "dependencies": {}
+  },
+  "fpm-ui#out-dated-body": {
+    "value": "The ⁨English⁩ document was last modified on ⁨Never Synced⁩. Since then, the ⁨English⁩ version has the following changes.",
+    "dependencies": {}
+  },
+  "fpm-ui#out-dated-heading": {
+    "value": "This document is out dated.",
+    "dependencies": {}
+  },
+  "fpm-ui#show-latest-version": {
+    "value": "Show latest version",
+    "dependencies": {}
+  },
+  "fpm-ui#show-outdated-version": {
+    "value": "Show outdated version",
+    "dependencies": {}
+  },
+  "fpm-ui#show-translation-status": {
+    "value": "Show translation status",
+    "dependencies": {}
+  },
+  "fpm-ui#show-unapproved-version": {
+    "value": "Show unapproved version",
+    "dependencies": {}
+  },
+  "fpm-ui#status": {
+    "value": "Status",
+    "dependencies": {}
+  },
+  "fpm-ui#total-number-of-documents": {
+    "value": "Total number of documents:",
+    "dependencies": {}
+  },
+  "fpm-ui#translation-not-available": {
+    "value": "This document is not yet translated to ⁨English⁩. You are seeing ⁨English⁩ version.",
+    "dependencies": {}
+  },
+  "fpm-ui#unapproved-heading": {
+    "value": "The translation of this document is not yet approved.",
+    "dependencies": {}
+  },
+  "fpm-ui#upto-date": {
+    "value": "Upto-date",
+    "dependencies": {}
+  },
+  "fpm-ui#welcome-fpm-page": {
+    "value": "Welcome to the FPM Package Page",
+    "dependencies": {}
+  },
+  "fpm-ui#welcome-fpm-page-subtitle": {
+    "value": "Here you find everything that you want to know about this package.",
     "dependencies": {}
   }
 }
@@ -636,7 +766,12 @@ window.ftd = (function () {
 </head>
     <body>
 
-        <div data-id="main:root" style="align-items: flex-start; align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: wrap; height: 100%; justify-content: flex-start; margin-bottom: auto; margin-top: auto; white-space: initial; width: 100%" class="ft_md"></div>
+        <div data-id="main:root" style="align-items: flex-start; align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: wrap; height: 100%; justify-content: flex-start; margin-bottom: auto; margin-top: auto; white-space: initial; width: 100%" class="ft_md"><div data-id="0:main" style="align-items: flex-start; align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; padding: 40px; white-space: initial; width: 100%" class="ft_md"><div data-id="0,0:main" id="welcome-to-the-fpm-package-page" style="align-items: flex-start; align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; padding-left: 90px; padding-right: 90px; white-space: initial; width: 100%" class="ft_md"><div data-id="0,0,0:main" style="align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(0,0,0,1); font-family: apple-system; font-size: 40px; font-weight: 700; padding-bottom: 24px; text-align: left; white-space: initial" class="ft_md">Welcome to the FPM Package Page</div>
+<div data-id="0,0,1:main" style="align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(77,77,77,1); font-family: apple-system; font-size: 19px; font-weight: 400; line-height: 30px; padding-bottom: 34px; padding-top: 50px; text-align: left; white-space: initial" class="ft_md">Here you find everything that you want to know about this package.</div>
+<div data-id="0,0,2:main" style="align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-size: 30px; font-weight: 400; text-align: left; white-space: initial" class="ft_md">amitu</div>
+<div data-id="0,0,3:main" data-spacing="margin-left:2px" style="align-items: flex-start; align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: none; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start; margin-bottom: 5px; white-space: initial" class="ft_md"><div data-id="0,0,3,0:main" style="align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-weight: 400; margin-bottom: auto; margin-top: auto; text-align: left; white-space: initial" class="ft_md">Language:</div></div>
+<div data-id="0,0,4:main" data-spacing="margin-left:2px" style="align-items: flex-start; align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start; margin-bottom: 5px; white-space: initial" class="ft_md"><div data-id="0,0,4,0:main" style="align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-weight: 400; margin-bottom: auto; margin-top: auto; text-align: left; white-space: initial" class="ft_md">Zip:</div>
+<div data-id="0,0,4,1:main" style="align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-weight: 400; margin-bottom: auto; margin-left: 2px; margin-top: auto; text-align: left; white-space: initial" class="ft_md">amitu</div></div></div></div></div>
 
 
     <script>
