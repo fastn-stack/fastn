@@ -482,7 +482,7 @@ checksum = "6dcb8d6a105c26489c20701dc1a9d51b301106fae58d352d1d4e6f9ecafe45f9"
 dependencies = [
  "colored",
  "diffy",
- "ftd",
+ "ftd 0.1.17 (registry+https://github.com/rust-lang/crates.io-index)",
  "rand",
  "walkdir",
 ]
@@ -595,7 +595,7 @@ dependencies = [
  "diffy",
  "fbt-lib",
  "fluent",
- "ftd",
+ "ftd 0.1.17 (git+https://github.com/FifthTry/ftd?rev=f4ed8aad7bff523ebf97cb6ce64ebed8cb710888)",
  "futures",
  "home",
  "ignore",
@@ -633,6 +633,25 @@ dependencies = [
  "css-color-parser",
  "failure",
  "format_num",
+ "lazy_static 1.4.0",
+ "regex",
+ "serde",
+ "serde_json",
+ "slug",
+ "syntect",
+ "thiserror",
+]
+
+[[package]]
+name = "ftd"
+version = "0.1.17"
+source = "git+https://github.com/FifthTry/ftd?rev=f4ed8aad7bff523ebf97cb6ce64ebed8cb710888#f4ed8aad7bff523ebf97cb6ce64ebed8cb710888"
+dependencies = [
+ "comrak",
+ "css-color-parser",
+ "failure",
+ "format_num",
+ "include_dir",
  "lazy_static 1.4.0",
  "regex",
  "serde",
@@ -937,6 +956,25 @@ dependencies = [
  "thread_local",
  "walkdir",
  "winapi-util",
+]
+
+[[package]]
+name = "include_dir"
+version = "0.7.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "482a2e29200b7eed25d7fdbd14423326760b7f6658d21a4cf12d55a50713c69f"
+dependencies = [
+ "include_dir_macros",
+]
+
+[[package]]
+name = "include_dir_macros"
+version = "0.7.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5e074c19deab2501407c91ba1860fa3d6820bfde307db6d8cb851b55a10be89b"
+dependencies = [
+ "proc-macro2",
+ "quote",
 ]
 
 [[package]]
