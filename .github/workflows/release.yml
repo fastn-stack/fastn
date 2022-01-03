@@ -5,7 +5,7 @@ on:
     branches: [ main ]
     paths:
      - '**.rs'
-
+  workflow_dispatch:
 jobs:
   release:
     name: release ${{ matrix.target }}
