@@ -64,7 +64,10 @@ I've helped open source many projects at Facebook and every one needed a website
 They all had very similar constraints: the documentation should be written in
 markdown and be deployed via GitHub pages. I’m so glad ftd now exists
 so that I don’t have to spend a week each time spinning up a new one.
--- ft.h1: fpm: FTD Package Manager
+
+-- ft.content:
+
+--- ft.h1: fpm: FTD Package Manager
 
 [What is FPM?](/fpm/about/)
 
@@ -75,5 +78,5 @@ Github: [github.com/FifthTry/fpm](https://github.com/FifthTry/fpm)
 Discord: [#fpm on FifthTry](https://discord.gg/a7eBUeutWD)
 
 
--- ft.youtube:
+--- ft.youtube:
 id: rny1EGkqw_M
