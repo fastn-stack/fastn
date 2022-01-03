@@ -1,6 +1,6 @@
 -- import: fpm
 
--- fpm.package: fifthtry.github.io/fpm.dev/
+-- fpm.package: fpm-dev.vercel.app
 zip: github.com/fifthtry/fpm.dev/archive/refs/heads/main.zip
 language: English
 translation: fifthtry.github.io/fpm.dev-hi
