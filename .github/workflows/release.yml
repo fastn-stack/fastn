@@ -7,7 +7,7 @@ on:
      - '**.rs'
   workflow_dispatch:
 jobs:
-  release:
+  release-ubuntu:
     name: release ${{ matrix.target }}
     runs-on: ubuntu-latest
     steps:
@@ -22,5 +22,22 @@ jobs:
           args: --release
       - uses: actions/upload-artifact@master
         with:
-          name: SSR_BUILD
+          name: linux_x64_ubuntu_latest
           path: target/release/fpm
+  release-windows:
+    name: release ${{ matrix.target }}
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@main
+      - uses: actions-rs/toolchain@v1
+      - name: Run Build
+        id: build-windows
+        continue-on-error: true
+        uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --release
+      - uses: actions/upload-artifact@master
+        with:
+          name: windows_x64_latest
+          path: target/release/fpm.exe
