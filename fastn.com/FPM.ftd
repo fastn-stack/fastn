@@ -3,7 +3,7 @@
 -- fpm.package: fifthtry.github.io/fpm.dev/
 zip: github.com/fifthtry/fpm.dev/archive/refs/heads/main.zip
 language: English
-translation: fifthtry.github.io/fpm-dev-hi
+translation: fifthtry.github.io/fpm.dev-hi
 
 -- fpm.dependency: fifthtry.github.io/Jupiter-theme
 
