@@ -1,9 +1,4 @@
-
-
-
--- ft.doc-page:
-toc: $ft.toc
-
+-- ft.page:
 
 
 -- ft.h0: `$processor$: toc`

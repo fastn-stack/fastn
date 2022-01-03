@@ -1,15 +1,4 @@
--- import: fifthtry.github.io/Jupiter-theme as ft
-
--- ft.site-name: FPM-DEV
--- ft.site-icon: static/images/logo.svg
--- ft.github: https://github.com/fifthtry/fpm-dev-en/
--- ft.site-url: /ftd-dev-en
-
--- ft.header-toc:
-$processor$: toc
-
-- about/
-  Docs
+-- import: fifthtry.github.io/Flash-theme as ft
 
 -- ft.toc:
 $processor$: toc

@@ -1,13 +1,10 @@
-
-
--- ft.doc-page:
-toc: $ft.toc
+-- ft.page:
 
 
 -- ft.h0: Roadmap
 
 
--- ft.h1: FPM as kick-ass SSG tool
+-- ft.h1: FPM as kickass SSG tool
 
 - package cargo binary for different os/arch
 - docs:

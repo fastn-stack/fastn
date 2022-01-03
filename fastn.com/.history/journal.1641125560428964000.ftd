@@ -1,6 +1,7 @@
 
--- ft.doc-page:
-toc: $ft.toc
+
+
+-- ft.page:
 
 
 -- ft.h0: FPM Journal
@@ -59,7 +60,7 @@ WhatsApp etc, E2E, End To End-Encryption systems rely on some shared identity, e
 a phone number of email address as a convenience, and then they generate some keys
 behind the scenes, you can see the fingerprint of your keys in whatsapp for
 example, and verify each others identity (phone number appears to be the identity
-from the layman's perspective, but its backed by strong cryptographic foundations).
+from the laymen's perspective, but its backed by strong cryptographic foundations).
 
 So let me repeat, when you are sending a message on WhatsApp, you think you are
 sending it to a phone number, but WhatsApp has internally exchanged some encryption
@@ -74,7 +75,7 @@ only the corresponding private key can de-crypt the message.
 
 So in this sense, a key pair can be your identity. But key pairs are just numbers,
 and unlike phone numbers, they are much bigger. So exchanging these numbers is not
-fun, it's opaque, no one can remember them, nor can see what they are referring to
+fun, it's opaque, no one can remember them, nor can see what they are referrring to
 if we see a huge number representing a public key in someone's `FPM.ftd` file as a
 dependency.
 
@@ -146,7 +147,7 @@ she has done so far.
 
 
 -- ft.image: You can see the translation banner and available languages
-src: /images/translation/english-with-dropdown.jpg
+src: https://i.imgur.com/ohOvHma.jpg
 
 Consider [this page for example](https://arpita-jaiswal.github.io/vivekanand/), it
 is originally in English and is being translated in two other languages, Hindi and
@@ -302,7 +303,7 @@ everyone or that they have strong latency guarantees (the gap between an update
 happening on any aggregator in world to this aggregator telling you it has
 happened).
 
-We will have to employ many techniques from distributed hash table literature and
+We will have to employ many techniques from distribuetd hash table literature and
 prior work. Maybe even use [IPFS etc](https://github.com/rs-ipfs/rust-ipfs) and
 not re-invent things.
 
@@ -324,7 +325,7 @@ binary maybe), or on your Heroku/DigitalOcean instance if you have devops
 bandwidth, or you can buy it from a SAAS provider.
 
 If you are using a cloud `fpm-reader` (meaning not running on your machine), your
-`fpm daemon` will connect with `fpm-reader` and get the updates via a web-socket/
+`fpm deamon` will connect with `fpm-reader` and get the updates via a web-socket/
 push mechanism.
 
 Update: Turns out [nostr](https://github.com/fiatjaf/nostr) describes the protocol
@@ -442,7 +443,7 @@ UI, maybe tooltips etc. We have to show timestamp of when the original was last
 modified and when the translation was last modified also in this table.
 
 
--- ft.h2: A Note On Upto-Date-ness Of These Pages
+-- ft.h2: A Not On Upto-Date-ness Of These Pages
 
 The `Translation Status Page` is built as part of original language `fpm package`
 and `Language Detail Page` is built as part of each translation. But they
@@ -463,7 +464,7 @@ go to Translation Status Page, we show the last built version but we then downlo
 
 I am not too happy with the frontend approach, every single visitor will
 re-download everything, think about the global warming people, FPM is trying to be
-network resilient, if we create multi-planetary civilisations, HTTP based lets just
+network resilient, if we create multi plantery civilisations, HTTP based lets just
 fetch what we want when we want won't work, and such federated, change when needed,
 show stale but refresh etc approaches would be needed.
 
@@ -570,7 +571,7 @@ are in advanced stage, and vice versa? Can these two people really talk to each
 other meaningfully? Isn't there is a need for a translation there?
 
 And consider this also: say I am describing the strict specification of what FPM
-does, shouldn't there be a document like this? Which assumes you know everything,
+does, shouldnt there be a document like this? Which assumes you know everything,
 and you are only interested in exact description of precise behaviour of what FPM
 does? Of course that document must exist. But is that just a document? It must be
 a package right? And then we have the "end user documentation" of FPM. Isn't that
@@ -647,7 +648,7 @@ generated HTML files, and ensure they do not change.
 
 I find HTML a bit noisy, reviewing change in generated HTML is not fun. Further
 there is a question of coverage - not all features of `fpm` could have been used
-in the `.ftd` file, maybe it is bare-bones, and when someone uses realistic `.ftd`
+in the `.ftd` file, maybe it is barebones, and when someone uses realistic `.ftd`
 files, maybe things would not go as expected.
 
 
@@ -953,7 +954,7 @@ But for FPM, centralisation is especially a problem: other package managers only
 distribute packages to be downloaded once at build time, when you are doing a
 deploy, you will download the `.zip` file from package repository, and won't
 download again till another dependency is added or version changes. No end user
-goes to `crates.io`/`npmjs.com` etc.
+goes to `crates.io`/`nmpjs.com` etc.
 
 FPM packages on the other hand are actual websites. So FPM repository is used by
 all end users, and all your site traffic goes to your `fpm-repo`. One single
@@ -1062,7 +1063,7 @@ Other idea that came to me after implementing first solution: we create a folder
 when browsing remotely, all URLs that we put in `ftd` files have `/<repo-name>/`
 prefix.
 
-Not sure the pros and cons of the two. Former is implemented already so that's one
+Not sure the pros and cons of the two. Former is implemented already so thats one
 pro. Later somehow feels cleaner to me. Not yet sure.
 
 If you are using GitHub Pages, build your files with `fpm build --base=/` locally
@@ -1374,7 +1375,7 @@ If the documents know about their role, eg the title of a document was "section
 1: introduction", it will read wrong if it's included as a chapter. Also chapter
 numbering must not be part of the document.
 
-One thought for this is to define variables like `fpm.role` and `fpm.role-number`,
+One thought for this is to define variables like `fpm.role` and `fpm.role-numner`,
 and asking documents to use these variables instead of making assumptions about
 their roles etc.
 
@@ -1728,8 +1729,8 @@ documented. There must be abstraction boundaries. Everyone must understand what
 this framework is doing etc etc. People look at framework and go say I will also
 make one. But I will do all the work later. If you wonder where tech debt comes
 from, this is where it comes from. You went to a Mercedes showroom and drove off
-with a shiny car, and told them you will pay for it later. Live with your
-"bailgadi" instead.
+with a shiny car, and told them you will pay for it later. Live with your ballgadi
+instead.
 
 
 -- ft.image:

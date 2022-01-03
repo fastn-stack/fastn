@@ -1,79 +1,85 @@
 -- import: fpm
 
 -- fpm.snapshot: FPM.ftd
-timestamp: 1640869850167008000
+timestamp: 1641125560428964000
 
 -- fpm.snapshot: FPM/prelude.ftd
 timestamp: 1640859547412923000
 
 -- fpm.snapshot: about.ftd
-timestamp: 1640861637238465000
+timestamp: 1641125560428964000
 
 -- fpm.snapshot: build.ftd
-timestamp: 1640861637238465000
+timestamp: 1641125560428964000
 
 -- fpm.snapshot: config.ftd
-timestamp: 1640864713892656000
+timestamp: 1641125560428964000
 
 -- fpm.snapshot: diff.ftd
-timestamp: 1640861637238465000
+timestamp: 1641125560428964000
 
 -- fpm.snapshot: fpm-ftd-file.ftd
-timestamp: 1640861637238465000
+timestamp: 1641125560428964000
 
 -- fpm.snapshot: fpm-vars.ftd
-timestamp: 1640861637238465000
+timestamp: 1641125560428964000
 
 -- fpm.snapshot: fs.ftd
-timestamp: 1640861637238465000
+timestamp: 1641125560428964000
 
 -- fpm.snapshot: ftd-host.ftd
-timestamp: 1640861637238465000
+timestamp: 1641125560428964000
 
 -- fpm.snapshot: http.ftd
-timestamp: 1640861637238465000
+timestamp: 1641125560428964000
+
+-- fpm.snapshot: images/translation/english-with-dropdown.jpg
+timestamp: 1641129039370457000
 
 -- fpm.snapshot: index.ftd
-timestamp: 1640861705202408000
+timestamp: 1641125560428964000
 
 -- fpm.snapshot: install.ftd
-timestamp: 1640861637238465000
+timestamp: 1641125560428964000
 
 -- fpm.snapshot: journal.ftd
-timestamp: 1640861705202408000
+timestamp: 1641129039370457000
 
 -- fpm.snapshot: known-issues.ftd
-timestamp: 1640861637238465000
+timestamp: 1641125560428964000
 
 -- fpm.snapshot: lib.ftd
-timestamp: 1640859547412923000
-
--- fpm.snapshot: not.ftd
-timestamp: 1640861637238465000
+timestamp: 1641125560428964000
 
 -- fpm.snapshot: package-query.ftd
-timestamp: 1640861637238465000
+timestamp: 1641129039370457000
 
 -- fpm.snapshot: processors.ftd
-timestamp: 1640861637238465000
+timestamp: 1641125560428964000
 
 -- fpm.snapshot: roadmap.ftd
-timestamp: 1640861637238465000
+timestamp: 1641129039370457000
+
+-- fpm.snapshot: scripts/build.sh
+timestamp: 1641125560428964000
+
+-- fpm.snapshot: scripts/sync.sh
+timestamp: 1641125560428964000
 
 -- fpm.snapshot: status.ftd
-timestamp: 1640859547412923000
+timestamp: 1641125560428964000
 
 -- fpm.snapshot: sync.ftd
-timestamp: 1640861637238465000
+timestamp: 1641125560428964000
 
 -- fpm.snapshot: toc.ftd
-timestamp: 1640861637238465000
+timestamp: 1641125560428964000
 
 -- fpm.snapshot: update.ftd
-timestamp: 1640861637238465000
+timestamp: 1641125560428964000
 
 -- fpm.snapshot: usage.ftd
-timestamp: 1640859547412923000
+timestamp: 1641125560428964000
 
 -- fpm.snapshot: why-not.ftd
-timestamp: 1640861637238465000
+timestamp: 1641125560428964000

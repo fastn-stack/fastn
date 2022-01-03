@@ -1,7 +1,4 @@
-
-
--- ft.doc-page:
-toc: $ft.toc
+-- ft.page:
 
 
 -- ft.h0: `$processor$: package-query`
@@ -48,7 +45,7 @@ Say you have inserted some data:
 -- ft.code:
 lang: sql
 
-INSERT INTO user (name, department) VALUES ("amit", "engineering");
+INSERT INTO user (name, department) VALUES ("amit", "engg");
 INSERT INTO user (name, department) VALUES ("jack", "ops");
 
 
