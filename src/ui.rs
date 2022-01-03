@@ -1265,6 +1265,7 @@ pub struct Common {
     pub move_right: Option<i64>,
     pub position: Position,
     pub inner: bool,
+    pub z_index: Option<i64>,
     // TODO: background-image, un-cropped, tiled, tiled{X, Y}
     // TODO: border-style: solid, dashed, dotted
     // TODO: border-{shadow, glow}

@@ -252,6 +252,7 @@ pub fn common_from_properties(
             doc.name,
         )?,
         inner: ftd::p2::utils::bool_with_default("inner", inner_default, properties, doc.name, 0)?,
+        z_index: ftd::p2::utils::int_optional("z-index", properties, doc.name, 0)?,
     })
 }
 
@@ -499,6 +500,10 @@ fn common_arguments() -> Vec<(String, ftd::p2::Kind)> {
         (
             "inner".to_string(),
             ftd::p2::Kind::boolean().into_optional(),
+        ),
+        (
+            "z-index".to_string(),
+            ftd::p2::Kind::integer().into_optional(),
         ),
     ]
 }
