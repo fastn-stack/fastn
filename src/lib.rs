@@ -6,6 +6,7 @@ extern crate lazy_static;
 #[macro_use]
 pub(crate) mod utils;
 
+// Temp comment
 mod commands;
 mod config;
 mod dependency;
