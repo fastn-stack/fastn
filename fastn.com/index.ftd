@@ -15,7 +15,7 @@ color: white
 
 -- ft.banner: ftd has some dynamic features, which an be used when using fpm-repo.
 
--- ft.feature-row:
+-- ft.feature-list:
 
 --- ft.feature: Powered by Markdown
 image: static/images/undraw_typewriter.svg
@@ -36,7 +36,7 @@ image: static/images/undraw_version_control.svg
 Support users on all versions of your project. Document versioning
 helps you keep documentation in sync with project releases.
 
--- ft.testimony-row:
+-- ft.testimony-list:
 
 --- ft.testimony: Christopher "vjeux" Chedeau
 image: static/images/christopher-chedeau.a975949.200.jpg
