@@ -1,4 +1,9 @@
--- ft.page:
+
+
+
+-- ft.doc-page:
+toc: $ft.toc
+
 
 
 -- ft.h0: `fpm status`
