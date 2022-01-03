@@ -23,7 +23,10 @@ jobs:
       - uses: actions/upload-artifact@master
         with:
           name: linux_x64_ubuntu_latest
-          path: target/release/fpm
+          path: |
+            target/release/fpm
+            README.md
+            LICENSE
   release-windows:
     name: Build for Windows
     runs-on: windows-latest
@@ -40,7 +43,10 @@ jobs:
       - uses: actions/upload-artifact@master
         with:
           name: windows_x64_latest
-          path: target/release/fpm.exe
+          path: |
+            target/release/fpm.exe
+            README.md
+            LICENSE
   release-macos:
     name: Build for MacOS
     runs-on: macos-latest
@@ -57,4 +63,7 @@ jobs:
       - uses: actions/upload-artifact@master
         with:
           name: macos_x64_latest
-          path: target/release/fpm
+          path: |
+            target/release/fpm
+            README.md
+            LICENSE
