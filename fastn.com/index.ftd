@@ -20,7 +20,7 @@ color: white
 --- ft.feature: Powered by Markdown
 image: static/images/undraw_typewriter.svg
 
-Save time and focus on your project's documentation.
+Save time and focus on your project's documentation. 
 Simply write docs and blog posts with Markdown/MDX and Docusaurus
 will publish a set of static HTML files ready to serve. You can
 even embed JSX components into your Markdown thanks to MDX.
