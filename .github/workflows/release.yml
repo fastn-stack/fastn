@@ -22,6 +22,7 @@ jobs:
         continue-on-error: true
         uses: actions-rs/cargo@v1
         with:
+          use-cross: true
           command: build
           args: --release --target=x86_64-unknown-linux-musl
       - uses: actions/upload-artifact@master
