@@ -10,28 +10,20 @@ jobs:
   release-ubuntu:
     name: Build for Linux
     runs-on: ubuntu-latest
+    env:
+      CARGO_TERM_COLOR: always
+      BUILD_TARGET: x86_64-unknown-linux-musl
+      BINARY_NAME: fpm
     steps:
       - uses: actions/checkout@main
-      - uses: actions-rs/toolchain@v1
+      - name: Build-musl
+        uses: gmiam/rust-musl-action@master
         with:
-          toolchain: stable
-          target: x86_64-unknown-linux-musl
-          override: true
-      - name: Run Build
-        id: build-linux
-        continue-on-error: true
-        uses: actions-rs/cargo@v1
+          args: cargo build --target $BUILD_TARGET --release
+      - uses: actions/upload-artifact@v2
         with:
-          use-cross: true
-          command: build
-          args: --release --target=x86_64-unknown-linux-musl
-      - uses: actions/upload-artifact@master
-        with:
-          name: linux_x64_ubuntu_latest
-          path: |
-            target/release/fpm
-            README.md
-            LICENSE
+          name: linux_musl_x86_64
+          path: target/x86_64-unknown-linux-musl/release/${{ env.BINARY_NAME }}*
   release-windows:
     name: Build for Windows
     runs-on: windows-latest
