@@ -1287,13 +1287,13 @@ fn non_static_container_align(l: &ftd::Position, inner: bool) -> Vec<(String, St
                 vec![
                     ("right".to_string(), "0".to_string()),
                     ("top".to_string(), "50%".to_string()),
-                    ("transform".to_string(), "translate(-50%)".to_string()),
+                    ("transform".to_string(), "translateY(-50%)".to_string()),
                 ]
             } else {
                 vec![
                     ("left".to_string(), "100%".to_string()),
                     ("top".to_string(), "50%".to_string()),
-                    ("transform".to_string(), "translate(-50%)".to_string()),
+                    ("transform".to_string(), "translateY(-50%)".to_string()),
                 ]
             }
         }
