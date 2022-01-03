@@ -262,6 +262,7 @@ impl ftd::p2::Library for Library {
                 indoc::indoc! {"
                         {fpm_base}
                         
+                        -- string device: mobile
                         -- string document-id: {document_id}
                         -- optional string diff:
                         -- optional string last-marked-on:
