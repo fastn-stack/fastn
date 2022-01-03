@@ -1,7 +1,8 @@
 \-- ft-core.concept:
 
--- ft.page:
-    
+-- ft.doc-page:
+toc: $ft.toc
+
 -- ft.h0: `record`
 
 `ftd` supports `record` types. These are also called `struct` in some languages.

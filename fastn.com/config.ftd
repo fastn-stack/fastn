@@ -1,4 +1,23 @@
--- import: fifthtry.github.io/Flash-theme as ft
+-- import: fifthtry.github.io/Jupiter-theme as ft
+
+-- ft.site-name: FTD-DEV
+-- ft.site-icon: static/images/logo.svg
+-- ft.github: https://github.com/fifthtry/ftd-dev-en/
+-- ft.site-url: /ftd-dev-en
+
+-- ft.header-toc:
+$processor$: toc
+
+- common/
+  Docs
+- fifthtry/ftd/roadmap
+  Roadmap & RFCs
+- fifthtry/ftd/journal
+  Journal
+- https://try.ftd.dev
+  Try FTD Online
+- https://github.com/fifthtry/ftd/
+  Github
 
 -- ft.toc:
 $processor$: toc

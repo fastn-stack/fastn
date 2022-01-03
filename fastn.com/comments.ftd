@@ -1,8 +1,6 @@
 
-
-
--- ft.page:
-
+-- ft.doc-page:
+toc: $ft.toc
 
 -- ft.h0: Comments In `ftd` Files
 

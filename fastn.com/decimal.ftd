@@ -1,5 +1,6 @@
--- ft.page:
-    
+-- ft.doc-page:
+toc: $ft.toc
+
 -- ft.h0: Decimal
 
 Renders a decimal value.

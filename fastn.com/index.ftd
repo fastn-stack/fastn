@@ -1,7 +1,71 @@
 -- ft.page:
 
+-- ft.hero: Build optimized websites quickly, focus on your content
+image: static/images/github-light.svg
 
--- ft.h1: **ftd**
+--- ft.action-button: Get Started
+url: /install/
+background-color: #25c19f
+color: white
+
+--- ft.action-button: Playground
+url: https://play.fifthtry.com/
+background-color: #54c7ec
+color: white
+
+-- ft.banner: ftd has some dynamic features, which an be used when using fpm-repo.
+
+-- ft.feature-list:
+
+--- ft.feature: Powered by Markdown
+image: static/images/undraw_typewriter.svg
+
+Save time and focus on your project's documentation.
+Simply write docs and blog posts with Markdown/MDX and Docusaurus
+will publish a set of static HTML files ready to serve. You can
+even embed JSX components into your Markdown thanks to MDX.
+
+--- ft.feature: Ready for Translations
+image: static/images/undraw_around_the_world.svg
+
+Localization comes pre-configured. Use Crowdin to translate your docs into over 70 languages.
+
+--- ft.feature: Document Versioning
+image: static/images/undraw_version_control.svg
+
+Support users on all versions of your project. Document versioning
+helps you keep documentation in sync with project releases.
+
+-- ft.testimony-list:
+
+--- ft.testimony: Christopher "vjeux" Chedeau
+image: static/images/christopher-chedeau.a975949.200.jpg
+designation: Lead Prettier Developer
+
+I've helped open source many projects at Facebook and every one needed a website.
+They all had very similar constraints: the documentation should be written in
+markdown and be deployed via GitHub pages. I’m so glad that ftd now exists
+so that I don’t have to spend a week each time spinning up a new one.
+
+--- ft.testimony: Christopher "vjeux" Chedeau
+image: static/images/christopher-chedeau.a975949.200.jpg
+designation: Lead Prettier Developer
+
+I've helped open source many projects at Facebook and every one needed a website.
+They all had very similar constraints: the documentation should be written in
+markdown and be deployed via GitHub pages. I’m so glad that ftd now exists
+so that I don’t have to spend a week each time spinning up a new one.
+
+--- ft.testimony: Christopher "vjeux" Chedeau
+image: static/images/christopher-chedeau.a975949.200.jpg
+designation: Lead Prettier Developer
+
+I've helped open source many projects at Facebook and every one needed a website.
+They all had very similar constraints: the documentation should be written in
+markdown and be deployed via GitHub pages. I’m so glad ftd now exists
+so that I don’t have to spend a week each time spinning up a new one.
+
+--- ft.h1: **ftd**
 
 > A Markup Language For Data Exchange And User Interface Design. 
 
@@ -23,29 +87,19 @@ Checkout the [Roadmap & RFCs](/fifthtry/ftd/roadmap/) and
 [Changelog](/fifthtry/ftd/changelog/).
 
 
--- ft.youtube:
+--- ft.youtube:
 id: ZoCGwt_nLbk
 
 
--- ft.youtube:
+--- ft.youtube:
 id: h0uLW9hucLw
 
 
--- ft.youtube:
+--- ft.youtube:
 id: n341w3GwdrQ
 
 
--- ft.youtube:
+--- ft.youtube:
 id: qyP8bBBAu98
 
-\-- $ft-core.header:
-$processor$: ft-toc
 
-- fifthtry/ftd/roadmap
-  Roadmap & RFCs
-- fifthtry/ftd/journal
-  Journal
-- https://try.ftd.dev
-  Try FTD Online
-- https://github.com/fifthtry/ftd/
-  Github

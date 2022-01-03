@@ -1,4 +1,5 @@
--- ft.page:
+-- ft.doc-page:
+toc: $ft.toc
     
 -- ft.h0: `ftd::p1`: A JSON/YML Replacement
 
