@@ -1,7 +1,7 @@
 -- import: fpm
 
--- fpm.package: fifthtry.github.io/ftd-dev-en/
-zip: github.com/fifthtry/ftd-dev-en/archive/refs/heads/main.zip
+-- fpm.package: ftd-dev.vercel.app
+zip: github.com/fifthtry/ftd.dev/archive/refs/heads/main.zip
 language: en
 
 -- fpm.dependency: fifthtry.github.io/Jupiter-theme
