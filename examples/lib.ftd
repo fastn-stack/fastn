@@ -46,7 +46,7 @@ caption name:
 string contact: 1001
 string fax:
 integer no-of-employees: 50
-person list employees: &people
+person list employees: $people
 
 -- lead.individual amitu-data: Amit Upadhyay
 
