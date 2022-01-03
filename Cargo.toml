@@ -32,6 +32,7 @@ slug = { version = "0.1.4" }
 futures = { version = "0.3", optional = true }
 async-recursion = { version = "0.3.2", optional = true }
 async-trait = { version = "0.1.51", optional = true }
+include_dir = "0.7.2"
 
 [dev-dependencies]
 diffy = "0.2.0"

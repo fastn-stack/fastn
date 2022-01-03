@@ -1,0 +1,178 @@
+%YAML 1.2
+---
+# http://www.sublimetext.com/docs/3/syntax.html
+name: Elm
+file_extensions:
+  - elm
+scope: source.elm
+contexts:
+  main:
+    - match: \(\)
+      scope: constant.language.unit.elm
+    - match: ^\b((effect|port)\s+)?(module)\s+
+      captures:
+        1: keyword.other.elm
+        3: keyword.other.elm
+      push:
+        - meta_scope: meta.declaration.module.elm
+        - match: $|;
+          captures:
+            1: keyword.other.elm
+          pop: true
+        - include: module_name
+        - match: '(where)\s*\{'
+          captures:
+            1: keyword.other.elm
+          push:
+            - match: '\}'
+              pop: true
+            - include: type_signature
+        - match: (exposing)
+          scope: keyword.other.elm
+        - include: module_exports
+        - match: (where)
+          scope: keyword.other.elm
+        - match: "[a-z]+"
+          scope: invalid
+    - match: ^\b(import)\s+
+      captures:
+        1: keyword.other.elm
+      push:
+        - meta_scope: meta.import.elm
+        - match: ($|;)
+          pop: true
+        - match: (as|exposing)
+          scope: keyword.import.elm
+        - include: module_name
+        - include: module_exports
+    - match: '(\[)(glsl)(\|)'
+      captures:
+        1: keyword.other.elm
+        2: support.function.prelude.elm
+        3: keyword.other.elm
+      push:
+        - meta_scope: entity.glsl.elm
+        - match: '\|\]'
+          scope: keyword.other.elm
+          pop: true
+        - include: scope:source.glsl
+    - match: type( alias)? (\w+)
+      scope: keyword.other.elm
+      captures:
+        2: entity.name.type.elm
+    - match: \b(case|of|let|in|as)\s+
+      scope: keyword.other.elm
+    - match: \b(if|then|else)\s+
+      scope: keyword.control.elm
+    - match: '\b([0-9]+\.[0-9]+([eE][+-]?[0-9]+)?|[0-9]+[eE][+-]?[0-9]+)\b'
+      comment: Floats are always decimal
+      scope: constant.numeric.float.elm
+    - match: '\b([0-9]+)\b'
+      scope: constant.numeric.elm
+    - match: '"""'
+      captures:
+        0: punctuation.definition.string.begin.elm
+      push:
+        - meta_scope: string.quoted.triple.elm
+        - match: '"""'
+          captures:
+            0: punctuation.definition.string.end.elm
+          pop: true
+        - include: escapes
+    - match: '"'
+      captures:
+        0: punctuation.definition.string.begin.elm
+      push:
+        - meta_scope: string.quoted.double.elm
+        - match: '"'
+          captures:
+            0: punctuation.definition.string.end.elm
+          pop: true
+        - include: escapes
+    - match: "'"
+      captures:
+        0: punctuation.definition.string.begin.elm
+      push:
+        - meta_scope: string.quoted.single.elm
+        - match: "'"
+          captures:
+            0: punctuation.definition.string.end.elm
+          pop: true
+        - include: escapes
+    - match: '^(port\s+)?([a-z][a-zA-Z0-9_]*)\s*(:)([:]+)?'
+      captures:
+        1: keyword.other.port.elm
+        2: entity.name.function.elm hide.from.goto_symbol
+        3: keyword.other.colon.elm
+        4: invalid
+      push:
+        - meta_scope: meta.function.type-declaration.elm
+        - match: $\n?
+          pop: true
+        - include: type_signature
+    - match: '\b[A-Z]\w*\b'
+      scope: constant.other.elm
+    - include: comments
+    - match: '^[a-z][A-Za-z0-9_]*\s+'
+      scope: entity.name.function.elm
+    - include: operator_fn
+    - match: '[+\-/\\*=.<>:&|^?%!]+'
+      scope: keyword.operator.elm
+    - match: '[\[\]\{\},]'
+      scope: support.function.delimiter.elm
+    - match: '[\(\)]'
+      scope: keyword.other.parenthesis.elm
+  block_comment:
+    - match: '\{-'
+      captures:
+        0: punctuation.definition.comment.elm
+      push:
+        - meta_scope: comment.block.elm
+        - include: block_comment
+        - match: '-\}'
+          captures:
+            0: punctuation.definition.comment.elm
+          pop: true
+  comments:
+    - match: (--).*$\n?
+      scope: comment.line.double-dash.elm
+      captures:
+        1: punctuation.definition.comment.elm
+    - include: block_comment
+  operator_fn:
+    - match: '\([+\-/\\*=.<>:&|^?%!]+\)'
+      scope: entity.name.function.infix.elm
+  module_exports:
+    - match: \(
+      push:
+        - meta_scope: meta.declaration.exports.elm
+        - match: \)
+          pop: true
+        - match: '\b[a-z][a-zA-Z_0-9]*'
+          scope: entity.name.function.elm
+        - match: '\b[A-Z][A-Za-z_0-9]*'
+          scope: storage.type.elm
+        - match: ","
+          scope: punctuation.separator.comma.elm
+        - include: operator_fn
+        - match: \(.*?\)
+          comment: So named because I don't know what to call this.
+          scope: meta.other.unknown.elm
+  module_name:
+    - match: "[A-Z][A-Za-z._0-9]*"
+      scope: support.other.module.elm
+  type_signature:
+    - match: "->"
+      scope: keyword.other.arrow.elm
+    - match: '\b[a-z][a-zA-Z0-9_]*\b'
+      scope: variable.other.generic-type.elm
+    - match: '\b[A-Z][a-zA-Z0-9_]*\b'
+      scope: storage.type.elm
+    - match: \(\)
+      scope: support.constant.unit.elm
+    - include: comments
+  escapes:
+    - match: '\\[nrt\\\"'']'
+      scope: constant.character.escape.elm
+    - match: '\\u\{[0-9a-fA-F]{4,6}\}'
+      scope: constant.character.escape.elm

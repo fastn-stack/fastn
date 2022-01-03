@@ -1,0 +1,27 @@
+%YAML 1.2
+---
+name: FifthTry Document (.ftd)
+file_extensions:
+  - ftd
+scope: source.ftd
+contexts:
+  main:
+    - match: ^--\s+
+      push: section_line
+      scope: comment
+    - match: ^---\s+
+      push: section_line
+      scope: comment
+    - match: "^(.*?)(:)( *)(.*$)"
+      captures:
+        1: storage.type.function
+        2: comment
+        4: constant.character
+  section_line:
+    - meta_scope: comment
+    - match: $
+      pop: true
+    - match: "(.*?)(:)( *)(.*)$"
+      captures:
+        1: entity.name.class
+        4: string

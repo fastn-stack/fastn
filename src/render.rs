@@ -1,9 +1,14 @@
+static SYNTAX_DIR: include_dir::Dir<'_> = include_dir::include_dir!("syntax");
+
 lazy_static::lazy_static! {
     pub static ref SS: syntect::parsing::SyntaxSet = {
         let mut builder = syntect::parsing::SyntaxSet::load_defaults_newlines().into_builder();
-        let path = std::path::Path::new("syntax");
-        if path.exists() {
-            builder.add_from_folder(path, true).unwrap();
+        for f in SYNTAX_DIR.files() {
+            builder.add(syntect::parsing::syntax_definition::SyntaxDefinition::load_from_str(
+                f.contents_utf8().unwrap(),
+                true,
+                f.path().file_stem().and_then(|x| x.to_str())
+            ).unwrap());
         }
         builder.build()
     };
