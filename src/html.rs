@@ -940,6 +940,9 @@ impl ftd::Common {
         if self.link.is_some() {
             d.insert(s("cursor"), s("pointer"));
         }
+        if let Some(p) = &self.z_index {
+            d.insert(s("z-index"), format!("{}px", p));
+        }
         if self.shadow_size.is_some()
             || self.shadow_blur.is_some()
             || self.shadow_offset_x.is_some()
