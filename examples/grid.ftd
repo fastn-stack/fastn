@@ -6,6 +6,8 @@ width: fill
 
 -- ft.h0: Grid Layout
 
+-- ft.h1: Grid Using Area
+
 This grid layout contains six columns and three rows:
 
 -- ftd.grid:
@@ -14,6 +16,7 @@ gap: 10
 background-color: #2196F3
 padding: 10
 width: fill
+margin-bottom: 40
 
 --- ftd.text: Header
 grid-area: header
@@ -46,6 +49,68 @@ padding-vertical: 20
 
 --- ftd.text: Footer
 grid-area: footer
+background-color: rgba(255, 255, 255, 0.8)
+text-align: center
+size: 30
+padding-vertical: 20
+
+-- ft.h1: Grid Using Rows and Column
+
+This grid layout contains three columns and two rows:
+
+-- ftd.grid:
+columns: 100px 50px 100px
+rows: 80px auto
+column-gap: 10
+row-gap: 15
+background-color: red
+padding: 10
+margin-bottom: 40
+
+--- ftd.text: 11
+grid-column: 1 / 2
+grid-row: 1 / 2
+background-color: rgba(255, 255, 255, 0.8)
+text-align: center
+size: 30
+padding-vertical: 20
+
+--- ftd.text: 12
+grid-column: 2 / 3
+grid-row: 1 / 2
+background-color: rgba(255, 255, 255, 0.8)
+text-align: center
+size: 30
+padding-vertical: 20
+height: fill
+
+--- ftd.text: 13
+grid-column: 3 / 4
+grid-row: 1 / 2
+background-color: rgba(255, 255, 255, 0.8)
+text-align: center
+size: 30
+padding-vertical: 20
+
+--- ftd.text: 21
+grid-column: 1 / 2
+grid-row: 2 / 3
+background-color: rgba(255, 255, 255, 0.8)
+text-align: center
+size: 30
+padding-vertical: 20
+
+--- ftd.text: 22
+grid-column: 2 / 3
+grid-row: 2 / 3
+background-color: rgba(255, 255, 255, 0.8)
+text-align: center
+size: 30
+padding-vertical: 20
+
+--- ftd.text: 23
+grid-column: 3 / 4
+grid-row: 2 / 3
 background-color: rgba(255, 255, 255, 0.8)
 text-align: center
 size: 30
