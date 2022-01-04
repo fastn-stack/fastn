@@ -451,6 +451,17 @@ window.ftd = (function () {
         ftd_utils.handle_action(id, variable, value, data);
     }
 
+    exports.set_string = function (id, variable, value) {
+        let data = ftd_data[id];
+
+        if (!data[variable]) {
+            console.log(variable, "is not in data, ignoring");
+            return;
+        }
+
+        ftd_utils.handle_action(id, variable, value, data);
+    }
+
     exports.set_multi_value = function (id, list) {
         for (const idx in list) {
             if (!list.hasOwnProperty(idx)) {
@@ -475,6 +486,16 @@ window.ftd = (function () {
             }
 
             exports.set_bool(id, variable, value)
+        }
+    }
+
+    exports.set_string_for_all = function (variable, value) {
+        for (let id in ftd_data) {
+            if (!ftd_data.hasOwnProperty(id)) {
+                continue;
+            }
+
+            exports.set_string(id, variable, value)
         }
     }
 
