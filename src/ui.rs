@@ -344,6 +344,7 @@ impl Element {
                             ..
                         },
                     container,
+                    ..
                 }) => {
                     ftd::Element::get_style_event_dependencies(&container.children, data);
                     if let Some((_, _, external_children)) = &container.external_children {
@@ -448,6 +449,7 @@ impl Element {
                             ..
                         },
                     container,
+                    ..
                 }) => {
                     ftd::Element::get_value_event_dependencies(&container.children, data);
                     if let Some((_, _, external_children)) = &container.external_children {
@@ -531,6 +533,7 @@ impl Element {
                             ..
                         },
                     container,
+                    ..
                 }) => {
                     ftd::Element::get_visible_event_dependencies(&container.children, data);
                     if let Some((_, _, external_children)) = &container.external_children {
@@ -594,6 +597,7 @@ impl Element {
                 | ftd::Element::Grid(ftd::Grid {
                     common: ftd::Common { locals, .. },
                     container,
+                    ..
                 }) => {
                     let mut all_locals = ftd::Element::get_locals(&container.children);
                     for (k, v) in locals {
@@ -1324,6 +1328,9 @@ pub struct Common {
     pub position: Position,
     pub inner: bool,
     pub z_index: Option<i64>,
+    pub grid_area: Option<String>,
+    pub grid_column: Option<String>,
+    pub grid_row: Option<String>,
     // TODO: background-image, un-cropped, tiled, tiled{X, Y}
     // TODO: border-style: solid, dashed, dotted
     // TODO: border-{shadow, glow}
@@ -1394,6 +1401,14 @@ pub struct Scene {
 
 #[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
 pub struct Grid {
+    pub areas: Option<String>,
+    pub columns: Option<String>,
+    pub rows: Option<String>,
+    pub gap: Option<i64>,
+    pub column_gap: Option<i64>,
+    pub row_gap: Option<i64>,
+    pub inline: bool,
+    pub auto_flow: Option<String>,
     pub container: Container,
     pub common: Common,
 }
