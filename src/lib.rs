@@ -39,7 +39,9 @@ pub use variable::{PropertyValue, TextSource, Value, Variable};
 pub fn js() -> &'static str {
     include_str!("../ftd.js")
 }
-
+pub fn css() -> &'static str {
+    include_str!("../ftd.css")
+}
 pub fn html() -> &'static str {
     include_str!("../ftd.html")
 }
