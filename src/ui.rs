@@ -13,6 +13,7 @@ pub enum Element {
     Boolean(Text),
     Decimal(Text),
     Scene(Scene),
+    Grid(Grid),
     Null,
 }
 
@@ -54,6 +55,11 @@ impl Element {
                     container,
                 })
                 | Self::Scene(ftd::Scene {
+                    common: ftd::Common { data_id: id, .. },
+                    container,
+                    ..
+                })
+                | Self::Grid(ftd::Grid {
                     common: ftd::Common { data_id: id, .. },
                     container,
                     ..
@@ -161,6 +167,16 @@ impl Element {
                         ..
                     },
                 ..
+            })
+            | Self::Grid(ftd::Grid {
+                common: ftd::Common { data_id: id, .. },
+                container:
+                    ftd::Container {
+                        external_children,
+                        children,
+                        ..
+                    },
+                ..
             }) => (
                 id,
                 external_children
@@ -256,6 +272,7 @@ impl Element {
                 ftd::Element::Row(ftd::Row { container, .. }) => container,
                 ftd::Element::Column(ftd::Column { container, .. }) => container,
                 ftd::Element::Scene(ftd::Scene { container, .. }) => container,
+                ftd::Element::Grid(ftd::Grid { container, .. }) => container,
                 _ => continue,
             };
             let all_locals = ftd::Element::get_external_children_dependencies(&container.children);
@@ -311,6 +328,15 @@ impl Element {
                     container,
                 })
                 | ftd::Element::Scene(ftd::Scene {
+                    common:
+                        ftd::Common {
+                            conditional_attribute,
+                            data_id: id,
+                            ..
+                        },
+                    container,
+                })
+                | ftd::Element::Grid(ftd::Grid {
                     common:
                         ftd::Common {
                             conditional_attribute,
@@ -413,6 +439,15 @@ impl Element {
                             ..
                         },
                     container,
+                })
+                | ftd::Element::Grid(ftd::Grid {
+                    common:
+                        ftd::Common {
+                            reference,
+                            data_id: id,
+                            ..
+                        },
+                    container,
                 }) => {
                     ftd::Element::get_value_event_dependencies(&container.children, data);
                     if let Some((_, _, external_children)) = &container.external_children {
@@ -487,6 +522,15 @@ impl Element {
                             ..
                         },
                     container,
+                })
+                | ftd::Element::Grid(ftd::Grid {
+                    common:
+                        ftd::Common {
+                            condition,
+                            data_id: id,
+                            ..
+                        },
+                    container,
                 }) => {
                     ftd::Element::get_visible_event_dependencies(&container.children, data);
                     if let Some((_, _, external_children)) = &container.external_children {
@@ -546,6 +590,10 @@ impl Element {
                 | ftd::Element::Scene(ftd::Scene {
                     common: ftd::Common { locals, .. },
                     container,
+                })
+                | ftd::Element::Grid(ftd::Grid {
+                    common: ftd::Common { locals, .. },
+                    container,
                 }) => {
                     let mut all_locals = ftd::Element::get_locals(&container.children);
                     for (k, v) in locals {
@@ -582,6 +630,7 @@ impl Element {
             ftd::Element::Column(e) => e.container.is_open(is_container_children_empty),
             ftd::Element::Row(e) => e.container.is_open(is_container_children_empty),
             ftd::Element::Scene(e) => e.container.is_open(is_container_children_empty),
+            ftd::Element::Grid(e) => e.container.is_open(is_container_children_empty),
             _ => (false, None),
         }
     }
@@ -591,6 +640,7 @@ impl Element {
             ftd::Element::Column(e) => e.common.data_id.clone(),
             ftd::Element::Row(e) => e.common.data_id.clone(),
             ftd::Element::Scene(e) => e.common.data_id.clone(),
+            ftd::Element::Grid(e) => e.common.data_id.clone(),
             _ => None,
         }
     }
@@ -600,6 +650,7 @@ impl Element {
             ftd::Element::Column(e) => e.common.data_id = name,
             ftd::Element::Row(e) => e.common.data_id = name,
             ftd::Element::Scene(e) => e.common.data_id = name,
+            ftd::Element::Grid(e) => e.common.data_id = name,
             _ => {}
         }
     }
@@ -617,7 +668,8 @@ impl Element {
             | ftd::Element::Integer(ftd::Text { common, .. })
             | ftd::Element::Boolean(ftd::Text { common, .. })
             | ftd::Element::Decimal(ftd::Text { common, .. })
-            | ftd::Element::Scene(ftd::Scene { common, .. }) => common.id = name,
+            | ftd::Element::Scene(ftd::Scene { common, .. })
+            | ftd::Element::Grid(ftd::Grid { common, .. }) => common.id = name,
             ftd::Element::Null => {}
         }
     }
@@ -635,7 +687,8 @@ impl Element {
             | ftd::Element::Integer(ftd::Text { common, .. })
             | ftd::Element::Boolean(ftd::Text { common, .. })
             | ftd::Element::Decimal(ftd::Text { common, .. })
-            | ftd::Element::Scene(ftd::Scene { common, .. }) => common,
+            | ftd::Element::Scene(ftd::Scene { common, .. })
+            | ftd::Element::Grid(ftd::Grid { common, .. }) => common,
             ftd::Element::Null => return,
         }
         .condition = condition;
@@ -654,7 +707,8 @@ impl Element {
             | ftd::Element::Integer(ftd::Text { common, .. })
             | ftd::Element::Boolean(ftd::Text { common, .. })
             | ftd::Element::Decimal(ftd::Text { common, .. })
-            | ftd::Element::Scene(ftd::Scene { common, .. }) => common,
+            | ftd::Element::Scene(ftd::Scene { common, .. })
+            | ftd::Element::Grid(ftd::Grid { common, .. }) => common,
             ftd::Element::Null => return,
         }
         .is_not_visible = is_not_visible;
@@ -673,7 +727,8 @@ impl Element {
             | ftd::Element::Integer(ftd::Text { common, .. })
             | ftd::Element::Boolean(ftd::Text { common, .. })
             | ftd::Element::Decimal(ftd::Text { common, .. })
-            | ftd::Element::Scene(ftd::Scene { common, .. }) => common,
+            | ftd::Element::Scene(ftd::Scene { common, .. })
+            | ftd::Element::Grid(ftd::Grid { common, .. }) => common,
             ftd::Element::Null => return,
         }
         .locals = locals;
@@ -692,7 +747,8 @@ impl Element {
             | ftd::Element::Integer(ftd::Text { common, .. })
             | ftd::Element::Boolean(ftd::Text { common, .. })
             | ftd::Element::Decimal(ftd::Text { common, .. })
-            | ftd::Element::Scene(ftd::Scene { common, .. }) => common,
+            | ftd::Element::Scene(ftd::Scene { common, .. })
+            | ftd::Element::Grid(ftd::Grid { common, .. }) => common,
             ftd::Element::Null => return,
         }
         .events
@@ -721,6 +777,7 @@ impl Element {
             ftd::Element::Boolean(e) => Some(&mut e.common),
             ftd::Element::Decimal(e) => Some(&mut e.common),
             ftd::Element::Scene(e) => Some(&mut e.common),
+            ftd::Element::Grid(e) => Some(&mut e.common),
             _ => None,
         }
     }
@@ -739,6 +796,7 @@ impl Element {
             ftd::Element::Boolean(e) => Some(&e.common),
             ftd::Element::Decimal(e) => Some(&e.common),
             ftd::Element::Scene(e) => Some(&e.common),
+            ftd::Element::Grid(e) => Some(&e.common),
             _ => None,
         }
     }
@@ -1330,6 +1388,12 @@ pub struct Row {
 
 #[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
 pub struct Scene {
+    pub container: Container,
+    pub common: Common,
+}
+
+#[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
+pub struct Grid {
     pub container: Container,
     pub common: Common,
 }

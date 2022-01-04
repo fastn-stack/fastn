@@ -251,6 +251,7 @@ impl ftd::Element {
         match self {
             Self::Row(i) => (i.to_node(doc_id)),
             Self::Scene(i) => (i.to_node(doc_id)),
+            Self::Grid(i) => (i.to_node(doc_id)),
             Self::Text(i) => (i.to_node(doc_id)),
             Self::TextBlock(i) => (i.to_node(doc_id)),
             Self::Code(i) => (i.to_node(doc_id)),
@@ -465,6 +466,12 @@ impl ftd::Scene {
         }
         main_node.children = vec![node];
         main_node
+    }
+}
+
+impl ftd::Grid {
+    pub fn to_node(&self, doc_id: &str) -> Node {
+        Node::from_container(&self.common, &self.container, doc_id)
     }
 }
 

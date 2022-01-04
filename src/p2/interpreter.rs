@@ -735,6 +735,10 @@ pub fn default_bag() -> std::collections::BTreeMap<String, ftd::p2::Thing> {
             ftd::p2::Thing::Component(ftd::p2::element::scene_function()),
         ),
         (
+            "ftd#grid".to_string(),
+            ftd::p2::Thing::Component(ftd::p2::element::grid_function()),
+        ),
+        (
             "ftd#input".to_string(),
             ftd::p2::Thing::Component(ftd::p2::element::input_function()),
         ),
