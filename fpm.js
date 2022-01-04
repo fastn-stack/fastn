@@ -1,6 +1,6 @@
 (function () {
     const MOBILE_VARIABLE = "fpm-ui#mobile";
-    const PIXEL_RATIO = window.devicePixelRatio || 1;
+    // const PIXEL_RATIO = window.devicePixelRatio || 1;
 
     let last = is_mobile();
     window.ftd.set_bool_for_all(MOBILE_VARIABLE, last);
@@ -15,7 +15,7 @@
 
     function is_mobile() {
         // not at all sure about this functions logic.
-        let width = window.visualViewport.width * PIXEL_RATIO;
+        let width = window.visualViewport.width;
 
         // why 1148? this is the smallest width my desktop safari can shrink to.
         // in future we may want to have more than one break points, and then
@@ -31,7 +31,7 @@
         // another function detect_orientation(), "landscape" and "portrait" etc,
         // and instead of setting `fpm-ui#mobile: boolean` we set `fpm-ui#device`
         // and `fpm-ui#viewport-orientation` etc.
-        return width <= 1148;
+        return width <= 1000;
     }
 
     window.show_main = function () {
