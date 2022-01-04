@@ -1,5 +1,6 @@
 (function () {
     const MOBILE_VARIABLE = "fpm-ui#mobile";
+    const DARK_MODE = "fpm-ui#dark-mode"
     // const PIXEL_RATIO = window.devicePixelRatio || 1;
 
     let last = is_mobile();
@@ -41,6 +42,14 @@
     window.show_fallback = function () {
         document.getElementById("main").style.display = "none";
         document.getElementById("fallback").style.display = "block";
+    }
+
+    window.enable_dark_mode = function () {
+        window.ftd.set_bool_for_all(DARK_MODE, true);
+    }
+
+    window.disable_dark_mode = function () {
+        window.ftd.set_bool_for_all(DARK_MODE, false);
     }
 
 })();

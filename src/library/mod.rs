@@ -111,7 +111,7 @@ impl ftd::p2::Library for Library {
                     -- string welcome-fpm-page: {welcome_fpm_page}
                     -- string welcome-fpm-page-subtitle: {welcome_fpm_page_subtitle}
                     -- string language: {language}
-                    "},
+                "},
                 language = fpm::i18n::translation::search(
                     &lang,
                     &primary_lang,
