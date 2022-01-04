@@ -399,7 +399,7 @@ async fn process_ftd(
 
         let mut f = tokio::fs::File::create(new_file_path).await?;
         f.write_all(
-            fix_base(
+            replace_markers(
                 fpm::ftd_html(),
                 config,
                 main,
@@ -459,7 +459,7 @@ async fn process_ftd(
         let mut f = tokio::fs::File::create(new_file_path).await?;
 
         f.write_all(
-            fix_base(
+            replace_markers(
                 fpm::with_message()
                     .replace(
                         "__ftd_data_message__",
@@ -548,7 +548,7 @@ async fn process_ftd(
         let mut f = tokio::fs::File::create(new_file_path).await?;
 
         f.write_all(
-            fix_base(
+            replace_markers(
                 fpm::with_fallback()
                     .replace(
                         "__ftd_data_message__",
@@ -607,7 +607,7 @@ async fn process_static(sa: &fpm::Static, base_path: &camino::Utf8Path) -> fpm::
     Ok(())
 }
 
-fn fix_base(
+fn replace_markers(
     s: &str,
     config: &fpm::Config,
     main: &fpm::Document,
