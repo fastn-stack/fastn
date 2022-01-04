@@ -217,7 +217,7 @@ let ftd_utils = {
         }
     },
 
-    handle_action: function (id, target, value, data) {
+    handle_action: function (id, target, value, data, ftd_external_children) {
         data[target].value = value.toString();
 
         let dependencies = data[target].dependencies;
@@ -279,15 +279,12 @@ let ftd_utils = {
                 }
             }
         }
-    }
-};
+        this.external_children_replace(id, ftd_external_children)
+    },
 
-window.ftd = (function () {
-    let ftd_data = {};
-    let ftd_external_children = {};
-
-    function external_children_replace(id) {
+    external_children_replace: function (id, ftd_external_children) {
         let external_children = ftd_external_children[id];
+        let external_children_placed = [];
         for (const object in external_children) {
             if (!external_children.hasOwnProperty(object)) {
                 continue;
@@ -312,8 +309,8 @@ window.ftd = (function () {
                         break;
                     }
                 }
-                if (display) {
-                    console.log(`${object}::: ${set_at}`);
+                if (display && !external_children_placed.includes(object)) {
+                    console.log(`${object}:${id}::: ${set_at}:${id}`);
                     let get_element_set_at = document.querySelector(`[data-id="${set_at}:${id}"]`);
                     let objects_to_set = document.querySelectorAll(`[data-ext-id="${object}:${id}"]`);
                     for (let i = 0; i < objects_to_set.length; i++) {
@@ -323,12 +320,17 @@ window.ftd = (function () {
                             get_element_set_at.appendChild(object_to_set);
                         }
                     }
-                    return;
+                    external_children_placed.push(object);
                 }
             }
 
         }
     }
+};
+
+window.ftd = (function () {
+    let ftd_data = {};
+    let ftd_external_children = {};
 
     function handle_event(evt, id, action) {
         let act = action["action"];
@@ -396,13 +398,12 @@ window.ftd = (function () {
             }
 
             let data = ftd_data[id];
-            ftd_utils.handle_action(id, target, value, data);
+            ftd_utils.handle_action(id, target, value, data, ftd_external_children);
 
         } else {
             console.log("unknown action:", act);
             return;
         }
-        external_children_replace(id);
 
     }
 
@@ -437,7 +438,7 @@ window.ftd = (function () {
             }
         }
 
-        ftd_utils.handle_action(id, variable, value, data);
+        ftd_utils.handle_action(id, variable, value, data, ftd_external_children);
     }
 
     exports.set_bool = function (id, variable, value) {
@@ -448,7 +449,7 @@ window.ftd = (function () {
             return;
         }
 
-        ftd_utils.handle_action(id, variable, value, data);
+        ftd_utils.handle_action(id, variable, value, data, ftd_external_children);
     }
 
     exports.set_string = function (id, variable, value) {
