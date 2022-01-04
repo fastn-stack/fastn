@@ -38,8 +38,14 @@ $processor$: toc
     `$processor$: package-query`
   - fpm-vars/
     `import: fpm`
-- install/
-  Install `fpm`
+- how-to/
+  How To
+  - how-to/install/
+    Install `fpm`
+  - how-to/update/
+    Update `fpm`
+  - how-to/get-started-github-pages/
+    Get started with Github pages
 - usage/
   `fpm` Usage
   - build/
