@@ -54,6 +54,7 @@ impl<'a> ExecuteDoc<'a> {
                             ftd::Element::Row(ref r) => &r.container.children,
                             ftd::Element::Column(ref r) => &r.container.children,
                             ftd::Element::Scene(ref r) => &r.container.children,
+                            ftd::Element::Grid(ref r) => &r.container.children,
                             _ => unreachable!(),
                         };
                     }
@@ -238,6 +239,7 @@ impl<'a> ExecuteDoc<'a> {
                 ftd::Element::Row(ref mut r) => &mut r.container.children,
                 ftd::Element::Column(ref mut r) => &mut r.container.children,
                 ftd::Element::Scene(ref mut r) => &mut r.container.children,
+                ftd::Element::Grid(ref mut r) => &mut r.container.children,
                 _ => unreachable!(),
             };
         }
@@ -291,6 +293,10 @@ impl<'a> ExecuteDoc<'a> {
                 | Some(ftd::Element::Scene(ftd::Scene {
                     container: ref mut c,
                     ..
+                }))
+                | Some(ftd::Element::Grid(ftd::Grid {
+                    container: ref mut c,
+                    ..
                 })) => {
                     let child = if container_children.is_empty() {
                         current_container.push(len);
@@ -335,6 +341,9 @@ impl<'a> ExecuteDoc<'a> {
                     ref mut container, ..
                 }))
                 | Some(ftd::Element::Scene(ftd::Scene {
+                    ref mut container, ..
+                }))
+                | Some(ftd::Element::Grid(ftd::Grid {
                     ref mut container, ..
                 })) => {
                     container.children.extend(container_children);

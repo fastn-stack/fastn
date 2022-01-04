@@ -1355,6 +1355,33 @@ pub fn scene_function() -> ftd::Component {
     }
 }
 
+pub fn grid_function() -> ftd::Component {
+    let arguments = {
+        let mut arguments: std::collections::BTreeMap<String, ftd::p2::Kind> =
+            [container_arguments(), common_arguments()]
+                .concat()
+                .into_iter()
+                .collect();
+        arguments.remove("spacing");
+        arguments.remove("wrap");
+        arguments
+    };
+
+    ftd::Component {
+        line_number: 0,
+        kernel: true,
+        root: "ftd.kernel".to_string(),
+        full_name: "ftd#grid".to_string(),
+        arguments,
+        locals: Default::default(),
+        properties: Default::default(),
+        instructions: Default::default(),
+        invocations: Default::default(),
+        condition: None,
+        events: vec![],
+    }
+}
+
 pub fn boolean_function() -> ftd::Component {
     ftd::Component {
         line_number: 0,
@@ -1455,6 +1482,24 @@ pub fn scene_from_properties(
 ) -> ftd::p1::Result<ftd::Scene> {
     let properties = &ftd::p2::utils::properties(properties_with_ref);
     Ok(ftd::Scene {
+        common: common_from_properties(
+            properties, doc, condition, is_child, events, all_locals, root_name, None,
+        )?,
+        container: container_from_properties(properties, doc)?,
+    })
+}
+
+pub fn grid_from_properties(
+    properties_with_ref: &std::collections::BTreeMap<String, (ftd::Value, Option<String>)>,
+    doc: &ftd::p2::TDoc,
+    condition: &Option<ftd::p2::Boolean>,
+    is_child: bool,
+    events: &[ftd::p2::Event],
+    all_locals: &mut ftd::Map,
+    root_name: Option<&str>,
+) -> ftd::p1::Result<ftd::Grid> {
+    let properties = &ftd::p2::utils::properties(properties_with_ref);
+    Ok(ftd::Grid {
         common: common_from_properties(
             properties, doc, condition, is_child, events, all_locals, root_name, None,
         )?,

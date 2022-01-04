@@ -182,7 +182,8 @@ impl ChildComponent {
         match (&mut element, children.is_empty()) {
             (ftd::Element::Column(_), _)
             | (ftd::Element::Row(_), _)
-            | (ftd::Element::Scene(_), _) => {
+            | (ftd::Element::Scene(_), _)
+            | (ftd::Element::Grid(_), _) => {
                 let instructions = children
                     .iter()
                     .map(|child| {
@@ -220,7 +221,7 @@ impl ChildComponent {
                         .unwrap();
                 }
                 match root.full_name.as_str() {
-                    "ftd#row" | "ftd#column" | "ftd#scene" => {}
+                    "ftd#row" | "ftd#column" | "ftd#scene" | "ftd#grid" => {}
                     t => {
                         return ftd::e2(
                             format!("{} cant have children", t),
@@ -1250,6 +1251,9 @@ impl Component {
                 "ftd#scene" => ftd::Element::Scene(ftd::p2::element::scene_from_properties(
                     arguments, doc, condition, is_child, events, all_locals, root_name,
                 )?),
+                "ftd#grid" => ftd::Element::Grid(ftd::p2::element::grid_from_properties(
+                    arguments, doc, condition, is_child, events, all_locals, root_name,
+                )?),
                 _ => unreachable!(),
             };
             Ok(ElementWithContainer {
@@ -1395,6 +1399,9 @@ impl Component {
                     ref mut container, ..
                 })
                 | ftd::Element::Scene(ftd::Scene {
+                    ref mut container, ..
+                })
+                | ftd::Element::Grid(ftd::Grid {
                     ref mut container, ..
                 }) => {
                     let ElementWithContainer {
@@ -1758,7 +1765,8 @@ fn is_component(name: &str) -> bool {
         || (name == "ftd.decimal")
         || (name == "ftd.boolean")
         || (name == "ftd.input")
-        || (name == "ftd.scene"))
+        || (name == "ftd.scene")
+        || (name == "ftd.grid"))
 }
 
 fn assert_no_extra_properties(

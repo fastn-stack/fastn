@@ -181,6 +181,15 @@ impl Document {
                             return Some(t);
                         }
                     }
+                    ftd::Element::Grid(c) => {
+                        if let Some(v) = f(e) {
+                            return Some(v);
+                        }
+
+                        if let Some(t) = finder(&c.container.children, f) {
+                            return Some(t);
+                        }
+                    }
                     ftd::Element::Image(_) => {
                         if let Some(v) = f(e) {
                             return Some(v);
@@ -570,7 +579,8 @@ pub fn default_scene_children_position(elements: &mut Vec<ftd::Element>) {
         match element {
             ftd::Element::Scene(ftd::Scene { container, .. })
             | ftd::Element::Row(ftd::Row { container, .. })
-            | ftd::Element::Column(ftd::Column { container, .. }) => {
+            | ftd::Element::Column(ftd::Column { container, .. })
+            | ftd::Element::Grid(ftd::Grid { container, .. }) => {
                 default_scene_children_position(&mut container.children);
                 if let Some((_, _, ref mut ext_children)) = container.external_children {
                     default_scene_children_position(ext_children);
