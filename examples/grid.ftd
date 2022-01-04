@@ -116,3 +116,42 @@ text-align: center
 size: 30
 padding-vertical: 20
 
+-- ft.h1: Grid Using Area With An Empty Grid Cell
+
+This grid layout contains four columns and three rows:
+
+-- ftd.grid:
+areas: header header header header | main main . sidebar | footer footer footer footer
+gap: 10
+background-color: green
+padding: 10
+width: fill
+margin-bottom: 40
+
+--- ftd.text: Header
+grid-area: header
+background-color: rgba(255, 255, 255, 0.8)
+text-align: center
+size: 30
+padding-vertical: 20
+
+--- ftd.text: Main
+grid-area: main
+background-color: rgba(255, 255, 255, 0.8)
+text-align: center
+size: 30
+padding-vertical: 20
+
+--- ftd.text: Sidebar
+grid-area: sidebar
+background-color: rgba(255, 255, 255, 0.8)
+text-align: center
+size: 30
+padding-vertical: 20
+
+--- ftd.text: Footer
+grid-area: footer
+background-color: rgba(255, 255, 255, 0.8)
+text-align: center
+size: 30
+padding-vertical: 20
