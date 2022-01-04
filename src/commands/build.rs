@@ -400,35 +400,12 @@ async fn process_ftd(
         let mut f = tokio::fs::File::create(new_file_path).await?;
         f.write_all(
             fix_base(
-                fpm::ftd_html()
-                    .replace("__ftd_doc_title__", doc_title.as_str())
-                    .replace(
-                        "__ftd_canonical_url__",
-                        config
-                            .package
-                            .generate_canonical_url(main.id_to_path().as_str())
-                            .as_str(),
-                    )
-                    .replace(
-                        "__ftd_data__",
-                        serde_json::to_string_pretty(&ftd_doc.data)
-                            .expect("failed to convert document to json")
-                            .as_str(),
-                    )
-                    .replace(
-                        "__ftd_external_children__",
-                        serde_json::to_string_pretty(&ftd_doc.external_children)
-                            .expect("failed to convert document to json")
-                            .as_str(),
-                    )
-                    .replace(
-                        "__ftd__",
-                        format!("{}{}", ftd_doc.html, config.get_font_style(),).as_str(),
-                    )
-                    .as_str()
-                    .replace("__ftd_js__", ftd::js())
-                    .as_str(),
+                fpm::ftd_html(),
+                config,
+                main,
+                doc_title.as_str(),
                 base_url,
+                &ftd_doc,
             )
             .as_bytes(),
         )
@@ -484,14 +461,6 @@ async fn process_ftd(
         f.write_all(
             fix_base(
                 fpm::with_message()
-                    .replace("__ftd_doc_title__", doc_title.as_str())
-                    .replace(
-                        "__ftd_canonical_url__",
-                        config
-                            .package
-                            .generate_canonical_url(main.id_to_path().as_str())
-                            .as_str(),
-                    )
                     .replace(
                         "__ftd_data_message__",
                         serde_json::to_string_pretty(&message_rt_doc.data)
@@ -508,26 +477,12 @@ async fn process_ftd(
                         "__message__",
                         format!("{}{}", message_rt_doc.html, config.get_font_style(),).as_str(),
                     )
-                    .replace(
-                        "__ftd_data_main__",
-                        serde_json::to_string_pretty(&main_rt_doc.data)
-                            .expect("failed to convert document to json")
-                            .as_str(),
-                    )
-                    .replace(
-                        "__ftd_external_children_main__",
-                        serde_json::to_string_pretty(&main_rt_doc.external_children)
-                            .expect("failed to convert document to json")
-                            .as_str(),
-                    )
-                    .replace(
-                        "__main__",
-                        format!("{}{}", main_rt_doc.html, config.get_font_style(),).as_str(),
-                    )
-                    .as_str()
-                    .replace("__ftd_js__", ftd::js())
                     .as_str(),
+                config,
+                main,
+                doc_title.as_str(),
                 base_url,
+                &main_rt_doc,
             )
             .as_bytes(),
         )
@@ -595,14 +550,6 @@ async fn process_ftd(
         f.write_all(
             fix_base(
                 fpm::with_fallback()
-                    .replace("__ftd_doc_title__", doc_title.as_str())
-                    .replace(
-                        "__ftd_canonical_url__",
-                        config
-                            .package
-                            .generate_canonical_url(main.id_to_path().as_str())
-                            .as_str(),
-                    )
                     .replace(
                         "__ftd_data_message__",
                         serde_json::to_string_pretty(&message_rt_doc.data)
@@ -635,26 +582,12 @@ async fn process_ftd(
                         "__fallback__",
                         format!("{}{}", fallback_rt_doc.html, config.get_font_style(),).as_str(),
                     )
-                    .replace(
-                        "__ftd_data_main__",
-                        serde_json::to_string_pretty(&main_rt_doc.data)
-                            .expect("failed to convert document to json")
-                            .as_str(),
-                    )
-                    .replace(
-                        "__ftd_external_children_main__",
-                        serde_json::to_string_pretty(&main_rt_doc.external_children)
-                            .expect("failed to convert document to json")
-                            .as_str(),
-                    )
-                    .replace(
-                        "__main__",
-                        format!("{}{}", main_rt_doc.html, config.get_font_style(),).as_str(),
-                    )
-                    .as_str()
-                    .replace("__ftd_js__", ftd::js())
                     .as_str(),
+                config,
+                main,
+                doc_title.as_str(),
                 base_url,
+                &main_rt_doc,
             )
             .as_bytes(),
         )
@@ -674,9 +607,45 @@ async fn process_static(sa: &fpm::Static, base_path: &camino::Utf8Path) -> fpm::
     Ok(())
 }
 
-fn fix_base(s: &str, base_url: Option<&str>) -> String {
-    match base_url {
+fn fix_base(
+    s: &str,
+    config: &fpm::Config,
+    main: &fpm::Document,
+    title: &str,
+    base_url: Option<&str>,
+    main_rt: &ftd::Document,
+) -> String {
+    let mut s = s
+        .replace("__ftd_doc_title__", title)
+        .replace(
+            "__ftd_canonical_url__",
+            config
+                .package
+                .generate_canonical_url(main.id_to_path().as_str())
+                .as_str(),
+        )
+        .replace("__ftd_js__", fpm::ftd_js())
+        .replace("__ftd_css__", fpm::ftd_css())
+        .replace("__fpm_js__", fpm::fpm_js())
+        .replace(
+            "__ftd_data_main__",
+            serde_json::to_string_pretty(&main_rt.data)
+                .expect("failed to convert document to json")
+                .as_str(),
+        )
+        .replace(
+            "__ftd_external_children_main__",
+            serde_json::to_string_pretty(&main_rt.external_children)
+                .expect("failed to convert document to json")
+                .as_str(),
+        )
+        .replace(
+            "__main__",
+            format!("{}{}", main_rt.html, config.get_font_style(),).as_str(),
+        );
+    s = match base_url {
         Some(u) => s.replace("__base_url__", u),
         None => s.replace("<base href=\"__base_url__\">", ""),
-    }
+    };
+    s
 }

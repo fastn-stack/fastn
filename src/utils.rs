@@ -206,3 +206,7 @@ pub(crate) fn validate_zip_url(package: &fpm::Package) -> fpm::Result<()> {
 
     Ok(())
 }
+
+pub fn is_test() -> bool {
+    std::env::args().any(|e| e == "--test")
+}

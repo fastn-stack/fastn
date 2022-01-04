@@ -85,6 +85,7 @@ impl ftd::p2::Library for Library {
 
             format!(
                 indoc::indoc! {"
+                    -- boolean mobile: true
                     -- string last-modified-on: {last_modified_on}
                     -- string never-synced: {never_synced}
                     -- string show-translation-status: {show_translation_status}
@@ -262,7 +263,6 @@ impl ftd::p2::Library for Library {
                 indoc::indoc! {"
                         {fpm_base}
                         
-                        -- string device: mobile
                         -- string document-id: {document_id}
                         -- optional string diff:
                         -- optional string last-marked-on:

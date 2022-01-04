@@ -1,197 +1,42 @@
 <!DOCTYPE html>
-<html lang="en" style="height: 100%;">
-<head>
-    <meta charset="UTF-8"><base href="__base_url__">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">__ftd_canonical_url__
-    <title>__ftd_doc_title__</title>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8"><base href="__base_url__">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">__ftd_canonical_url__
+        <title>__ftd_doc_title__</title>
+        <script type="ftd" id="ftd-data-message">__ftd_data_message__</script>
+        <script type="ftd" id="ftd-external-children-message">__ftd_external_children_message__</script>
+        <script type="ftd" id="ftd-data-main">__ftd_data_main__</script>
+        <script type="ftd" id="ftd-external-children-main">__ftd_external_children_main__</script>
+        <script type="ftd" id="ftd-data-fallback">__ftd_data_fallback__</script>
+        <script type="ftd" id="ftd-external-children-fallback">__ftd_external_children_fallback__</script>
+        <style>__ftd_css__</style>
+    </head>
+    <body>
+        <div id="message">__message__</div>
+        <div id="main">__main__</div>
+        <div id="fallback" style="display: none">__fallback__</div>
 
-    <script type="ftd" id="ftd-data-message">
-        __ftd_data_message__
-    </script>
-    <script type="ftd" id="ftd-external-children-message">
-        __ftd_external_children_message__
-    </script>
-    <script type="ftd" id="ftd-data-main">
-        __ftd_data_main__
-    </script>
-    <script type="ftd" id="ftd-external-children-main">
-        __ftd_external_children_main__
-    </script>
-    <script type="ftd" id="ftd-data-fallback">
-        __ftd_data_fallback__
-    </script>
-    <script type="ftd" id="ftd-external-children-fallback">
-        __ftd_external_children_fallback__
-    </script>
+        <script>
+            __ftd_js__
 
-    <script>
-        __ftd_js__
-    </script>
+            window.ftd.init(
+                "message",
+                JSON.parse(document.getElementById("ftd-data-message").innerText),
+                JSON.parse(document.getElementById("ftd-external-children-message").innerText)
+            );
+            window.ftd.init(
+                "main",
+                JSON.parse(document.getElementById("ftd-data-main").innerText),
+                JSON.parse(document.getElementById("ftd-external-children-main").innerText)
+            );
+            window.ftd.init(
+                "fallback",
+                JSON.parse(document.getElementById("ftd-data-fallback").innerText),
+                JSON.parse(document.getElementById("ftd-external-children-fallback").innerText)
+            );
 
-    <style>
-        body {
-            margin: 0;
-        }
-        pre {
-            white-space: break-spaces;
-        }
-
-        pre code {
-            overflow-x: auto;
-            display: block;
-            padding: 10px !important;
-        }
-
-        p {
-            margin: 0;
-        }
-
-        ul {
-            margin: 0;
-        }
-
-        .ft_md ul,
-        .ft_md ol,
-        .ft_md p {
-            margin: 10px 0;
-        }
-
-        .ft_md h1,
-        .ft_md h2,
-        .ft_md h3,
-        .ft_md h4,
-        .ft_md h5 {
-            margin-top: 34px;
-            margin-bottom: 0;
-            line-height: 1.2em;
-            color: #000000;
-        }
-
-        .ft_md ul ul,
-        .ft_md ul ol,
-        .ft_md ol ul,
-        .ft_md ol ol {
-            line-height: 1.5em;
-            margin: 0;
-        }
-
-        .ft_md ul li,
-        .ft_md ol li,
-        .ft_md ul ol li .ft_md ul ul li .ft_md ol ul li .ft_md ol ol li {
-            position: relative;
-            padding-left: 32px;
-            margin: 4px 0;
-        }
-
-        .ft_md ul {
-            list-style: none;
-            padding-left: 0;
-        }
-
-        .ft_md ol {
-            list-style: none;
-            padding-left: 0;
-            counter-reset: item;
-        }
-
-        .ft_md ol li:before,
-        .ft_md ol ol li:before,
-        .ft_md ul ol li:before {
-            content: counter(item);
-            counter-increment: item;
-            background-color: #e4e9eb;
-            color: #000000;
-            font-size: 11px;
-            line-height: 10px;
-            text-align: center;
-            padding: 4px 0;
-            height: 10px;
-            width: 18px;
-            border-radius: 10px;
-            position: absolute;
-            left: 0;
-            top: 5px;
-        }
-
-        .ft_md ul li::before,
-        .ft_md ul ul li::before,
-        .ft_md ol ul li::before {
-            content: "";
-            position: absolute;
-            width: 6px;
-            height: 6px;
-            left: 8px;
-            top: 10px;
-            border-radius: 50%;
-            background: #c1c8ce;
-        }
-
-        .ft_md a {
-            color: #0047b4;
-            text-decoration: none;
-        }
-
-        .ft_md a:visited {
-            color: #632ec4;
-        }
-
-        .ft_md a:hover {
-            text-decoration: none;
-        }
-
-        .ft_md code {
-            font-size: 0.9em;
-            padding: 0.1em 0.25em;
-            background-color: #f0f0f0;
-            border-radius: 4px;
-        }
-
-        .ft_md blockquote {
-            padding: 0.25em 1em;
-            margin: 1em 0;
-            background-color: #f0f0f0;
-            border-radius: 3px;
-        }
-
-        .ft_md blockquote>blockquote {
-            margin: 0;
-        }
-
-    </style>
-
-</head>
-<body style="height: 100%;">
-
-<div id="message">__message__</div>
-<div id="main">__main__</div>
-<div id="fallback" style="display: none">__fallback__</div>
-
-<script>
-    function show_main() {
-        document.getElementById("main").style.display = "block";
-        document.getElementById("fallback").style.display = "none";
-    }
-
-    function show_fallback() {
-        document.getElementById("main").style.display = "none";
-        document.getElementById("fallback").style.display = "block";
-    }
-
-    window.ftd.init(
-        "message",
-        JSON.parse(document.getElementById("ftd-data-message").innerText),
-        JSON.parse(document.getElementById("ftd-external-children-message").innerText)
-    );
-    window.ftd.init(
-        "main",
-        JSON.parse(document.getElementById("ftd-data-main").innerText),
-        JSON.parse(document.getElementById("ftd-external-children-main").innerText)
-    );
-    window.ftd.init(
-        "fallback",
-        JSON.parse(document.getElementById("ftd-data-fallback").innerText),
-        JSON.parse(document.getElementById("ftd-external-children-fallback").innerText)
-    );
-</script>
-</body>
+            __fpm_js__
+        </script>
+    </body>
 </html>

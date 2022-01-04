@@ -38,8 +38,30 @@ pub(crate) use utils::{copy_dir_all, get_timestamp_nanosecond};
 fn ftd_html() -> &'static str {
     include_str!("../ftd.html")
 }
+
 fn fpm_ftd() -> &'static str {
     include_str!("../ftd/fpm.ftd")
+}
+
+fn fpm_js() -> &'static str {
+    if fpm::utils::is_test() {
+        return "FPM_JS";
+    }
+    include_str!("../fpm.js")
+}
+
+fn ftd_js() -> &'static str {
+    if fpm::utils::is_test() {
+        return "FTD_JS";
+    }
+    ftd::js()
+}
+
+fn ftd_css() -> &'static str {
+    if fpm::utils::is_test() {
+        return "FTD_CSS";
+    }
+    ftd::css()
 }
 
 fn fpm_lib_ftd() -> &'static str {
