@@ -468,5 +468,15 @@ window.ftd = (function () {
         ftd_external_children[id] = external_children;
     }
 
+    exports.set_bool_for_all = function (variable, value) {
+        for (let id in ftd_data) {
+            if (!ftd_data.hasOwnProperty(id)) {
+                continue;
+            }
+
+            exports.set_bool(id, variable, value)
+        }
+    }
+
     return exports;
 })();
