@@ -471,7 +471,39 @@ impl ftd::Scene {
 
 impl ftd::Grid {
     pub fn to_node(&self, doc_id: &str) -> Node {
-        Node::from_container(&self.common, &self.container, doc_id)
+        let mut n = Node::from_container(&self.common, &self.container, doc_id);
+        if self.inline {
+            n.style.insert(s("display"), s("inline-grid"));
+        } else {
+            n.style.insert(s("display"), s("grid"));
+        }
+        if let Some(ref areas) = self.areas {
+            let areas = areas.split('|').map(|v| v.trim()).collect::<Vec<&str>>();
+            let mut css_areas = s("");
+            for area in areas {
+                css_areas = format!("{}'{}'", css_areas, area);
+            }
+            n.style.insert(s("grid-template-areas"), css_areas);
+        }
+        if let Some(ref columns) = self.columns {
+            n.style.insert(s("grid-template-columns"), s(columns));
+        }
+        if let Some(ref columns) = self.columns {
+            n.style.insert(s("grid-template-columns"), s(columns));
+        }
+        if let Some(ref rows) = self.rows {
+            n.style.insert(s("grid-template-rows"), s(rows));
+        }
+        if let Some(ref gap) = self.gap {
+            n.style.insert(s("grid-gap"), format!("{}px", gap));
+        }
+        if let Some(ref gap) = self.column_gap {
+            n.style.insert(s("column-gap"), format!("{}px", gap));
+        }
+        if let Some(ref gap) = self.row_gap {
+            n.style.insert(s("row-gap"), format!("{}px", gap));
+        }
+        n
     }
 }
 
@@ -949,6 +981,15 @@ impl ftd::Common {
         }
         if let Some(p) = &self.z_index {
             d.insert(s("z-index"), format!("{}px", p));
+        }
+        if let Some(p) = &self.grid_area {
+            d.insert(s("grid-area"), s(p));
+        }
+        if let Some(p) = &self.grid_column {
+            d.insert(s("grid-column"), s(p));
+        }
+        if let Some(p) = &self.grid_row {
+            d.insert(s("grid-row"), s(p));
         }
         if self.shadow_size.is_some()
             || self.shadow_blur.is_some()

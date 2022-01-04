@@ -1,0 +1,53 @@
+-- import: ft
+
+-- ftd.column:
+padding: 30
+width: fill
+
+-- ft.h0: Grid Layout
+
+This grid layout contains six columns and three rows:
+
+-- ftd.grid:
+areas: header header header header header header | menu main main main right right | menu footer footer footer footer footer
+gap: 10
+background-color: #2196F3
+padding: 10
+width: fill
+
+--- ftd.text: Header
+grid-area: header
+background-color: rgba(255, 255, 255, 0.8)
+text-align: center
+size: 30
+padding-vertical: 20
+
+--- ftd.text: Menu
+grid-area: menu
+background-color: rgba(255, 255, 255, 0.8)
+text-align: center
+size: 30
+padding-vertical: 20
+height: fill
+
+--- ftd.text: Main
+grid-area: main
+background-color: rgba(255, 255, 255, 0.8)
+text-align: center
+size: 30
+padding-vertical: 20
+
+--- ftd.text: Right
+grid-area: right
+background-color: rgba(255, 255, 255, 0.8)
+text-align: center
+size: 30
+padding-vertical: 20
+
+--- ftd.text: Footer
+grid-area: footer
+background-color: rgba(255, 255, 255, 0.8)
+text-align: center
+size: 30
+padding-vertical: 20
+
