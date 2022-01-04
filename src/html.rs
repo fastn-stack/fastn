@@ -503,6 +503,9 @@ impl ftd::Grid {
         if let Some(ref gap) = self.row_gap {
             n.style.insert(s("row-gap"), format!("{}px", gap));
         }
+        if let Some(ref auto_flow) = self.auto_flow {
+            n.style.insert(s("grid-auto-flow"), s(auto_flow));
+        }
         n
     }
 }
