@@ -12,15 +12,19 @@
 
     function initialise_device() {
         last_device = is_mobile();
+        console.log("is_mobile", last_device);
         window.ftd.set_bool_for_all(FPM_MOBILE, last_device);
     }
 
     window.onresize = function () {
         let current = is_mobile();
-        if (current !== last_device) {
-            window.ftd.set_bool_for_all(FPM_MOBILE, current);
-            last_device = current;
+        if (current === last_device) {
+            return;
         }
+
+        window.ftd.set_bool_for_all(FPM_MOBILE, current);
+        last_device = current;
+        console.log("is_mobile", last_device);
     }
 
     function is_mobile() {
@@ -40,7 +44,7 @@
         // another function detect_orientation(), "landscape" and "portrait" etc,
         // and instead of setting `fpm-ui#mobile: boolean` we set `fpm-ui#device`
         // and `fpm-ui#viewport-orientation` etc.
-        return width <= 1200;
+        return width <= 500;
     }
 
     window.show_main = function () {
