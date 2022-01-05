@@ -46,6 +46,8 @@ $processor$: toc
     Update `fpm`
   - how-to/get-started-github-pages/
     Get started with Github pages
+  - how-to/get-started-vercel/
+    Get started with Vercel
 - usage/
   `fpm` Usage
   - build/
