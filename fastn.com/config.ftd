@@ -61,3 +61,48 @@ $processor$: toc
 - known-issues/
   Known Issues
 
+
+-- ft.toc-item list learn:
+$processor$: toc
+
+- index.html
+  Introduction
+- about/
+  Installation
+
+-- ft.toc-item list community:
+$processor$: toc
+
+- index.html
+  Introduction
+- about/
+  Installation
+
+-- ft.toc-item list more:
+$processor$: toc
+
+- index.html
+  Introduction
+- about/
+  Installation
+
+-- ft.toc-item list legal:
+$processor$: toc
+
+- index.html
+  Introduction
+- about/
+  Installation
+
+
+-- ft.footer-toc: Learn
+children: $learn
+
+-- ft.footer-toc: Community
+children: $community
+
+-- ft.footer-toc: More
+children: $more
+
+-- ft.footer-toc: Legal
+children: $legal
