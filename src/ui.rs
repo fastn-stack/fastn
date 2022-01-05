@@ -1165,19 +1165,19 @@ impl Default for Position {
 }
 
 impl Position {
-    pub fn from(l: Option<String>, doc_id: &str) -> ftd::p1::Result<ftd::Position> {
+    pub fn from(l: Option<String>, doc_id: &str) -> ftd::p1::Result<Option<ftd::Position>> {
         Ok(match l.as_deref() {
-            Some("center") => Self::Center,
-            Some("top") => Self::Top,
-            Some("bottom") => Self::Bottom,
-            Some("left") => Self::Left,
-            Some("right") => Self::Right,
-            Some("top-left") => Self::TopLeft,
-            Some("top-right") => Self::TopRight,
-            Some("bottom-left") => Self::BottomLeft,
-            Some("bottom-right") => Self::BottomRight,
+            Some("center") => Some(Self::Center),
+            Some("top") => Some(Self::Top),
+            Some("bottom") => Some(Self::Bottom),
+            Some("left") => Some(Self::Left),
+            Some("right") => Some(Self::Right),
+            Some("top-left") => Some(Self::TopLeft),
+            Some("top-right") => Some(Self::TopRight),
+            Some("bottom-left") => Some(Self::BottomLeft),
+            Some("bottom-right") => Some(Self::BottomRight),
             Some(t) => return ftd::e2(format!("{} is not a valid alignment", t), doc_id, 0), // TODO
-            None => return Ok(Self::TopLeft),
+            None => None,
         })
     }
 }
@@ -1520,7 +1520,7 @@ pub struct Common {
     pub move_down: Option<i64>,
     pub move_left: Option<i64>,
     pub move_right: Option<i64>,
-    pub position: Position,
+    pub position: Option<Position>,
     pub inner: bool,
     pub z_index: Option<i64>,
     pub slot: Option<String>,

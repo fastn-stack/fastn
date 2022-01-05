@@ -2104,6 +2104,7 @@ fn update_properties(
 ) {
     let default_property = vec![
         "id", "top", "bottom", "left", "right", "align", "scale", "rotate", "scale-x", "scale-y",
+        "slot",
     ];
     for p in default_property {
         if !properties.contains_key(p) {
@@ -2172,7 +2173,7 @@ fn assert_no_extra_properties(
             || (is_component(name)
                 && vec![
                     "id", "top", "bottom", "left", "right", "align", "scale", "rotate", "scale-x",
-                    "scale-y",
+                    "scale-y", "slot",
                 ]
                 .contains(&key)))
         {
@@ -2402,6 +2403,7 @@ pub fn read_properties(
             "scale-y".to_string(),
             ftd::p2::Kind::decimal().into_optional(),
         );
+        default_argument.insert("slot".to_string(), ftd::p2::Kind::string().into_optional());
 
         for (key, arg) in default_argument {
             root_arguments.entry(key).or_insert(arg);
