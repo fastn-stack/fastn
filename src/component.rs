@@ -684,6 +684,20 @@ fn get_conditional_attributes(
         ],
     );
 
+    dictionary.insert("slots".to_string(), vec!["grid-template-areas".to_string()]);
+    dictionary.insert(
+        "slot-widths".to_string(),
+        vec!["grid-template-columns".to_string()],
+    );
+    dictionary.insert(
+        "slot-heights".to_string(),
+        vec!["grid-template-rows".to_string()],
+    );
+    if properties.contains_key("slots") {
+        dictionary.insert("spacing".to_string(), vec!["grid-gap".to_string()]);
+    }
+    dictionary.insert("slot".to_string(), vec!["grid-area".to_string()]);
+
     for (name, value) in properties {
         if !value.conditions.is_empty() {
             let styles = if let Some(styles) = dictionary.get(name) {
@@ -764,6 +778,7 @@ fn get_conditional_attributes(
             "shadow-blur",
             "font-size",
             "border-width",
+            "grid-gap",
         ];
 
         let style_length = vec![
@@ -788,7 +803,15 @@ fn get_conditional_attributes(
             "border-bottom-right-radius",
         ];
 
-        let style_string = vec!["cursor", "position", "align", "background-image"];
+        let style_string = vec![
+            "cursor",
+            "position",
+            "align",
+            "background-image",
+            "grid-template-columns",
+            "grid-template-rows",
+            "grid-area",
+        ];
 
         let style_overflow = vec!["overflow-x", "overflow-y"];
 
@@ -915,6 +938,27 @@ fn get_conditional_attributes(
                     important: false,
                 },
                 v => return ftd::e2(format!("expected int, found: {:?}", v), doc_id, line_number),
+            }
+        } else if name.eq("grid-template-areas") {
+            match value {
+                ftd::Value::String { text: v, .. } => {
+                    let areas = v.split('|').map(|v| v.trim()).collect::<Vec<&str>>();
+                    let mut css_areas = "".to_string();
+                    for area in areas {
+                        css_areas = format!("{}'{}'", css_areas, area);
+                    }
+                    ftd::ConditionalValue {
+                        value: css_areas,
+                        important: false,
+                    }
+                }
+                v => {
+                    return ftd::e2(
+                        format!("expected string, found: {:?}", v),
+                        doc_id,
+                        line_number,
+                    )
+                }
             }
         } else {
             return ftd::e2(
