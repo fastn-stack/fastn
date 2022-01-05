@@ -489,10 +489,11 @@ impl ftd::Grid {
         n.style.insert(s("grid-template-areas"), css_areas);
 
         if let Some(ref columns) = self.slot_widths {
-            n.style.insert(s("grid-template-columns"), s(columns));
+            n.style
+                .insert(s("grid-template-columns"), s(columns.trim()));
         }
         if let Some(ref rows) = self.slot_heights {
-            n.style.insert(s("grid-template-rows"), s(rows));
+            n.style.insert(s("grid-template-rows"), s(rows.trim()));
         }
         if let Some(ref gap) = self.spacing {
             n.style.insert(s("grid-gap"), format!("{}px", gap));
@@ -985,7 +986,7 @@ impl ftd::Common {
         if let Some(p) = &self.z_index {
             d.insert(s("z-index"), format!("{}px", p));
         }
-        if let Some(p) = &self.grid_area {
+        if let Some(p) = &self.slot {
             d.insert(s("grid-area"), s(p));
         }
         if let Some(p) = &self.grid_column {

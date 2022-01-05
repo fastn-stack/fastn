@@ -1344,7 +1344,7 @@ pub struct Common {
     pub position: Position,
     pub inner: bool,
     pub z_index: Option<i64>,
-    pub grid_area: Option<String>,
+    pub slot: Option<String>,
     pub grid_column: Option<String>,
     pub grid_row: Option<String>,
     // TODO: background-image, un-cropped, tiled, tiled{X, Y}

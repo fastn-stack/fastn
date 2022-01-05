@@ -253,7 +253,7 @@ pub fn common_from_properties(
         )?,
         inner: ftd::p2::utils::bool_with_default("inner", inner_default, properties, doc.name, 0)?,
         z_index: ftd::p2::utils::int_optional("z-index", properties, doc.name, 0)?,
-        grid_area: ftd::p2::utils::string_optional("slot", properties, doc.name, 0)?,
+        slot: ftd::p2::utils::string_optional("slot", properties, doc.name, 0)?,
         grid_column: ftd::p2::utils::string_optional("grid-column", properties, doc.name, 0)?,
         grid_row: ftd::p2::utils::string_optional("grid-row", properties, doc.name, 0)?,
     })
