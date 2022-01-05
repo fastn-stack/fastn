@@ -759,7 +759,7 @@ pub fn default_column() -> ftd::Column {
         common: ftd::Common {
             width: Some(ftd::Length::Fill),
             height: Some(ftd::Length::Fill),
-            position: ftd::Position::Center,
+            position: Some(ftd::Position::Center),
             ..Default::default()
         },
         container: ftd::Container {
@@ -3232,7 +3232,7 @@ mod test {
             text: ftd::markdown_line("What kind of documentation?"),
             line: true,
             common: ftd::Common {
-                position: ftd::Position::Center,
+                position: Some(ftd::Position::Center),
                 reference: Some(s("@title@0")),
                 ..Default::default()
             },
@@ -3326,7 +3326,7 @@ mod test {
         let title = ftd::Text {
             text: ftd::markdown_line("What kind of documentation?"),
             common: ftd::Common {
-                position: ftd::Position::Center,
+                position: Some(ftd::Position::Center),
                 reference: Some(s("@title@0")),
                 ..Default::default()
             },
@@ -3336,7 +3336,7 @@ mod test {
         let second_title = ftd::Text {
             text: ftd::markdown_line("second call"),
             common: ftd::Common {
-                position: ftd::Position::Center,
+                position: Some(ftd::Position::Center),
                 reference: Some(s("@title@1")),
                 ..Default::default()
             },
@@ -3468,7 +3468,7 @@ mod test {
         let title = ftd::Text {
             text: ftd::markdown_line("What kind of documentation?"),
             common: ftd::Common {
-                position: ftd::Position::Center,
+                position: Some(ftd::Position::Center),
                 reference: Some(s("@title@0")),
                 ..Default::default()
             },
@@ -3478,7 +3478,7 @@ mod test {
         let second_title = ftd::Text {
             text: ftd::markdown_line("second call"),
             common: ftd::Common {
-                position: ftd::Position::Center,
+                position: Some(ftd::Position::Center),
                 reference: Some(s("@title@1")),
                 ..Default::default()
             },
@@ -3488,7 +3488,7 @@ mod test {
         let third_title = ftd::Text {
             text: ftd::markdown_line("third call"),
             common: ftd::Common {
-                position: ftd::Position::Center,
+                position: Some(ftd::Position::Center),
                 reference: Some(s("@title@2")),
                 ..Default::default()
             },
@@ -10999,7 +10999,7 @@ mod test {
                                     common: ftd::Common {
                                         width: Some(ftd::Length::Fill),
                                         height: Some(ftd::Length::Fill),
-                                        position: ftd::Position::Center,
+                                        position: Some(ftd::Position::Center),
                                         ..Default::default()
                                     },
                                 })],
@@ -11023,7 +11023,7 @@ mod test {
             common: ftd::Common {
                 width: Some(ftd::Length::Fill),
                 height: Some(ftd::Length::Fill),
-                position: ftd::Position::Center,
+                position: Some(ftd::Position::Center),
                 ..Default::default()
             },
         })];
@@ -11853,7 +11853,7 @@ mod test {
                             scale_x: Some(-1.0),
                             scale_y: Some(-1.0),
                             rotate: Some(45),
-                            position: ftd::Position::Center,
+                            position: Some(ftd::Position::Center),
                             ..Default::default()
                         },
                         ..Default::default()

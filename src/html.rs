@@ -507,6 +507,31 @@ impl ftd::Grid {
         if let Some(ref auto_flow) = self.auto_flow {
             n.style.insert(s("grid-auto-flow"), s(auto_flow));
         }
+
+        n.children = {
+            let mut children = vec![];
+            for child in self.container.children.iter() {
+                let mut child_node = child.to_node(doc_id);
+                let common = if let Some(common) = child.get_common() {
+                    common
+                } else {
+                    children.push(child_node);
+                    continue;
+                };
+                if common.anchor.is_some() {
+                    children.push(child_node);
+                    continue;
+                }
+                if let Some(ref position) = common.position {
+                    for (key, value) in grid_align(position) {
+                        child_node.style.insert(s(key.as_str()), value);
+                    }
+                }
+                children.push(child_node);
+            }
+            children
+        };
+
         n
     }
 }
@@ -540,6 +565,30 @@ impl ftd::Row {
             };
         }
 
+        n.children = {
+            let mut children = vec![];
+            for child in self.container.children.iter() {
+                let mut child_node = child.to_node(doc_id);
+                let common = if let Some(common) = child.get_common() {
+                    common
+                } else {
+                    children.push(child_node);
+                    continue;
+                };
+                if common.anchor.is_some() {
+                    children.push(child_node);
+                    continue;
+                }
+                if let Some(ref position) = common.position {
+                    for (key, value) in row_align(position) {
+                        child_node.style.insert(s(key.as_str()), value);
+                    }
+                }
+                children.push(child_node);
+            }
+            children
+        };
+
         n
     }
 }
@@ -571,6 +620,30 @@ impl ftd::Column {
                 _ => n.style.insert(key, value),
             };
         }
+
+        n.children = {
+            let mut children = vec![];
+            for child in self.container.children.iter() {
+                let mut child_node = child.to_node(doc_id);
+                let common = if let Some(common) = child.get_common() {
+                    common
+                } else {
+                    children.push(child_node);
+                    continue;
+                };
+                if common.anchor.is_some() {
+                    children.push(child_node);
+                    continue;
+                }
+                if let Some(ref position) = common.position {
+                    for (key, value) in column_align(position) {
+                        child_node.style.insert(s(key.as_str()), value);
+                    }
+                }
+                children.push(child_node);
+            }
+            children
+        };
 
         n
     }
@@ -1039,16 +1112,20 @@ impl ftd::Common {
         }
 
         match &self.anchor {
-            Some(_) => {
-                for (key, value) in non_static_container_align(&self.position, self.inner) {
+            Some(_)
+                if !((self.left.is_some() || self.right.is_some())
+                    && (self.top.is_some() || self.bottom.is_some())) =>
+            {
+                let position = if let Some(ref position) = self.position {
+                    position
+                } else {
+                    &ftd::Position::TopLeft
+                };
+                for (key, value) in non_static_container_align(position, self.inner) {
                     d.insert(s(key.as_str()), value);
                 }
             }
-            None => {
-                for (key, value) in container_align(&self.position) {
-                    d.insert(s(key.as_str()), value);
-                }
-            }
+            _ => {}
         }
 
         let translate = get_translate(
@@ -1248,7 +1325,87 @@ pub fn anchor(l: &ftd::Anchor) -> String {
     }
 }
 
-fn container_align(l: &ftd::Position) -> Vec<(String, String)> {
+fn row_align(l: &ftd::Position) -> Vec<(String, String)> {
+    match l {
+        ftd::Position::Center => vec![
+            ("align-self".to_string(), "center".to_string()),
+            ("margin-bottom".to_string(), "auto".to_string()),
+            ("margin-top".to_string(), "auto".to_string()),
+        ],
+        ftd::Position::Top => vec![
+            ("align-self".to_string(), "center".to_string()),
+            ("margin-bottom".to_string(), "auto".to_string()),
+        ],
+        ftd::Position::Bottom => vec![
+            ("align-self".to_string(), "center".to_string()),
+            ("margin-bottom".to_string(), "0".to_string()),
+            ("margin-top".to_string(), "auto".to_string()),
+        ],
+        _ => vec![],
+    }
+}
+
+pub(crate) fn column_align(l: &ftd::Position) -> Vec<(String, String)> {
+    match l {
+        ftd::Position::Center => vec![
+            ("align-self".to_string(), "center".to_string()),
+            ("margin-left".to_string(), "auto".to_string()),
+            ("margin-right".to_string(), "auto".to_string()),
+        ],
+        ftd::Position::Left => vec![
+            ("align-self".to_string(), "flex-start".to_string()),
+            ("margin-right".to_string(), "auto".to_string()),
+        ],
+        ftd::Position::Right => vec![
+            ("align-self".to_string(), "flex-end".to_string()),
+            ("margin-left".to_string(), "auto".to_string()),
+        ],
+        _ => vec![],
+    }
+}
+
+fn grid_align(l: &ftd::Position) -> Vec<(String, String)> {
+    match l {
+        ftd::Position::Center => vec![
+            ("align-self".to_string(), "center".to_string()),
+            ("justify-self".to_string(), "center".to_string()),
+        ],
+        ftd::Position::Top => vec![
+            ("align-self".to_string(), "start".to_string()),
+            ("justify-self".to_string(), "center".to_string()),
+        ],
+        ftd::Position::Left => vec![
+            ("align-self".to_string(), "center".to_string()),
+            ("justify-self".to_string(), "start".to_string()),
+        ],
+        ftd::Position::Right => vec![
+            ("align-self".to_string(), "center".to_string()),
+            ("justify-self".to_string(), "end".to_string()),
+        ],
+        ftd::Position::Bottom => vec![
+            ("align-self".to_string(), "end".to_string()),
+            ("justify-self".to_string(), "center".to_string()),
+        ],
+        ftd::Position::TopLeft => vec![
+            ("align-self".to_string(), "flex-start".to_string()),
+            ("justify-self".to_string(), "flex-start".to_string()),
+        ],
+        ftd::Position::TopRight => vec![
+            ("align-self".to_string(), "flex-start".to_string()),
+            ("justify-self".to_string(), "flex-end".to_string()),
+        ],
+        ftd::Position::BottomLeft => vec![
+            ("align-self".to_string(), "flex-end".to_string()),
+            ("justify-self".to_string(), "flex-start".to_string()),
+        ],
+        ftd::Position::BottomRight => vec![
+            ("align-self".to_string(), "flex-end".to_string()),
+            ("justify-self".to_string(), "flex-end".to_string()),
+        ],
+    }
+}
+
+/*fn container_align(l: &ftd::Position) -> Vec<(String, String)> {
     match l {
         ftd::Position::Center => vec![
             ("align-self".to_string(), "center".to_string()),
@@ -1292,7 +1449,7 @@ fn container_align(l: &ftd::Position) -> Vec<(String, String)> {
             ("margin-left".to_string(), "auto".to_string()),
         ],
     }
-}
+}*/
 
 fn non_static_container_align(l: &ftd::Position, inner: bool) -> Vec<(String, String)> {
     match l {

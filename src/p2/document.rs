@@ -88,9 +88,31 @@ impl Document {
     }
 
     pub fn html(&self, id: &str, doc_id: &str) -> String {
-        self.main
-            .to_node(doc_id)
-            .to_html(&Default::default(), &self.rt_data(), id)
+        let mut node = self.main.to_node(doc_id);
+        node.children = {
+            let mut children = vec![];
+            for child in self.main.container.children.iter() {
+                let mut child_node = child.to_node(doc_id);
+                let common = if let Some(common) = child.get_common() {
+                    common
+                } else {
+                    children.push(child_node);
+                    continue;
+                };
+                if common.anchor.is_some() {
+                    children.push(child_node);
+                    continue;
+                }
+                if let Some(ref position) = common.position {
+                    for (key, value) in ftd::html::column_align(position) {
+                        child_node.style.insert(key.as_str().to_string(), value);
+                    }
+                }
+                children.push(child_node);
+            }
+            children
+        };
+        node.to_html(&Default::default(), &self.rt_data(), id)
     }
 
     pub fn set_string(&mut self, name: &str, value: &str) {
