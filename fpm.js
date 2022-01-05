@@ -2,11 +2,13 @@
     const FPM_MOBILE = "fpm-ui#mobile";
     const FPM_DARK_MODE = "fpm-ui#dark-mode"
     const FPM_FOLLOW_SYSTEM_DARK_MODE = "fpm-ui#follow-system-dark-mode"
+    const DARK_MODE_COOKIE = "fpm-dark-mode";
+    const COOKIE_SYSTEM_LIGHT = "system-light";
+    const COOKIE_SYSTEM_DARK = "system-dark";
+    const COOKIE_DARK_MODE = "dark";
+    const COOKIE_LIGHT_MODE = "light";
 
     let last_device;
-
-    initialise_device();
-    initialise_dark_mode();
 
     function initialise_device() {
         last_device = is_mobile();
@@ -87,11 +89,6 @@
 
      */
 
-    const DARK_MODE_COOKIE = "fpm-dark-mode";
-    const COOKIE_SYSTEM_LIGHT = "system-light";
-    const COOKIE_SYSTEM_DARK = "system-dark";
-    const COOKIE_DARK_MODE = "dark";
-    const COOKIE_LIGHT_MODE = "light";
 
     window.enable_dark_mode = function () {
         // TODO: coalesce the two set_bool-s into one so there is only one DOM
@@ -166,6 +163,9 @@
             "change", update_dark_mode
         );
     }
+
+    initialise_device();
+    initialise_dark_mode();
 })();
 
 /*! instant.page v5.1.0 - (C) 2019-2020 Alexandre Dieulot - https://instant.page/license */
