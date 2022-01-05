@@ -87,6 +87,7 @@ impl ftd::p2::Library for Library {
                 indoc::indoc! {"
                     -- boolean mobile: true
                     -- boolean dark-mode: false
+                    -- boolean follow-system-dark-mode: true
                     -- string last-modified-on: {last_modified_on}
                     -- string never-synced: {never_synced}
                     -- string show-translation-status: {show_translation_status}
