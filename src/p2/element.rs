@@ -24,17 +24,35 @@ pub fn common_from_properties(
             .collect(),
         None => vec![],
     };
+
     let anchor = ftd::Anchor::from(
         ftd::p2::utils::string_optional("anchor", properties, doc.name, 0)?,
         doc.name,
     )?;
 
-    let inner_default = match anchor {
-        Some(ref p) => match p {
-            ftd::Anchor::Parent => false,
-            ftd::Anchor::Window => true,
-        },
-        None => false,
+    let (position, inner) = {
+        let mut position = None;
+        let mut inner = match anchor {
+            Some(ref p) => match p {
+                ftd::Anchor::Parent => false,
+                ftd::Anchor::Window => true,
+            },
+            None => false,
+        };
+        let position_inner =
+            match ftd::p2::utils::string_optional("position", properties, doc.name, 0)? {
+                None => ftd::p2::utils::string_optional("align", properties, doc.name, 0)?,
+                Some(v) => Some(v),
+            };
+        if let Some(position_inner) = position_inner {
+            if let Some(p) = position_inner.strip_prefix("inner ") {
+                position = ftd::Position::from(Some(p.to_string()), doc.name)?;
+                inner = true;
+            } else {
+                position = ftd::Position::from(Some(position_inner), doc.name)?;
+            }
+        }
+        (position, inner)
     };
 
     let arguments = {
@@ -244,14 +262,8 @@ pub fn common_from_properties(
         move_down: ftd::p2::utils::int_optional("move-down", properties, doc.name, 0)?,
         move_left: ftd::p2::utils::int_optional("move-left", properties, doc.name, 0)?,
         move_right: ftd::p2::utils::int_optional("move-right", properties, doc.name, 0)?,
-        position: ftd::Position::from(
-            match ftd::p2::utils::string_optional("position", properties, doc.name, 0)? {
-                None => ftd::p2::utils::string_optional("align", properties, doc.name, 0)?,
-                Some(v) => Some(v),
-            },
-            doc.name,
-        )?,
-        inner: ftd::p2::utils::bool_with_default("inner", inner_default, properties, doc.name, 0)?,
+        position,
+        inner,
         z_index: ftd::p2::utils::int_optional("z-index", properties, doc.name, 0)?,
         slot: ftd::p2::utils::string_optional("slot", properties, doc.name, 0)?,
         grid_column: ftd::p2::utils::string_optional("grid-column", properties, doc.name, 0)?,
@@ -499,10 +511,6 @@ fn common_arguments() -> Vec<(String, ftd::p2::Kind)> {
         (
             "position".to_string(),
             ftd::p2::Kind::string().into_optional(),
-        ),
-        (
-            "inner".to_string(),
-            ftd::p2::Kind::boolean().into_optional(),
         ),
         (
             "z-index".to_string(),
