@@ -766,6 +766,7 @@ pub fn default_column() -> ftd::Column {
             wrap: true,
             ..Default::default()
         },
+        spacing: None,
     }
 }
 
@@ -1464,10 +1465,13 @@ mod test {
         main.container
             .children
             .push(ftd::Element::Column(ftd::Column {
+                spacing: None,
                 container: ftd::Container {
                     children: vec![ftd::Element::Column(ftd::Column {
+                        spacing: None,
                         container: ftd::Container {
                             children: vec![ftd::Element::Column(ftd::Column {
+                                spacing: None,
                                 container: ftd::Container {
                                     children: vec![
                                         ftd::Element::Text(ftd::Text {
@@ -1488,6 +1492,7 @@ mod test {
                                         }),
                                         ftd::Element::Null,
                                         ftd::Element::Column(ftd::Column {
+                                            spacing: None,
                                             container: ftd::Container {
                                                 children: vec![
                                                     ftd::Element::Null,
@@ -1508,6 +1513,7 @@ mod test {
                                                         ..Default::default()
                                                     }),
                                                     ftd::Element::Column(ftd::Column {
+                                                        spacing: None,
                                                         container: ftd::Container {
                                                             external_children: Default::default(),
                                                             children: vec![
@@ -1568,8 +1574,10 @@ mod test {
                                                 width: Some(ftd::Length::Fill),
                                                 ..Default::default()
                                             },
+                                            ..Default::default()
                                         }),
                                         ftd::Element::Column(ftd::Column {
+                                            spacing: None,
                                             container: ftd::Container {
                                                 external_children: Default::default(),
                                                 children: vec![
@@ -1621,6 +1629,7 @@ mod test {
                                     width: Some(ftd::Length::Fill),
                                     ..Default::default()
                                 },
+                                ..Default::default()
                             })],
                             ..Default::default()
                         },
@@ -1632,6 +1641,7 @@ mod test {
                             width: Some(ftd::Length::Px { value: 300 }),
                             ..Default::default()
                         },
+                        ..Default::default()
                     })],
                     ..Default::default()
                 },
@@ -2176,10 +2186,13 @@ mod test {
         main.container
             .children
             .push(ftd::Element::Column(ftd::Column {
+                spacing: None,
                 container: ftd::Container {
                     children: vec![ftd::Element::Column(ftd::Column {
+                        spacing: None,
                         container: ftd::Container {
                             children: vec![ftd::Element::Column(ftd::Column {
+                                spacing: None,
                                 container: ftd::Container {
                                     children: vec![
                                         ftd::Element::Text(ftd::Text {
@@ -2200,6 +2213,7 @@ mod test {
                                         }),
                                         ftd::Element::Null,
                                         ftd::Element::Column(ftd::Column {
+                                            spacing: None,
                                             container: ftd::Container {
                                                 children: vec![
                                                     ftd::Element::Null,
@@ -2220,6 +2234,7 @@ mod test {
                                                         ..Default::default()
                                                     }),
                                                     ftd::Element::Column(ftd::Column {
+                                                        spacing: None,
                                                         container: ftd::Container {
                                                             external_children: Default::default(),
                                                             children: vec![
@@ -2282,6 +2297,7 @@ mod test {
                                             },
                                         }),
                                         ftd::Element::Column(ftd::Column {
+                                            spacing: None,
                                             container: ftd::Container {
                                                 external_children: Default::default(),
                                                 children: vec![
@@ -2494,6 +2510,7 @@ mod test {
         main.container
             .children
             .push(ftd::Element::Column(ftd::Column {
+                spacing: None,
                 common: ftd::Common {
                     width: Some(ftd::Length::Px { value: 200 }),
                     background_color: Some(ftd::Color {
@@ -3251,7 +3268,7 @@ mod test {
         let mut main = super::default_column();
         main.container
             .children
-            .push(ftd::Element::Column(ftd::Column {
+            .push(ftd::Element::Column(ftd::Column {spacing: None,
                 common: ftd::Common {
                     padding: Some(30),
                     locals: std::array::IntoIter::new([
@@ -3363,7 +3380,7 @@ mod test {
         let mut main = super::default_column();
         main.container
             .children
-            .push(ftd::Element::Column(ftd::Column {
+            .push(ftd::Element::Column(ftd::Column {spacing: None,
                 common: ftd::Common {
                     padding: Some(30),
                     locals: std::array::IntoIter::new([
@@ -3392,6 +3409,7 @@ mod test {
         main.container
             .children
             .push(ftd::Element::Column(ftd::Column {
+                spacing: None,
                 common: ftd::Common {
                     padding: Some(30),
                     locals: std::array::IntoIter::new([
@@ -3514,7 +3532,7 @@ mod test {
         let mut main = super::default_column();
         main.container
             .children
-            .push(ftd::Element::Column(ftd::Column {
+            .push(ftd::Element::Column(ftd::Column {spacing: None,
                 common: ftd::Common {
                     padding: Some(30),
                     locals: std::array::IntoIter::new([
@@ -3543,6 +3561,7 @@ mod test {
         main.container
             .children
             .push(ftd::Element::Column(ftd::Column {
+                spacing: None,
                 common: ftd::Common {
                     padding: Some(30),
                     locals: std::array::IntoIter::new([
@@ -3564,6 +3583,7 @@ mod test {
         main.container
             .children
             .push(ftd::Element::Column(ftd::Column {
+                spacing: None,
                 common: ftd::Common {
                     padding: Some(30),
                     locals: std::array::IntoIter::new([(s("title@2"), s("third call"))]).collect(),
@@ -3726,6 +3746,7 @@ mod test {
         main.container
             .children
             .push(ftd::Element::Column(ftd::Column {
+                spacing: None,
                 container: ftd::Container {
                     children: vec![
                         ftd::Element::Text(ftd::Text {
@@ -3765,6 +3786,7 @@ mod test {
         main.container
             .children
             .push(ftd::Element::Column(ftd::Column {
+                spacing: None,
                 container: ftd::Container {
                     children: vec![
                         ftd::Element::Text(ftd::Text {
@@ -3869,6 +3891,7 @@ mod test {
         main.container
             .children
             .push(ftd::Element::Column(ftd::Column {
+                spacing: None,
                 container: ftd::Container {
                     children: vec![ftd::Element::Image(ftd::Image {
                         src: s("foo.png"),
@@ -3888,6 +3911,7 @@ mod test {
         main.container
             .children
             .push(ftd::Element::Column(ftd::Column {
+                spacing: None,
                 container: ftd::Container {
                     children: vec![ftd::Element::Image(ftd::Image {
                         src: s("bar.png"),
@@ -4653,11 +4677,14 @@ mod test {
         main.container
             .children
             .push(ftd::Element::Column(ftd::Column {
+                spacing: None,
                 container: ftd::Container {
                     children: vec![ftd::Element::Row(ftd::Row {
+                        spacing: None,
                         container: ftd::Container {
                             children: vec![
                                 ftd::Element::Row(ftd::Row {
+                                    spacing: None,
                                     common: ftd::Common {
                                         data_id: Some(s("r2")),
                                         id: Some(s("foo-1:r2")),
@@ -4691,10 +4718,13 @@ mod test {
         main.container
             .children
             .push(ftd::Element::Column(ftd::Column {
+                spacing: None,
                 container: ftd::Container {
                     children: vec![ftd::Element::Row(ftd::Row {
+                        spacing: None,
                         container: ftd::Container {
                             children: vec![ftd::Element::Row(ftd::Row {
+                                spacing: None,
                                 common: ftd::Common {
                                     data_id: Some(s("r2")),
                                     id: Some(s("foo-2:r2")),
@@ -4807,11 +4837,14 @@ mod test {
         main.container
             .children
             .push(ftd::Element::Column(ftd::Column {
+                spacing: None,
                 container: ftd::Container {
                     children: vec![ftd::Element::Row(ftd::Row {
+                        spacing: None,
                         container: ftd::Container {
                             children: vec![
                                 ftd::Element::Row(ftd::Row {
+                                    spacing: None,
                                     common: ftd::Common {
                                         data_id: Some(s("r2")),
                                         id: Some(s("foo-1:r2")),
@@ -4845,10 +4878,13 @@ mod test {
         main.container
             .children
             .push(ftd::Element::Column(ftd::Column {
+                spacing: None,
                 container: ftd::Container {
                     children: vec![ftd::Element::Row(ftd::Row {
+                        spacing: None,
                         container: ftd::Container {
                             children: vec![ftd::Element::Row(ftd::Row {
+                                spacing: None,
                                 common: ftd::Common {
                                     data_id: Some(s("r2")),
                                     id: Some(s("foo-2:r2")),
@@ -4904,6 +4940,7 @@ mod test {
         main.container
             .children
             .push(ftd::Element::Column(ftd::Column {
+                spacing: None,
                 container: ftd::Container {
                     external_children: Some((
                         s("some-child"),
@@ -4911,8 +4948,10 @@ mod test {
                         vec![ftd::Element::Column(external_children)],
                     )),
                     children: vec![ftd::Element::Row(ftd::Row {
+                        spacing: None,
                         container: ftd::Container {
                             children: vec![ftd::Element::Row(ftd::Row {
+                                spacing: None,
                                 common: ftd::Common {
                                     data_id: Some(s("some-child")),
                                     ..Default::default()
@@ -5031,13 +5070,17 @@ mod test {
         main.container
             .children
             .push(ftd::Element::Column(ftd::Column {
+                spacing: None,
                 container: ftd::Container {
                     children: vec![ftd::Element::Column(ftd::Column {
+                        spacing: None,
                         container: ftd::Container {
                             children: vec![ftd::Element::Column(ftd::Column {
+                                spacing: None,
                                 container: ftd::Container {
                                     children: vec![
                                         ftd::Element::Column(ftd::Column {
+                                            spacing: None,
                                             container: ftd::Container {
                                                 children: vec![ftd::Element::Text(ftd::Text {
                                                     text: ftd::markdown_line("Mobile Display"),
@@ -5069,6 +5112,7 @@ mod test {
                                             },
                                         }),
                                         ftd::Element::Column(ftd::Column {
+                                            spacing: None,
                                             container: ftd::Container {
                                                 children: vec![ftd::Element::Text(ftd::Text {
                                                     text: ftd::markdown_line("Desktop Display"),
@@ -5411,13 +5455,17 @@ mod test {
         main.container
             .children
             .push(ftd::Element::Column(ftd::Column {
+                spacing: None,
                 container: ftd::Container {
                     children: vec![ftd::Element::Column(ftd::Column {
+                        spacing: None,
                         container: ftd::Container {
                             children: vec![
                                 ftd::Element::Column(ftd::Column {
+                                    spacing: None,
                                     container: ftd::Container {
                                         children: vec![ftd::Element::Column(ftd::Column {
+                                            spacing: None,
                                             container: ftd::Container {
                                                 children: vec![],
                                                 ..Default::default()
@@ -5446,8 +5494,10 @@ mod test {
                                     },
                                 }),
                                 ftd::Element::Column(ftd::Column {
+                                    spacing: None,
                                     container: ftd::Container {
                                         children: vec![ftd::Element::Column(ftd::Column {
+                                            spacing: None,
                                             common: ftd::Common {
                                                 data_id: Some(s("mobile-container")),
                                                 ..Default::default()
@@ -5559,11 +5609,14 @@ mod test {
         main.container
             .children
             .push(ftd::Element::Column(ftd::Column {
+                spacing: None,
                 container: ftd::Container {
                     children: vec![
                         ftd::Element::Column(ftd::Column {
+                            spacing: None,
                             container: ftd::Container {
                                 children: vec![ftd::Element::Column(ftd::Column {
+                                    spacing: None,
                                     common: ftd::Common {
                                         data_id: Some(s("foo")),
                                         ..Default::default()
@@ -5588,8 +5641,10 @@ mod test {
                             },
                         }),
                         ftd::Element::Column(ftd::Column {
+                            spacing: None,
                             container: ftd::Container {
                                 children: vec![ftd::Element::Column(ftd::Column {
+                                    spacing: None,
                                     common: ftd::Common {
                                         data_id: Some(s("foo")),
                                         ..Default::default()
@@ -5687,10 +5742,13 @@ mod test {
 
         let mut external_children = super::default_column();
         external_children.container.children = vec![ftd::Element::Column(ftd::Column {
+            spacing: None,
             container: ftd::Container {
                 children: vec![ftd::Element::Row(ftd::Row {
+                    spacing: None,
                     container: ftd::Container {
                         children: vec![ftd::Element::Column(ftd::Column {
+                            spacing: None,
                             common: ftd::Common {
                                 locals: std::array::IntoIter::new([(s("id@0,0,0,0"), s("foo"))])
                                     .collect(),
@@ -5721,13 +5779,17 @@ mod test {
         main.container
             .children
             .push(ftd::Element::Column(ftd::Column {
+                spacing: None,
                 container: ftd::Container {
                     children: vec![
                         ftd::Element::Column(ftd::Column {
+                            spacing: None,
                             container: ftd::Container {
                                 children: vec![ftd::Element::Row(ftd::Row {
+                                    spacing: None,
                                     container: ftd::Container {
                                         children: vec![ftd::Element::Column(ftd::Column {
+                                            spacing: None,
                                             common: ftd::Common {
                                                 locals: std::array::IntoIter::new([(
                                                     s("id@0,0,0,0"),
@@ -5770,10 +5832,13 @@ mod test {
                             ..Default::default()
                         }),
                         ftd::Element::Column(ftd::Column {
+                            spacing: None,
                             container: ftd::Container {
                                 children: vec![ftd::Element::Row(ftd::Row {
+                                    spacing: None,
                                     container: ftd::Container {
                                         children: vec![ftd::Element::Column(ftd::Column {
+                                            spacing: None,
                                             common: ftd::Common {
                                                 locals: std::array::IntoIter::new([(
                                                     s("id@0,1,0,0"),
@@ -5920,13 +5985,17 @@ mod test {
         main.container
             .children
             .push(ftd::Element::Column(ftd::Column {
+                spacing: None,
                 container: ftd::Container {
                     children: vec![ftd::Element::Column(ftd::Column {
+                        spacing: None,
                         container: ftd::Container {
                             children: vec![
                                 ftd::Element::Column(ftd::Column {
+                                    spacing: None,
                                     container: ftd::Container {
                                         children: vec![ftd::Element::Column(ftd::Column {
+                                            spacing: None,
                                             container: ftd::Container {
                                                 children: vec![],
                                                 ..Default::default()
@@ -5948,8 +6017,10 @@ mod test {
                                     },
                                 }),
                                 ftd::Element::Column(ftd::Column {
+                                    spacing: None,
                                     container: ftd::Container {
                                         children: vec![ftd::Element::Column(ftd::Column {
+                                            spacing: None,
                                             common: ftd::Common {
                                                 data_id: Some(s("main-container")),
                                                 ..Default::default()
@@ -6037,6 +6108,7 @@ mod test {
     fn open_container_id_1() {
         let mut main = self::default_column();
         main.container.children.push(ftd::Element::Row(ftd::Row {
+            spacing: None,
             common: ftd::Common {
                 data_id: Some(s("r1")),
                 id: Some(s("r1")),
@@ -6048,6 +6120,7 @@ mod test {
             },
         }));
         main.container.children.push(ftd::Element::Row(ftd::Row {
+            spacing: None,
             container: ftd::Container {
                 external_children: Default::default(),
                 children: vec![
@@ -6057,6 +6130,7 @@ mod test {
                         ..Default::default()
                     }),
                     ftd::Element::Row(ftd::Row {
+                        spacing: None,
                         container: ftd::Container {
                             open: (Some(false), None),
                             ..Default::default()
@@ -6136,6 +6210,7 @@ mod test {
     fn basic_loop_on_record_1() {
         let mut main = super::default_column();
         main.container.children.push(ftd::Element::Row(ftd::Row {
+            spacing: None,
             container: ftd::Container {
                 children: vec![
                     ftd::Element::Text(ftd::Text {
@@ -6170,6 +6245,7 @@ mod test {
         }));
 
         main.container.children.push(ftd::Element::Row(ftd::Row {
+            spacing: None,
             container: ftd::Container {
                 children: vec![
                     ftd::Element::Text(ftd::Text {
@@ -6203,6 +6279,7 @@ mod test {
         }));
 
         main.container.children.push(ftd::Element::Row(ftd::Row {
+            spacing: None,
             container: ftd::Container {
                 children: vec![
                     ftd::Element::Text(ftd::Text {
@@ -6440,6 +6517,7 @@ mod test {
         main.container.children.push(ftd::Element::Null);
 
         main.container.children.push(ftd::Element::Row(ftd::Row {
+            spacing: None,
             container: ftd::Container {
                 children: vec![
                     ftd::Element::Text(ftd::Text {
@@ -6738,6 +6816,7 @@ mod test {
         };
 
         col.container.children.push(ftd::Element::Row(ftd::Row {
+            spacing: None,
             container: ftd::Container {
                 children: vec![
                     ftd::Element::Text(ftd::Text {
@@ -6771,6 +6850,7 @@ mod test {
         }));
 
         col.container.children.push(ftd::Element::Row(ftd::Row {
+            spacing: None,
             container: ftd::Container {
                 children: vec![
                     ftd::Element::Text(ftd::Text {
@@ -7234,6 +7314,7 @@ mod test {
         let mut main = super::default_column();
 
         main.container.children.push(ftd::Element::Row(ftd::Row {
+            spacing: None,
             container: ftd::Container {
                 children: vec![
                     ftd::Element::Text(ftd::Text {
@@ -7268,6 +7349,7 @@ mod test {
         }));
 
         main.container.children.push(ftd::Element::Row(ftd::Row {
+            spacing: None,
             container: ftd::Container {
                 children: vec![
                     ftd::Element::Text(ftd::Text {
@@ -7302,6 +7384,7 @@ mod test {
         }));
 
         main.container.children.push(ftd::Element::Row(ftd::Row {
+            spacing: None,
             container: ftd::Container {
                 children: vec![
                     ftd::Element::Text(ftd::Text {
@@ -7336,6 +7419,7 @@ mod test {
         }));
 
         main.container.children.push(ftd::Element::Row(ftd::Row {
+            spacing: None,
             container: ftd::Container {
                 children: vec![
                     ftd::Element::Text(ftd::Text {
@@ -7370,6 +7454,7 @@ mod test {
         }));
 
         main.container.children.push(ftd::Element::Row(ftd::Row {
+            spacing: None,
             container: ftd::Container {
                 children: vec![
                     ftd::Element::Text(ftd::Text {
@@ -7404,6 +7489,7 @@ mod test {
         }));
 
         main.container.children.push(ftd::Element::Row(ftd::Row {
+            spacing: None,
             container: ftd::Container {
                 children: vec![
                     ftd::Element::Text(ftd::Text {
@@ -7438,6 +7524,7 @@ mod test {
         }));
 
         main.container.children.push(ftd::Element::Row(ftd::Row {
+            spacing: None,
             container: ftd::Container {
                 children: vec![
                     ftd::Element::Text(ftd::Text {
@@ -7472,6 +7559,7 @@ mod test {
         }));
 
         main.container.children.push(ftd::Element::Row(ftd::Row {
+            spacing: None,
             container: ftd::Container {
                 children: vec![
                     ftd::Element::Text(ftd::Text {
@@ -7816,6 +7904,7 @@ mod test {
     fn loop_with_tree_structure() {
         let mut main = super::default_column();
         let col = ftd::Element::Column(ftd::Column {
+            spacing: None,
             container: ftd::Container {
                 children: vec![
                     ftd::Element::Text(ftd::Text {
@@ -7829,6 +7918,7 @@ mod test {
                         ..Default::default()
                     }),
                     ftd::Element::Column(ftd::Column {
+                        spacing: None,
                         container: ftd::Container {
                             children: vec![ftd::Element::Text(ftd::Text {
                                 text: ftd::markdown_line("aa title"),
@@ -7845,6 +7935,7 @@ mod test {
                         ..Default::default()
                     }),
                     ftd::Element::Column(ftd::Column {
+                        spacing: None,
                         container: ftd::Container {
                             children: vec![ftd::Element::Text(ftd::Text {
                                 text: ftd::markdown_line("aaa title"),
@@ -7867,6 +7958,7 @@ mod test {
         });
         main.container.children.push(col.clone());
         main.container.children.push(ftd::Element::Row(ftd::Row {
+            spacing: None,
             container: ftd::Container {
                 children: vec![col],
                 ..Default::default()
@@ -8244,6 +8336,7 @@ mod test {
     fn import_check() {
         let mut main = super::default_column();
         main.container.children.push(ftd::Element::Row(ftd::Row {
+            spacing: None,
             container: ftd::Container {
                 children: vec![ftd::Element::Text(ftd::Text {
                     text: ftd::markdown_line("Hello World"),
@@ -8631,6 +8724,7 @@ mod test {
     fn default_with_reference() {
         let mut main = super::default_column();
         main.container.children.push(ftd::Element::Row(ftd::Row {
+            spacing: None,
             container: ftd::Container {
                 children: vec![ftd::Element::Text(ftd::Text {
                     text: ftd::markdown_line("Arpita"),
@@ -8654,6 +8748,7 @@ mod test {
             },
         }));
         main.container.children.push(ftd::Element::Row(ftd::Row {
+            spacing: None,
             container: ftd::Container {
                 children: vec![ftd::Element::Text(ftd::Text {
                     text: ftd::markdown_line("Amit Upadhayay"),
@@ -8991,12 +9086,16 @@ mod test {
         main.container
             .children
             .push(ftd::Element::Column(ftd::Column {
+                spacing: None,
                 container: ftd::Container {
                     children: vec![ftd::Element::Column(ftd::Column {
+                        spacing: None,
                         container: ftd::Container {
                             children: vec![ftd::Element::Row(ftd::Row {
+                                spacing: None,
                                 container: ftd::Container {
                                     children: vec![ftd::Element::Column(ftd::Column {
+                                        spacing: None,
                                         container: ftd::Container {
                                             children: vec![ftd::Element::Text(ftd::Text {
                                                 text: ftd::markdown_line("hello"),
@@ -9029,13 +9128,17 @@ mod test {
         main.container
             .children
             .push(ftd::Element::Column(ftd::Column {
+                spacing: None,
                 container: ftd::Container {
                     children: vec![
                         ftd::Element::Column(ftd::Column {
+                            spacing: None,
                             container: ftd::Container {
                                 children: vec![ftd::Element::Row(ftd::Row {
+                                    spacing: None,
                                     container: ftd::Container {
                                         children: vec![ftd::Element::Column(ftd::Column {
+                                            spacing: None,
                                             container: ftd::Container {
                                                 children: vec![ftd::Element::Text(ftd::Text {
                                                     text: ftd::markdown_line("hello"),
@@ -9065,6 +9168,7 @@ mod test {
                             },
                         }),
                         ftd::Element::Row(ftd::Row {
+                            spacing: None,
                             common: ftd::Common {
                                 data_id: Some(s("page-id-row")),
                                 id: Some(s("page-id-row")),
@@ -9083,6 +9187,7 @@ mod test {
             }));
 
         main.container.children.push(ftd::Element::Row(ftd::Row {
+            spacing: None,
             ..Default::default()
         }));
 
@@ -9136,6 +9241,7 @@ mod test {
         main.container
             .children
             .push(ftd::Element::Column(ftd::Column {
+                spacing: None,
                 container: ftd::Container {
                     children: vec![ftd::Element::Text(ftd::Text {
                         text: ftd::markdown_line("Heading 31"),
@@ -9160,6 +9266,7 @@ mod test {
         main.container
             .children
             .push(ftd::Element::Column(ftd::Column {
+                spacing: None,
                 container: ftd::Container {
                     children: vec![
                         ftd::Element::Text(ftd::Text {
@@ -9173,6 +9280,7 @@ mod test {
                             ..Default::default()
                         }),
                         ftd::Element::Column(ftd::Column {
+                            spacing: None,
                             container: ftd::Container {
                                 children: vec![
                                     ftd::Element::Text(ftd::Text {
@@ -9186,6 +9294,7 @@ mod test {
                                         ..Default::default()
                                     }),
                                     ftd::Element::Column(ftd::Column {
+                                        spacing: None,
                                         container: ftd::Container {
                                             children: vec![
                                                 ftd::Element::Text(ftd::Text {
@@ -9232,6 +9341,7 @@ mod test {
                             },
                         }),
                         ftd::Element::Column(ftd::Column {
+                            spacing: None,
                             container: ftd::Container {
                                 children: vec![ftd::Element::Text(ftd::Text {
                                     text: ftd::markdown_line("Heading 22"),
@@ -9257,6 +9367,7 @@ mod test {
                             },
                         }),
                         ftd::Element::Column(ftd::Column {
+                            spacing: None,
                             container: ftd::Container {
                                 children: vec![ftd::Element::Text(ftd::Text {
                                     text: ftd::markdown_line("Heading 23"),
@@ -9295,6 +9406,7 @@ mod test {
         main.container
             .children
             .push(ftd::Element::Column(ftd::Column {
+                spacing: None,
                 container: ftd::Container {
                     children: vec![
                         ftd::Element::Text(ftd::Text {
@@ -9308,6 +9420,7 @@ mod test {
                             ..Default::default()
                         }),
                         ftd::Element::Column(ftd::Column {
+                            spacing: None,
                             container: ftd::Container {
                                 children: vec![ftd::Element::Text(ftd::Text {
                                     text: ftd::markdown_line("Heading 33"),
@@ -9333,6 +9446,7 @@ mod test {
                             },
                         }),
                         ftd::Element::Column(ftd::Column {
+                            spacing: None,
                             container: ftd::Container {
                                 children: vec![ftd::Element::Text(ftd::Text {
                                     text: ftd::markdown_line("Heading 24"),
@@ -9434,6 +9548,7 @@ mod test {
         main.container
             .children
             .push(ftd::Element::Column(ftd::Column {
+                spacing: None,
                 container: ftd::Container {
                     children: vec![
                         ftd::Element::Text(ftd::Text {
@@ -9633,6 +9748,7 @@ mod test {
         main.container
             .children
             .push(ftd::Element::Column(ftd::Column {
+                spacing: None,
                 container: ftd::Container {
                     children: vec![
                         ftd::Element::Text(ftd::Text {
@@ -9717,6 +9833,7 @@ mod test {
         main.container
             .children
             .push(ftd::Element::Column(ftd::Column {
+                spacing: None,
                 container: ftd::Container {
                     children: vec![
                         ftd::Element::Text(ftd::Text {
@@ -9737,6 +9854,7 @@ mod test {
                             ..Default::default()
                         }),
                         ftd::Element::Column(ftd::Column {
+                            spacing: None,
                             container: ftd::Container {
                                 children: vec![ftd::Element::Text(ftd::Text {
                                     text: ftd::markdown_line("aa title"),
@@ -9768,6 +9886,7 @@ mod test {
                             },
                         }),
                         ftd::Element::Column(ftd::Column {
+                            spacing: None,
                             container: ftd::Container {
                                 children: vec![ftd::Element::Text(ftd::Text {
                                     text: ftd::markdown_line("aaa title"),
@@ -9859,11 +9978,14 @@ mod test {
         main.container
             .children
             .push(ftd::Element::Column(ftd::Column {
+                spacing: None,
                 container: ftd::Container {
                     children: vec![ftd::Element::Column(ftd::Column {
+                        spacing: None,
                         container: ftd::Container {
                             children: vec![
                                 ftd::Element::Column(ftd::Column {
+                                    spacing: None,
                                     container: ftd::Container {
                                         children: vec![
                                             ftd::Element::Text(ftd::Text {
@@ -9893,6 +10015,7 @@ mod test {
                                     ..Default::default()
                                 }),
                                 ftd::Element::Column(ftd::Column {
+                                    spacing: None,
                                     container: ftd::Container {
                                         children: vec![ftd::Element::Text(ftd::Text {
                                             text: ftd::markdown_line("Hello Bar"),
@@ -10098,6 +10221,7 @@ mod test {
         }));
 
         main.container.children.push(ftd::Element::Row(ftd::Row {
+            spacing: None,
             container: ftd::Container {
                 children: vec![ftd::Element::Text(ftd::Text {
                     text: ftd::markdown_line("hello5"),
@@ -10119,6 +10243,7 @@ mod test {
         }));
 
         main.container.children.push(ftd::Element::Row(ftd::Row {
+            spacing: None,
             container: ftd::Container {
                 children: vec![ftd::Element::Text(ftd::Text {
                     text: ftd::markdown("/foo says hello"),
@@ -10183,9 +10308,11 @@ mod test {
         main.container
             .children
             .push(ftd::Element::Column(ftd::Column {
+                spacing: None,
                 container: ftd::Container {
                     children: vec![
                         ftd::Element::Column(ftd::Column {
+                            spacing: None,
                             container: ftd::Container {
                                 children: vec![
                                     ftd::Element::Text(ftd::Text {
@@ -10431,6 +10558,7 @@ mod test {
         main.container
             .children
             .push(ftd::Element::Column(ftd::Column {
+                spacing: None,
                 container: ftd::Container {
                     children: vec![
                         ftd::Element::Integer(ftd::Text {
@@ -10528,6 +10656,7 @@ mod test {
     fn nested_component() {
         let mut main = super::default_column();
         main.container.children.push(ftd::Element::Row(ftd::Row {
+            spacing: None,
             common: ftd::Common {
                 locals: std::array::IntoIter::new([(s("cta@0"), s("CTA says Hello"))]).collect(),
                 ..Default::default()
@@ -10666,6 +10795,7 @@ mod test {
         main.container
             .children
             .push(ftd::Element::Column(ftd::Column {
+                spacing: None,
                 container: ftd::Container {
                     children: vec![
                         ftd::Element::Text(ftd::Text {
@@ -10722,9 +10852,11 @@ mod test {
     fn open_container_with_parent_id() {
         let mut main = super::default_column();
         let beverage_external_children = vec![ftd::Element::Column(ftd::Column {
+            spacing: None,
             container: ftd::Container {
                 children: vec![
                     ftd::Element::Column(ftd::Column {
+                        spacing: None,
                         container: ftd::Container {
                             children: vec![
                                 ftd::Element::Text(ftd::Text {
@@ -10745,6 +10877,7 @@ mod test {
                                     ..Default::default()
                                 }),
                                 ftd::Element::Column(ftd::Column {
+                                    spacing: None,
                                     common: ftd::Common {
                                         condition: Some(ftd::Condition {
                                             variable: s("@visible@0,0,0"),
@@ -10770,6 +10903,7 @@ mod test {
                         },
                     }),
                     ftd::Element::Column(ftd::Column {
+                        spacing: None,
                         container: ftd::Container {
                             children: vec![
                                 ftd::Element::Text(ftd::Text {
@@ -10790,6 +10924,7 @@ mod test {
                                     ..Default::default()
                                 }),
                                 ftd::Element::Column(ftd::Column {
+                                    spacing: None,
                                     common: ftd::Common {
                                         condition: Some(ftd::Condition {
                                             variable: s("@visible@0,0,1"),
@@ -10805,8 +10940,10 @@ mod test {
                                 s("some-child"),
                                 vec![vec![1]],
                                 vec![ftd::Element::Column(ftd::Column {
+                                    spacing: None,
                                     container: ftd::Container {
                                         children: vec![ftd::Element::Column(ftd::Column {
+                                            spacing: None,
                                             container: ftd::Container {
                                                 children: vec![
                                                     ftd::Element::Text(ftd::Text {
@@ -10827,6 +10964,7 @@ mod test {
                                                         ..Default::default()
                                                     }),
                                                     ftd::Element::Column(ftd::Column {
+                                                        spacing: None,
                                                         common: ftd::Common {
                                                             condition: Some(ftd::Condition {
                                                                 variable: s("@visible@0,0,1,0"),
@@ -10893,8 +11031,10 @@ mod test {
         main.container
             .children
             .push(ftd::Element::Column(ftd::Column {
+                spacing: None,
                 container: ftd::Container {
                     children: vec![ftd::Element::Column(ftd::Column {
+                        spacing: None,
                         container: ftd::Container {
                             children: vec![
                                 ftd::Element::Text(ftd::Text {
@@ -10915,6 +11055,7 @@ mod test {
                                     ..Default::default()
                                 }),
                                 ftd::Element::Column(ftd::Column {
+                                    spacing: None,
                                     common: ftd::Common {
                                         condition: Some(ftd::Condition {
                                             variable: s("@visible@0,0"),
@@ -11002,6 +11143,7 @@ mod test {
         main.container
             .children
             .push(ftd::Element::Column(ftd::Column {
+                spacing: None,
                 container: ftd::Container {
                     children: vec![
                         ftd::Element::Text(ftd::Text {
@@ -11118,6 +11260,7 @@ mod test {
         main.container
             .children
             .push(ftd::Element::Column(ftd::Column {
+                spacing: None,
                 container: ftd::Container {
                     children: vec![
                         ftd::Element::Text(ftd::Text {
@@ -11164,6 +11307,7 @@ mod test {
         main.container
             .children
             .push(ftd::Element::Column(ftd::Column {
+                spacing: None,
                 container: ftd::Container {
                     children: vec![
                         ftd::Element::Text(ftd::Text {
@@ -11250,6 +11394,7 @@ mod test {
         main.container
             .children
             .push(ftd::Element::Column(ftd::Column {
+                spacing: None,
                 container: ftd::Container {
                     children: vec![ftd::Element::Text(ftd::Text {
                         text: ftd::markdown_line("hello"),
@@ -11268,6 +11413,7 @@ mod test {
         main.container
             .children
             .push(ftd::Element::Column(ftd::Column {
+                spacing: None,
                 container: ftd::Container {
                     children: vec![ftd::Element::Text(ftd::Text {
                         text: ftd::markdown_line("hello"),
@@ -11324,6 +11470,7 @@ mod test {
         main.container
             .children
             .push(ftd::Element::Column(ftd::Column {
+                spacing: None,
                 container: ftd::Container {
                     children: vec![
                         ftd::Element::Null,
@@ -11341,6 +11488,7 @@ mod test {
         main.container
             .children
             .push(ftd::Element::Column(ftd::Column {
+                spacing: None,
                 container: ftd::Container {
                     children: vec![
                         ftd::Element::Text(ftd::Text {
@@ -11403,6 +11551,7 @@ mod test {
         main.container
             .children
             .push(ftd::Element::Column(ftd::Column {
+                spacing: None,
                 container: ftd::Container {
                     children: vec![ftd::Element::Text(ftd::Text {
                         text: ftd::markdown_line("Hello"),
@@ -11467,8 +11616,10 @@ mod test {
         main.container
             .children
             .push(ftd::Element::Column(ftd::Column {
+                spacing: None,
                 container: ftd::Container {
                     children: vec![ftd::Element::Column(ftd::Column {
+                        spacing: None,
                         common: ftd::Common {
                             id: Some(s("foo-id:some-id")),
                             data_id: Some(s("some-id")),
@@ -11531,9 +11682,11 @@ mod test {
         main.container
             .children
             .push(ftd::Element::Column(ftd::Column {
+                spacing: None,
                 container: ftd::Container {
                     children: vec![
                         ftd::Element::Column(ftd::Column {
+                            spacing: None,
                             container: ftd::Container {
                                 children: vec![ftd::Element::Text(ftd::Text {
                                     text: ftd::markdown_line("commit message 1"),
@@ -11549,6 +11702,7 @@ mod test {
                             ..Default::default()
                         }),
                         ftd::Element::Column(ftd::Column {
+                            spacing: None,
                             container: ftd::Container {
                                 children: vec![ftd::Element::Text(ftd::Text {
                                     text: ftd::markdown_line("commit message 2"),
@@ -11564,6 +11718,7 @@ mod test {
                             ..Default::default()
                         }),
                         ftd::Element::Column(ftd::Column {
+                            spacing: None,
                             container: ftd::Container {
                                 children: vec![ftd::Element::Text(ftd::Text {
                                     text: ftd::markdown_line("file filename 1"),
@@ -11579,6 +11734,7 @@ mod test {
                             ..Default::default()
                         }),
                         ftd::Element::Column(ftd::Column {
+                            spacing: None,
                             container: ftd::Container {
                                 children: vec![ftd::Element::Text(ftd::Text {
                                     text: ftd::markdown_line("file filename 2"),
@@ -11676,6 +11832,7 @@ mod test {
         main.container
             .children
             .push(ftd::Element::Scene(ftd::Scene {
+                spacing: None,
                 container: ftd::Container {
                     children: vec![ftd::Element::Text(ftd::Text {
                         text: ftd::markdown_line("Hello"),
@@ -11914,8 +12071,10 @@ mod test {
     fn inner_container_check() {
         let mut main = super::default_column();
         let col = ftd::Element::Column(ftd::Column {
+            spacing: None,
             container: ftd::Container {
                 children: vec![ftd::Element::Column(ftd::Column {
+                    spacing: None,
                     container: ftd::Container {
                         children: vec![
                             ftd::Element::Image(ftd::Image {
@@ -12051,6 +12210,7 @@ mod test {
         main.container
             .children
             .push(ftd::Element::Column(ftd::Column {
+                spacing: None,
                 container: ftd::Container {
                     children: vec![
                         ftd::Element::Text(ftd::Text {
@@ -12066,6 +12226,7 @@ mod test {
                             ..Default::default()
                         }),
                         ftd::Element::Column(ftd::Column {
+                            spacing: None,
                             container: ftd::Container {
                                 children: vec![ftd::Element::Text(ftd::Text {
                                     text: ftd::markdown_line("Hello Again"),
@@ -12158,6 +12319,7 @@ mod test {
     fn new_syntax() {
         let mut main = super::default_column();
         main.container.children.push(ftd::Element::Row(ftd::Row {
+            spacing: None,
             container: ftd::Container {
                 children: vec![ftd::Element::Integer(ftd::Text {
                     text: ftd::markdown_line("20"),
@@ -12254,8 +12416,10 @@ mod test {
     fn condition_check() {
         let mut main = super::default_column();
         main.container.children.push(ftd::Element::Row(ftd::Row {
+            spacing: None,
             container: ftd::Container {
                 children: vec![ftd::Element::Column(ftd::Column {
+                    spacing: None,
                     container: ftd::Container {
                         children: vec![ftd::Element::Text(ftd::Text {
                             text: ftd::markdown_line("Hello"),
@@ -12328,6 +12492,7 @@ mod test {
         main.container
             .children
             .push(ftd::Element::Column(ftd::Column {
+                spacing: None,
                 container: ftd::Container {
                     children: vec![
                         ftd::Element::Integer(ftd::Text {
@@ -12410,6 +12575,7 @@ mod test {
             }));
 
         main.container.children.push(ftd::Element::Row(ftd::Row {
+            spacing: None,
             container: ftd::Container {
                 children: vec![ftd::Element::Text(ftd::Text {
                     text: ftd::markdown_line("hello"),
@@ -12533,6 +12699,7 @@ mod test {
         main.container
             .children
             .push(ftd::Element::Column(ftd::Column {
+                spacing: None,
                 container: ftd::Container {
                     children: vec![
                         ftd::Element::Text(ftd::Text {
@@ -12656,6 +12823,7 @@ mod test {
         main.container
             .children
             .push(ftd::Element::Column(ftd::Column {
+                spacing: None,
                 container: ftd::Container {
                     children: vec![
                         ftd::Element::Text(ftd::Text {
@@ -12681,6 +12849,7 @@ mod test {
                             ..Default::default()
                         }),
                         ftd::Element::Column(ftd::Column {
+                            spacing: None,
                             container: ftd::Container {
                                 children: vec![
                                     ftd::Element::Text(ftd::Text {

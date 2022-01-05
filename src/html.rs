@@ -452,7 +452,7 @@ impl ftd::Scene {
         if self.common.width.is_none() {
             main_node.style.insert(s("width"), s("1000px"));
         }
-        if let Some(ref p) = self.container.spacing {
+        if let Some(ref p) = self.spacing {
             let (key, value) = spacing(p, "margin-left");
             match p {
                 ftd::Spacing::Absolute { value } => {
@@ -477,30 +477,30 @@ impl ftd::Grid {
         } else {
             n.style.insert(s("display"), s("grid"));
         }
-        if let Some(ref areas) = self.areas {
-            let areas = areas.split('|').map(|v| v.trim()).collect::<Vec<&str>>();
-            let mut css_areas = s("");
-            for area in areas {
-                css_areas = format!("{}'{}'", css_areas, area);
-            }
-            n.style.insert(s("grid-template-areas"), css_areas);
+        let areas = self
+            .slots
+            .split('|')
+            .map(|v| v.trim())
+            .collect::<Vec<&str>>();
+        let mut css_areas = s("");
+        for area in areas {
+            css_areas = format!("{}'{}'", css_areas, area);
         }
-        if let Some(ref columns) = self.columns {
+        n.style.insert(s("grid-template-areas"), css_areas);
+
+        if let Some(ref columns) = self.slot_widths {
             n.style.insert(s("grid-template-columns"), s(columns));
         }
-        if let Some(ref columns) = self.columns {
-            n.style.insert(s("grid-template-columns"), s(columns));
-        }
-        if let Some(ref rows) = self.rows {
+        if let Some(ref rows) = self.slot_heights {
             n.style.insert(s("grid-template-rows"), s(rows));
         }
-        if let Some(ref gap) = self.gap {
+        if let Some(ref gap) = self.spacing {
             n.style.insert(s("grid-gap"), format!("{}px", gap));
         }
-        if let Some(ref gap) = self.column_gap {
+        if let Some(ref gap) = self.spacing_vertical {
             n.style.insert(s("column-gap"), format!("{}px", gap));
         }
-        if let Some(ref gap) = self.row_gap {
+        if let Some(ref gap) = self.spacing_horizontal {
             n.style.insert(s("row-gap"), format!("{}px", gap));
         }
         if let Some(ref auto_flow) = self.auto_flow {
@@ -527,7 +527,7 @@ impl ftd::Row {
 
         n.style.insert(s("justify-content"), s("flex-start"));
 
-        if let Some(ref p) = self.container.spacing {
+        if let Some(ref p) = self.spacing {
             let (key, value) = spacing(p, "margin-left");
             match p {
                 ftd::Spacing::Absolute { value } => {
@@ -559,7 +559,7 @@ impl ftd::Column {
 
         n.style.insert(s("justify-content"), s("flex-start"));
 
-        if let Some(ref p) = self.container.spacing {
+        if let Some(ref p) = self.spacing {
             let (key, value) = spacing(p, "margin-top");
             match p {
                 ftd::Spacing::Absolute { value } => {

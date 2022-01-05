@@ -49,10 +49,12 @@ impl Element {
                 Self::Row(ftd::Row {
                     common: ftd::Common { data_id: id, .. },
                     container,
+                    ..
                 })
                 | Self::Column(ftd::Column {
                     common: ftd::Common { data_id: id, .. },
                     container,
+                    ..
                 })
                 | Self::Scene(ftd::Scene {
                     common: ftd::Common { data_id: id, .. },
@@ -148,6 +150,7 @@ impl Element {
                         children,
                         ..
                     },
+                ..
             })
             | Self::Column(ftd::Column {
                 common: ftd::Common { data_id: id, .. },
@@ -157,6 +160,7 @@ impl Element {
                         children,
                         ..
                     },
+                ..
             })
             | Self::Scene(ftd::Scene {
                 common: ftd::Common { data_id: id, .. },
@@ -317,6 +321,7 @@ impl Element {
                             ..
                         },
                     container,
+                    ..
                 })
                 | ftd::Element::Row(ftd::Row {
                     common:
@@ -326,6 +331,7 @@ impl Element {
                             ..
                         },
                     container,
+                    ..
                 })
                 | ftd::Element::Scene(ftd::Scene {
                     common:
@@ -335,6 +341,7 @@ impl Element {
                             ..
                         },
                     container,
+                    ..
                 })
                 | ftd::Element::Grid(ftd::Grid {
                     common:
@@ -422,6 +429,7 @@ impl Element {
                             ..
                         },
                     container,
+                    ..
                 })
                 | ftd::Element::Row(ftd::Row {
                     common:
@@ -431,6 +439,7 @@ impl Element {
                             ..
                         },
                     container,
+                    ..
                 })
                 | ftd::Element::Scene(ftd::Scene {
                     common:
@@ -440,6 +449,7 @@ impl Element {
                             ..
                         },
                     container,
+                    ..
                 })
                 | ftd::Element::Grid(ftd::Grid {
                     common:
@@ -506,6 +516,7 @@ impl Element {
                             ..
                         },
                     container,
+                    ..
                 })
                 | ftd::Element::Row(ftd::Row {
                     common:
@@ -515,6 +526,7 @@ impl Element {
                             ..
                         },
                     container,
+                    ..
                 })
                 | ftd::Element::Scene(ftd::Scene {
                     common:
@@ -524,6 +536,7 @@ impl Element {
                             ..
                         },
                     container,
+                    ..
                 })
                 | ftd::Element::Grid(ftd::Grid {
                     common:
@@ -585,14 +598,17 @@ impl Element {
                 ftd::Element::Row(ftd::Row {
                     common: ftd::Common { locals, .. },
                     container,
+                    ..
                 })
                 | ftd::Element::Column(ftd::Column {
                     common: ftd::Common { locals, .. },
                     container,
+                    ..
                 })
                 | ftd::Element::Scene(ftd::Scene {
                     common: ftd::Common { locals, .. },
                     container,
+                    ..
                 })
                 | ftd::Element::Grid(ftd::Grid {
                     common: ftd::Common { locals, .. },
@@ -1364,7 +1380,6 @@ pub struct Container {
     pub children: Vec<ftd::Element>,
     pub external_children: Option<(String, Vec<Vec<usize>>, Vec<ftd::Element>)>,
     pub open: (Option<bool>, Option<String>),
-    pub spacing: Option<Spacing>,
     pub wrap: bool,
 }
 
@@ -1390,23 +1405,25 @@ pub struct Image {
 #[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
 pub struct Row {
     pub container: Container,
+    pub spacing: Option<Spacing>,
     pub common: Common,
 }
 
 #[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
 pub struct Scene {
     pub container: Container,
+    pub spacing: Option<Spacing>,
     pub common: Common,
 }
 
 #[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
 pub struct Grid {
-    pub areas: Option<String>,
-    pub columns: Option<String>,
-    pub rows: Option<String>,
-    pub gap: Option<i64>,
-    pub column_gap: Option<i64>,
-    pub row_gap: Option<i64>,
+    pub slots: String,
+    pub slot_widths: Option<String>,
+    pub slot_heights: Option<String>,
+    pub spacing: Option<i64>,
+    pub spacing_vertical: Option<i64>,
+    pub spacing_horizontal: Option<i64>,
     pub inline: bool,
     pub auto_flow: Option<String>,
     pub container: Container,
@@ -1416,6 +1433,7 @@ pub struct Grid {
 #[derive(serde::Deserialize, Debug, PartialEq, Clone, Default, serde::Serialize)]
 pub struct Column {
     pub container: Container,
+    pub spacing: Option<Spacing>,
     pub common: Common,
 }
 

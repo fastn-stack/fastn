@@ -1,0 +1,29 @@
+-- ftd.column:
+padding: 30
+
+
+-- ftd.grid:
+slots: header header | sidebar main
+slot-widths: 60px 100px
+slot-heights: 20px 200px
+background-color: #2196F3
+spacing: 10
+padding: 10
+
+--- text: Header
+slot: header
+
+--- text: Sidebar
+slot: sidebar
+
+--- text: Main
+slot: main
+
+
+-- ftd.text text: $value
+caption value:
+string slot:
+slot: $slot
+background-color: rgba(255, 255, 255, 0.8)
+text-align: center
+height: fill

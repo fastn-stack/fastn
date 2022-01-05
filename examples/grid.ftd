@@ -11,22 +11,22 @@ width: fill
 This grid layout contains six columns and three rows:
 
 -- ftd.grid:
-areas: header header header header header header | menu main main main right right | menu footer footer footer footer footer
-gap: 10
+slots: header header header header header header | menu main main main right right | menu footer footer footer footer footer
+spacing: 10
 background-color: #2196F3
 padding: 10
 width: fill
 margin-bottom: 40
 
 --- ftd.text: Header
-grid-area: header
+slot: header
 background-color: rgba(255, 255, 255, 0.8)
 text-align: center
 size: 30
 padding-vertical: 20
 
 --- ftd.text: Menu
-grid-area: menu
+slot: menu
 background-color: rgba(255, 255, 255, 0.8)
 text-align: center
 size: 30
@@ -34,21 +34,21 @@ padding-vertical: 20
 height: fill
 
 --- ftd.text: Main
-grid-area: main
+slot: main
 background-color: rgba(255, 255, 255, 0.8)
 text-align: center
 size: 30
 padding-vertical: 20
 
 --- ftd.text: Right
-grid-area: right
+slot: right
 background-color: rgba(255, 255, 255, 0.8)
 text-align: center
 size: 30
 padding-vertical: 20
 
 --- ftd.text: Footer
-grid-area: footer
+slot: footer
 background-color: rgba(255, 255, 255, 0.8)
 text-align: center
 size: 30
@@ -56,11 +56,11 @@ padding-vertical: 20
 
 
 
--- ft.h1: Grid Using Rows and Column
+/-- ft.h1: Grid Using Rows and Column
 
 This grid layout contains three columns and two rows:
 
--- ftd.grid:
+/-- ftd.grid:
 columns: 100px 50px 100px
 rows: 80px auto
 column-gap: 10
@@ -123,36 +123,36 @@ padding-vertical: 20
 This grid layout contains four columns and three rows:
 
 -- ftd.grid:
-areas: header header header header | main main . sidebar | footer footer footer footer
-gap: 10
+slots: header header header header | main main . sidebar | footer footer footer footer
+spacing: 10
 background-color: green
 padding: 10
 width: fill
 margin-bottom: 40
 
 --- ftd.text: Header
-grid-area: header
+slot: header
 background-color: rgba(255, 255, 255, 0.8)
 text-align: center
 size: 30
 padding-vertical: 20
 
 --- ftd.text: Main
-grid-area: main
+slot: main
 background-color: rgba(255, 255, 255, 0.8)
 text-align: center
 size: 30
 padding-vertical: 20
 
 --- ftd.text: Sidebar
-grid-area: sidebar
+slot: sidebar
 background-color: rgba(255, 255, 255, 0.8)
 text-align: center
 size: 30
 padding-vertical: 20
 
 --- ftd.text: Footer
-grid-area: footer
+slot: footer
 background-color: rgba(255, 255, 255, 0.8)
 text-align: center
 size: 30
@@ -160,11 +160,11 @@ padding-vertical: 20
 
 
 
--- ft.h1: Grid Row Auto Flow
+/-- ft.h1: Grid Row Auto Flow
 
 This grid layout contains five columns and two rows:
 
--- ftd.grid:
+/-- ftd.grid:
 columns: 60px 60px 60px 60px 60px
 rows: 30px 30px
 column-gap: 10
@@ -214,11 +214,11 @@ height: fill
 overflow-y: auto
 
 
--- ft.h1: Grid Column Auto Flow
+/-- ft.h1: Grid Column Auto Flow
 
 This grid layout contains five columns and two rows:
 
--- ftd.grid:
+/-- ftd.grid:
 columns: 60px 60px 60px 60px 60px
 rows: 30px 30px
 column-gap: 10
@@ -266,3 +266,33 @@ text-align: center
 size: 30
 height: fill
 overflow-y: auto
+
+-- ft.h1: Grid Areas with slot-widths and slot-heights
+
+This grid layout contains two columns and two rows:
+
+-- ftd.grid:
+slots: header header | sidebar main
+slot-widths: 60px 100px
+slot-heights: 20px 200px
+background-color: #2196F3
+spacing: 10
+padding: 10
+
+--- text: Header
+slot: header
+
+--- text: Sidebar
+slot: sidebar
+
+--- text: Main
+slot: main
+
+
+-- ftd.text text: $value
+caption value:
+string slot:
+slot: $slot
+background-color: rgba(255, 255, 255, 0.8)
+text-align: center
+height: fill
