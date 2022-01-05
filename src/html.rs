@@ -790,9 +790,6 @@ impl ftd::Image {
                 n.style.insert(s("object-position"), s("0 0"));
             }
         }
-        if self.common.width == None {
-            n.style.insert(s("width"), s("100%"));
-        }
 
         n
     }
