@@ -253,7 +253,7 @@ pub fn common_from_properties(
         )?,
         inner: ftd::p2::utils::bool_with_default("inner", inner_default, properties, doc.name, 0)?,
         z_index: ftd::p2::utils::int_optional("z-index", properties, doc.name, 0)?,
-        grid_area: ftd::p2::utils::string_optional("grid-area", properties, doc.name, 0)?,
+        grid_area: ftd::p2::utils::string_optional("slot", properties, doc.name, 0)?,
         grid_column: ftd::p2::utils::string_optional("grid-column", properties, doc.name, 0)?,
         grid_row: ftd::p2::utils::string_optional("grid-row", properties, doc.name, 0)?,
     })
@@ -508,18 +508,15 @@ fn common_arguments() -> Vec<(String, ftd::p2::Kind)> {
             "z-index".to_string(),
             ftd::p2::Kind::integer().into_optional(),
         ),
-        (
-            "grid-area".to_string(),
-            ftd::p2::Kind::string().into_optional(),
-        ),
-        (
+        ("slot".to_string(), ftd::p2::Kind::string().into_optional()),
+        /*(
             "grid-column".to_string(),
             ftd::p2::Kind::string().into_optional(),
         ),
         (
             "grid-row".to_string(),
             ftd::p2::Kind::string().into_optional(),
-        ),
+        ),*/
     ]
 }
 
@@ -540,9 +537,6 @@ pub fn container_from_properties(
         children: Default::default(),
         external_children: Default::default(),
         open: ftd::p2::utils::string_bool_optional("open", properties, doc.name, 0)?,
-        spacing: ftd::Spacing::from(ftd::p2::utils::string_optional(
-            "spacing", properties, doc.name, 0,
-        )?)?,
         wrap: ftd::p2::utils::bool_with_default("wrap", false, properties, doc.name, 0)?,
     })
 }
@@ -550,10 +544,6 @@ pub fn container_from_properties(
 fn container_arguments() -> Vec<(String, ftd::p2::Kind)> {
     vec![
         ("open".to_string(), ftd::p2::Kind::string().into_optional()),
-        (
-            "spacing".to_string(),
-            ftd::p2::Kind::string().into_optional(),
-        ),
         ("align".to_string(), ftd::p2::Kind::string().into_optional()),
         ("wrap".to_string(), ftd::p2::Kind::boolean().into_optional()),
     ]
@@ -617,10 +607,17 @@ pub fn row_function() -> ftd::Component {
         kernel: true,
         full_name: "ftd#row".to_string(),
         root: "ftd.kernel".to_string(),
-        arguments: [container_arguments(), common_arguments()]
-            .concat()
-            .into_iter()
-            .collect(),
+        arguments: [
+            container_arguments(),
+            common_arguments(),
+            vec![(
+                "spacing".to_string(),
+                ftd::p2::Kind::string().into_optional(),
+            )],
+        ]
+        .concat()
+        .into_iter()
+        .collect(),
         locals: Default::default(),
         properties: Default::default(),
         instructions: Default::default(),
@@ -646,6 +643,9 @@ pub fn row_from_properties(
             properties, doc, condition, is_child, events, all_locals, root_name, None,
         )?,
         container: container_from_properties(properties, doc)?,
+        spacing: ftd::Spacing::from(ftd::p2::utils::string_optional(
+            "spacing", properties, doc.name, 0,
+        )?)?,
     })
 }
 
@@ -655,10 +655,17 @@ pub fn column_function() -> ftd::Component {
         kernel: true,
         full_name: "ftd#column".to_string(),
         root: "ftd.kernel".to_string(),
-        arguments: [container_arguments(), common_arguments()]
-            .concat()
-            .into_iter()
-            .collect(),
+        arguments: [
+            container_arguments(),
+            common_arguments(),
+            vec![(
+                "spacing".to_string(),
+                ftd::p2::Kind::string().into_optional(),
+            )],
+        ]
+        .concat()
+        .into_iter()
+        .collect(),
         locals: Default::default(),
         properties: Default::default(),
         instructions: Default::default(),
@@ -683,6 +690,9 @@ pub fn column_from_properties(
             properties, doc, condition, is_child, events, all_locals, root_name, None,
         )?,
         container: container_from_properties(properties, doc)?,
+        spacing: ftd::Spacing::from(ftd::p2::utils::string_optional(
+            "spacing", properties, doc.name, 0,
+        )?)?,
     })
 }
 
@@ -1345,11 +1355,17 @@ pub fn decimal_function() -> ftd::Component {
 
 pub fn scene_function() -> ftd::Component {
     let arguments = {
-        let mut arguments: std::collections::BTreeMap<String, ftd::p2::Kind> =
-            [container_arguments(), common_arguments()]
-                .concat()
-                .into_iter()
-                .collect();
+        let mut arguments: std::collections::BTreeMap<String, ftd::p2::Kind> = [
+            container_arguments(),
+            common_arguments(),
+            vec![(
+                "spacing".to_string(),
+                ftd::p2::Kind::string().into_optional(),
+            )],
+        ]
+        .concat()
+        .into_iter()
+        .collect();
         arguments.remove("spacing");
         arguments.remove("wrap");
         arguments
@@ -1371,43 +1387,32 @@ pub fn scene_function() -> ftd::Component {
 }
 
 pub fn grid_function() -> ftd::Component {
-    let arguments = {
-        let mut arguments: std::collections::BTreeMap<String, ftd::p2::Kind> = [
-            vec![
-                ("areas".to_string(), ftd::p2::Kind::string().into_optional()),
-                (
-                    "columns".to_string(),
-                    ftd::p2::Kind::string().into_optional(),
-                ),
-                ("rows".to_string(), ftd::p2::Kind::string().into_optional()),
-                ("gap".to_string(), ftd::p2::Kind::integer().into_optional()),
-                (
-                    "column-gap".to_string(),
-                    ftd::p2::Kind::integer().into_optional(),
-                ),
-                (
-                    "row-gap".to_string(),
-                    ftd::p2::Kind::integer().into_optional(),
-                ),
-                (
-                    "inline".to_string(),
-                    ftd::p2::Kind::boolean().into_optional(),
-                ),
-                (
-                    "auto-flow".to_string(),
-                    ftd::p2::Kind::string().into_optional(),
-                ),
-            ],
-            container_arguments(),
-            common_arguments(),
-        ]
-        .concat()
-        .into_iter()
-        .collect();
-        arguments.remove("spacing");
-        arguments.remove("wrap");
-        arguments
-    };
+    let arguments: std::collections::BTreeMap<String, ftd::p2::Kind> = [
+        container_arguments(),
+        common_arguments(),
+        vec![
+            ("slots".to_string(), ftd::p2::Kind::string()),
+            (
+                "slot-widths".to_string(),
+                ftd::p2::Kind::string().into_optional(),
+            ),
+            (
+                "slot-heights".to_string(),
+                ftd::p2::Kind::string().into_optional(),
+            ),
+            (
+                "spacing".to_string(),
+                ftd::p2::Kind::integer().into_optional(),
+            ),
+            (
+                "inline".to_string(),
+                ftd::p2::Kind::boolean().into_optional(),
+            ),
+        ],
+    ]
+    .concat()
+    .into_iter()
+    .collect();
 
     ftd::Component {
         line_number: 0,
@@ -1528,6 +1533,9 @@ pub fn scene_from_properties(
             properties, doc, condition, is_child, events, all_locals, root_name, None,
         )?,
         container: container_from_properties(properties, doc)?,
+        spacing: ftd::Spacing::from(ftd::p2::utils::string_optional(
+            "spacing", properties, doc.name, 0,
+        )?)?,
     })
 }
 
@@ -1542,12 +1550,25 @@ pub fn grid_from_properties(
 ) -> ftd::p1::Result<ftd::Grid> {
     let properties = &ftd::p2::utils::properties(properties_with_ref);
     Ok(ftd::Grid {
-        areas: ftd::p2::utils::string_optional("areas", properties, doc.name, 0)?,
-        columns: ftd::p2::utils::string_optional("columns", properties, doc.name, 0)?,
-        rows: ftd::p2::utils::string_optional("rows", properties, doc.name, 0)?,
-        gap: ftd::p2::utils::int_optional("gap", properties, doc.name, 0)?,
-        column_gap: ftd::p2::utils::int_optional("column-gap", properties, doc.name, 0)?,
-        row_gap: ftd::p2::utils::int_optional("row-gap", properties, doc.name, 0)?,
+        slots: match ftd::p2::utils::string_optional("slots", properties, doc.name, 0)? {
+            Some(val) => val,
+            None => return ftd::e2("expected slots", doc.name, 0),
+        },
+        slot_widths: ftd::p2::utils::string_optional("slot-widths", properties, doc.name, 0)?,
+        slot_heights: ftd::p2::utils::string_optional("slot-heights", properties, doc.name, 0)?,
+        spacing: ftd::p2::utils::int_optional("spacing", properties, doc.name, 0)?,
+        spacing_vertical: ftd::p2::utils::int_optional(
+            "spacing-vertical",
+            properties,
+            doc.name,
+            0,
+        )?,
+        spacing_horizontal: ftd::p2::utils::int_optional(
+            "spacing-horizontal",
+            properties,
+            doc.name,
+            0,
+        )?,
         common: common_from_properties(
             properties, doc, condition, is_child, events, all_locals, root_name, None,
         )?,
