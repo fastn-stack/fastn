@@ -343,7 +343,7 @@ window.ftd = (function () {
             let target = action["target"];
             exports.set_bool(id, target, data[target].value !== 'true');
         } else if (act === "message-host") {
-            let target = action["target"].trim();
+            let target = action["target"].trim().replaceAll("-", "_");
             window[target]();
         } else if (act === "increment") {
             let target = action["target"];
