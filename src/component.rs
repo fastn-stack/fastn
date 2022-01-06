@@ -178,6 +178,24 @@ impl ChildComponent {
             }
         }
 
+        let children = {
+            let mut children = children.to_vec();
+            let root = { doc.get_component(self.line_number, self.root.as_str())? };
+            let root_name = ftd::p2::utils::get_root_component_name(
+                doc,
+                root.full_name.as_str(),
+                self.line_number,
+            )?;
+            if root_name.eq("ftd#markup") {
+                for instruction in root.instructions {
+                    if let ftd::Instruction::ChildComponent { child } = instruction {
+                        children.push(child);
+                    }
+                }
+            }
+            children
+        };
+
         let mut elements_name = vec![];
 
         let mut container_children = vec![];
@@ -1398,16 +1416,26 @@ impl Component {
                     )?,
                 }
             } else {
-                let s = ChildComponent::from_p1(
-                    sub.line_number,
-                    sub.name.as_str(),
-                    &sub.header,
-                    &sub.caption,
-                    &sub.body_without_comment(),
+                let child = if ftd::p2::utils::get_root_component_name(
                     doc,
-                    &arguments,
-                )?;
-                Instruction::ChildComponent { child: s }
+                    root_component.full_name.as_str(),
+                    sub.line_number,
+                )?
+                .eq("ftd#markup")
+                {
+                    ftd::p2::utils::get_markup_child(sub, doc, &arguments)?
+                } else {
+                    ftd::ChildComponent::from_p1(
+                        sub.line_number,
+                        sub.name.as_str(),
+                        &sub.header,
+                        &sub.caption,
+                        &sub.body_without_comment(),
+                        doc,
+                        &arguments,
+                    )?
+                };
+                Instruction::ChildComponent { child }
             });
         }
 
@@ -1667,6 +1695,7 @@ impl Component {
                 | ftd::Element::Integer(_)
                 | ftd::Element::Decimal(_)
                 | ftd::Element::Boolean(_)
+                | ftd::Element::Markup(_)
                 | ftd::Element::Null => {}
                 ftd::Element::Column(ftd::Column {
                     ref mut container, ..
@@ -1678,9 +1707,6 @@ impl Component {
                     ref mut container, ..
                 })
                 | ftd::Element::Grid(ftd::Grid {
-                    ref mut container, ..
-                })
-                | ftd::Element::Markup(ftd::Markups {
                     ref mut container, ..
                 }) => {
                     let ElementWithContainer {

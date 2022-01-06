@@ -625,10 +625,25 @@ pub fn properties(
     properties
 }
 
+pub(crate) fn get_root_component_name(
+    doc: &ftd::p2::TDoc,
+    name: &str,
+    line_number: usize,
+) -> ftd::p1::Result<String> {
+    let mut name = name.to_string();
+    let mut root_name = name.to_string();
+    while name != "ftd.kernel" {
+        let component = doc.get_component(line_number, name.as_str())?;
+        name = component.root;
+        root_name = component.full_name;
+    }
+    Ok(root_name)
+}
+
 pub(crate) fn get_markup_child(
     sub: &ftd::p1::SubSection,
     doc: &ftd::p2::TDoc,
-    parent: &ftd::ChildComponent,
+    arguments: &std::collections::BTreeMap<String, ftd::p2::Kind>,
 ) -> ftd::p1::Result<ftd::ChildComponent> {
     let (sub_name, ref_name) = match sub.name.split_once(" ") {
         Some((sub_name, ref_name)) => (sub_name.trim(), ref_name.trim()),
@@ -645,8 +660,8 @@ pub(crate) fn get_markup_child(
         &sub.header,
         &sub_caption,
         &sub.body_without_comment(),
-        &doc,
-        &parent.arguments,
+        doc,
+        arguments,
     )?;
     child.root = format!("{} {}", child.root, ref_name);
     Ok(child)
