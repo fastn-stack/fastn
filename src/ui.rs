@@ -63,6 +63,48 @@ markup {
 */
 
 impl Element {
+    pub fn set_markup_id(
+        children: &mut [ftd::Markup],
+        index_vec: &[usize],
+        external_id: Option<String>,
+    ) {
+        for (idx, child) in children.iter_mut().enumerate() {
+            let index_string: String = {
+                let mut index_vec = index_vec.to_vec();
+                index_vec.push(idx);
+                index_vec
+                    .iter()
+                    .map(|v| v.to_string())
+                    .collect::<Vec<String>>()
+                    .join(",")
+            };
+            let mut id = match &mut child.itext {
+                IText::Text(t) | IText::Integer(t) | IText::Boolean(t) | IText::Decimal(t) => {
+                    &mut t.common.data_id
+                }
+                IText::TextBlock(t) => &mut t.common.data_id,
+            };
+
+            let mut index_vec = index_vec.to_vec();
+            index_vec.push(idx);
+            Self::set_markup_id(&mut child.children, &index_vec, external_id.clone());
+
+            let external_id = {
+                if let Some(ref external_id) = external_id {
+                    format!(":{}", external_id)
+                } else {
+                    "".to_string()
+                }
+            };
+
+            if let Some(id) = &mut id {
+                *id = format!("{}:{}{}", id, index_string, external_id);
+            } else {
+                *id = Some(format!("{}{}", index_string, external_id));
+            }
+        }
+    }
+
     pub fn set_id(children: &mut [ftd::Element], index_vec: &[usize], external_id: Option<String>) {
         for (idx, child) in children.iter_mut().enumerate() {
             let index_string: String = {
@@ -140,11 +182,13 @@ impl Element {
                     }
                     id
                 }
+                Self::Markup(t) => {
+                    let mut index_vec = index_vec.to_vec();
+                    index_vec.push(idx);
+                    Self::set_markup_id(&mut t.children, &index_vec, external_id.clone());
+                    &mut t.common.data_id
+                }
                 Self::IFrame(ftd::IFrame {
-                    common: ftd::Common { data_id: id, .. },
-                    ..
-                }) => id,
-                Self::Markup(ftd::Markups {
                     common: ftd::Common { data_id: id, .. },
                     ..
                 }) => id,
