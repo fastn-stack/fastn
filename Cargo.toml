@@ -1,6 +1,6 @@
 [package]
 name = "ftd"
-version = "0.1.17"
+version = "0.1.18"
 authors = [
     "Amit Upadhyay <upadhyay@gmail.com>",
     "Arpita Jaiswal <arpita@fifthtry.com>",
