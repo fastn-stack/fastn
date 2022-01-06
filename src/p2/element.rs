@@ -1637,7 +1637,10 @@ pub fn markup_from_properties(
     for v in value.split("\n\n") {
         let v = v.trim().replace('\n', "");
         let properties_with_ref = {
-            let mut properties_with_ref = properties_with_ref.clone();
+            let mut properties_with_ref: std::collections::BTreeMap<
+                String,
+                (ftd::Value, Option<String>),
+            > = Default::default();
             let mut text = text.clone();
             text.0 = ftd::Value::String {
                 text: v,
