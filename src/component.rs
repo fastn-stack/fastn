@@ -190,17 +190,7 @@ impl ChildComponent {
                 let instructions = children
                     .iter()
                     .map(|child| {
-                        let child = {
-                            let mut child = child.clone();
-                            if let ftd::Element::Markup(_) = element {
-                                if let Some((ref c, ref element_name)) = child.root.split_once(" ")
-                                {
-                                    elements_name.push(element_name.to_string());
-                                    child.root = c.to_string();
-                                }
-                            }
-                            child
-                        };
+                        let child = get_modified_child(child, &element, &mut elements_name);
                         if child.is_recursive {
                             ftd::Instruction::RecursiveChildComponent { child }
                         } else {
@@ -276,11 +266,27 @@ impl ChildComponent {
             // dbg!(&markups);
         }
 
-        Ok(ElementWithContainer {
+        return Ok(ElementWithContainer {
             element,
             children: container_children,
             child_container,
-        })
+        });
+
+        fn get_modified_child(
+            child: &ftd::ChildComponent,
+            element: &ftd::Element,
+            elements_name: &mut Vec<String>,
+        ) -> ftd::ChildComponent {
+            let mut child = child.clone();
+            if let ftd::Element::Markup(_) = element {
+                dbg!(&child, &element);
+                if let Some((ref c, ref element_name)) = child.root.split_once(" ") {
+                    elements_name.push(element_name.to_string());
+                    child.root = c.to_string();
+                }
+            }
+            child
+        }
     }
 
     #[allow(clippy::too_many_arguments)]
@@ -2127,7 +2133,7 @@ pub fn read_properties(
                 } else {
                     return ftd::e2(
                         format!(
-                            "{} is calling {}, without a required argument `{}`",
+                            "{} is calling {}, without a required argument 1 `{}`",
                             fn_name, root, name
                         ),
                         doc.name,

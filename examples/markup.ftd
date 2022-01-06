@@ -1,12 +1,12 @@
 -- ftd.markup:
 background-color: yellow
 
-Now {hello| Hello {underline | Amitu}} world. {hello}
+Now {hello| Hello {underline | Amitu}} world. {hello} **Greetings** {underline}
 
 --- ftd.text hello: Someone
 size: 10
 color: red
 
---- ftd.text underline: Someone
+--- ftd.text underline:
 size: 30
 background-color: orange
