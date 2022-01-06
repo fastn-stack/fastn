@@ -271,7 +271,6 @@ impl Document {
         );
 
         d.main = rt.render()?;
-        dbg!(&d.main);
         Ok(d)
     }
 
