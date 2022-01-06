@@ -625,6 +625,33 @@ pub fn properties(
     properties
 }
 
+pub(crate) fn get_markup_child(
+    sub: &ftd::p1::SubSection,
+    doc: &ftd::p2::TDoc,
+    parent: &ftd::ChildComponent,
+) -> ftd::p1::Result<ftd::ChildComponent> {
+    let (sub_name, ref_name) = match sub.name.split_once(" ") {
+        Some((sub_name, ref_name)) => (sub_name.trim(), ref_name.trim()),
+        _ => return ftd::e2("the component should have name", doc.name, sub.line_number),
+    };
+    let sub_caption = if sub.caption.is_none() && sub.body_without_comment().is_none() {
+        Some(ref_name.to_string())
+    } else {
+        sub.caption.clone()
+    };
+    let mut child = ftd::ChildComponent::from_p1(
+        sub.line_number,
+        sub_name,
+        &sub.header,
+        &sub_caption,
+        &sub.body_without_comment(),
+        &doc,
+        &parent.arguments,
+    )?;
+    child.root = format!("{} {}", child.root, ref_name);
+    Ok(child)
+}
+
 pub fn structure_header_to_properties(
     s: &str,
     arguments: &std::collections::BTreeMap<String, crate::p2::Kind>,

@@ -308,36 +308,7 @@ impl<'a> Interpreter<'a> {
                                     )?);
                                 } else {
                                     let child = if parent.root.eq("ftd#markup") {
-                                        let (sub_name, ref_name) = match sub.name.split_once(" ") {
-                                            Some((sub_name, ref_name)) => {
-                                                (sub_name.trim(), ref_name.trim())
-                                            }
-                                            _ => {
-                                                return ftd::e2(
-                                                    "the component should have name",
-                                                    doc.name,
-                                                    sub.line_number,
-                                                )
-                                            }
-                                        };
-                                        let sub_caption = if sub.caption.is_none()
-                                            && sub.body_without_comment().is_none()
-                                        {
-                                            Some(ref_name.to_string())
-                                        } else {
-                                            sub.caption.clone()
-                                        };
-                                        let mut child = ftd::ChildComponent::from_p1(
-                                            sub.line_number,
-                                            sub_name,
-                                            &sub.header,
-                                            &sub_caption,
-                                            &sub.body_without_comment(),
-                                            &doc,
-                                            &parent.arguments,
-                                        )?;
-                                        child.root = format!("{} {}", child.root, ref_name);
-                                        child
+                                        ftd::p2::utils::get_markup_child(&sub, &doc, &parent)?
                                     } else {
                                         ftd::ChildComponent::from_p1(
                                             sub.line_number,
@@ -636,36 +607,7 @@ impl<'a> Interpreter<'a> {
                                     )?);
                                 } else {
                                     let child = if parent.root.eq("ftd#markup") {
-                                        let (sub_name, ref_name) = match sub.name.split_once(" ") {
-                                            Some((sub_name, ref_name)) => {
-                                                (sub_name.trim(), ref_name.trim())
-                                            }
-                                            _ => {
-                                                return ftd::e2(
-                                                    "the component should have name",
-                                                    doc.name,
-                                                    sub.line_number,
-                                                )
-                                            }
-                                        };
-                                        let sub_caption = if sub.caption.is_none()
-                                            && sub.body_without_comment().is_none()
-                                        {
-                                            Some(ref_name.to_string())
-                                        } else {
-                                            sub.caption.clone()
-                                        };
-                                        let mut child = ftd::ChildComponent::from_p1(
-                                            sub.line_number,
-                                            sub_name,
-                                            &sub.header,
-                                            &sub_caption,
-                                            &sub.body_without_comment(),
-                                            &doc,
-                                            &parent.arguments,
-                                        )?;
-                                        child.root = format!("{} {}", child.root, ref_name);
-                                        child
+                                        ftd::p2::utils::get_markup_child(&sub, &doc, &parent)?
                                     } else {
                                         ftd::ChildComponent::from_p1(
                                             sub.line_number,
