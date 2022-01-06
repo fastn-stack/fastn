@@ -178,23 +178,33 @@ impl ChildComponent {
             }
         }
 
+        let mut elements_name = vec![];
+
         let mut container_children = vec![];
         match (&mut element, children.is_empty()) {
             (ftd::Element::Column(_), _)
             | (ftd::Element::Row(_), _)
             | (ftd::Element::Scene(_), _)
-            | (ftd::Element::Grid(_), _) => {
+            | (ftd::Element::Grid(_), _)
+            | (ftd::Element::Markup(_), _) => {
                 let instructions = children
                     .iter()
                     .map(|child| {
+                        let child = {
+                            let mut child = child.clone();
+                            if let ftd::Element::Markup(_) = element {
+                                if let Some((ref c, ref element_name)) = child.root.split_once(" ")
+                                {
+                                    elements_name.push(element_name.to_string());
+                                    child.root = c.to_string();
+                                }
+                            }
+                            child
+                        };
                         if child.is_recursive {
-                            ftd::Instruction::RecursiveChildComponent {
-                                child: child.clone(),
-                            }
+                            ftd::Instruction::RecursiveChildComponent { child }
                         } else {
-                            ftd::Instruction::ChildComponent {
-                                child: child.clone(),
-                            }
+                            ftd::Instruction::ChildComponent { child }
                         }
                     })
                     .collect::<Vec<ftd::Instruction>>();
@@ -221,7 +231,7 @@ impl ChildComponent {
                         .unwrap();
                 }
                 match root.full_name.as_str() {
-                    "ftd#row" | "ftd#column" | "ftd#scene" | "ftd#grid" => {}
+                    "ftd#row" | "ftd#column" | "ftd#scene" | "ftd#grid" | "ftd#markup" => {}
                     t => {
                         return ftd::e2(
                             format!("{} cant have children", t),
@@ -240,6 +250,32 @@ impl ChildComponent {
             }
             (_, true) => {}
         }
+
+        // dbg!(&container_children, &elements_name, &element);
+
+        if let ftd::Element::Markup(ref mut markups) = element {
+            let mut named_container = std::collections::BTreeMap::new();
+            for (idx, container) in container_children.iter().enumerate() {
+                match elements_name.get(idx) {
+                    Some(name) => {
+                        named_container.insert(name.to_string(), container);
+                    }
+                    None => {
+                        return ftd::e2(
+                            format!("cannot find name for container {:?}", container),
+                            doc.name,
+                            0,
+                        )
+                    }
+                }
+            }
+            // dbg!(&named_container);
+            for markup in markups.children.iter_mut() {
+                reevalute_markup(markup, &named_container, doc.name)?;
+            }
+            // dbg!(&markups);
+        }
+
         Ok(ElementWithContainer {
             element,
             children: container_children,
@@ -572,6 +608,163 @@ impl ChildComponent {
             Ok(properties)
         }
     }
+}
+
+fn reevalute_markup(
+    markup: &mut ftd::Markup,
+    named_container: &std::collections::BTreeMap<String, &ftd::Element>,
+    doc_id: &str,
+) -> ftd::p1::Result<()> {
+    let text = match &markup.itext {
+        ftd::IText::Text(ftd::Text { text, .. })
+        | ftd::IText::TextBlock(ftd::TextBlock { text, .. })
+        | ftd::IText::Integer(ftd::Text { text, .. })
+        | ftd::IText::Boolean(ftd::Text { text, .. })
+        | ftd::IText::Decimal(ftd::Text { text, .. }) => text.original.chars().collect::<Vec<_>>(),
+    };
+    let mut children = vec![];
+    let mut idx = 0;
+    let mut traverse_string = "".to_string();
+    while idx < text.len() {
+        // dbg!(&text[idx], &idx);
+        if text[idx].eq(&'{') {
+            // dbg!("inside", &traverse_string);
+            children.push(ftd::Markup {
+                itext: ftd::IText::Text(ftd::Text {
+                    text: ftd::markdown_line(traverse_string.as_str()),
+                    ..Default::default()
+                }),
+                children: vec![],
+            });
+            traverse_string = "".to_string();
+
+            let mut stack = vec!['{'];
+            while !stack.is_empty() {
+                idx += 1;
+                if idx >= text.len() {
+                    return ftd::e2(
+                        format!(
+                            "cannot find closing-parenthesis before the string ends: {}",
+                            traverse_string
+                        ),
+                        doc_id,
+                        0,
+                    );
+                }
+                if text[idx].eq(&'{') {
+                    stack.push('{');
+                } else if text[idx].eq(&'}') {
+                    stack.pop();
+                }
+                if !stack.is_empty() {
+                    traverse_string.push(text[idx]);
+                }
+            }
+            // dbg!("after", &traverse_string);
+            let (style, text) = traverse_string
+                .split_once('|')
+                .map(|(v, n)| (v.trim(), Some(n)))
+                .unwrap_or((traverse_string.trim(), None));
+
+            let container = match named_container.get(style) {
+                Some(container) => container,
+                None => {
+                    return ftd::e2(
+                        format!("This component not found in ftd#markup {}", style),
+                        doc_id,
+                        0,
+                    )
+                }
+            };
+            let itext = match container {
+                ftd::Element::Text(t) => {
+                    let t = {
+                        let mut t = t.clone();
+                        if let Some(text) = text {
+                            t.text = ftd::markdown_line(text);
+                        }
+                        t
+                    };
+                    ftd::IText::Text(t)
+                }
+                ftd::Element::Integer(t) => {
+                    let t = {
+                        let mut t = t.clone();
+                        if let Some(text) = text {
+                            t.text = ftd::markdown_line(text);
+                        }
+                        t
+                    };
+                    ftd::IText::Integer(t)
+                }
+                ftd::Element::Boolean(t) => {
+                    let t = {
+                        let mut t = t.clone();
+                        if let Some(text) = text {
+                            t.text = ftd::markdown_line(text);
+                        }
+                        t
+                    };
+                    ftd::IText::Boolean(t)
+                }
+                ftd::Element::Decimal(t) => {
+                    let t = {
+                        let mut t = t.clone();
+                        if let Some(text) = text {
+                            t.text = ftd::markdown_line(text);
+                        }
+                        t
+                    };
+                    ftd::IText::Decimal(t)
+                }
+                ftd::Element::TextBlock(t) => {
+                    let t = {
+                        let mut t = t.clone();
+                        if let Some(text) = text {
+                            t.text = ftd::markdown_line(text);
+                        }
+                        t
+                    };
+                    ftd::IText::TextBlock(t)
+                }
+                t => {
+                    return ftd::e2(
+                        format!(
+                            "expected type istext, integer, boolean, decimal. found: {:?}",
+                            t
+                        ),
+                        doc_id,
+                        0,
+                    )
+                }
+            };
+
+            children.push(ftd::Markup {
+                itext,
+                children: vec![],
+            });
+
+            traverse_string = "".to_string();
+        } else {
+            traverse_string.push(text[idx]);
+        }
+        idx += 1;
+    }
+    if !traverse_string.is_empty() && !children.is_empty() {
+        children.push(ftd::Markup {
+            itext: ftd::IText::Text(ftd::Text {
+                text: ftd::markdown_line(traverse_string.as_str()),
+                ..Default::default()
+            }),
+            children: vec![],
+        });
+    }
+    for child in children.iter_mut() {
+        reevalute_markup(child, named_container, doc_id)?;
+    }
+    markup.children = children;
+
+    Ok(())
 }
 
 fn resolve_recursive_property(
@@ -1298,6 +1491,9 @@ impl Component {
                 "ftd#grid" => ftd::Element::Grid(ftd::p2::element::grid_from_properties(
                     arguments, doc, condition, is_child, events, all_locals, root_name,
                 )?),
+                "ftd#markup" => ftd::Element::Markup(ftd::p2::element::markup_from_properties(
+                    arguments, doc, condition, is_child, events, all_locals, root_name,
+                )?),
                 _ => unreachable!(),
             };
             Ok(ElementWithContainer {
@@ -1446,6 +1642,9 @@ impl Component {
                     ref mut container, ..
                 })
                 | ftd::Element::Grid(ftd::Grid {
+                    ref mut container, ..
+                })
+                | ftd::Element::Markup(ftd::Markups {
                     ref mut container, ..
                 }) => {
                     let ElementWithContainer {
@@ -1811,7 +2010,8 @@ fn is_component(name: &str) -> bool {
         || (name == "ftd.boolean")
         || (name == "ftd.input")
         || (name == "ftd.scene")
-        || (name == "ftd.grid"))
+        || (name == "ftd.grid")
+        || (name == "ftd.markup"))
 }
 
 fn assert_no_extra_properties(

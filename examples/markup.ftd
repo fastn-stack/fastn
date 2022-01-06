@@ -1,0 +1,12 @@
+-- ftd.markup:
+background-color: yellow
+
+Now {hello| Hello {underline | Amitu}} world. {hello}
+
+--- ftd.text hello: Someone
+size: 10
+color: red
+
+--- ftd.text underline: Someone
+size: 30
+background-color: orange

@@ -582,6 +582,7 @@ impl<'a> Interpreter<'a> {
                                 &doc,
                                 &Default::default(),
                             )?;
+                            // dbg!(&parent);
 
                             let mut children = vec![];
 
@@ -600,15 +601,42 @@ impl<'a> Interpreter<'a> {
                                         None,
                                     )?);
                                 } else {
-                                    children.push(ftd::ChildComponent::from_p1(
-                                        sub.line_number,
-                                        sub.name.as_str(),
-                                        &sub.header,
-                                        &sub.caption,
-                                        &sub.body_without_comment(),
-                                        &doc,
-                                        &parent.arguments,
-                                    )?);
+                                    let child = if parent.root.eq("ftd#markup") {
+                                        let (sub_name, ref_name) = match sub.name.split_once(" ") {
+                                            Some((sub_name, ref_name)) => {
+                                                (sub_name.trim(), ref_name.trim())
+                                            }
+                                            _ => {
+                                                return ftd::e2(
+                                                    "the component should have name",
+                                                    doc.name,
+                                                    sub.line_number,
+                                                )
+                                            }
+                                        };
+                                        let mut child = ftd::ChildComponent::from_p1(
+                                            sub.line_number,
+                                            sub_name,
+                                            &sub.header,
+                                            &sub.caption,
+                                            &sub.body_without_comment(),
+                                            &doc,
+                                            &parent.arguments,
+                                        )?;
+                                        child.root = format!("{} {}", child.root, ref_name);
+                                        child
+                                    } else {
+                                        ftd::ChildComponent::from_p1(
+                                            sub.line_number,
+                                            sub.name.as_str(),
+                                            &sub.header,
+                                            &sub.caption,
+                                            &sub.body_without_comment(),
+                                            &doc,
+                                            &parent.arguments,
+                                        )?
+                                    };
+                                    children.push(child);
                                 }
                             }
 
@@ -737,6 +765,10 @@ pub fn default_bag() -> std::collections::BTreeMap<String, ftd::p2::Thing> {
         (
             "ftd#grid".to_string(),
             ftd::p2::Thing::Component(ftd::p2::element::grid_function()),
+        ),
+        (
+            "ftd#markup".to_string(),
+            ftd::p2::Thing::Component(ftd::p2::element::markup_function()),
         ),
         (
             "ftd#input".to_string(),

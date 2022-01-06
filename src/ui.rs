@@ -14,8 +14,73 @@ pub enum Element {
     Decimal(Text),
     Scene(Scene),
     Grid(Grid),
+    Markup(Markups),
     Null,
 }
+
+#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
+pub struct Markups {
+    pub common: ftd::Common,
+    pub container: ftd::Container,
+    pub children: Vec<Markup>,
+}
+
+#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
+pub struct Markup {
+    pub itext: IText,
+    pub children: Vec<Markup>,
+}
+
+#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
+pub enum IText {
+    Text(Text),
+    TextBlock(TextBlock),
+    Integer(Text),
+    Boolean(Text),
+    Decimal(Text),
+}
+
+impl IText {
+    pub(crate) fn get_common(&self) -> ftd::Common {
+        match self {
+            IText::Text(t) | IText::Integer(t) | IText::Boolean(t) | IText::Decimal(t) => {
+                t.common.clone()
+            }
+            IText::TextBlock(t) => t.common.clone(),
+        }
+    }
+
+    pub(crate) fn get_text(&self) -> ftd::Rendered {
+        match self {
+            IText::Text(t) | IText::Integer(t) | IText::Boolean(t) | IText::Decimal(t) => {
+                t.text.clone()
+            }
+            IText::TextBlock(t) => t.text.clone(),
+        }
+    }
+}
+
+/*
+hello, {yellow: world}, {bold: this is {yellow: awesome}}.
+
+markup {
+    children: vec![
+        Markup: {
+            itext: Text {
+                text: hello,
+            }
+            children: vec![
+                Markup: {
+                    itext: Text {
+                        text: world,
+                        style: yellow
+                    }
+                }
+            ]
+        }
+    ]
+}
+*/
 
 impl Element {
     pub fn set_id(children: &mut [ftd::Element], index_vec: &[usize], external_id: Option<String>) {
@@ -96,6 +161,10 @@ impl Element {
                     id
                 }
                 Self::IFrame(ftd::IFrame {
+                    common: ftd::Common { data_id: id, .. },
+                    ..
+                }) => id,
+                Self::Markup(ftd::Markups {
                     common: ftd::Common { data_id: id, .. },
                     ..
                 }) => id,
@@ -364,6 +433,7 @@ impl Element {
                 | ftd::Element::TextBlock(ftd::TextBlock { common, .. })
                 | ftd::Element::Code(ftd::Code { common, .. })
                 | ftd::Element::IFrame(ftd::IFrame { common, .. })
+                | ftd::Element::Markup(ftd::Markups { common, .. })
                 | ftd::Element::Input(ftd::Input { common, .. })
                 | ftd::Element::Integer(ftd::Text { common, .. })
                 | ftd::Element::Boolean(ftd::Text { common, .. })
@@ -472,6 +542,7 @@ impl Element {
                 | ftd::Element::TextBlock(ftd::TextBlock { common, .. })
                 | ftd::Element::Code(ftd::Code { common, .. })
                 | ftd::Element::IFrame(ftd::IFrame { common, .. })
+                | ftd::Element::Markup(ftd::Markups { common, .. })
                 | ftd::Element::Input(ftd::Input { common, .. })
                 | ftd::Element::Integer(ftd::Text { common, .. })
                 | ftd::Element::Boolean(ftd::Text { common, .. })
@@ -559,6 +630,7 @@ impl Element {
                 | ftd::Element::TextBlock(ftd::TextBlock { common, .. })
                 | ftd::Element::Code(ftd::Code { common, .. })
                 | ftd::Element::IFrame(ftd::IFrame { common, .. })
+                | ftd::Element::Markup(ftd::Markups { common, .. })
                 | ftd::Element::Input(ftd::Input { common, .. })
                 | ftd::Element::Integer(ftd::Text { common, .. })
                 | ftd::Element::Boolean(ftd::Text { common, .. })
@@ -632,6 +704,7 @@ impl Element {
                 | ftd::Element::Code(ftd::Code { common, .. })
                 | ftd::Element::Image(ftd::Image { common, .. })
                 | ftd::Element::IFrame(ftd::IFrame { common, .. })
+                | ftd::Element::Markup(ftd::Markups { common, .. })
                 | ftd::Element::Input(ftd::Input { common, .. })
                 | ftd::Element::Integer(ftd::Text { common, .. })
                 | ftd::Element::Boolean(ftd::Text { common, .. }) => common.locals.clone(),
@@ -684,6 +757,7 @@ impl Element {
             | ftd::Element::Code(ftd::Code { common, .. })
             | ftd::Element::Image(ftd::Image { common, .. })
             | ftd::Element::IFrame(ftd::IFrame { common, .. })
+            | ftd::Element::Markup(ftd::Markups { common, .. })
             | ftd::Element::Input(ftd::Input { common, .. })
             | ftd::Element::Integer(ftd::Text { common, .. })
             | ftd::Element::Boolean(ftd::Text { common, .. })
@@ -703,6 +777,7 @@ impl Element {
             | ftd::Element::Code(ftd::Code { common, .. })
             | ftd::Element::Image(ftd::Image { common, .. })
             | ftd::Element::IFrame(ftd::IFrame { common, .. })
+            | ftd::Element::Markup(ftd::Markups { common, .. })
             | ftd::Element::Input(ftd::Input { common, .. })
             | ftd::Element::Integer(ftd::Text { common, .. })
             | ftd::Element::Boolean(ftd::Text { common, .. })
@@ -723,6 +798,7 @@ impl Element {
             | ftd::Element::Code(ftd::Code { common, .. })
             | ftd::Element::Image(ftd::Image { common, .. })
             | ftd::Element::IFrame(ftd::IFrame { common, .. })
+            | ftd::Element::Markup(ftd::Markups { common, .. })
             | ftd::Element::Input(ftd::Input { common, .. })
             | ftd::Element::Integer(ftd::Text { common, .. })
             | ftd::Element::Boolean(ftd::Text { common, .. })
@@ -743,6 +819,7 @@ impl Element {
             | ftd::Element::Code(ftd::Code { common, .. })
             | ftd::Element::Image(ftd::Image { common, .. })
             | ftd::Element::IFrame(ftd::IFrame { common, .. })
+            | ftd::Element::Markup(ftd::Markups { common, .. })
             | ftd::Element::Input(ftd::Input { common, .. })
             | ftd::Element::Integer(ftd::Text { common, .. })
             | ftd::Element::Boolean(ftd::Text { common, .. })
@@ -763,6 +840,7 @@ impl Element {
             | ftd::Element::Code(ftd::Code { common, .. })
             | ftd::Element::Image(ftd::Image { common, .. })
             | ftd::Element::IFrame(ftd::IFrame { common, .. })
+            | ftd::Element::Markup(ftd::Markups { common, .. })
             | ftd::Element::Input(ftd::Input { common, .. })
             | ftd::Element::Integer(ftd::Text { common, .. })
             | ftd::Element::Boolean(ftd::Text { common, .. })
