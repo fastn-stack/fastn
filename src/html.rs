@@ -808,17 +808,18 @@ impl ftd::IFrame {
 
 impl ftd::Markups {
     pub fn to_node(&self, doc_id: &str) -> Node {
-        let mut node = Node {
-            node: s("div"),
-            ..Default::default()
-        };
-        node.children = self.children.iter().map(|v| v.to_node(doc_id)).collect();
+        let mut node = Node::from_common("div", &self.common, doc_id);
+        node.children = self
+            .children
+            .iter()
+            .map(|v| v.to_node(doc_id, true))
+            .collect();
         node
     }
 }
 
 impl ftd::Markup {
-    pub fn to_node(&self, doc_id: &str) -> Node {
+    pub fn to_node(&self, doc_id: &str, is_paragraph: bool) -> Node {
         let mut n = match self.itext {
             ftd::IText::Text(ref t)
             | ftd::IText::Integer(ref t)
@@ -827,14 +828,22 @@ impl ftd::Markup {
             ftd::IText::TextBlock(ref t) => t.to_node(doc_id),
         };
         if n.node.eq("div") {
-            n.node = s("span");
+            if is_paragraph {
+                n.node = s("p");
+            } else {
+                n.node = s("span");
+            }
         }
         if self.children.is_empty() {
             return n;
         } else {
             n.text = None;
         }
-        n.children = self.children.iter().map(|v| v.to_node(doc_id)).collect();
+        n.children = self
+            .children
+            .iter()
+            .map(|v| v.to_node(doc_id, false))
+            .collect();
         n
     }
 }

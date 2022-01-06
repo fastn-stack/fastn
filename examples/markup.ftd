@@ -4,6 +4,8 @@ margin-bottom: 20
 
 Now {hello: Hello {underline: Amitu}} world. {hello} **Greetings** {underline}
 
+{hello: Everyone should say **Hi** to each other}
+
 --- ftd.text hello: Someone
 size: 10
 color: red
