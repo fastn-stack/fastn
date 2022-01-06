@@ -83,6 +83,19 @@ impl Kind {
                 doc_id,  line_number),
         })
     }
+
+    pub fn has_default_value(&self) -> bool {
+        match self {
+            Kind::String { default, .. }
+            | Kind::Integer { default, .. }
+            | Kind::Decimal { default, .. }
+            | Kind::Boolean { default, .. }
+            | Kind::Record { default, .. }
+            | Kind::List { default, .. } => default.is_some(),
+            Kind::UI { default } => default.is_some(),
+            _ => false,
+        }
+    }
 }
 
 impl Kind {

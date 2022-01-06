@@ -264,7 +264,7 @@ impl ChildComponent {
         // They act as the component variables which are, then, referred to in markup text
         // container_children copy there properties to the reference in markup text
         if let ftd::Element::Markup(ref mut markups) = element {
-            reevalute_markups(markups, &container_children, &elements_name, doc.name)?;
+            reevalute_markups(markups, &container_children, &elements_name, doc)?;
         }
 
         return Ok(ElementWithContainer {
@@ -300,7 +300,7 @@ impl ChildComponent {
             markups: &mut ftd::Markups,
             container_children: &[ftd::Element],
             elements_name: &[String],
-            doc_id: &str,
+            doc: &ftd::p2::TDoc,
         ) -> ftd::p1::Result<()> {
             let mut named_container = std::collections::BTreeMap::new();
             // first convert the container children into the named container.
@@ -309,19 +309,19 @@ impl ChildComponent {
             for (idx, container) in container_children.iter().enumerate() {
                 match elements_name.get(idx) {
                     Some(name) => {
-                        named_container.insert(name.to_string(), container);
+                        named_container.insert(name.to_string(), container.to_owned());
                     }
                     None => {
                         return ftd::e2(
                             format!("cannot find name for container {:?}", container),
-                            doc_id,
+                            doc.name,
                             0,
                         )
                     }
                 }
             }
             for markup in markups.children.iter_mut() {
-                reevalute_markup(markup, &named_container, doc_id)?;
+                reevalute_markup(markup, &named_container, doc)?;
             }
 
             Ok(())
@@ -657,8 +657,8 @@ impl ChildComponent {
 
 fn reevalute_markup(
     markup: &mut ftd::Markup,
-    named_container: &std::collections::BTreeMap<String, &ftd::Element>,
-    doc_id: &str,
+    named_container: &std::collections::BTreeMap<String, ftd::Element>,
+    doc: &ftd::p2::TDoc,
 ) -> ftd::p1::Result<()> {
     let text = match &markup.itext {
         ftd::IText::Text(ftd::Text { text, .. })
@@ -679,21 +679,18 @@ fn reevalute_markup(
                 }),
                 children: vec![],
             });
-            traverse_string = get_inner_text(&text, &mut idx, doc_id)?;
+            traverse_string = get_inner_text(&text, &mut idx, doc.name)?;
             let (style, text) = traverse_string
                 .split_once(':')
                 .map(|(v, n)| (v.trim(), Some(n)))
                 .unwrap_or((traverse_string.trim(), None));
 
-            let container = named_container
-                .get(style)
-                .ok_or(ftd::p1::Error::ParseError {
-                    message: format!("This component not found in ftd#markup {}", style),
-                    doc_id: doc_id.to_string(),
-                    line_number: 0,
-                })?;
+            let container = match named_container.get(style) {
+                Some(style) => style.to_owned(),
+                None => get_element_doc(doc, style)?,
+            };
 
-            let itext = element_to_itext(container, doc_id, text)?;
+            let itext = element_to_itext(&container, doc.name, text)?;
 
             children.push(ftd::Markup {
                 itext,
@@ -717,7 +714,7 @@ fn reevalute_markup(
         });
     }
     for child in children.iter_mut() {
-        reevalute_markup(child, named_container, doc_id)?;
+        reevalute_markup(child, named_container, doc)?;
     }
     markup.children = children;
 
@@ -823,6 +820,53 @@ fn reevalute_markup(
                 )
             }
         })
+    }
+
+    fn get_element_doc(doc: &ftd::p2::TDoc, name: &str) -> ftd::p1::Result<ftd::Element> {
+        let mut root = doc
+            .get_component(0, name)
+            .map_err(|_| ftd::p1::Error::ParseError {
+                message: format!("This component not found in ftd#markup {}", name),
+                doc_id: doc.name.to_string(),
+                line_number: 0,
+            })?;
+
+        let property_value = if let Some(p) = root.properties.get("text") {
+            p
+        } else if let Some(p) = root.properties.get("value") {
+            p
+        } else {
+            return ftd::e2(
+                format!(
+                    "expected type for ftd#markup are text, integer, decimal and boolean, {:?}",
+                    root
+                ),
+                doc.name,
+                0,
+            );
+        };
+
+        if let ftd::component::Property {
+            default: Some(ftd::PropertyValue::Variable { kind, .. }),
+            ..
+        } = property_value
+        {
+            if !kind.has_default_value() {
+                let property = ftd::component::Property {
+                    default: Some(ftd::PropertyValue::Value {
+                        value: ftd::Value::String {
+                            text: name.to_string(),
+                            source: ftd::TextSource::Header,
+                        },
+                    }),
+                    ..Default::default()
+                };
+                root.properties.insert("text".to_string(), property.clone());
+                root.properties.insert("value".to_string(), property);
+            }
+        }
+        root.arguments = std::collections::BTreeMap::new();
+        Ok(root.call_without_values(doc, name)?.element)
     }
 }
 
@@ -1482,6 +1526,25 @@ impl Component {
             events,
             line_number: p1.line_number,
         });
+    }
+
+    fn call_without_values(
+        &self,
+        doc: &ftd::p2::TDoc,
+        name: &str,
+    ) -> ftd::p1::Result<ElementWithContainer> {
+        self.call(
+            &Default::default(),
+            doc,
+            &mut Default::default(),
+            &Default::default(),
+            false,
+            doc.get_root(name, 0)?,
+            &[],
+            &mut Default::default(),
+            &[],
+            Default::default(),
+        )
     }
 
     #[allow(clippy::too_many_arguments)]
