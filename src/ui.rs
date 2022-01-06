@@ -40,26 +40,6 @@ pub enum IText {
     Decimal(Text),
 }
 
-impl IText {
-    pub(crate) fn get_common(&self) -> ftd::Common {
-        match self {
-            IText::Text(t) | IText::Integer(t) | IText::Boolean(t) | IText::Decimal(t) => {
-                t.common.clone()
-            }
-            IText::TextBlock(t) => t.common.clone(),
-        }
-    }
-
-    pub(crate) fn get_text(&self) -> ftd::Rendered {
-        match self {
-            IText::Text(t) | IText::Integer(t) | IText::Boolean(t) | IText::Decimal(t) => {
-                t.text.clone()
-            }
-            IText::TextBlock(t) => t.text.clone(),
-        }
-    }
-}
-
 /*
 hello, {yellow: world}, {bold: this is {yellow: awesome}}.
 

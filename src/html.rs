@@ -819,10 +819,20 @@ impl ftd::Markups {
 
 impl ftd::Markup {
     pub fn to_node(&self, doc_id: &str) -> Node {
-        let mut n = Node::from_common("span", &self.itext.get_common(), doc_id);
+        let mut n = match self.itext {
+            ftd::IText::Text(ref t)
+            | ftd::IText::Integer(ref t)
+            | ftd::IText::Boolean(ref t)
+            | ftd::IText::Decimal(ref t) => t.to_node(doc_id),
+            ftd::IText::TextBlock(ref t) => t.to_node(doc_id),
+        };
+        if n.node.eq("div") {
+            n.node = s("span");
+        }
         if self.children.is_empty() {
-            n.text = Some(self.itext.get_text().original);
             return n;
+        } else {
+            n.text = None;
         }
         n.children = self.children.iter().map(|v| v.to_node(doc_id)).collect();
         n
