@@ -7,14 +7,16 @@ Vercel is an incredibly easy to use tool which helps you build and ship your
 websites with an easy to use interface. You can get started with a fresh repository(Step 1)
 or you can deploy your existing repository(Step 2).
 
--- ft.h1: Step 1. Start fresh with a new repository
+-- ft.h1: Step 1. Choosing the source of your deployment
 
-Use this [template](https://vercel.com/new/clone?repository-url=https://github.com/fifthtry/fpm-blog&template=other) to initialize. Check out step 3 for the configuration setup.
+-- ft.h2: Step 1.1. Start from scratch: New Repository
+
+Use this [template](https://vercel.com/new/clone?repository-url=https://github.com/fifthtry/fpm-blog&template=other) to initialize. Check out step 2 for the configuration setup.
 
 --- ft.image: Just choose your repository name and click on the Create button
 src: /how-to/vercel-new-template.png
 
--- ft.h1: Step 2. Deploy an existing repository
+-- ft.h2: Step 1.2. Deploy an existing repository
 
 Deploying an existing FPM repository on vercel is quite easy. On your vercel 
 dashboard, click on [New Project](https://vercel.com/new) and select your git 
@@ -22,12 +24,12 @@ provider and the repository accordingly.
 
 Once done, you'll be taken to the Configuration Dashboard of the application. 
 Select the `FRAMEWORK PRESET` as Other and enter the configuration mentioned in 
-Step 3.
+Step 2.
 
 -- ft.image:
 src: /how-to/vercel-new-from-repo.png
 
--- ft.h1: Step 3. Vercel FPM configuration
+-- ft.h1: Step 2. Vercel FPM configuration
 
 Once the application is up and ready, head over to Settings > General and enter 
 the following configuration in the __Build & Development Settings__
@@ -35,7 +37,7 @@ the following configuration in the __Build & Development Settings__
 -- ft.code: Build Command
 lang: sh
 
-\/tmp/fpm/bin/fpm build --base=/
+fpm build --base=/
 
 -- ft.code: Output Directory
 lang: sh
@@ -45,7 +47,7 @@ lang: sh
 -- ft.code: Install Command
 lang: sh
 
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/FifthTry/fpm/releases/releases/linux_musl_x86_64/install-fpm.sh)"
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/FifthTry/fpm/releases/install-fpm.sh)"
 
 
 -- ft.image:
