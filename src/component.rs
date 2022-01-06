@@ -190,6 +190,7 @@ impl ChildComponent {
                 let instructions = children
                     .iter()
                     .map(|child| {
+                        // ftd#markup modifies the child
                         let child = get_modified_child(child, &element, &mut elements_name);
                         if child.is_recursive {
                             ftd::Instruction::RecursiveChildComponent { child }
@@ -241,29 +242,11 @@ impl ChildComponent {
             (_, true) => {}
         }
 
-        // dbg!(&container_children, &elements_name, &element);
-
+        // In case markup the behaviour of container_children is not the same.
+        // They act as the component variables which are, then, referred to in markup text
+        // container_children copy there properties to the reference in markup text
         if let ftd::Element::Markup(ref mut markups) = element {
-            let mut named_container = std::collections::BTreeMap::new();
-            for (idx, container) in container_children.iter().enumerate() {
-                match elements_name.get(idx) {
-                    Some(name) => {
-                        named_container.insert(name.to_string(), container);
-                    }
-                    None => {
-                        return ftd::e2(
-                            format!("cannot find name for container {:?}", container),
-                            doc.name,
-                            0,
-                        )
-                    }
-                }
-            }
-            // dbg!(&named_container);
-            for markup in markups.children.iter_mut() {
-                reevalute_markup(markup, &named_container, doc.name)?;
-            }
-            // dbg!(&markups);
+            reevalute_markups(markups, &container_children, &elements_name, doc.name)?;
         }
 
         return Ok(ElementWithContainer {
@@ -272,6 +255,11 @@ impl ChildComponent {
             child_container,
         });
 
+        /// ftd#markup modifies the child because root name contains both the component and also the variable name
+        /// Like this: --- <component-name> <variable-name>:
+        /// Example: --- ftd.text name:
+        /// We need to remove variable name before passing it to instruction and later append it to resolve variables
+        /// in ftd#markup.
         fn get_modified_child(
             child: &ftd::ChildComponent,
             element: &ftd::Element,
@@ -279,13 +267,47 @@ impl ChildComponent {
         ) -> ftd::ChildComponent {
             let mut child = child.clone();
             if let ftd::Element::Markup(_) = element {
-                dbg!(&child, &element);
                 if let Some((ref c, ref element_name)) = child.root.split_once(" ") {
                     elements_name.push(element_name.to_string());
                     child.root = c.to_string();
                 }
             }
             child
+        }
+
+        /// In case markup the behaviour of container_children is not the same.
+        /// They act as the component variables which are, then, referred to in markup text
+        /// container_children copy there properties to the reference in markup text
+        fn reevalute_markups(
+            markups: &mut ftd::Markups,
+            container_children: &[ftd::Element],
+            elements_name: &[String],
+            doc_id: &str,
+        ) -> ftd::p1::Result<()> {
+            let mut named_container = std::collections::BTreeMap::new();
+            // first convert the container children into the named container.
+            // which basically make a map of component's variable name with the container_child.
+            // which was initially  seperated by `get_modified_child()`
+            for (idx, container) in container_children.iter().enumerate() {
+                match elements_name.get(idx) {
+                    Some(name) => {
+                        named_container.insert(name.to_string(), container);
+                    }
+                    None => {
+                        return ftd::e2(
+                            format!("cannot find name for container {:?}", container),
+                            doc_id,
+                            0,
+                        )
+                    }
+                }
+            }
+            // dbg!(&named_container);
+            for markup in markups.children.iter_mut() {
+                reevalute_markup(markup, &named_container, doc_id)?;
+            }
+
+            Ok(())
         }
     }
 
