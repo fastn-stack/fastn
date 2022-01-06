@@ -47,7 +47,7 @@ lang: sh
 -- ft.code: Install Command
 lang: sh
 
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/FifthTry/fpm/releases/install-fpm.sh)"
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/FifthTry/fpm/main/install-fpm.sh)"
 
 
 -- ft.image:
