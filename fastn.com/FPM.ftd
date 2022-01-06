@@ -3,7 +3,7 @@
 -- fpm.package: fpm.dev
 zip: github.com/fifthtry/fpm.dev/archive/refs/heads/main.zip
 language: English
-translation: fpm-dev-hi.vercel.app
+translation: hi.fpm.dev
 
 -- fpm.dependency: fifthtry.github.io/Jupiter-theme
 
