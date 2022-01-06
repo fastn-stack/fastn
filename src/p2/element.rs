@@ -1641,7 +1641,7 @@ pub fn markup_from_properties(
             let mut text = text.clone();
             text.0 = ftd::Value::String {
                 text: v,
-                source: ftd::TextSource::Body,
+                source: ftd::TextSource::Header,
             };
             properties_with_ref.insert("text".to_string(), text.clone());
             properties_with_ref
