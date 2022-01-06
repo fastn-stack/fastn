@@ -1,6 +1,6 @@
 [package]
 name = "fpm"
-version = "0.1.9"
+version = "0.1.10"
 authors = [
     "Amit Upadhyay <upadhyay@gmail.com>",
     "Arpita Jaiswal <arpita@fifthtry.com>",
@@ -18,7 +18,7 @@ async-recursion = "0.3.2"
 camino = "1.0.5"
 clap = "2.33.3"
 diffy = "0.2.1"
-ftd = { git = "https://github.com/FifthTry/ftd", rev = "0152b65" }
+ftd = "0.1.18"
 futures = "0.3"
 home = "0.5.3"
 ignore = "0.4.18"
