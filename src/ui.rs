@@ -63,59 +63,9 @@ markup {
 */
 
 impl Element {
-    pub fn set_markup_id(
-        children: &mut [ftd::Markup],
-        index_vec: &[usize],
-        external_id: Option<String>,
-    ) {
-        for (idx, child) in children.iter_mut().enumerate() {
-            let index_string: String = {
-                let mut index_vec = index_vec.to_vec();
-                index_vec.push(idx);
-                index_vec
-                    .iter()
-                    .map(|v| v.to_string())
-                    .collect::<Vec<String>>()
-                    .join(",")
-            };
-            let mut id = match &mut child.itext {
-                IText::Text(t) | IText::Integer(t) | IText::Boolean(t) | IText::Decimal(t) => {
-                    &mut t.common.data_id
-                }
-                IText::TextBlock(t) => &mut t.common.data_id,
-            };
-
-            let mut index_vec = index_vec.to_vec();
-            index_vec.push(idx);
-            Self::set_markup_id(&mut child.children, &index_vec, external_id.clone());
-
-            let external_id = {
-                if let Some(ref external_id) = external_id {
-                    format!(":{}", external_id)
-                } else {
-                    "".to_string()
-                }
-            };
-
-            if let Some(id) = &mut id {
-                *id = format!("{}:{}{}", id, index_string, external_id);
-            } else {
-                *id = Some(format!("{}{}", index_string, external_id));
-            }
-        }
-    }
-
     pub fn set_id(children: &mut [ftd::Element], index_vec: &[usize], external_id: Option<String>) {
         for (idx, child) in children.iter_mut().enumerate() {
-            let index_string: String = {
-                let mut index_vec = index_vec.to_vec();
-                index_vec.push(idx);
-                index_vec
-                    .iter()
-                    .map(|v| v.to_string())
-                    .collect::<Vec<String>>()
-                    .join(",")
-            };
+            let index_string = get_index_string(index_vec, idx);
             let mut id = match child {
                 Self::Text(ftd::Text {
                     common: ftd::Common { data_id: id, .. },
@@ -185,7 +135,7 @@ impl Element {
                 Self::Markup(t) => {
                     let mut index_vec = index_vec.to_vec();
                     index_vec.push(idx);
-                    Self::set_markup_id(&mut t.children, &index_vec, external_id.clone());
+                    set_markup_id(&mut t.children, &index_vec, external_id.clone());
                     &mut t.common.data_id
                 }
                 Self::IFrame(ftd::IFrame {
@@ -210,7 +160,32 @@ impl Element {
                 }) => id,
                 Self::Null => continue,
             };
+            set_id(&mut id, &external_id, index_string.as_str())
+        }
 
+        fn set_markup_id(
+            children: &mut [ftd::Markup],
+            index_vec: &[usize],
+            external_id: Option<String>,
+        ) {
+            for (idx, child) in children.iter_mut().enumerate() {
+                let index_string = get_index_string(index_vec, idx);
+                let mut id = match &mut child.itext {
+                    IText::Text(t) | IText::Integer(t) | IText::Boolean(t) | IText::Decimal(t) => {
+                        &mut t.common.data_id
+                    }
+                    IText::TextBlock(t) => &mut t.common.data_id,
+                };
+
+                let mut index_vec = index_vec.to_vec();
+                index_vec.push(idx);
+                set_markup_id(&mut child.children, &index_vec, external_id.clone());
+
+                set_id(&mut id, &external_id, index_string.as_str())
+            }
+        }
+
+        fn set_id(id: &mut Option<String>, external_id: &Option<String>, index_string: &str) {
             let external_id = {
                 if let Some(ref external_id) = external_id {
                     format!(":{}", external_id)
@@ -219,11 +194,24 @@ impl Element {
                 }
             };
 
-            if let Some(id) = &mut id {
+            if let Some(id) = id {
                 *id = format!("{}:{}{}", id, index_string, external_id);
             } else {
                 *id = Some(format!("{}{}", index_string, external_id));
             }
+        }
+
+        fn get_index_string(index_vec: &[usize], idx: usize) -> String {
+            let index_string: String = {
+                let mut index_vec = index_vec.to_vec();
+                index_vec.push(idx);
+                index_vec
+                    .iter()
+                    .map(|v| v.to_string())
+                    .collect::<Vec<String>>()
+                    .join(",")
+            };
+            index_string
         }
     }
 
@@ -452,12 +440,17 @@ impl Element {
                     }
                     (conditional_attribute, id)
                 }
+                ftd::Element::Markup(ftd::Markups {
+                    common, children, ..
+                }) => {
+                    markup_get_style_event_dependencies(children, data);
+                    (&common.conditional_attribute, &common.data_id)
+                }
                 ftd::Element::Image(ftd::Image { common, .. })
                 | ftd::Element::Text(ftd::Text { common, .. })
                 | ftd::Element::TextBlock(ftd::TextBlock { common, .. })
                 | ftd::Element::Code(ftd::Code { common, .. })
                 | ftd::Element::IFrame(ftd::IFrame { common, .. })
-                | ftd::Element::Markup(ftd::Markups { common, .. })
                 | ftd::Element::Input(ftd::Input { common, .. })
                 | ftd::Element::Integer(ftd::Text { common, .. })
                 | ftd::Element::Boolean(ftd::Text { common, .. })
@@ -466,6 +459,30 @@ impl Element {
                 }
                 ftd::Element::Null => continue,
             };
+            style_condition(conditional_attributes, id, data);
+        }
+
+        fn markup_get_style_event_dependencies(
+            children: &[ftd::Markup],
+            data: &mut ftd::DataDependenciesMap,
+        ) {
+            for child in children {
+                let (conditional_attributes, id) = match child.itext {
+                    IText::Text(ref t)
+                    | IText::Integer(ref t)
+                    | IText::Boolean(ref t)
+                    | IText::Decimal(ref t) => (&t.common.conditional_attribute, &t.common.data_id),
+                    IText::TextBlock(ref t) => (&t.common.conditional_attribute, &t.common.data_id),
+                };
+                markup_get_style_event_dependencies(&child.children, data);
+                style_condition(conditional_attributes, id, data);
+            }
+        }
+        fn style_condition(
+            conditional_attributes: &std::collections::BTreeMap<String, ConditionalAttribute>,
+            id: &Option<String>,
+            data: &mut ftd::DataDependenciesMap,
+        ) {
             for (k, v) in conditional_attributes {
                 if let ftd::ConditionalAttribute {
                     attribute_type: ftd::AttributeType::Style,
@@ -561,12 +578,17 @@ impl Element {
                     }
                     (reference, id)
                 }
+                ftd::Element::Markup(ftd::Markups {
+                    common, children, ..
+                }) => {
+                    markup_get_value_event_dependencies(children, data);
+                    (&common.reference, &common.data_id)
+                }
                 ftd::Element::Image(ftd::Image { common, .. })
                 | ftd::Element::Text(ftd::Text { common, .. })
                 | ftd::Element::TextBlock(ftd::TextBlock { common, .. })
                 | ftd::Element::Code(ftd::Code { common, .. })
                 | ftd::Element::IFrame(ftd::IFrame { common, .. })
-                | ftd::Element::Markup(ftd::Markups { common, .. })
                 | ftd::Element::Input(ftd::Input { common, .. })
                 | ftd::Element::Integer(ftd::Text { common, .. })
                 | ftd::Element::Boolean(ftd::Text { common, .. })
@@ -575,6 +597,31 @@ impl Element {
                 }
                 ftd::Element::Null => continue,
             };
+            value_condition(reference, id, data);
+        }
+
+        fn markup_get_value_event_dependencies(
+            children: &[ftd::Markup],
+            data: &mut ftd::DataDependenciesMap,
+        ) {
+            for child in children {
+                let (reference, id) = match child.itext {
+                    IText::Text(ref t)
+                    | IText::Integer(ref t)
+                    | IText::Boolean(ref t)
+                    | IText::Decimal(ref t) => (&t.common.reference, &t.common.data_id),
+                    IText::TextBlock(ref t) => (&t.common.reference, &t.common.data_id),
+                };
+                markup_get_value_event_dependencies(&child.children, data);
+                value_condition(reference, id, data);
+            }
+        }
+
+        fn value_condition(
+            reference: &Option<String>,
+            id: &Option<String>,
+            data: &mut ftd::DataDependenciesMap,
+        ) {
             if let Some(reference) = reference {
                 let id = id.clone().expect("universal id should be present");
 
@@ -649,12 +696,17 @@ impl Element {
                     }
                     (condition, id)
                 }
+                ftd::Element::Markup(ftd::Markups {
+                    common, children, ..
+                }) => {
+                    markup_get_visible_event_dependencies(children, data);
+                    (&common.condition, &common.data_id)
+                }
                 ftd::Element::Image(ftd::Image { common, .. })
                 | ftd::Element::Text(ftd::Text { common, .. })
                 | ftd::Element::TextBlock(ftd::TextBlock { common, .. })
                 | ftd::Element::Code(ftd::Code { common, .. })
                 | ftd::Element::IFrame(ftd::IFrame { common, .. })
-                | ftd::Element::Markup(ftd::Markups { common, .. })
                 | ftd::Element::Input(ftd::Input { common, .. })
                 | ftd::Element::Integer(ftd::Text { common, .. })
                 | ftd::Element::Boolean(ftd::Text { common, .. })
@@ -663,6 +715,31 @@ impl Element {
                 }
                 ftd::Element::Null => continue,
             };
+            visibility_condition(condition, id, data);
+        }
+
+        fn markup_get_visible_event_dependencies(
+            children: &[ftd::Markup],
+            data: &mut ftd::DataDependenciesMap,
+        ) {
+            for child in children {
+                let (condition, id) = match child.itext {
+                    IText::Text(ref t)
+                    | IText::Integer(ref t)
+                    | IText::Boolean(ref t)
+                    | IText::Decimal(ref t) => (&t.common.condition, &t.common.data_id),
+                    IText::TextBlock(ref t) => (&t.common.condition, &t.common.data_id),
+                };
+                markup_get_visible_event_dependencies(&child.children, data);
+                visibility_condition(condition, id, data);
+            }
+        }
+
+        fn visibility_condition(
+            condition: &Option<ftd::Condition>,
+            id: &Option<String>,
+            data: &mut ftd::DataDependenciesMap,
+        ) {
             if let Some(condition) = condition {
                 let id = id.clone().expect("universal id should be present");
 

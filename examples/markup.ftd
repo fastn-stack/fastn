@@ -1,18 +1,23 @@
+-- boolean orange: true
+
+-- string name: AmitU
+
 -- ftd.markup:
 background-color: yellow
 margin-bottom: 20
 
-Now {hello: Hello {underline: Amitu}} world. {hello} **Greetings** {underline}
+Now {hello: Hello {underline: AmitU}} world. {hello} **Greetings** {underline}
 
 {hello: Everyone should say **Hi** to each other}
 
---- ftd.text hello: Someone
-size: 10
+--- ftd.text hello: $name
+size: 15
 color: red
 
 --- ftd.text underline:
 size: 30
-background-color: orange
+background-color if $orange: orange
+$event-click$: toggle $orange
 
 
 -- md:
