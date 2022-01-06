@@ -308,7 +308,11 @@ impl<'a> Interpreter<'a> {
                                     )?);
                                 } else {
                                     let child = if parent.root.eq("ftd#markup") {
-                                        ftd::p2::utils::get_markup_child(&sub, &doc, &parent)?
+                                        ftd::p2::utils::get_markup_child(
+                                            &sub,
+                                            &doc,
+                                            &parent.arguments,
+                                        )?
                                     } else {
                                         ftd::ChildComponent::from_p1(
                                             sub.line_number,
@@ -587,7 +591,6 @@ impl<'a> Interpreter<'a> {
                                 &doc,
                                 &Default::default(),
                             )?;
-                            // dbg!(&parent);
 
                             let mut children = vec![];
 
@@ -607,7 +610,11 @@ impl<'a> Interpreter<'a> {
                                     )?);
                                 } else {
                                     let child = if parent.root.eq("ftd#markup") {
-                                        ftd::p2::utils::get_markup_child(&sub, &doc, &parent)?
+                                        ftd::p2::utils::get_markup_child(
+                                            sub,
+                                            &doc,
+                                            &parent.arguments,
+                                        )?
                                     } else {
                                         ftd::ChildComponent::from_p1(
                                             sub.line_number,

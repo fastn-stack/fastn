@@ -270,7 +270,6 @@ impl Document {
     ) -> ftd::p1::Result<Document> {
         let mut interpreter = ftd::p2::interpreter::Interpreter::new(lib);
         let instructions = interpreter.interpret(name, source)?;
-        // dbg!(&instructions);
         let rt = ftd::RT::from(name, interpreter.aliases, interpreter.bag, instructions);
 
         Ok(Document {
