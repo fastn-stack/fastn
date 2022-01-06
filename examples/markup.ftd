@@ -1,16 +1,25 @@
+-- import: lib
+-- import: conditional-attributes as ca
+
 -- boolean orange: true
 
 -- string name: AmitU
+
+-- ftd.text amit: $text
+caption text:
+size: 20
+background-color: pink
+
 
 -- ftd.markup:
 background-color: yellow
 margin-bottom: 20
 
-Now {hello: Hello {underline: AmitU}} world. {hello} **Greetings** {underline}
+Now {ca.foo: {hello: Hello {underline: AmitU}} world. {hello} **Greetings** {underline} {amit} Amit Upadhyay} Outside
 
 {hello: Everyone should say **Hi** to each other}
 
---- ftd.text hello: $name
+--- ftd.text hello: $lib.amitu.name
 size: 15
 color: red
 
@@ -22,10 +31,13 @@ $event-click$: toggle $orange
 
 -- md:
 
+Now {hello: Hello {underline: Amitu}} world. {hello} **Greetings** {underline}
+
+
 -- ftd.markup md:
 background-color: green
-
-Now {hello: Hello {underline: Amitu}} world. {hello} **Greetings** {underline}
+body value:
+value: $value
 
 --- ftd.text hello: Someone
 size: 10
