@@ -1386,6 +1386,30 @@ pub fn scene_function() -> ftd::Component {
     }
 }
 
+pub fn markup_function() -> ftd::Component {
+    let arguments: std::collections::BTreeMap<String, ftd::p2::Kind> = [
+        common_arguments(),
+        vec![("value".to_string(), ftd::p2::Kind::body())],
+    ]
+    .concat()
+    .into_iter()
+    .collect();
+
+    ftd::Component {
+        line_number: 0,
+        kernel: true,
+        root: "ftd.kernel".to_string(),
+        full_name: "ftd#markup".to_string(),
+        arguments,
+        locals: Default::default(),
+        properties: Default::default(),
+        instructions: Default::default(),
+        invocations: Default::default(),
+        condition: None,
+        events: vec![],
+    }
+}
+
 pub fn grid_function() -> ftd::Component {
     let arguments: std::collections::BTreeMap<String, ftd::p2::Kind> = [
         container_arguments(),
@@ -1575,5 +1599,65 @@ pub fn grid_from_properties(
         container: container_from_properties(properties, doc)?,
         inline: ftd::p2::utils::bool_with_default("inline", false, properties, doc.name, 0)?,
         auto_flow: ftd::p2::utils::string_optional("auto-flow", properties, doc.name, 0)?,
+    })
+}
+
+pub fn markup_from_properties(
+    properties_with_ref: &std::collections::BTreeMap<String, (ftd::Value, Option<String>)>,
+    doc: &ftd::p2::TDoc,
+    condition: &Option<ftd::p2::Boolean>,
+    is_child: bool,
+    events: &[ftd::p2::Event],
+    all_locals: &mut ftd::Map,
+    root_name: Option<&str>,
+) -> ftd::p1::Result<ftd::Markups> {
+    let text = if let Some(text) = properties_with_ref.get("value") {
+        text
+    } else {
+        return ftd::e2("expected field `value`".to_string(), doc.name, 0);
+    };
+    let properties = &ftd::p2::utils::properties(properties_with_ref);
+    let (value, _source, reference) = ftd::p2::utils::string_and_source_and_ref(
+        0,
+        "value",
+        properties_with_ref,
+        all_locals,
+        doc.name,
+        condition,
+    )?;
+    let mut markup_vec = vec![];
+    for v in value.split("\n\n") {
+        let v = v.trim().replace('\n', "");
+        let properties_with_ref = {
+            let mut properties_with_ref = properties_with_ref.clone();
+            let mut text = text.clone();
+            text.0 = ftd::Value::String {
+                text: v,
+                source: ftd::TextSource::Body,
+            };
+            properties_with_ref.insert("text".to_string(), text.clone());
+            properties_with_ref
+        };
+        let itext = ftd::IText::Text(text_from_properties(
+            &properties_with_ref,
+            doc,
+            condition,
+            is_child,
+            events,
+            all_locals,
+            root_name,
+        )?);
+        markup_vec.push(ftd::Markup {
+            itext,
+            children: vec![],
+        });
+    }
+
+    Ok(ftd::Markups {
+        common: common_from_properties(
+            properties, doc, condition, is_child, events, all_locals, root_name, reference,
+        )?,
+        children: markup_vec,
+        container: container_from_properties(properties, doc)?,
     })
 }

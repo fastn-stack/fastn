@@ -252,6 +252,7 @@ impl ftd::Element {
             Self::Row(i) => (i.to_node(doc_id)),
             Self::Scene(i) => (i.to_node(doc_id)),
             Self::Grid(i) => (i.to_node(doc_id)),
+            Self::Markup(i) => (i.to_node(doc_id)),
             Self::Text(i) => (i.to_node(doc_id)),
             Self::TextBlock(i) => (i.to_node(doc_id)),
             Self::Code(i) => (i.to_node(doc_id)),
@@ -801,6 +802,29 @@ impl ftd::IFrame {
         n.attrs.insert(s("src"), escape(self.src.as_str()));
         n.attrs.insert(s("allow"), s("fullscreen"));
         n.attrs.insert(s("allowfullscreen"), s("allowfullscreen"));
+        n
+    }
+}
+
+impl ftd::Markups {
+    pub fn to_node(&self, doc_id: &str) -> Node {
+        let mut node = Node {
+            node: s("div"),
+            ..Default::default()
+        };
+        node.children = self.children.iter().map(|v| v.to_node(doc_id)).collect();
+        node
+    }
+}
+
+impl ftd::Markup {
+    pub fn to_node(&self, doc_id: &str) -> Node {
+        let mut n = Node::from_common("span", &self.itext.get_common(), doc_id);
+        if self.children.is_empty() {
+            n.text = Some(self.itext.get_text().original);
+            return n;
+        }
+        n.children = self.children.iter().map(|v| v.to_node(doc_id)).collect();
         n
     }
 }
