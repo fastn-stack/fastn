@@ -1,0 +1,110 @@
+-- import: fifthtry.github.io/Jupiter-theme as ft
+
+-- ft.site-name: FPM-DEV
+-- ft.site-icon: static/images/logo.svg
+-- ft.github: https://github.com/fifthtry/fpm-dev-en/
+-- ft.site-url: /ftd-dev-en
+
+-- ft.header-toc:
+$processor$: toc
+
+- about/
+  Docs
+
+-- ft.toc:
+$processor$: toc
+
+- index.html
+  fpm: FTD Package Manager
+- about/
+  About `fpm`
+  - why-not/
+    Why Not `fpm`?
+- roadmap/
+  Roadmap
+- journal/
+  Journal
+- fs/
+  File System Organization
+  - FPM/
+    `FPM.ftd`
+- ftd-host/
+  FTD Host Features
+  - http/
+    `$processor$: http`
+  - toc/
+    `$processor$: toc`
+  - package-query/
+    `$processor$: package-query`
+  - fpm-vars/
+    `import: fpm`
+- how-to/
+  How To
+  - how-to/install/
+    Install `fpm`
+  - how-to/update/
+    Update `fpm`
+  - how-to/get-started-github-pages/
+    Get started with Github pages
+  - how-to/get-started-vercel/
+    Get started with Vercel
+- usage/
+  `fpm` Usage
+  - build/
+    `fpm build`
+  - sync/
+    `fpm sync`
+  - status/
+    `fpm status`
+  - diff/
+    `fpm diff`
+  - update/
+    `fpm update`
+- known-issues/
+  Known Issues
+
+
+-- ft.toc-item list learn:
+$processor$: toc
+
+- index.html
+  Introduction
+- about/
+  Installation
+
+-- ft.toc-item list community:
+$processor$: toc
+
+- index.html
+  Introduction
+- about/
+  Installation
+
+-- ft.toc-item list more:
+$processor$: toc
+
+- index.html
+  Introduction
+- about/
+  Installation
+
+-- ft.toc-item list legal:
+$processor$: toc
+
+- index.html
+  Introduction
+- about/
+  Installation
+
+
+-- ft.footer-toc: Learn
+children: $learn
+
+-- ft.footer-toc: Community
+children: $community
+
+-- ft.footer-toc: More
+children: $more
+
+-- ft.footer-toc: Legal
+children: $legal

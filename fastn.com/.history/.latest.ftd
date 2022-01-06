@@ -1,10 +1,13 @@
 -- import: fpm
 
 -- fpm.snapshot: FPM.ftd
-timestamp: 1641226255041587000
+timestamp: 1641470335050441000
 
 -- fpm.snapshot: FPM/prelude.ftd
 timestamp: 1641226255041587000
+
+-- fpm.snapshot: README.md
+timestamp: 1641470335050441000
 
 -- fpm.snapshot: about.ftd
 timestamp: 1641226255041587000
@@ -13,7 +16,7 @@ timestamp: 1641226255041587000
 timestamp: 1641226255041587000
 
 -- fpm.snapshot: config.ftd
-timestamp: 1641226255041587000
+timestamp: 1641470335050441000
 
 -- fpm.snapshot: diff.ftd
 timestamp: 1641226255041587000
@@ -30,17 +33,50 @@ timestamp: 1641226255041587000
 -- fpm.snapshot: ftd-host.ftd
 timestamp: 1641226255041587000
 
+-- fpm.snapshot: how-to/get-started-github-pages.ftd
+timestamp: 1641470335050441000
+
+-- fpm.snapshot: how-to/get-started-vercel.ftd
+timestamp: 1641470335050441000
+
+-- fpm.snapshot: how-to/github-initialize-repo.png
+timestamp: 1641470335050441000
+
+-- fpm.snapshot: how-to/github-pages-initialize.png
+timestamp: 1641470335050441000
+
+-- fpm.snapshot: how-to/github-use-this-template.png
+timestamp: 1641470335050441000
+
+-- fpm.snapshot: how-to/install.ftd
+timestamp: 1641470335050441000
+
+-- fpm.snapshot: how-to/update.ftd
+timestamp: 1641470335050441000
+
+-- fpm.snapshot: how-to/vercel-deploy-settings.png
+timestamp: 1641470335050441000
+
+-- fpm.snapshot: how-to/vercel-new-from-existing.png
+timestamp: 1641470335050441000
+
+-- fpm.snapshot: how-to/vercel-new-from-repo.png
+timestamp: 1641470335050441000
+
+-- fpm.snapshot: how-to/vercel-new-template.png
+timestamp: 1641470335050441000
+
 -- fpm.snapshot: http.ftd
 timestamp: 1641226255041587000
 
 -- fpm.snapshot: images/translation/english-with-dropdown.jpg
-timestamp: 1641226255041587000
+timestamp: 1641470335050441000
 
 -- fpm.snapshot: index.ftd
 timestamp: 1641226255041587000
 
 -- fpm.snapshot: install.ftd
-timestamp: 1641226255041587000
+timestamp: 1641470335050441000
 
 -- fpm.snapshot: journal.ftd
 timestamp: 1641226255041587000
@@ -70,7 +106,7 @@ timestamp: 1641125560428964000
 timestamp: 1641125560428964000
 
 -- fpm.snapshot: static/images/christopher-chedeau.a975949.200.jpg
-timestamp: 1641226255041587000
+timestamp: 1641470335050441000
 
 -- fpm.snapshot: static/images/dark-mode.svg
 timestamp: 1641226255041587000
