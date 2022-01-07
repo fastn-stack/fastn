@@ -14,86 +14,84 @@ $processor$: toc
 -- ft.toc:
 $processor$: toc
 
-- index.html
-  fpm: FTD Package Manager
-- about/
+- /about/
   About `fpm`
   - why-not/
     Why Not `fpm`?
-- roadmap/
+- /roadmap/
   Roadmap
-- journal/
+- /journal/
   Journal
-- fs/
+- /fs/
   File System Organization
-  - fpm-ftd-file/
+  - /fpm-ftd-file/
     `FPM.ftd`
-- ftd-host/
+- /ftd-host/
   FTD Host Features
-  - http/
+  - /http/
     `$processor$: http`
-  - toc/
+  - /toc/
     `$processor$: toc`
-  - package-query/
+  - /package-query/
     `$processor$: package-query`
-  - fpm-vars/
+  - /fpm-vars/
     `import: fpm`
-- how-to/
+- /how-to/
   How To
-  - how-to/install/
+  - /how-to/install/
     Install `fpm`
-  - how-to/update/
+  - /how-to/update/
     Update `fpm`
-  - how-to/get-started-github-pages/
+  - /how-to/get-started-github-pages/
     Get started with Github pages
-  - how-to/get-started-vercel/
+  - /how-to/get-started-vercel/
     Get started with Vercel
-- usage/
+- /usage/
   `fpm` Usage
-  - build/
+  - /build/
     `fpm build`
-  - sync/
+  - /sync/
     `fpm sync`
-  - status/
+  - /status/
     `fpm status`
-  - diff/
+  - /diff/
     `fpm diff`
-  - update/
+  - /update/
     `fpm update`
-- known-issues/
+- /known-issues/
   Known Issues
 
 
 -- ft.toc-item list learn:
 $processor$: toc
 
-- index.html
+- /
   Introduction
-- about/
+- /about/
   Installation
 
 -- ft.toc-item list community:
 $processor$: toc
 
-- index.html
+- /
   Introduction
-- about/
+- /about/
   Installation
 
 -- ft.toc-item list more:
 $processor$: toc
 
-- index.html
+- /
   Introduction
-- about/
+- /about/
   Installation
 
 -- ft.toc-item list legal:
 $processor$: toc
 
-- index.html
+- /
   Introduction
-- about/
+- /about/
   Installation
 
 
