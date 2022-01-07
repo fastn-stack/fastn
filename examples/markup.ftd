@@ -33,20 +33,31 @@ $event-click$: toggle $orange
 
 Now {hello: Hello {underline: Amitu}} world. {hello} **Greetings** {underline}
 
+- hello1
+- hello2
+  - hello3
+  - hello4
+- hello5
+
+The above is the list printing.
+This checks if everything is **alright**.
+
 -- boolean dark-mode: true
 
 -- ftd.markup md:
 background-color: green
-body value:
+caption or body value:
 text: $value
 color: blue
 color if $dark-mode: yellow
-size: 60
+size: 20
 
 --- ftd.text hello: Someone
 size: 10
 $event-click$: toggle $dark-mode
 
 --- ftd.text underline:
-size: 30
+size: 40
 background-color: orange
+
+-- md: India
