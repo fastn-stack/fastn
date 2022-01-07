@@ -609,7 +609,12 @@ impl<'a> Interpreter<'a> {
                                         None,
                                     )?);
                                 } else {
-                                    let child = if parent.root.eq("ftd#markup") {
+                                    let root_name = ftd::p2::utils::get_root_component_name(
+                                        &doc,
+                                        parent.root.as_str(),
+                                        sub.line_number,
+                                    )?;
+                                    let child = if root_name.eq("ftd#markup") {
                                         ftd::p2::utils::get_markup_child(
                                             sub,
                                             &doc,

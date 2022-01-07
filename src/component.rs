@@ -1,5 +1,3 @@
-use crate::IText;
-
 #[derive(Default, Debug, Clone, PartialEq, serde::Serialize, serde::Deserialize)]
 pub struct Component {
     pub root: String,
@@ -182,17 +180,18 @@ impl ChildComponent {
 
         let children = {
             let mut children = children.to_vec();
-            let root = { doc.get_component(self.line_number, self.root.as_str())? };
-            let root_name = ftd::p2::utils::get_root_component_name(
-                doc,
-                root.full_name.as_str(),
-                self.line_number,
-            )?;
+            let root_name =
+                ftd::p2::utils::get_root_component_name(doc, self.root.as_str(), self.line_number)?;
             if root_name.eq("ftd#markup") {
-                for instruction in root.instructions {
-                    if let ftd::Instruction::ChildComponent { child } = instruction {
-                        children.push(child);
+                let mut name = self.root.to_string();
+                while name != "ftd.kernel" {
+                    let component = doc.get_component(self.line_number, name.as_str())?;
+                    for instruction in component.instructions {
+                        if let ftd::Instruction::ChildComponent { child } = instruction {
+                            children.push(child);
+                        }
                     }
+                    name = component.root;
                 }
             }
             children
@@ -293,56 +292,6 @@ impl ChildComponent {
                 }
             }
             child
-        }
-
-        /// In case markup the behaviour of container_children is not the same.
-        /// They act as the component variables which are, then, referred to in markup text
-        /// container_children copy there properties to the reference in markup text
-        fn reevalute_markups(
-            markups: &mut ftd::Markups,
-            container_children: &[ftd::Element],
-            elements_name: &[String],
-            doc: &ftd::p2::TDoc,
-        ) -> ftd::p1::Result<()> {
-            let mut named_container = std::collections::BTreeMap::new();
-            // first convert the container children into the named container.
-            // which basically make a map of component's variable name with the container_child.
-            // which was initially  seperated by `get_modified_child()`
-            for (idx, container) in container_children.iter().enumerate() {
-                match elements_name.get(idx) {
-                    Some(name) => {
-                        named_container.insert(name.to_string(), container.to_owned());
-                    }
-                    None => {
-                        return ftd::e2(
-                            format!("cannot find name for container {:?}", container),
-                            doc.name,
-                            0,
-                        )
-                    }
-                }
-            }
-            let mut all_children = markups.children.to_owned();
-            for v in markups.text.original.split("\n\n") {
-                let itext = ftd::IText::Markup(ftd::Markups {
-                    text: if !markups.line {
-                        ftd::markdown(v)
-                    } else {
-                        ftd::markdown_line(v)
-                    },
-                    ..Default::default()
-                });
-                all_children.push(ftd::Markup {
-                    itext,
-                    children: vec![],
-                });
-            }
-            for markup in all_children.iter_mut() {
-                reevalute_markup(markup, &named_container, doc)?;
-            }
-            markups.children = all_children;
-
-            Ok(())
         }
     }
 
@@ -671,6 +620,56 @@ impl ChildComponent {
             Ok(properties)
         }
     }
+}
+
+/// In case markup the behaviour of container_children is not the same.
+/// They act as the component variables which are, then, referred to in markup text
+/// container_children copy there properties to the reference in markup text
+fn reevalute_markups(
+    markups: &mut ftd::Markups,
+    container_children: &[ftd::Element],
+    elements_name: &[String],
+    doc: &ftd::p2::TDoc,
+) -> ftd::p1::Result<()> {
+    let mut named_container = std::collections::BTreeMap::new();
+    // first convert the container children into the named container.
+    // which basically make a map of component's variable name with the container_child.
+    // which was initially  seperated by `get_modified_child()`
+    for (idx, container) in container_children.iter().enumerate() {
+        match elements_name.get(idx) {
+            Some(name) => {
+                named_container.insert(name.to_string(), container.to_owned());
+            }
+            None => {
+                return ftd::e2(
+                    format!("cannot find name for container {:?}", container),
+                    doc.name,
+                    0,
+                )
+            }
+        }
+    }
+    let mut all_children = markups.children.to_owned();
+    for v in markups.text.original.split("\n\n") {
+        let itext = ftd::IText::Markup(ftd::Markups {
+            text: if !markups.line {
+                ftd::markdown(v)
+            } else {
+                ftd::markdown_line(v)
+            },
+            ..Default::default()
+        });
+        all_children.push(ftd::Markup {
+            itext,
+            children: vec![],
+        });
+    }
+    for markup in all_children.iter_mut() {
+        reevalute_markup(markup, &named_container, doc)?;
+    }
+    markups.children = all_children;
+
+    Ok(())
 }
 
 fn reevalute_markup(
