@@ -5,11 +5,8 @@
 
 -- string name: AmitU
 
--- ftd.text amit: $text
-caption text:
-size: 20
-background-color: pink
-
+-- ftd.column:
+width: fill
 
 -- ftd.markup:
 background-color: yellow
@@ -41,6 +38,13 @@ Now {hello: Hello {underline: Amitu}} world. {hello} **Greetings** {underline}
 
 The above is the list printing.
 This checks if everything is **alright**.
+{purple: Check this purple text for instance}
+
+--- ftd.text purple: Purple
+color: purple
+
+
+-- md: India
 
 -- boolean dark-mode: true
 
@@ -51,6 +55,7 @@ text: $value
 color: blue
 color if $dark-mode: yellow
 size: 20
+margin-bottom: 40
 
 --- ftd.text hello: Someone
 size: 10
@@ -60,4 +65,9 @@ $event-click$: toggle $dark-mode
 size: 40
 background-color: orange
 
--- md: India
+
+
+-- ftd.text amit: $text
+caption text:
+size: 20
+background-color: pink

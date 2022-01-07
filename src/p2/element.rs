@@ -1643,11 +1643,6 @@ pub fn markup_from_properties(
     all_locals: &mut ftd::Map,
     root_name: Option<&str>,
 ) -> ftd::p1::Result<ftd::Markups> {
-    let text = if let Some(text) = properties_with_ref.get("text") {
-        text
-    } else {
-        return ftd::e2("expected field `value`".to_string(), doc.name, 0);
-    };
     let properties = &ftd::p2::utils::properties(properties_with_ref);
     let (value, source, reference) = ftd::p2::utils::string_and_source_and_ref(
         0,
@@ -1667,40 +1662,10 @@ pub fn markup_from_properties(
         None => vec![],
     };
 
-    /*let mut markup_vec = vec![];
-    for v in value.split("\n\n") {
-        let properties_with_ref = {
-            let mut properties_with_ref: std::collections::BTreeMap<
-                String,
-                (ftd::Value, Option<String>),
-            > = Default::default();
-            let mut text = text.clone();
-            text.0 = ftd::Value::String {
-                text: v.to_string(),
-                source: source.to_owned(),
-            };
-            properties_with_ref.insert("text".to_string(), text.clone());
-            properties_with_ref
-        };
-        let itext = ftd::IText::Text(text_from_properties(
-            &properties_with_ref,
-            doc,
-            condition,
-            is_child,
-            events,
-            all_locals,
-            root_name,
-        )?);
-        markup_vec.push(ftd::Markup {
-            itext,
-            children: vec![],
-        });
-    }*/
-
     Ok(ftd::Markups {
         text: ftd::Rendered {
-            original: value.to_string(),
-            rendered: value.to_string(),
+            original: value.clone(),
+            rendered: value,
         },
         common: common_from_properties(
             properties, doc, condition, is_child, events, all_locals, root_name, reference,

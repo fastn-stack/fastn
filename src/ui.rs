@@ -177,21 +177,39 @@ impl Element {
             index_vec: &[usize],
             external_id: Option<String>,
         ) {
-            for (idx, child) in children.iter_mut().enumerate() {
-                let index_string = get_index_string(index_vec, idx);
-                let mut id = match &mut child.itext {
-                    IText::Text(t) | IText::Integer(t) | IText::Boolean(t) | IText::Decimal(t) => {
-                        &mut t.common.data_id
+            return set_markup_id_(children, index_vec, external_id, 0);
+
+            fn set_markup_id_(
+                children: &mut [ftd::Markup],
+                index_vec: &[usize],
+                external_id: Option<String>,
+                start_index: usize,
+            ) {
+                for (idx, child) in children.iter_mut().enumerate() {
+                    let index_string = get_index_string(index_vec, idx + start_index);
+                    let (mut id, children) = match &mut child.itext {
+                        IText::Text(t)
+                        | IText::Integer(t)
+                        | IText::Boolean(t)
+                        | IText::Decimal(t) => (&mut t.common.data_id, None),
+                        IText::TextBlock(t) => (&mut t.common.data_id, None),
+                        IText::Markup(t) => (&mut t.common.data_id, Some(&mut t.children)),
+                    };
+
+                    let mut index_vec = index_vec.to_vec();
+                    index_vec.push(idx);
+                    set_markup_id_(&mut child.children, &index_vec, external_id.clone(), 0);
+                    if let Some(mut children) = children {
+                        set_markup_id_(
+                            &mut children,
+                            &index_vec,
+                            external_id.clone(),
+                            child.children.len(),
+                        );
                     }
-                    IText::TextBlock(t) => &mut t.common.data_id,
-                    IText::Markup(t) => &mut t.common.data_id,
-                };
 
-                let mut index_vec = index_vec.to_vec();
-                index_vec.push(idx);
-                set_markup_id(&mut child.children, &index_vec, external_id.clone());
-
-                set_id(&mut id, &external_id, index_string.as_str())
+                    set_id(&mut id, &external_id, index_string.as_str())
+                }
             }
         }
 
@@ -483,7 +501,10 @@ impl Element {
                     | IText::Boolean(ref t)
                     | IText::Decimal(ref t) => (&t.common.conditional_attribute, &t.common.data_id),
                     IText::TextBlock(ref t) => (&t.common.conditional_attribute, &t.common.data_id),
-                    IText::Markup(ref t) => (&t.common.conditional_attribute, &t.common.data_id),
+                    IText::Markup(ref t) => {
+                        markup_get_style_event_dependencies(&t.children, data);
+                        (&t.common.conditional_attribute, &t.common.data_id)
+                    }
                 };
                 markup_get_style_event_dependencies(&child.children, data);
                 style_condition(conditional_attributes, id, data);
@@ -622,7 +643,10 @@ impl Element {
                     | IText::Boolean(ref t)
                     | IText::Decimal(ref t) => (&t.common.reference, &t.common.data_id),
                     IText::TextBlock(ref t) => (&t.common.reference, &t.common.data_id),
-                    IText::Markup(ref t) => (&t.common.reference, &t.common.data_id),
+                    IText::Markup(ref t) => {
+                        markup_get_value_event_dependencies(&t.children, data);
+                        (&t.common.reference, &t.common.data_id)
+                    }
                 };
                 markup_get_value_event_dependencies(&child.children, data);
                 value_condition(reference, id, data);
@@ -741,7 +765,10 @@ impl Element {
                     | IText::Boolean(ref t)
                     | IText::Decimal(ref t) => (&t.common.condition, &t.common.data_id),
                     IText::TextBlock(ref t) => (&t.common.condition, &t.common.data_id),
-                    IText::Markup(ref t) => (&t.common.condition, &t.common.data_id),
+                    IText::Markup(ref t) => {
+                        markup_get_visible_event_dependencies(&t.children, data);
+                        (&t.common.condition, &t.common.data_id)
+                    }
                 };
                 markup_get_visible_event_dependencies(&child.children, data);
                 visibility_condition(condition, id, data);
