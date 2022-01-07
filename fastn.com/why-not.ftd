@@ -14,17 +14,17 @@ this page.
 -- ft.h1: Use `FTD`
 
 We promote `fpm` for working with `ftd` files, but `fpm` is not the only way to use
-`ftd` technology. You can directly depend on `ftd`, and build many websites, 
-especially when things become more interesting, it may be a good idea to go the 
+`ftd` technology. You can directly depend on `ftd`, and build many websites,
+especially when things become more interesting, it may be a good idea to go the
 lower level `ftd` crate (and we will soon make it available in other languages that
 can easily consume Rust generated libraries).
 
 
 -- ft.h1: `fpm` is in Alpha stage right now
 
-We are actively developing, the first commit of the project happened only on 24th 
+We are actively developing, the first commit of the project happened only on 24th
 Nov 2021, so feel free to wait for `fpm` and `ftd` (which is slightly more mature,
-but still in infancy), if you have a serious need and you have run out of taking 
+but still in infancy), if you have a serious need and you have run out of taking
 risk budget.
 
 

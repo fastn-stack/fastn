@@ -49,7 +49,7 @@ used to succinctly describe links in nav bars or creating table of content.
 Each link starts with a dash (`-`) followed by a space and then the URL, and the
 title of link comes in next line aligned with the start of URL.
 
-For nesting we can indent both lines by two spaces. Any amount of nesting is 
+For nesting we can indent both lines by two spaces. Any amount of nesting is
 possible.
 
 Currently the parser is strict, rules must be followed exactly.

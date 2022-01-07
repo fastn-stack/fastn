@@ -1,27 +1,44 @@
+-- import: fpm-ui
 
 -- ft.doc-page:
 toc: $ft.toc
 
 -- ft.h0: About `fpm`
 
-[`ftd`](https://ftd.dev) is a language to create web pages or documents for 
+-- markup:
+
+[`ftd`](https://ftd.dev) is a {language} to create web pages or documents for
 publishing on the web. It starts with Markdown, but adds features to create full
-page layouts, lets you create reusable "ftd components", and has first class 
+page layouts, lets you create reusable "ftd components", and has first class
 support for data modelling, so the `ftd` document can be used as an data exchange
 format as well (as a replacement of JSON/CSV etc).
 
-`fpm` is "`ftd` package manager", defines a package format for packaging `ftd` 
+`fpm` is "`ftd` package manager", defines a package format for packaging `ftd`
 files. `fpm` packages can depend on other `fpm` packages, and `fpm` can install
 all the dependencies of a package.
 
-`fpm` can also convert `ftd` files to static HTML files, so you can publish FTD 
+`fpm` can also convert `ftd` files to static HTML files, so you can publish FTD
 files on github pages, S3 etc static site hosting sites.
+
+-- ftd.markup markup:
+body body:
+text: $body
+size: 15
+line-height: 24
+color: $ft.neutral-700
+color if $fpm-ui.dark-mode: $ft.neutral-200
+padding-bottom: 8
+font: apple-system
+
+-- ftd.text language: This is the language
+background-color if not $fpm-ui.dark-mode: yellow
+color if $fpm-ui.dark-mode: yellow
 
 
 -- ft.h1: `fpm-repo`
 
 `fpm` packages can be shared with others by using `.tar.gz` format defined by `fpm`
-or via Git repository (any version control system for that matter). `fpm` is 
+or via Git repository (any version control system for that matter). `fpm` is
 capable of downloading package dependencies for packages that are hosted on version
 control systems or tarballs served over HTTP.
 
@@ -29,7 +46,7 @@ control systems or tarballs served over HTTP.
 first class package hosting. You can chose if your `fpm` package would be natively
 hosted on say Github or via a `fpm-repo` you have created or available as SAAS.
 
-`fpm-repo` has advantages over Github etc hosting as a `fpm` package is inherently 
+`fpm-repo` has advantages over Github etc hosting as a `fpm` package is inherently
 a web site, and `fpm-repo` shows the site directly, without a static build step.
 
 `ftd` has some dynamic features, which an be used when using `fpm-repo`.

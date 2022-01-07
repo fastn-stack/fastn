@@ -7,19 +7,19 @@ toc: $ft.toc
 
 -- ft.h0: `fpm build`
 
-`fpm build` is used to convert `.ftd` files in a fpm package into static HTML 
+`fpm build` is used to convert `.ftd` files in a fpm package into static HTML
 files. The generated HTML files can be uploaded on github-pages, S3 etc to publish
 your `ftd` files.
 
 
 -- ft.h1: Regarding Dynamic Features in FTD
 
-`ftd` files can be dynamic, say they can refer an HTTP endpoint, from where `ftd` 
-will fetch the content, say JSON, and pass it to `ftd` document. This happens 
+`ftd` files can be dynamic, say they can refer an HTTP endpoint, from where `ftd`
+will fetch the content, say JSON, and pass it to `ftd` document. This happens
 during rendering, if you use the planned `fpm serve`, or if the `fpm package` is
-published to a `fpm-repo`. 
+published to a `fpm-repo`.
 
-When using `fpm build`, the dynamic stuff happens during the build time, and 
+When using `fpm build`, the dynamic stuff happens during the build time, and
 subsequently a static version is only available.
 
 `fpm build` is only to support the use case where you do not have ability to run

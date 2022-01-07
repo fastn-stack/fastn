@@ -32,8 +32,8 @@ And say you have an SQLite database file with table like this:
 lang: sql
 
 CREATE TABLE user (
-    id INTEGER PRIMARY KEY AUTOINCREMENT, 
-    name TEXT, 
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT,
     department TEXT
 );
 
@@ -54,7 +54,7 @@ INSERT INTO user (name, department) VALUES ("jack", "ops");
 
 -- ft.markdown:
 
-Assuming the SQLite file is `db.sqlite`, you can fetch data from the SQLite 
+Assuming the SQLite file is `db.sqlite`, you can fetch data from the SQLite
 database using `package-query` processor:
 
 
@@ -72,7 +72,7 @@ SELECT * FROM user;
 
 The record we use must match with the result of the query, so if we would have
 individually selected columns, or used expressions in the SELECT clause, the type
-of expression must match with the record in which you are going to store the 
+of expression must match with the record in which you are going to store the
 result.
 
 You can then show the results in the FTD document, eg:

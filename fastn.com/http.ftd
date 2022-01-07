@@ -32,7 +32,7 @@ repo list items:
 
 We have two records: `repo`, and `result`. We also have a variable of type `result`.
 
-Lets initialise this variable with result of fetching the top repositories from 
+Lets initialise this variable with result of fetching the top repositories from
 Github:
 
 
@@ -54,7 +54,7 @@ This is the URL where we would be fetching the JSON from. It is mandatory.
 
 -- ft.h2: Key: Value pairs
 
-Each key value pair is passed added to the URL as query params. 
+Each key value pair is passed added to the URL as query params.
 
 The response of the JSON must match with type of the variable where we are storing
 the result, here it is `r` of type `record` defined above.
