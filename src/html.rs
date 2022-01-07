@@ -1,3 +1,5 @@
+use crate::IText;
+
 #[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
 pub struct Node {
     pub condition: Option<ftd::Condition>,
@@ -931,6 +933,9 @@ impl ftd::Markups {
         let (key, value) = style(&self.style.weight);
         n.style.insert(s(key.as_str()), value);
 
+        if self.children.is_empty() {
+            n.text = Some(self.text.rendered.clone());
+        }
         n.children = self
             .children
             .iter()
@@ -948,6 +953,7 @@ impl ftd::Markup {
             | ftd::IText::Boolean(ref t)
             | ftd::IText::Decimal(ref t) => t.to_node(doc_id),
             ftd::IText::TextBlock(ref t) => t.to_node(doc_id),
+            IText::Markup(ref t) => t.to_node(doc_id),
         };
         if n.node.eq("div") {
             if is_paragraph {

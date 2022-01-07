@@ -1,3 +1,5 @@
+use crate::IText;
+
 #[derive(Default, Debug, Clone, PartialEq, serde::Serialize, serde::Deserialize)]
 pub struct Component {
     pub root: String,
@@ -320,9 +322,25 @@ impl ChildComponent {
                     }
                 }
             }
-            for markup in markups.children.iter_mut() {
+            let mut all_children = markups.children.to_owned();
+            for v in markups.text.original.split("\n\n") {
+                let itext = ftd::IText::Markup(ftd::Markups {
+                    text: if !markups.line {
+                        ftd::markdown(v)
+                    } else {
+                        ftd::markdown_line(v)
+                    },
+                    ..Default::default()
+                });
+                all_children.push(ftd::Markup {
+                    itext,
+                    children: vec![],
+                });
+            }
+            for markup in all_children.iter_mut() {
                 reevalute_markup(markup, &named_container, doc)?;
             }
+            markups.children = all_children;
 
             Ok(())
         }
@@ -665,7 +683,10 @@ fn reevalute_markup(
         | ftd::IText::TextBlock(ftd::TextBlock { text, .. })
         | ftd::IText::Integer(ftd::Text { text, .. })
         | ftd::IText::Boolean(ftd::Text { text, .. })
-        | ftd::IText::Decimal(ftd::Text { text, .. }) => text.original.chars().collect::<Vec<_>>(),
+        | ftd::IText::Decimal(ftd::Text { text, .. })
+        | ftd::IText::Markup(ftd::Markups { text, .. }) => {
+            text.original.chars().collect::<Vec<_>>()
+        }
     };
     let mut children = vec![];
     let mut idx = 0;
@@ -808,6 +829,17 @@ fn reevalute_markup(
                     t
                 };
                 ftd::IText::TextBlock(t)
+            }
+            ftd::Element::Markup(t) => {
+                let t = {
+                    let mut t = t.clone();
+                    if let Some(text) = text {
+                        t.text = ftd::markdown_line(text);
+                        t.common.reference = None;
+                    }
+                    t
+                };
+                ftd::IText::Markup(t)
             }
             t => {
                 return ftd::e2(

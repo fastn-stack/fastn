@@ -1667,7 +1667,7 @@ pub fn markup_from_properties(
         None => vec![],
     };
 
-    let mut markup_vec = vec![];
+    /*let mut markup_vec = vec![];
     for v in value.split("\n\n") {
         let properties_with_ref = {
             let mut properties_with_ref: std::collections::BTreeMap<
@@ -1695,13 +1695,17 @@ pub fn markup_from_properties(
             itext,
             children: vec![],
         });
-    }
+    }*/
 
     Ok(ftd::Markups {
+        text: ftd::Rendered {
+            original: value.to_string(),
+            rendered: value.to_string(),
+        },
         common: common_from_properties(
             properties, doc, condition, is_child, events, all_locals, root_name, reference,
         )?,
-        children: markup_vec,
+        children: vec![],
         line: source != ftd::TextSource::Body,
         text_align: ftd::TextAlign::from(
             ftd::p2::utils::string_optional("text-align", properties, doc.name, 0)?,
