@@ -14,7 +14,7 @@ lang: ftd
 
 -- ft.h3: Attributes
 
-Boolean accepts the below attributes as well all the [common attributes ](/fifthtry/ftd/common/).
+Boolean accepts the below attributes as well all the [common attributes ](common/).
 
 - `text`
 - `line` 

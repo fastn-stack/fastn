@@ -37,7 +37,7 @@ fax: string
 Here we have used `ftd::p1`'s "sub-section" to represent each possibilities.
 
 The declarations `individual` or `company`, are called `or-type` variants, and they
-use similar syntax as [`record` declarations](/fifthtry/ftd/record/).
+use similar syntax as [`record` declarations](record/).
 
 -- ft.h1: `or-type` variables
 
@@ -106,4 +106,4 @@ let amitu: Lead = doc.get("amitu")?;
 -- ft.markdown:
 
 You can read more details of reading `ftd` files ["Reading FTD 
-Files"](/fifthtry/ftd/reading-data/) guide.
+Files"](reading-data/) guide.

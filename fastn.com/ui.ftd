@@ -9,5 +9,5 @@ internally for rendering on the web, but its planning to support more backends l
 terminal/curses, and mobile device native frameworks for iOS and Android, and 
 possibly also a low-level implementation for embedded devices.
 
-`ftd` has a concept called [`component`](/fifthtry/ftd/component/), start by 
+`ftd` has a concept called [`component`](component/), start by 
 reading about it.

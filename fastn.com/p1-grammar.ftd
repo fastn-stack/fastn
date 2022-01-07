@@ -107,7 +107,7 @@ has no header but has a body: `this one has a body`.
 
 -- ft.h1: Philosophy, and why there is no `sub-sub-section`
 
-Check out our [philosophy guide](/fifthtry/ftd/philosophy/) to understand why we 
+Check out our [philosophy guide](philosophy/) to understand why we 
 have taken some of these decisions.
 
 -- ft.h1: Programmatic Access

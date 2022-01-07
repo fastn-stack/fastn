@@ -20,7 +20,7 @@ lang: ftd
 -- ft.markdown:
 
 Text accepts the below attributes as well all the [common 
-attributes](/fifthtry/ftd/common/).
+attributes](common/).
 
 
 -- ft.h1: `text: String`

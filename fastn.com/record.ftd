@@ -26,8 +26,8 @@ fields: `name`, `age` and `bio`.
 
 -- ft.h1: Field Types
 
-Fields can be either one of the [built-in types](/fifthtry/ftd/built-in-types/), 
-another type like a `record` or [`or-type`](/fifthtry/ftd/or-type/).
+Fields can be either one of the [built-in types](built-in-types/), 
+another type like a `record` or [`or-type`](or-type/).
 
 -- ft.h1: Record Variable
 
@@ -92,7 +92,7 @@ let amitu: Person = doc.get("amitu")?;
 -- ft.markdown:
 
 You can read more details of reading `ftd` files ["Reading FTD 
-Files"](/fifthtry/ftd/reading-data/) guide.
+Files"](reading-data/) guide.
 
 -- ft.h1: Record "Instances"
 

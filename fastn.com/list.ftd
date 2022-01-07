@@ -105,4 +105,4 @@ let people: Vec<Person> = doc.get("people")?;
 -- ft.markdown:
 
 You can read more details of reading `ftd` files ["Reading FTD 
-Files"](/fifthtry/ftd/reading-data/) guide.
+Files"](reading-data/) guide.

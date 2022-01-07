@@ -72,7 +72,7 @@ so that I don’t have to spend a week each time spinning up a new one.
 FTD stands for Fifthtry Document Format. Documents on FifthTry are stored in this
 format.
 
-[Start Here](/fifthtry/ftd/language/)
+[Start Here](language/)
 
 FTD is meant to be a universal file format for text-based data, think of XML done
 right.
@@ -83,8 +83,8 @@ Twitter: [@FifthTryHQ](https://twitter.com/fifthtryhq)
 
 License: BSD
 
-Checkout the [Roadmap & RFCs](/fifthtry/ftd/roadmap/) and 
-[Changelog](/fifthtry/ftd/changelog/).
+Checkout the [Roadmap & RFCs](roadmap/) and 
+[Changelog](changelog/).
 
 
 --- ft.youtube:

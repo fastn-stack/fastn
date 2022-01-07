@@ -32,15 +32,15 @@ type for each field. Notice also our types `caption`, which like "heading of the
 data", `body`, which lets people write multiline strings without worrying about
 quoting or indentation etc.
 
-Read our [`ftd::p1` grammar guide](/fifthtry/ftd/p1-grammar/) to understand the low 
+Read our [`ftd::p1` grammar guide](p1-grammar/) to understand the low 
 level grammer better.
 
 -- ft.h1: Rich Data Modelling
 
-It has support for [typed variables](/fifthtry/ftd/variables/),
-[`records`](/fifthtry/ftd/record/) (`struct` in other languages), 
-[`or-type`](/fifthtry/ftd/or-type/) (`enum` in Rust, also called "algebraic data 
-type") and [lists](/fifthtry/ftd/list/). 
+It has support for [typed variables](variables/),
+[`records`](record/) (`struct` in other languages), 
+[`or-type`](or-type/) (`enum` in Rust, also called "algebraic data 
+type") and [lists](list/). 
 
 FTD files can be validated to confirm to strict type or not, and this can be used
 by editors to assist humans write correct ftd files.
@@ -64,7 +64,7 @@ let amitu: Employee = doc.get("amitu")?;
 
 -- ft.markdown:
 
-Read more about it in ["reading data" guide](/fifthtry/ftd/reading-data/).
+Read more about it in ["reading data" guide](reading-data/).
 
 -- ft.h1: Better Organization Of Data
 

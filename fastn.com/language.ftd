@@ -16,7 +16,7 @@ FTD is a domain-specific language to represent typed data and user interfaces.
 `ftd` is an alternative to XML/JSON for storing data.
 
 Note: `ftd` is built on a lower level grammar, called [`ftd::p1` 
-grammar](/fifthtry/ftd/p1-grammar/), it defines things like sections, 
+grammar](p1-grammar/), it defines things like sections, 
 sub-sections, caption, headers, and body.
 
 
@@ -71,7 +71,7 @@ let employees: Vec<Employee> = doc.get("employees")?;
 
 -- ft.markdown:
 
-Read about [ftd's data modelling capability](/fifthtry/ftd/data-modelling/) in 
+Read about [ftd's data modelling capability](data-modelling/) in 
 detail.
 
 

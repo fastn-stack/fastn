@@ -17,7 +17,7 @@ let msg: String = doc.get("some/id#x)?;
 -- ft.markdown:
 
 To learn about `lib` parameter, checkout the [library 
-documentation](/fifthtry/ftd/library/).
+documentation](library/).
 
 When calling `.get()` the type of variable in Rust must have compatible 
 [serde::Deserialize](https://docs.serde.rs/serde/de/trait.Deserialize.html) 
@@ -27,9 +27,9 @@ into Rust `enum`.
 
 -- ft.h2: A Note On ID
 
-When parsing `ftd` file, a ["library"](/fifthtry/ftd/library/) has to be provided 
+When parsing `ftd` file, a ["library"](library/) has to be provided 
 because an `ftd` file can refer to another ftd files using the [`import` 
-feature](/fifthtry/ftd/import/). So the parsed document contains all data about
+feature](import/). So the parsed document contains all data about
 all the `ftd` files referenced, directly or indirectly from the original file.
 
 The original document's name must be provided when parsing, in our example,

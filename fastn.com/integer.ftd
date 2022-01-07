@@ -17,7 +17,7 @@ value: 10
 -- ft.markdown:
 
 Integer accepts the below attributes along with the
-[common attributes](/fifthtry/ftd/common/).
+[common attributes](common/).
 
 
 -- ft.h1: `value`

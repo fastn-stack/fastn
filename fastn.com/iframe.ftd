@@ -14,6 +14,6 @@ lang: ftd
 
 -- ft.h3: Attributes
 
-Iframe accepts the below attributes as well all the [common attributes ](/fifthtry/ftd/common/).
+Iframe accepts the below attributes as well all the [common attributes ](common/).
 
 - `src`

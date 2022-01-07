@@ -11,7 +11,7 @@ id: foo
 This is an example to show how can we place a new element inside any inner 
 container. In other words, how can we change the current container to some inner 
 container so that we can place any element inside that container.
-It is recommended to go through [this document](/fifthtry/ftd/container-management/) 
+It is recommended to go through [this document](container-management/) 
 to have better understanding of this concept.
 
 

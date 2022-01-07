@@ -25,16 +25,16 @@ The `import` line is not needed as it's automatically imported. This line define
 namespace `ftd`, so all `ftd` kernels components are referred as `ftd.text` and 
 so on.
 
-We are then using a component named [`ftd.text`](/fifthtry/ftd/text/) to render 
+We are then using a component named [`ftd.text`](text/) to render 
 the text "hello world" in the UI.
 
 -- ft.h1: List of `ftd` kernel components
 
-- [`ftd.column`](/fifthtry/ftd/column/)
-- [`ftd.row`](/fifthtry/ftd/row/)
-- [`ftd.text`](/fifthtry/ftd/text/)
-- [`ftd.image`](/fifthtry/ftd/image/)
-- [`ftd.iframe`](/fifthtry/ftd/iframe/)
-- [`ftd.integer`](/fifthtry/ftd/integer/)
-- [`ftd.decimal`](/fifthtry/ftd/decimal/)
-- [`ftd.boolean`](/fifthtry/ftd/boolean/)
+- [`ftd.column`](column/)
+- [`ftd.row`](row/)
+- [`ftd.text`](text/)
+- [`ftd.image`](image/)
+- [`ftd.iframe`](iframe/)
+- [`ftd.integer`](integer/)
+- [`ftd.decimal`](decimal/)
+- [`ftd.boolean`](boolean/)

@@ -46,7 +46,7 @@ lang: txt
 
 -- ft.markdown:
 
-In [Common](/fifthtry/ftd/common/) we have an attribute: `region`, eg `ft.h1` has 
+In [Common](common/) we have an attribute: `region`, eg `ft.h1` has 
 region set to `Some(Region::H1)`, we use the heading region to auto nest.
 
 In the source we wrote `h1`, `h2` as if they were siblings, but by we everything

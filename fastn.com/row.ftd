@@ -14,4 +14,4 @@ lang: ftd
 
 -- ft.h3: Attributes
 
-Row accepts the [container attributes ](/fifthtry/ftd/container/) as well all the [common attributes ](/fifthtry/ftd/common/).
+Row accepts the [container attributes](container/) as well all the [common attributes ](common/).

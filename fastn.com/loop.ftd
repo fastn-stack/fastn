@@ -5,7 +5,7 @@ toc: $ft.toc
     
 -- ft.h0: `$loop$`: Looping Over Lists
 
-`ftd` supports [`list`](/fifthtry/ftd/list/) data type, and we can render each
+`ftd` supports [`list`](list/) data type, and we can render each
 element of a list using `$loop$` construct.
 
 Consider this list:
@@ -36,7 +36,7 @@ $loop$: people as obj
 -- ft.markdown:
 
 Notice the `$loop$`, which tells `ftd` to invoke the component 
-[`ftd.text`](/fifthtry/ftd/text/), once for each member of our list.
+[`ftd.text`](text/), once for each member of our list.
 
 We have looped over `people`, and in each instance of the loop, the current member
 is called `obj`, notice the `as obj` modifier.

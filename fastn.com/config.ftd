@@ -16,7 +16,7 @@ $processor$: toc
   Journal
 - https://try.ftd.dev
   Try FTD Online
-- https://github.com/fifthtry/ftd/
+- https://github.com/
   Github
 
 -- ft.toc:
@@ -68,6 +68,8 @@ $processor$: toc
         `ftd.boolean`
       - common/
         Common Attributes
+      - text-common/
+        Common Text Attributes
       - container/
         Container Attributes
     - container-management/

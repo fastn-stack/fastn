@@ -23,9 +23,9 @@ for writing free form text, or have too much syntax.
 If the vision is for every human to own their data, one must ask, data in what 
 format? XML? JSON? YML? Markdown? FTD hopes to be that format.
 
-`ftd` is [strongly typed](/fifthtry/ftd/data-modelling/), with a type system 
+`ftd` is [strongly typed](data-modelling/), with a type system 
 hopefully superior to many programming languages (we have 
-[ADT](/fifthtry/ftd/or-type/)!).
+[ADT](or-type/)!).
 
 
 -- ft.h1: Simple Syntax
@@ -59,6 +59,6 @@ This forces us to represent data and UI, both of them are inherently hierarchal
 in nature, in a flat format. This is possible to some extent, as we explore with
 the design of `ftd`.
 
-Read how we do ["container management"](/fifthtry/ftd/container/) to attempt this.
+Read how we do ["container management"](container/) to attempt this.
 
 What we are trying is very hard. We will have to make compromises somewhere.

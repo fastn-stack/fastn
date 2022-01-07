@@ -6,8 +6,8 @@ toc: $ft.toc
 -- ft.h0: Built-in Types
 
 `ftd` comes with some built-in types. These types can be used to construct more
-complex types like [`record`](/fifthtry/ftd/record/) and 
-[`or-type`](/fifthtry/ftd/or-type/).
+complex types like [`record`](record/) and 
+[`or-type`](or-type/).
 
 -- ft.h1: `boolean`
 

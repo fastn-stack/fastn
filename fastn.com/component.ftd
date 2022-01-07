@@ -39,7 +39,7 @@ Here we have defined a new component `heading`.
 -- ft.h2: Parent Component
 
 Every component inherits from a "parent component". This is provided by the 
-[header](/fifthtry/ftd/p1-grammar/) `component`.
+[header](p1-grammar/) `component`.
 
 In this case, our `heading` component is using `ftd.text`. We are creating a
 custom-component with shows given text with the font size of 18 pixels.
@@ -50,7 +50,7 @@ custom-component with shows given text with the font size of 18 pixels.
 So how is `ftd.text` implemented? `ftd` comes with some "kernel components", these are the lowest
 level components that every other component uses directly or indirectly.
 
-Read about our [kernel components guide](/fifthtry/ftd/kernel/) to learn about 
+Read about our [kernel components guide](kernel/) to learn about 
 these components.
 
 
@@ -60,7 +60,7 @@ Component "arguments" starts with `$`, in our component we have one such argumen
 `$title`. 
 
 The type of our `$title` argument is `caption`. You can read more about `caption` 
-in the [`ftd` types guide](/fifthtry/ftd/built-in-types/).
+in the [`ftd` types guide](built-in-types/).
 
 
 -- ft.h3: Arguments with Default Values
@@ -123,7 +123,7 @@ the default value of a local variable.
 -- ft.h2: Using Container Components
 
 Some components have children. `ftd` comes with two kernel container components,
-[`ftd.row`](/fifthtry/ftd/row/) and [`ftd.column`](/fifthtry/ftd/column/).
+[`ftd.row`](row/) and [`ftd.column`](column/).
 
 
 -- ft.code:
@@ -153,13 +153,13 @@ shows its children in a single row.
 
 Note that we have used `--- ` to indicate that the two `ftd.text` are 
 sub-sections of the `ftd.row` section (review [ftd.p1 
-grammar](/fifthtry/ftd/p1-grammar/)).
+grammar](p1-grammar/)).
 
 We have passed the component arguments to each `ftd.text`.
 
 A container component can use other container components and create an heirarchy
 of such components, read more about it in "[container management 
-guide](/fifthtry/ftd/container/)".
+guide](container/)".
 
 
 -- ft.h1: Using Components
@@ -247,7 +247,7 @@ value: Banglore, India
 -- ft.h2: Container Management
 
 Every `ftd` document is rendered with a top-level container initialized. This
-top-level container is an [`ftd.column`](/fifthtry/ftd/column/), it places its 
+top-level container is an [`ftd.column`](column/), it places its 
 children on top of each other.
 
 `ftd` also has a concept of `current container`. When the document starts, the top
@@ -260,7 +260,7 @@ placed in it.
 We can set the current container to any container using that container's `id` 
 property. The default top-level container can be set using `ftd.main` alias.
 
-Read more about it in the [container management guide](/fifthtry/ftd/container/).
+Read more about it in the [container management guide](/container/).
 
 
 -- ft.h1: Conditional Components
@@ -286,4 +286,4 @@ if: not dark-mode
 We have inserted two `ftd.text` components, but only one of them would be visible,
 based on the value of the `dark-mode` variable.
 
-Read more about it in [conditional components guide](/fifthtry/ftd/if/).
+Read more about it in [conditional components guide](if/).

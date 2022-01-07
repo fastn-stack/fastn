@@ -5,5 +5,5 @@ toc: $ft.toc
 
 Here are examples that help you familiarise yourself with ftd language better.
 
-- [Creating a tree](/fifthtry/ftd/creating-a-tree/)
-- [Inner Container](/fifthtry/ftd/inner-container/)
+- [Creating a tree](creating-a-tree/)
+- [Inner Container](inner-container/)

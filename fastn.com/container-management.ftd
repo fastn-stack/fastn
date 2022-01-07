@@ -9,8 +9,8 @@ Every `ftd` document is rendered in the context of a "main container".
 
 -- ft.h1: `ftd.main`: the main container
 
-`ftd` has two container components: [`ftd.column`](/fifthtry/ftd/column/) and 
-[`ftd.row`](/fifthtry/ftd/row/). These two components can store zero or more 
+`ftd` has two container components: [`ftd.column`](column/) and 
+[`ftd.row`](row/). These two components can store zero or more 
 components as children.
 
 The main container for the document is an `ftd.column`. It is created when we start
@@ -232,4 +232,4 @@ lang: ftd
 -- ft.markdown:
 
 This would place the element `-- ftd.text: hello` as a child inside `c1` of `foo`
-with id `foo-1`. For more example, visit this [link](/fifthtry/ftd/inner-container/)
+with id `foo-1`. For more example, visit this [link](inner-container/)

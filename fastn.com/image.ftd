@@ -14,7 +14,7 @@ lang: ftd
 
 -- ft.h3: Attributes
 
-Image accepts the below attributes as well all the [common attributes ](/fifthtry/ftd/common/).
+Image accepts the below attributes as well all the [common attributes ](common/).
 
 - `src`
 - `description` 
