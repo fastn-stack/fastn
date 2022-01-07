@@ -703,19 +703,33 @@ fn reevalute_markups(
     doc: &ftd::p2::TDoc,
 ) -> ftd::p1::Result<()> {
     let mut all_children = markups.children.to_owned();
-    for v in markups.text.original.split("\n\n") {
-        let itext = ftd::IText::Markup(ftd::Markups {
-            text: if !markups.line {
-                ftd::markdown(v)
-            } else {
-                ftd::markdown_line(v)
-            },
-            ..Default::default()
-        });
-        all_children.push(ftd::Markup {
-            itext,
+    if markups.text.original.contains("\n\n") {
+        for v in markups.text.original.split("\n\n") {
+            let itext = ftd::IText::Markup(ftd::Markups {
+                text: if !markups.line {
+                    ftd::markdown(v)
+                } else {
+                    ftd::markdown_line(v)
+                },
+                ..Default::default()
+            });
+            all_children.push(ftd::Markup {
+                itext,
+                children: vec![],
+            });
+        }
+    }
+    if all_children.is_empty() {
+        let mut markup = ftd::Markup {
+            itext: ftd::IText::Markup(markups.clone()),
             children: vec![],
-        });
+        };
+        reevalute_markup(&mut markup, &named_container, doc)?;
+        if let ftd::IText::Markup(m) = markup.itext {
+            *markups = m;
+        }
+        markups.children = markup.children;
+        return Ok(());
     }
     for markup in all_children.iter_mut() {
         reevalute_markup(markup, &named_container, doc)?;
@@ -2743,15 +2757,17 @@ mod test {
             }),
         );
         let mut main = default_column();
-        main.container.children.push(ftd::Element::Text(ftd::Text {
-            text: ftd::markdown_line("Amit"),
-            line: true,
-            common: ftd::Common {
-                reference: Some(s("foo/bar#name")),
+        main.container
+            .children
+            .push(ftd::Element::Markup(ftd::Markups {
+                text: ftd::markdown_line("Amit"),
+                line: true,
+                common: ftd::Common {
+                    reference: Some(s("foo/bar#name")),
+                    ..Default::default()
+                },
                 ..Default::default()
-            },
-            ..Default::default()
-        }));
+            }));
 
         p!(
             "
@@ -2817,11 +2833,13 @@ mod test {
         );
 
         let mut main = default_column();
-        main.container.children.push(ftd::Element::Text(ftd::Text {
-            text: ftd::markdown_line("Abrar Khan"),
-            line: true,
-            ..Default::default()
-        }));
+        main.container
+            .children
+            .push(ftd::Element::Markup(ftd::Markups {
+                text: ftd::markdown_line("Abrar Khan"),
+                line: true,
+                ..Default::default()
+            }));
 
         p!(
             "
