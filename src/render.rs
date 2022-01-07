@@ -49,9 +49,11 @@ pub fn render(s: &str, auto_links: bool, hard_breaks: bool) -> String {
 pub fn inline(s: &str) -> String {
     // this assumes the input is a single line of text
     let s = strip_image(s.trim());
-    if s.contains('\n') {
-        eprintln!("render_inline called on an input with newlines: {}", s);
-    }
+
+    // todo: currently remove assumption check that the input is a single line because of markup feature. recheck this later
+    // if s.contains('\n') {
+    //     eprintln!("render_inline called on an input with newlines: {}", s);
+    // }
     let o = comrak::markdown_to_html(s.as_str(), &MD);
     let o = o.trim().replace("\n", "");
     let l1 = o.chars().count();

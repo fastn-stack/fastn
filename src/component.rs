@@ -896,19 +896,28 @@ fn reevalute_markup(
                     }
                     t
                 };
-                let named_container = {
-                    let mut n = markup_get_named_container(
-                        &[],
-                        root,
-                        0,
-                        doc,
-                        &Default::default(),
-                        &mut Default::default(),
-                        &mut Default::default(),
-                        &[],
-                    )?;
-                    n.extend(named_container.clone());
-                    n
+                let named_container = if let Ok(mut get) = markup_get_named_container(
+                    &[],
+                    root,
+                    0,
+                    doc,
+                    &Default::default(),
+                    &mut Default::default(),
+                    &mut Default::default(),
+                    &[],
+                ) {
+                    get.extend(named_container.clone());
+                    get
+                } else {
+                    // In case of component variable of markup defined internally,
+                    // it won't be present inside doc.bag
+                    // Example:
+                    // -- ftd.markup foo: {bar: Hello}
+                    // --- ftd.markup bar:
+                    // color: red
+                    //
+                    // `bar` here won't be present inside doc.bag
+                    named_container.clone()
                 };
                 reevalute_markups(&mut t, named_container, doc)?;
                 ftd::IText::Markup(t)
@@ -930,7 +939,7 @@ fn reevalute_markup(
         let mut root = doc
             .get_component(0, name)
             .map_err(|_| ftd::p1::Error::ParseError {
-                message: format!("This component not found in ftd#markup {}", name),
+                message: format!("This component not found in ftd.text {}", name),
                 doc_id: doc.name.to_string(),
                 line_number: 0,
             })?;
@@ -942,7 +951,7 @@ fn reevalute_markup(
         } else {
             return ftd::e2(
                 format!(
-                    "expected type for ftd#markup are text, integer, decimal and boolean, {:?}",
+                    "expected type for ftd.text are text, integer, decimal and boolean, {:?}",
                     root
                 ),
                 doc.name,
