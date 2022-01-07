@@ -155,6 +155,8 @@ $info
 
 -- ftd.scene control-panel:
 background-color: #d9e7f8
+border-color if $MOUSE-IN: yellow
+border-width if $MOUSE-IN: 3
 border-width: 2
 width: 600
 height: 460
@@ -180,16 +182,9 @@ $event-click$: stop-propagation
 $event-click$: prevent-default
 
 
---- ftd.text: etcd
+--- etcd:
 top: 220
 left: 40
-padding: 20
-border-width: 1
-border-radius: 30
-background-color: white
-$event-click$: $info = $etcd-info
-$event-click$: stop-propagation
-$event-click$: prevent-default
 
 
 --- cloud-controller-manager:
@@ -213,6 +208,18 @@ left: 108
 length: 50
 top: 251
 left: 304
+
+
+-- ftd.text etcd: etcd
+padding: 20
+border-width: 1
+border-radius: 30
+background-color: white
+border-color if $MOUSE-IN: yellow
+border-width if $MOUSE-IN: 3
+$event-click$: $info = $etcd-info
+$event-click$: stop-propagation
+$event-click$: prevent-default
 
 
 
@@ -275,6 +282,8 @@ height: 270
 background-color: #fce251
 border-width: 1
 padding: 20
+border-color if $MOUSE-IN: yellow
+border-width if $MOUSE-IN: 3
 
 --- ftd.text: Kube Api Server
 align: center
@@ -290,6 +299,8 @@ border-width: 2
 width: 600
 height: 460
 align: center
+border-color if $MOUSE-IN: yellow
+border-width if $MOUSE-IN: 3
 
 --- ftd.text: Nodes
 top: 5
@@ -356,6 +367,8 @@ width: 400
 align: center
 open: box-id
 padding: 15
+border-color if $MOUSE-IN: yellow
+border-width if $MOUSE-IN: 3
 
 --- ftd.text: $title
 top: 5
@@ -378,6 +391,8 @@ width: 80
 padding: 5
 align: center
 border-width: 1
+border-color if $MOUSE-IN: yellow
+border-width if $MOUSE-IN: 3
 
 -- ftd.row vertical-line:
 string length:
