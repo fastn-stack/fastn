@@ -258,6 +258,7 @@ impl Document {
         Self::find(children, &|e: &ftd::Element| -> Option<T> {
             match e {
                 ftd::Element::Text(t) => f(t),
+                ftd::Element::Markup(t) => f(&t.to_owned().to_text()),
                 _ => None,
             }
         })

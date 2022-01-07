@@ -7,12 +7,12 @@
 
 -- boolean dark-mode: true
 
--- ftd.markup m1: Markup
+-- ftd.text m1: Markup
 
 -- ftd.column:
 width: fill
 
--- ftd.markup:
+-- ftd.text:
 background-color: yellow
 margin-bottom: 20
 
@@ -23,11 +23,11 @@ Now {ca.foo: {hello: Hello {underline1: AmitU}} world. {hello} **Greetings** {un
 
 {hello: Everyone should say **Hi** to each other}
 
---- ftd.markup hello: $lib.amitu.name
+--- ftd.text hello: $lib.amitu.name
 size: 15
 color: red
 
---- ftd.markup underline1:
+--- ftd.text underline1:
 size: 30
 background-color if $orange: orange
 $event-click$: toggle $orange
@@ -47,13 +47,13 @@ The above is the list printing.
 This checks if everything is **alright**.
 {purple: Check this purple text for instance}
 
---- ftd.markup purple: Purple
+--- ftd.text purple: Purple
 color: purple
 
 
 -- md: India
 
--- ftd.markup md:
+-- ftd.text md:
 background-color: green
 caption or body value:
 text: $value
@@ -62,17 +62,17 @@ color if $dark-mode: yellow
 size: 20
 margin-bottom: 40
 
---- ftd.markup hello: Someone
+--- ftd.text hello: Someone
 size: 10
 $event-click$: toggle $dark-mode
 
---- ftd.markup underline:
+--- ftd.text underline:
 size: 40
 background-color: orange
 
 
 
--- ftd.markup amit: $text
+-- ftd.text amit: $text
 caption text:
 size: 20
 background-color: pink

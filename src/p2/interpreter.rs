@@ -307,7 +307,7 @@ impl<'a> Interpreter<'a> {
                                         None,
                                     )?);
                                 } else {
-                                    let child = if parent.root.eq("ftd#markup") {
+                                    let child = if parent.root.eq("ftd#text") {
                                         ftd::p2::utils::get_markup_child(
                                             &sub,
                                             &doc,
@@ -614,7 +614,7 @@ impl<'a> Interpreter<'a> {
                                         parent.root.as_str(),
                                         sub.line_number,
                                     )?;
-                                    let child = if root_name.eq("ftd#markup") {
+                                    let child = if root_name.eq("ftd#text") {
                                         ftd::p2::utils::get_markup_child(
                                             sub,
                                             &doc,
@@ -721,13 +721,13 @@ pub fn default_bag() -> std::collections::BTreeMap<String, ftd::p2::Thing> {
             "ftd#column".to_string(),
             ftd::p2::Thing::Component(ftd::p2::element::column_function()),
         ),
-        (
+        /*(
             "ftd#text".to_string(),
             ftd::p2::Thing::Component(ftd::p2::element::text_function(false)),
-        ),
+        ),*/
         (
             "ftd#text-block".to_string(),
-            ftd::p2::Thing::Component(ftd::p2::element::text_function(true)),
+            ftd::p2::Thing::Component(ftd::p2::element::text_function()),
         ),
         (
             "ftd#code".to_string(),
@@ -762,7 +762,7 @@ pub fn default_bag() -> std::collections::BTreeMap<String, ftd::p2::Thing> {
             ftd::p2::Thing::Component(ftd::p2::element::grid_function()),
         ),
         (
-            "ftd#markup".to_string(),
+            "ftd#text".to_string(),
             ftd::p2::Thing::Component(ftd::p2::element::markup_function()),
         ),
         (

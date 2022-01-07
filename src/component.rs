@@ -218,7 +218,7 @@ impl ChildComponent {
                     self.line_number,
                 )?;
                 match root_name.as_str() {
-                    "ftd#row" | "ftd#column" | "ftd#scene" | "ftd#grid" | "ftd#markup" => {}
+                    "ftd#row" | "ftd#column" | "ftd#scene" | "ftd#grid" | "ftd#text" => {}
                     t => {
                         return ftd::e2(
                             format!("{} cant have children", t),
@@ -607,7 +607,7 @@ fn markup_get_named_container(
     let children = {
         let mut children = children.to_vec();
         let root_name = ftd::p2::utils::get_root_component_name(doc, root, line_number)?;
-        if root_name.eq("ftd#markup") {
+        if root_name.eq("ftd#text") {
             let mut name = root.to_string();
             while name != "ftd.kernel" {
                 let component = doc.get_component(line_number, name.as_str())?;
@@ -1583,7 +1583,7 @@ impl Component {
                     root_component.full_name.as_str(),
                     sub.line_number,
                 )?
-                .eq("ftd#markup")
+                .eq("ftd#text")
                 {
                     ftd::p2::utils::get_markup_child(sub, doc, &arguments)?
                 } else {
@@ -1695,9 +1695,9 @@ impl Component {
             .push(property.to_owned());
         if self.root == "ftd.kernel" {
             let element = match self.full_name.as_str() {
-                "ftd#text" => ftd::Element::Text(ftd::p2::element::text_from_properties(
+                /*"ftd#text" => ftd::Element::Text(ftd::p2::element::text_from_properties(
                     arguments, doc, condition, is_child, events, all_locals, root_name,
-                )?),
+                )?),*/
                 "ftd#text-block" => {
                     ftd::Element::TextBlock(ftd::p2::element::text_block_from_properties(
                         arguments, doc, condition, is_child, events, all_locals, root_name,
@@ -1736,7 +1736,7 @@ impl Component {
                 "ftd#grid" => ftd::Element::Grid(ftd::p2::element::grid_from_properties(
                     arguments, doc, condition, is_child, events, all_locals, root_name,
                 )?),
-                "ftd#markup" => ftd::Element::Markup(ftd::p2::element::markup_from_properties(
+                "ftd#text" => ftd::Element::Markup(ftd::p2::element::markup_from_properties(
                     arguments, doc, condition, is_child, events, all_locals, root_name,
                 )?),
                 _ => unreachable!(),
