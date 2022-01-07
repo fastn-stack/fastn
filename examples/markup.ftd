@@ -33,15 +33,19 @@ $event-click$: toggle $orange
 
 Now {hello: Hello {underline: Amitu}} world. {hello} **Greetings** {underline}
 
+-- boolean dark-mode: true
 
 -- ftd.markup md:
 background-color: green
 body value:
-value: $value
+text: $value
+color: blue
+color if $dark-mode: yellow
+size: 60
 
 --- ftd.text hello: Someone
 size: 10
-color: red
+$event-click$: toggle $dark-mode
 
 --- ftd.text underline:
 size: 30

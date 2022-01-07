@@ -72,7 +72,7 @@ impl RT {
         .execute(&[], &mut Default::default(), None)?
         .children;
 
-        ftd::Element::renesting_on_region(&mut element);
+        ftd::Element::renest_on_region(&mut element);
         ftd::p2::document::set_region_id(&mut element);
         ftd::p2::document::default_scene_children_position(&mut element);
 

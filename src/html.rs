@@ -881,13 +881,60 @@ impl ftd::IFrame {
 
 impl ftd::Markups {
     pub fn to_node(&self, doc_id: &str) -> Node {
-        let mut node = Node::from_common("div", &self.common, doc_id);
-        node.children = self
+        let node = match &self.common.link {
+            Some(_) => "a",
+            None => match &self.common.submit {
+                Some(_) => "form",
+                _ => "div",
+            },
+        };
+        let mut n = Node::from_common(node, &self.common, doc_id);
+        let (key, value) = text_align(&self.text_align);
+        n.style.insert(s(key.as_str()), value);
+        if let Some(p) = self.size {
+            n.style.insert(s("font-size"), format!("{}px", p));
+        }
+        if let Some(p) = self.line_height {
+            n.style.insert(s("line-height"), format!("{}px", p));
+        }
+
+        if !self.font.is_empty() {
+            let family = self
+                .font
+                .iter()
+                .map(|v| v.to_string())
+                .collect::<Vec<String>>()
+                .join(", ");
+            n.style.insert(s("font-family"), family);
+        }
+
+        if self.style.italic {
+            n.style.insert(s("font-style"), s("italic"));
+        }
+        if self.style.underline {
+            n.style.insert(s("text-decoration"), s("underline"));
+        }
+        if self.style.strike {
+            n.style.insert(s("text-decoration"), s("line-through"));
+        }
+
+        if let Some(p) = &self.line_clamp {
+            n.style.insert(s("display"), "-webkit-box".to_string());
+            n.style.insert(s("overflow"), "hidden".to_string());
+            n.style.insert(s("-webkit-line-clamp"), format!("{}", p));
+            n.style
+                .insert(s("-webkit-box-orient"), "vertical".to_string());
+        }
+
+        let (key, value) = style(&self.style.weight);
+        n.style.insert(s(key.as_str()), value);
+
+        n.children = self
             .children
             .iter()
             .map(|v| v.to_node(doc_id, true))
             .collect();
-        node
+        n
     }
 }
 

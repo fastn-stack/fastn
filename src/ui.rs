@@ -21,6 +21,13 @@ pub enum Element {
 #[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
 pub struct Markups {
     pub common: ftd::Common,
+    pub text_align: TextAlign,
+    pub style: Style,
+    pub size: Option<i64>,
+    pub font: Vec<NamedFont>,
+    pub external_font: Option<ExternalFont>,
+    pub line_height: Option<i64>,
+    pub line_clamp: Option<i64>,
     pub container: ftd::Container,
     pub children: Vec<Markup>,
 }
@@ -967,6 +974,7 @@ impl Element {
             ftd::Element::Column(e) => Some(&mut e.common),
             ftd::Element::Row(e) => Some(&mut e.common),
             ftd::Element::Text(e) => Some(&mut e.common),
+            ftd::Element::Markup(e) => Some(&mut e.common),
             ftd::Element::TextBlock(e) => Some(&mut e.common),
             ftd::Element::Code(e) => Some(&mut e.common),
             ftd::Element::Image(e) => Some(&mut e.common),
@@ -977,7 +985,7 @@ impl Element {
             ftd::Element::Decimal(e) => Some(&mut e.common),
             ftd::Element::Scene(e) => Some(&mut e.common),
             ftd::Element::Grid(e) => Some(&mut e.common),
-            _ => None,
+            ftd::Element::Null => None,
         }
     }
 
@@ -986,6 +994,7 @@ impl Element {
             ftd::Element::Column(e) => Some(&e.common),
             ftd::Element::Row(e) => Some(&e.common),
             ftd::Element::Text(e) => Some(&e.common),
+            ftd::Element::Markup(e) => Some(&e.common),
             ftd::Element::TextBlock(e) => Some(&e.common),
             ftd::Element::Code(e) => Some(&e.common),
             ftd::Element::Image(e) => Some(&e.common),
@@ -996,11 +1005,11 @@ impl Element {
             ftd::Element::Decimal(e) => Some(&e.common),
             ftd::Element::Scene(e) => Some(&e.common),
             ftd::Element::Grid(e) => Some(&e.common),
-            _ => None,
+            ftd::Element::Null => None,
         }
     }
 
-    pub fn renesting_on_region(elements: &mut Vec<ftd::Element>) {
+    pub fn renest_on_region(elements: &mut Vec<ftd::Element>) {
         let mut region: Option<(usize, &Region)> = None;
         let mut insert: Vec<(usize, usize)> = Default::default();
         for (idx, element) in elements.iter().enumerate() {
@@ -1053,9 +1062,9 @@ impl Element {
                     ref mut container, ..
                 }) => {
                     if let Some((_, _, ref mut e)) = container.external_children {
-                        ftd::Element::renesting_on_region(e);
+                        ftd::Element::renest_on_region(e);
                     }
-                    ftd::Element::renesting_on_region(&mut container.children);
+                    ftd::Element::renest_on_region(&mut container.children);
                 }
                 _ => continue,
             }

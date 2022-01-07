@@ -1395,20 +1395,44 @@ pub fn scene_function() -> ftd::Component {
 }
 
 pub fn markup_function() -> ftd::Component {
-    let arguments: std::collections::BTreeMap<String, ftd::p2::Kind> = [
-        common_arguments(),
-        vec![("value".to_string(), ftd::p2::Kind::body())],
-    ]
-    .concat()
-    .into_iter()
-    .collect();
-
     ftd::Component {
         line_number: 0,
         kernel: true,
         root: "ftd.kernel".to_string(),
         full_name: "ftd#markup".to_string(),
-        arguments,
+        arguments: [
+            vec![
+                ("text".to_string(), ftd::p2::Kind::caption_or_body()),
+                ("align".to_string(), ftd::p2::Kind::string().into_optional()),
+                ("style".to_string(), ftd::p2::Kind::string().into_optional()),
+                ("size".to_string(), ftd::p2::Kind::integer().into_optional()),
+                (
+                    "font-url".to_string(),
+                    ftd::p2::Kind::string().into_optional(),
+                ),
+                ("font".to_string(), ftd::p2::Kind::string().into_optional()),
+                (
+                    "font-display".to_string(),
+                    ftd::p2::Kind::string().into_optional(),
+                ),
+                (
+                    "line-height".to_string(),
+                    ftd::p2::Kind::integer().into_optional(),
+                ),
+                (
+                    "line-clamp".to_string(),
+                    ftd::p2::Kind::integer().into_optional(),
+                ),
+                (
+                    "text-align".to_string(),
+                    ftd::p2::Kind::string().into_optional(),
+                ),
+            ],
+            common_arguments(),
+        ]
+        .concat()
+        .into_iter()
+        .collect(),
         locals: Default::default(),
         properties: Default::default(),
         instructions: Default::default(),
@@ -1619,7 +1643,7 @@ pub fn markup_from_properties(
     all_locals: &mut ftd::Map,
     root_name: Option<&str>,
 ) -> ftd::p1::Result<ftd::Markups> {
-    let text = if let Some(text) = properties_with_ref.get("value") {
+    let text = if let Some(text) = properties_with_ref.get("text") {
         text
     } else {
         return ftd::e2("expected field `value`".to_string(), doc.name, 0);
@@ -1627,12 +1651,22 @@ pub fn markup_from_properties(
     let properties = &ftd::p2::utils::properties(properties_with_ref);
     let (value, _source, reference) = ftd::p2::utils::string_and_source_and_ref(
         0,
-        "value",
+        "text",
         properties_with_ref,
         all_locals,
         doc.name,
         condition,
     )?;
+    let font_str = ftd::p2::utils::string_optional("font", properties, doc.name, 0)?;
+
+    let font: Vec<ftd::NamedFont> = match font_str {
+        Some(f) => f
+            .split(',')
+            .flat_map(|x| ftd::NamedFont::from(Some(x.to_string())))
+            .collect(),
+        None => vec![],
+    };
+
     let mut markup_vec = vec![];
     for v in value.split("\n\n") {
         let v = v.trim().replace('\n', "");
@@ -1670,5 +1704,18 @@ pub fn markup_from_properties(
         )?,
         children: markup_vec,
         container: container_from_properties(properties, doc)?,
+        text_align: ftd::TextAlign::from(
+            ftd::p2::utils::string_optional("text-align", properties, doc.name, 0)?,
+            doc.name,
+        )?,
+        style: ftd::Style::from(
+            ftd::p2::utils::string_optional("style", properties, doc.name, 0)?,
+            doc.name,
+        )?,
+        size: ftd::p2::utils::int_optional("size", properties, doc.name, 0)?,
+        external_font: external_font_from_properties(properties, doc)?,
+        font,
+        line_height: ftd::p2::utils::int_optional("line-height", properties, doc.name, 0)?,
+        line_clamp: ftd::p2::utils::int_optional("line-clamp", properties, doc.name, 0)?,
     })
 }
