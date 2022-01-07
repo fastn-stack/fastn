@@ -132,11 +132,16 @@ right: 506
 
 
 -- ftd.column:
-background-color: white
+background-color: #ebe2ce
 width: fill
-padding: 20
+padding: 10
 margin-top: 20
-spacing: 20
+
+--- ftd.column:
+width: fill
+padding: 10
+border-width: 1
+spacing: 5
 
 --- ftd.text: Notes:
 style: bold
