@@ -18,8 +18,9 @@ pub enum Element {
     Null,
 }
 
-#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
+#[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
 pub struct Markups {
+    pub text: ftd::Rendered,
     pub common: ftd::Common,
     pub text_align: TextAlign,
     pub line: bool,
@@ -45,6 +46,7 @@ pub enum IText {
     Integer(Text),
     Boolean(Text),
     Decimal(Text),
+    Markup(Markups),
 }
 
 /*
@@ -182,6 +184,7 @@ impl Element {
                         &mut t.common.data_id
                     }
                     IText::TextBlock(t) => &mut t.common.data_id,
+                    IText::Markup(t) => &mut t.common.data_id,
                 };
 
                 let mut index_vec = index_vec.to_vec();
@@ -480,6 +483,7 @@ impl Element {
                     | IText::Boolean(ref t)
                     | IText::Decimal(ref t) => (&t.common.conditional_attribute, &t.common.data_id),
                     IText::TextBlock(ref t) => (&t.common.conditional_attribute, &t.common.data_id),
+                    IText::Markup(ref t) => (&t.common.conditional_attribute, &t.common.data_id),
                 };
                 markup_get_style_event_dependencies(&child.children, data);
                 style_condition(conditional_attributes, id, data);
@@ -618,6 +622,7 @@ impl Element {
                     | IText::Boolean(ref t)
                     | IText::Decimal(ref t) => (&t.common.reference, &t.common.data_id),
                     IText::TextBlock(ref t) => (&t.common.reference, &t.common.data_id),
+                    IText::Markup(ref t) => (&t.common.reference, &t.common.data_id),
                 };
                 markup_get_value_event_dependencies(&child.children, data);
                 value_condition(reference, id, data);
@@ -736,6 +741,7 @@ impl Element {
                     | IText::Boolean(ref t)
                     | IText::Decimal(ref t) => (&t.common.condition, &t.common.data_id),
                     IText::TextBlock(ref t) => (&t.common.condition, &t.common.data_id),
+                    IText::Markup(ref t) => (&t.common.condition, &t.common.data_id),
                 };
                 markup_get_visible_event_dependencies(&child.children, data);
                 visibility_condition(condition, id, data);
