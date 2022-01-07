@@ -817,7 +817,7 @@ pub fn iframe_from_properties(
     })
 }
 
-pub fn text_from_properties(
+/*pub fn text_from_properties(
     properties_with_ref: &std::collections::BTreeMap<String, (ftd::Value, Option<String>)>,
     doc: &ftd::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
@@ -869,7 +869,7 @@ pub fn text_from_properties(
         line_height: ftd::p2::utils::int_optional("line-height", properties, doc.name, 0)?,
         line_clamp: ftd::p2::utils::int_optional("line-clamp", properties, doc.name, 0)?,
     })
-}
+}*/
 
 pub fn text_block_from_properties(
     properties_with_ref: &std::collections::BTreeMap<String, (ftd::Value, Option<String>)>,
@@ -1169,18 +1169,12 @@ pub fn boolean_from_properties(
     })
 }
 
-pub fn text_function(is_text_block: bool) -> ftd::Component {
-    let full_name = if is_text_block {
-        "ftd#text-block"
-    } else {
-        "ftd#text"
-    };
-
+pub fn text_function() -> ftd::Component {
     ftd::Component {
         line_number: 0,
         kernel: true,
         root: "ftd.kernel".to_string(),
-        full_name: full_name.to_string(),
+        full_name: "ftd#text-block".to_string(),
         arguments: [
             vec![
                 ("text".to_string(), ftd::p2::Kind::caption_or_body()),
@@ -1399,7 +1393,7 @@ pub fn markup_function() -> ftd::Component {
         line_number: 0,
         kernel: true,
         root: "ftd.kernel".to_string(),
-        full_name: "ftd#markup".to_string(),
+        full_name: "ftd#text".to_string(),
         arguments: [
             vec![
                 ("text".to_string(), ftd::p2::Kind::caption_or_body()),

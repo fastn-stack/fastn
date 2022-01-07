@@ -33,6 +33,23 @@ pub struct Markups {
     pub children: Vec<Markup>,
 }
 
+impl Markups {
+    pub(crate) fn to_text(self) -> Text {
+        Text {
+            text: self.text,
+            line: self.line,
+            common: self.common,
+            text_align: self.text_align,
+            style: self.style,
+            size: self.size,
+            font: self.font,
+            external_font: self.external_font,
+            line_height: self.line_height,
+            line_clamp: self.line_clamp,
+        }
+    }
+}
+
 #[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
 pub struct Markup {
     pub itext: IText,
