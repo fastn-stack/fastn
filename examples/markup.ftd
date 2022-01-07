@@ -5,6 +5,10 @@
 
 -- string name: AmitU
 
+-- boolean dark-mode: true
+
+-- ftd.markup m1: Markup
+
 -- ftd.column:
 width: fill
 
@@ -12,7 +16,10 @@ width: fill
 background-color: yellow
 margin-bottom: 20
 
-Now {ca.foo: {hello: Hello {underline: AmitU}} world. {hello} **Greetings** {underline} {amit} Amit Upadhyay} Outside
+Now {ca.foo: {hello: Hello {underline1: AmitU}} world. {hello} **Greetings** {underline1} {amit} Amit Upadhyay} Outside
+{md: {hello:Hello}}
+{yet}
+{m1}
 
 {hello: Everyone should say **Hi** to each other}
 
@@ -20,13 +27,13 @@ Now {ca.foo: {hello: Hello {underline: AmitU}} world. {hello} **Greetings** {und
 size: 15
 color: red
 
---- ftd.text underline:
+--- ftd.text underline1:
 size: 30
 background-color if $orange: orange
 $event-click$: toggle $orange
 
 
--- md:
+-- md yet:
 
 Now {hello: Hello {underline: Amitu}} world. {hello} **Greetings** {underline}
 
@@ -45,8 +52,6 @@ color: purple
 
 
 -- md: India
-
--- boolean dark-mode: true
 
 -- ftd.markup md:
 background-color: green

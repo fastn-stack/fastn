@@ -1,5 +1,3 @@
-use crate::Element;
-
 #[derive(Default, Debug, Clone, PartialEq, serde::Serialize, serde::Deserialize)]
 pub struct Component {
     pub root: String,
@@ -258,11 +256,11 @@ impl ChildComponent {
             reevalute_markups(markups, named_container, doc)?;
         }
 
-        return Ok(ElementWithContainer {
+        Ok(ElementWithContainer {
             element,
             children: container_children,
             child_container,
-        });
+        })
     }
 
     #[allow(clippy::too_many_arguments)]
@@ -592,6 +590,7 @@ impl ChildComponent {
     }
 }
 
+#[allow(clippy::too_many_arguments)]
 fn markup_get_named_container(
     children: &[ChildComponent],
     root: &str,
@@ -602,10 +601,9 @@ fn markup_get_named_container(
         String,
         Vec<std::collections::BTreeMap<String, ftd::Value>>,
     >,
-
     all_locals: &mut ftd::Map,
     local_container: &[usize],
-) -> ftd::p1::Result<std::collections::BTreeMap<String, Element>> {
+) -> ftd::p1::Result<std::collections::BTreeMap<String, ftd::Element>> {
     let children = {
         let mut children = children.to_vec();
         let root_name = ftd::p2::utils::get_root_component_name(doc, root, line_number)?;
@@ -676,7 +674,7 @@ fn markup_get_named_container(
         container_children: &[ftd::Element],
         elements_name: &[String],
         doc: &ftd::p2::TDoc,
-    ) -> ftd::p1::Result<std::collections::BTreeMap<String, Element>> {
+    ) -> ftd::p1::Result<std::collections::BTreeMap<String, ftd::Element>> {
         let mut named_container = std::collections::BTreeMap::new();
         for (idx, container) in container_children.iter().enumerate() {
             match elements_name.get(idx) {
@@ -701,7 +699,7 @@ fn markup_get_named_container(
 /// container_children copy there properties to the reference in markup text
 fn reevalute_markups(
     markups: &mut ftd::Markups,
-    named_container: std::collections::BTreeMap<String, Element>,
+    named_container: std::collections::BTreeMap<String, ftd::Element>,
     doc: &ftd::p2::TDoc,
 ) -> ftd::p1::Result<()> {
     let mut all_children = markups.children.to_owned();
@@ -765,7 +763,7 @@ fn reevalute_markup(
                 None => get_element_doc(doc, style)?,
             };
 
-            let itext = element_to_itext(&container, doc.name, text)?;
+            let itext = element_to_itext(&container, doc, text, style, named_container)?;
 
             children.push(ftd::Markup {
                 itext,
@@ -789,6 +787,9 @@ fn reevalute_markup(
         });
     }
     for child in children.iter_mut() {
+        if let ftd::IText::Markup(_) = child.itext {
+            continue;
+        }
         reevalute_markup(child, named_container, doc)?;
     }
     markup.children = children;
@@ -825,8 +826,10 @@ fn reevalute_markup(
 
     fn element_to_itext(
         element: &ftd::Element,
-        doc_id: &str,
+        doc: &ftd::p2::TDoc,
         text: Option<&str>,
+        root: &str,
+        named_container: &std::collections::BTreeMap<String, ftd::Element>,
     ) -> ftd::p1::Result<ftd::IText> {
         Ok(match element {
             ftd::Element::Text(t) => {
@@ -885,7 +888,7 @@ fn reevalute_markup(
                 ftd::IText::TextBlock(t)
             }
             ftd::Element::Markup(t) => {
-                let t = {
+                let mut t = {
                     let mut t = t.clone();
                     if let Some(text) = text {
                         t.text = ftd::markdown_line(text);
@@ -893,6 +896,21 @@ fn reevalute_markup(
                     }
                     t
                 };
+                let named_container = {
+                    let mut n = markup_get_named_container(
+                        &[],
+                        root,
+                        0,
+                        doc,
+                        &Default::default(),
+                        &mut Default::default(),
+                        &mut Default::default(),
+                        &[],
+                    )?;
+                    n.extend(named_container.clone());
+                    n
+                };
+                reevalute_markups(&mut t, named_container, doc)?;
                 ftd::IText::Markup(t)
             }
             t => {
@@ -901,7 +919,7 @@ fn reevalute_markup(
                         "expected type istext, integer, boolean, decimal. found: {:?}",
                         t
                     ),
-                    doc_id,
+                    doc.name,
                     0,
                 )
             }
