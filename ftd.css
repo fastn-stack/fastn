@@ -134,3 +134,7 @@ ul {
 .ft_md blockquote>blockquote {
     margin: 0;
 }
+
+body.fpm-dark .ft_md code {
+    color: black;
+}
