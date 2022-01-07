@@ -1,10 +1,6 @@
 name: Build release
 
 on:
-  push:
-    branches: [ main ]
-    paths:
-     - '**.rs'
   workflow_dispatch:
 jobs:
   release-ubuntu:
