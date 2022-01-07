@@ -234,12 +234,15 @@ let ftd_utils = {
                 } else if (json_dependency.dependency_type === "Visible") {
                     let display = "none";
                     if (data[target].value === json_dependency.condition) {
-                        let is_flex = document.querySelector(`[data-id="${dependency}:${id}"]`).style.flexDirection.length;
-                        let is_webkit = document.querySelector(`[data-id="${dependency}:${id}"]`).style.webkitLineClamp.length;
+                        let is_flex = !!document.querySelector(`[data-id="${dependency}:${id}"]`).style.flexDirection.length;
+                        let is_grid = !!document.querySelector(`[data-id="${dependency}:${id}"]`).style.gridTemplateAreas.length;
+                        let is_webkit = !!document.querySelector(`[data-id="${dependency}:${id}"]`).style.webkitLineClamp.length;
                         if (is_flex) {
                             display = "flex";
                         } else if (is_webkit) {
                             display = "-webkit-box";
+                        } else if (is_grid) {
+                            display = "grid";
                         } else {
                             display = "block";
                         }
