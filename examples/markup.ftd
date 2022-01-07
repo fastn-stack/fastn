@@ -23,11 +23,11 @@ Now {ca.foo: {hello: Hello {underline1: AmitU}} world. {hello} **Greetings** {un
 
 {hello: Everyone should say **Hi** to each other}
 
---- ftd.text hello: $lib.amitu.name
+--- ftd.markup hello: $lib.amitu.name
 size: 15
 color: red
 
---- ftd.text underline1:
+--- ftd.markup underline1:
 size: 30
 background-color if $orange: orange
 $event-click$: toggle $orange
@@ -47,7 +47,7 @@ The above is the list printing.
 This checks if everything is **alright**.
 {purple: Check this purple text for instance}
 
---- ftd.text purple: Purple
+--- ftd.markup purple: Purple
 color: purple
 
 
@@ -62,17 +62,17 @@ color if $dark-mode: yellow
 size: 20
 margin-bottom: 40
 
---- ftd.text hello: Someone
+--- ftd.markup hello: Someone
 size: 10
 $event-click$: toggle $dark-mode
 
---- ftd.text underline:
+--- ftd.markup underline:
 size: 40
 background-color: orange
 
 
 
--- ftd.text amit: $text
+-- ftd.markup amit: $text
 caption text:
 size: 20
 background-color: pink
