@@ -2,17 +2,17 @@
 
 -- ft.site-name: FTD-DEV
 -- ft.site-icon: static/images/logo.svg
--- ft.github: https://github.com/fifthtry/ftd-dev-en/
--- ft.site-url: /ftd-dev-en
+-- ft.github: https://github.com/fifthtry/ftd.dev/
+-- ft.site-url: /
 
 -- ft.header-toc:
 $processor$: toc
 
 - common/
   Docs
-- fifthtry/ftd/roadmap
+- roadmap/
   Roadmap & RFCs
-- fifthtry/ftd/journal
+- journal/
   Journal
 - https://try.ftd.dev
   Try FTD Online
