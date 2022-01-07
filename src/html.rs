@@ -864,6 +864,7 @@ impl ftd::Image {
             if self.crop {
                 n.style.insert(s("object-fit"), s("cover"));
                 n.style.insert(s("object-position"), s("0 0"));
+                n.style.insert(s("width"), s("100%"));
             }
         }
 
