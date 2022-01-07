@@ -34,16 +34,16 @@ pub struct Markups {
 }
 
 impl Markups {
-    pub(crate) fn to_text(self) -> Text {
+    pub(crate) fn to_text(&self) -> Text {
         Text {
-            text: self.text,
+            text: self.text.to_owned(),
             line: self.line,
-            common: self.common,
-            text_align: self.text_align,
-            style: self.style,
+            common: self.common.to_owned(),
+            text_align: self.text_align.to_owned(),
+            style: self.style.to_owned(),
             size: self.size,
-            font: self.font,
-            external_font: self.external_font,
+            font: self.font.to_owned(),
+            external_font: self.external_font.to_owned(),
             line_height: self.line_height,
             line_clamp: self.line_clamp,
         }

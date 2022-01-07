@@ -1657,10 +1657,7 @@ pub fn markup_from_properties(
     };
 
     Ok(ftd::Markups {
-        text: ftd::Rendered {
-            original: value.clone(),
-            rendered: value,
-        },
+        text: ftd::markdown_line(value.as_str()),
         common: common_from_properties(
             properties, doc, condition, is_child, events, all_locals, root_name, reference,
         )?,
