@@ -896,6 +896,8 @@ impl ftd::Markups {
         }
         if let Some(p) = self.line_height {
             n.style.insert(s("line-height"), format!("{}px", p));
+        } else if !&self.line {
+            n.style.insert(s("line-height"), s("26px"));
         }
 
         if !self.font.is_empty() {
@@ -932,7 +934,7 @@ impl ftd::Markups {
         n.children = self
             .children
             .iter()
-            .map(|v| v.to_node(doc_id, true))
+            .map(|v| v.to_node(doc_id, !self.line))
             .collect();
         n
     }

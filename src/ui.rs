@@ -22,13 +22,13 @@ pub enum Element {
 pub struct Markups {
     pub common: ftd::Common,
     pub text_align: TextAlign,
+    pub line: bool,
     pub style: Style,
     pub size: Option<i64>,
     pub font: Vec<NamedFont>,
     pub external_font: Option<ExternalFont>,
     pub line_height: Option<i64>,
     pub line_clamp: Option<i64>,
-    pub container: ftd::Container,
     pub children: Vec<Markup>,
 }
 
