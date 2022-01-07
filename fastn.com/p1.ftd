@@ -1,6 +1,6 @@
 -- ft.doc-page:
-toc: $ft.toc
-    
+toc: $config.dev-toc
+
 -- ft.h0: `ftd::p1`: A JSON/YML Replacement
 
 -- ft.markdown:
@@ -73,9 +73,9 @@ about crating cryptic `![Alt text](/path/to/img.jpg "image title")`.
 
 -- ft.markdown:
 
-Compared to `ini`/`toml`/`json`/`yml`, the `p1`'s `-- section:` syntax is bit 
-easier, less text to write, and there is no distinction between the format people 
-use for writing markdown text vs other configurations, none of these formats 
+Compared to `ini`/`toml`/`json`/`yml`, the `p1`'s `-- section:` syntax is bit
+easier, less text to write, and there is no distinction between the format people
+use for writing markdown text vs other configurations, none of these formats
 mentioned are used by any of the static site generators for example.
 
 We intentionally do not support nesting as it forces you to think about what is
@@ -87,16 +87,16 @@ going on. p1 file should be designed for humans to read and write, and as little
 -- ft.markdown:
 
 One of the goals of `ftd::p1` is to become the file format that all humans know,
-not just programmers. Humans must be able to own their data, and for non binary 
+not just programmers. Humans must be able to own their data, and for non binary
 data, like images etc, if some data can be captured as sane text file, it must be
-captured as text file, and its not enough to give people access to those text 
-files, those text files must be master data as much as possible, and must be 
+captured as text file, and its not enough to give people access to those text
+files, those text files must be master data as much as possible, and must be
 readable/editable by humans.
 
-One can say XML was an attempt in this direction. It failed. `ftd::p1` and 
-eventually `ftd` is another attempt at that. 
+One can say XML was an attempt in this direction. It failed. `ftd::p1` and
+eventually `ftd` is another attempt at that.
 
-All XML files look "alike", have common sigils, similar syntax, if you ever get 
+All XML files look "alike", have common sigils, similar syntax, if you ever get
 used to editing one, you feel quite comfortable in others. You just have to learn
 about the xml schema. We are trying to do the same with `ftd::p1`.
 
@@ -104,16 +104,16 @@ about the xml schema. We are trying to do the same with `ftd::p1`.
 
 -- ft.markdown:
 
-One aspect we diverge from JSON/XML etc is lack of nesting. JSON etc support 
-arbitrary nesting, we only support two level nesting (section and sub-section, 
+One aspect we diverge from JSON/XML etc is lack of nesting. JSON etc support
+arbitrary nesting, we only support two level nesting (section and sub-section,
 there is no sub-sub-section etc).
 
 This forced developers to chose section/sub-section properly, and we expect people
-to use `id`s and `class`es to keep definitions flat, and use `id`/`classes` to 
+to use `id`s and `class`es to keep definitions flat, and use `id`/`classes` to
 refer to one or more section defined elsewhere.
 
-Keeping things flat means humans don't have to learn about nesting or indentation 
-rules. This means we don't refer to anonymous deeply nested DOM nodes or JSON 
+Keeping things flat means humans don't have to learn about nesting or indentation
+rules. This means we don't refer to anonymous deeply nested DOM nodes or JSON
 objects, but refer by IDs and CLASSes.
 
 -- ft.h2: Text Vs Data
@@ -121,7 +121,7 @@ objects, but refer by IDs and CLASSes.
 -- ft.markdown:
 
 If you look at file formats, we have asciidoc, markdown, restructured text etc on
-one hand, and json/yml/ini files on another. 
+one hand, and json/yml/ini files on another.
 
 One is optimised for writing prose, long text, and other for storing data. This is
 an artificial divide. Every text ever written can someday become long, multiline,
@@ -129,7 +129,7 @@ and nested multiline JSON etc is just torture for humans to write.
 
 Other is optimised for storing proper data, instead of prose. But markdown/asciidoc
 cant be used for storing data. We have hybrids like "yml front matter in markdown",
-but they are quite limited, they still expect only one piece of text can be 
+but they are quite limited, they still expect only one piece of text can be
 multiline and everything else must be simple "small text" or people suffer from
 a very poor editing experience.
 
@@ -142,19 +142,19 @@ a very poor editing experience.
 `ftd` is a list of `sections`, each `section`:
 
 - starts with `-- `.
-- `section name`, eg if you see `-- markdown:`, this is a `section` with name 
+- `section name`, eg if you see `-- markdown:`, this is a `section` with name
   `markdown`
-- `section caption`: `sections` can optionally have captions, eg `-- h0: hello`, 
+- `section caption`: `sections` can optionally have captions, eg `-- h0: hello`,
   here "hello" is the `section caption`
 - `section header`: this is a series of "key-value" pairs, separated by ":" and
   comes right after the section name line
-  - eg "-- image:<newline>src: http://..", here "src" is the "key", and 
+  - eg "-- image:<newline>src: http://..", here "src" is the "key", and
     "http://.." is the "value".
   - `section header` ends after first empty line
-- `section body`: any text that comes after `section header` till the next 
+- `section body`: any text that comes after `section header` till the next
   `section` or `sub-section` is the "body" of that section.
-- `sub-section`: `sub-sections` look like `section`, but they start with `--- ` 
-  instead of `-- `. 
+- `sub-section`: `sub-sections` look like `section`, but they start with `--- `
+  instead of `-- `.
   - A `section` can have zero or more `sub-sections.
   - there is no "sub-sub-section"
   - `sub-sections` also have `sub-section name`, optional `sub-section captions`,
@@ -169,13 +169,13 @@ lang: ftd
 section-header-1: section header value
 section-header-2: any number of section header possible
 
-optional body. note there is a single empty line to trigger end 
+optional body. note there is a single empty line to trigger end
 of "header"
 
 \--- sub-section-1: optional caption of subsection
 sub-section-header: they too can have headers
 
-optional body. 
+optional body.
 
 \--- sub-section-2: any number of subsections can exist
 
@@ -215,8 +215,8 @@ pub struct Header(pub(crate) Vec<(String, String)>);
 
 -- ft.markdown:
 
-This is a low level AST. You should have your own types defined, and convert 
-`ftd::p1::Section` etc to your type and use that type in your program, instead of 
+This is a low level AST. You should have your own types defined, and convert
+`ftd::p1::Section` etc to your type and use that type in your program, instead of
 directly using these types.
 
 In future we may get `serde` like auto derives that will convert things directly to
@@ -251,7 +251,7 @@ This is how you will create `Markdown` given `ftd::p1::Section`:
 lang: rs
 
 impl Markdown {
-    pub fn from_p1(p1: &crate::p1::Section) 
+    pub fn from_p1(p1: &crate::p1::Section)
         -> Result<Self, crate::document::ParseError> {
         let mut m = Markdown::default();
         if let Some(ref c) = p1.caption {
@@ -297,7 +297,7 @@ impl Markdown {
 
 -- ft.markdown:
 
-We are using a bunch of helpers defined on `ftd::p1::Header` eg 
+We are using a bunch of helpers defined on `ftd::p1::Header` eg
 `.bool_with_default()` and `.str_with_default()`, which gets a `bool` or `str`
 from header, or return if not found or invalid (in case of `bool`).
 

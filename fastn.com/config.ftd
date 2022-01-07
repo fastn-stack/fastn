@@ -1,108 +1,114 @@
 -- import: fifthtry.github.io/Jupiter-theme as ft
 
--- ft.site-name: FTD-DEV
--- ft.site-icon: static/images/logo.svg
+-- ft.site-name: `ftd`
+-- ft.site-icon: /static/images/logo.svg
 -- ft.github: https://github.com/fifthtry/ftd.dev/
 -- ft.site-url: /
 
 -- ft.header-toc:
 $processor$: toc
 
-- common/
+- /language/
   Docs
-- roadmap/
+- /roadmap/
   Roadmap & RFCs
-- journal/
+- /journal/
   Journal
-- https://try.ftd.dev
-  Try FTD Online
-- https://github.com/
+- /development/
+  Development
+- https://github.com/FifthTry/ftd
   Github
+
+-- ft.toc-item list dev-toc:
+
+-- dev-toc:
+$processor$: toc
+
+- /changelog/
+  Changelog
+- /roadmap/
+  Roadmap & RFCs
+- /journal/
+  Journal
+- /internals/
+  Internals
+- /p1/
+  `ftd::p1`: A JSON/YML Replacement
 
 -- ft.toc:
 $processor$: toc
 
-- index.html
-  FTD
-- language/
+- /language/
   FTD Language
-  - p1-grammar/
+  - /p1-grammar/
     `ftd::p1` grammar
-  - philosophy/
+  - /philosophy/
     Philosophy
-  - data-modelling/
+  - /data-modelling/
     Data Modelling
-    - variables/
+    - /variables/
       Variables
-    - built-in-types/
+    - /built-in-types/
       Built-in Types
-    - record/
+    - /record/
       `record`
-    - or-type/
+    - /or-type/
       `or-type`
-    - list/
+    - /list/
       `list`
-    - reading-data/
+    - /reading-data/
       Reading FTD Files
-  - ui/
+  - /ui/
     UI
-    - component/
+    - /component/
       `component`
-    - kernel/
+    - /kernel/
       Kernel Components
-      - row/
+      - /row/
         `ftd.row`
-      - column/
+      - /column/
         `ftd.column`
-      - text/
+      - /text/
         `ftd.text`
-      - image/
+      - /image/
         `ftd.image`
-      - iframe/
+      - /iframe/
         `ftd.iframe`
-      - integer/
+      - /integer/
         `ftd.integer`
-      - decimal/
+      - /decimal/
         `ftd.decimal`
-      - boolean/
+      - /boolean/
         `ftd.boolean`
-      - common/
+      - /common/
         Common Attributes
-      - text-common/
+      - /text-common/
         Common Text Attributes
-      - container/
+      - /container/
         Container Attributes
-    - container-management/
+    - /container-management/
       Container Management
-    - if/
+    - /if/
       `if`: Conditional Components
-    - if-attr/
+    - /if-attr/
       Conditional Attributes
-    - loop/
+    - /loop/
       `$loop$`: Looping Over Lists
-    - id/
+    - /id/
       ID
-    - event-handling/
+    - /event-handling/
       `$event-<event-name>$`: Event Handling
-    - auto-nesting/
+    - /auto-nesting/
       Auto Nesting
-  - import/
+  - /import/
     `import`
-  - examples/
+  - /examples/
     Examples
-    - creating-a-tree/
+    - /creating-a-tree/
       Creating a tree
-  - library/
+  - /library/
     `ftd::Library`
-  - comments/
+  - /comments/
     Comments In `ftd` Files
-- internals/
-  Internals
-- run-ftd/
+- /run-ftd/
   How to run ftd
-- p1/
-  `ftd::p1`: A JSON/YML Replacement
-- changelog/
-  Changelog
-- roadmap/
-  Roadmap & RFCs

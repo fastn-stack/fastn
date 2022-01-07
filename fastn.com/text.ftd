@@ -11,7 +11,7 @@ id: main
 Renders a text block.
 
 
--- ft.code:
+-- ft.code: yo
 lang: ftd
 
 \-- ftd.text: hello world
@@ -19,15 +19,15 @@ lang: ftd
 
 -- ft.markdown:
 
-Text accepts the below attributes as well all the [common 
+Text accepts the below attributes as well all the [common
 attributes](common/).
 
 
 -- ft.h1: `text: String`
 
-You can pass any string value. 
+You can pass any string value.
 
-You have two ways to pass text value to the `ftd.text` component. 
+You have two ways to pass text value to the `ftd.text` component.
 
 As `caption` which is a single line text.
 
@@ -149,7 +149,7 @@ align: center
 - `extra-light`
 - `hairline`
 
-First three properties, `italic`, `underline` and `strike` can be all applied 
+First three properties, `italic`, `underline` and `strike` can be all applied
 together, along with one of the next properties.
 
 
@@ -171,7 +171,7 @@ style: italic strike semi-bold
 
 -- ft.h1: `format`
 
-`ftd.text` uses `format` attribute to decide how to format the text. It can be 
+`ftd.text` uses `format` attribute to decide how to format the text. It can be
 `markdown`, `latex` or `code`.
 
 
@@ -266,14 +266,14 @@ print("hello world")
 
 -- ft.markdown:
 
-When using `format: code`, `lang` attribute should be also specified. This 
+When using `format: code`, `lang` attribute should be also specified. This
 attribute decides what "language" the source code is in. Further `theme` can also
 be specified to control the theme used for syntax highlighting.
 
 
 -- ft.h1: `lang`
 
-When the value of `format` is `code`, `lang` can be specified to chose the 
+When the value of `format` is `code`, `lang` can be specified to chose the
 "language" used for syntax highlighting.
 
 The value of `lang` must be the file extension used by source of that code, eg for
@@ -284,7 +284,7 @@ The default value of `lang` is `txt`.
 
 -- ft.h1: `theme`
 
-When the value of `format` is `code`, `theme` can be specified to chose the 
+When the value of `format` is `code`, `theme` can be specified to chose the
 "theme" used for syntax highlighting.
 
 The supported values of themes are:
@@ -321,8 +321,7 @@ if: $show-theme-demos
 -- ft.h3: `theme: InspiredGitHub`
 
 
-\-- ftd.text:
-format: code
+-- ftd.code:
 lang: py
 width: fill
 theme: InspiredGitHub
@@ -335,8 +334,7 @@ print("hello world")
 -- ft.h3: `theme: Solarized (dark)`
 
 
-\-- ftd.text:
-format: code
+-- ftd.code:
 lang: py
 width: fill
 theme: Solarized (dark)

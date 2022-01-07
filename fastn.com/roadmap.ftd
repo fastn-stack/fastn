@@ -1,6 +1,5 @@
-
 -- ft.doc-page:
-toc: $ft.toc
+toc: $config.dev-toc
 
 
 -- ft.h0: Roadmap & RFCs
@@ -40,7 +39,7 @@ Owner: Arpita, Sourabh
 -- ft.h1: FTD tutorial roadmap
 
 The idea is to create a list of tutorials to show all the possible ui/layout
-that can be created throught ftd. 
+that can be created throught ftd.
 
 - How to create a responsive component in ftd?
 - How to create a sticky header in ftd?
@@ -70,14 +69,14 @@ that can be created throught ftd.
 
 - [`message-host` event handler](/ftd/~/127/)
 - support basic types in `from_json_row_`
-- [`ui` as a type](/ftd/~/112/) 
+- [`ui` as a type](/ftd/~/112/)
 - backward incompatible: [unified component/variable syntax](/ftd/~/115/)
 - viewport based length (`width: vh 40` etc)
 - backwards incompatible: [`ftd.text` vs `ftd.text-block`](/ftd/~/113/)
 - `$lool$: $foo as $o` instead of `.. $foo as o`
 - `google-font-url`
 - [everything is `$foo` (against `ftd-0.2` branch)](/ftd/~/105/)
-- remove `ftd.comic` 
+- remove `ftd.comic`
 - [`@mouse-in`: special variable](/fifthtry/ftd/~/57/)
 - `#foo` global variables (remove `ref`) (and `import: f; #f.foo` not `f.#foo`)
   - `ftd.boolean`'s value is not changing correctly when variable changes
@@ -158,7 +157,7 @@ things on which we do not have a clarity on how things should work.
 
 -- ft.h1: data modelling
 
-- `-- <list-name>: ref x` to add `x` to `<list-name>` if type matches (and no 
+- `-- <list-name>: ref x` to add `x` to `<list-name>` if type matches (and no
   other header or body passed).
 - `if` on list append
 - [`$loop$` over `list`](/fifthtry/ftd/~/28/)
