@@ -8700,7 +8700,7 @@ mod test {
                             ftd::PropertyValue::Reference {
                                 name: s("foo/bar#default-age"),
                                 kind: ftd::p2::Kind::Integer {
-                                    default: Some(s("$default-age")),
+                                    default: Some(s("$foo/bar#default-age")),
                                 },
                             },
                         ),
@@ -8763,7 +8763,7 @@ mod test {
                     (
                         s("age"),
                         ftd::p2::Kind::Integer {
-                            default: Some(s("$default-age")),
+                            default: Some(s("$foo/bar#default-age")),
                         },
                     ),
                     (
@@ -8908,12 +8908,12 @@ mod test {
                 arguments: std::array::IntoIter::new([
                     (
                         s("name"),
-                        ftd::p2::Kind::string().set_default(Some(s("$default-name"))),
+                        ftd::p2::Kind::string().set_default(Some(s("$foo/bar#default-name"))),
                     ),
                     (
                         s("text-size"),
                         ftd::p2::Kind::Integer {
-                            default: Some(s("$default-size")),
+                            default: Some(s("$foo/bar#default-size")),
                         },
                     ),
                 ])
@@ -8931,7 +8931,7 @@ mod test {
                                         name: s("text-size"),
                                         kind: ftd::p2::Kind::Optional {
                                             kind: Box::new(ftd::p2::Kind::Integer {
-                                                default: Some(s("$default-size")),
+                                                default: Some(s("$foo/bar#default-size")),
                                             }),
                                         },
                                     }),
@@ -8945,7 +8945,7 @@ mod test {
                                     default: Some(ftd::PropertyValue::Variable {
                                         name: s("name"),
                                         kind: ftd::p2::Kind::caption_or_body()
-                                            .set_default(Some(s("$default-name"))),
+                                            .set_default(Some(s("$foo/bar#default-name"))),
                                     }),
                                     conditions: vec![],
                                     ..Default::default()
@@ -9092,7 +9092,7 @@ mod test {
                             ftd::PropertyValue::Reference {
                                 name: s("foo/bar#default-phone"),
                                 kind: ftd::p2::Kind::string()
-                                    .set_default(Some(s("$default-phone"))),
+                                    .set_default(Some(s("$foo/bar#default-phone"))),
                             },
                         ),
                     ])
@@ -9123,7 +9123,8 @@ mod test {
                             (s("name"), ftd::p2::Kind::caption()),
                             (
                                 s("phone"),
-                                ftd::p2::Kind::string().set_default(Some(s("$default-phone"))),
+                                ftd::p2::Kind::string()
+                                    .set_default(Some(s("$foo/bar#default-phone"))),
                             ),
                         ])
                         .collect(),
