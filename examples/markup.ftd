@@ -55,6 +55,15 @@ $event-click$: toggle $orange
 
 --- ftd.text: 3
 
+-- md:
+
+hello world says
+
+hello again
+
+--- ftd.text bar:
+size: 50
+
 
 -- md yet:
 

@@ -242,18 +242,21 @@ impl ChildComponent {
         // In case markup the behaviour of container_children is not the same.
         // They act as the component variables which are, then, referred to in markup text
         // container_children copy there properties to the reference in markup text
+
         if let ftd::Element::Markup(ref mut markups) = element {
-            let named_container = markup_get_named_container(
-                children,
-                self.root.as_str(),
-                self.line_number,
-                doc,
-                arguments,
-                invocations,
-                all_locals,
-                local_container,
-            )?;
-            reevalute_markups(markups, named_container, doc)?;
+            if !children.is_empty() {
+                let named_container = markup_get_named_container(
+                    children,
+                    self.root.as_str(),
+                    self.line_number,
+                    doc,
+                    arguments,
+                    invocations,
+                    all_locals,
+                    local_container,
+                )?;
+                reevalute_markups(markups, named_container, doc)?;
+            }
         }
 
         Ok(ElementWithContainer {
@@ -719,6 +722,11 @@ fn reevalute_markups(
     named_container: std::collections::BTreeMap<String, ftd::Element>,
     doc: &ftd::p2::TDoc,
 ) -> ftd::p1::Result<()> {
+    if !markups.children.is_empty() {
+        // no need to re-evalute
+        // already evaluted
+        return Ok(());
+    }
     let mut all_children = markups.children.to_owned();
     if markups.text.original.contains("\n\n") {
         for v in markups.text.original.split("\n\n") {
