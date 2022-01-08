@@ -21,7 +21,6 @@ impl PropertyValue {
         doc: &ftd::p2::TDoc,
         arguments: &std::collections::BTreeMap<String, ftd::p2::Kind>,
         source: Option<ftd::TextSource>,
-        root_name: Option<&str>,
     ) -> ftd::p1::Result<ftd::PropertyValue> {
         let property_type = if let Some(arg) = value.strip_prefix('$') {
             PropertyType::Variable(arg.to_string())
@@ -55,7 +54,7 @@ impl PropertyValue {
                         },
                         false,
                     ),
-                    None => match doc.get_thing_with_root(line_number, &string, root_name) {
+                    None => match doc.get_thing(line_number, &string) {
                         Ok(ftd::p2::Thing::Variable(v)) => (v.value.kind(), true),
                         Ok(ftd::p2::Thing::Component(_)) => {
                             (ftd::p2::Kind::UI { default: None }, true)

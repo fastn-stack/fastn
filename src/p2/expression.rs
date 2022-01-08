@@ -287,7 +287,6 @@ impl Boolean {
                     doc,
                     arguments,
                     None,
-                    None,
                 ) {
                     Ok(v) => v,
                     Err(e) => match &loop_already_resolved_property {

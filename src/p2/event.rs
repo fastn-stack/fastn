@@ -368,7 +368,6 @@ impl Action {
                                 doc,
                                 arguments,
                                 None,
-                                None,
                             )?);
                             idx += 1;
                         }
@@ -405,7 +404,6 @@ impl Action {
                     doc,
                     arguments,
                     None,
-                    None,
                 )?;
                 let kind = ftd::PropertyValue::Value {
                     value: ftd::variable::Value::String {
@@ -437,15 +435,8 @@ impl Action {
             arguments: &std::collections::BTreeMap<String, ftd::p2::Kind>,
             kind: Option<ftd::p2::Kind>,
         ) -> ftd::p1::Result<(String, ftd::p2::Kind)> {
-            let pv = ftd::PropertyValue::resolve_value(
-                line_number,
-                &value,
-                kind,
-                doc,
-                arguments,
-                None,
-                None,
-            )?;
+            let pv =
+                ftd::PropertyValue::resolve_value(line_number, &value, kind, doc, arguments, None)?;
             Ok((
                 match pv {
                     ftd::PropertyValue::Reference { ref name, .. } => name.to_string(),

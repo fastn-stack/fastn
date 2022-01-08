@@ -592,7 +592,6 @@ impl ChildComponent {
                         doc,
                         arguments,
                         None,
-                        None,
                     ) {
                         properties.insert(
                             "value".to_string(),
@@ -2058,7 +2057,6 @@ pub fn recursive_child_component(
         doc,
         arguments,
         None,
-        None,
     )?;
 
     let recursive_kind = if let ftd::p2::Kind::List { kind, .. } = recursive_property_value.kind() {
@@ -2223,7 +2221,6 @@ pub fn recursive_child_component(
             None,
             doc,
             &arguments,
-            None,
             None,
         )?;
         Ok(ftd::component::Property {
@@ -2449,7 +2446,6 @@ pub fn read_properties(
                 doc,
                 arguments,
                 Some(source.clone()),
-                None,
             )?;
             let nested_properties = if let ftd::PropertyValue::Reference {
                 kind: ftd::p2::Kind::UI { .. },
@@ -2577,7 +2573,6 @@ fn root_properties_from_inherits(
             None,
             doc,
             arguments,
-            None,
             None,
         )?;
         root_properties.insert(
