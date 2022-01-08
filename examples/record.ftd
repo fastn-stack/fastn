@@ -4,7 +4,10 @@
 
 -- ftd.text: $lib.amitu.address.first-line
 
--- ftd.text: $lib.amitu.address.city-detail.name
+-- boolean bool: true
+
+-- ftd.text foo: $lib.amitu.address.city-detail.name
+color if $bool: red
 
 -- lib.lead.individual amitu-data: Amit Upadhyay
 
