@@ -1,6 +1,10 @@
 use std::iter::FromIterator;
 
-pub async fn build(config: &fpm::Config, base_url: Option<&str>) -> fpm::Result<()> {
+pub async fn build(
+    config: &fpm::Config,
+    file: Option<&str>,
+    base_url: Option<&str>,
+) -> fpm::Result<()> {
     use fpm::utils::HasElements;
 
     tokio::fs::create_dir_all(config.build_dir()).await?;
@@ -14,13 +18,17 @@ pub async fn build(config: &fpm::Config, base_url: Option<&str>) -> fpm::Result<
             // translations, when building `config` we ensured this was rejected
             unreachable!()
         }
-        (Some(original), false) => build_with_original(config, original, base_url).await,
-        (None, false) => build_simple(config, base_url).await,
-        (None, true) => build_with_translations(config, base_url).await,
+        (Some(original), false) => build_with_original(config, original, file, base_url).await,
+        (None, false) => build_simple(config, file, base_url).await,
+        (None, true) => build_with_translations(config, file, base_url).await,
     }
 }
 
-async fn build_simple(config: &fpm::Config, base_url: Option<&str>) -> fpm::Result<()> {
+async fn build_simple(
+    config: &fpm::Config,
+    file: Option<&str>,
+    base_url: Option<&str>,
+) -> fpm::Result<()> {
     let documents = std::collections::BTreeMap::from_iter(
         fpm::get_documents(config)
             .await?
@@ -28,10 +36,14 @@ async fn build_simple(config: &fpm::Config, base_url: Option<&str>) -> fpm::Resu
             .map(|v| (v.get_id(), v)),
     );
 
-    process_files(config, &documents, base_url).await
+    process_files(config, &documents, file, base_url).await
 }
 
-async fn build_with_translations(config: &fpm::Config, base_url: Option<&str>) -> fpm::Result<()> {
+async fn build_with_translations(
+    config: &fpm::Config,
+    _file: Option<&str>,
+    base_url: Option<&str>,
+) -> fpm::Result<()> {
     let documents = std::collections::BTreeMap::from_iter(
         fpm::get_documents(config)
             .await?
@@ -80,6 +92,7 @@ async fn build_with_translations(config: &fpm::Config, base_url: Option<&str>) -
 async fn build_with_original(
     config: &fpm::Config,
     _original: &fpm::Package,
+    _file: Option<&str>,
     base_url: Option<&str>,
 ) -> fpm::Result<()> {
     // This is the translation package
@@ -148,10 +161,14 @@ async fn build_with_original(
 async fn process_files(
     config: &fpm::Config,
     documents: &std::collections::BTreeMap<String, fpm::File>,
+    file: Option<&str>,
     base_url: Option<&str>,
 ) -> fpm::Result<()> {
-    for file in documents.values() {
-        process_file(config, file, None, None, Default::default(), base_url).await?
+    for f in documents.values() {
+        if file.is_some() && file != Some(f.get_id().as_str()) {
+            continue;
+        }
+        process_file(config, f, None, None, Default::default(), base_url).await?
     }
     Ok(())
 }
@@ -254,7 +271,7 @@ async fn process_ftd(
             let fpm = {
                 let mut translation_status_count = format!(
                     indoc::indoc! {"
-                        -- fpm.translation-status-count: 
+                        -- fpm.translation-status-count:
                         never-marked: {never_marked}
                         missing: {missing}
                         out-dated: {out_dated}
@@ -278,9 +295,9 @@ async fn process_ftd(
                 format!(
                     indoc::indoc! {"
                     {content}
-                    
+
                     {translation_status_count}
-    
+
                     "},
                     content = content,
                     translation_status_count = translation_status_count

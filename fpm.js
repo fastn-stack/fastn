@@ -45,7 +45,7 @@
         // another function detect_orientation(), "landscape" and "portrait" etc,
         // and instead of setting `fpm-ui#mobile: boolean` we set `fpm-ui#device`
         // and `fpm-ui#viewport-orientation` etc.
-        return width <= 500;
+        return width <= 800;
     }
 
     window.show_main = function () {
@@ -160,7 +160,7 @@
     }
 
     function set_cookie(name, value) {
-        document.cookie = name + "=" + value;
+        document.cookie = name + "=" + value + "; path=/";
     }
 
     function system_dark_mode() {

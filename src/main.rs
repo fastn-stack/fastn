@@ -9,7 +9,7 @@ async fn main() -> fpm::Result<()> {
     }
 
     if let Some(build) = matches.subcommand_matches("build") {
-        fpm::build(&config, build.value_of("base")).await?;
+        fpm::build(&config, build.value_of("file"), build.value_of("base")).await?;
     }
 
     if let Some(sync) = matches.subcommand_matches("sync") {
@@ -74,6 +74,7 @@ fn app(authors: &'static str) -> clap::App<'static, 'static> {
         .subcommand(
             clap::SubCommand::with_name("build")
                 .about("Build static site from this fpm package")
+                .arg(clap::Arg::with_name("file").required(false))
                 .arg(
                     clap::Arg::with_name("base")
                         .long("base")
