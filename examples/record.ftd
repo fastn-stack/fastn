@@ -13,6 +13,8 @@ color if $bool: red
 
 -- ftd.text: $amitu-data.name
 
+-- ftd.text: $amitu-data.phone
+
 -- ftd.text: $lib.acme.name
 
 -- ftd.text: $obj.name

@@ -120,22 +120,14 @@ impl Record {
                         )
                     }
                 },
-                (Err(ftd::p1::Error::NotFound { .. }), _) => {
-                    let root_name = if let Some((root, _)) = self.name.split_once('#') {
-                        Some(root)
-                    } else {
-                        None
-                    };
-                    kind.read_section(
-                        p1.line_number,
-                        &p1.header,
-                        &p1.caption,
-                        &p1.body_without_comment(),
-                        name,
-                        doc,
-                        root_name,
-                    )?
-                }
+                (Err(ftd::p1::Error::NotFound { .. }), _) => kind.read_section(
+                    p1.line_number,
+                    &p1.header,
+                    &p1.caption,
+                    &p1.body_without_comment(),
+                    name,
+                    doc,
+                )?,
                 (
                     Err(ftd::p1::Error::MoreThanOneSubSections { .. }),
                     ftd::p2::Kind::List {
@@ -163,7 +155,6 @@ impl Record {
                                     &s.body_without_comment(),
                                     s.name.as_str(),
                                     doc,
-                                    None,
                                 )? {
                                     ftd::PropertyValue::Value { value: v } => v,
                                     _ => unimplemented!(),
@@ -227,7 +218,6 @@ impl Record {
                     &p1.body_without_comment(),
                     name,
                     doc,
-                    None,
                 )?,
             );
         }
