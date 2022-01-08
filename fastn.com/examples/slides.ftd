@@ -1,0 +1,67 @@
+-- integer count: 0
+-- import: examples/diagram
+
+-- ftd.grid:
+slots: left right-1 right-2 | main main main
+slot-widths: auto 80px 80px
+slot-heights: 56px auto
+width: fill
+height: fill
+
+-- ftd.text: FTD Slideshow
+slot: left
+background-color: black
+padding: 20
+color: white
+width: fill
+
+
+-- ftd.text: Previous
+slot: right-1
+color: white
+padding: 20
+background-color: black
+$event-click$: decrement $count clamp 0 3
+
+-- ftd.text: Next
+slot: right-2
+padding: 20
+background-color: black
+color: white
+$event-click$: increment $count clamp 0 3
+
+-- ftd.column:
+slot: main
+align: center
+
+-- ftd.image slide:
+string src:
+optional string width:
+src: $src
+align: center
+width: $width
+$event-click$: increment $count clamp 0 3
+
+
+-- diagram.diagram:
+if: $count == 0
+
+/-- slide:
+src: https://www.liveabout.com/thmb/YCJmu1khSJo8kMYM090QCd9W78U=/1250x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/powerpuff_girls-56a00bc45f9b58eba4aea61d.jpg
+if: $count == 0
+width: 500
+
+-- slide:
+src: https://akns-images.eonline.com/eol_images/Entire_Site/20121016/634.mm.cm.111612_copy.jpg?fit=around%7C634:1024&output-quality=90&crop=634:1024;center,top
+if: $count == 1
+width: 300
+
+-- slide:
+src: https://sketchok.com/images/articles/01-cartoons/000-va/21/17.jpg
+if: $count == 2
+width: 400
+
+-- slide:
+src: https://i.pinimg.com/originals/e3/b9/3a/e3b93ab29b709d82ed393253b1ff781a.jpg
+if: $count == 3
+width: 300

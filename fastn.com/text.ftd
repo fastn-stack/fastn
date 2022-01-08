@@ -204,35 +204,6 @@ This is **markdown** formatted text.
 Note: we do not support `![]()` (image) in markdown, nor we support html tags.
 
 
--- ft.h2: `format: latex`
-
-`format` can also be `latex` for writing equations:
-
-
--- ft.code:
-lang: ftd
-
-\-- ftd.text:
-format: latex
-width: fill
-align: center
-
-e^{i\pi} + 1 = 0
-
-
--- ft.markdown:
-
-Which renders as:
-
-
-\-- ftd.text:
-format: latex
-width: fill
-align: center
-
-e^{i\pi} + 1 = 0
-
-
 -- ft.h2: `format: code`
 
 `ftd.text` supports source code syntax highlighting.
