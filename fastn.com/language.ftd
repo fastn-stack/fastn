@@ -15,30 +15,27 @@ FTD is a domain-specific language to represent typed data and user interfaces.
 
 `ftd` is an alternative to XML/JSON for storing data.
 
-Note: `ftd` is built on a lower level grammar, called [`ftd::p1` 
-grammar](p1-grammar/), it defines things like sections, 
-sub-sections, caption, headers, and body.
+Note: `ftd` is built on a lower level grammar, called [`ftd::p1` grammar](/p1-grammar/),
+it defines things like sections, sub-sections, caption, headers, and body.
 
 
 -- ft.code: ftd file containing data
 lang: ftd
 
-\-- record person: 
+\-- record person:
 name: caption
 location: string
 bio: optional body
 
-\-- $amitu: Amit Upadhyay
-type: person
-location: Banglore, India
+\-- person amitu: Amit Upadhyay
+location: Bangalore, India
 
-Amit is the founder and CEO of FifthTry. 
+Amit is the founder and CEO of FifthTry.
 
-He loves to code, and is pursuing his childhood goal of 
+He loves to code, and is pursuing his childhood goal of
 becoming a professional starer of the trees.
 
-\-- list employees:
-type: person
+\-- person list employees:
 
 \-- employees: Sourabh Garg
 location: Ranchi, India
@@ -71,7 +68,7 @@ let employees: Vec<Employee> = doc.get("employees")?;
 
 -- ft.markdown:
 
-Read about [ftd's data modelling capability](data-modelling/) in 
+Read about [ftd's data modelling capability](/data-modelling/) in
 detail.
 
 
@@ -81,14 +78,14 @@ detail.
 -- ft.code: hello world ftd
 lang: ftd
 
-\-- $msg: hello world
+\-- string msg: hello world
 
 \-- ftd.text: $msg
 
 
 -- ft.markdown:
 
-This is a ftd file that defines a variable `msg` and uses it to shows 
+This is a ftd file that defines a variable `msg` and uses it to shows
 "hello world" in the UI using `ftd.text` "component".
 
 ----
@@ -104,7 +101,7 @@ This is a ftd file that defines a variable `msg` and uses it to shows
 
 ----
 
-This document is powered by ftd, and the source code listed above is part of this 
+This document is powered by ftd, and the source code listed above is part of this
 document, and what you see above between the two lines is rendered by ftd.
 
 Let's see a slightly more complex layout:
@@ -127,7 +124,6 @@ padding: 10
 width: fill
 
 \-- ftd.row:
-align: right
 
 \-- ftd.text: $msg
 width: fill
@@ -168,7 +164,6 @@ width: fill
 
 
 -- ftd.row:
-align: right
 width: fill
 
 
@@ -184,6 +179,7 @@ align: right
 padding: 10
 border-top: 1
 width: fill
+background-color: white
 
 
 -- ftd.text:
@@ -191,15 +187,14 @@ width: fill
 
 We support **markdown** as well.
 
-
 -- container: foo
 
 
 -- ft.markdown:
 
-Most websites you come across can be created using this (or will be in the future). 
+Most websites you come across can be created using this (or will be in the future).
 We have a DSL that picks elements from CSS, after simplifying things a little bit.
 
 As a goal we want `ftd` files to be renderable in the browser, as well as in other
-modes, like in Terminal using curses UI, natively on Mobile devices, Emacs, 
+modes, like in Terminal using curses UI, natively on Mobile devices, Emacs,
 rendering from scratch using just C/assembly for low-powered devices and so on.

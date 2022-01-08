@@ -21,12 +21,12 @@ bio: optional body
 
 -- ft.markdown:
 
-Here we are creating a record. The name of the record is `person`. It has three 
+Here we are creating a record. The name of the record is `person`. It has three
 fields: `name`, `age` and `bio`.
 
 -- ft.h1: Field Types
 
-Fields can be either one of the [built-in types](built-in-types/), 
+Fields can be either one of the [built-in types](built-in-types/),
 another type like a `record` or [`or-type`](or-type/).
 
 -- ft.h1: Record Variable
@@ -36,17 +36,16 @@ A variable can be created with type `record`:
 -- ft.code:
 lang: ftd
 
-\-- var amitu: Amit Upadhyay
-type: person
+\-- person amitu: Amit Upadhyay
 age: 40
 
 -- ft.markdown:
 
 Here we have created a new variable of type `person`, called it `amitu`, and the
 value of `name`, since its declared as `caption` in the record definition, is read
-from the "caption" area, and `age` is read from the "header". 
+from the "caption" area, and `age` is read from the "header".
 
-Note that we have not passed `bio`, since `bio` is declared as `optional body`, 
+Note that we have not passed `bio`, since `bio` is declared as `optional body`,
 so it's not a problem. Had it been `body` the above would not have been valid.
 
 -- ft.h1: Reading A Record From Rust
@@ -55,7 +54,7 @@ A `record` in `ftd` is equivalent of a `struct` in Rust.
 
 -- ft.h2: Rust Type
 
-To read the above `ftd` file from Rust you will have to first create a `struct` 
+To read the above `ftd` file from Rust you will have to first create a `struct`
 in Rust that is compatible with our `person` definition:
 
 -- ft.code:
@@ -73,8 +72,8 @@ struct Person {
 For each field in `person` record, we have a corresponding field in our `Person`
 `struct`.
 
-Note that we used `age` as i32, but it could have been any type that can be 
-deserialised from [JSON 
+Note that we used `age` as i32, but it could have been any type that can be
+deserialised from [JSON
 Number](https://docs.serde.rs/serde_json/struct.Number.html) since `ftd` `integer`
 is converted to `JSON Number`.
 
@@ -91,7 +90,7 @@ let amitu: Person = doc.get("amitu")?;
 
 -- ft.markdown:
 
-You can read more details of reading `ftd` files ["Reading FTD 
+You can read more details of reading `ftd` files ["Reading FTD
 Files"](reading-data/) guide.
 
 -- ft.h1: Record "Instances"

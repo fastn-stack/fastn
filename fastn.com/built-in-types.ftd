@@ -6,8 +6,8 @@ toc: $ft.toc
 -- ft.h0: Built-in Types
 
 `ftd` comes with some built-in types. These types can be used to construct more
-complex types like [`record`](record/) and 
-[`or-type`](or-type/).
+complex types like [`record`](/record/) and
+[`or-type`](/or-type/).
 
 -- ft.h1: `boolean`
 
@@ -16,8 +16,7 @@ This type is used to represent boolean values `true` and `false`.
 -- ft.code:
 lang: ftd
 
-\-- var is-monday: true
-type: boolean
+\-- boolean is-monday: true
 
 -- ft.markdown:
 
@@ -31,8 +30,7 @@ This is integer type, can be positive or negative.
 -- ft.code:
 lang: ftd
 
-\-- var number-of-days-in-a-week: 7
-type: integer
+\-- integer number-of-days-in-a-week: 7
 
 -- ft.markdown:
 
@@ -46,8 +44,7 @@ This type is used to represent decimal numbers.
 -- ft.code:
 lang: ftd
 
-\-- var pi: 3.14159
-type: decimal
+\-- decimal pi: 3.14159
 
 -- ft.markdown:
 
@@ -61,25 +58,19 @@ This is unicode string.
 -- ft.code:
 lang: ftd
 
-\-- var message: hello world!
-type: string
+\-- string message: hello world!
 
--- ft.code: a multi-line string (type is optional for `string`)
+-- ft.code: a multi-line string
 lang: ftd
 
-\-- var message:
+\-- string message:
 
 this is a multiline string.
 
 can have any number of lines.
 
-or long paragraph, if you have a long paragraph to write. it can 
+or long paragraph, if you have a long paragraph to write. it can
 contain unicode characters in any भाषा, or emojis, 💁👌🎍😍.
-
--- ft.markdown:
-
-This type can be "auto-detected" so it's not necessary to specify the type when
-declaring an string variable.
 
 -- ft.h1: `caption`
 
@@ -97,17 +88,15 @@ lang: ftd
 \-- record person:
 name: caption
 
-\-- var amitu: Amit Upadhyay
-type: person
+\-- person amitu: Amit Upadhyay
 
-\-- var shobhit:
-type: person
+\-- person shobhit:
 name: Shobhit Sharma
 
 -- ft.markdown:
 
-If something is specified as `caption`, it can come in the "caption" location, eg 
-in case of `amitu` var, or it can come as an explicit key, as in the declaration 
+If something is specified as `caption`, it can come in the "caption" location, eg
+in case of `amitu` var, or it can come as an explicit key, as in the declaration
 of `shobhit` variable.
 
 -- ft.h1: `body`
@@ -127,15 +116,13 @@ lang: ftd
 name: caption
 bio: body
 
-\-- var amitu: Amit Upadhyay
-type: person
+\-- person amitu: Amit Upadhyay
 
-this is single 
+this is single
 
 or multi-line bio of Amit.
 
-\-- var shobhit:
-type: person
+\-- person shobhit:
 name: Shobhit Sharma
 bio: or we can put things in "header"
 
@@ -147,13 +134,13 @@ case of `amitu` var, or it can come as an explicit key, as in the declaration of
 
 -- ft.h1: `caption or body`
 
-`caption or body` is a special type, it is an alias for `string`, but can not be 
+`caption or body` is a special type, it is an alias for `string`, but can not be
 used when declaring a variable.
 
 This type is used for `record`, `or-type` and `component` arguments.
 
-If a `record` or `or-type` field, or `component` argument is defined as `caption 
-or body`, it can be passed in either the "caption" or "body" location in 
+If a `record` or `or-type` field, or `component` argument is defined as `caption
+or body`, it can be passed in either the "caption" or "body" location in
 `ftd::p1` "section".
 
 -- ft.code: record with caption or body
@@ -162,20 +149,17 @@ lang: ftd
 \-- record person:
 name: caption or body
 
-\-- var amitu: Amit Upadhyay
-type: person
+\-- person amitu: Amit Upadhyay
 
-\-- var shobhit:
-type: person
+\-- person shobhit:
 name: Shobhit Sharma
 
-\-- var abrar:
-type: person
+\-- person abrar:
 
 Abrar Khan
 
 -- ft.markdown:
 
-If something is specified as `caption or body`, it can come in the "caption" 
-location, eg in case of `amitu` var, or it can come as an explicit key, as in 
+If something is specified as `caption or body`, it can come in the "caption"
+location, eg in case of `amitu` var, or it can come as an explicit key, as in
 the declaration of `shobhit` variable, or in "body" location, eg for `abrar`.

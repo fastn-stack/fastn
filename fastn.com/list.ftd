@@ -2,7 +2,7 @@
 
 -- ft.doc-page:
 toc: $ft.toc
-    
+
 -- ft.h0: `list`
 
 `list` keyword can be used to create a list or an array in `ftd`.
@@ -12,8 +12,7 @@ toc: $ft.toc
 -- ft.code: a list of integer
 lang: ftd
 
-\-- list primes:
-type: integer
+\-- integer list primes:
 
 -- ft.markdown:
 
@@ -44,8 +43,7 @@ lang: ftd
 name: caption
 bio: body
 
-\-- list people:
-type: person
+\-- person list people:
 
 \-- people: Amit Upadhyay
 
@@ -57,7 +55,7 @@ Shobhit is a developer at FifthTry.
 
 -- ft.markdown:
 
-Here we have created a `list` of `person` objects, called it `people`, and 
+Here we have created a `list` of `person` objects, called it `people`, and
 created two `person` objects and inserted them the `people` list.
 
 -- ft.h1: `$processor$`
@@ -67,8 +65,7 @@ A list can be created using platform provided processors:
 -- ft.code:
 lang: ftd
 
-\-- list foo:
-type: string
+\-- string list foo:
 $processor$: some-list
 
 -- ft.markdown:
@@ -80,8 +77,7 @@ If we already have a list we can insert values to it using `$processor$` as well
 -- ft.code:
 lang: ftd
 
-\-- list foo:
-type: string
+\-- string list foo:
 
 \-- foo:
 $processor$: some-list
@@ -104,5 +100,5 @@ let people: Vec<Person> = doc.get("people")?;
 
 -- ft.markdown:
 
-You can read more details of reading `ftd` files ["Reading FTD 
-Files"](reading-data/) guide.
+You can read more details of reading `ftd` files ["Reading FTD Files"](/reading-data/)
+guide.

@@ -14,8 +14,7 @@ supports declaring variables.
 -- ft.code:
 lang: ftd
 
-\-- var x: 20
-type: integer
+\-- integer x: 20
 
 
 -- ft.markdown:
@@ -25,19 +24,19 @@ Variables have `type`s.
 
 -- ft.h1: Auto Guessing Basic Types
 
-For [built-in types](built-in-types/), integer, boolean,  etc, 
+For [built-in types](built-in-types/), integer, boolean,  etc,
 `ftd` can guess the type based on the value:
 
 
 -- ft.code:
 lang: ftd
 
-\-- var x: 20
+\-- integer x: 20
 
 
 -- ft.h1: Types
 
-Type of a variable can be one of the [built-in types](builtin-types/), 
+Type of a variable can be one of the [built-in types](builtin-types/),
 a [record](record/), or an [or-type](or-type/).
 
 
@@ -49,9 +48,9 @@ A variable can be defined as referring to another variable.
 -- ft.code:
 lang: ftd
 
-\-- var x: 10
+\-- integer x: 10
 
-\-- var y: ref x
+\-- integer y: $x
 
 
 -- ft.h1: Updating a Variable
@@ -62,9 +61,9 @@ Once a variable has been defined it can be updated too:
 -- ft.code:
 lang: ftd
 
-\-- var x: 10
+\-- integer x: 10
 
-\-- x: 20
+\-- $x: 20
 
 
 -- ft.markdown:
@@ -84,14 +83,13 @@ on which this document is getting rendered, you can use that like this:
 -- ft.code:
 lang: ftd
 
-\-- var name-of-os:
-type: string
+\-- string name-of-os:
 $processor$: os
 
 
 -- ft.markdown:
 
-`type` is mandatory when using `$processor$`. Available processors would be 
+`type` is mandatory when using `$processor$`. Available processors would be
 documented as part of platform documentation.
 
 Processors can also look at data passed, so its possible to create a processor:
@@ -100,13 +98,12 @@ Processors can also look at data passed, so its possible to create a processor:
 -- ft.code:
 lang: ftd
 
-\-- var greeting: hello, world
-type: string
+\-- string greeting: hello, world
 $processor$: uppercase
 
 
 -- ft.markdown:
 
-Say the platform has provided a processor `uppercase`, which takes the current 
+Say the platform has provided a processor `uppercase`, which takes the current
 value, `hello, world` and returns its upper case value. In this case the variable
 greeting will hold the value: `HELLO, WORLD`.
