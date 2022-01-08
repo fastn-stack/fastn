@@ -462,6 +462,23 @@ impl ChildComponent {
             common.conditional_attribute.extend(conditional_attribute);
         }
 
+        if let ftd::Element::Markup(ref mut markups) = element.element {
+            let named_container = match markup_get_named_container(
+                &[],
+                self.root.as_str(),
+                self.line_number,
+                doc,
+                arguments,
+                invocations,
+                all_locals,
+                local_container,
+            ) {
+                Ok(n) => n,
+                _ => return Ok(element),
+            };
+            reevalute_markups(markups, named_container, doc).ok();
+        }
+
         Ok(element)
     }
 

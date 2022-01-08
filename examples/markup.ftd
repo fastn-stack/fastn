@@ -33,6 +33,29 @@ background-color if $orange: orange
 $event-click$: toggle $orange
 
 
+
+-- col:
+
+
+
+-- ftd.column col:
+
+--- ftd.text: 1
+
+--- yet:
+
+
+
+
+-- ftd.column:
+
+--- ftd.text: 2
+
+--- yet:
+
+--- ftd.text: 3
+
+
 -- md yet:
 
 Now {hello: Hello {underline: Amitu}} world. {hello} **Greetings** {underline}
