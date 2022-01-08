@@ -1,5 +1,6 @@
 -- integer count: 0
 -- import: examples/diagram
+-- import: examples/comic
 
 -- ftd.grid:
 slots: left right-1 right-2 | main main main
@@ -46,12 +47,15 @@ $event-click$: increment $count clamp 0 3
 -- diagram.diagram:
 if: $count == 0
 
+-- comic.comic:
+if: $count == 1
+
 /-- slide:
 src: https://www.liveabout.com/thmb/YCJmu1khSJo8kMYM090QCd9W78U=/1250x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/powerpuff_girls-56a00bc45f9b58eba4aea61d.jpg
 if: $count == 0
 width: 500
 
--- slide:
+/-- slide:
 src: https://akns-images.eonline.com/eol_images/Entire_Site/20121016/634.mm.cm.111612_copy.jpg?fit=around%7C634:1024&output-quality=90&crop=634:1024;center,top
 if: $count == 1
 width: 300
