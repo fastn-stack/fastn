@@ -248,12 +248,14 @@ impl Header {
 
     pub fn conditional_str(
         &self,
-        doc_id: &str,
+        doc: &ftd::p2::TDoc,
         line_number: usize,
         name: &str,
+        arguments: &std::collections::BTreeMap<String, ftd::p2::Kind>,
     ) -> Result<Vec<(usize, String, Option<&str>)>> {
         let mut conditional_vector = vec![];
         for (idx, (_, k, v)) in self.0.iter().enumerate() {
+            let v = doc.resolve_reference_name(line_number, v, arguments)?;
             if k == name {
                 conditional_vector.push((idx, v.to_string(), None));
             }
@@ -268,7 +270,7 @@ impl Header {
         }
         if conditional_vector.is_empty() {
             Err(Error::NotFound {
-                doc_id: doc_id.to_string(),
+                doc_id: doc.name.to_string(),
                 line_number,
                 key: format!("`{}` header is missing", name),
             })

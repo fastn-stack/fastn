@@ -459,15 +459,13 @@ impl Kind {
         default: Option<String>,
         doc: &ftd::p2::TDoc,
         object_kind: Option<(&str, Self)>,
+        arguments: &std::collections::BTreeMap<String, ftd::p2::Kind>,
     ) -> ftd::p1::Result<Self> {
         // resolve the value
         let default = {
             let mut default = default.clone();
             if let Some(ref v) = default {
-                if let Some(v) = v.strip_prefix('$') {
-                    let s = doc.resolve_name(line_number, v)?;
-                    default = Some(format!("${}", s));
-                }
+                default = Some(doc.resolve_reference_name(line_number, v, arguments)?);
             }
             default
         };

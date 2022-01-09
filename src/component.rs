@@ -527,7 +527,8 @@ impl ChildComponent {
             name,
             doc,
         )?;
-        let (local_arguments, inherits) = read_arguments(p1, name, &root.arguments, doc)?;
+        let (local_arguments, inherits) =
+            read_arguments(p1, name, &root.arguments, arguments, doc)?;
 
         let mut all_arguments = local_arguments.clone();
         all_arguments.extend(arguments.clone());
@@ -1578,8 +1579,13 @@ impl Component {
         let name = var_data.name;
         let root = var_data.kind;
         let root_component = doc.get_component(p1.line_number, root.as_str())?;
-        let (arguments, inherits) =
-            read_arguments(&p1.header, root.as_str(), &root_component.arguments, doc)?;
+        let (arguments, inherits) = read_arguments(
+            &p1.header,
+            root.as_str(),
+            &root_component.arguments,
+            &Default::default(),
+            doc,
+        )?;
 
         assert_no_extra_properties(
             p1.line_number,
@@ -2370,7 +2376,7 @@ pub fn read_properties(
             continue;
         }
         let (conditional_vector, source) = match (
-            p1.conditional_str(doc.name, line_number, name),
+            p1.conditional_str(doc, line_number, name, arguments),
             kind.inner(),
         ) {
             (Ok(v), _) => (
@@ -2591,6 +2597,7 @@ fn read_arguments(
     p1: &ftd::p1::Header,
     root: &str,
     root_arguments: &std::collections::BTreeMap<String, ftd::p2::Kind>,
+    arguments: &std::collections::BTreeMap<String, ftd::p2::Kind>,
     doc: &ftd::p2::TDoc,
 ) -> ftd::p1::Result<(
     std::collections::BTreeMap<String, ftd::p2::Kind>,
@@ -2636,7 +2643,7 @@ fn read_arguments(
                 }
             }
         } else {
-            ftd::p2::Kind::for_variable(i.to_owned(), k, option_v, doc, None)?
+            ftd::p2::Kind::for_variable(i.to_owned(), k, option_v, doc, None, arguments)?
         };
         if let ftd::p2::Kind::UI {
             default: Some((_, h)),

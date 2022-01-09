@@ -173,8 +173,12 @@ impl Boolean {
         left_right_resolved_property: (Option<ftd::PropertyValue>, Option<ftd::PropertyValue>),
         line_number: usize,
     ) -> ftd::p1::Result<Self> {
-        let (boolean, left, right) =
+        let (boolean, mut left, mut right) =
             ftd::p2::Boolean::boolean_left_right(line_number, expr, doc.name)?;
+        left = doc.resolve_reference_name(line_number, left.as_str(), arguments)?;
+        if let Some(ref r) = right {
+            right = doc.resolve_reference_name(line_number, r, arguments).ok();
+        }
         return Ok(match boolean.as_str() {
             "Literal" => Boolean::Literal {
                 value: left == "true",

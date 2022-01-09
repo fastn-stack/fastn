@@ -293,7 +293,14 @@ impl Record {
             };
             fields.insert(
                 var_data.name.to_string(),
-                ftd::p2::Kind::for_variable(i.to_owned(), k, v, doc, Some(object_kind.clone()))?,
+                ftd::p2::Kind::for_variable(
+                    i.to_owned(),
+                    k,
+                    v,
+                    doc,
+                    Some(object_kind.clone()),
+                    &Default::default(),
+                )?,
             );
             order.push(var_data.name.to_string());
         }
