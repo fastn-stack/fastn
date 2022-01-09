@@ -67,7 +67,6 @@ impl RT {
             instructions: &self.instructions,
             arguments: &Default::default(),
             invocations: &mut invocations,
-            root_name: None,
         }
         .execute(&[], &mut Default::default(), None)?
         .children;

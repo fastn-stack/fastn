@@ -12,15 +12,13 @@ impl Event {
         property: &std::collections::BTreeMap<String, Vec<ftd::PropertyValue>>,
         arguments: &std::collections::BTreeMap<String, ftd::Value>,
         doc: &ftd::p2::TDoc,
-        root_name: Option<&str>,
     ) -> ftd::p1::Result<std::collections::BTreeMap<String, Vec<String>>> {
         let mut property_string: std::collections::BTreeMap<String, Vec<String>> =
             Default::default();
         for (s, property_values) in property {
             let mut property_values_string = vec![];
             for property_value in property_values {
-                let value =
-                    property_value.resolve_with_root(line_number, arguments, doc, root_name)?;
+                let value = property_value.resolve(line_number, arguments, doc)?;
                 if let Some(v) = value.to_string() {
                     property_values_string.push(v);
                 } else {
@@ -42,7 +40,6 @@ impl Event {
         all_locals: &mut ftd::Map,
         arguments: &std::collections::BTreeMap<String, ftd::Value>,
         doc: &ftd::p2::TDoc,
-        root_name: Option<&str>,
     ) -> ftd::p1::Result<Vec<ftd::Event>> {
         let arguments = {
             //remove properties
@@ -87,7 +84,6 @@ impl Event {
                         &e.action.parameters,
                         &arguments,
                         doc,
-                        root_name,
                     )?,
                 },
             });

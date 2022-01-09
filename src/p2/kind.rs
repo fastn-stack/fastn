@@ -461,9 +461,9 @@ impl Kind {
         object_kind: Option<(&str, Self)>,
         arguments: &std::collections::BTreeMap<String, ftd::p2::Kind>,
     ) -> ftd::p1::Result<Self> {
-        // resolve the value
         let default = {
-            let mut default = default.clone();
+            // resolve the default value
+            let mut default = default;
             if let Some(ref v) = default {
                 default = Some(doc.resolve_reference_name(line_number, v, arguments)?);
             }

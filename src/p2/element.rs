@@ -6,7 +6,6 @@ pub fn common_from_properties(
     is_child: bool,
     events: &[ftd::p2::Event],
     all_locals: &mut ftd::Map,
-    root_name: Option<&str>,
     reference: Option<String>,
 ) -> ftd::p1::Result<ftd::Common> {
     let submit = ftd::p2::utils::string_optional("submit", properties, doc.name, 0)?;
@@ -90,7 +89,7 @@ pub fn common_from_properties(
         locals: Default::default(),
         condition: cond,
         is_not_visible: !is_visible,
-        events: ftd::p2::Event::get_events(0, events, all_locals, properties, doc, root_name)?,
+        events: ftd::p2::Event::get_events(0, events, all_locals, properties, doc)?,
         reference,
         region: ftd::Region::from(
             ftd::p2::utils::string_optional("region", properties, doc.name, 0)?,
@@ -594,7 +593,6 @@ pub fn image_from_properties(
     is_child: bool,
     events: &[ftd::p2::Event],
     all_locals: &mut ftd::Map,
-    root_name: Option<&str>,
 ) -> ftd::p1::Result<ftd::Image> {
     let (src, reference) =
         ftd::p2::utils::string_and_ref(0, "src", properties_with_ref, all_locals, doc.name)?;
@@ -604,7 +602,7 @@ pub fn image_from_properties(
         description: ftd::p2::utils::string_optional("description", properties, doc.name, 0)?
             .unwrap_or_else(|| "".to_string()),
         common: common_from_properties(
-            properties, doc, condition, is_child, events, all_locals, root_name, reference,
+            properties, doc, condition, is_child, events, all_locals, reference,
         )?,
         crop: ftd::p2::utils::bool_with_default("crop", false, properties, doc.name, 0)?,
     })
@@ -643,12 +641,11 @@ pub fn row_from_properties(
     is_child: bool,
     events: &[ftd::p2::Event],
     all_locals: &mut ftd::Map,
-    root_name: Option<&str>,
 ) -> ftd::p1::Result<ftd::Row> {
     let properties = &ftd::p2::utils::properties(properties_with_ref);
     Ok(ftd::Row {
         common: common_from_properties(
-            properties, doc, condition, is_child, events, all_locals, root_name, None,
+            properties, doc, condition, is_child, events, all_locals, None,
         )?,
         container: container_from_properties(properties, doc)?,
         spacing: ftd::Spacing::from(ftd::p2::utils::string_optional(
@@ -690,12 +687,11 @@ pub fn column_from_properties(
     is_child: bool,
     events: &[ftd::p2::Event],
     all_locals: &mut ftd::Map,
-    root_name: Option<&str>,
 ) -> ftd::p1::Result<ftd::Column> {
     let properties = &ftd::p2::utils::properties(properties_with_ref);
     Ok(ftd::Column {
         common: common_from_properties(
-            properties, doc, condition, is_child, events, all_locals, root_name, None,
+            properties, doc, condition, is_child, events, all_locals, None,
         )?,
         container: container_from_properties(properties, doc)?,
         spacing: ftd::Spacing::from(ftd::p2::utils::string_optional(
@@ -795,7 +791,6 @@ pub fn iframe_from_properties(
     is_child: bool,
     events: &[ftd::p2::Event],
     all_locals: &mut ftd::Map,
-    root_name: Option<&str>,
 ) -> ftd::p1::Result<ftd::IFrame> {
     let properties = &ftd::p2::utils::properties(properties_with_ref);
     let src = match (
@@ -812,7 +807,7 @@ pub fn iframe_from_properties(
     Ok(ftd::IFrame {
         src,
         common: common_from_properties(
-            properties, doc, condition, is_child, events, all_locals, root_name, None,
+            properties, doc, condition, is_child, events, all_locals, None,
         )?,
     })
 }
@@ -824,7 +819,6 @@ pub fn iframe_from_properties(
     is_child: bool,
     events: &[ftd::p2::Event],
     all_locals: &mut ftd::Map,
-    root_name: Option<&str>,
 ) -> ftd::p1::Result<ftd::Text> {
     let properties = &ftd::p2::utils::properties(properties_with_ref);
 
@@ -853,7 +847,7 @@ pub fn iframe_from_properties(
             ftd::markdown_line(text.as_str())
         },
         common: common_from_properties(
-            properties, doc, condition, is_child, events, all_locals, root_name, reference,
+            properties, doc, condition, is_child, events, all_locals, reference,
         )?,
         text_align: ftd::TextAlign::from(
             ftd::p2::utils::string_optional("text-align", properties, doc.name, 0)?,
@@ -878,7 +872,6 @@ pub fn text_block_from_properties(
     is_child: bool,
     events: &[ftd::p2::Event],
     all_locals: &mut ftd::Map,
-    root_name: Option<&str>,
 ) -> ftd::p1::Result<ftd::TextBlock> {
     let properties = &ftd::p2::utils::properties(properties_with_ref);
 
@@ -907,7 +900,7 @@ pub fn text_block_from_properties(
             ftd::markdown_line(text.as_str())
         },
         common: common_from_properties(
-            properties, doc, condition, is_child, events, all_locals, root_name, reference,
+            properties, doc, condition, is_child, events, all_locals, reference,
         )?,
         text_align: ftd::TextAlign::from(
             ftd::p2::utils::string_optional("text-align", properties, doc.name, 0)?,
@@ -932,7 +925,6 @@ pub fn code_from_properties(
     is_child: bool,
     events: &[ftd::p2::Event],
     all_locals: &mut ftd::Map,
-    root_name: Option<&str>,
 ) -> ftd::p1::Result<ftd::Code> {
     let properties = &ftd::p2::utils::properties(properties_with_ref);
 
@@ -971,7 +963,7 @@ pub fn code_from_properties(
             doc.name,
         )?,
         common: common_from_properties(
-            properties, doc, condition, is_child, events, all_locals, root_name, reference,
+            properties, doc, condition, is_child, events, all_locals, reference,
         )?,
         text_align: ftd::TextAlign::from(
             ftd::p2::utils::string_optional("text-align", properties, doc.name, 0)?,
@@ -996,7 +988,6 @@ pub fn integer_from_properties(
     is_child: bool,
     events: &[ftd::p2::Event],
     all_locals: &mut ftd::Map,
-    root_name: Option<&str>,
 ) -> ftd::p1::Result<ftd::Text> {
     let properties = &ftd::p2::utils::properties(properties_with_ref);
     let font_str = ftd::p2::utils::string_optional("font", properties, doc.name, 0)?;
@@ -1025,7 +1016,7 @@ pub fn integer_from_properties(
         text: ftd::markdown_line(text.as_str()),
         line: false,
         common: common_from_properties(
-            properties, doc, condition, is_child, events, all_locals, root_name, reference,
+            properties, doc, condition, is_child, events, all_locals, reference,
         )?,
         text_align: ftd::TextAlign::from(
             ftd::p2::utils::string_optional("text-align", properties, doc.name, 0)?,
@@ -1050,7 +1041,6 @@ pub fn decimal_from_properties(
     is_child: bool,
     events: &[ftd::p2::Event],
     all_locals: &mut ftd::Map,
-    root_name: Option<&str>,
 ) -> ftd::p1::Result<ftd::Text> {
     let properties = &ftd::p2::utils::properties(properties_with_ref);
     let font_str = ftd::p2::utils::string_optional("font", properties, doc.name, 0)?;
@@ -1079,7 +1069,7 @@ pub fn decimal_from_properties(
         text: ftd::markdown_line(text.as_str()),
         line: false,
         common: common_from_properties(
-            properties, doc, condition, is_child, events, all_locals, root_name, reference,
+            properties, doc, condition, is_child, events, all_locals, reference,
         )?,
         text_align: ftd::TextAlign::from(
             ftd::p2::utils::string_optional("text-align", properties, doc.name, 0)?,
@@ -1123,7 +1113,6 @@ pub fn boolean_from_properties(
     is_child: bool,
     events: &[ftd::p2::Event],
     all_locals: &mut ftd::Map,
-    root_name: Option<&str>,
 ) -> ftd::p1::Result<ftd::Text> {
     let properties = &ftd::p2::utils::properties(properties_with_ref);
     let font_str = ftd::p2::utils::string_optional("font", properties, doc.name, 0)?;
@@ -1151,7 +1140,7 @@ pub fn boolean_from_properties(
         text: ftd::markdown_line(text.as_str()),
         line: false,
         common: common_from_properties(
-            properties, doc, condition, is_child, events, all_locals, root_name, reference,
+            properties, doc, condition, is_child, events, all_locals, reference,
         )?,
         text_align: ftd::TextAlign::from(
             ftd::p2::utils::string_optional("text-align", properties, doc.name, 0)?,
@@ -1557,12 +1546,11 @@ pub fn input_from_properties(
     is_child: bool,
     events: &[ftd::p2::Event],
     all_locals: &mut ftd::Map,
-    root_name: Option<&str>,
 ) -> ftd::p1::Result<ftd::Input> {
     let properties = &ftd::p2::utils::properties(properties_with_ref);
     Ok(ftd::Input {
         common: common_from_properties(
-            properties, doc, condition, is_child, events, all_locals, root_name, None,
+            properties, doc, condition, is_child, events, all_locals, None,
         )?,
         placeholder: ftd::p2::utils::string_optional("placeholder", properties, doc.name, 0)?,
     })
@@ -1575,12 +1563,11 @@ pub fn scene_from_properties(
     is_child: bool,
     events: &[ftd::p2::Event],
     all_locals: &mut ftd::Map,
-    root_name: Option<&str>,
 ) -> ftd::p1::Result<ftd::Scene> {
     let properties = &ftd::p2::utils::properties(properties_with_ref);
     Ok(ftd::Scene {
         common: common_from_properties(
-            properties, doc, condition, is_child, events, all_locals, root_name, None,
+            properties, doc, condition, is_child, events, all_locals, None,
         )?,
         container: container_from_properties(properties, doc)?,
         spacing: ftd::Spacing::from(ftd::p2::utils::string_optional(
@@ -1596,7 +1583,6 @@ pub fn grid_from_properties(
     is_child: bool,
     events: &[ftd::p2::Event],
     all_locals: &mut ftd::Map,
-    root_name: Option<&str>,
 ) -> ftd::p1::Result<ftd::Grid> {
     let properties = &ftd::p2::utils::properties(properties_with_ref);
     Ok(ftd::Grid {
@@ -1620,7 +1606,7 @@ pub fn grid_from_properties(
             0,
         )?,
         common: common_from_properties(
-            properties, doc, condition, is_child, events, all_locals, root_name, None,
+            properties, doc, condition, is_child, events, all_locals, None,
         )?,
         container: container_from_properties(properties, doc)?,
         inline: ftd::p2::utils::bool_with_default("inline", false, properties, doc.name, 0)?,
@@ -1635,7 +1621,6 @@ pub fn markup_from_properties(
     is_child: bool,
     events: &[ftd::p2::Event],
     all_locals: &mut ftd::Map,
-    root_name: Option<&str>,
 ) -> ftd::p1::Result<ftd::Markups> {
     let properties = &ftd::p2::utils::properties(properties_with_ref);
     let (value, source, reference) = ftd::p2::utils::string_and_source_and_ref(
@@ -1659,7 +1644,7 @@ pub fn markup_from_properties(
     Ok(ftd::Markups {
         text: ftd::markdown_line(value.as_str()),
         common: common_from_properties(
-            properties, doc, condition, is_child, events, all_locals, root_name, reference,
+            properties, doc, condition, is_child, events, all_locals, reference,
         )?,
         children: vec![],
         line: source != ftd::TextSource::Body,
