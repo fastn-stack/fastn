@@ -9,7 +9,6 @@ pub struct ExecuteDoc<'a> {
         String,
         Vec<std::collections::BTreeMap<String, ftd::Value>>,
     >,
-    pub root_name: Option<&'a str>,
 }
 
 impl<'a> ExecuteDoc<'a> {
@@ -140,7 +139,6 @@ impl<'a> ExecuteDoc<'a> {
                                     &f.properties,
                                     self.arguments,
                                     &doc,
-                                    None,
                                 )?,
                                 doc.name,
                                 f.line_number,
@@ -162,7 +160,6 @@ impl<'a> ExecuteDoc<'a> {
                         self.arguments,
                         self.invocations,
                         true,
-                        self.root_name,
                         all_locals,
                         &local_container,
                         new_id.clone(),
@@ -189,7 +186,6 @@ impl<'a> ExecuteDoc<'a> {
                         self.arguments,
                         self.invocations,
                         true,
-                        self.root_name,
                         all_locals,
                         &local_container,
                     )?;

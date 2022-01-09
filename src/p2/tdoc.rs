@@ -439,13 +439,12 @@ impl<'a> TDoc<'a> {
         }
     }
 
-    pub fn get_value_and_conditions_with_root(
+    pub fn get_value_and_conditions(
         &self,
         line_number: usize,
         name: &str,
-        root_name: Option<&str>,
     ) -> ftd::p1::Result<(ftd::Value, Vec<(ftd::p2::Boolean, ftd::Value)>)> {
-        match self.get_thing_with_root(line_number, name, root_name)? {
+        match self.get_thing(line_number, name)? {
             ftd::p2::Thing::Variable(v) => Ok((v.value, v.conditions)),
             v => self.err("not a variable", v, "get_value", line_number),
         }
@@ -453,17 +452,7 @@ impl<'a> TDoc<'a> {
 
     pub fn get_value(&self, line_number: usize, name: &str) -> ftd::p1::Result<ftd::Value> {
         // TODO: name can be a.b.c, and a and a.b are records with right fields
-        self.get_value_with_root(line_number, name, None)
-    }
-
-    pub fn get_value_with_root(
-        &self,
-        line_number: usize,
-        name: &str,
-        root_name: Option<&str>,
-    ) -> ftd::p1::Result<ftd::Value> {
-        // TODO: name can be a.b.c, and a and a.b are records with right fields
-        match self.get_thing_with_root(line_number, name, root_name)? {
+        match self.get_thing(line_number, name)? {
             ftd::p2::Thing::Variable(v) => Ok(v.value),
             v => self.err("not a variable", v, "get_value", line_number),
         }
@@ -485,18 +474,6 @@ impl<'a> TDoc<'a> {
 
     pub fn get_component(&self, line_number: usize, name: &str) -> ftd::p1::Result<ftd::Component> {
         match self.get_thing(line_number, name)? {
-            ftd::p2::Thing::Component(v) => Ok(v),
-            v => self.err("not a component", v, "get_component", line_number),
-        }
-    }
-
-    pub fn get_component_with_root(
-        &self,
-        line_number: usize,
-        name: &str,
-        root_name: Option<&str>,
-    ) -> ftd::p1::Result<ftd::Component> {
-        match self.get_thing_with_root(line_number, name, root_name)? {
             ftd::p2::Thing::Component(v) => Ok(v),
             v => self.err("not a component", v, "get_component", line_number),
         }
@@ -535,22 +512,13 @@ impl<'a> TDoc<'a> {
         line_number: usize,
         name: &'a str,
     ) -> ftd::p1::Result<ftd::p2::Thing> {
-        self.get_thing_with_root(line_number, name, None)
-    }
-
-    pub fn get_thing_with_root(
-        &'a self,
-        line_number: usize,
-        name: &'a str,
-        root_name: Option<&'a str>,
-    ) -> ftd::p1::Result<ftd::p2::Thing> {
         let name = if let Some(name) = name.strip_prefix('$') {
             name
         } else {
             name
         };
 
-        let (initial_thing, name) = get_initial_thing(self, line_number, root_name, name)?;
+        let (initial_thing, name) = get_initial_thing(self, line_number, name)?;
 
         if let Some(remaining) = name {
             return get_thing(self, line_number, remaining.as_str(), &initial_thing);
@@ -560,7 +528,6 @@ impl<'a> TDoc<'a> {
         fn get_initial_thing(
             doc: &ftd::p2::TDoc,
             line_number: usize,
-            root_name: Option<&str>,
             name: &str,
         ) -> ftd::p1::Result<(ftd::p2::Thing, Option<String>)> {
             if name.contains('#') {
@@ -665,7 +632,7 @@ impl<'a> TDoc<'a> {
                             conditions,
                         })
                     } else if let Some(ftd::PropertyValue::Reference { name, .. }) = fields.get(v) {
-                        get_initial_thing(doc, line_number, None, name)?.0
+                        get_initial_thing(doc, line_number, name)?.0
                     } else {
                         thing.clone()
                     }

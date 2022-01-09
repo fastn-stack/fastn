@@ -134,7 +134,7 @@ impl ChildComponent {
     ) -> ftd::p1::Result<ElementWithContainer> {
         let id = ftd::p2::utils::string_optional(
             "id",
-            &resolve_properties(self.line_number, &self.properties, arguments, doc, None)?,
+            &resolve_properties(self.line_number, &self.properties, arguments, doc)?,
             doc.name,
             self.line_number,
         )?;
@@ -158,7 +158,6 @@ impl ChildComponent {
             arguments,
             invocations,
             false,
-            None,
             all_locals,
             local_container,
             id.clone(),
@@ -205,7 +204,6 @@ impl ChildComponent {
                     instructions: &instructions,
                     arguments,
                     invocations,
-                    root_name: None,
                 }
                 .execute(local_container, all_locals, None)?
                 .children;
@@ -276,23 +274,17 @@ impl ChildComponent {
             Vec<std::collections::BTreeMap<String, ftd::Value>>,
         >,
         is_child: bool,
-        root_name: Option<&str>,
         all_locals: &mut ftd::Map,
         local_container: &[usize],
     ) -> ftd::p1::Result<Vec<ElementWithContainer>> {
         let root = {
             // NOTE: doing unwrap to force bug report if we following fails, this function
             // must have validated everything, and must not fail at run time
-            doc.get_component_with_root(self.line_number, self.root.as_str(), root_name)
+            doc.get_component(self.line_number, self.root.as_str())
                 .unwrap()
         };
-        let loop_property = resolve_recursive_property(
-            self.line_number,
-            &self.properties,
-            arguments,
-            doc,
-            root_name,
-        )?;
+        let loop_property =
+            resolve_recursive_property(self.line_number, &self.properties, arguments, doc)?;
         let mut elements = vec![];
 
         if let ftd::Value::List { data, .. } = loop_property {
@@ -305,7 +297,6 @@ impl ChildComponent {
                     &self.properties,
                     &new_arguments,
                     doc,
-                    root_name,
                 )?;
                 let mut temp_locals: ftd::Map = Default::default();
                 let conditional_attribute = get_conditional_attributes(
@@ -349,8 +340,6 @@ impl ChildComponent {
                     invocations,
                     &None,
                     is_child,
-                    doc.get_root(self.root.as_str(), self.line_number)?
-                        .or(root_name),
                     &self.events,
                     &mut all_old_locals,
                     local_container.as_slice(),
@@ -396,7 +385,6 @@ impl ChildComponent {
             Vec<std::collections::BTreeMap<String, ftd::Value>>,
         >,
         is_child: bool,
-        root_name: Option<&str>,
         all_locals: &mut ftd::Map,
         local_container: &[usize],
         id: Option<String>,
@@ -421,13 +409,8 @@ impl ChildComponent {
         };
 
         let root_properties = {
-            let mut root_properties = resolve_properties_with_ref(
-                self.line_number,
-                &self.properties,
-                arguments,
-                doc,
-                root_name,
-            )?;
+            let mut root_properties =
+                resolve_properties_with_ref(self.line_number, &self.properties, arguments, doc)?;
             //pass argument of component to its children
             for (k, v) in arguments {
                 root_properties.insert(format!("${}", k), (v.to_owned(), None));
@@ -454,7 +437,6 @@ impl ChildComponent {
             invocations,
             &self.condition,
             is_child,
-            doc.get_root(self.root.as_str(), self.line_number)?,
             &self.events,
             all_locals,
             local_container,
@@ -663,7 +645,6 @@ fn markup_get_named_container(
         instructions: &instructions,
         arguments,
         invocations,
-        root_name: None,
     }
     .execute(local_container, all_locals, None)?
     .children;
@@ -951,8 +932,8 @@ fn reevalute_markup(
                     // In case of component variable of markup defined internally,
                     // it won't be present inside doc.bag
                     // Example:
-                    // -- ftd.markup foo: {bar: Hello}
-                    // --- ftd.markup bar:
+                    // -- ftd.text foo: {bar: Hello}
+                    // --- ftd.text bar:
                     // color: red
                     //
                     // `bar` here won't be present inside doc.bag
@@ -1018,7 +999,7 @@ fn reevalute_markup(
             }
         }
         root.arguments = std::collections::BTreeMap::new();
-        Ok(root.call_without_values(doc, name)?.element)
+        Ok(root.call_without_values(doc)?.element)
     }
 }
 
@@ -1027,11 +1008,10 @@ fn resolve_recursive_property(
     self_properties: &std::collections::BTreeMap<String, Property>,
     arguments: &std::collections::BTreeMap<String, ftd::Value>,
     doc: &ftd::p2::TDoc,
-    root_name: Option<&str>,
 ) -> ftd::p1::Result<ftd::Value> {
     if let Some(value) = self_properties.get("$loop$") {
         if let Ok(property_value) = value.eval(line_number, "$loop$", arguments, doc) {
-            return property_value.resolve_with_root(line_number, arguments, doc, root_name);
+            return property_value.resolve(line_number, arguments, doc);
         }
     }
     ftd::e2(
@@ -1046,7 +1026,6 @@ pub fn resolve_properties(
     self_properties: &std::collections::BTreeMap<String, Property>,
     arguments: &std::collections::BTreeMap<String, ftd::Value>,
     doc: &ftd::p2::TDoc,
-    root_name: Option<&str>,
 ) -> ftd::p1::Result<std::collections::BTreeMap<String, ftd::Value>> {
     let mut properties: std::collections::BTreeMap<String, ftd::Value> = Default::default();
     for (name, value) in self_properties.iter() {
@@ -1056,7 +1035,7 @@ pub fn resolve_properties(
         if let Ok(property_value) = value.eval(line_number, name, arguments, doc) {
             properties.insert(
                 name.to_string(),
-                property_value.resolve_with_root(line_number, arguments, doc, root_name)?,
+                property_value.resolve(line_number, arguments, doc)?,
             );
         }
     }
@@ -1423,7 +1402,6 @@ fn resolve_properties_with_ref(
     self_properties: &std::collections::BTreeMap<String, Property>,
     arguments: &std::collections::BTreeMap<String, ftd::Value>,
     doc: &ftd::p2::TDoc,
-    root_name: Option<&str>,
 ) -> ftd::p1::Result<std::collections::BTreeMap<String, (ftd::Value, Option<String>)>> {
     let mut properties: std::collections::BTreeMap<String, (ftd::Value, Option<String>)> =
         Default::default();
@@ -1438,8 +1416,7 @@ fn resolve_properties_with_ref(
                 _ => None,
             };
             let resolved_value = {
-                let mut resolved_value =
-                    property_value.resolve_with_root(line_number, arguments, doc, root_name)?;
+                let mut resolved_value = property_value.resolve(line_number, arguments, doc)?;
                 if let ftd::Value::UI { data, .. } = &mut resolved_value {
                     data.extend(value.nested_properties.clone())
                 }
@@ -1453,7 +1430,6 @@ fn resolve_properties_with_ref(
 }
 
 impl Component {
-    #[allow(clippy::too_many_arguments)]
     fn call_sub_functions(
         &self,
         arguments: &std::collections::BTreeMap<String, ftd::Value>,
@@ -1462,7 +1438,6 @@ impl Component {
             String,
             Vec<std::collections::BTreeMap<String, ftd::Value>>,
         >,
-        root_name: Option<&str>,
         call_container: &[usize],
         all_locals: &mut ftd::Map,
         id: Option<String>,
@@ -1471,39 +1446,19 @@ impl Component {
             let mut instructions: Vec<Instruction> = self.instructions.clone();
             for instruction in instructions.iter_mut() {
                 match instruction {
-                    Instruction::ChildComponent { child } => reference_to_child_component(
-                        child,
-                        arguments,
-                        self.line_number,
-                        doc,
-                        root_name,
-                    )?,
+                    Instruction::ChildComponent { child } => {
+                        reference_to_child_component(child, arguments, self.line_number, doc)?
+                    }
                     Instruction::Component { parent, children } => {
-                        reference_to_child_component(
-                            parent,
-                            arguments,
-                            self.line_number,
-                            doc,
-                            root_name,
-                        )?;
+                        reference_to_child_component(parent, arguments, self.line_number, doc)?;
                         for child in children.iter_mut() {
-                            reference_to_child_component(
-                                child,
-                                arguments,
-                                self.line_number,
-                                doc,
-                                root_name,
-                            )?;
+                            reference_to_child_component(child, arguments, self.line_number, doc)?;
                         }
                     }
                     Instruction::ChangeContainer { .. } => {}
-                    Instruction::RecursiveChildComponent { child } => reference_to_child_component(
-                        child,
-                        arguments,
-                        self.line_number,
-                        doc,
-                        root_name,
-                    )?,
+                    Instruction::RecursiveChildComponent { child } => {
+                        reference_to_child_component(child, arguments, self.line_number, doc)?
+                    }
                 }
             }
             instructions
@@ -1516,7 +1471,6 @@ impl Component {
             instructions: &new_instruction,
             arguments,
             invocations,
-            root_name,
         }
         .execute(call_container, all_locals, id);
 
@@ -1525,11 +1479,10 @@ impl Component {
             arguments: &std::collections::BTreeMap<String, crate::Value>,
             line_number: usize,
             doc: &ftd::p2::TDoc,
-            root_name: Option<&str>,
         ) -> ftd::p1::Result<()> {
             if let Some(ref c) = child.reference {
                 if let Some(ftd::Value::UI { name, data, .. }) = arguments.get(&c.0) {
-                    match doc.get_component_with_root(line_number, name, root_name) {
+                    match doc.get_component(line_number, name) {
                         Ok(_) => {
                             *child = ChildComponent {
                                 root: name.to_string(),
@@ -1685,18 +1638,13 @@ impl Component {
         });
     }
 
-    fn call_without_values(
-        &self,
-        doc: &ftd::p2::TDoc,
-        name: &str,
-    ) -> ftd::p1::Result<ElementWithContainer> {
+    fn call_without_values(&self, doc: &ftd::p2::TDoc) -> ftd::p1::Result<ElementWithContainer> {
         self.call(
             &Default::default(),
             doc,
             &mut Default::default(),
             &Default::default(),
             false,
-            doc.get_root(name, 0)?,
             &[],
             &mut Default::default(),
             &[],
@@ -1715,7 +1663,6 @@ impl Component {
         >,
         condition: &Option<ftd::p2::Boolean>,
         is_child: bool,
-        root_name: Option<&str>,
         events: &[ftd::p2::Event],
         all_locals: &mut ftd::Map,
         local_container: &[usize],
@@ -1744,44 +1691,44 @@ impl Component {
                 )?),*/
                 "ftd#text-block" => {
                     ftd::Element::TextBlock(ftd::p2::element::text_block_from_properties(
-                        arguments, doc, condition, is_child, events, all_locals, root_name,
+                        arguments, doc, condition, is_child, events, all_locals,
                     )?)
                 }
                 "ftd#code" => ftd::Element::Code(ftd::p2::element::code_from_properties(
-                    arguments, doc, condition, is_child, events, all_locals, root_name,
+                    arguments, doc, condition, is_child, events, all_locals,
                 )?),
                 "ftd#image" => ftd::Element::Image(ftd::p2::element::image_from_properties(
-                    arguments, doc, condition, is_child, events, all_locals, root_name,
+                    arguments, doc, condition, is_child, events, all_locals,
                 )?),
                 "ftd#row" => ftd::Element::Row(ftd::p2::element::row_from_properties(
-                    arguments, doc, condition, is_child, events, all_locals, root_name,
+                    arguments, doc, condition, is_child, events, all_locals,
                 )?),
                 "ftd#column" => ftd::Element::Column(ftd::p2::element::column_from_properties(
-                    arguments, doc, condition, is_child, events, all_locals, root_name,
+                    arguments, doc, condition, is_child, events, all_locals,
                 )?),
                 "ftd#iframe" => ftd::Element::IFrame(ftd::p2::element::iframe_from_properties(
-                    arguments, doc, condition, is_child, events, all_locals, root_name,
+                    arguments, doc, condition, is_child, events, all_locals,
                 )?),
                 "ftd#integer" => ftd::Element::Integer(ftd::p2::element::integer_from_properties(
-                    arguments, doc, condition, is_child, events, all_locals, root_name,
+                    arguments, doc, condition, is_child, events, all_locals,
                 )?),
                 "ftd#decimal" => ftd::Element::Decimal(ftd::p2::element::decimal_from_properties(
-                    arguments, doc, condition, is_child, events, all_locals, root_name,
+                    arguments, doc, condition, is_child, events, all_locals,
                 )?),
                 "ftd#boolean" => ftd::Element::Boolean(ftd::p2::element::boolean_from_properties(
-                    arguments, doc, condition, is_child, events, all_locals, root_name,
+                    arguments, doc, condition, is_child, events, all_locals,
                 )?),
                 "ftd#input" => ftd::Element::Input(ftd::p2::element::input_from_properties(
-                    arguments, doc, condition, is_child, events, all_locals, root_name,
+                    arguments, doc, condition, is_child, events, all_locals,
                 )?),
                 "ftd#scene" => ftd::Element::Scene(ftd::p2::element::scene_from_properties(
-                    arguments, doc, condition, is_child, events, all_locals, root_name,
+                    arguments, doc, condition, is_child, events, all_locals,
                 )?),
                 "ftd#grid" => ftd::Element::Grid(ftd::p2::element::grid_from_properties(
-                    arguments, doc, condition, is_child, events, all_locals, root_name,
+                    arguments, doc, condition, is_child, events, all_locals,
                 )?),
                 "ftd#text" => ftd::Element::Markup(ftd::p2::element::markup_from_properties(
-                    arguments, doc, condition, is_child, events, all_locals, root_name,
+                    arguments, doc, condition, is_child, events, all_locals,
                 )?),
                 _ => unreachable!(),
             };
@@ -1804,7 +1751,6 @@ impl Component {
                     &self.properties,
                     &property,
                     doc,
-                    root_name,
                 )?;
                 update_properties(&mut properties, &property, &self.arguments);
                 properties
@@ -1858,14 +1804,8 @@ impl Component {
                 _ => (None, true, false),
             };
 
-            let events = ftd::p2::Event::get_events(
-                self.line_number,
-                events,
-                all_locals,
-                &arguments,
-                doc,
-                root_name,
-            )?;
+            let events =
+                ftd::p2::Event::get_events(self.line_number, events, all_locals, &arguments, doc)?;
 
             // let mut all_locals = all_locals.clone();
             all_locals.extend(all_new_locals.clone());
@@ -1877,7 +1817,6 @@ impl Component {
                     invocations,
                     &self.condition,
                     is_child,
-                    root_name,
                     &self.events,
                     /*&mut */ all_locals,
                     local_container,
@@ -1942,7 +1881,6 @@ impl Component {
                         &property,
                         doc,
                         invocations,
-                        root_name,
                         local_container,
                         &mut all_new_locals,
                         id,

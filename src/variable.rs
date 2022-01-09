@@ -218,16 +218,6 @@ impl PropertyValue {
         arguments: &std::collections::BTreeMap<String, ftd::Value>,
         doc: &ftd::p2::TDoc,
     ) -> ftd::p1::Result<Value> {
-        self.resolve_with_root(line_number, arguments, doc, None)
-    }
-
-    pub fn resolve_with_root(
-        &self,
-        line_number: usize,
-        arguments: &std::collections::BTreeMap<String, ftd::Value>,
-        doc: &ftd::p2::TDoc,
-        root_name: Option<&str>,
-    ) -> ftd::p1::Result<Value> {
         Ok(match self {
             ftd::PropertyValue::Value { value: v } => v.to_owned(),
             ftd::PropertyValue::Variable {
@@ -239,9 +229,7 @@ impl PropertyValue {
                     let (part_1, part_2) = ftd::p2::utils::split(name.to_string(), ".")?;
                     match arguments.get(&part_1) {
                         Some(Value::Record { name, fields }) => match fields.get(&part_2) {
-                            Some(pv) => {
-                                return pv.resolve_with_root(line_number, arguments, doc, root_name)
-                            }
+                            Some(pv) => return pv.resolve(line_number, arguments, doc),
                             None => {
                                 return ftd::e2(
                                     format!(
@@ -295,17 +283,14 @@ impl PropertyValue {
                 kind: reference_kind,
             } => {
                 assert_eq!(self.kind(), *reference_kind);
-                let (default, condition) = if let Ok(d) =
-                    doc.get_value_and_conditions_with_root(0, reference_name.as_str(), root_name)
-                {
-                    d
-                } else if let Ok(d) =
-                    doc.get_component_with_root(0, reference_name.as_str(), root_name)
-                {
-                    return d.to_value(reference_kind);
-                } else {
-                    return reference_kind.to_value(line_number, doc.name);
-                };
+                let (default, condition) =
+                    if let Ok(d) = doc.get_value_and_conditions(0, reference_name.as_str()) {
+                        d
+                    } else if let Ok(d) = doc.get_component(0, reference_name.as_str()) {
+                        return d.to_value(reference_kind);
+                    } else {
+                        return reference_kind.to_value(line_number, doc.name);
+                    };
                 let mut value = default;
                 for (boolean, property) in condition {
                     if boolean.eval(line_number, arguments, doc)? {
