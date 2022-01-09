@@ -396,6 +396,21 @@ pub fn decimal_optional(
     }
 }
 
+pub(crate) fn get_doc_name_and_remaining(s: &str) -> ftd::p1::Result<(String, Option<String>)> {
+    let mut part1 = "".to_string();
+    let mut pattern_to_split_at = s.to_string();
+    if let Some((p1, p2)) = s.split_once('#') {
+        part1 = format!("{}#", p1);
+        pattern_to_split_at = p2.to_string();
+    }
+    Ok(if pattern_to_split_at.contains('.') {
+        let (p1, p2) = ftd::p2::utils::split(pattern_to_split_at, ".")?;
+        (format!("{}{}", part1, p1), Some(p2))
+    } else {
+        (s.to_string(), None)
+    })
+}
+
 pub fn split(name: String, split_at: &str) -> ftd::p1::Result<(String, String)> {
     let mut part = name.splitn(2, split_at);
     let part_1 = part.next().unwrap().trim();

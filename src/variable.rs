@@ -43,7 +43,7 @@ impl PropertyValue {
             PropertyType::Value(value)
         };
 
-        let (part1, part2) = get_parts(&property_type.string())?;
+        let (part1, part2) = ftd::p2::utils::get_doc_name_and_remaining(&property_type.string())?;
 
         return Ok(match property_type {
             PropertyType::Variable(string) | PropertyType::Component { name: string, .. } => {
@@ -160,21 +160,6 @@ impl PropertyValue {
                     | PropertyType::Component { name: s, .. } => s.to_string(),
                 }
             }
-        }
-
-        fn get_parts(s: &str) -> ftd::p1::Result<(String, Option<String>)> {
-            let mut part1 = "".to_string();
-            let mut pattern_to_split_at = s.to_string();
-            if let Some((p1, p2)) = s.split_once('#') {
-                part1 = p1.to_string();
-                pattern_to_split_at = p2.to_string();
-            }
-            Ok(if pattern_to_split_at.contains('.') {
-                let (p1, p2) = ftd::p2::utils::split(pattern_to_split_at, ".")?;
-                (format!("{}{}", part1, p1), Some(p2))
-            } else {
-                (s.to_string(), None)
-            })
         }
 
         fn get_kind(
@@ -498,7 +483,14 @@ impl Variable {
             vec![].as_slice(),
         )?;
         let name = doc.resolve_name(p1.line_number, &var_data.name)?;
-        let kind = ftd::p2::Kind::for_variable(p1.line_number, &p1.name, None, doc, None)?;
+        let kind = ftd::p2::Kind::for_variable(
+            p1.line_number,
+            &p1.name,
+            None,
+            doc,
+            None,
+            &Default::default(),
+        )?;
         if !kind.is_list() {
             return ftd::e2(
                 format!("Expected list found: {:?}", p1),
@@ -605,7 +597,14 @@ impl Variable {
         let name = var_data.name.clone();
 
         if var_data.is_optional() && p1.caption.is_none() && p1.body.is_none() {
-            let kind = ftd::p2::Kind::for_variable(p1.line_number, &p1.name, None, doc, None)?;
+            let kind = ftd::p2::Kind::for_variable(
+                p1.line_number,
+                &p1.name,
+                None,
+                doc,
+                None,
+                &Default::default(),
+            )?;
             return Ok(Variable {
                 name,
                 value: ftd::Value::Optional {
@@ -637,7 +636,14 @@ impl Variable {
                 },
             };
             if var_data.is_optional() {
-                let kind = ftd::p2::Kind::for_variable(p1.line_number, &p1.name, None, doc, None)?;
+                let kind = ftd::p2::Kind::for_variable(
+                    p1.line_number,
+                    &p1.name,
+                    None,
+                    doc,
+                    None,
+                    &Default::default(),
+                )?;
                 value = ftd::Value::Optional {
                     data: Box::new(Some(value)),
                     kind: kind.inner().to_owned(),

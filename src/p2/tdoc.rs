@@ -366,6 +366,28 @@ impl<'a> TDoc<'a> {
         })
     }
 
+    pub(crate) fn resolve_reference_name(
+        &self,
+        line_number: usize,
+        name: &str,
+        arguments: &std::collections::BTreeMap<String, ftd::p2::Kind>,
+    ) -> ftd::p1::Result<String> {
+        return Ok(if let Some(l) = name.strip_prefix('$') {
+            let d = ftd::p2::utils::get_doc_name_and_remaining(l)?.0;
+            if arguments.contains_key(d.as_str()) || get_special_variable().contains(&d.as_str()) {
+                return Ok(name.to_string());
+            }
+            let s = self.resolve_name(line_number, l)?;
+            format!("${}", s)
+        } else {
+            name.to_string()
+        });
+
+        fn get_special_variable() -> Vec<&'static str> {
+            vec!["MOUSE-IN"]
+        }
+    }
+
     pub fn resolve_name(&self, line_number: usize, name: &str) -> ftd::p1::Result<String> {
         if name.contains('#') {
             return Ok(name.to_string());
@@ -374,7 +396,7 @@ impl<'a> TDoc<'a> {
         Ok(match ftd::split_module(name, self.name, line_number)? {
             (Some(m), v, None) => match self.aliases.get(m) {
                 Some(m) => format!("{}#{}", m, v),
-                None => return self.err("alias not found", m, "resolve_name", line_number),
+                None => format!("{}#{}.{}", self.name, m, v),
             },
             (Some(m), v, Some(c)) => match self.aliases.get(m) {
                 Some(m) => format!("{}#{}.{}", m, v, c),
@@ -557,7 +579,7 @@ impl<'a> TDoc<'a> {
                     None => doc.err("not found", name, "get_thing", line_number),
                 };
             }
-            return Ok(match get_initial_thing_(doc, root_name, doc.name, name) {
+            return Ok(match get_initial_thing_(doc, None, doc.name, name) {
                 Some(a) => a,
                 None => {
                     if let Some((m, v)) = name.split_once('.') {

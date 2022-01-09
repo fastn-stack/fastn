@@ -8791,7 +8791,7 @@ mod test {
                 text: ftd::markdown_line("Software developer working at fifthtry."),
                 size: Some(20),
                 common: ftd::Common {
-                    reference: Some(s("abrar.bio")),
+                    reference: Some(s("foo/bar#abrar.bio")),
                     ..Default::default()
                 },
                 ..Default::default()
@@ -8993,7 +8993,7 @@ mod test {
                 text: ftd::markdown_line("Amit Upadhyay"),
                 line: true,
                 common: ftd::Common {
-                    reference: Some(s("amitu.name")),
+                    reference: Some(s("foo/bar#amitu.name")),
                     ..Default::default()
                 },
                 ..Default::default()
@@ -9004,7 +9004,7 @@ mod test {
                 text: ftd::markdown_line("1000"),
                 line: true,
                 common: ftd::Common {
-                    reference: Some(s("amitu.phone")),
+                    reference: Some(s("foo/bar#amitu.phone")),
                     ..Default::default()
                 },
                 ..Default::default()
@@ -9016,7 +9016,7 @@ mod test {
                 line: true,
                 size: Some(50),
                 common: ftd::Common {
-                    reference: Some(s("acme.contact")),
+                    reference: Some(s("foo/bar#acme.contact")),
                     ..Default::default()
                 },
                 ..Default::default()
@@ -10527,7 +10527,7 @@ mod test {
     }
 
     #[test]
-    fn action_increment_decrement_condition() {
+    fn action_increment_decrement_condition_1() {
         let mut main = super::default_column();
         main.container
             .children
