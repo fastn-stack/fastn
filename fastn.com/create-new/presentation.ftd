@@ -19,4 +19,8 @@ image: images/giggle.png
 link: https://github.com/FifthTry/crispy-presentation-template/generate
 image: images/crispy.png
 
+--- ft.theme: Rotary
+link: https://github.com/FifthTry/rotary-presentation-template/generate
+image: images/rotary.png
+
 
