@@ -1,27 +1,26 @@
 -- ft.page:
 
--- ft.hero: Build optimized websites quickly, focus on your content
-image: static/images/github-light.svg
+-- ft.create-section:
 
---- ft.action-button: Get Started
-slot: cta-1
-url: /install/
-background-color: #25c19f
-color: white
+-- ft.h2: Create a
 
+-- ft.template-list:
 
--- ft.content:
+--- ft.template: Book
+link: /
+image: images/document.png
+active: true
 
---- ft.h1: fpm: FTD Package Manager
+--- ft.template: Open source site
+link: /
+image: images/open-source.png
+active: true
 
-[What is FPM?](/about/)
+--- ft.template: Presentation
+image: images/document.png
+active: false
 
-Checkout what is planned in [Roadmap](/roadmap/), and day to day updates in the
-[Journal](/journal/).
+--- ft.template: Diagram
+image: images/document.png
+active: false
 
-Github: [github.com/FifthTry/fpm](https://github.com/FifthTry/fpm)
-Discord: [#fpm on FifthTry](https://discord.gg/a7eBUeutWD)
-
-
---- ft.youtube:
-id: rny1EGkqw_M
