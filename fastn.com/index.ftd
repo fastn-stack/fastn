@@ -9,12 +9,6 @@ url: /install/
 background-color: #25c19f
 color: white
 
---- ft.action-button: Playground
-slot: cta-2
-url: https://play.fifthtry.com/
-background-color: #54c7ec
-color: white
-
 
 -- ft.content:
 
