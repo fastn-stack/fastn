@@ -13,7 +13,7 @@ active: true
 cta-text: Select Theme
 
 --- ft.template: Open source site
-link: /
+link: /select-open-source-theme
 image: images/open-source.png
 active: true
 cta-text: Select Theme
