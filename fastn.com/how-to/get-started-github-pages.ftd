@@ -21,10 +21,6 @@ browser and click on the `Use this template` button
 src: /how-to/github-use-this-template.png
 width: fill
 
--- ft.image: Step II: Make sure you check the `Include all branches` checkbox
-src: /how-to/github-initialize-repo.png
-width: fill
-
 -- ft.h2: Step 2: Updating the configs in repository
 
 In order to use the package properly, you'll need to make the following changes
@@ -39,18 +35,6 @@ lang: ftd
 zip: github.com/<username_or_orgname>/<repo_name>/archive/refs/heads/main.zip
 
 \-- fpm.dependency: fifthtry.github.io/blog-theme
-
-
--- ft.code: .github/workflows/deploy.yml
-lang: yml
-
-# Look for the following line:
-
-run: fpm build --base=/fpm-blog/
-
-# and replace it with
-run: fpm build --base=/<repo_name>/
-
 
 -- ft.h2: Step 3: Activate the `Github Pages` environment on your repo
 
