@@ -1,0 +1,13 @@
+-- ft.page:
+
+-- ft.create-section:
+
+-- ft.h2: Choose your theme
+
+-- ft.template-list:
+
+--- ft.template: Jupiter
+link: https://github.com/FifthTry/fpm-book/generate
+image: images/document.png
+active: true
+cta-text: Create

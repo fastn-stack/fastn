@@ -7,20 +7,23 @@
 -- ft.template-list:
 
 --- ft.template: Book
-link: /
+link: /create-new/book
 image: images/document.png
 active: true
+cta-text: Select Theme
 
 --- ft.template: Open source site
 link: /
 image: images/open-source.png
 active: true
+cta-text: Select Theme
 
 --- ft.template: Presentation
 image: images/document.png
 active: false
+cta-text: Coming Soon
 
 --- ft.template: Diagram
 image: images/document.png
 active: false
-
+cta-text: Coming Soon
