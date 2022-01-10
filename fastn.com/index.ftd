@@ -19,9 +19,10 @@ active: true
 cta-text: Select Theme
 
 --- ft.template: Presentation
-image: images/no-data.jpg
-active: false
-cta-text: Coming Soon
+link: /create-new/presentation
+image: images/giggle.png
+active: true
+cta-text: Select Theme
 
 --- ft.template: Diagram
 image: images/no-data.jpg

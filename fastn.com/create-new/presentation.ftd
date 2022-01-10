@@ -1,0 +1,18 @@
+-- ft.page:
+
+-- ft.create-section:
+
+-- ft.bread-crumb:
+
+--- ft.crumb: Create a presentation
+link: /
+
+--- ft.crumb: Pick a theme
+
+-- ft.template-list:
+
+--- ft.theme: Giggle
+link: https://github.com/FifthTry/giggle-presentation-theme/generate
+image: images/giggle.png
+
+
