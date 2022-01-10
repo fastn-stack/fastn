@@ -19,11 +19,11 @@ active: true
 cta-text: Select Theme
 
 --- ft.template: Presentation
-image: images/document.png
+image: images/no-data.jpg
 active: false
 cta-text: Coming Soon
 
 --- ft.template: Diagram
-image: images/document.png
+image: images/no-data.jpg
 active: false
 cta-text: Coming Soon
