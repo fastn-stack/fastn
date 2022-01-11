@@ -37,7 +37,7 @@ image: static/images/github-light.svg
 
 --- ft.action-button: Get Started
 slot: cta-1
-url: /install/
+url: /how-to/install/
 background-color: #25c19f
 color: white
 
