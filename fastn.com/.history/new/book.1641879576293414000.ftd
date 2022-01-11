@@ -1,0 +1,18 @@
+-- ft.page:
+
+-- ft.create-section:
+
+-- ft.bread-crumb:
+
+--- ft.crumb: Create a book
+link: /
+
+--- ft.crumb: Pick a theme
+
+-- ft.template-list:
+
+--- ft.theme: Jupiter
+link: https://github.com/FifthTry/fpm-book/generate
+image: images/jupiter.png
+live_preview: https://fifthtry.github.io/fpm-book/
+
