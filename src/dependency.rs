@@ -8,11 +8,7 @@ pub struct Dependency {
     pub alias: Option<String>,
 }
 
-pub fn ensure(
-    base_dir: &camino::Utf8PathBuf,
-    deps: &mut Vec<fpm::Dependency>,
-    package: &mut fpm::Package,
-) -> fpm::Result<()> {
+pub fn ensure(base_dir: &camino::Utf8PathBuf, package: &mut fpm::Package) -> fpm::Result<()> {
     /*futures::future::join_all(
         deps.into_iter()
             .map(|x| (x, base_dir.clone()))
@@ -37,7 +33,7 @@ pub fn ensure(
         translation_of.process(base_dir, &mut downloaded_package, true, true)?;
     }
 
-    for dep in deps.iter_mut() {
+    for dep in package.dependencies.iter_mut() {
         dep.package
             .process(base_dir, &mut downloaded_package, false, true)?;
     }
@@ -290,7 +286,7 @@ impl fpm::Package {
 
         downloaded_package.push(mutpackage.name.to_string());
 
-        let mut deps = {
+        package.dependencies = {
             let temp_deps: Vec<fpm::dependency::DependencyTemp> =
                 ftd_document.get("fpm#dependency")?;
             temp_deps
@@ -300,7 +296,7 @@ impl fpm::Package {
         };
 
         if download_dependencies {
-            for dep in deps.iter_mut() {
+            for dep in package.dependencies.iter_mut() {
                 let dep_path = root.join(".packages").join(dep.package.name.as_str());
                 if downloaded_package.contains(&dep.package.name) {
                     continue;

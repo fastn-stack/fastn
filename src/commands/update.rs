@@ -7,12 +7,12 @@ pub async fn update(config: &fpm::Config) -> fpm::Result<()> {
     };
 
     let c = fpm::Config::read().await?;
-    if c.dependencies.is_empty() {
+    if c.package.dependencies.is_empty() {
         println!("No dependencies to update.")
-    } else if c.dependencies.len() == 1 {
+    } else if c.package.dependencies.len() == 1 {
         println!("Updated the package dependency.")
     } else {
-        println!("Updated {} dependencies.", c.dependencies.len())
+        println!("Updated {} dependencies.", c.package.dependencies.len())
     }
 
     Ok(())

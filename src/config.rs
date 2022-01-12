@@ -28,9 +28,6 @@ pub struct Config {
     ///
     /// Note that this too is kind of bad design, we will move fonts to `fpm::Package` struct soon.
     pub fonts: Vec<fpm::Font>,
-    /// `dependencies` keeps track of direct dependencies of a given package. This too should be
-    /// moved to `fpm::Package` to support recursive dependencies etc.
-    pub dependencies: Vec<fpm::Dependency>,
     /// `ignored` keeps track of files that are to be ignored by `fpm build`, `fpm sync` etc.
     pub ignored: ignore::overrides::Override,
 }
@@ -108,7 +105,8 @@ impl Config {
     /// aliases() returns the list of the available aliases at the package level.
     pub fn aliases(&self) -> fpm::Result<std::collections::BTreeMap<&str, &fpm::Package>> {
         let mut resp = std::collections::BTreeMap::new();
-        self.dependencies
+        self.package
+            .dependencies
             .iter()
             .filter(|d| d.alias.is_some())
             .for_each(|d| {
@@ -160,16 +158,20 @@ impl Config {
                 }
             }
         };
-        let mut package = {
-            let temp_package: PackageTemp = b.get("fpm#package")?;
-            temp_package.into_package()
-        };
+
         let deps = {
             let temp_deps: Vec<fpm::dependency::DependencyTemp> = b.get("fpm#dependency")?;
             temp_deps
                 .into_iter()
                 .map(|v| v.into_dependency())
                 .collect::<Vec<fpm::Dependency>>()
+        };
+
+        let mut package = {
+            let temp_package: PackageTemp = b.get("fpm#package")?;
+            let mut package = temp_package.into_package();
+            package.dependencies = deps;
+            package
         };
 
         let fonts: Vec<fpm::Font> = b.get("fpm#font")?;
@@ -196,14 +198,14 @@ impl Config {
             }
         };
 
-        fpm::dependency::ensure(&root, &mut deps.clone(), &mut package)?;
+        fpm::dependency::ensure(&root, &mut package)?;
+        dbg!(&package);
 
         Ok(Config {
             package,
             root,
             original_directory,
             fonts,
-            dependencies: deps,
             ignored,
         })
     }
@@ -262,6 +264,7 @@ impl PackageTemp {
             zip: self.zip,
             translation_status: None,
             canonical_url: self.canonical_url,
+            dependencies: vec![],
         }
     }
 }
@@ -276,6 +279,9 @@ pub struct Package {
     pub zip: Option<String>,
     pub translation_status: Option<fpm::translation::TranslationStatusCount>,
     pub canonical_url: Option<String>,
+    /// `dependencies` keeps track of direct dependencies of a given package. This too should be
+    /// moved to `fpm::Package` to support recursive dependencies etc.
+    pub dependencies: Vec<fpm::Dependency>,
 }
 
 impl Package {
@@ -289,6 +295,7 @@ impl Package {
             zip: None,
             translation_status: None,
             canonical_url: None,
+            dependencies: vec![],
         }
     }
 
