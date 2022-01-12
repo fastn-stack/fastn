@@ -30,7 +30,7 @@ impl ftd::p2::Library for Library {
             let mut new_packages = packages.clone();
             while let Some(current_package) = new_packages.last() {
                 if let Some((v, current_packages)) =
-                    get_data_from_package(name, current_package, &self, &new_packages)
+                    get_data_from_package(name, current_package, self, &new_packages)
                 {
                     *packages = current_packages;
                     drop(new_packages);
@@ -46,9 +46,9 @@ impl ftd::p2::Library for Library {
             name: &str,
             package: &fpm::Package,
             lib: &Library,
-            current_packages: &Vec<fpm::Package>,
+            current_packages: &[fpm::Package],
         ) -> Option<(String, Vec<fpm::Package>)> {
-            let mut current_packages = current_packages.clone();
+            let mut current_packages = current_packages.to_owned();
             let path = if package.name.eq(&lib.config.package.name) {
                 lib.config.root.clone()
             } else {
@@ -93,7 +93,7 @@ impl ftd::p2::Library for Library {
                     }
                 }
             }
-            return None;
+            None
         }
 
         fn construct_fpm_ui(lib: &Library) -> String {
