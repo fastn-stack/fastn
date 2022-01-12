@@ -9,6 +9,7 @@ pub struct Library {
     pub markdown: Option<(String, String)>,
     pub document_id: String,
     pub translated_data: fpm::TranslationData,
+    // pub current_package: std::sync::Arc<std::sync::Mutex<Vec<fpm::Package>>>,
 }
 
 impl ftd::p2::Library for Library {

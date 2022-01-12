@@ -27,6 +27,16 @@ pub fn ensure(
     //  function to unsafe and downloaded_package as global static variable to have longer lifetime
 
     let mut downloaded_package = vec![package.name.clone()];
+
+    if let Some(translation_of) = package.translation_of.as_mut() {
+        if package.language.is_none() {
+            return Err(fpm::Error::UsageError {
+                message: "Translation package needs to declare the language".to_string(),
+            });
+        }
+        translation_of.process(base_dir, &mut downloaded_package, true, true)?;
+    }
+
     for dep in deps.iter_mut() {
         dep.package
             .process(base_dir, &mut downloaded_package, false, true)?;
@@ -47,15 +57,6 @@ pub fn ensure(
             });
         }
         translation.process(base_dir, &mut downloaded_package, false, false)?;
-    }
-
-    if let Some(translation_of) = package.translation_of.as_mut() {
-        if package.language.is_none() {
-            return Err(fpm::Error::UsageError {
-                message: "Translation package needs to declare the language".to_string(),
-            });
-        }
-        translation_of.process(base_dir, &mut downloaded_package, true, true)?;
     }
     Ok(())
 }
@@ -111,22 +112,36 @@ impl fpm::Package {
         }
 
         let root = base_dir.join(".packages").join(self.name.as_str());
-        let mut fpm_path = root.join("FPM.ftd");
+
+        // Just download FPM.ftd of the dependent package and continue
+        if !download_translations && !download_dependencies {
+            let (path, name) = if let Some((path, name)) = self.name.rsplit_once('/') {
+                (base_dir.join(".packages").join(path), name)
+            } else {
+                (base_dir.join(".packages"), self.name.as_str())
+            };
+            let file_extract_path = path.join(format!("{}.ftd", name));
+            if !file_extract_path.exists() {
+                std::fs::create_dir_all(&path)?;
+                let fpm_string = get_fpm(self.name.as_str())?;
+                let mut f = std::fs::File::create(&file_extract_path)?;
+                f.write_all(fpm_string.as_bytes())?;
+            }
+            return fpm::Package::process_fpm(
+                &root,
+                base_dir,
+                downloaded_package,
+                self,
+                download_translations,
+                download_dependencies,
+                &file_extract_path,
+            );
+        }
+
+        // Download everything of dependent package
         if !root.exists() {
             // Download the FPM.ftd file first for the package to download.
-            let response_fpm = if let Ok(response_fpm) =
-                futures::executor::block_on(reqwest::get(format!("https://{}/FPM.ftd", self.name)))
-            {
-                response_fpm
-            } else {
-                futures::executor::block_on(reqwest::get(format!("http://{}/FPM.ftd", self.name)))?
-            };
-            let fpm_string = String::from_utf8(
-                futures::executor::block_on(response_fpm.bytes())?
-                    .into_iter()
-                    .collect(),
-            )
-            .expect("");
+            let fpm_string = get_fpm(self.name.as_str())?;
 
             // Read FPM.ftd and get download zip url from `zip` argument
             let download_url = {
@@ -152,85 +167,83 @@ impl fpm::Package {
                     })?
             };
 
-            if !download_translations && !download_dependencies {
-                let (path, name) = if let Some((path, name)) = self.name.rsplit_once('/') {
-                    (base_dir.join(".packages").join(path), name)
-                } else {
-                    (base_dir.join(".packages"), self.name.as_str())
-                };
-                std::fs::create_dir_all(&path)?;
-                let file_extract_path = path.join(format!("{}.ftd", name));
-                if !file_extract_path.exists() {
-                    let mut f = std::fs::File::create(&file_extract_path)?;
-                    f.write_all(fpm_string.as_bytes())?;
-                }
-                fpm_path = file_extract_path;
-            } else {
-                let path =
-                    camino::Utf8PathBuf::from(format!("/tmp/{}.zip", self.name.replace("/", "__")));
+            let path =
+                camino::Utf8PathBuf::from(format!("/tmp/{}.zip", self.name.replace("/", "__")));
 
-                // Download the zip folder
+            // Download the zip folder
+            {
+                let response = if download_url[1..].contains("://")
+                    || download_url.starts_with("//")
                 {
-                    let response =
-                        if download_url[1..].contains("://") || download_url.starts_with("//") {
-                            futures::executor::block_on(reqwest::get(download_url))?
-                        } else if let Ok(response) = futures::executor::block_on(reqwest::get(
-                            format!("https://{}", download_url),
-                        )) {
-                            response
-                        } else {
-                            futures::executor::block_on(reqwest::get(format!(
-                                "http://{}",
-                                download_url
-                            )))?
-                        };
+                    futures::executor::block_on(reqwest::get(download_url))?
+                } else if let Ok(response) =
+                    futures::executor::block_on(reqwest::get(format!("https://{}", download_url)))
+                {
+                    response
+                } else {
+                    futures::executor::block_on(reqwest::get(format!("http://{}", download_url)))?
+                };
 
-                    let mut file = std::fs::File::create(&path)?;
-                    // TODO: instead of reading the whole thing in memory use tokio::io::copy() somehow?
-                    let content = futures::executor::block_on(response.bytes())?;
-                    file.write_all(&content)?;
-                }
+                let mut file = std::fs::File::create(&path)?;
+                // TODO: instead of reading the whole thing in memory use tokio::io::copy() somehow?
+                let content = futures::executor::block_on(response.bytes())?;
+                file.write_all(&content)?;
+            }
 
-                let file = std::fs::File::open(&path)?;
-                // TODO: switch to async_zip crate
-                let mut archive = zip::ZipArchive::new(file)?;
-                for i in 0..archive.len() {
-                    let mut c_file = archive.by_index(i).unwrap();
-                    let out_path = match c_file.enclosed_name() {
-                        Some(path) => path.to_owned(),
-                        None => continue,
-                    };
-                    let out_path_without_folder =
-                        out_path.to_str().unwrap().split_once("/").unwrap().1;
-                    let file_extract_path = base_dir
-                        .join(".packages")
-                        .join(self.name.as_str())
-                        .join(out_path_without_folder);
-                    if (&*c_file.name()).ends_with('/') {
-                        std::fs::create_dir_all(&file_extract_path)?;
-                    } else {
-                        if let Some(p) = file_extract_path.parent() {
-                            if !p.exists() {
-                                std::fs::create_dir_all(p)?;
-                            }
+            let file = std::fs::File::open(&path)?;
+            // TODO: switch to async_zip crate
+            let mut archive = zip::ZipArchive::new(file)?;
+            for i in 0..archive.len() {
+                let mut c_file = archive.by_index(i).unwrap();
+                let out_path = match c_file.enclosed_name() {
+                    Some(path) => path.to_owned(),
+                    None => continue,
+                };
+                let out_path_without_folder = out_path.to_str().unwrap().split_once("/").unwrap().1;
+                let file_extract_path = base_dir
+                    .join(".packages")
+                    .join(self.name.as_str())
+                    .join(out_path_without_folder);
+                if (&*c_file.name()).ends_with('/') {
+                    std::fs::create_dir_all(&file_extract_path)?;
+                } else {
+                    if let Some(p) = file_extract_path.parent() {
+                        if !p.exists() {
+                            std::fs::create_dir_all(p)?;
                         }
-                        // Note: we will be able to use tokio::io::copy() with async_zip
-                        let mut outfile = std::fs::File::create(file_extract_path)?;
-                        std::io::copy(&mut c_file, &mut outfile)?;
                     }
+                    // Note: we will be able to use tokio::io::copy() with async_zip
+                    let mut outfile = std::fs::File::create(file_extract_path)?;
+                    std::io::copy(&mut c_file, &mut outfile)?;
                 }
             }
         }
 
-        fpm::Package::process_fpm(
+        return fpm::Package::process_fpm(
             &root,
             base_dir,
             downloaded_package,
             self,
             download_translations,
             download_dependencies,
-            &fpm_path,
-        )
+            &root.join("FPM.ftd"),
+        );
+
+        fn get_fpm(name: &str) -> fpm::Result<String> {
+            let response_fpm = if let Ok(response_fpm) =
+                futures::executor::block_on(reqwest::get(format!("https://{}/FPM.ftd", name)))
+            {
+                response_fpm
+            } else {
+                futures::executor::block_on(reqwest::get(format!("http://{}/FPM.ftd", name)))?
+            };
+            Ok(String::from_utf8(
+                futures::executor::block_on(response_fpm.bytes())?
+                    .into_iter()
+                    .collect(),
+            )
+            .expect(""))
+        }
     }
 
     /// This function is called by `process()` or recursively called by itself.
