@@ -103,6 +103,7 @@ pub(crate) fn get_package_title(config: &fpm::Config) -> String {
         markdown: None,
         document_id: "index.ftd".to_string(),
         translated_data: Default::default(),
+        current_package: std::sync::Arc::new(std::sync::Mutex::new(vec![config.package.clone()])),
     };
     let main_ftd_doc = match ftd::p2::Document::from("index.ftd", fpm.as_str(), &lib) {
         Ok(v) => v,

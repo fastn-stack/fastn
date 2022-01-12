@@ -397,6 +397,9 @@ async fn process_ftd(
             markdown: None,
             document_id: main.id.clone(),
             translated_data: Default::default(),
+            current_package: std::sync::Arc::new(std::sync::Mutex::new(vec![config
+                .package
+                .clone()])),
         };
 
         let main_ftd_doc =
@@ -445,6 +448,9 @@ async fn process_ftd(
             markdown: None,
             document_id: main.id.clone(),
             translated_data,
+            current_package: std::sync::Arc::new(std::sync::Mutex::new(vec![config
+                .package
+                .clone()])),
         };
 
         let main_ftd_doc =
@@ -523,6 +529,9 @@ async fn process_ftd(
             markdown: None,
             document_id: main.id.clone(),
             translated_data,
+            current_package: std::sync::Arc::new(std::sync::Mutex::new(vec![config
+                .package
+                .clone()])),
         };
 
         let main_ftd_doc =

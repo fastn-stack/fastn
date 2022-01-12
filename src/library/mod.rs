@@ -9,7 +9,7 @@ pub struct Library {
     pub markdown: Option<(String, String)>,
     pub document_id: String,
     pub translated_data: fpm::TranslationData,
-    // pub current_package: std::sync::Arc<std::sync::Mutex<Vec<fpm::Package>>>,
+    pub current_package: std::sync::Arc<std::sync::Mutex<Vec<fpm::Package>>>,
 }
 
 impl ftd::p2::Library for Library {
@@ -26,41 +26,75 @@ impl ftd::p2::Library for Library {
             return Some(fpm::fpm_lib_ftd().to_string());
         }
 
-        if let Ok(v) = std::fs::read_to_string(self.config.root.join(format!("{}.ftd", name))) {
-            return Some(v);
-        }
-
-        if let Ok(original_path) = self.config.original_path() {
-            if let Ok(v) = std::fs::read_to_string(original_path.join(format!("{}.ftd", name))) {
-                return Some(v);
+        if let Ok(mut packages) = self.current_package.lock() {
+            let mut new_packages = packages.clone();
+            while let Some(current_package) = new_packages.last() {
+                if let Some((v, current_packages)) =
+                    get_data_from_package(name, current_package, &self, &new_packages)
+                {
+                    *packages = current_packages;
+                    drop(new_packages);
+                    return Some(v);
+                }
+                new_packages.pop();
             }
         }
 
-        let package_path = self.config.root.join(".packages");
-        if let Ok(v) = std::fs::read_to_string(package_path.join(format!("{}.ftd", name))) {
-            return Some(v);
-        }
-        // Check for Aliases of the packages
-        for (alias, package) in self.config.aliases().ok()? {
-            if name.starts_with(&alias) {
-                // Non index document
-                let non_alias_name = name.replacen(&alias, package.name.as_str(), 1);
-                if let Ok(v) = std::fs::read_to_string(
-                    package_path.join(format!("{}.ftd", non_alias_name.as_str())),
-                ) {
-                    return Some(v);
-                } else {
-                    // Index document check for the alias
+        return None;
+
+        fn get_data_from_package(
+            name: &str,
+            package: &fpm::Package,
+            lib: &Library,
+            current_packages: &Vec<fpm::Package>,
+        ) -> Option<(String, Vec<fpm::Package>)> {
+            let mut current_packages = current_packages.clone();
+            let path = if package.name.eq(&lib.config.package.name) {
+                lib.config.root.clone()
+            } else {
+                lib.config
+                    .root
+                    .join(".packages")
+                    .join(package.name.as_str())
+            };
+
+            if let Ok(v) = std::fs::read_to_string(path.join(format!("{}.ftd", name))) {
+                return Some((v, current_packages));
+            }
+
+            if let Some(o) = package.translation_of.as_ref() {
+                let original_path = lib.config.root.join(".packages").join(o.name.as_str());
+                if let Ok(v) = std::fs::read_to_string(original_path.join(format!("{}.ftd", name)))
+                {
+                    current_packages.push(o.clone());
+                    return Some((v, current_packages));
+                }
+            }
+
+            // Check for Aliases of the packages
+            for (alias, package) in package.aliases().ok()? {
+                if name.starts_with(&alias) || name.starts_with(package.name.as_str()) {
+                    // Non index document
+                    let package_path = lib.config.root.join(".packages");
+                    let non_alias_name = name.replacen(&alias, package.name.as_str(), 1);
                     if let Ok(v) = std::fs::read_to_string(
-                        package_path.join(format!("{}/index.ftd", non_alias_name.as_str())),
+                        package_path.join(format!("{}.ftd", non_alias_name.as_str())),
                     ) {
-                        return Some(v);
+                        current_packages.push(package.clone());
+                        return Some((v, current_packages));
+                    } else {
+                        // Index document check for the alias
+                        if let Ok(v) = std::fs::read_to_string(
+                            package_path.join(format!("{}/index.ftd", non_alias_name.as_str())),
+                        ) {
+                            current_packages.push(package.clone());
+                            return Some((v, current_packages));
+                        }
                     }
                 }
             }
+            return None;
         }
-
-        return std::fs::read_to_string(package_path.join(format!("{}/index.ftd", name))).ok();
 
         fn construct_fpm_ui(lib: &Library) -> String {
             let lang = match lib.config.package.language {

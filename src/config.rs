@@ -102,7 +102,7 @@ impl Config {
         Ok(self.root.join(".packages").join(o.name.as_str()))
     }
 
-    /// aliases() returns the list of the available aliases at the package level.
+    /*/// aliases() returns the list of the available aliases at the package level.
     pub fn aliases(&self) -> fpm::Result<std::collections::BTreeMap<&str, &fpm::Package>> {
         let mut resp = std::collections::BTreeMap::new();
         self.package
@@ -113,7 +113,7 @@ impl Config {
                 resp.insert(d.alias.as_ref().unwrap().as_str(), &d.package);
             });
         Ok(resp)
-    }
+    }*/
 
     /// `get_font_style()` returns the HTML style tag which includes all the fonts used by any
     /// ftd document. Currently this function does not check for fonts in package dependencies
@@ -199,7 +199,6 @@ impl Config {
         };
 
         fpm::dependency::ensure(&root, &mut package)?;
-        dbg!(&package);
 
         Ok(Config {
             package,
@@ -315,5 +314,17 @@ impl Package {
             }
             None => "".to_string(),
         }
+    }
+
+    /// aliases() returns the list of the available aliases at the package level.
+    pub fn aliases(&self) -> fpm::Result<std::collections::BTreeMap<&str, &fpm::Package>> {
+        let mut resp = std::collections::BTreeMap::new();
+        self.dependencies.iter().for_each(|d| {
+            resp.insert(
+                d.alias.as_ref().unwrap_or(&d.package.name).as_str(),
+                &d.package,
+            );
+        });
+        Ok(resp)
     }
 }
