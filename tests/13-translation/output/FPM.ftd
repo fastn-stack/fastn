@@ -6,7 +6,7 @@ language: hi
 translation-of: arpita-jaiswal/blog
 
 
--- fpm.translation-status-count: 
+-- fpm.translation-status-count:
 never-marked: 2
 missing: 4
 out-dated: 0
