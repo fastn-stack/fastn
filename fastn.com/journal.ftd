@@ -424,6 +424,80 @@ even if the key `config` is not found we can auto import it.
 Will it work? I guess we will only find out after Arpita has implemented it and
 it comes time for me to merge it.
 
+-- ft.h1: Thought: What About Search?
+
+I was showing a demo of FPM against Docusaurus to a friend today, and I feel we
+have done quite a decent job. What they have over us right now is Versioning and
+Search.
+
+On versioning we have already detailed the plans on how we will build a much
+superior version than what is out there using our tracking feature. But we have
+never discussed how can we implement search.
+
+How Docusaurus implements search is by embedding [Algolia's
+DocSearch](https://docsearch.algolia.com/docs/what-is-docsearch) widget.
+DocSearch provides an integrated search experience, a library to fetch data from
+backend, in this case Algolia, and a UI with autocomplete, Command Palette
+interface and so on. It's great as as drop in implementation.
+
+We can not really use DocSearch though. We can not use any JavaScript library
+for UI because our UI is in FTD. So how would we implement search?
+
+Let's assume for a moment that we are still going to use Algolia for indexing,
+core search feature. There are many alternatives,
+[MeiliSearch's](https://docs.meilisearch.com/learn/what_is_meilisearch/features.html),
+[typesence](https://typesense.org), even ElasticSearch, PostgreSQL Full Text
+Search and so on. It's not interesting what we are using.
+
+So lets say we are using one of these, and for purpose of this write-up lets say
+there is a function `search(query)` available in JavaScript that can initiate
+the search, and lets say it calls `found_results(results)` every time the result
+is ready. Let's assume these two functions do absolutely nothing with DOM.
+
+-- ft.h2: `message-host` to Rescue
+
+The key piece that we would use is `message-host` feature. We can build an input
+field in ftd using `ftd.input`, we currently have very limited `ftd.input`, eg
+it does not do variable binding, we will implement that, any input typed in
+`ftd.input` would be bound to a variable in `ftd`. Further we will have
+`$event-change$` for handling change event.
+
+We will basically call `$event-change$: message-host do-query`. `do-query` would
+be a "object constructor", it will create an object, with following shape:
+
+-- ft.code:
+lang: json
+
+{
+    "function": "search",
+    "params": {
+        "query": "<input-field-value>"
+    }
+}
+
+-- ft.markdown:
+
+This way changes will flow from FTD to JavaScript. In JavaScript, specifically,
+`fpm.js` we will call `search()` method, with `params` as input parameter.
+`search()` will perform a fetch from say Algolia.
+
+-- ft.h2: Passing Results Back From JavaScript
+
+JavaScript can modify any of the variables defined in FTD files. We are already
+using that to set `fpm-ui.mobile`, `fpm-ui.dark-mode` etc using that mechanism
+in `fpm.js`.
+
+We will have some fpm variables for search state. Say we can have
+`fpm.search-loading: boolean` to indicate show search is in progress. And
+`fpm.search-result: list result-item`, where `result-item` is some record which
+represents individual search result.
+
+Once these variables are passed, the ftd "re-renders" the document. This way
+search result can be shown to users.
+
+Should not be very hard to implement.
+
+
 -- ft.h1: Thought: Package Identity
 
 2nd Jan 2022
