@@ -46,14 +46,32 @@ pub fn render(s: &str, auto_links: bool, hard_breaks: bool) -> String {
     o.replace(MAGIC, "![")
 }
 
+pub fn markup_inline(s: &str) -> String {
+    let s = strip_image(s.trim());
+    let o = comrak::markdown_to_html(s.as_str(), &MD);
+    let o = o.trim().replace("\n", " ");
+    if o.starts_with("<p>") {
+        let l1 = o.chars().count();
+        let l2 = "<p></p>".len();
+        let l = if l1 > l2 { l1 - l2 } else { l1 };
+        return o
+            .chars()
+            .skip("<p>".len())
+            .take(l)
+            .collect::<String>()
+            .replace(MAGIC, "![");
+    }
+
+    o.replace(MAGIC, "![")
+}
+
 pub fn inline(s: &str) -> String {
     // this assumes the input is a single line of text
     let s = strip_image(s.trim());
 
-    // todo: currently remove assumption check that the input is a single line because of markup feature. recheck this later
-    // if s.contains('\n') {
-    //     eprintln!("render_inline called on an input with newlines: {}", s);
-    // }
+    if s.contains('\n') {
+        eprintln!("render_inline called on an input with newlines: {}", s);
+    }
     let o = comrak::markdown_to_html(s.as_str(), &MD);
     let o = o.trim().replace("\n", "");
     let l1 = o.chars().count();
