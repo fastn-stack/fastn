@@ -183,29 +183,36 @@ pub(crate) fn validate_zip_url(package: &fpm::Package) -> fpm::Result<()> {
         warning!("expected zip in fpm.package");
         return Ok(());
     };
-    let output = std::process::Command::new("git")
-        .args(["remote", "get-url", "--push", "origin"])
-        .output()
-        .unwrap();
-    if output.status.success() {
-        let github_repo_name = std::str::from_utf8(&output.stdout)
-            .unwrap()
-            .trim()
-            .replace(".git", "")
-            .replace("git@github.com:", "")
-            .replace("https://github.com/", "")
-            .to_lowercase();
-        let expected_zip_url = format!(
-            "github.com/{}/archive/refs/heads/main.zip",
-            github_repo_name
-        );
-        if &expected_zip_url != zip {
-            let warning_message = format!("warning: valid `zip` is expected in fpm.package.\nsuggestion: change `zip` value to '{}'\n", expected_zip_url);
-            warning!(warning_message);
-        }
-    }
 
-    Ok(())
+    let repo = match git2::Repository::open(std::env::current_dir()?) {
+        Ok(repo) => repo,
+        Err(_) => {
+            // let warning_message = "Warning! The current directory is not a git repository";
+            // warning!(warning_message.to_string());
+            return Ok(());
+        }
+    };
+    let x = match repo.find_remote("origin")?.url().to_owned() {
+        Some(remote_url) => {
+            let github_repo_name = remote_url
+                .trim()
+                .replace(".git", "")
+                .replace("git@github.com:", "")
+                .replace("https://github.com/", "")
+                .to_lowercase();
+            let expected_zip_url = format!(
+                "github.com/{}/archive/refs/heads/main.zip",
+                github_repo_name
+            );
+            if &expected_zip_url != zip {
+                let warning_message = format!("warning: valid `zip` is expected in fpm.package.\nsuggestion: change `zip` value to '{}'\n", expected_zip_url);
+                warning!(warning_message);
+            }
+            Ok(())
+        }
+        _ => Ok(()),
+    };
+    x
 }
 
 pub fn is_test() -> bool {

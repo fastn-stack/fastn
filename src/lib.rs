@@ -169,6 +169,9 @@ pub enum Error {
 
     #[error("FromPathBufError: {}", _0)]
     FromPathBufError(#[from] camino::FromPathBufError),
+
+    #[error("Git Error: {}", _0)]
+    GitError(#[from] git2::Error),
 }
 
 pub type Result<T> = std::result::Result<T, Error>;
