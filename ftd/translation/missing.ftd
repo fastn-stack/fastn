@@ -1,6 +1,6 @@
 -- import: fpm
 -- import: fpm-lib
--- import: fpm-ui
+/
 
 -- ftd.column:
 width: fill
@@ -32,7 +32,7 @@ src: https://res.cloudinary.com/dphj6havg/image/upload/v1640696994/info-1_jowsqn
 width: 16
 height: auto
 
---- ftd.text: $fpm-ui.translation-not-available
+--- ftd.text: $fpm.ui.translation-not-available
 /color: white
 style: semi-bold
 font: apple-system

@@ -1,5 +1,4 @@
 -- import: fpm
--- import: fpm-ui
 
 -- ftd.row message:
 width: fill
@@ -12,11 +11,11 @@ background-color: #f3f3f3
 --- ftd.column:
 spacing: 5
 
---- key-value: $fpm-ui.last-modified-on
+--- key-value: $fpm.ui.last-modified-on
 value: $fpm.current-document-last-modified-on
-default: $fpm-ui.never-synced
+default: $fpm.ui.never-synced
 
---- ftd.text: $fpm-ui.show-translation-status
+--- ftd.text: $fpm.ui.show-translation-status
 link: $fpm.translation-status-url
 background-color: #d27355
 border-radius: 13
@@ -73,14 +72,14 @@ position: center
 position: center
 boolean show-menu: false
 
---- ftd.text: $fpm-ui.other-available-languages
+--- ftd.text: $fpm.ui.other-available-languages
 if: $fpm.language is null
 
 --- ftd.row:
 width: fill
 if: $fpm.language is not null
 
---- ftd.text: $fpm-ui.current-language
+--- ftd.text: $fpm.ui.current-language
 width: 120
 align: center
 

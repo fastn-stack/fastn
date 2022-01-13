@@ -1,6 +1,6 @@
 -- import: fpm
 -- import: fpm-lib
--- import: fpm-ui
+
 
 -- boolean show-main: true
 
@@ -36,13 +36,13 @@ src: https://res.cloudinary.com/dphj6havg/image/upload/v1640696994/info-1_jowsqn
 width: 16
 height: auto
 
---- ftd.text: $fpm-ui.unapproved-heading
+--- ftd.text: $fpm.ui.unapproved-heading
 /color: white
 style: semi-bold
 font: apple-system
 padding-right: 20
 
---- ftd.text: $fpm-ui.show-unapproved-version
+--- ftd.text: $fpm.ui.show-unapproved-version
 if: $show-main
 $event-click$: toggle $show-main
 $event-click$: message-host show_fallback
@@ -61,7 +61,7 @@ font: apple-system
 background-color: #d27355
 color: white
 
---- ftd.text: $fpm-ui.show-latest-version
+--- ftd.text: $fpm.ui.show-latest-version
 if: not $show-main
 $event-click$: toggle $show-main
 $event-click$: message-host show_main

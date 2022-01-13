@@ -134,33 +134,64 @@ impl ftd::p2::Library for Library {
 
             format!(
                 indoc::indoc! {"
-                    -- boolean mobile: true
-                    -- boolean dark-mode: false
-                    -- boolean follow-system-dark-mode: true
-                    -- string last-modified-on: {last_modified_on}
-                    -- string never-synced: {never_synced}
-                    -- string show-translation-status: {show_translation_status}
-                    -- string other-available-languages: {other_available_languages}
-                    -- string current-language: {current_language}
-                    -- string translation-not-available: {translation_not_available}
-                    -- string unapproved-heading: {unapproved_heading}
-                    -- string show-unapproved-version: {show_unapproved_version}
-                    -- string show-latest-version: {show_latest_version}
-                    -- string show-outdated-version: {show_outdated_version}
-                    -- string out-dated-heading: {out_dated_heading}
-                    -- string out-dated-body: {out_dated_body}
-                    -- string language-detail-page: {language_detail_page}
-                    -- string language-detail-page-body: {language_detail_page_body}
-                    -- string total-number-of-documents: {total_number_of_documents}
-                    -- string document: {document}
-                    -- string status: {status}
-                    -- string missing: {missing}
-                    -- string never-marked: {never_marked}
-                    -- string out-dated: {out_dated}
-                    -- string upto-date: {upto_date}
-                    -- string welcome-fpm-page: {welcome_fpm_page}
-                    -- string welcome-fpm-page-subtitle: {welcome_fpm_page_subtitle}
-                    -- string language: {language}
+                    -- record ui-data:
+                    boolean mobile: true
+                    boolean dark-mode: false
+                    boolean follow-system-dark-mode: true
+                    string last-modified-on:
+                    string never-synced:
+                    string show-translation-status:
+                    string other-available-languages:
+                    string current-language:
+                    string translation-not-available:
+                    string unapproved-heading:
+                    string show-unapproved-version:
+                    string show-latest-version:
+                    string show-outdated-version:
+                    string out-dated-heading:
+                    string out-dated-body:
+                    string language-detail-page:
+                    string language-detail-page-body:
+                    string total-number-of-documents:
+                    string document:
+                    string status:
+                    string missing:
+                    string never-marked:
+                    string out-dated:
+                    string upto-date:
+                    string welcome-fpm-page:
+                    string welcome-fpm-page-subtitle:
+                    string language:
+
+
+                    -- ui-data ui:
+                    mobile: true
+                    dark-mode: false
+                    follow-system-dark-mode: true
+                    last-modified-on: {last_modified_on}
+                    never-synced: {never_synced}
+                    show-translation-status: {show_translation_status}
+                    other-available-languages: {other_available_languages}
+                    current-language: {current_language}
+                    translation-not-available: {translation_not_available}
+                    unapproved-heading: {unapproved_heading}
+                    show-unapproved-version: {show_unapproved_version}
+                    show-latest-version: {show_latest_version}
+                    show-outdated-version: {show_outdated_version}
+                    out-dated-heading: {out_dated_heading}
+                    out-dated-body: {out_dated_body}
+                    language-detail-page: {language_detail_page}
+                    language-detail-page-body: {language_detail_page_body}
+                    total-number-of-documents: {total_number_of_documents}
+                    document: {document}
+                    status: {status}
+                    missing: {missing}
+                    never-marked: {never_marked}
+                    out-dated: {out_dated}
+                    upto-date: {upto_date}
+                    welcome-fpm-page: {welcome_fpm_page}
+                    welcome-fpm-page-subtitle: {welcome_fpm_page_subtitle}
+                    language: {language}
                 "},
                 language = fpm::i18n::translation::search(
                     &lang,
@@ -313,6 +344,7 @@ impl ftd::p2::Library for Library {
             let mut fpm_base = format!(
                 indoc::indoc! {"
                         {fpm_base}
+                        {fpm_ui}
                         
                         -- string document-id: {document_id}
                         -- optional string diff:
@@ -341,6 +373,7 @@ impl ftd::p2::Library for Library {
     
                         "},
                 fpm_base = fpm::fpm_ftd().to_string(),
+                fpm_ui = construct_fpm_ui(lib),
                 document_id = lib.document_id,
                 title = fpm::utils::get_package_title(&lib.config),
                 package_name = lib.config.package.name,
