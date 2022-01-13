@@ -1,0 +1,43 @@
+-- import: fifthtry.github.io/Jupiter-theme as ft
+-- import: config
+
+
+
+-- ft.doc-page:
+toc: $ft.toc
+
+
+-- ft.h0: `fpm sync`
+
+`fpm sync` operates in two modes. If the package is hosted on `fpm-repo` then it
+syncs the content of local folder with remote [not yet implemented]. If the package
+is hosted on `github` etc, then `sync` creates a snapshot of modified files in
+`.history` folder.
+
+
+-- ft.h1: Output
+
+
+-- ft.code:
+lang: sh
+
+fpm sync
+Repo for amitu is github, directly syncing with .history.
+a/b.ftd
+index.ftd
+FPM.ftd
+
+
+-- ft.code: when everything is up to date.
+lang: sh
+
+fpm sync
+Everything is upto date.
+
+
+-- ft.markdown:
+
+`fpm sync` first reports the repo of the package name, if its `github` it says
+its `directly syncing with .history`.
+
+Then it lists all the files that have been modified and updated.
