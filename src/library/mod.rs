@@ -4,6 +4,7 @@ mod http;
 mod sqlite;
 mod toc;
 
+#[derive(Debug)]
 pub struct Library {
     pub config: fpm::Config,
     pub markdown: Option<(String, String)>,
@@ -135,9 +136,6 @@ impl ftd::p2::Library for Library {
             format!(
                 indoc::indoc! {"
                     -- record ui-data:
-                    boolean mobile: true
-                    boolean dark-mode: false
-                    boolean follow-system-dark-mode: true
                     string last-modified-on:
                     string never-synced:
                     string show-translation-status:
@@ -165,9 +163,6 @@ impl ftd::p2::Library for Library {
 
 
                     -- ui-data ui:
-                    mobile: true
-                    dark-mode: false
-                    follow-system-dark-mode: true
                     last-modified-on: {last_modified_on}
                     never-synced: {never_synced}
                     show-translation-status: {show_translation_status}
@@ -346,6 +341,9 @@ impl ftd::p2::Library for Library {
                         {fpm_base}
                         {fpm_ui}
                         
+                        -- boolean mobile: true
+                        -- boolean dark-mode: false
+                        -- boolean follow-system-dark-mode: true
                         -- string document-id: {document_id}
                         -- optional string diff:
                         -- optional string last-marked-on:
@@ -375,7 +373,7 @@ impl ftd::p2::Library for Library {
                 fpm_base = fpm::fpm_ftd().to_string(),
                 fpm_ui = construct_fpm_ui(lib),
                 document_id = lib.document_id,
-                title = fpm::utils::get_package_title(&lib.config),
+                title = lib.config.package.name,
                 package_name = lib.config.package.name,
                 home_url = format!("//{}", lib.config.package.name)
             );

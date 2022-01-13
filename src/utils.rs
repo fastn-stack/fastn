@@ -92,6 +92,10 @@ pub(crate) async fn get_last_modified_on(path: &camino::Utf8PathBuf) -> Option<S
         .map(|v| nanos_to_rfc3339(v))
 }
 
+/*
+// todo get_package_title needs to be implemented
+    @amitu need to come up with idea
+    This data would be used in fpm.title
 pub(crate) fn get_package_title(config: &fpm::Config) -> String {
     let fpm = if let Ok(fpm) = std::fs::read_to_string(config.root.join("index.ftd")) {
         fpm
@@ -115,7 +119,7 @@ pub(crate) fn get_package_title(config: &fpm::Config) -> String {
         Some(x) => x.rendered.clone(),
         _ => config.package.name.clone(),
     }
-}
+}*/
 
 #[async_recursion::async_recursion(?Send)]
 pub async fn copy_dir_all(

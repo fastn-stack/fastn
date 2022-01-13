@@ -1,7 +1,7 @@
 (function () {
-    const FPM_MOBILE = "fpm-ui#mobile";
-    const FPM_DARK_MODE = "fpm-ui#dark-mode"
-    const FPM_FOLLOW_SYSTEM_DARK_MODE = "fpm-ui#follow-system-dark-mode"
+    const FPM_MOBILE = "fpm#mobile";
+    const FPM_DARK_MODE = "fpm#dark-mode"
+    const FPM_FOLLOW_SYSTEM_DARK_MODE = "fpm#follow-system-dark-mode"
     const DARK_MODE_COOKIE = "fpm-dark-mode";
     const COOKIE_SYSTEM_LIGHT = "system-light";
     const COOKIE_SYSTEM_DARK = "system-dark";
