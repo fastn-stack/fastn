@@ -286,9 +286,7 @@ impl Header {
                 continue;
             }
             if k == name {
-                for v in v.split(',') {
-                    strings.push(v.trim());
-                }
+                strings.push(v.as_str());
             }
         }
         strings

@@ -1,13 +1,13 @@
--- import: record as dd
+-- import: record
 exposing: *
 
 -- import: lib
-exposing: amitu
-
--- string var: Madhav
+exposing: amitu, default-phone
 
 -- ftd.boolean: $bool
 
 -- ftd.text: $amitu.name
+
+-- ftd.text: $default-phone
 
 -- foo:

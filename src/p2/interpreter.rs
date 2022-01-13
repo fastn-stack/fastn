@@ -355,6 +355,13 @@ impl<'a> Interpreter<'a> {
                             p1.line_number,
                         );
                     }
+                    t => {
+                        return ftd::e2(
+                            format!("unexpected thing `{}`: `{:?}`", p1.name, t),
+                            doc.name,
+                            p1.line_number,
+                        )
+                    }
                 };
             }
             self.bag.extend(thing);
@@ -686,7 +693,13 @@ impl<'a> Interpreter<'a> {
         if p1.name != "import" {
             return;
         }
-        let exposings = p1.header.strings("exposing");
+        let exposings = {
+            let mut exposings = vec![];
+            for v in p1.header.strings("exposing") {
+                exposings.extend(v.split(',').map(|v| v.trim()));
+            }
+            exposings
+        };
         if exposings.contains(&"*") {
             let tmp_bag = self.bag.clone();
             for (n, thing) in tmp_bag {
