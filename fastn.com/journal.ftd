@@ -1,3 +1,5 @@
+-- import: fifthtry.github.io/Jupiter-theme as ft
+-- import: config
 
 -- ft.doc-page:
 toc: $ft.toc
@@ -27,6 +29,400 @@ So links never break (and original author can keep updating document URL at whim
 
 (on how having article.page allows us to get just the content of a page, without
 header/sidebar/footer etc).
+
+
+-- ft.h1: The Struggle With Prelude
+
+13th Jan 2022
+
+We had a feature called prelude. You can define a file `FPM/prelude.ftd`, and
+this file is prepended to the top of every `.ftd` file in the package when its
+being evaluated by FTD.
+
+-- ft.h2: Motivation
+
+The motivation for this feature was to not have to repeat some lines in every
+file, and also so it becomes easy to change one place and have it affect all
+files. There were two main use cases for this:
+
+-- ft.code:
+lang: ftd
+
+\-- import: some-dependency.some-module-in-the-theme as ft
+
+-- ft.markdown:
+
+Here we wanted to be able to import different modules from inside any dependency
+to all files.
+
+We can do dependency aliasing, so `some-dependency` is defined in `FPM.ftd` as
+`-- fpm.dependency: some-org.github.io/Some-Dependency as some-dependency`.
+
+The other main use cases was config. In every package we may want to set some
+global variables that should be available to all FTD files in that package. We
+can but them in say `config.ftd`, and then in `FPM/prelude.ftd` we can import
+the `config`, and it becomes available everywhere.
+
+-- ft.h2: This Approach Did Not Workout
+
+The problem with this approach was that it fails if you import any local FTD file
+from `FTD/prelude.ftd`. Consider we have a document `foo.ftd`, and say `foo.ftd`
+imports `bar.ftd`, if we put `-- import: foo` in prelude, this line would be
+included when `bar.ftd` would be evaluated, which means `bar.ftd` will try to
+import `foo.ftd`, and `foo.ftd` is importing `bar.ftd`, which leads to recursion.
+
+Now we can technically try to solve recursion issue, it's a general deficiency
+of `FTD` that we can not handle recursion. We should be like python, which
+allows such recursive imports, but symbols available to each other when two
+modules import each other is only the symbols defined till that point for one
+of them in worst case.
+
+We can and will try to make our system more robust, but I did not like putting
+that fix as a dependency for prelude. It is possible that recursive dependency
+would cause surprises, and we may not be able to solve it cleanly. So I want to
+hold on to question of recursive module imports and not link it with prelude.
+
+We decide and removed this prelude feature {recently}.
+
+-- ftd.text recently: recently
+link: https://github.com/FifthTry/fpm/pull/57
+
+-- ft.h2: The Second Try
+
+Instead of `FPM/prelude.ftd` we decided what if we have a section `prelude` in
+`FPM.ftd` itself:
+
+-- ft.code:
+lang: ftd
+
+\-- import: fpm
+\-- fpm.package: some-package
+\-- fpm.dependency: some-org.github.io/Some-Dependency as some-dependency
+\-- fpm.prelude:
+ft: some-dependency.some-module-in-the-theme
+foo: foo
+
+-- ft.markdown:
+
+So we would import `some-dependency.some-module-in-the-theme as ft` in every
+document. This tells us explicitly which documents are being imported, eg `foo`
+and we would not include the prelude in files that are listed in `prelude`
+section.
+
+This sounded like a good idea, but it too did not workout. Say `foo.ftd` imported
+`bar.ftd`. When evaluating `bar.ftd` we would include the `prelude` stuff, so `bar`
+will try to import `foo`, and we are back to recursion. We could have done some
+document analysis, see that `bar` is importing `foo` and `foo` is "special", so
+treat `bar` too as special and do not do auto import prelude stuff, but we felt
+its too magical, and generally did not like it.
+
+We also considered and then rejected to put the entire "prelude" chain in `FPM`
+folder itself, so we know what documents are special, and prelude can only import
+from FPM and not elsewhere, but it too was too much magic. And there was also a
+risk that it may bring every document in `FPM` folder due to transitive
+dependencies.
+
+-- ft.h2: The Next Attempt
+
+We finally decided, we will give up on this line altogether and look at it more
+deeply. Why can't we have a normal module `prelude.ftd` or whatever you want to
+call it, and *most* of the files in the package can chose to import `prelude`
+and get everything they want. This way we do not have anything special happening
+at all, everything is explicit.
+
+To implement this we realise we need a feature, we want to be able to import a
+bunch of "symbols" in `prelude`, and export them from prelude. Eg if `prelude`
+is:
+
+-- ft.code:
+lang: ftd
+
+\-- import: foo
+\-- string message: hello
+
+-- ft.markdown:
+
+We should be able to do:
+
+-- ft.code:
+lang: ftd
+
+\-- import: prelude
+exposing: *
+
+\-- foo.hello: $message
+
+-- ft.markdown:
+
+We felt quite good about the design and Arpita wrote up a quick
+[PR](https://github.com/FifthTry/ftd/pull/72).
+
+Unfortunately I am not at all happy with it, and here is the thought process.
+
+-- ft.h2: Import Star Is An Anti Pattern
+
+As soon as I saw the code snippet in the PR:
+
+-- ft.code:
+lang: ftd
+
+\-- import: record
+exposing: *
+
+\-- import: lib
+exposing: amitu, default-phone
+
+\-- ftd.boolean: $bool
+
+\-- ftd.text: $amitu.name
+
+\-- ftd.text: $default-phone
+
+\-- address:
+
+-- ft.markdown:
+
+I started regretting it. Here things are still not too bad, imagine if both
+`exposing` had used `*`, we wouldn't know if `amitu` and `default-phone` came
+from `record` or `lib`.
+
+In virtually every language `import *` is considered an anti pattern for this
+reason, or it should be. To ask readers to look at multiple files to figure out
+where some symbol is coming from. Sure a good editor can help, you can
+`Cmd-click` on a symbol and go to it's definition. But it requires tooling for
+reading, and FTD we are designing with hopes that low end editors can also be
+used without issues. This is why ftd does not have indentation.
+
+But isn't `import *` a good patter for `prelude`? In Rust for example, many
+libraries recommend:
+
+-- ft.code:
+lang: rs
+
+use diesel.prelude.*;
+
+-- ft.markdown:
+
+If we go with this thought process, then too the PR is wrong because `exposing`
+only exposes "symbols" defined by the imported module, meaning variables and
+components etc. It does not bring in imports from that package.
+
+So if this was the prelude file:
+
+-- ft.code:
+lang: ftd
+
+\-- import: foo
+\-- string message: hello
+
+-- ft.markdown:
+
+And we did `-- import: prelude exposing *` (btw we should also support this
+"compact syntax" along with the `exposing` header to make things one-liner), it
+will bring in `message`, but not `foo`.
+
+And `prelude` must not define new symbols, it should be a just a file to import
+a bunch of things and create a useful common place.
+
+So as it stands the current PR is both an anti pattern and useless for the task
+at hand.
+
+-- ft.h2: Yet Another Proposal
+
+Is this the fifth proposal? Not sure. I swear Arpita this was not on purpose, to
+create an elaborate joke.
+
+What if we did this:
+
+-- ft.code:
+lang: ftd
+
+\-- fpm.dependency: fifthtry.github.io/Jupiter-theme as j
+book: j.book
+ft: j.ft
+
+
+-- ft.h2: A Detour: Index Only Or Package Interface Specific Documents?
+
+In FPM we have concept of "package-interface". The idea is any package can act
+as a package interface, and then any number of other packages can implement that
+package interface, and all packages implementing a given package interfaces can
+be used interchangeably.
+
+Currently the few packages we have so far all put all their code in `index.ftd`
+file. Actually this was so till a while back and when Arpita was creating a package
+interface for slides, she created a bunch of documents, `slide-1`, `slide-2` and
+so on.
+
+We have been thinking of `-- import: foo exposing *` from the point of view of
+making package index the "main" place which contains all the symbols exported by
+a package, but we can still define them in separate files, so `index.ftd` does
+not become too big.
+
+But the question is why? Why did we feel a need to bring everything together into
+a single `index.ftd` instead of importing different modules? Because of our package
+aliasing. When defining a dependency we have `as <alias>` syntax to make it easy
+to alias the package and then use the package name as a single word from any
+module.
+
+-- ft.code:
+lang: ftd
+
+\-- fpm.dependency: fifthtry.github.io/K-theme as k
+
+-- ft.markdown:
+
+With the above we can do:
+
+-- ft.code:
+lang: ftd
+
+\-- import: k
+
+-- ft.markdown:
+
+In any document and then use things defined on `k` using `k.foo` name. But it
+only works if `k` contains all the symbols we care about. If they are spread
+in different modules we have to do more imports.
+
+It was a small thing, but now the prelude is under discussion, we do not have
+to worry about it much.
+
+And here is another more important point, which forces us to not have any
+symbol in the `index.ftd` file, and leave it only for documentation etc.
+
+See, a package may implement more than one package interface. Say we have a
+package interface `FifthTry/article`, which defines a bunch of components for
+writing "articles", which can be say blog post content, or book content, or
+content of a slide show etc. Article defines headings, code block, image,
+paragraph etc, which all prose will have.
+
+Similarly we have a package `FifthTry/slide` which defines things like `slide`
+and `slide-intro` etc.
+
+Now when someone is using a theme for slide, say a unicorn theme for slide, that
+theme will implement `slide` from `FifthTry/slide` but also `h1` from
+`FifthTry/article`. Now if we put the two together in a single `index.ftd`,
+authors will have to write:
+
+-- ft.code:
+lang: ftd
+
+\-- import: unicorn-slide as s
+
+\-- s.slide:
+
+\--- s.h1: slide heading
+
+-- ft.markdown:
+
+Problem here is not content is making the assumption that both `FifthTry/slide`
+and `FifthTry/article` are implemented by a single theme. What if we wanted to
+use one implementation of `FifthTry/slide` but another implementation of
+`FifthTry/article`, we will have to change our content files to use two modules.
+
+So we have decided that every package interface will define one or more modules
+that will be as unique as possible to that package interface (other package
+interfaces should avoid using that name). So we should have written:
+
+-- ft.code:
+lang: ftd
+
+\-- import: unicorn-slide.slide as s
+\-- import: unicorn-slide.article as a
+
+\-- s.slide:
+
+\--- a.h1: slide heading
+
+-- ft.markdown:
+
+Now technically we could have also written:
+
+-- ft.code:
+lang: ftd
+
+\-- import: unicorn-slide as s
+\-- import: unicorn-slide as a
+
+\-- s.slide:
+
+\--- a.h1: slide heading
+
+-- ft.markdown:
+
+If we did this then everything defined at `index.ftd` in `unicorn-slide` was
+okay. But how do we "force" authors to do this? If they do not do that they will
+have harder time switching themes. So if `FifthTry/slide` had defined `slide.ftd`
+with `slide` component it would be forced by all authors to do the former.
+
+-- ft.h2: Coming Back To The Proposal
+
+So lets review this:
+
+-- ft.code:
+lang: ftd
+
+\-- fpm.dependency: fifthtry.github.io/Jupiter-theme as j
+book: j.book
+a: j.article
+
+-- ft.markdown:
+
+With this we will now auto import all dependencies eg `j` in all documents.
+Further we will also import `j.book` as `book` and `j.article` as `a` and so
+on.
+
+This way if we wanted to use `FifthTry/article` from some other theme, we would
+do:
+
+-- ft.code:
+lang: ftd
+
+\-- fpm.dependency: fifthtry.github.io/Jupiter-theme as j
+book: j.book
+
+\-- fpm.dependency: fifthtry.github.io/Some-Other-theme as k
+a: k.article
+
+-- ft.markdown:
+
+And we will make the following an error:
+
+-- ft.code:
+lang: ftd
+
+\-- fpm.dependency: fifthtry.github.io/Jupiter-theme as j
+book: j.book
+a: j.article
+
+\-- fpm.dependency: fifthtry.github.io/Some-Other-theme as k
+a: k.article
+
+-- ft.h2: But What Happened To `config.ftd`?
+
+We still will have to import `config.ftd` from all files. What can we do about it?
+
+We can do the same thing at current package as well:
+
+-- ft.code:
+lang: ftd
+
+\-- fpm.package: fpm.dev
+zip: github.com/fifthtry/fpm.dev/archive/refs/heads/main.zip
+config: config
+
+-- ft.markdown:
+
+For now lets say we only allow one key `config`, and it will be auto imported
+in all documents. Do not import other documents from `config` and you will be
+good, else we could be back to recursive import issue.
+
+We can also make this automatic feature, if a file `config.ftd` is present and
+even if the key `config` is not found we can auto import it.
+
+Will it work? I guess we will only find out after Arpita has implemented it and
+it comes time for me to merge it.
 
 -- ft.h1: Thought: Package Identity
 
