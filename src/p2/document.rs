@@ -55,7 +55,9 @@ impl Document {
         ftd::Element::get_value_event_dependencies(&self.main.container.children, &mut data);
         ftd::Element::get_style_event_dependencies(&self.main.container.children, &mut data);
 
-        data
+        data.into_iter()
+            .filter(|(_, v)| !v.dependencies.is_empty())
+            .collect()
     }
 
     pub fn rerender(&mut self, id: &str, doc_id: &str) -> ftd::p1::Result<ftd::Document> {
