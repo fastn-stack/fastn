@@ -543,7 +543,7 @@ impl ChildComponent {
                 )?),
                 None => None,
             },
-            root: root.full_name.clone(),
+            root: doc.resolve_name(line_number, root.full_name.as_str())?,
             events: p1.get_events(line_number, doc, &all_arguments)?,
             is_recursive: false,
             arguments: local_arguments,
@@ -2132,7 +2132,7 @@ pub fn recursive_child_component(
     )?);
 
     return Ok(ftd::ChildComponent {
-        root: sub.name.to_string(),
+        root: doc.resolve_name(sub.line_number, &sub.name.to_string())?,
         condition: match sub.header.str_optional(doc.name, sub.line_number, "if")? {
             Some(expr) => Some(ftd::p2::Boolean::from_expression(
                 expr,
