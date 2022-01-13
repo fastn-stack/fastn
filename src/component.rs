@@ -734,6 +734,7 @@ fn reevalute_markups(
         if let ftd::IText::Markup(m) = markup.itext {
             *markups = m;
         }
+        markups.line = true;
         markups.children = markup.children;
         return Ok(());
     }

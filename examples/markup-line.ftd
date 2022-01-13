@@ -1,0 +1,6 @@
+-- ftd.text:
+
+hello {world}.
+
+-- ftd.text world: World
+color: green
