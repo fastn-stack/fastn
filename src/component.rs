@@ -715,7 +715,7 @@ fn reevalute_markups(
                 text: if !markups.line {
                     ftd::markdown(v)
                 } else {
-                    ftd::markdown_line(v)
+                    ftd::markup_line(v)
                 },
                 ..Default::default()
             });
@@ -767,7 +767,7 @@ fn reevalute_markup(
         if text[idx].eq(&'{') {
             children.push(ftd::Markup {
                 itext: ftd::IText::Text(ftd::Text {
-                    text: ftd::markdown_line(traverse_string.as_str()),
+                    text: ftd::markup_line(traverse_string.as_str()),
                     ..Default::default()
                 }),
                 children: vec![],
@@ -800,7 +800,7 @@ fn reevalute_markup(
     if !traverse_string.is_empty() && !children.is_empty() {
         children.push(ftd::Markup {
             itext: ftd::IText::Text(ftd::Text {
-                text: ftd::markdown_line(traverse_string.as_str()),
+                text: ftd::markup_line(traverse_string.as_str()),
                 ..Default::default()
             }),
             children: vec![],
@@ -856,7 +856,7 @@ fn reevalute_markup(
                 let t = {
                     let mut t = t.clone();
                     if let Some(text) = text {
-                        t.text = ftd::markdown_line(text);
+                        t.text = ftd::markup_line(text);
                         t.common.reference = None;
                     }
                     t
@@ -867,7 +867,7 @@ fn reevalute_markup(
                 let t = {
                     let mut t = t.clone();
                     if let Some(text) = text {
-                        t.text = ftd::markdown_line(text);
+                        t.text = ftd::markup_line(text);
                         t.common.reference = None;
                     }
                     t
@@ -878,7 +878,7 @@ fn reevalute_markup(
                 let t = {
                     let mut t = t.clone();
                     if let Some(text) = text {
-                        t.text = ftd::markdown_line(text);
+                        t.text = ftd::markup_line(text);
                         t.common.reference = None;
                     }
                     t
@@ -889,7 +889,7 @@ fn reevalute_markup(
                 let t = {
                     let mut t = t.clone();
                     if let Some(text) = text {
-                        t.text = ftd::markdown_line(text);
+                        t.text = ftd::markup_line(text);
                         t.common.reference = None;
                     }
                     t
@@ -900,7 +900,7 @@ fn reevalute_markup(
                 let t = {
                     let mut t = t.clone();
                     if let Some(text) = text {
-                        t.text = ftd::markdown_line(text);
+                        t.text = ftd::markup_line(text);
                         t.common.reference = None;
                     }
                     t
@@ -911,7 +911,7 @@ fn reevalute_markup(
                 let mut t = {
                     let mut t = t.clone();
                     if let Some(text) = text {
-                        t.text = ftd::markdown_line(text);
+                        t.text = ftd::markup_line(text);
                         t.common.reference = None;
                     }
                     t

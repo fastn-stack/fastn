@@ -3285,7 +3285,7 @@ mod test {
     #[test]
     fn components() {
         let title = ftd::Markups {
-            text: ftd::markdown_line("What kind of documentation?"),
+            text: ftd::markup_line("What kind of documentation?"),
             line: true,
             common: ftd::Common {
                 position: Some(ftd::Position::Center),
@@ -3295,7 +3295,7 @@ mod test {
             ..Default::default()
         };
         let about = ftd::Markups {
-            text: ftd::markdown_line(
+            text: ftd::markup_line(
                 indoc::indoc!(
                     "
                     UI screens, behaviour and journeys, database tables, APIs, how to
@@ -3380,7 +3380,7 @@ mod test {
     #[test]
     fn conditional_body() {
         let title = ftd::Markups {
-            text: ftd::markdown_line("What kind of documentation?"),
+            text: ftd::markup_line("What kind of documentation?"),
             common: ftd::Common {
                 position: Some(ftd::Position::Center),
                 reference: Some(s("@title@0")),
@@ -3390,7 +3390,7 @@ mod test {
             ..Default::default()
         };
         let second_title = ftd::Markups {
-            text: ftd::markdown_line("second call"),
+            text: ftd::markup_line("second call"),
             common: ftd::Common {
                 position: Some(ftd::Position::Center),
                 reference: Some(s("@title@1")),
@@ -3400,7 +3400,7 @@ mod test {
             ..Default::default()
         };
         let about = ftd::Markups {
-            text: ftd::markdown_line(
+            text: ftd::markup_line(
                 indoc::indoc!(
                     "
                     UI screens, behaviour and journeys, database tables, APIs, how to
@@ -3522,7 +3522,7 @@ mod test {
     #[test]
     fn conditional_header() {
         let title = ftd::Markups {
-            text: ftd::markdown_line("What kind of documentation?"),
+            text: ftd::markup_line("What kind of documentation?"),
             common: ftd::Common {
                 position: Some(ftd::Position::Center),
                 reference: Some(s("@title@0")),
@@ -3532,7 +3532,7 @@ mod test {
             ..Default::default()
         };
         let second_title = ftd::Markups {
-            text: ftd::markdown_line("second call"),
+            text: ftd::markup_line("second call"),
             common: ftd::Common {
                 position: Some(ftd::Position::Center),
                 reference: Some(s("@title@1")),
@@ -3542,7 +3542,7 @@ mod test {
             ..Default::default()
         };
         let third_title = ftd::Markups {
-            text: ftd::markdown_line("third call"),
+            text: ftd::markup_line("third call"),
             common: ftd::Common {
                 position: Some(ftd::Position::Center),
                 reference: Some(s("@title@2")),
@@ -3552,7 +3552,7 @@ mod test {
             ..Default::default()
         };
         let about = ftd::Markups {
-            text: ftd::markdown_line(
+            text: ftd::markup_line(
                 indoc::indoc!(
                     "
                     UI screens, behaviour and journeys, database tables, APIs, how to
