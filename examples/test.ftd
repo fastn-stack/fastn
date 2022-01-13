@@ -1,3 +1,13 @@
--- import: record
+-- import: record as dd
+exposing: *
 
--- record.foo:
+-- import: lib
+exposing: amitu
+
+-- string var: Madhav
+
+-- ftd.boolean: $bool
+
+-- ftd.text: $amitu.name
+
+-- foo:

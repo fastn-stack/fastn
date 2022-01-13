@@ -17,8 +17,14 @@ impl ToString for Document {
 impl Document {
     fn get_data(&self) -> ftd::Map {
         let mut d: ftd::Map = Default::default();
-        for (k, v) in self.data.iter() {
-            if let ftd::p2::Thing::Variable(ftd::Variable { value, .. }) = v {
+        for k in self.data.keys() {
+            let mut key = k.to_string();
+            while let Some(ftd::p2::Thing::Reference(ref c)) = self.data.get(key.as_str()) {
+                key = c.to_string();
+            }
+            if let Some(ftd::p2::Thing::Variable(ftd::Variable { value, .. })) =
+                self.data.get(key.as_str())
+            {
                 let value = match value {
                     ftd::Value::Boolean { value } => value.to_string(),
                     ftd::Value::Integer { value } => value.to_string(),
@@ -271,6 +277,7 @@ impl Document {
     ) -> ftd::p1::Result<Document> {
         let mut interpreter = ftd::p2::interpreter::Interpreter::new(lib);
         let instructions = interpreter.interpret(name, source)?;
+        // dbg!(&instructions);
         let rt = ftd::RT::from(name, interpreter.aliases, interpreter.bag, instructions);
 
         Ok(Document {

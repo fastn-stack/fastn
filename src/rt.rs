@@ -89,7 +89,11 @@ pub(crate) fn store_invocations(
     >,
 ) {
     for (k, v) in invocations.into_iter() {
-        match bag.get_mut(k.as_str()).unwrap() {
+        let mut key = k;
+        while let Some(ftd::p2::Thing::Reference(ref c)) = bag.get(key.as_str()) {
+            key = c.to_string();
+        }
+        match bag.get_mut(key.as_str()).unwrap() {
             ftd::p2::Thing::Component(ref mut c) => {
                 if !c.kernel {
                     c.invocations.extend(v)

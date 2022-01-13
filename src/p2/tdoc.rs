@@ -542,29 +542,41 @@ impl<'a> TDoc<'a> {
                     full_name
                 };
                 return match doc.bag.get(name.as_str()) {
-                    Some(a) => Ok((a.to_owned(), remaining_value)),
+                    Some(a) => {
+                        if let ftd::p2::Thing::Reference(a) = a {
+                            get_initial_thing(doc, line_number, a.as_str())
+                                .map(|(v, _)| (v, remaining_value))
+                        } else {
+                            Ok((a.to_owned(), remaining_value))
+                        }
+                    }
                     None => doc.err("not found", name, "get_thing", line_number),
                 };
             }
-            return Ok(match get_initial_thing_(doc, None, doc.name, name) {
-                Some(a) => a,
-                None => {
-                    if let Some((m, v)) = name.split_once('.') {
-                        match get_initial_thing_(doc, Some(m), m, v) {
-                            None => return doc.err("not found", name, "get_thing", line_number),
-                            Some(a) => a,
+            return Ok(
+                match get_initial_thing_(doc, None, doc.name, name, line_number) {
+                    Some(a) => a,
+                    None => {
+                        if let Some((m, v)) = name.split_once('.') {
+                            match get_initial_thing_(doc, Some(m), m, v, line_number) {
+                                None => {
+                                    return doc.err("not found", name, "get_thing", line_number)
+                                }
+                                Some(a) => a,
+                            }
+                        } else {
+                            return doc.err("not found", name, "get_thing", line_number);
                         }
-                    } else {
-                        return doc.err("not found", name, "get_thing", line_number);
                     }
-                }
-            });
+                },
+            );
 
             fn get_initial_thing_(
                 doc: &ftd::p2::TDoc,
                 root_name: Option<&str>,
                 doc_name: &str,
                 name: &str,
+                line_number: usize,
             ) -> Option<(ftd::p2::Thing, Option<String>)> {
                 let (name, remaining_value) =
                     if let Some((v, remaining_value)) = name.split_once('.') {
@@ -578,7 +590,15 @@ impl<'a> TDoc<'a> {
                     .get(format!("{}#{}", doc_name, name).as_str())
                     .map(ToOwned::to_owned)
                 {
-                    Some(a) => Some((a, remaining_value)),
+                    Some(a) => {
+                        if let ftd::p2::Thing::Reference(a) = a {
+                            get_initial_thing(doc, line_number, a.as_str())
+                                .ok()
+                                .map(|(v, _)| (v, remaining_value))
+                        } else {
+                            Some((a, remaining_value))
+                        }
+                    }
                     None => match root_name {
                         Some(doc_name) => match doc.aliases.get(doc_name) {
                             Some(g) => doc

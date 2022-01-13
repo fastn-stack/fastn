@@ -279,6 +279,21 @@ impl Header {
         }
     }
 
+    pub fn strings(&self, name: &str) -> Vec<&str> {
+        let mut strings = vec![];
+        for (_, k, v) in self.0.iter() {
+            if k.starts_with('/') {
+                continue;
+            }
+            if k == name {
+                for v in v.split(',') {
+                    strings.push(v.trim());
+                }
+            }
+        }
+        strings
+    }
+
     pub fn str(&self, doc_id: &str, line_number: usize, name: &str) -> Result<&str> {
         for (_, k, v) in self.0.iter() {
             if k.starts_with('/') {

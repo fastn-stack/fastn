@@ -95,6 +95,7 @@ impl<'a> Interpreter<'a> {
                     .await?;
                     self.add_library_to_bag(library_name.as_str())
                 }
+                self.resolve_exposing(p1, library_name.as_str(), name);
                 continue;
             }
 
@@ -397,6 +398,7 @@ impl<'a> Interpreter<'a> {
                     self.interpret_(library_name.as_str(), s.as_str(), false, d_get, d_processor)?;
                     self.add_library_to_bag(library_name.as_str())
                 }
+                self.resolve_exposing(p1, library_name.as_str(), name);
                 continue;
             }
 
@@ -661,6 +663,13 @@ impl<'a> Interpreter<'a> {
                             p1.line_number,
                         );
                     }
+                    t => {
+                        return ftd::e2(
+                            format!("unexpected thing `{}`: `{:?}`", p1.name, t),
+                            doc.name,
+                            p1.line_number,
+                        )
+                    }
                 };
             }
             self.bag.extend(thing);
@@ -671,6 +680,34 @@ impl<'a> Interpreter<'a> {
             self.aliases = aliases;
         }
         Ok(instructions)
+    }
+
+    fn resolve_exposing(&mut self, p1: &ftd::p1::Section, library_name: &str, name: &str) {
+        if p1.name != "import" {
+            return;
+        }
+        let exposings = p1.header.strings("exposing");
+        if exposings.contains(&"*") {
+            let tmp_bag = self.bag.clone();
+            for (n, thing) in tmp_bag {
+                if let Some(v) = n.strip_prefix(format!("{}#", library_name).as_str()) {
+                    self.bag.remove(n.as_str());
+                    let new_name = format!("{}#{}", name, v);
+                    self.bag.insert(new_name.clone(), thing);
+                    self.bag.insert(n, ftd::p2::Thing::Reference(new_name));
+                }
+            }
+        } else {
+            for expose in exposings {
+                let full_name = format!("{}#{}", library_name, expose);
+                if let Some(thing) = self.bag.remove(full_name.as_str()) {
+                    let new_name = format!("{}#{}", name, expose);
+                    self.bag.insert(new_name.clone(), thing);
+                    self.bag
+                        .insert(full_name, ftd::p2::Thing::Reference(new_name));
+                }
+            }
+        }
     }
 
     pub(crate) fn new(lib: &'a dyn ftd::p2::Library) -> Self {
@@ -708,7 +745,7 @@ pub enum Thing {
     Record(ftd::p2::Record),
     OrType(ftd::OrType),
     OrTypeWithVariant { e: ftd::OrType, variant: String },
-    // Library -> Name of library successfully parsed
+    Reference(String), // Library -> Name of library successfully parsed
 }
 
 pub fn default_bag() -> std::collections::BTreeMap<String, ftd::p2::Thing> {
