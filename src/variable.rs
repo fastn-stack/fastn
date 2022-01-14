@@ -1,7 +1,7 @@
 #[derive(Debug, PartialEq, Clone, serde::Serialize, serde::Deserialize)]
 pub struct Variable {
     pub name: String,
-    pub value: Value,
+    pub value: ftd::Value,
     pub conditions: Vec<(ftd::p2::Boolean, ftd::Value)>,
 }
 
@@ -359,6 +359,9 @@ pub enum Value {
     Boolean {
         value: bool,
     },
+    Object {
+        values: std::collections::BTreeMap<String, PropertyValue>,
+    },
     Record {
         name: String,
         fields: std::collections::BTreeMap<String, PropertyValue>,
@@ -420,6 +423,7 @@ impl Value {
             Value::Integer { .. } => ftd::p2::Kind::integer(),
             Value::Decimal { .. } => ftd::p2::Kind::decimal(),
             Value::Boolean { .. } => ftd::p2::Kind::boolean(),
+            Value::Object { .. } => ftd::p2::Kind::object(),
             Value::Record { name: id, .. } => ftd::p2::Kind::Record {
                 name: id.to_string(),
                 default: None,
@@ -606,6 +610,7 @@ impl Variable {
                 "integer" => read_integer(p1, doc.name)?,
                 "decimal" => read_decimal(p1, doc.name)?,
                 "boolean" => read_boolean(p1, doc.name)?,
+                "object" => read_object(p1, doc)?,
                 t => match doc.get_thing(p1.line_number, t)? {
                     ftd::p2::Thing::Record(r) => r.create(p1, doc)?,
                     ftd::p2::Thing::OrTypeWithVariant { e, variant } => {
@@ -756,6 +761,55 @@ fn read_boolean(p1: &ftd::p1::Section, doc_id: &str) -> ftd::p1::Result<Value> {
     ftd::e2("not a valid bool", doc_id, p1.line_number)
 }
 
+fn read_object(p1: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Result<Value> {
+    let mut values: std::collections::BTreeMap<String, PropertyValue> = Default::default();
+    for (line_number, k, v) in p1.header.0.iter() {
+        let line_number = line_number.to_owned();
+        let value = if v.trim().starts_with('$') {
+            ftd::PropertyValue::resolve_value(line_number, v, None, doc, &Default::default(), None)?
+        } else if let Ok(v) = ftd::PropertyValue::resolve_value(
+            line_number,
+            v,
+            Some(ftd::p2::Kind::decimal()),
+            doc,
+            &Default::default(),
+            None,
+        ) {
+            v
+        } else if let Ok(v) = ftd::PropertyValue::resolve_value(
+            line_number,
+            v,
+            Some(ftd::p2::Kind::boolean()),
+            doc,
+            &Default::default(),
+            None,
+        ) {
+            v
+        } else if let Ok(v) = ftd::PropertyValue::resolve_value(
+            line_number,
+            v,
+            Some(ftd::p2::Kind::integer()),
+            doc,
+            &Default::default(),
+            None,
+        ) {
+            v
+        } else {
+            ftd::PropertyValue::resolve_value(
+                line_number,
+                v,
+                Some(ftd::p2::Kind::string()),
+                doc,
+                &Default::default(),
+                None,
+            )?
+        };
+        values.insert(k.to_string(), value);
+    }
+
+    Ok(Value::Object { values })
+}
+
 #[derive(Debug, Clone)]
 pub struct VariableData {
     pub name: String,
@@ -843,7 +897,7 @@ impl VariableData {
 
         let type_ = match var_kind.as_str() {
             "string" | "caption" | "body" | "body or caption" | "caption or body" | "integer"
-            | "decimal" | "boolean" => Type::Variable,
+            | "decimal" | "boolean" | "object" => Type::Variable,
             a if doc.get_record(line_number, a).is_ok()
                 || doc.get_or_type(line_number, a).is_ok()
                 || doc.get_or_type_with_variant(line_number, a).is_ok()

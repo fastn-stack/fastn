@@ -6,6 +6,9 @@ pub enum Kind {
         body: bool,
         default: Option<String>,
     },
+    Object {
+        values: std::collections::BTreeMap<String, String>,
+    },
     Integer {
         default: Option<String>,
     },
@@ -57,6 +60,7 @@ impl Kind {
             ftd::p2::Kind::Integer { .. } => "integer",
             ftd::p2::Kind::Decimal { .. } => "decimal",
             ftd::p2::Kind::Boolean { .. } => "boolean",
+            ftd::p2::Kind::Object { .. } => "object",
             _ => return ftd::e2(format!("Kind supported for default value are string, integer, decimal and boolean with default value, found: kind `{:?}`", &self), doc_id, line_number),
         }.to_string())
     }
@@ -141,6 +145,12 @@ impl Kind {
 
     pub fn boolean() -> Self {
         Kind::Boolean { default: None }
+    }
+
+    pub fn object() -> Self {
+        Kind::Object {
+            values: Default::default(),
+        }
     }
 
     pub fn string() -> Self {
@@ -426,6 +436,7 @@ impl Kind {
             "body or caption" | "caption or body" => Kind::caption_or_body(),
             "integer" => Kind::integer(),
             "decimal" => Kind::decimal(),
+            "object" => Kind::object(),
             "boolean" => Kind::boolean(),
             "element" => Kind::Element,
             "elements" => Kind::Elements,
@@ -482,6 +493,7 @@ impl Kind {
                 "body or caption" | "caption or body" => Kind::caption_or_body(),
                 "integer" => Kind::integer(),
                 "decimal" => Kind::decimal(),
+                "object" => Kind::object(),
                 "boolean" => Kind::boolean(),
                 "element" => Kind::Element,
                 "elements" => Kind::Elements,
