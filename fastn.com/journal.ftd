@@ -308,7 +308,7 @@ contained.
 While I was doing that I realised the reason we use `git` is currently not strong
 enough, so Arpita removed `git2`.
 
--- ft.h2: `FPM Editor` Plans
+-- ft.h1: `FPM Editor` Plans
 
 In future we may be bringing `git2` dependency back though, when `fpm` becomes
 a full blown "editor" as well. We want `fpm` to one day be only binary authors
@@ -317,6 +317,26 @@ need, it will be the editor, so you do not say SublimeText etc, it will have
 make `fpm` run as a web server, and maybe a side by side preview with auto reload.
 
 Integrated Authoring Environment it would be, IAE.
+
+-- ft.h1: `fpm-ui` -> `fpm`
+
+We used to have a special module named `fpm-ui` with a bunch of variables for
+translation etc. It used to also contain `ftd-ui.mobile` and `fpm-ui.dark-mode`
+flags as well. We also had another special module `fpm`, with other set of
+similar variables.
+
+It was an implementation detail, there was some feature missing in FTD (ability
+to refer to record fields defined in another module), and Arpita did not like
+"polluting" `fpm` with such variables which would tomorrow become `record`
+fields, so she created `fpm-ui`.
+
+Since then Arpita has implemented the fix, you can now do `foo.bar.baz` and
+`foo` maybe another module, `foo.bar` an instance of some record, and `.baz` a
+field on that record. So she cleaned things up by removing `fpm-ui` and moving
+all the variables to `fpm`.
+
+We have not yet properly documented those variables which we will be doing soon.
+
 
 -- ft.h1: The Struggle With Prelude
 
