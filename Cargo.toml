@@ -20,7 +20,6 @@ clap = "2.33.3"
 diffy = "0.2.1"
 ftd = { git = "https://github.com/FifthTry/ftd", rev = "740121d" }
 futures = "0.3"
-git2 = { version = "0.13", features = ["vendored-libgit2", "vendored-openssl"] }
 home = "0.5.3"
 ignore = "0.4.18"
 indoc = "1.0"
