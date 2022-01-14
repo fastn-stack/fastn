@@ -49,7 +49,7 @@ impl DNode {
             let events = ftd::event::group_by_js_event(&self.events);
             for (name, actions) in events {
                 let event = format!(
-                    "window.ftd.handle_event(event, '{}', '{}')",
+                    "window.ftd.handle_event(event, '{}', '{}', this)",
                     id,
                     actions.replace("\"", "&quot;")
                 );
