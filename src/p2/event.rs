@@ -229,7 +229,16 @@ impl ActionKind {
             | ftd::p2::ActionKind::StopPropagation
             | ftd::p2::ActionKind::PreventDefault
             | ftd::p2::ActionKind::SetValue
-            | ftd::p2::ActionKind::MessageHost => {}
+            | ftd::p2::ActionKind::MessageHost => {
+                parameters.insert(
+                    "data".to_string(),
+                    ftd::p2::event::Parameter {
+                        min: 1,
+                        max: 1,
+                        ptype: vec![ftd::p2::Kind::object()],
+                    },
+                );
+            }
             ftd::p2::ActionKind::Increment | ftd::p2::ActionKind::Decrement => {
                 parameters.insert(
                     "by".to_string(),
@@ -280,6 +289,26 @@ impl Action {
             }
             _ if a.starts_with("message-host") => {
                 let value = a.replace("message-host", "").trim().to_string();
+                let parameters = {
+                    let mut parameters: std::collections::BTreeMap<
+                        String,
+                        Vec<ftd::PropertyValue>,
+                    > = Default::default();
+                    if let Some(p) = ActionKind::MessageHost.parameters().get("data") {
+                        parameters.insert(
+                            "data".to_string(),
+                            vec![ftd::PropertyValue::resolve_value(
+                                line_number,
+                                value.as_str(),
+                                p.ptype.get(0).map(|k| k.to_owned()),
+                                doc,
+                                arguments,
+                                None,
+                            )?],
+                        );
+                    }
+                    parameters
+                };
                 let target = if value.is_empty() {
                     "ftd_message".to_string()
                 } else {
@@ -289,7 +318,7 @@ impl Action {
                 Ok(Self {
                     action: ActionKind::MessageHost,
                     target,
-                    parameters: Default::default(),
+                    parameters,
                 })
             }
             _ if a.starts_with("increment ") || a.starts_with("decrement ") => {

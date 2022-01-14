@@ -346,8 +346,14 @@ window.ftd = (function () {
             let target = action["target"];
             exports.set_bool(id, target, data[target].value !== 'true');
         } else if (act === "message-host") {
-            let target = action["target"].trim().replaceAll("-", "_");
-            window[target]();
+            if (action["parameters"].data !== undefined) {
+                let data = JSON.parse(action["parameters"].data[0])
+                let func = data.function.trim().replaceAll("-", "_");
+                window[func](data);
+            } else {
+                let target = action["target"].trim().replaceAll("-", "_");
+                window[target]();
+            }
         } else if (act === "increment") {
             let target = action["target"];
             let increment = 1;
@@ -507,3 +513,7 @@ window.ftd = (function () {
 
     return exports;
 })();
+
+function console_print(data) {
+    console.log(data);
+}
