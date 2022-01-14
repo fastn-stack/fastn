@@ -260,11 +260,39 @@ a general purpose UI library that can be used with any JS project. We would be
 almost like Elm, like Elm has "ports", we will have `message-host` to send data
 from FTD to JS, and `ftd.set_var` family of functions to set FTD data from JS.
 
-This means you can tomorrow write full blog applications like Twitter and GMail
+This means you can tomorrow write full web applications like Twitter and GMail
 with FTD. Your JS will have no idea about DOM, your JS will simply set FTD
 variables, and FTD will take care of rendering them, and will call your JS from
 time to time, based on user events etc via `message-host`.
 
+-- ft.h1: Thought: Theme-able Internet
+
+When we are consuming a site, say HackerNews, we get their UI. But it would be
+cool if anyone can "theme" their UI. How could we do that? One option is we, or
+someone, maybe even the owner of the site, create a "data type" and "package
+interface" for every site, and a "converter" which will crawl the site and
+create data of site in the package interface format ftd files. Then people can
+create their own theme implementing the package interface, and we have
+theme-able internet.
+
+-- ft.h1: Lint Vs Warning Vs Error
+
+Was reading [Rethinking errors, warnings, and
+lints](http://neugierig.org/software/blog/2022/01/rethinking-errors.html), and
+I quite liked it. We should have a strict mode in `ftd` and a regular mode. In
+strict mode we fail on any thing that maybe wrong, eg un-used import, variables
+or components with improper case, un-used component arguments and so on. We will
+try to be as strict as possible. Maybe even bad formatting should be considered
+an error in strict mode. All arguments in component definition must come before
+the properties for example.
+
+We will then have `fpm build` not use the strict mode, so authors can quickly
+try things out. And finally we should have `fpm build --release`, which will use
+`ftd` in strict mode, forcing people to ensure all sloppy-ness is fixed before
+something is published.
+
+We can also have `fpm check` which will test for all warnings, and can be used
+as part of `pre-commit` hooks.
 
 
 -- ft.h1: The Struggle With Prelude
