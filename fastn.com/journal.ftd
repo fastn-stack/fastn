@@ -189,7 +189,7 @@ lang: ftd
 \-- fpm.dependency: fifthtry.github.io/Jupiter-theme as j
 implements: fpm.dev/blog
 
-\-- fpm.dependency: fifthtry.github.io/Some-Book-theme as k
+\-- fpm.dependency: fifthtry.GitHub.io/Some-Book-theme as k
 implements: fpm.dev/book
 author: book-author
 
@@ -197,6 +197,75 @@ author: book-author
 
 Here we are explicitly renaming `author` to `book-author`, and we do not have
 to care about the alias.
+
+Closing note: this is a lot of "magic" indeed, but consider that in scientific
+computing world, machine learning world etc, using well defined aliases for
+common Python modules, e.g. `np` for `numpy`, `pd` for `panda`, `plt` for
+`matplotlib` are almost universally recognizable. We are creating **few** such
+aliases, `book`, `post`, etc, which we hope to similarly become universally
+recognizable, and so this magic is acceptable. Creating a consistent naming, so
+any `ftd` document you come across in wild can be easily copy-paste-able in your
+project is easily achieved by this. You will always know what `book` is if you
+come across it anywhere, and can quickly pick from a huge number of themes that
+are implementing `book`.
+
+-- ft.h1: More Thoughts On Search: And Host Architecture
+
+We have to first implement simple things like "object constructor" in FTD. This
+is the core to how we pass data from FTD to "host". We similarly need a "special
+variable" `$VALUE`, which will be available only in `$event-change$` handlers,
+so we can do `$event-change$: $query = $VALUE`, assuming we already have a
+variable defined: `-- optional string query:`. These are easy bits.
+
+Then we have a harder bit. In FTD the DOM structure is rendered by Rust code,
+and from front-end we can only modify some variables, variables that show-hide
+an existing DOM node, or change some attribute of existing DOM node. This is why
+we have to make every field conditional individually, we have to update our JS
+to change the DOM node.
+
+What we have to do now is an ability to generate DOM node in front-end now.
+Search is going to fetch search result from some service, and we have to create
+a child corresponding to each search result. We can do a hacky thing, pre-create
+say 10 DOM nodes, because we know the page is going to have 10 search results
+only, but this is not a great answer, say consider if we had tree, with up-to 4
+level, we will have to pre-create 10 * 10 * 10 * 10 DOM nodes.
+
+So me and Arpita decided we create a proper support for creating DOM based on
+component definitions from front-end. We will pass a specification of components
+that are needed dynamically (we do a dynamic variable dependency analysis
+already). And then we will write some JavaScript code in `ftd.js` to create DOM
+based on the component spec, and the data (it will happen every time the data
+changes).
+
+We already have a bunch of JS logic, this change will introduce quite a bit more,
+still quite low compared to other JS library standards, our current `ftd.js` is
+only 3.3KB gzipped, it will barely increase it to 10KB at worst. This will
+increase the amount of JSON we include in page, as now the specification of all
+the components used dynamically will also be included. Our compresses `index.html`
+for example is only 12KB (which includes JS/CSS etc everything), so we still
+have quite a small built size.
+
+We have done some interesting parsing for what we call "ftd markup", we will have
+to port that code over as well. Which means we have to have a full markdown parser
+in JavaScript, which will further increase the size.
+
+We can do this in a conditional way, only include markup/markdown parser if one
+of the dynamically called components need it. Or only include dynamic component
+rendering part of JS if there are at least one dynamic component. But even in worst
+case I do not see our compressed, everything included HTML going above 20-30KB,
+which is quite acceptable.
+
+One very interesting consequence of this feature would be that FTD would become
+a general purpose UI library that can be used with any JS project. We would be
+almost like Elm, like Elm has "ports", we will have `message-host` to send data
+from FTD to JS, and `ftd.set_var` family of functions to set FTD data from JS.
+
+This means you can tomorrow write full blog applications like Twitter and GMail
+with FTD. Your JS will have no idea about DOM, your JS will simply set FTD
+variables, and FTD will take care of rendering them, and will call your JS from
+time to time, based on user events etc via `message-host`.
+
+
 
 -- ft.h1: The Struggle With Prelude
 
