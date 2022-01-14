@@ -1,4 +1,4 @@
--- import: fpm-ui
+-- import: fpm
 -- import: fifthtry.github.io/Jupiter-theme as ft
 -- import: config
 
@@ -21,9 +21,11 @@ all the dependencies of a package.
 files on github pages, S3 etc static site hosting sites.
 
 
+
+
 -- ftd.text language: This is the language
-background-color if not $fpm-ui.dark-mode: yellow
-color if $fpm-ui.dark-mode: yellow
+background-color if not $fpm.dark-mode: yellow
+color if $fpm.dark-mode: yellow
 
 
 -- ft.h1: `fpm-repo`

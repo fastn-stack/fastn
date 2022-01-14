@@ -31,6 +31,173 @@ So links never break (and original author can keep updating document URL at whim
 header/sidebar/footer etc).
 
 
+-- ft.h1: Another Thought On Prelude
+
+14th Jan 2022
+
+So yesterday we settled with this as solution for our prelude problem:
+
+-- ft.code:
+lang: ftd
+
+\-- fpm.dependency: fifthtry.github.io/Jupiter-theme as j
+book: j.book
+ft: j.ft
+
+-- ft.markdown:
+
+After a good night sleep I feel we can evolve this further. The thing is we did
+not discuss a "default" exports for every "package interface", nor are we using
+the planned `implements` syntax yet. The idea is when you import a dependency,
+you may want to use it only because it implements the package interface of a
+package you are interested in. Say you want something that implements
+`fpm.dev/blog`, and you found `Jay/Fancy-Blog-Theme`. Now `Jay/Fancy-Blog-Theme`
+may implement more than just `fpm.dev/blog`. It may implement other packages.
+Also `Jay/Fancy-Blog-Theme` may define some components that are not part of
+`fpm.dev/blog`, which means if you used them, switching to another theme would
+become hard as that other theme may not implement `Jay/Fancy-Blog-Theme`.
+
+So we do not want to access all modules and symbols of a package, we want to
+constraint what modules and symbols are "visible" to us. We can do that using
+proposed `implements` syntax:
+
+-- ft.code:
+lang: ftd
+
+\-- fpm.dependency: fifthtry.github.io/Jupiter-theme as j
+implements: fpm.dev/blog
+
+-- ft.markdown:
+
+Using `implements` does three things: 1. ensures `fifthtry.github.io/Jupiter-theme`
+has modules and compatible symbols as defined in `fpm.dev/blog`, 2. any attempt
+to access any extra modules are symbols, that are not part of `fpm.dev/blog`
+lead to error, and 3. makes `fpm.dev/blog` an alias for
+`fifthtry.github.io/Jupiter-theme`, so if any document has imported
+`fpm.dev/blog`, they will be getting `fifthtry.github.io/Jupiter-theme` instead.
+
+We can use `implements` more than once on a dependency.
+
+Now if you look at the two code snippets, its obvious that `book: j.book` is
+conflicting with `implements`. We are defining the same thing twice. We are going
+to have to definitely use the `implements` clause. But also the `book: j.book`.
+
+Can we somehow do it in one go? This is not just a question of reducing the amount
+of things you have to write, its also about creating a consistency. Consider if
+a package can define default imports / "main" modules:
+
+-- ft.code:
+lang: ftd
+
+\-- import: fpm
+
+\-- fpm.package: fpm.dev/blog
+main: blog, post, author
+
+-- ft.markdown:
+
+Say with that definition of `main`, say this:
+
+-- ft.code:
+lang: ftd
+
+\-- fpm.dependency: fifthtry.github.io/Jupiter-theme as j
+implements: fpm.dev/blog
+
+
+-- ft.markdown:
+
+Is equivalent to:
+
+-- ft.code:
+lang: ftd
+
+\-- fpm.dependency: fifthtry.github.io/Jupiter-theme as j
+implements: fpm.dev/blog
+blog: j.blog
+post: j.post
+author: j.author
+
+-- ft.markdown:
+
+Meaning if any ftd file now onwards refers to `blog`, they will be getting
+`j.blog`, i.e. j.blog is auto imported in every ftd file. And we do not even have
+to write the explicit lines, we follow `implements`, and look at `main` for the
+package being implemented, and auto import the `main` modules.
+
+So while it obviously is a lot of "magic", we are getting a consistency, everyone
+refers to `fpm.dev/blog.author` with the alias `author`, even when we are using
+different theme. So modifying the theme becomes easy. All the main imports would
+get well known soon etc.
+
+What will happen when say both `fpm.dev/blog` and `fpm.dev/book` have defined
+say a module named `author`?
+
+In this case we can go on and define things explicitly:
+
+-- ft.code:
+lang: ftd
+
+\-- fpm.dependency: fifthtry.github.io/Jupiter-theme as j
+implements: fpm.dev/blog
+
+\-- fpm.dependency: fifthtry.github.io/Some-Book-theme as j
+implements: fpm.dev/book
+book-author: j.author
+
+-- ft.markdown:
+
+Lets assume `fpm.dev/blog` has `main: blog, post, author` and `fpm.dev/book` has
+`main: book, author`, `author` conflicts between the two. So just putting the
+two dependencie without `author: j.author` line, eg:
+
+-- ft.code:
+lang: ftd
+
+\-- fpm.dependency: fifthtry.github.io/Jupiter-theme as j
+implements: fpm.dev/blog
+
+\-- fpm.dependency: fifthtry.github.io/Some-Book-theme as j
+implements: fpm.dev/book
+
+-- ft.markdown:
+
+would be an error. `fpm` will say both expose `author` and its ambiguous. So we
+will have to explicitly map the author to some other name for one of the packages.
+
+-- ft.code:
+lang: ftd
+
+\-- fpm.dependency: fifthtry.github.io/Jupiter-theme as j
+implements: fpm.dev/blog
+
+\-- fpm.dependency: fifthtry.github.io/Some-Book-theme as k
+implements: fpm.dev/book
+book-author: k.author
+
+
+-- ft.markdown:
+
+Here we are saying `author` will refer to `j.author`, the default, and
+`k` has given up `author` and used `book-author` name.
+
+We can even support this syntax:
+
+-- ft.code:
+lang: ftd
+
+\-- fpm.dependency: fifthtry.github.io/Jupiter-theme as j
+implements: fpm.dev/blog
+
+\-- fpm.dependency: fifthtry.github.io/Some-Book-theme as k
+implements: fpm.dev/book
+author: book-author
+
+-- ft.markdown:
+
+Here we are explicitly renaming `author` to `book-author`, and we do not have
+to care about the alias.
+
 -- ft.h1: The Struggle With Prelude
 
 13th Jan 2022
