@@ -616,6 +616,7 @@ impl<'a> TDoc<'a> {
                     let fields = match value {
                         ftd::Value::Record { fields, .. } => fields,
                         ftd::Value::OrType { fields, .. } => fields,
+                        ftd::Value::Object { values } => values,
                         _ => {
                             return doc.err(
                                 "not an record or or-type",
