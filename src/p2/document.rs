@@ -19,6 +19,17 @@ impl Document {
         let mut d: ftd::Map = Default::default();
         for (k, v) in self.data.iter() {
             if let ftd::p2::Thing::Variable(ftd::Variable { value, .. }) = v {
+                let value = if let ftd::Value::Optional { data, .. } = value {
+                    match data.as_ref() {
+                        None => ftd::Value::String {
+                            text: "".to_string(),
+                            source: ftd::TextSource::Header,
+                        },
+                        Some(v) => v.to_owned(),
+                    }
+                } else {
+                    value.to_owned()
+                };
                 let value = match value {
                     ftd::Value::Boolean { value } => value.to_string(),
                     ftd::Value::Integer { value } => value.to_string(),

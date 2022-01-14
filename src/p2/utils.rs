@@ -106,7 +106,7 @@ pub fn string_and_source_and_ref(
                                     return Ok((
                                         "".to_string(),
                                         source,
-                                        complete_reference(&Some(reference.clone()), all_locals),
+                                        complete_reference(&Some(reference.to_owned()), all_locals),
                                     ));
                                 }
                             }
@@ -114,11 +114,14 @@ pub fn string_and_source_and_ref(
                         }
                     }
 
-                    return ftd::e2(
-                        format!("expected string, found: {:?}", kind),
-                        doc_id,
-                        line_number,
-                    );
+                    // In case when the optional string is null.
+                    // Return the empty string
+
+                    Ok((
+                        "".to_string(),
+                        source,
+                        complete_reference(&Some(reference.to_owned()), all_locals),
+                    ))
                 }
                 Some(ftd::Value::String { text, source }) => Ok((
                     text.to_string(),

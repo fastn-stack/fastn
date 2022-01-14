@@ -1,11 +1,12 @@
--- string query: Nothing
+-- optional string query:
 
 -- ftd.column:
 padding: 20
 spacing: 20
 
 -- ftd.input:
-placeholder: Input
+placeholder: Type Something Here...
+width: 400
 border-width: 2
 $event-change$: $query=$VALUE
 
