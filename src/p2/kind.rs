@@ -55,7 +55,7 @@ impl Kind {
     }
 
     pub fn to_string(&self, line_number: usize, doc_id: &str) -> ftd::p1::Result<String> {
-        Ok(match self {
+        Ok(match self.inner() {
             ftd::p2::Kind::String { .. } => "string",
             ftd::p2::Kind::Integer { .. } => "integer",
             ftd::p2::Kind::Decimal { .. } => "decimal",

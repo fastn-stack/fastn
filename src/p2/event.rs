@@ -18,7 +18,6 @@ impl Event {
         for (s, property_values) in property {
             let mut property_values_string = vec![];
             for property_value in property_values {
-                //todo
                 let value = property_value.resolve(line_number, arguments, doc)?;
                 if let Some(v) = value.to_string() {
                     property_values_string.push(v);
