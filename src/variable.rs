@@ -218,7 +218,7 @@ impl PropertyValue {
         arguments: &std::collections::BTreeMap<String, ftd::Value>,
         doc: &ftd::p2::TDoc,
     ) -> ftd::p1::Result<Value> {
-        Ok(match self {
+        let mut value = match self {
             ftd::PropertyValue::Value { value: v } => v.to_owned(),
             ftd::PropertyValue::Variable {
                 name,
@@ -299,7 +299,17 @@ impl PropertyValue {
                 }
                 value
             }
-        })
+        };
+
+        // In case of Object resolve all the values
+        if let ftd::Value::Object { values } = &mut value {
+            for (_, v) in values.iter_mut() {
+                *v = ftd::PropertyValue::Value {
+                    value: v.resolve(line_number, arguments, doc)?,
+                };
+            }
+        }
+        Ok(value)
     }
 }
 
@@ -458,6 +468,17 @@ impl Value {
             Value::Integer { value } => Some(value.to_string()),
             Value::Decimal { value } => Some(value.to_string()),
             Value::Boolean { value } => Some(value.to_string()),
+            Value::Object { values } => {
+                let mut new_values: std::collections::BTreeMap<String, String> = Default::default();
+                for (k, v) in values {
+                    if let ftd::PropertyValue::Value { value } = v {
+                        if let Some(v) = value.to_string() {
+                            new_values.insert(k.to_owned(), v);
+                        }
+                    }
+                }
+                serde_json::to_string(&new_values).ok()
+            }
             _ => None,
         }
     }

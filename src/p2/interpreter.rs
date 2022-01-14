@@ -13219,6 +13219,14 @@ mod test {
                     })],
                     ..Default::default()
                 },
+                common: ftd::Common {
+                    locals: std::array::IntoIter::new([(
+                        s("o@0"),
+                        s("{\"a\":\"Madhav\",\"b\":\"bb\"}"),
+                    )])
+                    .collect(),
+                    ..Default::default()
+                },
                 ..Default::default()
             }));
 
@@ -13337,17 +13345,28 @@ mod test {
             ftd::p2::Thing::Variable(ftd::Variable {
                 name: s("obj"),
                 value: ftd::Value::Object {
-                    values: std::array::IntoIter::new([(
-                        s("value"),
-                        ftd::PropertyValue::Reference {
-                            name: s("foo/bar#input-data"),
-                            kind: ftd::p2::Kind::String {
-                                caption: true,
-                                body: false,
-                                default: None,
+                    values: std::array::IntoIter::new([
+                        (
+                            s("function"),
+                            ftd::PropertyValue::Value {
+                                value: ftd::Value::String {
+                                    text: s("some-function"),
+                                    source: ftd::TextSource::Header,
+                                },
                             },
-                        },
-                    )])
+                        ),
+                        (
+                            s("value"),
+                            ftd::PropertyValue::Reference {
+                                name: s("foo/bar#input-data"),
+                                kind: ftd::p2::Kind::String {
+                                    caption: true,
+                                    body: false,
+                                    default: None,
+                                },
+                            },
+                        ),
+                    ])
                     .collect(),
                 },
                 conditions: vec![],
@@ -13376,7 +13395,12 @@ mod test {
                             action: ftd::Action {
                                 action: s("message-host"),
                                 target: s("$obj"),
-                                parameters: Default::default(),
+                                parameters: std::array::IntoIter::new([(
+                                    "data".to_string(),
+                                    vec!["{\"function\":\"some-function\",\"value\":\"Nothing\"}"
+                                        .to_string()],
+                                )])
+                                .collect(),
                             },
                         },
                     ],
@@ -13390,6 +13414,7 @@ mod test {
             -- string input-data: Nothing
 
             -- object obj:
+            function: some-function
             value: $input-data
 
             -- ftd.input:

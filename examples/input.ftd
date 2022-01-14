@@ -1,5 +1,9 @@
 -- optional string query:
 
+-- object obj:
+function: console-print
+value: Hello World
+
 -- ftd.column:
 padding: 20
 spacing: 20
@@ -9,6 +13,7 @@ placeholder: Type Something Here...
 width: 400
 border-width: 2
 $event-change$: $query=$VALUE
+$event-change$: message-host $obj
 
 -- ftd.text:
 
