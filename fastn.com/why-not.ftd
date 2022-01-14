@@ -5,7 +5,6 @@
 -- ft.doc-page:
 toc: $ft.toc
 
-
 -- ft.h0: Why not to use `fpm`?
 
 While we love `fpm`, it is this `fpm` not the right tool for you. We document some
