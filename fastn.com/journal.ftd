@@ -294,6 +294,29 @@ something is published.
 We can also have `fpm check` which will test for all warnings, and can be used
 as part of `pre-commit` hooks.
 
+-- ft.h1: Added And Removed `git2`
+
+We used to depend on `git` when doing validation of `fpm.package.zip` URL. This
+failed on Ganesh's Windows machine as he does not have `git` cli installed. We
+learned that `Github Desktop` does not install `git` cli on Windows.
+
+So Shobhit converted our code to use `git2` (`libgit`) as a Rust crate
+dependency, so we do not depend on external binary. I further ensured that `git2`
+is compiled with bundled SSL and LibGit libraries so our CLI becomes more self
+contained.
+
+While I was doing that I realised the reason we use `git` is currently not strong
+enough, so Arpita removed `git2`.
+
+-- ft.h2: `FPM Editor` Plans
+
+In future we may be bringing `git2` dependency back though, when `fpm` becomes
+a full blown "editor" as well. We want `fpm` to one day be only binary authors
+need, it will be the editor, so you do not say SublimeText etc, it will have
+`git` internally so you can clone and commit from `fpm` editor itself, we will
+make `fpm` run as a web server, and maybe a side by side preview with auto reload.
+
+Integrated Authoring Environment it would be, IAE.
 
 -- ft.h1: The Struggle With Prelude
 
