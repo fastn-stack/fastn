@@ -1,0 +1,18 @@
+-- string query: Nothing
+
+-- ftd.column:
+padding: 20
+spacing: 20
+
+-- ftd.input:
+placeholder: Input
+border-width: 2
+$event-change$: $query=$VALUE
+
+-- ftd.text:
+
+You have typed: {value}
+
+--- ftd.text value: $query
+color: green
+size: 20

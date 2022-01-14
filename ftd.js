@@ -335,7 +335,7 @@ window.ftd = (function () {
     let ftd_data = {};
     let ftd_external_children = {};
 
-    function handle_event(evt, id, action) {
+    function handle_event(evt, id, action, obj) {
         let act = action["action"];
         let data = ftd_data[id];
         if (act === "stop-propagation") {
@@ -398,6 +398,8 @@ window.ftd = (function () {
                 value = parseFloat(value);
             } else if (action["parameters"].value[1] === "boolean") {
                 value = (value === "true");
+            } else if (action["parameters"].value[0] === "$VALUE" && obj.value !== undefined ) {
+                value = obj.value
             }
 
             let data = ftd_data[id];
@@ -412,11 +414,11 @@ window.ftd = (function () {
 
     let exports = {};
 
-    exports.handle_event = function (evt, id, event) {
+    exports.handle_event = function (evt, id, event, obj) {
         console.log(id, event);
         let actions = JSON.parse(event);
         for (const action in actions) {
-            handle_event(evt, id, actions[action])
+            handle_event(evt, id, actions[action], obj)
         }
     }
 

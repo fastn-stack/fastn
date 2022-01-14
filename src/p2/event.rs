@@ -18,6 +18,7 @@ impl Event {
         for (s, property_values) in property {
             let mut property_values_string = vec![];
             for property_value in property_values {
+                //todo
                 let value = property_value.resolve(line_number, arguments, doc)?;
                 if let Some(v) = value.to_string() {
                     property_values_string.push(v);
@@ -126,18 +127,21 @@ impl Event {
 #[derive(Debug, PartialEq, Clone, serde::Serialize, serde::Deserialize)]
 pub enum EventName {
     OnClick,
+    OnChange,
 }
 
 impl EventName {
     pub fn to_str(&self) -> &'static str {
         match self {
             Self::OnClick => "onclick",
+            Self::OnChange => "onchange",
         }
     }
 
     pub fn from_string(s: &str, doc_id: &str) -> ftd::p1::Result<Self> {
         match s {
             "click" => Ok(Self::OnClick),
+            "change" => Ok(Self::OnChange),
             t => return ftd::e2(format!("{} is not a valid event", t), doc_id, 0),
         }
     }
@@ -393,14 +397,25 @@ impl Action {
                 let mut parameters: std::collections::BTreeMap<String, Vec<ftd::PropertyValue>> =
                     Default::default();
 
-                let value = ftd::PropertyValue::resolve_value(
-                    line_number,
-                    &part_2,
-                    Some(kind.clone()),
-                    doc,
-                    arguments,
-                    None,
-                )?;
+                let value = {
+                    if part_2.eq("$VALUE") {
+                        ftd::PropertyValue::Value {
+                            value: ftd::variable::Value::String {
+                                text: part_2,
+                                source: ftd::TextSource::Header,
+                            },
+                        }
+                    } else {
+                        ftd::PropertyValue::resolve_value(
+                            line_number,
+                            &part_2,
+                            Some(kind.clone()),
+                            doc,
+                            arguments,
+                            None,
+                        )?
+                    }
+                };
                 let kind = ftd::PropertyValue::Value {
                     value: ftd::variable::Value::String {
                         text: kind.to_string(line_number, doc.name)?,
