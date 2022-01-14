@@ -633,13 +633,34 @@ We will basically call `$event-change$: message-host do-query`. `do-query` would
 be a "object constructor", it will create an object, with following shape:
 
 -- ft.code:
+lang: ftd
+
+\-- object do-query:
+function: search
+query: $query
+
+-- ft.markdown:
+
+Lets also assume we have the following input:
+
+-- ft.code:
+lang: ftd
+
+\-- optional string query:
+
+\-- ftd.input: Search
+$event-change$: $query=$VALUE
+
+-- ft.markdown:
+
+This was our variable `$query` is "bound" to the input field.
+
+-- ft.code:
 lang: json
 
 {
     "function": "search",
-    "params": {
-        "query": "<input-field-value>"
-    }
+    "query": "<input-field-value>"
 }
 
 -- ft.markdown:
@@ -651,8 +672,7 @@ This way changes will flow from FTD to JavaScript. In JavaScript, specifically,
 -- ft.h2: Passing Results Back From JavaScript
 
 JavaScript can modify any of the variables defined in FTD files. We are already
-using that to set `fpm-ui.mobile`, `fpm-ui.dark-mode` etc using that mechanism
-in `fpm.js`.
+using that to set `fpm.mobile`, `fpm.dark-mode` etc using that mechanism in `fpm.js`.
 
 We will have some fpm variables for search state. Say we can have
 `fpm.search-loading: boolean` to indicate show search is in progress. And
