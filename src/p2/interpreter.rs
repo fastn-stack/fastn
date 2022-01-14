@@ -13316,6 +13316,90 @@ mod test {
         );
     }
 
+    #[test]
+    fn event_change() {
+        let mut main = super::default_column();
+        let mut bag = super::default_bag();
+        bag.insert(
+            s("foo/bar#input-data"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("input-data"),
+                value: ftd::Value::String {
+                    text: s("Nothing"),
+                    source: ftd::TextSource::Caption,
+                },
+                conditions: vec![],
+            }),
+        );
+
+        bag.insert(
+            s("foo/bar#obj"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("obj"),
+                value: ftd::Value::Object {
+                    values: std::array::IntoIter::new([(
+                        s("value"),
+                        ftd::PropertyValue::Reference {
+                            name: s("foo/bar#input-data"),
+                            kind: ftd::p2::Kind::String {
+                                caption: true,
+                                body: false,
+                                default: None,
+                            },
+                        },
+                    )])
+                    .collect(),
+                },
+                conditions: vec![],
+            }),
+        );
+
+        main.container
+            .children
+            .push(ftd::Element::Input(ftd::Input {
+                common: ftd::Common {
+                    events: vec![
+                        ftd::Event {
+                            name: s("onchange"),
+                            action: ftd::Action {
+                                action: s("set-value"),
+                                target: s("foo/bar#input-data"),
+                                parameters: std::array::IntoIter::new([(
+                                    s("value"),
+                                    vec![s("$VALUE"), s("string")],
+                                )])
+                                .collect(),
+                            },
+                        },
+                        ftd::Event {
+                            name: s("onchange"),
+                            action: ftd::Action {
+                                action: s("message-host"),
+                                target: s("$obj"),
+                                parameters: Default::default(),
+                            },
+                        },
+                    ],
+                    ..Default::default()
+                },
+                placeholder: None,
+            }));
+
+        p!(
+            "
+            -- string input-data: Nothing
+
+            -- object obj:
+            value: $input-data
+
+            -- ftd.input:
+            $event-change$: $input-data=$VALUE
+            $event-change$: message-host $obj
+            ",
+            (bag, main),
+        );
+    }
+
     /*#[test]
     fn loop_with_tree_structure_1() {
         let (g_bag, g_col) = ftd::p2::interpreter::interpret(
