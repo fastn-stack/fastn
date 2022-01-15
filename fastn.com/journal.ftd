@@ -176,8 +176,44 @@ This is why FTD is trying to be a common language that will work everywhere, it
 will be responsible for UI and all the core part of functionality, like search,
 API access etc, has to be provided by host.
 
+-- ft.h2: Objects Can Take Parameters
+
+You may want to pass parameters to objects. Soon you will be able to do:
+
+-- ft.code:
+lang: ftd
+
+\-- object console-print:
+string message:
+function: console-print
+message: $message
+
+\-- ftd.text: click me
+$event-click$: message-host console-print:
+> message: clicked!
+
+\-- ftd.input:
+$event-input$: message-host console-print:
+> message: $VALUE
 
 
+-- ft.markdown:
+
+Other usage of object constructor that takes parameter would be:
+
+-- ft.code:
+lang: ftd
+
+\-- object get-user-info:
+string username:
+$process$: http
+url: https://github.com/api/user-info
+method: POST
+api-key: $api-key
+
+\-- user-info info:
+$processor$: get-user-info
+username: amitu
 
 
 -- ft.h1: Another Thought On Prelude
