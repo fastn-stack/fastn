@@ -127,6 +127,7 @@ impl Event {
 pub enum EventName {
     OnClick,
     OnChange,
+    OnInput,
 }
 
 impl EventName {
@@ -134,6 +135,7 @@ impl EventName {
         match self {
             Self::OnClick => "onclick",
             Self::OnChange => "onchange",
+            Self::OnInput => "oninput",
         }
     }
 
@@ -141,6 +143,7 @@ impl EventName {
         match s {
             "click" => Ok(Self::OnClick),
             "change" => Ok(Self::OnChange),
+            "input" => Ok(Self::OnInput),
             t => return ftd::e2(format!("{} is not a valid event", t), doc_id, 0),
         }
     }
