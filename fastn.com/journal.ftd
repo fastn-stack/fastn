@@ -1,3 +1,6 @@
+-- import: fifthtry.github.io/Jupiter-theme as ft
+-- import: config
+
 -- ft.doc-page:
 toc: $config.dev-toc
 id: page
@@ -5,6 +8,540 @@ id: page
 
 -- ft.h0: FTD Journal
 
+-- ft.h1: Object Implementation Details
+
+15th Jan 2022
+
+So Arpita has just implemented object constructors:
+
+-- ft.code:
+lang: ftd
+
+\-- object obj:
+function: console-print
+value: Hello World
+
+-- ft.markdown:
+
+With this now you can construct JSON objects, eg above will create:
+
+-- ft.code:
+lang: json
+
+{
+    "function": "console-print",
+    "value": "Hello World"
+}
+
+-- ft.markdown:
+
+And then you can pass the object to JavaScript using `message-host`, eg:
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.text: click me
+$event-click$: message-host $obj
+
+-- ft.markdown:
+
+And in JavaScript you can write the consumer:
+
+-- ft.code:
+lang: js
+
+window["console-print"] = function(v) {
+    console.log(v.value);
+}
+
+-- ft.markdown:
+
+This JS code has to be provided by the "FTD Host", eg FPM is one such FTD Host.
+To create arbitrary functionality, FTD Host interface has to be implemented.
+
+
+This is the basic. Soon the object constructor will be able to refer to other
+variables in FTD, eg:
+
+-- ft.code:
+lang: ftd
+
+\-- object obj:
+function: console-print
+value: $foo
+
+-- ft.markdown:
+
+Here we will use the value, and type of `$foo`, and that will be inserted in the
+object.
+
+-- ft.h2: Objects Are Opaque
+
+One important point to note is that objects, once constructed, can not be
+introspected from FTD. So you can not do:
+
+-- ft.code:
+lang: ftd
+
+\-- integer f: $obj.value
+
+-- ft.markdown:
+
+Assuming `$object.value` is an `integer`, this may seem "reasonable", but we do
+not allow it. At least for now. We are doing it for performance reason one can
+say, also we are lazy, we do not yet have time to think though the implications
+of it.
+
+We are building this feature to pass data to JavaScript for now, so we are
+committing to only the part of design that is minimally needed.
+
+-- ft.h2: JS Evaluation
+
+When we have variable references in the object, we will generate the following
+object:
+
+-- ft.code:
+lang: json
+
+{
+    "object": {
+        "function": "console-print",
+        "value": "$foo"
+    }
+}
+
+
+-- ft.markdown:
+
+We have one option that we go through the object and find all values with `$foo`
+pattern, and resolve them. We can also have `\$foo` to escape this behaviour.
+
+Other option is to keep track of references:
+
+-- ft.code:
+lang: json
+
+{
+    "references": {
+        "value": "$foo",
+        "foo.bar[0].baz": "$baz"
+    },
+    "object": {
+        "function": "console-print",
+        "value": "$foo"
+    }
+}
+
+-- ft.markdown:
+
+In `references` we have "JSON-paths" to every key that is a reference. Its easy
+to update the object by iterating it.
+
+We will see which ends up being easier to implement.
+
+-- ft.h2: Objects Are Only Constructed in JS
+
+The optimization I was talking about, why we want things opaque in FTD is so that
+we only write code to create "object" in JS, and we do not have to evaluate the
+value of object in Rust at all.
+
+-- ft.h2: JavaScript Is Not The Only Host Language
+
+Currently we are writing our FTD Host implementations in JS, but tomorrow we
+want to support Swift, Java, etc when FTD targets other platforms.
+
+This is why FTD is trying to be a common language that will work everywhere, it
+will be responsible for UI and all the core part of functionality, like search,
+API access etc, has to be provided by host.
+
+-- ft.h2: Objects Can Take Parameters
+
+You may want to pass parameters to objects. Soon you will be able to do:
+
+-- ft.code:
+lang: ftd
+
+\-- object console-print:
+string message:
+function: console-print
+message: $message
+
+\-- ftd.text: click me
+$event-click$: message-host console-print:
+> message: clicked!
+
+\-- ftd.input:
+$event-input$: message-host console-print:
+> message: $VALUE
+
+
+-- ft.markdown:
+
+Other usage of object constructor that takes parameter would be:
+
+-- ft.code:
+lang: ftd
+
+\-- object get-user-info:
+string username:
+$process$: http
+url: https://github.com/api/user-info
+method: POST
+api-key: $api-key
+
+\-- user-info info:
+$processor$: get-user-info
+username: amitu
+
+-- ft.h2: `message-host` can now pass parameters to FTD Host
+
+`message-host` till now used to accept a function name, and `ftd.js` used to call
+that function.
+
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.text: click me
+$event-click$: message-host foo
+
+-- ft.markdown:
+
+This will call a function named `window.foo()`.
+
+But there was no way till now to pass arguments to that function. With the
+latest changes done by Arpita now we can pass arguments as well:
+
+-- ft.code:
+lang: ftd
+
+\-- object arg:
+function: what-ever-function
+name: jack
+field: value
+
+\-- ftd.text: click me
+$event-click$: message-host $arg
+
+-- ft.markdown:
+
+With this we will call `window.what-ever-function` and pass it following object:
+
+-- ft.code:
+lang: json
+
+{
+    "function": "what-ever-function",
+    "name": "jack",
+    "field": "value"
+}
+
+We will soon allow including FTD variable references in the object, e.g.
+`name: $name`. We will also make `function` optional, if it's not passed we will
+assume the name of object, in the above example it was `arg`.
+
+-- ft.h1: `$VALUE` on `ftd.input`, `$event-input$` and `$event-change`
+
+Arpita added support for `$VALUE` special variable so now you can do:
+
+-- ft.code:
+lang: ftd
+
+\-- optional string query:
+
+\-- ftd.input:
+placeholder: Type Something Here...
+$event-input$: $query=$VALUE
+
+\-- ftd.text: $query
+
+-- ft.markdown:
+
+With the above, whatever is typed in the input field is immediately reflected
+in `$query`. See a [demo here](https://fifthtry.github.io/ftd/input.html).
+
+We have two events, `$event-input$`, which happens as soon as a input is edited,
+on key press, and `$event-change$`, which happens when the user presses Enter
+after inputting, or if the input field loses focus.
+
+The `$VALUE` special variable is only visible to the event handler of the above
+two events.
+
+-- ft.h2: Future Plans
+
+In future we will add a few features:
+
+-- ft.h3: `value`
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.input:
+value: $query
+$event-input$: $query=$VALUE
+
+-- ft.markdown:
+
+Note the `value` bound to a variable, every time the variable changes the value
+of the input field would be updated. So you can control the value of one input
+field with another for example.
+
+-- ft.h3: `default`
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.input:
+default: $query
+
+-- ft.markdown:
+
+`default` will be used to bind the value of an input field when the input field
+is initialized, and any further changes done to `$query` would have no effect on
+the input field.
+
+-- ft.h3: `type`
+
+We will also support `type` parameter so input field can be used to get `username`,
+which hints the browser to use Password Manager etc, `email`, `password` etc,
+similar to how HTML input works.
+
+-- ft.h1: Missing Feature: Intra-Page Table Of Content
+
+When a FTD generated page is created, it is currently not possible to create a
+table of content based on headings in the page.
+
+Many sites show a table of content somewhere, usually on the right, or sometime
+at the beginning of the article after the intro etc. This requires us to query
+the current page for data. Heading hierarchy is one such data. List of images,
+tables, diagrams etc could be other such query. Maybe even list of all foot-notes,
+links etc could be useful as well.
+
+We have "region" to identify some of these things. The query should allow us to
+query by region, and authors should use regions properly to set this up.
+
+One way to query things is package-query feature that we are working on `fpm`.
+But that is largely for querying information from the entire package. And while
+one can use the same mechanism to also query for information in current page, it
+puts a dependency on `fpm`. Since ftd has access to information in current page,
+such a query can be conceivably be easily provided by FTD as well.
+
+What would be the result to these queries? Since these queries are to power intra
+page linking, they should return `#hash` for that specific DOM node. We auto
+generate `id` for each heading as of now. We have to start generating IDs for
+every interesting region.
+
+So the query could return list of hash, title pairs. Each region will have to
+be associated with some sort of text as well. In case of image, table etc it
+could be caption. Else it the name of the object can be the title, e.g. for image
+we will just show "image", or even "image 1" etc.
+
+What about heading tree?
+
+We already do heading tree detection, we can return a nested data structure based
+on our query.
+
+What all to include? We can pass a list of regions that we are interested in.
+
+It has to be a `$processor$`. We can call it `page-query`, `package-query` for
+entire package, page query for just the page.
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.toc-item list headers:
+$processor$: page-query
+regions: h1, h2, h3, h4, image
+
+-- ft.markdown:
+
+Where `ftd.toc-item` itself is a record:
+
+-- ft.code:
+lang: ftd
+
+\-- record toc-item:
+string title:
+string url:
+toc-item list children:
+
+-- ft.markdown:
+
+Implementing it requires two pass rendering. In first pass the data would be
+wrong, an empty list, we will first construct the whole DOM tree. And then in
+second pass we will do the query, and update the list with the result.
+
+-- ft.h1: TODO, RELEASE Only Posts And So On
+
+In org-mode it is possible to add some tags to headings, like a TODO, RELEASE
+etc, and then do query on the tags, eg only show headings matching given tag.
+
+Consider this journal page itself, there are a lot of future TODO like headings,
+many announcements of some feature RELEASE and so on. Now imagine if there was
+some way to have a selector where you click on TODO button and only the posts
+with TODO tags are visible.
+
+How would we do that? One easy way to do it is to create components like this:
+
+-- ft.code:
+lang: ftd
+
+\-- optional string current-tag:
+
+\-- ftd.text h1: $title
+caption title:
+string tag:
+if: $current-tag is null | $tag == $current-tag
+
+-- ft.markdown:
+
+This should be doable already with no feature requirements, other than the `|`,
+the `or` expression support.
+
+-- ft.h1: Tags In TOC
+
+It would also be cool if we could show the tags in the TOC. But our type
+`toc-item` does not have `tags`. `region` is a common property, available on
+all ftd elements. Maybe we can add `tags` on all of them as well, and include
+`tags` in `toc-item`? We should also add `region` to `toc-item`.
+
+-- ft.h1: Min/Max And Other Constraints
+
+I was reading up on asn1, and they have interesting feature:
+
+-- ft.code:
+lang: asn
+
+Address ::= SEQUENCE {
+   street-address UTF8String,
+   country UTF8String -- see a note below,
+   postal-code UTF8String
+} ((WITH COMPONENTS {
+       ...,
+       country ("USA"),
+       postal-code (PATTERN "[0-9]#5(-[0-9]#4)?")
+    }
+  | WITH COMPONENTS {
+       ...,
+       country ("Canada"),
+       postal-code (PATTERN "[0-9][A-Z][0-9]
+                                [A-Z][0-9][A-Z]")
+    }
+  ))
+
+
+-- ft.markdown:
+
+SEQUENCE is just a `record`, and it has three fields, and for `postal-code` they
+have two different constraints applied, depending on the value of `country`
+field, e.g. if `country` is `USA`, then `postal-code` must match the given pattern
+and so on.
+
+This is quite interesting. We have minimal form handling support now, so user
+is going to type stuff, and it would be good if we can chose to not accept
+invalid values.
+
+Similarly for components and theme configuration variables theme and component
+authors should be able to place some restrictions on the values passed to them.
+
+How could could it look like? First of all it has to be done at both top level,
+and inside component level. So like `-- container:`, which can equally well work
+with `--- container:`, meaning it should not have nesting. If we look at ASN1
+example there is clear nesting. I mean if there was no nesting it would be easier
+to design. Lets see.
+
+Say:
+
+-- ft.code:
+lang: ftd
+
+\-- string foo: hello
+\-- check foo:
+regex: <some regex>
+
+-- ft.markdown:
+
+So I am proposing a `check` keyword. We could have called it `constraint foo`
+as well, but that's longer to type and I keep forgetting the spelling.
+
+We can do it on record as well:
+
+-- ft.code:
+lang: ftd
+
+\-- record foo:
+string title:
+
+\--- check title:
+regex: <whatever>
+
+-- ft.markdown:
+
+And for components:
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.text foo:
+caption title:
+
+\--- check title:
+regex: <whatever>
+
+-- ft.markdown:
+
+Types of checks will vary based on type of thing being checked. For string we
+have `regex`. But we can have `max-length`, `min-length`, `starts-with`,
+`ends-with`, `is-lower-case`, `is-title-case`, `contains`/`at-most-one` and so
+on. Maybe even `unicode-range` stuff we use for `font-face`.
+
+Similarly `integer` can be `min`, `max`, `is-odd: true`, `is-prime`? etc.
+
+`contains`, `min`/`max` etc can also refer to other variables. How would we
+disambiguate global vs local variables by same name? We won't. Don't overwrite
+shadow variables, it's not a good idea, we will put a lint for that.
+
+How would we know if the value is failing? In some cases we can create errors,
+so if an invalid value was part of a document we can refuse to save the document
+etc. But sometimes, e.g. when I am say changing a `boolean`, and based on new
+value of the `boolean` a bunch of variables that were initially valid are no
+longer valid. How do we deal with that?
+
+One option is we accept the error case, and for each variable we have a special
+attribute `.error`, which can be `optional string`, will be `null` if the
+variable checks pass, else it would be the user visible error message.
+
+Error message in what language? We can't pretend there is only one language now
+can we? Especially when first class translation support is our one of shining
+features in `fpm`? Problem for tomorrow me!
+
+`-- check` can specify some error message as well if the check fails. What if
+there are more than one errors? Make it `.errors`, like Django forms? Auto
+message, e.g. failure of `min`, we can create an error message in right language.
+
+BTW this takes us to need for ftl, Fluent, like way to translate stuff, when
+we are creating component libraries, we are going to have to hard code strings,
+and given we have first class `markup` support, we can create string templates
+in every language for some string, and use variable substitution etc.
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.text welcome-message:
+string who:
+text if $fpm.lang == en: Hello, {$who}
+
+\--- text:
+if $fpm.lang == hi:
+
+नमस्ते {$who},
+
+आपसे मिल कर बहुत ख़ुशी हुई.
+
+-- ft.markdown:
+
+Some polish is needed in the syntax, but I think it can be made to work without
+adding any new feature to FTD for translation.
 
 -- ft.h1: `$event-click$: message-host <>`
 
