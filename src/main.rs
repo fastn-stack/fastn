@@ -52,8 +52,8 @@ fn write(id: &str, doc: String) {
         }
     };
 
-    std::fs::create_dir_all("./build").expect("failed to create build folder");
-    let mut f = std::fs::File::create(format!("./build/{}", id.replace(".ftd", ".html")))
+    std::fs::create_dir_all("./docs").expect("failed to create docs folder");
+    let mut f = std::fs::File::create(format!("./docs/{}", id.replace(".ftd", ".html")))
         .expect("failed to create .html file");
 
     let doc = b.to_rt("main", id);
