@@ -30,6 +30,155 @@ So links never break (and original author can keep updating document URL at whim
 (on how having article.page allows us to get just the content of a page, without
 header/sidebar/footer etc).
 
+-- ft.h1: Object Implementation Details
+
+15th Jan 2022
+
+So Arpita has just implemented object constructors:
+
+-- ft.code:
+lang: ftd
+
+\-- object obj:
+function: console-print
+value: Hello World
+
+-- ft.markdown:
+
+With this now you can construct JSON objects, eg above will create:
+
+-- ft.code:
+lang: json
+
+{
+    "function": "console-print",
+    "value": "Hello World"
+}
+
+-- ft.markdown:
+
+And then you can pass the object to JavaScript using `message-host`, eg:
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.text: click me
+$event-click$: message-host $obj
+
+-- ft.markdown:
+
+And in JavaScript you can write the consumer:
+
+-- ft.code:
+lang: js
+
+window["console-print"] = function(v) {
+    console.log(v.value);
+}
+
+-- ft.markdown:
+
+This JS code has to be provided by the "FTD Host", eg FPM is one such FTD Host.
+To create arbitrary functionality, FTD Host interface has to be implemented.
+
+
+This is the basic. Soon the object constructor will be able to refer to other
+variables in FTD, eg:
+
+-- ft.code:
+lang: ftd
+
+\-- object obj:
+function: console-print
+value: $foo
+
+-- ft.markdown:
+
+Here we will use the value, and type of `$foo`, and that will be inserted in the
+object.
+
+-- ft.h2: Objects Are Opaque
+
+One important point to note is that objects, once constructed, can not be
+introspected from FTD. So you can not do:
+
+-- ft.code:
+lang: ftd
+
+\-- integer f: $obj.value
+
+-- ft.markdown:
+
+Assuming `$object.value` is an `integer`, this may seem "reasonable", but we do
+not allow it. At least for now. We are doing it for performance reason one can
+say, also we are lazy, we do not yet have time to think though the implications
+of it.
+
+We are building this feature to pass data to JavaScript for now, so we are
+committing to only the part of design that is minimally needed.
+
+-- ft.h2: JS Evaluation
+
+When we have variable references in the object, we will generate the following
+object:
+
+-- ft.code:
+lang: json
+
+{
+    "object": {
+        "function": "console-print",
+        "value": "$foo"
+    }
+}
+
+
+-- ft.markdown:
+
+We have one option that we go through the object and find all values with `$foo`
+pattern, and resolve them. We can also have `\$foo` to escape this behaviour.
+
+Other option is to keep track of references:
+
+-- ft.code:
+lang: json
+
+{
+    "references": {
+        "value": "$foo",
+        "foo.bar[0].baz": "$baz"
+    },
+    "object": {
+        "function": "console-print",
+        "value": "$foo"
+    }
+}
+
+-- ft.markdown:
+
+In `references` we have "JSON-paths" to every key that is a reference. Its easy
+to update the object by iterating it.
+
+We will see which ends up being easier to implement.
+
+-- ft.h2: Objects Are Only Constructed in JS
+
+The optimisation I was talking about, why we want things opaque in FTD is so that
+we only write code to create "object" in JS, and we do not have to evaluate the
+value of object in Rust at all.
+
+-- ft.h2: JavaScript Is Not The Only Host Language
+
+Currently we are writing our FTD Host implementations in JS, but tomorrow we
+want to support Swift, Java, etc when FTD targets other platforms.
+
+This is why FTD is trying to be a common language that will work everywhere, it
+will be responsible for UI and all the core part of functionality, like search,
+API access etc, has to be provided by host.
+
+
+
+
 
 -- ft.h1: Another Thought On Prelude
 
