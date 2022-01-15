@@ -29,7 +29,7 @@ pub fn main() {
                 let doc = std::fs::read_to_string(source).expect("cant read file");
                 write(id, doc);
                 write_doc = format!(
-                    "{}\n-- ftd.text: {} \n link: /{}\n\n",
+                    "{}\n-- ftd.text: {} \n link: {}\n\n",
                     write_doc,
                     id.replace(".ftd", ""),
                     id.replace(".ftd", ".html"),

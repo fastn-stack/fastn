@@ -5,10 +5,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
     <title>ftd</title>
     <script type="ftd" id="ftd-data">
-        {}
+        {
+  "spacing-and-image-link.ftd#show": {
+    "value": "true",
+    "dependencies": {
+      "2,1,0:some-id-external:2": "[{\"dependency_type\":\"Visible\",\"condition\":\"true\",\"parameters\":{}}]",
+      "3,1,0:some-id-external:3": "[{\"dependency_type\":\"Visible\",\"condition\":\"true\",\"parameters\":{}}]"
+    }
+  }
+}
     </script>
     <script type="ftd" id="ftd-external-children">
-        {}
+        {
+  "some-id-external:2": [
+    {
+      "condition": [
+        "some-id:2,1"
+      ],
+      "set_at": "some-id:2,1"
+    }
+  ],
+  "some-id-external:3": [
+    {
+      "condition": [
+        "some-id:3,1"
+      ],
+      "set_at": "some-id:3,1"
+    }
+  ]
+}
     </script>
     <script>
         // all ftd_utils are meant to be pure functions only: they can only depend on the
@@ -666,65 +691,18 @@ function console_print(data) {
 </head>
     <body style="height: 100%;">
 
-        <div data-id="main:root" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; height: 100%; justify-content: flex-start; white-space: initial; width: 100%" class="ft_md"><div data-id="0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-size: 50px; font-weight: 700; padding-bottom: 20px; text-align: left; white-space: initial" class="ft_md">Examples Index</div>
-<a data-id="1:main" href="architecture-diagram.html" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; text-align: left; white-space: initial" class="ft_md">architecture-diagram</a>
-<a data-id="2:main" href="test1.html" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; text-align: left; white-space: initial" class="ft_md">test1</a>
-<a data-id="3:main" href="spacing.html" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; text-align: left; white-space: initial" class="ft_md">spacing</a>
-<a data-id="4:main" href="creating-a-tree.html" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; text-align: left; white-space: initial" class="ft_md">creating-a-tree</a>
-<a data-id="5:main" href="intra-page-link-heading.html" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; text-align: left; white-space: initial" class="ft_md">intra-page-link-heading</a>
-<a data-id="6:main" href="open-container-with-if.html" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; text-align: left; white-space: initial" class="ft_md">open-container-with-if</a>
-<a data-id="7:main" href="action-increment-decrement.html" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; text-align: left; white-space: initial" class="ft_md">action-increment-decrement</a>
-<a data-id="8:main" href="open-container-with-id.html" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; text-align: left; white-space: initial" class="ft_md">open-container-with-id</a>
-<a data-id="9:main" href="grid.html" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; text-align: left; white-space: initial" class="ft_md">grid</a>
-<a data-id="10:main" href="event-toggle-creating-a-tree.html" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; text-align: left; white-space: initial" class="ft_md">event-toggle-creating-a-tree</a>
-<a data-id="11:main" href="spacing-and-image-link.html" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; text-align: left; white-space: initial" class="ft_md">spacing-and-image-link</a>
-<a data-id="12:main" href="event-stop-propagation.html" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; text-align: left; white-space: initial" class="ft_md">event-stop-propagation</a>
-<a data-id="13:main" href="variable-component.html" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; text-align: left; white-space: initial" class="ft_md">variable-component</a>
-<a data-id="14:main" href="markup.html" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; text-align: left; white-space: initial" class="ft_md">markup</a>
-<a data-id="15:main" href="hello-world.html" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; text-align: left; white-space: initial" class="ft_md">hello-world</a>
-<a data-id="16:main" href="ft.html" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; text-align: left; white-space: initial" class="ft_md">ft</a>
-<a data-id="17:main" href="buggy-open.html" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; text-align: left; white-space: initial" class="ft_md">buggy-open</a>
-<a data-id="18:main" href="conditional-attributes.html" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; text-align: left; white-space: initial" class="ft_md">conditional-attributes</a>
-<a data-id="19:main" href="test-video.html" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; text-align: left; white-space: initial" class="ft_md">test-video</a>
-<a data-id="20:main" href="record.html" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; text-align: left; white-space: initial" class="ft_md">record</a>
-<a data-id="21:main" href="t1.html" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; text-align: left; white-space: initial" class="ft_md">t1</a>
-<a data-id="22:main" href="deep-open-container.html" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; text-align: left; white-space: initial" class="ft_md">deep-open-container</a>
-<a data-id="23:main" href="external-variable.html" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; text-align: left; white-space: initial" class="ft_md">external-variable</a>
-<a data-id="24:main" href="comic_scene_crop_scale.html" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; text-align: left; white-space: initial" class="ft_md">comic_scene_crop_scale</a>
-<a data-id="25:main" href="event-toggle-on-inner-container.html" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; text-align: left; white-space: initial" class="ft_md">event-toggle-on-inner-container</a>
-<a data-id="26:main" href="action-increment-decrement-local-variable.html" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; text-align: left; white-space: initial" class="ft_md">action-increment-decrement-local-variable</a>
-<a data-id="27:main" href="grid-sample.html" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; text-align: left; white-space: initial" class="ft_md">grid-sample</a>
-<a data-id="28:main" href="basic-loop-on-record.html" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; text-align: left; white-space: initial" class="ft_md">basic-loop-on-record</a>
-<a data-id="29:main" href="event-toggle-for-loop.html" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; text-align: left; white-space: initial" class="ft_md">event-toggle-for-loop</a>
-<a data-id="30:main" href="invalid-deep-open-container.html" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; text-align: left; white-space: initial" class="ft_md">invalid-deep-open-container</a>
-<a data-id="31:main" href="anchor-position.html" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; text-align: left; white-space: initial" class="ft_md">anchor-position</a>
-<a data-id="32:main" href="example.html" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; text-align: left; white-space: initial" class="ft_md">example</a>
-<a data-id="33:main" href="action-increment-decrement-on-component.html" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; text-align: left; white-space: initial" class="ft_md">action-increment-decrement-on-component</a>
-<a data-id="34:main" href="mygate.html" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; text-align: left; white-space: initial" class="ft_md">mygate</a>
-<a data-id="35:main" href="new-syntax.html" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; text-align: left; white-space: initial" class="ft_md">new-syntax</a>
-<a data-id="36:main" href="rendering-ft-page.html" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; text-align: left; white-space: initial" class="ft_md">rendering-ft-page</a>
-<a data-id="37:main" href="nested-open-container.html" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; text-align: left; white-space: initial" class="ft_md">nested-open-container</a>
-<a data-id="38:main" href="input.html" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; text-align: left; white-space: initial" class="ft_md">input</a>
-<a data-id="39:main" href="deep-nested-open-container.html" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; text-align: left; white-space: initial" class="ft_md">deep-nested-open-container</a>
-<a data-id="40:main" href="event-set.html" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; text-align: left; white-space: initial" class="ft_md">event-set</a>
-<a data-id="41:main" href="absolute_positioning.html" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; text-align: left; white-space: initial" class="ft_md">absolute_positioning</a>
-<a data-id="42:main" href="event-toggle-local-variable-for-component.html" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; text-align: left; white-space: initial" class="ft_md">event-toggle-local-variable-for-component</a>
-<a data-id="43:main" href="event-onclick-toggle.html" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; text-align: left; white-space: initial" class="ft_md">event-onclick-toggle</a>
-<a data-id="44:main" href="line-clamp.html" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; text-align: left; white-space: initial" class="ft_md">line-clamp</a>
-<a data-id="45:main" href="lib.html" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; text-align: left; white-space: initial" class="ft_md">lib</a>
-<a data-id="46:main" href="mouse-in-text.html" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; text-align: left; white-space: initial" class="ft_md">mouse-in-text</a>
-<a data-id="47:main" href="markup-line.html" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; text-align: left; white-space: initial" class="ft_md">markup-line</a>
-<a data-id="48:main" href="event-toggle-local-variable.html" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; text-align: left; white-space: initial" class="ft_md">event-toggle-local-variable</a>
-<a data-id="49:main" href="container-switch.html" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; text-align: left; white-space: initial" class="ft_md">container-switch</a>
-<a data-id="50:main" href="intra-page-link-2.html" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; text-align: left; white-space: initial" class="ft_md">intra-page-link-2</a>
-<a data-id="51:main" href="escape-body.html" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; text-align: left; white-space: initial" class="ft_md">escape-body</a>
-<a data-id="52:main" href="submit.html" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; text-align: left; white-space: initial" class="ft_md">submit</a>
-<a data-id="53:main" href="test.html" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; text-align: left; white-space: initial" class="ft_md">test</a>
-<a data-id="54:main" href="conditional-attribute-tab.html" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; text-align: left; white-space: initial" class="ft_md">conditional-attribute-tab</a>
-<a data-id="55:main" href="comic.html" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; text-align: left; white-space: initial" class="ft_md">comic</a>
-<a data-id="56:main" href="intra-page-link.html" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; text-align: left; white-space: initial" class="ft_md">intra-page-link</a>
-<a data-id="57:main" href="comic_with_scene_without_comicgen.html" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; text-align: left; white-space: initial" class="ft_md">comic_with_scene_without_comicgen</a>
-<a data-id="58:main" href="auto-nesting.html" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; text-align: left; white-space: initial" class="ft_md">auto-nesting</a></div>
+        <div data-id="main:root" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; height: 100%; justify-content: flex-start; white-space: initial; width: 100%" class="ft_md"><a data-id="0:main" href="https://www.amitu.com/fifthtry/amitu/" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; white-space: initial; width: 200px" class="ft_md"><img alt="" data-id="main:root" src="https://www.w3schools.com/cssref/img_tree.gif" style="width: 100%"></a>
+<div data-id="1:main" data-spacing="margin-left:20px" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start; white-space: initial" class="ft_md"><div data-id="1,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-weight: 400; text-align: left; white-space: initial" class="ft_md">hello</div>
+<div data-id="1,1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-weight: 400; margin-left: 20px; text-align: left; white-space: initial" class="ft_md">world</div></div>
+<div data-id="2:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; white-space: initial" class="ft_md"><div data-id="2,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-weight: 400; text-align: left; white-space: initial" class="ft_md">Row Title</div>
+<div data-id="some-id:2,1:main" data-spacing="margin-left:20px" style="align-items: flex-start; border-color: rgba(255,255,0,1); border-radius: 0px; border-style: solid; border-width: 2px; box-sizing: border-box; color: rgba(255,0,0,1); display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start; white-space: initial" class="ft_md"><div data-ext-id="some-id-external:2:main" data-id="2,1,0:some-id-external:2:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-weight: 400; text-align: left; white-space: initial" class="ft_md">hello</div>
+<div data-ext-id="some-id-external:2:main" data-id="2,1,1:some-id-external:2:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-weight: 400; margin-left: 20px; text-align: left; white-space: initial" class="ft_md">world</div>
+<div data-ext-id="some-id-external:2:main" data-id="2,1,2:some-id-external:2:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-weight: 400; margin-left: 20px; text-align: left; white-space: initial" class="ft_md">again</div></div></div>
+<div data-id="3:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; padding-top: 20px; white-space: initial" class="ft_md"><div data-id="3,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-weight: 400; text-align: left; white-space: initial" class="ft_md">Column Title</div>
+<div data-id="some-id:3,1:main" data-spacing="margin-top:20px" style="align-items: flex-start; border-color: rgba(235,237,239,1); border-radius: 0px; border-style: solid; border-width: 2px; box-sizing: border-box; color: rgba(0,128,0,1); display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; white-space: initial" class="ft_md"><div data-ext-id="some-id-external:3:main" data-id="3,1,0:some-id-external:3:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-weight: 400; text-align: left; white-space: initial" class="ft_md">hello</div>
+<div data-ext-id="some-id-external:3:main" data-id="3,1,1:some-id-external:3:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-weight: 400; margin-top: 20px; text-align: left; white-space: initial" class="ft_md">world</div>
+<div data-ext-id="some-id-external:3:main" data-id="3,1,2:some-id-external:3:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-weight: 400; margin-top: 20px; text-align: left; white-space: initial" class="ft_md">again</div></div></div>
+<div data-id="4:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;toggle&quot;,&quot;target&quot;:&quot;spacing-and-image-link.ftd#show&quot;,&quot;parameters&quot;:{}}]', this)" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; padding-top: 20px; text-align: left; white-space: initial" class="ft_md">Click here!</div></div>
 
 
     <script>
