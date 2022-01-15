@@ -292,7 +292,7 @@ impl Action {
             }
             _ if a.starts_with("message-host") => {
                 let value = a.replace("message-host", "").trim().to_string();
-                let parameters = {
+                let parameters = if value.starts_with('$') {
                     let mut parameters: std::collections::BTreeMap<
                         String,
                         Vec<ftd::PropertyValue>,
@@ -311,6 +311,8 @@ impl Action {
                         );
                     }
                     parameters
+                } else {
+                    Default::default()
                 };
                 let target = if value.is_empty() {
                     "ftd_message".to_string()
