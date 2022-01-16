@@ -8,6 +8,157 @@ id: page
 
 -- ft.h0: FTD Journal
 
+-- ft.h1: `$processor$`, `async`, `Library::get()` and `Document::set_*()`
+
+16th Jan 2022
+
+One of the things that has emerged since yesterdays brain storm with Arpita is
+we need first class support for updating FTD variables from "host languages".
+
+You can say we have already two host languages, Rust and JavaScript. Once a
+variable has been defined in FTD it can be updated by by Rust code on backend
+using `ftd::Document::set_bool()` etc family of functions. Similarly the variable
+can be updated by `window.ftd.set_bool()` etc family of functions.
+
+So we have an emerging pattern, we define some variables in FTD with some initial
+values, and they can be made dynamic by host. If we make this a first class thing,
+currently we only support changes to basic types like boolean and string, if we
+support complete access to FTD internals from host, and reliably update the FTD
+"view" based on FTD data it would be cool.
+
+-- ft.h2: `Library::get()` Simplification
+
+Currently we have a technique where we create "virtual" FTD documents, e.g. there
+is a module `fpm` for our FPM static site generator. This module is dynamically
+constructed with actual values set for all these variables. This is done so we
+can pass a bunch of data that we have in Rust to FTD files. So we do something
+like [this](https://github.com/FifthTry/fpm/blob/8a0ce82571921e275292532b211a2dcaad618131/src/library/mod.rs#L136-L336):
+
+-- ft.code: dynamically generating `last_modified_on`
+lang: rs
+
+format!(
+    indoc::indoc! {"
+        -- record ui-data:
+        string last-modified-on:
+
+        -- ui-data ui:
+        last-modified-on: {last_modified_on}
+     "},
+    last_modified_on = fpm::i18n::translation::search(
+        &lang,
+        &primary_lang,
+        "last-modified-on",
+        &current_document_last_modified_on
+    ),
+)
+
+-- ft.markdown:
+
+We are setting `last_modified_on` based on string substitution in Rust using
+`format!()` statement.
+
+If we have first class support for setting any variable from Rust, we can keep
+`fpm.ftd` file static, with no data in it, and load it to create FTD variables,
+and then update each of the variables defined by `fpm.ftd` file.
+
+This means our `ftd::Library::get()` methods can be simplified. It currently
+perform two tasks:
+
+1. Given an ID, it transforms the ID, e.g. it looks up the ID in dependency list,
+   applies complex module resolution logic and reads the final file from disc.
+2. It generates dynamic ftd files like I shown above.
+
+The transformation etc can be done in a `sync` way. Reading a file itself can
+be argued to be `async`, but for many cases it can be considered sync, say if
+you have an in-memory database of ftd files.
+
+Point is, if we recommended use case 2, it would necessarily mean `ftd::Library::get()`
+be strongly `async`, allow arbitrary complex data lookups, HTTP API calls, database
+calls and so on. Where as if `::get()` is only for loading FTD files, it's relatively
+simpler. In many many use cases, say for serving blog or static content, content
+is small and can be read on application start, with some watcher to keep updating
+in memory cache on file system changes. In other cases, say FTD working as
+primary front-end for application, the number of FTD files would be even smaller
+in general. So it is conceivable to keep entire set of FTD files in memory.
+
+This will still leave out fetching FTD files from say internet. If we want to
+support that, and there may be some security issues there, but maybe they are
+solvable somehow and in general we should allow fetching from internet etc.
+
+So while we can not fully make `ftd::Library::get()` `sync`, at least we can
+limit it's complexity, and not have two ways to set dynamic data.
+
+-- ft.h2: Reviewing `$processor$`
+
+So if we have first class support for update FTD data from host languages, then
+do we still need `$processor$`?
+
+Our `ftd::Library` Rust `trait` exposes another method `::process()` whenever
+FTD interpreter encounters a `$processor$` directive. `process()` computes the
+data, and passes it to interpreter, and then interpreter continues interpreting
+the rest of the document.
+
+Technically we can make this also two pass, let the interpreter interpret the
+entire document in peace (only interrupted by `::get()` calls, to be executed
+every time interpreter comes across an `-- import:` directive).
+
+We are basically seeing if we can make the whole interpret pass "pure
+computation". Now we proved `get()` can't be pure yet and we probably will accept
+that design choice. But what about `$processor$`? Can we remove it?
+
+One key difference between `fpm` scenario I described above vs `$processor$` is
+`fpm` was "well known". `fpm` module is well documented (or is going to be), and
+so Rust code knows what all dynamic variables are there, and Rust can update them.
+
+But in case of `$processor$`, it can be applied on any user variable defined in
+arbitrary FTD file. Interpreter can give each of `$processor$` variables a
+default value, go through the document once, and afterwards let Rust update it
+How would Rust know what all variables to update?
+
+-- ft.code: `$processor$` to update variable
+lang: ftd
+
+\-- string foo:
+$processor$: get-some-data-from-internet
+
+-- ft.markdown:
+
+Here we have a processor `get-some-data-from-internet`, which returns a `string`,
+and the string is bound to the name `foo` in FTD.
+
+Currently when interpreter encounters `$processor$` directive, it immediately
+calls the `get-some-data-from-internet` (via `Library::process()`), and
+initializes `foo`.
+
+If we want to do it after the fact, we would have to discover what all variables
+have processor applied.
+
+We have another use case of processor planned:
+
+-- ft.code: `$processor$` to component
+lang: ftd
+
+\-- ftd.text:
+$processor$: get-some-data-from-internet
+
+-- ft.markdown:
+
+In this case we are not keeping the output of `get-some-data-from-internet` in
+any FTD variable, but instead directly passing the value to the component.
+
+Currently there is no plan to allow host to directly modify the FTD generated
+DOM, we want to do it via data updates, host only knows about data, updates the
+data, and UI updates itself.
+
+On the whole it feels to me that creating new API to get variables that have
+`$processor$` or worse allowing host to directly update DOM are not great ideas.
+
+So our interpreter can not really be pure data operation, and it seems the best
+design is to allow for first class `async` support and continue on current path.
+
+
+
 -- ft.h1: Object Implementation Details
 
 15th Jan 2022
@@ -235,6 +386,8 @@ lang: json
     "name": "jack",
     "field": "value"
 }
+
+-- ft.markdown:
 
 We will soon allow including FTD variable references in the object, e.g.
 `name: $name`. We will also make `function` optional, if it's not passed we will
@@ -518,6 +671,8 @@ features in `fpm`? Problem for tomorrow me!
 `-- check` can specify some error message as well if the check fails. What if
 there are more than one errors? Make it `.errors`, like Django forms? Auto
 message, e.g. failure of `min`, we can create an error message in right language.
+
+-- ft.h1: Thoughts On Internationalization in FTD
 
 BTW this takes us to need for ftl, Fluent, like way to translate stuff, when
 we are creating component libraries, we are going to have to hard code strings,
