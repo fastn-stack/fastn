@@ -16,7 +16,7 @@ $event-click$: increment $a by $by
 
 --- ftd.integer:
 value: $a
-color if $b: green
+background-color if $b: rgba(0, 128, 0, 0.35)
 color if $a == 30: red
 
 -- foo:
