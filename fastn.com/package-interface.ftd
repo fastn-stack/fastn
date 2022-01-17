@@ -1,0 +1,10 @@
+-- import: fifthtry.github.io/Jupiter-theme as ft
+-- import: config
+
+-- ft.doc-page:
+toc: $config.themes-toc
+
+
+-- ft.h0: FPM Package Interface
+
+Theme packages are [designed to be interchangeable](/themes/).
