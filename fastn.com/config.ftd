@@ -1,6 +1,6 @@
 -- import: fifthtry.github.io/Jupiter-theme as ft
 
--- ft.site-name: FPM-DEV
+-- ft.site-name: FPM
 -- ft.site-icon: static/images/logo.svg
 -- ft.github: https://github.com/fifthtry/fpm-dev-en/
 -- ft.site-url: /
@@ -10,6 +10,13 @@ $processor$: toc
 
 - about/
   Docs
+- usage/
+  `fpm` CLI Manual
+- journal/
+  Development
+- themes/
+  Themes
+
 
 -- ft.toc:
 $processor$: toc
@@ -18,10 +25,6 @@ $processor$: toc
   About `fpm`
   - why-not/
     Why Not `fpm`?
-- /roadmap/
-  Roadmap
-- /journal/
-  Journal
 - /fs/
   File System Organization
   - /fpm-ftd-file/
@@ -61,6 +64,36 @@ $processor$: toc
 - /known-issues/
   Known Issues
 
+
+-- ft.toc-item list dev-toc:
+$processor$: toc
+
+- /roadmap/
+  Roadmap
+- /journal/
+  Journal
+
+-- ft.toc-item list themes-toc:
+$processor$: toc
+
+- /themes/
+  About Themes
+- /package-interface/
+  Package Interface
+  - /theme/docs/
+    Theme Documentation
+  - /theme/article/
+    Article PI
+  - /theme/book/
+    Book PI
+  - /theme/presentation/
+    Presentation PI
+- /theme/config/
+  Theme Config
+- /theme/responsive/
+  Responsive Themes
+- /theme/dark-mode/
+  Dark Mode
 
 -- ft.toc-item list learn:
 $processor$: toc

@@ -2,7 +2,7 @@
 -- import: config
 
 -- ft.doc-page:
-toc: $ft.toc
+toc: $config.dev-toc
 
 
 -- ft.h0: FPM Journal
@@ -30,190 +30,64 @@ So links never break (and original author can keep updating document URL at whim
 (on how having article.page allows us to get just the content of a page, without
 header/sidebar/footer etc).
 
--- ft.h1: Object Implementation Details
-
-15th Jan 2022
-
-So Arpita has just implemented object constructors:
+-- ft.h1: Package Interfaces: Strict Vs Compatible
 
 -- ft.code:
 lang: ftd
 
-\-- object obj:
-function: console-print
-value: Hello World
+\-- resume.me: Amit {bold: Upadhyay}
+total-experience: 18 years
 
--- ft.markdown:
+\--- bio:
+hello, this me.
+\--- ft.image:
+\--- ftd.row:
+\--- ft.markdown:
+\--- ft.image:
 
-With this now you can construct JSON objects, eg above will create:
+\--- container: resume.me
 
--- ft.code:
-lang: json
+\-- ft.markdown:
 
-{
-    "function": "console-print",
-    "value": "Hello World"
-}
 
--- ft.markdown:
-
-And then you can pass the object to JavaScript using `message-host`, eg:
-
--- ft.code:
+-- ft.code: resume-1.ftd
 lang: ftd
 
-\-- ftd.text: click me
-$event-click$: message-host $obj
+\-- ftd.row me:
+caption name:
+string total-experience
 
--- ft.markdown:
-
-And in JavaScript you can write the consumer:
-
--- ft.code:
-lang: js
-
-window["console-print"] = function(v) {
-    console.log(v.value);
-}
-
--- ft.markdown:
-
-This JS code has to be provided by the "FTD Host", eg FPM is one such FTD Host.
-To create arbitrary functionality, FTD Host interface has to be implemented.
-
-
-This is the basic. Soon the object constructor will be able to refer to other
-variables in FTD, eg:
-
--- ft.code:
+-- ft.code: resume-2.ftd
 lang: ftd
 
-\-- object obj:
-function: console-print
-value: $foo
+\-- record person
+caption name:
+string total-experience
+ftd.ui bio:
 
--- ft.markdown:
-
-Here we will use the value, and type of `$foo`, and that will be inserted in the
-object.
-
--- ft.h2: Objects Are Opaque
-
-One important point to note is that objects, once constructed, can not be
-introspected from FTD. So you can not do:
-
--- ft.code:
-lang: ftd
-
-\-- integer f: $obj.value
-
--- ft.markdown:
-
-Assuming `$object.value` is an `integer`, this may seem "reasonable", but we do
-not allow it. At least for now. We are doing it for performance reason one can
-say, also we are lazy, we do not yet have time to think though the implications
-of it.
-
-We are building this feature to pass data to JavaScript for now, so we are
-committing to only the part of design that is minimally needed.
-
--- ft.h2: JS Evaluation
-
-When we have variable references in the object, we will generate the following
-object:
-
--- ft.code:
-lang: json
-
-{
-    "object": {
-        "function": "console-print",
-        "value": "$foo"
-    }
-}
+\-- person me:
 
 
--- ft.markdown:
+\-- ftd.column:
+spacing: 20
 
-We have one option that we go through the object and find all values with `$foo`
-pattern, and resolve them. We can also have `\$foo` to escape this behaviour.
-
-Other option is to keep track of references:
-
--- ft.code:
-lang: json
-
-{
-    "references": {
-        "value": "$foo",
-        "foo.bar[0].baz": "$baz"
-    },
-    "object": {
-        "function": "console-print",
-        "value": "$foo"
-    }
-}
-
--- ft.markdown:
-
-In `references` we have "JSON-paths" to every key that is a reference. Its easy
-to update the object by iterating it.
-
-We will see which ends up being easier to implement.
-
--- ft.h2: Objects Are Only Constructed in JS
-
-The optimisation I was talking about, why we want things opaque in FTD is so that
-we only write code to create "object" in JS, and we do not have to evaluate the
-value of object in Rust at all.
-
--- ft.h2: JavaScript Is Not The Only Host Language
-
-Currently we are writing our FTD Host implementations in JS, but tomorrow we
-want to support Swift, Java, etc when FTD targets other platforms.
-
-This is why FTD is trying to be a common language that will work everywhere, it
-will be responsible for UI and all the core part of functionality, like search,
-API access etc, has to be provided by host.
-
--- ft.h2: Objects Can Take Parameters
-
-You may want to pass parameters to objects. Soon you will be able to do:
-
--- ft.code:
-lang: ftd
-
-\-- object console-print:
-string message:
-function: console-print
-message: $message
-
-\-- ftd.text: click me
-$event-click$: message-host console-print:
-> message: clicked!
-
-\-- ftd.input:
-$event-input$: message-host console-print:
-> message: $VALUE
+\--- me.bio:
 
 
--- ft.markdown:
 
-Other usage of object constructor that takes parameter would be:
 
--- ft.code:
-lang: ftd
 
-\-- object get-user-info:
-string username:
-$process$: http
-url: https://github.com/api/user-info
-method: POST
-api-key: $api-key
+\-- resume.degree: BTech, Mechanical Engineering
+university: IIT-Bombay
+graduation: 2003
 
-\-- user-info info:
-$processor$: get-user-info
-username: amitu
+\-- resume.job: CEO
+company: FifthTry, Inc
+industry: Developer Tools
+start-date: 2020-August
+
+\--- resume.role: CEO
+start-date: 2020-August
 
 
 -- ft.h1: Another Thought On Prelude
@@ -305,7 +179,7 @@ author: j.author
 
 -- ft.markdown:
 
-Meaning if any ftd file now onwards refers to `blog`, they will be getting
+Meaning if any ftd file now on-wards refers to `blog`, they will be getting
 `j.blog`, i.e. j.blog is auto imported in every ftd file. And we do not even have
 to write the explicit lines, we follow `implements`, and look at `main` for the
 package being implemented, and auto import the `main` modules.
@@ -622,7 +496,7 @@ call it, and *most* of the files in the package can chose to import `prelude`
 and get everything they want. This way we do not have anything special happening
 at all, everything is explicit.
 
-To implement this we realise we need a feature, we want to be able to import a
+To implement this we realize we need a feature, we want to be able to import a
 bunch of "symbols" in `prelude`, and export them from prelude. Eg if `prelude`
 is:
 
