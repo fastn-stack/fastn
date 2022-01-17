@@ -10617,8 +10617,14 @@ mod test {
                         action: ftd::Action {
                             action: s("increment"),
                             target: s("foo/bar#count"),
-                            parameters: std::array::IntoIter::new([(s("by"), vec![s("2")])])
-                                .collect(),
+                            parameters: std::array::IntoIter::new([(
+                                s("by"),
+                                vec![ftd::event::ParameterData {
+                                    value: "2".to_string(),
+                                    reference: None,
+                                }],
+                            )])
+                            .collect(),
                         },
                     }],
                     ..Default::default()
@@ -10638,8 +10644,26 @@ mod test {
                             action: s("increment"),
                             target: s("foo/bar#count"),
                             parameters: std::array::IntoIter::new([
-                                (s("by"), vec![s("2")]),
-                                (s("clamp"), vec![s("2"), s("10")]),
+                                (
+                                    s("by"),
+                                    vec![ftd::event::ParameterData {
+                                        value: "2".to_string(),
+                                        reference: None,
+                                    }],
+                                ),
+                                (
+                                    s("clamp"),
+                                    vec![
+                                        ftd::event::ParameterData {
+                                            value: "2".to_string(),
+                                            reference: None,
+                                        },
+                                        ftd::event::ParameterData {
+                                            value: "10".to_string(),
+                                            reference: None,
+                                        },
+                                    ],
+                                ),
                             ])
                             .collect(),
                         },
@@ -10662,7 +10686,16 @@ mod test {
                             target: s("foo/bar#count"),
                             parameters: std::array::IntoIter::new([(
                                 s("clamp"),
-                                vec![s("2"), s("10")],
+                                vec![
+                                    ftd::event::ParameterData {
+                                        value: "2".to_string(),
+                                        reference: None,
+                                    },
+                                    ftd::event::ParameterData {
+                                        value: "10".to_string(),
+                                        reference: None,
+                                    },
+                                ],
                             )])
                             .collect(),
                         },
@@ -10734,7 +10767,10 @@ mod test {
                                         target: s("@count@0"),
                                         parameters: std::array::IntoIter::new([(
                                             s("by"),
-                                            vec![s("3")],
+                                            vec![ftd::event::ParameterData {
+                                                value: "3".to_string(),
+                                                reference: None,
+                                            }],
                                         )])
                                         .collect(),
                                     },
@@ -10754,7 +10790,10 @@ mod test {
                                         target: s("@count@0"),
                                         parameters: std::array::IntoIter::new([(
                                             s("by"),
-                                            vec![s("2")],
+                                            vec![ftd::event::ParameterData {
+                                                value: "2".to_string(),
+                                                reference: Some(s("foo/bar#decrement-by")),
+                                            }],
                                         )])
                                         .collect(),
                                     },
@@ -10863,7 +10902,13 @@ mod test {
                             action: ftd::Action {
                                 action: s("increment"),
                                 target: s("foo/bar#count"),
-                                parameters: std::array::IntoIter::new([(s("clamp"), vec![s("0"), s("1")])])
+                                parameters: std::array::IntoIter::new([(s("clamp"), vec![ftd::event::ParameterData {
+                                    value: "0".to_string(),
+                                    reference: None,
+                                }, ftd::event::ParameterData {
+                                    value: "1".to_string(),
+                                    reference: None,
+                                }])])
                                     .collect(),
                             },
                         },
@@ -10895,7 +10940,16 @@ mod test {
                             target: s("foo/bar#count"),
                             parameters: std::array::IntoIter::new([(
                                 s("clamp"),
-                                vec![s("0"), s("1")],
+                                vec![
+                                    ftd::event::ParameterData {
+                                        value: "0".to_string(),
+                                        reference: None,
+                                    },
+                                    ftd::event::ParameterData {
+                                        value: "1".to_string(),
+                                        reference: None,
+                                    },
+                                ],
                             )])
                             .collect(),
                         },
@@ -12104,7 +12158,16 @@ mod test {
                             target: s("foo/bar#current"),
                             parameters: std::array::IntoIter::new([(
                                 s("value"),
-                                vec![s("hello world"), s("string")],
+                                vec![
+                                    ftd::event::ParameterData {
+                                        value: s("hello world"),
+                                        reference: None,
+                                    },
+                                    ftd::event::ParameterData {
+                                        value: s("string"),
+                                        reference: None,
+                                    },
+                                ],
                             )])
                             .collect(),
                         },
@@ -12127,7 +12190,16 @@ mod test {
                             target: s("foo/bar#current"),
                             parameters: std::array::IntoIter::new([(
                                 s("value"),
-                                vec![s("good bye"), s("string")],
+                                vec![
+                                    ftd::event::ParameterData {
+                                        value: s("good bye"),
+                                        reference: Some(s("foo/bar#msg")),
+                                    },
+                                    ftd::event::ParameterData {
+                                        value: s("string"),
+                                        reference: None,
+                                    },
+                                ],
                             )])
                             .collect(),
                         },
@@ -12338,7 +12410,16 @@ mod test {
                                 target: s("@MOUSE-IN@0"),
                                 parameters: std::array::IntoIter::new([(
                                     s("value"),
-                                    vec![s("true"), s("boolean")],
+                                    vec![
+                                        ftd::event::ParameterData {
+                                            value: s("true"),
+                                            reference: None,
+                                        },
+                                        ftd::event::ParameterData {
+                                            value: s("boolean"),
+                                            reference: None,
+                                        },
+                                    ],
                                 )])
                                 .collect(),
                             },
@@ -12350,7 +12431,16 @@ mod test {
                                 target: s("@MOUSE-IN@0"),
                                 parameters: std::array::IntoIter::new([(
                                     s("value"),
-                                    vec![s("false"), s("boolean")],
+                                    vec![
+                                        ftd::event::ParameterData {
+                                            value: s("false"),
+                                            reference: None,
+                                        },
+                                        ftd::event::ParameterData {
+                                            value: s("boolean"),
+                                            reference: None,
+                                        },
+                                    ],
                                 )])
                                 .collect(),
                             },
@@ -12552,8 +12642,14 @@ mod test {
                         action: ftd::Action {
                             action: s("increment"),
                             target: s("@a@0"),
-                            parameters: std::array::IntoIter::new([(s("by"), vec![s("2")])])
-                                .collect(),
+                            parameters: std::array::IntoIter::new([(
+                                s("by"),
+                                vec![ftd::event::ParameterData {
+                                    value: s("2"),
+                                    reference: None,
+                                }],
+                            )])
+                            .collect(),
                         },
                     },
                 ],
@@ -12738,7 +12834,16 @@ mod test {
                                 target: s("@some-text@0"),
                                 parameters: std::array::IntoIter::new([(
                                     "value".to_string(),
-                                    vec!["hello".to_string(), "string".to_string()],
+                                    vec![
+                                        ftd::event::ParameterData {
+                                            value: s("hello"),
+                                            reference: Some(s("foo/bar#current")),
+                                        },
+                                        ftd::event::ParameterData {
+                                            value: s("string"),
+                                            reference: None,
+                                        },
+                                    ],
                                 )])
                                 .collect(),
                             },
@@ -13385,7 +13490,16 @@ mod test {
                                 target: s("foo/bar#input-data"),
                                 parameters: std::array::IntoIter::new([(
                                     s("value"),
-                                    vec![s("$VALUE"), s("string")],
+                                    vec![
+                                        ftd::event::ParameterData {
+                                            value: s("$VALUE"),
+                                            reference: None,
+                                        },
+                                        ftd::event::ParameterData {
+                                            value: s("string"),
+                                            reference: None,
+                                        },
+                                    ],
                                 )])
                                 .collect(),
                             },
@@ -13397,8 +13511,12 @@ mod test {
                                 target: s("$obj"),
                                 parameters: std::array::IntoIter::new([(
                                     "data".to_string(),
-                                    vec!["{\"function\":\"some-function\",\"value\":\"Nothing\"}"
-                                        .to_string()],
+                                    vec![ftd::event::ParameterData {
+                                    value: s(
+                                        "{\"function\":\"some-function\",\"value\":\"Nothing\"}",
+                                    ),
+                                    reference: Some(s("{\"value\":\"foo/bar#input-data\"}")),
+                                }],
                                 )])
                                 .collect(),
                             },

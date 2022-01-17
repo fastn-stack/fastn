@@ -12,16 +12,18 @@ impl Event {
         property: &std::collections::BTreeMap<String, Vec<ftd::PropertyValue>>,
         arguments: &std::collections::BTreeMap<String, ftd::Value>,
         doc: &ftd::p2::TDoc,
-    ) -> ftd::p1::Result<std::collections::BTreeMap<String, Vec<(String, Option<String>)>>> {
-        let mut property_string: std::collections::BTreeMap<String, Vec<(String, Option<String>)>> =
-            Default::default();
+    ) -> ftd::p1::Result<std::collections::BTreeMap<String, Vec<ftd::event::ParameterData>>> {
+        let mut property_string: std::collections::BTreeMap<
+            String,
+            Vec<ftd::event::ParameterData>,
+        > = Default::default();
         for (s, property_values) in property {
             let mut property_values_string = vec![];
             for property_value in property_values {
                 let value = property_value.resolve(line_number, arguments, doc)?;
-                let reference = get_reference(property_value, doc, line_number);
-                if let Some(v) = value.to_string() {
-                    property_values_string.push(v);
+                let reference = get_reference(property_value, doc, line_number)?;
+                if let Some(value) = value.to_string() {
+                    property_values_string.push(ftd::event::ParameterData { value, reference });
                 } else {
                     return ftd::e2(
                         format!("Can't convert value to string {:?}", value),
@@ -34,21 +36,30 @@ impl Event {
         }
         return Ok(property_string);
 
-        fn get_reference(property_value: &ftd::PropertyValue, doc: &ftd::p2::TDoc,line_number: usize,) -> Option<String> {
-            match property_value {
-                ftd::PropertyValue::Reference { name, kind } => {
+        fn get_reference(
+            property_value: &ftd::PropertyValue,
+            doc: &ftd::p2::TDoc,
+            line_number: usize,
+        ) -> ftd::p1::Result<Option<String>> {
+            Ok(match property_value {
+                ftd::PropertyValue::Reference { name, .. } => {
                     match doc.get_value(line_number, name)? {
                         ftd::Value::Object { values } => {
-                            let mut
+                            let mut val: std::collections::BTreeMap<String, String> =
+                                Default::default();
+                            for (k, v) in values.iter() {
+                                if let Some(reference) = get_reference(v, doc, line_number)? {
+                                    val.insert(k.to_string(), reference);
+                                }
+                            }
+                            serde_json::to_string(&val).ok()
                         }
                         _ => Some(name.to_owned()),
                     }
                 }
                 _ => None,
-            }
-            None
+            })
         }
-
     }
 
     pub fn get_events(
@@ -118,7 +129,16 @@ impl Event {
                     target: format!("@MOUSE-IN@{}", val),
                     parameters: std::array::IntoIter::new([(
                         "value".to_string(),
-                        vec!["true".to_string(), "boolean".to_string()],
+                        vec![
+                            ftd::event::ParameterData {
+                                value: "true".to_string(),
+                                reference: None,
+                            },
+                            ftd::event::ParameterData {
+                                value: "boolean".to_string(),
+                                reference: None,
+                            },
+                        ],
                     )])
                     .collect(),
                 },
@@ -130,7 +150,16 @@ impl Event {
                     target: format!("@MOUSE-IN@{}", val),
                     parameters: std::array::IntoIter::new([(
                         "value".to_string(),
-                        vec!["false".to_string(), "boolean".to_string()],
+                        vec![
+                            ftd::event::ParameterData {
+                                value: "false".to_string(),
+                                reference: None,
+                            },
+                            ftd::event::ParameterData {
+                                value: "boolean".to_string(),
+                                reference: None,
+                            },
+                        ],
                     )])
                     .collect(),
                 },
@@ -258,14 +287,6 @@ impl ActionKind {
                         ptype: vec![ftd::p2::Kind::object()],
                     },
                 );
-                parameters.insert(
-                    "reference".to_string(),
-                    ftd::p2::event::Parameter {
-                        min: 1,
-                        max: 1,
-                        ptype: vec![ftd::p2::Kind::object()],
-                    },
-                );
             }
             ftd::p2::ActionKind::Increment | ftd::p2::ActionKind::Decrement => {
                 parameters.insert(
@@ -348,7 +369,7 @@ impl Action {
                 Ok(Self {
                     action: ActionKind::MessageHost,
                     target,
-                    parameters: dbg!(parameters),
+                    parameters,
                 })
             }
             _ if a.starts_with("increment ") || a.starts_with("decrement ") => {

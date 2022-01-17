@@ -468,6 +468,13 @@ impl Value {
             Value::Integer { value } => Some(value.to_string()),
             Value::Decimal { value } => Some(value.to_string()),
             Value::Boolean { value } => Some(value.to_string()),
+            Value::Optional { data, .. } => {
+                if let Some(data) = data.as_ref() {
+                    data.to_string()
+                } else {
+                    None
+                }
+            }
             Value::Object { values } => {
                 let mut new_values: std::collections::BTreeMap<String, String> = Default::default();
                 for (k, v) in values {

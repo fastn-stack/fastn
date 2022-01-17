@@ -394,7 +394,7 @@ window.ftd = (function () {
             exports.set_bool(id, target, data[target].value !== 'true');
         } else if (act === "message-host") {
             if (action["parameters"].data !== undefined) {
-                let data = JSON.parse(action["parameters"].data[0])
+                let data = JSON.parse(action["parameters"].data[0].value)
                 let func = data.function.trim().replaceAll("-", "_");
                 window[func](data);
             } else {
@@ -405,18 +405,18 @@ window.ftd = (function () {
             let target = action["target"];
             let increment = 1;
             if (action["parameters"].by !== undefined) {
-                increment = parseInt(action["parameters"].by[0]);
+                increment = parseInt(action["parameters"].by[0].value);
             }
             let clamp_max = undefined;
             let clamp_min = undefined;
             if (action["parameters"]["clamp"] !== undefined) {
                 let clamp_value = action["parameters"]["clamp"];
                 if (clamp_value.length === 1) {
-                    clamp_max = parseInt(clamp_value[0]);
+                    clamp_max = parseInt(clamp_value[0].value);
                 }
                 if (clamp_value.length === 2) {
-                    clamp_min = parseInt(clamp_value[0]);
-                    clamp_max = parseInt(clamp_value[1]);
+                    clamp_min = parseInt(clamp_value[0].value);
+                    clamp_max = parseInt(clamp_value[1].value);
                 }
             }
             exports.increment_decrement_value(id, target, increment, clamp_min, clamp_max);
@@ -425,7 +425,7 @@ window.ftd = (function () {
             let target = action["target"];
             let decrement = -1;
             if (action["parameters"].by !== undefined) {
-                decrement = -parseInt(action["parameters"].by[0]);
+                decrement = -parseInt(action["parameters"].by[0].value);
             }
 
             let clamp_max = undefined;
@@ -433,25 +433,25 @@ window.ftd = (function () {
             if (action["parameters"]["clamp"] !== undefined) {
                 let clamp_value = action["parameters"]["clamp"];
                 if (clamp_value.length === 1) {
-                    clamp_max = parseInt(clamp_value[0]);
+                    clamp_max = parseInt(clamp_value[0].value);
                 }
                 if (clamp_value.length === 2) {
-                    clamp_min = parseInt(clamp_value[0]);
-                    clamp_max = parseInt(clamp_value[1]);
+                    clamp_min = parseInt(clamp_value[0].value);
+                    clamp_max = parseInt(clamp_value[1].value);
                 }
             }
 
             exports.increment_decrement_value(id, target, decrement, clamp_min, clamp_max);
         } else if (act === "set-value") {
             let target = action["target"];
-            let value = action["parameters"].value[0];
-            if (action["parameters"].value[1] === "integer") {
+            let value = action["parameters"].value[0].value;
+            if (action["parameters"].value[1].value === "integer") {
                 value = parseInt(value);
-            } else if (action["parameters"].value[1] === "decimal") {
+            } else if (action["parameters"].value[1].value === "decimal") {
                 value = parseFloat(value);
-            } else if (action["parameters"].value[1] === "boolean") {
+            } else if (action["parameters"].value[1].value === "boolean") {
                 value = (value === "true");
-            } else if (action["parameters"].value[0] === "$VALUE" && obj.value !== undefined ) {
+            } else if (action["parameters"].value[0].value === "$VALUE" && obj.value !== undefined ) {
                 value = obj.value
             }
 
@@ -700,10 +700,10 @@ function console_print(data) {
 </head>
     <body style="height: 100%;">
 
-        <div data-id="main:root" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; height: 100%; justify-content: flex-start; white-space: initial; width: 100%" class="ft_md"><img alt="" data-id="0:main" src="https://www.liveabout.com/thmb/YCJmu1khSJo8kMYM090QCd9W78U=/1250x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/powerpuff_girls-56a00bc45f9b58eba4aea61d.jpg" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;increment&quot;,&quot;target&quot;:&quot;action-increment-decrement-on-component.ftd#count&quot;,&quot;parameters&quot;:{&quot;clamp&quot;:[&quot;0&quot;,&quot;3&quot;]}}]', this)" style="align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; margin-left: auto; margin-right: auto; white-space: initial">
-<img alt="" data-id="1:main" src="https://upload.wikimedia.org/wikipedia/en/d/d4/Mickey_Mouse.png" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;increment&quot;,&quot;target&quot;:&quot;action-increment-decrement-on-component.ftd#count&quot;,&quot;parameters&quot;:{&quot;clamp&quot;:[&quot;0&quot;,&quot;3&quot;]}}]', this)" style="align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; display: none; margin-left: auto; margin-right: auto; white-space: initial">
-<img alt="" data-id="2:main" src="https://blog.ipleaders.in/wp-content/uploads/2021/07/751589-mickey-mouse.jpg" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;increment&quot;,&quot;target&quot;:&quot;action-increment-decrement-on-component.ftd#count&quot;,&quot;parameters&quot;:{&quot;clamp&quot;:[&quot;0&quot;,&quot;3&quot;]}}]', this)" style="align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; display: none; margin-left: auto; margin-right: auto; white-space: initial">
-<img alt="" data-id="3:main" src="https://blog.earlymoments.com/wp-content/uploads/2016/03/Mickey_Mouse_group_700x493.jpg" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;increment&quot;,&quot;target&quot;:&quot;action-increment-decrement-on-component.ftd#count&quot;,&quot;parameters&quot;:{&quot;clamp&quot;:[&quot;0&quot;,&quot;3&quot;]}}]', this)" style="align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; display: none; margin-left: auto; margin-right: auto; white-space: initial"></div>
+        <div data-id="main:root" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; height: 100%; justify-content: flex-start; white-space: initial; width: 100%" class="ft_md"><img alt="" data-id="0:main" src="https://www.liveabout.com/thmb/YCJmu1khSJo8kMYM090QCd9W78U=/1250x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/powerpuff_girls-56a00bc45f9b58eba4aea61d.jpg" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;increment&quot;,&quot;target&quot;:&quot;action-increment-decrement-on-component.ftd#count&quot;,&quot;parameters&quot;:{&quot;clamp&quot;:[{&quot;value&quot;:&quot;0&quot;,&quot;reference&quot;:null},{&quot;value&quot;:&quot;3&quot;,&quot;reference&quot;:null}]}}]', this)" style="align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; margin-left: auto; margin-right: auto; white-space: initial">
+<img alt="" data-id="1:main" src="https://upload.wikimedia.org/wikipedia/en/d/d4/Mickey_Mouse.png" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;increment&quot;,&quot;target&quot;:&quot;action-increment-decrement-on-component.ftd#count&quot;,&quot;parameters&quot;:{&quot;clamp&quot;:[{&quot;value&quot;:&quot;0&quot;,&quot;reference&quot;:null},{&quot;value&quot;:&quot;3&quot;,&quot;reference&quot;:null}]}}]', this)" style="align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; display: none; margin-left: auto; margin-right: auto; white-space: initial">
+<img alt="" data-id="2:main" src="https://blog.ipleaders.in/wp-content/uploads/2021/07/751589-mickey-mouse.jpg" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;increment&quot;,&quot;target&quot;:&quot;action-increment-decrement-on-component.ftd#count&quot;,&quot;parameters&quot;:{&quot;clamp&quot;:[{&quot;value&quot;:&quot;0&quot;,&quot;reference&quot;:null},{&quot;value&quot;:&quot;3&quot;,&quot;reference&quot;:null}]}}]', this)" style="align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; display: none; margin-left: auto; margin-right: auto; white-space: initial">
+<img alt="" data-id="3:main" src="https://blog.earlymoments.com/wp-content/uploads/2016/03/Mickey_Mouse_group_700x493.jpg" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;increment&quot;,&quot;target&quot;:&quot;action-increment-decrement-on-component.ftd#count&quot;,&quot;parameters&quot;:{&quot;clamp&quot;:[{&quot;value&quot;:&quot;0&quot;,&quot;reference&quot;:null},{&quot;value&quot;:&quot;3&quot;,&quot;reference&quot;:null}]}}]', this)" style="align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; display: none; margin-left: auto; margin-right: auto; white-space: initial"></div>
 
 
     <script>
