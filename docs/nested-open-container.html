@@ -48,23 +48,23 @@
 // input passed, not on closures or global data etc
 let ftd_utils = {
     resolve_reference: function (value, reference, data) {
-        if ((typeof value) === "object") {
-            let r = {};
+        if (value instanceof Object) {
+            let result = value instanceof Array ? [] : {};
             for (var key of Object.keys(value)) {
                 if (((typeof value[key]) === "object") && (reference[key] !== undefined)) {
-                    r[key] = ftd_utils.resolve_reference(value[key], reference[key], data);
-                } else if (reference[key] !== undefined) {
-                    r[key] = data[reference[key]]["value"] !== undefined ? data[reference[key]].value : value[key];
+                    result[key] = ftd_utils.resolve_reference(value[key], reference[key], data);
+                } else if (reference[key] !== undefined && reference[key] !== null) {
+                    result[key] = data[reference[key]]["value"] !== undefined ? data[reference[key]].value : value[key];
                 } else {
-                    r[key] = value[key];
+                    result[key] = value[key];
                 }
             }
             for (var key of Object.keys(reference)) {
                 if (value[key] === undefined && data[reference[key]]["value"] !== undefined) {
-                    r[key] = data[reference[key]].value;
+                    result[key] = data[reference[key]].value;
                 }
             }
-            return r;
+            return result;
         } else if (reference!== null && reference!== undefined && data[reference]["value"] !== undefined) {
             return data[reference]["value"];
         } else {
