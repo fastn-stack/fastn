@@ -25,6 +25,31 @@
         // all ftd_utils are meant to be pure functions only: they can only depend on the
 // input passed, not on closures or global data etc
 let ftd_utils = {
+    resolve_reference: function (value, reference, data) {
+        if ((typeof value) === "object") {
+            let r = {};
+            for (var key of Object.keys(value)) {
+                if (((typeof value[key]) === "object") && (reference[key] !== undefined)) {
+                    r[key] = ftd_utils.resolve_reference(value[key], reference[key], data);
+                } else if (reference[key] !== undefined) {
+                    r[key] = data[reference[key]]["value"] !== undefined ? data[reference[key]].value : value[key];
+                } else {
+                    r[key] = value[key];
+                }
+            }
+            for (var key of Object.keys(reference)) {
+                if (value[key] === undefined && data[reference[key]]["value"] !== undefined) {
+                    r[key] = data[reference[key]].value;
+                }
+            }
+            return r;
+        } else if (reference!== null && reference!== undefined && data[reference]["value"] !== undefined) {
+            return data[reference]["value"];
+        } else {
+            return value;
+        }
+    },
+
     is_visible: function (id, affected_id) {
         return (document.querySelector(`[data-id="${affected_id}:${id}"]`).style.display !== "none");
     },
@@ -371,7 +396,9 @@ window.ftd = (function () {
             exports.set_bool(id, target, data[target].value !== 'true');
         } else if (act === "message-host") {
             if (action["parameters"].data !== undefined) {
-                let data = JSON.parse(action["parameters"].data[0].value)
+                let value = JSON.parse(action["parameters"].data[0].value);
+                let reference = JSON.parse(action["parameters"].data[0].reference);
+                let data = ftd_utils.resolve_reference(value, reference, ftd_data[id]);
                 let func = data.function.trim().replaceAll("-", "_");
                 window[func](data);
             } else {
@@ -382,18 +409,20 @@ window.ftd = (function () {
             let target = action["target"];
             let increment = 1;
             if (action["parameters"].by !== undefined) {
-                increment = parseInt(action["parameters"].by[0].value);
+                let by_value = action["parameters"].by[0].value;
+                let by_reference = action["parameters"].by[0].reference;
+                increment = parseInt(ftd_utils.resolve_reference(by_value, by_reference, ftd_data[id]));
             }
             let clamp_max = undefined;
             let clamp_min = undefined;
             if (action["parameters"]["clamp"] !== undefined) {
                 let clamp_value = action["parameters"]["clamp"];
                 if (clamp_value.length === 1) {
-                    clamp_max = parseInt(clamp_value[0].value);
+                    clamp_max = parseInt(ftd_utils.resolve_reference(clamp_value[0].value, clamp_value[0].reference, ftd_data[id]));
                 }
                 if (clamp_value.length === 2) {
-                    clamp_min = parseInt(clamp_value[0].value);
-                    clamp_max = parseInt(clamp_value[1].value);
+                    clamp_min = parseInt(ftd_utils.resolve_reference(clamp_value[0].value, clamp_value[0].reference, ftd_data[id]));
+                    clamp_max = parseInt(ftd_utils.resolve_reference(clamp_value[1].value, clamp_value[1].reference, ftd_data[id]));
                 }
             }
             exports.increment_decrement_value(id, target, increment, clamp_min, clamp_max);
@@ -402,7 +431,9 @@ window.ftd = (function () {
             let target = action["target"];
             let decrement = -1;
             if (action["parameters"].by !== undefined) {
-                decrement = -parseInt(action["parameters"].by[0].value);
+                let by_value = action["parameters"].by[0].value;
+                let by_reference = action["parameters"].by[0].reference;
+                decrement = -parseInt(ftd_utils.resolve_reference(by_value, by_reference, ftd_data[id]));
             }
 
             let clamp_max = undefined;
@@ -410,11 +441,11 @@ window.ftd = (function () {
             if (action["parameters"]["clamp"] !== undefined) {
                 let clamp_value = action["parameters"]["clamp"];
                 if (clamp_value.length === 1) {
-                    clamp_max = parseInt(clamp_value[0].value);
+                    clamp_max = parseInt(ftd_utils.resolve_reference(clamp_value[0].value, clamp_value[0].reference, ftd_data[id]));
                 }
                 if (clamp_value.length === 2) {
-                    clamp_min = parseInt(clamp_value[0].value);
-                    clamp_max = parseInt(clamp_value[1].value);
+                    clamp_min = parseInt(ftd_utils.resolve_reference(clamp_value[0].value, clamp_value[0].reference, ftd_data[id]));
+                    clamp_max = parseInt(ftd_utils.resolve_reference(clamp_value[1].value, clamp_value[1].reference, ftd_data[id]));
                 }
             }
 

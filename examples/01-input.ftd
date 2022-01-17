@@ -1,4 +1,4 @@
--- optional string query: happy
+-- optional string query:
 
 -- object obj:
 function: console-print

@@ -1,12 +1,22 @@
+-- integer by: 2
+
+-- ftd.integer: $by
+
+-- ftd.text: increment by
+$event-click$: increment $by by 1
+
+-- ftd.text: decrement by
+$event-click$: decrement $by by 1
+
 -- ftd.row foo:
 integer a:
 boolean b: false
 $event-click$: toggle $b
-$event-click$: increment $a by 2
+$event-click$: increment $a by $by
 
 --- ftd.integer:
 value: $a
-color if $b: black
+color if $b: green
 color if $a == 30: red
 
 -- foo:
