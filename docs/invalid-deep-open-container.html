@@ -383,7 +383,7 @@ window.ftd = (function () {
             exports.set_bool(id, target, data[target].value !== 'true');
         } else if (act === "message-host") {
             if (action["parameters"].data !== undefined) {
-                let data = JSON.parse(action["parameters"].data[0])
+                let data = JSON.parse(action["parameters"].data[0].value)
                 let func = data.function.trim().replaceAll("-", "_");
                 window[func](data);
             } else {
@@ -394,18 +394,18 @@ window.ftd = (function () {
             let target = action["target"];
             let increment = 1;
             if (action["parameters"].by !== undefined) {
-                increment = parseInt(action["parameters"].by[0]);
+                increment = parseInt(action["parameters"].by[0].value);
             }
             let clamp_max = undefined;
             let clamp_min = undefined;
             if (action["parameters"]["clamp"] !== undefined) {
                 let clamp_value = action["parameters"]["clamp"];
                 if (clamp_value.length === 1) {
-                    clamp_max = parseInt(clamp_value[0]);
+                    clamp_max = parseInt(clamp_value[0].value);
                 }
                 if (clamp_value.length === 2) {
-                    clamp_min = parseInt(clamp_value[0]);
-                    clamp_max = parseInt(clamp_value[1]);
+                    clamp_min = parseInt(clamp_value[0].value);
+                    clamp_max = parseInt(clamp_value[1].value);
                 }
             }
             exports.increment_decrement_value(id, target, increment, clamp_min, clamp_max);
@@ -414,7 +414,7 @@ window.ftd = (function () {
             let target = action["target"];
             let decrement = -1;
             if (action["parameters"].by !== undefined) {
-                decrement = -parseInt(action["parameters"].by[0]);
+                decrement = -parseInt(action["parameters"].by[0].value);
             }
 
             let clamp_max = undefined;
@@ -422,25 +422,25 @@ window.ftd = (function () {
             if (action["parameters"]["clamp"] !== undefined) {
                 let clamp_value = action["parameters"]["clamp"];
                 if (clamp_value.length === 1) {
-                    clamp_max = parseInt(clamp_value[0]);
+                    clamp_max = parseInt(clamp_value[0].value);
                 }
                 if (clamp_value.length === 2) {
-                    clamp_min = parseInt(clamp_value[0]);
-                    clamp_max = parseInt(clamp_value[1]);
+                    clamp_min = parseInt(clamp_value[0].value);
+                    clamp_max = parseInt(clamp_value[1].value);
                 }
             }
 
             exports.increment_decrement_value(id, target, decrement, clamp_min, clamp_max);
         } else if (act === "set-value") {
             let target = action["target"];
-            let value = action["parameters"].value[0];
-            if (action["parameters"].value[1] === "integer") {
+            let value = action["parameters"].value[0].value;
+            if (action["parameters"].value[1].value === "integer") {
                 value = parseInt(value);
-            } else if (action["parameters"].value[1] === "decimal") {
+            } else if (action["parameters"].value[1].value === "decimal") {
                 value = parseFloat(value);
-            } else if (action["parameters"].value[1] === "boolean") {
+            } else if (action["parameters"].value[1].value === "boolean") {
                 value = (value === "true");
-            } else if (action["parameters"].value[0] === "$VALUE" && obj.value !== undefined ) {
+            } else if (action["parameters"].value[0].value === "$VALUE" && obj.value !== undefined ) {
                 value = obj.value
             }
 

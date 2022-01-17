@@ -374,7 +374,7 @@ window.ftd = (function () {
             exports.set_bool(id, target, data[target].value !== 'true');
         } else if (act === "message-host") {
             if (action["parameters"].data !== undefined) {
-                let data = JSON.parse(action["parameters"].data[0])
+                let data = JSON.parse(action["parameters"].data[0].value)
                 let func = data.function.trim().replaceAll("-", "_");
                 window[func](data);
             } else {
@@ -385,18 +385,18 @@ window.ftd = (function () {
             let target = action["target"];
             let increment = 1;
             if (action["parameters"].by !== undefined) {
-                increment = parseInt(action["parameters"].by[0]);
+                increment = parseInt(action["parameters"].by[0].value);
             }
             let clamp_max = undefined;
             let clamp_min = undefined;
             if (action["parameters"]["clamp"] !== undefined) {
                 let clamp_value = action["parameters"]["clamp"];
                 if (clamp_value.length === 1) {
-                    clamp_max = parseInt(clamp_value[0]);
+                    clamp_max = parseInt(clamp_value[0].value);
                 }
                 if (clamp_value.length === 2) {
-                    clamp_min = parseInt(clamp_value[0]);
-                    clamp_max = parseInt(clamp_value[1]);
+                    clamp_min = parseInt(clamp_value[0].value);
+                    clamp_max = parseInt(clamp_value[1].value);
                 }
             }
             exports.increment_decrement_value(id, target, increment, clamp_min, clamp_max);
@@ -405,7 +405,7 @@ window.ftd = (function () {
             let target = action["target"];
             let decrement = -1;
             if (action["parameters"].by !== undefined) {
-                decrement = -parseInt(action["parameters"].by[0]);
+                decrement = -parseInt(action["parameters"].by[0].value);
             }
 
             let clamp_max = undefined;
@@ -413,25 +413,25 @@ window.ftd = (function () {
             if (action["parameters"]["clamp"] !== undefined) {
                 let clamp_value = action["parameters"]["clamp"];
                 if (clamp_value.length === 1) {
-                    clamp_max = parseInt(clamp_value[0]);
+                    clamp_max = parseInt(clamp_value[0].value);
                 }
                 if (clamp_value.length === 2) {
-                    clamp_min = parseInt(clamp_value[0]);
-                    clamp_max = parseInt(clamp_value[1]);
+                    clamp_min = parseInt(clamp_value[0].value);
+                    clamp_max = parseInt(clamp_value[1].value);
                 }
             }
 
             exports.increment_decrement_value(id, target, decrement, clamp_min, clamp_max);
         } else if (act === "set-value") {
             let target = action["target"];
-            let value = action["parameters"].value[0];
-            if (action["parameters"].value[1] === "integer") {
+            let value = action["parameters"].value[0].value;
+            if (action["parameters"].value[1].value === "integer") {
                 value = parseInt(value);
-            } else if (action["parameters"].value[1] === "decimal") {
+            } else if (action["parameters"].value[1].value === "decimal") {
                 value = parseFloat(value);
-            } else if (action["parameters"].value[1] === "boolean") {
+            } else if (action["parameters"].value[1].value === "boolean") {
                 value = (value === "true");
-            } else if (action["parameters"].value[0] === "$VALUE" && obj.value !== undefined ) {
+            } else if (action["parameters"].value[0].value === "$VALUE" && obj.value !== undefined ) {
                 value = obj.value
             }
 
@@ -680,8 +680,8 @@ function console_print(data) {
 </head>
     <body style="height: 100%;">
 
-        <div data-id="main:root" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; height: 100%; justify-content: flex-start; white-space: initial; width: 100%" class="ft_md"><div data-id="0:main" onmouseenter="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;@MOUSE-IN@0&quot;,&quot;parameters&quot;:{&quot;value&quot;:[&quot;true&quot;,&quot;boolean&quot;]}}]', this)" onmouseleave="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;@MOUSE-IN@0&quot;,&quot;parameters&quot;:{&quot;value&quot;:[&quot;false&quot;,&quot;boolean&quot;]}}]', this)" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; text-align: left; white-space: initial" class="ft_md">Hello World</div>
-<div data-id="1:main" onmouseleave="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;@MOUSE-IN@1&quot;,&quot;parameters&quot;:{&quot;value&quot;:[&quot;false&quot;,&quot;boolean&quot;]}}]', this)" onmouseenter="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;@MOUSE-IN@1&quot;,&quot;parameters&quot;:{&quot;value&quot;:[&quot;true&quot;,&quot;boolean&quot;]}}]', this)" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start; white-space: initial" class="ft_md"><div data-id="1,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-weight: 400; text-align: left; white-space: initial" class="ft_md">Hello</div>
+        <div data-id="main:root" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; height: 100%; justify-content: flex-start; white-space: initial; width: 100%" class="ft_md"><div data-id="0:main" onmouseleave="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;@MOUSE-IN@0&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;false&quot;,&quot;reference&quot;:null},{&quot;value&quot;:&quot;boolean&quot;,&quot;reference&quot;:null}]}}]', this)" onmouseenter="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;@MOUSE-IN@0&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;true&quot;,&quot;reference&quot;:null},{&quot;value&quot;:&quot;boolean&quot;,&quot;reference&quot;:null}]}}]', this)" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; text-align: left; white-space: initial" class="ft_md">Hello World</div>
+<div data-id="1:main" onmouseenter="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;@MOUSE-IN@1&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;true&quot;,&quot;reference&quot;:null},{&quot;value&quot;:&quot;boolean&quot;,&quot;reference&quot;:null}]}}]', this)" onmouseleave="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;@MOUSE-IN@1&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;false&quot;,&quot;reference&quot;:null},{&quot;value&quot;:&quot;boolean&quot;,&quot;reference&quot;:null}]}}]', this)" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start; white-space: initial" class="ft_md"><div data-id="1,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-weight: 400; text-align: left; white-space: initial" class="ft_md">Hello</div>
 <div data-id="1,1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: none; font-weight: 400; padding-left: 10px; text-align: left; white-space: initial" class="ft_md">World</div></div></div>
 
 
