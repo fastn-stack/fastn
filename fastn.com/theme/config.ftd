@@ -81,4 +81,5 @@ in book like contents, or it can be used to create the header navigation links,
 links in footer and so on.
 
 Themes should consider using table of content processor as much as makes sense
-so authors can have consistent, familiar experience across themes.
+so authors can have consistent, familiar experience across themes. One or more
+instances of variables of type `toc-item list` should be used.
