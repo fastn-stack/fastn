@@ -2,7 +2,7 @@
 
 -- object obj:
 function: console-print
-value: Hello World
+value: $query
 
 -- ftd.column:
 padding: 20
