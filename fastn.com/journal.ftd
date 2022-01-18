@@ -30,6 +30,148 @@ So links never break (and original author can keep updating document URL at whim
 (on how having article.page allows us to get just the content of a page, without
 header/sidebar/footer etc).
 
+
+-- ft.h1: Object Gets $ref syntax & message-host only accepts objects
+
+-- ft.h1: "Main" Variables
+
+Some variables, like `fpm.document-title`, could be set by more than one ftd
+documents, each document is telling us what is the document-title for that
+document by setting `fpm.document-title`.
+
+But we allow authors to import any document from any other document, barring
+cycles, so these variables can get clobbered. Say if there is `a.ftd` and `b.ftd`
+and former wants document title to `A` and later to `B`, they can do both:
+`-- fpm.document-title: A` and so on. But what if `a.ftd` looks like this:
+
+-- ft.code:
+lang: ftd
+
+\-- import: fpm
+
+\-- fpm.document-title: A
+
+\-- import: b
+
+-- ft.markdown:
+
+`b.ftd` would be imported after `a.ftd` has updated `fpm.document-title`, and
+it will overwrite `fpm.document-title`. We can argue this is fine at some level
+and user is aware of things.
+
+Further there is another concern, what if `fpm.document-title` was optional, and
+the idea was if this is not set, we pick the title from first heading of the
+document. And say this worked out fine, so `a.ftd` will not want to
+`fpm.document-title`, but say it does not work for `b.ftd` so it wants to
+explicitly set it. But then `a.ftd` imports `b.ftd`. We can not solve by import
+order etc.
+
+Proposal:
+
+-- ft.code: `fpm.ftd` file
+lang: ftd
+
+\-- optional string document-title:
+$main$: true
+
+-- ft.markdown:
+
+If any variable or list is defined as `$main$`, then only the changes done by
+the "main document" would be kept. FTD interpreter knows whats the main document
+that is being interpreted, and it knows when it is interpreting one of its
+dependencies (via import).
+
+We can further allow `$main$` during variable change also to allow non main
+documents to update variable still, eg a `config.ftd` or some file which is
+only for setting project variables.
+
+-- ft.code: `config.ftd`
+lang: ftd
+
+\-- import: fpm
+\-- fpm.site-title: AmitU's Blog
+$main$: true
+
+-- ft.markdown:
+
+Further when any "main" document is importing some document, it can declare that
+that document be also considered main:
+
+-- ft.code: `a.ftd`
+lang: ftd
+
+\-- import: config
+$main$: true
+\-- import: b
+
+-- ft.markdown:
+
+Here we have imported `config` as "main", but not `b`.
+
+This would be applicable for both variable overwrite, and for adding a an element
+to a list, either can use "$main$".
+
+-- ft.h2: In Other Words
+
+1. some variables can be declared as $main$.
+1. a `$main$` variable can only be modified by
+   1. document that is considered `$main$`, 3. and 4. decide when a document is
+      considered `$main$`
+   1. or by forcing update by include `$main$` while updating the variable
+1. the document that started the interpreter is the initial `$main$` document
+1. when a `$main$` document is importing some document it can declare those
+   document as `$main$` as well
+
+-- ft.h2: Edge Case
+
+Consider if `b.ftd`:
+
+-- ft.code:
+lang: ftd
+
+\-- import: fpm
+\-- fpm.document-title: B
+
+\-- ftd.text show-title: $fpm.title
+
+
+-- ft.markdown:
+
+And say `a.ftd` was:
+
+-- ft.code:
+lang: ftd
+
+\-- import: fpm
+\-- fpm.document-title: A
+\-- import: b
+\-- b.show-title:
+
+-- ft.markdown:
+
+The `show-title` will show `A` and not `B` even though if you look at source
+of `show-title` in `b.ftd` it appears it is modifying a variable and using it
+right away.
+
+This is not particularly confusing because a variable could have been updated
+multiple times, even within the same file:
+
+-- ft.code:
+lang: ftd
+
+\-- import: fpm
+\-- fpm.document-title: B
+
+\-- ftd.text show-title: $fpm.title
+
+\-- fpm.document-title: New B
+
+-- ft.markdown:
+
+In this case, the immediate value of `fpm.document-title` is not used by
+`show-title`, but the "eventual value".
+
+
 -- ft.h1: Package Interfaces: Strict Vs Compatible
 
 -- ft.code:
