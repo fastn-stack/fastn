@@ -91,7 +91,6 @@ markup {
 impl Element {
     pub fn set_id(children: &mut [ftd::Element], index_vec: &[usize], external_id: Option<String>) {
         for (idx, child) in children.iter_mut().enumerate() {
-            let index_string = get_index_string(index_vec, idx);
             let (mut id, is_dummy) = match child {
                 Self::Text(ftd::Text {
                     common:
@@ -251,6 +250,11 @@ impl Element {
                 }
                 Self::Null => continue,
             };
+            let index_string = if *is_dummy {
+                get_index_string(index_vec, None)
+            } else {
+                get_index_string(index_vec, Some(idx))
+            };
             set_id(&mut id, &external_id, index_string.as_str(), *is_dummy)
         }
 
@@ -268,7 +272,6 @@ impl Element {
                 start_index: usize,
             ) {
                 for (idx, child) in children.iter_mut().enumerate() {
-                    let index_string = get_index_string(index_vec, idx + start_index);
                     let (mut id, children, is_dummy) = match &mut child.itext {
                         IText::Text(t)
                         | IText::Integer(t)
@@ -280,6 +283,11 @@ impl Element {
                             Some(&mut t.children),
                             t.common.is_dummy,
                         ),
+                    };
+                    let index_string = if is_dummy {
+                        get_index_string(index_vec, None)
+                    } else {
+                        get_index_string(index_vec, Some(idx + start_index))
                     };
 
                     let mut index_vec = index_vec.to_vec();
@@ -325,10 +333,12 @@ impl Element {
             }
         }
 
-        fn get_index_string(index_vec: &[usize], idx: usize) -> String {
+        fn get_index_string(index_vec: &[usize], idx: Option<usize>) -> String {
             let index_string: String = {
                 let mut index_vec = index_vec.to_vec();
-                index_vec.push(idx);
+                if let Some(idx) = idx {
+                    index_vec.push(idx);
+                }
                 index_vec
                     .iter()
                     .map(|v| v.to_string())

@@ -4,9 +4,32 @@
 
 -- flower: Lotus
 
+-- optional string query:
+
+-- object obj:
+function: append-list
+value: $query
+list: $flower
 
 -- ftd.column:
-padding: 40
+padding: 20
+spacing: 20
+
+-- ftd.input:
+placeholder: Type Something Here...
+width: 400
+border-width: 2
+$event-input$: $query=$VALUE
+$event-change$: message-host $obj
+
+-- ftd.text:
+
+You have typed: {value}
+
+--- ftd.text value: $query
+color: green
+size: 20
+
 
 -- ftd.text: $obj
 $loop$: $flower as $obj

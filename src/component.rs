@@ -289,7 +289,7 @@ impl ChildComponent {
 
         if let ftd::Value::List { data, kind } = loop_property {
             for (i, d) in data.iter().enumerate() {
-                elements.push(construct_element(
+                let mut element = construct_element(
                     self,
                     d,
                     i,
@@ -300,7 +300,17 @@ impl ChildComponent {
                     is_child,
                     all_locals,
                     local_container,
-                )?);
+                )?;
+                if let Some(value) = self.properties.get("$loop$") {
+                    if let Ok(ftd::PropertyValue::Reference { name, .. }) =
+                        value.eval(0, "$loop$", arguments, doc)
+                    {
+                        if let Some(common) = element.element.get_mut_common() {
+                            common.reference = Some(name.to_string());
+                        }
+                    }
+                }
+                elements.push(element);
             }
             if let Some(tmp_data) = construct_tmp_data(&kind) {
                 if let Some(value) = self.properties.get("$loop$") {
