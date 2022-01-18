@@ -34,11 +34,7 @@ impl Document {
                         list_data.push(val);
                     }
                 }
-                return if !list_data.is_empty() {
-                    serde_json::to_string(&list_data).ok()
-                } else {
-                    None
-                };
+                return serde_json::to_string(&list_data).ok();
             }
             let value = if let ftd::Value::Optional { data, .. } = value {
                 match data.as_ref() {

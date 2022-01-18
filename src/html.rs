@@ -356,7 +356,7 @@ impl Node {
             external_children,
             open_id: id,
             external_children_container,
-            null: false,
+            null: common.is_dummy,
             events: common.events.clone(),
             locals: common.locals.clone(),
         }

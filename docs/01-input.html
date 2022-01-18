@@ -342,8 +342,6 @@ let ftd_utils = {
                         }
                         deps[dependency] = dependencies[dependency];
                         data[target].dependencies = deps;
-                    } else if (!!Object.keys(dependencies).filter(s => s.endsWith(':dummy')).length) {
-                        continue;
                     } else {
                         document.querySelector(`[data-id="${dependency}:${id}"]`).innerText = data[target].value;
                     }
@@ -654,16 +652,12 @@ function console_print(id, data) {
 }
 
 function append_list(id, data, reference) {
-    console.log(data);
-    console.log(reference);
-    console.log(reference["list"]);
     if (reference["list"] !== undefined) {
         let value = window.ftd.get_value(id, reference["list"]);
         if (ftd_utils.isJson(value)) {
             let object = JSON.parse(value);
             if ((object instanceof Array) && data["value"] !== undefined && data["value"].length !== 0) {
                 object.push(data["value"]);
-                console.log(object);
                 window.ftd.set_string(id, reference["list"], JSON.stringify(object));
             }
         }
@@ -805,7 +799,7 @@ function append_list(id, data, reference) {
 </head>
     <body style="height: 100%;">
 
-        <div data-id="main:root" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; height: 100%; justify-content: flex-start; white-space: initial; width: 100%" class="ft_md"><div data-id="0:main" data-spacing="margin-top:20px" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; padding: 20px; white-space: initial" class="ft_md"><input data-id="0,0:main" placeholder="Type Something Here..." oninput="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;01-input.ftd#query&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;$VALUE&quot;,&quot;reference&quot;:null},{&quot;value&quot;:&quot;string&quot;,&quot;reference&quot;:null}]}}]', this)" onchange="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;message-host&quot;,&quot;target&quot;:&quot;$obj&quot;,&quot;parameters&quot;:{&quot;data&quot;:[{&quot;value&quot;:&quot;{\\&quot;function\\&quot;:\\&quot;console-print\\&quot;}&quot;,&quot;reference&quot;:&quot;{\\&quot;value\\&quot;:\\&quot;01-input.ftd#query\\&quot;}&quot;}]}}]', this)" style="border-radius: 0px; border-style: solid; border-width: 2px; box-sizing: border-box; cursor: pointer; white-space: initial; width: 400px" class="ft_md"></input>
+        <div data-id="main:root" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; height: 100%; justify-content: flex-start; white-space: initial; width: 100%" class="ft_md"><div data-id="0:main" data-spacing="margin-top:20px" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; padding: 20px; white-space: initial" class="ft_md"><input data-id="0,0:main" placeholder="Type Something Here..." onchange="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;message-host&quot;,&quot;target&quot;:&quot;$obj&quot;,&quot;parameters&quot;:{&quot;data&quot;:[{&quot;value&quot;:&quot;{\\&quot;function\\&quot;:\\&quot;console-print\\&quot;}&quot;,&quot;reference&quot;:&quot;{\\&quot;value\\&quot;:\\&quot;01-input.ftd#query\\&quot;}&quot;}]}}]', this)" oninput="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;01-input.ftd#query&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;$VALUE&quot;,&quot;reference&quot;:null},{&quot;value&quot;:&quot;string&quot;,&quot;reference&quot;:null}]}}]', this)" style="border-radius: 0px; border-style: solid; border-width: 2px; box-sizing: border-box; cursor: pointer; white-space: initial; width: 400px" class="ft_md"></input>
 <div data-id="0,1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-weight: 400; margin-top: 20px; text-align: left; white-space: initial" class="ft_md"><span data-id="0,1,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-weight: 400; line-height: 26px; text-align: left; white-space: initial" class="ft_md">You have typed:</span>
 <span data-id="0,1,1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(0,128,0,1); font-size: 20px; font-weight: 400; text-align: left; white-space: initial" class="ft_md"></span></div></div></div>
 
