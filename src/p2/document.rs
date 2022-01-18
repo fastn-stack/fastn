@@ -19,27 +19,45 @@ impl Document {
         let mut d: ftd::Map = Default::default();
         for (k, v) in self.data.iter() {
             if let ftd::p2::Thing::Variable(ftd::Variable { value, .. }) = v {
-                let value = if let ftd::Value::Optional { data, .. } = value {
-                    match data.as_ref() {
-                        None => ftd::Value::String {
-                            text: "".to_string(),
-                            source: ftd::TextSource::Header,
-                        },
-                        Some(v) => v.to_owned(),
-                    }
-                } else {
-                    value.to_owned()
-                };
-                let value = match value {
-                    ftd::Value::Boolean { value } => value.to_string(),
-                    ftd::Value::Integer { value } => value.to_string(),
-                    ftd::Value::String { text: value, .. } => value.to_string(),
-                    _ => continue,
-                };
-                d.insert(k.to_string(), value);
+                if let Some(value) = get_value(value) {
+                    d.insert(k.to_string(), value);
+                }
             }
         }
-        d
+        return d;
+
+        fn get_value(value: &ftd::Value) -> Option<String> {
+            if let ftd::Value::List { data, .. } = value {
+                let mut list_data = vec![];
+                for val in data {
+                    if let Some(val) = get_value(val) {
+                        list_data.push(val);
+                    }
+                }
+                return if !list_data.is_empty() {
+                    serde_json::to_string(&list_data).ok()
+                } else {
+                    None
+                };
+            }
+            let value = if let ftd::Value::Optional { data, .. } = value {
+                match data.as_ref() {
+                    None => ftd::Value::String {
+                        text: "".to_string(),
+                        source: ftd::TextSource::Header,
+                    },
+                    Some(v) => v.to_owned(),
+                }
+            } else {
+                value.to_owned()
+            };
+            match value {
+                ftd::Value::Boolean { value } => Some(value.to_string()),
+                ftd::Value::Integer { value } => Some(value.to_string()),
+                ftd::Value::String { text: value, .. } => Some(value.to_string()),
+                _ => None,
+            }
+        }
     }
 
     fn get_locals(&self) -> ftd::Map {
@@ -51,6 +69,7 @@ impl Document {
         for (k, v) in self.get_locals() {
             d.insert(format!("@{}", k), v.to_string());
         }
+        dbg!(&d, &self.main.container);
 
         let mut data: ftd::DataDependenciesMap = Default::default();
         for (k, v) in d {

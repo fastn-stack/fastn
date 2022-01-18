@@ -283,96 +283,128 @@ impl ChildComponent {
             doc.get_component(self.line_number, self.root.as_str())
                 .unwrap()
         };
+        dbg!(&self.properties);
         let loop_property =
             resolve_recursive_property(self.line_number, &self.properties, arguments, doc)?;
         let mut elements = vec![];
 
+        dbg!(&loop_property);
         if let ftd::Value::List { data, .. } = loop_property {
             for (i, d) in data.iter().enumerate() {
-                let mut new_arguments: std::collections::BTreeMap<String, ftd::Value> =
-                    arguments.clone();
-                new_arguments.insert("$loop$".to_string(), d.clone());
-                let new_properties = resolve_properties_with_ref(
-                    self.line_number,
-                    &self.properties,
-                    &new_arguments,
+                elements.push(construct_element(
+                    &self,
+                    d,
+                    i,
+                    &root,
                     doc,
-                )?;
-                let mut temp_locals: ftd::Map = Default::default();
-                let conditional_attribute = get_conditional_attributes(
-                    self.line_number,
-                    &self.properties,
-                    &new_arguments,
-                    doc,
-                    &mut temp_locals,
-                )?;
-                let local_container = {
-                    let mut container = local_container[..local_container.len() - 1].to_vec();
-                    match local_container.last() {
-                        Some(val) => container.push(val + i),
-                        None => container.push(i),
-                    }
-                    container
-                };
-                let is_visible = {
-                    let mut visible = true;
-                    if let Some(ref b) = self.condition {
-                        if b.is_constant() && !b.eval(self.line_number, &new_arguments, doc)? {
-                            visible = false;
-                            if let Ok(true) = b.set_null(self.line_number, doc.name) {
-                                elements.push(ElementWithContainer {
-                                    element: ftd::Element::Null,
-                                    children: vec![],
-                                    child_container: None,
-                                });
-                                continue;
-                            }
-                        }
-                    }
-                    visible
-                };
-
-                let mut all_old_locals = all_locals.clone();
-
-                let mut element = root.call(
-                    &new_properties,
-                    doc,
+                    arguments,
                     invocations,
-                    &None,
                     is_child,
-                    &self.events,
-                    &mut all_old_locals,
-                    local_container.as_slice(),
-                    None,
-                )?;
-
-                if let Some(condition) = &self.condition {
-                    element.element.set_non_visibility(!condition.eval(
-                        self.line_number,
-                        &new_arguments,
-                        doc,
-                    )?);
-                    element.element.set_condition(
-                        condition
-                            .to_condition(
-                                self.line_number,
-                                all_locals,
-                                &Default::default(),
-                                doc.name,
-                            )
-                            .ok(),
-                    );
-                }
-                if !is_visible {
-                    element.element.set_non_visibility(!is_visible);
-                }
-                if let Some(common) = element.element.get_mut_common() {
-                    common.conditional_attribute.extend(conditional_attribute);
-                }
-                elements.push(element);
+                    all_locals,
+                    local_container,
+                )?);
             }
         }
-        Ok(elements)
+        return Ok(elements);
+
+        fn construct_element(
+            child_component: &ChildComponent,
+            d: &ftd::Value,
+            index: usize,
+            root: &ftd::Component,
+            doc: &ftd::p2::TDoc,
+            arguments: &std::collections::BTreeMap<String, ftd::Value>,
+            invocations: &mut std::collections::BTreeMap<
+                String,
+                Vec<std::collections::BTreeMap<String, ftd::Value>>,
+            >,
+            is_child: bool,
+            all_locals: &mut ftd::Map,
+            local_container: &[usize],
+        ) -> ftd::p1::Result<ElementWithContainer> {
+            let mut new_arguments: std::collections::BTreeMap<String, ftd::Value> =
+                arguments.clone();
+            new_arguments.insert("$loop$".to_string(), d.clone());
+            let new_properties = resolve_properties_with_ref(
+                child_component.line_number,
+                &child_component.properties,
+                &new_arguments,
+                doc,
+            )?;
+            let mut temp_locals: ftd::Map = Default::default();
+            let conditional_attribute = get_conditional_attributes(
+                child_component.line_number,
+                &child_component.properties,
+                &new_arguments,
+                doc,
+                &mut temp_locals,
+            )?;
+            let local_container = {
+                let mut container = local_container[..local_container.len() - 1].to_vec();
+                match local_container.last() {
+                    Some(val) => container.push(val + index),
+                    None => container.push(index),
+                }
+                container
+            };
+            let is_visible = {
+                let mut visible = true;
+                if let Some(ref b) = child_component.condition {
+                    if b.is_constant()
+                        && !b.eval(child_component.line_number, &new_arguments, doc)?
+                    {
+                        visible = false;
+                        if let Ok(true) = b.set_null(child_component.line_number, doc.name) {
+                            return Ok(ElementWithContainer {
+                                element: ftd::Element::Null,
+                                children: vec![],
+                                child_container: None,
+                            });
+                        }
+                    }
+                }
+                visible
+            };
+
+            let mut all_old_locals = all_locals.clone();
+
+            let mut element = root.call(
+                &new_properties,
+                doc,
+                invocations,
+                &None,
+                is_child,
+                &child_component.events,
+                &mut all_old_locals,
+                local_container.as_slice(),
+                None,
+            )?;
+
+            if let Some(condition) = &child_component.condition {
+                element.element.set_non_visibility(!condition.eval(
+                    child_component.line_number,
+                    &new_arguments,
+                    doc,
+                )?);
+                element.element.set_condition(
+                    condition
+                        .to_condition(
+                            child_component.line_number,
+                            all_locals,
+                            &Default::default(),
+                            doc.name,
+                        )
+                        .ok(),
+                );
+            }
+            if !is_visible {
+                element.element.set_non_visibility(!is_visible);
+            }
+            if let Some(common) = element.element.get_mut_common() {
+                common.conditional_attribute.extend(conditional_attribute);
+            }
+            Ok(element)
+        }
     }
 
     #[allow(clippy::too_many_arguments)]
