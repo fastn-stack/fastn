@@ -13,3 +13,4 @@ Cargo.lock
 .packages/
 .idea/
 .packages/
+.DS_Store
