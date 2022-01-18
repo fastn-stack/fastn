@@ -54,7 +54,7 @@ impl Document {
             match value {
                 ftd::Value::Boolean { value } => Some(value.to_string()),
                 ftd::Value::Integer { value } => Some(value.to_string()),
-                ftd::Value::String { text: value, .. } => Some(value.to_string()),
+                ftd::Value::String { text: value, .. } => Some(value),
                 _ => None,
             }
         }
