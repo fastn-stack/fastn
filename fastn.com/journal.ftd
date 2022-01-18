@@ -8,9 +8,8 @@ id: page
 
 -- ft.h0: FTD Journal
 
--- ft.h1: Object Gets $ref syntax & message-host only accepts objects
 
--- ft.h1: "Main" Variables
+-- ft.h1: "$main$" Variables
 
 18th Jan 2022
 
@@ -150,6 +149,57 @@ lang: ftd
 In this case, the immediate value of `fpm.document-title` is not used by
 `show-title`, but the "eventual value".
 
+-- ft.h1: Object Gets `$ref` syntax
+
+Arpita implemented variable referencing in object constructor syntax, so now
+you can do:
+
+-- ft.code:
+lang: ftd
+
+\-- import: bar
+\-- object foo:
+key: $bar.baz
+
+-- ft.markdown:
+
+And say if `bar.baz` is `20` (`integer`), it will generate this:
+
+-- ft.code:
+lang: json
+
+{
+    "key": 20
+}
+
+-- ft.h1: Proposal: `message-host` to only accepts objects
+
+This brings use to `message-host`. It currently accepts either a string, which
+is the name of function exposed by the FTD host, or it can be an object, that
+has to define a key `function`, which will be the function.
+
+In general I am not fond of "string values", because if you make a typo, ftd
+interpreter can't help you. The host functions are provided by host language,
+and ftd compiler has no idea about host functions. Ideally FTD compiler should
+have some knowledge about capabilities provided by host, maybe some sort of
+schema and type definition?
+
+In the meanwhile, accepting both string and object, I now consider an
+anti-pattern, we should only support well known object constructors:
+
+-- ft.code:
+lang: ftd
+
+\-- import: fpm
+
+\-- ftd.text: Switch To Dark Mode
+$event-click$: message-host $fpm.switch-to-dark-mode
+
+-- ft.markdown:
+
+Is superior to `message-host switch-to-dark-mode`, where `switch-to-dark-mode`
+was a string, but `$fpm.switch-to-dark-mode` is a reference to something FTD
+interpreter can verify.
 
 -- ft.h1: `$processor$`, `async`, `Library::get()` and `Document::set_*()`
 
