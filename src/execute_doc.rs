@@ -35,7 +35,6 @@ impl<'a> ExecuteDoc<'a> {
         let mut named_containers: std::collections::BTreeMap<String, Vec<Vec<usize>>> =
             Default::default();
         let mut children: Vec<ftd::Element> = vec![];
-        dbg!(&index, &self.instructions);
 
         while *index < self.instructions.len() {
             let doc = ftd::p2::TDoc {
@@ -209,11 +208,11 @@ impl<'a> ExecuteDoc<'a> {
             *index += 1;
         }
 
-        dbg!(Ok(ftd::component::ElementWithContainer {
+        Ok(ftd::component::ElementWithContainer {
             element: ftd::Element::Null,
             children,
             child_container: Some(named_containers),
-        }))
+        })
     }
 
     #[allow(clippy::too_many_arguments)]

@@ -6846,6 +6846,19 @@ mod test {
                 ..Default::default()
             }));
 
+        main.container
+            .children
+            .push(ftd::Element::Markup(ftd::Markups {
+                text: ftd::markdown_line("$loop$"),
+                line: true,
+                common: ftd::Common {
+                    reference: Some(s("foo/bar#people")),
+                    is_dummy: true,
+                    ..Default::default()
+                },
+                ..Default::default()
+            }));
+
         let mut bag = super::default_bag();
 
         bag.insert(
@@ -7349,6 +7362,19 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("\"https://ftd.dev\""),
                 line: true,
+                ..Default::default()
+            }));
+
+        main.container
+            .children
+            .push(ftd::Element::Markup(ftd::Markups {
+                text: ftd::markdown_line("$loop$"),
+                line: true,
+                common: ftd::Common {
+                    reference: Some(s("foo/bar#test")),
+                    is_dummy: true,
+                    ..Default::default()
+                },
                 ..Default::default()
             }));
 

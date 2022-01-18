@@ -304,7 +304,7 @@ impl Node {
             children_style: common.children_style(),
             text: None,
             classes: common.add_class(),
-            null: false,
+            null: common.is_dummy,
             events: common.events.clone(),
             locals: common.locals.clone(),
         }
