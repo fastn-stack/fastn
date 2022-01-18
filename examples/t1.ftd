@@ -1,5 +1,8 @@
 -- integer by: 2
 
+-- ftd.column:
+padding: 40
+
 -- ftd.integer: $by
 
 -- ftd.text: increment by
