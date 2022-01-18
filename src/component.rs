@@ -290,7 +290,7 @@ impl ChildComponent {
         if let ftd::Value::List { data, kind } = loop_property {
             for (i, d) in data.iter().enumerate() {
                 elements.push(construct_element(
-                    &self,
+                    self,
                     d,
                     i,
                     &root,
@@ -308,7 +308,7 @@ impl ChildComponent {
                         value.eval(0, "$loop$", arguments, doc)
                     {
                         let mut element = construct_element(
-                            &self,
+                            self,
                             &tmp_data,
                             data.len(),
                             &root,
