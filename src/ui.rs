@@ -92,40 +92,125 @@ impl Element {
     pub fn set_id(children: &mut [ftd::Element], index_vec: &[usize], external_id: Option<String>) {
         for (idx, child) in children.iter_mut().enumerate() {
             let index_string = get_index_string(index_vec, idx);
-            let mut id = match child {
+            let (mut id, is_dummy) = match child {
                 Self::Text(ftd::Text {
-                    common: ftd::Common { data_id: id, .. },
+                    common:
+                        ftd::Common {
+                            data_id: id,
+                            is_dummy,
+                            ..
+                        },
                     ..
-                }) => id,
-                Self::TextBlock(ftd::TextBlock {
-                    common: ftd::Common { data_id: id, .. },
+                })
+                | Self::TextBlock(ftd::TextBlock {
+                    common:
+                        ftd::Common {
+                            data_id: id,
+                            is_dummy,
+                            ..
+                        },
                     ..
-                }) => id,
-                Self::Code(ftd::Code {
-                    common: ftd::Common { data_id: id, .. },
+                })
+                | Self::Code(ftd::Code {
+                    common:
+                        ftd::Common {
+                            data_id: id,
+                            is_dummy,
+                            ..
+                        },
                     ..
-                }) => id,
-                Self::Image(ftd::Image {
-                    common: ftd::Common { data_id: id, .. },
+                })
+                | Self::Image(ftd::Image {
+                    common:
+                        ftd::Common {
+                            data_id: id,
+                            is_dummy,
+                            ..
+                        },
                     ..
-                }) => id,
+                })
+                | Self::IFrame(ftd::IFrame {
+                    common:
+                        ftd::Common {
+                            data_id: id,
+                            is_dummy,
+                            ..
+                        },
+                    ..
+                })
+                | Self::Input(ftd::Input {
+                    common:
+                        ftd::Common {
+                            data_id: id,
+                            is_dummy,
+                            ..
+                        },
+                    ..
+                })
+                | Self::Integer(ftd::Text {
+                    common:
+                        ftd::Common {
+                            data_id: id,
+                            is_dummy,
+                            ..
+                        },
+                    ..
+                })
+                | Self::Boolean(ftd::Text {
+                    common:
+                        ftd::Common {
+                            data_id: id,
+                            is_dummy,
+                            ..
+                        },
+                    ..
+                })
+                | Self::Decimal(ftd::Text {
+                    common:
+                        ftd::Common {
+                            data_id: id,
+                            is_dummy,
+                            ..
+                        },
+                    ..
+                }) => (id, is_dummy),
                 Self::Row(ftd::Row {
-                    common: ftd::Common { data_id: id, .. },
+                    common:
+                        ftd::Common {
+                            data_id: id,
+                            is_dummy,
+                            ..
+                        },
                     container,
                     ..
                 })
                 | Self::Column(ftd::Column {
-                    common: ftd::Common { data_id: id, .. },
+                    common:
+                        ftd::Common {
+                            data_id: id,
+                            is_dummy,
+                            ..
+                        },
                     container,
                     ..
                 })
                 | Self::Scene(ftd::Scene {
-                    common: ftd::Common { data_id: id, .. },
+                    common:
+                        ftd::Common {
+                            data_id: id,
+                            is_dummy,
+                            ..
+                        },
                     container,
                     ..
                 })
                 | Self::Grid(ftd::Grid {
-                    common: ftd::Common { data_id: id, .. },
+                    common:
+                        ftd::Common {
+                            data_id: id,
+                            is_dummy,
+                            ..
+                        },
                     container,
                     ..
                 }) => {
@@ -156,37 +241,17 @@ impl Element {
                             }
                         }
                     }
-                    id
+                    (id, is_dummy)
                 }
                 Self::Markup(t) => {
                     let mut index_vec = index_vec.to_vec();
                     index_vec.push(idx);
                     set_markup_id(&mut t.children, &index_vec, external_id.clone());
-                    &mut t.common.data_id
+                    (&mut t.common.data_id, &mut t.common.is_dummy)
                 }
-                Self::IFrame(ftd::IFrame {
-                    common: ftd::Common { data_id: id, .. },
-                    ..
-                }) => id,
-                Self::Input(ftd::Input {
-                    common: ftd::Common { data_id: id, .. },
-                    ..
-                }) => id,
-                Self::Integer(ftd::Text {
-                    common: ftd::Common { data_id: id, .. },
-                    ..
-                }) => id,
-                Self::Boolean(ftd::Text {
-                    common: ftd::Common { data_id: id, .. },
-                    ..
-                }) => id,
-                Self::Decimal(ftd::Text {
-                    common: ftd::Common { data_id: id, .. },
-                    ..
-                }) => id,
                 Self::Null => continue,
             };
-            set_id(&mut id, &external_id, index_string.as_str())
+            set_id(&mut id, &external_id, index_string.as_str(), *is_dummy)
         }
 
         fn set_markup_id(
@@ -204,13 +269,17 @@ impl Element {
             ) {
                 for (idx, child) in children.iter_mut().enumerate() {
                     let index_string = get_index_string(index_vec, idx + start_index);
-                    let (mut id, children) = match &mut child.itext {
+                    let (mut id, children, is_dummy) = match &mut child.itext {
                         IText::Text(t)
                         | IText::Integer(t)
                         | IText::Boolean(t)
-                        | IText::Decimal(t) => (&mut t.common.data_id, None),
-                        IText::TextBlock(t) => (&mut t.common.data_id, None),
-                        IText::Markup(t) => (&mut t.common.data_id, Some(&mut t.children)),
+                        | IText::Decimal(t) => (&mut t.common.data_id, None, t.common.is_dummy),
+                        IText::TextBlock(t) => (&mut t.common.data_id, None, t.common.is_dummy),
+                        IText::Markup(t) => (
+                            &mut t.common.data_id,
+                            Some(&mut t.children),
+                            t.common.is_dummy,
+                        ),
                     };
 
                     let mut index_vec = index_vec.to_vec();
@@ -225,12 +294,17 @@ impl Element {
                         );
                     }
 
-                    set_id(&mut id, &external_id, index_string.as_str())
+                    set_id(&mut id, &external_id, index_string.as_str(), is_dummy)
                 }
             }
         }
 
-        fn set_id(id: &mut Option<String>, external_id: &Option<String>, index_string: &str) {
+        fn set_id(
+            id: &mut Option<String>,
+            external_id: &Option<String>,
+            index_string: &str,
+            is_dummy: bool,
+        ) {
             let external_id = {
                 if let Some(ref external_id) = external_id {
                     format!(":{}", external_id)
@@ -238,11 +312,16 @@ impl Element {
                     "".to_string()
                 }
             };
+            let dummy_str = if is_dummy {
+                ":dummy".to_string()
+            } else {
+                "".to_string()
+            };
 
             if let Some(id) = id {
-                *id = format!("{}:{}{}", id, index_string, external_id);
+                *id = format!("{}:{}{}{}", id, index_string, external_id, dummy_str);
             } else {
-                *id = Some(format!("{}{}", index_string, external_id));
+                *id = Some(format!("{}{}{}", index_string, external_id, dummy_str));
             }
         }
 
@@ -1514,6 +1593,7 @@ pub struct Common {
     pub locals: ftd::Map,
     pub condition: Option<ftd::Condition>,
     pub is_not_visible: bool,
+    pub is_dummy: bool,
     pub events: Vec<ftd::Event>,
     pub reference: Option<String>,
     pub region: Option<Region>,

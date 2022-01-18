@@ -61,6 +61,7 @@ impl Kind {
             ftd::p2::Kind::Decimal { .. } => "decimal",
             ftd::p2::Kind::Boolean { .. } => "boolean",
             ftd::p2::Kind::Object { .. } => "object",
+            ftd::p2::Kind::List { .. } => "list",
             _ => return ftd::e2(format!("Kind supported for default value are string, integer, decimal and boolean with default value, found: kind `{:?}`", &self), doc_id, line_number),
         }.to_string())
     }

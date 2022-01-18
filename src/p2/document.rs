@@ -69,7 +69,7 @@ impl Document {
         for (k, v) in self.get_locals() {
             d.insert(format!("@{}", k), v.to_string());
         }
-        dbg!(&d, &self.main.container);
+        // dbg!(&d, &self.main.container);
 
         let mut data: ftd::DataDependenciesMap = Default::default();
         for (k, v) in d {

@@ -283,13 +283,11 @@ impl ChildComponent {
             doc.get_component(self.line_number, self.root.as_str())
                 .unwrap()
         };
-        dbg!(&self.properties);
         let loop_property =
             resolve_recursive_property(self.line_number, &self.properties, arguments, doc)?;
         let mut elements = vec![];
 
-        dbg!(&loop_property);
-        if let ftd::Value::List { data, .. } = loop_property {
+        if let ftd::Value::List { data, kind } = loop_property {
             for (i, d) in data.iter().enumerate() {
                 elements.push(construct_element(
                     &self,
@@ -304,8 +302,47 @@ impl ChildComponent {
                     local_container,
                 )?);
             }
+            if let Some(tmp_data) = construct_tmp_data(&kind) {
+                if let Some(value) = self.properties.get("$loop$") {
+                    if let Ok(ftd::PropertyValue::Reference { name, .. }) =
+                        value.eval(0, "$loop$", arguments, doc)
+                    {
+                        let mut element = construct_element(
+                            &self,
+                            &tmp_data,
+                            data.len(),
+                            &root,
+                            doc,
+                            arguments,
+                            invocations,
+                            is_child,
+                            all_locals,
+                            local_container,
+                        )?;
+                        if let Some(common) = element.element.get_mut_common() {
+                            common.reference = Some(name.to_string());
+                            common.is_dummy = true;
+                            elements.push(element);
+                        }
+                    }
+                }
+            }
         }
+        // let tmp_data = construct_tmp_data()
         return Ok(elements);
+
+        fn construct_tmp_data(kind: &ftd::p2::Kind) -> Option<ftd::Value> {
+            match kind {
+                ftd::p2::Kind::String { .. } => Some(ftd::Value::String {
+                    text: "$loop$".to_string(),
+                    source: ftd::TextSource::Header,
+                }),
+                ftd::p2::Kind::Integer { .. } => Some(ftd::Value::Integer { value: 0 }),
+                ftd::p2::Kind::Decimal { .. } => Some(ftd::Value::Decimal { value: 0.0 }),
+                ftd::p2::Kind::Boolean { .. } => Some(ftd::Value::Boolean { value: false }),
+                _ => None,
+            }
+        }
 
         fn construct_element(
             child_component: &ChildComponent,

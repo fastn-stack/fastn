@@ -89,6 +89,7 @@ pub fn common_from_properties(
         locals: Default::default(),
         condition: cond,
         is_not_visible: !is_visible,
+        is_dummy: false,
         events: ftd::p2::Event::get_events(0, events, all_locals, properties, doc)?,
         reference,
         region: ftd::Region::from(
