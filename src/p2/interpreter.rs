@@ -6353,6 +6353,7 @@ mod test {
                     (s("name@1"), s("Arpita Jaiswal")),
                 ])
                 .collect(),
+                reference: Some(s("foo/bar#people")),
                 ..Default::default()
             },
         }));
@@ -6388,6 +6389,7 @@ mod test {
                     (s("name@2"), s("Amit Upadhyay")),
                 ])
                 .collect(),
+                reference: Some(s("foo/bar#people")),
                 ..Default::default()
             },
         }));
@@ -6627,6 +6629,7 @@ mod test {
                     (s("body@1"), s("Amit is CEO of FifthTry.")),
                 ])
                 .collect(),
+                reference: Some(s("foo/bar#people")),
                 ..Default::default()
             },
             ..Default::default()
@@ -6827,6 +6830,10 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("Arpita"),
                 line: true,
+                common: ftd::Common {
+                    reference: Some(s("foo/bar#people")),
+                    ..Default::default()
+                },
                 ..Default::default()
             }));
 
@@ -6835,6 +6842,10 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("Asit"),
                 line: true,
+                common: ftd::Common {
+                    reference: Some(s("foo/bar#people")),
+                    ..Default::default()
+                },
                 ..Default::default()
             }));
 
@@ -6843,6 +6854,10 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("Sourabh"),
                 line: true,
+                common: ftd::Common {
+                    reference: Some(s("foo/bar#people")),
+                    ..Default::default()
+                },
                 ..Default::default()
             }));
 
@@ -6946,6 +6961,7 @@ mod test {
                     (s("name@0,0"), s("Arpita Jaiswal")),
                 ])
                 .collect(),
+                reference: Some(s("foo/bar#people")),
                 ..Default::default()
             },
         }));
@@ -6981,6 +6997,7 @@ mod test {
                     (s("name@0,1"), s("Amit Upadhyay")),
                 ])
                 .collect(),
+                reference: Some(s("foo/bar#people")),
                 ..Default::default()
             },
         }));
@@ -7306,6 +7323,10 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("\"ftd\""),
                 line: true,
+                common: ftd::Common {
+                    reference: Some(s("foo/bar#test")),
+                    ..Default::default()
+                },
                 ..Default::default()
             }));
 
@@ -7314,6 +7335,10 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("\"0.1.18\""),
                 line: true,
+                common: ftd::Common {
+                    reference: Some(s("foo/bar#test")),
+                    ..Default::default()
+                },
                 ..Default::default()
             }));
 
@@ -7322,6 +7347,10 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("["),
                 line: true,
+                common: ftd::Common {
+                    reference: Some(s("foo/bar#test")),
+                    ..Default::default()
+                },
                 ..Default::default()
             }));
 
@@ -7330,6 +7359,10 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("\"2018\""),
                 line: true,
+                common: ftd::Common {
+                    reference: Some(s("foo/bar#test")),
+                    ..Default::default()
+                },
                 ..Default::default()
             }));
 
@@ -7338,6 +7371,10 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("\"ftd: FifthTry Document Format\""),
                 line: true,
+                common: ftd::Common {
+                    reference: Some(s("foo/bar#test")),
+                    ..Default::default()
+                },
                 ..Default::default()
             }));
 
@@ -7346,6 +7383,10 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("\"MIT\""),
                 line: true,
+                common: ftd::Common {
+                    reference: Some(s("foo/bar#test")),
+                    ..Default::default()
+                },
                 ..Default::default()
             }));
 
@@ -7354,6 +7395,10 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("\"https://github.com/FifthTry/ftd\""),
                 line: true,
+                common: ftd::Common {
+                    reference: Some(s("foo/bar#test")),
+                    ..Default::default()
+                },
                 ..Default::default()
             }));
 
@@ -7362,6 +7407,10 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("\"https://ftd.dev\""),
                 line: true,
+                common: ftd::Common {
+                    reference: Some(s("foo/bar#test")),
+                    ..Default::default()
+                },
                 ..Default::default()
             }));
 
@@ -7479,6 +7528,7 @@ mod test {
                     (s("body@0"), s("name")),
                 ])
                 .collect(),
+                reference: Some(s("foo/bar#test")),
                 ..Default::default()
             },
         }));
@@ -7514,6 +7564,7 @@ mod test {
                     (s("body@1"), s("version")),
                 ])
                 .collect(),
+                reference: Some(s("foo/bar#test")),
                 ..Default::default()
             },
         }));
@@ -7549,6 +7600,7 @@ mod test {
                     (s("body@2"), s("authors")),
                 ])
                 .collect(),
+                reference: Some(s("foo/bar#test")),
                 ..Default::default()
             },
         }));
@@ -7584,6 +7636,7 @@ mod test {
                     (s("body@3"), s("edition")),
                 ])
                 .collect(),
+                reference: Some(s("foo/bar#test")),
                 ..Default::default()
             },
         }));
@@ -7619,6 +7672,7 @@ mod test {
                     (s("body@4"), s("description")),
                 ])
                 .collect(),
+                reference: Some(s("foo/bar#test")),
                 ..Default::default()
             },
         }));
@@ -7654,6 +7708,7 @@ mod test {
                     (s("body@5"), s("license")),
                 ])
                 .collect(),
+                reference: Some(s("foo/bar#test")),
                 ..Default::default()
             },
         }));
@@ -7689,6 +7744,7 @@ mod test {
                     (s("body@6"), s("repository")),
                 ])
                 .collect(),
+                reference: Some(s("foo/bar#test")),
                 ..Default::default()
             },
         }));
@@ -7724,6 +7780,7 @@ mod test {
                     (s("body@7"), s("homepage")),
                 ])
                 .collect(),
+                reference: Some(s("foo/bar#test")),
                 ..Default::default()
             },
         }));
@@ -8087,6 +8144,10 @@ mod test {
                         ..Default::default()
                     }),
                 ],
+                ..Default::default()
+            },
+            common: ftd::Common {
+                reference: Some(s("foo/bar#toc")),
                 ..Default::default()
             },
             ..Default::default()
@@ -10079,6 +10140,7 @@ mod test {
                 },
                 common: ftd::Common {
                     locals: std::array::IntoIter::new([(s("open@0"), s("true"))]).collect(),
+                    reference: Some(s("foo/bar#toc")),
                     ..Default::default()
                 },
             }));
