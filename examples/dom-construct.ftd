@@ -1,0 +1,12 @@
+-- string list flower:
+
+-- flower: Rose
+
+-- flower: Lotus
+
+
+-- ftd.column:
+padding: 40
+
+-- ftd.text: $obj
+$loop$: $flower as $obj
