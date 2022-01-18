@@ -358,8 +358,6 @@ let ftd_utils = {
                         }
                         deps[dependency] = dependencies[dependency];
                         data[target].dependencies = deps;
-                    } else if (!!Object.keys(dependencies).filter(s => s.endsWith(':dummy')).length) {
-                        continue;
                     } else {
                         document.querySelector(`[data-id="${dependency}:${id}"]`).innerText = data[target].value;
                     }
@@ -670,16 +668,12 @@ function console_print(id, data) {
 }
 
 function append_list(id, data, reference) {
-    console.log(data);
-    console.log(reference);
-    console.log(reference["list"]);
     if (reference["list"] !== undefined) {
         let value = window.ftd.get_value(id, reference["list"]);
         if (ftd_utils.isJson(value)) {
             let object = JSON.parse(value);
             if ((object instanceof Array) && data["value"] !== undefined && data["value"].length !== 0) {
                 object.push(data["value"]);
-                console.log(object);
                 window.ftd.set_string(id, reference["list"], JSON.stringify(object));
             }
         }

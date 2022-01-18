@@ -1,9 +1,5 @@
 -- string list flower:
 
--- flower: Rose
-
--- flower: Lotus
-
 -- optional string query:
 
 -- object obj:
@@ -31,5 +27,18 @@ color: green
 size: 20
 
 
--- ftd.text: $obj
+-- show-data: $obj
 $loop$: $flower as $obj
+
+
+-- ftd.column show-data:
+caption text:
+padding: 10
+background-color: yellow
+color: red
+
+--- ftd.column:
+padding: 20
+border-width: 2
+
+--- ftd.text: $text
