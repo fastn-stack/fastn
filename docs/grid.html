@@ -355,10 +355,67 @@ let ftd_utils = {
         }
     },
 
+    isJson: function(str) {
+        try {
+            JSON.parse(str);
+        } catch (e) {
+            return false;
+        }
+        return true;
+    },
+
+    getString: (function() {
+        var DIV = document.createElement("div");
+
+        if ('outerHTML' in DIV)
+            return function(node) {
+                return node.outerHTML;
+            };
+
+        return function(node) {
+            var div = DIV.cloneNode();
+            div.appendChild(node.cloneNode(true));
+            return div.innerHTML;
+        };
+
+    })(),
+
+    create_dom: function (value,  node) {
+        let dom_ids = [];
+        let parent_node = node.parentElement;
+        if (ftd_utils.isJson(value)) {
+            let object = JSON.parse(value);
+            for (const idx in object) {
+                var new_node = node.cloneNode(true);
+                new_node.style.display = null;
+                let id = new_node.getAttribute("data-id").replace(":dummy", ",".concat(idx, ":new"));
+                new_node.setAttribute("data-id", id);
+                dom_ids.push(id);
+                parent_node.innerHTML += ftd_utils.getString(new_node).replace("$loop$", object[idx]);
+            }
+        } else {
+            var new_node = node.cloneNode(true);
+            new_node.style.display = null;
+            let id = new_node.getAttribute("data-id").replace(":dummy", ",0:new");
+            new_node.setAttribute("data-id", id);
+            dom_ids.push(id);
+            parent_node.innerHTML += ftd_utils.getString(new_node).replace("$loop$", value);
+        }
+        return dom_ids;
+    },
+
+    remove_nodes: function (nodes, id) {
+        for (const node in nodes) {
+            console.log(`${nodes[node]}:${id}`);
+            document.querySelector(`[data-id="${nodes[node]}:${id}"]`).remove();
+        }
+    },
+
     handle_action: function (id, target, value, data, ftd_external_children) {
         data[target].value = value.toString();
 
         let dependencies = data[target].dependencies;
+        console.log(dependencies);
         for (const dependency in dependencies) {
             if (!dependencies.hasOwnProperty(dependency)) {
                 continue;
@@ -368,7 +425,21 @@ let ftd_utils = {
             for (const index in json_dependencies) {
                 let json_dependency = json_dependencies[index];
                 if (json_dependency.dependency_type === "Value") {
-                    document.querySelector(`[data-id="${dependency}:${id}"]`).innerText = data[target].value;
+                    if (dependency.endsWith(':dummy')) {
+                        let dummy_node = document.querySelector(`[data-id="${dependency}:${id}"]`);
+                        let dom_ids = ftd_utils.create_dom(data[target].value, dummy_node);
+                        ftd_utils.remove_nodes(Object.keys(dependencies).filter(s => !s.endsWith(':dummy')), id);
+                        let deps = {};
+                        for (const dom_id in dom_ids) {
+                            deps[dom_ids[dom_id].replace(`:${id}`, "")] = dependencies[dependency];
+                        }
+                        deps[dependency] = dependencies[dependency];
+                        data[target].dependencies = deps;
+                    } else if (!!Object.keys(dependencies).filter(s => s.endsWith(':dummy')).length) {
+                        continue;
+                    } else {
+                        document.querySelector(`[data-id="${dependency}:${id}"]`).innerText = data[target].value;
+                    }
                 } else if (json_dependency.dependency_type === "Visible") {
                     let display = "none";
                     if (data[target].value === json_dependency.condition) {
@@ -424,6 +495,9 @@ let ftd_utils = {
     },
 
     external_children_replace: function (id, ftd_external_children) {
+        if (ftd_external_children[id] === undefined) {
+            return;
+        }
         let external_children = ftd_external_children[id];
         let external_children_placed = [];
         for (const object in external_children) {
@@ -489,10 +563,10 @@ window.ftd = (function () {
                 let reference = JSON.parse(action["parameters"].data[0].reference);
                 let data = ftd_utils.resolve_reference(value, reference, ftd_data[id]);
                 let func = data.function.trim().replaceAll("-", "_");
-                window[func](data);
+                window[func](id, data, reference);
             } else {
                 let target = action["target"].trim().replaceAll("-", "_");
-                window[target]();
+                window[target](id);
             }
         } else if (act === "increment") {
             let target = action["target"];
@@ -618,6 +692,16 @@ window.ftd = (function () {
         ftd_utils.handle_action(id, variable, value, data);
     }
 
+    exports.get_value = function (id, variable) {
+        let data = ftd_data[id];
+
+        if (!data[variable]) {
+            console.log(variable, "is not in data, ignoring");
+            return;
+        }
+        return data[variable].value;
+    }
+
     exports.set_multi_value = function (id, list) {
         for (const idx in list) {
             if (!list.hasOwnProperty(idx)) {
@@ -658,8 +742,25 @@ window.ftd = (function () {
     return exports;
 })();
 
-function console_print(data) {
+function console_print(id, data) {
     console.log(data);
+}
+
+function append_list(id, data, reference) {
+    console.log(data);
+    console.log(reference);
+    console.log(reference["list"]);
+    if (reference["list"] !== undefined) {
+        let value = window.ftd.get_value(id, reference["list"]);
+        if (ftd_utils.isJson(value)) {
+            let object = JSON.parse(value);
+            if ((object instanceof Array) && data["value"] !== undefined && data["value"].length !== 0) {
+                object.push(data["value"]);
+                console.log(object);
+                window.ftd.set_string(id, reference["list"], JSON.stringify(object));
+            }
+        }
+    }
 }
 
     </script>
