@@ -330,7 +330,6 @@ let ftd_utils = {
         data[target].value = value.toString();
 
         let dependencies = data[target].dependencies;
-        console.log(dependencies);
         for (const dependency in dependencies) {
             if (!dependencies.hasOwnProperty(dependency)) {
                 continue;
@@ -542,6 +541,23 @@ window.ftd = (function () {
             let data = ftd_data[id];
             ftd_utils.handle_action(id, target, value, data, ftd_external_children);
 
+        } else if (act === "insert") {
+            let target = action["target"];
+            let value = undefined;
+            if (action["parameters"].value !== undefined) {
+                let insert_value = action["parameters"].value[0].value;
+                let insert_reference = action["parameters"].value[0].reference;
+                value = ftd_utils.resolve_reference(insert_value, insert_reference, ftd_data[id]);
+            }
+            let at = undefined;
+            if (action["parameters"].at !== undefined) {
+                let at_value = action["parameters"].at[0].value;
+                let at_reference = action["parameters"].at[0].reference;
+                at = ftd_utils.resolve_reference(at_value, at_reference, ftd_data[id]);
+            }
+
+            exports.insert_value(id, target, value, at);
+
         } else {
             console.log("unknown action:", act);
             return;
@@ -581,6 +597,38 @@ window.ftd = (function () {
         }
 
         ftd_utils.handle_action(id, variable, value, data, ftd_external_children);
+    }
+
+    exports.insert_value = function (id, target, value, at) {
+        let data = ftd_data[id];
+
+        if (!data[target]) {
+            console.log(target, "is not in data, ignoring");
+            return;
+        }
+
+        let list = data[target].value;
+        if (ftd_utils.isJson(list)) {
+            list = JSON.parse(list);
+        } else {
+            console.log(list, "is not list, ignoring");
+            return;
+        }
+
+        if (value === undefined || value.trim() === "") {
+            console.log("Nothing to insert in ", list);
+            return;
+        }
+
+        if (at !== undefined && at === "end") {
+            list.push(value);
+        } else if (at !== undefined && at === "start") {
+            list.unshift(value);
+        } else {
+            list.push(value);
+        }
+
+        ftd_utils.handle_action(id, target, JSON.stringify(list), data, ftd_external_children);
     }
 
     exports.set_bool = function (id, variable, value) {
@@ -657,19 +705,6 @@ window.ftd = (function () {
 
 function console_print(id, data) {
     console.log(data);
-}
-
-function append_list(id, data, reference) {
-    if (reference["list"] !== undefined) {
-        let value = window.ftd.get_value(id, reference["list"]);
-        if (ftd_utils.isJson(value)) {
-            let object = JSON.parse(value);
-            if ((object instanceof Array) && data["value"] !== undefined && data["value"].length !== 0) {
-                object.push(data["value"]);
-                window.ftd.set_string(id, reference["list"], JSON.stringify(object));
-            }
-        }
-    }
 }
 
     </script>

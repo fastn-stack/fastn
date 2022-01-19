@@ -472,7 +472,7 @@ impl Value {
                 if let Some(data) = data.as_ref() {
                     data.to_string()
                 } else {
-                    None
+                    Some("".to_string())
                 }
             }
             Value::Object { values } => {

@@ -2,11 +2,6 @@
 
 -- optional string query:
 
--- object obj:
-function: append-list
-value: $query
-list: $flower
-
 -- ftd.column:
 padding: 20
 spacing: 20
@@ -16,7 +11,7 @@ placeholder: Type Something Here...
 width: 400
 border-width: 2
 $event-input$: $query=$VALUE
-$event-change$: message-host $obj
+$event-change$: insert into $flower value $query at end
 
 -- ftd.text:
 
