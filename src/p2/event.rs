@@ -32,7 +32,9 @@ impl Event {
                     );
                 }
             }
-            property_string.insert(s.to_string(), property_values_string);
+            if !property_values_string.is_empty() {
+                property_string.insert(s.to_string(), property_values_string);
+            }
         }
         return Ok(property_string);
 
@@ -228,6 +230,8 @@ pub struct Action {
 #[derive(Debug, PartialEq, Clone, serde::Deserialize)]
 pub enum ActionKind {
     Toggle,
+    Insert,
+    // Clear,
     Increment,
     Decrement,
     StopPropagation,
@@ -251,6 +255,7 @@ impl ActionKind {
             Self::Toggle => "toggle",
             Self::Increment => "increment",
             Self::Decrement => "decrement",
+            Self::Insert => "insert",
             Self::StopPropagation => "stop-propagation",
             Self::PreventDefault => "prevent-default",
             Self::SetValue => "set-value",
@@ -277,8 +282,9 @@ impl ActionKind {
             ftd::p2::ActionKind::Toggle
             | ftd::p2::ActionKind::StopPropagation
             | ftd::p2::ActionKind::PreventDefault
-            | ftd::p2::ActionKind::SetValue
-            | ftd::p2::ActionKind::MessageHost => {
+            // | ftd::p2::ActionKind::Clear
+            | ftd::p2::ActionKind::SetValue => {}
+            ftd::p2::ActionKind::MessageHost => {
                 parameters.insert(
                     "data".to_string(),
                     ftd::p2::event::Parameter {
@@ -303,6 +309,24 @@ impl ActionKind {
                         min: 1,
                         max: 2,
                         ptype: vec![ftd::p2::Kind::integer(), ftd::p2::Kind::integer()],
+                    },
+                );
+            }
+            ftd::p2::ActionKind::Insert => {
+                parameters.insert(
+                    "value".to_string(),
+                    ftd::p2::event::Parameter {
+                        min: 1,
+                        max: 1,
+                        ptype: vec![],
+                    },
+                );
+                parameters.insert(
+                    "at".to_string(),
+                    ftd::p2::event::Parameter {
+                        min: 1,
+                        max: 1,
+                        ptype: vec![ftd::p2::Kind::string()],
                     },
                 );
             }
@@ -456,6 +480,104 @@ impl Action {
 
                 Ok(Self {
                     action: action_kind,
+                    target,
+                    parameters,
+                })
+            }
+            _ if a.starts_with("insert into ") => {
+                let vector: Vec<&str> = a.split(' ').filter(|x| !x.is_empty()).collect();
+                let value = if let Some(val) = vector.get(2) {
+                    val.to_string()
+                } else {
+                    return ftd::e2(
+                        format!(
+                            "target not found, expected `insert into <something>` found: {}",
+                            a
+                        ),
+                        doc.name,
+                        line_number,
+                    );
+                };
+                let (target, kind) = get_target(line_number, value.clone(), doc, arguments, None)?;
+                let expected_value_kind = if let ftd::p2::Kind::List { kind, .. } = kind {
+                    kind.as_ref().to_owned()
+                } else {
+                    return ftd::e2(
+                        format!(
+                            "expected target `{}` kind is list found: `{:?}`",
+                            value, kind
+                        ),
+                        doc.name,
+                        line_number,
+                    );
+                };
+                let parameters = {
+                    let mut parameters: std::collections::BTreeMap<
+                        String,
+                        Vec<ftd::PropertyValue>,
+                    > = Default::default();
+                    let mut current_parameter = "".to_string();
+                    let (mut min, mut max, mut idx) = (0, 0, 0);
+                    let mut pkind = vec![];
+                    for parameter in vector[3..].iter() {
+                        if let Some(p) = ActionKind::Insert.parameters().get(*parameter) {
+                            if min > idx {
+                                return ftd::e2(
+                                    format!(
+                                        "minumum number of arguments for {} are {}, found: {}",
+                                        current_parameter, min, idx
+                                    ),
+                                    doc.name,
+                                    line_number,
+                                );
+                            }
+                            current_parameter = parameter.to_string();
+                            min = p.min;
+                            max = p.max;
+                            pkind = p.ptype.to_vec();
+                            idx = 0;
+                            parameters.insert(current_parameter.to_string(), vec![]);
+                        } else if let Some(p) = parameters.get_mut(&current_parameter) {
+                            if idx >= max {
+                                return ftd::e2(
+                                    format!(
+                                        "maximum number of arguments for {} are {}, found: {}",
+                                        current_parameter,
+                                        max,
+                                        max + 1
+                                    ),
+                                    doc.name,
+                                    line_number,
+                                );
+                            }
+                            let value = ftd::PropertyValue::resolve_value(
+                                line_number,
+                                parameter,
+                                pkind.get(idx).map(|k| k.to_owned()),
+                                doc,
+                                arguments,
+                                None,
+                            )?;
+                            if !value.kind().inner().eq(&expected_value_kind) {
+                                return ftd::e2(
+                                    format!(
+                                        "expected value kind: `{:?}` found: `{:?}`",
+                                        value.kind(),
+                                        expected_value_kind
+                                    ),
+                                    doc.name,
+                                    line_number,
+                                );
+                            }
+                            p.push(value);
+                            idx += 1;
+                        }
+                    }
+                    parameters
+                };
+
+                Ok(Self {
+                    action: ActionKind::Insert,
                     target,
                     parameters,
                 })

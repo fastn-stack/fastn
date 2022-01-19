@@ -287,6 +287,18 @@ impl ChildComponent {
             resolve_recursive_property(self.line_number, &self.properties, arguments, doc)?;
         let mut elements = vec![];
 
+        let reference_name = {
+            let mut reference_name = None;
+            if let Some(value) = self.properties.get("$loop$") {
+                if let Ok(ftd::PropertyValue::Reference { name, .. }) =
+                    value.eval(0, "$loop$", arguments, doc)
+                {
+                    reference_name = Some(name);
+                }
+            }
+            reference_name
+        };
+
         if let ftd::Value::List { data, kind } = loop_property {
             for (i, d) in data.iter().enumerate() {
                 let mut element = construct_element(
@@ -301,39 +313,31 @@ impl ChildComponent {
                     all_locals,
                     local_container,
                 )?;
-                if let Some(value) = self.properties.get("$loop$") {
-                    if let Ok(ftd::PropertyValue::Reference { name, .. }) =
-                        value.eval(0, "$loop$", arguments, doc)
-                    {
-                        if let Some(common) = element.element.get_mut_common() {
-                            common.reference = Some(name.to_string());
-                        }
+                if let Some(name) = reference_name {
+                    if let Some(common) = element.element.get_mut_common() {
+                        common.reference = Some(name.to_string());
                     }
                 }
                 elements.push(element);
             }
             if let Some(tmp_data) = construct_tmp_data(&kind) {
-                if let Some(value) = self.properties.get("$loop$") {
-                    if let Ok(ftd::PropertyValue::Reference { name, .. }) =
-                        value.eval(0, "$loop$", arguments, doc)
-                    {
-                        let mut element = construct_element(
-                            self,
-                            &tmp_data,
-                            data.len(),
-                            &root,
-                            doc,
-                            arguments,
-                            invocations,
-                            is_child,
-                            all_locals,
-                            local_container,
-                        )?;
-                        if let Some(common) = element.element.get_mut_common() {
-                            common.reference = Some(name.to_string());
-                            common.is_dummy = true;
-                            elements.push(element);
-                        }
+                if let Some(name) = reference_name {
+                    let mut element = construct_element(
+                        self,
+                        &tmp_data,
+                        data.len(),
+                        &root,
+                        doc,
+                        arguments,
+                        invocations,
+                        is_child,
+                        all_locals,
+                        local_container,
+                    )?;
+                    if let Some(common) = element.element.get_mut_common() {
+                        common.reference = Some(name.to_string());
+                        common.is_dummy = true;
+                        elements.push(element);
                     }
                 }
             }
