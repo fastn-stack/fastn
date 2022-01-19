@@ -409,7 +409,8 @@ let ftd_utils = {
                         ftd_utils.remove_nodes(Object.keys(dependencies).filter(s => !s.endsWith(':dummy')), id);
                         let deps = {};
                         for (const dom_id in dom_ids) {
-                            deps[dom_ids[dom_id].replace(`:${id}`, "")] = dependencies[dependency];
+                            let id_without_main = dom_ids[dom_id].substring(0, dom_ids[dom_id].length - `:${id}`.length )
+                            deps[id_without_main] = dependencies[dependency];
                         }
                         deps[dependency] = dependencies[dependency];
                         data[target].dependencies = deps;
