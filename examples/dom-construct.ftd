@@ -11,7 +11,7 @@ placeholder: Type Something Here...
 width: 400
 border-width: 2
 $event-input$: $query=$VALUE
-$event-change$: insert into $flower value $query at end
+$event-change$: insert into $flower value $VALUE at end
 
 -- ftd.text:
 
