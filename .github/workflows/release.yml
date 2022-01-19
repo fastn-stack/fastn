@@ -16,6 +16,15 @@ jobs:
       BINARY_NAME: fpm
     steps:
       - uses: actions/checkout@main
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+            ftd/target
+            fifthtry_content/target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
       - name: Build-musl
         uses: gmiam/rust-musl-action@master
         continue-on-error: false
@@ -31,6 +40,15 @@ jobs:
     steps:
       - uses: actions/checkout@main
       - uses: actions-rs/toolchain@v1
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+            ftd/target
+            fifthtry_content/target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
       - name: Run Build
         id: build-windows
         continue-on-error: false
@@ -49,6 +67,15 @@ jobs:
     steps:
       - uses: actions/checkout@main
       - uses: actions-rs/toolchain@v1
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+            ftd/target
+            fifthtry_content/target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
       - name: Run Build
         id: build-macos
         continue-on-error: false
@@ -80,3 +107,8 @@ jobs:
           path: ~/download/windows
       - name: List all
         run: find ~/download/.
+      - uses: ncipollo/release-action@v1
+        with:
+          artifacts: "release.tar.gz,foo/*.txt"
+          bodyFile: "body.md"
+          token: ${{ secrets.GITHUB_TOKEN }}
