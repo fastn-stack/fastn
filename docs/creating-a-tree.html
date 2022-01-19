@@ -6,27 +6,59 @@
     <title>ftd</title>
     <script type="ftd" id="ftd-data">
         {
+  "@active@0,0,0": {
+    "value": "true",
+    "dependencies": {
+      "0,0,0,0": "[{\"dependency_type\":\"Visible\",\"condition\":\"$IsNotNull$\",\"parameters\":{}}]",
+      "0,0,0,1": "[{\"dependency_type\":\"Visible\",\"condition\":\"$IsNull$\",\"parameters\":{}}]"
+    }
+  },
+  "@active@0,0,0,0": {
+    "value": "",
+    "dependencies": {
+      "0,0,0,2,0": "[{\"dependency_type\":\"Visible\",\"condition\":\"$IsNotNull$\",\"parameters\":{}}]",
+      "0,0,0,2,1": "[{\"dependency_type\":\"Visible\",\"condition\":\"$IsNull$\",\"parameters\":{}}]"
+    }
+  },
+  "@active@0,0,0,1": {
+    "value": "",
+    "dependencies": {
+      "0,0,0,3,0": "[{\"dependency_type\":\"Visible\",\"condition\":\"$IsNotNull$\",\"parameters\":{}}]",
+      "0,0,0,3,1": "[{\"dependency_type\":\"Visible\",\"condition\":\"$IsNull$\",\"parameters\":{}}]"
+    }
+  },
+  "@active@0,0,0,1,0": {
+    "value": "",
+    "dependencies": {
+      "0,0,0,3,2,0": "[{\"dependency_type\":\"Visible\",\"condition\":\"$IsNotNull$\",\"parameters\":{}}]",
+      "0,0,0,3,2,1": "[{\"dependency_type\":\"Visible\",\"condition\":\"$IsNull$\",\"parameters\":{}}]"
+    }
+  },
   "@name@0,0,0": {
     "value": "5PM Tasks",
     "dependencies": {
-      "0,0,0,0": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
+      "0,0,0,0": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]",
+      "0,0,0,1": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
     }
   },
   "@name@0,0,0,0": {
     "value": "Log",
     "dependencies": {
+      "0,0,0,2,0": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]",
       "0,0,0,2,1": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
     }
   },
   "@name@0,0,0,1": {
     "value": "DB Tables",
     "dependencies": {
+      "0,0,0,3,0": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]",
       "0,0,0,3,1": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
     }
   },
   "@name@0,0,0,1,0": {
     "value": "API Changelog",
     "dependencies": {
+      "0,0,0,3,2,0": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]",
       "0,0,0,3,2,1": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
     }
   }
@@ -365,7 +397,10 @@ let ftd_utils = {
                     }
                 } else if (json_dependency.dependency_type === "Visible") {
                     let display = "none";
-                    if (data[target].value === json_dependency.condition) {
+                    if ((data[target].value === json_dependency.condition)
+                        || (json_dependency.condition === "$IsNull$" && data[target].value.trim().length === 0)
+                        || (json_dependency.condition === "$IsNotNull$" && data[target].value.trim().length !== 0)
+                    ) {
                         let is_flex = !!document.querySelector(`[data-id="${dependency}:${id}"]`).style.flexDirection.length;
                         let is_grid = !!document.querySelector(`[data-id="${dependency}:${id}"]`).style.gridTemplateAreas.length;
                         let is_webkit = !!document.querySelector(`[data-id="${dependency}:${id}"]`).style.webkitLineClamp.length;
@@ -862,9 +897,13 @@ function console_print(id, data) {
     <body style="height: 100%;">
 
         <div data-id="main:root" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; height: 100%; justify-content: flex-start; white-space: initial; width: 100%" class="ft_md"><div data-id="0:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; white-space: initial" class="ft_md"><div data-id="toc_main:0,0:main" style="align-items: flex-start; border-color: rgba(235,237,239,1); border-radius: 0px; border-right-width: 1px !important; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; height: 100%; justify-content: flex-start; padding-left: 10px; padding-right: 20px; padding-top: 30px; white-space: initial; width: 300px" class="ft_md"><div data-id="/welcome/:0,0,0:main" style="align-items: flex-start; align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; margin-right: auto; padding-bottom: 2px; padding-left: 10px; padding-top: 2px; white-space: initial; width: 100%" class="ft_md"><div data-id="0,0,0,0:main" style="align-self: flex-start; background-color: rgba(106,124,149,1); border-radius: 2px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(255,255,255,1); font-size: 14px; font-weight: 600; margin-right: auto; padding-bottom: 4px; padding-left: 10px; padding-top: 4px; text-align: left; white-space: initial; width: 100%" class="ft_md">5PM Tasks</div>
-<div data-id="/Building/:0,0,0,2:main" style="align-items: flex-start; align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; margin-right: auto; padding-bottom: 2px; padding-left: 10px; padding-top: 2px; white-space: initial; width: 100%" class="ft_md"><div data-id="0,0,0,2,1:main" style="align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(77,77,77,1); font-size: 14px; font-weight: 400; margin-right: auto; padding-bottom: 7px; padding-left: 10px; padding-top: 7px; text-align: left; white-space: initial" class="ft_md">Log</div></div>
-<div data-id="/Platform/:0,0,0,3:main" style="align-items: flex-start; align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; margin-right: auto; padding-bottom: 2px; padding-left: 10px; padding-top: 2px; white-space: initial; width: 100%" class="ft_md"><div data-id="0,0,0,3,1:main" style="align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(77,77,77,1); font-size: 14px; font-weight: 400; margin-right: auto; padding-bottom: 7px; padding-left: 10px; padding-top: 7px; text-align: left; white-space: initial" class="ft_md">DB Tables</div>
-<div data-id="/Changelog/:0,0,0,3,2:main" style="align-items: flex-start; align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; margin-right: auto; padding-bottom: 2px; padding-left: 10px; padding-top: 2px; white-space: initial; width: 100%" class="ft_md"><div data-id="0,0,0,3,2,1:main" style="align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(77,77,77,1); font-size: 14px; font-weight: 400; margin-right: auto; padding-bottom: 7px; padding-left: 10px; padding-top: 7px; text-align: left; white-space: initial" class="ft_md">API Changelog</div></div></div></div></div></div></div>
+<div data-id="0,0,0,1:main" style="align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(77,77,77,1); display: none; font-size: 14px; font-weight: 400; margin-right: auto; padding-bottom: 7px; padding-left: 10px; padding-top: 7px; text-align: left; white-space: initial" class="ft_md">5PM Tasks</div>
+<div data-id="/Building/:0,0,0,2:main" style="align-items: flex-start; align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; margin-right: auto; padding-bottom: 2px; padding-left: 10px; padding-top: 2px; white-space: initial; width: 100%" class="ft_md"><div data-id="0,0,0,2,0:main" style="align-self: flex-start; background-color: rgba(106,124,149,1); border-radius: 2px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(255,255,255,1); display: none; font-size: 14px; font-weight: 600; margin-right: auto; padding-bottom: 4px; padding-left: 10px; padding-top: 4px; text-align: left; white-space: initial; width: 100%" class="ft_md">Log</div>
+<div data-id="0,0,0,2,1:main" style="align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(77,77,77,1); font-size: 14px; font-weight: 400; margin-right: auto; padding-bottom: 7px; padding-left: 10px; padding-top: 7px; text-align: left; white-space: initial" class="ft_md">Log</div></div>
+<div data-id="/Platform/:0,0,0,3:main" style="align-items: flex-start; align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; margin-right: auto; padding-bottom: 2px; padding-left: 10px; padding-top: 2px; white-space: initial; width: 100%" class="ft_md"><div data-id="0,0,0,3,0:main" style="align-self: flex-start; background-color: rgba(106,124,149,1); border-radius: 2px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(255,255,255,1); display: none; font-size: 14px; font-weight: 600; margin-right: auto; padding-bottom: 4px; padding-left: 10px; padding-top: 4px; text-align: left; white-space: initial; width: 100%" class="ft_md">DB Tables</div>
+<div data-id="0,0,0,3,1:main" style="align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(77,77,77,1); font-size: 14px; font-weight: 400; margin-right: auto; padding-bottom: 7px; padding-left: 10px; padding-top: 7px; text-align: left; white-space: initial" class="ft_md">DB Tables</div>
+<div data-id="/Changelog/:0,0,0,3,2:main" style="align-items: flex-start; align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; margin-right: auto; padding-bottom: 2px; padding-left: 10px; padding-top: 2px; white-space: initial; width: 100%" class="ft_md"><div data-id="0,0,0,3,2,0:main" style="align-self: flex-start; background-color: rgba(106,124,149,1); border-radius: 2px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(255,255,255,1); display: none; font-size: 14px; font-weight: 600; margin-right: auto; padding-bottom: 4px; padding-left: 10px; padding-top: 4px; text-align: left; white-space: initial; width: 100%" class="ft_md">API Changelog</div>
+<div data-id="0,0,0,3,2,1:main" style="align-self: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(77,77,77,1); font-size: 14px; font-weight: 400; margin-right: auto; padding-bottom: 7px; padding-left: 10px; padding-top: 7px; text-align: left; white-space: initial" class="ft_md">API Changelog</div></div></div></div></div></div></div>
 
 
     <script>

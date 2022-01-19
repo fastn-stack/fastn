@@ -396,7 +396,10 @@ let ftd_utils = {
                     }
                 } else if (json_dependency.dependency_type === "Visible") {
                     let display = "none";
-                    if (data[target].value === json_dependency.condition) {
+                    if ((data[target].value === json_dependency.condition)
+                        || (json_dependency.condition === "$IsNull$" && data[target].value.trim().length === 0)
+                        || (json_dependency.condition === "$IsNotNull$" && data[target].value.trim().length !== 0)
+                    ) {
                         let is_flex = !!document.querySelector(`[data-id="${dependency}:${id}"]`).style.flexDirection.length;
                         let is_grid = !!document.querySelector(`[data-id="${dependency}:${id}"]`).style.gridTemplateAreas.length;
                         let is_webkit = !!document.querySelector(`[data-id="${dependency}:${id}"]`).style.webkitLineClamp.length;

@@ -6,6 +6,30 @@
     <title>ftd</title>
     <script type="ftd" id="ftd-data">
         {
+  "@body1@0": {
+    "value": "",
+    "dependencies": {
+      "0,1": "[{\"dependency_type\":\"Visible\",\"condition\":\"$IsNotNull$\",\"parameters\":{}}]"
+    }
+  },
+  "@body@0,1": {
+    "value": "",
+    "dependencies": {
+      "0,1": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
+    }
+  },
+  "@body@2": {
+    "value": "",
+    "dependencies": {
+      "0,3,1": "[{\"dependency_type\":\"Visible\",\"condition\":\"$IsNotNull$\",\"parameters\":{}}]"
+    }
+  },
+  "@body@2,1": {
+    "value": "",
+    "dependencies": {
+      "0,3,1": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
+    }
+  },
   "@title@0": {
     "value": "Once upon a time...",
     "dependencies": {
@@ -353,7 +377,10 @@ let ftd_utils = {
                     }
                 } else if (json_dependency.dependency_type === "Visible") {
                     let display = "none";
-                    if (data[target].value === json_dependency.condition) {
+                    if ((data[target].value === json_dependency.condition)
+                        || (json_dependency.condition === "$IsNull$" && data[target].value.trim().length === 0)
+                        || (json_dependency.condition === "$IsNotNull$" && data[target].value.trim().length !== 0)
+                    ) {
                         let is_flex = !!document.querySelector(`[data-id="${dependency}:${id}"]`).style.flexDirection.length;
                         let is_grid = !!document.querySelector(`[data-id="${dependency}:${id}"]`).style.gridTemplateAreas.length;
                         let is_webkit = !!document.querySelector(`[data-id="${dependency}:${id}"]`).style.webkitLineClamp.length;
@@ -850,6 +877,7 @@ function console_print(id, data) {
     <body style="height: 100%;">
 
         <div data-id="main:root" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; height: 100%; justify-content: flex-start; white-space: initial; width: 100%" class="ft_md"><div data-id="0:main" id="once-upon-a-time" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; white-space: initial; width: 100%" class="ft_md"><div data-id="0,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(0,0,0,1); font-size: 40px; font-weight: 700; line-height: 50px; padding-bottom: 12px; text-align: left; white-space: initial" class="ft_md">Once upon a time…</div>
+<div data-id="0,1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(77,77,77,1); display: none; font-size: 17px; font-weight: 400; padding-bottom: 8px; text-align: left; white-space: initial" class="ft_md"></div>
 <div data-id="0,2:main" style="align-self: center; background-color: rgba(95,158,160,1); border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; height: 1120px; margin-left: auto; margin-right: auto; white-space: initial; width: 1070px" class="ft_md"><div data-id="0,2:scene:main" style="position: relative" class=""><div data-id="0,2:scene-bg:main" style="display: block; height: 1120px; width: 100%" class=""></div>
 <div data-id="0,2,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; left: 20px; position: absolute; top: 20px; white-space: initial; width: 1000px" class="ft_md"><div data-id="0,2,0:scene:main" style="position: relative" class=""><div data-id="0,2,0:scene-bg:main" style="display: block; height: auto; width: 100%" class=""></div>
 <img alt="" data-id="0,2,0,0:main" src="https://assets.teenvogue.com/photos/5beb340b368e21796e2d8b85/16:9/w_2560%2Cc_limit/ppg2016_keyart_horizontal_nologos_final.jpg" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; left: 0px; position: absolute; top: 0px; white-space: initial; width: 500px">
@@ -880,7 +908,8 @@ function console_print(id, data) {
 <div data-id="0,2,5:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; left: 800px; position: absolute; top: 700px; transform: scale(1.8) scaleX(-1); white-space: initial; width: 200px" class="ft_md"><div data-id="0,2,5:scene:main" style="position: relative" class=""><div data-id="0,2,5:scene-bg:main" style="display: block; height: auto; width: 100%" class=""></div>
 <img alt="" data-id="0,2,5,0:main" src="https://media.githubusercontent.com/media/gramener/comicgen/v1/svg/priyanuova/straight/pose/yuhoo.svg" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; left: 0px; position: absolute; top: 0px; white-space: initial">
 <img alt="" data-id="0,2,5,1:main" src="https://media.githubusercontent.com/media/gramener/comicgen/v1/svg/priyanuova/straight/emotion/laugh.svg" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; left: 0px; position: absolute; top: 0px; white-space: initial"></div></div></div></div>
-<div data-id="0,3:main" id="the-end" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; white-space: initial; width: 100%" class="ft_md"><div data-id="0,3,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(0,0,0,1); font-size: 34px; font-weight: 700; line-height: 42px; padding-bottom: 12px; padding-top: 34px; text-align: left; white-space: initial" class="ft_md">The End!!</div></div></div></div>
+<div data-id="0,3:main" id="the-end" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; white-space: initial; width: 100%" class="ft_md"><div data-id="0,3,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(0,0,0,1); font-size: 34px; font-weight: 700; line-height: 42px; padding-bottom: 12px; padding-top: 34px; text-align: left; white-space: initial" class="ft_md">The End!!</div>
+<div data-id="0,3,1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(77,77,77,1); display: none; font-size: 17px; font-weight: 400; padding-bottom: 8px; text-align: left; white-space: initial" class="ft_md"></div></div></div></div>
 
 
     <script>

@@ -1511,17 +1511,61 @@ mod test {
                                                     alpha: 1.0,
                                                 }),
                                                 reference: Some(s("@name@0,0,0")),
+                                                condition: Some(ftd::Condition {
+                                                    variable: s("@active@0,0,0"),
+                                                    value: s("$IsNotNull$"),
+                                                }),
                                                 ..Default::default()
                                             },
                                             size: Some(14),
                                             ..Default::default()
                                         }),
-                                        ftd::Element::Null,
+                                        ftd::Element::Markup(ftd::Markups {
+                                            text: ftd::markdown_line("5PM Tasks"),
+                                            line: true,
+                                            common: ftd::Common {
+                                                color: Some(ftd::Color {
+                                                    r: 77,
+                                                    g: 77,
+                                                    b: 77,
+                                                    alpha: 1.0,
+                                                }),
+                                                reference: Some(s("@name@0,0,0")),
+                                                condition: Some(ftd::Condition {
+                                                    variable: s("@active@0,0,0"),
+                                                    value: s("$IsNull$"),
+                                                }),
+                                                is_not_visible: true,
+                                                ..Default::default()
+                                            },
+                                            size: Some(14),
+                                            ..Default::default()
+                                        }),
                                         ftd::Element::Column(ftd::Column {
                                             spacing: None,
                                             container: ftd::Container {
                                                 children: vec![
-                                                    ftd::Element::Null,
+                                                    ftd::Element::Markup(ftd::Markups {
+                                                        text: ftd::markdown_line("Log"),
+                                                        line: true,
+                                                        common: ftd::Common {
+                                                            color: Some(ftd::Color {
+                                                                r: 255,
+                                                                g: 255,
+                                                                b: 255,
+                                                                alpha: 1.0,
+                                                            }),
+                                                            reference: Some(s("@name@0,0,0,0")),
+                                                            condition: Some(ftd::Condition {
+                                                                variable: s("@active@0,0,0,0"),
+                                                                value: s("$IsNotNull$"),
+                                                            }),
+                                                            is_not_visible: true,
+                                                            ..Default::default()
+                                                        },
+                                                        size: Some(14),
+                                                        ..Default::default()
+                                                    }),
                                                     ftd::Element::Markup(ftd::Markups {
                                                         text: ftd::markdown_line("Log"),
                                                         line: true,
@@ -1533,6 +1577,10 @@ mod test {
                                                                 alpha: 1.0,
                                                             }),
                                                             reference: Some(s("@name@0,0,0,0")),
+                                                            condition: Some(ftd::Condition {
+                                                                variable: s("@active@0,0,0,0"),
+                                                                value: s("$IsNull$"),
+                                                            }),
                                                             ..Default::default()
                                                         },
                                                         size: Some(14),
@@ -1543,37 +1591,70 @@ mod test {
                                                         container: ftd::Container {
                                                             external_children: Default::default(),
                                                             children: vec![
-                                                                ftd::Element::Null,
-                                                                ftd::Element::Markup(
-                                                                    ftd::Markups {
-                                                                        text: ftd::markdown_line(
-                                                                            "ChildLog",
-                                                                        ),
-                                                                        line: true,
-                                                                        common: ftd::Common {
-                                                                            color: Some(
-                                                                                ftd::Color {
-                                                                                    r: 77,
-                                                                                    g: 77,
-                                                                                    b: 77,
-                                                                                    alpha: 1.0,
-                                                                                },
-                                                                            ),
-                                                                            reference: Some(s(
-                                                                                "@name@0,0,0,0,0",
-                                                                            )),
-                                                                            ..Default::default()
-                                                                        },
-                                                                        size: Some(14),
-                                                                        ..Default::default()
-                                                                    },
+                                                            ftd::Element::Markup(ftd::Markups {
+                                                                text: ftd::markdown_line(
+                                                                    "ChildLog",
                                                                 ),
-                                                            ],
+                                                                line: true,
+                                                                common: ftd::Common {
+                                                                    color: Some(ftd::Color {
+                                                                        r: 255,
+                                                                        g: 255,
+                                                                        b: 255,
+                                                                        alpha: 1.0,
+                                                                    }),
+                                                                    reference: Some(s(
+                                                                        "@name@0,0,0,0,0",
+                                                                    )),
+                                                                    condition: Some(
+                                                                        ftd::Condition {
+                                                                            variable: s(
+                                                                                "@active@0,0,0,0,0",
+                                                                            ),
+                                                                            value: s("$IsNotNull$"),
+                                                                        },
+                                                                    ),
+                                                                    is_not_visible: true,
+                                                                    ..Default::default()
+                                                                },
+                                                                size: Some(14),
+                                                                ..Default::default()
+                                                            }),
+                                                            ftd::Element::Markup(ftd::Markups {
+                                                                text: ftd::markdown_line(
+                                                                    "ChildLog",
+                                                                ),
+                                                                line: true,
+                                                                common: ftd::Common {
+                                                                    color: Some(ftd::Color {
+                                                                        r: 77,
+                                                                        g: 77,
+                                                                        b: 77,
+                                                                        alpha: 1.0,
+                                                                    }),
+                                                                    reference: Some(s(
+                                                                        "@name@0,0,0,0,0",
+                                                                    )),
+                                                                    condition: Some(
+                                                                        ftd::Condition {
+                                                                            variable: s(
+                                                                                "@active@0,0,0,0,0",
+                                                                            ),
+                                                                            value: s("$IsNull$"),
+                                                                        },
+                                                                    ),
+                                                                    ..Default::default()
+                                                                },
+                                                                size: Some(14),
+                                                                ..Default::default()
+                                                            }),
+                                                        ],
                                                             open: (Some(true), None),
                                                             ..Default::default()
                                                         },
                                                         common: ftd::Common {
                                                             locals: std::array::IntoIter::new([
+                                                                (s("active@0,0,0,0,0"), s("")),
                                                                 (
                                                                     s("id@0,0,0,0,0"),
                                                                     s("/ChildBuilding/"),
@@ -1596,6 +1677,7 @@ mod test {
                                             },
                                             common: ftd::Common {
                                                 locals: std::array::IntoIter::new([
+                                                    (s("active@0,0,0,0"), s("")),
                                                     (s("id@0,0,0,0"), s("/Building/")),
                                                     (s("name@0,0,0,0"), s("Log")),
                                                 ])
@@ -1604,14 +1686,33 @@ mod test {
                                                 width: Some(ftd::Length::Fill),
                                                 ..Default::default()
                                             },
-                                            ..Default::default()
                                         }),
                                         ftd::Element::Column(ftd::Column {
                                             spacing: None,
                                             container: ftd::Container {
                                                 external_children: Default::default(),
                                                 children: vec![
-                                                    ftd::Element::Null,
+                                                    ftd::Element::Markup(ftd::Markups {
+                                                        text: ftd::markdown_line("Log2"),
+                                                        line: true,
+                                                        common: ftd::Common {
+                                                            color: Some(ftd::Color {
+                                                                r: 255,
+                                                                g: 255,
+                                                                b: 255,
+                                                                alpha: 1.0,
+                                                            }),
+                                                            reference: Some(s("@name@0,0,0,1")),
+                                                            condition: Some(ftd::Condition {
+                                                                variable: s("@active@0,0,0,1"),
+                                                                value: s("$IsNotNull$"),
+                                                            }),
+                                                            is_not_visible: true,
+                                                            ..Default::default()
+                                                        },
+                                                        size: Some(14),
+                                                        ..Default::default()
+                                                    }),
                                                     ftd::Element::Markup(ftd::Markups {
                                                         text: ftd::markdown_line("Log2"),
                                                         line: true,
@@ -1623,6 +1724,10 @@ mod test {
                                                                 alpha: 1.0,
                                                             }),
                                                             reference: Some(s("@name@0,0,0,1")),
+                                                            condition: Some(ftd::Condition {
+                                                                variable: s("@active@0,0,0,1"),
+                                                                value: s("$IsNull$"),
+                                                            }),
                                                             ..Default::default()
                                                         },
                                                         size: Some(14),
@@ -1634,6 +1739,7 @@ mod test {
                                             },
                                             common: ftd::Common {
                                                 locals: std::array::IntoIter::new([
+                                                    (s("active@0,0,0,1"), s("")),
                                                     (s("id@0,0,0,1"), s("/Building2/")),
                                                     (s("name@0,0,0,1"), s("Log2")),
                                                 ])
@@ -1659,7 +1765,6 @@ mod test {
                                     width: Some(ftd::Length::Fill),
                                     ..Default::default()
                                 },
-                                ..Default::default()
                             })],
                             ..Default::default()
                         },
@@ -1671,7 +1776,6 @@ mod test {
                             width: Some(ftd::Length::Px { value: 300 }),
                             ..Default::default()
                         },
-                        ..Default::default()
                     })],
                     ..Default::default()
                 },
@@ -2236,17 +2340,61 @@ mod test {
                                                     alpha: 1.0,
                                                 }),
                                                 reference: Some(s("@name@0,0,0")),
+                                                condition: Some(ftd::Condition {
+                                                    variable: s("@active@0,0,0"),
+                                                    value: s("$IsNotNull$"),
+                                                }),
                                                 ..Default::default()
                                             },
                                             size: Some(14),
                                             ..Default::default()
                                         }),
-                                        ftd::Element::Null,
+                                        ftd::Element::Markup(ftd::Markups {
+                                            text: ftd::markdown_line("5PM Tasks"),
+                                            line: true,
+                                            common: ftd::Common {
+                                                color: Some(ftd::Color {
+                                                    r: 77,
+                                                    g: 77,
+                                                    b: 77,
+                                                    alpha: 1.0,
+                                                }),
+                                                reference: Some(s("@name@0,0,0")),
+                                                condition: Some(ftd::Condition {
+                                                    variable: s("@active@0,0,0"),
+                                                    value: s("$IsNull$"),
+                                                }),
+                                                is_not_visible: true,
+                                                ..Default::default()
+                                            },
+                                            size: Some(14),
+                                            ..Default::default()
+                                        }),
                                         ftd::Element::Column(ftd::Column {
                                             spacing: None,
                                             container: ftd::Container {
                                                 children: vec![
-                                                    ftd::Element::Null,
+                                                    ftd::Element::Markup(ftd::Markups {
+                                                        text: ftd::markdown_line("Log"),
+                                                        line: true,
+                                                        common: ftd::Common {
+                                                            color: Some(ftd::Color {
+                                                                r: 255,
+                                                                g: 255,
+                                                                b: 255,
+                                                                alpha: 1.0,
+                                                            }),
+                                                            reference: Some(s("@name@0,0,0,0")),
+                                                            condition: Some(ftd::Condition {
+                                                                variable: s("@active@0,0,0,0"),
+                                                                value: s("$IsNotNull$"),
+                                                            }),
+                                                            is_not_visible: true,
+                                                            ..Default::default()
+                                                        },
+                                                        size: Some(14),
+                                                        ..Default::default()
+                                                    }),
                                                     ftd::Element::Markup(ftd::Markups {
                                                         text: ftd::markdown_line("Log"),
                                                         line: true,
@@ -2258,6 +2406,10 @@ mod test {
                                                                 alpha: 1.0,
                                                             }),
                                                             reference: Some(s("@name@0,0,0,0")),
+                                                            condition: Some(ftd::Condition {
+                                                                variable: s("@active@0,0,0,0"),
+                                                                value: s("$IsNull$"),
+                                                            }),
                                                             ..Default::default()
                                                         },
                                                         size: Some(14),
@@ -2268,37 +2420,70 @@ mod test {
                                                         container: ftd::Container {
                                                             external_children: Default::default(),
                                                             children: vec![
-                                                                ftd::Element::Null,
-                                                                ftd::Element::Markup(
-                                                                    ftd::Markups {
-                                                                        text: ftd::markdown_line(
-                                                                            "ChildLog",
-                                                                        ),
-                                                                        line: true,
-                                                                        common: ftd::Common {
-                                                                            color: Some(
-                                                                                ftd::Color {
-                                                                                    r: 77,
-                                                                                    g: 77,
-                                                                                    b: 77,
-                                                                                    alpha: 1.0,
-                                                                                },
-                                                                            ),
-                                                                            reference: Some(s(
-                                                                                "@name@0,0,0,0,0",
-                                                                            )),
-                                                                            ..Default::default()
-                                                                        },
-                                                                        size: Some(14),
-                                                                        ..Default::default()
-                                                                    },
+                                                            ftd::Element::Markup(ftd::Markups {
+                                                                text: ftd::markdown_line(
+                                                                    "ChildLog",
                                                                 ),
-                                                            ],
+                                                                line: true,
+                                                                common: ftd::Common {
+                                                                    color: Some(ftd::Color {
+                                                                        r: 255,
+                                                                        g: 255,
+                                                                        b: 255,
+                                                                        alpha: 1.0,
+                                                                    }),
+                                                                    reference: Some(s(
+                                                                        "@name@0,0,0,0,0",
+                                                                    )),
+                                                                    condition: Some(
+                                                                        ftd::Condition {
+                                                                            variable: s(
+                                                                                "@active@0,0,0,0,0",
+                                                                            ),
+                                                                            value: s("$IsNotNull$"),
+                                                                        },
+                                                                    ),
+                                                                    is_not_visible: true,
+                                                                    ..Default::default()
+                                                                },
+                                                                size: Some(14),
+                                                                ..Default::default()
+                                                            }),
+                                                            ftd::Element::Markup(ftd::Markups {
+                                                                text: ftd::markdown_line(
+                                                                    "ChildLog",
+                                                                ),
+                                                                line: true,
+                                                                common: ftd::Common {
+                                                                    color: Some(ftd::Color {
+                                                                        r: 77,
+                                                                        g: 77,
+                                                                        b: 77,
+                                                                        alpha: 1.0,
+                                                                    }),
+                                                                    reference: Some(s(
+                                                                        "@name@0,0,0,0,0",
+                                                                    )),
+                                                                    condition: Some(
+                                                                        ftd::Condition {
+                                                                            variable: s(
+                                                                                "@active@0,0,0,0,0",
+                                                                            ),
+                                                                            value: s("$IsNull$"),
+                                                                        },
+                                                                    ),
+                                                                    ..Default::default()
+                                                                },
+                                                                size: Some(14),
+                                                                ..Default::default()
+                                                            }),
+                                                        ],
                                                             open: (Some(true), None),
                                                             ..Default::default()
                                                         },
                                                         common: ftd::Common {
                                                             locals: std::array::IntoIter::new([
+                                                                (s("active@0,0,0,0,0"), s("")),
                                                                 (
                                                                     s("id@0,0,0,0,0"),
                                                                     s("/ChildBuilding/"),
@@ -2321,6 +2506,7 @@ mod test {
                                             },
                                             common: ftd::Common {
                                                 locals: std::array::IntoIter::new([
+                                                    (s("active@0,0,0,0"), s("")),
                                                     (s("id@0,0,0,0"), s("/Building/")),
                                                     (s("name@0,0,0,0"), s("Log")),
                                                 ])
@@ -2335,7 +2521,27 @@ mod test {
                                             container: ftd::Container {
                                                 external_children: Default::default(),
                                                 children: vec![
-                                                    ftd::Element::Null,
+                                                    ftd::Element::Markup(ftd::Markups {
+                                                        text: ftd::markdown_line("Log2"),
+                                                        line: true,
+                                                        common: ftd::Common {
+                                                            color: Some(ftd::Color {
+                                                                r: 255,
+                                                                g: 255,
+                                                                b: 255,
+                                                                alpha: 1.0,
+                                                            }),
+                                                            reference: Some(s("@name@0,0,0,1")),
+                                                            condition: Some(ftd::Condition {
+                                                                variable: s("@active@0,0,0,1"),
+                                                                value: s("$IsNotNull$"),
+                                                            }),
+                                                            is_not_visible: true,
+                                                            ..Default::default()
+                                                        },
+                                                        size: Some(14),
+                                                        ..Default::default()
+                                                    }),
                                                     ftd::Element::Markup(ftd::Markups {
                                                         text: ftd::markdown_line("Log2"),
                                                         line: true,
@@ -2347,6 +2553,10 @@ mod test {
                                                                 alpha: 1.0,
                                                             }),
                                                             reference: Some(s("@name@0,0,0,1")),
+                                                            condition: Some(ftd::Condition {
+                                                                variable: s("@active@0,0,0,1"),
+                                                                value: s("$IsNull$"),
+                                                            }),
                                                             ..Default::default()
                                                         },
                                                         size: Some(14),
@@ -2358,6 +2568,7 @@ mod test {
                                             },
                                             common: ftd::Common {
                                                 locals: std::array::IntoIter::new([
+                                                    (s("active@0,0,0,1"), s("")),
                                                     (s("id@0,0,0,1"), s("/Building2/")),
                                                     (s("name@0,0,0,1"), s("Log2")),
                                                 ])
@@ -3413,6 +3624,24 @@ mod test {
             ),
             common: ftd::Common {
                 reference: Some(s("@about@0")),
+                condition: Some(ftd::Condition {
+                    variable: s("@about@0"),
+                    value: s("$IsNotNull$"),
+                }),
+                ..Default::default()
+            },
+            line: true,
+            ..Default::default()
+        };
+        let second_about = ftd::Markups {
+            text: ftd::markup_line(""),
+            common: ftd::Common {
+                reference: Some(s("@about@1")),
+                condition: Some(ftd::Condition {
+                    variable: s("@about@1"),
+                    value: s("$IsNotNull$"),
+                }),
+                is_not_visible: true,
                 ..Default::default()
             },
             line: true,
@@ -3422,6 +3651,10 @@ mod test {
             src: s("/static/home/document-type-min.png"),
             common: ftd::Common {
                 reference: Some(s("@src@0")),
+                condition: Some(ftd::Condition {
+                    variable: s("@src@0"),
+                    value: s("$IsNotNull$"),
+                }),
                 ..Default::default()
             },
             ..Default::default()
@@ -3430,6 +3663,10 @@ mod test {
             src: s("second-image.png"),
             common: ftd::Common {
                 reference: Some(s("@src@1")),
+                condition: Some(ftd::Condition {
+                    variable: s("@src@1"),
+                    value: s("$IsNotNull$"),
+                }),
                 ..Default::default()
             },
             ..Default::default()
@@ -3471,6 +3708,7 @@ mod test {
                 common: ftd::Common {
                     padding: Some(30),
                     locals: std::array::IntoIter::new([
+                        (s("about@1"), s("")),
                         (s("src@1"), s("second-image.png")),
                         (s("title@1"), s("second call")),
                     ])
@@ -3480,7 +3718,7 @@ mod test {
                 container: ftd::Container {
                     children: vec![
                         ftd::Element::Markup(second_title),
-                        ftd::Element::Null,
+                        ftd::Element::Markup(second_about),
                         ftd::Element::Image(second_image),
                     ],
                     ..Default::default()
@@ -3565,7 +3803,39 @@ mod test {
                 .trim(),
             ),
             common: ftd::Common {
+                condition: Some(ftd::Condition {
+                    variable: s("@about@0"),
+                    value: s("$IsNotNull$"),
+                }),
                 reference: Some(s("@about@0")),
+                ..Default::default()
+            },
+            line: true,
+            ..Default::default()
+        };
+        let second_about = ftd::Markups {
+            text: ftd::markup_line(""),
+            common: ftd::Common {
+                condition: Some(ftd::Condition {
+                    variable: s("@about@1"),
+                    value: s("$IsNotNull$"),
+                }),
+                reference: Some(s("@about@1")),
+                is_not_visible: true,
+                ..Default::default()
+            },
+            line: true,
+            ..Default::default()
+        };
+        let third_about = ftd::Markups {
+            text: ftd::markup_line(""),
+            common: ftd::Common {
+                condition: Some(ftd::Condition {
+                    variable: s("@about@2"),
+                    value: s("$IsNotNull$"),
+                }),
+                reference: Some(s("@about@2")),
+                is_not_visible: true,
                 ..Default::default()
             },
             line: true,
@@ -3575,6 +3845,10 @@ mod test {
             src: s("/static/home/document-type-min.png"),
             common: ftd::Common {
                 reference: Some(s("@src@0")),
+                condition: Some(ftd::Condition {
+                    variable: s("@src@0"),
+                    value: s("$IsNotNull$"),
+                }),
                 ..Default::default()
             },
             ..Default::default()
@@ -3583,6 +3857,23 @@ mod test {
             src: s("second-image.png"),
             common: ftd::Common {
                 reference: Some(s("@src@1")),
+                condition: Some(ftd::Condition {
+                    variable: s("@src@1"),
+                    value: s("$IsNotNull$"),
+                }),
+                ..Default::default()
+            },
+            ..Default::default()
+        };
+        let third_image = ftd::Image {
+            src: s(""),
+            common: ftd::Common {
+                reference: Some(s("@src@2")),
+                condition: Some(ftd::Condition {
+                    variable: s("@src@2"),
+                    value: s("$IsNotNull$"),
+                }),
+                is_not_visible: true,
                 ..Default::default()
             },
             ..Default::default()
@@ -3624,6 +3915,7 @@ mod test {
                 common: ftd::Common {
                     padding: Some(30),
                     locals: std::array::IntoIter::new([
+                        (s("about@1"), s("")),
                         (s("src@1"), s("second-image.png")),
                         (s("title@1"), s("second call")),
                     ])
@@ -3633,7 +3925,7 @@ mod test {
                 container: ftd::Container {
                     children: vec![
                         ftd::Element::Markup(second_title),
-                        ftd::Element::Null,
+                        ftd::Element::Markup(second_about),
                         ftd::Element::Image(second_image),
                     ],
                     ..Default::default()
@@ -3645,14 +3937,19 @@ mod test {
                 spacing: None,
                 common: ftd::Common {
                     padding: Some(30),
-                    locals: std::array::IntoIter::new([(s("title@2"), s("third call"))]).collect(),
+                    locals: std::array::IntoIter::new([
+                        (s("about@2"), s("")),
+                        (s("src@2"), s("")),
+                        (s("title@2"), s("third call")),
+                    ])
+                    .collect(),
                     ..Default::default()
                 },
                 container: ftd::Container {
                     children: vec![
                         ftd::Element::Markup(third_title),
-                        ftd::Element::Null,
-                        ftd::Element::Null,
+                        ftd::Element::Markup(third_about),
+                        ftd::Element::Image(third_image),
                     ],
                     ..Default::default()
                 },
@@ -3826,6 +4123,10 @@ mod test {
                                     s("what about the body?"),
                                 )])
                                 .collect(),
+                                condition: Some(ftd::Condition {
+                                    variable: s("@body@0"),
+                                    value: s("$IsNotNull$"),
+                                }),
                                 reference: Some(s("@body@0,1")),
                                 ..Default::default()
                             },
@@ -3858,13 +4159,31 @@ mod test {
                             },
                             ..Default::default()
                         }),
-                        ftd::Element::Null,
+                        ftd::Element::Markup(ftd::Markups {
+                            text: ftd::markdown_line(""),
+                            line: true,
+                            common: ftd::Common {
+                                locals: std::array::IntoIter::new([(s("body@1,1"), s(""))])
+                                    .collect(),
+                                condition: Some(ftd::Condition {
+                                    variable: s("@body@1"),
+                                    value: s("$IsNotNull$"),
+                                }),
+                                reference: Some(s("@body@1,1")),
+                                is_not_visible: true,
+                                ..Default::default()
+                            },
+                            ..Default::default()
+                        }),
                     ],
                     ..Default::default()
                 },
                 common: ftd::Common {
-                    locals: std::array::IntoIter::new([(s("title@1"), s("heading without body"))])
-                        .collect(),
+                    locals: std::array::IntoIter::new([
+                        (s("body@1"), s("")),
+                        (s("title@1"), s("heading without body")),
+                    ])
+                    .collect(),
                     ..Default::default()
                 },
             }));
@@ -3964,7 +4283,11 @@ mod test {
                     ..Default::default()
                 },
                 common: ftd::Common {
-                    locals: std::array::IntoIter::new([(s("src@0"), s("foo.png"))]).collect(),
+                    locals: std::array::IntoIter::new([
+                        (s("src@0"), s("foo.png")),
+                        (s("width@0"), s("")),
+                    ])
+                    .collect(),
                     ..Default::default()
                 },
             }));
@@ -5848,6 +6171,10 @@ mod test {
                 open: (None, Some(s("desktop-container"))),
                 ..Default::default()
             },
+            common: ftd::Common {
+                locals: std::array::IntoIter::new([(s("id@0,0"), s(""))]).collect(),
+                ..Default::default()
+            },
             ..Default::default()
         })];
 
@@ -6084,6 +6411,8 @@ mod test {
                                         ..Default::default()
                                     },
                                     common: ftd::Common {
+                                        locals: std::array::IntoIter::new([(s("id@0,0,0"), s(""))])
+                                            .collect(),
                                         condition: Some(ftd::Condition {
                                             variable: s("foo/bar#is-mobile"),
                                             value: s("false"),
@@ -6106,6 +6435,8 @@ mod test {
                                         ..Default::default()
                                     },
                                     common: ftd::Common {
+                                        locals: std::array::IntoIter::new([(s("id@0,0,1"), s(""))])
+                                            .collect(),
                                         condition: Some(ftd::Condition {
                                             variable: s("foo/bar#is-mobile"),
                                             value: s("true"),
@@ -11579,6 +11910,10 @@ mod test {
                                 )])
                                 .collect(),
                                 reference: Some(s("@body@0,1")),
+                                condition: Some(ftd::Condition {
+                                    variable: s("@body@0"),
+                                    value: s("$IsNotNull$"),
+                                }),
                                 ..Default::default()
                             },
                             ..Default::default()
@@ -11625,6 +11960,10 @@ mod test {
                                     s("Heading 01 body"),
                                 )])
                                 .collect(),
+                                condition: Some(ftd::Condition {
+                                    variable: s("@body@1"),
+                                    value: s("$IsNotNull$"),
+                                }),
                                 reference: Some(s("@body@1,1")),
                                 ..Default::default()
                             },
@@ -12377,6 +12716,10 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("hello"),
                 line: true,
+                common: ftd::Common {
+                    locals: std::array::IntoIter::new([(s("size@1"), s(""))]).collect(),
+                    ..Default::default()
+                },
                 ..Default::default()
             }));
 
@@ -13355,17 +13698,57 @@ mod test {
                 line: true,
                 common: ftd::Common {
                     reference: Some(s("foo/bar#active")),
+                    condition: Some(ftd::Condition {
+                        variable: s("foo/bar#active"),
+                        value: s("$IsNotNull$"),
+                    }),
                     ..Default::default()
                 },
                 ..Default::default()
             }));
-        main.container.children.push(ftd::Element::Null);
-        main.container.children.push(ftd::Element::Null);
+        main.container
+            .children
+            .push(ftd::Element::Markup(ftd::Markups {
+                text: ftd::markdown_line("Not Active"),
+                line: true,
+                common: ftd::Common {
+                    condition: Some(ftd::Condition {
+                        variable: s("foo/bar#active"),
+                        value: s("$IsNull$"),
+                    }),
+                    is_not_visible: true,
+                    ..Default::default()
+                },
+                ..Default::default()
+            }));
+        main.container
+            .children
+            .push(ftd::Element::Markup(ftd::Markups {
+                text: ftd::markdown_line(""),
+                line: true,
+                common: ftd::Common {
+                    reference: Some(s("foo/bar#flag")),
+                    condition: Some(ftd::Condition {
+                        variable: s("foo/bar#flag"),
+                        value: s("$IsNotNull$"),
+                    }),
+                    is_not_visible: true,
+                    ..Default::default()
+                },
+                ..Default::default()
+            }));
         main.container
             .children
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("No Flag Available"),
                 line: true,
+                common: ftd::Common {
+                    condition: Some(ftd::Condition {
+                        variable: s("foo/bar#flag"),
+                        value: s("$IsNull$"),
+                    }),
+                    ..Default::default()
+                },
                 ..Default::default()
             }));
 

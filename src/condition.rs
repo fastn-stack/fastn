@@ -7,7 +7,13 @@ pub struct Condition {
 impl Condition {
     pub fn is_true(&self, data: &ftd::DataDependenciesMap) -> bool {
         if let Some(ftd::Data { value: v, .. }) = data.get(self.variable.as_str()) {
-            return v == &self.value;
+            return if self.value.eq("$IsNull$") {
+                v.is_empty()
+            } else if self.value.eq("$IsNotNull$") {
+                !v.is_empty()
+            } else {
+                v == &self.value
+            };
         }
 
         true

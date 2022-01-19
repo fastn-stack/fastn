@@ -720,3 +720,65 @@ pub fn structure_header_to_properties(
         }
     }
 }
+
+pub fn arguments_on_condition(
+    arguments: &std::collections::BTreeMap<String, ftd::Value>,
+    condition: &ftd::p2::Boolean,
+    line_number: usize,
+    doc_id: &str,
+) -> ftd::p1::Result<(std::collections::BTreeMap<String, ftd::Value>, bool)> {
+    let mut arguments = arguments.to_owned();
+    let mut is_visible = true;
+    if let ftd::p2::Boolean::IsNotNull { ref value } = condition {
+        match value {
+            ftd::PropertyValue::Value { .. } => {}
+            ftd::PropertyValue::Reference { name, kind }
+            | ftd::PropertyValue::Variable { name, kind } => {
+                if let ftd::p2::Kind::Optional { kind } = kind {
+                    if arguments.get(name).is_none() {
+                        is_visible = false;
+                        arguments
+                            .insert(name.to_string(), kind_to_value(kind, line_number, doc_id)?);
+                    }
+                } else {
+                    return ftd::e2(
+                        format!("expected optional kind, found: {:?}", kind),
+                        doc_id,
+                        line_number,
+                    );
+                }
+            }
+        }
+    }
+    return Ok((arguments, is_visible));
+
+    fn kind_to_value(
+        kind: &ftd::p2::Kind,
+        line_number: usize,
+        doc_id: &str,
+    ) -> ftd::p1::Result<ftd::Value> {
+        if let Ok(value) = kind.to_value(line_number, doc_id) {
+            return Ok(value);
+        }
+        // todo implement for all the kind
+        Ok(match kind {
+            ftd::p2::Kind::String { .. } => ftd::Value::String {
+                text: "".to_string(),
+                source: ftd::TextSource::Header,
+            },
+            ftd::p2::Kind::Integer { .. } => ftd::Value::Integer { value: 0 },
+            ftd::p2::Kind::Decimal { .. } => ftd::Value::Decimal { value: 0.0 },
+            ftd::p2::Kind::Boolean { .. } => ftd::Value::Boolean { value: false },
+            _ => {
+                return ftd::e2(
+                    format!(
+                        "implemented for string, integer, decimal and boolean, found: {:?}",
+                        kind
+                    ),
+                    doc_id,
+                    line_number,
+                )
+            }
+        })
+    }
+}

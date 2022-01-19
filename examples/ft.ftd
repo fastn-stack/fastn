@@ -11,7 +11,7 @@ padding-bottom: 8
 
 -- ftd.column h0:
 caption title:
-optional body body:
+optional body body1:
 width: fill
 region: h0
 
@@ -25,8 +25,8 @@ style: bold
 padding-bottom: 12
 
 --- markdown:
-if: $body is not null
-body: $body
+if: $body1 is not null
+body: $body1
 
 
 

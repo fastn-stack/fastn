@@ -656,7 +656,7 @@ impl Element {
                                     .insert(id, serde_json::to_string(&vec![json]).unwrap());
                             }
                         } else {
-                            panic!("{} should be declared", condition.variable)
+                            panic!("{} should be declared 1", condition.variable)
                         }
                     }
                 }
@@ -904,7 +904,7 @@ impl Element {
                         dependencies.insert(id, serde_json::to_string(&vec![json]).unwrap());
                     }
                 } else {
-                    panic!("{} should be declared", condition.variable)
+                    panic!("{} should be declared 2", condition.variable)
                 }
             }
         }
@@ -945,13 +945,19 @@ impl Element {
                     }
                     all_locals
                 }
+                ftd::Element::Markup(ftd::Markups {
+                    common, children, ..
+                }) => {
+                    let mut local = markup_get_locals(children);
+                    local.extend(common.locals.clone());
+                    local
+                }
                 ftd::Element::Decimal(ftd::Text { common, .. })
                 | ftd::Element::Text(ftd::Text { common, .. })
                 | ftd::Element::TextBlock(ftd::TextBlock { common, .. })
                 | ftd::Element::Code(ftd::Code { common, .. })
                 | ftd::Element::Image(ftd::Image { common, .. })
                 | ftd::Element::IFrame(ftd::IFrame { common, .. })
-                | ftd::Element::Markup(ftd::Markups { common, .. })
                 | ftd::Element::Input(ftd::Input { common, .. })
                 | ftd::Element::Integer(ftd::Text { common, .. })
                 | ftd::Element::Boolean(ftd::Text { common, .. }) => common.locals.clone(),
@@ -962,7 +968,27 @@ impl Element {
                 d.insert(k.to_string(), v.to_string());
             }
         }
-        d
+        return d;
+
+        fn markup_get_locals(children: &[ftd::Markup]) -> ftd::Map {
+            let mut all_locals: ftd::Map = Default::default();
+            for child in children {
+                let locals = match child.itext {
+                    IText::Text(ref t)
+                    | IText::Integer(ref t)
+                    | IText::Boolean(ref t)
+                    | IText::Decimal(ref t) => t.common.locals.clone(),
+                    IText::TextBlock(ref t) => t.common.locals.clone(),
+                    IText::Markup(ref t) => {
+                        let mut locals = markup_get_locals(&t.children);
+                        locals.extend(t.common.locals.clone());
+                        locals
+                    }
+                };
+                all_locals.extend(locals);
+            }
+            all_locals
+        }
     }
 
     pub fn is_open_container(&self, is_container_children_empty: bool) -> (bool, Option<String>) {

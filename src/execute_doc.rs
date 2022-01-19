@@ -117,6 +117,17 @@ impl<'a> ExecuteDoc<'a> {
                     )?;
                 }
                 ftd::Instruction::ChildComponent { child: f } if !f.is_recursive => {
+                    let (arguments, is_visible) = if let Some(ref condition) = f.condition {
+                        ftd::p2::utils::arguments_on_condition(
+                            self.arguments,
+                            condition,
+                            f.line_number,
+                            doc.name,
+                        )?
+                    } else {
+                        (self.arguments.to_owned(), true)
+                    };
+
                     let new_id = {
                         if f.condition.is_some()
                             && f.condition.as_ref().unwrap().is_constant()
@@ -137,7 +148,7 @@ impl<'a> ExecuteDoc<'a> {
                                 &ftd::component::resolve_properties(
                                     f.line_number,
                                     &f.properties,
-                                    self.arguments,
+                                    &arguments,
                                     &doc,
                                 )?,
                                 doc.name,
@@ -157,7 +168,7 @@ impl<'a> ExecuteDoc<'a> {
                         ..
                     } = f.call(
                         &doc,
-                        self.arguments,
+                        &arguments,
                         self.invocations,
                         true,
                         all_locals,
@@ -165,6 +176,9 @@ impl<'a> ExecuteDoc<'a> {
                         new_id.clone(),
                     )?;
                     e.set_element_id(new_id);
+                    if !is_visible {
+                        e.set_non_visibility(!is_visible);
+                    }
 
                     children = self.add_element(
                         children,

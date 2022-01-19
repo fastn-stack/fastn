@@ -2019,20 +2019,31 @@ impl Component {
                     locals.insert(format!("{}@{}", k, string_container), value.to_string());
                 }
             } else if let Some(arg) = self.arguments.get(k) {
-                match arg {
-                    ftd::p2::Kind::String {
-                        default: Some(d), ..
-                    }
-                    | ftd::p2::Kind::Integer { default: Some(d) }
-                    | ftd::p2::Kind::Decimal { default: Some(d) }
-                    | ftd::p2::Kind::Boolean { default: Some(d) } => {
-                        locals.insert(format!("{}@{}", k, string_container), d.to_string());
-                    }
-                    _ => {}
-                };
+                if let Some(d) = get_local_value(arg) {
+                    locals.insert(format!("{}@{}", k, string_container), d.to_string());
+                }
             }
         }
-        Ok(locals)
+        return Ok(locals);
+
+        fn get_local_value(kind: &ftd::p2::Kind) -> Option<String> {
+            match kind {
+                ftd::p2::Kind::String {
+                    default: Some(d), ..
+                }
+                | ftd::p2::Kind::Integer { default: Some(d) }
+                | ftd::p2::Kind::Decimal { default: Some(d) }
+                | ftd::p2::Kind::Boolean { default: Some(d) } => Some(d.to_string()),
+                ftd::p2::Kind::Optional { kind } => {
+                    if let Some(val) = get_local_value(kind) {
+                        Some(val)
+                    } else {
+                        Some("".to_string())
+                    }
+                }
+                _ => None,
+            }
+        }
     }
 
     fn get_locals_map(&self, string_container: &str) -> ftd::Map {
