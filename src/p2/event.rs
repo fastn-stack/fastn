@@ -231,7 +231,7 @@ pub struct Action {
 pub enum ActionKind {
     Toggle,
     Insert,
-    // Clear,
+    Clear,
     Increment,
     Decrement,
     StopPropagation,
@@ -252,14 +252,15 @@ impl serde::Serialize for ActionKind {
 impl ActionKind {
     pub fn to_str(&self) -> &'static str {
         match self {
-            Self::Toggle => "toggle",
-            Self::Increment => "increment",
-            Self::Decrement => "decrement",
-            Self::Insert => "insert",
-            Self::StopPropagation => "stop-propagation",
-            Self::PreventDefault => "prevent-default",
-            Self::SetValue => "set-value",
-            Self::MessageHost => "message-host",
+            ftd::p2::ActionKind::Toggle => "toggle",
+            ftd::p2::ActionKind::Increment => "increment",
+            ftd::p2::ActionKind::Decrement => "decrement",
+            ftd::p2::ActionKind::Insert => "insert",
+            ftd::p2::ActionKind::StopPropagation => "stop-propagation",
+            ftd::p2::ActionKind::PreventDefault => "prevent-default",
+            ftd::p2::ActionKind::SetValue => "set-value",
+            ftd::p2::ActionKind::MessageHost => "message-host",
+            ftd::p2::ActionKind::Clear => "clear",
         }
     }
 
@@ -282,7 +283,7 @@ impl ActionKind {
             ftd::p2::ActionKind::Toggle
             | ftd::p2::ActionKind::StopPropagation
             | ftd::p2::ActionKind::PreventDefault
-            // | ftd::p2::ActionKind::Clear
+            | ftd::p2::ActionKind::Clear
             | ftd::p2::ActionKind::SetValue => {}
             ftd::p2::ActionKind::MessageHost => {
                 parameters.insert(
@@ -356,6 +357,25 @@ impl Action {
                 .0;
                 Ok(Self {
                     action: ActionKind::Toggle,
+                    target,
+                    parameters: Default::default(),
+                })
+            }
+            _ if a.starts_with("clear ") => {
+                let value = a.replace("clear ", "");
+                let (target, kind) = get_target(line_number, value, doc, arguments, None)?;
+                if !kind.is_list() && !kind.is_optional() {
+                    return ftd::e2(
+                        format!(
+                            "clear should have target of kind: `list` or `optional`, found: {:?}",
+                            kind
+                        ),
+                        doc.name,
+                        line_number,
+                    );
+                }
+                Ok(Self {
+                    action: ActionKind::Clear,
                     target,
                     parameters: Default::default(),
                 })

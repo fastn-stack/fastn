@@ -542,6 +542,15 @@ window.ftd = (function () {
 
             exports.insert_value(id, target, value, at);
 
+        } else if (act === "clear") {
+            let target = action["target"];
+            let data = ftd_data[id];
+            let value = "";
+            if (ftd_utils.isJson(data[target].value)) {
+                let list = [];
+                value = JSON.stringify(list);
+            }
+            ftd_utils.handle_action(id, target, value, data, ftd_external_children);
         } else {
             console.log("unknown action:", act);
             return;
