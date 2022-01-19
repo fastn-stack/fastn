@@ -79,7 +79,7 @@ pub(crate) async fn get_current_document_last_modified_on(
         .await
         .unwrap_or_default()
         .get(document_id)
-        .map(|v| nanos_to_rfc3339(v))
+        .map(nanos_to_rfc3339)
 }
 
 pub(crate) async fn get_last_modified_on(path: &camino::Utf8PathBuf) -> Option<String> {
@@ -89,7 +89,7 @@ pub(crate) async fn get_last_modified_on(path: &camino::Utf8PathBuf) -> Option<S
         .values()
         .into_iter()
         .max()
-        .map(|v| nanos_to_rfc3339(v))
+        .map(nanos_to_rfc3339)
 }
 
 /*

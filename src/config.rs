@@ -130,7 +130,7 @@ impl Config {
             .fold("".to_string(), |c, f| format!("{}\n{}", c, f.to_html()));
         return match generated_style.is_empty() {
             false => format!("<style>{}</style>", generated_style),
-            _ => format!(""),
+            _ => "".to_string(),
         };
     }
 

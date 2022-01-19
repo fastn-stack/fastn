@@ -370,7 +370,7 @@ impl ftd::p2::Library for Library {
                         -- language-toc-item list language-toc:
     
                         "},
-                fpm_base = fpm::fpm_ftd().to_string(),
+                fpm_base = fpm::fpm_ftd(),
                 fpm_ui = construct_fpm_ui(lib),
                 document_id = lib.document_id,
                 title = lib.config.package.name,
@@ -413,12 +413,11 @@ impl ftd::p2::Library for Library {
                     indoc::indoc! {"
                         {fpm_base}
                         
-                        -- translation-status-url: {translation_status_url}
+                        -- translation-status-url: //{package_name}/FPM/translation-status
     
                         "},
                     fpm_base = fpm_base,
-                    translation_status_url =
-                        format!("//{}/FPM/translation-status", lib.config.package.name),
+                    package_name = lib.config.package.name
                 );
             }
 
