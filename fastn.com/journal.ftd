@@ -1,5 +1,6 @@
 -- import: fifthtry.github.io/Jupiter-theme as ft
 -- import: config
+-- import: fpm
 
 -- ft.doc-page:
 toc: $config.dev-toc
@@ -7,6 +8,85 @@ id: page
 
 
 -- ft.h0: FTD Journal
+
+-- ft.h1: Dynamic Components
+
+19th Jan 2022
+
+Till now when a page used to get rendered from backend, it used to contain the
+entire component hierarchy, and front-end event handling etc only changed some
+of the DOM attributes, and visibility. If there was an element whose visibility
+was affected by an `if` clause, it used to be always included, and set as hidden
+and when needed we used to make it visible. We never created DOM node till now
+as part of event handling. This means it was not possible for us to have say a
+list, and add elements to the list from any of our event handling code.
+
+Yesterday Arpita implemented support for dynamically constructing DOM when say
+we add elements to a list.
+
+Consider this:
+
+-- string list strings:
+
+-- optional string query:
+
+-- ftd.row:
+width: fill
+spacing: 10
+
+--- ftd.input:
+placeholder: Type Something Here...
+width: 250
+border-width: 2
+padding: 8
+$event-input$: $query=$VALUE
+$event-change$: insert into $strings value $VALUE at end
+
+/--- ftd.text: Add
+/if: $query is not null
+color: white
+background-color: red
+move-down: 4
+padding: 5
+$event-click$: insert into $strings value $query at end
+
+--- ftd.text: Clear
+color: white
+background-color: red
+move-down: 4
+padding: 5
+$event-click$: clear $strings
+$event-click$: clear $query
+
+
+-- ftd.text:
+color if $fpm.dark-mode: white
+
+You have typed: {value}
+
+--- ftd.text value: $query
+color: green
+color if $fpm.dark-mode: white
+background-color if $fpm.dark-mode: green
+size: 20
+
+
+-- show-data: $obj
+$loop$: $strings as $obj
+
+
+-- ftd.column show-data:
+caption text:
+padding: 10
+background-color if $fpm.dark-mode: white
+background-color: yellow
+color: red
+
+--- ftd.column:
+padding: 20
+border-width: 2
+
+--- ftd.text: $text
 
 
 -- ft.h1: "$main$" Variables

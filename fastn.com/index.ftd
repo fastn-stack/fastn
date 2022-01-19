@@ -22,7 +22,7 @@ open: false
 
 -- ft.markdown:
 
-{ft.yellow: A Markup Language For Data Exchange And User Interface Design.}
+{ft.highlight: A Markup Language For Data Exchange And User Interface Design.}
 
 FTD stands for Fifthtry Document Format. Documents on FifthTry are stored in this
 format.
