@@ -1,4 +1,4 @@
--- string list flower:
+-- string list strings:
 
 -- optional string query:
 
@@ -11,7 +11,7 @@ placeholder: Type Something Here...
 width: 400
 border-width: 2
 $event-input$: $query=$VALUE
-$event-change$: insert into $flower value $VALUE at end
+$event-change$: insert into $strings value $VALUE at end
 
 -- ftd.text:
 
@@ -23,7 +23,7 @@ size: 20
 
 
 -- show-data: $obj
-$loop$: $flower as $obj
+$loop$: $strings as $obj
 
 
 -- ftd.column show-data:
