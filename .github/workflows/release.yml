@@ -2,6 +2,10 @@ name: Build release
 
 on:
   workflow_dispatch:
+    inputs:
+        releaseTag:
+          description: 'Release Tag'     
+          required: true
 jobs:
   release-ubuntu:
     name: Build for Linux
@@ -14,8 +18,13 @@ jobs:
       - uses: actions/checkout@main
       - name: Build-musl
         uses: gmiam/rust-musl-action@master
+        continue-on-error: false
         with:
           args: cargo build --target $BUILD_TARGET --release
+      - name: Rename assets
+        run: |
+          mv target/x86_64-unknown-linux-musl/release/${{ env.BINARY_NAME }} target/x86_64-unknown-linux-musl/release/fpm_linux_musl_x86_64
+          mv target/x86_64-unknown-linux-musl/release/${{ env.BINARY_NAME }}.d target/x86_64-unknown-linux-musl/release/fpm_linux_musl_x86_64.d
       - uses: actions/upload-artifact@v2
         with:
           name: linux_musl_x86_64
@@ -28,18 +37,19 @@ jobs:
       - uses: actions-rs/toolchain@v1
       - name: Run Build
         id: build-windows
-        continue-on-error: true
+        continue-on-error: false
         uses: actions-rs/cargo@v1
         with:
           command: build
           args: --release
+      - name: Rename assets
+        run: |
+          rename target/release/fpm.exe target/release/fpm_windows_x86_64.exe
       - uses: actions/upload-artifact@master
         with:
           name: windows_x64_latest
           path: |
             target/release/fpm.exe
-            README.md
-            LICENSE
   release-macos:
     name: Build for MacOS
     runs-on: macos-latest
@@ -48,15 +58,34 @@ jobs:
       - uses: actions-rs/toolchain@v1
       - name: Run Build
         id: build-macos
-        continue-on-error: true
+        continue-on-error: false
         uses: actions-rs/cargo@v1
         with:
           command: build
           args: --release
+      - name: Rename assets
+        run: |
+          mv target/release/fpm target/release/fpm_macos_x86_64
       - uses: actions/upload-artifact@master
         with:
           name: macos_x64_latest
           path: |
             target/release/fpm
-            README.md
-            LICENSE
+  create-release:
+    name: Create github tag and release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v2
+        with:
+          name: macos_x64_latest
+          path: ~/download/macos
+      - uses: actions/download-artifact@v2
+        with:
+          name: linux_musl_x86_64
+          path: ~/download/linux_musl
+      - uses: actions/download-artifact@v2
+        with:
+          name: windows_x64_latest
+          path: ~/download/windows
+      - name: List all
+        run: find ~/download/.
