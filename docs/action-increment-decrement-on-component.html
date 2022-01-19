@@ -66,7 +66,7 @@ let ftd_utils = {
                 }
             }
             return result;
-        } else if (reference!== null && reference!== undefined && data[reference]["value"] !== undefined) {
+        } else if (reference !== null && reference !== undefined && data[reference] !== undefined && data[reference]["value"] !== undefined) {
             return data[reference]["value"];
         } else {
             return (value === "$VALUE" && obj.value !== undefined) ? obj.value : value;
