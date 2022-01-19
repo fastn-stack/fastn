@@ -556,6 +556,15 @@ window.ftd = (function () {
 
             exports.insert_value(id, target, value, at);
 
+        } else if (act === "clear") {
+            let target = action["target"];
+            let data = ftd_data[id];
+            let value = "";
+            if (ftd_utils.isJson(data[target].value)) {
+                let list = [];
+                value = JSON.stringify(list);
+            }
+            ftd_utils.handle_action(id, target, value, data, ftd_external_children);
         } else {
             console.log("unknown action:", act);
             return;
@@ -840,7 +849,7 @@ function console_print(id, data) {
 </head>
     <body style="height: 100%;">
 
-        <div data-id="main:root" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; height: 100%; justify-content: flex-start; white-space: initial; width: 100%" class="ft_md"><div data-id="0:main" onmouseenter="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;@MOUSE-IN@0&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;true&quot;,&quot;reference&quot;:null},{&quot;value&quot;:&quot;boolean&quot;,&quot;reference&quot;:null}]}}]', this)" onmouseleave="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;@MOUSE-IN@0&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;false&quot;,&quot;reference&quot;:null},{&quot;value&quot;:&quot;boolean&quot;,&quot;reference&quot;:null}]}}]', this)" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; text-align: left; white-space: initial" class="ft_md">Hello World</div>
+        <div data-id="main:root" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; height: 100%; justify-content: flex-start; white-space: initial; width: 100%" class="ft_md"><div data-id="0:main" onmouseleave="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;@MOUSE-IN@0&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;false&quot;,&quot;reference&quot;:null},{&quot;value&quot;:&quot;boolean&quot;,&quot;reference&quot;:null}]}}]', this)" onmouseenter="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;@MOUSE-IN@0&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;true&quot;,&quot;reference&quot;:null},{&quot;value&quot;:&quot;boolean&quot;,&quot;reference&quot;:null}]}}]', this)" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; text-align: left; white-space: initial" class="ft_md">Hello World</div>
 <div data-id="1:main" onmouseenter="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;@MOUSE-IN@1&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;true&quot;,&quot;reference&quot;:null},{&quot;value&quot;:&quot;boolean&quot;,&quot;reference&quot;:null}]}}]', this)" onmouseleave="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;@MOUSE-IN@1&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;false&quot;,&quot;reference&quot;:null},{&quot;value&quot;:&quot;boolean&quot;,&quot;reference&quot;:null}]}}]', this)" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start; white-space: initial" class="ft_md"><div data-id="1,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-weight: 400; text-align: left; white-space: initial" class="ft_md">Hello</div>
 <div data-id="1,1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: none; font-weight: 400; padding-left: 10px; text-align: left; white-space: initial" class="ft_md">World</div></div></div>
 

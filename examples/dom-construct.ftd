@@ -5,13 +5,25 @@
 -- ftd.column:
 padding: 20
 spacing: 20
+width: fill
 
--- ftd.input:
+-- ftd.row:
+width: fill
+spacing: 20
+
+--- ftd.input:
 placeholder: Type Something Here...
-width: 400
+width: percent 20
 border-width: 2
 $event-input$: $query=$VALUE
 $event-change$: insert into $strings value $VALUE at end
+
+--- ftd.text: Clear
+color: white
+background-color: red
+padding: 5
+$event-click$: clear $strings
+$event-click$: clear $query
 
 -- ftd.text:
 
@@ -20,6 +32,7 @@ You have typed: {value}
 --- ftd.text value: $query
 color: green
 size: 20
+
 
 
 -- show-data: $obj
