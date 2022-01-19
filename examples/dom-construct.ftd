@@ -13,7 +13,7 @@ spacing: 20
 
 --- ftd.input:
 placeholder: Type Something Here...
-width: percent 20
+width: 250
 border-width: 2
 $event-input$: $query=$VALUE
 $event-change$: insert into $strings value $VALUE at end
