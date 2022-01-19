@@ -550,14 +550,23 @@ impl Action {
                                     line_number,
                                 );
                             }
-                            let value = ftd::PropertyValue::resolve_value(
-                                line_number,
-                                parameter,
-                                pkind.get(idx).map(|k| k.to_owned()),
-                                doc,
-                                arguments,
-                                None,
-                            )?;
+                            let value = if parameter.eq(&"$VALUE") {
+                                ftd::PropertyValue::Value {
+                                    value: ftd::variable::Value::String {
+                                        text: parameter.to_string(),
+                                        source: ftd::TextSource::Header,
+                                    },
+                                }
+                            } else {
+                                ftd::PropertyValue::resolve_value(
+                                    line_number,
+                                    parameter,
+                                    pkind.get(idx).map(|k| k.to_owned()),
+                                    doc,
+                                    arguments,
+                                    None,
+                                )?
+                            };
                             if !value.kind().inner().eq(&expected_value_kind) {
                                 return ftd::e2(
                                     format!(

@@ -131,7 +131,7 @@
         // all ftd_utils are meant to be pure functions only: they can only depend on the
 // input passed, not on closures or global data etc
 let ftd_utils = {
-    resolve_reference: function (value, reference, data) {
+    resolve_reference: function (value, reference, data, obj) {
         if (value instanceof Object) {
             let result = value instanceof Array ? [] : {};
             for (var key of Object.keys(value)) {
@@ -140,7 +140,7 @@ let ftd_utils = {
                 } else if (reference[key] !== undefined && reference[key] !== null) {
                     result[key] = data[reference[key]]["value"] !== undefined ? data[reference[key]].value : value[key];
                 } else {
-                    result[key] = value[key];
+                    result[key] = (value[key] === "$VALUE" && obj.value !== undefined) ? obj.value : value[key];
                 }
             }
             for (var key of Object.keys(reference)) {
@@ -152,7 +152,7 @@ let ftd_utils = {
         } else if (reference!== null && reference!== undefined && data[reference]["value"] !== undefined) {
             return data[reference]["value"];
         } else {
-            return value;
+            return (value === "$VALUE" && obj.value !== undefined) ? obj.value : value;
         }
     },
 
@@ -575,7 +575,7 @@ window.ftd = (function () {
             if (action["parameters"].data !== undefined) {
                 let value = JSON.parse(action["parameters"].data[0].value);
                 let reference = JSON.parse(action["parameters"].data[0].reference);
-                let data = ftd_utils.resolve_reference(value, reference, ftd_data[id]);
+                let data = ftd_utils.resolve_reference(value, reference, ftd_data[id], obj);
                 let func = data.function.trim().replaceAll("-", "_");
                 window[func](id, data, reference);
             } else {
@@ -588,18 +588,18 @@ window.ftd = (function () {
             if (action["parameters"].by !== undefined) {
                 let by_value = action["parameters"].by[0].value;
                 let by_reference = action["parameters"].by[0].reference;
-                increment = parseInt(ftd_utils.resolve_reference(by_value, by_reference, ftd_data[id]));
+                increment = parseInt(ftd_utils.resolve_reference(by_value, by_reference, ftd_data[id], obj));
             }
             let clamp_max = undefined;
             let clamp_min = undefined;
             if (action["parameters"]["clamp"] !== undefined) {
                 let clamp_value = action["parameters"]["clamp"];
                 if (clamp_value.length === 1) {
-                    clamp_max = parseInt(ftd_utils.resolve_reference(clamp_value[0].value, clamp_value[0].reference, ftd_data[id]));
+                    clamp_max = parseInt(ftd_utils.resolve_reference(clamp_value[0].value, clamp_value[0].reference, ftd_data[id], obj));
                 }
                 if (clamp_value.length === 2) {
-                    clamp_min = parseInt(ftd_utils.resolve_reference(clamp_value[0].value, clamp_value[0].reference, ftd_data[id]));
-                    clamp_max = parseInt(ftd_utils.resolve_reference(clamp_value[1].value, clamp_value[1].reference, ftd_data[id]));
+                    clamp_min = parseInt(ftd_utils.resolve_reference(clamp_value[0].value, clamp_value[0].reference, ftd_data[id], obj));
+                    clamp_max = parseInt(ftd_utils.resolve_reference(clamp_value[1].value, clamp_value[1].reference, ftd_data[id], obj));
                 }
             }
             exports.increment_decrement_value(id, target, increment, clamp_min, clamp_max);
@@ -610,7 +610,7 @@ window.ftd = (function () {
             if (action["parameters"].by !== undefined) {
                 let by_value = action["parameters"].by[0].value;
                 let by_reference = action["parameters"].by[0].reference;
-                decrement = -parseInt(ftd_utils.resolve_reference(by_value, by_reference, ftd_data[id]));
+                decrement = -parseInt(ftd_utils.resolve_reference(by_value, by_reference, ftd_data[id], obj));
             }
 
             let clamp_max = undefined;
@@ -618,26 +618,25 @@ window.ftd = (function () {
             if (action["parameters"]["clamp"] !== undefined) {
                 let clamp_value = action["parameters"]["clamp"];
                 if (clamp_value.length === 1) {
-                    clamp_max = parseInt(ftd_utils.resolve_reference(clamp_value[0].value, clamp_value[0].reference, ftd_data[id]));
+                    clamp_max = parseInt(ftd_utils.resolve_reference(clamp_value[0].value, clamp_value[0].reference, ftd_data[id], obj));
                 }
                 if (clamp_value.length === 2) {
-                    clamp_min = parseInt(ftd_utils.resolve_reference(clamp_value[0].value, clamp_value[0].reference, ftd_data[id]));
-                    clamp_max = parseInt(ftd_utils.resolve_reference(clamp_value[1].value, clamp_value[1].reference, ftd_data[id]));
+                    clamp_min = parseInt(ftd_utils.resolve_reference(clamp_value[0].value, clamp_value[0].reference, ftd_data[id], obj));
+                    clamp_max = parseInt(ftd_utils.resolve_reference(clamp_value[1].value, clamp_value[1].reference, ftd_data[id], obj));
                 }
             }
 
             exports.increment_decrement_value(id, target, decrement, clamp_min, clamp_max);
         } else if (act === "set-value") {
             let target = action["target"];
-            let value = action["parameters"].value[0].value;
+            let value_data = action["parameters"].value[0];
+            let value = ftd_utils.resolve_reference(value_data.value, value_data.reference, ftd_data[id], obj)
             if (action["parameters"].value[1].value === "integer") {
                 value = parseInt(value);
             } else if (action["parameters"].value[1].value === "decimal") {
                 value = parseFloat(value);
             } else if (action["parameters"].value[1].value === "boolean") {
                 value = (value === "true");
-            } else if (action["parameters"].value[0].value === "$VALUE" && obj.value !== undefined ) {
-                value = obj.value
             }
 
             let data = ftd_data[id];
@@ -649,13 +648,13 @@ window.ftd = (function () {
             if (action["parameters"].value !== undefined) {
                 let insert_value = action["parameters"].value[0].value;
                 let insert_reference = action["parameters"].value[0].reference;
-                value = ftd_utils.resolve_reference(insert_value, insert_reference, ftd_data[id]);
+                value = ftd_utils.resolve_reference(insert_value, insert_reference, ftd_data[id], obj);
             }
             let at = undefined;
             if (action["parameters"].at !== undefined) {
                 let at_value = action["parameters"].at[0].value;
                 let at_reference = action["parameters"].at[0].reference;
-                at = ftd_utils.resolve_reference(at_value, at_reference, ftd_data[id]);
+                at = ftd_utils.resolve_reference(at_value, at_reference, ftd_data[id], obj);
             }
 
             exports.insert_value(id, target, value, at);
