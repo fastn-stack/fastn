@@ -21,10 +21,6 @@ jobs:
         continue-on-error: false
         with:
           args: cargo build --target $BUILD_TARGET --release
-      - name: Rename assets
-        run: |
-          mv target/x86_64-unknown-linux-musl/release/${{ env.BINARY_NAME }} target/x86_64-unknown-linux-musl/release/fpm_linux_musl_x86_64
-          mv target/x86_64-unknown-linux-musl/release/${{ env.BINARY_NAME }}.d target/x86_64-unknown-linux-musl/release/fpm_linux_musl_x86_64.d
       - uses: actions/upload-artifact@v2
         with:
           name: linux_musl_x86_64
@@ -42,9 +38,6 @@ jobs:
         with:
           command: build
           args: --release
-      - name: Rename assets
-        run: |
-          rename target/release/fpm.exe target/release/fpm_windows_x86_64.exe
       - uses: actions/upload-artifact@master
         with:
           name: windows_x64_latest
@@ -63,9 +56,6 @@ jobs:
         with:
           command: build
           args: --release
-      - name: Rename assets
-        run: |
-          mv target/release/fpm target/release/fpm_macos_x86_64
       - uses: actions/upload-artifact@master
         with:
           name: macos_x64_latest
