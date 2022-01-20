@@ -51,31 +51,7 @@ impl Boolean {
     ) -> ftd::p1::Result<ftd::Condition> {
         let (variable, value) = match self {
             Self::Equal { left, right } => {
-                let variable = match left {
-                    ftd::PropertyValue::Reference { name, .. } => name.to_string(),
-                    ftd::PropertyValue::Variable { name, .. } => {
-                        if let Some(string_container) = all_locals.get(name) {
-                            format!("@{}@{}", name, string_container)
-                        } else if name.eq("MOUSE-IN") {
-                            let string_container = all_locals.get("MOUSE-IN-TEMP").unwrap().clone();
-                            all_locals.insert("MOUSE-IN".to_string(), string_container.to_string());
-                            format!("@MOUSE-IN@{}", string_container)
-                        } else {
-                            return ftd::e2(
-                                format!("Can't find the local variable {}", name),
-                                doc_id,
-                                line_number,
-                            );
-                        }
-                    }
-                    _ => {
-                        return ftd::e2(
-                            format!("{:?} must be variable or local variable", left),
-                            doc_id,
-                            line_number,
-                        );
-                    }
-                };
+                let variable = resolve_variable(left, line_number, all_locals, doc_id)?;
 
                 let value = match right {
                     ftd::PropertyValue::Value { value } => value.to_owned(),
@@ -113,9 +89,29 @@ impl Boolean {
 
                 (variable, value)
             }
+            Self::IsNotNull { value } => {
+                let variable = resolve_variable(value, line_number, all_locals, doc_id)?;
+                (
+                    variable,
+                    ftd::Value::String {
+                        text: "$IsNotNull$".to_string(),
+                        source: ftd::TextSource::Header,
+                    },
+                )
+            }
+            Self::IsNull { value } => {
+                let variable = resolve_variable(value, line_number, all_locals, doc_id)?;
+                (
+                    variable,
+                    ftd::Value::String {
+                        text: "$IsNull$".to_string(),
+                        source: ftd::TextSource::Header,
+                    },
+                )
+            }
             _ => return ftd::e2(format!("{:?} must not happen", self), doc_id, line_number),
         };
-        match value.to_string() {
+        return match value.to_string() {
             None => {
                 return ftd::e2(
                     format!(
@@ -127,6 +123,39 @@ impl Boolean {
                 )
             }
             Some(value) => Ok(ftd::Condition { variable, value }),
+        };
+
+        fn resolve_variable(
+            value: &ftd::PropertyValue,
+            line_number: usize,
+            all_locals: &mut ftd::Map,
+            doc_id: &str,
+        ) -> ftd::p1::Result<String> {
+            Ok(match value {
+                ftd::PropertyValue::Reference { name, .. } => name.to_string(),
+                ftd::PropertyValue::Variable { name, .. } => {
+                    if let Some(string_container) = all_locals.get(name) {
+                        format!("@{}@{}", name, string_container)
+                    } else if name.eq("MOUSE-IN") {
+                        let string_container = all_locals.get("MOUSE-IN-TEMP").unwrap().clone();
+                        all_locals.insert("MOUSE-IN".to_string(), string_container.to_string());
+                        format!("@MOUSE-IN@{}", string_container)
+                    } else {
+                        return ftd::e2(
+                            format!("Can't find the local variable {}", name),
+                            doc_id,
+                            line_number,
+                        );
+                    }
+                }
+                _ => {
+                    return ftd::e2(
+                        format!("{:?} must be variable or local variable", value),
+                        doc_id,
+                        line_number,
+                    );
+                }
+            })
         }
     }
 
@@ -332,7 +361,9 @@ impl Boolean {
                 right: ftd::PropertyValue::Value { .. },
                 ..
             }
-        )) || is_loop_constant
+        ) && !matches!(self, Self::IsNotNull { .. })
+            && !matches!(self, Self::IsNull { .. }))
+            || is_loop_constant
     }
 
     pub fn is_arg_constant(&self) -> bool {
@@ -370,7 +401,9 @@ impl Boolean {
                 right: ftd::PropertyValue::Variable { .. },
                 ..
             }
-        )) || is_loop_constant
+        ) && !matches!(self, Self::IsNotNull { .. })
+            && !matches!(self, Self::IsNull { .. }))
+            || is_loop_constant
     }
 
     pub fn eval(
@@ -400,11 +433,7 @@ impl Boolean {
 
     pub fn set_null(&self, line_number: usize, doc_id: &str) -> ftd::p1::Result<bool> {
         Ok(match self {
-            Self::Literal { .. }
-            | Self::IsNotNull { .. }
-            | Self::IsNull { .. }
-            | Self::IsNotEmpty { .. }
-            | Self::IsEmpty { .. } => true,
+            Self::Literal { .. } | Self::IsNotEmpty { .. } | Self::IsEmpty { .. } => true,
             Self::Equal { left, right } => match (left, right) {
                 (ftd::PropertyValue::Value { .. }, ftd::PropertyValue::Value { .. })
                 | (ftd::PropertyValue::Value { .. }, ftd::PropertyValue::Variable { .. })
@@ -414,6 +443,7 @@ impl Boolean {
                 }
                 _ => false,
             },
+            Self::IsNotNull { .. } | Self::IsNull { .. } => false,
             _ => {
                 return ftd::e2(
                     format!("unimplemented for type: {:?}", self),

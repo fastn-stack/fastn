@@ -16,7 +16,14 @@ placeholder: Type Something Here...
 width: 250
 border-width: 2
 $event-input$: $query=$VALUE
-$event-change$: insert into $strings value $VALUE at end
+
+--- ftd.text: Add
+color: white
+background-color: green
+padding: 5
+if: $query is not null
+$event-click$: insert into $strings value $query at end
+$event-click$: clear $query
 
 --- ftd.text: Clear
 color: white

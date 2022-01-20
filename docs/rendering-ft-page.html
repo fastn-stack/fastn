@@ -6,10 +6,22 @@
     <title>ftd</title>
     <script type="ftd" id="ftd-data">
         {
+  "@body1@0": {
+    "value": "FTD is a domain-specific language to represent typed data and user interfaces.",
+    "dependencies": {
+      "0,1": "[{\"dependency_type\":\"Visible\",\"condition\":\"$IsNotNull$\",\"parameters\":{}}]"
+    }
+  },
   "@body@0,1": {
     "value": "FTD is a domain-specific language to represent typed data and user interfaces.",
     "dependencies": {
       "0,1": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
+    }
+  },
+  "@body@1": {
+    "value": "`ftd` is an alternative to XML/JSON for storing data.\n\nNote: `ftd` is built on a lower level grammar, called [`ftd::p1`\ngrammar](/fifthtry/ftd/p1-grammar/), it defines things like sections,\nsub-sections, caption, headers, and body.",
+    "dependencies": {
+      "0,2,1": "[{\"dependency_type\":\"Visible\",\"condition\":\"$IsNotNull$\",\"parameters\":{}}]"
     }
   },
   "@body@1,1": {
@@ -27,6 +39,7 @@
   "@body@11": {
     "value": "-- ftd.column:\nborder-width: 1\nwidth: fill\nid: outer\n\n-- ftd.row:\nwidth: fill\nbackground-color: yellow\npadding: 10\n\n-- ftd.text: $msg\nwidth: fill\n\n-- ftd.row:\nalign: right\n\n-- ftd.text: $msg\nwidth: fill\n\n-- container: outer\n\n-- ftd.row:\npadding: 10\nborder-top: 1\nwidth: fill\nalign: center\n\n-- ftd.text:\nwidth: fill\n\nWe support **markdown** as well.",
     "dependencies": {
+      "0,3,6,1": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]",
       "0,3,6,2": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
     }
   },
@@ -45,7 +58,8 @@
   "@body@2": {
     "value": "-- record person:\ncaption name:\nstring location:\noptional body bio:\n\n-- string amitu: Amit Upadhyay\nlocation: Banglore, India\n\nAmit is the founder and CEO of FifthTry.\n\nHe loves to code, and is pursuing his childhood goal of\nbecoming a professional starer of the trees.\n\n-- list employees:\ntype: person\n\n-- employees: Sourabh Garg\nlocation: Ranchi, India\n\nSourabh loves to UI.\n\n-- employees: Arpita Jaiswal\nlocation: Lucknow, India",
     "dependencies": {
-      "0,2,2,1": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
+      "0,2,2,1": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]",
+      "0,2,2,2": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
     }
   },
   "@body@3": {
@@ -57,7 +71,8 @@
   "@body@4": {
     "value": "#[derive(serde::Deserialize)]\nstruct Employee {\n    name: String,\n    location: String,\n    bio: Option<String>\n}\n\nlet doc = ftd::p2::Document::from(\"some/id\", source, lib)?;\nlet amitu: Employee = doc.get(\"amitu\")?;\nlet employees: Vec<Employee> = doc.get(\"employees\")?;",
     "dependencies": {
-      "0,2,4,1": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
+      "0,2,4,1": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]",
+      "0,2,4,2": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
     }
   },
   "@body@5": {
@@ -66,10 +81,23 @@
       "0,2,5": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
     }
   },
+  "@body@6": {
+    "value": "",
+    "dependencies": {
+      "0,3,1": "[{\"dependency_type\":\"Visible\",\"condition\":\"$IsNotNull$\",\"parameters\":{}}]"
+    }
+  },
+  "@body@6,1": {
+    "value": "",
+    "dependencies": {
+      "0,3,1": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
+    }
+  },
   "@body@7": {
     "value": "-- string msg: hello world\n\n-- ftd.text: $msg",
     "dependencies": {
-      "0,3,2,1": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
+      "0,3,2,1": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]",
+      "0,3,2,2": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
     }
   },
   "@body@8": {
@@ -78,22 +106,36 @@
       "0,3,3": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
     }
   },
+  "@caption@11": {
+    "value": "",
+    "dependencies": {
+      "0,3,6,0": "[{\"dependency_type\":\"Visible\",\"condition\":\"$IsNotNull$\",\"parameters\":{}},{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]",
+      "0,3,6,1": "[{\"dependency_type\":\"Visible\",\"condition\":\"$IsNotNull$\",\"parameters\":{}}]",
+      "0,3,6,2": "[{\"dependency_type\":\"Visible\",\"condition\":\"$IsNull$\",\"parameters\":{}}]"
+    }
+  },
   "@caption@2": {
     "value": "ftd file containing data",
     "dependencies": {
-      "0,2,2,0": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
+      "0,2,2,0": "[{\"dependency_type\":\"Visible\",\"condition\":\"$IsNotNull$\",\"parameters\":{}},{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]",
+      "0,2,2,1": "[{\"dependency_type\":\"Visible\",\"condition\":\"$IsNotNull$\",\"parameters\":{}}]",
+      "0,2,2,2": "[{\"dependency_type\":\"Visible\",\"condition\":\"$IsNull$\",\"parameters\":{}}]"
     }
   },
   "@caption@4": {
     "value": "getting data out of ftd",
     "dependencies": {
-      "0,2,4,0": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
+      "0,2,4,0": "[{\"dependency_type\":\"Visible\",\"condition\":\"$IsNotNull$\",\"parameters\":{}},{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]",
+      "0,2,4,1": "[{\"dependency_type\":\"Visible\",\"condition\":\"$IsNotNull$\",\"parameters\":{}}]",
+      "0,2,4,2": "[{\"dependency_type\":\"Visible\",\"condition\":\"$IsNull$\",\"parameters\":{}}]"
     }
   },
   "@caption@7": {
     "value": "hello world ftd",
     "dependencies": {
-      "0,3,2,0": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
+      "0,3,2,0": "[{\"dependency_type\":\"Visible\",\"condition\":\"$IsNotNull$\",\"parameters\":{}},{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]",
+      "0,3,2,1": "[{\"dependency_type\":\"Visible\",\"condition\":\"$IsNotNull$\",\"parameters\":{}}]",
+      "0,3,2,2": "[{\"dependency_type\":\"Visible\",\"condition\":\"$IsNull$\",\"parameters\":{}}]"
     }
   },
   "@title@0": {
@@ -149,7 +191,7 @@ let ftd_utils = {
                 }
             }
             return result;
-        } else if (reference!== null && reference!== undefined && data[reference]["value"] !== undefined) {
+        } else if (reference !== null && reference !== undefined && data[reference] !== undefined && data[reference]["value"] !== undefined) {
             return data[reference]["value"];
         } else {
             return (value === "$VALUE" && obj.value !== undefined) ? obj.value : value;
@@ -457,7 +499,10 @@ let ftd_utils = {
                     }
                 } else if (json_dependency.dependency_type === "Visible") {
                     let display = "none";
-                    if (data[target].value === json_dependency.condition) {
+                    if ((data[target].value === json_dependency.condition)
+                        || (json_dependency.condition === "$IsNull$" && data[target].value.trim().length === 0)
+                        || (json_dependency.condition === "$IsNotNull$" && data[target].value.trim().length !== 0)
+                    ) {
                         let is_flex = !!document.querySelector(`[data-id="${dependency}:${id}"]`).style.flexDirection.length;
                         let is_grid = !!document.querySelector(`[data-id="${dependency}:${id}"]`).style.gridTemplateAreas.length;
                         let is_webkit = !!document.querySelector(`[data-id="${dependency}:${id}"]`).style.webkitLineClamp.length;
@@ -987,6 +1032,31 @@ sub-sections, caption, headers, and body.</p>
 </span><span style="color:#65737e;">-- </span><span style="color:#ebcb8b;">employees</span><span style="color:#65737e;">: </span><span style="color:#a3be8c;">Arpita Jaiswal
 </span><span style="color:#b48ead;">location</span><span style="color:#65737e;">: </span><span style="color:#d08770;">Lucknow, India
 </span></pre>
+</div>
+<div data-id="0,2,2,2:main" style="background-color: rgba(43,48,59,1); border-bottom-left-radius: 4px !important; border-bottom-right-radius: 4px !important; border-radius: 0px; border-style: solid; border-top-left-radius: 4px !important; border-top-right-radius: 4px !important; border-width: 0px; box-sizing: border-box; color: rgba(77,77,77,1); display: none; font-size: 17px; font-weight: 400; line-height: 25px; overflow-x: auto; padding-bottom: 10px; padding-left: 20px; padding-right: 20px; padding-top: 10px; text-align: left; white-space: initial; width: 100%" class="ft_md"><pre style="background-color:#2b303b;"><span style="color:#65737e;">-- </span><span style="color:#ebcb8b;">record person</span><span style="color:#65737e;">:
+</span><span style="color:#b48ead;">caption name</span><span style="color:#65737e;">:
+</span><span style="color:#b48ead;">string location</span><span style="color:#65737e;">:
+</span><span style="color:#b48ead;">optional body bio</span><span style="color:#65737e;">:
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#65737e;">-- </span><span style="color:#ebcb8b;">string amitu</span><span style="color:#65737e;">: </span><span style="color:#a3be8c;">Amit Upadhyay
+</span><span style="color:#b48ead;">location</span><span style="color:#65737e;">: </span><span style="color:#d08770;">Banglore, India
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">Amit is the founder and CEO of FifthTry.
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">He loves to code, and is pursuing his childhood goal of
+</span><span style="color:#c0c5ce;">becoming a professional starer of the trees.
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#65737e;">-- </span><span style="color:#ebcb8b;">list employees</span><span style="color:#65737e;">:
+</span><span style="color:#b48ead;">type</span><span style="color:#65737e;">: </span><span style="color:#d08770;">person
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#65737e;">-- </span><span style="color:#ebcb8b;">employees</span><span style="color:#65737e;">: </span><span style="color:#a3be8c;">Sourabh Garg
+</span><span style="color:#b48ead;">location</span><span style="color:#65737e;">: </span><span style="color:#d08770;">Ranchi, India
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">Sourabh loves to UI.
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#65737e;">-- </span><span style="color:#ebcb8b;">employees</span><span style="color:#65737e;">: </span><span style="color:#a3be8c;">Arpita Jaiswal
+</span><span style="color:#b48ead;">location</span><span style="color:#65737e;">: </span><span style="color:#d08770;">Lucknow, India
+</span></pre>
 </div></div>
 <div data-id="0,2,3:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(77,77,77,1); font-size: 17px; font-weight: 400; padding-bottom: 8px; text-align: left; white-space: initial" class="ft_md">This data can be read from Rust:</div>
 <div data-id="0,2,4:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; padding-bottom: 12px; padding-top: 12px; white-space: initial; width: 100%" class="ft_md"><div data-id="0,2,4,0:main" style="background-color: rgba(58,64,78,1); border-radius: 0px; border-style: solid; border-top-left-radius: 4px !important; border-top-right-radius: 4px !important; border-width: 0px; box-sizing: border-box; color: rgba(220,220,220,1); font-size: 14px; font-weight: 400; padding-bottom: 10px; padding-left: 20px; padding-right: 20px; padding-top: 10px; text-align: left; white-space: initial; width: 100%" class="ft_md">getting data out of ftd</div>
@@ -1001,11 +1071,29 @@ sub-sections, caption, headers, and body.</p>
 </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> amitu: Employee = doc.</span><span style="color:#96b5b4;">get</span><span style="color:#c0c5ce;">(&quot;</span><span style="color:#a3be8c;">amitu</span><span style="color:#c0c5ce;">&quot;)?;
 </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> employees: Vec&lt;Employee&gt; = doc.</span><span style="color:#96b5b4;">get</span><span style="color:#c0c5ce;">(&quot;</span><span style="color:#a3be8c;">employees</span><span style="color:#c0c5ce;">&quot;)?;
 </span></pre>
+</div>
+<div data-id="0,2,4,2:main" style="background-color: rgba(43,48,59,1); border-bottom-left-radius: 4px !important; border-bottom-right-radius: 4px !important; border-radius: 0px; border-style: solid; border-top-left-radius: 4px !important; border-top-right-radius: 4px !important; border-width: 0px; box-sizing: border-box; color: rgba(77,77,77,1); display: none; font-size: 17px; font-weight: 400; line-height: 25px; overflow-x: auto; padding-bottom: 10px; padding-left: 20px; padding-right: 20px; padding-top: 10px; text-align: left; white-space: initial; width: 100%" class="ft_md"><pre style="background-color:#2b303b;"><span style="color:#c0c5ce;">#[</span><span style="color:#bf616a;">derive</span><span style="color:#c0c5ce;">(serde::Deserialize)]
+</span><span style="color:#b48ead;">struct </span><span style="color:#c0c5ce;">Employee {
+</span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: String,
+</span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">location</span><span style="color:#c0c5ce;">: String,
+</span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">bio</span><span style="color:#c0c5ce;">: Option&lt;String&gt;
+</span><span style="color:#c0c5ce;">}
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> doc = ftd::p2::Document::from(&quot;</span><span style="color:#a3be8c;">some/id</span><span style="color:#c0c5ce;">&quot;, source, lib)?;
+</span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> amitu: Employee = doc.</span><span style="color:#96b5b4;">get</span><span style="color:#c0c5ce;">(&quot;</span><span style="color:#a3be8c;">amitu</span><span style="color:#c0c5ce;">&quot;)?;
+</span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> employees: Vec&lt;Employee&gt; = doc.</span><span style="color:#96b5b4;">get</span><span style="color:#c0c5ce;">(&quot;</span><span style="color:#a3be8c;">employees</span><span style="color:#c0c5ce;">&quot;)?;
+</span></pre>
 </div></div>
 <div data-id="0,2,5:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(77,77,77,1); font-size: 17px; font-weight: 400; padding-bottom: 8px; text-align: left; white-space: initial" class="ft_md">Read about <a href="/fifthtry/ftd/data-modelling/">ftd’s data modelling capability</a> in detail.</div></div>
 <div data-id="0,3:main" id="ui-language" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; white-space: initial; width: 100%" class="ft_md"><div data-id="0,3,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(0,0,0,1); font-size: 34px; font-weight: 700; line-height: 42px; padding-bottom: 12px; padding-top: 34px; text-align: left; white-space: initial" class="ft_md">UI Language</div>
+<div data-id="0,3,1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(77,77,77,1); display: none; font-size: 17px; font-weight: 400; padding-bottom: 8px; text-align: left; white-space: initial" class="ft_md"></div>
 <div data-id="0,3,2:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; padding-bottom: 12px; padding-top: 12px; white-space: initial; width: 100%" class="ft_md"><div data-id="0,3,2,0:main" style="background-color: rgba(58,64,78,1); border-radius: 0px; border-style: solid; border-top-left-radius: 4px !important; border-top-right-radius: 4px !important; border-width: 0px; box-sizing: border-box; color: rgba(220,220,220,1); font-size: 14px; font-weight: 400; padding-bottom: 10px; padding-left: 20px; padding-right: 20px; padding-top: 10px; text-align: left; white-space: initial; width: 100%" class="ft_md">hello world ftd</div>
 <div data-id="0,3,2,1:main" style="background-color: rgba(43,48,59,1); border-bottom-left-radius: 4px !important; border-bottom-right-radius: 4px !important; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(77,77,77,1); font-size: 17px; font-weight: 400; line-height: 25px; overflow-x: auto; padding-bottom: 10px; padding-left: 20px; padding-right: 20px; padding-top: 10px; text-align: left; white-space: initial; width: 100%" class="ft_md"><pre style="background-color:#2b303b;"><span style="color:#65737e;">-- </span><span style="color:#ebcb8b;">string msg</span><span style="color:#65737e;">: </span><span style="color:#a3be8c;">hello world
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#65737e;">-- </span><span style="color:#ebcb8b;">ftd.text</span><span style="color:#65737e;">: </span><span style="color:#a3be8c;">$msg
+</span></pre>
+</div>
+<div data-id="0,3,2,2:main" style="background-color: rgba(43,48,59,1); border-bottom-left-radius: 4px !important; border-bottom-right-radius: 4px !important; border-radius: 0px; border-style: solid; border-top-left-radius: 4px !important; border-top-right-radius: 4px !important; border-width: 0px; box-sizing: border-box; color: rgba(77,77,77,1); display: none; font-size: 17px; font-weight: 400; line-height: 25px; overflow-x: auto; padding-bottom: 10px; padding-left: 20px; padding-right: 20px; padding-top: 10px; text-align: left; white-space: initial; width: 100%" class="ft_md"><pre style="background-color:#2b303b;"><span style="color:#65737e;">-- </span><span style="color:#ebcb8b;">string msg</span><span style="color:#65737e;">: </span><span style="color:#a3be8c;">hello world
 </span><span style="color:#c0c5ce;">
 </span><span style="color:#65737e;">-- </span><span style="color:#ebcb8b;">ftd.text</span><span style="color:#65737e;">: </span><span style="color:#a3be8c;">$msg
 </span></pre>
@@ -1023,7 +1111,41 @@ document, and what you see above between the two lines is rendered by ftd.</p>
 </p>
 <p data-id="0,3,5,2:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-weight: 400; text-align: left; white-space: initial" class="ft_md"><p>Let’s see a slightly more complex layout:</p>
 </p></div>
-<div data-id="0,3,6:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; padding-bottom: 12px; padding-top: 12px; white-space: initial; width: 100%" class="ft_md"><div data-id="0,3,6,2:main" style="background-color: rgba(43,48,59,1); border-bottom-left-radius: 4px !important; border-bottom-right-radius: 4px !important; border-radius: 0px; border-style: solid; border-top-left-radius: 4px !important; border-top-right-radius: 4px !important; border-width: 0px; box-sizing: border-box; color: rgba(77,77,77,1); font-size: 17px; font-weight: 400; line-height: 25px; overflow-x: auto; padding-bottom: 10px; padding-left: 20px; padding-right: 20px; padding-top: 10px; text-align: left; white-space: initial; width: 100%" class="ft_md"><pre style="background-color:#2b303b;"><span style="color:#65737e;">-- </span><span style="color:#ebcb8b;">ftd.column</span><span style="color:#65737e;">:
+<div data-id="0,3,6:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; padding-bottom: 12px; padding-top: 12px; white-space: initial; width: 100%" class="ft_md"><div data-id="0,3,6,0:main" style="background-color: rgba(58,64,78,1); border-radius: 0px; border-style: solid; border-top-left-radius: 4px !important; border-top-right-radius: 4px !important; border-width: 0px; box-sizing: border-box; color: rgba(220,220,220,1); display: none; font-size: 14px; font-weight: 400; padding-bottom: 10px; padding-left: 20px; padding-right: 20px; padding-top: 10px; text-align: left; white-space: initial; width: 100%" class="ft_md"></div>
+<div data-id="0,3,6,1:main" style="background-color: rgba(43,48,59,1); border-bottom-left-radius: 4px !important; border-bottom-right-radius: 4px !important; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(77,77,77,1); display: none; font-size: 17px; font-weight: 400; line-height: 25px; overflow-x: auto; padding-bottom: 10px; padding-left: 20px; padding-right: 20px; padding-top: 10px; text-align: left; white-space: initial; width: 100%" class="ft_md"><pre style="background-color:#2b303b;"><span style="color:#65737e;">-- </span><span style="color:#ebcb8b;">ftd.column</span><span style="color:#65737e;">:
+</span><span style="color:#b48ead;">border-width</span><span style="color:#65737e;">: </span><span style="color:#d08770;">1
+</span><span style="color:#b48ead;">width</span><span style="color:#65737e;">: </span><span style="color:#d08770;">fill
+</span><span style="color:#b48ead;">id</span><span style="color:#65737e;">: </span><span style="color:#d08770;">outer
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#65737e;">-- </span><span style="color:#ebcb8b;">ftd.row</span><span style="color:#65737e;">:
+</span><span style="color:#b48ead;">width</span><span style="color:#65737e;">: </span><span style="color:#d08770;">fill
+</span><span style="color:#b48ead;">background-color</span><span style="color:#65737e;">: </span><span style="color:#d08770;">yellow
+</span><span style="color:#b48ead;">padding</span><span style="color:#65737e;">: </span><span style="color:#d08770;">10
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#65737e;">-- </span><span style="color:#ebcb8b;">ftd.text</span><span style="color:#65737e;">: </span><span style="color:#a3be8c;">$msg
+</span><span style="color:#b48ead;">width</span><span style="color:#65737e;">: </span><span style="color:#d08770;">fill
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#65737e;">-- </span><span style="color:#ebcb8b;">ftd.row</span><span style="color:#65737e;">:
+</span><span style="color:#b48ead;">align</span><span style="color:#65737e;">: </span><span style="color:#d08770;">right
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#65737e;">-- </span><span style="color:#ebcb8b;">ftd.text</span><span style="color:#65737e;">: </span><span style="color:#a3be8c;">$msg
+</span><span style="color:#b48ead;">width</span><span style="color:#65737e;">: </span><span style="color:#d08770;">fill
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#65737e;">-- </span><span style="color:#ebcb8b;">container</span><span style="color:#65737e;">: </span><span style="color:#a3be8c;">outer
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#65737e;">-- </span><span style="color:#ebcb8b;">ftd.row</span><span style="color:#65737e;">:
+</span><span style="color:#b48ead;">padding</span><span style="color:#65737e;">: </span><span style="color:#d08770;">10
+</span><span style="color:#b48ead;">border-top</span><span style="color:#65737e;">: </span><span style="color:#d08770;">1
+</span><span style="color:#b48ead;">width</span><span style="color:#65737e;">: </span><span style="color:#d08770;">fill
+</span><span style="color:#b48ead;">align</span><span style="color:#65737e;">: </span><span style="color:#d08770;">center
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#65737e;">-- </span><span style="color:#ebcb8b;">ftd.text</span><span style="color:#65737e;">:
+</span><span style="color:#b48ead;">width</span><span style="color:#65737e;">: </span><span style="color:#d08770;">fill
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">We support **markdown** as well.
+</span></pre>
+</div>
+<div data-id="0,3,6,2:main" style="background-color: rgba(43,48,59,1); border-bottom-left-radius: 4px !important; border-bottom-right-radius: 4px !important; border-radius: 0px; border-style: solid; border-top-left-radius: 4px !important; border-top-right-radius: 4px !important; border-width: 0px; box-sizing: border-box; color: rgba(77,77,77,1); font-size: 17px; font-weight: 400; line-height: 25px; overflow-x: auto; padding-bottom: 10px; padding-left: 20px; padding-right: 20px; padding-top: 10px; text-align: left; white-space: initial; width: 100%" class="ft_md"><pre style="background-color:#2b303b;"><span style="color:#65737e;">-- </span><span style="color:#ebcb8b;">ftd.column</span><span style="color:#65737e;">:
 </span><span style="color:#b48ead;">border-width</span><span style="color:#65737e;">: </span><span style="color:#d08770;">1
 </span><span style="color:#b48ead;">width</span><span style="color:#65737e;">: </span><span style="color:#d08770;">fill
 </span><span style="color:#b48ead;">id</span><span style="color:#65737e;">: </span><span style="color:#d08770;">outer

@@ -405,8 +405,16 @@ impl Value {
         if matches!(self, Self::None { .. }) {
             return true;
         }
+        if let Self::String { text, .. } = self {
+            return text.is_empty();
+        }
         if let Self::Optional { data, .. } = self {
-            if data.as_ref().eq(&None) {
+            let value = if let Some(ftd::Value::String { text, .. }) = data.as_ref() {
+                text.is_empty()
+            } else {
+                false
+            };
+            if data.as_ref().eq(&None) || value {
                 return true;
             }
         }
