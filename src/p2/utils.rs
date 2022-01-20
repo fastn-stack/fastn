@@ -137,6 +137,44 @@ pub fn string_and_source_and_ref(
                 }
             }
         }
+        Some((v, reference)) if condition.is_some() => {
+            let reference = match reference {
+                Some(reference) => {
+                    if let Some(s) = reference.strip_prefix('@') {
+                        s
+                    } else {
+                        reference
+                    }
+                }
+                None => {
+                    return ftd::e2(
+                        format!("expected string, found: {:?}", v.kind()),
+                        doc_id,
+                        line_number,
+                    )
+                }
+            };
+            if let Some(ftd::p2::Boolean::IsNotNull { value }) = condition {
+                match value {
+                    ftd::PropertyValue::Reference { name, .. }
+                    | ftd::PropertyValue::Variable { name, .. } => {
+                        if name.eq(reference) {
+                            return Ok((
+                                "".to_string(),
+                                ftd::TextSource::Header,
+                                complete_reference(&Some(reference.to_owned()), all_locals),
+                            ));
+                        }
+                    }
+                    _ => {}
+                }
+            }
+            ftd::e2(
+                format!("expected string, found: {:?}", v.kind()),
+                doc_id,
+                line_number,
+            )
+        }
         Some(v) => ftd::e2(
             format!("expected string, found: {:?}", v),
             doc_id,
