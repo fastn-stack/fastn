@@ -42,7 +42,6 @@ impl<'a> ExecuteDoc<'a> {
                 aliases: self.aliases,
                 bag: self.bag,
             };
-            // dbg!(&self.instructions[*index]);
 
             let local_container = {
                 let mut local_container = parent_container.to_vec();
@@ -119,7 +118,6 @@ impl<'a> ExecuteDoc<'a> {
                 }
                 ftd::Instruction::ChildComponent { child: f } if !f.is_recursive => {
                     let (arguments, is_visible) = if let Some(ref condition) = f.condition {
-                        // dbg!(&condition, &self.arguments, &doc);
                         ftd::p2::utils::arguments_on_condition(
                             self.arguments,
                             condition,

@@ -2476,7 +2476,6 @@ pub fn read_properties(
             }
         };
         for (idx, value, conditional_attribute) in conditional_vector {
-            // dbg!(&kind, &value, &arguments, &doc);
             let property_value = ftd::PropertyValue::resolve_value(
                 line_number,
                 value.as_str(),
@@ -2485,7 +2484,6 @@ pub fn read_properties(
                 arguments,
                 Some(source.clone()),
             )?;
-            // dbg!(&property_value);
             let nested_properties = if let ftd::PropertyValue::Reference {
                 kind: ftd::p2::Kind::UI { .. },
                 ..

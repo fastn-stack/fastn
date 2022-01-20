@@ -692,10 +692,8 @@ pub fn interpret(
     std::collections::BTreeMap<String, ftd::p2::Thing>,
     ftd::Column,
 )> {
-    // dbg!(&name);
     let mut interpreter = Interpreter::new(lib);
     let instructions = interpreter.interpret(name, source)?;
-    // dbg!(&instructions);
     let mut rt = ftd::RT::from(name, interpreter.aliases, interpreter.bag, instructions);
     let main = rt.render_()?;
     Ok((rt.bag, main))
@@ -14183,7 +14181,6 @@ mod test {
             &ftd::p2::TestLibrary {},
         )
         .expect("found error");
-        dbg!(&g_col);
     }*/
 
     /*#[test]
