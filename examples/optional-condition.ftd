@@ -1,0 +1,17 @@
+-- record status-data:
+optional string name:
+
+-- status-data list status:
+
+-- status:
+name: Madhav
+
+-- ftd.row print:
+status-data data:
+
+--- ftd.text: data
+if: $data.name is not null
+
+-- print:
+$loop$: $status as $obj
+data: $obj

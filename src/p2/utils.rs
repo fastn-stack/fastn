@@ -725,7 +725,7 @@ pub fn arguments_on_condition(
     arguments: &std::collections::BTreeMap<String, ftd::Value>,
     condition: &ftd::p2::Boolean,
     line_number: usize,
-    doc_id: &str,
+    doc: &ftd::p2::TDoc,
 ) -> ftd::p1::Result<(std::collections::BTreeMap<String, ftd::Value>, bool)> {
     let mut arguments = arguments.to_owned();
     let mut is_visible = true;
@@ -735,15 +735,36 @@ pub fn arguments_on_condition(
             ftd::PropertyValue::Reference { name, kind }
             | ftd::PropertyValue::Variable { name, kind } => {
                 if let ftd::p2::Kind::Optional { kind } = kind {
-                    if arguments.get(name).is_none() {
+                    let bag_with_argument = {
+                        let mut bag_with_argument = doc.bag.clone();
+                        bag_with_argument.extend(arguments.iter().map(|(k, v)| {
+                            (
+                                format!("{}#{}", doc.name, k),
+                                ftd::p2::Thing::Variable(ftd::Variable {
+                                    name: k.to_string(),
+                                    value: v.to_owned(),
+                                    conditions: vec![],
+                                }),
+                            )
+                        }));
+                        bag_with_argument
+                    };
+                    let doc = ftd::p2::TDoc {
+                        name: doc.name,
+                        aliases: doc.aliases,
+                        bag: &bag_with_argument,
+                    };
+                    if doc.get_value(line_number, name).is_err() {
                         is_visible = false;
-                        arguments
-                            .insert(name.to_string(), kind_to_value(kind, line_number, doc_id)?);
+                        arguments.insert(
+                            name.to_string(),
+                            kind_to_value(kind, line_number, doc.name)?,
+                        );
                     }
                 } else {
                     return ftd::e2(
                         format!("expected optional kind, found: {:?}", kind),
-                        doc_id,
+                        doc.name,
                         line_number,
                     );
                 }

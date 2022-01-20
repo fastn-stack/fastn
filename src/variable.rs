@@ -401,6 +401,12 @@ pub enum Value {
 }
 
 impl Value {
+    pub fn into_optional(self) -> ftd::Value {
+        ftd::Value::Optional {
+            kind: self.kind(),
+            data: Box::new(Some(self)),
+        }
+    }
     pub fn is_null(&self) -> bool {
         if matches!(self, Self::None { .. }) {
             return true;
@@ -486,6 +492,17 @@ impl Value {
             Value::Object { values } => {
                 let mut new_values: std::collections::BTreeMap<String, String> = Default::default();
                 for (k, v) in values {
+                    if let ftd::PropertyValue::Value { value } = v {
+                        if let Some(v) = value.to_string() {
+                            new_values.insert(k.to_owned(), v);
+                        }
+                    }
+                }
+                serde_json::to_string(&new_values).ok()
+            }
+            Value::Record { fields, .. } => {
+                let mut new_values: std::collections::BTreeMap<String, String> = Default::default();
+                for (k, v) in fields {
                     if let ftd::PropertyValue::Value { value } = v {
                         if let Some(v) = value.to_string() {
                             new_values.insert(k.to_owned(), v);
