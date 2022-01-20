@@ -120,4 +120,4 @@ jobs:
           generateReleaseNotes: true
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ github.event.inputs.releaseTag }}
-          prerelease: ${{ !github.event.inputs.productionRelease }}
+          prerelease: ${{ github.event.inputs.productionRelease && github.event.inputs.productionRelease == 'false' }}
