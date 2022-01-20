@@ -9,7 +9,8 @@ id: page
 
 -- ft.h0: FTD Journal
 
--- ft.h1: Dynamic Components
+
+-- ft.h1: Dynamic Components Landed!
 
 19th Jan 2022
 
@@ -30,6 +31,9 @@ Consider this:
 
 -- optional string query:
 
+-- ftd.column:
+spacing: 10
+
 -- ftd.row:
 width: fill
 spacing: 10
@@ -40,15 +44,15 @@ width: 250
 border-width: 2
 padding: 8
 $event-input$: $query=$VALUE
-$event-change$: insert into $strings value $VALUE at end
 
-/--- ftd.text: Add
-/if: $query is not null
+--- ftd.text: Add
+if: $query is not null
 color: white
-background-color: red
+background-color: green
 move-down: 4
 padding: 5
 $event-click$: insert into $strings value $query at end
+$event-click$: clear $query
 
 --- ftd.text: Clear
 color: white
@@ -56,10 +60,10 @@ background-color: red
 move-down: 4
 padding: 5
 $event-click$: clear $strings
-$event-click$: clear $query
 
 
 -- ftd.text:
+if: $query is not null
 color if $fpm.dark-mode: white
 
 You have typed: {value}
@@ -68,6 +72,7 @@ You have typed: {value}
 color: green
 color if $fpm.dark-mode: white
 background-color if $fpm.dark-mode: green
+padding if $query is not null: 5
 size: 20
 
 
@@ -78,7 +83,7 @@ $loop$: $strings as $obj
 -- ftd.column show-data:
 caption text:
 padding: 10
-background-color if $fpm.dark-mode: white
+/background-color if $fpm.dark-mode: white
 background-color: yellow
 color: red
 
@@ -88,6 +93,28 @@ border-width: 2
 
 --- ftd.text: $text
 
+-- container: page
+
+-- ft.markdown:
+
+We are very proud of this feature! What is even cooler is how little work it
+took to implement it. Initially I thought we will have to somehow send our
+component spec to front-end, for the components that are directly or indirectly
+called from the components used by such dynamic elements we want to create. And
+it sounded like a lot of duplication of logic between what we do in Rust and we
+would have to do in JavaScript.
+
+Arpita got this brilliant insight that we can create one instance of each such
+component and keep them hidden, and when we have to create any new instance of
+any of these components we clone that DOM node, and set it up with correct data.
+
+It turned out to be as simple it sounds, and entire insight to merge was 3-4hrs!
+I was worried about JS size increase etc, and none of that happened. So little
+code, such a massive impact.
+
+Now that we have support for creating nodes dynamically, we are almost complete
+UI solution, and FTD should be considered an alternative anywhere you would
+consider using say React for creating UI.
 
 -- ft.h1: "$main$" Variables
 
