@@ -6,6 +6,9 @@ on:
         releaseTag:
           description: 'Release Tag'     
           required: true
+        productionRelease:
+          type: boolean
+          description: Mark release as production ready
 jobs:
   release-ubuntu:
     name: Build for Linux
@@ -117,3 +120,4 @@ jobs:
           generateReleaseNotes: true
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ github.event.inputs.releaseTag }}
+          prerelease: ${{ !github.event.inputs.productionRelease }}
