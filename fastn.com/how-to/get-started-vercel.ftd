@@ -57,7 +57,7 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/FifthTry/fpm/main/install-
 
 
 -- ft.image:
-src: /how-to/vercel-deploy-settings.
+src: /how-to/vercel-deploy-settings.png
 width: fill
 
 Congratulations, your FPM package is now successfully hosted. You can head over to

@@ -30,7 +30,9 @@ So links never break (and original author can keep updating document URL at whim
 (on how having article.page allows us to get just the content of a page, without
 header/sidebar/footer etc).
 
+-- ft.h1: Release Automation
 
+Shobhit implemented some release automation...
 
 -- ft.h1: Package Interfaces: Strict Vs Compatible
 
