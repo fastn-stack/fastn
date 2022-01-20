@@ -9,6 +9,16 @@ id: page
 
 -- ft.h0: FTD Journal
 
+-- ft.h1: Dynamic Components: Path Ahead
+
+20th Jan 2022
+
+Now that we have basic dynamic components working.
+
+insert syntax, clear, delete at index, is list empty, how many items in the
+list, similarly how to filter
+
+default record
 
 -- ft.h1: Dynamic Components Landed!
 
@@ -909,7 +919,10 @@ Say:
 lang: ftd
 
 \-- string foo: hello
-\-- check foo:
+
+
+\-- check foo for person:
+\--- title:
 regex: <some regex>
 
 -- ft.markdown:
@@ -940,6 +953,9 @@ caption title:
 
 \--- check title:
 regex: <whatever>
+
+\--- check p:
+check: foo
 
 -- ft.markdown:
 
