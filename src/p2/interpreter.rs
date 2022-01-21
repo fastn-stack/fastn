@@ -8455,6 +8455,14 @@ mod test {
                             })],
                             ..Default::default()
                         },
+                        common: ftd::Common {
+                            locals: std::array::IntoIter::new([(
+                                s("toc@0,1"),
+                                s("{\"link\":\"aa link\",\"title\":\"aa title\"}"),
+                            )])
+                            .collect(),
+                            ..Default::default()
+                        },
                         ..Default::default()
                     }),
                     ftd::Element::Column(ftd::Column {
@@ -8472,6 +8480,14 @@ mod test {
                             })],
                             ..Default::default()
                         },
+                        common: ftd::Common {
+                            locals: std::array::IntoIter::new([(
+                                s("toc@0,2"),
+                                s("{\"link\":\"aaa link\",\"title\":\"aaa title\"}"),
+                            )])
+                            .collect(),
+                            ..Default::default()
+                        },
                         ..Default::default()
                     }),
                 ],
@@ -8479,6 +8495,89 @@ mod test {
             },
             common: ftd::Common {
                 reference: Some(s("foo/bar#toc")),
+                locals: std::array::IntoIter::new([(
+                    s("toc@0"),
+                    s("{\"link\":\"ab link\",\"title\":\"ab title\"}"),
+                )])
+                .collect(),
+                ..Default::default()
+            },
+            ..Default::default()
+        });
+        let col1 = ftd::Element::Column(ftd::Column {
+            spacing: None,
+            container: ftd::Container {
+                children: vec![
+                    ftd::Element::Markup(ftd::Markups {
+                        text: ftd::markdown_line("ab title"),
+                        line: true,
+                        common: ftd::Common {
+                            reference: Some(s("@toc.title")),
+                            link: Some(s("ab link")),
+                            ..Default::default()
+                        },
+                        ..Default::default()
+                    }),
+                    ftd::Element::Column(ftd::Column {
+                        spacing: None,
+                        container: ftd::Container {
+                            children: vec![ftd::Element::Markup(ftd::Markups {
+                                text: ftd::markdown_line("aa title"),
+                                line: true,
+                                common: ftd::Common {
+                                    reference: Some(s("@toc.title")),
+                                    link: Some(s("aa link")),
+                                    ..Default::default()
+                                },
+                                ..Default::default()
+                            })],
+                            ..Default::default()
+                        },
+                        common: ftd::Common {
+                            locals: std::array::IntoIter::new([(
+                                s("toc@1,0,1"),
+                                s("{\"link\":\"aa link\",\"title\":\"aa title\"}"),
+                            )])
+                            .collect(),
+                            ..Default::default()
+                        },
+                        ..Default::default()
+                    }),
+                    ftd::Element::Column(ftd::Column {
+                        spacing: None,
+                        container: ftd::Container {
+                            children: vec![ftd::Element::Markup(ftd::Markups {
+                                text: ftd::markdown_line("aaa title"),
+                                line: true,
+                                common: ftd::Common {
+                                    reference: Some(s("@toc.title")),
+                                    link: Some(s("aaa link")),
+                                    ..Default::default()
+                                },
+                                ..Default::default()
+                            })],
+                            ..Default::default()
+                        },
+                        common: ftd::Common {
+                            locals: std::array::IntoIter::new([(
+                                s("toc@1,0,2"),
+                                s("{\"link\":\"aaa link\",\"title\":\"aaa title\"}"),
+                            )])
+                            .collect(),
+                            ..Default::default()
+                        },
+                        ..Default::default()
+                    }),
+                ],
+                ..Default::default()
+            },
+            common: ftd::Common {
+                reference: Some(s("foo/bar#toc")),
+                locals: std::array::IntoIter::new([(
+                    s("toc@1,0"),
+                    s("{\"link\":\"ab link\",\"title\":\"ab title\"}"),
+                )])
+                .collect(),
                 ..Default::default()
             },
             ..Default::default()
@@ -8487,7 +8586,7 @@ mod test {
         main.container.children.push(ftd::Element::Row(ftd::Row {
             spacing: None,
             container: ftd::Container {
-                children: vec![col],
+                children: vec![col1],
                 ..Default::default()
             },
             ..Default::default()
@@ -10425,8 +10524,11 @@ mod test {
                                 ..Default::default()
                             },
                             common: ftd::Common {
-                                locals: std::array::IntoIter::new([(s("open@0,1"), s("true"))])
-                                    .collect(),
+                                locals: std::array::IntoIter::new([
+                                    (s("open@0,1"), s("true")),
+                                    (s("toc@0,1"), s("{\"title\":\"aa title\"}")),
+                                ])
+                                .collect(),
                                 condition: Some(ftd::Condition {
                                     variable: s("@open@0"),
                                     value: s("true"),
@@ -10457,8 +10559,11 @@ mod test {
                                 ..Default::default()
                             },
                             common: ftd::Common {
-                                locals: std::array::IntoIter::new([(s("open@0,2"), s("true"))])
-                                    .collect(),
+                                locals: std::array::IntoIter::new([
+                                    (s("open@0,2"), s("true")),
+                                    (s("toc@0,2"), s("{\"title\":\"aaa title\"}")),
+                                ])
+                                .collect(),
                                 condition: Some(ftd::Condition {
                                     variable: s("@open@0"),
                                     value: s("true"),
@@ -10470,7 +10575,11 @@ mod test {
                     ..Default::default()
                 },
                 common: ftd::Common {
-                    locals: std::array::IntoIter::new([(s("open@0"), s("true"))]).collect(),
+                    locals: std::array::IntoIter::new([
+                        (s("open@0"), s("true")),
+                        (s("toc@0"), s("{\"title\":\"ab title\"}")),
+                    ])
+                    .collect(),
                     reference: Some(s("foo/bar#toc")),
                     ..Default::default()
                 },
@@ -12338,6 +12447,14 @@ mod test {
                                 })],
                                 ..Default::default()
                             },
+                            common: ftd::Common {
+                                locals: std::array::IntoIter::new([(
+                                    s("commit@0,0"),
+                                    s("{\"message\":\"commit message 1\"}"),
+                                )])
+                                .collect(),
+                                ..Default::default()
+                            },
                             ..Default::default()
                         }),
                         ftd::Element::Column(ftd::Column {
@@ -12352,6 +12469,14 @@ mod test {
                                     },
                                     ..Default::default()
                                 })],
+                                ..Default::default()
+                            },
+                            common: ftd::Common {
+                                locals: std::array::IntoIter::new([(
+                                    s("commit@0,1"),
+                                    s("{\"message\":\"commit message 2\"}"),
+                                )])
+                                .collect(),
                                 ..Default::default()
                             },
                             ..Default::default()
@@ -12370,6 +12495,14 @@ mod test {
                                 })],
                                 ..Default::default()
                             },
+                            common: ftd::Common {
+                                locals: std::array::IntoIter::new([(
+                                    s("file@0,2"),
+                                    s("{\"filename\":\"file filename 1\"}"),
+                                )])
+                                .collect(),
+                                ..Default::default()
+                            },
                             ..Default::default()
                         }),
                         ftd::Element::Column(ftd::Column {
@@ -12386,9 +12519,21 @@ mod test {
                                 })],
                                 ..Default::default()
                             },
+                            common: ftd::Common {
+                                locals: std::array::IntoIter::new([(
+                                    s("file@0,3"),
+                                    s("{\"filename\":\"file filename 2\"}"),
+                                )])
+                                .collect(),
+                                ..Default::default()
+                            },
                             ..Default::default()
                         }),
                     ],
+                    ..Default::default()
+                },
+                common: ftd::Common {
+                    locals: std::array::IntoIter::new([(s("changes@0"), s("{}"))]).collect(),
                     ..Default::default()
                 },
                 ..Default::default()
@@ -14013,6 +14158,30 @@ mod test {
             (bag, main),
         );
     }
+
+    /*#[test]
+    fn optional_condition_on_record() {
+        let (_g_bag, g_col) = crate::p2::interpreter::interpret(
+            "foo/bar",
+            indoc::indoc!(
+                "
+                -- record person-data:
+                caption name:
+                integer age:
+
+                -- person-data person1: Madhav
+                age: 10
+
+                -- optional person-data person:
+
+                -- ftd.text: $person.name
+                if: $person is not null
+                "
+            ),
+            &ftd::p2::TestLibrary {},
+        )
+        .expect("found error");
+    }*/
 
     /*#[test]
     fn loop_with_tree_structure_1() {

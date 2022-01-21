@@ -74,7 +74,7 @@ pub fn common_from_properties(
             }
             if !c.is_arg_constant() {
                 (
-                    Some(c.to_condition(0, all_locals, &arguments, doc.name)?),
+                    Some(c.to_condition(0, all_locals, &arguments, doc)?),
                     is_visible,
                 )
             } else {

@@ -122,7 +122,7 @@ impl<'a> ExecuteDoc<'a> {
                             self.arguments,
                             condition,
                             f.line_number,
-                            doc.name,
+                            &doc,
                         )?
                     } else {
                         (self.arguments.to_owned(), true)

@@ -137,6 +137,44 @@ pub fn string_and_source_and_ref(
                 }
             }
         }
+        Some((v, reference)) if condition.is_some() => {
+            let reference = match reference {
+                Some(reference) => {
+                    if let Some(s) = reference.strip_prefix('@') {
+                        s
+                    } else {
+                        reference
+                    }
+                }
+                None => {
+                    return ftd::e2(
+                        format!("expected string, found: {:?}", v.kind()),
+                        doc_id,
+                        line_number,
+                    )
+                }
+            };
+            if let Some(ftd::p2::Boolean::IsNotNull { value }) = condition {
+                match value {
+                    ftd::PropertyValue::Reference { name, .. }
+                    | ftd::PropertyValue::Variable { name, .. } => {
+                        if name.eq(reference) {
+                            return Ok((
+                                "".to_string(),
+                                ftd::TextSource::Header,
+                                complete_reference(&Some(reference.to_owned()), all_locals),
+                            ));
+                        }
+                    }
+                    _ => {}
+                }
+            }
+            ftd::e2(
+                format!("expected string, found: {:?}", v.kind()),
+                doc_id,
+                line_number,
+            )
+        }
         Some(v) => ftd::e2(
             format!("expected string, found: {:?}", v),
             doc_id,
@@ -725,7 +763,7 @@ pub fn arguments_on_condition(
     arguments: &std::collections::BTreeMap<String, ftd::Value>,
     condition: &ftd::p2::Boolean,
     line_number: usize,
-    doc_id: &str,
+    doc: &ftd::p2::TDoc,
 ) -> ftd::p1::Result<(std::collections::BTreeMap<String, ftd::Value>, bool)> {
     let mut arguments = arguments.to_owned();
     let mut is_visible = true;
@@ -735,15 +773,36 @@ pub fn arguments_on_condition(
             ftd::PropertyValue::Reference { name, kind }
             | ftd::PropertyValue::Variable { name, kind } => {
                 if let ftd::p2::Kind::Optional { kind } = kind {
-                    if arguments.get(name).is_none() {
+                    let bag_with_argument = {
+                        let mut bag_with_argument = doc.bag.clone();
+                        bag_with_argument.extend(arguments.iter().map(|(k, v)| {
+                            (
+                                format!("{}#{}", doc.name, k),
+                                ftd::p2::Thing::Variable(ftd::Variable {
+                                    name: k.to_string(),
+                                    value: v.to_owned(),
+                                    conditions: vec![],
+                                }),
+                            )
+                        }));
+                        bag_with_argument
+                    };
+                    let doc = ftd::p2::TDoc {
+                        name: doc.name,
+                        aliases: doc.aliases,
+                        bag: &bag_with_argument,
+                    };
+                    if doc.get_value(line_number, name).is_err() {
                         is_visible = false;
-                        arguments
-                            .insert(name.to_string(), kind_to_value(kind, line_number, doc_id)?);
+                        arguments.insert(
+                            name.to_string(),
+                            kind_to_value(kind, line_number, doc.name)?,
+                        );
                     }
                 } else {
                     return ftd::e2(
                         format!("expected optional kind, found: {:?}", kind),
-                        doc_id,
+                        doc.name,
                         line_number,
                     );
                 }

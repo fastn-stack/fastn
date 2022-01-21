@@ -889,7 +889,10 @@ impl Element {
             if let Some(condition) = condition {
                 let id = id.clone().expect("universal id should be present");
 
-                if let Some(ftd::Data { dependencies, .. }) = data.get_mut(&condition.variable) {
+                let variable = ftd::p2::utils::get_doc_name_and_remaining(&condition.variable)
+                    .unwrap()
+                    .0;
+                if let Some(ftd::Data { dependencies, .. }) = data.get_mut(&variable) {
                     let json = ftd::Dependencies {
                         dependency_type: ftd::DependencyType::Visible,
                         condition: Some(condition.value.to_string()),

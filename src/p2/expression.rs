@@ -47,11 +47,11 @@ impl Boolean {
         line_number: usize,
         all_locals: &mut ftd::Map,
         arguments: &std::collections::BTreeMap<String, ftd::Value>,
-        doc_id: &str,
+        doc: &ftd::p2::TDoc,
     ) -> ftd::p1::Result<ftd::Condition> {
         let (variable, value) = match self {
             Self::Equal { left, right } => {
-                let variable = resolve_variable(left, line_number, all_locals, doc_id)?;
+                let variable = resolve_variable(left, line_number, all_locals, arguments, doc)?;
 
                 let value = match right {
                     ftd::PropertyValue::Value { value } => value.to_owned(),
@@ -66,14 +66,14 @@ impl Boolean {
                                         kind,
                                         arg.kind()
                                     ),
-                                    doc_id,
+                                    doc.name,
                                     line_number,
                                 );
                             }
                         } else {
                             return ftd::e2(
                                 format!("argument not found {}", name),
-                                doc_id,
+                                doc.name,
                                 line_number,
                             );
                         }
@@ -81,7 +81,7 @@ impl Boolean {
                     _ => {
                         return ftd::e2(
                             format!("{:?} must be value or argument", right),
-                            doc_id,
+                            doc.name,
                             line_number,
                         );
                     }
@@ -90,7 +90,7 @@ impl Boolean {
                 (variable, value)
             }
             Self::IsNotNull { value } => {
-                let variable = resolve_variable(value, line_number, all_locals, doc_id)?;
+                let variable = resolve_variable(value, line_number, all_locals, arguments, doc)?;
                 (
                     variable,
                     ftd::Value::String {
@@ -100,7 +100,7 @@ impl Boolean {
                 )
             }
             Self::IsNull { value } => {
-                let variable = resolve_variable(value, line_number, all_locals, doc_id)?;
+                let variable = resolve_variable(value, line_number, all_locals, arguments, doc)?;
                 (
                     variable,
                     ftd::Value::String {
@@ -109,7 +109,7 @@ impl Boolean {
                     },
                 )
             }
-            _ => return ftd::e2(format!("{:?} must not happen", self), doc_id, line_number),
+            _ => return ftd::e2(format!("{:?} must not happen", self), doc.name, line_number),
         };
         return match value.to_string() {
             None => {
@@ -118,7 +118,7 @@ impl Boolean {
                         "expected value of type String, Integer, Decimal or Boolean, found: {:?}",
                         value
                     ),
-                    doc_id,
+                    doc.name,
                     line_number,
                 )
             }
@@ -129,33 +129,62 @@ impl Boolean {
             value: &ftd::PropertyValue,
             line_number: usize,
             all_locals: &mut ftd::Map,
-            doc_id: &str,
+            arguments: &std::collections::BTreeMap<String, ftd::Value>,
+            doc: &ftd::p2::TDoc,
         ) -> ftd::p1::Result<String> {
-            Ok(match value {
-                ftd::PropertyValue::Reference { name, .. } => name.to_string(),
+            match value {
+                ftd::PropertyValue::Reference { name, .. } => Ok(name.to_string()),
                 ftd::PropertyValue::Variable { name, .. } => {
-                    if let Some(string_container) = all_locals.get(name) {
-                        format!("@{}@{}", name, string_container)
+                    let (v, remaining) = name
+                        .split_once('.')
+                        .map(|(v, n)| (v, Some(n)))
+                        .unwrap_or((name, None));
+                    if let Some(string_container) = all_locals.get(v) {
+                        if let Some(remaining) = remaining {
+                            let bag_with_argument = {
+                                let mut bag_with_argument = doc.bag.clone();
+                                bag_with_argument.extend(arguments.iter().map(|(k, v)| {
+                                    (
+                                        format!("{}#{}", doc.name, k),
+                                        ftd::p2::Thing::Variable(ftd::Variable {
+                                            name: k.to_string(),
+                                            value: v.to_owned(),
+                                            conditions: vec![],
+                                        }),
+                                    )
+                                }));
+                                bag_with_argument
+                            };
+                            let doc = ftd::p2::TDoc {
+                                name: doc.name,
+                                aliases: doc.aliases,
+                                bag: &bag_with_argument,
+                            };
+                            if doc.get_value(line_number, name).is_ok() {
+                                return Ok(format!("@{}@{}.{}", v, string_container, remaining));
+                            }
+                        } else {
+                            return Ok(format!("@{}@{}", v, string_container));
+                        }
                     } else if name.eq("MOUSE-IN") {
                         let string_container = all_locals.get("MOUSE-IN-TEMP").unwrap().clone();
                         all_locals.insert("MOUSE-IN".to_string(), string_container.to_string());
-                        format!("@MOUSE-IN@{}", string_container)
-                    } else {
-                        return ftd::e2(
-                            format!("Can't find the local variable {}", name),
-                            doc_id,
-                            line_number,
-                        );
+                        return Ok(format!("@MOUSE-IN@{}", string_container));
                     }
+                    return ftd::e2(
+                        format!("Can't find the local variable {}", name),
+                        doc.name,
+                        line_number,
+                    );
                 }
                 _ => {
                     return ftd::e2(
                         format!("{:?} must be variable or local variable", value),
-                        doc_id,
+                        doc.name,
                         line_number,
                     );
                 }
-            })
+            }
         }
     }
 

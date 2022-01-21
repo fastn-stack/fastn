@@ -354,6 +354,9 @@ impl ChildComponent {
                 ftd::p2::Kind::Integer { .. } => Some(ftd::Value::Integer { value: 0 }),
                 ftd::p2::Kind::Decimal { .. } => Some(ftd::Value::Decimal { value: 0.0 }),
                 ftd::p2::Kind::Boolean { .. } => Some(ftd::Value::Boolean { value: false }),
+                ftd::p2::Kind::Optional { kind } => {
+                    construct_tmp_data(kind).map(|v| v.into_optional())
+                }
                 _ => None,
             }
         }
@@ -443,7 +446,7 @@ impl ChildComponent {
                             child_component.line_number,
                             all_locals,
                             &Default::default(),
-                            doc.name,
+                            doc,
                         )
                         .ok(),
                 );
@@ -1225,7 +1228,7 @@ fn get_conditional_attributes(
                             line_number,
                             all_locals,
                             &Default::default(),
-                            doc.name,
+                            doc,
                         )?;
                         let value = pv.resolve(line_number, arguments, doc)?;
                         let string = get_string_value(&name, value, doc.name, line_number)?;
@@ -1866,12 +1869,7 @@ impl Component {
                     let is_visible = c.eval(self.line_number, &arguments, doc)?;
                     if !c.is_arg_constant() {
                         (
-                            Some(c.to_condition(
-                                self.line_number,
-                                all_locals,
-                                &arguments,
-                                doc.name,
-                            )?),
+                            Some(c.to_condition(self.line_number, all_locals, &arguments, doc)?),
                             is_visible,
                             false,
                         )
