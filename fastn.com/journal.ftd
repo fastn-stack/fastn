@@ -32,29 +32,89 @@ header/sidebar/footer etc).
 
 -- ft.h1: Release Automation
 
-Shobhit implemented some release automation...
+21st Jan 2022
+
+Shobhit has been implementing some release automatons off late. Now our [Github
+Action](https://github.com/FifthTry/fpm/blob/main/.github/workflows/release.yml)
+creates binaries for the three supported platforms (we only run our unit tests
+on Linux, so technically Windows is not completely supported right now, but we
+still want to, if you come across any issue please let us know and we will
+resolve asap). The workflow also creates a release.
+
+We have a script, [install-fpm.sh](https://github.com/FifthTry/fpm/blob/main/install-fpm.sh),
+which we recommend you use for you CI systems for installing latest release of
+`fpm`. It supports both Linux and Mac. Also it lets you chose if you want to
+use the latest pre-release or the latest release of `fpm`.
+
+You can use `install-fpm.sh --pre-release` to get the pre-release. Without the
+argument it installs the latest release.
+
+FPM.dev, ftd.dev and a bunch of FifthTry sites use fpm in `--pre-release` mode
+so as to catch bugs and regressions early.
+
 
 -- ft.h1: TOC Syntax
+
+We have been discussing the toc syntax off late. `fpm` comes with an ftd
+`$preprocessor$`, [`toc`](/toc/). Currently it has the syntax like this:
+
+-- ft.code:
+lang: ftd
+
+\-- toc:
+$processor$: toc
+
+- https://google.com
+  Google
+- /some/url/
+  Some URL
+  - /some/nested/page/
+    Supports Nesting as Well
+
+
+-- ft.markdown:
+
+It has a few issues:
+
+1. We have both title and URL as compulsory parameters, we want to allow people
+   to create TOC entries that are not yet linked with any URL, and show them in
+   TOC without a link, for creating entries for chapters or topics that are
+   coming soon.
+2. We want to be able to specify `src:` to be used as icon for some entry.
+3. We want to add "separators" in TOC
+4. We want to be able to use "part headings", these are not links, but are used
+   to group a bunch of chapters together.
+5. We want people use font-icon like fonts.
+6. More compact link specifications when it makes sense.
 
 -- ft.code:
 lang: ftd
 
 - <title>
   url: <url>
+  disabled: false
   src: asd
   font-icon: fad fa-bell
 
   - <title>: <url>
   - --
+  - src: foo.png
   - <title>
 
 
 -- ft.markdown:
 
-No URL is automatically disabled.
+Title now comes in first line. If there is space you can put title and URL in
+same line. `url`, `src`, `font-icon`, `disabled` etc other meta data you can
+pass to an entry in toc.
+
+Nesting is still there, by two spaces. You can use free spaces before and after
+links, but not between the properties.
 
 
 -- ft.h1: Package Interfaces: Strict Vs Compatible
+
+17th Jan 2022
 
 -- ft.code:
 lang: ftd
@@ -96,10 +156,6 @@ ftd.ui bio:
 spacing: 20
 
 \--- me.bio:
-
-
-
-
 
 \-- resume.degree: BTech, Mechanical Engineering
 university: IIT-Bombay
