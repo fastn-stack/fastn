@@ -11,14 +11,249 @@ id: page
 
 -- ft.h1: Dynamic Components: Path Ahead
 
-20th Jan 2022
+21st Jan 2022
 
-Now that we have basic dynamic components working.
+Now that we have basic dynamic components working, we need to think of syntax
+for more actions. We currently has "SQL-esque" commands, eg `increment $foo by 1`
+etc, instead of function like syntax: `$foo.increment(by: 1)`. We have to figure
+out what we want our eventual syntax to look like.
+
+Some command operations:
+
+1. increment an integer variable: `increment $foo by $incr clamp 10`.
+1. Updating a variable: `$foo=<new value>`.
+1. Toggling a boolean: `toggle $foo`
+1. Inserting an element into a list: `insert $el into $list at end` or `at front`
+   or `at <position>`.
+1. Clearing a list or an optional value: `clear $list` or `clear $optional`
+1. Removing element at given position: `remove from $list at $pos`
+
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.text: hello
+$event-click$: increment: what=$count, by=2
+> what: $count
+> by: 2
+> clamp: 10
+
+\-- ftd.text: hello
+$event-click$: increment: what=$count, by=2, clamp=10
+
+-- ft.markdown:
+
+Moving to a function call syntax looks good. We have to prefix functions by their
+module names, so most of functions provided by `ftd` will be `ftd.<foo>`.
+Arguments will always be named, no positional arguments. We will use `=` for
+arguments that come on same line, and `:` for arguments that come in subsequent
+lines. Functions can define `caption` type, in such cases, other arguments can
+not come in caption line.
+
+-- ft.h2: Function Syntax Basics
+
+One possible way to implement functions could be:
+
+-- ft.code:
+lang: ftd
+
+\-- void increment:
+integer variable what:
+integer by: 1
+optional integer clamp:
+
+integer new = $what + $by
+
+if $clamp && $new > $clamp {
+    $new = 0
+}
+
+$what = $new
+
+-- ft.markdown:
+
+The type of a function is in the declaration line. We have created a special type
+`void` for functions that are only for side effects, e.g. to be directly called
+from `$event-*$`. For other types, eg integer it will appear to look like an
+integer variable definition, but since it takes arguments, it's a function.
+
+The last expression can be considered the return type of a function, but we will
+also support `return <value>`. Arguments are specified in usual manner.
+
+-- ft.h2: Higher Order Variables
+
+In the example we have used `integer variable what`, which is to indicate that
+here we are not accepting a value, but the reference to some variable, which
+would be modified by this function.
+
+-- ft.h2: Functions Vs Formula
+
+Functions would be called from event handlers. Functions job is to mutate some
+variables.
+
+Some functions can be defined as pure, they can not take higher order variable,
+and can only be called from variables defined at global levels. Formulas can
+depend on other variables, and when the underlying variable changes, the value
+of the formula changes automatically.
+
+-- ft.code:
+lang: ftd
+
+\-- integer length: 20
+
+\-- integer foo: area: length=$length, width=20
+
+-- ft.markdown:
+
+Here since the declaration of a variable uses a function, `foo` is considered a
+formula. In such cases further updates to `foo` is not allowed. If `$length`
+changes, `foo` would be auto-updated.
+
+-- ft.h2: Error Handling
+
+We are basically stuck here right now. What is you try to remove the 10th item
+from a list, but the list only contains 2 items? Should it silently be dropped?
+We do type checks, so we do not have to worry all sorts of errors, so you can
+not add a string to an integer array, this will be checked at "compile time", if
+you try to do that, the document would fail to load. But run time errors can
+still happen.
+
+Variables change from events. What kind of errors: division by zero. Parsing
+error, e.g. if someone is trying to enter an integer in an input field, and they
+type some non digit. Or say if we are reading some data from JSON, and we are
+expecting an integer but we get a string, or the key is missing.
+
+Among these errors I listed, divide by zero is special, in being an operation
+that we usually don't want to make "error check before proceeding", for others
+we can ensure all functions that can fail return some value that forces one to
+handle failure possibility. Forcing error check for divide by zero will force
+all mathy code to become too verbose.
+
+Any error that happened during initial page load is "fine", we simply bail, show
+error message and let author figure it out. This is equivalent to "compile time",
+and we want people to not store invalid documents. But runtime errors we can not
+avoid.
+
+-- ft.h3: Rust Like `Result` And `Option`
+
+Rust has first class for failures, `Result` and `Option` types are there. It kind
+of means we need some level of generic support. We can have special handling for
+Result and Option types without generic.
+
+So we can write something like:
+
+-- ft.code:
+lang: ftd
+
+\-- integer result to-integer:
+string value:
+
+-- ft.markdown:
+
+Here we have a function `to-return` that returns `integer result`, (for list it
+would be `integer list result foo:`).
+
+-- ft.h3: Handling Errors
+
+`if <var-name> = <result expression> { success clause, can use <var-name> }
+else <error-name> { error clause }`
+
+-- ft.code:
+lang: ftd
+
+\-- void foo:
+
+let i = if num = to-string: value=hello {
+    num
+} else error {
+    console.log(error)
+}
+
+-- ft.markdown:
+
+Can also work with optional values. Function can return `-- optional integer foo:`
+optional values as well. In such cases, the `else` block won't take `error`
+variable name, it will always be null.
+
+Error type will only be string. In future when we have enums, we can also do:
+
+-- ft.code:
+lang: ftd
+
+\-- string enum Errors:
+invalid-integer: Value Is Not A Valid Integer
+empty-value: The value was empty string
+overflow: The value is too large to fit into integer type.
+
+
+\-- void foo:
+
+let i = if num = to-string: value=hello {
+    num
+} else Errors.invalid-integer {
+    console.log(Errors.invalid-integer.message)
+} else Errors.empty-value {
+    console.log(Errors.empty-value.message)
+} else error {
+    console.log(error)
+}
+
+-- ft.markdown:
+
+Here we have multiple else clauses for `enum`.
+
+-- ft.h2: `<type> result` is not an `or-type`
+
+`or-type` is our name for `enum` in Rust.
+
+In future we will have `match` statement for handling `or-type`, but we are not
+going to treat `result` and `optional` as `or-type`, so `match` can never work
+with them.
+
+-- ft.h2: Returning Errors
+
+We will use `return 1` to indicate success, and `fail "whatever the message`
+to return failure message. We will also support `let num = to-string?
+value=hello`, here `?` acts like Rust.
+
+-- ft.h2: Event Handler Errors
+
+What happens if one of the event handlers raises an error? One option is we do
+not allow functions that can fail as event handlers.
+
+
+-- ft.h2: Old Notes
 
 insert syntax, clear, delete at index, is list empty, how many items in the
 list, similarly how to filter
 
 default record
+
+-- ft.code:
+lang: ftd
+
+
+\-- void do-get:
+
+fetch-people(after-get, on-error)
+
+\-- void fetch-people:
+success(person list) -> void:
+failure error->void:
+
+ftd.http-get("https://foo.com", success, failure)
+
+
+
+\-- void after-get:
+person list people:
+
+\-- void on-error:
+error error:
+
+
+
+
 
 -- ft.h1: Dynamic Components Landed!
 
