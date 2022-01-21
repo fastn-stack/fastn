@@ -4,7 +4,7 @@
 zip: github.com/fifthtry/ftd.dev/archive/refs/heads/main.zip
 language: en
 
--- fpm.dependency: fifthtry.github.io/Jupiter-theme
+-- fpm.dependency: fifthtry.github.io/Forest-Theme
 
 -- fpm.font: apple-system
 woff2: https://fonts.gstatic.com/s/opensans/v27/memvYaGs126MiZpBA-UvWbX2vVnXBbObj2OVTS-mu0SC55I.woff2
