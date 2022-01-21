@@ -34,6 +34,26 @@ header/sidebar/footer etc).
 
 Shobhit implemented some release automation...
 
+-- ft.h1: TOC Syntax
+
+-- ft.code:
+lang: ftd
+
+- <title>
+  url: <url>
+  src: asd
+  font-icon: fad fa-bell
+
+  - <title>: <url>
+  - --
+  - <title>
+
+
+-- ft.markdown:
+
+No URL is automatically disabled.
+
+
 -- ft.h1: Package Interfaces: Strict Vs Compatible
 
 -- ft.code:
