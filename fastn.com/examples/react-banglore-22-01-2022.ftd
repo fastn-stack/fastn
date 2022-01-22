@@ -3,8 +3,8 @@
 -- import: fifthtry.github.io/Forest-Theme as ft
 -- import: fpm
 
--- integer count: 19
--- integer total: 19
+-- integer count: 0
+-- integer total: 20
 
 -- ftd.grid:
 slots: left right-1 right-2 | main main main
@@ -106,6 +106,9 @@ if: $count == 18
 
 -- mini-todo:
 if: $count == 19
+
+-- outro:
+if: $count == 20
 
 /-- slide:
 src: https://www.liveabout.com/thmb/YCJmu1khSJo8kMYM090QCd9W78U=/1250x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/powerpuff_girls-56a00bc45f9b58eba4aea61d.jpg
@@ -816,4 +819,36 @@ size: 24
 width: fill
 text-align: center
 
-Amit Upadhyay, CEO, Founder: FifthTry.com
+Amit Upadhyay, CEO, Founder: [FifthTry.com](https://www.fifthtry.com)
+
+
+-- ftd.scene outro:
+width: 1000
+height: fill
+
+
+
+--- ftd.text: Thank You!
+top: 150
+left: 500
+size: 32
+
+
+--- ftd.text:
+top: 250
+left: 500
+size: 24
+width: fill
+
+Amit Upadhyay
+
+Twitter: [amitu](https://twitter.com/amitu)
+
+Github: [amitu](https://github.com/amitu)
+
+Email: amitu@fifthtry.com
+
+FTD Site: [ftd.dev](https://ftd.dev)
+
+FPM (FTD Static Site Generator): [fpm.dev](https://fpm.dev)
+

@@ -8,10 +8,12 @@
 -- ft.header-toc:
 $processor$: toc
 
+- /examples/react-banglore-22-01-2022/
+  React Bangalore
 - /language/
   Docs
 - /roadmap/
-  Roadmap & RFCs
+  Roadmap
 - /journal/
   Journal
 - /development/
