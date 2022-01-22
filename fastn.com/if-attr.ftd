@@ -36,7 +36,7 @@ Lets understand it better with few examples
 -- ft.code: Conditional Attribute using variable
 lang: ftd
 
-\-- $present: false
+\-- boolean present: false
 
 \-- ftd.text foo:
 caption name:
@@ -96,10 +96,10 @@ is set (in this case, it's `red`).
 -- ft.code: Conditional Attribute with default
 lang: ftd
 
-\-- var present: false
+\-- boolean present: false
 
 \-- component foo:
-caption $name:
+caption name:
 component: ftd.text
 color: grey
 color if $present: green

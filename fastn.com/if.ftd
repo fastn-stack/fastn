@@ -14,13 +14,13 @@ not, based on the arguments, or global variables.
 -- ft.code: Conditionals When Using Components
 lang: ftd
 
-\-- var dark-mode: true
+\-- boolean dark-mode: true
 
 \-- ftd.text: we are in dark mode
-if: dark-mode
+if: $dark-mode
 
 \-- ftd.text: light mode rules
-if: not dark-mode
+if: not $dark-mode
 
 -- ft.markdown:
 
@@ -35,17 +35,16 @@ When defining a component we can also use conditionals:
 -- ft.code:
 lang: ftd
 
-\-- component image:
-component: ft.column
-$src: string
-$caption: optional caption
+\-- ftd.column image:
+string src:
+optional caption caption:
 
 \--- ft.image:
-src: ref $src
+src: $src
 
 \--- ft.text:
 if: $caption is not null
-text: ref $caption
+text: $caption
 
 -- ft.markdown:
 

@@ -1,9 +1,10 @@
 -- import: examples/diagram
 -- import: examples/comic
 -- import: fifthtry.github.io/Forest-Theme as ft
+-- import: fpm
 
--- integer count: 0
--- integer total: 18
+-- integer count: 19
+-- integer total: 19
 
 -- ftd.grid:
 slots: left right-1 right-2 | main main main
@@ -102,6 +103,9 @@ if: $count == 17
 
 -- comic.comic:
 if: $count == 18
+
+-- mini-todo:
+if: $count == 19
 
 /-- slide:
 src: https://www.liveabout.com/thmb/YCJmu1khSJo8kMYM090QCd9W78U=/1250x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/powerpuff_girls-56a00bc45f9b58eba4aea61d.jpg
@@ -700,6 +704,96 @@ top: 300
 size: 30
 left: 800
 top: 350
+
+
+
+
+-- string list strings:
+-- optional string query:
+
+-- ftd.scene mini-todo:
+
+--- ftd.column:
+top: 100
+left: 300
+spacing: 10
+id: column-one
+
+--- ftd.row:
+width: fill
+spacing: 10
+
+--- ftd.input:
+placeholder: Type Something Here...
+width: 250
+border-width: 2
+padding: 8
+$event-input$: $query=$VALUE
+
+--- ftd.text: Add
+if: $query is not null
+color: white
+background-color: green
+move-down: 4
+padding: 5
+$event-click$: insert into $strings value $query at end
+$event-click$: clear $query
+
+--- ftd.text: Clear
+color: white
+background-color: red
+move-down: 4
+padding: 5
+$event-click$: clear $strings
+
+--- container: column-one
+
+--- ftd.text:
+if: $query is not null
+
+You have typed: {value}
+
+--- ftd.column:
+top: 300
+left: 300
+spacing: 20
+
+--- show-data: $obj
+$loop$: $strings as $obj
+
+
+
+-- ftd.text value: $query
+color: green
+color if $fpm.dark-mode: white
+background-color if $fpm.dark-mode: green
+padding if $query is not null: 5
+size: 20
+
+
+
+
+-- ftd.column show-data:
+caption text:
+padding: 10
+/background-color if $fpm.dark-mode: white
+background-color: yellow
+color: red
+
+--- ftd.column:
+padding: 20
+border-width: 2
+
+--- ftd.text: $text
+
+
+
+
+
+
+
+
+
 
 
 

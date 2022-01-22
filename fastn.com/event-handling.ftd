@@ -39,7 +39,7 @@ print(os)
 -- ft.code: source of the example shown above
 lang: ftd
 
-\-- $open: true
+\-- boolean open: true
 
 
 \-- ftd.column:
