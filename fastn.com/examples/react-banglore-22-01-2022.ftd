@@ -8,23 +8,24 @@
 
 -- ftd.grid:
 slots: left right-1 right-2 | main main main
-slot-widths: auto 80px 80px
+slot-widths: auto 90px 90px
 slot-heights: 56px auto
 width: fill
 height: fill
 
--- string title: FTD: Programming Language For Human Beings
 
--- ftd.text: $title
+-- ftd.text: ftd: Programming Language For Human Beings _by_ @amitu
 $event-click$: $count = 0
 slot: left
 background-color: black
 padding: 20
+size: 20
 color: white
 width: fill
 
 -- ftd.text: Previous
 slot: right-1
+size: 20
 color: white
 padding: 20
 background-color: black
@@ -32,6 +33,7 @@ $event-click$: decrement $count clamp 0 $total
 
 -- ftd.text: Next
 slot: right-2
+size: 20
 padding: 20
 background-color: black
 color: white
@@ -809,7 +811,7 @@ top: 200
 left: 350
 spacing: 60
 
---- ftd.text: $title
+--- ftd.text: FTD: Programming Language For Human Beings
 size: 48
 text-align: center
 
@@ -819,7 +821,8 @@ size: 24
 width: fill
 text-align: center
 
-Amit Upadhyay, CEO, Founder: [FifthTry.com](https://www.fifthtry.com)
+Amit Upadhyay, Founder: [FifthTry.com](https://www.fifthtry.com) -
+[@amitu](https://twitter.com/amitu)
 
 
 -- ftd.scene outro:
