@@ -1,4 +1,16 @@
 -- import: fifthtry.github.io/Forest-Theme as ft
+-- import: config
+
+-- ft.doc-page:
+toc: $config.examples-toc
+
+-- ft.h1: An Architecture Diagram
+
+In this example you can see an architecture diagram created using FTD.
+
+It is interactive, you can click on individual blocks. It is not yet responsive,
+we will be updating the example to make it mobile optimized/responsive soon.
+
 -- diagram:
 
 -- string info: start-info

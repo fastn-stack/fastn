@@ -42,10 +42,16 @@ $processor$: toc
 
 - /examples/input/
   Input
+- /examples/diagram/
+  Architecture Diagram
 - /examples/comic/
   Comic
 - /creating-a-tree/
   Creating a tree
+- /examples/mygate/
+  Gate Pass
+- /examples/grid/
+  Grid
 
 -- ft.toc:
 $processor$: toc
