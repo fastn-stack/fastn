@@ -14,25 +14,31 @@ toc: $config.examples-toc
 background-color: cadetblue
 width: 1070
 height: 920
-align: center
+scale: 0.8
+move-left: 100
+move-up: 80
+left: 0
 
---- powerpuffgirls_says:
+--- power-puff-girls-say:
 
 --- mm_says:
 
---- sophie_and_ethan_says:
+--- sophie-and-ethan-say:
 
 /--- import-ethan-scene:
 
-/--- priya-dances:
+--- priya-dances:
 
-/--- priya-dances-again:
+--- priya-dances-again:
 
--- ft.h1: The End!!
+--- ft.h1: The End!!
+top: 800
+left: 460
 
 
 
--- ftd.scene powerpuffgirls_says:
+
+-- ftd.scene power-puff-girls-say:
 left: 20
 top: 20
 
@@ -69,21 +75,21 @@ left: 10
 top: 10
 
 
--- ftd.scene sophie_and_ethan_says:
+-- ftd.scene sophie-and-ethan-say:
 background-image: https://previews.123rf.com/images/blackspring/blackspring1512/blackspring151200008/49429469-cartoon-forest-background.jpg
 width: 500
 left: 20
 top: 386
 scale-y: 1.4
 
---- ethan_says:
+--- ethan-says:
 
---- sophie_says:
-
-
+--- sophie-says:
 
 
--- ftd.scene ethan_says:
+
+
+-- ftd.scene ethan-says:
 left: 0
 top: 0
 
@@ -121,7 +127,7 @@ left: 0
 
 
 
--- ftd.scene sophie_says:
+-- ftd.scene sophie-says:
 left: 240
 top: 0
 
