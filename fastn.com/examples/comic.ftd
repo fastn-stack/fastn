@@ -1,5 +1,9 @@
 -- import: fifthtry.github.io/Forest-Theme as ft
 /-- import: comic_scene_crop_scale as comic1
+-- import: config
+
+-- ft.doc-page:
+toc: $config.examples-toc
 
 -- ft.h0: Once upon a time...
 

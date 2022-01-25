@@ -1,8 +1,9 @@
 -- import: fifthtry.github.io/Forest-Theme as ft
 -- import: config
+-- import: fpm
 
 -- ft.doc-page:
-toc: $ft.toc
+toc: $config.examples-toc
 id: main
 
 
@@ -26,8 +27,9 @@ lang: ftd
 \-- ftd.column:
 
 
--- ft.image: Image 1
-src: https://i.imgur.com/JDOcj1Q.png
+-- ft.image:
+src: images/tree/first.jpeg
+width: fill
 
 
 -- ft.markdown:
@@ -45,8 +47,9 @@ lang: ftd
 name: Beverage
 
 
--- ft.image: Image 2
-src: https://i.imgur.com/ZXDE7Ap.png
+-- ft.image:
+src: images/tree/second.jpeg
+width: fill
 
 
 -- ft.markdown:
@@ -70,8 +73,9 @@ padding-left: 10
 open: true
 
 
--- ft.image: Image 3
-src: https://i.imgur.com/vAT0h3k.png
+-- ft.image:
+src: images/tree/third.jpeg
+width: fill
 
 
 -- ft.markdown:
@@ -102,8 +106,9 @@ open: true
 \--- ftd.text: $name
 
 
--- ft.image: Image 4
-src: https://i.imgur.com/4r6uyF1.png
+-- ft.image:
+src: images/tree/fourth.jpeg
+width: fill
 
 
 -- ft.markdown:
@@ -121,8 +126,9 @@ lang: ftd
 name: Beverage
 
 
--- ft.image: Image 5
-src: https://i.imgur.com/zXOsLIz.png
+-- ft.image:
+src: images/tree/fifth.jpeg
+width: fill
 
 
 -- ft.markdown:
@@ -136,12 +142,13 @@ padding-left: 10
 open: true
 
 --- ftd.text: $name
-
+color if $fpm.dark-mode: white
 
 -- ftd.column:
 spacing: 20
 border-width: 1
 border-radius: 5
+border-color if $fpm.dark-mode: white
 padding: 10
 width: fill
 
@@ -191,24 +198,29 @@ which changes the open container to the one with id `beverage-id` which is item 
 and now this becomes an open container. At last, we have inserted item `Mango Juice`.
 
 
--- ft.image: Image 6
-src: https://i.imgur.com/KoA6Y1l.png
+-- ft.image:
+src: images/tree/sixth.jpeg
+width: fill
 
 
--- ft.image: Image 7
-src: https://i.imgur.com/ULCthFb.png
+-- ft.image:
+src: images/tree/seventh.jpeg
+width: fill
 
 
--- ft.image: Image 8
-src: https://i.imgur.com/ZKKKxwn.png
+-- ft.image:
+src: images/tree/eighth.jpeg
+width: fill
 
 
--- ft.image: Image 9
-src: https://i.imgur.com/nv0v1G6.png
+-- ft.image:
+src: images/tree/ninth.jpeg
+width: fill
 
 
--- ft.image: Image 10
-src: https://i.imgur.com/8DvnnLz.png
+-- ft.image:
+src: images/tree/tenth.jpeg
+width: fill
 
 
 -- ft.h1: Presenting Tree
@@ -263,6 +275,7 @@ Output
 spacing: 20
 border-width: 1
 border-radius: 5
+border-color if $fpm.dark-mode: white
 padding: 10
 width: fill
 
@@ -271,13 +284,14 @@ width: fill
 string name:
 padding-left: 10
 open: true
+color if $fpm.dark-mode: white
 
 --- ftd.row:
 
 --- ftd.text: ✌️
 
 --- ftd.text: $name
-
+color if $fpm.dark-mode: white
 
 -- ftd.column:
 
@@ -466,12 +480,14 @@ Output
 spacing: 20
 border-width: 1
 border-radius: 5
+border-color if $fpm.dark-mode: white
 padding: 10
 width: fill
 
 
 -- ftd.column display-item1:
 string name:
+color if $fpm.dark-mode: white
 padding-left: 10
 open: some-child
 boolean visible: true
@@ -482,6 +498,7 @@ $event-click$: toggle $visible
 --- ftd.text: ✌️
 
 --- ftd.text: $name
+color if $fpm.dark-mode: white
 
 --- container: ftd.main
 

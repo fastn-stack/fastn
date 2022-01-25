@@ -13,9 +13,10 @@ please head over to Github.
 
 Checkout the [Journal](/journal/) to learn about day to day development of `ftd`.
 If you intend to contribute to `ftd`, or learn how `ftd` works at a deeper level,
-it's highly recommended you checkout the Journal often.
+it's recommended you checkout the Journal.
 
 To learn what is planned in near future, checkout the [Roadmap](/roadmap/) page.
 This is a longish list of where the project is headed.
 
 [Changelog](/changelog/) is for keeping track of releases, migration guide etc.
+We haven't had a "proper" release yet, so this page is not yet being maintained.

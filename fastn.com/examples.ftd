@@ -4,9 +4,9 @@
 
 
 -- ft.doc-page:
-toc: $ft.toc
+toc: $config.examples-toc
 
 
 -- ft.h0: Examples
 
-This section contains ftd examples which have step by step explanations.
+In the sidebar you will find a few FTD examples.

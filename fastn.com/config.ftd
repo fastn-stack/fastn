@@ -1,7 +1,7 @@
 -- import: fifthtry.github.io/Forest-Theme as ft
 
 -- ft.site-name: `ftd`
--- ft.site-icon: /static/images/logo.svg
+-- ft.site-icon: images/logo.svg
 -- ft.github: https://github.com/fifthtry/ftd.dev/
 -- ft.site-url: /
 
@@ -12,10 +12,8 @@ $processor$: toc
   React Bangalore
 - /language/
   Docs
-- /roadmap/
-  Roadmap
-- /journal/
-  Journal
+- /examples/
+  Examples
 - /development/
   Development
 - https://github.com/FifthTry/ftd
@@ -36,6 +34,18 @@ $processor$: toc
   Internals
 - /p1/
   `ftd::p1`: A JSON/YML Replacement
+
+-- ft.toc-item list examples-toc:
+
+-- examples-toc:
+$processor$: toc
+
+- /examples/input/
+  Input
+- /examples/comic/
+  Comic
+- /creating-a-tree/
+  Creating a tree
 
 -- ft.toc:
 $processor$: toc
@@ -104,10 +114,6 @@ $processor$: toc
       Auto Nesting
   - /import/
     `import`
-  - /examples/
-    Examples
-    - /creating-a-tree/
-      Creating a tree
   - /library/
     `ftd::Library`
   - /comments/

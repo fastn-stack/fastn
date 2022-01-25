@@ -4,7 +4,7 @@
 -- ft.page:
 
 -- ft.hero: Build optimized websites quickly, focus on your content
-image: static/images/github-light.svg
+image: images/github-light.svg
 
 --- ft.action-button: Get Started
 slot: cta-1
