@@ -30,6 +30,40 @@ So links never break (and original author can keep updating document URL at whim
 (on how having article.page allows us to get just the content of a page, without
 header/sidebar/footer etc).
 
+-- ft.h1: Syntax And Theme Packages
+
+26th Jan 2022
+
+Recently discussed "Thought: Font/Asset Packages", and we had a need for packages
+that can be used to distribute fonts, and other assets like images. When
+designing some theme we realize we have to give users ability to modify the
+syntax definitions, we currently ship with whatever is shipped with
+[syntect](https://github.com/FifthTry/ftd/blob/master/src/render.rs) and a few
+[extra syntax definitions](https://github.com/FifthTry/ftd/tree/master/syntax)
+in ftd repo.
+
+We have to allow people to define both extra language support and theme support.
+Also we have to ship language and themes as FPM Packages, so they can added as
+dependencies. We would need some meta data in FPM Package to indicate they are
+special theme or syntax definition package. We can do it by package interface,
+if a package is defined to implement a package interface, e.g. `fpm/syntax` of
+`fpm/syntax-theme`, we would look for special files in such packages that are
+dependency of current package and make them available to ftd.
+
+-- ft.h1: `-- import: package`?
+
+Currently when you see `-- import: foo`, `foo` can either be package name or
+alias, or `foo` can be a module (ftd file) in current package. What if we stop
+doing the later, and the only way to import `foo.ftd` in current package was:
+`-- import: package:foo`?
+
+We can go even one step further, and allow package name itself to be aliased (if
+needed), and always use `<current-package–name:module-name>` when importing.
+
+So both? I tend to prefer one. Rust does `crate`. But they also have to rename
+`crate` to any name, and I tend to use that in all my Rust code instead of
+`crate`.
+
 -- ft.h1: Release Automation
 
 21st Jan 2022
