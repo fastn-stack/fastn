@@ -9,6 +9,48 @@ id: page
 
 -- ft.h0: FTD Journal
 
+-- ft.h1: Pure Functions?
+
+26th Jan 2022
+
+Was discussing function definition stuff with Arpita and I am quite happy with
+the design in general. We have can pass variables to functions by reference (so
+they can be modified by the function), or value. Function decides if the passed
+argument is by reference or value. Beyond these referenced variables, a function
+can not modify any variable. Function can read other global variables but can't
+modify them.
+
+I also like the either a function call is used as a. event handler, in which
+case function must have a return type of `void` or `null`, or maybe we can even
+call them event-handler to make the distinction clearer, or b. formula, a
+function whose output is "bound" to a name, every time any of the arguments of
+the formula, or any global reference in the formula is changed, the value of the
+bound name is also recomputed and changed.
+
+Error handling with result and option being special data types, and our `if`
+expression handling them is also still making sense after a few days of
+deliberations.
+
+What about `async`? What if a formula needs to depend on say local store, or some
+API? Should we support it? I do not yet have a good answer to this. I feel like
+saying just switch to "host language" for such things, where you get full first
+class language, instead of FTD. But do I want to say FTD is not a first class
+language? Where to draw the line? We can obviously not give all the host
+capabilities to ftd, I mean we discussed reading from API, but what about
+reading from USB or file system or Windows Registry, etc etc? We are going to
+have to depend on host functions to give access to such features.
+
+We can not be a single language. We are UI language. Data manipulation and
+arbitrary computation (within limits) on the data should be supported first class,
+but we can not go for complete replacement. We also have to live side by side with
+another "host" language.
+
+But is host language "user programmable"? Or is it only for giving users building
+blocks, that they can then connect together? This drawing a line between what
+must forever remain host language domain, and what must be handled by ftd is
+tricky to resolve for me yet.
+
+
 -- ft.h1: Dynamic Components: Path Ahead
 
 21st Jan 2022
