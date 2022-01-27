@@ -1,6 +1,7 @@
 (function () {
     const FPM_MOBILE = "fpm#mobile";
     const FPM_DARK_MODE = "fpm#dark-mode"
+    const SYSTEM_DARK_MODE = "fpm#system-dark-mode"
     const FPM_FOLLOW_SYSTEM_DARK_MODE = "fpm#follow-system-dark-mode"
     const DARK_MODE_COOKIE = "fpm-dark-mode";
     const COOKIE_SYSTEM_LIGHT = "system-light";
@@ -100,6 +101,7 @@
         //       update
         window.ftd.set_bool_for_all(FPM_DARK_MODE, true);
         window.ftd.set_bool_for_all(FPM_FOLLOW_SYSTEM_DARK_MODE, false);
+        window.ftd.set_bool_for_all(SYSTEM_DARK_MODE, system_dark_mode());
         document.body.classList.add(DARK_MODE_CLASS);
         set_cookie(DARK_MODE_COOKIE, COOKIE_DARK_MODE);
     }
@@ -109,6 +111,7 @@
         //       update
         window.ftd.set_bool_for_all(FPM_DARK_MODE, false);
         window.ftd.set_bool_for_all(FPM_FOLLOW_SYSTEM_DARK_MODE, false);
+        window.ftd.set_bool_for_all(SYSTEM_DARK_MODE, system_dark_mode());
         document.body.classList.remove(DARK_MODE_CLASS);
         set_cookie(DARK_MODE_COOKIE, COOKIE_LIGHT_MODE);
     }
@@ -117,6 +120,7 @@
         // TODO: coalesce the two set_bool-s into one so there is only one DOM
         //       update
         window.ftd.set_bool_for_all(FPM_FOLLOW_SYSTEM_DARK_MODE, true);
+        window.ftd.set_bool_for_all(SYSTEM_DARK_MODE, system_dark_mode());
         if (system_dark_mode()) {
             window.ftd.set_bool_for_all(FPM_DARK_MODE, true);
             document.body.classList.add(DARK_MODE_CLASS);

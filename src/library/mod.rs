@@ -343,6 +343,7 @@ impl ftd::p2::Library for Library {
                         
                         -- boolean mobile: true
                         -- boolean dark-mode: false
+                        -- boolean system-dark-mode: false
                         -- boolean follow-system-dark-mode: true
                         -- string document-id: {document_id}
                         -- optional string diff:
