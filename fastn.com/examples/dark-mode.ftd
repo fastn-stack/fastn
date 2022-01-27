@@ -1,0 +1,193 @@
+-- import: fifthtry.github.io/Forest-Theme as ft
+-- import: config
+-- import: fpm
+
+-- ft.doc-page:
+toc: $config.examples-toc
+
+-- ft.h0: Building Dark-Mode Switcher Using FTD
+
+In this tutorial we are going to design dark mode switcher from scratch.
+
+-- ft.h1: A Discussion on UI
+
+Many Dark Mode switchers act as toggle switches, they let user switch from one
+state, dark-mode, to another, light mode:
+
+-- dark-mode-toggle:
+
+
+
+
+
+
+-- ftd.column dark-mode-toggle:
+boolean dark-mode: true
+width: fill
+margin-bottom: 15
+padding: 10
+border-width: 1
+border-radius: 5
+background-color if $dark-mode: #8B8000
+background-color: yellow
+
+--- ftd.row:
+spacing: 5
+align: right
+
+--- ftd.text: Dark Mode:
+color if $dark-mode: white
+color: black
+move-down: 5
+$event-click$: toggle $dark-mode
+
+--- ftd.text: 🌙
+if: $dark-mode
+move-up: 2
+$event-click$: toggle $dark-mode
+
+--- ftd.text: 🌞
+if: not $dark-mode
+scale: 1.2
+$event-click$: toggle $dark-mode
+
+--- container: ftd.main
+
+--- ftd.row:
+boolean dark-mode: true
+border-bottom-radius: 5
+width: fill
+
+--- ftd.text:
+color if $dark-mode: white
+color: black
+
+This is some text to show you dark mode. Try clicking on the 🌙 / 🌞 above.
+
+
+-- ft.markdown:
+
+This is a common pattern, you will find that kind of dark mode toggle in many
+website.
+
+-- ft.h2: Two State vs Three State Logic
+
+Today operating system have also started supporting dark mode. The dark mode
+switcher, the UI that we are building in this tutorial {ft.highlight: should
+ideally not exist at all}. Every site that supports dark mode should simply
+honor the operating system preferences set by the user.
+
+-- ft.image:
+src: images/dark-mode-preferences.png
+width: fill
+
+From the Help in the OSX Preferences:
+
+> Auto gradually adjusts the appearance from light to dark throughout the day.
+
+We should honor the operating system preferences because then user gets a more
+coherent desktop environment. All apps use dark mode or none do. Also operating
+systems give more advanced control, for example automatic switching to dark mode
+based on ambient lighting, or based on time of the day. You would not expect
+every website to create such complex logic, doing so based on time of day is
+slightly simpler, you only have to worry about finding user's time zone reliable,
+account for daylight saving etc, but ambient light detection is hard problem and
+requires access to webcam etc, which nobody would give access too!
+
+One can argue the only purpose of the manual switcher in websites that do
+support it is show off that this supports it, and maybe given people who love to
+fiddle things yet another fidget spinner. Or maybe it signals as a reminder to
+end users that we have this feature, see we care about you, or maybe see this is
+yet another reason we are cooler than our "enterprise" competitor. For
+developers of the site it acts as a debug tool, and should ideally be relegated
+to Browser Developer Tools.
+
+Dark mode support, good, I personally find it a major readability improvement,
+especially in the night. Dark mode switcher? Not needed as much as current trend
+shows.
+
+So if OS is better at switching things, should sites have switcher? This is up to
+product managers to decide. But if someone was to ask if they have to have
+switcher, how should switcher act? For this question the two state switcher is
+almost definitely a bad idea and should never be used, over a three state
+switcher:
+
+
+-- dark-mode-tri-state:
+
+-- ftd.column dark-mode-tri-state:
+boolean dark-mode: true
+boolean open: false
+width: fill
+margin-bottom: 15
+padding: 10
+border-width: 1
+border-radius: 5
+background-color if $dark-mode: #8B8000
+background-color: yellow
+
+--- ftd.row:
+spacing: 5
+align: right
+
+--- ftd.text: Dark Mode:
+color if $dark-mode: white
+color: black
+move-down: 5
+$event-click$: toggle $open
+
+--- ftd.text: 🌙
+if: $dark-mode
+move-up: 2
+$event-click$: toggle $open
+
+--- ftd.text: 🌞
+if: not $dark-mode
+scale: 1.2
+$event-click$: toggle $open
+
+--- ftd.column:
+if: $open
+background-color: white
+width: 100
+border-width: 1
+border-radius: 4
+anchor: parent
+position: bottom
+
+--- t: 🌙 Dark
+$event-click$: $dark-mode=true
+$event-click$: $open=false
+
+
+--- t: 🌞 Light
+$event-click$: $dark-mode=false
+$event-click$: $open=false
+
+--- t: 💻 System
+$event-click$: $open=false
+
+--- container: ftd.main
+
+--- ftd.row:
+boolean dark-mode: true
+border-bottom-radius: 5
+width: fill
+
+--- ftd.text:
+color if $dark-mode: white
+color: black
+
+This is some text to show you dark mode. Try clicking on the 🌙 / 🌞 above.
+
+-- ft.markdown:
+
+Here we do not yet have "System" working. Clicking on that item simply closes
+the dropdown.
+
+-- ftd.text t: $text
+caption text:
+width: fill
+padding-horizontal: 10
+padding-vertical: 5
+background-color if $MOUSE-IN: #f2f2f2

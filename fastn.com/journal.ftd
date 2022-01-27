@@ -9,6 +9,66 @@ id: page
 
 -- ft.h0: FTD Journal
 
+-- ft.h1: Comics Using FTD
+
+27th Jan 2022
+
+We can already create [comics using FTD](/examples/comic/). But we need is more
+succinct syntax to represent a bunch of position, scale, rotation related
+attributes into a single short-hand notation, and eventually give a drag and
+drop interface that updates the position etc shorthand notation.
+
+-- ft.code:
+lang: ftd
+
+\-- panel:
+d: 0, 0, 1
+
+\--- girl-1:
+pose: flying
+d: 0, 100, 1.5
+a: left-right
+
+\--- girl-2:
+pose: flying
+a: bottom-top, 0-1,
+
+\--- girl-2: Hello Everyone! We are Power puff girls
+pose: flying
+a: 1-
+
+
+\--- girl-3:
+pose: flying
+a: right-left, 1s
+
+-- ft.markdown:
+
+`d:` could be dimensions, position, orientation, scale etc. `a:` could be
+animation. We can even have double representation, eg a separate place where all
+the dimensions and animations are put for the entire scene, so rest of the code
+only shows the character names, poses, dialogs etc.
+
+If we do this, we can make the "source" of comic almost as readable as the
+rendered comic itself. And this technique is not limited to only comics, any
+thing that requires spatial arrangement, but is can otherwise be described
+better in text, say an diagram, model of a house and so on can all benefit from
+such a representation.
+
+We tend to think that such things can not be represented in text, but maybe it's
+only because the optimal representation has not been created yet.
+
+The advantage of text is tremendous. We can use Git etc, the only technology
+worthy to be called collaborative, Google Docs, whose entire reason for existence
+is "word processor collaboration", can not scale to dozen collaborators, forget
+100s or tens of thousands, which git can easily. None of the Figma's, Adobe's
+offerings, random comic generation tools, equation editor, animation creator, etc
+work with reasonable number of collaborators, who would create an account with
+every diagramming, comic generation, image editing tool you use. There is just
+too much fragmentation, entire companies on individual tools, but your workflow
+needs all of them. Git can solve that if there was a text file representation
+for each need.
+
 -- ft.h1: Pure Functions?
 
 26th Jan 2022

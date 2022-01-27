@@ -52,6 +52,8 @@ $processor$: toc
   Gate Pass
 - /examples/grid/
   Grid
+- /examples/dark-mode/
+  Dark Mode
 
 -- ft.toc:
 $processor$: toc

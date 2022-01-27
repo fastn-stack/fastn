@@ -10,6 +10,34 @@ toc: $config.examples-toc
 -- comic:
 
 
+-- panel-column:
+
+-- panel:
+d: 0, 0, 1
+
+--- girl-1:
+pose: flying
+d: 0, 100, 1.5
+a: left-right
+
+--- girl-2:
+pose: flying
+a: bottom-top, 0-1,
+
+--- girl-2: Hello Everyone! We are Power puff girls
+pose: flying
+a: 1-
+
+
+--- girl-3:
+pose: flying
+a: right-left, 1s
+
+
+
+
+
+
 -- ftd.scene comic:
 background-color: cadetblue
 width: 1070
