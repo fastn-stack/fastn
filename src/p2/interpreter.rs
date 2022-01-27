@@ -261,6 +261,18 @@ impl<'a> Interpreter<'a> {
                         );
                     }
                     ftd::p2::Thing::Component(_) => {
+                        let p1 = {
+                            let mut p1 = p1.clone();
+                            if p1
+                                .header
+                                .str_optional(doc.name, p1.line_number, "$processor$")?
+                                .is_some()
+                            {
+                                let value = self.lib.process(&p1, &doc).await?;
+                                Self::p1_from_processor(&mut p1, value);
+                            }
+                            p1
+                        };
                         if let Ok(loop_data) = p1.header.str(doc.name, p1.line_number, "$loop$") {
                             let section_to_subsection = ftd::p1::SubSection {
                                 name: p1.name.to_string(),
@@ -563,6 +575,18 @@ impl<'a> Interpreter<'a> {
                         );
                     }
                     ftd::p2::Thing::Component(_) => {
+                        let p1 = {
+                            let mut p1 = p1.clone();
+                            if p1
+                                .header
+                                .str_optional(doc.name, p1.line_number, "$processor$")?
+                                .is_some()
+                            {
+                                let value = self.lib.process(&p1, &doc)?;
+                                Self::p1_from_processor(&mut p1, value);
+                            }
+                            p1
+                        };
                         if let Ok(loop_data) = p1.header.str(doc.name, p1.line_number, "$loop$") {
                             let section_to_subsection = ftd::p1::SubSection {
                                 name: p1.name.to_string(),
@@ -680,6 +704,30 @@ impl<'a> Interpreter<'a> {
             p1: Default::default(),
             aliases: Default::default(),
             parsed_libs: Default::default(),
+        }
+    }
+
+    pub(crate) fn p1_from_processor(p1: &mut ftd::p1::Section, value: ftd::Value) {
+        if let ftd::Value::Object { values } = value {
+            for (k, v) in values {
+                let v = if let ftd::PropertyValue::Value { value } = v {
+                    if let Some(v) = value.to_string() {
+                        v
+                    } else {
+                        continue;
+                    }
+                } else {
+                    continue;
+                };
+
+                if k.eq("$body$") {
+                    p1.body = Some((p1.line_number, v));
+                } else if k.eq("$caption$") {
+                    p1.caption = Some(v);
+                } else {
+                    p1.header.0.push((p1.line_number, k, v));
+                }
+            }
         }
     }
 }
@@ -14156,6 +14204,28 @@ mod test {
             $event-change$: message-host $obj
             ",
             (bag, main),
+        );
+    }
+
+    #[test]
+    fn component_processor() {
+        let mut main = super::default_column();
+
+        main.container
+            .children
+            .push(ftd::Element::Markup(ftd::Markups {
+                text: ftd::markup_line("Hello from text-component processor"),
+                line: true,
+                size: Some(40),
+                ..Default::default()
+            }));
+
+        p!(
+            "
+            -- ftd.text: hello
+            $processor$: text-component-processor
+            ",
+            (super::default_bag(), main),
         );
     }
 

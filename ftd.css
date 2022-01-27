@@ -136,5 +136,10 @@ ul {
 }
 
 body.fpm-dark .ft_md code {
-    color: black;
+    color: #f9f9f9;
+    background-color: rgba(255 255 255 0.12);
+}
+
+.ft_md pre {
+    background-color: rgba(255 255 255 0.32);
 }
