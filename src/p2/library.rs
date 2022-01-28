@@ -120,6 +120,26 @@ fn read_package(section: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Res
     }
 }
 
+fn text_component() -> ftd::p1::Result<ftd::Value> {
+    let mut v: std::collections::BTreeMap<String, ftd::PropertyValue> = Default::default();
+    v.insert(
+        "$caption$".to_string(),
+        ftd::PropertyValue::Value {
+            value: ftd::variable::Value::String {
+                text: "Hello from text-component processor".to_string(),
+                source: ftd::TextSource::Header,
+            },
+        },
+    );
+    v.insert(
+        "size".to_string(),
+        ftd::PropertyValue::Value {
+            value: ftd::variable::Value::Integer { value: 40 },
+        },
+    );
+    Ok(ftd::Value::Object { values: v })
+}
+
 fn read_records(section: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Result<ftd::Value> {
     let var = ftd::Variable::list_from_p1(section, doc)?;
     let get = std::fs::read_to_string("./Cargo.toml").map_err(|e| ftd::p1::Error::ParseError {
@@ -203,6 +223,7 @@ impl Library for TestLibrary {
             "read_version_from_cargo_toml" => read_version(),
             "read_package_from_cargo_toml" => read_package(section, doc),
             "read_package_records_from_cargo_toml" => read_records(section, doc),
+            "text-component-processor" => text_component(),
             t => ftd::e2(
                 format!("unknown processor: {}", t),
                 doc.name,
@@ -230,6 +251,7 @@ impl Library for TestLibrary {
             "read_version_from_cargo_toml" => read_version(),
             "read_package_from_cargo_toml" => read_package(section, doc),
             "read_package_records_from_cargo_toml" => read_records(section, doc),
+            "text-component-processor" => text_component(),
             t => ftd::e2(
                 format!("unknown processor: {}", t),
                 doc.name,
