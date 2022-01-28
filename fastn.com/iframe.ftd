@@ -1,10 +1,10 @@
--- import: fifthtry.github.io/Forest-Theme as ft
+-- import: ft
 -- import: config
 
 -- ft.doc-page:
 toc: $ft.toc
     
--- ft.h0: Iframe
+-- ft.h0: `ftd.iframe`
 
 Renders an Iframe.
 

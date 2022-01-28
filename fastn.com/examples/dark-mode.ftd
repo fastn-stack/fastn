@@ -1,6 +1,9 @@
--- import: fifthtry.github.io/Forest-Theme as ft
+-- import: ft
 -- import: config
 -- import: fpm
+
+
+
 
 -- ft.doc-page:
 toc: $config.examples-toc
@@ -111,6 +114,8 @@ switcher:
 
 -- dark-mode-tri-state:
 
+
+
 -- ftd.column dark-mode-tri-state:
 boolean open: false
 width: fill
@@ -158,11 +163,11 @@ border-radius: 4
 anchor: parent
 position: bottom
 
---- t: 🌙 - Dark*
+--- t: 🌙 - Dark
 $event-click$: message-host enable-dark-mode
 $event-click$: $open=false
 
---- t: 🌞 - Light*
+--- t: 🌞 - Light
 $event-click$: message-host enable-light-mode
 $event-click$: $open=false
 

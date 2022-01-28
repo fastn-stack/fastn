@@ -1,7 +1,5 @@
--- import: fifthtry.github.io/Forest-Theme as ft
+-- import: ft
 -- import: config
-
-
 
 -- ft.doc-page:
 toc: $ft.toc

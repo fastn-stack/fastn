@@ -1,4 +1,4 @@
--- import: fifthtry.github.io/Forest-Theme as ft
+-- import: ft
 -- import: config
 
 \-- ft-core.concept:
@@ -28,8 +28,8 @@ New components are defined using the `component` keyword:
 lang: ftd
 
 \-- ftd.text heading:
-$title: caption
-text: ref $title
+caption title:
+text: $title
 size: 35
 color: red
 
@@ -75,9 +75,9 @@ An argument can be defined with a default value:
 lang: ftd
 
 \-- ftd.text foo:
-$name: caption
-$size: integer with default 10
-text: ref $name
+caption name:
+integer size: 10
+text: $name
 
 \-- foo: hello (uses default value of $size)
 
@@ -103,9 +103,9 @@ Component "local variables" starts with `@`:
 lang: ftd
 
 \-- ftd.text foo:
-$name: caption
-@open: boolean with default true
-text: ref $name
+caption name:
+boolean open: true
+text: $name
 if: @open
 $event-click$: toggle @open
 
@@ -133,17 +133,17 @@ Some components have children. `ftd` comes with two kernel container components,
 lang: ftd
 
 \-- ftd.row label:
-$name: caption
-$value: body
+caption name:
+body value:
 spacing: 5
 
 \--- ftd.text:
 style: bold
-text: ref $name
+text: $name
 
 \--- ftd.text:
 width: fill
-text: ref $value
+text: $value
 
 
 -- ft.markdown:
@@ -205,25 +205,23 @@ This is how it looks like:
 
 
 -- ftd.text heading:
-$title: caption
-text: ref $title
+caption title:
+text: $title
 size: 35
 color: red
 
 
 -- ftd.row label: 
-width: fill
 caption name:
 body value:
+width: fill
 spacing: 5
 
---- ftd.text:
+--- ftd.text: $name
 style: bold
-text: ref $name
 
---- ftd.text:
+--- ftd.text: $value
 width: fill
-text: ref $value
 
 
 -- ftd.column:
@@ -275,13 +273,13 @@ on the arguments, or global variables.
 -- ft.code:
 lang: ftd
 
-\-- var dark-mode: true
+\-- boolean dark-mode: true
 
 \-- ftd.text: we are in dark mode
-if: dark-mode
+if: $dark-mode
 
 \-- ftd.text: light mode rules
-if: not dark-mode
+if: not $dark-mode
 
 
 -- ft.markdown:
