@@ -1,6 +1,7 @@
 -- import: ft
 -- import: config
 -- import: fpm
+-- import: dms
 
 
 
@@ -112,87 +113,12 @@ almost definitely a bad idea and should never be used, over a three state
 switcher:
 
 
--- dark-mode-tri-state:
-
-
-
--- ftd.column dark-mode-tri-state:
-boolean open: false
-width: fill
-margin-bottom: 15
-padding: 10
-border-width: 1
-border-radius: 5
-background-color if $fpm.dark-mode: #8B8000
-background-color: yellow
-
---- ftd.row:
-spacing: 5
-align: right
-
---- ftd.text: Dark Mode:
-if: $fpm.follow-system-dark-mode
-color if $fpm.dark-mode: white
-color: black
-move-down: 5
-$event-click$: toggle $open
-
---- ftd.text: Dark Mode*:
-if: not $fpm.follow-system-dark-mode
-color if $fpm.dark-mode: white
-color: black
-move-down: 5
-$event-click$: toggle $open
-
---- ftd.text: 🌙
-if: $fpm.dark-mode
-move-up: 2
-$event-click$: toggle $open
-
---- ftd.text: 🌞
-if: not $fpm.dark-mode
-scale: 1.2
-$event-click$: toggle $open
-
---- ftd.column:
-if: $open
-background-color: white
-width: 110
-border-width: 1
-border-radius: 4
-anchor: parent
-position: bottom
-
---- t: 🌙 - Dark
-$event-click$: message-host enable-dark-mode
-$event-click$: $open=false
-
---- t: 🌞 - Light
-$event-click$: message-host enable-light-mode
-$event-click$: $open=false
-
---- t: 🌞 - System
-if: not $fpm.system-dark-mode
-$event-click$: message-host enable-system-mode
-$event-click$: $open=false
-
---- t: 🌙 - System
-if: $fpm.system-dark-mode
-$event-click$: message-host enable-system-mode
-$event-click$: $open=false
-
---- container: ftd.main
-
---- ftd.row:
-boolean dark-mode: true
-border-bottom-radius: 5
-width: fill
-
---- ftd.text:
-color if $fpm.dark-mode: white
-color: black
+-- dms.preview:
 
 This is some text to show you dark mode. Try clicking on the 🌙 / 🌞 above.
+
+
+
 
 -- ft.markdown:
 
@@ -210,19 +136,12 @@ This is the Three-State dark-mode we would be building in this tutorial.
 
 We would be packaging the end product such that you can use it from any `fpm`
 package as a dependency. The name of package we would be creating is
-`fifthtry.github.io/dark-mode-switcher`, and will be available on
+`fifthtry.github.io/dark-mode-switcher`, so its source will be stored in
+[FifthTry/dark-mode/switcher](///github.com/fifthTry/dark-mode-switcher).
 
 
 
 
 
-
-
--- ftd.text t: $text
-caption text:
-width: fill
-padding-horizontal: 10
-padding-vertical: 5
-background-color if $MOUSE-IN: #f2f2f2
 
 
