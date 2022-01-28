@@ -5,7 +5,7 @@ zip: github.com/fifthtry/fpm.dev/archive/refs/heads/main.zip
 language: English
 translation: hi.fpm.dev
 
--- fpm.dependency: fifthtry.github.io/Forest-Theme
+-- fpm.dependency: fifthtry.github.io/Forest-Theme as ft
 
 -- fpm.font: apple-system
 woff2: https://fonts.gstatic.com/s/opensans/v27/memvYaGs126MiZpBA-UvWbX2vVnXBbObj2OVTS-mu0SC55I.woff2
