@@ -37,7 +37,6 @@ a: bottom-top, 0-1,
 pose: flying
 a: 1-
 
-
 \--- girl-3:
 pose: flying
 a: right-left, 1s

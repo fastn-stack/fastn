@@ -9,16 +9,12 @@ toc: $config.examples-toc
 
 In this tutorial we are going to design dark mode switcher from scratch.
 
--- ft.h1: A Discussion on UI
+-- ft.h1: A Note on UI
 
 Many Dark Mode switchers act as toggle switches, they let user switch from one
 state, dark-mode, to another, light mode:
 
 -- dark-mode-toggle:
-
-
-
-
 
 
 -- ftd.column dark-mode-toggle:
@@ -116,14 +112,13 @@ switcher:
 -- dark-mode-tri-state:
 
 -- ftd.column dark-mode-tri-state:
-boolean dark-mode: true
 boolean open: false
 width: fill
 margin-bottom: 15
 padding: 10
 border-width: 1
 border-radius: 5
-background-color if $dark-mode: #8B8000
+background-color if $fpm.dark-mode: #8B8000
 background-color: yellow
 
 --- ftd.row:
@@ -131,40 +126,54 @@ spacing: 5
 align: right
 
 --- ftd.text: Dark Mode:
-color if $dark-mode: white
+if: $fpm.follow-system-dark-mode
+color if $fpm.dark-mode: white
+color: black
+move-down: 5
+$event-click$: toggle $open
+
+--- ftd.text: Dark Mode*:
+if: not $fpm.follow-system-dark-mode
+color if $fpm.dark-mode: white
 color: black
 move-down: 5
 $event-click$: toggle $open
 
 --- ftd.text: 🌙
-if: $dark-mode
+if: $fpm.dark-mode
 move-up: 2
 $event-click$: toggle $open
 
 --- ftd.text: 🌞
-if: not $dark-mode
+if: not $fpm.dark-mode
 scale: 1.2
 $event-click$: toggle $open
 
 --- ftd.column:
 if: $open
 background-color: white
-width: 100
+width: 110
 border-width: 1
 border-radius: 4
 anchor: parent
 position: bottom
 
---- t: 🌙 Dark
-$event-click$: $dark-mode=true
+--- t: 🌙 - Dark*
+$event-click$: message-host enable-dark-mode
 $event-click$: $open=false
 
-
---- t: 🌞 Light
-$event-click$: $dark-mode=false
+--- t: 🌞 - Light*
+$event-click$: message-host enable-light-mode
 $event-click$: $open=false
 
---- t: 💻 System
+--- t: 🌞 - System
+if: not $fpm.system-dark-mode
+$event-click$: message-host enable-system-mode
+$event-click$: $open=false
+
+--- t: 🌙 - System
+if: $fpm.system-dark-mode
+$event-click$: message-host enable-system-mode
 $event-click$: $open=false
 
 --- container: ftd.main
@@ -175,15 +184,34 @@ border-bottom-radius: 5
 width: fill
 
 --- ftd.text:
-color if $dark-mode: white
+color if $fpm.dark-mode: white
 color: black
 
 This is some text to show you dark mode. Try clicking on the 🌙 / 🌞 above.
 
 -- ft.markdown:
 
-Here we do not yet have "System" working. Clicking on that item simply closes
-the dropdown.
+This UI is connected with "fpm variables" that are also used by the theme so you
+can see that it's changing entire page's dark mode setting. Also the settings in
+this are persisted in a cookie, so you do not lose the value.
+
+If you pay attention, the dark mode UI when the popup is open show if the system
+is currently in dark-mode or light-mode. Try toggling your operating system
+dark-mode preferences while the drop-down is open to see it change in real-time.
+
+This is the Three-State dark-mode we would be building in this tutorial.
+
+-- ft.h1: A Note On Packaging
+
+We would be packaging the end product such that you can use it from any `fpm`
+package as a dependency. The name of package we would be creating is
+`fifthtry.github.io/dark-mode-switcher`, and will be available on
+
+
+
+
+
+
 
 -- ftd.text t: $text
 caption text:
@@ -191,3 +219,5 @@ width: fill
 padding-horizontal: 10
 padding-vertical: 5
 background-color if $MOUSE-IN: #f2f2f2
+
+
