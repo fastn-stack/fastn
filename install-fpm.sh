@@ -1,4 +1,4 @@
-# usr/bin/sh
+#!/bin/bash
 
 if [[ $* == *--pre-release* ]]; then
     URL="https://api.github.com/repos/fifthtry/fpm/releases"
