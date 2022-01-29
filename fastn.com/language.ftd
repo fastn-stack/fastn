@@ -1,5 +1,6 @@
 -- import: ft
 -- import: config
+-- import: fpm
 
 -- ft.doc-page:
 toc: $ft.toc
@@ -120,7 +121,7 @@ id: outer
 
 \-- ftd.row:
 width: fill
-background-color: yellow
+background-color: $ft.neutral-200
 padding: 10
 
 \-- ftd.text: $msg
@@ -154,16 +155,19 @@ Which gets rendered into:
 border-width: 1
 width: fill
 id: outer
-
+margin-bottom: 20
 
 -- ftd.row:
 width: fill
-background-color: yellow
+background-color: $ft.code-bg-light
+background-color if $fpm.dark-mode: $ft.code-bg-dark
 padding: 10
 
 
 -- ftd.text: $msg
 width: fill
+color: $ft.neutral
+font: Roboto
 
 
 -- ftd.row:
@@ -173,6 +177,8 @@ width: fill
 -- ftd.text: $msg
 width: fill
 align: right
+color: $ft.neutral
+font: Roboto
 
 
 -- container: outer
@@ -182,11 +188,14 @@ align: right
 padding: 10
 border-top: 1
 width: fill
-background-color: white
 
 
 -- ftd.text:
 width: fill
+color: $ft.neutral-800
+color if $fpm.dark-mode: $ft.neutral
+font: Roboto
+
 
 We support **markdown** as well.
 
