@@ -20,8 +20,6 @@ $processor$: toc
   Github
 
 -- ft.toc-item list dev-toc:
-
--- dev-toc:
 $processor$: toc
 
 - /changelog/
@@ -36,8 +34,6 @@ $processor$: toc
   `ftd::p1`: A JSON/YML Replacement
 
 -- ft.toc-item list examples-toc:
-
--- examples-toc:
 $processor$: toc
 
 - /examples/input/
@@ -54,6 +50,8 @@ $processor$: toc
   Grid
 - /examples/dark-mode/
   Dark Mode
+- /examples/conditional-variable/
+  Conditional Variable
 
 -- ft.toc:
 $processor$: toc

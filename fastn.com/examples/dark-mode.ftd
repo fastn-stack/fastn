@@ -78,8 +78,18 @@ ideally not exist at all}. Every site that supports dark mode should simply
 honor the operating system preferences set by the user.
 
 -- ft.image:
-src: images/dark-mode-preferences.png
-width: fill
+if: $fpm.dark-mode
+src: images/dark-mode/dark-mode-preferences.png
+width: 600
+align: center
+
+-- ft.image:
+if: not $fpm.dark-mode
+src: images/dark-mode/light-mode-preferences.png
+width: 600
+align: center
+
+-- ft.markdown:
 
 From the Help in the OSX Preferences:
 
@@ -136,11 +146,64 @@ This is the Three-State dark-mode we would be building in this tutorial.
 
 We would be packaging the end product such that you can use it from any `fpm`
 package as a dependency. The name of package we would be creating is
-`fifthtry.github.io/dark-mode-switcher`, so its source will be stored in
+[fifthtry.github.io/dark-mode-switcher](///fifthtry.github.io/dark-mode-switcher),
+so its source will be stored on Github in
 [FifthTry/dark-mode/switcher](///github.com/fifthTry/dark-mode-switcher).
 
+The package name is also a URL, which should be the homepage and documentation
+of that package.
 
+-- ft.h1: Creating The Package
 
+Lets start with creating the package. We have to create our Github Repo. Head
+over to Github to create the new repo:
+
+-- ft.image:
+src: images/dark-mode/new-repo.png
+
+Pick any name. Note that the name of repo is part of the name of the fpm package
+you are building, people will be importing it etc, so pick the name accordingly:
+
+-- ft.image:
+src: images/dark-mode/pick-name.png
+
+Also since this is a package to be shared with the world you want the package to
+be public. The repository need not necessarily be public, it is possible for
+Github Pages to keep the Github Pages published site to be public, but not the
+source code, but for the purpose of this tutorial and simplicity lets keep it
+public.
+
+This will create an empty repository.
+
+-- ft.image:
+src: images/dark-mode/created.png
+
+Now it's time for us to publish. If you did not pick a licence and README we
+will have to create a new Git repository as instructed in above message. If you
+picked those items Github would have created and initialised your repository
+that you will have to clone.
+
+An package is pretty bare bones, it needs only two files, `FPM.ftd` and
+`index.ftd`. `FPM.ftd` file is the package meta data of the package, and [this
+is how it looks like for our tutorial](https://github.com/FifthTry/dark-mode-switcher/blob/main/FPM.ftd):
+
+-- ft.code:
+lang: ftd
+
+\-- import: fpm
+
+\-- fpm.package: fifthtry.github.io/dark-mode-switcher
+zip: github.com/fifthtry/dark-mode-switcher/archive/refs/heads/main.zip
+
+-- ft.markdown:
+
+The name must match name of your repository, so if you created foo/bar, the name
+would be `foo.github.io/bar`.
+
+Note that we are doing this for convencience only, in this tutorial the package
+woudl be published using Github Pages. If you want you can have a custom domain
+for your package and the package name then would be based on the domain. The
+package name must URL where the package has been "published".
 
 
 

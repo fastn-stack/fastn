@@ -9,6 +9,342 @@ id: page
 
 -- ft.h0: FTD Journal
 
+
+-- ft.h1: Conditional Variable
+
+-- ft.h1: Sublime Text Gets Syntax Support
+
+-- ft.h1: Boolean Expressions
+
+We are going to add boolean expressions in FTD now. Till now we support `if` at
+component level, attribute level, and variable level.
+
+-- ft.code:
+lang: ftd
+
+\-- foo:
+if: $something
+color if $something-else: red
+
+\-- string bar: yo
+
+\-- bar: hello
+if: $something
+
+-- ft.markdown:
+
+In the first example we use `if` both at component level, and attribute level.
+In the next example we use `if` to control `bar` variable.
+
+Lets call `if:` as `section level if`, and `foo if $something` as `attribute
+level if`.
+
+Till now we can either do `$something` or `not $something`, but not higher
+boolean expressions like `if: $a or $b` etc.
+
+We want to allow general purspose boolean expressions now, with `and`, `or`, and
+grouping using `(`/`)`. We will follow Python syntax for that.
+
+What about multiline expressions? We can use multiline expressions for `section
+level if` easily:
+
+-- ft.code:
+lang: ftd
+
+\-- foo:
+if: (
+    $a or $b or (
+        $something and $something-else
+    )
+)
+
+\-- foo:
+if: $a or $b or (
+    $something and $something-else
+)
+
+-- ft.markdown:
+
+Should we also allow:
+
+-- ft.code:
+lang: ftd
+
+\-- foo:
+color if (
+    $a or $b or (
+        $something and $something-else
+    )
+): red
+
+-- ft.markdown:
+
+Technically we should. We will have to fix our `p1` grammar/parser for this.
+We can always implement the inline versions first, and do the more general
+syntax later on.
+
+Other thought was we created intermediary "formulas" and use them.
+
+-- ft.code:
+lang: ftd
+
+\-- boolean some-formula: (
+    $a or $b or (
+        $something and $something-else
+    )
+)
+
+\-- foo:
+color if $some-formula: red
+
+-- ft.markdown:
+
+We should also allow component level formulas when defining a component:
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.row foo:
+boolean some-formula: (
+    $a or $b or (
+        $something and $something-else
+    )
+)
+
+\--- ftd.text:
+color if $some-formula: red
+
+-- ft.markdown:
+
+Basically we can chose to only support expression at header or caption level,
+and not a p1 key level. In fact maybe not even at cation level:
+
+-- ft.code:
+lang: ftd
+
+\-- boolean some-formula:
+
+$a or $b or (
+    $something and $something-else
+)
+
+-- ft.markdown:
+
+Above is arguably cleaner than the caption one. Which leaves us with header
+being the only thing that needs multi value support. Unless we allow this
+syntax:
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.row foo:
+
+\--- boolean some-formula:
+
+$a or $b or (
+    $something and $something-else
+)
+
+-- ft.markdown:
+
+Here we have created a "component level variable" by using `---`. With component
+level variable we never need multi line header key or value to support multiline
+boolean expressions. Which means we won't have to modify our p1 parser and
+grammar remains simpler.
+
+Arpita thinks even if we use multiline value or caption, we must use our
+continuation syntax:
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.row foo:
+boolean some-formula:
+> $a or $b or (
+>     $something and $something-else
+> )
+
+-- ft.markdown:
+
+With continuation in the mix we do not need "component level variable". Or we
+support both continuation and component level variable.
+
+
+-- ft.h1: Pass By Value Vs Reference
+
+If we do this:
+
+-- ft.code:
+lang: ftd
+
+\-- boolean foo: true
+
+\-- t:
+val: $foo
+
+\-- ftd.text t: hello
+boolean val:
+color if $val: red
+
+-- ft.markdown:
+
+If we modify `$foo`, should `$val` change? This is currently implemented as
+pass by value. We are planning a syntax in future:
+
+
+-- ft.code:
+lang: ftd
+
+\-- t:
+val: $foo
+
+\-- ftd.text t: hello
+boolean variable val:
+color if $val: red
+
+-- ft.markdown:
+
+Here we defined `val` as `boolean variable` instead of `boolean` as in last
+example. With `x variable`, the we will implement pass by reference semantics.
+We call this feature higher order variable.
+
+Arpita proposes this syntax:
+
+-- ft.code:
+lang: ftd
+
+\-- t:
+val: $foo
+
+\-- ftd.text t: hello
+boolean $val:
+color if $val: red
+
+-- ft.markdown:
+
+It's better because it's way shorter.
+
+One open question for higher order variable is should this be allowed:
+
+-- ft.code:
+lang: ftd
+
+\-- t:
+val: true
+
+\-- ftd.text t: hello
+boolean variable val:
+boolean $val:
+color if $val: red
+
+-- ft.markdown:
+
+Here we have passed `true` but `$val` need to bind to some existing variable,
+and we only have a value. We can say we would allow it, and any modifications
+to `$val` would be lost, semantically its modifying that `true`, but since
+nothing else is bound to it the modification is not visible outside.
+
+With this we do not have any major objections to higher order variable.
+
+So we have two possible variables, changes in parent reflect in child and child
+in parent when we use higher order variable. Or change in neither side is
+reflected in other side, when using normal variable (pass by value). The default
+of pass by value seems bad, as if a parent variable is modified it's value is
+updated everywhere it is directly referenced but not in children:
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.row foo:
+boolean o: true
+
+\--- bar:
+o: $o
+color if $o: red
+$event-click$: toggle $o
+
+-- ft.markdown:
+
+Here color keeps changing when `$o` is changing, but `o` is not. This feels
+wrong.
+
+Shouldn't people just write:
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.row foo:
+boolean o: true
+
+\--- bar:
+o if $o: true
+o if not $o: false
+
+
+-- ft.markdown:
+
+It clearly looks equivalent to above but is actually different.
+
+I am not saying pass by reference should be default, else any changes done by
+bar to `$o` will always be visible to parent. I mean we can do that. But I feel
+there should be a third choice where changes go from parent to child always. If
+the child component is modifying the variable that modifications is not reflected
+outside, but if not then it is.
+
+If the variable was never modified by a component then the value passed from
+outside could always be reflected and there is no concern. But if component is
+updating a variable then what to do? We can say if variable is never modified by
+component then we do pass by reference, else we do pass by reference or value
+depending on if component has defined variable as higher order or not.
+
+Arpita says if we do this it would be hard to explain as the behaviour of a
+component will suddenly change if they add an event handler that modifies a
+variable.
+
+What to do?
+
+
+-- ft.h1: `MOUSE-IN` Behavior Change
+
+Currently we have a special variable `$MOUSE-IN` which can be used anywhere
+inside a component definition without declaring, and it is true if the mouse is
+hovering over the current component.
+
+This is limiting, what if you wanted to use this variable from outside a
+component? Or what if you want to be more precise, within a component if you
+want to do something if the mouse is within a specific child in the component?
+
+If you want to emulate the old behaviour you will have to do this:
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.row foo:
+boolean mouse-in: false
+
+\--- ftd.text: yo
+$event-mouse$: $mouse-in=$MOUSE-IN
+
+-- ft.markdown:
+
+We have `$event-mouse$` that will be triggered when mouse enters or leaves a
+component. Then we can do the following as well:
+
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.row:
+boolean mouse-in: false
+border-width if $mouse-in: 1
+
+\--- ftd.text: yo
+$event-mouse$: $mouse-in=$MOUSE-IN
+
+-- ft.markdown:
+
+Here we are not defining a component and can still use `$MOUSE-IN`.
+
 -- ft.h1: Comics Using FTD
 
 27th Jan 2022
@@ -31,11 +367,11 @@ a: left-right
 
 \--- girl-2:
 pose: flying
-a: bottom-top, 0-1,
+a: bottom-top, 0-1, left-right, 1-2
 
 \--- girl-2: Hello Everyone! We are Power puff girls
 pose: flying
-a: 1-
+a: 2-
 
 \--- girl-3:
 pose: flying
