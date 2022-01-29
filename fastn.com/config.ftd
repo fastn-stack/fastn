@@ -54,6 +54,8 @@ $processor$: toc
   Grid
 - /examples/dark-mode/
   Dark Mode
+- /examples/conditional-variable/
+  Conditional Variable
 
 -- ft.toc:
 $processor$: toc
