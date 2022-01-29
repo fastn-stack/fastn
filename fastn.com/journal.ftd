@@ -30,6 +30,99 @@ So links never break (and original author can keep updating document URL at whim
 (on how having article.page allows us to get just the content of a page, without
 header/sidebar/footer etc).
 
+-- ft.h1: Removing `.zip` Key
+
+29th Jan 2022
+
+When creating a new package we have to write, e.g.:
+
+-- ft.code:
+lang: ftd
+
+\-- import: fpm
+
+\-- fpm.package: fifthtry.github.io/dark-mode-switcher
+zip: github.com/fifthtry/dark-mode-switcher/archive/refs/heads/main.zip
+
+
+-- ft.markdown:
+
+Which is annoying. We need the publish URL, and that is good, we are going to
+share it everywhere. But we need zip also, and its only used by fpm for internal
+purpose (downloading the package). But writing the zip key and reading it is
+both noise for humans.
+
+My first thought was we auto generate the zip URL by parsing the package name,
+which would be fragile and won't work if someone is using custom domain etc.
+Then it occured to me that we can create the zip file and upload it as part of
+the build itself, so the zip file url will always be
+`<package-name>/package.zip`.
+
+It has one positive aspect: zip url as defined currently can diverge from the
+published package. People may see one thing on package url but may download
+something else, the latest code on main. The build may not have happened on
+subsequent commits, so things can diverge. The zip as part of package ensures
+we always get the source of what we see.
+
+This can arguably be the downside as well, if there is something wrong with the
+package, one can not just fix it by committing on main, one now have to figure
+out how to update the zip. I am not sure what will be the cause of this tho.
+
+Overall I think we should go ahead with this proposal.
+
+-- ft.h1: Scroll To View Host Function
+
+Was wondering how would we implement [this site](https://www.businessonbot.com).
+They have a single page, and all header links simply scroll to different
+portions of the same page. The scroll behaviour is also smooth, not abrupt.
+
+We can implement the abrupt scroll behaviour currently, we give each heading a
+unique `id`, or authors can specify their own `id`. So link targets can be
+`#foo`. But this will jump abruptly.
+
+So we will give the following fpm host function:
+
+-- ft.code:
+lang: ftd
+
+\-- object scroll-to-foo:
+function: scroll-to-id
+id: foo
+
+\-- ftd.text: About Us
+$event-click$: message-host $scroll-to-foo
+
+
+-- ft.markdown:
+
+This will use the ["smooth"
+behaviour](https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView).
+
+
+We should eventually be able to do:
+
+-- ft.code:
+lang: ftd
+
+\-- import: fpm
+
+\-- ftd.text: About Us
+$event-click$: message-host $fpm.scroll-to:
+> id: foo
+
+-- ft.markdown:
+
+Or even better:
+
+-- ft.code:
+lang: ftd
+
+\-- import: fpm
+
+\-- ftd.text: About Us
+$event-click$: $fpm.scroll-to: id=foo
+
+
 -- ft.h1: Syntax And Theme Packages
 
 26th Jan 2022
