@@ -1,0 +1,18 @@
+-- boolean value: true
+
+-- string foo: Arpita
+
+-- foo: Ayushi
+if: not $value
+
+
+-- ftd.column:
+padding: 40
+
+-- ftd.text: $foo
+size: 40
+color: green
+color if $value: orange
+
+-- ftd.text: Click me 💡
+$event-click$: toggle $value

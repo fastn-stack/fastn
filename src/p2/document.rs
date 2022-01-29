@@ -76,6 +76,7 @@ impl Document {
                 },
             );
         }
+        ftd::Element::get_variable_dependencies(&self, &mut data);
         ftd::Element::get_visible_event_dependencies(&self.main.container.children, &mut data);
         ftd::Element::get_value_event_dependencies(&self.main.container.children, &mut data);
         ftd::Element::get_style_event_dependencies(&self.main.container.children, &mut data);

@@ -786,6 +786,87 @@ impl Element {
         }
     }
 
+    pub fn get_variable_dependencies(
+        document: &ftd::p2::Document,
+        data: &mut ftd::DataDependenciesMap,
+    ) {
+        for (k, v) in document.data.iter() {
+            if !data.contains_key(k) {
+                continue;
+            }
+            let (conditions, default) = if let ftd::p2::Thing::Variable(ftd::Variable {
+                conditions,
+                value: default,
+                ..
+            }) = v
+            {
+                (conditions, default)
+            } else {
+                continue;
+            };
+            for (condition, value) in conditions {
+                let condition = if let Ok(condition) = condition.to_condition(
+                    0,
+                    &mut Default::default(),
+                    &Default::default(),
+                    &ftd::p2::TDoc {
+                        name: document.name.as_str(),
+                        aliases: &document.aliases,
+                        bag: &document.data,
+                    },
+                ) {
+                    condition
+                } else {
+                    continue;
+                };
+                let value = if let Some(value) = value.to_string() {
+                    value
+                } else {
+                    continue;
+                };
+
+                let variable = ftd::p2::utils::get_doc_name_and_remaining(&condition.variable)
+                    .unwrap()
+                    .0;
+                let dependencies =
+                    if let Some(ftd::Data { dependencies, .. }) = data.get_mut(&variable) {
+                        dependencies
+                    } else {
+                        continue;
+                    };
+                let json = ftd::Dependencies {
+                    dependency_type: ftd::DependencyType::Variable,
+                    condition: Some(condition.value.to_string()),
+                    parameters: std::array::IntoIter::new([(
+                        k.to_string(),
+                        ftd::ConditionalValueWithDefault {
+                            value: ConditionalValue {
+                                value,
+                                important: false,
+                            },
+                            default: default.to_string().map(|value| ConditionalValue {
+                                value,
+                                important: false,
+                            }),
+                        },
+                    )])
+                    .collect(),
+                };
+                if let Some(dependencies) = dependencies.get_mut("$value$") {
+                    let mut d =
+                        serde_json::from_str::<Vec<ftd::Dependencies>>(dependencies).unwrap();
+                    d.push(json);
+                    *dependencies = serde_json::to_string(&d).unwrap();
+                } else {
+                    dependencies.insert(
+                        "$value$".to_string(),
+                        serde_json::to_string(&vec![json]).unwrap(),
+                    );
+                }
+            }
+        }
+    }
+
     pub fn get_visible_event_dependencies(
         children: &[ftd::Element],
         data: &mut ftd::DataDependenciesMap,
