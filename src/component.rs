@@ -1293,6 +1293,7 @@ fn get_conditional_attributes(
             "font-size",
             "border-width",
             "grid-gap",
+            "line-height",
         ];
 
         let style_length = vec![

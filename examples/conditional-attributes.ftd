@@ -60,6 +60,8 @@ color: white
 color if $present: green
 color if not $present: red
 padding if $present: 5
+line-height if not $present: 200
+line-height if $present: 10
 
 --- ftd.text: Click Here!
 $event-click$: toggle $present
