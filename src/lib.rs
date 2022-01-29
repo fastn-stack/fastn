@@ -100,6 +100,7 @@ pub enum DependencyType {
     Style,
     Visible,
     Value,
+    Variable,
 }
 
 #[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]

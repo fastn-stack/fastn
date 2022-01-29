@@ -14229,6 +14229,26 @@ mod test {
         );
     }
 
+    #[test]
+    fn conditionl_variable() {
+        let (g_bag, _g_col) = crate::p2::interpreter::interpret(
+            "foo/bar",
+            indoc::indoc!(
+                "
+                -- boolean value: true
+            
+                -- string foo: Arpita
+
+                -- foo: Ayushi
+                if: not $value
+                "
+            ),
+            &ftd::p2::TestLibrary {},
+        )
+        .expect("found error");
+        dbg!(&g_bag);
+    }
+
     /*#[test]
     fn optional_condition_on_record() {
         let (_g_bag, g_col) = crate::p2::interpreter::interpret(
