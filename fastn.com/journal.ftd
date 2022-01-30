@@ -1,5 +1,5 @@
 -- import: ft
--- import: config
+-- import: package:config
 
 -- ft.doc-page:
 toc: $config.dev-toc
@@ -122,6 +122,39 @@ lang: ftd
 \-- ftd.text: About Us
 $event-click$: $fpm.scroll-to: id=foo
 
+
+-- ft.h1: Markdown Styling
+
+Me and Shobhit were wondering how would we fix markdown styling. Currently we
+have a css file that contains styling that gets applied to markdown generated
+html and currently there is no way to update that CSS.
+
+We want any theme to be able to update the markdown styling. And yet we do not
+want to let anyone modify CSS, we consider CSS a liability, an escape hatch,
+which will hamper our plans to write non HTML based rendering for FTD.
+
+When we parse markdown we get elements like heading, paragraph, link, image,
+tables, and lists. We eventually realised if we had a syntax like this:
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.markdown:
+h1: ft.h1
+h2: ft.h2
+link: ft.link
+paragraph: ft.paragraph
+
+the markdown text
+
+-- ft.markdown:
+
+We can solve our problems. `ftd.markdown` would be a new ftd kernel element which
+will take a bunch of `ftd.ui` constructors, which will then be invoked for every
+heading, paragraph etc that we encounter in the markdown.
+
+This way any theme can create their own markdown wrapper component and pass it
+all the component constructors, and completely control the rendering.
 
 -- ft.h1: Syntax And Theme Packages
 
