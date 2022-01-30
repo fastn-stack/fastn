@@ -198,14 +198,30 @@ unlike them you actually get a proper presentation of data, the FTD file can
 contain the definition of component that can render the data that you can view
 in your browser.
 
+FTD can also be used as a configuration language.
+
+-- ft.h1: FPM: FTD Package Manager
+
+FTD has a sister project, [fpm](https://fpm.dev), a package manager for FTD.
+
+-- ft.h1: Getting Involved
+
+We are trying to create the language for human beings and we do not belive it
+would be possible without your support. We would love to hear from you.
+
+Github: https://github.com/FifthTry/ftd
 
 Discord: Join our [`ftd` channel](https://discord.gg/xN3uD8P7WA).
 
-Twitter: [@FifthTryHQ](https://twitter.com/fifthtryhq)
-
 License: BSD
 
-Checkout the [Roadmap & RFCs](/roadmap/) and [Changelog](/changelog/).
+Checkout the [Journal](/Journal/) and [Roadmap](/roadmap/).
+
+
+-- ft.h1: Videos
+
+We have recorded some videos explaining FTD in detail for our internal team.
+You may benefit from them as well.
 
 
 -- ft.youtube:

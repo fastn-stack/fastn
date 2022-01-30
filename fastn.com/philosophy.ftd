@@ -10,6 +10,55 @@ toc: $ft.toc
 
 -- ft.h0: Philosophy Behind `ftd`
 
+FTD is being designed as language for human beings. We believe all humans should
+be able to own the digital work they produce. Today that work is lost in
+proprietory software and SAAS. Even most open source software treats text as
+primarily a text blob, information in text is really hard to extract.
+
+There is no distinction between data and prose. When you write a tweet there is
+some prose, but there is also a lot of data, when you tweeted it, what app did
+you use, what was your location, what is the URL of the tweet. You own all that
+data. You want to be able to edit all that data. Same with Microsoft Word or
+Google Docs. You want to be able to extract information from your documents, but
+you can not. You can download maybe, but you will lose data in the process. What
+you download will not be editable in the same way. The downloaded data offered
+by most SAAS as response to regulations and customer demands is done in a
+farciscal fashion, Facebook, Twitter, everyone will give you a ZIP file but you
+will have very hard time viewing this data, or using it for any reason.
+
+We belive a uniform language must exist to represent data and prose that any
+human being can learn easily. We believe all human beings are going to write
+and create more and more things. And they must be able to remix that, use
+programming facilities, create reusable packages, have dependencies on each
+other, etc.
+
+When you are writing you do not want to be limited to dead text. And you do not
+want to be at the whims of SAAS and other such software that you have to learn,
+where things keeps on changing, company can go away with your data. You also do
+not want to do the same thing in every software in slightly different interfaces,
+learning a powerful general purpose editor is a worthwhile investment only for
+programmers because programmers are not bound to any software and they truly
+own the software they write, the entire history etc, in a way you do not own,
+when using MS Word of Google Docs, Notion etc.
+
+Further most software are incompatible with others. A graph made in one software
+one can not be used with another software. You have to export the graph out as
+image, losing the original document, and if you attach the image, the changes to
+the original do automatically get reflected, you will have to re-export and
+re-attach. Why can't you use any presentaiton in any document? Why can't your
+presentation not include the spreadsheet? Why can't your email not contain a
+presentation you can view? Without exporting everything and detaching it from
+the original source?
+
+Why can you have your document depend on another document like your software
+depends on software libraries? Why can't there be a package manager that
+downloads all documents your document depend on and create a final documentation
+you want to share? A text written in one software is today lost, can barely be
+used from another without export step.
+
+
+-- ft.h1: Markdown
+
 Markdown is brilliant, very soon probably every text input where humans write free
 form text will be supporting markdown or a subset of it. 
 
@@ -56,7 +105,7 @@ most successful programming languages used "getting rid of closing tags/brackets
 as one of the selling points, at least in the beginning).
 
 
--- ft.h2: Hierarchal data and flat structure
+-- ft.h2: Hierarchical data and flat structure
 
 This forces us to represent data and UI, both of them are inherently hierarchal 
 in nature, in a flat format. This is possible to some extent, as we explore with
