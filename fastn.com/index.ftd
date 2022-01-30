@@ -5,9 +5,11 @@
 
 -- ft.content:
 
+-- ft.h0: FTD: Programming Language For Prose
+
 -- ft.markdown:
 
-{ft.highlight: FTD: Programming Language For Prose}
+
 
 FTD is an open source programming language for writing prose.
 
@@ -138,6 +140,14 @@ Amit is the founder and CEO of FifthTry.
 He loves to code, and is pursuing his childhood goal of
 becoming a professional starer of the trees.
 
+-- ft.markdown:
+
+Here we have defined a variable `amitu`. You can also define a list:
+
+
+-- ft.code:
+lang: ftd
+
 \-- person list employees:
 
 \-- employees: Sourabh Garg
@@ -148,11 +158,46 @@ location: Lucknow, India
 
 Arpita is the primary author of FTD language.
 
+-- ft.markdown:
 
-[Start Here](/language/)
+We can then create a component that can render such record and loop over a list
+to show all members of the list:
 
-FTD is meant to be a universal file format for text-based data, think of XML done
-right.
+-- ft.code:
+lang: ftd
+
+\-- render-person:
+person: $p
+$loop$: $employees as $p
+
+-- ft.markdown:
+
+This way we can have clean separation of data from presentation. The data
+defined in FTD documents can be easily read from say Rust:
+
+-- ft.code:
+lang: rs
+
+#[derive(serde::Deserialize)]
+struct Employee {
+    name: String,
+    location: String,
+    bio: Option<String>
+}
+
+let doc = ftd::p2::Document::from("some/id", source, lib)?;
+let amitu: Employee = doc.get("amitu")?;
+let employees: Vec<Employee> = doc.get("employees")?;
+
+
+-- ft.markdown:
+
+Data defined in FTD are first class data. Instead of sharing CSV/JSON files you
+can chose to share FTD files. Unlike CSV/JSON data in FTD are type checked. And
+unlike them you actually get a proper presentation of data, the FTD file can
+contain the definition of component that can render the data that you can view
+in your browser.
+
 
 Discord: Join our [`ftd` channel](https://discord.gg/xN3uD8P7WA).
 
