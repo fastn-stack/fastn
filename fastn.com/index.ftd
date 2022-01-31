@@ -13,7 +13,7 @@
 
 FTD is an open source programming language for writing prose.
 
--- ft.code:
+-- ft.code: `ftd` Hello World!
 lang: ftd
 
 \-- import: lib
@@ -41,11 +41,11 @@ slots: left right
 slot-widths: 70% auto
 spacing: 15
 
---- ft.code:
+--- ft.code: `ftd.text` kernel component
 lang: ftd
 slot: left
 
-\-- ftd.text: Hello World
+\-- ftd.text: Hello World!
 boolean current: false
 $event-click$: toggle $current
 color if $current: red
@@ -53,7 +53,7 @@ color: white
 background-color: black
 padding: 20
 
---- ftd.text: Hello World
+--- ftd.text: Hello World!
 align: center
 slot: right
 $event-click$: toggle $current
@@ -62,7 +62,6 @@ text-align: center
 color if $current: red
 color: white
 background-color: black
-margin-right: 10
 
 
 
@@ -81,7 +80,7 @@ slots: left right
 slot-widths: 70% auto
 spacing: 15
 
---- ft.code:
+--- ft.code: creating a custom component
 lang: ftd
 slot: left
 
@@ -95,9 +94,9 @@ color: white
 background-color: black
 padding: 20
 
-\-- toggle-text: Components are cool!
+\-- toggle-text: FTD is cool!
 
---- toggle-text: Components are cool!
+--- toggle-text: FTD is cool!
 slot: right
 
 -- ftd.text toggle-text: $title
@@ -110,7 +109,6 @@ color if $current: red
 color: white
 background-color: black
 padding: 20
-margin-right: 10
 
 
 -- ft.markdown:
@@ -121,7 +119,7 @@ writing without "polluting" the prose with noise.
 
 FTD is also a good first class data language. You can define and use records:
 
--- ft.code:
+-- ft.code: data modelling in `ftd`
 lang: ftd
 
 \-- record person:
@@ -136,7 +134,7 @@ the value can come in the "caption" position, after the `:` of the "section line
 eg lines that start with `--` or `---`. If a field is optional, it must be marked
 as such.
 
--- ft.code:
+-- ft.code: creating a variable
 lang: ftd
 
 \-- person amitu: Amit Upadhyay
@@ -152,7 +150,7 @@ becoming a professional starer of the trees.
 Here we have defined a variable `amitu`. You can also define a list:
 
 
--- ft.code:
+-- ft.code: creating a list
 lang: ftd
 
 \-- person list employees:
@@ -170,7 +168,7 @@ Arpita is the primary author of FTD language.
 We can then create a component that can render such record and loop over a list
 to show all members of the list:
 
--- ft.code:
+-- ft.code: looping over a list
 lang: ftd
 
 \-- render-person:
@@ -182,7 +180,7 @@ $loop$: $employees as $p
 This way we can have clean separation of data from presentation. The data
 defined in FTD documents can be easily read from say Rust:
 
--- ft.code:
+-- ft.code: reading data from `ftd` files
 lang: rs
 
 #[derive(serde::Deserialize)]
