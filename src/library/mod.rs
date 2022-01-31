@@ -1,6 +1,7 @@
 use crate::utils::HasElements;
 
 mod http;
+mod new_toc;
 mod sqlite;
 mod toc;
 
@@ -828,6 +829,7 @@ impl ftd::p2::Library for Library {
             "toc" => fpm::library::toc::processor(section, doc),
             "http" => fpm::library::http::processor(section, doc),
             "package-query" => fpm::library::sqlite::processor(section, doc, &self.config),
+            "toc-v2" => fpm::library::new_toc::processor(section, doc, &self.config),
             t => unimplemented!("$processor$: {} is not implemented yet", t),
         }
     }
