@@ -74,17 +74,19 @@ You can also abstract out the logic in a custom ftd component, eg:
 
 -- ftd.grid:
 width: fill
-slots: l r
+slots: left right
 slot-widths: 70% auto
+spacing: 15
 
 --- ft.code:
 lang: ftd
-slot: l
+slot: left
 
 \-- ftd.text toggle-text: $title
 boolean current: false
 caption title:
 $event-click$: toggle $current
+text-align: center
 color if $current: red
 color: white
 background-color: black
@@ -93,12 +95,13 @@ padding: 20
 \-- toggle-text: Components are cool!
 
 --- toggle-text: Components are cool!
-slot: r
+slot: right
 
 -- ftd.text toggle-text: $title
 boolean current: false
 caption title:
 align: center
+text-align: center
 $event-click$: toggle $current
 color if $current: red
 color: white
