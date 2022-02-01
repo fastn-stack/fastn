@@ -1,0 +1,5 @@
+-- ftd.code:
+$processor$: include
+$path$: code/dummy_code.rs:all
+
+// This text goes to the very top

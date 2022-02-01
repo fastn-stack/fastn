@@ -604,6 +604,7 @@ dependencies = [
  "lazy_static 1.4.0",
  "pretty_assertions",
  "realm-lang",
+ "regex",
  "reqwest",
  "rusqlite",
  "rusty-hook",

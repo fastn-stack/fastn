@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+        <title>index.ftd</title>
+        <script type="ftd" id="ftd-data">{}</script>
+        <script type="ftd" id="ftd-external-children">{}</script>
+        <style>FTD_CSS</style>
+    </head>
+    <body>
+        <div data-id="main:root" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; height: 100%; justify-content: flex-start; white-space: initial; width: 100%" class="ft_md"><div data-id="0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-weight: 400; line-height: 26px; text-align: left; white-space: initial" class="ft_md"><pre style="background-color:#2b303b;"><span style="color:#b48ead;">use </span><span style="color:#c0c5ce;">std::io;
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">main</span><span style="color:#c0c5ce;">() {
+</span><span style="color:#c0c5ce;">    println!(&quot;</span><span style="color:#a3be8c;">Guess the number!</span><span style="color:#c0c5ce;">&quot;);
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">    println!(&quot;</span><span style="color:#a3be8c;">Please input your guess.</span><span style="color:#c0c5ce;">&quot;);
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">    </span><span style="color:#b48ead;">let mut</span><span style="color:#c0c5ce;"> guess = String::new();
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">    io::stdin()
+</span><span style="color:#c0c5ce;">        .</span><span style="color:#96b5b4;">read_line</span><span style="color:#c0c5ce;">(&amp;</span><span style="color:#b48ead;">mut</span><span style="color:#c0c5ce;"> guess)
+</span><span style="color:#c0c5ce;">        .</span><span style="color:#96b5b4;">expect</span><span style="color:#c0c5ce;">(&quot;</span><span style="color:#a3be8c;">Failed to read line</span><span style="color:#c0c5ce;">&quot;);
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">    println!(&quot;</span><span style="color:#a3be8c;">You guessed: </span><span style="color:#d08770;">{}</span><span style="color:#c0c5ce;">&quot;, guess);
+</span><span style="color:#c0c5ce;">}
+</span></pre>
+</div></div>
+        <script>FPM_JS</script>
+    </body>
+</html>

@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-        <title>Hello world!</title>
-        <script type="ftd" id="ftd-data">{
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+  <title>Hello world!</title>
+  <script type="ftd" id="ftd-data">{
   "@title@0": {
     "value": "Hello world!",
     "dependencies": {
@@ -18,21 +19,35 @@
     }
   }
 }</script>
-        <script type="ftd" id="ftd-external-children">{}</script>
-        <style>FTD_CSS</style>
-    </head>
-    <body>
-        <div data-id="main:root" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; height: 100%; justify-content: flex-start; white-space: initial; width: 100%" class="ft_md"><div data-id="0:main" id="hello-world" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; padding-bottom: 6px; white-space: initial; width: 100%" class="ft_md"><div data-id="0,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(255,255,255,1); font-size: 19px; font-weight: 700; line-height: 26px; padding-bottom: 8px; padding-top: 16px; text-align: left; white-space: initial" class="ft_md">Hello world!</div></div></div>
-        <script>
-            FTD_JS
+  <script type="ftd" id="ftd-external-children">{}</script>
+  <style>
+    FTD_CSS
+  </style>
+</head>
 
-            window.ftd.init(
-                "main",
-                JSON.parse(document.getElementById("ftd-data").innerText),
-                JSON.parse(document.getElementById("ftd-external-children").innerText)
-            );
+<body>
+  <div data-id="main:root"
+    style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; height: 100%; justify-content: flex-start; white-space: initial; width: 100%"
+    class="ft_md">
+    <div data-id="0:main" id="hello-world"
+      style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; padding-bottom: 6px; white-space: initial; width: 100%"
+      class="ft_md">
+      <div data-id="0,0:main"
+        style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(255,255,255,1); font-size: 19px; font-weight: 700; line-height: 26px; padding-bottom: 8px; padding-top: 16px; text-align: left; white-space: initial"
+        class="ft_md">Hello world!</div>
+    </div>
+  </div>
+  <script>
+    FTD_JS
 
-            FPM_JS
-        </script>
-    </body>
+    window.ftd.init(
+      "main",
+      JSON.parse(document.getElementById("ftd-data").innerText),
+      JSON.parse(document.getElementById("ftd-external-children").innerText)
+    );
+
+    FPM_JS
+  </script>
+</body>
+
 </html>
