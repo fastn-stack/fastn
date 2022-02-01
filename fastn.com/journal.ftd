@@ -23,7 +23,7 @@ id: page
 
 So Arpita is working on [`-- boolean foo:
 $bar`](///github.com/FifthTry/ftd/issues/90) and we are stuck at the
-question [we discussed on 29th Jan](#pass-by-value-vs-reference).
+question [we discussed on 29th Jan](/journal/#pass-by-value-vs-reference).
 
 -- ft.code:
 lang: ftd
