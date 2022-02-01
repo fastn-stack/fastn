@@ -10,11 +10,153 @@ id: page
 -- ft.h0: FTD Journal
 
 
+
+
 -- ft.h1: Conditional Variable
+
 
 -- ft.h1: Sublime Text Gets Syntax Support
 
+-- ft.h1: Reference Vs Value Recap
+
+1st Feb 2022
+
+So Arpita is working on [`-- boolean foo:
+$bar`](///github.com/FifthTry/ftd/issues/90) and we are stuck at the
+question [we discussed on 29th Jan](#pass-by-value-vs-reference).
+
+-- ft.code:
+lang: ftd
+
+\-- boolean y: true
+\-- boolean x: $y
+
+\-- foo:
+boolean $x: $y
+boolean z: $y
+
+-- ft.markdown:
+
+In `foo` we are going with the proposal Arpita likes for declaring variable
+references: `boolean $x` meaning `$x` is now tied to the `rvalue`. If `rvalue`
+changes `$x` will change. `z` is assigned `rvalue` at declaratin and does not
+change afterwards.
+
+Crux of the problem: why do we not always have references? If we do any local
+change in component will be reflected globally if any variable was to default to
+a global value. Many times we want defaults set by global, but if inadvertantly
+every component starts modifying globals it would be a mess.
+
+The specific problem Arpita had in above snippet was now we have different
+syntax, if global assignments are always reference, but in component its always
+value then we have an inconsistency which she rightly doesn't like.
+
+One option is we go with her syntax, `<type> $x` means its an alias,
+`<type> x` means it is a assign current value. My syntax was `<type> variable x`
+vs `<type> x`. If we go with either of them, does it solve our problem?
+
+The thing is component changing global variable should be exception, but
+component getting latest value of global should be norm.
+
+Question: why are we then creaitng a new variable in component, and not just
+using the global variable from inside the component? We want to use global
+variable as the default value of some component property, but we want callers
+of component to change that if they want to.
+
+Would readable vs writable semantics help? If we are doing:
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.row foo:
+boolean x: $some-global
+
+-- ft.markdown:
+
+We want to default `x` to `some-global`, but want callers of `foo` to be able to
+overwrite it. We are not creating a variable to change it in the component after
+compnent has been constructed.
+
+Currently there is no way to declare if a variable is mutable or not. If there
+was we could have different behaviours: a mutable variable will not reflect
+changes to global, or maybe a mutable variable will not reflect changes to
+global after it has been mutated once. But it will never mutate global.
+
+Should we say its always reference and always non mutable. To make it mutable
+you opt-in, and then behaviour changes. Or we decide if it's mutable by
+analysing the body of the component.
+
+Say we use a explicit mutable syntax, and only allow event handlers to modify a
+mutable variable:
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.row foo:
+mutable boolean x: $some-global
+
+-- ft.markdown:
+
+Or we do:
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.row foo:
+boolean $x: $some-global
+
+-- ft.markdown:
+
+But sometimes we want components to modify top level variables as well.
+
+How about we go with this bevaviour: we don't have mutable, any component
+variable with default value of global will keep reflecting changes in global
+till it has been modified by the component, once it is modified it starts
+ignoring global changes. Further, a component can modify global by directly
+using the global variable in the event handlers.
+
+We will still need reference sytnax: the above the was the default behaviour of
+normal variables. We will still have `<type> $foo` or `<type> variable foo` to
+indicate it takes a variable from caller context and it always modifies that
+variable.
+
+How about global reference:
+
+-- ft.code:
+lang: ftd
+
+\-- boolean y: true
+\-- boolean x: $y
+
+\-- foo:
+$event-click$: toggle $x
+
+-- ft.markdown:
+
+Does it modify only global `x` or `y` as well? We can say we follow the same
+behaviour for global variables as well, x will continue to track `y` till `x`
+was modified. Unless `x` was defined as `boolean variable x`, in which `x` and
+`y` are always the same variables.
+
+-- ft.h2: Final Proposal?
+
+All variables, where-ever they are defined, if they are defined with rvalue of
+an expression involving one or more variables will continue to reflect the value
+of expression at that point of time, till the variable has been explicitly
+overwritten.
+
+Identity expression on a variable `$x` is simply `$x`, any other expression, eg
+`$x * 2` is non-identity (even `$x * 1` or `$x + 0` are non identity
+expressions).
+
+If a variable is defined with non identity expression on another variable it is
+considered a formula and can not be changed. Non identity expressions can not be
+used as `rvalue` of `<type> variable x`.
+
+
 -- ft.h1: Boolean Expressions
+
+29th Jan 2022
 
 We are going to add boolean expressions in FTD now. Till now we support `if` at
 component level, attribute level, and variable level.
