@@ -31,22 +31,22 @@
 
     function is_mobile() {
         // not at all sure about this functions logic.
-        let width = window.visualViewport.width;
+        let width = window.innerWidth;
 
         // in future we may want to have more than one break points, and then
         // we may also want the theme builders to decide where the breakpoints
         // should go. we should be able to fetch fpm variables here, or maybe
         // simply pass the width, user agent etc to fpm and let people put the
         // checks on width user agent etc, but it would be good if we can
-        // standardise few breakpoints. or maybe we should do both, some
+        // standardize few breakpoints. or maybe we should do both, some
         // standard breakpoints and pass the raw data.
 
         // we would then rename this function to detect_device() which will
         // return one of "desktop", "tablet", "mobile". and also maybe have
         // another function detect_orientation(), "landscape" and "portrait" etc,
         // and instead of setting `fpm-ui#mobile: boolean` we set `fpm-ui#device`
-        // and `fpm-ui#viewport-orientation` etc.
-        return width <= 800;
+        // and `fpm-ui#view-port-orientation` etc.
+        return width <= 768;
     }
 
     window.show_main = function () {
