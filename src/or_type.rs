@@ -68,10 +68,12 @@ mod test {
             s("foo/bar#abrar"),
             ftd::p2::Thing::Variable(ftd::Variable {
                 name: s("abrar"),
-                value: ftd::Value::OrType {
-                    name: s("foo/bar#entity"),
-                    variant: s("person"),
-                    fields: abrar(),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::OrType {
+                        name: s("foo/bar#entity"),
+                        variant: s("person"),
+                        fields: abrar(),
+                    },
                 },
                 conditions: vec![],
             }),
@@ -80,7 +82,9 @@ mod test {
             "foo/bar#x".to_string(),
             ftd::p2::Thing::Variable(ftd::Variable {
                 name: "x".to_string(),
-                value: ftd::Value::Integer { value: 10 },
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Integer { value: 10 },
+                },
                 conditions: vec![],
             }),
         );

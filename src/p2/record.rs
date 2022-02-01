@@ -415,9 +415,11 @@ mod test {
             "foo/bar#abrar".to_string(),
             ftd::p2::Thing::Variable(ftd::Variable {
                 name: "abrar".to_string(),
-                value: ftd::Value::Record {
-                    name: "foo/bar#person".to_string(),
-                    fields: abrar(),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Record {
+                        name: "foo/bar#person".to_string(),
+                        fields: abrar(),
+                    },
                 },
                 conditions: vec![],
             }),
@@ -439,7 +441,9 @@ mod test {
             "foo/bar#x".to_string(),
             ftd::p2::Thing::Variable(ftd::Variable {
                 name: "x".to_string(),
-                value: ftd::Value::Integer { value: 20 },
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Integer { value: 20 },
+                },
                 conditions: vec![],
             }),
         );
@@ -466,30 +470,32 @@ mod test {
             "foo/bar#abrar_e".to_string(),
             ftd::p2::Thing::Variable(ftd::Variable {
                 name: "abrar_e".to_string(),
-                value: ftd::Value::Record {
-                    name: "foo/bar#employee".to_string(),
-                    fields: std::array::IntoIter::new([
-                        (
-                            s("eid"),
-                            ftd::PropertyValue::Value {
-                                value: ftd::Value::String {
-                                    text: "E04".to_string(),
-                                    source: ftd::TextSource::Header,
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Record {
+                        name: "foo/bar#employee".to_string(),
+                        fields: std::array::IntoIter::new([
+                            (
+                                s("eid"),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::String {
+                                        text: "E04".to_string(),
+                                        source: ftd::TextSource::Header,
+                                    },
                                 },
-                            },
-                        ),
-                        (
-                            s("who"),
-                            ftd::PropertyValue::Reference {
-                                name: s("foo/bar#abrar"),
-                                kind: ftd::p2::Kind::Record {
-                                    name: s("foo/bar#person"),
-                                    default: None,
+                            ),
+                            (
+                                s("who"),
+                                ftd::PropertyValue::Reference {
+                                    name: s("foo/bar#abrar"),
+                                    kind: ftd::p2::Kind::Record {
+                                        name: s("foo/bar#person"),
+                                        default: None,
+                                    },
                                 },
-                            },
-                        ),
-                    ])
-                    .collect(),
+                            ),
+                        ])
+                        .collect(),
+                    },
                 },
                 conditions: vec![],
             }),
@@ -499,29 +505,31 @@ mod test {
             "foo/bar#sourabh".to_string(),
             ftd::p2::Thing::Variable(ftd::Variable {
                 name: "sourabh".to_string(),
-                value: ftd::Value::Record {
-                    name: "foo/bar#employee".to_string(),
-                    fields: std::array::IntoIter::new([
-                        (
-                            s("eid"),
-                            ftd::PropertyValue::Value {
-                                value: ftd::Value::String {
-                                    text: "E05".to_string(),
-                                    source: ftd::TextSource::Body,
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Record {
+                        name: "foo/bar#employee".to_string(),
+                        fields: std::array::IntoIter::new([
+                            (
+                                s("eid"),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::String {
+                                        text: "E05".to_string(),
+                                        source: ftd::TextSource::Body,
+                                    },
                                 },
-                            },
-                        ),
-                        (
-                            s("who"),
-                            ftd::PropertyValue::Value {
-                                value: ftd::Value::Record {
-                                    name: "foo/bar#person".to_string(),
-                                    fields: sourabh,
+                            ),
+                            (
+                                s("who"),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::Record {
+                                        name: "foo/bar#person".to_string(),
+                                        fields: sourabh,
+                                    },
                                 },
-                            },
-                        ),
-                    ])
-                    .collect(),
+                            ),
+                        ])
+                        .collect(),
+                    },
                 },
                 conditions: vec![],
             }),
@@ -616,42 +624,50 @@ mod test {
                 "foo/bar#abrar".to_string(),
                 ftd::p2::Thing::Variable(ftd::Variable {
                     name: "abrar".to_string(),
-                    value: ftd::Value::Record {
-                        name: "foo/bar#person".to_string(),
-                        fields: std::array::IntoIter::new([
-                            (
-                                s("name"),
-                                ftd::PropertyValue::Value {
-                                    value: ftd::Value::String {
-                                        text: "Abrar Khan".to_string(),
-                                        source: ftd::TextSource::Caption,
+                    value: ftd::PropertyValue::Value {
+                        value: ftd::Value::Record {
+                            name: "foo/bar#person".to_string(),
+                            fields: std::array::IntoIter::new([
+                                (
+                                    s("name"),
+                                    ftd::PropertyValue::Value {
+                                        value: ftd::Value::String {
+                                            text: "Abrar Khan".to_string(),
+                                            source: ftd::TextSource::Caption,
+                                        },
                                     },
-                                },
-                            ),
-                            (
-                                s("friends"),
-                                ftd::PropertyValue::Value {
-                                    value: ftd::Value::List {
-                                        kind: ftd::p2::Kind::string(),
-                                        data: vec![
-                                            ftd::Value::String {
-                                                text: "Deepak Angrula".to_string(),
-                                                source: source.clone(),
-                                            },
-                                            ftd::Value::String {
-                                                text: "Amit Upadhyay".to_string(),
-                                                source: source.clone(),
-                                            },
-                                            ftd::Value::String {
-                                                text: "Saurabh Garg".to_string(),
-                                                source,
-                                            },
-                                        ],
+                                ),
+                                (
+                                    s("friends"),
+                                    ftd::PropertyValue::Value {
+                                        value: ftd::Value::List {
+                                            kind: ftd::p2::Kind::string(),
+                                            data: vec![
+                                                ftd::PropertyValue::Value {
+                                                    value: ftd::Value::String {
+                                                        text: "Deepak Angrula".to_string(),
+                                                        source: source.clone(),
+                                                    },
+                                                },
+                                                ftd::PropertyValue::Value {
+                                                    value: ftd::Value::String {
+                                                        text: "Amit Upadhyay".to_string(),
+                                                        source: source.clone(),
+                                                    },
+                                                },
+                                                ftd::PropertyValue::Value {
+                                                    value: ftd::Value::String {
+                                                        text: "Saurabh Garg".to_string(),
+                                                        source,
+                                                    },
+                                                },
+                                            ],
+                                        },
                                     },
-                                },
-                            ),
-                        ])
-                        .collect(),
+                                ),
+                            ])
+                            .collect(),
+                        },
                     },
                     conditions: vec![],
                 }),
@@ -734,87 +750,107 @@ mod test {
             "foo/bar#abrar".to_string(),
             ftd::p2::Thing::Variable(ftd::Variable {
                 name: "abrar".to_string(),
-                value: ftd::Value::Record {
-                    name: "foo/bar#person".to_string(),
-                    fields: std::array::IntoIter::new([
-                        (
-                            s("name"),
-                            ftd::PropertyValue::Value {
-                                value: ftd::Value::String {
-                                    text: "Abrar Khan".to_string(),
-                                    source: ftd::TextSource::Caption,
-                                },
-                            },
-                        ),
-                        (
-                            s("points"),
-                            ftd::PropertyValue::Value {
-                                value: ftd::Value::List {
-                                    kind: ftd::p2::Kind::Record {
-                                        name: s("foo/bar#point"),
-                                        default: None,
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Record {
+                        name: "foo/bar#person".to_string(),
+                        fields: std::array::IntoIter::new([
+                            (
+                                s("name"),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::String {
+                                        text: "Abrar Khan".to_string(),
+                                        source: ftd::TextSource::Caption,
                                     },
-                                    data: vec![
-                                        ftd::Value::Record {
-                                            name: "foo/bar#point".to_string(),
-                                            fields: std::array::IntoIter::new([
-                                                (
-                                                    s("x"),
-                                                    ftd::PropertyValue::Value {
-                                                        value: ftd::Value::Integer { value: 10 },
-                                                    },
-                                                ),
-                                                (
-                                                    s("y"),
-                                                    ftd::PropertyValue::Value {
-                                                        value: ftd::Value::Integer { value: 20 },
-                                                    },
-                                                ),
-                                            ])
-                                            .collect(),
-                                        },
-                                        ftd::Value::Record {
-                                            name: "foo/bar#point".to_string(),
-                                            fields: std::array::IntoIter::new([
-                                                (
-                                                    s("x"),
-                                                    ftd::PropertyValue::Value {
-                                                        value: ftd::Value::Integer { value: 0 },
-                                                    },
-                                                ),
-                                                (
-                                                    s("y"),
-                                                    ftd::PropertyValue::Value {
-                                                        value: ftd::Value::Integer { value: 0 },
-                                                    },
-                                                ),
-                                            ])
-                                            .collect(),
-                                        },
-                                        ftd::Value::Record {
-                                            name: "foo/bar#point".to_string(),
-                                            fields: std::array::IntoIter::new([
-                                                (
-                                                    s("x"),
-                                                    ftd::PropertyValue::Value {
-                                                        value: ftd::Value::Integer { value: 1 },
-                                                    },
-                                                ),
-                                                (
-                                                    s("y"),
-                                                    ftd::PropertyValue::Value {
-                                                        value: ftd::Value::Integer { value: 22 },
-                                                    },
-                                                ),
-                                            ])
-                                            .collect(),
-                                        },
-                                    ],
                                 },
-                            },
-                        ),
-                    ])
-                    .collect(),
+                            ),
+                            (
+                                s("points"),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::List {
+                                        kind: ftd::p2::Kind::Record {
+                                            name: s("foo/bar#point"),
+                                            default: None,
+                                        },
+                                        data: vec![
+                                            ftd::PropertyValue::Value {
+                                                value: ftd::Value::Record {
+                                                    name: "foo/bar#point".to_string(),
+                                                    fields: std::array::IntoIter::new([
+                                                        (
+                                                            s("x"),
+                                                            ftd::PropertyValue::Value {
+                                                                value: ftd::Value::Integer {
+                                                                    value: 10,
+                                                                },
+                                                            },
+                                                        ),
+                                                        (
+                                                            s("y"),
+                                                            ftd::PropertyValue::Value {
+                                                                value: ftd::Value::Integer {
+                                                                    value: 20,
+                                                                },
+                                                            },
+                                                        ),
+                                                    ])
+                                                    .collect(),
+                                                },
+                                            },
+                                            ftd::PropertyValue::Value {
+                                                value: ftd::Value::Record {
+                                                    name: "foo/bar#point".to_string(),
+                                                    fields: std::array::IntoIter::new([
+                                                        (
+                                                            s("x"),
+                                                            ftd::PropertyValue::Value {
+                                                                value: ftd::Value::Integer {
+                                                                    value: 0,
+                                                                },
+                                                            },
+                                                        ),
+                                                        (
+                                                            s("y"),
+                                                            ftd::PropertyValue::Value {
+                                                                value: ftd::Value::Integer {
+                                                                    value: 0,
+                                                                },
+                                                            },
+                                                        ),
+                                                    ])
+                                                    .collect(),
+                                                },
+                                            },
+                                            ftd::PropertyValue::Value {
+                                                value: ftd::Value::Record {
+                                                    name: "foo/bar#point".to_string(),
+                                                    fields: std::array::IntoIter::new([
+                                                        (
+                                                            s("x"),
+                                                            ftd::PropertyValue::Value {
+                                                                value: ftd::Value::Integer {
+                                                                    value: 1,
+                                                                },
+                                                            },
+                                                        ),
+                                                        (
+                                                            s("y"),
+                                                            ftd::PropertyValue::Value {
+                                                                value: ftd::Value::Integer {
+                                                                    value: 22,
+                                                                },
+                                                            },
+                                                        ),
+                                                    ])
+                                                    .collect(),
+                                                },
+                                            },
+                                        ],
+                                    },
+                                },
+                            ),
+                        ])
+                        .collect(),
+                    },
                 },
                 conditions: vec![],
             }),
@@ -878,24 +914,25 @@ mod test {
             s("foo/bar#jan"),
             ftd::p2::Thing::Variable(ftd::Variable {
                 name: s("jan"),
-                value: ftd::Value::Record {
-                    name: s("foo/bar#sale"),
-                    fields: std::array::IntoIter::new([
-                        (
-                            s("value"),
-                            ftd::PropertyValue::Value {
-                                value: ftd::Value::Integer { value: 2000 },
-                            },
-                        ),
-                        (
-                            s("party"),
-                            ftd::PropertyValue::Value {
-                                value: ftd::Value::List {
-                                    kind: ftd::p2::Kind::OrType {
-                                        name: s("foo/bar#entity"),
-                                    },
-                                    data: vec![
-                                        ftd::Value::OrType {
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Record {
+                        name: s("foo/bar#sale"),
+                        fields: std::array::IntoIter::new([
+                            (
+                                s("value"),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::Integer { value: 2000 },
+                                },
+                            ),
+                            (
+                                s("party"),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::List {
+                                        kind: ftd::p2::Kind::OrType {
+                                            name: s("foo/bar#entity"),
+                                        },
+                                        data: vec![
+                                        ftd::PropertyValue::Value {value: ftd::Value::OrType {
                                             name: s("foo/bar#entity"),
                                             variant: s("person"),
                                             fields: std::array::IntoIter::new([
@@ -934,8 +971,8 @@ mod test {
                                                 ),
                                             ])
                                             .collect(),
-                                        },
-                                        ftd::Value::OrType {
+                                        }},
+                                        ftd::PropertyValue::Value {value: ftd::Value::OrType {
                                             name: s("foo/bar#entity"),
                                             variant: s("company"),
                                             fields: std::array::IntoIter::new([
@@ -959,13 +996,14 @@ mod test {
                                                 ),
                                             ])
                                             .collect(),
-                                        },
+                                        }},
                                     ],
+                                    },
                                 },
-                            },
-                        ),
-                    ])
-                    .collect(),
+                            ),
+                        ])
+                        .collect(),
+                    },
                 },
                 conditions: vec![],
             }),

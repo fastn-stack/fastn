@@ -2817,9 +2817,11 @@ mod test {
             "foo/bar#name".to_string(),
             ftd::p2::Thing::Variable(ftd::Variable {
                 name: "name".to_string(),
-                value: ftd::Value::String {
-                    text: s("Amit"),
-                    source: ftd::TextSource::Caption,
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::String {
+                        text: s("Amit"),
+                        source: ftd::TextSource::Caption,
+                    },
                 },
                 conditions: vec![],
             }),
@@ -2884,7 +2886,9 @@ mod test {
             "foo/bar#x".to_string(),
             ftd::p2::Thing::Variable(ftd::Variable {
                 name: "x".to_string(),
-                value: ftd::Value::Integer { value: 20 },
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Integer { value: 20 },
+                },
                 conditions: vec![],
             }),
         );
@@ -2892,9 +2896,11 @@ mod test {
             "foo/bar#abrar".to_string(),
             ftd::p2::Thing::Variable(ftd::Variable {
                 name: "abrar".to_string(),
-                value: ftd::Value::Record {
-                    name: "foo/bar#person".to_string(),
-                    fields: abrar(),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Record {
+                        name: "foo/bar#person".to_string(),
+                        fields: abrar(),
+                    },
                 },
                 conditions: vec![],
             }),
