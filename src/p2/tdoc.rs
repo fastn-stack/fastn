@@ -470,7 +470,10 @@ impl<'a> TDoc<'a> {
     pub fn get_value(&self, line_number: usize, name: &str) -> ftd::p1::Result<ftd::Value> {
         // TODO: name can be a.b.c, and a and a.b are records with right fields
         match self.get_thing(line_number, name)? {
-            ftd::p2::Thing::Variable(v) => v.value.resolve(line_number, &Default::default(), self),
+            ftd::p2::Thing::Variable(v) => {
+                v.value
+                    .partial_resolve(line_number, &Default::default(), self)
+            }
             v => self.err("not a variable", v, "get_value", line_number),
         }
     }
@@ -825,13 +828,17 @@ mod test {
         let value_from_json = doc.from_json_rows(&section[0], &data).unwrap();
         let value = ftd::Value::List {
             data: vec![
-                ftd::Value::String {
-                    text: "Prayagraj".to_string(),
-                    source: ftd::TextSource::Header,
+                ftd::PropertyValue::Value {
+                    value: ftd::Value::String {
+                        text: "Prayagraj".to_string(),
+                        source: ftd::TextSource::Header,
+                    },
                 },
-                ftd::Value::String {
-                    text: "Varanasi".to_string(),
-                    source: ftd::TextSource::Header,
+                ftd::PropertyValue::Value {
+                    value: ftd::Value::String {
+                        text: "Varanasi".to_string(),
+                        source: ftd::TextSource::Header,
+                    },
                 },
             ],
             kind: ftd::p2::Kind::String {
@@ -889,83 +896,87 @@ mod test {
         let value_from_json = doc.from_json_rows(&section[0], &data).unwrap();
         let value = ftd::Value::List {
             data: vec![
-                ftd::Value::Record {
-                    name: "foo/bar#person".to_string(),
-                    fields: std::array::IntoIter::new([
-                        (
-                            "name".to_string(),
-                            ftd::PropertyValue::Value {
-                                value: ftd::Value::String {
-                                    text: "Amitu".to_string(),
-                                    source: ftd::TextSource::Header,
+                ftd::PropertyValue::Value {
+                    value: ftd::Value::Record {
+                        name: "foo/bar#person".to_string(),
+                        fields: std::array::IntoIter::new([
+                            (
+                                "name".to_string(),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::String {
+                                        text: "Amitu".to_string(),
+                                        source: ftd::TextSource::Header,
+                                    },
                                 },
-                            },
-                        ),
-                        (
-                            "age".to_string(),
-                            ftd::PropertyValue::Value {
-                                value: ftd::Value::Integer { value: 20 },
-                            },
-                        ),
-                        (
-                            "bio".to_string(),
-                            ftd::PropertyValue::Value {
-                                value: ftd::Value::String {
-                                    text: "CEO of fifthTry".to_string(),
-                                    source: ftd::TextSource::Header,
+                            ),
+                            (
+                                "age".to_string(),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::Integer { value: 20 },
                                 },
-                            },
-                        ),
-                        (
-                            "address".to_string(),
-                            ftd::PropertyValue::Value {
-                                value: ftd::Value::String {
-                                    text: "Bangalore".to_string(),
-                                    source: ftd::TextSource::Header,
+                            ),
+                            (
+                                "bio".to_string(),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::String {
+                                        text: "CEO of fifthTry".to_string(),
+                                        source: ftd::TextSource::Header,
+                                    },
                                 },
-                            },
-                        ),
-                    ])
-                    .collect(),
+                            ),
+                            (
+                                "address".to_string(),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::String {
+                                        text: "Bangalore".to_string(),
+                                        source: ftd::TextSource::Header,
+                                    },
+                                },
+                            ),
+                        ])
+                        .collect(),
+                    },
                 },
-                ftd::Value::Record {
-                    name: "foo/bar#person".to_string(),
-                    fields: std::array::IntoIter::new([
-                        (
-                            "name".to_string(),
-                            ftd::PropertyValue::Value {
-                                value: ftd::Value::String {
-                                    text: "Arpita".to_string(),
-                                    source: ftd::TextSource::Header,
+                ftd::PropertyValue::Value {
+                    value: ftd::Value::Record {
+                        name: "foo/bar#person".to_string(),
+                        fields: std::array::IntoIter::new([
+                            (
+                                "name".to_string(),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::String {
+                                        text: "Arpita".to_string(),
+                                        source: ftd::TextSource::Header,
+                                    },
                                 },
-                            },
-                        ),
-                        (
-                            "age".to_string(),
-                            ftd::PropertyValue::Value {
-                                value: ftd::Value::Integer { value: 20 },
-                            },
-                        ),
-                        (
-                            "bio".to_string(),
-                            ftd::PropertyValue::Value {
-                                value: ftd::Value::String {
-                                    text: "Software Developer of fifthTry".to_string(),
-                                    source: ftd::TextSource::Header,
+                            ),
+                            (
+                                "age".to_string(),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::Integer { value: 20 },
                                 },
-                            },
-                        ),
-                        (
-                            "address".to_string(),
-                            ftd::PropertyValue::Value {
-                                value: ftd::Value::String {
-                                    text: "Varanasi".to_string(),
-                                    source: ftd::TextSource::Header,
+                            ),
+                            (
+                                "bio".to_string(),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::String {
+                                        text: "Software Developer of fifthTry".to_string(),
+                                        source: ftd::TextSource::Header,
+                                    },
                                 },
-                            },
-                        ),
-                    ])
-                    .collect(),
+                            ),
+                            (
+                                "address".to_string(),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::String {
+                                        text: "Varanasi".to_string(),
+                                        source: ftd::TextSource::Header,
+                                    },
+                                },
+                            ),
+                        ])
+                        .collect(),
+                    },
                 },
             ],
             kind: ftd::p2::Kind::Record {

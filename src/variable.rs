@@ -227,13 +227,33 @@ impl PropertyValue {
             Self::Variable { kind, .. } => kind.to_owned(),
         }
     }
+
+    /// resolves all the internal fields too
     pub fn resolve(
         &self,
         line_number: usize,
         arguments: &std::collections::BTreeMap<String, ftd::Value>,
         doc: &ftd::p2::TDoc,
     ) -> ftd::p1::Result<Value> {
-        let mut value = match self {
+        let mut value = self.partial_resolve(line_number, arguments, doc)?;
+        // In case of Object resolve all the values
+        if let ftd::Value::Object { values } = &mut value {
+            for (_, v) in values.iter_mut() {
+                *v = ftd::PropertyValue::Value {
+                    value: v.partial_resolve(line_number, arguments, doc)?,
+                };
+            }
+        }
+        Ok(value)
+    }
+
+    pub fn partial_resolve(
+        &self,
+        line_number: usize,
+        arguments: &std::collections::BTreeMap<String, ftd::Value>,
+        doc: &ftd::p2::TDoc,
+    ) -> ftd::p1::Result<Value> {
+        Ok(match self {
             ftd::PropertyValue::Value { value: v } => v.to_owned(),
             ftd::PropertyValue::Variable {
                 name,
@@ -314,17 +334,7 @@ impl PropertyValue {
                 }
                 value
             }
-        };
-
-        // In case of Object resolve all the values
-        if let ftd::Value::Object { values } = &mut value {
-            for (_, v) in values.iter_mut() {
-                *v = ftd::PropertyValue::Value {
-                    value: v.resolve(line_number, arguments, doc)?,
-                };
-            }
-        }
-        Ok(value)
+        })
     }
 }
 
@@ -1133,20 +1143,48 @@ mod test {
     #[test]
     fn int() {
         use super::Value::Integer;
-        p2!("-- integer x: 10", "x", Integer { value: 10 }, vec![],);
+        p2!(
+            "-- integer x: 10",
+            "x",
+            ftd::PropertyValue::Value {
+                value: Integer { value: 10 }
+            },
+            vec![],
+        );
     }
 
     #[test]
     fn float() {
         use super::Value::Decimal;
-        p2!("-- decimal x: 10", "x", Decimal { value: 10.0 }, vec![],);
+        p2!(
+            "-- decimal x: 10",
+            "x",
+            ftd::PropertyValue::Value {
+                value: Decimal { value: 10.0 }
+            },
+            vec![],
+        );
     }
 
     #[test]
     fn bool() {
         use super::Value::Boolean;
-        p2!("-- boolean x: true", "x", Boolean { value: true }, vec![],);
-        p2!("-- boolean x: false", "x", Boolean { value: false }, vec![],);
+        p2!(
+            "-- boolean x: true",
+            "x",
+            ftd::PropertyValue::Value {
+                value: Boolean { value: true }
+            },
+            vec![],
+        );
+        p2!(
+            "-- boolean x: false",
+            "x",
+            ftd::PropertyValue::Value {
+                value: Boolean { value: false }
+            },
+            vec![],
+        );
     }
 
     #[test]
@@ -1155,36 +1193,44 @@ mod test {
         p2!(
             "-- string x: hello",
             "x",
-            String {
-                text: "hello".to_string(),
-                source: ftd::TextSource::Caption
+            ftd::PropertyValue::Value {
+                value: String {
+                    text: "hello".to_string(),
+                    source: ftd::TextSource::Caption
+                }
             },
             vec![],
         );
         p2!(
             "-- string x:\n\nhello world\nyo!",
             "x",
-            String {
-                text: "hello world\nyo!".to_string(),
-                source: ftd::TextSource::Body
+            ftd::PropertyValue::Value {
+                value: String {
+                    text: "hello world\nyo!".to_string(),
+                    source: ftd::TextSource::Body
+                }
             },
             vec![],
         );
         p2!(
             "-- string x: 10",
             "x",
-            String {
-                text: "10".to_string(),
-                source: ftd::TextSource::Caption
+            ftd::PropertyValue::Value {
+                value: String {
+                    text: "10".to_string(),
+                    source: ftd::TextSource::Caption
+                }
             },
             vec![],
         );
         p2!(
             "-- string x: true",
             "x",
-            String {
-                text: "true".to_string(),
-                source: ftd::TextSource::Caption
+            ftd::PropertyValue::Value {
+                value: String {
+                    text: "true".to_string(),
+                    source: ftd::TextSource::Caption
+                }
             },
             vec![],
         );
