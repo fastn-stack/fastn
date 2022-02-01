@@ -161,55 +161,31 @@ impl<'a> Interpreter<'a> {
                 ));
                 // processed_p1.push(p1.name.to_string());
             } else if let Ok(ref var_data) = var_data {
-                if var_data.is_none() || var_data.is_optional() {
+                let d = if p1
+                    .header
+                    .str(doc.name, p1.line_number, "$processor$")
+                    .is_ok()
+                {
+                    let name = doc.resolve_name(p1.line_number, &var_data.name)?;
+                    let start = std::time::Instant::now();
+                    let value = self.lib.process(p1, &doc).await?;
+                    *d_processor = d_processor.saturating_add(std::time::Instant::now() - start);
+                    ftd::Variable {
+                        name,
+                        value,
+                        conditions: vec![],
+                    }
+                } else if var_data.is_none() || var_data.is_optional() {
                     // declare and instantiate a variable
-                    let d = if p1
-                        .header
-                        .str(doc.name, p1.line_number, "$processor$")
-                        .is_ok()
-                    {
-                        let name = var_data.name.to_string();
-                        let start = std::time::Instant::now();
-                        let value = self.lib.process(p1, &doc).await?;
-                        *d_processor =
-                            d_processor.saturating_add(std::time::Instant::now() - start);
-                        ftd::Variable {
-                            name,
-                            value,
-                            conditions: vec![],
-                        }
-                    } else {
-                        ftd::Variable::from_p1(p1, &doc)?
-                    };
-                    thing.push((
-                        doc.resolve_name(p1.line_number, &d.name.to_string())?,
-                        ftd::p2::Thing::Variable(d),
-                    ));
+                    ftd::Variable::from_p1(p1, &doc)?
                 } else {
                     // declare and instantiate a list
-                    let d = if p1
-                        .header
-                        .str(doc.name, p1.line_number, "$processor$")
-                        .is_ok()
-                    {
-                        let name = doc.resolve_name(p1.line_number, &var_data.name)?;
-                        let start = std::time::Instant::now();
-                        let value = self.lib.process(p1, &doc).await?;
-                        *d_processor =
-                            d_processor.saturating_add(std::time::Instant::now() - start);
-                        ftd::Variable {
-                            name,
-                            value,
-                            conditions: vec![],
-                        }
-                    } else {
-                        ftd::Variable::list_from_p1(p1, &doc)?
-                    };
-                    thing.push((
-                        doc.resolve_name(p1.line_number, &d.name.to_string())?,
-                        ftd::p2::Thing::Variable(d),
-                    ));
-                }
+                    ftd::Variable::list_from_p1(p1, &doc)?
+                };
+                thing.push((
+                    doc.resolve_name(p1.line_number, &d.name.to_string())?,
+                    ftd::p2::Thing::Variable(d),
+                ));
             } else if let ftd::p2::Thing::Variable(mut v) =
                 doc.get_thing(p1.line_number, p1.name.as_str())?
             {
@@ -475,55 +451,31 @@ impl<'a> Interpreter<'a> {
                 ));
                 // processed_p1.push(p1.name.to_string());
             } else if let Ok(ref var_data) = var_data {
-                if var_data.is_none() || var_data.is_optional() {
+                let d = if p1
+                    .header
+                    .str(doc.name, p1.line_number, "$processor$")
+                    .is_ok()
+                {
+                    let name = doc.resolve_name(p1.line_number, &var_data.name)?;
+                    let start = std::time::Instant::now();
+                    let value = self.lib.process(p1, &doc)?;
+                    *d_processor = d_processor.saturating_add(std::time::Instant::now() - start);
+                    ftd::Variable {
+                        name,
+                        value,
+                        conditions: vec![],
+                    }
+                } else if var_data.is_none() || var_data.is_optional() {
                     // declare and instantiate a variable
-                    let d = if p1
-                        .header
-                        .str(doc.name, p1.line_number, "$processor$")
-                        .is_ok()
-                    {
-                        let name = var_data.name.to_string();
-                        let start = std::time::Instant::now();
-                        let value = self.lib.process(p1, &doc)?;
-                        *d_processor =
-                            d_processor.saturating_add(std::time::Instant::now() - start);
-                        ftd::Variable {
-                            name,
-                            value,
-                            conditions: vec![],
-                        }
-                    } else {
-                        ftd::Variable::from_p1(p1, &doc)?
-                    };
-                    thing.push((
-                        doc.resolve_name(p1.line_number, &d.name.to_string())?,
-                        ftd::p2::Thing::Variable(d),
-                    ));
+                    ftd::Variable::from_p1(p1, &doc)?
                 } else {
                     // declare and instantiate a list
-                    let d = if p1
-                        .header
-                        .str(doc.name, p1.line_number, "$processor$")
-                        .is_ok()
-                    {
-                        let name = doc.resolve_name(p1.line_number, &var_data.name)?;
-                        let start = std::time::Instant::now();
-                        let value = self.lib.process(p1, &doc)?;
-                        *d_processor =
-                            d_processor.saturating_add(std::time::Instant::now() - start);
-                        ftd::Variable {
-                            name,
-                            value,
-                            conditions: vec![],
-                        }
-                    } else {
-                        ftd::Variable::list_from_p1(p1, &doc)?
-                    };
-                    thing.push((
-                        doc.resolve_name(p1.line_number, &d.name.to_string())?,
-                        ftd::p2::Thing::Variable(d),
-                    ));
-                }
+                    ftd::Variable::list_from_p1(p1, &doc)?
+                };
+                thing.push((
+                    doc.resolve_name(p1.line_number, &d.name.to_string())?,
+                    ftd::p2::Thing::Variable(d),
+                ));
             } else if let ftd::p2::Thing::Variable(mut v) =
                 doc.get_thing(p1.line_number, p1.name.as_str())?
             {
@@ -7618,7 +7570,7 @@ mod test {
         bag.insert(
             "foo/bar#test".to_string(),
             ftd::p2::Thing::Variable(ftd::Variable {
-                name: "test".to_string(),
+                name: "foo/bar#test".to_string(),
                 value: ftd::Value::String {
                     text: "\"0.1.18\"".to_string(),
                     source: ftd::TextSource::Header,
