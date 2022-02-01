@@ -9,7 +9,13 @@ async fn main() -> fpm::Result<()> {
     }
 
     if let Some(build) = matches.subcommand_matches("build") {
-        fpm::build(&config, build.value_of("file"), build.value_of("base")).await?;
+        fpm::build(
+            &config,
+            build.value_of("file"),
+            build.value_of("base"),
+            build.is_present("ignore-failed"),
+        )
+        .await?;
     }
 
     if let Some(sync) = matches.subcommand_matches("sync") {
@@ -80,6 +86,12 @@ fn app(authors: &'static str) -> clap::App<'static, 'static> {
                         .long("base")
                         .takes_value(true)
                         .help("Base URL"),
+                )
+                .arg(
+                    clap::Arg::with_name("ignore-failed")
+                        .long("ignore-failed")
+                        .takes_value(false)
+                        .required(false),
                 )
                 .version(env!("CARGO_PKG_VERSION")),
         )

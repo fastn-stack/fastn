@@ -1,9 +1,10 @@
 -- fbt:
-cmd: cd amitu && $FBT_CWD/target/debug/fpm --test build
+cmd: cd amitu && $FBT_CWD/target/debug/fpm --test build --ignore-failed
 output: amitu/.build
 
 
 -- stdout:
 
 Processed FPM.ftd
+Failed to process fail_doc.ftd
 Processed index.ftd

@@ -4,10 +4,12 @@ pub async fn build(
     config: &fpm::Config,
     file: Option<&str>,
     base_url: Option<&str>,
+    ignore_failed: bool,
 ) -> fpm::Result<()> {
     use fpm::utils::HasElements;
 
     tokio::fs::create_dir_all(config.build_dir()).await?;
+    // let skip_failed = ignore_failed.unwrap_or(false);
 
     match (
         config.package.translation_of.as_ref(),
@@ -18,9 +20,11 @@ pub async fn build(
             // translations, when building `config` we ensured this was rejected
             unreachable!()
         }
-        (Some(original), false) => build_with_original(config, original, file, base_url).await,
-        (None, false) => build_simple(config, file, base_url).await,
-        (None, true) => build_with_translations(config, file, base_url).await,
+        (Some(original), false) => {
+            build_with_original(config, original, file, base_url, ignore_failed).await
+        }
+        (None, false) => build_simple(config, file, base_url, ignore_failed).await,
+        (None, true) => build_with_translations(config, file, base_url, ignore_failed).await,
     }
 }
 
@@ -28,6 +32,7 @@ async fn build_simple(
     config: &fpm::Config,
     file: Option<&str>,
     base_url: Option<&str>,
+    skip_failed: bool,
 ) -> fpm::Result<()> {
     let documents = std::collections::BTreeMap::from_iter(
         fpm::get_documents(config)
@@ -36,13 +41,14 @@ async fn build_simple(
             .map(|v| (v.get_id(), v)),
     );
 
-    process_files(config, &documents, file, base_url).await
+    process_files(config, &documents, file, base_url, skip_failed).await
 }
 
 async fn build_with_translations(
     config: &fpm::Config,
     _file: Option<&str>,
     base_url: Option<&str>,
+    skip_failed: bool,
 ) -> fpm::Result<()> {
     let documents = std::collections::BTreeMap::from_iter(
         fpm::get_documents(config)
@@ -61,6 +67,7 @@ async fn build_with_translations(
             Some(message.as_str()),
             Default::default(),
             base_url,
+            skip_failed,
         )
         .await?;
     }
@@ -94,6 +101,7 @@ async fn build_with_original(
     _original: &fpm::Package,
     _file: Option<&str>,
     base_url: Option<&str>,
+    skip_failed: bool,
 ) -> fpm::Result<()> {
     // This is the translation package
     // Fetch all files from the original package
@@ -134,7 +142,9 @@ async fn build_with_original(
 
     // Process all the files collected from original and root package
     for translated_document in translated_documents.values() {
-        translated_document.html(config, base_url).await?;
+        translated_document
+            .html(config, base_url, skip_failed)
+            .await?;
     }
 
     // Add /FPM/translation-status page
@@ -163,12 +173,22 @@ async fn process_files(
     documents: &std::collections::BTreeMap<String, fpm::File>,
     file: Option<&str>,
     base_url: Option<&str>,
+    skip_failed: bool,
 ) -> fpm::Result<()> {
     for f in documents.values() {
         if file.is_some() && file != Some(f.get_id().as_str()) {
             continue;
         }
-        process_file(config, f, None, None, Default::default(), base_url).await?
+        process_file(
+            config,
+            f,
+            None,
+            None,
+            Default::default(),
+            base_url,
+            skip_failed,
+        )
+        .await?
     }
     Ok(())
 }
@@ -180,11 +200,12 @@ pub(crate) async fn process_file(
     message: Option<&str>,
     translated_data: fpm::TranslationData,
     base_url: Option<&str>,
+    skip_failed: bool,
 ) -> fpm::Result<()> {
     if let Some(fallback) = fallback {
         match (main, fallback) {
             (fpm::File::Ftd(main_doc), fpm::File::Ftd(fallback_doc)) => {
-                process_ftd(
+                let resp = process_ftd(
                     config,
                     main_doc,
                     Some(fallback_doc),
@@ -192,7 +213,19 @@ pub(crate) async fn process_file(
                     translated_data,
                     base_url,
                 )
-                .await?
+                .await;
+                match (resp, skip_failed) {
+                    (Ok(r), _) => r,
+                    (_, true) => {
+                        println!("Failed to process {}", main.get_id());
+                        return Ok(());
+                    }
+                    (_, _) => {
+                        return Err(fpm::Error::UsageError {
+                            message: format!("{:?} Unable to process the document", main.get_id()),
+                        })
+                    }
+                }
             }
             (fpm::File::Static(main_sa), fpm::File::Static(_)) => {
                 process_static(main_sa, &config.root).await?
@@ -214,7 +247,19 @@ pub(crate) async fn process_file(
     }
     match main {
         fpm::File::Ftd(doc) => {
-            process_ftd(config, doc, None, message, translated_data, base_url).await?
+            let resp = process_ftd(config, doc, None, message, translated_data, base_url).await;
+            match (resp, skip_failed) {
+                (Ok(r), _) => r,
+                (_, true) => {
+                    println!("Failed to process {}", main.get_id());
+                    return Ok(());
+                }
+                (_, _) => {
+                    return Err(fpm::Error::UsageError {
+                        message: format!("{:?} Unable to process the document", main.get_id()),
+                    })
+                }
+            }
         }
         fpm::File::Static(sa) => process_static(sa, &config.root).await?,
         fpm::File::Markdown(doc) => process_markdown(doc, config, base_url).await?,

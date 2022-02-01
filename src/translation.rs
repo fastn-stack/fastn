@@ -27,7 +27,12 @@ pub struct TranslationData {
 }
 
 impl TranslatedDocument {
-    pub async fn html(&self, config: &fpm::Config, base_url: Option<&str>) -> fpm::Result<()> {
+    pub async fn html(
+        &self,
+        config: &fpm::Config,
+        base_url: Option<&str>,
+        skip_failed: bool,
+    ) -> fpm::Result<()> {
         // handle the message
         // render with-fallback or with-message
         let message = fpm::get_messages(self, config)?;
@@ -68,6 +73,7 @@ impl TranslatedDocument {
             Some(message.as_str()),
             translated_data,
             base_url,
+            skip_failed,
         )
         .await?;
         return Ok(());
