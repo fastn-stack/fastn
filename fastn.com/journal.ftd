@@ -194,6 +194,25 @@ But then we are still facing all data is in UI problem. We have to identify UI
 elements using IDs, or name of component if they are singlton. Current clean
 data modelling will go.
 
+-- ft.h1: Limited / Controllable Mutability
+
+It's not easy to put all data only in component, data being defined at top of
+file, etc is handy, we have seen it work quite well, everything looks clean etc,
+but we are struggling with components modifying gloabls problem.
+
+What is we say globals of a module or a package can only be modified by
+components defined in that module or package? We still allow top level
+modifications, eg config modifies colors etc, this is not part of component but
+top level declarations.
+
+If we had way to limit modifications, eg `mut(package) boolean foo:` we are
+saying only current package can modify this foo. Default can be `mut(module)`
+meaning only current module can modify it. And we also allow `mut` meaning anyone
+can modify things. Or we change defaults, `mut` means `mut(package)`, and
+`mut(pub)` or something to mean everyone can modify.
+
+So we go with the "Final Proposal" with `mut` added to limit debugging scope?
+
 -- ft.h1: Boolean Expressions
 
 29th Jan 2022
