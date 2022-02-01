@@ -1,19 +1,34 @@
 #[derive(Debug, PartialEq, Clone, serde::Serialize, serde::Deserialize)]
 pub struct Variable {
     pub name: String,
-    pub value: ftd::Value,
-    pub conditions: Vec<(ftd::p2::Boolean, ftd::Value)>,
+    pub value: ftd::PropertyValue,
+    pub conditions: Vec<(ftd::p2::Boolean, ftd::PropertyValue)>,
 }
 
 #[derive(Debug, Clone, PartialEq, serde::Serialize, serde::Deserialize)]
 #[serde(tag = "type")]
 pub enum PropertyValue {
-    Value { value: ftd::variable::Value },
+    Value { value: ftd::Value },
     Reference { name: String, kind: ftd::p2::Kind },
     Variable { name: String, kind: ftd::p2::Kind },
 }
 
 impl PropertyValue {
+    pub fn into_optional(self) -> Self {
+        let mut s = self;
+        match &mut s {
+            PropertyValue::Value { value } => {
+                *value = value.clone().into_optional();
+            }
+            PropertyValue::Reference { kind, .. } | PropertyValue::Variable { kind, .. } => {
+                *kind = ftd::p2::Kind::Optional {
+                    kind: Box::new(kind.clone()),
+                };
+            }
+        }
+        s
+    }
+
     pub fn resolve_value(
         line_number: usize,
         value: &str,
@@ -382,7 +397,7 @@ pub enum Value {
         fields: std::collections::BTreeMap<String, PropertyValue>,
     },
     List {
-        data: Vec<Value>,
+        data: Vec<PropertyValue>,
         kind: ftd::p2::Kind,
     },
     Optional {
@@ -540,11 +555,29 @@ impl Variable {
                 p1.line_number,
             );
         }
+        if let Some(ref caption) = p1.caption {
+            if let Some(text) = caption.strip_prefix('$') {
+                return Ok(Variable {
+                    name,
+                    value: ftd::PropertyValue::Reference {
+                        name: doc.resolve_name(p1.line_number, text)?,
+                        kind: ftd::p2::Kind::List {
+                            kind: Box::new(kind.list_kind().to_owned()),
+                            default: None,
+                        },
+                    },
+                    conditions: vec![],
+                });
+            }
+        }
+
         Ok(Variable {
             name,
-            value: Value::List {
-                data: Default::default(),
-                kind: kind.list_kind().to_owned(),
+            value: ftd::PropertyValue::Value {
+                value: Value::List {
+                    data: Default::default(),
+                    kind: kind.list_kind().to_owned(),
+                },
             },
             conditions: vec![],
         })
@@ -557,14 +590,16 @@ impl Variable {
         )?;
         Ok(Variable {
             name,
-            value: Value::Map {
-                data: Default::default(),
-                kind: ftd::p2::Kind::from(
-                    p1.line_number,
-                    p1.header.str(doc.name, p1.line_number, "type")?,
-                    doc,
-                    None,
-                )?,
+            value: ftd::PropertyValue::Value {
+                value: Value::Map {
+                    data: Default::default(),
+                    kind: ftd::p2::Kind::from(
+                        p1.line_number,
+                        p1.header.str(doc.name, p1.line_number, "type")?,
+                        doc,
+                        None,
+                    )?,
+                },
             },
             conditions: vec![],
         })
@@ -580,12 +615,12 @@ impl Variable {
             kind: &ftd::p2::Kind,
             p1: &ftd::p1::Section,
             doc: &ftd::p2::TDoc,
-        ) -> ftd::p1::Result<ftd::Value> {
+        ) -> ftd::p1::Result<ftd::PropertyValue> {
             Ok(match kind {
-                ftd::p2::Kind::Integer { .. } => read_integer(p1, doc.name)?,
-                ftd::p2::Kind::Decimal { .. } => read_decimal(p1, doc.name)?,
-                ftd::p2::Kind::Boolean { .. } => read_boolean(p1, doc.name)?,
-                ftd::p2::Kind::String { .. } => read_string(p1, doc.name)?,
+                ftd::p2::Kind::Integer { .. } => read_integer(p1, doc)?,
+                ftd::p2::Kind::Decimal { .. } => read_decimal(p1, doc)?,
+                ftd::p2::Kind::Boolean { .. } => read_boolean(p1, doc)?,
+                ftd::p2::Kind::String { .. } => read_string(p1, doc)?,
                 ftd::p2::Kind::Record { name, .. } => {
                     doc.get_record(line_number, name)?.create(p1, doc)?
                 }
@@ -603,15 +638,34 @@ impl Variable {
             p1
         };
 
-        match (&self.value.kind(), &mut self.value) {
+        match (
+            &self.value.kind(),
+            &self
+                .value
+                .resolve(p1.line_number, &Default::default(), doc)?,
+        ) {
             (ftd::p2::Kind::Record { name, .. }, _) => {
                 self.value = doc.get_record(p1.line_number, name)?.create(&p1, doc)?
             }
             (ftd::p2::Kind::List { kind, .. }, ftd::Value::List { data, .. }) => {
+                let mut data = data.clone();
                 data.push(read_value(p1.line_number, kind, &p1, doc)?);
+                self.value = ftd::PropertyValue::Value {
+                    value: ftd::Value::List {
+                        data,
+                        kind: kind.as_ref().clone(),
+                    },
+                };
             }
-            (ftd::p2::Kind::Optional { kind }, ftd::Value::Optional { data, .. }) => {
-                *data = Box::new(read_value(p1.line_number, kind, &p1, doc).ok());
+            (ftd::p2::Kind::Optional { kind }, ftd::Value::Optional { .. }) => {
+                self.value = read_value(p1.line_number, kind, &p1, doc)
+                    .map(|v| v.into_optional())
+                    .unwrap_or(ftd::PropertyValue::Value {
+                        value: ftd::Value::Optional {
+                            data: Box::new(None),
+                            kind: kind.as_ref().inner().clone(),
+                        },
+                    });
             }
             (ftd::p2::Kind::Map { .. }, _) => {
                 return ftd::e2("unexpected map", doc.name, p1.line_number)
@@ -649,9 +703,11 @@ impl Variable {
             )?;
             return Ok(Variable {
                 name,
-                value: ftd::Value::Optional {
-                    data: Box::new(None),
-                    kind: kind.inner().to_owned(),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Optional {
+                        data: Box::new(None),
+                        kind: kind.inner().to_owned(),
+                    },
                 },
                 conditions: vec![],
             });
@@ -659,10 +715,10 @@ impl Variable {
 
         let value = {
             let mut value = match var_data.kind.as_str() {
-                "string" => read_string(p1, doc.name)?,
-                "integer" => read_integer(p1, doc.name)?,
-                "decimal" => read_decimal(p1, doc.name)?,
-                "boolean" => read_boolean(p1, doc.name)?,
+                "string" => read_string(p1, doc)?,
+                "integer" => read_integer(p1, doc)?,
+                "decimal" => read_decimal(p1, doc)?,
+                "boolean" => read_boolean(p1, doc)?,
                 "object" => read_object(p1, doc)?,
                 t => match doc.get_thing(p1.line_number, t)? {
                     ftd::p2::Thing::Record(r) => r.create(p1, doc)?,
@@ -687,10 +743,19 @@ impl Variable {
                     None,
                     &Default::default(),
                 )?;
-                value = ftd::Value::Optional {
-                    data: Box::new(Some(value)),
-                    kind: kind.inner().to_owned(),
-                };
+                //todo: use into_optional
+                match &mut value {
+                    PropertyValue::Value { value } => {
+                        *value = ftd::Value::Optional {
+                            data: Box::new(Some(value.clone())),
+                            kind: kind.inner().to_owned(),
+                        };
+                    }
+                    PropertyValue::Reference { kind: k, .. }
+                    | PropertyValue::Variable { kind: k, .. } => {
+                        *k = kind;
+                    }
+                }
             }
             value
         };
@@ -706,12 +771,12 @@ impl Variable {
         &self,
         p1: &ftd::p1::Section,
         doc: &ftd::p2::TDoc,
-    ) -> ftd::p1::Result<ftd::Value> {
+    ) -> ftd::p1::Result<ftd::PropertyValue> {
         match self.value.kind() {
-            ftd::p2::Kind::String { .. } => read_string(p1, doc.name),
-            ftd::p2::Kind::Integer { .. } => read_integer(p1, doc.name),
-            ftd::p2::Kind::Decimal { .. } => read_decimal(p1, doc.name),
-            ftd::p2::Kind::Boolean { .. } => read_boolean(p1, doc.name),
+            ftd::p2::Kind::String { .. } => read_string(p1, doc),
+            ftd::p2::Kind::Integer { .. } => read_integer(p1, doc),
+            ftd::p2::Kind::Decimal { .. } => read_decimal(p1, doc),
+            ftd::p2::Kind::Boolean { .. } => read_boolean(p1, doc),
             ftd::p2::Kind::Record { name, .. } => match doc.get_thing(p1.line_number, &name)? {
                 ftd::p2::Thing::Record(r) => r.create(p1, doc),
                 t => ftd::e2(
@@ -764,58 +829,102 @@ pub fn guess_type(s: &str, is_body: bool) -> ftd::p1::Result<Value> {
     })
 }
 
-fn read_string(p1: &ftd::p1::Section, doc_id: &str) -> ftd::p1::Result<Value> {
-    match (&p1.caption, &p1.body_without_comment()) {
-        (Some(c), Some(b)) => ftd::e2(
-            format!("both caption: `{}` and body: `{}` present", c, b.1),
-            doc_id,
-            p1.line_number,
-        ),
-        (Some(caption), None) => Ok(Value::String {
-            text: caption.to_string(),
-            source: TextSource::Caption,
-        }),
-        (None, Some(body)) => Ok(Value::String {
-            text: body.1.to_string(),
-            source: TextSource::Body,
-        }),
-        (None, None) => ftd::e2(
-            "either body or caption is required for string",
-            doc_id,
-            p1.line_number,
-        ),
-    }
+fn read_string(p1: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Result<ftd::PropertyValue> {
+    let (text, source, line_number) = match (&p1.caption, &p1.body_without_comment()) {
+        (Some(c), Some(b)) => {
+            return ftd::e2(
+                format!("both caption: `{}` and body: `{}` present", c, b.1),
+                doc.name,
+                p1.line_number,
+            )
+        }
+        (Some(caption), None) => (caption.to_string(), TextSource::Caption, p1.line_number),
+        (None, Some(body)) => (body.1.to_string(), TextSource::Body, body.0),
+        (None, None) => {
+            return ftd::e2(
+                "either body or caption is required for string",
+                doc.name,
+                p1.line_number,
+            )
+        }
+    };
+    Ok(if let Some(text) = text.strip_prefix('$') {
+        ftd::PropertyValue::Reference {
+            name: doc.resolve_name(line_number, text)?,
+            kind: ftd::p2::Kind::String {
+                caption: source.eq(&ftd::TextSource::Caption),
+                body: source.eq(&ftd::TextSource::Body),
+                default: None,
+            },
+        }
+    } else {
+        ftd::PropertyValue::Value {
+            value: Value::String { text, source },
+        }
+    })
 }
 
-fn read_integer(p1: &ftd::p1::Section, doc_id: &str) -> ftd::p1::Result<Value> {
-    let caption = p1.caption(p1.line_number, doc_id)?;
-    if let Ok(v) = caption.parse::<i64>() {
-        return Ok(Value::Integer { value: v });
-    }
-
-    ftd::e2("not a valid integer", doc_id, p1.line_number)
+fn read_integer(p1: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Result<ftd::PropertyValue> {
+    let caption = p1.caption(p1.line_number, doc.name)?;
+    Ok(if let Some(text) = caption.strip_prefix('$') {
+        ftd::PropertyValue::Reference {
+            name: doc.resolve_name(p1.line_number, text)?,
+            kind: ftd::p2::Kind::Integer { default: None },
+        }
+    } else {
+        if let Ok(v) = caption.parse::<i64>() {
+            return Ok(ftd::PropertyValue::Value {
+                value: Value::Integer { value: v },
+            });
+        }
+        return ftd::e2("not a valid integer", doc.name, p1.line_number);
+    })
 }
 
-fn read_decimal(p1: &ftd::p1::Section, doc_id: &str) -> ftd::p1::Result<Value> {
-    let caption = p1.caption(p1.line_number, doc_id)?;
-    if let Ok(v) = caption.parse::<f64>() {
-        return Ok(Value::Decimal { value: v });
-    }
-
-    ftd::e2("not a valid float", doc_id, p1.line_number)
+fn read_decimal(p1: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Result<ftd::PropertyValue> {
+    let caption = p1.caption(p1.line_number, doc.name)?;
+    Ok(if let Some(text) = caption.strip_prefix('$') {
+        ftd::PropertyValue::Reference {
+            name: doc.resolve_name(p1.line_number, text)?,
+            kind: ftd::p2::Kind::Integer { default: None },
+        }
+    } else {
+        if let Ok(v) = caption.parse::<f64>() {
+            return Ok(ftd::PropertyValue::Value {
+                value: Value::Decimal { value: v },
+            });
+        }
+        return ftd::e2("not a valid float", doc.name, p1.line_number);
+    })
 }
 
-fn read_boolean(p1: &ftd::p1::Section, doc_id: &str) -> ftd::p1::Result<Value> {
-    let caption = p1.caption(p1.line_number, doc_id)?;
-    if let Ok(v) = caption.parse::<bool>() {
-        return Ok(Value::Boolean { value: v });
-    }
-
-    ftd::e2("not a valid bool", doc_id, p1.line_number)
+fn read_boolean(p1: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Result<ftd::PropertyValue> {
+    let caption = p1.caption(p1.line_number, doc.name)?;
+    Ok(if let Some(text) = caption.strip_prefix('$') {
+        ftd::PropertyValue::Reference {
+            name: doc.resolve_name(p1.line_number, text)?,
+            kind: ftd::p2::Kind::Integer { default: None },
+        }
+    } else {
+        if let Ok(v) = caption.parse::<bool>() {
+            return Ok(ftd::PropertyValue::Value {
+                value: Value::Boolean { value: v },
+            });
+        }
+        return ftd::e2("not a valid bool", doc.name, p1.line_number);
+    })
 }
 
-fn read_object(p1: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Result<Value> {
+fn read_object(p1: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Result<ftd::PropertyValue> {
     let mut values: std::collections::BTreeMap<String, PropertyValue> = Default::default();
+    if let Some(ref caption) = p1.caption {
+        if let Some(text) = caption.strip_prefix('$') {
+            return Ok(ftd::PropertyValue::Reference {
+                name: doc.resolve_name(p1.line_number, text)?,
+                kind: ftd::p2::Kind::Object { default: None },
+            });
+        }
+    }
     for (line_number, k, v) in p1.header.0.iter() {
         let line_number = line_number.to_owned();
         let value = if v.trim().starts_with('$') {
@@ -860,7 +969,9 @@ fn read_object(p1: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Result<Va
         values.insert(k.to_string(), value);
     }
 
-    Ok(Value::Object { values })
+    Ok(ftd::PropertyValue::Value {
+        value: Value::Object { values },
+    })
 }
 
 #[derive(Debug, Clone)]
@@ -1101,34 +1212,38 @@ mod test {
             "foo/bar#pr".to_string(),
             ftd::p2::Thing::Variable(ftd::Variable {
                 name: "foo/bar#pr".to_string(),
-                value: ftd::Value::List {
-                    data: vec![ftd::Value::Record {
-                        name: s("foo/bar#pull-request"),
-                        fields: std::array::IntoIter::new([
-                            (
-                                s("title"),
-                                ftd::PropertyValue::Value {
-                                    value: ftd::Value::String {
-                                        text: "some pr".to_string(),
-                                        source: ftd::TextSource::Caption,
-                                    },
-                                },
-                            ),
-                            (
-                                s("about"),
-                                ftd::PropertyValue::Value {
-                                    value: ftd::Value::String {
-                                        text: "yo yo".to_string(),
-                                        source: ftd::TextSource::Body,
-                                    },
-                                },
-                            ),
-                        ])
-                        .collect(),
-                    }],
-                    kind: ftd::p2::Kind::Record {
-                        name: s("foo/bar#pull-request"),
-                        default: None,
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::List {
+                        data: vec![ftd::PropertyValue::Value {
+                            value: ftd::Value::Record {
+                                name: s("foo/bar#pull-request"),
+                                fields: std::array::IntoIter::new([
+                                    (
+                                        s("title"),
+                                        ftd::PropertyValue::Value {
+                                            value: ftd::Value::String {
+                                                text: "some pr".to_string(),
+                                                source: ftd::TextSource::Caption,
+                                            },
+                                        },
+                                    ),
+                                    (
+                                        s("about"),
+                                        ftd::PropertyValue::Value {
+                                            value: ftd::Value::String {
+                                                text: "yo yo".to_string(),
+                                                source: ftd::TextSource::Body,
+                                            },
+                                        },
+                                    ),
+                                ])
+                                .collect(),
+                            },
+                        }],
+                        kind: ftd::p2::Kind::Record {
+                            name: s("foo/bar#pull-request"),
+                            default: None,
+                        },
                     },
                 },
                 conditions: vec![],

@@ -75,7 +75,7 @@ fn read_package(section: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Res
         doc_id: doc.name.to_string(),
         line_number: section.line_number,
     })?;
-    if let ftd::Value::List {
+    if let Ok(ftd::Value::List {
         kind:
             ftd::p2::Kind::String {
                 caption,
@@ -83,7 +83,9 @@ fn read_package(section: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Res
                 default,
             },
         ..
-    } = var.value
+    }) = var
+        .value
+        .resolve(section.line_number, &Default::default(), doc)
     {
         let mut data = vec![];
         for line in get.split('\n') {
@@ -94,9 +96,11 @@ fn read_package(section: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Res
                 let mut part = line.splitn(2, '=');
                 let _part_1 = part.next().unwrap().trim();
                 let part_2 = part.next().unwrap().trim();
-                data.push(ftd::Value::String {
-                    text: part_2.to_string(),
-                    source: ftd::TextSource::Header,
+                data.push(ftd::PropertyValue::Value {
+                    value: ftd::Value::String {
+                        text: part_2.to_string(),
+                        source: ftd::TextSource::Header,
+                    },
                 });
             }
         }
@@ -147,10 +151,12 @@ fn read_records(section: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Res
         doc_id: doc.name.to_string(),
         line_number: section.line_number,
     })?;
-    if let ftd::Value::List {
+    if let Ok(ftd::Value::List {
         kind: ftd::p2::Kind::Record { name, .. },
         ..
-    } = var.value.clone()
+    }) = var
+        .value
+        .resolve(section.line_number, &Default::default(), doc)
     {
         let rec = doc.get_record(section.line_number, name.as_str())?;
         let mut data = vec![];
@@ -179,9 +185,11 @@ fn read_records(section: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Res
                         _ => unimplemented!(),
                     }
                 }
-                data.push(ftd::Value::Record {
-                    name: rec.name.clone(),
-                    fields,
+                data.push(ftd::PropertyValue::Value {
+                    value: ftd::Value::Record {
+                        name: rec.name.clone(),
+                        fields,
+                    },
                 });
             }
         }

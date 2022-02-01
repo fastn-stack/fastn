@@ -148,7 +148,9 @@ impl Boolean {
                                         format!("{}#{}", doc.name, k),
                                         ftd::p2::Thing::Variable(ftd::Variable {
                                             name: k.to_string(),
-                                            value: v.to_owned(),
+                                            value: ftd::PropertyValue::Value {
+                                                value: v.to_owned(),
+                                            },
                                             conditions: vec![],
                                         }),
                                     )
