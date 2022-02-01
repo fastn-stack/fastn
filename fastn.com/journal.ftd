@@ -213,6 +213,23 @@ can modify things. Or we change defaults, `mut` means `mut(package)`, and
 
 So we go with the "Final Proposal" with `mut` added to limit debugging scope?
 
+-- ft.code:
+lang: ftd
+
+\-- boolean foo: true
+mutable-by: package
+mutable-by: module
+mutable-by: all
+mutable-by: some-other-package
+
+-- ft.markdown:
+
+Maybe we can even allow name of other packages explicitly that can mutate it.
+`mutable-by` can be specified multiple times. `package` and `module` refer to
+current package and module respectively, or you can specify any package or
+specific module. Or you can specify `all` to say everyone can mutate this.
+By default it would be `mutable-by: module`.
+
 -- ft.h1: Boolean Expressions
 
 29th Jan 2022
