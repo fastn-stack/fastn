@@ -172,7 +172,7 @@ impl<'a> Interpreter<'a> {
                     *d_processor = d_processor.saturating_add(std::time::Instant::now() - start);
                     ftd::Variable {
                         name,
-                        value,
+                        value: ftd::PropertyValue::Value { value },
                         conditions: vec![],
                     }
                 } else if var_data.is_none() || var_data.is_optional() {
@@ -218,7 +218,7 @@ impl<'a> Interpreter<'a> {
                     let start = std::time::Instant::now();
                     let value = self.lib.process(p1, &doc).await?;
                     *d_processor = d_processor.saturating_add(std::time::Instant::now() - start);
-                    v.value = value;
+                    v.value = ftd::PropertyValue::Value { value };
                 } else {
                     v.update_from_p1(p1, &doc)?;
                 }
@@ -354,7 +354,7 @@ impl<'a> Interpreter<'a> {
         Ok(instructions)
     }
 
-    #[cfg(not(feature = "async"))]
+    // #[cfg(not(feature = "async"))]
     fn interpret_(
         &mut self,
         name: &str,
@@ -462,7 +462,7 @@ impl<'a> Interpreter<'a> {
                     *d_processor = d_processor.saturating_add(std::time::Instant::now() - start);
                     ftd::Variable {
                         name,
-                        value,
+                        value: ftd::PropertyValue::Value { value },
                         conditions: vec![],
                     }
                 } else if var_data.is_none() || var_data.is_optional() {
@@ -508,7 +508,7 @@ impl<'a> Interpreter<'a> {
                     let start = std::time::Instant::now();
                     let value = self.lib.process(p1, &doc)?;
                     *d_processor = d_processor.saturating_add(std::time::Instant::now() - start);
-                    v.value = value;
+                    v.value = ftd::PropertyValue::Value { value };
                 } else {
                     v.update_from_p1(p1, &doc)?;
                 }

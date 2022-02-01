@@ -17,20 +17,35 @@ impl ToString for Document {
 impl Document {
     fn get_data(&self) -> ftd::Map {
         let mut d: ftd::Map = Default::default();
+        let doc = ftd::p2::TDoc {
+            name: self.name.as_str(),
+            aliases: &self.aliases,
+            bag: &self.data,
+        };
         for (k, v) in self.data.iter() {
             if let ftd::p2::Thing::Variable(ftd::Variable { value, .. }) = v {
-                if let Some(value) = get_value(value) {
+                let val = if let Ok(val) = value.resolve(0, &Default::default(), &doc) {
+                    val
+                } else {
+                    continue;
+                };
+                if let Some(value) = get_value(&val, &doc) {
                     d.insert(k.to_string(), value);
                 }
             }
         }
         return d;
 
-        fn get_value(value: &ftd::Value) -> Option<String> {
+        fn get_value(value: &ftd::Value, doc: &ftd::p2::TDoc) -> Option<String> {
             if let ftd::Value::List { data, .. } = value {
                 let mut list_data = vec![];
                 for val in data {
-                    if let Some(val) = get_value(val) {
+                    let val = if let Ok(val) = val.resolve(0, &Default::default(), doc) {
+                        val
+                    } else {
+                        continue;
+                    };
+                    if let Some(val) = get_value(&val, doc) {
                         list_data.push(val);
                     }
                 }
@@ -146,9 +161,11 @@ impl Document {
     pub fn set_string(&mut self, name: &str, value: &str) {
         let thing = ftd::p2::Thing::Variable(ftd::Variable {
             name: name.to_string(),
-            value: ftd::Value::String {
-                text: value.to_string(),
-                source: ftd::TextSource::Header,
+            value: ftd::PropertyValue::Value {
+                value: ftd::Value::String {
+                    text: value.to_string(),
+                    source: ftd::TextSource::Header,
+                },
             },
             conditions: vec![],
         });
@@ -158,7 +175,9 @@ impl Document {
     pub fn set_bool(&mut self, name: &str, value: bool) {
         let thing = ftd::p2::Thing::Variable(ftd::Variable {
             name: name.to_string(),
-            value: ftd::Value::Boolean { value },
+            value: ftd::PropertyValue::Value {
+                value: ftd::Value::Boolean { value },
+            },
             conditions: vec![],
         });
         self.data.insert(name.to_string(), thing);
@@ -503,14 +522,26 @@ impl Document {
                 })
             }
         };
+        let doc = ftd::p2::TDoc {
+            name: self.name.as_str(),
+            aliases: &self.aliases,
+            bag: &self.data,
+        };
 
         match thing {
-            ftd::p2::Thing::Variable(v) => self.value_to_json(&v.value),
+            ftd::p2::Thing::Variable(v) => {
+                self.value_to_json(&v.value.resolve(0, &Default::default(), &doc)?)
+            }
             t => panic!("{:?} is not a variable", t),
         }
     }
 
     fn value_to_json(&self, v: &ftd::Value) -> ftd::p1::Result<serde_json::Value> {
+        let doc = ftd::p2::TDoc {
+            name: self.name.as_str(),
+            aliases: &self.aliases,
+            bag: &self.data,
+        };
         Ok(match v {
             ftd::Value::Integer { value } => {
                 serde_json::Value::Number(serde_json::Number::from(*value))
@@ -525,7 +556,12 @@ impl Document {
             ftd::Value::OrType {
                 variant, fields, ..
             } => self.object_to_json(Some(variant), fields)?,
-            ftd::Value::List { data, .. } => self.list_to_json(data)?,
+            ftd::Value::List { data, .. } => self.list_to_json(
+                data.iter()
+                    .filter_map(|v| v.resolve(0, &Default::default(), &doc).ok())
+                    .collect::<Vec<ftd::Value>>()
+                    .as_slice(),
+            )?,
             ftd::Value::None { .. } => serde_json::Value::Null,
             _ => {
                 return ftd::e2(

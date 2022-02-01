@@ -345,15 +345,23 @@ impl ChildComponent {
         // let tmp_data = construct_tmp_data()
         return Ok(elements);
 
-        fn construct_tmp_data(kind: &ftd::p2::Kind) -> Option<ftd::Value> {
+        fn construct_tmp_data(kind: &ftd::p2::Kind) -> Option<ftd::PropertyValue> {
             match kind {
-                ftd::p2::Kind::String { .. } => Some(ftd::Value::String {
-                    text: "$loop$".to_string(),
-                    source: ftd::TextSource::Header,
+                ftd::p2::Kind::String { .. } => Some(ftd::PropertyValue::Value {
+                    value: ftd::Value::String {
+                        text: "$loop$".to_string(),
+                        source: ftd::TextSource::Header,
+                    },
                 }),
-                ftd::p2::Kind::Integer { .. } => Some(ftd::Value::Integer { value: 0 }),
-                ftd::p2::Kind::Decimal { .. } => Some(ftd::Value::Decimal { value: 0.0 }),
-                ftd::p2::Kind::Boolean { .. } => Some(ftd::Value::Boolean { value: false }),
+                ftd::p2::Kind::Integer { .. } => Some(ftd::PropertyValue::Value {
+                    value: ftd::Value::Integer { value: 0 },
+                }),
+                ftd::p2::Kind::Decimal { .. } => Some(ftd::PropertyValue::Value {
+                    value: ftd::Value::Decimal { value: 0.0 },
+                }),
+                ftd::p2::Kind::Boolean { .. } => Some(ftd::PropertyValue::Value {
+                    value: ftd::Value::Boolean { value: false },
+                }),
                 ftd::p2::Kind::Optional { kind } => {
                     construct_tmp_data(kind).map(|v| v.into_optional())
                 }
@@ -363,7 +371,7 @@ impl ChildComponent {
 
         fn construct_element(
             child_component: &ChildComponent,
-            d: &ftd::Value,
+            d: &ftd::PropertyValue,
             index: usize,
             root: &ftd::Component,
             doc: &ftd::p2::TDoc,
@@ -378,7 +386,8 @@ impl ChildComponent {
         ) -> ftd::p1::Result<ElementWithContainer> {
             let mut new_arguments: std::collections::BTreeMap<String, ftd::Value> =
                 arguments.clone();
-            new_arguments.insert("$loop$".to_string(), d.clone());
+            let d = d.resolve(child_component.line_number, arguments, doc)?;
+            new_arguments.insert("$loop$".to_string(), d);
             let new_properties = resolve_properties_with_ref(
                 child_component.line_number,
                 &child_component.properties,

@@ -111,10 +111,12 @@ impl<'a> TDoc<'a> {
             }
             ftd::p2::Kind::List { kind, .. } => {
                 let kind = kind.as_ref();
-                let mut data: Vec<ftd::Value> = vec![];
+                let mut data: Vec<ftd::PropertyValue> = vec![];
                 if let serde_json::Value::Array(list) = json {
                     for item in list {
-                        data.push(self.from_json_(line_number, item, kind.to_owned())?);
+                        data.push(ftd::PropertyValue::Value {
+                            value: self.from_json_(line_number, item, kind.to_owned())?,
+                        });
                     }
                 } else {
                     return ftd::e2(
@@ -160,9 +162,11 @@ impl<'a> TDoc<'a> {
             Ok(match kind {
                 ftd::p2::Kind::List { kind, .. } => {
                     let kind = kind.as_ref();
-                    let mut data: Vec<ftd::Value> = vec![];
+                    let mut data: Vec<ftd::PropertyValue> = vec![];
                     for row in rows {
-                        data.push(doc.from_json_row_(line_number, row, kind.to_owned())?);
+                        data.push(ftd::PropertyValue::Value {
+                            value: doc.from_json_row_(line_number, row, kind.to_owned())?,
+                        });
                     }
 
                     ftd::Value::List {
@@ -433,10 +437,10 @@ impl<'a> TDoc<'a> {
     }
 
     pub fn is_variable_record_type(&self, line_number: usize, name: &str) -> ftd::p1::Result<bool> {
-        match self.get_value(line_number, name)? {
-            ftd::Value::Record { .. } => Ok(true),
-            _ => Ok(false),
-        }
+        Ok(match self.get_thing(line_number, name)? {
+            ftd::p2::Thing::Variable(v) => v.value.kind().is_record(),
+            _ => false,
+        })
     }
 
     pub fn get_value_and_conditions(
@@ -445,7 +449,20 @@ impl<'a> TDoc<'a> {
         name: &str,
     ) -> ftd::p1::Result<(ftd::Value, Vec<(ftd::p2::Boolean, ftd::Value)>)> {
         match self.get_thing(line_number, name)? {
-            ftd::p2::Thing::Variable(v) => Ok((v.value, v.conditions)),
+            ftd::p2::Thing::Variable(v) => Ok((
+                v.value.resolve(line_number, &Default::default(), self)?,
+                v.conditions
+                    .into_iter()
+                    .map(|(b, v)| {
+                        if let Ok(v) = v.resolve(line_number, &Default::default(), self) {
+                            Some((b, v))
+                        } else {
+                            None
+                        }
+                    })
+                    .flatten()
+                    .collect(),
+            )),
             v => self.err("not a variable", v, "get_value", line_number),
         }
     }
@@ -453,7 +470,7 @@ impl<'a> TDoc<'a> {
     pub fn get_value(&self, line_number: usize, name: &str) -> ftd::p1::Result<ftd::Value> {
         // TODO: name can be a.b.c, and a and a.b are records with right fields
         match self.get_thing(line_number, name)? {
-            ftd::p2::Thing::Variable(v) => Ok(v.value),
+            ftd::p2::Thing::Variable(v) => v.value.resolve(line_number, &Default::default(), self),
             v => self.err("not a variable", v, "get_value", line_number),
         }
     }
@@ -613,7 +630,7 @@ impl<'a> TDoc<'a> {
                     value,
                     conditions,
                 }) => {
-                    let fields = match value {
+                    let fields = match value.resolve(line_number, &Default::default(), doc)? {
                         ftd::Value::Record { fields, .. } => fields,
                         ftd::Value::OrType { fields, .. } => fields,
                         ftd::Value::Object { values } => values,
@@ -629,7 +646,7 @@ impl<'a> TDoc<'a> {
                     if let Some(ftd::PropertyValue::Value { value: val }) = fields.get(v) {
                         ftd::p2::Thing::Variable(ftd::Variable {
                             name,
-                            value: val.clone(),
+                            value: ftd::PropertyValue::Value { value: val.clone() },
                             conditions,
                         })
                     } else if let Some(ftd::PropertyValue::Reference { name, .. }) = fields.get(v) {

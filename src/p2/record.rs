@@ -55,7 +55,7 @@ impl Record {
                 ) => match list_kind.as_ref() {
                     ftd::p2::Kind::OrType { name: or_type_name } => {
                         let e = doc.get_or_type(p1.line_number, or_type_name)?;
-                        let mut values: Vec<ftd::Value> = vec![];
+                        let mut values: Vec<ftd::PropertyValue> = vec![];
                         for s in p1.sub_sections.0.iter() {
                             if s.is_commented {
                                 continue;
@@ -63,10 +63,12 @@ impl Record {
                             for v in e.variants.iter() {
                                 let variant = v.variant_name().expect("record.fields").to_string();
                                 if s.name == format!("{}.{}", name, variant.as_str()) {
-                                    values.push(ftd::Value::OrType {
-                                        variant,
-                                        name: e.name.to_string(),
-                                        fields: v.fields_from_sub_section(s, doc)?,
+                                    values.push(ftd::PropertyValue::Value {
+                                        value: ftd::Value::OrType {
+                                            variant,
+                                            name: e.name.to_string(),
+                                            fields: v.fields_from_sub_section(s, doc)?,
+                                        },
                                     })
                                 }
                             }
@@ -92,14 +94,16 @@ impl Record {
                         ftd::PropertyValue::Value { value: list }
                     }
                     ftd::p2::Kind::String { .. } => {
-                        let mut values: Vec<ftd::Value> = vec![];
+                        let mut values: Vec<ftd::PropertyValue> = vec![];
                         for (_, k, v) in p1.header.0.iter() {
                             if *k != *name || k.starts_with('/') {
                                 continue;
                             }
-                            values.push(ftd::Value::String {
-                                text: v.to_string(),
-                                source: ftd::TextSource::Header,
+                            values.push(ftd::PropertyValue::Value {
+                                value: ftd::Value::String {
+                                    text: v.to_string(),
+                                    source: ftd::TextSource::Header,
+                                },
                             });
                         }
                         ftd::PropertyValue::Value {
@@ -134,7 +138,7 @@ impl Record {
                         kind: list_kind, ..
                     },
                 ) => {
-                    let mut values: Vec<ftd::Value> = vec![];
+                    let mut values: Vec<ftd::PropertyValue> = vec![];
                     for s in p1.sub_sections.0.iter() {
                         if s.name != *name || s.is_commented {
                             continue;
@@ -142,24 +146,22 @@ impl Record {
                         let v = match list_kind.inner().string_any() {
                             ftd::p2::Kind::Record { name, .. } => {
                                 let record = doc.get_record(p1.line_number, name.as_str())?;
-                                ftd::Value::Record {
-                                    name: doc.resolve_name(s.line_number, record.name.as_str())?,
-                                    fields: record.fields_from_sub_section(s, doc)?,
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::Record {
+                                        name: doc
+                                            .resolve_name(s.line_number, record.name.as_str())?,
+                                        fields: record.fields_from_sub_section(s, doc)?,
+                                    },
                                 }
                             }
-                            k => {
-                                match k.read_section(
-                                    s.line_number,
-                                    &s.header,
-                                    &s.caption,
-                                    &s.body_without_comment(),
-                                    s.name.as_str(),
-                                    doc,
-                                )? {
-                                    ftd::PropertyValue::Value { value: v } => v,
-                                    _ => unimplemented!(),
-                                }
-                            }
+                            k => k.read_section(
+                                s.line_number,
+                                &s.header,
+                                &s.caption,
+                                &s.body_without_comment(),
+                                s.name.as_str(),
+                                doc,
+                            )?,
                         };
                         values.push(v);
                     }
@@ -194,10 +196,13 @@ impl Record {
         &self,
         p1: &ftd::p1::Section,
         doc: &ftd::p2::TDoc,
-    ) -> ftd::p1::Result<ftd::Value> {
-        Ok(ftd::Value::Record {
-            name: doc.resolve_name(p1.line_number, self.name.as_str())?,
-            fields: self.fields(p1, doc)?,
+    ) -> ftd::p1::Result<ftd::PropertyValue> {
+        // todo: check if the its reference to other variable
+        Ok(ftd::PropertyValue::Value {
+            value: ftd::Value::Record {
+                name: doc.resolve_name(p1.line_number, self.name.as_str())?,
+                fields: self.fields(p1, doc)?,
+            },
         })
     }
 

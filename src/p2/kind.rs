@@ -7,7 +7,7 @@ pub enum Kind {
         default: Option<String>,
     },
     Object {
-        values: std::collections::BTreeMap<String, String>,
+        default: Option<String>,
     },
     Integer {
         default: Option<String>,
@@ -52,6 +52,10 @@ impl Kind {
 
     pub fn is_list(&self) -> bool {
         matches!(self, Kind::List { .. })
+    }
+
+    pub fn is_record(&self) -> bool {
+        matches!(self, Kind::Record { .. })
     }
 
     pub fn to_string(&self, line_number: usize, doc_id: &str) -> ftd::p1::Result<String> {
@@ -150,7 +154,7 @@ impl Kind {
 
     pub fn object() -> Self {
         Kind::Object {
-            values: Default::default(),
+            default: Default::default(),
         }
     }
 

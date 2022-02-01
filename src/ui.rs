@@ -790,6 +790,11 @@ impl Element {
         document: &ftd::p2::Document,
         data: &mut ftd::DataDependenciesMap,
     ) {
+        let doc = ftd::p2::TDoc {
+            name: document.name.as_str(),
+            aliases: &document.aliases,
+            bag: &document.data,
+        };
         for (k, v) in document.data.iter() {
             if !data.contains_key(k) {
                 continue;
@@ -803,6 +808,10 @@ impl Element {
                 (conditions, default)
             } else {
                 continue;
+            };
+            let default = match default.resolve(0, &Default::default(), &doc) {
+                Ok(v) => v,
+                _ => continue,
             };
             for (condition, value) in conditions {
                 let condition = if let Ok(condition) = condition.to_condition(
@@ -819,10 +828,12 @@ impl Element {
                 } else {
                     continue;
                 };
-                let value = if let Some(value) = value.to_string() {
-                    value
-                } else {
-                    continue;
+                let value = match value.resolve(0, &Default::default(), &doc) {
+                    Ok(value) => match value.to_string() {
+                        Some(v) => v,
+                        None => continue,
+                    },
+                    _ => continue,
                 };
 
                 let variable = ftd::p2::utils::get_doc_name_and_remaining(&condition.variable)

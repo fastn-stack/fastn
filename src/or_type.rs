@@ -28,7 +28,8 @@ impl OrType {
         p1: &ftd::p1::Section,
         variant: String,
         doc: &ftd::p2::TDoc,
-    ) -> ftd::p1::Result<ftd::Value> {
+    ) -> ftd::p1::Result<ftd::PropertyValue> {
+        // todo: check if the its reference to other variable
         for v in self.variants.iter() {
             if v.name
                 == doc.resolve_name(
@@ -36,10 +37,12 @@ impl OrType {
                     format!("{}.{}", self.name, variant.as_str()).as_str(),
                 )?
             {
-                return Ok(ftd::Value::OrType {
-                    variant,
-                    name: self.name.to_string(),
-                    fields: v.fields(p1, doc)?,
+                return Ok(ftd::PropertyValue::Value {
+                    value: ftd::Value::OrType {
+                        variant,
+                        name: self.name.to_string(),
+                        fields: v.fields(p1, doc)?,
+                    },
                 });
             }
         }
