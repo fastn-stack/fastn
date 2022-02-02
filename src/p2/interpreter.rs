@@ -354,7 +354,7 @@ impl<'a> Interpreter<'a> {
         Ok(instructions)
     }
 
-    // #[cfg(not(feature = "async"))]
+    #[cfg(not(feature = "async"))]
     fn interpret_(
         &mut self,
         name: &str,
@@ -14326,26 +14326,6 @@ mod test {
             ",
             (super::default_bag(), main),
         );
-    }
-
-    #[test]
-    fn conditionl_variable() {
-        let (g_bag, _g_col) = crate::p2::interpreter::interpret(
-            "foo/bar",
-            indoc::indoc!(
-                "
-                -- boolean value: true
-            
-                -- string foo: Arpita
-
-                -- foo: Ayushi
-                if: not $value
-                "
-            ),
-            &ftd::p2::TestLibrary {},
-        )
-        .expect("found error");
-        dbg!(&g_bag);
     }
 
     /*#[test]
