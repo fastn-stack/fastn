@@ -6,8 +6,6 @@ Homepage: [ftd.dev](https://ftd.dev/)
 
 Discord: Join our [`ftd` channel](https://discord.gg/xN3uD8P7WA).
 
-Twitter: [@FifthTryHQ](https://twitter.com/fifthtryhq)
-
 License: BSD
 
 Checkout the [Roadmap](https://ftd.dev/roadmap/) and 
