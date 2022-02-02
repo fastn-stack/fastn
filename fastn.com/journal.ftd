@@ -17,6 +17,67 @@ id: page
 
 -- ft.h1: Sublime Text Gets Syntax Support
 
+-- ft.h1: Final Decision On References
+
+2nd Feb 2022
+
+Let's hope it is really final, Arpita is now going to implement it.
+
+Every binding is now by reference. So if you define:
+
+-- ft.code:
+lang: ftd
+
+\-- string foo: hello
+\-- string bar: $foo
+
+-- ft.markdown:
+
+Both `foo` and `bar` have the same storage in memory and both are names refering
+to same thing.
+
+One can opt out of this by cloning:
+
+-- ft.code:
+lang: ftd
+
+\-- string foo: hello
+\-- string bar: ftd.clone: $foo
+
+-- ft.markdown:
+
+We are will build `ftd.clone` in due time.
+
+Any attempt to modify anything would be governed by the `mutable-by` rules. The
+exact syntax of mutable-by is not fixed but concept is.
+
+We will further allow mutable-by to following package interfect. So e.g.
+
+-- ft.code: `fpm.ftd`
+lang: ftd
+
+\-- boolean dark-mode: false
+mutable-by: fpm.dev/dark-mode-switcher
+
+-- ft.markdown:
+
+Now any package that implements `fpm.dev/dark-mode-switcher` will be able to
+modify the `fpm.dark-mode` variable.
+
+Further anyone that uses such a package will have to still opt in:
+
+-- ft.code: amitu.com/FPM.ftd
+lang: ftd
+
+\-- fpm.dependency: arpita.com/dms
+implements: fpm.dev/dark-mode-switcher
+
+-- ft.markdown:
+
+Here `amitu.com/FPM.ftd` has explicitly granted `arpita.com/dms`
+`fpm.dev/dark-mode-switcher` "rights".
+
+
 -- ft.h1: Reference Vs Value Recap
 
 1st Feb 2022
