@@ -14443,8 +14443,55 @@ mod test {
                 },
                 ..Default::default()
             }));
+        main.container
+            .children
+            .push(ftd::Element::Markup(ftd::Markups {
+                text: ftd::markdown_line("Arpita"),
+                line: true,
+                common: ftd::Common {
+                    reference: Some(s("foo/bar#arpita.name")),
+                    ..Default::default()
+                },
+                ..Default::default()
+            }));
 
         let mut bag = super::default_bag();
+        bag.insert(
+            s("foo/bar#arpita"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("arpita"),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Record {
+                        name: s("foo/bar#person"),
+                        fields: std::array::IntoIter::new([(
+                            s("name"),
+                            ftd::PropertyValue::Reference {
+                                name: s("foo/bar#bar"),
+                                kind: ftd::p2::Kind::String {
+                                    caption: true,
+                                    body: false,
+                                    default: None,
+                                },
+                            },
+                        )])
+                        .collect(),
+                    },
+                },
+                conditions: vec![],
+            }),
+        );
+
+        bag.insert(
+            s("foo/bar#person"),
+            ftd::p2::Thing::Record(ftd::p2::Record {
+                name: s("foo/bar#person"),
+                fields: std::array::IntoIter::new([(s("name"), ftd::p2::Kind::caption())])
+                    .collect(),
+                instances: Default::default(),
+                order: vec![s("name")],
+            }),
+        );
+
         bag.insert(
             s("foo/bar#bar"),
             ftd::p2::Thing::Variable(ftd::Variable {
@@ -14580,6 +14627,11 @@ mod test {
 
                 -- string list lbar: $lfoo
 
+                -- record person:
+                caption name:
+
+                -- person arpita: $bar
+
                 -- ftd.text: $bar
 
                 -- ftd.integer: $ibar
@@ -14589,6 +14641,8 @@ mod test {
 
                 -- ftd.text: $obj
                 $loop$: $lbar as $obj
+
+                -- ftd.text: $arpita.name
                 "
             ),
             &ftd::p2::TestLibrary {},
