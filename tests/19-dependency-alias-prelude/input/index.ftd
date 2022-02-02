@@ -1,4 +1,13 @@
+-- import: sibling
 
--- lib.block: This block refers to fpm.dev/lib.block
+-- lib.block:
 
--- header.block: This block refers to fpm.dev/lib.block
+--- ftd.text: This block refers to fpm.dev/lib.block
+
+-- header.block:
+
+--- ftd.text: This block refers to fpm.dev/lib.block
+
+-- sibling.block:
+
+--- ftd.text: This block refers to fpm.dev/lib.block

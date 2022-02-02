@@ -51,6 +51,7 @@ impl ftd::p2::Library for Library {
             lib: &Library,
             current_packages: &[fpm::Package],
         ) -> Option<(String, Vec<fpm::Package>)> {
+            // dbg!(name, current_packages);
             let mut current_packages = current_packages.to_owned();
             let path = if package.name.eq(&lib.config.package.name) {
                 lib.config.root.clone()
@@ -88,6 +89,11 @@ impl ftd::p2::Library for Library {
                 mut current_packages: Vec<fpm::Package>,
             ) -> Option<(String, Vec<fpm::Package>)> {
                 // Check for Aliases of the packages
+                let all_aliases = package.dependency_aliases();
+                let name = match all_aliases.get(name) {
+                    Some(n) => n.as_str(),
+                    None => name,
+                };
                 for (alias, package) in package.aliases().ok()? {
                     if name.starts_with(&alias) || name.starts_with(package.name.as_str()) {
                         // Non index document

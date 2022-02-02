@@ -1,8 +1,9 @@
 -- fbt:
 cmd: $FBT_CWD/target/debug/fpm --test build
 output: .build
-skip: WIP
+
 -- stdout:
 
 Processed FPM.ftd
 Processed index.ftd
+Processed sibling.ftd
