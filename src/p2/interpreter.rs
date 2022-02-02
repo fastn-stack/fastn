@@ -14352,6 +14352,97 @@ mod test {
                 },
                 ..Default::default()
             }));
+        main.container
+            .children
+            .push(ftd::Element::Markup(ftd::Markups {
+                text: ftd::markdown_line("Arpita"),
+                line: true,
+                common: ftd::Common {
+                    reference: Some(s("foo/bar#lfoo")),
+                    ..Default::default()
+                },
+                ..Default::default()
+            }));
+        main.container
+            .children
+            .push(ftd::Element::Markup(ftd::Markups {
+                text: ftd::markdown_line("Arpita"),
+                line: true,
+                common: ftd::Common {
+                    reference: Some(s("foo/bar#lfoo")),
+                    ..Default::default()
+                },
+                ..Default::default()
+            }));
+        main.container
+            .children
+            .push(ftd::Element::Markup(ftd::Markups {
+                text: ftd::markdown_line("Ayushi"),
+                line: true,
+                common: ftd::Common {
+                    reference: Some(s("foo/bar#lfoo")),
+                    ..Default::default()
+                },
+                ..Default::default()
+            }));
+        main.container
+            .children
+            .push(ftd::Element::Markup(ftd::Markups {
+                text: ftd::markdown_line("$loop$"),
+                line: true,
+                common: ftd::Common {
+                    is_dummy: true,
+                    reference: Some(s("foo/bar#lfoo")),
+                    ..Default::default()
+                },
+                ..Default::default()
+            }));
+
+        main.container
+            .children
+            .push(ftd::Element::Markup(ftd::Markups {
+                text: ftd::markdown_line("Arpita"),
+                line: true,
+                common: ftd::Common {
+                    reference: Some(s("foo/bar#lbar")),
+                    ..Default::default()
+                },
+                ..Default::default()
+            }));
+        main.container
+            .children
+            .push(ftd::Element::Markup(ftd::Markups {
+                text: ftd::markdown_line("Arpita"),
+                line: true,
+                common: ftd::Common {
+                    reference: Some(s("foo/bar#lbar")),
+                    ..Default::default()
+                },
+                ..Default::default()
+            }));
+        main.container
+            .children
+            .push(ftd::Element::Markup(ftd::Markups {
+                text: ftd::markdown_line("Ayushi"),
+                line: true,
+                common: ftd::Common {
+                    reference: Some(s("foo/bar#lbar")),
+                    ..Default::default()
+                },
+                ..Default::default()
+            }));
+        main.container
+            .children
+            .push(ftd::Element::Markup(ftd::Markups {
+                text: ftd::markdown_line("$loop$"),
+                line: true,
+                common: ftd::Common {
+                    is_dummy: true,
+                    reference: Some(s("foo/bar#lbar")),
+                    ..Default::default()
+                },
+                ..Default::default()
+            }));
 
         let mut bag = super::default_bag();
         bag.insert(
@@ -14407,6 +14498,66 @@ mod test {
             }),
         );
 
+        bag.insert(
+            s("foo/bar#lbar"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("foo/bar#lbar"),
+                value: ftd::PropertyValue::Reference {
+                    name: s("foo/bar#lfoo"),
+                    kind: ftd::p2::Kind::List {
+                        kind: Box::new(ftd::p2::Kind::String {
+                            caption: false,
+                            body: false,
+                            default: None,
+                        }),
+                        default: None,
+                    },
+                },
+                conditions: vec![],
+            }),
+        );
+
+        bag.insert(
+            s("foo/bar#lfoo"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("foo/bar#lfoo"),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::List {
+                        data: vec![
+                            ftd::PropertyValue::Reference {
+                                name: s("foo/bar#foo"),
+                                kind: ftd::p2::Kind::String {
+                                    caption: true,
+                                    body: false,
+                                    default: None,
+                                },
+                            },
+                            ftd::PropertyValue::Reference {
+                                name: s("foo/bar#bar"),
+                                kind: ftd::p2::Kind::String {
+                                    caption: true,
+                                    body: false,
+                                    default: None,
+                                },
+                            },
+                            ftd::PropertyValue::Value {
+                                value: ftd::Value::String {
+                                    text: s("Ayushi"),
+                                    source: ftd::TextSource::Caption,
+                                },
+                            },
+                        ],
+                        kind: ftd::p2::Kind::String {
+                            caption: false,
+                            body: false,
+                            default: None,
+                        },
+                    },
+                },
+                conditions: vec![],
+            }),
+        );
+
         let (g_bag, g_col) = crate::p2::interpreter::interpret(
             "foo/bar",
             indoc::indoc!(
@@ -14419,9 +14570,25 @@ mod test {
 
                 -- integer ibar: $ifoo
 
+                -- string list lfoo:
+
+                -- lfoo: $foo
+
+                -- lfoo: $bar
+
+                -- lfoo: Ayushi
+
+                -- string list lbar: $lfoo
+
                 -- ftd.text: $bar
 
                 -- ftd.integer: $ibar
+
+                -- ftd.text: $obj
+                $loop$: $lfoo as $obj
+
+                -- ftd.text: $obj
+                $loop$: $lbar as $obj
                 "
             ),
             &ftd::p2::TestLibrary {},
