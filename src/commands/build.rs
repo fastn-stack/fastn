@@ -374,7 +374,35 @@ async fn process_ftd(
         main.content = include_str!("../../ftd/info.ftd").to_string();
         (None, None, main)
     } else {
-        (fallback, message, main.to_owned())
+        let main = main.to_owned();
+        let mut all_prelude_alias = std::collections::HashMap::<String, String>::new();
+        config
+            .package
+            .dependencies
+            .clone()
+            .into_iter()
+            .for_each(|dep| {
+                all_prelude_alias.extend(dep.aliases);
+            });
+        let prefix = all_prelude_alias
+            .into_iter()
+            .fold(None, |pre, (alias, _real)| {
+                Some(format!(
+                    "{}\n-- import: {}",
+                    pre.unwrap_or("".to_string()),
+                    alias
+                ))
+            });
+
+        let new_main = fpm::Document {
+            id: main.id,
+            parent_path: main.parent_path,
+            content: match prefix {
+                Some(s) => format!("{}\n\n{}", s.trim(), main.content),
+                None => main.content,
+            },
+        };
+        (fallback, message, new_main)
     };
 
     match (fallback, message) {

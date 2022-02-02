@@ -164,7 +164,9 @@ impl Config {
             temp_deps
                 .into_iter()
                 .map(|v| v.into_dependency())
-                .collect::<Vec<fpm::Dependency>>()
+                .collect::<Vec<fpm::Result<fpm::Dependency>>>()
+                .into_iter()
+                .collect::<fpm::Result<Vec<fpm::Dependency>>>()?
         };
 
         let mut package = {

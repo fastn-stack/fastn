@@ -6,6 +6,7 @@ pub struct Dependency {
     pub version: Option<String>,
     pub notes: Option<String>,
     pub alias: Option<String>,
+    pub aliases: std::collections::HashMap<String, String>,
 }
 
 pub fn ensure(base_dir: &camino::Utf8PathBuf, package: &mut fpm::Package) -> fpm::Result<()> {
@@ -62,20 +63,40 @@ pub(crate) struct DependencyTemp {
     pub name: String,
     pub version: Option<String>,
     pub notes: Option<String>,
+    pub aliases: Option<String>,
 }
 
 impl DependencyTemp {
-    pub(crate) fn into_dependency(self) -> fpm::Dependency {
+    pub(crate) fn into_dependency(self) -> fpm::Result<fpm::Dependency> {
         let (package_name, alias) = match self.name.as_str().split_once(" as ") {
             Some((package, alias)) => (package, Some(alias.to_string())),
             _ => (self.name.as_str(), None),
         };
-        fpm::Dependency {
+        let mut aliases = std::collections::HashMap::<String, String>::new();
+        if let Some(a) = self.aliases {
+            for s in a.split(',') {
+                match s.split_once(" as ") {
+                    Some((package, alias)) => {
+                        aliases.insert(alias.trim().to_string(), package.trim().to_string())
+                    }
+                    _ => {
+                        return Err(fpm::Error::UsageError {
+                            message: format!(
+                                "Unable to process the aliases for {}. Incorrect definition {}",
+                                package_name, s
+                            ),
+                        })
+                    }
+                };
+            }
+        };
+        Ok(fpm::Dependency {
             package: fpm::Package::new(package_name),
             version: self.version,
             notes: self.notes,
             alias,
-        }
+            aliases,
+        })
     }
 }
 
@@ -292,7 +313,9 @@ impl fpm::Package {
             temp_deps
                 .into_iter()
                 .map(|v| v.into_dependency())
-                .collect::<Vec<fpm::Dependency>>()
+                .collect::<Vec<fpm::Result<fpm::Dependency>>>()
+                .into_iter()
+                .collect::<fpm::Result<Vec<fpm::Dependency>>>()?
         };
 
         if download_dependencies {
