@@ -220,10 +220,8 @@ pub(crate) async fn process_file(
                         println!("Failed to process {}", main.get_id());
                         return Ok(());
                     }
-                    (_, _) => {
-                        return Err(fpm::Error::UsageError {
-                            message: format!("{:?} Unable to process the document", main.get_id()),
-                        })
+                    (e, _) => {
+                        return e;
                     }
                 }
             }
@@ -254,10 +252,8 @@ pub(crate) async fn process_file(
                     println!("Failed to process {}", main.get_id());
                     return Ok(());
                 }
-                (_, _) => {
-                    return Err(fpm::Error::UsageError {
-                        message: format!("{:?} Unable to process the document", main.get_id()),
-                    })
+                (e, _) => {
+                    return e;
                 }
             }
         }
