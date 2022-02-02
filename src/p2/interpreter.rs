@@ -14342,6 +14342,16 @@ mod test {
                 },
                 ..Default::default()
             }));
+        main.container
+            .children
+            .push(ftd::Element::Integer(ftd::Text {
+                text: ftd::markdown_line("1"),
+                common: ftd::Common {
+                    reference: Some(s("foo/bar#ibar")),
+                    ..Default::default()
+                },
+                ..Default::default()
+            }));
 
         let mut bag = super::default_bag();
         bag.insert(
@@ -14374,6 +14384,29 @@ mod test {
             }),
         );
 
+        bag.insert(
+            s("foo/bar#ibar"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("ibar"),
+                value: ftd::PropertyValue::Reference {
+                    name: s("foo/bar#ifoo"),
+                    kind: ftd::p2::Kind::Integer { default: None },
+                },
+                conditions: vec![],
+            }),
+        );
+
+        bag.insert(
+            s("foo/bar#ifoo"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("ifoo"),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Integer { value: 1 },
+                },
+                conditions: vec![],
+            }),
+        );
+
         let (g_bag, g_col) = crate::p2::interpreter::interpret(
             "foo/bar",
             indoc::indoc!(
@@ -14382,7 +14415,13 @@ mod test {
 
                 -- string bar: $foo
 
+                -- integer ifoo: 1
+
+                -- integer ibar: $ifoo
+
                 -- ftd.text: $bar
+
+                -- ftd.integer: $ibar
                 "
             ),
             &ftd::p2::TestLibrary {},
