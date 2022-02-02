@@ -268,6 +268,7 @@ pub fn common_from_properties(
         slot: ftd::p2::utils::string_optional("slot", properties, doc.name, 0)?,
         grid_column: ftd::p2::utils::string_optional("grid-column", properties, doc.name, 0)?,
         grid_row: ftd::p2::utils::string_optional("grid-row", properties, doc.name, 0)?,
+        white_space: ftd::p2::utils::string_optional("white-space", properties, doc.name, 0)?,
     })
 }
 
@@ -517,14 +518,17 @@ fn common_arguments() -> Vec<(String, ftd::p2::Kind)> {
             ftd::p2::Kind::integer().into_optional(),
         ),
         ("slot".to_string(), ftd::p2::Kind::string().into_optional()),
-        /*(
-            "grid-column".to_string(),
-            ftd::p2::Kind::string().into_optional(),
-        ),
         (
-            "grid-row".to_string(),
+            "white-space".to_string(),
             ftd::p2::Kind::string().into_optional(),
-        ),*/
+        ), /*(
+               "grid-column".to_string(),
+               ftd::p2::Kind::string().into_optional(),
+           ),
+           (
+               "grid-row".to_string(),
+               ftd::p2::Kind::string().into_optional(),
+           ),*/
     ]
 }
 
