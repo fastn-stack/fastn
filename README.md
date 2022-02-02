@@ -1,4 +1,4 @@
-# FTD
+# FTD: Programming Language For Prose
 
 Homepage: [ftd.dev](https://ftd.dev/)
 
