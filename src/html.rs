@@ -1253,7 +1253,12 @@ impl ftd::Common {
         d.insert(s("border-width"), format!("{}px", self.border_width));
         d.insert(s("border-radius"), format!("{}px", self.border_radius));
         d.insert(s("box-sizing"), s("border-box"));
-        d.insert(s("white-space"), s("initial"));
+
+        if let Some(ref p) = self.white_space {
+            d.insert(s("white-space"), s(p));
+        } else {
+            d.insert(s("white-space"), s("initial"));
+        }
 
         d
     }

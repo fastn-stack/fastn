@@ -1796,6 +1796,7 @@ pub struct Common {
     pub slot: Option<String>,
     pub grid_column: Option<String>,
     pub grid_row: Option<String>,
+    pub white_space: Option<String>,
     // TODO: background-image, un-cropped, tiled, tiled{X, Y}
     // TODO: border-style: solid, dashed, dotted
     // TODO: border-{shadow, glow}
