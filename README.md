@@ -1,22 +1,12 @@
-# FTD
+# FTD: Programming Language For Prose
 
-Docs: [ftd.dev](https://ftd.dev/)
+Homepage: [ftd.dev](https://ftd.dev/)
 
-> A Markup Language For Data Exchange And User Interface Design. 
-
-FTD stands for Fifthtry Document Format. Documents on FifthTry are stored in this
-format.
-
-[Start Here](https://ftd.dev/language/)
-
-FTD is meant to be a universal file format for text-based data, think of XML done
-right.
+> FTD is an open source programming language for writing prose.
 
 Discord: Join our [`ftd` channel](https://discord.gg/xN3uD8P7WA).
 
-Twitter: [@FifthTryHQ](https://twitter.com/fifthtryhq)
-
 License: BSD
 
-Checkout the [Roadmap & RFCs](https://ftd.dev/roadmap/) and 
-[Changelog](https://ftd.dev/changelog/).
+Checkout the [Roadmap](https://ftd.dev/roadmap/) and 
+[Journal](https://ftd.dev/journal/).
