@@ -14328,6 +14328,71 @@ mod test {
         );
     }
 
+    #[test]
+    fn global_variable_pass_as_reference() {
+        let mut main = super::default_column();
+        main.container
+            .children
+            .push(ftd::Element::Markup(ftd::Markups {
+                text: ftd::markdown_line("Arpita"),
+                line: true,
+                common: ftd::Common {
+                    reference: Some(s("foo/bar#bar")),
+                    ..Default::default()
+                },
+                ..Default::default()
+            }));
+
+        let mut bag = super::default_bag();
+        bag.insert(
+            s("foo/bar#bar"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("bar"),
+                value: ftd::PropertyValue::Reference {
+                    name: s("foo/bar#foo"),
+                    kind: ftd::p2::Kind::String {
+                        caption: true,
+                        body: false,
+                        default: None,
+                    },
+                },
+                conditions: vec![],
+            }),
+        );
+
+        bag.insert(
+            s("foo/bar#foo"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("foo"),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::String {
+                        text: s("Arpita"),
+                        source: ftd::TextSource::Caption,
+                    },
+                },
+                conditions: vec![],
+            }),
+        );
+
+        let (g_bag, g_col) = crate::p2::interpreter::interpret(
+            "foo/bar",
+            indoc::indoc!(
+                "
+                -- string foo: Arpita
+
+                -- string bar: $foo
+
+                -- ftd.text: $bar
+                "
+            ),
+            &ftd::p2::TestLibrary {},
+        )
+        .expect("found error");
+
+        pretty_assertions::assert_eq!(g_col, main);
+        pretty_assertions::assert_eq!(g_bag, bag);
+    }
+
     /*#[test]
     fn optional_condition_on_record() {
         let (_g_bag, g_col) = crate::p2::interpreter::interpret(
