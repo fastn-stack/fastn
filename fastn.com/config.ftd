@@ -94,6 +94,10 @@ $processor$: toc
   Responsive Themes
 - /theme/dark-mode/
   Dark Mode
+- /theme/components/
+  Components
+  - /theme/header/
+    Dark Mode
 
 -- ft.toc-item list learn:
 $processor$: toc
