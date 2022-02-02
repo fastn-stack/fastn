@@ -381,6 +381,13 @@ let ftd_utils = {
         }
     },
 
+    is_equal_condition: function (value, condition) {
+        return ((value === condition)
+            || (condition === "$IsNull$" && value.trim().length === 0)
+            || (condition === "$IsNotNull$" && value.trim().length !== 0)
+        );
+    },
+
     handle_action: function (id, target, value, data, ftd_external_children) {
         data[target].value = value.toString();
 
@@ -410,10 +417,7 @@ let ftd_utils = {
                     }
                 } else if (json_dependency.dependency_type === "Visible") {
                     let display = "none";
-                    if ((data[target].value === json_dependency.condition)
-                        || (json_dependency.condition === "$IsNull$" && data[target].value.trim().length === 0)
-                        || (json_dependency.condition === "$IsNotNull$" && data[target].value.trim().length !== 0)
-                    ) {
+                    if (ftd_utils.is_equal_condition(data[target].value, json_dependency.condition)) {
                         let is_flex = !!document.querySelector(`[data-id="${dependency}:${id}"]`).style.flexDirection.length;
                         let is_grid = !!document.querySelector(`[data-id="${dependency}:${id}"]`).style.gridTemplateAreas.length;
                         let is_webkit = !!document.querySelector(`[data-id="${dependency}:${id}"]`).style.webkitLineClamp.length;
@@ -430,11 +434,30 @@ let ftd_utils = {
                     document.querySelector(`[data-id="${dependency}:${id}"]`).style.display = display;
                     ftd_utils.first_child_styling(`${dependency}:${id}`);
 
-                } else if (json_dependency.dependency_type === "Style") {
-                    if (data[target].value === json_dependency.condition) {
+                } else if (json_dependency.dependency_type === "Variable") {
+                    if (ftd_utils.is_equal_condition(data[target].value, json_dependency.condition)) {
                         for (const parameter in json_dependency.parameters) {
-                            let value = json_dependency.parameters[`${parameter}`].value.value;
-                            let important = json_dependency.parameters[`${parameter}`].value.important;
+                            if (data[parameter] !== undefined) {
+                                let value = json_dependency.parameters[parameter].value.value;
+                                ftd_utils.handle_action(id, parameter, value, data, ftd_external_children)
+                            }
+                        }
+                    } else {
+                        for (const parameter in json_dependency.parameters) {
+                            if (data[parameter] !== undefined) {
+                                let default_value = json_dependency.parameters[parameter].default;
+                                if (default_value === null) {
+                                    continue;
+                                }
+                                ftd_utils.handle_action(id, parameter, default_value.value, data, ftd_external_children)
+                            }
+                        }
+                    }
+                } else if (json_dependency.dependency_type === "Style") {
+                    if (ftd_utils.is_equal_condition(data[target].value, json_dependency.condition)) {
+                        for (const parameter in json_dependency.parameters) {
+                            let value = json_dependency.parameters[parameter].value.value;
+                            let important = json_dependency.parameters[parameter].value.important;
                             ftd_utils.set_style(parameter, `${dependency}:${id}`, value, important);
                             if (!styles_edited.includes(parameter)) {
                                 styles_edited.push(parameter);
@@ -442,7 +465,7 @@ let ftd_utils = {
                         }
                     } else {
                         for (const parameter in json_dependency.parameters) {
-                            let default_value = json_dependency.parameters[`${parameter}`].default;
+                            let default_value = json_dependency.parameters[parameter].default;
                             if (!styles_edited.includes(parameter)) {
                                 if (default_value === null) {
                                     if (["border-left-width", "border-right-width", "border-top-width", "border-bottom-width"].includes(parameter)) {
@@ -898,7 +921,7 @@ ul {
 .ft_md code {
     font-size: 0.9em;
     padding: 0.1em 0.25em;
-    background-color: #f0f0f0;
+    background-color: rgba(159, 155, 155, 0.27);
     border-radius: 4px;
 }
 
@@ -915,13 +938,29 @@ ul {
 
 body.fpm-dark .ft_md code {
     color: #f9f9f9;
-    background-color: rgba(255 255 255 0.12);
+    background-color: rgba(255, 255, 255, 0.12);
 }
 
-.ft_md pre {
-    background-color: rgba(255 255 255 0.32);
+body.fpm-dark .ft_md blockquote {
+    background-color: rgba(240, 240, 240, 0.12);
 }
 
+body.fpm-dark .ft_md a {
+    color: #58a6ff;
+    text-decoration: none;
+}
+
+body.fpm-dark .ft_md a:visited {
+    color: #a27de7;
+}
+
+body.fpm-dark .ft_md a code {
+    color: #58a6ff;
+}
+
+body.fpm-dark .ft_md a:visited code {
+    color: #a27de7;
+}
     </style>
 
 </head>
