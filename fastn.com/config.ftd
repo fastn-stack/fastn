@@ -16,8 +16,6 @@ $processor$: toc
   Examples
 - /development/
   Development
-- https://github.com/FifthTry/ftd
-  Github
 
 -- ft.toc-item list dev-toc:
 $processor$: toc
