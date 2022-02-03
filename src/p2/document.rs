@@ -223,42 +223,6 @@ impl Document {
                             return Some(v);
                         }
                     }
-                    ftd::Element::Column(c) => {
-                        if let Some(v) = f(e) {
-                            return Some(v);
-                        }
-
-                        if let Some(t) = finder(&c.container.children, f) {
-                            return Some(t);
-                        }
-                    }
-                    ftd::Element::Row(c) => {
-                        if let Some(v) = f(e) {
-                            return Some(v);
-                        }
-
-                        if let Some(t) = finder(&c.container.children, f) {
-                            return Some(t);
-                        }
-                    }
-                    ftd::Element::Scene(c) => {
-                        if let Some(v) = f(e) {
-                            return Some(v);
-                        }
-
-                        if let Some(t) = finder(&c.container.children, f) {
-                            return Some(t);
-                        }
-                    }
-                    ftd::Element::Grid(c) => {
-                        if let Some(v) = f(e) {
-                            return Some(v);
-                        }
-
-                        if let Some(t) = finder(&c.container.children, f) {
-                            return Some(t);
-                        }
-                    }
                     ftd::Element::Image(_) => {
                         if let Some(v) = f(e) {
                             return Some(v);
@@ -287,6 +251,24 @@ impl Document {
                     ftd::Element::Boolean(_) => {
                         if let Some(v) = f(e) {
                             return Some(v);
+                        }
+                    }
+                    ftd::Element::Column(ftd::Column { container, .. })
+                    | ftd::Element::Row(ftd::Row { container, .. })
+                    | ftd::Element::Scene(ftd::Scene { container, .. })
+                    | ftd::Element::Grid(ftd::Grid { container, .. }) => {
+                        if let Some(v) = f(e) {
+                            return Some(v);
+                        }
+
+                        if let Some(t) = finder(&container.children, f) {
+                            return Some(t);
+                        }
+
+                        if let Some((_, _, ref external_children)) = container.external_children {
+                            if let Some(t) = finder(external_children, f) {
+                                return Some(t);
+                            }
                         }
                     }
                     ftd::Element::Null => {}

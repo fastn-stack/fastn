@@ -60,9 +60,15 @@ fn write(id: &str, doc: String) {
 
     let ftd_js = std::fs::read_to_string("ftd.js").expect("ftd.js not found");
 
+    let doc_title = match &b.title() {
+        Some(x) => x.original.clone(),
+        _ => id.to_string(),
+    };
+
     f.write_all(
         std::fs::read_to_string("ftd.html")
             .expect("cant read ftd.html")
+            .replace("__ftd_doc_title__", doc_title.as_str())
             .replace(
                 "__ftd_data__",
                 serde_json::to_string_pretty(&doc.data)
