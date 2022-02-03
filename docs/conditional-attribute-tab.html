@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-    <title>ftd</title>
+    <title>one</title>
     <script type="ftd" id="ftd-data">
         {
   "conditional-attribute-tab.ftd#current": {
@@ -31,18 +31,18 @@ let ftd_utils = {
                 if (((typeof value[key]) === "object") && (reference[key] !== undefined)) {
                     result[key] = ftd_utils.resolve_reference(value[key], reference[key], data);
                 } else if (reference[key] !== undefined && reference[key] !== null) {
-                    result[key] = data[reference[key]]?.value !== undefined ? data[reference[key]].value : value[key];
+                    result[key] = (data[reference[key]] !== undefined && data[reference[key]].value !== undefined) ? data[reference[key]].value : value[key];
                 } else {
                     result[key] = (value[key] === "$VALUE" && obj.value !== undefined) ? obj.value : value[key];
                 }
             }
             for (var key of Object.keys(reference)) {
-                if (value[key] === undefined && data[reference[key]]?.value !== undefined) {
+                if (value[key] === undefined && data[reference[key]] !== undefined && data[reference[key]].value !== undefined) {
                     result[key] = data[reference[key]].value;
                 }
             }
             return result;
-        } else if (reference !== null && reference !== undefined && data[reference]?.value !== undefined) {
+        } else if (reference !== null && reference !== undefined && data[reference] !== undefined && data[reference].value !== undefined) {
             return data[reference]["value"];
         } else {
             return (value === "$VALUE" && obj.value !== undefined) ? obj.value : value;
