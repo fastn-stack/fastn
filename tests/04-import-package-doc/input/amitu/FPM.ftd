@@ -2,3 +2,5 @@
 
 -- fpm.package: amitu
 zip: amitu
+
+-- fpm.dependency: shobhit.dev

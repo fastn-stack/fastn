@@ -1,5 +1,10 @@
--- import: lib
+-- import: amitu:lib as lib
+-- import: shobhit.dev as shobhit_lib
 
 -- lib.block:
 
 --- ftd.text: hello
+
+-- shobhit_lib.s_block:
+
+--- ftd.text: hello world!
