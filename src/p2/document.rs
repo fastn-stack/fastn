@@ -203,52 +203,16 @@ impl Document {
         {
             for e in elements.iter() {
                 match e {
-                    ftd::Element::Text(_) => {
-                        if let Some(v) = f(e) {
-                            return Some(v);
-                        }
-                    }
-                    ftd::Element::TextBlock(_) => {
-                        if let Some(v) = f(e) {
-                            return Some(v);
-                        }
-                    }
-                    ftd::Element::Code(_) => {
-                        if let Some(v) = f(e) {
-                            return Some(v);
-                        }
-                    }
-                    ftd::Element::Input(_) => {
-                        if let Some(v) = f(e) {
-                            return Some(v);
-                        }
-                    }
-                    ftd::Element::Image(_) => {
-                        if let Some(v) = f(e) {
-                            return Some(v);
-                        }
-                    }
-                    ftd::Element::Markup(_) => {
-                        if let Some(v) = f(e) {
-                            return Some(v);
-                        }
-                    }
-                    ftd::Element::IFrame(_) => {
-                        if let Some(v) = f(e) {
-                            return Some(v);
-                        }
-                    }
-                    ftd::Element::Decimal(_) => {
-                        if let Some(v) = f(e) {
-                            return Some(v);
-                        }
-                    }
-                    ftd::Element::Integer(_) => {
-                        if let Some(v) = f(e) {
-                            return Some(v);
-                        }
-                    }
-                    ftd::Element::Boolean(_) => {
+                    ftd::Element::Text(_)
+                    | ftd::Element::TextBlock(_)
+                    | ftd::Element::Code(_)
+                    | ftd::Element::Input(_)
+                    | ftd::Element::Image(_)
+                    | ftd::Element::Markup(_)
+                    | ftd::Element::IFrame(_)
+                    | ftd::Element::Decimal(_)
+                    | ftd::Element::Integer(_)
+                    | ftd::Element::Boolean(_) => {
                         if let Some(v) = f(e) {
                             return Some(v);
                         }
