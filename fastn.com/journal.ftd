@@ -41,6 +41,8 @@ icon.
 
 -- ft.image:
 src: images/notifications.png
+width: 500
+align: center
 
 Imagine any FPM page shows a notifications icon like this in the header. We do
 not have login but we have cookie, we keep track of what you have read via
@@ -104,6 +106,65 @@ vs created-on of latest news. created-on of latest news can be stored as a
 another fpm variable for convenience till we get first item of a list support.
 Once the UI is open, we will want to show what all is new, so we will def need
 string comparison operator, `>`.
+
+-- ft.h1: FPM Package Registry
+
+Currently FPM is fully distributed, each FPM package is published on a URL
+controlled by the owner of the package. To aid discoverablity tt would be cool
+if there was a package registry though, a central place where you can quickly
+discover packages.
+
+Is this going against our decentral design? Not really. FPM does not really
+depend on the registry unlike other package managers. You can depend on any
+package and if some package is removed from package registry, all it will lose
+is a listing one some site. The package itself would be still available and
+anyone who want to use the package can still use it.
+
+Registry is just a handy place to quickly find themes, components etc, we can
+easy show all (most) packages that implement a given package interface. We can
+even show some stats like how many packages depend on any given package, which
+can be a good proxy for people who want to create a dependency on that package,
+a package that is quite popular for example maybe safer to use than a package
+that just came up yesterday and no one is using it.
+
+We will make `fpm.dev` the "fpm central" or "fpm package repository", which
+means eventually `fpm.dev` will have dynamic stuff. Can we build the dynamic
+stuff using our proposed [FPM Web
+Framework](/journal/#explanation-of-dynamic-documents-and-actions)? Time will
+tell. We will not block on it. FPM package repository can tomorrow become an
+open source real world showcase of fpm web framework when it is in place tho.
+
+-- ft.h2: `fpm ping`
+
+The way the registry would work is by a package pinging the central repository
+that the package has been updated. The ping itself will not be trusted, we will
+not have API keys, signup etc. `fpm ping` will simply call an end point and pass
+the package name as the only information. FPM registry will then schedule a
+crawl of the fpm package and get the information from the published package.
+
+-- ft.h2: Registry and News
+
+We just discussed adding news support in FPM packages. FPM registry can show the
+news, and may give quick notify me when this package has news button next to
+each package listed.
+
+-- ft.h2: Registry And Web Hook
+
+Say you are authoring an FPM package and it depends a few FPM packages, it would
+be cool to auto re-publish your fpm package every time any of the dependencies
+changes.
+
+Since `fpm ping` is notifying the registry when package changes, fpm registry
+can tomorrow also notify arbitrary webhook end points when a news is published
+about any package. You can listen for that and review and republish or
+auto-republish.
+
+-- ft.h2: Decentralized Registry?
+
+The first idea was a centralised registry, but we can have say 10s of registries
+each gossiping with each other telling about updates, so there is no central
+point. And any registry you publish to, you can expect the eventually the entire
+registry network will know about updates to your package.
 
 -- ft.h1: More on `package.zip`
 
