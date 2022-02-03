@@ -38,3 +38,16 @@ if: $fpm.dark-mode
 link: https://github.com/FifthTry/fpm-book/generate
 image: images/dark-jupiter.png
 live_preview: https://fifthtry.github.io/fpm-book/
+
+
+--- ft.theme: Blue Sapphire
+if: not $fpm.dark-mode
+link: https://github.com/FifthTry/Blue-Sapphire-Template/generate
+image: images/blue-sapphire-light.png
+live_preview: https://fifthtry.github.io/Blue-Sapphire-Template/
+
+--- ft.theme: Blue Sapphire
+if: $fpm.dark-mode
+link: https://github.com/FifthTry/Blue-Sapphire-Template/generate
+image: images/blue-sapphire-dark.png
+live_preview: https://fifthtry.github.io/Blue-Sapphire-Template/
