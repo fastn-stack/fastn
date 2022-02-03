@@ -160,7 +160,8 @@
 
     function get_cookie(name, def) {
         // source: https://stackoverflow.com/questions/5639346/
-        return document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)')?.pop() || def
+        let regex = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
+        return regex !== null ? regex.pop() : def;
     }
 
     function set_cookie(name, value) {
