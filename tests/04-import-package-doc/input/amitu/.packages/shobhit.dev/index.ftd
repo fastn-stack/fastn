@@ -1,0 +1,4 @@
+-- import: shobhit.dev:lib as lib
+
+-- ftd.row s_block:
+background-color: #CCCCCC

@@ -61,9 +61,12 @@ impl ftd::p2::Library for Library {
                     .join(".packages")
                     .join(package.name.as_str())
             };
-
-            if let Ok(v) = std::fs::read_to_string(path.join(format!("{}.ftd", name))) {
-                return Some((v, current_packages));
+            if name.starts_with(format!("{}:", &lib.config.package.name).as_str()) {
+                if let Some((_, p)) = name.split_once(':') {
+                    if let Ok(v) = std::fs::read_to_string(path.join(format!("{}.ftd", p))) {
+                        return Some((v, current_packages));
+                    }
+                }
             }
 
             if let Some(o) = package.translation_of.as_ref() {
@@ -94,11 +97,17 @@ impl ftd::p2::Library for Library {
                     Some(n) => n.as_str(),
                     None => name,
                 };
+                // Import package non strict. In future, <package_name>:path is strict.
                 for (alias, package) in package.aliases().ok()? {
                     if name.starts_with(&alias) || name.starts_with(package.name.as_str()) {
                         // Non index document
                         let package_path = lib.config.root.join(".packages");
                         let non_alias_name = name.replacen(&alias, package.name.as_str(), 1);
+                        let non_alias_name = non_alias_name.replacen(
+                            ':',
+                            std::path::MAIN_SEPARATOR.to_string().as_str(),
+                            1,
+                        );
                         if let Ok(v) = std::fs::read_to_string(
                             package_path.join(format!("{}.ftd", non_alias_name.as_str())),
                         ) {
