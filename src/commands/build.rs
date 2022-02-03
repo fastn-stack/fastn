@@ -434,7 +434,7 @@ async fn process_ftd(
                 }
             };
         let doc_title = match &main_ftd_doc.title() {
-            Some(x) => x.rendered.clone(),
+            Some(x) => x.original.clone(),
             _ => main.id.as_str().to_string(),
         };
         let ftd_doc = main_ftd_doc.to_rt("main", &main.id);
@@ -486,7 +486,7 @@ async fn process_ftd(
             };
 
         let doc_title = match &main_ftd_doc.title() {
-            Some(x) => x.rendered.clone(),
+            Some(x) => x.original.clone(),
             _ => main.id.as_str().to_string(),
         };
         let main_rt_doc = main_ftd_doc.to_rt("main", &main.id);
@@ -577,7 +577,7 @@ async fn process_ftd(
         };
 
         let doc_title = match &main_ftd_doc.title() {
-            Some(x) => x.rendered.clone(),
+            Some(x) => x.original.clone(),
             _ => main.id.as_str().to_string(),
         };
         let message_rt_doc = message_ftd_doc.to_rt("message", &main.id);
