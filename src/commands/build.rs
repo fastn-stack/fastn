@@ -389,7 +389,7 @@ async fn process_ftd(
             .fold(None, |pre, (alias, _real)| {
                 Some(format!(
                     "{}\n-- import: {}",
-                    pre.unwrap_or("".to_string()),
+                    pre.unwrap_or_else(|| "".to_string()),
                     alias
                 ))
             });
