@@ -1153,7 +1153,7 @@ impl ftd::Common {
             d.insert(s("cursor"), s("pointer"));
         }
         if let Some(p) = &self.z_index {
-            d.insert(s("z-index"), format!("{}px", p));
+            d.insert(s("z-index"), p.to_string());
         }
         if let Some(p) = &self.slot {
             d.insert(s("grid-area"), s(p));
