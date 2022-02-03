@@ -30,6 +30,81 @@ So links never break (and original author can keep updating document URL at whim
 (on how having article.page allows us to get just the content of a page, without
 header/sidebar/footer etc).
 
+-- ft.h1: Package Notifications
+
+3rd Feb 2022
+
+I was going through [MagicBell](https://www.magicbell.com/spec) and I quite
+love them. It gave me the idea that people today almost universally hate the
+email subscription dialog, and yet universally are driven to clicking that red
+icon.
+
+-- ft.image:
+src: images/notifications.png
+
+Imagine any FPM page shows a notifications icon like this in the header. We do
+not have login but we have cookie, we keep track of what you have read via
+cookie or local store. In the future we can also include signup via email option
+as in the notification drop down. Even subscribe via browser using [Push
+API](https://developer.mozilla.org/en-US/docs/Web/API/Push_API).
+
+Email and Push will require server side support, but basic notification without
+that is also quite useful and can be easily implemented: if we somehow solve the
+how in FPM package the notifications are stored problem.
+
+What to show in drop down and link for each of them has to discoverable by fpm
+somehow. Maybe we can have:
+
+-- ft.code: `fpm.ftd` notification variable
+lang: ftd
+
+\-- record news-item:
+caption title:
+string link:
+optional string src:
+body description:
+datetime created-on:
+
+\-- news-item list news:
+
+-- ft.markdown:
+
+So people can create notifications in say `config.ftd`:
+
+-- ft.code:
+lang: ftd
+
+\-- import: fpm
+
+\-- fpm.news: Package Notifications
+link: /journal/#package-notification
+created-on: 2022-02-03 11:30AM IST
+
+A spec for showing notifications in header has been just added to Journal.
+
+-- ft.markdown:
+
+We will ask people to keep only some meaningful number of items in news, say
+10, and keep deleting the old ones. Or we can keep the entire archive and only
+consider the first 10 when showing the notifications. We can also show all the
+news items in `/FPM/news/` page.
+
+We will create a package: fifthtry.github.io/notifications which will act as
+the widget, read the `fpm.news` and show. We will have a message-host function
+to store the latest notification created-on in a cookie, and on page load the
+value of the cookie would be made available on `fpm.latest-news-read` variable,
+so any news items later than `fpm.latest-news-read` will be shown as unread.
+
+We will mark the news as read when the notification icon is clicked.
+
+To impelment this we need `date-time` type ideally. Else if we store `created-on`
+as `string`, we still need `>` check. We also need a way to get first item from
+a list. To show the dot on the closed icon state, we need check of cookie value
+vs created-on of latest news. created-on of latest news can be stored as a
+another fpm variable for convenience till we get first item of a list support.
+Once the UI is open, we will want to show what all is new, so we will def need
+string comparison operator, `>`.
+
 -- ft.h1: More on `package.zip`
 
 2nd Feb 2022
