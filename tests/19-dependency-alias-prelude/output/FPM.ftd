@@ -4,4 +4,12 @@
 zip: github.com/fifthtry/amitu/archive/refs/heads/main.zip
 
 -- fpm.dependency: theme
-aliases: theme/lib as lib, theme/header as header
+
+-- fpm.dependency: one.fpm.local as one
+
+-- fpm.auto-import: theme/lib
+
+-- fpm.auto-import: theme/header
+as: theme_header
+
+-- fpm.auto-import: one/blog

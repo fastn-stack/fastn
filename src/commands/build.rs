@@ -375,24 +375,27 @@ async fn process_ftd(
         (None, None, main)
     } else {
         let main = main.to_owned();
-        let mut all_prelude_alias = std::collections::HashMap::<String, String>::new();
-        config
-            .package
-            .dependencies
-            .clone()
-            .into_iter()
-            .for_each(|dep| {
-                all_prelude_alias.extend(dep.aliases);
-            });
-        let prefix = all_prelude_alias
-            .into_iter()
-            .fold(None, |pre, (alias, _real)| {
-                Some(format!(
-                    "{}\n-- import: {}",
-                    pre.unwrap_or_else(|| "".to_string()),
-                    alias
-                ))
-            });
+        // let mut all_prelude_alias = std::collections::HashMap::<String, String>::new();
+        // config.auto_import.iter().for_each(|f| all_prelude_alias.insert())
+        // config
+        //     .package
+        //     .dependencies
+        //     .clone()
+        //     .into_iter()
+        //     .for_each(|dep| {
+        //         all_prelude_alias.extend(dep.aliases);
+        //     });
+        let prefix = config.auto_import.iter().fold(None, |pre, ai| {
+            Some(format!(
+                "{}\n-- import: {}{}",
+                pre.unwrap_or_else(|| "".to_string()),
+                &ai.path,
+                match &ai.alias {
+                    Some(a) => format!(" as {}", a),
+                    None => String::new(),
+                }
+            ))
+        });
 
         let new_main = fpm::Document {
             id: main.id,

@@ -30,6 +30,8 @@ pub struct Config {
     pub fonts: Vec<fpm::Font>,
     /// `ignored` keeps track of files that are to be ignored by `fpm build`, `fpm sync` etc.
     pub ignored: ignore::overrides::Override,
+    /// `auto_import` keeps track of the global auto imports in the package.
+    pub auto_import: Vec<fpm::AutoImport>,
 }
 
 impl Config {
@@ -176,6 +178,8 @@ impl Config {
             package
         };
 
+        let auto_imports: Vec<fpm::AutoImport> = b.get("fpm#auto-import")?;
+
         let fonts: Vec<fpm::Font> = b.get("fpm#font")?;
 
         fpm::utils::validate_zip_url(&package)?;
@@ -208,7 +212,21 @@ impl Config {
             original_directory,
             fonts,
             ignored,
+            auto_import: auto_imports,
         })
+    }
+
+    pub fn eval_auto_import(&self, name: &str) -> Option<&str> {
+        for x in &self.auto_import {
+            let matching_string = match &x.alias {
+                Some(a) => a.as_str(),
+                None => x.path.as_str(),
+            };
+            if matching_string == name {
+                return Some(&x.path);
+            };
+        }
+        None
     }
 }
 
@@ -330,11 +348,11 @@ impl Package {
         Ok(resp)
     }
 
-    pub fn dependency_aliases(&self) -> std::collections::BTreeMap<String, String> {
-        let mut resp = std::collections::BTreeMap::new();
-        self.dependencies.iter().for_each(|dep| {
-            resp.extend(dep.aliases.clone());
-        });
-        resp
-    }
+    // pub fn dependency_aliases(&self) -> std::collections::BTreeMap<String, String> {
+    //     let mut resp = std::collections::BTreeMap::new();
+    //     self.dependencies.iter().for_each(|dep| {
+    //         resp.extend(dep.aliases.clone());
+    //     });
+    //     resp
+    // }
 }

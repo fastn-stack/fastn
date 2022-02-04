@@ -13,9 +13,14 @@ optional string canonical-url:
 caption name:
 optional string version:
 optional body notes:
-optional string aliases:
 
 -- dependency-data list dependency:
+
+-- record auto-import-instance:
+caption path:
+optional string as:
+
+-- auto-import-instance list auto-import:
 
 -- record font-data:
 caption name:

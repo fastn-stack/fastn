@@ -28,7 +28,10 @@ impl ftd::p2::Library for Library {
         if name == "fpm-lib" {
             return Some(fpm::fpm_lib_ftd().to_string());
         }
-
+        let name = match self.config.eval_auto_import(name) {
+            Some(n) => n,
+            None => name,
+        };
         if let Ok(mut packages) = self.current_package.lock() {
             let mut new_packages = packages.clone();
             while let Some(current_package) = new_packages.last() {
@@ -51,7 +54,6 @@ impl ftd::p2::Library for Library {
             lib: &Library,
             current_packages: &[fpm::Package],
         ) -> Option<(String, Vec<fpm::Package>)> {
-            // dbg!(name, current_packages);
             let mut current_packages = current_packages.to_owned();
             let path = if package.name.eq(&lib.config.package.name) {
                 lib.config.root.clone()
@@ -63,7 +65,9 @@ impl ftd::p2::Library for Library {
             };
             // Explicit check for the current package.
             if name.starts_with(format!("{}/", &lib.config.package.name).as_str()) {
-                if let Some((_, p)) = name.split_once('/') {
+                if let Some((_, p)) =
+                    name.split_once(format!("{}/", &lib.config.package.name).as_str())
+                {
                     if let Ok(v) = std::fs::read_to_string(path.join(format!("{}.ftd", p))) {
                         return Some((v, current_packages));
                     }
@@ -93,11 +97,11 @@ impl ftd::p2::Library for Library {
                 mut current_packages: Vec<fpm::Package>,
             ) -> Option<(String, Vec<fpm::Package>)> {
                 // Check for Aliases of the packages
-                let all_aliases = package.dependency_aliases();
-                let name = match all_aliases.get(name) {
-                    Some(n) => n.as_str(),
-                    None => name,
-                };
+                // let all_aliases = package.dependency_aliases();
+                // let name = match all_aliases.get(name) {
+                //     Some(n) => n.as_str(),
+                //     None => name,
+                // };
                 // Import package non strict. In future, <package_name>:path is strict.
                 for (alias, package) in package.aliases().ok()? {
                     if name.starts_with(&alias) || name.starts_with(package.name.as_str()) {
