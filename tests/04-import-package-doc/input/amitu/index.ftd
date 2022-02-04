@@ -1,4 +1,4 @@
--- import: amitu:lib as lib
+-- import: amitu/lib
 -- import: shobhit.dev as shobhit_lib
 
 -- lib.block:

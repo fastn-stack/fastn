@@ -60,8 +60,9 @@ impl ftd::p2::Library for Library {
                     .join(".packages")
                     .join(package.name.as_str())
             };
-            if name.starts_with(format!("{}:", &lib.config.package.name).as_str()) {
-                if let Some((_, p)) = name.split_once(':') {
+            // Explicit check for the current package.
+            if name.starts_with(format!("{}/", &lib.config.package.name).as_str()) {
+                if let Some((_, p)) = name.split_once('/') {
                     if let Ok(v) = std::fs::read_to_string(path.join(format!("{}.ftd", p))) {
                         return Some((v, current_packages));
                     }
@@ -97,11 +98,6 @@ impl ftd::p2::Library for Library {
                         // Non index document
                         let package_path = lib.config.root.join(".packages");
                         let non_alias_name = name.replacen(&alias, package.name.as_str(), 1);
-                        let non_alias_name = non_alias_name.replacen(
-                            ':',
-                            std::path::MAIN_SEPARATOR.to_string().as_str(),
-                            1,
-                        );
                         if let Ok(v) = std::fs::read_to_string(
                             package_path.join(format!("{}.ftd", non_alias_name.as_str())),
                         ) {
