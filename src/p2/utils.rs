@@ -137,18 +137,26 @@ pub fn string_and_source_and_ref(
                 }
             }
         }
-        Some((v, reference)) if condition.is_some() => {
-            let reference = match reference {
-                Some(reference) => {
-                    if let Some(s) = reference.strip_prefix('@') {
-                        s
-                    } else {
-                        reference
-                    }
+        Some((ftd::Value::None { kind }, reference)) if condition.is_some() => {
+            let kind = kind.inner();
+            let source = match kind {
+                _ if matches!(kind, ftd::p2::Kind::String { .. }) => {
+                    ftd::TextSource::from_kind(kind, doc_id, line_number)?
                 }
+                _ => {
+                    return ftd::e2(
+                        format!("expected string, found1: {:?}", kind),
+                        doc_id,
+                        line_number,
+                    )
+                }
+            };
+
+            let reference = match reference {
+                Some(reference) => reference,
                 None => {
                     return ftd::e2(
-                        format!("expected string, found: {:?}", v.kind()),
+                        format!("expected string, found2: {:?}", kind),
                         doc_id,
                         line_number,
                     )
@@ -158,10 +166,16 @@ pub fn string_and_source_and_ref(
                 match value {
                     ftd::PropertyValue::Reference { name, .. }
                     | ftd::PropertyValue::Variable { name, .. } => {
-                        if name.eq(reference) {
+                        if name.eq({
+                            if let Some(reference) = reference.strip_prefix('@') {
+                                reference
+                            } else {
+                                reference
+                            }
+                        }) {
                             return Ok((
                                 "".to_string(),
-                                ftd::TextSource::Header,
+                                source,
                                 complete_reference(&Some(reference.to_owned()), all_locals),
                             ));
                         }
@@ -170,13 +184,13 @@ pub fn string_and_source_and_ref(
                 }
             }
             ftd::e2(
-                format!("expected string, found: {:?}", v.kind()),
+                format!("expected string, found3: {:?}", kind),
                 doc_id,
                 line_number,
             )
         }
         Some(v) => ftd::e2(
-            format!("expected string, found: {:?}", v),
+            format!("expected string, found4: {:?}", v),
             doc_id,
             line_number,
         ),
