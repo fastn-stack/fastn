@@ -1,7 +1,7 @@
 -- import: fpm
 
--- fpm.package: fpm.dev
-zip: github.com/fifthtry/fpm.dev/archive/refs/heads/main.zip
+-- fpm.package: fpm.dev asZ̉
+zip: github.com/fifthtry/fpm.dev/arc=====ive/refs/heads/main.zip
 language: English
 translation: hi.fpm.dev
 
