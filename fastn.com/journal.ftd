@@ -30,6 +30,54 @@ So links never break (and original author can keep updating document URL at whim
 (on how having article.page allows us to get just the content of a page, without
 header/sidebar/footer etc).
 
+-- ft.h1: On `main:`
+
+4th Feb 2022
+
+So Shobhit has implemented the "main" proposal. What we are trying to avoid is
+imports at top of each file. With `main` we manage that. But now we lose
+discoverablity, where does a symbol come from. In main proposal the fact `author`
+is coming from `foo.com/book-theme` is not obvious as you are writing:
+
+-- ft.code: FPM.dev
+lang: ftd
+
+\-- fpm.dependency: foo.com/book-theme
+implements: fpm.dev/blog
+
+-- ft.markdown:
+
+`fpm.dev/blog` declairs `main: book, author` which tells you that because of
+the `implements` every module in current package has access to `author`.
+
+Revised proposal:
+
+First we are implementing package:module syntax. So earlier we used to refer to
+`foo.com/book-theme` as `-- import: foo.com/book-theme`, but now we should refer
+to them as `-- import: book-theme`. Further the idea of `main:` was to ensure we
+do not have all the code in index file, so main would still be there, and now
+we should refer using `-- import: book-theme:author`. Finally we will auto import
+this line. So in the code you will write: `-- book-theme:author.name: John Doe`.
+
+This way things are explicit, if you wanted to you can import `-- import:
+book-theme:author` on top of file to write: `-- author.name: John Doe`.
+
+We can then have `auto-import` feature:
+
+-- ft.code: FPM.dev
+lang: ftd
+
+\-- fpm.dependency: foo.com/book-theme
+implements: fpm.dev/blog
+auto-import: book-theme:author
+auto-import: book-theme:article as ft
+
+-- ft.markdown:
+
+With this `author` would be available to every module in current package without
+explicitly importing so you don't have to write `-- import: book-theme:author`
+on top of file to write and you can still write `-- author.name: John Doe`.
+
 -- ft.h1: Package Notifications
 
 3rd Feb 2022
