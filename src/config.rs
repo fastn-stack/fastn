@@ -198,6 +198,7 @@ impl Config {
                     });
                 }
             }
+            overrides.add("!FPM/**")?;
 
             match overrides.build() {
                 Ok(v) => v,
