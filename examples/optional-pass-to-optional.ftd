@@ -1,0 +1,29 @@
+-- import: ft
+
+-- ftd.column:
+padding: 40
+
+-- ft.h0: Optional variable passable to optional variable when variable is null
+
+-- col1:
+value: Calling col1
+
+-- col1:
+
+
+-- ftd.column col1:
+optional string value:
+
+--- col2:
+val: $value
+
+
+
+-- ftd.column col2:
+optional string val:
+
+--- ftd.text: $val
+if: $val is not null
+
+--- ftd.text: No value
+if: $val is null

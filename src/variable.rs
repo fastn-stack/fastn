@@ -514,6 +514,7 @@ impl Value {
                     Some("".to_string())
                 }
             }
+            Value::None { .. } => Some("".to_string()),
             Value::Object { values } => {
                 let mut new_values: std::collections::BTreeMap<String, String> = Default::default();
                 for (k, v) in values {
