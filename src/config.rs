@@ -352,12 +352,4 @@ impl Package {
         });
         Ok(resp)
     }
-
-    // pub fn dependency_aliases(&self) -> std::collections::BTreeMap<String, String> {
-    //     let mut resp = std::collections::BTreeMap::new();
-    //     self.dependencies.iter().for_each(|dep| {
-    //         resp.extend(dep.aliases.clone());
-    //     });
-    //     resp
-    // }
 }

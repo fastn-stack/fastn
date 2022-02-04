@@ -70,24 +70,6 @@ impl DependencyTemp {
             Some((package, alias)) => (package, Some(alias.to_string())),
             _ => (self.name.as_str(), None),
         };
-        // let mut aliases = std::collections::HashMap::<String, String>::new();
-        // if let Some(a) = self.aliases {
-        //     for s in a.split(',') {
-        //         match s.split_once(" as ") {
-        //             Some((package, alias)) => {
-        //                 aliases.insert(alias.trim().to_string(), package.trim().to_string())
-        //             }
-        //             _ => {
-        //                 return Err(fpm::Error::UsageError {
-        //                     message: format!(
-        //                         "Unable to process the aliases for {}. Incorrect definition {}",
-        //                         package_name, s
-        //                     ),
-        //                 })
-        //             }
-        //         };
-        //     }
-        // };
         Ok(fpm::Dependency {
             package: fpm::Package::new(package_name),
             version: self.version,

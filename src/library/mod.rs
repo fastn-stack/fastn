@@ -96,12 +96,6 @@ impl ftd::p2::Library for Library {
                 lib: &Library,
                 mut current_packages: Vec<fpm::Package>,
             ) -> Option<(String, Vec<fpm::Package>)> {
-                // Check for Aliases of the packages
-                // let all_aliases = package.dependency_aliases();
-                // let name = match all_aliases.get(name) {
-                //     Some(n) => n.as_str(),
-                //     None => name,
-                // };
                 // Import package non strict. In future, <package_name>:path is strict.
                 for (alias, package) in package.aliases().ok()? {
                     if name.starts_with(&alias) || name.starts_with(package.name.as_str()) {
