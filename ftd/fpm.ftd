@@ -16,11 +16,7 @@ optional body notes:
 
 -- dependency-data list dependency:
 
--- record auto-import-instance:
-caption path:
-optional string as:
-
--- auto-import-instance list auto-import:
+-- string list auto-import:
 
 -- record font-data:
 caption name:

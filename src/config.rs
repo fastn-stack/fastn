@@ -178,7 +178,12 @@ impl Config {
             package
         };
 
-        let auto_imports: Vec<fpm::AutoImport> = b.get("fpm#auto-import")?;
+        let auto_imports: Vec<String> = b.get("fpm#auto-import")?;
+        // let mut aliases = std::collections::HashMap::<String, String>::new();
+        let auto_import = auto_imports
+            .iter()
+            .map(|f| fpm::AutoImport::from_string(f.as_str()))
+            .collect();
 
         let fonts: Vec<fpm::Font> = b.get("fpm#font")?;
 
@@ -212,7 +217,7 @@ impl Config {
             original_directory,
             fonts,
             ignored,
-            auto_import: auto_imports,
+            auto_import,
         })
     }
 
