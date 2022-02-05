@@ -29,6 +29,8 @@ impl ftd::p2::Library for Library {
             return Some(fpm::fpm_lib_ftd().to_string());
         }
 
+        // dbg!(&self, &name);
+
         if let Ok(mut packages) = self.current_package.lock() {
             let mut new_packages = packages.clone();
             while let Some(current_package) = new_packages.last() {
@@ -67,6 +69,10 @@ impl ftd::p2::Library for Library {
                         return Some((v, current_packages));
                     }
                 }
+            }
+
+            if let Ok(v) = std::fs::read_to_string(path.join(format!("{}.ftd", name))) {
+                return Some((v, current_packages));
             }
 
             if let Some(o) = package.translation_of.as_ref() {

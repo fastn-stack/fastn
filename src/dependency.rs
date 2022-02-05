@@ -168,26 +168,28 @@ impl fpm::Package {
 
             // Download the zip folder
             {
-                let response = if download_url[1..].contains("://")
-                    || download_url.starts_with("//")
-                {
-                    futures::executor::block_on(reqwest::get(download_url))?
-                } else if let Ok(response) =
-                    futures::executor::block_on(reqwest::get(format!("https://{}", download_url)))
-                {
-                    response
-                } else {
-                    futures::executor::block_on(reqwest::get(format!("http://{}", download_url)))?
-                };
-
+                // dbg!(&download_url);
+                let mut response =
+                    if download_url[1..].contains("://") || download_url.starts_with("//") {
+                        reqwest::get(download_url.as_str())?
+                    } else if let Ok(response) =
+                        reqwest::get(format!("https://{}", download_url).as_str())
+                    {
+                        response
+                    } else {
+                        reqwest::get(format!("http://{}", download_url).as_str())?
+                    };
+                // dbg!(&response);
                 let mut file = std::fs::File::create(&path)?;
                 // TODO: instead of reading the whole thing in memory use tokio::io::copy() somehow?
-                let content = futures::executor::block_on(response.bytes())?;
-                file.write_all(&content)?;
+                let mut buf: Vec<u8> = vec![];
+                response.copy_to(&mut buf)?;
+                file.write_all(&buf)?;
             }
 
             let file = std::fs::File::open(&path)?;
             // TODO: switch to async_zip crate
+            // dbg!(&file);
             let mut archive = zip::ZipArchive::new(file)?;
             for i in 0..archive.len() {
                 let mut c_file = archive.by_index(i).unwrap();
@@ -226,19 +228,15 @@ impl fpm::Package {
         );
 
         fn get_fpm(name: &str) -> fpm::Result<String> {
-            let response_fpm = if let Ok(response_fpm) =
-                futures::executor::block_on(reqwest::get(format!("https://{}/FPM.ftd", name)))
+            // dbg!(&name);
+            let mut response_fpm = if let Ok(response_fpm) =
+                reqwest::get(format!("https://{}/FPM.ftd", name).as_str())
             {
                 response_fpm
             } else {
-                futures::executor::block_on(reqwest::get(format!("http://{}/FPM.ftd", name)))?
+                reqwest::get(format!("http://{}/FPM.ftd", name).as_str())?
             };
-            Ok(String::from_utf8(
-                futures::executor::block_on(response_fpm.bytes())?
-                    .into_iter()
-                    .collect(),
-            )
-            .expect(""))
+            Ok(response_fpm.text()?)
         }
     }
 
