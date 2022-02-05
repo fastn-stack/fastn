@@ -10,6 +10,8 @@ $processor$: toc
 
 - /examples/react-banglore-22-01-2022/
   React Bangalore
+- /why/
+  Why FTD?
 - /language/
   Docs
 - /examples/
@@ -30,6 +32,18 @@ $processor$: toc
   Internals
 - /p1/
   `ftd::p1`: A JSON/YML Replacement
+
+
+-- ft.toc-item list why-toc:
+$processor$: toc
+
+- /why/
+  Why FTD
+- /philosophy/
+  Philosophy
+- /why/not-mdx/
+  Why not MDX?
+
 
 -- ft.toc-item list examples-toc:
 $processor$: toc
@@ -58,8 +72,6 @@ $processor$: toc
   FTD Language
   - /p1-grammar/
     `ftd::p1` grammar
-  - /philosophy/
-    Philosophy
   - /data-modelling/
     Data Modelling
     - /variables/
