@@ -5,7 +5,7 @@
 
 
 -- ft.doc-page:
-toc: $ft.toc
+toc: $config.why-toc
 
 
 -- ft.h0: Philosophy Behind `ftd`

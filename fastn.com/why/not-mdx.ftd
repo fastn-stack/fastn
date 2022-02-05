@@ -2,7 +2,7 @@
 -- import: config
 
 -- ft.doc-page:
-toc: $ft.why-toc
+toc: $config.why-toc
 
 -- ft.h0: Why Not MDX?
 
@@ -62,8 +62,7 @@ with mdsvex.
 
 -- ft.h1: Component Vs Prose Language
 
-First difference
-between FTD with MDX or SVX is the language in which you write
+First difference between FTD with MDX or SVX is the language in which you write
 your `.mdx` or `.svx` is not the same as the language in which you write the
 actual component implementation.
 
