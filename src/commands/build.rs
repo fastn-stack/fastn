@@ -677,15 +677,21 @@ fn replace_markers(
         .replace("__fpm_js__", fpm::fpm_js())
         .replace(
             "__ftd_data_main__",
-            serde_json::to_string_pretty(&main_rt.data)
-                .expect("failed to convert document to json")
-                .as_str(),
+            fpm::font::escape(
+                serde_json::to_string_pretty(&main_rt.data)
+                    .expect("failed to convert document to json")
+                    .as_str(),
+            )
+            .as_str(),
         )
         .replace(
             "__ftd_external_children_main__",
-            serde_json::to_string_pretty(&main_rt.external_children)
-                .expect("failed to convert document to json")
-                .as_str(),
+            fpm::font::escape(
+                serde_json::to_string_pretty(&main_rt.external_children)
+                    .expect("failed to convert document to json")
+                    .as_str(),
+            )
+            .as_str(),
         )
         .replace(
             "__main__",
