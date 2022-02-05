@@ -86,9 +86,6 @@ impl ftd::p2::Library for Library {
                     if let Ok(v) = std::fs::read_to_string(path.join(format!("{}.ftd", name))) {
                         return Some((v, current_packages));
                     }
-                }
-
-                if let Some(ref name) = p {
                     if let Ok(v) =
                         std::fs::read_to_string(original_path.join(format!("{}.ftd", name)))
                     {
