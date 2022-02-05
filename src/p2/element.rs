@@ -269,6 +269,8 @@ pub fn common_from_properties(
         grid_column: ftd::p2::utils::string_optional("grid-column", properties, doc.name, 0)?,
         grid_row: ftd::p2::utils::string_optional("grid-row", properties, doc.name, 0)?,
         white_space: ftd::p2::utils::string_optional("white-space", properties, doc.name, 0)?,
+        border_style: ftd::p2::utils::string_optional("border-style", properties, doc.name, 0)?,
+        text_transform: ftd::p2::utils::string_optional("text-transform", properties, doc.name, 0)?,
     })
 }
 
@@ -521,14 +523,23 @@ fn common_arguments() -> Vec<(String, ftd::p2::Kind)> {
         (
             "white-space".to_string(),
             ftd::p2::Kind::string().into_optional(),
-        ), /*(
-               "grid-column".to_string(),
-               ftd::p2::Kind::string().into_optional(),
-           ),
-           (
-               "grid-row".to_string(),
-               ftd::p2::Kind::string().into_optional(),
-           ),*/
+        ),
+        (
+            "border-style".to_string(),
+            ftd::p2::Kind::string().into_optional(),
+        ),
+        (
+            "text-transform".to_string(),
+            ftd::p2::Kind::string().into_optional(),
+        ),
+        /*(
+            "grid-column".to_string(),
+            ftd::p2::Kind::string().into_optional(),
+        ),
+        (
+            "grid-row".to_string(),
+            ftd::p2::Kind::string().into_optional(),
+        ),*/
     ]
 }
 

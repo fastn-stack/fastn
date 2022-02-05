@@ -20,6 +20,9 @@ val: $value
 
 
 -- ftd.column col2:
+text-transform: uppercase
+border-style: dotted
+border-width: 1
 optional string val:
 
 --- ftd.text: $val

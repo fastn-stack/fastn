@@ -1164,6 +1164,9 @@ impl ftd::Common {
         if let Some(p) = &self.grid_row {
             d.insert(s("grid-row"), s(p));
         }
+        if let Some(p) = &self.text_transform {
+            d.insert(s("text-transform"), s(p));
+        }
         if self.shadow_size.is_some()
             || self.shadow_blur.is_some()
             || self.shadow_offset_x.is_some()
@@ -1249,7 +1252,11 @@ impl ftd::Common {
             d.insert(s("transform"), data);
         }
 
-        d.insert(s("border-style"), s("solid"));
+        if let Some(p) = &self.border_style {
+            d.insert(s("border-style"), s(p));
+        } else {
+            d.insert(s("border-style"), s("solid"));
+        }
         d.insert(s("border-width"), format!("{}px", self.border_width));
         d.insert(s("border-radius"), format!("{}px", self.border_radius));
         d.insert(s("box-sizing"), s("border-box"));
