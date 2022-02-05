@@ -99,9 +99,9 @@ this:
 -- ft.code: HelloWorld.svelte
 lang: svelte
 
-<{script}>
+<script>
     let name = 'world';
-</{script}>
+</script>
 
 <h1>Hello {name}!</h1>
 
