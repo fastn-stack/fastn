@@ -1,6 +1,6 @@
 -- import: ft
 -- import: fpm
--- import: config
+-- import: ftd-dev.vercel.app/config
 
 -- ft.doc-page:
 toc: $config.examples-toc

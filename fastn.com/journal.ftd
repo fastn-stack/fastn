@@ -1,5 +1,5 @@
 -- import: ft
--- import: config
+-- import: ftd-dev.vercel.app/config
 -- import: fpm
 
 -- ft.doc-page:
@@ -1146,7 +1146,7 @@ that document be also considered main:
 -- ft.code: `a.ftd`
 lang: ftd
 
-\-- import: config
+\-- import: ftd-dev.vercel.app/config
 $main$: true
 \-- import: b
 

@@ -1,5 +1,5 @@
--- import: examples/diagram
--- import: examples/comic
+-- import: ftd-dev.vercel.app/examples/diagram
+-- import: ftd-dev.vercel.app/examples/comic
 -- import: ft
 -- import: fpm
 
@@ -651,7 +651,7 @@ left: 220
 lang: ftd
 
 \-- import: fifthtry.github.io/Forest-Theme as ft
-\-- import: config
+\-- import: ftd-dev.vercel.app/config
 \-- import: fpm
 
 \-- ft.page:

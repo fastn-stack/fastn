@@ -1,6 +1,6 @@
 -- import: ft
 /-- import: comic_scene_crop_scale as comic1
--- import: config
+-- import: ftd-dev.vercel.app/config
 
 -- ft.doc-page:
 toc: $config.examples-toc

@@ -1,6 +1,6 @@
--- import: examples/diagram
--- import: examples/comic
--- import: examples/intro
+-- import: ftd-dev.vercel.app/examples/diagram
+-- import: ftd-dev.vercel.app/examples/comic
+-- import: ftd-dev.vercel.app/examples/intro
 
 -- integer count: 0
 -- integer total: 4
