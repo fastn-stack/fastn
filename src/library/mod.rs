@@ -60,9 +60,13 @@ impl ftd::p2::Library for Library {
                     .join(".packages")
                     .join(package.name.as_str())
             };
-
-            if let Ok(v) = std::fs::read_to_string(path.join(format!("{}.ftd", name))) {
-                return Some((v, current_packages));
+            // Explicit check for the current package.
+            if name.starts_with(format!("{}/", &lib.config.package.name).as_str()) {
+                if let Some((_, p)) = name.split_once('/') {
+                    if let Ok(v) = std::fs::read_to_string(path.join(format!("{}.ftd", p))) {
+                        return Some((v, current_packages));
+                    }
+                }
             }
 
             if let Some(o) = package.translation_of.as_ref() {
@@ -88,6 +92,7 @@ impl ftd::p2::Library for Library {
                 mut current_packages: Vec<fpm::Package>,
             ) -> Option<(String, Vec<fpm::Package>)> {
                 // Check for Aliases of the packages
+                // Import package non strict. In future, <package_name>:path is strict.
                 for (alias, package) in package.aliases().ok()? {
                     if name.starts_with(&alias) || name.starts_with(package.name.as_str()) {
                         // Non index document
