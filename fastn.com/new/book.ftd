@@ -1,5 +1,5 @@
 -- import: ft
--- import: config
+-- import: fpm.dev/config
 -- import: fpm
 
 -- ft.page:

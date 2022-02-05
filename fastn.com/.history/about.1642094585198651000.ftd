@@ -1,6 +1,6 @@
 -- import: fpm-ui
 -- import: fifthtry.github.io/Jupiter-theme as ft
--- import: config
+-- import: fpm.dev/config
 
 -- ft.doc-page:
 toc: $ft.toc
