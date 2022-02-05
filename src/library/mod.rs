@@ -53,7 +53,7 @@ impl ftd::p2::Library for Library {
             lib: &Library,
             current_packages: &[fpm::Package],
         ) -> Option<(String, Vec<fpm::Package>)> {
-            let mut current_packages = current_packages.to_owned();
+            let current_packages = current_packages.to_owned();
             let path = if package.name.eq(&lib.config.package.name) {
                 lib.config.root.clone()
             } else {
@@ -84,7 +84,6 @@ impl ftd::p2::Library for Library {
                 // then check in original package
                 if let Some(ref name) = p {
                     if let Ok(v) = std::fs::read_to_string(path.join(format!("{}.ftd", name))) {
-                        current_packages.push(o.clone());
                         return Some((v, current_packages));
                     }
                 }
@@ -93,7 +92,6 @@ impl ftd::p2::Library for Library {
                     if let Ok(v) =
                         std::fs::read_to_string(original_path.join(format!("{}.ftd", name)))
                     {
-                        current_packages.push(o.clone());
                         return Some((v, current_packages));
                     }
                 }
