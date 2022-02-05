@@ -63,25 +63,41 @@ impl ftd::p2::Library for Library {
                     .join(package.name.as_str())
             };
             // Explicit check for the current package.
-            if name.starts_with(format!("{}/", &lib.config.package.name).as_str()) {
-                if let Some((_, p)) = name.split_once('/') {
-                    if let Ok(v) = std::fs::read_to_string(path.join(format!("{}.ftd", p))) {
-                        return Some((v, current_packages));
-                    }
+            if name.starts_with(format!("{}/", &package.name).as_str()) {
+                let p = name.replace(format!("{}/", &package.name).as_str(), "");
+                if let Ok(v) = std::fs::read_to_string(path.join(format!("{}.ftd", p))) {
+                    return Some((v, current_packages));
                 }
-            }
-
-            if let Ok(v) = std::fs::read_to_string(path.join(format!("{}.ftd", name))) {
-                return Some((v, current_packages));
             }
 
             if let Some(o) = package.translation_of.as_ref() {
                 let original_path = lib.config.root.join(".packages").join(o.name.as_str());
-                if let Ok(v) = std::fs::read_to_string(original_path.join(format!("{}.ftd", name)))
-                {
-                    current_packages.push(o.clone());
-                    return Some((v, current_packages));
+                let p = if name.starts_with(format!("{}/", &o.name).as_str()) {
+                    Some(name.replace(format!("{}/", &o.name).as_str(), ""))
+                } else if name.starts_with(format!("{}/", &package.name).as_str()) {
+                    Some(name.replace(format!("{}/", &package.name).as_str(), ""))
+                } else {
+                    None
+                };
+
+                // first check in the current/translation package
+                // then check in original package
+                if let Some(ref name) = p {
+                    if let Ok(v) = std::fs::read_to_string(path.join(format!("{}.ftd", name))) {
+                        current_packages.push(o.clone());
+                        return Some((v, current_packages));
+                    }
                 }
+
+                if let Some(ref name) = p {
+                    if let Ok(v) =
+                        std::fs::read_to_string(original_path.join(format!("{}.ftd", name)))
+                    {
+                        current_packages.push(o.clone());
+                        return Some((v, current_packages));
+                    }
+                }
+
                 if let Some((v, current_packages)) =
                     get_data_from_dependency(name, o, lib, current_packages.clone())
                 {

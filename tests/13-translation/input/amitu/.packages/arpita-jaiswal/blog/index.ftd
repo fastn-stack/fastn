@@ -1,8 +1,8 @@
--- import: blog
+-- import: arpita-jaiswal/blog/blog
 
 -- import: blog-theme
 
--- import: lib
+-- import: arpita-jaiswal/blog/lib
 
 -- ftd.text: This is only in original so far
 

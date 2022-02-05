@@ -1,4 +1,4 @@
--- import: blog
+-- import: arpita-jaiswal/blog/blog
 
 -- record person:
 integer id:
