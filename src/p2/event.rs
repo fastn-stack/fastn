@@ -67,7 +67,7 @@ impl Event {
     pub fn get_events(
         line_number: usize,
         events: &[Self],
-        all_locals: &mut ftd::Map,
+        all_locals: &ftd::Map,
         arguments: &std::collections::BTreeMap<String, ftd::Value>,
         doc: &ftd::p2::TDoc,
     ) -> ftd::p1::Result<Vec<ftd::Event>> {
@@ -90,9 +90,7 @@ impl Event {
                     if let Some(val) = all_locals.get(value) {
                         format!("@{}@{}", value, val)
                     } else if value.eq("MOUSE-IN") {
-                        let string_container = all_locals.get("MOUSE-IN-TEMP").unwrap().clone();
-                        all_locals.insert("MOUSE-IN".to_string(), string_container.to_string());
-                        format!("@MOUSE-IN@{}", string_container)
+                        "@MOUSE-IN".to_string()
                     } else {
                         return ftd::e2(
                             format!("Can't find the local variable {}", value),
@@ -121,53 +119,51 @@ impl Event {
         Ok(event)
     }
 
-    pub fn mouse_event(all_locals: &mut ftd::Map) -> ftd::p1::Result<Vec<ftd::Event>> {
+    pub fn mouse_event(val: &str) -> Vec<ftd::Event> {
         let mut event: Vec<ftd::Event> = vec![];
-        if let Some(val) = all_locals.get("MOUSE-IN") {
-            event.push(ftd::Event {
-                name: "onmouseenter".to_string(),
-                action: ftd::Action {
-                    action: "set-value".to_string(),
-                    target: format!("@MOUSE-IN@{}", val),
-                    parameters: std::array::IntoIter::new([(
-                        "value".to_string(),
-                        vec![
-                            ftd::event::ParameterData {
-                                value: "true".to_string(),
-                                reference: None,
-                            },
-                            ftd::event::ParameterData {
-                                value: "boolean".to_string(),
-                                reference: None,
-                            },
-                        ],
-                    )])
-                    .collect(),
-                },
-            });
-            event.push(ftd::Event {
-                name: "onmouseleave".to_string(),
-                action: ftd::Action {
-                    action: "set-value".to_string(),
-                    target: format!("@MOUSE-IN@{}", val),
-                    parameters: std::array::IntoIter::new([(
-                        "value".to_string(),
-                        vec![
-                            ftd::event::ParameterData {
-                                value: "false".to_string(),
-                                reference: None,
-                            },
-                            ftd::event::ParameterData {
-                                value: "boolean".to_string(),
-                                reference: None,
-                            },
-                        ],
-                    )])
-                    .collect(),
-                },
-            });
-        }
-        Ok(event)
+        event.push(ftd::Event {
+            name: "onmouseenter".to_string(),
+            action: ftd::Action {
+                action: "set-value".to_string(),
+                target: format!("@MOUSE-IN@{}", val),
+                parameters: std::array::IntoIter::new([(
+                    "value".to_string(),
+                    vec![
+                        ftd::event::ParameterData {
+                            value: "true".to_string(),
+                            reference: None,
+                        },
+                        ftd::event::ParameterData {
+                            value: "boolean".to_string(),
+                            reference: None,
+                        },
+                    ],
+                )])
+                .collect(),
+            },
+        });
+        event.push(ftd::Event {
+            name: "onmouseleave".to_string(),
+            action: ftd::Action {
+                action: "set-value".to_string(),
+                target: format!("@MOUSE-IN@{}", val),
+                parameters: std::array::IntoIter::new([(
+                    "value".to_string(),
+                    vec![
+                        ftd::event::ParameterData {
+                            value: "false".to_string(),
+                            reference: None,
+                        },
+                        ftd::event::ParameterData {
+                            value: "boolean".to_string(),
+                            reference: None,
+                        },
+                    ],
+                )])
+                .collect(),
+            },
+        });
+        event
     }
 }
 

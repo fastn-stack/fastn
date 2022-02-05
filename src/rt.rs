@@ -68,9 +68,10 @@ impl RT {
             arguments: &Default::default(),
             invocations: &mut invocations,
         }
-        .execute(&[], &mut Default::default(), None)?
+        .execute(&[], &Default::default(), None)?
         .children;
 
+        ftd::Element::set_default_locals(&mut element);
         ftd::Element::renest_on_region(&mut element);
         ftd::p2::document::set_region_id(&mut element);
         ftd::p2::document::default_scene_children_position(&mut element);

@@ -15,7 +15,7 @@ impl<'a> ExecuteDoc<'a> {
     pub(crate) fn execute(
         &mut self,
         parent_container: &[usize],
-        all_locals: &mut ftd::Map,
+        all_locals: &ftd::Map,
         id: Option<String>,
     ) -> ftd::p1::Result<ftd::component::ElementWithContainer> {
         let mut index = 0;
@@ -27,7 +27,7 @@ impl<'a> ExecuteDoc<'a> {
         index: &mut usize,
         is_external: bool,
         parent_container: &[usize],
-        all_locals: &mut ftd::Map,
+        all_locals: &ftd::Map,
         parent_id: Option<String>,
         id: Option<String>,
     ) -> ftd::p1::Result<ftd::component::ElementWithContainer> {
@@ -102,7 +102,6 @@ impl<'a> ExecuteDoc<'a> {
                         &local_container,
                     )?;
 
-                    let mut temp_locals: ftd::Map = Default::default();
                     children = self.add_element(
                         children,
                         &mut current_container,
@@ -111,7 +110,7 @@ impl<'a> ExecuteDoc<'a> {
                         child_container,
                         index,
                         parent_container,
-                        &mut temp_locals,
+                        &Default::default(),
                         None,
                         container_children,
                     )?;
@@ -239,7 +238,7 @@ impl<'a> ExecuteDoc<'a> {
         container: Option<std::collections::BTreeMap<String, Vec<Vec<usize>>>>,
         index: &mut usize,
         parent_container: &[usize],
-        all_locals: &mut ftd::Map,
+        all_locals: &ftd::Map,
         id: Option<String>,
         container_children: Vec<ftd::Element>,
     ) -> ftd::p1::Result<Vec<ftd::Element>> {
@@ -313,14 +312,12 @@ impl<'a> ExecuteDoc<'a> {
                         let mut new_parent_container = parent_container.to_vec();
                         new_parent_container.append(&mut current_container.to_vec());
 
-                        let mut temp_locals: ftd::Map = Default::default();
-
                         *index += 1;
                         self.execute_(
                             index,
                             true,
                             &new_parent_container,
-                            &mut temp_locals,
+                            &Default::default(),
                             parent_id,
                             None,
                         )?

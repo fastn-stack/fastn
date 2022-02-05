@@ -45,7 +45,7 @@ impl Boolean {
     pub fn to_condition(
         &self,
         line_number: usize,
-        all_locals: &mut ftd::Map,
+        all_locals: &ftd::Map,
         arguments: &std::collections::BTreeMap<String, ftd::Value>,
         doc: &ftd::p2::TDoc,
     ) -> ftd::p1::Result<ftd::Condition> {
@@ -128,7 +128,7 @@ impl Boolean {
         fn resolve_variable(
             value: &ftd::PropertyValue,
             line_number: usize,
-            all_locals: &mut ftd::Map,
+            all_locals: &ftd::Map,
             arguments: &std::collections::BTreeMap<String, ftd::Value>,
             doc: &ftd::p2::TDoc,
         ) -> ftd::p1::Result<String> {
@@ -169,9 +169,7 @@ impl Boolean {
                             return Ok(format!("@{}@{}", v, string_container));
                         }
                     } else if name.eq("MOUSE-IN") {
-                        let string_container = all_locals.get("MOUSE-IN-TEMP").unwrap().clone();
-                        all_locals.insert("MOUSE-IN".to_string(), string_container.to_string());
-                        return Ok(format!("@MOUSE-IN@{}", string_container));
+                        return Ok("@MOUSE-IN".to_string());
                     }
                     return ftd::e2(
                         format!("Can't find the local variable {}", name),

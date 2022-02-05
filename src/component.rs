@@ -129,7 +129,7 @@ impl ChildComponent {
             String,
             Vec<std::collections::BTreeMap<String, ftd::Value>>,
         >,
-        all_locals: &mut ftd::Map,
+        all_locals: &ftd::Map,
         local_container: &[usize],
     ) -> ftd::p1::Result<ElementWithContainer> {
         let id = ftd::p2::utils::string_optional(
@@ -145,9 +145,13 @@ impl ChildComponent {
             .collect::<Vec<String>>()
             .join(",");
 
-        for k in self.arguments.keys() {
-            all_locals.insert(k.to_string(), string_container.to_string());
-        }
+        let all_locals = {
+            let mut all_locals = all_locals.clone();
+            for k in self.arguments.keys() {
+                all_locals.insert(k.to_string(), string_container.to_string());
+            }
+            all_locals
+        };
 
         let ElementWithContainer {
             mut element,
@@ -158,7 +162,7 @@ impl ChildComponent {
             arguments,
             invocations,
             false,
-            all_locals,
+            &all_locals,
             local_container,
             id.clone(),
         )?;
@@ -205,7 +209,7 @@ impl ChildComponent {
                     arguments,
                     invocations,
                 }
-                .execute(local_container, all_locals, None)?
+                .execute(local_container, &all_locals, None)?
                 .children;
                 container_children.extend(elements);
             }
@@ -250,7 +254,7 @@ impl ChildComponent {
                     doc,
                     arguments,
                     invocations,
-                    all_locals,
+                    &all_locals,
                     local_container,
                 )?;
                 reevalute_markups(markups, named_container, doc)?;
@@ -274,7 +278,7 @@ impl ChildComponent {
             Vec<std::collections::BTreeMap<String, ftd::Value>>,
         >,
         is_child: bool,
-        all_locals: &mut ftd::Map,
+        all_locals: &ftd::Map,
         local_container: &[usize],
     ) -> ftd::p1::Result<Vec<ElementWithContainer>> {
         let root = {
@@ -381,7 +385,7 @@ impl ChildComponent {
                 Vec<std::collections::BTreeMap<String, ftd::Value>>,
             >,
             is_child: bool,
-            all_locals: &mut ftd::Map,
+            all_locals: &ftd::Map,
             local_container: &[usize],
         ) -> ftd::p1::Result<ElementWithContainer> {
             let mut new_arguments: std::collections::BTreeMap<String, ftd::Value> =
@@ -394,13 +398,12 @@ impl ChildComponent {
                 &new_arguments,
                 doc,
             )?;
-            let mut temp_locals: ftd::Map = Default::default();
             let conditional_attribute = get_conditional_attributes(
                 child_component.line_number,
                 &child_component.properties,
                 &new_arguments,
                 doc,
-                &mut temp_locals,
+                &Default::default(),
             )?;
             let local_container = {
                 let mut container = local_container[..local_container.len() - 1].to_vec();
@@ -429,8 +432,6 @@ impl ChildComponent {
                 visible
             };
 
-            let mut all_old_locals = all_locals.clone();
-
             let mut element = root.call(
                 &new_properties,
                 doc,
@@ -438,7 +439,7 @@ impl ChildComponent {
                 &None,
                 is_child,
                 &child_component.events,
-                &mut all_old_locals,
+                all_locals,
                 local_container.as_slice(),
                 None,
             )?;
@@ -480,7 +481,7 @@ impl ChildComponent {
             Vec<std::collections::BTreeMap<String, ftd::Value>>,
         >,
         is_child: bool,
-        all_locals: &mut ftd::Map,
+        all_locals: &ftd::Map,
         local_container: &[usize],
         id: Option<String>,
     ) -> ftd::p1::Result<ElementWithContainer> {
@@ -698,7 +699,7 @@ fn markup_get_named_container(
         String,
         Vec<std::collections::BTreeMap<String, ftd::Value>>,
     >,
-    all_locals: &mut ftd::Map,
+    all_locals: &ftd::Map,
     local_container: &[usize],
 ) -> ftd::p1::Result<std::collections::BTreeMap<String, ftd::Element>> {
     let children = {
@@ -1019,7 +1020,7 @@ fn reevalute_markup(
                     doc,
                     &Default::default(),
                     &mut Default::default(),
-                    &mut Default::default(),
+                    &Default::default(),
                     &[],
                 ) {
                     get.extend(named_container.clone());
@@ -1143,7 +1144,7 @@ fn get_conditional_attributes(
     properties: &std::collections::BTreeMap<String, Property>,
     arguments: &std::collections::BTreeMap<String, ftd::Value>,
     doc: &ftd::p2::TDoc,
-    all_locals: &mut ftd::Map,
+    all_locals: &ftd::Map,
 ) -> ftd::p1::Result<std::collections::BTreeMap<String, ftd::ConditionalAttribute>> {
     let mut conditional_attribute: std::collections::BTreeMap<String, ftd::ConditionalAttribute> =
         Default::default();
@@ -1536,7 +1537,7 @@ impl Component {
             Vec<std::collections::BTreeMap<String, ftd::Value>>,
         >,
         call_container: &[usize],
-        all_locals: &mut ftd::Map,
+        all_locals: &ftd::Map,
         id: Option<String>,
     ) -> ftd::p1::Result<ElementWithContainer> {
         let new_instruction = {
@@ -1743,7 +1744,7 @@ impl Component {
             &Default::default(),
             false,
             &[],
-            &mut Default::default(),
+            &Default::default(),
             &[],
             Default::default(),
         )
@@ -1761,10 +1762,16 @@ impl Component {
         condition: &Option<ftd::p2::Boolean>,
         is_child: bool,
         events: &[ftd::p2::Event],
-        all_locals: &mut ftd::Map,
+        all_locals: &ftd::Map,
         local_container: &[usize],
         id: Option<String>,
     ) -> ftd::p1::Result<ElementWithContainer> {
+        let string_container: String = local_container
+            .iter()
+            .map(|v| v.to_string())
+            .collect::<Vec<String>>()
+            .join(",");
+
         let property = {
             //remove arguments
             let mut properties_without_arguments: std::collections::BTreeMap<String, ftd::Value> =
@@ -1853,14 +1860,6 @@ impl Component {
                 properties
             };
 
-            let string_container: String = local_container
-                .iter()
-                .map(|v| v.to_string())
-                .collect::<Vec<String>>()
-                .join(",");
-
-            let mut all_new_locals: ftd::Map = self.get_locals_map(&string_container);
-
             let (get_condition, is_visible, is_null_element) = match condition {
                 Some(c) => {
                     let arguments = {
@@ -1899,8 +1898,12 @@ impl Component {
             let events =
                 ftd::p2::Event::get_events(self.line_number, events, all_locals, &arguments, doc)?;
 
-            // let mut all_locals = all_locals.clone();
-            all_locals.extend(all_new_locals.clone());
+            let all_new_locals: ftd::Map = self.get_locals_map(&string_container);
+            let all_locals = {
+                let mut all_locals = all_locals.clone();
+                all_locals.extend(all_new_locals.clone());
+                all_locals
+            };
 
             let mut element = if !is_null_element {
                 root.call(
@@ -1910,7 +1913,7 @@ impl Component {
                     &self.condition,
                     is_child,
                     &self.events,
-                    /*&mut */ all_locals,
+                    /*&mut */ &all_locals,
                     local_container,
                     None,
                 )?
@@ -1937,7 +1940,7 @@ impl Component {
                 &self.properties,
                 &property,
                 doc,
-                &mut all_new_locals,
+                &all_new_locals,
             )?;
 
             let mut containers = None;
@@ -1974,7 +1977,7 @@ impl Component {
                         doc,
                         invocations,
                         local_container,
-                        &mut all_new_locals,
+                        &all_new_locals,
                         id,
                     )?;
                     containers = child_container;
@@ -1991,9 +1994,9 @@ impl Component {
             if let Some(common) = element.get_mut_common() {
                 common.conditional_attribute.extend(conditional_attribute);
                 common.events.extend(events);
-                common
-                    .events
-                    .extend(ftd::p2::Event::mouse_event(&mut all_new_locals)?);
+                // common
+                //     .events
+                //     .extend(ftd::p2::Event::mouse_event(&mut all_new_locals)?);
             }
 
             Ok(ElementWithContainer {
@@ -2013,15 +2016,6 @@ impl Component {
         let mut locals: ftd::Map = Default::default();
 
         for k in all_locals.keys() {
-            if k.eq("MOUSE-IN-TEMP") {
-                continue;
-            }
-            if k.eq("MOUSE-IN") {
-                locals.insert(
-                    format!("MOUSE-IN@{}", string_container),
-                    "false".to_string(),
-                );
-            }
             if let Some(arg) = arguments.get(k) {
                 if let Some(value) = arg.to_string() {
                     locals.insert(format!("{}@{}", k, string_container), value.to_string());
@@ -2060,7 +2054,6 @@ impl Component {
         for k in self.arguments.keys() {
             all_locals.insert(k.to_string(), string_container.to_string());
         }
-        all_locals.insert("MOUSE-IN-TEMP".to_string(), string_container.to_string());
         all_locals
     }
 
