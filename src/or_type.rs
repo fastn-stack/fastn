@@ -68,6 +68,7 @@ mod test {
             s("foo/bar#abrar"),
             ftd::p2::Thing::Variable(ftd::Variable {
                 name: s("abrar"),
+                flags: ftd::VariableFlags::default(),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::OrType {
                         name: s("foo/bar#entity"),
@@ -81,6 +82,7 @@ mod test {
         bag.insert(
             "foo/bar#x".to_string(),
             ftd::p2::Thing::Variable(ftd::Variable {
+                flags: ftd::VariableFlags::default(),
                 name: "x".to_string(),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Integer { value: 10 },

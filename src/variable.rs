@@ -3,6 +3,24 @@ pub struct Variable {
     pub name: String,
     pub value: ftd::PropertyValue,
     pub conditions: Vec<(ftd::p2::Boolean, ftd::PropertyValue)>,
+    pub flags: VariableFlags,
+}
+
+#[derive(Debug, PartialEq, Clone, serde::Serialize, Default, serde::Deserialize)]
+pub struct VariableFlags {
+    pub always_include: Option<bool>,
+}
+
+impl VariableFlags {
+    pub(crate) fn from_p1(
+        p1: &ftd::p1::Header,
+        doc_id: &str,
+        line_number: usize,
+    ) -> ftd::p1::Result<Self> {
+        Ok(VariableFlags {
+            always_include: p1.bool_optional(doc_id, line_number, "$always-include$")?,
+        })
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, serde::Serialize, serde::Deserialize)]
@@ -47,8 +65,8 @@ impl PropertyValue {
                     line_number,
                 );
             }
-            let (name, caption) = ftd::p2::utils::split(value.to_string(), ":")?;
-            PropertyType::Component { name, caption }
+            let (name, _caption) = ftd::p2::utils::split(value.to_string(), ":")?;
+            PropertyType::Component { name }
         } else {
             let value = if let Some(value) = value.strip_prefix('\\') {
                 value.to_string()
@@ -164,7 +182,7 @@ impl PropertyValue {
         enum PropertyType {
             Value(String),
             Variable(String),
-            Component { name: String, caption: String },
+            Component { name: String },
         }
 
         impl PropertyType {
@@ -578,6 +596,11 @@ impl Variable {
                         },
                     },
                     conditions: vec![],
+                    flags: ftd::variable::VariableFlags::from_p1(
+                        &p1.header,
+                        doc.name,
+                        p1.line_number,
+                    )?,
                 });
             }
         }
@@ -591,6 +614,7 @@ impl Variable {
                 },
             },
             conditions: vec![],
+            flags: ftd::variable::VariableFlags::from_p1(&p1.header, doc.name, p1.line_number)?,
         })
     }
 
@@ -613,6 +637,7 @@ impl Variable {
                 },
             },
             conditions: vec![],
+            flags: ftd::variable::VariableFlags::from_p1(&p1.header, doc.name, p1.line_number)?,
         })
     }
 
@@ -721,6 +746,7 @@ impl Variable {
                     },
                 },
                 conditions: vec![],
+                flags: ftd::variable::VariableFlags::from_p1(&p1.header, doc.name, p1.line_number)?,
             });
         }
 
@@ -775,6 +801,7 @@ impl Variable {
             name,
             value,
             conditions: vec![],
+            flags: ftd::variable::VariableFlags::from_p1(&p1.header, doc.name, p1.line_number)?,
         })
     }
 
@@ -783,7 +810,7 @@ impl Variable {
         p1: &ftd::p1::Section,
         doc: &ftd::p2::TDoc,
     ) -> ftd::p1::Result<ftd::PropertyValue> {
-        match self.value.kind() {
+        match self.value.kind().inner() {
             ftd::p2::Kind::String { .. } => read_string(p1, doc),
             ftd::p2::Kind::Integer { .. } => read_integer(p1, doc),
             ftd::p2::Kind::Decimal { .. } => read_decimal(p1, doc),
@@ -1133,6 +1160,7 @@ mod test {
             pretty_assertions::assert_eq!(
                 super::Variable::from_p1(&p1[0], &mut d).unwrap(),
                 super::Variable {
+                    flags: ftd::VariableFlags::default(),
                     name: $n.to_string(),
                     value: $v,
                     conditions: $c
@@ -1259,6 +1287,7 @@ mod test {
             "foo/bar#pr".to_string(),
             ftd::p2::Thing::Variable(ftd::Variable {
                 name: "foo/bar#pr".to_string(),
+                flags: ftd::VariableFlags::default(),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::List {
                         data: vec![ftd::PropertyValue::Value {
