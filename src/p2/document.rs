@@ -24,7 +24,10 @@ impl Document {
             bag: &self.data,
         };
         for (k, v) in self.data.iter() {
-            if let ftd::p2::Thing::Variable(ftd::Variable { value, flags: flag, .. }) = v {
+            if let ftd::p2::Thing::Variable(ftd::Variable {
+                value, flags: flag, ..
+            }) = v
+            {
                 let val = if let Ok(val) = value.resolve(0, &Default::default(), &doc) {
                     val
                 } else {
