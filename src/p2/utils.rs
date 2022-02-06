@@ -798,7 +798,7 @@ pub fn arguments_on_condition(
                                         value: v.to_owned(),
                                     },
                                     conditions: vec![],
-                                    flag: ftd::variable::VariableFlag {
+                                    flags: ftd::variable::VariableFlags {
                                         always_include: None,
                                     },
                                 }),

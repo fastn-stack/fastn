@@ -34,7 +34,7 @@ pub use ui::{
     Input, Length, Markup, Markups, NamedFont, Overflow, Position, Region, Row, Scene, Spacing,
     Style, Text, TextAlign, TextBlock, TextFormat, Weight,
 };
-pub use variable::{PropertyValue, TextSource, Value, Variable};
+pub use variable::{PropertyValue, TextSource, Value, Variable, VariableFlags};
 
 pub fn js() -> &'static str {
     include_str!("../ftd.js")

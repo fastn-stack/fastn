@@ -652,7 +652,7 @@ impl<'a> TDoc<'a> {
                             name,
                             value: ftd::PropertyValue::Value { value: val.clone() },
                             conditions,
-                            flag: ftd::variable::VariableFlag {
+                            flags: ftd::variable::VariableFlags {
                                 always_include: None,
                             },
                         })

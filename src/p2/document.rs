@@ -24,7 +24,7 @@ impl Document {
             bag: &self.data,
         };
         for (k, v) in self.data.iter() {
-            if let ftd::p2::Thing::Variable(ftd::Variable { value, flag, .. }) = v {
+            if let ftd::p2::Thing::Variable(ftd::Variable { value, flags: flag, .. }) = v {
                 let val = if let Ok(val) = value.resolve(0, &Default::default(), &doc) {
                     val
                 } else {
@@ -33,7 +33,7 @@ impl Document {
                 if let Some(value) = get_value(&val, &doc) {
                     d.insert(k.to_string(), value);
                 }
-                if let ftd::variable::VariableFlag {
+                if let ftd::variable::VariableFlags {
                     always_include: Some(f),
                 } = flag
                 {
