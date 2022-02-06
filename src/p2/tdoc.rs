@@ -632,6 +632,7 @@ impl<'a> TDoc<'a> {
                     name,
                     value,
                     conditions,
+                    ..
                 }) => {
                     let fields = match value.resolve(line_number, &Default::default(), doc)? {
                         ftd::Value::Record { fields, .. } => fields,
@@ -651,6 +652,9 @@ impl<'a> TDoc<'a> {
                             name,
                             value: ftd::PropertyValue::Value { value: val.clone() },
                             conditions,
+                            flag: ftd::variable::VariableFlag {
+                                always_include: None,
+                            },
                         })
                     } else if let Some(ftd::PropertyValue::Reference { name, .. }) = fields.get(v) {
                         get_initial_thing(doc, line_number, name)?.0

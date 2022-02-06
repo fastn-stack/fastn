@@ -152,6 +152,9 @@ impl Boolean {
                                                 value: v.to_owned(),
                                             },
                                             conditions: vec![],
+                                            flag: ftd::variable::VariableFlag {
+                                                always_include: None,
+                                            },
                                         }),
                                     )
                                 }));

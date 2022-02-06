@@ -3,6 +3,24 @@ pub struct Variable {
     pub name: String,
     pub value: ftd::PropertyValue,
     pub conditions: Vec<(ftd::p2::Boolean, ftd::PropertyValue)>,
+    pub flag: VariableFlag,
+}
+
+#[derive(Debug, PartialEq, Clone, serde::Serialize, serde::Deserialize)]
+pub struct VariableFlag {
+    pub always_include: Option<bool>,
+}
+
+impl VariableFlag {
+    pub(crate) fn from_p1(
+        p1: &ftd::p1::Header,
+        doc_id: &str,
+        line_number: usize,
+    ) -> ftd::p1::Result<Self> {
+        Ok(VariableFlag {
+            always_include: p1.bool_optional(doc_id, line_number, "$always-include$")?,
+        })
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, serde::Serialize, serde::Deserialize)]
@@ -578,6 +596,11 @@ impl Variable {
                         },
                     },
                     conditions: vec![],
+                    flag: ftd::variable::VariableFlag::from_p1(
+                        &p1.header,
+                        doc.name,
+                        p1.line_number,
+                    )?,
                 });
             }
         }
@@ -591,6 +614,7 @@ impl Variable {
                 },
             },
             conditions: vec![],
+            flag: ftd::variable::VariableFlag::from_p1(&p1.header, doc.name, p1.line_number)?,
         })
     }
 
@@ -613,6 +637,7 @@ impl Variable {
                 },
             },
             conditions: vec![],
+            flag: ftd::variable::VariableFlag::from_p1(&p1.header, doc.name, p1.line_number)?,
         })
     }
 
@@ -721,6 +746,7 @@ impl Variable {
                     },
                 },
                 conditions: vec![],
+                flag: ftd::variable::VariableFlag::from_p1(&p1.header, doc.name, p1.line_number)?,
             });
         }
 
@@ -775,6 +801,7 @@ impl Variable {
             name,
             value,
             conditions: vec![],
+            flag: ftd::variable::VariableFlag::from_p1(&p1.header, doc.name, p1.line_number)?,
         })
     }
 

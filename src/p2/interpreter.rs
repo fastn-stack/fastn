@@ -174,6 +174,11 @@ impl<'a> Interpreter<'a> {
                         name,
                         value: ftd::PropertyValue::Value { value },
                         conditions: vec![],
+                        flag: ftd::variable::VariableFlag::from_p1(
+                            &p1.header,
+                            doc.name,
+                            p1.line_number,
+                        )?,
                     }
                 } else if var_data.is_none() || var_data.is_optional() {
                     // declare and instantiate a variable
@@ -464,6 +469,11 @@ impl<'a> Interpreter<'a> {
                         name,
                         value: ftd::PropertyValue::Value { value },
                         conditions: vec![],
+                        flag: ftd::variable::VariableFlag::from_p1(
+                            &p1.header,
+                            doc.name,
+                            p1.line_number,
+                        )?,
                     }
                 } else if var_data.is_none() || var_data.is_optional() {
                     // declare and instantiate a variable

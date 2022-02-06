@@ -15,15 +15,16 @@ impl ToString for Document {
 }
 
 impl Document {
-    fn get_data(&self) -> ftd::Map {
+    fn get_data(&self) -> (ftd::Map, Vec<String>) {
         let mut d: ftd::Map = Default::default();
+        let mut always_include = vec![];
         let doc = ftd::p2::TDoc {
             name: self.name.as_str(),
             aliases: &self.aliases,
             bag: &self.data,
         };
         for (k, v) in self.data.iter() {
-            if let ftd::p2::Thing::Variable(ftd::Variable { value, .. }) = v {
+            if let ftd::p2::Thing::Variable(ftd::Variable { value, flag, .. }) = v {
                 let val = if let Ok(val) = value.resolve(0, &Default::default(), &doc) {
                     val
                 } else {
@@ -32,9 +33,17 @@ impl Document {
                 if let Some(value) = get_value(&val, &doc) {
                     d.insert(k.to_string(), value);
                 }
+                if let ftd::variable::VariableFlag {
+                    always_include: Some(f),
+                } = flag
+                {
+                    if *f {
+                        always_include.push(k.to_string());
+                    }
+                }
             }
         }
-        return d;
+        return (d, always_include);
 
         fn get_value(value: &ftd::Value, doc: &ftd::p2::TDoc) -> Option<String> {
             if let ftd::Value::List { data, .. } = value {
@@ -76,7 +85,7 @@ impl Document {
     }
 
     fn rt_data(&self) -> ftd::DataDependenciesMap {
-        let mut d: ftd::Map = self.get_data();
+        let (mut d, always_include) = self.get_data();
         for (k, v) in self.get_locals() {
             d.insert(format!("@{}", k), v.to_string());
         }
@@ -97,7 +106,7 @@ impl Document {
         ftd::Element::get_style_event_dependencies(&self.main.container.children, &mut data);
 
         data.into_iter()
-            .filter(|(_, v)| !v.dependencies.is_empty())
+            .filter(|(k, v)| (!v.dependencies.is_empty() || always_include.contains(k)))
             .collect()
     }
 
@@ -156,31 +165,6 @@ impl Document {
             children
         };
         node.to_html(&Default::default(), &self.rt_data(), id)
-    }
-
-    pub fn set_string(&mut self, name: &str, value: &str) {
-        let thing = ftd::p2::Thing::Variable(ftd::Variable {
-            name: name.to_string(),
-            value: ftd::PropertyValue::Value {
-                value: ftd::Value::String {
-                    text: value.to_string(),
-                    source: ftd::TextSource::Header,
-                },
-            },
-            conditions: vec![],
-        });
-        self.data.insert(name.to_string(), thing);
-    }
-
-    pub fn set_bool(&mut self, name: &str, value: bool) {
-        let thing = ftd::p2::Thing::Variable(ftd::Variable {
-            name: name.to_string(),
-            value: ftd::PropertyValue::Value {
-                value: ftd::Value::Boolean { value },
-            },
-            conditions: vec![],
-        });
-        self.data.insert(name.to_string(), thing);
     }
 
     pub fn alias(&self, doc: &str) -> Option<&str> {
