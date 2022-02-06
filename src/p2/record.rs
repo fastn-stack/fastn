@@ -32,7 +32,7 @@ impl Record {
                     },
                 },
                 (Ok(v), ftd::p2::Kind::Record { name, .. }) => {
-                    let record = doc.get_record(p1.line_number, name)?;
+                    let record = doc.get_record(p1.line_number, name.as_str())?;
                     ftd::PropertyValue::Value {
                         value: ftd::Value::Record {
                             name: doc.resolve_name(p1.line_number, record.name.as_str())?,
@@ -414,6 +414,7 @@ mod test {
         bag.insert(
             "foo/bar#abrar".to_string(),
             ftd::p2::Thing::Variable(ftd::Variable {
+                flags: ftd::VariableFlags::default(),
                 name: "abrar".to_string(),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Record {
@@ -440,6 +441,7 @@ mod test {
         bag.insert(
             "foo/bar#x".to_string(),
             ftd::p2::Thing::Variable(ftd::Variable {
+                flags: ftd::VariableFlags::default(),
                 name: "x".to_string(),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Integer { value: 20 },
@@ -469,6 +471,7 @@ mod test {
         bag.insert(
             "foo/bar#abrar_e".to_string(),
             ftd::p2::Thing::Variable(ftd::Variable {
+                flags: ftd::VariableFlags::default(),
                 name: "abrar_e".to_string(),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Record {
@@ -504,6 +507,7 @@ mod test {
         bag.insert(
             "foo/bar#sourabh".to_string(),
             ftd::p2::Thing::Variable(ftd::Variable {
+                flags: ftd::VariableFlags::default(),
                 name: "sourabh".to_string(),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Record {
@@ -623,6 +627,7 @@ mod test {
             bag.insert(
                 "foo/bar#abrar".to_string(),
                 ftd::p2::Thing::Variable(ftd::Variable {
+                    flags: ftd::VariableFlags::default(),
                     name: "abrar".to_string(),
                     value: ftd::PropertyValue::Value {
                         value: ftd::Value::Record {
@@ -749,6 +754,7 @@ mod test {
         bag.insert(
             "foo/bar#abrar".to_string(),
             ftd::p2::Thing::Variable(ftd::Variable {
+                flags: ftd::VariableFlags::default(),
                 name: "abrar".to_string(),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Record {
@@ -913,6 +919,7 @@ mod test {
         bag.insert(
             s("foo/bar#jan"),
             ftd::p2::Thing::Variable(ftd::Variable {
+                flags: ftd::VariableFlags::default(),
                 name: s("jan"),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Record {
