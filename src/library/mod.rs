@@ -63,6 +63,11 @@ impl ftd::p2::Library for Library {
                     .join(package.name.as_str())
             };
             // Explicit check for the current package.
+            if name.eq(&package.name) {
+                if let Ok(v) = std::fs::read_to_string(path.join("index.ftd")) {
+                    return Some((v, current_packages));
+                }
+            }
             if name.starts_with(format!("{}/", &package.name).as_str()) {
                 let p = name.replace(format!("{}/", &package.name).as_str(), "");
                 if let Ok(v) = std::fs::read_to_string(path.join(format!("{}.ftd", p))) {
@@ -365,6 +370,12 @@ impl ftd::p2::Library for Library {
                         {fpm_base}
                         {fpm_ui}
                         
+                        -- optional string theme-color:
+                        $always-include$: true
+
+                        -- integer mobile-breakpoint: 768
+                        $always-include$: true
+
                         -- boolean mobile: true
                         -- boolean dark-mode: false
                         -- boolean system-dark-mode: false
