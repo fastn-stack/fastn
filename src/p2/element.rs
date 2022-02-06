@@ -5,7 +5,7 @@ pub fn common_from_properties(
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
     events: &[ftd::p2::Event],
-    all_locals: &mut ftd::Map,
+    all_locals: &ftd::Map,
     reference: Option<String>,
 ) -> ftd::p1::Result<ftd::Common> {
     let submit = ftd::p2::utils::string_optional("submit", properties, doc.name, 0)?;
@@ -608,7 +608,7 @@ pub fn image_from_properties(
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
     events: &[ftd::p2::Event],
-    all_locals: &mut ftd::Map,
+    all_locals: &ftd::Map,
 ) -> ftd::p1::Result<ftd::Image> {
     let (src, reference) =
         ftd::p2::utils::string_and_ref(0, "src", properties_with_ref, all_locals, doc.name)?;
@@ -656,7 +656,7 @@ pub fn row_from_properties(
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
     events: &[ftd::p2::Event],
-    all_locals: &mut ftd::Map,
+    all_locals: &ftd::Map,
 ) -> ftd::p1::Result<ftd::Row> {
     let properties = &ftd::p2::utils::properties(properties_with_ref);
     Ok(ftd::Row {
@@ -702,7 +702,7 @@ pub fn column_from_properties(
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
     events: &[ftd::p2::Event],
-    all_locals: &mut ftd::Map,
+    all_locals: &ftd::Map,
 ) -> ftd::p1::Result<ftd::Column> {
     let properties = &ftd::p2::utils::properties(properties_with_ref);
     Ok(ftd::Column {
@@ -806,7 +806,7 @@ pub fn iframe_from_properties(
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
     events: &[ftd::p2::Event],
-    all_locals: &mut ftd::Map,
+    all_locals: &ftd::Map,
 ) -> ftd::p1::Result<ftd::IFrame> {
     let properties = &ftd::p2::utils::properties(properties_with_ref);
     let src = match (
@@ -834,7 +834,7 @@ pub fn iframe_from_properties(
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
     events: &[ftd::p2::Event],
-    all_locals: &mut ftd::Map,
+    all_locals: &ftd::Map,
 ) -> ftd::p1::Result<ftd::Text> {
     let properties = &ftd::p2::utils::properties(properties_with_ref);
 
@@ -887,7 +887,7 @@ pub fn text_block_from_properties(
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
     events: &[ftd::p2::Event],
-    all_locals: &mut ftd::Map,
+    all_locals: &ftd::Map,
 ) -> ftd::p1::Result<ftd::TextBlock> {
     let properties = &ftd::p2::utils::properties(properties_with_ref);
 
@@ -940,7 +940,7 @@ pub fn code_from_properties(
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
     events: &[ftd::p2::Event],
-    all_locals: &mut ftd::Map,
+    all_locals: &ftd::Map,
 ) -> ftd::p1::Result<ftd::Code> {
     let properties = &ftd::p2::utils::properties(properties_with_ref);
 
@@ -1003,7 +1003,7 @@ pub fn integer_from_properties(
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
     events: &[ftd::p2::Event],
-    all_locals: &mut ftd::Map,
+    all_locals: &ftd::Map,
 ) -> ftd::p1::Result<ftd::Text> {
     let properties = &ftd::p2::utils::properties(properties_with_ref);
     let font_str = ftd::p2::utils::string_optional("font", properties, doc.name, 0)?;
@@ -1056,7 +1056,7 @@ pub fn decimal_from_properties(
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
     events: &[ftd::p2::Event],
-    all_locals: &mut ftd::Map,
+    all_locals: &ftd::Map,
 ) -> ftd::p1::Result<ftd::Text> {
     let properties = &ftd::p2::utils::properties(properties_with_ref);
     let font_str = ftd::p2::utils::string_optional("font", properties, doc.name, 0)?;
@@ -1128,7 +1128,7 @@ pub fn boolean_from_properties(
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
     events: &[ftd::p2::Event],
-    all_locals: &mut ftd::Map,
+    all_locals: &ftd::Map,
 ) -> ftd::p1::Result<ftd::Text> {
     let properties = &ftd::p2::utils::properties(properties_with_ref);
     let font_str = ftd::p2::utils::string_optional("font", properties, doc.name, 0)?;
@@ -1561,7 +1561,7 @@ pub fn input_from_properties(
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
     events: &[ftd::p2::Event],
-    all_locals: &mut ftd::Map,
+    all_locals: &ftd::Map,
 ) -> ftd::p1::Result<ftd::Input> {
     let properties = &ftd::p2::utils::properties(properties_with_ref);
     Ok(ftd::Input {
@@ -1578,7 +1578,7 @@ pub fn scene_from_properties(
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
     events: &[ftd::p2::Event],
-    all_locals: &mut ftd::Map,
+    all_locals: &ftd::Map,
 ) -> ftd::p1::Result<ftd::Scene> {
     let properties = &ftd::p2::utils::properties(properties_with_ref);
     Ok(ftd::Scene {
@@ -1598,7 +1598,7 @@ pub fn grid_from_properties(
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
     events: &[ftd::p2::Event],
-    all_locals: &mut ftd::Map,
+    all_locals: &ftd::Map,
 ) -> ftd::p1::Result<ftd::Grid> {
     let properties = &ftd::p2::utils::properties(properties_with_ref);
     Ok(ftd::Grid {
@@ -1636,7 +1636,7 @@ pub fn markup_from_properties(
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
     events: &[ftd::p2::Event],
-    all_locals: &mut ftd::Map,
+    all_locals: &ftd::Map,
 ) -> ftd::p1::Result<ftd::Markups> {
     let properties = &ftd::p2::utils::properties(properties_with_ref);
     let (value, source, reference) = ftd::p2::utils::string_and_source_and_ref(

@@ -41,7 +41,7 @@ pub fn string_and_ref(
     line_number: usize,
     name: &str,
     properties: &std::collections::BTreeMap<String, (ftd::Value, Option<String>)>,
-    all_locals: &mut ftd::Map,
+    all_locals: &ftd::Map,
     doc_id: &str,
 ) -> ftd::p1::Result<(String, Option<String>)> {
     match properties.get(name) {
@@ -61,7 +61,7 @@ pub fn string_and_source_and_ref(
     line_number: usize,
     name: &str,
     properties: &std::collections::BTreeMap<String, (ftd::Value, Option<String>)>,
-    all_locals: &mut ftd::Map,
+    all_locals: &ftd::Map,
     doc_id: &str,
     condition: &Option<ftd::p2::Boolean>,
 ) -> ftd::p1::Result<(String, ftd::TextSource, Option<String>)> {
@@ -198,7 +198,7 @@ pub fn string_and_source_and_ref(
     }
 }
 
-pub fn complete_reference(reference: &Option<String>, all_locals: &mut ftd::Map) -> Option<String> {
+pub fn complete_reference(reference: &Option<String>, all_locals: &ftd::Map) -> Option<String> {
     let mut reference = reference.to_owned();
     if let Some(ref r) = reference {
         if let Some(name) = r.strip_prefix('@') {
@@ -208,9 +208,7 @@ pub fn complete_reference(reference: &Option<String>, all_locals: &mut ftd::Map)
             if let Some(string_container) = all_locals.get(name) {
                 reference = Some(format!("@{}@{}", name, string_container));
             } else if name.eq("MOUSE-IN") {
-                let string_container = all_locals.get("MOUSE-IN-TEMP").unwrap().clone();
-                all_locals.insert("MOUSE-IN".to_string(), string_container.to_string());
-                reference = Some(format!("@MOUSE-IN@{}", string_container));
+                reference = Some("@MOUSE-IN".to_string());
             }
         }
     }

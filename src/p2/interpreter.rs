@@ -5601,11 +5601,10 @@ mod test {
                                     ..Default::default()
                                 },
                                 common: ftd::Common {
-                                    locals: std::array::IntoIter::new([(
-                                        s("id@1,0,0"),
-                                        s("foo-id"),
-                                    )])
-                                    .collect(),
+                                    /*locals: std::array::IntoIter::new([
+                                        (s("id@1,0,0"), s("foo-id")),
+                                    ])
+                                    .collect(),*/
                                     id: Some(s("foo-id")),
                                     data_id: Some(s("foo-id")),
                                     ..Default::default()

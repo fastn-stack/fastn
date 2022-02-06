@@ -1,3 +1,10 @@
+-- import: ft
+
+-- ftd.column:
+padding: 30
+
+-- ft.h0: Mouse in Text
+
 -- ftd.text foo:
 text: Hello World
 color if $MOUSE-IN: red
@@ -14,6 +21,19 @@ background-color if $MOUSE-IN: orange
 
 --- ftd.text: World
 padding-left: 10
-if: $MOUSE-IN
+color if $MOUSE-IN: green
 
 -- bar:
+
+-- asd:
+
+-- ftd.column asd:
+boolean mouse-in: false
+color if $mouse-in: orange
+
+--- ftd.text: Hover Here
+$event-mouseenter$: $mouse-in = true
+$event-mouseleave$: $mouse-in = false
+
+--- ftd.text: This is secret of all!
+if: $mouse-in

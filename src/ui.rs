@@ -89,6 +89,94 @@ markup {
 */
 
 impl Element {
+    pub(crate) fn set_default_locals(elements: &mut [ftd::Element]) {
+        return set_default_locals_(elements, &[]);
+        fn set_default_locals_(children: &mut [ftd::Element], index_vec: &[usize]) {
+            for (idx, child) in children.iter_mut().enumerate() {
+                let common = match child {
+                    Element::Text(ftd::Text { common, .. })
+                    | Element::TextBlock(ftd::TextBlock { common, .. })
+                    | Element::Code(ftd::Code { common, .. })
+                    | Element::Image(ftd::Image { common, .. })
+                    | Element::IFrame(ftd::IFrame { common, .. })
+                    | Element::Input(ftd::Input { common, .. })
+                    | Element::Integer(ftd::Text { common, .. })
+                    | Element::Boolean(ftd::Text { common, .. })
+                    | Element::Decimal(ftd::Text { common, .. })
+                    | Element::Markup(ftd::Markups { common, .. }) => common,
+                    Element::Row(ftd::Row {
+                        common, container, ..
+                    })
+                    | Element::Column(ftd::Column {
+                        common, container, ..
+                    })
+                    | Element::Scene(ftd::Scene {
+                        common, container, ..
+                    })
+                    | Element::Grid(ftd::Grid {
+                        common, container, ..
+                    }) => {
+                        let mut index_vec = index_vec.to_vec();
+                        index_vec.push(idx);
+                        set_default_locals_(&mut container.children, &index_vec);
+                        if let Some((_, _, external_children)) = &mut container.external_children {
+                            index_vec.push(container.children.len());
+                            set_default_locals_(external_children, &index_vec);
+                        }
+                        common
+                    }
+                    Element::Null => continue,
+                };
+
+                let index = get_index_string(index_vec, idx);
+                if check(common, &index) {
+                    common.events.extend(ftd::p2::Event::mouse_event(&index));
+                    common
+                        .locals
+                        .insert(format!("MOUSE-IN@{}", index), "false".to_string());
+                }
+            }
+
+            fn check(common: &mut ftd::Common, index: &str) -> bool {
+                if let Some(ref mut condition) = common.condition {
+                    if condition.variable.eq("@MOUSE-IN") {
+                        condition.variable = format!("@MOUSE-IN@{}", index);
+                        return true;
+                    }
+                }
+                if let Some(ref mut reference) = common.reference {
+                    if reference.eq(&"@MOUSE-IN") {
+                        *reference = format!("@MOUSE-IN@{}", index);
+                        return true;
+                    }
+                }
+                let mut set = false;
+                for (_, v) in common.conditional_attribute.iter_mut() {
+                    for (condition, _) in &mut v.conditions_with_value {
+                        if condition.variable.eq("@MOUSE-IN") {
+                            condition.variable = format!("@MOUSE-IN@{}", index);
+                            set = true;
+                        }
+                    }
+                }
+                set
+            }
+
+            fn get_index_string(index_vec: &[usize], idx: usize) -> String {
+                let index_string: String = {
+                    let mut index_vec = index_vec.to_vec();
+                    index_vec.push(idx);
+                    index_vec
+                        .iter()
+                        .map(|v| v.to_string())
+                        .collect::<Vec<String>>()
+                        .join(",")
+                };
+                index_string
+            }
+        }
+    }
+
     pub fn set_id(children: &mut [ftd::Element], index_vec: &[usize], external_id: Option<String>) {
         for (idx, child) in children.iter_mut().enumerate() {
             let (mut id, is_dummy) = match child {
@@ -816,7 +904,7 @@ impl Element {
             for (condition, value) in conditions {
                 let condition = if let Ok(condition) = condition.to_condition(
                     0,
-                    &mut Default::default(),
+                    &Default::default(),
                     &Default::default(),
                     &ftd::p2::TDoc {
                         name: document.name.as_str(),

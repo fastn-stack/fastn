@@ -815,7 +815,7 @@ impl Variable {
             ftd::p2::Kind::Integer { .. } => read_integer(p1, doc),
             ftd::p2::Kind::Decimal { .. } => read_decimal(p1, doc),
             ftd::p2::Kind::Boolean { .. } => read_boolean(p1, doc),
-            ftd::p2::Kind::Record { name, .. } => match doc.get_thing(p1.line_number, &name)? {
+            ftd::p2::Kind::Record { name, .. } => match doc.get_thing(p1.line_number, name)? {
                 ftd::p2::Thing::Record(r) => r.create(p1, doc),
                 t => ftd::e2(
                     format!("expected record type, found: {:?}", t),
@@ -823,7 +823,7 @@ impl Variable {
                     p1.line_number,
                 ),
             },
-            ftd::p2::Kind::OrType { name } => match doc.get_thing(p1.line_number, &name)? {
+            ftd::p2::Kind::OrType { name } => match doc.get_thing(p1.line_number, name)? {
                 ftd::p2::Thing::OrTypeWithVariant { e, variant } => e.create(p1, variant, doc),
                 t => ftd::e2(
                     format!("expected or-type type, found: {:?}", t),
