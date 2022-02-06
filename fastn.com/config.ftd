@@ -132,14 +132,14 @@ $processor$: toc
   Installation
 
 
--- ft.footer-toc: Learn
+/-- ft.footer-toc: Learn
 children: $learn
 
--- ft.footer-toc: Community
+/-- ft.footer-toc: Community
 children: $community
 
--- ft.footer-toc: More
+/-- ft.footer-toc: More
 children: $more
 
--- ft.footer-toc: Legal
+/-- ft.footer-toc: Legal
 children: $legal
