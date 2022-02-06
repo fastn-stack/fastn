@@ -810,7 +810,7 @@ impl Variable {
         p1: &ftd::p1::Section,
         doc: &ftd::p2::TDoc,
     ) -> ftd::p1::Result<ftd::PropertyValue> {
-        match self.value.kind() {
+        match self.value.kind().inner() {
             ftd::p2::Kind::String { .. } => read_string(p1, doc),
             ftd::p2::Kind::Integer { .. } => read_integer(p1, doc),
             ftd::p2::Kind::Decimal { .. } => read_decimal(p1, doc),
