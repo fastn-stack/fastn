@@ -172,6 +172,8 @@ pub enum EventName {
     OnClick,
     OnChange,
     OnInput,
+    OnMouseEnter,
+    OnMouseLeave,
 }
 
 impl EventName {
@@ -180,6 +182,8 @@ impl EventName {
             Self::OnClick => "onclick",
             Self::OnChange => "onchange",
             Self::OnInput => "oninput",
+            Self::OnMouseEnter => "onmouseenter",
+            Self::OnMouseLeave => "onmouseleave",
         }
     }
 
@@ -188,6 +192,8 @@ impl EventName {
             "click" => Ok(Self::OnClick),
             "change" => Ok(Self::OnChange),
             "input" => Ok(Self::OnInput),
+            "mouseenter" => Ok(Self::OnMouseEnter),
+            "mouseleave" => Ok(Self::OnMouseLeave),
             t => return ftd::e2(format!("{} is not a valid event", t), doc_id, 0),
         }
     }
@@ -624,7 +630,7 @@ impl Action {
                     Default::default();
 
                 let value = {
-                    if part_2.eq("$VALUE") {
+                    if part_2.eq("$VALUE") || part_2.eq("$MOUSE-IN") {
                         ftd::PropertyValue::Value {
                             value: ftd::variable::Value::String {
                                 text: part_2,
