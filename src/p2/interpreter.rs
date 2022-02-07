@@ -14727,6 +14727,8 @@ mod test {
                 --- ftd.text: $title
 
                 --- ftd.text: $subtitle
+
+                --- ftd.text: $bio
                 
                 --- ftd.boolean: $active 
                 "
