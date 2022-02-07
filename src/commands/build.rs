@@ -375,7 +375,7 @@ async fn process_ftd(
         (None, None, main)
     } else {
         let main = main.to_owned();
-        let prefix = config.auto_import.iter().fold(None, |pre, ai| {
+        let prefix = config.package.auto_import.iter().fold(None, |pre, ai| {
             Some(format!(
                 "{}\n-- import: {}{}",
                 pre.unwrap_or_else(|| "".to_string()),

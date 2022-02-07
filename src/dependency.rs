@@ -297,6 +297,13 @@ impl fpm::Package {
                 .collect::<fpm::Result<Vec<fpm::Dependency>>>()?
         };
 
+        let auto_imports: Vec<String> = ftd_document.get("fpm#auto-import")?;
+        let auto_import = auto_imports
+            .iter()
+            .map(|f| fpm::AutoImport::from_string(f.as_str()))
+            .collect();
+        package.auto_import = auto_import;
+
         if download_dependencies {
             for dep in package.dependencies.iter_mut() {
                 let dep_path = root.join(".packages").join(dep.package.name.as_str());

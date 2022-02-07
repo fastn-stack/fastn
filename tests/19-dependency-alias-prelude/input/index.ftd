@@ -15,3 +15,7 @@
 -- blog.block:
 
 --- ftd.text: Aliased dependency + auto import
+
+-- config.some-data: test
+
+-- config.some-data: new-entry 2

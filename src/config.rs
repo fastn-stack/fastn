@@ -30,8 +30,6 @@ pub struct Config {
     pub fonts: Vec<fpm::Font>,
     /// `ignored` keeps track of files that are to be ignored by `fpm build`, `fpm sync` etc.
     pub ignored: ignore::overrides::Override,
-    /// `auto_import` keeps track of the global auto imports in the package.
-    pub auto_import: Vec<fpm::AutoImport>,
 }
 
 impl Config {
@@ -175,15 +173,16 @@ impl Config {
             let temp_package: PackageTemp = b.get("fpm#package")?;
             let mut package = temp_package.into_package();
             package.dependencies = deps;
+
+            let auto_imports: Vec<String> = b.get("fpm#auto-import")?;
+            // let mut aliases = std::collections::HashMap::<String, String>::new();
+            let auto_import = auto_imports
+                .iter()
+                .map(|f| fpm::AutoImport::from_string(f.as_str()))
+                .collect();
+            package.auto_import = auto_import;
             package
         };
-
-        let auto_imports: Vec<String> = b.get("fpm#auto-import")?;
-        // let mut aliases = std::collections::HashMap::<String, String>::new();
-        let auto_import = auto_imports
-            .iter()
-            .map(|f| fpm::AutoImport::from_string(f.as_str()))
-            .collect();
 
         let fonts: Vec<fpm::Font> = b.get("fpm#font")?;
 
@@ -218,21 +217,7 @@ impl Config {
             original_directory,
             fonts,
             ignored,
-            auto_import,
         })
-    }
-
-    pub fn eval_auto_import(&self, name: &str) -> Option<&str> {
-        for x in &self.auto_import {
-            let matching_string = match &x.alias {
-                Some(a) => a.as_str(),
-                None => x.path.as_str(),
-            };
-            if matching_string == name {
-                return Some(&x.path);
-            };
-        }
-        None
     }
 }
 
@@ -290,6 +275,7 @@ impl PackageTemp {
             translation_status: None,
             canonical_url: self.canonical_url,
             dependencies: vec![],
+            auto_import: vec![],
         }
     }
 }
@@ -307,6 +293,8 @@ pub struct Package {
     /// `dependencies` keeps track of direct dependencies of a given package. This too should be
     /// moved to `fpm::Package` to support recursive dependencies etc.
     pub dependencies: Vec<fpm::Dependency>,
+    /// `auto_import` keeps track of the global auto imports in the package.
+    pub auto_import: Vec<fpm::AutoImport>,
 }
 
 impl Package {
@@ -321,7 +309,21 @@ impl Package {
             translation_status: None,
             canonical_url: None,
             dependencies: vec![],
+            auto_import: vec![],
         }
+    }
+
+    pub fn eval_auto_import(&self, name: &str) -> Option<&str> {
+        for x in &self.auto_import {
+            let matching_string = match &x.alias {
+                Some(a) => a.as_str(),
+                None => x.path.as_str(),
+            };
+            if matching_string == name {
+                return Some(&x.path);
+            };
+        }
+        None
     }
 
     pub fn generate_canonical_url(&self, path: &str) -> String {

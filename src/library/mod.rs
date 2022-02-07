@@ -28,10 +28,6 @@ impl ftd::p2::Library for Library {
         if name == "fpm-lib" {
             return Some(fpm::fpm_lib_ftd().to_string());
         }
-        let name = match self.config.eval_auto_import(name) {
-            Some(n) => n,
-            None => name,
-        };
         if let Ok(mut packages) = self.current_package.lock() {
             let mut new_packages = packages.clone();
             while let Some(current_package) = new_packages.last() {
@@ -96,6 +92,17 @@ impl ftd::p2::Library for Library {
                 lib: &Library,
                 mut current_packages: Vec<fpm::Package>,
             ) -> Option<(String, Vec<fpm::Package>)> {
+                // let name = match package.eval_auto_import(name) {
+                //     Some(n) => n,
+                //     None => name,
+                // };
+                dbg!(&package);
+                dbg!(name);
+                let name = match package.eval_auto_import(name) {
+                    Some(n) => n,
+                    None => name,
+                };
+                dbg!(name);
                 // Import package non strict. In future, <package_name>:path is strict.
                 for (alias, package) in package.aliases().ok()? {
                     if name.starts_with(&alias) || name.starts_with(package.name.as_str()) {
