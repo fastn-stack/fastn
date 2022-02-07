@@ -504,6 +504,7 @@ impl ChildComponent {
                 .unwrap()
         };
 
+        dbg!(&root, &self, &arguments);
         let root_properties = {
             let mut root_properties =
                 resolve_properties_with_ref(self.line_number, &self.properties, arguments, doc)?;
@@ -2640,6 +2641,9 @@ fn read_arguments(
     let mut args: std::collections::BTreeMap<String, ftd::p2::Kind> = Default::default();
     let mut inherits: Vec<String> = Default::default();
 
+    // contains parent arguments and current arguments
+    let mut all_args = arguments.clone();
+
     for (idx, (i, k, v)) in p1.0.iter().enumerate() {
         if (k.starts_with('$') && k.ends_with('$')) || k.starts_with('/') || k.starts_with('>') {
             // event and loop matches
@@ -2666,7 +2670,16 @@ fn read_arguments(
             match root_arguments.get(&var_data.name) {
                 Some(kind) => {
                     inherits.push(var_data.name.to_string());
-                    kind.clone().set_default(option_v)
+                    let default = {
+                        // resolve the default value
+                        let mut default = option_v;
+                        if let Some(ref v) = default {
+                            default =
+                                Some(doc.resolve_reference_name(i.to_owned(), v, &all_args)?);
+                        }
+                        default
+                    };
+                    kind.clone().set_default(default)
                 }
                 None => {
                     return ftd::e2(
@@ -2677,7 +2690,7 @@ fn read_arguments(
                 }
             }
         } else {
-            ftd::p2::Kind::for_variable(i.to_owned(), k, option_v, doc, None, arguments)?
+            ftd::p2::Kind::for_variable(i.to_owned(), k, option_v, doc, None, &all_args)?
         };
         if let ftd::p2::Kind::UI {
             default: Some((_, h)),
@@ -2698,7 +2711,8 @@ fn read_arguments(
             };
             *h = headers;
         }
-        args.insert(var_data.name.to_string(), kind);
+        args.insert(var_data.name.to_string(), kind.clone());
+        all_args.insert(var_data.name.to_string(), kind);
     }
 
     Ok((args, inherits))
