@@ -4,4 +4,6 @@
 
 -- fpm.dependency: one.fpm.local as o
 
+-- fpm.dependency: two.fpm.local
+
 -- fpm.auto-import: o/blog
