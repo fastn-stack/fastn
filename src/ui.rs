@@ -898,15 +898,13 @@ impl Element {
             } else {
                 continue;
             };
-            let default = match default.resolve(0, &Default::default(), &doc) {
+            let default = match default.resolve(0, &doc) {
                 Ok(v) => v,
                 _ => continue,
             };
             for (condition, value) in conditions {
                 let condition = if let Ok(condition) = condition.to_condition(
                     0,
-                    &Default::default(),
-                    &Default::default(),
                     &ftd::p2::TDoc {
                         name: document.name.as_str(),
                         aliases: &document.aliases,
@@ -918,7 +916,7 @@ impl Element {
                 } else {
                     continue;
                 };
-                let value = match value.resolve(0, &Default::default(), &doc) {
+                let value = match value.resolve(0, &doc) {
                     Ok(value) => match value.to_string() {
                         Some(v) => v,
                         None => continue,

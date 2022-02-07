@@ -5,7 +5,6 @@ pub struct ExecuteDoc<'a> {
     pub bag: &'a std::collections::BTreeMap<String, ftd::p2::Thing>,
     pub local_variables: std::collections::BTreeMap<String, ftd::p2::Thing>,
     pub instructions: &'a [ftd::Instruction],
-    pub arguments: &'a std::collections::BTreeMap<String, ftd::Value>,
     pub invocations: &'a mut std::collections::BTreeMap<
         String,
         Vec<std::collections::BTreeMap<String, ftd::Value>>,
@@ -16,11 +15,10 @@ impl<'a> ExecuteDoc<'a> {
     pub(crate) fn execute(
         &mut self,
         parent_container: &[usize],
-        all_locals: &ftd::Map,
         id: Option<String>,
     ) -> ftd::p1::Result<ftd::component::ElementWithContainer> {
         let mut index = 0;
-        self.execute_(&mut index, false, parent_container, all_locals, None, id)
+        self.execute_(&mut index, false, parent_container, None, id)
     }
 
     fn execute_(
@@ -28,7 +26,6 @@ impl<'a> ExecuteDoc<'a> {
         index: &mut usize,
         is_external: bool,
         parent_container: &[usize],
-        all_locals: &ftd::Map,
         parent_id: Option<String>,
         id: Option<String>,
     ) -> ftd::p1::Result<ftd::component::ElementWithContainer> {
@@ -90,7 +87,7 @@ impl<'a> ExecuteDoc<'a> {
                     parent,
                     children: inner,
                 } => {
-                    assert!(self.arguments.is_empty()); // This clause cant have arguments
+                    //assert!(self.arguments.is_empty()); // This clause cant have arguments
                     let (parent, inner) = {
                         let mut parent = parent.clone();
                         let mut inner = inner.clone();
@@ -102,14 +99,7 @@ impl<'a> ExecuteDoc<'a> {
                         element,
                         children: container_children,
                         child_container,
-                    } = parent.super_call(
-                        &inner,
-                        &mut doc,
-                        self.arguments,
-                        self.invocations,
-                        all_locals,
-                        &local_container,
-                    )?;
+                    } = parent.super_call(&inner, &mut doc, self.invocations, &local_container)?;
 
                     children = self.add_element(
                         children,
@@ -119,31 +109,35 @@ impl<'a> ExecuteDoc<'a> {
                         child_container,
                         index,
                         parent_container,
-                        &Default::default(),
                         None,
                         container_children,
                     )?;
                 }
                 ftd::Instruction::ChildComponent { child: f } if !f.is_recursive => {
                     let (arguments, is_visible) = if let Some(ref condition) = f.condition {
-                        ftd::p2::utils::arguments_on_condition(
-                            self.arguments,
-                            condition,
-                            f.line_number,
-                            &doc,
-                        )?
+                        ftd::p2::utils::arguments_on_condition(condition, f.line_number, &doc)?
                     } else {
-                        (self.arguments.to_owned(), true)
+                        (Default::default(), true)
+                    };
+                    let f = {
+                        let mut f = f.clone();
+                        f.properties.extend(arguments.into_iter().map(|(k, v)| {
+                            (
+                                k,
+                                ftd::component::Property {
+                                    default: Some(ftd::PropertyValue::Value { value: v }),
+                                    conditions: vec![],
+                                    nested_properties: Default::default(),
+                                },
+                            )
+                        }));
+                        f
                     };
 
                     let new_id = {
                         if f.condition.is_some()
                             && f.condition.as_ref().unwrap().is_constant()
-                            && !f.condition.as_ref().unwrap().eval(
-                                f.line_number,
-                                self.arguments,
-                                &doc,
-                            )?
+                            && !f.condition.as_ref().unwrap().eval(f.line_number, &doc)?
                             && f.condition
                                 .as_ref()
                                 .unwrap()
@@ -156,7 +150,6 @@ impl<'a> ExecuteDoc<'a> {
                                 &ftd::component::resolve_properties(
                                     f.line_number,
                                     &f.properties,
-                                    &arguments,
                                     &doc,
                                 )?,
                                 doc.name,
@@ -176,10 +169,8 @@ impl<'a> ExecuteDoc<'a> {
                         ..
                     } = f.call(
                         &mut doc,
-                        &arguments,
                         self.invocations,
                         true,
-                        all_locals,
                         &local_container,
                         new_id.clone(),
                     )?;
@@ -196,21 +187,14 @@ impl<'a> ExecuteDoc<'a> {
                         child_container,
                         index,
                         parent_container,
-                        all_locals,
                         id.clone(),
                         vec![],
                     )?;
                 }
                 ftd::Instruction::RecursiveChildComponent { child: f }
                 | ftd::Instruction::ChildComponent { child: f } => {
-                    let elements = f.recursive_call(
-                        &mut doc,
-                        self.arguments,
-                        self.invocations,
-                        true,
-                        all_locals,
-                        &local_container,
-                    )?;
+                    let elements =
+                        f.recursive_call(&mut doc, self.invocations, true, &local_container)?;
                     for e in elements {
                         children = self.add_element(
                             children,
@@ -220,7 +204,6 @@ impl<'a> ExecuteDoc<'a> {
                             None,
                             index,
                             parent_container,
-                            all_locals,
                             None,
                             vec![],
                         )?
@@ -247,7 +230,6 @@ impl<'a> ExecuteDoc<'a> {
         container: Option<std::collections::BTreeMap<String, Vec<Vec<usize>>>>,
         index: &mut usize,
         parent_container: &[usize],
-        all_locals: &ftd::Map,
         id: Option<String>,
         container_children: Vec<ftd::Element>,
     ) -> ftd::p1::Result<Vec<ftd::Element>> {
@@ -322,15 +304,8 @@ impl<'a> ExecuteDoc<'a> {
                         new_parent_container.append(&mut current_container.to_vec());
 
                         *index += 1;
-                        self.execute_(
-                            index,
-                            true,
-                            &new_parent_container,
-                            &Default::default(),
-                            parent_id,
-                            None,
-                        )?
-                        .children
+                        self.execute_(index, true, &new_parent_container, parent_id, None)?
+                            .children
                     } else {
                         container_children
                     };
@@ -380,7 +355,6 @@ impl<'a> ExecuteDoc<'a> {
                             index,
                             true,
                             &new_parent_container,
-                            all_locals,
                             parent_id.clone(),
                             id,
                         )?;

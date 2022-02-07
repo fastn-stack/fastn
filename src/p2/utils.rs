@@ -40,46 +40,44 @@ pub fn parse_import(
 pub fn string_and_ref(
     line_number: usize,
     name: &str,
-    properties: &std::collections::BTreeMap<String, (ftd::Value, Option<String>)>,
-    all_locals: &ftd::Map,
-    doc_id: &str,
+    properties: &std::collections::BTreeMap<String, ftd::component::Property>,
+    doc: &ftd::p2::TDoc,
 ) -> ftd::p1::Result<(String, Option<String>)> {
+    let properties = ftd::component::resolve_properties_with_ref(line_number, properties, doc)?;
     match properties.get(name) {
         Some((ftd::Value::String { text, .. }, reference)) => {
-            Ok((text.to_string(), complete_reference(reference, all_locals)))
+            Ok((text.to_string(), complete_reference(reference)))
         }
         Some(v) => ftd::e2(
             format!("expected string, found: {:?}", v),
-            doc_id,
+            doc.name,
             line_number,
         ),
-        None => ftd::e2(format!("'{}' not found", name), doc_id, line_number),
+        None => ftd::e2(format!("'{}' not found", name), doc.name, line_number),
     }
 }
 
 pub fn string_and_source_and_ref(
     line_number: usize,
     name: &str,
-    properties: &std::collections::BTreeMap<String, (ftd::Value, Option<String>)>,
-    all_locals: &ftd::Map,
-    doc_id: &str,
+    properties: &std::collections::BTreeMap<String, ftd::component::Property>,
+    doc: &ftd::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
 ) -> ftd::p1::Result<(String, ftd::TextSource, Option<String>)> {
+    let properties = ftd::component::resolve_properties_with_ref(line_number, properties, doc)?;
     match properties.get(name) {
-        Some((ftd::Value::String { text, source }, reference)) => Ok((
-            text.to_string(),
-            source.to_owned(),
-            complete_reference(reference, all_locals),
-        )),
+        Some((ftd::Value::String { text, source }, reference)) => {
+            Ok((text.to_string(), source.to_owned(), reference.to_owned()))
+        }
         Some((ftd::Value::Optional { data, kind }, reference)) => {
             let source = match kind {
                 _ if matches!(kind, ftd::p2::Kind::String { .. }) => {
-                    ftd::TextSource::from_kind(kind, doc_id, line_number)?
+                    ftd::TextSource::from_kind(kind, doc.name, line_number)?
                 }
                 _ => {
                     return ftd::e2(
                         format!("expected string, found: {:?}", kind),
-                        doc_id,
+                        doc.name,
                         line_number,
                     )
                 }
@@ -92,7 +90,7 @@ pub fn string_and_source_and_ref(
                         None => {
                             return ftd::e2(
                                 format!("expected string, found: {:?}", kind),
-                                doc_id,
+                                doc.name,
                                 line_number,
                             )
                         }
@@ -106,7 +104,7 @@ pub fn string_and_source_and_ref(
                                     return Ok((
                                         "".to_string(),
                                         source,
-                                        complete_reference(&Some(reference.to_owned()), all_locals),
+                                        complete_reference(&Some(reference.to_owned())),
                                     ));
                                 }
                             }
@@ -120,18 +118,18 @@ pub fn string_and_source_and_ref(
                     Ok((
                         "".to_string(),
                         source,
-                        complete_reference(&Some(reference.to_owned()), all_locals),
+                        complete_reference(&Some(reference.to_owned())),
                     ))
                 }
                 Some(ftd::Value::String { text, source }) => Ok((
                     text.to_string(),
                     source.to_owned(),
-                    complete_reference(reference, all_locals),
+                    complete_reference(reference),
                 )),
                 _ => {
                     return ftd::e2(
                         format!("expected string, found: {:?}", kind),
-                        doc_id,
+                        doc.name,
                         line_number,
                     )
                 }
@@ -141,12 +139,12 @@ pub fn string_and_source_and_ref(
             let kind = kind.inner();
             let source = match kind {
                 _ if matches!(kind, ftd::p2::Kind::String { .. }) => {
-                    ftd::TextSource::from_kind(kind, doc_id, line_number)?
+                    ftd::TextSource::from_kind(kind, doc.name, line_number)?
                 }
                 _ => {
                     return ftd::e2(
                         format!("expected string, found1: {:?}", kind),
-                        doc_id,
+                        doc.name,
                         line_number,
                     )
                 }
@@ -157,7 +155,7 @@ pub fn string_and_source_and_ref(
                 None => {
                     return ftd::e2(
                         format!("expected string, found2: {:?}", kind),
-                        doc_id,
+                        doc.name,
                         line_number,
                     )
                 }
@@ -176,7 +174,7 @@ pub fn string_and_source_and_ref(
                             return Ok((
                                 "".to_string(),
                                 source,
-                                complete_reference(&Some(reference.to_owned()), all_locals),
+                                complete_reference(&Some(reference.to_owned())),
                             ));
                         }
                     }
@@ -185,28 +183,26 @@ pub fn string_and_source_and_ref(
             }
             ftd::e2(
                 format!("expected string, found3: {:?}", kind),
-                doc_id,
+                doc.name,
                 line_number,
             )
         }
         Some(v) => ftd::e2(
             format!("expected string, found4: {:?}", v),
-            doc_id,
+            doc.name,
             line_number,
         ),
-        None => ftd::e2(format!("'{}' not found", name), doc_id, line_number),
+        None => ftd::e2(format!("'{}' not found", name), doc.name, line_number),
     }
 }
 
-pub fn complete_reference(reference: &Option<String>, all_locals: &ftd::Map) -> Option<String> {
+// todo: remove this
+pub fn complete_reference(reference: &Option<String>) -> Option<String> {
     let mut reference = reference.to_owned();
     if let Some(ref r) = reference {
         if let Some(name) = r.strip_prefix('@') {
             if name.eq("$loop$") {
                 return None;
-            }
-            if let Some(string_container) = all_locals.get(name) {
-                reference = Some(format!("@{}@{}", name, string_container));
             } else if name.eq("MOUSE-IN") {
                 reference = Some("@MOUSE-IN".to_string());
             }
@@ -684,16 +680,6 @@ pub fn reorder(
     Ok((new_p1, var_types))
 }
 
-pub fn properties(
-    properties_with_ref: &std::collections::BTreeMap<String, (ftd::Value, Option<String>)>,
-) -> std::collections::BTreeMap<String, ftd::Value> {
-    let mut properties: std::collections::BTreeMap<String, ftd::Value> = Default::default();
-    for (k, (v, _)) in properties_with_ref {
-        properties.insert(k.to_string(), v.to_owned());
-    }
-    properties
-}
-
 pub(crate) fn get_root_component_name(
     doc: &ftd::p2::TDoc,
     name: &str,
@@ -773,12 +759,11 @@ pub fn structure_header_to_properties(
 }
 
 pub fn arguments_on_condition(
-    arguments: &std::collections::BTreeMap<String, ftd::Value>,
     condition: &ftd::p2::Boolean,
     line_number: usize,
     doc: &ftd::p2::TDoc,
 ) -> ftd::p1::Result<(std::collections::BTreeMap<String, ftd::Value>, bool)> {
-    let mut arguments = arguments.to_owned();
+    let mut arguments: std::collections::BTreeMap<String, ftd::Value> = Default::default();
     let mut is_visible = true;
     if let ftd::p2::Boolean::IsNotNull { ref value } = condition {
         match value {
@@ -786,31 +771,6 @@ pub fn arguments_on_condition(
             ftd::PropertyValue::Reference { name, kind }
             | ftd::PropertyValue::Variable { name, kind } => {
                 if let ftd::p2::Kind::Optional { kind } = kind {
-                    let bag_with_argument = {
-                        let mut bag_with_argument = doc.bag.clone();
-                        bag_with_argument.extend(arguments.iter().map(|(k, v)| {
-                            (
-                                format!("{}#{}", doc.name, k),
-                                ftd::p2::Thing::Variable(ftd::Variable {
-                                    name: k.to_string(),
-                                    value: ftd::PropertyValue::Value {
-                                        value: v.to_owned(),
-                                    },
-                                    conditions: vec![],
-                                    flags: ftd::variable::VariableFlags {
-                                        always_include: None,
-                                    },
-                                }),
-                            )
-                        }));
-                        bag_with_argument
-                    };
-                    let doc = ftd::p2::TDoc {
-                        name: doc.name,
-                        aliases: doc.aliases,
-                        bag: &bag_with_argument,
-                        local_variables: Default::default(),
-                    };
                     if doc.get_value(line_number, name).is_err() {
                         is_visible = false;
                         arguments.insert(

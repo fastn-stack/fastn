@@ -83,9 +83,7 @@ fn read_package(section: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Res
                 default,
             },
         ..
-    }) = var
-        .value
-        .resolve(section.line_number, &Default::default(), doc)
+    }) = var.value.resolve(section.line_number, doc)
     {
         let mut data = vec![];
         for line in get.split('\n') {
@@ -154,9 +152,7 @@ fn read_records(section: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Res
     if let Ok(ftd::Value::List {
         kind: ftd::p2::Kind::Record { name, .. },
         ..
-    }) = var
-        .value
-        .resolve(section.line_number, &Default::default(), doc)
+    }) = var.value.resolve(section.line_number, doc)
     {
         let rec = doc.get_record(section.line_number, name.as_str())?;
         let mut data = vec![];

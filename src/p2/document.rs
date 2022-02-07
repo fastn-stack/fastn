@@ -29,7 +29,7 @@ impl Document {
                 value, flags: flag, ..
             }) = v
             {
-                let val = if let Ok(val) = value.resolve(0, &Default::default(), &doc) {
+                let val = if let Ok(val) = value.resolve(0, &doc) {
                     val
                 } else {
                     continue;
@@ -53,7 +53,7 @@ impl Document {
             if let ftd::Value::List { data, .. } = value {
                 let mut list_data = vec![];
                 for val in data {
-                    let val = if let Ok(val) = val.resolve(0, &Default::default(), doc) {
+                    let val = if let Ok(val) = val.resolve(0, doc) {
                         val
                     } else {
                         continue;
@@ -464,9 +464,7 @@ impl Document {
         };
 
         match thing {
-            ftd::p2::Thing::Variable(v) => {
-                self.value_to_json(&v.value.resolve(0, &Default::default(), &doc)?)
-            }
+            ftd::p2::Thing::Variable(v) => self.value_to_json(&v.value.resolve(0, &doc)?),
             t => panic!("{:?} is not a variable", t),
         }
     }
@@ -494,7 +492,7 @@ impl Document {
             } => self.object_to_json(Some(variant), fields)?,
             ftd::Value::List { data, .. } => self.list_to_json(
                 data.iter()
-                    .filter_map(|v| v.resolve(0, &Default::default(), &doc).ok())
+                    .filter_map(|v| v.resolve(0, &doc).ok())
                     .collect::<Vec<ftd::Value>>()
                     .as_slice(),
             )?,
