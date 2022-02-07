@@ -255,18 +255,13 @@ impl PropertyValue {
     }
 
     /// resolves all the internal fields too
-    pub fn resolve(
-        &self,
-        line_number: usize,
-        arguments: &std::collections::BTreeMap<String, ftd::Value>,
-        doc: &ftd::p2::TDoc,
-    ) -> ftd::p1::Result<Value> {
-        let mut value = self.partial_resolve(line_number, arguments, doc)?;
+    pub fn resolve(&self, line_number: usize, doc: &ftd::p2::TDoc) -> ftd::p1::Result<Value> {
+        let mut value = self.partial_resolve(line_number, doc)?;
         // In case of Object resolve all the values
         if let ftd::Value::Object { values } = &mut value {
             for (_, v) in values.iter_mut() {
                 *v = ftd::PropertyValue::Value {
-                    value: v.partial_resolve(line_number, arguments, doc)?,
+                    value: v.partial_resolve(line_number, doc)?,
                 };
             }
         }
@@ -276,7 +271,6 @@ impl PropertyValue {
     pub fn partial_resolve(
         &self,
         line_number: usize,
-        arguments: &std::collections::BTreeMap<String, ftd::Value>,
         doc: &ftd::p2::TDoc,
     ) -> ftd::p1::Result<Value> {
         Ok(match self {
@@ -300,7 +294,7 @@ impl PropertyValue {
                     };
                 let mut value = default;
                 for (boolean, property) in condition {
-                    if boolean.eval(line_number, arguments, doc)? {
+                    if boolean.eval(line_number, doc)? {
                         value = property;
                     }
                 }
@@ -630,9 +624,7 @@ impl Variable {
 
         match (
             &self.value.kind(),
-            &self
-                .value
-                .resolve(p1.line_number, &Default::default(), doc)?,
+            &self.value.resolve(p1.line_number, doc)?,
         ) {
             (ftd::p2::Kind::Record { name, .. }, _) => {
                 self.value = doc.get_record(p1.line_number, name)?.create(&p1, doc)?

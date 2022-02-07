@@ -58,7 +58,7 @@ impl<'a> TDoc<'a> {
                 }
             };
             if let ftd::PropertyValue::Variable { ref mut name, .. } = default {
-                *name = self.resolve_name(0, format!("{}@{}", name, string_container).as_str())?
+                *name = self.resolve_name(0, format!("{}@{}", name, string_container).as_str())?;
             }
             let local_variable = ftd::p2::Thing::Variable(ftd::Variable {
                 name: k.to_string(),
@@ -82,10 +82,13 @@ impl<'a> TDoc<'a> {
                 }
             }
         }
+        if let Some(ref mut condition) = component.condition {
+            edit_condition(condition, self, &string_container)?;
+        }
 
         component.arguments = Default::default();
         for instruction in component.instructions.iter_mut() {
-            let mut child = match instruction {
+            let child = match instruction {
                 ftd::Instruction::ChildComponent { child } => child,
                 _ => continue,
             };
@@ -101,8 +104,47 @@ impl<'a> TDoc<'a> {
                     }
                 }
             }
+            if let Some((ref mut c, _)) = child.reference {
+                *c = self.resolve_name(0, format!("{}@{}", c, string_container).as_str())?;
+            }
+            if let Some(ref mut condition) = child.condition {
+                edit_condition(condition, self, &string_container)?;
+            }
         }
-        Ok(())
+        return Ok(());
+
+        fn edit_condition(
+            condition: &mut ftd::p2::Boolean,
+            doc: &ftd::p2::TDoc,
+            string_container: &str,
+        ) -> ftd::p1::Result<()> {
+            match condition {
+                ftd::p2::Boolean::IsNotNull { value }
+                | ftd::p2::Boolean::IsNull { value }
+                | ftd::p2::Boolean::IsNotEmpty { value }
+                | ftd::p2::Boolean::IsEmpty { value }
+                | ftd::p2::Boolean::ListIsEmpty { value } => {
+                    if let ftd::PropertyValue::Variable { ref mut name, .. } = value {
+                        *name =
+                            doc.resolve_name(0, format!("{}@{}", name, string_container).as_str())?;
+                    }
+                }
+                ftd::p2::Boolean::Equal { left, right }
+                | ftd::p2::Boolean::NotEqual { left, right } => {
+                    if let ftd::PropertyValue::Variable { ref mut name, .. } = left {
+                        *name =
+                            doc.resolve_name(0, format!("{}@{}", name, string_container).as_str())?;
+                    }
+                    if let ftd::PropertyValue::Variable { ref mut name, .. } = right {
+                        *name =
+                            doc.resolve_name(0, format!("{}@{}", name, string_container).as_str())?;
+                    }
+                }
+                ftd::p2::Boolean::Not { of } => edit_condition(of, doc, string_container)?,
+                ftd::p2::Boolean::Literal { .. } => {}
+            }
+            Ok(())
+        }
     }
 
     pub(crate) fn insert_local(
@@ -149,6 +191,9 @@ impl<'a> TDoc<'a> {
                 local_variable,
             );
         }
+        if let Some(ref mut condition) = parent.condition {
+            edit_condition(condition, self, &string_container);
+        }
         for (_, property) in parent.properties.iter_mut() {
             if let Some(ftd::PropertyValue::Variable { ref mut name, .. }) = property.default {
                 *name = self.resolve_name(0, format!("{}@{}", name, string_container).as_str())?;
@@ -156,7 +201,7 @@ impl<'a> TDoc<'a> {
             for (_, condition) in property.conditions.iter_mut() {
                 if let ftd::PropertyValue::Variable { ref mut name, .. } = condition {
                     *name =
-                        self.resolve_name(0, format!("{}@{}", name, string_container).as_str())?
+                        self.resolve_name(0, format!("{}@{}", name, string_container).as_str())?;
                 }
             }
         }
@@ -169,13 +214,52 @@ impl<'a> TDoc<'a> {
                 }
                 for (_, condition) in property.conditions.iter_mut() {
                     if let ftd::PropertyValue::Variable { ref mut name, .. } = condition {
-                        *name =
-                            self.resolve_name(0, format!("{}@{}", name, string_container).as_str())?
+                        *name = self
+                            .resolve_name(0, format!("{}@{}", name, string_container).as_str())?;
                     }
                 }
             }
+            if let Some((ref mut c, _)) = child.reference {
+                *c = self.resolve_name(0, format!("{}@{}", c, string_container).as_str())?;
+            }
+            if let Some(ref mut condition) = child.condition {
+                edit_condition(condition, self, &string_container);
+            }
         }
-        Ok(())
+        return Ok(());
+
+        fn edit_condition(
+            condition: &mut ftd::p2::Boolean,
+            doc: &ftd::p2::TDoc,
+            string_container: &str,
+        ) -> ftd::p1::Result<()> {
+            match condition {
+                ftd::p2::Boolean::IsNotNull { value }
+                | ftd::p2::Boolean::IsNull { value }
+                | ftd::p2::Boolean::IsNotEmpty { value }
+                | ftd::p2::Boolean::IsEmpty { value }
+                | ftd::p2::Boolean::ListIsEmpty { value } => {
+                    if let ftd::PropertyValue::Variable { ref mut name, .. } = value {
+                        *name =
+                            doc.resolve_name(0, format!("{}@{}", name, string_container).as_str())?
+                    }
+                }
+                ftd::p2::Boolean::Equal { left, right }
+                | ftd::p2::Boolean::NotEqual { left, right } => {
+                    if let ftd::PropertyValue::Variable { ref mut name, .. } = left {
+                        *name =
+                            doc.resolve_name(0, format!("{}@{}", name, string_container).as_str())?
+                    }
+                    if let ftd::PropertyValue::Variable { ref mut name, .. } = right {
+                        *name =
+                            doc.resolve_name(0, format!("{}@{}", name, string_container).as_str())?
+                    }
+                }
+                ftd::p2::Boolean::Not { of } => edit_condition(of, doc, string_container)?,
+                ftd::p2::Boolean::Literal { .. } => {}
+            }
+            Ok(())
+        }
     }
 
     pub fn from_json<T>(&self, json: &T, section: &ftd::p1::Section) -> ftd::p1::Result<ftd::Value>
@@ -622,11 +706,11 @@ impl<'a> TDoc<'a> {
     ) -> ftd::p1::Result<(ftd::Value, Vec<(ftd::p2::Boolean, ftd::Value)>)> {
         match self.get_thing(line_number, name)? {
             ftd::p2::Thing::Variable(v) => Ok((
-                v.value.resolve(line_number, &Default::default(), self)?,
+                v.value.resolve(line_number, self)?,
                 v.conditions
                     .into_iter()
                     .map(|(b, v)| {
-                        if let Ok(v) = v.resolve(line_number, &Default::default(), self) {
+                        if let Ok(v) = v.resolve(line_number, self) {
                             Some((b, v))
                         } else {
                             None
@@ -642,10 +726,7 @@ impl<'a> TDoc<'a> {
     pub fn get_value(&self, line_number: usize, name: &str) -> ftd::p1::Result<ftd::Value> {
         // TODO: name can be a.b.c, and a and a.b are records with right fields
         match self.get_thing(line_number, name)? {
-            ftd::p2::Thing::Variable(v) => {
-                v.value
-                    .partial_resolve(line_number, &Default::default(), self)
-            }
+            ftd::p2::Thing::Variable(v) => v.value.partial_resolve(line_number, self),
             v => self.err("not a variable", v, "get_value", line_number),
         }
     }
@@ -811,7 +892,7 @@ impl<'a> TDoc<'a> {
                     conditions,
                     ..
                 }) => {
-                    let fields = match value.resolve(line_number, &Default::default(), doc)? {
+                    let fields = match value.resolve(line_number, doc)? {
                         ftd::Value::Record { fields, .. } => fields,
                         ftd::Value::OrType { fields, .. } => fields,
                         ftd::Value::Object { values } => values,

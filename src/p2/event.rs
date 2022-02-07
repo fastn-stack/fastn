@@ -10,7 +10,6 @@ impl Event {
     fn to_value(
         line_number: usize,
         property: &std::collections::BTreeMap<String, Vec<ftd::PropertyValue>>,
-        arguments: &std::collections::BTreeMap<String, ftd::Value>,
         doc: &ftd::p2::TDoc,
     ) -> ftd::p1::Result<std::collections::BTreeMap<String, Vec<ftd::event::ParameterData>>> {
         let mut property_string: std::collections::BTreeMap<
@@ -20,7 +19,7 @@ impl Event {
         for (s, property_values) in property {
             let mut property_values_string = vec![];
             for property_value in property_values {
-                let value = property_value.resolve(line_number, arguments, doc)?;
+                let value = property_value.resolve(line_number, doc)?;
                 let reference = get_reference(property_value, doc, line_number)?;
                 if let Some(value) = value.to_string() {
                     property_values_string.push(ftd::event::ParameterData { value, reference });
@@ -67,52 +66,18 @@ impl Event {
     pub fn get_events(
         line_number: usize,
         events: &[Self],
-        all_locals: &ftd::Map,
-        arguments: &std::collections::BTreeMap<String, ftd::Value>,
         doc: &ftd::p2::TDoc,
     ) -> ftd::p1::Result<Vec<ftd::Event>> {
-        let arguments = {
-            //remove properties
-            let mut arguments_without_properties: std::collections::BTreeMap<String, ftd::Value> =
-                Default::default();
-            for (k, v) in arguments {
-                if let Some(k) = k.strip_prefix('$') {
-                    arguments_without_properties.insert(k.to_string(), v.to_owned());
-                }
-            }
-            arguments_without_properties
-        };
-
         let mut event: Vec<ftd::Event> = vec![];
         for e in events {
-            let target = match e.action.target.strip_prefix('@') {
-                Some(value) => {
-                    if let Some(val) = all_locals.get(value) {
-                        format!("@{}@{}", value, val)
-                    } else if value.eq("MOUSE-IN") {
-                        "@MOUSE-IN".to_string()
-                    } else {
-                        return ftd::e2(
-                            format!("Can't find the local variable {}", value),
-                            doc.name,
-                            line_number,
-                        );
-                    }
-                }
-                None => e.action.target.to_string(),
-            };
+            let target = e.action.target.to_string();
 
             event.push(ftd::Event {
                 name: e.name.to_str().to_string(),
                 action: ftd::Action {
                     action: e.action.action.to_str().to_string(),
                     target,
-                    parameters: ftd::p2::Event::to_value(
-                        line_number,
-                        &e.action.parameters,
-                        &arguments,
-                        doc,
-                    )?,
+                    parameters: ftd::p2::Event::to_value(line_number, &e.action.parameters, doc)?,
                 },
             });
         }

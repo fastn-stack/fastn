@@ -66,10 +66,9 @@ impl RT {
             bag: &self.bag,
             local_variables: Default::default(),
             instructions: &self.instructions,
-            arguments: &Default::default(),
             invocations: &mut invocations,
         }
-        .execute(&[], &Default::default(), None)?
+        .execute(&[], None)?
         .children;
 
         ftd::Element::set_default_locals(&mut element);

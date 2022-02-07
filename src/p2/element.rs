@@ -5,7 +5,6 @@ pub fn common_from_properties(
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
     events: &[ftd::p2::Event],
-    all_locals: &ftd::Map,
     reference: Option<String>,
 ) -> ftd::p1::Result<ftd::Common> {
     let submit = ftd::p2::utils::string_optional("submit", properties, doc.name, 0)?;
@@ -54,29 +53,14 @@ pub fn common_from_properties(
         (position, inner)
     };
 
-    let arguments = {
-        //remove properties
-        let mut arguments_without_properties: std::collections::BTreeMap<String, ftd::Value> =
-            Default::default();
-        for (k, v) in properties {
-            if let Some(k) = k.strip_prefix('$') {
-                arguments_without_properties.insert(k.to_string(), v.to_owned());
-            }
-        }
-        arguments_without_properties
-    };
-
     let (cond, is_visible) = match condition {
         Some(c) => {
             let mut is_visible = true;
-            if !c.eval(0, &arguments, doc)? {
+            if !c.eval(0, doc)? {
                 is_visible = false;
             }
             if !c.is_arg_constant() {
-                (
-                    Some(c.to_condition(0, all_locals, &arguments, doc)?),
-                    is_visible,
-                )
+                (Some(c.to_condition(0, doc)?), is_visible)
             } else {
                 (None, is_visible)
             }
@@ -90,7 +74,7 @@ pub fn common_from_properties(
         condition: cond,
         is_not_visible: !is_visible,
         is_dummy: false,
-        events: ftd::p2::Event::get_events(0, events, all_locals, properties, doc)?,
+        events: ftd::p2::Event::get_events(0, events, doc)?,
         reference,
         region: ftd::Region::from(
             ftd::p2::utils::string_optional("region", properties, doc.name, 0)?,
@@ -603,23 +587,19 @@ pub fn image_function() -> ftd::Component {
 }
 
 pub fn image_from_properties(
-    properties_with_ref: &std::collections::BTreeMap<String, (ftd::Value, Option<String>)>,
+    properties: &std::collections::BTreeMap<String, ftd::component::Property>,
     doc: &ftd::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
     events: &[ftd::p2::Event],
-    all_locals: &ftd::Map,
 ) -> ftd::p1::Result<ftd::Image> {
-    let (src, reference) =
-        ftd::p2::utils::string_and_ref(0, "src", properties_with_ref, all_locals, doc.name)?;
-    let properties = &ftd::p2::utils::properties(properties_with_ref);
+    let (src, reference) = ftd::p2::utils::string_and_ref(0, "src", properties, doc)?;
+    let properties = &ftd::component::resolve_properties(0, properties, doc)?;
     Ok(ftd::Image {
         src,
         description: ftd::p2::utils::string_optional("description", properties, doc.name, 0)?
             .unwrap_or_else(|| "".to_string()),
-        common: common_from_properties(
-            properties, doc, condition, is_child, events, all_locals, reference,
-        )?,
+        common: common_from_properties(properties, doc, condition, is_child, events, reference)?,
         crop: ftd::p2::utils::bool_with_default("crop", false, properties, doc.name, 0)?,
     })
 }
@@ -651,18 +631,15 @@ pub fn row_function() -> ftd::Component {
 }
 
 pub fn row_from_properties(
-    properties_with_ref: &std::collections::BTreeMap<String, (ftd::Value, Option<String>)>,
+    properties: &std::collections::BTreeMap<String, ftd::component::Property>,
     doc: &ftd::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
     events: &[ftd::p2::Event],
-    all_locals: &ftd::Map,
 ) -> ftd::p1::Result<ftd::Row> {
-    let properties = &ftd::p2::utils::properties(properties_with_ref);
+    let properties = &ftd::component::resolve_properties(0, properties, doc)?;
     Ok(ftd::Row {
-        common: common_from_properties(
-            properties, doc, condition, is_child, events, all_locals, None,
-        )?,
+        common: common_from_properties(properties, doc, condition, is_child, events, None)?,
         container: container_from_properties(properties, doc)?,
         spacing: ftd::Spacing::from(ftd::p2::utils::string_optional(
             "spacing", properties, doc.name, 0,
@@ -697,18 +674,15 @@ pub fn column_function() -> ftd::Component {
 }
 
 pub fn column_from_properties(
-    properties_with_ref: &std::collections::BTreeMap<String, (ftd::Value, Option<String>)>,
+    properties: &std::collections::BTreeMap<String, ftd::component::Property>,
     doc: &ftd::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
     events: &[ftd::p2::Event],
-    all_locals: &ftd::Map,
 ) -> ftd::p1::Result<ftd::Column> {
-    let properties = &ftd::p2::utils::properties(properties_with_ref);
+    let properties = &ftd::component::resolve_properties(0, properties, doc)?;
     Ok(ftd::Column {
-        common: common_from_properties(
-            properties, doc, condition, is_child, events, all_locals, None,
-        )?,
+        common: common_from_properties(properties, doc, condition, is_child, events, None)?,
         container: container_from_properties(properties, doc)?,
         spacing: ftd::Spacing::from(ftd::p2::utils::string_optional(
             "spacing", properties, doc.name, 0,
@@ -801,14 +775,13 @@ pub fn iframe_function() -> ftd::Component {
 }
 
 pub fn iframe_from_properties(
-    properties_with_ref: &std::collections::BTreeMap<String, (ftd::Value, Option<String>)>,
+    properties: &std::collections::BTreeMap<String, ftd::component::Property>,
     doc: &ftd::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
     events: &[ftd::p2::Event],
-    all_locals: &ftd::Map,
 ) -> ftd::p1::Result<ftd::IFrame> {
-    let properties = &ftd::p2::utils::properties(properties_with_ref);
+    let properties = &ftd::component::resolve_properties(0, properties, doc)?;
     let src = match (
         ftd::p2::utils::string_optional("src", properties, doc.name, 0)?,
         ftd::p2::utils::string_optional("youtube", properties, doc.name, 0)?
@@ -822,26 +795,24 @@ pub fn iframe_from_properties(
 
     Ok(ftd::IFrame {
         src,
-        common: common_from_properties(
-            properties, doc, condition, is_child, events, all_locals, None,
-        )?,
+        common: common_from_properties(properties, doc, condition, is_child, events, None)?,
     })
 }
 
 /*pub fn text_from_properties(
-    properties_with_ref: &std::collections::BTreeMap<String, (ftd::Value, Option<String>)>,
+    properties: &std::collections::BTreeMap<String, ftd::component::Property>,
     doc: &ftd::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
     events: &[ftd::p2::Event],
-    all_locals: &ftd::Map,
+
 ) -> ftd::p1::Result<ftd::Text> {
-    let properties = &ftd::p2::utils::properties(properties_with_ref);
+    let properties = &ftd::component::resolve_properties(0, properties, doc)?;
 
     let (text, source, reference) = ftd::p2::utils::string_and_source_and_ref(
         0,
         "text",
-        properties_with_ref,
+        properties,
         all_locals,
         doc.name,
         condition,
@@ -863,7 +834,7 @@ pub fn iframe_from_properties(
             ftd::markdown_line(text.as_str())
         },
         common: common_from_properties(
-            properties, doc, condition, is_child, events, all_locals, reference,
+            properties, doc, condition, is_child, events,  reference,
         )?,
         text_align: ftd::TextAlign::from(
             ftd::p2::utils::string_optional("text-align", properties, doc.name, 0)?,
@@ -882,23 +853,15 @@ pub fn iframe_from_properties(
 }*/
 
 pub fn text_block_from_properties(
-    properties_with_ref: &std::collections::BTreeMap<String, (ftd::Value, Option<String>)>,
+    properties: &std::collections::BTreeMap<String, ftd::component::Property>,
     doc: &ftd::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
     events: &[ftd::p2::Event],
-    all_locals: &ftd::Map,
 ) -> ftd::p1::Result<ftd::TextBlock> {
-    let properties = &ftd::p2::utils::properties(properties_with_ref);
-
-    let (text, source, reference) = ftd::p2::utils::string_and_source_and_ref(
-        0,
-        "text",
-        properties_with_ref,
-        all_locals,
-        doc.name,
-        condition,
-    )?;
+    let (text, source, reference) =
+        ftd::p2::utils::string_and_source_and_ref(0, "text", properties, doc, condition)?;
+    let properties = &ftd::component::resolve_properties(0, properties, doc)?;
     let font_str = ftd::p2::utils::string_optional("font", properties, doc.name, 0)?;
 
     let font: Vec<ftd::NamedFont> = match font_str {
@@ -915,9 +878,7 @@ pub fn text_block_from_properties(
         } else {
             ftd::markdown_line(text.as_str())
         },
-        common: common_from_properties(
-            properties, doc, condition, is_child, events, all_locals, reference,
-        )?,
+        common: common_from_properties(properties, doc, condition, is_child, events, reference)?,
         text_align: ftd::TextAlign::from(
             ftd::p2::utils::string_optional("text-align", properties, doc.name, 0)?,
             doc.name,
@@ -935,23 +896,15 @@ pub fn text_block_from_properties(
 }
 
 pub fn code_from_properties(
-    properties_with_ref: &std::collections::BTreeMap<String, (ftd::Value, Option<String>)>,
+    properties: &std::collections::BTreeMap<String, ftd::component::Property>,
     doc: &ftd::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
     events: &[ftd::p2::Event],
-    all_locals: &ftd::Map,
 ) -> ftd::p1::Result<ftd::Code> {
-    let properties = &ftd::p2::utils::properties(properties_with_ref);
-
-    let (text, _, reference) = ftd::p2::utils::string_and_source_and_ref(
-        0,
-        "text",
-        properties_with_ref,
-        all_locals,
-        doc.name,
-        condition,
-    )?;
+    let (text, _, reference) =
+        ftd::p2::utils::string_and_source_and_ref(0, "text", properties, doc, condition)?;
+    let properties = &ftd::component::resolve_properties(0, properties, doc)?;
     let font_str = ftd::p2::utils::string_optional("font", properties, doc.name, 0)?;
 
     let font: Vec<ftd::NamedFont> = match font_str {
@@ -978,9 +931,7 @@ pub fn code_from_properties(
             .as_str(),
             doc.name,
         )?,
-        common: common_from_properties(
-            properties, doc, condition, is_child, events, all_locals, reference,
-        )?,
+        common: common_from_properties(properties, doc, condition, is_child, events, reference)?,
         text_align: ftd::TextAlign::from(
             ftd::p2::utils::string_optional("text-align", properties, doc.name, 0)?,
             doc.name,
@@ -998,14 +949,13 @@ pub fn code_from_properties(
 }
 
 pub fn integer_from_properties(
-    properties_with_ref: &std::collections::BTreeMap<String, (ftd::Value, Option<String>)>,
+    properties: &std::collections::BTreeMap<String, ftd::component::Property>,
     doc: &ftd::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
     events: &[ftd::p2::Event],
-    all_locals: &ftd::Map,
 ) -> ftd::p1::Result<ftd::Text> {
-    let properties = &ftd::p2::utils::properties(properties_with_ref);
+    let properties = &ftd::component::resolve_properties(0, properties, doc)?;
     let font_str = ftd::p2::utils::string_optional("font", properties, doc.name, 0)?;
     let num = format_num::NumberFormat::new();
     let text = match ftd::p2::utils::string_optional("format", properties, doc.name, 0)? {
@@ -1015,10 +965,8 @@ pub fn integer_from_properties(
         ),
         None => ftd::p2::utils::int("value", properties, doc.name, 0)?.to_string(),
     };
-    let reference = ftd::p2::utils::complete_reference(
-        &properties_with_ref.get("value").expect("").1,
-        all_locals,
-    );
+    let reference =
+        ftd::p2::utils::complete_reference(&properties.get("value").expect("").to_string());
 
     let font: Vec<ftd::NamedFont> = match font_str {
         Some(f) => f
@@ -1031,9 +979,7 @@ pub fn integer_from_properties(
     Ok(ftd::Text {
         text: ftd::markdown_line(text.as_str()),
         line: false,
-        common: common_from_properties(
-            properties, doc, condition, is_child, events, all_locals, reference,
-        )?,
+        common: common_from_properties(properties, doc, condition, is_child, events, reference)?,
         text_align: ftd::TextAlign::from(
             ftd::p2::utils::string_optional("text-align", properties, doc.name, 0)?,
             doc.name,
@@ -1051,14 +997,13 @@ pub fn integer_from_properties(
 }
 
 pub fn decimal_from_properties(
-    properties_with_ref: &std::collections::BTreeMap<String, (ftd::Value, Option<String>)>,
+    properties: &std::collections::BTreeMap<String, ftd::component::Property>,
     doc: &ftd::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
     events: &[ftd::p2::Event],
-    all_locals: &ftd::Map,
 ) -> ftd::p1::Result<ftd::Text> {
-    let properties = &ftd::p2::utils::properties(properties_with_ref);
+    let properties = &ftd::component::resolve_properties(0, properties, doc)?;
     let font_str = ftd::p2::utils::string_optional("font", properties, doc.name, 0)?;
     let num = format_num::NumberFormat::new();
     let text = match ftd::p2::utils::string_optional("format", properties, doc.name, 0)? {
@@ -1069,10 +1014,8 @@ pub fn decimal_from_properties(
         None => ftd::p2::utils::decimal("value", properties, doc.name, 0)?.to_string(),
     };
 
-    let reference = ftd::p2::utils::complete_reference(
-        &properties_with_ref.get("value").expect("").1,
-        all_locals,
-    );
+    let reference =
+        ftd::p2::utils::complete_reference(&properties.get("value").expect("").to_string());
 
     let font: Vec<ftd::NamedFont> = match font_str {
         Some(f) => f
@@ -1084,9 +1027,7 @@ pub fn decimal_from_properties(
     Ok(ftd::Text {
         text: ftd::markdown_line(text.as_str()),
         line: false,
-        common: common_from_properties(
-            properties, doc, condition, is_child, events, all_locals, reference,
-        )?,
+        common: common_from_properties(properties, doc, condition, is_child, events, reference)?,
         text_align: ftd::TextAlign::from(
             ftd::p2::utils::string_optional("text-align", properties, doc.name, 0)?,
             doc.name,
@@ -1123,14 +1064,13 @@ pub fn color_from(l: Option<String>, doc_id: &str) -> ftd::p1::Result<Option<ftd
 }
 
 pub fn boolean_from_properties(
-    properties_with_ref: &std::collections::BTreeMap<String, (ftd::Value, Option<String>)>,
+    properties: &std::collections::BTreeMap<String, ftd::component::Property>,
     doc: &ftd::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
     events: &[ftd::p2::Event],
-    all_locals: &ftd::Map,
 ) -> ftd::p1::Result<ftd::Text> {
-    let properties = &ftd::p2::utils::properties(properties_with_ref);
+    let properties = &ftd::component::resolve_properties(0, properties, doc)?;
     let font_str = ftd::p2::utils::string_optional("font", properties, doc.name, 0)?;
     let value = ftd::p2::utils::bool("value", properties, doc.name, 0)?;
     let text = if value {
@@ -1139,10 +1079,8 @@ pub fn boolean_from_properties(
         ftd::p2::utils::string_with_default("false", "false", properties, doc.name, 0)?
     };
 
-    let reference = ftd::p2::utils::complete_reference(
-        &properties_with_ref.get("value").expect("").1,
-        all_locals,
-    );
+    let reference =
+        ftd::p2::utils::complete_reference(&properties.get("value").expect("").to_string());
 
     let font: Vec<ftd::NamedFont> = match font_str {
         Some(f) => f
@@ -1155,9 +1093,7 @@ pub fn boolean_from_properties(
     Ok(ftd::Text {
         text: ftd::markdown_line(text.as_str()),
         line: false,
-        common: common_from_properties(
-            properties, doc, condition, is_child, events, all_locals, reference,
-        )?,
+        common: common_from_properties(properties, doc, condition, is_child, events, reference)?,
         text_align: ftd::TextAlign::from(
             ftd::p2::utils::string_optional("text-align", properties, doc.name, 0)?,
             doc.name,
@@ -1556,35 +1492,29 @@ pub fn input_function() -> ftd::Component {
 }
 
 pub fn input_from_properties(
-    properties_with_ref: &std::collections::BTreeMap<String, (ftd::Value, Option<String>)>,
+    properties: &std::collections::BTreeMap<String, ftd::component::Property>,
     doc: &ftd::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
     events: &[ftd::p2::Event],
-    all_locals: &ftd::Map,
 ) -> ftd::p1::Result<ftd::Input> {
-    let properties = &ftd::p2::utils::properties(properties_with_ref);
+    let properties = &ftd::component::resolve_properties(0, properties, doc)?;
     Ok(ftd::Input {
-        common: common_from_properties(
-            properties, doc, condition, is_child, events, all_locals, None,
-        )?,
+        common: common_from_properties(properties, doc, condition, is_child, events, None)?,
         placeholder: ftd::p2::utils::string_optional("placeholder", properties, doc.name, 0)?,
     })
 }
 
 pub fn scene_from_properties(
-    properties_with_ref: &std::collections::BTreeMap<String, (ftd::Value, Option<String>)>,
+    properties: &std::collections::BTreeMap<String, ftd::component::Property>,
     doc: &ftd::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
     events: &[ftd::p2::Event],
-    all_locals: &ftd::Map,
 ) -> ftd::p1::Result<ftd::Scene> {
-    let properties = &ftd::p2::utils::properties(properties_with_ref);
+    let properties = &ftd::component::resolve_properties(0, properties, doc)?;
     Ok(ftd::Scene {
-        common: common_from_properties(
-            properties, doc, condition, is_child, events, all_locals, None,
-        )?,
+        common: common_from_properties(properties, doc, condition, is_child, events, None)?,
         container: container_from_properties(properties, doc)?,
         spacing: ftd::Spacing::from(ftd::p2::utils::string_optional(
             "spacing", properties, doc.name, 0,
@@ -1593,14 +1523,13 @@ pub fn scene_from_properties(
 }
 
 pub fn grid_from_properties(
-    properties_with_ref: &std::collections::BTreeMap<String, (ftd::Value, Option<String>)>,
+    properties: &std::collections::BTreeMap<String, ftd::component::Property>,
     doc: &ftd::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
     events: &[ftd::p2::Event],
-    all_locals: &ftd::Map,
 ) -> ftd::p1::Result<ftd::Grid> {
-    let properties = &ftd::p2::utils::properties(properties_with_ref);
+    let properties = &ftd::component::resolve_properties(0, properties, doc)?;
     Ok(ftd::Grid {
         slots: match ftd::p2::utils::string_optional("slots", properties, doc.name, 0)? {
             Some(val) => val,
@@ -1621,9 +1550,7 @@ pub fn grid_from_properties(
             doc.name,
             0,
         )?,
-        common: common_from_properties(
-            properties, doc, condition, is_child, events, all_locals, None,
-        )?,
+        common: common_from_properties(properties, doc, condition, is_child, events, None)?,
         container: container_from_properties(properties, doc)?,
         inline: ftd::p2::utils::bool_with_default("inline", false, properties, doc.name, 0)?,
         auto_flow: ftd::p2::utils::string_optional("auto-flow", properties, doc.name, 0)?,
@@ -1631,22 +1558,15 @@ pub fn grid_from_properties(
 }
 
 pub fn markup_from_properties(
-    properties_with_ref: &std::collections::BTreeMap<String, (ftd::Value, Option<String>)>,
+    properties: &std::collections::BTreeMap<String, ftd::component::Property>,
     doc: &ftd::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
     events: &[ftd::p2::Event],
-    all_locals: &ftd::Map,
 ) -> ftd::p1::Result<ftd::Markups> {
-    let properties = &ftd::p2::utils::properties(properties_with_ref);
-    let (value, source, reference) = ftd::p2::utils::string_and_source_and_ref(
-        0,
-        "text",
-        properties_with_ref,
-        all_locals,
-        doc.name,
-        condition,
-    )?;
+    let (value, source, reference) =
+        ftd::p2::utils::string_and_source_and_ref(0, "text", properties, doc, condition)?;
+    let properties = &ftd::component::resolve_properties(0, properties, doc)?;
     let font_str = ftd::p2::utils::string_optional("font", properties, doc.name, 0)?;
 
     let font: Vec<ftd::NamedFont> = match font_str {
@@ -1659,9 +1579,7 @@ pub fn markup_from_properties(
 
     Ok(ftd::Markups {
         text: ftd::markup_line(value.as_str()),
-        common: common_from_properties(
-            properties, doc, condition, is_child, events, all_locals, reference,
-        )?,
+        common: common_from_properties(properties, doc, condition, is_child, events, reference)?,
         children: vec![],
         line: source != ftd::TextSource::Body,
         text_align: ftd::TextAlign::from(

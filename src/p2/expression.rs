@@ -45,39 +45,15 @@ impl Boolean {
     pub fn to_condition(
         &self,
         line_number: usize,
-        all_locals: &ftd::Map,
-        arguments: &std::collections::BTreeMap<String, ftd::Value>,
         doc: &ftd::p2::TDoc,
     ) -> ftd::p1::Result<ftd::Condition> {
         let (variable, value) = match self {
             Self::Equal { left, right } => {
-                let variable = resolve_variable(left, line_number, all_locals, arguments, doc)?;
+                let variable = resolve_variable(left, line_number, doc)?;
 
                 let value = match right {
                     ftd::PropertyValue::Value { value } => value.to_owned(),
-                    ftd::PropertyValue::Variable { name, kind } => {
-                        if let Some(arg) = arguments.get(name) {
-                            if arg.kind().is_same_as(kind) {
-                                arg.to_owned()
-                            } else {
-                                return ftd::e2(
-                                    format!(
-                                        "kind mismatch expected: {:?} found: {:?}",
-                                        kind,
-                                        arg.kind()
-                                    ),
-                                    doc.name,
-                                    line_number,
-                                );
-                            }
-                        } else {
-                            return ftd::e2(
-                                format!("argument not found {}", name),
-                                doc.name,
-                                line_number,
-                            );
-                        }
-                    }
+                    ftd::PropertyValue::Variable { name, .. } => doc.get_value(0, name)?,
                     _ => {
                         return ftd::e2(
                             format!("{:?} must be value or argument", right),
@@ -90,7 +66,7 @@ impl Boolean {
                 (variable, value)
             }
             Self::IsNotNull { value } => {
-                let variable = resolve_variable(value, line_number, all_locals, arguments, doc)?;
+                let variable = resolve_variable(value, line_number, doc)?;
                 (
                     variable,
                     ftd::Value::String {
@@ -100,7 +76,7 @@ impl Boolean {
                 )
             }
             Self::IsNull { value } => {
-                let variable = resolve_variable(value, line_number, all_locals, arguments, doc)?;
+                let variable = resolve_variable(value, line_number, doc)?;
                 (
                     variable,
                     ftd::Value::String {
@@ -128,59 +104,11 @@ impl Boolean {
         fn resolve_variable(
             value: &ftd::PropertyValue,
             line_number: usize,
-            all_locals: &ftd::Map,
-            arguments: &std::collections::BTreeMap<String, ftd::Value>,
             doc: &ftd::p2::TDoc,
         ) -> ftd::p1::Result<String> {
             match value {
-                ftd::PropertyValue::Reference { name, .. } => Ok(name.to_string()),
-                ftd::PropertyValue::Variable { name, .. } => {
-                    let (v, remaining) = name
-                        .split_once('.')
-                        .map(|(v, n)| (v, Some(n)))
-                        .unwrap_or((name, None));
-                    if let Some(string_container) = all_locals.get(v) {
-                        if let Some(remaining) = remaining {
-                            let bag_with_argument = {
-                                let mut bag_with_argument = doc.bag.clone();
-                                bag_with_argument.extend(arguments.iter().map(|(k, v)| {
-                                    (
-                                        format!("{}#{}", doc.name, k),
-                                        ftd::p2::Thing::Variable(ftd::Variable {
-                                            name: k.to_string(),
-                                            value: ftd::PropertyValue::Value {
-                                                value: v.to_owned(),
-                                            },
-                                            conditions: vec![],
-                                            flags: ftd::variable::VariableFlags {
-                                                always_include: None,
-                                            },
-                                        }),
-                                    )
-                                }));
-                                bag_with_argument
-                            };
-                            let doc = ftd::p2::TDoc {
-                                name: doc.name,
-                                aliases: doc.aliases,
-                                bag: &bag_with_argument,
-                                local_variables: Default::default(),
-                            };
-                            if doc.get_value(line_number, name).is_ok() {
-                                return Ok(format!("@{}@{}.{}", v, string_container, remaining));
-                            }
-                        } else {
-                            return Ok(format!("@{}@{}", v, string_container));
-                        }
-                    } else if name.eq("MOUSE-IN") {
-                        return Ok("@MOUSE-IN".to_string());
-                    }
-                    return ftd::e2(
-                        format!("Can't find the local variable {}", name),
-                        doc.name,
-                        line_number,
-                    );
-                }
+                ftd::PropertyValue::Variable { name, .. }
+                | ftd::PropertyValue::Reference { name, .. } => Ok(name.to_string()),
                 _ => {
                     return ftd::e2(
                         format!("{:?} must be variable or local variable", value),
@@ -439,21 +367,16 @@ impl Boolean {
             || is_loop_constant
     }
 
-    pub fn eval(
-        &self,
-        line_number: usize,
-        arguments: &std::collections::BTreeMap<String, ftd::Value>,
-        doc: &ftd::p2::TDoc,
-    ) -> ftd::p1::Result<bool> {
+    pub fn eval(&self, line_number: usize, doc: &ftd::p2::TDoc) -> ftd::p1::Result<bool> {
         Ok(match self {
             Self::Literal { value } => *value,
-            Self::IsNotNull { value } => !value.resolve(line_number, arguments, doc)?.is_null(),
-            Self::IsNull { value } => value.resolve(line_number, arguments, doc)?.is_null(),
-            Self::IsNotEmpty { value } => !value.resolve(line_number, arguments, doc)?.is_empty(),
-            Self::IsEmpty { value } => value.resolve(line_number, arguments, doc)?.is_empty(),
+            Self::IsNotNull { value } => !value.resolve(line_number, doc)?.is_null(),
+            Self::IsNull { value } => value.resolve(line_number, doc)?.is_null(),
+            Self::IsNotEmpty { value } => !value.resolve(line_number, doc)?.is_empty(),
+            Self::IsEmpty { value } => value.resolve(line_number, doc)?.is_empty(),
             Self::Equal { left, right } => left
-                .resolve(line_number, arguments, doc)?
-                .is_equal(&right.resolve(line_number, arguments, doc)?),
+                .resolve(line_number, doc)?
+                .is_equal(&right.resolve(line_number, doc)?),
             _ => {
                 return ftd::e2(
                     format!("unknown Boolean found: {:?}", self),

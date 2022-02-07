@@ -451,7 +451,7 @@ impl<'a> Interpreter<'a> {
             }) = var_data
             {
                 // declare a function
-                let d = dbg!(ftd::Component::from_p1(p1, &doc)?);
+                let d = ftd::Component::from_p1(p1, &doc)?;
                 thing.push((
                     doc.resolve_name(p1.line_number, &d.full_name.to_string())?,
                     ftd::p2::Thing::Component(d),
