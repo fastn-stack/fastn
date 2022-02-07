@@ -3,6 +3,7 @@ pub struct ExecuteDoc<'a> {
     pub name: &'a str,
     pub aliases: &'a std::collections::BTreeMap<String, String>,
     pub bag: &'a std::collections::BTreeMap<String, ftd::p2::Thing>,
+    pub local_variables: std::collections::BTreeMap<String, ftd::p2::Thing>,
     pub instructions: &'a [ftd::Instruction],
     pub arguments: &'a std::collections::BTreeMap<String, ftd::Value>,
     pub invocations: &'a mut std::collections::BTreeMap<
@@ -37,10 +38,11 @@ impl<'a> ExecuteDoc<'a> {
         let mut children: Vec<ftd::Element> = vec![];
 
         while *index < self.instructions.len() {
-            let doc = ftd::p2::TDoc {
+            let mut doc = ftd::p2::TDoc {
                 name: self.name,
                 aliases: self.aliases,
                 bag: self.bag,
+                local_variables: self.local_variables.clone(),
             };
 
             let local_container = {
@@ -89,13 +91,20 @@ impl<'a> ExecuteDoc<'a> {
                     children: inner,
                 } => {
                     assert!(self.arguments.is_empty()); // This clause cant have arguments
+                    let (parent, inner) = {
+                        let mut parent = parent.clone();
+                        let mut inner = inner.clone();
+                        doc.insert_local(&mut parent, &mut inner, local_container.as_slice());
+                        (parent, inner)
+                    };
+
                     let ftd::component::ElementWithContainer {
                         element,
                         children: container_children,
                         child_container,
                     } = parent.super_call(
-                        inner,
-                        &doc,
+                        &inner,
+                        &mut doc,
                         self.arguments,
                         self.invocations,
                         all_locals,
@@ -166,7 +175,7 @@ impl<'a> ExecuteDoc<'a> {
                         child_container,
                         ..
                     } = f.call(
-                        &doc,
+                        &mut doc,
                         &arguments,
                         self.invocations,
                         true,
@@ -195,7 +204,7 @@ impl<'a> ExecuteDoc<'a> {
                 ftd::Instruction::RecursiveChildComponent { child: f }
                 | ftd::Instruction::ChildComponent { child: f } => {
                     let elements = f.recursive_call(
-                        &doc,
+                        &mut doc,
                         self.arguments,
                         self.invocations,
                         true,

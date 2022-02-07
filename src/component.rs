@@ -123,7 +123,7 @@ impl ChildComponent {
     pub fn super_call(
         &self,
         children: &[Self],
-        doc: &ftd::p2::TDoc,
+        doc: &mut ftd::p2::TDoc,
         arguments: &std::collections::BTreeMap<String, ftd::Value>,
         invocations: &mut std::collections::BTreeMap<
             String,
@@ -205,6 +205,7 @@ impl ChildComponent {
                     name: doc.name,
                     aliases: doc.aliases,
                     bag: doc.bag,
+                    local_variables: doc.local_variables.to_owned(),
                     instructions: &instructions,
                     arguments,
                     invocations,
@@ -271,7 +272,7 @@ impl ChildComponent {
     #[allow(clippy::too_many_arguments)]
     pub fn recursive_call(
         &self,
-        doc: &ftd::p2::TDoc,
+        doc: &mut ftd::p2::TDoc,
         arguments: &std::collections::BTreeMap<String, ftd::Value>,
         invocations: &mut std::collections::BTreeMap<
             String,
@@ -378,7 +379,7 @@ impl ChildComponent {
             d: &ftd::PropertyValue,
             index: usize,
             root: &ftd::Component,
-            doc: &ftd::p2::TDoc,
+            doc: &mut ftd::p2::TDoc,
             arguments: &std::collections::BTreeMap<String, ftd::Value>,
             invocations: &mut std::collections::BTreeMap<
                 String,
@@ -474,7 +475,7 @@ impl ChildComponent {
     #[allow(clippy::too_many_arguments)]
     pub fn call(
         &self,
-        doc: &ftd::p2::TDoc,
+        doc: &mut ftd::p2::TDoc,
         arguments: &std::collections::BTreeMap<String, ftd::Value>,
         invocations: &mut std::collections::BTreeMap<
             String,
@@ -497,14 +498,16 @@ impl ChildComponent {
             }
         }
 
-        let root = {
+        let mut root = {
             // NOTE: doing unwrap to force bug report if we following fails, this function
             // must have validated everything, and must not fail at run time
             doc.get_component(self.line_number, self.root.as_str())
                 .unwrap()
         };
 
-        dbg!(&root, &self, &arguments);
+        doc.insert_local_from_component(&mut root, &self.properties, local_container);
+
+        dbg!("call", &root, &self, &arguments, &doc);
         let root_properties = {
             let mut root_properties =
                 resolve_properties_with_ref(self.line_number, &self.properties, arguments, doc)?;
@@ -519,6 +522,8 @@ impl ChildComponent {
             }
             root_properties
         };
+
+        dbg!(&root_properties);
 
         let conditional_attribute = get_conditional_attributes(
             self.line_number,
@@ -739,6 +744,7 @@ fn markup_get_named_container(
         name: doc.name,
         aliases: doc.aliases,
         bag: doc.bag,
+        local_variables: doc.local_variables.to_owned(),
         instructions: &instructions,
         arguments,
         invocations,
@@ -798,7 +804,7 @@ fn markup_get_named_container(
 fn reevalute_markups(
     markups: &mut ftd::Markups,
     named_container: std::collections::BTreeMap<String, ftd::Element>,
-    doc: &ftd::p2::TDoc,
+    doc: &mut ftd::p2::TDoc,
 ) -> ftd::p1::Result<()> {
     if !markups.children.is_empty() {
         // no need to re-evalute
@@ -846,7 +852,7 @@ fn reevalute_markups(
 fn reevalute_markup(
     markup: &mut ftd::Markup,
     named_container: &std::collections::BTreeMap<String, ftd::Element>,
-    doc: &ftd::p2::TDoc,
+    doc: &mut ftd::p2::TDoc,
 ) -> ftd::p1::Result<()> {
     let text = match &markup.itext {
         ftd::IText::Text(ftd::Text { text, .. })
@@ -944,7 +950,7 @@ fn reevalute_markup(
 
     fn element_to_itext(
         element: &ftd::Element,
-        doc: &ftd::p2::TDoc,
+        doc: &mut ftd::p2::TDoc,
         text: Option<&str>,
         root: &str,
         named_container: &std::collections::BTreeMap<String, ftd::Element>,
@@ -1053,7 +1059,7 @@ fn reevalute_markup(
         })
     }
 
-    fn get_element_doc(doc: &ftd::p2::TDoc, name: &str) -> ftd::p1::Result<ftd::Element> {
+    fn get_element_doc(doc: &mut ftd::p2::TDoc, name: &str) -> ftd::p1::Result<ftd::Element> {
         let mut root = doc
             .get_component(0, name)
             .map_err(|_| ftd::p1::Error::ParseError {
@@ -1567,6 +1573,7 @@ impl Component {
             name: doc.name,
             aliases: doc.aliases,
             bag: doc.bag,
+            local_variables: doc.local_variables.to_owned(),
             instructions: &new_instruction,
             arguments,
             invocations,
@@ -1737,7 +1744,10 @@ impl Component {
         });
     }
 
-    fn call_without_values(&self, doc: &ftd::p2::TDoc) -> ftd::p1::Result<ElementWithContainer> {
+    fn call_without_values(
+        &self,
+        doc: &mut ftd::p2::TDoc,
+    ) -> ftd::p1::Result<ElementWithContainer> {
         self.call(
             &Default::default(),
             doc,
@@ -1755,7 +1765,7 @@ impl Component {
     fn call(
         &self,
         arguments: &std::collections::BTreeMap<String, (ftd::Value, Option<String>)>,
-        doc: &ftd::p2::TDoc,
+        doc: &mut ftd::p2::TDoc,
         invocations: &mut std::collections::BTreeMap<
             String,
             Vec<std::collections::BTreeMap<String, ftd::Value>>,
@@ -1767,6 +1777,7 @@ impl Component {
         local_container: &[usize],
         id: Option<String>,
     ) -> ftd::p1::Result<ElementWithContainer> {
+        dbg!("Component::call", &arguments);
         let string_container: String = local_container
             .iter()
             .map(|v| v.to_string())
@@ -1843,12 +1854,13 @@ impl Component {
                 child_container: None,
             })
         } else {
-            let root = {
+            let mut root = {
                 // NOTE: doing unwrap to force bug report if we following fails, this function
                 // must have validated everything, and must not fail at run time
                 doc.get_component(self.line_number, self.root.as_str())
                     .unwrap()
             };
+            doc.insert_local_from_component(&mut root, &self.properties, local_container);
             let arguments = ftd::p2::utils::properties(arguments);
             let root_properties = {
                 let mut properties = resolve_properties_with_ref(
@@ -1969,6 +1981,7 @@ impl Component {
                 | ftd::Element::Grid(ftd::Grid {
                     ref mut container, ..
                 }) => {
+                    dbg!("calling_sub_functions");
                     let ElementWithContainer {
                         children,
                         child_container,
@@ -2744,6 +2757,7 @@ mod test {
             name: "foo",
             bag: &mut bag,
             aliases: &aliases,
+            local_variables: Default::default(),
         };
         p2!(
             "-- ftd.text foo:
@@ -2788,6 +2802,7 @@ mod test {
             name: "foo",
             bag: &mut bag,
             aliases: &aliases,
+            local_variables: Default::default(),
         };
         p2!(
             "-- ftd.text foo:

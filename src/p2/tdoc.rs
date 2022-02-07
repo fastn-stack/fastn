@@ -3,9 +3,181 @@ pub struct TDoc<'a> {
     pub name: &'a str,
     pub aliases: &'a std::collections::BTreeMap<String, String>,
     pub bag: &'a std::collections::BTreeMap<String, ftd::p2::Thing>,
+    pub local_variables: std::collections::BTreeMap<String, ftd::p2::Thing>,
 }
 
 impl<'a> TDoc<'a> {
+    pub(crate) fn insert_local_from_component(
+        &mut self,
+        component: &mut ftd::Component,
+        child_component_properties: &std::collections::BTreeMap<String, ftd::component::Property>,
+        local_container: &[usize],
+    ) -> ftd::p1::Result<()> {
+        let string_container: String = local_container
+            .iter()
+            .map(|v| v.to_string())
+            .collect::<Vec<String>>()
+            .join(",");
+        if component.root == "ftd.kernel" {
+            return Ok(());
+        }
+        for (k, arg) in component.arguments.iter() {
+            let mut default = if let Some(d) = child_component_properties.get(k) {
+                if let Some(ref d) = d.default {
+                    d.to_owned()
+                } else {
+                    //todo
+                    return ftd::e2(
+                        format!(
+                            "expected default value for local variable {}: {:?} in {}",
+                            k, arg, component.root
+                        ),
+                        self.name,
+                        0,
+                    );
+                }
+            } else {
+                if let Some(default) = arg.get_default_value_str() {
+                    ftd::PropertyValue::resolve_value(
+                        0,
+                        default.as_str(),
+                        Some(arg.to_owned()),
+                        self,
+                        &component.arguments,
+                        None,
+                    )?
+                } else {
+                    return ftd::e2(
+                        format!(
+                            "expected default value for local variable {}: {:?} in {}",
+                            k, arg, component.root
+                        ),
+                        self.name,
+                        0,
+                    );
+                }
+            };
+            if let ftd::PropertyValue::Variable { ref mut name, .. } = default {
+                *name = self.resolve_name(0, format!("{}@{}", name, string_container).as_str())?
+            }
+            let local_variable = ftd::p2::Thing::Variable(ftd::Variable {
+                name: k.to_string(),
+                value: default,
+                conditions: vec![],
+                flags: Default::default(),
+            });
+            self.local_variables.insert(
+                self.resolve_name(0, format!("{}@{}", k, string_container).as_str())?,
+                local_variable,
+            );
+        }
+        for (_, property) in component.properties.iter_mut() {
+            if let Some(ftd::PropertyValue::Variable { ref mut name, .. }) = property.default {
+                *name = self.resolve_name(0, format!("{}@{}", name, string_container).as_str())?;
+            }
+            for (_, condition) in property.conditions.iter_mut() {
+                if let ftd::PropertyValue::Variable { ref mut name, .. } = condition {
+                    *name =
+                        self.resolve_name(0, format!("{}@{}", name, string_container).as_str())?
+                }
+            }
+        }
+
+        component.arguments = Default::default();
+        for instruction in component.instructions.iter_mut() {
+            let mut child = match instruction {
+                ftd::Instruction::ChildComponent { child } => child,
+                _ => continue,
+            };
+            for (_, property) in child.properties.iter_mut() {
+                if let Some(ftd::PropertyValue::Variable { ref mut name, .. }) = property.default {
+                    *name =
+                        self.resolve_name(0, format!("{}@{}", name, string_container).as_str())?;
+                }
+                for (_, condition) in property.conditions.iter_mut() {
+                    if let ftd::PropertyValue::Variable { ref mut name, .. } = condition {
+                        *name =
+                            self.resolve_name(0, format!("{}@{}", name, string_container).as_str())?
+                    }
+                }
+            }
+        }
+        Ok(())
+    }
+
+    pub(crate) fn insert_local(
+        &mut self,
+        parent: &mut ftd::ChildComponent,
+        children: &mut Vec<ftd::ChildComponent>,
+        local_container: &[usize],
+    ) -> ftd::p1::Result<()> {
+        let string_container: String = local_container
+            .iter()
+            .map(|v| v.to_string())
+            .collect::<Vec<String>>()
+            .join(",");
+        for (k, arg) in parent.arguments.iter() {
+            let default = {
+                if let Some(default) = arg.get_default_value_str() {
+                    ftd::PropertyValue::resolve_value(
+                        0,
+                        default.as_str(),
+                        Some(arg.to_owned()),
+                        self,
+                        &parent.arguments,
+                        None,
+                    )?
+                } else {
+                    return ftd::e2(
+                        format!(
+                            "expected default value for local variable {}: {:?} in {}",
+                            k, arg, parent.root
+                        ),
+                        self.name,
+                        0,
+                    );
+                }
+            };
+            let local_variable = ftd::p2::Thing::Variable(ftd::Variable {
+                name: k.to_string(),
+                value: default,
+                conditions: vec![],
+                flags: Default::default(),
+            });
+            self.local_variables.insert(
+                self.resolve_name(0, format!("{}@{}", k, string_container).as_str())?,
+                local_variable,
+            );
+        }
+        for (_, property) in parent.properties.iter_mut() {
+            if let Some(ftd::PropertyValue::Variable { ref mut name, .. }) = property.default {
+                *name = self.resolve_name(0, format!("{}@{}", name, string_container).as_str())?;
+            }
+            for (_, condition) in property.conditions.iter_mut() {
+                if let ftd::PropertyValue::Variable { ref mut name, .. } = condition {
+                    *name =
+                        self.resolve_name(0, format!("{}@{}", name, string_container).as_str())?
+                }
+            }
+        }
+        parent.arguments = Default::default();
+        for child in children.iter_mut() {
+            for (_, property) in child.properties.iter_mut() {
+                if let Some(ftd::PropertyValue::Variable { ref mut name, .. }) = property.default {
+                    *name =
+                        self.resolve_name(0, format!("{}@{}", name, string_container).as_str())?;
+                }
+                for (_, condition) in property.conditions.iter_mut() {
+                    if let ftd::PropertyValue::Variable { ref mut name, .. } = condition {
+                        *name =
+                            self.resolve_name(0, format!("{}@{}", name, string_container).as_str())?
+                    }
+                }
+            }
+        }
+        Ok(())
+    }
+
     pub fn from_json<T>(&self, json: &T, section: &ftd::p1::Section) -> ftd::p1::Result<ftd::Value>
     where
         T: serde::Serialize + std::fmt::Debug,
@@ -563,7 +735,10 @@ impl<'a> TDoc<'a> {
                 };
                 return match doc.bag.get(name.as_str()) {
                     Some(a) => Ok((a.to_owned(), remaining_value)),
-                    None => doc.err("not found", name, "get_thing", line_number),
+                    None => match doc.local_variables.get(name.as_str()) {
+                        Some(a) => Ok((a.to_owned(), remaining_value)),
+                        None => doc.err("not found", name, "get_thing", line_number),
+                    },
                 };
             }
             return Ok(match get_initial_thing_(doc, None, doc.name, name) {
@@ -592,17 +767,19 @@ impl<'a> TDoc<'a> {
                     } else {
                         (name, None)
                     };
-
-                match doc
-                    .bag
+                let bag = {
+                    let mut bag = doc.bag.to_owned();
+                    bag.extend(doc.local_variables.to_owned());
+                    bag
+                };
+                match bag
                     .get(format!("{}#{}", doc_name, name).as_str())
                     .map(ToOwned::to_owned)
                 {
                     Some(a) => Some((a, remaining_value)),
                     None => match root_name {
                         Some(doc_name) => match doc.aliases.get(doc_name) {
-                            Some(g) => doc
-                                .bag
+                            Some(g) => bag
                                 .get(format!("{}#{}", g, name).as_str())
                                 .map(|v| (v.clone(), remaining_value)),
                             None => None,
@@ -819,6 +996,7 @@ mod test {
             name: "foo/bar",
             aliases: &Default::default(),
             bag: &Default::default(),
+            local_variables: Default::default(),
         };
         let section = ftd::p1::parse(
             indoc::indoc!(
@@ -887,6 +1065,7 @@ mod test {
             name: "foo/bar",
             aliases: &Default::default(),
             bag: &g_bag,
+            local_variables: Default::default(),
         };
         let section = ftd::p1::parse(
             indoc::indoc!(

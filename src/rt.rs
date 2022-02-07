@@ -64,6 +64,7 @@ impl RT {
             name: self.name.as_str(),
             aliases: &self.aliases,
             bag: &self.bag,
+            local_variables: Default::default(),
             instructions: &self.instructions,
             arguments: &Default::default(),
             invocations: &mut invocations,

@@ -164,6 +164,7 @@ impl Boolean {
                                 name: doc.name,
                                 aliases: doc.aliases,
                                 bag: &bag_with_argument,
+                                local_variables: Default::default(),
                             };
                             if doc.get_value(line_number, name).is_ok() {
                                 return Ok(format!("@{}@{}.{}", v, string_container, remaining));
