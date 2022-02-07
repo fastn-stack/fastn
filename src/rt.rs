@@ -60,11 +60,12 @@ impl RT {
     pub fn render_(&mut self) -> ftd::p1::Result<ftd::Column> {
         let mut main = ftd::p2::interpreter::default_column();
         let mut invocations = Default::default();
+        let mut local_variables = Default::default();
         let mut element = ftd::execute_doc::ExecuteDoc {
             name: self.name.as_str(),
             aliases: &self.aliases,
             bag: &self.bag,
-            local_variables: Default::default(),
+            local_variables: &mut local_variables,
             instructions: &self.instructions,
             invocations: &mut invocations,
         }

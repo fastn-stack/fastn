@@ -601,7 +601,7 @@ pub fn reorder(
         name: doc_id,
         aliases: &Default::default(),
         bag: &Default::default(),
-        local_variables: Default::default(),
+        local_variables: &mut Default::default(),
     };
 
     let mut p1_map: std::collections::BTreeMap<String, ftd::p1::Section> = Default::default();

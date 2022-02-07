@@ -3,7 +3,7 @@ pub struct TDoc<'a> {
     pub name: &'a str,
     pub aliases: &'a std::collections::BTreeMap<String, String>,
     pub bag: &'a std::collections::BTreeMap<String, ftd::p2::Thing>,
-    pub local_variables: std::collections::BTreeMap<String, ftd::p2::Thing>,
+    pub local_variables: &'a mut std::collections::BTreeMap<String, ftd::p2::Thing>,
 }
 
 impl<'a> TDoc<'a> {
@@ -1077,7 +1077,7 @@ mod test {
             name: "foo/bar",
             aliases: &Default::default(),
             bag: &Default::default(),
-            local_variables: Default::default(),
+            local_variables: &mut Default::default(),
         };
         let section = ftd::p1::parse(
             indoc::indoc!(
@@ -1146,7 +1146,7 @@ mod test {
             name: "foo/bar",
             aliases: &Default::default(),
             bag: &g_bag,
-            local_variables: Default::default(),
+            local_variables: &mut Default::default(),
         };
         let section = ftd::p1::parse(
             indoc::indoc!(
