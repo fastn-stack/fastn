@@ -57,6 +57,8 @@ impl PropertyValue {
     ) -> ftd::p1::Result<ftd::PropertyValue> {
         let property_type = if let Some(arg) = value.strip_prefix('$') {
             PropertyType::Variable(arg.to_string())
+        } else if let Some(arg) = value.strip_prefix('@') {
+            PropertyType::LocalVariable(arg.to_string())
         } else if let Some(ftd::p2::Kind::UI { .. }) = expected_kind {
             if !value.contains(':') {
                 return ftd::e2(
@@ -79,7 +81,11 @@ impl PropertyValue {
         let (part1, part2) = ftd::p2::utils::get_doc_name_and_remaining(&property_type.string())?;
 
         return Ok(match property_type {
-            PropertyType::Variable(string) | PropertyType::Component { name: string, .. } => {
+            PropertyType::Variable(ref string)
+            | PropertyType::LocalVariable(ref string)
+            | PropertyType::Component {
+                name: ref string, ..
+            } => {
                 let (kind, is_doc) = match arguments.get(&part1) {
                     _ if part1.eq("MOUSE-IN") => (
                         ftd::p2::Kind::Boolean {
@@ -87,7 +93,7 @@ impl PropertyValue {
                         },
                         false,
                     ),
-                    None => match doc.get_thing(line_number, &string) {
+                    None => match doc.get_thing(line_number, string) {
                         Ok(ftd::p2::Thing::Variable(v)) => (v.value.kind(), true),
                         Ok(ftd::p2::Thing::Component(_)) => {
                             (ftd::p2::Kind::UI { default: None }, true)
@@ -104,16 +110,16 @@ impl PropertyValue {
                 };
 
                 let found_kind = get_kind(line_number, &kind, part2, doc, &expected_kind)?;
-                if is_doc {
+                if is_doc && !matches!(property_type, PropertyType::LocalVariable(_)) {
                     PropertyValue::Reference {
                         name: doc
                             .resolve_name(line_number, string.as_str())
-                            .unwrap_or(string),
+                            .unwrap_or(string.to_string()),
                         kind: found_kind,
                     }
                 } else {
                     PropertyValue::Variable {
-                        name: string,
+                        name: string.to_string(),
                         kind: found_kind,
                     }
                 }
@@ -182,6 +188,7 @@ impl PropertyValue {
         enum PropertyType {
             Value(String),
             Variable(String),
+            LocalVariable(String),
             Component { name: String },
         }
 
@@ -190,6 +197,7 @@ impl PropertyValue {
                 match self {
                     PropertyType::Value(s)
                     | PropertyType::Variable(s)
+                    | PropertyType::LocalVariable(s)
                     | PropertyType::Component { name: s, .. } => s.to_string(),
                 }
             }
