@@ -186,7 +186,7 @@ impl ChildComponent {
                     name: doc.name,
                     aliases: doc.aliases,
                     bag: doc.bag,
-                    local_variables: doc.local_variables.to_owned(),
+                    local_variables: doc.local_variables,
                     instructions: &instructions,
                     invocations,
                 }
@@ -641,7 +641,7 @@ fn markup_get_named_container(
     children: &[ChildComponent],
     root: &str,
     line_number: usize,
-    doc: &ftd::p2::TDoc,
+    doc: &mut ftd::p2::TDoc,
     invocations: &mut std::collections::BTreeMap<
         String,
         Vec<std::collections::BTreeMap<String, ftd::Value>>,
@@ -684,7 +684,7 @@ fn markup_get_named_container(
         name: doc.name,
         aliases: doc.aliases,
         bag: doc.bag,
-        local_variables: doc.local_variables.to_owned(),
+        local_variables: doc.local_variables,
         instructions: &instructions,
         invocations,
     }
@@ -1456,7 +1456,7 @@ pub(crate) fn resolve_properties_with_ref(
 impl Component {
     fn call_sub_functions(
         &self,
-        doc: &ftd::p2::TDoc,
+        doc: &mut ftd::p2::TDoc,
         invocations: &mut std::collections::BTreeMap<
             String,
             Vec<std::collections::BTreeMap<String, ftd::Value>>,
@@ -1490,7 +1490,7 @@ impl Component {
             name: doc.name,
             aliases: doc.aliases,
             bag: doc.bag,
-            local_variables: doc.local_variables.to_owned(),
+            local_variables: doc.local_variables,
             instructions: &new_instruction,
             invocations,
         }
@@ -2596,7 +2596,7 @@ mod test {
             name: "foo",
             bag: &mut bag,
             aliases: &aliases,
-            local_variables: Default::default(),
+            local_variables: &mut Default::default(),
         };
         p2!(
             "-- ftd.text foo:
@@ -2641,7 +2641,7 @@ mod test {
             name: "foo",
             bag: &mut bag,
             aliases: &aliases,
-            local_variables: Default::default(),
+            local_variables: &mut Default::default(),
         };
         p2!(
             "-- ftd.text foo:

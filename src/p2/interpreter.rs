@@ -104,7 +104,7 @@ impl<'a> Interpreter<'a> {
                 name,
                 aliases: &aliases,
                 bag: &self.bag,
-                local_variables: Default::default(),
+                local_variables: &mut Default::default(),
             };
 
             let var_data = ftd::variable::VariableData::get_name_kind(
@@ -400,7 +400,7 @@ impl<'a> Interpreter<'a> {
                 name,
                 aliases: &aliases,
                 bag: &self.bag,
-                local_variables: Default::default(),
+                local_variables: &mut Default::default(),
             };
 
             let var_data = ftd::variable::VariableData::get_name_kind(

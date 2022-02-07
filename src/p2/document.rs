@@ -22,7 +22,7 @@ impl Document {
             name: self.name.as_str(),
             aliases: &self.aliases,
             bag: &self.data,
-            local_variables: Default::default(),
+            local_variables: &mut Default::default(),
         };
         for (k, v) in self.data.iter() {
             if let ftd::p2::Thing::Variable(ftd::Variable {
@@ -460,7 +460,7 @@ impl Document {
             name: self.name.as_str(),
             aliases: &self.aliases,
             bag: &self.data,
-            local_variables: Default::default(),
+            local_variables: &mut Default::default(),
         };
 
         match thing {
@@ -474,7 +474,7 @@ impl Document {
             name: self.name.as_str(),
             aliases: &self.aliases,
             bag: &self.data,
-            local_variables: Default::default(),
+            local_variables: &mut Default::default(),
         };
         Ok(match v {
             ftd::Value::Integer { value } => {
