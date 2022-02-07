@@ -1195,7 +1195,7 @@ impl ftd::Common {
             );
         }
         if let Some(p) = &self.anchor {
-            d.insert(s("position"), p.to_postion());
+            d.insert(s("position"), p.to_position());
         }
         if let Some(p) = &self.gradient_direction {
             d.insert(s("background-image"), gradient(p, &self.gradient_colors));

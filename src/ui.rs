@@ -1715,7 +1715,7 @@ impl Anchor {
         }))
     }
 
-    pub fn to_postion(&self) -> String {
+    pub fn to_position(&self) -> String {
         match self {
             ftd::Anchor::Window => "fixed",
             ftd::Anchor::Parent => "absolute",
