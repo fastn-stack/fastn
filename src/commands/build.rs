@@ -375,25 +375,25 @@ async fn process_ftd(
         (None, None, main)
     } else {
         let main = main.to_owned();
-        let prefix = config.package.auto_import.iter().fold(None, |pre, ai| {
-            Some(format!(
-                "{}\n-- import: {}{}",
-                pre.unwrap_or_else(|| "".to_string()),
-                &ai.path,
-                match &ai.alias {
-                    Some(a) => format!(" as {}", a),
-                    None => String::new(),
-                }
-            ))
-        });
+        // let prefix = config.package.auto_import.iter().fold(None, |pre, ai| {
+        //     Some(format!(
+        //         "{}\n-- import: {}{}",
+        //         pre.unwrap_or_else(|| "".to_string()),
+        //         &ai.path,
+        //         match &ai.alias {
+        //             Some(a) => format!(" as {}", a),
+        //             None => String::new(),
+        //         }
+        //     ))
+        // });
+        // let prefix = config.package.generate_prefix_string();
 
         let new_main = fpm::Document {
+            content: config
+                .package
+                .get_prefixed_body(main.content.as_str(), &main.id, true),
             id: main.id,
             parent_path: main.parent_path,
-            content: match prefix {
-                Some(s) => format!("{}\n\n{}", s.trim(), main.content),
-                None => main.content,
-            },
         };
         (fallback, message, new_main)
     };

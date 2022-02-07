@@ -9,6 +9,8 @@ async fn main() -> fpm::Result<()> {
     }
 
     if let Some(build) = matches.subcommand_matches("build") {
+        // Evaluate the aliases for the package
+        config.package.aliases()?;
         fpm::build(
             &config,
             build.value_of("file"),

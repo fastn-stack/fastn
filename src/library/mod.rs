@@ -17,6 +17,7 @@ pub struct Library {
 
 impl ftd::p2::Library for Library {
     fn get(&self, name: &str) -> Option<String> {
+        // Standard libraries
         if name == "fpm" {
             return Some(construct_fpm_base(self));
         }
@@ -24,110 +25,141 @@ impl ftd::p2::Library for Library {
         if name == "fpm-ui" {
             return Some(construct_fpm_ui(self));
         }
-
         if name == "fpm-lib" {
             return Some(fpm::fpm_lib_ftd().to_string());
         }
-        if let Ok(mut packages) = self.current_package.lock() {
-            let mut new_packages = packages.clone();
-            while let Some(current_package) = new_packages.last() {
-                if let Some((v, current_packages)) =
-                    get_data_from_package(name, current_package, self, &new_packages)
-                {
-                    *packages = current_packages;
-                    drop(new_packages);
-                    return Some(v);
+        if let Some(r) = get_data_from_package(name, &self.config.package, self) {
+            return Some(r);
+        }
+        if let Some(r) = get_from_all_dependencies(name, &self.config.package, &self) {
+            return Some(r);
+        }
+        return None;
+
+        fn get_from_all_dependencies(
+            name: &str,
+            package: &fpm::Package,
+            lib: &fpm::Library,
+        ) -> Option<String> {
+            // dbg!(&package.dependencies);
+            for dep in &package.dependencies {
+                // dbg!(&dep);
+                let new_name = match &dep.alias {
+                    Some(i) => {
+                        if name.starts_with(format!("{}/", i).as_str()) {
+                            name.replace(i.as_str(), dep.package.name.as_str())
+                        } else {
+                            name.to_string()
+                        }
+                    }
+                    None => name.to_string(),
+                };
+                if new_name.starts_with(format!("{}/", dep.package.name.as_str()).as_str()) {
+                    // dbg!(&dep);
+
+                    if let Some(resp) = get_from_dependency(new_name.as_str(), &dep.package, lib) {
+                        return Some(resp);
+                    };
                 }
-                new_packages.pop();
             }
+            None
+        }
+        fn get_from_dependency(
+            name: &str,
+            from_package: &fpm::Package,
+            lib: &fpm::Library,
+        ) -> Option<String> {
+            // TODO: Here the library needs to be evaluated for this particular package
+            if let Some(r) = get_data_from_package(name, from_package, lib) {
+                return Some(from_package.get_prefixed_body(r.as_str(), name, false));
+            }
+            None
+            // The response needs to be prefixed with alias and all.
         }
 
-        return None;
+        fn get_file_from_location(base_path: &camino::Utf8PathBuf, name: &str) -> Option<String> {
+            let os_name = name.replace("/", std::path::MAIN_SEPARATOR.to_string().as_str());
+            if let Ok(v) = std::fs::read_to_string(base_path.join(format!("{}.ftd", os_name))) {
+                return Some(v);
+            }
+            if let Ok(v) = std::fs::read_to_string(base_path.join(os_name).join("index.ftd")) {
+                return Some(v);
+            }
+            None
+        }
 
         fn get_data_from_package(
             name: &str,
             package: &fpm::Package,
             lib: &Library,
-            current_packages: &[fpm::Package],
-        ) -> Option<(String, Vec<fpm::Package>)> {
-            let mut current_packages = current_packages.to_owned();
+        ) -> Option<String> {
             let path = if package.name.eq(&lib.config.package.name) {
                 lib.config.root.clone()
             } else {
-                lib.config
-                    .root
-                    .join(".packages")
-                    .join(package.name.as_str())
+                lib.config.packages_root.clone().join(package.name.as_str())
             };
             // Explicit check for the current package.
-            if name.starts_with(format!("{}/", &lib.config.package.name).as_str()) {
-                if let Some((_, p)) =
-                    name.split_once(format!("{}/", &lib.config.package.name).as_str())
-                {
-                    if let Ok(v) = std::fs::read_to_string(path.join(format!("{}.ftd", p))) {
-                        return Some((v, current_packages));
-                    }
+            if name.starts_with(format!("{}/", &package.name).as_str()) {
+                let new_name = name.replace(format!("{}/", &package.name).as_str(), "");
+                if let Some(r) = get_file_from_location(&path, new_name.as_str()) {
+                    return Some(r);
                 }
             }
 
             if let Some(o) = package.translation_of.as_ref() {
-                let original_path = lib.config.root.join(".packages").join(o.name.as_str());
-                if let Ok(v) = std::fs::read_to_string(original_path.join(format!("{}.ftd", name)))
-                {
-                    current_packages.push(o.clone());
-                    return Some((v, current_packages));
+                let original_path = lib.config.packages_root.join(o.name.as_str());
+                if let Some(r) = get_file_from_location(&original_path, name) {
+                    return Some(r);
                 }
-                if let Some((v, current_packages)) =
-                    get_data_from_dependency(name, o, lib, current_packages.clone())
-                {
-                    return Some((v, current_packages));
+                // Should be the library of the Original package
+                if let Some(r) = get_from_all_dependencies(name, o, lib) {
+                    return Some(r);
                 }
             }
-
-            return get_data_from_dependency(name, package, lib, current_packages);
-
-            fn get_data_from_dependency(
-                name: &str,
-                package: &fpm::Package,
-                lib: &Library,
-                mut current_packages: Vec<fpm::Package>,
-            ) -> Option<(String, Vec<fpm::Package>)> {
-                // let name = match package.eval_auto_import(name) {
-                //     Some(n) => n,
-                //     None => name,
-                // };
-                dbg!(&package);
-                dbg!(name);
-                let name = match package.eval_auto_import(name) {
-                    Some(n) => n,
-                    None => name,
-                };
-                dbg!(name);
-                // Import package non strict. In future, <package_name>:path is strict.
-                for (alias, package) in package.aliases().ok()? {
-                    if name.starts_with(&alias) || name.starts_with(package.name.as_str()) {
-                        // Non index document
-                        let package_path = lib.config.root.join(".packages");
-                        let non_alias_name = name.replacen(&alias, package.name.as_str(), 1);
-                        if let Ok(v) = std::fs::read_to_string(
-                            package_path.join(format!("{}.ftd", non_alias_name.as_str())),
-                        ) {
-                            current_packages.push(package.clone());
-                            return Some((v, current_packages));
-                        } else {
-                            // Index document check for the alias
-                            if let Ok(v) = std::fs::read_to_string(
-                                package_path.join(format!("{}/index.ftd", non_alias_name.as_str())),
-                            ) {
-                                current_packages.push(package.clone());
-                                return Some((v, current_packages));
-                            }
-                        }
-                    }
-                }
-                None
-            }
+            None
         }
+
+        // fn get_data_from_dependency(
+        //     name: &str,
+        //     package: &fpm::Package,
+        //     lib: &Library,
+        //     mut current_packages: Vec<fpm::Package>,
+        // ) -> Option<(String, Vec<fpm::Package>)> {
+        //     // let name = match package.eval_auto_import(name) {
+        //     //     Some(n) => n,
+        //     //     None => name,
+        //     // };
+        //     // dbg!(&package);
+        //     // dbg!(name);
+        //     let name = match package.eval_auto_import(name) {
+        //         Some(n) => n,
+        //         None => name,
+        //     };
+        //     // dbg!(name);
+        //     // Import package non strict. In future, <package_name>:path is strict.
+        //     for (alias, package) in package.aliases().ok()? {
+        //         if name.starts_with(&alias) || name.starts_with(package.name.as_str()) {
+        //             // Non index document
+        //             let package_path = lib.config.root.join(".packages");
+        //             let non_alias_name = name.replacen(&alias, package.name.as_str(), 1);
+        //             if let Ok(v) = std::fs::read_to_string(
+        //                 package_path.join(format!("{}.ftd", non_alias_name.as_str())),
+        //             ) {
+        //                 current_packages.push(package.clone());
+        //                 return Some((v, current_packages));
+        //             } else {
+        //                 // Index document check for the alias
+        //                 if let Ok(v) = std::fs::read_to_string(
+        //                     package_path.join(format!("{}/index.ftd", non_alias_name.as_str())),
+        //                 ) {
+        //                     current_packages.push(package.clone());
+        //                     return Some((v, current_packages));
+        //                 }
+        //             }
+        //         }
+        //     }
+        //     None
+        // }
 
         fn construct_fpm_ui(lib: &Library) -> String {
             let lang = match lib.config.package.language {

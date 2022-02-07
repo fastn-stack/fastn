@@ -1,3 +1,7 @@
 -- import: fpm
 
 -- fpm.package: theme
+
+-- fpm.dependency: one.fpm.local as o
+
+-- fpm.auto-import: o/blog

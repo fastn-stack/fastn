@@ -103,9 +103,11 @@ impl fpm::Package {
         //       want to update a package, delete the corresponding folder and latest
         //       version will get downloaded.
 
-        if downloaded_package.contains(&self.name) {
-            return Ok(());
-        }
+        // TODO: Fix this. Removing this because if a package has been downloaded as both an intermediate dependency
+        // and as a direct dependency, then the code results in non evaluation of the dependend package
+        // if downloaded_package.contains(&self.name) {
+        //     return Ok(());
+        // }
 
         let root = base_dir.join(".packages").join(self.name.as_str());
 

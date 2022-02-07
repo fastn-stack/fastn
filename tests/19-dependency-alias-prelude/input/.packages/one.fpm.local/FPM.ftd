@@ -2,4 +2,4 @@
 
 -- fpm.package: one.fpm.local
 
--- fpm.auto-import: one.fpm.local/config
+-- fpm.auto-import: one.fpm.local/FPM/config
