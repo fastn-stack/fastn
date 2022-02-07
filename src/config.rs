@@ -328,11 +328,11 @@ impl Package {
                     if dependency.alias.is_some()
                         && ai
                             .path
-                            .starts_with(format!("{}/", dependency.alias.as_ref()?).as_str())
+                            .starts_with(format!("{}", dependency.alias.as_ref()?).as_str())
                     {
                         import_doc_path = ai.path.replacen(
                             dependency.alias.as_ref()?.as_str(),
-                            &dependency.package.name.as_str(),
+                            dependency.package.name.as_str(),
                             1,
                         );
                     }

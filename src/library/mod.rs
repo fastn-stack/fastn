@@ -30,7 +30,7 @@ impl ftd::p2::Library for Library {
         if let Some(r) = get_data_from_package(name, &self.config.package, self) {
             return Some(r);
         }
-        if let Some(r) = get_from_all_dependencies(name, &self.config.package, &self) {
+        if let Some(r) = get_from_all_dependencies(name, &self.config.package, self) {
             return Some(r);
         }
         return None;
@@ -59,7 +59,7 @@ impl ftd::p2::Library for Library {
                     }
                 };
 
-                if non_aliased_name.starts_with(format!("{}", dep.package.name.as_str()).as_str()) {
+                if non_aliased_name.starts_with(dep.package.name.as_str()) {
                     if let Some(resp) =
                         get_from_dependency(non_aliased_name.as_str(), &dep.package, lib)
                     {
@@ -89,8 +89,8 @@ impl ftd::p2::Library for Library {
 
         fn get_file_from_location(base_path: &camino::Utf8PathBuf, name: &str) -> Option<String> {
             let os_name = name
-                .trim_start_matches("/")
-                .trim_end_matches("/")
+                .trim_start_matches('/')
+                .trim_end_matches('/')
                 .replace("/", std::path::MAIN_SEPARATOR.to_string().as_str());
             if let Ok(v) = std::fs::read_to_string(base_path.join(format!("{}.ftd", os_name))) {
                 return Some(v);
