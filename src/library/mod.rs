@@ -29,7 +29,10 @@ impl ftd::p2::Library for Library {
         if let Some(r) = get_data_from_package(name, &self.config.package, self) {
             return Some(r);
         }
-        if let Some(r) = get_from_all_dependencies(name, &self.config.package, self) {
+        let mut evaluated_packages = vec![self.config.package.name.clone()];
+        if let Some(r) =
+            get_from_all_dependencies(name, &self.config.package, self, &mut evaluated_packages)
+        {
             return Some(r);
         }
         return None;
@@ -38,6 +41,7 @@ impl ftd::p2::Library for Library {
             name: &str,
             package: &fpm::Package,
             lib: &fpm::Library,
+            evaluated_packages: &mut Vec<String>,
         ) -> Option<String> {
             for dep in &package.dependencies {
                 // If unaliased name is a direct match
@@ -63,8 +67,11 @@ impl ftd::p2::Library for Library {
                         return Some(resp);
                     };
                 }
+                evaluated_packages.push(dep.package.name.clone());
                 // Recursilvely check the dependency of the current package
-                if let Some(resp) = get_from_all_dependencies(name, &dep.package, lib) {
+                if let Some(resp) =
+                    get_from_all_dependencies(name, &dep.package, lib, evaluated_packages)
+                {
                     return Some(resp);
                 }
             }
@@ -122,7 +129,10 @@ impl ftd::p2::Library for Library {
                     return Some(r);
                 }
                 // Should be the library of the Original package
-                if let Some(r) = get_from_all_dependencies(name, o, lib) {
+                let evaluated_packages = vec![o.name.clone()];
+                if let Some(r) =
+                    get_from_all_dependencies(name, o, lib, evaluated_packages.to_owned().as_mut())
+                {
                     return Some(r);
                 }
             }
