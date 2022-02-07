@@ -326,9 +326,7 @@ impl Package {
                 // Check for the aliases and map them to the full path
                 for dependency in &self.dependencies {
                     if dependency.alias.is_some()
-                        && ai
-                            .path
-                            .starts_with(format!("{}", dependency.alias.as_ref()?).as_str())
+                        && ai.path.starts_with(dependency.alias.as_ref()?.as_str())
                     {
                         import_doc_path = ai.path.replacen(
                             dependency.alias.as_ref()?.as_str(),
