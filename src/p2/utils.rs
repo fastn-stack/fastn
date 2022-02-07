@@ -605,6 +605,7 @@ pub fn reorder(
         name: doc_id,
         aliases: &Default::default(),
         bag: &Default::default(),
+        local_variables: Default::default(),
     };
 
     let mut p1_map: std::collections::BTreeMap<String, ftd::p1::Section> = Default::default();
@@ -808,6 +809,7 @@ pub fn arguments_on_condition(
                         name: doc.name,
                         aliases: doc.aliases,
                         bag: &bag_with_argument,
+                        local_variables: Default::default(),
                     };
                     if doc.get_value(line_number, name).is_err() {
                         is_visible = false;

@@ -282,64 +282,10 @@ impl PropertyValue {
         Ok(match self {
             ftd::PropertyValue::Value { value: v } => v.to_owned(),
             ftd::PropertyValue::Variable {
-                name,
-                kind: argument_kind,
-            } => {
-                assert_eq!(self.kind(), *argument_kind);
-                if name.contains('.') {
-                    let (part_1, part_2) = ftd::p2::utils::split(name.to_string(), ".")?;
-                    match arguments.get(&part_1) {
-                        Some(Value::Record { name, fields }) => match fields.get(&part_2) {
-                            Some(pv) => return pv.resolve(line_number, arguments, doc),
-                            None => {
-                                return ftd::e2(
-                                    format!(
-                                        "{} is not present in record {} [name: {}]",
-                                        part_2, part_1, name
-                                    ),
-                                    doc.name,
-                                    line_number,
-                                )
-                            }
-                        },
-                        None => {
-                            return ftd::e2(
-                                format!("{} is not present in argument [name: {}]", part_1, name),
-                                doc.name,
-                                line_number,
-                            );
-                        }
-                        _ => {
-                            return ftd::e2(
-                                format!("{} is not a record [name: {}]", part_1, name),
-                                doc.name,
-                                line_number,
-                            )
-                        }
-                    }
-                } else {
-                    match (arguments.get(name.as_str()), argument_kind.is_optional()) {
-                        (Some(v), _) => v.to_owned(),
-                        (None, t) => {
-                            if let Ok(val) = argument_kind.to_value(line_number, doc.name) {
-                                val
-                            } else {
-                                if !t {
-                                    return ftd::e2(
-                                        format!("{} is required", name),
-                                        doc.name,
-                                        line_number,
-                                    );
-                                }
-                                Value::None {
-                                    kind: argument_kind.to_owned(),
-                                }
-                            }
-                        }
-                    }
-                }
+                name: reference_name,
+                kind: reference_kind,
             }
-            ftd::PropertyValue::Reference {
+            | ftd::PropertyValue::Reference {
                 name: reference_name,
                 kind: reference_kind,
             } => {
@@ -1164,6 +1110,7 @@ mod test {
                 name: "foo",
                 bag: &mut bag,
                 aliases: &aliases,
+                local_variables: Default::default(),
             };
             pretty_assertions::assert_eq!(
                 super::Variable::from_p1(&p1[0], &mut d).unwrap(),

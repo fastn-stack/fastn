@@ -104,6 +104,7 @@ impl<'a> Interpreter<'a> {
                 name,
                 aliases: &aliases,
                 bag: &self.bag,
+                local_variables: Default::default(),
             };
 
             let var_data = ftd::variable::VariableData::get_name_kind(
@@ -399,6 +400,7 @@ impl<'a> Interpreter<'a> {
                 name,
                 aliases: &aliases,
                 bag: &self.bag,
+                local_variables: Default::default(),
             };
 
             let var_data = ftd::variable::VariableData::get_name_kind(
@@ -449,7 +451,7 @@ impl<'a> Interpreter<'a> {
             }) = var_data
             {
                 // declare a function
-                let d = ftd::Component::from_p1(p1, &doc)?;
+                let d = dbg!(ftd::Component::from_p1(p1, &doc)?);
                 thing.push((
                     doc.resolve_name(p1.line_number, &d.full_name.to_string())?,
                     ftd::p2::Thing::Component(d),
@@ -14717,12 +14719,23 @@ mod test {
 
                 -- bar:
                 title: $foo
+                w: 2
+                integer gg: 1
+
+                --- ftd.integer: $gg
+
+                -- bar:
+                title: $foo
+                w: 1
 
                 -- ftd.column bar:
                 string title:
                 boolean active: false
                 string subtitle: $foo
                 string bio: $subtitle
+                integer w:
+                color: green
+                border-width: $w
                 
                 --- ftd.text: $title
 
