@@ -359,7 +359,7 @@ impl<'a> Interpreter<'a> {
         Ok(instructions)
     }
 
-    #[cfg(not(feature = "async"))]
+    // #[cfg(not(feature = "async"))]
     fn interpret_(
         &mut self,
         name: &str,
@@ -536,7 +536,7 @@ impl<'a> Interpreter<'a> {
                             p1.line_number,
                         );
                     }
-                    ftd::p2::Thing::Component(_) => {
+                    ftd::p2::Thing::Component(c) => {
                         let p1 = {
                             let mut p1 = p1.clone();
                             if p1
@@ -575,7 +575,7 @@ impl<'a> Interpreter<'a> {
                                 &p1.caption,
                                 &p1.body_without_comment(),
                                 &doc,
-                                &Default::default(),
+                                &c.arguments,
                             )?;
 
                             let mut children = vec![];
@@ -704,6 +704,7 @@ pub fn interpret(
 )> {
     let mut interpreter = Interpreter::new(lib);
     let instructions = interpreter.interpret(name, source)?;
+    dbg!(&instructions);
     let mut rt = ftd::RT::from(name, interpreter.aliases, interpreter.bag, instructions);
     let main = rt.render_()?;
     Ok((rt.bag, main))
@@ -14704,6 +14705,37 @@ mod test {
 
         pretty_assertions::assert_eq!(g_col, main);
         pretty_assertions::assert_eq!(g_bag, bag);
+    }
+
+    #[test]
+    fn locals_as_ref() {
+        let (g_bag, g_col) = crate::p2::interpreter::interpret(
+            "foo/bar",
+            indoc::indoc!(
+                "
+                -- string foo: Foo
+
+                -- bar:
+                title: $foo
+
+                -- ftd.column bar:
+                string title:
+                boolean active: false
+                string subtitle: $foo
+                string bio: $subtitle
+                
+                --- ftd.text: $title
+
+                --- ftd.text: $subtitle
+                
+                --- ftd.boolean: $active 
+                "
+            ),
+            &ftd::p2::TestLibrary {},
+        )
+        .expect("found error");
+
+        dbg!(&g_bag, &g_col);
     }
 
     /*#[test]
