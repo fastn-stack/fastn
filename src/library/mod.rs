@@ -129,10 +129,8 @@ impl ftd::p2::Library for Library {
                     return Some(r);
                 }
                 // Should be the library of the Original package
-                let evaluated_packages = vec![o.name.clone()];
-                if let Some(r) =
-                    get_from_all_dependencies(name, o, lib, evaluated_packages.to_owned().as_mut())
-                {
+                let mut evaluated_packages = vec![o.name.clone()];
+                if let Some(r) = get_from_all_dependencies(name, o, lib, &mut evaluated_packages) {
                     return Some(r);
                 }
             }
