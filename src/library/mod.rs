@@ -12,7 +12,6 @@ pub struct Library {
     pub markdown: Option<(String, String)>,
     pub document_id: String,
     pub translated_data: fpm::TranslationData,
-    pub current_package: std::sync::Arc<std::sync::Mutex<Vec<fpm::Package>>>,
 }
 
 impl ftd::p2::Library for Library {
@@ -40,8 +39,6 @@ impl ftd::p2::Library for Library {
             package: &fpm::Package,
             lib: &fpm::Library,
         ) -> Option<String> {
-            // dbg!(name);
-            // dbg!(&package);
             for dep in &package.dependencies {
                 // If unaliased name is a direct match
                 let non_aliased_name = if name.starts_with(dep.package.name.as_str()) {
