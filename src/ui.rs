@@ -66,28 +66,6 @@ pub enum IText {
     Markup(Markups),
 }
 
-/*
-hello, {yellow: world}, {bold: this is {yellow: awesome}}.
-
-markup {
-    children: vec![
-        Markup: {
-            itext: Text {
-                text: hello,
-            }
-            children: vec![
-                Markup: {
-                    itext: Text {
-                        text: world,
-                        style: yellow
-                    }
-                }
-            ]
-        }
-    ]
-}
-*/
-
 impl Element {
     pub(crate) fn set_default_locals(elements: &mut [ftd::Element]) {
         return set_default_locals_(elements, &[]);
