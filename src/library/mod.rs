@@ -16,7 +16,6 @@ pub struct Library {
 
 impl ftd::p2::Library for Library {
     fn get(&self, name: &str, doc: &ftd::p2::TDoc) -> Option<String> {
-        dbg!(&doc.name, name);
         // Standard libraries
         if name == "fpm" {
             return Some(construct_fpm_base(self));
@@ -27,54 +26,89 @@ impl ftd::p2::Library for Library {
         if name == "fpm-lib" {
             return Some(fpm::fpm_lib_ftd().to_string());
         }
-        if let Some(r) = get_data_from_package(name, &self.config.package, self) {
-            return Some(r);
+        return if doc.name.starts_with(&self.config.package.name.as_str()) {
+            get_for_package_config(name, &self.config.package, &self)
+        } else {
+            for package in &get_root_package_for_path(doc.name, &self.config.package, false) {
+                if let Some(resp) = get_for_package_config(name, package, &self) {
+                    return Some(resp);
+                };
+            }
+            None
+        };
+
+        fn get_for_package_config(
+            name: &str,
+            package: &fpm::Package,
+            lib: &fpm::Library,
+        ) -> Option<String> {
+            if name.starts_with(package.name.as_str()) {
+                if let Some(r) = get_data_from_package(name, &package, lib) {
+                    return Some(r);
+                }
+            }
+            if let Some(r) = get_from_all_dependencies(name, package, lib) {
+                return Some(r);
+            }
+            // Check the translation of the package
+            if let Some(o) = package.translation_of.as_ref() {
+                if let Some(resp) = get_for_package_config(name, o, lib) {
+                    return Some(resp);
+                }
+            }
+            None
         }
-        let mut evaluated_packages = vec![self.config.package.name.clone()];
-        if let Some(r) =
-            get_from_all_dependencies(name, &self.config.package, self, &mut evaluated_packages)
-        {
-            return Some(r);
+        fn get_root_package_for_path(
+            name: &str,
+            package: &fpm::Package,
+            include_self: bool,
+        ) -> Vec<fpm::Package> {
+            if name.starts_with(package.name.as_str()) {
+                if include_self {
+                    vec![package.to_owned()]
+                } else {
+                    vec![]
+                }
+            } else {
+                let mut resp = vec![];
+                for dep in &package.dependencies {
+                    if let Some(unaliased_name) = dep.unaliased_name(name) {
+                        resp.extend(get_root_package_for_path(
+                            unaliased_name.as_str(),
+                            &dep.package,
+                            false,
+                        ));
+                        resp.push(dep.package.clone())
+                    }
+                }
+                resp
+            }
         }
-        return None;
 
         fn get_from_all_dependencies(
             name: &str,
             package: &fpm::Package,
             lib: &fpm::Library,
-            evaluated_packages: &mut Vec<String>,
+            // evaluated_packages: &mut Vec<String>,
         ) -> Option<String> {
             for dep in &package.dependencies {
-                // If unaliased name is a direct match
-                let non_aliased_name = if name.starts_with(dep.package.name.as_str()) {
-                    name.to_string()
-                } else {
-                    match &dep.alias {
-                        Some(i) => {
-                            if name.starts_with(i.as_str()) {
-                                name.replacen(i.as_str(), dep.package.name.as_str(), 1)
-                            } else {
-                                name.to_string()
-                            }
-                        }
-                        None => name.to_string(),
+                if let Some(non_aliased_name) = dep.unaliased_name(name) {
+                    if non_aliased_name.starts_with(dep.package.name.as_str()) {
+                        if let Some(resp) =
+                            get_from_dependency(non_aliased_name.as_str(), &dep.package, lib)
+                        {
+                            return Some(resp);
+                        };
                     }
-                };
+                }
 
-                if non_aliased_name.starts_with(dep.package.name.as_str()) {
-                    if let Some(resp) =
-                        get_from_dependency(non_aliased_name.as_str(), &dep.package, lib)
-                    {
-                        return Some(resp);
-                    };
-                }
-                evaluated_packages.push(dep.package.name.clone());
+                // evaluated_packages.push(dep.package.name.clone());
                 // Recursilvely check the dependency of the current package
-                if let Some(resp) =
-                    get_from_all_dependencies(name, &dep.package, lib, evaluated_packages)
-                {
-                    return Some(resp);
-                }
+                // if let Some(resp) =
+                //     get_from_all_dependencies(name, &dep.package, lib, evaluated_packages)
+                // {
+                //     return Some(resp);
+                // }
             }
             None
         }
@@ -120,18 +154,6 @@ impl ftd::p2::Library for Library {
             if name.starts_with(&package.name.as_str()) {
                 let new_name = name.replacen(&package.name.as_str(), "", 1);
                 if let Some(r) = get_file_from_location(&path, new_name.as_str()) {
-                    return Some(r);
-                }
-            }
-
-            if let Some(o) = package.translation_of.as_ref() {
-                let original_path = lib.config.packages_root.join(o.name.as_str());
-                if let Some(r) = get_file_from_location(&original_path, name) {
-                    return Some(r);
-                }
-                // Should be the library of the Original package
-                let mut evaluated_packages = vec![o.name.clone()];
-                if let Some(r) = get_from_all_dependencies(name, o, lib, &mut evaluated_packages) {
                     return Some(r);
                 }
             }

@@ -1,9 +1,7 @@
--- import: two.fpm.local/test
-
 -- ftd.row block:
 background-color: #F0F0F0
 
 -- config.some-data: test
 
 // This should not happen
--- test.hello-msg: Here's the text
+\\-- test.hello-msg: Here's the text

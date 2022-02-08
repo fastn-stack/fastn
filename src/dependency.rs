@@ -8,6 +8,28 @@ pub struct Dependency {
     pub alias: Option<String>,
 }
 
+impl Dependency {
+    pub fn unaliased_name(&self, name: &str) -> Option<String> {
+        if name.starts_with(self.package.name.as_str()) {
+            Some(name.to_string())
+        } else {
+            match &self.alias {
+                Some(i) => {
+                    if name.starts_with(i.as_str()) {
+                        self.unaliased_name(
+                            name.replacen(i.as_str(), self.package.name.as_str(), 1)
+                                .as_str(),
+                        )
+                    } else {
+                        None
+                    }
+                }
+                None => None,
+            }
+        }
+    }
+}
+
 pub fn ensure(base_dir: &camino::Utf8PathBuf, package: &mut fpm::Package) -> fpm::Result<()> {
     /*futures::future::join_all(
         deps.into_iter()
