@@ -90,7 +90,7 @@ impl Event {
             name: "onmouseenter".to_string(),
             action: ftd::Action {
                 action: "set-value".to_string(),
-                target: format!("@MOUSE-IN@{}", val),
+                target: val.to_string(),
                 parameters: std::array::IntoIter::new([(
                     "value".to_string(),
                     vec![
@@ -111,7 +111,7 @@ impl Event {
             name: "onmouseleave".to_string(),
             action: ftd::Action {
                 action: "set-value".to_string(),
-                target: format!("@MOUSE-IN@{}", val),
+                target: val.to_string(),
                 parameters: std::array::IntoIter::new([(
                     "value".to_string(),
                     vec![

@@ -7,17 +7,92 @@ pub struct TDoc<'a> {
 }
 
 impl<'a> TDoc<'a> {
+    pub(crate) fn insert_local_from_childcomponent(
+        &mut self,
+        local_container: &[usize],
+        child: &mut ftd::ChildComponent,
+    ) -> ftd::p1::Result<()> {
+        let string_container = get_string_container(local_container);
+        for (_, property) in child.properties.iter_mut() {
+            if let Some(ref mut default) = property.default {
+                rename_property_value(default, self, string_container.as_str())?;
+            }
+            for (boolean, condition) in property.conditions.iter_mut() {
+                edit_condition(boolean, self, &string_container)?;
+                rename_property_value(condition, self, string_container.as_str())?;
+            }
+        }
+        if let Some((ref mut c, _)) = child.reference {
+            *c = self.resolve_name(0, format!("{}@{}", c, string_container).as_str())?;
+        }
+        if let Some(ref mut condition) = child.condition {
+            edit_condition(condition, self, &string_container)?;
+        }
+        return Ok(());
+
+        fn get_string_container(local_container: &[usize]) -> String {
+            local_container
+                .iter()
+                .map(|v| v.to_string())
+                .collect::<Vec<String>>()
+                .join(",")
+        }
+
+        fn edit_condition(
+            condition: &mut ftd::p2::Boolean,
+            doc: &mut ftd::p2::TDoc,
+            string_container: &str,
+        ) -> ftd::p1::Result<()> {
+            match condition {
+                ftd::p2::Boolean::IsNotNull { value }
+                | ftd::p2::Boolean::IsNull { value }
+                | ftd::p2::Boolean::IsNotEmpty { value }
+                | ftd::p2::Boolean::IsEmpty { value }
+                | ftd::p2::Boolean::ListIsEmpty { value } => {
+                    rename_property_value(value, doc, string_container)?;
+                }
+                ftd::p2::Boolean::Equal { left, right }
+                | ftd::p2::Boolean::NotEqual { left, right } => {
+                    rename_property_value(left, doc, string_container)?;
+                    rename_property_value(right, doc, string_container)?;
+                }
+                ftd::p2::Boolean::Not { of } => edit_condition(of, doc, string_container)?,
+                ftd::p2::Boolean::Literal { .. } => {}
+            }
+            Ok(())
+        }
+
+        fn rename_property_value(
+            property_value: &mut ftd::PropertyValue,
+            doc: &mut ftd::p2::TDoc,
+            string_container: &str,
+        ) -> ftd::p1::Result<()> {
+            if let ftd::PropertyValue::Variable { ref mut name, .. } = property_value {
+                let key = doc.resolve_name(0, format!("{}@{}", name, string_container).as_str())?;
+                if name.as_str().eq("MOUSE-IN") && !doc.local_variables.contains_key(&key) {
+                    let local_variable = ftd::p2::Thing::Variable(ftd::Variable {
+                        name: key.clone(),
+                        value: ftd::PropertyValue::Value {
+                            value: ftd::Value::Boolean { value: false },
+                        },
+                        conditions: vec![],
+                        flags: Default::default(),
+                    });
+                    doc.local_variables.insert(key.clone(), local_variable);
+                    *name =
+                        doc.resolve_name(0, format!("{}@{}", name, string_container).as_str())?;
+                }
+            }
+            Ok(())
+        }
+    }
     pub(crate) fn insert_local_from_component(
         &mut self,
         component: &mut ftd::Component,
         child_component_properties: &std::collections::BTreeMap<String, ftd::component::Property>,
         local_container: &[usize],
     ) -> ftd::p1::Result<()> {
-        let string_container: String = local_container
-            .iter()
-            .map(|v| v.to_string())
-            .collect::<Vec<String>>()
-            .join(",");
+        let string_container = get_string_container(local_container);
         if component.root == "ftd.kernel" {
             return Ok(());
         }
@@ -29,7 +104,7 @@ impl<'a> TDoc<'a> {
                     //todo
                     return ftd::e2(
                         format!(
-                            "expected default value for local variable {}: {:?} in {}",
+                            "expected default value for local variable 1 {}: {:?} in {}",
                             k, arg, component.root
                         ),
                         self.name,
@@ -87,10 +162,12 @@ impl<'a> TDoc<'a> {
                         &component.arguments,
                         None,
                     )?
+                } else if let Ok(value) = arg.to_value(0, self.name) {
+                    ftd::PropertyValue::Value { value }
                 } else {
                     return ftd::e2(
                         format!(
-                            "expected default value for local variable {}: {:?} in {}",
+                            "expected default value for local variable 2 {}: {:?} in {}",
                             k, arg, component.root
                         ),
                         self.name,
@@ -113,50 +190,85 @@ impl<'a> TDoc<'a> {
             );
         }
         for (_, property) in component.properties.iter_mut() {
-            if let Some(ftd::PropertyValue::Variable { ref mut name, .. }) = property.default {
-                *name = self.resolve_name(0, format!("{}@{}", name, string_container).as_str())?;
+            if let Some(ref mut default) = property.default {
+                rename_property_value(
+                    default,
+                    self,
+                    string_container.as_str(),
+                    string_container.as_str(),
+                )?;
             }
-            for (_, condition) in property.conditions.iter_mut() {
-                if let ftd::PropertyValue::Variable { ref mut name, .. } = condition {
-                    *name =
-                        self.resolve_name(0, format!("{}@{}", name, string_container).as_str())?
-                }
+            for (boolean, condition) in property.conditions.iter_mut() {
+                edit_condition(boolean, self, &string_container, &string_container)?;
+                rename_property_value(
+                    condition,
+                    self,
+                    string_container.as_str(),
+                    string_container.as_str(),
+                )?;
             }
         }
         if let Some(ref mut condition) = component.condition {
-            edit_condition(condition, self, &string_container)?;
+            edit_condition(condition, self, &string_container, &string_container)?;
         }
 
         component.arguments = Default::default();
-        for instruction in component.instructions.iter_mut() {
+        for (idx, instruction) in component.instructions.iter_mut().enumerate() {
+            let local_container = {
+                let mut local_container = local_container.to_vec();
+                local_container.push(idx);
+                local_container
+            };
+            let current_container = get_string_container(local_container.as_slice());
             let child = match instruction {
                 ftd::Instruction::ChildComponent { child } => child,
                 _ => continue,
             };
             for (_, property) in child.properties.iter_mut() {
-                if let Some(ftd::PropertyValue::Variable { ref mut name, .. }) = property.default {
-                    *name =
-                        self.resolve_name(0, format!("{}@{}", name, string_container).as_str())?;
+                if let Some(ref mut default) = property.default {
+                    rename_property_value(
+                        default,
+                        self,
+                        string_container.as_str(),
+                        current_container.as_str(),
+                    )?;
                 }
-                for (_, condition) in property.conditions.iter_mut() {
-                    if let ftd::PropertyValue::Variable { ref mut name, .. } = condition {
-                        *name =
-                            self.resolve_name(0, format!("{}@{}", name, string_container).as_str())?
-                    }
+                for (boolean, condition) in property.conditions.iter_mut() {
+                    edit_condition(boolean, self, &string_container, current_container.as_str())?;
+                    rename_property_value(
+                        condition,
+                        self,
+                        string_container.as_str(),
+                        current_container.as_str(),
+                    )?;
                 }
             }
             if let Some((ref mut c, _)) = child.reference {
                 *c = self.resolve_name(0, format!("{}@{}", c, string_container).as_str())?;
             }
             if let Some(ref mut condition) = child.condition {
-                edit_condition(condition, self, &string_container)?;
+                edit_condition(
+                    condition,
+                    self,
+                    &string_container,
+                    current_container.as_str(),
+                )?;
             }
         }
         return Ok(());
 
+        fn get_string_container(local_container: &[usize]) -> String {
+            local_container
+                .iter()
+                .map(|v| v.to_string())
+                .collect::<Vec<String>>()
+                .join(",")
+        }
+
         fn edit_condition(
             condition: &mut ftd::p2::Boolean,
-            doc: &ftd::p2::TDoc,
+            doc: &mut ftd::p2::TDoc,
+            parent_container: &str,
             string_container: &str,
         ) -> ftd::p1::Result<()> {
             match condition {
@@ -165,24 +277,45 @@ impl<'a> TDoc<'a> {
                 | ftd::p2::Boolean::IsNotEmpty { value }
                 | ftd::p2::Boolean::IsEmpty { value }
                 | ftd::p2::Boolean::ListIsEmpty { value } => {
-                    if let ftd::PropertyValue::Variable { ref mut name, .. } = value {
-                        *name =
-                            doc.resolve_name(0, format!("{}@{}", name, string_container).as_str())?;
-                    }
+                    rename_property_value(value, doc, parent_container, string_container)?;
                 }
                 ftd::p2::Boolean::Equal { left, right }
                 | ftd::p2::Boolean::NotEqual { left, right } => {
-                    if let ftd::PropertyValue::Variable { ref mut name, .. } = left {
-                        *name =
-                            doc.resolve_name(0, format!("{}@{}", name, string_container).as_str())?;
-                    }
-                    if let ftd::PropertyValue::Variable { ref mut name, .. } = right {
-                        *name =
-                            doc.resolve_name(0, format!("{}@{}", name, string_container).as_str())?;
-                    }
+                    rename_property_value(left, doc, parent_container, string_container)?;
+                    rename_property_value(right, doc, parent_container, string_container)?;
                 }
-                ftd::p2::Boolean::Not { of } => edit_condition(of, doc, string_container)?,
+                ftd::p2::Boolean::Not { of } => {
+                    edit_condition(of, doc, parent_container, string_container)?
+                }
                 ftd::p2::Boolean::Literal { .. } => {}
+            }
+            Ok(())
+        }
+
+        fn rename_property_value(
+            property_value: &mut ftd::PropertyValue,
+            doc: &mut ftd::p2::TDoc,
+            parent_container: &str,
+            string_container: &str,
+        ) -> ftd::p1::Result<()> {
+            if let ftd::PropertyValue::Variable { ref mut name, .. } = property_value {
+                let key = doc.resolve_name(0, format!("{}@{}", name, parent_container).as_str())?;
+                if name.as_str().eq("MOUSE-IN") && !doc.local_variables.contains_key(&key) {
+                    let local_variable = ftd::p2::Thing::Variable(ftd::Variable {
+                        name: key.clone(),
+                        value: ftd::PropertyValue::Value {
+                            value: ftd::Value::Boolean { value: false },
+                        },
+                        conditions: vec![],
+                        flags: Default::default(),
+                    });
+                    doc.local_variables.insert(key.clone(), local_variable);
+                    *name =
+                        doc.resolve_name(0, format!("{}@{}", name, string_container).as_str())?;
+                } else {
+                    *name =
+                        doc.resolve_name(0, format!("{}@{}", name, parent_container).as_str())?;
+                }
             }
             Ok(())
         }
@@ -210,10 +343,12 @@ impl<'a> TDoc<'a> {
                         &parent.arguments,
                         None,
                     )?
+                } else if let Ok(value) = arg.to_value(0, self.name) {
+                    ftd::PropertyValue::Value { value }
                 } else {
                     return ftd::e2(
                         format!(
-                            "expected default value for local variable {}: {:?} in {}",
+                            "expected default value for local variable 3 {}: {:?} in {}",
                             k, arg, parent.root
                         ),
                         self.name,
