@@ -385,7 +385,12 @@ impl<'a> Interpreter<'a> {
                     ftd::p2::utils::parse_import(&p1.caption, name, p1.line_number)?;
                 aliases.insert(alias, library_name.clone());
                 let start = std::time::Instant::now();
-                let s = self.lib.get_with_result(library_name.as_str())?;
+                let doc = ftd::p2::TDoc {
+                    name,
+                    aliases: &aliases,
+                    bag: &self.bag,
+                };
+                let s = self.lib.get_with_result(library_name.as_str(), &doc)?;
                 *d_get = d_get.saturating_add(std::time::Instant::now() - start);
                 if !self.library_in_the_bag(library_name.as_str()) {
                     self.interpret_(library_name.as_str(), s.as_str(), false, d_get, d_processor)?;

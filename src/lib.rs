@@ -241,7 +241,7 @@ impl ftd::p2::Library for ExampleLibrary {
 
 #[cfg(not(feature = "async"))]
 impl ftd::p2::Library for ExampleLibrary {
-    fn get(&self, name: &str) -> Option<String> {
+    fn get(&self, name: &str, _doc: &ftd::p2::TDoc) -> Option<String> {
         std::fs::read_to_string(format!("./examples/{}.ftd", name)).ok()
     }
 }

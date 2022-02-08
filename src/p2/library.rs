@@ -23,9 +23,9 @@ pub trait Library: Sync {
 
 #[cfg(not(feature = "async"))]
 pub trait Library {
-    fn get(&self, name: &str) -> Option<String>;
-    fn get_with_result(&self, name: &str) -> ftd::p1::Result<String> {
-        match self.get(name) {
+    fn get(&self, name: &str, doc: &ftd::p2::TDoc) -> Option<String>;
+    fn get_with_result(&self, name: &str, doc: &ftd::p2::TDoc) -> ftd::p1::Result<String> {
+        match self.get(name, doc) {
             Some(v) => Ok(v),
             None => ftd::e2(format!("library not found: {}", name), "", 0),
         }
@@ -239,7 +239,7 @@ impl Library for TestLibrary {
 
 #[cfg(not(feature = "async"))]
 impl Library for TestLibrary {
-    fn get(&self, name: &str) -> Option<String> {
+    fn get(&self, name: &str, _doc: &ftd::p2::TDoc) -> Option<String> {
         std::fs::read_to_string(format!("./tests/{}.ftd", name)).ok()
     }
 
