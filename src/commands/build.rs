@@ -115,7 +115,7 @@ async fn build_with_original(
 
     // documents contains all the files in original package
     let original_documents = std::collections::BTreeMap::from_iter(
-        fpm::paths_to_files(files, original_path.as_path())
+        fpm::paths_to_files(&config.package.name.as_str(), files, original_path.as_path())
             .await?
             .into_iter()
             .map(|v| (v.get_id(), v)),

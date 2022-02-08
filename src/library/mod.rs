@@ -15,7 +15,8 @@ pub struct Library {
 }
 
 impl ftd::p2::Library for Library {
-    fn get(&self, name: &str) -> Option<String> {
+    fn get(&self, name: &str, doc: &ftd::p2::TDoc) -> Option<String> {
+        dbg!(&doc.name, name);
         // Standard libraries
         if name == "fpm" {
             return Some(construct_fpm_base(self));
@@ -865,7 +866,7 @@ impl ftd::p2::Library for Library {
 pub struct FPMLibrary {}
 
 impl ftd::p2::Library for FPMLibrary {
-    fn get(&self, name: &str) -> Option<String> {
+    fn get(&self, name: &str, _doc: &ftd::p2::TDoc) -> Option<String> {
         if name == "fpm" {
             return Some(fpm::fpm_ftd().to_string());
         } else {

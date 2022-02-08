@@ -595,7 +595,7 @@ dependencies = [
  "diffy",
  "fbt-lib",
  "fluent",
- "ftd 0.1.18 (git+https://github.com/FifthTry/ftd?rev=70aeed5ae5b1ddbfd9e73c2b1dcf1625d62aa50f)",
+ "ftd 0.1.18",
  "futures",
  "home",
  "ignore",
@@ -627,8 +627,6 @@ checksum = "c1fd087255f739f4f1aeea69f11b72f8080e9c2e7645cd06955dad4a178a49e3"
 [[package]]
 name = "ftd"
 version = "0.1.18"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "61e702a157c28dc4f15440ca309fb5634f3ed9964529f88b20fd9dfd685b5880"
 dependencies = [
  "comrak",
  "css-color-parser",
@@ -647,7 +645,8 @@ dependencies = [
 [[package]]
 name = "ftd"
 version = "0.1.18"
-source = "git+https://github.com/FifthTry/ftd?rev=70aeed5ae5b1ddbfd9e73c2b1dcf1625d62aa50f#70aeed5ae5b1ddbfd9e73c2b1dcf1625d62aa50f"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "61e702a157c28dc4f15440ca309fb5634f3ed9964529f88b20fd9dfd685b5880"
 dependencies = [
  "comrak",
  "css-color-parser",
