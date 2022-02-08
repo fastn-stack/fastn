@@ -128,19 +128,6 @@ impl Element {
                 }
                 None
             }
-
-            fn get_index_string(index_vec: &[usize], idx: usize) -> String {
-                let index_string: String = {
-                    let mut index_vec = index_vec.to_vec();
-                    index_vec.push(idx);
-                    index_vec
-                        .iter()
-                        .map(|v| v.to_string())
-                        .collect::<Vec<String>>()
-                        .join(",")
-                };
-                index_string
-            }
         }
     }
 

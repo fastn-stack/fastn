@@ -229,7 +229,6 @@ impl ChildComponent {
         })
     }
 
-    #[allow(clippy::too_many_arguments)]
     pub fn recursive_call(
         &self,
         doc: &mut ftd::p2::TDoc,
@@ -385,15 +384,21 @@ impl ChildComponent {
                 }
                 visible
             };
-
             let conditional_attribute = get_conditional_attributes(
                 child_component.line_number,
                 &child_component.properties,
                 doc,
             )?;
+            let properties = {
+                let mut properties = child_component.properties.clone();
+                for (_, v) in properties.iter_mut() {
+                    modify_properties(v, doc, string_container.as_str())?;
+                }
+                properties
+            };
 
             let mut element = root.call(
-                &child_component.properties,
+                &properties,
                 doc,
                 invocations,
                 &None,
@@ -419,8 +424,82 @@ impl ChildComponent {
             if let Some(common) = element.element.get_mut_common() {
                 common.conditional_attribute.extend(conditional_attribute);
             }
-            doc.local_variables.remove(loop_name.as_str());
-            Ok(element)
+            // doc.local_variables.remove(loop_name.as_str());
+            return Ok(element);
+
+            fn modify_properties(
+                property: &mut ftd::component::Property,
+                doc: &mut ftd::p2::TDoc,
+                string_container: &str,
+            ) -> ftd::p1::Result<()> {
+                if let Some(ref mut default) = property.default {
+                    rename_property_value(default, doc, string_container)?;
+                }
+                for (boolean, condition) in property.conditions.iter_mut() {
+                    edit_condition(boolean, doc, string_container)?;
+                    rename_property_value(condition, doc, string_container)?;
+                }
+                Ok(())
+            }
+
+            fn edit_condition(
+                condition: &mut ftd::p2::Boolean,
+                doc: &mut ftd::p2::TDoc,
+                string_container: &str,
+            ) -> ftd::p1::Result<()> {
+                match condition {
+                    ftd::p2::Boolean::IsNotNull { value }
+                    | ftd::p2::Boolean::IsNull { value }
+                    | ftd::p2::Boolean::IsNotEmpty { value }
+                    | ftd::p2::Boolean::IsEmpty { value }
+                    | ftd::p2::Boolean::ListIsEmpty { value } => {
+                        rename_property_value(value, doc, string_container)?;
+                    }
+                    ftd::p2::Boolean::Equal { left, right }
+                    | ftd::p2::Boolean::NotEqual { left, right } => {
+                        rename_property_value(left, doc, string_container)?;
+                        rename_property_value(right, doc, string_container)?;
+                    }
+                    ftd::p2::Boolean::Not { of } => edit_condition(of, doc, string_container)?,
+                    ftd::p2::Boolean::Literal { .. } => {}
+                }
+                Ok(())
+            }
+
+            fn rename_property_value(
+                property_value: &mut ftd::PropertyValue,
+                doc: &mut ftd::p2::TDoc,
+                parent_container: &str,
+            ) -> ftd::p1::Result<()> {
+                if let ftd::PropertyValue::Variable { ref mut name, .. } = property_value {
+                    let (part1, part2) = ftd::p2::utils::get_doc_name_and_remaining(name)?;
+                    let key = if let Some(ref p2) = part2 {
+                        doc.resolve_name(
+                            0,
+                            format!("{}@{}.{}", part1, parent_container, p2).as_str(),
+                        )?
+                    } else {
+                        doc.resolve_name(0, format!("{}@{}", part1, parent_container).as_str())?
+                    };
+                    if name.as_str().eq("MOUSE-IN") && !doc.local_variables.contains_key(&key) {
+                        let local_variable = ftd::p2::Thing::Variable(ftd::Variable {
+                            name: key.clone(),
+                            value: ftd::PropertyValue::Value {
+                                value: ftd::Value::Boolean { value: false },
+                            },
+                            conditions: vec![],
+                            flags: Default::default(),
+                        });
+                        doc.local_variables.insert(key.clone(), local_variable);
+                        *name = key;
+                    } else if doc.local_variables.contains_key(
+                        &doc.resolve_name(0, format!("{}@{}", part1, parent_container).as_str())?,
+                    ) {
+                        *name = key;
+                    }
+                }
+                Ok(())
+            }
         }
     }
 
