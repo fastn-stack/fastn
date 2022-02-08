@@ -212,7 +212,17 @@ impl<'a> TDoc<'a> {
             edit_condition(condition, self, &string_container, &string_container)?;
         }
         for event in component.events.iter_mut() {
-            //todo
+            rename_property_value(
+                &mut event.action.target,
+                self,
+                &string_container,
+                &string_container,
+            )?;
+            for (_, parameters) in event.action.parameters.iter_mut() {
+                for parameter in parameters.iter_mut() {
+                    rename_property_value(parameter, self, &string_container, &string_container)?;
+                }
+            }
         }
 
         component.arguments = Default::default();
@@ -256,6 +266,24 @@ impl<'a> TDoc<'a> {
                     &string_container,
                     current_container.as_str(),
                 )?;
+            }
+            for event in child.events.iter_mut() {
+                rename_property_value(
+                    &mut event.action.target,
+                    self,
+                    &string_container,
+                    current_container.as_str(),
+                )?;
+                for (_, parameters) in event.action.parameters.iter_mut() {
+                    for parameter in parameters.iter_mut() {
+                        rename_property_value(
+                            parameter,
+                            self,
+                            &string_container,
+                            current_container.as_str(),
+                        )?;
+                    }
+                }
             }
         }
         return Ok(());
