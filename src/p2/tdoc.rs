@@ -211,6 +211,9 @@ impl<'a> TDoc<'a> {
         if let Some(ref mut condition) = component.condition {
             edit_condition(condition, self, &string_container, &string_container)?;
         }
+        for event in component.events.iter_mut() {
+            //todo
+        }
 
         component.arguments = Default::default();
         for (idx, instruction) in component.instructions.iter_mut().enumerate() {

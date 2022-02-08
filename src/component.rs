@@ -1416,7 +1416,7 @@ pub(crate) fn resolve_properties_with_ref(
         if let Ok(property_value) = value.eval(line_number, name, doc) {
             let reference = match property_value {
                 ftd::PropertyValue::Reference { name, .. } => Some(name.to_string()),
-                ftd::PropertyValue::Variable { name, .. } => Some(format!("@{}", name)),
+                ftd::PropertyValue::Variable { name, .. } => Some(name.to_string()),
                 _ => None,
             };
             let resolved_value = {
