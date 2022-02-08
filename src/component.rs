@@ -477,7 +477,6 @@ impl ChildComponent {
         let conditional_attribute =
             get_conditional_attributes(self.line_number, &self.properties, doc)?;
 
-        // dbg!("Child call", &self.properties, &root);
         let mut element = root.call(
             &self.properties,
             doc,
@@ -1485,7 +1484,6 @@ impl Component {
             instructions
         };
 
-        dbg!(&new_instruction, &doc.local_variables);
         return ftd::execute_doc::ExecuteDoc {
             name: doc.name,
             aliases: doc.aliases,
@@ -1502,7 +1500,6 @@ impl Component {
             doc: &ftd::p2::TDoc,
         ) -> ftd::p1::Result<()> {
             if let Some(ref c) = child.reference {
-                //if let Ok(ftd::Value::UI { name, data, .. }) = doc.get_value(line_number, &c.0) {
                 match doc.get_component(line_number, &c.0) {
                     Ok(_) => {
                         *child = ChildComponent {
@@ -1518,7 +1515,6 @@ impl Component {
                     }
                     Err(e) => return ftd::e2(format!("{:?}", e), doc.name, line_number),
                 }
-                //}
             }
             Ok(())
         }
@@ -1778,7 +1774,6 @@ impl Component {
             };
 
             let events = ftd::p2::Event::get_events(self.line_number, events, doc)?;
-            // dbg!("Component call", &root);
             let mut element = if !is_null_element {
                 root.call(
                     &self.properties,
