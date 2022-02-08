@@ -12,3 +12,5 @@ zip: github.com/fifthtry/amitu/archive/refs/heads/main.zip
 -- fpm.auto-import: theme/header as theme_header
 
 -- fpm.auto-import: one/blog
+
+-- fpm.auto-import: fifthtry.github.io/amitu/FPM/config
