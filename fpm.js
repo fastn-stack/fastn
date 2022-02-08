@@ -1,5 +1,7 @@
 (function () {
     const FPM_MOBILE = "fpm#mobile";
+    const FPM_MOBILE_BREAKPOINT = "fpm#mobile-breakpoint";
+    const FPM_THEME_COLOR = "fpm#theme-color";
     const FPM_DARK_MODE = "fpm#dark-mode"
     const SYSTEM_DARK_MODE = "fpm#system-dark-mode"
     const FPM_FOLLOW_SYSTEM_DARK_MODE = "fpm#follow-system-dark-mode"
@@ -9,6 +11,7 @@
     const COOKIE_DARK_MODE = "dark";
     const COOKIE_LIGHT_MODE = "light";
     const DARK_MODE_CLASS = "fpm-dark";
+    const THEME_COLOR_META = "theme-color";
 
     let last_device;
 
@@ -46,7 +49,8 @@
         // another function detect_orientation(), "landscape" and "portrait" etc,
         // and instead of setting `fpm-ui#mobile: boolean` we set `fpm-ui#device`
         // and `fpm-ui#view-port-orientation` etc.
-        return width <= 768;
+        let breakpoint = parseInt(window.ftd.get_value("main", FPM_MOBILE_BREAKPOINT));
+        return width <= breakpoint;
     }
 
     window.show_main = function () {
@@ -104,6 +108,7 @@
         window.ftd.set_bool_for_all(SYSTEM_DARK_MODE, system_dark_mode());
         document.body.classList.add(DARK_MODE_CLASS);
         set_cookie(DARK_MODE_COOKIE, COOKIE_DARK_MODE);
+        update_theme_color();
     }
 
     window.enable_light_mode = function () {
@@ -114,6 +119,7 @@
         window.ftd.set_bool_for_all(SYSTEM_DARK_MODE, system_dark_mode());
         document.body.classList.remove(DARK_MODE_CLASS);
         set_cookie(DARK_MODE_COOKIE, COOKIE_LIGHT_MODE);
+        update_theme_color();
     }
 
     window.enable_system_mode = function () {
@@ -129,6 +135,35 @@
             window.ftd.set_bool_for_all(FPM_DARK_MODE, false);
             document.body.classList.remove(DARK_MODE_CLASS);
             set_cookie(DARK_MODE_COOKIE, COOKIE_SYSTEM_LIGHT)
+        }
+        update_theme_color();
+    }
+
+    function update_theme_color() {
+        let theme_color = window.ftd.get_value("main", FPM_THEME_COLOR);
+        if (!!theme_color) {
+            set_meta(THEME_COLOR_META, theme_color);
+        } else {
+            delete_meta(THEME_COLOR_META);
+        }
+    }
+
+    function set_meta(name, value) {
+        let meta = document.querySelector("meta[name=" + name + "]");
+        if (!!meta) {
+            meta.content = value;
+        } else {
+            meta = document.createElement('meta');
+            meta.name = name;
+            meta.content = value;
+            document.getElementsByTagName('head')[0].appendChild(meta);
+        }
+    }
+
+    function delete_meta(name) {
+        let meta = document.querySelector("meta[name=" + name + "]")
+        if (!!meta) {
+            meta.remove();
         }
     }
 

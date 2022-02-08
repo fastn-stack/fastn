@@ -15,7 +15,7 @@ pub struct Font {
     weight: Option<String>,
 }
 
-fn escape(s: &str) -> String {
+pub(crate) fn escape(s: &str) -> String {
     let s = s.replace('>', "\\u003E");
     let s = s.replace('<', "\\u003C");
     s.replace('&', "\\u0026")

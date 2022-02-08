@@ -390,6 +390,12 @@ impl ftd::p2::Library for Library {
                         {fpm_base}
                         {fpm_ui}
                         
+                        -- optional string theme-color:
+                        $always-include$: true
+
+                        -- integer mobile-breakpoint: 768
+                        $always-include$: true
+
                         -- boolean mobile: true
                         -- boolean dark-mode: false
                         -- boolean system-dark-mode: false

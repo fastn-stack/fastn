@@ -18,14 +18,14 @@ async-recursion = "0.3.2"
 camino = "1.0.5"
 clap = "2.33.3"
 diffy = "0.2.1"
-# ftd = { git = "https://github.com/FifthTry/ftd", rev = "70aeed5ae5b1ddbfd9e73c2b1dcf1625d62aa50f" }
-ftd = { path = "../ftd" }
+ftd = { git = "https://github.com/FifthTry/ftd", rev = "6428bf7b4b8aff7d6efc820adce065b5ef2dbdd2" }
+# ftd = { path = "../ftd" }
 futures = "0.3"
 home = "0.5.3"
 ignore = "0.4.18"
 indoc = "1.0"
 regex = "1.0.0"
-reqwest = "0.11.6"
+reqwest = "0.9.18"
 rusqlite = { version = "0.26.3", features = ["bundled"] }
 serde = { version = "1", features = ["derive"] }
 serde_derive = "1.0"

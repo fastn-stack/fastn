@@ -1,11 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-  <title>Hello world!</title>
-  <script type="ftd" id="ftd-data">{
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+        <title>Hello world!</title>
+        <script type="ftd" id="ftd-data">{
+  "@body@0": {
+    "value": "",
+    "dependencies": {
+      "0,1": "[{\"dependency_type\":\"Visible\",\"condition\":\"$IsNotNull$\",\"parameters\":{}}]"
+    }
+  },
+  "@body@0,1": {
+    "value": "",
+    "dependencies": {
+      "0,1": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]",
+      "0,2": "[{\"dependency_type\":\"Visible\",\"condition\":\"$IsNotNull$\",\"parameters\":{}}]"
+    }
+  },
+  "@body@0,2": {
+    "value": "",
+    "dependencies": {
+      "0,2": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
+    }
+  },
   "@title@0": {
     "value": "Hello world!",
     "dependencies": {
@@ -15,39 +33,29 @@
   "theme#dark-mode": {
     "value": "true",
     "dependencies": {
-      "0,0": "[{\"dependency_type\":\"Style\",\"condition\":\"true\",\"parameters\":{\"color\":{\"value\":{\"value\":\"rgba(255,255,255,1)\",\"important\":false},\"default\":{\"value\":\"rgba(0,0,0,1)\",\"important\":false}}}}]"
+      "0,0": "[{\"dependency_type\":\"Style\",\"condition\":\"true\",\"parameters\":{\"color\":{\"value\":{\"value\":\"rgba(255,255,255,1)\",\"important\":false},\"default\":{\"value\":\"rgba(0,0,0,1)\",\"important\":false}}}}]",
+      "0,1": "[{\"dependency_type\":\"Style\",\"condition\":\"true\",\"parameters\":{\"color\":{\"value\":{\"value\":\"rgba(206,210,221,1)\",\"important\":false},\"default\":{\"value\":\"rgba(0,0,0,1)\",\"important\":false}}}}]",
+      "0,2": "[{\"dependency_type\":\"Style\",\"condition\":\"true\",\"parameters\":{\"color\":{\"value\":{\"value\":\"rgba(206,210,221,1)\",\"important\":false},\"default\":{\"value\":\"rgba(0,0,0,1)\",\"important\":false}}}}]"
     }
   }
 }</script>
-  <script type="ftd" id="ftd-external-children">{}</script>
-  <style>
-    FTD_CSS
-  </style>
-</head>
+        <script type="ftd" id="ftd-external-children">{}</script>
+        <style>FTD_CSS</style>
+    </head>
+    <body>
+        <div data-id="main:root" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; height: 100%; justify-content: flex-start; white-space: initial; width: 100%" class="ft_md"><div data-id="0:main" id="hello-world" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; padding-bottom: 6px; white-space: initial; width: 100%" class="ft_md"><div data-id="0,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(255,255,255,1); font-size: 19px; font-weight: 700; line-height: 26px; padding-bottom: 8px; padding-top: 16px; text-align: left; white-space: initial" class="ft_md">Hello world!</div>
+<div data-id="0,1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(206,210,221,1); display: none; font-size: 18px; font-weight: 400; line-height: 24px; text-align: left; white-space: initial" class="ft_md"></div>
+<div data-id="0,2:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(206,210,221,1); display: none; font-size: 18px; font-weight: 400; line-height: 24px; text-align: left; white-space: initial" class="ft_md"></div></div></div>
+        <script>
+            FTD_JS
 
-<body>
-  <div data-id="main:root"
-    style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; height: 100%; justify-content: flex-start; white-space: initial; width: 100%"
-    class="ft_md">
-    <div data-id="0:main" id="hello-world"
-      style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; padding-bottom: 6px; white-space: initial; width: 100%"
-      class="ft_md">
-      <div data-id="0,0:main"
-        style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(255,255,255,1); font-size: 19px; font-weight: 700; line-height: 26px; padding-bottom: 8px; padding-top: 16px; text-align: left; white-space: initial"
-        class="ft_md">Hello world!</div>
-    </div>
-  </div>
-  <script>
-    FTD_JS
+            window.ftd.init(
+                "main",
+                JSON.parse(document.getElementById("ftd-data").innerText),
+                JSON.parse(document.getElementById("ftd-external-children").innerText)
+            );
 
-    window.ftd.init(
-      "main",
-      JSON.parse(document.getElementById("ftd-data").innerText),
-      JSON.parse(document.getElementById("ftd-external-children").innerText)
-    );
-
-    FPM_JS
-  </script>
-</body>
-
+            FPM_JS
+        </script>
+    </body>
 </html>
