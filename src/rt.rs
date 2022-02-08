@@ -79,6 +79,7 @@ impl RT {
 
         main.container.children.extend(element);
         store_invocations(&mut self.bag, &mut local_variables, invocations);
+        self.bag.extend(local_variables);
         Ok(main)
     }
 }

@@ -122,6 +122,7 @@ impl Document {
             self.instructions.clone(),
         );
         self.main = rt.render()?;
+        self.data.extend(rt.bag);
         let data = self.rt_data();
         Ok(ftd::Document {
             data,
@@ -275,6 +276,7 @@ impl Document {
         );
 
         d.main = rt.render()?;
+        d.data.extend(rt.bag);
         Ok(d)
     }
 
