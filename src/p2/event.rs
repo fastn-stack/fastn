@@ -70,7 +70,11 @@ impl Event {
     ) -> ftd::p1::Result<Vec<ftd::Event>> {
         let mut event: Vec<ftd::Event> = vec![];
         for e in events {
-            let target = e.action.target.to_string();
+            let target = match &e.action.target {
+                ftd::PropertyValue::Value { value } => value.to_string().unwrap_or("".to_string()),
+                ftd::PropertyValue::Reference { name, .. }
+                | ftd::PropertyValue::Variable { name, .. } => name.to_string(),
+            };
 
             event.push(ftd::Event {
                 name: e.name.to_str().to_string(),
@@ -189,8 +193,8 @@ pub struct Parameter {
 
 #[derive(Debug, PartialEq, Clone, serde::Serialize, serde::Deserialize)]
 pub struct Action {
-    pub action: ActionKind, // toggle
-    pub target: String,     // foo
+    pub action: ActionKind,         // toggle
+    pub target: ftd::PropertyValue, // foo
     pub parameters: std::collections::BTreeMap<String, Vec<ftd::PropertyValue>>,
 }
 
@@ -320,8 +324,7 @@ impl Action {
                     doc,
                     arguments,
                     Some(ftd::p2::Kind::boolean()),
-                )?
-                .0;
+                )?;
                 Ok(Self {
                     action: ActionKind::Toggle,
                     target,
@@ -330,7 +333,8 @@ impl Action {
             }
             _ if a.starts_with("clear ") => {
                 let value = a.replace("clear ", "");
-                let (target, kind) = get_target(line_number, value, doc, arguments, None)?;
+                let target = get_target(line_number, value, doc, arguments, None)?;
+                let kind = target.kind();
                 if !kind.is_list() && !kind.is_optional() {
                     return ftd::e2(
                         format!(
@@ -371,10 +375,16 @@ impl Action {
                 } else {
                     Default::default()
                 };
-                let target = if value.is_empty() {
-                    "ftd_message".to_string()
-                } else {
-                    value
+
+                let target = ftd::PropertyValue::Value {
+                    value: ftd::Value::String {
+                        text: if value.is_empty() {
+                            "ftd_message".to_string()
+                        } else {
+                            value
+                        },
+                        source: ftd::TextSource::Header,
+                    },
                 };
 
                 Ok(Self {
@@ -409,8 +419,7 @@ impl Action {
                     doc,
                     arguments,
                     Some(ftd::p2::Kind::integer()),
-                )?
-                .0;
+                )?;
 
                 let parameters = {
                     let mut parameters: std::collections::BTreeMap<
@@ -485,7 +494,8 @@ impl Action {
                         line_number,
                     );
                 };
-                let (target, kind) = get_target(line_number, value.clone(), doc, arguments, None)?;
+                let target = get_target(line_number, value.clone(), doc, arguments, None)?;
+                let kind = target.kind();
                 let expected_value_kind = if let ftd::p2::Kind::List { kind, .. } = kind {
                     kind.as_ref().to_owned()
                 } else {
@@ -580,17 +590,28 @@ impl Action {
             }
             _ if a.eq("stop-propagation") => Ok(Self {
                 action: ActionKind::StopPropagation,
-                target: "".to_string(),
+                target: ftd::PropertyValue::Value {
+                    value: ftd::Value::String {
+                        text: "".to_string(),
+                        source: ftd::TextSource::Header,
+                    },
+                },
                 parameters: Default::default(),
             }),
             _ if a.eq("prevent-default") => Ok(Self {
                 action: ActionKind::PreventDefault,
-                target: "".to_string(),
+                target: ftd::PropertyValue::Value {
+                    value: ftd::Value::String {
+                        text: "".to_string(),
+                        source: ftd::TextSource::Header,
+                    },
+                },
                 parameters: Default::default(),
             }),
             _ if a.contains('=') => {
                 let (part_1, part_2) = ftd::p2::utils::split(a, "=")?;
-                let (target, kind) = get_target(line_number, part_1, doc, arguments, None)?;
+                let target = get_target(line_number, part_1, doc, arguments, None)?;
+                let kind = target.kind();
                 let mut parameters: std::collections::BTreeMap<String, Vec<ftd::PropertyValue>> =
                     Default::default();
 
@@ -642,23 +663,8 @@ impl Action {
             doc: &ftd::p2::TDoc,
             arguments: &std::collections::BTreeMap<String, ftd::p2::Kind>,
             kind: Option<ftd::p2::Kind>,
-        ) -> ftd::p1::Result<(String, ftd::p2::Kind)> {
-            let pv =
-                ftd::PropertyValue::resolve_value(line_number, &value, kind, doc, arguments, None)?;
-            Ok((
-                match pv {
-                    ftd::PropertyValue::Reference { ref name, .. } => name.to_string(),
-                    ftd::PropertyValue::Variable { ref name, .. } => format!("@{}", name),
-                    t => {
-                        return ftd::e2(
-                            format!("value not expected {:?}", t),
-                            doc.name,
-                            line_number,
-                        )
-                    }
-                },
-                pv.kind(),
-            ))
+        ) -> ftd::p1::Result<ftd::PropertyValue> {
+            ftd::PropertyValue::resolve_value(line_number, &value, kind, doc, arguments, None)
         }
     }
 }
