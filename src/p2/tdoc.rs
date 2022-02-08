@@ -22,7 +22,7 @@ impl<'a> TDoc<'a> {
             return Ok(());
         }
         for (k, arg) in component.arguments.iter() {
-            let mut default = if let Some(d) = child_component_properties.get(k) {
+            let default = if let Some(d) = child_component_properties.get(k) {
                 if let Some(ref d) = d.default {
                     d.to_owned()
                 } else {
@@ -57,9 +57,9 @@ impl<'a> TDoc<'a> {
                     );
                 }
             };
-            if let ftd::PropertyValue::Variable { ref mut name, .. } = default {
+            /*if let ftd::PropertyValue::Variable { ref mut name, .. } = default {
                 *name = self.resolve_name(0, format!("{}@{}", name, string_container).as_str())?;
-            }
+            }*/
             let local_variable = ftd::p2::Thing::Variable(ftd::Variable {
                 name: k.to_string(),
                 value: default,

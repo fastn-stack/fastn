@@ -474,8 +474,6 @@ impl ChildComponent {
 
         doc.insert_local_from_component(&mut root, &self.properties, local_container);
 
-        dbg!("call", &root, &self, &doc.local_variables);
-
         let conditional_attribute =
             get_conditional_attributes(self.line_number, &self.properties, doc)?;
 
@@ -1858,56 +1856,6 @@ impl Component {
                 child_container: containers,
             })
         }
-    }
-
-    fn get_all_locals(
-        &self,
-        all_locals: &ftd::Map,
-        arguments: &std::collections::BTreeMap<String, ftd::Value>,
-        string_container: &str,
-    ) -> ftd::p1::Result<ftd::Map> {
-        let mut locals: ftd::Map = Default::default();
-
-        for k in all_locals.keys() {
-            if let Some(arg) = arguments.get(k) {
-                if let Some(value) = arg.to_string() {
-                    locals.insert(format!("{}@{}", k, string_container), value.to_string());
-                }
-            } else if let Some(arg) = self.arguments.get(k) {
-                if let Some(d) = get_local_value(arg) {
-                    locals.insert(format!("{}@{}", k, string_container), d.to_string());
-                }
-            }
-        }
-        return Ok(locals);
-
-        fn get_local_value(kind: &ftd::p2::Kind) -> Option<String> {
-            match kind {
-                ftd::p2::Kind::String {
-                    default: Some(d), ..
-                }
-                | ftd::p2::Kind::Integer { default: Some(d) }
-                | ftd::p2::Kind::Decimal { default: Some(d) }
-                | ftd::p2::Kind::Boolean { default: Some(d) } => Some(d.to_string()),
-                ftd::p2::Kind::Optional { kind } => {
-                    if let Some(val) = get_local_value(kind) {
-                        Some(val)
-                    } else {
-                        Some("".to_string())
-                    }
-                }
-                _ => None,
-            }
-        }
-    }
-
-    fn get_locals_map(&self, string_container: &str) -> ftd::Map {
-        let mut all_locals: ftd::Map = Default::default();
-
-        for k in self.arguments.keys() {
-            all_locals.insert(k.to_string(), string_container.to_string());
-        }
-        all_locals
     }
 
     pub fn to_value(&self, kind: &ftd::p2::Kind) -> ftd::p1::Result<ftd::Value> {
