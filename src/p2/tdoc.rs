@@ -23,7 +23,7 @@ impl<'a> TDoc<'a> {
         }
         for (k, arg) in component.arguments.iter() {
             let default = if let Some(d) = child_component_properties.get(k) {
-                if let Some(ref d) = d.default {
+                let default = if let Some(ref d) = d.default {
                     d.to_owned()
                 } else {
                     //todo
@@ -35,7 +35,48 @@ impl<'a> TDoc<'a> {
                         self.name,
                         0,
                     );
+                };
+                if matches!(default.kind(), ftd::p2::Kind::UI { .. }) {
+                    let root = match &default {
+                        ftd::PropertyValue::Value {
+                            value: ftd::Value::UI { name, .. },
+                        }
+                        | ftd::PropertyValue::Reference { name, .. }
+                        | ftd::PropertyValue::Variable { name, .. } => name,
+                        ftd::PropertyValue::Value { value } => {
+                            return ftd::e2(
+                                format!(
+                                    "expected UI for local variable {}: {:?} in {}, found: `{:?}`",
+                                    k, arg, component.root, value
+                                ),
+                                self.name,
+                                0,
+                            )
+                        }
+                    }
+                    .to_string();
+
+                    let c = ftd::p2::Thing::Component(ftd::Component {
+                        root,
+                        full_name: self
+                            .resolve_name(0, format!("{}@{}", k, string_container).as_str())?,
+                        arguments: Default::default(),
+                        locals: Default::default(),
+                        properties: d.nested_properties.clone(),
+                        instructions: vec![],
+                        events: vec![],
+                        condition: None,
+                        kernel: false,
+                        invocations: vec![],
+                        line_number: 0,
+                    });
+                    self.local_variables.insert(
+                        self.resolve_name(0, format!("{}@{}", k, string_container).as_str())?,
+                        c,
+                    );
+                    continue;
                 }
+                default
             } else {
                 if let Some(default) = arg.get_default_value_str() {
                     ftd::PropertyValue::resolve_value(
