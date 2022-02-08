@@ -386,7 +386,7 @@ impl ChildComponent {
                 &mut root,
                 &child_component.properties,
                 local_container.as_slice(),
-            );
+            )?;
             let is_visible = {
                 let mut visible = true;
                 if let Some(ref b) = child_component.condition {
@@ -472,7 +472,7 @@ impl ChildComponent {
                 .unwrap()
         };
 
-        doc.insert_local_from_component(&mut root, &self.properties, local_container);
+        doc.insert_local_from_component(&mut root, &self.properties, local_container)?;
 
         let conditional_attribute =
             get_conditional_attributes(self.line_number, &self.properties, doc)?;
@@ -1752,7 +1752,7 @@ impl Component {
                 doc.get_component(self.line_number, self.root.as_str())
                     .unwrap()
             };
-            doc.insert_local_from_component(&mut root, &self.properties, local_container);
+            doc.insert_local_from_component(&mut root, &self.properties, local_container)?;
 
             let (get_condition, is_visible, is_null_element) = match condition {
                 Some(c) => {
@@ -2084,29 +2084,6 @@ pub fn recursive_child_component(
             }
         }
         false
-    }
-}
-
-fn update_properties(
-    properties: &mut std::collections::BTreeMap<String, (ftd::Value, Option<String>)>,
-    arguments_value: &std::collections::BTreeMap<String, ftd::Value>,
-    arguments: &std::collections::BTreeMap<String, ftd::p2::Kind>,
-) {
-    let default_property = vec![
-        "id", "top", "bottom", "left", "right", "align", "scale", "rotate", "scale-x", "scale-y",
-        "slot",
-    ];
-    for p in default_property {
-        if !properties.contains_key(p) {
-            if let Some(v) = arguments_value.get(p) {
-                properties.insert(p.to_string(), (v.to_owned(), None));
-            }
-        }
-    }
-    for p in arguments.keys() {
-        if let Some(v) = arguments_value.get(p) {
-            properties.insert(format!("${}", p), (v.to_owned(), None));
-        }
     }
 }
 

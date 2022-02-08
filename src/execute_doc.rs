@@ -91,7 +91,7 @@ impl<'a> ExecuteDoc<'a> {
                     let (parent, inner) = {
                         let mut parent = parent.clone();
                         let mut inner = inner.clone();
-                        doc.insert_local(&mut parent, &mut inner, local_container.as_slice());
+                        doc.insert_local(&mut parent, &mut inner, local_container.as_slice())?;
                         (parent, inner)
                     };
 

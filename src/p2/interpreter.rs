@@ -14718,6 +14718,8 @@ mod test {
                 -- string foo: Foo
 
                 -- bar:
+                id: bar-id
+                scale: 1.2
                 title: $foo
                 w: 2
                 integer gg: 1

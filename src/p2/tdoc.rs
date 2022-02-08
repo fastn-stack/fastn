@@ -192,7 +192,7 @@ impl<'a> TDoc<'a> {
             );
         }
         if let Some(ref mut condition) = parent.condition {
-            edit_condition(condition, self, &string_container);
+            edit_condition(condition, self, &string_container)?;
         }
         for (_, property) in parent.properties.iter_mut() {
             if let Some(ftd::PropertyValue::Variable { ref mut name, .. }) = property.default {
@@ -223,7 +223,7 @@ impl<'a> TDoc<'a> {
                 *c = self.resolve_name(0, format!("{}@{}", c, string_container).as_str())?;
             }
             if let Some(ref mut condition) = child.condition {
-                edit_condition(condition, self, &string_container);
+                edit_condition(condition, self, &string_container)?;
             }
         }
         return Ok(());
