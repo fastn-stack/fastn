@@ -315,7 +315,7 @@ impl<'a> ExecuteDoc<'a> {
                             vec![]
                         } else {
                             let mut main = ftd::p2::interpreter::default_column();
-                            main.container.children = child;
+                            main.container.children.extend(child);
                             vec![ftd::Element::Column(main)]
                         }
                     };

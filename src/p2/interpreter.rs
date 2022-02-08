@@ -706,7 +706,7 @@ pub fn interpret(
 )> {
     let mut interpreter = Interpreter::new(lib);
     let instructions = interpreter.interpret(name, source)?;
-    dbg!(&instructions);
+    dbg!(&instructions, &interpreter.bag);
     let mut rt = ftd::RT::from(name, interpreter.aliases, interpreter.bag, instructions);
     let main = rt.render_()?;
     Ok((rt.bag, main))
@@ -14729,6 +14729,10 @@ mod test {
                 -- bar:
                 title: $foo
                 w: 1
+
+
+                -- ftd.column bar1:
+                ftd.ui
 
                 -- ftd.column bar:
                 string title:

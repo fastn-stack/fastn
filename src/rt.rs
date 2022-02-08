@@ -77,27 +77,41 @@ impl RT {
         ftd::p2::document::set_region_id(&mut element);
         ftd::p2::document::default_scene_children_position(&mut element);
 
-        main.container.children = element;
-        store_invocations(&mut self.bag, invocations);
+        main.container.children.extend(element);
+        store_invocations(&mut self.bag, &mut local_variables, invocations);
         Ok(main)
     }
 }
 
 pub(crate) fn store_invocations(
     bag: &mut std::collections::BTreeMap<String, ftd::p2::Thing>,
+    local_variables: &mut std::collections::BTreeMap<String, ftd::p2::Thing>,
     invocations: std::collections::BTreeMap<
         String,
         Vec<std::collections::BTreeMap<String, ftd::Value>>,
     >,
 ) {
     for (k, v) in invocations.into_iter() {
-        match bag.get_mut(k.as_str()).unwrap() {
-            ftd::p2::Thing::Component(ref mut c) => {
-                if !c.kernel {
-                    c.invocations.extend(v)
+        if let Some(c) = bag.get_mut(k.as_str()) {
+            match c {
+                ftd::p2::Thing::Component(ref mut c) => {
+                    if !c.kernel {
+                        c.invocations.extend(v)
+                    }
+                    continue;
                 }
+                _ => unreachable!(),
             }
-            _ => unreachable!(),
+        }
+        if let Some(c) = local_variables.get_mut(k.as_str()) {
+            match c {
+                ftd::p2::Thing::Component(ref mut c) => {
+                    if !c.kernel {
+                        c.invocations.extend(v)
+                    }
+                }
+                _ => unreachable!(),
+            }
         }
     }
 }
