@@ -27,10 +27,10 @@ impl ftd::p2::Library for Library {
             return Some(fpm::fpm_lib_ftd().to_string());
         }
         return if doc.name.starts_with(&self.config.package.name.as_str()) {
-            get_for_package_config(name, &self.config.package, &self)
+            get_for_package_config(name, &self.config.package, self)
         } else {
             for package in &get_root_package_for_path(doc.name, &self.config.package, false) {
-                if let Some(resp) = get_for_package_config(name, package, &self) {
+                if let Some(resp) = get_for_package_config(name, package, self) {
                     return Some(resp);
                 };
             }
@@ -43,7 +43,7 @@ impl ftd::p2::Library for Library {
             lib: &fpm::Library,
         ) -> Option<String> {
             if name.starts_with(package.name.as_str()) {
-                if let Some(r) = get_data_from_package(name, &package, lib) {
+                if let Some(r) = get_data_from_package(name, package, lib) {
                     return Some(r);
                 }
             }

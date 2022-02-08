@@ -71,7 +71,7 @@ pub(crate) async fn get_documents(config: &fpm::Config) -> fpm::Result<Vec<fpm::
         .map(|x| camino::Utf8PathBuf::from_path_buf(x.into_path()).unwrap()) //todo: improve error message
         .collect::<Vec<camino::Utf8PathBuf>>();
     let mut documents =
-        fpm::paths_to_files(&config.package.name.as_str(), all_files, &config.root).await?;
+        fpm::paths_to_files(config.package.name.as_str(), all_files, &config.root).await?;
     documents.sort_by_key(|v| v.get_id());
 
     Ok(documents)
