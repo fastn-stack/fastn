@@ -706,7 +706,7 @@ pub fn interpret(
 )> {
     let mut interpreter = Interpreter::new(lib);
     let instructions = interpreter.interpret(name, source)?;
-    dbg!(&instructions, &interpreter.bag);
+    dbg!(&instructions);
     let mut rt = ftd::RT::from(name, interpreter.aliases, interpreter.bag, instructions);
     let main = rt.render_()?;
     Ok((rt.bag, main))
@@ -10522,7 +10522,14 @@ mod test {
                     name: ftd::p2::EventName::OnClick,
                     action: ftd::p2::Action {
                         action: ftd::p2::ActionKind::Toggle,
-                        target: s("@open"),
+                        target: ftd::PropertyValue::Variable {
+                            name: s("@open"),
+                            kind: ftd::p2::Kind::String {
+                                caption: false,
+                                body: false,
+                                default: None,
+                            },
+                        },
                         parameters: Default::default(),
                     },
                 }],
@@ -10811,6 +10818,7 @@ mod test {
             &ftd::p2::TestLibrary {},
         )
         .expect("found error");
+        // dbg!(&g_col);
 
         pretty_assertions::assert_eq!(g_col, main);
     }
