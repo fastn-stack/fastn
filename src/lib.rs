@@ -14,7 +14,6 @@ pub mod main;
 mod or_type;
 pub mod p1;
 pub mod p2;
-mod pre_execute_doc;
 pub mod render;
 mod rt;
 mod ui;
