@@ -66,7 +66,7 @@ impl Kind {
             ftd::p2::Kind::Boolean { .. } => "boolean",
             ftd::p2::Kind::Object { .. } => "object",
             ftd::p2::Kind::List { .. } => "list",
-            _ => return ftd::e2(format!("Kind supported for default value are string, integer, decimal and boolean with default value, found: kind `{:?}`", &self), doc_id, line_number),
+            _ => return ftd::e2(format!("1 Kind supported for default value are string, integer, decimal and boolean with default value, found: kind `{:?}`", &self), doc_id, line_number),
         }.to_string())
     }
 
@@ -74,21 +74,30 @@ impl Kind {
         Ok(match self {
             ftd::p2::Kind::String { default: Some(d), .. } => ftd::Value::String {text: d.to_string(), source: ftd::TextSource::Default} ,
             ftd::p2::Kind::Integer { default: Some(d) } => ftd::Value::Integer { value: match d.parse::<i64>() {
-                Ok(v) => v,
-                Err(_) => return ftd::e2(format!("{} is not an integer", d), doc_id, line_number),
-            },},
+                    Ok(v) => v,
+                    Err(_) => return ftd::e2(format!("{} is not an integer", d), doc_id, line_number),
+                },
+            },
             ftd::p2::Kind::Decimal { default: Some(d) } => ftd::Value::Decimal { value: d.parse::<f64>().map_err(|e| ftd::p1::Error::ParseError {
-                message: e.to_string(),
-                doc_id: doc_id.to_string(),
-                line_number,
-            })?, } ,
+                    message: e.to_string(),
+                    doc_id: doc_id.to_string(),
+                    line_number,
+                })?,
+            },
             ftd::p2::Kind::Boolean { default: Some(d) } => ftd::Value::Boolean { value: d.parse::<bool>().map_err(|e|ftd::p1::Error::ParseError {
-                message: e.to_string(),
-                doc_id: doc_id.to_string(),
-                line_number,
-            })?, } ,
+                    message: e.to_string(),
+                    doc_id: doc_id.to_string(),
+                    line_number,
+                })?,
+            },
+            ftd::p2::Kind::Optional {kind} => if let Ok(f) = kind.to_value(line_number, doc_id) {
+                ftd::Value::Optional {data: Box::new(Some(f)), kind: kind.as_ref().to_owned()}
+            } else {
+                ftd::Value::Optional {data: Box::new(None), kind: kind.as_ref().to_owned()}
+            },
+            ftd::p2::Kind::List { kind, .. } => ftd::Value::List { data: vec![], kind: kind.as_ref().to_owned() },
             _ => return ftd::e2(
-                format!("Kind supported for default value are string, integer, decimal and boolean with default value, found: kind `{:?}`", &self),
+                format!("2 Kind supported for default value are string, integer, decimal and boolean with default value, found: kind `{:?}`", &self),
                 doc_id,  line_number),
         })
     }
@@ -174,6 +183,7 @@ impl Kind {
             | Kind::List { default, .. }
             | Kind::String { default, .. } => default.clone(),
             Kind::UI { default, .. } => default.as_ref().map(|(v, _)| v.clone()),
+            Kind::Optional { kind } => kind.get_default_value_str(),
             _ => None,
         }
     }

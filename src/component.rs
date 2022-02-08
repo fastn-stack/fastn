@@ -136,12 +136,6 @@ impl ChildComponent {
             self.line_number,
         )?;
 
-        let string_container: String = local_container
-            .iter()
-            .map(|v| v.to_string())
-            .collect::<Vec<String>>()
-            .join(",");
-
         let ElementWithContainer {
             mut element,
             child_container,
@@ -149,18 +143,6 @@ impl ChildComponent {
         } = self.call(doc, invocations, false, local_container, id.clone())?;
         element.set_container_id(id.clone());
         element.set_element_id(id);
-
-        if let Some(common) = element.get_mut_common() {
-            for (k, v) in &self.arguments {
-                if let Ok(v) = v.to_value(self.line_number, doc.name) {
-                    if let Some(v) = v.to_string() {
-                        common
-                            .locals
-                            .insert(format!("{}@{}", k, string_container), v.to_string());
-                    }
-                }
-            }
-        }
 
         let mut container_children = vec![];
         match (&mut element, children.is_empty()) {

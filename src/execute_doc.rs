@@ -121,6 +121,7 @@ impl<'a> ExecuteDoc<'a> {
                     };
                     let f = {
                         let mut f = f.clone();
+                        doc.insert_local_from_childcomponent(local_container.as_slice(), &mut f)?;
                         f.properties.extend(arguments.into_iter().map(|(k, v)| {
                             (
                                 k,
