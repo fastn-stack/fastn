@@ -1,7 +1,15 @@
 pub async fn status(config: &fpm::Config, source: Option<&str>) -> fpm::Result<()> {
     let snapshots = fpm::snapshot::get_latest_snapshots(&config.root).await?;
     match source {
-        Some(source) => file_status(config.package.name.clone(), &config.root, source, &snapshots).await,
+        Some(source) => {
+            file_status(
+                config.package.name.clone(),
+                &config.root,
+                source,
+                &snapshots,
+            )
+            .await
+        }
         None => all_status(config, &snapshots).await,
     }
 }
