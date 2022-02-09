@@ -71,6 +71,72 @@ paste in browser and see doc of individual module) and we will always refer to
 current package either as `package` keyword, or we can even allow `as` alias
 syntax in the `-- fpm.package:` line.
 
+-- ft.h1: Static Assets From Dependencies
+
+Lets say we let any package specify some `exports`, these could be images or even
+ftd files (eg contact-us, about-us can be auto created without cluttering).
+
+-- ft.code: theme/FPM.ftd
+lang: ftd
+
+\-- import: fpm
+\-- fpm.package: theme
+\-- fpm.export: images/
+default: true
+\-- fpm.export: sample/about-us.ftd as about-us.ftd
+default: false
+
+-- ft.markdown:
+
+When I am using the `theme` I can be explicit:
+
+-- ft.code:
+lang: ftd
+
+\-- fpm.dependency: theme
+include: *
+
+-- ft.markdown:
+
+`include: *` would be default. We have can have `include: defaults` to only
+import default ones. We can also include individual patterns explicitly.
+
+Note: exports are not considered part of package interface.
+
+-- ft.h2: Can we import any file?
+
+Not seeing any reason why not. There is a question of backward compatibility, I
+as a theme author may want to move things around, things that are not explicitly
+exported are private to me.
+
+This feature is largely so components exposed by a theme can reliably refer to
+assets made available by theme. Ideally only theme components should know about
+existence of such.
+
+-- ft.h2: Auto Include In A Name-spaced Folder
+
+In `.build` we can create `.build/foo.com/blog-theme/images/bg.png` etc, and we
+can do it on demand (only if any component that refers to `bg.png` is actually
+used while rendering any document it would be copied). Since assets in this
+scheme can never conflict, they can considered opaque, so the package can not
+refer to them.
+
+Problem would be say a theme has a few images and some component in that theme
+lets you pass one of the those images as component argument: so how would we
+refer to that image? Full URL or the partial URL? We can refer partial URL and
+since component knows its part of some theme, it will resolve. But what if in
+author package there is some other image and I do not want theme provided URL
+and use my URL? We are then forced to give full URL and not partial. A component
+in a theme refers to images in the theme via relative URL, eg `images/bg.png`.
+One option is we always use full URL: foo.com/book-theme/images/bg.png. At least
+in this case, because URL starts with package name, we know it belongs to that
+package, and so we can know if its either https://foo.com/book-theme/images/bg.png
+or https://author.com/FPM/foo.com/book-theme/images/bg.png. If the theme component
+referred to the URL using protocol, then it would be absolute and we do not want
+to analyze.
+
+Ideally we should copy on access.
+
 -- ft.h1: Package Notifications
 
 3rd Feb 2022
