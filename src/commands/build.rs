@@ -100,7 +100,7 @@ async fn build_with_translations(
 async fn build_with_original(
     config: &fpm::Config,
     _original: &fpm::Package,
-    _file: Option<&str>,
+    file: Option<&str>,
     base_url: Option<&str>,
     skip_failed: bool,
 ) -> fpm::Result<()> {
@@ -143,6 +143,22 @@ async fn build_with_original(
 
     // Process all the files collected from original and root package
     for translated_document in translated_documents.values() {
+        if file.is_some()
+            && file
+                != Some(
+                    match &translated_document {
+                        fpm::TranslatedDocument::Missing { original } => original.get_id(),
+                        fpm::TranslatedDocument::NeverMarked { translated, .. } => {
+                            translated.get_id()
+                        }
+                        fpm::TranslatedDocument::Outdated { translated, .. } => translated.get_id(),
+                        fpm::TranslatedDocument::UptoDate { translated, .. } => translated.get_id(),
+                    }
+                    .as_str(),
+                )
+        {
+            continue;
+        }
         translated_document
             .html(config, base_url, skip_failed)
             .await?;
