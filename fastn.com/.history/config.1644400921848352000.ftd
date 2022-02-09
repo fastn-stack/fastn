@@ -1,0 +1,147 @@
+-- import: ft
+
+-- ft.site-name: FPM
+-- ft.site-icon: static/images/logo.svg
+-- ft.github: https://github.com/fifthtry/fpm
+-- ft.site-url: /
+
+-- ft.header-toc:
+$processor$: toc
+
+- about/
+  Docs
+- usage/
+  `fpm` CLI Manual
+- journal/
+  Development
+- themes/
+  Themes
+
+
+-- ft.toc:
+$processor$: toc
+
+- /about/
+  About `fpm`
+  - why-not/
+    Why Not `fpm`?
+- /fs/
+  File System Organization
+  - /fpm-ftd-file/
+    `FPM.ftd`
+- /ftd-host/
+  FTD Host Features
+  - /http/
+    `$processor$: http`
+  - /toc/
+    `$processor$: toc`
+  - /package-query/
+    `$processor$: package-query`
+  - /fpm-vars/
+    `import: fpm`
+- /how-to/
+  How To
+  - /how-to/install/
+    Install `fpm`
+  - /how-to/update/
+    Update `fpm`
+  - /how-to/get-started-github-pages/
+    Get started with Github pages
+  - /how-to/get-started-vercel/
+    Get started with Vercel
+- /usage/
+  `fpm` Usage
+  - /build/
+    `fpm build`
+  - /sync/
+    `fpm sync`
+  - /status/
+    `fpm status`
+  - /diff/
+    `fpm diff`
+  - /update/
+    `fpm update`
+- /known-issues/
+  Known Issues
+
+
+-- ft.toc-item list dev-toc:
+$processor$: toc
+
+- /roadmap/
+  Roadmap
+- /journal/
+  Journal
+
+-- ft.toc-item list themes-toc:
+$processor$: toc
+
+- /themes/
+  About Themes
+- /package-interface/
+  Package Interface
+  - /theme/docs/
+    Theme Documentation
+  - /theme/article/
+    Article PI
+  - /theme/book/
+    Book PI
+  - /theme/presentation/
+    Presentation PI
+- /theme/config/
+  Theme Config
+- /theme/responsive/
+  Responsive Themes
+- /theme/dark-mode/
+  Dark Mode
+- /theme/components/
+  Components
+  - /theme/header/
+    Dark Mode
+- /vars/
+  FPM Variables
+
+-- ft.toc-item list learn:
+$processor$: toc
+
+- /
+  Introduction
+- /about/
+  Installation
+
+-- ft.toc-item list community:
+$processor$: toc
+
+- /
+  Introduction
+- /about/
+  Installation
+
+-- ft.toc-item list more:
+$processor$: toc
+
+- /
+  Introduction
+- /about/
+  Installation
+
+-- ft.toc-item list legal:
+$processor$: toc
+
+- /
+  Introduction
+- /about/
+  Installation
+
+
+/-- ft.footer-toc: Learn
+children: $learn
+
+/-- ft.footer-toc: Community
+children: $community
+
+/-- ft.footer-toc: More
+children: $more
+
+/-- ft.footer-toc: Legal
+children: $legal
