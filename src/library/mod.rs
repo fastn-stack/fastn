@@ -26,8 +26,8 @@ impl ftd::p2::Library for Library {
         if name == "fpm-lib" {
             return Some(fpm::fpm_lib_ftd().to_string());
         }
-        return if doc.name.starts_with(&self.config.package.name.as_str()) {
-            get_for_package_config(name, &self.config.package, self)
+        return if let Some(r) = get_for_package_config(name, &self.config.package, self) {
+            Some(r)
         } else {
             for package in &get_root_package_for_path(doc.name, &self.config.package, false) {
                 if let Some(resp) = get_for_package_config(name, package, self) {
@@ -51,8 +51,17 @@ impl ftd::p2::Library for Library {
                 return Some(r);
             }
             // Check the translation of the package
-            if let Some(o) = package.translation_of.as_ref() {
-                if let Some(resp) = get_for_package_config(name, o, lib) {
+            if let Some(translation_of_package) = package.translation_of.as_ref() {
+                if let Some(resp) = get_for_package_config(
+                    name.replacen(
+                        package.name.as_str(),
+                        translation_of_package.name.as_str(),
+                        1,
+                    )
+                    .as_str(),
+                    translation_of_package,
+                    lib,
+                ) {
                     return Some(resp);
                 }
             }
