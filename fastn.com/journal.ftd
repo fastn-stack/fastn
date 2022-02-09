@@ -30,6 +30,191 @@ So links never break (and original author can keep updating document URL at whim
 (on how having article.page allows us to get just the content of a page, without
 header/sidebar/footer etc).
 
+-- ft.h1: Static Assets From Dependencies
+
+9th Feb 20222
+
+For static assets we have to solve three problems.
+
+-- ft.h2: Where are the assets stored?
+
+In the main package, we create a `.build` folder. The dependencies are checked
+out in `.packages` folder.
+
+For a dependency `d.com/a`, the asset `images/foo.png` will be stored in
+`.build/_assets/d.com/a/images/foo.png`.
+
+There is not much to this part.
+
+-- ft.h2: When to copy?
+
+Should we copy all assets in `.packages` folder in `.build/_assets`? Or should
+we do it on demand?
+
+Easy answer for now is lets copy all static (non ftd and md files a package are
+considered static). In future we can optimize this.
+
+-- ft.h2: How to ensure paths work?
+
+This is the trikiest part.
+
+So say `d.com/a/lib.ftd` has a component:
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.image logo:
+src: images/foo.png
+
+-- ft.markdown:
+
+We are going to use relative path here. Technically if someone uses absolute
+path, then we can still learn if the absolute path is part of package or outside,
+e.g. if they used:
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.image logo:
+src: https://d.com/a/images/foo.png
+
+-- ft.markdown:
+
+This is the worst case scenario. They should not use it as if they do, when they
+are developing logically they would not see the local modifications to `foo.png`
+without publishing.
+
+But technically we can rewrite these URLs too. We do not want to continue to
+download from `d.com`, and increase their hosting bills, and also take the risk
+of them blocking assets via some tweak in their nginx conf etc, leading to our
+site giving 404.
+
+So we should rewrite the URL to: `/_assets/d.com/a/images/foo.png` and now it
+would be server by our hosting providers and things will be in our control.
+
+Repeating, technically we can rewrite such URLs as well, and maybe we should.
+Then comes next hard part:
+
+-- ft.code: d.com/a/lib.ftd
+lang: ftd
+
+\-- ftd.image logo:
+string src: /images/foo.png
+src: $src
+
+-- ft.markdown:
+
+We have to change the `src` again to `/_assets/d.com/a/images/foo.png`.
+Should we rewrite all paths? What if this was part of the main package? Or what
+if we did this from our main package:
+
+
+-- ftd.code:
+lang: ftd
+
+\-- import: d.com/a/lib
+
+\-- lib.logo:
+src: images/foo.png
+
+-- ft.markdown:
+
+Now is this referring to `/images/foo.png` from our package, or
+`/_assets/d.com/a/images/foo.png`?
+
+We can argue we will only handle relative URLs and not absolute ones. Further
+when we come across a relative URL we will resolve it to full URL based on
+current package. We already track the current package, so this should be easy.
+
+So same string in different package will refer to different values. This becomes
+more complex in this scenario:
+
+-- ft.code: d.com/a/lib.ftd
+lang: ftd
+
+\-- string logo-1: images/foo.png
+\-- string logo-2: images/two.png
+
+\-- ftd.image logo:
+string src: $logo-1
+src: $src
+
+
+-- ft.code: main package:
+lang: ftd
+
+\-- import: d.com/a/lib
+
+\-- lib.logo:
+src: $lib.logo-2
+
+\-- lib.logo:
+src: images/two.png
+
+-- ft.markdown:
+
+Here both values are same, but should they resolve into same URL or different
+URLs?
+
+What if we say neither URLs are right and the lib should include path including
+package name:
+
+-- ft.code: d.com/a/lib.ftd
+lang: ftd
+
+\-- string logo-1: d.com/a/images/foo.png
+\-- string logo-2: d.com/a/images/two.png
+
+\-- ftd.image logo:
+string src: $logo-1
+src: $src
+
+-- ft.code: main package:
+lang: ftd
+
+\-- import: d.com/a/lib
+
+\-- lib.logo:
+src: $lib.logo-2
+
+\-- lib.logo:
+src: amitu.com/images/two.png
+
+-- ft.markdown:
+
+In this we are never having to worry if `images/foo.png` refers to `amitu.com`
+or `d.com/a`. It's explicit.
+
+It is still a "relative url" because it does not start with `/` or protocol.
+
+So we look at all relative URLs containing package name, and either remove the
+package name: `amitu.com/images/two.png -> images/two.png` or add `_assets`:
+`d.com/a/images/two.png -> _assets/d.com/a/images/two.png`. We can even resolve
+`https://d.com/a/images/two.png -> _assets/d.com/a/images/two.png`.
+
+
+If the relagive URL doesnt contain current package or dependency name then we
+leave it as is.
+
+Theme designers would be encouraged to use their package name in the assets.
+
+-- ft.h2: Base And Versioning
+
+Instead of resolving `https://d.com/a/images/two.png ->
+_assets/d.com/a/images/two.png` etc we can do `https://d.com/a/images/two.png ->
+$HOST$BASE/_assets/d.com/a/images/two.png` when `--base` argument is used. Where
+$HOST would be either http://127.0.0.1:8000 etc or https://amitu.com. This is
+to ensure image URLs not depend on `BASE`. This way we can use `$BASE` for
+handling markdown URLs.
+
+Markdown URL problem: `tutorial/` should resolve into `$BASE/tutorial`, this
+works if base is common for the entire project as has been so far. But when we
+have versioning, we may want `tutorial/` to resolve either into `/v1/tutorial/`
+or `/v2/tutorial/`, and this will depenend on current version. So when we have
+haversion support we will want to keep base free to handle versioning, but we
+are assuming assets would be shared across all versions.
+
+
 -- ft.h1: On `main:`
 
 4th Feb 2022
