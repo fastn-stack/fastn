@@ -1,12 +1,21 @@
 pub async fn status(config: &fpm::Config, source: Option<&str>) -> fpm::Result<()> {
     let snapshots = fpm::snapshot::get_latest_snapshots(&config.root).await?;
     match source {
-        Some(source) => file_status(&config.root, source, &snapshots).await,
+        Some(source) => {
+            file_status(
+                config.package.name.clone(),
+                &config.root,
+                source,
+                &snapshots,
+            )
+            .await
+        }
         None => all_status(config, &snapshots).await,
     }
 }
 
 async fn file_status(
+    package_name: String,
     base_path: &camino::Utf8PathBuf,
     source: &str,
     snapshots: &std::collections::BTreeMap<String, u128>,
@@ -21,7 +30,7 @@ async fn file_status(
         return Ok(());
     }
 
-    let file = fpm::get_file(&path, base_path).await?;
+    let file = fpm::get_file(package_name, &path, base_path).await?;
 
     let file_status = get_file_status(&file, snapshots).await?;
     let track_status = get_track_status(&file, snapshots, base_path.as_str())?;

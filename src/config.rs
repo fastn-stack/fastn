@@ -16,6 +16,11 @@ pub struct Config {
     ///
     /// A utility that returns camino version of `current_dir()` may be used in future.
     pub root: camino::Utf8PathBuf,
+
+    /// Keeps a track of the package root for a particular config. For a dep2 of a dep1,
+    /// this could point to the <original_root>/.packages/
+    /// whereas the project root could be at <original_root>/.packages/<dep1_root>
+    pub packages_root: camino::Utf8PathBuf,
     /// `original_directory` is the directory from which the `fpm` command was invoked
     ///
     /// During the execution of `fpm`, we change the directory to the package root so the program
@@ -164,13 +169,23 @@ impl Config {
             temp_deps
                 .into_iter()
                 .map(|v| v.into_dependency())
-                .collect::<Vec<fpm::Dependency>>()
+                .collect::<Vec<fpm::Result<fpm::Dependency>>>()
+                .into_iter()
+                .collect::<fpm::Result<Vec<fpm::Dependency>>>()?
         };
 
         let mut package = {
             let temp_package: PackageTemp = b.get("fpm#package")?;
             let mut package = temp_package.into_package();
             package.dependencies = deps;
+
+            let auto_imports: Vec<String> = b.get("fpm#auto-import")?;
+            // let mut aliases = std::collections::HashMap::<String, String>::new();
+            let auto_import = auto_imports
+                .iter()
+                .map(|f| fpm::AutoImport::from_string(f.as_str()))
+                .collect();
+            package.auto_import = auto_import;
             package
         };
 
@@ -187,6 +202,7 @@ impl Config {
                     });
                 }
             }
+            overrides.add("!FPM/**")?;
 
             match overrides.build() {
                 Ok(v) => v,
@@ -202,6 +218,7 @@ impl Config {
 
         Ok(Config {
             package,
+            packages_root: root.clone().join(".packages"),
             root,
             original_directory,
             fonts,
@@ -264,6 +281,7 @@ impl PackageTemp {
             translation_status: None,
             canonical_url: self.canonical_url,
             dependencies: vec![],
+            auto_import: vec![],
         }
     }
 }
@@ -281,6 +299,8 @@ pub struct Package {
     /// `dependencies` keeps track of direct dependencies of a given package. This too should be
     /// moved to `fpm::Package` to support recursive dependencies etc.
     pub dependencies: Vec<fpm::Dependency>,
+    /// `auto_import` keeps track of the global auto imports in the package.
+    pub auto_import: Vec<fpm::AutoImport>,
 }
 
 impl Package {
@@ -295,7 +315,60 @@ impl Package {
             translation_status: None,
             canonical_url: None,
             dependencies: vec![],
+            auto_import: vec![],
         }
+    }
+
+    pub fn generate_prefix_string(&self, with_alias: bool) -> Option<String> {
+        self.auto_import.iter().fold(None, |pre, ai| {
+            let mut import_doc_path = ai.path.clone();
+            if !with_alias {
+                // Check for the aliases and map them to the full path
+                for dependency in &self.dependencies {
+                    if dependency.alias.is_some()
+                        && ai.path.starts_with(dependency.alias.as_ref()?.as_str())
+                    {
+                        import_doc_path = ai.path.replacen(
+                            dependency.alias.as_ref()?.as_str(),
+                            dependency.package.name.as_str(),
+                            1,
+                        );
+                    }
+                }
+            }
+            Some(format!(
+                "{}\n-- import: {}{}",
+                pre.unwrap_or_else(|| "".to_string()),
+                &import_doc_path,
+                match &ai.alias {
+                    Some(a) => format!(" as {}", a),
+                    None => String::new(),
+                }
+            ))
+        })
+    }
+
+    pub fn get_prefixed_body(&self, body: &str, id: &str, with_alias: bool) -> String {
+        if id.contains("FPM/") {
+            return body.to_string();
+        };
+        match self.generate_prefix_string(with_alias) {
+            Some(s) => format!("{}\n\n{}", s.trim(), body),
+            None => body.to_string(),
+        }
+    }
+
+    pub fn eval_auto_import(&self, name: &str) -> Option<&str> {
+        for x in &self.auto_import {
+            let matching_string = match &x.alias {
+                Some(a) => a.as_str(),
+                None => x.path.as_str(),
+            };
+            if matching_string == name {
+                return Some(&x.path);
+            };
+        }
+        None
     }
 
     pub fn generate_canonical_url(&self, path: &str) -> String {
@@ -319,12 +392,12 @@ impl Package {
     /// aliases() returns the list of the available aliases at the package level.
     pub fn aliases(&self) -> fpm::Result<std::collections::BTreeMap<&str, &fpm::Package>> {
         let mut resp = std::collections::BTreeMap::new();
-        self.dependencies.iter().for_each(|d| {
-            resp.insert(
-                d.alias.as_ref().unwrap_or(&d.package.name).as_str(),
-                &d.package,
-            );
-        });
+        for d in &self.dependencies {
+            if let Some(a) = &d.alias {
+                resp.insert(a.as_str(), &d.package);
+            }
+            resp.insert(&d.package.name, &d.package);
+        }
         Ok(resp)
     }
 }

@@ -77,6 +77,7 @@ async fn build_with_translations(
             id: "FPM/translation-status.ftd".to_string(),
             content: fpm::original_package_status(config)?,
             parent_path: config.root.as_str().to_string(),
+            package_name: config.package.name.clone(),
         };
 
         process_ftd(
@@ -115,7 +116,7 @@ async fn build_with_original(
 
     // documents contains all the files in original package
     let original_documents = std::collections::BTreeMap::from_iter(
-        fpm::paths_to_files(files, original_path.as_path())
+        fpm::paths_to_files(config.package.name.as_str(), files, original_path.as_path())
             .await?
             .into_iter()
             .map(|v| (v.get_id(), v)),
@@ -153,6 +154,7 @@ async fn build_with_original(
             id: "FPM/translation-status.ftd".to_string(),
             content: fpm::translation_package_status(config)?,
             parent_path: config.root.as_str().to_string(),
+            package_name: config.package.name.clone(),
         };
 
         process_ftd(
@@ -374,7 +376,29 @@ async fn process_ftd(
         main.content = include_str!("../../ftd/info.ftd").to_string();
         (None, None, main)
     } else {
-        (fallback, message, main.to_owned())
+        let main = main.to_owned();
+        // let prefix = config.package.auto_import.iter().fold(None, |pre, ai| {
+        //     Some(format!(
+        //         "{}\n-- import: {}{}",
+        //         pre.unwrap_or_else(|| "".to_string()),
+        //         &ai.path,
+        //         match &ai.alias {
+        //             Some(a) => format!(" as {}", a),
+        //             None => String::new(),
+        //         }
+        //     ))
+        // });
+        // let prefix = config.package.generate_prefix_string();
+
+        let new_main = fpm::Document {
+            content: config
+                .package
+                .get_prefixed_body(main.content.as_str(), &main.id, true),
+            id: main.id,
+            parent_path: main.parent_path,
+            package_name: main.package_name,
+        };
+        (fallback, message, new_main)
     };
 
     match (fallback, message) {
@@ -419,20 +443,20 @@ async fn process_ftd(
             markdown: None,
             document_id: main.id.clone(),
             translated_data: Default::default(),
-            current_package: std::sync::Arc::new(std::sync::Mutex::new(vec![config
-                .package
-                .clone()])),
         };
 
-        let main_ftd_doc =
-            match ftd::p2::Document::from(main.id.as_str(), main.content.as_str(), &lib) {
-                Ok(v) => v,
-                Err(e) => {
-                    return Err(fpm::Error::PackageError {
-                        message: format!("failed to parse {:?}", &e),
-                    });
-                }
-            };
+        let main_ftd_doc = match ftd::p2::Document::from(
+            main.id_with_package().as_str(),
+            main.content.as_str(),
+            &lib,
+        ) {
+            Ok(v) => v,
+            Err(e) => {
+                return Err(fpm::Error::PackageError {
+                    message: format!("failed to parse {:?}", &e),
+                });
+            }
+        };
         let doc_title = match &main_ftd_doc.title() {
             Some(x) => x.original.clone(),
             _ => main.id.as_str().to_string(),
@@ -470,20 +494,20 @@ async fn process_ftd(
             markdown: None,
             document_id: main.id.clone(),
             translated_data,
-            current_package: std::sync::Arc::new(std::sync::Mutex::new(vec![config
-                .package
-                .clone()])),
         };
 
-        let main_ftd_doc =
-            match ftd::p2::Document::from(main.id.as_str(), main.content.as_str(), &lib) {
-                Ok(v) => v,
-                Err(e) => {
-                    return Err(fpm::Error::PackageError {
-                        message: format!("failed to parse {:?}", &e),
-                    });
-                }
-            };
+        let main_ftd_doc = match ftd::p2::Document::from(
+            main.id_with_package().as_str(),
+            main.content.as_str(),
+            &lib,
+        ) {
+            Ok(v) => v,
+            Err(e) => {
+                return Err(fpm::Error::PackageError {
+                    message: format!("failed to parse {:?}", &e),
+                });
+            }
+        };
 
         let doc_title = match &main_ftd_doc.title() {
             Some(x) => x.original.clone(),
@@ -551,20 +575,20 @@ async fn process_ftd(
             markdown: None,
             document_id: main.id.clone(),
             translated_data,
-            current_package: std::sync::Arc::new(std::sync::Mutex::new(vec![config
-                .package
-                .clone()])),
         };
 
-        let main_ftd_doc =
-            match ftd::p2::Document::from(main.id.as_str(), main.content.as_str(), &lib) {
-                Ok(v) => v,
-                Err(e) => {
-                    return Err(fpm::Error::PackageError {
-                        message: format!("failed to parse {:?}", &e),
-                    });
-                }
-            };
+        let main_ftd_doc = match ftd::p2::Document::from(
+            main.id_with_package().as_str(),
+            main.content.as_str(),
+            &lib,
+        ) {
+            Ok(v) => v,
+            Err(e) => {
+                return Err(fpm::Error::PackageError {
+                    message: format!("failed to parse {:?}", &e),
+                });
+            }
+        };
         let main_rt_doc = main_ftd_doc.to_rt("main", &main.id);
 
         let message_ftd_doc = match ftd::p2::Document::from("message", message, &lib) {
@@ -582,15 +606,18 @@ async fn process_ftd(
         };
         let message_rt_doc = message_ftd_doc.to_rt("message", &main.id);
 
-        let fallback_ftd_doc =
-            match ftd::p2::Document::from(main.id.as_str(), fallback.content.as_str(), &lib) {
-                Ok(v) => v,
-                Err(e) => {
-                    return Err(fpm::Error::PackageError {
-                        message: format!("failed to parse {:?}", &e),
-                    });
-                }
-            };
+        let fallback_ftd_doc = match ftd::p2::Document::from(
+            main.id_with_package().as_str(),
+            fallback.content.as_str(),
+            &lib,
+        ) {
+            Ok(v) => v,
+            Err(e) => {
+                return Err(fpm::Error::PackageError {
+                    message: format!("failed to parse {:?}", &e),
+                });
+            }
+        };
         let fallback_rt_doc = fallback_ftd_doc.to_rt("fallback", &fallback.id);
 
         let mut f = tokio::fs::File::create(new_file_path).await?;

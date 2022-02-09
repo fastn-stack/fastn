@@ -16,6 +16,8 @@ optional body notes:
 
 -- dependency-data list dependency:
 
+-- string list auto-import:
+
 -- record font-data:
 caption name:
 optional string woff:

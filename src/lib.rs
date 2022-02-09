@@ -7,6 +7,7 @@ extern crate lazy_static;
 pub(crate) mod utils;
 
 // Temp comment
+mod auto_import;
 mod commands;
 mod config;
 mod dependency;
@@ -18,6 +19,7 @@ mod snapshot;
 mod tracker;
 mod translation;
 
+pub(crate) use auto_import::AutoImport;
 pub(crate) use commands::build::process_file;
 pub use commands::{
     build::build, diff::diff, mark_upto_date::mark_upto_date, start_tracking::start_tracking,

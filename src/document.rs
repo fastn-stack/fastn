@@ -32,6 +32,7 @@ impl File {
 
 #[derive(Debug, Clone)]
 pub struct Document {
+    pub package_name: String,
     pub id: String,
     pub content: String,
     pub parent_path: String,
@@ -41,6 +42,14 @@ impl Document {
     pub fn id_to_path(&self) -> String {
         self.id
             .replace(".ftd", std::path::MAIN_SEPARATOR.to_string().as_str())
+    }
+
+    pub fn id_with_package(&self) -> String {
+        format!(
+            "{}/{}",
+            self.package_name.as_str(),
+            self.id.trim_end_matches(".ftd")
+        )
     }
 }
 
@@ -61,22 +70,26 @@ pub(crate) async fn get_documents(config: &fpm::Config) -> fpm::Result<Vec<fpm::
         .flatten()
         .map(|x| camino::Utf8PathBuf::from_path_buf(x.into_path()).unwrap()) //todo: improve error message
         .collect::<Vec<camino::Utf8PathBuf>>();
-    let mut documents = fpm::paths_to_files(all_files, &config.root).await?;
+    let mut documents =
+        fpm::paths_to_files(config.package.name.as_str(), all_files, &config.root).await?;
     documents.sort_by_key(|v| v.get_id());
 
     Ok(documents)
 }
 
 pub(crate) async fn paths_to_files(
+    package_name: &str,
     files: Vec<camino::Utf8PathBuf>,
     base_path: &camino::Utf8Path,
 ) -> fpm::Result<Vec<fpm::File>> {
+    let pkg = package_name.to_string();
     Ok(futures::future::join_all(
         files
             .into_iter()
             .map(|x| {
                 let base = base_path.to_path_buf();
-                tokio::spawn(async move { fpm::get_file(&x, &base).await })
+                let p = pkg.clone();
+                tokio::spawn(async move { fpm::get_file(p, &x, &base).await })
             })
             .collect::<Vec<tokio::task::JoinHandle<fpm::Result<fpm::File>>>>(),
     )
@@ -99,6 +112,7 @@ pub fn package_ignores() -> Result<ignore::overrides::Override, ignore::Error> {
 }
 
 pub(crate) async fn get_file(
+    package_name: String,
     doc_path: &camino::Utf8Path,
     base_path: &camino::Utf8Path,
 ) -> fpm::Result<File> {
@@ -129,11 +143,13 @@ pub(crate) async fn get_file(
 
     Ok(match id.rsplit_once(".") {
         Some((_, "ftd")) => File::Ftd(Document {
+            package_name: package_name.to_string(),
             id: id.to_string(),
             content: tokio::fs::read_to_string(&doc_path).await?,
             parent_path: base_path.to_string(),
         }),
         Some((_, "md")) => File::Markdown(Document {
+            package_name: package_name.to_string(),
             id: id.to_string(),
             content: tokio::fs::read_to_string(&doc_path).await?,
             parent_path: base_path.to_string(),

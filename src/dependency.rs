@@ -8,6 +8,28 @@ pub struct Dependency {
     pub alias: Option<String>,
 }
 
+impl Dependency {
+    pub fn unaliased_name(&self, name: &str) -> Option<String> {
+        if name.starts_with(self.package.name.as_str()) {
+            Some(name.to_string())
+        } else {
+            match &self.alias {
+                Some(i) => {
+                    if name.starts_with(i.as_str()) {
+                        self.unaliased_name(
+                            name.replacen(i.as_str(), self.package.name.as_str(), 1)
+                                .as_str(),
+                        )
+                    } else {
+                        None
+                    }
+                }
+                None => None,
+            }
+        }
+    }
+}
+
 pub fn ensure(base_dir: &camino::Utf8PathBuf, package: &mut fpm::Package) -> fpm::Result<()> {
     /*futures::future::join_all(
         deps.into_iter()
@@ -65,17 +87,17 @@ pub(crate) struct DependencyTemp {
 }
 
 impl DependencyTemp {
-    pub(crate) fn into_dependency(self) -> fpm::Dependency {
+    pub(crate) fn into_dependency(self) -> fpm::Result<fpm::Dependency> {
         let (package_name, alias) = match self.name.as_str().split_once(" as ") {
             Some((package, alias)) => (package, Some(alias.to_string())),
             _ => (self.name.as_str(), None),
         };
-        fpm::Dependency {
+        Ok(fpm::Dependency {
             package: fpm::Package::new(package_name),
             version: self.version,
             notes: self.notes,
             alias,
-        }
+        })
     }
 }
 
@@ -103,9 +125,11 @@ impl fpm::Package {
         //       want to update a package, delete the corresponding folder and latest
         //       version will get downloaded.
 
-        if downloaded_package.contains(&self.name) {
-            return Ok(());
-        }
+        // TODO: Fix this. Removing this because if a package has been downloaded as both an intermediate dependency
+        // and as a direct dependency, then the code results in non evaluation of the dependend package
+        // if downloaded_package.contains(&self.name) {
+        //     return Ok(());
+        // }
 
         let root = base_dir.join(".packages").join(self.name.as_str());
 
@@ -290,8 +314,17 @@ impl fpm::Package {
             temp_deps
                 .into_iter()
                 .map(|v| v.into_dependency())
-                .collect::<Vec<fpm::Dependency>>()
+                .collect::<Vec<fpm::Result<fpm::Dependency>>>()
+                .into_iter()
+                .collect::<fpm::Result<Vec<fpm::Dependency>>>()?
         };
+
+        let auto_imports: Vec<String> = ftd_document.get("fpm#auto-import")?;
+        let auto_import = auto_imports
+            .iter()
+            .map(|f| fpm::AutoImport::from_string(f.as_str()))
+            .collect();
+        package.auto_import = auto_import;
 
         if download_dependencies {
             for dep in package.dependencies.iter_mut() {
