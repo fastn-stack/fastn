@@ -100,7 +100,7 @@ impl ftd::p2::Library for Library {
             lib: &fpm::Library,
             // evaluated_packages: &mut Vec<String>,
         ) -> Option<String> {
-            for dep in &package.dependencies {
+            for dep in &package.get_flattened_dependencies() {
                 if let Some(non_aliased_name) = dep.unaliased_name(name) {
                     if non_aliased_name.starts_with(dep.package.name.as_str()) {
                         if let Some(resp) =
@@ -110,14 +110,6 @@ impl ftd::p2::Library for Library {
                         };
                     }
                 }
-
-                // evaluated_packages.push(dep.package.name.clone());
-                // Recursilvely check the dependency of the current package
-                // if let Some(resp) =
-                //     get_from_all_dependencies(name, &dep.package, lib, evaluated_packages)
-                // {
-                //     return Some(resp);
-                // }
             }
             None
         }

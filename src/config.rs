@@ -319,6 +319,18 @@ impl Package {
         }
     }
 
+    pub fn get_flattened_dependencies(&self) -> Vec<fpm::Dependency> {
+        self.dependencies
+            .clone()
+            .into_iter()
+            .fold(&mut vec![], |old_val, dep| {
+                old_val.extend(dep.package.get_flattened_dependencies());
+                old_val.push(dep);
+                old_val
+            })
+            .to_owned()
+    }
+
     pub fn generate_prefix_string(&self, with_alias: bool) -> Option<String> {
         self.auto_import.iter().fold(None, |pre, ai| {
             let mut import_doc_path = ai.path.clone();
