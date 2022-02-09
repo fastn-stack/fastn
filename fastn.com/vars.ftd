@@ -1,0 +1,95 @@
+-- import: ft
+-- import: fpm
+-- import: fpm.dev/config
+
+-- ft.doc-page:
+toc: $config.themes-toc
+
+-- ft.h0: `fpm` Variables
+
+
+-- var: fpm.mobile
+type: boolean
+readonly: true
+dynamic: true
+
+This variable is set to true when the browser is mobile like. We detect mobile
+or desktop based on browser width. `fpm.mobile-breakpoint` can be used to
+customize when we switch from mobile to desktop.
+
+`fpm.mobile` automatically changes when browser resizes.
+
+
+-- var: fpm.mobile-breakpoint
+type: integer
+default: 768
+
+This is the width below which we consider show the mobile view.
+
+-- var: fpm.language
+type: string
+
+When translation is enabled for a project, this variable tells you the current
+language.
+
+
+
+-- ftd.column var:
+caption name:
+string type:
+optional string default:
+boolean dynamic: false
+boolean readonly: false
+body body:
+spacing: 20
+width: fill
+
+--- ft.h1: $name
+
+--- ftd.row:
+border-width: 1
+border-color if $fpm.dark-mode: white
+padding: 20
+spacing: 5
+width: fill
+
+--- ftd.text: Type
+style: bold
+color if $fpm.dark-mode: white
+
+--- ftd.text: $type
+color if $fpm.dark-mode: white
+
+--- container: ftd.main
+
+--- ftd.row:
+width: fill
+border-width: 1
+border-color if $fpm.dark-mode: white
+padding: 20
+spacing: 5
+if: $default is not null
+
+--- ftd.text: Default Value
+style: bold
+color if $fpm.dark-mode: white
+
+--- ftd.text: $default
+if: $default is not null
+color if $fpm.dark-mode: white
+
+--- container: ftd.main
+
+--- ft.tip:
+if: $dynamic
+
+This variable is dynamic, it can change after page load.
+
+--- ft.tip:
+if: $readonly
+
+This variable is readonly, do not try to modify it.
+
+--- ft.markdown:
+
+$body

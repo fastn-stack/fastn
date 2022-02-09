@@ -98,6 +98,8 @@ $processor$: toc
   Components
   - /theme/header/
     Dark Mode
+- /vars/
+  FPM Variables
 
 -- ft.toc-item list learn:
 $processor$: toc
