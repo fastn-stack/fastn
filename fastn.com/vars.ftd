@@ -27,10 +27,106 @@ default: 768
 This is the width below which we consider show the mobile view.
 
 -- var: fpm.language
-type: string
+type: optional string
+readonly: true
 
-When translation is enabled for a project, this variable tells you the current
-language.
+This variable tells you the language of current package if provided in FPM.ftd file.
+This is generally the case when translation is enabled.
+
+-- var: fpm.home-url
+type: string
+readonly: true
+
+It gives the home url of the package which basically is https://<package.name> or http://<package.name>
+
+
+-- var: fpm.translation-status-url
+type: string
+readonly: true
+default: home url
+
+By default the value is home url, but in case of translation package, the value is
+<package.name>/FPM/translation-status
+
+-- var: fpm.language-toc
+type: language-toc-item list
+readonly: true
+
+It is a list of record `language-toc-item`. This record has following structure
+
+-- ft.code: language-toc-item
+lang: ftd
+
+\-- record language-toc-item:
+caption title:
+string url:
+
+-- ft.markdown:
+
+It contains the list of all the available languages.
+
+-- var: fpm.current-document-last-modified-on
+type: optional string
+readonly: true
+
+This gives the `last modified on` in datetime format for the current document.
+It fetches it from the .history snapshots (which is available only after running
+`fpm sync`)
+
+-- var: fpm.last-modified-on
+type: optional string
+readonly: true
+
+This gives the `last modified on` in datetime format for the current package.
+It fetches it from the .history snapshots (which is available only after running
+`fpm sync`)
+
+-- var: fpm.package-name
+type: string
+readonly: true
+
+This gives the current package name
+
+
+-- var: fpm.number-of-documents
+type: optional string
+readonly: true
+
+This gives the total number of documents available in current package.
+In case of translation package, it gives
+`<total number of documents available in current package> / <total number of documents available in original package>`
+
+Note: It fetches it from .history snapshot latest record. So if the package is never synced.
+It gives nothing.
+
+
+-- var: fpm.diff
+type: optional string
+readonly: true
+
+This show the difference in document on out of date translation state
+
+-- var: fpm.translation-status
+type: optional string
+readonly: true
+
+When package is the translation package, it has following value for different states
+Missing
+NeverMarked
+UptoDate
+Outdated
+
+-- var: fpm.is-translation-package
+type: boolean
+readonly: true
+
+This gives true if the package is the translation package, false otherwise
+
+-- var: fpm.has-translations
+type: boolean
+readonly: true
+
+This gives true if the package has translations available, false otherwise
 
 
 
