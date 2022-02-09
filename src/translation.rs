@@ -24,6 +24,19 @@ pub struct TranslationData {
     pub last_marked_on: Option<u128>,
     pub original_latest: Option<u128>,
     pub translated_latest: Option<u128>,
+    pub status: Option<String>,
+}
+
+impl TranslationData {
+    fn new(status: &str) -> TranslationData {
+        TranslationData {
+            diff: None,
+            last_marked_on: None,
+            original_latest: None,
+            translated_latest: None,
+            status: Some(status.to_string()),
+        }
+    }
 }
 
 impl TranslatedDocument {
@@ -38,12 +51,16 @@ impl TranslatedDocument {
         let message = fpm::get_messages(self, config)?;
         let (main, fallback, translated_data) = match self {
             TranslatedDocument::Missing { original } => {
-                (original, None, TranslationData::default())
+                (original, None, TranslationData::new("Missing"))
             }
             TranslatedDocument::NeverMarked {
                 original,
                 translated,
-            } => (original, Some(translated), TranslationData::default()),
+            } => (
+                original,
+                Some(translated),
+                TranslationData::new("NeverMarked"),
+            ),
             TranslatedDocument::Outdated {
                 original,
                 translated,
@@ -58,12 +75,13 @@ impl TranslatedDocument {
                     last_marked_on: Some(*last_marked_on),
                     original_latest: Some(*original_latest),
                     translated_latest: Some(*translated_latest),
+                    status: Some("Outdated".to_string()),
                 };
 
                 (translated, Some(original), translated_data)
             }
             TranslatedDocument::UptoDate { translated, .. } => {
-                (translated, None, TranslationData::default())
+                (translated, None, TranslationData::new("UptoDate"))
             }
         };
         fpm::process_file(

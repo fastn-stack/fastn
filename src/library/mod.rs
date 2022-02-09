@@ -395,13 +395,16 @@ impl ftd::p2::Library for Library {
 
                         -- integer mobile-breakpoint: 768
                         $always-include$: true
-
+                        
+                        -- boolean is-translation-package: false
+                        -- boolean has-translations: false
                         -- boolean mobile: true
                         -- boolean dark-mode: false
                         -- boolean system-dark-mode: false
                         -- boolean follow-system-dark-mode: true
                         -- string document-id: {document_id}
                         -- optional string diff:
+                        -- optional string translation-status:
                         -- optional string last-marked-on:
                         -- optional string original-latest:
                         -- optional string translated-latest:
@@ -434,6 +437,30 @@ impl ftd::p2::Library for Library {
                 home_url = format!("//{}", lib.config.package.name)
             );
 
+            if lib.config.package.translation_of.is_some() {
+                fpm_base = format!(
+                    indoc::indoc! {"
+                        {fpm_base}
+                        
+                        -- is-translation-package: true
+    
+                        "},
+                    fpm_base = fpm_base,
+                );
+            }
+
+            if lib.config.package.translations.has_elements() {
+                fpm_base = format!(
+                    indoc::indoc! {"
+                        {fpm_base}
+                        
+                        -- has-translations: true
+    
+                        "},
+                    fpm_base = fpm_base,
+                );
+            }
+
             if let Some(ref zip) = lib.config.package.zip {
                 fpm_base = format!(
                     indoc::indoc! {"
@@ -459,6 +486,20 @@ impl ftd::p2::Library for Library {
                         "},
                     fpm_base = fpm_base,
                     diff = diff,
+                );
+            }
+            if let Some(ref status) = lib.translated_data.status {
+                fpm_base = format!(
+                    indoc::indoc! {"
+                        {fpm_base}
+                        
+                        -- translation-status: 
+                        
+                        {translation_status}
+    
+                        "},
+                    fpm_base = fpm_base,
+                    translation_status = status,
                 );
             }
 
