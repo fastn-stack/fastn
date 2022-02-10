@@ -294,13 +294,13 @@ pub fn string_optional(
             Some(ftd::Value::String { text: v, .. }) => Ok(Some(v.to_string())),
             None => Ok(None),
             v => ftd::e2(
-                format!("expected string, found: {:?}", v),
+                format!("expected string, for: `{}` found: {:?}", name, v),
                 doc_id,
                 line_number,
             ),
         },
         Some(v) => ftd::e2(
-            format!("expected string, found: {:?}", v),
+            format!("expected string, for: `{}` found: {:?}", name, v),
             doc_id,
             line_number,
         ),
