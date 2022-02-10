@@ -1617,7 +1617,7 @@ impl Component {
             );
         }
         let name = var_data.name;
-        let root = var_data.kind;
+        let root = doc.resolve_name(p1.line_number, var_data.kind.as_str())?;
         let root_component = doc.get_component(p1.line_number, root.as_str())?;
         let (arguments, inherits) = read_arguments(
             &p1.header,

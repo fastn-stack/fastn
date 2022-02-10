@@ -64,7 +64,8 @@ impl<'a> TDoc<'a> {
                         line_number: 0,
                     });
                     self.local_variables
-                        .insert(self.resolve_local_variable_name(0, k, string_container)?, c);
+                        .entry(self.resolve_local_variable_name(0, k, string_container)?)
+                        .or_insert(c);
                     continue;
                 }
                 default
@@ -100,10 +101,9 @@ impl<'a> TDoc<'a> {
                 conditions: vec![],
                 flags: Default::default(),
             });
-            self.local_variables.insert(
-                self.resolve_local_variable_name(0, k, string_container)?,
-                local_variable,
-            );
+            self.local_variables
+                .entry(self.resolve_local_variable_name(0, k, string_container)?)
+                .or_insert(local_variable);
         }
 
         *arguments = Default::default();
