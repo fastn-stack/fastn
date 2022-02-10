@@ -69,6 +69,7 @@ async fn write(
     timestamp: u128,
     snapshots: &std::collections::BTreeMap<String, u128>,
 ) -> fpm::Result<(fpm::Snapshot, bool)> {
+    use sha2::Digest;
     if let Some((dir, _)) = doc.get_id().rsplit_once('/') {
         tokio::fs::create_dir_all(
             camino::Utf8PathBuf::from(doc.get_base_path())
@@ -80,9 +81,10 @@ async fn write(
 
     if let Some(timestamp) = snapshots.get(&doc.get_id()) {
         let path = fpm::utils::history_path(&doc.get_id(), &doc.get_base_path(), timestamp);
-        if let Ok(current_doc) = tokio::fs::read_to_string(&doc.get_full_path()).await {
-            let existing_doc = tokio::fs::read_to_string(&path).await?;
-            if current_doc.eq(&existing_doc) {
+        if let Ok(current_doc) = tokio::fs::read(&doc.get_full_path()).await {
+            let existing_doc = tokio::fs::read(&path).await?;
+
+            if sha2::Sha256::digest(current_doc).eq(&sha2::Sha256::digest(existing_doc)) {
                 return Ok((
                     fpm::Snapshot {
                         filename: doc.get_id(),
