@@ -116,6 +116,17 @@ impl Property {
         }
         property_value
     }
+
+    pub(crate) fn add_default_properties(
+        reference: &std::collections::BTreeMap<String, Property>,
+        properties: &mut std::collections::BTreeMap<String, Property>,
+    ) {
+        for (key, arg) in reference {
+            if default_arguments().contains_key(key) {
+                properties.entry(key.to_string()).or_insert(arg.to_owned());
+            }
+        }
+    }
 }
 
 impl ChildComponent {
@@ -2235,8 +2246,14 @@ pub fn read_properties(
     is_reference: bool,
 ) -> ftd::p1::Result<std::collections::BTreeMap<String, Property>> {
     let mut properties: std::collections::BTreeMap<String, Property> = Default::default();
-    let mut root_arguments = root_arguments.clone();
-    update_root_arguments(&mut root_arguments);
+    let root_arguments = {
+        let mut root_arguments = root_arguments.clone();
+        let default_argument = default_arguments();
+        for (key, arg) in default_argument {
+            root_arguments.entry(key).or_insert(arg);
+        }
+        root_arguments
+    };
 
     for (name, kind) in root_arguments.iter() {
         if let Some(prop) = root_properties.get(name) {
@@ -2391,46 +2408,42 @@ pub fn read_properties(
         }
     }
     return Ok(properties);
+}
 
-    fn update_root_arguments(
-        root_arguments: &mut std::collections::BTreeMap<String, ftd::p2::Kind>,
-    ) {
-        let mut default_argument: std::collections::BTreeMap<String, ftd::p2::Kind> =
-            Default::default();
-        default_argument.insert("id".to_string(), ftd::p2::Kind::string().into_optional());
-        default_argument.insert("top".to_string(), ftd::p2::Kind::integer().into_optional());
-        default_argument.insert(
-            "bottom".to_string(),
-            ftd::p2::Kind::integer().into_optional(),
-        );
-        default_argument.insert("left".to_string(), ftd::p2::Kind::integer().into_optional());
-        default_argument.insert(
-            "right".to_string(),
-            ftd::p2::Kind::integer().into_optional(),
-        );
-        default_argument.insert("align".to_string(), ftd::p2::Kind::string().into_optional());
-        default_argument.insert(
-            "scale".to_string(),
-            ftd::p2::Kind::decimal().into_optional(),
-        );
-        default_argument.insert(
-            "rotate".to_string(),
-            ftd::p2::Kind::integer().into_optional(),
-        );
-        default_argument.insert(
-            "scale-x".to_string(),
-            ftd::p2::Kind::decimal().into_optional(),
-        );
-        default_argument.insert(
-            "scale-y".to_string(),
-            ftd::p2::Kind::decimal().into_optional(),
-        );
-        default_argument.insert("slot".to_string(), ftd::p2::Kind::string().into_optional());
+pub(crate) fn default_arguments() -> std::collections::BTreeMap<String, ftd::p2::Kind> {
+    let mut default_argument: std::collections::BTreeMap<String, ftd::p2::Kind> =
+        Default::default();
+    default_argument.insert("id".to_string(), ftd::p2::Kind::string().into_optional());
+    default_argument.insert("top".to_string(), ftd::p2::Kind::integer().into_optional());
+    default_argument.insert(
+        "bottom".to_string(),
+        ftd::p2::Kind::integer().into_optional(),
+    );
+    default_argument.insert("left".to_string(), ftd::p2::Kind::integer().into_optional());
+    default_argument.insert(
+        "right".to_string(),
+        ftd::p2::Kind::integer().into_optional(),
+    );
+    default_argument.insert("align".to_string(), ftd::p2::Kind::string().into_optional());
+    default_argument.insert(
+        "scale".to_string(),
+        ftd::p2::Kind::decimal().into_optional(),
+    );
+    default_argument.insert(
+        "rotate".to_string(),
+        ftd::p2::Kind::integer().into_optional(),
+    );
+    default_argument.insert(
+        "scale-x".to_string(),
+        ftd::p2::Kind::decimal().into_optional(),
+    );
+    default_argument.insert(
+        "scale-y".to_string(),
+        ftd::p2::Kind::decimal().into_optional(),
+    );
+    default_argument.insert("slot".to_string(), ftd::p2::Kind::string().into_optional());
 
-        for (key, arg) in default_argument {
-            root_arguments.entry(key).or_insert(arg);
-        }
-    }
+    default_argument
 }
 
 fn root_properties_from_inherits(
