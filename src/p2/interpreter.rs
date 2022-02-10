@@ -10802,7 +10802,6 @@ mod test {
             &ftd::p2::TestLibrary {},
         )
         .expect("found error");
-        // dbg!(&g_col);
 
         pretty_assertions::assert_eq!(g_col, main);
     }
@@ -14693,6 +14692,17 @@ mod test {
     fn locals_as_ref() {
         let mut bag = super::default_bag();
         bag.insert(
+            s("foo/bar#active"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("active"),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Boolean { value: true },
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            }),
+        );
+        bag.insert(
             s("foo/bar#active@0"),
             ftd::p2::Thing::Variable(ftd::Variable {
                 name: s("active"),
@@ -15070,6 +15080,10 @@ mod test {
                     data_id: Some(s("bar-id")),
                     border_width: 2,
                     scale: Some(1.2),
+                    condition: Some(ftd::Condition {
+                        variable: s("foo/bar#active"),
+                        value: s("true"),
+                    }),
                     ..Default::default()
                 },
             }));
@@ -15136,7 +15150,10 @@ mod test {
             "
             -- string foo: Foo
 
+            -- boolean active: true
+
             -- bar:
+            if: $active
             id: bar-id
             scale: 1.2
             title: $foo
