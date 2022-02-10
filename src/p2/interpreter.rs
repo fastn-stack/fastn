@@ -15069,6 +15069,7 @@ mod test {
                     id: Some(s("bar-id")),
                     data_id: Some(s("bar-id")),
                     border_width: 2,
+                    scale: Some(1.2),
                     ..Default::default()
                 },
             }));

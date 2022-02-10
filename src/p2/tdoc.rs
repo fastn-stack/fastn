@@ -52,8 +52,7 @@ impl<'a> TDoc<'a> {
 
                     let c = ftd::p2::Thing::Component(ftd::Component {
                         root,
-                        full_name: self
-                            .resolve_name(0, format!("{}@{}", k, string_container).as_str())?,
+                        full_name: self.resolve_local_variable_name(0, k, string_container)?,
                         arguments: Default::default(),
                         locals: Default::default(),
                         properties: d.nested_properties.clone(),
@@ -64,10 +63,8 @@ impl<'a> TDoc<'a> {
                         invocations: vec![],
                         line_number: 0,
                     });
-                    self.local_variables.insert(
-                        self.resolve_name(0, format!("{}@{}", k, string_container).as_str())?,
-                        c,
-                    );
+                    self.local_variables
+                        .insert(self.resolve_local_variable_name(0, k, string_container)?, c);
                     continue;
                 }
                 default
@@ -96,8 +93,7 @@ impl<'a> TDoc<'a> {
             };
             if let ftd::PropertyValue::Variable { ref mut name, .. } = default {
                 if !self.local_variables.contains_key(name) {
-                    *name =
-                        self.resolve_name(0, format!("{}@{}", name, string_container).as_str())?;
+                    *name = self.resolve_local_variable_name(0, name, string_container)?;
                 }
             }
             let local_variable = ftd::p2::Thing::Variable(ftd::Variable {
@@ -107,7 +103,7 @@ impl<'a> TDoc<'a> {
                 flags: Default::default(),
             });
             self.local_variables.insert(
-                self.resolve_name(0, format!("{}@{}", k, string_container).as_str())?,
+                self.resolve_local_variable_name(0, k, string_container)?,
                 local_variable,
             );
         }
@@ -244,13 +240,11 @@ impl<'a> TDoc<'a> {
                 if name.contains("$loop$") || (insert_only && !name.as_str().eq("MOUSE-IN")) {
                     return Ok(());
                 }
-                let (part1, part2) = ftd::p2::utils::get_doc_name_and_remaining(name)?;
-                let key = if let Some(ref p2) = part2 {
-                    doc.resolve_name(0, format!("{}@{}.{}", part1, parent_container, p2).as_str())?
-                } else {
-                    doc.resolve_name(0, format!("{}@{}", part1, parent_container).as_str())?
-                };
+                let part1 = ftd::p2::utils::get_doc_name_and_remaining(name)?.0;
+                let key = doc.resolve_local_variable_name(0, name.as_str(), parent_container)?;
                 if name.as_str().eq("MOUSE-IN") {
+                    let key =
+                        doc.resolve_local_variable_name(0, name.as_str(), current_container)?;
                     let local_variable = ftd::p2::Thing::Variable(ftd::Variable {
                         name: key.clone(),
                         value: ftd::PropertyValue::Value {
@@ -259,14 +253,6 @@ impl<'a> TDoc<'a> {
                         conditions: vec![],
                         flags: Default::default(),
                     });
-                    let key = if let Some(ref p2) = part2 {
-                        doc.resolve_name(
-                            0,
-                            format!("{}@{}.{}", part1, current_container, p2).as_str(),
-                        )?
-                    } else {
-                        doc.resolve_name(0, format!("{}@{}", part1, current_container).as_str())?
-                    };
                     doc.local_variables.insert(key.clone(), local_variable);
                     *name = key;
                 } else if doc.local_variables.contains_key(
@@ -783,6 +769,23 @@ impl<'a> TDoc<'a> {
         fn get_special_variable() -> Vec<&'static str> {
             vec!["MOUSE-IN"]
         }
+    }
+
+    pub(crate) fn resolve_local_variable_name(
+        &self,
+        line_number: usize,
+        name: &str,
+        container: &str,
+    ) -> ftd::p1::Result<String> {
+        let (part1, part2) = ftd::p2::utils::get_doc_name_and_remaining(name)?;
+        Ok(if let Some(ref p2) = part2 {
+            self.resolve_name(
+                line_number,
+                format!("{}@{}.{}", part1, container, p2).as_str(),
+            )?
+        } else {
+            self.resolve_name(line_number, format!("{}@{}", part1, container).as_str())?
+        })
     }
 
     pub fn resolve_name(&self, line_number: usize, name: &str) -> ftd::p1::Result<String> {
