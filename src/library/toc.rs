@@ -259,8 +259,8 @@ impl TocParser {
             // Empty line found. Process the temp_item
             self.eval_temp_item()?;
         } else {
-            match dbg!(&self.temp_item).clone() {
-                Some((i, d)) => match dbg!(line.rsplit_once(":")) {
+            match self.temp_item.clone() {
+                Some((i, d)) => match line.rsplit_once(":") {
                     Some(("url", v)) => {
                         self.temp_item = Some((
                             TocItem {

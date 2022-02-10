@@ -192,7 +192,6 @@ impl fpm::Package {
 
             // Download the zip folder
             {
-                // dbg!(&download_url);
                 let mut response =
                     if download_url[1..].contains("://") || download_url.starts_with("//") {
                         reqwest::get(download_url.as_str())?
@@ -203,7 +202,6 @@ impl fpm::Package {
                     } else {
                         reqwest::get(format!("http://{}", download_url).as_str())?
                     };
-                // dbg!(&response);
                 let mut file = std::fs::File::create(&path)?;
                 // TODO: instead of reading the whole thing in memory use tokio::io::copy() somehow?
                 let mut buf: Vec<u8> = vec![];
@@ -213,7 +211,6 @@ impl fpm::Package {
 
             let file = std::fs::File::open(&path)?;
             // TODO: switch to async_zip crate
-            // dbg!(&file);
             let mut archive = zip::ZipArchive::new(file)?;
             for i in 0..archive.len() {
                 let mut c_file = archive.by_index(i).unwrap();
@@ -252,7 +249,6 @@ impl fpm::Package {
         );
 
         fn get_fpm(name: &str) -> fpm::Result<String> {
-            // dbg!(&name);
             let mut response_fpm = if let Ok(response_fpm) =
                 reqwest::get(format!("https://{}/FPM.ftd", name).as_str())
             {
