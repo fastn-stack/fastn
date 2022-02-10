@@ -8,130 +8,82 @@
 -- ft.header-toc:
 $processor$: toc
 
-- about/
-  Docs
-- usage/
-  `fpm` CLI Manual
-- journal/
-  Development
-- themes/
-  Themes
-
+- Docs: about/
+- `fpm` CLI Manual: usage/
+- Development: journal/
+- Themes: themes/
 
 -- ft.toc:
 $processor$: toc
 
-- /about/
-  About `fpm`
-  - why-not/
-    Why Not `fpm`?
-- /fs/
-  File System Organization
-  - /fpm-ftd-file/
-    `FPM.ftd`
-- /ftd-host/
-  FTD Host Features
-  - /http/
-    `$processor$: http`
-  - /toc/
-    `$processor$: toc`
-  - /package-query/
-    `$processor$: package-query`
-  - /fpm-vars/
-    `import: fpm`
-- /how-to/
-  How To
-  - /how-to/install/
-    Install `fpm`
-  - /how-to/update/
-    Update `fpm`
-  - /how-to/get-started-github-pages/
-    Get started with Github pages
-  - /how-to/get-started-vercel/
-    Get started with Vercel
-- /usage/
-  `fpm` Usage
-  - /build/
-    `fpm build`
-  - /sync/
-    `fpm sync`
-  - /status/
-    `fpm status`
-  - /diff/
-    `fpm diff`
-  - /update/
-    `fpm update`
-- /known-issues/
-  Known Issues
+- About `fpm`: /about/
+  - Why Not `fpm`?: why-not/
+- File System Organization: /fs/
+  - `FPM.ftd`: /fpm-ftd-file/
+- FTD Host Features: /ftd-host/ 
+  - `$processor$: http`: /http/
+  - `$processor$: toc`: /toc/
+  - `$processor$: package-query`: /package-query/
+  - `import: fpm`: /fpm-vars/
+- How To: /how-to/
+  - Install `fpm`: /how-to/install/
+  - Update `fpm`: /how-to/update/
+  - Get started with Github pages: /how-to/get-started-github-pages/
+  - Get started with Vercel: /how-to/get-started-vercel/
+- `fpm` Usage: /usage/
+  - `fpm build`: /build/
+  - `fpm sync`: /sync/
+  - `fpm status`: /status/
+  - `fpm diff`: /diff/
+  - `fpm update`: /update/
+- Known Issues: /known-issues/
 
 
 -- ft.toc-item list dev-toc:
 $processor$: toc
 
-- /roadmap/
-  Roadmap
-- /journal/
-  Journal
+- Roadmap: /roadmap/
+- Journal: /journal/
 
 -- ft.toc-item list themes-toc:
 $processor$: toc
 
-- /themes/
-  About Themes
-- /package-interface/
-  Package Interface
-  - /theme/docs/
-    Theme Documentation
-  - /theme/article/
-    Article PI
-  - /theme/book/
-    Book PI
-  - /theme/presentation/
-    Presentation PI
-- /theme/config/
-  Theme Config
-- /theme/responsive/
-  Responsive Themes
-- /theme/dark-mode/
-  Dark Mode
-- /theme/components/
-  Components
-  - /theme/header/
-    Dark Mode
-- /vars/
-  FPM Variables
+- About Themes: /themes/
+- Package Interface: /package-interface/
+  - Theme Documentation: /theme/docs/
+  - Article PI: /theme/article/
+  - Book PI: /theme/book/
+  - Presentation PI: /theme/presentation/
+- Theme Config: /theme/config/
+- Responsive Themes: /theme/responsive/
+- Dark Mode: /theme/dark-mode/
+- Components: /theme/components/
+  - Dark Mode: /theme/header/
+- FPM Variables: /vars/
 
 -- ft.toc-item list learn:
 $processor$: toc
 
-- /
-  Introduction
-- /about/
-  Installation
+- Introduction: /
+- Installation: /about/
 
 -- ft.toc-item list community:
 $processor$: toc
 
-- /
-  Introduction
-- /about/
-  Installation
+- Introduction: /
+- Installation: /about/
 
 -- ft.toc-item list more:
 $processor$: toc
 
-- /
-  Introduction
-- /about/
-  Installation
+- Introduction: /
+- Installation: /about/
 
 -- ft.toc-item list legal:
 $processor$: toc
 
-- /
-  Introduction
-- /about/
-  Installation
+- Introduction: /
+- Installation: /about/
 
 
 /-- ft.footer-toc: Learn
