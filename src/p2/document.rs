@@ -116,6 +116,7 @@ impl Document {
                 },
             );
         }
+        // dbg!(&self.main.container.children);
         ftd::Element::get_variable_dependencies(self, &mut data);
         ftd::Element::get_visible_event_dependencies(&self.main.container.children, &mut data);
         ftd::Element::get_value_event_dependencies(&self.main.container.children, &mut data);
@@ -265,6 +266,7 @@ impl Document {
     ) -> ftd::p1::Result<Document> {
         let mut interpreter = ftd::p2::interpreter::Interpreter::new(lib);
         let instructions = interpreter.interpret(name, source)?;
+        // dbg!(&instructions);
         let rt = ftd::RT::from(name, interpreter.aliases, interpreter.bag, instructions);
 
         Ok(Document {

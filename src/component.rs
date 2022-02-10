@@ -2326,14 +2326,26 @@ pub fn read_properties(
             }
         };
         for (idx, value, conditional_attribute) in conditional_vector {
-            let property_value = ftd::PropertyValue::resolve_value(
+            let property_value = match ftd::PropertyValue::resolve_value(
                 line_number,
                 value.as_str(),
                 Some(kind.to_owned()),
                 doc,
                 arguments,
                 Some(source.clone()),
-            )?;
+            ) {
+                Ok(p) => p,
+                _ if source.eq(&ftd::TextSource::Default) => ftd::PropertyValue::resolve_value(
+                    line_number,
+                    value.as_str(),
+                    Some(kind.to_owned()),
+                    doc,
+                    &root_arguments,
+                    Some(source.clone()),
+                )?,
+                Err(e) => return Err(e),
+            };
+
             let nested_properties = if let ftd::PropertyValue::Reference {
                 kind: ftd::p2::Kind::UI { .. },
                 ..

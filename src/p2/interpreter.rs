@@ -242,7 +242,7 @@ impl<'a> Interpreter<'a> {
                             p1.line_number,
                         );
                     }
-                    ftd::p2::Thing::Component(_) => {
+                    ftd::p2::Thing::Component(c) => {
                         let p1 = {
                             let mut p1 = p1.clone();
                             if p1
@@ -538,7 +538,7 @@ impl<'a> Interpreter<'a> {
                             p1.line_number,
                         );
                     }
-                    ftd::p2::Thing::Component(c) => {
+                    ftd::p2::Thing::Component(_) => {
                         let p1 = {
                             let mut p1 = p1.clone();
                             if p1
@@ -577,7 +577,7 @@ impl<'a> Interpreter<'a> {
                                 &p1.caption,
                                 &p1.body_without_comment(),
                                 &doc,
-                                &c.arguments,
+                                &Default::default(),
                             )?;
 
                             let mut children = vec![];
