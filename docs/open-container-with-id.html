@@ -6,26 +6,26 @@
     <title>Start Page</title>
     <script type="ftd" id="ftd-data">
         {
-  "@body@0,0": {
-    "value": "",
+  "open-container-with-id.ftd#body@0,0": {
+    "value": "null",
     "dependencies": {
       "0,0,1,0,1:main-container-external:0": "[{\"dependency_type\":\"Visible\",\"condition\":\"$IsNotNull$\",\"parameters\":{}}]"
     }
   },
-  "@body@0,0,1": {
-    "value": "",
+  "open-container-with-id.ftd#body@0,0,1": {
+    "value": "null",
     "dependencies": {
       "0,0,1,0,1:main-container-external:0": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
     }
   },
-  "@body@0,1": {
-    "value": "This is your main project. You can make it private on clicking on the button above.\n\nYou can edit things by double clicking.\n\nUpdate the table of content by editing the 'toc' section",
+  "open-container-with-id.ftd#body@0,1": {
+    "value": "\"This is your main project. You can make it private on clicking on the button above.\\n\\nYou can edit things by double clicking.\\n\\nUpdate the table of content by editing the 'toc' section\"",
     "dependencies": {
       "0,0,1,1:main-container-external:0": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
     }
   },
-  "@title@0,0": {
-    "value": "qweq",
+  "open-container-with-id.ftd#title@0,0": {
+    "value": "\"qweq\"",
     "dependencies": {
       "0,0,1,0,0:main-container-external:0": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
     }
@@ -347,8 +347,8 @@ let ftd_utils = {
 
     is_equal_condition: function (value, condition) {
         return ((value === condition)
-            || (condition === "$IsNull$" && value.trim().length === 0)
-            || (condition === "$IsNotNull$" && value.trim().length !== 0)
+            || (condition === "$IsNull$" && (value.trim().length === 0 || value === "null"))
+            || (condition === "$IsNotNull$" && (value.trim().length !== 0 && value !== "null"))
         );
     },
 

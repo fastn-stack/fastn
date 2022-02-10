@@ -6,8 +6,8 @@
     <title>main.ftd</title>
     <script type="ftd" id="ftd-data">
         {
-  "@file@0": {
-    "value": "main.ftd",
+  "escape-body.ftd#file@0": {
+    "value": "\"main.ftd\"",
     "dependencies": {
       "0,0": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
     }
@@ -320,8 +320,8 @@ let ftd_utils = {
 
     is_equal_condition: function (value, condition) {
         return ((value === condition)
-            || (condition === "$IsNull$" && value.trim().length === 0)
-            || (condition === "$IsNotNull$" && value.trim().length !== 0)
+            || (condition === "$IsNull$" && (value.trim().length === 0 || value === "null"))
+            || (condition === "$IsNotNull$" && (value.trim().length !== 0 && value !== "null"))
         );
     },
 

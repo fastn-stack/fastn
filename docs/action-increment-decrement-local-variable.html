@@ -6,7 +6,7 @@
     <title>increment counter</title>
     <script type="ftd" id="ftd-data">
         {
-  "@count@0": {
+  "action-increment-decrement-local-variable.ftd#count@0": {
     "value": "0",
     "dependencies": {
       "0,0": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]",
@@ -324,8 +324,8 @@ let ftd_utils = {
 
     is_equal_condition: function (value, condition) {
         return ((value === condition)
-            || (condition === "$IsNull$" && value.trim().length === 0)
-            || (condition === "$IsNotNull$" && value.trim().length !== 0)
+            || (condition === "$IsNull$" && (value.trim().length === 0 || value === "null"))
+            || (condition === "$IsNotNull$" && (value.trim().length !== 0 && value !== "null"))
         );
     },
 
@@ -908,10 +908,10 @@ body.fpm-dark .ft_md a:visited code {
     <body style="height: 100%;">
 
         <div data-id="main:root" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; height: 100%; justify-content: flex-start; white-space: initial; width: 100%" class="ft_md"><div data-id="0:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; white-space: initial" class="ft_md"><div data-id="0,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-weight: 400; line-height: 26px; text-align: left; white-space: initial" class="ft_md">0</div>
-<div data-id="0,1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;increment&quot;,&quot;target&quot;:&quot;@count@0&quot;,&quot;parameters&quot;:{}}]', this)" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; text-align: left; white-space: initial" class="ft_md">increment counter</div>
-<div data-id="0,2:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;decrement&quot;,&quot;target&quot;:&quot;@count@0&quot;,&quot;parameters&quot;:{}}]', this)" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; text-align: left; white-space: initial" class="ft_md">decrement counter</div>
-<div data-id="0,3:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;increment&quot;,&quot;target&quot;:&quot;@count@0&quot;,&quot;parameters&quot;:{&quot;by&quot;:[{&quot;value&quot;:&quot;2&quot;,&quot;reference&quot;:null}],&quot;clamp&quot;:[{&quot;value&quot;:&quot;0&quot;,&quot;reference&quot;:null},{&quot;value&quot;:&quot;10&quot;,&quot;reference&quot;:null}]}}]', this)" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; text-align: left; white-space: initial" class="ft_md">increment counter by 2 clamp 0 10</div>
-<div data-id="0,4:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;decrement&quot;,&quot;target&quot;:&quot;@count@0&quot;,&quot;parameters&quot;:{&quot;clamp&quot;:[{&quot;value&quot;:&quot;0&quot;,&quot;reference&quot;:null},{&quot;value&quot;:&quot;10&quot;,&quot;reference&quot;:null}]}}]', this)" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; text-align: left; white-space: initial" class="ft_md">decrement counter clamp 0 10</div>
+<div data-id="0,1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;increment&quot;,&quot;target&quot;:&quot;action-increment-decrement-local-variable.ftd#count@0&quot;,&quot;parameters&quot;:{}}]', this)" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; text-align: left; white-space: initial" class="ft_md">increment counter</div>
+<div data-id="0,2:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;decrement&quot;,&quot;target&quot;:&quot;action-increment-decrement-local-variable.ftd#count@0&quot;,&quot;parameters&quot;:{}}]', this)" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; text-align: left; white-space: initial" class="ft_md">decrement counter</div>
+<div data-id="0,3:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;increment&quot;,&quot;target&quot;:&quot;action-increment-decrement-local-variable.ftd#count@0&quot;,&quot;parameters&quot;:{&quot;by&quot;:[{&quot;value&quot;:&quot;2&quot;,&quot;reference&quot;:null}],&quot;clamp&quot;:[{&quot;value&quot;:&quot;0&quot;,&quot;reference&quot;:null},{&quot;value&quot;:&quot;10&quot;,&quot;reference&quot;:null}]}}]', this)" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; text-align: left; white-space: initial" class="ft_md">increment counter by 2 clamp 0 10</div>
+<div data-id="0,4:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;decrement&quot;,&quot;target&quot;:&quot;action-increment-decrement-local-variable.ftd#count@0&quot;,&quot;parameters&quot;:{&quot;clamp&quot;:[{&quot;value&quot;:&quot;0&quot;,&quot;reference&quot;:null},{&quot;value&quot;:&quot;10&quot;,&quot;reference&quot;:null}]}}]', this)" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; text-align: left; white-space: initial" class="ft_md">decrement counter clamp 0 10</div>
 <img alt="" data-id="0,5:main" src="https://www.liveabout.com/thmb/YCJmu1khSJo8kMYM090QCd9W78U=/1250x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/powerpuff_girls-56a00bc45f9b58eba4aea61d.jpg" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; white-space: initial">
 <img alt="" data-id="0,6:main" src="https://upload.wikimedia.org/wikipedia/en/d/d4/Mickey_Mouse.png" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: none; white-space: initial">
 <img alt="" data-id="0,7:main" src="https://blog.ipleaders.in/wp-content/uploads/2021/07/751589-mickey-mouse.jpg" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: none; white-space: initial">

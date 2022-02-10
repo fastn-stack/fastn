@@ -6,38 +6,38 @@
     <title>Once upon a time...</title>
     <script type="ftd" id="ftd-data">
         {
-  "@body1@0": {
-    "value": "",
+  "comic_scene_crop_scale.ftd#body1@0": {
+    "value": "null",
     "dependencies": {
       "0,1": "[{\"dependency_type\":\"Visible\",\"condition\":\"$IsNotNull$\",\"parameters\":{}}]"
     }
   },
-  "@body@0,1": {
-    "value": "",
+  "comic_scene_crop_scale.ftd#body@0,1": {
+    "value": "null",
     "dependencies": {
       "0,1": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
     }
   },
-  "@body@2": {
-    "value": "",
+  "comic_scene_crop_scale.ftd#body@2": {
+    "value": "null",
     "dependencies": {
       "0,3,1": "[{\"dependency_type\":\"Visible\",\"condition\":\"$IsNotNull$\",\"parameters\":{}}]"
     }
   },
-  "@body@2,1": {
-    "value": "",
+  "comic_scene_crop_scale.ftd#body@2,1": {
+    "value": "null",
     "dependencies": {
       "0,3,1": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
     }
   },
-  "@title@0": {
-    "value": "Once upon a time...",
+  "comic_scene_crop_scale.ftd#title@0": {
+    "value": "\"Once upon a time...\"",
     "dependencies": {
       "0,0": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
     }
   },
-  "@title@2": {
-    "value": "The End!!",
+  "comic_scene_crop_scale.ftd#title@2": {
+    "value": "\"The End!!\"",
     "dependencies": {
       "0,3,0": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
     }
@@ -350,8 +350,8 @@ let ftd_utils = {
 
     is_equal_condition: function (value, condition) {
         return ((value === condition)
-            || (condition === "$IsNull$" && value.trim().length === 0)
-            || (condition === "$IsNotNull$" && value.trim().length !== 0)
+            || (condition === "$IsNull$" && (value.trim().length === 0 || value === "null"))
+            || (condition === "$IsNotNull$" && (value.trim().length !== 0 && value !== "null"))
         );
     },
 

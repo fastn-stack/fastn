@@ -6,14 +6,8 @@
     <title>Add</title>
     <script type="ftd" id="ftd-data">
         {
-  "@text@0,2": {
-    "value": "$loop$",
-    "dependencies": {
-      "0,2,0,0": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
-    }
-  },
   "dom-construct.ftd#query": {
-    "value": "",
+    "value": "null",
     "dependencies": {
       "0,0,1": "[{\"dependency_type\":\"Visible\",\"condition\":\"$IsNotNull$\",\"parameters\":{}}]",
       "0,1,1": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
@@ -23,6 +17,12 @@
     "value": "[]",
     "dependencies": {
       "0:dummy": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
+    }
+  },
+  "dom-construct.ftd#text@0,2": {
+    "value": "\"$loop$\"",
+    "dependencies": {
+      "0,2,0,0": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
     }
   }
 }
@@ -333,8 +333,8 @@ let ftd_utils = {
 
     is_equal_condition: function (value, condition) {
         return ((value === condition)
-            || (condition === "$IsNull$" && value.trim().length === 0)
-            || (condition === "$IsNotNull$" && value.trim().length !== 0)
+            || (condition === "$IsNull$" && (value.trim().length === 0 || value === "null"))
+            || (condition === "$IsNotNull$" && (value.trim().length !== 0 && value !== "null"))
         );
     },
 
