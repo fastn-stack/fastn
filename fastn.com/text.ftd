@@ -25,6 +25,11 @@ lang: ftd
 
 Text accepts the below attributes as well all the [common attributes](common/).
 
+--- ft.code: captions are cool
+lang: ftd
+
+\-- ft.tip: is cool
+
 -- ft.h1: `text: String`
 
 You can pass any string value.
@@ -280,11 +285,13 @@ The supported values of themes are:
 
 -- ftd.text: View Themes
 if: not $show-theme-demos
+color if $fpm.dark-mode: white
 $event-click$: toggle $show-theme-demos
 
 
 -- ftd.text: Hide Themes
 if: $show-theme-demos
+color if $fpm.dark-mode: white
 $event-click$: toggle $show-theme-demos
 
 
@@ -320,11 +327,17 @@ print("hello world")
 
 -- ftd.text: Hide Themes
 if: $show-theme-demos
+color if $fpm.dark-mode: white
 $event-click$: toggle $show-theme-demos
 
 
 -- ft.h3: `theme: Solarized (light)`
 
+
+-- ftd.code:
+lang: py
+width: fill
+theme: Solarized (light)
 
 \-- ftd.text:
 format: code
@@ -340,6 +353,11 @@ print("hello world")
 -- ft.h3: `theme: base16-eighties.dark`
 
 
+-- ftd.code:
+lang: py
+width: fill
+theme: base16-eighties.dark
+
 \-- ftd.text:
 format: code
 lang: py
@@ -353,11 +371,16 @@ print("hello world")
 
 -- ftd.text: Hide Themes
 if: $show-theme-demos
+color if $fpm.dark-mode: white
 $event-click$: toggle $show-theme-demos
 
 
 -- ft.h3: `theme: base16-mocha.dark`
 
+-- ftd.code:
+lang: py
+width: fill
+theme: base16-mocha.dark
 
 \-- ftd.text:
 format: code
@@ -372,6 +395,10 @@ print("hello world")
 
 -- ft.h3: `theme: base16-ocean.dark`
 
+-- ftd.code:
+lang: py
+width: fill
+theme: base16-ocean.dark
 
 \-- ftd.text:
 format: code
@@ -386,6 +413,10 @@ print("hello world")
 
 -- ft.h3: `theme: base16-ocean.light`
 
+-- ftd.code:
+lang: py
+width: fill
+theme: base16-ocean.light
 
 \-- ftd.text:
 format: code
@@ -400,6 +431,7 @@ print("hello world")
 
 -- ftd.text: Hide Themes
 if: $show-theme-demos
+color if $fpm.dark-mode: white
 $event-click$: toggle $show-theme-demos
 
 

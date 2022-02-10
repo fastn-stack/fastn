@@ -17,6 +17,72 @@ id: page
 
 -- ft.h1: Sublime Text Gets Syntax Support
 
+-- ft.h1: Index Symbols
+
+10th Feb 2022
+
+Now that we are creating a lot of FPM packages, question of documentation and
+best practices starting to dictate our features. One thing I have struggled with
+is how to organize a package.
+
+Till a while back the only ergonomic way was to put everything into one single
+index.ftd file. We had to do single file else there would be a lot of import
+statements in each file. Also it interrupts the writing, if you are in the
+middle of a ftd file and decide to use a new component, you have to temporarily
+jump to the top of the file, add an import statement and then come back to your
+original place and use the component.
+
+Now that we have auto import feature, one can easily import more than one module
+from a package in every file. One would ask people to add a bunch of auto
+imports when adding a dependency, and we are done.
+
+This means we can now breakup our package into smaller files. So the question is
+how small a file?
+
+When writing documentation I started with putting the entire documentation in the
+index file. But then the page is becoming quite long, so I felt I should split
+the documentation file as well.
+
+I think it would be better if we created a file for each component, and in that
+file we put the documentation as well as the component source. But when we do
+the ideal name for the file would be the name of the component itself. Also
+since ftd only supports importing a module and not individual symbols from the
+module we would have to end up writing:
+
+-- ft.code:
+lang: ftd
+
+\-- import: some-lib.com/foo/header
+\-- header.header: something
+
+-- ft.markdown:
+
+I am not liking the `header.header` etc. What if we allow people to write:
+
+-- ft.code:
+lang: ftd
+
+\-- import: some-lib.com/foo/header
+\-- header: something
+
+-- ft.markdown:
+
+And ftd will see if we are trying to use the module itself, and if so it will
+translate it to `module.<whatever is named after module>`. It can be either a
+variable, record or component.
+
+The only main downside is if we see something like above we do not know if
+`header` refers to some imported symbol, in which case I would go review
+`auto-imports` in `FPM.ftd` file, or a component defined locally in current
+file. Since author files usually won't have components defined or may be one
+component defined, in general we do not have this issue.
+
+As long as we support any feature like alias, we will have to review `FPM.ftd`
+to see the symbol's full name. The only way to avoid jumping to `FPM.ftd` to
+understand each component used, is to not use auto import or dependency alias
+feature, and put explicit import on top of each file.
+
+
 -- ft.h1: Final Decision On References
 
 2nd Feb 2022
