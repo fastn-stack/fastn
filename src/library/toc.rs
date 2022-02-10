@@ -1,4 +1,8 @@
-pub fn processor(section: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Result<ftd::Value> {
+pub fn processor(
+    section: &ftd::p1::Section,
+    doc: &ftd::p2::TDoc,
+    _config: &fpm::Config,
+) -> ftd::p1::Result<ftd::Value> {
     let toc_items = ToC::parse(section.body(section.line_number, doc.name)?.as_str())
         .map_err(|e| ftd::p1::Error::ParseError {
             message: format!("Cannot parse body: {:?}", e),
@@ -9,54 +13,39 @@ pub fn processor(section: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Re
         .iter()
         .map(|item| item.to_toc_item_compat())
         .collect::<Vec<TocItemCompat>>();
-
     doc.from_json(&toc_items, section)
-}
-
-#[derive(serde::Deserialize)]
-pub struct TocItemInDoc {
-    pub id: String,
-    pub title: String,
-    pub children: Vec<TocItemInDoc>,
-}
-
-impl From<TocItemInDoc> for TocItem {
-    fn from(s: TocItemInDoc) -> TocItem {
-        TocItem {
-            url: format!("/{}/", s.id.as_str()),
-            number: vec![],
-            title: ftd::markdown_line(s.title.as_str()),
-            id: s.id,
-            children: s.children.into_iter().map(Into::into).collect(),
-        }
-    }
 }
 
 #[derive(Debug, serde::Serialize)]
 pub struct TocItemCompat {
-    pub id: String,
     pub url: String,
-    pub number: Vec<u8>,
+    pub number: String,
     pub title: String,
+    pub is_heading: bool,
     pub children: Vec<TocItemCompat>,
 }
 
-#[derive(PartialEq, Debug, Default, serde::Serialize, serde::Deserialize, Clone)]
+#[derive(PartialEq, Debug, Default, Clone)]
 pub struct TocItem {
-    pub id: String,
-    pub url: String,
-    pub number: Vec<u8>,
+    pub id: Option<String>,
     pub title: ftd::Rendered,
+    pub url: Option<String>,
+    pub number: Vec<u8>,
+    pub is_heading: bool,
+    pub is_disabled: bool,
+    pub img_src: Option<String>,
+    pub font_icon: Option<String>,
     pub children: Vec<TocItem>,
 }
 
 impl TocItem {
     pub(crate) fn to_toc_item_compat(&self) -> TocItemCompat {
+        // TODO: num converting to ol and li in ftd.???
         TocItemCompat {
-            id: self.id.to_string(),
-            url: self.url.to_string(),
-            number: self.number.to_vec(),
+            url: self.url.clone().or_else(|| Some("".to_string())).unwrap(),
+            number: self.number.iter().map(|x| format!("{}_", x)).collect(),
             title: self.title.original.to_string(),
+            is_heading: self.is_heading,
             children: self
                 .children
                 .iter()
@@ -66,171 +55,20 @@ impl TocItem {
     }
 }
 
-#[derive(PartialEq, Debug, Default, Clone, serde::Serialize, serde::Deserialize)]
-pub struct ToC {
-    pub items: Vec<TocItem>,
-}
-
 #[derive(Debug, Clone, PartialEq)]
 enum ParsingState {
-    WaitingForID,
-    WaitingForTitle((String, usize)),
+    WaitingForNextItem,
+    WaitingForAttributes,
 }
 
-#[derive(Debug)]
-pub struct Parser {
+pub struct TocParser {
     state: ParsingState,
     sections: Vec<(TocItem, usize)>,
-}
-
-impl Parser {
-    fn read_id(&mut self, line: &str) -> Result<(), ParseError> {
-        if line.trim().is_empty() {
-            return Ok(());
-        }
-
-        let mut iter = line.chars();
-        let mut x = 0;
-        loop {
-            match iter.next() {
-                Some(' ') => {
-                    iter.next();
-                    x += 1;
-                }
-                Some('-') => {
-                    break;
-                }
-                Some(c) => {
-                    return Err(ParseError::InputError(format!(
-                        "expecting \"-\", found: {}",
-                        c
-                    )));
-                }
-                None => {
-                    return Err(ParseError::InputError(format!(
-                        "line ended too soon: {}",
-                        line
-                    )));
-                }
-            }
-        }
-        let rest: String = iter.collect();
-        if rest.trim().is_empty() {
-            return Err(ParseError::InputError(format!(
-                "line ended too soon: {}",
-                line
-            )));
-        }
-        self.state = ParsingState::WaitingForTitle((rest, x));
-
-        Ok(())
-    }
-
-    fn read_title(&mut self, line: &str, id: String, size: usize) -> Result<(), ParseError> {
-        if line.trim().is_empty() {
-            return Err(ParseError::InputError("found empty line".to_string()));
-        }
-
-        let mut iter = line.chars();
-        let mut x = 0;
-        let c;
-        loop {
-            match iter.next() {
-                Some(' ') => {
-                    iter.next();
-                    x += 1;
-                }
-                Some('-') => {
-                    return Err(ParseError::InputError(
-                        "line starts with -, not allowed".to_string(),
-                    ));
-                }
-                Some(c_) => {
-                    c = c_;
-                    break;
-                }
-                None => {
-                    return Err(ParseError::InputError(
-                        "improperly indented line found".to_string(),
-                    ))
-                }
-            }
-        }
-        if x != size + 1 {
-            return Err(ParseError::InputError(format!(
-                "improperly indented, expected {} spaces, found: {}",
-                (size + 1) * 2,
-                x * 2
-            )));
-        }
-        let rest: String = iter.collect();
-        let rest = c.to_string() + rest.as_str();
-
-        let id = id.trim().to_string();
-        self.sections.push((
-            TocItem {
-                url: id_to_url(id.as_str()),
-                id,
-                title: ftd::markdown_line(rest.trim()),
-                children: vec![],
-                number: vec![],
-            },
-            size,
-        ));
-        self.state = ParsingState::WaitingForID;
-        Ok(())
-    }
-
-    fn finalize(self) -> Result<Vec<(TocItem, usize)>, ParseError> {
-        if self.state != ParsingState::WaitingForID {
-            return Err(ParseError::InputError("title not found".to_string()));
-        };
-
-        Ok(self.sections)
-    }
-}
-
-fn id_to_url(id: &str) -> String {
-    if id.starts_with("https://")
-        || id.starts_with("http://")
-        || id.starts_with('/')
-        || id.ends_with('/')
-        || id.starts_with("..")
-        || id.starts_with("./")
-        || id.ends_with(".html")
-    {
-        id.to_string()
-    } else {
-        format!("/{}/", id)
-    }
-}
-
-impl ToC {
-    pub fn parse(s: &str) -> Result<Self, ParseError> {
-        let mut parser = Parser {
-            state: ParsingState::WaitingForID,
-            sections: vec![],
-        };
-
-        for line in s.split('\n') {
-            let state = parser.state.clone();
-            match state {
-                ParsingState::WaitingForID => parser.read_id(line)?,
-                ParsingState::WaitingForTitle((id, size)) => parser.read_title(line, id, size)?,
-            }
-        }
-
-        Ok(ToC {
-            items: construct_tree_util(parser.finalize()?),
-        })
-    }
+    temp_item: Option<(TocItem, usize)>,
 }
 
 #[derive(thiserror::Error, Debug)]
-pub enum ParseError {
-    #[error("InputError: {0}")]
-    InputError(String),
-}
+pub enum ParseError {}
 
 #[derive(Debug)]
 struct LevelTree {
@@ -242,10 +80,6 @@ impl LevelTree {
     fn new(level: usize, item: TocItem) -> Self {
         Self { level, item }
     }
-}
-
-fn get_top_level(stack: &[LevelTree]) -> usize {
-    stack.last().map(|x| x.level).unwrap()
 }
 
 fn construct_tree_util(mut elements: Vec<(TocItem, usize)>) -> Vec<TocItem> {
@@ -260,13 +94,18 @@ fn construct_tree_util(mut elements: Vec<(TocItem, usize)>) -> Vec<TocItem> {
     tree.into_iter().map(|x| x.item).collect()
 }
 
+fn get_top_level(stack: &[LevelTree]) -> usize {
+    stack.last().map(|x| x.level).unwrap()
+}
+
 fn construct_tree(elements: Vec<(TocItem, usize)>, smallest_level: usize) -> Vec<LevelTree> {
     let mut stack_tree = vec![];
+    let mut num: Vec<u8> = vec![0];
     for (toc_item, level) in elements.into_iter() {
         if level < smallest_level {
             panic!("Level should not be lesser than smallest level");
         }
-        let node = LevelTree::new(level, toc_item);
+
         if !(stack_tree.is_empty() || get_top_level(&stack_tree) <= level) {
             let top = stack_tree.pop().unwrap();
             let mut top_level = top.level;
@@ -309,9 +148,184 @@ fn construct_tree(elements: Vec<(TocItem, usize)>, smallest_level: usize) -> Vec
             }
             assert!(level >= top_level);
         }
+        let new_toc_item = match &toc_item.is_heading {
+            true => {
+                // Level reset. Remove all elements > level
+                if level < (num.len() - 1) {
+                    num = num[0..level + 1].to_vec();
+                } else if let Some(i) = num.get_mut(level) {
+                    *i = 0;
+                }
+                toc_item
+            }
+            false => {
+                if level < (num.len() - 1) {
+                    // Level reset. Remove all elements > level
+                    num = num[0..level + 1].to_vec();
+                }
+                if let Some(i) = num.get_mut(level) {
+                    *i += 1;
+                } else {
+                    num.insert(level, 1);
+                };
+                TocItem {
+                    number: num.clone(),
+                    ..toc_item
+                }
+            }
+        };
+        let node = LevelTree::new(level, new_toc_item);
+
         stack_tree.push(node);
     }
     stack_tree
+}
+
+impl TocParser {
+    pub fn read_line(&mut self, line: &str) -> Result<(), ParseError> {
+        // The row could be one of the 4 things:
+
+        // - Heading
+        // - Prefix/suffix item
+        // - Separator
+        // - ToC item
+        if line.trim().is_empty() {
+            return Ok(());
+        }
+        let mut iter = line.chars();
+        let mut depth = 0;
+        loop {
+            match iter.next() {
+                Some(' ') => {
+                    depth += 1;
+                    iter.next();
+                }
+                Some('-') => {
+                    break;
+                }
+                Some('#') => {
+                    // Heading can not have any attributes. Append the item and look for the next input
+                    self.eval_temp_item()?;
+                    self.sections.push((
+                        TocItem {
+                            title: ftd::markdown_line(iter.collect::<String>().trim()),
+                            is_heading: true,
+                            ..Default::default()
+                        },
+                        depth,
+                    ));
+                    self.state = ParsingState::WaitingForNextItem;
+                    return Ok(());
+                }
+                Some(k) => {
+                    let l = format!("{}{}", k, iter.collect::<String>());
+                    self.read_attrs(l.as_str())?;
+                    return Ok(());
+                    // panic!()
+                }
+                None => {
+                    break;
+                }
+            }
+        }
+        let rest: String = iter.collect();
+        self.eval_temp_item()?;
+        // Split the line by `:`. title = 0, url = Option<1>
+        let (t, u) = match rest.rsplit_once(":") {
+            Some((i, v)) => (i.trim().to_string(), Some(v.trim().to_string())),
+            None => (rest.trim().to_string(), None),
+        };
+        self.temp_item = Some((
+            TocItem {
+                title: ftd::markdown_line(t.as_str()),
+                url: u,
+                ..Default::default()
+            },
+            depth,
+        ));
+        self.state = ParsingState::WaitingForAttributes;
+        Ok(())
+    }
+
+    fn eval_temp_item(&mut self) -> Result<(), ParseError> {
+        if let Some((t, u)) = self.temp_item.clone() {
+            self.sections.push((t, u))
+        }
+        self.temp_item = None;
+        Ok(())
+    }
+    fn read_attrs(&mut self, line: &str) -> Result<(), ParseError> {
+        if line.trim().is_empty() {
+            // Empty line found. Process the temp_item
+            self.eval_temp_item()?;
+        } else {
+            match dbg!(&self.temp_item).clone() {
+                Some((i, d)) => match dbg!(line.rsplit_once(":")) {
+                    Some(("url", v)) => {
+                        self.temp_item = Some((
+                            TocItem {
+                                url: Some(v.trim().to_string()),
+                                ..i
+                            },
+                            d,
+                        ));
+                    }
+                    Some(("font-icon", v)) => {
+                        self.temp_item = Some((
+                            TocItem {
+                                font_icon: Some(v.trim().to_string()),
+                                ..i
+                            },
+                            d,
+                        ));
+                    }
+                    Some(("src", v)) => {
+                        self.temp_item = Some((
+                            TocItem {
+                                img_src: Some(v.trim().to_string()),
+                                ..i
+                            },
+                            d,
+                        ));
+                    }
+                    _ => todo!(),
+                },
+                _ => panic!("State mismatch"),
+            };
+        };
+        Ok(())
+    }
+
+    fn finalize(self) -> Result<Vec<(TocItem, usize)>, ParseError> {
+        // if self.state != ParsingState::WaitingF {
+        //     return Err(ParseError::InputError("title not found".to_string()));
+        // };
+        Ok(self.sections)
+    }
+}
+
+impl ToC {
+    pub fn parse(s: &str) -> Result<Self, ParseError> {
+        let mut parser = TocParser {
+            state: ParsingState::WaitingForNextItem,
+            sections: vec![],
+            temp_item: None,
+        };
+        for line in s.split('\n') {
+            parser.read_line(line)?;
+        }
+        if parser.temp_item.is_some() {
+            parser.eval_temp_item()?;
+        }
+        Ok(ToC {
+            items: construct_tree_util(parser.finalize()?),
+        })
+    }
+}
+
+#[derive(PartialEq, Debug, Default, Clone)]
+pub struct ToC {
+    pub items: Vec<TocItem>,
 }
 
 #[cfg(test)]
@@ -336,112 +350,172 @@ mod test {
         p!(
             &indoc!(
                 "
-                - amitu/realm/intro
-                  What is Realm?
-                  - amitu/realm/routing
-                    Routing is Hard
-                  - amitu/realm/backend-routing
-                    What does Realm do?
-                  - amitu/realm/type-safety
-                    Backend Data And Type Safety
-                - amitu/realm/tutorial
-                  Tutorial
-                - amitu/realm/how-tos
-                  How To Guides
-                  - amitu/realm/how-to/api
-                    How to Write An API?
-                  - amitu/realm/how-to/form
-                    How To Validate Forms?
-                  - amitu/realm/how-to/ports
-                    How to write custom ports?
-                  - amitu/realm/how-to/file-upload
-                    How to handle file uploads?
-                  - amitu/realm/how-to/animation
-                    How to do animations?
-                "
+        # Hello World!
+
+        - Test Page: /test-page/
+
+        # Title One
+
+        - Home Page
+          url: /home/
+          # Nested Title
+          - Nested Link
+            url: /home/nested-link/
+          # Nested Title 2
+          - Nested Link Two: /home/nested-link-two/
+            - Further Nesting: /home/nested-link-two/further-nested/
+        "
             ),
             super::ToC {
                 items: vec![
                     super::TocItem {
-                        id: "amitu/realm/intro".to_string(),
-                        url: "/amitu/realm/intro/".to_string(),
-                        title: ftd::markdown_line("What is Realm?"),
+                        title: ftd::markdown_line("Hello World!"),
+                        id: None,
+                        url: None,
                         number: vec![],
-                        children: vec![
-                            super::TocItem {
-                                id: "amitu/realm/routing".to_string(),
-                                url: "/amitu/realm/routing/".to_string(),
-                                title: ftd::markdown_line("Routing is Hard"),
-                                children: vec![],
-                                number: vec![],
-                            },
-                            super::TocItem {
-                                id: "amitu/realm/backend-routing".to_string(),
-                                url: "/amitu/realm/backend-routing/".to_string(),
-                                title: ftd::markdown_line("What does Realm do?"),
-                                children: vec![],
-                                number: vec![],
-                            },
-                            super::TocItem {
-                                id: "amitu/realm/type-safety".to_string(),
-                                url: "/amitu/realm/type-safety/".to_string(),
-                                title: ftd::markdown_line("Backend Data And Type Safety"),
-                                children: vec![],
-                                number: vec![],
-                            },
-                        ],
+                        is_disabled: false,
+                        img_src: None,
+                        is_heading: true,
+                        font_icon: None,
+                        children: vec![]
                     },
                     super::TocItem {
-                        id: "amitu/realm/tutorial".to_string(),
-                        url: "/amitu/realm/tutorial/".to_string(),
-                        title: ftd::markdown_line("Tutorial"),
-                        children: vec![],
-                        number: vec![],
+                        title: ftd::markdown_line("Test Page"),
+                        id: None,
+                        url: Some("/test-page/".to_string()),
+                        number: vec![1],
+                        is_heading: false,
+                        is_disabled: false,
+                        img_src: None,
+                        font_icon: None,
+                        children: vec![]
                     },
                     super::TocItem {
-                        id: "amitu/realm/how-tos".to_string(),
-                        url: "/amitu/realm/how-tos/".to_string(),
-                        title: ftd::markdown_line("How To Guides"),
+                        title: ftd::markdown_line("Title One"),
+                        id: None,
+                        url: None,
                         number: vec![],
+                        is_disabled: false,
+                        is_heading: true,
+                        img_src: None,
+                        font_icon: None,
+                        children: vec![]
+                    },
+                    super::TocItem {
+                        title: ftd::markdown_line("Home Page"),
+                        id: None,
+                        url: Some("/home/".to_string()),
+                        number: vec![1],
+                        is_disabled: false,
+                        is_heading: false,
+                        img_src: None,
+                        font_icon: None,
                         children: vec![
                             super::TocItem {
-                                id: "amitu/realm/how-to/api".to_string(),
-                                url: "/amitu/realm/how-to/api/".to_string(),
-                                title: ftd::markdown_line("How to Write An API?"),
-                                children: vec![],
+                                title: ftd::markdown_line("Nested Title"),
+                                id: None,
+                                url: None,
                                 number: vec![],
+                                is_heading: true,
+                                is_disabled: false,
+                                img_src: None,
+                                font_icon: None,
+                                children: vec![]
                             },
                             super::TocItem {
-                                id: "amitu/realm/how-to/form".to_string(),
-                                url: "/amitu/realm/how-to/form/".to_string(),
-                                title: ftd::markdown_line("How To Validate Forms?"),
+                                id: None,
+                                title: ftd::markdown_line("Nested Link"),
+                                url: Some("/home/nested-link/".to_string(),),
+                                number: vec![1, 1],
+                                is_heading: false,
+                                is_disabled: false,
+                                img_src: None,
+                                font_icon: None,
                                 children: vec![],
-                                number: vec![],
                             },
                             super::TocItem {
-                                id: "amitu/realm/how-to/ports".to_string(),
-                                url: "/amitu/realm/how-to/ports/".to_string(),
-                                title: ftd::markdown_line("How to write custom ports?"),
-                                children: vec![],
+                                title: ftd::markdown_line("Nested Title 2"),
+                                id: None,
+                                url: None,
                                 number: vec![],
+                                is_heading: true,
+                                is_disabled: false,
+                                img_src: None,
+                                font_icon: None,
+                                children: vec![]
                             },
                             super::TocItem {
-                                id: "amitu/realm/how-to/file-upload".to_string(),
-                                url: "/amitu/realm/how-to/file-upload/".to_string(),
-                                title: ftd::markdown_line("How to handle file uploads?"),
-                                children: vec![],
-                                number: vec![],
-                            },
-                            super::TocItem {
-                                id: "amitu/realm/how-to/animation".to_string(),
-                                url: "/amitu/realm/how-to/animation/".to_string(),
-                                title: ftd::markdown_line("How to do animations?"),
-                                children: vec![],
-                                number: vec![],
+                                id: None,
+                                title: ftd::markdown_line("Nested Link Two"),
+                                url: Some("/home/nested-link-two/".to_string()),
+                                number: vec![1, 1],
+                                is_heading: false,
+                                is_disabled: false,
+                                img_src: None,
+                                font_icon: None,
+                                children: vec![super::TocItem {
+                                    id: None,
+                                    title: ftd::markdown_line("Further Nesting"),
+                                    url: Some("/home/nested-link-two/further-nested/".to_string()),
+                                    number: vec![1, 1, 1],
+                                    is_heading: false,
+                                    is_disabled: false,
+                                    img_src: None,
+                                    font_icon: None,
+                                    children: vec![],
+                                },],
                             },
                         ],
-                    },
+                    }
                 ]
+            }
+        );
+    }
+
+    #[test]
+    fn parse_heading() {
+        p!(
+            &indoc!(
+                "
+        # Home Page
+        "
+            ),
+            super::ToC {
+                items: vec![super::TocItem {
+                    title: ftd::markdown_line("Home Page"),
+                    id: None,
+                    url: None,
+                    number: vec![],
+                    is_disabled: false,
+                    is_heading: true,
+                    img_src: None,
+                    font_icon: None,
+                    children: vec![]
+                }]
+            }
+        );
+    }
+
+    #[test]
+    fn parse_simple_with_num() {
+        p!(
+            &indoc!(
+                "
+        - Home Page: /home-page/
+        "
+            ),
+            super::ToC {
+                items: vec![super::TocItem {
+                    title: ftd::markdown_line("Home Page"),
+                    is_heading: false,
+                    id: None,
+                    url: Some("/home-page/".to_string()),
+                    number: vec![1],
+                    is_disabled: false,
+                    img_src: None,
+                    font_icon: None,
+                    children: vec![]
+                }]
             }
         );
     }
