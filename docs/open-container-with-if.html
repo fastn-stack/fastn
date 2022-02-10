@@ -6,54 +6,6 @@
     <title>Start Display</title>
     <script type="ftd" id="ftd-data">
         {
-  "@name@1,1,1,0,0": {
-    "value": "Mobile 1",
-    "dependencies": {
-      "1,1,1,0,0,0,0:some-child-external:1,1,1": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
-    }
-  },
-  "@name@1,1,1,0,0,0": {
-    "value": "Rs. 340",
-    "dependencies": {
-      "1,1,1,0,0,0,1,0:some-child-external:1,1,1": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
-    }
-  },
-  "@name@1,1,1,0,0,0,0": {
-    "value": "Awesome Mobile",
-    "dependencies": {
-      "1,1,1,0,0,0,1,1,0:some-child-external:1,1,1": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
-    }
-  },
-  "@name@1,1,1,0,0,1": {
-    "value": "Good Mobile 1",
-    "dependencies": {
-      "1,1,1,0,0,0,2,0:some-child-external:1,1,1": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
-    }
-  },
-  "@name@1,1,1,1,0": {
-    "value": "Mobile 2",
-    "dependencies": {
-      "1,1,1,0,1,0,0:some-child-external:1,1,1": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
-    }
-  },
-  "@name@1,1,1,1,0,0": {
-    "value": "Rs. 350",
-    "dependencies": {
-      "1,1,1,0,1,0,1,0:some-child-external:1,1,1": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
-    }
-  },
-  "@name@1,1,1,1,0,0,0": {
-    "value": "Awesome Mobile",
-    "dependencies": {
-      "1,1,1,0,1,0,1,1,0:some-child-external:1,1,1": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
-    }
-  },
-  "@name@1,1,1,1,0,1": {
-    "value": "Good Mobile 2",
-    "dependencies": {
-      "1,1,1,0,1,0,2,0:some-child-external:1,1,1": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
-    }
-  },
   "open-container-with-if.ftd#android": {
     "value": "false",
     "dependencies": {
@@ -72,6 +24,54 @@
       "some-child:1,1,1,0": "[{\"dependency_type\":\"Visible\",\"condition\":\"true\",\"parameters\":{}}]",
       "some-child:1,1,1,1": "[{\"dependency_type\":\"Visible\",\"condition\":\"true\",\"parameters\":{}}]",
       "some-child:1,1,1,2": "[{\"dependency_type\":\"Visible\",\"condition\":\"false\",\"parameters\":{}}]"
+    }
+  },
+  "open-container-with-if.ftd#name@1,1,1,0,0": {
+    "value": "\"Mobile 1\"",
+    "dependencies": {
+      "1,1,1,0,0,0,0:some-child-external:1,1,1": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
+    }
+  },
+  "open-container-with-if.ftd#name@1,1,1,0,0,0": {
+    "value": "\"Rs. 340\"",
+    "dependencies": {
+      "1,1,1,0,0,0,1,0:some-child-external:1,1,1": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
+    }
+  },
+  "open-container-with-if.ftd#name@1,1,1,0,0,0,0": {
+    "value": "\"Awesome Mobile\"",
+    "dependencies": {
+      "1,1,1,0,0,0,1,1,0:some-child-external:1,1,1": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
+    }
+  },
+  "open-container-with-if.ftd#name@1,1,1,0,0,1": {
+    "value": "\"Good Mobile 1\"",
+    "dependencies": {
+      "1,1,1,0,0,0,2,0:some-child-external:1,1,1": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
+    }
+  },
+  "open-container-with-if.ftd#name@1,1,1,1,0": {
+    "value": "\"Mobile 2\"",
+    "dependencies": {
+      "1,1,1,0,1,0,0:some-child-external:1,1,1": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
+    }
+  },
+  "open-container-with-if.ftd#name@1,1,1,1,0,0": {
+    "value": "\"Rs. 350\"",
+    "dependencies": {
+      "1,1,1,0,1,0,1,0:some-child-external:1,1,1": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
+    }
+  },
+  "open-container-with-if.ftd#name@1,1,1,1,0,0,0": {
+    "value": "\"Awesome Mobile\"",
+    "dependencies": {
+      "1,1,1,0,1,0,1,1,0:some-child-external:1,1,1": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
+    }
+  },
+  "open-container-with-if.ftd#name@1,1,1,1,0,1": {
+    "value": "\"Good Mobile 2\"",
+    "dependencies": {
+      "1,1,1,0,1,0,2,0:some-child-external:1,1,1": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
     }
   }
 }
@@ -405,8 +405,8 @@ let ftd_utils = {
 
     is_equal_condition: function (value, condition) {
         return ((value === condition)
-            || (condition === "$IsNull$" && value.trim().length === 0)
-            || (condition === "$IsNotNull$" && value.trim().length !== 0)
+            || (condition === "$IsNull$" && (value.trim().length === 0 || value === "null"))
+            || (condition === "$IsNotNull$" && (value.trim().length !== 0 && value !== "null"))
         );
     },
 

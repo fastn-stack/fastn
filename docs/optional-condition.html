@@ -6,20 +6,20 @@
     <title>Title</title>
     <script type="ftd" id="ftd-data">
         {
-  "@data@0": {
-    "value": "{\"name\":\"\",\"title\":\"Title\"}",
+  "optional-condition.ftd#data@0": {
+    "value": "{\"name\":null,\"title\":\"Title\"}",
     "dependencies": {
       "0,1": "[{\"dependency_type\":\"Visible\",\"condition\":\"$IsNotNull$\",\"parameters\":{}}]"
     }
   },
-  "@data@1": {
+  "optional-condition.ftd#data@1": {
     "value": "{\"name\":\"Name 2\",\"title\":\"Title 2\"}",
     "dependencies": {
       "1,1": "[{\"dependency_type\":\"Visible\",\"condition\":\"$IsNotNull$\",\"parameters\":{}}]"
     }
   },
   "optional-condition.ftd#status": {
-    "value": "[]",
+    "value": "[{\"name\":null,\"title\":\"Title\"},{\"name\":\"Name 2\",\"title\":\"Title 2\"}]",
     "dependencies": {
       "0": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]",
       "1": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
@@ -333,8 +333,8 @@ let ftd_utils = {
 
     is_equal_condition: function (value, condition) {
         return ((value === condition)
-            || (condition === "$IsNull$" && value.trim().length === 0)
-            || (condition === "$IsNotNull$" && value.trim().length !== 0)
+            || (condition === "$IsNull$" && (value.trim().length === 0 || value === "null"))
+            || (condition === "$IsNotNull$" && (value.trim().length !== 0 && value !== "null"))
         );
     },
 

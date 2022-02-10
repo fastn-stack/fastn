@@ -6,18 +6,6 @@
     <title>1</title>
     <script type="ftd" id="ftd-data">
         {
-  "@value@0,3": {
-    "value": "hello world says\n\nhello again",
-    "dependencies": {
-      "0,3": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
-    }
-  },
-  "@value@0,4": {
-    "value": "India",
-    "dependencies": {
-      "0,4": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
-    }
-  },
   "conditional-attributes#present": {
     "value": "false",
     "dependencies": {
@@ -40,6 +28,36 @@
     "dependencies": {
       "0,0,0,1,1,1": "[{\"dependency_type\":\"Style\",\"condition\":\"true\",\"parameters\":{\"background-color\":{\"value\":{\"value\":\"rgba(255,165,0,1)\",\"important\":false},\"default\":null}}}]",
       "0,0,0,1,5": "[{\"dependency_type\":\"Style\",\"condition\":\"true\",\"parameters\":{\"background-color\":{\"value\":{\"value\":\"rgba(255,165,0,1)\",\"important\":false},\"default\":null}}}]"
+    }
+  },
+  "markup.ftd#value@": {
+    "value": "\"Now {hello: Hello {underline: Amitu}} world. {hello} **Greetings** {underline}\\n\\n- hello1\\n- hello2\\n  - hello3\\n  - hello4\\n- hello5\\n\\nThe above is the list printing.\\nThis checks if everything is **alright**.\\n{purple: Check this purple text for instance}\"",
+    "dependencies": {
+      "0,0,0,5": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
+    }
+  },
+  "markup.ftd#value@0,1,1": {
+    "value": "\"Now {hello: Hello {underline: Amitu}} world. {hello} **Greetings** {underline}\\n\\n- hello1\\n- hello2\\n  - hello3\\n  - hello4\\n- hello5\\n\\nThe above is the list printing.\\nThis checks if everything is **alright**.\\n{purple: Check this purple text for instance}\"",
+    "dependencies": {
+      "0,1,1": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
+    }
+  },
+  "markup.ftd#value@0,2,1": {
+    "value": "\"Now {hello: Hello {underline: Amitu}} world. {hello} **Greetings** {underline}\\n\\n- hello1\\n- hello2\\n  - hello3\\n  - hello4\\n- hello5\\n\\nThe above is the list printing.\\nThis checks if everything is **alright**.\\n{purple: Check this purple text for instance}\"",
+    "dependencies": {
+      "0,2,1": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
+    }
+  },
+  "markup.ftd#value@0,3": {
+    "value": "\"hello world says\\n\\nhello again\"",
+    "dependencies": {
+      "0,3": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
+    }
+  },
+  "markup.ftd#value@0,4": {
+    "value": "\"India\"",
+    "dependencies": {
+      "0,4": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
     }
   }
 }
@@ -350,8 +368,8 @@ let ftd_utils = {
 
     is_equal_condition: function (value, condition) {
         return ((value === condition)
-            || (condition === "$IsNull$" && value.trim().length === 0)
-            || (condition === "$IsNotNull$" && value.trim().length !== 0)
+            || (condition === "$IsNull$" && (value.trim().length === 0 || value === "null"))
+            || (condition === "$IsNotNull$" && (value.trim().length !== 0 && value !== "null"))
         );
     },
 

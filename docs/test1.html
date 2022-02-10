@@ -6,250 +6,196 @@
     <title>Conditional Attributes</title>
     <script type="ftd" id="ftd-data">
         {
-  "@body1@0": {
-    "value": "`ftd` supports `if` expression to decide the value of attribute, based on the\narguments, or global variables.",
+  "test1.ftd#body1@0": {
+    "value": "\"`ftd` supports `if` expression to decide the value of attribute, based on the\\narguments, or global variables.\"",
     "dependencies": {
       "0,1": "[{\"dependency_type\":\"Visible\",\"condition\":\"$IsNotNull$\",\"parameters\":{}}]"
     }
   },
-  "@body@0,1": {
-    "value": "`ftd` supports `if` expression to decide the value of attribute, based on the\narguments, or global variables.",
+  "test1.ftd#body@0,1": {
+    "value": "\"`ftd` supports `if` expression to decide the value of attribute, based on the\\narguments, or global variables.\"",
     "dependencies": {
       "0,1": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
     }
   },
-  "@body@1": {
-    "value": "The priority of conditional attributes is in increasing order (low -> high) i.e.\nthe condition at bottom has higher priority than the above conditions. The value of\nattribute with no condition is taken as default.",
+  "test1.ftd#body@1": {
+    "value": "\"The priority of conditional attributes is in increasing order (low -> high) i.e.\\nthe condition at bottom has higher priority than the above conditions. The value of\\nattribute with no condition is taken as default.\"",
     "dependencies": {
       "0,2,1": "[{\"dependency_type\":\"Visible\",\"condition\":\"$IsNotNull$\",\"parameters\":{}}]"
     }
   },
-  "@body@1,1": {
-    "value": "The priority of conditional attributes is in increasing order (low -> high) i.e.\nthe condition at bottom has higher priority than the above conditions. The value of\nattribute with no condition is taken as default.",
+  "test1.ftd#body@1,1": {
+    "value": "\"The priority of conditional attributes is in increasing order (low -> high) i.e.\\nthe condition at bottom has higher priority than the above conditions. The value of\\nattribute with no condition is taken as default.\"",
     "dependencies": {
       "0,2,1": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
     }
   },
-  "@body@12": {
-    "value": "Here, in above sample code, no conditional statement is satisfied, so the value of\nstyle `color` is set to its default value (i.e. `grey`).",
+  "test1.ftd#body@12": {
+    "value": "\"Here, in above sample code, no conditional statement is satisfied, so the value of\\nstyle `color` is set to its default value (i.e. `grey`).\"",
     "dependencies": {
       "0,3,3,5": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
     }
   },
-  "@body@13": {
-    "value": "",
+  "test1.ftd#body@13": {
+    "value": "null",
     "dependencies": {
       "0,3,4,1": "[{\"dependency_type\":\"Visible\",\"condition\":\"$IsNotNull$\",\"parameters\":{}}]"
     }
   },
-  "@body@13,1": {
-    "value": "",
+  "test1.ftd#body@13,1": {
+    "value": "null",
     "dependencies": {
       "0,3,4,1": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
     }
   },
-  "@body@14": {
-    "value": "-- ftd.text foo:\ncaption name:\noptional string yes:\ncolor: grey\ncolor if $yes is not null: blue\ntext: $name\n\n-- foo: hello\nyes: world",
+  "test1.ftd#body@14": {
+    "value": "\"-- ftd.text foo:\\ncaption name:\\noptional string yes:\\ncolor: grey\\ncolor if $yes is not null: blue\\ntext: $name\\n\\n-- foo: hello\\nyes: world\"",
     "dependencies": {
       "0,3,4,2,1": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]",
       "0,3,4,2,2": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
     }
   },
-  "@body@17": {
-    "value": "Here, in above sample code, we have defined the argument `yes` of optional string type.\nif `yes` is passed then `color if $yes is not null` condition would be satisfied and\nthe `color` gets set to `blue`.",
+  "test1.ftd#body@17": {
+    "value": "\"Here, in above sample code, we have defined the argument `yes` of optional string type.\\nif `yes` is passed then `color if $yes is not null` condition would be satisfied and\\nthe `color` gets set to `blue`.\"",
     "dependencies": {
       "0,3,4,5": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
     }
   },
-  "@body@18": {
-    "value": "",
+  "test1.ftd#body@18": {
+    "value": "null",
     "dependencies": {
       "0,3,5,1": "[{\"dependency_type\":\"Visible\",\"condition\":\"$IsNotNull$\",\"parameters\":{}}]"
     }
   },
-  "@body@18,1": {
-    "value": "",
+  "test1.ftd#body@18,1": {
+    "value": "null",
     "dependencies": {
       "0,3,5,1": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
     }
   },
-  "@body@19": {
-    "value": "-- boolean present: false\n\n-- ftd.text foo:\ncaption name:\noptional string yes:\ncolor: grey\ncolor if $present: blue\ncolor if not $present: red\ncolor if $yes is not null: green\ntext: $name\n\n-- foo: hello\nyes: world",
+  "test1.ftd#body@19": {
+    "value": "\"-- boolean present: false\\n\\n-- ftd.text foo:\\ncaption name:\\noptional string yes:\\ncolor: grey\\ncolor if $present: blue\\ncolor if not $present: red\\ncolor if $yes is not null: green\\ntext: $name\\n\\n-- foo: hello\\nyes: world\"",
     "dependencies": {
       "0,3,5,2,1": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]",
       "0,3,5,2,2": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
     }
   },
-  "@body@2": {
-    "value": "Lets understand it better with few examples",
+  "test1.ftd#body@2": {
+    "value": "\"Lets understand it better with few examples\"",
     "dependencies": {
       "0,3,1": "[{\"dependency_type\":\"Visible\",\"condition\":\"$IsNotNull$\",\"parameters\":{}}]"
     }
   },
-  "@body@2,1": {
-    "value": "Lets understand it better with few examples",
+  "test1.ftd#body@2,1": {
+    "value": "\"Lets understand it better with few examples\"",
     "dependencies": {
       "0,3,1": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
     }
   },
-  "@body@22": {
-    "value": "Here, in above sample code, both `color if not $present: red` and\n`color if $yes is not null: blue` are satisfied, so according to the precedence rule,\nthe value of attribute/style is set to value in last satisfied condition, i.e.,\n`color if $yes is not null: blue` has highest priority. So the `color` gets set to `blue`.",
+  "test1.ftd#body@22": {
+    "value": "\"Here, in above sample code, both `color if not $present: red` and\\n`color if $yes is not null: blue` are satisfied, so according to the precedence rule,\\nthe value of attribute/style is set to value in last satisfied condition, i.e.,\\n`color if $yes is not null: blue` has highest priority. So the `color` gets set to `blue`.\"",
     "dependencies": {
       "0,3,5,5": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
     }
   },
-  "@body@3": {
-    "value": "",
+  "test1.ftd#body@3": {
+    "value": "null",
     "dependencies": {
       "0,3,2,1": "[{\"dependency_type\":\"Visible\",\"condition\":\"$IsNotNull$\",\"parameters\":{}}]"
     }
   },
-  "@body@3,1": {
-    "value": "",
+  "test1.ftd#body@3,1": {
+    "value": "null",
     "dependencies": {
       "0,3,2,1": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
     }
   },
-  "@body@4": {
-    "value": "-- boolean present: false\n\n-- ftd.text foo:\ncaption name:\ncolor: grey\ncolor if $present: green\ncolor if not $present: red\ntext: $name\n\n-- foo: hello",
+  "test1.ftd#body@4": {
+    "value": "\"-- boolean present: false\\n\\n-- ftd.text foo:\\ncaption name:\\ncolor: grey\\ncolor if $present: green\\ncolor if not $present: red\\ntext: $name\\n\\n-- foo: hello\"",
     "dependencies": {
       "0,3,2,2,1": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]",
       "0,3,2,2,2": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
     }
   },
-  "@body@7": {
-    "value": "Here, in above sample code, the attribute or style `color` has default value as\n`grey` and it follows the conditional statements. According to the value of the\nvariable `present` (in this case, it is `false`), the value of the style `color`\nis set (in this case, it's `red`).",
+  "test1.ftd#body@7": {
+    "value": "\"Here, in above sample code, the attribute or style `color` has default value as\\n`grey` and it follows the conditional statements. According to the value of the\\nvariable `present` (in this case, it is `false`), the value of the style `color`\\nis set (in this case, it's `red`).\"",
     "dependencies": {
       "0,3,2,5": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
     }
   },
-  "@body@8": {
-    "value": "",
+  "test1.ftd#body@8": {
+    "value": "null",
     "dependencies": {
       "0,3,3,1": "[{\"dependency_type\":\"Visible\",\"condition\":\"$IsNotNull$\",\"parameters\":{}}]"
     }
   },
-  "@body@8,1": {
-    "value": "",
+  "test1.ftd#body@8,1": {
+    "value": "null",
     "dependencies": {
       "0,3,3,1": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
     }
   },
-  "@body@9": {
-    "value": "-- boolean present: false\n\n-- ftd.text foo:\ncaption name:\ncolor: grey\ncolor if $present: green\ntext: $name\n\n-- foo: hello",
+  "test1.ftd#body@9": {
+    "value": "\"-- boolean present: false\\n\\n-- ftd.text foo:\\ncaption name:\\ncolor: grey\\ncolor if $present: green\\ntext: $name\\n\\n-- foo: hello\"",
     "dependencies": {
       "0,3,3,2,1": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]",
       "0,3,3,2,2": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
     }
   },
-  "@caption@14": {
-    "value": "Conditional Attribute using arguments",
+  "test1.ftd#caption@14": {
+    "value": "\"Conditional Attribute using arguments\"",
     "dependencies": {
       "0,3,4,2,0": "[{\"dependency_type\":\"Visible\",\"condition\":\"$IsNotNull$\",\"parameters\":{}},{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]",
       "0,3,4,2,1": "[{\"dependency_type\":\"Visible\",\"condition\":\"$IsNotNull$\",\"parameters\":{}}]",
       "0,3,4,2,2": "[{\"dependency_type\":\"Visible\",\"condition\":\"$IsNull$\",\"parameters\":{}}]"
     }
   },
-  "@caption@19": {
-    "value": "Conditional Attribute deciding priority",
+  "test1.ftd#caption@19": {
+    "value": "\"Conditional Attribute deciding priority\"",
     "dependencies": {
       "0,3,5,2,0": "[{\"dependency_type\":\"Visible\",\"condition\":\"$IsNotNull$\",\"parameters\":{}},{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]",
       "0,3,5,2,1": "[{\"dependency_type\":\"Visible\",\"condition\":\"$IsNotNull$\",\"parameters\":{}}]",
       "0,3,5,2,2": "[{\"dependency_type\":\"Visible\",\"condition\":\"$IsNull$\",\"parameters\":{}}]"
     }
   },
-  "@caption@4": {
-    "value": "Conditional Attribute using variable",
+  "test1.ftd#caption@4": {
+    "value": "\"Conditional Attribute using variable\"",
     "dependencies": {
       "0,3,2,2,0": "[{\"dependency_type\":\"Visible\",\"condition\":\"$IsNotNull$\",\"parameters\":{}},{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]",
       "0,3,2,2,1": "[{\"dependency_type\":\"Visible\",\"condition\":\"$IsNotNull$\",\"parameters\":{}}]",
       "0,3,2,2,2": "[{\"dependency_type\":\"Visible\",\"condition\":\"$IsNull$\",\"parameters\":{}}]"
     }
   },
-  "@caption@9": {
-    "value": "Conditional Attribute with default",
+  "test1.ftd#caption@9": {
+    "value": "\"Conditional Attribute with default\"",
     "dependencies": {
       "0,3,3,2,0": "[{\"dependency_type\":\"Visible\",\"condition\":\"$IsNotNull$\",\"parameters\":{}},{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]",
       "0,3,3,2,1": "[{\"dependency_type\":\"Visible\",\"condition\":\"$IsNotNull$\",\"parameters\":{}}]",
       "0,3,3,2,2": "[{\"dependency_type\":\"Visible\",\"condition\":\"$IsNull$\",\"parameters\":{}}]"
     }
   },
-  "@name@11,0": {
-    "value": "hello",
+  "test1.ftd#name@11,0": {
+    "value": "\"hello\"",
     "dependencies": {
       "0,3,3,4,0": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
     }
   },
-  "@name@16,0": {
-    "value": "hello",
+  "test1.ftd#name@16,0": {
+    "value": "\"hello\"",
     "dependencies": {
       "0,3,4,4,0": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
     }
   },
-  "@name@21,0": {
-    "value": "hello",
+  "test1.ftd#name@21,0": {
+    "value": "\"hello\"",
     "dependencies": {
       "0,3,5,4,0": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
     }
   },
-  "@name@6,0": {
-    "value": "hello",
+  "test1.ftd#name@6,0": {
+    "value": "\"hello\"",
     "dependencies": {
       "0,3,2,4,0": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
-    }
-  },
-  "@title@0": {
-    "value": "Conditional Attributes",
-    "dependencies": {
-      "0,0": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
-    }
-  },
-  "@title@1": {
-    "value": "Priority Order",
-    "dependencies": {
-      "0,2,0": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
-    }
-  },
-  "@title@13": {
-    "value": "Example 3:",
-    "dependencies": {
-      "0,3,4,0": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
-    }
-  },
-  "@title@18": {
-    "value": "Example 4:",
-    "dependencies": {
-      "0,3,5,0": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
-    }
-  },
-  "@title@2": {
-    "value": "Examples",
-    "dependencies": {
-      "0,3,0": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
-    }
-  },
-  "@title@3": {
-    "value": "Example 1:",
-    "dependencies": {
-      "0,3,2,0": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
-    }
-  },
-  "@title@8": {
-    "value": "Example 2:",
-    "dependencies": {
-      "0,3,3,0": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
-    }
-  },
-  "@yes@16,0": {
-    "value": "world",
-    "dependencies": {
-      "0,3,4,4,0": "[{\"dependency_type\":\"Style\",\"condition\":\"$IsNotNull$\",\"parameters\":{\"color\":{\"value\":{\"value\":\"rgba(0,0,255,1)\",\"important\":false},\"default\":{\"value\":\"rgba(128,128,128,1)\",\"important\":false}}}}]"
-    }
-  },
-  "@yes@21,0": {
-    "value": "world",
-    "dependencies": {
-      "0,3,5,4,0": "[{\"dependency_type\":\"Style\",\"condition\":\"$IsNotNull$\",\"parameters\":{\"color\":{\"value\":{\"value\":\"rgba(0,128,0,1)\",\"important\":false},\"default\":{\"value\":\"rgba(128,128,128,1)\",\"important\":false}}}}]"
     }
   },
   "test1.ftd#present": {
@@ -258,6 +204,60 @@
       "0,3,2,4,0": "[{\"dependency_type\":\"Style\",\"condition\":\"true\",\"parameters\":{\"color\":{\"value\":{\"value\":\"rgba(0,128,0,1)\",\"important\":false},\"default\":{\"value\":\"rgba(128,128,128,1)\",\"important\":false}}}},{\"dependency_type\":\"Style\",\"condition\":\"false\",\"parameters\":{\"color\":{\"value\":{\"value\":\"rgba(255,0,0,1)\",\"important\":false},\"default\":{\"value\":\"rgba(128,128,128,1)\",\"important\":false}}}}]",
       "0,3,3,4,0": "[{\"dependency_type\":\"Style\",\"condition\":\"true\",\"parameters\":{\"color\":{\"value\":{\"value\":\"rgba(0,128,0,1)\",\"important\":false},\"default\":{\"value\":\"rgba(128,128,128,1)\",\"important\":false}}}}]",
       "0,3,5,4,0": "[{\"dependency_type\":\"Style\",\"condition\":\"true\",\"parameters\":{\"color\":{\"value\":{\"value\":\"rgba(0,0,255,1)\",\"important\":false},\"default\":{\"value\":\"rgba(128,128,128,1)\",\"important\":false}}}},{\"dependency_type\":\"Style\",\"condition\":\"false\",\"parameters\":{\"color\":{\"value\":{\"value\":\"rgba(255,0,0,1)\",\"important\":false},\"default\":{\"value\":\"rgba(128,128,128,1)\",\"important\":false}}}}]"
+    }
+  },
+  "test1.ftd#title@0": {
+    "value": "\"Conditional Attributes\"",
+    "dependencies": {
+      "0,0": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
+    }
+  },
+  "test1.ftd#title@1": {
+    "value": "\"Priority Order\"",
+    "dependencies": {
+      "0,2,0": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
+    }
+  },
+  "test1.ftd#title@13": {
+    "value": "\"Example 3:\"",
+    "dependencies": {
+      "0,3,4,0": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
+    }
+  },
+  "test1.ftd#title@18": {
+    "value": "\"Example 4:\"",
+    "dependencies": {
+      "0,3,5,0": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
+    }
+  },
+  "test1.ftd#title@2": {
+    "value": "\"Examples\"",
+    "dependencies": {
+      "0,3,0": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
+    }
+  },
+  "test1.ftd#title@3": {
+    "value": "\"Example 1:\"",
+    "dependencies": {
+      "0,3,2,0": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
+    }
+  },
+  "test1.ftd#title@8": {
+    "value": "\"Example 2:\"",
+    "dependencies": {
+      "0,3,3,0": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
+    }
+  },
+  "test1.ftd#yes@16,0": {
+    "value": "\"world\"",
+    "dependencies": {
+      "0,3,4,4,0": "[{\"dependency_type\":\"Style\",\"condition\":\"$IsNotNull$\",\"parameters\":{\"color\":{\"value\":{\"value\":\"rgba(0,0,255,1)\",\"important\":false},\"default\":{\"value\":\"rgba(128,128,128,1)\",\"important\":false}}}}]"
+    }
+  },
+  "test1.ftd#yes@21,0": {
+    "value": "\"world\"",
+    "dependencies": {
+      "0,3,5,4,0": "[{\"dependency_type\":\"Style\",\"condition\":\"$IsNotNull$\",\"parameters\":{\"color\":{\"value\":{\"value\":\"rgba(0,128,0,1)\",\"important\":false},\"default\":{\"value\":\"rgba(128,128,128,1)\",\"important\":false}}}}]"
     }
   }
 }
@@ -568,8 +568,8 @@ let ftd_utils = {
 
     is_equal_condition: function (value, condition) {
         return ((value === condition)
-            || (condition === "$IsNull$" && value.trim().length === 0)
-            || (condition === "$IsNotNull$" && value.trim().length !== 0)
+            || (condition === "$IsNull$" && (value.trim().length === 0 || value === "null"))
+            || (condition === "$IsNotNull$" && (value.trim().length !== 0 && value !== "null"))
         );
     },
 

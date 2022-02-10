@@ -320,8 +320,8 @@ let ftd_utils = {
 
     is_equal_condition: function (value, condition) {
         return ((value === condition)
-            || (condition === "$IsNull$" && value.trim().length === 0)
-            || (condition === "$IsNotNull$" && value.trim().length !== 0)
+            || (condition === "$IsNull$" && (value.trim().length === 0 || value === "null"))
+            || (condition === "$IsNotNull$" && (value.trim().length !== 0 && value !== "null"))
         );
     },
 

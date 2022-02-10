@@ -7,7 +7,7 @@
     <script type="ftd" id="ftd-data">
         {
   "conditional-attribute-tab.ftd#current": {
-    "value": "one",
+    "value": "\"one\"",
     "dependencies": {
       "0": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]",
       "1,0": "[{\"dependency_type\":\"Style\",\"condition\":\"one\",\"parameters\":{\"color\":{\"value\":{\"value\":\"rgba(255,0,0,1)\",\"important\":false},\"default\":null}}}]",
@@ -323,8 +323,8 @@ let ftd_utils = {
 
     is_equal_condition: function (value, condition) {
         return ((value === condition)
-            || (condition === "$IsNull$" && value.trim().length === 0)
-            || (condition === "$IsNotNull$" && value.trim().length !== 0)
+            || (condition === "$IsNull$" && (value.trim().length === 0 || value === "null"))
+            || (condition === "$IsNotNull$" && (value.trim().length !== 0 && value !== "null"))
         );
     },
 

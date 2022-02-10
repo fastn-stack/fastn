@@ -6,30 +6,6 @@
     <title>action-increment-decrement-on-component.ftd</title>
     <script type="ftd" id="ftd-data">
         {
-  "@src@0": {
-    "value": "https://www.liveabout.com/thmb/YCJmu1khSJo8kMYM090QCd9W78U=/1250x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/powerpuff_girls-56a00bc45f9b58eba4aea61d.jpg",
-    "dependencies": {
-      "0": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
-    }
-  },
-  "@src@1": {
-    "value": "https://upload.wikimedia.org/wikipedia/en/d/d4/Mickey_Mouse.png",
-    "dependencies": {
-      "1": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
-    }
-  },
-  "@src@2": {
-    "value": "https://blog.ipleaders.in/wp-content/uploads/2021/07/751589-mickey-mouse.jpg",
-    "dependencies": {
-      "2": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
-    }
-  },
-  "@src@3": {
-    "value": "https://blog.earlymoments.com/wp-content/uploads/2016/03/Mickey_Mouse_group_700x493.jpg",
-    "dependencies": {
-      "3": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
-    }
-  },
   "action-increment-decrement-on-component.ftd#count": {
     "value": "0",
     "dependencies": {
@@ -37,6 +13,30 @@
       "1": "[{\"dependency_type\":\"Visible\",\"condition\":\"1\",\"parameters\":{}}]",
       "2": "[{\"dependency_type\":\"Visible\",\"condition\":\"2\",\"parameters\":{}}]",
       "3": "[{\"dependency_type\":\"Visible\",\"condition\":\"3\",\"parameters\":{}}]"
+    }
+  },
+  "action-increment-decrement-on-component.ftd#src@0": {
+    "value": "\"https://www.liveabout.com/thmb/YCJmu1khSJo8kMYM090QCd9W78U=/1250x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/powerpuff_girls-56a00bc45f9b58eba4aea61d.jpg\"",
+    "dependencies": {
+      "0": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
+    }
+  },
+  "action-increment-decrement-on-component.ftd#src@1": {
+    "value": "\"https://upload.wikimedia.org/wikipedia/en/d/d4/Mickey_Mouse.png\"",
+    "dependencies": {
+      "1": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
+    }
+  },
+  "action-increment-decrement-on-component.ftd#src@2": {
+    "value": "\"https://blog.ipleaders.in/wp-content/uploads/2021/07/751589-mickey-mouse.jpg\"",
+    "dependencies": {
+      "2": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
+    }
+  },
+  "action-increment-decrement-on-component.ftd#src@3": {
+    "value": "\"https://blog.earlymoments.com/wp-content/uploads/2016/03/Mickey_Mouse_group_700x493.jpg\"",
+    "dependencies": {
+      "3": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
     }
   }
 }
@@ -347,8 +347,8 @@ let ftd_utils = {
 
     is_equal_condition: function (value, condition) {
         return ((value === condition)
-            || (condition === "$IsNull$" && value.trim().length === 0)
-            || (condition === "$IsNotNull$" && value.trim().length !== 0)
+            || (condition === "$IsNull$" && (value.trim().length === 0 || value === "null"))
+            || (condition === "$IsNotNull$" && (value.trim().length !== 0 && value !== "null"))
         );
     },
 

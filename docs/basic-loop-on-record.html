@@ -6,68 +6,68 @@
     <title>People at Fifthtry</title>
     <script type="ftd" id="ftd-data">
         {
-  "@body@1": {
-    "value": "world",
+  "basic-loop-on-record.ftd#body@1": {
+    "value": "\"world\"",
     "dependencies": {
       "1,1": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
     }
   },
-  "@body@2": {
-    "value": "Amit is CEO of FifthTry.",
+  "basic-loop-on-record.ftd#body@2": {
+    "value": "\"Amit is CEO of FifthTry.\"",
     "dependencies": {
       "2,1": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
     }
   },
-  "@body@3": {
-    "value": "Arpita is developer at Fifthtry",
+  "basic-loop-on-record.ftd#body@3": {
+    "value": "\"Arpita is developer at Fifthtry\"",
     "dependencies": {
       "3,1": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
     }
   },
-  "@body@4": {
-    "value": "Asit is developer at Fifthtry",
+  "basic-loop-on-record.ftd#body@4": {
+    "value": "\"Asit is developer at Fifthtry\"",
     "dependencies": {
       "4,1": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
     }
   },
-  "@body@5": {
-    "value": "Sourabh is developer at Fifthtry",
+  "basic-loop-on-record.ftd#body@5": {
+    "value": "\"Sourabh is developer at Fifthtry\"",
     "dependencies": {
       "5,1": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
     }
   },
-  "@name@1": {
-    "value": "hello",
+  "basic-loop-on-record.ftd#name@1": {
+    "value": "\"hello\"",
     "dependencies": {
       "1,0": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
     }
   },
-  "@name@2": {
-    "value": "Amit Upadhyay",
+  "basic-loop-on-record.ftd#name@2": {
+    "value": "\"Amit Upadhyay\"",
     "dependencies": {
       "2,0": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
     }
   },
-  "@name@3": {
-    "value": "Arpita Jaiswal",
+  "basic-loop-on-record.ftd#name@3": {
+    "value": "\"Arpita Jaiswal\"",
     "dependencies": {
       "3,0": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
     }
   },
-  "@name@4": {
-    "value": "Asit",
+  "basic-loop-on-record.ftd#name@4": {
+    "value": "\"Asit\"",
     "dependencies": {
       "4,0": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
     }
   },
-  "@name@5": {
-    "value": "Sourabh",
+  "basic-loop-on-record.ftd#name@5": {
+    "value": "\"Sourabh\"",
     "dependencies": {
       "5,0": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
     }
   },
   "basic-loop-on-record.ftd#people": {
-    "value": "[]",
+    "value": "[{\"bio\":\"Amit is CEO of FifthTry.\",\"name\":\"Amit Upadhyay\"},{\"bio\":\"Arpita is developer at Fifthtry\",\"name\":\"Arpita Jaiswal\"},{\"bio\":\"Asit is developer at Fifthtry\",\"name\":\"Asit\"},{\"bio\":\"Sourabh is developer at Fifthtry\",\"name\":\"Sourabh\"}]",
     "dependencies": {
       "2": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]",
       "3": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]",
@@ -383,8 +383,8 @@ let ftd_utils = {
 
     is_equal_condition: function (value, condition) {
         return ((value === condition)
-            || (condition === "$IsNull$" && value.trim().length === 0)
-            || (condition === "$IsNotNull$" && value.trim().length !== 0)
+            || (condition === "$IsNull$" && (value.trim().length === 0 || value === "null"))
+            || (condition === "$IsNotNull$" && (value.trim().length !== 0 && value !== "null"))
         );
     },
 

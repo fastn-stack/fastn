@@ -6,57 +6,57 @@
     <title>5PM Tasks</title>
     <script type="ftd" id="ftd-data">
         {
-  "@active@0,0,0": {
+  "creating-a-tree.ftd#active@0,0,0": {
     "value": "true",
     "dependencies": {
       "0,0,0,0": "[{\"dependency_type\":\"Visible\",\"condition\":\"$IsNotNull$\",\"parameters\":{}}]",
       "0,0,0,1": "[{\"dependency_type\":\"Visible\",\"condition\":\"$IsNull$\",\"parameters\":{}}]"
     }
   },
-  "@active@0,0,0,0": {
-    "value": "",
+  "creating-a-tree.ftd#active@0,0,0,0": {
+    "value": "null",
     "dependencies": {
       "0,0,0,2,0": "[{\"dependency_type\":\"Visible\",\"condition\":\"$IsNotNull$\",\"parameters\":{}}]",
       "0,0,0,2,1": "[{\"dependency_type\":\"Visible\",\"condition\":\"$IsNull$\",\"parameters\":{}}]"
     }
   },
-  "@active@0,0,0,1": {
-    "value": "",
+  "creating-a-tree.ftd#active@0,0,0,1": {
+    "value": "null",
     "dependencies": {
       "0,0,0,3,0": "[{\"dependency_type\":\"Visible\",\"condition\":\"$IsNotNull$\",\"parameters\":{}}]",
       "0,0,0,3,1": "[{\"dependency_type\":\"Visible\",\"condition\":\"$IsNull$\",\"parameters\":{}}]"
     }
   },
-  "@active@0,0,0,1,0": {
-    "value": "",
+  "creating-a-tree.ftd#active@0,0,0,1,0": {
+    "value": "null",
     "dependencies": {
       "0,0,0,3,2,0": "[{\"dependency_type\":\"Visible\",\"condition\":\"$IsNotNull$\",\"parameters\":{}}]",
       "0,0,0,3,2,1": "[{\"dependency_type\":\"Visible\",\"condition\":\"$IsNull$\",\"parameters\":{}}]"
     }
   },
-  "@name@0,0,0": {
-    "value": "5PM Tasks",
+  "creating-a-tree.ftd#name@0,0,0": {
+    "value": "\"5PM Tasks\"",
     "dependencies": {
       "0,0,0,0": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]",
       "0,0,0,1": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
     }
   },
-  "@name@0,0,0,0": {
-    "value": "Log",
+  "creating-a-tree.ftd#name@0,0,0,0": {
+    "value": "\"Log\"",
     "dependencies": {
       "0,0,0,2,0": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]",
       "0,0,0,2,1": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
     }
   },
-  "@name@0,0,0,1": {
-    "value": "DB Tables",
+  "creating-a-tree.ftd#name@0,0,0,1": {
+    "value": "\"DB Tables\"",
     "dependencies": {
       "0,0,0,3,0": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]",
       "0,0,0,3,1": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
     }
   },
-  "@name@0,0,0,1,0": {
-    "value": "API Changelog",
+  "creating-a-tree.ftd#name@0,0,0,1,0": {
+    "value": "\"API Changelog\"",
     "dependencies": {
       "0,0,0,3,2,0": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]",
       "0,0,0,3,2,1": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
@@ -370,8 +370,8 @@ let ftd_utils = {
 
     is_equal_condition: function (value, condition) {
         return ((value === condition)
-            || (condition === "$IsNull$" && value.trim().length === 0)
-            || (condition === "$IsNotNull$" && value.trim().length !== 0)
+            || (condition === "$IsNull$" && (value.trim().length === 0 || value === "null"))
+            || (condition === "$IsNotNull$" && (value.trim().length !== 0 && value !== "null"))
         );
     },
 
