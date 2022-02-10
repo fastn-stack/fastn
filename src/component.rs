@@ -298,10 +298,10 @@ impl ChildComponent {
                 }
             }
         }
-        // let tmp_data = construct_tmp_data()
         return Ok(elements);
 
         fn construct_tmp_data(kind: &ftd::p2::Kind) -> Option<ftd::PropertyValue> {
+            // todo: fix it for all kind (Arpita)
             match kind {
                 ftd::p2::Kind::String { .. } => Some(ftd::PropertyValue::Value {
                     value: ftd::Value::String {
@@ -339,7 +339,6 @@ impl ChildComponent {
             local_container: &[usize],
         ) -> ftd::p1::Result<ElementWithContainer> {
             let mut root = root.to_owned();
-            let d = d.resolve(child_component.line_number, doc)?;
             let local_container = {
                 let mut container = local_container[..local_container.len() - 1].to_vec();
                 match local_container.last() {
@@ -358,7 +357,7 @@ impl ChildComponent {
                 loop_name.clone(),
                 ftd::p2::Thing::Variable(ftd::Variable {
                     name: "$loop$".to_string(),
-                    value: ftd::PropertyValue::Value { value: d },
+                    value: d.to_owned(),
                     conditions: vec![],
                     flags: Default::default(),
                 }),
