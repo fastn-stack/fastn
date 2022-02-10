@@ -37,11 +37,75 @@ pub fn parse_import(
     }
 }
 
+pub fn boolean_and_ref(
+    line_number: usize,
+    name: &str,
+    properties: &std::collections::BTreeMap<String, ftd::component::Property>,
+    doc: &ftd::p2::TDoc,
+    _condition: &Option<ftd::p2::Boolean>, // todo: check the string_and_source_and_ref and use
+) -> ftd::p1::Result<(bool, Option<String>)> {
+    let properties = ftd::component::resolve_properties_with_ref(line_number, properties, doc)?;
+    match properties.get(name) {
+        Some((ftd::Value::Boolean { value }, reference)) => {
+            Ok((value.to_owned(), complete_reference(reference)))
+        }
+        Some(v) => ftd::e2(
+            format!("expected boolean, found: {:?}", v),
+            doc.name,
+            line_number,
+        ),
+        None => ftd::e2(format!("'{}' not found", name), doc.name, line_number),
+    }
+}
+
+pub fn integer_and_ref(
+    line_number: usize,
+    name: &str,
+    properties: &std::collections::BTreeMap<String, ftd::component::Property>,
+    doc: &ftd::p2::TDoc,
+    _condition: &Option<ftd::p2::Boolean>, // todo: check the string_and_source_and_ref and use
+) -> ftd::p1::Result<(i64, Option<String>)> {
+    let properties = ftd::component::resolve_properties_with_ref(line_number, properties, doc)?;
+    match properties.get(name) {
+        Some((ftd::Value::Integer { value }, reference)) => {
+            Ok((value.to_owned(), complete_reference(reference)))
+        }
+        Some(v) => ftd::e2(
+            format!("expected integer, found: {:?}", v),
+            doc.name,
+            line_number,
+        ),
+        None => ftd::e2(format!("'{}' not found", name), doc.name, line_number),
+    }
+}
+
+pub fn decimal_and_ref(
+    line_number: usize,
+    name: &str,
+    properties: &std::collections::BTreeMap<String, ftd::component::Property>,
+    doc: &ftd::p2::TDoc,
+    _condition: &Option<ftd::p2::Boolean>, // todo: check the string_and_source_and_ref and use
+) -> ftd::p1::Result<(f64, Option<String>)> {
+    let properties = ftd::component::resolve_properties_with_ref(line_number, properties, doc)?;
+    match properties.get(name) {
+        Some((ftd::Value::Decimal { value }, reference)) => {
+            Ok((value.to_owned(), complete_reference(reference)))
+        }
+        Some(v) => ftd::e2(
+            format!("expected integer, found: {:?}", v),
+            doc.name,
+            line_number,
+        ),
+        None => ftd::e2(format!("'{}' not found", name), doc.name, line_number),
+    }
+}
+
 pub fn string_and_ref(
     line_number: usize,
     name: &str,
     properties: &std::collections::BTreeMap<String, ftd::component::Property>,
     doc: &ftd::p2::TDoc,
+    // todo: check the string_and_source_and_ref and use condition
 ) -> ftd::p1::Result<(String, Option<String>)> {
     let properties = ftd::component::resolve_properties_with_ref(line_number, properties, doc)?;
     match properties.get(name) {
