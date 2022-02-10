@@ -8,131 +8,77 @@
 -- ft.header-toc:
 $processor$: toc
 
-- /examples/react-banglore-22-01-2022/
-  React Bangalore
-- /why/
-  Why FTD?
-- /language/
-  Docs
-- /examples/
-  Examples
-- /development/
-  Development
+- React Bangalore: /examples/react-banglore-22-01-2022/
+- Why FTD?: /why/
+- Docs: /language/
+- Examples: /examples/
+- Development: /development/
 
 -- ft.toc-item list dev-toc:
 $processor$: toc
 
-- /changelog/
-  Changelog
-- /roadmap/
-  Roadmap & RFCs
-- /journal/
-  Journal
-- /internals/
-  Internals
-- /p1/
-  `ftd::p1`: A JSON/YML Replacement
+- Changelog: /changelog/
+- Roadmap & RFCs: /roadmap/
+- Journal: /journal/
+- Internals: /internals/
+- `ftd::p1`: A JSON/YML Replacement: /p1/
 
 
 -- ft.toc-item list why-toc:
 $processor$: toc
 
-- /why/
-  Why FTD
-- /philosophy/
-  Philosophy
-- /why/not-mdx/
-  Why not MDX?
+- Why FTD: /why/
+- Philosophy: /philosophy/
+- Why not MDX?: /why/not-mdx/
 
 
 -- ft.toc-item list examples-toc:
 $processor$: toc
 
-- /examples/input/
-  Input
-- /examples/diagram/
-  Architecture Diagram
-- /examples/comic/
-  Comic
-- /creating-a-tree/
-  Creating a tree
-- /examples/mygate/
-  Gate Pass
-- /examples/grid/
-  Grid
-- /examples/dark-mode/
-  Dark Mode
-- /examples/conditional-variable/
-  Conditional Variable
+- Input: /examples/input/
+- Architecture Diagram: /examples/diagram/
+- Comic: /examples/comic/
+- Creating a tree: /creating-a-tree/
+- Gate Pass: /examples/mygate/
+- Grid: /examples/grid/
+- Dark Mode: /examples/dark-mode/
+- Conditional Variable: /examples/conditional-variable/
+  
 
 -- ft.toc:
 $processor$: toc
 
-- /language/
-  FTD Language
-  - /p1-grammar/
-    `ftd::p1` grammar
-  - /data-modelling/
-    Data Modelling
-    - /variables/
-      Variables
-    - /built-in-types/
-      Built-in Types
-    - /record/
-      `record`
-    - /or-type/
-      `or-type`
-    - /list/
-      `list`
-    - /reading-data/
-      Reading FTD Files
-  - /ui/
-    UI
-    - /component/
-      `component`
-    - /kernel/
-      Kernel Components
-      - /row/
-        `ftd.row`
-      - /column/
-        `ftd.column`
-      - /text/
-        `ftd.text`
-      - /image/
-        `ftd.image`
-      - /iframe/
-        `ftd.iframe`
-      - /integer/
-        `ftd.integer`
-      - /decimal/
-        `ftd.decimal`
-      - /boolean/
-        `ftd.boolean`
-      - /common/
-        Common Attributes
-      - /text-common/
-        Common Text Attributes
-      - /container/
-        Container Attributes
-    - /container-management/
-      Container Management
-    - /if/
-      `if`: Conditional Components
-    - /if-attr/
-      Conditional Attributes
-    - /loop/
-      `$loop$`: Looping Over Lists
-    - /id/
-      ID
-    - /event-handling/
-      `$event-<event-name>$`: Event Handling
-    - /auto-nesting/
-      Auto Nesting
-  - /import/
-    `import`
-  - /library/
-    `ftd::Library`
-  - /comments/
-    Comments In `ftd` Files
-- /run-ftd/
-  How to run ftd
+- FTD Language: /language/
+  - `ftd::p1` grammar: /p1-grammar/
+  - Data Modelling: /data-modelling/
+    - Variables: /variables/
+    - Built-in Types: /built-in-types/
+    - `record`: /record/
+    - `or-type`: /or-type/
+    - `list`: /list/
+    - Reading FTD Files: /reading-data/
+  - UI: /ui/
+    - `component`: /component/
+    - Kernel Components: /kernel/
+      - `ftd.row`: /row/
+      - `ftd.column`: /column/
+      - `ftd.text`: /text/
+      - `ftd.image`: /image/
+      - `ftd.iframe`: /iframe/
+      - `ftd.integer`: /integer/
+      - `ftd.decimal`: /decimal/
+      - `ftd.boolean`: /boolean/
+      - Common Attributes: /common/
+      - Common Text Attributes: /text-common/
+      - Container Attributes: /container/
+    - Container Management: /container-management/
+    - `if`: Conditional Components: /if/
+    - Conditional Attributes: /if-attr/
+    - `$loop$`: Looping Over Lists: /loop/
+    - ID: /id/
+    - `$event-<event-name>$`: Event Handling: /event-handling/
+    - Auto Nesting: /auto-nesting/
+  - `import`: /import/
+  - `ftd::Library`: /library/
+  - Comments In `ftd` Files: /comments/
+- How to run ftd: /run-ftd/
