@@ -46,7 +46,7 @@ async fn build_simple(
 
 async fn build_with_translations(
     config: &fpm::Config,
-    _file: Option<&str>,
+    process_file: Option<&str>,
     base_url: Option<&str>,
     skip_failed: bool,
 ) -> fpm::Result<()> {
@@ -60,6 +60,9 @@ async fn build_with_translations(
     let message = fpm::available_languages(config)?;
 
     for file in documents.values() {
+        if process_file.is_some() && process_file != Some(file.get_id().as_str()) {
+            continue;
+        }
         fpm::process_file(
             config,
             file,
