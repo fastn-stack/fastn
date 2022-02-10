@@ -11,6 +11,9 @@ async fn main() -> fpm::Result<()> {
     if let Some(build) = matches.subcommand_matches("build") {
         // Evaluate the aliases for the package
         config.package.aliases()?;
+        if build.is_present("verbose") {
+            println!("{}", fpm::debug_env_vars());
+        }
         fpm::build(
             &config,
             build.value_of("file"),
@@ -92,6 +95,13 @@ fn app(authors: &'static str) -> clap::App<'static, 'static> {
                 .arg(
                     clap::Arg::with_name("ignore-failed")
                         .long("ignore-failed")
+                        .takes_value(false)
+                        .required(false),
+                )
+                .arg(
+                    clap::Arg::with_name("verbose")
+                        .long("verbose")
+                        .short("v")
                         .takes_value(false)
                         .required(false),
                 )

@@ -142,6 +142,19 @@ fn get_messages(status: &fpm::TranslatedDocument, config: &fpm::Config) -> fpm::
     })
 }
 
+pub fn debug_env_vars() -> String {
+    std::env::vars()
+        .into_iter()
+        .filter(|(key, _)| {
+            vec!["CARGO", "VERGEN", "FPM"]
+                .iter()
+                .any(|prefix| key.starts_with(prefix))
+        })
+        .fold(String::new(), |consolidated_res, (key, value)| {
+            format!("{}\n{}: {}", consolidated_res, key, value)
+        })
+}
+
 // fn default_markdown() -> &'static str {
 //     include_str!("../ftd/markdown.ftd")
 // }

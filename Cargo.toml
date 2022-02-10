@@ -11,7 +11,7 @@ description = "fpm: FTD Package Manager"
 license = "MIT"
 repository = "https://github.com/FifthTry/fpm"
 homepage = "https://fpm.dev"
-
+build = "build.rs"
 
 [dependencies]
 async-recursion = "0.3.2"
@@ -47,3 +47,7 @@ fbt-lib = "0.1.16"
 indoc = "1"
 pretty_assertions = "1"
 rusty-hook = "^0.11.2"
+
+[build-dependencies]
+vergen = "6"
+anyhow = "1.0.53"
