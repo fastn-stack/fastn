@@ -358,11 +358,7 @@ impl ChildComponent {
                 }
                 container
             };
-            let string_container: String = local_container
-                .iter()
-                .map(|v| v.to_string())
-                .collect::<Vec<String>>()
-                .join(",");
+            let string_container = ftd::p2::utils::get_string_container(local_container.as_slice());
             let loop_name = doc.resolve_name(0, format!("$loop$@{}", string_container).as_str())?;
             doc.local_variables.insert(
                 loop_name.clone(),
