@@ -445,6 +445,14 @@ pub fn decimal_optional(
     }
 }
 
+pub(crate) fn get_string_container(local_container: &[usize]) -> String {
+    local_container
+        .iter()
+        .map(|v| v.to_string())
+        .collect::<Vec<String>>()
+        .join(",")
+}
+
 pub(crate) fn get_doc_name_and_remaining(s: &str) -> ftd::p1::Result<(String, Option<String>)> {
     let mut part1 = "".to_string();
     let mut pattern_to_split_at = s.to_string();
