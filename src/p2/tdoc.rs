@@ -314,6 +314,10 @@ impl<'a> TDoc<'a> {
             child_component_properties,
             string_container.as_str(),
         )?;
+        ftd::component::Property::add_default_properties(
+            child_component_properties,
+            &mut component.properties,
+        );
         self.update_component_data(
             string_container.as_str(),
             string_container.as_str(),

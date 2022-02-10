@@ -35,7 +35,7 @@ impl Document {
                     continue;
                 };
                 if let Some(value) = get_value(&val, &doc) {
-                    d.insert(k.to_string(), value);
+                    d.insert(k.to_string(), value.to_string());
                 }
                 if let ftd::variable::VariableFlags {
                     always_include: Some(f),
@@ -49,7 +49,7 @@ impl Document {
         }
         return (d, always_include);
 
-        fn get_value(value: &ftd::Value, doc: &ftd::p2::TDoc) -> Option<String> {
+        fn get_value(value: &ftd::Value, doc: &ftd::p2::TDoc) -> Option<serde_json::Value> {
             if let ftd::Value::List { data, .. } = value {
                 let mut list_data = vec![];
                 for val in data {
@@ -62,23 +62,35 @@ impl Document {
                         list_data.push(val);
                     }
                 }
-                return serde_json::to_string(&list_data).ok();
+                return serde_json::to_value(&list_data).ok();
             }
-            let value = if let ftd::Value::Optional { data, .. } = value {
+            let value = if let ftd::Value::Optional { data, kind } = value {
                 match data.as_ref() {
-                    None => ftd::Value::String {
-                        text: "".to_string(),
-                        source: ftd::TextSource::Header,
+                    None => ftd::Value::None {
+                        kind: kind.to_owned(),
                     },
                     Some(v) => v.to_owned(),
                 }
             } else {
                 value.to_owned()
             };
+
             match value {
-                ftd::Value::Boolean { value } => Some(value.to_string()),
-                ftd::Value::Integer { value } => Some(value.to_string()),
-                ftd::Value::String { text: value, .. } => Some(value),
+                ftd::Value::None { .. } => Some(serde_json::Value::Null),
+                ftd::Value::Boolean { value } => serde_json::to_value(value).ok(),
+                ftd::Value::Integer { value } => serde_json::to_value(value).ok(),
+                ftd::Value::String { text: value, .. } => serde_json::to_value(value).ok(),
+                ftd::Value::Record { fields, .. } => {
+                    let mut value_fields = std::collections::BTreeMap::new();
+                    for (k, v) in fields {
+                        if let Ok(val) = v.resolve(0, doc) {
+                            if let Some(val) = get_value(&val, doc) {
+                                value_fields.insert(k, val);
+                            }
+                        }
+                    }
+                    serde_json::to_value(value_fields).ok()
+                }
                 _ => None,
             }
         }
