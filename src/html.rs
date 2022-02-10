@@ -1407,11 +1407,7 @@ pub fn overflow(l: &ftd::Overflow, f: &str) -> (String, String) {
 }
 
 fn gradient(d: &ftd::GradientDirection, c: &[ftd::Color]) -> String {
-    let color = c
-        .iter()
-        .map(|v| color(v))
-        .collect::<Vec<String>>()
-        .join(",");
+    let color = c.iter().map(color).collect::<Vec<String>>().join(",");
     let gradient_style = match d {
         ftd::GradientDirection::BottomToTop => "linear-gradient(to top ".to_string(),
         ftd::GradientDirection::TopToBottom => "linear-gradient(to bottom ".to_string(),

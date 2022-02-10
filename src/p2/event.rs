@@ -71,7 +71,9 @@ impl Event {
         let mut event: Vec<ftd::Event> = vec![];
         for e in events {
             let target = match &e.action.target {
-                ftd::PropertyValue::Value { value } => value.to_string().unwrap_or("".to_string()),
+                ftd::PropertyValue::Value { value } => {
+                    value.to_string().unwrap_or_else(|| "".to_string())
+                }
                 ftd::PropertyValue::Reference { name, .. }
                 | ftd::PropertyValue::Variable { name, .. } => name.to_string(),
             };
@@ -89,50 +91,50 @@ impl Event {
     }
 
     pub fn mouse_event(val: &str) -> Vec<ftd::Event> {
-        let mut event: Vec<ftd::Event> = vec![];
-        event.push(ftd::Event {
-            name: "onmouseenter".to_string(),
-            action: ftd::Action {
-                action: "set-value".to_string(),
-                target: val.to_string(),
-                parameters: std::array::IntoIter::new([(
-                    "value".to_string(),
-                    vec![
-                        ftd::event::ParameterData {
-                            value: "true".to_string(),
-                            reference: None,
-                        },
-                        ftd::event::ParameterData {
-                            value: "boolean".to_string(),
-                            reference: None,
-                        },
-                    ],
-                )])
-                .collect(),
+        vec![
+            ftd::Event {
+                name: "onmouseenter".to_string(),
+                action: ftd::Action {
+                    action: "set-value".to_string(),
+                    target: val.to_string(),
+                    parameters: std::array::IntoIter::new([(
+                        "value".to_string(),
+                        vec![
+                            ftd::event::ParameterData {
+                                value: "true".to_string(),
+                                reference: None,
+                            },
+                            ftd::event::ParameterData {
+                                value: "boolean".to_string(),
+                                reference: None,
+                            },
+                        ],
+                    )])
+                    .collect(),
+                },
             },
-        });
-        event.push(ftd::Event {
-            name: "onmouseleave".to_string(),
-            action: ftd::Action {
-                action: "set-value".to_string(),
-                target: val.to_string(),
-                parameters: std::array::IntoIter::new([(
-                    "value".to_string(),
-                    vec![
-                        ftd::event::ParameterData {
-                            value: "false".to_string(),
-                            reference: None,
-                        },
-                        ftd::event::ParameterData {
-                            value: "boolean".to_string(),
-                            reference: None,
-                        },
-                    ],
-                )])
-                .collect(),
+            ftd::Event {
+                name: "onmouseleave".to_string(),
+                action: ftd::Action {
+                    action: "set-value".to_string(),
+                    target: val.to_string(),
+                    parameters: std::array::IntoIter::new([(
+                        "value".to_string(),
+                        vec![
+                            ftd::event::ParameterData {
+                                value: "false".to_string(),
+                                reference: None,
+                            },
+                            ftd::event::ParameterData {
+                                value: "boolean".to_string(),
+                                reference: None,
+                            },
+                        ],
+                    )])
+                    .collect(),
+                },
             },
-        });
-        event
+        ]
     }
 }
 

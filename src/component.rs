@@ -123,7 +123,9 @@ impl Property {
     ) {
         for (key, arg) in reference {
             if default_arguments().contains_key(key) {
-                properties.entry(key.to_string()).or_insert(arg.to_owned());
+                properties
+                    .entry(key.to_string())
+                    .or_insert_with(|| arg.to_owned());
             }
         }
     }
@@ -336,6 +338,7 @@ impl ChildComponent {
             }
         }
 
+        #[allow(clippy::too_many_arguments)]
         fn construct_element(
             child_component: &ChildComponent,
             d: &ftd::PropertyValue,
@@ -361,7 +364,7 @@ impl ChildComponent {
             let string_container = ftd::p2::utils::get_string_container(local_container.as_slice());
             let loop_name = doc.resolve_name(0, format!("$loop$@{}", string_container).as_str())?;
             doc.local_variables.insert(
-                loop_name.clone(),
+                loop_name,
                 ftd::p2::Thing::Variable(ftd::Variable {
                     name: "$loop$".to_string(),
                     value: d.to_owned(),
@@ -1738,6 +1741,7 @@ impl Component {
         )
     }
 
+    #[allow(clippy::too_many_arguments)]
     fn call(
         &self,
         arguments: &std::collections::BTreeMap<String, Property>,
@@ -2019,15 +2023,13 @@ pub fn recursive_child_component(
 
     let mut reference = None;
 
-    let (root_arguments, full_name, caption) =
-        if name_with_component.is_some() && sub.name == name_with_component.clone().expect("").0 {
-            let root_component = name_with_component.expect("").1;
-            (
-                root_component.arguments.clone(),
-                root_component.full_name.to_string(),
-                root_component.get_caption(),
-            )
-        } else {
+    let (root_arguments, full_name, caption) = match name_with_component {
+        Some((name, root_component)) if sub.name == name => (
+            root_component.arguments.clone(),
+            root_component.full_name.to_string(),
+            root_component.get_caption(),
+        ),
+        _ => {
             let root = if let Some(ftd::p2::Kind::UI { default }) = arguments.get(&sub.name) {
                 reference = Some((
                     sub.name.to_string(),
@@ -2065,7 +2067,8 @@ pub fn recursive_child_component(
                 root.full_name.to_string(),
                 root.get_caption(),
             )
-        };
+        }
+    };
 
     let mut new_caption = sub.caption.clone();
     if let (Some(caption), Some(caption_arg)) = (sub.caption.clone(), caption) {
@@ -2415,7 +2418,7 @@ pub fn read_properties(
             }
         }
     }
-    return Ok(properties);
+    Ok(properties)
 }
 
 pub(crate) fn default_arguments() -> std::collections::BTreeMap<String, ftd::p2::Kind> {
