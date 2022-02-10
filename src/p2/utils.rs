@@ -207,7 +207,7 @@ pub fn string_and_source_and_ref(
                 }
                 _ => {
                     return ftd::e2(
-                        format!("expected string, found1: {:?}", kind),
+                        format!("expected string, found: {:?}", kind),
                         doc.name,
                         line_number,
                     )
@@ -218,7 +218,7 @@ pub fn string_and_source_and_ref(
                 Some(reference) => reference,
                 None => {
                     return ftd::e2(
-                        format!("expected string, found2: {:?}", kind),
+                        format!("expected string, found: {:?}", kind),
                         doc.name,
                         line_number,
                     )
@@ -246,13 +246,13 @@ pub fn string_and_source_and_ref(
                 }
             }
             ftd::e2(
-                format!("expected string, found3: {:?}", kind),
+                format!("expected string, found: {:?}", kind),
                 doc.name,
                 line_number,
             )
         }
         Some(v) => ftd::e2(
-            format!("expected string, found4: {:?}", v),
+            format!("expected string, found: {:?}", v),
             doc.name,
             line_number,
         ),
@@ -287,6 +287,18 @@ pub fn string_optional(
             kind: ftd::p2::Kind::String { .. },
         }) => Ok(None),
         Some(ftd::Value::None { .. }) => Ok(None),
+        Some(ftd::Value::Optional {
+            data,
+            kind: ftd::p2::Kind::String { .. },
+        }) => match data.as_ref() {
+            Some(ftd::Value::String { text: v, .. }) => Ok(Some(v.to_string())),
+            None => Ok(None),
+            v => ftd::e2(
+                format!("expected string, found: {:?}", v),
+                doc_id,
+                line_number,
+            ),
+        },
         Some(v) => ftd::e2(
             format!("expected string, found: {:?}", v),
             doc_id,
