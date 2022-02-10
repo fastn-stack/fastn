@@ -706,7 +706,6 @@ pub fn interpret(
 )> {
     let mut interpreter = Interpreter::new(lib);
     let instructions = interpreter.interpret(name, source)?;
-    dbg!(&instructions);
     let mut rt = ftd::RT::from(name, interpreter.aliases, interpreter.bag, instructions);
     let main = rt.render_()?;
     Ok((rt.bag, main))
@@ -10683,11 +10682,11 @@ mod test {
                                     name: s("onclick"),
                                     action: ftd::Action {
                                         action: s("toggle"),
-                                        target: s("@open@0"),
+                                        target: s("foo/bar#open@0"),
                                         parameters: Default::default(),
                                     },
                                 }],
-                                reference: Some(s("@toc.title")),
+                                reference: Some(s("foo/bar#toc@0.title")),
                                 ..Default::default()
                             },
                             ..Default::default()
@@ -10703,11 +10702,11 @@ mod test {
                                             name: s("onclick"),
                                             action: ftd::Action {
                                                 action: s("toggle"),
-                                                target: s("@open@0,1"),
+                                                target: s("foo/bar#open@0,1"),
                                                 parameters: Default::default(),
                                             },
                                         }],
-                                        reference: Some(s("@toc.title")),
+                                        reference: Some(s("foo/bar#toc@0,1.title")),
                                         ..Default::default()
                                     },
                                     ..Default::default()
@@ -10715,13 +10714,8 @@ mod test {
                                 ..Default::default()
                             },
                             common: ftd::Common {
-                                locals: std::array::IntoIter::new([
-                                    (s("open@0,1"), s("true")),
-                                    (s("toc@0,1"), s("{\"title\":\"aa title\"}")),
-                                ])
-                                .collect(),
                                 condition: Some(ftd::Condition {
-                                    variable: s("@open@0"),
+                                    variable: s("foo/bar#open@0"),
                                     value: s("true"),
                                 }),
                                 ..Default::default()
@@ -10738,11 +10732,11 @@ mod test {
                                             name: s("onclick"),
                                             action: ftd::Action {
                                                 action: s("toggle"),
-                                                target: s("@open@0,2"),
+                                                target: s("foo/bar#open@0,2"),
                                                 parameters: Default::default(),
                                             },
                                         }],
-                                        reference: Some(s("@toc.title")),
+                                        reference: Some(s("foo/bar#toc@0,2.title")),
                                         ..Default::default()
                                     },
                                     ..Default::default()
@@ -10750,13 +10744,8 @@ mod test {
                                 ..Default::default()
                             },
                             common: ftd::Common {
-                                locals: std::array::IntoIter::new([
-                                    (s("open@0,2"), s("true")),
-                                    (s("toc@0,2"), s("{\"title\":\"aaa title\"}")),
-                                ])
-                                .collect(),
                                 condition: Some(ftd::Condition {
-                                    variable: s("@open@0"),
+                                    variable: s("foo/bar#open@0"),
                                     value: s("true"),
                                 }),
                                 ..Default::default()
@@ -10766,11 +10755,6 @@ mod test {
                     ..Default::default()
                 },
                 common: ftd::Common {
-                    locals: std::array::IntoIter::new([
-                        (s("open@0"), s("true")),
-                        (s("toc@0"), s("{\"title\":\"ab title\"}")),
-                    ])
-                    .collect(),
                     reference: Some(s("foo/bar#toc")),
                     ..Default::default()
                 },
@@ -13893,8 +13877,6 @@ mod test {
                                     b: 0,
                                     alpha: 1.0,
                                 }),
-                                locals: std::array::IntoIter::new([(s("size@0,1"), s("30"))])
-                                    .collect(),
                                 ..Default::default()
                             },
                             size: Some(30),
@@ -13908,7 +13890,7 @@ mod test {
                                         text: ftd::markdown_line("hello again"),
                                         line: true,
                                         common: ftd::Common {
-                                            reference: Some(s("@msg@0,2")),
+                                            reference: Some(s("foo/bar#msg@0,2")),
                                             ..Default::default()
                                         },
                                         ..Default::default()
@@ -13917,7 +13899,7 @@ mod test {
                                         text: ftd::markdown_line("hello world!"),
                                         line: true,
                                         common: ftd::Common {
-                                            reference: Some(s("@other-msg@0,2")),
+                                            reference: Some(s("foo/bar#other-msg@0,2")),
                                             ..Default::default()
                                         },
                                         ..Default::default()
@@ -13932,11 +13914,6 @@ mod test {
                                                 b: 0,
                                                 alpha: 1.0,
                                             }),
-                                            locals: std::array::IntoIter::new([(
-                                                s("size@0,2,2"),
-                                                s("20"),
-                                            )])
-                                            .collect(),
                                             ..Default::default()
                                         },
                                         size: Some(20),
@@ -13961,11 +13938,6 @@ mod test {
                                 ..Default::default()
                             },
                             common: ftd::Common {
-                                locals: std::array::IntoIter::new([
-                                    (s("msg@0,2"), s("hello again")),
-                                    (s("other-msg@0,2"), s("hello world!")),
-                                ])
-                                .collect(),
                                 ..Default::default()
                             },
                         }),
@@ -14719,52 +14691,486 @@ mod test {
 
     #[test]
     fn locals_as_ref() {
-        let (g_bag, g_col) = crate::p2::interpreter::interpret(
-            "foo/bar",
-            indoc::indoc!(
-                "
-                -- string foo: Foo
+        let mut bag = super::default_bag();
+        bag.insert(
+            s("foo/bar#active@0"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("active"),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Boolean { value: false },
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            }),
+        );
+        bag.insert(
+            s("foo/bar#active@1"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("active"),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Boolean { value: false },
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            }),
+        );
+        bag.insert(
+            s("foo/bar#bar"),
+            ftd::p2::Thing::Component(ftd::Component {
+                root: s("ftd.column"),
+                full_name: s("foo/bar#bar"),
+                arguments: std::array::IntoIter::new([
+                    (
+                        s("active"),
+                        ftd::p2::Kind::boolean().set_default(Some(s("false"))),
+                    ),
+                    (
+                        s("bio"),
+                        ftd::p2::Kind::string().set_default(Some(s("@subtitle"))),
+                    ),
+                    (
+                        s("subtitle"),
+                        ftd::p2::Kind::string().set_default(Some(s("$foo/bar#foo"))),
+                    ),
+                    (s("title"), ftd::p2::Kind::string()),
+                    (s("w"), ftd::p2::Kind::integer()),
+                ])
+                .collect(),
+                locals: Default::default(),
+                properties: std::array::IntoIter::new([
+                    (
+                        s("border-width"),
+                        ftd::component::Property {
+                            default: Some(ftd::PropertyValue::Variable {
+                                name: s("w"),
+                                kind: ftd::p2::Kind::Optional {
+                                    kind: Box::new(ftd::p2::Kind::integer()),
+                                },
+                            }),
+                            conditions: vec![],
+                            nested_properties: Default::default(),
+                        },
+                    ),
+                    (
+                        s("color"),
+                        ftd::component::Property {
+                            default: Some(ftd::PropertyValue::Value {
+                                value: ftd::Value::String {
+                                    text: s("green"),
+                                    source: ftd::TextSource::Header,
+                                },
+                            }),
+                            conditions: vec![],
+                            nested_properties: Default::default(),
+                        },
+                    ),
+                ])
+                .collect(),
+                instructions: vec![
+                    ftd::Instruction::ChildComponent {
+                        child: ftd::ChildComponent {
+                            root: s("ftd#text"),
+                            condition: None,
+                            properties: std::array::IntoIter::new([(
+                                s("text"),
+                                ftd::component::Property {
+                                    default: Some(ftd::PropertyValue::Variable {
+                                        name: s("title"),
+                                        kind: ftd::p2::Kind::caption_or_body(),
+                                    }),
+                                    conditions: vec![],
+                                    nested_properties: Default::default(),
+                                },
+                            )])
+                            .collect(),
+                            ..Default::default()
+                        },
+                    },
+                    ftd::Instruction::ChildComponent {
+                        child: ftd::ChildComponent {
+                            root: s("ftd#text"),
+                            condition: None,
+                            properties: std::array::IntoIter::new([(
+                                s("text"),
+                                ftd::component::Property {
+                                    default: Some(ftd::PropertyValue::Variable {
+                                        name: s("subtitle"),
+                                        kind: ftd::p2::Kind::caption_or_body()
+                                            .set_default(Some(s("$foo/bar#foo"))),
+                                    }),
+                                    conditions: vec![],
+                                    nested_properties: Default::default(),
+                                },
+                            )])
+                            .collect(),
+                            ..Default::default()
+                        },
+                    },
+                    ftd::Instruction::ChildComponent {
+                        child: ftd::ChildComponent {
+                            root: s("ftd#text"),
+                            condition: None,
+                            properties: std::array::IntoIter::new([(
+                                s("text"),
+                                ftd::component::Property {
+                                    default: Some(ftd::PropertyValue::Variable {
+                                        name: s("bio"),
+                                        kind: ftd::p2::Kind::caption_or_body()
+                                            .set_default(Some(s("@subtitle"))),
+                                    }),
+                                    conditions: vec![],
+                                    nested_properties: Default::default(),
+                                },
+                            )])
+                            .collect(),
+                            ..Default::default()
+                        },
+                    },
+                    ftd::Instruction::ChildComponent {
+                        child: ftd::ChildComponent {
+                            root: s("ftd#boolean"),
+                            condition: None,
+                            properties: std::array::IntoIter::new([(
+                                s("value"),
+                                ftd::component::Property {
+                                    default: Some(ftd::PropertyValue::Variable {
+                                        name: s("active"),
+                                        kind: ftd::p2::Kind::boolean()
+                                            .set_default(Some(s("false"))),
+                                    }),
+                                    conditions: vec![],
+                                    nested_properties: Default::default(),
+                                },
+                            )])
+                            .collect(),
+                            ..Default::default()
+                        },
+                    },
+                ],
+                events: vec![],
+                condition: None,
+                kernel: false,
+                invocations: vec![],
+                line_number: 0,
+            }),
+        );
+        bag.insert(
+            s("foo/bar#bar1"),
+            ftd::p2::Thing::Component(ftd::Component {
+                root: s("ftd.column"),
+                full_name: s("foo/bar#bar1"),
+                arguments: Default::default(),
+                locals: Default::default(),
+                properties: Default::default(),
+                instructions: vec![],
+                events: vec![],
+                condition: None,
+                kernel: false,
+                invocations: vec![],
+                line_number: 0,
+            }),
+        );
+        bag.insert(
+            s("foo/bar#bio@0"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("bio"),
+                value: ftd::PropertyValue::Variable {
+                    name: s("foo/bar#subtitle@0"),
+                    kind: ftd::p2::Kind::string().set_default(Some(s("$foo/bar#foo"))),
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            }),
+        );
+        bag.insert(
+            s("foo/bar#bio@1"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("bio"),
+                value: ftd::PropertyValue::Variable {
+                    name: s("foo/bar#subtitle@1"),
+                    kind: ftd::p2::Kind::string().set_default(Some(s("$foo/bar#foo"))),
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            }),
+        );
+        bag.insert(
+            s("foo/bar#foo"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("foo"),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::String {
+                        text: s("Foo"),
+                        source: ftd::TextSource::Caption,
+                    },
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            }),
+        );
+        bag.insert(
+            s("foo/bar#foo"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("foo"),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::String {
+                        text: s("Foo"),
+                        source: ftd::TextSource::Caption,
+                    },
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            }),
+        );
+        bag.insert(
+            s("foo/bar#gg@0"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("gg"),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Integer { value: 1 },
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            }),
+        );
+        bag.insert(
+            s("foo/bar#subtitle@0"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("subtitle"),
+                value: ftd::PropertyValue::Reference {
+                    name: s("foo/bar#foo"),
+                    kind: ftd::p2::Kind::string().set_default(Some(s("$foo/bar#foo"))),
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            }),
+        );
+        bag.insert(
+            s("foo/bar#subtitle@1"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("subtitle"),
+                value: ftd::PropertyValue::Reference {
+                    name: s("foo/bar#foo"),
+                    kind: ftd::p2::Kind::string().set_default(Some(s("$foo/bar#foo"))),
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            }),
+        );
+        bag.insert(
+            s("foo/bar#title@0"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("title"),
+                value: ftd::PropertyValue::Reference {
+                    name: s("foo/bar#foo"),
+                    kind: ftd::p2::Kind::string(),
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            }),
+        );
+        bag.insert(
+            s("foo/bar#title@1"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("title"),
+                value: ftd::PropertyValue::Reference {
+                    name: s("foo/bar#foo"),
+                    kind: ftd::p2::Kind::string(),
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            }),
+        );
+        bag.insert(
+            s("foo/bar#w@0"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("w"),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Integer { value: 2 },
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            }),
+        );
+        bag.insert(
+            s("foo/bar#w@1"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("w"),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Integer { value: 1 },
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            }),
+        );
 
-                -- bar:
-                id: bar-id
-                scale: 1.2
-                title: $foo
-                w: 2
-                integer gg: 1
+        let mut main = super::default_column();
+        main.container
+            .children
+            .push(ftd::Element::Column(ftd::Column {
+                container: ftd::Container {
+                    children: vec![
+                        ftd::Element::Markup(ftd::Markups {
+                            text: ftd::markup_line("Foo"),
+                            line: true,
+                            common: ftd::Common {
+                                reference: Some(s("foo/bar#title@0")),
+                                ..Default::default()
+                            },
+                            ..Default::default()
+                        }),
+                        ftd::Element::Markup(ftd::Markups {
+                            text: ftd::markup_line("Foo"),
+                            line: true,
+                            common: ftd::Common {
+                                reference: Some(s("foo/bar#subtitle@0")),
+                                ..Default::default()
+                            },
+                            ..Default::default()
+                        }),
+                        ftd::Element::Markup(ftd::Markups {
+                            text: ftd::markup_line("Foo"),
+                            line: true,
+                            common: ftd::Common {
+                                reference: Some(s("foo/bar#bio@0")),
+                                ..Default::default()
+                            },
+                            ..Default::default()
+                        }),
+                        ftd::Element::Boolean(ftd::Text {
+                            text: ftd::markup_line("false"),
+                            common: ftd::Common {
+                                reference: Some(s("foo/bar#active@0")),
+                                ..Default::default()
+                            },
+                            ..Default::default()
+                        }),
+                        ftd::Element::Integer(ftd::Text {
+                            text: ftd::markup_line("1"),
+                            common: ftd::Common {
+                                reference: Some(s("foo/bar#gg@0")),
+                                ..Default::default()
+                            },
+                            ..Default::default()
+                        }),
+                    ],
+                    external_children: None,
+                    open: (None, None),
+                    wrap: false,
+                },
+                spacing: None,
+                common: ftd::Common {
+                    color: Some(ftd::Color {
+                        r: 0,
+                        g: 128,
+                        b: 0,
+                        alpha: 1.0,
+                    }),
+                    id: Some(s("bar-id")),
+                    data_id: Some(s("bar-id")),
+                    border_width: 2,
+                    ..Default::default()
+                },
+            }));
 
-                --- ftd.integer: $gg
+        main.container
+            .children
+            .push(ftd::Element::Column(ftd::Column {
+                container: ftd::Container {
+                    children: vec![
+                        ftd::Element::Markup(ftd::Markups {
+                            text: ftd::markup_line("Foo"),
+                            line: true,
+                            common: ftd::Common {
+                                reference: Some(s("foo/bar#title@1")),
+                                ..Default::default()
+                            },
+                            ..Default::default()
+                        }),
+                        ftd::Element::Markup(ftd::Markups {
+                            text: ftd::markup_line("Foo"),
+                            line: true,
+                            common: ftd::Common {
+                                reference: Some(s("foo/bar#subtitle@1")),
+                                ..Default::default()
+                            },
+                            ..Default::default()
+                        }),
+                        ftd::Element::Markup(ftd::Markups {
+                            text: ftd::markup_line("Foo"),
+                            line: true,
+                            common: ftd::Common {
+                                reference: Some(s("foo/bar#bio@1")),
+                                ..Default::default()
+                            },
+                            ..Default::default()
+                        }),
+                        ftd::Element::Boolean(ftd::Text {
+                            text: ftd::markup_line("false"),
+                            common: ftd::Common {
+                                reference: Some(s("foo/bar#active@1")),
+                                ..Default::default()
+                            },
+                            ..Default::default()
+                        }),
+                    ],
+                    external_children: None,
+                    open: (None, None),
+                    wrap: false,
+                },
+                spacing: None,
+                common: ftd::Common {
+                    color: Some(ftd::Color {
+                        r: 0,
+                        g: 128,
+                        b: 0,
+                        alpha: 1.0,
+                    }),
+                    border_width: 1,
+                    ..Default::default()
+                },
+            }));
 
-                -- bar:
-                title: $foo
-                w: 1
+        p!(
+            "
+            -- string foo: Foo
+
+            -- bar:
+            id: bar-id
+            scale: 1.2
+            title: $foo
+            w: 2
+            integer gg: 1
+
+            --- ftd.integer: $gg
+
+            -- bar:
+            title: $foo
+            w: 1
 
 
-                -- ftd.column bar1:
-                ftd.ui
+            -- ftd.column bar1:
+            ftd.ui
 
-                -- ftd.column bar:
-                string title:
-                boolean active: false
-                string subtitle: $foo
-                string bio: $subtitle
-                integer w:
-                color: green
-                border-width: $w
-                
-                --- ftd.text: $title
+            -- ftd.column bar:
+            string title:
+            boolean active: false
+            string subtitle: $foo
+            string bio: $subtitle
+            integer w:
+            color: green
+            border-width: $w
+            
+            --- ftd.text: $title
 
-                --- ftd.text: $subtitle
+            --- ftd.text: $subtitle
 
-                --- ftd.text: $bio
-                
-                --- ftd.boolean: $active 
-                "
-            ),
-            &ftd::p2::TestLibrary {},
-        )
-        .expect("found error");
-
-        dbg!(&g_bag, &g_col);
+            --- ftd.text: $bio
+            
+            --- ftd.boolean: $active 
+            ",
+            (bag, main),
+        );
     }
 
     /*#[test]

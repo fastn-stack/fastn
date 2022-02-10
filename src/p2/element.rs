@@ -955,6 +955,7 @@ pub fn integer_from_properties(
     is_child: bool,
     events: &[ftd::p2::Event],
 ) -> ftd::p1::Result<ftd::Text> {
+    let reference = ftd::p2::utils::integer_and_ref(0, "value", properties, doc, condition)?.1;
     let properties = &ftd::component::resolve_properties(0, properties, doc)?;
     let font_str = ftd::p2::utils::string_optional("font", properties, doc.name, 0)?;
     let num = format_num::NumberFormat::new();
@@ -965,8 +966,6 @@ pub fn integer_from_properties(
         ),
         None => ftd::p2::utils::int("value", properties, doc.name, 0)?.to_string(),
     };
-    let reference =
-        ftd::p2::utils::complete_reference(&properties.get("value").expect("").to_string());
 
     let font: Vec<ftd::NamedFont> = match font_str {
         Some(f) => f
@@ -1003,6 +1002,7 @@ pub fn decimal_from_properties(
     is_child: bool,
     events: &[ftd::p2::Event],
 ) -> ftd::p1::Result<ftd::Text> {
+    let reference = ftd::p2::utils::decimal_and_ref(0, "value", properties, doc, condition)?.1;
     let properties = &ftd::component::resolve_properties(0, properties, doc)?;
     let font_str = ftd::p2::utils::string_optional("font", properties, doc.name, 0)?;
     let num = format_num::NumberFormat::new();
@@ -1014,8 +1014,7 @@ pub fn decimal_from_properties(
         None => ftd::p2::utils::decimal("value", properties, doc.name, 0)?.to_string(),
     };
 
-    let reference =
-        ftd::p2::utils::complete_reference(&properties.get("value").expect("").to_string());
+    // let reference = ftd::p2::utils::complete_reference(&properties.get("value").expect("").to_string());
 
     let font: Vec<ftd::NamedFont> = match font_str {
         Some(f) => f
@@ -1070,6 +1069,7 @@ pub fn boolean_from_properties(
     is_child: bool,
     events: &[ftd::p2::Event],
 ) -> ftd::p1::Result<ftd::Text> {
+    let reference = ftd::p2::utils::boolean_and_ref(0, "value", properties, doc, condition)?.1;
     let properties = &ftd::component::resolve_properties(0, properties, doc)?;
     let font_str = ftd::p2::utils::string_optional("font", properties, doc.name, 0)?;
     let value = ftd::p2::utils::bool("value", properties, doc.name, 0)?;
@@ -1078,9 +1078,6 @@ pub fn boolean_from_properties(
     } else {
         ftd::p2::utils::string_with_default("false", "false", properties, doc.name, 0)?
     };
-
-    let reference =
-        ftd::p2::utils::complete_reference(&properties.get("value").expect("").to_string());
 
     let font: Vec<ftd::NamedFont> = match font_str {
         Some(f) => f
