@@ -114,7 +114,7 @@ impl PropertyValue {
                     PropertyValue::Reference {
                         name: doc
                             .resolve_name(line_number, string.as_str())
-                            .unwrap_or(string.to_string()),
+                            .unwrap_or_else(|_| string.to_string()),
                         kind: found_kind,
                     }
                 } else {

@@ -68,28 +68,26 @@ impl<'a> TDoc<'a> {
                     continue;
                 }
                 default
+            } else if let Some(default) = arg.get_default_value_str() {
+                ftd::PropertyValue::resolve_value(
+                    0,
+                    default.as_str(),
+                    Some(arg.to_owned()),
+                    self,
+                    arguments,
+                    None,
+                )?
+            } else if let Ok(value) = arg.to_value(0, self.name) {
+                ftd::PropertyValue::Value { value }
             } else {
-                if let Some(default) = arg.get_default_value_str() {
-                    ftd::PropertyValue::resolve_value(
-                        0,
-                        default.as_str(),
-                        Some(arg.to_owned()),
-                        self,
-                        &arguments,
-                        None,
-                    )?
-                } else if let Ok(value) = arg.to_value(0, self.name) {
-                    ftd::PropertyValue::Value { value }
-                } else {
-                    return ftd::e2(
-                        format!(
-                            "expected default value for local variable 2 {}: {:?} in {}",
-                            k, arg, root
-                        ),
-                        self.name,
-                        0,
-                    );
-                }
+                return ftd::e2(
+                    format!(
+                        "expected default value for local variable 2 {}: {:?} in {}",
+                        k, arg, root
+                    ),
+                    self.name,
+                    0,
+                );
             };
             if let ftd::PropertyValue::Variable { ref mut name, .. } = default {
                 if !self.local_variables.contains_key(name) {
@@ -112,6 +110,7 @@ impl<'a> TDoc<'a> {
         Ok(())
     }
 
+    #[allow(clippy::too_many_arguments)]
     fn update_component_data(
         &mut self,
         current_container: &str,
@@ -281,7 +280,7 @@ impl<'a> TDoc<'a> {
             &mut child.events,
             true,
         )?;
-        return Ok(());
+        Ok(())
     }
 
     pub(crate) fn insert_local_from_component(

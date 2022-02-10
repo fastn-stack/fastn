@@ -133,7 +133,7 @@ impl Element {
 
     pub fn set_id(children: &mut [ftd::Element], index_vec: &[usize], external_id: Option<String>) {
         for (idx, child) in children.iter_mut().enumerate() {
-            let (mut id, is_dummy) = match child {
+            let (id, is_dummy) = match child {
                 Self::Text(ftd::Text {
                     common:
                         ftd::Common {
@@ -297,7 +297,7 @@ impl Element {
             } else {
                 get_index_string(index_vec, Some(idx))
             };
-            set_id(&mut id, &external_id, index_string.as_str(), *is_dummy)
+            set_id(id, &external_id, index_string.as_str(), *is_dummy)
         }
 
         fn set_markup_id(
@@ -314,7 +314,7 @@ impl Element {
                 start_index: usize,
             ) {
                 for (idx, child) in children.iter_mut().enumerate() {
-                    let (mut id, children, is_dummy) = match &mut child.itext {
+                    let (id, children, is_dummy) = match &mut child.itext {
                         IText::Text(t)
                         | IText::Integer(t)
                         | IText::Boolean(t)
@@ -335,16 +335,16 @@ impl Element {
                     let mut index_vec = index_vec.to_vec();
                     index_vec.push(idx);
                     set_markup_id_(&mut child.children, &index_vec, external_id.clone(), 0);
-                    if let Some(mut children) = children {
+                    if let Some(children) = children {
                         set_markup_id_(
-                            &mut children,
+                            children,
                             &index_vec,
                             external_id.clone(),
                             child.children.len(),
                         );
                     }
 
-                    set_id(&mut id, &external_id, index_string.as_str(), is_dummy)
+                    set_id(id, &external_id, index_string.as_str(), is_dummy)
                 }
             }
         }
