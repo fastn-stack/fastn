@@ -42,12 +42,108 @@ pub fn boolean_and_ref(
     name: &str,
     properties: &std::collections::BTreeMap<String, ftd::component::Property>,
     doc: &ftd::p2::TDoc,
-    _condition: &Option<ftd::p2::Boolean>, // todo: check the string_and_source_and_ref and use
+    condition: &Option<ftd::p2::Boolean>, // todo: check the string_and_source_and_ref and use
 ) -> ftd::p1::Result<(bool, Option<String>)> {
     let properties = ftd::component::resolve_properties_with_ref(line_number, properties, doc)?;
     match properties.get(name) {
         Some((ftd::Value::Boolean { value }, reference)) => {
             Ok((value.to_owned(), complete_reference(reference)))
+        }
+        Some((ftd::Value::Optional { data, kind }, reference)) => {
+            if !matches!(kind, ftd::p2::Kind::Boolean { .. }) {
+                return ftd::e2(
+                    format!("expected boolean, found: {:?}", kind),
+                    doc.name,
+                    line_number,
+                );
+            };
+            match data.as_ref() {
+                None => {
+                    let reference = match reference {
+                        Some(reference) => reference,
+                        None => {
+                            return ftd::e2(
+                                format!("expected boolean, found: {:?}", kind),
+                                doc.name,
+                                line_number,
+                            )
+                        }
+                    };
+
+                    if let Some(ftd::p2::Boolean::IsNotNull { value }) = condition {
+                        match value {
+                            ftd::PropertyValue::Reference { name, .. }
+                            | ftd::PropertyValue::Variable { name, .. } => {
+                                if name.eq(reference) {
+                                    return Ok((
+                                        false,
+                                        complete_reference(&Some(reference.to_owned())),
+                                    ));
+                                }
+                            }
+                            _ => {}
+                        }
+                    }
+
+                    // In case when the optional string is null.
+                    // Return the empty string
+
+                    Ok((false, complete_reference(&Some(reference.to_owned()))))
+                }
+                Some(ftd::Value::Boolean { value }) => {
+                    Ok((value.to_owned(), complete_reference(reference)))
+                }
+                _ => {
+                    return ftd::e2(
+                        format!("expected boolean, found: {:?}", kind),
+                        doc.name,
+                        line_number,
+                    )
+                }
+            }
+        }
+        Some((ftd::Value::None { kind }, reference)) if condition.is_some() => {
+            let kind = kind.inner();
+            if !matches!(kind, ftd::p2::Kind::Boolean { .. }) {
+                return ftd::e2(
+                    format!("expected boolean, found: {:?}", kind),
+                    doc.name,
+                    line_number,
+                );
+            };
+
+            let reference = match reference {
+                Some(reference) => reference,
+                None => {
+                    return ftd::e2(
+                        format!("expected integer, found: {:?}", kind),
+                        doc.name,
+                        line_number,
+                    )
+                }
+            };
+            if let Some(ftd::p2::Boolean::IsNotNull { value }) = condition {
+                match value {
+                    ftd::PropertyValue::Reference { name, .. }
+                    | ftd::PropertyValue::Variable { name, .. } => {
+                        if name.eq({
+                            if let Some(reference) = reference.strip_prefix('@') {
+                                reference
+                            } else {
+                                reference
+                            }
+                        }) {
+                            return Ok((false, complete_reference(&Some(reference.to_owned()))));
+                        }
+                    }
+                    _ => {}
+                }
+            }
+            ftd::e2(
+                format!("expected boolean, found: {:?}", kind),
+                doc.name,
+                line_number,
+            )
         }
         Some(v) => ftd::e2(
             format!("expected boolean, found: {:?}", v),
@@ -63,12 +159,108 @@ pub fn integer_and_ref(
     name: &str,
     properties: &std::collections::BTreeMap<String, ftd::component::Property>,
     doc: &ftd::p2::TDoc,
-    _condition: &Option<ftd::p2::Boolean>, // todo: check the string_and_source_and_ref and use
+    condition: &Option<ftd::p2::Boolean>, // todo: check the string_and_source_and_ref and use
 ) -> ftd::p1::Result<(i64, Option<String>)> {
     let properties = ftd::component::resolve_properties_with_ref(line_number, properties, doc)?;
     match properties.get(name) {
         Some((ftd::Value::Integer { value }, reference)) => {
             Ok((value.to_owned(), complete_reference(reference)))
+        }
+        Some((ftd::Value::Optional { data, kind }, reference)) => {
+            if !matches!(kind, ftd::p2::Kind::Integer { .. }) {
+                return ftd::e2(
+                    format!("expected integer, found: {:?}", kind),
+                    doc.name,
+                    line_number,
+                );
+            };
+            match data.as_ref() {
+                None => {
+                    let reference = match reference {
+                        Some(reference) => reference,
+                        None => {
+                            return ftd::e2(
+                                format!("expected integer, found: {:?}", kind),
+                                doc.name,
+                                line_number,
+                            )
+                        }
+                    };
+
+                    if let Some(ftd::p2::Boolean::IsNotNull { value }) = condition {
+                        match value {
+                            ftd::PropertyValue::Reference { name, .. }
+                            | ftd::PropertyValue::Variable { name, .. } => {
+                                if name.eq(reference) {
+                                    return Ok((
+                                        0,
+                                        complete_reference(&Some(reference.to_owned())),
+                                    ));
+                                }
+                            }
+                            _ => {}
+                        }
+                    }
+
+                    // In case when the optional string is null.
+                    // Return the empty string
+
+                    Ok((0, complete_reference(&Some(reference.to_owned()))))
+                }
+                Some(ftd::Value::Integer { value }) => {
+                    Ok((value.to_owned(), complete_reference(reference)))
+                }
+                _ => {
+                    return ftd::e2(
+                        format!("expected integer, found: {:?}", kind),
+                        doc.name,
+                        line_number,
+                    )
+                }
+            }
+        }
+        Some((ftd::Value::None { kind }, reference)) if condition.is_some() => {
+            let kind = kind.inner();
+            if !matches!(kind, ftd::p2::Kind::Integer { .. }) {
+                return ftd::e2(
+                    format!("expected integer, found: {:?}", kind),
+                    doc.name,
+                    line_number,
+                );
+            };
+
+            let reference = match reference {
+                Some(reference) => reference,
+                None => {
+                    return ftd::e2(
+                        format!("expected integer, found: {:?}", kind),
+                        doc.name,
+                        line_number,
+                    )
+                }
+            };
+            if let Some(ftd::p2::Boolean::IsNotNull { value }) = condition {
+                match value {
+                    ftd::PropertyValue::Reference { name, .. }
+                    | ftd::PropertyValue::Variable { name, .. } => {
+                        if name.eq({
+                            if let Some(reference) = reference.strip_prefix('@') {
+                                reference
+                            } else {
+                                reference
+                            }
+                        }) {
+                            return Ok((0, complete_reference(&Some(reference.to_owned()))));
+                        }
+                    }
+                    _ => {}
+                }
+            }
+            ftd::e2(
+                format!("expected integer, found: {:?}", kind),
+                doc.name,
+                line_number,
+            )
         }
         Some(v) => ftd::e2(
             format!("expected integer, found: {:?}", v),
@@ -84,36 +276,111 @@ pub fn decimal_and_ref(
     name: &str,
     properties: &std::collections::BTreeMap<String, ftd::component::Property>,
     doc: &ftd::p2::TDoc,
-    _condition: &Option<ftd::p2::Boolean>, // todo: check the string_and_source_and_ref and use
+    condition: &Option<ftd::p2::Boolean>, // todo: check the string_and_source_and_ref and use
 ) -> ftd::p1::Result<(f64, Option<String>)> {
     let properties = ftd::component::resolve_properties_with_ref(line_number, properties, doc)?;
     match properties.get(name) {
         Some((ftd::Value::Decimal { value }, reference)) => {
             Ok((value.to_owned(), complete_reference(reference)))
         }
-        Some(v) => ftd::e2(
-            format!("expected integer, found: {:?}", v),
-            doc.name,
-            line_number,
-        ),
-        None => ftd::e2(format!("'{}' not found", name), doc.name, line_number),
-    }
-}
+        Some((ftd::Value::Optional { data, kind }, reference)) => {
+            if !matches!(kind, ftd::p2::Kind::Decimal { .. }) {
+                return ftd::e2(
+                    format!("expected decimal, found: {:?}", kind),
+                    doc.name,
+                    line_number,
+                );
+            };
+            match data.as_ref() {
+                None => {
+                    let reference = match reference {
+                        Some(reference) => reference,
+                        None => {
+                            return ftd::e2(
+                                format!("expected decimal, found: {:?}", kind),
+                                doc.name,
+                                line_number,
+                            )
+                        }
+                    };
 
-pub fn string_and_ref(
-    line_number: usize,
-    name: &str,
-    properties: &std::collections::BTreeMap<String, ftd::component::Property>,
-    doc: &ftd::p2::TDoc,
-    // todo: check the string_and_source_and_ref and use condition
-) -> ftd::p1::Result<(String, Option<String>)> {
-    let properties = ftd::component::resolve_properties_with_ref(line_number, properties, doc)?;
-    match properties.get(name) {
-        Some((ftd::Value::String { text, .. }, reference)) => {
-            Ok((text.to_string(), complete_reference(reference)))
+                    if let Some(ftd::p2::Boolean::IsNotNull { value }) = condition {
+                        match value {
+                            ftd::PropertyValue::Reference { name, .. }
+                            | ftd::PropertyValue::Variable { name, .. } => {
+                                if name.eq(reference) {
+                                    return Ok((
+                                        0.0,
+                                        complete_reference(&Some(reference.to_owned())),
+                                    ));
+                                }
+                            }
+                            _ => {}
+                        }
+                    }
+
+                    // In case when the optional string is null.
+                    // Return the empty string
+
+                    Ok((0.0, complete_reference(&Some(reference.to_owned()))))
+                }
+                Some(ftd::Value::Decimal { value }) => {
+                    Ok((value.to_owned(), complete_reference(reference)))
+                }
+                _ => {
+                    return ftd::e2(
+                        format!("expected decimal, found: {:?}", kind),
+                        doc.name,
+                        line_number,
+                    )
+                }
+            }
+        }
+        Some((ftd::Value::None { kind }, reference)) if condition.is_some() => {
+            let kind = kind.inner();
+            if !matches!(kind, ftd::p2::Kind::Decimal { .. }) {
+                return ftd::e2(
+                    format!("expected integer, found: {:?}", kind),
+                    doc.name,
+                    line_number,
+                );
+            };
+
+            let reference = match reference {
+                Some(reference) => reference,
+                None => {
+                    return ftd::e2(
+                        format!("expected integer, found: {:?}", kind),
+                        doc.name,
+                        line_number,
+                    )
+                }
+            };
+            if let Some(ftd::p2::Boolean::IsNotNull { value }) = condition {
+                match value {
+                    ftd::PropertyValue::Reference { name, .. }
+                    | ftd::PropertyValue::Variable { name, .. } => {
+                        if name.eq({
+                            if let Some(reference) = reference.strip_prefix('@') {
+                                reference
+                            } else {
+                                reference
+                            }
+                        }) {
+                            return Ok((0.0, complete_reference(&Some(reference.to_owned()))));
+                        }
+                    }
+                    _ => {}
+                }
+            }
+            ftd::e2(
+                format!("expected decimal, found: {:?}", kind),
+                doc.name,
+                line_number,
+            )
         }
         Some(v) => ftd::e2(
-            format!("expected string, found: {:?}", v),
+            format!("expected decimal, found: {:?}", v),
             doc.name,
             line_number,
         ),
