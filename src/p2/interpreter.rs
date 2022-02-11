@@ -1028,8 +1028,7 @@ mod test {
                         },
                     )])
                     .collect(),
-                    locals: std::array::IntoIter::new([(s("name@0"), s("hello"))]).collect(),
-                    reference: Some(s("@name@0")),
+                    reference: Some(s("foo/bar#name@0")),
                     ..Default::default()
                 },
                 ..Default::default()
@@ -1059,7 +1058,7 @@ mod test {
         bag.insert(
             "foo/bar#ft_toc".to_string(),
             ftd::p2::Thing::Component(ftd::Component {
-                root: "ftd.column".to_string(),
+                root: "ftd#column".to_string(),
                 full_name: "foo/bar#ft_toc".to_string(),
                 arguments: Default::default(),
                 properties: Default::default(),
@@ -1262,7 +1261,7 @@ mod test {
         bag.insert(
             "foo/bar#parent".to_string(),
             ftd::p2::Thing::Component(ftd::Component {
-                root: "ftd.column".to_string(),
+                root: "ftd#column".to_string(),
                 full_name: "foo/bar#parent".to_string(),
                 arguments: std::array::IntoIter::new([
                     (
@@ -1433,7 +1432,7 @@ mod test {
         bag.insert(
             "foo/bar#table-of-content".to_string(),
             ftd::p2::Thing::Component(ftd::Component {
-                root: "ftd.column".to_string(),
+                root: "ftd#column".to_string(),
                 full_name: "foo/bar#table-of-content".to_string(),
                 arguments: std::array::IntoIter::new([(s("id"), ftd::p2::Kind::string())])
                     .collect(),
@@ -1488,7 +1487,7 @@ mod test {
         bag.insert(
             "foo/bar#toc-heading".to_string(),
             ftd::p2::Thing::Component(ftd::Component {
-                root: "ftd.text".to_string(),
+                root: "ftd#text".to_string(),
                 full_name: "foo/bar#toc-heading".to_string(),
                 arguments: std::array::IntoIter::new([(s("text"), ftd::p2::Kind::caption())])
                     .collect(),
@@ -1520,6 +1519,398 @@ mod test {
             }),
         );
 
+        bag.insert(
+            s("foo/bar#active@0,0,0"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("active"),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Boolean { value: true },
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            }),
+        );
+        bag.insert(
+            s("foo/bar#active@0,0,0,0"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("active"),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Optional {
+                        data: Box::new(None),
+                        kind: ftd::p2::Kind::boolean(),
+                    },
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            }),
+        );
+        bag.insert(
+            s("foo/bar#active@0,0,0,0,0"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("active"),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Optional {
+                        data: Box::new(None),
+                        kind: ftd::p2::Kind::boolean(),
+                    },
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            }),
+        );
+        bag.insert(
+            s("foo/bar#active@0,0,0,1"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("active"),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Optional {
+                        data: Box::new(None),
+                        kind: ftd::p2::Kind::boolean(),
+                    },
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            }),
+        );
+        bag.insert(
+            s("foo/bar#id@0,0"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("id"),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::String {
+                        text: s("toc_main"),
+                        source: ftd::TextSource::Header,
+                    },
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            }),
+        );
+        bag.insert(
+            s("foo/bar#id@0,0,0"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("id"),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::String {
+                        text: s("/welcome/"),
+                        source: ftd::TextSource::Header,
+                    },
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            }),
+        );
+        bag.insert(
+            s("foo/bar#id@0,0,0,0"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("id"),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::String {
+                        text: s("/Building/"),
+                        source: ftd::TextSource::Header,
+                    },
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            }),
+        );
+        bag.insert(
+            s("foo/bar#id@0,0,0,0,0"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("id"),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::String {
+                        text: s("/ChildBuilding/"),
+                        source: ftd::TextSource::Header,
+                    },
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            }),
+        );
+        bag.insert(
+            s("foo/bar#id@0,0,0,1"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("id"),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::String {
+                        text: s("/Building2/"),
+                        source: ftd::TextSource::Header,
+                    },
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            }),
+        );
+        bag.insert(
+            s("foo/bar#name@0,0,0,0"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("name"),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::String {
+                        text: s("Log"),
+                        source: ftd::TextSource::Header,
+                    },
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            }),
+        );
+        bag.insert(
+            s("foo/bar#name@0,0,0,0,0"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("name"),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::String {
+                        text: s("ChildLog"),
+                        source: ftd::TextSource::Header,
+                    },
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            }),
+        );
+        bag.insert(
+            s("foo/bar#name@0,0,0"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("name"),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::String {
+                        text: s("5PM Tasks"),
+                        source: ftd::TextSource::Header,
+                    },
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            }),
+        );
+        bag.insert(
+            s("foo/bar#name@0,0,0,1"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("name"),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::String {
+                        text: s("Log2"),
+                        source: ftd::TextSource::Header,
+                    },
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            }),
+        );
+
+        let children = vec![
+            ftd::Element::Markup(ftd::Markups {
+                text: ftd::markdown_line("5PM Tasks"),
+                line: true,
+                common: ftd::Common {
+                    color: Some(ftd::Color {
+                        r: 255,
+                        g: 255,
+                        b: 255,
+                        alpha: 1.0,
+                    }),
+                    reference: Some(s("foo/bar#name@0,0,0")),
+                    condition: Some(ftd::Condition {
+                        variable: s("foo/bar#active@0,0,0"),
+                        value: s("$IsNotNull$"),
+                    }),
+                    ..Default::default()
+                },
+                size: Some(14),
+                ..Default::default()
+            }),
+            ftd::Element::Markup(ftd::Markups {
+                text: ftd::markdown_line("5PM Tasks"),
+                line: true,
+                common: ftd::Common {
+                    color: Some(ftd::Color {
+                        r: 77,
+                        g: 77,
+                        b: 77,
+                        alpha: 1.0,
+                    }),
+                    reference: Some(s("foo/bar#name@0,0,0")),
+                    condition: Some(ftd::Condition {
+                        variable: s("foo/bar#active@0,0,0"),
+                        value: s("$IsNull$"),
+                    }),
+                    is_not_visible: true,
+                    ..Default::default()
+                },
+                size: Some(14),
+                ..Default::default()
+            }),
+            ftd::Element::Column(ftd::Column {
+                spacing: None,
+                container: ftd::Container {
+                    children: vec![
+                        ftd::Element::Markup(ftd::Markups {
+                            text: ftd::markdown_line("Log"),
+                            line: true,
+                            common: ftd::Common {
+                                color: Some(ftd::Color {
+                                    r: 255,
+                                    g: 255,
+                                    b: 255,
+                                    alpha: 1.0,
+                                }),
+                                reference: Some(s("foo/bar#name@0,0,0,0")),
+                                condition: Some(ftd::Condition {
+                                    variable: s("foo/bar#active@0,0,0,0"),
+                                    value: s("$IsNotNull$"),
+                                }),
+                                is_not_visible: true,
+                                ..Default::default()
+                            },
+                            size: Some(14),
+                            ..Default::default()
+                        }),
+                        ftd::Element::Markup(ftd::Markups {
+                            text: ftd::markdown_line("Log"),
+                            line: true,
+                            common: ftd::Common {
+                                color: Some(ftd::Color {
+                                    r: 77,
+                                    g: 77,
+                                    b: 77,
+                                    alpha: 1.0,
+                                }),
+                                reference: Some(s("foo/bar#name@0,0,0,0")),
+                                condition: Some(ftd::Condition {
+                                    variable: s("foo/bar#active@0,0,0,0"),
+                                    value: s("$IsNull$"),
+                                }),
+                                ..Default::default()
+                            },
+                            size: Some(14),
+                            ..Default::default()
+                        }),
+                        ftd::Element::Column(ftd::Column {
+                            spacing: None,
+                            container: ftd::Container {
+                                external_children: Default::default(),
+                                children: vec![
+                                    ftd::Element::Markup(ftd::Markups {
+                                        text: ftd::markdown_line("ChildLog"),
+                                        line: true,
+                                        common: ftd::Common {
+                                            color: Some(ftd::Color {
+                                                r: 255,
+                                                g: 255,
+                                                b: 255,
+                                                alpha: 1.0,
+                                            }),
+                                            reference: Some(s("foo/bar#name@0,0,0,0,0")),
+                                            condition: Some(ftd::Condition {
+                                                variable: s("foo/bar#active@0,0,0,0,0"),
+                                                value: s("$IsNotNull$"),
+                                            }),
+                                            is_not_visible: true,
+                                            ..Default::default()
+                                        },
+                                        size: Some(14),
+                                        ..Default::default()
+                                    }),
+                                    ftd::Element::Markup(ftd::Markups {
+                                        text: ftd::markdown_line("ChildLog"),
+                                        line: true,
+                                        common: ftd::Common {
+                                            color: Some(ftd::Color {
+                                                r: 77,
+                                                g: 77,
+                                                b: 77,
+                                                alpha: 1.0,
+                                            }),
+                                            reference: Some(s("foo/bar#name@0,0,0,0,0")),
+                                            condition: Some(ftd::Condition {
+                                                variable: s("foo/bar#active@0,0,0,0,0"),
+                                                value: s("$IsNull$"),
+                                            }),
+                                            ..Default::default()
+                                        },
+                                        size: Some(14),
+                                        ..Default::default()
+                                    }),
+                                ],
+                                open: (Some(true), None),
+                                ..Default::default()
+                            },
+                            common: ftd::Common {
+                                data_id: Some(s("/ChildBuilding/")),
+                                width: Some(ftd::Length::Fill),
+                                ..Default::default()
+                            },
+                        }),
+                    ],
+                    external_children: Default::default(),
+                    open: (Some(true), None),
+                    ..Default::default()
+                },
+                common: ftd::Common {
+                    data_id: Some(s("/Building/")),
+                    width: Some(ftd::Length::Fill),
+                    ..Default::default()
+                },
+            }),
+            ftd::Element::Column(ftd::Column {
+                spacing: None,
+                container: ftd::Container {
+                    external_children: Default::default(),
+                    children: vec![
+                        ftd::Element::Markup(ftd::Markups {
+                            text: ftd::markdown_line("Log2"),
+                            line: true,
+                            common: ftd::Common {
+                                color: Some(ftd::Color {
+                                    r: 255,
+                                    g: 255,
+                                    b: 255,
+                                    alpha: 1.0,
+                                }),
+                                reference: Some(s("foo/bar#name@0,0,0,1")),
+                                condition: Some(ftd::Condition {
+                                    variable: s("foo/bar#active@0,0,0,1"),
+                                    value: s("$IsNotNull$"),
+                                }),
+                                is_not_visible: true,
+                                ..Default::default()
+                            },
+                            size: Some(14),
+                            ..Default::default()
+                        }),
+                        ftd::Element::Markup(ftd::Markups {
+                            text: ftd::markdown_line("Log2"),
+                            line: true,
+                            common: ftd::Common {
+                                color: Some(ftd::Color {
+                                    r: 77,
+                                    g: 77,
+                                    b: 77,
+                                    alpha: 1.0,
+                                }),
+                                reference: Some(s("foo/bar#name@0,0,0,1")),
+                                condition: Some(ftd::Condition {
+                                    variable: s("foo/bar#active@0,0,0,1"),
+                                    value: s("$IsNull$"),
+                                }),
+                                ..Default::default()
+                            },
+                            size: Some(14),
+                            ..Default::default()
+                        }),
+                    ],
+                    open: (Some(true), None),
+                    ..Default::default()
+                },
+                common: ftd::Common {
+                    data_id: Some(s("/Building2/")),
+                    width: Some(ftd::Length::Fill),
+                    ..Default::default()
+                },
+            }),
+        ];
+
         let mut main = super::default_column();
         main.container
             .children
@@ -1532,268 +1923,12 @@ mod test {
                             children: vec![ftd::Element::Column(ftd::Column {
                                 spacing: None,
                                 container: ftd::Container {
-                                    children: vec![
-                                        ftd::Element::Markup(ftd::Markups {
-                                            text: ftd::markdown_line("5PM Tasks"),
-                                            line: true,
-                                            common: ftd::Common {
-                                                color: Some(ftd::Color {
-                                                    r: 255,
-                                                    g: 255,
-                                                    b: 255,
-                                                    alpha: 1.0,
-                                                }),
-                                                reference: Some(s("@name@0,0,0")),
-                                                condition: Some(ftd::Condition {
-                                                    variable: s("@active@0,0,0"),
-                                                    value: s("$IsNotNull$"),
-                                                }),
-                                                ..Default::default()
-                                            },
-                                            size: Some(14),
-                                            ..Default::default()
-                                        }),
-                                        ftd::Element::Markup(ftd::Markups {
-                                            text: ftd::markdown_line("5PM Tasks"),
-                                            line: true,
-                                            common: ftd::Common {
-                                                color: Some(ftd::Color {
-                                                    r: 77,
-                                                    g: 77,
-                                                    b: 77,
-                                                    alpha: 1.0,
-                                                }),
-                                                reference: Some(s("@name@0,0,0")),
-                                                condition: Some(ftd::Condition {
-                                                    variable: s("@active@0,0,0"),
-                                                    value: s("$IsNull$"),
-                                                }),
-                                                is_not_visible: true,
-                                                ..Default::default()
-                                            },
-                                            size: Some(14),
-                                            ..Default::default()
-                                        }),
-                                        ftd::Element::Column(ftd::Column {
-                                            spacing: None,
-                                            container: ftd::Container {
-                                                children: vec![
-                                                    ftd::Element::Markup(ftd::Markups {
-                                                        text: ftd::markdown_line("Log"),
-                                                        line: true,
-                                                        common: ftd::Common {
-                                                            color: Some(ftd::Color {
-                                                                r: 255,
-                                                                g: 255,
-                                                                b: 255,
-                                                                alpha: 1.0,
-                                                            }),
-                                                            reference: Some(s("@name@0,0,0,0")),
-                                                            condition: Some(ftd::Condition {
-                                                                variable: s("@active@0,0,0,0"),
-                                                                value: s("$IsNotNull$"),
-                                                            }),
-                                                            is_not_visible: true,
-                                                            ..Default::default()
-                                                        },
-                                                        size: Some(14),
-                                                        ..Default::default()
-                                                    }),
-                                                    ftd::Element::Markup(ftd::Markups {
-                                                        text: ftd::markdown_line("Log"),
-                                                        line: true,
-                                                        common: ftd::Common {
-                                                            color: Some(ftd::Color {
-                                                                r: 77,
-                                                                g: 77,
-                                                                b: 77,
-                                                                alpha: 1.0,
-                                                            }),
-                                                            reference: Some(s("@name@0,0,0,0")),
-                                                            condition: Some(ftd::Condition {
-                                                                variable: s("@active@0,0,0,0"),
-                                                                value: s("$IsNull$"),
-                                                            }),
-                                                            ..Default::default()
-                                                        },
-                                                        size: Some(14),
-                                                        ..Default::default()
-                                                    }),
-                                                    ftd::Element::Column(ftd::Column {
-                                                        spacing: None,
-                                                        container: ftd::Container {
-                                                            external_children: Default::default(),
-                                                            children: vec![
-                                                            ftd::Element::Markup(ftd::Markups {
-                                                                text: ftd::markdown_line(
-                                                                    "ChildLog",
-                                                                ),
-                                                                line: true,
-                                                                common: ftd::Common {
-                                                                    color: Some(ftd::Color {
-                                                                        r: 255,
-                                                                        g: 255,
-                                                                        b: 255,
-                                                                        alpha: 1.0,
-                                                                    }),
-                                                                    reference: Some(s(
-                                                                        "@name@0,0,0,0,0",
-                                                                    )),
-                                                                    condition: Some(
-                                                                        ftd::Condition {
-                                                                            variable: s(
-                                                                                "@active@0,0,0,0,0",
-                                                                            ),
-                                                                            value: s("$IsNotNull$"),
-                                                                        },
-                                                                    ),
-                                                                    is_not_visible: true,
-                                                                    ..Default::default()
-                                                                },
-                                                                size: Some(14),
-                                                                ..Default::default()
-                                                            }),
-                                                            ftd::Element::Markup(ftd::Markups {
-                                                                text: ftd::markdown_line(
-                                                                    "ChildLog",
-                                                                ),
-                                                                line: true,
-                                                                common: ftd::Common {
-                                                                    color: Some(ftd::Color {
-                                                                        r: 77,
-                                                                        g: 77,
-                                                                        b: 77,
-                                                                        alpha: 1.0,
-                                                                    }),
-                                                                    reference: Some(s(
-                                                                        "@name@0,0,0,0,0",
-                                                                    )),
-                                                                    condition: Some(
-                                                                        ftd::Condition {
-                                                                            variable: s(
-                                                                                "@active@0,0,0,0,0",
-                                                                            ),
-                                                                            value: s("$IsNull$"),
-                                                                        },
-                                                                    ),
-                                                                    ..Default::default()
-                                                                },
-                                                                size: Some(14),
-                                                                ..Default::default()
-                                                            }),
-                                                        ],
-                                                            open: (Some(true), None),
-                                                            ..Default::default()
-                                                        },
-                                                        common: ftd::Common {
-                                                            locals: std::array::IntoIter::new([
-                                                                (s("active@0,0,0,0,0"), s("")),
-                                                                (
-                                                                    s("id@0,0,0,0,0"),
-                                                                    s("/ChildBuilding/"),
-                                                                ),
-                                                                (
-                                                                    s("name@0,0,0,0,0"),
-                                                                    s("ChildLog"),
-                                                                ),
-                                                            ])
-                                                            .collect(),
-                                                            data_id: Some(s("/ChildBuilding/")),
-                                                            width: Some(ftd::Length::Fill),
-                                                            ..Default::default()
-                                                        },
-                                                    }),
-                                                ],
-                                                external_children: Default::default(),
-                                                open: (Some(true), None),
-                                                ..Default::default()
-                                            },
-                                            common: ftd::Common {
-                                                locals: std::array::IntoIter::new([
-                                                    (s("active@0,0,0,0"), s("")),
-                                                    (s("id@0,0,0,0"), s("/Building/")),
-                                                    (s("name@0,0,0,0"), s("Log")),
-                                                ])
-                                                .collect(),
-                                                data_id: Some(s("/Building/")),
-                                                width: Some(ftd::Length::Fill),
-                                                ..Default::default()
-                                            },
-                                        }),
-                                        ftd::Element::Column(ftd::Column {
-                                            spacing: None,
-                                            container: ftd::Container {
-                                                external_children: Default::default(),
-                                                children: vec![
-                                                    ftd::Element::Markup(ftd::Markups {
-                                                        text: ftd::markdown_line("Log2"),
-                                                        line: true,
-                                                        common: ftd::Common {
-                                                            color: Some(ftd::Color {
-                                                                r: 255,
-                                                                g: 255,
-                                                                b: 255,
-                                                                alpha: 1.0,
-                                                            }),
-                                                            reference: Some(s("@name@0,0,0,1")),
-                                                            condition: Some(ftd::Condition {
-                                                                variable: s("@active@0,0,0,1"),
-                                                                value: s("$IsNotNull$"),
-                                                            }),
-                                                            is_not_visible: true,
-                                                            ..Default::default()
-                                                        },
-                                                        size: Some(14),
-                                                        ..Default::default()
-                                                    }),
-                                                    ftd::Element::Markup(ftd::Markups {
-                                                        text: ftd::markdown_line("Log2"),
-                                                        line: true,
-                                                        common: ftd::Common {
-                                                            color: Some(ftd::Color {
-                                                                r: 77,
-                                                                g: 77,
-                                                                b: 77,
-                                                                alpha: 1.0,
-                                                            }),
-                                                            reference: Some(s("@name@0,0,0,1")),
-                                                            condition: Some(ftd::Condition {
-                                                                variable: s("@active@0,0,0,1"),
-                                                                value: s("$IsNull$"),
-                                                            }),
-                                                            ..Default::default()
-                                                        },
-                                                        size: Some(14),
-                                                        ..Default::default()
-                                                    }),
-                                                ],
-                                                open: (Some(true), None),
-                                                ..Default::default()
-                                            },
-                                            common: ftd::Common {
-                                                locals: std::array::IntoIter::new([
-                                                    (s("active@0,0,0,1"), s("")),
-                                                    (s("id@0,0,0,1"), s("/Building2/")),
-                                                    (s("name@0,0,0,1"), s("Log2")),
-                                                ])
-                                                .collect(),
-                                                data_id: Some(s("/Building2/")),
-                                                width: Some(ftd::Length::Fill),
-                                                ..Default::default()
-                                            },
-                                        }),
-                                    ],
+                                    children,
                                     external_children: Default::default(),
                                     open: (Some(true), None),
                                     ..Default::default()
                                 },
                                 common: ftd::Common {
-                                    locals: std::array::IntoIter::new([
-                                        (s("active@0,0,0"), s("true")),
-                                        (s("id@0,0,0"), s("/welcome/")),
-                                        (s("name@0,0,0"), s("5PM Tasks")),
-                                    ])
-                                    .collect(),
                                     data_id: Some(s("/welcome/")),
                                     width: Some(ftd::Length::Fill),
                                     ..Default::default()
@@ -1802,8 +1937,6 @@ mod test {
                             ..Default::default()
                         },
                         common: ftd::Common {
-                            locals: std::array::IntoIter::new([(s("id@0,0"), s("toc_main"))])
-                                .collect(),
                             data_id: Some(s("toc_main")),
                             height: Some(ftd::Length::Fill),
                             width: Some(ftd::Length::Px { value: 300 }),
@@ -1889,7 +2022,7 @@ mod test {
         bag.insert(
             "creating-a-tree#ft_toc".to_string(),
             ftd::p2::Thing::Component(ftd::Component {
-                root: "ftd.column".to_string(),
+                root: "ftd#column".to_string(),
                 full_name: "creating-a-tree#ft_toc".to_string(),
                 arguments: Default::default(),
                 properties: Default::default(),
@@ -2091,7 +2224,7 @@ mod test {
         bag.insert(
             "creating-a-tree#parent".to_string(),
             ftd::p2::Thing::Component(ftd::Component {
-                root: "ftd.column".to_string(),
+                root: "ftd#column".to_string(),
                 full_name: "creating-a-tree#parent".to_string(),
                 arguments: std::array::IntoIter::new([
                     (
@@ -2262,7 +2395,7 @@ mod test {
         bag.insert(
             "creating-a-tree#table-of-content".to_string(),
             ftd::p2::Thing::Component(ftd::Component {
-                root: "ftd.column".to_string(),
+                root: "ftd#column".to_string(),
                 full_name: "creating-a-tree#table-of-content".to_string(),
                 arguments: std::array::IntoIter::new([(s("id"), ftd::p2::Kind::string())])
                     .collect(),
@@ -2317,7 +2450,7 @@ mod test {
         bag.insert(
             "creating-a-tree#toc-heading".to_string(),
             ftd::p2::Thing::Component(ftd::Component {
-                root: "ftd.text".to_string(),
+                root: "ftd#text".to_string(),
                 full_name: "creating-a-tree#toc-heading".to_string(),
                 arguments: std::array::IntoIter::new([(s("text"), ftd::p2::Kind::caption())])
                     .collect(),
@@ -2348,6 +2481,397 @@ mod test {
                 ..Default::default()
             }),
         );
+        bag.insert(
+            s("foo/bar#active@0,0,0"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("active"),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Boolean { value: true },
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            }),
+        );
+        bag.insert(
+            s("foo/bar#active@0,0,0,0"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("active"),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Optional {
+                        data: Box::new(None),
+                        kind: ftd::p2::Kind::boolean(),
+                    },
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            }),
+        );
+        bag.insert(
+            s("foo/bar#active@0,0,0,0,0"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("active"),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Optional {
+                        data: Box::new(None),
+                        kind: ftd::p2::Kind::boolean(),
+                    },
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            }),
+        );
+        bag.insert(
+            s("foo/bar#active@0,0,0,1"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("active"),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Optional {
+                        data: Box::new(None),
+                        kind: ftd::p2::Kind::boolean(),
+                    },
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            }),
+        );
+        bag.insert(
+            s("foo/bar#id@0,0"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("id"),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::String {
+                        text: s("toc_main"),
+                        source: ftd::TextSource::Header,
+                    },
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            }),
+        );
+        bag.insert(
+            s("foo/bar#id@0,0,0"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("id"),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::String {
+                        text: s("/welcome/"),
+                        source: ftd::TextSource::Header,
+                    },
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            }),
+        );
+        bag.insert(
+            s("foo/bar#id@0,0,0,0"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("id"),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::String {
+                        text: s("/Building/"),
+                        source: ftd::TextSource::Header,
+                    },
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            }),
+        );
+        bag.insert(
+            s("foo/bar#id@0,0,0,0,0"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("id"),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::String {
+                        text: s("/ChildBuilding/"),
+                        source: ftd::TextSource::Header,
+                    },
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            }),
+        );
+        bag.insert(
+            s("foo/bar#id@0,0,0,1"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("id"),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::String {
+                        text: s("/Building2/"),
+                        source: ftd::TextSource::Header,
+                    },
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            }),
+        );
+        bag.insert(
+            s("foo/bar#name@0,0,0,0"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("name"),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::String {
+                        text: s("Log"),
+                        source: ftd::TextSource::Header,
+                    },
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            }),
+        );
+        bag.insert(
+            s("foo/bar#name@0,0,0,0,0"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("name"),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::String {
+                        text: s("ChildLog"),
+                        source: ftd::TextSource::Header,
+                    },
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            }),
+        );
+        bag.insert(
+            s("foo/bar#name@0,0,0"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("name"),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::String {
+                        text: s("5PM Tasks"),
+                        source: ftd::TextSource::Header,
+                    },
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            }),
+        );
+        bag.insert(
+            s("foo/bar#name@0,0,0,1"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("name"),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::String {
+                        text: s("Log2"),
+                        source: ftd::TextSource::Header,
+                    },
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            }),
+        );
+
+        let children = vec![
+            ftd::Element::Markup(ftd::Markups {
+                text: ftd::markdown_line("5PM Tasks"),
+                line: true,
+                common: ftd::Common {
+                    color: Some(ftd::Color {
+                        r: 255,
+                        g: 255,
+                        b: 255,
+                        alpha: 1.0,
+                    }),
+                    reference: Some(s("foo/bar#name@0,0,0")),
+                    condition: Some(ftd::Condition {
+                        variable: s("foo/bar#active@0,0,0"),
+                        value: s("$IsNotNull$"),
+                    }),
+                    ..Default::default()
+                },
+                size: Some(14),
+                ..Default::default()
+            }),
+            ftd::Element::Markup(ftd::Markups {
+                text: ftd::markdown_line("5PM Tasks"),
+                line: true,
+                common: ftd::Common {
+                    color: Some(ftd::Color {
+                        r: 77,
+                        g: 77,
+                        b: 77,
+                        alpha: 1.0,
+                    }),
+                    reference: Some(s("foo/bar#name@0,0,0")),
+                    condition: Some(ftd::Condition {
+                        variable: s("foo/bar#active@0,0,0"),
+                        value: s("$IsNull$"),
+                    }),
+                    is_not_visible: true,
+                    ..Default::default()
+                },
+                size: Some(14),
+                ..Default::default()
+            }),
+            ftd::Element::Column(ftd::Column {
+                spacing: None,
+                container: ftd::Container {
+                    children: vec![
+                        ftd::Element::Markup(ftd::Markups {
+                            text: ftd::markdown_line("Log"),
+                            line: true,
+                            common: ftd::Common {
+                                color: Some(ftd::Color {
+                                    r: 255,
+                                    g: 255,
+                                    b: 255,
+                                    alpha: 1.0,
+                                }),
+                                reference: Some(s("foo/bar#name@0,0,0,0")),
+                                condition: Some(ftd::Condition {
+                                    variable: s("foo/bar#active@0,0,0,0"),
+                                    value: s("$IsNotNull$"),
+                                }),
+                                is_not_visible: true,
+                                ..Default::default()
+                            },
+                            size: Some(14),
+                            ..Default::default()
+                        }),
+                        ftd::Element::Markup(ftd::Markups {
+                            text: ftd::markdown_line("Log"),
+                            line: true,
+                            common: ftd::Common {
+                                color: Some(ftd::Color {
+                                    r: 77,
+                                    g: 77,
+                                    b: 77,
+                                    alpha: 1.0,
+                                }),
+                                reference: Some(s("foo/bar#name@0,0,0,0")),
+                                condition: Some(ftd::Condition {
+                                    variable: s("foo/bar#active@0,0,0,0"),
+                                    value: s("$IsNull$"),
+                                }),
+                                ..Default::default()
+                            },
+                            size: Some(14),
+                            ..Default::default()
+                        }),
+                        ftd::Element::Column(ftd::Column {
+                            spacing: None,
+                            container: ftd::Container {
+                                external_children: Default::default(),
+                                children: vec![
+                                    ftd::Element::Markup(ftd::Markups {
+                                        text: ftd::markdown_line("ChildLog"),
+                                        line: true,
+                                        common: ftd::Common {
+                                            color: Some(ftd::Color {
+                                                r: 255,
+                                                g: 255,
+                                                b: 255,
+                                                alpha: 1.0,
+                                            }),
+                                            reference: Some(s("foo/bar#name@0,0,0,0,0")),
+                                            condition: Some(ftd::Condition {
+                                                variable: s("foo/bar#active@0,0,0,0,0"),
+                                                value: s("$IsNotNull$"),
+                                            }),
+                                            is_not_visible: true,
+                                            ..Default::default()
+                                        },
+                                        size: Some(14),
+                                        ..Default::default()
+                                    }),
+                                    ftd::Element::Markup(ftd::Markups {
+                                        text: ftd::markdown_line("ChildLog"),
+                                        line: true,
+                                        common: ftd::Common {
+                                            color: Some(ftd::Color {
+                                                r: 77,
+                                                g: 77,
+                                                b: 77,
+                                                alpha: 1.0,
+                                            }),
+                                            reference: Some(s("foo/bar#name@0,0,0,0,0")),
+                                            condition: Some(ftd::Condition {
+                                                variable: s("foo/bar#active@0,0,0,0,0"),
+                                                value: s("$IsNull$"),
+                                            }),
+                                            ..Default::default()
+                                        },
+                                        size: Some(14),
+                                        ..Default::default()
+                                    }),
+                                ],
+                                open: (Some(true), None),
+                                ..Default::default()
+                            },
+                            common: ftd::Common {
+                                data_id: Some(s("/ChildBuilding/")),
+                                width: Some(ftd::Length::Fill),
+                                ..Default::default()
+                            },
+                        }),
+                    ],
+                    external_children: Default::default(),
+                    open: (Some(true), None),
+                    ..Default::default()
+                },
+                common: ftd::Common {
+                    data_id: Some(s("/Building/")),
+                    width: Some(ftd::Length::Fill),
+                    ..Default::default()
+                },
+            }),
+            ftd::Element::Column(ftd::Column {
+                spacing: None,
+                container: ftd::Container {
+                    external_children: Default::default(),
+                    children: vec![
+                        ftd::Element::Markup(ftd::Markups {
+                            text: ftd::markdown_line("Log2"),
+                            line: true,
+                            common: ftd::Common {
+                                color: Some(ftd::Color {
+                                    r: 255,
+                                    g: 255,
+                                    b: 255,
+                                    alpha: 1.0,
+                                }),
+                                reference: Some(s("foo/bar#name@0,0,0,1")),
+                                condition: Some(ftd::Condition {
+                                    variable: s("foo/bar#active@0,0,0,1"),
+                                    value: s("$IsNotNull$"),
+                                }),
+                                is_not_visible: true,
+                                ..Default::default()
+                            },
+                            size: Some(14),
+                            ..Default::default()
+                        }),
+                        ftd::Element::Markup(ftd::Markups {
+                            text: ftd::markdown_line("Log2"),
+                            line: true,
+                            common: ftd::Common {
+                                color: Some(ftd::Color {
+                                    r: 77,
+                                    g: 77,
+                                    b: 77,
+                                    alpha: 1.0,
+                                }),
+                                reference: Some(s("foo/bar#name@0,0,0,1")),
+                                condition: Some(ftd::Condition {
+                                    variable: s("foo/bar#active@0,0,0,1"),
+                                    value: s("$IsNull$"),
+                                }),
+                                ..Default::default()
+                            },
+                            size: Some(14),
+                            ..Default::default()
+                        }),
+                    ],
+                    open: (Some(true), None),
+                    ..Default::default()
+                },
+                common: ftd::Common {
+                    data_id: Some(s("/Building2/")),
+                    width: Some(ftd::Length::Fill),
+                    ..Default::default()
+                },
+            }),
+        ];
 
         let mut main = super::default_column();
         main.container
@@ -2361,268 +2885,12 @@ mod test {
                             children: vec![ftd::Element::Column(ftd::Column {
                                 spacing: None,
                                 container: ftd::Container {
-                                    children: vec![
-                                        ftd::Element::Markup(ftd::Markups {
-                                            text: ftd::markdown_line("5PM Tasks"),
-                                            line: true,
-                                            common: ftd::Common {
-                                                color: Some(ftd::Color {
-                                                    r: 255,
-                                                    g: 255,
-                                                    b: 255,
-                                                    alpha: 1.0,
-                                                }),
-                                                reference: Some(s("@name@0,0,0")),
-                                                condition: Some(ftd::Condition {
-                                                    variable: s("@active@0,0,0"),
-                                                    value: s("$IsNotNull$"),
-                                                }),
-                                                ..Default::default()
-                                            },
-                                            size: Some(14),
-                                            ..Default::default()
-                                        }),
-                                        ftd::Element::Markup(ftd::Markups {
-                                            text: ftd::markdown_line("5PM Tasks"),
-                                            line: true,
-                                            common: ftd::Common {
-                                                color: Some(ftd::Color {
-                                                    r: 77,
-                                                    g: 77,
-                                                    b: 77,
-                                                    alpha: 1.0,
-                                                }),
-                                                reference: Some(s("@name@0,0,0")),
-                                                condition: Some(ftd::Condition {
-                                                    variable: s("@active@0,0,0"),
-                                                    value: s("$IsNull$"),
-                                                }),
-                                                is_not_visible: true,
-                                                ..Default::default()
-                                            },
-                                            size: Some(14),
-                                            ..Default::default()
-                                        }),
-                                        ftd::Element::Column(ftd::Column {
-                                            spacing: None,
-                                            container: ftd::Container {
-                                                children: vec![
-                                                    ftd::Element::Markup(ftd::Markups {
-                                                        text: ftd::markdown_line("Log"),
-                                                        line: true,
-                                                        common: ftd::Common {
-                                                            color: Some(ftd::Color {
-                                                                r: 255,
-                                                                g: 255,
-                                                                b: 255,
-                                                                alpha: 1.0,
-                                                            }),
-                                                            reference: Some(s("@name@0,0,0,0")),
-                                                            condition: Some(ftd::Condition {
-                                                                variable: s("@active@0,0,0,0"),
-                                                                value: s("$IsNotNull$"),
-                                                            }),
-                                                            is_not_visible: true,
-                                                            ..Default::default()
-                                                        },
-                                                        size: Some(14),
-                                                        ..Default::default()
-                                                    }),
-                                                    ftd::Element::Markup(ftd::Markups {
-                                                        text: ftd::markdown_line("Log"),
-                                                        line: true,
-                                                        common: ftd::Common {
-                                                            color: Some(ftd::Color {
-                                                                r: 77,
-                                                                g: 77,
-                                                                b: 77,
-                                                                alpha: 1.0,
-                                                            }),
-                                                            reference: Some(s("@name@0,0,0,0")),
-                                                            condition: Some(ftd::Condition {
-                                                                variable: s("@active@0,0,0,0"),
-                                                                value: s("$IsNull$"),
-                                                            }),
-                                                            ..Default::default()
-                                                        },
-                                                        size: Some(14),
-                                                        ..Default::default()
-                                                    }),
-                                                    ftd::Element::Column(ftd::Column {
-                                                        spacing: None,
-                                                        container: ftd::Container {
-                                                            external_children: Default::default(),
-                                                            children: vec![
-                                                            ftd::Element::Markup(ftd::Markups {
-                                                                text: ftd::markdown_line(
-                                                                    "ChildLog",
-                                                                ),
-                                                                line: true,
-                                                                common: ftd::Common {
-                                                                    color: Some(ftd::Color {
-                                                                        r: 255,
-                                                                        g: 255,
-                                                                        b: 255,
-                                                                        alpha: 1.0,
-                                                                    }),
-                                                                    reference: Some(s(
-                                                                        "@name@0,0,0,0,0",
-                                                                    )),
-                                                                    condition: Some(
-                                                                        ftd::Condition {
-                                                                            variable: s(
-                                                                                "@active@0,0,0,0,0",
-                                                                            ),
-                                                                            value: s("$IsNotNull$"),
-                                                                        },
-                                                                    ),
-                                                                    is_not_visible: true,
-                                                                    ..Default::default()
-                                                                },
-                                                                size: Some(14),
-                                                                ..Default::default()
-                                                            }),
-                                                            ftd::Element::Markup(ftd::Markups {
-                                                                text: ftd::markdown_line(
-                                                                    "ChildLog",
-                                                                ),
-                                                                line: true,
-                                                                common: ftd::Common {
-                                                                    color: Some(ftd::Color {
-                                                                        r: 77,
-                                                                        g: 77,
-                                                                        b: 77,
-                                                                        alpha: 1.0,
-                                                                    }),
-                                                                    reference: Some(s(
-                                                                        "@name@0,0,0,0,0",
-                                                                    )),
-                                                                    condition: Some(
-                                                                        ftd::Condition {
-                                                                            variable: s(
-                                                                                "@active@0,0,0,0,0",
-                                                                            ),
-                                                                            value: s("$IsNull$"),
-                                                                        },
-                                                                    ),
-                                                                    ..Default::default()
-                                                                },
-                                                                size: Some(14),
-                                                                ..Default::default()
-                                                            }),
-                                                        ],
-                                                            open: (Some(true), None),
-                                                            ..Default::default()
-                                                        },
-                                                        common: ftd::Common {
-                                                            locals: std::array::IntoIter::new([
-                                                                (s("active@0,0,0,0,0"), s("")),
-                                                                (
-                                                                    s("id@0,0,0,0,0"),
-                                                                    s("/ChildBuilding/"),
-                                                                ),
-                                                                (
-                                                                    s("name@0,0,0,0,0"),
-                                                                    s("ChildLog"),
-                                                                ),
-                                                            ])
-                                                            .collect(),
-                                                            data_id: Some(s("/ChildBuilding/")),
-                                                            width: Some(ftd::Length::Fill),
-                                                            ..Default::default()
-                                                        },
-                                                    }),
-                                                ],
-                                                external_children: Default::default(),
-                                                open: (Some(true), None),
-                                                ..Default::default()
-                                            },
-                                            common: ftd::Common {
-                                                locals: std::array::IntoIter::new([
-                                                    (s("active@0,0,0,0"), s("")),
-                                                    (s("id@0,0,0,0"), s("/Building/")),
-                                                    (s("name@0,0,0,0"), s("Log")),
-                                                ])
-                                                .collect(),
-                                                data_id: Some(s("/Building/")),
-                                                width: Some(ftd::Length::Fill),
-                                                ..Default::default()
-                                            },
-                                        }),
-                                        ftd::Element::Column(ftd::Column {
-                                            spacing: None,
-                                            container: ftd::Container {
-                                                external_children: Default::default(),
-                                                children: vec![
-                                                    ftd::Element::Markup(ftd::Markups {
-                                                        text: ftd::markdown_line("Log2"),
-                                                        line: true,
-                                                        common: ftd::Common {
-                                                            color: Some(ftd::Color {
-                                                                r: 255,
-                                                                g: 255,
-                                                                b: 255,
-                                                                alpha: 1.0,
-                                                            }),
-                                                            reference: Some(s("@name@0,0,0,1")),
-                                                            condition: Some(ftd::Condition {
-                                                                variable: s("@active@0,0,0,1"),
-                                                                value: s("$IsNotNull$"),
-                                                            }),
-                                                            is_not_visible: true,
-                                                            ..Default::default()
-                                                        },
-                                                        size: Some(14),
-                                                        ..Default::default()
-                                                    }),
-                                                    ftd::Element::Markup(ftd::Markups {
-                                                        text: ftd::markdown_line("Log2"),
-                                                        line: true,
-                                                        common: ftd::Common {
-                                                            color: Some(ftd::Color {
-                                                                r: 77,
-                                                                g: 77,
-                                                                b: 77,
-                                                                alpha: 1.0,
-                                                            }),
-                                                            reference: Some(s("@name@0,0,0,1")),
-                                                            condition: Some(ftd::Condition {
-                                                                variable: s("@active@0,0,0,1"),
-                                                                value: s("$IsNull$"),
-                                                            }),
-                                                            ..Default::default()
-                                                        },
-                                                        size: Some(14),
-                                                        ..Default::default()
-                                                    }),
-                                                ],
-                                                open: (Some(true), None),
-                                                ..Default::default()
-                                            },
-                                            common: ftd::Common {
-                                                locals: std::array::IntoIter::new([
-                                                    (s("active@0,0,0,1"), s("")),
-                                                    (s("id@0,0,0,1"), s("/Building2/")),
-                                                    (s("name@0,0,0,1"), s("Log2")),
-                                                ])
-                                                .collect(),
-                                                data_id: Some(s("/Building2/")),
-                                                width: Some(ftd::Length::Fill),
-                                                ..Default::default()
-                                            },
-                                        }),
-                                    ],
+                                    children,
                                     external_children: Default::default(),
                                     open: (Some(true), None),
                                     ..Default::default()
                                 },
                                 common: ftd::Common {
-                                    locals: std::array::IntoIter::new([
-                                        (s("active@0,0,0"), s("true")),
-                                        (s("id@0,0,0"), s("/welcome/")),
-                                        (s("name@0,0,0"), s("5PM Tasks")),
-                                    ])
-                                    .collect(),
                                     data_id: Some(s("/welcome/")),
                                     width: Some(ftd::Length::Fill),
                                     ..Default::default()
@@ -2631,8 +2899,6 @@ mod test {
                             ..Default::default()
                         },
                         common: ftd::Common {
-                            locals: std::array::IntoIter::new([(s("id@0,0"), s("toc_main"))])
-                                .collect(),
                             data_id: Some(s("toc_main")),
                             height: Some(ftd::Length::Fill),
                             width: Some(ftd::Length::Px { value: 300 }),
@@ -2688,7 +2954,7 @@ mod test {
         bag.insert(
             "fifthtry/ft#markdown".to_string(),
             ftd::p2::Thing::Component(ftd::Component {
-                root: "ftd.text".to_string(),
+                root: "ftd#text".to_string(),
                 full_name: "fifthtry/ft#markdown".to_string(),
                 arguments: std::array::IntoIter::new([(s("body"), ftd::p2::Kind::body())])
                     .collect(),
@@ -2726,7 +2992,7 @@ mod test {
         bag.insert(
             "reference#test-component".to_string(),
             ftd::p2::Thing::Component(ftd::Component {
-                root: "ftd.column".to_string(),
+                root: "ftd#column".to_string(),
                 full_name: "reference#test-component".to_string(),
                 arguments: Default::default(),
                 properties: std::array::IntoIter::new([
@@ -2832,7 +3098,7 @@ mod test {
             "foo/bar#foo".to_string(),
             ftd::p2::Thing::Component(ftd::Component {
                 full_name: s("foo/bar#foo"),
-                root: "ftd.text".to_string(),
+                root: "ftd#text".to_string(),
                 arguments: std::array::IntoIter::new([(
                     s("name"),
                     ftd::p2::Kind::caption_or_body(),
@@ -2880,6 +3146,48 @@ mod test {
                 ..Default::default()
             }),
         );
+        bag.insert(
+            "foo/bar#name@0".to_string(),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                flags: ftd::VariableFlags::default(),
+                name: "name".to_string(),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::String {
+                        text: "hello".to_string(),
+                        source: ftd::TextSource::Caption,
+                    },
+                },
+                conditions: vec![],
+            }),
+        );
+        bag.insert(
+            "foo/bar#name@1".to_string(),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                flags: ftd::VariableFlags::default(),
+                name: "name".to_string(),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::String {
+                        text: "world".to_string(),
+                        source: ftd::TextSource::Header,
+                    },
+                },
+                conditions: vec![],
+            }),
+        );
+        bag.insert(
+            "foo/bar#name@2".to_string(),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                flags: ftd::VariableFlags::default(),
+                name: "name".to_string(),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::String {
+                        text: "yo yo".to_string(),
+                        source: ftd::TextSource::Body,
+                    },
+                },
+                conditions: vec![],
+            }),
+        );
 
         let mut main = super::default_column();
         main.container
@@ -2888,8 +3196,7 @@ mod test {
                 text: ftd::markdown_line("hello"),
                 line: true,
                 common: ftd::Common {
-                    locals: std::array::IntoIter::new([(s("name@0"), s("hello"))]).collect(),
-                    reference: Some(s("@name@0")),
+                    reference: Some(s("foo/bar#name@0")),
                     ..Default::default()
                 },
                 ..Default::default()
@@ -2900,8 +3207,7 @@ mod test {
                 text: ftd::markdown_line("world"),
                 line: true,
                 common: ftd::Common {
-                    locals: std::array::IntoIter::new([(s("name@1"), s("world"))]).collect(),
-                    reference: Some(s("@name@1")),
+                    reference: Some(s("foo/bar#name@1")),
                     ..Default::default()
                 },
                 ..Default::default()
@@ -2912,8 +3218,7 @@ mod test {
                 text: ftd::markdown_line("yo yo"),
                 line: true,
                 common: ftd::Common {
-                    locals: std::array::IntoIter::new([(s("name@2"), s("yo yo"))]).collect(),
-                    reference: Some(s("@name@2")),
+                    reference: Some(s("foo/bar#name@2")),
                     ..Default::default()
                 },
                 ..Default::default()
@@ -3063,7 +3368,7 @@ mod test {
             "foo/bar#foo".to_string(),
             ftd::p2::Thing::Component(ftd::Component {
                 full_name: s("foo/bar#foo"),
-                root: "ftd.row".to_string(),
+                root: "ftd#row".to_string(),
                 instructions: vec![ftd::Instruction::ChildComponent{child: ftd::ChildComponent {
                     events: vec![],
                     condition: None,
@@ -3176,6 +3481,17 @@ mod test {
                 ..Default::default()
             }),
         );
+        bag.insert(
+            "foo/bar#x@0".to_string(),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                flags: ftd::VariableFlags::default(),
+                name: "x".to_string(),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Integer { value: 10 },
+                },
+                conditions: vec![],
+            }),
+        );
 
         let mut main = super::default_column();
         let mut row: ftd::Row = Default::default();
@@ -3203,10 +3519,6 @@ mod test {
                 },
                 ..Default::default()
             }));
-        row.common = ftd::Common {
-            locals: std::array::IntoIter::new([(s("x@0"), s("10"))]).collect(),
-            ..Default::default()
-        };
 
         main.container.children.push(ftd::Element::Row(row));
         p!(
@@ -3566,7 +3878,7 @@ mod test {
             line: true,
             common: ftd::Common {
                 position: Some(ftd::Position::Center),
-                reference: Some(s("@title@0")),
+                reference: Some(s("foo/bar#title@0")),
                 ..Default::default()
             },
             ..Default::default()
@@ -3583,7 +3895,7 @@ mod test {
                 .trim(),
             ),
             common: ftd::Common {
-                reference: Some(s("@about@0")),
+                reference: Some(s("foo/bar#about@0")),
                 ..Default::default()
             },
             line: true,
@@ -3593,7 +3905,7 @@ mod test {
         let image = ftd::Image {
             src: s("/static/home/document-type-min.png"),
             common: ftd::Common {
-                reference: Some(s("@src@0")),
+                reference: Some(s("foo/bar#src@0")),
                 ..Default::default()
             },
             ..Default::default()
@@ -3602,18 +3914,10 @@ mod test {
         let mut main = super::default_column();
         main.container
             .children
-            .push(ftd::Element::Column(ftd::Column {spacing: None,
+            .push(ftd::Element::Column(ftd::Column {
+                spacing: None,
                 common: ftd::Common {
                     padding: Some(30),
-                    locals: std::array::IntoIter::new([
-                        (s("about@0"), s("UI screens, behaviour and journeys, database tables, APIs, how to\ncontribute to, deploy, or monitor microservice, everything that\nmakes web or mobile product teams productive.")),
-                        (
-                            s("src@0"),
-                            s("/static/home/document-type-min.png"),
-                        ),
-                        (s("title@0"), s("What kind of documentation?")),
-                    ])
-                    .collect(),
                     ..Default::default()
                 },
                 container: ftd::Container {
@@ -3705,7 +4009,7 @@ mod test {
             text: ftd::markup_line("What kind of documentation?"),
             common: ftd::Common {
                 position: Some(ftd::Position::Center),
-                reference: Some(s("@title@0")),
+                reference: Some(s("foo/bar#title@0")),
                 ..Default::default()
             },
             line: true,
@@ -3715,7 +4019,7 @@ mod test {
             text: ftd::markup_line("second call"),
             common: ftd::Common {
                 position: Some(ftd::Position::Center),
-                reference: Some(s("@title@1")),
+                reference: Some(s("foo/bar#title@1")),
                 ..Default::default()
             },
             line: true,
@@ -3733,9 +4037,9 @@ mod test {
                 .trim(),
             ),
             common: ftd::Common {
-                reference: Some(s("@about@0")),
+                reference: Some(s("foo/bar#about@0")),
                 condition: Some(ftd::Condition {
-                    variable: s("@about@0"),
+                    variable: s("foo/bar#about@0"),
                     value: s("$IsNotNull$"),
                 }),
                 ..Default::default()
@@ -3746,9 +4050,9 @@ mod test {
         let second_about = ftd::Markups {
             text: ftd::markup_line(""),
             common: ftd::Common {
-                reference: Some(s("@about@1")),
+                reference: Some(s("foo/bar#about@1")),
                 condition: Some(ftd::Condition {
-                    variable: s("@about@1"),
+                    variable: s("foo/bar#about@1"),
                     value: s("$IsNotNull$"),
                 }),
                 is_not_visible: true,
@@ -3760,9 +4064,9 @@ mod test {
         let image = ftd::Image {
             src: s("/static/home/document-type-min.png"),
             common: ftd::Common {
-                reference: Some(s("@src@0")),
+                reference: Some(s("foo/bar#src@0")),
                 condition: Some(ftd::Condition {
-                    variable: s("@src@0"),
+                    variable: s("foo/bar#src@0"),
                     value: s("$IsNotNull$"),
                 }),
                 ..Default::default()
@@ -3772,9 +4076,9 @@ mod test {
         let second_image = ftd::Image {
             src: s("second-image.png"),
             common: ftd::Common {
-                reference: Some(s("@src@1")),
+                reference: Some(s("foo/bar#src@1")),
                 condition: Some(ftd::Condition {
-                    variable: s("@src@1"),
+                    variable: s("foo/bar#src@1"),
                     value: s("$IsNotNull$"),
                 }),
                 ..Default::default()
@@ -3785,21 +4089,10 @@ mod test {
         let mut main = super::default_column();
         main.container
             .children
-            .push(ftd::Element::Column(ftd::Column {spacing: None,
+            .push(ftd::Element::Column(ftd::Column {
+                spacing: None,
                 common: ftd::Common {
                     padding: Some(30),
-                    locals: std::array::IntoIter::new([
-                        (s("about@0"), s("UI screens, behaviour and journeys, database tables, APIs, how to\ncontribute to, deploy, or monitor microservice, everything that\nmakes web or mobile product teams productive.")),
-                        (
-                            s("src@0"),
-                            s("/static/home/document-type-min.png"),
-                        ),
-                        (
-                            s("title@0"),
-                            s("What kind of documentation?"),
-                        ),
-                    ])
-                    .collect(),
                     ..Default::default()
                 },
                 container: ftd::Container {
@@ -3817,12 +4110,6 @@ mod test {
                 spacing: None,
                 common: ftd::Common {
                     padding: Some(30),
-                    locals: std::array::IntoIter::new([
-                        (s("about@1"), s("")),
-                        (s("src@1"), s("second-image.png")),
-                        (s("title@1"), s("second call")),
-                    ])
-                    .collect(),
                     ..Default::default()
                 },
                 container: ftd::Container {
@@ -3907,7 +4194,7 @@ mod test {
             }),
         );
         bag.insert(
-            "foo/bar#title@0".to_string(),
+            "foo/bar#title@1".to_string(),
             ftd::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "title".to_string(),
@@ -4195,7 +4482,7 @@ mod test {
             ftd::p2::Thing::Component(ftd::Component {
                 invocations: Default::default(),
                 full_name: "fifthtry/ft#markdown".to_string(),
-                root: s("ftd.text"),
+                root: s("ftd#text"),
                 arguments: std::array::IntoIter::new([(s("body"), ftd::p2::Kind::body())])
                     .collect(),
                 properties: std::array::IntoIter::new([(
@@ -4243,7 +4530,7 @@ mod test {
             ftd::p2::Thing::Component(ftd::Component {
                 invocations: Default::default(),
                 full_name: "foo/bar#h0".to_string(),
-                root: s("ftd.column"),
+                root: s("ftd#column"),
                 arguments: std::array::IntoIter::new([
                     (s("body"), ftd::p2::Kind::body().into_optional()),
                     (s("title"), ftd::p2::Kind::caption()),
@@ -4297,6 +4584,86 @@ mod test {
                     },
                 ],
                 ..Default::default()
+            }),
+        );
+        bag.insert(
+            s("foo/bar#body@0"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                flags: ftd::VariableFlags::default(),
+                name: s("body"),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::String {
+                        text: "what about the body?".to_string(),
+                        source: ftd::TextSource::Body,
+                    },
+                },
+                conditions: vec![],
+            }),
+        );
+        bag.insert(
+            s("foo/bar#body@0,1"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                flags: ftd::VariableFlags::default(),
+                name: s("body"),
+                value: ftd::PropertyValue::Variable {
+                    name: "foo/bar#body@0".to_string(),
+                    kind: ftd::p2::Kind::body(),
+                },
+                conditions: vec![],
+            }),
+        );
+        bag.insert(
+            s("foo/bar#body@1"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                flags: ftd::VariableFlags::default(),
+                name: s("body"),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Optional {
+                        data: Box::new(None),
+                        kind: ftd::p2::Kind::body(),
+                    },
+                },
+                conditions: vec![],
+            }),
+        );
+        bag.insert(
+            s("foo/bar#body@1,1"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                flags: ftd::VariableFlags::default(),
+                name: s("body"),
+                value: ftd::PropertyValue::Variable {
+                    name: "foo/bar#body@1".to_string(),
+                    kind: ftd::p2::Kind::body(),
+                },
+                conditions: vec![],
+            }),
+        );
+        bag.insert(
+            s("foo/bar#title@0"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                flags: ftd::VariableFlags::default(),
+                name: s("title"),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::String {
+                        text: "hello".to_string(),
+                        source: ftd::TextSource::Caption,
+                    },
+                },
+                conditions: vec![],
+            }),
+        );
+        bag.insert(
+            s("foo/bar#title@1"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                flags: ftd::VariableFlags::default(),
+                name: s("title"),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::String {
+                        text: "heading without body".to_string(),
+                        source: ftd::TextSource::Caption,
+                    },
+                },
+                conditions: vec![],
             }),
         );
 
@@ -4420,11 +4787,67 @@ mod test {
         let mut bag = super::default_bag();
 
         bag.insert(
+            s("foo/bar#src@0"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                flags: ftd::VariableFlags::default(),
+                name: s("src"),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::String {
+                        text: "foo.png".to_string(),
+                        source: ftd::TextSource::Body,
+                    },
+                },
+                conditions: vec![],
+            }),
+        );
+        bag.insert(
+            s("foo/bar#src@1"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                flags: ftd::VariableFlags::default(),
+                name: s("src"),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::String {
+                        text: "bar.png".to_string(),
+                        source: ftd::TextSource::Body,
+                    },
+                },
+                conditions: vec![],
+            }),
+        );
+        bag.insert(
+            s("foo/bar#width@0"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                flags: ftd::VariableFlags::default(),
+                name: s("width"),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Optional {
+                        data: Box::new(None),
+                        kind: ftd::p2::Kind::string(),
+                    },
+                },
+                conditions: vec![],
+            }),
+        );
+        bag.insert(
+            s("foo/bar#width@1"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                flags: ftd::VariableFlags::default(),
+                name: s("width"),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::String {
+                        text: "300".to_string(),
+                        source: ftd::TextSource::Header,
+                    },
+                },
+                conditions: vec![],
+            }),
+        );
+        bag.insert(
             s("foo/bar#image"),
             ftd::p2::Thing::Component(ftd::Component {
                 invocations: Default::default(),
                 full_name: "foo/bar#image".to_string(),
-                root: s("ftd.column"),
+                root: s("ftd#column"),
                 arguments: std::array::IntoIter::new([
                     (s("width"), ftd::p2::Kind::string().into_optional()),
                     (s("src"), ftd::p2::Kind::string()),
@@ -4477,21 +4900,14 @@ mod test {
                     children: vec![ftd::Element::Image(ftd::Image {
                         src: s("foo.png"),
                         common: ftd::Common {
-                            reference: Some(s("@src@0")),
+                            reference: Some(s("foo/bar#src@0")),
                             ..Default::default()
                         },
                         ..Default::default()
                     })],
                     ..Default::default()
                 },
-                common: ftd::Common {
-                    locals: std::array::IntoIter::new([
-                        (s("src@0"), s("foo.png")),
-                        (s("width@0"), s("")),
-                    ])
-                    .collect(),
-                    ..Default::default()
-                },
+                ..Default::default()
             }));
         main.container
             .children
@@ -4501,7 +4917,7 @@ mod test {
                     children: vec![ftd::Element::Image(ftd::Image {
                         src: s("bar.png"),
                         common: ftd::Common {
-                            reference: Some(s("@src@1")),
+                            reference: Some(s("foo/bar#src@1")),
                             width: Some(ftd::Length::Px { value: 300 }),
                             ..Default::default()
                         },
@@ -4509,14 +4925,7 @@ mod test {
                     })],
                     ..Default::default()
                 },
-                common: ftd::Common {
-                    locals: std::array::IntoIter::new([
-                        (s("src@1"), s("bar.png")),
-                        (s("width@1"), s("300")),
-                    ])
-                    .collect(),
-                    ..Default::default()
-                },
+                ..Default::default()
             }));
 
         p!(
@@ -4609,6 +5018,17 @@ mod test {
                 ..Default::default()
             }),
         );
+        bag.insert(
+            "foo/bar#x@0".to_string(),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                flags: ftd::VariableFlags::default(),
+                name: "x".to_string(),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Integer { value: 10 },
+                },
+                conditions: vec![],
+            }),
+        );
 
         let mut main = super::default_column();
         let mut row: ftd::Row = Default::default();
@@ -4626,10 +5046,6 @@ mod test {
                 line: false,
                 ..Default::default()
             }));
-        row.common = ftd::Common {
-            locals: std::array::IntoIter::new([(s("x@0"), s("10"))]).collect(),
-            ..Default::default()
-        };
         main.container.children.push(ftd::Element::Row(row));
 
         p!(
@@ -4656,10 +5072,22 @@ mod test {
         let mut bag = super::default_bag();
 
         bag.insert(
+            "foo/bar#x@0".to_string(),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                flags: ftd::VariableFlags::default(),
+                name: "x".to_string(),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Integer { value: 10 },
+                },
+                conditions: vec![],
+            }),
+        );
+
+        bag.insert(
             "foo/bar#foo".to_string(),
             ftd::p2::Thing::Component(ftd::Component {
                 full_name: s("foo/bar#foo"),
-                root: "ftd.row".to_string(),
+                root: "ftd#row".to_string(),
                 instructions: vec![
                     ftd::Instruction::ChildComponent {
                         child: ftd::ChildComponent {
@@ -4737,11 +5165,6 @@ mod test {
                 line: false,
                 ..Default::default()
             }));
-
-        row.common = ftd::Common {
-            locals: std::array::IntoIter::new([(s("x@0"), s("10"))]).collect(),
-            ..Default::default()
-        };
 
         main.container.children.push(ftd::Element::Row(row));
 
@@ -5212,7 +5635,7 @@ mod test {
         bag.insert(
             "foo/bar#foo".to_string(),
             ftd::p2::Thing::Component(ftd::Component {
-                root: "ftd.column".to_string(),
+                root: "ftd#column".to_string(),
                 full_name: "foo/bar#foo".to_string(),
                 instructions: vec![
                     ftd::component::Instruction::ChildComponent {
@@ -5372,7 +5795,7 @@ mod test {
         bag.insert(
             "inner_container#foo".to_string(),
             ftd::p2::Thing::Component(ftd::Component {
-                root: "ftd.column".to_string(),
+                root: "ftd#column".to_string(),
                 full_name: "inner_container#foo".to_string(),
                 instructions: vec![
                     ftd::component::Instruction::ChildComponent {
@@ -5565,7 +5988,7 @@ mod test {
         bag.insert(
             "foo/bar#foo".to_string(),
             ftd::p2::Thing::Component(ftd::Component {
-                root: "ftd.column".to_string(),
+                root: "ftd#column".to_string(),
                 full_name: s("foo/bar#foo"),
                 properties: std::array::IntoIter::new([(
                     s("open"),
@@ -5693,11 +6116,6 @@ mod test {
                                                 ..Default::default()
                                             },
                                             common: ftd::Common {
-                                                locals: std::array::IntoIter::new([(
-                                                    s("id@1,0,0,0"),
-                                                    s("some-child"),
-                                                )])
-                                                .collect(),
                                                 condition: Some(ftd::Condition {
                                                     variable: s("foo/bar#mobile"),
                                                     value: s("true"),
@@ -5720,11 +6138,6 @@ mod test {
                                                 ..Default::default()
                                             },
                                             common: ftd::Common {
-                                                locals: std::array::IntoIter::new([(
-                                                    s("id@1,0,0,1"),
-                                                    s("some-child"),
-                                                )])
-                                                .collect(),
                                                 condition: Some(ftd::Condition {
                                                     variable: s("foo/bar#mobile"),
                                                     value: s("false"),
@@ -5745,10 +6158,6 @@ mod test {
                                     ..Default::default()
                                 },
                                 common: ftd::Common {
-                                    /*locals: std::array::IntoIter::new([
-                                        (s("id@1,0,0"), s("foo-id")),
-                                    ])
-                                    .collect(),*/
                                     id: Some(s("foo-id")),
                                     data_id: Some(s("foo-id")),
                                     ..Default::default()
@@ -5775,7 +6184,7 @@ mod test {
         bag.insert(
             s("foo/bar#desktop-display"),
             ftd::p2::Thing::Component(ftd::Component {
-                root: "ftd.column".to_string(),
+                root: "ftd#column".to_string(),
                 full_name: s("foo/bar#desktop-display"),
                 arguments: std::array::IntoIter::new([(
                     s("id"),
@@ -5826,7 +6235,7 @@ mod test {
         bag.insert(
             s("foo/bar#foo"),
             ftd::p2::Thing::Component(ftd::Component {
-                root: "ftd.column".to_string(),
+                root: "ftd#column".to_string(),
                 full_name: s("foo/bar#foo"),
                 properties: std::array::IntoIter::new([(
                     s("open"),
@@ -5925,7 +6334,7 @@ mod test {
         bag.insert(
             s("foo/bar#mobile-display"),
             ftd::p2::Thing::Component(ftd::Component {
-                root: "ftd.column".to_string(),
+                root: "ftd#column".to_string(),
                 full_name: s("foo/bar#mobile-display"),
                 arguments: std::array::IntoIter::new([(
                     s("id"),
@@ -5985,6 +6394,36 @@ mod test {
                     },
                 }],
                 ..Default::default()
+            }),
+        );
+
+        bag.insert(
+            s("foo/bar#id@1,0,0,0"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                flags: ftd::VariableFlags::default(),
+                name: s("id"),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::variable::Value::String {
+                        text: s("some-child"),
+                        source: ftd::TextSource::Header,
+                    },
+                },
+                conditions: vec![],
+            }),
+        );
+
+        bag.insert(
+            s("foo/bar#id@1,0,0,1"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                flags: ftd::VariableFlags::default(),
+                name: s("id"),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::variable::Value::String {
+                        text: s("some-child"),
+                        source: ftd::TextSource::Header,
+                    },
+                },
+                conditions: vec![],
             }),
         );
 
@@ -6576,8 +7015,6 @@ mod test {
                                         ..Default::default()
                                     },
                                     common: ftd::Common {
-                                        locals: std::array::IntoIter::new([(s("id@0,0,0"), s(""))])
-                                            .collect(),
                                         condition: Some(ftd::Condition {
                                             variable: s("foo/bar#is-mobile"),
                                             value: s("false"),
@@ -6600,8 +7037,6 @@ mod test {
                                         ..Default::default()
                                     },
                                     common: ftd::Common {
-                                        locals: std::array::IntoIter::new([(s("id@0,0,1"), s(""))])
-                                            .collect(),
                                         condition: Some(ftd::Condition {
                                             variable: s("foo/bar#is-mobile"),
                                             value: s("true"),
@@ -6791,7 +7226,7 @@ mod test {
                         text: ftd::markdown_line("hello"),
                         line: true,
                         common: ftd::Common {
-                            reference: Some(s("@name@0")),
+                            reference: Some(s("foo/bar#name@0")),
                             ..Default::default()
                         },
                         ..Default::default()
@@ -6800,7 +7235,7 @@ mod test {
                         text: ftd::markdown_line("world"),
                         line: true,
                         common: ftd::Common {
-                            reference: Some(s("@body@0")),
+                            reference: Some(s("foo/bar#body@0")),
                             ..Default::default()
                         },
                         ..Default::default()
@@ -6808,14 +7243,7 @@ mod test {
                 ],
                 ..Default::default()
             },
-            common: ftd::Common {
-                locals: std::array::IntoIter::new([
-                    (s("body@0"), s("world")),
-                    (s("name@0"), s("hello")),
-                ])
-                .collect(),
-                ..Default::default()
-            },
+            ..Default::default()
         }));
 
         main.container.children.push(ftd::Element::Row(ftd::Row {
@@ -6826,7 +7254,7 @@ mod test {
                         text: ftd::markdown_line("Arpita Jaiswal"),
                         line: true,
                         common: ftd::Common {
-                            reference: Some(s("@name@1")),
+                            reference: Some(s("foo/bar#name@1")),
                             ..Default::default()
                         },
                         ..Default::default()
@@ -6835,7 +7263,7 @@ mod test {
                         text: ftd::markdown_line("Arpita is developer at Fifthtry"),
                         line: true,
                         common: ftd::Common {
-                            reference: Some(s("@body@1")),
+                            reference: Some(s("foo/bar#body@1")),
                             ..Default::default()
                         },
                         ..Default::default()
@@ -6844,11 +7272,6 @@ mod test {
                 ..Default::default()
             },
             common: ftd::Common {
-                locals: std::array::IntoIter::new([
-                    (s("body@1"), s("Arpita is developer at Fifthtry")),
-                    (s("name@1"), s("Arpita Jaiswal")),
-                ])
-                .collect(),
                 reference: Some(s("foo/bar#people")),
                 ..Default::default()
             },
@@ -6862,7 +7285,7 @@ mod test {
                         text: ftd::markdown_line("Amit Upadhyay"),
                         line: true,
                         common: ftd::Common {
-                            reference: Some(s("@name@2")),
+                            reference: Some(s("foo/bar#name@2")),
                             ..Default::default()
                         },
                         ..Default::default()
@@ -6871,7 +7294,7 @@ mod test {
                         text: ftd::markdown_line("Amit is CEO of FifthTry."),
                         line: true,
                         common: ftd::Common {
-                            reference: Some(s("@body@2")),
+                            reference: Some(s("foo/bar#body@2")),
                             ..Default::default()
                         },
                         ..Default::default()
@@ -6880,11 +7303,6 @@ mod test {
                 ..Default::default()
             },
             common: ftd::Common {
-                locals: std::array::IntoIter::new([
-                    (s("body@2"), s("Amit is CEO of FifthTry.")),
-                    (s("name@2"), s("Amit Upadhyay")),
-                ])
-                .collect(),
                 reference: Some(s("foo/bar#people")),
                 ..Default::default()
             },
@@ -7173,7 +7591,7 @@ mod test {
                 name: "name".to_string(),
                 value: ftd::PropertyValue::Variable {
                     name: s("foo/bar#$loop$@1.name"),
-                    kind: ftd::p2::Kind::body(),
+                    kind: ftd::p2::Kind::caption(),
                 },
                 conditions: vec![],
             }),
@@ -7185,7 +7603,7 @@ mod test {
                 name: "name".to_string(),
                 value: ftd::PropertyValue::Variable {
                     name: s("foo/bar#$loop$@2.name"),
-                    kind: ftd::p2::Kind::body(),
+                    kind: ftd::p2::Kind::caption(),
                 },
                 conditions: vec![],
             }),
@@ -7662,7 +8080,7 @@ mod test {
                         text: ftd::markdown_line("Arpita Jaiswal"),
                         line: true,
                         common: ftd::Common {
-                            reference: Some(s("@name@0,0")),
+                            reference: Some(s("foo/bar#name@0,0")),
                             ..Default::default()
                         },
                         ..Default::default()
@@ -7671,7 +8089,7 @@ mod test {
                         text: ftd::markdown_line("Arpita is developer at Fifthtry"),
                         line: true,
                         common: ftd::Common {
-                            reference: Some(s("@body@0,0")),
+                            reference: Some(s("foo/bar#body@0,0")),
                             ..Default::default()
                         },
                         ..Default::default()
@@ -7680,11 +8098,6 @@ mod test {
                 ..Default::default()
             },
             common: ftd::Common {
-                locals: std::array::IntoIter::new([
-                    (s("body@0,0"), s("Arpita is developer at Fifthtry")),
-                    (s("name@0,0"), s("Arpita Jaiswal")),
-                ])
-                .collect(),
                 reference: Some(s("foo/bar#people")),
                 ..Default::default()
             },
@@ -7698,7 +8111,7 @@ mod test {
                         text: ftd::markdown_line("Amit Upadhyay"),
                         line: true,
                         common: ftd::Common {
-                            reference: Some(s("@name@0,1")),
+                            reference: Some(s("foo/bar#name@0,1")),
                             ..Default::default()
                         },
                         ..Default::default()
@@ -7707,7 +8120,7 @@ mod test {
                         text: ftd::markdown_line("Amit is CEO of FifthTry."),
                         line: true,
                         common: ftd::Common {
-                            reference: Some(s("@body@0,1")),
+                            reference: Some(s("foo/bar#body@0,1")),
                             ..Default::default()
                         },
                         ..Default::default()
@@ -7716,11 +8129,6 @@ mod test {
                 ..Default::default()
             },
             common: ftd::Common {
-                locals: std::array::IntoIter::new([
-                    (s("body@0,1"), s("Amit is CEO of FifthTry.")),
-                    (s("name@0,1"), s("Amit Upadhyay")),
-                ])
-                .collect(),
                 reference: Some(s("foo/bar#people")),
                 ..Default::default()
             },
@@ -8392,7 +8800,7 @@ mod test {
                         text: ftd::markdown_line("\"ftd\""),
                         line: true,
                         common: ftd::Common {
-                            reference: Some(s("@name@0")),
+                            reference: Some(s("foo/bar#name@0")),
                             ..Default::default()
                         },
                         ..Default::default()
@@ -8401,7 +8809,7 @@ mod test {
                         text: ftd::markdown_line("name"),
                         line: true,
                         common: ftd::Common {
-                            reference: Some(s("@body@0")),
+                            reference: Some(s("foo/bar#body@0")),
                             ..Default::default()
                         },
                         ..Default::default()
@@ -8410,11 +8818,6 @@ mod test {
                 ..Default::default()
             },
             common: ftd::Common {
-                locals: std::array::IntoIter::new([
-                    (s("name@0"), s("\"ftd\"")),
-                    (s("body@0"), s("name")),
-                ])
-                .collect(),
                 reference: Some(s("foo/bar#test")),
                 ..Default::default()
             },
@@ -8428,7 +8831,7 @@ mod test {
                         text: ftd::markdown_line("\"0.1.18\""),
                         line: true,
                         common: ftd::Common {
-                            reference: Some(s("@name@1")),
+                            reference: Some(s("foo/bar#name@1")),
                             ..Default::default()
                         },
                         ..Default::default()
@@ -8437,7 +8840,7 @@ mod test {
                         text: ftd::markdown_line("version"),
                         line: true,
                         common: ftd::Common {
-                            reference: Some(s("@body@1")),
+                            reference: Some(s("foo/bar#body@1")),
                             ..Default::default()
                         },
                         ..Default::default()
@@ -8446,11 +8849,6 @@ mod test {
                 ..Default::default()
             },
             common: ftd::Common {
-                locals: std::array::IntoIter::new([
-                    (s("name@1"), s("\"0.1.18\"")),
-                    (s("body@1"), s("version")),
-                ])
-                .collect(),
                 reference: Some(s("foo/bar#test")),
                 ..Default::default()
             },
@@ -8464,7 +8862,7 @@ mod test {
                         text: ftd::markdown_line("["),
                         line: true,
                         common: ftd::Common {
-                            reference: Some(s("@name@2")),
+                            reference: Some(s("foo/bar#name@2")),
                             ..Default::default()
                         },
                         ..Default::default()
@@ -8473,7 +8871,7 @@ mod test {
                         text: ftd::markdown_line("authors"),
                         line: true,
                         common: ftd::Common {
-                            reference: Some(s("@body@2")),
+                            reference: Some(s("foo/bar#body@2")),
                             ..Default::default()
                         },
                         ..Default::default()
@@ -8482,11 +8880,6 @@ mod test {
                 ..Default::default()
             },
             common: ftd::Common {
-                locals: std::array::IntoIter::new([
-                    (s("name@2"), s("[")),
-                    (s("body@2"), s("authors")),
-                ])
-                .collect(),
                 reference: Some(s("foo/bar#test")),
                 ..Default::default()
             },
@@ -8500,7 +8893,7 @@ mod test {
                         text: ftd::markdown_line("\"2018\""),
                         line: true,
                         common: ftd::Common {
-                            reference: Some(s("@name@3")),
+                            reference: Some(s("foo/bar#name@3")),
                             ..Default::default()
                         },
                         ..Default::default()
@@ -8509,7 +8902,7 @@ mod test {
                         text: ftd::markdown_line("edition"),
                         line: true,
                         common: ftd::Common {
-                            reference: Some(s("@body@3")),
+                            reference: Some(s("foo/bar#body@3")),
                             ..Default::default()
                         },
                         ..Default::default()
@@ -8518,11 +8911,6 @@ mod test {
                 ..Default::default()
             },
             common: ftd::Common {
-                locals: std::array::IntoIter::new([
-                    (s("name@3"), s("\"2018\"")),
-                    (s("body@3"), s("edition")),
-                ])
-                .collect(),
                 reference: Some(s("foo/bar#test")),
                 ..Default::default()
             },
@@ -8536,7 +8924,7 @@ mod test {
                         text: ftd::markdown_line("\"ftd: FifthTry Document Format\""),
                         line: true,
                         common: ftd::Common {
-                            reference: Some(s("@name@4")),
+                            reference: Some(s("foo/bar#name@4")),
                             ..Default::default()
                         },
                         ..Default::default()
@@ -8545,7 +8933,7 @@ mod test {
                         text: ftd::markdown_line("description"),
                         line: true,
                         common: ftd::Common {
-                            reference: Some(s("@body@4")),
+                            reference: Some(s("foo/bar#body@4")),
                             ..Default::default()
                         },
                         ..Default::default()
@@ -8554,11 +8942,6 @@ mod test {
                 ..Default::default()
             },
             common: ftd::Common {
-                locals: std::array::IntoIter::new([
-                    (s("name@4"), s("\"ftd: FifthTry Document Format\"")),
-                    (s("body@4"), s("description")),
-                ])
-                .collect(),
                 reference: Some(s("foo/bar#test")),
                 ..Default::default()
             },
@@ -8572,7 +8955,7 @@ mod test {
                         text: ftd::markdown_line("\"MIT\""),
                         line: true,
                         common: ftd::Common {
-                            reference: Some(s("@name@5")),
+                            reference: Some(s("foo/bar#name@5")),
                             ..Default::default()
                         },
                         ..Default::default()
@@ -8581,7 +8964,7 @@ mod test {
                         text: ftd::markdown_line("license"),
                         line: true,
                         common: ftd::Common {
-                            reference: Some(s("@body@5")),
+                            reference: Some(s("foo/bar#body@5")),
                             ..Default::default()
                         },
                         ..Default::default()
@@ -8590,11 +8973,6 @@ mod test {
                 ..Default::default()
             },
             common: ftd::Common {
-                locals: std::array::IntoIter::new([
-                    (s("name@5"), s("\"MIT\"")),
-                    (s("body@5"), s("license")),
-                ])
-                .collect(),
                 reference: Some(s("foo/bar#test")),
                 ..Default::default()
             },
@@ -8608,7 +8986,7 @@ mod test {
                         text: ftd::markdown_line("\"https://github.com/FifthTry/ftd\""),
                         line: true,
                         common: ftd::Common {
-                            reference: Some(s("@name@6")),
+                            reference: Some(s("foo/bar#name@6")),
                             ..Default::default()
                         },
                         ..Default::default()
@@ -8617,7 +8995,7 @@ mod test {
                         text: ftd::markdown_line("repository"),
                         line: true,
                         common: ftd::Common {
-                            reference: Some(s("@body@6")),
+                            reference: Some(s("foo/bar#body@6")),
                             ..Default::default()
                         },
                         ..Default::default()
@@ -8626,11 +9004,6 @@ mod test {
                 ..Default::default()
             },
             common: ftd::Common {
-                locals: std::array::IntoIter::new([
-                    (s("name@6"), s("\"https://github.com/FifthTry/ftd\"")),
-                    (s("body@6"), s("repository")),
-                ])
-                .collect(),
                 reference: Some(s("foo/bar#test")),
                 ..Default::default()
             },
@@ -8644,7 +9017,7 @@ mod test {
                         text: ftd::markdown_line("\"https://ftd.dev\""),
                         line: true,
                         common: ftd::Common {
-                            reference: Some(s("@name@7")),
+                            reference: Some(s("foo/bar#name@7")),
                             ..Default::default()
                         },
                         ..Default::default()
@@ -8653,7 +9026,7 @@ mod test {
                         text: ftd::markdown_line("homepage"),
                         line: true,
                         common: ftd::Common {
-                            reference: Some(s("@body@7")),
+                            reference: Some(s("foo/bar#body@7")),
                             ..Default::default()
                         },
                         ..Default::default()
@@ -8662,17 +9035,12 @@ mod test {
                 ..Default::default()
             },
             common: ftd::Common {
-                locals: std::array::IntoIter::new([
-                    (s("name@7"), s("\"https://ftd.dev\"")),
-                    (s("body@7"), s("homepage")),
-                ])
-                .collect(),
                 reference: Some(s("foo/bar#test")),
                 ..Default::default()
             },
         }));
 
-        let mut bag = super::default_bag();
+        /*let mut bag = super::default_bag();
 
         bag.insert(
             "foo/bar#data".to_string(),
@@ -8973,31 +9341,37 @@ mod test {
                 },
                 conditions: vec![],
             }),
-        );
+        );*/
 
-        p!(
-            "
-            -- ftd.row foo:
-            caption name:
-            string body:
+        let (_g_bag, g_col) = ftd::p2::interpreter::interpret(
+            "foo/bar",
+            indoc::indoc!(
+                "
+                -- ftd.row foo:
+                caption name:
+                string body:
+    
+                --- ftd.text: $name
+    
+                --- ftd.text: $body
+    
+                -- record data:
+                string title:
+                string description:
+    
+                -- data list test:
+                $processor$: read_package_records_from_cargo_toml
+    
+                -- foo: $obj.title
+                $loop$: $test as $obj
+                body: $obj.description
+                "
+            ),
+            &ftd::p2::TestLibrary {},
+        )
+        .expect("found error");
 
-            --- ftd.text: $name
-
-            --- ftd.text: $body
-
-            -- record data:
-            string title:
-            string description:
-
-            -- data list test:
-            $processor$: read_package_records_from_cargo_toml
-
-            -- foo: $obj.title
-            $loop$: $test as $obj
-            body: $obj.description
-            ",
-            (bag, main),
-        );
+        pretty_assertions::assert_eq!(g_col, main);
     }
 
     #[test]
@@ -9011,7 +9385,7 @@ mod test {
                         text: ftd::markdown_line("ab title"),
                         line: true,
                         common: ftd::Common {
-                            reference: Some(s("@toc.title")),
+                            reference: Some(s("foo/bar#toc@0.title")),
                             link: Some(s("ab link")),
                             ..Default::default()
                         },
@@ -9024,20 +9398,12 @@ mod test {
                                 text: ftd::markdown_line("aa title"),
                                 line: true,
                                 common: ftd::Common {
-                                    reference: Some(s("@toc.title")),
+                                    reference: Some(s("foo/bar#toc@0,1.title")),
                                     link: Some(s("aa link")),
                                     ..Default::default()
                                 },
                                 ..Default::default()
                             })],
-                            ..Default::default()
-                        },
-                        common: ftd::Common {
-                            locals: std::array::IntoIter::new([(
-                                s("toc@0,1"),
-                                s("{\"link\":\"aa link\",\"title\":\"aa title\"}"),
-                            )])
-                            .collect(),
                             ..Default::default()
                         },
                         ..Default::default()
@@ -9049,20 +9415,12 @@ mod test {
                                 text: ftd::markdown_line("aaa title"),
                                 line: true,
                                 common: ftd::Common {
-                                    reference: Some(s("@toc.title")),
+                                    reference: Some(s("foo/bar#toc@0,2.title")),
                                     link: Some(s("aaa link")),
                                     ..Default::default()
                                 },
                                 ..Default::default()
                             })],
-                            ..Default::default()
-                        },
-                        common: ftd::Common {
-                            locals: std::array::IntoIter::new([(
-                                s("toc@0,2"),
-                                s("{\"link\":\"aaa link\",\"title\":\"aaa title\"}"),
-                            )])
-                            .collect(),
                             ..Default::default()
                         },
                         ..Default::default()
@@ -9072,11 +9430,6 @@ mod test {
             },
             common: ftd::Common {
                 reference: Some(s("foo/bar#toc")),
-                locals: std::array::IntoIter::new([(
-                    s("toc@0"),
-                    s("{\"link\":\"ab link\",\"title\":\"ab title\"}"),
-                )])
-                .collect(),
                 ..Default::default()
             },
             ..Default::default()
@@ -9089,7 +9442,7 @@ mod test {
                         text: ftd::markdown_line("ab title"),
                         line: true,
                         common: ftd::Common {
-                            reference: Some(s("@toc.title")),
+                            reference: Some(s("foo/bar#toc@1,0.title")),
                             link: Some(s("ab link")),
                             ..Default::default()
                         },
@@ -9102,20 +9455,12 @@ mod test {
                                 text: ftd::markdown_line("aa title"),
                                 line: true,
                                 common: ftd::Common {
-                                    reference: Some(s("@toc.title")),
+                                    reference: Some(s("foo/bar#toc@1,0,1.title")),
                                     link: Some(s("aa link")),
                                     ..Default::default()
                                 },
                                 ..Default::default()
                             })],
-                            ..Default::default()
-                        },
-                        common: ftd::Common {
-                            locals: std::array::IntoIter::new([(
-                                s("toc@1,0,1"),
-                                s("{\"link\":\"aa link\",\"title\":\"aa title\"}"),
-                            )])
-                            .collect(),
                             ..Default::default()
                         },
                         ..Default::default()
@@ -9127,20 +9472,12 @@ mod test {
                                 text: ftd::markdown_line("aaa title"),
                                 line: true,
                                 common: ftd::Common {
-                                    reference: Some(s("@toc.title")),
+                                    reference: Some(s("foo/bar#toc@1,0,2.title")),
                                     link: Some(s("aaa link")),
                                     ..Default::default()
                                 },
                                 ..Default::default()
                             })],
-                            ..Default::default()
-                        },
-                        common: ftd::Common {
-                            locals: std::array::IntoIter::new([(
-                                s("toc@1,0,2"),
-                                s("{\"link\":\"aaa link\",\"title\":\"aaa title\"}"),
-                            )])
-                            .collect(),
                             ..Default::default()
                         },
                         ..Default::default()
@@ -9150,11 +9487,6 @@ mod test {
             },
             common: ftd::Common {
                 reference: Some(s("foo/bar#toc")),
-                locals: std::array::IntoIter::new([(
-                    s("toc@1,0"),
-                    s("{\"link\":\"ab link\",\"title\":\"ab title\"}"),
-                )])
-                .collect(),
                 ..Default::default()
             },
             ..Default::default()
@@ -9571,7 +9903,7 @@ mod test {
         bag.insert(
             s("hello-world#foo"),
             ftd::p2::Thing::Component(ftd::Component {
-                root: s("ftd.row"),
+                root: s("ftd#row"),
                 full_name: s("hello-world#foo"),
                 instructions: vec![ftd::Instruction::ChildComponent {
                     child: ftd::ChildComponent {
@@ -10096,7 +10428,7 @@ mod test {
         bag.insert(
             s("foo/bar#foo"),
             ftd::p2::Thing::Component(ftd::Component {
-                root: s("ftd.row"),
+                root: s("ftd#row"),
                 full_name: s("foo/bar#foo"),
                 arguments: std::array::IntoIter::new([
                     (
@@ -10151,6 +10483,55 @@ mod test {
                 }],
                 kernel: false,
                 ..Default::default()
+            }),
+        );
+        bag.insert(
+            s("foo/bar#name@0"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("name"),
+                value: ftd::PropertyValue::Reference {
+                    name: s("foo/bar#default-name"),
+                    kind: ftd::p2::Kind::string().set_default(Some(s("$foo/bar#default-name"))),
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            }),
+        );
+        bag.insert(
+            s("foo/bar#name@1"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("name"),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::String {
+                        text: s("Amit Upadhyay"),
+                        source: ftd::TextSource::Header,
+                    },
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            }),
+        );
+        bag.insert(
+            s("foo/bar#text-size@0"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("text-size"),
+                value: ftd::PropertyValue::Reference {
+                    name: s("foo/bar#default-size"),
+                    kind: ftd::p2::Kind::integer().set_default(Some(s("$foo/bar#default-size"))),
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            }),
+        );
+        bag.insert(
+            s("foo/bar#text-size@1"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("text-size"),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Integer { value: 20 },
+                },
+                conditions: vec![],
+                flags: Default::default(),
             }),
         );
 
@@ -10567,7 +10948,7 @@ mod test {
                         line: true,
                         common: ftd::Common {
                             region: Some(ftd::Region::Title),
-                            reference: Some(s("@title@0")),
+                            reference: Some(s("foo/bar#title@0")),
                             ..Default::default()
                         },
                         ..Default::default()
@@ -10575,7 +10956,6 @@ mod test {
                     ..Default::default()
                 },
                 common: ftd::Common {
-                    locals: std::array::IntoIter::new([(s("title@0"), s("Heading 31"))]).collect(),
                     region: Some(ftd::Region::H3),
                     id: Some(s("heading-31")),
                     ..Default::default()
@@ -10593,7 +10973,7 @@ mod test {
                             line: true,
                             common: ftd::Common {
                                 region: Some(ftd::Region::Title),
-                                reference: Some(s("@title@1")),
+                                reference: Some(s("foo/bar#title@1")),
                                 ..Default::default()
                             },
                             ..Default::default()
@@ -10607,7 +10987,7 @@ mod test {
                                         line: true,
                                         common: ftd::Common {
                                             region: Some(ftd::Region::Title),
-                                            reference: Some(s("@title@2")),
+                                            reference: Some(s("foo/bar#title@2")),
                                             ..Default::default()
                                         },
                                         ..Default::default()
@@ -10621,7 +11001,7 @@ mod test {
                                                     line: true,
                                                     common: ftd::Common {
                                                         region: Some(ftd::Region::Title),
-                                                        reference: Some(s("@title@3")),
+                                                        reference: Some(s("foo/bar#title@3")),
                                                         ..Default::default()
                                                     },
                                                     ..Default::default()
@@ -10635,11 +11015,6 @@ mod test {
                                             ..Default::default()
                                         },
                                         common: ftd::Common {
-                                            locals: std::array::IntoIter::new([(
-                                                s("title@3"),
-                                                s("Heading 32"),
-                                            )])
-                                            .collect(),
                                             region: Some(ftd::Region::H3),
                                             id: Some(s("heading-32")),
                                             ..Default::default()
@@ -10649,11 +11024,6 @@ mod test {
                                 ..Default::default()
                             },
                             common: ftd::Common {
-                                locals: std::array::IntoIter::new([(
-                                    s("title@2"),
-                                    s("Heading 21"),
-                                )])
-                                .collect(),
                                 region: Some(ftd::Region::H2),
                                 id: Some(s("heading-21")),
                                 ..Default::default()
@@ -10666,7 +11036,7 @@ mod test {
                                     text: ftd::markdown_line("Heading 22"),
                                     line: true,
                                     common: ftd::Common {
-                                        reference: Some(s("@title@5")),
+                                        reference: Some(s("foo/bar#title@5")),
                                         region: Some(ftd::Region::Title),
                                         ..Default::default()
                                     },
@@ -10675,11 +11045,6 @@ mod test {
                                 ..Default::default()
                             },
                             common: ftd::Common {
-                                locals: std::array::IntoIter::new([(
-                                    s("title@5"),
-                                    s("Heading 22"),
-                                )])
-                                .collect(),
                                 region: Some(ftd::Region::H2),
                                 id: Some(s("heading-22")),
                                 ..Default::default()
@@ -10693,7 +11058,7 @@ mod test {
                                     line: true,
                                     common: ftd::Common {
                                         region: Some(ftd::Region::Title),
-                                        reference: Some(s("@title@6")),
+                                        reference: Some(s("foo/bar#title@6")),
                                         ..Default::default()
                                     },
                                     ..Default::default()
@@ -10701,11 +11066,6 @@ mod test {
                                 ..Default::default()
                             },
                             common: ftd::Common {
-                                locals: std::array::IntoIter::new([(
-                                    s("title@6"),
-                                    s("Heading 23"),
-                                )])
-                                .collect(),
                                 region: Some(ftd::Region::H2),
                                 id: Some(s("heading-23")),
                                 ..Default::default()
@@ -10715,7 +11075,6 @@ mod test {
                     ..Default::default()
                 },
                 common: ftd::Common {
-                    locals: std::array::IntoIter::new([(s("title@1"), s("Heading 11"))]).collect(),
                     region: Some(ftd::Region::H1),
                     id: Some(s("heading-11")),
                     ..Default::default()
@@ -10732,7 +11091,7 @@ mod test {
                             text: ftd::markdown_line("Heading 12"),
                             line: true,
                             common: ftd::Common {
-                                reference: Some(s("@title@7")),
+                                reference: Some(s("foo/bar#title@7")),
                                 region: Some(ftd::Region::Title),
                                 ..Default::default()
                             },
@@ -10745,7 +11104,7 @@ mod test {
                                     text: ftd::markdown_line("Heading 33"),
                                     line: true,
                                     common: ftd::Common {
-                                        reference: Some(s("@title@8")),
+                                        reference: Some(s("foo/bar#title@8")),
                                         region: Some(ftd::Region::Title),
                                         ..Default::default()
                                     },
@@ -10754,11 +11113,6 @@ mod test {
                                 ..Default::default()
                             },
                             common: ftd::Common {
-                                locals: std::array::IntoIter::new([(
-                                    s("title@8"),
-                                    s("Heading 33"),
-                                )])
-                                .collect(),
                                 region: Some(ftd::Region::H3),
                                 id: Some(s("heading-33")),
                                 ..Default::default()
@@ -10771,7 +11125,7 @@ mod test {
                                     text: ftd::markdown_line("Heading 24"),
                                     line: true,
                                     common: ftd::Common {
-                                        reference: Some(s("@title@9")),
+                                        reference: Some(s("foo/bar#title@9")),
                                         region: Some(ftd::Region::Title),
                                         ..Default::default()
                                     },
@@ -10780,11 +11134,6 @@ mod test {
                                 ..Default::default()
                             },
                             common: ftd::Common {
-                                locals: std::array::IntoIter::new([(
-                                    s("title@9"),
-                                    s("Heading 24"),
-                                )])
-                                .collect(),
                                 region: Some(ftd::Region::H2),
                                 id: Some(s("heading-24")),
                                 ..Default::default()
@@ -10794,7 +11143,6 @@ mod test {
                     ..Default::default()
                 },
                 common: ftd::Common {
-                    locals: std::array::IntoIter::new([(s("title@7"), s("Heading 12"))]).collect(),
                     region: Some(ftd::Region::H1),
                     id: Some(s("heading-12")),
                     ..Default::default()
@@ -10978,7 +11326,7 @@ mod test {
         bag.insert(
             s("foo/bar#foo"),
             ftd::p2::Thing::Component(ftd::Component {
-                root: "ftd.text".to_string(),
+                root: "ftd#text".to_string(),
                 full_name: "foo/bar#foo".to_string(),
                 arguments: std::array::IntoIter::new([
                     (s("name"), ftd::p2::Kind::caption()),
@@ -11009,12 +11357,8 @@ mod test {
                     action: ftd::p2::Action {
                         action: ftd::p2::ActionKind::Toggle,
                         target: ftd::PropertyValue::Variable {
-                            name: s("@open"),
-                            kind: ftd::p2::Kind::String {
-                                caption: false,
-                                body: false,
-                                default: None,
-                            },
+                            name: s("open"),
+                            kind: ftd::p2::Kind::boolean().set_default(Some(s("true"))),
                         },
                         parameters: Default::default(),
                     },
@@ -11042,6 +11386,31 @@ mod test {
                 .collect()],
                 line_number: 1,
                 ..Default::default()
+            }),
+        );
+        bag.insert(
+            s("foo/bar#name@0"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("name"),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::String {
+                        text: s("Hello"),
+                        source: ftd::TextSource::Caption,
+                    },
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            }),
+        );
+        bag.insert(
+            s("foo/bar#open@0"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("open"),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Boolean { value: true },
+                },
+                conditions: vec![],
+                flags: Default::default(),
             }),
         );
 
@@ -11314,7 +11683,7 @@ mod test {
                                                         name: s("onclick"),
                                                         action: ftd::Action {
                                                             action: s("toggle"),
-                                                            target: s("@open@0"),
+                                                            target: s("foo/bar#open@0"),
                                                             parameters: Default::default(),
                                                         },
                                                     }],
@@ -11343,13 +11712,8 @@ mod test {
                                         ..Default::default()
                                     },
                                     common: ftd::Common {
-                                        locals: std::array::IntoIter::new([(
-                                            s("open-bar@0,0,1"),
-                                            s("true"),
-                                        )])
-                                        .collect(),
                                         condition: Some(ftd::Condition {
-                                            variable: s("@open@0"),
+                                            variable: s("foo/bar#open@0"),
                                             value: s("true"),
                                         }),
                                         ..Default::default()
@@ -11365,10 +11729,7 @@ mod test {
                     })],
                     ..Default::default()
                 },
-                common: ftd::Common {
-                    locals: std::array::IntoIter::new([(s("open@0"), s("true"))]).collect(),
-                    ..Default::default()
-                },
+                ..Default::default()
             }));
 
         let (_g_bag, g_col) = ftd::p2::interpreter::interpret(
@@ -12177,16 +12538,28 @@ mod test {
                         ftd::Element::Markup(ftd::Markups {
                             text: ftd::markdown_line("Arpita"),
                             line: true,
+                            common: ftd::Common {
+                                reference: Some(s("foo/bar#$loop$@0,0")),
+                                ..Default::default()
+                            },
                             ..Default::default()
                         }),
                         ftd::Element::Markup(ftd::Markups {
                             text: ftd::markdown_line("Ayushi"),
                             line: true,
+                            common: ftd::Common {
+                                reference: Some(s("foo/bar#$loop$@0,1")),
+                                ..Default::default()
+                            },
                             ..Default::default()
                         }),
                         ftd::Element::Markup(ftd::Markups {
                             text: ftd::markdown_line("AmitU"),
                             line: true,
+                            common: ftd::Common {
+                                reference: Some(s("foo/bar#$loop$@0,2")),
+                                ..Default::default()
+                            },
                             ..Default::default()
                         }),
                     ],
@@ -12243,11 +12616,11 @@ mod test {
                                             name: s("onclick"),
                                             action: ftd::Action {
                                                 action: s("toggle"),
-                                                target: s("@visible@0,0,0"),
+                                                target: s("foo/bar#visible@0,0,0"),
                                                 ..Default::default()
                                             },
                                         }],
-                                        reference: Some(s("@name@0,0,0")),
+                                        reference: Some(s("foo/bar#name@0,0,0")),
                                         ..Default::default()
                                     },
                                     ..Default::default()
@@ -12256,7 +12629,7 @@ mod test {
                                     spacing: None,
                                     common: ftd::Common {
                                         condition: Some(ftd::Condition {
-                                            variable: s("@visible@0,0,0"),
+                                            variable: s("foo/bar#visible@0,0,0"),
                                             value: s("true"),
                                         }),
                                         data_id: Some(s("some-child")),
@@ -12269,14 +12642,7 @@ mod test {
                             open: (None, Some(s("some-child"))),
                             ..Default::default()
                         },
-                        common: ftd::Common {
-                            locals: std::array::IntoIter::new([
-                                (s("name@0,0,0"), s("Water")),
-                                (s("visible@0,0,0"), s("true")),
-                            ])
-                            .collect(),
-                            ..Default::default()
-                        },
+                        ..Default::default()
                     }),
                     ftd::Element::Column(ftd::Column {
                         spacing: None,
@@ -12290,11 +12656,11 @@ mod test {
                                             name: s("onclick"),
                                             action: ftd::Action {
                                                 action: s("toggle"),
-                                                target: s("@visible@0,0,1"),
+                                                target: s("foo/bar#visible@0,0,1"),
                                                 ..Default::default()
                                             },
                                         }],
-                                        reference: Some(s("@name@0,0,1")),
+                                        reference: Some(s("foo/bar#name@0,0,1")),
                                         ..Default::default()
                                     },
                                     ..Default::default()
@@ -12303,7 +12669,7 @@ mod test {
                                     spacing: None,
                                     common: ftd::Common {
                                         condition: Some(ftd::Condition {
-                                            variable: s("@visible@0,0,1"),
+                                            variable: s("foo/bar#visible@0,0,1"),
                                             value: s("true"),
                                         }),
                                         data_id: Some(s("some-child")),
@@ -12330,11 +12696,15 @@ mod test {
                                                                 name: s("onclick"),
                                                                 action: ftd::Action {
                                                                     action: s("toggle"),
-                                                                    target: s("@visible@0,0,1,0"),
+                                                                    target: s(
+                                                                        "foo/bar#visible@0,0,1,0",
+                                                                    ),
                                                                     ..Default::default()
                                                                 },
                                                             }],
-                                                            reference: Some(s("@name@0,0,1,0")),
+                                                            reference: Some(s(
+                                                                "foo/bar#name@0,0,1,0",
+                                                            )),
                                                             ..Default::default()
                                                         },
                                                         ..Default::default()
@@ -12343,7 +12713,9 @@ mod test {
                                                         spacing: None,
                                                         common: ftd::Common {
                                                             condition: Some(ftd::Condition {
-                                                                variable: s("@visible@0,0,1,0"),
+                                                                variable: s(
+                                                                    "foo/bar#visible@0,0,1,0",
+                                                                ),
                                                                 value: s("true"),
                                                             }),
                                                             data_id: Some(s("some-child")),
@@ -12360,14 +12732,7 @@ mod test {
                                                 open: (None, Some(s("some-child"))),
                                                 ..Default::default()
                                             },
-                                            common: ftd::Common {
-                                                locals: std::array::IntoIter::new([
-                                                    (s("name@0,0,1,0"), s("Mango Juice")),
-                                                    (s("visible@0,0,1,0"), s("true")),
-                                                ])
-                                                .collect(),
-                                                ..Default::default()
-                                            },
+                                            ..Default::default()
                                         })],
                                         ..Default::default()
                                     },
@@ -12382,14 +12747,7 @@ mod test {
                             open: (None, Some(s("some-child"))),
                             ..Default::default()
                         },
-                        common: ftd::Common {
-                            locals: std::array::IntoIter::new([
-                                (s("name@0,0,1"), s("Juice")),
-                                (s("visible@0,0,1"), s("true")),
-                            ])
-                            .collect(),
-                            ..Default::default()
-                        },
+                        ..Default::default()
                     }),
                 ],
                 ..Default::default()
@@ -12419,11 +12777,11 @@ mod test {
                                             name: s("onclick"),
                                             action: ftd::Action {
                                                 action: s("toggle"),
-                                                target: s("@visible@0,0"),
+                                                target: s("foo/bar#visible@0,0"),
                                                 ..Default::default()
                                             },
                                         }],
-                                        reference: Some(s("@name@0,0")),
+                                        reference: Some(s("foo/bar#name@0,0")),
                                         ..Default::default()
                                     },
                                     ..Default::default()
@@ -12432,7 +12790,7 @@ mod test {
                                     spacing: None,
                                     common: ftd::Common {
                                         condition: Some(ftd::Condition {
-                                            variable: s("@visible@0,0"),
+                                            variable: s("foo/bar#visible@0,0"),
                                             value: s("true"),
                                         }),
                                         data_id: Some(s("some-child")),
@@ -12451,11 +12809,6 @@ mod test {
                             ..Default::default()
                         },
                         common: ftd::Common {
-                            locals: std::array::IntoIter::new([
-                                (s("name@0,0"), s("Beverage")),
-                                (s("visible@0,0"), s("true")),
-                            ])
-                            .collect(),
                             data_id: Some(s("beverage")),
                             id: Some(s("beverage")),
                             ..Default::default()
@@ -12529,7 +12882,7 @@ mod test {
                             text: ftd::markdown_line("hello"),
                             line: true,
                             common: ftd::Common {
-                                reference: Some(s("@hello2@0")),
+                                reference: Some(s("foo/bar#hello2@0")),
                                 ..Default::default()
                             },
                             ..Default::default()
@@ -12551,10 +12904,7 @@ mod test {
                     ],
                     ..Default::default()
                 },
-                common: ftd::Common {
-                    locals: std::array::IntoIter::new([(s("hello2@0"), s("hello"))]).collect(),
-                    ..Default::default()
-                },
+                ..Default::default()
             }));
 
         let (_g_bag, g_col) = ftd::p2::interpreter::interpret(
@@ -13060,19 +13410,11 @@ mod test {
                                     text: ftd::markdown_line("commit message 1"),
                                     line: true,
                                     common: ftd::Common {
-                                        reference: Some(s("@commit.message")),
+                                        reference: Some(s("foo/bar#commit@0,0.message")),
                                         ..Default::default()
                                     },
                                     ..Default::default()
                                 })],
-                                ..Default::default()
-                            },
-                            common: ftd::Common {
-                                locals: std::array::IntoIter::new([(
-                                    s("commit@0,0"),
-                                    s("{\"message\":\"commit message 1\"}"),
-                                )])
-                                .collect(),
                                 ..Default::default()
                             },
                             ..Default::default()
@@ -13084,19 +13426,11 @@ mod test {
                                     text: ftd::markdown_line("commit message 2"),
                                     line: true,
                                     common: ftd::Common {
-                                        reference: Some(s("@commit.message")),
+                                        reference: Some(s("foo/bar#commit@0,1.message")),
                                         ..Default::default()
                                     },
                                     ..Default::default()
                                 })],
-                                ..Default::default()
-                            },
-                            common: ftd::Common {
-                                locals: std::array::IntoIter::new([(
-                                    s("commit@0,1"),
-                                    s("{\"message\":\"commit message 2\"}"),
-                                )])
-                                .collect(),
                                 ..Default::default()
                             },
                             ..Default::default()
@@ -13108,19 +13442,11 @@ mod test {
                                     text: ftd::markdown_line("file filename 1"),
                                     line: true,
                                     common: ftd::Common {
-                                        reference: Some(s("@file.filename")),
+                                        reference: Some(s("foo/bar#file@0,2.filename")),
                                         ..Default::default()
                                     },
                                     ..Default::default()
                                 })],
-                                ..Default::default()
-                            },
-                            common: ftd::Common {
-                                locals: std::array::IntoIter::new([(
-                                    s("file@0,2"),
-                                    s("{\"filename\":\"file filename 1\"}"),
-                                )])
-                                .collect(),
                                 ..Default::default()
                             },
                             ..Default::default()
@@ -13132,28 +13458,16 @@ mod test {
                                     text: ftd::markdown_line("file filename 2"),
                                     line: true,
                                     common: ftd::Common {
-                                        reference: Some(s("@file.filename")),
+                                        reference: Some(s("foo/bar#file@0,3.filename")),
                                         ..Default::default()
                                     },
                                     ..Default::default()
                                 })],
                                 ..Default::default()
                             },
-                            common: ftd::Common {
-                                locals: std::array::IntoIter::new([(
-                                    s("file@0,3"),
-                                    s("{\"filename\":\"file filename 2\"}"),
-                                )])
-                                .collect(),
-                                ..Default::default()
-                            },
                             ..Default::default()
                         }),
                     ],
-                    ..Default::default()
-                },
-                common: ftd::Common {
-                    locals: std::array::IntoIter::new([(s("changes@0"), s("{}"))]).collect(),
                     ..Default::default()
                 },
                 ..Default::default()
@@ -13579,14 +13893,13 @@ mod test {
                 text: ftd::markdown_line("Hello World"),
                 line: true,
                 common: ftd::Common {
-                    locals: std::array::IntoIter::new([(s("MOUSE-IN@0"), s("false"))]).collect(),
                     conditional_attribute: std::array::IntoIter::new([(
                         s("color"),
                         ftd::ConditionalAttribute {
                             attribute_type: ftd::AttributeType::Style,
                             conditions_with_value: vec![(
                                 ftd::Condition {
-                                    variable: s("@MOUSE-IN@0"),
+                                    variable: s("foo/bar#MOUSE-IN@0"),
                                     value: s("true"),
                                 },
                                 ftd::ConditionalValue {
@@ -13603,7 +13916,7 @@ mod test {
                             name: s("onmouseenter"),
                             action: ftd::Action {
                                 action: s("set-value"),
-                                target: s("@MOUSE-IN@0"),
+                                target: s("foo/bar#MOUSE-IN@0"),
                                 parameters: std::array::IntoIter::new([(
                                     s("value"),
                                     vec![
@@ -13624,7 +13937,7 @@ mod test {
                             name: s("onmouseleave"),
                             action: ftd::Action {
                                 action: s("set-value"),
-                                target: s("@MOUSE-IN@0"),
+                                target: s("foo/bar#MOUSE-IN@0"),
                                 parameters: std::array::IntoIter::new([(
                                     s("value"),
                                     vec![
@@ -13788,7 +14101,7 @@ mod test {
                                 conditions_with_value: vec![
                                     (
                                         ftd::Condition {
-                                            variable: s("@b@0"),
+                                            variable: s("foo/bar#b@0"),
                                             value: s("true"),
                                         },
                                         ftd::ConditionalValue {
@@ -13798,7 +14111,7 @@ mod test {
                                     ),
                                     (
                                         ftd::Condition {
-                                            variable: s("@a@0"),
+                                            variable: s("foo/bar#a@0"),
                                             value: s("30"),
                                         },
                                         ftd::ConditionalValue {
@@ -13811,7 +14124,7 @@ mod test {
                             },
                         )])
                         .collect(),
-                        reference: Some(s("@a@0")),
+                        reference: Some(s("foo/bar#a@0")),
                         ..Default::default()
                     },
                     ..Default::default()
@@ -13819,14 +14132,12 @@ mod test {
                 ..Default::default()
             },
             common: ftd::Common {
-                locals: std::array::IntoIter::new([(s("a@0"), s("20")), (s("b@0"), s("false"))])
-                    .collect(),
                 events: vec![
                     ftd::Event {
                         name: s("onclick"),
                         action: ftd::Action {
                             action: s("toggle"),
-                            target: s("@b@0"),
+                            target: s("foo/bar#b@0"),
                             parameters: Default::default(),
                         },
                     },
@@ -13834,7 +14145,7 @@ mod test {
                         name: s("onclick"),
                         action: ftd::Action {
                             action: s("increment"),
-                            target: s("@a@0"),
+                            target: s("foo/bar#a@0"),
                             parameters: std::array::IntoIter::new([(
                                 s("by"),
                                 vec![ftd::event::ParameterData {
@@ -14129,7 +14440,7 @@ mod test {
                             attribute_type: ftd::AttributeType::Style,
                             conditions_with_value: vec![(
                                 ftd::Condition {
-                                    variable: s("@t@0"),
+                                    variable: s("foo/bar#t@0"),
                                     value: s("true"),
                                 },
                                 ftd::ConditionalValue {
@@ -14140,11 +14451,6 @@ mod test {
                             default: None,
                         },
                     )])
-                    .collect(),
-                    locals: std::array::IntoIter::new([
-                        (s("f@0"), s("hello")),
-                        (s("t@0"), s("true")),
-                    ])
                     .collect(),
                     reference: Some(s("foo/bar#bar")),
                     color: Some(ftd::Color {
@@ -14168,7 +14474,7 @@ mod test {
                             text: ftd::markdown_line("hello"),
                             line: true,
                             common: ftd::Common {
-                                reference: Some(s("@ff@1")),
+                                reference: Some(s("foo/bar#ff@1")),
                                 ..Default::default()
                             },
                             ..Default::default()
@@ -14176,7 +14482,7 @@ mod test {
                         ftd::Element::Integer(ftd::Text {
                             text: ftd::markdown_line("20"),
                             common: ftd::Common {
-                                reference: Some(s("@i@1")),
+                                reference: Some(s("foo/bar#i@1")),
                                 ..Default::default()
                             },
                             ..Default::default()
@@ -14184,14 +14490,7 @@ mod test {
                     ],
                     ..Default::default()
                 },
-                common: ftd::Common {
-                    locals: std::array::IntoIter::new([
-                        (s("ff@1"), s("hello")),
-                        (s("i@1"), s("20")),
-                    ])
-                    .collect(),
-                    ..Default::default()
-                },
+                ..Default::default()
             }));
 
         let (_g_bag, g_col) = ftd::p2::interpreter::interpret(
@@ -14530,14 +14829,6 @@ mod test {
                     })],
                     ..Default::default()
                 },
-                common: ftd::Common {
-                    locals: std::array::IntoIter::new([(
-                        s("o@0"),
-                        s("{\"a\":\"Madhav\",\"b\":\"bb\"}"),
-                    )])
-                    .collect(),
-                    ..Default::default()
-                },
                 ..Default::default()
             }));
 
@@ -14559,7 +14850,7 @@ mod test {
         bag.insert(
             s("foo/bar#foo"),
             ftd::p2::Thing::Component(ftd::Component {
-                root: s("ftd.column"),
+                root: s("ftd#column"),
                 full_name: s("foo/bar#foo"),
                 arguments: std::array::IntoIter::new([(s("o"), ftd::p2::Kind::object())]).collect(),
                 instructions: vec![ftd::Instruction::ChildComponent {
@@ -14618,6 +14909,18 @@ mod test {
                     },
                 },
                 conditions: vec![],
+            }),
+        );
+        bag.insert(
+            s("foo/bar#o@0"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("o"),
+                value: ftd::PropertyValue::Reference {
+                    name: s("foo/bar#obj"),
+                    kind: ftd::p2::Kind::object(),
+                },
+                conditions: vec![],
+                flags: Default::default(),
             }),
         );
 
@@ -15067,6 +15370,112 @@ mod test {
             }),
         );
 
+        bag.insert(
+            s("foo/bar#$loop$@2"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("$loop$"),
+                value: ftd::PropertyValue::Reference {
+                    name: s("foo/bar#foo"),
+                    kind: ftd::p2::Kind::caption(),
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            }),
+        );
+        bag.insert(
+            s("foo/bar#$loop$@3"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("$loop$"),
+                value: ftd::PropertyValue::Reference {
+                    name: s("foo/bar#bar"),
+                    kind: ftd::p2::Kind::caption(),
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            }),
+        );
+        bag.insert(
+            s("foo/bar#$loop$@4"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("$loop$"),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::String {
+                        text: s("Ayushi"),
+                        source: ftd::TextSource::Caption,
+                    },
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            }),
+        );
+        bag.insert(
+            s("foo/bar#$loop$@5"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("$loop$"),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::String {
+                        text: s("$loop$"),
+                        source: ftd::TextSource::Header,
+                    },
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            }),
+        );
+
+        bag.insert(
+            s("foo/bar#$loop$@6"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("$loop$"),
+                value: ftd::PropertyValue::Reference {
+                    name: s("foo/bar#foo"),
+                    kind: ftd::p2::Kind::caption(),
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            }),
+        );
+        bag.insert(
+            s("foo/bar#$loop$@7"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("$loop$"),
+                value: ftd::PropertyValue::Reference {
+                    name: s("foo/bar#bar"),
+                    kind: ftd::p2::Kind::caption(),
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            }),
+        );
+        bag.insert(
+            s("foo/bar#$loop$@8"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("$loop$"),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::String {
+                        text: s("Ayushi"),
+                        source: ftd::TextSource::Caption,
+                    },
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            }),
+        );
+        bag.insert(
+            s("foo/bar#$loop$@9"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("$loop$"),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::String {
+                        text: s("$loop$"),
+                        source: ftd::TextSource::Header,
+                    },
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            }),
+        );
+
         let (g_bag, g_col) = crate::p2::interpreter::interpret(
             "foo/bar",
             indoc::indoc!(
@@ -15154,7 +15563,7 @@ mod test {
         bag.insert(
             s("foo/bar#bar"),
             ftd::p2::Thing::Component(ftd::Component {
-                root: s("ftd.column"),
+                root: s("ftd#column"),
                 full_name: s("foo/bar#bar"),
                 arguments: std::array::IntoIter::new([
                     (
@@ -15294,7 +15703,7 @@ mod test {
         bag.insert(
             s("foo/bar#bar1"),
             ftd::p2::Thing::Component(ftd::Component {
-                root: s("ftd.column"),
+                root: s("ftd#column"),
                 full_name: s("foo/bar#bar1"),
                 arguments: Default::default(),
                 locals: Default::default(),
