@@ -1049,9 +1049,7 @@ impl<'a> TDoc<'a> {
                             name,
                             value: ftd::PropertyValue::Value { value: val.clone() },
                             conditions,
-                            flags: ftd::variable::VariableFlags {
-                                always_include: None,
-                            },
+                            flags: ftd::VariableFlags::default(),
                         })
                     } else if let Some(ftd::PropertyValue::Reference { name, .. }) = fields.get(v) {
                         get_initial_thing(doc, line_number, name)?.0
