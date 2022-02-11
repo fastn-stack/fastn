@@ -15897,7 +15897,7 @@ mod test {
                                     default: Some(ftd::PropertyValue::Variable {
                                         name: s("bio"),
                                         kind: ftd::p2::Kind::caption_or_body()
-                                            .set_default(Some(s("@subtitle"))),
+                                            .set_default(Some(s("$subtitle"))),
                                     }),
                                     conditions: vec![],
                                     nested_properties: Default::default(),
