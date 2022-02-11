@@ -15,7 +15,6 @@ pub struct Node {
     pub children_style: ftd::Map,
     pub text: Option<String>,
     pub null: bool,
-    pub locals: ftd::Map,
 }
 
 impl Node {
@@ -279,7 +278,6 @@ impl ftd::Element {
                 children_style: Default::default(),
                 text: None,
                 null: true,
-                locals: Default::default(),
             },
         }
     }
@@ -306,7 +304,6 @@ impl Node {
             classes: common.add_class(),
             null: common.is_dummy,
             events: common.events.clone(),
-            locals: common.locals.clone(),
         }
     }
 
@@ -358,7 +355,6 @@ impl Node {
             external_children_container,
             null: common.is_dummy,
             events: common.events.clone(),
-            locals: common.locals.clone(),
         }
     }
 }
@@ -847,7 +843,6 @@ impl ftd::Image {
                 children_style: Default::default(),
                 text: None,
                 null: false,
-                locals: Default::default(),
             };
             img.style.insert(s("width"), s("100%"));
             img.attrs.insert(s("src"), escape(self.src.as_str()));

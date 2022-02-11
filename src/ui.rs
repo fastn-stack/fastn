@@ -1047,87 +1047,6 @@ impl Element {
         }
     }
 
-    pub fn get_locals(children: &[ftd::Element]) -> ftd::Map {
-        let mut d: ftd::Map = Default::default();
-        for child in children {
-            let locals = match child {
-                ftd::Element::Row(ftd::Row {
-                    common: ftd::Common { locals, .. },
-                    container,
-                    ..
-                })
-                | ftd::Element::Column(ftd::Column {
-                    common: ftd::Common { locals, .. },
-                    container,
-                    ..
-                })
-                | ftd::Element::Scene(ftd::Scene {
-                    common: ftd::Common { locals, .. },
-                    container,
-                    ..
-                })
-                | ftd::Element::Grid(ftd::Grid {
-                    common: ftd::Common { locals, .. },
-                    container,
-                    ..
-                }) => {
-                    let mut all_locals = ftd::Element::get_locals(&container.children);
-                    for (k, v) in locals {
-                        all_locals.insert(k.to_string(), v.to_string());
-                    }
-                    if let Some((_, _, ref c)) = container.external_children {
-                        for (k, v) in ftd::Element::get_locals(c) {
-                            all_locals.insert(k.to_string(), v.to_string());
-                        }
-                    }
-                    all_locals
-                }
-                ftd::Element::Markup(ftd::Markups {
-                    common, children, ..
-                }) => {
-                    let mut local = markup_get_locals(children);
-                    local.extend(common.locals.clone());
-                    local
-                }
-                ftd::Element::Decimal(ftd::Text { common, .. })
-                | ftd::Element::Text(ftd::Text { common, .. })
-                | ftd::Element::TextBlock(ftd::TextBlock { common, .. })
-                | ftd::Element::Code(ftd::Code { common, .. })
-                | ftd::Element::Image(ftd::Image { common, .. })
-                | ftd::Element::IFrame(ftd::IFrame { common, .. })
-                | ftd::Element::Input(ftd::Input { common, .. })
-                | ftd::Element::Integer(ftd::Text { common, .. })
-                | ftd::Element::Boolean(ftd::Text { common, .. }) => common.locals.clone(),
-                ftd::Element::Null => Default::default(),
-            };
-
-            for (k, v) in locals {
-                d.insert(k.to_string(), v.to_string());
-            }
-        }
-        return d;
-
-        fn markup_get_locals(children: &[ftd::Markup]) -> ftd::Map {
-            let mut all_locals: ftd::Map = Default::default();
-            for child in children {
-                let locals = match child.itext {
-                    IText::Text(ref t)
-                    | IText::Integer(ref t)
-                    | IText::Boolean(ref t)
-                    | IText::Decimal(ref t) => t.common.locals.clone(),
-                    IText::TextBlock(ref t) => t.common.locals.clone(),
-                    IText::Markup(ref t) => {
-                        let mut locals = markup_get_locals(&t.children);
-                        locals.extend(t.common.locals.clone());
-                        locals
-                    }
-                };
-                all_locals.extend(locals);
-            }
-            all_locals
-        }
-    }
-
     pub fn is_open_container(&self, is_container_children_empty: bool) -> (bool, Option<String>) {
         match self {
             ftd::Element::Column(e) => e.container.is_open(is_container_children_empty),
@@ -1218,27 +1137,6 @@ impl Element {
             ftd::Element::Null => return,
         }
         .is_not_visible = is_not_visible;
-    }
-
-    pub fn set_locals(&mut self, locals: ftd::Map) {
-        match self {
-            ftd::Element::Column(ftd::Column { common, .. })
-            | ftd::Element::Row(ftd::Row { common, .. })
-            | ftd::Element::Text(ftd::Text { common, .. })
-            | ftd::Element::TextBlock(ftd::TextBlock { common, .. })
-            | ftd::Element::Code(ftd::Code { common, .. })
-            | ftd::Element::Image(ftd::Image { common, .. })
-            | ftd::Element::IFrame(ftd::IFrame { common, .. })
-            | ftd::Element::Markup(ftd::Markups { common, .. })
-            | ftd::Element::Input(ftd::Input { common, .. })
-            | ftd::Element::Integer(ftd::Text { common, .. })
-            | ftd::Element::Boolean(ftd::Text { common, .. })
-            | ftd::Element::Decimal(ftd::Text { common, .. })
-            | ftd::Element::Scene(ftd::Scene { common, .. })
-            | ftd::Element::Grid(ftd::Grid { common, .. }) => common,
-            ftd::Element::Null => return,
-        }
-        .locals = locals;
     }
 
     pub fn set_events(&mut self, events: &mut Vec<ftd::Event>) {
@@ -1763,7 +1661,6 @@ pub struct ConditionalValue {
 #[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
 pub struct Common {
     pub conditional_attribute: std::collections::BTreeMap<String, ConditionalAttribute>,
-    pub locals: ftd::Map,
     pub condition: Option<ftd::Condition>,
     pub is_not_visible: bool,
     pub is_dummy: bool,
