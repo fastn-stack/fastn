@@ -30,7 +30,6 @@ $processor$: toc
   - Update `fpm`: /how-to/update/
   - Get started with Github pages: /how-to/get-started-github-pages/
   - Get started with Vercel: /how-to/get-started-vercel/
-  - Enable Translations: /translation/
 - `fpm` Usage: /usage/
   - `fpm build`: /build/
   - `fpm sync`: /sync/
