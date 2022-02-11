@@ -14020,10 +14020,6 @@ mod test {
                 text: ftd::markdown_line("hello"),
                 line: true,
                 size: Some(50),
-                common: ftd::Common {
-                    locals: std::array::IntoIter::new([(s("size@0"), s("50"))]).collect(),
-                    ..Default::default()
-                },
                 ..Default::default()
             }));
 
@@ -14032,10 +14028,6 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("hello"),
                 line: true,
-                common: ftd::Common {
-                    locals: std::array::IntoIter::new([(s("size@1"), s(""))]).collect(),
-                    ..Default::default()
-                },
                 ..Default::default()
             }));
 
