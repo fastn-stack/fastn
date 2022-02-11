@@ -781,7 +781,7 @@ impl<'a> TDoc<'a> {
         return Ok(if let Some(l) = name.strip_prefix('$') {
             let d = ftd::p2::utils::get_doc_name_and_remaining(l)?.0;
             if arguments.contains_key(d.as_str()) || get_special_variable().contains(&d.as_str()) {
-                return Ok(format!("@{}", l));
+                return Ok(format!("${}", l));
             }
             let s = self.resolve_name(line_number, l)?;
             format!("${}", s)

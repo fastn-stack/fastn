@@ -535,7 +535,7 @@ pub fn complete_reference(reference: &Option<String>) -> Option<String> {
             if name.eq("$loop$") {
                 return None;
             } else if name.eq("MOUSE-IN") {
-                reference = Some("@MOUSE-IN".to_string());
+                reference = Some("$MOUSE-IN".to_string());
             }
         }
     }

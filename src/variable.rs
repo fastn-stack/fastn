@@ -57,8 +57,6 @@ impl PropertyValue {
     ) -> ftd::p1::Result<ftd::PropertyValue> {
         let property_type = if let Some(arg) = value.strip_prefix('$') {
             PropertyType::Variable(arg.to_string())
-        } else if let Some(arg) = value.strip_prefix('@') {
-            PropertyType::LocalVariable(arg.to_string())
         } else if let Some(ftd::p2::Kind::UI { .. }) = expected_kind {
             if !value.contains(':') {
                 return ftd::e2(
@@ -82,7 +80,6 @@ impl PropertyValue {
 
         return Ok(match property_type {
             PropertyType::Variable(ref string)
-            | PropertyType::LocalVariable(ref string)
             | PropertyType::Component {
                 name: ref string, ..
             } => {
@@ -110,7 +107,7 @@ impl PropertyValue {
                 };
 
                 let found_kind = get_kind(line_number, &kind, part2, doc, &expected_kind)?;
-                if is_doc && !matches!(property_type, PropertyType::LocalVariable(_)) {
+                if is_doc {
                     PropertyValue::Reference {
                         name: doc
                             .resolve_name(line_number, string.as_str())
@@ -188,7 +185,6 @@ impl PropertyValue {
         enum PropertyType {
             Value(String),
             Variable(String),
-            LocalVariable(String),
             Component { name: String },
         }
 
@@ -197,7 +193,6 @@ impl PropertyValue {
                 match self {
                     PropertyType::Value(s)
                     | PropertyType::Variable(s)
-                    | PropertyType::LocalVariable(s)
                     | PropertyType::Component { name: s, .. } => s.to_string(),
                 }
             }

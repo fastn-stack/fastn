@@ -15807,7 +15807,7 @@ mod test {
                     ),
                     (
                         s("bio"),
-                        ftd::p2::Kind::string().set_default(Some(s("@subtitle"))),
+                        ftd::p2::Kind::string().set_default(Some(s("$subtitle"))),
                     ),
                     (
                         s("subtitle"),
