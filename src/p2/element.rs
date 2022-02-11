@@ -593,7 +593,8 @@ pub fn image_from_properties(
     is_child: bool,
     events: &[ftd::p2::Event],
 ) -> ftd::p1::Result<ftd::Image> {
-    let (src, reference) = ftd::p2::utils::string_and_ref(0, "src", properties, doc)?;
+    let (src, _, reference) =
+        ftd::p2::utils::string_and_source_and_ref(0, "src", properties, doc, condition)?;
     let properties = &ftd::component::resolve_properties(0, properties, doc)?;
     Ok(ftd::Image {
         src,

@@ -4248,7 +4248,7 @@ mod test {
             text: ftd::markup_line("What kind of documentation?"),
             common: ftd::Common {
                 position: Some(ftd::Position::Center),
-                reference: Some(s("@title@0")),
+                reference: Some(s("foo/bar#title@0")),
                 ..Default::default()
             },
             line: true,
@@ -4258,7 +4258,7 @@ mod test {
             text: ftd::markup_line("second call"),
             common: ftd::Common {
                 position: Some(ftd::Position::Center),
-                reference: Some(s("@title@1")),
+                reference: Some(s("foo/bar#title@1")),
                 ..Default::default()
             },
             line: true,
@@ -4268,7 +4268,7 @@ mod test {
             text: ftd::markup_line("third call"),
             common: ftd::Common {
                 position: Some(ftd::Position::Center),
-                reference: Some(s("@title@2")),
+                reference: Some(s("foo/bar#title@2")),
                 ..Default::default()
             },
             line: true,
@@ -4287,10 +4287,10 @@ mod test {
             ),
             common: ftd::Common {
                 condition: Some(ftd::Condition {
-                    variable: s("@about@0"),
+                    variable: s("foo/bar#about@0"),
                     value: s("$IsNotNull$"),
                 }),
-                reference: Some(s("@about@0")),
+                reference: Some(s("foo/bar#about@0")),
                 ..Default::default()
             },
             line: true,
@@ -4300,10 +4300,10 @@ mod test {
             text: ftd::markup_line(""),
             common: ftd::Common {
                 condition: Some(ftd::Condition {
-                    variable: s("@about@1"),
+                    variable: s("foo/bar#about@1"),
                     value: s("$IsNotNull$"),
                 }),
-                reference: Some(s("@about@1")),
+                reference: Some(s("foo/bar#about@1")),
                 is_not_visible: true,
                 ..Default::default()
             },
@@ -4314,10 +4314,10 @@ mod test {
             text: ftd::markup_line(""),
             common: ftd::Common {
                 condition: Some(ftd::Condition {
-                    variable: s("@about@2"),
+                    variable: s("foo/bar#about@2"),
                     value: s("$IsNotNull$"),
                 }),
-                reference: Some(s("@about@2")),
+                reference: Some(s("foo/bar#about@2")),
                 is_not_visible: true,
                 ..Default::default()
             },
@@ -4327,9 +4327,9 @@ mod test {
         let image = ftd::Image {
             src: s("/static/home/document-type-min.png"),
             common: ftd::Common {
-                reference: Some(s("@src@0")),
+                reference: Some(s("foo/bar#src@0")),
                 condition: Some(ftd::Condition {
-                    variable: s("@src@0"),
+                    variable: s("foo/bar#src@0"),
                     value: s("$IsNotNull$"),
                 }),
                 ..Default::default()
@@ -4339,9 +4339,9 @@ mod test {
         let second_image = ftd::Image {
             src: s("second-image.png"),
             common: ftd::Common {
-                reference: Some(s("@src@1")),
+                reference: Some(s("foo/bar#src@1")),
                 condition: Some(ftd::Condition {
-                    variable: s("@src@1"),
+                    variable: s("foo/bar#src@1"),
                     value: s("$IsNotNull$"),
                 }),
                 ..Default::default()
@@ -4351,9 +4351,9 @@ mod test {
         let third_image = ftd::Image {
             src: s(""),
             common: ftd::Common {
-                reference: Some(s("@src@2")),
+                reference: Some(s("foo/bar#src@2")),
                 condition: Some(ftd::Condition {
-                    variable: s("@src@2"),
+                    variable: s("foo/bar#src@2"),
                     value: s("$IsNotNull$"),
                 }),
                 is_not_visible: true,
@@ -4365,21 +4365,10 @@ mod test {
         let mut main = super::default_column();
         main.container
             .children
-            .push(ftd::Element::Column(ftd::Column {spacing: None,
+            .push(ftd::Element::Column(ftd::Column {
+                spacing: None,
                 common: ftd::Common {
                     padding: Some(30),
-                    locals: std::array::IntoIter::new([
-                        (s("about@0"), s("UI screens, behaviour and journeys, database tables, APIs, how to\ncontribute to, deploy, or monitor microservice, everything that\nmakes web or mobile product teams productive.")),
-                        (
-                            s("src@0"),
-                            s("/static/home/document-type-min.png"),
-                        ),
-                        (
-                            s("title@0"),
-                            s("What kind of documentation?"),
-                        ),
-                    ])
-                    .collect(),
                     ..Default::default()
                 },
                 container: ftd::Container {
@@ -4397,12 +4386,6 @@ mod test {
                 spacing: None,
                 common: ftd::Common {
                     padding: Some(30),
-                    locals: std::array::IntoIter::new([
-                        (s("about@1"), s("")),
-                        (s("src@1"), s("second-image.png")),
-                        (s("title@1"), s("second call")),
-                    ])
-                    .collect(),
                     ..Default::default()
                 },
                 container: ftd::Container {
@@ -4420,12 +4403,6 @@ mod test {
                 spacing: None,
                 common: ftd::Common {
                     padding: Some(30),
-                    locals: std::array::IntoIter::new([
-                        (s("about@2"), s("")),
-                        (s("src@2"), s("")),
-                        (s("title@2"), s("third call")),
-                    ])
-                    .collect(),
                     ..Default::default()
                 },
                 container: ftd::Container {
@@ -4438,6 +4415,133 @@ mod test {
                 },
             }));
 
+        let mut bag = white_two_image_bag(true);
+        bag.insert(
+            "foo/bar#about@0".to_string(),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                flags: ftd::VariableFlags::default(),
+                name: "about".to_string(),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::String {
+                        text: s("UI screens, behaviour and journeys, database tables, APIs, how to\ncontribute to, deploy, or monitor microservice, everything that\nmakes web or mobile product teams productive."),
+                        source: ftd::TextSource::Body,
+                    },
+                },
+                conditions: vec![],
+            }),
+        );
+        bag.insert(
+            "foo/bar#about@1".to_string(),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                flags: ftd::VariableFlags::default(),
+                name: "about".to_string(),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Optional {
+                        data: Box::new(None),
+                        kind: ftd::p2::Kind::body(),
+                    },
+                },
+                conditions: vec![],
+            }),
+        );
+        bag.insert(
+            "foo/bar#about@2".to_string(),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                flags: ftd::VariableFlags::default(),
+                name: "about".to_string(),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Optional {
+                        data: Box::new(None),
+                        kind: ftd::p2::Kind::body(),
+                    },
+                },
+                conditions: vec![],
+            }),
+        );
+        bag.insert(
+            "foo/bar#src@0".to_string(),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                flags: ftd::VariableFlags::default(),
+                name: "src".to_string(),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::String {
+                        text: s("/static/home/document-type-min.png"),
+                        source: ftd::TextSource::Header,
+                    },
+                },
+                conditions: vec![],
+            }),
+        );
+        bag.insert(
+            "foo/bar#src@1".to_string(),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                flags: ftd::VariableFlags::default(),
+                name: "src".to_string(),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::String {
+                        text: s("second-image.png"),
+                        source: ftd::TextSource::Header,
+                    },
+                },
+                conditions: vec![],
+            }),
+        );
+        bag.insert(
+            "foo/bar#src@2".to_string(),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                flags: ftd::VariableFlags::default(),
+                name: "src".to_string(),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Optional {
+                        data: Box::new(None),
+                        kind: ftd::p2::Kind::string(),
+                    },
+                },
+                conditions: vec![],
+            }),
+        );
+        bag.insert(
+            "foo/bar#title@0".to_string(),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                flags: ftd::VariableFlags::default(),
+                name: "title".to_string(),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::String {
+                        text: s("What kind of documentation?"),
+                        source: ftd::TextSource::Caption,
+                    },
+                },
+                conditions: vec![],
+            }),
+        );
+        bag.insert(
+            "foo/bar#title@1".to_string(),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                flags: ftd::VariableFlags::default(),
+                name: "title".to_string(),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::String {
+                        text: s("second call"),
+                        source: ftd::TextSource::Caption,
+                    },
+                },
+                conditions: vec![],
+            }),
+        );
+        bag.insert(
+            "foo/bar#title@2".to_string(),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                flags: ftd::VariableFlags::default(),
+                name: "title".to_string(),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::String {
+                        text: s("third call"),
+                        source: ftd::TextSource::Caption,
+                    },
+                },
+                conditions: vec![],
+            }),
+        );
         p!(
             "
             -- ftd.column white-two-image:
@@ -4470,7 +4574,7 @@ mod test {
 
             -- white-two-image: third call
             ",
-            (white_two_image_bag(true), main),
+            (bag, main),
         );
     }
 
