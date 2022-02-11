@@ -389,6 +389,7 @@ impl<'a> Interpreter<'a> {
                     name,
                     aliases: &aliases,
                     bag: &self.bag,
+                    local_variables: &mut Default::default(),
                 };
                 let s = self.lib.get_with_result(library_name.as_str(), &doc)?;
                 *d_get = d_get.saturating_add(std::time::Instant::now() - start);
