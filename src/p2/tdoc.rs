@@ -111,7 +111,7 @@ impl<'a> TDoc<'a> {
     }
 
     #[allow(clippy::too_many_arguments)]
-    fn update_component_data(
+    pub(crate) fn update_component_data(
         &mut self,
         current_container: &str,
         parent_container: &str,
@@ -120,6 +120,7 @@ impl<'a> TDoc<'a> {
         condition: &mut Option<ftd::p2::Boolean>,
         events: &mut Vec<ftd::p2::Event>,
         insert_only: bool,
+        ignore_loop: bool,
     ) -> ftd::p1::Result<()> {
         for (_, property) in properties.iter_mut() {
             if let Some(ref mut default) = property.default {
@@ -129,6 +130,7 @@ impl<'a> TDoc<'a> {
                     parent_container,
                     current_container,
                     insert_only,
+                    ignore_loop,
                 )?;
             }
             for (boolean, condition) in property.conditions.iter_mut() {
@@ -138,6 +140,7 @@ impl<'a> TDoc<'a> {
                     parent_container,
                     current_container,
                     insert_only,
+                    ignore_loop,
                 )?;
                 rename_property_value(
                     condition,
@@ -145,6 +148,7 @@ impl<'a> TDoc<'a> {
                     parent_container,
                     current_container,
                     insert_only,
+                    ignore_loop,
                 )?;
             }
         }
@@ -158,6 +162,7 @@ impl<'a> TDoc<'a> {
                 parent_container,
                 current_container,
                 insert_only,
+                ignore_loop,
             )?;
         }
         for event in events.iter_mut() {
@@ -167,6 +172,7 @@ impl<'a> TDoc<'a> {
                 parent_container,
                 current_container,
                 insert_only,
+                ignore_loop,
             )?;
             for (_, parameters) in event.action.parameters.iter_mut() {
                 for parameter in parameters.iter_mut() {
@@ -176,6 +182,7 @@ impl<'a> TDoc<'a> {
                         parent_container,
                         current_container,
                         insert_only,
+                        ignore_loop,
                     )?;
                 }
             }
@@ -188,6 +195,7 @@ impl<'a> TDoc<'a> {
             parent_container: &str,
             current_container: &str,
             insert_only: bool,
+            ignore_loop: bool,
         ) -> ftd::p1::Result<()> {
             match condition {
                 ftd::p2::Boolean::IsNotNull { value }
@@ -201,6 +209,7 @@ impl<'a> TDoc<'a> {
                         parent_container,
                         current_container,
                         insert_only,
+                        ignore_loop,
                     )?;
                 }
                 ftd::p2::Boolean::Equal { left, right }
@@ -211,6 +220,7 @@ impl<'a> TDoc<'a> {
                         parent_container,
                         current_container,
                         insert_only,
+                        ignore_loop,
                     )?;
                     rename_property_value(
                         right,
@@ -218,11 +228,17 @@ impl<'a> TDoc<'a> {
                         parent_container,
                         current_container,
                         insert_only,
+                        ignore_loop,
                     )?;
                 }
-                ftd::p2::Boolean::Not { of } => {
-                    edit_condition(of, doc, parent_container, current_container, insert_only)?
-                }
+                ftd::p2::Boolean::Not { of } => edit_condition(
+                    of,
+                    doc,
+                    parent_container,
+                    current_container,
+                    insert_only,
+                    ignore_loop,
+                )?,
                 ftd::p2::Boolean::Literal { .. } => {}
             }
             Ok(())
@@ -234,9 +250,12 @@ impl<'a> TDoc<'a> {
             parent_container: &str,
             current_container: &str,
             insert_only: bool,
+            ignore_loop: bool,
         ) -> ftd::p1::Result<()> {
             if let ftd::PropertyValue::Variable { ref mut name, .. } = property_value {
-                if name.contains("$loop$") || (insert_only && !name.as_str().eq("MOUSE-IN")) {
+                if (ignore_loop && name.contains("$loop$"))
+                    || (insert_only && !name.as_str().eq("MOUSE-IN"))
+                {
                     return Ok(());
                 }
                 let part1 = ftd::p2::utils::get_doc_name_and_remaining(name)?.0;
@@ -279,6 +298,7 @@ impl<'a> TDoc<'a> {
             &mut child.condition,
             &mut child.events,
             true,
+            true,
         )?;
         Ok(())
     }
@@ -311,6 +331,7 @@ impl<'a> TDoc<'a> {
             &mut component.condition,
             &mut component.events,
             false,
+            true,
         )?;
         for (idx, instruction) in component.instructions.iter_mut().enumerate() {
             let local_container = {
@@ -333,6 +354,7 @@ impl<'a> TDoc<'a> {
                 &mut child.condition,
                 &mut child.events,
                 false,
+                true,
             )?;
         }
         Ok(())
@@ -362,6 +384,7 @@ impl<'a> TDoc<'a> {
             &mut parent.condition,
             &mut parent.events,
             false,
+            true,
         )?;
         for (idx, child) in children.iter_mut().enumerate() {
             let local_container = {
@@ -379,6 +402,7 @@ impl<'a> TDoc<'a> {
                 &mut child.condition,
                 &mut child.events,
                 false,
+                true,
             )?;
         }
         Ok(())
