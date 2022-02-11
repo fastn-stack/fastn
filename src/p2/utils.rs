@@ -606,7 +606,7 @@ pub fn int(
     match properties.get(name) {
         Some(ftd::Value::Integer { value: v, .. }) => Ok(*v),
         Some(v) => ftd::e2(
-            format!("[{}] expected int, found: {:?}", name, v),
+            format!("[{}] expected int, found1: {:?}", name, v),
             doc_id,
             line_number,
         ),
@@ -626,7 +626,23 @@ pub fn int_optional(
             kind: ftd::p2::Kind::Integer { .. },
         }) => Ok(None),
         Some(ftd::Value::None { .. }) => Ok(None),
-        Some(v) => ftd::e2(format!("expected int, found: {:?}", v), doc_id, line_number),
+        Some(ftd::Value::Optional {
+            data,
+            kind: ftd::p2::Kind::Integer { .. },
+        }) => match data.as_ref() {
+            Some(ftd::Value::Integer { value }) => Ok(Some(*value)),
+            None => Ok(None),
+            v => ftd::e2(
+                format!("expected integer, for: `{}` found: {:?}", name, v),
+                doc_id,
+                line_number,
+            ),
+        },
+        Some(v) => ftd::e2(
+            format!("expected integer, found: {:?}", v),
+            doc_id,
+            line_number,
+        ),
         None => Ok(None),
     }
 }
@@ -718,6 +734,36 @@ pub fn string_bool_optional(
                 Ok((None, Some(v.to_string())))
             }
         }
+        Some(ftd::Value::Optional {
+            data,
+            kind: ftd::p2::Kind::Boolean { .. },
+        }) => match data.as_ref() {
+            Some(ftd::Value::Boolean { value: v }) => Ok((Some(*v), None)),
+            None => Ok((None, None)),
+            v => ftd::e2(
+                format!("expected string, for: `{}` found: {:?}", name, v),
+                doc_id,
+                line_number,
+            ),
+        },
+        Some(ftd::Value::Optional {
+            data,
+            kind: ftd::p2::Kind::String { .. },
+        }) => match data.as_ref() {
+            Some(ftd::Value::String { text: v, .. }) => {
+                if let Ok(b) = v.parse::<bool>() {
+                    Ok((Some(b), None))
+                } else {
+                    Ok((None, Some(v.to_string())))
+                }
+            }
+            None => Ok((None, None)),
+            v => ftd::e2(
+                format!("expected string, for: `{}` found: {:?}", name, v),
+                doc_id,
+                line_number,
+            ),
+        },
         Some(v) => ftd::e2(
             format!("expected bool, found: {:?}", v),
             doc_id,
@@ -779,6 +825,18 @@ pub fn decimal_optional(
             kind: ftd::p2::Kind::Decimal { .. },
         }) => Ok(None),
         Some(ftd::Value::None { .. }) => Ok(None),
+        Some(ftd::Value::Optional {
+            data,
+            kind: ftd::p2::Kind::Decimal { .. },
+        }) => match data.as_ref() {
+            Some(ftd::Value::Decimal { value: v }) => Ok(Some(*v)),
+            None => Ok(None),
+            v => ftd::e2(
+                format!("expected string, for: `{}` found: {:?}", name, v),
+                doc_id,
+                line_number,
+            ),
+        },
         Some(v) => ftd::e2(
             format!("expected decimal, found: {:?}", v),
             doc_id,
