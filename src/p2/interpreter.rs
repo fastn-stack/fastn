@@ -7644,7 +7644,42 @@ mod test {
     #[test]
     fn basic_loop_on_record_with_if_condition() {
         let mut main = super::default_column();
-        main.container.children.push(ftd::Element::Null);
+        main.container.children.push(ftd::Element::Row(ftd::Row {
+            spacing: None,
+            container: ftd::Container {
+                children: vec![
+                    ftd::Element::Markup(ftd::Markups {
+                        text: ftd::markdown_line("Arpita Jaiswal"),
+                        line: true,
+                        common: ftd::Common {
+                            reference: Some(s("foo/bar#name@0")),
+                            ..Default::default()
+                        },
+                        ..Default::default()
+                    }),
+                    ftd::Element::Markup(ftd::Markups {
+                        text: ftd::markdown_line("Arpita is developer at Fifthtry"),
+                        line: true,
+                        common: ftd::Common {
+                            reference: Some(s("foo/bar#body@0")),
+                            ..Default::default()
+                        },
+                        ..Default::default()
+                    }),
+                ],
+                ..Default::default()
+            },
+            common: ftd::Common {
+                reference: Some(s("foo/bar#people")),
+                condition: Some(ftd::Condition {
+                    variable: s("foo/bar#$loop$@0.ceo"),
+                    value: s("true"),
+                }),
+                is_not_visible: true,
+                ..Default::default()
+            },
+            ..Default::default()
+        }));
 
         main.container.children.push(ftd::Element::Row(ftd::Row {
             spacing: None,
@@ -7654,7 +7689,7 @@ mod test {
                         text: ftd::markdown_line("Amit Upadhyay"),
                         line: true,
                         common: ftd::Common {
-                            reference: Some(s("@name@1")),
+                            reference: Some(s("foo/bar#name@1")),
                             ..Default::default()
                         },
                         ..Default::default()
@@ -7663,7 +7698,7 @@ mod test {
                         text: ftd::markdown_line("Amit is CEO of FifthTry."),
                         line: true,
                         common: ftd::Common {
-                            reference: Some(s("@body@1")),
+                            reference: Some(s("foo/bar#body@1")),
                             ..Default::default()
                         },
                         ..Default::default()
@@ -7672,11 +7707,10 @@ mod test {
                 ..Default::default()
             },
             common: ftd::Common {
-                locals: std::array::IntoIter::new([
-                    (s("name@1"), s("Amit Upadhyay")),
-                    (s("body@1"), s("Amit is CEO of FifthTry.")),
-                ])
-                .collect(),
+                condition: Some(ftd::Condition {
+                    variable: s("foo/bar#$loop$@1.ceo"),
+                    value: s("true"),
+                }),
                 reference: Some(s("foo/bar#people")),
                 ..Default::default()
             },
@@ -7688,7 +7722,7 @@ mod test {
         bag.insert(
             "foo/bar#foo".to_string(),
             ftd::p2::Thing::Component(ftd::Component {
-                root: "ftd.row".to_string(),
+                root: "ftd#row".to_string(),
                 full_name: s("foo/bar#foo"),
                 arguments: std::array::IntoIter::new([
                     (s("body"), ftd::p2::Kind::string()),
@@ -7839,6 +7873,140 @@ mod test {
                 .collect(),
                 instances: Default::default(),
                 order: vec![s("name"), s("bio"), s("ceo")],
+            }),
+        );
+
+        bag.insert(
+            s("foo/bar#$loop$@0"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: "$loop$".to_string(),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Record {
+                        name: "foo/bar#person".to_string(),
+                        fields: std::array::IntoIter::new([
+                            (
+                                s("bio"),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::String {
+                                        text: "Arpita is developer at Fifthtry".to_string(),
+                                        source: ftd::TextSource::Body,
+                                    },
+                                },
+                            ),
+                            (
+                                s("ceo"),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::Boolean { value: false },
+                                },
+                            ),
+                            (
+                                s("name"),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::String {
+                                        text: "Arpita Jaiswal".to_string(),
+                                        source: ftd::TextSource::Caption,
+                                    },
+                                },
+                            ),
+                        ])
+                        .collect(),
+                    },
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            }),
+        );
+
+        bag.insert(
+            s("foo/bar#$loop$@1"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: "$loop$".to_string(),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Record {
+                        name: "foo/bar#person".to_string(),
+                        fields: std::array::IntoIter::new([
+                            (
+                                s("bio"),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::String {
+                                        text: "Amit is CEO of FifthTry.".to_string(),
+                                        source: ftd::TextSource::Body,
+                                    },
+                                },
+                            ),
+                            (
+                                s("ceo"),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::Boolean { value: true },
+                                },
+                            ),
+                            (
+                                s("name"),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::String {
+                                        text: "Amit Upadhyay".to_string(),
+                                        source: ftd::TextSource::Caption,
+                                    },
+                                },
+                            ),
+                        ])
+                        .collect(),
+                    },
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            }),
+        );
+
+        bag.insert(
+            s("foo/bar#body@0"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: "body".to_string(),
+                value: ftd::PropertyValue::Variable {
+                    name: "foo/bar#$loop$@0.bio".to_string(),
+                    kind: ftd::p2::Kind::body(),
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            }),
+        );
+
+        bag.insert(
+            s("foo/bar#body@1"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: "body".to_string(),
+                value: ftd::PropertyValue::Variable {
+                    name: "foo/bar#$loop$@1.bio".to_string(),
+                    kind: ftd::p2::Kind::body(),
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            }),
+        );
+
+        bag.insert(
+            s("foo/bar#name@0"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: "name".to_string(),
+                value: ftd::PropertyValue::Variable {
+                    name: "foo/bar#$loop$@0.name".to_string(),
+                    kind: ftd::p2::Kind::caption(),
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            }),
+        );
+
+        bag.insert(
+            s("foo/bar#name@1"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: "name".to_string(),
+                value: ftd::PropertyValue::Variable {
+                    name: "foo/bar#$loop$@1.name".to_string(),
+                    kind: ftd::p2::Kind::caption(),
+                },
+                conditions: vec![],
+                flags: Default::default(),
             }),
         );
 
