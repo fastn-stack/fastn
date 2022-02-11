@@ -42,7 +42,8 @@ pub fn main() {
 
 fn write(id: &str, doc: String) {
     use std::io::Write;
-
+    let start = std::time::Instant::now();
+    print!("Processing: {} ... ", id);
     let lib = ftd::ExampleLibrary {};
     let b = match ftd::p2::Document::from(id, &*doc, &lib) {
         Ok(v) => v,
@@ -51,7 +52,6 @@ fn write(id: &str, doc: String) {
             return;
         }
     };
-    print!("Processing: {} ... ", id);
     std::fs::create_dir_all("./docs").expect("failed to create docs folder");
     let mut f = std::fs::File::create(format!("./docs/{}", id.replace(".ftd", ".html")))
         .expect("failed to create .html file");
@@ -87,6 +87,6 @@ fn write(id: &str, doc: String) {
             .as_bytes(),
     )
     .expect("failed to write to .html file");
-
-    println!("Done");
+    let duration = start.elapsed();
+    println!("Done {:?}", duration);
 }

@@ -1011,19 +1011,21 @@ impl<'a> TDoc<'a> {
                     } else {
                         (name, None)
                     };
-                let bag = {
-                    let mut bag = doc.bag.to_owned();
-                    bag.extend(doc.local_variables.to_owned());
-                    bag
-                };
-                match bag
+
+                match doc
+                    .bag
                     .get(format!("{}#{}", doc_name, name).as_str())
+                    .or_else(|| {
+                        doc.local_variables
+                            .get(format!("{}#{}", doc_name, name).as_str())
+                    })
                     .map(ToOwned::to_owned)
                 {
                     Some(a) => Some((a, remaining_value)),
                     None => match root_name {
                         Some(doc_name) => match doc.aliases.get(doc_name) {
-                            Some(g) => bag
+                            Some(g) => doc
+                                .bag
                                 .get(format!("{}#{}", g, name).as_str())
                                 .map(|v| (v.clone(), remaining_value)),
                             None => None,
