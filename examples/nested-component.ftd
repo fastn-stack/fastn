@@ -1,0 +1,10 @@
+-- secondary-button: CTA says Hello
+
+-- primary-button secondary-button:
+caption cta:
+cta: $cta
+
+-- ftd.row primary-button:
+caption cta:
+
+--- ftd.text: $cta

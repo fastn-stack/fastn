@@ -2612,7 +2612,7 @@ mod test {
             d,
             super::Component {
                 full_name: s("foo#foo"),
-                root: "ftd.text".to_string(),
+                root: "ftd#text".to_string(),
                 arguments: std::array::IntoIter::new([
                     (s("foo"), ftd::p2::Kind::string()),
                     (s("bar"), ftd::p2::Kind::optional(ftd::p2::Kind::integer()))
@@ -2654,7 +2654,7 @@ mod test {
             ",
             d,
             super::Component {
-                root: "ftd.text".to_string(),
+                root: "ftd#text".to_string(),
                 full_name: s("foo#foo"),
                 properties: std::array::IntoIter::new([(
                     s("text"),
