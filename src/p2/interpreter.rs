@@ -956,6 +956,21 @@ mod test {
         );
 
         bag.insert(
+            "foo/bar#name@0".to_string(),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                flags: ftd::VariableFlags::default(),
+                name: "name".to_string(),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::String {
+                        text: s("hello"),
+                        source: ftd::TextSource::Caption,
+                    },
+                },
+                conditions: vec![],
+            }),
+        );
+
+        bag.insert(
             "foo/bar#present".to_string(),
             ftd::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
@@ -3680,7 +3695,7 @@ mod test {
             contribute to, deploy, or monitor microservice, everything that
             makes web or mobile product teams productive.
             ",
-            (white_two_image_bag(false), main),
+            (bag, main),
         );
     }
 
@@ -3820,6 +3835,92 @@ mod test {
                 },
             }));
 
+        let mut bag = white_two_image_bag(true);
+        bag.insert(
+            "foo/bar#about@0".to_string(),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                flags: ftd::VariableFlags::default(),
+                name: "about".to_string(),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::String {
+                        text: s("UI screens, behaviour and journeys, database tables, APIs, how to\ncontribute to, deploy, or monitor microservice, everything that\nmakes web or mobile product teams productive."),
+                        source: ftd::TextSource::Body,
+                    },
+                },
+                conditions: vec![],
+            }),
+        );
+        bag.insert(
+            "foo/bar#about@1".to_string(),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                flags: ftd::VariableFlags::default(),
+                name: "about".to_string(),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Optional {
+                        data: Box::new(None),
+                        kind: ftd::p2::Kind::body(),
+                    },
+                },
+                conditions: vec![],
+            }),
+        );
+        bag.insert(
+            "foo/bar#src@0".to_string(),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                flags: ftd::VariableFlags::default(),
+                name: "src".to_string(),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::String {
+                        text: s("/static/home/document-type-min.png"),
+                        source: ftd::TextSource::Header,
+                    },
+                },
+                conditions: vec![],
+            }),
+        );
+        bag.insert(
+            "foo/bar#src@1".to_string(),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                flags: ftd::VariableFlags::default(),
+                name: "src".to_string(),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::String {
+                        text: s("second-image.png"),
+                        source: ftd::TextSource::Header,
+                    },
+                },
+                conditions: vec![],
+            }),
+        );
+        bag.insert(
+            "foo/bar#title@0".to_string(),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                flags: ftd::VariableFlags::default(),
+                name: "title".to_string(),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::String {
+                        text: s("What kind of documentation?"),
+                        source: ftd::TextSource::Caption,
+                    },
+                },
+                conditions: vec![],
+            }),
+        );
+        bag.insert(
+            "foo/bar#title@0".to_string(),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                flags: ftd::VariableFlags::default(),
+                name: "title".to_string(),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::String {
+                        text: s("second call"),
+                        source: ftd::TextSource::Caption,
+                    },
+                },
+                conditions: vec![],
+            }),
+        );
+
         p!(
             "
             -- ftd.column white-two-image:
@@ -3850,7 +3951,7 @@ mod test {
             -- white-two-image: second call
             src: second-image.png
             ",
-            (white_two_image_bag(true), main),
+            (bag, main),
         );
     }
 
@@ -4801,10 +4902,6 @@ mod test {
                 line: false,
                 ..Default::default()
             }));
-        row.common = ftd::Common {
-            locals: std::array::IntoIter::new([(s("x@0"), s("10"))]).collect(),
-            ..Default::default()
-        };
         main.container.children.push(ftd::Element::Row(row));
 
         p!(
@@ -7038,7 +7135,7 @@ mod test {
                 name: "body".to_string(),
                 value: ftd::PropertyValue::Variable {
                     name: s("foo/bar#$loop$@1.bio"),
-                    kind: ftd::p2::Kind::string(),
+                    kind: ftd::p2::Kind::body(),
                 },
                 conditions: vec![],
             }),
@@ -7050,7 +7147,45 @@ mod test {
                 name: "body".to_string(),
                 value: ftd::PropertyValue::Variable {
                     name: s("foo/bar#$loop$@2.bio"),
-                    kind: ftd::p2::Kind::string(),
+                    kind: ftd::p2::Kind::body(),
+                },
+                conditions: vec![],
+            }),
+        );
+        bag.insert(
+            "foo/bar#name@0".to_string(),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                flags: ftd::VariableFlags::default(),
+                name: "name".to_string(),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::String {
+                        text: s("hello"),
+                        source: ftd::TextSource::Caption,
+                    },
+                },
+                conditions: vec![],
+            }),
+        );
+        bag.insert(
+            "foo/bar#name@1".to_string(),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                flags: ftd::VariableFlags::default(),
+                name: "name".to_string(),
+                value: ftd::PropertyValue::Variable {
+                    name: s("foo/bar#$loop$@1.name"),
+                    kind: ftd::p2::Kind::body(),
+                },
+                conditions: vec![],
+            }),
+        );
+        bag.insert(
+            "foo/bar#name@2".to_string(),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                flags: ftd::VariableFlags::default(),
+                name: "name".to_string(),
+                value: ftd::PropertyValue::Variable {
+                    name: s("foo/bar#$loop$@2.name"),
+                    kind: ftd::p2::Kind::body(),
                 },
                 conditions: vec![],
             }),
@@ -7450,7 +7585,7 @@ mod test {
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::String {
                         text: s("$loop$"),
-                        source: ftd::TextSource::Caption,
+                        source: ftd::TextSource::Header,
                     },
                 },
                 conditions: vec![],
@@ -8212,7 +8347,7 @@ mod test {
             }),
         );
         bag.insert(
-            "foo/bar#$loop$@0".to_string(),
+            "foo/bar#$loop$@8".to_string(),
             ftd::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "$loop$".to_string(),
@@ -9682,7 +9817,7 @@ mod test {
             }),
         );
         bag.insert(
-            s("foo/bar#size@0"),
+            s("foo/bar#size@2"),
             ftd::p2::Thing::Variable(ftd::Variable {
                 name: s("size"),
                 value: ftd::PropertyValue::Value {
