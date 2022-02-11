@@ -96,15 +96,8 @@ impl Document {
         }
     }
 
-    fn get_locals(&self) -> ftd::Map {
-        ftd::Element::get_locals(&self.main.container.children)
-    }
-
     fn rt_data(&self) -> ftd::DataDependenciesMap {
-        let (mut d, always_include) = self.get_data();
-        for (k, v) in self.get_locals() {
-            d.insert(format!("@{}", k), v.to_string());
-        }
+        let (d, always_include) = self.get_data();
 
         let mut data: ftd::DataDependenciesMap = Default::default();
         for (k, v) in d {

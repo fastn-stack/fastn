@@ -70,7 +70,6 @@ pub fn common_from_properties(
 
     Ok(ftd::Common {
         conditional_attribute: Default::default(),
-        locals: Default::default(),
         condition: cond,
         is_not_visible: !is_visible,
         is_dummy: false,
