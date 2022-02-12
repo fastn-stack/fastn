@@ -12,6 +12,7 @@ background-color if $MOUSE-IN: yellow
 size if $MOUSE-IN: 40
 
 -- foo:
+move-up: 7
 
 -- ftd.row bar:
 color if $MOUSE-IN: red
@@ -32,8 +33,8 @@ boolean mouse-in: false
 color if $mouse-in: orange
 
 --- ftd.text: Hover Here
-$event-mouseenter$: $mouse-in = true
-$event-mouseleave$: $mouse-in = false
+$event-mouse-enter$: $mouse-in = true
+$event-mouse-leave$: $mouse-in = false
 
 --- ftd.text: This is secret of all!
 if: $mouse-in

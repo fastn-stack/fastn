@@ -1537,7 +1537,7 @@ mod test {
             }),
         );
         bag.insert(
-            s("foo/bar#active@0,0,0,0"),
+            s("foo/bar#active@0,0,0,0,2"),
             ftd::p2::Thing::Variable(ftd::Variable {
                 name: s("active"),
                 value: ftd::PropertyValue::Value {
@@ -1551,7 +1551,7 @@ mod test {
             }),
         );
         bag.insert(
-            s("foo/bar#active@0,0,0,0,0"),
+            s("foo/bar#active@0,0,0,2"),
             ftd::p2::Thing::Variable(ftd::Variable {
                 name: s("active"),
                 value: ftd::PropertyValue::Value {
@@ -1565,7 +1565,7 @@ mod test {
             }),
         );
         bag.insert(
-            s("foo/bar#active@0,0,0,1"),
+            s("foo/bar#active@0,0,0,3"),
             ftd::p2::Thing::Variable(ftd::Variable {
                 name: s("active"),
                 value: ftd::PropertyValue::Value {
@@ -1607,7 +1607,7 @@ mod test {
             }),
         );
         bag.insert(
-            s("foo/bar#id@0,0,0,0"),
+            s("foo/bar#id@0,0,0,2"),
             ftd::p2::Thing::Variable(ftd::Variable {
                 name: s("id"),
                 value: ftd::PropertyValue::Value {
@@ -1621,7 +1621,7 @@ mod test {
             }),
         );
         bag.insert(
-            s("foo/bar#id@0,0,0,0,0"),
+            s("foo/bar#id@0,0,0,0,2"),
             ftd::p2::Thing::Variable(ftd::Variable {
                 name: s("id"),
                 value: ftd::PropertyValue::Value {
@@ -1635,7 +1635,7 @@ mod test {
             }),
         );
         bag.insert(
-            s("foo/bar#id@0,0,0,1"),
+            s("foo/bar#id@0,0,0,3"),
             ftd::p2::Thing::Variable(ftd::Variable {
                 name: s("id"),
                 value: ftd::PropertyValue::Value {
@@ -1649,7 +1649,7 @@ mod test {
             }),
         );
         bag.insert(
-            s("foo/bar#name@0,0,0,0"),
+            s("foo/bar#name@0,0,0,2"),
             ftd::p2::Thing::Variable(ftd::Variable {
                 name: s("name"),
                 value: ftd::PropertyValue::Value {
@@ -1663,7 +1663,7 @@ mod test {
             }),
         );
         bag.insert(
-            s("foo/bar#name@0,0,0,0,0"),
+            s("foo/bar#name@0,0,0,0,2"),
             ftd::p2::Thing::Variable(ftd::Variable {
                 name: s("name"),
                 value: ftd::PropertyValue::Value {
@@ -1691,7 +1691,7 @@ mod test {
             }),
         );
         bag.insert(
-            s("foo/bar#name@0,0,0,1"),
+            s("foo/bar#name@0,0,0,3"),
             ftd::p2::Thing::Variable(ftd::Variable {
                 name: s("name"),
                 value: ftd::PropertyValue::Value {
@@ -1761,9 +1761,9 @@ mod test {
                                     b: 255,
                                     alpha: 1.0,
                                 }),
-                                reference: Some(s("foo/bar#name@0,0,0,0")),
+                                reference: Some(s("foo/bar#name@0,0,0,2")),
                                 condition: Some(ftd::Condition {
-                                    variable: s("foo/bar#active@0,0,0,0"),
+                                    variable: s("foo/bar#active@0,0,0,2"),
                                     value: s("$IsNotNull$"),
                                 }),
                                 is_not_visible: true,
@@ -1782,9 +1782,9 @@ mod test {
                                     b: 77,
                                     alpha: 1.0,
                                 }),
-                                reference: Some(s("foo/bar#name@0,0,0,0")),
+                                reference: Some(s("foo/bar#name@0,0,0,2")),
                                 condition: Some(ftd::Condition {
-                                    variable: s("foo/bar#active@0,0,0,0"),
+                                    variable: s("foo/bar#active@0,0,0,2"),
                                     value: s("$IsNull$"),
                                 }),
                                 ..Default::default()
@@ -1807,9 +1807,9 @@ mod test {
                                                 b: 255,
                                                 alpha: 1.0,
                                             }),
-                                            reference: Some(s("foo/bar#name@0,0,0,0,0")),
+                                            reference: Some(s("foo/bar#name@0,0,0,0,2")),
                                             condition: Some(ftd::Condition {
-                                                variable: s("foo/bar#active@0,0,0,0,0"),
+                                                variable: s("foo/bar#active@0,0,0,0,2"),
                                                 value: s("$IsNotNull$"),
                                             }),
                                             is_not_visible: true,
@@ -1828,9 +1828,9 @@ mod test {
                                                 b: 77,
                                                 alpha: 1.0,
                                             }),
-                                            reference: Some(s("foo/bar#name@0,0,0,0,0")),
+                                            reference: Some(s("foo/bar#name@0,0,0,0,2")),
                                             condition: Some(ftd::Condition {
-                                                variable: s("foo/bar#active@0,0,0,0,0"),
+                                                variable: s("foo/bar#active@0,0,0,0,2"),
                                                 value: s("$IsNull$"),
                                             }),
                                             ..Default::default()
@@ -1874,9 +1874,9 @@ mod test {
                                     b: 255,
                                     alpha: 1.0,
                                 }),
-                                reference: Some(s("foo/bar#name@0,0,0,1")),
+                                reference: Some(s("foo/bar#name@0,0,0,3")),
                                 condition: Some(ftd::Condition {
-                                    variable: s("foo/bar#active@0,0,0,1"),
+                                    variable: s("foo/bar#active@0,0,0,3"),
                                     value: s("$IsNotNull$"),
                                 }),
                                 is_not_visible: true,
@@ -1895,9 +1895,9 @@ mod test {
                                     b: 77,
                                     alpha: 1.0,
                                 }),
-                                reference: Some(s("foo/bar#name@0,0,0,1")),
+                                reference: Some(s("foo/bar#name@0,0,0,3")),
                                 condition: Some(ftd::Condition {
-                                    variable: s("foo/bar#active@0,0,0,1"),
+                                    variable: s("foo/bar#active@0,0,0,3"),
                                     value: s("$IsNull$"),
                                 }),
                                 ..Default::default()
@@ -2499,7 +2499,7 @@ mod test {
             }),
         );
         bag.insert(
-            s("foo/bar#active@0,0,0,0"),
+            s("foo/bar#active@0,0,0,2"),
             ftd::p2::Thing::Variable(ftd::Variable {
                 name: s("active"),
                 value: ftd::PropertyValue::Value {
@@ -2513,7 +2513,7 @@ mod test {
             }),
         );
         bag.insert(
-            s("foo/bar#active@0,0,0,0,0"),
+            s("foo/bar#active@0,0,0,0,2"),
             ftd::p2::Thing::Variable(ftd::Variable {
                 name: s("active"),
                 value: ftd::PropertyValue::Value {
@@ -2527,7 +2527,7 @@ mod test {
             }),
         );
         bag.insert(
-            s("foo/bar#active@0,0,0,1"),
+            s("foo/bar#active@0,0,0,3"),
             ftd::p2::Thing::Variable(ftd::Variable {
                 name: s("active"),
                 value: ftd::PropertyValue::Value {
@@ -2569,7 +2569,7 @@ mod test {
             }),
         );
         bag.insert(
-            s("foo/bar#id@0,0,0,0"),
+            s("foo/bar#id@0,0,0,2"),
             ftd::p2::Thing::Variable(ftd::Variable {
                 name: s("id"),
                 value: ftd::PropertyValue::Value {
@@ -2583,7 +2583,7 @@ mod test {
             }),
         );
         bag.insert(
-            s("foo/bar#id@0,0,0,0,0"),
+            s("foo/bar#id@0,0,0,0,2"),
             ftd::p2::Thing::Variable(ftd::Variable {
                 name: s("id"),
                 value: ftd::PropertyValue::Value {
@@ -2597,7 +2597,7 @@ mod test {
             }),
         );
         bag.insert(
-            s("foo/bar#id@0,0,0,1"),
+            s("foo/bar#id@0,0,0,3"),
             ftd::p2::Thing::Variable(ftd::Variable {
                 name: s("id"),
                 value: ftd::PropertyValue::Value {
@@ -2611,7 +2611,7 @@ mod test {
             }),
         );
         bag.insert(
-            s("foo/bar#name@0,0,0,0"),
+            s("foo/bar#name@0,0,0,2"),
             ftd::p2::Thing::Variable(ftd::Variable {
                 name: s("name"),
                 value: ftd::PropertyValue::Value {
@@ -2625,7 +2625,7 @@ mod test {
             }),
         );
         bag.insert(
-            s("foo/bar#name@0,0,0,0,0"),
+            s("foo/bar#name@0,0,0,0,2"),
             ftd::p2::Thing::Variable(ftd::Variable {
                 name: s("name"),
                 value: ftd::PropertyValue::Value {
@@ -2653,7 +2653,7 @@ mod test {
             }),
         );
         bag.insert(
-            s("foo/bar#name@0,0,0,1"),
+            s("foo/bar#name@0,0,0,3"),
             ftd::p2::Thing::Variable(ftd::Variable {
                 name: s("name"),
                 value: ftd::PropertyValue::Value {
@@ -2723,9 +2723,9 @@ mod test {
                                     b: 255,
                                     alpha: 1.0,
                                 }),
-                                reference: Some(s("foo/bar#name@0,0,0,0")),
+                                reference: Some(s("foo/bar#name@0,0,0,2")),
                                 condition: Some(ftd::Condition {
-                                    variable: s("foo/bar#active@0,0,0,0"),
+                                    variable: s("foo/bar#active@0,0,0,2"),
                                     value: s("$IsNotNull$"),
                                 }),
                                 is_not_visible: true,
@@ -2744,9 +2744,9 @@ mod test {
                                     b: 77,
                                     alpha: 1.0,
                                 }),
-                                reference: Some(s("foo/bar#name@0,0,0,0")),
+                                reference: Some(s("foo/bar#name@0,0,0,2")),
                                 condition: Some(ftd::Condition {
-                                    variable: s("foo/bar#active@0,0,0,0"),
+                                    variable: s("foo/bar#active@0,0,0,2"),
                                     value: s("$IsNull$"),
                                 }),
                                 ..Default::default()
@@ -2769,9 +2769,9 @@ mod test {
                                                 b: 255,
                                                 alpha: 1.0,
                                             }),
-                                            reference: Some(s("foo/bar#name@0,0,0,0,0")),
+                                            reference: Some(s("foo/bar#name@0,0,0,0,2")),
                                             condition: Some(ftd::Condition {
-                                                variable: s("foo/bar#active@0,0,0,0,0"),
+                                                variable: s("foo/bar#active@0,0,0,0,2"),
                                                 value: s("$IsNotNull$"),
                                             }),
                                             is_not_visible: true,
@@ -2790,9 +2790,9 @@ mod test {
                                                 b: 77,
                                                 alpha: 1.0,
                                             }),
-                                            reference: Some(s("foo/bar#name@0,0,0,0,0")),
+                                            reference: Some(s("foo/bar#name@0,0,0,0,2")),
                                             condition: Some(ftd::Condition {
-                                                variable: s("foo/bar#active@0,0,0,0,0"),
+                                                variable: s("foo/bar#active@0,0,0,0,2"),
                                                 value: s("$IsNull$"),
                                             }),
                                             ..Default::default()
@@ -2836,9 +2836,9 @@ mod test {
                                     b: 255,
                                     alpha: 1.0,
                                 }),
-                                reference: Some(s("foo/bar#name@0,0,0,1")),
+                                reference: Some(s("foo/bar#name@0,0,0,3")),
                                 condition: Some(ftd::Condition {
-                                    variable: s("foo/bar#active@0,0,0,1"),
+                                    variable: s("foo/bar#active@0,0,0,3"),
                                     value: s("$IsNotNull$"),
                                 }),
                                 is_not_visible: true,
@@ -2857,9 +2857,9 @@ mod test {
                                     b: 77,
                                     alpha: 1.0,
                                 }),
-                                reference: Some(s("foo/bar#name@0,0,0,1")),
+                                reference: Some(s("foo/bar#name@0,0,0,3")),
                                 condition: Some(ftd::Condition {
-                                    variable: s("foo/bar#active@0,0,0,1"),
+                                    variable: s("foo/bar#active@0,0,0,3"),
                                     value: s("$IsNull$"),
                                 }),
                                 ..Default::default()
@@ -12859,11 +12859,11 @@ mod test {
                                             name: s("onclick"),
                                             action: ftd::Action {
                                                 action: s("toggle"),
-                                                target: s("foo/bar#visible@0,0,0"),
+                                                target: s("foo/bar#visible@0,0,2"),
                                                 ..Default::default()
                                             },
                                         }],
-                                        reference: Some(s("foo/bar#name@0,0,0")),
+                                        reference: Some(s("foo/bar#name@0,0,2")),
                                         ..Default::default()
                                     },
                                     ..Default::default()
@@ -12872,7 +12872,7 @@ mod test {
                                     spacing: None,
                                     common: ftd::Common {
                                         condition: Some(ftd::Condition {
-                                            variable: s("foo/bar#visible@0,0,0"),
+                                            variable: s("foo/bar#visible@0,0,2"),
                                             value: s("true"),
                                         }),
                                         data_id: Some(s("some-child")),
@@ -12899,11 +12899,11 @@ mod test {
                                             name: s("onclick"),
                                             action: ftd::Action {
                                                 action: s("toggle"),
-                                                target: s("foo/bar#visible@0,0,1"),
+                                                target: s("foo/bar#visible@0,0,3"),
                                                 ..Default::default()
                                             },
                                         }],
-                                        reference: Some(s("foo/bar#name@0,0,1")),
+                                        reference: Some(s("foo/bar#name@0,0,3")),
                                         ..Default::default()
                                     },
                                     ..Default::default()
@@ -12912,7 +12912,7 @@ mod test {
                                     spacing: None,
                                     common: ftd::Common {
                                         condition: Some(ftd::Condition {
-                                            variable: s("foo/bar#visible@0,0,1"),
+                                            variable: s("foo/bar#visible@0,0,3"),
                                             value: s("true"),
                                         }),
                                         data_id: Some(s("some-child")),
@@ -12940,13 +12940,13 @@ mod test {
                                                                 action: ftd::Action {
                                                                     action: s("toggle"),
                                                                     target: s(
-                                                                        "foo/bar#visible@0,0,1,0",
+                                                                        "foo/bar#visible@0,0,1,2",
                                                                     ),
                                                                     ..Default::default()
                                                                 },
                                                             }],
                                                             reference: Some(s(
-                                                                "foo/bar#name@0,0,1,0",
+                                                                "foo/bar#name@0,0,1,2",
                                                             )),
                                                             ..Default::default()
                                                         },
@@ -12957,7 +12957,7 @@ mod test {
                                                         common: ftd::Common {
                                                             condition: Some(ftd::Condition {
                                                                 variable: s(
-                                                                    "foo/bar#visible@0,0,1,0",
+                                                                    "foo/bar#visible@0,0,1,2",
                                                                 ),
                                                                 value: s("true"),
                                                             }),

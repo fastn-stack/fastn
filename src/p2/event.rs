@@ -163,8 +163,8 @@ impl EventName {
             "click" => Ok(Self::OnClick),
             "change" => Ok(Self::OnChange),
             "input" => Ok(Self::OnInput),
-            "mouseenter" => Ok(Self::OnMouseEnter),
-            "mouseleave" => Ok(Self::OnMouseLeave),
+            "mouse-enter" => Ok(Self::OnMouseEnter),
+            "mouse-leave" => Ok(Self::OnMouseLeave),
             t => return ftd::e2(format!("{} is not a valid event", t), doc_id, 0),
         }
     }

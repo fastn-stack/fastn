@@ -2137,12 +2137,7 @@ fn assert_no_extra_properties(
         };
 
         if !(root_arguments.contains_key(key)
-            || (is_component(name)
-                && vec![
-                    "id", "top", "bottom", "left", "right", "align", "scale", "rotate", "scale-x",
-                    "scale-y", "slot",
-                ]
-                .contains(&key)))
+            || (is_component(name) && default_arguments().contains_key(key)))
         {
             return ftd::e2(
                 format!(
@@ -2366,9 +2361,26 @@ pub(crate) fn default_arguments() -> std::collections::BTreeMap<String, ftd::p2:
     );
     default_argument.insert("left".to_string(), ftd::p2::Kind::integer().into_optional());
     default_argument.insert(
+        "move-up".to_string(),
+        ftd::p2::Kind::integer().into_optional(),
+    );
+    default_argument.insert(
+        "move-down".to_string(),
+        ftd::p2::Kind::integer().into_optional(),
+    );
+    default_argument.insert(
+        "move-left".to_string(),
+        ftd::p2::Kind::integer().into_optional(),
+    );
+    default_argument.insert(
+        "move-right".to_string(),
+        ftd::p2::Kind::integer().into_optional(),
+    );
+    default_argument.insert(
         "right".to_string(),
         ftd::p2::Kind::integer().into_optional(),
     );
+
     default_argument.insert("align".to_string(), ftd::p2::Kind::string().into_optional());
     default_argument.insert(
         "scale".to_string(),
