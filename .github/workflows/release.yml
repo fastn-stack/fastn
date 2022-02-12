@@ -29,7 +29,7 @@ jobs:
             fifthtry_content/target
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
       - name: Build-musl
-        uses: gmiam/rust-musl-action@master
+        uses: gmiam/rust-musl-action@9e6a37b
         continue-on-error: false
         with:
           args: cargo build --target $BUILD_TARGET --release
