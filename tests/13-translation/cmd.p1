@@ -4,10 +4,10 @@ output: amitu/.build
 
 -- stdout:
 
-Processed FPM.ftd
-Processed blog.ftd
-Processed db.ftd
-Processed db.sqlite
-Processed index.ftd
-Processed lib.ftd
+Processing FPM.ftd ... Done
+Processing blog.ftd ... Done
+Processing db.ftd ... Done
+Processing db.sqlite ... Done
+Processing index.ftd ... Done
+Processing lib.ftd ... Done
 

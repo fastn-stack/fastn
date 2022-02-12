@@ -4,7 +4,7 @@ output: amitu/.build
 
 -- stdout:
 
-Processed FPM.ftd
-Processed index.ftd
-Processed lib.ftd
+Processing FPM.ftd ... Done
+Processing index.ftd ... Done
+Processing lib.ftd ... Done
 

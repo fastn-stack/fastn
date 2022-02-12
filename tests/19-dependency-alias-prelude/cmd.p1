@@ -4,6 +4,6 @@ output: .build
 
 -- stdout:
 
-Processed FPM.ftd
-Processed index.ftd
-Processed sibling.ftd
+Processing FPM.ftd ... Done
+Processing index.ftd ... Done
+Processing sibling.ftd ... Done

@@ -5,33 +5,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
         <title>This is only in original so far</title>
         <script type="ftd" id="ftd-data-message">{
-  "@default@0,1,0,0": {
-    "value": "कभी समन्वयित नहीं किया गया",
-    "dependencies": {
-      "0,1,0,0,2": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
-    }
-  },
-  "@key@0,1,0,0": {
-    "value": "अंतिम संशोधित तिथि :",
-    "dependencies": {
-      "0,1,0,0,0": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
-    }
-  },
-  "@show-menu@0,1,1": {
-    "value": "false",
-    "dependencies": {
-      "0,1,1,2,0": "[{\"dependency_type\":\"Visible\",\"condition\":\"true\",\"parameters\":{}}]"
-    }
-  },
-  "@value@0,1,0,0": {
-    "value": "",
-    "dependencies": {
-      "0,1,0,0,1": "[{\"dependency_type\":\"Visible\",\"condition\":\"$IsNotNull$\",\"parameters\":{}},{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]",
-      "0,1,0,0,2": "[{\"dependency_type\":\"Visible\",\"condition\":\"$IsNull$\",\"parameters\":{}}]"
-    }
-  },
   "fpm#language": {
-    "value": "Hindi",
+    "value": "\"Hindi\"",
     "dependencies": {
       "0,1,1,0": "[{\"dependency_type\":\"Visible\",\"condition\":\"$IsNull$\",\"parameters\":{}}]",
       "0,1,1,1": "[{\"dependency_type\":\"Visible\",\"condition\":\"$IsNotNull$\",\"parameters\":{}}]",
@@ -39,7 +14,7 @@
     }
   },
   "fpm#language-toc": {
-    "value": "[]",
+    "value": "[{\"children\":[],\"title\":\"English: https\",\"url\":\"//arpita-jaiswal/blog/\"}]",
     "dependencies": {
       "0,1,1,2,0,0": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
     }
@@ -49,8 +24,33 @@
     "dependencies": {}
   },
   "fpm#theme-color": {
-    "value": "",
+    "value": "null",
     "dependencies": {}
+  },
+  "message#default@0,1,0,0": {
+    "value": "\"कभी समन्वयित नहीं किया गया\"",
+    "dependencies": {
+      "0,1,0,0,2": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
+    }
+  },
+  "message#key@0,1,0,0": {
+    "value": "\"अंतिम संशोधित तिथि :\"",
+    "dependencies": {
+      "0,1,0,0,0": "[{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]"
+    }
+  },
+  "message#show-menu@0,1,1": {
+    "value": "false",
+    "dependencies": {
+      "0,1,1,2,0": "[{\"dependency_type\":\"Visible\",\"condition\":\"true\",\"parameters\":{}}]"
+    }
+  },
+  "message#value@0,1,0,0": {
+    "value": "null",
+    "dependencies": {
+      "0,1,0,0,1": "[{\"dependency_type\":\"Visible\",\"condition\":\"$IsNotNull$\",\"parameters\":{}},{\"dependency_type\":\"Value\",\"condition\":null,\"parameters\":{}}]",
+      "0,1,0,0,2": "[{\"dependency_type\":\"Visible\",\"condition\":\"$IsNull$\",\"parameters\":{}}]"
+    }
   }
 }</script>
         <script type="ftd" id="ftd-external-children-message">{}</script>
@@ -67,10 +67,10 @@
 <a data-id="0,1,0,1:message" href="//amitu/FPM/translation-status" style="background-color: rgba(210,115,85,1); border-color: rgba(38,100,79,1); border-radius: 13px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(255,255,255,1); cursor: pointer; font-weight: 400; margin-top: 5px; padding: 8px; text-align: left; white-space: initial" class="ft_md">अनुवाद की स्थिति दिखाएं</a></div>
 <div data-id="0,1,1:message" style="align-items: flex-start; align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start; margin-bottom: auto; margin-top: auto; white-space: initial" class="ft_md"><div data-id="0,1,1,0:message" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: none; font-weight: 400; text-align: left; white-space: initial" class="ft_md">अन्य उपलब्ध भाषाएं :</div>
 <div data-id="0,1,1,1:message" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start; white-space: initial; width: 100%" class="ft_md"><div data-id="0,1,1,1,0:message" style="align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-weight: 400; margin-bottom: auto; margin-top: auto; text-align: left; white-space: initial; width: 120px" class="ft_md">वर्तमान भाषा :</div>
-<div data-id="0,1,1,1,1:message" onclick="window.ftd.handle_event(event, 'message', '[{&quot;action&quot;:&quot;toggle&quot;,&quot;target&quot;:&quot;@show-menu@0,1,1&quot;,&quot;parameters&quot;:{}}]', this)" style="background-color: rgba(255,255,255,1); border-color: rgba(173,174,179,1); border-radius: 0px; border-style: solid; border-width: 1px; box-sizing: border-box; cursor: pointer; font-weight: 400; margin-bottom: 5px; margin-left: 5px; margin-right: 5px; margin-top: 5px; padding-left: 5px; padding-right: 50px; text-align: left; white-space: initial" class="ft_md">Hindi</div></div>
-<div data-id="0,1,1,2:message" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; position: relative; white-space: initial; width: 100%" class="ft_md"><div data-id="0,1,1,2,0:message" onclick="window.ftd.handle_event(event, 'message', '[{&quot;action&quot;:&quot;toggle&quot;,&quot;target&quot;:&quot;@show-menu@0,1,1&quot;,&quot;parameters&quot;:{}}]', this)" style="align-items: flex-start; background-color: rgba(241,241,241,1); border-radius: 0px; border-style: solid; border-width: 0px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.25); box-sizing: border-box; cursor: pointer; display: none; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; margin-top: 10px; min-width: 160px; position: absolute; right: 0; top: 0; white-space: initial; width: 100%" class="ft_md"><a data-id="0,1,1,2,0,0:message" href="https://arpita-jaiswal/blog/" style="border-bottom-width: 1px !important; border-color: rgba(227,225,225,1); border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; padding: 10px; text-align: left; white-space: initial; width: 100%" class="ft_md">English</a></div></div></div></div></div></div></div>
+<div data-id="0,1,1,1,1:message" onclick="window.ftd.handle_event(event, 'message', '[{&quot;action&quot;:&quot;toggle&quot;,&quot;target&quot;:&quot;message#show-menu@0,1,1&quot;,&quot;parameters&quot;:{}}]', this)" style="background-color: rgba(255,255,255,1); border-color: rgba(173,174,179,1); border-radius: 0px; border-style: solid; border-width: 1px; box-sizing: border-box; cursor: pointer; font-weight: 400; margin-bottom: 5px; margin-left: 5px; margin-right: 5px; margin-top: 5px; padding-left: 5px; padding-right: 50px; text-align: left; white-space: initial" class="ft_md">Hindi</div></div>
+<div data-id="0,1,1,2:message" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; position: relative; white-space: initial; width: 100%" class="ft_md"><div data-id="0,1,1,2,0:message" onclick="window.ftd.handle_event(event, 'message', '[{&quot;action&quot;:&quot;toggle&quot;,&quot;target&quot;:&quot;message#show-menu@0,1,1&quot;,&quot;parameters&quot;:{}}]', this)" style="align-items: flex-start; background-color: rgba(241,241,241,1); border-radius: 0px; border-style: solid; border-width: 0px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.25); box-sizing: border-box; cursor: pointer; display: none; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; margin-top: 10px; min-width: 160px; position: absolute; right: 0; top: 0; white-space: initial; width: 100%" class="ft_md"><a data-id="0,1,1,2,0,0:message" href="//arpita-jaiswal/blog/" style="border-bottom-width: 1px !important; border-color: rgba(227,225,225,1); border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; padding: 10px; text-align: left; white-space: initial; width: 100%" class="ft_md">English: https</a></div></div></div></div></div></div></div>
         <div id="main"><div data-id="main:root" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; height: 100%; justify-content: flex-start; white-space: initial; width: 100%" class="ft_md"><div data-id="0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-weight: 400; text-align: left; white-space: initial" class="ft_md">This is only in original so far</div>
-<div data-id="1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-weight: 400; text-align: left; white-space: initial" class="ft_md">Translated Blog says hello</div>
+<div data-id="1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-weight: 400; text-align: left; white-space: initial" class="ft_md">Blog says hello</div>
 <div data-id="2:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-weight: 400; text-align: left; white-space: initial" class="ft_md">blog-theme says hello</div>
 <div data-id="3:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-weight: 400; text-align: left; white-space: initial" class="ft_md">lib says hello</div></div></div>
         <script>

@@ -26,6 +26,16 @@
 </span><span style="color:#c0c5ce;">}
 </span></pre>
 </div></div>
-        <script>FPM_JS</script>
+        <script>
+            FTD_JS
+
+            window.ftd.init(
+                "main",
+                JSON.parse(document.getElementById("ftd-data").innerText),
+                JSON.parse(document.getElementById("ftd-external-children").innerText)
+            );
+
+            FPM_JS
+        </script>
     </body>
 </html>

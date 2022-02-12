@@ -5,7 +5,7 @@ output: amitu/.build
 
 -- stdout:
 
-Processed FPM.ftd
-Processed index.ftd
-Processed nested/document.ftd
-Processed nested/index.ftd
+Processing FPM.ftd ... Done
+Processing index.ftd ... Done
+Processing nested/document.ftd ... Done
+Processing nested/index.ftd ... Done
