@@ -1,7 +1,3 @@
--- import: ft
--- import: fpm.dev/config
--- import: fpm
-
 -- ft.page:
 
 -- ft.create-section:
