@@ -56,7 +56,7 @@ zip: github.com/fifthtry/fpm.dev/archive/refs/heads/main.zip
 -- ft.markdown:
 
 We have created a package named `fpm.dev`. Packages in FPM are named after the
-domain where they would be published. Every FPM package is a website.
+domain where they would be published. {ft.highlight: Every FPM package is a website.}
 
 -- ft.h2: Distributed Package Manager
 
