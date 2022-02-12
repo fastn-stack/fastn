@@ -18,7 +18,7 @@ impl<'a> ExecuteDoc<'a> {
         id: Option<String>,
     ) -> ftd::p1::Result<ftd::component::ElementWithContainer> {
         let mut index = 0;
-        self.execute_(&mut index, false, parent_container, None, id)
+        self.execute_(&mut index, false, parent_container, 0, None, id)
     }
 
     fn execute_(
@@ -26,6 +26,7 @@ impl<'a> ExecuteDoc<'a> {
         index: &mut usize,
         is_external: bool,
         parent_container: &[usize],
+        parent_children_length: usize, // in case of open container send the current length
         parent_id: Option<String>,
         id: Option<String>,
     ) -> ftd::p1::Result<ftd::component::ElementWithContainer> {
@@ -56,7 +57,7 @@ impl<'a> ExecuteDoc<'a> {
                             _ => unreachable!(),
                         };
                     }
-                    current.len()
+                    current.len() + parent_children_length
                 };
                 local_container.push(current_length);
                 local_container
@@ -263,7 +264,7 @@ impl<'a> ExecuteDoc<'a> {
             c.push(len);
             update_named_container(&c, named_containers, &child_container, container_id, true);
         }
-
+        let number_of_children = e.number_of_children();
         let open_id = e.is_open_container(container_children.is_empty()).1;
         let container_id = e.container_id();
         let is_open = e.is_open_container(container_children.is_empty()).0;
@@ -305,8 +306,15 @@ impl<'a> ExecuteDoc<'a> {
                         new_parent_container.append(&mut current_container.to_vec());
 
                         *index += 1;
-                        self.execute_(index, true, &new_parent_container, parent_id, None)?
-                            .children
+                        self.execute_(
+                            index,
+                            true,
+                            &new_parent_container,
+                            number_of_children,
+                            parent_id,
+                            None,
+                        )?
+                        .children
                     } else {
                         container_children
                     };
@@ -356,6 +364,7 @@ impl<'a> ExecuteDoc<'a> {
                             index,
                             true,
                             &new_parent_container,
+                            number_of_children,
                             parent_id.clone(),
                             id,
                         )?;

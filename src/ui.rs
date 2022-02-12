@@ -1057,6 +1057,16 @@ impl Element {
         }
     }
 
+    pub fn number_of_children(&self) -> usize {
+        match self {
+            ftd::Element::Column(e) => e.container.children.len(),
+            ftd::Element::Row(e) => e.container.children.len(),
+            ftd::Element::Scene(e) => e.container.children.len(),
+            ftd::Element::Grid(e) => e.container.children.len(),
+            _ => 0,
+        }
+    }
+
     pub fn container_id(&self) -> Option<String> {
         match self {
             ftd::Element::Column(e) => e.common.data_id.clone(),
