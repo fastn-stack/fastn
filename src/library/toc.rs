@@ -231,7 +231,7 @@ impl TocParser {
         let rest: String = iter.collect();
         self.eval_temp_item()?;
         // Split the line by `:`. title = 0, url = Option<1>
-        let (t, u) = match rest.rsplit_once(":") {
+        let (t, u) = match rest.split_once(":") {
             Some((i, v)) => (i.trim().to_string(), Some(v.trim().to_string())),
             None => (rest.trim().to_string(), None),
         };

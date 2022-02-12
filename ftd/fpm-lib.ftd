@@ -95,10 +95,7 @@ padding-left: 5
 padding-right: 50
 background-color: white
 
-
-
 --- container: ftd.main
-
 
 --- ftd.column:
 position: right
@@ -114,7 +111,7 @@ shadow-offset-y: 8
 shadow-blur: 16
 position: inner top-right
 width: fill
-margin-top: 10
+margin-top: 26
 $event-click$: toggle $show-menu
 
 --- ftd.text: $obj.title
