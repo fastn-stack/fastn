@@ -1,3 +1,7 @@
+-- import: fpm
+-- import: ft
+-- import: fpm.dev/config
+
 -- ft.doc-page:
 toc: $ft.toc
 
