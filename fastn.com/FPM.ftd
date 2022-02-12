@@ -8,7 +8,9 @@ translation: hi.fpm.dev
 -- fpm.dependency: fifthtry.github.io/Forest-Theme as ft
 
 -- fpm.auto-import: ft
--- fpm.auto-import: fpm.dev/config
+
+-- fpm.auto-import: fpm.dev/FPM/config
+
 -- fpm.auto-import: fpm
 
 

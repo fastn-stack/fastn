@@ -1,6 +1,3 @@
--- import: ft
--- import: fpm.dev/config
-
 -- ft.doc-page:
 toc: $config.themes-toc
 
