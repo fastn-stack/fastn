@@ -1,6 +1,3 @@
--- import: ft
--- import: fpm.dev/config
-
 -- ft.page:
 
 -- ft.hero: Build optimized websites quickly, focus on your content
