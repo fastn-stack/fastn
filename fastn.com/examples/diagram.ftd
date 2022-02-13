@@ -351,7 +351,8 @@ border-width: 2
 spacing: 20
 width: 400
 align: center
-open: box-id
+open: true
+append-at: box-id
 padding: 15
 border-color if $MOUSE-IN: yellow
 border-radius: 4

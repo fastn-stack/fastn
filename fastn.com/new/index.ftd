@@ -15,7 +15,8 @@ id: outer
 
 
 -- ftd.column page:
-open: m
+open: true
+append-at: m
 
 \--- lib.ftd-header:
 

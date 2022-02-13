@@ -2449,7 +2449,8 @@ $event-click$: toggle show
 
 \-- component foo:
 component: ftd.column
-open: some-id
+open: true
+append-at: some-id
 
 \--- ftd.text: Title
 
@@ -2570,7 +2571,8 @@ $event-click$: toggle $show
 
 
 -- ftd.column foo:
-open: some-id
+open: true
+append-at: some-id
 
 --- ftd.text: Title
 

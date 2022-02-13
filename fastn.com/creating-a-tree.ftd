@@ -333,7 +333,8 @@ lang: ftd
 component: ftd.column
 string $name:
 padding-left: 10
-open: some-child
+open: true
+append-at: some-child
 $visible: true
 
 \--- ftd.row:
@@ -362,7 +363,8 @@ lang: ftd
 component: ftd.column
 string $name:
 padding-left: 10
-open: some-child
+open: true
+append-at: some-child
 $visible: true
 
 
@@ -434,7 +436,8 @@ lang: ftd
 component: ftd.column
 string $name:
 padding-left: 10
-open: some-child
+open: true
+append-at: some-child
 $visible: true
 
 \--- ftd.row:
@@ -489,7 +492,8 @@ width: fill
 string name:
 color if $fpm.dark-mode: white
 padding-left: 10
-open: some-child
+open: true
+append-at: some-child
 boolean visible: true
 
 --- ftd.row:
