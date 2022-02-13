@@ -1,7 +1,8 @@
 -- ftd.column display-item1:
 string name:
 padding-left: 10
-open: some-child
+open: true
+append-at: some-child
 boolean visible: false
 
 --- ftd.row:

@@ -51,7 +51,8 @@ id: main-container
 
 -- ftd.column page:
 width: fill
-open: main-container
+open: true
+append-at: main-container
 
 --- ftd.column:
 id: start

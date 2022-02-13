@@ -542,14 +542,19 @@ pub fn container_from_properties(
     Ok(ftd::Container {
         children: Default::default(),
         external_children: Default::default(),
-        open: ftd::p2::utils::string_bool_optional("open", properties, doc.name, 0)?,
+        open: ftd::p2::utils::bool_optional("open", properties, doc.name, 0)?,
+        append_at: ftd::p2::utils::string_optional("append-at", properties, doc.name, 0)?,
         wrap: ftd::p2::utils::bool_with_default("wrap", false, properties, doc.name, 0)?,
     })
 }
 
 fn container_arguments() -> Vec<(String, ftd::p2::Kind)> {
     vec![
-        ("open".to_string(), ftd::p2::Kind::string().into_optional()),
+        ("open".to_string(), ftd::p2::Kind::boolean().into_optional()),
+        (
+            "append-at".to_string(),
+            ftd::p2::Kind::string().into_optional(),
+        ),
         ("align".to_string(), ftd::p2::Kind::string().into_optional()),
         ("wrap".to_string(), ftd::p2::Kind::boolean().into_optional()),
     ]

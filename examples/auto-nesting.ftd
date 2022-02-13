@@ -38,7 +38,8 @@ color: red
 
 -- ftd.column page:
 color: green
-open: page-id
+open: true
+append-at: page-id
 
 --- ftd.text: Page
 

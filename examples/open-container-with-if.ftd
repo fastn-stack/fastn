@@ -6,7 +6,8 @@
 optional string id:
 id: $id
 color: green
-open: iphone-id
+open: true
+append-at: iphone-id
 
 --- ftd.text: iPhone Display
 
@@ -25,7 +26,8 @@ color: red
 optional string id:
 id: $id
 color: blue
-open: android-id
+open: true
+append-at: android-id
 
 --- ftd.text: Android Display
 
@@ -36,7 +38,8 @@ if: $android
 -- boolean mobile: true
 
 -- ftd.column foo:
-open: some-child
+open: true
+append-at: some-child
 padding-left: 20
 id: foo
 

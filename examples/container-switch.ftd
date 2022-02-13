@@ -3,7 +3,8 @@
 width: fill
 optional string id:
 id: $id
-open: desktop-container
+open: true
+append-at: desktop-container
 
 --- ftd.text: Desktop says Hello
 
@@ -16,7 +17,8 @@ id: desktop-container
 width: fill
 optional string id:
 id: $id
-open: mobile-container
+open: true
+append-at: mobile-container
 
 --- ftd.text: Mobile says Hello
 
@@ -28,7 +30,8 @@ id: mobile-container
 -- boolean is-mobile: true
 
 -- ftd.column page:
-open: main-container
+open: true
+append-at: main-container
 
 --- desktop:
 if: not $is-mobile

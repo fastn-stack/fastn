@@ -715,49 +715,23 @@ pub fn bool(
     }
 }
 
-pub fn string_bool_optional(
+pub fn bool_optional(
     name: &str,
     properties: &std::collections::BTreeMap<String, ftd::Value>,
     doc_id: &str,
     line_number: usize,
-) -> ftd::p1::Result<(Option<bool>, Option<String>)> {
+) -> ftd::p1::Result<Option<bool>> {
     match properties.get(name) {
-        Some(ftd::Value::Boolean { value: v }) => Ok((Some(*v), None)),
+        Some(ftd::Value::Boolean { value: v }) => Ok(Some(*v)),
         Some(ftd::Value::None {
             kind: ftd::p2::Kind::Boolean { .. },
-        }) => Ok((None, None)),
-        Some(ftd::Value::None { .. }) => Ok((None, None)),
-        Some(ftd::Value::String { text: v, .. }) => {
-            if let Ok(b) = v.parse::<bool>() {
-                Ok((Some(b), None))
-            } else {
-                Ok((None, Some(v.to_string())))
-            }
-        }
+        }) => Ok(None),
         Some(ftd::Value::Optional {
             data,
             kind: ftd::p2::Kind::Boolean { .. },
         }) => match data.as_ref() {
-            Some(ftd::Value::Boolean { value: v }) => Ok((Some(*v), None)),
-            None => Ok((None, None)),
-            v => ftd::e2(
-                format!("expected string, for: `{}` found: {:?}", name, v),
-                doc_id,
-                line_number,
-            ),
-        },
-        Some(ftd::Value::Optional {
-            data,
-            kind: ftd::p2::Kind::String { .. },
-        }) => match data.as_ref() {
-            Some(ftd::Value::String { text: v, .. }) => {
-                if let Ok(b) = v.parse::<bool>() {
-                    Ok((Some(b), None))
-                } else {
-                    Ok((None, Some(v.to_string())))
-                }
-            }
-            None => Ok((None, None)),
+            Some(ftd::Value::Boolean { value: v }) => Ok(Some(*v)),
+            None => Ok(None),
             v => ftd::e2(
                 format!("expected string, for: `{}` found: {:?}", name, v),
                 doc_id,
@@ -769,7 +743,7 @@ pub fn string_bool_optional(
             doc_id,
             line_number,
         ),
-        None => Ok((None, None)),
+        None => Ok(None),
     }
 }
 

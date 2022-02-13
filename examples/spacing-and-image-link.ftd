@@ -12,7 +12,8 @@ spacing: 20
 --- ftd.text: world
 
 -- ftd.column foo:
-open: some-id
+open: true
+append-at: some-id
 
 --- ftd.text: Row Title
 
@@ -24,7 +25,8 @@ border-width: 2
 border-color: yellow
 
 -- ftd.column bar:
-open: some-id
+open: true
+append-at: some-id
 padding-top: 20
 
 --- ftd.text: Column Title
@@ -34,7 +36,7 @@ spacing: 20
 id: some-id
 color: green
 border-width: 2
-border-color: \#ebedef
+border-color: #ebedef
 
 
 -- boolean show: true

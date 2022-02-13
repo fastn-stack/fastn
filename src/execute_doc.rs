@@ -265,13 +265,12 @@ impl<'a> ExecuteDoc<'a> {
             update_named_container(&c, named_containers, &child_container, container_id, true);
         }
         let number_of_children = e.number_of_children();
-        let open_id = e.is_open_container(container_children.is_empty()).1;
+        let append_at = e.append_at();
         let container_id = e.container_id();
-        let is_open = e.is_open_container(container_children.is_empty()).0;
-
+        let is_open = e.is_open_container(container_children.is_empty());
         current.push(e);
 
-        if let Some(id) = open_id {
+        if let Some(id) = append_at {
             let open_id = container_id.map_or(id.clone(), |v| format!("{}#{}", v, id));
 
             let container =
@@ -300,7 +299,7 @@ impl<'a> ExecuteDoc<'a> {
                     container: ref mut c,
                     ..
                 })) => {
-                    let child = if container_children.is_empty() {
+                    let child = if container_children.is_empty() && is_open {
                         current_container.push(len);
                         let mut new_parent_container = parent_container.to_vec();
                         new_parent_container.append(&mut current_container.to_vec());

@@ -27,7 +27,8 @@ color: green
 
 -- ftd.column desktop:
 width: fill
-open: desktop-container
+open: true
+append-at: desktop-container
 optional string id:
 id: $id
 color: orange
@@ -48,7 +49,8 @@ id: foo
 
 -- ftd.column mobile:
 width: fill
-open: mobile-container
+open: true
+append-at: mobile-container
 optional string id:
 id: $id
 color: blue
@@ -73,7 +75,8 @@ id: foo
 
 -- ftd.column page:
 width: fill
-open: main-container.foo
+open: true
+append-at: main-container.foo
 
 --- ftd.text: Page
 

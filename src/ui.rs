@@ -1047,13 +1047,23 @@ impl Element {
         }
     }
 
-    pub fn is_open_container(&self, is_container_children_empty: bool) -> (bool, Option<String>) {
+    pub fn is_open_container(&self, is_container_children_empty: bool) -> bool {
         match self {
             ftd::Element::Column(e) => e.container.is_open(is_container_children_empty),
             ftd::Element::Row(e) => e.container.is_open(is_container_children_empty),
             ftd::Element::Scene(e) => e.container.is_open(is_container_children_empty),
             ftd::Element::Grid(e) => e.container.is_open(is_container_children_empty),
-            _ => (false, None),
+            _ => false,
+        }
+    }
+
+    pub fn append_at(&self) -> Option<String> {
+        match self {
+            ftd::Element::Column(e) => e.container.append_at.to_owned(),
+            ftd::Element::Row(e) => e.container.append_at.to_owned(),
+            ftd::Element::Scene(e) => e.container.append_at.to_owned(),
+            ftd::Element::Grid(e) => e.container.append_at.to_owned(),
+            _ => None,
         }
     }
 
@@ -1780,18 +1790,15 @@ impl Spacing {
 pub struct Container {
     pub children: Vec<ftd::Element>,
     pub external_children: Option<(String, Vec<Vec<usize>>, Vec<ftd::Element>)>,
-    pub open: (Option<bool>, Option<String>),
+    pub open: Option<bool>,
+    pub append_at: Option<String>,
     pub wrap: bool,
 }
 
 impl Container {
-    pub fn is_open(&self, is_container_children_empty: bool) -> (bool, Option<String>) {
-        (
-            self.open
-                .0
-                .unwrap_or_else(|| (self.children.is_empty() && is_container_children_empty)),
-            self.open.1.clone(),
-        )
+    pub fn is_open(&self, is_container_children_empty: bool) -> bool {
+        self.open
+            .unwrap_or_else(|| (self.children.is_empty() && is_container_children_empty))
     }
 }
 

@@ -61,7 +61,8 @@ id: foo
 
 -- ftd.column page:
 width: fill
-open: main-container.foo
+open: true
+append-at: main-container.foo
 
 --- ftd.text: Page
 

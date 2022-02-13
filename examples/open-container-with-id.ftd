@@ -36,7 +36,8 @@ if: $body is not null
 body: $body
 
 -- ftd.column page:
-open: main-container
+open: true
+append-at: main-container
 
 --- ftd.row:
 width: fill

@@ -1,0 +1,52 @@
+-- import: ft
+
+-- foo:
+
+-- ft.h1: Foo says Hello
+
+-- container: ftd.main
+
+-- foo:
+
+--- ft.h1: Foo says Hello Again
+
+-- bar:
+
+-- ft.h1: This is not bar text
+
+
+-- bar:
+
+--- ft.h1: Bar says Hello
+
+
+
+-- ftd.column foo:
+open: true
+append-at: foo-id
+padding: 20
+border-width: 2
+color: red
+
+--- ftd.text: Before Foo
+
+--- ftd.column:
+id: foo-id
+open: false
+
+--- ftd.text: After Foo
+
+
+-- ftd.column bar:
+append-at: bar-id
+padding: 20
+border-width: 2
+color: green
+
+--- ftd.text: Before Bar
+
+--- ftd.column:
+id: bar-id
+open: false
+
+--- ftd.text: After Bar
