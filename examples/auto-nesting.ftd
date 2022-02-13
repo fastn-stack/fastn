@@ -2,34 +2,56 @@
 region: h1
 padding-left: 10
 caption title:
+append-at: h1-id
+boolean open: true
 
 --- ftd.text:
 text: $title
 caption $title:
 region: title
 size: 34
+$event-click$: toggle $open
+
+--- ftd.column:
+id: h1-id
+if: $open
+
 
 -- ftd.column h2:
 region: h2
 padding-left: 10
 caption title:
+append-at: h2-id
+boolean open: true
 
 --- ftd.text:
 text: $title
 caption $title:
 region: title
 size: 28
+$event-click$: toggle $open
+
+--- ftd.column:
+id: h2-id
+if: $open
 
 -- ftd.column h3:
 region: h3
 padding-left: 10
 caption title:
+append-at: h3-id
+boolean open: true
 
 --- ftd.text:
 text: $title
 caption $title:
 region: title
 size: 24
+$event-click$: toggle $open
+
+--- ftd.column:
+id: h3-id
+if: $open
 
 -- ftd.column foo:
 color: red
@@ -61,7 +83,15 @@ id: page-id
 
 -- h1: Heading 1
 
+-- ftd.text:
+
+The Great Western Railway War Memorial is a First World War memorial by Charles Sargeant Jagger and Thomas S. Tait. It stands on platform 1 at London Paddington station, commemorating the 2,500 Great Western Railway (GWR) employees killed in the conflict. A third of the GWR's workforce of almost 80,000 left to fight in the war, the company guaranteeing their jobs. The memorial consists of a bronze statue of a soldier in heavy winter clothing, reading a letter from home. The statue stands on a polished granite plinth, within a white stone surround. The names of the dead are on a roll buried in the plinth. GWR chairman Viscount Churchill unveiled the memorial on 11 November 1922 in front of over 6,000 people, including the Archbishop of Canterbury, GWR officials, and relatives of the dead. When public gatherings were restricted during the COVID-19 pandemic, local communities on the GWR network laid wreaths on trains that carried them to
+
 -- h2: Heading 2
+
+-- ftd.text:
+
+The Great Western Railway War Memorial is a First World War memorial by Charles Sargeant Jagger and Thomas S. Tait. It stands on platform 1 at London Paddington station, commemorating the 2,500 Great Western Railway (GWR) employees killed in the conflict. A third of the GWR's workforce of almost 80,000 left to fight in the war, the company guaranteeing their jobs. The memorial consists of a bronze statue of a soldier in heavy winter clothing, reading a letter from home. The statue stands on a polished granite plinth, within a white stone surround. The names of the dead are on a roll buried in the plinth. GWR chairman Viscount Churchill unveiled the memorial on 11 November 1922 in front of over 6,000 people, including the Archbishop of Canterbury, GWR officials, and relatives of the dead. When public gatherings were restricted during the COVID-19 pandemic, local communities on the GWR network laid wreaths on trains that carried them to
 
 -- h3: Heading 3
 
@@ -69,13 +99,25 @@ id: page-id
 
 -- h2: Heading 2
 
+-- ftd.text:
+
+The Great Western Railway War Memorial is a First World War memorial by Charles Sargeant Jagger and Thomas S. Tait. It stands on platform 1 at London Paddington station, commemorating the 2,500 Great Western Railway (GWR) employees killed in the conflict. A third of the GWR's workforce of almost 80,000 left to fight in the war, the company guaranteeing their jobs. The memorial consists of a bronze statue of a soldier in heavy winter clothing, reading a letter from home. The statue stands on a polished granite plinth, within a white stone surround. The names of the dead are on a roll buried in the plinth. GWR chairman Viscount Churchill unveiled the memorial on 11 November 1922 in front of over 6,000 people, including the Archbishop of Canterbury, GWR officials, and relatives of the dead. When public gatherings were restricted during the COVID-19 pandemic, local communities on the GWR network laid wreaths on trains that carried them to
+
 -- h2: Heading 2
+
+-- ftd.text:
+
+The Great Western Railway War Memorial is a First World War memorial by Charles Sargeant Jagger and Thomas S. Tait. It stands on platform 1 at London Paddington station, commemorating the 2,500 Great Western Railway (GWR) employees killed in the conflict. A third of the GWR's workforce of almost 80,000 left to fight in the war, the company guaranteeing their jobs. The memorial consists of a bronze statue of a soldier in heavy winter clothing, reading a letter from home. The statue stands on a polished granite plinth, within a white stone surround. The names of the dead are on a roll buried in the plinth. GWR chairman Viscount Churchill unveiled the memorial on 11 November 1922 in front of over 6,000 people, including the Archbishop of Canterbury, GWR officials, and relatives of the dead. When public gatherings were restricted during the COVID-19 pandemic, local communities on the GWR network laid wreaths on trains that carried them to
 
 -- h1: Heading 1
 
 -- h3: Heading 3
 
 -- foo:
+
+-- ftd.text:
+
+The Great Western Railway War Memorial is a First World War memorial by Charles Sargeant Jagger and Thomas S. Tait. It stands on platform 1 at London Paddington station, commemorating the 2,500 Great Western Railway (GWR) employees killed in the conflict. A third of the GWR's workforce of almost 80,000 left to fight in the war, the company guaranteeing their jobs. The memorial consists of a bronze statue of a soldier in heavy winter clothing, reading a letter from home. The statue stands on a polished granite plinth, within a white stone surround. The names of the dead are on a roll buried in the plinth. GWR chairman Viscount Churchill unveiled the memorial on 11 November 1922 in front of over 6,000 people, including the Archbishop of Canterbury, GWR officials, and relatives of the dead. When public gatherings were restricted during the COVID-19 pandemic, local communities on the GWR network laid wreaths on trains that carried them to
 
 -- h2: Heading 2
 

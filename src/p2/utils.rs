@@ -844,6 +844,9 @@ pub(crate) fn get_doc_name_and_remaining(s: &str) -> ftd::p1::Result<(String, Op
 }
 
 pub fn split(name: String, split_at: &str) -> ftd::p1::Result<(String, String)> {
+    if !name.contains(split_at) {
+        return ftd::e2(format!("{} is not found in {}", split_at, name), "", 0);
+    }
     let mut part = name.splitn(2, split_at);
     let part_1 = part.next().unwrap().trim();
     let part_2 = part.next().unwrap().trim();

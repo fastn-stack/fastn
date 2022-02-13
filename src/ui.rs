@@ -1229,6 +1229,16 @@ impl Element {
         }
     }
 
+    pub fn get_container(&self) -> Option<&ftd::Container> {
+        match self {
+            ftd::Element::Column(e) => Some(&e.container),
+            ftd::Element::Row(e) => Some(&e.container),
+            ftd::Element::Scene(e) => Some(&e.container),
+            ftd::Element::Grid(e) => Some(&e.container),
+            _ => None,
+        }
+    }
+
     pub fn renest_on_region(elements: &mut Vec<ftd::Element>) {
         let mut region: Option<(usize, &Region)> = None;
         let mut insert: Vec<(usize, usize)> = Default::default();
@@ -1264,7 +1274,39 @@ impl Element {
                 | ftd::Element::Row(ftd::Row {
                     ref mut container, ..
                 }) => {
-                    container.children.append(&mut children);
+                    if let Some(ref id) = container.append_at {
+                        let id = if let Ok(id) = ftd::p2::utils::split(id.to_string(), ".") {
+                            id.1
+                        } else {
+                            id.to_string()
+                        };
+
+                        let container_idx =
+                            get_container(container.children.as_slice(), id.as_str());
+
+                        let external_children = {
+                            if children.is_empty() {
+                                vec![]
+                            } else {
+                                let mut main = ftd::p2::interpreter::default_column();
+                                main.container.children.extend(children);
+                                vec![ftd::Element::Column(main)]
+                            }
+                        };
+                        match &mut container.external_children {
+                            Some((i, c, e))
+                                if (id.eq(i) && (&container_idx.as_slice()).eq(&c.as_slice())) =>
+                            {
+                                e.extend(external_children)
+                            }
+                            _ => {
+                                container.external_children =
+                                    Some((id, container_idx, external_children));
+                            }
+                        }
+                    } else {
+                        container.children.append(&mut children);
+                    }
                 }
                 _ => continue,
             }
@@ -1287,6 +1329,60 @@ impl Element {
                     ftd::Element::renest_on_region(&mut container.children);
                 }
                 _ => continue,
+            }
+        }
+
+        fn get_container(children: &[ftd::Element], append_at: &str) -> Vec<Vec<usize>> {
+            let mut all_container = vec![];
+            get_container_(
+                children,
+                append_at,
+                &mut false,
+                &mut vec![],
+                &mut all_container,
+            );
+            return all_container;
+
+            fn get_container_(
+                children: &[ftd::Element],
+                append_at: &str,
+                found: &mut bool,
+                container: &mut Vec<usize>,
+                all_container: &mut Vec<Vec<usize>>,
+            ) {
+                for (idx, child) in children.iter().enumerate() {
+                    let c = if let Some(c) = child.get_container() {
+                        c
+                    } else {
+                        continue;
+                    };
+                    let common = if let Some(common) = child.get_common() {
+                        common
+                    } else {
+                        continue;
+                    };
+
+                    match common.data_id {
+                        Some(ref id) if append_at.eq(id.as_str()) => {
+                            *found = true;
+                            container.push(idx);
+                            all_container.push(container.to_owned());
+                            return;
+                        }
+                        _ => {}
+                    }
+                    container.push(idx);
+                    get_container_(
+                        c.children.as_slice(),
+                        append_at,
+                        found,
+                        container,
+                        all_container,
+                    );
+                    if !(*found) {
+                        container.pop();
+                    }
+                }
             }
         }
     }
