@@ -38,7 +38,8 @@ string link:
 
 -- ftd.column index-page:
 width: fill
-open: content-container
+open: true
+append-at: content-container
 background-color if $dark-mode:$neutral-700
 
 --- header:
@@ -61,7 +62,8 @@ id: content-container
 
 -- ftd.column blog-page:
 width: fill
-open: content-container2
+open: true
+append-at: content-container2
 background-color if $dark-mode: $neutral-700
 
 --- header:
