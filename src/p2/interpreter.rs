@@ -1298,10 +1298,7 @@ mod test {
                         s("open"),
                         ftd::component::Property {
                             default: Some(ftd::PropertyValue::Value {
-                                value: ftd::variable::Value::String {
-                                    text: "true".to_string(),
-                                    source: ftd::TextSource::Header,
-                                },
+                                value: ftd::Value::Boolean { value: true },
                             }),
                             conditions: vec![],
                             ..Default::default()
@@ -1839,7 +1836,7 @@ mod test {
                                         ..Default::default()
                                     }),
                                 ],
-                                open: (Some(true), None),
+                                open: Some(true),
                                 ..Default::default()
                             },
                             common: ftd::Common {
@@ -1850,7 +1847,7 @@ mod test {
                         }),
                     ],
                     external_children: Default::default(),
-                    open: (Some(true), None),
+                    open: Some(true),
                     ..Default::default()
                 },
                 common: ftd::Common {
@@ -1906,7 +1903,7 @@ mod test {
                             ..Default::default()
                         }),
                     ],
-                    open: (Some(true), None),
+                    open: Some(true),
                     ..Default::default()
                 },
                 common: ftd::Common {
@@ -1931,7 +1928,7 @@ mod test {
                                 container: ftd::Container {
                                     children,
                                     external_children: Default::default(),
-                                    open: (Some(true), None),
+                                    open: Some(true),
                                     ..Default::default()
                                 },
                                 common: ftd::Common {
@@ -2261,10 +2258,7 @@ mod test {
                         s("open"),
                         ftd::component::Property {
                             default: Some(ftd::PropertyValue::Value {
-                                value: ftd::variable::Value::String {
-                                    text: "true".to_string(),
-                                    source: ftd::TextSource::Header,
-                                },
+                                value: ftd::Value::Boolean { value: true },
                             }),
                             conditions: vec![],
                             ..Default::default()
@@ -2801,7 +2795,7 @@ mod test {
                                         ..Default::default()
                                     }),
                                 ],
-                                open: (Some(true), None),
+                                open: Some(true),
                                 ..Default::default()
                             },
                             common: ftd::Common {
@@ -2812,7 +2806,7 @@ mod test {
                         }),
                     ],
                     external_children: Default::default(),
-                    open: (Some(true), None),
+                    open: Some(true),
                     ..Default::default()
                 },
                 common: ftd::Common {
@@ -2868,7 +2862,7 @@ mod test {
                             ..Default::default()
                         }),
                     ],
-                    open: (Some(true), None),
+                    open: Some(true),
                     ..Default::default()
                 },
                 common: ftd::Common {
@@ -2893,7 +2887,7 @@ mod test {
                                 container: ftd::Container {
                                     children,
                                     external_children: Default::default(),
-                                    open: (Some(true), None),
+                                    open: Some(true),
                                     ..Default::default()
                                 },
                                 common: ftd::Common {
@@ -6066,7 +6060,8 @@ mod test {
                         },
                         ..Default::default()
                     })],
-                    open: (None, Some(s("some-child"))),
+                    open: Some(true),
+                    append_at: Some(s("some-child")),
                     ..Default::default()
                 },
                 ..Default::default()
@@ -6079,19 +6074,31 @@ mod test {
             ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd#column".to_string(),
                 full_name: s("foo/bar#foo"),
-                properties: std::array::IntoIter::new([(
-                    s("open"),
-                    ftd::component::Property {
-                        default: Some(ftd::PropertyValue::Value {
-                            value: ftd::Value::String {
-                                text: s("some-child"),
-                                source: ftd::TextSource::Header,
-                            },
-                        }),
-                        conditions: vec![],
-                        ..Default::default()
-                    },
-                )])
+                properties: std::array::IntoIter::new([
+                    (
+                        s("append-at"),
+                        ftd::component::Property {
+                            default: Some(ftd::PropertyValue::Value {
+                                value: ftd::Value::String {
+                                    text: s("some-child"),
+                                    source: ftd::TextSource::Header,
+                                },
+                            }),
+                            conditions: vec![],
+                            ..Default::default()
+                        },
+                    ),
+                    (
+                        s("open"),
+                        ftd::component::Property {
+                            default: Some(ftd::PropertyValue::Value {
+                                value: ftd::Value::Boolean { value: true },
+                            }),
+                            conditions: vec![],
+                            ..Default::default()
+                        },
+                    ),
+                ])
                 .collect(),
                 instructions: vec![
                     ftd::component::Instruction::ChildComponent {
@@ -6133,7 +6140,8 @@ mod test {
         p!(
             "
             -- ftd.column foo:
-            open: some-child
+            open: true
+            append-at: some-child
 
             --- ftd.row:
 
@@ -6243,7 +6251,8 @@ mod test {
                                         vec![vec![0], vec![1]],
                                         vec![ftd::Element::Column(external_children)],
                                     )),
-                                    open: (None, Some(s("some-child"))),
+                                    open: Some(true),
+                                    append_at: Some(s("some-child")),
                                     ..Default::default()
                                 },
                                 common: ftd::Common {
@@ -6326,19 +6335,31 @@ mod test {
             ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd#column".to_string(),
                 full_name: s("foo/bar#foo"),
-                properties: std::array::IntoIter::new([(
-                    s("open"),
-                    ftd::component::Property {
-                        default: Some(ftd::PropertyValue::Value {
-                            value: ftd::variable::Value::String {
-                                text: s("some-child"),
-                                source: ftd::TextSource::Header,
-                            },
-                        }),
-                        conditions: vec![],
-                        ..Default::default()
-                    },
-                )])
+                properties: std::array::IntoIter::new([
+                    (
+                        s("append-at"),
+                        ftd::component::Property {
+                            default: Some(ftd::PropertyValue::Value {
+                                value: ftd::variable::Value::String {
+                                    text: s("some-child"),
+                                    source: ftd::TextSource::Header,
+                                },
+                            }),
+                            conditions: vec![],
+                            ..Default::default()
+                        },
+                    ),
+                    (
+                        s("open"),
+                        ftd::component::Property {
+                            default: Some(ftd::PropertyValue::Value {
+                                value: ftd::Value::Boolean { value: true },
+                            }),
+                            conditions: vec![],
+                            ..Default::default()
+                        },
+                    ),
+                ])
                 .collect(),
                 instructions: vec![
                     ftd::component::Instruction::ChildComponent {
@@ -6534,7 +6555,8 @@ mod test {
             -- boolean mobile: true
 
             -- ftd.column foo:
-            open: some-child
+            open: true
+            append-at: some-child
 
             --- mobile-display:
             if: $mobile
@@ -6608,7 +6630,8 @@ mod test {
                                             vec![vec![0]],
                                             vec![],
                                         )),
-                                        open: (None, Some(s("desktop-container"))),
+                                        open: Some(true),
+                                        append_at: Some(s("desktop-container")),
                                         ..Default::default()
                                     },
                                     common: ftd::Common {
@@ -6637,7 +6660,8 @@ mod test {
                                             vec![vec![0]],
                                             vec![],
                                         )),
-                                        open: (None, Some(s("mobile-container"))),
+                                        open: Some(true),
+                                        append_at: Some(s("mobile-container")),
                                         ..Default::default()
                                     },
                                     common: ftd::Common {
@@ -6662,7 +6686,8 @@ mod test {
                         vec![vec![0, 0], vec![0, 1]],
                         vec![ftd::Element::Column(external_children)],
                     )),
-                    open: (None, Some(s("main-container"))),
+                    open: Some(true),
+                    append_at: Some(s("main-container")),
                     ..Default::default()
                 },
                 ..Default::default()
@@ -6673,13 +6698,15 @@ mod test {
             indoc::indoc!(
                 "
                 -- ftd.column desktop:
-                open: desktop-container
+                open: true
+                append-at: desktop-container
 
                 --- ftd.column:
                 id: desktop-container
 
                 -- ftd.column mobile:
-                open: mobile-container
+                open: true
+                append-at: mobile-container
 
                 --- ftd.column:
                 id: mobile-container
@@ -6687,7 +6714,8 @@ mod test {
                 -- boolean is-mobile: true
 
                 -- ftd.column page:
-                open: main-container
+                open: true
+                append-at: main-container
 
                 --- ftd.column:
                 id: start
@@ -6791,7 +6819,8 @@ mod test {
                         vec![vec![0, 0], vec![1, 0]],
                         vec![ftd::Element::Column(external_children)],
                     )),
-                    open: (None, Some(s("main-container.foo"))),
+                    open: Some(true),
+                    append_at: Some(s("main-container.foo")),
                     ..Default::default()
                 },
                 ..Default::default()
@@ -6818,7 +6847,8 @@ mod test {
                 -- boolean is-mobile: true
 
                 -- ftd.column page:
-                open: main-container.foo
+                open: true
+                append-at: main-container.foo
 
                 --- desktop:
                 if: not $is-mobile
@@ -6885,7 +6915,8 @@ mod test {
                     vec![vec![0]],
                     vec![ftd::Element::Column(nested_external_children)],
                 )),
-                open: (None, Some(s("desktop-container"))),
+                open: Some(true),
+                append_at: Some(s("desktop-container")),
                 ..Default::default()
             },
             ..Default::default()
@@ -6924,7 +6955,8 @@ mod test {
                                     vec![vec![0]],
                                     vec![],
                                 )),
-                                open: (None, Some(s("desktop-container"))),
+                                open: Some(true),
+                                append_at: Some(s("desktop-container")),
                                 ..Default::default()
                             },
                             common: ftd::Common {
@@ -6963,7 +6995,8 @@ mod test {
                                     vec![vec![0]],
                                     vec![],
                                 )),
-                                open: (None, Some(s("mobile-container"))),
+                                open: Some(true),
+                                append_at: Some(s("mobile-container")),
                                 ..Default::default()
                             },
                             common: ftd::Common {
@@ -6982,7 +7015,8 @@ mod test {
                         vec![vec![0, 0, 0], vec![1, 0, 0]],
                         vec![ftd::Element::Column(external_children)],
                     )),
-                    open: (None, Some(s("main-container.foo"))),
+                    open: Some(true),
+                    append_at: Some(s("main-container.foo")),
                     ..Default::default()
                 },
                 ..Default::default()
@@ -7002,7 +7036,8 @@ mod test {
 
 
                 -- ftd.column desktop:
-                open: desktop-container
+                open: true
+                append-at: desktop-container
                 optional string id:
                 id: $id
 
@@ -7015,7 +7050,8 @@ mod test {
 
 
                 -- ftd.column mobile:
-                open: mobile-container
+                open: true
+                append-at: mobile-container
                 optional string id:
                 id: $id
 
@@ -7030,7 +7066,8 @@ mod test {
 
 
                 -- ftd.column page:
-                open: main-container.foo
+                open: true
+                append-at: main-container.foo
 
                 --- desktop:
                 if: not $is-mobile
@@ -7146,7 +7183,8 @@ mod test {
                         vec![],
                         vec![ftd::Element::Column(external_children)],
                     )),
-                    open: (None, Some(s("main-container"))),
+                    open: Some(true),
+                    append_at: Some(s("main-container")),
                     ..Default::default()
                 },
                 ..Default::default()
@@ -7173,7 +7211,8 @@ mod test {
                 -- boolean is-mobile: true
 
                 -- ftd.column page:
-                open: main-container
+                open: true
+                append-at: main-container
 
                 --- ftd.column:
                 id: start
@@ -7211,7 +7250,7 @@ mod test {
                 ..Default::default()
             },
             container: ftd::Container {
-                open: (Some(false), None),
+                open: Some(false),
                 ..Default::default()
             },
         }));
@@ -7228,7 +7267,7 @@ mod test {
                     ftd::Element::Row(ftd::Row {
                         spacing: None,
                         container: ftd::Container {
-                            open: (Some(false), None),
+                            open: Some(false),
                             ..Default::default()
                         },
                         common: ftd::Common {
@@ -7238,7 +7277,7 @@ mod test {
                         },
                     }),
                 ],
-                open: (Some(true), None),
+                open: Some(true),
                 ..Default::default()
             },
             common: ftd::Common {
@@ -12882,7 +12921,8 @@ mod test {
                                 }),
                             ],
                             external_children: Some((s("some-child"), vec![vec![1]], vec![])),
-                            open: (None, Some(s("some-child"))),
+                            open: Some(true),
+                            append_at: Some(s("some-child")),
                             ..Default::default()
                         },
                         ..Default::default()
@@ -12972,7 +13012,8 @@ mod test {
                                                     vec![vec![1]],
                                                     vec![],
                                                 )),
-                                                open: (None, Some(s("some-child"))),
+                                                open: Some(true),
+                                                append_at: Some(s("some-child")),
                                                 ..Default::default()
                                             },
                                             ..Default::default()
@@ -12987,7 +13028,8 @@ mod test {
                                     },
                                 })],
                             )),
-                            open: (None, Some(s("some-child"))),
+                            open: Some(true),
+                            append_at: Some(s("some-child")),
                             ..Default::default()
                         },
                         ..Default::default()
@@ -13048,7 +13090,8 @@ mod test {
                                 vec![vec![1]],
                                 beverage_external_children,
                             )),
-                            open: (None, Some(s("some-child"))),
+                            open: Some(true),
+                            append_at: Some(s("some-child")),
                             ..Default::default()
                         },
                         common: ftd::Common {
@@ -13068,7 +13111,8 @@ mod test {
                 "
             -- ftd.column display-item1:
             string name:
-            open: some-child
+            open: true
+            append-at: some-child
             boolean visible: true
 
             --- ftd.text: $name
@@ -13591,7 +13635,8 @@ mod test {
                         vec![vec![0]],
                         vec![ftd::Element::Column(external_children)],
                     )),
-                    open: (None, Some(s("some-id"))),
+                    open: Some(true),
+                    append_at: Some(s("some-id")),
                     ..Default::default()
                 },
                 common: ftd::Common {
@@ -13624,7 +13669,8 @@ mod test {
 
 
                 -- ftd.column foo:
-                open: some-id
+                open: true
+                append-at: some-id
 
                 --- ftd.column:
                 id: some-id
@@ -16136,8 +16182,8 @@ mod test {
                         }),
                     ],
                     external_children: None,
-                    open: (None, None),
                     wrap: false,
+                    ..Default::default()
                 },
                 spacing: None,
                 common: ftd::Common {
@@ -16201,8 +16247,8 @@ mod test {
                         }),
                     ],
                     external_children: None,
-                    open: (None, None),
                     wrap: false,
+                    ..Default::default()
                 },
                 spacing: None,
                 common: ftd::Common {
