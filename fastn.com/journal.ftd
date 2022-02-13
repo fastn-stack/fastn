@@ -106,7 +106,7 @@ Should we rewrite all paths? What if this was part of the main package? Or what
 if we did this from our main package:
 
 
--- ftd.code:
+-- ft.code:
 lang: ftd
 
 \-- import: d.com/a/lib
