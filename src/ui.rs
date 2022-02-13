@@ -1334,19 +1334,12 @@ impl Element {
 
         fn get_container(children: &[ftd::Element], append_at: &str) -> Vec<Vec<usize>> {
             let mut all_container = vec![];
-            get_container_(
-                children,
-                append_at,
-                &mut false,
-                &mut vec![],
-                &mut all_container,
-            );
+            get_container_(children, append_at, &mut vec![], &mut all_container);
             return all_container;
 
             fn get_container_(
                 children: &[ftd::Element],
                 append_at: &str,
-                found: &mut bool,
                 container: &mut Vec<usize>,
                 all_container: &mut Vec<Vec<usize>>,
             ) {
@@ -1364,7 +1357,6 @@ impl Element {
 
                     match common.data_id {
                         Some(ref id) if append_at.eq(id.as_str()) => {
-                            *found = true;
                             container.push(idx);
                             all_container.push(container.to_owned());
                             return;
@@ -1372,16 +1364,8 @@ impl Element {
                         _ => {}
                     }
                     container.push(idx);
-                    get_container_(
-                        c.children.as_slice(),
-                        append_at,
-                        found,
-                        container,
-                        all_container,
-                    );
-                    if !(*found) {
-                        container.pop();
-                    }
+                    get_container_(c.children.as_slice(), append_at, container, all_container);
+                    container.pop();
                 }
             }
         }
