@@ -1,11 +1,11 @@
 #[cfg(feature = "async")]
 #[async_trait::async_trait]
 pub trait Library: Sync {
-    async fn get(&self, name: &str) -> Option<String>;
-    async fn get_with_result(&self, name: &str) -> ftd::p1::Result<String> {
-        match self.get(name).await {
+    async fn get(&self, name: &str, doc: &ftd::p2::TDoc) -> Option<String>;
+    async fn get_with_result(&self, name: &str, doc: &ftd::p2::TDoc) -> ftd::p1::Result<String> {
+        match self.get(name, doc) {
             Some(v) => Ok(v),
-            None => ftd::e2(format!("library not found: {}", name), "TODO", 0), // TODO
+            None => ftd::e2(format!("library not found: {}", name), "", 0),
         }
     }
     async fn process(

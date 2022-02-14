@@ -393,7 +393,7 @@ impl<'a> Interpreter<'a> {
         Ok(instructions)
     }
 
-    // #[cfg(not(feature = "async"))]
+    #[cfg(not(feature = "async"))]
     fn interpret_(
         &mut self,
         name: &str,
