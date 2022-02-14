@@ -587,7 +587,7 @@ mod test {
 
             Frontend developer at fifthtry.
 
-            -- integer x: 20
+            -- x: 20
 
             -- abrar: Abrar Khan2
             address: Bihar2
