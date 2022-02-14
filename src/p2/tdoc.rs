@@ -358,9 +358,9 @@ impl<'a> TDoc<'a> {
             };
             let current_container =
                 ftd::p2::utils::get_string_container(local_container.as_slice());
-            let (child, ignore_mouse_in) = match instruction {
-                ftd::Instruction::ChildComponent { child } => (child, false),
-                ftd::Instruction::RecursiveChildComponent { child } => (child, true),
+            let child = match instruction {
+                ftd::Instruction::ChildComponent { child }
+                | ftd::Instruction::RecursiveChildComponent { child } => child,
                 _ => continue,
             };
             self.update_component_data(
@@ -372,7 +372,7 @@ impl<'a> TDoc<'a> {
                 &mut child.events,
                 false,
                 true,
-                ignore_mouse_in,
+                true,
             )?;
         }
         Ok(())
