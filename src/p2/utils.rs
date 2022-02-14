@@ -660,7 +660,11 @@ pub fn int_with_default(
             kind: ftd::p2::Kind::Integer { .. },
         }) => Ok(def),
         Some(ftd::Value::None { .. }) => Ok(def),
-        Some(v) => ftd::e2(format!("expected int, found: {:?}", v), doc_id, line_number),
+        Some(v) => ftd::e2(
+            format!("expected int, found2: {:?}", v),
+            doc_id,
+            line_number,
+        ),
         None => Ok(def),
     }
 }

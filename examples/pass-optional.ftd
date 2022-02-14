@@ -1,0 +1,20 @@
+-- foo: First Hello
+left: 20
+
+-- foo: Second Hello
+right: 10
+color: red
+
+
+-- ftd.column foo:
+optional integer left:
+optional integer right:
+optional string color:
+caption title: Hello world
+anchor: parent
+left if $left is not null: $left
+right if $right is not null: $right
+color if $color is not null: $color
+top: 30
+
+--- ftd.text: $title

@@ -1170,6 +1170,10 @@ fn get_conditional_attributes(
                     if !condition.is_arg_constant() {
                         let cond = condition.to_condition(line_number, doc)?;
                         let value = pv.resolve(line_number, doc)?;
+                        if check_for_none(&condition, &pv, &value) {
+                            // todo: send default value
+                            continue;
+                        }
                         let string = get_string_value(&name, value, doc.name, line_number)?;
                         conditions_with_value.push((cond, string));
                     }
@@ -1196,6 +1200,38 @@ fn get_conditional_attributes(
         }
     }
     return Ok(conditional_attribute);
+
+    fn check_for_none(
+        condition: &ftd::p2::Boolean,
+        pv: &ftd::PropertyValue,
+        value: &ftd::Value,
+    ) -> bool {
+        let bool_name = if let ftd::p2::Boolean::IsNotNull { value } = condition {
+            match value {
+                ftd::PropertyValue::Reference { name, .. }
+                | ftd::PropertyValue::Variable { name, .. } => name,
+                _ => return false,
+            }
+        } else {
+            return false;
+        };
+
+        let pv_name = match pv {
+            ftd::PropertyValue::Reference { name, .. }
+            | ftd::PropertyValue::Variable { name, .. } => name,
+            _ => return false,
+        };
+
+        if !bool_name.eq(pv_name) {
+            return false;
+        }
+
+        match value {
+            ftd::Value::None { .. } => true,
+            ftd::Value::Optional { data, .. } if data.as_ref().eq(&None) => true,
+            _ => false,
+        }
+    }
 
     fn get_style_name(name: String) -> String {
         match name.as_str() {
@@ -1277,7 +1313,13 @@ fn get_conditional_attributes(
                     value: format!("{}px", v),
                     important: false,
                 },
-                v => return ftd::e2(format!("expected int, found: {:?}", v), doc_id, line_number),
+                v => {
+                    return ftd::e2(
+                        format!("expected int, found3: {:?}", v),
+                        doc_id,
+                        line_number,
+                    )
+                }
             }
         } else if style_integer_important.contains(&name) {
             match value {
@@ -1285,7 +1327,13 @@ fn get_conditional_attributes(
                     value: format!("{}px", v),
                     important: true,
                 },
-                v => return ftd::e2(format!("expected int, found: {:?}", v), doc_id, line_number),
+                v => {
+                    return ftd::e2(
+                        format!("expected int, found4: {:?}", v),
+                        doc_id,
+                        line_number,
+                    )
+                }
             }
         } else if style_length.contains(&name) {
             match value {
@@ -1391,7 +1439,13 @@ fn get_conditional_attributes(
                     value: v.to_string(),
                     important: false,
                 },
-                v => return ftd::e2(format!("expected int, found: {:?}", v), doc_id, line_number),
+                v => {
+                    return ftd::e2(
+                        format!("expected int, found5: {:?}", v),
+                        doc_id,
+                        line_number,
+                    )
+                }
             }
         } else if name.eq("grid-template-areas") {
             match value {
