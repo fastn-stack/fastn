@@ -1170,7 +1170,7 @@ fn get_conditional_attributes(
                     if !condition.is_arg_constant() {
                         let cond = condition.to_condition(line_number, doc)?;
                         let value = pv.resolve(line_number, doc)?;
-                        if check_for_none(&condition, &pv, &value) {
+                        if check_for_none(condition, pv, &value) {
                             // todo: send default value
                             continue;
                         }
