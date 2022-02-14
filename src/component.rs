@@ -388,6 +388,7 @@ impl ChildComponent {
                     &mut child_component.events,
                     false,
                     false,
+                    false,
                 )?;
                 child_component
             };
@@ -1933,7 +1934,7 @@ pub fn recursive_child_component(
     let mut loop_on_component = loop_data.to_string();
 
     if loop_data.contains("as") {
-        let parts = ftd::p2::utils::split(loop_data.to_string(), "as")?;
+        let parts = ftd::p2::utils::split(loop_data.to_string(), " as ")?;
         loop_on_component = parts.0;
         loop_ref = if let Some(loop_ref) = parts.1.strip_prefix('$') {
             loop_ref.to_string()

@@ -121,6 +121,7 @@ impl<'a> TDoc<'a> {
         events: &mut Vec<ftd::p2::Event>,
         insert_only: bool,
         ignore_loop: bool,
+        ignore_mouse_in: bool,
     ) -> ftd::p1::Result<()> {
         for (_, property) in properties.iter_mut() {
             if let Some(ref mut default) = property.default {
@@ -131,6 +132,7 @@ impl<'a> TDoc<'a> {
                     current_container,
                     insert_only,
                     ignore_loop,
+                    ignore_mouse_in,
                 )?;
             }
             for (boolean, condition) in property.conditions.iter_mut() {
@@ -141,6 +143,7 @@ impl<'a> TDoc<'a> {
                     current_container,
                     insert_only,
                     ignore_loop,
+                    ignore_mouse_in,
                 )?;
                 rename_property_value(
                     condition,
@@ -149,6 +152,7 @@ impl<'a> TDoc<'a> {
                     current_container,
                     insert_only,
                     ignore_loop,
+                    ignore_mouse_in,
                 )?;
             }
         }
@@ -163,6 +167,7 @@ impl<'a> TDoc<'a> {
                 current_container,
                 insert_only,
                 ignore_loop,
+                ignore_mouse_in,
             )?;
         }
         for event in events.iter_mut() {
@@ -173,6 +178,7 @@ impl<'a> TDoc<'a> {
                 current_container,
                 insert_only,
                 ignore_loop,
+                ignore_mouse_in,
             )?;
             for (_, parameters) in event.action.parameters.iter_mut() {
                 for parameter in parameters.iter_mut() {
@@ -183,6 +189,7 @@ impl<'a> TDoc<'a> {
                         current_container,
                         insert_only,
                         ignore_loop,
+                        ignore_mouse_in,
                     )?;
                 }
             }
@@ -196,6 +203,7 @@ impl<'a> TDoc<'a> {
             current_container: &str,
             insert_only: bool,
             ignore_loop: bool,
+            ignore_mouse_in: bool,
         ) -> ftd::p1::Result<()> {
             match condition {
                 ftd::p2::Boolean::IsNotNull { value }
@@ -210,6 +218,7 @@ impl<'a> TDoc<'a> {
                         current_container,
                         insert_only,
                         ignore_loop,
+                        ignore_mouse_in,
                     )?;
                 }
                 ftd::p2::Boolean::Equal { left, right }
@@ -221,6 +230,7 @@ impl<'a> TDoc<'a> {
                         current_container,
                         insert_only,
                         ignore_loop,
+                        ignore_mouse_in,
                     )?;
                     rename_property_value(
                         right,
@@ -229,6 +239,7 @@ impl<'a> TDoc<'a> {
                         current_container,
                         insert_only,
                         ignore_loop,
+                        ignore_mouse_in,
                     )?;
                 }
                 ftd::p2::Boolean::Not { of } => edit_condition(
@@ -238,6 +249,7 @@ impl<'a> TDoc<'a> {
                     current_container,
                     insert_only,
                     ignore_loop,
+                    ignore_mouse_in,
                 )?,
                 ftd::p2::Boolean::Literal { .. } => {}
             }
@@ -251,10 +263,13 @@ impl<'a> TDoc<'a> {
             current_container: &str,
             insert_only: bool,
             ignore_loop: bool,
+            ignore_mouse_in: bool,
         ) -> ftd::p1::Result<()> {
             if let ftd::PropertyValue::Variable { ref mut name, .. } = property_value {
                 if (ignore_loop && name.contains("$loop$"))
                     || (insert_only && !name.as_str().eq("MOUSE-IN"))
+                    || (ignore_mouse_in && name.contains("MOUSE-IN"))
+                // in case of recursive_child_component
                 {
                     return Ok(());
                 }
@@ -299,6 +314,7 @@ impl<'a> TDoc<'a> {
             &mut child.events,
             true,
             true,
+            false,
         )?;
         Ok(())
     }
@@ -332,6 +348,7 @@ impl<'a> TDoc<'a> {
             &mut component.events,
             false,
             true,
+            false,
         )?;
         for (idx, instruction) in component.instructions.iter_mut().enumerate() {
             let local_container = {
@@ -341,9 +358,9 @@ impl<'a> TDoc<'a> {
             };
             let current_container =
                 ftd::p2::utils::get_string_container(local_container.as_slice());
-            let child = match instruction {
-                ftd::Instruction::ChildComponent { child }
-                | ftd::Instruction::RecursiveChildComponent { child } => child,
+            let (child, ignore_mouse_in) = match instruction {
+                ftd::Instruction::ChildComponent { child } => (child, false),
+                ftd::Instruction::RecursiveChildComponent { child } => (child, true),
                 _ => continue,
             };
             self.update_component_data(
@@ -355,6 +372,7 @@ impl<'a> TDoc<'a> {
                 &mut child.events,
                 false,
                 true,
+                ignore_mouse_in,
             )?;
         }
         Ok(())
@@ -385,6 +403,7 @@ impl<'a> TDoc<'a> {
             &mut parent.events,
             false,
             true,
+            false,
         )?;
         for (idx, child) in children.iter_mut().enumerate() {
             let local_container = {
@@ -403,6 +422,7 @@ impl<'a> TDoc<'a> {
                 &mut child.events,
                 false,
                 true,
+                false,
             )?;
         }
         Ok(())
