@@ -1041,6 +1041,13 @@ pub fn reorder(
             ..
         }) = var_data
         {
+            if p1_map.contains_key(name) {
+                return ftd::e2(
+                    format!("{} is already declared", name),
+                    doc.name,
+                    p1.line_number,
+                );
+            }
             p1_map.insert(name.to_string(), p1.to_owned());
             inserted_p1.push(idx);
         }

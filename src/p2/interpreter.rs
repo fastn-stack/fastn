@@ -77,22 +77,25 @@ impl<'a> Interpreter<'a> {
             if p1.is_commented {
                 continue;
             }
+
             if p1.name == "import" {
                 let (library_name, alias) =
                     ftd::p2::utils::parse_import(&p1.caption, name, p1.line_number)?;
                 aliases.insert(alias, library_name.clone());
                 let start = std::time::Instant::now();
-                let s = self.lib.get_with_result(library_name.as_str()).await?;
+                let doc = ftd::p2::TDoc {
+                    name,
+                    aliases: &aliases,
+                    bag: &self.bag,
+                    local_variables: &mut Default::default(),
+                };
+                let s = self
+                    .lib
+                    .get_with_result(library_name.as_str(), &doc)
+                    .await?;
                 *d_get = d_get.saturating_add(std::time::Instant::now() - start);
                 if !self.library_in_the_bag(library_name.as_str()) {
-                    self.async_interpret_(
-                        library_name.as_str(),
-                        s.as_str(),
-                        false,
-                        d_get,
-                        d_processor,
-                    )
-                    .await?;
+                    self.interpret_(library_name.as_str(), s.as_str(), false, d_get, d_processor)?;
                     self.add_library_to_bag(library_name.as_str())
                 }
                 continue;
@@ -120,23 +123,38 @@ impl<'a> Interpreter<'a> {
                 // declare a record
                 let d =
                     ftd::p2::Record::from_p1(p1.name.as_str(), &p1.header, &doc, p1.line_number)?;
-                thing.push((
-                    doc.resolve_name(p1.line_number, &d.name.to_string())?,
-                    ftd::p2::Thing::Record(d),
-                ));
+                let name = doc.resolve_name(p1.line_number, &d.name.to_string())?;
+                if self.bag.contains_key(name.as_str()) {
+                    return ftd::e2(
+                        format!("{} is already declared", d.name),
+                        doc.name,
+                        p1.line_number,
+                    );
+                }
+                thing.push((name, ftd::p2::Thing::Record(d)));
             } else if p1.name.starts_with("or-type ") {
                 // declare a record
                 let d = ftd::OrType::from_p1(p1, &doc)?;
-                thing.push((
-                    doc.resolve_name(p1.line_number, &d.name.to_string())?,
-                    ftd::p2::Thing::OrType(d),
-                ));
+                let name = doc.resolve_name(p1.line_number, &d.name.to_string())?;
+                if self.bag.contains_key(name.as_str()) {
+                    return ftd::e2(
+                        format!("{} is already declared", d.name),
+                        doc.name,
+                        p1.line_number,
+                    );
+                }
+                thing.push((name, ftd::p2::Thing::OrType(d)));
             } else if p1.name.starts_with("map ") {
                 let d = ftd::Variable::map_from_p1(p1, &doc)?;
-                thing.push((
-                    doc.resolve_name(p1.line_number, &d.name.to_string())?,
-                    ftd::p2::Thing::Variable(d),
-                ));
+                let name = doc.resolve_name(p1.line_number, &d.name.to_string())?;
+                if self.bag.contains_key(name.as_str()) {
+                    return ftd::e2(
+                        format!("{} is already declared", d.name),
+                        doc.name,
+                        p1.line_number,
+                    );
+                }
+                thing.push((name, ftd::p2::Thing::Variable(d)));
                 // } else if_two_words(p1.name.as_str() {
                 //   TODO: <record-name> <variable-name>: foo can be used to create a variable/
                 //         Not sure if its a good idea tho.
@@ -156,10 +174,15 @@ impl<'a> Interpreter<'a> {
             {
                 // declare a function
                 let d = ftd::Component::from_p1(p1, &doc)?;
-                thing.push((
-                    doc.resolve_name(p1.line_number, &d.full_name.to_string())?,
-                    ftd::p2::Thing::Component(d),
-                ));
+                let name = doc.resolve_name(p1.line_number, &d.full_name.to_string())?;
+                if self.bag.contains_key(name.as_str()) {
+                    return ftd::e2(
+                        format!("{} is already declared", d.full_name),
+                        doc.name,
+                        p1.line_number,
+                    );
+                }
+                thing.push((name, ftd::p2::Thing::Component(d)));
                 // processed_p1.push(p1.name.to_string());
             } else if let Ok(ref var_data) = var_data {
                 let d = if p1
@@ -188,10 +211,15 @@ impl<'a> Interpreter<'a> {
                     // declare and instantiate a list
                     ftd::Variable::list_from_p1(p1, &doc)?
                 };
-                thing.push((
-                    doc.resolve_name(p1.line_number, &d.name.to_string())?,
-                    ftd::p2::Thing::Variable(d),
-                ));
+                let name = doc.resolve_name(p1.line_number, &d.name.to_string())?;
+                if self.bag.contains_key(name.as_str()) {
+                    return ftd::e2(
+                        format!("{} is already declared", d.name),
+                        doc.name,
+                        p1.line_number,
+                    );
+                }
+                thing.push((name, ftd::p2::Thing::Variable(d)));
             } else if let ftd::p2::Thing::Variable(mut v) =
                 doc.get_thing(p1.line_number, p1.name.as_str())?
             {
@@ -242,7 +270,7 @@ impl<'a> Interpreter<'a> {
                             p1.line_number,
                         );
                     }
-                    ftd::p2::Thing::Component(c) => {
+                    ftd::p2::Thing::Component(_) => {
                         let p1 = {
                             let mut p1 = p1.clone();
                             if p1
@@ -301,9 +329,14 @@ impl<'a> Interpreter<'a> {
                                         None,
                                     )?);
                                 } else {
-                                    let child = if parent.root.eq("ftd#text") {
+                                    let root_name = ftd::p2::utils::get_root_component_name(
+                                        &doc,
+                                        parent.root.as_str(),
+                                        sub.line_number,
+                                    )?;
+                                    let child = if root_name.eq("ftd#text") {
                                         ftd::p2::utils::get_markup_child(
-                                            &sub,
+                                            sub,
                                             &doc,
                                             &parent.arguments,
                                         )?
@@ -360,7 +393,7 @@ impl<'a> Interpreter<'a> {
         Ok(instructions)
     }
 
-    #[cfg(not(feature = "async"))]
+    // #[cfg(not(feature = "async"))]
     fn interpret_(
         &mut self,
         name: &str,
@@ -422,23 +455,38 @@ impl<'a> Interpreter<'a> {
                 // declare a record
                 let d =
                     ftd::p2::Record::from_p1(p1.name.as_str(), &p1.header, &doc, p1.line_number)?;
-                thing.push((
-                    doc.resolve_name(p1.line_number, &d.name.to_string())?,
-                    ftd::p2::Thing::Record(d),
-                ));
+                let name = doc.resolve_name(p1.line_number, &d.name.to_string())?;
+                if self.bag.contains_key(name.as_str()) {
+                    return ftd::e2(
+                        format!("{} is already declared", d.name),
+                        doc.name,
+                        p1.line_number,
+                    );
+                }
+                thing.push((name, ftd::p2::Thing::Record(d)));
             } else if p1.name.starts_with("or-type ") {
                 // declare a record
                 let d = ftd::OrType::from_p1(p1, &doc)?;
-                thing.push((
-                    doc.resolve_name(p1.line_number, &d.name.to_string())?,
-                    ftd::p2::Thing::OrType(d),
-                ));
+                let name = doc.resolve_name(p1.line_number, &d.name.to_string())?;
+                if self.bag.contains_key(name.as_str()) {
+                    return ftd::e2(
+                        format!("{} is already declared", d.name),
+                        doc.name,
+                        p1.line_number,
+                    );
+                }
+                thing.push((name, ftd::p2::Thing::OrType(d)));
             } else if p1.name.starts_with("map ") {
                 let d = ftd::Variable::map_from_p1(p1, &doc)?;
-                thing.push((
-                    doc.resolve_name(p1.line_number, &d.name.to_string())?,
-                    ftd::p2::Thing::Variable(d),
-                ));
+                let name = doc.resolve_name(p1.line_number, &d.name.to_string())?;
+                if self.bag.contains_key(name.as_str()) {
+                    return ftd::e2(
+                        format!("{} is already declared", d.name),
+                        doc.name,
+                        p1.line_number,
+                    );
+                }
+                thing.push((name, ftd::p2::Thing::Variable(d)));
                 // } else if_two_words(p1.name.as_str() {
                 //   TODO: <record-name> <variable-name>: foo can be used to create a variable/
                 //         Not sure if its a good idea tho.
@@ -458,10 +506,15 @@ impl<'a> Interpreter<'a> {
             {
                 // declare a function
                 let d = ftd::Component::from_p1(p1, &doc)?;
-                thing.push((
-                    doc.resolve_name(p1.line_number, &d.full_name.to_string())?,
-                    ftd::p2::Thing::Component(d),
-                ));
+                let name = doc.resolve_name(p1.line_number, &d.full_name.to_string())?;
+                if self.bag.contains_key(name.as_str()) {
+                    return ftd::e2(
+                        format!("{} is already declared", d.full_name),
+                        doc.name,
+                        p1.line_number,
+                    );
+                }
+                thing.push((name, ftd::p2::Thing::Component(d)));
                 // processed_p1.push(p1.name.to_string());
             } else if let Ok(ref var_data) = var_data {
                 let d = if p1
@@ -490,10 +543,15 @@ impl<'a> Interpreter<'a> {
                     // declare and instantiate a list
                     ftd::Variable::list_from_p1(p1, &doc)?
                 };
-                thing.push((
-                    doc.resolve_name(p1.line_number, &d.name.to_string())?,
-                    ftd::p2::Thing::Variable(d),
-                ));
+                let name = doc.resolve_name(p1.line_number, &d.name.to_string())?;
+                if self.bag.contains_key(name.as_str()) {
+                    return ftd::e2(
+                        format!("{} is already declared", d.name),
+                        doc.name,
+                        p1.line_number,
+                    );
+                }
+                thing.push((name, ftd::p2::Thing::Variable(d)));
             } else if let ftd::p2::Thing::Variable(mut v) =
                 doc.get_thing(p1.line_number, p1.name.as_str())?
             {
