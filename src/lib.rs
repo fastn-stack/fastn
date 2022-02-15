@@ -234,7 +234,7 @@ use async_trait::async_trait;
 #[cfg(feature = "async")]
 #[async_trait]
 impl ftd::p2::Library for ExampleLibrary {
-    async fn get(&self, name: &str) -> Option<String> {
+    async fn get(&self, name: &str, _doc: &ftd::p2::TDoc) -> Option<String> {
         std::fs::read_to_string(format!("./examples/{}.ftd", name)).ok()
     }
 }
