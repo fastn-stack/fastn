@@ -1,7 +1,3 @@
--- import: ft
--- import: ftd-dev.vercel.app/config
--- import: fpm
-
 -- ft.doc-page:
 toc: $ft.toc
 

@@ -1,11 +1,3 @@
--- import: ft
--- import: ftd-dev.vercel.app/config
--- import: fpm
--- import: dms
-
-
-
-
 -- ft.doc-page:
 toc: $config.examples-toc
 

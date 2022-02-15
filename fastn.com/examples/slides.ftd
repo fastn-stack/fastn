@@ -1,6 +1,6 @@
--- import: ftd-dev.vercel.app/examples/diagram
--- import: ftd-dev.vercel.app/examples/comic
--- import: ftd-dev.vercel.app/examples/intro
+/-- import: ftd-dev.vercel.app/examples/diagram
+/-- import: ftd-dev.vercel.app/examples/comic
+/-- import: ftd-dev.vercel.app/examples/intro
 
 -- integer count: 0
 -- integer total: 4
@@ -40,15 +40,15 @@ width: fill
 height: fill
 
 
--- intro.intro:
+/-- intro.intro:
 if: $count == 0
 
 
 
--- diagram.diagram:
+/-- diagram.diagram:
 if: $count == 1
 
--- comic.comic:
+/-- comic.comic:
 if: $count == 2
 
 /-- slide:

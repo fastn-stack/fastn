@@ -1,7 +1,0 @@
--- import: ft
--- import: ftd-dev.vercel.app/config
-
--- ft.doc-page:
-toc: $ft.toc
-    
--- ft.h0: Globals

@@ -1,6 +1,3 @@
--- import: ft
--- import: ftd-dev.vercel.app/config
-
 \-- component page:
 component: ftd.column
 open: m
