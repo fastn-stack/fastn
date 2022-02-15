@@ -46,9 +46,28 @@ impl ftd::p2::Library for Library {
                     return Some(r);
                 }
             }
-            if let Some(r) = get_from_all_dependencies(name, package, lib) {
-                return Some(r);
+            // If package == lib.config.package => Current iteration for the top most package
+            // Root package evaluation
+            if package.name == lib.config.package.name {
+                if let Some(translation_of_package) = lib.config.package.translation_of.as_ref() {
+                    // Index document can be accessed from the package name directly. For others `/` is required to be certain.
+                    // vivekanand-hi -> vivekanand-hi-hi This is wrong. That's why we ensure a strict `/` check or a full name match
+                    let new_name = if translation_of_package.name.as_str().eq(name) {
+                        package.name.clone()
+                    } else {
+                        name.clone().replacen(
+                            format!("{}/", translation_of_package.name.as_str()).as_str(),
+                            format!("{}/", package.name.as_str()).as_str(),
+                            1,
+                        )
+                    };
+
+                    if let Some(resp) = get_data_from_package(new_name.as_str(), package, lib) {
+                        return Some(resp);
+                    }
+                }
             }
+
             // Check the translation of the package
             if let Some(translation_of_package) = package.translation_of.as_ref() {
                 if let Some(resp) = get_for_package_config(
@@ -63,6 +82,10 @@ impl ftd::p2::Library for Library {
                 ) {
                     return Some(resp);
                 }
+            }
+
+            if let Some(r) = get_from_all_dependencies(name, package, lib) {
+                return Some(r);
             }
             None
         }
