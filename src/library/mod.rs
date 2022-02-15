@@ -177,11 +177,7 @@ impl ftd::p2::Library for Library {
             if name.starts_with(&package.name.as_str()) {
                 let new_name = name.replacen(&package.name.as_str(), "", 1);
                 if let Some(body) = get_file_from_location(&path, new_name.as_str()) {
-                    return Some(dbg!(package.get_prefixed_body(
-                        body.as_str(),
-                        dbg!(name),
-                        false
-                    )));
+                    return Some(package.get_prefixed_body(body.as_str(), name, false));
                 }
             }
             None
