@@ -13,7 +13,7 @@ toc: $config.examples-toc
 -- ftd.scene comic:
 background-color: cadetblue
 width: 1070
-height: 920
+height: 1137
 scale: 0.8
 move-left: 100
 move-up: 80
@@ -31,9 +31,15 @@ left: 0
 
 --- priya-dances-again:
 
---- ft.h1: The End!!
+--- ftd.text: The End!!
 top: 800
-left: 460
+left: 320
+size: 50
+line-height: 32
+cursor: default
+style: bold
+background-color: #f7ea61
+padding: 80
 
 
 
