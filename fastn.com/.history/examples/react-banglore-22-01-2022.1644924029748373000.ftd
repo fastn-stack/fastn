@@ -1,5 +1,5 @@
 -- import: ftd.dev/examples/diagram
--- import: ftd.dev/examples/comic
+/-- import: ftd-dev.vercel.app/examples/comic
 
 -- integer count: 0
 -- integer total: 20
@@ -101,7 +101,7 @@ if: $count == 16
 -- diagram.diagram:
 if: $count == 17
 
--- comic.comic:
+/-- comic.comic:
 if: $count == 18
 
 -- mini-todo:
