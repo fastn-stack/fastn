@@ -55,7 +55,7 @@ impl ftd::p2::Library for Library {
                     let new_name = if translation_of_package.name.as_str().eq(name) {
                         package.name.clone()
                     } else {
-                        name.clone().replacen(
+                        name.replacen(
                             format!("{}/", translation_of_package.name.as_str()).as_str(),
                             format!("{}/", package.name.as_str()).as_str(),
                             1,
