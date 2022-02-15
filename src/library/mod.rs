@@ -839,9 +839,10 @@ impl ftd::p2::Library for Library {
                             );
                         }
                     }
+                }
 
-                    fpm_base = format!(
-                        indoc::indoc! {"
+                fpm_base = format!(
+                    indoc::indoc! {"
                         {fpm_base}
                         
                         -- record status-data:
@@ -858,10 +859,9 @@ impl ftd::p2::Library for Library {
                         {translation_status_list}
                         
                     "},
-                        fpm_base = fpm_base,
-                        translation_status_list = translation_status_list
-                    );
-                }
+                    fpm_base = fpm_base,
+                    translation_status_list = translation_status_list
+                );
             }
 
             let other_language_packages =
