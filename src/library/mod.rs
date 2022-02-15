@@ -143,8 +143,8 @@ impl ftd::p2::Library for Library {
             // TODO: Here the library needs to be evaluated for this particular package
             // Right now the solution works by recursively looking for the package in the dependency tree
             // Ideally we should also know the library definition of a particular package
-            if let Some(r) = get_data_from_package(name, from_package, lib) {
-                return Some(from_package.get_prefixed_body(r.as_str(), name, false));
+            if let Some(resp_body) = get_data_from_package(name, from_package, lib) {
+                return Some(resp_body);
             }
             None
         }
@@ -176,8 +176,12 @@ impl ftd::p2::Library for Library {
             // Explicit check for the current package.
             if name.starts_with(&package.name.as_str()) {
                 let new_name = name.replacen(&package.name.as_str(), "", 1);
-                if let Some(r) = get_file_from_location(&path, new_name.as_str()) {
-                    return Some(r);
+                if let Some(body) = get_file_from_location(&path, new_name.as_str()) {
+                    return Some(dbg!(package.get_prefixed_body(
+                        body.as_str(),
+                        dbg!(name),
+                        false
+                    )));
                 }
             }
             None

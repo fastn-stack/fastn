@@ -337,14 +337,16 @@ impl Package {
             if !with_alias {
                 // Check for the aliases and map them to the full path
                 for dependency in &self.dependencies {
-                    if dependency.alias.is_some()
-                        && ai.path.starts_with(dependency.alias.as_ref()?.as_str())
-                    {
-                        import_doc_path = ai.path.replacen(
-                            dependency.alias.as_ref()?.as_str(),
-                            dependency.package.name.as_str(),
-                            1,
-                        );
+                    if let Some(alias) = &dependency.alias {
+                        if alias.as_str().eq(ai.path.as_str())
+                            || ai.path.starts_with(format!("{}/", alias).as_str())
+                        {
+                            import_doc_path = ai.path.replacen(
+                                dependency.alias.as_ref()?.as_str(),
+                                dependency.package.name.as_str(),
+                                1,
+                            );
+                        }
                     }
                 }
             }
