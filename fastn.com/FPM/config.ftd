@@ -18,6 +18,7 @@ $processor$: toc
 
 - About `fpm`: /about/
   - Why Not `fpm`?: why-not/
+  - Translation philosphy?: translation-philosphy/
 - File System Organization: /fs/
   - `FPM.ftd`: /fpm-ftd-file/
 - FTD Host Features: /ftd-host/ 

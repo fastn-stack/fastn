@@ -25,10 +25,8 @@ translation of `foo.com`
 `foo.com` = master
 `bar.com` = translation
 
-\ TODO: URL here
-
-Please familiarize yourself with our `Translation Philosphy` to get acquainted 
-with the terminologies used in the document
+Please familiarize yourself with our [Translation Philosphy](translation-philosphy/)
+to get acquainted with the terminologies used in the document
 
 -- ft.h1: Setting up the `master` package
 

@@ -247,25 +247,6 @@ line-height: 22
 position: center
 
 
--- ftd.column h0:
-caption title:
-optional body body:
-width: fill
-padding-horizontal: 90
-
---- ftd.text:
-text: $title
-size: 40
-color: black
-color if $fpm.dark-mode: $neutral
-style: bold
-padding-bottom: 24
-font: apple-system
-
---- markdown:
-if: $body is not null
-body: $body
-
 
 -- ftd.row header:
 width: fill
