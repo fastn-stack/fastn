@@ -298,14 +298,6 @@ slot: sidebar
 slot: main
 
 
--- ftd.text text: $value
-caption value:
-string slot:
-slot: $slot
-background-color: rgba(255, 255, 255, 0.8)
-text-align: center
-height: fill
-
 -- ft.h1: Grid with Event
 
 This grid layout contains two columns and two rows which changes to one column and two rows:

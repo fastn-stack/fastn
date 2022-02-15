@@ -27,6 +27,9 @@ background-color: white
 width: 1350
 height: 540
 $event-click$: $info = kubernetes-info
+scale: 0.65
+margin-left: -267
+margin-top: -95
 
 --- control-panel:
 left: 50
@@ -68,7 +71,7 @@ right: 506
 background-color: #ebe2ce
 width: fill
 padding: 10
-margin-top: 20
+margin-top: -60
 
 --- ftd.column:
 width: fill

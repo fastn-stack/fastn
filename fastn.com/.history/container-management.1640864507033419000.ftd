@@ -98,7 +98,8 @@ components will be placed:
 lang: ftd
 
 \-- component foo:
-open: some-child
+append-at: some-child
+open: true
 component: ftd.column
 
 \--- ftd.row:
