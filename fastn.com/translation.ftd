@@ -202,6 +202,9 @@ Once this package is deployed, the next time we run `fpm translation-status` in
 context of the `translation` package(/bar.com/), we should see the `Out-dated`
 document status
 
+-- ft.code: `bar.com` translation-status
+lang: shell
+
 \$/bar.com/> fpm translation-status
 
 Never marked: FPM.ftd
