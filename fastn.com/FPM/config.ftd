@@ -1,0 +1,84 @@
+-- import: ft
+
+-- ft.site-icon: /images/ftd-logo-desktop.png
+-- ft.site-icon-mobile: /images/ftd-logo-mobile.png
+-- ft.github: https://github.com/fifthtry/ftd/
+-- ft.site-url: /
+
+-- ft.header-toc:
+$processor$: toc
+
+- React Bangalore: /examples/react-banglore-22-01-2022/
+- Why FTD?: /why/
+- Docs: /language/
+- Examples: /examples/
+- Development: /development/
+
+-- ft.toc-item list dev-toc:
+$processor$: toc
+
+- Changelog: /changelog/
+- Roadmap & RFCs: /roadmap/
+- Journal: /journal/
+- Internals: /internals/
+- `ftd::p1`: A JSON/YML Replacement: /p1/
+
+
+-- ft.toc-item list why-toc:
+$processor$: toc
+
+- Why FTD: /why/
+- Philosophy: /philosophy/
+- Why not MDX?: /why/not-mdx/
+
+
+-- ft.toc-item list examples-toc:
+$processor$: toc
+
+- Input: /examples/input/
+- Architecture Diagram: /examples/diagram/
+- Comic: /examples/comic/
+- Creating a tree: /creating-a-tree/
+- Gate Pass: /examples/mygate/
+- Grid: /examples/grid/
+- Dark Mode: /examples/dark-mode/
+- Conditional Variable: /examples/conditional-variable/
+  
+
+-- ft.toc:
+$processor$: toc
+
+- FTD Language: /language/
+  - `ftd::p1` grammar: /p1-grammar/
+  - Data Modelling: /data-modelling/
+    - Variables: /variables/
+    - Built-in Types: /built-in-types/
+    - `record`: /record/
+    - `or-type`: /or-type/
+    - `list`: /list/
+    - Reading FTD Files: /reading-data/
+  - UI: /ui/
+    - `component`: /component/
+    - Kernel Components: /kernel/
+      - `ftd.row`: /row/
+      - `ftd.column`: /column/
+      - `ftd.text`: /text/
+      - `ftd.image`: /image/
+      - `ftd.iframe`: /iframe/
+      - `ftd.integer`: /integer/
+      - `ftd.decimal`: /decimal/
+      - `ftd.boolean`: /boolean/
+      - Common Attributes: /common/
+      - Common Text Attributes: /text-common/
+      - Container Attributes: /container/
+    - Container Management: /container-management/
+    - `if`: Conditional Components: /if/
+    - Conditional Attributes: /if-attr/
+    - `$loop$`: Looping Over Lists: /loop/
+    - ID: /id/
+    - `$event-<event-name>$`: Event Handling: /event-handling/
+    - Auto Nesting: /auto-nesting/
+  - `import`: /import/
+  - `ftd::Library`: /library/
+  - Comments In `ftd` Files: /comments/
+- How to run ftd: /run-ftd/
