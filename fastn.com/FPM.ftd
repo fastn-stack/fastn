@@ -1,6 +1,6 @@
 -- import: fpm
 
--- fpm.package: ftd-dev.vercel.app
+-- fpm.package: ftd.dev
 zip: github.com/fifthtry/ftd.dev/archive/refs/heads/main.zip
 language: en
 
@@ -10,7 +10,7 @@ language: en
 
 -- fpm.auto-import: ft
 -- fpm.auto-import: fpm
--- fpm.auto-import: ftd-dev.vercel.app/FPM/config
+-- fpm.auto-import: ftd.dev/FPM/config
 -- fpm.auto-import: dms
 
 -- fpm.font: apple-system
