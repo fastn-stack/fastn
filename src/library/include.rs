@@ -188,19 +188,31 @@ impl IncludeCode {
             doc.path
                 .replace('/', std::path::MAIN_SEPARATOR.to_string().as_str()),
         );
-        let file_content = std::fs::read_to_string(file_path)?;
+        let file_content = std::fs::read_to_string(file_path)?
+            .lines()
+            .into_iter()
+            .fold(String::new(), |accumulator, instance| {
+                let should_escape = instance.starts_with('$') || instance.starts_with('/');
+                format!(
+                    "{}{}{}\n",
+                    accumulator.as_str(),
+                    if should_escape { "\\" } else { "" },
+                    instance
+                )
+            });
         let output = match (file_content, doc.roa) {
             (fc, RangeOrAnchor::Anchor(anchor_name)) => take_anchored_lines(&fc, &anchor_name),
             (fc, RangeOrAnchor::Range(LineRange::RangeFull)) => fc,
             (fc, RangeOrAnchor::Range(r)) => {
-                let (start, end) = match r {
-                    LineRange::Range((s, e)) => (s, e),
-                    LineRange::RangeFrom(s) => (s, -1),
-                    LineRange::RangeTo(e) => (0, e),
-                    _ => panic!(),
-                };
                 let lines = fc.lines();
                 let len = lines.clone().count();
+                let (start, end) = match r {
+                    LineRange::Range((s, e)) => (s - 1, e),
+                    LineRange::RangeFrom(s) => (s - 1, len as i32),
+                    LineRange::RangeTo(e) => (0, e),
+                    LineRange::SingleLine(e) => (e - 1, e),
+                    LineRange::RangeFull => (0, len as i32),
+                };
                 lines
                     .skip(start as usize)
                     .take(std::cmp::min(end as usize, len))
