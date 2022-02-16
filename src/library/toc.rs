@@ -230,15 +230,12 @@ impl TocParser {
         }
         let rest: String = iter.collect();
         self.eval_temp_item()?;
-        // Split the line by `:`. title = 0, url = Option<1>
-        let (t, u) = match rest.split_once(":") {
-            Some((i, v)) => (i.trim().to_string(), Some(v.trim().to_string())),
-            None => (rest.trim().to_string(), None),
-        };
+
+        // Stop eager checking, Instead of split and evaluate URL/title, first push
+        // The complete string, postprocess if url doesn't exist
         self.temp_item = Some((
             TocItem {
-                title: ftd::markdown_line(t.as_str()),
-                url: u,
+                title: ftd::markdown_line(rest.as_str().trim()),
                 ..Default::default()
             },
             depth,
@@ -248,8 +245,25 @@ impl TocParser {
     }
 
     fn eval_temp_item(&mut self) -> Result<(), ParseError> {
-        if let Some((t, u)) = self.temp_item.clone() {
-            self.sections.push((t, u))
+        if let Some((toc_item, depth)) = self.temp_item.clone() {
+            // Split the line by `:`. title = 0, url = Option<1>
+            let resp_item = if toc_item.url.is_none() {
+                // URL not defined, Try splitting the title to evaluate the URL
+                let current_title = toc_item.title.original.as_str();
+                if let Some((first, second)) = dbg!(current_title.rsplit_once(":")) {
+                    // (, Some(second.trim().to_string()))
+                    TocItem {
+                        title: ftd::markdown_line(first.trim()),
+                        url: Some(second.trim().to_string()),
+                        ..Default::default()
+                    }
+                } else {
+                    toc_item
+                }
+            } else {
+                toc_item
+            };
+            self.sections.push((resp_item, depth))
         }
         self.temp_item = None;
         Ok(())
@@ -364,6 +378,10 @@ mod test {
           # Nested Title 2
           - Nested Link Two: /home/nested-link-two/
             - Further Nesting: /home/nested-link-two/further-nested/
+          - `ftd::p1` grammar
+            url: /p1-grammar/
+          - `ftd::p1` grammar: /p1-grammar/
+
         "
             ),
             super::ToC {
@@ -464,6 +482,28 @@ mod test {
                                     font_icon: None,
                                     children: vec![],
                                 },],
+                            },
+                            super::TocItem {
+                                id: None,
+                                title: ftd::markdown_line("`ftd::p1` grammar"),
+                                url: Some("/p1-grammar/".to_string()),
+                                number: vec![1, 2],
+                                is_heading: false,
+                                is_disabled: false,
+                                img_src: None,
+                                font_icon: None,
+                                children: vec![],
+                            },
+                            super::TocItem {
+                                id: None,
+                                title: ftd::markdown_line("`ftd::p1` grammar"),
+                                url: Some("/p1-grammar/".to_string()),
+                                number: vec![1, 3],
+                                is_heading: false,
+                                is_disabled: false,
+                                img_src: None,
+                                font_icon: None,
+                                children: vec![],
                             },
                         ],
                     }
