@@ -41,13 +41,13 @@ $processor$: toc
 - Known Issues: /known-issues/
 
 
--- ft.toc-item list dev-toc:
+-- fpm.toc-item list dev-toc:
 $processor$: toc
 
 - Roadmap: /roadmap/
 - Journal: /journal/
 
--- ft.toc-item list themes-toc:
+-- fpm.toc-item list themes-toc:
 $processor$: toc
 
 - About Themes: /themes/
@@ -63,25 +63,25 @@ $processor$: toc
   - Dark Mode: /theme/header/
 - FPM Variables: /vars/
 
--- ft.toc-item list learn:
+-- fpm.toc-item list learn:
 $processor$: toc
 
 - Introduction: /
 - Installation: /about/
 
--- ft.toc-item list community:
+-- fpm.toc-item list community:
 $processor$: toc
 
 - Introduction: /
 - Installation: /about/
 
--- ft.toc-item list more:
+-- fpm.toc-item list more:
 $processor$: toc
 
 - Introduction: /
 - Installation: /about/
 
--- ft.toc-item list legal:
+-- fpm.toc-item list legal:
 $processor$: toc
 
 - Introduction: /
