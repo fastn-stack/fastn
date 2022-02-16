@@ -48,37 +48,35 @@ $processor$: toc
 -- ft.toc:
 $processor$: toc
 
-- FTD Language: /language/
-  - `ftd::p1` grammar: /p1-grammar/
-  - Data Modelling: /data-modelling/
-    - Variables: /variables/
-    - Built-in Types: /built-in-types/
-    - `record`: /record/
-    - `or-type`: /or-type/
-    - `list`: /list/
-    - Reading FTD Files: /reading-data/
-  - UI: /ui/
-    - `component`: /component/
-    - Kernel Components: /kernel/
-      - `ftd.row`: /row/
-      - `ftd.column`: /column/
-      - `ftd.text`: /text/
-      - `ftd.image`: /image/
-      - `ftd.iframe`: /iframe/
-      - `ftd.integer`: /integer/
-      - `ftd.decimal`: /decimal/
-      - `ftd.boolean`: /boolean/
-      - Common Attributes: /common/
-      - Common Text Attributes: /text-common/
-      - Container Attributes: /container/
-    - Container Management: /container-management/
-    - `if`: Conditional Components: /if/
-    - Conditional Attributes: /if-attr/
-    - `$loop$`: Looping Over Lists: /loop/
-    - ID: /id/
-    - `$event-<event-name>$`: Event Handling: /event-handling/
-    - Auto Nesting: /auto-nesting/
-  - `import`: /import/
-  - `ftd::Library`: /library/
-  - Comments In `ftd` Files: /comments/
-- How to run ftd: /run-ftd/
+- `ftd p1` grammar: /p1-grammar/
+- Data Modelling: /data-modelling/
+  - Variables: /variables/
+  - Built-in Types: /built-in-types/
+- `record`: /record/
+  - `or-type`: /or-type/
+  - `list`: /list/
+  - Reading FTD Files: /reading-data/
+- UI: /ui/
+  - `component`: /component/
+  - Kernel Components: /kernel/
+    - `ftd.row`: /row/
+    - `ftd.column`: /column/
+    - `ftd.text`: /text/
+    - `ftd.image`: /image/
+    - `ftd.iframe`: /iframe/
+    - `ftd.integer`: /integer/
+    - `ftd.decimal`: /decimal/
+    - `ftd.boolean`: /boolean/
+    - Common Attributes: /common/
+    - Common Text Attributes: /text-common/
+    - Container Attributes: /container/
+  - Container Management: /container-management/
+  - `if`: Conditional Components: /if/
+  - Conditional Attributes: /if-attr/
+  - `$loop$`: Looping Over Lists: /loop/
+  - ID: /id/
+  - `$event-<event-name>$`: Event Handling: /event-handling/
+  - Auto Nesting: /auto-nesting/
+- `import`: /import/
+- `ftd Library`: /library/
+- Comments In `ftd` Files: /comments/
