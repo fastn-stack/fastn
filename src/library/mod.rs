@@ -444,12 +444,12 @@ impl ftd::p2::Library for Library {
                         -- optional string package-zip:
                         -- string home-url: {home_url}
 
-                        -- record language-toc-item:
+                        -- record toc-item:
                         caption title:
                         string url:
-                        language-toc-item list children:
+                        toc-item list children:
 
-                        -- language-toc-item list language-toc:
+                        -- toc-item list language-toc:
     
                         "},
                 fpm_base = fpm::fpm_ftd(),
