@@ -14,7 +14,7 @@ $processor$: toc
 - Examples: /examples/
 - Development: /development/
 
--- ft.toc-item list dev-toc:
+-- fpm.toc-item list dev-toc:
 $processor$: toc
 
 - Changelog: /changelog/
@@ -24,7 +24,7 @@ $processor$: toc
 - `ftd::p1`: A JSON/YML Replacement: /p1/
 
 
--- ft.toc-item list why-toc:
+-- fpm.toc-item list why-toc:
 $processor$: toc
 
 - Why FTD: /why/
@@ -32,7 +32,7 @@ $processor$: toc
 - Why not MDX?: /why/not-mdx/
 
 
--- ft.toc-item list examples-toc:
+-- fpm.toc-item list examples-toc:
 $processor$: toc
 
 - Input: /examples/input/
