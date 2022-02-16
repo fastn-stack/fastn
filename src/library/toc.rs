@@ -43,7 +43,7 @@ impl TocItem {
         // TODO: num converting to ol and li in ftd.???
         TocItemCompat {
             url: self.url.clone().or_else(|| Some("".to_string())).unwrap(),
-            number: self.number.iter().map(|x| format!("{}_", x)).collect(),
+            number: self.number.iter().map(|x| format!("{}", x)).collect(),
             title: self.title.original.to_string(),
             is_heading: self.is_heading,
             children: self
@@ -250,7 +250,7 @@ impl TocParser {
             let resp_item = if toc_item.url.is_none() {
                 // URL not defined, Try splitting the title to evaluate the URL
                 let current_title = toc_item.title.original.as_str();
-                if let Some((first, second)) = dbg!(current_title.rsplit_once(":")) {
+                if let Some((first, second)) = current_title.rsplit_once(":") {
                     // (, Some(second.trim().to_string()))
                     TocItem {
                         title: ftd::markdown_line(first.trim()),
@@ -311,9 +311,6 @@ impl TocParser {
     }
 
     fn finalize(self) -> Result<Vec<(TocItem, usize)>, ParseError> {
-        // if self.state != ParsingState::WaitingF {
-        //     return Err(ParseError::InputError("title not found".to_string()));
-        // };
         Ok(self.sections)
     }
 }
