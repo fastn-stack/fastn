@@ -2,7 +2,8 @@
 
 
 -- ft.doc-page:
-toc: $ft.toc
+toc: $config.api-toc
+header-left: $config.doc-header
 
 
 -- ftd.column:

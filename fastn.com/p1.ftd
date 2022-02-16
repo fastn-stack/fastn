@@ -1,5 +1,6 @@
 -- ft.doc-page:
-toc: $config.dev-toc
+toc: $config.api-toc
+header-left: $config.doc-header
 
 -- ft.h0: `ftd::p1`: A JSON/YML Replacement
 

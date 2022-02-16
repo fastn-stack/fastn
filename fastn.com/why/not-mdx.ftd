@@ -1,5 +1,6 @@
 -- ft.doc-page:
-toc: $config.why-toc
+toc: $config.alternatives-toc
+header-left: $config.why-header
 
 -- ft.h0: Why Not MDX?
 

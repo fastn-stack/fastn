@@ -1,5 +1,6 @@
 -- ft.doc-page:
 toc: $config.dev-toc
+header-left: $config.doc-header
 
 
 -- ft.h0: Roadmap & RFCs

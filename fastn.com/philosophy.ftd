@@ -3,6 +3,7 @@
 
 -- ft.doc-page:
 toc: $config.why-toc
+header-left: $config.why-header
 
 
 -- ft.h0: Philosophy Behind `ftd`

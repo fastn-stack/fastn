@@ -2,7 +2,8 @@
 
 
 -- ft.doc-page:
-toc: $ft.toc
+toc: $config.data-toc
+header-left: $config.doc-header
 
 
 -- ft.h0: Variables
