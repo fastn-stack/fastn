@@ -241,7 +241,6 @@ pub(crate) async fn process_file(
                         return Ok(());
                     }
                     (e, _) => {
-                        dbg!(">>>>ARE WE HERE?");
                         return e;
                     }
                 }
@@ -426,8 +425,6 @@ async fn process_ftd(
 
         (new_fallback, message, new_main)
     };
-    // hjhjbhv
-    // dbg!(&final_main);
     match (fallback, message) {
         (Some(fallback), Some(message)) => {
             write_with_fallback(
