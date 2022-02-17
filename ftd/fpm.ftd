@@ -59,3 +59,73 @@ optional integer upto-date:
 optional string last-modified-on:
 
 -- translation-status-data translation-status-count: not set
+
+
+-- record ui-data:
+string last-modified-on:
+string never-synced:
+string show-translation-status:
+string other-available-languages:
+string current-language:
+string translation-not-available:
+string unapproved-heading:
+string show-unapproved-version:
+string show-latest-version:
+string show-outdated-version:
+string out-dated-heading:
+string out-dated-body:
+string language-detail-page:
+string language-detail-page-body:
+string total-number-of-documents:
+string document:
+string status:
+string missing:
+string never-marked:
+string out-dated:
+string upto-date:
+string welcome-fpm-page:
+string welcome-fpm-page-subtitle:
+string language:
+
+
+-- optional string theme-color:
+$always-include$: true
+
+-- integer mobile-breakpoint: 768
+$always-include$: true
+
+-- boolean is-translation-package: false
+-- boolean has-translations: false
+-- boolean mobile: true
+-- boolean dark-mode: false
+-- boolean system-dark-mode: false
+-- boolean follow-system-dark-mode: true
+\-- string document-id: 
+-- optional string diff:
+-- optional string translation-status:
+-- optional string last-marked-on:
+-- optional string original-latest:
+-- optional string translated-latest:
+-- optional string last-marked-on-rfc3339:
+-- optional string original-latest-rfc3339:
+-- optional string translated-latest-rfc3339:
+-- optional string language:
+-- optional string number-of-documents:
+-- optional string last-modified-on:
+-- optional string current-document-last-modified-on:
+\-- string translation-status-url:
+\-- string title:
+\-- string package-name:
+\-- optional string package-zip:
+\-- string home-url:
+
+-- record toc-item:
+optional string title:
+optional string url:
+optional string font-icon:
+optional string img-src:
+boolean is-heading:
+boolean is-disabled:
+toc-item list children:
+
+-- toc-item list language-toc:
