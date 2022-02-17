@@ -104,7 +104,17 @@ impl Config {
                 });
             }
         };
-        Ok(self.root.join(".packages").join(o.name.as_str()))
+        match &o.fpm_path {
+            Some(fpm_path) => Ok(fpm_path
+                .parent()
+                .expect("Expect fpm_path parent. Panic!")
+                .to_owned()),
+            _ => {
+                return Err(fpm::Error::UsageError {
+                    message: format!("Unable to find `fpm_path` of the package {}", o.name),
+                })
+            }
+        }
     }
 
     /*/// aliases() returns the list of the available aliases at the package level.
