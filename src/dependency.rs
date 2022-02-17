@@ -1,6 +1,6 @@
 use crate::utils::HasElements;
 
-#[derive(serde::Deserialize, Debug, Clone)]
+#[derive(Debug, Clone)]
 pub struct Dependency {
     pub package: fpm::Package,
     pub version: Option<String>,
@@ -237,7 +237,36 @@ impl fpm::Package {
                 }
             }
         }
-
+        let fpm_ftd_path = if root.join("FPM.ftd").exists() {
+            root.join("FPM.ftd")
+        } else {
+            let doc = std::fs::read_to_string(&root.join("FPM.manifest.ftd"));
+            let lib = fpm::FPMLibrary::default();
+            match ftd::p2::Document::from("FPM.manifest", doc?.as_str(), &lib) {
+                Ok(fpm_manifest_processed) => {
+                    let k: String = fpm_manifest_processed.get("FPM.manifest#package-root")?;
+                    let new_package_root = k
+                        .as_str()
+                        .split('/')
+                        .fold(root.clone(), |accumulator, part| accumulator.join(part));
+                    if new_package_root.join("FPM.ftd").exists() {
+                        new_package_root.join("FPM.ftd")
+                    } else {
+                        return Err(fpm::Error::PackageError {
+                            message: format!(
+                                "Can't find FPM.ftd file for the dependency package {}",
+                                self.name.as_str()
+                            ),
+                        });
+                    }
+                }
+                Err(e) => {
+                    return Err(fpm::Error::PackageError {
+                        message: format!("failed to parse FPM.manifest.ftd: {:?}", &e),
+                    });
+                }
+            }
+        };
         return fpm::Package::process_fpm(
             &root,
             base_dir,
@@ -245,7 +274,7 @@ impl fpm::Package {
             self,
             download_translations,
             download_dependencies,
-            &root.join("FPM.ftd"),
+            &fpm_ftd_path,
         );
 
         fn get_fpm(name: &str) -> fpm::Result<String> {
@@ -304,6 +333,7 @@ impl fpm::Package {
 
         downloaded_package.push(mutpackage.name.to_string());
 
+        package.fpm_path = Some(fpm_path.to_owned());
         package.dependencies = {
             let temp_deps: Vec<fpm::dependency::DependencyTemp> =
                 ftd_document.get("fpm#dependency")?;

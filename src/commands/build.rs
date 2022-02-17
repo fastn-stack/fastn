@@ -10,7 +10,6 @@ pub async fn build(
 
     tokio::fs::create_dir_all(config.build_dir()).await?;
     // let skip_failed = ignore_failed.unwrap_or(false);
-
     match (
         config.package.translation_of.as_ref(),
         config.package.translations.has_elements(),
@@ -40,7 +39,6 @@ async fn build_simple(
             .into_iter()
             .map(|v| (v.get_id(), v)),
     );
-
     process_files(config, &documents, file, base_url, skip_failed).await
 }
 
@@ -116,7 +114,6 @@ async fn build_with_original(
         .into_iter()
         .map(|v| original_path.join(v))
         .collect::<Vec<camino::Utf8PathBuf>>();
-
     // documents contains all the files in original package
     let original_documents = std::collections::BTreeMap::from_iter(
         fpm::paths_to_files(config.package.name.as_str(), files, original_path.as_path())
@@ -407,19 +404,6 @@ async fn process_ftd(
         (None, None, main)
     } else {
         let main = main.to_owned();
-        // let prefix = config.package.auto_import.iter().fold(None, |pre, ai| {
-        //     Some(format!(
-        //         "{}\n-- import: {}{}",
-        //         pre.unwrap_or_else(|| "".to_string()),
-        //         &ai.path,
-        //         match &ai.alias {
-        //             Some(a) => format!(" as {}", a),
-        //             None => String::new(),
-        //         }
-        //     ))
-        // });
-        // let prefix = config.package.generate_prefix_string();
-
         let new_main = fpm::Document {
             content: config
                 .package
@@ -428,9 +412,14 @@ async fn process_ftd(
             parent_path: main.parent_path,
             package_name: main.package_name,
         };
-        (fallback, message, new_main)
+        let new_fallback = fallback.map(|fb| fpm::Document {
+            content: config
+                .package
+                .get_prefixed_body(fb.content.as_str(), &fb.id, true),
+            ..fb.to_owned()
+        });
+        (new_fallback, message, new_main)
     };
-
     match (fallback, message) {
         (Some(fallback), Some(message)) => {
             write_with_fallback(
@@ -592,7 +581,7 @@ async fn process_ftd(
     async fn write_with_fallback(
         config: &fpm::Config,
         main: &fpm::Document,
-        fallback: &fpm::Document,
+        fallback: fpm::Document,
         new_file_path: &str,
         message: &str,
         translated_data: fpm::TranslationData,
