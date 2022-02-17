@@ -166,7 +166,7 @@ impl Config {
                                     new_package_root
                                 } else {
                                     return Err(fpm::Error::PackageError {
-                                        message: format!("Can't find FPM.ftd. The path specified in FPM.manifest.ftd doesn't contain the FPM.ftd file"),
+                                        message: "Can't find FPM.ftd. The path specified in FPM.manifest.ftd doesn't contain the FPM.ftd file".to_string(),
                                     });
                                 }
                             }
@@ -321,6 +321,7 @@ impl PackageTemp {
             canonical_url: self.canonical_url,
             dependencies: vec![],
             auto_import: vec![],
+            fpm_path: None,
         }
     }
 }
@@ -340,6 +341,7 @@ pub struct Package {
     pub dependencies: Vec<fpm::Dependency>,
     /// `auto_import` keeps track of the global auto imports in the package.
     pub auto_import: Vec<fpm::AutoImport>,
+    pub fpm_path: Option<camino::Utf8PathBuf>,
 }
 
 impl Package {
@@ -355,6 +357,7 @@ impl Package {
             canonical_url: None,
             dependencies: vec![],
             auto_import: vec![],
+            fpm_path: None,
         }
     }
 
