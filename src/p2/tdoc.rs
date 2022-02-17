@@ -552,6 +552,18 @@ impl<'a> TDoc<'a> {
                     kind: kind.to_owned(),
                 }
             }
+            ftd::p2::Kind::Optional { kind } => {
+                if let Ok(iterative_result) =
+                    self.from_json_(line_number, json, kind.as_ref().to_owned())
+                {
+                    iterative_result
+                } else {
+                    ftd::Value::Optional {
+                        kind: kind.as_ref().to_owned(),
+                        data: Box::new(None),
+                    }
+                }
+            }
             t => unimplemented!(
                 "{:?} not yet implemented, line number: {}, doc: {}",
                 t,
