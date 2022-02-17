@@ -283,8 +283,7 @@ impl TocParser {
                         let url_regex = regex::Regex::new(
                             r#":[ ]?(?P<url>(?:https?)?://(?:[a-zA-Z0-9]+\.)?(?:[A-z0-9]+\.)(?:[A-z0-9]+)(?:[/A-Za-z0-9\?:\&%]+))"#
                         ).unwrap();
-                        dbg!(current_title.as_str());
-                        if let Some(regex_match) = dbg!(url_regex.find(current_title.as_str())) {
+                        if let Some(regex_match) = url_regex.find(current_title.as_str()) {
                             let curr_title = current_title.as_str();
                             (
                                 Some(curr_title[..regex_match.start()].trim().to_string()),
