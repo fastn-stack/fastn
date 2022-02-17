@@ -68,9 +68,44 @@ impl<'a> Interpreter<'a> {
         d_processor: &mut std::time::Duration,
     ) -> ftd::p1::Result<Vec<ftd::Instruction>> {
         let p1 = ftd::p1::parse(s, name)?;
-        let (new_p1, var_types) = ftd::p2::utils::reorder(&p1, name)?;
 
         let mut aliases = default_aliases();
+        let mut iteration_index = 0;
+        while p1[iteration_index].name == "import" && iteration_index < p1.len() {
+            let (library_name, alias) = ftd::p2::utils::parse_import(
+                &p1[iteration_index].caption,
+                name,
+                p1[iteration_index].line_number,
+            )?;
+            aliases.insert(alias, library_name.clone());
+            let start = std::time::Instant::now();
+            let doc = ftd::p2::TDoc {
+                name,
+                aliases: &aliases,
+                bag: &self.bag,
+                local_variables: &mut Default::default(),
+            };
+            let s = self
+                .lib
+                .get_with_result(library_name.as_str(), &doc)
+                .await?;
+            *d_get = d_get.saturating_add(std::time::Instant::now() - start);
+            if !self.library_in_the_bag(library_name.as_str()) {
+                self.interpret_(library_name.as_str(), s.as_str(), false, d_get, d_processor)?;
+                self.add_library_to_bag(library_name.as_str())
+            }
+            iteration_index += 1;
+        }
+        let (new_p1, var_types) = ftd::p2::utils::reorder(
+            &p1[iteration_index..],
+            &ftd::p2::TDoc {
+                name,
+                aliases: &aliases,
+                bag: &self.bag,
+                local_variables: &mut Default::default(),
+            },
+        )?;
+
         let mut instructions: Vec<ftd::Instruction> = Default::default();
 
         for p1 in new_p1.iter() {
@@ -403,9 +438,42 @@ impl<'a> Interpreter<'a> {
         d_processor: &mut std::time::Duration,
     ) -> ftd::p1::Result<Vec<ftd::Instruction>> {
         let p1 = ftd::p1::parse(s, name)?;
-        let (new_p1, var_types) = ftd::p2::utils::reorder(&p1, name)?;
 
+        // do all imports and then reorder
         let mut aliases = default_aliases();
+        let mut iteration_index = 0;
+        while p1[iteration_index].name == "import" && iteration_index < p1.len() {
+            let (library_name, alias) = ftd::p2::utils::parse_import(
+                &p1[iteration_index].caption,
+                name,
+                p1[iteration_index].line_number,
+            )?;
+            aliases.insert(alias, library_name.clone());
+            let start = std::time::Instant::now();
+            let doc = ftd::p2::TDoc {
+                name,
+                aliases: &aliases,
+                bag: &self.bag,
+                local_variables: &mut Default::default(),
+            };
+            let s = self.lib.get_with_result(library_name.as_str(), &doc)?;
+            *d_get = d_get.saturating_add(std::time::Instant::now() - start);
+            if !self.library_in_the_bag(library_name.as_str()) {
+                self.interpret_(library_name.as_str(), s.as_str(), false, d_get, d_processor)?;
+                self.add_library_to_bag(library_name.as_str())
+            }
+            iteration_index += 1;
+        }
+        let (new_p1, var_types) = ftd::p2::utils::reorder(
+            &p1[iteration_index..],
+            &ftd::p2::TDoc {
+                name,
+                aliases: &aliases,
+                bag: &self.bag,
+                local_variables: &mut Default::default(),
+            },
+        )?;
+
         let mut instructions: Vec<ftd::Instruction> = Default::default();
 
         for p1 in new_p1.iter() {

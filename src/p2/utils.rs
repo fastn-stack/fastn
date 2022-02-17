@@ -859,7 +859,7 @@ pub fn split(name: String, split_at: &str) -> ftd::p1::Result<(String, String)> 
 
 pub fn reorder(
     p1: &[ftd::p1::Section],
-    doc_id: &str,
+    doc: &ftd::p2::TDoc,
 ) -> ftd::p1::Result<(Vec<ftd::p1::Section>, Vec<String>)> {
     fn is_kernel_component(comp: String) -> bool {
         if ["ftd.row", "ftd.column"].contains(&comp.as_str()) {
@@ -987,13 +987,6 @@ pub fn reorder(
         Ok(())
     }
 
-    let doc = ftd::p2::TDoc {
-        name: doc_id,
-        aliases: &Default::default(),
-        bag: &Default::default(),
-        local_variables: &mut Default::default(),
-    };
-
     let mut p1_map: std::collections::BTreeMap<String, ftd::p1::Section> = Default::default();
     let mut inserted_p1 = vec![];
     let mut new_p1 = vec![];
@@ -1001,7 +994,7 @@ pub fn reorder(
     let mut var_types = vec![];
     for (idx, p1) in p1.iter().enumerate() {
         let var_data =
-            ftd::variable::VariableData::get_name_kind(&p1.name, &doc, p1.line_number, &var_types);
+            ftd::variable::VariableData::get_name_kind(&p1.name, doc, p1.line_number, &var_types);
         if p1.name == "import"
             || p1.name.starts_with("record ")
             || p1.name.starts_with("or-type ")
@@ -1062,7 +1055,7 @@ pub fn reorder(
         &mut new_p1_component,
         None,
         &mut vec![],
-        &doc,
+        doc,
         &var_types,
     )?;
     new_p1.extend(new_p1_component);
