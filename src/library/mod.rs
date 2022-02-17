@@ -209,33 +209,6 @@ impl ftd::p2::Library for Library {
 
             format!(
                 indoc::indoc! {"
-                    -- record ui-data:
-                    string last-modified-on:
-                    string never-synced:
-                    string show-translation-status:
-                    string other-available-languages:
-                    string current-language:
-                    string translation-not-available:
-                    string unapproved-heading:
-                    string show-unapproved-version:
-                    string show-latest-version:
-                    string show-outdated-version:
-                    string out-dated-heading:
-                    string out-dated-body:
-                    string language-detail-page:
-                    string language-detail-page-body:
-                    string total-number-of-documents:
-                    string document:
-                    string status:
-                    string missing:
-                    string never-marked:
-                    string out-dated:
-                    string upto-date:
-                    string welcome-fpm-page:
-                    string welcome-fpm-page-subtitle:
-                    string language:
-
-
                     -- ui-data ui:
                     last-modified-on: {last_modified_on}
                     never-synced: {never_synced}
@@ -414,45 +387,12 @@ impl ftd::p2::Library for Library {
                 indoc::indoc! {"
                         {fpm_base}
                         {fpm_ui}
-                        
-                        -- optional string theme-color:
-                        $always-include$: true
-
-                        -- integer mobile-breakpoint: 768
-                        $always-include$: true
-                        
-                        -- boolean is-translation-package: false
-                        -- boolean has-translations: false
-                        -- boolean mobile: true
-                        -- boolean dark-mode: false
-                        -- boolean system-dark-mode: false
-                        -- boolean follow-system-dark-mode: true
                         -- string document-id: {document_id}
-                        -- optional string diff:
-                        -- optional string translation-status:
-                        -- optional string last-marked-on:
-                        -- optional string original-latest:
-                        -- optional string translated-latest:
-                        -- optional string last-marked-on-rfc3339:
-                        -- optional string original-latest-rfc3339:
-                        -- optional string translated-latest-rfc3339:
-                        -- optional string language:
-                        -- optional string number-of-documents:
-                        -- optional string last-modified-on:
-                        -- optional string current-document-last-modified-on:
                         -- string translation-status-url: {home_url}
                         -- string title: {title}
                         -- string package-name: {package_name}
                         -- optional string package-zip:
                         -- string home-url: {home_url}
-
-                        -- record toc-item:
-                        caption title:
-                        string url:
-                        toc-item list children:
-
-                        -- toc-item list language-toc:
-    
                         "},
                 fpm_base = fpm::fpm_ftd(),
                 fpm_ui = construct_fpm_ui(lib),
@@ -906,7 +846,8 @@ impl ftd::p2::Library for Library {
                     languages = format!(
                         indoc::indoc! {"
                         {languages}
-                        - {language}: {domain}
+                        - {language}
+                          url: {domain}
                         "},
                         languages = languages,
                         domain = domain,
