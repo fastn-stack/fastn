@@ -143,12 +143,48 @@ impl Config {
     pub async fn read() -> fpm::Result<Config> {
         let original_directory: camino::Utf8PathBuf =
             std::env::current_dir()?.canonicalize()?.try_into()?;
-        let root = match find_package_root(&original_directory) {
-            Some(b) => b,
+        let root = match find_root_for_file(&original_directory, "FPM.ftd") {
+            Some(fpm_ftd_root) => fpm_ftd_root,
             None => {
-                return Err(fpm::Error::UsageError {
-                    message: "FPM.ftd not found in any parent directory".to_string(),
-                });
+                // Look for FPM manifest
+                match find_root_for_file(&original_directory, "FPM.manifest.ftd") {
+                    Some(fpm_manifest_path) => {
+                        let doc =
+                            tokio::fs::read_to_string(fpm_manifest_path.join("FPM.manifest.ftd"));
+                        let lib = fpm::FPMLibrary::default();
+                        match ftd::p2::Document::from("FPM.manifest", doc.await?.as_str(), &lib) {
+                            Ok(fpm_manifest_processed) => {
+                                let k: String =
+                                    fpm_manifest_processed.get("FPM.manifest#package-root")?;
+                                let new_package_root = k
+                                    .as_str()
+                                    .split('/')
+                                    .fold(fpm_manifest_path, |accumulator, part| {
+                                        accumulator.join(part)
+                                    });
+                                if new_package_root.join("FPM.ftd").exists() {
+                                    new_package_root
+                                } else {
+                                    return Err(fpm::Error::PackageError {
+                                        message: format!("Can't find FPM.ftd. The path specified in FPM.manifest.ftd doesn't contain the FPM.ftd file"),
+                                    });
+                                }
+                            }
+                            Err(e) => {
+                                return Err(fpm::Error::PackageError {
+                                    message: format!("failed to parse FPM.manifest.ftd: {:?}", &e),
+                                });
+                            }
+                        }
+                    }
+                    None => {
+                        return Err(fpm::Error::UsageError {
+                            message:
+                                "FPM.ftd or FPM.manifest.ftd not found in any parent directory"
+                                    .to_string(),
+                        });
+                    }
+                }
             }
         };
         let b = {
@@ -227,14 +263,17 @@ impl Config {
     }
 }
 
-/// `find_package_root()` starts with the given path, which is the current directory where the
+/// `find_root_for_file()` starts with the given path, which is the current directory where the
 /// application started in, and goes up till it finds a folder that contains `FPM.ftd` file.
-pub(crate) fn find_package_root(dir: &camino::Utf8Path) -> Option<camino::Utf8PathBuf> {
-    if dir.join("FPM.ftd").exists() {
+pub(crate) fn find_root_for_file(
+    dir: &camino::Utf8Path,
+    file_name: &str,
+) -> Option<camino::Utf8PathBuf> {
+    if dir.join(file_name).exists() {
         Some(dir.into())
     } else {
         if let Some(p) = dir.parent() {
-            return find_package_root(p);
+            return find_root_for_file(p, file_name);
         };
         None
     }
@@ -286,7 +325,7 @@ impl PackageTemp {
     }
 }
 
-#[derive(serde::Deserialize, Debug, Clone)]
+#[derive(Debug, Clone)]
 pub struct Package {
     pub name: String,
     pub translation_of: Box<Option<Package>>,
