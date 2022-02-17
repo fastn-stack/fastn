@@ -3,7 +3,7 @@
 pub trait Library: Sync {
     async fn get(&self, name: &str, doc: &ftd::p2::TDoc) -> Option<String>;
     async fn get_with_result(&self, name: &str, doc: &ftd::p2::TDoc) -> ftd::p1::Result<String> {
-        match self.get(name, doc) {
+        match self.get(name, doc).await {
             Some(v) => Ok(v),
             None => ftd::e2(format!("library not found: {}", name), "", 0),
         }
@@ -211,7 +211,7 @@ fn read_records(section: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Res
 #[cfg(feature = "async")]
 #[async_trait::async_trait]
 impl Library for TestLibrary {
-    async fn get(&self, name: &str) -> Option<String> {
+    async fn get(&self, name: &str, _doc: &ftd::p2::TDoc) -> Option<String> {
         std::fs::read_to_string(format!("./tests/{}.ftd", name)).ok()
     }
 
