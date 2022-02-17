@@ -3,32 +3,43 @@ pub fn processor(
     doc: &ftd::p2::TDoc,
     _config: &fpm::Config,
 ) -> ftd::p1::Result<ftd::Value> {
-    let toc_items = ToC::parse(section.body(section.line_number, doc.name)?.as_str())
-        .map_err(|e| ftd::p1::Error::ParseError {
-            message: format!("Cannot parse body: {:?}", e),
-            doc_id: doc.name.to_string(),
-            line_number: section.line_number,
-        })?
-        .items
-        .iter()
-        .map(|item| item.to_toc_item_compat())
-        .collect::<Vec<TocItemCompat>>();
+    let toc_items = ToC::parse(
+        section.body(section.line_number, doc.name)?.as_str(),
+        doc.name,
+    )
+    .map_err(|e| ftd::p1::Error::ParseError {
+        message: format!("Cannot parse body: {:?}", e),
+        doc_id: doc.name.to_string(),
+        line_number: section.line_number,
+    })?
+    .items
+    .iter()
+    .map(|item| item.to_toc_item_compat())
+    .collect::<Vec<TocItemCompat>>();
     doc.from_json(&toc_items, section)
 }
 
 #[derive(Debug, serde::Serialize)]
 pub struct TocItemCompat {
-    pub url: String,
-    pub number: String,
-    pub title: String,
+    pub url: Option<String>,
+    pub number: Option<String>,
+    pub title: Option<String>,
+    #[serde(rename = "is-heading")]
     pub is_heading: bool,
+    // TODO: Font icon mapping to html?
+    #[serde(rename = "font-icon")]
+    pub font_icon: Option<String>,
+    #[serde(rename = "is-disabled")]
+    pub is_disabled: bool,
+    #[serde(rename = "img-src")]
+    pub image_src: Option<String>,
     pub children: Vec<TocItemCompat>,
 }
 
 #[derive(PartialEq, Debug, Default, Clone)]
 pub struct TocItem {
     pub id: Option<String>,
-    pub title: ftd::Rendered,
+    pub title: Option<String>,
     pub url: Option<String>,
     pub number: Vec<u8>,
     pub is_heading: bool,
@@ -42,15 +53,18 @@ impl TocItem {
     pub(crate) fn to_toc_item_compat(&self) -> TocItemCompat {
         // TODO: num converting to ol and li in ftd.???
         TocItemCompat {
-            url: self.url.clone().or_else(|| Some("".to_string())).unwrap(),
-            number: self.number.iter().map(|x| format!("{}", x)).collect(),
-            title: self.title.original.to_string(),
+            url: self.url.clone(),
+            number: Some(self.number.iter().map(|x| format!("{}.", x)).collect()),
+            title: self.title.clone(),
             is_heading: self.is_heading,
             children: self
                 .children
                 .iter()
                 .map(|item| item.to_toc_item_compat())
                 .collect(),
+            font_icon: self.font_icon.clone(),
+            image_src: self.img_src.clone(),
+            is_disabled: self.is_disabled,
         }
     }
 }
@@ -60,15 +74,23 @@ enum ParsingState {
     WaitingForNextItem,
     WaitingForAttributes,
 }
-
+#[derive(Debug)]
 pub struct TocParser {
     state: ParsingState,
     sections: Vec<(TocItem, usize)>,
     temp_item: Option<(TocItem, usize)>,
+    doc_name: String,
 }
 
 #[derive(thiserror::Error, Debug)]
-pub enum ParseError {}
+pub enum ParseError {
+    #[error("{doc_id} -> {message} -> Row Content: {row_content}")]
+    InvalidTOCItem {
+        doc_id: String,
+        message: String,
+        row_content: String,
+    },
+}
 
 #[derive(Debug)]
 struct LevelTree {
@@ -120,12 +142,6 @@ fn construct_tree(elements: Vec<(TocItem, usize)>, smallest_level: usize) -> Vec
                         // Means found children's parent, needs to append children to its parents
                         // and update top level accordingly
                         // parent level should equal to top_level - 1
-                        //println!(
-                        //    "TopLevel: {}, CurrentLevel: {}",
-                        //    top_level, cur_element.level
-                        //);
-
-                        // println!("Children: {:?}", children);
                         assert_eq!(cur_element.level as i32, (top_level as i32) - 1);
                         cur_element
                             .item
@@ -208,7 +224,7 @@ impl TocParser {
                     self.eval_temp_item()?;
                     self.sections.push((
                         TocItem {
-                            title: ftd::markdown_line(iter.collect::<String>().trim()),
+                            title: Some(iter.collect::<String>().trim().to_string()),
                             is_heading: true,
                             ..Default::default()
                         },
@@ -235,7 +251,7 @@ impl TocParser {
         // The complete string, postprocess if url doesn't exist
         self.temp_item = Some((
             TocItem {
-                title: ftd::markdown_line(rest.as_str().trim()),
+                title: Some(rest.as_str().trim().to_string()),
                 ..Default::default()
             },
             depth,
@@ -247,18 +263,50 @@ impl TocParser {
     fn eval_temp_item(&mut self) -> Result<(), ParseError> {
         if let Some((toc_item, depth)) = self.temp_item.clone() {
             // Split the line by `:`. title = 0, url = Option<1>
-            let resp_item = if toc_item.url.is_none() {
+            let resp_item = if toc_item.url.is_none() && toc_item.title.is_some() {
                 // URL not defined, Try splitting the title to evaluate the URL
-                let current_title = toc_item.title.original.as_str();
-                if let Some((first, second)) = current_title.rsplit_once(":") {
-                    // (, Some(second.trim().to_string()))
-                    TocItem {
-                        title: ftd::markdown_line(first.trim()),
-                        url: Some(second.trim().to_string()),
-                        ..Default::default()
+                let current_title = toc_item.title.clone().unwrap();
+                let (title, url) = match current_title.as_str().matches(':').count() {
+                    1 | 0 => {
+                        if let Some((first, second)) = current_title.rsplit_once(":") {
+                            (
+                                Some(first.trim().to_string()),
+                                Some(second.trim().to_string()),
+                            )
+                        } else {
+                            // No matches, i.e. return the current string as title, url as none
+                            (Some(current_title), None)
+                        }
                     }
-                } else {
-                    toc_item
+                    _ => {
+                        // The URL can have its own colons. So match the URL first
+                        let url_regex = regex::Regex::new(
+                            r#":[ ]?(?P<url>(?:https?)?://(?:[a-zA-Z0-9]+\.)?(?:[A-z0-9]+\.)(?:[A-z0-9]+)(?:[/A-Za-z0-9\?:\&%]+))"#
+                        ).unwrap();
+                        if let Some(regex_match) = url_regex.find(current_title.as_str()) {
+                            let curr_title = current_title.as_str();
+                            (
+                                Some(curr_title[..regex_match.start()].trim().to_string()),
+                                Some(
+                                    curr_title[regex_match.start()..regex_match.end()]
+                                        .trim_start_matches(':')
+                                        .trim()
+                                        .to_string(),
+                                ),
+                            )
+                        } else {
+                            return Err(ParseError::InvalidTOCItem {
+                                doc_id: self.doc_name.clone(),
+                                message: "Ambiguous <title>: <URL> evaluation. Multiple colons found. Either specify the complete URL or specify the url as an attribute".to_string(),
+                                row_content: current_title.as_str().to_string(),
+                            });
+                        }
+                    }
+                };
+                TocItem {
+                    title,
+                    url,
+                    ..toc_item
                 }
             } else {
                 toc_item
@@ -274,7 +322,7 @@ impl TocParser {
             self.eval_temp_item()?;
         } else {
             match self.temp_item.clone() {
-                Some((i, d)) => match line.rsplit_once(":") {
+                Some((i, d)) => match line.split_once(":") {
                     Some(("url", v)) => {
                         self.temp_item = Some((
                             TocItem {
@@ -288,6 +336,15 @@ impl TocParser {
                         self.temp_item = Some((
                             TocItem {
                                 font_icon: Some(v.trim().to_string()),
+                                ..i
+                            },
+                            d,
+                        ));
+                    }
+                    Some(("is-disabled", v)) => {
+                        self.temp_item = Some((
+                            TocItem {
+                                is_disabled: v.trim() == "true",
                                 ..i
                             },
                             d,
@@ -316,11 +373,12 @@ impl TocParser {
 }
 
 impl ToC {
-    pub fn parse(s: &str) -> Result<Self, ParseError> {
+    pub fn parse(s: &str, doc_name: &str) -> Result<Self, ParseError> {
         let mut parser = TocParser {
             state: ParsingState::WaitingForNextItem,
             sections: vec![],
             temp_item: None,
+            doc_name: doc_name.to_string(),
         };
         for line in s.split('\n') {
             parser.read_line(line)?;
@@ -350,7 +408,7 @@ mod test {
         };
         ($s:expr, $t: expr) => {
             assert_eq!(
-                super::ToC::parse($s).unwrap_or_else(|e| panic!("{}", e)),
+                super::ToC::parse($s, "test_doc").unwrap_or_else(|e| panic!("{}", e)),
                 $t
             )
         };
@@ -377,14 +435,13 @@ mod test {
             - Further Nesting: /home/nested-link-two/further-nested/
           - `ftd::p1` grammar
             url: /p1-grammar/
-          - `ftd::p1` grammar: /p1-grammar/
 
         "
             ),
             super::ToC {
                 items: vec![
                     super::TocItem {
-                        title: ftd::markdown_line("Hello World!"),
+                        title: Some(format!("Hello World!")),
                         id: None,
                         url: None,
                         number: vec![],
@@ -395,7 +452,7 @@ mod test {
                         children: vec![]
                     },
                     super::TocItem {
-                        title: ftd::markdown_line("Test Page"),
+                        title: Some(format!("Test Page")),
                         id: None,
                         url: Some("/test-page/".to_string()),
                         number: vec![1],
@@ -406,7 +463,7 @@ mod test {
                         children: vec![]
                     },
                     super::TocItem {
-                        title: ftd::markdown_line("Title One"),
+                        title: Some(format!("Title One")),
                         id: None,
                         url: None,
                         number: vec![],
@@ -417,7 +474,7 @@ mod test {
                         children: vec![]
                     },
                     super::TocItem {
-                        title: ftd::markdown_line("Home Page"),
+                        title: Some(format!("Home Page")),
                         id: None,
                         url: Some("/home/".to_string()),
                         number: vec![1],
@@ -427,7 +484,7 @@ mod test {
                         font_icon: None,
                         children: vec![
                             super::TocItem {
-                                title: ftd::markdown_line("Nested Title"),
+                                title: Some(format!("Nested Title")),
                                 id: None,
                                 url: None,
                                 number: vec![],
@@ -439,7 +496,7 @@ mod test {
                             },
                             super::TocItem {
                                 id: None,
-                                title: ftd::markdown_line("Nested Link"),
+                                title: Some(format!("Nested Link")),
                                 url: Some("/home/nested-link/".to_string(),),
                                 number: vec![1, 1],
                                 is_heading: false,
@@ -449,7 +506,7 @@ mod test {
                                 children: vec![],
                             },
                             super::TocItem {
-                                title: ftd::markdown_line("Nested Title 2"),
+                                title: Some(format!("Nested Title 2")),
                                 id: None,
                                 url: None,
                                 number: vec![],
@@ -461,7 +518,7 @@ mod test {
                             },
                             super::TocItem {
                                 id: None,
-                                title: ftd::markdown_line("Nested Link Two"),
+                                title: Some(format!("Nested Link Two")),
                                 url: Some("/home/nested-link-two/".to_string()),
                                 number: vec![1, 1],
                                 is_heading: false,
@@ -470,7 +527,7 @@ mod test {
                                 font_icon: None,
                                 children: vec![super::TocItem {
                                     id: None,
-                                    title: ftd::markdown_line("Further Nesting"),
+                                    title: Some(format!("Further Nesting")),
                                     url: Some("/home/nested-link-two/further-nested/".to_string()),
                                     number: vec![1, 1, 1],
                                     is_heading: false,
@@ -482,20 +539,9 @@ mod test {
                             },
                             super::TocItem {
                                 id: None,
-                                title: ftd::markdown_line("`ftd::p1` grammar"),
+                                title: Some(format!("`ftd::p1` grammar")),
                                 url: Some("/p1-grammar/".to_string()),
                                 number: vec![1, 2],
-                                is_heading: false,
-                                is_disabled: false,
-                                img_src: None,
-                                font_icon: None,
-                                children: vec![],
-                            },
-                            super::TocItem {
-                                id: None,
-                                title: ftd::markdown_line("`ftd::p1` grammar"),
-                                url: Some("/p1-grammar/".to_string()),
-                                number: vec![1, 3],
                                 is_heading: false,
                                 is_disabled: false,
                                 img_src: None,
@@ -519,7 +565,7 @@ mod test {
             ),
             super::ToC {
                 items: vec![super::TocItem {
-                    title: ftd::markdown_line("Home Page"),
+                    title: Some(format!("Home Page")),
                     id: None,
                     url: None,
                     number: vec![],
@@ -539,20 +585,34 @@ mod test {
             &indoc!(
                 "
         - Home Page: /home-page/
+        - Hindi: https://test.website.com
         "
             ),
             super::ToC {
-                items: vec![super::TocItem {
-                    title: ftd::markdown_line("Home Page"),
-                    is_heading: false,
-                    id: None,
-                    url: Some("/home-page/".to_string()),
-                    number: vec![1],
-                    is_disabled: false,
-                    img_src: None,
-                    font_icon: None,
-                    children: vec![]
-                }]
+                items: vec![
+                    super::TocItem {
+                        title: Some(format!("Home Page")),
+                        is_heading: false,
+                        id: None,
+                        url: Some("/home-page/".to_string()),
+                        number: vec![1],
+                        is_disabled: false,
+                        img_src: None,
+                        font_icon: None,
+                        children: vec![]
+                    },
+                    super::TocItem {
+                        title: Some(format!("Hindi")),
+                        is_heading: false,
+                        id: None,
+                        url: Some("https://test.website.com".to_string()),
+                        number: vec![2],
+                        is_disabled: false,
+                        img_src: None,
+                        font_icon: None,
+                        children: vec![]
+                    }
+                ]
             }
         );
     }
