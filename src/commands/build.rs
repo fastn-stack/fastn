@@ -412,17 +412,12 @@ async fn process_ftd(
             parent_path: main.parent_path,
             package_name: main.package_name,
         };
-        let new_fallback = if let Some(fb) = fallback {
-            Some(fpm::Document {
-                content: config
-                    .package
-                    .get_prefixed_body(fb.content.as_str(), &fb.id, true),
-                ..fb.to_owned()
-            })
-        } else {
-            None
-        };
-
+        let new_fallback = fallback.map(|fb| fpm::Document {
+            content: config
+                .package
+                .get_prefixed_body(fb.content.as_str(), &fb.id, true),
+            ..fb.to_owned()
+        });
         (new_fallback, message, new_main)
     };
     match (fallback, message) {
