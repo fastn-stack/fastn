@@ -237,7 +237,6 @@ impl fpm::Package {
                 }
             }
         }
-        // TODO: Find the FPM.ftd location here
         let fpm_ftd_path = if root.join("FPM.ftd").exists() {
             root.join("FPM.ftd")
         } else {
@@ -334,6 +333,7 @@ impl fpm::Package {
 
         downloaded_package.push(mutpackage.name.to_string());
 
+        package.fpm_path = Some(fpm_path.to_owned());
         package.dependencies = {
             let temp_deps: Vec<fpm::dependency::DependencyTemp> =
                 ftd_document.get("fpm#dependency")?;

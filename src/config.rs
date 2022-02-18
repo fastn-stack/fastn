@@ -104,7 +104,17 @@ impl Config {
                 });
             }
         };
-        Ok(self.root.join(".packages").join(o.name.as_str()))
+        match &o.fpm_path {
+            Some(fpm_path) => Ok(fpm_path
+                .parent()
+                .expect("Expect fpm_path parent. Panic!")
+                .to_owned()),
+            _ => {
+                return Err(fpm::Error::UsageError {
+                    message: format!("Unable to find `fpm_path` of the package {}", o.name),
+                })
+            }
+        }
     }
 
     /*/// aliases() returns the list of the available aliases at the package level.
@@ -166,7 +176,7 @@ impl Config {
                                     new_package_root
                                 } else {
                                     return Err(fpm::Error::PackageError {
-                                        message: format!("Can't find FPM.ftd. The path specified in FPM.manifest.ftd doesn't contain the FPM.ftd file"),
+                                        message: "Can't find FPM.ftd. The path specified in FPM.manifest.ftd doesn't contain the FPM.ftd file".to_string(),
                                     });
                                 }
                             }
@@ -321,6 +331,7 @@ impl PackageTemp {
             canonical_url: self.canonical_url,
             dependencies: vec![],
             auto_import: vec![],
+            fpm_path: None,
         }
     }
 }
@@ -340,6 +351,7 @@ pub struct Package {
     pub dependencies: Vec<fpm::Dependency>,
     /// `auto_import` keeps track of the global auto imports in the package.
     pub auto_import: Vec<fpm::AutoImport>,
+    pub fpm_path: Option<camino::Utf8PathBuf>,
 }
 
 impl Package {
@@ -355,6 +367,7 @@ impl Package {
             canonical_url: None,
             dependencies: vec![],
             auto_import: vec![],
+            fpm_path: None,
         }
     }
 
