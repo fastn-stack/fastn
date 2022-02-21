@@ -62,6 +62,12 @@ Based on the interface fpm will do something custom, font will be used in the
 generated HTML, syntax definition and syntax theme would be passed to syntact
 during syntax highlighting and so on.
 
+
+
+
+
+
+
 -- ft.h1: Static FPM Repo
 
 20th Feb 2022
@@ -114,6 +120,12 @@ email verifiction, and then add other plugins for Slack, Telegram etc later.
 
 As a logical next step to this would be package monetisation. If you want to
 charge for your package, fpm-repo can help you with that as well.
+
+
+
+
+
+
 
 -- ft.h1: Processors And Host Method
 
@@ -314,6 +326,11 @@ is used, like file system access or database query, network etc.
 There can be some overlap, some functionalities should be available both in
 frontend and backend. But it can not be generalised.
 
+
+
+
+
+
 -- ft.h1: Static Assets From Dependencies
 
 9th Feb 20222
@@ -391,7 +408,6 @@ src: $src
 We have to change the `src` again to `/_assets/d.com/a/images/foo.png`.
 Should we rewrite all paths? What if this was part of the main package? Or what
 if we did this from our main package:
-
 
 -- ft.code:
 lang: ftd
@@ -476,7 +492,6 @@ package name: `amitu.com/images/two.png -> images/two.png` or add `_assets`:
 `d.com/a/images/two.png -> _assets/d.com/a/images/two.png`. We can even resolve
 `https://d.com/a/images/two.png -> _assets/d.com/a/images/two.png`.
 
-
 If the relagive URL doesnt contain current package or dependency name then we
 leave it as is.
 
@@ -497,6 +512,11 @@ have versioning, we may want `tutorial/` to resolve either into `/v1/tutorial/`
 or `/v2/tutorial/`, and this will depenend on current version. So when we have
 haversion support we will want to keep base free to handle versioning, but we
 are assuming assets would be shared across all versions.
+
+
+
+
+
 
 
 -- ft.h1: On `main:`
@@ -539,6 +559,13 @@ Further we will not have `:` (reason: when using / we get a full URL that we can
 paste in browser and see doc of individual module) and we will always refer to
 current package either as `package` keyword, or we can even allow `as` alias
 syntax in the `-- fpm.package:` line.
+
+
+
+
+
+
+
 
 -- ft.h1: Static Assets From Dependencies
 
@@ -605,6 +632,15 @@ referred to the URL using protocol, then it would be absolute and we do not want
 to analyze.
 
 Ideally we should copy on access.
+
+
+
+
+
+
+
+
+
 
 -- ft.h1: Package Notifications
 
@@ -683,6 +719,14 @@ another fpm variable for convenience till we get first item of a list support.
 Once the UI is open, we will want to show what all is new, so we will def need
 string comparison operator, `>`.
 
+
+
+
+
+
+
+
+
 -- ft.h1: FPM Package Registry
 
 Currently FPM is fully distributed, each FPM package is published on a URL
@@ -741,6 +785,12 @@ The first idea was a centralised registry, but we can have say 10s of registries
 each gossiping with each other telling about updates, so there is no central
 point. And any registry you publish to, you can expect the eventually the entire
 registry network will know about updates to your package.
+
+
+
+
+
+
 
 -- ft.h1: More on `package.zip`
 
@@ -849,7 +899,6 @@ or in `en` (as part of our fallback logic) are considered part of the package.
 So you can import `hi:a`, even though there is no such file because we have
 fallback logic.
 
-
 -- ft.h2: Bind Proposal
 
 One option is we do not let people go out of `en` folder, and if any file has to
@@ -881,6 +930,12 @@ content of en folder, and then all `bind` files/dirs. So we will do
 We have explict bind in FPM.ftd. When generating zip we keep the repo structure,
 we only copy files that are bound. We will also generate manifest file.
 
+
+
+
+
+
+
 -- ft.h1: Removing `.zip` Key
 
 29th Jan 2022
@@ -894,7 +949,6 @@ lang: ftd
 
 \-- fpm.package: fifthtry.github.io/dark-mode-switcher
 zip: github.com/fifthtry/dark-mode-switcher/archive/refs/heads/main.zip
-
 
 -- ft.markdown:
 
@@ -920,6 +974,13 @@ package, one can not just fix it by committing on main, one now have to figure
 out how to update the zip. I am not sure what will be the cause of this tho.
 
 Overall I think we should go ahead with this proposal.
+
+
+
+
+
+
+
 
 -- ft.h1: Scroll To View Host Function
 
@@ -974,6 +1035,12 @@ lang: ftd
 $event-click$: $fpm.scroll-to: id=foo
 
 
+
+
+
+
+
+
 -- ft.h1: Markdown Styling
 
 Me and Shobhit were wondering how would we fix markdown styling. Currently we
@@ -1007,6 +1074,13 @@ heading, paragraph etc that we encounter in the markdown.
 This way any theme can create their own markdown wrapper component and pass it
 all the component constructors, and completely control the rendering.
 
+
+
+
+
+
+
+
 -- ft.h1: Syntax And Theme Packages
 
 26th Jan 2022
@@ -1027,6 +1101,12 @@ if a package is defined to implement a package interface, e.g. `fpm/syntax` of
 `fpm/syntax-theme`, we would look for special files in such packages that are
 dependency of current package and make them available to ftd.
 
+
+
+
+
+
+
 -- ft.h1: `-- import: package`?
 
 Currently when you see `-- import: foo`, `foo` can either be package name or
@@ -1040,6 +1120,12 @@ needed), and always use `<current-package–name:module-name>` when importing.
 So both? I tend to prefer one. Rust does `crate`. But they also have to rename
 `crate` to any name, and I tend to use that in all my Rust code instead of
 `crate`.
+
+
+
+
+
+
 
 -- ft.h1: Release Automation
 
@@ -1062,6 +1148,10 @@ argument it installs the latest release.
 
 FPM.dev, ftd.dev and a bunch of FifthTry sites use fpm in `--pre-release` mode
 so as to catch bugs and regressions early.
+
+
+
+
 
 
 -- ft.h1: TOC Syntax
