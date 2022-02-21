@@ -27,6 +27,293 @@ So links never break (and original author can keep updating document URL at whim
 (on how having article.page allows us to get just the content of a page, without
 header/sidebar/footer etc).
 
+-- ft.h1: Special Packages
+
+21st Feb 2022
+
+We recently spoke about WASM packages. We have fpm packages that will be used
+to distribute static assets. We want FPM packages for font support. We also need
+FPM packages to distribute syntax definitions and syntax themes. We can maybe
+create FPM package to distribute SQLite or CSV data files.
+
+In many cases the advantage of creating FPM package exists, even when the end
+users of the thing being distribuetd, font, sqlite, syntax definition, is not
+going to use FPM itself.
+
+Say you have created a font, you would want to distribute the font to both
+general audiance, and to people who want to use your font in a FPM package. In
+such a case it would make sense for you to create FPM package as FPM package
+can become the website for you, tomorrow when we have FPM repo in place you can
+easily monetise and otherwise control the distribution of your font.
+
+-- ft.h2: Package Interfaces
+
+Each kind of special package, will have a package interface, eg for fonts we
+will have `fpm.dev/font`, which will designate that this package is a font
+package, and is being used as font package. Both would be required? Not sure,
+explicit is better, so there is that.
+
+FPM cli will verify that the package is a proper font package if you say it
+`implements: fpm.dev/font`, which could mean anything, say font file must have
+so and so file name, or must come with fallback fonts, or it must have some meta
+data to be used to create CSS `@font-face` statement etc.
+
+Based on the interface fpm will do something custom, font will be used in the
+generated HTML, syntax definition and syntax theme would be passed to syntact
+during syntax highlighting and so on.
+
+-- ft.h1: Static FPM Repo
+
+20th Feb 2022
+
+Once translation feature is polished, and special packages are imeplemented,
+processors are done, we have to start thinking about FPM Repo. It is planned but
+no work has started on it. FPM Repo is quite ambitious, we want to do a lot but
+how do we begin?
+
+One option is we become target for static hosting. FPM is going to have dynamic
+features, but we have not yet built them, so we can at least do static hosting.
+Once static fpm repo is done we can look at dynamic stuff (fpm processors
+running on page request time instead of publish time) and CR/online editing
+stuff (not sure in which order, static -> dynamic -> CR seems logical because
+dynamic does not have frontend UI, is purely backend work, and also maybe we
+will build CR/editor etc using dynamic FPM).
+
+-- ft.h2: Read Permissions
+
+If we have static hosting, we can give access to read permissions. When using
+github pages/vercel, the permission system is pretty limited, Github Pages only
+allows private to people having access to some repo, which is great for an engg
+team, but can not be used for your entire company for example. Vercel has better
+story with [support for multiple auth
+providers](https://vercel.com/docs/concepts/solutions/authentication), like
+Okta, AWS Cognito, Firebase, but there is no "platform support" for
+authorisation rules, meaning if you are using Hugo and hosting on Vercel, it's
+not easy to just say allow access to poeple from my company, you will have to do
+some coding.
+
+With Static FPM Repo we can support authorisation rules in FPM.ftd itself. If we
+compare with Hugo on Vercel, it would be akin to Hugo supporting authorisation.
+
+Hugo and Vercel are independent products, and any integration between the two
+requires effort. FPM and FPM-Repo are being developed in parallel and can have
+complimentary features.
+
+-- ft.h2: Publishers Advantage
+
+Imagine if one can say this fpm package is only readable to people in my org,
+meaning they have a `@foo.com` email address. Or to people who have followed a
+certain account on Twitter, or liked a certain repository on Github etc, or part
+of some Discord or Telegram community etc etc.
+
+The first version of fpm-repo is being designed to realise this publisher
+advantage. We can start with something simple like Google Signin for company
+email verifiction, and then add other plugins for Slack, Telegram etc later.
+
+-- ft.h2: Paid Packages
+
+As a logical next step to this would be package monetisation. If you want to
+charge for your package, fpm-repo can help you with that as well.
+
+-- ft.h1: Processors And Host Method
+
+19th Feb 2022
+
+We currently ship [3-4 processors as part of FPM](/ftd-host/). These are part of
+FPM source code, and are implemented in Rust. We also ship [a few "host
+methods"](https://github.com/FifthTry/fpm/blob/main/fpm.js), which FTD can call
+using `message-host` event handlers. These are implemented in JavaScript.
+
+Having only a few such processors and methods is obviously not great because
+people are going to have arbitrary needs, and we can not hope to anticipate all
+of them and ship all such methods. We have to make it such that people can write
+their own.
+
+-- ft.h2: WASM: Processor And Host Method Packages
+
+Ideally we should be able to distribute them as FPM packages themselves, so no
+one has to install cargo or npm etc. This is possible if we somehow use wasm,
+and ship wasm files as part of FPM packages.
+
+We have two alternatives, [wasmer](https://wasmer.io) and wasmtime.
+
+-- ft.h2: Processor Use Cases
+
+Currently processors are written for parsing toc, which is pure computation.
+Then we have a processor to read file (include processor). This one needs disc
+access. We have a processor to do HTTP request and another to do SQLite queries
+against sqlite databases stored in FPM package.
+
+-- ft.h2: Processors And Reproducibility
+
+If an FPM package is pure, or depends on current package content, it is
+reproducible, meaning if I add that package as a dependency to some package,
+the package will work as expected. But if a processor allows a processor access
+to some resource only that machine has, say it makes an HTTP request to some
+intranet API, or to a database which only allows connection for given IP, and
+credentials, you would not want to share credentials of course. So if such a
+package is included as a dependency, it may not work, or it would require
+extra setup before it can work.
+
+Not much we can do about it. We do not want to curtail power of processors.
+
+-- ft.h2: Processor Sandboxing
+
+Are there any limits to what processors can do? We will have to allow processors
+to read files on disc, maybe even edit them. Good thing is we have some level of
+control as WASM can not automatically execute arbitrary code, it can only do
+computation and interact with system via methods we explicitly provide.
+
+Should we limit them to files in the package or let them read from anywhere? It
+becomes tricky as some use cases can exist which will need extra access. How
+about network access?
+
+I think we can emulate a lot from the [permission system of
+deno](https://deno.land/manual/getting_started/permissions). This is good prior
+work, so we should try to start from there.
+
+We can start with a very limited sandbox, only giving readonly access to files
+in current package.
+
+-- ft.h2: Cloud Consideration: CPU and RAM Limits
+
+FPM is not going only run locally. Tomorrow we will have fpm-repo, and we may
+even hope github pages etc start supporting fpm-repo. So what one can do using
+the processors has to be designed in such a way that when fpm is not running
+locally but on cloud, things stay manageable.
+
+One option is we expect every fpm-repo to run everything in an isolated server,
+with CPU and RAM limits imposed at
+[docker](https://docs.docker.com/config/containers/resource_constraints/)
+/[pod](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)
+etc level.
+
+Other option is we build resource checks in FPM itself. It seems something like
+this is possible with [wasmer](https://github.com/wasmerio/wasmer/issues/221).
+[Ethereum implementation of wasm has support for
+limits](https://ewasm.readthedocs.io/en/mkdocs/metering/). Restricting RAM
+should be possible based on my current understanding of WASM model (wasm runs
+against pre-allocated memory).
+
+In general, having such limits is also good for FPM running locally. We want
+people to have as much confidence as possible when running untrusted FPM
+packages, we do not want crypto miners and other such nasties running on our
+end users laptops.
+
+
+-- ft.h2: WASM Limitations
+
+WASM can do pure computation, but doing arbitary thing from WASM is not
+possible, we have to provide access to features or functions that WASM can
+call to do things. But if some processor wants to make calls to arbitray C
+libraries etc, it't not going to be possible in WASM model.
+
+WASM we are chosing for making it safe to run arbitrary programs so putting
+limitations on what is can do is required. We can not have both, arbitrary
+access and safe.
+
+-- ft.h2: Processor WASM API
+
+For now we will only allow one method: `fpm_host.get_document(id: String) ->
+Option<String>`, this will allow a package to read a file in current package.
+We will have a permission "can-read-package-files", which will have to be
+enabled before this will work.
+
+-- ft.code: FPM.ftd
+lang: ftd
+
+\-- fpm.dependency: amitu.com/include-processor as aip
+allow: can-read-package-files
+implements: fpm.dev/processor
+
+-- ft.markdown:
+
+We have explicitly allowed this permission. Every package that wants to act as
+fpm processor has to implement `fpm.dev/processor` interface. We can use this
+processor in our FTD file now using:
+
+-- ft.code:
+lang: ftd
+
+\-- import: aip
+
+\-- ft.code:
+lang: ftd
+$processor$: aip.include
+$file$: hello.rs
+
+-- ft.markdown:
+
+Here we are trying to use `amitu.com/include-processor`, which is aliased to
+`aip` in `FPM.ftd` file. By using explicit `import` we get to use namespacing
+offered by FTD.
+
+In future we will slowly allow access to TCP, HTTP, more file operations and so
+on.
+
+-- ft.h2: Host Methods and WASM
+
+Host methods run on frontend, in Browser, after page load as part of event
+handlers. We can use WASM there are well.
+
+We are going to have a "rich stdlib", we do not want to create meaningless
+fragmentation. We believe in batteries included. We have the luxury of only
+including the code of a host method if that method is being called from the
+current page. So a big library is okay.
+
+Host methods will be able to call the "fpm stdlib", it would be tricky to detect
+what libraries have been called tho, one can not do source code analysis, source
+is already compiled into wasm. Maybe we can analyse wasm to see all calls to
+outside world. But for the purpose of this discussion lets assume it is
+possible (if not we will have to create some sort of opt in, a method can only
+call stdlib functions it has declred in some form of manifest file, sucks, but
+what can we do, we can not include entire stdlib in all pages generated using
+FPM after all).
+
+-- ft.code: host-method package dependency
+lang: ftd
+
+\-- fpm.dependency: amitu.com/parse-date
+implements: fpm.dev/host-method
+
+-- ft.markdown:
+
+Any package that provides a host method shoud implement `fpm.dev/host-methods`
+package interface.
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.input:
+$on-change$: message-host: amitu.com/parse-date.parse, error=error-variable-name
+> target=where-to-store-date
+
+-- ft.markdown:
+
+Say want to parse the date entered by the user in an input field, and we have a
+package `amitu.com/parse-date`, which provides a host method "parse" that can do
+this.
+
+-- ft.h2: Where Would WASM Files Be Stored?
+
+We can store wasm files in FPM folder. Maybe we can have each wasm file export
+a single function, so we only include the minimum amount of code. For processors
+we can club all of them together in one file.
+
+-- ft.h2: Should Processors Be Callable From Frontend?
+
+Currently the backend processors only work with data, from FTD's perspective.
+FTD contains a bunch of variables, and processors create mode data that gets
+added to FTD variable space. Frontend methods also interact with FTD via
+variables.
+
+The capabilities available to frontend does not make sense for backend. But
+backend one may make sense for frontend. Though not backend only functionality
+is used, like file system access or database query, network etc.
+
+There can be some overlap, some functionalities should be available both in
+frontend and backend. But it can not be generalised.
+
 -- ft.h1: Static Assets From Dependencies
 
 9th Feb 20222
