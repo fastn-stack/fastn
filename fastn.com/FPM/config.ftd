@@ -93,7 +93,8 @@ $processor$: toc
 $processor$: toc
 
 - Reading FTD Files: /reading-data/
-- `ftd::p1`: A JSON/YML Replacement: /p1/
+- `ftd::p1`: A JSON/YML Replacement
+  url: /p1/
 
 
 -- fpm.toc-item list ui-toc:
@@ -116,11 +117,14 @@ $processor$: toc
 - Container Attributes: /container/
 - Container Management: /container-management/
 - Inner Container: /inner-container/
-- `if`: Conditional Components: /if/
+- `if` Conditional Components
+  url: /if/
 - Conditional Attributes: /if-attr/
-- `$loop$`: Looping Over Lists: /loop/
+- `$loop$`: Looping Over Lists
+  url: /loop/
 - ID: /id/
-- `$event-<event-name>$`: Event Handling: /event-handling/
+- `$event-<event-name>$`: Event Handling
+  url: /event-handling/
 - Auto Nesting: /auto-nesting/
 
 
