@@ -22,10 +22,14 @@ $processor$: toc
 - File System Organization: /fs/
   - `FPM.ftd`: /fpm-ftd-file/
 - FTD Host Features: /ftd-host/ 
-  - `$processor$: http`: /http/
-  - `$processor$: toc`: /toc/
-  - `$processor$: package-query`: /package-query/
-  - `import: fpm`: /fpm-vars/
+  - `$processor$: http`
+    url: /http/
+  - `$processor$: toc`
+    url: /toc/
+  - `$processor$: package-query`
+    url: /package-query/
+  - `import: fpm`
+    url: /fpm-vars/
 - How To: /how-to/
   - Install `fpm`: /how-to/install/
   - Update `fpm`: /how-to/update/
