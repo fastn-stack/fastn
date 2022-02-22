@@ -2184,6 +2184,7 @@ she has done so far.
 
 -- ft.image: You can see the translation banner and available languages
 src: /images/translation/english-with-dropdown.jpg
+width: fill
 
 Consider [this page for example](https://arpita-jaiswal.github.io/vivekanand/), it
 is originally in English and is being translated in two other languages, Hindi and
@@ -2198,6 +2199,7 @@ following:
 
 -- ft.image:
 src: https://i.imgur.com/2zHKX8m.jpg
+width: fill
 
 So this page was translated someday, but the message is saying that is now not
 up-to date with original, English version. She has used the excellent [Project
@@ -2216,6 +2218,7 @@ with translation or read the original.
 
 -- ft.image:
 src: https://i.imgur.com/QzstrXh.jpg
+width: fill
 
 We tell you when the Hindi translation was last marked upto date, and what all
 changes has happened in the English version since that date. This we believe is
@@ -2229,6 +2232,7 @@ We also take you to translation status page if you are so interested:
 
 -- ft.image:
 src: https://i.imgur.com/BunGHmW.jpg
+width: fill
 
 This page is translated in Hindi as well for example.
 
@@ -2251,6 +2255,7 @@ PR](https://github.com/FifthTry/fpm/pull/43) it will start looking a bit like th
 
 -- ft.image:
 src: https://i.imgur.com/90xCFV3.jpg
+width: fill
 
 It's quite bare bones. Soon it will list information about where to fetch package
 data from, the LICENSE of the package, how to collaborate, edit this package. We
@@ -2425,6 +2430,7 @@ the progress):
 
 -- ft.image:
 src: https://i.imgur.com/eL3C99a.jpg
+width: fill
 
 Here we are seeing the status of the original language, which is English. We see
 that the English FPM package was last modified on `2021-12-29T20:55` and has 13
@@ -2465,6 +2471,7 @@ looks like:
 
 -- ft.image:
 src: https://i.imgur.com/7gWQZvy.jpg
+width: fill
 
 We are showing the total number of documents in original package (currently it
 should have shown 13, seems there is a bug), we will also show that this is the
@@ -3771,6 +3778,7 @@ with a shiny car, and told them you will pay for it later. Live with your
 
 -- ft.image:
 src: https://i.imgur.com/EKBUF48.jpg
+width: fill
 
 So our bullock-cart should be `std::path::PathBuf`. Also instead of framework - a
 full on abstraction over file system, as that is what the `fpm::document` module
@@ -5037,6 +5045,7 @@ homepage:
 
 -- ft.image:
 src: https://i.imgur.com/axb1vKD.png
+width: fill
 
 This is still under works.
 
