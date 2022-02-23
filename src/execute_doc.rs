@@ -327,7 +327,13 @@ impl<'a> ExecuteDoc<'a> {
                             vec![ftd::Element::Column(main)]
                         }
                     };
-                    c.external_children = Some((id, container, external_children));
+                    if let Some((_, _, ref mut e)) = c.external_children {
+                        e.extend(external_children);
+                    } else {
+                        dbg!("get");
+
+                        c.external_children = Some((id, container, external_children));
+                    }
                 }
                 _ => unreachable!(),
             }

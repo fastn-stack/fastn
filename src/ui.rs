@@ -284,11 +284,20 @@ impl Element {
                     }
                     (id, is_dummy)
                 }
-                Self::Markup(t) => {
+                Self::Markup(ftd::Markups {
+                    common:
+                        ftd::Common {
+                            data_id: id,
+                            is_dummy,
+                            ..
+                        },
+                    children,
+                    ..
+                }) => {
                     let mut index_vec = index_vec.to_vec();
                     index_vec.push(idx);
-                    set_markup_id(&mut t.children, &index_vec, external_id.clone());
-                    (&mut t.common.data_id, &mut t.common.is_dummy)
+                    set_markup_id(children, &index_vec, external_id.clone());
+                    (id, is_dummy)
                 }
                 Self::Null => continue,
             };
@@ -297,7 +306,7 @@ impl Element {
             } else {
                 get_index_string(index_vec, Some(idx))
             };
-            set_id(id, &external_id, index_string.as_str(), *is_dummy)
+            set_id(id, &external_id, index_string.as_str(), *is_dummy);
         }
 
         fn set_markup_id(
@@ -571,50 +580,22 @@ impl Element {
         for child in children {
             let (conditional_attributes, id) = match child {
                 ftd::Element::Column(ftd::Column {
-                    common:
-                        ftd::Common {
-                            conditional_attribute,
-                            data_id: id,
-                            ..
-                        },
-                    container,
-                    ..
+                    common, container, ..
                 })
                 | ftd::Element::Row(ftd::Row {
-                    common:
-                        ftd::Common {
-                            conditional_attribute,
-                            data_id: id,
-                            ..
-                        },
-                    container,
-                    ..
+                    common, container, ..
                 })
                 | ftd::Element::Scene(ftd::Scene {
-                    common:
-                        ftd::Common {
-                            conditional_attribute,
-                            data_id: id,
-                            ..
-                        },
-                    container,
-                    ..
+                    common, container, ..
                 })
                 | ftd::Element::Grid(ftd::Grid {
-                    common:
-                        ftd::Common {
-                            conditional_attribute,
-                            data_id: id,
-                            ..
-                        },
-                    container,
-                    ..
+                    common, container, ..
                 }) => {
                     ftd::Element::get_style_event_dependencies(&container.children, data);
                     if let Some((_, _, external_children)) = &container.external_children {
                         ftd::Element::get_style_event_dependencies(external_children, data);
                     }
-                    (conditional_attribute, id)
+                    (&common.conditional_attribute, &common.data_id)
                 }
                 ftd::Element::Markup(ftd::Markups {
                     common, children, ..
@@ -713,50 +694,22 @@ impl Element {
         for child in children {
             let (reference, id) = match child {
                 ftd::Element::Column(ftd::Column {
-                    common:
-                        ftd::Common {
-                            reference,
-                            data_id: id,
-                            ..
-                        },
-                    container,
-                    ..
+                    common, container, ..
                 })
                 | ftd::Element::Row(ftd::Row {
-                    common:
-                        ftd::Common {
-                            reference,
-                            data_id: id,
-                            ..
-                        },
-                    container,
-                    ..
+                    common, container, ..
                 })
                 | ftd::Element::Scene(ftd::Scene {
-                    common:
-                        ftd::Common {
-                            reference,
-                            data_id: id,
-                            ..
-                        },
-                    container,
-                    ..
+                    common, container, ..
                 })
                 | ftd::Element::Grid(ftd::Grid {
-                    common:
-                        ftd::Common {
-                            reference,
-                            data_id: id,
-                            ..
-                        },
-                    container,
-                    ..
+                    common, container, ..
                 }) => {
                     ftd::Element::get_value_event_dependencies(&container.children, data);
                     if let Some((_, _, external_children)) = &container.external_children {
                         ftd::Element::get_value_event_dependencies(external_children, data);
                     }
-                    (reference, id)
+                    (&common.reference, &common.data_id)
                 }
                 ftd::Element::Markup(ftd::Markups {
                     common, children, ..
@@ -927,50 +880,22 @@ impl Element {
         for child in children {
             let (condition, id) = match child {
                 ftd::Element::Column(ftd::Column {
-                    common:
-                        ftd::Common {
-                            condition,
-                            data_id: id,
-                            ..
-                        },
-                    container,
-                    ..
+                    common, container, ..
                 })
                 | ftd::Element::Row(ftd::Row {
-                    common:
-                        ftd::Common {
-                            condition,
-                            data_id: id,
-                            ..
-                        },
-                    container,
-                    ..
+                    common, container, ..
                 })
                 | ftd::Element::Scene(ftd::Scene {
-                    common:
-                        ftd::Common {
-                            condition,
-                            data_id: id,
-                            ..
-                        },
-                    container,
-                    ..
+                    common, container, ..
                 })
                 | ftd::Element::Grid(ftd::Grid {
-                    common:
-                        ftd::Common {
-                            condition,
-                            data_id: id,
-                            ..
-                        },
-                    container,
-                    ..
+                    common, container, ..
                 }) => {
                     ftd::Element::get_visible_event_dependencies(&container.children, data);
                     if let Some((_, _, external_children)) = &container.external_children {
                         ftd::Element::get_visible_event_dependencies(external_children, data);
                     }
-                    (condition, id)
+                    (&common.condition, &common.data_id)
                 }
                 ftd::Element::Markup(ftd::Markups {
                     common, children, ..

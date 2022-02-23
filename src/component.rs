@@ -1866,7 +1866,7 @@ impl Component {
             let conditional_attribute =
                 get_conditional_attributes(self.line_number, &self.properties, doc)?;
 
-            let mut containers = None;
+            let mut containers: Option<std::collections::BTreeMap<String, Vec<Vec<usize>>>> = None;
             match &mut element {
                 ftd::Element::Text(_)
                 | ftd::Element::TextBlock(_)
@@ -1896,7 +1896,29 @@ impl Component {
                         child_container,
                         ..
                     } = self.call_sub_functions(doc, invocations, local_container, id)?;
-                    containers = child_container;
+
+                    if let Some(ref append_at) = container.append_at {
+                        if let Some(ref child_container) = child_container {
+                            let id = if append_at.contains('.') {
+                                ftd::p2::utils::split(append_at.to_string(), ".")?.1
+                            } else {
+                                append_at.to_string()
+                            };
+                            if let Some(c) = child_container.get(id.as_str()) {
+                                container.external_children = Some((id, c.to_owned(), vec![]));
+                            }
+                        }
+                    }
+                    if let Some(child_container) = child_container {
+                        match containers {
+                            Some(ref mut containers) => {
+                                containers.extend(child_container);
+                            }
+                            None => {
+                                containers = Some(child_container);
+                            }
+                        }
+                    }
                     container.children.extend(children);
                 }
             }
