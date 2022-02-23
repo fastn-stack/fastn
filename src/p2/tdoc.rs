@@ -553,15 +553,13 @@ impl<'a> TDoc<'a> {
                 }
             }
             ftd::p2::Kind::Optional { kind } => {
-                if let Ok(iterative_result) =
-                    self.from_json_(line_number, json, kind.as_ref().to_owned())
-                {
-                    iterative_result
-                } else {
-                    ftd::Value::Optional {
-                        kind: kind.as_ref().to_owned(),
+                let kind = kind.as_ref().to_owned();
+                match json {
+                    serde_json::Value::Null => ftd::Value::Optional {
+                        kind,
                         data: Box::new(None),
-                    }
+                    },
+                    _ => self.from_json_(line_number, json, kind)?,
                 }
             }
             t => unimplemented!(
