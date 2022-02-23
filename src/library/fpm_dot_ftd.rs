@@ -199,15 +199,15 @@ fn construct_fpm_ui(lib: &fpm::Library) -> String {
 pub(crate) fn get(lib: &fpm::Library) -> String {
     let mut fpm_base = format!(
         indoc::indoc! {"
-                        {fpm_base}
-                        {fpm_ui}
-                        -- string document-id: {document_id}
-                        -- string translation-status-url: {home_url}
-                        -- string title: {title}
-                        -- string package-name: {package_name}
-                        -- optional string package-zip:
-                        -- string home-url: {home_url}
-                        "},
+            {fpm_base}
+            {fpm_ui}
+            -- string document-id: {document_id}
+            -- string translation-status-url: {home_url}
+            -- string title: {title}
+            -- string package-name: {package_name}
+            -- optional string package-zip:
+            -- string home-url: {home_url}
+        "},
         fpm_base = fpm::fpm_ftd(),
         fpm_ui = construct_fpm_ui(lib),
         document_id = lib.document_id,
@@ -219,11 +219,10 @@ pub(crate) fn get(lib: &fpm::Library) -> String {
     if lib.config.package.translation_of.is_some() {
         fpm_base = format!(
             indoc::indoc! {"
-                        {fpm_base}
-                        
-                        -- is-translation-package: true
-    
-                        "},
+                {fpm_base}
+                
+                -- is-translation-package: true
+            "},
             fpm_base = fpm_base,
         );
     }
@@ -231,11 +230,10 @@ pub(crate) fn get(lib: &fpm::Library) -> String {
     if lib.config.package.translations.has_elements() {
         fpm_base = format!(
             indoc::indoc! {"
-                        {fpm_base}
-                        
-                        -- has-translations: true
-    
-                        "},
+                {fpm_base}
+                
+                -- has-translations: true
+            "},
             fpm_base = fpm_base,
         );
     }
@@ -243,11 +241,10 @@ pub(crate) fn get(lib: &fpm::Library) -> String {
     if let Some(ref zip) = lib.config.package.zip {
         fpm_base = format!(
             indoc::indoc! {"
-                        {fpm_base}
-                        
-                        -- package-zip: {package_zip}
-    
-                        "},
+                {fpm_base}
+                
+                -- package-zip: {package_zip}
+            "},
             fpm_base = fpm_base,
             package_zip = zip,
         );
@@ -256,13 +253,12 @@ pub(crate) fn get(lib: &fpm::Library) -> String {
     if let Some(ref diff) = lib.translated_data.diff {
         fpm_base = format!(
             indoc::indoc! {"
-                        {fpm_base}
-                        
-                        -- diff: 
-                        
-                        {diff}
-    
-                        "},
+                {fpm_base}
+                
+                -- diff: 
+                
+                {diff}    
+            "},
             fpm_base = fpm_base,
             diff = diff,
         );
@@ -271,13 +267,12 @@ pub(crate) fn get(lib: &fpm::Library) -> String {
     if let Some(ref status) = lib.translated_data.status {
         fpm_base = format!(
             indoc::indoc! {"
-                        {fpm_base}
-                        
-                        -- translation-status: 
-                        
-                        {translation_status}
-    
-                        "},
+                {fpm_base}
+                
+                -- translation-status: 
+                
+                {translation_status}    
+            "},
             fpm_base = fpm_base,
             translation_status = status,
         );
@@ -287,11 +282,10 @@ pub(crate) fn get(lib: &fpm::Library) -> String {
     {
         fpm_base = format!(
             indoc::indoc! {"
-                        {fpm_base}
-                        
-                        -- translation-status-url: //{package_name}/FPM/translation-status
-    
-                        "},
+                {fpm_base}
+                
+                -- translation-status-url: //{package_name}/FPM/translation-status    
+            "},
             fpm_base = fpm_base,
             package_name = lib.config.package.name
         );
@@ -301,11 +295,10 @@ pub(crate) fn get(lib: &fpm::Library) -> String {
     {
         fpm_base = format!(
             indoc::indoc! {"
-                        {fpm_base}
-                        
-                        -- number-of-documents: {number_of_documents}
-    
-                        "},
+                {fpm_base}
+                
+                -- number-of-documents: {number_of_documents}    
+            "},
             fpm_base = fpm_base,
             number_of_documents = no_of_doc,
         );
@@ -316,11 +309,10 @@ pub(crate) fn get(lib: &fpm::Library) -> String {
     {
         fpm_base = format!(
             indoc::indoc! {"
-                        {fpm_base}
-                        
-                        -- last-modified-on: {last_modified_on}
-    
-                        "},
+                {fpm_base}
+                
+                -- last-modified-on: {last_modified_on}    
+            "},
             fpm_base = fpm_base,
             last_modified_on = last_modified_on,
         );
@@ -331,11 +323,10 @@ pub(crate) fn get(lib: &fpm::Library) -> String {
     ) {
         fpm_base = format!(
             indoc::indoc! {"
-                        {fpm_base}
-                        
-                        -- current-document-last-modified-on: {last_modified_on}
-    
-                        "},
+                {fpm_base}
+                
+                -- current-document-last-modified-on: {last_modified_on}    
+            "},
             fpm_base = fpm_base,
             last_modified_on = last_modified_on,
         );
@@ -344,11 +335,10 @@ pub(crate) fn get(lib: &fpm::Library) -> String {
     if let Some(ref language) = lib.config.package.language {
         fpm_base = format!(
             indoc::indoc! {"
-                        {fpm_base}
-                        
-                        -- language: {language} 
-    
-                        "},
+                {fpm_base}
+                
+                -- language: {language}     
+            "},
             fpm_base = fpm_base,
             language = fpm::utils::language_to_human(language),
         );
@@ -358,13 +348,11 @@ pub(crate) fn get(lib: &fpm::Library) -> String {
         let rfc3339 = fpm::utils::nanos_to_rfc3339(last_marked_on);
         fpm_base = format!(
             indoc::indoc! {"
-                        {fpm_base}
-                        
-                        -- last-marked-on: {last_marked_on}
-
-                        -- last-marked-on-rfc3339: {rfc3339}
-    
-                        "},
+                {fpm_base}
+                
+                -- last-marked-on: {last_marked_on}
+                -- last-marked-on-rfc3339: {rfc3339}    
+            "},
             fpm_base = fpm_base,
             last_marked_on = last_marked_on,
             rfc3339 = rfc3339
@@ -374,13 +362,11 @@ pub(crate) fn get(lib: &fpm::Library) -> String {
         let rfc3339 = fpm::utils::nanos_to_rfc3339(original_latest);
         fpm_base = format!(
             indoc::indoc! {"
-                        {fpm_base}
-                        
-                        -- original-latest: {original_latest}
-
-                        -- original-latest-rfc3339: {rfc3339}
-    
-                        "},
+                {fpm_base}
+                
+                -- original-latest: {original_latest}
+                -- original-latest-rfc3339: {rfc3339}    
+            "},
             fpm_base = fpm_base,
             original_latest = original_latest,
             rfc3339 = rfc3339
@@ -390,13 +376,11 @@ pub(crate) fn get(lib: &fpm::Library) -> String {
         let rfc3339 = fpm::utils::nanos_to_rfc3339(translated_latest);
         fpm_base = format!(
             indoc::indoc! {"
-                        {fpm_base}
+                {fpm_base}
                         
-                        -- translated-latest: {translated_latest}
-
-                        -- translated-latest-rfc3339: {rfc3339}
-    
-                        "},
+                -- translated-latest: {translated_latest}
+                -- translated-latest-rfc3339: {rfc3339}    
+            "},
             fpm_base = fpm_base,
             translated_latest = translated_latest,
             rfc3339 = rfc3339
@@ -405,14 +389,13 @@ pub(crate) fn get(lib: &fpm::Library) -> String {
     if let Some((filename, content)) = lib.markdown.as_ref() {
         fpm_base = format!(
             indoc::indoc! {"
-                        {fpm_base}
-                        
-                        -- string markdown-filename: {filename}
-                        
-                        -- string markdown-content:
+                {fpm_base}
+                
+                -- string markdown-filename: {filename}                        
+                -- string markdown-content:
     
-                        {content}
-                    "},
+                {content}
+            "},
             fpm_base = fpm_base,
             filename = filename,
             content = content
@@ -438,13 +421,12 @@ pub(crate) fn get(lib: &fpm::Library) -> String {
                 for (file, status) in translation_status.iter() {
                     translation_status_list = format!(
                         indoc::indoc! {"
-                                    {list}
-                                    
-                                    -- status:
-                                    file: {file}
-                                    status: {status}
-                                    
-                                "},
+                            {list}
+                            
+                            -- status:
+                            file: {file}
+                            status: {status}                                    
+                        "},
                         list = translation_status_list,
                         file = file,
                         status = status.as_str()
@@ -454,11 +436,10 @@ pub(crate) fn get(lib: &fpm::Library) -> String {
                         fpm::commands::translation_status::TranslationStatus::Missing => {
                             missing_files = format!(
                                 indoc::indoc! {"
-                                            {list}
-                                            
-                                            -- missing-files: {file}
-                                            
-                                        "},
+                                    {list}
+                                    
+                                    -- missing-files: {file}                                            
+                                "},
                                 list = missing_files,
                                 file = file,
                             );
