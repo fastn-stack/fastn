@@ -57,7 +57,7 @@ pub(crate) fn track_path(id: &str, base_path: &str) -> camino::Utf8PathBuf {
     base_path.join(".tracks").join(format!("{}.track", id))
 }
 
-pub(crate) async fn get_no_of_document(config: &fpm::Config) -> fpm::Result<String> {
+pub(crate) async fn get_number_of_documents(config: &fpm::Config) -> fpm::Result<String> {
     let mut no_of_docs = fpm::snapshot::get_latest_snapshots(&config.root)
         .await?
         .len()

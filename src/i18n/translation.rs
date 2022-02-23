@@ -1,4 +1,5 @@
 const RES: &str = "translation";
+
 lazy_static! {
     pub static ref TRANSLATION: fpm::i18n::Base = fpm::i18n::new_base(RES);
 }

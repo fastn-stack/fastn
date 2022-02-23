@@ -23,78 +23,36 @@ fn construct_fpm_ui(lib: &fpm::Library) -> String {
 
     format!(
         indoc::indoc! {"
-                    -- ui-data ui:
-                    last-modified-on: {last_modified_on}
-                    never-synced: {never_synced}
-                    show-translation-status: {show_translation_status}
-                    other-available-languages: {other_available_languages}
-                    current-language: {current_language}
-                    translation-not-available: {translation_not_available}
-                    unapproved-heading: {unapproved_heading}
-                    show-unapproved-version: {show_unapproved_version}
-                    show-latest-version: {show_latest_version}
-                    show-outdated-version: {show_outdated_version}
-                    out-dated-heading: {out_dated_heading}
-                    out-dated-body: {out_dated_body}
-                    language-detail-page: {language_detail_page}
-                    language-detail-page-body: {language_detail_page_body}
-                    total-number-of-documents: {total_number_of_documents}
-                    document: {document}
-                    status: {status}
-                    missing: {missing}
-                    never-marked: {never_marked}
-                    out-dated: {out_dated}
-                    upto-date: {upto_date}
-                    welcome-fpm-page: {welcome_fpm_page}
-                    welcome-fpm-page-subtitle: {welcome_fpm_page_subtitle}
-                    language: {language}
-                "},
-        language = fpm::i18n::translation::search(
+            -- ui-data ui:
+            current-language: {current_language}
+            document: {document}
+            language-detail-page-body: {language_detail_page_body}
+            language-detail-page: {language_detail_page}
+            language: {language}
+            last-modified-on: {last_modified_on}
+            missing: {missing}
+            never-marked: {never_marked}
+            never-synced: {never_synced}
+            other-available-languages: {other_available_languages}
+            out-dated-body: {out_dated_body}
+            out-dated-heading: {out_dated_heading}
+            out-dated: {out_dated}
+            show-latest-version: {show_latest_version}
+            show-outdated-version: {show_outdated_version}
+            show-translation-status: {show_translation_status}
+            show-unapproved-version: {show_unapproved_version}
+            status: {status}
+            total-number-of-documents: {total_number_of_documents}
+            translation-not-available: {translation_not_available}
+            unapproved-heading: {unapproved_heading}
+            upto-date: {upto_date}
+            welcome-fpm-page-subtitle: {welcome_fpm_page_subtitle}
+            welcome-fpm-page: {welcome_fpm_page}
+        "},
+        current_language = fpm::i18n::translation::search(
             &lang,
             &primary_lang,
-            "language",
-            &current_document_last_modified_on
-        ),
-        welcome_fpm_page_subtitle = fpm::i18n::translation::search(
-            &lang,
-            &primary_lang,
-            "welcome-fpm-page-subtitle",
-            &current_document_last_modified_on
-        ),
-        welcome_fpm_page = fpm::i18n::translation::search(
-            &lang,
-            &primary_lang,
-            "welcome-fpm-page",
-            &current_document_last_modified_on
-        ),
-        upto_date = fpm::i18n::translation::search(
-            &lang,
-            &primary_lang,
-            "upto-date",
-            &current_document_last_modified_on
-        ),
-        out_dated = fpm::i18n::translation::search(
-            &lang,
-            &primary_lang,
-            "out-dated",
-            &current_document_last_modified_on
-        ),
-        never_marked = fpm::i18n::translation::search(
-            &lang,
-            &primary_lang,
-            "never-marked",
-            &current_document_last_modified_on
-        ),
-        missing = fpm::i18n::translation::search(
-            &lang,
-            &primary_lang,
-            "missing",
-            &current_document_last_modified_on
-        ),
-        status = fpm::i18n::translation::search(
-            &lang,
-            &primary_lang,
-            "status",
+            "current-language",
             &current_document_last_modified_on
         ),
         document = fpm::i18n::translation::search(
@@ -103,10 +61,16 @@ fn construct_fpm_ui(lib: &fpm::Library) -> String {
             "document",
             &current_document_last_modified_on
         ),
-        total_number_of_documents = fpm::i18n::translation::search(
+        language = fpm::i18n::translation::search(
             &lang,
             &primary_lang,
-            "total-number-of-documents",
+            "language",
+            &current_document_last_modified_on
+        ),
+        language_detail_page = fpm::i18n::translation::search(
+            &lang,
+            &primary_lang,
+            "language-detail-page",
             &current_document_last_modified_on
         ),
         language_detail_page_body = fpm::i18n::translation::search(
@@ -127,10 +91,16 @@ fn construct_fpm_ui(lib: &fpm::Library) -> String {
             "never-synced",
             &current_document_last_modified_on
         ),
-        show_translation_status = fpm::i18n::translation::search(
+        missing = fpm::i18n::translation::search(
             &lang,
             &primary_lang,
-            "show-translation-status",
+            "missing",
+            &current_document_last_modified_on
+        ),
+        never_marked = fpm::i18n::translation::search(
+            &lang,
+            &primary_lang,
+            "never-marked",
             &current_document_last_modified_on
         ),
         other_available_languages = fpm::i18n::translation::search(
@@ -139,28 +109,22 @@ fn construct_fpm_ui(lib: &fpm::Library) -> String {
             "other-available-languages",
             &current_document_last_modified_on
         ),
-        current_language = fpm::i18n::translation::search(
+        out_dated = fpm::i18n::translation::search(
             &lang,
             &primary_lang,
-            "current-language",
+            "out-dated",
             &current_document_last_modified_on
         ),
-        translation_not_available = fpm::i18n::translation::search(
+        out_dated_body = fpm::i18n::translation::search(
             &lang,
             &primary_lang,
-            "translation-not-available",
+            "out-dated-body",
             &current_document_last_modified_on
         ),
-        unapproved_heading = fpm::i18n::translation::search(
+        out_dated_heading = fpm::i18n::translation::search(
             &lang,
             &primary_lang,
-            "unapproved-heading",
-            &current_document_last_modified_on
-        ),
-        show_unapproved_version = fpm::i18n::translation::search(
-            &lang,
-            &primary_lang,
-            "show-unapproved-version",
+            "out-dated-heading",
             &current_document_last_modified_on
         ),
         show_latest_version = fpm::i18n::translation::search(
@@ -175,22 +139,58 @@ fn construct_fpm_ui(lib: &fpm::Library) -> String {
             "show-outdated-version",
             &current_document_last_modified_on
         ),
-        out_dated_heading = fpm::i18n::translation::search(
+        show_translation_status = fpm::i18n::translation::search(
             &lang,
             &primary_lang,
-            "out-dated-heading",
+            "show-translation-status",
             &current_document_last_modified_on
         ),
-        out_dated_body = fpm::i18n::translation::search(
+        show_unapproved_version = fpm::i18n::translation::search(
             &lang,
             &primary_lang,
-            "out-dated-body",
+            "show-unapproved-version",
             &current_document_last_modified_on
         ),
-        language_detail_page = fpm::i18n::translation::search(
+        status = fpm::i18n::translation::search(
             &lang,
             &primary_lang,
-            "language-detail-page",
+            "status",
+            &current_document_last_modified_on
+        ),
+        total_number_of_documents = fpm::i18n::translation::search(
+            &lang,
+            &primary_lang,
+            "total-number-of-documents",
+            &current_document_last_modified_on
+        ),
+        translation_not_available = fpm::i18n::translation::search(
+            &lang,
+            &primary_lang,
+            "translation-not-available",
+            &current_document_last_modified_on
+        ),
+        unapproved_heading = fpm::i18n::translation::search(
+            &lang,
+            &primary_lang,
+            "unapproved-heading",
+            &current_document_last_modified_on
+        ),
+        upto_date = fpm::i18n::translation::search(
+            &lang,
+            &primary_lang,
+            "upto-date",
+            &current_document_last_modified_on
+        ),
+        welcome_fpm_page = fpm::i18n::translation::search(
+            &lang,
+            &primary_lang,
+            "welcome-fpm-page",
+            &current_document_last_modified_on
+        ),
+        welcome_fpm_page_subtitle = fpm::i18n::translation::search(
+            &lang,
+            &primary_lang,
+            "welcome-fpm-page-subtitle",
             &current_document_last_modified_on
         ),
     )
@@ -213,7 +213,7 @@ pub(crate) fn get(lib: &fpm::Library) -> String {
         document_id = lib.document_id,
         title = lib.config.package.name,
         package_name = lib.config.package.name,
-        home_url = format!("//{}", lib.config.package.name)
+        home_url = format!("//{}", lib.config.package.name),
     );
 
     if lib.config.package.translation_of.is_some() {
@@ -287,11 +287,12 @@ pub(crate) fn get(lib: &fpm::Library) -> String {
                 -- translation-status-url: //{package_name}/FPM/translation-status    
             "},
             fpm_base = fpm_base,
-            package_name = lib.config.package.name
+            package_name = lib.config.package.name,
         );
     }
 
-    if let Ok(no_of_doc) = futures::executor::block_on(fpm::utils::get_no_of_document(&lib.config))
+    if let Ok(number_of_documents) =
+        futures::executor::block_on(fpm::utils::get_number_of_documents(&lib.config))
     {
         fpm_base = format!(
             indoc::indoc! {"
@@ -300,7 +301,7 @@ pub(crate) fn get(lib: &fpm::Library) -> String {
                 -- number-of-documents: {number_of_documents}    
             "},
             fpm_base = fpm_base,
-            number_of_documents = no_of_doc,
+            number_of_documents = number_of_documents,
         );
     }
 
@@ -355,7 +356,7 @@ pub(crate) fn get(lib: &fpm::Library) -> String {
             "},
             fpm_base = fpm_base,
             last_marked_on = last_marked_on,
-            rfc3339 = rfc3339
+            rfc3339 = rfc3339,
         );
     }
     if let Some(ref original_latest) = lib.translated_data.original_latest {
@@ -369,7 +370,7 @@ pub(crate) fn get(lib: &fpm::Library) -> String {
             "},
             fpm_base = fpm_base,
             original_latest = original_latest,
-            rfc3339 = rfc3339
+            rfc3339 = rfc3339,
         );
     }
     if let Some(ref translated_latest) = lib.translated_data.translated_latest {
@@ -383,7 +384,7 @@ pub(crate) fn get(lib: &fpm::Library) -> String {
             "},
             fpm_base = fpm_base,
             translated_latest = translated_latest,
-            rfc3339 = rfc3339
+            rfc3339 = rfc3339,
         );
     }
     if let Some((filename, content)) = lib.markdown.as_ref() {
@@ -398,7 +399,7 @@ pub(crate) fn get(lib: &fpm::Library) -> String {
             "},
             fpm_base = fpm_base,
             filename = filename,
-            content = content
+            content = content,
         );
     }
 
@@ -635,13 +636,13 @@ pub(crate) fn get(lib: &fpm::Library) -> String {
 
             languages = format!(
                 indoc::indoc! {"
-                        {languages}
-                        - {language}
-                          url: {domain}
-                        "},
+                    {languages}
+                    - {language}
+                      url: {domain}
+                "},
                 languages = languages,
                 domain = domain,
-                language = language
+                language = language,
             );
         }
 
@@ -657,7 +658,7 @@ pub(crate) fn get(lib: &fpm::Library) -> String {
 
                         "},
                 fpm_base = fpm_base,
-                languages = languages
+                languages = languages,
             );
         }
     }
