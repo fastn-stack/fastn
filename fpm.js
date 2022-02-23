@@ -47,8 +47,8 @@
         // we would then rename this function to detect_device() which will
         // return one of "desktop", "tablet", "mobile". and also maybe have
         // another function detect_orientation(), "landscape" and "portrait" etc,
-        // and instead of setting `fpm-ui#mobile: boolean` we set `fpm-ui#device`
-        // and `fpm-ui#view-port-orientation` etc.
+        // and instead of setting `fpm#mobile: boolean` we set `fpm-ui#device`
+        // and `fpm#view-port-orientation` etc.
         let breakpoint = parseInt(window.ftd.get_value("main", FPM_MOBILE_BREAKPOINT));
         return width <= breakpoint;
     }
@@ -64,13 +64,13 @@
     }
 
     /*
-        fpm-ui.dark-mode behaviour:
+        fpm.dark-mode behaviour:
 
-        fpm-ui.dark-mode is a boolean, default false, it tells the UI to show
+        fpm.dark-mode is a boolean, default false, it tells the UI to show
         the UI in dark or light mode. Themes should use this variable to decide
         which mode to show in UI.
 
-        fpm-ui.dark-mode-follow-system, boolean, default true, keeps track if
+        fpm.dark-mode-follow-system, boolean, default true, keeps track if
         we are reading the value of `dark-mode` from system preference, or user
         has overridden the system preference.
 
