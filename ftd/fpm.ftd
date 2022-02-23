@@ -1,6 +1,6 @@
 -- record package-data:
 caption name:
-optional string about:
+optional body about:
 optional string zip:
 optional string language:
 optional string translation-of:
