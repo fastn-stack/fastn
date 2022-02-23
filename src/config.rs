@@ -221,8 +221,16 @@ impl Config {
         };
 
         let mut package = {
-            let temp_package: PackageTemp = b.get("fpm#package")?;
-            let mut package = temp_package.into_package();
+            let temp_package: Option<PackageTemp> = b.get("fpm#package")?;
+            let mut package = match temp_package {
+                Some(v) => v.into_package(),
+                None => {
+                    return Err(fpm::Error::PackageError {
+                        message: "FPM.ftd does not contain package definition".to_string(),
+                    })
+                }
+            };
+
             package.dependencies = deps;
 
             let auto_imports: Vec<String> = b.get("fpm#auto-import")?;
