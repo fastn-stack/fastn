@@ -504,6 +504,10 @@ impl Document {
                     .as_slice(),
             )?,
             ftd::Value::None { .. } => serde_json::Value::Null,
+            ftd::Value::Optional { data, .. } => match data.as_ref() {
+                Some(v) => self.value_to_json(v)?,
+                None => serde_json::Value::Null,
+            },
             _ => {
                 return ftd::e2(
                     format!("unhandled value found(value_to_json): {:?}", v),
