@@ -336,12 +336,12 @@ async fn process_ftd(
             let original_snapshots =
                 fpm::snapshot::get_latest_snapshots(&config.original_path()?).await?;
             let translation_status =
-                fpm::translation::get_translation_status_count(&original_snapshots, &config.root)?;
+                fpm::translation::get_translation_status_counts(&original_snapshots, &config.root)?;
             let content = std::fs::read_to_string(config.root.join(main.id.as_str()))?;
             let fpm = {
-                let mut translation_status_count = format!(
+                let mut translation_status_summary = format!(
                     indoc::indoc! {"
-                        -- fpm.translation-status-count:
+                        -- fpm.translation-status-summary:
                         never-marked: {never_marked}
                         missing: {missing}
                         out-dated: {out_dated}
@@ -353,11 +353,11 @@ async fn process_ftd(
                     upto_date = translation_status.upto_date,
                 );
                 if let Some(last_modified_on) = translation_status.last_modified_on {
-                    translation_status_count = format!(
+                    translation_status_summary = format!(
                         indoc::indoc! {"
-                            {translation_status_count}last-modified-on: {last_modified_on}
+                            {translation_status_summary}last-modified-on: {last_modified_on}
                         "},
-                        translation_status_count = translation_status_count,
+                        translation_status_summary = translation_status_summary,
                         last_modified_on = last_modified_on
                     );
                 }
@@ -370,7 +370,7 @@ async fn process_ftd(
 
                     "},
                     content = content,
-                    translation_status_count = translation_status_count
+                    translation_status_count = translation_status_summary
                 )
             };
 

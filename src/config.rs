@@ -335,7 +335,7 @@ impl PackageTemp {
             language: self.language,
             about: self.about,
             zip: self.zip,
-            translation_status: None,
+            translation_status_summary: None,
             canonical_url: self.canonical_url,
             dependencies: vec![],
             auto_import: vec![],
@@ -352,7 +352,7 @@ pub struct Package {
     pub language: Option<String>,
     pub about: Option<String>,
     pub zip: Option<String>,
-    pub translation_status: Option<fpm::translation::TranslationStatusCount>,
+    pub translation_status_summary: Option<fpm::translation::TranslationStatusSummary>,
     pub canonical_url: Option<String>,
     /// `dependencies` keeps track of direct dependencies of a given package. This too should be
     /// moved to `fpm::Package` to support recursive dependencies etc.
@@ -371,7 +371,7 @@ impl Package {
             language: None,
             about: None,
             zip: None,
-            translation_status: None,
+            translation_status_summary: None,
             canonical_url: None,
             dependencies: vec![],
             auto_import: vec![],

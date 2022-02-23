@@ -325,11 +325,7 @@ impl fpm::Package {
             temp_package.into_package()
         };
 
-        if let Ok(translation_status) = ftd_document
-            .get::<fpm::translation::TranslationStatusCount>("fpm#translation-status-count")
-        {
-            package.translation_status = Some(translation_status);
-        }
+        package.translation_status_summary = ftd_document.get("fpm#translation-status-summary")?;
 
         downloaded_package.push(mutpackage.name.to_string());
 

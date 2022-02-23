@@ -453,6 +453,7 @@ impl ftd::p2::Library for Library {
                     diff = diff,
                 );
             }
+
             if let Some(ref status) = lib.translated_data.status {
                 fpm_base = format!(
                     indoc::indoc! {"
@@ -736,7 +737,7 @@ impl ftd::p2::Library for Library {
             if lib.config.package.translations.has_elements() {
                 let mut translation_status_list = "".to_string();
                 for translation in lib.config.package.translations.iter() {
-                    if let Some(ref status) = translation.translation_status {
+                    if let Some(ref status) = translation.translation_status_summary {
                         if let Some(ref language) = translation.language {
                             let url =
                                 format!("https://{}/FPM/translation-status/", translation.name);

@@ -23,7 +23,7 @@ async fn translation_package_status(config: &fpm::Config) -> fpm::Result<()> {
 
 async fn original_package_status(config: &fpm::Config) -> fpm::Result<()> {
     for translation in config.package.translations.iter() {
-        if let Some(ref status) = translation.translation_status {
+        if let Some(ref status) = translation.translation_status_summary {
             println!("Status for `{}` package:", translation.name);
             println!("{}", status.to_string());
         }

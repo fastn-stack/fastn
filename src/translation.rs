@@ -200,11 +200,11 @@ impl TranslatedDocument {
     }
 }
 
-pub(crate) fn get_translation_status_count(
+pub(crate) fn get_translation_status_counts(
     snapshots: &std::collections::BTreeMap<String, u128>,
     path: &camino::Utf8PathBuf,
-) -> fpm::Result<TranslationStatusCount> {
-    let mut translation_status_count = TranslationStatusCount {
+) -> fpm::Result<TranslationStatusSummary> {
+    let mut translation_status_count = TranslationStatusSummary {
         never_marked: 0,
         missing: 0,
         out_dated: 0,
@@ -242,7 +242,7 @@ pub(crate) fn get_translation_status_count(
 }
 
 #[derive(serde::Deserialize, Debug, Clone)]
-pub struct TranslationStatusCount {
+pub struct TranslationStatusSummary {
     #[serde(rename = "never-marked")]
     pub never_marked: i32,
     pub missing: i32,
@@ -254,7 +254,7 @@ pub struct TranslationStatusCount {
     pub last_modified_on: Option<String>,
 }
 
-impl ToString for TranslationStatusCount {
+impl ToString for TranslationStatusSummary {
     fn to_string(&self) -> String {
         format!(
             indoc::indoc! {"
