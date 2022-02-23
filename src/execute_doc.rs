@@ -266,22 +266,10 @@ impl<'a> ExecuteDoc<'a> {
         }
         let number_of_children = e.number_of_children();
         let append_at = e.append_at();
-        let container_id = e.container_id();
         let is_open = e.is_open_container(container_children.is_empty());
         current.push(e);
 
-        if let Some(id) = append_at {
-            let open_id = container_id.map_or(id.clone(), |v| format!("{}#{}", v, id));
-
-            let container =
-                get_external_children(current, &open_id, named_containers, current_container);
-
-            let id = if id.contains('.') {
-                ftd::p2::utils::split(id, ".")?.1
-            } else {
-                id
-            };
-
+        if let Some(append_at) = append_at {
             match current.last_mut() {
                 Some(ftd::Element::Column(ftd::Column {
                     container: ref mut c,
@@ -330,9 +318,11 @@ impl<'a> ExecuteDoc<'a> {
                     if let Some((_, _, ref mut e)) = c.external_children {
                         e.extend(external_children);
                     } else {
-                        dbg!("get");
-
-                        c.external_children = Some((id, container, external_children));
+                        return ftd::e2(
+                            format!("expected external_children data for id: {}", append_at),
+                            "",
+                            0,
+                        );
                     }
                 }
                 _ => unreachable!(),
@@ -392,40 +382,6 @@ impl<'a> ExecuteDoc<'a> {
         }
         Ok(main)
     }
-}
-
-fn get_external_children(
-    children: &[ftd::Element],
-    open_id: &str,
-    named_containers: &std::collections::BTreeMap<String, Vec<Vec<usize>>>,
-    current_container: &[usize],
-) -> Vec<Vec<usize>> {
-    let open_id = if !open_id.contains('#') {
-        format!("#{}", open_id.replace(".", "#"))
-    } else {
-        open_id.to_string()
-    };
-
-    let container = match named_containers.get(&open_id) {
-        Some(c) => {
-            let mut container = vec![];
-            for c in c {
-                let matching = c
-                    .iter()
-                    .zip(current_container.iter())
-                    .filter(|&(a, b)| a == b)
-                    .count();
-                if let Some(cc) = c.get(matching) {
-                    if matching == current_container.len() && cc == &(children.len() - 1) {
-                        container.push(c[matching + 1..].to_vec());
-                    }
-                }
-            }
-            container
-        }
-        None => vec![],
-    };
-    container
 }
 
 fn match_parent_id(c: &str, parent_id: &Option<String>) -> bool {

@@ -1904,7 +1904,9 @@ impl Component {
                             } else {
                                 append_at.to_string()
                             };
-                            if let Some(c) = child_container.get(id.as_str()) {
+                            if let Some(c) =
+                                child_container.get(append_at.replace(".", "#").as_str())
+                            {
                                 container.external_children = Some((id, c.to_owned(), vec![]));
                             }
                         }
