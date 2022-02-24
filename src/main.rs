@@ -83,6 +83,7 @@ fn write(id: &str, doc: String) {
             )
             .replace("__ftd__", b.html("main", id).as_str())
             .replace("__ftd_js__", ftd_js.as_str())
+            .replace("__ftd_body_events__", doc.body_events.events.as_str())
             .replace("__ftd_css__", ftd::css())
             .as_bytes(),
     )

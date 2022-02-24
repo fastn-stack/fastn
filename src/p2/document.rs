@@ -135,6 +135,7 @@ impl Document {
             external_children: ftd::Element::get_external_children_dependencies(
                 &self.main.container.children,
             ),
+            body_events: self.body_events(id),
         })
     }
 
@@ -146,6 +147,89 @@ impl Document {
             data: self.rt_data(),
             html: self.html(id, doc_id),
             external_children,
+            body_events: self.body_events(id),
+        }
+    }
+
+    pub fn body_events(&self, id: &str) -> ftd::BodyEvents {
+        let mut events = "".to_string();
+        body_events_(self.main.container.children.as_slice(), &mut events, id);
+        return ftd::BodyEvents {
+            id: id.to_string(),
+            events,
+        };
+        fn body_events_(children: &[ftd::Element], event_string: &mut String, id: &str) {
+            for child in children {
+                let events = match child {
+                    ftd::Element::Column(ftd::Column {
+                        common, container, ..
+                    })
+                    | ftd::Element::Row(ftd::Row {
+                        common, container, ..
+                    })
+                    | ftd::Element::Scene(ftd::Scene {
+                        common, container, ..
+                    })
+                    | ftd::Element::Grid(ftd::Grid {
+                        common, container, ..
+                    }) => {
+                        body_events_(&container.children, event_string, id);
+                        if let Some((_, _, external_children)) = &container.external_children {
+                            body_events_(external_children, event_string, id);
+                        }
+                        common.events.as_slice()
+                    }
+                    ftd::Element::Markup(ftd::Markups {
+                        common, children, ..
+                    }) => {
+                        markup_body_events_(children, event_string, id);
+                        common.events.as_slice()
+                    }
+                    ftd::Element::Image(ftd::Image { common, .. })
+                    | ftd::Element::Text(ftd::Text { common, .. })
+                    | ftd::Element::TextBlock(ftd::TextBlock { common, .. })
+                    | ftd::Element::Code(ftd::Code { common, .. })
+                    | ftd::Element::IFrame(ftd::IFrame { common, .. })
+                    | ftd::Element::Input(ftd::Input { common, .. })
+                    | ftd::Element::Integer(ftd::Text { common, .. })
+                    | ftd::Element::Boolean(ftd::Text { common, .. })
+                    | ftd::Element::Decimal(ftd::Text { common, .. }) => common.events.as_slice(),
+                    ftd::Element::Null => continue,
+                };
+                get_events(event_string, events, id);
+            }
+        }
+
+        fn markup_body_events_(children: &[ftd::Markup], event_string: &mut String, id: &str) {
+            for child in children {
+                let events = match child.itext {
+                    ftd::IText::Text(ref t)
+                    | ftd::IText::Integer(ref t)
+                    | ftd::IText::Boolean(ref t)
+                    | ftd::IText::Decimal(ref t) => t.common.events.as_slice(),
+                    ftd::IText::TextBlock(ref t) => t.common.events.as_slice(),
+                    ftd::IText::Markup(ref t) => {
+                        markup_body_events_(&t.children, event_string, id);
+                        t.common.events.as_slice()
+                    }
+                };
+                markup_body_events_(&child.children, event_string, id);
+                get_events(event_string, events, id);
+            }
+        }
+
+        fn get_events(event_string: &mut String, events: &[ftd::Event], id: &str) {
+            let events = ftd::event::group_by_js_event(events);
+            for (name, actions) in events {
+                let event = format!(
+                    "window.ftd.handle_event(event, '{}', '{}', this);",
+                    id, actions
+                );
+                if name == "onclickoutside" {
+                    event_string.push(' ');
+                    event_string.push_str(event.as_str());
+                }
+            }
         }
     }
 

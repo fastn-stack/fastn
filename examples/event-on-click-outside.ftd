@@ -1,0 +1,11 @@
+-- foo:
+
+-- ftd.column foo:
+boolean open: false
+$on-click-outside$: toggle $open
+
+--- ftd.text: Click anywhere!
+
+--- ftd.text: Great Job!
+if: $open
+
