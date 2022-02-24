@@ -278,14 +278,35 @@ impl fpm::Package {
         );
 
         fn get_fpm(name: &str) -> fpm::Result<String> {
-            let mut response_fpm = if let Ok(response_fpm) =
+            let response_fpm = if let Ok(response_fpm) =
                 reqwest::get(format!("https://{}/FPM.ftd", name).as_str())
             {
-                response_fpm
+                if response_fpm.status().is_success() {
+                    Some(response_fpm)
+                } else {
+                    None
+                }
             } else {
-                reqwest::get(format!("http://{}/FPM.ftd", name).as_str())?
+                if let Ok(response_fpm) = reqwest::get(format!("http://{}/FPM.ftd", name).as_str())
+                {
+                    if response_fpm.status().is_success() {
+                        Some(response_fpm)
+                    } else {
+                        None
+                    }
+                } else {
+                    None
+                }
             };
-            Ok(response_fpm.text()?)
+            match response_fpm {
+                Some(mut response_fpm) => Ok(response_fpm.text()?),
+                None => Err(fpm::Error::UsageError {
+                    message: format!(
+                        "Unable to find the FPM.ftd for the dependency package: {}",
+                        name
+                    ),
+                }),
+            }
         }
     }
 
