@@ -5,7 +5,7 @@ string src:
 integer idx:
 src: $src
 if: $count == $idx
-$event-click$: increment $count clamp 0 3
+$on-click$: increment $count clamp 0 3
 align: center
 
 -- slide:

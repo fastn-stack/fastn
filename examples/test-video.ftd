@@ -5,7 +5,7 @@
 -- boolean foo: true
 
 -- ftd.text: Click here
-$event-click$: toggle $foo
+$on-click$: toggle $foo
 
 -- ftd.image: Sample Image
 src: https://upload.wikimedia.org/wikipedia/en/e/ef/RD-S_sample_graph.png

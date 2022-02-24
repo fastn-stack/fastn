@@ -30,7 +30,7 @@ color: red
 --- ftd.text underline1:
 size: 30
 background-color if $orange: orange
-$event-click$: toggle $orange
+$on-click$: toggle $orange
 
 
 
@@ -96,7 +96,7 @@ margin-bottom: 40
 
 --- ftd.text hello: Someone
 size: 10
-$event-click$: toggle $dark-mode
+$on-click$: toggle $dark-mode
 
 --- ftd.text underline:
 size: 40

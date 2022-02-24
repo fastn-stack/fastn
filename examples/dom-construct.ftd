@@ -15,22 +15,22 @@ spacing: 20
 placeholder: Type Something Here...
 width: 250
 border-width: 2
-$event-input$: $query=$VALUE
+$on-input$: $query=$VALUE
 
 --- ftd.text: Add
 color: white
 background-color: green
 padding: 5
 if: $query is not null
-$event-click$: insert into $strings value $query at end
-$event-click$: clear $query
+$on-click$: insert into $strings value $query at end
+$on-click$: clear $query
 
 --- ftd.text: Clear
 color: white
 background-color: red
 padding: 5
-$event-click$: clear $strings
-$event-click$: clear $query
+$on-click$: clear $strings
+$on-click$: clear $query
 
 -- ftd.text:
 

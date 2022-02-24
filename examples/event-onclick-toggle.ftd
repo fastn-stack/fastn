@@ -13,4 +13,4 @@ if: not $mobile
 -- foo:
 
 -- ftd.text: Click here!
-$event-click$: toggle $mobile
+$on-click$: toggle $mobile

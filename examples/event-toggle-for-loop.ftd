@@ -8,7 +8,7 @@ padding-left: 10
 boolean open: true
 
 --- ftd.text: $toc.title
-$event-click$: toggle $open
+$on-click$: toggle $open
 
 --- toc-item:
 if: $open

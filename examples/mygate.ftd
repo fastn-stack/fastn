@@ -16,7 +16,7 @@ align: center
 
 
 -- ftd.text: toggle
-$event-click$: toggle $open
+$on-click$: toggle $open
 
 
 -- ftd.column gate-pass:
@@ -47,7 +47,7 @@ border-left: 4
 border-right: 4
 align: center
 padding: 5
-$event-click$: toggle $open
+$on-click$: toggle $open
 
 --- container: ftd.main
 

@@ -128,10 +128,10 @@ bio: Good Mobile 2
 -- ftd.text: end of display
 
 -- ftd.text: Click here!
-$event-click$: toggle $mobile
+$on-click$: toggle $mobile
 
 -- ftd.text: Click here Android!
-$event-click$: toggle $android
+$on-click$: toggle $android
 
 -- ftd.text: Click here iPhone!
-$event-click$: toggle $iphone
+$on-click$: toggle $iphone

@@ -2,7 +2,7 @@
 boolean open: true
 
 --- ftd.text: toggle me
-$event-click$: toggle $open
+$on-click$: toggle $open
 
 --- ftd.text: some body
 if: $open

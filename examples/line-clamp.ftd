@@ -10,11 +10,11 @@ line-clamp if $read_more: $max_lines
 
 
 --- ftd.text: Read More
-$event-click$: toggle $read_more
+$on-click$: toggle $read_more
 if: $read_more
 
 --- ftd.text: Read Less
-$event-click$: toggle $read_more
+$on-click$: toggle $read_more
 if: not $read_more
 
 

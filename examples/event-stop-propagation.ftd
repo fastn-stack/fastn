@@ -2,7 +2,7 @@
 
 -- ftd.column foo:
 boolean open: true
-$event-click$: toggle $open
+$on-click$: toggle $open
 padding: 50
 background-color: red
 align: center
@@ -16,8 +16,8 @@ if: $open
 
 -- ftd.column bar:
 boolean open: true
-$event-click$: toggle $open
-$event-click$: stop-propagation
+$on-click$: toggle $open
+$on-click$: stop-propagation
 padding: 50
 background-color: green
 align: center

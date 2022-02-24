@@ -6,16 +6,16 @@ padding: 40
 -- ftd.integer: $by
 
 -- ftd.text: increment by
-$event-click$: increment $by by 1
+$on-click$: increment $by by 1
 
 -- ftd.text: decrement by
-$event-click$: decrement $by by 1
+$on-click$: decrement $by by 1
 
 -- ftd.row foo:
 integer a:
 boolean b: false
-$event-click$: toggle $b
-$event-click$: increment $a by $by
+$on-click$: toggle $b
+$on-click$: increment $a by $by
 
 --- ftd.integer:
 value: $a

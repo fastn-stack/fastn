@@ -15,4 +15,4 @@ color: green
 color if $value: orange
 
 -- ftd.text: Click me 💡
-$event-click$: toggle $value
+$on-click$: toggle $value

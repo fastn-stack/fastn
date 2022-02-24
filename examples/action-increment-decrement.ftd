@@ -4,10 +4,10 @@
 value: $count
 
 -- ftd.text: increment count
-$event-click$: increment $count clamp 0 3
+$on-click$: increment $count clamp 0 3
 
 -- ftd.text: decrement count
-$event-click$: decrement $count clamp 0 3
+$on-click$: decrement $count clamp 0 3
 
 -- ftd.image:
 src: https://www.liveabout.com/thmb/YCJmu1khSJo8kMYM090QCd9W78U=/1250x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/powerpuff_girls-56a00bc45f9b58eba4aea61d.jpg
