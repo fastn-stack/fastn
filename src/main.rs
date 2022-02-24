@@ -1,6 +1,6 @@
 #[tokio::main]
 async fn main() -> fpm::Result<()> {
-    let matches = app(authors()).get_matches();
+    let matches = app(authors(), version()).get_matches();
 
     let config = fpm::Config::read().await?;
 
@@ -65,9 +65,9 @@ async fn main() -> fpm::Result<()> {
     Ok(())
 }
 
-fn app(authors: &'static str) -> clap::App<'static, 'static> {
+fn app(authors: &'static str, version: &'static str) -> clap::App<'static, 'static> {
     clap::App::new("fpm: FTD Package Manager")
-        .version(env!("CARGO_PKG_VERSION"))
+        .version(version)
         .author(authors)
         .setting(clap::AppSettings::ArgRequiredElseHelp)
         .arg(
@@ -177,6 +177,16 @@ fn app(authors: &'static str) -> clap::App<'static, 'static> {
                 .about("Remove a tracking relation between two files")
                 .version(env!("CARGO_PKG_VERSION")),
         )
+}
+
+pub fn version() -> &'static str {
+    if std::env::args().any(|e| e == "--test") {
+        env!("CARGO_PKG_VERSION")
+    } else {
+        Box::leak(
+            format!("{} [{}]", env!("CARGO_PKG_VERSION"), env!("VERGEN_GIT_SHA")).into_boxed_str(),
+        )
+    }
 }
 
 pub fn authors() -> &'static str {
