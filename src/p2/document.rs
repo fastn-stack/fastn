@@ -151,16 +151,49 @@ impl Document {
         }
     }
 
-    pub fn body_events(&self, id: &str) -> ftd::BodyEvents {
-        let mut events = "".to_string();
+    pub fn body_events(&self, id: &str) -> String {
+        let mut events = vec![];
         body_events_(self.main.container.children.as_slice(), &mut events, id);
-        return ftd::BodyEvents {
-            id: id.to_string(),
-            events,
-        };
-        fn body_events_(children: &[ftd::Element], event_string: &mut String, id: &str) {
+
+        return events_to_string(events);
+
+        fn events_to_string(events: Vec<(String, String)>) -> String {
+            if events.is_empty() {
+                return "".to_string();
+            }
+            let mut string = format!(
+                indoc::indoc! {"
+                    document.addEventListener(\"click\", function(event) {open_bracket}
+                "},
+                open_bracket = "{",
+            )
+            .to_string();
+            for (data_id, event) in events {
+                string = format!(
+                    indoc::indoc! {"
+                        {string}
+                        if (!document.querySelector(`[data-id=\"{data_id}\"]`).contains(event.target)) {open_bracket}
+                            {event}
+                        {close_bracket}
+                    "},
+                    string = string,
+                    data_id = data_id,
+                    open_bracket = "{",
+                    event = event,
+                    close_bracket = "}"
+                );
+            }
+            string = format!("{}{}", string, "});");
+            string
+        }
+
+        fn body_events_(
+            children: &[ftd::Element],
+            event_string: &mut Vec<(String, String)>,
+            id: &str,
+        ) {
             for child in children {
-                let events = match child {
+                let (events, data_id) = match child {
                     ftd::Element::Column(ftd::Column {
                         common, container, ..
                     })
@@ -177,13 +210,13 @@ impl Document {
                         if let Some((_, _, external_children)) = &container.external_children {
                             body_events_(external_children, event_string, id);
                         }
-                        common.events.as_slice()
+                        (common.events.as_slice(), &common.data_id)
                     }
                     ftd::Element::Markup(ftd::Markups {
                         common, children, ..
                     }) => {
                         markup_body_events_(children, event_string, id);
-                        common.events.as_slice()
+                        (common.events.as_slice(), &common.data_id)
                     }
                     ftd::Element::Image(ftd::Image { common, .. })
                     | ftd::Element::Text(ftd::Text { common, .. })
@@ -193,42 +226,58 @@ impl Document {
                     | ftd::Element::Input(ftd::Input { common, .. })
                     | ftd::Element::Integer(ftd::Text { common, .. })
                     | ftd::Element::Boolean(ftd::Text { common, .. })
-                    | ftd::Element::Decimal(ftd::Text { common, .. }) => common.events.as_slice(),
+                    | ftd::Element::Decimal(ftd::Text { common, .. }) => {
+                        (common.events.as_slice(), &common.data_id)
+                    }
                     ftd::Element::Null => continue,
                 };
-                get_events(event_string, events, id);
+                get_events(event_string, events, id, data_id);
             }
         }
 
-        fn markup_body_events_(children: &[ftd::Markup], event_string: &mut String, id: &str) {
+        fn markup_body_events_(
+            children: &[ftd::Markup],
+            event_string: &mut Vec<(String, String)>,
+            id: &str,
+        ) {
             for child in children {
-                let events = match child.itext {
+                let (events, data_id) = match child.itext {
                     ftd::IText::Text(ref t)
                     | ftd::IText::Integer(ref t)
                     | ftd::IText::Boolean(ref t)
-                    | ftd::IText::Decimal(ref t) => t.common.events.as_slice(),
-                    ftd::IText::TextBlock(ref t) => t.common.events.as_slice(),
+                    | ftd::IText::Decimal(ref t) => (t.common.events.as_slice(), &t.common.data_id),
+                    ftd::IText::TextBlock(ref t) => (t.common.events.as_slice(), &t.common.data_id),
                     ftd::IText::Markup(ref t) => {
                         markup_body_events_(&t.children, event_string, id);
-                        t.common.events.as_slice()
+                        (t.common.events.as_slice(), &t.common.data_id)
                     }
                 };
                 markup_body_events_(&child.children, event_string, id);
-                get_events(event_string, events, id);
+                get_events(event_string, events, id, data_id);
             }
         }
 
-        fn get_events(event_string: &mut String, events: &[ftd::Event], id: &str) {
+        fn get_events(
+            event_string: &mut Vec<(String, String)>,
+            events: &[ftd::Event],
+            id: &str,
+            data_id: &Option<String>,
+        ) {
             let events = ftd::event::group_by_js_event(events);
             for (name, actions) in events {
                 let event = format!(
                     "window.ftd.handle_event(event, '{}', '{}', this);",
                     id, actions
                 );
-                if name == "onclickoutside" {
-                    event_string.push(' ');
-                    event_string.push_str(event.as_str());
+                if name != "onclickoutside" {
+                    continue;
                 }
+                let oid = if let Some(oid) = data_id {
+                    format!("{}:{}", oid, id)
+                } else {
+                    format!("{}:root", id)
+                };
+                event_string.push((oid, event));
             }
         }
     }

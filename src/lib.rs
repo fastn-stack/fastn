@@ -59,13 +59,7 @@ pub struct Document {
     pub html: String,
     pub data: ftd::DataDependenciesMap,
     pub external_children: ExternalChildrenDependenciesMap,
-    pub body_events: BodyEvents,
-}
-
-#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize, Default)]
-pub struct BodyEvents {
-    pub id: String,
-    pub events: String,
+    pub body_events: String,
 }
 
 pub fn get_name<'a, 'b>(prefix: &'a str, s: &'b str, doc_id: &str) -> ftd::p1::Result<&'b str> {

@@ -1,10 +1,20 @@
+-- ftd.column:
+padding: 40
+spacing: 30
+
+-- foo:
+
 -- foo:
 
 -- ftd.column foo:
 boolean open: false
-$on-click-outside$: toggle $open
+$on-click-outside$: $open = false
+border-width: 2
+background-color: orange
+padding: 10
 
---- ftd.text: Click anywhere!
+--- ftd.text: Click here!
+$on-click$: toggle $open
 
 --- ftd.text: Great Job!
 if: $open

@@ -3,13 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-    <title>Click anywhere!</title>
+    <title>Click here!</title>
     <script type="ftd" id="ftd-data">
         {
-  "event-on-click-outside.ftd#open@0": {
+  "event-on-click-outside.ftd#open@0,0": {
     "value": "false",
     "dependencies": {
-      "0,1": "[{\"dependency_type\":\"Visible\",\"condition\":\"true\",\"parameters\":{}}]"
+      "0,0,1": "[{\"dependency_type\":\"Visible\",\"condition\":\"true\",\"parameters\":{}}]"
+    }
+  },
+  "event-on-click-outside.ftd#open@0,1": {
+    "value": "false",
+    "dependencies": {
+      "0,1,1": "[{\"dependency_type\":\"Visible\",\"condition\":\"true\",\"parameters\":{}}]"
     }
   }
 }
@@ -735,8 +741,15 @@ function console_print(id, data) {
 }
 
         document.addEventListener("click", function(event) {
-             window.ftd.handle_event(event, 'main', '[{"action":"toggle","target":"event-on-click-outside.ftd#open@0","parameters":{}}]', this);
-        });
+
+if (!document.querySelector(`[data-id="0,0:main"]`).contains(event.target)) {
+    window.ftd.handle_event(event, 'main', '[{"action":"set-value","target":"event-on-click-outside.ftd#open@0,0","parameters":{"value":[{"value":"false","reference":null},{"value":"boolean","reference":null}]}}]', this);
+}
+
+if (!document.querySelector(`[data-id="0,1:main"]`).contains(event.target)) {
+    window.ftd.handle_event(event, 'main', '[{"action":"set-value","target":"event-on-click-outside.ftd#open@0,1","parameters":{"value":[{"value":"false","reference":null},{"value":"boolean","reference":null}]}}]', this);
+}
+});
     </script>
     <style>
         html {
@@ -906,8 +919,10 @@ body.fpm-dark .ft_md a:visited code {
 </head>
     <body style="height: 100%;">
 
-        <div data-id="main:root" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; height: 100%; justify-content: flex-start; white-space: initial; width: 100%" class="ft_md"><div data-id="0:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; white-space: initial" class="ft_md"><div data-id="0,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-weight: 400; text-align: left; white-space: initial" class="ft_md">Click anywhere!</div>
-<div data-id="0,1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: none; font-weight: 400; text-align: left; white-space: initial" class="ft_md">Great Job!</div></div></div>
+        <div data-id="main:root" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; height: 100%; justify-content: flex-start; white-space: initial; width: 100%" class="ft_md"><div data-id="0:main" data-spacing="margin-top:30px" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; padding: 40px; white-space: initial" class="ft_md"><div data-id="0,0:main" style="align-items: flex-start; background-color: rgba(255,165,0,1); border-radius: 0px; border-style: solid; border-width: 2px; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; padding: 10px; white-space: initial" class="ft_md"><div data-id="0,0,0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;toggle&quot;,&quot;target&quot;:&quot;event-on-click-outside.ftd#open@0,0&quot;,&quot;parameters&quot;:{}}]', this)" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; text-align: left; white-space: initial" class="ft_md">Click here!</div>
+<div data-id="0,0,1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: none; font-weight: 400; text-align: left; white-space: initial" class="ft_md">Great Job!</div></div>
+<div data-id="0,1:main" style="align-items: flex-start; background-color: rgba(255,165,0,1); border-radius: 0px; border-style: solid; border-width: 2px; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; margin-top: 30px; padding: 10px; white-space: initial" class="ft_md"><div data-id="0,1,0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;toggle&quot;,&quot;target&quot;:&quot;event-on-click-outside.ftd#open@0,1&quot;,&quot;parameters&quot;:{}}]', this)" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; text-align: left; white-space: initial" class="ft_md">Click here!</div>
+<div data-id="0,1,1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: none; font-weight: 400; text-align: left; white-space: initial" class="ft_md">Great Job!</div></div></div></div>
 
 
     <script>
