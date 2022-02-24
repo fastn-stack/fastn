@@ -286,17 +286,16 @@ impl fpm::Package {
                 } else {
                     None
                 }
-            } else {
-                if let Ok(response_fpm) = reqwest::get(format!("http://{}/FPM.ftd", name).as_str())
-                {
-                    if response_fpm.status().is_success() {
-                        Some(response_fpm)
-                    } else {
-                        None
-                    }
+            } else if let Ok(response_fpm) =
+                reqwest::get(format!("http://{}/FPM.ftd", name).as_str())
+            {
+                if response_fpm.status().is_success() {
+                    Some(response_fpm)
                 } else {
                     None
                 }
+            } else {
+                None
             };
             match response_fpm {
                 Some(mut response_fpm) => Ok(response_fpm.text()?),
