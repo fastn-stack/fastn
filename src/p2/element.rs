@@ -1239,6 +1239,10 @@ pub fn integer_function() -> ftd::Component {
                     "line-height".to_string(),
                     ftd::p2::Kind::string().into_optional(),
                 ),
+                (
+                    "text-align".to_string(),
+                    ftd::p2::Kind::string().into_optional(),
+                ),
             ],
             common_arguments(),
         ]
@@ -1281,6 +1285,10 @@ pub fn decimal_function() -> ftd::Component {
                 ),
                 (
                     "line-height".to_string(),
+                    ftd::p2::Kind::string().into_optional(),
+                ),
+                (
+                    "text-align".to_string(),
                     ftd::p2::Kind::string().into_optional(),
                 ),
             ],
