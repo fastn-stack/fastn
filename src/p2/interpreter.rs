@@ -91,13 +91,8 @@ impl<'a> Interpreter<'a> {
                 .await?;
             *d_get = d_get.saturating_add(std::time::Instant::now() - start);
             if !self.library_in_the_bag(library_name.as_str()) {
-                self.async_interpret_(
-                    library_name.as_str(),
-                    s.as_str(),
-                    false,
-                    d_get,
-                    d_processor,
-                )?;
+                self.async_interpret_(library_name.as_str(), s.as_str(), false, d_get, d_processor)
+                    .await?;
                 self.add_library_to_bag(library_name.as_str())
             }
             iteration_index += 1;
