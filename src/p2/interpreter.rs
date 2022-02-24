@@ -11702,7 +11702,7 @@ mod test {
                 -- foo:
 
                 -- ftd.text: Click Here!
-                $event-click$: toggle $mobile
+                $on-click$: toggle $mobile
                 "
             ),
             &ftd::p2::TestLibrary {},
@@ -11840,7 +11840,7 @@ mod test {
                 boolean open: true
                 text: $name
                 if: $open
-                $event-click$: toggle $open
+                $on-click$: toggle $open
 
                 -- foo: Hello
                 "
@@ -11917,7 +11917,7 @@ mod test {
                 boolean open: true
 
                 --- ftd.text: Click here
-                $event-click$: toggle $open
+                $on-click$: toggle $open
 
                 --- ftd.text: Open True
                 if: $open
@@ -12043,7 +12043,7 @@ mod test {
                 boolean open: true
 
                 --- ftd.text: $toc.title
-                $event-click$: toggle $open
+                $on-click$: toggle $open
 
                 --- toc-item:
                 if: $open
@@ -12168,7 +12168,7 @@ mod test {
                 --- ftd.column:
 
                 --- ftd.text: Click here!
-                $event-click$: toggle $open
+                $on-click$: toggle $open
 
                 --- ftd.text: Hello
 
@@ -12675,19 +12675,19 @@ mod test {
                 if: $count == 8
 
                 -- ftd.text: increment counter
-                $event-click$: increment $count
+                $on-click$: increment $count
 
                 -- ftd.text: decrement counter
-                $event-click$: decrement $count
+                $on-click$: decrement $count
 
                 -- ftd.text: increment counter
-                $event-click$: increment $count by 2
+                $on-click$: increment $count by 2
 
                 -- ftd.text: increment counter by 2 clamp 2 10
-                $event-click$: increment $count by 2 clamp 2 10
+                $on-click$: increment $count by 2 clamp 2 10
 
                 -- ftd.text: decrement count clamp 2 10
-                $event-click$: decrement $count clamp 2 10
+                $on-click$: decrement $count clamp 2 10
                 "
             ),
             &ftd::p2::TestLibrary {},
@@ -12779,10 +12779,10 @@ mod test {
                 value: $count
 
                 --- ftd.text: increment counter
-                $event-click$: increment $count by $by
+                $on-click$: increment $count by $by
 
                 --- ftd.text: decrement counter
-                $event-click$: decrement $count by $decrement-by
+                $on-click$: decrement $count by $decrement-by
 
                 -- foo:
                 by: 3
@@ -12925,7 +12925,7 @@ mod test {
                 integer idx:
                 src: $src
                 if: $count == $idx
-                $event-click$: increment $count clamp 0 1
+                $on-click$: increment $count clamp 0 1
 
                 -- slide:
                 src: https://www.liveabout.com/thmb/YCJmu1khSJo8kMYM090QCd9W78U=/1250x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/powerpuff_girls-56a00bc45f9b58eba4aea61d.jpg
@@ -13251,7 +13251,7 @@ mod test {
             boolean visible: true
 
             --- ftd.text: $name
-            $event-click$: toggle $visible
+            $on-click$: toggle $visible
 
             --- ftd.column:
             if: $visible
@@ -14151,12 +14151,12 @@ mod test {
                 -- ftd.text: $current
 
                 -- ftd.text: change message
-                $event-click$: $current = hello world
+                $on-click$: $current = hello world
 
                 -- string msg: good bye
 
                 -- ftd.text: change message again
-                $event-click$: $current = $msg
+                $on-click$: $current = $msg
                 "
             ),
             &ftd::p2::TestLibrary {},
@@ -14477,7 +14477,7 @@ mod test {
 
                 -- ftd.column foo:
                 boolean open: true
-                $event-click$: toggle $open
+                $on-click$: toggle $open
 
                 --- ftd.text: Hello
                 if: $open
@@ -14487,8 +14487,8 @@ mod test {
 
                 -- ftd.column bar:
                 boolean open: true
-                $event-click$: toggle $open
-                $event-click$: stop-propagation
+                $on-click$: toggle $open
+                $on-click$: stop-propagation
 
                 --- ftd.text: Hello Again
                 if: $open
@@ -14584,8 +14584,8 @@ mod test {
                 -- ftd.row foo:
                 integer a:
                 boolean b: false
-                $event-click$: toggle $b
-                $event-click$: increment $a by 2
+                $on-click$: toggle $b
+                $on-click$: increment $a by 2
 
                 --- ftd.integer:
                 value: $a
@@ -14810,8 +14810,8 @@ mod test {
                 -- ftd.column foo:
                 integer a:
                 boolean b: false
-                $event-click$: toggle $b
-                $event-click$: increment $a
+                $on-click$: toggle $b
+                $on-click$: increment $a
 
                 --- ftd.integer:
                 value: $a
@@ -14822,13 +14822,13 @@ mod test {
                 -- foo:
                 a: 20
                 string some-text: whatever
-                $event-click$: $some-text = $current
+                $on-click$: $some-text = $current
 
                 --- ftd.text: $some-text
 
                 -- ftd.row:
                 boolean foo: false
-                $event-click$: toggle $foo
+                $on-click$: toggle $foo
 
                 --- ftd.text: hello
                 color if $foo: red
@@ -15473,8 +15473,8 @@ mod test {
             value: $input-data
 
             -- ftd.input:
-            $event-change$: $input-data=$VALUE
-            $event-change$: message-host $obj
+            $on-change$: $input-data=$VALUE
+            $on-change$: message-host $obj
             ",
             (bag, main),
         );

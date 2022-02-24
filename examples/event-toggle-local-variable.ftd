@@ -3,7 +3,7 @@ caption name:
 boolean open: true
 text: $name
 if: $open
-$event-click$: toggle $open
+$on-click$: toggle $open
 
 -- ftd.text: gg
 

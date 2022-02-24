@@ -57,8 +57,8 @@ boolean mouse-in: false
 color if $mouse-in: orange
 
 --- ftd.text: Hover Here
-$event-mouse-enter$: $mouse-in = true
-$event-mouse-leave$: $mouse-in = false
+$on-mouse-enter$: $mouse-in = true
+$on-mouse-leave$: $mouse-in = false
 
 --- ftd.text: This is secret of all!
 if: $mouse-in

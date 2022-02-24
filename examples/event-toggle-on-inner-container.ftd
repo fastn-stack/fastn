@@ -14,11 +14,11 @@ spacing: 10
 
 --- ftd.text: Close
 if: $open
-$event-click$: toggle $open
+$on-click$: toggle $open
 
 --- ftd.text: Open
 if: not $open
-$event-click$: toggle $open
+$on-click$: toggle $open
 
 --- container: ftd.main
 

@@ -10,7 +10,7 @@ text: $title
 caption $title:
 region: title
 size: 34
-$event-click$: toggle $open
+$on-click$: toggle $open
 
 --- ftd.column:
 id: h1-id
@@ -29,7 +29,7 @@ text: $title
 caption $title:
 region: title
 size: 28
-$event-click$: toggle $open
+$on-click$: toggle $open
 
 --- ftd.column:
 id: h2-id
@@ -47,7 +47,7 @@ text: $title
 caption $title:
 region: title
 size: 24
-$event-click$: toggle $open
+$on-click$: toggle $open
 
 --- ftd.column:
 id: h3-id

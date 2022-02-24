@@ -8,7 +8,7 @@ pub struct DNode {
     pub text: Option<String>,
     pub null: bool,
     pub visible: bool,
-    pub events: Vec<ftd::Event>, // $event-click$: toggle foo | "click: toggle foo"
+    pub events: Vec<ftd::Event>, // $on-click$: toggle foo | "click: toggle foo"
 }
 
 impl DNode {

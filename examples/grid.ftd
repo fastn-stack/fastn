@@ -322,7 +322,7 @@ slot if $mobile: header
 
 
 -- ftd.text: CLICK HERE!
-$event-click$: toggle $mobile
+$on-click$: toggle $mobile
 
 -- ftd.text text: $value
 caption value:

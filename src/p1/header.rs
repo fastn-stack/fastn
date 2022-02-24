@@ -212,8 +212,8 @@ impl Header {
         let events = {
             let mut events = vec![];
             for (_, k, v) in self.0.iter() {
-                if k.starts_with("$event-") && k.ends_with('$') {
-                    let mut event = k.replace("$event-", "");
+                if k.starts_with("$on-") && k.ends_with('$') {
+                    let mut event = k.replace("$on-", "");
                     event = event[..event.len() - 1].to_string();
                     events.push((event, v.to_string()));
                 }

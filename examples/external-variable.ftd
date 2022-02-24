@@ -1,8 +1,8 @@
 -- ftd.column foo:
 integer a:
 boolean b: false
-$event-click$: toggle $b
-$event-click$: increment $a
+$on-click$: toggle $b
+$on-click$: increment $a
 
 --- ftd.integer:
 value: $a
@@ -14,7 +14,7 @@ color if $b: yellow
 id: hello
 a: 20
 string some-text: whatever
-$event-click$: $some-text = $current
+$on-click$: $some-text = $current
 
 --- ftd.text: $some-text
 
@@ -25,7 +25,7 @@ color if $hello.b: red
 -- ftd.row:
 id: hello
 boolean foo: false
-$event-click$: toggle $foo
+$on-click$: toggle $foo
 
 --- ftd.text: hello
 color if $foo: red

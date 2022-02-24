@@ -6,9 +6,9 @@ if: $current == some value
 -- ftd.text: $current
 
 -- ftd.text: change message
-$event-click$: $current = hello world
+$on-click$: $current = hello world
 
 -- string msg: good bye
 
 -- ftd.text: change message again
-$event-click$: $current = $msg
+$on-click$: $current = $msg

@@ -6,7 +6,7 @@ append-at: some-child
 boolean visible: false
 
 --- ftd.row:
-$event-click$: toggle $visible
+$on-click$: toggle $visible
 
 --- ftd.text: ✌️
 

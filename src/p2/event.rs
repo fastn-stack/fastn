@@ -1,6 +1,6 @@
 #[derive(Debug, PartialEq, Clone, serde::Serialize, serde::Deserialize)]
 pub struct Event {
-    // $event-click$: toggle foo
+    // $on-click$: toggle foo
     // will be parsed into this Event struct
     pub name: EventName, // click
     pub action: Action,

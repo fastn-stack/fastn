@@ -61,4 +61,4 @@ if: $show
 
 -- ftd.text: Click here!
 padding-top: 20
-$event-click$: toggle $show
+$on-click$: toggle $show
