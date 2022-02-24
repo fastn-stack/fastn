@@ -1,0 +1,26 @@
+-- record data:
+caption title:
+optional string link:
+
+-- data list bar:
+
+-- bar: Data
+
+-- bar: Hello
+link: yes
+
+-- foo: $obj.title
+$loop$: $bar as $obj
+link: $obj.link
+
+-- ftd.row foo:
+caption title:
+optional string link:
+
+--- ftd.text: $title
+
+--- ftd.text: Not Null
+if: $link is not null
+
+--- ftd.text: Null
+if: $link is null

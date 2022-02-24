@@ -161,29 +161,21 @@ impl Document {
             if events.is_empty() {
                 return "".to_string();
             }
-            let mut string = format!(
-                indoc::indoc! {"
-                    document.addEventListener(\"click\", function(event) {open_bracket}
-                "},
-                open_bracket = "{",
-            )
-            .to_string();
+            let mut string = "document.addEventListener(\"click\", function(event) {".to_string();
             for (data_id, event) in events {
                 string = format!(
                     indoc::indoc! {"
                         {string}
-                        if (!document.querySelector(`[data-id=\"{data_id}\"]`).contains(event.target)) {open_bracket}
+                        if (!document.querySelector(`[data-id=\"{data_id}\"]`).contains(event.target)) {{
                             {event}
-                        {close_bracket}
+                        }}
                     "},
                     string = string,
                     data_id = data_id,
-                    open_bracket = "{",
                     event = event,
-                    close_bracket = "}"
                 );
             }
-            string = format!("{}{}", string, "});");
+            string = format!("{}}});", string);
             string
         }
 
