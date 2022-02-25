@@ -166,7 +166,7 @@ impl Document {
                 string = format!(
                     indoc::indoc! {"
                         {string}
-                        if (!document.querySelector(`[data-id=\"{data_id}\"]`).contains(event.target)) {{
+                        if (document.querySelector(`[data-id=\"{data_id}\"]`).style.display !== \"none\" && !document.querySelector(`[data-id=\"{data_id}\"]`).contains(event.target)) {{
                             {event}
                         }}
                     "},
