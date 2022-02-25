@@ -348,9 +348,10 @@ let ftd_utils = {
     },
 
     is_equal_condition: function (value, condition) {
-        return ((value === condition)
-            || (condition === "$IsNull$" && (value.trim().length === 0 || value === "null"))
-            || (condition === "$IsNotNull$" && (value.trim().length !== 0 && value !== "null"))
+        let val = value.replaceAll("\"", "");
+        return ((val === condition)
+            || (condition === "$IsNull$" && (val.trim().length === 0 || val === "null"))
+            || (condition === "$IsNotNull$" && (val.trim().length !== 0 && val !== "null"))
         );
     },
 
