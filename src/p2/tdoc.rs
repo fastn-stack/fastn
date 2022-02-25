@@ -1087,10 +1087,10 @@ impl<'a> TDoc<'a> {
                     conditions,
                     ..
                 }) => {
-                    let fields = match value.resolve(line_number, doc)? {
-                        ftd::Value::Record { fields, .. } => fields,
-                        ftd::Value::OrType { fields, .. } => fields,
-                        ftd::Value::Object { values } => values,
+                    let fields = match value.resolve(line_number, doc)?.inner() {
+                        Some(ftd::Value::Record { fields, .. }) => fields,
+                        Some(ftd::Value::OrType { fields, .. }) => fields,
+                        Some(ftd::Value::Object { values }) => values,
                         _ => {
                             return doc.err(
                                 "not an record or or-type",
@@ -1123,139 +1123,6 @@ impl<'a> TDoc<'a> {
             Ok(thing)
         }
     }
-
-    /*pub fn get_thing_with_root(
-        &'a self,
-        line_number: usize,
-        name: &'a str,
-        root_name: Option<&'a str>,
-    ) -> ftd::p1::Result<ftd::p2::Thing> {
-        let name = if let Some(name) = name.strip_prefix('$') {
-            name
-        } else {
-            name
-        };
-
-        match if name.contains('#') {
-            self.bag.get(name).map(ToOwned::to_owned)
-        } else if self
-            .bag
-            .get(format!("{}#{}", self.name, name).as_str())
-            .is_some()
-        {
-            self.bag
-                .get(format!("{}#{}", self.name, name).as_str())
-                .map(ToOwned::to_owned)
-        } else {
-            match ftd::split_module(name, self.name, line_number)? {
-                (Some(m), v, None) => match self.aliases.get(m) {
-                    Some(m) => self
-                        .bag
-                        .get(format!("{}#{}", m, v).as_str())
-                        .map(ToOwned::to_owned),
-                    None => {
-                        let thing = self.get_thing(line_number, m)?;
-                        match thing.clone() {
-                            ftd::p2::Thing::OrType(e) => Some(ftd::p2::Thing::OrTypeWithVariant {
-                                e,
-                                variant: v.to_string(),
-                            }),
-                            ftd::p2::Thing::Variable(ftd::Variable {
-                                name,
-                                value,
-                                conditions,
-                            }) => {
-                                let fields = match value {
-                                    ftd::Value::Record { fields, .. } => fields,
-                                    ftd::Value::OrType { fields, .. } => fields,
-                                    _ => {
-                                        return self.err(
-                                            "not an record or or-type",
-                                            thing,
-                                            "get_thing",
-                                            line_number,
-                                        )
-                                    }
-                                };
-                                if let Some(ftd::PropertyValue::Value { value: val }) =
-                                    fields.get(v)
-                                {
-                                    return Ok(ftd::p2::Thing::Variable(ftd::Variable {
-                                        name,
-                                        value: val.clone(),
-                                        conditions,
-                                    }));
-                                } else if let Some(ftd::PropertyValue::Reference { name, .. }) =
-                                    fields.get(v)
-                                {
-                                    self.bag.get(name).map(ToOwned::to_owned)
-                                } else {
-                                    Some(thing)
-                                }
-                            }
-                            _ => {
-                                return self.err("not an or-type", thing, "get_thing", line_number);
-                            }
-                        }
-                    }
-                },
-                (Some(m), e, Some(v)) => match self.aliases.get(m) {
-                    Some(m) => match self.bag.get(format!("{}#{}", m, e).as_str()) {
-                        Some(ftd::p2::Thing::OrType(e)) => {
-                            Some(ftd::p2::Thing::OrTypeWithVariant {
-                                e: e.to_owned(),
-                                variant: v.to_string(),
-                            })
-                        }
-                        Some(t) => {
-                            return self.err("not an or-type", t, "get_thing", line_number);
-                        }
-                        None => {
-                            return self.err(
-                                "not found",
-                                format!("{}#{}", m, e),
-                                "get_thing",
-                                line_number,
-                            )
-                        }
-                    },
-                    None => return self.err("not found", name, "get_thing", line_number),
-                },
-                (None, v, None) => {
-                    match self
-                        .bag
-                        .get(format!("{}#{}", self.name, v).as_str())
-                        .map(|v| v.to_owned())
-                    {
-                        Some(a) => Some(a),
-                        None => match root_name {
-                            Some(name) => match self.aliases.get(name) {
-                                Some(g) => self
-                                    .bag
-                                    .get(format!("{}#{}", g, v).as_str())
-                                    .map(|b| b.to_owned()),
-                                None => None,
-                            },
-                            None => None,
-                        },
-                    }
-                }
-                (None, e, Some(v)) => match self.bag.get(format!("{}#{}", self.name, e).as_str()) {
-                    Some(ftd::p2::Thing::OrType(e)) => Some(ftd::p2::Thing::OrTypeWithVariant {
-                        e: e.to_owned(),
-                        variant: v.to_string(),
-                    }),
-                    Some(t) => {
-                        return self.err("expected or-type, found", t, "get_thing", line_number);
-                    }
-                    None => return self.err("not found", name, "get_thing", line_number),
-                },
-            }
-        } {
-            Some(v) => Ok(v),
-            None => self.err("not found", name, "get_thing", line_number),
-        }
-    }*/
 }
 
 #[cfg(test)]

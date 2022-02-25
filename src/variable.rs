@@ -387,6 +387,13 @@ pub enum Value {
 }
 
 impl Value {
+    pub fn inner(self) -> Option<Self> {
+        match self {
+            ftd::Value::Optional { data, .. } => data.as_ref().as_ref().map(|d| d.to_owned()),
+            _ => Some(self),
+        }
+    }
+
     pub fn into_optional(self) -> ftd::Value {
         ftd::Value::Optional {
             kind: self.kind(),
