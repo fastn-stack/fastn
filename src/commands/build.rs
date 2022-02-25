@@ -400,7 +400,10 @@ async fn process_ftd(
 
     let (fallback, message, final_main) = if main.id.eq("FPM.ftd") {
         let mut main = main.to_owned();
-        main.content = include_str!("../../ftd/info.ftd").to_string();
+        // main.content = include_str!("../../ftd/info.ftd").to_string();
+        main.content = config
+            .package
+            .get_prefixed_body("-- ft.packge-info-page:", &main.id, true);
         (None, None, main)
     } else {
         let main = main.to_owned();
