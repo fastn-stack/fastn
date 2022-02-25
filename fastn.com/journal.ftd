@@ -665,11 +665,11 @@ lang: ftd
 boolean mouse-in: false
 
 \--- ftd.text: yo
-$event-mouse$: $mouse-in=$MOUSE-IN
+$on-mouse$: $mouse-in=$MOUSE-IN
 
 -- ft.markdown:
 
-We have `$event-mouse$` that will be triggered when mouse enters or leaves a
+We have `$on-mouse$` that will be triggered when mouse enters or leaves a
 component. Then we can do the following as well:
 
 
@@ -681,7 +681,7 @@ boolean mouse-in: false
 border-width if $mouse-in: 1
 
 \--- ftd.text: yo
-$event-mouse$: $mouse-in=$MOUSE-IN
+$on-mouse$: $mouse-in=$MOUSE-IN
 
 -- ft.markdown:
 
@@ -853,7 +853,7 @@ $what = $new
 
 The type of a function is in the declaration line. We have created a special type
 `void` for functions that are only for side effects, e.g. to be directly called
-from `$event-*$`. For other types, eg integer it will appear to look like an
+from `$on-*$`. For other types, eg integer it will appear to look like an
 integer variable definition, but since it takes arguments, it's a function.
 
 The last expression can be considered the return type of a function, but we will
@@ -1067,7 +1067,7 @@ placeholder: Type Something Here...
 width: 250
 border-width: 2
 padding: 8
-$event-input$: $query=$VALUE
+$on-input$: $query=$VALUE
 
 --- ftd.text: Add
 if: $query is not null
@@ -1646,7 +1646,7 @@ $on-click$: message-host console-print:
 > message: clicked!
 
 \-- ftd.input:
-$event-input$: message-host console-print:
+$on-input$: message-host console-print:
 > message: $VALUE
 
 
@@ -1717,7 +1717,7 @@ We will soon allow including FTD variable references in the object, e.g.
 `name: $name`. We will also make `function` optional, if it's not passed we will
 assume the name of object, in the above example it was `arg`.
 
--- ft.h1: `$VALUE` on `ftd.input`, `$event-input$` and `$event-change`
+-- ft.h1: `$VALUE` on `ftd.input`, `$on-input$` and `$on-change`
 
 Arpita added support for `$VALUE` special variable so now you can do:
 
@@ -1728,7 +1728,7 @@ lang: ftd
 
 \-- ftd.input:
 placeholder: Type Something Here...
-$event-input$: $query=$VALUE
+$on-input$: $query=$VALUE
 
 \-- ftd.text: $query
 
@@ -1737,8 +1737,8 @@ $event-input$: $query=$VALUE
 With the above, whatever is typed in the input field is immediately reflected
 in `$query`. See a [demo here](https://fifthtry.github.io/ftd/input.html).
 
-We have two events, `$event-input$`, which happens as soon as a input is edited,
-on key press, and `$event-change$`, which happens when the user presses Enter
+We have two events, `$on-input$`, which happens as soon as a input is edited,
+on key press, and `$on-change$`, which happens when the user presses Enter
 after inputting, or if the input field loses focus.
 
 The `$VALUE` special variable is only visible to the event handler of the above
@@ -1755,7 +1755,7 @@ lang: ftd
 
 \-- ftd.input:
 value: $query
-$event-input$: $query=$VALUE
+$on-input$: $query=$VALUE
 
 -- ft.markdown:
 

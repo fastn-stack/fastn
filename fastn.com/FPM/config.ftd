@@ -123,7 +123,7 @@ $processor$: toc
 - `$loop$`: Looping Over Lists
   url: /loop/
 - ID: /id/
-- `$event-<event-name>$`: Event Handling
+- `$on-<event-name>$`: Event Handling
   url: /event-handling/
 - Auto Nesting: /auto-nesting/
 

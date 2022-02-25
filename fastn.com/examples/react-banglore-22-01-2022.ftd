@@ -535,7 +535,7 @@ bio: $o.bio
 width: 800
 height: fill
 
---- ft.code: `if` and `$event-*$` handling
+--- ft.code: `if` and `$on-*$` handling
 lang: ftd
 left: 300
 top: 100
@@ -552,12 +552,12 @@ $on-click$: toggle $open
 --- ftd.text: You can see me!
 left: 300
 top: 430
-if: $event-1-open
+if: $on-1-open
 
 --- ftd.text: Toggle
 left: 300
 top: 460
-$on-click$: toggle $event-1-open
+$on-click$: toggle $on-1-open
 
 
 
@@ -586,16 +586,16 @@ $on-click$: toggle $funky
 
 
 --- ftd.text: Some Text
-color if $event-2-funky: red
+color if $on-2-funky: red
 size: 40
-background-color if $event-2-funky: yellow
+background-color if $on-2-funky: yellow
 left: 300
 top: 440
 
 --- ftd.text: Toggle
 left: 300
 top: 489
-$on-click$: toggle $event-2-funky
+$on-click$: toggle $on-2-funky
 
 
 
@@ -731,7 +731,7 @@ placeholder: Type Something Here...
 width: 250
 border-width: 2
 padding: 8
-$event-input$: $query=$VALUE
+$on-input$: $query=$VALUE
 
 --- ftd.text: Add
 if: $query is not null

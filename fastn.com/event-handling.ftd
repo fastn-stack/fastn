@@ -5,7 +5,7 @@ header-left: $config.doc-header
 
 -- ft.h0: Event Handling
 
-FTD supports event handling using `$event-<event-name>$` header.
+FTD supports event handling using `$on-<event-name>$` header.
 
 
 -- boolean open: true
@@ -64,7 +64,7 @@ import os
 print(os)
 
 
--- ft.h1: `$event-<event-name>$: <action> <action-arguments>`
+-- ft.h1: `$on-<event-name>$: <action> <action-arguments>`
 
 FTD supports a few events, like `click`, which is mapped to an "action", eg 
 there is an action `toggle`, which toggles a Boolean variable. Actions take data

@@ -142,7 +142,7 @@ things on which we do not have a clarity on how things should work.
 - [action: cycle](/fifthtry/ftd/~/66/)
 - action: input -> variable data binding
 - [in-equality expression](/fifthtry/ftd/~/36/)
-- `$event-escape$`
+- `$on-escape$`
 
 
 -- ft.h1: ui

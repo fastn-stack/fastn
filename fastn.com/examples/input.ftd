@@ -22,8 +22,8 @@ spacing: 20
 placeholder: Type Something Here...
 width: 400
 border-width: 2
-$event-input$: $query=$VALUE
-$event-change$: message-host $obj
+$on-input$: $query=$VALUE
+$on-change$: message-host $obj
 
 -- ftd.text:
 color if $fpm.dark-mode: white
