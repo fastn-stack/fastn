@@ -1002,7 +1002,7 @@ function: scroll-to-id
 id: foo
 
 \-- ftd.text: About Us
-$event-click$: message-host $scroll-to-foo
+$on-click$: message-host $scroll-to-foo
 
 
 -- ft.markdown:
@@ -1019,7 +1019,7 @@ lang: ftd
 \-- import: fpm
 
 \-- ftd.text: About Us
-$event-click$: message-host $fpm.scroll-to:
+$on-click$: message-host $fpm.scroll-to:
 > id: foo
 
 -- ft.markdown:
@@ -1032,7 +1032,7 @@ lang: ftd
 \-- import: fpm
 
 \-- ftd.text: About Us
-$event-click$: $fpm.scroll-to: id=foo
+$on-click$: $fpm.scroll-to: id=foo
 
 
 
@@ -3516,7 +3516,7 @@ will allow an event handler to message the "ftd host" (also in future we are goi
 to rename FTD "Library" terminology to "FTD Host").
 
 Our `with-fallback.html` will come with a `show_main()` and `show_fallback()` host
-messages that our "message ftd" file will be able to trigger using `$event-click$:
+messages that our "message ftd" file will be able to trigger using `$on-click$:
 message-host show-main` etc.
 
 We are quite happy with this design for now. I wrote couple of feature requests
@@ -3638,7 +3638,7 @@ these files maybe.
 In never-marked and out-of-date scenarios we will have three FTD files to build,
 which will go in the generated `.html` file. The "message" file will show on the
 top of the page, and then one of the two, original and translation, would be shown
-and the "message" file will have a button with an `$event-click$: call-js
+and the "message" file will have a button with an `$on-click$: call-js
 <function-name>`, and we will have FPM.js file, which will have functions
 `show-original` and `show-translation` (and a "client variable:
 `fpm.showing-original`).
@@ -4657,12 +4657,12 @@ wc -l tags
 
 -- ftd.text: Hide `t.py`
 if: $show-t-py
-$event-click$: toggle $show-t-py
+$on-click$: toggle $show-t-py
 
 
 -- ftd.text: Show `t.py`
 if: not $show-t-py
-$event-click$: toggle $show-t-py
+$on-click$: toggle $show-t-py
 
 
 -- ft.code:

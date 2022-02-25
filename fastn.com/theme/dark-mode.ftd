@@ -113,7 +113,7 @@ When user interacts with the dark mode switcher UI in your theme and they can
 chose to overwrite system preference and go for dark, overwrite and go for light,
 or indicate they want to switch back to system preference.
 
-For these we have exposed three message host "actions": `$event-click$:
+For these we have exposed three message host "actions": `$on-click$:
 message-host enable-dark-mode` or `message-host enable-light-mode` or
 `message-host enable-system-mode`.
 

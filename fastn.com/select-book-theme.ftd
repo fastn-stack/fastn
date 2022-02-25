@@ -51,7 +51,7 @@ left: 0
 right: 0
 background-color:  rgba (0, 0, 0, 0.5)
 z-index: 1
-$event-click$: toggle $sidebar-open
+$on-click$: toggle $sidebar-open
 
 --- container: ftd.main
 
@@ -194,7 +194,7 @@ left: 0
 right: 0
 background-color:  rgba (0, 0, 0, 0.5)
 z-index: 1
-$event-click$: toggle $sidebar-open
+$on-click$: toggle $sidebar-open
 
 --- container: ftd.main
 
@@ -318,7 +318,7 @@ align: center
 if: not $fpm.dark-mode
 src: https://res.cloudinary.com/dphj6havg/image/upload/v1640938217/dark-mode_mfy9hd.svg
 height: 18
-$event-click$: message-host enable-dark-mode
+$on-click$: message-host enable-dark-mode
 align: center
 
 --- container: action-container
@@ -327,7 +327,7 @@ align: center
 if:  $fpm.dark-mode
 src: https://res.cloudinary.com/dphj6havg/image/upload/v1641367492/light-mode_o0zne7.svg
 height: 18
-$event-click$: message-host enable-light-mode
+$on-click$: message-host enable-light-mode
 align: center
 
 
@@ -352,7 +352,7 @@ id: left-side
 src: https://res.cloudinary.com/dphj6havg/image/upload/v1641205689/Vector_3_uzxoow.svg
 width: 24
 height: auto
-$event-click$: toggle $sidebar-open
+$on-click$: toggle $sidebar-open
 position: center
 
 --- ftd.row:
@@ -385,7 +385,7 @@ link: $github
 --- ftd.image:
 src: https://res.cloudinary.com/dphj6havg/image/upload/v1640938217/dark-mode_mfy9hd.svg
 height: 18
-$event-click$: toggle $fpm.dark-mode
+$on-click$: toggle $fpm.dark-mode
 
 
 -- ftd.text footer-link:
