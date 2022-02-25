@@ -9,7 +9,7 @@ toc: $ft.toc
 -- page-title: Translation Status
 
 -- title: $fpm.title
-subtitle: key-value: Last modified on:
+subtitle: key-value-small: Last modified on:
 > value: $fpm.last-modified-on
 > default: Never synced
 
@@ -40,7 +40,7 @@ region: title
 text: $title
 color: #000000
 color if $fpm.dark-mode: #FFFFFF
-font: Roboto-700
+font: apple-system
 style: bold
 size: 46
 
@@ -50,22 +50,63 @@ size: 46
 caption key:
 optional string value:
 string default:
-margin-bottom: 10
+margin-bottom: 25
 spacing: 2
 
 --- ftd.text: $key
 color: #000000
 color if $fpm.dark-mode: #D0CFCF
+font: apple-system
 
 --- ftd.text: $value
 if: $value is not null
 color: #3EC5FF
 color if $fpm.dark-mode: #3EC5FF
+font: apple-system
+style: bold
 
 --- ftd.text: $default
 if: $value is null
 color: #3EC5FF
 color if $fpm.dark-mode: #3EC5FF
+font: apple-system
+
+
+-- ftd.row key-value-small:
+caption key:
+optional string value:
+string default:
+margin-bottom: 5
+spacing: 2
+
+--- ftd.column:
+width: fill
+
+
+--- ftd.text: $key
+color: #000000
+color if $fpm.dark-mode: #D0CFCF
+font: apple-system
+size: 12
+
+--- ftd.column:
+width: fill
+
+--- ftd.text: $value
+if: $value is not null
+color: #3EC5FF
+color if $fpm.dark-mode: #3EC5FF
+font: apple-system
+style: bold
+size: 14
+
+--- ftd.text: $default
+if: $value is null
+color: #3EC5FF
+color if $fpm.dark-mode: #3EC5FF
+font: apple-system
+size: 14
+
 
 
 -- ftd.column title:
@@ -86,7 +127,7 @@ size: 30
 color: #000000
 color if $fpm.dark-mode: #E9E9E9
 style: bold
-font: Roboto
+font: apple-system
 align: center
 link: $fpm.home-url
 
@@ -99,6 +140,7 @@ padding-horizontal: 10
 color: #DBB484
 align: center
 size: 14
+font: apple-system
 
 
 --- ftd.column:
@@ -123,7 +165,6 @@ body: $body
 caption title:
 optional body body:
 width: fill
-padding-horizontal: 90
 region: h0
 
 --- ftd.text:
@@ -133,7 +174,7 @@ size: 40
 color: black
 style: bold
 padding-bottom: 24
-font: Roboto
+font: apple-system
 
 --- container: ftd.main
 
@@ -150,9 +191,9 @@ size: 19
 line-height: 30
 color: #000000
 color if $fpm.dark-mode: #E9E9E9
-padding-bottom: 5
+padding-bottom: 10
 padding-top: 50
-font: Roboto
+font: apple-system
 
 
 -- ftd.row print:
@@ -170,40 +211,47 @@ width: percent 20
 padding: 5
 style: bold
 text-align: left
+font: apple-system
 
 --- ftd.integer: $data.never-marked
 width: percent 20
 padding: 5
-/text-align: center
+text-align: center
+font: apple-system
 
 --- ftd.integer:  $data.missing
 width: percent 20
 padding: 5
-/text-align: center
+text-align: center
+font: apple-system
 
 --- ftd.integer: $data.out-dated
 width: percent 20
 padding: 5
-/text-align: center
+text-align: center
+font: apple-system
 
 --- ftd.integer: $data.upto-date
 width: percent 20
 padding: 5
-/text-align: center
+text-align: center
+font: apple-system
 
 --- ftd.text: $data.last-modified-on
 if: $data.last-modified-on is not null
 link: $data.url
 width: percent 20
 padding: 5
-text-align: left
+text-align: center
+font: apple-system
 
 --- ftd.text: Never Synced
 if: $data.last-modified-on is null
 link: $data.url
 width: percent 20
 padding: 5
-text-align: left
+text-align: center
+font: apple-system
 
 
 
@@ -224,31 +272,37 @@ border-top-radius: 5
 width: percent 20
 padding: 5
 text-align: left
+font: apple-system
 
 --- ftd.text: Never marked
 width: percent 20
 padding: 5
-text-align: left
+text-align: center
+font: apple-system
 
 --- ftd.text: Missing
 width: percent 20
 padding: 5
-text-align: left
+text-align: center
+font: apple-system
 
 --- ftd.text: Out-dated
 width: percent 20
 padding: 5
-text-align: left
+text-align: center
+font: apple-system
 
 --- ftd.text: Up-to Date
 width: percent 20
 padding: 5
-text-align: left
+text-align: center
+font: apple-system
 
 --- ftd.text: Last modified on
 width: percent 20
 padding: 5
-text-align: left
+text-align: center
+font: apple-system
 
 --- container: ftd.main
 
