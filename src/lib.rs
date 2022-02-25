@@ -88,21 +88,23 @@ fn available_languages(config: &fpm::Config) -> fpm::Result<String> {
 }
 
 fn original_package_status(config: &fpm::Config) -> fpm::Result<String> {
-    let path = config.root.join("FPM/translation/original-status.ftd");
-    Ok(if path.is_file() {
-        std::fs::read_to_string(path)?
-    } else {
-        include_str!("../ftd/translation/original-status.ftd").to_string()
-    })
+    Ok(
+        if let Some(body_prefix) = config.package.generate_prefix_string(false) {
+            format!("{}\n\n{}", body_prefix, "-- ft.original-status-page:")
+        } else {
+            include_str!("../ftd/translation/original-status.ftd").to_string()
+        },
+    )
 }
 
 fn translation_package_status(config: &fpm::Config) -> fpm::Result<String> {
-    let path = config.root.join("FPM/translation/translation-status.ftd");
-    Ok(if path.is_file() {
-        std::fs::read_to_string(path)?
-    } else {
-        include_str!("../ftd/translation/translation-status.ftd").to_string()
-    })
+    Ok(
+        if let Some(body_prefix) = config.package.generate_prefix_string(false) {
+            format!("{}\n\n{}", body_prefix, "-- ft.translation-status-page:")
+        } else {
+            include_str!("../ftd/translation/translation-status.ftd").to_string()
+        },
+    )
 }
 
 fn get_messages(status: &fpm::TranslatedDocument, config: &fpm::Config) -> fpm::Result<String> {
