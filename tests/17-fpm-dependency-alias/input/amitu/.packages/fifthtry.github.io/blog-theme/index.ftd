@@ -224,7 +224,7 @@ link: $reddit
 src: https://res.cloudinary.com/dphj6havg/image/upload/v1640162431/moon_gmh2cd.png
 height: 20
 width: auto
-$event-click$: toggle $dark-mode
+$on-click$: toggle $dark-mode
 
 
 -- ftd.column welcome-section:

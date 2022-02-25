@@ -44,8 +44,8 @@ padding-right: 20
 
 --- ftd.text: $fpm.ui.show-unapproved-version
 if: $show-main
-$event-click$: toggle $show-main
-$event-click$: message-host show_fallback
+$on-click$: toggle $show-main
+$on-click$: message-host show_fallback
 /color: #E87F85
 /background-color: white
 border-radius: 4
@@ -63,8 +63,8 @@ color: white
 
 --- ftd.text: $fpm.ui.show-latest-version
 if: not $show-main
-$event-click$: toggle $show-main
-$event-click$: message-host show_main
+$on-click$: toggle $show-main
+$on-click$: message-host show_main
 /color: #E87F85
 /background-color: white
 border-radius: 4

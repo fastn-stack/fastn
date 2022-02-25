@@ -32,7 +32,7 @@ border-color: #e77d84
 -- ftd.row:
 spacing: 15
 position: top
-$event-click$: toggle $show-detail
+$on-click$: toggle $show-detail
 
 --- ftd.image:
 src: https://res.cloudinary.com/dphj6havg/image/upload/v1640696994/info-1_jowsqn.svg
@@ -47,10 +47,10 @@ padding-right: 20
 
 --- ftd.text: $fpm.ui.show-latest-version
 if: $show-main
-$event-click$: toggle $show-main
-$event-click$: stop-propagation
-$event-click$: prevent-default
-$event-click$: message-host show_fallback
+$on-click$: toggle $show-main
+$on-click$: stop-propagation
+$on-click$: prevent-default
+$on-click$: message-host show_fallback
 /color: #E87F85
 /background-color: white
 border-radius: 4
@@ -67,10 +67,10 @@ color: white
 
 --- ftd.text: $fpm.ui.show-outdated-version
 if: not $show-main
-$event-click$: toggle $show-main
-$event-click$: stop-propagation
-$event-click$: prevent-default
-$event-click$: message-host show_main
+$on-click$: toggle $show-main
+$on-click$: stop-propagation
+$on-click$: prevent-default
+$on-click$: message-host show_main
 /color: #E87F85
 /background-color: white
 border-radius: 4
