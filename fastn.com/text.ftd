@@ -283,13 +283,13 @@ The supported values of themes are:
 -- ftd.text: View Themes
 if: not $show-theme-demos
 color if $fpm.dark-mode: white
-$event-click$: toggle $show-theme-demos
+$on-click$: toggle $show-theme-demos
 
 
 -- ftd.text: Hide Themes
 if: $show-theme-demos
 color if $fpm.dark-mode: white
-$event-click$: toggle $show-theme-demos
+$on-click$: toggle $show-theme-demos
 
 
 -- ftd.column:
@@ -325,7 +325,7 @@ print("hello world")
 -- ftd.text: Hide Themes
 if: $show-theme-demos
 color if $fpm.dark-mode: white
-$event-click$: toggle $show-theme-demos
+$on-click$: toggle $show-theme-demos
 
 
 -- ft.h3: `theme: Solarized (light)`
@@ -369,7 +369,7 @@ print("hello world")
 -- ftd.text: Hide Themes
 if: $show-theme-demos
 color if $fpm.dark-mode: white
-$event-click$: toggle $show-theme-demos
+$on-click$: toggle $show-theme-demos
 
 
 -- ft.h3: `theme: base16-mocha.dark`
@@ -429,7 +429,7 @@ print("hello world")
 -- ftd.text: Hide Themes
 if: $show-theme-demos
 color if $fpm.dark-mode: white
-$event-click$: toggle $show-theme-demos
+$on-click$: toggle $show-theme-demos
 
 
 -- container: main

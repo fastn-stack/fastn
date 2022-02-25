@@ -24,14 +24,14 @@ slot: right-1
 color: white
 padding: 20
 background-color: black
-$event-click$: decrement $count clamp 0 $total
+$on-click$: decrement $count clamp 0 $total
 
 -- ftd.text: Next
 slot: right-2
 padding: 20
 background-color: black
 color: white
-$event-click$: increment $count clamp 0 $total
+$on-click$: increment $count clamp 0 $total
 
 -- ftd.column:
 slot: main
@@ -78,4 +78,4 @@ optional string width:
 src: $src
 align: center
 width: $width
-$event-click$: increment $count clamp 0 $total
+$on-click$: increment $count clamp 0 $total

@@ -23,7 +23,7 @@ padding: 40
 background-color: white
 width: 1350
 height: 540
-$event-click$: $info = kubernetes-info
+$on-click$: $info = kubernetes-info
 scale: 0.65
 margin-left: -267
 margin-top: -95
@@ -31,16 +31,16 @@ margin-top: -95
 --- control-panel:
 left: 50
 top: 20
-$event-click$: $info = control-panel-info
-$event-click$: stop-propagation
-$event-click$: prevent-default
+$on-click$: $info = control-panel-info
+$on-click$: stop-propagation
+$on-click$: prevent-default
 
 --- nodes:
 top: 20
 right: 50
-$event-click$: $info = nodes-info
-$event-click$: stop-propagation
-$event-click$: prevent-default
+$on-click$: $info = nodes-info
+$on-click$: stop-propagation
+$on-click$: prevent-default
 
 --- vertical-line:
 length: 231
@@ -155,16 +155,16 @@ size: 25
 --- kube-controller-manager:
 top: 50
 left: 20
-$event-click$: $info = kube-controller-manager-info
-$event-click$: stop-propagation
-$event-click$: prevent-default
+$on-click$: $info = kube-controller-manager-info
+$on-click$: stop-propagation
+$on-click$: prevent-default
 
 --- kube-api-server:
 top: 50
 right: 35
-$event-click$: $info = kube-api-server-info
-$event-click$: stop-propagation
-$event-click$: prevent-default
+$on-click$: $info = kube-api-server-info
+$on-click$: stop-propagation
+$on-click$: prevent-default
 
 
 --- etcd:
@@ -175,9 +175,9 @@ left: 40
 --- cloud-controller-manager:
 top: 300
 left: 20
-$event-click$: $info = cloud-controller-manager-info
-$event-click$: stop-propagation
-$event-click$: prevent-default
+$on-click$: $info = cloud-controller-manager-info
+$on-click$: stop-propagation
+$on-click$: prevent-default
 
 --- vertical-line:
 length: 42
@@ -201,9 +201,9 @@ border-width: 2
 border-radius: 10
 background-color: white
 border-color if $MOUSE-IN: yellow
-$event-click$: $info = etcd-info
-$event-click$: stop-propagation
-$event-click$: prevent-default
+$on-click$: $info = etcd-info
+$on-click$: stop-propagation
+$on-click$: prevent-default
 
 
 
@@ -214,24 +214,24 @@ background-color: #dc9eb3
 title: Kube Controller Manager
 
 --- text-block: Node Controller
-$event-click$: $info = node-controller-info
-$event-click$: stop-propagation
-$event-click$: prevent-default
+$on-click$: $info = node-controller-info
+$on-click$: stop-propagation
+$on-click$: prevent-default
 
 --- text-block: Replication Controller
-$event-click$: $info = replication-controller-info
-$event-click$: stop-propagation
-$event-click$: prevent-default
+$on-click$: $info = replication-controller-info
+$on-click$: stop-propagation
+$on-click$: prevent-default
 
 --- text-block: Endpoints Controller
-$event-click$: $info = endpoints-controller-info
-$event-click$: stop-propagation
-$event-click$: prevent-default
+$on-click$: $info = endpoints-controller-info
+$on-click$: stop-propagation
+$on-click$: prevent-default
 
 --- text-block: Service Account & Token Controller
-$event-click$: $info = service-account-token-controller-info
-$event-click$: stop-propagation
-$event-click$: prevent-default
+$on-click$: $info = service-account-token-controller-info
+$on-click$: stop-propagation
+$on-click$: prevent-default
 
 
 
@@ -242,19 +242,19 @@ background-color: #76c2c4
 title: Cloud Controller Manager
 
 --- text-block: Node Controller
-$event-click$: $info = cloud-node-controller-info
-$event-click$: stop-propagation
-$event-click$: prevent-default
+$on-click$: $info = cloud-node-controller-info
+$on-click$: stop-propagation
+$on-click$: prevent-default
 
 --- text-block: Route Controller
-$event-click$: $info = cloud-route-controller-info
-$event-click$: stop-propagation
-$event-click$: prevent-default
+$on-click$: $info = cloud-route-controller-info
+$on-click$: stop-propagation
+$on-click$: prevent-default
 
 --- text-block: Service Controller
-$event-click$: $info = cloud-service-controller-info
-$event-click$: stop-propagation
-$event-click$: prevent-default
+$on-click$: $info = cloud-service-controller-info
+$on-click$: stop-propagation
+$on-click$: prevent-default
 
 
 
@@ -323,23 +323,23 @@ left: 5
 --- text-block: Kubelet
 left: 70
 top: 50
-$event-click$: $info = kubelet-info
-$event-click$: stop-propagation
-$event-click$: prevent-default
+$on-click$: $info = kubelet-info
+$on-click$: stop-propagation
+$on-click$: prevent-default
 
 --- text-block: Kube Proxy
 left: 70
 top: 150
-$event-click$: $info = kube-proxy-info
-$event-click$: stop-propagation
-$event-click$: prevent-default
+$on-click$: $info = kube-proxy-info
+$on-click$: stop-propagation
+$on-click$: prevent-default
 
 --- text-block: Container Runtime
 left: 180
 top: 100
-$event-click$: $info = container-runtime-info
-$event-click$: stop-propagation
-$event-click$: prevent-default
+$on-click$: $info = container-runtime-info
+$on-click$: stop-propagation
+$on-click$: prevent-default
 
 
 

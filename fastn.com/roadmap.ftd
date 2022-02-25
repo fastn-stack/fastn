@@ -96,7 +96,7 @@ that can be created throught ftd.
 - `ftd.integer`/`.decimal`/`.boolean` should also accept value as `caption`.
 - [`/-` comments](/fifthtry/ftd/~/38/)
 - implement `cursor`
-- if `$event-click$` is set, use `pointer` as default cursor
+- if `$on-click$` is set, use `pointer` as default cursor
 - [`if` on var-overwrite/list-append](/fifthtry/ftd/~/35/)
 - [intra page link](/fifthtry/ftd/~/86/)
 - move-{up, down, left, right}

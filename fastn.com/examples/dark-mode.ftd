@@ -31,17 +31,17 @@ align: right
 color if $dark-mode: white
 color: black
 move-down: 5
-$event-click$: toggle $dark-mode
+$on-click$: toggle $dark-mode
 
 --- ftd.text: 🌙
 if: $dark-mode
 move-up: 2
-$event-click$: toggle $dark-mode
+$on-click$: toggle $dark-mode
 
 --- ftd.text: 🌞
 if: not $dark-mode
 scale: 1.2
-$event-click$: toggle $dark-mode
+$on-click$: toggle $dark-mode
 
 --- container: ftd.main
 

@@ -334,7 +334,7 @@ append-at: some-child
 $visible: true
 
 \--- ftd.row:
-$event-click$: toggle $visible
+$on-click$: toggle $visible
 
 \--- ftd.text: ✌️
 
@@ -415,7 +415,7 @@ We can attach it with an event `click`. Check these changes in subsection `--- f
 lang: ftd
 
 \--- ftd.row:
-$event-click$: toggle $visible
+$on-click$: toggle $visible
 
 
 -- ft.h1: Presenting an interactive Tree
@@ -437,7 +437,7 @@ append-at: some-child
 $visible: true
 
 \--- ftd.row:
-$event-click$: toggle $visible
+$on-click$: toggle $visible
 
 \--- ftd.text: ✌️
 
@@ -493,7 +493,7 @@ append-at: some-child
 boolean visible: true
 
 --- ftd.row:
-$event-click$: toggle $visible
+$on-click$: toggle $visible
 
 --- ftd.text: ✌️
 

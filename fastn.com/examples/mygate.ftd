@@ -20,7 +20,7 @@ align: center
 
 
 -- ftd.text: toggle
-$event-click$: toggle $open
+$on-click$: toggle $open
 color if $fpm.dark-mode: white
 
 
@@ -54,7 +54,7 @@ border-right: 4
 align: center
 padding: 5
 color if $fpm.dark-mode: white
-$event-click$: toggle $open
+$on-click$: toggle $open
 
 --- container: ftd.main
 

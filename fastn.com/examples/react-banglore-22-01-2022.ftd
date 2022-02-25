@@ -13,7 +13,7 @@ height: fill
 
 
 -- ftd.text: ftd: Programming Language For Human Beings _by_ @amitu
-$event-click$: $count = 0
+$on-click$: $count = 0
 slot: left
 background-color: black
 padding: 20
@@ -27,7 +27,7 @@ size: 20
 color: white
 padding: 20
 background-color: black
-$event-click$: decrement $count clamp 0 $total
+$on-click$: decrement $count clamp 0 $total
 
 -- ftd.text: Next
 slot: right-2
@@ -35,7 +35,7 @@ size: 20
 padding: 20
 background-color: black
 color: white
-$event-click$: increment $count clamp 0 $total
+$on-click$: increment $count clamp 0 $total
 
 -- ftd.column:
 slot: main
@@ -137,7 +137,7 @@ optional string width:
 src: $src
 align: center
 width: $width
-$event-click$: increment $count clamp 0 $total
+$on-click$: increment $count clamp 0 $total
 
 
 
@@ -546,7 +546,7 @@ top: 100
 if: $open
 
 \-- ftd.text: Toggle
-$event-click$: toggle $open
+$on-click$: toggle $open
 
 
 --- ftd.text: You can see me!
@@ -557,7 +557,7 @@ if: $event-1-open
 --- ftd.text: Toggle
 left: 300
 top: 460
-$event-click$: toggle $event-1-open
+$on-click$: toggle $event-1-open
 
 
 
@@ -582,7 +582,7 @@ size: 40
 background-color if $funky: yellow
 
 \-- ftd.text: Toggle
-$event-click$: toggle $funky
+$on-click$: toggle $funky
 
 
 --- ftd.text: Some Text
@@ -595,7 +595,7 @@ top: 440
 --- ftd.text: Toggle
 left: 300
 top: 489
-$event-click$: toggle $event-2-funky
+$on-click$: toggle $event-2-funky
 
 
 
@@ -739,15 +739,15 @@ color: white
 background-color: green
 move-down: 4
 padding: 5
-$event-click$: insert into $strings value $query at end
-$event-click$: clear $query
+$on-click$: insert into $strings value $query at end
+$on-click$: clear $query
 
 --- ftd.text: Clear
 color: white
 background-color: red
 move-down: 4
 padding: 5
-$event-click$: clear $strings
+$on-click$: clear $strings
 
 --- container: column-one
 

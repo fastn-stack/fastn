@@ -253,7 +253,7 @@ lang: ftd
 \-- boolean x: $y
 
 \-- foo:
-$event-click$: toggle $x
+$on-click$: toggle $x
 
 -- ft.markdown:
 
@@ -603,7 +603,7 @@ boolean o: true
 \--- bar:
 o: $o
 color if $o: red
-$event-click$: toggle $o
+$on-click$: toggle $o
 
 -- ft.markdown:
 
@@ -812,13 +812,13 @@ Some command operations:
 lang: ftd
 
 \-- ftd.text: hello
-$event-click$: increment: what=$count, by=2
+$on-click$: increment: what=$count, by=2
 > what: $count
 > by: 2
 > clamp: 10
 
 \-- ftd.text: hello
-$event-click$: increment: what=$count, by=2, clamp=10
+$on-click$: increment: what=$count, by=2, clamp=10
 
 -- ft.markdown:
 
@@ -1075,15 +1075,15 @@ color: white
 background-color: green
 move-down: 4
 padding: 5
-$event-click$: insert into $strings value $query at end
-$event-click$: clear $query
+$on-click$: insert into $strings value $query at end
+$on-click$: clear $query
 
 --- ftd.text: Clear
 color: white
 background-color: red
 move-down: 4
 padding: 5
-$event-click$: clear $strings
+$on-click$: clear $strings
 
 
 -- ftd.text:
@@ -1324,7 +1324,7 @@ lang: ftd
 \-- import: fpm
 
 \-- ftd.text: Switch To Dark Mode
-$event-click$: message-host $fpm.switch-to-dark-mode
+$on-click$: message-host $fpm.switch-to-dark-mode
 
 -- ft.markdown:
 
@@ -1516,7 +1516,7 @@ And then you can pass the object to JavaScript using `message-host`, eg:
 lang: ftd
 
 \-- ftd.text: click me
-$event-click$: message-host $obj
+$on-click$: message-host $obj
 
 -- ft.markdown:
 
@@ -1642,7 +1642,7 @@ function: console-print
 message: $message
 
 \-- ftd.text: click me
-$event-click$: message-host console-print:
+$on-click$: message-host console-print:
 > message: clicked!
 
 \-- ftd.input:
@@ -1678,7 +1678,7 @@ that function.
 lang: ftd
 
 \-- ftd.text: click me
-$event-click$: message-host foo
+$on-click$: message-host foo
 
 -- ft.markdown:
 
@@ -1696,7 +1696,7 @@ name: jack
 field: value
 
 \-- ftd.text: click me
-$event-click$: message-host $arg
+$on-click$: message-host $arg
 
 -- ft.markdown:
 
@@ -2028,7 +2028,7 @@ if $fpm.lang == hi:
 Some polish is needed in the syntax, but I think it can be made to work without
 adding any new feature to FTD for translation.
 
--- ft.h1: `$event-click$: message-host <>`
+-- ft.h1: `$on-click$: message-host <>`
 
 23rd Dec 2021
 
@@ -2050,7 +2050,7 @@ window.foo = function() {
 lang: ftd
 
 \-- ftd.text: call foo
-$event-click$: message-host foo
+$on-click$: message-host foo
 
 
 -- ft.markdown:
@@ -2442,7 +2442,7 @@ if: show
 \--- ftd.text: World 🌎
 
 \-- ftd.text: Click here!
-$event-click$: toggle show
+$on-click$: toggle show
 
 \-- component foo:
 component: ftd.column
@@ -2564,7 +2564,7 @@ if: $show
 
 
 -- ftd.text: Click here!
-$event-click$: toggle $show
+$on-click$: toggle $show
 
 
 -- ftd.column foo:

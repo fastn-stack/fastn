@@ -44,7 +44,7 @@ slot: left
 
 \-- ftd.text: Hello World!
 boolean current: false
-$event-click$: toggle $current
+$on-click$: toggle $current
 color if $current: red
 color: white
 background-color: black
@@ -53,7 +53,7 @@ padding: 20
 --- ftd.text: Hello World!
 align: center
 slot: right
-$event-click$: toggle $current
+$on-click$: toggle $current
 padding: 20
 text-align: center
 color if $current: red
@@ -84,7 +84,7 @@ slot: left
 \-- ftd.text toggle-text: $title
 boolean current: false
 caption title:
-$event-click$: toggle $current
+$on-click$: toggle $current
 text-align: center
 color if $current: red
 color: white
@@ -101,7 +101,7 @@ boolean current: false
 caption title:
 align: center
 text-align: center
-$event-click$: toggle $current
+$on-click$: toggle $current
 color if $current: red
 color: white
 background-color: black
