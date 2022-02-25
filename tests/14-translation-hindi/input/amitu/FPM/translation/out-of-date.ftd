@@ -25,10 +25,10 @@ $fpm.diff
 
 -- ftd.text: Show Fallback
 if: $show-main
-$event-click$: toggle $show-main
-$event-click$: message-host show_fallback
+$on-click$: toggle $show-main
+$on-click$: message-host show_fallback
 
 -- ftd.text: Show Main
 if: not $show-main
-$event-click$: toggle $show-main
-$event-click$: message-host show_main
+$on-click$: toggle $show-main
+$on-click$: message-host show_main

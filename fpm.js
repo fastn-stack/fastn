@@ -75,10 +75,10 @@
         has overridden the system preference.
 
         These two variables must not be set by ftd code directly, but they must
-        use `$event-click$: message-host enable-dark-mode`, to ignore system
-        preference and use dark mode. `$event-click$: message-host
+        use `$on-click$: message-host enable-dark-mode`, to ignore system
+        preference and use dark mode. `$on-click$: message-host
         disable-dark-mode` to ignore system preference and use light mode and
-        `$event-click$: message-host follow-system-dark-mode` to ignore user
+        `$on-click$: message-host follow-system-dark-mode` to ignore user
         preference and start following system preference.
 
         we use a cookie: `fpm-dark-mode` to store the preference. The cookie can

@@ -90,7 +90,7 @@ margin-top: 5
 margin-bottom: 5
 margin-left: 5
 margin-right: 5
-$event-click$: toggle $show-menu
+$on-click$: toggle $show-menu
 padding-left: 5
 padding-right: 50
 background-color: white
@@ -112,7 +112,7 @@ shadow-blur: 16
 position: inner top-right
 width: fill
 margin-top: 26
-$event-click$: toggle $show-menu
+$on-click$: toggle $show-menu
 
 --- ftd.text: $obj.title
 $loop$: $fpm.language-toc as $obj
