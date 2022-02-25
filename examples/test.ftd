@@ -1,3 +1,6 @@
 -- import: record
+-- import: test.dev
 
 -- record.foo:
+
+-- test.bar:

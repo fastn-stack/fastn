@@ -26,15 +26,19 @@ pub fn parse_import(
         };
     }
 
-    if !v.contains('/') {
-        return Ok((v.to_string(), v.to_string()));
+    if v.contains('/') {
+        let mut parts = v.rsplitn(2, '/');
+        return match (parts.next(), parts.next()) {
+            (Some(t), Some(_)) => Ok((v.to_string(), t.to_string())),
+            _ => ftd::e2("doc id must contain /", doc_id, line_number),
+        };
     }
 
-    let mut parts = v.rsplitn(2, '/');
-    match (parts.next(), parts.next()) {
-        (Some(t), Some(_)) => Ok((v.to_string(), t.to_string())),
-        _ => ftd::e2("doc id must contain /", doc_id, line_number),
+    if let Some((t, _)) = v.split_once('.') {
+        return Ok((v.to_string(), t.to_string()));
     }
+
+    Ok((v.to_string(), v.to_string()))
 }
 
 pub fn boolean_and_ref(
