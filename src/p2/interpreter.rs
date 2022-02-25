@@ -71,7 +71,7 @@ impl<'a> Interpreter<'a> {
 
         let mut aliases = default_aliases();
         let mut iteration_index = 0;
-        while p1[iteration_index].name == "import" && iteration_index < p1.len() {
+        while iteration_index < p1.len() && p1[iteration_index].name == "import" {
             let (library_name, alias) = ftd::p2::utils::parse_import(
                 &p1[iteration_index].caption,
                 name,
@@ -450,7 +450,7 @@ impl<'a> Interpreter<'a> {
         // do all imports and then reorder
         let mut aliases = default_aliases();
         let mut iteration_index = 0;
-        while p1[iteration_index].name == "import" && iteration_index < p1.len() {
+        while iteration_index < p1.len() && p1[iteration_index].name == "import" {
             let (library_name, alias) = ftd::p2::utils::parse_import(
                 &p1[iteration_index].caption,
                 name,
