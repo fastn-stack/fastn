@@ -284,7 +284,7 @@ pub(crate) fn get(lib: &fpm::Library) -> String {
             indoc::indoc! {"
                 {fpm_base}
                 
-                -- translation-status-url: //{package_name}/FPM/translation-status    
+                -- translation-status-url: //{package_name}/-/translation-status    
             "},
             fpm_base = fpm_base,
             package_name = lib.config.package.name,
@@ -530,7 +530,7 @@ pub(crate) fn get(lib: &fpm::Library) -> String {
         for translation in lib.config.package.translations.iter() {
             if let Some(ref status) = translation.translation_status_summary {
                 if let Some(ref language) = translation.language {
-                    let url = format!("https://{}/FPM/translation-status/", translation.name);
+                    let url = format!("https://{}/-/translation-status/", translation.name);
                     let status = {
                         let mut status_data = format!(
                             indoc::indoc! {"
