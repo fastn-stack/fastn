@@ -1453,8 +1453,8 @@ are implementing `book`.
 
 We have to first implement simple things like "object constructor" in FTD. This
 is the core to how we pass data from FTD to "host". We similarly need a "special
-variable" `$VALUE`, which will be available only in `$event-change$` handlers,
-so we can do `$event-change$: $query = $VALUE`, assuming we already have a
+variable" `$VALUE`, which will be available only in `$on-change$` handlers,
+so we can do `$on-change$: $query = $VALUE`, assuming we already have a
 variable defined: `-- optional string query:`. These are easy bits.
 
 Then we have a harder bit. In FTD the DOM structure is rendered by Rust code,
@@ -2007,9 +2007,9 @@ The key piece that we would use is `message-host` feature. We can build an input
 field in ftd using `ftd.input`, we currently have very limited `ftd.input`, eg
 it does not do variable binding, we will implement that, any input typed in
 `ftd.input` would be bound to a variable in `ftd`. Further we will have
-`$event-change$` for handling change event.
+`$on-change$` for handling change event.
 
-We will basically call `$event-change$: message-host do-query`. `do-query` would
+We will basically call `$on-change$: message-host do-query`. `do-query` would
 be a "object constructor", it will create an object, with following shape:
 
 -- ft.code:
@@ -2029,7 +2029,7 @@ lang: ftd
 \-- optional string query:
 
 \-- ftd.input: Search
-$event-change$: $query=$VALUE
+$on-change$: $query=$VALUE
 
 -- ft.markdown:
 
