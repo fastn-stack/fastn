@@ -13,6 +13,9 @@ $fpm.ui.welcome-fpm-page-subtitle
 -- ftd.text: $fpm.package-name
 size: 30
 
+-- fpm-lib.key-value-without-default: Built with `fpm-cli` version
+value: $fpm.fpm-cli-version
+
 -- fpm-lib.key-value-without-default: $fpm.ui.language
 value: $fpm.language
 

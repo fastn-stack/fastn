@@ -196,11 +196,25 @@ fn construct_fpm_ui(lib: &fpm::Library) -> String {
     )
 }
 
+fn construct_fpm_cli_variables(_lib: &fpm::Library) -> String {
+    format!(
+        indoc::indoc! {"
+        -- string fpm-cli-version: {fpm_version}
+    "},
+        fpm_version = if fpm::utils::is_test() {
+            String::from("FPM_CLI_VERSION")
+        } else {
+            format!("{} [{}]", env!("CARGO_PKG_VERSION"), env!("VERGEN_GIT_SHA"))
+        },
+    )
+}
+
 pub(crate) fn get(lib: &fpm::Library) -> String {
     let mut fpm_base = format!(
         indoc::indoc! {"
             {fpm_base}
             {fpm_ui}
+            {fpm_cli_variables}
             -- string document-id: {document_id}
             -- string translation-status-url: {home_url}
             -- string title: {title}
@@ -210,6 +224,7 @@ pub(crate) fn get(lib: &fpm::Library) -> String {
         "},
         fpm_base = fpm::fpm_ftd(),
         fpm_ui = construct_fpm_ui(lib),
+        fpm_cli_variables = construct_fpm_cli_variables(lib),
         document_id = lib.document_id,
         title = lib.config.package.name,
         package_name = lib.config.package.name,
