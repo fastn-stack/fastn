@@ -1,0 +1,11 @@
+-- ft.doc-page:
+toc: $config.api-toc
+header-left: $config.doc-header
+
+    
+-- ft.h0: Container Attributes
+
+- `spacing`
+- `align` 
+- `wrap`
+- `open`

@@ -3,59 +3,62 @@
 -- fpm.snapshot: FPM.ftd
 timestamp: 1644924029748373000
 
+-- fpm.snapshot: alternatives.ftd
+timestamp: 1645777086357201000
+
 -- fpm.snapshot: auto-nesting.ftd
-timestamp: 1644924029748373000
+timestamp: 1645777086357201000
 
 -- fpm.snapshot: boolean.ftd
-timestamp: 1644924029748373000
+timestamp: 1645777086357201000
 
 -- fpm.snapshot: built-in-types.ftd
-timestamp: 1644924029748373000
+timestamp: 1645777086357201000
 
 -- fpm.snapshot: changelog.ftd
-timestamp: 1644924029748373000
+timestamp: 1645777086357201000
 
 -- fpm.snapshot: column.ftd
-timestamp: 1644924029748373000
+timestamp: 1645777086357201000
 
 -- fpm.snapshot: comments.ftd
-timestamp: 1644924029748373000
+timestamp: 1645777086357201000
 
 -- fpm.snapshot: common.ftd
-timestamp: 1644924029748373000
+timestamp: 1645777086357201000
 
 -- fpm.snapshot: component.ftd
-timestamp: 1644924029748373000
+timestamp: 1645777086357201000
 
 -- fpm.snapshot: container-management.ftd
-timestamp: 1644924029748373000
+timestamp: 1645777086357201000
 
 -- fpm.snapshot: container.ftd
-timestamp: 1644924029748373000
+timestamp: 1645777086357201000
 
 -- fpm.snapshot: creating-a-tree.ftd
-timestamp: 1644924029748373000
+timestamp: 1645777086357201000
 
--- fpm.snapshot: data-modelling.ftd
-timestamp: 1644924029748373000
+-- fpm.snapshot: data-modeling.ftd
+timestamp: 1645777086357201000
 
 -- fpm.snapshot: decimal.ftd
-timestamp: 1644924029748373000
+timestamp: 1645777086357201000
 
 -- fpm.snapshot: development.ftd
-timestamp: 1644924029748373000
+timestamp: 1645777086357201000
 
 -- fpm.snapshot: docs.ftd
-timestamp: 1644924029748373000
+timestamp: 1645777086357201000
 
 -- fpm.snapshot: doomsday.ftd
 timestamp: 1644924029748373000
 
 -- fpm.snapshot: enums.ftd
-timestamp: 1644924029748373000
+timestamp: 1645777086357201000
 
 -- fpm.snapshot: event-handling.ftd
-timestamp: 1644924029748373000
+timestamp: 1645777086357201000
 
 -- fpm.snapshot: examples.ftd
 timestamp: 1644924029748373000
@@ -64,46 +67,49 @@ timestamp: 1644924029748373000
 timestamp: 1644924029748373000
 
 -- fpm.snapshot: examples/conditional-variable.ftd
-timestamp: 1644924029748373000
+timestamp: 1645777086357201000
 
 -- fpm.snapshot: examples/dark-mode.ftd
-timestamp: 1644924029748373000
+timestamp: 1645777086357201000
 
 -- fpm.snapshot: examples/diagram.ftd
-timestamp: 1644924029748373000
+timestamp: 1645777086357201000
 
 -- fpm.snapshot: examples/grid.ftd
-timestamp: 1644924029748373000
+timestamp: 1645777086357201000
 
 -- fpm.snapshot: examples/input.ftd
-timestamp: 1644924029748373000
+timestamp: 1645777086357201000
 
 -- fpm.snapshot: examples/intro.ftd
 timestamp: 1644924029748373000
 
 -- fpm.snapshot: examples/mygate.ftd
-timestamp: 1644924029748373000
+timestamp: 1645777086357201000
 
 -- fpm.snapshot: examples/react-banglore-22-01-2022.ftd
-timestamp: 1644924029748373000
+timestamp: 1645777086357201000
 
 -- fpm.snapshot: examples/slides.ftd
-timestamp: 1644924029748373000
+timestamp: 1645777086357201000
+
+-- fpm.snapshot: faq.ftd
+timestamp: 1645777086357201000
 
 -- fpm.snapshot: id.ftd
-timestamp: 1644924029748373000
+timestamp: 1645777086357201000
 
 -- fpm.snapshot: if-attr.ftd
-timestamp: 1644924029748373000
+timestamp: 1645777086357201000
 
 -- fpm.snapshot: if.ftd
-timestamp: 1644924029748373000
+timestamp: 1645777086357201000
 
 -- fpm.snapshot: iframe.ftd
-timestamp: 1644924029748373000
+timestamp: 1645777086357201000
 
 -- fpm.snapshot: image.ftd
-timestamp: 1644924029748373000
+timestamp: 1645777086357201000
 
 -- fpm.snapshot: images/Docs.png
 timestamp: 1644924029748373000
@@ -229,28 +235,28 @@ timestamp: 1644924029748373000
 timestamp: 1644924029748373000
 
 -- fpm.snapshot: import.ftd
-timestamp: 1644924029748373000
+timestamp: 1645777086357201000
 
 -- fpm.snapshot: index.ftd
-timestamp: 1644924029748373000
+timestamp: 1645777086357201000
 
 -- fpm.snapshot: inner-container.ftd
-timestamp: 1644924029748373000
+timestamp: 1645777086357201000
 
 -- fpm.snapshot: input.ftd
-timestamp: 1644924029748373000
+timestamp: 1645777086357201000
 
 -- fpm.snapshot: integer.ftd
-timestamp: 1644924029748373000
+timestamp: 1645777086357201000
 
 -- fpm.snapshot: internals.ftd
-timestamp: 1644924029748373000
+timestamp: 1645777086357201000
 
 -- fpm.snapshot: journal.ftd
-timestamp: 1644924029748373000
+timestamp: 1645777086357201000
 
 -- fpm.snapshot: kernel.ftd
-timestamp: 1644924029748373000
+timestamp: 1645777086357201000
 
 -- fpm.snapshot: language.ftd
 timestamp: 1644924029748373000
@@ -259,16 +265,16 @@ timestamp: 1644924029748373000
 timestamp: 1644924029748373000
 
 -- fpm.snapshot: library.ftd
-timestamp: 1644924029748373000
+timestamp: 1645777086357201000
 
 -- fpm.snapshot: list.ftd
-timestamp: 1644924029748373000
+timestamp: 1645777086357201000
 
 -- fpm.snapshot: loop.ftd
-timestamp: 1644924029748373000
+timestamp: 1645777086357201000
 
 -- fpm.snapshot: named-list.ftd
-timestamp: 1644924029748373000
+timestamp: 1645777086357201000
 
 -- fpm.snapshot: new/docs.ftd
 timestamp: 1640864507033419000
@@ -291,32 +297,38 @@ timestamp: 1640864507033419000
 -- fpm.snapshot: new/showcase.ftd
 timestamp: 1640864507033419000
 
+-- fpm.snapshot: news.ftd
+timestamp: 1645777086357201000
+
+-- fpm.snapshot: news/react-banglore-22-01-2022.ftd
+timestamp: 1645777086357201000
+
 -- fpm.snapshot: or-type.ftd
-timestamp: 1644924029748373000
+timestamp: 1645777086357201000
 
 -- fpm.snapshot: p1-grammar.ftd
-timestamp: 1644924029748373000
+timestamp: 1645777086357201000
 
 -- fpm.snapshot: p1.ftd
-timestamp: 1644924029748373000
+timestamp: 1645777086357201000
 
 -- fpm.snapshot: philosophy.ftd
-timestamp: 1644924029748373000
+timestamp: 1645777086357201000
 
 -- fpm.snapshot: reading-data.ftd
-timestamp: 1644924029748373000
+timestamp: 1645777086357201000
 
 -- fpm.snapshot: record.ftd
-timestamp: 1644924029748373000
+timestamp: 1645777086357201000
 
 -- fpm.snapshot: responsive.ftd
 timestamp: 1644924029748373000
 
 -- fpm.snapshot: roadmap.ftd
-timestamp: 1644924029748373000
+timestamp: 1645777086357201000
 
 -- fpm.snapshot: row.ftd
-timestamp: 1644924029748373000
+timestamp: 1645777086357201000
 
 -- fpm.snapshot: run-ftd.ftd
 timestamp: 1644924029748373000
@@ -325,19 +337,19 @@ timestamp: 1644924029748373000
 timestamp: 1644924029748373000
 
 -- fpm.snapshot: text-common.ftd
-timestamp: 1644924029748373000
+timestamp: 1645777086357201000
 
 -- fpm.snapshot: text.ftd
-timestamp: 1644924029748373000
+timestamp: 1645777086357201000
 
 -- fpm.snapshot: ui.ftd
-timestamp: 1644924029748373000
+timestamp: 1645777086357201000
 
 -- fpm.snapshot: variables.ftd
-timestamp: 1644924029748373000
+timestamp: 1645777086357201000
 
 -- fpm.snapshot: why.ftd
-timestamp: 1644924029748373000
+timestamp: 1645777086357201000
 
 -- fpm.snapshot: why/not-mdx.ftd
-timestamp: 1644924029748373000
+timestamp: 1645777086357201000

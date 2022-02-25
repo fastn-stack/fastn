@@ -1,0 +1,5 @@
+-- ft.doc-page:
+toc: $config.api-toc
+header-left: $config.doc-header
+
+-- ft.h1: Common Text Attributes
