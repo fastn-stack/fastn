@@ -148,7 +148,7 @@ $always-include$: true
 \-- string translation-status-url:
 \-- string title:
 \-- string package-name:
-\-- optional string package-zip:
+-- optional string package-zip:
 \-- string home-url:
 
 

@@ -7,7 +7,7 @@ width: fill
 
 -- h0: Translation Status
 
--- title: $fpm.title
+-- title: $fpm.package-title
 subtitle: key-value: Last modified on:
 > value: $fpm.last-modified-on
 > default: Never synced
