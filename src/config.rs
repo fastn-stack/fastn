@@ -449,7 +449,7 @@ impl Package {
         match &self.canonical_url {
             Some(url) => {
                 // Ignore the FPM document as that path won't exist in the reference website
-                if path != "-/" && path != "-/translation-status/" {
+                if !path.starts_with("-/") {
                     format!(
                         "\n<link rel=\"canonical\" href=\"{canonical_base}{path}\" />",
                         canonical_base = url,
