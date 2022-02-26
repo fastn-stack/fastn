@@ -671,7 +671,7 @@ pub(crate) fn get(lib: &fpm::Library) -> String {
 fn capital_fpm(lib: &fpm::Library) -> String {
     let mut s = format!(
         indoc::indoc! {"
-            -- package: {package_name}
+            -- package-data package: {package_name}
         "},
         package_name = lib.config.package.name,
     );

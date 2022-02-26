@@ -207,7 +207,10 @@ pub struct FPMLibrary {}
 impl ftd::p2::Library for FPMLibrary {
     fn get(&self, name: &str, _doc: &ftd::p2::TDoc) -> Option<String> {
         if name == "fpm" {
-            return Some(fpm::fpm_ftd().to_string());
+            return Some(format!(
+                "{}\n\n-- optional package-data package:\n",
+                fpm::fpm_ftd()
+            ));
         } else {
             std::fs::read_to_string(format!("./{}.ftd", name)).ok()
         }
