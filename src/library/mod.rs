@@ -215,12 +215,4 @@ impl ftd::p2::Library for FPMLibrary {
             std::fs::read_to_string(format!("./{}.ftd", name)).ok()
         }
     }
-
-    fn process(
-        &self,
-        _section: &ftd::p1::Section,
-        _doc: &ftd::p2::TDoc,
-    ) -> ftd::p1::Result<ftd::Value> {
-        unimplemented!("not implemented yet");
-    }
 }
