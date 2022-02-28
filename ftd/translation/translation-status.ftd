@@ -8,7 +8,7 @@ width: fill
 
 -- h0: $fpm.ui.language-detail-page
 
--- title: $fpm.title
+-- title: $fpm.package-title
 subtitle: key-value: $fpm.ui.last-modified-on
 > value: $fpm.last-modified-on
 > default: Never synced
