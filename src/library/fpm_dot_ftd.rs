@@ -245,6 +245,8 @@ pub(crate) fn get(lib: &fpm::Library) -> String {
 
             {ui_data}
 
+            {build_info}
+
             -- string document-id: {document_id}
             -- string translation-status-url: {home_url}
             -- string package-title: {title}
@@ -254,6 +256,7 @@ pub(crate) fn get(lib: &fpm::Library) -> String {
         fpm_base = fpm::fpm_ftd(),
         capital_fpm = capital_fpm(lib),
         ui_data = ui_data(lib),
+        build_info = construct_fpm_cli_variables(lib),
         document_id = lib.document_id,
         title = lib.config.package.name,
         package_name = lib.config.package.name,
