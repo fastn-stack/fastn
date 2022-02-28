@@ -90,29 +90,13 @@ fn available_languages(config: &fpm::Config) -> fpm::Result<String> {
 }
 
 fn original_package_status(config: &fpm::Config) -> fpm::Result<String> {
-    let package_info_package =
-        config
-            .package
-            .dependencies
-            .iter()
-            .fold(
-                fpm::PACKAGE_INFO_INTERFACE,
-                |dep_package, dep| match dep_package {
-                    fpm::PACKAGE_INFO_INTERFACE => {
-                        if match &dep.implements {
-                            Some(all_interfaces) => {
-                                all_interfaces.contains(&fpm::PACKAGE_INFO_INTERFACE.to_string())
-                            }
-                            None => false,
-                        } {
-                            &dep.package.name
-                        } else {
-                            dep_package
-                        }
-                    }
-                    pkg => pkg,
-                },
-            );
+    let package_info_package = match config
+        .package
+        .get_dependency_for_interface(fpm::PACKAGE_INFO_INTERFACE)
+    {
+        Some(dep) => dep.package.name.as_str(),
+        None => fpm::PACKAGE_INFO_INTERFACE,
+    };
     let body_prefix = match config.package.generate_prefix_string(false) {
         Some(bp) => bp,
         None => String::new(),
@@ -124,29 +108,13 @@ fn original_package_status(config: &fpm::Config) -> fpm::Result<String> {
 }
 
 fn translation_package_status(config: &fpm::Config) -> fpm::Result<String> {
-    let package_info_package =
-        config
-            .package
-            .dependencies
-            .iter()
-            .fold(
-                fpm::PACKAGE_INFO_INTERFACE,
-                |dep_package, dep| match dep_package {
-                    fpm::PACKAGE_INFO_INTERFACE => {
-                        if match &dep.implements {
-                            Some(all_interfaces) => {
-                                all_interfaces.contains(&fpm::PACKAGE_INFO_INTERFACE.to_string())
-                            }
-                            None => false,
-                        } {
-                            &dep.package.name
-                        } else {
-                            dep_package
-                        }
-                    }
-                    pkg => pkg,
-                },
-            );
+    let package_info_package = match config
+        .package
+        .get_dependency_for_interface(fpm::PACKAGE_INFO_INTERFACE)
+    {
+        Some(dep) => dep.package.name.as_str(),
+        None => fpm::PACKAGE_INFO_INTERFACE,
+    };
     let body_prefix = match config.package.generate_prefix_string(false) {
         Some(bp) => bp,
         None => String::new(),

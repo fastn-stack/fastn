@@ -231,17 +231,14 @@ impl Config {
                 }
             };
 
-            let has_package_info_dep = deps.iter().fold(false, |is_found, dep| match is_found {
-                true => true,
-                false => match &dep.implements {
+            if package.name != fpm::PACKAGE_INFO_INTERFACE
+                && !deps.iter().any(|dep| match &dep.implements {
                     Some(all_interfaces) => {
                         all_interfaces.contains(&fpm::PACKAGE_INFO_INTERFACE.to_string())
                     }
                     None => false,
-                },
-            });
-
-            if has_package_info_dep.eq(&false) && package.name != fpm::PACKAGE_INFO_INTERFACE {
+                })
+            {
                 deps.push(fpm::Dependency {
                     package: fpm::Package::new(fpm::PACKAGE_INFO_INTERFACE),
                     version: None,
@@ -397,6 +394,15 @@ impl Package {
             auto_import: vec![],
             fpm_path: None,
         }
+    }
+
+    pub fn get_dependency_for_interface(&self, interface: &str) -> Option<&fpm::Dependency> {
+        self.dependencies.iter().find(|dep| {
+            dep.implements
+                .clone()
+                .unwrap_or_else(Vec::new)
+                .contains(&interface.to_string())
+        })
     }
 
     pub fn get_flattened_dependencies(&self) -> Vec<fpm::Dependency> {

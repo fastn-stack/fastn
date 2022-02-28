@@ -389,24 +389,13 @@ async fn process_ftd(
         if main.id.eq("FPM.ftd") {
             main.id = "-.ftd".to_string();
             // main.content = include_str!("../../ftd/info.ftd").to_string();
-            let package_info_package = config.package.dependencies.iter().fold(
-                fpm::PACKAGE_INFO_INTERFACE,
-                |dep_package, dep| match dep_package {
-                    fpm::PACKAGE_INFO_INTERFACE => {
-                        if match &dep.implements {
-                            Some(all_interfaces) => {
-                                all_interfaces.contains(&fpm::PACKAGE_INFO_INTERFACE.to_string())
-                            }
-                            None => false,
-                        } {
-                            &dep.package.name
-                        } else {
-                            dep_package
-                        }
-                    }
-                    pkg => pkg,
-                },
-            );
+            let package_info_package = match config
+                .package
+                .get_dependency_for_interface(fpm::PACKAGE_INFO_INTERFACE)
+            {
+                Some(dep) => dep.package.name.as_str(),
+                None => fpm::PACKAGE_INFO_INTERFACE,
+            };
             main.content = config.package.get_prefixed_body(
                 format!(
                     "-- import: {}/package-info as pi\n\n-- pi.package-info-page:",
@@ -435,7 +424,7 @@ async fn process_ftd(
     let new_file_path = config.root.join(".build").join(file_rel_path);
 
     let (fallback, message, final_main) = if main.id.eq("-.ftd") {
-        (None, None, main.to_owned())
+        (None, None, main)
     } else {
         let new_main = fpm::Document {
             content: config
