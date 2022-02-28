@@ -6,6 +6,7 @@ pub struct Dependency {
     pub version: Option<String>,
     pub notes: Option<String>,
     pub alias: Option<String>,
+    pub implements: Vec<String>,
 }
 
 impl Dependency {
@@ -84,6 +85,7 @@ pub(crate) struct DependencyTemp {
     pub name: String,
     pub version: Option<String>,
     pub notes: Option<String>,
+    pub implements: Vec<String>,
 }
 
 impl DependencyTemp {
@@ -97,6 +99,7 @@ impl DependencyTemp {
             version: self.version,
             notes: self.notes,
             alias,
+            implements: self.implements,
         })
     }
 }

@@ -388,7 +388,27 @@ async fn process_ftd(
         let mut main = main.to_owned();
         if main.id.eq("FPM.ftd") {
             main.id = "-.ftd".to_string();
-            main.content = include_str!("../../ftd/info.ftd").to_string();
+            let path = config.root.join("FPM").join("info.ftd");
+            main.content = if path.is_file() {
+                std::fs::read_to_string(path)?
+            } else {
+                let package_info_package = match config
+                    .package
+                    .get_dependency_for_interface(fpm::PACKAGE_INFO_INTERFACE)
+                {
+                    Some(dep) => dep.package.name.as_str(),
+                    None => fpm::PACKAGE_INFO_INTERFACE,
+                };
+                config.package.get_prefixed_body(
+                    format!(
+                        "-- import: {}/package-info as pi\n\n-- pi.package-info-page:",
+                        package_info_package
+                    )
+                    .as_str(),
+                    &main.id,
+                    true,
+                )
+            }
         }
         main
     };
