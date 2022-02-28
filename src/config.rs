@@ -33,8 +33,6 @@ pub struct Config {
     ///
     /// Note that this too is kind of bad design, we will move fonts to `fpm::Package` struct soon.
     pub fonts: Vec<fpm::Font>,
-    /// `ignored` keeps track of files that are to be ignored by `fpm build`, `fpm sync` etc.
-    pub ignored: ignore::overrides::Override,
 }
 
 impl Config {
@@ -255,33 +253,35 @@ impl Config {
                 .map(|f| fpm::AutoImport::from_string(f.as_str()))
                 .collect();
             package.auto_import = auto_import;
+
+            package.ignored_paths = b.get::<Vec<String>>("fpm#ignore")?;
+            // {
+            //     let mut overrides = ignore::overrides::OverrideBuilder::new("./");
+            //     for ig in  {
+            //         if let Err(e) = overrides.add(format!("!{}", ig.as_str()).as_str()) {
+            //             return Err(fpm::Error::PackageError {
+            //                 message: format!("failed parse fpm.ignore: {} => {:?}", ig, e),
+            //             });
+            //         }
+            //     }
+            //     overrides.add("!FPM/**")?;
+
+            //     match overrides.build() {
+            //         Ok(v) => v,
+            //         Err(e) => {
+            //             return Err(fpm::Error::PackageError {
+            //                 message: format!("failed parse fpm.ignore: {:?}", e),
+            //             });
+            //         }
+            //     }
+            // };
+
             package
         };
 
         let fonts: Vec<fpm::Font> = b.get("fpm#font")?;
 
         fpm::utils::validate_zip_url(&package)?;
-
-        let ignored = {
-            let mut overrides = ignore::overrides::OverrideBuilder::new("./");
-            for ig in b.get::<Vec<String>>("fpm#ignore")? {
-                if let Err(e) = overrides.add(format!("!{}", ig.as_str()).as_str()) {
-                    return Err(fpm::Error::PackageError {
-                        message: format!("failed parse fpm.ignore: {} => {:?}", ig, e),
-                    });
-                }
-            }
-            overrides.add("!FPM/**")?;
-
-            match overrides.build() {
-                Ok(v) => v,
-                Err(e) => {
-                    return Err(fpm::Error::PackageError {
-                        message: format!("failed parse fpm.ignore: {:?}", e),
-                    });
-                }
-            }
-        };
 
         fpm::dependency::ensure(&root, &mut package)?;
 
@@ -291,7 +291,6 @@ impl Config {
             root,
             original_directory,
             fonts,
-            ignored,
         })
     }
 }
@@ -355,6 +354,7 @@ impl PackageTemp {
             dependencies: vec![],
             auto_import: vec![],
             fpm_path: None,
+            ignored_paths: vec![],
         }
     }
 }
@@ -375,6 +375,8 @@ pub struct Package {
     /// `auto_import` keeps track of the global auto imports in the package.
     pub auto_import: Vec<fpm::AutoImport>,
     pub fpm_path: Option<camino::Utf8PathBuf>,
+    /// `ignored` keeps track of files that are to be ignored by `fpm build`, `fpm sync` etc.
+    pub ignored_paths: Vec<String>,
 }
 
 impl Package {
@@ -391,6 +393,7 @@ impl Package {
             dependencies: vec![],
             auto_import: vec![],
             fpm_path: None,
+            ignored_paths: vec![],
         }
     }
 

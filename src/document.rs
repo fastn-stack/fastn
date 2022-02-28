@@ -61,9 +61,7 @@ pub struct Static {
 
 pub(crate) async fn get_documents(config: &fpm::Config) -> fpm::Result<Vec<fpm::File>> {
     let mut ignore_paths = ignore::WalkBuilder::new("./");
-    ignore_paths.overrides(package_ignores()?); // unwrap ok because this we know can never fail
-    ignore_paths.standard_filters(true);
-    ignore_paths.overrides(config.ignored.clone());
+    ignore_paths.overrides(package_ignores(config)?);
     let all_files = ignore_paths
         .build()
         .into_iter()
@@ -100,7 +98,7 @@ pub(crate) async fn paths_to_files(
     .collect::<Vec<fpm::File>>())
 }
 
-pub fn package_ignores() -> Result<ignore::overrides::Override, ignore::Error> {
+pub fn package_ignores(config: &fpm::Config) -> Result<ignore::overrides::Override, ignore::Error> {
     let mut overrides = ignore::overrides::OverrideBuilder::new("./");
     overrides.add("!.history")?;
     overrides.add("!.packages")?;
@@ -108,6 +106,9 @@ pub fn package_ignores() -> Result<ignore::overrides::Override, ignore::Error> {
     overrides.add("!FPM")?;
     overrides.add("!rust-toolchain")?;
     overrides.add("!.build")?;
+    for ignored_path in &config.package.ignored_paths {
+        overrides.add(format!("!{}", ignored_path).as_str())?;
+    }
     overrides.build()
 }
 
