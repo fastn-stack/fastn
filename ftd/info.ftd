@@ -14,10 +14,22 @@ $fpm.ui.welcome-fpm-page-subtitle
 size: 30
 
 -- fpm-lib.key-value-without-default: Built with `fpm-cli` version
-value: $fpm.fpm-cli-version
+value: $fpm.info.cli-version
+
+-- fpm-lib.key-value-without-default: Git hash for `fpm-cli` build
+value: $fpm.info.cli-git-commit-hash
+
+-- fpm-lib.key-value-without-default: `fpm-cli` build timestamp
+value: $fpm.info.cli-created-on
 
 -- fpm-lib.key-value-without-default: $fpm.ui.language
 value: $fpm.language
 
 -- fpm-lib.key-value-without-default: Zip:
 value: $fpm.package-zip
+
+-- fpm-lib.key-value-without-default: Build timestamp
+value: $fpm.info.build-created-on
+
+-- fpm-lib.key-value-without-default: FTD version
+value: $fpm.info.ftd-version

@@ -199,13 +199,40 @@ fn construct_fpm_ui(lib: &fpm::Library) -> String {
 fn construct_fpm_cli_variables(_lib: &fpm::Library) -> String {
     format!(
         indoc::indoc! {"
-        -- string fpm-cli-version: {fpm_version}
+        -- fpm.build-info info:
+        cli-version: {cli_version}
+        cli-git-commit-hash: {cli_git_commit_hash}
+        cli-created-on: {cli_created_on}
+        build-created-on: {build_created_on}
+        ftd-version: {ftd_version}
     "},
-        fpm_version = if fpm::utils::is_test() {
-            String::from("FPM_CLI_VERSION")
+        cli_version = if fpm::utils::is_test() {
+            "FPM_CLI_VERSION"
         } else {
-            format!("{} [{}]", env!("CARGO_PKG_VERSION"), env!("VERGEN_GIT_SHA"))
+            env!("CARGO_PKG_VERSION")
         },
+        cli_git_commit_hash = if fpm::utils::is_test() {
+            "FPM_CLI_GIT_HASH"
+        } else {
+            env!("VERGEN_GIT_SHA")
+        },
+        cli_created_on = if fpm::utils::is_test() {
+            "FPM_CLI_BUILD_TIMESTAMP"
+        } else {
+            env!("VERGEN_BUILD_TIMESTAMP")
+        },
+        ftd_version = if fpm::utils::is_test() {
+            "FTD_VERSION"
+        } else {
+            ""
+            // TODO
+        },
+        build_created_on = if fpm::utils::is_test() {
+            String::from("BUILD_CREATE_TIMESTAMP")
+        } else {
+            let now: chrono::DateTime<chrono::Utc> = std::time::SystemTime::now().into();
+            now.to_rfc3339()
+        }
     )
 }
 
