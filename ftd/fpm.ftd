@@ -163,6 +163,15 @@ toc-item list children:
 
 -- toc-item list language-toc:
 
+
+-- record build-info:
+string cli-version:
+string cli-git-commit-hash:
+string cli-created-on:
+string build-created-on:
+string ftd-version:
+
+
 -- string list missing-files:
 -- string list never-marked-files:
 -- string list outdated-files:

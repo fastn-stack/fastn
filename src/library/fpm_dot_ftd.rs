@@ -196,6 +196,46 @@ fn ui_data(lib: &fpm::Library) -> String {
     )
 }
 
+fn construct_fpm_cli_variables(_lib: &fpm::Library) -> String {
+    format!(
+        indoc::indoc! {"
+        -- fpm.build-info info:
+        cli-version: {cli_version}
+        cli-git-commit-hash: {cli_git_commit_hash}
+        cli-created-on: {cli_created_on}
+        build-created-on: {build_created_on}
+        ftd-version: {ftd_version}
+    "},
+        cli_version = if fpm::utils::is_test() {
+            "FPM_CLI_VERSION"
+        } else {
+            env!("CARGO_PKG_VERSION")
+        },
+        cli_git_commit_hash = if fpm::utils::is_test() {
+            "FPM_CLI_GIT_HASH"
+        } else {
+            env!("VERGEN_GIT_SHA")
+        },
+        cli_created_on = if fpm::utils::is_test() {
+            "FPM_CLI_BUILD_TIMESTAMP"
+        } else {
+            env!("VERGEN_BUILD_TIMESTAMP")
+        },
+        ftd_version = if fpm::utils::is_test() {
+            "FTD_VERSION"
+        } else {
+            ""
+            // TODO
+        },
+        build_created_on = if fpm::utils::is_test() {
+            String::from("BUILD_CREATE_TIMESTAMP")
+        } else {
+            let now: chrono::DateTime<chrono::Utc> = std::time::SystemTime::now().into();
+            now.to_rfc3339()
+        }
+    )
+}
+
 pub(crate) fn get(lib: &fpm::Library) -> String {
     let mut fpm_base = format!(
         indoc::indoc! {"
@@ -204,6 +244,8 @@ pub(crate) fn get(lib: &fpm::Library) -> String {
             {capital_fpm}
 
             {ui_data}
+
+            {build_info}
 
             -- string document-id: {document_id}
             -- string translation-status-url: {home_url}
@@ -214,6 +256,7 @@ pub(crate) fn get(lib: &fpm::Library) -> String {
         fpm_base = fpm::fpm_ftd(),
         capital_fpm = capital_fpm(lib),
         ui_data = ui_data(lib),
+        build_info = construct_fpm_cli_variables(lib),
         document_id = lib.document_id,
         title = lib.config.package.name,
         package_name = lib.config.package.name,
