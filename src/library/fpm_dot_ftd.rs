@@ -1,6 +1,6 @@
 use crate::utils::HasElements;
 
-fn construct_fpm_ui(lib: &fpm::Library) -> String {
+fn ui_data(lib: &fpm::Library) -> String {
     let lang = match lib.config.package.language {
         Some(ref lang) => {
             realm_lang::Language::from_2_letter_code(lang).unwrap_or(realm_lang::Language::English)
@@ -240,18 +240,20 @@ pub(crate) fn get(lib: &fpm::Library) -> String {
     let mut fpm_base = format!(
         indoc::indoc! {"
             {fpm_base}
-            {fpm_ui}
-            {fpm_cli_variables}
+
+            {capital_fpm}
+
+            {ui_data}
+
             -- string document-id: {document_id}
             -- string translation-status-url: {home_url}
-            -- string title: {title}
+            -- string package-title: {title}
             -- string package-name: {package_name}
-            -- optional string package-zip:
             -- string home-url: {home_url}
         "},
         fpm_base = fpm::fpm_ftd(),
-        fpm_ui = construct_fpm_ui(lib),
-        fpm_cli_variables = construct_fpm_cli_variables(lib),
+        capital_fpm = capital_fpm(lib),
+        ui_data = ui_data(lib),
         document_id = lib.document_id,
         title = lib.config.package.name,
         package_name = lib.config.package.name,
@@ -326,7 +328,8 @@ pub(crate) fn get(lib: &fpm::Library) -> String {
             indoc::indoc! {"
                 {fpm_base}
                 
-                -- translation-status-url: //{package_name}/FPM/translation-status    
+                -- translation-status-url: //{package_name}/-/translation-status/
+
             "},
             fpm_base = fpm_base,
             package_name = lib.config.package.name,
@@ -490,11 +493,11 @@ pub(crate) fn get(lib: &fpm::Library) -> String {
                         fpm::commands::translation_status::TranslationStatus::NeverMarked => {
                             never_marked_files = format!(
                                 indoc::indoc! {"
-                                            {list}
-                                            
-                                            -- never-marked-files: {file}
-                                            
-                                        "},
+                                    {list}
+                                    
+                                    -- never-marked-files: {file}
+                                    
+                                "},
                                 list = never_marked_files,
                                 file = file,
                             );
@@ -502,11 +505,11 @@ pub(crate) fn get(lib: &fpm::Library) -> String {
                         fpm::commands::translation_status::TranslationStatus::Outdated => {
                             outdated_files = format!(
                                 indoc::indoc! {"
-                                            {list}
-                                            
-                                            -- outdated-files: {file}
-                                            
-                                        "},
+                                    {list}
+                                    
+                                    -- outdated-files: {file}
+                                    
+                                "},
                                 list = outdated_files,
                                 file = file,
                             );
@@ -514,11 +517,11 @@ pub(crate) fn get(lib: &fpm::Library) -> String {
                         fpm::commands::translation_status::TranslationStatus::UptoDate => {
                             upto_date_files = format!(
                                 indoc::indoc! {"
-                                            {list}
-                                            
-                                            -- upto-date-files: {file}
-                                            
-                                        "},
+                                    {list}
+                                    
+                                    -- upto-date-files: {file}
+                                    
+                                "},
                                 list = upto_date_files,
                                 file = file,
                             );
@@ -528,34 +531,32 @@ pub(crate) fn get(lib: &fpm::Library) -> String {
 
                 fpm_base = format!(
                     indoc::indoc! {"
-                                {fpm_base}
-                                
-                                -- record status-data:
-                                string file:
-                                string status:
-                                
-                                -- status-data list status:
-        
-                                {translation_status_list}
+                        {fpm_base}
+                        
+                        -- record status-data:
+                        string file:
+                        string status:
+                        
+                        -- status-data list status:
 
-                                -- string list missing-files:
-                                
-                                {missing_files}
+                        {translation_status_list}
 
-                                -- string list never-marked-files:
-                                
-                                {never_marked_files}
+                        -- string list missing-files:
+                        
+                        {missing_files}
 
-                                -- string list outdated-files:
-                                
-                                {outdated_files}
+                        -- string list never-marked-files:
+                        
+                        {never_marked_files}
 
-                                -- string list upto-date-files:
-                                
-                                {upto_date_files}
+                        -- string list outdated-files:
+                        
+                        {outdated_files}
 
-                                
-                            "},
+                        -- string list upto-date-files:
+                        
+                        {upto_date_files}
+                    "},
                     fpm_base = fpm_base,
                     translation_status_list = translation_status_list,
                     missing_files = missing_files,
@@ -572,18 +573,18 @@ pub(crate) fn get(lib: &fpm::Library) -> String {
         for translation in lib.config.package.translations.iter() {
             if let Some(ref status) = translation.translation_status_summary {
                 if let Some(ref language) = translation.language {
-                    let url = format!("https://{}/FPM/translation-status/", translation.name);
+                    let url = format!("https://{}/-/translation-status/", translation.name);
                     let status = {
                         let mut status_data = format!(
                             indoc::indoc! {"
-                                        -- status:
-                                        language: {language}
-                                        url: {url}
-                                        never-marked: {never_marked}
-                                        missing: {missing}
-                                        out-dated: {out_dated}
-                                        upto-date: {upto_date}
-                                    "},
+                                -- status:
+                                language: {language}
+                                url: {url}
+                                never-marked: {never_marked}
+                                missing: {missing}
+                                out-dated: {out_dated}
+                                upto-date: {upto_date}
+                            "},
                             language = language,
                             url = url,
                             never_marked = status.never_marked,
@@ -594,8 +595,8 @@ pub(crate) fn get(lib: &fpm::Library) -> String {
                         if let Some(ref last_modified_on) = status.last_modified_on {
                             status_data = format!(
                                 indoc::indoc! {"
-                                            {status}last-modified-on: {last_modified_on}
-                                        "},
+                                    {status}last-modified-on: {last_modified_on}
+                                "},
                                 status = status_data,
                                 last_modified_on = last_modified_on
                             );
@@ -604,11 +605,11 @@ pub(crate) fn get(lib: &fpm::Library) -> String {
                     };
                     translation_status_list = format!(
                         indoc::indoc! {"
-                                    {list}
-                                    
-                                    {status}
-                                    
-                                "},
+                            {list}
+                            
+                            {status}
+                            
+                        "},
                         list = translation_status_list,
                         status = status
                     );
@@ -618,22 +619,22 @@ pub(crate) fn get(lib: &fpm::Library) -> String {
 
         fpm_base = format!(
             indoc::indoc! {"
-                        {fpm_base}
-                        
-                        -- record status-data:
-                        string language:
-                        string url:
-                        integer never-marked:
-                        integer missing:
-                        integer out-dated:
-                        integer upto-date:
-                        optional string last-modified-on:
-                        
-                        -- status-data list status:
+                {fpm_base}
+                
+                -- record status-data:
+                string language:
+                string url:
+                integer never-marked:
+                integer missing:
+                integer out-dated:
+                integer upto-date:
+                optional string last-modified-on:
+                
+                -- status-data list status:
 
-                        {translation_status_list}
-                        
-                    "},
+                {translation_status_list}
+                
+            "},
             fpm_base = fpm_base,
             translation_status_list = translation_status_list
         );
@@ -691,14 +692,13 @@ pub(crate) fn get(lib: &fpm::Library) -> String {
         if !languages.trim().is_empty() {
             fpm_base = format!(
                 indoc::indoc! {"
-                        {fpm_base}
-                        
-                        -- language-toc:
-                        $processor$: toc
-
-                        {languages}
-
-                        "},
+                    {fpm_base}
+                    
+                    -- language-toc:
+                    $processor$: toc
+        
+                    {languages}
+                "},
                 fpm_base = fpm_base,
                 languages = languages,
             );
@@ -706,4 +706,19 @@ pub(crate) fn get(lib: &fpm::Library) -> String {
     }
 
     fpm_base
+}
+
+fn capital_fpm(lib: &fpm::Library) -> String {
+    let mut s = format!(
+        indoc::indoc! {"
+            -- package-data package: {package_name}
+        "},
+        package_name = lib.config.package.name,
+    );
+
+    if let Some(ref zip) = lib.config.package.zip {
+        s.push_str(format!("zip: {}", zip).as_str());
+    }
+
+    s
 }

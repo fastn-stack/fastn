@@ -9,9 +9,6 @@ optional string canonical-url:
 
 
 
--- optional package-data package:
-
-
 
 -- record dependency-data:
 caption name:
@@ -148,7 +145,7 @@ $always-include$: true
 \-- string translation-status-url:
 \-- string title:
 \-- string package-name:
-\-- optional string package-zip:
+-- optional string package-zip:
 \-- string home-url:
 
 
