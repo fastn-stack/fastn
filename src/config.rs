@@ -235,7 +235,7 @@ impl Config {
                 true => true,
                 false => match &dep.implements {
                     Some(all_interfaces) => {
-                        all_interfaces.contains(&format!("{}", fpm::PACKAGE_INFO_INTERFACE))
+                        all_interfaces.contains(&fpm::PACKAGE_INFO_INTERFACE.to_string())
                     }
                     None => false,
                 },

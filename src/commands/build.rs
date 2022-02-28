@@ -395,7 +395,7 @@ async fn process_ftd(
                     fpm::PACKAGE_INFO_INTERFACE => {
                         if match &dep.implements {
                             Some(all_interfaces) => {
-                                all_interfaces.contains(&format!("{}", fpm::PACKAGE_INFO_INTERFACE))
+                                all_interfaces.contains(&fpm::PACKAGE_INFO_INTERFACE.to_string())
                             }
                             None => false,
                         } {

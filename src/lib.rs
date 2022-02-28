@@ -101,7 +101,7 @@ fn original_package_status(config: &fpm::Config) -> fpm::Result<String> {
                     fpm::PACKAGE_INFO_INTERFACE => {
                         if match &dep.implements {
                             Some(all_interfaces) => {
-                                all_interfaces.contains(&format!("{}", fpm::PACKAGE_INFO_INTERFACE))
+                                all_interfaces.contains(&fpm::PACKAGE_INFO_INTERFACE.to_string())
                             }
                             None => false,
                         } {
@@ -135,7 +135,7 @@ fn translation_package_status(config: &fpm::Config) -> fpm::Result<String> {
                     fpm::PACKAGE_INFO_INTERFACE => {
                         if match &dep.implements {
                             Some(all_interfaces) => {
-                                all_interfaces.contains(&format!("{}", fpm::PACKAGE_INFO_INTERFACE))
+                                all_interfaces.contains(&fpm::PACKAGE_INFO_INTERFACE.to_string())
                             }
                             None => false,
                         } {
