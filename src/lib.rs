@@ -37,6 +37,8 @@ pub(crate) use tracker::Track;
 pub(crate) use translation::{TranslatedDocument, TranslationData};
 pub(crate) use utils::{copy_dir_all, get_timestamp_nanosecond};
 
+pub const PACKAGE_INFO_INTERFACE: &str = "fifthtry.github.io/package-info";
+
 fn ftd_html() -> &'static str {
     include_str!("../ftd.html")
 }
@@ -88,23 +90,71 @@ fn available_languages(config: &fpm::Config) -> fpm::Result<String> {
 }
 
 fn original_package_status(config: &fpm::Config) -> fpm::Result<String> {
-    Ok(
-        if let Some(body_prefix) = config.package.generate_prefix_string(false) {
-            format!("{}\n\n{}", body_prefix, "-- ft.original-status-page:")
-        } else {
-            include_str!("../ftd/translation/original-status.ftd").to_string()
-        },
-    )
+    let package_info_package =
+        config
+            .package
+            .dependencies
+            .iter()
+            .fold(
+                fpm::PACKAGE_INFO_INTERFACE,
+                |dep_package, dep| match dep_package {
+                    fpm::PACKAGE_INFO_INTERFACE => {
+                        if match &dep.implements {
+                            Some(all_interfaces) => {
+                                all_interfaces.contains(&format!("{}", fpm::PACKAGE_INFO_INTERFACE))
+                            }
+                            None => false,
+                        } {
+                            &dep.package.name
+                        } else {
+                            dep_package
+                        }
+                    }
+                    pkg => pkg,
+                },
+            );
+    let body_prefix = match config.package.generate_prefix_string(false) {
+        Some(bp) => bp,
+        None => String::new(),
+    };
+    Ok(format!(
+        "{}\n\n-- import: {}/original-status as pi\n\n-- pi.original-status-page:",
+        body_prefix, package_info_package
+    ))
 }
 
 fn translation_package_status(config: &fpm::Config) -> fpm::Result<String> {
-    Ok(
-        if let Some(body_prefix) = config.package.generate_prefix_string(false) {
-            format!("{}\n\n{}", body_prefix, "-- ft.translation-status-page:")
-        } else {
-            include_str!("../ftd/translation/translation-status.ftd").to_string()
-        },
-    )
+    let package_info_package =
+        config
+            .package
+            .dependencies
+            .iter()
+            .fold(
+                fpm::PACKAGE_INFO_INTERFACE,
+                |dep_package, dep| match dep_package {
+                    fpm::PACKAGE_INFO_INTERFACE => {
+                        if match &dep.implements {
+                            Some(all_interfaces) => {
+                                all_interfaces.contains(&format!("{}", fpm::PACKAGE_INFO_INTERFACE))
+                            }
+                            None => false,
+                        } {
+                            &dep.package.name
+                        } else {
+                            dep_package
+                        }
+                    }
+                    pkg => pkg,
+                },
+            );
+    let body_prefix = match config.package.generate_prefix_string(false) {
+        Some(bp) => bp,
+        None => String::new(),
+    };
+    Ok(format!(
+        "{}\n\n-- import: {}/translation-status as pi\n\n-- pi.translation-status-page:",
+        body_prefix, package_info_package
+    ))
 }
 
 fn get_messages(status: &fpm::TranslatedDocument, config: &fpm::Config) -> fpm::Result<String> {

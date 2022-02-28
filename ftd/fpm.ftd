@@ -14,7 +14,7 @@ optional string canonical-url:
 caption name:
 optional string version:
 optional body notes:
-
+optional string list implements:
 
 
 -- dependency-data list dependency:
@@ -162,3 +162,23 @@ toc-item list children:
 
 
 -- toc-item list language-toc:
+
+-- string list missing-files:
+-- string list never-marked-files:
+-- string list outdated-files:
+-- string list upto-date-files:
+
+
+\ Translation status for the original language package
+
+-- record all-language-status-data:
+string language:
+string url:
+integer never-marked:
+integer missing:
+integer out-dated:
+integer upto-date:
+optional string last-modified-on:
+
+-- all-language-status-data list all-language-translation-status:
+

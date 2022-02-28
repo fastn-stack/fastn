@@ -210,7 +210,7 @@ impl Config {
             }
         };
 
-        let deps = {
+        let mut deps = {
             let temp_deps: Vec<fpm::dependency::DependencyTemp> = b.get("fpm#dependency")?;
             temp_deps
                 .into_iter()
@@ -229,6 +229,26 @@ impl Config {
                         message: "FPM.ftd does not contain package definition".to_string(),
                     })
                 }
+            };
+
+            let has_package_info_dep = deps.iter().fold(false, |is_found, dep| match is_found {
+                true => true,
+                false => match &dep.implements {
+                    Some(all_interfaces) => {
+                        all_interfaces.contains(&format!("{}", fpm::PACKAGE_INFO_INTERFACE))
+                    }
+                    None => false,
+                },
+            });
+
+            if has_package_info_dep.eq(&false) && package.name != fpm::PACKAGE_INFO_INTERFACE {
+                deps.push(fpm::Dependency {
+                    package: fpm::Package::new(fpm::PACKAGE_INFO_INTERFACE),
+                    version: None,
+                    notes: None,
+                    alias: None,
+                    implements: None,
+                });
             };
 
             package.dependencies = deps;
