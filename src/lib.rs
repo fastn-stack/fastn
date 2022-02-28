@@ -90,39 +90,57 @@ fn available_languages(config: &fpm::Config) -> fpm::Result<String> {
 }
 
 fn original_package_status(config: &fpm::Config) -> fpm::Result<String> {
-    let package_info_package = match config
-        .package
-        .get_dependency_for_interface(fpm::PACKAGE_INFO_INTERFACE)
-    {
-        Some(dep) => dep.package.name.as_str(),
-        None => fpm::PACKAGE_INFO_INTERFACE,
-    };
-    let body_prefix = match config.package.generate_prefix_string(false) {
-        Some(bp) => bp,
-        None => String::new(),
-    };
-    Ok(format!(
-        "{}\n\n-- import: {}/original-status as pi\n\n-- pi.original-status-page:",
-        body_prefix, package_info_package
-    ))
+    let path = config
+        .root
+        .join("FPM")
+        .join("translation")
+        .join("original-status.ftd");
+    Ok(if path.is_file() {
+        std::fs::read_to_string(path)?
+    } else {
+        let package_info_package = match config
+            .package
+            .get_dependency_for_interface(fpm::PACKAGE_INFO_INTERFACE)
+        {
+            Some(dep) => dep.package.name.as_str(),
+            None => fpm::PACKAGE_INFO_INTERFACE,
+        };
+        let body_prefix = match config.package.generate_prefix_string(false) {
+            Some(bp) => bp,
+            None => String::new(),
+        };
+        format!(
+            "{}\n\n-- import: {}/original-status as pi\n\n-- pi.original-status-page:",
+            body_prefix, package_info_package
+        )
+    })
 }
 
 fn translation_package_status(config: &fpm::Config) -> fpm::Result<String> {
-    let package_info_package = match config
-        .package
-        .get_dependency_for_interface(fpm::PACKAGE_INFO_INTERFACE)
-    {
-        Some(dep) => dep.package.name.as_str(),
-        None => fpm::PACKAGE_INFO_INTERFACE,
-    };
-    let body_prefix = match config.package.generate_prefix_string(false) {
-        Some(bp) => bp,
-        None => String::new(),
-    };
-    Ok(format!(
-        "{}\n\n-- import: {}/translation-status as pi\n\n-- pi.translation-status-page:",
-        body_prefix, package_info_package
-    ))
+    let path = config
+        .root
+        .join("FPM")
+        .join("translation")
+        .join("translation-status.ftd");
+    Ok(if path.is_file() {
+        std::fs::read_to_string(path)?
+    } else {
+        let package_info_package = match config
+            .package
+            .get_dependency_for_interface(fpm::PACKAGE_INFO_INTERFACE)
+        {
+            Some(dep) => dep.package.name.as_str(),
+            None => fpm::PACKAGE_INFO_INTERFACE,
+        };
+        let body_prefix = match config.package.generate_prefix_string(false) {
+            Some(bp) => bp,
+            None => String::new(),
+        };
+        format!(
+            "{}\n\n-- import: {}/translation-status as pi\n\n-- pi.translation-status-page:",
+            body_prefix, package_info_package
+        )
+    })
 }
 
 fn get_messages(status: &fpm::TranslatedDocument, config: &fpm::Config) -> fpm::Result<String> {
