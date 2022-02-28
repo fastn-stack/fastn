@@ -14,7 +14,7 @@ optional string canonical-url:
 caption name:
 optional string version:
 optional body notes:
-optional string list implements:
+string list implements:
 
 
 -- dependency-data list dependency:
