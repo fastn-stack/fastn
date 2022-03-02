@@ -5,10 +5,12 @@ on:
     branches: [ main ]
     paths:
      - '**.rs'
+     - 'Cargo.*'
   pull_request:
     branches: [ main ]
     paths:
      - '**.rs'
+     - 'Cargo.*'
 jobs:
   everything:
     name: Rust Checks
