@@ -44,8 +44,7 @@ sha2 = "0.10"
 itertools = "0.10.3"
 
 [dev-dependencies]
-fbt-lib = {git="https://github.com/FifthTry/fbt", ref="928bff1" }
-# fbt-lib = "0.1.16"
+fbt-lib = "0.1.17"
 indoc = "1"
 pretty_assertions = "1"
 rusty-hook = "^0.11.2"

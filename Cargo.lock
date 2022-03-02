@@ -658,7 +658,8 @@ dependencies = [
 [[package]]
 name = "fbt-lib"
 version = "0.1.17"
-source = "git+https://github.com/FifthTry/fbt#928bff1a9f21bf25b7ca0aac4496083c5a0d2d04"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1144a04b8e9b84612e54593a7ce393b41c81d01ce32cdd6e93f7f89f4fffe451"
 dependencies = [
  "colored",
  "diffy",
