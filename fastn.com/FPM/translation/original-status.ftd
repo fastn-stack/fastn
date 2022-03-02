@@ -8,7 +8,7 @@ toc: $ft.toc
 
 -- page-title: Translation Status
 
--- title: $fpm.title
+-- title: $fpm.package-title
 subtitle: key-value-small: Last modified on:
 > value: $fpm.last-modified-on
 > default: Never synced
@@ -197,7 +197,7 @@ font: apple-system
 
 
 -- ftd.row print:
-fpm.status-data data:
+fpm.all-language-status-data data:
 width: fill
 border-bottom: 1
 border-color: white
@@ -307,5 +307,5 @@ font: apple-system
 --- container: ftd.main
 
 --- print:
-$loop$: $fpm.status as $obj
+$loop$: $fpm.all-language-translation-status as $obj
 data: $obj
