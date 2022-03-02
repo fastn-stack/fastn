@@ -23,19 +23,6 @@ default: Not known
 
 
 
--- translation-status: 
-
-
--- translation-missing: 
-
-
-
-
-
-
-
-
-
 
 
 -- ftd.column page-title: 
@@ -222,12 +209,14 @@ padding-top: 50
 font: apple-system
 
 
--- ftd.row print-inline:
+-- ftd.row print:
 fpm.status-data data:
 width: fill
+border-bottom: 1
+border-color: white
 padding: 10
-color: #316777
-color if $fpm.dark-mode: #ffffff 
+color: #000000
+background-color: #D9DBDC
 
 
 --- ftd.text: $data.language
@@ -280,62 +269,55 @@ font: apple-system
 
 
 
--- ftd.column translation-status:
-background-color: #E8E8E8
-background-color if $fpm.dark-mode: #1D2C30
+-- ftd.column language-status:
+background-color: #f3f3f3
 width: fill
 max-width: 1000
-border-radius: 5
-color: #316777
-color if $fpm.dark-mode: #A9A9A9
-padding: 10
 border-radius: 5
 
 --- ftd.row:
 width: fill
+background-color: #153B46
+color: #F09523
+padding: 10
+border-top-radius: 5
 
---- icon-title: 
-title: Language
+--- icon-title: Language
 icon: false
 column-width: percent 15
 
---- icon-title: 
-title: Missing
+--- icon-title: Missing
 icon: true
 icon-path: images/translation-icons/translations-missing.png
 column-width: percent 15
 
 
---- icon-title: 
-title: Never marked
+--- icon-title: Never marked
 icon: true
 icon-path: images/translation-icons/translations-info.png 
 column-width: percent 22
 
 
---- icon-title: 
-title: Out-dated
+--- icon-title: Out-dated
 icon: true
 icon-path: images/translation-icons/translations-time.png 
 column-width: percent 20
 
 
---- icon-title: 
-title: Up-to Date
+--- icon-title: Up-to Date
 icon: true
 icon-path: images/translation-icons/translations-success.png 
 column-width: percent 20
 
 
---- icon-title: 
-title: Last modified on
+--- icon-title: Last modified on
 icon: false
 column-width: percent 20
 
 
 --- container: ftd.main
 
---- print-inline:
+--- print:
 $loop$: $fpm.status as $obj
 data: $obj
 
@@ -345,61 +327,18 @@ data: $obj
 -- ftd.row icon-title:
 boolean icon: true 
 caption title:
-optional integer count:
 optional string icon-path:
-optional integer font-size:
-optional integer margin-right:
 string column-width: percent 20
 width: $column-width
+
 
 --- ftd.image:
 if: $icon
 src: $icon-path
 move-down: 7
 move-left: 2
-margin-right: $margin-right
 
 --- ftd.text: $title
 padding: 5
 text-align: left
 font: apple-system
-size: $font-size
-
---- ftd.integer: $count
-if: $count is not null
-style: bold
-
-
-
--- ftd.column translation-missing:
-width: fill
-max-width: 1000
-border-radius: 5
-border-color: #9A5454
-border-style: dashed
-border-width: 2
-color: #153B46
-color if $fpm.dark-mode: #FFFFFF
-padding: 15
-border-radius: 5
-margin-top: 20
-
-
---- icon-title: 
-title: इन दस्तावेज का अनुवाद उपलब्ध नहीं हैं :
-count: 6
-icon: true
-icon-path: images/translation-icons/35x26/translations-missing.png
-column-width: fill
-font-size: 24
-margin-right: 20
-
-
-
-
-
-
-
-
-
-
