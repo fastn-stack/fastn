@@ -41,6 +41,7 @@ realm-lang = "0.1.0"
 antidote = "1"
 intl-memoizer = "0.5.1"
 sha2 = "0.10"
+itertools = "0.10.3"
 
 [dev-dependencies]
 fbt-lib = "0.1.16"

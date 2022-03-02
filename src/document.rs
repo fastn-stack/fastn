@@ -59,8 +59,19 @@ pub struct Static {
     pub base_path: camino::Utf8PathBuf,
 }
 
-pub(crate) async fn get_documents(config: &fpm::Config) -> fpm::Result<Vec<fpm::File>> {
-    let mut ignore_paths = ignore::WalkBuilder::new("./");
+pub(crate) async fn get_documents(
+    config: &fpm::Config,
+    package: &fpm::Package,
+) -> fpm::Result<Vec<fpm::File>> {
+    let path = if let Some(package_fpm_path) = &package.fpm_path {
+        // TODO: Unwrap?
+        package_fpm_path.parent().unwrap().to_owned()
+    } else if package.name.eq(&config.package.name) {
+        config.root.clone()
+    } else {
+        config.packages_root.clone().join(package.name.as_str())
+    };
+    let mut ignore_paths = ignore::WalkBuilder::new(&path);
     ignore_paths.overrides(package_ignores(config)?);
     let all_files = ignore_paths
         .build()
@@ -68,8 +79,9 @@ pub(crate) async fn get_documents(config: &fpm::Config) -> fpm::Result<Vec<fpm::
         .flatten()
         .map(|x| camino::Utf8PathBuf::from_path_buf(x.into_path()).unwrap()) //todo: improve error message
         .collect::<Vec<camino::Utf8PathBuf>>();
-    let mut documents =
-        fpm::paths_to_files(config.package.name.as_str(), all_files, &config.root).await?;
+
+    // TODO: Unwrap?
+    let mut documents = fpm::paths_to_files(package.name.as_str(), all_files, &path).await?;
     documents.sort_by_key(|v| v.get_id());
 
     Ok(documents)

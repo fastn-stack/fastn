@@ -87,6 +87,7 @@ impl TranslatedDocument {
         };
         fpm::process_file(
             config,
+            &config.package,
             main,
             fallback,
             Some(message.as_str()),
