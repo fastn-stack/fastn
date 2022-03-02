@@ -71,13 +71,13 @@ honor the operating system preferences set by the user.
 
 -- ft.image:
 if: $fpm.dark-mode
-src: images/dark-mode/dark-mode-preferences.png
+src: -/ftd.dev/images/dark-mode/dark-mode-preferences.png
 width: 600
 align: center
 
 -- ft.image:
 if: not $fpm.dark-mode
-src: images/dark-mode/light-mode-preferences.png
+src: -/ftd.dev/images/dark-mode/light-mode-preferences.png
 width: 600
 align: center
 
@@ -149,14 +149,14 @@ Lets start with creating the package. We have to create our Github Repo. Head
 over to Github to create the new repo:
 
 -- ft.image:
-src: images/dark-mode/new-repo.png
+src: -/ftd.dev/images/dark-mode/new-repo.png
 width: fill
 
 Pick any name. Note that the name of repo is part of the name of the fpm package
 you are building, people will be importing it etc, so pick the name accordingly:
 
 -- ft.image:
-src: images/dark-mode/pick-name.png
+src: -/ftd.dev/images/dark-mode/pick-name.png
 width: fill
 
 Also since this is a package to be shared with the world you want the package to
@@ -168,7 +168,7 @@ public.
 This will create an empty repository.
 
 -- ft.image:
-src: images/dark-mode/created.png
+src: -/ftd.dev/images/dark-mode/created.png
 width: fill
 
 Now it's time for us to publish. If you did not pick a licence and README we

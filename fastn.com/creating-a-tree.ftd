@@ -24,7 +24,7 @@ lang: ftd
 
 
 -- ft.image:
-src: images/tree/first.jpeg
+src: -/ftd.dev/images/tree/first.jpeg
 width: fill
 
 
@@ -44,7 +44,7 @@ name: Beverage
 
 
 -- ft.image:
-src: images/tree/second.jpeg
+src: -/ftd.dev/images/tree/second.jpeg
 width: fill
 
 
@@ -70,7 +70,7 @@ open: true
 
 
 -- ft.image:
-src: images/tree/third.jpeg
+src: -/ftd.dev/images/tree/third.jpeg
 width: fill
 
 
@@ -103,7 +103,7 @@ open: true
 
 
 -- ft.image:
-src: images/tree/fourth.jpeg
+src: -/ftd.dev/images/tree/fourth.jpeg
 width: fill
 
 
@@ -123,7 +123,7 @@ name: Beverage
 
 
 -- ft.image:
-src: images/tree/fifth.jpeg
+src: -/ftd.dev/images/tree/fifth.jpeg
 width: fill
 
 
@@ -195,27 +195,27 @@ and now this becomes an open container. At last, we have inserted item `Mango Ju
 
 
 -- ft.image:
-src: images/tree/sixth.jpeg
+src: -/ftd.dev/images/tree/sixth.jpeg
 width: fill
 
 
 -- ft.image:
-src: images/tree/seventh.jpeg
+src: -/ftd.dev/images/tree/seventh.jpeg
 width: fill
 
 
 -- ft.image:
-src: images/tree/eighth.jpeg
+src: -/ftd.dev/images/tree/eighth.jpeg
 width: fill
 
 
 -- ft.image:
-src: images/tree/ninth.jpeg
+src: -/ftd.dev/images/tree/ninth.jpeg
 width: fill
 
 
 -- ft.image:
-src: images/tree/tenth.jpeg
+src: -/ftd.dev/images/tree/tenth.jpeg
 width: fill
 
 
