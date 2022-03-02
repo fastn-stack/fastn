@@ -72,7 +72,7 @@ pub(crate) async fn get_documents(
         config.packages_root.clone().join(package.name.as_str())
     };
     let mut ignore_paths = ignore::WalkBuilder::new(&path);
-    ignore_paths.overrides(package_ignores(config)?);
+    ignore_paths.overrides(package_ignores(config, &path)?);
     let all_files = ignore_paths
         .build()
         .into_iter()
@@ -110,8 +110,11 @@ pub(crate) async fn paths_to_files(
     .collect::<Vec<fpm::File>>())
 }
 
-pub fn package_ignores(config: &fpm::Config) -> Result<ignore::overrides::Override, ignore::Error> {
-    let mut overrides = ignore::overrides::OverrideBuilder::new("./");
+pub fn package_ignores(
+    config: &fpm::Config,
+    root_path: &camino::Utf8PathBuf,
+) -> Result<ignore::overrides::Override, ignore::Error> {
+    let mut overrides = ignore::overrides::OverrideBuilder::new(root_path);
     overrides.add("!.history")?;
     overrides.add("!.packages")?;
     overrides.add("!.tracks")?;

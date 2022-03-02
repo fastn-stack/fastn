@@ -4,5 +4,6 @@ output: .build
 
 -- stdout:
 
-Processing FPM.ftd ... Done
-Processing index.ftd ... Done
+Processing fifthtry.github.io/amitu/FPM.ftd ... Done
+Processing fifthtry.github.io/amitu/index.ftd ... Done
+Processing fifthtry.github.io/blog-theme/LICENSE ... Done

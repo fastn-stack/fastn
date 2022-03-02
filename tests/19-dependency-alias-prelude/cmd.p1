@@ -4,6 +4,10 @@ output: .build
 
 -- stdout:
 
-Processing FPM.ftd ... Done
-Processing index.ftd ... Done
-Processing sibling.ftd ... Done
+Processing fifthtry.github.io/amitu/FPM.ftd ... Done
+Processing fifthtry.github.io/amitu/index.ftd ... Done
+Processing fifthtry.github.io/amitu/sibling.ftd ... Done
+Processing fifthtry.github.io/amitu/static_main.txt ... Done
+Processing one.fpm.local/static_one.txt ... Done
+Processing two.fpm.local/static_two.txt ... Done
+Processing theme/static_theme.txt ... Done

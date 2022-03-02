@@ -266,7 +266,11 @@ pub(crate) async fn process_file(
 ) -> fpm::Result<()> {
     let start = std::time::Instant::now();
     if let Some(fallback) = fallback {
-        print!("Processing {} ... ", main.get_id());
+        print!(
+            "Processing {}/{} ... ",
+            package.name.as_str(),
+            main.get_id()
+        );
         match (main, fallback) {
             (fpm::File::Ftd(main_doc), fpm::File::Ftd(fallback_doc)) => {
                 let resp = process_ftd(
@@ -311,7 +315,11 @@ pub(crate) async fn process_file(
         }
         return Ok(());
     }
-    print!("Processing {} ... ", main.get_id());
+    print!(
+        "Processing {}/{} ... ",
+        package.name.as_str(),
+        main.get_id()
+    );
     match main {
         fpm::File::Ftd(doc) => {
             let resp = process_ftd(config, doc, None, message, translated_data, base_url).await;
@@ -765,10 +773,10 @@ async fn process_static(
     base_path: &camino::Utf8Path,
     package: &fpm::Package,
 ) -> fpm::Result<()> {
-    let base_path = dbg!(base_path
+    let base_path = base_path
         .join(".build")
         .join("-")
-        .join(package.name.as_str()));
+        .join(package.name.as_str());
     std::fs::create_dir_all(&base_path)?;
     if let Some((dir, _)) = sa.id.rsplit_once(std::path::MAIN_SEPARATOR) {
         std::fs::create_dir_all(&base_path.join(dir))?;

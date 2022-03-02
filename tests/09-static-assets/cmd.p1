@@ -5,7 +5,7 @@ output: amitu/.build
 
 -- stdout:
 
-Processing FPM.ftd ... Done
-Processing index.ftd ... Done
-Processing scrot.png ... Done
-Processing static/scrot_2.png ... Done
+Processing www.amitu.com/FPM.ftd ... Done
+Processing www.amitu.com/index.ftd ... Done
+Processing www.amitu.com/scrot.png ... Done
+Processing www.amitu.com/static/scrot_2.png ... Done

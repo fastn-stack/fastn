@@ -5,6 +5,6 @@ output: amitu/.build
 
 -- stdout:
 
-Processing FPM.ftd ... Done
-Processing fail_doc.ftd ... Failed
-Processing index.ftd ... Done
+Processing www.amitu.com/FPM.ftd ... Done
+Processing www.amitu.com/fail_doc.ftd ... Failed
+Processing www.amitu.com/index.ftd ... Done
