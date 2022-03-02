@@ -9,4 +9,4 @@
 # fpm test
 /tests/**/.build
 
-
+/tests/**/.packages/fifthtry.github.io/package-info/
