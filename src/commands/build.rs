@@ -38,10 +38,7 @@ pub async fn build(
             fpm::get_documents(config, &dep.package)
                 .await?
                 .into_iter()
-                .filter(|file_instance| match file_instance {
-                    fpm::File::Static(_) => true,
-                    _ => false,
-                })
+                .filter(|file_instance| matches!(file_instance, fpm::File::Static(_)))
                 .collect::<Vec<fpm::File>>()
                 .into_iter()
                 .map(|v| (v.get_id(), v)),
@@ -254,6 +251,7 @@ async fn process_files(
     Ok(())
 }
 
+#[allow(clippy::too_many_arguments)]
 pub(crate) async fn process_file(
     config: &fpm::Config,
     package: &fpm::Package,
@@ -334,7 +332,7 @@ pub(crate) async fn process_file(
                 }
             }
         }
-        fpm::File::Static(sa) => process_static(sa, &config.root, &package).await?,
+        fpm::File::Static(sa) => process_static(sa, &config.root, package).await?,
         fpm::File::Markdown(doc) => process_markdown(doc, config, base_url).await?,
     }
     if fpm::utils::is_test() {
