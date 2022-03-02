@@ -3,6 +3,7 @@ pub struct ExecuteDoc<'a> {
     pub name: &'a str,
     pub aliases: &'a std::collections::BTreeMap<String, String>,
     pub bag: &'a std::collections::BTreeMap<String, ftd::p2::Thing>,
+    pub types: &'a std::collections::BTreeMap<String, ftd::p2::Kind>,
     pub local_variables: &'a mut std::collections::BTreeMap<String, ftd::p2::Thing>,
     pub instructions: &'a [ftd::Instruction],
     pub invocations: &'a mut std::collections::BTreeMap<
@@ -41,6 +42,7 @@ impl<'a> ExecuteDoc<'a> {
                 aliases: self.aliases,
                 bag: self.bag,
                 local_variables: self.local_variables,
+                types: self.types,
             };
 
             let local_container = {

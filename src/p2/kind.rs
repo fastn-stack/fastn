@@ -43,6 +43,10 @@ pub enum Kind {
     UI {
         default: Option<(String, ftd::p1::Header)>,
     },
+    Type {
+        name: String,
+        kind: Box<Kind>,
+    },
 }
 
 impl Kind {

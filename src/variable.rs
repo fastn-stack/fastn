@@ -975,45 +975,33 @@ pub enum VariableModifier {
     Optional,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum Type {
     Variable,
     Component,
 }
 
 impl VariableData {
-    pub fn get_name_kind(
+    pub fn get_variable_data(
         s: &str,
         doc: &ftd::p2::TDoc,
         line_number: usize,
         var_types: &[String],
+        name: &str,
     ) -> ftd::p1::Result<VariableData> {
-        if s.starts_with("record ")
-            || s.starts_with("or-type ")
-            || s.starts_with("map ")
-            || s == "container"
-        {
-            return ftd::e2(
-                format!("invalid declaration, found: `{}`", s),
-                doc.name,
-                line_number,
-            );
-        }
         let expr = s.split_whitespace().collect::<Vec<&str>>();
-        if expr.len() > 4 || expr.len() <= 1 {
+        if expr.len() > 3 || expr.len() < 1 {
             return ftd::e2(
                 format!("invalid declaration, found: `{}`", s),
                 doc.name,
                 line_number,
             );
         }
-        let mut name = expr.get(1);
         let mut kind = expr.get(0).map(|k| k.to_string());
         let mut modifier = VariableModifier::None;
-        if expr.len() == 4 {
+        if expr.len() == 3 {
             if expr.get(1).unwrap().eq(&"or") {
-                kind = Some(expr[..3].join(" "));
-                name = expr.get(3);
+                kind = Some(expr.join(" "));
             } else {
                 return ftd::e2(
                     format!("invalid variable or list declaration, found: `{}`", s),
@@ -1021,14 +1009,12 @@ impl VariableData {
                     line_number,
                 );
             }
-        } else if expr.len() == 3 {
+        } else if expr.len() == 2 {
             if expr.get(1).unwrap().eq(&"list") {
                 modifier = VariableModifier::List;
-                name = expr.get(2);
                 kind = expr.get(0).map(|k| k.to_string());
             } else if expr.get(0).unwrap().eq(&"optional") {
                 modifier = VariableModifier::Optional;
-                name = expr.get(2);
                 kind = expr.get(1).map(|k| k.to_string());
             } else {
                 return ftd::e2(
@@ -1048,6 +1034,7 @@ impl VariableData {
         let type_ = match var_kind.as_str() {
             "string" | "caption" | "body" | "body or caption" | "caption or body" | "integer"
             | "decimal" | "boolean" | "object" => Type::Variable,
+            a if doc.types.contains_key(a) => Type::Variable,
             a if doc.get_record(line_number, a).is_ok()
                 || doc.get_or_type(line_number, a).is_ok()
                 || doc.get_or_type_with_variant(line_number, a).is_ok()
@@ -1059,17 +1046,44 @@ impl VariableData {
         };
 
         Ok(VariableData {
-            name: name
-                .ok_or(ftd::p1::Error::ParseError {
-                    message: format!("name not found `{}`", s),
-                    doc_id: doc.name.to_string(),
-                    line_number,
-                })?
-                .to_string(),
+            name: name.to_string(),
             kind: var_kind,
             modifier,
             type_,
         })
+    }
+
+    pub fn get_name_kind(
+        s: &str,
+        doc: &ftd::p2::TDoc,
+        line_number: usize,
+        var_types: &[String],
+    ) -> ftd::p1::Result<VariableData> {
+        if s.starts_with("record ")
+            || s.starts_with("or-type ")
+            || s.starts_with("map ")
+            || s == "container"
+        {
+            return ftd::e2(
+                format!("invalid declaration, found: `{}`", s),
+                doc.name,
+                line_number,
+            );
+        }
+        let expr = s.split_whitespace().collect::<Vec<&str>>();
+        let name = if let Some(name) = expr.last() {
+            name
+        } else {
+            return ftd::e2(format!("name not found `{}`", s), doc.name, line_number);
+        };
+
+        VariableData::get_variable_data(
+            &expr[..expr.len() - 1].join(" "),
+            doc,
+            line_number,
+            var_types,
+            name,
+        )
     }
 
     pub fn is_variable(&self) -> bool {
@@ -1105,6 +1119,7 @@ mod test {
                 bag: &mut bag,
                 aliases: &aliases,
                 local_variables: &mut Default::default(),
+                types: &Default::default(),
             };
             pretty_assertions::assert_eq!(
                 super::Variable::from_p1(&p1[0], &mut d).unwrap(),

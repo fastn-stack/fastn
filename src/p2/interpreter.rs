@@ -4,6 +4,7 @@ pub(crate) struct Interpreter<'a> {
     pub p1: Vec<ftd::p1::Section>,
     pub aliases: std::collections::BTreeMap<String, String>,
     pub parsed_libs: Vec<String>,
+    pub types: std::collections::BTreeMap<String, ftd::p2::Kind>,
 }
 
 impl<'a> Interpreter<'a> {
@@ -71,8 +72,8 @@ impl<'a> Interpreter<'a> {
 
         let mut aliases = default_aliases();
         let mut iteration_index = 0;
-        while iteration_index < p1.len() && p1[iteration_index].name == "import" {
-            if p1[iteration_index].is_commented {
+        while iteration_index < p1.len() {
+            if p1[iteration_index].is_commented || p1[iteration_index].name != "import" {
                 iteration_index += 1;
                 continue;
             }
@@ -88,6 +89,7 @@ impl<'a> Interpreter<'a> {
                 aliases: &aliases,
                 bag: &self.bag,
                 local_variables: &mut Default::default(),
+                types: &self.types,
             };
             let s = self
                 .lib
@@ -103,12 +105,14 @@ impl<'a> Interpreter<'a> {
         }
         let (new_p1, var_types) = ftd::p2::utils::reorder(
             &p1[iteration_index..],
-            &ftd::p2::TDoc {
+            &mut ftd::p2::TDoc {
                 name,
                 aliases: &aliases,
                 bag: &self.bag,
                 local_variables: &mut Default::default(),
+                types: &Default::default(),
             },
+            &mut self.types,
         )?;
 
         let mut instructions: Vec<ftd::Instruction> = Default::default();
@@ -128,6 +132,7 @@ impl<'a> Interpreter<'a> {
                     aliases: &aliases,
                     bag: &self.bag,
                     local_variables: &mut Default::default(),
+                    types: &self.types,
                 };
                 let s = self
                     .lib
@@ -155,6 +160,7 @@ impl<'a> Interpreter<'a> {
                 aliases: &aliases,
                 bag: &self.bag,
                 local_variables: &mut Default::default(),
+                types: &self.types,
             };
 
             let var_data = ftd::variable::VariableData::get_name_kind(
@@ -440,7 +446,7 @@ impl<'a> Interpreter<'a> {
         Ok(instructions)
     }
 
-    #[cfg(not(feature = "async"))]
+    // #[cfg(not(feature = "async"))]
     fn interpret_(
         &mut self,
         name: &str,
@@ -454,8 +460,8 @@ impl<'a> Interpreter<'a> {
         // do all imports and then reorder
         let mut aliases = default_aliases();
         let mut iteration_index = 0;
-        while iteration_index < p1.len() && p1[iteration_index].name == "import" {
-            if p1[iteration_index].is_commented {
+        while iteration_index < p1.len() {
+            if p1[iteration_index].is_commented || p1[iteration_index].name != "import" {
                 iteration_index += 1;
                 continue;
             }
@@ -471,6 +477,7 @@ impl<'a> Interpreter<'a> {
                 aliases: &aliases,
                 bag: &self.bag,
                 local_variables: &mut Default::default(),
+                types: &self.types,
             };
             let s = self.lib.get_with_result(library_name.as_str(), &doc)?;
             *d_get = d_get.saturating_add(std::time::Instant::now() - start);
@@ -481,13 +488,15 @@ impl<'a> Interpreter<'a> {
             iteration_index += 1;
         }
         let (new_p1, var_types) = ftd::p2::utils::reorder(
-            &p1[iteration_index..],
-            &ftd::p2::TDoc {
+            &p1,
+            &mut ftd::p2::TDoc {
                 name,
                 aliases: &aliases,
                 bag: &self.bag,
                 local_variables: &mut Default::default(),
+                types: &Default::default(),
             },
+            &mut self.types,
         )?;
 
         let mut instructions: Vec<ftd::Instruction> = Default::default();
@@ -507,6 +516,7 @@ impl<'a> Interpreter<'a> {
                     aliases: &aliases,
                     bag: &self.bag,
                     local_variables: &mut Default::default(),
+                    types: &self.types,
                 };
                 let s = self.lib.get_with_result(library_name.as_str(), &doc)?;
                 *d_get = d_get.saturating_add(std::time::Instant::now() - start);
@@ -524,6 +534,7 @@ impl<'a> Interpreter<'a> {
                 aliases: &aliases,
                 bag: &self.bag,
                 local_variables: &mut Default::default(),
+                types: &self.types,
             };
 
             let var_data = ftd::variable::VariableData::get_name_kind(
@@ -816,6 +827,7 @@ impl<'a> Interpreter<'a> {
             p1: Default::default(),
             aliases: Default::default(),
             parsed_libs: Default::default(),
+            types: Default::default(),
         }
     }
 
@@ -16449,6 +16461,30 @@ mod test {
             ",
             (bag, main),
         );
+    }
+
+    #[test]
+    fn defining_type() {
+        let (g_bag, g_col) = crate::p2::interpreter::interpret(
+            "foo/bar",
+            indoc::indoc!(
+                "
+                -- type city: string
+
+                /-- city c: Varanasi
+
+                /-- foo:
+                val: $c
+
+                /-- ftd.column foo:
+                city val:
+                
+                --- ftd.text: $val 
+                "
+            ),
+            &ftd::p2::TestLibrary {},
+        )
+        .expect("found error");
     }
 
     /*#[test]

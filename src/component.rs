@@ -181,6 +181,7 @@ impl ChildComponent {
                     name: doc.name,
                     aliases: doc.aliases,
                     bag: doc.bag,
+                    types: doc.types,
                     local_variables: doc.local_variables,
                     instructions: &instructions,
                     invocations,
@@ -690,6 +691,7 @@ fn markup_get_named_container(
         local_variables: doc.local_variables,
         instructions: &instructions,
         invocations,
+        types: doc.types,
     }
     .execute(local_container, None)?
     .children;
@@ -1550,6 +1552,7 @@ impl Component {
             local_variables: doc.local_variables,
             instructions: &new_instruction,
             invocations,
+            types: doc.types,
         }
         .execute(call_container, id);
 
@@ -2627,6 +2630,7 @@ mod test {
             bag: &mut bag,
             aliases: &aliases,
             local_variables: &mut Default::default(),
+            types: &Default::default(),
         };
         p2!(
             "-- ftd.text foo:
@@ -2672,6 +2676,7 @@ mod test {
             bag: &mut bag,
             aliases: &aliases,
             local_variables: &mut Default::default(),
+            types: &Default::default(),
         };
         p2!(
             "-- ftd.text foo:

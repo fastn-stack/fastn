@@ -65,6 +65,7 @@ impl RT {
             name: self.name.as_str(),
             aliases: &self.aliases,
             bag: &self.bag,
+            types: &Default::default(), //Check this Arpita
             local_variables: &mut local_variables,
             instructions: &self.instructions,
             invocations: &mut invocations,

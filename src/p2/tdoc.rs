@@ -4,6 +4,7 @@ pub struct TDoc<'a> {
     pub aliases: &'a std::collections::BTreeMap<String, String>,
     pub bag: &'a std::collections::BTreeMap<String, ftd::p2::Thing>,
     pub local_variables: &'a mut std::collections::BTreeMap<String, ftd::p2::Thing>,
+    pub types: &'a std::collections::BTreeMap<String, ftd::p2::Kind>,
 }
 
 impl<'a> TDoc<'a> {
@@ -972,6 +973,73 @@ impl<'a> TDoc<'a> {
             _ => Ok(None),
         }
     }
+
+    pub fn get_kind(
+        &'a self,
+        line_number: usize,
+        name: &'a str,
+        type_: &'a str,
+    ) -> ftd::p1::Result<ftd::p2::Kind> {
+        let var_data = ftd::variable::VariableData::get_variable_data(
+            name,
+            self,
+            line_number,
+            vec![].as_slice(),
+            "",
+        )?;
+        if ftd::variable::Type::Component == var_data.type_ {
+            return ftd::e2(
+                format!("expected variable found component `{}`", name),
+                self.name,
+                line_number,
+            );
+        }
+        let kind = match var_data.kind.as_str() {
+            "string" => ftd::p2::Kind::string(),
+            "caption" => ftd::p2::Kind::caption(),
+            "body" => ftd::p2::Kind::body(),
+            "body or caption" | "caption or body" => ftd::p2::Kind::caption_or_body(),
+            "integer" => ftd::p2::Kind::integer(),
+            "decimal" => ftd::p2::Kind::decimal(),
+            "object" => ftd::p2::Kind::object(),
+            "boolean" => ftd::p2::Kind::boolean(),
+            "element" => ftd::p2::Kind::Element,
+            "elements" => ftd::p2::Kind::Elements,
+            "message" => ftd::p2::Kind::Message,
+            "string-message" => ftd::p2::Kind::StringMessage,
+            "int-message" => ftd::p2::Kind::IntMessage,
+            "ftd.ui" => ftd::p2::Kind::UI { default: None },
+            k => match self.get_thing(line_number, k) {
+                Ok(ftd::p2::Thing::Record(r)) => ftd::p2::Kind::Record {
+                    name: r.name,
+                    default: None,
+                },
+                Ok(ftd::p2::Thing::OrType(e)) => ftd::p2::Kind::OrType { name: e.name },
+                _ => {
+                    if let Some(kind) = self.types.get(k) {
+                        ftd::p2::Kind::Type {
+                            name: type_.to_string(),
+                            kind: Box::new(kind.to_owned()),
+                        }
+                    } else {
+                        return ftd::e2(format!("Unknown type {}", k), self.name, line_number);
+                    }
+                }
+            },
+        };
+        if var_data.is_list() {
+            return Ok(ftd::p2::Kind::List {
+                kind: Box::new(kind),
+                default: None,
+            });
+        }
+
+        Ok(if var_data.is_optional() {
+            ftd::p2::Kind::optional(kind)
+        } else {
+            kind
+        })
+    }
     // name = foo | alias.foo | a/b#foo
     pub fn get_thing(
         &'a self,
@@ -1138,6 +1206,7 @@ mod test {
             aliases: &Default::default(),
             bag: &Default::default(),
             local_variables: &mut Default::default(),
+            types: &Default::default(),
         };
         let section = ftd::p1::parse(
             indoc::indoc!(
@@ -1207,6 +1276,7 @@ mod test {
             aliases: &Default::default(),
             bag: &g_bag,
             local_variables: &mut Default::default(),
+            types: &Default::default(),
         };
         let section = ftd::p1::parse(
             indoc::indoc!(

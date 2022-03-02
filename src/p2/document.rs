@@ -6,6 +6,7 @@ pub struct Document {
     pub main: ftd::Column,
     pub p1: Vec<ftd::p1::Section>,
     pub aliases: std::collections::BTreeMap<String, String>,
+    pub types: std::collections::BTreeMap<String, ftd::p2::Kind>,
 }
 
 impl ToString for Document {
@@ -23,6 +24,7 @@ impl Document {
             aliases: &self.aliases,
             bag: &self.data,
             local_variables: &mut Default::default(),
+            types: &self.types,
         };
         for (k, v) in self.data.iter() {
             if let ftd::p2::Thing::Variable(ftd::Variable {
@@ -392,6 +394,7 @@ impl Document {
             p1: interpreter.p1,
             aliases: rt.aliases,
             name: name.to_string(),
+            types: interpreter.types,
         })
     }
 
@@ -593,6 +596,7 @@ impl Document {
             aliases: &self.aliases,
             bag: &self.data,
             local_variables: &mut Default::default(),
+            types: &self.types,
         };
 
         match thing {
@@ -607,6 +611,7 @@ impl Document {
             aliases: &self.aliases,
             bag: &self.data,
             local_variables: &mut Default::default(),
+            types: &Default::default(),
         };
         Ok(match v {
             ftd::Value::Integer { value } => {

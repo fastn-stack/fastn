@@ -863,10 +863,11 @@ pub fn split(name: String, split_at: &str) -> ftd::p1::Result<(String, String)> 
 
 pub fn reorder(
     p1: &[ftd::p1::Section],
-    doc: &ftd::p2::TDoc,
+    doc: &mut ftd::p2::TDoc,
+    types: &mut std::collections::BTreeMap<String, ftd::p2::Kind>,
 ) -> ftd::p1::Result<(Vec<ftd::p1::Section>, Vec<String>)> {
     fn is_kernel_component(comp: String) -> bool {
-        if ["ftd.row", "ftd.column"].contains(&comp.as_str()) {
+        if ["ftd.row", "ftd.column", "ftd.scene", "ftd.grid"].contains(&comp.as_str()) {
             return true;
         }
         false
@@ -1007,6 +1008,30 @@ pub fn reorder(
             inserted_p1.push(idx);
             new_p1.push(p1.to_owned());
         }
+        if let Some(type_) = p1.name.strip_prefix("type ") {
+            let alias = match p1.caption {
+                Some(ref val) => val,
+                None => {
+                    return ftd::e2(
+                        format!("expected value in caption, found: `{:?}`", p1),
+                        doc.name,
+                        p1.line_number,
+                    );
+                }
+            };
+            let kind = ftd::p2::TDoc {
+                name: doc.name,
+                aliases: doc.aliases,
+                bag: doc.bag,
+                local_variables: &mut Default::default(),
+                types,
+            }
+            .get_kind(p1.line_number, alias, type_)?;
+            types.insert(type_.to_string(), kind);
+            inserted_p1.push(idx);
+            continue;
+        }
+
         if let Ok(ftd::variable::VariableData {
             type_: ftd::variable::Type::Variable,
             ref name,
