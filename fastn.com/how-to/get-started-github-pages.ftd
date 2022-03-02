@@ -17,7 +17,7 @@ Open the [fpm-blog](https://github.com/fifthtry/fpm-blog/) repository in your
 browser and click on the `Use this template` button
 
 -- ft.image: Step I: Use the template repository to initialize your repository
-src: /how-to/github-use-this-template.png
+src: -/fpm.dev/how-to/github-use-this-template.png
 width: fill
 
 -- ft.h2: Step 2: Updating the configs in repository
@@ -44,5 +44,5 @@ Choose the `build` branch in the dropdown and in the directory dropdown, choose
 `/(root)` and click on Save.
 
 -- ft.image:
-src: /how-to/github-pages-initialize.png
+src: -/fpm.dev/how-to/github-pages-initialize.png
 width: fill

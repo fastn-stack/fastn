@@ -10,7 +10,7 @@ toc: $ft.toc
 icon: true
 icon-path: images/translation-icons/large/translations-title-default.png
 
--- title: $fpm.title
+-- title: $fpm.package-title
 subtitle: key-value-small: Last modified on:
 > value: $fpm.last-modified-on
 > default: Never synced
@@ -223,7 +223,7 @@ font: apple-system
 
 
 -- ftd.row print-inline:
-fpm.status-data data:
+fpm.all-language-status-data data:
 width: fill
 padding: 10
 color: #316777
@@ -336,7 +336,7 @@ column-width: percent 20
 --- container: ftd.main
 
 --- print-inline:
-$loop$: $fpm.status as $obj
+$loop$: $fpm.all-language-translation-status as $obj
 data: $obj
 
 

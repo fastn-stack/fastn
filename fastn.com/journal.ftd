@@ -652,7 +652,7 @@ email subscription dialog, and yet universally are driven to clicking that red
 icon.
 
 -- ft.image:
-src: images/notifications.png
+src: -/fpm.dev/images/notifications.png
 width: 500
 align: center
 
@@ -2183,7 +2183,7 @@ she has done so far.
 
 
 -- ft.image: You can see the translation banner and available languages
-src: /images/translation/english-with-dropdown.jpg
+src: -/fpm.dev/images/translation/english-with-dropdown.jpg
 width: fill
 
 Consider [this page for example](https://arpita-jaiswal.github.io/vivekanand/), it

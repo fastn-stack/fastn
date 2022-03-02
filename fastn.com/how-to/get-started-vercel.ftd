@@ -15,7 +15,7 @@ Use this [template](https://vercel.com/new/clone?repository-url=https://github.c
 to initialize. Check out step 2 for the configuration setup.
 
 --- ft.image: Just choose your repository name and click on the Create button
-src: /how-to/vercel-new-template.png
+src: -/fpm.dev/how-to/vercel-new-template.png
 width: fill
 
 -- ft.h2: Step 1.2. Deploy an existing repository
@@ -29,7 +29,7 @@ Select the `FRAMEWORK PRESET` as Other and enter the configuration mentioned in
 Step 2.
 
 -- ft.image:
-src: /how-to/vercel-new-from-repo.png
+src: -/fpm.dev/how-to/vercel-new-from-repo.png
 width: fill
 
 -- ft.h1: Step 2. Vercel FPM configuration
@@ -54,7 +54,7 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/FifthTry/fpm/main/install-
 
 
 -- ft.image:
-src: /how-to/vercel-deploy-settings.png
+src: -/fpm.dev/how-to/vercel-deploy-settings.png
 width: fill
 
 Congratulations, your FPM package is now successfully hosted. You can head over to
