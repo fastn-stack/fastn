@@ -49,7 +49,7 @@
         // another function detect_orientation(), "landscape" and "portrait" etc,
         // and instead of setting `fpm#mobile: boolean` we set `fpm-ui#device`
         // and `fpm#view-port-orientation` etc.
-        let breakpoint = parseInt(window.ftd.get_value("main", FPM_MOBILE_BREAKPOINT));
+        let breakpoint = window.ftd.get_value("main", FPM_MOBILE_BREAKPOINT);
         return width <= breakpoint;
     }
 
