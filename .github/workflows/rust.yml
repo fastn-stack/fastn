@@ -6,11 +6,15 @@ on:
       - master
     paths:
       - '**.rs'
+      - 'Cargo.*'
+      - 'rust-toolchain'
   pull_request:
     branches:
       - master
     paths:
       - '**.rs'
+      - 'Cargo.*'
+      - 'rust-toolchain'
 jobs:
   everything:
     name: Rust Checks
