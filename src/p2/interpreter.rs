@@ -455,6 +455,10 @@ impl<'a> Interpreter<'a> {
         let mut aliases = default_aliases();
         let mut iteration_index = 0;
         while iteration_index < p1.len() && p1[iteration_index].name == "import" {
+            if p1[iteration_index].is_commented {
+                iteration_index += 1;
+                continue;
+            }
             let (library_name, alias) = ftd::p2::utils::parse_import(
                 &p1[iteration_index].caption,
                 name,
