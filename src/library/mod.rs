@@ -174,11 +174,41 @@ impl ftd::p2::Library for Library {
             // Explicit check for the current package.
             if name.starts_with(&package.name.as_str()) {
                 let new_name = name.replacen(&package.name.as_str(), "", 1);
-                if let Some(body) = get_file_from_location(&path, new_name.as_str()) {
-                    return Some(package.get_prefixed_body(body.as_str(), name, false));
+                if new_name.as_str().trim_start_matches('/') == "assets" {
+                    // Virtual document for getting the assets
+                    return Some(get_assets_doc_for_package(package));
+                } else {
+                    if let Some(body) = get_file_from_location(&path, new_name.as_str()) {
+                        return Some(package.get_prefixed_body(body.as_str(), name, false));
+                    }
                 }
             }
             None
+        }
+
+        fn get_assets_doc_for_package(package: &fpm::Package) -> String {
+            use itertools::Itertools;
+
+            let fonts = package
+                .fonts
+                .iter()
+                .unique_by(|font| font.name.as_str())
+                .collect_vec()
+                .iter()
+                .fold(String::new(), |accumulator, font| {
+                    format!(
+                        "{pre}\n-- string {font_var_name}: {font_var_val}\n",
+                        pre = accumulator,
+                        font_var_name = font.name.as_str(),
+                        font_var_val = font.html_name(package.name.as_str())
+                    )
+                });
+            format!(
+                indoc::indoc! {"
+                    {fonts}
+                "},
+                fonts = fonts
+            )
         }
     }
 

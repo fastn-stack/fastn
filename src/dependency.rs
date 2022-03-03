@@ -369,6 +369,7 @@ impl fpm::Package {
             .map(|f| fpm::AutoImport::from_string(f.as_str()))
             .collect();
         package.auto_import = auto_import;
+        package.fonts = ftd_document.get("fpm#font")?;
 
         if download_dependencies {
             for dep in package.dependencies.iter_mut() {

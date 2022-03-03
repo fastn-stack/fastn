@@ -1,1 +1,9 @@
+-- import: www.amitu.com/assets
+-- import: one.fpm.local/assets as theme-assets
+
+
 -- ftd.text: hello
+font: $assets.myFirstFont
+
+-- ftd.text: World
+font: $theme-assets.themeFont

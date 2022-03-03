@@ -29,10 +29,6 @@ pub struct Config {
     /// When printing filenames for users consumption we want to print the paths relative to the
     /// `original_directory`, so we keep track of the original directory.
     pub original_directory: camino::Utf8PathBuf,
-    /// `fonts` keeps track of the fonts used by the package.
-    ///
-    /// Note that this too is kind of bad design, we will move fonts to `fpm::Package` struct soon.
-    pub fonts: Vec<fpm::Font>,
 }
 
 impl Config {
@@ -132,15 +128,27 @@ impl Config {
     /// ftd document. Currently this function does not check for fonts in package dependencies
     /// nor it tries to avoid fonts that are configured but not needed in current document.
     pub fn get_font_style(&self) -> String {
+        use itertools::Itertools;
         // TODO: accept list of actual fonts used in the current document. each document accepts
         //       a different list of fonts and only fonts used by a given document should be
         //       included in the HTML produced by that font
         // TODO: fetch fonts from package dependencies as well (ideally this function should fail
         //       if one of the fonts used by any ftd document is not found
+
         let generated_style = self
-            .fonts
+            .package
+            .get_flattened_dependencies()
+            .into_iter()
+            .unique_by(|dep| dep.package.name.clone())
+            .collect_vec()
             .iter()
-            .fold("".to_string(), |c, f| format!("{}\n{}", c, f.to_html()));
+            .fold(self.package.get_font_html(), |accumulator, dep| {
+                format!(
+                    "{pre}\n{new}",
+                    pre = accumulator,
+                    new = dep.package.get_font_html()
+                )
+            });
         return match generated_style.is_empty() {
             false => format!("<style>{}</style>", generated_style),
             _ => "".to_string(),
@@ -255,31 +263,9 @@ impl Config {
             package.auto_import = auto_import;
 
             package.ignored_paths = b.get::<Vec<String>>("fpm#ignore")?;
-            // {
-            //     let mut overrides = ignore::overrides::OverrideBuilder::new("./");
-            //     for ig in  {
-            //         if let Err(e) = overrides.add(format!("!{}", ig.as_str()).as_str()) {
-            //             return Err(fpm::Error::PackageError {
-            //                 message: format!("failed parse fpm.ignore: {} => {:?}", ig, e),
-            //             });
-            //         }
-            //     }
-            //     overrides.add("!FPM/**")?;
-
-            //     match overrides.build() {
-            //         Ok(v) => v,
-            //         Err(e) => {
-            //             return Err(fpm::Error::PackageError {
-            //                 message: format!("failed parse fpm.ignore: {:?}", e),
-            //             });
-            //         }
-            //     }
-            // };
-
+            package.fonts = b.get("fpm#font")?;
             package
         };
-
-        let fonts: Vec<fpm::Font> = b.get("fpm#font")?;
 
         fpm::utils::validate_zip_url(&package)?;
 
@@ -290,7 +276,6 @@ impl Config {
             packages_root: root.clone().join(".packages"),
             root,
             original_directory,
-            fonts,
         })
     }
 }
@@ -355,6 +340,7 @@ impl PackageTemp {
             auto_import: vec![],
             fpm_path: None,
             ignored_paths: vec![],
+            fonts: vec![],
         }
     }
 }
@@ -377,6 +363,10 @@ pub struct Package {
     pub fpm_path: Option<camino::Utf8PathBuf>,
     /// `ignored` keeps track of files that are to be ignored by `fpm build`, `fpm sync` etc.
     pub ignored_paths: Vec<String>,
+    /// `fonts` keeps track of the fonts used by the package.
+    ///
+    /// Note that this too is kind of bad design, we will move fonts to `fpm::Package` struct soon.
+    pub fonts: Vec<fpm::Font>,
 }
 
 impl Package {
@@ -394,6 +384,7 @@ impl Package {
             auto_import: vec![],
             fpm_path: None,
             ignored_paths: vec![],
+            fonts: vec![],
         }
     }
 
@@ -413,6 +404,16 @@ impl Package {
                 old_val
             })
             .to_owned()
+    }
+
+    pub fn get_font_html(&self) -> String {
+        self.fonts.iter().fold(String::new(), |accumulator, font| {
+            format!(
+                "{pre}{new}\n",
+                pre = accumulator,
+                new = font.to_html(self.name.as_str())
+            )
+        })
     }
 
     pub fn generate_prefix_string(&self, with_alias: bool) -> Option<String> {
