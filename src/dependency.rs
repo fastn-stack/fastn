@@ -190,8 +190,7 @@ impl fpm::Package {
                     })?
             };
 
-            let path =
-                camino::Utf8PathBuf::from(format!("/tmp/{}.zip", self.name.replace("/", "__")));
+            let path = std::env::temp_dir().join(format!("{}.zip", self.name.replace("/", "__")));
 
             // Download the zip folder
             {
