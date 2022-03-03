@@ -27,11 +27,34 @@ default: Not known
 -- ftd.column page-title: 
 caption title:
 optional body body:
+boolean icon: true 
+optional string light-icon-path:
+optional string dark-icon-path:
 width: fill
 padding-bottom: 10
 border-bottom: 1
 border-color: #414F53
 margin-bottom: 20
+
+--- ftd.row:
+
+--- ftd.row:
+if: $icon
+
+--- ftd.image:
+if: not $fpm.dark-mode
+src: $light-icon-path
+width: 60
+margin-right: 20
+margin-top: 4
+
+--- ftd.image:
+if: $fpm.dark-mode
+src: $dark-icon-path
+width: 60
+margin-right: 20
+margin-top: 4
+
 
 --- ftd.text: $title
 text: $title
@@ -197,7 +220,7 @@ font: apple-system
 
 
 -- ftd.row print:
-fpm.status-data data:
+fpm.all-language-status-data data:
 width: fill
 border-bottom: 1
 border-color: white
@@ -269,35 +292,44 @@ color: #F09523
 padding: 10
 border-top-radius: 5
 
---- icon-title: Language
+--- icon-title-cell: 
+title: Language
 icon: false
 column-width: percent 15
 
---- icon-title: Missing
+--- icon-title-cell: 
+title: Missing
 icon: true
-icon-path: images/translation-icons/translations-missing.png
+icon-path-light: -/fpm.dev/images/translation-icons/light/translations-missing.png
+icon-path-dark: -/fpm.dev/images/translation-icons/dark/translations-missing.png
 column-width: percent 15
 
-
---- icon-title: Never marked
+--- icon-title-cell: 
+title: Never marked
 icon: true
-icon-path: images/translation-icons/translations-info.png 
+icon-path-light: -/fpm.dev/images/translation-icons/light/translations-info.png 
+icon-path-dark: -/fpm.dev/images/translation-icons/dark/translations-info.png 
 column-width: percent 22
 
 
---- icon-title: Out-dated
+--- icon-title-cell: 
+title: Out-dated
 icon: true
-icon-path: images/translation-icons/translations-time.png 
+icon-path-light: -/fpm.dev/images/translation-icons/light/translations-time.png 
+icon-path-dark: -/fpm.dev/images/translation-icons/dark/translations-time.png 
 column-width: percent 20
 
 
---- icon-title: Up-to Date
+--- icon-title-cell: 
+title: Up-to Date
 icon: true
-icon-path: images/translation-icons/translations-success.png 
+icon-path-light: -/fpm.dev/images/translation-icons/light/translations-success.png 
+icon-path-dark: -/fpm.dev/images/translation-icons/dark/translations-success.png 
 column-width: percent 20
 
 
---- icon-title: Last modified on
+--- icon-title-cell: 
+title: Last modified on
 icon: false
 column-width: percent 20
 
@@ -305,27 +337,48 @@ column-width: percent 20
 --- container: ftd.main
 
 --- print:
-$loop$: $fpm.status as $obj
+$loop$: $fpm.all-language-translation-status as $obj
 data: $obj
 
 
 
 
--- ftd.row icon-title:
+-- ftd.row icon-title-cell:
 boolean icon: true 
 caption title:
-optional string icon-path:
-string column-width: percent 20
+optional string icon-path-light:
+optional string icon-path-dark:
+optional integer font-size:
+optional integer margin-right:
+optional string column-width: fill
 width: $column-width
 
 
---- ftd.image:
+--- ftd.row:
+
+--- ftd.row:
 if: $icon
-src: $icon-path
+
+--- ftd.image:
+if: not $fpm.dark-mode
+src: $icon-path-light
 move-down: 7
 move-left: 2
+margin-right: $margin-right
+
+--- ftd.image:
+if: $fpm.dark-mode
+src: $icon-path-dark
+move-down: 7
+move-left: 2
+margin-right: $margin-right
+
+--- container: ftd.main
 
 --- ftd.text: $title
 padding: 5
 text-align: left
 font: apple-system
+size: $font-size
+color: #153B46
+color if $fpm.dark-mode: #FFFFFF

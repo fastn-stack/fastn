@@ -477,6 +477,7 @@ optional integer font-size:
 optional integer margin-right:
 optional string icon-path-light:
 optional string icon-path-dark:
+string title-color: #FA6C6C
 boolean open: false
 width: fill
 
@@ -511,8 +512,7 @@ padding if $count is not null: 0
 text-align: left
 font: apple-system
 size: $font-size
-color: #153B46
-color if $fpm.dark-mode: #FFFFFF
+color: $title-color
 
 --- ftd.text: $count
 if: $count is not null
@@ -600,6 +600,7 @@ optional string group-type:
 
 --- icon-title: 
 title: इन दस्तावेज का अनुवाद उपलब्ध नहीं हैं :
+title-color: #FA6C6C
 count: 6
 icon: true
 icon-path-light: -/fpm.dev/images/translation-icons/light/35x26/translations-missing.png
@@ -651,6 +652,7 @@ optional string group-type:
 --- icon-title: 
 /if: $group-type 'nevermarked'
 title: इन दस्तावेज का अनुवाद उपलब्ध हैं, पर जाँच बाक़ी हैं :
+title-color: #F48D0C
 count: 4
 icon: true
 icon-path-light: -/fpm.dev/images/translation-icons/light/35x26/translations-info.png
@@ -701,6 +703,7 @@ optional string group-type:
 --- icon-title: 
 /if: $group-type 'outdated'
 title: इन दस्तावेज का अनुवाद पुराना हैं :
+title-color: #FAD345
 count: 2
 icon: true
 icon-path-light: -/fpm.dev/images/translation-icons/light/35x26/translations-time.png
@@ -751,6 +754,7 @@ optional string group-type:
 --- icon-title: 
 /if: $group-type 'uptodate'
 title: इन दस्तावेज का अनुवाद उपलब्ध हैं :
+title-color: #58C802
 count: 1
 icon: true
 icon-path-light: -/fpm.dev/images/translation-icons/light/35x26/translations-success.png
