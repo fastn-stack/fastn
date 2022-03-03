@@ -5,43 +5,31 @@
 -- ft.doc-page:
 toc: $ft.toc
 
-
--- page-title: भाषा विवरण पृष्ठ
+-- header-sticky-title: Outdated
 icon: true
+button-text: View out of date Hindi version
+link-text: View changes
+green-title: You are currently viewing updated English version.
 light-icon-path: -/fpm.dev/images/translation-icons/light/large/translations-title-default.png
 dark-icon-path: -/fpm.dev/images/translation-icons/dark/large/translations-title-default.png
 
 
--- title: $fpm.package-title
-subtitle: key-value-small: Last modified on:
-> value: $fpm.last-modified-on
-> default: Never synced
+English version of this document was last updated on 21st Mar 2021, but you are 
+viewing Hindi version that was updated on 10th Feb 2021.
 
-Here is the list of the translation status for the available languages.
 
--- key-value: Total number of documents:
-value: $fpm.number-of-documents
-default: Not known
+-- ft.h0: Religion not the Crying need of India (20 September 1893)
+
+Christians must always be ready for good criticism, and I hardly think that you will mind if I make a little criticism. You Christians, who are so fond of sending out missionaries to save the soul of the heathen — why do you not try to save their bodies from starvation? In India, during the terrible famines, thousands died from hunger, yet you Christians did nothing. You erect churches all through India, but the crying evil in the East is not religion — they have religion enough — but it is bread that the suffering millions of burning India cry out for with parched throats. They ask us for bread, but we give them stones. It is an insult to a starving people to offer them religion; it is an insult to a starving man to teach him metaphysics. In India a priest that preached for money would lose caste and be spat upon by the people. I came here to seek aid for my impoverished people, and I fully realised how difficult it was to get help for heathens from Christians in a Christian land.
 
 
 
--- translation-status: 
 
 
 
--- translation-missing: 
 
 
 
--- translation-nevermarked: 
-
-
-
--- translation-outdated: 
-
-
-
--- translation-uptodate: 
 
 
 

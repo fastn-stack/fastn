@@ -5,43 +5,267 @@
 -- ft.doc-page:
 toc: $ft.toc
 
+/-- outdated: 
 
--- page-title: भाषा विवरण पृष्ठ
-icon: true
-light-icon-path: -/fpm.dev/images/translation-icons/light/large/translations-title-default.png
-dark-icon-path: -/fpm.dev/images/translation-icons/dark/large/translations-title-default.png
+/-- missing: 
 
 
--- title: $fpm.package-title
-subtitle: key-value-small: Last modified on:
-> value: $fpm.last-modified-on
-> default: Never synced
+/-- nevermarked: 
 
-Here is the list of the translation status for the available languages.
+-- uptodate:
 
--- key-value: Total number of documents:
-value: $fpm.number-of-documents
-default: Not known
+
+-- ft.h0: Religion not the Crying need of India (20 September 1893)
+
+Christians must always be ready for good criticism, and I hardly think that you will mind if I make a little criticism. You Christians, who are so fond of sending out missionaries to save the soul of the heathen — why do you not try to save their bodies from starvation? In India, during the terrible famines, thousands died from hunger, yet you Christians did nothing. You erect churches all through India, but the crying evil in the East is not religion — they have religion enough — but it is bread that the suffering millions of burning India cry out for with parched throats. They ask us for bread, but we give them stones. It is an insult to a starving people to offer them religion; it is an insult to a starving man to teach him metaphysics. In India a priest that preached for money would lose caste and be spat upon by the people. I came here to seek aid for my impoverished people, and I fully realised how difficult it was to get help for heathens from Christians in a Christian land.
 
 
 
--- translation-status: 
 
 
 
--- translation-missing: 
+
+
+-- header-sticky-title  uptodate: Upto date
+boolean icon: true
+optional string light-icon-path: -/fpm.dev/images/translation-icons/light/large/translations-success.png
+optional string dark-icon-path: -/fpm.dev/images/translation-icons/dark/large/translations-sucess.png
 
 
 
--- translation-nevermarked: 
 
 
 
--- translation-outdated: 
+
+-- header-sticky-title  missing: Missing
+boolean icon: true
+optional string light-icon-path: -/fpm.dev/images/translation-icons/light/large/translations-missing.png
+optional string dark-icon-path: -/fpm.dev/images/translation-icons/dark/large/translations-missing.png
+
+
+English version of this document was last updated on 21st Mar 2021, but you are 
+viewing Hindi version that was updated on 10th Feb 2021.
 
 
 
--- translation-uptodate: 
+
+
+-- header-sticky-title  nevermarked: Never marked
+boolean icon: true
+optional string button-text: View out of date Hindi version
+optional string button-link: /hi
+optional string light-icon-path: -/fpm.dev/images/translation-icons/light/large/translations-info.png
+optional string dark-icon-path: -/fpm.dev/images/translation-icons/dark/large/translations-info.png
+
+
+English version of this document was last updated on 21st Mar 2021, but you are 
+viewing Hindi version that was updated on 10th Feb 2021.
+
+
+
+
+
+
+
+
+
+-- header-sticky-title outdated: Outdated
+boolean icon: true
+boolean open: false
+optional string button-text: View out of date Hindi version
+optional string button-link: /hi
+optional string link-text: View changes
+optional string green-title: You are currently viewing updated English version.
+optional string light-icon-path: -/fpm.dev/images/translation-icons/light/large/translations-title-default.png
+optional string dark-icon-path: -/fpm.dev/images/translation-icons/dark/large/translations-title-default.png
+
+English version of this document was last updated on 21st Mar 2021, but you are 
+viewing Hindi version that was updated on 10th Feb 2021.
+
+--- code-block: The following changes has been made in English edition since last modification
+if: $open
+
+\-- fpm.toc-item list empty-toc:
+
+\-- fpm.toc-item list toc-top-right:
+$processor$: toc
+
+- Roadmap: /roadmap/
+- Journal: 
+  - Home Index: /index/
+  - Docs: /index/
+  - Articles: /index/
+  - Home Pictures: /index/
+
+/-- never-marked: 
+/-- missing:
+/-- upto-date:
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- ftd.column code-block:
+caption title:
+body body:
+width: fill
+border-top: 1
+border-color: #5A6E75
+margin-top: 20
+boolean open: false
+
+
+
+--- ftd.text: $title
+padding-vertical: 10
+font: apple-system
+size: 16
+color: #FFFFFF
+color $fpm.dark-mode: #FFFFFF
+
+
+--- ft.code:
+lang: ftd
+
+$body
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- ftd.column header-sticky-title:
+caption title:
+boolean icon: true
+optional body body:
+optional string button-text:
+optional string button-link:
+optional string green-title:
+optional string light-icon-path:
+optional string dark-icon-path:
+optional string link-text:
+optional string code-body:
+width: fill
+padding-vertical: 20
+padding-horizontal: 50
+border-bottom-radius: 20
+margin-top: -20 
+margin-bottom: 20
+background-color: #C5C5C5
+background-color if $fpm.dark-mode: #3B4B50
+boolean open: false
+
+--- ftd.row:
+
+--- ftd.row:
+if: $icon
+
+--- ftd.image:
+if: not $fpm.dark-mode
+src: $light-icon-path
+width: 60
+margin-right: 20
+margin-top: 4
+
+--- ftd.image:
+if: $fpm.dark-mode
+src: $dark-icon-path
+width: 60
+margin-right: 20
+margin-top: 4
+
+--- ftd.text: $title
+link: $button-link
+text: $title
+caption $title:
+region: title
+text: $title
+color: #000000
+color if $fpm.dark-mode: #FFFFFF
+font: apple-system
+style: bold
+size: 30
+
+--- container: ftd.main
+
+--- ftd.row:
+if: $body is not null
+margin-top: -35
+width: fill
+
+--- markdown:
+if: $body is not null
+body: $body
+
+--- container: ftd.main
+
+--- ftd.text: $green-title
+color: #3B4B50
+color if $fpm.dark-mode: #35CC00
+margin-top: -10
+size: 19
+line-height: 30
+font: apple-system
+
+
+--- container: ftd.main
+
+--- ftd.row:
+if: $button-text is not null
+width: fill
+spacing: 40
+margin-top: 20
+
+--- ftd.text: $button-text
+border-width: 1
+border-radius: 6
+border-color: #F09523
+padding-vertical: 10
+padding-horizontal: 25
+size: 19
+style: bold
+line-height: 22
+font: apple-system
+color: #FFFFFF
+color if $fpm.dark-mode: #FFFFFF
+background-color: #3B4B50
+background-color $fpm.dark-mode: #3B4B50
+link: $button-link
+
+
+--- ftd.text: $link-text
+size: 19
+style: bold
+line-height: 22
+font: apple-system
+padding-top: 10
+color: #000000
+color if $fpm.dark-mode: #F09523
+$on-click$: toggle $open
+
+
+
+
+
+
+
+
 
 
 
