@@ -64,10 +64,16 @@ impl Font {
     }
 
     pub fn html_name(&self, package_name: &str) -> String {
-        use sha2::Digest;
-        let hash_str = format!("{}{}", package_name, self.name.as_str());
-        let mut sha256 = sha2::Sha256::new();
-        sha256.update(hash_str);
-        format!("font_{:X}", sha256.finalize())
+        // use sha2::Digest;
+        let hash_str = format!("{}-{}", package_name, self.name.as_str());
+        // let mut sha256 = sha2::Sha256::new();
+        // sha256.update(hash_str);
+        hash_str
+            .chars()
+            .map(|x| match x {
+                '.' | '/' | '?' | '_' => '-',
+                _ => x,
+            })
+            .collect()
     }
 }
