@@ -149,7 +149,7 @@ impl Config {
                     new = dep.package.get_font_html()
                 )
             });
-        return match generated_style.is_empty() {
+        return match generated_style.trim().is_empty() {
             false => format!("<style>{}</style>", generated_style),
             _ => "".to_string(),
         };
