@@ -8,7 +8,9 @@ toc: $ft.toc
 
 -- page-title: भाषा विवरण पृष्ठ
 icon: true
-icon-path: images/translation-icons/large/translations-title-default.png
+light-icon-path: -/fpm.dev/images/translation-icons/light/large/translations-title-default.png
+dark-icon-path: -/fpm.dev/images/translation-icons/dark/large/translations-title-default.png
+
 
 -- title: $fpm.package-title
 subtitle: key-value-small: Last modified on:
@@ -26,13 +28,20 @@ default: Not known
 -- translation-status: 
 
 
+
 -- translation-missing: 
 
 
 
+-- translation-nevermarked: 
 
 
 
+-- translation-outdated: 
+
+
+
+-- translation-uptodate: 
 
 
 
@@ -42,7 +51,8 @@ default: Not known
 caption title:
 optional body body:
 boolean icon: true 
-optional string icon-path:
+optional string light-icon-path:
+optional string dark-icon-path:
 width: fill
 padding-bottom: 10
 border-bottom: 1
@@ -51,9 +61,19 @@ margin-bottom: 20
 
 --- ftd.row:
 
---- ftd.image:
+--- ftd.row:
 if: $icon
-src: $icon-path
+
+--- ftd.image:
+if: not $fpm.dark-mode
+src: $light-icon-path
+width: 60
+margin-right: 20
+margin-top: 4
+
+--- ftd.image:
+if: $fpm.dark-mode
+src: $dark-icon-path
 width: 60
 margin-right: 20
 margin-top: 4
@@ -69,6 +89,12 @@ color if $fpm.dark-mode: #FFFFFF
 font: apple-system
 style: bold
 size: 46
+
+
+
+
+
+
 
 
 
@@ -96,6 +122,14 @@ if: $value is null
 color: #3EC5FF
 color if $fpm.dark-mode: #3EC5FF
 font: apple-system
+
+
+
+
+
+
+
+
 
 
 -- ftd.row key-value-small:
@@ -135,6 +169,10 @@ size: 14
 
 
 
+
+
+
+
 -- ftd.column title:
 caption title:
 optional body body:
@@ -160,10 +198,12 @@ link: $fpm.home-url
 --- ftd.text: $fpm.language
 if: $fpm.language is not null
 border-radius: 4
-background-color: #2C3639
+background-color: #F2F2F2
+background-color if $fpm.dark-mode: #2C3639
 padding-vertical: 5
 padding-horizontal: 10
-color: #DBB484
+color: #D2882C
+color if $fpm.dark-mode: #DBB484
 align: center
 size: 14
 font: apple-system
@@ -185,6 +225,13 @@ padding-top: 15
 --- markdown:
 if: $body is not null
 body: $body
+
+
+
+
+
+
+
 
 
 -- ftd.column h0:
@@ -210,6 +257,12 @@ body: $body
 
 
 
+
+
+
+
+
+
 -- ftd.text markdown:
 body body:
 text: $body
@@ -222,13 +275,20 @@ padding-top: 50
 font: apple-system
 
 
+
+
+
+
+
+
+
+
 -- ftd.row print-inline:
 fpm.all-language-status-data data:
 width: fill
 padding: 10
 color: #316777
 color if $fpm.dark-mode: #ffffff 
-
 
 --- ftd.text: $data.language
 link: $data.url
@@ -280,6 +340,13 @@ font: apple-system
 
 
 
+
+
+
+
+
+
+
 -- ftd.column translation-status:
 background-color: #E8E8E8
 background-color if $fpm.dark-mode: #1D2C30
@@ -294,40 +361,43 @@ border-radius: 5
 --- ftd.row:
 width: fill
 
---- icon-title: 
+--- icon-title-cell: 
 title: Language
 icon: false
 column-width: percent 15
 
---- icon-title: 
+--- icon-title-cell: 
 title: Missing
 icon: true
-icon-path: images/translation-icons/translations-missing.png
+icon-path-light: -/fpm.dev/images/translation-icons/light/translations-missing.png
+icon-path-dark: -/fpm.dev/images/translation-icons/dark/translations-missing.png
 column-width: percent 15
 
-
---- icon-title: 
+--- icon-title-cell: 
 title: Never marked
 icon: true
-icon-path: images/translation-icons/translations-info.png 
+icon-path-light: -/fpm.dev/images/translation-icons/light/translations-info.png 
+icon-path-dark: -/fpm.dev/images/translation-icons/dark/translations-info.png 
 column-width: percent 22
 
 
---- icon-title: 
+--- icon-title-cell: 
 title: Out-dated
 icon: true
-icon-path: images/translation-icons/translations-time.png 
+icon-path-light: -/fpm.dev/images/translation-icons/light/translations-time.png 
+icon-path-dark: -/fpm.dev/images/translation-icons/dark/translations-time.png 
 column-width: percent 20
 
 
---- icon-title: 
+--- icon-title-cell: 
 title: Up-to Date
 icon: true
-icon-path: images/translation-icons/translations-success.png 
+icon-path-light: -/fpm.dev/images/translation-icons/light/translations-success.png 
+icon-path-dark: -/fpm.dev/images/translation-icons/dark/translations-success.png 
 column-width: percent 20
 
 
---- icon-title: 
+--- icon-title-cell: 
 title: Last modified on
 icon: false
 column-width: percent 20
@@ -342,32 +412,176 @@ data: $obj
 
 
 
--- ftd.row icon-title:
+
+
+
+
+
+-- ftd.row icon-title-cell:
 boolean icon: true 
 caption title:
-optional integer count:
-optional string icon-path:
+optional string icon-path-light:
+optional string icon-path-dark:
 optional integer font-size:
 optional integer margin-right:
-string column-width: percent 20
+optional string column-width: fill
 width: $column-width
 
---- ftd.image:
+
+--- ftd.row:
+
+--- ftd.row:
 if: $icon
-src: $icon-path
+
+--- ftd.image:
+if: not $fpm.dark-mode
+src: $icon-path-light
 move-down: 7
 move-left: 2
 margin-right: $margin-right
+
+--- ftd.image:
+if: $fpm.dark-mode
+src: $icon-path-dark
+move-down: 7
+move-left: 2
+margin-right: $margin-right
+
+--- container: ftd.main
 
 --- ftd.text: $title
 padding: 5
 text-align: left
 font: apple-system
 size: $font-size
+color: #153B46
+color if $fpm.dark-mode: #FFFFFF
 
---- ftd.integer: $count
+
+
+
+
+
+
+
+
+
+
+
+-- ftd.row icon-title:
+boolean icon: true 
+caption title:
+optional string count:
+optional string icon-path:
+optional integer font-size:
+optional integer margin-right:
+optional string icon-path-light:
+optional string icon-path-dark:
+boolean open: false
+width: fill
+
+
+--- ftd.row:
+if: $count is not null
+position: left
+width: fill
+
+
+--- ftd.row:
+if: $icon
+
+--- ftd.image:
+if: not $fpm.dark-mode
+src: $icon-path-light
+move-down: 7
+move-left: 2
+margin-right: $margin-right
+
+--- ftd.image:
+if: $fpm.dark-mode
+src: $icon-path-dark
+move-down: 7
+move-left: 2
+margin-right: $margin-right
+
+
+--- ftd.text: $title
+padding: 5
+padding if $count is not null: 0
+text-align: left
+font: apple-system
+size: $font-size
+color: #153B46
+color if $fpm.dark-mode: #FFFFFF
+
+--- ftd.text: $count
 if: $count is not null
 style: bold
+text-align: left
+font: apple-system
+size: $font-size
+color: #153B46
+color if $fpm.dark-mode: #D0CFCF
+margin-left: 15
+
+--- container: ftd.main
+
+--- ftd.row:
+if: $count is not null
+position: right
+width: percent 20
+
+--- ftd.text: ﹀
+text-align: right
+width: fill
+size: 24
+style: bold
+margin-top: 5
+margin-right: 10
+color: #153B46
+color if $fpm.dark-mode: #FFFFFF
+
+/--- ftd.text: ︿
+text-align: right
+width: fill
+size: 24
+style: bold
+margin-top: 5
+margin-right: 10
+color: #153B46
+color if $fpm.dark-mode: #FFFFFF
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- ftd.row key-item:
+caption title:
+width: fill
+padding-vertical: 10
+
+--- ftd.text: $title
+color: #153B46
+color if $fpm.dark-mode: #FFFFFF
+font: apple-system
+size: 14
+
+
+
+
+
+
+
+
+
 
 
 
@@ -378,21 +592,37 @@ border-radius: 5
 border-color: #9A5454
 border-style: dashed
 border-width: 2
-color: #153B46
-color if $fpm.dark-mode: #FFFFFF
 padding: 15
 border-radius: 5
 margin-top: 20
-
+boolean open: false
+optional string group-type:
 
 --- icon-title: 
 title: इन दस्तावेज का अनुवाद उपलब्ध नहीं हैं :
 count: 6
 icon: true
-icon-path: images/translation-icons/35x26/translations-missing.png
-column-width: fill
+icon-path-light: -/fpm.dev/images/translation-icons/light/35x26/translations-missing.png
+icon-path-dark: -/fpm.dev/images/translation-icons/dark/35x26/translations-missing.png
 font-size: 24
 margin-right: 20
+open: $open
+$on-click$: toggle $open
+/$on-click-outside$: $open = false
+
+--- ftd.column:
+width: fill
+if: $open
+
+--- key-item: address-at-the-final-session.ftd
+
+--- key-item: common-component.ftd
+
+--- key-item: lib.ftd
+
+--- key-item: paper-on-hinduism.ftd
+
+--- key-item: religion-not-the-crying-need-of-india.ftd
 
 
 
@@ -401,5 +631,148 @@ margin-right: 20
 
 
 
+
+
+
+-- ftd.column translation-nevermarked:
+width: fill
+max-width: 1000
+border-radius: 5
+border-color: #9A5454
+border-style: dashed
+border-width: 2
+padding: 15
+border-radius: 5
+margin-top: 20
+boolean open: false
+optional string group-type:
+
+
+--- icon-title: 
+/if: $group-type 'nevermarked'
+title: इन दस्तावेज का अनुवाद उपलब्ध हैं, पर जाँच बाक़ी हैं :
+count: 4
+icon: true
+icon-path-light: -/fpm.dev/images/translation-icons/light/35x26/translations-info.png
+icon-path-dark: -/fpm.dev/images/translation-icons/dark/35x26/translations-info.png
+font-size: 24
+margin-right: 20
+open: $open
+$on-click$: toggle $open
+/$on-click-outside$: $open = false
+
+--- ftd.column:
+width: fill
+if: $open
+
+--- key-item: address-at-the-final-session.ftd
+
+--- key-item: common-component.ftd
+
+--- key-item: lib.ftd
+
+--- key-item: paper-on-hinduism.ftd
+
+--- key-item: religion-not-the-crying-need-of-india.ftd
+
+
+
+
+
+
+
+
+
+
+-- ftd.column translation-outdated:
+width: fill
+max-width: 1000
+border-radius: 5
+border-color: #9A5454
+border-style: dashed
+border-width: 2
+padding: 15
+border-radius: 5
+margin-top: 20
+boolean open: false
+optional string group-type:
+
+
+--- icon-title: 
+/if: $group-type 'outdated'
+title: इन दस्तावेज का अनुवाद पुराना हैं :
+count: 2
+icon: true
+icon-path-light: -/fpm.dev/images/translation-icons/light/35x26/translations-time.png
+icon-path-dark: -/fpm.dev/images/translation-icons/dark/35x26/translations-time.png
+font-size: 24
+margin-right: 20
+open: $open
+$on-click$: toggle $open
+/$on-click-outside$: $open = false
+
+--- ftd.column:
+width: fill
+if: $open
+
+--- key-item: address-at-the-final-session.ftd
+
+--- key-item: common-component.ftd
+
+--- key-item: lib.ftd
+
+--- key-item: paper-on-hinduism.ftd
+
+--- key-item: religion-not-the-crying-need-of-india.ftd
+
+
+
+
+
+
+
+
+
+
+-- ftd.column translation-uptodate:
+width: fill
+max-width: 1000
+border-radius: 5
+border-color: #9A5454
+border-style: dashed
+border-width: 2
+padding: 15
+border-radius: 5
+margin-top: 20
+boolean open: false
+optional string group-type:
+
+
+--- icon-title: 
+/if: $group-type 'uptodate'
+title: इन दस्तावेज का अनुवाद उपलब्ध हैं :
+count: 1
+icon: true
+icon-path-light: -/fpm.dev/images/translation-icons/light/35x26/translations-success.png
+icon-path-dark: -/fpm.dev/images/translation-icons/dark/35x26/translations-success.png
+font-size: 24
+margin-right: 20
+open: $open
+$on-click$: toggle $open
+/$on-click-outside$: $open = false
+
+--- ftd.column:
+width: fill
+if: $open
+
+--- key-item: address-at-the-final-session.ftd
+
+--- key-item: common-component.ftd
+
+--- key-item: lib.ftd
+
+--- key-item: paper-on-hinduism.ftd
+
+--- key-item: religion-not-the-crying-need-of-india.ftd
 
 
