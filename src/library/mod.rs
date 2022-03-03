@@ -177,10 +177,8 @@ impl ftd::p2::Library for Library {
                 if new_name.as_str().trim_start_matches('/') == "assets" {
                     // Virtual document for getting the assets
                     return Some(get_assets_doc_for_package(package));
-                } else {
-                    if let Some(body) = get_file_from_location(&path, new_name.as_str()) {
-                        return Some(package.get_prefixed_body(body.as_str(), name, false));
-                    }
+                } else if let Some(body) = get_file_from_location(&path, new_name.as_str()) {
+                    return Some(package.get_prefixed_body(body.as_str(), name, false));
                 }
             }
             None
