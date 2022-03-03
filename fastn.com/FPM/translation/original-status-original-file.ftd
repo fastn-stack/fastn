@@ -1,0 +1,331 @@
+-- import: ft
+-- import: fpm
+-- import: fpm.dev/FPM/config
+
+-- ft.doc-page:
+toc: $ft.toc
+
+
+-- page-title: Translation Status
+
+-- title: $fpm.title
+subtitle: key-value-small: Last modified on:
+> value: $fpm.last-modified-on
+> default: Never synced
+
+Here is the list of the translation status for the available languages.
+
+-- key-value: Total number of documents:
+value: $fpm.number-of-documents
+default: Not known
+
+-- language-status:
+
+
+
+
+-- ftd.column page-title: 
+caption title:
+optional body body:
+width: fill
+padding-bottom: 10
+border-bottom: 1
+border-color: #414F53
+margin-bottom: 20
+
+--- ftd.text: $title
+text: $title
+caption $title:
+region: title
+text: $title
+color: #000000
+color if $fpm.dark-mode: #FFFFFF
+font: apple-system
+style: bold
+size: 46
+
+
+
+-- ftd.row key-value:
+caption key:
+optional string value:
+string default:
+margin-bottom: 25
+spacing: 2
+
+--- ftd.text: $key
+color: #000000
+color if $fpm.dark-mode: #D0CFCF
+font: apple-system
+
+--- ftd.text: $value
+if: $value is not null
+color: #3EC5FF
+color if $fpm.dark-mode: #3EC5FF
+font: apple-system
+style: bold
+
+--- ftd.text: $default
+if: $value is null
+color: #3EC5FF
+color if $fpm.dark-mode: #3EC5FF
+font: apple-system
+
+
+-- ftd.row key-value-small:
+caption key:
+optional string value:
+string default:
+margin-bottom: 5
+spacing: 2
+
+--- ftd.column:
+width: fill
+
+
+--- ftd.text: $key
+color: #000000
+color if $fpm.dark-mode: #D0CFCF
+font: apple-system
+size: 12
+
+--- ftd.column:
+width: fill
+
+--- ftd.text: $value
+if: $value is not null
+color: #3EC5FF
+color if $fpm.dark-mode: #3EC5FF
+font: apple-system
+style: bold
+size: 14
+
+--- ftd.text: $default
+if: $value is null
+color: #3EC5FF
+color if $fpm.dark-mode: #3EC5FF
+font: apple-system
+size: 14
+
+
+
+-- ftd.column title:
+caption title:
+optional body body:
+ftd.ui subtitle:
+width: fill
+region: h1
+
+
+--- ftd.row:
+spacing: 25
+width: fill
+
+--- ftd.text: $title
+region: title
+size: 30
+color: #000000
+color if $fpm.dark-mode: #E9E9E9
+style: bold
+font: apple-system
+align: center
+link: $fpm.home-url
+
+--- ftd.text: $fpm.language
+if: $fpm.language is not null
+border-radius: 4
+background-color: #2C3639
+padding-vertical: 5
+padding-horizontal: 10
+color: #DBB484
+align: center
+size: 14
+font: apple-system
+
+
+--- ftd.column:
+width: fill
+
+
+--- ftd.row:
+position: right
+padding-top: 15
+
+--- subtitle:
+
+
+--- container: ftd.main
+
+--- markdown:
+if: $body is not null
+body: $body
+
+
+-- ftd.column h0:
+caption title:
+optional body body:
+width: fill
+region: h0
+
+--- ftd.text:
+text: $title
+region: title
+size: 40
+color: black
+style: bold
+padding-bottom: 24
+font: apple-system
+
+--- container: ftd.main
+
+--- markdown:
+if: $body is not null
+body: $body
+
+
+
+-- ftd.text markdown:
+body body:
+text: $body
+size: 19
+line-height: 30
+color: #000000
+color if $fpm.dark-mode: #E9E9E9
+padding-bottom: 10
+padding-top: 50
+font: apple-system
+
+
+-- ftd.row print:
+fpm.status-data data:
+width: fill
+border-bottom: 1
+border-color: white
+padding: 10
+color: #000000
+background-color: #D9DBDC
+
+
+--- ftd.text: $data.language
+link: $data.url
+width: percent 15
+padding: 5
+style: bold
+text-align: left
+font: apple-system
+
+--- ftd.integer:  $data.missing
+width: percent 15
+padding: 5
+text-align: center
+font: apple-system
+
+--- ftd.integer: $data.never-marked
+width: percent 22
+padding: 5
+text-align: center
+font: apple-system
+
+--- ftd.integer: $data.out-dated
+width: percent 20
+padding: 5
+text-align: center
+font: apple-system
+
+--- ftd.integer: $data.upto-date
+width: percent 20
+padding: 5
+text-align: center
+font: apple-system
+
+--- ftd.text: $data.last-modified-on
+if: $data.last-modified-on is not null
+link: $data.url
+width: percent 20
+padding: 5
+text-align: center
+font: apple-system
+
+--- ftd.text: Never Synced
+if: $data.last-modified-on is null
+link: $data.url
+width: percent 20
+padding: 5
+text-align: center
+font: apple-system
+
+
+
+-- ftd.column language-status:
+background-color: #f3f3f3
+width: fill
+max-width: 1000
+border-radius: 5
+
+--- ftd.row:
+width: fill
+background-color: #153B46
+color: #F09523
+padding: 10
+border-top-radius: 5
+
+--- icon-title: Language
+icon: false
+column-width: percent 15
+
+--- icon-title: Missing
+icon: true
+icon-path: images/translation-icons/translations-missing.png
+column-width: percent 15
+
+
+--- icon-title: Never marked
+icon: true
+icon-path: images/translation-icons/translations-info.png 
+column-width: percent 22
+
+
+--- icon-title: Out-dated
+icon: true
+icon-path: images/translation-icons/translations-time.png 
+column-width: percent 20
+
+
+--- icon-title: Up-to Date
+icon: true
+icon-path: images/translation-icons/translations-success.png 
+column-width: percent 20
+
+
+--- icon-title: Last modified on
+icon: false
+column-width: percent 20
+
+
+--- container: ftd.main
+
+--- print:
+$loop$: $fpm.status as $obj
+data: $obj
+
+
+
+
+-- ftd.row icon-title:
+boolean icon: true 
+caption title:
+optional string icon-path:
+string column-width: percent 20
+width: $column-width
+
+
+--- ftd.image:
+if: $icon
+src: $icon-path
+move-down: 7
+move-left: 2
+
+--- ftd.text: $title
+padding: 5
+text-align: left
+font: apple-system
