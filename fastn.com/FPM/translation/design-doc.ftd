@@ -292,6 +292,21 @@ font: apple-system
 style: bold
 size: 46
 
+--- container: ftd.main
+
+--- ftd.row:
+if: not $icon
+
+--- ftd.text: $title
+text: $title
+caption $title:
+region: title
+text: $title
+color: #000000
+color if $fpm.dark-mode: #FFFFFF
+font: apple-system
+style: bold
+size: 46
 
 
 
@@ -396,6 +411,7 @@ style: bold
 font: apple-system
 align: center
 link: $fpm.home-url
+white-space: nowrap
 
 --- ftd.text: $fpm.language
 if: $fpm.language is not null
@@ -515,6 +531,7 @@ width: percent 20
 padding: 5
 text-align: center
 font: apple-system
+size: 12
 
 --- ftd.text: Never Synced
 if: $data.last-modified-on is null
@@ -644,6 +661,48 @@ color: #153B46
 color if $fpm.dark-mode: #FFFFFF
 
 
+
+
+
+-- ftd.row icon-title-cell-home:
+boolean icon: true 
+caption title:
+optional string icon-path-light:
+optional string icon-path-dark:
+optional integer font-size:
+optional integer margin-right:
+optional string column-width: fill
+width: $column-width
+
+
+--- ftd.row:
+
+--- ftd.row:
+if: $icon
+
+--- ftd.image:
+if: not $fpm.dark-mode
+src: $icon-path-light
+move-down: 7
+move-left: 2
+margin-right: $margin-right
+
+--- ftd.image:
+if: $fpm.dark-mode
+src: $icon-path-dark
+move-down: 7
+move-left: 2
+margin-right: $margin-right
+
+--- container: ftd.main
+
+--- ftd.text: $title
+padding: 5
+text-align: left
+font: apple-system
+size: $font-size
+color: #FFFFFF
+color if $fpm.dark-mode: #FFFFFF
 
 
 
@@ -1016,3 +1075,167 @@ width: fill
 if: $body is not null
 
 $body
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- ftd.column language-status:
+background-color: #f3f3f3
+width: fill
+max-width: 1000
+border-radius: 5
+
+--- ftd.row:
+width: fill
+background-color: #153B46
+background-color if $fpm.dark-mode: #153B46
+color: #FFFFFF
+color if $fpm.dark-mode: #FFFFFF
+padding: 10
+border-top-radius: 5
+
+--- icon-title-cell-home: 
+title: Language
+icon: false
+column-width: percent 15
+
+--- icon-title-cell-home: 
+title: Missing
+icon: true
+icon-path-light: -/fpm.dev/images/translation-icons/dark/translations-missing.png
+icon-path-dark: -/fpm.dev/images/translation-icons/dark/translations-missing.png
+column-width: percent 15
+
+--- icon-title-cell-home: 
+title: Never marked
+icon: true
+icon-path-light: -/fpm.dev/images/translation-icons/dark/translations-info.png 
+icon-path-dark: -/fpm.dev/images/translation-icons/dark/translations-info.png 
+column-width: percent 22
+
+
+--- icon-title-cell-home: 
+title: Out-dated
+icon: true
+icon-path-light: -/fpm.dev/images/translation-icons/dark/translations-time.png 
+icon-path-dark: -/fpm.dev/images/translation-icons/dark/translations-time.png 
+column-width: percent 20
+
+
+--- icon-title-cell-home: 
+title: Up-to Date
+icon: true
+icon-path-light: -/fpm.dev/images/translation-icons/dark/translations-success.png 
+icon-path-dark: -/fpm.dev/images/translation-icons/dark/translations-success.png 
+column-width: percent 20
+
+
+--- icon-title-cell-home: 
+title: Last modified on
+icon: false
+column-width: percent 20
+
+
+--- container: ftd.main
+
+--- print:
+$loop$: $fpm.all-language-translation-status as $obj
+data: $obj
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- ftd.row print:
+fpm.all-language-status-data data:
+width: fill
+border-bottom: 1
+border-color: white
+padding: 10
+color: #000000
+background-color: #D9DBDC
+
+
+--- ftd.text: $data.language
+link: $data.url
+width: percent 15
+padding: 5
+style: bold
+text-align: left
+font: apple-system
+
+--- ftd.integer:  $data.missing
+width: percent 15
+padding: 5
+text-align: center
+font: apple-system
+
+--- ftd.integer: $data.never-marked
+width: percent 22
+padding: 5
+text-align: center
+font: apple-system
+
+--- ftd.integer: $data.out-dated
+width: percent 20
+padding: 5
+text-align: center
+font: apple-system
+
+--- ftd.integer: $data.upto-date
+width: percent 20
+padding: 5
+text-align: center
+font: apple-system
+
+--- ftd.text: $data.last-modified-on
+if: $data.last-modified-on is not null
+link: $data.url
+width: percent 20
+padding: 5
+text-align: center
+font: apple-system
+size: 12
+
+--- ftd.text: Never Synced
+if: $data.last-modified-on is null
+link: $data.url
+width: percent 20
+padding: 5
+text-align: center
+font: apple-system
+
+
+
+
+
+
+
+
+
+
+
+
+
+
