@@ -3,7 +3,7 @@
 
 
 -- ftd.text: hello
-font: $assets.myFirstFont
+font: $assets.fonts.myFirstFont
 
 -- ftd.text: World
-font: $theme-assets.themeFont
+font: $theme-assets.fonts.themeFont

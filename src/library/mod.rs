@@ -187,24 +187,39 @@ impl ftd::p2::Library for Library {
         fn get_assets_doc_for_package(package: &fpm::Package) -> String {
             use itertools::Itertools;
 
-            let fonts = package
+            let (font_record, fonts) = package
                 .fonts
                 .iter()
                 .unique_by(|font| font.name.as_str())
                 .collect_vec()
                 .iter()
-                .fold(String::new(), |accumulator, font| {
-                    format!(
-                        "{pre}\n-- string {font_var_name}: {font_var_val}\n",
-                        pre = accumulator,
-                        font_var_name = font.name.as_str(),
-                        font_var_val = font.html_name(package.name.as_str())
-                    )
-                });
+                .fold(
+                    (
+                        String::from("-- record font:"),
+                        String::from("-- font fonts:"),
+                    ),
+                    |(record_accumulator, instance_accumulator), font| {
+                        (
+                            format!(
+                                "{pre}\nstring {font_var_name}:\n",
+                                pre = record_accumulator,
+                                font_var_name = font.name.as_str(),
+                            ),
+                            format!(
+                                "{pre}\n{font_var_name}: {font_var_val}\n",
+                                pre = instance_accumulator,
+                                font_var_name = font.name.as_str(),
+                                font_var_val = font.html_name(package.name.as_str())
+                            ),
+                        )
+                    },
+                );
             format!(
                 indoc::indoc! {"
+                    {font_record}
                     {fonts}
                 "},
+                font_record = font_record,
                 fonts = fonts
             )
         }
