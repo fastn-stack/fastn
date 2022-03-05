@@ -445,7 +445,11 @@ async fn process_ftd(
                 let package_info_package = match config
                     .package
                     .get_dependency_for_interface(fpm::PACKAGE_INFO_INTERFACE)
-                {
+                    .or_else(|| {
+                        config
+                            .package
+                            .get_dependency_for_interface(fpm::PACKAGE_THEME_INTERFACE)
+                    }) {
                     Some(dep) => dep.package.name.as_str(),
                     None => fpm::PACKAGE_INFO_INTERFACE,
                 };
