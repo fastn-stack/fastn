@@ -396,7 +396,9 @@ impl Document {
     }
 
     pub fn from(name: &str, source: &str, lib: &dyn ftd::p2::Library) -> ftd::p1::Result<Document> {
+        //dbg!("start", &source, &name, "end");
         let mut d = Self::without_render(name, source, lib)?;
+        //dbg!(&d.instructions, &source, &name);
 
         let mut rt = ftd::RT::from(
             d.name.as_str(),
@@ -407,6 +409,7 @@ impl Document {
 
         d.main = rt.render()?;
         d.data.extend(rt.bag);
+        //dbg!(&d.name);
         Ok(d)
     }
 

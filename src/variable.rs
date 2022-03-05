@@ -463,8 +463,10 @@ impl Value {
     }
 
     pub fn is_equal(&self, other: &Self) -> bool {
-        match (self, other) {
-            (Value::String { text: a, .. }, Value::String { text: b, .. }) => a == b,
+        match (self.to_owned().inner(), other.to_owned().inner()) {
+            (Some(Value::String { text: ref a, .. }), Some(Value::String { text: ref b, .. })) => {
+                a == b
+            }
             (a, b) => a == b,
         }
     }

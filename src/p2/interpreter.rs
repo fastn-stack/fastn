@@ -16451,6 +16451,56 @@ mod test {
         );
     }
 
+    #[test]
+    fn optional_string_compare() {
+        let mut bag = super::default_bag();
+        bag.insert(
+            s("foo/bar#bar"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("bar"),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Optional {
+                        data: Box::new(Some(ftd::Value::String {
+                            text: "Something".to_string(),
+                            source: ftd::TextSource::Caption,
+                        })),
+                        kind: ftd::p2::Kind::caption(),
+                    },
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            }),
+        );
+
+        let mut main = super::default_column();
+        main.container
+            .children
+            .push(ftd::Element::Markup(ftd::Markups {
+                text: ftd::markup_line("Something"),
+                common: ftd::Common {
+                    condition: Some(ftd::Condition {
+                        variable: s("foo/bar#bar"),
+                        value: s("Something"),
+                    }),
+                    reference: Some(s("foo/bar#bar")),
+                    ..Default::default()
+                },
+                line: true,
+                ..Default::default()
+            }));
+
+        p!(
+            "
+            -- optional string bar:
+
+            -- bar: Something
+            
+            -- ftd.text: $bar
+            if: $bar == Something
+            ",
+            (bag, main),
+        );
+    }
     /*#[test]
     fn optional_condition_on_record() {
         let (_g_bag, g_col) = crate::p2::interpreter::interpret(

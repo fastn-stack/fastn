@@ -696,7 +696,7 @@ window.ftd = (function () {
             console.log(variable, "is not in data, ignoring");
             return;
         }
-        return data[variable].value;
+        return JSON.parse(data[variable].value);
     }
 
     exports.set_multi_value = function (id, list) {
