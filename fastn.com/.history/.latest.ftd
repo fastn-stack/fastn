@@ -1,7 +1,7 @@
 -- import: fpm
 
 -- fpm.snapshot: FPM.ftd
-timestamp: 1645695858839287000
+timestamp: 1646494343706523000
 
 -- fpm.snapshot: README.md
 timestamp: 1641470335050441000
@@ -31,10 +31,10 @@ timestamp: 1645695858839287000
 timestamp: 1645695858839287000
 
 -- fpm.snapshot: how-to/get-started-github-pages.ftd
-timestamp: 1645695858839287000
+timestamp: 1646494343706523000
 
 -- fpm.snapshot: how-to/get-started-vercel.ftd
-timestamp: 1645695858839287000
+timestamp: 1646494343706523000
 
 -- fpm.snapshot: how-to/github-initialize-repo.png
 timestamp: 1644400921848352000
@@ -117,14 +117,98 @@ timestamp: 1644400921848352000
 -- fpm.snapshot: images/rotary.png
 timestamp: 1644400921848352000
 
+-- fpm.snapshot: images/translation-icons/dark/35x26/translations-info.png
+timestamp: 1646494343706523000
+
+-- fpm.snapshot: images/translation-icons/dark/35x26/translations-missing.png
+timestamp: 1646494343706523000
+
+-- fpm.snapshot: images/translation-icons/dark/35x26/translations-success.png
+timestamp: 1646494343706523000
+
+-- fpm.snapshot: images/translation-icons/dark/35x26/translations-time.png
+timestamp: 1646494343706523000
+
+-- fpm.snapshot: images/translation-icons/dark/large/translations-info.png
+timestamp: 1646494343706523000
+
+-- fpm.snapshot: images/translation-icons/dark/large/translations-success.png
+timestamp: 1646494343706523000
+
+-- fpm.snapshot: images/translation-icons/dark/large/translations-time.png
+timestamp: 1646494343706523000
+
+-- fpm.snapshot: images/translation-icons/dark/large/translations-title-default.png
+timestamp: 1646494343706523000
+
+-- fpm.snapshot: images/translation-icons/dark/large/translattions-missing.png
+timestamp: 1646494343706523000
+
+-- fpm.snapshot: images/translation-icons/dark/translations-default.png
+timestamp: 1646494343706523000
+
+-- fpm.snapshot: images/translation-icons/dark/translations-info.png
+timestamp: 1646494343706523000
+
+-- fpm.snapshot: images/translation-icons/dark/translations-missing.png
+timestamp: 1646494343706523000
+
+-- fpm.snapshot: images/translation-icons/dark/translations-success.png
+timestamp: 1646494343706523000
+
+-- fpm.snapshot: images/translation-icons/dark/translations-time.png
+timestamp: 1646494343706523000
+
+-- fpm.snapshot: images/translation-icons/light/35x26/translations-info.png
+timestamp: 1646494343706523000
+
+-- fpm.snapshot: images/translation-icons/light/35x26/translations-missing.png
+timestamp: 1646494343706523000
+
+-- fpm.snapshot: images/translation-icons/light/35x26/translations-success.png
+timestamp: 1646494343706523000
+
+-- fpm.snapshot: images/translation-icons/light/35x26/translations-time.png
+timestamp: 1646494343706523000
+
+-- fpm.snapshot: images/translation-icons/light/large/translations-info.png
+timestamp: 1646494343706523000
+
+-- fpm.snapshot: images/translation-icons/light/large/translations-success.png
+timestamp: 1646494343706523000
+
+-- fpm.snapshot: images/translation-icons/light/large/translations-time.png
+timestamp: 1646494343706523000
+
+-- fpm.snapshot: images/translation-icons/light/large/translations-title-default.png
+timestamp: 1646494343706523000
+
+-- fpm.snapshot: images/translation-icons/light/large/translattions-missing.png
+timestamp: 1646494343706523000
+
+-- fpm.snapshot: images/translation-icons/light/translations-default.png
+timestamp: 1646494343706523000
+
+-- fpm.snapshot: images/translation-icons/light/translations-info.png
+timestamp: 1646494343706523000
+
+-- fpm.snapshot: images/translation-icons/light/translations-missing.png
+timestamp: 1646494343706523000
+
+-- fpm.snapshot: images/translation-icons/light/translations-success.png
+timestamp: 1646494343706523000
+
+-- fpm.snapshot: images/translation-icons/light/translations-time.png
+timestamp: 1646494343706523000
+
 -- fpm.snapshot: images/translation/english-with-dropdown.jpg
 timestamp: 1644400921848352000
 
 -- fpm.snapshot: index.ftd
-timestamp: 1645695858839287000
+timestamp: 1646494343706523000
 
 -- fpm.snapshot: journal.ftd
-timestamp: 1645777560884060000
+timestamp: 1646494343706523000
 
 -- fpm.snapshot: known-issues.ftd
 timestamp: 1645695858839287000
@@ -196,10 +280,10 @@ timestamp: 1645695858839287000
 timestamp: 1644400921848352000
 
 -- fpm.snapshot: theme/dark-mode.ftd
-timestamp: 1645777560884060000
+timestamp: 1646494343706523000
 
 -- fpm.snapshot: theme/header.ftd
-timestamp: 1645695858839287000
+timestamp: 1646494343706523000
 
 -- fpm.snapshot: theme/responsive.ftd
 timestamp: 1645695858839287000
@@ -223,7 +307,7 @@ timestamp: 1645695858839287000
 timestamp: 1645695858839287000
 
 -- fpm.snapshot: vars.ftd
-timestamp: 1645695858839287000
+timestamp: 1646494343706523000
 
 -- fpm.snapshot: why-not.ftd
 timestamp: 1645695858839287000
