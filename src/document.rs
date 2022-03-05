@@ -72,7 +72,7 @@ pub(crate) async fn get_documents(
         config.packages_root.clone().join(package.name.as_str())
     };
     let mut ignore_paths = ignore::WalkBuilder::new(&path);
-    ignore_paths.overrides(package_ignores(config, &path)?);
+    ignore_paths.overrides(package_ignores(&package, &path)?);
     let all_files = ignore_paths
         .build()
         .into_iter()
@@ -110,8 +110,9 @@ pub(crate) async fn paths_to_files(
     .collect::<Vec<fpm::File>>())
 }
 
+// TODO: Shoud be package instad of config
 pub fn package_ignores(
-    config: &fpm::Config,
+    package: &fpm::Package,
     root_path: &camino::Utf8PathBuf,
 ) -> Result<ignore::overrides::Override, ignore::Error> {
     let mut overrides = ignore::overrides::OverrideBuilder::new(root_path);
@@ -121,7 +122,7 @@ pub fn package_ignores(
     overrides.add("!FPM")?;
     overrides.add("!rust-toolchain")?;
     overrides.add("!.build")?;
-    for ignored_path in &config.package.ignored_paths {
+    for ignored_path in &package.ignored_paths {
         overrides.add(format!("!{}", ignored_path).as_str())?;
     }
     overrides.build()

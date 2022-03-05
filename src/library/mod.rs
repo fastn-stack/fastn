@@ -214,6 +214,7 @@ impl ftd::p2::Library for Library {
                         )
                     },
                 );
+            // let (records, values) = fpm::get_documents(config, package)
             format!(
                 indoc::indoc! {"
                     {font_record}
