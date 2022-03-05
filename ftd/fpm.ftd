@@ -127,6 +127,8 @@ $always-include$: true
 -- boolean has-translations: false
 -- boolean mobile: true
 -- boolean dark-mode: false
+-- boolean is-fallback: false
+-- boolean translation-diff-open: false
 -- boolean system-dark-mode: false
 -- boolean follow-system-dark-mode: true
 \-- string document-id: 

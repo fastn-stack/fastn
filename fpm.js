@@ -2,6 +2,8 @@
     const FPM_MOBILE = "fpm#mobile";
     const FPM_MOBILE_BREAKPOINT = "fpm#mobile-breakpoint";
     const FPM_THEME_COLOR = "fpm#theme-color";
+    const FPM_IS_FALLBACK = "fpm#is-fallback";
+    const FPM_TRANSLATION_DIFF_OPEN = "fpm#translation-diff-open";
     const FPM_DARK_MODE = "fpm#dark-mode"
     const SYSTEM_DARK_MODE = "fpm#system-dark-mode"
     const FPM_FOLLOW_SYSTEM_DARK_MODE = "fpm#follow-system-dark-mode"
@@ -14,6 +16,7 @@
     const THEME_COLOR_META = "theme-color";
 
     let last_device;
+    var translation_diff_open = false;
 
     function initialise_device() {
         last_device = is_mobile();
@@ -56,11 +59,18 @@
     window.show_main = function () {
         document.getElementById("main").style.display = "block";
         document.getElementById("fallback").style.display = "none";
+        window.ftd.set_bool_for_all(FPM_IS_FALLBACK, false);
     }
 
     window.show_fallback = function () {
         document.getElementById("main").style.display = "none";
         document.getElementById("fallback").style.display = "block";
+        window.ftd.set_bool_for_all(FPM_IS_FALLBACK, true);
+    }
+
+    window.toggle_translation_diff = function () {
+        translation_diff_open = !translation_diff_open;
+        window.ftd.set_bool_for_all(FPM_TRANSLATION_DIFF_OPEN, translation_diff_open);
     }
 
     /*
