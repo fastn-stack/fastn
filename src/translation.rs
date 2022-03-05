@@ -44,7 +44,7 @@ impl TranslatedDocument {
     pub async fn html(
         &self,
         config: &fpm::Config,
-        base_url: Option<&str>,
+        base_url: &str,
         skip_failed: bool,
     ) -> fpm::Result<()> {
         // handle the message
