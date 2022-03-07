@@ -3,7 +3,7 @@ use std::iter::FromIterator;
 pub async fn build(
     config: &fpm::Config,
     file: Option<&str>,
-    base_url: Option<&str>,
+    base_url: &str,
     ignore_failed: bool,
 ) -> fpm::Result<()> {
     use fpm::utils::HasElements;
@@ -27,13 +27,30 @@ pub async fn build(
         (None, true) => build_with_translations(config, file, base_url, ignore_failed).await,
     }?;
     // Process static assets for the dependencies
-    for dep in config
-        .package
-        .get_flattened_dependencies()
-        .into_iter()
-        .unique_by(|dep| dep.package.name.clone())
-        .collect_vec()
-    {
+    let dependencies = if let Some(package) = config.package.translation_of.as_ref() {
+        let mut d = package
+            .get_flattened_dependencies()
+            .into_iter()
+            .unique_by(|dep| dep.package.name.clone())
+            .collect_vec();
+        d.extend(
+            config
+                .package
+                .get_flattened_dependencies()
+                .into_iter()
+                .unique_by(|dep| dep.package.name.clone()),
+        );
+        d
+    } else {
+        config
+            .package
+            .get_flattened_dependencies()
+            .into_iter()
+            .unique_by(|dep| dep.package.name.clone())
+            .collect_vec()
+    };
+
+    for dep in dependencies {
         let static_files = std::collections::BTreeMap::from_iter(
             fpm::get_documents(config, &dep.package)
                 .await?
@@ -59,7 +76,7 @@ pub async fn build(
 async fn build_simple(
     config: &fpm::Config,
     file: Option<&str>,
-    base_url: Option<&str>,
+    base_url: &str,
     skip_failed: bool,
 ) -> fpm::Result<()> {
     let documents = std::collections::BTreeMap::from_iter(
@@ -82,7 +99,7 @@ async fn build_simple(
 async fn build_with_translations(
     config: &fpm::Config,
     process_file: Option<&str>,
-    base_url: Option<&str>,
+    base_url: &str,
     skip_failed: bool,
 ) -> fpm::Result<()> {
     let documents = std::collections::BTreeMap::from_iter(
@@ -140,7 +157,7 @@ async fn build_with_original(
     config: &fpm::Config,
     _original: &fpm::Package,
     file: Option<&str>,
-    base_url: Option<&str>,
+    base_url: &str,
     skip_failed: bool,
 ) -> fpm::Result<()> {
     // This is the translation package
@@ -229,7 +246,7 @@ async fn process_files(
     package: &fpm::Package,
     documents: &std::collections::BTreeMap<String, fpm::File>,
     file: Option<&str>,
-    base_url: Option<&str>,
+    base_url: &str,
     skip_failed: bool,
 ) -> fpm::Result<()> {
     for f in documents.values() {
@@ -259,7 +276,7 @@ pub(crate) async fn process_file(
     fallback: Option<&fpm::File>,
     message: Option<&str>,
     translated_data: fpm::TranslationData,
-    base_url: Option<&str>,
+    base_url: &str,
     skip_failed: bool,
 ) -> fpm::Result<()> {
     let start = std::time::Instant::now();
@@ -346,7 +363,7 @@ pub(crate) async fn process_file(
 async fn process_markdown(
     _doc: &fpm::Document,
     _config: &fpm::Config,
-    _base_url: Option<&str>,
+    _base_url: &str,
 ) -> fpm::Result<()> {
     /*if _doc.id == "README.md"
         && !(std::path::Path::new(
@@ -377,7 +394,7 @@ async fn process_ftd(
     fallback: Option<&fpm::Document>,
     message: Option<&str>,
     translated_data: fpm::TranslationData,
-    base_url: Option<&str>,
+    base_url: &str,
 ) -> fpm::Result<()> {
     if main.id.eq("FPM.ftd") {
         if config.is_translation_package() {
@@ -445,7 +462,11 @@ async fn process_ftd(
                 let package_info_package = match config
                     .package
                     .get_dependency_for_interface(fpm::PACKAGE_INFO_INTERFACE)
-                {
+                    .or_else(|| {
+                        config
+                            .package
+                            .get_dependency_for_interface(fpm::PACKAGE_THEME_INTERFACE)
+                    }) {
                     Some(dep) => dep.package.name.as_str(),
                     None => fpm::PACKAGE_INFO_INTERFACE,
                 };
@@ -529,7 +550,7 @@ async fn process_ftd(
         config: &fpm::Config,
         main: &fpm::Document,
         new_file_path: &str,
-        base_url: Option<&str>,
+        base_url: &str,
     ) -> fpm::Result<()> {
         use tokio::io::AsyncWriteExt;
 
@@ -580,7 +601,7 @@ async fn process_ftd(
         new_file_path: &str,
         message: &str,
         translated_data: fpm::TranslationData,
-        base_url: Option<&str>,
+        base_url: &str,
     ) -> fpm::Result<()> {
         use tokio::io::AsyncWriteExt;
 
@@ -661,7 +682,7 @@ async fn process_ftd(
         new_file_path: &str,
         message: &str,
         translated_data: fpm::TranslationData,
-        base_url: Option<&str>,
+        base_url: &str,
     ) -> fpm::Result<()> {
         use tokio::io::AsyncWriteExt;
 
@@ -791,11 +812,10 @@ fn replace_markers(
     config: &fpm::Config,
     main: &fpm::Document,
     title: &str,
-    base_url: Option<&str>,
+    base_url: &str,
     main_rt: &ftd::Document,
 ) -> String {
-    let mut s = s
-        .replace("__ftd_doc_title__", title)
+    s.replace("__ftd_doc_title__", title)
         .replace(
             "__ftd_canonical_url__",
             config
@@ -828,10 +848,6 @@ fn replace_markers(
         .replace(
             "__main__",
             format!("{}{}", main_rt.html, config.get_font_style(),).as_str(),
-        );
-    s = match base_url {
-        Some(u) => s.replace("__base_url__", u),
-        None => s.replace("<base href=\"__base_url__\">", ""),
-    };
-    s
+        )
+        .replace("__base_url__", base_url)
 }

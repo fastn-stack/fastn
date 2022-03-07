@@ -17,7 +17,7 @@ async fn main() -> fpm::Result<()> {
         fpm::build(
             &config,
             build.value_of("file"),
-            build.value_of("base"),
+            build.value_of("base").unwrap(), // unwrap okay because base is required
             build.is_present("ignore-failed"),
         )
         .await?;
@@ -90,6 +90,7 @@ fn app(authors: &'static str, version: &'static str) -> clap::App<'static, 'stat
                     clap::Arg::with_name("base")
                         .long("base")
                         .takes_value(true)
+                        .default_value("/")
                         .help("Base URL"),
                 )
                 .arg(

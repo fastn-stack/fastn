@@ -38,6 +38,7 @@ pub(crate) use translation::{TranslatedDocument, TranslationData};
 pub(crate) use utils::{copy_dir_all, get_timestamp_nanosecond};
 
 pub const PACKAGE_INFO_INTERFACE: &str = "fifthtry.github.io/package-info";
+pub const PACKAGE_THEME_INTERFACE: &str = "fifthtry.github.io/theme";
 
 fn ftd_html() -> &'static str {
     include_str!("../ftd.html")
@@ -101,7 +102,11 @@ fn original_package_status(config: &fpm::Config) -> fpm::Result<String> {
         let package_info_package = match config
             .package
             .get_dependency_for_interface(fpm::PACKAGE_INFO_INTERFACE)
-        {
+            .or_else(|| {
+                config
+                    .package
+                    .get_dependency_for_interface(fpm::PACKAGE_THEME_INTERFACE)
+            }) {
             Some(dep) => dep.package.name.as_str(),
             None => fpm::PACKAGE_INFO_INTERFACE,
         };
@@ -128,7 +133,11 @@ fn translation_package_status(config: &fpm::Config) -> fpm::Result<String> {
         let package_info_package = match config
             .package
             .get_dependency_for_interface(fpm::PACKAGE_INFO_INTERFACE)
-        {
+            .or_else(|| {
+                config
+                    .package
+                    .get_dependency_for_interface(fpm::PACKAGE_THEME_INTERFACE)
+            }) {
             Some(dep) => dep.package.name.as_str(),
             None => fpm::PACKAGE_INFO_INTERFACE,
         };
