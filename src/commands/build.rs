@@ -27,13 +27,30 @@ pub async fn build(
         (None, true) => build_with_translations(config, file, base_url, ignore_failed).await,
     }?;
     // Process static assets for the dependencies
-    for dep in config
-        .package
-        .get_flattened_dependencies()
-        .into_iter()
-        .unique_by(|dep| dep.package.name.clone())
-        .collect_vec()
-    {
+    let dependencies = if let Some(package) = config.package.translation_of.as_ref() {
+        let mut d = package
+            .get_flattened_dependencies()
+            .into_iter()
+            .unique_by(|dep| dep.package.name.clone())
+            .collect_vec();
+        d.extend(
+            config
+                .package
+                .get_flattened_dependencies()
+                .into_iter()
+                .unique_by(|dep| dep.package.name.clone()),
+        );
+        d
+    } else {
+        config
+            .package
+            .get_flattened_dependencies()
+            .into_iter()
+            .unique_by(|dep| dep.package.name.clone())
+            .collect_vec()
+    };
+
+    for dep in dependencies {
         let static_files = std::collections::BTreeMap::from_iter(
             fpm::get_documents(config, &dep.package)
                 .await?
