@@ -199,6 +199,13 @@ This gives true if the package has translations available, false otherwise
 
 
 
+-- var: fpm.theme-color
+type: string (color)
+readonly: true
+
+This sets the [theme-color
+meta](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meta/name/theme-color).
+
 
 
 
