@@ -201,12 +201,12 @@ impl ftd::p2::Library for Library {
                     |(record_accumulator, instance_accumulator), font| {
                         (
                             format!(
-                                "{pre}\nstring {font_var_name}:\n",
+                                "{pre}\nstring {font_var_name}:",
                                 pre = record_accumulator,
                                 font_var_name = font.name.as_str(),
                             ),
                             format!(
-                                "{pre}\n{font_var_name}: {font_var_val}\n",
+                                "{pre}\n{font_var_name}: {font_var_val}",
                                 pre = instance_accumulator,
                                 font_var_name = font.name.as_str(),
                                 font_var_val = font.html_name(package.name.as_str())
