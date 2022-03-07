@@ -3,6 +3,9 @@
 
 
 -- ftd.text: hello
+font: $assets.fonts.Roboto
+
+-- ftd.text: hello
 font: $assets.fonts.myFirstFont
 
 -- ftd.text: World
