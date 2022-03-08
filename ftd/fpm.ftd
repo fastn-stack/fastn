@@ -193,3 +193,6 @@ optional string last-modified-on:
 
 -- all-language-status-data list all-language-translation-status:
 
+-- record image-src:
+string default:
+string dark:

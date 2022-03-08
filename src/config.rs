@@ -504,11 +504,34 @@ impl Package {
         // Virtual document that contains the asset information about the package
         use itertools::Itertools;
         let all_docs = fpm::get_documents(config, &self).await?;
-        let k = all_docs
+        let all_file_names = all_docs
             .iter()
             .map(|file_instance| file_instance.get_id())
+            .filter(|file_name| !file_name.eq("FPM.ftd"))
             .collect::<Vec<String>>();
-        dbg!(k);
+        dbg!(&all_file_names);
+        let all_file_name_records = &all_file_names
+            .iter()
+            .unique_by(|file_name| {
+                if let Some((_, ext)) = file_name.rsplit_once('.') {
+                    ext
+                } else {
+                    "non-ext-file"
+                }
+            })
+            .filter_map(|file_name| {
+                if let Some((_, ext)) = file_name.rsplit_once('.') {
+                    if fpm::IMAGE_EXT.contains(&ext) {
+                        Some(format!("-- record {ext}-file:\nfpm.image-src {ext}:"))
+                    } else {
+                        Some(format!("-- record {ext}-file:\nstring {ext}:"))
+                    }
+                } else {
+                    None
+                }
+            })
+            .collect::<Vec<String>>();
+        dbg!(all_file_name_records);
         let (font_record, fonts) = self
             .fonts
             .iter()

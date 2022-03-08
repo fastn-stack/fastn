@@ -72,6 +72,7 @@ pub(crate) async fn get_documents(
         config.packages_root.clone().join(package.name.as_str())
     };
     let mut ignore_paths = ignore::WalkBuilder::new(&path);
+    ignore_paths.hidden(false); // Allow the linux hidden files to be evaluated
     ignore_paths.overrides(package_ignores(&package, &path)?);
     let all_files = ignore_paths
         .build()
