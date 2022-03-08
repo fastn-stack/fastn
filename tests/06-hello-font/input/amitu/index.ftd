@@ -13,4 +13,4 @@ font: $assets.fonts.myFirstFont
 font: $theme-assets.fonts.themeFont
 
 -- ftd.text:
-text: $temp.blah.test.txt
+text: $assets.temp-dir.blah2.test.jpg

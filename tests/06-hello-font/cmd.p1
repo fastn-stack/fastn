@@ -7,4 +7,12 @@ output: amitu/.build
 
 Downloading fifthtry.github.io/package-info ... done in <omitted>
 Processing www.amitu.com/FPM.ftd ... done in <omitted>
+Processing www.amitu.com/ignored_dir.txt ... done in <omitted>
+Processing www.amitu.com/ignored_dir/should_not_generate.ftd ... done in <omitted>
+Processing www.amitu.com/ignored_dir/test/hello.txt ... done in <omitted>
 Processing www.amitu.com/index.ftd ... done in <omitted>
+Processing www.amitu.com/temp.ftd ... done in <omitted>
+Processing www.amitu.com/temp_dir/blah/test.txt ... done in <omitted>
+Processing www.amitu.com/temp_dir/blah2/t ... done in <omitted>
+Processing www.amitu.com/temp_dir/blah2/test.jpg ... done in <omitted>
+Processing www.amitu.com/temp_dir/hw.txt ... done in <omitted>

@@ -39,6 +39,7 @@ pub async fn build(
         config.package.name.clone(),
         config.package.get_assets_doc(config).await?,
     );
+    // panic!();
     for dep in &dependencies {
         asset_documents.insert(
             dep.package.name.clone(),
@@ -384,6 +385,7 @@ pub(crate) async fn process_file(
                     message,
                     translated_data,
                     base_url,
+                    asset_documents,
                 )
                 .await;
                 match (resp, skip_failed) {
@@ -407,6 +409,7 @@ pub(crate) async fn process_file(
                     translated_data,
                     base_url,
                     package,
+                    asset_documents,
                 )
                 .await;
                 match (resp, skip_failed) {
@@ -519,6 +522,7 @@ pub(crate) async fn process_file(
                 translated_data,
                 base_url,
                 package,
+                asset_documents,
             )
             .await;
             match (resp, skip_failed) {
@@ -542,7 +546,16 @@ pub(crate) async fn process_file(
                 package,
             )
             .await?;
-            let resp = process_code(config, doc, None, message, translated_data, base_url).await;
+            let resp = process_code(
+                config,
+                doc,
+                None,
+                message,
+                translated_data,
+                base_url,
+                asset_documents,
+            )
+            .await;
             match (resp, skip_failed) {
                 (Ok(r), _) => r,
                 (_, true) => {
@@ -570,6 +583,7 @@ async fn process_image(
     translated_data: fpm::TranslationData,
     base_url: &str,
     package: &fpm::Package,
+    asset_documents: &std::collections::HashMap<String, String>,
 ) -> fpm::Result<()> {
     let main = convert_to_ftd(config, main, package)?;
     if let Some(d) = fallback {
@@ -580,11 +594,21 @@ async fn process_image(
             message,
             translated_data,
             base_url,
+            asset_documents,
         )
         .await;
     }
 
-    return process_ftd(config, &main, None, message, translated_data, base_url).await;
+    return process_ftd(
+        config,
+        &main,
+        None,
+        message,
+        translated_data,
+        base_url,
+        asset_documents,
+    )
+    .await;
 
     fn convert_to_ftd(
         config: &fpm::Config,
@@ -611,6 +635,7 @@ async fn process_code(
     message: Option<&str>,
     translated_data: fpm::TranslationData,
     base_url: &str,
+    asset_documents: &std::collections::HashMap<String, String>,
 ) -> fpm::Result<()> {
     let main = if let Some(main) = convert_to_ftd(config, main)? {
         main
@@ -620,8 +645,16 @@ async fn process_code(
     if let Some(d) = fallback {
         match convert_to_ftd(config, d)? {
             Some(d) => {
-                return process_ftd(config, &main, Some(&d), message, translated_data, base_url)
-                    .await;
+                return process_ftd(
+                    config,
+                    &main,
+                    Some(&d),
+                    message,
+                    translated_data,
+                    base_url,
+                    asset_documents,
+                )
+                .await;
             }
             None => {
                 return Ok(());
@@ -629,7 +662,16 @@ async fn process_code(
         }
     };
 
-    return process_ftd(config, &main, None, message, translated_data, base_url).await;
+    return process_ftd(
+        config,
+        &main,
+        None,
+        message,
+        translated_data,
+        base_url,
+        asset_documents,
+    )
+    .await;
 
     fn convert_to_ftd(
         config: &fpm::Config,
