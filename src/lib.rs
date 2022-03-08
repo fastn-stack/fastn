@@ -90,6 +90,49 @@ fn available_languages(config: &fpm::Config) -> fpm::Result<String> {
     })
 }
 
+fn package_info_markdown(
+    config: &fpm::Config,
+    file_name: &str,
+    content: &str,
+) -> fpm::Result<String> {
+    let path = config.root.join("FPM").join("markdown.ftd");
+    Ok(if path.is_file() {
+        std::fs::read_to_string(path)?
+    } else {
+        let package_info_package = match config
+            .package
+            .get_dependency_for_interface(fpm::PACKAGE_INFO_INTERFACE)
+            .or_else(|| {
+                config
+                    .package
+                    .get_dependency_for_interface(fpm::PACKAGE_THEME_INTERFACE)
+            }) {
+            Some(dep) => dep.package.name.as_str(),
+            None => fpm::PACKAGE_INFO_INTERFACE,
+        };
+        let body_prefix = match config.package.generate_prefix_string(false) {
+            Some(bp) => bp,
+            None => String::new(),
+        };
+        format!(
+            indoc::indoc! {"
+                {body_prefix}
+        
+                -- import: {package_info_package}/markdown as pi 
+        
+                -- pi.markdown-page: {file_name}
+
+                {content}
+
+            "},
+            body_prefix = body_prefix,
+            package_info_package = package_info_package,
+            content = content,
+            file_name = file_name,
+        )
+    })
+}
+
 fn original_package_status(config: &fpm::Config) -> fpm::Result<String> {
     let path = config
         .root

@@ -311,8 +311,26 @@ pub(crate) async fn process_file(
             (fpm::File::Static(main_sa), fpm::File::Static(_)) => {
                 process_static(main_sa, &config.root, package).await?
             }
-            (fpm::File::Markdown(main_sa), fpm::File::Markdown(_)) => {
-                process_markdown(main_sa, config, base_url).await?
+            (fpm::File::Markdown(main_doc), fpm::File::Markdown(fallback_doc)) => {
+                let resp = process_markdown(
+                    config,
+                    main_doc,
+                    Some(fallback_doc),
+                    message,
+                    translated_data,
+                    base_url,
+                )
+                .await;
+                match (resp, skip_failed) {
+                    (Ok(r), _) => r,
+                    (_, true) => {
+                        println!("Failed");
+                        return Ok(());
+                    }
+                    (e, _) => {
+                        return e;
+                    }
+                }
             }
             (main_file, fallback_file) => {
                 return Err(fpm::Error::UsageError {
@@ -350,7 +368,20 @@ pub(crate) async fn process_file(
             }
         }
         fpm::File::Static(sa) => process_static(sa, &config.root, package).await?,
-        fpm::File::Markdown(doc) => process_markdown(doc, config, base_url).await?,
+        fpm::File::Markdown(doc) => {
+            let resp =
+                process_markdown(config, doc, None, message, translated_data, base_url).await;
+            match (resp, skip_failed) {
+                (Ok(r), _) => r,
+                (_, true) => {
+                    println!("Failed");
+                    return Ok(());
+                }
+                (e, _) => {
+                    return e;
+                }
+            }
+        }
     }
     if fpm::utils::is_test() {
         println!("Done");
@@ -361,31 +392,89 @@ pub(crate) async fn process_file(
 }
 
 async fn process_markdown(
-    _doc: &fpm::Document,
-    _config: &fpm::Config,
-    _base_url: &str,
+    config: &fpm::Config,
+    main: &fpm::Document,
+    fallback: Option<&fpm::Document>,
+    message: Option<&str>,
+    translated_data: fpm::TranslationData,
+    base_url: &str,
 ) -> fpm::Result<()> {
-    /*if _doc.id == "README.md"
-        && !(std::path::Path::new(
-        format!(".{}index.ftd", std::path::MAIN_SEPARATOR).as_str(),
-    )
-        .exists()
-        || std::path::Path::new(
-        format!(".{}index.md", std::path::MAIN_SEPARATOR).as_str(),
-    )
-        .exists())
-    {
-        "index.md".to_string()
+    let main = if let Some(main) = convert_md_to_ftd(config, main)? {
+        main
     } else {
-        _doc.id.to_string()
-    }*/
+        return Ok(());
+    };
+    match fallback {
+        Some(d) => match convert_md_to_ftd(config, d)? {
+            Some(d) => {
+                return process_ftd(config, &main, Some(&d), message, translated_data, base_url)
+                    .await;
+            }
+            None => {
+                return Ok(());
+            }
+        },
+        None => {}
+    };
+
+    return process_ftd(config, &main, None, message, translated_data, base_url).await;
+
     // if let Ok(c) = tokio::fs::read_to_string("./FPM/markdown.ftd").await {
     //     c
     // } else {
     //     fpm::default_markdown().to_string()
     // }
     // todo
-    Ok(())
+
+    fn convert_md_to_ftd(
+        config: &fpm::Config,
+        doc: &fpm::Document,
+    ) -> fpm::Result<Option<fpm::Document>> {
+        let doc_id = if doc.id == "README.md"
+            && !(std::path::Path::new(format!(".{}index.ftd", std::path::MAIN_SEPARATOR).as_str())
+                .exists()
+                || std::path::Path::new(format!(".{}index.md", std::path::MAIN_SEPARATOR).as_str())
+                    .exists())
+        {
+            "index.md".to_string()
+        } else if !std::path::Path::new(
+            format!(
+                ".{}{}",
+                std::path::MAIN_SEPARATOR,
+                convert_md_to_ftd_extension(doc.id.as_str())?
+            )
+            .as_str(),
+        )
+        .exists()
+        {
+            doc.id.to_string()
+        } else {
+            return Ok(None);
+        };
+        let id = convert_md_to_ftd_extension(doc_id.as_str())?;
+        let new_content = fpm::package_info_markdown(config, id.as_str(), doc.content.as_str())?;
+
+        let new_doc = {
+            let mut new_doc = doc.to_owned();
+            new_doc.content = new_content;
+            new_doc.id = id;
+            new_doc
+        };
+
+        Ok(Some(new_doc))
+    }
+
+    fn convert_md_to_ftd_extension(name: &str) -> fpm::Result<String> {
+        let file_name = if let Some(p1) = name.strip_suffix(".md") {
+            p1
+        } else {
+            return Err(fpm::Error::UsageError {
+                message: format!("expected md file found: `{}`", name),
+            });
+        };
+
+        Ok(format!("{}.ftd", file_name))
+    }
 }
 
 async fn process_ftd(
