@@ -792,19 +792,32 @@ async fn process_static(
     base_path: &camino::Utf8Path,
     package: &fpm::Package,
 ) -> fpm::Result<()> {
-    let base_path = base_path
-        .join(".build")
-        .join("-")
-        .join(package.name.as_str());
-    std::fs::create_dir_all(&base_path)?;
-    if let Some((dir, _)) = sa.id.rsplit_once(std::path::MAIN_SEPARATOR) {
-        std::fs::create_dir_all(&base_path.join(dir))?;
+    copy_to_build(sa, base_path, package)?;
+    if let Some(original_package) = package.translation_of.as_ref() {
+        copy_to_build(sa, base_path, original_package)?;
     }
-    std::fs::copy(
-        sa.base_path.join(sa.id.as_str()),
-        base_path.join(sa.id.as_str()),
-    )?;
-    Ok(())
+    return Ok(());
+
+    fn copy_to_build(
+        sa: &fpm::Static,
+        base_path: &camino::Utf8Path,
+        package: &fpm::Package,
+    ) -> fpm::Result<()> {
+        let build_path = base_path
+            .join(".build")
+            .join("-")
+            .join(package.name.as_str());
+        std::fs::create_dir_all(&build_path)?;
+        if let Some((dir, _)) = sa.id.rsplit_once(std::path::MAIN_SEPARATOR) {
+            std::fs::create_dir_all(&build_path.join(dir))?;
+        }
+        std::fs::copy(
+            sa.base_path.join(sa.id.as_str()),
+            build_path.join(sa.id.as_str()),
+        )?;
+
+        Ok(())
+    }
 }
 
 fn replace_markers(
