@@ -401,8 +401,8 @@ impl fpm::Package {
             if let Some(translation_of) = package.translation_of.as_ref() {
                 return Err(fpm::Error::PackageError {
                     message: format!(
-                        "Cannot translated a translation package. \
-                    suggestion: Translated the original package instead. \
+                        "Cannot translate a translation package. \
+                    suggestion: Translate the original package instead. \
                     Looks like `{}` is an original package",
                         translation_of.name
                     ),

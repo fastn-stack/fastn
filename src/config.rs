@@ -270,7 +270,17 @@ impl Config {
         fpm::utils::validate_zip_url(&package)?;
 
         fpm::dependency::ensure(&root, &mut package)?;
-
+        if package.import_auto_imports_from_original {
+            if let Some(ref original_package) = *package.translation_of {
+                if !package.auto_import.is_empty() {
+                    return Err(fpm::Error::PackageError {
+                        message: format!("Can't use `inherit-auto-imports-from-original` along with auto-imports defined for the translation package. Either set `inherit-auto-imports-from-original` to false or remove `fpm.auto-import` from the {package_name}/FPM.ftd file", package_name=package.name.as_str()),
+                    });
+                } else {
+                    package.auto_import = original_package.auto_import.clone()
+                }
+            }
+        }
         Ok(Config {
             package,
             packages_root: root.clone().join(".packages"),
@@ -312,6 +322,8 @@ pub(crate) struct PackageTemp {
     pub zip: Option<String>,
     #[serde(rename = "canonical-url")]
     pub canonical_url: Option<String>,
+    #[serde(rename = "inherit-auto-imports-from-original")]
+    pub import_auto_imports_from_original: bool,
 }
 
 impl PackageTemp {
@@ -341,6 +353,7 @@ impl PackageTemp {
             fpm_path: None,
             ignored_paths: vec![],
             fonts: vec![],
+            import_auto_imports_from_original: self.import_auto_imports_from_original,
         }
     }
 }
@@ -367,6 +380,8 @@ pub struct Package {
     ///
     /// Note that this too is kind of bad design, we will move fonts to `fpm::Package` struct soon.
     pub fonts: Vec<fpm::Font>,
+
+    pub import_auto_imports_from_original: bool,
 }
 
 impl Package {
@@ -385,6 +400,7 @@ impl Package {
             fpm_path: None,
             ignored_paths: vec![],
             fonts: vec![],
+            import_auto_imports_from_original: true,
         }
     }
 
