@@ -159,7 +159,7 @@ async fn build_with_translations(
             Default::default(),
             base_url,
             skip_failed,
-            &asset_documents,
+            asset_documents,
         )
         .await?;
     }
@@ -183,7 +183,7 @@ async fn build_with_translations(
             None,
             Default::default(),
             base_url,
-            &asset_documents,
+            asset_documents,
         )
         .await?;
         fpm::utils::print_end("Processed translation-status.ftd", start);
@@ -260,7 +260,7 @@ async fn build_with_original(
             continue;
         }
         translated_document
-            .html(config, base_url, skip_failed, &asset_documents)
+            .html(config, base_url, skip_failed, asset_documents)
             .await?;
     }
 
@@ -283,7 +283,7 @@ async fn build_with_original(
             None,
             Default::default(),
             base_url,
-            &asset_documents,
+            asset_documents,
         )
         .await?;
         fpm::utils::print_end("Processed translation-status.ftd", start);
@@ -313,7 +313,7 @@ async fn process_files(
             Default::default(),
             base_url,
             skip_failed,
-            &asset_documents,
+            asset_documents,
         )
         .await?
     }
@@ -575,6 +575,7 @@ pub(crate) async fn process_file(
     Ok(())
 }
 
+#[allow(clippy::too_many_arguments)]
 async fn process_image(
     config: &fpm::Config,
     main: &fpm::Static,
@@ -933,7 +934,7 @@ async fn process_ftd(
                 message,
                 translated_data,
                 base_url,
-                &asset_documents,
+                asset_documents,
             )
             .await?
         }
@@ -945,7 +946,7 @@ async fn process_ftd(
                 message,
                 translated_data,
                 base_url,
-                &asset_documents,
+                asset_documents,
             )
             .await?
         }
@@ -1095,7 +1096,7 @@ async fn process_ftd(
         .await?;
         Ok(())
     }
-
+    #[allow(clippy::too_many_arguments)]
     async fn write_with_fallback(
         config: &fpm::Config,
         main: &fpm::Document,

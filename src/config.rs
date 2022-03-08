@@ -521,7 +521,7 @@ impl Package {
     pub async fn get_assets_doc(&self, config: &fpm::Config) -> fpm::Result<String> {
         // Virtual document that contains the asset information about the package
         use itertools::Itertools;
-        let all_docs = fpm::get_documents(config, &self).await?;
+        let all_docs = fpm::get_documents(config, self).await?;
         let all_file_names = all_docs
             .iter()
             .filter_map(|file_instance| {
@@ -601,7 +601,7 @@ impl Package {
         impl Path {
             pub fn new(path: &str) -> Path {
                 Path {
-                    parts: path.to_string().split("/").map(|s| s.to_string()).collect(),
+                    parts: path.to_string().split('/').map(|s| s.to_string()).collect(),
                 }
             }
         }
@@ -610,7 +610,7 @@ impl Package {
         struct Dir {
             name: String,
             full_path: String,
-            children: Vec<Box<Dir>>,
+            children: Vec<Dir>,
         }
 
         fn dir(val: &str) -> Dir {
@@ -622,7 +622,7 @@ impl Package {
                 Dir {
                     name: name.to_string(),
                     full_path: full_path.to_string(),
-                    children: Vec::<Box<Dir>>::new(),
+                    children: Vec::<Dir>::new(),
                 }
             }
 
@@ -639,7 +639,7 @@ impl Package {
             where
                 T: Into<Dir>,
             {
-                self.children.push(Box::new(leaf.into()));
+                self.children.push(leaf.into());
                 self
             }
 
@@ -660,23 +660,23 @@ impl Package {
             }
         }
 
-        fn build_tree(node: &mut Dir, parts: &Vec<String>, depth: usize) {
+        fn build_tree(node: &mut Dir, parts: &[String], depth: usize) {
             if depth < parts.len() {
                 let item = &parts[depth];
                 let full_path = &parts[..depth + 1].join("/");
 
-                let mut dir = match node.find_child(&item) {
+                let dir = match node.find_child(item) {
                     Some(d) => d,
                     None => {
-                        let d = Dir::new(&item, full_path.as_str());
+                        let d = Dir::new(item, full_path.as_str());
                         node.add_child(d);
-                        match node.find_child(&item) {
+                        match node.find_child(item) {
                             Some(d2) => d2,
                             None => panic!("Got here!"),
                         }
                     }
                 };
-                build_tree(&mut dir, parts, depth + 1);
+                build_tree(dir, parts, depth + 1);
             }
         }
 

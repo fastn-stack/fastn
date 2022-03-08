@@ -81,7 +81,7 @@ pub(crate) async fn get_documents(
     };
     let mut ignore_paths = ignore::WalkBuilder::new(&path);
     // ignore_paths.hidden(false); // Allow the linux hidden files to be evaluated
-    ignore_paths.overrides(package_ignores(&package, &path)?);
+    ignore_paths.overrides(package_ignores(package, &path)?);
     let all_files = ignore_paths
         .build()
         .into_iter()
