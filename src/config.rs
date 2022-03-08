@@ -543,11 +543,11 @@ impl Package {
             .iter()
             .unique()
             .map(|ext| {
-                // if fpm::IMAGE_EXT.contains(&ext.as_str()) {
-                //     format!("-- record {ext}-file:\nfpm.image-src {ext}:")
-                // } else {
-                format!("-- record {ext}-file:\nstring {ext}:")
-                // }
+                if fpm::IMAGE_EXT.contains(&ext.as_str()) {
+                    format!("-- record {ext}-file:\nfpm.image-src {ext}:")
+                } else {
+                    format!("-- record {ext}-file:\nstring {ext}:")
+                }
             })
             .join("\n");
         let (font_record, fonts) = self
@@ -752,7 +752,33 @@ impl Package {
                     let new_values = if let Some(ext) = file_ext {
                         found_extensions.push(ext.to_string());
                         // Found the extension. Should be appended to the parent record
-                        format!("-- {ext}-file {child_key}:\n{ext}: {child_full_path}",)
+                        let dark_mode_file_name = format!("{file_name}-dark.{ext}");
+                        let dark_mode_asset = node
+                            .children
+                            .iter()
+                            .find(|c| c.name.eq(dark_mode_file_name.as_str()));
+                        if fpm::IMAGE_EXT.contains(&ext) {
+                            format!(
+                                indoc::indoc! {"
+                            -- fpm.image-src {child_key}-image-instance:
+                            default: {child_full_path}
+                            dark: {dark_mode_file_path}
+                            
+                            -- {ext}-file {child_key}:
+                            {ext}: ${child_key}-image-instance"
+                                },
+                                ext = ext,
+                                child_key = child_key,
+                                child_full_path = child_full_path.as_str(),
+                                dark_mode_file_path = if let Some(dark_asset) = dark_mode_asset {
+                                    dark_asset.full_path.as_str()
+                                } else {
+                                    child_full_path.as_str()
+                                }
+                            )
+                        } else {
+                            format!("-- {ext}-file {child_key}:\n{ext}: {child_full_path}",)
+                        }
                     } else {
                         // Extension not found. Will be appended directly as a string
                         format!("-- string {file_name}: {child_full_path}")
