@@ -105,6 +105,8 @@ async fn build_with_translations(
     base_url: &str,
     skip_failed: bool,
 ) -> fpm::Result<()> {
+    use std::io::Write;
+
     let documents = std::collections::BTreeMap::from_iter(
         fpm::get_documents(config, &config.package)
             .await?
@@ -139,6 +141,10 @@ async fn build_with_translations(
             package_name: config.package.name.clone(),
         };
 
+        print!("Processing translation-status.ftd ... ");
+        let start = std::time::Instant::now();
+        std::io::stdout().flush()?;
+
         process_ftd(
             config,
             &translation_status,
@@ -148,6 +154,12 @@ async fn build_with_translations(
             base_url,
         )
         .await?;
+
+        if fpm::utils::is_test() {
+            println!("Done");
+        } else {
+            println!("Done {:?}", start.elapsed());
+        }
     }
     Ok(())
 }
@@ -163,6 +175,8 @@ async fn build_with_original(
     base_url: &str,
     skip_failed: bool,
 ) -> fpm::Result<()> {
+    use std::io::Write;
+
     // This is the translation package
     // Fetch all files from the original package
     let original_path = config.original_path()?;
@@ -231,6 +245,9 @@ async fn build_with_original(
             package_name: config.package.name.clone(),
         };
 
+        print!("Processing translation-status.ftd ... ");
+        let start = std::time::Instant::now();
+        std::io::stdout().flush()?;
         process_ftd(
             config,
             &translation_status,
@@ -240,6 +257,12 @@ async fn build_with_original(
             base_url,
         )
         .await?;
+
+        if fpm::utils::is_test() {
+            println!("Done");
+        } else {
+            println!("Done {:?}", start.elapsed());
+        }
     }
     Ok(())
 }
