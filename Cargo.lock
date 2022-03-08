@@ -335,6 +335,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "colorize"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "dc17e449bc7854c50b943d113a98bc0e01dc6585d2c66eaa09ca645ebd8a7e62"
+
+[[package]]
 name = "comrak"
 version = "0.7.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -775,6 +781,7 @@ dependencies = [
  "camino",
  "chrono",
  "clap",
+ "colorize",
  "diffy",
  "fbt-lib",
  "fluent",
@@ -797,7 +804,6 @@ dependencies = [
  "serde_derive",
  "serde_json",
  "sha2",
- "termcolor",
  "thiserror",
  "tokio 1.16.1",
  "url 2.2.2",
@@ -2447,15 +2453,6 @@ dependencies = [
  "redox_syscall 0.2.10",
  "remove_dir_all",
  "winapi 0.3.9",
-]
-
-[[package]]
-name = "termcolor"
-version = "1.1.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2dfed899f0eb03f32ee8c6a0aabdb8a7949659e3466561fc0adf54e26d88c5f4"
-dependencies = [
- "winapi-util",
 ]
 
 [[package]]

@@ -1,17 +1,25 @@
+use colorize::AnsiColor;
+
 macro_rules! warning {
     ($s:expr,) => {
         warning!($s)
     };
     ($s:expr) => {
-        use std::io::Write;
-        use termcolor::WriteColor;
-
-        let mut stdout = termcolor::StandardStream::stdout(termcolor::ColorChoice::Always);
-        stdout.set_color(termcolor::ColorSpec::new().set_fg(Some(termcolor::Color::Yellow)))?;
-
-        writeln!(&mut stdout, "{}", $s)?;
-        stdout.reset()?;
+        println!("{}", format!("{}", $s).yellow());
     };
+}
+
+pub fn print_end(msg: &str, start: std::time::Instant) {
+    if fpm::utils::is_test() {
+        println!("done in <omitted>");
+    } else {
+        println!(
+            // TODO: instead of lots of spaces put proper erase current terminal line thing
+            "\r{} in {:?}.                          ",
+            msg.to_string().green(),
+            start.elapsed()
+        );
+    }
 }
 
 pub trait HasElements {

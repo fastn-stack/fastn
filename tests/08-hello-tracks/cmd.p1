@@ -5,7 +5,7 @@ output: amitu/.tracks
 
 -- stdout:
 
-Downloading fifthtry.github.io/package-info ... Done
+Downloading fifthtry.github.io/package-info ... done in <omitted>
 index-track.ftd is now tracking index.ftd
 index-track.ftd is now tracking hello.txt
 index-track.ftd is already tracking hello.txt

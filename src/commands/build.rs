@@ -155,12 +155,7 @@ async fn build_with_translations(
             base_url,
         )
         .await?;
-
-        if fpm::utils::is_test() {
-            println!("Done");
-        } else {
-            println!("Done {:?}", start.elapsed());
-        }
+        fpm::utils::print_end("Processed translation-status.ftd", start);
     }
     Ok(())
 }
@@ -258,12 +253,7 @@ async fn build_with_original(
             base_url,
         )
         .await?;
-
-        if fpm::utils::is_test() {
-            println!("Done");
-        } else {
-            println!("Done {:?}", start.elapsed());
-        }
+        fpm::utils::print_end("Processed translation-status.ftd", start);
     }
     Ok(())
 }
@@ -424,11 +414,10 @@ pub(crate) async fn process_file(
                 })
             }
         }
-        if fpm::utils::is_test() {
-            println!("Done");
-        } else {
-            println!("Done {:?}", start.elapsed());
-        }
+        fpm::utils::print_end(
+            format!("Processed {}/{}", package.name.as_str(), main.get_id()).as_str(),
+            start,
+        );
         return Ok(());
     }
     print!(
@@ -512,11 +501,10 @@ pub(crate) async fn process_file(
             }
         }
     }
-    if fpm::utils::is_test() {
-        println!("Done");
-    } else {
-        println!("Done {:?}", start.elapsed());
-    }
+    fpm::utils::print_end(
+        format!("Processed {}/{}", package.name.as_str(), main.get_id()).as_str(),
+        start,
+    );
     Ok(())
 }
 

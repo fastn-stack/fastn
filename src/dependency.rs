@@ -241,12 +241,7 @@ impl fpm::Package {
                     std::io::copy(&mut c_file, &mut outfile)?;
                 }
             }
-
-            if fpm::utils::is_test() {
-                println!("Done");
-            } else {
-                println!("Done {:?}", start.elapsed());
-            }
+            fpm::utils::print_end(format!("Downloaded {}", self.name.as_str()).as_str(), start);
         }
         let fpm_ftd_path = if root.join("FPM.ftd").exists() {
             root.join("FPM.ftd")

@@ -5,8 +5,8 @@ output: amitu/.build
 
 -- stdout:
 
-Downloading fifthtry.github.io/package-info ... Done
-Processing www.amitu.com/FPM.ftd ... Done
-Processing www.amitu.com/index.ftd ... Done
-Processing www.amitu.com/scrot.png ... Done
-Processing www.amitu.com/static/scrot_2.png ... Done
+Downloading fifthtry.github.io/package-info ... done in <omitted>
+Processing www.amitu.com/FPM.ftd ... done in <omitted>
+Processing www.amitu.com/index.ftd ... done in <omitted>
+Processing www.amitu.com/scrot.png ... done in <omitted>
+Processing www.amitu.com/static/scrot_2.png ... done in <omitted>
