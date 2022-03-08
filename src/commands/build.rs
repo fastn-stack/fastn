@@ -282,6 +282,8 @@ pub(crate) async fn process_file(
     base_url: &str,
     skip_failed: bool,
 ) -> fpm::Result<()> {
+    use std::io::Write;
+
     let start = std::time::Instant::now();
     if let Some(fallback) = fallback {
         print!(
@@ -289,6 +291,7 @@ pub(crate) async fn process_file(
             package.name.as_str(),
             main.get_id()
         );
+        std::io::stdout().flush()?;
         match (main, fallback) {
             (fpm::File::Ftd(main_doc), fpm::File::Ftd(fallback_doc)) => {
                 let resp = process_ftd(
@@ -386,6 +389,7 @@ pub(crate) async fn process_file(
         package.name.as_str(),
         main.get_id()
     );
+    std::io::stdout().flush()?;
     match main {
         fpm::File::Ftd(doc) => {
             let resp = process_ftd(config, doc, None, message, translated_data, base_url).await;

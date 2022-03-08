@@ -5,6 +5,7 @@ output: amitu/.build
 
 -- stdout:
 
+Downloading fifthtry.github.io/package-info ... Done
 Processing www.amitu.com/FPM.ftd ... Done
 Processing www.amitu.com/index.ftd ... Done
 Processing www.amitu.com/scrot.png ... Done

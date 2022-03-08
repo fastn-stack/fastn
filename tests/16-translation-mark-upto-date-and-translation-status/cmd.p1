@@ -4,6 +4,7 @@ output: amitu/.tracks
 
 -- stdout:
 
+Downloading fifthtry.github.io/package-info ... Done
 lib.ftd is now marked upto date
 Never marked: FPM.ftd
 Missing: index.ftd

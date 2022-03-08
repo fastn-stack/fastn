@@ -192,6 +192,9 @@ impl fpm::Package {
 
             let path = std::env::temp_dir().join(format!("{}.zip", self.name.replace("/", "__")));
 
+            let start = std::time::Instant::now();
+            print!("Downloading {} ... ", self.name.as_str());
+            std::io::stdout().flush()?;
             // Download the zip folder
             {
                 let mut response =
@@ -237,6 +240,12 @@ impl fpm::Package {
                     let mut outfile = std::fs::File::create(file_extract_path)?;
                     std::io::copy(&mut c_file, &mut outfile)?;
                 }
+            }
+
+            if fpm::utils::is_test() {
+                println!("Done");
+            } else {
+                println!("Done {:?}", start.elapsed());
             }
         }
         let fpm_ftd_path = if root.join("FPM.ftd").exists() {
