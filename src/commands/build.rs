@@ -404,8 +404,8 @@ async fn process_markdown(
     } else {
         return Ok(());
     };
-    match fallback {
-        Some(d) => match convert_md_to_ftd(config, d)? {
+    if let Some(d) = fallback {
+        match convert_md_to_ftd(config, d)? {
             Some(d) => {
                 return process_ftd(config, &main, Some(&d), message, translated_data, base_url)
                     .await;
@@ -413,8 +413,7 @@ async fn process_markdown(
             None => {
                 return Ok(());
             }
-        },
-        None => {}
+        }
     };
 
     return process_ftd(config, &main, None, message, translated_data, base_url).await;
