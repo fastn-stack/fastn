@@ -10,6 +10,9 @@ pub struct Library {
     pub markdown: Option<(String, String)>,
     pub document_id: String,
     pub translated_data: fpm::TranslationData,
+    /// Hashmap that contains the information about the assets document for the current build
+    /// It'll contain a map of <package_name> corresponding to the asset doc for that package
+    pub asset_documents: std::collections::HashMap<String, String>,
 }
 
 impl ftd::p2::Library for Library {
@@ -176,7 +179,12 @@ impl ftd::p2::Library for Library {
                 let new_name = name.replacen(&package.name.as_str(), "", 1);
                 if new_name.as_str().trim_start_matches('/') == "assets" {
                     // Virtual document for getting the assets
-                    return Some(package.get_assets_doc());
+                    if let Some(asset_doc) = lib.asset_documents.get(&package.name.clone()) {
+                        return Some(asset_doc.to_owned());
+                    } else {
+                        panic!("Expected assets doc to be initialized")
+                    }
+                    // return Some(package.get_assets_doc());
                 } else if let Some(body) = get_file_from_location(&path, new_name.as_str()) {
                     return Some(package.get_prefixed_body(body.as_str(), name, false));
                 }

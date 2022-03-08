@@ -500,10 +500,15 @@ impl Package {
         Ok(resp)
     }
 
-    pub fn get_assets_doc(&self) -> String {
+    pub async fn get_assets_doc(&self, config: &fpm::Config) -> fpm::Result<String> {
         // Virtual document that contains the asset information about the package
         use itertools::Itertools;
-
+        let all_docs = fpm::get_documents(config, &self).await?;
+        let k = all_docs
+            .iter()
+            .map(|file_instance| file_instance.get_id())
+            .collect::<Vec<String>>();
+        dbg!(k);
         let (font_record, fonts) = self
             .fonts
             .iter()
@@ -531,13 +536,13 @@ impl Package {
                     )
                 },
             );
-        format!(
+        Ok(format!(
             indoc::indoc! {"
                 {font_record}
                 {fonts}
             "},
             font_record = font_record,
             fonts = fonts
-        )
+        ))
     }
 }

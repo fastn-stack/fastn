@@ -1,5 +1,6 @@
 -- import: www.amitu.com/assets
 -- import: one.fpm.local/assets as theme-assets
+-- import: www.amitu.com/temp
 
 
 -- ftd.text: hello
@@ -10,3 +11,6 @@ font: $assets.fonts.myFirstFont
 
 -- ftd.text: World
 font: $theme-assets.fonts.themeFont
+
+-- ftd.text:
+text: $temp.blah.test.txt

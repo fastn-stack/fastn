@@ -11,6 +11,41 @@ pub async fn build(
 
     tokio::fs::create_dir_all(config.build_dir()).await?;
     // let skip_failed = ignore_failed.unwrap_or(false);
+    // Process static assets for the dependencies
+    let dependencies = if let Some(package) = config.package.translation_of.as_ref() {
+        let mut deps = package
+            .get_flattened_dependencies()
+            .into_iter()
+            .unique_by(|dep| dep.package.name.clone())
+            .collect_vec();
+        deps.extend(
+            config
+                .package
+                .get_flattened_dependencies()
+                .into_iter()
+                .unique_by(|dep| dep.package.name.clone()),
+        );
+        deps
+    } else {
+        config
+            .package
+            .get_flattened_dependencies()
+            .into_iter()
+            .unique_by(|dep| dep.package.name.clone())
+            .collect_vec()
+    };
+    let mut asset_documents = std::collections::HashMap::new();
+    asset_documents.insert(
+        config.package.name.clone(),
+        config.package.get_assets_doc(config).await?,
+    );
+    for dep in &dependencies {
+        asset_documents.insert(
+            dep.package.name.clone(),
+            dep.package.get_assets_doc(config).await?,
+        );
+    }
+
     match (
         config.package.translation_of.as_ref(),
         config.package.translations.has_elements(),
@@ -21,34 +56,23 @@ pub async fn build(
             unreachable!()
         }
         (Some(original), false) => {
-            build_with_original(config, original, file, base_url, ignore_failed).await
+            build_with_original(
+                config,
+                original,
+                file,
+                base_url,
+                ignore_failed,
+                &asset_documents,
+            )
+            .await
         }
-        (None, false) => build_simple(config, file, base_url, ignore_failed).await,
-        (None, true) => build_with_translations(config, file, base_url, ignore_failed).await,
+        (None, false) => {
+            build_simple(config, file, base_url, ignore_failed, &asset_documents).await
+        }
+        (None, true) => {
+            build_with_translations(config, file, base_url, ignore_failed, &asset_documents).await
+        }
     }?;
-    // Process static assets for the dependencies
-    let dependencies = if let Some(package) = config.package.translation_of.as_ref() {
-        let mut d = package
-            .get_flattened_dependencies()
-            .into_iter()
-            .unique_by(|dep| dep.package.name.clone())
-            .collect_vec();
-        d.extend(
-            config
-                .package
-                .get_flattened_dependencies()
-                .into_iter()
-                .unique_by(|dep| dep.package.name.clone()),
-        );
-        d
-    } else {
-        config
-            .package
-            .get_flattened_dependencies()
-            .into_iter()
-            .unique_by(|dep| dep.package.name.clone())
-            .collect_vec()
-    };
 
     for dep in dependencies {
         let static_files = std::collections::BTreeMap::from_iter(
@@ -67,6 +91,7 @@ pub async fn build(
             file,
             base_url,
             ignore_failed,
+            &asset_documents,
         )
         .await?;
     }
@@ -78,6 +103,7 @@ async fn build_simple(
     file: Option<&str>,
     base_url: &str,
     skip_failed: bool,
+    asset_documents: &std::collections::HashMap<String, String>,
 ) -> fpm::Result<()> {
     let documents = std::collections::BTreeMap::from_iter(
         fpm::get_documents(config, &config.package)
@@ -92,6 +118,7 @@ async fn build_simple(
         file,
         base_url,
         skip_failed,
+        asset_documents,
     )
     .await
 }
@@ -101,6 +128,7 @@ async fn build_with_translations(
     process_file: Option<&str>,
     base_url: &str,
     skip_failed: bool,
+    asset_documents: &std::collections::HashMap<String, String>,
 ) -> fpm::Result<()> {
     let documents = std::collections::BTreeMap::from_iter(
         fpm::get_documents(config, &config.package)
@@ -124,6 +152,7 @@ async fn build_with_translations(
             Default::default(),
             base_url,
             skip_failed,
+            &asset_documents,
         )
         .await?;
     }
@@ -143,6 +172,7 @@ async fn build_with_translations(
             None,
             Default::default(),
             base_url,
+            &asset_documents,
         )
         .await?;
     }
@@ -159,6 +189,7 @@ async fn build_with_original(
     file: Option<&str>,
     base_url: &str,
     skip_failed: bool,
+    asset_documents: &std::collections::HashMap<String, String>,
 ) -> fpm::Result<()> {
     // This is the translation package
     // Fetch all files from the original package
@@ -215,7 +246,7 @@ async fn build_with_original(
             continue;
         }
         translated_document
-            .html(config, base_url, skip_failed)
+            .html(config, base_url, skip_failed, &asset_documents)
             .await?;
     }
 
@@ -235,6 +266,7 @@ async fn build_with_original(
             None,
             Default::default(),
             base_url,
+            &asset_documents,
         )
         .await?;
     }
@@ -248,6 +280,7 @@ async fn process_files(
     file: Option<&str>,
     base_url: &str,
     skip_failed: bool,
+    asset_documents: &std::collections::HashMap<String, String>,
 ) -> fpm::Result<()> {
     for f in documents.values() {
         if file.is_some() && file != Some(f.get_id().as_str()) {
@@ -262,6 +295,7 @@ async fn process_files(
             Default::default(),
             base_url,
             skip_failed,
+            &asset_documents,
         )
         .await?
     }
@@ -278,6 +312,7 @@ pub(crate) async fn process_file(
     translated_data: fpm::TranslationData,
     base_url: &str,
     skip_failed: bool,
+    asset_documents: &std::collections::HashMap<String, String>,
 ) -> fpm::Result<()> {
     let start = std::time::Instant::now();
     if let Some(fallback) = fallback {
@@ -295,6 +330,7 @@ pub(crate) async fn process_file(
                     message,
                     translated_data,
                     base_url,
+                    asset_documents,
                 )
                 .await;
                 match (resp, skip_failed) {
@@ -337,7 +373,16 @@ pub(crate) async fn process_file(
     );
     match main {
         fpm::File::Ftd(doc) => {
-            let resp = process_ftd(config, doc, None, message, translated_data, base_url).await;
+            let resp = process_ftd(
+                config,
+                doc,
+                None,
+                message,
+                translated_data,
+                base_url,
+                asset_documents,
+            )
+            .await;
             match (resp, skip_failed) {
                 (Ok(r), _) => r,
                 (_, true) => {
@@ -395,6 +440,7 @@ async fn process_ftd(
     message: Option<&str>,
     translated_data: fpm::TranslationData,
     base_url: &str,
+    asset_documents: &std::collections::HashMap<String, String>,
 ) -> fpm::Result<()> {
     if main.id.eq("FPM.ftd") {
         if config.is_translation_package() {
@@ -527,6 +573,7 @@ async fn process_ftd(
                 message,
                 translated_data,
                 base_url,
+                &asset_documents,
             )
             .await?
         }
@@ -538,10 +585,20 @@ async fn process_ftd(
                 message,
                 translated_data,
                 base_url,
+                &asset_documents,
             )
             .await?
         }
-        _ => write_default(config, &final_main, new_file_path.as_str(), base_url).await?,
+        _ => {
+            write_default(
+                config,
+                &final_main,
+                new_file_path.as_str(),
+                base_url,
+                asset_documents,
+            )
+            .await?
+        }
     }
 
     return Ok(());
@@ -551,6 +608,7 @@ async fn process_ftd(
         main: &fpm::Document,
         new_file_path: &str,
         base_url: &str,
+        asset_documents: &std::collections::HashMap<String, String>,
     ) -> fpm::Result<()> {
         use tokio::io::AsyncWriteExt;
 
@@ -559,6 +617,7 @@ async fn process_ftd(
             markdown: None,
             document_id: main.id.clone(),
             translated_data: Default::default(),
+            asset_documents: asset_documents.to_owned(),
         };
 
         let main_ftd_doc = match ftd::p2::Document::from(
@@ -602,6 +661,7 @@ async fn process_ftd(
         message: &str,
         translated_data: fpm::TranslationData,
         base_url: &str,
+        asset_documents: &std::collections::HashMap<String, String>,
     ) -> fpm::Result<()> {
         use tokio::io::AsyncWriteExt;
 
@@ -610,6 +670,7 @@ async fn process_ftd(
             markdown: None,
             document_id: main.id.clone(),
             translated_data,
+            asset_documents: asset_documents.to_owned(),
         };
 
         let main_ftd_doc = match ftd::p2::Document::from(
@@ -683,14 +744,15 @@ async fn process_ftd(
         message: &str,
         translated_data: fpm::TranslationData,
         base_url: &str,
+        asset_documents: &std::collections::HashMap<String, String>,
     ) -> fpm::Result<()> {
         use tokio::io::AsyncWriteExt;
-
         let lib = fpm::Library {
             config: config.clone(),
             markdown: None,
             document_id: main.id.clone(),
             translated_data,
+            asset_documents: asset_documents.to_owned(),
         };
 
         let main_ftd_doc = match ftd::p2::Document::from(
