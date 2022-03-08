@@ -90,6 +90,70 @@ fn available_languages(config: &fpm::Config) -> fpm::Result<String> {
     })
 }
 
+fn package_info_code(
+    config: &fpm::Config,
+    file_name: &str,
+    content: &str,
+    extension: &str,
+) -> fpm::Result<String> {
+    let path = config.root.join("FPM").join("code.ftd");
+    Ok(if path.is_file() {
+        std::fs::read_to_string(path)?
+    } else {
+        let package_info_package = match config
+            .package
+            .get_dependency_for_interface(fpm::PACKAGE_INFO_INTERFACE)
+            .or_else(|| {
+                config
+                    .package
+                    .get_dependency_for_interface(fpm::PACKAGE_THEME_INTERFACE)
+            }) {
+            Some(dep) => dep.package.name.as_str(),
+            None => fpm::PACKAGE_INFO_INTERFACE,
+        };
+        let body_prefix = match config.package.generate_prefix_string(false) {
+            Some(bp) => bp,
+            None => String::new(),
+        };
+        if content.trim().is_empty() {
+            format!(
+                indoc::indoc! {"
+                {body_prefix}
+        
+                -- import: {package_info_package}/code as pi 
+        
+                -- pi.code-page: {file_name}
+                lang: {ext}
+
+                "},
+                body_prefix = body_prefix,
+                package_info_package = package_info_package,
+                file_name = file_name,
+                ext = extension,
+            )
+        } else {
+            format!(
+                indoc::indoc! {"
+                {body_prefix}
+        
+                -- import: {package_info_package}/code as pi 
+        
+                -- pi.code-page: {file_name}
+                lang: {ext}
+
+                {content}
+
+                "},
+                body_prefix = body_prefix,
+                package_info_package = package_info_package,
+                file_name = file_name,
+                ext = extension,
+                content = content,
+            )
+        }
+    })
+}
+
 fn package_info_markdown(
     config: &fpm::Config,
     file_name: &str,
@@ -114,8 +178,23 @@ fn package_info_markdown(
             Some(bp) => bp,
             None => String::new(),
         };
-        format!(
-            indoc::indoc! {"
+        if content.trim().is_empty() {
+            format!(
+                indoc::indoc! {"
+                {body_prefix}
+        
+                -- import: {package_info_package}/markdown as pi 
+        
+                -- pi.markdown-page: {file_name}
+
+            "},
+                body_prefix = body_prefix,
+                package_info_package = package_info_package,
+                file_name = file_name,
+            )
+        } else {
+            format!(
+                indoc::indoc! {"
                 {body_prefix}
         
                 -- import: {package_info_package}/markdown as pi 
@@ -125,11 +204,12 @@ fn package_info_markdown(
                 {content}
 
             "},
-            body_prefix = body_prefix,
-            package_info_package = package_info_package,
-            content = content,
-            file_name = file_name,
-        )
+                body_prefix = body_prefix,
+                package_info_package = package_info_package,
+                content = content,
+                file_name = file_name,
+            )
+        }
     })
 }
 

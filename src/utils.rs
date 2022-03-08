@@ -71,6 +71,15 @@ pub(crate) async fn get_number_of_documents(config: &fpm::Config) -> fpm::Result
     Ok(no_of_docs)
 }
 
+pub(crate) fn get_extension(file_name: &str) -> fpm::Result<String> {
+    if let Some((_, ext)) = file_name.rsplit_once('.') {
+        return Ok(ext.to_string());
+    }
+    Err(fpm::Error::UsageError {
+        message: format!("extension not found, `{}`", file_name),
+    })
+}
+
 pub(crate) async fn get_current_document_last_modified_on(
     config: &fpm::Config,
     document_id: &str,

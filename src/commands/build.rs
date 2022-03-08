@@ -55,7 +55,10 @@ pub async fn build(
             fpm::get_documents(config, &dep.package)
                 .await?
                 .into_iter()
-                .filter(|file_instance| matches!(file_instance, fpm::File::Static(_)))
+                .filter(|file_instance| {
+                    matches!(file_instance, fpm::File::Static(_))
+                        || matches!(file_instance, fpm::File::Code(_))
+                })
                 .collect::<Vec<fpm::File>>()
                 .into_iter()
                 .map(|v| (v.get_id(), v)),
@@ -311,6 +314,36 @@ pub(crate) async fn process_file(
             (fpm::File::Static(main_sa), fpm::File::Static(_)) => {
                 process_static(main_sa, &config.root, package).await?
             }
+            (fpm::File::Code(main_doc), fpm::File::Code(fallback_doc)) => {
+                process_static(
+                    &fpm::Static {
+                        id: main_doc.id.to_string(),
+                        base_path: camino::Utf8PathBuf::from(main_doc.parent_path.as_str()),
+                    },
+                    &config.root,
+                    package,
+                )
+                .await?;
+                let resp = process_code(
+                    config,
+                    main_doc,
+                    Some(fallback_doc),
+                    message,
+                    translated_data,
+                    base_url,
+                )
+                .await;
+                match (resp, skip_failed) {
+                    (Ok(r), _) => r,
+                    (_, true) => {
+                        println!("Failed");
+                        return Ok(());
+                    }
+                    (e, _) => {
+                        return e;
+                    }
+                }
+            }
             (fpm::File::Markdown(main_doc), fpm::File::Markdown(fallback_doc)) => {
                 let resp = process_markdown(
                     config,
@@ -382,6 +415,28 @@ pub(crate) async fn process_file(
                 }
             }
         }
+        fpm::File::Code(doc) => {
+            process_static(
+                &fpm::Static {
+                    id: doc.id.to_string(),
+                    base_path: camino::Utf8PathBuf::from(doc.parent_path.as_str()),
+                },
+                &config.root,
+                package,
+            )
+            .await?;
+            let resp = process_code(config, doc, None, message, translated_data, base_url).await;
+            match (resp, skip_failed) {
+                (Ok(r), _) => r,
+                (_, true) => {
+                    println!("Failed");
+                    return Ok(());
+                }
+                (e, _) => {
+                    return e;
+                }
+            }
+        }
     }
     if fpm::utils::is_test() {
         println!("Done");
@@ -389,6 +444,57 @@ pub(crate) async fn process_file(
         println!("Done {:?}", start.elapsed());
     }
     Ok(())
+}
+
+async fn process_code(
+    config: &fpm::Config,
+    main: &fpm::Document,
+    fallback: Option<&fpm::Document>,
+    message: Option<&str>,
+    translated_data: fpm::TranslationData,
+    base_url: &str,
+) -> fpm::Result<()> {
+    let main = if let Some(main) = convert_to_ftd(config, main)? {
+        main
+    } else {
+        return Ok(());
+    };
+    if let Some(d) = fallback {
+        match convert_to_ftd(config, d)? {
+            Some(d) => {
+                return process_ftd(config, &main, Some(&d), message, translated_data, base_url)
+                    .await;
+            }
+            None => {
+                return Ok(());
+            }
+        }
+    };
+
+    return process_ftd(config, &main, None, message, translated_data, base_url).await;
+
+    fn convert_to_ftd(
+        config: &fpm::Config,
+        doc: &fpm::Document,
+    ) -> fpm::Result<Option<fpm::Document>> {
+        let id = convert_to_ftd_extension(doc.id.as_str())?;
+        let ext = fpm::utils::get_extension(doc.id.as_str())?;
+        let new_content =
+            fpm::package_info_code(config, id.as_str(), doc.content.as_str(), ext.as_str())?;
+
+        let new_doc = {
+            let mut new_doc = doc.to_owned();
+            new_doc.content = new_content;
+            new_doc.id = id;
+            new_doc
+        };
+
+        Ok(Some(new_doc))
+    }
+
+    fn convert_to_ftd_extension(name: &str) -> fpm::Result<String> {
+        Ok(format!("{}.ftd", name))
+    }
 }
 
 async fn process_markdown(
@@ -417,13 +523,6 @@ async fn process_markdown(
     };
 
     return process_ftd(config, &main, None, message, translated_data, base_url).await;
-
-    // if let Ok(c) = tokio::fs::read_to_string("./FPM/markdown.ftd").await {
-    //     c
-    // } else {
-    //     fpm::default_markdown().to_string()
-    // }
-    // todo
 
     fn convert_md_to_ftd(
         config: &fpm::Config,
