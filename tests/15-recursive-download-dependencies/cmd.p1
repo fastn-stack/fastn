@@ -4,5 +4,6 @@ output: amitu/.build
 
 -- stdout:
 
-Processing amitu/FPM.ftd ... Done
-Processing amitu/index.ftd ... Done
+Downloading fifthtry.github.io/package-info ... done in <omitted>
+Processing amitu/FPM.ftd ... done in <omitted>
+Processing amitu/index.ftd ... done in <omitted>

@@ -1,17 +1,25 @@
+use colorize::AnsiColor;
+
 macro_rules! warning {
     ($s:expr,) => {
         warning!($s)
     };
     ($s:expr) => {
-        use std::io::Write;
-        use termcolor::WriteColor;
-
-        let mut stdout = termcolor::StandardStream::stdout(termcolor::ColorChoice::Always);
-        stdout.set_color(termcolor::ColorSpec::new().set_fg(Some(termcolor::Color::Yellow)))?;
-
-        writeln!(&mut stdout, "{}", $s)?;
-        stdout.reset()?;
+        println!("{}", format!("{}", $s).yellow());
     };
+}
+
+pub fn print_end(msg: &str, start: std::time::Instant) {
+    if fpm::utils::is_test() {
+        println!("done in <omitted>");
+    } else {
+        println!(
+            // TODO: instead of lots of spaces put proper erase current terminal line thing
+            "\r{} in {:?}.                          ",
+            msg.to_string().green(),
+            start.elapsed()
+        );
+    }
 }
 
 pub trait HasElements {
@@ -69,6 +77,15 @@ pub(crate) async fn get_number_of_documents(config: &fpm::Config) -> fpm::Result
         no_of_docs = format!("{} / {}", no_of_docs, no_of_original_docs);
     }
     Ok(no_of_docs)
+}
+
+pub(crate) fn get_extension(file_name: &str) -> fpm::Result<String> {
+    if let Some((_, ext)) = file_name.rsplit_once('.') {
+        return Ok(ext.to_string());
+    }
+    Err(fpm::Error::UsageError {
+        message: format!("extension not found, `{}`", file_name),
+    })
 }
 
 pub(crate) async fn get_current_document_last_modified_on(

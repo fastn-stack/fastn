@@ -79,7 +79,11 @@ pub async fn build(
             fpm::get_documents(config, &dep.package)
                 .await?
                 .into_iter()
-                .filter(|file_instance| matches!(file_instance, fpm::File::Static(_)))
+                .filter(|file_instance| {
+                    matches!(file_instance, fpm::File::Static(_))
+                        || matches!(file_instance, fpm::File::Code(_))
+                        || matches!(file_instance, fpm::File::Image(_))
+                })
                 .collect::<Vec<fpm::File>>()
                 .into_iter()
                 .map(|v| (v.get_id(), v)),
@@ -130,6 +134,8 @@ async fn build_with_translations(
     skip_failed: bool,
     asset_documents: &std::collections::HashMap<String, String>,
 ) -> fpm::Result<()> {
+    use std::io::Write;
+
     let documents = std::collections::BTreeMap::from_iter(
         fpm::get_documents(config, &config.package)
             .await?
@@ -165,6 +171,10 @@ async fn build_with_translations(
             package_name: config.package.name.clone(),
         };
 
+        print!("Processing translation-status.ftd ... ");
+        let start = std::time::Instant::now();
+        std::io::stdout().flush()?;
+
         process_ftd(
             config,
             &translation_status,
@@ -175,6 +185,7 @@ async fn build_with_translations(
             &asset_documents,
         )
         .await?;
+        fpm::utils::print_end("Processed translation-status.ftd", start);
     }
     Ok(())
 }
@@ -191,6 +202,8 @@ async fn build_with_original(
     skip_failed: bool,
     asset_documents: &std::collections::HashMap<String, String>,
 ) -> fpm::Result<()> {
+    use std::io::Write;
+
     // This is the translation package
     // Fetch all files from the original package
     let original_path = config.original_path()?;
@@ -259,6 +272,9 @@ async fn build_with_original(
             package_name: config.package.name.clone(),
         };
 
+        print!("Processing translation-status.ftd ... ");
+        let start = std::time::Instant::now();
+        std::io::stdout().flush()?;
         process_ftd(
             config,
             &translation_status,
@@ -269,6 +285,7 @@ async fn build_with_original(
             &asset_documents,
         )
         .await?;
+        fpm::utils::print_end("Processed translation-status.ftd", start);
     }
     Ok(())
 }
@@ -314,6 +331,8 @@ pub(crate) async fn process_file(
     skip_failed: bool,
     asset_documents: &std::collections::HashMap<String, String>,
 ) -> fpm::Result<()> {
+    use std::io::Write;
+
     let start = std::time::Instant::now();
     if let Some(fallback) = fallback {
         print!(
@@ -321,6 +340,7 @@ pub(crate) async fn process_file(
             package.name.as_str(),
             main.get_id()
         );
+        std::io::stdout().flush()?;
         match (main, fallback) {
             (fpm::File::Ftd(main_doc), fpm::File::Ftd(fallback_doc)) => {
                 let resp = process_ftd(
@@ -346,6 +366,59 @@ pub(crate) async fn process_file(
             }
             (fpm::File::Static(main_sa), fpm::File::Static(_)) => {
                 process_static(main_sa, &config.root, package).await?
+            }
+            (fpm::File::Code(main_doc), fpm::File::Code(fallback_doc)) => {
+                process_static(
+                    &fpm::Static {
+                        id: main_doc.id.to_string(),
+                        base_path: camino::Utf8PathBuf::from(main_doc.parent_path.as_str()),
+                    },
+                    &config.root,
+                    package,
+                )
+                .await?;
+                let resp = process_code(
+                    config,
+                    main_doc,
+                    Some(fallback_doc),
+                    message,
+                    translated_data,
+                    base_url,
+                )
+                .await;
+                match (resp, skip_failed) {
+                    (Ok(r), _) => r,
+                    (_, true) => {
+                        println!("Failed");
+                        return Ok(());
+                    }
+                    (e, _) => {
+                        return e;
+                    }
+                }
+            }
+            (fpm::File::Image(main_doc), fpm::File::Image(fallback_doc)) => {
+                process_static(main_doc, &config.root, package).await?;
+                let resp = process_image(
+                    config,
+                    main_doc,
+                    Some(fallback_doc),
+                    message,
+                    translated_data,
+                    base_url,
+                    package,
+                )
+                .await;
+                match (resp, skip_failed) {
+                    (Ok(r), _) => r,
+                    (_, true) => {
+                        println!("Failed");
+                        return Ok(());
+                    }
+                    (e, _) => {
+                        return e;
+                    }
+                }
             }
             (fpm::File::Markdown(main_doc), fpm::File::Markdown(fallback_doc)) => {
                 let resp = process_markdown(
@@ -378,11 +451,10 @@ pub(crate) async fn process_file(
                 })
             }
         }
-        if fpm::utils::is_test() {
-            println!("Done");
-        } else {
-            println!("Done {:?}", start.elapsed());
-        }
+        fpm::utils::print_end(
+            format!("Processed {}/{}", package.name.as_str(), main.get_id()).as_str(),
+            start,
+        );
         return Ok(());
     }
     print!(
@@ -390,6 +462,7 @@ pub(crate) async fn process_file(
         package.name.as_str(),
         main.get_id()
     );
+    std::io::stdout().flush()?;
     match main {
         fpm::File::Ftd(doc) => {
             let resp = process_ftd(
@@ -436,13 +509,150 @@ pub(crate) async fn process_file(
                 }
             }
         }
+        fpm::File::Image(main_doc) => {
+            process_static(main_doc, &config.root, package).await?;
+            let resp = process_image(
+                config,
+                main_doc,
+                None,
+                message,
+                translated_data,
+                base_url,
+                package,
+            )
+            .await;
+            match (resp, skip_failed) {
+                (Ok(r), _) => r,
+                (_, true) => {
+                    println!("Failed");
+                    return Ok(());
+                }
+                (e, _) => {
+                    return e;
+                }
+            }
+        }
+        fpm::File::Code(doc) => {
+            process_static(
+                &fpm::Static {
+                    id: doc.id.to_string(),
+                    base_path: camino::Utf8PathBuf::from(doc.parent_path.as_str()),
+                },
+                &config.root,
+                package,
+            )
+            .await?;
+            let resp = process_code(config, doc, None, message, translated_data, base_url).await;
+            match (resp, skip_failed) {
+                (Ok(r), _) => r,
+                (_, true) => {
+                    println!("Failed");
+                    return Ok(());
+                }
+                (e, _) => {
+                    return e;
+                }
+            }
+        }
     }
-    if fpm::utils::is_test() {
-        println!("Done");
-    } else {
-        println!("Done {:?}", start.elapsed());
-    }
+    fpm::utils::print_end(
+        format!("Processed {}/{}", package.name.as_str(), main.get_id()).as_str(),
+        start,
+    );
     Ok(())
+}
+
+async fn process_image(
+    config: &fpm::Config,
+    main: &fpm::Static,
+    fallback: Option<&fpm::Static>,
+    message: Option<&str>,
+    translated_data: fpm::TranslationData,
+    base_url: &str,
+    package: &fpm::Package,
+) -> fpm::Result<()> {
+    let main = convert_to_ftd(config, main, package)?;
+    if let Some(d) = fallback {
+        return process_ftd(
+            config,
+            &main,
+            Some(&convert_to_ftd(config, d, package)?),
+            message,
+            translated_data,
+            base_url,
+        )
+        .await;
+    }
+
+    return process_ftd(config, &main, None, message, translated_data, base_url).await;
+
+    fn convert_to_ftd(
+        config: &fpm::Config,
+        doc: &fpm::Static,
+        package: &fpm::Package,
+    ) -> fpm::Result<fpm::Document> {
+        Ok(fpm::Document {
+            package_name: package.name.to_string(),
+            id: convert_to_ftd_extension(doc.id.as_str())?,
+            content: fpm::package_info_image(config, doc, package)?,
+            parent_path: doc.base_path.to_string(),
+        })
+    }
+
+    fn convert_to_ftd_extension(name: &str) -> fpm::Result<String> {
+        Ok(format!("{}.ftd", name))
+    }
+}
+
+async fn process_code(
+    config: &fpm::Config,
+    main: &fpm::Document,
+    fallback: Option<&fpm::Document>,
+    message: Option<&str>,
+    translated_data: fpm::TranslationData,
+    base_url: &str,
+) -> fpm::Result<()> {
+    let main = if let Some(main) = convert_to_ftd(config, main)? {
+        main
+    } else {
+        return Ok(());
+    };
+    if let Some(d) = fallback {
+        match convert_to_ftd(config, d)? {
+            Some(d) => {
+                return process_ftd(config, &main, Some(&d), message, translated_data, base_url)
+                    .await;
+            }
+            None => {
+                return Ok(());
+            }
+        }
+    };
+
+    return process_ftd(config, &main, None, message, translated_data, base_url).await;
+
+    fn convert_to_ftd(
+        config: &fpm::Config,
+        doc: &fpm::Document,
+    ) -> fpm::Result<Option<fpm::Document>> {
+        let id = convert_to_ftd_extension(doc.id.as_str())?;
+        let ext = fpm::utils::get_extension(doc.id.as_str())?;
+        let new_content =
+            fpm::package_info_code(config, id.as_str(), doc.content.as_str(), ext.as_str())?;
+
+        let new_doc = {
+            let mut new_doc = doc.to_owned();
+            new_doc.content = new_content;
+            new_doc.id = id;
+            new_doc
+        };
+
+        Ok(Some(new_doc))
+    }
+
+    fn convert_to_ftd_extension(name: &str) -> fpm::Result<String> {
+        Ok(format!("{}.ftd", name))
+    }
 }
 
 async fn process_markdown(
@@ -489,13 +699,6 @@ async fn process_markdown(
         asset_documents,
     )
     .await;
-
-    // if let Ok(c) = tokio::fs::read_to_string("./FPM/markdown.ftd").await {
-    //     c
-    // } else {
-    //     fpm::default_markdown().to_string()
-    // }
-    // todo
 
     fn convert_md_to_ftd(
         config: &fpm::Config,

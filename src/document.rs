@@ -3,6 +3,8 @@ pub enum File {
     Ftd(Document),
     Static(Static),
     Markdown(Document),
+    Code(Document),
+    Image(Static),
 }
 
 impl File {
@@ -11,6 +13,8 @@ impl File {
             Self::Ftd(a) => a.id.clone(),
             Self::Static(a) => a.id.clone(),
             Self::Markdown(a) => a.id.clone(),
+            Self::Code(a) => a.id.clone(),
+            Self::Image(a) => a.id.clone(),
         }
     }
     pub fn get_base_path(&self) -> String {
@@ -18,6 +22,8 @@ impl File {
             Self::Ftd(a) => a.parent_path.to_string(),
             Self::Static(a) => a.base_path.to_string(),
             Self::Markdown(a) => a.parent_path.to_string(),
+            Self::Code(a) => a.parent_path.to_string(),
+            Self::Image(a) => a.base_path.to_string(),
         }
     }
     pub fn get_full_path(&self) -> camino::Utf8PathBuf {
@@ -25,6 +31,8 @@ impl File {
             Self::Ftd(a) => (a.id.to_string(), a.parent_path.to_string()),
             Self::Static(a) => (a.id.to_string(), a.base_path.to_string()),
             Self::Markdown(a) => (a.id.to_string(), a.parent_path.to_string()),
+            Self::Code(a) => (a.id.to_string(), a.parent_path.to_string()),
+            Self::Image(a) => (a.id.to_string(), a.base_path.to_string()),
         };
         camino::Utf8PathBuf::from(base_path).join(id)
     }
@@ -172,6 +180,23 @@ pub(crate) async fn get_file(
             content: tokio::fs::read_to_string(&doc_path).await?,
             parent_path: base_path.to_string(),
         }),
+        Some((_, ext)) if ftd::render::KNOWN_EXTENSIONS.contains(ext) => File::Code(Document {
+            package_name: package_name.to_string(),
+            id: id.to_string(),
+            content: tokio::fs::read_to_string(&doc_path).await?,
+            parent_path: base_path.to_string(),
+        }),
+        Some((_, ext))
+            if mime_guess::MimeGuess::from_ext(ext)
+                .first_or_octet_stream()
+                .to_string()
+                .starts_with("image/") =>
+        {
+            File::Image(Static {
+                id: id.to_string(),
+                base_path: base_path.to_path_buf(),
+            })
+        }
         _ => File::Static(Static {
             id: id.to_string(),
             base_path: base_path.to_path_buf(),

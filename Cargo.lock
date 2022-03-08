@@ -335,6 +335,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "colorize"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "dc17e449bc7854c50b943d113a98bc0e01dc6585d2c66eaa09ca645ebd8a7e62"
+
+[[package]]
 name = "comrak"
 version = "0.7.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -775,10 +781,11 @@ dependencies = [
  "camino",
  "chrono",
  "clap",
+ "colorize",
  "diffy",
  "fbt-lib",
  "fluent",
- "ftd 0.1.18 (git+https://github.com/FifthTry/ftd?rev=f99d6c0d75477efa5e2ac5fa12375f5d5e0504c1)",
+ "ftd 0.1.18 (git+https://github.com/FifthTry/ftd?rev=0ea5c3da20dd15ebb281a48d7468668d4e038743)",
  "futures 0.3.21",
  "home",
  "ignore",
@@ -786,6 +793,7 @@ dependencies = [
  "intl-memoizer",
  "itertools",
  "lazy_static 1.4.0",
+ "mime_guess",
  "pretty_assertions",
  "realm-lang",
  "regex",
@@ -796,7 +804,6 @@ dependencies = [
  "serde_derive",
  "serde_json",
  "sha2",
- "termcolor",
  "thiserror",
  "tokio 1.16.1",
  "url 2.2.2",
@@ -833,7 +840,7 @@ dependencies = [
 [[package]]
 name = "ftd"
 version = "0.1.18"
-source = "git+https://github.com/FifthTry/ftd?rev=f99d6c0d75477efa5e2ac5fa12375f5d5e0504c1#f99d6c0d75477efa5e2ac5fa12375f5d5e0504c1"
+source = "git+https://github.com/FifthTry/ftd?rev=0ea5c3da20dd15ebb281a48d7468668d4e038743#0ea5c3da20dd15ebb281a48d7468668d4e038743"
 dependencies = [
  "comrak",
  "css-color-parser",
@@ -1484,9 +1491,9 @@ checksum = "2a60c7ce501c71e03a9c9c0d35b861413ae925bd979cc7a4e30d060069aaac8d"
 
 [[package]]
 name = "mime_guess"
-version = "2.0.3"
+version = "2.0.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2684d4c2e97d99848d30b324b00c8fcc7e5c897b7cbb5819b09e7c90e8baf212"
+checksum = "4192263c238a5f0d0c6bfd21f336a313a4ce1c450542449ca191bb657b4642ef"
 dependencies = [
  "mime",
  "unicase",
@@ -2446,15 +2453,6 @@ dependencies = [
  "redox_syscall 0.2.10",
  "remove_dir_all",
  "winapi 0.3.9",
-]
-
-[[package]]
-name = "termcolor"
-version = "1.1.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2dfed899f0eb03f32ee8c6a0aabdb8a7949659e3466561fc0adf54e26d88c5f4"
-dependencies = [
- "winapi-util",
 ]
 
 [[package]]

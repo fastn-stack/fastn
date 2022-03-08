@@ -18,7 +18,7 @@ async-recursion = "0.3.2"
 camino = "1.0.5"
 clap = "2.33.3"
 diffy = "0.2.1"
-ftd = { git = "https://github.com/FifthTry/ftd", rev = "f99d6c0d75477efa5e2ac5fa12375f5d5e0504c1" }
+ftd = { git = "https://github.com/FifthTry/ftd", rev = "0ea5c3da20dd15ebb281a48d7468668d4e038743" }
 #ftd = {path = "../ftd"}
 futures = "0.3"
 home = "0.5.3"
@@ -34,7 +34,7 @@ thiserror = "1.0"
 tokio = { version = "1.14.0", features = ["full"] }
 url = "2.2.2"
 zip = "0.5"
-termcolor = "1.1.2"
+colorize = "0.1.0"
 chrono = "0.4.19"
 fluent = "0.16"
 lazy_static = "1"
@@ -43,6 +43,7 @@ antidote = "1"
 intl-memoizer = "0.5.1"
 sha2 = "0.10"
 itertools = "0.10.3"
+mime_guess = "2"
 
 [dev-dependencies]
 fbt-lib = "0.1.17"

@@ -192,6 +192,9 @@ impl fpm::Package {
 
             let path = std::env::temp_dir().join(format!("{}.zip", self.name.replace("/", "__")));
 
+            let start = std::time::Instant::now();
+            print!("Downloading {} ... ", self.name.as_str());
+            std::io::stdout().flush()?;
             // Download the zip folder
             {
                 let mut response =
@@ -238,6 +241,7 @@ impl fpm::Package {
                     std::io::copy(&mut c_file, &mut outfile)?;
                 }
             }
+            fpm::utils::print_end(format!("Downloaded {}", self.name.as_str()).as_str(), start);
         }
         let fpm_ftd_path = if root.join("FPM.ftd").exists() {
             root.join("FPM.ftd")
@@ -401,8 +405,8 @@ impl fpm::Package {
             if let Some(translation_of) = package.translation_of.as_ref() {
                 return Err(fpm::Error::PackageError {
                     message: format!(
-                        "Cannot translated a translation package. \
-                    suggestion: Translated the original package instead. \
+                        "Cannot translate a translation package. \
+                    suggestion: Translate the original package instead. \
                     Looks like `{}` is an original package",
                         translation_of.name
                     ),
