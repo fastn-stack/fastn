@@ -114,21 +114,19 @@ fn package_info_image(
             Some(bp) => bp,
             None => String::new(),
         };
-        format!(
-            indoc::indoc! {"
-                {body_prefix}
-        
-                -- import: {package_info_package}/image as pi 
-        
-                -- pi.image-page: {file_name}
-                src: {src}
-
-            "},
-            body_prefix = body_prefix,
-            file_name = doc.id,
-            package_info_package = package_info_package,
-            src = format!("-/{}/{}", package.name.as_str(), doc.id.as_str()),
-        )
+        indoc::formatdoc! {"
+            {body_prefix}
+    
+            -- import: {package_info_package}/image as pi 
+    
+            -- pi.image-page: {file_name}
+            src: {src}
+        ",
+        body_prefix = body_prefix,
+        file_name = doc.id,
+        package_info_package = package_info_package,
+        src = format!("-/{}/{}", package.name.as_str(), doc.id.as_str()),
+        }
     })
 }
 
