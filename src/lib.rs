@@ -90,6 +90,48 @@ fn available_languages(config: &fpm::Config) -> fpm::Result<String> {
     })
 }
 
+fn package_info_image(
+    config: &fpm::Config,
+    doc: &fpm::Static,
+    package: &fpm::Package,
+) -> fpm::Result<String> {
+    let path = config.root.join("FPM").join("image.ftd");
+    Ok(if path.is_file() {
+        std::fs::read_to_string(path)?
+    } else {
+        let package_info_package = match config
+            .package
+            .get_dependency_for_interface(fpm::PACKAGE_INFO_INTERFACE)
+            .or_else(|| {
+                config
+                    .package
+                    .get_dependency_for_interface(fpm::PACKAGE_THEME_INTERFACE)
+            }) {
+            Some(dep) => dep.package.name.as_str(),
+            None => fpm::PACKAGE_INFO_INTERFACE,
+        };
+        let body_prefix = match config.package.generate_prefix_string(false) {
+            Some(bp) => bp,
+            None => String::new(),
+        };
+        format!(
+            indoc::indoc! {"
+                {body_prefix}
+        
+                -- import: {package_info_package}/image as pi 
+        
+                -- pi.image-page: {file_name}
+                src: {src}
+
+            "},
+            body_prefix = body_prefix,
+            file_name = doc.id,
+            package_info_package = package_info_package,
+            src = format!("-/{}/{}", package.name.as_str(), doc.id.as_str()),
+        )
+    })
+}
+
 fn package_info_code(
     config: &fpm::Config,
     file_name: &str,

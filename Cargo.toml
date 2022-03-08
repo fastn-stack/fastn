@@ -43,6 +43,7 @@ antidote = "1"
 intl-memoizer = "0.5.1"
 sha2 = "0.10"
 itertools = "0.10.3"
+mime_guess = "2"
 
 [dev-dependencies]
 fbt-lib = "0.1.17"

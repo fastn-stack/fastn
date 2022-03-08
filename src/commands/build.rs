@@ -58,6 +58,7 @@ pub async fn build(
                 .filter(|file_instance| {
                     matches!(file_instance, fpm::File::Static(_))
                         || matches!(file_instance, fpm::File::Code(_))
+                        || matches!(file_instance, fpm::File::Image(_))
                 })
                 .collect::<Vec<fpm::File>>()
                 .into_iter()
@@ -370,6 +371,29 @@ pub(crate) async fn process_file(
                     }
                 }
             }
+            (fpm::File::Image(main_doc), fpm::File::Image(fallback_doc)) => {
+                process_static(main_doc, &config.root, package).await?;
+                let resp = process_image(
+                    config,
+                    main_doc,
+                    Some(fallback_doc),
+                    message,
+                    translated_data,
+                    base_url,
+                    package,
+                )
+                .await;
+                match (resp, skip_failed) {
+                    (Ok(r), _) => r,
+                    (_, true) => {
+                        println!("Failed");
+                        return Ok(());
+                    }
+                    (e, _) => {
+                        return e;
+                    }
+                }
+            }
             (fpm::File::Markdown(main_doc), fpm::File::Markdown(fallback_doc)) => {
                 let resp = process_markdown(
                     config,
@@ -442,6 +466,29 @@ pub(crate) async fn process_file(
                 }
             }
         }
+        fpm::File::Image(main_doc) => {
+            process_static(main_doc, &config.root, package).await?;
+            let resp = process_image(
+                config,
+                main_doc,
+                None,
+                message,
+                translated_data,
+                base_url,
+                package,
+            )
+            .await;
+            match (resp, skip_failed) {
+                (Ok(r), _) => r,
+                (_, true) => {
+                    println!("Failed");
+                    return Ok(());
+                }
+                (e, _) => {
+                    return e;
+                }
+            }
+        }
         fpm::File::Code(doc) => {
             process_static(
                 &fpm::Static {
@@ -471,6 +518,48 @@ pub(crate) async fn process_file(
         println!("Done {:?}", start.elapsed());
     }
     Ok(())
+}
+
+async fn process_image(
+    config: &fpm::Config,
+    main: &fpm::Static,
+    fallback: Option<&fpm::Static>,
+    message: Option<&str>,
+    translated_data: fpm::TranslationData,
+    base_url: &str,
+    package: &fpm::Package,
+) -> fpm::Result<()> {
+    let main = convert_to_ftd(config, main, package)?;
+    if let Some(d) = fallback {
+        return process_ftd(
+            config,
+            &main,
+            Some(&convert_to_ftd(config, d, package)?),
+            message,
+            translated_data,
+            base_url,
+        )
+        .await;
+    }
+
+    return process_ftd(config, &main, None, message, translated_data, base_url).await;
+
+    fn convert_to_ftd(
+        config: &fpm::Config,
+        doc: &fpm::Static,
+        package: &fpm::Package,
+    ) -> fpm::Result<fpm::Document> {
+        Ok(fpm::Document {
+            package_name: package.name.to_string(),
+            id: convert_to_ftd_extension(doc.id.as_str())?,
+            content: fpm::package_info_image(config, doc, package)?,
+            parent_path: doc.base_path.to_string(),
+        })
+    }
+
+    fn convert_to_ftd_extension(name: &str) -> fpm::Result<String> {
+        Ok(format!("{}.ftd", name))
+    }
 }
 
 async fn process_code(
