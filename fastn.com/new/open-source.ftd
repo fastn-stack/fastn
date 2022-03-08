@@ -1,35 +1,37 @@
+-- import: fpm.dev/lib
+
 -- ft.page:
 
--- ft.create-section:
+-- lib.create-section:
 
--- ft.bread-crumb:
+-- lib.bread-crumb:
 
---- ft.crumb: Create a FOSS site
+--- lib.crumb: Create a FOSS site
 link: /
 
---- ft.crumb: Pick a theme
+--- lib.crumb: Pick a theme
 
--- ft.template-list:
+-- lib.template-list:
 
---- ft.theme: Forest FOSS
+--- lib.theme: Forest FOSS
 if: not $fpm.dark-mode
 link: https://github.com/FifthTry/Forest-FOSS-Template/generate
 image: images/forest-foss.png
 live_preview: https://fifthtry.github.io/Forest-FOSS-Template/
 
---- ft.theme: Forest FOSS
+--- lib.theme: Forest FOSS
 if: $fpm.dark-mode
 link: https://github.com/FifthTry/Forest-FOSS-Template/generate
 image: images/dark-forest-foss.png
 live_preview: https://fifthtry.github.io/Forest-FOSS-Template/
 
---- ft.theme: Jupiter FOSS
+--- lib.theme: Jupiter FOSS
 if: not $fpm.dark-mode
 link: https://github.com/FifthTry/jupiter-foss-template/generate
 image: images/open-source.png
 live_preview: https://fifthtry.github.io/jupiter-foss-template/
 
---- ft.theme: Jupiter FOSS
+--- lib.theme: Jupiter FOSS
 if: $fpm.dark-mode
 link: https://github.com/FifthTry/jupiter-foss-template/generate
 image: images/dark-jupiter-foss.png

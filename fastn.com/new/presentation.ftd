@@ -1,27 +1,29 @@
+-- import: fpm.dev/lib
+
 -- ft.page:
 
--- ft.create-section:
+-- lib.create-section:
 
--- ft.bread-crumb:
+-- lib.bread-crumb:
 
---- ft.crumb: Create a presentation
+--- lib.crumb: Create a presentation
 link: /
 
---- ft.crumb: Pick a theme
+--- lib.crumb: Pick a theme
 
--- ft.template-list:
+-- lib.template-list:
 
---- ft.theme: Giggle
+--- lib.theme: Giggle
 link: https://github.com/FifthTry/giggle-presentation-template/generate
 image: images/giggle.png
 live_preview: https://fifthtry.github.io/Giggle-Presentation-Template/
 
---- ft.theme: Crispy
+--- lib.theme: Crispy
 link: https://github.com/FifthTry/crispy-presentation-template/generate
 image: images/crispy.png
 live_preview: https://fifthtry.github.io/Crispy-Presentation-Template/
 
---- ft.theme: Rotary
+--- lib.theme: Rotary
 link: https://github.com/FifthTry/rotary-presentation-template/generate
 image: images/rotary.png
 live_preview: https://fifthtry.github.io/Rotary-Presentation-Template/

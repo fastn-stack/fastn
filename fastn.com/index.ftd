@@ -1,32 +1,34 @@
+-- import: fpm.dev/lib
+
 -- ft.page:
 id: main-page
 
 
--- ft.create-section:
+-- lib.create-section:
 
 --- ft.h2: Create
 
---- ft.template-list:
+--- lib.template-list:
 
---- ft.template: An Online Book
+--- lib.template: An Online Book
 link: /new/book/
 image: -/fpm.dev/images/document.png
 active: true
 cta-text: Select Theme
 
---- ft.template: An Open Source Project Site
+--- lib.template: An Open Source Project Site
 link: /new/open-source/
 image: -/fpm.dev/images/open-source.png
 active: true
 cta-text: Select Theme
 
---- ft.template: A Presentation
+--- lib.template: A Presentation
 link: /new/presentation/
 image: -/fpm.dev/images/giggle.png
 active: true
 cta-text: Select Theme
 
---- ft.template: A Diagram
+--- lib.template: A Diagram
 image: -/fpm.dev/images/no-data.jpg
 active: false
 cta-text: Coming Soon

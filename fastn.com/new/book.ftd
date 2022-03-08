@@ -1,48 +1,50 @@
+-- import: fpm.dev/lib
+
 -- ft.page:
 
--- ft.create-section:
+-- lib.create-section:
 
--- ft.bread-crumb:
+-- lib.bread-crumb:
 
---- ft.crumb: Create a book
+--- lib.crumb: Create a book
 link: /
 
---- ft.crumb: Pick a theme
+--- lib.crumb: Pick a theme
 
--- ft.template-list:
+-- lib.template-list:
 
---- ft.theme: Forest
+--- lib.theme: Forest
 if: not $fpm.dark-mode
 link: https://github.com/FifthTry/Forest-Template/generate
 image: images/forest-light.jpg
 live_preview: https://fifthtry.github.io/Forest-Template/
 
---- ft.theme: Forest
+--- lib.theme: Forest
 if: $fpm.dark-mode
 link: https://github.com/FifthTry/Forest-Template/generate
 image: images/forest-dark.jpg
 live_preview: https://fifthtry.github.io/Forest-Template/
 
---- ft.theme: Jupiter
+--- lib.theme: Jupiter
 if: not $fpm.dark-mode
 link: https://github.com/FifthTry/fpm-book/generate
 image: images/jupiter-light.jpg
 live_preview: https://fifthtry.github.io/fpm-book/
 
---- ft.theme: Jupiter
+--- lib.theme: Jupiter
 if: $fpm.dark-mode
 link: https://github.com/FifthTry/fpm-book/generate
 image: images/jupiter-dark.jpg
 live_preview: https://fifthtry.github.io/fpm-book/
 
 
---- ft.theme: Blue Sapphire
+--- lib.theme: Blue Sapphire
 if: not $fpm.dark-mode
 link: https://github.com/FifthTry/Blue-Sapphire-Template/generate
 image: images/blue-sapphire-light.jpg
 live_preview: https://fifthtry.github.io/Blue-Sapphire-Template/
 
---- ft.theme: Blue Sapphire
+--- lib.theme: Blue Sapphire
 if: $fpm.dark-mode
 link: https://github.com/FifthTry/Blue-Sapphire-Template/generate
 image: images/blue-sapphire-dark.jpg

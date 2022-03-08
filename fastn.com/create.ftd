@@ -1,9 +1,11 @@
+-- import: fpm.dev/lib
+
 -- ft.page:
 
--- ft.hero: Build optimized websites quickly, focus on your content
+-- lib.hero: Build optimized websites quickly, focus on your content
 image: static/images/github-light.svg
 
---- ft.action-button: Get Started
+--- lib.action-button: Get Started
 slot: cta-1
 url: /install/
 background-color: #25c19f
