@@ -499,4 +499,45 @@ impl Package {
         }
         Ok(resp)
     }
+
+    pub fn get_assets_doc(&self) -> String {
+        // Virtual document that contains the asset information about the package
+        use itertools::Itertools;
+
+        let (font_record, fonts) = self
+            .fonts
+            .iter()
+            .unique_by(|font| font.name.as_str())
+            .collect_vec()
+            .iter()
+            .fold(
+                (
+                    String::from("-- record font:"),
+                    String::from("-- font fonts:"),
+                ),
+                |(record_accumulator, instance_accumulator), font| {
+                    (
+                        format!(
+                            "{pre}\nstring {font_var_name}:",
+                            pre = record_accumulator,
+                            font_var_name = font.name.as_str(),
+                        ),
+                        format!(
+                            "{pre}\n{font_var_name}: {font_var_val}",
+                            pre = instance_accumulator,
+                            font_var_name = font.name.as_str(),
+                            font_var_val = font.html_name(self.name.as_str())
+                        ),
+                    )
+                },
+            );
+        format!(
+            indoc::indoc! {"
+                {font_record}
+                {fonts}
+            "},
+            font_record = font_record,
+            fonts = fonts
+        )
+    }
 }
