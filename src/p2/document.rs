@@ -409,7 +409,6 @@ impl Document {
 
         d.main = rt.render()?;
         d.data.extend(rt.bag);
-        //dbg!(&d.name);
         Ok(d)
     }
 

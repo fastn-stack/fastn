@@ -12,6 +12,8 @@ lazy_static::lazy_static! {
         }
         builder.build()
     };
+    pub static ref KNOWN_EXTENSIONS: std::collections::HashSet<String> =
+        SS.syntaxes().iter().map(|v| v.file_extensions.to_vec()).flatten().collect();
     pub static ref TS: syntect::highlighting::ThemeSet =
         syntect::highlighting::ThemeSet::load_defaults();
     pub static ref MD: comrak::ComrakOptions = {
