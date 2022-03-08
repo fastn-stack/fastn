@@ -1,5 +1,7 @@
 use std::convert::TryInto;
 
+use lazy_static::__Deref;
+
 /// `Config` struct keeps track of a few configuration parameters that is shared with the entire
 /// program. It is constructed from the content of `FPM.ftd` file for the package.
 ///
@@ -506,32 +508,33 @@ impl Package {
         let all_docs = fpm::get_documents(config, &self).await?;
         let all_file_names = all_docs
             .iter()
-            .map(|file_instance| file_instance.get_id())
-            .filter(|file_name| !file_name.eq("FPM.ftd"))
-            .collect::<Vec<String>>();
-        dbg!(&all_file_names);
-        let all_file_name_records = &all_file_names
-            .iter()
-            .unique_by(|file_name| {
-                if let Some((_, ext)) = file_name.rsplit_once('.') {
-                    ext
-                } else {
-                    "non-ext-file"
-                }
-            })
-            .filter_map(|file_name| {
-                if let Some((_, ext)) = file_name.rsplit_once('.') {
-                    if fpm::IMAGE_EXT.contains(&ext) {
-                        Some(format!("-- record {ext}-file:\nfpm.image-src {ext}:"))
-                    } else {
-                        Some(format!("-- record {ext}-file:\nstring {ext}:"))
-                    }
-                } else {
+            .filter_map(|file_instance| {
+                let file_id = file_instance.get_id();
+                if file_id.eq("FPM.ftd") {
                     None
+                } else {
+                    Some(Path::new(file_id.as_str()))
                 }
             })
-            .collect::<Vec<String>>();
-        dbg!(all_file_name_records);
+            .collect::<Vec<Path>>();
+        let mut top = dir("root");
+        for path in all_file_names.iter() {
+            build_tree(&mut top, &path.parts, path.raw.clone(), 0);
+        }
+        dbg!(&top);
+        let mut all_extensions: Vec<String> = vec![];
+        let (resp1, resp2) = build_record_values(&top, &mut all_extensions);
+        let extension_records = all_extensions
+            .iter()
+            .map(|ext| {
+                if fpm::IMAGE_EXT.contains(&ext.as_str()) {
+                    format!("-- record {ext}-file:\nfpm.image-src {ext}:")
+                } else {
+                    format!("-- record {ext}-file:\nstring {ext}:")
+                }
+            })
+            .join("\n");
+        // dbg!(format!("{resp1}\n\n{resp2}"));
         let (font_record, fonts) = self
             .fonts
             .iter()
@@ -559,13 +562,165 @@ impl Package {
                     )
                 },
             );
-        Ok(format!(
+        return Ok(format!(
             indoc::indoc! {"
+                {extension_records}\n
+                {resp1}\n
+                {resp2}
                 {font_record}
                 {fonts}
             "},
+            extension_records = extension_records,
+            resp1 = resp1,
+            resp2 = resp2,
             font_record = font_record,
             fonts = fonts
-        ))
+        ));
+
+        #[derive(Debug)]
+        struct Path {
+            parts: Vec<String>,
+            raw: String,
+        }
+        impl Path {
+            pub fn new(path: &str) -> Path {
+                Path {
+                    parts: path.to_string().split("/").map(|s| s.to_string()).collect(),
+                    raw: path.to_string(),
+                }
+            }
+        }
+
+        #[derive(Debug, Clone)]
+        struct Dir {
+            name: String,
+            full_path: String,
+            children: Vec<Box<Dir>>,
+        }
+
+        fn dir(val: &str) -> Dir {
+            Dir::new(val, val)
+        }
+
+        impl Dir {
+            fn new(name: &str, full_path: &str) -> Dir {
+                Dir {
+                    name: name.to_string(),
+                    full_path: full_path.to_string(),
+                    children: Vec::<Box<Dir>>::new(),
+                }
+            }
+
+            fn find_child(&mut self, name: &str) -> Option<&mut Dir> {
+                for c in self.children.iter_mut() {
+                    if c.name == name {
+                        return Some(c);
+                    }
+                }
+                None
+            }
+
+            fn add_child<T>(&mut self, leaf: T) -> &mut Self
+            where
+                T: Into<Dir>,
+            {
+                self.children.push(Box::new(leaf.into()));
+                self
+            }
+
+            fn full_path_to_key(&self) -> String {
+                let path = self.full_path.as_str().trim_start_matches('.').trim();
+                path.chars()
+                    .map(|x| match x {
+                        '/' => '-',
+                        '.' => '-',
+                        '_' => '-',
+                        _ => x,
+                    })
+                    .collect()
+            }
+        }
+
+        fn build_tree(node: &mut Dir, parts: &Vec<String>, full_path: String, depth: usize) {
+            if depth < parts.len() {
+                let item = &parts[depth];
+
+                let mut dir = match node.find_child(&item) {
+                    Some(d) => d,
+                    None => {
+                        let d = Dir::new(&item, full_path.as_str());
+                        node.add_child(d);
+                        match node.find_child(&item) {
+                            Some(d2) => d2,
+                            None => panic!("Got here!"),
+                        }
+                    }
+                };
+                build_tree(&mut dir, parts, full_path, depth + 1);
+            }
+        }
+
+        fn build_record_values(node: &Dir, found_extensions: &mut Vec<String>) -> (String, String) {
+            node.children.iter().fold(
+                (
+                    String::new(),
+                    if node.name.as_str().eq("root") {
+                        String::new()
+                    } else {
+                        format!("-- record {folder_name}", folder_name = node.name.as_str())
+                    },
+                ),
+                |(value_accumulator, record_accumulator), child_node| {
+                    let temp_child_node = child_node.deref();
+
+                    let (prefix, record_append) = if temp_child_node.children.is_empty() {
+                        let (name, ext) = process_leaf_node(&temp_child_node);
+                        // TODO: Full path eval. As per the static logic + file logics
+                        if let Some(e) = ext {
+                            found_extensions.push(e.to_string());
+                            (
+                                format!(
+                                    "-- {e}-file {key}:\n{e}: {full_path}",
+                                    key = temp_child_node.full_path_to_key(),
+                                    full_path = temp_child_node.full_path.as_str()
+                                ),
+                                if node.children.is_empty() {
+                                    format!(
+                                        "-- {e}-file {name}: {full_path}",
+                                        full_path = temp_child_node.full_path.as_str()
+                                    )
+                                } else {
+                                    format!("{e}-file {e}:")
+                                },
+                            )
+                        } else {
+                            (
+                                format!(""),
+                                format!(
+                                    "string {name}: {full_path}",
+                                    full_path = temp_child_node.full_path.as_str()
+                                ),
+                            )
+                        }
+                    } else {
+                        build_record_values(temp_child_node, found_extensions)
+                    };
+                    (
+                        format!("{prefix}\n{value_accumulator}"),
+                        format!("{record_accumulator}\n{record_append}"),
+                    )
+                },
+            )
+        }
+
+        fn process_leaf_node(node: &Dir) -> (&str, Option<&str>) {
+            if let Some((name, ext)) = node.name.as_str().rsplit_once('.') {
+                let name = if name.is_empty() { "DOT" } else { name };
+                (name, Some(ext))
+            } else {
+                // File without extension
+                (node.name.as_str(), None)
+            }
+        }
     }
 }

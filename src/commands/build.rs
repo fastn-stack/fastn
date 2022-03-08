@@ -355,6 +355,7 @@ pub(crate) async fn process_file(
                     message,
                     translated_data,
                     base_url,
+                    asset_documents,
                 )
                 .await;
                 match (resp, skip_failed) {
@@ -414,8 +415,16 @@ pub(crate) async fn process_file(
         }
         fpm::File::Static(sa) => process_static(sa, &config.root, package).await?,
         fpm::File::Markdown(doc) => {
-            let resp =
-                process_markdown(config, doc, None, message, translated_data, base_url).await;
+            let resp = process_markdown(
+                config,
+                doc,
+                None,
+                message,
+                translated_data,
+                base_url,
+                asset_documents,
+            )
+            .await;
             match (resp, skip_failed) {
                 (Ok(r), _) => r,
                 (_, true) => {
@@ -443,6 +452,7 @@ async fn process_markdown(
     message: Option<&str>,
     translated_data: fpm::TranslationData,
     base_url: &str,
+    asset_documents: &std::collections::HashMap<String, String>,
 ) -> fpm::Result<()> {
     let main = if let Some(main) = convert_md_to_ftd(config, main)? {
         main
@@ -452,8 +462,16 @@ async fn process_markdown(
     if let Some(d) = fallback {
         match convert_md_to_ftd(config, d)? {
             Some(d) => {
-                return process_ftd(config, &main, Some(&d), message, translated_data, base_url)
-                    .await;
+                return process_ftd(
+                    config,
+                    &main,
+                    Some(&d),
+                    message,
+                    translated_data,
+                    base_url,
+                    asset_documents,
+                )
+                .await;
             }
             None => {
                 return Ok(());
@@ -461,7 +479,16 @@ async fn process_markdown(
         }
     };
 
-    return process_ftd(config, &main, None, message, translated_data, base_url).await;
+    return process_ftd(
+        config,
+        &main,
+        None,
+        message,
+        translated_data,
+        base_url,
+        asset_documents,
+    )
+    .await;
 
     // if let Ok(c) = tokio::fs::read_to_string("./FPM/markdown.ftd").await {
     //     c
