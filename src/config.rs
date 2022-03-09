@@ -539,7 +539,7 @@ impl Package {
             .unique()
             .map(|ext| {
                 if fpm::IMAGE_EXT.contains(&ext.as_str()) {
-                    format!("-- record {ext}-file:\nfpm.image-src {ext}:")
+                    format!("-- record {ext}-file:\nftd.image-src {ext}:")
                 } else {
                     format!("-- record {ext}-file:\nstring {ext}:")
                 }
@@ -574,8 +574,6 @@ impl Package {
             );
         return Ok(format!(
             indoc::indoc! {"
-                -- import: fpm
-
                 {extension_records}\n
                 {generated_records}\n
                 {generated_values}
@@ -768,7 +766,7 @@ impl Package {
                             match child.file_instance.as_ref().unwrap() {
                                 fpm::File::Image(_) => {
                                     // In case markdown, append the md-page attribute directly
-                                    (true, "fpm.image-src")
+                                    (true, "ftd.image-src")
                                 }
                                 fpm::File::Markdown(_) | fpm::File::Code(_) => (true, "string"),
                                 _ => (false, "string"),
@@ -779,7 +777,7 @@ impl Package {
                             named_child_instance =
                                 format!("{named_child_instance}\n{page_instance_part}");
                         }
-                        if attribute_type.eq("fpm.image-src") {
+                        if attribute_type.eq("ftd.image-src") {
                             let dark_mode_file_name = format!("{child_name}-dark.{attribute_name}");
                             let dark_mode_asset = node
                                 .children
@@ -787,8 +785,8 @@ impl Package {
                                 .find(|c| c.name.eq(dark_mode_file_name.as_str()));
                             let image_src = format!(
                                 indoc::indoc! {"
-                                    -- fpm.image-src {child_record_instance}:
-                                    default: {child_full_path}
+                                    -- ftd.image-src {child_record_instance}:
+                                    light: {child_full_path}
                                     dark: {dark_mode_file_path}"
                                 },
                                 child_record_instance = child.full_path_to_key(),
