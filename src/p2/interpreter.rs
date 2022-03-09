@@ -941,7 +941,7 @@ pub fn default_bag() -> std::collections::BTreeMap<String, ftd::p2::Thing> {
                     ("light".to_string(), ftd::p2::Kind::caption()),
                     ("dark".to_string(), ftd::p2::Kind::string()),
                 ])
-                    .collect(),
+                .collect(),
                 instances: Default::default(),
                 order: vec!["light".to_string(), "dark".to_string()],
             }),
