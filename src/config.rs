@@ -520,19 +520,16 @@ impl Package {
         // Virtual document that contains the asset information about the package
         use itertools::Itertools;
         let all_docs = fpm::get_documents(config, self).await?;
-        let all_files = all_docs
-            .into_iter()
-            .filter_map(|file_instance| {
-                let id = file_instance.get_id();
-                if id.eq("FPM.ftd") {
-                    None
-                } else {
-                    Some((Path::new(id.as_str()), file_instance))
-                }
-            })
-            .collect::<Vec<(Path, fpm::File)>>();
+        let all_files = all_docs.into_iter().filter_map(|file_instance| {
+            let id = file_instance.get_id();
+            if id.eq("FPM.ftd") {
+                None
+            } else {
+                Some((Path::new(id.as_str()), file_instance))
+            }
+        });
         let mut top = Dir::new("root", "root", "/", None);
-        for (path, file_ins) in all_files.into_iter() {
+        for (path, file_ins) in all_files {
             build_tree(&mut top, &path.parts, 0, Some(file_ins));
         }
         let mut all_extensions: Vec<String> = vec![];
