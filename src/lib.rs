@@ -207,17 +207,9 @@ where
 
 pub fn split_module<'a>(
     id: &'a str,
-    doc_id: &str,
-    line_number: usize,
+    _doc_id: &str,
+    _line_number: usize,
 ) -> ftd::p1::Result<(Option<&'a str>, &'a str, Option<&'a str>)> {
-    if id.chars().filter(|v| *v == '.').count() > 2 {
-        return ftd::e2(
-            format!("id contains more than two dots: {}", id),
-            doc_id,
-            line_number,
-        );
-    }
-
     match id.split_once('.') {
         Some((p1, p2)) => match p2.split_once(".") {
             Some((p21, p22)) => Ok((Some(p1), p21, Some(p22))),
