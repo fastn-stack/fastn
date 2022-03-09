@@ -39,7 +39,6 @@ pub async fn build(
         config.package.name.clone(),
         config.package.get_assets_doc(config).await?,
     );
-    // panic!();
     for dep in &dependencies {
         asset_documents.insert(
             dep.package.name.clone(),

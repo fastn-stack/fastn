@@ -1,6 +1,5 @@
 -- import: www.amitu.com/assets
 -- import: one.fpm.local/assets as theme-assets
--- import: www.amitu.com/temp
 
 
 -- ftd.text: hello
@@ -13,4 +12,19 @@ font: $assets.fonts.myFirstFont
 font: $theme-assets.fonts.themeFont
 
 -- ftd.text:
-text: $assets.temp-dir.blah2.test-dark.jpg.dark
+text: $assets.files.index.jpg.dark
+
+-- ftd.text:
+text: $assets.files.index.ftd
+
+-- ftd.text:
+text: $assets.files.hello.world.test.py
+
+-- ftd.text:
+text: $assets.files.hello.world.test.py-page
+
+-- ftd.text:
+text: $assets.files.hello.py-page
+
+-- ftd.text:
+text: $assets.files.hello.py

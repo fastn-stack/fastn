@@ -1,7 +1,5 @@
 use std::convert::TryInto;
 
-use lazy_static::__Deref;
-
 /// `Config` struct keeps track of a few configuration parameters that is shared with the entire
 /// program. It is constructed from the content of `FPM.ftd` file for the package.
 ///
@@ -522,20 +520,20 @@ impl Package {
         // Virtual document that contains the asset information about the package
         use itertools::Itertools;
         let all_docs = fpm::get_documents(config, self).await?;
-        let all_file_names = all_docs
-            .iter()
+        let all_files = all_docs
+            .into_iter()
             .filter_map(|file_instance| {
-                let file_id = file_instance.get_id();
-                if file_id.eq("FPM.ftd") {
+                let id = file_instance.get_id();
+                if id.eq("FPM.ftd") {
                     None
                 } else {
-                    Some(Path::new(file_id.as_str()))
+                    Some((Path::new(id.as_str()), file_instance))
                 }
             })
-            .collect::<Vec<Path>>();
-        let mut top = dir("root");
-        for path in all_file_names.iter() {
-            build_tree(&mut top, &path.parts, 0);
+            .collect::<Vec<(Path, fpm::File)>>();
+        let mut top = Dir::new("root", "root", "/", None);
+        for (path, file_ins) in all_files.into_iter() {
+            build_tree(&mut top, &path.parts, 0, Some(file_ins));
         }
         let mut all_extensions: Vec<String> = vec![];
         let (resp1, resp2) = build_record_values(&top, &mut all_extensions);
@@ -610,18 +608,23 @@ impl Package {
         struct Dir {
             name: String,
             full_path: String,
+            dir_path: String,
+            file_instance: Option<fpm::File>,
             children: Vec<Dir>,
         }
 
-        fn dir(val: &str) -> Dir {
-            Dir::new(val, val)
-        }
-
         impl Dir {
-            fn new(name: &str, full_path: &str) -> Dir {
+            fn new(
+                name: &str,
+                full_path: &str,
+                dir_path: &str,
+                file_instance: Option<fpm::File>,
+            ) -> Dir {
                 Dir {
                     name: name.to_string(),
                     full_path: full_path.to_string(),
+                    dir_path: dir_path.to_string(),
+                    file_instance,
                     children: Vec::<Dir>::new(),
                 }
             }
@@ -648,27 +651,54 @@ impl Package {
             }
 
             fn full_path_to_key(&self) -> String {
-                let path = self.full_path.as_str().trim_start_matches('.').trim();
-                path.chars()
-                    .map(|x| match x {
-                        '/' => '-',
-                        '.' => '-',
-                        '_' => '-',
-                        _ => x,
-                    })
-                    .collect()
+                get_sanitized_string(self.full_path.as_str())
+            }
+            fn name_and_extension(&self) -> (&str, Option<&str>) {
+                if let Some((name, ext)) = self.name.as_str().rsplit_once('.') {
+                    let name = if name.is_empty() { "DOT" } else { name };
+                    (name, Some(ext))
+                } else {
+                    // File without extension
+                    (self.name.as_str(), None)
+                }
             }
         }
 
-        fn build_tree(node: &mut Dir, parts: &[String], depth: usize) {
+        fn get_sanitized_string(input: &str) -> String {
+            let path = input.trim_start_matches('.').trim();
+            path.chars()
+                .map(|x| match x {
+                    '/' => '-',
+                    '.' => '-',
+                    '_' => '-',
+                    _ => x,
+                })
+                .collect()
+        }
+
+        fn build_tree(node: &mut Dir, parts: &[String], depth: usize, file_ins: Option<fpm::File>) {
             if depth < parts.len() {
                 let item = &parts[depth];
                 let full_path = &parts[..depth + 1].join("/");
+                let dir_path = &parts[..depth].join("/");
 
                 let dir = match node.find_child(item) {
                     Some(d) => d,
                     None => {
-                        let d = Dir::new(item, full_path.as_str());
+                        let d = Dir::new(
+                            item,
+                            full_path.as_str(),
+                            dir_path.as_str(),
+                            if let Some(f) = file_ins.clone() {
+                                if full_path.as_str().eq(f.get_id().as_str()) {
+                                    Some(f)
+                                } else {
+                                    None
+                                }
+                            } else {
+                                None
+                            },
+                        );
                         node.add_child(d);
                         match node.find_child(item) {
                             Some(d2) => d2,
@@ -676,127 +706,155 @@ impl Package {
                         }
                     }
                 };
-                build_tree(dir, parts, depth + 1);
+                build_tree(dir, parts, depth + 1, file_ins);
             }
         }
 
         fn build_record_values(node: &Dir, found_extensions: &mut Vec<String>) -> (String, String) {
             let mut resp_records = String::new();
             let mut resp_values = String::new();
-            for child_node in node.children.iter() {
-                let child_node = child_node.deref();
-                let child_full_path = child_node.full_path.clone();
-                let child_key = child_node.full_path_to_key();
-                if !child_node.is_leaf() {
-                    let (new_records, new_values) = child_node.children.iter().fold(
-                        (
-                            format!(
-                                "-- record {key}-folder:",
-                                key = child_node.full_path_to_key()
-                            ),
-                            format!(
-                                "-- {key}-folder {key}:",
-                                key = child_node.full_path_to_key(),
-                            ),
-                        ),
-                        |(child_record_accumulator, child_value_accumulator), sub_child_ins| {
-                            let sub_child_ins = sub_child_ins.deref();
-                            let (append_record, append_value) = if sub_child_ins.is_leaf() {
-                                let (sub_child_file_name, sub_child_file_ext) =
-                                    process_leaf_node(sub_child_ins);
-                                if let Some(ext) = sub_child_file_ext {
-                                    (
-                                        format!("{ext}-file {sub_child_file_name}:"),
-                                        format!(
-                                            "{sub_child_file_name}: ${sub_child_key}",
-                                            sub_child_key = sub_child_ins.full_path_to_key()
-                                        ),
-                                    )
-                                } else {
-                                    (
-                                        format!("string {sub_child_file_name}:"),
-                                        format!(
-                                            "{sub_child_file_name}: {sub_child_path}",
-                                            sub_child_path = sub_child_ins.full_path
-                                        ),
-                                    )
-                                }
-                            } else {
-                                (
-                                    format!(
-                                        "{sub_child_key}-folder {sub_child_name}:",
-                                        sub_child_key = sub_child_ins.full_path_to_key(),
-                                        sub_child_name = sub_child_ins.name.as_str()
-                                    ),
-                                    format!(
-                                        "{sub_child_name}: ${sub_child_key}",
-                                        sub_child_key = sub_child_ins.full_path_to_key(),
-                                        sub_child_name = sub_child_ins.name.as_str()
-                                    ),
-                                )
-                            };
-                            (
-                                format!("{child_record_accumulator}\n{append_record}"),
-                                format!("{child_value_accumulator}\n{append_value}"),
-                            )
-                        },
-                    );
+            let mut root_record = String::from("-- record all-files:");
+            let mut root_record_instance = String::from("-- all-files files:");
+            // First combine all the children by name
+            let mut named_children: std::collections::HashMap<String, Vec<Dir>> =
+                std::collections::HashMap::new();
 
-                    let (child_records, child_values) =
-                        build_record_values(child_node, found_extensions);
-
-                    resp_records = format!("{resp_records}\n{child_records}\n{new_records}");
-                    resp_values = format!("{resp_values}\n{child_values}\n{new_values}");
+            for child_node in node.children.clone().into_iter() {
+                // let child_node = child_node.deref();
+                let (child_name, _) = child_node.name_and_extension();
+                let child_key = get_sanitized_string(
+                    format!(
+                        "{dir_path}{slash}{child_name}",
+                        dir_path = child_node.dir_path.as_str(),
+                        slash = if child_node.dir_path.is_empty() {
+                            ""
+                        } else {
+                            "/"
+                        }
+                    )
+                    .as_str(),
+                );
+                if let Some(ins) = named_children.get_mut(&child_key) {
+                    ins.push(child_node);
                 } else {
-                    let (file_name, file_ext) = process_leaf_node(child_node);
-                    let new_values = if let Some(ext) = file_ext {
-                        found_extensions.push(ext.to_string());
-                        // Found the extension. Should be appended to the parent record
-                        let dark_mode_file_name = format!("{file_name}-dark.{ext}");
-                        let dark_mode_asset = node
-                            .children
-                            .iter()
-                            .find(|c| c.name.eq(dark_mode_file_name.as_str()));
-                        if fpm::IMAGE_EXT.contains(&ext) {
-                            format!(
+                    named_children.insert(child_key, vec![child_node]);
+                };
+            }
+            for (key_name, children) in named_children.iter() {
+                let mut named_child_record = format!("-- record file-record-{key_name}:");
+                let mut named_child_instance =
+                    format!("-- file-record-{key_name} file-record-instance-{key_name}:");
+                if node.name.as_str().eq("root") {
+                    root_record = format!("{root_record}\nfile-record-{key_name} {key_name}:");
+                    root_record_instance = format!(
+                        "{root_record_instance}\n{key_name}: $file-record-instance-{key_name}"
+                    );
+                }
+                for child in children {
+                    let (child_name, child_ext) = child.name_and_extension();
+
+                    if child.is_leaf() {
+                        let attribute_name: &str = if let Some(ext) = child_ext {
+                            // found_extensions.push(ext.to_string());
+                            ext
+                        } else {
+                            // TODO: Non extension file names not supported
+                            continue;
+                        };
+                        let page_record_part = format!("string {attribute_name}-page:");
+                        // TODO: The URL for the generated page to be fixed
+                        let page_instance_part = format!(
+                            "{attribute_name}-page: {child_dir_path}/{child_name}",
+                            child_dir_path = child.dir_path
+                        );
+                        let (append_page, attribute_type) =
+                            match child.file_instance.as_ref().unwrap() {
+                                fpm::File::Image(_) => {
+                                    // In case markdown, append the md-page attribute directly
+                                    (true, "fpm.image-src")
+                                }
+                                fpm::File::Markdown(_) | fpm::File::Code(_) => (true, "string"),
+                                _ => (false, "string"),
+                            };
+                        if append_page {
+                            named_child_record =
+                                format!("{named_child_record}\n{page_record_part}");
+                            named_child_instance =
+                                format!("{named_child_instance}\n{page_instance_part}");
+                        }
+                        if attribute_type.eq("fpm.image-src") {
+                            let dark_mode_file_name = format!("{child_name}-dark.{attribute_name}");
+                            let dark_mode_asset = node
+                                .children
+                                .iter()
+                                .find(|c| c.name.eq(dark_mode_file_name.as_str()));
+                            let image_src = format!(
                                 indoc::indoc! {"
-                            -- fpm.image-src {child_key}-image-instance:
-                            default: {child_full_path}
-                            dark: {dark_mode_file_path}
-                            
-                            -- {ext}-file {child_key}:
-                            {ext}: ${child_key}-image-instance"
+                                    -- fpm.image-src {child_record_instance}:
+                                    default: {child_full_path}
+                                    dark: {dark_mode_file_path}"
                                 },
-                                ext = ext,
-                                child_key = child_key,
-                                child_full_path = child_full_path.as_str(),
+                                child_record_instance = child.full_path_to_key(),
+                                child_full_path = child.full_path.as_str(),
                                 dark_mode_file_path = if let Some(dark_asset) = dark_mode_asset {
                                     dark_asset.full_path.as_str()
                                 } else {
-                                    child_full_path.as_str()
-                                }
-                            )
+                                    child.full_path.as_str()
+                                },
+                            );
+                            resp_values = format!("{image_src}\n{resp_values}",);
                         } else {
-                            format!("-- {ext}-file {child_key}:\n{ext}: {child_full_path}",)
+                            resp_values = format!(
+                                "-- {attribute_type} {child_record_instance}: {child_instance_path}\n{resp_values}",
+                                child_record_instance = child.full_path_to_key(),
+                                child_instance_path = child.full_path
+                            );
                         }
+
+                        named_child_record =
+                            format!("{named_child_record}\n{attribute_type} {attribute_name}:");
+                        named_child_instance = format!(
+                            "{named_child_instance}\n{attribute_name}: ${child_record_instance}",
+                            child_record_instance = child.full_path_to_key()
+                        );
                     } else {
-                        // Extension not found. Will be appended directly as a string
-                        format!("-- string {file_name}: {child_full_path}")
-                    };
-                    resp_values = format!("{resp_values}\n{new_values}");
+                        let (child_records, child_values) =
+                            build_record_values(child, found_extensions);
+                        resp_records = format!("{child_records}\n{resp_records}");
+                        resp_values = format!("{child_values}\n{resp_values}");
+
+                        for sub_child in child.children.iter() {
+                            let (sub_child_name, _) = sub_child.name_and_extension();
+
+                            let sub_child_key = get_sanitized_string(
+                                format!(
+                                    "{dir_path}{slash}{sub_child_name}",
+                                    dir_path = sub_child.dir_path.as_str(),
+                                    slash = if sub_child.dir_path.is_empty() {
+                                        ""
+                                    } else {
+                                        "/"
+                                    }
+                                )
+                                .as_str(),
+                            );
+                            named_child_record = format!(
+                                "{named_child_record}\nfile-record-{sub_child_key} {sub_child_name}:",
+                            );
+                            named_child_instance = format!(
+                                "{named_child_instance}\n{sub_child_name}: $file-record-instance-{sub_child_key}",
+                            )
+                        }
+                    }
                 }
+                resp_records = format!("{resp_records}\n{named_child_record}");
+                resp_values = format!("{resp_values}\n{named_child_instance}");
+            }
+            if node.name.as_str().eq("root") {
+                resp_records = format!("{resp_records}\n{root_record}");
+                resp_values = format!("{resp_values}\n{root_record_instance}");
             }
             (resp_records, resp_values)
-        }
-
-        fn process_leaf_node(node: &Dir) -> (&str, Option<&str>) {
-            if let Some((name, ext)) = node.name.as_str().rsplit_once('.') {
-                let name = if name.is_empty() { "DOT" } else { name };
-                (name, Some(ext))
-            } else {
-                // File without extension
-                (node.name.as_str(), None)
-            }
         }
     }
 }
