@@ -25,6 +25,7 @@ size: 20
 
 
 -- ftd.image-src foo: hello.png
+dark: hello.png
 
 -- ftd.image:
 src: $foo.light
