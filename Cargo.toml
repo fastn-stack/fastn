@@ -18,8 +18,8 @@ async-recursion = "0.3.2"
 camino = "1.0.5"
 clap = "2.33.3"
 diffy = "0.2.1"
-# ftd = { git = "https://github.com/FifthTry/ftd", rev = "0ea5c3da20dd15ebb281a48d7468668d4e038743" }
-ftd = {path = "../ftd"}
+ftd = { git = "https://github.com/FifthTry/ftd", rev = "0ea5c3da20dd15ebb281a48d7468668d4e038743" }
+#ftd = {path = "../ftd"}
 futures = "0.3"
 home = "0.5.3"
 ignore = "0.4.18"
