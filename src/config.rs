@@ -533,7 +533,7 @@ impl Package {
             build_tree(&mut top, &path.parts, 0, Some(file_ins));
         }
         let mut all_extensions: Vec<String> = vec![];
-        let (resp1, resp2) = build_record_values(&top, &mut all_extensions);
+        let (generated_records, generated_values) = build_record_values(&top, &mut all_extensions);
         let extension_records = all_extensions
             .iter()
             .unique()
@@ -577,14 +577,14 @@ impl Package {
                 -- import: fpm
 
                 {extension_records}\n
-                {resp1}\n
-                {resp2}
+                {generated_records}\n
+                {generated_values}
                 {font_record}
                 {fonts}
             "},
             extension_records = extension_records,
-            resp1 = resp1,
-            resp2 = resp2,
+            generated_records = generated_records,
+            generated_values = generated_values,
             font_record = font_record,
             fonts = fonts
         ));
