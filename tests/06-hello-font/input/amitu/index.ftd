@@ -14,6 +14,10 @@ font: $theme-assets.fonts.themeFont
 -- ftd.text:
 text: $assets.files.index.jpg.dark
 
+
+-- ftd.text:
+text: $assets.files.index.jpg.light
+
 -- ftd.text:
 text: $assets.files.index.ftd
 
