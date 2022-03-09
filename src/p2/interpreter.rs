@@ -933,6 +933,19 @@ pub fn default_bag() -> std::collections::BTreeMap<String, ftd::p2::Thing> {
             "ftd#null".to_string(),
             ftd::p2::Thing::Component(ftd::p2::element::null()),
         ),
+        (
+            "ftd#image-src".to_string(),
+            ftd::p2::Thing::Record(ftd::p2::Record {
+                name: "ftd#image-src".to_string(),
+                fields: std::array::IntoIter::new([
+                    ("light".to_string(), ftd::p2::Kind::caption()),
+                    ("dark".to_string(), ftd::p2::Kind::string().into_optional()),
+                ])
+                    .collect(),
+                instances: Default::default(),
+                order: vec!["light".to_string(), "dark".to_string()],
+            }),
+        ),
     ])
     .collect()
 }

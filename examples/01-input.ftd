@@ -22,3 +22,9 @@ You have typed: {value}
 --- ftd.text value: $query
 color: green
 size: 20
+
+
+-- ftd.image-src foo: hello.png
+
+-- ftd.image:
+src: $foo.light
