@@ -13,6 +13,7 @@ pub struct Font {
     display: Option<String>,
     style: Option<String>,
     weight: Option<String>,
+    stretch: Option<String>,
 }
 
 pub(crate) fn escape(s: &str) -> String {
@@ -41,6 +42,9 @@ impl Font {
         }
         if let Some(ref d) = self.weight {
             attrs.push(format!("font-weight: {}", escape(d)));
+        }
+        if let Some(ref d) = self.stretch {
+            attrs.push(format!("font-stretch: {}", escape(d)));
         }
 
         let mut src: Vec<String> = vec![];

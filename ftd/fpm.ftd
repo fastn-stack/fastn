@@ -38,6 +38,7 @@ optional string unicode-range:
 optional string display:
 optional string style:
 optional string weight:
+optional string stretch:
 
 
 
