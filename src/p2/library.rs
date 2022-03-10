@@ -134,7 +134,7 @@ fn text_component() -> ftd::p1::Result<ftd::Value> {
         },
     );
     v.insert(
-        "size".to_string(),
+        "line-clamp".to_string(),
         ftd::PropertyValue::Value {
             value: ftd::variable::Value::Integer { value: 40 },
         },

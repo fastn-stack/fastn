@@ -546,6 +546,39 @@ pub fn complete_reference(reference: &Option<String>) -> Option<String> {
     reference
 }
 
+pub fn record_optional(
+    name: &str,
+    properties: &std::collections::BTreeMap<String, ftd::Value>,
+    doc_id: &str,
+    line_number: usize,
+) -> ftd::p1::Result<Option<std::collections::BTreeMap<String, ftd::PropertyValue>>> {
+    match properties.get(name) {
+        Some(ftd::Value::Record { fields, .. }) => Ok(Some(fields.to_owned())),
+        Some(ftd::Value::None {
+            kind: ftd::p2::Kind::Record { .. },
+        }) => Ok(None),
+        Some(ftd::Value::None { .. }) => Ok(None),
+        Some(ftd::Value::Optional {
+            data,
+            kind: ftd::p2::Kind::Record { .. },
+        }) => match data.as_ref() {
+            Some(ftd::Value::Record { fields, .. }) => Ok(Some(fields.to_owned())),
+            None => Ok(None),
+            v => ftd::e2(
+                format!("expected record, for: `{}` found: {:?}", name, v),
+                doc_id,
+                line_number,
+            ),
+        },
+        Some(v) => ftd::e2(
+            format!("expected record, for: `{}` found: {:?}", name, v),
+            doc_id,
+            line_number,
+        ),
+        None => Ok(None),
+    }
+}
+
 pub fn string_optional(
     name: &str,
     properties: &std::collections::BTreeMap<String, ftd::Value>,
@@ -576,6 +609,33 @@ pub fn string_optional(
             line_number,
         ),
         None => Ok(None),
+    }
+}
+
+pub fn string(
+    name: &str,
+    properties: &std::collections::BTreeMap<String, ftd::Value>,
+    doc_id: &str,
+    line_number: usize,
+) -> ftd::p1::Result<String> {
+    match properties.get(name) {
+        Some(ftd::Value::String { text: v, .. }) => Ok(v.to_string()),
+        Some(ftd::Value::Optional {
+            data,
+            kind: ftd::p2::Kind::String { .. },
+        }) => match data.as_ref() {
+            Some(ftd::Value::String { text: v, .. }) => Ok(v.to_string()),
+            v => ftd::e2(
+                format!("expected string, for: `{}` found: {:?}", name, v),
+                doc_id,
+                line_number,
+            ),
+        },
+        v => ftd::e2(
+            format!("expected string, for: `{}` found: {:?}", name, v),
+            doc_id,
+            line_number,
+        ),
     }
 }
 
