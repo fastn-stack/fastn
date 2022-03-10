@@ -32,3 +32,6 @@ text: $assets.files.hello.py-page
 
 -- ftd.text:
 text: $assets.files.hello.py
+
+-- ftd.text:
+text: $assets.files.index.without-extension

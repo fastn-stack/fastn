@@ -37,12 +37,12 @@ pub async fn build(
     let mut asset_documents = std::collections::HashMap::new();
     asset_documents.insert(
         config.package.name.clone(),
-        config.package.get_assets_doc(config).await?,
+        config.package.get_assets_doc(config, base_url).await?,
     );
     for dep in &dependencies {
         asset_documents.insert(
             dep.package.name.clone(),
-            dep.package.get_assets_doc(config).await?,
+            dep.package.get_assets_doc(config, base_url).await?,
         );
     }
 

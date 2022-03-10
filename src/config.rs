@@ -516,7 +516,11 @@ impl Package {
         Ok(resp)
     }
 
-    pub async fn get_assets_doc(&self, config: &fpm::Config) -> fpm::Result<String> {
+    pub async fn get_assets_doc(
+        &self,
+        config: &fpm::Config,
+        base_url: &str,
+    ) -> fpm::Result<String> {
         // Virtual document that contains the asset information about the package
         use itertools::Itertools;
         let all_docs = fpm::get_documents(config, self).await?;
@@ -533,18 +537,8 @@ impl Package {
             build_tree(&mut top, &path.parts, 0, Some(file_ins));
         }
         let mut all_extensions: Vec<String> = vec![];
-        let (generated_records, generated_values) = build_record_values(&top, &mut all_extensions);
-        let extension_records = all_extensions
-            .iter()
-            .unique()
-            .map(|ext| {
-                if fpm::IMAGE_EXT.contains(&ext.as_str()) {
-                    format!("-- record {ext}-file:\nftd.image-src {ext}:")
-                } else {
-                    format!("-- record {ext}-file:\nstring {ext}:")
-                }
-            })
-            .join("\n");
+        let (generated_records, generated_values) =
+            build_record_values(&top, &mut all_extensions, self.name.as_str(), base_url);
         let (font_record, fonts) = self
             .fonts
             .iter()
@@ -574,13 +568,11 @@ impl Package {
             );
         return Ok(format!(
             indoc::indoc! {"
-                {extension_records}\n
                 {generated_records}\n
                 {generated_values}
                 {font_record}
                 {fonts}
             "},
-            extension_records = extension_records,
             generated_records = generated_records,
             generated_values = generated_values,
             font_record = font_record,
@@ -705,7 +697,12 @@ impl Package {
             }
         }
 
-        fn build_record_values(node: &Dir, found_extensions: &mut Vec<String>) -> (String, String) {
+        fn build_record_values(
+            node: &Dir,
+            found_extensions: &mut Vec<String>,
+            package_name: &str,
+            base_url: &str,
+        ) -> (String, String) {
             let mut resp_records = String::new();
             let mut resp_values = String::new();
             let mut root_record = String::from("-- record all-files:");
@@ -753,8 +750,7 @@ impl Package {
                             // found_extensions.push(ext.to_string());
                             ext
                         } else {
-                            // TODO: Non extension file names not supported
-                            continue;
+                            "without-extension"
                         };
                         let page_record_part = format!("string {attribute_name}-page:");
                         // TODO: The URL for the generated page to be fixed
@@ -762,14 +758,17 @@ impl Package {
                             "{attribute_name}-page: {child_dir_path}/{child_name}",
                             child_dir_path = child.dir_path
                         );
-                        let (append_page, attribute_type) =
+                        let (append_page, is_static_copied, attribute_type) =
                             match child.file_instance.as_ref().unwrap() {
                                 fpm::File::Image(_) => {
                                     // In case markdown, append the md-page attribute directly
-                                    (true, "ftd.image-src")
+                                    (true, true, "ftd.image-src")
                                 }
-                                fpm::File::Markdown(_) | fpm::File::Code(_) => (true, "string"),
-                                _ => (false, "string"),
+                                fpm::File::Markdown(_) | fpm::File::Code(_) => {
+                                    (true, true, "string")
+                                }
+                                fpm::File::Ftd(_) => (false, false, "string"),
+                                _ => (false, true, "string"),
                             };
                         if append_page {
                             named_child_record =
@@ -785,10 +784,12 @@ impl Package {
                                 .find(|c| c.name.eq(dark_mode_file_name.as_str()));
                             let image_src = format!(
                                 indoc::indoc! {"
-                                    -- ftd.image-src {child_record_instance}:
-                                    light: {child_full_path}
-                                    dark: {dark_mode_file_path}"
+                                    -- ftd.image-src file-leaf-instance-{child_record_instance}:
+                                    light: {base_url}/-/{package_name}/{child_full_path}
+                                    dark: {base_url}/-/{package_name}/{dark_mode_file_path}"
                                 },
+                                base_url = base_url,
+                                package_name = package_name,
                                 child_record_instance = child.full_path_to_key(),
                                 child_full_path = child.full_path.as_str(),
                                 dark_mode_file_path = if let Some(dark_asset) = dark_mode_asset {
@@ -800,7 +801,8 @@ impl Package {
                             resp_values = format!("{image_src}\n{resp_values}",);
                         } else {
                             resp_values = format!(
-                                "-- {attribute_type} {child_record_instance}: {child_instance_path}\n{resp_values}",
+                                "-- {attribute_type} file-leaf-instance-{child_record_instance}: {base_url}/{static_dir_prefix}{child_instance_path}\n{resp_values}",
+                                static_dir_prefix = if is_static_copied { format!("-/{package_name}/")} else {String::new()},
                                 child_record_instance = child.full_path_to_key(),
                                 child_instance_path = child.full_path
                             );
@@ -809,12 +811,12 @@ impl Package {
                         named_child_record =
                             format!("{named_child_record}\n{attribute_type} {attribute_name}:");
                         named_child_instance = format!(
-                            "{named_child_instance}\n{attribute_name}: ${child_record_instance}",
+                            "{named_child_instance}\n{attribute_name}: $file-leaf-instance-{child_record_instance}",
                             child_record_instance = child.full_path_to_key()
                         );
                     } else {
                         let (child_records, child_values) =
-                            build_record_values(child, found_extensions);
+                            build_record_values(child, found_extensions, package_name, base_url);
                         resp_records = format!("{child_records}\n{resp_records}");
                         resp_values = format!("{child_values}\n{resp_values}");
 
