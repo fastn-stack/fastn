@@ -1858,8 +1858,8 @@ impl Font {
         line_number: usize,
     ) -> ftd::p1::Result<Font> {
         let properties = l
-            .into_iter()
-            .map(|(k, v)| v.resolve(line_number, doc).map(|v| ((k.to_string(), v))))
+            .iter()
+            .map(|(k, v)| v.resolve(line_number, doc).map(|v| (k.to_string(), v)))
             .collect::<ftd::p1::Result<std::collections::BTreeMap<String, ftd::Value>>>()?;
         Ok(Font {
             font: ftd::p2::utils::string("font", &properties, doc.name, 0)?,
