@@ -61,7 +61,6 @@ background-color: rgba(13, 131, 225, 0.23)
 
 
 --- ftd.text: About AmitU
-size: 30
 style: bold
 slot: header
 align: center
@@ -79,7 +78,6 @@ height: 50
 align: center
 
 --- ftd.text: Amit Upadhyay (CEO fifthtry)
-size: 15
 align: center
 margin-bottom: 40
 

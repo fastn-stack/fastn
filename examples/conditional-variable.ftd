@@ -10,7 +10,6 @@ if: not $value
 padding: 40
 
 -- ftd.text: $foo
-size: 40
 color: green
 color if $value: orange
 

@@ -69,7 +69,6 @@ padding-left: 10
 
 --- ftd.text:
 text: $name
-size: 14
 color: grey
 
 -- ftd.column items:
@@ -99,7 +98,6 @@ name: $bio
 
 
 -- ftd.text: Start Display
-size: 30
 
 -- ftd.column:
 id: hello

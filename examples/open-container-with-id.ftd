@@ -12,7 +12,6 @@ optional boolean collapsed:
 optional caption title:
 optional boolean two_columns:
 text: $body
-size: 17
 color: \#4d4d4d
 padding-bottom: 34
 
@@ -23,9 +22,7 @@ width: fill
 
 --- ftd.text:
 text: $title
-caption $title:
 text: $title
-size: 30
 color: black
 style: bold
 padding-bottom: 12

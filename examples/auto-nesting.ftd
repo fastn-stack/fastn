@@ -9,7 +9,6 @@ boolean open: true
 text: $title
 caption $title:
 region: title
-size: 34
 $on-click$: toggle $open
 
 --- ftd.column:
@@ -28,7 +27,6 @@ boolean open: true
 text: $title
 caption $title:
 region: title
-size: 28
 $on-click$: toggle $open
 
 --- ftd.column:
@@ -46,7 +44,6 @@ boolean open: true
 text: $title
 caption $title:
 region: title
-size: 24
 $on-click$: toggle $open
 
 --- ftd.column:

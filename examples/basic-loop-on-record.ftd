@@ -8,7 +8,6 @@ width: fill
 margin-top: 10
 
 --- ftd.text: $name
-size: 20
 color: red
 
 --- ftd.text: $body
@@ -39,7 +38,6 @@ Asit is developer at Fifthtry
 Sourabh is developer at Fifthtry
 
 -- ftd.text: People at Fifthtry
-size: 40
 style: bold
 
 -- string get: world

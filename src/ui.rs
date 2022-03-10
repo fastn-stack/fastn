@@ -26,7 +26,6 @@ pub struct Markups {
     pub line: bool,
     pub style: Style,
     pub font: Option<Font>,
-    pub external_font: Option<ExternalFont>,
     pub line_clamp: Option<i64>,
     pub children: Vec<Markup>,
 }
@@ -40,7 +39,6 @@ impl Markups {
             text_align: self.text_align.to_owned(),
             style: self.style.to_owned(),
             font: self.font.to_owned(),
-            external_font: self.external_font.to_owned(),
             line_clamp: self.line_clamp,
         }
     }
@@ -2023,7 +2021,6 @@ pub struct Text {
     pub text_align: TextAlign,
     pub style: Style,
     pub font: Option<Font>,
-    pub external_font: Option<ExternalFont>,
     pub line_clamp: Option<i64>,
     // TODO: line-height
     // TODO: region (https://package.elm-lang.org/packages/mdgriffith/elm-ui/latest/Element-Region)
@@ -2043,7 +2040,6 @@ pub struct TextBlock {
     pub style: Style,
     pub size: Option<i64>,
     pub font: Vec<NamedFont>,
-    pub external_font: Option<ExternalFont>,
     pub line_height: Option<i64>,
     pub line_clamp: Option<i64>,
 }
@@ -2055,7 +2051,6 @@ pub struct Code {
     pub text_align: TextAlign,
     pub style: Style,
     pub font: Option<Font>,
-    pub external_font: Option<ExternalFont>,
     pub line_clamp: Option<i64>,
 }
 

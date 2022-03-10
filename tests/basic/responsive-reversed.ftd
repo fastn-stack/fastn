@@ -1,8 +1,0 @@
-
--- fifthtry/text: Hello World!
-id: @hello
-
-
--- fifthtry/text: Hello World Mobile!
-id: @hello
-device: mobile

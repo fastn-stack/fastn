@@ -598,13 +598,13 @@ pub fn string_optional(
             Some(ftd::Value::String { text: v, .. }) => Ok(Some(v.to_string())),
             None => Ok(None),
             v => ftd::e2(
-                format!("expected string, for: `{}` found: {:?}", name, v),
+                format!("expected string1, for: `{}` found: {:?}", name, v),
                 doc_id,
                 line_number,
             ),
         },
         Some(v) => ftd::e2(
-            format!("expected string, for: `{}` found: {:?}", name, v),
+            format!("expected string2, for: `{}` found: {:?}", name, v),
             doc_id,
             line_number,
         ),
@@ -626,13 +626,13 @@ pub fn string(
         }) => match data.as_ref() {
             Some(ftd::Value::String { text: v, .. }) => Ok(v.to_string()),
             v => ftd::e2(
-                format!("expected string, for: `{}` found: {:?}", name, v),
+                format!("expected string3, for: `{}` found: {:?}", name, v),
                 doc_id,
                 line_number,
             ),
         },
         v => ftd::e2(
-            format!("expected string, for: `{}` found: {:?}", name, v),
+            format!("expected string4, for: `{}` found: {:?}", name, v),
             doc_id,
             line_number,
         ),
@@ -801,7 +801,7 @@ pub fn bool_optional(
             Some(ftd::Value::Boolean { value: v }) => Ok(Some(*v)),
             None => Ok(None),
             v => ftd::e2(
-                format!("expected string, for: `{}` found: {:?}", name, v),
+                format!("expected string5, for: `{}` found: {:?}", name, v),
                 doc_id,
                 line_number,
             ),
@@ -874,7 +874,7 @@ pub fn decimal_optional(
             Some(ftd::Value::Decimal { value: v }) => Ok(Some(*v)),
             None => Ok(None),
             v => ftd::e2(
-                format!("expected string, for: `{}` found: {:?}", name, v),
+                format!("expected string6, for: `{}` found: {:?}", name, v),
                 doc_id,
                 line_number,
             ),
