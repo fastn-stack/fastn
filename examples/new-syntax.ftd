@@ -15,7 +15,7 @@ string ff: hello
 -- ftd.text: $bar
 boolean t: true
 string f: hello
-size: $foo
+border-width: $foo
 color if $t: red
 
 -- col:

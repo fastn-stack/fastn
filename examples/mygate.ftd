@@ -80,7 +80,6 @@ if: $open
 
 --- ftd.integer:
 value: $code
-size: 50
 align: center
 color: white
 style: bold

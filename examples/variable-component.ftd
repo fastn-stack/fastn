@@ -1,7 +1,7 @@
 -- ftd.text foo: hello
 integer size: 10
 color: red
-size: $size
+border-width: $size
 
 -- ftd.column moo:
 caption msg: world
@@ -34,4 +34,4 @@ g: moo: hello again
 >> size: 20
 > k: ftd.text: hello amitu!
 >> color: green
->> size: 10
+>> border-width: 10

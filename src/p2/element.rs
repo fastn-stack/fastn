@@ -695,40 +695,6 @@ pub fn column_from_properties(
     })
 }
 
-pub fn external_font_from_properties(
-    properties: &std::collections::BTreeMap<String, ftd::Value>,
-    doc: &ftd::p2::TDoc,
-) -> ftd::p1::Result<Option<ftd::ExternalFont>> {
-    let font_option = ftd::p2::utils::string_optional("font", properties, doc.name, 0)?;
-    let font_url_option = ftd::p2::utils::string_optional("font-url", properties, doc.name, 0)?;
-
-    match (font_option, font_url_option) {
-        (Some(font), Some(font_url)) => {
-            let name_opt = font.split(',').next();
-            let name = match name_opt {
-                Some(f) => f.to_string(),
-                None => {
-                    return ftd::e2(
-                        "Something went wrong while parsing font vector",
-                        doc.name,
-                        0,
-                    );
-                }
-            };
-
-            Ok(Some(ftd::ExternalFont {
-                url: font_url,
-                display: ftd::FontDisplay::from(
-                    ftd::p2::utils::string_optional("font-display", properties, doc.name, 0)?,
-                    doc.name,
-                )?,
-                name,
-            }))
-        }
-        _ => Ok(None),
-    }
-}
-
 #[allow(dead_code)]
 #[allow(unused_variables)]
 pub fn text_render(
@@ -867,6 +833,7 @@ pub fn text_block_from_properties(
     let (text, source, reference) =
         ftd::p2::utils::string_and_source_and_ref(0, "text", properties, doc, condition)?;
     let properties = &ftd::component::resolve_properties(0, properties, doc)?;
+    dbg!("2");
     let font_str = ftd::p2::utils::string_optional("font", properties, doc.name, 0)?;
 
     let font: Vec<ftd::NamedFont> = match font_str {
@@ -893,7 +860,6 @@ pub fn text_block_from_properties(
             doc.name,
         )?,
         size: ftd::p2::utils::int_optional("size", properties, doc.name, 0)?,
-        external_font: external_font_from_properties(properties, doc)?,
         font,
         line_height: ftd::p2::utils::int_optional("line-height", properties, doc.name, 0)?,
         line_clamp: ftd::p2::utils::int_optional("line-clamp", properties, doc.name, 0)?,
@@ -938,7 +904,6 @@ pub fn code_from_properties(
             ftd::p2::utils::string_optional("style", properties, doc.name, 0)?,
             doc.name,
         )?,
-        external_font: external_font_from_properties(properties, doc)?,
         font,
         line_clamp: ftd::p2::utils::int_optional("line-clamp", properties, doc.name, 0)?,
     })
@@ -977,7 +942,6 @@ pub fn integer_from_properties(
             ftd::p2::utils::string_optional("style", properties, doc.name, 0)?,
             doc.name,
         )?,
-        external_font: external_font_from_properties(properties, doc)?,
         font,
         line_clamp: ftd::p2::utils::int_optional("line-clamp", properties, doc.name, 0)?,
     })
@@ -1015,7 +979,6 @@ pub fn decimal_from_properties(
             ftd::p2::utils::string_optional("style", properties, doc.name, 0)?,
             doc.name,
         )?,
-        external_font: external_font_from_properties(properties, doc)?,
         font,
         line_clamp: ftd::p2::utils::int_optional("line-clamp", properties, doc.name, 0)?,
     })
@@ -1071,7 +1034,6 @@ pub fn boolean_from_properties(
             ftd::p2::utils::string_optional("style", properties, doc.name, 0)?,
             doc.name,
         )?,
-        external_font: external_font_from_properties(properties, doc)?,
         font,
         line_clamp: ftd::p2::utils::int_optional("line-clamp", properties, doc.name, 0)?,
     })
@@ -1089,20 +1051,12 @@ pub fn text_function() -> ftd::Component {
                 ("align".to_string(), ftd::p2::Kind::string().into_optional()),
                 ("style".to_string(), ftd::p2::Kind::string().into_optional()),
                 (
-                    "font-url".to_string(),
-                    ftd::p2::Kind::string().into_optional(),
-                ),
-                (
                     "font".to_string(),
                     ftd::p2::Kind::Record {
                         name: "ftd#font".to_string(),
                         default: None,
                     }
                     .into_optional(),
-                ),
-                (
-                    "font-display".to_string(),
-                    ftd::p2::Kind::string().into_optional(),
                 ),
                 (
                     "line-clamp".to_string(),
@@ -1141,20 +1095,12 @@ pub fn code_function() -> ftd::Component {
                 ("lang".to_string(), ftd::p2::Kind::string().into_optional()),
                 ("theme".to_string(), ftd::p2::Kind::string().into_optional()),
                 (
-                    "font-url".to_string(),
-                    ftd::p2::Kind::string().into_optional(),
-                ),
-                (
                     "font".to_string(),
                     ftd::p2::Kind::Record {
                         name: "ftd#font".to_string(),
                         default: None,
                     }
                     .into_optional(),
-                ),
-                (
-                    "font-display".to_string(),
-                    ftd::p2::Kind::string().into_optional(),
                 ),
                 (
                     "line-clamp".to_string(),
@@ -1195,20 +1141,12 @@ pub fn integer_function() -> ftd::Component {
                     ftd::p2::Kind::string().into_optional(),
                 ),
                 (
-                    "font-url".to_string(),
-                    ftd::p2::Kind::string().into_optional(),
-                ),
-                (
                     "font".to_string(),
                     ftd::p2::Kind::Record {
                         name: "ftd#font".to_string(),
                         default: None,
                     }
                     .into_optional(),
-                ),
-                (
-                    "font-display".to_string(),
-                    ftd::p2::Kind::string().into_optional(),
                 ),
                 (
                     "text-align".to_string(),
@@ -1245,20 +1183,12 @@ pub fn decimal_function() -> ftd::Component {
                     ftd::p2::Kind::string().into_optional(),
                 ),
                 (
-                    "font-url".to_string(),
-                    ftd::p2::Kind::string().into_optional(),
-                ),
-                (
                     "font".to_string(),
                     ftd::p2::Kind::Record {
                         name: "ftd#font".to_string(),
                         default: None,
                     }
                     .into_optional(),
-                ),
-                (
-                    "font-display".to_string(),
-                    ftd::p2::Kind::string().into_optional(),
                 ),
                 (
                     "text-align".to_string(),
@@ -1324,20 +1254,12 @@ pub fn markup_function() -> ftd::Component {
                 ("align".to_string(), ftd::p2::Kind::string().into_optional()),
                 ("style".to_string(), ftd::p2::Kind::string().into_optional()),
                 (
-                    "font-url".to_string(),
-                    ftd::p2::Kind::string().into_optional(),
-                ),
-                (
                     "font".to_string(),
                     ftd::p2::Kind::Record {
                         name: "ftd#font".to_string(),
                         default: None,
                     }
                     .into_optional(),
-                ),
-                (
-                    "font-display".to_string(),
-                    ftd::p2::Kind::string().into_optional(),
                 ),
                 (
                     "line-clamp".to_string(),
@@ -1421,20 +1343,12 @@ pub fn boolean_function() -> ftd::Component {
                     ftd::p2::Kind::string().into_optional(),
                 ),
                 (
-                    "font-url".to_string(),
-                    ftd::p2::Kind::string().into_optional(),
-                ),
-                (
                     "font".to_string(),
                     ftd::p2::Kind::Record {
                         name: "ftd#font".to_string(),
                         default: None,
                     }
                     .into_optional(),
-                ),
-                (
-                    "font-display".to_string(),
-                    ftd::p2::Kind::string().into_optional(),
                 ),
                 ("true".to_string(), ftd::p2::Kind::string().into_optional()),
                 ("false".to_string(), ftd::p2::Kind::string().into_optional()),
@@ -1570,7 +1484,6 @@ pub fn markup_from_properties(
             ftd::p2::utils::string_optional("style", properties, doc.name, 0)?,
             doc.name,
         )?,
-        external_font: external_font_from_properties(properties, doc)?,
         font,
         line_clamp: ftd::p2::utils::int_optional("line-clamp", properties, doc.name, 0)?,
     })

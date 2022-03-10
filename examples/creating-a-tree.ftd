@@ -83,7 +83,6 @@ height: 18
 --- ftd.text:
 text: $github-repo
 color: \#4D4D4D
-size: 14
 
 
 -- ftd.row pr-title:
@@ -99,33 +98,28 @@ spacing: 5
 --- ftd.text:
 text: \#
 color: \#4D4D4D
-size: 16
 style: bold
 
 --- ftd.integer:
 value: $number
 color: \#4D4D4D
-size: 16
 style: bold
 
 --- ftd.text:
 text: \-
 color: \#4D4D4D
-size: 16
 style: bold
 
 --- ftd.text:
 text: $title
 width: fill
 color: \#4D4D4D
-size: 16
 style: bold
 
 --- ftd.text:
 if: $status is not null
 text: $status
 align: right
-size: 12
 color: \#5E7CEC
 width: auto
 background-color: \#DEE3F4
@@ -165,7 +159,6 @@ padding-bottom: 10
 if: $body is not null
 text: $body
 color: \#4D4D4D
-size: 14
 
 
 -- ftd.text markdown:
@@ -174,7 +167,6 @@ optional boolean collapsed:
 optional caption title:
 optional boolean two_columns:
 text: $body
-size: 17
 color: \#4d4d4d
 padding-bottom: 34
 
@@ -186,7 +178,6 @@ width: fill
 
 --- ftd.text:
 text: $title
-size: 36
 color: black
 style: bold
 padding-bottom: 24
@@ -205,7 +196,6 @@ width: fill
 text: $title
 caption $title:
 text: $title
-size: 30
 color: black
 style: bold
 padding-bottom: 12
@@ -224,7 +214,6 @@ width: fill
 --- ftd.text:
 caption $title:
 text: $title
-size: 24
 color: black
 style: bold
 padding-bottom: 12
@@ -243,7 +232,6 @@ width: fill
 --- ftd.text:
 caption $title:
 text: $title
-size: 21
 color: black
 style: bold
 padding-bottom: 12
@@ -262,7 +250,6 @@ width: fill
 --- ftd.text:
 caption $title:
 text: $title
-size: 17
 color: black
 style: bold
 padding-bottom: 12
@@ -281,7 +268,6 @@ width: fill
 --- ftd.text:
 caption $title:
 text: $title
-size: 14
 color: black
 style: bold
 padding-bottom: 12
@@ -300,7 +286,6 @@ width: fill
 --- ftd.text:
 caption $title:
 text: $title
-size: 12
 color: black
 style: bold
 padding-bottom: 12
@@ -336,7 +321,6 @@ text: $caption
 color: \#4D4D4D
 align: center
 width: fill
-size: 17
 style: italic
 
 --- markdown:
@@ -359,7 +343,6 @@ if: $caption is not null
 text: $caption
 color: \#DCDCDC
 width: fill
-size: 14
 background-color: \#3a404e
 padding-top: 10
 padding-bottom: 10
@@ -373,8 +356,6 @@ text: $body
 lang: $lang
 color: \#4D4D4D
 width: fill
-size: 17
-line-height: 25
 padding-top: 10
 padding-left: 20
 padding-bottom: 10
@@ -389,8 +370,6 @@ text: $body
 lang: $lang
 color: \#4D4D4D
 width: fill
-size: 17
-line-height: 25
 padding-top: 10
 padding-left: 20
 padding-bottom: 10
@@ -429,7 +408,6 @@ align: right
 
 --- ftd.text: Propose changes
 color: white
-size: 14
 align: center
 width: fill
 
@@ -443,7 +421,6 @@ padding-top: 19
 padding-bottom: 19
 
 --- ftd.text: FifthTry Bible
-size: 22
 color: white
 link: /
 
@@ -452,22 +429,18 @@ align: right
 spacing: 30
 
 --- ftd.text: FifthTry Manual
-size: 14
 color: white
 link: /fifthtry/manual/
 
 --- ftd.text: FifthTry Blog
-size: 14
 color: white
 link: /fifthtry/blog/
 
 --- ftd.text: FifthTry Handbook
-size: 14
 color: white
 link: /fifthtry/handbook/
 
 --- ftd.text: Feature Roadmap
-size: 14
 color: white
 link: /amitu/fifthtry/features/
 
@@ -482,7 +455,6 @@ align: center
 -- ftd.text toc-heading:
 caption text:
 text: $text
-size: 16
 color: black
 align: left
 padding-left: 20
@@ -519,7 +491,6 @@ open: true
 --- ftd.text:
 if: $active is not null
 text: $name
-size: 14
 color: white
 align: left
 padding-left: 10
@@ -533,7 +504,6 @@ style: semi-bold
 --- ftd.text:
 if: $active is null
 text: $name
-size: 14
 color: \#4D4D4D
 align: left
 padding-left: 10
@@ -579,7 +549,6 @@ padding-right: 20
 
 --- ftd.text: $text
 color: white
-size: 14
 align: center
 width: fill
 
@@ -599,7 +568,6 @@ padding-right: 20
 
 --- ftd.text: $text
 color: \#e87f85
-size: 14
 align: center
 width: fill
 
@@ -617,7 +585,6 @@ link: $link
 
 --- ftd.text: $text
 color: white
-size: 14
 align: center
 width: fill
 
@@ -688,6 +655,5 @@ link: $discard-link
 --- container: ftd.main
 
 --- ftd.text: This is a new page
-size: 17
 
 -- ft_toc:

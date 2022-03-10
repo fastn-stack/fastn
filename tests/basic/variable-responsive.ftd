@@ -1,9 +1,0 @@
-; We are not supporting this feature.
-
--- fifthtry/text: No Mails!
-id: @hello
-$count: $int$
-responsive: $count=0
-
--- fifthtry/text: Hello World!
-id: @hello

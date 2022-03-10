@@ -4,7 +4,7 @@ pub fn main() {
     let dir = std::path::Path::new("./examples/");
 
     let mut write_doc =
-        "-- ftd.column:\n padding-horizontal: 40\n\n-- ftd.text: Examples Index\nsize: 50\npadding-bottom: 20\nstyle: bold\n".to_string();
+        "-- ftd.column:\n padding-horizontal: 40\n\n-- ftd.text: Examples Index\nstyle: extra-bold\npadding-bottom: 20\nstyle: bold\n".to_string();
 
     if let Some(id) = id {
         let path = format!("./examples/{}.ftd", id);

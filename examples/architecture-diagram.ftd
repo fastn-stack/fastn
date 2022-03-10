@@ -106,7 +106,6 @@ $on-click$: stop-propagation
 $on-click$: prevent-default
 
 --- ftd.text: Kubernetes Architecture
-size: 40
 bottom: 10
 left: 10
 
@@ -145,7 +144,6 @@ spacing: 5
 
 --- ftd.text: Notes:
 style: bold
-size: 20
 
 --- ftd.text:
 
@@ -165,7 +163,6 @@ align: center
 --- ftd.text: Control Panel
 top: 5
 left: 5
-size: 25
 
 --- kube-controller-manager:
 top: 50
@@ -305,7 +302,6 @@ border-width if $MOUSE-IN: 3
 --- ftd.text: Nodes
 top: 5
 left: 5
-size: 25
 
 --- ftd.column:
 top: 50
@@ -374,7 +370,6 @@ border-width if $MOUSE-IN: 3
 --- ftd.text: $title
 top: 5
 left: 5
-size: 20
 
 --- ftd.row:
 spacing: space-around

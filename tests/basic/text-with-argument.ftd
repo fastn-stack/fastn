@@ -1,5 +1,0 @@
-
--- fifthtry/text:
-id: @hello
-$arg: $string$
-text: $arg

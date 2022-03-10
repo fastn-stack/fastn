@@ -48,7 +48,7 @@ background-color if $MOUSE-IN: #F1F3FE
 text: Hello World
 color if $MOUSE-IN: red
 background-color if $MOUSE-IN: yellow
-size if $MOUSE-IN: 40
+border-width if $MOUSE-IN: 40
 
 
 

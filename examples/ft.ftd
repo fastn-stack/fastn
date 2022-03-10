@@ -4,7 +4,6 @@ optional boolean collapsed:
 optional caption title:
 optional boolean two_columns:
 text: $body
-size: 17
 color: #4d4d4d
 padding-bottom: 8
 
@@ -18,8 +17,6 @@ region: h0
 --- ftd.text:
 text: $title
 region: title
-size: 40
-line-height: 50
 color: black
 style: bold
 padding-bottom: 12
@@ -41,8 +38,6 @@ text: $title
 caption $title:
 region: title
 text: $title
-size: 34
-line-height: 42
 color: black
 style: bold
 padding-bottom: 12
@@ -64,8 +59,6 @@ region: h2
 caption $title:
 text: $title
 region: title
-size: 28
-line-height: 34
 color: black
 style: bold
 padding-bottom: 12
@@ -86,8 +79,6 @@ region: h3
 caption $title:
 text: $title
 region: title
-size: 24
-line-height: 30
 color: black
 style: bold
 padding-bottom: 12
@@ -109,8 +100,6 @@ region: h4
 caption $title:
 text: $title
 region: title
-size: 19
-line-height: 25
 color: black
 style: bold
 padding-bottom: 12
@@ -131,8 +120,6 @@ region: h5
 caption $title:
 text: $title
 region: title
-size: 16
-line-height: 21
 color: black
 style: bold
 padding-bottom: 12
@@ -153,8 +140,6 @@ region: h6
 caption $title:
 text: $title
 region: title
-size: 14
-line-height: 19
 color: black
 style: bold
 padding-bottom: 12
@@ -187,7 +172,6 @@ if: $caption is not null
 text: $caption
 color: #DCDCDC
 width: fill
-size: 14
 background-color: #3a404e
 padding-top: 10
 padding-bottom: 10
@@ -201,8 +185,6 @@ text: $body
 lang: $lang
 color: #4D4D4D
 width: fill
-size: 17
-line-height: 25
 padding-top: 10
 padding-left: 20
 padding-bottom: 10
@@ -217,8 +199,6 @@ text: $body
 lang: $lang
 color: #4D4D4D
 width: fill
-size: 17
-line-height: 25
 padding-top: 10
 padding-left: 20
 padding-bottom: 10

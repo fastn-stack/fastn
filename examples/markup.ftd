@@ -24,11 +24,9 @@ Now {ca.foo: {hello: Hello {underline1: AmitU}} world. {hello} **Greetings** {un
 {hello: Everyone should say **Hi** to each other}
 
 --- ftd.text hello: $lib.amitu.name
-size: 15
 color: red
 
 --- ftd.text underline1:
-size: 30
 background-color if $orange: orange
 $on-click$: toggle $orange
 
@@ -62,7 +60,6 @@ hello world says
 hello again
 
 --- ftd.text bar:
-size: 50
 
 
 -- md yet:
@@ -91,20 +88,16 @@ caption or body value:
 text: $value
 color: blue
 color if $dark-mode: yellow
-size: 20
 margin-bottom: 40
 
 --- ftd.text hello: Someone
-size: 10
 $on-click$: toggle $dark-mode
 
 --- ftd.text underline:
-size: 40
 background-color: orange
 
 
 
 -- ftd.text amit: $text
 caption text:
-size: 20
 background-color: pink

@@ -1,3 +1,5 @@
+-- import: lib
+
 -- optional string query:
 
 -- object obj:
@@ -21,7 +23,7 @@ You have typed: {value}
 
 --- ftd.text value: $query
 color: green
-size: 20
+font: $lib.cursive-font
 
 
 -- ftd.image-src foo: hello.png
