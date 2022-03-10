@@ -1,6 +1,6 @@
 use crate::utils::HasElements;
 
-fn ui_data(lib: &fpm::Library) -> String {
+fn i18n_data(lib: &fpm::Library) -> String {
     let lang = match lib.config.package.language {
         Some(ref lang) => {
             realm_lang::Language::from_2_letter_code(lang).unwrap_or(realm_lang::Language::English)
@@ -23,7 +23,7 @@ fn ui_data(lib: &fpm::Library) -> String {
 
     format!(
         indoc::indoc! {"
-            -- ui-data ui:
+            -- i18n-data i18n:
             current-language: {current_language}
             document: {document}
             language-detail-page-body: {language_detail_page_body}
@@ -243,7 +243,7 @@ pub(crate) fn get(lib: &fpm::Library) -> String {
 
             {capital_fpm}
 
-            {ui_data}
+            {i18n_data}
 
             {build_info}
 
@@ -255,7 +255,7 @@ pub(crate) fn get(lib: &fpm::Library) -> String {
         "},
         fpm_base = fpm::fpm_ftd(),
         capital_fpm = capital_fpm(lib),
-        ui_data = ui_data(lib),
+        i18n_data = i18n_data(lib),
         build_info = construct_fpm_cli_variables(lib),
         document_id = lib.document_id,
         title = lib.config.package.name,
