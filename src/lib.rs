@@ -40,6 +40,8 @@ pub(crate) use utils::{copy_dir_all, get_timestamp_nanosecond};
 pub const PACKAGE_INFO_INTERFACE: &str = "fifthtry.github.io/package-info";
 pub const PACKAGE_THEME_INTERFACE: &str = "fifthtry.github.io/theme";
 
+pub const IMAGE_EXT: &[&str] = &["jpg", "png", "svg"];
+
 fn ftd_html() -> &'static str {
     include_str!("../ftd.html")
 }

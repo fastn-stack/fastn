@@ -46,6 +46,7 @@ impl TranslatedDocument {
         config: &fpm::Config,
         base_url: &str,
         skip_failed: bool,
+        asset_documents: &std::collections::HashMap<String, String>,
     ) -> fpm::Result<()> {
         // handle the message
         // render with-fallback or with-message
@@ -94,6 +95,7 @@ impl TranslatedDocument {
             translated_data,
             base_url,
             skip_failed,
+            asset_documents,
         )
         .await?;
         return Ok(());

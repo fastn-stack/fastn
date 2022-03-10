@@ -7,4 +7,9 @@ output: amitu/.build
 
 Downloading fifthtry.github.io/package-info ... done in <omitted>
 Processing www.amitu.com/FPM.ftd ... done in <omitted>
+Processing www.amitu.com/hello.py ... done in <omitted>
+Processing www.amitu.com/hello/world/test.py ... done in <omitted>
+Processing www.amitu.com/index ... done in <omitted>
 Processing www.amitu.com/index.ftd ... done in <omitted>
+Processing www.amitu.com/index.jpg ... done in <omitted>
+Processing www.amitu.com/index.md ... done in <omitted>
