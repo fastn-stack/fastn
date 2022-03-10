@@ -86,7 +86,7 @@ optional string last-modified-on:
 
 
 
--- record ui-data:
+-- record i18n-data:
 string last-modified-on:
 string never-synced:
 string show-translation-status:
