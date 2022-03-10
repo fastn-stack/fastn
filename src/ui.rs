@@ -25,10 +25,8 @@ pub struct Markups {
     pub text_align: TextAlign,
     pub line: bool,
     pub style: Style,
-    pub size: Option<i64>,
-    pub font: Vec<NamedFont>,
+    pub font: Option<Font>,
     pub external_font: Option<ExternalFont>,
-    pub line_height: Option<i64>,
     pub line_clamp: Option<i64>,
     pub children: Vec<Markup>,
 }
@@ -41,10 +39,8 @@ impl Markups {
             common: self.common.to_owned(),
             text_align: self.text_align.to_owned(),
             style: self.style.to_owned(),
-            size: self.size,
             font: self.font.to_owned(),
             external_font: self.external_font.to_owned(),
-            line_height: self.line_height,
             line_clamp: self.line_clamp,
         }
     }
@@ -1850,6 +1846,33 @@ impl FontDisplay {
 }
 
 #[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
+pub struct Font {
+    pub font: String,
+    pub line_height: i64,
+    pub size: i64,
+    pub weight: i64,
+}
+
+impl Font {
+    pub fn from(
+        l: &std::collections::BTreeMap<String, ftd::PropertyValue>,
+        doc: &ftd::p2::TDoc,
+        line_number: usize,
+    ) -> ftd::p1::Result<Font> {
+        let properties = l
+            .into_iter()
+            .map(|(k, v)| v.resolve(line_number, doc).map(|v| ((k.to_string(), v))))
+            .collect::<ftd::p1::Result<std::collections::BTreeMap<String, ftd::Value>>>()?;
+        Ok(Font {
+            font: ftd::p2::utils::string("font", &properties, doc.name, 0)?,
+            line_height: ftd::p2::utils::int("line-height", &properties, doc.name, 0)?,
+            size: ftd::p2::utils::int("size", &properties, doc.name, 0)?,
+            weight: ftd::p2::utils::int("weight", &properties, doc.name, 0)?,
+        })
+    }
+}
+
+#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
 #[serde(tag = "type")]
 pub enum NamedFont {
     Monospace,
@@ -1999,10 +2022,8 @@ pub struct Text {
     pub common: Common,
     pub text_align: TextAlign,
     pub style: Style,
-    pub size: Option<i64>,
-    pub font: Vec<NamedFont>,
+    pub font: Option<Font>,
     pub external_font: Option<ExternalFont>,
-    pub line_height: Option<i64>,
     pub line_clamp: Option<i64>,
     // TODO: line-height
     // TODO: region (https://package.elm-lang.org/packages/mdgriffith/elm-ui/latest/Element-Region)
@@ -2033,10 +2054,8 @@ pub struct Code {
     pub common: Common,
     pub text_align: TextAlign,
     pub style: Style,
-    pub size: Option<i64>,
-    pub font: Vec<NamedFont>,
+    pub font: Option<Font>,
     pub external_font: Option<ExternalFont>,
-    pub line_height: Option<i64>,
     pub line_clamp: Option<i64>,
 }
 

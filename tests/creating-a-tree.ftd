@@ -1,7 +1,6 @@
 -- ftd.text toc-heading:
 caption text:
 text: $text
-size: 16
 
 
 -- ftd.column table-of-content:
@@ -22,13 +21,11 @@ open: true
 --- ftd.text:
 if: $active is not null
 text: $name
-size: 14
 color: white
 
 --- ftd.text:
 if: $active is null
 text: $name
-size: 14
 color: \#4D4D4D
 
 

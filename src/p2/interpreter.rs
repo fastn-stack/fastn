@@ -946,6 +946,26 @@ pub fn default_bag() -> std::collections::BTreeMap<String, ftd::p2::Thing> {
                 order: vec!["light".to_string(), "dark".to_string()],
             }),
         ),
+        (
+            "ftd#font".to_string(),
+            ftd::p2::Thing::Record(ftd::p2::Record {
+                name: "ftd#font".to_string(),
+                fields: std::array::IntoIter::new([
+                    ("font".to_string(), ftd::p2::Kind::caption()),
+                    ("line-height".to_string(), ftd::p2::Kind::string()),
+                    ("size".to_string(), ftd::p2::Kind::integer()),
+                    ("weight".to_string(), ftd::p2::Kind::integer()),
+                ])
+                .collect(),
+                instances: Default::default(),
+                order: vec![
+                    "font".to_string(),
+                    "line-height".to_string(),
+                    "size".to_string(),
+                    "weight".to_string(),
+                ],
+            }),
+        ),
     ])
     .collect()
 }
@@ -1503,16 +1523,6 @@ mod test {
                                     },
                                 ),
                                 (
-                                    s("size"),
-                                    ftd::component::Property {
-                                        default: Some(ftd::PropertyValue::Value {
-                                            value: ftd::variable::Value::Integer { value: 14 },
-                                        }),
-                                        conditions: vec![],
-                                        ..Default::default()
-                                    },
-                                ),
-                                (
                                     s("text"),
                                     ftd::component::Property {
                                         default: Some(ftd::PropertyValue::Variable {
@@ -1550,16 +1560,6 @@ mod test {
                                                 text: "#4D4D4D".to_string(),
                                                 source: ftd::TextSource::Header,
                                             },
-                                        }),
-                                        conditions: vec![],
-                                        ..Default::default()
-                                    },
-                                ),
-                                (
-                                    s("size"),
-                                    ftd::component::Property {
-                                        default: Some(ftd::PropertyValue::Value {
-                                            value: ftd::variable::Value::Integer { value: 14 },
                                         }),
                                         conditions: vec![],
                                         ..Default::default()
@@ -1651,7 +1651,7 @@ mod test {
                     .collect(),
                 properties: std::array::IntoIter::new([
                     (
-                        s("size"),
+                        s("line-clamp"),
                         ftd::component::Property {
                             default: Some(ftd::PropertyValue::Value {
                                 value: ftd::variable::Value::Integer { value: 16 },
@@ -1875,7 +1875,6 @@ mod test {
                     }),
                     ..Default::default()
                 },
-                size: Some(14),
                 ..Default::default()
             }),
             ftd::Element::Markup(ftd::Markups {
@@ -1896,7 +1895,6 @@ mod test {
                     is_not_visible: true,
                     ..Default::default()
                 },
-                size: Some(14),
                 ..Default::default()
             }),
             ftd::Element::Column(ftd::Column {
@@ -1921,7 +1919,6 @@ mod test {
                                 is_not_visible: true,
                                 ..Default::default()
                             },
-                            size: Some(14),
                             ..Default::default()
                         }),
                         ftd::Element::Markup(ftd::Markups {
@@ -1941,7 +1938,6 @@ mod test {
                                 }),
                                 ..Default::default()
                             },
-                            size: Some(14),
                             ..Default::default()
                         }),
                         ftd::Element::Column(ftd::Column {
@@ -1967,7 +1963,6 @@ mod test {
                                             is_not_visible: true,
                                             ..Default::default()
                                         },
-                                        size: Some(14),
                                         ..Default::default()
                                     }),
                                     ftd::Element::Markup(ftd::Markups {
@@ -1987,7 +1982,6 @@ mod test {
                                             }),
                                             ..Default::default()
                                         },
-                                        size: Some(14),
                                         ..Default::default()
                                     }),
                                 ],
@@ -2034,7 +2028,6 @@ mod test {
                                 is_not_visible: true,
                                 ..Default::default()
                             },
-                            size: Some(14),
                             ..Default::default()
                         }),
                         ftd::Element::Markup(ftd::Markups {
@@ -2054,7 +2047,6 @@ mod test {
                                 }),
                                 ..Default::default()
                             },
-                            size: Some(14),
                             ..Default::default()
                         }),
                     ],
@@ -2111,7 +2103,7 @@ mod test {
             -- ftd.text toc-heading:
             caption text:
             text: $text
-            size: 16
+            line-clamp: 16
 
 
             -- ftd.column table-of-content:
@@ -2132,13 +2124,11 @@ mod test {
             --- ftd.text:
             if: $active is not null
             text: $name
-            size: 14
             color: white
 
             --- ftd.text:
             if: $active is null
             text: $name
-            size: 14
             color: \#4D4D4D
 
 
@@ -2463,16 +2453,6 @@ mod test {
                                     },
                                 ),
                                 (
-                                    s("size"),
-                                    ftd::component::Property {
-                                        default: Some(ftd::PropertyValue::Value {
-                                            value: ftd::variable::Value::Integer { value: 14 },
-                                        }),
-                                        conditions: vec![],
-                                        ..Default::default()
-                                    },
-                                ),
-                                (
                                     s("text"),
                                     ftd::component::Property {
                                         default: Some(ftd::PropertyValue::Variable {
@@ -2510,16 +2490,6 @@ mod test {
                                                 text: "#4D4D4D".to_string(),
                                                 source: ftd::TextSource::Header,
                                             },
-                                        }),
-                                        conditions: vec![],
-                                        ..Default::default()
-                                    },
-                                ),
-                                (
-                                    s("size"),
-                                    ftd::component::Property {
-                                        default: Some(ftd::PropertyValue::Value {
-                                            value: ftd::variable::Value::Integer { value: 14 },
                                         }),
                                         conditions: vec![],
                                         ..Default::default()
@@ -2609,29 +2579,17 @@ mod test {
                 full_name: "creating-a-tree#toc-heading".to_string(),
                 arguments: std::array::IntoIter::new([(s("text"), ftd::p2::Kind::caption())])
                     .collect(),
-                properties: std::array::IntoIter::new([
-                    (
-                        s("size"),
-                        ftd::component::Property {
-                            default: Some(ftd::PropertyValue::Value {
-                                value: ftd::variable::Value::Integer { value: 16 },
-                            }),
-                            conditions: vec![],
-                            ..Default::default()
-                        },
-                    ),
-                    (
-                        s("text"),
-                        ftd::component::Property {
-                            default: Some(ftd::PropertyValue::Variable {
-                                name: "text".to_string(),
-                                kind: ftd::p2::Kind::caption_or_body(),
-                            }),
-                            conditions: vec![],
-                            ..Default::default()
-                        },
-                    ),
-                ])
+                properties: std::array::IntoIter::new([(
+                    s("text"),
+                    ftd::component::Property {
+                        default: Some(ftd::PropertyValue::Variable {
+                            name: "text".to_string(),
+                            kind: ftd::p2::Kind::caption_or_body(),
+                        }),
+                        conditions: vec![],
+                        ..Default::default()
+                    },
+                )])
                 .collect(),
                 ..Default::default()
             }),
@@ -2834,7 +2792,6 @@ mod test {
                     }),
                     ..Default::default()
                 },
-                size: Some(14),
                 ..Default::default()
             }),
             ftd::Element::Markup(ftd::Markups {
@@ -2855,7 +2812,6 @@ mod test {
                     is_not_visible: true,
                     ..Default::default()
                 },
-                size: Some(14),
                 ..Default::default()
             }),
             ftd::Element::Column(ftd::Column {
@@ -2880,7 +2836,6 @@ mod test {
                                 is_not_visible: true,
                                 ..Default::default()
                             },
-                            size: Some(14),
                             ..Default::default()
                         }),
                         ftd::Element::Markup(ftd::Markups {
@@ -2900,7 +2855,6 @@ mod test {
                                 }),
                                 ..Default::default()
                             },
-                            size: Some(14),
                             ..Default::default()
                         }),
                         ftd::Element::Column(ftd::Column {
@@ -2926,7 +2880,6 @@ mod test {
                                             is_not_visible: true,
                                             ..Default::default()
                                         },
-                                        size: Some(14),
                                         ..Default::default()
                                     }),
                                     ftd::Element::Markup(ftd::Markups {
@@ -2946,7 +2899,6 @@ mod test {
                                             }),
                                             ..Default::default()
                                         },
-                                        size: Some(14),
                                         ..Default::default()
                                     }),
                                 ],
@@ -2993,7 +2945,6 @@ mod test {
                                 is_not_visible: true,
                                 ..Default::default()
                             },
-                            size: Some(14),
                             ..Default::default()
                         }),
                         ftd::Element::Markup(ftd::Markups {
@@ -3013,7 +2964,7 @@ mod test {
                                 }),
                                 ..Default::default()
                             },
-                            size: Some(14),
+
                             ..Default::default()
                         }),
                     ],
@@ -3512,189 +3463,6 @@ mod test {
             text: back in main
         ",
             (super::default_bag(), main),
-        );
-    }
-
-    #[test]
-    fn sf1() {
-        let mut bag = super::default_bag();
-
-        bag.insert(
-            "foo/bar#foo".to_string(),
-            ftd::p2::Thing::Component(ftd::Component {
-                full_name: s("foo/bar#foo"),
-                root: "ftd#row".to_string(),
-                instructions: vec![ftd::Instruction::ChildComponent{child: ftd::ChildComponent {
-                    events: vec![],
-                    condition: None,
-                    root: s("ftd#text"),
-                    properties: std::array::IntoIter::new([
-                        (
-                            s("text"),
-                            ftd::component::Property {
-                                default: Some(ftd::PropertyValue::Value {
-                                    value: ftd::Value::String {
-                                        text: s("hello"),
-                                        source: ftd::TextSource::Header,
-                                    },
-                                }),
-                                conditions: vec![],
-                                ..Default::default()
-                            },
-                        ),
-                        (
-                            s("size"),
-                            ftd::component::Property {
-                                default: Some(ftd::PropertyValue::Value {
-                                    value: ftd::Value::Integer { value: 14 },
-                                }),
-                                conditions: vec![],
-                                ..Default::default()
-                            },
-                        ),
-                        (
-                            s("font"),
-                            ftd::component::Property {
-                                default: Some(ftd::PropertyValue::Value {
-                                    value: ftd::Value::String {
-                                        text: s("Roboto"),
-                                        source: ftd::TextSource::Header,
-                                    },
-                                }),
-                                conditions: vec![],
-                                ..Default::default()
-                            },
-                        ),
-                        (
-                            s("font-url"),
-                            ftd::component::Property {
-                                default: Some(ftd::PropertyValue::Value {
-                                    value: ftd::Value::String {
-                                        text: s("https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap"),
-                                        source: ftd::TextSource::Header,
-                                    },
-                                }),
-                                conditions: vec![],
-                                ..Default::default()
-                            },
-                        ),
-                        (
-                            s("font-display"),
-                            ftd::component::Property {
-                                default: Some(ftd::PropertyValue::Value {
-                                    value: ftd::Value::String {
-                                        text: s("swap"),
-                                        source: ftd::TextSource::Header,
-                                    },
-                                }),
-                                conditions: vec![],
-                                ..Default::default()
-                            },
-                        ),
-                        (
-                            s("border-width"),
-                            ftd::component::Property {
-                                default: Some(ftd::PropertyValue::Variable {
-                                    name: s("x"),
-                                    kind: ftd::p2::Kind::integer().into_optional(),
-                                }),
-                                conditions: vec![],
-                                ..Default::default()
-                            },
-                        ),
-                        (
-                            s("overflow-x"),
-                            ftd::component::Property {
-                                default: Some(ftd::PropertyValue::Value {
-                                    value: ftd::Value::String {
-                                        text: s("auto"),
-                                        source: ftd::TextSource::Header,
-                                    },
-                                }),
-                                conditions: vec![],
-                                ..Default::default()
-                            },
-                        ),
-                        (
-                            s("overflow-y"),
-                            ftd::component::Property {
-                                default: Some(ftd::PropertyValue::Value {
-                                    value: ftd::Value::String {
-                                        text: s("auto"),
-                                        source: ftd::TextSource::Header,
-                                    },
-                                }),
-                                conditions: vec![],
-                                ..Default::default()
-                            },
-                        ),
-                    ])
-                    .collect(),
-                    ..Default::default()
-                }}],
-                arguments: std::array::IntoIter::new([(s("x"), ftd::p2::Kind::integer())]).collect(),
-                ..Default::default()
-            }),
-        );
-        bag.insert(
-            "foo/bar#x@0".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                flags: ftd::VariableFlags::default(),
-                name: "x".to_string(),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 10 },
-                },
-                conditions: vec![],
-            }),
-        );
-
-        let mut main = super::default_column();
-        let mut row: ftd::Row = Default::default();
-        row.container
-            .children
-            .push(ftd::Element::Markup(ftd::Markups {
-                text: ftd::markdown_line("hello"),
-                size: Some(14),
-                external_font: Some(ftd::ExternalFont {
-                    url: "https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap"
-                        .to_string(),
-                    display: ftd::FontDisplay::Swap,
-                    name: "Roboto".to_string(),
-                }),
-                font: vec![ftd::NamedFont::Named {
-                    value: "Roboto".to_string(),
-                }],
-
-                line: true,
-                common: ftd::Common {
-                    border_width: 10,
-                    overflow_x: Some(ftd::Overflow::Auto),
-                    overflow_y: Some(ftd::Overflow::Auto),
-                    ..Default::default()
-                },
-                ..Default::default()
-            }));
-
-        main.container.children.push(ftd::Element::Row(row));
-        p!(
-            "
-            -- ftd.row foo:
-            integer x:
-
-            --- ftd.text:
-            text: hello
-            size: 14
-            border-width: $x
-            font-url: https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap
-            font: Roboto
-            font-display: swap
-            overflow-x: auto
-            overflow-y: auto
-
-            -- foo:
-            x: 10
-        ",
-            (bag, main),
         );
     }
 
@@ -10414,7 +10182,7 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("hello world"),
                 line: true,
-                size: Some(10),
+                line_clamp: Some(10),
                 common: ftd::Common {
                     reference: Some(s("foo/bar#name@0")),
                     ..Default::default()
@@ -10427,7 +10195,7 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("hello"),
                 line: true,
-                size: Some(10),
+                line_clamp: Some(10),
                 common: ftd::Common {
                     reference: Some(s("foo/bar#name@1")),
                     ..Default::default()
@@ -10440,7 +10208,7 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("this is nice"),
                 line: true,
-                size: Some(20),
+                line_clamp: Some(20),
                 common: ftd::Common {
                     reference: Some(s("foo/bar#name@2")),
                     ..Default::default()
@@ -10460,7 +10228,7 @@ mod test {
                         ftd::p2::Kind::caption().set_default(Some(s("hello world"))),
                     ),
                     (
-                        s("size"),
+                        s("line-clamp"),
                         ftd::p2::Kind::Integer {
                             default: Some(s("10")),
                         },
@@ -10469,10 +10237,10 @@ mod test {
                 .collect(),
                 properties: std::array::IntoIter::new([
                     (
-                        s("size"),
+                        s("line-clamp"),
                         ftd::component::Property {
                             default: Some(ftd::PropertyValue::Variable {
-                                name: s("size"),
+                                name: s("line-clamp"),
                                 kind: ftd::p2::Kind::Optional {
                                     kind: Box::from(ftd::p2::Kind::Integer {
                                         default: Some(s("10")),
@@ -10506,7 +10274,7 @@ mod test {
                                 source: ftd::TextSource::Default,
                             },
                         ),
-                        (s("size"), ftd::Value::Integer { value: 10 }),
+                        (s("line-clamp"), ftd::Value::Integer { value: 10 }),
                     ])
                     .collect(),
                     std::array::IntoIter::new([
@@ -10517,7 +10285,7 @@ mod test {
                                 source: ftd::TextSource::Caption,
                             },
                         ),
-                        (s("size"), ftd::Value::Integer { value: 10 }),
+                        (s("line-clamp"), ftd::Value::Integer { value: 10 }),
                     ])
                     .collect(),
                     std::array::IntoIter::new([
@@ -10528,7 +10296,7 @@ mod test {
                                 source: ftd::TextSource::Caption,
                             },
                         ),
-                        (s("size"), ftd::Value::Integer { value: 20 }),
+                        (s("line-clamp"), ftd::Value::Integer { value: 20 }),
                     ])
                     .collect(),
                 ],
@@ -10579,9 +10347,9 @@ mod test {
             }),
         );
         bag.insert(
-            s("foo/bar#size@0"),
+            s("foo/bar#line-clamp@0"),
             ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("size"),
+                name: s("line-clamp"),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Integer { value: 10 },
                 },
@@ -10590,9 +10358,9 @@ mod test {
             }),
         );
         bag.insert(
-            s("foo/bar#size@1"),
+            s("foo/bar#line-clamp@1"),
             ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("size"),
+                name: s("line-clamp"),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Integer { value: 10 },
                 },
@@ -10601,9 +10369,9 @@ mod test {
             }),
         );
         bag.insert(
-            s("foo/bar#size@2"),
+            s("foo/bar#line-clamp@2"),
             ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("size"),
+                name: s("line-clamp"),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Integer { value: 20 },
                 },
@@ -10617,16 +10385,16 @@ mod test {
                 "
                 -- ftd.text foo:
                 caption name: hello world
-                integer size: 10
+                integer line-clamp: 10
                 text: $name
-                size: $size
+                line-clamp: $line-clamp
 
                 -- foo:
 
                 -- foo: hello
 
                 -- foo: this is nice
-                size: 20
+                line-clamp: 20
                 "
             ),
             &ftd::p2::TestLibrary {},
@@ -10760,7 +10528,7 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("Software developer working at fifthtry."),
                 line: true,
-                size: Some(20),
+                line_clamp: Some(20),
                 common: ftd::Common {
                     reference: Some(s("foo/bar#abrar.bio")),
                     ..Default::default()
@@ -10788,7 +10556,7 @@ mod test {
                 Software developer working at fifthtry.
 
                 -- ftd.text: $abrar.bio
-                size: $abrar.age
+                line-clamp: $abrar.age
                 "
             ),
             &ftd::p2::TestLibrary {},
@@ -10808,7 +10576,7 @@ mod test {
                 children: vec![ftd::Element::Markup(ftd::Markups {
                     text: ftd::markdown_line("Arpita"),
                     line: true,
-                    size: Some(10),
+                    line_clamp: Some(10),
                     common: ftd::Common {
                         reference: Some(s("foo/bar#name@0")),
                         ..Default::default()
@@ -10825,7 +10593,7 @@ mod test {
                 children: vec![ftd::Element::Markup(ftd::Markups {
                     text: ftd::markdown_line("Amit Upadhyay"),
                     line: true,
-                    size: Some(20),
+                    line_clamp: Some(20),
                     common: ftd::Common {
                         reference: Some(s("foo/bar#name@1")),
                         ..Default::default()
@@ -10888,7 +10656,7 @@ mod test {
                         condition: None,
                         properties: std::array::IntoIter::new([
                             (
-                                s("size"),
+                                s("line-clamp"),
                                 ftd::component::Property {
                                     default: Some(ftd::PropertyValue::Variable {
                                         name: s("text-size"),
@@ -10984,7 +10752,7 @@ mod test {
             integer text-size: $default-size
 
             --- ftd.text: $name
-            size: $text-size
+            line-clamp: $text-size
 
             -- foo:
 
@@ -11026,7 +10794,7 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("John Doe"),
                 line: true,
-                size: Some(50),
+                line_clamp: Some(50),
                 common: ftd::Common {
                     reference: Some(s("foo/bar#acme.contact")),
                     ..Default::default()
@@ -11203,7 +10971,7 @@ mod test {
                 -- ftd.text: $amitu.phone
 
                 -- ftd.text: $acme.contact
-                size: $acme.no-of-employees
+                line-clamp: $acme.no-of-employees
 
                 "
             ),
@@ -14227,7 +13995,7 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("hello"),
                 line: true,
-                size: Some(50),
+                line_clamp: Some(50),
                 ..Default::default()
             }));
 
@@ -14244,10 +14012,10 @@ mod test {
             indoc::indoc!(
                 "
                 -- ftd.text foo: hello
-                inherit size:
+                inherit line-clamp:
 
                 -- foo:
-                size: 50
+                line-clamp: 50
 
                 -- foo:
                 "
@@ -14869,7 +14637,7 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("hello"),
                 line: true,
-                size: Some(30),
+                line_clamp: Some(30),
                 common: ftd::Common {
                     conditional_attribute: std::array::IntoIter::new([(
                         s("color"),
@@ -14951,7 +14719,7 @@ mod test {
                 -- ftd.text: $bar
                 boolean t: true
                 string f: hello
-                size: $foo
+                line-clamp: $foo
                 color if $t: red
 
                 -- col:
@@ -15041,7 +14809,7 @@ mod test {
                                 }),
                                 ..Default::default()
                             },
-                            size: Some(30),
+                            line_clamp: Some(30),
                             ..Default::default()
                         }),
                         ftd::Element::Column(ftd::Column {
@@ -15078,7 +14846,7 @@ mod test {
                                             }),
                                             ..Default::default()
                                         },
-                                        size: Some(20),
+                                        line_clamp: Some(20),
                                         ..Default::default()
                                     }),
                                     ftd::Element::Markup(ftd::Markups {
@@ -15093,7 +14861,7 @@ mod test {
                                             }),
                                             ..Default::default()
                                         },
-                                        size: Some(10),
+                                        line_clamp: Some(10),
                                         ..Default::default()
                                     }),
                                 ],
@@ -15114,9 +14882,9 @@ mod test {
             indoc::indoc!(
                 "
                 -- ftd.text foo: hello
-                integer size: 10
+                integer line-clamp: 10
                 color: red
-                size: $size
+                line-clamp: $line-clamp
 
                 -- ftd.column moo: 
                 caption msg: world
@@ -15134,7 +14902,7 @@ mod test {
 
                 -- ftd.column bar:
                 ftd.ui t: foo:
-                > size: 30
+                > line-clamp: 30
                 ftd.ui g:
 
                 --- ftd.text: amitu
@@ -15147,10 +14915,10 @@ mod test {
                 g: moo: hello again
                 > other-msg: hello world!
                 > t: foo:
-                >> size: 20
+                >> line-clamp: 20
                 > k: ftd.text: hello amitu!
                 >> color: red
-                >> size: 10
+                >> line-clamp: 10
                 "
             ),
             &ftd::p2::TestLibrary {},
@@ -15510,7 +15278,7 @@ mod test {
             .push(ftd::Element::Markup(ftd::Markups {
                 text: ftd::markup_line("Hello from text-component processor"),
                 line: true,
-                size: Some(40),
+                line_clamp: Some(40),
                 ..Default::default()
             }));
 

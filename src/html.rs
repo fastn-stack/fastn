@@ -663,23 +663,16 @@ impl ftd::Text {
         n.text = Some(self.text.rendered.clone());
         let (key, value) = text_align(&self.text_align);
         n.style.insert(s(key.as_str()), value);
-        if let Some(p) = self.size {
-            n.style.insert(s("font-size"), format!("{}px", p));
-        }
-        if let Some(p) = self.line_height {
-            n.style.insert(s("line-height"), format!("{}px", p));
-        } else if !&self.line {
+        if !self.line && self.font.is_none() {
             n.style.insert(s("line-height"), s("26px"));
         }
 
-        if !self.font.is_empty() {
-            let family = self
-                .font
-                .iter()
-                .map(|v| v.to_string())
-                .collect::<Vec<String>>()
-                .join(", ");
-            n.style.insert(s("font-family"), family);
+        if let Some(ref font) = self.font {
+            n.style.insert(s("font-family"), font.font.to_string());
+            n.style
+                .insert(s("line-height"), format!("{}px", font.line_height));
+            n.style.insert(s("font-size"), format!("{}px", font.size));
+            n.style.insert(s("font-weight"), font.size.to_string());
         }
 
         if self.style.italic {
@@ -781,23 +774,17 @@ impl ftd::Code {
         n.text = Some(self.text.rendered.clone());
         let (key, value) = text_align(&self.text_align);
         n.style.insert(s(key.as_str()), value);
-        if let Some(p) = self.size {
-            n.style.insert(s("font-size"), format!("{}px", p));
-        }
-        if let Some(p) = self.line_height {
-            n.style.insert(s("line-height"), format!("{}px", p));
-        } else {
+
+        if self.font.is_none() {
             n.style.insert(s("line-height"), s("26px"));
         }
 
-        if !self.font.is_empty() {
-            let family = self
-                .font
-                .iter()
-                .map(|v| v.to_string())
-                .collect::<Vec<String>>()
-                .join(", ");
-            n.style.insert(s("font-family"), family);
+        if let Some(ref font) = self.font {
+            n.style.insert(s("font-family"), font.font.to_string());
+            n.style
+                .insert(s("line-height"), format!("{}px", font.line_height));
+            n.style.insert(s("font-size"), format!("{}px", font.size));
+            n.style.insert(s("font-weight"), font.size.to_string());
         }
 
         if self.style.italic {
@@ -891,21 +878,17 @@ impl ftd::Markups {
         let mut n = Node::from_common(node, &self.common, doc_id);
         let (key, value) = text_align(&self.text_align);
         n.style.insert(s(key.as_str()), value);
-        if let Some(p) = self.size {
-            n.style.insert(s("font-size"), format!("{}px", p));
-        }
-        if let Some(p) = self.line_height {
-            n.style.insert(s("line-height"), format!("{}px", p));
+
+        if !self.line && self.font.is_none() {
+            n.style.insert(s("line-height"), s("26px"));
         }
 
-        if !self.font.is_empty() {
-            let family = self
-                .font
-                .iter()
-                .map(|v| v.to_string())
-                .collect::<Vec<String>>()
-                .join(", ");
-            n.style.insert(s("font-family"), family);
+        if let Some(ref font) = self.font {
+            n.style.insert(s("font-family"), font.font.to_string());
+            n.style
+                .insert(s("line-height"), format!("{}px", font.line_height));
+            n.style.insert(s("font-size"), format!("{}px", font.size));
+            n.style.insert(s("font-weight"), font.size.to_string());
         }
 
         if self.style.italic {
