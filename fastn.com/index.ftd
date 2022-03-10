@@ -45,7 +45,7 @@ FPM is a command line tool written in Rust that acts as both package manager for
 
 -- ft.h2: FPM.ftd
 
-To convert a folder contianing `ftd` files, create a `FPM.ftd` file:
+To create a "fpm package", create a `FPM.ftd` file in any folder:
 
 -- ft.code:
 lang: ftd
@@ -85,10 +85,10 @@ zip: github.com/fifthtry/fpm.dev/archive/refs/heads/main.zip
 Here `fpm.dev` has a dependency on [`fifthtry.github.io/Forest-Theme`](https://fifthtry.github.io/Forest-Theme).
 
 We have also used "alias" feature to bind the name of this dependency to `ft`,
-so FTD files can write `-- import: ft` instead of `-- import:
-fifthtry.github.io/Forest-Theme`.
+so FTD files can write `-- import: ft` instead of having to use the full path,
+e.g. `-- import: fifthtry.github.io/Forest-Theme`.
 
--- ft.h2: Fungible Themes - Package Interface
+-- ft.h2: Fungible Packages - Package Interface
 
 An FPM package contains one or more "ftd modules", and the modules export one or
 more "symbols", eg [records](https://ftd.dev/record/),
@@ -100,11 +100,6 @@ interface" of that package. FPM lets one package declare that it is
 "implementing" another package. All packages that implement a common package
 are interchangeable without chaning any code, and only updating the dependency
 in `FPM.ftd` file.
-
-This allows for component libraries and themes to be easily interchangeable. So
-if you use any component, say a event schedule bar, dark mode switcher, etc, you
-know you can easily find other packages that are compatible with those packages
-and switch to those components easily.
 
 -- ft.h2: Translation Tracking
 
