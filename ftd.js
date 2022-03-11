@@ -714,3 +714,101 @@ window.ftd = (function () {
 function console_print(id, data) {
     console.log(data);
 }
+
+(function () {
+    const DARK_MODE = "ftd#dark-mode";
+    const SYSTEM_DARK_MODE = "ftd#system-dark-mode";
+    const FOLLOW_SYSTEM_DARK_MODE = "ftd#follow-system-dark-mode";
+    const DARK_MODE_COOKIE = "ftd-dark-mode";
+    const COOKIE_SYSTEM_LIGHT = "system-light";
+    const COOKIE_SYSTEM_DARK = "system-dark";
+    const COOKIE_DARK_MODE = "dark";
+    const COOKIE_LIGHT_MODE = "light";
+    const DARK_MODE_CLASS = "fpm-dark";
+
+    window.enable_dark_mode = function () {
+        // TODO: coalesce the two set_bool-s into one so there is only one DOM
+        //       update
+        window.ftd.set_bool_for_all(DARK_MODE, true);
+        window.ftd.set_bool_for_all(FOLLOW_SYSTEM_DARK_MODE, false);
+        window.ftd.set_bool_for_all(SYSTEM_DARK_MODE, system_dark_mode());
+        document.body.classList.add(DARK_MODE_CLASS);
+        set_cookie(DARK_MODE_COOKIE, COOKIE_DARK_MODE);
+    }
+
+    window.enable_light_mode = function () {
+        // TODO: coalesce the two set_bool-s into one so there is only one DOM
+        //       update
+        window.ftd.set_bool_for_all(DARK_MODE, false);
+        window.ftd.set_bool_for_all(FOLLOW_SYSTEM_DARK_MODE, false);
+        window.ftd.set_bool_for_all(SYSTEM_DARK_MODE, system_dark_mode());
+        if (document.body.classList.contains(DARK_MODE_CLASS)) {
+            document.body.classList.remove(DARK_MODE_CLASS);
+        }
+        set_cookie(DARK_MODE_COOKIE, COOKIE_LIGHT_MODE);
+    }
+
+    window.enable_system_mode = function () {
+        // TODO: coalesce the two set_bool-s into one so there is only one DOM
+        //       update
+        window.ftd.set_bool_for_all(FOLLOW_SYSTEM_DARK_MODE, true);
+        window.ftd.set_bool_for_all(SYSTEM_DARK_MODE, system_dark_mode());
+        if (system_dark_mode()) {
+            window.ftd.set_bool_for_all(DARK_MODE, true);
+            document.body.classList.add(DARK_MODE_CLASS);
+            set_cookie(DARK_MODE_COOKIE, COOKIE_SYSTEM_DARK)
+        } else {
+            window.ftd.set_bool_for_all(DARK_MODE, false);
+            if (document.body.classList.contains(DARK_MODE_CLASS)) {
+                document.body.classList.remove(DARK_MODE_CLASS);
+            }
+            set_cookie(DARK_MODE_COOKIE, COOKIE_SYSTEM_LIGHT)
+        }
+    }
+
+    function set_cookie(name, value) {
+        document.cookie = name + "=" + value + "; path=/";
+    }
+
+    function system_dark_mode() {
+        return !!(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)
+    }
+
+    function initialise_dark_mode() {
+        update_dark_mode();
+        start_watching_dark_mode_system_preference();
+    }
+
+    function get_cookie(name, def) {
+        // source: https://stackoverflow.com/questions/5639346/
+        let regex = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
+        return regex !== null ? regex.pop() : def;
+    }
+
+    function update_dark_mode() {
+        let current_dark_mode_cookie = get_cookie(DARK_MODE_COOKIE, COOKIE_SYSTEM_LIGHT);
+
+        switch (current_dark_mode_cookie) {
+            case COOKIE_SYSTEM_LIGHT:
+            case COOKIE_SYSTEM_DARK:
+                window.enable_system_mode();
+                break;
+            case COOKIE_LIGHT_MODE:
+                window.enable_light_mode();
+                break;
+            case COOKIE_DARK_MODE:
+                window.enable_dark_mode();
+                break;
+            default:
+                console.log("cookie value is wrong", current_dark_mode_cookie);
+                window.enable_system_mode();
+        }
+    }
+
+    function start_watching_dark_mode_system_preference() {
+        window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').addEventListener(
+            "change", update_dark_mode
+        );
+    }
+    initialise_dark_mode();
+})();

@@ -934,6 +934,45 @@ pub fn default_bag() -> std::collections::BTreeMap<String, ftd::p2::Thing> {
             ftd::p2::Thing::Component(ftd::p2::element::null()),
         ),
         (
+            "ftd#dark-mode".to_string(),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: "ftd#dark-mode".to_string(),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Boolean { value: false },
+                },
+                conditions: vec![],
+                flags: ftd::VariableFlags {
+                    always_include: Some(true),
+                },
+            }),
+        ),
+        (
+            "ftd#system-dark-mode".to_string(),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: "ftd#system-dark-mode".to_string(),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Boolean { value: false },
+                },
+                conditions: vec![],
+                flags: ftd::VariableFlags {
+                    always_include: Some(true),
+                },
+            }),
+        ),
+        (
+            "ftd#follow-system-dark-mode".to_string(),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: "ftd#follow-system-dark-mode".to_string(),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Boolean { value: true },
+                },
+                conditions: vec![],
+                flags: ftd::VariableFlags {
+                    always_include: Some(true),
+                },
+            }),
+        ),
+        (
             "ftd#image-src".to_string(),
             ftd::p2::Thing::Record(ftd::p2::Record {
                 name: "ftd#image-src".to_string(),

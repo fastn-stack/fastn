@@ -1,0 +1,18 @@
+-- ftd.image-src src: https://upload.wikimedia.org/wikipedia/en/d/d4/Mickey_Mouse.png
+dark: https://blog.ipleaders.in/wp-content/uploads/2021/07/751589-mickey-mouse.jpg
+
+-- ftd.image:
+src: $src
+
+-- ftd.text: Hello
+color if $ftd.dark-mode: red
+color: green
+
+-- ftd.text: Dark Mode
+$on-click$: message-host enable-dark-mode
+
+-- ftd.text: Light Mode
+$on-click$: message-host enable-light-mode
+
+-- ftd.text: System Mode
+$on-click$: message-host enable-system-mode
