@@ -567,7 +567,13 @@ pub fn image_function() -> ftd::Component {
         root: "ftd.kernel".to_string(),
         arguments: [
             vec![
-                ("src".to_string(), ftd::p2::Kind::string()),
+                (
+                    "src".to_string(),
+                    ftd::p2::Kind::Record {
+                        name: "ftd#image-src".to_string(),
+                        default: None,
+                    },
+                ),
                 (
                     "description".to_string(),
                     ftd::p2::Kind::string().into_optional(),
@@ -597,11 +603,11 @@ pub fn image_from_properties(
     is_child: bool,
     events: &[ftd::p2::Event],
 ) -> ftd::p1::Result<ftd::Image> {
-    let (src, _, reference) =
-        ftd::p2::utils::string_and_source_and_ref(0, "src", properties, doc, condition)?;
+    let (src, reference) = ftd::p2::utils::record_and_ref(0, "src", properties, doc, condition)?;
+    let src_record = ftd::ImageSrc::from(&src, doc, 0)?;
     let properties = &ftd::component::resolve_properties(0, properties, doc)?;
     Ok(ftd::Image {
-        src,
+        src: src_record,
         description: ftd::p2::utils::string_optional("description", properties, doc.name, 0)?
             .unwrap_or_else(|| "".to_string()),
         common: common_from_properties(properties, doc, condition, is_child, events, reference)?,
@@ -769,59 +775,6 @@ pub fn iframe_from_properties(
         common: common_from_properties(properties, doc, condition, is_child, events, None)?,
     })
 }
-
-/*pub fn text_from_properties(
-    properties: &std::collections::BTreeMap<String, ftd::component::Property>,
-    doc: &ftd::p2::TDoc,
-    condition: &Option<ftd::p2::Boolean>,
-    is_child: bool,
-    events: &[ftd::p2::Event],
-
-) -> ftd::p1::Result<ftd::Text> {
-    let properties = &ftd::component::resolve_properties(0, properties, doc)?;
-
-    let (text, source, reference) = ftd::p2::utils::string_and_source_and_ref(
-        0,
-        "text",
-        properties,
-        all_locals,
-        doc.name,
-        condition,
-    )?;
-    let font_str = ftd::p2::utils::string_optional("font", properties, doc.name, 0)?;
-
-    let font: Vec<ftd::NamedFont> = match font_str {
-        Some(f) => f
-            .split(',')
-            .flat_map(|x| ftd::NamedFont::from(Some(x.to_string())))
-            .collect(),
-        None => vec![],
-    };
-    Ok(ftd::Text {
-        line: source != ftd::TextSource::Body,
-        text: if source == ftd::TextSource::Body {
-            ftd::markdown(text.as_str())
-        } else {
-            ftd::markdown_line(text.as_str())
-        },
-        common: common_from_properties(
-            properties, doc, condition, is_child, events,  reference,
-        )?,
-        text_align: ftd::TextAlign::from(
-            ftd::p2::utils::string_optional("text-align", properties, doc.name, 0)?,
-            doc.name,
-        )?,
-        style: ftd::Style::from(
-            ftd::p2::utils::string_optional("style", properties, doc.name, 0)?,
-            doc.name,
-        )?,
-        size: ftd::p2::utils::int_optional("size", properties, doc.name, 0)?,
-        external_font: external_font_from_properties(properties, doc)?,
-        font,
-        line_height: ftd::p2::utils::int_optional("line-height", properties, doc.name, 0)?,
-        line_clamp: ftd::p2::utils::int_optional("line-clamp", properties, doc.name, 0)?,
-    })
-}*/
 
 pub fn text_block_from_properties(
     properties: &std::collections::BTreeMap<String, ftd::component::Property>,

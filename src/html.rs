@@ -832,7 +832,7 @@ impl ftd::Image {
                 null: false,
             };
             img.style.insert(s("width"), s("100%"));
-            img.attrs.insert(s("src"), escape(self.src.as_str()));
+            img.attrs.insert(s("src"), escape(self.src.light.as_str()));
             img.attrs
                 .insert(s("alt"), escape(self.description.as_str()));
             if self.crop {
@@ -841,7 +841,7 @@ impl ftd::Image {
             }
             n.children.push(img);
         } else {
-            n.attrs.insert(s("src"), escape(self.src.as_str()));
+            n.attrs.insert(s("src"), escape(self.src.light.as_str()));
             n.attrs.insert(s("alt"), escape(self.description.as_str()));
             if self.crop {
                 n.style.insert(s("object-fit"), s("cover"));

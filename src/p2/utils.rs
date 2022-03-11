@@ -546,6 +546,133 @@ pub fn complete_reference(reference: &Option<String>) -> Option<String> {
     reference
 }
 
+pub fn record_and_ref(
+    line_number: usize,
+    name: &str,
+    properties: &std::collections::BTreeMap<String, ftd::component::Property>,
+    doc: &ftd::p2::TDoc,
+    condition: &Option<ftd::p2::Boolean>,
+) -> ftd::p1::Result<(
+    std::collections::BTreeMap<String, ftd::PropertyValue>,
+    Option<String>,
+)> {
+    let properties = ftd::component::resolve_properties_with_ref(line_number, properties, doc)?;
+    match properties.get(name) {
+        Some((ftd::Value::Record { fields, .. }, reference)) => {
+            Ok((fields.to_owned(), reference.to_owned()))
+        }
+        Some((ftd::Value::Optional { data, kind }, reference)) => {
+            if !matches!(kind, ftd::p2::Kind::Record { .. }) {
+                return ftd::e2(
+                    format!("expected record, found: {:?}", kind),
+                    doc.name,
+                    line_number,
+                );
+            }
+
+            match data.as_ref() {
+                None => {
+                    let reference = match reference {
+                        Some(reference) => reference,
+                        None => {
+                            return ftd::e2(
+                                format!("expected record, found: {:?}", kind),
+                                doc.name,
+                                line_number,
+                            )
+                        }
+                    };
+
+                    if let Some(ftd::p2::Boolean::IsNotNull { value }) = condition {
+                        match value {
+                            ftd::PropertyValue::Reference { name, .. }
+                            | ftd::PropertyValue::Variable { name, .. } => {
+                                if name.eq(reference) {
+                                    return Ok((
+                                        std::collections::BTreeMap::new(),
+                                        complete_reference(&Some(reference.to_owned())),
+                                    ));
+                                }
+                            }
+                            _ => {}
+                        }
+                    }
+
+                    // In case when the optional string is null.
+                    // Return the empty string
+
+                    Ok((
+                        std::collections::BTreeMap::new(),
+                        complete_reference(&Some(reference.to_owned())),
+                    ))
+                }
+                Some(ftd::Value::Record { fields, .. }) => {
+                    Ok((fields.to_owned(), complete_reference(reference)))
+                }
+                _ => {
+                    return ftd::e2(
+                        format!("expected record, found: {:?}", kind),
+                        doc.name,
+                        line_number,
+                    )
+                }
+            }
+        }
+        Some((ftd::Value::None { kind }, reference)) if condition.is_some() => {
+            let kind = kind.inner();
+            if !matches!(kind, ftd::p2::Kind::Record { .. }) {
+                return ftd::e2(
+                    format!("expected record, found: {:?}", kind),
+                    doc.name,
+                    line_number,
+                );
+            }
+
+            let reference = match reference {
+                Some(reference) => reference,
+                None => {
+                    return ftd::e2(
+                        format!("expected record, found: {:?}", kind),
+                        doc.name,
+                        line_number,
+                    )
+                }
+            };
+            if let Some(ftd::p2::Boolean::IsNotNull { value }) = condition {
+                match value {
+                    ftd::PropertyValue::Reference { name, .. }
+                    | ftd::PropertyValue::Variable { name, .. } => {
+                        if name.eq({
+                            if let Some(reference) = reference.strip_prefix('@') {
+                                reference
+                            } else {
+                                reference
+                            }
+                        }) {
+                            return Ok((
+                                std::collections::BTreeMap::new(),
+                                complete_reference(&Some(reference.to_owned())),
+                            ));
+                        }
+                    }
+                    _ => {}
+                }
+            }
+            ftd::e2(
+                format!("expected record, found: {:?}", kind),
+                doc.name,
+                line_number,
+            )
+        }
+        Some(v) => ftd::e2(
+            format!("expected record, found: {:?}", v),
+            doc.name,
+            line_number,
+        ),
+        None => ftd::e2(format!("'{}' not found", name), doc.name, line_number),
+    }
+}
+
 pub fn record_optional(
     name: &str,
     properties: &std::collections::BTreeMap<String, ftd::Value>,

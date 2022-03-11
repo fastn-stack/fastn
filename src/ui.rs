@@ -1751,7 +1751,7 @@ impl Container {
 
 #[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
 pub struct Image {
-    pub src: String,
+    pub src: ImageSrc,
     pub description: String,
     pub common: Common,
     pub crop: bool,
@@ -1839,6 +1839,31 @@ impl FontDisplay {
             Some("block") => ftd::FontDisplay::Block,
             Some(t) => return ftd::e2(format!("{} is not a valid alignment", t), doc_id, 0), // TODO
             None => return Ok(ftd::FontDisplay::Block),
+        })
+    }
+}
+
+#[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
+pub struct ImageSrc {
+    pub light: String,
+    pub dark: String,
+}
+
+impl ImageSrc {
+    pub fn from(
+        l: &std::collections::BTreeMap<String, ftd::PropertyValue>,
+        doc: &ftd::p2::TDoc,
+        line_number: usize,
+    ) -> ftd::p1::Result<ImageSrc> {
+        let properties = l
+            .iter()
+            .map(|(k, v)| v.resolve(line_number, doc).map(|v| (k.to_string(), v)))
+            .collect::<ftd::p1::Result<std::collections::BTreeMap<String, ftd::Value>>>()?;
+        Ok(ImageSrc {
+            light: ftd::p2::utils::string_optional("light", &properties, doc.name, 0)?
+                .unwrap_or("".to_string()),
+            dark: ftd::p2::utils::string_optional("dark", &properties, doc.name, 0)?
+                .unwrap_or("".to_string()),
         })
     }
 }
