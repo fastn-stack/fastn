@@ -3865,7 +3865,7 @@ mod test {
         };
 
         let image = ftd::Image {
-            src: s("/static/home/document-type-min.png"),
+            src: i("/static/home/document-type-min.png"),
             common: ftd::Common {
                 reference: Some(s("foo/bar#src@0")),
                 ..Default::default()
@@ -3908,6 +3908,40 @@ mod test {
             }),
         );
         bag.insert(
+            "foo/bar#src0".to_string(),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                flags: ftd::VariableFlags::default(),
+                name: "src0".to_string(),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Record {
+                        name: s("ftd#image-src"),
+                        fields: std::array::IntoIter::new([
+                            (
+                                s("dark"),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::String {
+                                        text: "/static/home/document-type-min.png".to_string(),
+                                        source: ftd::TextSource::Header,
+                                    },
+                                },
+                            ),
+                            (
+                                s("light"),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::String {
+                                        text: "/static/home/document-type-min.png".to_string(),
+                                        source: ftd::TextSource::Header,
+                                    },
+                                },
+                            ),
+                        ])
+                        .collect(),
+                    },
+                },
+                conditions: vec![],
+            }),
+        );
+        bag.insert(
             "foo/bar#src@0".to_string(),
             ftd::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
@@ -3938,10 +3972,14 @@ mod test {
 
         p!(
             "
+            -- ftd.image-src src0: 
+            light: /static/home/document-type-min.png
+            dark: /static/home/document-type-min.png
+
             -- ftd.column white-two-image:
             caption title:
             body about:
-            string src:
+            ftd.image-src src:
             padding: 30
 
             --- ftd.text:
@@ -3955,7 +3993,7 @@ mod test {
             src: $src
 
             -- white-two-image: What kind of documentation?
-            src: /static/home/document-type-min.png
+            src: $src0
 
             UI screens, behaviour and journeys, database tables, APIs, how to
             contribute to, deploy, or monitor microservice, everything that
@@ -4024,7 +4062,7 @@ mod test {
             ..Default::default()
         };
         let image = ftd::Image {
-            src: s("/static/home/document-type-min.png"),
+            src: i("/static/home/document-type-min.png"),
             common: ftd::Common {
                 reference: Some(s("foo/bar#src@0")),
                 condition: Some(ftd::Condition {
@@ -4036,7 +4074,7 @@ mod test {
             ..Default::default()
         };
         let second_image = ftd::Image {
-            src: s("second-image.png"),
+            src: i("second-image.png"),
             common: ftd::Common {
                 reference: Some(s("foo/bar#src@1")),
                 condition: Some(ftd::Condition {
@@ -4172,10 +4210,18 @@ mod test {
 
         p!(
             "
+            -- ftd.image-src src0: 
+            light: /static/home/document-type-min.png
+            dark: /static/home/document-type-min.png
+
+            -- ftd.image-src src1: 
+            light: second-image.png
+            dark: second-image.png
+            
             -- ftd.column white-two-image:
             caption title:
             optional body about:
-            optional string src:
+            optional ftd.image-src src:
             padding: 30
 
             --- ftd.text:
@@ -4191,14 +4237,14 @@ mod test {
             src: $src
 
             -- white-two-image: What kind of documentation?
-            src: /static/home/document-type-min.png
+            src: $src0
 
             UI screens, behaviour and journeys, database tables, APIs, how to
             contribute to, deploy, or monitor microservice, everything that
             makes web or mobile product teams productive.
 
             -- white-two-image: second call
-            src: second-image.png
+            src: $src1
             ",
             (bag, main),
         );
@@ -4287,7 +4333,7 @@ mod test {
             ..Default::default()
         };
         let image = ftd::Image {
-            src: s("/static/home/document-type-min.png"),
+            src: i("/static/home/document-type-min.png"),
             common: ftd::Common {
                 reference: Some(s("foo/bar#src@0")),
                 condition: Some(ftd::Condition {
@@ -4299,7 +4345,7 @@ mod test {
             ..Default::default()
         };
         let second_image = ftd::Image {
-            src: s("second-image.png"),
+            src: i("second-image.png"),
             common: ftd::Common {
                 reference: Some(s("foo/bar#src@1")),
                 condition: Some(ftd::Condition {
@@ -4311,7 +4357,7 @@ mod test {
             ..Default::default()
         };
         let third_image = ftd::Image {
-            src: s(""),
+            src: i(""),
             common: ftd::Common {
                 reference: Some(s("foo/bar#src@2")),
                 condition: Some(ftd::Condition {
@@ -4506,10 +4552,18 @@ mod test {
         );
         p!(
             "
+            -- ftd.image-src src0: 
+            light: /static/home/document-type-min.png
+            dark: /static/home/document-type-min.png
+
+            -- ftd.image-src src1: 
+            light: second-image.png
+            dark: second-image.png
+
             -- ftd.column white-two-image:
             caption title:
             optional body about:
-            optional string src:
+            optional ftd.image-src src:
             padding: 30
 
             --- ftd.text:
@@ -4525,14 +4579,14 @@ mod test {
             src: $src
 
             -- white-two-image: What kind of documentation?
-            src: /static/home/document-type-min.png
+            src: $src0
 
             UI screens, behaviour and journeys, database tables, APIs, how to
             contribute to, deploy, or monitor microservice, everything that
             makes web or mobile product teams productive.
 
             -- white-two-image: second call
-            src: second-image.png
+            src: $src1
 
             -- white-two-image: third call
             ",
@@ -4943,7 +4997,7 @@ mod test {
                 spacing: None,
                 container: ftd::Container {
                     children: vec![ftd::Element::Image(ftd::Image {
-                        src: s("foo.png"),
+                        src: i("foo.png"),
                         common: ftd::Common {
                             reference: Some(s("foo/bar#src@0")),
                             ..Default::default()
@@ -4960,7 +5014,7 @@ mod test {
                 spacing: None,
                 container: ftd::Container {
                     children: vec![ftd::Element::Image(ftd::Image {
-                        src: s("bar.png"),
+                        src: i("bar.png"),
                         common: ftd::Common {
                             reference: Some(s("foo/bar#src@1")),
                             width: Some(ftd::Length::Px { value: 300 }),
@@ -4975,8 +5029,16 @@ mod test {
 
         p!(
             "
+            -- ftd.image-src src0: 
+            light: foo.png
+            dark: foo.png
+
+            -- ftd.image-src src1: 
+            light: bar.png
+            dark: bar.png
+
             -- ftd.column image:
-            string src:
+            ftd.image-src src:
             optional string width:
 
             --- ftd.image:
@@ -4984,10 +5046,10 @@ mod test {
             width: $width
 
             -- image:
-            src: foo.png
+            src: $src0
 
             -- image:
-            src: bar.png
+            src: $src1
             width: 300
             ",
             (bag, main),
@@ -12673,7 +12735,7 @@ mod test {
         main.container
             .children
             .push(ftd::Element::Image(ftd::Image {
-                src: s("https://www.liveabout.com/thmb/YCJmu1khSJo8kMYM090QCd9W78U=/1250x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/powerpuff_girls-56a00bc45f9b58eba4aea61d.jpg"),
+                src: i("https://www.liveabout.com/thmb/YCJmu1khSJo8kMYM090QCd9W78U=/1250x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/powerpuff_girls-56a00bc45f9b58eba4aea61d.jpg"),
                 common: ftd::Common {
                     condition: Some(
                         ftd::Condition {
@@ -12708,7 +12770,7 @@ mod test {
         main.container
             .children
             .push(ftd::Element::Image(ftd::Image {
-                src: s("https://upload.wikimedia.org/wikipedia/en/d/d4/Mickey_Mouse.png"),
+                src: i("https://upload.wikimedia.org/wikipedia/en/d/d4/Mickey_Mouse.png"),
                 common: ftd::Common {
                     condition: Some(ftd::Condition {
                         variable: s("foo/bar#count"),
@@ -12748,19 +12810,27 @@ mod test {
                 "
                 -- integer count: 0
 
+                -- ftd.image-src src0: 
+                light: https://www.liveabout.com/thmb/YCJmu1khSJo8kMYM090QCd9W78U=/1250x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/powerpuff_girls-56a00bc45f9b58eba4aea61d.jpg
+                dark: https://www.liveabout.com/thmb/YCJmu1khSJo8kMYM090QCd9W78U=/1250x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/powerpuff_girls-56a00bc45f9b58eba4aea61d.jpg
+
+                -- ftd.image-src src1: 
+                light: https://upload.wikimedia.org/wikipedia/en/d/d4/Mickey_Mouse.png
+                dark: https://upload.wikimedia.org/wikipedia/en/d/d4/Mickey_Mouse.png
+
                 -- ftd.image slide:
-                string src:
+                ftd.image-src src:
                 integer idx:
                 src: $src
                 if: $count == $idx
                 $on-click$: increment $count clamp 0 1
 
                 -- slide:
-                src: https://www.liveabout.com/thmb/YCJmu1khSJo8kMYM090QCd9W78U=/1250x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/powerpuff_girls-56a00bc45f9b58eba4aea61d.jpg
+                src: $src0
                 idx: 0
 
                 -- slide:
-                src: https://upload.wikimedia.org/wikipedia/en/d/d4/Mickey_Mouse.png
+                src: $src1
                 idx: 1
                 "
             ),
@@ -14076,7 +14146,11 @@ mod test {
                     container: ftd::Container {
                         children: vec![
                             ftd::Element::Image(ftd::Image {
-                                src: s("https://www.nilinswap.com/static/img/dp.jpeg"),
+                                src: i("https://www.nilinswap.com/static/img/dp.jpeg"),
+                                common: ftd::Common {
+                                    reference: Some(s("foo/bar#src0")),
+                                    ..Default::default()
+                                },
                                 ..Default::default()
                             }),
                             ftd::Element::Markup(ftd::Markups {
@@ -14100,12 +14174,16 @@ mod test {
             "foo/bar",
             indoc::indoc!(
                 "
+                -- ftd.image-src src0: 
+                light: https://www.nilinswap.com/static/img/dp.jpeg
+                dark: https://www.nilinswap.com/static/img/dp.jpeg
+
                 -- ftd.column:
 
                 --- ftd.column:
 
                 --- ftd.image:
-                src: https://www.nilinswap.com/static/img/dp.jpeg
+                src: $src0
 
                 --- ftd.text: Swapnil Sharma
 
@@ -14115,7 +14193,7 @@ mod test {
                 --- ftd.column:
 
                 --- ftd.image:
-                src: https://www.nilinswap.com/static/img/dp.jpeg
+                src: $src0
 
                 --- ftd.text: Swapnil Sharma
 
