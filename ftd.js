@@ -331,7 +331,12 @@ let ftd_utils = {
                         deps[dependency] = dependencies[dependency];
                         data[target].dependencies = deps;
                     } else {
-                        document.querySelector(`[data-id="${dependency}:${id}"]`).innerText = data[target].value;
+                        let doc = document.querySelector(`[data-id="${dependency}:${id}"]`);
+                        if (doc.src !== undefined) {
+                            doc.src = data[target].value;
+                        } else {
+                            doc.innerText = data[target].value;
+                        }
                     }
                 } else if (json_dependency.dependency_type === "Visible") {
                     let display = "none";

@@ -775,6 +775,89 @@ impl Element {
         }
     }
 
+    pub fn get_image_variable(document: &ftd::p2::Document, data: &mut ftd::DataDependenciesMap) {
+        let doc = ftd::p2::TDoc {
+            name: document.name.as_str(),
+            aliases: &document.aliases,
+            bag: &document.data,
+            local_variables: &mut Default::default(),
+        };
+        for (k, v) in document.data.iter() {
+            if !data.contains_key(k) {
+                continue;
+            }
+            //todo: implement this for conditions as well
+            let (_conditions, default) = if let ftd::p2::Thing::Variable(ftd::Variable {
+                conditions,
+                value: default,
+                ..
+            }) = v
+            {
+                match default.kind() {
+                    ftd::p2::Kind::Record { name, .. } if name.eq("ftd#image-src") => {
+                        (conditions, default)
+                    }
+                    _ => {
+                        continue;
+                    }
+                }
+            } else {
+                continue;
+            };
+            let default = match default.resolve(0, &doc) {
+                Ok(ftd::Value::Record { fields, .. }) => fields,
+                _ => continue,
+            };
+            let properties = match default
+                .iter()
+                .map(|(k, v)| v.resolve(0, &doc).map(|v| (k.to_string(), v)))
+                .collect::<ftd::p1::Result<std::collections::BTreeMap<String, ftd::Value>>>()
+            {
+                Ok(d) => d,
+                _ => continue,
+            };
+            let dark =
+                ftd::p2::utils::string("dark", &properties, &doc.name, 0).unwrap_or("".to_string());
+            let light = ftd::p2::utils::string("light", &properties, &doc.name, 0)
+                .unwrap_or("".to_string());
+            let dependencies =
+                if let Some(ftd::Data { dependencies, .. }) = data.get_mut("ftd#dark-mode") {
+                    dependencies
+                } else {
+                    continue;
+                };
+            let json = ftd::Dependencies {
+                dependency_type: ftd::DependencyType::Variable,
+                condition: Some("true".to_string()),
+                parameters: std::array::IntoIter::new([(
+                    k.to_string(),
+                    ftd::ConditionalValueWithDefault {
+                        value: ConditionalValue {
+                            value: dark.to_string(),
+                            important: false,
+                        },
+                        default: Some(ConditionalValue {
+                            value: light.to_string(),
+                            important: false,
+                        }),
+                    },
+                )])
+                .collect(),
+            };
+
+            if let Some(dependencies) = dependencies.get_mut("$value$") {
+                let mut d = serde_json::from_str::<Vec<ftd::Dependencies>>(dependencies).unwrap();
+                d.push(json);
+                *dependencies = serde_json::to_string(&d).unwrap();
+            } else {
+                dependencies.insert(
+                    "$value$".to_string(),
+                    serde_json::to_string(&vec![json]).unwrap(),
+                );
+            }
+        }
+    }
+
     pub fn get_variable_dependencies(
         document: &ftd::p2::Document,
         data: &mut ftd::DataDependenciesMap,

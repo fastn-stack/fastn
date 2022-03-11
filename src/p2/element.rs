@@ -786,7 +786,6 @@ pub fn text_block_from_properties(
     let (text, source, reference) =
         ftd::p2::utils::string_and_source_and_ref(0, "text", properties, doc, condition)?;
     let properties = &ftd::component::resolve_properties(0, properties, doc)?;
-    dbg!("2");
     let font_str = ftd::p2::utils::string_optional("font", properties, doc.name, 0)?;
 
     let font: Vec<ftd::NamedFont> = match font_str {

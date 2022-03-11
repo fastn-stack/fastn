@@ -109,6 +109,7 @@ impl Document {
                 },
             );
         }
+        ftd::Element::get_image_variable(self, &mut data);
         ftd::Element::get_variable_dependencies(self, &mut data);
         ftd::Element::get_visible_event_dependencies(&self.main.container.children, &mut data);
         ftd::Element::get_value_event_dependencies(&self.main.container.children, &mut data);
@@ -396,9 +397,7 @@ impl Document {
     }
 
     pub fn from(name: &str, source: &str, lib: &dyn ftd::p2::Library) -> ftd::p1::Result<Document> {
-        //dbg!("start", &source, &name, "end");
         let mut d = Self::without_render(name, source, lib)?;
-        //dbg!(&d.instructions, &source, &name);
 
         let mut rt = ftd::RT::from(
             d.name.as_str(),
