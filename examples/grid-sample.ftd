@@ -1,5 +1,10 @@
 -- import: ft
 
+-- ftd.image-src src0: https://ftd.dev/static/images/logo.svg
+dark: https://ftd.dev/static/images/logo.svg
+
+-- ftd.image-src src1: https://ca.slack-edge.com/T016XLVEW4W-U0174K0BDB5-gecc6caf7069-512
+dark: https://ca.slack-edge.com/T016XLVEW4W-U0174K0BDB5-gecc6caf7069-512
 
 -- ftd.grid:
 slots: header header | sidebar main | sidebar footer
@@ -29,7 +34,7 @@ border-bottom: 2
 spacing: 20
 
 --- ftd.image:
-src: https://ftd.dev/static/images/logo.svg
+src: $src0
 height: 32
 align: center
 
@@ -73,7 +78,7 @@ padding: 20
 overflow-y: auto
 
 --- ftd.image:
-src: https://ca.slack-edge.com/T016XLVEW4W-U0174K0BDB5-gecc6caf7069-512
+src: $src1
 height: 50
 align: center
 

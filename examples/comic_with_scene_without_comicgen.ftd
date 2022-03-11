@@ -1,5 +1,11 @@
 -- import: ft
 
+-- ftd.image-src src0: https://media.githubusercontent.com/media/gramener/comicgen/v1/svg/aryan/pose/handsfolded.svg
+dark: https://media.githubusercontent.com/media/gramener/comicgen/v1/svg/aryan/pose/handsfolded.svg
+
+-- ftd.image-src src1: https://media.githubusercontent.com/media/gramener/comicgen/v1/svg/aryan/emotion/sad.svg
+dark: https://media.githubusercontent.com/media/gramener/comicgen/v1/svg/aryan/emotion/sad.svg
+
 -- ft.h0: Once upon a time...
 
 -- ftd.scene:
@@ -27,11 +33,11 @@ left: $left
 top: $top
 
 --- ftd.image:
-src: https://media.githubusercontent.com/media/gramener/comicgen/v1/svg/aryan/pose/handsfolded.svg
+src: $src0
 top: 0
 left: 0
 
 --- ftd.image:
-src: https://media.githubusercontent.com/media/gramener/comicgen/v1/svg/aryan/emotion/sad.svg
+src: $src1
 top: 0
 left: 0

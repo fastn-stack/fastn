@@ -1,8 +1,10 @@
--- ftd.image-src src: https://upload.wikimedia.org/wikipedia/en/d/d4/Mickey_Mouse.png
+-- ftd.image-src src: https://blog.earlymoments.com/wp-content/uploads/2016/03/Mickey_Mouse_group_700x493.jpg
 dark: https://blog.ipleaders.in/wp-content/uploads/2021/07/751589-mickey-mouse.jpg
 
 -- ftd.image:
 src: $src
+width: 800
+height: 600
 
 -- ftd.text: Hello
 color if $ftd.dark-mode: red

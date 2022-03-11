@@ -1,5 +1,9 @@
+-- ftd.image-src src: https://www.w3schools.com/cssref/img_tree.gif
+dark: https://www.w3schools.com/cssref/img_tree.gif
+
+
 -- ftd.image:
-src: https://www.w3schools.com/cssref/img_tree.gif
+src: $src
 link: https://www.amitu.com/fifthtry/amitu/
 width: 200
 

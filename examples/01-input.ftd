@@ -30,4 +30,4 @@ font: $lib.cursive-font
 dark: hello.png
 
 -- ftd.image:
-src: $foo.light
+src: $foo
