@@ -673,6 +673,15 @@ impl ftd::Text {
                 .insert(s("line-height"), format!("{}px", font.line_height));
             n.style.insert(s("font-size"), format!("{}px", font.size));
             n.style.insert(s("font-weight"), font.size.to_string());
+            if font.style.italic {
+                n.style.insert(s("font-style"), s("italic"));
+            }
+            if font.style.underline {
+                n.style.insert(s("text-decoration"), s("underline"));
+            }
+            if font.style.strike {
+                n.style.insert(s("text-decoration"), s("line-through"));
+            }
         }
 
         if self.style.italic {
@@ -785,6 +794,15 @@ impl ftd::Code {
                 .insert(s("line-height"), format!("{}px", font.line_height));
             n.style.insert(s("font-size"), format!("{}px", font.size));
             n.style.insert(s("font-weight"), font.size.to_string());
+            if font.style.italic {
+                n.style.insert(s("font-style"), s("italic"));
+            }
+            if font.style.underline {
+                n.style.insert(s("text-decoration"), s("underline"));
+            }
+            if font.style.strike {
+                n.style.insert(s("text-decoration"), s("line-through"));
+            }
         }
 
         if self.style.italic {
@@ -889,6 +907,15 @@ impl ftd::Markups {
                 .insert(s("line-height"), format!("{}px", font.line_height));
             n.style.insert(s("font-size"), format!("{}px", font.size));
             n.style.insert(s("font-weight"), font.size.to_string());
+            if font.style.italic {
+                n.style.insert(s("font-style"), s("italic"));
+            }
+            if font.style.underline {
+                n.style.insert(s("text-decoration"), s("underline"));
+            }
+            if font.style.strike {
+                n.style.insert(s("text-decoration"), s("line-through"));
+            }
         }
 
         if self.style.italic {

@@ -994,6 +994,7 @@ pub fn default_bag() -> std::collections::BTreeMap<String, ftd::p2::Thing> {
                     ("line-height".to_string(), ftd::p2::Kind::integer()),
                     ("size".to_string(), ftd::p2::Kind::integer()),
                     ("weight".to_string(), ftd::p2::Kind::integer()),
+                    ("style".to_string(), ftd::p2::Kind::string().into_optional())
                 ])
                 .collect(),
                 instances: Default::default(),
@@ -1002,6 +1003,7 @@ pub fn default_bag() -> std::collections::BTreeMap<String, ftd::p2::Thing> {
                     "line-height".to_string(),
                     "size".to_string(),
                     "weight".to_string(),
+                    "style".to_string()
                 ],
             }),
         ),

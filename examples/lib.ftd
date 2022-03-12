@@ -58,6 +58,7 @@ fax: +1-234-567890
 line-height: 40
 weight: 400
 size: 32
+style: italic
 
 -- ftd.text: Hello There
 font: $cursive-font

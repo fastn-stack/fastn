@@ -1957,6 +1957,7 @@ pub struct Font {
     pub line_height: i64,
     pub size: i64,
     pub weight: i64,
+    pub style: Style,
 }
 
 impl Font {
@@ -1974,6 +1975,10 @@ impl Font {
             line_height: ftd::p2::utils::int("line-height", &properties, doc.name, 0)?,
             size: ftd::p2::utils::int("size", &properties, doc.name, 0)?,
             weight: ftd::p2::utils::int("weight", &properties, doc.name, 0)?,
+            style: ftd::Style::from(
+                ftd::p2::utils::string_optional("style", &properties, doc.name, 0)?,
+                doc.name,
+            )?,
         })
     }
 }
