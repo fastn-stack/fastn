@@ -30,7 +30,7 @@ pub use or_type::OrType;
 pub use rt::RT;
 pub use ui::{
     Anchor, AttributeType, Code, Color, Column, Common, ConditionalAttribute, ConditionalValue,
-    Container, Element, Font, FontDisplay, GradientDirection, Grid, IFrame, IText, Image, ImageSrc,
+    Container, Element, Type, FontDisplay, GradientDirection, Grid, IFrame, IText, Image, ImageSrc,
     Input, Length, Markup, Markups, NamedFont, Overflow, Position, Region, Row, Scene, Spacing,
     Style, Text, TextAlign, TextBlock, TextFormat, Weight,
 };

@@ -986,9 +986,9 @@ pub fn default_bag() -> std::collections::BTreeMap<String, ftd::p2::Thing> {
             }),
         ),
         (
-            "ftd#font".to_string(),
+            "ftd#type".to_string(),
             ftd::p2::Thing::Record(ftd::p2::Record {
-                name: "ftd#font".to_string(),
+                name: "ftd#type".to_string(),
                 fields: std::array::IntoIter::new([
                     ("font".to_string(), ftd::p2::Kind::caption()),
                     ("line-height".to_string(), ftd::p2::Kind::integer()),

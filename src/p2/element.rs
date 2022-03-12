@@ -829,7 +829,7 @@ pub fn code_from_properties(
         ftd::p2::utils::string_and_source_and_ref(0, "text", properties, doc, condition)?;
     let properties = &ftd::component::resolve_properties(0, properties, doc)?;
     let font_str = ftd::p2::utils::record_optional("font", properties, doc.name, 0)?;
-    let font = font_str.map_or(Ok(None), |v| ftd::Font::from(&v, doc, 0).map(Some))?;
+    let font = font_str.map_or(Ok(None), |v| ftd::Type::from(&v, doc, 0).map(Some))?;
 
     Ok(ftd::Code {
         text: ftd::code_with_theme(
@@ -880,7 +880,7 @@ pub fn integer_from_properties(
     };
 
     let font_str = ftd::p2::utils::record_optional("font", properties, doc.name, 0)?;
-    let font = font_str.map_or(Ok(None), |v| ftd::Font::from(&v, doc, 0).map(Some))?;
+    let font = font_str.map_or(Ok(None), |v| ftd::Type::from(&v, doc, 0).map(Some))?;
 
     Ok(ftd::Text {
         text: ftd::markdown_line(text.as_str()),
@@ -918,7 +918,7 @@ pub fn decimal_from_properties(
     };
 
     let font_str = ftd::p2::utils::record_optional("font", properties, doc.name, 0)?;
-    let font = font_str.map_or(Ok(None), |v| ftd::Font::from(&v, doc, 0).map(Some))?;
+    let font = font_str.map_or(Ok(None), |v| ftd::Type::from(&v, doc, 0).map(Some))?;
     Ok(ftd::Text {
         text: ftd::markdown_line(text.as_str()),
         line: false,
@@ -972,7 +972,7 @@ pub fn boolean_from_properties(
     };
 
     let font_str = ftd::p2::utils::record_optional("font", properties, doc.name, 0)?;
-    let font = font_str.map_or(Ok(None), |v| ftd::Font::from(&v, doc, 0).map(Some))?;
+    let font = font_str.map_or(Ok(None), |v| ftd::Type::from(&v, doc, 0).map(Some))?;
 
     Ok(ftd::Text {
         text: ftd::markdown_line(text.as_str()),
@@ -1005,7 +1005,7 @@ pub fn text_function() -> ftd::Component {
                 (
                     "font".to_string(),
                     ftd::p2::Kind::Record {
-                        name: "ftd#font".to_string(),
+                        name: "ftd#type".to_string(),
                         default: None,
                     }
                     .into_optional(),
@@ -1049,7 +1049,7 @@ pub fn code_function() -> ftd::Component {
                 (
                     "font".to_string(),
                     ftd::p2::Kind::Record {
-                        name: "ftd#font".to_string(),
+                        name: "ftd#type".to_string(),
                         default: None,
                     }
                     .into_optional(),
@@ -1095,7 +1095,7 @@ pub fn integer_function() -> ftd::Component {
                 (
                     "font".to_string(),
                     ftd::p2::Kind::Record {
-                        name: "ftd#font".to_string(),
+                        name: "ftd#type".to_string(),
                         default: None,
                     }
                     .into_optional(),
@@ -1137,7 +1137,7 @@ pub fn decimal_function() -> ftd::Component {
                 (
                     "font".to_string(),
                     ftd::p2::Kind::Record {
-                        name: "ftd#font".to_string(),
+                        name: "ftd#type".to_string(),
                         default: None,
                     }
                     .into_optional(),
@@ -1208,7 +1208,7 @@ pub fn markup_function() -> ftd::Component {
                 (
                     "font".to_string(),
                     ftd::p2::Kind::Record {
-                        name: "ftd#font".to_string(),
+                        name: "ftd#type".to_string(),
                         default: None,
                     }
                     .into_optional(),
@@ -1297,7 +1297,7 @@ pub fn boolean_function() -> ftd::Component {
                 (
                     "font".to_string(),
                     ftd::p2::Kind::Record {
-                        name: "ftd#font".to_string(),
+                        name: "ftd#type".to_string(),
                         default: None,
                     }
                     .into_optional(),
@@ -1421,7 +1421,7 @@ pub fn markup_from_properties(
         ftd::p2::utils::string_and_source_and_ref(0, "text", properties, doc, condition)?;
     let properties = &ftd::component::resolve_properties(0, properties, doc)?;
     let font_str = ftd::p2::utils::record_optional("font", properties, doc.name, 0)?;
-    let font = font_str.map_or(Ok(None), |v| ftd::Font::from(&v, doc, 0).map(Some))?;
+    let font = font_str.map_or(Ok(None), |v| ftd::Type::from(&v, doc, 0).map(Some))?;
 
     Ok(ftd::Markups {
         text: ftd::markup_line(value.as_str()),

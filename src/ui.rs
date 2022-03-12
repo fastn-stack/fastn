@@ -25,7 +25,7 @@ pub struct Markups {
     pub text_align: TextAlign,
     pub line: bool,
     pub style: Style,
-    pub font: Option<Font>,
+    pub font: Option<Type>,
     pub line_clamp: Option<i64>,
     pub children: Vec<Markup>,
 }
@@ -1952,7 +1952,7 @@ impl ImageSrc {
 }
 
 #[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
-pub struct Font {
+pub struct Type {
     pub font: String,
     pub line_height: i64,
     pub size: i64,
@@ -1960,17 +1960,17 @@ pub struct Font {
     pub style: Style,
 }
 
-impl Font {
+impl Type {
     pub fn from(
         l: &std::collections::BTreeMap<String, ftd::PropertyValue>,
         doc: &ftd::p2::TDoc,
         line_number: usize,
-    ) -> ftd::p1::Result<Font> {
+    ) -> ftd::p1::Result<Type> {
         let properties = l
             .iter()
             .map(|(k, v)| v.resolve(line_number, doc).map(|v| (k.to_string(), v)))
             .collect::<ftd::p1::Result<std::collections::BTreeMap<String, ftd::Value>>>()?;
-        Ok(Font {
+        Ok(Type {
             font: ftd::p2::utils::string("font", &properties, doc.name, 0)?,
             line_height: ftd::p2::utils::int("line-height", &properties, doc.name, 0)?,
             size: ftd::p2::utils::int("size", &properties, doc.name, 0)?,
@@ -2133,7 +2133,7 @@ pub struct Text {
     pub common: Common,
     pub text_align: TextAlign,
     pub style: Style,
-    pub font: Option<Font>,
+    pub font: Option<Type>,
     pub line_clamp: Option<i64>,
     // TODO: line-height
     // TODO: region (https://package.elm-lang.org/packages/mdgriffith/elm-ui/latest/Element-Region)
@@ -2163,7 +2163,7 @@ pub struct Code {
     pub common: Common,
     pub text_align: TextAlign,
     pub style: Style,
-    pub font: Option<Font>,
+    pub font: Option<Type>,
     pub line_clamp: Option<i64>,
 }
 
