@@ -1,5 +1,3 @@
-use syntect::parsing::syntax_definition::MatchOperation::None;
-
 #[derive(serde::Deserialize, Clone, Debug, PartialEq, serde::Serialize)]
 #[serde(tag = "type")]
 pub enum Element {
@@ -2172,7 +2170,7 @@ pub struct Code {
 #[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
 pub struct Color {
     pub light: ColorValue,
-    pub dark: ColorValue
+    pub dark: ColorValue,
 }
 
 impl Color {
@@ -2181,11 +2179,7 @@ impl Color {
         doc: &ftd::p2::TDoc,
         line_number: usize,
     ) -> ftd::p1::Result<Option<Color>> {
-        let l = if let Some(l) = l {
-            l
-        } else {
-            return Ok(None)
-        };
+        let l = if let Some(l) = l { l } else { return Ok(None) };
 
         let properties = l
             .iter()
@@ -2193,17 +2187,18 @@ impl Color {
             .collect::<ftd::p1::Result<std::collections::BTreeMap<String, ftd::Value>>>()?;
         Ok(Some(Color {
             light: ftd::p2::element::color_from(
-                ftd::p2::utils::string_optional("light", properties, doc.name, 0)?,
+                ftd::p2::utils::string_optional("light", &properties, doc.name, 0)?,
                 doc.name,
-            )?.unwrap(),
+            )?
+            .unwrap(),
             dark: ftd::p2::element::color_from(
-                ftd::p2::utils::string_optional("dark", properties, doc.name, 0)?,
+                ftd::p2::utils::string_optional("dark", &properties, doc.name, 0)?,
                 doc.name,
-            )?.unwrap(),
+            )?
+            .unwrap(),
         }))
     }
 }
-
 
 #[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
 pub struct ColorValue {
