@@ -816,10 +816,10 @@ impl Element {
                 Ok(d) => d,
                 _ => continue,
             };
-            let dark =
-                ftd::p2::utils::string("dark", &properties, &doc.name, 0).unwrap_or("".to_string());
-            let light = ftd::p2::utils::string("light", &properties, &doc.name, 0)
-                .unwrap_or("".to_string());
+            let dark = ftd::p2::utils::string("dark", &properties, doc.name, 0)
+                .unwrap_or_else(|_| "".to_string());
+            let light = ftd::p2::utils::string("light", &properties, doc.name, 0)
+                .unwrap_or_else(|_| "".to_string());
             let dependencies =
                 if let Some(ftd::Data { dependencies, .. }) = data.get_mut("ftd#dark-mode") {
                     dependencies
@@ -1944,9 +1944,9 @@ impl ImageSrc {
             .collect::<ftd::p1::Result<std::collections::BTreeMap<String, ftd::Value>>>()?;
         Ok(ImageSrc {
             light: ftd::p2::utils::string_optional("light", &properties, doc.name, 0)?
-                .unwrap_or("".to_string()),
+                .unwrap_or_else(|| "".to_string()),
             dark: ftd::p2::utils::string_optional("dark", &properties, doc.name, 0)?
-                .unwrap_or("".to_string()),
+                .unwrap_or_else(|| "".to_string()),
         })
     }
 }
