@@ -3710,7 +3710,10 @@ mod test {
                         }
                     }),
                     (s("src"), {
-                        let s = ftd::p2::Kind::string();
+                        let s = ftd::p2::Kind::Record {
+                            name: s("ftd#image-src"),
+                            default: None,
+                        };
                         if about_optional {
                             s.into_optional()
                         } else {
@@ -3804,7 +3807,11 @@ mod test {
                                 Some(ftd::p2::Boolean::IsNotNull {
                                     value: ftd::PropertyValue::Variable {
                                         name: s("src"),
-                                        kind: ftd::p2::Kind::string().into_optional(),
+                                        kind: ftd::p2::Kind::Record {
+                                            name: s("ftd#image-src"),
+                                            default: None,
+                                        }
+                                        .into_optional(),
                                     },
                                 })
                             } else {
@@ -3816,7 +3823,10 @@ mod test {
                                 ftd::component::Property {
                                     default: Some(ftd::PropertyValue::Variable {
                                         name: s("src"),
-                                        kind: ftd::p2::Kind::string(),
+                                        kind: ftd::p2::Kind::Record {
+                                            name: s("ftd#image-src"),
+                                            default: None,
+                                        },
                                     }),
                                     conditions: vec![],
                                     ..Default::default()
@@ -3946,10 +3956,11 @@ mod test {
             ftd::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "src".to_string(),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::String {
-                        text: s("/static/home/document-type-min.png"),
-                        source: ftd::TextSource::Header,
+                value: ftd::PropertyValue::Reference {
+                    name: s("foo/bar#src0"),
+                    kind: ftd::p2::Kind::Record {
+                        name: s("ftd#image-src"),
+                        default: None,
                     },
                 },
                 conditions: vec![],
@@ -4124,6 +4135,75 @@ mod test {
 
         let mut bag = white_two_image_bag(true);
         bag.insert(
+            "foo/bar#src0".to_string(),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                flags: ftd::VariableFlags::default(),
+                name: "src0".to_string(),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Record {
+                        name: s("ftd#image-src"),
+                        fields: std::array::IntoIter::new([
+                            (
+                                s("dark"),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::String {
+                                        text: "/static/home/document-type-min.png".to_string(),
+                                        source: ftd::TextSource::Header,
+                                    },
+                                },
+                            ),
+                            (
+                                s("light"),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::String {
+                                        text: "/static/home/document-type-min.png".to_string(),
+                                        source: ftd::TextSource::Header,
+                                    },
+                                },
+                            ),
+                        ])
+                        .collect(),
+                    },
+                },
+                conditions: vec![],
+            }),
+        );
+        bag.insert(
+            "foo/bar#src1".to_string(),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                flags: ftd::VariableFlags::default(),
+                name: "src1".to_string(),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Record {
+                        name: s("ftd#image-src"),
+                        fields: std::array::IntoIter::new([
+                            (
+                                s("dark"),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::String {
+                                        text: "second-image.png".to_string(),
+                                        source: ftd::TextSource::Header,
+                                    },
+                                },
+                            ),
+                            (
+                                s("light"),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::String {
+                                        text: "second-image.png".to_string(),
+                                        source: ftd::TextSource::Header,
+                                    },
+                                },
+                            ),
+                        ])
+                        .collect(),
+                    },
+                },
+                conditions: vec![],
+            }),
+        );
+
+        bag.insert(
             "foo/bar#about@0".to_string(),
             ftd::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
@@ -4156,10 +4236,13 @@ mod test {
             ftd::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "src".to_string(),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::String {
-                        text: s("/static/home/document-type-min.png"),
-                        source: ftd::TextSource::Header,
+                value: ftd::PropertyValue::Reference {
+                    name: s("foo/bar#src0"),
+                    kind: ftd::p2::Kind::Optional {
+                        kind: Box::new(ftd::p2::Kind::Record {
+                            name: s("ftd#image-src"),
+                            default: None,
+                        }),
                     },
                 },
                 conditions: vec![],
@@ -4170,10 +4253,13 @@ mod test {
             ftd::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "src".to_string(),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::String {
-                        text: s("second-image.png"),
-                        source: ftd::TextSource::Header,
+                value: ftd::PropertyValue::Reference {
+                    name: s("foo/bar#src1"),
+                    kind: ftd::p2::Kind::Optional {
+                        kind: Box::new(ftd::p2::Kind::Record {
+                            name: s("ftd#image-src"),
+                            default: None,
+                        }),
                     },
                 },
                 conditions: vec![],
@@ -4425,6 +4511,74 @@ mod test {
 
         let mut bag = white_two_image_bag(true);
         bag.insert(
+            "foo/bar#src0".to_string(),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                flags: ftd::VariableFlags::default(),
+                name: "src0".to_string(),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Record {
+                        name: s("ftd#image-src"),
+                        fields: std::array::IntoIter::new([
+                            (
+                                s("dark"),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::String {
+                                        text: "/static/home/document-type-min.png".to_string(),
+                                        source: ftd::TextSource::Header,
+                                    },
+                                },
+                            ),
+                            (
+                                s("light"),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::String {
+                                        text: "/static/home/document-type-min.png".to_string(),
+                                        source: ftd::TextSource::Header,
+                                    },
+                                },
+                            ),
+                        ])
+                        .collect(),
+                    },
+                },
+                conditions: vec![],
+            }),
+        );
+        bag.insert(
+            "foo/bar#src1".to_string(),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                flags: ftd::VariableFlags::default(),
+                name: "src1".to_string(),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Record {
+                        name: s("ftd#image-src"),
+                        fields: std::array::IntoIter::new([
+                            (
+                                s("dark"),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::String {
+                                        text: "second-image.png".to_string(),
+                                        source: ftd::TextSource::Header,
+                                    },
+                                },
+                            ),
+                            (
+                                s("light"),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::String {
+                                        text: "second-image.png".to_string(),
+                                        source: ftd::TextSource::Header,
+                                    },
+                                },
+                            ),
+                        ])
+                        .collect(),
+                    },
+                },
+                conditions: vec![],
+            }),
+        );
+        bag.insert(
             "foo/bar#about@0".to_string(),
             ftd::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
@@ -4471,10 +4625,13 @@ mod test {
             ftd::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "src".to_string(),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::String {
-                        text: s("/static/home/document-type-min.png"),
-                        source: ftd::TextSource::Header,
+                value: ftd::PropertyValue::Reference {
+                    name: s("foo/bar#src0"),
+                    kind: ftd::p2::Kind::Optional {
+                        kind: Box::new(ftd::p2::Kind::Record {
+                            name: s("ftd#image-src"),
+                            default: None,
+                        }),
                     },
                 },
                 conditions: vec![],
@@ -4485,10 +4642,13 @@ mod test {
             ftd::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "src".to_string(),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::String {
-                        text: s("second-image.png"),
-                        source: ftd::TextSource::Header,
+                value: ftd::PropertyValue::Reference {
+                    name: s("foo/bar#src1"),
+                    kind: ftd::p2::Kind::Optional {
+                        kind: Box::new(ftd::p2::Kind::Record {
+                            name: s("ftd#image-src"),
+                            default: None,
+                        }),
                     },
                 },
                 conditions: vec![],
@@ -4502,7 +4662,10 @@ mod test {
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Optional {
                         data: Box::new(None),
-                        kind: ftd::p2::Kind::string(),
+                        kind: ftd::p2::Kind::Record {
+                            name: s("ftd#image-src"),
+                            default: None,
+                        },
                     },
                 },
                 conditions: vec![],
@@ -4890,10 +5053,11 @@ mod test {
             ftd::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: s("src"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::String {
-                        text: "foo.png".to_string(),
-                        source: ftd::TextSource::Header,
+                value: ftd::PropertyValue::Reference {
+                    name: s("foo/bar#src0"),
+                    kind: ftd::p2::Kind::Record {
+                        name: s("ftd#image-src"),
+                        default: None,
                     },
                 },
                 conditions: vec![],
@@ -4904,10 +5068,11 @@ mod test {
             ftd::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: s("src"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::String {
-                        text: "bar.png".to_string(),
-                        source: ftd::TextSource::Header,
+                value: ftd::PropertyValue::Reference {
+                    name: s("foo/bar#src1"),
+                    kind: ftd::p2::Kind::Record {
+                        name: s("ftd#image-src"),
+                        default: None,
                     },
                 },
                 conditions: vec![],
@@ -4942,6 +5107,76 @@ mod test {
             }),
         );
         bag.insert(
+            "foo/bar#src0".to_string(),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                flags: ftd::VariableFlags::default(),
+                name: "src0".to_string(),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Record {
+                        name: s("ftd#image-src"),
+                        fields: std::array::IntoIter::new([
+                            (
+                                s("dark"),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::String {
+                                        text: "foo.png".to_string(),
+                                        source: ftd::TextSource::Header,
+                                    },
+                                },
+                            ),
+                            (
+                                s("light"),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::String {
+                                        text: "foo.png".to_string(),
+                                        source: ftd::TextSource::Header,
+                                    },
+                                },
+                            ),
+                        ])
+                        .collect(),
+                    },
+                },
+                conditions: vec![],
+            }),
+        );
+
+        bag.insert(
+            "foo/bar#src1".to_string(),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                flags: ftd::VariableFlags::default(),
+                name: "src1".to_string(),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Record {
+                        name: s("ftd#image-src"),
+                        fields: std::array::IntoIter::new([
+                            (
+                                s("dark"),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::String {
+                                        text: "bar.png".to_string(),
+                                        source: ftd::TextSource::Header,
+                                    },
+                                },
+                            ),
+                            (
+                                s("light"),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::String {
+                                        text: "bar.png".to_string(),
+                                        source: ftd::TextSource::Header,
+                                    },
+                                },
+                            ),
+                        ])
+                        .collect(),
+                    },
+                },
+                conditions: vec![],
+            }),
+        );
+
+        bag.insert(
             s("foo/bar#image"),
             ftd::p2::Thing::Component(ftd::Component {
                 invocations: Default::default(),
@@ -4949,7 +5184,13 @@ mod test {
                 root: s("ftd#column"),
                 arguments: std::array::IntoIter::new([
                     (s("width"), ftd::p2::Kind::string().into_optional()),
-                    (s("src"), ftd::p2::Kind::string()),
+                    (
+                        s("src"),
+                        ftd::p2::Kind::Record {
+                            name: s("ftd#image-src"),
+                            default: None,
+                        },
+                    ),
                 ])
                 .collect(),
                 instructions: vec![ftd::Instruction::ChildComponent {
@@ -4963,7 +5204,10 @@ mod test {
                                 ftd::component::Property {
                                     default: Some(ftd::PropertyValue::Variable {
                                         name: s("src"),
-                                        kind: ftd::p2::Kind::string(),
+                                        kind: ftd::p2::Kind::Record {
+                                            name: s("ftd#image-src"),
+                                            default: None,
+                                        },
                                     }),
                                     conditions: vec![],
                                     ..Default::default()
