@@ -1,3 +1,5 @@
+use syntect::parsing::syntax_definition::MatchOperation::None;
+
 #[derive(serde::Deserialize, Clone, Debug, PartialEq, serde::Serialize)]
 #[serde(tag = "type")]
 pub enum Element {
@@ -1767,7 +1769,7 @@ pub struct Common {
     pub shadow_color: Option<Color>,
     pub anchor: Option<ftd::Anchor>,
     pub gradient_direction: Option<GradientDirection>,
-    pub gradient_colors: Vec<Color>,
+    pub gradient_colors: Vec<ColorValue>,
     pub background_image: Option<String>,
     pub background_repeat: bool,
     pub background_parallax: bool,
@@ -2169,6 +2171,42 @@ pub struct Code {
 
 #[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
 pub struct Color {
+    pub light: ColorValue,
+    pub dark: ColorValue
+}
+
+impl Color {
+    pub fn from(
+        l: Option<std::collections::BTreeMap<String, ftd::PropertyValue>>,
+        doc: &ftd::p2::TDoc,
+        line_number: usize,
+    ) -> ftd::p1::Result<Option<Color>> {
+        let l = if let Some(l) = l {
+            l
+        } else {
+            return Ok(None)
+        };
+
+        let properties = l
+            .iter()
+            .map(|(k, v)| v.resolve(line_number, doc).map(|v| (k.to_string(), v)))
+            .collect::<ftd::p1::Result<std::collections::BTreeMap<String, ftd::Value>>>()?;
+        Ok(Some(Color {
+            light: ftd::p2::element::color_from(
+                ftd::p2::utils::string_optional("light", properties, doc.name, 0)?,
+                doc.name,
+            )?.unwrap(),
+            dark: ftd::p2::element::color_from(
+                ftd::p2::utils::string_optional("dark", properties, doc.name, 0)?,
+                doc.name,
+            )?.unwrap(),
+        }))
+    }
+}
+
+
+#[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
+pub struct ColorValue {
     pub r: u8,
     pub g: u8,
     pub b: u8,

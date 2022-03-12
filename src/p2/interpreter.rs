@@ -986,6 +986,19 @@ pub fn default_bag() -> std::collections::BTreeMap<String, ftd::p2::Thing> {
             }),
         ),
         (
+            "ftd#color".to_string(),
+            ftd::p2::Thing::Record(ftd::p2::Record {
+                name: "ftd#color".to_string(),
+                fields: std::array::IntoIter::new([
+                    ("light".to_string(), ftd::p2::Kind::caption()),
+                    ("dark".to_string(), ftd::p2::Kind::string()),
+                ])
+                    .collect(),
+                instances: Default::default(),
+                order: vec!["light".to_string(), "dark".to_string()],
+            }),
+        ),
+        (
             "ftd#type".to_string(),
             ftd::p2::Thing::Record(ftd::p2::Record {
                 name: "ftd#type".to_string(),
@@ -1211,7 +1224,7 @@ mod test {
                 text: ftd::markdown_line("hello"),
                 line: true,
                 common: ftd::Common {
-                    color: Some(ftd::Color {
+                    color: Some(ftd::ColorValue {
                         r: 255,
                         g: 0,
                         b: 0,
@@ -1903,7 +1916,7 @@ mod test {
                 text: ftd::markdown_line("5PM Tasks"),
                 line: true,
                 common: ftd::Common {
-                    color: Some(ftd::Color {
+                    color: Some(ftd::ColorValue {
                         r: 255,
                         g: 255,
                         b: 255,
@@ -1922,7 +1935,7 @@ mod test {
                 text: ftd::markdown_line("5PM Tasks"),
                 line: true,
                 common: ftd::Common {
-                    color: Some(ftd::Color {
+                    color: Some(ftd::ColorValue {
                         r: 77,
                         g: 77,
                         b: 77,
@@ -1946,7 +1959,7 @@ mod test {
                             text: ftd::markdown_line("Log"),
                             line: true,
                             common: ftd::Common {
-                                color: Some(ftd::Color {
+                                color: Some(ftd::ColorValue {
                                     r: 255,
                                     g: 255,
                                     b: 255,
@@ -1966,7 +1979,7 @@ mod test {
                             text: ftd::markdown_line("Log"),
                             line: true,
                             common: ftd::Common {
-                                color: Some(ftd::Color {
+                                color: Some(ftd::ColorValue {
                                     r: 77,
                                     g: 77,
                                     b: 77,
@@ -1990,7 +2003,7 @@ mod test {
                                         text: ftd::markdown_line("ChildLog"),
                                         line: true,
                                         common: ftd::Common {
-                                            color: Some(ftd::Color {
+                                            color: Some(ftd::ColorValue {
                                                 r: 255,
                                                 g: 255,
                                                 b: 255,
@@ -2010,7 +2023,7 @@ mod test {
                                         text: ftd::markdown_line("ChildLog"),
                                         line: true,
                                         common: ftd::Common {
-                                            color: Some(ftd::Color {
+                                            color: Some(ftd::ColorValue {
                                                 r: 77,
                                                 g: 77,
                                                 b: 77,
@@ -2055,7 +2068,7 @@ mod test {
                             text: ftd::markdown_line("Log2"),
                             line: true,
                             common: ftd::Common {
-                                color: Some(ftd::Color {
+                                color: Some(ftd::ColorValue {
                                     r: 255,
                                     g: 255,
                                     b: 255,
@@ -2075,7 +2088,7 @@ mod test {
                             text: ftd::markdown_line("Log2"),
                             line: true,
                             common: ftd::Common {
-                                color: Some(ftd::Color {
+                                color: Some(ftd::ColorValue {
                                     r: 77,
                                     g: 77,
                                     b: 77,
@@ -2820,7 +2833,7 @@ mod test {
                 text: ftd::markdown_line("5PM Tasks"),
                 line: true,
                 common: ftd::Common {
-                    color: Some(ftd::Color {
+                    color: Some(ftd::ColorValue {
                         r: 255,
                         g: 255,
                         b: 255,
@@ -2839,7 +2852,7 @@ mod test {
                 text: ftd::markdown_line("5PM Tasks"),
                 line: true,
                 common: ftd::Common {
-                    color: Some(ftd::Color {
+                    color: Some(ftd::ColorValue {
                         r: 77,
                         g: 77,
                         b: 77,
@@ -2863,7 +2876,7 @@ mod test {
                             text: ftd::markdown_line("Log"),
                             line: true,
                             common: ftd::Common {
-                                color: Some(ftd::Color {
+                                color: Some(ftd::ColorValue {
                                     r: 255,
                                     g: 255,
                                     b: 255,
@@ -2883,7 +2896,7 @@ mod test {
                             text: ftd::markdown_line("Log"),
                             line: true,
                             common: ftd::Common {
-                                color: Some(ftd::Color {
+                                color: Some(ftd::ColorValue {
                                     r: 77,
                                     g: 77,
                                     b: 77,
@@ -2907,7 +2920,7 @@ mod test {
                                         text: ftd::markdown_line("ChildLog"),
                                         line: true,
                                         common: ftd::Common {
-                                            color: Some(ftd::Color {
+                                            color: Some(ftd::ColorValue {
                                                 r: 255,
                                                 g: 255,
                                                 b: 255,
@@ -2927,7 +2940,7 @@ mod test {
                                         text: ftd::markdown_line("ChildLog"),
                                         line: true,
                                         common: ftd::Common {
-                                            color: Some(ftd::Color {
+                                            color: Some(ftd::ColorValue {
                                                 r: 77,
                                                 g: 77,
                                                 b: 77,
@@ -2972,7 +2985,7 @@ mod test {
                             text: ftd::markdown_line("Log2"),
                             line: true,
                             common: ftd::Common {
-                                color: Some(ftd::Color {
+                                color: Some(ftd::ColorValue {
                                     r: 255,
                                     g: 255,
                                     b: 255,
@@ -2992,7 +3005,7 @@ mod test {
                             text: ftd::markdown_line("Log2"),
                             line: true,
                             common: ftd::Common {
-                                color: Some(ftd::Color {
+                                color: Some(ftd::ColorValue {
                                     r: 77,
                                     g: 77,
                                     b: 77,
@@ -3213,7 +3226,7 @@ mod test {
                 spacing: None,
                 common: ftd::Common {
                     width: Some(ftd::Length::Px { value: 200 }),
-                    background_color: Some(ftd::Color {
+                    background_color: Some(ftd::ColorValue {
                         r: 243,
                         g: 243,
                         b: 243,
@@ -12450,7 +12463,7 @@ mod test {
                 text: ftd::markdown_line("/hello3"),
                 line: true,
                 common: ftd::Common {
-                    color: Some(ftd::Color {
+                    color: Some(ftd::ColorValue {
                         r: 255,
                         g: 0,
                         b: 0,
@@ -12468,7 +12481,7 @@ mod test {
                     text: ftd::markdown_line("hello5"),
                     line: true,
                     common: ftd::Common {
-                        color: Some(ftd::Color {
+                        color: Some(ftd::ColorValue {
                             r: 0,
                             g: 128,
                             b: 0,
@@ -15021,7 +15034,7 @@ mod test {
                     )])
                     .collect(),
                     reference: Some(s("foo/bar#bar")),
-                    color: Some(ftd::Color {
+                    color: Some(ftd::ColorValue {
                         r: 255,
                         g: 0,
                         b: 0,
@@ -15164,7 +15177,7 @@ mod test {
                             text: ftd::markdown_line("hello"),
                             line: true,
                             common: ftd::Common {
-                                color: Some(ftd::Color {
+                                color: Some(ftd::ColorValue {
                                     r: 255,
                                     g: 0,
                                     b: 0,
@@ -15201,7 +15214,7 @@ mod test {
                                         text: ftd::markdown_line("hello"),
                                         line: true,
                                         common: ftd::Common {
-                                            color: Some(ftd::Color {
+                                            color: Some(ftd::ColorValue {
                                                 r: 255,
                                                 g: 0,
                                                 b: 0,
@@ -15216,7 +15229,7 @@ mod test {
                                         text: ftd::markdown_line("hello amitu!"),
                                         line: true,
                                         common: ftd::Common {
-                                            color: Some(ftd::Color {
+                                            color: Some(ftd::ColorValue {
                                                 r: 255,
                                                 g: 0,
                                                 b: 0,
@@ -16474,7 +16487,7 @@ mod test {
                 },
                 spacing: None,
                 common: ftd::Common {
-                    color: Some(ftd::Color {
+                    color: Some(ftd::ColorValue {
                         r: 0,
                         g: 128,
                         b: 0,
@@ -16539,7 +16552,7 @@ mod test {
                 },
                 spacing: None,
                 common: ftd::Common {
-                    color: Some(ftd::Color {
+                    color: Some(ftd::ColorValue {
                         r: 0,
                         g: 128,
                         b: 0,

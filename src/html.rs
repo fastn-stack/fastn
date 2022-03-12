@@ -1120,13 +1120,13 @@ impl ftd::Common {
             d.insert(s("margin-bottom"), format!("{}px", p));
         }
         if let Some(p) = &self.background_color {
-            d.insert(s("background-color"), color(p));
+            d.insert(s("background-color"), color(&p.light));
         }
         if let Some(p) = &self.color {
-            d.insert(s("color"), color(p));
+            d.insert(s("color"), color(&p.light));
         }
         if let Some(p) = &self.border_color {
-            d.insert(s("border-color"), color(p));
+            d.insert(s("border-color"), color(&p.light));
         }
         if let Some(p) = &self.overflow_x {
             let (key, value) = overflow(p, "overflow-x");
@@ -1178,8 +1178,8 @@ impl ftd::Common {
             || self.shadow_offset_y.is_some()
         {
             let shadow_color = match &self.shadow_color {
-                Some(p) => p,
-                None => &ftd::Color {
+                Some(p) => &p.light,
+                None => &ftd::ColorValue {
                     r: 0,
                     g: 0,
                     b: 0,
@@ -1355,8 +1355,8 @@ fn s(s: &str) -> String {
     s.to_string()
 }
 
-pub fn color(c: &ftd::Color) -> String {
-    let ftd::Color { r, g, b, alpha } = c;
+pub fn color(c: &ftd::ColorValue) -> String {
+    let ftd::ColorValue { r, g, b, alpha } = c;
     format!("rgba({},{},{},{})", r, g, b, alpha)
 }
 
@@ -1411,7 +1411,7 @@ pub fn overflow(l: &ftd::Overflow, f: &str) -> (String, String) {
     }
 }
 
-fn gradient(d: &ftd::GradientDirection, c: &[ftd::Color]) -> String {
+fn gradient(d: &ftd::GradientDirection, c: &[ftd::ColorValue]) -> String {
     let color = c.iter().map(color).collect::<Vec<String>>().join(",");
     let gradient_style = match d {
         ftd::GradientDirection::BottomToTop => "linear-gradient(to top ".to_string(),

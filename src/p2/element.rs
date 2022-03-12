@@ -15,7 +15,7 @@ pub fn common_from_properties(
     let gradient_color_str =
         ftd::p2::utils::string_optional("gradient-colors", properties, doc.name, 0)?;
 
-    let gradient_colors: Vec<ftd::Color> = match gradient_color_str {
+    let gradient_colors: Vec<ftd::ColorValue> = match gradient_color_str {
         Some(f) => f
             .split(',')
             .flat_map(|x| color_from(Some(x.to_string()), doc.name).ok()?)
@@ -144,17 +144,20 @@ pub fn common_from_properties(
             ftd::p2::utils::string_optional("max-height", properties, doc.name, 0)?,
             doc.name,
         )?,
-        color: color_from(
-            ftd::p2::utils::string_optional("color", properties, doc.name, 0)?,
-            doc.name,
+        color: ftd::Color::from(
+            ftd::p2::utils::record_optional("color", &properties, doc.name, 0)?,
+            doc,
+            0
         )?,
-        background_color: color_from(
-            ftd::p2::utils::string_optional("background-color", properties, doc.name, 0)?,
-            doc.name,
+        background_color: ftd::Color::from(
+            ftd::p2::utils::record_optional("background-color", properties, doc.name, 0)?,
+            doc,
+            0
         )?,
-        border_color: color_from(
-            ftd::p2::utils::string_optional("border-color", properties, doc.name, 0)?,
-            doc.name,
+        border_color: ftd::Color::from(
+            ftd::p2::utils::record_optional("border-color", properties, doc.name, 0)?,
+            doc,
+            0
         )?,
         border_width: ftd::p2::utils::int_with_default("border-width", 0, properties, doc.name, 0)?,
         border_radius: ftd::p2::utils::int_with_default(
@@ -207,9 +210,10 @@ pub fn common_from_properties(
         shadow_offset_y: ftd::p2::utils::int_optional("shadow-offset-y", properties, doc.name, 0)?,
         shadow_size: ftd::p2::utils::int_optional("shadow-size", properties, doc.name, 0)?,
         shadow_blur: ftd::p2::utils::int_optional("shadow-blur", properties, doc.name, 0)?,
-        shadow_color: color_from(
-            ftd::p2::utils::string_optional("shadow-color", properties, doc.name, 0)?,
-            doc.name,
+        shadow_color: ftd::Color::from(
+            ftd::p2::utils::record_optional("shadow-color", properties, doc.name, 0)?,
+            doc,
+            0
         )?,
         gradient_direction: ftd::GradientDirection::from(
             ftd::p2::utils::string_optional("gradient-direction", properties, doc.name, 0)?,
@@ -333,14 +337,26 @@ fn common_arguments() -> Vec<(String, ftd::p2::Kind)> {
             "region".to_string(),
             ftd::p2::Kind::string().into_optional(),
         ),
-        ("color".to_string(), ftd::p2::Kind::string().into_optional()),
+        (
+            "color".to_string(),
+            ftd::p2::Kind::Record {
+                name: "ftd#color".to_string(),
+                default: None,
+            }.into_optional(),
+        ),
         (
             "background-color".to_string(),
-            ftd::p2::Kind::string().into_optional(),
+            ftd::p2::Kind::Record {
+                name: "ftd#color".to_string(),
+                default: None,
+            }.into_optional(),
         ),
         (
             "border-color".to_string(),
-            ftd::p2::Kind::string().into_optional(),
+            ftd::p2::Kind::Record {
+                name: "ftd#color".to_string(),
+                default: None,
+            }.into_optional(),
         ),
         (
             "border-width".to_string(),
@@ -448,7 +464,10 @@ fn common_arguments() -> Vec<(String, ftd::p2::Kind)> {
         ),
         (
             "shadow-color".to_string(),
-            ftd::p2::Kind::string().into_optional(),
+            ftd::p2::Kind::Record {
+                name: "ftd#color".to_string(),
+                default: None,
+            }.into_optional(),
         ),
         (
             "background-image".to_string(),
@@ -936,7 +955,7 @@ pub fn decimal_from_properties(
     })
 }
 
-pub fn color_from(l: Option<String>, doc_id: &str) -> ftd::p1::Result<Option<ftd::Color>> {
+pub fn color_from(l: Option<String>, doc_id: &str) -> ftd::p1::Result<Option<ftd::ColorValue>> {
     use std::str::FromStr;
 
     let v = match l {
@@ -945,7 +964,7 @@ pub fn color_from(l: Option<String>, doc_id: &str) -> ftd::p1::Result<Option<ftd
     };
 
     match css_color_parser::Color::from_str(v.as_str()) {
-        Ok(v) => Ok(Some(ftd::Color {
+        Ok(v) => Ok(Some(ftd::ColorValue {
             r: v.r,
             g: v.g,
             b: v.b,
