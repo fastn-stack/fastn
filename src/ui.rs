@@ -669,8 +669,10 @@ impl Element {
                                 d.push(json);
                                 *dependencies = serde_json::to_string(&d).unwrap();
                             } else {
-                                dependencies
-                                    .insert(id, serde_json::to_string(&vec![json]).unwrap());
+                                dependencies.insert(
+                                    id.to_string(),
+                                    serde_json::to_string(&vec![json]).unwrap(),
+                                );
                             }
                         } else {
                             panic!("{} should be declared", condition.variable)
@@ -684,7 +686,9 @@ impl Element {
                                         k.to_string(),
                                         ftd::ConditionalValueWithDefault {
                                             value: ftd::ConditionalValue {
-                                                value: condition.variable.to_string(),
+                                                value: serde_json::to_string(
+                                                    &serde_json::json!({ "$variable$": condition.variable, "$node$": id}),
+                                                ).unwrap(),
                                                 important: false,
                                                 reference: None,
                                             },
@@ -823,64 +827,75 @@ impl Element {
                     ftd::ConditionalAttribute,
                 >,
             ) {
-                if let Some(ref reference) = color.reference {
-                    let parameters = {
-                        let mut parameters = std::collections::BTreeMap::new();
-                        parameters.insert(
-                            style.to_string(),
-                            ftd::ConditionalValueWithDefault {
-                                value: ConditionalValue {
-                                    value: serde_json::to_string(
-                                        &serde_json::json!({ "light": ftd::html::color(&color.light), "dark": ftd::html::color(&color.dark), "$kind$": "light" }),
-                                    ).unwrap(),
-                                    important: false,
-                                    reference: None,
-                                },
-                                default: None,
+                let (reference, value) = if let Some(ftd::ConditionalAttribute {
+                    default:
+                        Some(ConditionalValue {
+                            reference: Some(reference),
+                            value,
+                            ..
+                        }),
+                    ..
+                }) = conditional_attribute.get(style)
+                {
+                    (reference.to_string(), value.to_string())
+                } else if let Some(ref reference) = color.reference {
+                    (reference.to_string(),  serde_json::to_string(
+                        &serde_json::json!({ "light": ftd::html::color(&color.light), "dark": ftd::html::color(&color.dark), "$kind$": "light" }),
+                    ).unwrap())
+                } else {
+                    return;
+                };
+                let parameters = {
+                    let mut parameters = std::collections::BTreeMap::new();
+                    parameters.insert(
+                        style.to_string(),
+                        ftd::ConditionalValueWithDefault {
+                            value: ConditionalValue {
+                                value,
+                                important: false,
+                                reference: None,
                             },
-                        );
-                        let dependents = conditional_attribute
-                            .get(style)
-                            .unwrap_or(&ConditionalAttribute {
-                                attribute_type: AttributeType::Style,
-                                conditions_with_value: vec![],
-                                default: None,
-                            })
-                            .conditions_with_value
-                            .iter()
-                            .map(|(v, _)| v.variable.to_string())
-                            .collect::<Vec<String>>();
-                        parameters.insert(
-                            "dependents".to_string(),
-                            ftd::ConditionalValueWithDefault {
-                                value: ConditionalValue {
-                                    value: serde_json::to_string(&dependents).unwrap(),
-                                    important: false,
-                                    reference: None,
-                                },
-                                default: None,
+                            default: None,
+                        },
+                    );
+                    let dependents = conditional_attribute
+                        .get(style)
+                        .unwrap_or(&ConditionalAttribute {
+                            attribute_type: AttributeType::Style,
+                            conditions_with_value: vec![],
+                            default: None,
+                        })
+                        .conditions_with_value
+                        .iter()
+                        .map(|(v, _)| v.variable.to_string())
+                        .collect::<Vec<String>>();
+                    parameters.insert(
+                        "dependents".to_string(),
+                        ftd::ConditionalValueWithDefault {
+                            value: ConditionalValue {
+                                value: serde_json::to_string(&dependents).unwrap(),
+                                important: false,
+                                reference: None,
                             },
-                        );
-                        parameters
+                            default: None,
+                        },
+                    );
+                    parameters
+                };
+                if let Some(ftd::Data { dependencies, .. }) = data.get_mut(&reference) {
+                    let json = ftd::Dependencies {
+                        dependency_type: ftd::DependencyType::Style,
+                        condition: None,
+                        parameters,
                     };
-                    if let Some(ftd::Data { dependencies, .. }) = data.get_mut(reference) {
-                        let json = ftd::Dependencies {
-                            dependency_type: ftd::DependencyType::Style,
-                            condition: None,
-                            parameters,
-                        };
-                        if let Some(dependencies) = dependencies.get_mut(id) {
-                            let mut d =
-                                serde_json::from_str::<Vec<ftd::Dependencies>>(dependencies)
-                                    .unwrap();
-                            d.push(json);
-                            *dependencies = serde_json::to_string(&d).unwrap();
-                        } else {
-                            dependencies.insert(
-                                id.to_string(),
-                                serde_json::to_string(&vec![json]).unwrap(),
-                            );
-                        }
+                    if let Some(dependencies) = dependencies.get_mut(id) {
+                        let mut d =
+                            serde_json::from_str::<Vec<ftd::Dependencies>>(dependencies).unwrap();
+                        d.push(json);
+                        *dependencies = serde_json::to_string(&d).unwrap();
+                    } else {
+                        dependencies
+                            .insert(id.to_string(), serde_json::to_string(&vec![json]).unwrap());
                     }
                 }
             }

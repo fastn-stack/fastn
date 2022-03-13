@@ -1,8 +1,14 @@
 -- ftd.color c: red
 dark: green
 
+-- ftd.color b: orange
+dark: purple
+
+-- boolean a: true
+
 -- ftd.text: Hello
 color: $c
+color if $a: $b
 
 -- ftd.text: Dark Mode
 $on-click$: message-host enable-dark-mode
@@ -12,3 +18,6 @@ $on-click$: message-host enable-light-mode
 
 -- ftd.text: System Mode
 $on-click$: message-host enable-system-mode
+
+-- ftd.text: Change a
+$on-click$: toggle $a

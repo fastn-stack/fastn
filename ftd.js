@@ -307,14 +307,11 @@ let ftd_utils = {
     },
 
     handle_action: function (id, target, value, data, ftd_external_children) {
-        console.log("start", data[target], value, target);
         data[target].value = value.toString();
         let new_value = data[target].value;
-        let kind = null;
         if (ftd_utils.isJson(data[target].value)) {
             let json = JSON.parse(new_value);
             if (!!json["$kind$"]) {
-                kind = json["$kind$"];
                 new_value = json[json["$kind$"]];
             }
         }
@@ -368,7 +365,26 @@ let ftd_utils = {
                     ftd_utils.first_child_styling(`${dependency}:${id}`);
 
                 } else if (json_dependency.dependency_type === "Variable") {
-                    if (ftd_utils.is_equal_condition(data[target].value, json_dependency.condition)) {
+                    if (!json_dependency.condition) {
+                        if (dependency === "$style$") {
+                            for (const parameter in json_dependency.parameters) {
+                                let param_val = JSON.parse(json_dependency.parameters[parameter].value.value);
+                                let node = param_val["$node$"];
+                                let variable = param_val["$variable$"];
+                                let dependent = data[variable].value;
+                                let dependent_dependencies = JSON.parse(data[variable].dependencies[node]);
+                                for (const d in dependent_dependencies) {
+                                    if (dependent_dependencies[d].dependency_type !== "Style"
+                                        || !dependent_dependencies[d].parameters[parameter]) {
+                                        continue;
+                                    }
+                                    dependent_dependencies[d].parameters[parameter].value.value = data[target].value;
+                                }
+                                data[variable].dependencies[node] = JSON.stringify(dependent_dependencies);
+                                ftd_utils.handle_action(id, variable, dependent, data, ftd_external_children);
+                            }
+                        }
+                    } else if (ftd_utils.is_equal_condition(data[target].value, json_dependency.condition)) {
                         for (const parameter in json_dependency.parameters) {
                             if (data[parameter] !== undefined) {
                                 let value = json_dependency.parameters[parameter].value.value;
@@ -398,20 +414,33 @@ let ftd_utils = {
                     }
                 } else if (json_dependency.dependency_type === "Style") {
                     if (!json_dependency.condition) {
+                        let set = [];
+                        if (!!json_dependency.parameters["dependents"]) {
+                            set = JSON.parse(json_dependency.parameters["dependents"].value.value);
+                        }
+                        if (!!set.length) {
+                            let style_attr = Object.keys(json_dependency.parameters).filter(w => w !== "dependents")[0];
+                            for (const idx in set) {
+                                let dependent = data[set[idx]].value;
+                                let dependent_dependencies = JSON.parse(data[set[idx]].dependencies[dependency]);
+                                for (const d in dependent_dependencies) {
+                                    if (dependent_dependencies[d].dependency_type !== "Style"
+                                        || !dependent_dependencies[d].parameters[style_attr]) {
+                                        continue;
+                                    }
+                                    dependent_dependencies[d].parameters[style_attr].default.value = data[target].value;
+                                }
+                                data[set[idx]].dependencies[dependency] = JSON.stringify(dependent_dependencies);
+                                ftd_utils.handle_action(id, set[idx], dependent, data, ftd_external_children);
+                            }
+                            continue;
+                        }
                         for (const parameter in json_dependency.parameters) {
                             if (parameter === "dependents") {
                                 continue;
                             }
-                            let value = json_dependency.parameters[parameter].value.value;
-                            if (ftd_utils.isJson(value)) {
-                                let json = JSON.parse(value);
-                                let new_kind = kind === null ? json["$kind$"] : kind;
-                                if (!!new_kind) {
-                                    value = json[new_kind];
-                                }
-                            }
                             let important = json_dependency.parameters[parameter].value.important;
-                            ftd_utils.set_style(parameter, `${dependency}:${id}`, value, important);
+                            ftd_utils.set_style(parameter, `${dependency}:${id}`, new_value, important);
                             if (!styles_edited.includes(parameter)) {
                                 styles_edited.push(parameter);
                             }
@@ -419,6 +448,12 @@ let ftd_utils = {
                     } else if (ftd_utils.is_equal_condition(data[target].value, json_dependency.condition)) {
                         for (const parameter in json_dependency.parameters) {
                             let value = json_dependency.parameters[parameter].value.value;
+                            if (ftd_utils.isJson(value)) {
+                                let json = JSON.parse(value);
+                                if (!!json["$kind$"]) {
+                                    value = json[json["$kind$"]];
+                                }
+                            }
                             let important = json_dependency.parameters[parameter].value.important;
                             ftd_utils.set_style(parameter, `${dependency}:${id}`, value, important);
                             if (!styles_edited.includes(parameter)) {
@@ -428,6 +463,12 @@ let ftd_utils = {
                     } else {
                         for (const parameter in json_dependency.parameters) {
                             let default_value = json_dependency.parameters[parameter].default;
+                            if (ftd_utils.isJson(default_value)) {
+                                let json = JSON.parse(value);
+                                if (!!json["$kind$"]) {
+                                    default_value = json[json["$kind$"]];
+                                }
+                            }
                             if (!styles_edited.includes(parameter)) {
                                 if (default_value === null) {
                                     if (["border-left-width", "border-right-width", "border-top-width", "border-bottom-width"].includes(parameter)) {
@@ -438,6 +479,12 @@ let ftd_utils = {
                                     }
                                 } else {
                                     let value = default_value.value;
+                                    if (ftd_utils.isJson(value)) {
+                                        let json = JSON.parse(value);
+                                        if (!!json["$kind$"]) {
+                                            value = json[json["$kind$"]];
+                                        }
+                                    }
                                     let important = default_value.important;
                                     ftd_utils.set_style(parameter, `${dependency}:${id}`, value, important);
                                 }
