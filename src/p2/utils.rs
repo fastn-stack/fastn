@@ -673,6 +673,53 @@ pub fn record_and_ref(
     }
 }
 
+pub fn record_optional_with_ref(
+    name: &str,
+    properties: &std::collections::BTreeMap<String, ftd::component::Property>,
+    doc: &ftd::p2::TDoc,
+    line_number: usize,
+) -> ftd::p1::Result<(
+    Option<std::collections::BTreeMap<String, ftd::PropertyValue>>,
+    Option<String>,
+)> {
+    let properties = ftd::component::resolve_properties_with_ref(line_number, properties, doc)?;
+    match properties.get(name) {
+        Some((ftd::Value::Record { fields, .. }, reference)) => {
+            Ok((Some(fields.to_owned()), reference.to_owned()))
+        }
+        Some((
+            ftd::Value::None {
+                kind: ftd::p2::Kind::Record { .. },
+            },
+            _,
+        )) => Ok((None, None)),
+        Some((ftd::Value::None { .. }, _)) => Ok((None, None)),
+        Some((
+            ftd::Value::Optional {
+                data,
+                kind: ftd::p2::Kind::Record { .. },
+            },
+            reference,
+        )) => match data.as_ref() {
+            Some(ftd::Value::Record { fields, .. }) => {
+                Ok((Some(fields.to_owned()), reference.to_owned()))
+            }
+            None => Ok((None, None)),
+            v => ftd::e2(
+                format!("expected record, for: `{}` found: {:?}", name, v),
+                doc.name,
+                line_number,
+            ),
+        },
+        Some(v) => ftd::e2(
+            format!("expected record, for: `{}` found: {:?}", name, v),
+            doc.name,
+            line_number,
+        ),
+        None => Ok((None, None)),
+    }
+}
+
 pub fn record_optional(
     name: &str,
     properties: &std::collections::BTreeMap<String, ftd::Value>,
