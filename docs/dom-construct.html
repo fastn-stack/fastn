@@ -564,7 +564,7 @@ let ftd_utils = {
         let new_value = data[target].value;
         if (ftd_utils.isJson(data[target].value)) {
             let json = JSON.parse(new_value);
-            if (!!json["$kind$"]) {
+            if (!!json && !!json["$kind$"]) {
                 new_value = json[json["$kind$"]];
             }
         }
@@ -703,7 +703,7 @@ let ftd_utils = {
                             let value = json_dependency.parameters[parameter].value.value;
                             if (ftd_utils.isJson(value)) {
                                 let json = JSON.parse(value);
-                                if (!!json["$kind$"]) {
+                                if (!!json && !!json["$kind$"]) {
                                     value = json[json["$kind$"]];
                                 }
                             }
@@ -717,8 +717,8 @@ let ftd_utils = {
                         for (const parameter in json_dependency.parameters) {
                             let default_value = json_dependency.parameters[parameter].default;
                             if (ftd_utils.isJson(default_value)) {
-                                let json = JSON.parse(value);
-                                if (!!json["$kind$"]) {
+                                let json = JSON.parse(default_value);
+                                if (!!json && !!json["$kind$"]) {
                                     default_value = json[json["$kind$"]];
                                 }
                             }
@@ -734,7 +734,7 @@ let ftd_utils = {
                                     let value = default_value.value;
                                     if (ftd_utils.isJson(value)) {
                                         let json = JSON.parse(value);
-                                        if (!!json["$kind$"]) {
+                                        if (!!json && !!json["$kind$"]) {
                                             value = json[json["$kind$"]];
                                         }
                                     }
