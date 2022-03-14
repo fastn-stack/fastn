@@ -15,7 +15,7 @@ style: italic
 padding-horizontal: 40
 padding-vertical: 20
 
--- ftd.text: Examples Index
+-- ftd.text: FTD Examples
 font: $heading
 padding-bottom: 20
 
