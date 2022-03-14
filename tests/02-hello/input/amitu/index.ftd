@@ -1,10 +1,21 @@
+-- import: fpm
+
 -- ftd.text: hello
+
+-- ftd.type body-large: sans-serif
+line-height: 25
+size: 16
+weight: 400
 
 -- ftd.text: hello_h2
 region: h2
+type: $body-large
 
 -- ftd.text: hello_h1
 region: h1
+type: $fpm.type.body-medium
+color: $fpm.color.primary
 
 -- ftd.text: hello_h0
 region: h0
+type: $fpm.type.body-small
