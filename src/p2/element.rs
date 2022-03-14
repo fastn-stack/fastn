@@ -146,14 +146,14 @@ pub fn common_from_properties(
             doc.name,
         )?,
         color: ftd::Color::from(
-            ftd::p2::utils::record_optional_with_ref("color", &unresolved_properties, doc, 0)?,
+            ftd::p2::utils::record_optional_with_ref("color", unresolved_properties, doc, 0)?,
             doc,
             0,
         )?,
         background_color: ftd::Color::from(
             ftd::p2::utils::record_optional_with_ref(
                 "background-color",
-                &unresolved_properties,
+                unresolved_properties,
                 doc,
                 0,
             )?,
@@ -163,7 +163,7 @@ pub fn common_from_properties(
         border_color: ftd::Color::from(
             ftd::p2::utils::record_optional_with_ref(
                 "border-color",
-                &unresolved_properties,
+                unresolved_properties,
                 doc,
                 0,
             )?,
@@ -224,7 +224,7 @@ pub fn common_from_properties(
         shadow_color: ftd::Color::from(
             ftd::p2::utils::record_optional_with_ref(
                 "shadow-color",
-                &unresolved_properties,
+                unresolved_properties,
                 doc,
                 0,
             )?,

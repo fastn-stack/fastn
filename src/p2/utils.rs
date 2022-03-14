@@ -673,6 +673,7 @@ pub fn record_and_ref(
     }
 }
 
+#[allow(clippy::type_complexity)]
 pub fn record_optional_with_ref(
     name: &str,
     properties: &std::collections::BTreeMap<String, ftd::component::Property>,
