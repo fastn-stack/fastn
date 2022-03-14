@@ -702,9 +702,6 @@ impl ftd::Text {
                 .insert(s("-webkit-box-orient"), "vertical".to_string());
         }
 
-        let (key, value) = style(&self.style.weight);
-        n.style.insert(s(key.as_str()), value);
-
         // TODO: text styles
         n
     }
@@ -761,9 +758,6 @@ impl ftd::TextBlock {
             n.style
                 .insert(s("-webkit-box-orient"), "vertical".to_string());
         }
-
-        let (key, value) = style(&self.style.weight);
-        n.style.insert(s(key.as_str()), value);
 
         // TODO: text styles
         n
@@ -823,8 +817,6 @@ impl ftd::Code {
                 .insert(s("-webkit-box-orient"), "vertical".to_string());
         }
 
-        let (key, value) = style(&self.style.weight);
-        n.style.insert(s(key.as_str()), value);
         n
     }
 }
@@ -935,9 +927,6 @@ impl ftd::Markups {
             n.style
                 .insert(s("-webkit-box-orient"), "vertical".to_string());
         }
-
-        let (key, value) = style(&self.style.weight);
-        n.style.insert(s(key.as_str()), value);
 
         if self.children.is_empty() {
             n.text = Some(self.text.rendered.clone());
@@ -1384,20 +1373,6 @@ fn text_align(l: &ftd::TextAlign) -> (String, String) {
         ftd::TextAlign::Left => ("text-align".to_string(), "left".to_string()),
         ftd::TextAlign::Right => ("text-align".to_string(), "right".to_string()),
         ftd::TextAlign::Justify => ("text-align".to_string(), "justify".to_string()),
-    }
-}
-
-fn style(l: &ftd::Weight) -> (String, String) {
-    match l {
-        ftd::Weight::Heavy => ("font-weight".to_string(), "900".to_string()),
-        ftd::Weight::ExtraBold => ("font-weight".to_string(), "800".to_string()),
-        ftd::Weight::Bold => ("font-weight".to_string(), "700".to_string()),
-        ftd::Weight::SemiBold => ("font-weight".to_string(), "600".to_string()),
-        ftd::Weight::Medium => ("font-weight".to_string(), "500".to_string()),
-        ftd::Weight::Regular => ("font-weight".to_string(), "400".to_string()),
-        ftd::Weight::Light => ("font-weight".to_string(), "300".to_string()),
-        ftd::Weight::ExtraLight => ("font-weight".to_string(), "200".to_string()),
-        ftd::Weight::HairLine => ("font-weight".to_string(), "100".to_string()),
     }
 }
 

@@ -1,3 +1,9 @@
+-- ftd.color white: white
+dark: white
+
+-- ftd.color 4D4D4D: #4D4D4D
+dark: #4D4D4D
+
 -- ftd.text toc-heading:
 caption text:
 text: $text
@@ -21,12 +27,12 @@ open: true
 --- ftd.text:
 if: $active is not null
 text: $name
-color: white
+color: $white
 
 --- ftd.text:
 if: $active is null
 text: $name
-color: \#4D4D4D
+color: $4D4D4D
 
 
 -- ftd.column ft_toc:

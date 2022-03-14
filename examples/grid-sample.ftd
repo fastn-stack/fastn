@@ -78,7 +78,7 @@ background-color: $color2
 
 
 --- ftd.text: About AmitU
-style: bold
+/style: bold
 slot: header
 align: center
 

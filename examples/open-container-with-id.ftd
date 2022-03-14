@@ -30,7 +30,7 @@ width: fill
 text: $title
 text: $title
 color: $black
-style: bold
+/style: bold
 padding-bottom: 12
 padding-top: 12
 

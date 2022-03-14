@@ -3,8 +3,25 @@ pub fn main() {
 
     let dir = std::path::Path::new("./examples/");
 
-    let mut write_doc =
-        "-- ftd.column:\n padding-horizontal: 40\n\n-- ftd.text: Examples Index\nstyle: extra-bold\npadding-bottom: 20\nstyle: bold\n".to_string();
+    let mut write_doc = indoc::indoc!(
+        "
+-- ftd.type heading: cursive
+line-height: 40
+weight: 800
+size: 40
+style: italic
+
+-- ftd.column:
+padding-horizontal: 40
+padding-vertical: 20
+
+-- ftd.text: Examples Index
+font: $heading
+padding-bottom: 20
+
+"
+    )
+    .to_string();
 
     if let Some(id) = id {
         let path = format!("./examples/{}.ftd", id);

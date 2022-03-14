@@ -173,7 +173,7 @@ border-width: 1
 spacing: 5
 
 --- ftd.text: Notes:
-style: bold
+/style: bold
 
 --- ftd.text:
 

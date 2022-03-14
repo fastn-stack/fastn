@@ -34,7 +34,7 @@ region: h0
 text: $title
 region: title
 color: $color-black
-style: bold
+/style: bold
 padding-bottom: 12
 
 --- markdown:
@@ -55,7 +55,7 @@ caption $title:
 region: title
 text: $title
 color: $color-black
-style: bold
+/style: bold
 padding-bottom: 12
 padding-top: 34
 
@@ -76,7 +76,7 @@ caption $title:
 text: $title
 region: title
 color: $color-black
-style: bold
+/style: bold
 padding-bottom: 12
 padding-top: 34
 
@@ -96,7 +96,7 @@ caption $title:
 text: $title
 region: title
 color: $color-black
-style: bold
+/style: bold
 padding-bottom: 12
 padding-top: 34
 
@@ -117,7 +117,7 @@ caption $title:
 text: $title
 region: title
 color: $color-black
-style: bold
+/style: bold
 padding-bottom: 12
 padding-top: 34
 
@@ -137,7 +137,7 @@ caption $title:
 text: $title
 region: title
 color: $color-black
-style: bold
+/style: bold
 padding-bottom: 12
 padding-top: 34
 
@@ -157,7 +157,7 @@ caption $title:
 text: $title
 region: title
 color: $color-black
-style: bold
+/style: bold
 padding-bottom: 12
 padding-top: 34
 

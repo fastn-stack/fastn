@@ -1224,11 +1224,20 @@ mod test {
                 text: ftd::markdown_line("hello"),
                 line: true,
                 common: ftd::Common {
-                    color: Some(ftd::ColorValue {
-                        r: 255,
-                        g: 0,
-                        b: 0,
-                        alpha: 1.0,
+                    color: Some(ftd::Color {
+                        light: ftd::ColorValue {
+                            r: 255,
+                            g: 0,
+                            b: 0,
+                            alpha: 1.0,
+                        },
+                        dark: ftd::ColorValue {
+                            r: 255,
+                            g: 0,
+                            b: 0,
+                            alpha: 1.0,
+                        },
+                        reference: None,
                     }),
                     conditional_attribute: std::array::IntoIter::new([(
                         s("color"),
@@ -1243,6 +1252,7 @@ mod test {
                                     ftd::ConditionalValue {
                                         value: s("rgba(0,128,0,1)"),
                                         important: false,
+                                        reference: None,
                                     },
                                 ),
                                 (
@@ -1253,12 +1263,14 @@ mod test {
                                     ftd::ConditionalValue {
                                         value: s("rgba(255,0,0,1)"),
                                         important: false,
+                                        reference: None,
                                     },
                                 ),
                             ],
                             default: Some(ftd::ConditionalValue {
                                 value: s("rgba(255,255,255,1)"),
                                 important: false,
+                                reference: None,
                             }),
                         },
                     )])
@@ -1273,11 +1285,17 @@ mod test {
             "
             -- boolean present: false
 
+            -- ftd.color red: red
+            dark: red
+
+            -- ftd.color green: green
+            dark: green
+
             -- ftd.text foo:
             caption name:
             color: white
-            color if $present: green
-            color if not $present: red
+            color if $present: $green
+            color if not $present: $red
             text: $name
 
             -- foo: hello
@@ -1916,11 +1934,20 @@ mod test {
                 text: ftd::markdown_line("5PM Tasks"),
                 line: true,
                 common: ftd::Common {
-                    color: Some(ftd::ColorValue {
-                        r: 255,
-                        g: 255,
-                        b: 255,
-                        alpha: 1.0,
+                    color: Some(ftd::Color {
+                        light: ftd::ColorValue {
+                            r: 255,
+                            g: 255,
+                            b: 255,
+                            alpha: 1.0,
+                        },
+                        dark: ftd::ColorValue {
+                            r: 255,
+                            g: 255,
+                            b: 255,
+                            alpha: 1.0,
+                        },
+                        reference: None,
                     }),
                     reference: Some(s("foo/bar#name@0,0,0")),
                     condition: Some(ftd::Condition {
@@ -1935,11 +1962,20 @@ mod test {
                 text: ftd::markdown_line("5PM Tasks"),
                 line: true,
                 common: ftd::Common {
-                    color: Some(ftd::ColorValue {
-                        r: 77,
-                        g: 77,
-                        b: 77,
-                        alpha: 1.0,
+                    color: Some(ftd::Color {
+                        light: ftd::ColorValue {
+                            r: 77,
+                            g: 77,
+                            b: 77,
+                            alpha: 1.0,
+                        },
+                        dark: ftd::ColorValue {
+                            r: 77,
+                            g: 77,
+                            b: 77,
+                            alpha: 1.0,
+                        },
+                        reference: None,
                     }),
                     reference: Some(s("foo/bar#name@0,0,0")),
                     condition: Some(ftd::Condition {
@@ -1959,11 +1995,20 @@ mod test {
                             text: ftd::markdown_line("Log"),
                             line: true,
                             common: ftd::Common {
-                                color: Some(ftd::ColorValue {
-                                    r: 255,
-                                    g: 255,
-                                    b: 255,
-                                    alpha: 1.0,
+                                color: Some(ftd::Color {
+                                    light: ftd::ColorValue {
+                                        r: 255,
+                                        g: 255,
+                                        b: 255,
+                                        alpha: 1.0,
+                                    },
+                                    dark: ftd::ColorValue {
+                                        r: 255,
+                                        g: 255,
+                                        b: 255,
+                                        alpha: 1.0,
+                                    },
+                                    reference: None,
                                 }),
                                 reference: Some(s("foo/bar#name@0,0,0,2")),
                                 condition: Some(ftd::Condition {
@@ -1979,11 +2024,20 @@ mod test {
                             text: ftd::markdown_line("Log"),
                             line: true,
                             common: ftd::Common {
-                                color: Some(ftd::ColorValue {
-                                    r: 77,
-                                    g: 77,
-                                    b: 77,
-                                    alpha: 1.0,
+                                color: Some(ftd::Color {
+                                    light: ftd::ColorValue {
+                                        r: 77,
+                                        g: 77,
+                                        b: 77,
+                                        alpha: 1.0,
+                                    },
+                                    dark: ftd::ColorValue {
+                                        r: 77,
+                                        g: 77,
+                                        b: 77,
+                                        alpha: 1.0,
+                                    },
+                                    reference: None,
                                 }),
                                 reference: Some(s("foo/bar#name@0,0,0,2")),
                                 condition: Some(ftd::Condition {
@@ -2003,11 +2057,20 @@ mod test {
                                         text: ftd::markdown_line("ChildLog"),
                                         line: true,
                                         common: ftd::Common {
-                                            color: Some(ftd::ColorValue {
-                                                r: 255,
-                                                g: 255,
-                                                b: 255,
-                                                alpha: 1.0,
+                                            color: Some(ftd::Color {
+                                                light: ftd::ColorValue {
+                                                    r: 255,
+                                                    g: 255,
+                                                    b: 255,
+                                                    alpha: 1.0,
+                                                },
+                                                dark: ftd::ColorValue {
+                                                    r: 255,
+                                                    g: 255,
+                                                    b: 255,
+                                                    alpha: 1.0,
+                                                },
+                                                reference: None,
                                             }),
                                             reference: Some(s("foo/bar#name@0,0,0,0,2")),
                                             condition: Some(ftd::Condition {
@@ -2023,11 +2086,20 @@ mod test {
                                         text: ftd::markdown_line("ChildLog"),
                                         line: true,
                                         common: ftd::Common {
-                                            color: Some(ftd::ColorValue {
-                                                r: 77,
-                                                g: 77,
-                                                b: 77,
-                                                alpha: 1.0,
+                                            color: Some(ftd::Color {
+                                                light: ftd::ColorValue {
+                                                    r: 77,
+                                                    g: 77,
+                                                    b: 77,
+                                                    alpha: 1.0,
+                                                },
+                                                dark: ftd::ColorValue {
+                                                    r: 77,
+                                                    g: 77,
+                                                    b: 77,
+                                                    alpha: 1.0,
+                                                },
+                                                reference: None,
                                             }),
                                             reference: Some(s("foo/bar#name@0,0,0,0,2")),
                                             condition: Some(ftd::Condition {
@@ -2068,11 +2140,20 @@ mod test {
                             text: ftd::markdown_line("Log2"),
                             line: true,
                             common: ftd::Common {
-                                color: Some(ftd::ColorValue {
-                                    r: 255,
-                                    g: 255,
-                                    b: 255,
-                                    alpha: 1.0,
+                                color: Some(ftd::Color {
+                                    light: ftd::ColorValue {
+                                        r: 255,
+                                        g: 255,
+                                        b: 255,
+                                        alpha: 1.0,
+                                    },
+                                    dark: ftd::ColorValue {
+                                        r: 255,
+                                        g: 255,
+                                        b: 255,
+                                        alpha: 1.0,
+                                    },
+                                    reference: None,
                                 }),
                                 reference: Some(s("foo/bar#name@0,0,0,3")),
                                 condition: Some(ftd::Condition {
@@ -2088,11 +2169,20 @@ mod test {
                             text: ftd::markdown_line("Log2"),
                             line: true,
                             common: ftd::Common {
-                                color: Some(ftd::ColorValue {
-                                    r: 77,
-                                    g: 77,
-                                    b: 77,
-                                    alpha: 1.0,
+                                color: Some(ftd::Color {
+                                    light: ftd::ColorValue {
+                                        r: 77,
+                                        g: 77,
+                                        b: 77,
+                                        alpha: 1.0,
+                                    },
+                                    dark: ftd::ColorValue {
+                                        r: 77,
+                                        g: 77,
+                                        b: 77,
+                                        alpha: 1.0,
+                                    },
+                                    reference: None,
                                 }),
                                 reference: Some(s("foo/bar#name@0,0,0,3")),
                                 condition: Some(ftd::Condition {
@@ -2154,6 +2244,12 @@ mod test {
 
         p!(
             r"
+            -- ftd.color white: white
+            dark: white
+            
+            -- ftd.color 4D4D4D: #4D4D4D
+            dark: #4D4D4D
+
             -- ftd.text toc-heading:
             caption text:
             text: $text
@@ -2178,12 +2274,12 @@ mod test {
             --- ftd.text:
             if: $active is not null
             text: $name
-            color: white
+            color: $white
 
             --- ftd.text:
             if: $active is null
             text: $name
-            color: \#4D4D4D
+            color: $4D4D4D
 
 
             -- ftd.column ft_toc:
@@ -2833,11 +2929,20 @@ mod test {
                 text: ftd::markdown_line("5PM Tasks"),
                 line: true,
                 common: ftd::Common {
-                    color: Some(ftd::ColorValue {
-                        r: 255,
-                        g: 255,
-                        b: 255,
-                        alpha: 1.0,
+                    color: Some(ftd::Color {
+                        light: ftd::ColorValue {
+                            r: 255,
+                            g: 255,
+                            b: 255,
+                            alpha: 1.0,
+                        },
+                        dark: ftd::ColorValue {
+                            r: 255,
+                            g: 255,
+                            b: 255,
+                            alpha: 1.0,
+                        },
+                        reference: None,
                     }),
                     reference: Some(s("foo/bar#name@0,0,0")),
                     condition: Some(ftd::Condition {
@@ -2852,11 +2957,20 @@ mod test {
                 text: ftd::markdown_line("5PM Tasks"),
                 line: true,
                 common: ftd::Common {
-                    color: Some(ftd::ColorValue {
-                        r: 77,
-                        g: 77,
-                        b: 77,
-                        alpha: 1.0,
+                    color: Some(ftd::Color {
+                        light: ftd::ColorValue {
+                            r: 77,
+                            g: 77,
+                            b: 77,
+                            alpha: 1.0,
+                        },
+                        dark: ftd::ColorValue {
+                            r: 77,
+                            g: 77,
+                            b: 77,
+                            alpha: 1.0,
+                        },
+                        reference: None,
                     }),
                     reference: Some(s("foo/bar#name@0,0,0")),
                     condition: Some(ftd::Condition {
@@ -2876,11 +2990,20 @@ mod test {
                             text: ftd::markdown_line("Log"),
                             line: true,
                             common: ftd::Common {
-                                color: Some(ftd::ColorValue {
-                                    r: 255,
-                                    g: 255,
-                                    b: 255,
-                                    alpha: 1.0,
+                                color: Some(ftd::Color {
+                                    light: ftd::ColorValue {
+                                        r: 255,
+                                        g: 255,
+                                        b: 255,
+                                        alpha: 1.0,
+                                    },
+                                    dark: ftd::ColorValue {
+                                        r: 255,
+                                        g: 255,
+                                        b: 255,
+                                        alpha: 1.0,
+                                    },
+                                    reference: None,
                                 }),
                                 reference: Some(s("foo/bar#name@0,0,0,2")),
                                 condition: Some(ftd::Condition {
@@ -2896,11 +3019,20 @@ mod test {
                             text: ftd::markdown_line("Log"),
                             line: true,
                             common: ftd::Common {
-                                color: Some(ftd::ColorValue {
-                                    r: 77,
-                                    g: 77,
-                                    b: 77,
-                                    alpha: 1.0,
+                                color: Some(ftd::Color {
+                                    light: ftd::ColorValue {
+                                        r: 77,
+                                        g: 77,
+                                        b: 77,
+                                        alpha: 1.0,
+                                    },
+                                    dark: ftd::ColorValue {
+                                        r: 77,
+                                        g: 77,
+                                        b: 77,
+                                        alpha: 1.0,
+                                    },
+                                    reference: None,
                                 }),
                                 reference: Some(s("foo/bar#name@0,0,0,2")),
                                 condition: Some(ftd::Condition {
@@ -2920,11 +3052,20 @@ mod test {
                                         text: ftd::markdown_line("ChildLog"),
                                         line: true,
                                         common: ftd::Common {
-                                            color: Some(ftd::ColorValue {
-                                                r: 255,
-                                                g: 255,
-                                                b: 255,
-                                                alpha: 1.0,
+                                            color: Some(ftd::Color {
+                                                light: ftd::ColorValue {
+                                                    r: 255,
+                                                    g: 255,
+                                                    b: 255,
+                                                    alpha: 1.0,
+                                                },
+                                                dark: ftd::ColorValue {
+                                                    r: 255,
+                                                    g: 255,
+                                                    b: 255,
+                                                    alpha: 1.0,
+                                                },
+                                                reference: None,
                                             }),
                                             reference: Some(s("foo/bar#name@0,0,0,0,2")),
                                             condition: Some(ftd::Condition {
@@ -2940,11 +3081,20 @@ mod test {
                                         text: ftd::markdown_line("ChildLog"),
                                         line: true,
                                         common: ftd::Common {
-                                            color: Some(ftd::ColorValue {
-                                                r: 77,
-                                                g: 77,
-                                                b: 77,
-                                                alpha: 1.0,
+                                            color: Some(ftd::Color {
+                                                light: ftd::ColorValue {
+                                                    r: 77,
+                                                    g: 77,
+                                                    b: 77,
+                                                    alpha: 1.0,
+                                                },
+                                                dark: ftd::ColorValue {
+                                                    r: 77,
+                                                    g: 77,
+                                                    b: 77,
+                                                    alpha: 1.0,
+                                                },
+                                                reference: None,
                                             }),
                                             reference: Some(s("foo/bar#name@0,0,0,0,2")),
                                             condition: Some(ftd::Condition {
@@ -2985,11 +3135,20 @@ mod test {
                             text: ftd::markdown_line("Log2"),
                             line: true,
                             common: ftd::Common {
-                                color: Some(ftd::ColorValue {
-                                    r: 255,
-                                    g: 255,
-                                    b: 255,
-                                    alpha: 1.0,
+                                color: Some(ftd::Color {
+                                    light: ftd::ColorValue {
+                                        r: 255,
+                                        g: 255,
+                                        b: 255,
+                                        alpha: 1.0,
+                                    },
+                                    dark: ftd::ColorValue {
+                                        r: 255,
+                                        g: 255,
+                                        b: 255,
+                                        alpha: 1.0,
+                                    },
+                                    reference: None,
                                 }),
                                 reference: Some(s("foo/bar#name@0,0,0,3")),
                                 condition: Some(ftd::Condition {
@@ -3005,11 +3164,20 @@ mod test {
                             text: ftd::markdown_line("Log2"),
                             line: true,
                             common: ftd::Common {
-                                color: Some(ftd::ColorValue {
-                                    r: 77,
-                                    g: 77,
-                                    b: 77,
-                                    alpha: 1.0,
+                                color: Some(ftd::Color {
+                                    light: ftd::ColorValue {
+                                        r: 77,
+                                        g: 77,
+                                        b: 77,
+                                        alpha: 1.0,
+                                    },
+                                    dark: ftd::ColorValue {
+                                        r: 77,
+                                        g: 77,
+                                        b: 77,
+                                        alpha: 1.0,
+                                    },
+                                    reference: None,
                                 }),
                                 reference: Some(s("foo/bar#name@0,0,0,3")),
                                 condition: Some(ftd::Condition {
@@ -3226,11 +3394,20 @@ mod test {
                 spacing: None,
                 common: ftd::Common {
                     width: Some(ftd::Length::Px { value: 200 }),
-                    background_color: Some(ftd::ColorValue {
-                        r: 243,
-                        g: 243,
-                        b: 243,
-                        alpha: 1.0,
+                    background_color: Some(ftd::Color {
+                        light: ftd::ColorValue {
+                            r: 243,
+                            g: 243,
+                            b: 243,
+                            alpha: 1.0,
+                        },
+                        dark: ftd::ColorValue {
+                            r: 243,
+                            g: 243,
+                            b: 243,
+                            alpha: 1.0,
+                        },
+                        reference: None,
                     }),
                     ..Default::default()
                 },
@@ -12463,11 +12640,20 @@ mod test {
                 text: ftd::markdown_line("/hello3"),
                 line: true,
                 common: ftd::Common {
-                    color: Some(ftd::ColorValue {
-                        r: 255,
-                        g: 0,
-                        b: 0,
-                        alpha: 1.0,
+                    color: Some(ftd::Color {
+                        light: ftd::ColorValue {
+                            r: 255,
+                            g: 0,
+                            b: 0,
+                            alpha: 1.0,
+                        },
+                        dark: ftd::ColorValue {
+                            r: 255,
+                            g: 0,
+                            b: 0,
+                            alpha: 1.0,
+                        },
+                        reference: None,
                     }),
                     ..Default::default()
                 },
@@ -12481,11 +12667,20 @@ mod test {
                     text: ftd::markdown_line("hello5"),
                     line: true,
                     common: ftd::Common {
-                        color: Some(ftd::ColorValue {
-                            r: 0,
-                            g: 128,
-                            b: 0,
-                            alpha: 1.0,
+                        color: Some(ftd::Color {
+                            light: ftd::ColorValue {
+                                r: 0,
+                                g: 128,
+                                b: 0,
+                                alpha: 1.0,
+                            },
+                            dark: ftd::ColorValue {
+                                r: 0,
+                                g: 128,
+                                b: 0,
+                                alpha: 1.0,
+                            },
+                            reference: None,
                         }),
                         ..Default::default()
                     },
@@ -12513,6 +12708,12 @@ mod test {
             "foo/bar",
             indoc::indoc!(
                 r"
+                -- ftd.color red: red
+                dark: red
+                
+                -- ftd.color green: green
+                dark: green
+                
                 /-- ftd.text:
                 cursor: pointer
 
@@ -12524,7 +12725,7 @@ mod test {
                 hello2
 
                 -- ftd.text:
-                color: red
+                color: $red
 
                 \/hello3
 
@@ -12533,7 +12734,7 @@ mod test {
                 /--- ftd.text: hello4
 
                 --- ftd.text: hello5
-                color: green
+                color: $green
                 /padding-left: 20
 
                 -- ftd.row foo:
@@ -14486,6 +14687,7 @@ mod test {
                                 ftd::ConditionalValue {
                                     value: s("rgba(255,0,0,1)"),
                                     important: false,
+                                    reference: None,
                                 },
                             )],
                             default: None,
@@ -14688,6 +14890,7 @@ mod test {
                                         ftd::ConditionalValue {
                                             value: s("rgba(0,0,0,1)"),
                                             important: false,
+                                            reference: None,
                                         },
                                     ),
                                     (
@@ -14698,6 +14901,7 @@ mod test {
                                         ftd::ConditionalValue {
                                             value: s("rgba(255,0,0,1)"),
                                             important: false,
+                                            reference: None,
                                         },
                                     ),
                                 ],
@@ -14857,6 +15061,7 @@ mod test {
                                             ftd::ConditionalValue {
                                                 value: s("rgba(0,0,0,1)"),
                                                 important: false,
+                                                reference: None,
                                             },
                                         )],
                                         default: None,
@@ -14943,6 +15148,7 @@ mod test {
                                     ftd::ConditionalValue {
                                         value: s("rgba(255,0,0,1)"),
                                         important: false,
+                                        reference: None,
                                     },
                                 )],
                                 default: None,
@@ -15027,6 +15233,7 @@ mod test {
                                 ftd::ConditionalValue {
                                     value: s("rgba(255,0,0,1)"),
                                     important: false,
+                                    reference: None,
                                 },
                             )],
                             default: None,
