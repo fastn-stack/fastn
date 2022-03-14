@@ -1,5 +1,17 @@
 -- import: ft
 
+-- ftd.color grey: grey
+dark: grey
+
+-- ftd.color green: green
+dark: green
+
+-- ftd.color red: red
+dark: red
+
+-- ftd.color blue: blue
+dark: blue
+
 -- ft.h0: Conditional Attributes
 
 `ftd` supports `if` expression to decide the value of attribute, based on the
@@ -32,7 +44,7 @@ text: $name
 \-- foo: hello
 
 -- ftd.text:
-color: grey
+color: $grey
 
 Output:
 
@@ -40,7 +52,7 @@ Output:
 
 -- ftd.row:
 border-width: 1
-border-color: grey
+border-color: $grey
 padding: 10
 width: fill
 
@@ -48,9 +60,9 @@ width: fill
 
 -- ftd.text foo1:
 caption name:
-color: grey
-color if $present: green
-color if not $present: red
+color: $grey
+color if $present: $green
+color if not $present: $red
 text: $name
 
 -- foo1: hello
@@ -80,7 +92,7 @@ text: $name
 \-- foo: hello
 
 -- ftd.text:
-color: grey
+color: $grey
 
 Output:
 
@@ -88,14 +100,14 @@ Output:
 
 -- ftd.row:
 border-width: 1
-border-color: grey
+border-color: $grey
 padding: 10
 width: fill
 
 -- ftd.text foo2:
 caption name:
-color: grey
-color if $present: green
+color: $grey
+color if $present: $green
 text: $name
 
 -- foo2: hello
@@ -123,7 +135,7 @@ text: $name
 yes: world
 
 -- ftd.text:
-color: grey
+color: $grey
 
 Output:
 
@@ -131,15 +143,15 @@ Output:
 
 -- ftd.row:
 border-width: 1
-border-color: grey
+border-color: $grey
 padding: 10
 width: fill
 
 -- ftd.text foo3:
 caption name:
 optional string yes:
-color: grey
-color if $yes is not null: blue
+color: $grey
+color if $yes is not null: $blue
 text: $name
 
 -- foo3: hello
@@ -173,7 +185,7 @@ text: $name
 yes: world
 
 -- ftd.text:
-color: grey
+color: $grey
 
 Output:
 
@@ -181,17 +193,17 @@ Output:
 
 -- ftd.row:
 border-width: 1
-border-color: grey
+border-color: $grey
 padding: 10
 width: fill
 
 -- ftd.text foo4:
 caption name:
 optional string yes:
-color: grey
-color if $present: blue
-color if not $present: red
-color if $yes is not null: green
+color: $grey
+color if $present: $blue
+color if not $present: $red
+color if $yes is not null: $green
 text: $name
 
 -- foo4: hello

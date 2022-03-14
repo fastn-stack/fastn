@@ -1,3 +1,6 @@
+-- ftd.color orange: orange
+dark: orange
+
 -- ftd.column:
 padding: 40
 spacing: 30
@@ -10,7 +13,7 @@ spacing: 30
 boolean open: false
 $on-click-outside$: $open = false
 border-width: 2
-background-color: orange
+background-color: $orange
 padding: 10
 
 --- ftd.text: Click here!

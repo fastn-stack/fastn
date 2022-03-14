@@ -1,6 +1,27 @@
 -- import: lib
 -- import: conditional-attributes as ca
 
+-- ftd.color yellow: yellow
+dark: yellow
+
+-- ftd.color red: red
+dark: red
+
+-- ftd.color green: green
+dark: green
+
+-- ftd.color blue: blue
+dark: blue
+
+-- ftd.color purple: purple
+dark: purple
+
+-- ftd.color pink: pink
+dark: pink
+
+-- ftd.color orange-color: orange
+dark: orange
+
 -- boolean orange: true
 
 -- string name: AmitU
@@ -13,7 +34,7 @@
 width: fill
 
 -- ftd.text:
-background-color: yellow
+background-color: $yellow
 margin-bottom: 20
 
 Now {ca.foo: {hello: Hello {underline1: AmitU}} world. {hello} **Greetings** {underline1} {amit} Amit Upadhyay} Outside
@@ -24,10 +45,10 @@ Now {ca.foo: {hello: Hello {underline1: AmitU}} world. {hello} **Greetings** {un
 {hello: Everyone should say **Hi** to each other}
 
 --- ftd.text hello: $lib.amitu.name
-color: red
+color: $red
 
 --- ftd.text underline1:
-background-color if $orange: orange
+background-color if $orange: $orange-color
 $on-click$: toggle $orange
 
 
@@ -77,27 +98,27 @@ This checks if everything is **alright**.
 {purple: Check this purple text for instance}
 
 --- ftd.text purple: Purple
-color: purple
+color: $purple
 
 
 -- md: India
 
 -- ftd.text md:
-background-color: green
+background-color: $green
 caption or body value:
 text: $value
-color: blue
-color if $dark-mode: yellow
+color: $blue
+color if $dark-mode: $yellow
 margin-bottom: 40
 
 --- ftd.text hello: Someone
 $on-click$: toggle $dark-mode
 
 --- ftd.text underline:
-background-color: orange
+background-color: $orange-color
 
 
 
 -- ftd.text amit: $text
 caption text:
-background-color: pink
+background-color: $pink

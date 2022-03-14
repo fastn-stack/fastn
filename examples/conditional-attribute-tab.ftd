@@ -1,3 +1,6 @@
+-- ftd.color red: red
+dark: red
+
 -- string current: one
 
 -- ftd.text: $current
@@ -7,16 +10,16 @@
 --- ftd.text: One
 padding: 10
 $on-click$: $current = one
-color if $current == one: red
+color if $current == one: $red
 
 
 --- ftd.text: Two
 padding: 10
 $on-click$: $current = two
-color if $current == two: red
+color if $current == two: $red
 
 
 --- ftd.text: Three
 padding: 10
 $on-click$: $current = three
-color if $current == three: red
+color if $current == three: $red

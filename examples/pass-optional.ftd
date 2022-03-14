@@ -1,15 +1,18 @@
+-- ftd.color red: red
+dark: red
+
 -- foo: First Hello
 left: 20
 
 -- foo: Second Hello
 right: 10
-color: red
+color: $red
 
 
 -- ftd.column foo:
 optional integer left:
 optional integer right:
-optional string color:
+optional ftd.color color:
 caption title: Hello world
 anchor: parent
 left if $left is not null: $left

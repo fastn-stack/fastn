@@ -1,5 +1,35 @@
 -- import: ft
 
+-- ftd.color efefef: #efefef
+dark: #efefef
+
+-- ftd.color white: white
+dark: white
+
+-- ftd.color ebe2ce: #ebe2ce
+dark: #ebe2ce
+
+-- ftd.color d9e7f8: #d9e7f8
+dark: #d9e7f8
+
+-- ftd.color dc9eb3: #dc9eb3
+dark: #dc9eb3
+
+-- ftd.color 76c2c4: #76c2c4
+dark: #76c2c4
+
+-- ftd.color fce251: #fce251
+dark: #fce251
+
+-- ftd.color d2d2ce: #d2d2ce
+dark: #d2d2ce
+
+-- ftd.color f09483: #f09483
+dark: #f09483
+
+-- ftd.color yellow: yellow
+dark: yellow
+
 -- string info: Click on various components to see the related-information.
 -- string kubernetes-info:
 
@@ -77,7 +107,7 @@ Kubernetes supports several container runtimes: Docker, containerd, CRI-O, and a
 
 
 -- ftd.column:
-background-color: #efefef
+background-color: $efefef
 width: fill
 height: fill
 padding: 40
@@ -85,7 +115,7 @@ padding: 40
 -- ft.h0: Architectural Diagram
 
 -- ftd.scene:
-background-color: white
+background-color: $white
 width: 1350
 height: 540
 align: center
@@ -131,7 +161,7 @@ right: 506
 
 
 -- ftd.column:
-background-color: #ebe2ce
+background-color: $ebe2ce
 width: fill
 padding: 10
 margin-top: 20
@@ -152,8 +182,8 @@ $info
 
 
 -- ftd.scene control-panel:
-background-color: #d9e7f8
-border-color if $MOUSE-IN: yellow
+background-color: $d9e7f8
+border-color if $MOUSE-IN: $yellow
 border-width if $MOUSE-IN: 3
 border-width: 2
 width: 600
@@ -211,8 +241,8 @@ left: 304
 padding: 20
 border-width: 1
 border-radius: 30
-background-color: white
-border-color if $MOUSE-IN: yellow
+background-color: $white
+border-color if $MOUSE-IN: $yellow
 border-width if $MOUSE-IN: 3
 $on-click$: $info = $etcd-info
 $on-click$: stop-propagation
@@ -223,7 +253,7 @@ $on-click$: prevent-default
 -- ftd.column kube-controller-manager:
 
 --- box:
-background-color: #dc9eb3
+background-color: $dc9eb3
 title: Kube Controller Manager
 
 --- text-block: Node Controller
@@ -251,7 +281,7 @@ $on-click$: prevent-default
 -- ftd.column cloud-controller-manager:
 
 --- box:
-background-color: #76c2c4
+background-color: $76c2c4
 title: Cloud Controller Manager
 
 --- text-block: Node Controller
@@ -276,10 +306,10 @@ $on-click$: prevent-default
 -- ftd.row kube-api-server:
 width: 100
 height: 270
-background-color: #fce251
+background-color: $fce251
 border-width: 1
 padding: 20
-border-color if $MOUSE-IN: yellow
+border-color if $MOUSE-IN: $yellow
 border-width if $MOUSE-IN: 3
 
 --- ftd.text: Kube Api Server
@@ -291,12 +321,12 @@ align: center
 
 
 -- ftd.scene nodes:
-background-color: #d2d2ce
+background-color: $d2d2ce
 border-width: 2
 width: 600
 height: 460
 align: center
-border-color if $MOUSE-IN: yellow
+border-color if $MOUSE-IN: $yellow
 border-width if $MOUSE-IN: 3
 
 --- ftd.text: Nodes
@@ -306,7 +336,7 @@ left: 5
 --- ftd.column:
 top: 50
 left: 90
-background-color: #f09483
+background-color: $f09483
 width: 400
 height: 300
 border-width: 1
@@ -321,7 +351,7 @@ left: 115
 
 
 -- ftd.scene worker-node:
-background-color: #f09483
+background-color: $f09483
 width: 400
 height: 300
 border-width: 1
@@ -354,7 +384,7 @@ $on-click$: prevent-default
 
 
 -- ftd.column box:
-optional string background-color:
+optional ftd.color background-color:
 string title:
 background-color: $background-color
 border-width: 1
@@ -364,7 +394,7 @@ align: center
 open: true
 append-at: box-id
 padding: 15
-border-color if $MOUSE-IN: yellow
+border-color if $MOUSE-IN: $yellow
 border-width if $MOUSE-IN: 3
 
 --- ftd.text: $title
@@ -382,12 +412,12 @@ id: box-id
 
 -- ftd.text text-block: $text
 caption text:
-background-color: white
+background-color: $white
 width: 80
 padding: 5
 align: center
 border-width: 1
-border-color if $MOUSE-IN: yellow
+border-color if $MOUSE-IN: $yellow
 border-width if $MOUSE-IN: 3
 
 -- ftd.row vertical-line:

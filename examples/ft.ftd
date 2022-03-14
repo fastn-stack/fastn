@@ -1,10 +1,26 @@
+-- ftd.color code-bg-title: #3a404e
+dark: #3a404e
+
+-- ftd.color code-title: #DCDCDC
+dark: #DCDCDC
+
+-- ftd.color code-color: #4D4D4D
+dark: #4D4D4D
+
+-- ftd.color code-bg: #2b303b
+dark: #2b303b
+
+-- ftd.color color-black: black
+dark: black
+
+
 -- ftd.text markdown:
 body body:
 optional boolean collapsed:
 optional caption title:
 optional boolean two_columns:
 text: $body
-color: #4d4d4d
+color: $code-color
 padding-bottom: 8
 
 
@@ -17,7 +33,7 @@ region: h0
 --- ftd.text:
 text: $title
 region: title
-color: black
+color: $color-black
 style: bold
 padding-bottom: 12
 
@@ -38,7 +54,7 @@ text: $title
 caption $title:
 region: title
 text: $title
-color: black
+color: $color-black
 style: bold
 padding-bottom: 12
 padding-top: 34
@@ -59,7 +75,7 @@ region: h2
 caption $title:
 text: $title
 region: title
-color: black
+color: $color-black
 style: bold
 padding-bottom: 12
 padding-top: 34
@@ -79,7 +95,7 @@ region: h3
 caption $title:
 text: $title
 region: title
-color: black
+color: $color-black
 style: bold
 padding-bottom: 12
 padding-top: 34
@@ -100,7 +116,7 @@ region: h4
 caption $title:
 text: $title
 region: title
-color: black
+color: $color-black
 style: bold
 padding-bottom: 12
 padding-top: 34
@@ -120,7 +136,7 @@ region: h5
 caption $title:
 text: $title
 region: title
-color: black
+color: $color-black
 style: bold
 padding-bottom: 12
 padding-top: 34
@@ -140,7 +156,7 @@ region: h6
 caption $title:
 text: $title
 region: title
-color: black
+color: $color-black
 style: bold
 padding-bottom: 12
 padding-top: 34
@@ -170,9 +186,9 @@ width: fill
 --- ftd.text:
 if: $caption is not null
 text: $caption
-color: #DCDCDC
+color: $code-title
 width: fill
-background-color: #3a404e
+background-color: $code-bg-title
 padding-top: 10
 padding-bottom: 10
 padding-left: 20
@@ -183,13 +199,13 @@ border-top-radius: 4
 if: $caption is not null
 text: $body
 lang: $lang
-color: #4D4D4D
+color: $code-color
 width: fill
 padding-top: 10
 padding-left: 20
 padding-bottom: 10
 padding-right: 20
-background-color: #2b303b
+background-color: $code-bg
 border-bottom-radius: 4
 overflow-x: auto
 
@@ -197,13 +213,13 @@ overflow-x: auto
 if: $caption is null
 text: $body
 lang: $lang
-color: #4D4D4D
+color: $code-color
 width: fill
 padding-top: 10
 padding-left: 20
 padding-bottom: 10
 padding-right: 20
-background-color: #2b303b
+background-color: $code-bg
 border-bottom-radius: 4
 border-top-radius: 4
 overflow-x: auto

@@ -1,10 +1,22 @@
+-- ftd.color red: red
+dark: red
+
+-- ftd.color green: green
+dark: green
+
+-- ftd.color orange: orange
+dark: orange
+
+-- ftd.color blue: blue
+dark: blue
+
 -- ftd.column ft_container:
 optional string id:
 id: $id
 padding-top: 30
 padding-left: 100
 align: center
-color: red
+color: $red
 
 --- ftd.text: Inside ft container
 
@@ -19,7 +31,7 @@ padding-left: 20
 padding-right: 20
 padding-bottom: 60
 align: top
-color: green
+color: $green
 
 --- ftd.text: Inside ft container
 
@@ -31,7 +43,7 @@ open: true
 append-at: desktop-container
 optional string id:
 id: $id
-color: orange
+color: $orange
 
 --- ftd.text: Desktop Main
 
@@ -53,7 +65,7 @@ open: true
 append-at: mobile-container
 optional string id:
 id: $id
-color: blue
+color: $blue
 
 --- ftd.text: Mobile Main
 

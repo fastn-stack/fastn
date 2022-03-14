@@ -1,3 +1,13 @@
+-- ftd.color red: red
+dark: red
+
+-- ftd.color blue: blue
+dark: blue
+
+-- ftd.color green: green
+dark: green
+
+
 -- ftd.column h1:
 region: h1
 padding-left: 10
@@ -51,19 +61,19 @@ id: h3-id
 if: $open
 
 -- ftd.column foo:
-color: red
+color: $red
 
 --- ftd.text: foo says hello
 
 -- ftd.column page:
-color: green
+color: $green
 open: true
 append-at: page-id
 
 --- ftd.text: Page
 
 --- ftd.column:
-color: blue
+color: $blue
 padding-left: 10
 id: page-id
 

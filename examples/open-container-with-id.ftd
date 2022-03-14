@@ -1,3 +1,9 @@
+-- ftd.color 4d4d4d: #4d4d4d
+dark: #4d4d4d
+
+-- ftd.color black: black
+dark: black
+
 -- ftd.column ft_container:
 optional string id:
 id: $id
@@ -12,7 +18,7 @@ optional boolean collapsed:
 optional caption title:
 optional boolean two_columns:
 text: $body
-color: \#4d4d4d
+color: $4d4d4d
 padding-bottom: 34
 
 -- ftd.column h1:
@@ -23,7 +29,7 @@ width: fill
 --- ftd.text:
 text: $title
 text: $title
-color: black
+color: $black
 style: bold
 padding-bottom: 12
 padding-top: 12

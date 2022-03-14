@@ -1,5 +1,9 @@
 -- import: lib
 
+-- ftd.color green: green
+dark: green
+
+
 -- optional string query:
 
 -- object obj:
@@ -22,7 +26,7 @@ $on-change$: message-host $obj
 You have typed: {value}
 
 --- ftd.text value: $query
-color: green
+color: $green
 font: $lib.cursive-font
 
 

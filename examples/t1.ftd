@@ -1,5 +1,11 @@
 -- integer by: 2
 
+-- ftd.color red: red
+dark: red
+
+-- ftd.color color1: rgba(0, 128, 0, 0.35)
+dark: rgba(0, 128, 0, 0.35)
+
 -- ftd.column:
 padding: 40
 
@@ -19,8 +25,8 @@ $on-click$: increment $a by $by
 
 --- ftd.integer:
 value: $a
-background-color if $b: rgba(0, 128, 0, 0.35)
-color if $a == 30: red
+background-color if $b: $color1
+color if $a == 30: $red
 
 -- foo:
 a: 20

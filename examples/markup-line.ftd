@@ -1,6 +1,9 @@
+-- ftd.color green: green
+dark: green
+
 -- ftd.text:
 
 hello {world}.
 
 -- ftd.text world: World
-color: green
+color: $green

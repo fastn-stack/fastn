@@ -6,6 +6,18 @@ dark: https://ftd.dev/static/images/logo.svg
 -- ftd.image-src src1: https://ca.slack-edge.com/T016XLVEW4W-U0174K0BDB5-gecc6caf7069-512
 dark: https://ca.slack-edge.com/T016XLVEW4W-U0174K0BDB5-gecc6caf7069-512
 
+-- ftd.color color1: rgba(153, 148, 148, 0.3)
+dark: rgba(153, 148, 148, 0.3)
+
+-- ftd.color color2: rgba(13, 131, 225, 0.23)
+dark: rgba(13, 131, 225, 0.23)
+
+-- ftd.color color3: rgba(255, 255, 255, 0.8)
+dark: rgba(255, 255, 255, 0.8)
+
+-- ftd.color 2196F3: #2196F3
+dark: #2196F3
+
 -- ftd.grid:
 slots: header header | sidebar main | sidebar footer
 slot-widths: 20% 80%
@@ -45,7 +57,7 @@ align: center
 -- ftd.row footer:
 width: fill
 height: fill
-background-color: rgba(153, 148, 148, 0.3)
+background-color: $color1
 spacing: space-between
 padding: 20
 
@@ -62,7 +74,7 @@ width: fill
 height: fill
 slots: header | main | footer
 slot-heights: 10% 80% 10%
-background-color: rgba(13, 131, 225, 0.23)
+background-color: $color2
 
 
 --- ftd.text: About AmitU
@@ -114,8 +126,8 @@ width: fill
 height: fill
 slot: footer
 spacing: space-between
-background-color: rgba(255, 255, 255, 0.8)
-color: #2196F3
+background-color: $color3
+color: $2196F3
 padding: 20
 
 

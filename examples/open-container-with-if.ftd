@@ -1,3 +1,18 @@
+-- ftd.color green: green
+dark: green
+
+-- ftd.color red: red
+dark: red
+
+-- ftd.color blue: blue
+dark: blue
+
+-- ftd.color grey: grey
+dark: grey
+
+-- ftd.color orange: orange
+dark: orange
+
 -- boolean iphone: false
 
 -- boolean android: false
@@ -5,7 +20,7 @@
 -- ftd.column iphone-display:
 optional string id:
 id: $id
-color: green
+color: $green
 open: true
 append-at: iphone-id
 
@@ -18,14 +33,14 @@ if: $iphone
 -- ftd.column desktop-display:
 optional string id:
 id: $id
-color: red
+color: $red
 
 --- ftd.text: Desktop Display
 
 -- ftd.column android-display:
 optional string id:
 id: $id
-color: blue
+color: $blue
 open: true
 append-at: android-id
 
@@ -69,13 +84,13 @@ padding-left: 10
 
 --- ftd.text:
 text: $name
-color: grey
+color: $grey
 
 -- ftd.column items:
 caption name:
 string price:
 string bio:
-color: orange
+color: $orange
 
 --- parent:
 id: /welcome/

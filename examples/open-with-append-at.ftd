@@ -1,5 +1,11 @@
 -- import: ft
 
+-- ftd.color green: green
+dark: green
+
+-- ftd.color red: red
+dark: red
+
 -- foo:
 
 -- ft.h1: Foo says Hello
@@ -26,7 +32,7 @@ open: true
 append-at: foo-id
 padding: 20
 border-width: 2
-color: red
+color: $red
 
 --- ftd.text: Before Foo
 
@@ -41,7 +47,7 @@ open: false
 append-at: bar-id
 padding: 20
 border-width: 2
-color: green
+color: $green
 
 --- ftd.text: Before Bar
 

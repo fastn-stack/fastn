@@ -1,4 +1,17 @@
--- string color-bg: green
+-- ftd.color color-bg: green
+dark: green
+
+-- ftd.color yellow: yellow
+dark: yellow
+
+-- ftd.color red: red
+dark: red
+
+-- ftd.color white: white
+dark: white
+
+-- ftd.color orange: orange
+dark: orange
 
 
 -- ftd.column:
@@ -22,7 +35,7 @@ $on-click$: toggle $open
 -- ftd.column gate-pass:
 width: 400
 align: center
-border-color: yellow
+border-color: $yellow
 border-width: 5
 caption title:
 body body:
@@ -39,9 +52,9 @@ align: center
 width: 100
 
 --- ftd.text: $title
-color: red
+color: $red
 width: 100
-background-color: white
+background-color: $white
 border-top: 4
 border-left: 4
 border-right: 4
@@ -54,7 +67,7 @@ $on-click$: toggle $open
 --- ftd.row:
 align: center
 width: 100
-border-color: red
+border-color: $red
 border-bottom: 4
 border-left: 4
 border-right: 4
@@ -74,14 +87,14 @@ padding: 20
 
 --- ftd.row:
 align: center
-background-color: orange
+background-color: $orange
 padding: 20
 if: $open
 
 --- ftd.integer:
 value: $code
 align: center
-color: white
+color: $white
 style: bold
 
 --- container: ftd.main
@@ -111,7 +124,7 @@ padding: 20
 --- ftd.text: www-mygate-com
 align: center
 width: fill
-color: white
+color: $white
 
 
 -- gate-pass: Invitation

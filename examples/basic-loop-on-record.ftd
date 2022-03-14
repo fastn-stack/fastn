@@ -1,17 +1,26 @@
+-- ftd.color grey: grey
+dark: grey
+
+-- ftd.color red: red
+dark: red
+
+-- ftd.color green: green
+dark: green
+
 -- ftd.column foo:
 caption name:
 string body:
 border-width: 1
-border-color: grey
+border-color: $grey
 padding: 10
 width: fill
 margin-top: 10
 
 --- ftd.text: $name
-color: red
+color: $red
 
 --- ftd.text: $body
-color: green
+color: $green
 
 -- record person:
 caption name:
