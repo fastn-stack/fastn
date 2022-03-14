@@ -25,7 +25,7 @@ pub struct Markups {
     pub text_align: TextAlign,
     pub line: bool,
     pub style: Style,
-    pub font: Option<Font>,
+    pub font: Option<Type>,
     pub line_clamp: Option<i64>,
     pub children: Vec<Markup>,
 }
@@ -669,12 +669,233 @@ impl Element {
                                 d.push(json);
                                 *dependencies = serde_json::to_string(&d).unwrap();
                             } else {
-                                dependencies
-                                    .insert(id, serde_json::to_string(&vec![json]).unwrap());
+                                dependencies.insert(
+                                    id.to_string(),
+                                    serde_json::to_string(&vec![json]).unwrap(),
+                                );
                             }
                         } else {
-                            panic!("{} should be declared 1", condition.variable)
+                            panic!("{} should be declared", condition.variable)
                         }
+                        if let Some(ref reference) = value.reference {
+                            if let Some(ftd::Data { dependencies, .. }) = data.get_mut(reference) {
+                                let json = ftd::Dependencies {
+                                    dependency_type: ftd::DependencyType::Variable,
+                                    condition: None,
+                                    parameters: std::array::IntoIter::new([(
+                                        k.to_string(),
+                                        ftd::ConditionalValueWithDefault {
+                                            value: ftd::ConditionalValue {
+                                                value: serde_json::to_string(
+                                                    &serde_json::json!({ "$variable$": condition.variable, "$node$": id}),
+                                                ).unwrap(),
+                                                important: false,
+                                                reference: None,
+                                            },
+                                            default: None,
+                                        },
+                                    )])
+                                    .collect(),
+                                };
+                                if let Some(dependencies) = dependencies.get_mut("$style$") {
+                                    let mut d = serde_json::from_str::<Vec<ftd::Dependencies>>(
+                                        dependencies,
+                                    )
+                                    .unwrap();
+                                    d.push(json);
+                                    *dependencies = serde_json::to_string(&d).unwrap();
+                                } else {
+                                    dependencies.insert(
+                                        "$style$".to_string(),
+                                        serde_json::to_string(&vec![json]).unwrap(),
+                                    );
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    pub fn get_color_event_dependencies(
+        children: &[ftd::Element],
+        data: &mut ftd::DataDependenciesMap,
+    ) {
+        for child in children {
+            let (reference, id) = match child {
+                ftd::Element::Column(ftd::Column {
+                    common, container, ..
+                })
+                | ftd::Element::Row(ftd::Row {
+                    common, container, ..
+                })
+                | ftd::Element::Scene(ftd::Scene {
+                    common, container, ..
+                })
+                | ftd::Element::Grid(ftd::Grid {
+                    common, container, ..
+                }) => {
+                    ftd::Element::get_color_event_dependencies(&container.children, data);
+                    if let Some((_, _, external_children)) = &container.external_children {
+                        ftd::Element::get_color_event_dependencies(external_children, data);
+                    }
+                    (common, &common.data_id)
+                }
+                ftd::Element::Markup(ftd::Markups {
+                    common, children, ..
+                }) => {
+                    markup_get_color_event_dependencies(children, data);
+                    (common, &common.data_id)
+                }
+                ftd::Element::Image(ftd::Image { common, .. })
+                | ftd::Element::Text(ftd::Text { common, .. })
+                | ftd::Element::TextBlock(ftd::TextBlock { common, .. })
+                | ftd::Element::Code(ftd::Code { common, .. })
+                | ftd::Element::IFrame(ftd::IFrame { common, .. })
+                | ftd::Element::Input(ftd::Input { common, .. })
+                | ftd::Element::Integer(ftd::Text { common, .. })
+                | ftd::Element::Boolean(ftd::Text { common, .. })
+                | ftd::Element::Decimal(ftd::Text { common, .. }) => (common, &common.data_id),
+                ftd::Element::Null => continue,
+            };
+            value_condition(reference, id, data);
+        }
+
+        fn markup_get_color_event_dependencies(
+            children: &[ftd::Markup],
+            data: &mut ftd::DataDependenciesMap,
+        ) {
+            for child in children {
+                let (reference, id) = match child.itext {
+                    IText::Text(ref t)
+                    | IText::Integer(ref t)
+                    | IText::Boolean(ref t)
+                    | IText::Decimal(ref t) => (&t.common, &t.common.data_id),
+                    IText::TextBlock(ref t) => (&t.common, &t.common.data_id),
+                    IText::Markup(ref t) => {
+                        markup_get_color_event_dependencies(&t.children, data);
+                        (&t.common, &t.common.data_id)
+                    }
+                };
+                markup_get_color_event_dependencies(&child.children, data);
+                value_condition(reference, id, data);
+            }
+        }
+
+        fn value_condition(
+            common: &ftd::Common,
+            id: &Option<String>,
+            data: &mut ftd::DataDependenciesMap,
+        ) {
+            let id = id.clone().expect("universal id should be present");
+            if let Some(ref color) = common.color {
+                color_condition(
+                    color,
+                    id.as_str(),
+                    data,
+                    "color",
+                    &common.conditional_attribute,
+                );
+            }
+            if let Some(ref color) = common.background_color {
+                color_condition(
+                    color,
+                    id.as_str(),
+                    data,
+                    "background-color",
+                    &common.conditional_attribute,
+                );
+            }
+            if let Some(ref color) = common.border_color {
+                color_condition(
+                    color,
+                    id.as_str(),
+                    data,
+                    "border-color",
+                    &common.conditional_attribute,
+                );
+            }
+
+            fn color_condition(
+                color: &ftd::Color,
+                id: &str,
+                data: &mut ftd::DataDependenciesMap,
+                style: &str,
+                conditional_attribute: &std::collections::BTreeMap<
+                    String,
+                    ftd::ConditionalAttribute,
+                >,
+            ) {
+                let (reference, value) = if let Some(ftd::ConditionalAttribute {
+                    default:
+                        Some(ConditionalValue {
+                            reference: Some(reference),
+                            value,
+                            ..
+                        }),
+                    ..
+                }) = conditional_attribute.get(style)
+                {
+                    (reference.to_string(), value.to_string())
+                } else if let Some(ref reference) = color.reference {
+                    (reference.to_string(),  serde_json::to_string(
+                        &serde_json::json!({ "light": ftd::html::color(&color.light), "dark": ftd::html::color(&color.dark), "$kind$": "light" }),
+                    ).unwrap())
+                } else {
+                    return;
+                };
+                let parameters = {
+                    let mut parameters = std::collections::BTreeMap::new();
+                    parameters.insert(
+                        style.to_string(),
+                        ftd::ConditionalValueWithDefault {
+                            value: ConditionalValue {
+                                value,
+                                important: false,
+                                reference: None,
+                            },
+                            default: None,
+                        },
+                    );
+                    let dependents = conditional_attribute
+                        .get(style)
+                        .unwrap_or(&ConditionalAttribute {
+                            attribute_type: AttributeType::Style,
+                            conditions_with_value: vec![],
+                            default: None,
+                        })
+                        .conditions_with_value
+                        .iter()
+                        .map(|(v, _)| v.variable.to_string())
+                        .collect::<Vec<String>>();
+                    parameters.insert(
+                        "dependents".to_string(),
+                        ftd::ConditionalValueWithDefault {
+                            value: ConditionalValue {
+                                value: serde_json::to_string(&dependents).unwrap(),
+                                important: false,
+                                reference: None,
+                            },
+                            default: None,
+                        },
+                    );
+                    parameters
+                };
+                if let Some(ftd::Data { dependencies, .. }) = data.get_mut(&reference) {
+                    let json = ftd::Dependencies {
+                        dependency_type: ftd::DependencyType::Style,
+                        condition: None,
+                        parameters,
+                    };
+                    if let Some(dependencies) = dependencies.get_mut(id) {
+                        let mut d =
+                            serde_json::from_str::<Vec<ftd::Dependencies>>(dependencies).unwrap();
+                        d.push(json);
+                        *dependencies = serde_json::to_string(&d).unwrap();
+                    } else {
+                        dependencies
+                            .insert(id.to_string(), serde_json::to_string(&vec![json]).unwrap());
                     }
                 }
             }
@@ -775,6 +996,62 @@ impl Element {
         }
     }
 
+    pub fn get_image_variable(document: &ftd::p2::Document, data: &mut ftd::DataDependenciesMap) {
+        for (k, v) in document.data.iter() {
+            if !data.contains_key(k) {
+                continue;
+            }
+            if let ftd::p2::Thing::Variable(ftd::Variable { value: default, .. }) = v {
+                match default.kind() {
+                    ftd::p2::Kind::Record { name, .. }
+                        if ["ftd#image-src", "ftd#color"].contains(&name.as_str()) => {}
+                    _ => {
+                        continue;
+                    }
+                }
+            } else {
+                continue;
+            };
+            let dependencies =
+                if let Some(ftd::Data { dependencies, .. }) = data.get_mut("ftd#dark-mode") {
+                    dependencies
+                } else {
+                    continue;
+                };
+            let json = ftd::Dependencies {
+                dependency_type: ftd::DependencyType::Variable,
+                condition: Some("true".to_string()),
+                parameters: std::array::IntoIter::new([(
+                    k.to_string(),
+                    ftd::ConditionalValueWithDefault {
+                        value: ConditionalValue {
+                            value: "dark".to_string(),
+                            important: false,
+                            reference: None,
+                        },
+                        default: Some(ConditionalValue {
+                            value: "light".to_string(),
+                            important: false,
+                            reference: None,
+                        }),
+                    },
+                )])
+                .collect(),
+            };
+
+            if let Some(dependencies) = dependencies.get_mut("$value#kind$") {
+                let mut d = serde_json::from_str::<Vec<ftd::Dependencies>>(dependencies).unwrap();
+                d.push(json);
+                *dependencies = serde_json::to_string(&d).unwrap();
+            } else {
+                dependencies.insert(
+                    "$value#kind$".to_string(),
+                    serde_json::to_string(&vec![json]).unwrap(),
+                );
+            }
+        }
+    }
+
     pub fn get_variable_dependencies(
         document: &ftd::p2::Document,
         data: &mut ftd::DataDependenciesMap,
@@ -843,10 +1120,12 @@ impl Element {
                             value: ConditionalValue {
                                 value,
                                 important: false,
+                                reference: None,
                             },
                             default: default.to_string().map(|value| ConditionalValue {
                                 value,
                                 important: false,
+                                reference: None,
                             }),
                         },
                     )])
@@ -1619,10 +1898,11 @@ pub struct ConditionalAttribute {
     pub default: Option<ConditionalValue>,
 }
 
-#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
+#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize, Default)]
 pub struct ConditionalValue {
     pub value: String,
     pub important: bool,
+    pub reference: Option<String>,
 }
 
 #[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
@@ -1684,7 +1964,7 @@ pub struct Common {
     pub shadow_color: Option<Color>,
     pub anchor: Option<ftd::Anchor>,
     pub gradient_direction: Option<GradientDirection>,
-    pub gradient_colors: Vec<Color>,
+    pub gradient_colors: Vec<ColorValue>,
     pub background_image: Option<String>,
     pub background_repeat: bool,
     pub background_parallax: bool,
@@ -1751,7 +2031,7 @@ impl Container {
 
 #[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
 pub struct Image {
-    pub src: String,
+    pub src: ImageSrc,
     pub description: String,
     pub common: Common,
     pub crop: bool,
@@ -1843,29 +2123,59 @@ impl FontDisplay {
     }
 }
 
-#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
-pub struct Font {
-    pub font: String,
-    pub line_height: i64,
-    pub size: i64,
-    pub weight: i64,
+#[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
+pub struct ImageSrc {
+    pub light: String,
+    pub dark: String,
 }
 
-impl Font {
+impl ImageSrc {
     pub fn from(
         l: &std::collections::BTreeMap<String, ftd::PropertyValue>,
         doc: &ftd::p2::TDoc,
         line_number: usize,
-    ) -> ftd::p1::Result<Font> {
+    ) -> ftd::p1::Result<ImageSrc> {
         let properties = l
             .iter()
             .map(|(k, v)| v.resolve(line_number, doc).map(|v| (k.to_string(), v)))
             .collect::<ftd::p1::Result<std::collections::BTreeMap<String, ftd::Value>>>()?;
-        Ok(Font {
+        Ok(ImageSrc {
+            light: ftd::p2::utils::string_optional("light", &properties, doc.name, 0)?
+                .unwrap_or_else(|| "".to_string()),
+            dark: ftd::p2::utils::string_optional("dark", &properties, doc.name, 0)?
+                .unwrap_or_else(|| "".to_string()),
+        })
+    }
+}
+
+#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
+pub struct Type {
+    pub font: String,
+    pub line_height: i64,
+    pub size: i64,
+    pub weight: i64,
+    pub style: Style,
+}
+
+impl Type {
+    pub fn from(
+        l: &std::collections::BTreeMap<String, ftd::PropertyValue>,
+        doc: &ftd::p2::TDoc,
+        line_number: usize,
+    ) -> ftd::p1::Result<Type> {
+        let properties = l
+            .iter()
+            .map(|(k, v)| v.resolve(line_number, doc).map(|v| (k.to_string(), v)))
+            .collect::<ftd::p1::Result<std::collections::BTreeMap<String, ftd::Value>>>()?;
+        Ok(Type {
             font: ftd::p2::utils::string("font", &properties, doc.name, 0)?,
             line_height: ftd::p2::utils::int("line-height", &properties, doc.name, 0)?,
             size: ftd::p2::utils::int("size", &properties, doc.name, 0)?,
             weight: ftd::p2::utils::int("weight", &properties, doc.name, 0)?,
+            style: ftd::Style::from(
+                ftd::p2::utils::string_optional("style", &properties, doc.name, 0)?,
+                doc.name,
+            )?,
         })
     }
 }
@@ -2020,7 +2330,7 @@ pub struct Text {
     pub common: Common,
     pub text_align: TextAlign,
     pub style: Style,
-    pub font: Option<Font>,
+    pub font: Option<Type>,
     pub line_clamp: Option<i64>,
     // TODO: line-height
     // TODO: region (https://package.elm-lang.org/packages/mdgriffith/elm-ui/latest/Element-Region)
@@ -2050,12 +2360,55 @@ pub struct Code {
     pub common: Common,
     pub text_align: TextAlign,
     pub style: Style,
-    pub font: Option<Font>,
+    pub font: Option<Type>,
     pub line_clamp: Option<i64>,
 }
 
 #[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
 pub struct Color {
+    pub light: ColorValue,
+    pub dark: ColorValue,
+    pub reference: Option<String>,
+}
+
+impl Color {
+    pub fn from(
+        l: (
+            Option<std::collections::BTreeMap<String, ftd::PropertyValue>>,
+            Option<String>,
+        ),
+        doc: &ftd::p2::TDoc,
+        line_number: usize,
+    ) -> ftd::p1::Result<Option<Color>> {
+        let reference = l.1;
+        let l = if let Some(l) = l.0 {
+            l
+        } else {
+            return Ok(None);
+        };
+
+        let properties = l
+            .iter()
+            .map(|(k, v)| v.resolve(line_number, doc).map(|v| (k.to_string(), v)))
+            .collect::<ftd::p1::Result<std::collections::BTreeMap<String, ftd::Value>>>()?;
+        Ok(Some(Color {
+            light: ftd::p2::element::color_from(
+                ftd::p2::utils::string_optional("light", &properties, doc.name, 0)?,
+                doc.name,
+            )?
+            .unwrap(),
+            dark: ftd::p2::element::color_from(
+                ftd::p2::utils::string_optional("dark", &properties, doc.name, 0)?,
+                doc.name,
+            )?
+            .unwrap(),
+            reference,
+        }))
+    }
+}
+
+#[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
+pub struct ColorValue {
     pub r: u8,
     pub g: u8,
     pub b: u8,

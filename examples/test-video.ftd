@@ -1,5 +1,8 @@
 -- import: ft
 
+-- ftd.image-src src: https://www.w3schools.com/cssref/img_tree.gif
+dark: https://www.w3schools.com/cssref/img_tree.gif
+
 -- ft.h1: Test video
 
 -- boolean foo: true
@@ -8,7 +11,7 @@
 $on-click$: toggle $foo
 
 -- ftd.image: Sample Image
-src: https://upload.wikimedia.org/wikipedia/en/e/ef/RD-S_sample_graph.png
+src: $src
 if: $foo
 
 

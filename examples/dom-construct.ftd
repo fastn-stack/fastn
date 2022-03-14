@@ -1,3 +1,15 @@
+-- ftd.color white: white
+dark: white
+
+-- ftd.color green: green
+dark: green
+
+-- ftd.color red: red
+dark: red
+
+-- ftd.color yellow: yellow
+dark: yellow
+
 -- string list strings:
 
 -- optional string query:
@@ -18,16 +30,16 @@ border-width: 2
 $on-input$: $query=$VALUE
 
 --- ftd.text: Add
-color: white
-background-color: green
+color: $white
+background-color: $green
 padding: 5
 if: $query is not null
 $on-click$: insert into $strings value $query at end
 $on-click$: clear $query
 
 --- ftd.text: Clear
-color: white
-background-color: red
+color: $white
+background-color: $red
 padding: 5
 $on-click$: clear $strings
 $on-click$: clear $query
@@ -37,7 +49,7 @@ $on-click$: clear $query
 You have typed: {value}
 
 --- ftd.text value: $query
-color: green
+color: $green
 
 
 
@@ -48,8 +60,8 @@ $loop$: $strings as $obj
 -- ftd.column show-data:
 caption text:
 padding: 10
-background-color: yellow
-color: red
+background-color: $yellow
+color: $red
 
 --- ftd.column:
 padding: 20

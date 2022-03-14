@@ -1,5 +1,8 @@
 -- import: ft
 
+-- ftd.color yellow: yellow
+dark: yellow
+
 -- ft.h0: FTD Language
 
 FTD is a domain-specific language to represent typed data and user interfaces.
@@ -101,7 +104,7 @@ id: outer
 
 \-- ftd.row:
 width: fill
-background-color: yellow
+background-color: $yellow
 padding: 10
 
 \-- ftd.text: $msg
@@ -137,7 +140,7 @@ id: outer
 
 -- ftd.row:
 width: fill
-background-color: yellow
+background-color: $yellow
 padding: 10
 
 -- ftd.text: $msg

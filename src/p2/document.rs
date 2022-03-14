@@ -80,8 +80,12 @@ impl Document {
                 ftd::Value::Boolean { value } => serde_json::to_value(value).ok(),
                 ftd::Value::Integer { value } => serde_json::to_value(value).ok(),
                 ftd::Value::String { text: value, .. } => serde_json::to_value(value).ok(),
-                ftd::Value::Record { fields, .. } => {
+                ftd::Value::Record { fields, name } => {
                     let mut value_fields = std::collections::BTreeMap::new();
+                    if ["ftd#image-src", "ftd#color"].contains(&name.as_str()) {
+                        value_fields
+                            .insert("$kind$".to_string(), serde_json::to_value("light").unwrap());
+                    }
                     for (k, v) in fields {
                         if let Ok(val) = v.resolve(0, doc) {
                             if let Some(val) = get_value(&val, doc) {
@@ -109,6 +113,8 @@ impl Document {
                 },
             );
         }
+        ftd::Element::get_image_variable(self, &mut data);
+        ftd::Element::get_color_event_dependencies(&self.main.container.children, &mut data);
         ftd::Element::get_variable_dependencies(self, &mut data);
         ftd::Element::get_visible_event_dependencies(&self.main.container.children, &mut data);
         ftd::Element::get_value_event_dependencies(&self.main.container.children, &mut data);
@@ -396,9 +402,7 @@ impl Document {
     }
 
     pub fn from(name: &str, source: &str, lib: &dyn ftd::p2::Library) -> ftd::p1::Result<Document> {
-        //dbg!("start", &source, &name, "end");
         let mut d = Self::without_render(name, source, lib)?;
-        //dbg!(&d.instructions, &source, &name);
 
         let mut rt = ftd::RT::from(
             d.name.as_str(),

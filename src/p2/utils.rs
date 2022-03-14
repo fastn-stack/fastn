@@ -546,6 +546,180 @@ pub fn complete_reference(reference: &Option<String>) -> Option<String> {
     reference
 }
 
+pub fn record_and_ref(
+    line_number: usize,
+    name: &str,
+    properties: &std::collections::BTreeMap<String, ftd::component::Property>,
+    doc: &ftd::p2::TDoc,
+    condition: &Option<ftd::p2::Boolean>,
+) -> ftd::p1::Result<(
+    std::collections::BTreeMap<String, ftd::PropertyValue>,
+    Option<String>,
+)> {
+    let properties = ftd::component::resolve_properties_with_ref(line_number, properties, doc)?;
+    match properties.get(name) {
+        Some((ftd::Value::Record { fields, .. }, reference)) => {
+            Ok((fields.to_owned(), reference.to_owned()))
+        }
+        Some((ftd::Value::Optional { data, kind }, reference)) => {
+            if !matches!(kind, ftd::p2::Kind::Record { .. }) {
+                return ftd::e2(
+                    format!("expected record, found: {:?}", kind),
+                    doc.name,
+                    line_number,
+                );
+            }
+
+            match data.as_ref() {
+                None => {
+                    let reference = match reference {
+                        Some(reference) => reference,
+                        None => {
+                            return ftd::e2(
+                                format!("expected record, found: {:?}", kind),
+                                doc.name,
+                                line_number,
+                            )
+                        }
+                    };
+
+                    if let Some(ftd::p2::Boolean::IsNotNull { value }) = condition {
+                        match value {
+                            ftd::PropertyValue::Reference { name, .. }
+                            | ftd::PropertyValue::Variable { name, .. } => {
+                                if name.eq(reference) {
+                                    return Ok((
+                                        std::collections::BTreeMap::new(),
+                                        complete_reference(&Some(reference.to_owned())),
+                                    ));
+                                }
+                            }
+                            _ => {}
+                        }
+                    }
+
+                    // In case when the optional string is null.
+                    // Return the empty string
+
+                    Ok((
+                        std::collections::BTreeMap::new(),
+                        complete_reference(&Some(reference.to_owned())),
+                    ))
+                }
+                Some(ftd::Value::Record { fields, .. }) => {
+                    Ok((fields.to_owned(), complete_reference(reference)))
+                }
+                _ => {
+                    return ftd::e2(
+                        format!("expected record, found: {:?}", kind),
+                        doc.name,
+                        line_number,
+                    )
+                }
+            }
+        }
+        Some((ftd::Value::None { kind }, reference)) if condition.is_some() => {
+            let kind = kind.inner();
+            if !matches!(kind, ftd::p2::Kind::Record { .. }) {
+                return ftd::e2(
+                    format!("expected record, found: {:?}", kind),
+                    doc.name,
+                    line_number,
+                );
+            }
+
+            let reference = match reference {
+                Some(reference) => reference,
+                None => {
+                    return ftd::e2(
+                        format!("expected record, found: {:?}", kind),
+                        doc.name,
+                        line_number,
+                    )
+                }
+            };
+            if let Some(ftd::p2::Boolean::IsNotNull { value }) = condition {
+                match value {
+                    ftd::PropertyValue::Reference { name, .. }
+                    | ftd::PropertyValue::Variable { name, .. } => {
+                        if name.eq({
+                            if let Some(reference) = reference.strip_prefix('@') {
+                                reference
+                            } else {
+                                reference
+                            }
+                        }) {
+                            return Ok((
+                                std::collections::BTreeMap::new(),
+                                complete_reference(&Some(reference.to_owned())),
+                            ));
+                        }
+                    }
+                    _ => {}
+                }
+            }
+            ftd::e2(
+                format!("expected record, found: {:?}", kind),
+                doc.name,
+                line_number,
+            )
+        }
+        Some(v) => ftd::e2(
+            format!("expected record, found: {:?}", v),
+            doc.name,
+            line_number,
+        ),
+        None => ftd::e2(format!("'{}' not found", name), doc.name, line_number),
+    }
+}
+
+pub fn record_optional_with_ref(
+    name: &str,
+    properties: &std::collections::BTreeMap<String, ftd::component::Property>,
+    doc: &ftd::p2::TDoc,
+    line_number: usize,
+) -> ftd::p1::Result<(
+    Option<std::collections::BTreeMap<String, ftd::PropertyValue>>,
+    Option<String>,
+)> {
+    let properties = ftd::component::resolve_properties_with_ref(line_number, properties, doc)?;
+    match properties.get(name) {
+        Some((ftd::Value::Record { fields, .. }, reference)) => {
+            Ok((Some(fields.to_owned()), reference.to_owned()))
+        }
+        Some((
+            ftd::Value::None {
+                kind: ftd::p2::Kind::Record { .. },
+            },
+            _,
+        )) => Ok((None, None)),
+        Some((ftd::Value::None { .. }, _)) => Ok((None, None)),
+        Some((
+            ftd::Value::Optional {
+                data,
+                kind: ftd::p2::Kind::Record { .. },
+            },
+            reference,
+        )) => match data.as_ref() {
+            Some(ftd::Value::Record { fields, .. }) => {
+                Ok((Some(fields.to_owned()), reference.to_owned()))
+            }
+            None => Ok((None, None)),
+            v => ftd::e2(
+                format!("expected record, for: `{}` found: {:?}", name, v),
+                doc.name,
+                line_number,
+            ),
+        },
+        Some(v) => ftd::e2(
+            format!("expected record, for: `{}` found: {:?}", name, v),
+            doc.name,
+            line_number,
+        ),
+        None => Ok((None, None)),
+    }
+}
+
 pub fn record_optional(
     name: &str,
     properties: &std::collections::BTreeMap<String, ftd::Value>,
@@ -598,13 +772,13 @@ pub fn string_optional(
             Some(ftd::Value::String { text: v, .. }) => Ok(Some(v.to_string())),
             None => Ok(None),
             v => ftd::e2(
-                format!("expected string1, for: `{}` found: {:?}", name, v),
+                format!("expected string, for: `{}` found: {:?}", name, v),
                 doc_id,
                 line_number,
             ),
         },
         Some(v) => ftd::e2(
-            format!("expected string2, for: `{}` found: {:?}", name, v),
+            format!("expected string, for: `{}` found: {:?}", name, v),
             doc_id,
             line_number,
         ),
@@ -626,13 +800,13 @@ pub fn string(
         }) => match data.as_ref() {
             Some(ftd::Value::String { text: v, .. }) => Ok(v.to_string()),
             v => ftd::e2(
-                format!("expected string3, for: `{}` found: {:?}", name, v),
+                format!("expected string, for: `{}` found: {:?}", name, v),
                 doc_id,
                 line_number,
             ),
         },
         v => ftd::e2(
-            format!("expected string4, for: `{}` found: {:?}", name, v),
+            format!("expected string, for: `{}` found: {:?}", name, v),
             doc_id,
             line_number,
         ),
@@ -801,7 +975,7 @@ pub fn bool_optional(
             Some(ftd::Value::Boolean { value: v }) => Ok(Some(*v)),
             None => Ok(None),
             v => ftd::e2(
-                format!("expected string5, for: `{}` found: {:?}", name, v),
+                format!("expected bool, for: `{}` found: {:?}", name, v),
                 doc_id,
                 line_number,
             ),
@@ -874,7 +1048,7 @@ pub fn decimal_optional(
             Some(ftd::Value::Decimal { value: v }) => Ok(Some(*v)),
             None => Ok(None),
             v => ftd::e2(
-                format!("expected string6, for: `{}` found: {:?}", name, v),
+                format!("expected decimal, for: `{}` found: {:?}", name, v),
                 doc_id,
                 line_number,
             ),

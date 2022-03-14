@@ -1,3 +1,6 @@
+-- ftd.color red: red
+dark: red
+
 -- ftd.column col:
 integer i:
 string ff: hello
@@ -16,7 +19,7 @@ string ff: hello
 boolean t: true
 string f: hello
 border-width: $foo
-color if $t: red
+color if $t: $red
 
 -- col:
 i: 20

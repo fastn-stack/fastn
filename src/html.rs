@@ -673,6 +673,15 @@ impl ftd::Text {
                 .insert(s("line-height"), format!("{}px", font.line_height));
             n.style.insert(s("font-size"), format!("{}px", font.size));
             n.style.insert(s("font-weight"), font.size.to_string());
+            if font.style.italic {
+                n.style.insert(s("font-style"), s("italic"));
+            }
+            if font.style.underline {
+                n.style.insert(s("text-decoration"), s("underline"));
+            }
+            if font.style.strike {
+                n.style.insert(s("text-decoration"), s("line-through"));
+            }
         }
 
         if self.style.italic {
@@ -785,6 +794,15 @@ impl ftd::Code {
                 .insert(s("line-height"), format!("{}px", font.line_height));
             n.style.insert(s("font-size"), format!("{}px", font.size));
             n.style.insert(s("font-weight"), font.size.to_string());
+            if font.style.italic {
+                n.style.insert(s("font-style"), s("italic"));
+            }
+            if font.style.underline {
+                n.style.insert(s("text-decoration"), s("underline"));
+            }
+            if font.style.strike {
+                n.style.insert(s("text-decoration"), s("line-through"));
+            }
         }
 
         if self.style.italic {
@@ -832,7 +850,7 @@ impl ftd::Image {
                 null: false,
             };
             img.style.insert(s("width"), s("100%"));
-            img.attrs.insert(s("src"), escape(self.src.as_str()));
+            img.attrs.insert(s("src"), escape(self.src.light.as_str()));
             img.attrs
                 .insert(s("alt"), escape(self.description.as_str()));
             if self.crop {
@@ -841,7 +859,7 @@ impl ftd::Image {
             }
             n.children.push(img);
         } else {
-            n.attrs.insert(s("src"), escape(self.src.as_str()));
+            n.attrs.insert(s("src"), escape(self.src.light.as_str()));
             n.attrs.insert(s("alt"), escape(self.description.as_str()));
             if self.crop {
                 n.style.insert(s("object-fit"), s("cover"));
@@ -889,6 +907,15 @@ impl ftd::Markups {
                 .insert(s("line-height"), format!("{}px", font.line_height));
             n.style.insert(s("font-size"), format!("{}px", font.size));
             n.style.insert(s("font-weight"), font.size.to_string());
+            if font.style.italic {
+                n.style.insert(s("font-style"), s("italic"));
+            }
+            if font.style.underline {
+                n.style.insert(s("text-decoration"), s("underline"));
+            }
+            if font.style.strike {
+                n.style.insert(s("text-decoration"), s("line-through"));
+            }
         }
 
         if self.style.italic {
@@ -1093,13 +1120,13 @@ impl ftd::Common {
             d.insert(s("margin-bottom"), format!("{}px", p));
         }
         if let Some(p) = &self.background_color {
-            d.insert(s("background-color"), color(p));
+            d.insert(s("background-color"), color(&p.light));
         }
         if let Some(p) = &self.color {
-            d.insert(s("color"), color(p));
+            d.insert(s("color"), color(&p.light));
         }
         if let Some(p) = &self.border_color {
-            d.insert(s("border-color"), color(p));
+            d.insert(s("border-color"), color(&p.light));
         }
         if let Some(p) = &self.overflow_x {
             let (key, value) = overflow(p, "overflow-x");
@@ -1151,8 +1178,8 @@ impl ftd::Common {
             || self.shadow_offset_y.is_some()
         {
             let shadow_color = match &self.shadow_color {
-                Some(p) => p,
-                None => &ftd::Color {
+                Some(p) => &p.light,
+                None => &ftd::ColorValue {
                     r: 0,
                     g: 0,
                     b: 0,
@@ -1328,8 +1355,8 @@ fn s(s: &str) -> String {
     s.to_string()
 }
 
-pub fn color(c: &ftd::Color) -> String {
-    let ftd::Color { r, g, b, alpha } = c;
+pub fn color(c: &ftd::ColorValue) -> String {
+    let ftd::ColorValue { r, g, b, alpha } = c;
     format!("rgba({},{},{},{})", r, g, b, alpha)
 }
 
@@ -1384,7 +1411,7 @@ pub fn overflow(l: &ftd::Overflow, f: &str) -> (String, String) {
     }
 }
 
-fn gradient(d: &ftd::GradientDirection, c: &[ftd::Color]) -> String {
+fn gradient(d: &ftd::GradientDirection, c: &[ftd::ColorValue]) -> String {
     let color = c.iter().map(color).collect::<Vec<String>>().join(",");
     let gradient_style = match d {
         ftd::GradientDirection::BottomToTop => "linear-gradient(to top ".to_string(),

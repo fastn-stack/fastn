@@ -29,10 +29,10 @@ pub use html::{anchor, color, length, overflow, Node};
 pub use or_type::OrType;
 pub use rt::RT;
 pub use ui::{
-    Anchor, AttributeType, Code, Color, Column, Common, ConditionalAttribute, ConditionalValue,
-    Container, Element, Font, FontDisplay, GradientDirection, Grid, IFrame, IText, Image, Input,
-    Length, Markup, Markups, NamedFont, Overflow, Position, Region, Row, Scene, Spacing, Style,
-    Text, TextAlign, TextBlock, TextFormat, Weight,
+    Anchor, AttributeType, Code, Color, ColorValue, Column, Common, ConditionalAttribute,
+    ConditionalValue, Container, Element, FontDisplay, GradientDirection, Grid, IFrame, IText,
+    Image, ImageSrc, Input, Length, Markup, Markups, NamedFont, Overflow, Position, Region, Row,
+    Scene, Spacing, Style, Text, TextAlign, TextBlock, TextFormat, Type, Weight,
 };
 pub use variable::{PropertyValue, TextSource, Value, Variable, VariableFlags};
 
@@ -111,7 +111,7 @@ pub struct Dependencies {
     pub parameters: std::collections::BTreeMap<String, ConditionalValueWithDefault>,
 }
 
-#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
+#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize, Default)]
 pub struct ConditionalValueWithDefault {
     pub value: ConditionalValue,
     pub default: Option<ConditionalValue>,

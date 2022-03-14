@@ -1,10 +1,46 @@
 -- import: ft
 -- import: comic_scene_crop_scale as comic1
 
+-- ftd.color cadetblue: cadetblue
+dark: cadetblue
+
+-- ftd.color white: white
+dark: white
+
+-- ftd.image-src src0: https://assets.teenvogue.com/photos/5beb340b368e21796e2d8b85/16:9/w_2560%2Cc_limit/ppg2016_keyart_horizontal_nologos_final.jpg
+dark: https://assets.teenvogue.com/photos/5beb340b368e21796e2d8b85/16:9/w_2560%2Cc_limit/ppg2016_keyart_horizontal_nologos_final.jpg
+
+-- ftd.image-src src1: https://www.clementoni.com/media/prod/en/20157/disney-mickey-mouse-104-pcs-puzzle-104-3d-model_GT4iLTt.jpg
+dark: https://www.clementoni.com/media/prod/en/20157/disney-mickey-mouse-104-pcs-puzzle-104-3d-model_GT4iLTt.jpg
+
+-- ftd.image-src src2: https://media.githubusercontent.com/media/gramener/comicgen/v1/svg/aryan/pose/handsfolded.svg
+dark: https://media.githubusercontent.com/media/gramener/comicgen/v1/svg/aryan/pose/handsfolded.svg
+
+-- ftd.image-src src3: https://media.githubusercontent.com/media/gramener/comicgen/v1/svg/aryan/emotion/smile.svg
+dark: https://media.githubusercontent.com/media/gramener/comicgen/v1/svg/aryan/emotion/smile.svg
+
+-- ftd.image-src src4: https://media.githubusercontent.com/media/gramener/comicgen/v1/svg/sophie/pose/holdingumbrella.svg
+dark: https://media.githubusercontent.com/media/gramener/comicgen/v1/svg/sophie/pose/holdingumbrella.svg
+
+-- ftd.image-src src5: https://media.githubusercontent.com/media/gramener/comicgen/v1/svg/sophie/emotion/excited.svg
+dark: https://media.githubusercontent.com/media/gramener/comicgen/v1/svg/sophie/emotion/excited.svg
+
+-- ftd.image-src src6: https://media.githubusercontent.com/media/gramener/comicgen/v1/svg/priyanuova/straight/pose/yuhoo.svg
+dark: https://media.githubusercontent.com/media/gramener/comicgen/v1/svg/priyanuova/straight/pose/yuhoo.svg
+
+-- ftd.image-src src7: https://media.githubusercontent.com/media/gramener/comicgen/v1/svg/priyanuova/straight/emotion/laugh.svg
+dark: https://media.githubusercontent.com/media/gramener/comicgen/v1/svg/priyanuova/straight/emotion/laugh.svg
+
+-- ftd.image-src src8: https://media.githubusercontent.com/media/gramener/comicgen/v1/svg/priyanuova/straight/pose/yuhoo.svg
+dark: https://media.githubusercontent.com/media/gramener/comicgen/v1/svg/priyanuova/straight/pose/yuhoo.svg
+
+-- ftd.image-src src9: https://media.githubusercontent.com/media/gramener/comicgen/v1/svg/priyanuova/straight/emotion/laugh.svg
+dark: https://media.githubusercontent.com/media/gramener/comicgen/v1/svg/priyanuova/straight/emotion/laugh.svg
+
 -- ft.h0: Once upon a time...
 
 -- ftd.scene:
-background-color: cadetblue
+background-color: $cadetblue
 width: 1070
 height: 1120
 align: center
@@ -30,14 +66,14 @@ left: 20
 top: 20
 
 --- ftd.image:
-src: https://assets.teenvogue.com/photos/5beb340b368e21796e2d8b85/16:9/w_2560%2Cc_limit/ppg2016_keyart_horizontal_nologos_final.jpg
+src: $src0
 top: 0
 left: 0
 width: 500
 
 --- ftd.text: Hello Everyone! We are PowerPuff Girls
 border-radius: 150
-background-color: white
+background-color: $white
 padding: 10
 left: 10
 top: 10
@@ -49,14 +85,14 @@ left: 540
 top: 20
 
 --- ftd.image:
-src: https://www.clementoni.com/media/prod/en/20157/disney-mickey-mouse-104-pcs-puzzle-104-3d-model_GT4iLTt.jpg
+src: $src1
 top: 0
 left: 0
 width: 500
 
 --- ftd.text: Hello Everyone! I am Mickey Mouse
 border-radius: 150
-background-color: white
+background-color: $white
 padding: 10
 left: 10
 top: 10
@@ -82,7 +118,7 @@ top: 0
 
 --- ftd.text: Hi! I am Ethan
 border-radius: 150
-background-color: white
+background-color: $white
 padding: 10
 left: 0
 top: 5
@@ -97,14 +133,14 @@ width: 200
 scale: 2.3
 
 --- ftd.image:
-src: https://media.githubusercontent.com/media/gramener/comicgen/v1/svg/aryan/pose/handsfolded.svg
+src: $src2
 top: 0
 left: 0
 height: 123
 crop: true
 
 --- ftd.image:
-src: https://media.githubusercontent.com/media/gramener/comicgen/v1/svg/aryan/emotion/smile.svg
+src: $src3
 top: 0
 left: 0
 
@@ -120,7 +156,7 @@ top: 0
 
 --- ftd.text: Nice to meet you Ethan. I am Sophie
 border-radius: 150
-background-color: white
+background-color: $white
 padding: 10
 left: 0
 top: 5
@@ -135,14 +171,14 @@ width: 200
 scale: 1.5
 
 --- ftd.image:
-src: https://media.githubusercontent.com/media/gramener/comicgen/v1/svg/sophie/pose/holdingumbrella.svg
+src: $src4
 top: 0
 left: 0
 height: 140
 crop: true
 
 --- ftd.image:
-src: https://media.githubusercontent.com/media/gramener/comicgen/v1/svg/sophie/emotion/excited.svg
+src: $src5
 top: 0
 left: 0
 
@@ -164,12 +200,12 @@ width: 200
 scale: 1.8
 
 --- ftd.image:
-src: https://media.githubusercontent.com/media/gramener/comicgen/v1/svg/priyanuova/straight/pose/yuhoo.svg
+src: $src6
 top: 0
 left: 0
 
 --- ftd.image:
-src: https://media.githubusercontent.com/media/gramener/comicgen/v1/svg/priyanuova/straight/emotion/laugh.svg
+src: $src7
 top: 0
 left: 0
 
@@ -182,11 +218,11 @@ scale: 1.8
 scale-x: -1
 
 --- ftd.image:
-src: https://media.githubusercontent.com/media/gramener/comicgen/v1/svg/priyanuova/straight/pose/yuhoo.svg
+src: $src8
 top: 0
 left: 0
 
 --- ftd.image:
-src: https://media.githubusercontent.com/media/gramener/comicgen/v1/svg/priyanuova/straight/emotion/laugh.svg
+src: $src9
 top: 0
 left: 0

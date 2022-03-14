@@ -1,11 +1,26 @@
 -- boolean present: false
 
+-- ftd.color red: red
+dark: red
+
+-- ftd.color yellow: yellow
+dark: yellow
+
+-- ftd.color green: green
+dark: green
+
+-- ftd.color 6b223a: #6b223a
+dark: #6b223a
+
+-- ftd.color white: white
+dark: white
+
 -- ftd.text foo:
 body name:
-color if $present: red
+color if $present: $red
 padding-horizontal if $present: 10
 height if $present: 50
-background-color if $present: yellow
+background-color if $present: $yellow
 border-left if $present: 2
 cursor if $present: cell
 border-top-radius if $present: 5
@@ -15,8 +30,8 @@ shadow-offset-x if $present: 2
 shadow-offset-y if $present: 4
 shadow-blur: 4
 shadow-blur if $present: 10
-shadow-color: green
-shadow-color if $present: #6b223a
+shadow-color: $green
+shadow-color if $present: $6b223a
 shadow-size if $present: 5
 text: $name
 background-image: https://www.w3schools.com/cssref/img_tree.gif
@@ -56,9 +71,9 @@ align if not $present: center
 align if $present: top-right
 
 --- ftd.text: Bar says hello
-color: white
-color if $present: green
-color if not $present: red
+color: $white
+color if $present: $green
+color if not $present: $red
 padding if $present: 5
 
 --- ftd.text: Click Here!

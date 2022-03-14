@@ -1,6 +1,12 @@
+-- ftd.color red: red
+dark: red
+
+-- ftd.color green: green
+dark: green
+
 -- ftd.text foo: hello
 integer size: 10
-color: red
+color: $red
 border-width: $size
 
 -- ftd.column moo:
@@ -33,5 +39,5 @@ g: moo: hello again
 > t: foo:
 >> size: 20
 > k: ftd.text: hello amitu!
->> color: green
+>> color: $green
 >> border-width: 10

@@ -1,3 +1,5 @@
+-- ftd.color red: red
+dark: red
 
 -- ftd.column desktop:
 width: fill
@@ -57,7 +59,7 @@ padding-left: 10
 
 -- ftd.column:
 padding-left: 10
-color: red
+color: $red
 
 -- ftd.text: Hello again
 

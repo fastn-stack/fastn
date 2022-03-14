@@ -12,12 +12,202 @@
       "0,0": "[{\"dependency_type\":\"Visible\",\"condition\":\"true\",\"parameters\":{}}]",
       "0,1": "[{\"dependency_type\":\"Visible\",\"condition\":\"false\",\"parameters\":{}}]"
     }
+  },
+  "ftd#dark-mode": {
+    "value": "false",
+    "dependencies": {
+      "$value#kind$": "[{\"dependency_type\":\"Variable\",\"condition\":\"true\",\"parameters\":{\"ft#code-bg\":{\"value\":{\"value\":\"dark\",\"important\":false,\"reference\":null},\"default\":{\"value\":\"light\",\"important\":false,\"reference\":null}}}},{\"dependency_type\":\"Variable\",\"condition\":\"true\",\"parameters\":{\"ft#code-bg-title\":{\"value\":{\"value\":\"dark\",\"important\":false,\"reference\":null},\"default\":{\"value\":\"light\",\"important\":false,\"reference\":null}}}},{\"dependency_type\":\"Variable\",\"condition\":\"true\",\"parameters\":{\"ft#code-color\":{\"value\":{\"value\":\"dark\",\"important\":false,\"reference\":null},\"default\":{\"value\":\"light\",\"important\":false,\"reference\":null}}}},{\"dependency_type\":\"Variable\",\"condition\":\"true\",\"parameters\":{\"ft#code-title\":{\"value\":{\"value\":\"dark\",\"important\":false,\"reference\":null},\"default\":{\"value\":\"light\",\"important\":false,\"reference\":null}}}},{\"dependency_type\":\"Variable\",\"condition\":\"true\",\"parameters\":{\"ft#color-black\":{\"value\":{\"value\":\"dark\",\"important\":false,\"reference\":null},\"default\":{\"value\":\"light\",\"important\":false,\"reference\":null}}}}]"
+    }
+  },
+  "ftd#follow-system-dark-mode": {
+    "value": "true",
+    "dependencies": {}
+  },
+  "ftd#system-dark-mode": {
+    "value": "false",
+    "dependencies": {}
   }
 }
     </script>
     <script type="ftd" id="ftd-external-children">
         {}
     </script>
+    <script>
+        
+    </script>
+    <style>
+        html {
+    height: 100%;
+    width: 100%;
+}
+
+body {
+    margin: 0;
+    height: 100%;
+    width: 100%;
+}
+
+
+pre {
+    white-space: break-spaces;
+}
+
+pre code {
+    overflow-x: auto;
+    display: block;
+    padding: 10px !important;
+}
+
+p {
+    margin: 0;
+}
+
+ul {
+    margin: 0;
+}
+
+.ft_md ul,
+.ft_md ol,
+.ft_md p {
+    margin: 10px 0;
+}
+
+.ft_md h1,
+.ft_md h2,
+.ft_md h3,
+.ft_md h4,
+.ft_md h5 {
+    margin-top: 34px;
+    margin-bottom: 0;
+    line-height: 1.2em;
+    color: #000000;
+}
+
+.ft_md ul ul,
+.ft_md ul ol,
+.ft_md ol ul,
+.ft_md ol ol {
+    line-height: 1.5em;
+    margin: 0;
+}
+
+.ft_md ul li,
+.ft_md ol li,
+.ft_md ul ol li .ft_md ul ul li .ft_md ol ul li .ft_md ol ol li {
+    position: relative;
+    padding-left: 32px;
+    margin: 4px 0;
+}
+
+.ft_md ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.ft_md ol {
+    list-style: none;
+    padding-left: 0;
+    counter-reset: item;
+}
+
+.ft_md ol li:before,
+.ft_md ol ol li:before,
+.ft_md ul ol li:before {
+    content: counter(item);
+    counter-increment: item;
+    background-color: #e4e9eb;
+    color: #000000;
+    font-size: 11px;
+    line-height: 10px;
+    text-align: center;
+    padding: 4px 0;
+    height: 10px;
+    width: 18px;
+    border-radius: 10px;
+    position: absolute;
+    left: 0;
+    top: 5px;
+}
+
+.ft_md ul li::before,
+.ft_md ul ul li::before,
+.ft_md ol ul li::before {
+    content: "";
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    left: 8px;
+    top: 10px;
+    border-radius: 50%;
+    background: #c1c8ce;
+}
+
+.ft_md a {
+    color: #0047b4;
+    text-decoration: none;
+}
+
+.ft_md a:visited {
+    color: #632ec4;
+}
+
+.ft_md a:hover {
+    text-decoration: none;
+}
+
+.ft_md code {
+    font-size: 0.9em;
+    padding: 0.1em 0.25em;
+    background-color: rgba(159, 155, 155, 0.27);
+    border-radius: 4px;
+}
+
+.ft_md blockquote {
+    padding: 0.25em 1em;
+    margin: 1em 0;
+    background-color: #f0f0f0;
+    border-radius: 3px;
+}
+
+.ft_md blockquote>blockquote {
+    margin: 0;
+}
+
+body.fpm-dark .ft_md code {
+    color: #f9f9f9;
+    background-color: rgba(255, 255, 255, 0.12);
+}
+
+body.fpm-dark .ft_md blockquote {
+    background-color: rgba(240, 240, 240, 0.12);
+}
+
+body.fpm-dark .ft_md a {
+    color: #58a6ff;
+    text-decoration: none;
+}
+
+body.fpm-dark .ft_md a:visited {
+    color: #a27de7;
+}
+
+body.fpm-dark .ft_md a code {
+    color: #58a6ff;
+}
+
+body.fpm-dark .ft_md a:visited code {
+    color: #a27de7;
+}
+    </style>
+
+</head>
+    <body style="height: 100%;">
+
+        <div data-id="main:root" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; height: 100%; justify-content: flex-start; white-space: initial; width: 100%" class="ft_md"><div data-id="0:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; white-space: initial" class="ft_md"><div data-id="0,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-weight: 400; text-align: left; white-space: initial" class="ft_md">Mobile</div>
+<div data-id="0,1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: none; font-weight: 400; text-align: left; white-space: initial" class="ft_md">Desktop</div></div>
+<div data-id="1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;toggle&quot;,&quot;target&quot;:&quot;event-onclick-toggle.ftd#mobile&quot;,&quot;parameters&quot;:{}}]', this)" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; text-align: left; white-space: initial" class="ft_md">Click here!</div></div>
+
+
     <script>
         // all ftd_utils are meant to be pure functions only: they can only depend on the
 // input passed, not on closures or global data etc
@@ -329,6 +519,13 @@ let ftd_utils = {
 
     handle_action: function (id, target, value, data, ftd_external_children) {
         data[target].value = value.toString();
+        let new_value = data[target].value;
+        if (ftd_utils.isJson(data[target].value)) {
+            let json = JSON.parse(new_value);
+            if (!!json && !!json["$kind$"]) {
+                new_value = json[json["$kind$"]];
+            }
+        }
 
         let dependencies = data[target].dependencies;
         for (const dependency in dependencies) {
@@ -352,7 +549,12 @@ let ftd_utils = {
                         deps[dependency] = dependencies[dependency];
                         data[target].dependencies = deps;
                     } else {
-                        document.querySelector(`[data-id="${dependency}:${id}"]`).innerText = data[target].value;
+                        let doc = document.querySelector(`[data-id="${dependency}:${id}"]`);
+                        if (doc.src !== undefined) {
+                            doc.src = new_value;
+                        } else {
+                            doc.innerText = new_value;
+                        }
                     }
                 } else if (json_dependency.dependency_type === "Visible") {
                     let display = "none";
@@ -374,10 +576,34 @@ let ftd_utils = {
                     ftd_utils.first_child_styling(`${dependency}:${id}`);
 
                 } else if (json_dependency.dependency_type === "Variable") {
-                    if (ftd_utils.is_equal_condition(data[target].value, json_dependency.condition)) {
+                    if (!json_dependency.condition) {
+                        if (dependency === "$style$") {
+                            for (const parameter in json_dependency.parameters) {
+                                let param_val = JSON.parse(json_dependency.parameters[parameter].value.value);
+                                let node = param_val["$node$"];
+                                let variable = param_val["$variable$"];
+                                let dependent = data[variable].value;
+                                let dependent_dependencies = JSON.parse(data[variable].dependencies[node]);
+                                for (const d in dependent_dependencies) {
+                                    if (dependent_dependencies[d].dependency_type !== "Style"
+                                        || !dependent_dependencies[d].parameters[parameter]) {
+                                        continue;
+                                    }
+                                    dependent_dependencies[d].parameters[parameter].value.value = data[target].value;
+                                }
+                                data[variable].dependencies[node] = JSON.stringify(dependent_dependencies);
+                                ftd_utils.handle_action(id, variable, dependent, data, ftd_external_children);
+                            }
+                        }
+                    } else if (ftd_utils.is_equal_condition(data[target].value, json_dependency.condition)) {
                         for (const parameter in json_dependency.parameters) {
                             if (data[parameter] !== undefined) {
                                 let value = json_dependency.parameters[parameter].value.value;
+                                if (dependency === "$value#kind$") {
+                                    let new_value = JSON.parse(data[parameter].value);
+                                    new_value["$kind$"] = value;
+                                    value = JSON.stringify(new_value);
+                                }
                                 ftd_utils.handle_action(id, parameter, value, data, ftd_external_children)
                             }
                         }
@@ -388,14 +614,57 @@ let ftd_utils = {
                                 if (default_value === null) {
                                     continue;
                                 }
+                                if (dependency === "$value#kind$") {
+                                    let new_value = JSON.parse(data[parameter].value);
+                                    new_value["$kind$"] = default_value.value;
+                                    default_value.value = JSON.stringify(new_value);
+                                }
                                 ftd_utils.handle_action(id, parameter, default_value.value, data, ftd_external_children)
                             }
                         }
                     }
                 } else if (json_dependency.dependency_type === "Style") {
-                    if (ftd_utils.is_equal_condition(data[target].value, json_dependency.condition)) {
+                    if (!json_dependency.condition) {
+                        let set = [];
+                        if (!!json_dependency.parameters["dependents"]) {
+                            set = JSON.parse(json_dependency.parameters["dependents"].value.value);
+                        }
+                        if (!!set.length) {
+                            let style_attr = Object.keys(json_dependency.parameters).filter(w => w !== "dependents")[0];
+                            for (const idx in set) {
+                                let dependent = data[set[idx]].value;
+                                let dependent_dependencies = JSON.parse(data[set[idx]].dependencies[dependency]);
+                                for (const d in dependent_dependencies) {
+                                    if (dependent_dependencies[d].dependency_type !== "Style"
+                                        || !dependent_dependencies[d].parameters[style_attr]) {
+                                        continue;
+                                    }
+                                    dependent_dependencies[d].parameters[style_attr].default.value = data[target].value;
+                                }
+                                data[set[idx]].dependencies[dependency] = JSON.stringify(dependent_dependencies);
+                                ftd_utils.handle_action(id, set[idx], dependent, data, ftd_external_children);
+                            }
+                            continue;
+                        }
+                        for (const parameter in json_dependency.parameters) {
+                            if (parameter === "dependents") {
+                                continue;
+                            }
+                            let important = json_dependency.parameters[parameter].value.important;
+                            ftd_utils.set_style(parameter, `${dependency}:${id}`, new_value, important);
+                            if (!styles_edited.includes(parameter)) {
+                                styles_edited.push(parameter);
+                            }
+                        }
+                    } else if (ftd_utils.is_equal_condition(data[target].value, json_dependency.condition)) {
                         for (const parameter in json_dependency.parameters) {
                             let value = json_dependency.parameters[parameter].value.value;
+                            if (ftd_utils.isJson(value)) {
+                                let json = JSON.parse(value);
+                                if (!!json && !!json["$kind$"]) {
+                                    value = json[json["$kind$"]];
+                                }
+                            }
                             let important = json_dependency.parameters[parameter].value.important;
                             ftd_utils.set_style(parameter, `${dependency}:${id}`, value, important);
                             if (!styles_edited.includes(parameter)) {
@@ -405,6 +674,12 @@ let ftd_utils = {
                     } else {
                         for (const parameter in json_dependency.parameters) {
                             let default_value = json_dependency.parameters[parameter].default;
+                            if (ftd_utils.isJson(default_value)) {
+                                let json = JSON.parse(default_value);
+                                if (!!json && !!json["$kind$"]) {
+                                    default_value = json[json["$kind$"]];
+                                }
+                            }
                             if (!styles_edited.includes(parameter)) {
                                 if (default_value === null) {
                                     if (["border-left-width", "border-right-width", "border-top-width", "border-bottom-width"].includes(parameter)) {
@@ -415,6 +690,12 @@ let ftd_utils = {
                                     }
                                 } else {
                                     let value = default_value.value;
+                                    if (ftd_utils.isJson(value)) {
+                                        let json = JSON.parse(value);
+                                        if (!!json && !!json["$kind$"]) {
+                                            value = json[json["$kind$"]];
+                                        }
+                                    }
                                     let important = default_value.important;
                                     ftd_utils.set_style(parameter, `${dependency}:${id}`, value, important);
                                 }
@@ -736,182 +1017,103 @@ function console_print(id, data) {
     console.log(data);
 }
 
-        
-    </script>
-    <style>
-        html {
-    height: 100%;
-    width: 100%;
-}
+(function () {
+    const DARK_MODE = "ftd#dark-mode";
+    const SYSTEM_DARK_MODE = "ftd#system-dark-mode";
+    const FOLLOW_SYSTEM_DARK_MODE = "ftd#follow-system-dark-mode";
+    const DARK_MODE_COOKIE = "ftd-dark-mode";
+    const COOKIE_SYSTEM_LIGHT = "system-light";
+    const COOKIE_SYSTEM_DARK = "system-dark";
+    const COOKIE_DARK_MODE = "dark";
+    const COOKIE_LIGHT_MODE = "light";
+    const DARK_MODE_CLASS = "fpm-dark";
 
-body {
-    margin: 0;
-    height: 100%;
-    width: 100%;
-}
+    window.enable_dark_mode = function () {
+        // TODO: coalesce the two set_bool-s into one so there is only one DOM
+        //       update
+        window.ftd.set_bool_for_all(DARK_MODE, true);
+        window.ftd.set_bool_for_all(FOLLOW_SYSTEM_DARK_MODE, false);
+        window.ftd.set_bool_for_all(SYSTEM_DARK_MODE, system_dark_mode());
+        document.body.classList.add(DARK_MODE_CLASS);
+        set_cookie(DARK_MODE_COOKIE, COOKIE_DARK_MODE);
+    }
 
+    window.enable_light_mode = function () {
+        // TODO: coalesce the two set_bool-s into one so there is only one DOM
+        //       update
+        window.ftd.set_bool_for_all(DARK_MODE, false);
+        window.ftd.set_bool_for_all(FOLLOW_SYSTEM_DARK_MODE, false);
+        window.ftd.set_bool_for_all(SYSTEM_DARK_MODE, system_dark_mode());
+        if (document.body.classList.contains(DARK_MODE_CLASS)) {
+            document.body.classList.remove(DARK_MODE_CLASS);
+        }
+        set_cookie(DARK_MODE_COOKIE, COOKIE_LIGHT_MODE);
+    }
 
-pre {
-    white-space: break-spaces;
-}
+    window.enable_system_mode = function () {
+        // TODO: coalesce the two set_bool-s into one so there is only one DOM
+        //       update
+        window.ftd.set_bool_for_all(FOLLOW_SYSTEM_DARK_MODE, true);
+        window.ftd.set_bool_for_all(SYSTEM_DARK_MODE, system_dark_mode());
+        if (system_dark_mode()) {
+            window.ftd.set_bool_for_all(DARK_MODE, true);
+            document.body.classList.add(DARK_MODE_CLASS);
+            set_cookie(DARK_MODE_COOKIE, COOKIE_SYSTEM_DARK)
+        } else {
+            window.ftd.set_bool_for_all(DARK_MODE, false);
+            if (document.body.classList.contains(DARK_MODE_CLASS)) {
+                document.body.classList.remove(DARK_MODE_CLASS);
+            }
+            set_cookie(DARK_MODE_COOKIE, COOKIE_SYSTEM_LIGHT)
+        }
+    }
 
-pre code {
-    overflow-x: auto;
-    display: block;
-    padding: 10px !important;
-}
+    function set_cookie(name, value) {
+        document.cookie = name + "=" + value + "; path=/";
+    }
 
-p {
-    margin: 0;
-}
+    function system_dark_mode() {
+        return !!(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)
+    }
 
-ul {
-    margin: 0;
-}
+    function initialise_dark_mode() {
+        update_dark_mode();
+        start_watching_dark_mode_system_preference();
+    }
 
-.ft_md ul,
-.ft_md ol,
-.ft_md p {
-    margin: 10px 0;
-}
+    function get_cookie(name, def) {
+        // source: https://stackoverflow.com/questions/5639346/
+        let regex = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
+        return regex !== null ? regex.pop() : def;
+    }
 
-.ft_md h1,
-.ft_md h2,
-.ft_md h3,
-.ft_md h4,
-.ft_md h5 {
-    margin-top: 34px;
-    margin-bottom: 0;
-    line-height: 1.2em;
-    color: #000000;
-}
+    function update_dark_mode() {
+        let current_dark_mode_cookie = get_cookie(DARK_MODE_COOKIE, COOKIE_SYSTEM_LIGHT);
 
-.ft_md ul ul,
-.ft_md ul ol,
-.ft_md ol ul,
-.ft_md ol ol {
-    line-height: 1.5em;
-    margin: 0;
-}
+        switch (current_dark_mode_cookie) {
+            case COOKIE_SYSTEM_LIGHT:
+            case COOKIE_SYSTEM_DARK:
+                window.enable_system_mode();
+                break;
+            case COOKIE_LIGHT_MODE:
+                window.enable_light_mode();
+                break;
+            case COOKIE_DARK_MODE:
+                window.enable_dark_mode();
+                break;
+            default:
+                console.log("cookie value is wrong", current_dark_mode_cookie);
+                window.enable_system_mode();
+        }
+    }
 
-.ft_md ul li,
-.ft_md ol li,
-.ft_md ul ol li .ft_md ul ul li .ft_md ol ul li .ft_md ol ol li {
-    position: relative;
-    padding-left: 32px;
-    margin: 4px 0;
-}
-
-.ft_md ul {
-    list-style: none;
-    padding-left: 0;
-}
-
-.ft_md ol {
-    list-style: none;
-    padding-left: 0;
-    counter-reset: item;
-}
-
-.ft_md ol li:before,
-.ft_md ol ol li:before,
-.ft_md ul ol li:before {
-    content: counter(item);
-    counter-increment: item;
-    background-color: #e4e9eb;
-    color: #000000;
-    font-size: 11px;
-    line-height: 10px;
-    text-align: center;
-    padding: 4px 0;
-    height: 10px;
-    width: 18px;
-    border-radius: 10px;
-    position: absolute;
-    left: 0;
-    top: 5px;
-}
-
-.ft_md ul li::before,
-.ft_md ul ul li::before,
-.ft_md ol ul li::before {
-    content: "";
-    position: absolute;
-    width: 6px;
-    height: 6px;
-    left: 8px;
-    top: 10px;
-    border-radius: 50%;
-    background: #c1c8ce;
-}
-
-.ft_md a {
-    color: #0047b4;
-    text-decoration: none;
-}
-
-.ft_md a:visited {
-    color: #632ec4;
-}
-
-.ft_md a:hover {
-    text-decoration: none;
-}
-
-.ft_md code {
-    font-size: 0.9em;
-    padding: 0.1em 0.25em;
-    background-color: rgba(159, 155, 155, 0.27);
-    border-radius: 4px;
-}
-
-.ft_md blockquote {
-    padding: 0.25em 1em;
-    margin: 1em 0;
-    background-color: #f0f0f0;
-    border-radius: 3px;
-}
-
-.ft_md blockquote>blockquote {
-    margin: 0;
-}
-
-body.fpm-dark .ft_md code {
-    color: #f9f9f9;
-    background-color: rgba(255, 255, 255, 0.12);
-}
-
-body.fpm-dark .ft_md blockquote {
-    background-color: rgba(240, 240, 240, 0.12);
-}
-
-body.fpm-dark .ft_md a {
-    color: #58a6ff;
-    text-decoration: none;
-}
-
-body.fpm-dark .ft_md a:visited {
-    color: #a27de7;
-}
-
-body.fpm-dark .ft_md a code {
-    color: #58a6ff;
-}
-
-body.fpm-dark .ft_md a:visited code {
-    color: #a27de7;
-}
-    </style>
-
-</head>
-    <body style="height: 100%;">
-
-        <div data-id="main:root" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; height: 100%; justify-content: flex-start; white-space: initial; width: 100%" class="ft_md"><div data-id="0:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; white-space: initial" class="ft_md"><div data-id="0,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-weight: 400; text-align: left; white-space: initial" class="ft_md">Mobile</div>
-<div data-id="0,1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: none; font-weight: 400; text-align: left; white-space: initial" class="ft_md">Desktop</div></div>
-<div data-id="1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;toggle&quot;,&quot;target&quot;:&quot;event-onclick-toggle.ftd#mobile&quot;,&quot;parameters&quot;:{}}]', this)" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; font-weight: 400; text-align: left; white-space: initial" class="ft_md">Click here!</div></div>
-
-
-    <script>
+    function start_watching_dark_mode_system_preference() {
+        window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').addEventListener(
+            "change", update_dark_mode
+        );
+    }
+    initialise_dark_mode();
+})();
         window.ftd.init(
             "main",
             JSON.parse(document.getElementById("ftd-data").innerText),

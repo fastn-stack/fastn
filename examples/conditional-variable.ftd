@@ -1,3 +1,9 @@
+-- ftd.color green: green
+dark: green
+
+-- ftd.color orange: orange
+dark: orange
+
 -- boolean value: true
 
 -- string foo: Arpita
@@ -10,8 +16,8 @@ if: not $value
 padding: 40
 
 -- ftd.text: $foo
-color: green
-color if $value: orange
+color: $green
+color if $value: $orange
 
 -- ftd.text: Click me 💡
 $on-click$: toggle $value

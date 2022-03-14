@@ -1,8 +1,17 @@
+-- ftd.color red: red
+dark: red
+
+-- ftd.color green: green
+dark: green
+
+-- ftd.color orange: orange
+dark: orange
+
 -- ftd.column:
 height: 200
 width: 200
 position: center
-background-color: red
+background-color: $red
 anchor: window
 
 --- ftd.column:
@@ -10,7 +19,7 @@ height: 20
 width: 20
 anchor: parent
 position: inner top
-background-color: green
+background-color: $green
 open: false
 
 --- ftd.column:
@@ -18,7 +27,7 @@ height: 20
 width: 20
 anchor: parent
 position: inner center
-background-color: green
+background-color: $green
 open: false
 
 --- ftd.column:
@@ -26,7 +35,7 @@ height: 20
 width: 20
 anchor: parent
 position: top
-background-color: orange
+background-color: $orange
 open: false
 
 --- ftd.column:
@@ -34,7 +43,7 @@ height: 20
 width: 20
 anchor: parent
 position: inner top-left
-background-color: green
+background-color: $green
 open: false
 
 --- ftd.column:
@@ -42,7 +51,7 @@ height: 20
 width: 20
 anchor: parent
 position: top-left
-background-color: orange
+background-color: $orange
 open: false
 
 --- ftd.column:
@@ -50,7 +59,7 @@ height: 20
 width: 20
 anchor: parent
 position: inner top-right
-background-color: green
+background-color: $green
 open: false
 
 --- ftd.column:
@@ -58,7 +67,7 @@ height: 20
 width: 20
 anchor: parent
 position: top-right
-background-color: orange
+background-color: $orange
 open: false
 
 --- ftd.column:
@@ -66,7 +75,7 @@ height: 20
 width: 20
 anchor: parent
 position: inner left
-background-color: green
+background-color: $green
 open: false
 
 --- ftd.column:
@@ -74,7 +83,7 @@ height: 20
 width: 20
 anchor: parent
 position: left
-background-color: orange
+background-color: $orange
 open: false
 
 --- ftd.column:
@@ -82,7 +91,7 @@ height: 20
 width: 20
 anchor: parent
 position: inner bottom-right
-background-color: green
+background-color: $green
 open: false
 
 --- ftd.column:
@@ -90,7 +99,7 @@ height: 20
 width: 20
 anchor: parent
 position: bottom-right
-background-color: orange
+background-color: $orange
 open: false
 
 --- ftd.column:
@@ -98,7 +107,7 @@ height: 20
 width: 20
 anchor: parent
 position: inner bottom
-background-color: green
+background-color: $green
 open: false
 
 --- ftd.column:
@@ -106,7 +115,7 @@ height: 20
 width: 20
 anchor: parent
 position: bottom
-background-color: orange
+background-color: $orange
 open: false
 
 --- ftd.column:
@@ -114,7 +123,7 @@ height: 20
 width: 20
 anchor: parent
 position: inner bottom-left
-background-color: green
+background-color: $green
 open: false
 
 --- ftd.column:
@@ -122,7 +131,7 @@ height: 20
 width: 20
 anchor: parent
 position: bottom-left
-background-color: orange
+background-color: $orange
 open: false
 
 --- ftd.column:
@@ -130,7 +139,7 @@ height: 20
 width: 20
 anchor: parent
 position: inner right
-background-color: green
+background-color: $green
 open: false
 
 --- ftd.column:
@@ -138,5 +147,5 @@ height: 20
 width: 20
 anchor: parent
 position: right
-background-color: orange
+background-color: $orange
 open: false

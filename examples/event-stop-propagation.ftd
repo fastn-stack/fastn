@@ -1,10 +1,16 @@
+-- ftd.color red: red
+dark: red
+
+-- ftd.color green: green
+dark: green
+
 -- foo:
 
 -- ftd.column foo:
 boolean open: true
 $on-click$: toggle $open
 padding: 50
-background-color: red
+background-color: $red
 align: center
 cursor: pointer
 
@@ -19,7 +25,7 @@ boolean open: true
 $on-click$: toggle $open
 $on-click$: stop-propagation
 padding: 50
-background-color: green
+background-color: $green
 align: center
 cursor: pointer
 

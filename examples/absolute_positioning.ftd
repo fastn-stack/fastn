@@ -1,3 +1,6 @@
+-- ftd.color red: red
+dark: red
+
 /-- ftd.text: hello world
 anchor: parent
 right: 0
@@ -6,7 +9,7 @@ top: 100
 /-- ftd.text: hello world without absolute
 
 -- ftd.column:
-color: red
+color: $red
 width: fill
 
 --- ftd.text: Text inside column with anchor: parent

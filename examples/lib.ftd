@@ -54,10 +54,11 @@ person list employees: $people
 contact: John Doe
 fax: +1-234-567890
 
--- ftd.font cursive-font: cursive
+-- ftd.type cursive-font: cursive
 line-height: 40
 weight: 400
 size: 32
+style: italic
 
 -- ftd.text: Hello There
 font: $cursive-font

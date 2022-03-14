@@ -1175,7 +1175,8 @@ fn get_conditional_attributes(
                             // todo: send default value
                             continue;
                         }
-                        let string = get_string_value(&name, value, doc.name, line_number)?;
+                        let string =
+                            get_string_value(&name, value, doc, line_number, pv.get_reference())?;
                         conditions_with_value.push((cond, string));
                     }
                 }
@@ -1183,7 +1184,8 @@ fn get_conditional_attributes(
                     let mut default = None;
                     if let Some(pv) = &value.default {
                         let value = pv.resolve(line_number, doc)?;
-                        let string = get_string_value(&name, value, doc.name, line_number)?;
+                        let string =
+                            get_string_value(&name, value, doc, line_number, pv.get_reference())?;
                         default = Some(string);
                     }
                     default
@@ -1245,8 +1247,9 @@ fn get_conditional_attributes(
     fn get_string_value(
         name: &str,
         value: ftd::Value,
-        doc_id: &str,
+        doc: &ftd::p2::TDoc,
         line_number: usize,
+        reference: Option<String>,
     ) -> ftd::p1::Result<ftd::ConditionalValue> {
         let style_integer = vec![
             "padding",
@@ -1313,11 +1316,12 @@ fn get_conditional_attributes(
                 ftd::Value::Integer { value: v } => ftd::ConditionalValue {
                     value: format!("{}px", v),
                     important: false,
+                    reference,
                 },
                 v => {
                     return ftd::e2(
                         format!("expected int, found3: {:?}", v),
-                        doc_id,
+                        doc.name,
                         line_number,
                     )
                 }
@@ -1327,11 +1331,12 @@ fn get_conditional_attributes(
                 ftd::Value::Integer { value: v } => ftd::ConditionalValue {
                     value: format!("{}px", v),
                     important: true,
+                    reference,
                 },
                 v => {
                     return ftd::e2(
                         format!("expected int, found4: {:?}", v),
-                        doc_id,
+                        doc.name,
                         line_number,
                     )
                 }
@@ -1339,27 +1344,55 @@ fn get_conditional_attributes(
         } else if style_length.contains(&name) {
             match value {
                 ftd::Value::String { text: v, .. } => ftd::ConditionalValue {
-                    value: ftd::length(&ftd::Length::from(Some(v), doc_id)?.unwrap(), name).1,
+                    value: ftd::length(&ftd::Length::from(Some(v), doc.name)?.unwrap(), name).1,
                     important: false,
+                    reference,
                 },
                 v => {
                     return ftd::e2(
                         format!("expected string, found: {:?}", v),
-                        doc_id,
+                        doc.name,
                         line_number,
                     )
                 }
             }
         } else if style_color.contains(&name) {
             match value {
-                ftd::Value::String { text: v, .. } => ftd::ConditionalValue {
-                    value: ftd::color(&ftd::p2::element::color_from(Some(v), doc_id)?.unwrap()),
-                    important: false,
-                },
+                ftd::Value::Record { fields, .. } => {
+                    let properties = fields
+                        .iter()
+                        .map(|(k, v)| v.resolve(line_number, doc).map(|v| (k.to_string(), v)))
+                        .collect::<ftd::p1::Result<std::collections::BTreeMap<String, ftd::Value>>>(
+                        )?;
+                    let light = if let Some(light) = ftd::p2::element::color_from(
+                        ftd::p2::utils::string_optional("light", &properties, doc.name, 0)?,
+                        doc.name,
+                    )? {
+                        ftd::html::color(&light)
+                    } else {
+                        "auto".to_string()
+                    };
+                    let dark = if let Some(dark) = ftd::p2::element::color_from(
+                        ftd::p2::utils::string_optional("dark", &properties, doc.name, 0)?,
+                        doc.name,
+                    )? {
+                        ftd::html::color(&dark)
+                    } else {
+                        "auto".to_string()
+                    };
+
+                    ftd::ConditionalValue {
+                        value: serde_json::to_string(
+                            &serde_json::json!({ "light": light, "dark": dark, "$kind$": "light" }),
+                        )?,
+                        important: false,
+                        reference,
+                    }
+                }
                 v => {
                     return ftd::e2(
                         format!("expected string, found: {:?}", v),
-                        doc_id,
+                        doc.name,
                         line_number,
                     )
                 }
@@ -1367,13 +1400,14 @@ fn get_conditional_attributes(
         } else if style_overflow.contains(&name) {
             match value {
                 ftd::Value::String { text: v, .. } => ftd::ConditionalValue {
-                    value: ftd::overflow(&ftd::Overflow::from(Some(v), doc_id)?.unwrap(), name).1,
+                    value: ftd::overflow(&ftd::Overflow::from(Some(v), doc.name)?.unwrap(), name).1,
                     important: false,
+                    reference,
                 },
                 v => {
                     return ftd::e2(
                         format!("expected string, found: {:?}", v),
-                        doc_id,
+                        doc.name,
                         line_number,
                     )
                 }
@@ -1383,11 +1417,12 @@ fn get_conditional_attributes(
                 ftd::Value::String { text: v, .. } => ftd::ConditionalValue {
                     value: v,
                     important: false,
+                    reference,
                 },
                 v => {
                     return ftd::e2(
                         format!("expected string, found: {:?}", v),
-                        doc_id,
+                        doc.name,
                         line_number,
                     )
                 }
@@ -1397,11 +1432,12 @@ fn get_conditional_attributes(
                 ftd::Value::Boolean { value: v } => ftd::ConditionalValue {
                     value: v.to_string(),
                     important: false,
+                    reference,
                 },
                 v => {
                     return ftd::e2(
                         format!("expected string, found: {:?}", v),
-                        doc_id,
+                        doc.name,
                         line_number,
                     )
                 }
@@ -1411,11 +1447,12 @@ fn get_conditional_attributes(
                 ftd::Value::Boolean { value: v } => ftd::ConditionalValue {
                     value: { if v { "sticky" } else { "inherit" }.to_string() },
                     important: false,
+                    reference,
                 },
                 v => {
                     return ftd::e2(
                         format!("expected boolean, found: {:?}", v),
-                        doc_id,
+                        doc.name,
                         line_number,
                     )
                 }
@@ -1425,11 +1462,12 @@ fn get_conditional_attributes(
                 ftd::Value::Boolean { value: v } => ftd::ConditionalValue {
                     value: { if v { "fixed" } else { "inherit" }.to_string() },
                     important: false,
+                    reference,
                 },
                 v => {
                     return ftd::e2(
                         format!("expected boolean, found: {:?}", v),
-                        doc_id,
+                        doc.name,
                         line_number,
                     )
                 }
@@ -1439,11 +1477,12 @@ fn get_conditional_attributes(
                 ftd::Value::Integer { value: v } => ftd::ConditionalValue {
                     value: v.to_string(),
                     important: false,
+                    reference,
                 },
                 v => {
                     return ftd::e2(
                         format!("expected int, found5: {:?}", v),
-                        doc_id,
+                        doc.name,
                         line_number,
                     )
                 }
@@ -1459,12 +1498,13 @@ fn get_conditional_attributes(
                     ftd::ConditionalValue {
                         value: css_areas,
                         important: false,
+                        reference,
                     }
                 }
                 v => {
                     return ftd::e2(
                         format!("expected string, found: {:?}", v),
-                        doc_id,
+                        doc.name,
                         line_number,
                     )
                 }
@@ -1472,7 +1512,7 @@ fn get_conditional_attributes(
         } else {
             return ftd::e2(
                 format!("unknown style name: `{}` value:`{:?}`", name, value),
-                doc_id,
+                doc.name,
                 line_number,
             );
         })

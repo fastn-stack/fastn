@@ -32,6 +32,14 @@ pub enum PropertyValue {
 }
 
 impl PropertyValue {
+    pub fn get_reference(&self) -> Option<String> {
+        match self {
+            ftd::PropertyValue::Reference { name, .. } => Some(name.to_string()),
+            ftd::PropertyValue::Variable { name, .. } => Some(name.to_string()),
+            _ => None,
+        }
+    }
+
     pub fn into_optional(self) -> Self {
         let mut s = self;
         match &mut s {

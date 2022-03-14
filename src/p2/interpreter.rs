@@ -934,6 +934,45 @@ pub fn default_bag() -> std::collections::BTreeMap<String, ftd::p2::Thing> {
             ftd::p2::Thing::Component(ftd::p2::element::null()),
         ),
         (
+            "ftd#dark-mode".to_string(),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: "ftd#dark-mode".to_string(),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Boolean { value: false },
+                },
+                conditions: vec![],
+                flags: ftd::VariableFlags {
+                    always_include: Some(true),
+                },
+            }),
+        ),
+        (
+            "ftd#system-dark-mode".to_string(),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: "ftd#system-dark-mode".to_string(),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Boolean { value: false },
+                },
+                conditions: vec![],
+                flags: ftd::VariableFlags {
+                    always_include: Some(true),
+                },
+            }),
+        ),
+        (
+            "ftd#follow-system-dark-mode".to_string(),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: "ftd#follow-system-dark-mode".to_string(),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Boolean { value: true },
+                },
+                conditions: vec![],
+                flags: ftd::VariableFlags {
+                    always_include: Some(true),
+                },
+            }),
+        ),
+        (
             "ftd#image-src".to_string(),
             ftd::p2::Thing::Record(ftd::p2::Record {
                 name: "ftd#image-src".to_string(),
@@ -954,20 +993,21 @@ pub fn default_bag() -> std::collections::BTreeMap<String, ftd::p2::Thing> {
                     ("light".to_string(), ftd::p2::Kind::caption()),
                     ("dark".to_string(), ftd::p2::Kind::string()),
                 ])
-                    .collect(),
+                .collect(),
                 instances: Default::default(),
                 order: vec!["light".to_string(), "dark".to_string()],
             }),
         ),
         (
-            "ftd#font".to_string(),
+            "ftd#type".to_string(),
             ftd::p2::Thing::Record(ftd::p2::Record {
-                name: "ftd#font".to_string(),
+                name: "ftd#type".to_string(),
                 fields: std::array::IntoIter::new([
                     ("font".to_string(), ftd::p2::Kind::caption()),
                     ("line-height".to_string(), ftd::p2::Kind::integer()),
                     ("size".to_string(), ftd::p2::Kind::integer()),
                     ("weight".to_string(), ftd::p2::Kind::integer()),
+                    ("style".to_string(), ftd::p2::Kind::string().into_optional()),
                 ])
                 .collect(),
                 instances: Default::default(),
@@ -976,6 +1016,7 @@ pub fn default_bag() -> std::collections::BTreeMap<String, ftd::p2::Thing> {
                     "line-height".to_string(),
                     "size".to_string(),
                     "weight".to_string(),
+                    "style".to_string(),
                 ],
             }),
         ),
@@ -1183,7 +1224,7 @@ mod test {
                 text: ftd::markdown_line("hello"),
                 line: true,
                 common: ftd::Common {
-                    color: Some(ftd::Color {
+                    color: Some(ftd::ColorValue {
                         r: 255,
                         g: 0,
                         b: 0,
@@ -1875,7 +1916,7 @@ mod test {
                 text: ftd::markdown_line("5PM Tasks"),
                 line: true,
                 common: ftd::Common {
-                    color: Some(ftd::Color {
+                    color: Some(ftd::ColorValue {
                         r: 255,
                         g: 255,
                         b: 255,
@@ -1894,7 +1935,7 @@ mod test {
                 text: ftd::markdown_line("5PM Tasks"),
                 line: true,
                 common: ftd::Common {
-                    color: Some(ftd::Color {
+                    color: Some(ftd::ColorValue {
                         r: 77,
                         g: 77,
                         b: 77,
@@ -1918,7 +1959,7 @@ mod test {
                             text: ftd::markdown_line("Log"),
                             line: true,
                             common: ftd::Common {
-                                color: Some(ftd::Color {
+                                color: Some(ftd::ColorValue {
                                     r: 255,
                                     g: 255,
                                     b: 255,
@@ -1938,7 +1979,7 @@ mod test {
                             text: ftd::markdown_line("Log"),
                             line: true,
                             common: ftd::Common {
-                                color: Some(ftd::Color {
+                                color: Some(ftd::ColorValue {
                                     r: 77,
                                     g: 77,
                                     b: 77,
@@ -1962,7 +2003,7 @@ mod test {
                                         text: ftd::markdown_line("ChildLog"),
                                         line: true,
                                         common: ftd::Common {
-                                            color: Some(ftd::Color {
+                                            color: Some(ftd::ColorValue {
                                                 r: 255,
                                                 g: 255,
                                                 b: 255,
@@ -1982,7 +2023,7 @@ mod test {
                                         text: ftd::markdown_line("ChildLog"),
                                         line: true,
                                         common: ftd::Common {
-                                            color: Some(ftd::Color {
+                                            color: Some(ftd::ColorValue {
                                                 r: 77,
                                                 g: 77,
                                                 b: 77,
@@ -2027,7 +2068,7 @@ mod test {
                             text: ftd::markdown_line("Log2"),
                             line: true,
                             common: ftd::Common {
-                                color: Some(ftd::Color {
+                                color: Some(ftd::ColorValue {
                                     r: 255,
                                     g: 255,
                                     b: 255,
@@ -2047,7 +2088,7 @@ mod test {
                             text: ftd::markdown_line("Log2"),
                             line: true,
                             common: ftd::Common {
-                                color: Some(ftd::Color {
+                                color: Some(ftd::ColorValue {
                                     r: 77,
                                     g: 77,
                                     b: 77,
@@ -2792,7 +2833,7 @@ mod test {
                 text: ftd::markdown_line("5PM Tasks"),
                 line: true,
                 common: ftd::Common {
-                    color: Some(ftd::Color {
+                    color: Some(ftd::ColorValue {
                         r: 255,
                         g: 255,
                         b: 255,
@@ -2811,7 +2852,7 @@ mod test {
                 text: ftd::markdown_line("5PM Tasks"),
                 line: true,
                 common: ftd::Common {
-                    color: Some(ftd::Color {
+                    color: Some(ftd::ColorValue {
                         r: 77,
                         g: 77,
                         b: 77,
@@ -2835,7 +2876,7 @@ mod test {
                             text: ftd::markdown_line("Log"),
                             line: true,
                             common: ftd::Common {
-                                color: Some(ftd::Color {
+                                color: Some(ftd::ColorValue {
                                     r: 255,
                                     g: 255,
                                     b: 255,
@@ -2855,7 +2896,7 @@ mod test {
                             text: ftd::markdown_line("Log"),
                             line: true,
                             common: ftd::Common {
-                                color: Some(ftd::Color {
+                                color: Some(ftd::ColorValue {
                                     r: 77,
                                     g: 77,
                                     b: 77,
@@ -2879,7 +2920,7 @@ mod test {
                                         text: ftd::markdown_line("ChildLog"),
                                         line: true,
                                         common: ftd::Common {
-                                            color: Some(ftd::Color {
+                                            color: Some(ftd::ColorValue {
                                                 r: 255,
                                                 g: 255,
                                                 b: 255,
@@ -2899,7 +2940,7 @@ mod test {
                                         text: ftd::markdown_line("ChildLog"),
                                         line: true,
                                         common: ftd::Common {
-                                            color: Some(ftd::Color {
+                                            color: Some(ftd::ColorValue {
                                                 r: 77,
                                                 g: 77,
                                                 b: 77,
@@ -2944,7 +2985,7 @@ mod test {
                             text: ftd::markdown_line("Log2"),
                             line: true,
                             common: ftd::Common {
-                                color: Some(ftd::Color {
+                                color: Some(ftd::ColorValue {
                                     r: 255,
                                     g: 255,
                                     b: 255,
@@ -2964,7 +3005,7 @@ mod test {
                             text: ftd::markdown_line("Log2"),
                             line: true,
                             common: ftd::Common {
-                                color: Some(ftd::Color {
+                                color: Some(ftd::ColorValue {
                                     r: 77,
                                     g: 77,
                                     b: 77,
@@ -3185,7 +3226,7 @@ mod test {
                 spacing: None,
                 common: ftd::Common {
                     width: Some(ftd::Length::Px { value: 200 }),
-                    background_color: Some(ftd::Color {
+                    background_color: Some(ftd::ColorValue {
                         r: 243,
                         g: 243,
                         b: 243,
@@ -3684,7 +3725,10 @@ mod test {
                         }
                     }),
                     (s("src"), {
-                        let s = ftd::p2::Kind::string();
+                        let s = ftd::p2::Kind::Record {
+                            name: s("ftd#image-src"),
+                            default: None,
+                        };
                         if about_optional {
                             s.into_optional()
                         } else {
@@ -3778,7 +3822,11 @@ mod test {
                                 Some(ftd::p2::Boolean::IsNotNull {
                                     value: ftd::PropertyValue::Variable {
                                         name: s("src"),
-                                        kind: ftd::p2::Kind::string().into_optional(),
+                                        kind: ftd::p2::Kind::Record {
+                                            name: s("ftd#image-src"),
+                                            default: None,
+                                        }
+                                        .into_optional(),
                                     },
                                 })
                             } else {
@@ -3790,7 +3838,10 @@ mod test {
                                 ftd::component::Property {
                                     default: Some(ftd::PropertyValue::Variable {
                                         name: s("src"),
-                                        kind: ftd::p2::Kind::string(),
+                                        kind: ftd::p2::Kind::Record {
+                                            name: s("ftd#image-src"),
+                                            default: None,
+                                        },
                                     }),
                                     conditions: vec![],
                                     ..Default::default()
@@ -3839,7 +3890,7 @@ mod test {
         };
 
         let image = ftd::Image {
-            src: s("/static/home/document-type-min.png"),
+            src: i("/static/home/document-type-min.png"),
             common: ftd::Common {
                 reference: Some(s("foo/bar#src@0")),
                 ..Default::default()
@@ -3882,14 +3933,49 @@ mod test {
             }),
         );
         bag.insert(
+            "foo/bar#src0".to_string(),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                flags: ftd::VariableFlags::default(),
+                name: "src0".to_string(),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Record {
+                        name: s("ftd#image-src"),
+                        fields: std::array::IntoIter::new([
+                            (
+                                s("dark"),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::String {
+                                        text: "/static/home/document-type-min.png".to_string(),
+                                        source: ftd::TextSource::Header,
+                                    },
+                                },
+                            ),
+                            (
+                                s("light"),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::String {
+                                        text: "/static/home/document-type-min.png".to_string(),
+                                        source: ftd::TextSource::Header,
+                                    },
+                                },
+                            ),
+                        ])
+                        .collect(),
+                    },
+                },
+                conditions: vec![],
+            }),
+        );
+        bag.insert(
             "foo/bar#src@0".to_string(),
             ftd::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "src".to_string(),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::String {
-                        text: s("/static/home/document-type-min.png"),
-                        source: ftd::TextSource::Header,
+                value: ftd::PropertyValue::Reference {
+                    name: s("foo/bar#src0"),
+                    kind: ftd::p2::Kind::Record {
+                        name: s("ftd#image-src"),
+                        default: None,
                     },
                 },
                 conditions: vec![],
@@ -3912,10 +3998,14 @@ mod test {
 
         p!(
             "
+            -- ftd.image-src src0: 
+            light: /static/home/document-type-min.png
+            dark: /static/home/document-type-min.png
+
             -- ftd.column white-two-image:
             caption title:
             body about:
-            string src:
+            ftd.image-src src:
             padding: 30
 
             --- ftd.text:
@@ -3929,7 +4019,7 @@ mod test {
             src: $src
 
             -- white-two-image: What kind of documentation?
-            src: /static/home/document-type-min.png
+            src: $src0
 
             UI screens, behaviour and journeys, database tables, APIs, how to
             contribute to, deploy, or monitor microservice, everything that
@@ -3998,7 +4088,7 @@ mod test {
             ..Default::default()
         };
         let image = ftd::Image {
-            src: s("/static/home/document-type-min.png"),
+            src: i("/static/home/document-type-min.png"),
             common: ftd::Common {
                 reference: Some(s("foo/bar#src@0")),
                 condition: Some(ftd::Condition {
@@ -4010,7 +4100,7 @@ mod test {
             ..Default::default()
         };
         let second_image = ftd::Image {
-            src: s("second-image.png"),
+            src: i("second-image.png"),
             common: ftd::Common {
                 reference: Some(s("foo/bar#src@1")),
                 condition: Some(ftd::Condition {
@@ -4060,6 +4150,75 @@ mod test {
 
         let mut bag = white_two_image_bag(true);
         bag.insert(
+            "foo/bar#src0".to_string(),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                flags: ftd::VariableFlags::default(),
+                name: "src0".to_string(),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Record {
+                        name: s("ftd#image-src"),
+                        fields: std::array::IntoIter::new([
+                            (
+                                s("dark"),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::String {
+                                        text: "/static/home/document-type-min.png".to_string(),
+                                        source: ftd::TextSource::Header,
+                                    },
+                                },
+                            ),
+                            (
+                                s("light"),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::String {
+                                        text: "/static/home/document-type-min.png".to_string(),
+                                        source: ftd::TextSource::Header,
+                                    },
+                                },
+                            ),
+                        ])
+                        .collect(),
+                    },
+                },
+                conditions: vec![],
+            }),
+        );
+        bag.insert(
+            "foo/bar#src1".to_string(),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                flags: ftd::VariableFlags::default(),
+                name: "src1".to_string(),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Record {
+                        name: s("ftd#image-src"),
+                        fields: std::array::IntoIter::new([
+                            (
+                                s("dark"),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::String {
+                                        text: "second-image.png".to_string(),
+                                        source: ftd::TextSource::Header,
+                                    },
+                                },
+                            ),
+                            (
+                                s("light"),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::String {
+                                        text: "second-image.png".to_string(),
+                                        source: ftd::TextSource::Header,
+                                    },
+                                },
+                            ),
+                        ])
+                        .collect(),
+                    },
+                },
+                conditions: vec![],
+            }),
+        );
+
+        bag.insert(
             "foo/bar#about@0".to_string(),
             ftd::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
@@ -4092,10 +4251,13 @@ mod test {
             ftd::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "src".to_string(),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::String {
-                        text: s("/static/home/document-type-min.png"),
-                        source: ftd::TextSource::Header,
+                value: ftd::PropertyValue::Reference {
+                    name: s("foo/bar#src0"),
+                    kind: ftd::p2::Kind::Optional {
+                        kind: Box::new(ftd::p2::Kind::Record {
+                            name: s("ftd#image-src"),
+                            default: None,
+                        }),
                     },
                 },
                 conditions: vec![],
@@ -4106,10 +4268,13 @@ mod test {
             ftd::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "src".to_string(),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::String {
-                        text: s("second-image.png"),
-                        source: ftd::TextSource::Header,
+                value: ftd::PropertyValue::Reference {
+                    name: s("foo/bar#src1"),
+                    kind: ftd::p2::Kind::Optional {
+                        kind: Box::new(ftd::p2::Kind::Record {
+                            name: s("ftd#image-src"),
+                            default: None,
+                        }),
                     },
                 },
                 conditions: vec![],
@@ -4146,10 +4311,18 @@ mod test {
 
         p!(
             "
+            -- ftd.image-src src0: 
+            light: /static/home/document-type-min.png
+            dark: /static/home/document-type-min.png
+
+            -- ftd.image-src src1: 
+            light: second-image.png
+            dark: second-image.png
+            
             -- ftd.column white-two-image:
             caption title:
             optional body about:
-            optional string src:
+            optional ftd.image-src src:
             padding: 30
 
             --- ftd.text:
@@ -4165,14 +4338,14 @@ mod test {
             src: $src
 
             -- white-two-image: What kind of documentation?
-            src: /static/home/document-type-min.png
+            src: $src0
 
             UI screens, behaviour and journeys, database tables, APIs, how to
             contribute to, deploy, or monitor microservice, everything that
             makes web or mobile product teams productive.
 
             -- white-two-image: second call
-            src: second-image.png
+            src: $src1
             ",
             (bag, main),
         );
@@ -4261,7 +4434,7 @@ mod test {
             ..Default::default()
         };
         let image = ftd::Image {
-            src: s("/static/home/document-type-min.png"),
+            src: i("/static/home/document-type-min.png"),
             common: ftd::Common {
                 reference: Some(s("foo/bar#src@0")),
                 condition: Some(ftd::Condition {
@@ -4273,7 +4446,7 @@ mod test {
             ..Default::default()
         };
         let second_image = ftd::Image {
-            src: s("second-image.png"),
+            src: i("second-image.png"),
             common: ftd::Common {
                 reference: Some(s("foo/bar#src@1")),
                 condition: Some(ftd::Condition {
@@ -4285,7 +4458,7 @@ mod test {
             ..Default::default()
         };
         let third_image = ftd::Image {
-            src: s(""),
+            src: i(""),
             common: ftd::Common {
                 reference: Some(s("foo/bar#src@2")),
                 condition: Some(ftd::Condition {
@@ -4353,6 +4526,74 @@ mod test {
 
         let mut bag = white_two_image_bag(true);
         bag.insert(
+            "foo/bar#src0".to_string(),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                flags: ftd::VariableFlags::default(),
+                name: "src0".to_string(),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Record {
+                        name: s("ftd#image-src"),
+                        fields: std::array::IntoIter::new([
+                            (
+                                s("dark"),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::String {
+                                        text: "/static/home/document-type-min.png".to_string(),
+                                        source: ftd::TextSource::Header,
+                                    },
+                                },
+                            ),
+                            (
+                                s("light"),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::String {
+                                        text: "/static/home/document-type-min.png".to_string(),
+                                        source: ftd::TextSource::Header,
+                                    },
+                                },
+                            ),
+                        ])
+                        .collect(),
+                    },
+                },
+                conditions: vec![],
+            }),
+        );
+        bag.insert(
+            "foo/bar#src1".to_string(),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                flags: ftd::VariableFlags::default(),
+                name: "src1".to_string(),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Record {
+                        name: s("ftd#image-src"),
+                        fields: std::array::IntoIter::new([
+                            (
+                                s("dark"),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::String {
+                                        text: "second-image.png".to_string(),
+                                        source: ftd::TextSource::Header,
+                                    },
+                                },
+                            ),
+                            (
+                                s("light"),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::String {
+                                        text: "second-image.png".to_string(),
+                                        source: ftd::TextSource::Header,
+                                    },
+                                },
+                            ),
+                        ])
+                        .collect(),
+                    },
+                },
+                conditions: vec![],
+            }),
+        );
+        bag.insert(
             "foo/bar#about@0".to_string(),
             ftd::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
@@ -4399,10 +4640,13 @@ mod test {
             ftd::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "src".to_string(),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::String {
-                        text: s("/static/home/document-type-min.png"),
-                        source: ftd::TextSource::Header,
+                value: ftd::PropertyValue::Reference {
+                    name: s("foo/bar#src0"),
+                    kind: ftd::p2::Kind::Optional {
+                        kind: Box::new(ftd::p2::Kind::Record {
+                            name: s("ftd#image-src"),
+                            default: None,
+                        }),
                     },
                 },
                 conditions: vec![],
@@ -4413,10 +4657,13 @@ mod test {
             ftd::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: "src".to_string(),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::String {
-                        text: s("second-image.png"),
-                        source: ftd::TextSource::Header,
+                value: ftd::PropertyValue::Reference {
+                    name: s("foo/bar#src1"),
+                    kind: ftd::p2::Kind::Optional {
+                        kind: Box::new(ftd::p2::Kind::Record {
+                            name: s("ftd#image-src"),
+                            default: None,
+                        }),
                     },
                 },
                 conditions: vec![],
@@ -4430,7 +4677,10 @@ mod test {
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Optional {
                         data: Box::new(None),
-                        kind: ftd::p2::Kind::string(),
+                        kind: ftd::p2::Kind::Record {
+                            name: s("ftd#image-src"),
+                            default: None,
+                        },
                     },
                 },
                 conditions: vec![],
@@ -4480,10 +4730,18 @@ mod test {
         );
         p!(
             "
+            -- ftd.image-src src0: 
+            light: /static/home/document-type-min.png
+            dark: /static/home/document-type-min.png
+
+            -- ftd.image-src src1: 
+            light: second-image.png
+            dark: second-image.png
+
             -- ftd.column white-two-image:
             caption title:
             optional body about:
-            optional string src:
+            optional ftd.image-src src:
             padding: 30
 
             --- ftd.text:
@@ -4499,14 +4757,14 @@ mod test {
             src: $src
 
             -- white-two-image: What kind of documentation?
-            src: /static/home/document-type-min.png
+            src: $src0
 
             UI screens, behaviour and journeys, database tables, APIs, how to
             contribute to, deploy, or monitor microservice, everything that
             makes web or mobile product teams productive.
 
             -- white-two-image: second call
-            src: second-image.png
+            src: $src1
 
             -- white-two-image: third call
             ",
@@ -4810,10 +5068,11 @@ mod test {
             ftd::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: s("src"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::String {
-                        text: "foo.png".to_string(),
-                        source: ftd::TextSource::Header,
+                value: ftd::PropertyValue::Reference {
+                    name: s("foo/bar#src0"),
+                    kind: ftd::p2::Kind::Record {
+                        name: s("ftd#image-src"),
+                        default: None,
                     },
                 },
                 conditions: vec![],
@@ -4824,10 +5083,11 @@ mod test {
             ftd::p2::Thing::Variable(ftd::Variable {
                 flags: ftd::VariableFlags::default(),
                 name: s("src"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::String {
-                        text: "bar.png".to_string(),
-                        source: ftd::TextSource::Header,
+                value: ftd::PropertyValue::Reference {
+                    name: s("foo/bar#src1"),
+                    kind: ftd::p2::Kind::Record {
+                        name: s("ftd#image-src"),
+                        default: None,
                     },
                 },
                 conditions: vec![],
@@ -4862,6 +5122,76 @@ mod test {
             }),
         );
         bag.insert(
+            "foo/bar#src0".to_string(),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                flags: ftd::VariableFlags::default(),
+                name: "src0".to_string(),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Record {
+                        name: s("ftd#image-src"),
+                        fields: std::array::IntoIter::new([
+                            (
+                                s("dark"),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::String {
+                                        text: "foo.png".to_string(),
+                                        source: ftd::TextSource::Header,
+                                    },
+                                },
+                            ),
+                            (
+                                s("light"),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::String {
+                                        text: "foo.png".to_string(),
+                                        source: ftd::TextSource::Header,
+                                    },
+                                },
+                            ),
+                        ])
+                        .collect(),
+                    },
+                },
+                conditions: vec![],
+            }),
+        );
+
+        bag.insert(
+            "foo/bar#src1".to_string(),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                flags: ftd::VariableFlags::default(),
+                name: "src1".to_string(),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Record {
+                        name: s("ftd#image-src"),
+                        fields: std::array::IntoIter::new([
+                            (
+                                s("dark"),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::String {
+                                        text: "bar.png".to_string(),
+                                        source: ftd::TextSource::Header,
+                                    },
+                                },
+                            ),
+                            (
+                                s("light"),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::String {
+                                        text: "bar.png".to_string(),
+                                        source: ftd::TextSource::Header,
+                                    },
+                                },
+                            ),
+                        ])
+                        .collect(),
+                    },
+                },
+                conditions: vec![],
+            }),
+        );
+
+        bag.insert(
             s("foo/bar#image"),
             ftd::p2::Thing::Component(ftd::Component {
                 invocations: Default::default(),
@@ -4869,7 +5199,13 @@ mod test {
                 root: s("ftd#column"),
                 arguments: std::array::IntoIter::new([
                     (s("width"), ftd::p2::Kind::string().into_optional()),
-                    (s("src"), ftd::p2::Kind::string()),
+                    (
+                        s("src"),
+                        ftd::p2::Kind::Record {
+                            name: s("ftd#image-src"),
+                            default: None,
+                        },
+                    ),
                 ])
                 .collect(),
                 instructions: vec![ftd::Instruction::ChildComponent {
@@ -4883,7 +5219,10 @@ mod test {
                                 ftd::component::Property {
                                     default: Some(ftd::PropertyValue::Variable {
                                         name: s("src"),
-                                        kind: ftd::p2::Kind::string(),
+                                        kind: ftd::p2::Kind::Record {
+                                            name: s("ftd#image-src"),
+                                            default: None,
+                                        },
                                     }),
                                     conditions: vec![],
                                     ..Default::default()
@@ -4917,7 +5256,7 @@ mod test {
                 spacing: None,
                 container: ftd::Container {
                     children: vec![ftd::Element::Image(ftd::Image {
-                        src: s("foo.png"),
+                        src: i("foo.png"),
                         common: ftd::Common {
                             reference: Some(s("foo/bar#src@0")),
                             ..Default::default()
@@ -4934,7 +5273,7 @@ mod test {
                 spacing: None,
                 container: ftd::Container {
                     children: vec![ftd::Element::Image(ftd::Image {
-                        src: s("bar.png"),
+                        src: i("bar.png"),
                         common: ftd::Common {
                             reference: Some(s("foo/bar#src@1")),
                             width: Some(ftd::Length::Px { value: 300 }),
@@ -4949,8 +5288,16 @@ mod test {
 
         p!(
             "
+            -- ftd.image-src src0: 
+            light: foo.png
+            dark: foo.png
+
+            -- ftd.image-src src1: 
+            light: bar.png
+            dark: bar.png
+
             -- ftd.column image:
-            string src:
+            ftd.image-src src:
             optional string width:
 
             --- ftd.image:
@@ -4958,10 +5305,10 @@ mod test {
             width: $width
 
             -- image:
-            src: foo.png
+            src: $src0
 
             -- image:
-            src: bar.png
+            src: $src1
             width: 300
             ",
             (bag, main),
@@ -12116,7 +12463,7 @@ mod test {
                 text: ftd::markdown_line("/hello3"),
                 line: true,
                 common: ftd::Common {
-                    color: Some(ftd::Color {
+                    color: Some(ftd::ColorValue {
                         r: 255,
                         g: 0,
                         b: 0,
@@ -12134,7 +12481,7 @@ mod test {
                     text: ftd::markdown_line("hello5"),
                     line: true,
                     common: ftd::Common {
-                        color: Some(ftd::Color {
+                        color: Some(ftd::ColorValue {
                             r: 0,
                             g: 128,
                             b: 0,
@@ -12647,7 +12994,7 @@ mod test {
         main.container
             .children
             .push(ftd::Element::Image(ftd::Image {
-                src: s("https://www.liveabout.com/thmb/YCJmu1khSJo8kMYM090QCd9W78U=/1250x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/powerpuff_girls-56a00bc45f9b58eba4aea61d.jpg"),
+                src: i("https://www.liveabout.com/thmb/YCJmu1khSJo8kMYM090QCd9W78U=/1250x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/powerpuff_girls-56a00bc45f9b58eba4aea61d.jpg"),
                 common: ftd::Common {
                     condition: Some(
                         ftd::Condition {
@@ -12682,7 +13029,7 @@ mod test {
         main.container
             .children
             .push(ftd::Element::Image(ftd::Image {
-                src: s("https://upload.wikimedia.org/wikipedia/en/d/d4/Mickey_Mouse.png"),
+                src: i("https://upload.wikimedia.org/wikipedia/en/d/d4/Mickey_Mouse.png"),
                 common: ftd::Common {
                     condition: Some(ftd::Condition {
                         variable: s("foo/bar#count"),
@@ -12722,19 +13069,27 @@ mod test {
                 "
                 -- integer count: 0
 
+                -- ftd.image-src src0: 
+                light: https://www.liveabout.com/thmb/YCJmu1khSJo8kMYM090QCd9W78U=/1250x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/powerpuff_girls-56a00bc45f9b58eba4aea61d.jpg
+                dark: https://www.liveabout.com/thmb/YCJmu1khSJo8kMYM090QCd9W78U=/1250x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/powerpuff_girls-56a00bc45f9b58eba4aea61d.jpg
+
+                -- ftd.image-src src1: 
+                light: https://upload.wikimedia.org/wikipedia/en/d/d4/Mickey_Mouse.png
+                dark: https://upload.wikimedia.org/wikipedia/en/d/d4/Mickey_Mouse.png
+
                 -- ftd.image slide:
-                string src:
+                ftd.image-src src:
                 integer idx:
                 src: $src
                 if: $count == $idx
                 $on-click$: increment $count clamp 0 1
 
                 -- slide:
-                src: https://www.liveabout.com/thmb/YCJmu1khSJo8kMYM090QCd9W78U=/1250x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/powerpuff_girls-56a00bc45f9b58eba4aea61d.jpg
+                src: $src0
                 idx: 0
 
                 -- slide:
-                src: https://upload.wikimedia.org/wikipedia/en/d/d4/Mickey_Mouse.png
+                src: $src1
                 idx: 1
                 "
             ),
@@ -14050,7 +14405,11 @@ mod test {
                     container: ftd::Container {
                         children: vec![
                             ftd::Element::Image(ftd::Image {
-                                src: s("https://www.nilinswap.com/static/img/dp.jpeg"),
+                                src: i("https://www.nilinswap.com/static/img/dp.jpeg"),
+                                common: ftd::Common {
+                                    reference: Some(s("foo/bar#src0")),
+                                    ..Default::default()
+                                },
                                 ..Default::default()
                             }),
                             ftd::Element::Markup(ftd::Markups {
@@ -14074,12 +14433,16 @@ mod test {
             "foo/bar",
             indoc::indoc!(
                 "
+                -- ftd.image-src src0: 
+                light: https://www.nilinswap.com/static/img/dp.jpeg
+                dark: https://www.nilinswap.com/static/img/dp.jpeg
+
                 -- ftd.column:
 
                 --- ftd.column:
 
                 --- ftd.image:
-                src: https://www.nilinswap.com/static/img/dp.jpeg
+                src: $src0
 
                 --- ftd.text: Swapnil Sharma
 
@@ -14089,7 +14452,7 @@ mod test {
                 --- ftd.column:
 
                 --- ftd.image:
-                src: https://www.nilinswap.com/static/img/dp.jpeg
+                src: $src0
 
                 --- ftd.text: Swapnil Sharma
 
@@ -14671,7 +15034,7 @@ mod test {
                     )])
                     .collect(),
                     reference: Some(s("foo/bar#bar")),
-                    color: Some(ftd::Color {
+                    color: Some(ftd::ColorValue {
                         r: 255,
                         g: 0,
                         b: 0,
@@ -14814,7 +15177,7 @@ mod test {
                             text: ftd::markdown_line("hello"),
                             line: true,
                             common: ftd::Common {
-                                color: Some(ftd::Color {
+                                color: Some(ftd::ColorValue {
                                     r: 255,
                                     g: 0,
                                     b: 0,
@@ -14851,7 +15214,7 @@ mod test {
                                         text: ftd::markdown_line("hello"),
                                         line: true,
                                         common: ftd::Common {
-                                            color: Some(ftd::Color {
+                                            color: Some(ftd::ColorValue {
                                                 r: 255,
                                                 g: 0,
                                                 b: 0,
@@ -14866,7 +15229,7 @@ mod test {
                                         text: ftd::markdown_line("hello amitu!"),
                                         line: true,
                                         common: ftd::Common {
-                                            color: Some(ftd::Color {
+                                            color: Some(ftd::ColorValue {
                                                 r: 255,
                                                 g: 0,
                                                 b: 0,
@@ -16124,7 +16487,7 @@ mod test {
                 },
                 spacing: None,
                 common: ftd::Common {
-                    color: Some(ftd::Color {
+                    color: Some(ftd::ColorValue {
                         r: 0,
                         g: 128,
                         b: 0,
@@ -16189,7 +16552,7 @@ mod test {
                 },
                 spacing: None,
                 common: ftd::Common {
-                    color: Some(ftd::Color {
+                    color: Some(ftd::ColorValue {
                         r: 0,
                         g: 128,
                         b: 0,

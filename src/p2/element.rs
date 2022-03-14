@@ -1,12 +1,13 @@
 #[allow(clippy::too_many_arguments)]
 pub fn common_from_properties(
-    properties: &std::collections::BTreeMap<String, ftd::Value>,
+    unresolved_properties: &std::collections::BTreeMap<String, ftd::component::Property>,
     doc: &ftd::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
     events: &[ftd::p2::Event],
     reference: Option<String>,
 ) -> ftd::p1::Result<ftd::Common> {
+    let properties = &ftd::component::resolve_properties(0, unresolved_properties, doc)?;
     let submit = ftd::p2::utils::string_optional("submit", properties, doc.name, 0)?;
     let link = ftd::p2::utils::string_optional("link", properties, doc.name, 0)?;
     if let (Some(_), Some(_)) = (&submit, &link) {
@@ -15,7 +16,7 @@ pub fn common_from_properties(
     let gradient_color_str =
         ftd::p2::utils::string_optional("gradient-colors", properties, doc.name, 0)?;
 
-    let gradient_colors: Vec<ftd::Color> = match gradient_color_str {
+    let gradient_colors: Vec<ftd::ColorValue> = match gradient_color_str {
         Some(f) => f
             .split(',')
             .flat_map(|x| color_from(Some(x.to_string()), doc.name).ok()?)
@@ -144,17 +145,30 @@ pub fn common_from_properties(
             ftd::p2::utils::string_optional("max-height", properties, doc.name, 0)?,
             doc.name,
         )?,
-        color: color_from(
-            ftd::p2::utils::string_optional("color", properties, doc.name, 0)?,
-            doc.name,
+        color: ftd::Color::from(
+            ftd::p2::utils::record_optional_with_ref("color", &unresolved_properties, doc, 0)?,
+            doc,
+            0,
         )?,
-        background_color: color_from(
-            ftd::p2::utils::string_optional("background-color", properties, doc.name, 0)?,
-            doc.name,
+        background_color: ftd::Color::from(
+            ftd::p2::utils::record_optional_with_ref(
+                "background-color",
+                &unresolved_properties,
+                doc,
+                0,
+            )?,
+            doc,
+            0,
         )?,
-        border_color: color_from(
-            ftd::p2::utils::string_optional("border-color", properties, doc.name, 0)?,
-            doc.name,
+        border_color: ftd::Color::from(
+            ftd::p2::utils::record_optional_with_ref(
+                "border-color",
+                &unresolved_properties,
+                doc,
+                0,
+            )?,
+            doc,
+            0,
         )?,
         border_width: ftd::p2::utils::int_with_default("border-width", 0, properties, doc.name, 0)?,
         border_radius: ftd::p2::utils::int_with_default(
@@ -207,9 +221,15 @@ pub fn common_from_properties(
         shadow_offset_y: ftd::p2::utils::int_optional("shadow-offset-y", properties, doc.name, 0)?,
         shadow_size: ftd::p2::utils::int_optional("shadow-size", properties, doc.name, 0)?,
         shadow_blur: ftd::p2::utils::int_optional("shadow-blur", properties, doc.name, 0)?,
-        shadow_color: color_from(
-            ftd::p2::utils::string_optional("shadow-color", properties, doc.name, 0)?,
-            doc.name,
+        shadow_color: ftd::Color::from(
+            ftd::p2::utils::record_optional_with_ref(
+                "shadow-color",
+                &unresolved_properties,
+                doc,
+                0,
+            )?,
+            doc,
+            0,
         )?,
         gradient_direction: ftd::GradientDirection::from(
             ftd::p2::utils::string_optional("gradient-direction", properties, doc.name, 0)?,
@@ -333,14 +353,29 @@ fn common_arguments() -> Vec<(String, ftd::p2::Kind)> {
             "region".to_string(),
             ftd::p2::Kind::string().into_optional(),
         ),
-        ("color".to_string(), ftd::p2::Kind::string().into_optional()),
+        (
+            "color".to_string(),
+            ftd::p2::Kind::Record {
+                name: "ftd#color".to_string(),
+                default: None,
+            }
+            .into_optional(),
+        ),
         (
             "background-color".to_string(),
-            ftd::p2::Kind::string().into_optional(),
+            ftd::p2::Kind::Record {
+                name: "ftd#color".to_string(),
+                default: None,
+            }
+            .into_optional(),
         ),
         (
             "border-color".to_string(),
-            ftd::p2::Kind::string().into_optional(),
+            ftd::p2::Kind::Record {
+                name: "ftd#color".to_string(),
+                default: None,
+            }
+            .into_optional(),
         ),
         (
             "border-width".to_string(),
@@ -448,7 +483,11 @@ fn common_arguments() -> Vec<(String, ftd::p2::Kind)> {
         ),
         (
             "shadow-color".to_string(),
-            ftd::p2::Kind::string().into_optional(),
+            ftd::p2::Kind::Record {
+                name: "ftd#color".to_string(),
+                default: None,
+            }
+            .into_optional(),
         ),
         (
             "background-image".to_string(),
@@ -567,7 +606,13 @@ pub fn image_function() -> ftd::Component {
         root: "ftd.kernel".to_string(),
         arguments: [
             vec![
-                ("src".to_string(), ftd::p2::Kind::string()),
+                (
+                    "src".to_string(),
+                    ftd::p2::Kind::Record {
+                        name: "ftd#image-src".to_string(),
+                        default: None,
+                    },
+                ),
                 (
                     "description".to_string(),
                     ftd::p2::Kind::string().into_optional(),
@@ -591,20 +636,28 @@ pub fn image_function() -> ftd::Component {
 }
 
 pub fn image_from_properties(
-    properties: &std::collections::BTreeMap<String, ftd::component::Property>,
+    unresolved_properties: &std::collections::BTreeMap<String, ftd::component::Property>,
     doc: &ftd::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
     events: &[ftd::p2::Event],
 ) -> ftd::p1::Result<ftd::Image> {
-    let (src, _, reference) =
-        ftd::p2::utils::string_and_source_and_ref(0, "src", properties, doc, condition)?;
-    let properties = &ftd::component::resolve_properties(0, properties, doc)?;
+    let (src, reference) =
+        ftd::p2::utils::record_and_ref(0, "src", unresolved_properties, doc, condition)?;
+    let src_record = ftd::ImageSrc::from(&src, doc, 0)?;
+    let properties = &ftd::component::resolve_properties(0, unresolved_properties, doc)?;
     Ok(ftd::Image {
-        src,
+        src: src_record,
         description: ftd::p2::utils::string_optional("description", properties, doc.name, 0)?
             .unwrap_or_else(|| "".to_string()),
-        common: common_from_properties(properties, doc, condition, is_child, events, reference)?,
+        common: common_from_properties(
+            unresolved_properties,
+            doc,
+            condition,
+            is_child,
+            events,
+            reference,
+        )?,
         crop: ftd::p2::utils::bool_with_default("crop", false, properties, doc.name, 0)?,
     })
 }
@@ -636,15 +689,22 @@ pub fn row_function() -> ftd::Component {
 }
 
 pub fn row_from_properties(
-    properties: &std::collections::BTreeMap<String, ftd::component::Property>,
+    unresolved_properties: &std::collections::BTreeMap<String, ftd::component::Property>,
     doc: &ftd::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
     events: &[ftd::p2::Event],
 ) -> ftd::p1::Result<ftd::Row> {
-    let properties = &ftd::component::resolve_properties(0, properties, doc)?;
+    let properties = &ftd::component::resolve_properties(0, unresolved_properties, doc)?;
     Ok(ftd::Row {
-        common: common_from_properties(properties, doc, condition, is_child, events, None)?,
+        common: common_from_properties(
+            unresolved_properties,
+            doc,
+            condition,
+            is_child,
+            events,
+            None,
+        )?,
         container: container_from_properties(properties, doc)?,
         spacing: ftd::Spacing::from(ftd::p2::utils::string_optional(
             "spacing", properties, doc.name, 0,
@@ -679,15 +739,22 @@ pub fn column_function() -> ftd::Component {
 }
 
 pub fn column_from_properties(
-    properties: &std::collections::BTreeMap<String, ftd::component::Property>,
+    unresolved_properties: &std::collections::BTreeMap<String, ftd::component::Property>,
     doc: &ftd::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
     events: &[ftd::p2::Event],
 ) -> ftd::p1::Result<ftd::Column> {
-    let properties = &ftd::component::resolve_properties(0, properties, doc)?;
+    let properties = &ftd::component::resolve_properties(0, unresolved_properties, doc)?;
     Ok(ftd::Column {
-        common: common_from_properties(properties, doc, condition, is_child, events, None)?,
+        common: common_from_properties(
+            unresolved_properties,
+            doc,
+            condition,
+            is_child,
+            events,
+            None,
+        )?,
         container: container_from_properties(properties, doc)?,
         spacing: ftd::Spacing::from(ftd::p2::utils::string_optional(
             "spacing", properties, doc.name, 0,
@@ -746,13 +813,13 @@ pub fn iframe_function() -> ftd::Component {
 }
 
 pub fn iframe_from_properties(
-    properties: &std::collections::BTreeMap<String, ftd::component::Property>,
+    unresolved_properties: &std::collections::BTreeMap<String, ftd::component::Property>,
     doc: &ftd::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
     events: &[ftd::p2::Event],
 ) -> ftd::p1::Result<ftd::IFrame> {
-    let properties = &ftd::component::resolve_properties(0, properties, doc)?;
+    let properties = &ftd::component::resolve_properties(0, unresolved_properties, doc)?;
     let src = match (
         ftd::p2::utils::string_optional("src", properties, doc.name, 0)?,
         ftd::p2::utils::string_optional("youtube", properties, doc.name, 0)?
@@ -766,74 +833,32 @@ pub fn iframe_from_properties(
 
     Ok(ftd::IFrame {
         src,
-        common: common_from_properties(properties, doc, condition, is_child, events, None)?,
+        common: common_from_properties(
+            unresolved_properties,
+            doc,
+            condition,
+            is_child,
+            events,
+            None,
+        )?,
     })
 }
 
-/*pub fn text_from_properties(
-    properties: &std::collections::BTreeMap<String, ftd::component::Property>,
-    doc: &ftd::p2::TDoc,
-    condition: &Option<ftd::p2::Boolean>,
-    is_child: bool,
-    events: &[ftd::p2::Event],
-
-) -> ftd::p1::Result<ftd::Text> {
-    let properties = &ftd::component::resolve_properties(0, properties, doc)?;
-
-    let (text, source, reference) = ftd::p2::utils::string_and_source_and_ref(
-        0,
-        "text",
-        properties,
-        all_locals,
-        doc.name,
-        condition,
-    )?;
-    let font_str = ftd::p2::utils::string_optional("font", properties, doc.name, 0)?;
-
-    let font: Vec<ftd::NamedFont> = match font_str {
-        Some(f) => f
-            .split(',')
-            .flat_map(|x| ftd::NamedFont::from(Some(x.to_string())))
-            .collect(),
-        None => vec![],
-    };
-    Ok(ftd::Text {
-        line: source != ftd::TextSource::Body,
-        text: if source == ftd::TextSource::Body {
-            ftd::markdown(text.as_str())
-        } else {
-            ftd::markdown_line(text.as_str())
-        },
-        common: common_from_properties(
-            properties, doc, condition, is_child, events,  reference,
-        )?,
-        text_align: ftd::TextAlign::from(
-            ftd::p2::utils::string_optional("text-align", properties, doc.name, 0)?,
-            doc.name,
-        )?,
-        style: ftd::Style::from(
-            ftd::p2::utils::string_optional("style", properties, doc.name, 0)?,
-            doc.name,
-        )?,
-        size: ftd::p2::utils::int_optional("size", properties, doc.name, 0)?,
-        external_font: external_font_from_properties(properties, doc)?,
-        font,
-        line_height: ftd::p2::utils::int_optional("line-height", properties, doc.name, 0)?,
-        line_clamp: ftd::p2::utils::int_optional("line-clamp", properties, doc.name, 0)?,
-    })
-}*/
-
 pub fn text_block_from_properties(
-    properties: &std::collections::BTreeMap<String, ftd::component::Property>,
+    unresolved_properties: &std::collections::BTreeMap<String, ftd::component::Property>,
     doc: &ftd::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
     events: &[ftd::p2::Event],
 ) -> ftd::p1::Result<ftd::TextBlock> {
-    let (text, source, reference) =
-        ftd::p2::utils::string_and_source_and_ref(0, "text", properties, doc, condition)?;
-    let properties = &ftd::component::resolve_properties(0, properties, doc)?;
-    dbg!("2");
+    let (text, source, reference) = ftd::p2::utils::string_and_source_and_ref(
+        0,
+        "text",
+        unresolved_properties,
+        doc,
+        condition,
+    )?;
+    let properties = &ftd::component::resolve_properties(0, unresolved_properties, doc)?;
     let font_str = ftd::p2::utils::string_optional("font", properties, doc.name, 0)?;
 
     let font: Vec<ftd::NamedFont> = match font_str {
@@ -850,7 +875,14 @@ pub fn text_block_from_properties(
         } else {
             ftd::markdown_line(text.as_str())
         },
-        common: common_from_properties(properties, doc, condition, is_child, events, reference)?,
+        common: common_from_properties(
+            unresolved_properties,
+            doc,
+            condition,
+            is_child,
+            events,
+            reference,
+        )?,
         text_align: ftd::TextAlign::from(
             ftd::p2::utils::string_optional("text-align", properties, doc.name, 0)?,
             doc.name,
@@ -867,17 +899,22 @@ pub fn text_block_from_properties(
 }
 
 pub fn code_from_properties(
-    properties: &std::collections::BTreeMap<String, ftd::component::Property>,
+    unresolved_properties: &std::collections::BTreeMap<String, ftd::component::Property>,
     doc: &ftd::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
     events: &[ftd::p2::Event],
 ) -> ftd::p1::Result<ftd::Code> {
-    let (text, _, reference) =
-        ftd::p2::utils::string_and_source_and_ref(0, "text", properties, doc, condition)?;
-    let properties = &ftd::component::resolve_properties(0, properties, doc)?;
+    let (text, _, reference) = ftd::p2::utils::string_and_source_and_ref(
+        0,
+        "text",
+        unresolved_properties,
+        doc,
+        condition,
+    )?;
+    let properties = &ftd::component::resolve_properties(0, unresolved_properties, doc)?;
     let font_str = ftd::p2::utils::record_optional("font", properties, doc.name, 0)?;
-    let font = font_str.map_or(Ok(None), |v| ftd::Font::from(&v, doc, 0).map(Some))?;
+    let font = font_str.map_or(Ok(None), |v| ftd::Type::from(&v, doc, 0).map(Some))?;
 
     Ok(ftd::Code {
         text: ftd::code_with_theme(
@@ -895,7 +932,14 @@ pub fn code_from_properties(
             .as_str(),
             doc.name,
         )?,
-        common: common_from_properties(properties, doc, condition, is_child, events, reference)?,
+        common: common_from_properties(
+            unresolved_properties,
+            doc,
+            condition,
+            is_child,
+            events,
+            reference,
+        )?,
         text_align: ftd::TextAlign::from(
             ftd::p2::utils::string_optional("text-align", properties, doc.name, 0)?,
             doc.name,
@@ -910,14 +954,15 @@ pub fn code_from_properties(
 }
 
 pub fn integer_from_properties(
-    properties: &std::collections::BTreeMap<String, ftd::component::Property>,
+    unresolved_properties: &std::collections::BTreeMap<String, ftd::component::Property>,
     doc: &ftd::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
     events: &[ftd::p2::Event],
 ) -> ftd::p1::Result<ftd::Text> {
-    let reference = ftd::p2::utils::integer_and_ref(0, "value", properties, doc, condition)?.1;
-    let properties = &ftd::component::resolve_properties(0, properties, doc)?;
+    let reference =
+        ftd::p2::utils::integer_and_ref(0, "value", unresolved_properties, doc, condition)?.1;
+    let properties = &ftd::component::resolve_properties(0, unresolved_properties, doc)?;
     let num = format_num::NumberFormat::new();
     let text = match ftd::p2::utils::string_optional("format", properties, doc.name, 0)? {
         Some(f) => num.format(
@@ -928,12 +973,19 @@ pub fn integer_from_properties(
     };
 
     let font_str = ftd::p2::utils::record_optional("font", properties, doc.name, 0)?;
-    let font = font_str.map_or(Ok(None), |v| ftd::Font::from(&v, doc, 0).map(Some))?;
+    let font = font_str.map_or(Ok(None), |v| ftd::Type::from(&v, doc, 0).map(Some))?;
 
     Ok(ftd::Text {
         text: ftd::markdown_line(text.as_str()),
         line: false,
-        common: common_from_properties(properties, doc, condition, is_child, events, reference)?,
+        common: common_from_properties(
+            unresolved_properties,
+            doc,
+            condition,
+            is_child,
+            events,
+            reference,
+        )?,
         text_align: ftd::TextAlign::from(
             ftd::p2::utils::string_optional("text-align", properties, doc.name, 0)?,
             doc.name,
@@ -948,14 +1000,15 @@ pub fn integer_from_properties(
 }
 
 pub fn decimal_from_properties(
-    properties: &std::collections::BTreeMap<String, ftd::component::Property>,
+    unresolved_properties: &std::collections::BTreeMap<String, ftd::component::Property>,
     doc: &ftd::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
     events: &[ftd::p2::Event],
 ) -> ftd::p1::Result<ftd::Text> {
-    let reference = ftd::p2::utils::decimal_and_ref(0, "value", properties, doc, condition)?.1;
-    let properties = &ftd::component::resolve_properties(0, properties, doc)?;
+    let reference =
+        ftd::p2::utils::decimal_and_ref(0, "value", unresolved_properties, doc, condition)?.1;
+    let properties = &ftd::component::resolve_properties(0, unresolved_properties, doc)?;
     let num = format_num::NumberFormat::new();
     let text = match ftd::p2::utils::string_optional("format", properties, doc.name, 0)? {
         Some(f) => num.format(
@@ -966,11 +1019,18 @@ pub fn decimal_from_properties(
     };
 
     let font_str = ftd::p2::utils::record_optional("font", properties, doc.name, 0)?;
-    let font = font_str.map_or(Ok(None), |v| ftd::Font::from(&v, doc, 0).map(Some))?;
+    let font = font_str.map_or(Ok(None), |v| ftd::Type::from(&v, doc, 0).map(Some))?;
     Ok(ftd::Text {
         text: ftd::markdown_line(text.as_str()),
         line: false,
-        common: common_from_properties(properties, doc, condition, is_child, events, reference)?,
+        common: common_from_properties(
+            unresolved_properties,
+            doc,
+            condition,
+            is_child,
+            events,
+            reference,
+        )?,
         text_align: ftd::TextAlign::from(
             ftd::p2::utils::string_optional("text-align", properties, doc.name, 0)?,
             doc.name,
@@ -984,7 +1044,7 @@ pub fn decimal_from_properties(
     })
 }
 
-pub fn color_from(l: Option<String>, doc_id: &str) -> ftd::p1::Result<Option<ftd::Color>> {
+pub fn color_from(l: Option<String>, doc_id: &str) -> ftd::p1::Result<Option<ftd::ColorValue>> {
     use std::str::FromStr;
 
     let v = match l {
@@ -993,7 +1053,7 @@ pub fn color_from(l: Option<String>, doc_id: &str) -> ftd::p1::Result<Option<ftd
     };
 
     match css_color_parser::Color::from_str(v.as_str()) {
-        Ok(v) => Ok(Some(ftd::Color {
+        Ok(v) => Ok(Some(ftd::ColorValue {
             r: v.r,
             g: v.g,
             b: v.b,
@@ -1004,14 +1064,15 @@ pub fn color_from(l: Option<String>, doc_id: &str) -> ftd::p1::Result<Option<ftd
 }
 
 pub fn boolean_from_properties(
-    properties: &std::collections::BTreeMap<String, ftd::component::Property>,
+    unresolved_properties: &std::collections::BTreeMap<String, ftd::component::Property>,
     doc: &ftd::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
     events: &[ftd::p2::Event],
 ) -> ftd::p1::Result<ftd::Text> {
-    let reference = ftd::p2::utils::boolean_and_ref(0, "value", properties, doc, condition)?.1;
-    let properties = &ftd::component::resolve_properties(0, properties, doc)?;
+    let reference =
+        ftd::p2::utils::boolean_and_ref(0, "value", unresolved_properties, doc, condition)?.1;
+    let properties = &ftd::component::resolve_properties(0, unresolved_properties, doc)?;
     let value = ftd::p2::utils::bool("value", properties, doc.name, 0)?;
     let text = if value {
         ftd::p2::utils::string_with_default("true", "true", properties, doc.name, 0)?
@@ -1020,12 +1081,19 @@ pub fn boolean_from_properties(
     };
 
     let font_str = ftd::p2::utils::record_optional("font", properties, doc.name, 0)?;
-    let font = font_str.map_or(Ok(None), |v| ftd::Font::from(&v, doc, 0).map(Some))?;
+    let font = font_str.map_or(Ok(None), |v| ftd::Type::from(&v, doc, 0).map(Some))?;
 
     Ok(ftd::Text {
         text: ftd::markdown_line(text.as_str()),
         line: false,
-        common: common_from_properties(properties, doc, condition, is_child, events, reference)?,
+        common: common_from_properties(
+            unresolved_properties,
+            doc,
+            condition,
+            is_child,
+            events,
+            reference,
+        )?,
         text_align: ftd::TextAlign::from(
             ftd::p2::utils::string_optional("text-align", properties, doc.name, 0)?,
             doc.name,
@@ -1053,7 +1121,7 @@ pub fn text_function() -> ftd::Component {
                 (
                     "font".to_string(),
                     ftd::p2::Kind::Record {
-                        name: "ftd#font".to_string(),
+                        name: "ftd#type".to_string(),
                         default: None,
                     }
                     .into_optional(),
@@ -1097,7 +1165,7 @@ pub fn code_function() -> ftd::Component {
                 (
                     "font".to_string(),
                     ftd::p2::Kind::Record {
-                        name: "ftd#font".to_string(),
+                        name: "ftd#type".to_string(),
                         default: None,
                     }
                     .into_optional(),
@@ -1143,7 +1211,7 @@ pub fn integer_function() -> ftd::Component {
                 (
                     "font".to_string(),
                     ftd::p2::Kind::Record {
-                        name: "ftd#font".to_string(),
+                        name: "ftd#type".to_string(),
                         default: None,
                     }
                     .into_optional(),
@@ -1185,7 +1253,7 @@ pub fn decimal_function() -> ftd::Component {
                 (
                     "font".to_string(),
                     ftd::p2::Kind::Record {
-                        name: "ftd#font".to_string(),
+                        name: "ftd#type".to_string(),
                         default: None,
                     }
                     .into_optional(),
@@ -1256,7 +1324,7 @@ pub fn markup_function() -> ftd::Component {
                 (
                     "font".to_string(),
                     ftd::p2::Kind::Record {
-                        name: "ftd#font".to_string(),
+                        name: "ftd#type".to_string(),
                         default: None,
                     }
                     .into_optional(),
@@ -1345,7 +1413,7 @@ pub fn boolean_function() -> ftd::Component {
                 (
                     "font".to_string(),
                     ftd::p2::Kind::Record {
-                        name: "ftd#font".to_string(),
+                        name: "ftd#type".to_string(),
                         default: None,
                     }
                     .into_optional(),
@@ -1393,29 +1461,43 @@ pub fn input_function() -> ftd::Component {
 }
 
 pub fn input_from_properties(
-    properties: &std::collections::BTreeMap<String, ftd::component::Property>,
+    unresolved_properties: &std::collections::BTreeMap<String, ftd::component::Property>,
     doc: &ftd::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
     events: &[ftd::p2::Event],
 ) -> ftd::p1::Result<ftd::Input> {
-    let properties = &ftd::component::resolve_properties(0, properties, doc)?;
+    let properties = &ftd::component::resolve_properties(0, unresolved_properties, doc)?;
     Ok(ftd::Input {
-        common: common_from_properties(properties, doc, condition, is_child, events, None)?,
+        common: common_from_properties(
+            unresolved_properties,
+            doc,
+            condition,
+            is_child,
+            events,
+            None,
+        )?,
         placeholder: ftd::p2::utils::string_optional("placeholder", properties, doc.name, 0)?,
     })
 }
 
 pub fn scene_from_properties(
-    properties: &std::collections::BTreeMap<String, ftd::component::Property>,
+    unresolved_properties: &std::collections::BTreeMap<String, ftd::component::Property>,
     doc: &ftd::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
     events: &[ftd::p2::Event],
 ) -> ftd::p1::Result<ftd::Scene> {
-    let properties = &ftd::component::resolve_properties(0, properties, doc)?;
+    let properties = &ftd::component::resolve_properties(0, unresolved_properties, doc)?;
     Ok(ftd::Scene {
-        common: common_from_properties(properties, doc, condition, is_child, events, None)?,
+        common: common_from_properties(
+            unresolved_properties,
+            doc,
+            condition,
+            is_child,
+            events,
+            None,
+        )?,
         container: container_from_properties(properties, doc)?,
         spacing: ftd::Spacing::from(ftd::p2::utils::string_optional(
             "spacing", properties, doc.name, 0,
@@ -1424,13 +1506,13 @@ pub fn scene_from_properties(
 }
 
 pub fn grid_from_properties(
-    properties: &std::collections::BTreeMap<String, ftd::component::Property>,
+    unresolved_properties: &std::collections::BTreeMap<String, ftd::component::Property>,
     doc: &ftd::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
     events: &[ftd::p2::Event],
 ) -> ftd::p1::Result<ftd::Grid> {
-    let properties = &ftd::component::resolve_properties(0, properties, doc)?;
+    let properties = &ftd::component::resolve_properties(0, unresolved_properties, doc)?;
     Ok(ftd::Grid {
         slots: match ftd::p2::utils::string_optional("slots", properties, doc.name, 0)? {
             Some(val) => val,
@@ -1451,7 +1533,14 @@ pub fn grid_from_properties(
             doc.name,
             0,
         )?,
-        common: common_from_properties(properties, doc, condition, is_child, events, None)?,
+        common: common_from_properties(
+            unresolved_properties,
+            doc,
+            condition,
+            is_child,
+            events,
+            None,
+        )?,
         container: container_from_properties(properties, doc)?,
         inline: ftd::p2::utils::bool_with_default("inline", false, properties, doc.name, 0)?,
         auto_flow: ftd::p2::utils::string_optional("auto-flow", properties, doc.name, 0)?,
@@ -1459,21 +1548,33 @@ pub fn grid_from_properties(
 }
 
 pub fn markup_from_properties(
-    properties: &std::collections::BTreeMap<String, ftd::component::Property>,
+    unresolved_properties: &std::collections::BTreeMap<String, ftd::component::Property>,
     doc: &ftd::p2::TDoc,
     condition: &Option<ftd::p2::Boolean>,
     is_child: bool,
     events: &[ftd::p2::Event],
 ) -> ftd::p1::Result<ftd::Markups> {
-    let (value, source, reference) =
-        ftd::p2::utils::string_and_source_and_ref(0, "text", properties, doc, condition)?;
-    let properties = &ftd::component::resolve_properties(0, properties, doc)?;
+    let (value, source, reference) = ftd::p2::utils::string_and_source_and_ref(
+        0,
+        "text",
+        unresolved_properties,
+        doc,
+        condition,
+    )?;
+    let properties = &ftd::component::resolve_properties(0, unresolved_properties, doc)?;
     let font_str = ftd::p2::utils::record_optional("font", properties, doc.name, 0)?;
-    let font = font_str.map_or(Ok(None), |v| ftd::Font::from(&v, doc, 0).map(Some))?;
+    let font = font_str.map_or(Ok(None), |v| ftd::Type::from(&v, doc, 0).map(Some))?;
 
     Ok(ftd::Markups {
         text: ftd::markup_line(value.as_str()),
-        common: common_from_properties(properties, doc, condition, is_child, events, reference)?,
+        common: common_from_properties(
+            unresolved_properties,
+            doc,
+            condition,
+            is_child,
+            events,
+            reference,
+        )?,
         children: vec![],
         line: source != ftd::TextSource::Body,
         text_align: ftd::TextAlign::from(

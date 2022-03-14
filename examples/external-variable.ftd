@@ -1,3 +1,9 @@
+-- ftd.color yellow: yellow
+dark: yellow
+
+-- ftd.color red: red
+dark: red
+
 -- ftd.column foo:
 integer a:
 boolean b: false
@@ -6,7 +12,7 @@ $on-click$: increment $a
 
 --- ftd.integer:
 value: $a
-color if $b: yellow
+color if $b: $yellow
 
 -- string current: hello
 
@@ -28,4 +34,4 @@ boolean foo: false
 $on-click$: toggle $foo
 
 --- ftd.text: hello
-color if $foo: red
+color if $foo: $red

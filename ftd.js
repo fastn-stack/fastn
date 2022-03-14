@@ -308,6 +308,13 @@ let ftd_utils = {
 
     handle_action: function (id, target, value, data, ftd_external_children) {
         data[target].value = value.toString();
+        let new_value = data[target].value;
+        if (ftd_utils.isJson(data[target].value)) {
+            let json = JSON.parse(new_value);
+            if (!!json && !!json["$kind$"]) {
+                new_value = json[json["$kind$"]];
+            }
+        }
 
         let dependencies = data[target].dependencies;
         for (const dependency in dependencies) {
@@ -331,7 +338,12 @@ let ftd_utils = {
                         deps[dependency] = dependencies[dependency];
                         data[target].dependencies = deps;
                     } else {
-                        document.querySelector(`[data-id="${dependency}:${id}"]`).innerText = data[target].value;
+                        let doc = document.querySelector(`[data-id="${dependency}:${id}"]`);
+                        if (doc.src !== undefined) {
+                            doc.src = new_value;
+                        } else {
+                            doc.innerText = new_value;
+                        }
                     }
                 } else if (json_dependency.dependency_type === "Visible") {
                     let display = "none";
@@ -353,10 +365,34 @@ let ftd_utils = {
                     ftd_utils.first_child_styling(`${dependency}:${id}`);
 
                 } else if (json_dependency.dependency_type === "Variable") {
-                    if (ftd_utils.is_equal_condition(data[target].value, json_dependency.condition)) {
+                    if (!json_dependency.condition) {
+                        if (dependency === "$style$") {
+                            for (const parameter in json_dependency.parameters) {
+                                let param_val = JSON.parse(json_dependency.parameters[parameter].value.value);
+                                let node = param_val["$node$"];
+                                let variable = param_val["$variable$"];
+                                let dependent = data[variable].value;
+                                let dependent_dependencies = JSON.parse(data[variable].dependencies[node]);
+                                for (const d in dependent_dependencies) {
+                                    if (dependent_dependencies[d].dependency_type !== "Style"
+                                        || !dependent_dependencies[d].parameters[parameter]) {
+                                        continue;
+                                    }
+                                    dependent_dependencies[d].parameters[parameter].value.value = data[target].value;
+                                }
+                                data[variable].dependencies[node] = JSON.stringify(dependent_dependencies);
+                                ftd_utils.handle_action(id, variable, dependent, data, ftd_external_children);
+                            }
+                        }
+                    } else if (ftd_utils.is_equal_condition(data[target].value, json_dependency.condition)) {
                         for (const parameter in json_dependency.parameters) {
                             if (data[parameter] !== undefined) {
                                 let value = json_dependency.parameters[parameter].value.value;
+                                if (dependency === "$value#kind$") {
+                                    let new_value = JSON.parse(data[parameter].value);
+                                    new_value["$kind$"] = value;
+                                    value = JSON.stringify(new_value);
+                                }
                                 ftd_utils.handle_action(id, parameter, value, data, ftd_external_children)
                             }
                         }
@@ -367,14 +403,57 @@ let ftd_utils = {
                                 if (default_value === null) {
                                     continue;
                                 }
+                                if (dependency === "$value#kind$") {
+                                    let new_value = JSON.parse(data[parameter].value);
+                                    new_value["$kind$"] = default_value.value;
+                                    default_value.value = JSON.stringify(new_value);
+                                }
                                 ftd_utils.handle_action(id, parameter, default_value.value, data, ftd_external_children)
                             }
                         }
                     }
                 } else if (json_dependency.dependency_type === "Style") {
-                    if (ftd_utils.is_equal_condition(data[target].value, json_dependency.condition)) {
+                    if (!json_dependency.condition) {
+                        let set = [];
+                        if (!!json_dependency.parameters["dependents"]) {
+                            set = JSON.parse(json_dependency.parameters["dependents"].value.value);
+                        }
+                        if (!!set.length) {
+                            let style_attr = Object.keys(json_dependency.parameters).filter(w => w !== "dependents")[0];
+                            for (const idx in set) {
+                                let dependent = data[set[idx]].value;
+                                let dependent_dependencies = JSON.parse(data[set[idx]].dependencies[dependency]);
+                                for (const d in dependent_dependencies) {
+                                    if (dependent_dependencies[d].dependency_type !== "Style"
+                                        || !dependent_dependencies[d].parameters[style_attr]) {
+                                        continue;
+                                    }
+                                    dependent_dependencies[d].parameters[style_attr].default.value = data[target].value;
+                                }
+                                data[set[idx]].dependencies[dependency] = JSON.stringify(dependent_dependencies);
+                                ftd_utils.handle_action(id, set[idx], dependent, data, ftd_external_children);
+                            }
+                            continue;
+                        }
+                        for (const parameter in json_dependency.parameters) {
+                            if (parameter === "dependents") {
+                                continue;
+                            }
+                            let important = json_dependency.parameters[parameter].value.important;
+                            ftd_utils.set_style(parameter, `${dependency}:${id}`, new_value, important);
+                            if (!styles_edited.includes(parameter)) {
+                                styles_edited.push(parameter);
+                            }
+                        }
+                    } else if (ftd_utils.is_equal_condition(data[target].value, json_dependency.condition)) {
                         for (const parameter in json_dependency.parameters) {
                             let value = json_dependency.parameters[parameter].value.value;
+                            if (ftd_utils.isJson(value)) {
+                                let json = JSON.parse(value);
+                                if (!!json && !!json["$kind$"]) {
+                                    value = json[json["$kind$"]];
+                                }
+                            }
                             let important = json_dependency.parameters[parameter].value.important;
                             ftd_utils.set_style(parameter, `${dependency}:${id}`, value, important);
                             if (!styles_edited.includes(parameter)) {
@@ -384,6 +463,12 @@ let ftd_utils = {
                     } else {
                         for (const parameter in json_dependency.parameters) {
                             let default_value = json_dependency.parameters[parameter].default;
+                            if (ftd_utils.isJson(default_value)) {
+                                let json = JSON.parse(default_value);
+                                if (!!json && !!json["$kind$"]) {
+                                    default_value = json[json["$kind$"]];
+                                }
+                            }
                             if (!styles_edited.includes(parameter)) {
                                 if (default_value === null) {
                                     if (["border-left-width", "border-right-width", "border-top-width", "border-bottom-width"].includes(parameter)) {
@@ -394,6 +479,12 @@ let ftd_utils = {
                                     }
                                 } else {
                                     let value = default_value.value;
+                                    if (ftd_utils.isJson(value)) {
+                                        let json = JSON.parse(value);
+                                        if (!!json && !!json["$kind$"]) {
+                                            value = json[json["$kind$"]];
+                                        }
+                                    }
                                     let important = default_value.important;
                                     ftd_utils.set_style(parameter, `${dependency}:${id}`, value, important);
                                 }
@@ -714,3 +805,101 @@ window.ftd = (function () {
 function console_print(id, data) {
     console.log(data);
 }
+
+(function () {
+    const DARK_MODE = "ftd#dark-mode";
+    const SYSTEM_DARK_MODE = "ftd#system-dark-mode";
+    const FOLLOW_SYSTEM_DARK_MODE = "ftd#follow-system-dark-mode";
+    const DARK_MODE_COOKIE = "ftd-dark-mode";
+    const COOKIE_SYSTEM_LIGHT = "system-light";
+    const COOKIE_SYSTEM_DARK = "system-dark";
+    const COOKIE_DARK_MODE = "dark";
+    const COOKIE_LIGHT_MODE = "light";
+    const DARK_MODE_CLASS = "fpm-dark";
+
+    window.enable_dark_mode = function () {
+        // TODO: coalesce the two set_bool-s into one so there is only one DOM
+        //       update
+        window.ftd.set_bool_for_all(DARK_MODE, true);
+        window.ftd.set_bool_for_all(FOLLOW_SYSTEM_DARK_MODE, false);
+        window.ftd.set_bool_for_all(SYSTEM_DARK_MODE, system_dark_mode());
+        document.body.classList.add(DARK_MODE_CLASS);
+        set_cookie(DARK_MODE_COOKIE, COOKIE_DARK_MODE);
+    }
+
+    window.enable_light_mode = function () {
+        // TODO: coalesce the two set_bool-s into one so there is only one DOM
+        //       update
+        window.ftd.set_bool_for_all(DARK_MODE, false);
+        window.ftd.set_bool_for_all(FOLLOW_SYSTEM_DARK_MODE, false);
+        window.ftd.set_bool_for_all(SYSTEM_DARK_MODE, system_dark_mode());
+        if (document.body.classList.contains(DARK_MODE_CLASS)) {
+            document.body.classList.remove(DARK_MODE_CLASS);
+        }
+        set_cookie(DARK_MODE_COOKIE, COOKIE_LIGHT_MODE);
+    }
+
+    window.enable_system_mode = function () {
+        // TODO: coalesce the two set_bool-s into one so there is only one DOM
+        //       update
+        window.ftd.set_bool_for_all(FOLLOW_SYSTEM_DARK_MODE, true);
+        window.ftd.set_bool_for_all(SYSTEM_DARK_MODE, system_dark_mode());
+        if (system_dark_mode()) {
+            window.ftd.set_bool_for_all(DARK_MODE, true);
+            document.body.classList.add(DARK_MODE_CLASS);
+            set_cookie(DARK_MODE_COOKIE, COOKIE_SYSTEM_DARK)
+        } else {
+            window.ftd.set_bool_for_all(DARK_MODE, false);
+            if (document.body.classList.contains(DARK_MODE_CLASS)) {
+                document.body.classList.remove(DARK_MODE_CLASS);
+            }
+            set_cookie(DARK_MODE_COOKIE, COOKIE_SYSTEM_LIGHT)
+        }
+    }
+
+    function set_cookie(name, value) {
+        document.cookie = name + "=" + value + "; path=/";
+    }
+
+    function system_dark_mode() {
+        return !!(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)
+    }
+
+    function initialise_dark_mode() {
+        update_dark_mode();
+        start_watching_dark_mode_system_preference();
+    }
+
+    function get_cookie(name, def) {
+        // source: https://stackoverflow.com/questions/5639346/
+        let regex = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
+        return regex !== null ? regex.pop() : def;
+    }
+
+    function update_dark_mode() {
+        let current_dark_mode_cookie = get_cookie(DARK_MODE_COOKIE, COOKIE_SYSTEM_LIGHT);
+
+        switch (current_dark_mode_cookie) {
+            case COOKIE_SYSTEM_LIGHT:
+            case COOKIE_SYSTEM_DARK:
+                window.enable_system_mode();
+                break;
+            case COOKIE_LIGHT_MODE:
+                window.enable_light_mode();
+                break;
+            case COOKIE_DARK_MODE:
+                window.enable_dark_mode();
+                break;
+            default:
+                console.log("cookie value is wrong", current_dark_mode_cookie);
+                window.enable_system_mode();
+        }
+    }
+
+    function start_watching_dark_mode_system_preference() {
+        window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').addEventListener(
+            "change", update_dark_mode
+        );
+    }
+    initialise_dark_mode();
+})();

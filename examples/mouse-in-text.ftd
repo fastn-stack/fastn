@@ -1,5 +1,27 @@
 -- import: ft
 
+-- ftd.color 818692: #818692
+dark: #818692
+
+-- ftd.color 5868CD: #5868CD
+dark: #5868CD
+
+-- ftd.color F1F3FE: #F1F3FE
+dark: #F1F3FE
+
+-- ftd.color red: red
+dark: red
+
+-- ftd.color yellow: yellow
+dark: yellow
+
+-- ftd.color orange: orange
+dark: orange
+
+-- ftd.color green: green
+dark: green
+
+
 -- ftd.column:
 padding: 30
 
@@ -25,9 +47,9 @@ move-up: 7
 
 -- ftd.text: $obj
 $loop$: $children as $obj
-color: #818692
-color if $MOUSE-IN: #5868CD
-background-color if $MOUSE-IN: #F1F3FE
+color: $818692
+color if $MOUSE-IN: $5868CD
+background-color if $MOUSE-IN: $F1F3FE
 
 
 -- show-children:
@@ -39,22 +61,22 @@ string list datas:
 
 --- ftd.text: $obj
 $loop$: $datas as $obj
-color: #818692
-color if $MOUSE-IN: #5868CD
-background-color if $MOUSE-IN: #F1F3FE
+color: $818692
+color if $MOUSE-IN: $5868CD
+background-color if $MOUSE-IN: $F1F3FE
 
 
 -- ftd.text foo:
 text: Hello World
-color if $MOUSE-IN: red
-background-color if $MOUSE-IN: yellow
+color if $MOUSE-IN: $red
+background-color if $MOUSE-IN: $yellow
 border-width if $MOUSE-IN: 40
 
 
 
 -- ftd.column asd:
 boolean mouse-in: false
-color if $mouse-in: orange
+color if $mouse-in: $orange
 
 --- ftd.text: Hover Here
 $on-mouse-enter$: $mouse-in = true
@@ -66,11 +88,11 @@ if: $mouse-in
 
 
 -- ftd.row bar:
-color if $MOUSE-IN: red
-background-color if $MOUSE-IN: orange
+color if $MOUSE-IN: $red
+background-color if $MOUSE-IN: $orange
 
 --- ftd.text: Hello
 
 --- ftd.text: World
 padding-left: 10
-color if $MOUSE-IN: green
+color if $MOUSE-IN: $green

@@ -1,5 +1,20 @@
+-- ftd.image-src src: https://www.w3schools.com/cssref/img_tree.gif
+dark: https://www.w3schools.com/cssref/img_tree.gif
+
+-- ftd.color green: green
+dark: green
+
+-- ftd.color red: red
+dark: red
+
+-- ftd.color yellow: yellow
+dark: yellow
+
+-- ftd.color ebedef: #ebedef
+dark: #ebedef
+
 -- ftd.image:
-src: https://www.w3schools.com/cssref/img_tree.gif
+src: $src
 link: https://www.amitu.com/fifthtry/amitu/
 width: 200
 
@@ -20,9 +35,9 @@ append-at: some-id
 --- ftd.row:
 spacing: 20
 id: some-id
-color: red
+color: $red
 border-width: 2
-border-color: yellow
+border-color: $yellow
 
 -- ftd.column bar:
 open: true
@@ -34,9 +49,9 @@ padding-top: 20
 --- ftd.column:
 spacing: 20
 id: some-id
-color: green
+color: $green
 border-width: 2
-border-color: #ebedef
+border-color: $ebedef
 
 
 -- boolean show: true

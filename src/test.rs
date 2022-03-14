@@ -32,6 +32,13 @@ pub fn s(s: &str) -> String {
     s.to_string()
 }
 
+pub fn i(p: &str) -> ftd::ImageSrc {
+    ftd::ImageSrc {
+        light: s(p),
+        dark: s(p),
+    }
+}
+
 pub use ftd::p2::interpreter::{default_bag, default_column};
 
 pub fn person_fields() -> std::collections::BTreeMap<String, ftd::p2::Kind> {

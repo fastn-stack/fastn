@@ -1,5 +1,14 @@
 -- import: ft
 
+-- ftd.color white: white
+dark: white
+
+-- ftd.image-src src0: https://media.githubusercontent.com/media/gramener/comicgen/v1/svg/aryan/pose/handsfolded.svg
+dark: https://media.githubusercontent.com/media/gramener/comicgen/v1/svg/aryan/pose/handsfolded.svg
+
+-- ftd.image-src src1: https://media.githubusercontent.com/media/gramener/comicgen/v1/svg/aryan/emotion/sad.svg
+dark: https://media.githubusercontent.com/media/gramener/comicgen/v1/svg/aryan/emotion/sad.svg
+
 -- ft.h0: Once upon a time...
 
 -- ftd.scene:
@@ -12,7 +21,7 @@ top: 60
 
 --- ftd.text: Hello Everyone! I am Ethan
 border-radius: 150
-background-color: white
+background-color: $white
 padding: 10
 left: 190
 top: 70
@@ -27,11 +36,11 @@ left: $left
 top: $top
 
 --- ftd.image:
-src: https://media.githubusercontent.com/media/gramener/comicgen/v1/svg/aryan/pose/handsfolded.svg
+src: $src0
 top: 0
 left: 0
 
 --- ftd.image:
-src: https://media.githubusercontent.com/media/gramener/comicgen/v1/svg/aryan/emotion/sad.svg
+src: $src1
 top: 0
 left: 0
