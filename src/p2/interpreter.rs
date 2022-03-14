@@ -1128,10 +1128,13 @@ mod test {
                     (
                         s("color"),
                         ftd::component::Property {
-                            default: Some(ftd::PropertyValue::Value {
-                                value: ftd::Value::String {
-                                    text: "white".to_string(),
-                                    source: ftd::TextSource::Header,
+                            default: Some(ftd::PropertyValue::Reference {
+                                name: s("foo/bar#white"),
+                                kind: ftd::p2::Kind::Optional {
+                                    kind: Box::new(ftd::p2::Kind::Record {
+                                        name: s("ftd#color"),
+                                        default: None,
+                                    }),
                                 },
                             }),
                             conditions: vec![
@@ -1145,10 +1148,13 @@ mod test {
                                             value: ftd::Value::Boolean { value: true },
                                         },
                                     },
-                                    ftd::PropertyValue::Value {
-                                        value: ftd::Value::String {
-                                            text: "green".to_string(),
-                                            source: ftd::TextSource::Header,
+                                    ftd::PropertyValue::Reference {
+                                        name: s("foo/bar#green"),
+                                        kind: ftd::p2::Kind::Optional {
+                                            kind: Box::new(ftd::p2::Kind::Record {
+                                                name: s("ftd#color"),
+                                                default: None,
+                                            }),
                                         },
                                     },
                                 ),
@@ -1162,10 +1168,13 @@ mod test {
                                             value: ftd::Value::Boolean { value: false },
                                         },
                                     },
-                                    ftd::PropertyValue::Value {
-                                        value: ftd::Value::String {
-                                            text: "red".to_string(),
-                                            source: ftd::TextSource::Header,
+                                    ftd::PropertyValue::Reference {
+                                        name: s("foo/bar#red"),
+                                        kind: ftd::p2::Kind::Optional {
+                                            kind: Box::new(ftd::p2::Kind::Record {
+                                                name: s("ftd#color"),
+                                                default: None,
+                                            }),
                                         },
                                     },
                                 ),
@@ -1187,6 +1196,111 @@ mod test {
                 ])
                 .collect(),
                 ..Default::default()
+            }),
+        );
+
+        bag.insert(
+            s("foo/bar#green"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("green"),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Record {
+                        name: s("ftd#color"),
+                        fields: std::array::IntoIter::new([
+                            (
+                                s("dark"),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::String {
+                                        text: s("green"),
+                                        source: ftd::TextSource::Header,
+                                    },
+                                },
+                            ),
+                            (
+                                s("light"),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::String {
+                                        text: s("green"),
+                                        source: ftd::TextSource::Caption,
+                                    },
+                                },
+                            ),
+                        ])
+                        .collect(),
+                    },
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            }),
+        );
+
+        bag.insert(
+            s("foo/bar#red"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("red"),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Record {
+                        name: s("ftd#color"),
+                        fields: std::array::IntoIter::new([
+                            (
+                                s("dark"),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::String {
+                                        text: s("red"),
+                                        source: ftd::TextSource::Header,
+                                    },
+                                },
+                            ),
+                            (
+                                s("light"),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::String {
+                                        text: s("red"),
+                                        source: ftd::TextSource::Caption,
+                                    },
+                                },
+                            ),
+                        ])
+                        .collect(),
+                    },
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            }),
+        );
+
+        bag.insert(
+            s("foo/bar#white"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("white"),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Record {
+                        name: s("ftd#color"),
+                        fields: std::array::IntoIter::new([
+                            (
+                                s("dark"),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::String {
+                                        text: s("white"),
+                                        source: ftd::TextSource::Header,
+                                    },
+                                },
+                            ),
+                            (
+                                s("light"),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::String {
+                                        text: s("white"),
+                                        source: ftd::TextSource::Caption,
+                                    },
+                                },
+                            ),
+                        ])
+                        .collect(),
+                    },
+                },
+                conditions: vec![],
+                flags: Default::default(),
             }),
         );
 
@@ -1237,7 +1351,7 @@ mod test {
                             b: 0,
                             alpha: 1.0,
                         },
-                        reference: None,
+                        reference: Some(s("foo/bar#red")),
                     }),
                     conditional_attribute: std::array::IntoIter::new([(
                         s("color"),
@@ -1250,9 +1364,9 @@ mod test {
                                         value: s("true"),
                                     },
                                     ftd::ConditionalValue {
-                                        value: s("rgba(0,128,0,1)"),
+                                        value: s("{\"$kind$\":\"light\",\"dark\":\"rgba(0,128,0,1)\",\"light\":\"rgba(0,128,0,1)\"}"),
                                         important: false,
-                                        reference: None,
+                                        reference: Some(s("foo/bar#green")),
                                     },
                                 ),
                                 (
@@ -1261,16 +1375,16 @@ mod test {
                                         value: s("false"),
                                     },
                                     ftd::ConditionalValue {
-                                        value: s("rgba(255,0,0,1)"),
+                                        value: s("{\"$kind$\":\"light\",\"dark\":\"rgba(255,0,0,1)\",\"light\":\"rgba(255,0,0,1)\"}"),
                                         important: false,
-                                        reference: None,
+                                        reference: Some(s("foo/bar#red")),
                                     },
                                 ),
                             ],
                             default: Some(ftd::ConditionalValue {
-                                value: s("rgba(255,255,255,1)"),
+                                value: s("{\"$kind$\":\"light\",\"dark\":\"rgba(255,255,255,1)\",\"light\":\"rgba(255,255,255,1)\"}"),
                                 important: false,
-                                reference: None,
+                                reference: Some(s("foo/bar#white")),
                             }),
                         },
                     )])
@@ -1291,9 +1405,12 @@ mod test {
             -- ftd.color green: green
             dark: green
 
+            -- ftd.color white: white
+            dark: white
+
             -- ftd.text foo:
             caption name:
-            color: white
+            color: $white
             color if $present: $green
             color if not $present: $red
             text: $name
@@ -1584,10 +1701,13 @@ mod test {
                                 (
                                     s("color"),
                                     ftd::component::Property {
-                                        default: Some(ftd::PropertyValue::Value {
-                                            value: ftd::variable::Value::String {
-                                                text: "white".to_string(),
-                                                source: ftd::TextSource::Header,
+                                        default: Some(ftd::PropertyValue::Reference {
+                                            name: s("foo/bar#white"),
+                                            kind: ftd::p2::Kind::Optional {
+                                                kind: Box::new(ftd::p2::Kind::Record {
+                                                    name: s("ftd#color"),
+                                                    default: None,
+                                                }),
                                             },
                                         }),
                                         conditions: vec![],
@@ -1627,10 +1747,13 @@ mod test {
                                 (
                                     s("color"),
                                     ftd::component::Property {
-                                        default: Some(ftd::PropertyValue::Value {
-                                            value: ftd::variable::Value::String {
-                                                text: "#4D4D4D".to_string(),
-                                                source: ftd::TextSource::Header,
+                                        default: Some(ftd::PropertyValue::Reference {
+                                            name: s("foo/bar#4D4D4D"),
+                                            kind: ftd::p2::Kind::Optional {
+                                                kind: Box::new(ftd::p2::Kind::Record {
+                                                    name: s("ftd#color"),
+                                                    default: None,
+                                                }),
                                             },
                                         }),
                                         conditions: vec![],
@@ -1929,6 +2052,76 @@ mod test {
             }),
         );
 
+        bag.insert(
+            s("foo/bar#4D4D4D"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("4D4D4D"),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Record {
+                        name: s("ftd#color"),
+                        fields: std::array::IntoIter::new([
+                            (
+                                s("dark"),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::String {
+                                        text: s("#4D4D4D"),
+                                        source: ftd::TextSource::Header,
+                                    },
+                                },
+                            ),
+                            (
+                                s("light"),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::String {
+                                        text: s("#4D4D4D"),
+                                        source: ftd::TextSource::Caption,
+                                    },
+                                },
+                            ),
+                        ])
+                        .collect(),
+                    },
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            }),
+        );
+
+        bag.insert(
+            s("foo/bar#white"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("white"),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Record {
+                        name: s("ftd#color"),
+                        fields: std::array::IntoIter::new([
+                            (
+                                s("dark"),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::String {
+                                        text: s("white"),
+                                        source: ftd::TextSource::Header,
+                                    },
+                                },
+                            ),
+                            (
+                                s("light"),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::String {
+                                        text: s("white"),
+                                        source: ftd::TextSource::Caption,
+                                    },
+                                },
+                            ),
+                        ])
+                        .collect(),
+                    },
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            }),
+        );
+
         let children = vec![
             ftd::Element::Markup(ftd::Markups {
                 text: ftd::markdown_line("5PM Tasks"),
@@ -1947,7 +2140,7 @@ mod test {
                             b: 255,
                             alpha: 1.0,
                         },
-                        reference: None,
+                        reference: Some(s("foo/bar#white")),
                     }),
                     reference: Some(s("foo/bar#name@0,0,0")),
                     condition: Some(ftd::Condition {
@@ -1975,7 +2168,7 @@ mod test {
                             b: 77,
                             alpha: 1.0,
                         },
-                        reference: None,
+                        reference: Some(s("foo/bar#4D4D4D")),
                     }),
                     reference: Some(s("foo/bar#name@0,0,0")),
                     condition: Some(ftd::Condition {
@@ -2008,7 +2201,7 @@ mod test {
                                         b: 255,
                                         alpha: 1.0,
                                     },
-                                    reference: None,
+                                    reference: Some(s("foo/bar#white")),
                                 }),
                                 reference: Some(s("foo/bar#name@0,0,0,2")),
                                 condition: Some(ftd::Condition {
@@ -2037,7 +2230,7 @@ mod test {
                                         b: 77,
                                         alpha: 1.0,
                                     },
-                                    reference: None,
+                                    reference: Some(s("foo/bar#4D4D4D")),
                                 }),
                                 reference: Some(s("foo/bar#name@0,0,0,2")),
                                 condition: Some(ftd::Condition {
@@ -2070,7 +2263,7 @@ mod test {
                                                     b: 255,
                                                     alpha: 1.0,
                                                 },
-                                                reference: None,
+                                                reference: Some(s("foo/bar#white")),
                                             }),
                                             reference: Some(s("foo/bar#name@0,0,0,0,2")),
                                             condition: Some(ftd::Condition {
@@ -2099,7 +2292,7 @@ mod test {
                                                     b: 77,
                                                     alpha: 1.0,
                                                 },
-                                                reference: None,
+                                                reference: Some(s("foo/bar#4D4D4D")),
                                             }),
                                             reference: Some(s("foo/bar#name@0,0,0,0,2")),
                                             condition: Some(ftd::Condition {
@@ -2153,7 +2346,7 @@ mod test {
                                         b: 255,
                                         alpha: 1.0,
                                     },
-                                    reference: None,
+                                    reference: Some(s("foo/bar#white")),
                                 }),
                                 reference: Some(s("foo/bar#name@0,0,0,3")),
                                 condition: Some(ftd::Condition {
@@ -2182,7 +2375,7 @@ mod test {
                                         b: 77,
                                         alpha: 1.0,
                                     },
-                                    reference: None,
+                                    reference: Some(s("foo/bar#4D4D4D")),
                                 }),
                                 reference: Some(s("foo/bar#name@0,0,0,3")),
                                 condition: Some(ftd::Condition {
@@ -2592,10 +2785,13 @@ mod test {
                                 (
                                     s("color"),
                                     ftd::component::Property {
-                                        default: Some(ftd::PropertyValue::Value {
-                                            value: ftd::variable::Value::String {
-                                                text: "white".to_string(),
-                                                source: ftd::TextSource::Header,
+                                        default: Some(ftd::PropertyValue::Reference {
+                                            name: s("creating-a-tree#white"),
+                                            kind: ftd::p2::Kind::Optional {
+                                                kind: Box::new(ftd::p2::Kind::Record {
+                                                    name: s("ftd#color"),
+                                                    default: None,
+                                                }),
                                             },
                                         }),
                                         conditions: vec![],
@@ -2635,10 +2831,13 @@ mod test {
                                 (
                                     s("color"),
                                     ftd::component::Property {
-                                        default: Some(ftd::PropertyValue::Value {
-                                            value: ftd::variable::Value::String {
-                                                text: "#4D4D4D".to_string(),
-                                                source: ftd::TextSource::Header,
+                                        default: Some(ftd::PropertyValue::Reference {
+                                            name: s("creating-a-tree#4D4D4D"),
+                                            kind: ftd::p2::Kind::Optional {
+                                                kind: Box::new(ftd::p2::Kind::Record {
+                                                    name: s("ftd#color"),
+                                                    default: None,
+                                                }),
                                             },
                                         }),
                                         conditions: vec![],
@@ -2923,6 +3122,75 @@ mod test {
                 flags: Default::default(),
             }),
         );
+        bag.insert(
+            s("creating-a-tree#4D4D4D"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("4D4D4D"),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Record {
+                        name: s("ftd#color"),
+                        fields: std::array::IntoIter::new([
+                            (
+                                s("dark"),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::String {
+                                        text: s("#4D4D4D"),
+                                        source: ftd::TextSource::Header,
+                                    },
+                                },
+                            ),
+                            (
+                                s("light"),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::String {
+                                        text: s("#4D4D4D"),
+                                        source: ftd::TextSource::Caption,
+                                    },
+                                },
+                            ),
+                        ])
+                        .collect(),
+                    },
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            }),
+        );
+
+        bag.insert(
+            s("creating-a-tree#white"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("white"),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Record {
+                        name: s("ftd#color"),
+                        fields: std::array::IntoIter::new([
+                            (
+                                s("dark"),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::String {
+                                        text: s("white"),
+                                        source: ftd::TextSource::Header,
+                                    },
+                                },
+                            ),
+                            (
+                                s("light"),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::String {
+                                        text: s("white"),
+                                        source: ftd::TextSource::Caption,
+                                    },
+                                },
+                            ),
+                        ])
+                        .collect(),
+                    },
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            }),
+        );
 
         let children = vec![
             ftd::Element::Markup(ftd::Markups {
@@ -2942,7 +3210,7 @@ mod test {
                             b: 255,
                             alpha: 1.0,
                         },
-                        reference: None,
+                        reference: Some(s("creating-a-tree#white")),
                     }),
                     reference: Some(s("foo/bar#name@0,0,0")),
                     condition: Some(ftd::Condition {
@@ -2970,7 +3238,7 @@ mod test {
                             b: 77,
                             alpha: 1.0,
                         },
-                        reference: None,
+                        reference: Some(s("creating-a-tree#4D4D4D")),
                     }),
                     reference: Some(s("foo/bar#name@0,0,0")),
                     condition: Some(ftd::Condition {
@@ -3003,7 +3271,7 @@ mod test {
                                         b: 255,
                                         alpha: 1.0,
                                     },
-                                    reference: None,
+                                    reference: Some(s("creating-a-tree#white")),
                                 }),
                                 reference: Some(s("foo/bar#name@0,0,0,2")),
                                 condition: Some(ftd::Condition {
@@ -3032,7 +3300,7 @@ mod test {
                                         b: 77,
                                         alpha: 1.0,
                                     },
-                                    reference: None,
+                                    reference: Some(s("creating-a-tree#4D4D4D")),
                                 }),
                                 reference: Some(s("foo/bar#name@0,0,0,2")),
                                 condition: Some(ftd::Condition {
@@ -3065,7 +3333,7 @@ mod test {
                                                     b: 255,
                                                     alpha: 1.0,
                                                 },
-                                                reference: None,
+                                                reference: Some(s("creating-a-tree#white")),
                                             }),
                                             reference: Some(s("foo/bar#name@0,0,0,0,2")),
                                             condition: Some(ftd::Condition {
@@ -3094,7 +3362,7 @@ mod test {
                                                     b: 77,
                                                     alpha: 1.0,
                                                 },
-                                                reference: None,
+                                                reference: Some(s("creating-a-tree#4D4D4D")),
                                             }),
                                             reference: Some(s("foo/bar#name@0,0,0,0,2")),
                                             condition: Some(ftd::Condition {
@@ -3148,7 +3416,7 @@ mod test {
                                         b: 255,
                                         alpha: 1.0,
                                     },
-                                    reference: None,
+                                    reference: Some(s("creating-a-tree#white")),
                                 }),
                                 reference: Some(s("foo/bar#name@0,0,0,3")),
                                 condition: Some(ftd::Condition {
@@ -3177,7 +3445,7 @@ mod test {
                                         b: 77,
                                         alpha: 1.0,
                                     },
-                                    reference: None,
+                                    reference: Some(s("creating-a-tree#4D4D4D")),
                                 }),
                                 reference: Some(s("foo/bar#name@0,0,0,3")),
                                 condition: Some(ftd::Condition {
@@ -3251,6 +3519,41 @@ mod test {
     #[test]
     fn reference() {
         let mut bag = super::default_bag();
+
+        bag.insert(
+            s("reference#f3f3f3"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("f3f3f3"),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Record {
+                        name: s("ftd#color"),
+                        fields: std::array::IntoIter::new([
+                            (
+                                s("dark"),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::String {
+                                        text: s("#f3f3f3"),
+                                        source: ftd::TextSource::Header,
+                                    },
+                                },
+                            ),
+                            (
+                                s("light"),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::String {
+                                        text: s("#f3f3f3"),
+                                        source: ftd::TextSource::Caption,
+                                    },
+                                },
+                            ),
+                        ])
+                        .collect(),
+                    },
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            }),
+        );
 
         bag.insert(
             "fifthtry/ft#dark-mode".to_string(),
@@ -3327,10 +3630,13 @@ mod test {
                     (
                         s("background-color"),
                         ftd::component::Property {
-                            default: Some(ftd::PropertyValue::Value {
-                                value: ftd::variable::Value::String {
-                                    text: "#f3f3f3".to_string(),
-                                    source: ftd::TextSource::Header,
+                            default: Some(ftd::PropertyValue::Reference {
+                                name: s("reference#f3f3f3"),
+                                kind: ftd::p2::Kind::Optional {
+                                    kind: Box::new(ftd::p2::Kind::Record {
+                                        name: s("ftd#color"),
+                                        default: None,
+                                    }),
                                 },
                             }),
                             conditions: vec![],
@@ -3407,7 +3713,7 @@ mod test {
                             b: 243,
                             alpha: 1.0,
                         },
-                        reference: None,
+                        reference: Some(s("reference#f3f3f3")),
                     }),
                     ..Default::default()
                 },
@@ -12653,7 +12959,7 @@ mod test {
                             b: 0,
                             alpha: 1.0,
                         },
-                        reference: None,
+                        reference: Some(s("foo/bar#red")),
                     }),
                     ..Default::default()
                 },
@@ -12680,7 +12986,7 @@ mod test {
                                 b: 0,
                                 alpha: 1.0,
                             },
-                            reference: None,
+                            reference: Some(s("foo/bar#green")),
                         }),
                         ..Default::default()
                     },
@@ -14685,9 +14991,9 @@ mod test {
                                     value: s("true"),
                                 },
                                 ftd::ConditionalValue {
-                                    value: s("rgba(255,0,0,1)"),
+                                    value: s("{\"$kind$\":\"light\",\"dark\":\"rgba(255,0,0,1)\",\"light\":\"rgba(255,0,0,1)\"}"),
                                     important: false,
-                                    reference: None,
+                                    reference: Some(s("foo/bar#red")),
                                 },
                             )],
                             default: None,
@@ -14747,9 +15053,12 @@ mod test {
             "foo/bar",
             indoc::indoc!(
                 "
+                -- ftd.color red: red
+                dark: red
+
                 -- ftd.text foo:
                 text: Hello World
-                color if $MOUSE-IN: red
+                color if $MOUSE-IN: $red
 
                 -- foo:
                 "
@@ -14888,9 +15197,9 @@ mod test {
                                             value: s("true"),
                                         },
                                         ftd::ConditionalValue {
-                                            value: s("rgba(0,0,0,1)"),
+                                            value: s("{\"$kind$\":\"light\",\"dark\":\"rgba(0,0,0,1)\",\"light\":\"rgba(0,0,0,1)\"}"),
                                             important: false,
-                                            reference: None,
+                                            reference: Some(s("foo/bar#black")),
                                         },
                                     ),
                                     (
@@ -14899,9 +15208,9 @@ mod test {
                                             value: s("30"),
                                         },
                                         ftd::ConditionalValue {
-                                            value: s("rgba(255,0,0,1)"),
+                                            value: s("{\"$kind$\":\"light\",\"dark\":\"rgba(255,0,0,1)\",\"light\":\"rgba(255,0,0,1)\"}"),
                                             important: false,
-                                            reference: None,
+                                            reference: Some(s("foo/bar#red")),
                                         },
                                     ),
                                 ],
@@ -14950,6 +15259,12 @@ mod test {
             "foo/bar",
             indoc::indoc!(
                 "
+                -- ftd.color black: black
+                dark: black
+
+                -- ftd.color red: red
+                dark: red
+
                 -- ftd.row foo:
                 integer a:
                 boolean b: false
@@ -14958,8 +15273,8 @@ mod test {
 
                 --- ftd.integer:
                 value: $a
-                color if $b: black
-                color if $a == 30: red
+                color if $b: $black
+                color if $a == 30: $red
 
                 -- foo:
                 a: 20
@@ -15059,9 +15374,9 @@ mod test {
                                                 value: s("true"),
                                             },
                                             ftd::ConditionalValue {
-                                                value: s("rgba(0,0,0,1)"),
+                                                value: s("{\"$kind$\":\"light\",\"dark\":\"rgba(0,0,0,1)\",\"light\":\"rgba(0,0,0,1)\"}"),
                                                 important: false,
-                                                reference: None,
+                                                reference: Some(s("foo/bar#black")),
                                             },
                                         )],
                                         default: None,
@@ -15146,9 +15461,9 @@ mod test {
                                         value: s("true"),
                                     },
                                     ftd::ConditionalValue {
-                                        value: s("rgba(255,0,0,1)"),
+                                        value: s("{\"$kind$\":\"light\",\"dark\":\"rgba(255,0,0,1)\",\"light\":\"rgba(255,0,0,1)\"}"),
                                         important: false,
-                                        reference: None,
+                                        reference: Some(s("foo/bar#red")),
                                     },
                                 )],
                                 default: None,
@@ -15178,6 +15493,12 @@ mod test {
             "foo/bar",
             indoc::indoc!(
                 "
+                -- ftd.color black: black
+                dark: black
+
+                -- ftd.color red: red
+                dark: red
+
                 -- ftd.column foo:
                 integer a:
                 boolean b: false
@@ -15186,7 +15507,7 @@ mod test {
 
                 --- ftd.integer:
                 value: $a
-                color if $b: black
+                color if $b: $black
 
                 -- string current: hello
 
@@ -15202,7 +15523,7 @@ mod test {
                 $on-click$: toggle $foo
 
                 --- ftd.text: hello
-                color if $foo: red
+                color if $foo: $red
                 "
             ),
             &ftd::p2::TestLibrary {},
@@ -15231,9 +15552,9 @@ mod test {
                                     value: s("true"),
                                 },
                                 ftd::ConditionalValue {
-                                    value: s("rgba(255,0,0,1)"),
+                                    value: s("{\"$kind$\":\"light\",\"dark\":\"rgba(255,0,0,1)\",\"light\":\"rgba(255,0,0,1)\"}"),
                                     important: false,
-                                    reference: None,
+                                    reference: Some(s("foo/bar#red")),
                                 },
                             )],
                             default: None,
@@ -15241,11 +15562,20 @@ mod test {
                     )])
                     .collect(),
                     reference: Some(s("foo/bar#bar")),
-                    color: Some(ftd::ColorValue {
-                        r: 255,
-                        g: 0,
-                        b: 0,
-                        alpha: 1.0,
+                    color: Some(ftd::Color {
+                        light: ftd::ColorValue {
+                            r: 255,
+                            g: 0,
+                            b: 0,
+                            alpha: 1.0,
+                        },
+                        dark: ftd::ColorValue {
+                            r: 255,
+                            g: 0,
+                            b: 0,
+                            alpha: 1.0,
+                        },
+                        reference: Some(s("foo/bar#red")),
                     }),
                     ..Default::default()
                 },
@@ -15285,6 +15615,9 @@ mod test {
             "foo/bar",
             indoc::indoc!(
                 "
+                -- ftd.color red: red
+                dark: red
+
                 -- ftd.column col:
                 integer i:
                 string ff: hello
@@ -15303,7 +15636,7 @@ mod test {
                 boolean t: true
                 string f: hello
                 line-clamp: $foo
-                color if $t: red
+                color if $t: $red
 
                 -- col:
                 i: 20
@@ -15384,11 +15717,20 @@ mod test {
                             text: ftd::markdown_line("hello"),
                             line: true,
                             common: ftd::Common {
-                                color: Some(ftd::ColorValue {
-                                    r: 255,
-                                    g: 0,
-                                    b: 0,
-                                    alpha: 1.0,
+                                color: Some(ftd::Color {
+                                    light: ftd::ColorValue {
+                                        r: 255,
+                                        g: 0,
+                                        b: 0,
+                                        alpha: 1.0,
+                                    },
+                                    dark: ftd::ColorValue {
+                                        r: 255,
+                                        g: 0,
+                                        b: 0,
+                                        alpha: 1.0,
+                                    },
+                                    reference: Some(s("foo/bar#red")),
                                 }),
                                 ..Default::default()
                             },
@@ -15421,11 +15763,20 @@ mod test {
                                         text: ftd::markdown_line("hello"),
                                         line: true,
                                         common: ftd::Common {
-                                            color: Some(ftd::ColorValue {
-                                                r: 255,
-                                                g: 0,
-                                                b: 0,
-                                                alpha: 1.0,
+                                            color: Some(ftd::Color {
+                                                light: ftd::ColorValue {
+                                                    r: 255,
+                                                    g: 0,
+                                                    b: 0,
+                                                    alpha: 1.0,
+                                                },
+                                                dark: ftd::ColorValue {
+                                                    r: 255,
+                                                    g: 0,
+                                                    b: 0,
+                                                    alpha: 1.0,
+                                                },
+                                                reference: Some(s("foo/bar#red")),
                                             }),
                                             ..Default::default()
                                         },
@@ -15436,11 +15787,20 @@ mod test {
                                         text: ftd::markdown_line("hello amitu!"),
                                         line: true,
                                         common: ftd::Common {
-                                            color: Some(ftd::ColorValue {
-                                                r: 255,
-                                                g: 0,
-                                                b: 0,
-                                                alpha: 1.0,
+                                            color: Some(ftd::Color {
+                                                light: ftd::ColorValue {
+                                                    r: 255,
+                                                    g: 0,
+                                                    b: 0,
+                                                    alpha: 1.0,
+                                                },
+                                                dark: ftd::ColorValue {
+                                                    r: 255,
+                                                    g: 0,
+                                                    b: 0,
+                                                    alpha: 1.0,
+                                                },
+                                                reference: Some(s("foo/bar#red")),
                                             }),
                                             ..Default::default()
                                         },
@@ -15464,9 +15824,12 @@ mod test {
             "foo/bar",
             indoc::indoc!(
                 "
+                -- ftd.color red: red
+                dark: red
+
                 -- ftd.text foo: hello
                 integer line-clamp: 10
-                color: red
+                color: $red
                 line-clamp: $line-clamp
 
                 -- ftd.column moo: 
@@ -15500,7 +15863,7 @@ mod test {
                 > t: foo:
                 >> line-clamp: 20
                 > k: ftd.text: hello amitu!
-                >> color: red
+                >> color: $red
                 >> line-clamp: 10
                 "
             ),
@@ -16388,10 +16751,13 @@ mod test {
                     (
                         s("color"),
                         ftd::component::Property {
-                            default: Some(ftd::PropertyValue::Value {
-                                value: ftd::Value::String {
-                                    text: s("green"),
-                                    source: ftd::TextSource::Header,
+                            default: Some(ftd::PropertyValue::Reference {
+                                name: s("foo/bar#green"),
+                                kind: ftd::p2::Kind::Optional {
+                                    kind: Box::new(ftd::p2::Kind::Record {
+                                        name: s("ftd#color"),
+                                        default: None,
+                                    }),
                                 },
                             }),
                             conditions: vec![],
@@ -16637,6 +17003,40 @@ mod test {
                 flags: Default::default(),
             }),
         );
+        bag.insert(
+            s("foo/bar#green"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("green"),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Record {
+                        name: s("ftd#color"),
+                        fields: std::array::IntoIter::new([
+                            (
+                                s("dark"),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::String {
+                                        text: s("green"),
+                                        source: ftd::TextSource::Header,
+                                    },
+                                },
+                            ),
+                            (
+                                s("light"),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::String {
+                                        text: s("green"),
+                                        source: ftd::TextSource::Caption,
+                                    },
+                                },
+                            ),
+                        ])
+                        .collect(),
+                    },
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            }),
+        );
 
         let mut main = super::default_column();
         main.container
@@ -16694,11 +17094,20 @@ mod test {
                 },
                 spacing: None,
                 common: ftd::Common {
-                    color: Some(ftd::ColorValue {
-                        r: 0,
-                        g: 128,
-                        b: 0,
-                        alpha: 1.0,
+                    color: Some(ftd::Color {
+                        light: ftd::ColorValue {
+                            r: 0,
+                            g: 128,
+                            b: 0,
+                            alpha: 1.0,
+                        },
+                        dark: ftd::ColorValue {
+                            r: 0,
+                            g: 128,
+                            b: 0,
+                            alpha: 1.0,
+                        },
+                        reference: Some(s("foo/bar#green")),
                     }),
                     id: Some(s("bar-id")),
                     data_id: Some(s("bar-id")),
@@ -16759,11 +17168,20 @@ mod test {
                 },
                 spacing: None,
                 common: ftd::Common {
-                    color: Some(ftd::ColorValue {
-                        r: 0,
-                        g: 128,
-                        b: 0,
-                        alpha: 1.0,
+                    color: Some(ftd::Color {
+                        light: ftd::ColorValue {
+                            r: 0,
+                            g: 128,
+                            b: 0,
+                            alpha: 1.0,
+                        },
+                        dark: ftd::ColorValue {
+                            r: 0,
+                            g: 128,
+                            b: 0,
+                            alpha: 1.0,
+                        },
+                        reference: Some(s("foo/bar#green")),
                     }),
                     border_width: 1,
                     ..Default::default()
@@ -16775,6 +17193,9 @@ mod test {
             -- string foo: Foo
 
             -- boolean active: true
+
+            -- ftd.color green: green
+            dark: green
 
             -- bar:
             if: $active
@@ -16800,7 +17221,7 @@ mod test {
             string subtitle: $foo
             string bio: $subtitle
             integer w:
-            color: green
+            color: $green
             border-width: $w
             
             --- ftd.text: $title

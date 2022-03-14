@@ -4,10 +4,13 @@
 
 -- name: John smith
 
+-- ftd.color f3f3f3: #f3f3f3
+dark: #f3f3f3
+
 
 -- ftd.column test-component:
 width: 200
-background-color: \#f3f3f3
+background-color: $f3f3f3
 
 --- ftd.text: $name
 
