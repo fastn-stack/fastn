@@ -56,20 +56,20 @@ width: fill
 
 --- ftd.text: $title
 region: title
-size: 30
-color: #162f78
-style: bold
-font: apple-system
+/size: 30
+/color: #162f78
+/style: bold
+/font: apple-system
 align: center
 link: $fpm.home-url
 
 --- ftd.text: $fpm.language
 if: $fpm.language is not null
 border-radius: 10
-background-color: #f3f3f3
+/background-color: #f3f3f3
 padding-vertical: 5
 padding-horizontal: 20
-color: #E38686
+/color: #E38686
 align: center
 
 --- container: ftd.main
@@ -91,11 +91,11 @@ region: h0
 --- ftd.text:
 text: $title
 region: title
-size: 40
-color: black
-style: bold
+/size: 40
+/color: black
+/style: bold
 padding-bottom: 24
-font: apple-system
+/font: apple-system
 
 --- container: ftd.main
 
@@ -108,12 +108,12 @@ body: $body
 -- ftd.text markdown:
 body body:
 text: $body
-size: 19
-line-height: 30
-color: #4d4d4d
+/size: 19
+/line-height: 30
+/color: #4d4d4d
 padding-bottom: 34
 padding-top: 50
-font: apple-system
+/font: apple-system
 
 
 
@@ -122,7 +122,7 @@ caption file:
 ftd.ui status:
 width: fill
 border-bottom: 1
-border-color: white
+/border-color: white
 padding: 10
 
 --- ftd.text: $file
@@ -134,14 +134,14 @@ padding: 5
 
 
 -- ftd.column files-status:
-background-color: #f3f3f3
+/background-color: #f3f3f3
 width: fill
 max-width: 800
 
 --- ftd.row:
 width: fill
-background-color: black
-color: white
+/background-color: black
+/color: white
 padding: 10
 border-top-radius: 5
 
@@ -159,16 +159,12 @@ padding: 5
 $loop$: $fpm.missing-files as $obj
 status: ftd.text: $fpm.i18n.missing
 > padding: 5
-> color: #eb8489
-> background-color: #fdebeb
 > border-radius: 10
 
 --- print: $obj
 $loop$: $fpm.never-marked-files as $obj
 status: ftd.text: $fpm.i18n.never-marked
 > padding: 5
-> color: #4e4ead
-> background-color: #e0dff9
 > border-radius: 10
 
 
@@ -176,8 +172,6 @@ status: ftd.text: $fpm.i18n.never-marked
 $loop$: $fpm.outdated-files as $obj
 status: ftd.text: $fpm.i18n.out-dated
 > padding: 5
-> color: #f7d06d
-> background-color: #fef7e5
 > border-radius: 10
 
 
@@ -185,6 +179,4 @@ status: ftd.text: $fpm.i18n.out-dated
 $loop$: $fpm.upto-date-files as $obj
 status: ftd.text: $fpm.i18n.upto-date
 > padding: 5
-> color: #4da486
-> background-color: #e0efeb
 > border-radius: 10

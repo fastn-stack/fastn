@@ -1,11 +1,15 @@
 
 -- string site-name: simple blog
--- string site-logo: https://res.cloudinary.com/dphj6havg/image/upload/v1638644344/Group_551_gqhmnl.svg
--- string site-logo-dark: https://res.cloudinary.com/dphj6havg/image/upload/v1640160716/Group_551_1_xehddg.svg
+
+-- ftd.image-src site-logo: https://res.cloudinary.com/dphj6havg/image/upload/v1638644344/Group_551_gqhmnl.svg
+dark: https://res.cloudinary.com/dphj6havg/image/upload/v1640160716/Group_551_1_xehddg.svg
+
 -- string copyright-text: © 2021 FPM Blog - Latest FPM News & Updates
 -- string author-name: Sourabh
 -- string author-bio: Sourabh
--- string author-image: Sourabh
+-- ftd.image-src author-image: Sourabh
+dark: Sourabh
+
 -- string linkedin-url: xyx
 -- string facebook-url: xyx
 -- string twitter-url: xyx
@@ -40,11 +44,10 @@ string link:
 width: fill
 open: true
 append-at: content-container
-background-color if $dark-mode:$neutral-700
+/background-color if $dark-mode:$neutral-700
 
 --- header:
 logo: $site-logo
-logo-dark: $site-logo-dark
 
 
 --- author-info:
@@ -64,11 +67,10 @@ id: content-container
 width: fill
 open: true
 append-at: content-container2
-background-color if $dark-mode: $neutral-700
+/background-color if $dark-mode: $neutral-700
 
 --- header:
-logo:  $site-logo
-logo-dark: $site-logo-dark
+logo: $site-logo
 
 --- content:
 id: content-container2
@@ -79,7 +81,7 @@ id: content-container2
 
 
 -- ftd.row banner:
-background-color: #5E7CEC
+/background-color: #5E7CEC
 width: fill
 padding-vertical: 20
 padding-horizontal: 100
@@ -89,13 +91,13 @@ padding-horizontal if $mobile: 15
 -- ftd.row author-info:
 string name:
 string bio:
-string image:
+ftd.image-src image:
 padding-horizontal: 100
 padding-horizontal if $mobile: 15
 padding-vertical: 30
 width: fill
-background-color: $neutral-300
-background-color if $dark-mode: $neutral-500
+/background-color: $neutral-300
+/background-color if $dark-mode: $neutral-500
 
 
 
@@ -106,15 +108,15 @@ spacing: 20
 position: left
 
 --- ftd.text: $name
-size: 30
+/size: 30
 style: medium
-color: $neutral-800
-color if $dark-mode: $neutral
+/color: $neutral-800
+/color if $dark-mode: $neutral
 
 --- ftd.text: $bio
-size: 16
-color: $neutral-800
-color if $dark-mode: $neutral
+/size: 16
+/color: $neutral-800
+/color if $dark-mode: $neutral
 
 --- container: ftd.main
 
@@ -131,15 +133,13 @@ position: right
 
 
 -- ftd.row header:
-string logo:
-string logo-dark:
+ftd.image-src logo:
 width: fill
-background-color: $neutral
-background-color if $dark-mode: $neutral-700
-border-color : #D4D4D4
-border-color if $dark-mode: $neutral-500
+/background-color: $neutral
+/background-color if $dark-mode: $neutral-700
+/border-color : #D4D4D4
+/border-color if $dark-mode: $neutral-500
 border-bottom: 1
-
 
 --- ftd.row:
 width: fill
@@ -148,25 +148,20 @@ padding-horizontal if $mobile: 15
 padding-vertical: 20
 
 --- ftd.image:
-if: not $dark-mode
 src: $logo
 height: auto
 width: 140
 width if $mobile: 110
 link: /
 
---- ftd.image:
-if:  $dark-mode
-src: $logo-dark
-height: auto
-width: 140
-width if $mobile: 110
-link: /
+
 
 --- follow-us: Follow us on
 twitter: $linkedin-url
 instagram:  $linkedin-url
 
+-- ftd.image-src i1: https://res.cloudinary.com/dphj6havg/image/upload/v1640089167/twitter-sign_qa5imj.svg
+dark: https://res.cloudinary.com/dphj6havg/image/upload/v1640089167/twitter-sign_qa5imj.svg
 
 -- ftd.row follow-us:
 caption title:
@@ -179,49 +174,49 @@ spacing: 14
 position: right
 
 --- ftd.text: $title
-size: 14
-style: light
-color: $neutral-800
-color if $dark-mode: $neutral
+/size: 14
+/style: light
+/color: $neutral-800
+/color if $dark-mode: $neutral
 padding-right: 20
 
 --- ftd.image:
 if:  $twitter is not null
-src: https://res.cloudinary.com/dphj6havg/image/upload/v1640089167/twitter-sign_qa5imj.svg
+src: $i1
 height: 24
 width: auto
 link: $twitter
 
 --- ftd.image:
 if:  $facebook is not null
-src: https://res.cloudinary.com/dphj6havg/image/upload/v1640089167/facebook_ea2xzm.svg
+src: $i1
 height: 24
 width: auto
 link: $facebook
 
 --- ftd.image:
 if:  $instagram is not null
-src: https://res.cloudinary.com/dphj6havg/image/upload/v1640089200/instagram_qo3tnd.svg
+src: $i1
 height: 24
 width: auto
 link: $instagram
 
 --- ftd.image:
 if:  $linkedin is not null
-src: https://res.cloudinary.com/dphj6havg/image/upload/v1640089167/linkedin-logo_oytvwq.svg
+src: $i1
 height: 24
 width: auto
 link: $linkedin
 
 --- ftd.image:
 if:  $reddit is not null
-src: https://res.cloudinary.com/dphj6havg/image/upload/v1640089167/reddit_wvh13l.svg
+src: $i1
 height: 24
 width: auto
 link: $reddit
 
 --- ftd.image:
-src: https://res.cloudinary.com/dphj6havg/image/upload/v1640162431/moon_gmh2cd.png
+src: $i1
 height: 20
 width: auto
 $on-click$: toggle $dark-mode
@@ -230,7 +225,7 @@ $on-click$: toggle $dark-mode
 -- ftd.column welcome-section:
 caption title:
 body body:
-background-color: #F5F7FF
+/background-color: #F5F7FF
 width: fill
 padding-vertical: 50
 padding-horizontal: 100
@@ -238,15 +233,15 @@ padding-horizontal if $mobile: 15
 spacing: 20
 
 --- ftd.text: $title
-size: 40
-color: #595959
+/size: 40
+/color: #595959
 
 --- ftd.text: $body
-size: 16
-line-height: 24
+/size: 16
+/line-height: 24
 width: 650
-style: light
-color: #4A4A4A
+/style: light
+/color: #4A4A4A
 
 
 
@@ -258,10 +253,10 @@ optional boolean collapsed:
 optional caption title:
 optional boolean two_columns:
 text: $body
-size: 18
-line-height: 24
-color:  $neutral-800
-color if $dark-mode: $neutral
+/size: 18
+/line-height: 24
+/color:  $neutral-800
+/color if $dark-mode: $neutral
 padding-bottom: 8
 
 
@@ -270,11 +265,11 @@ body body:
 optional boolean collapsed:
 optional caption title:
 optional boolean two_columns:
-color:  $neutral-800
-color if $dark-mode: $neutral-200
+/color:  $neutral-800
+/color if $dark-mode: $neutral-200
 text: $body
-size: 18
-line-height: 24
+/size: 18
+/line-height: 24
 
 
 -- ftd.column h0:
@@ -288,11 +283,11 @@ padding-bottom: 6
 --- ftd.text:
 text: $title
 region: title
-size: 48
-line-height: 64
-color: $color
-color if $dark-mode: $neutral
-style: bold
+/size: 48
+/line-height: 64
+/color: $color
+/color if $dark-mode: $neutral
+/style: bold
 padding-bottom: 8
 padding-top: 0
 width: fill
@@ -314,11 +309,11 @@ text: $title
 caption $title:
 region: title
 text: $title
-size: 36
-line-height: 40
-color: $neutral-800
-color if $dark-mode: $neutral
-style: bold
+/size: 36
+/line-height: 40
+/color: $neutral-800
+/color if $dark-mode: $neutral
+/style: bold
 padding-bottom: 8
 padding-top: 16
 
@@ -338,11 +333,11 @@ text: $title
 caption $title:
 region: title
 text: $title
-size: 28
-line-height: 34
-color: $neutral-800
-color if $dark-mode: $neutral
-style: bold
+/size: 28
+/line-height: 34
+/color: $neutral-800
+/color if $dark-mode: $neutral
+/style: bold
 padding-bottom: 8
 padding-top: 16
 
@@ -362,11 +357,11 @@ text: $title
 caption $title:
 region: title
 text: $title
-size: 22
-line-height: 30
-color: $neutral-800
-color if $dark-mode: $neutral
-style: bold
+/size: 22
+/line-height: 30
+/color: $neutral-800
+/color if $dark-mode: $neutral
+/style: bold
 padding-bottom: 8
 padding-top: 16
 
@@ -384,11 +379,11 @@ padding-bottom: 6
 --- ftd.text:
 region: title
 text: $title
-size: 19
-line-height: 26
-color:  $neutral-800
-color if $dark-mode: $neutral
-style: bold
+/size: 19
+/line-height: 26
+/color:  $neutral-800
+/color if $dark-mode: $neutral
+/style: bold
 padding-bottom: 8
 padding-top: 16
 
@@ -412,11 +407,11 @@ text: $title
 caption $title:
 region: title
 text: $title
-size: 24
-line-height: 24
-color: $neutral-800
-color if $dark-mode: $neutral
-style: semi-bold
+/size: 24
+/line-height: 24
+/color: $neutral-800
+/color if $dark-mode: $neutral
+/style: semi-bold
 padding-bottom: 8
 padding-top: 16
 
@@ -437,10 +432,10 @@ width: fill
 --- ftd.text:
 if: $caption is not null
 text: $caption
-color: #DCDCDC
+/color: #DCDCDC
 width: fill
-size: 14
-background-color: #3a404e
+/size: 14
+/background-color: #3a404e
 padding-top: 10
 padding-bottom: 10
 padding-left: 20
@@ -451,15 +446,15 @@ border-top-radius: 4
 if: $caption is not null
 text: $body
 lang: $lang
-color: #4D4D4D
+/color: #4D4D4D
 width: fill
-size: 17
-line-height: 25
+/size: 17
+/line-height: 25
 padding-top: 10
 padding-left: 20
 padding-bottom: 10
 padding-right: 20
-background-color: #2b303b
+/background-color: #2b303b
 border-bottom-radius: 4
 overflow-x: auto
 
@@ -467,15 +462,15 @@ overflow-x: auto
 if: $caption is null
 text: $body
 lang: $lang
-color: #4D4D4D
+/color: #4D4D4D
 width: fill
-size: 17
-line-height: 25
+/size: 17
+/line-height: 25
 padding-top: 10
 padding-left: 20
 padding-bottom: 10
 padding-right: 20
-background-color: #2b303b
+/background-color: #2b303b
 border-bottom-radius: 4
 border-top-radius: 4
 overflow-x: auto
@@ -490,27 +485,27 @@ string background-color: #000c2d
 padding-vertical: 30
 padding-horizontal: 24
 border-radius: 4
-background-color: $background-color
+/background-color: $background-color
 
 --- ftd.text: $title
-color:  $neutral
-size: 28
-style: bold
-line-height: 40
+/color: $neutral
+/size: 28
+/style: bold
+/line-height: 40
 padding-bottom: 12
 
 --- ftd.text: $title
-color:  $neutral
-size: 16
-line-height: 24
+/color:  $neutral
+/size: 16
+/line-height: 24
 padding-bottom: 24
 
 --- ftd.text: Subscribe
-color:  $neutral
-size: 14
+/color:  $neutral
+/size: 14
 padding-vertical: 10
 width: fill
-background-color: #f35266
+/background-color: #f35266
 border-radius: 3
 text-align: center
 
@@ -521,10 +516,10 @@ optional string facebook:
 optional string youtube:
 optional string instagram:
 width: fill
-background-color: $neutral
+/background-color: $neutral
 border-radius: 6
 padding-vertical: 20
-border-color: #eaecee
+/border-color: #eaecee
 border-width: 1
 
 --- ftd.row:
@@ -533,28 +528,28 @@ spacing: 20
 
 --- ftd.image:
 if: $twitter is not null
-src: https://res.cloudinary.com/dphj6havg/image/upload/v1638288389/twitter_owarko.png
+src: $i1
 width: 24
 height: auto
 link: $twitter
 
 --- ftd.image:
 if: $facebook is not null
-src: https://res.cloudinary.com/dphj6havg/image/upload/v1638288389/facebook-app-symbol_inagpd.png
+src: $i1
 width: 24
 height: auto
 link: $facebook
 
 --- ftd.image:
 if: $youtube is not null
-src: https://res.cloudinary.com/dphj6havg/image/upload/v1638288389/youtube_jy7yzc.png
+src: $i1
 width: 24
 height: auto
 link: $youtube
 
 --- ftd.image:
 if: $instagram is not null
-src: https://res.cloudinary.com/dphj6havg/image/upload/v1638288389/instagram_cxakmn.png
+src: $i1
 width: 24
 height: auto
 link: $instagram
@@ -565,28 +560,27 @@ link: $instagram
 -- ftd.row featured-post:
 caption title:
 string date:
-string image:
+ftd.image-src image:
 padding-vertical: 30
 padding-horizontal: 24
 border-radius: 6
-border-color: #eaecee
+/border-color: #eaecee
 border-width: 1
-background-color: $neutral
+/background-color: $neutral
 spacing: 10
 
 --- ftd.column:
 width: percent 75
 spacing: 10
 
-
 --- ftd.text: $title
-size: 18
-line-height: 26
-style: bold
+/size: 18
+/line-height: 26
+/style: bold
 
 --- ftd.text: $date
-size: 14
-color: #000c2d
+/size: 14
+/color: #000c2d
 
 --- container: ftd.main
 
@@ -607,8 +601,8 @@ width: fill
 
 --- ftd.row:
 padding-vertical: 20
-border-color: $neutral-400
-border-color if $dark-mode:$neutral-600
+/border-color: $neutral-400
+/border-color if $dark-mode:$neutral-600
 border-top: 1
 width: fill
 id: footer-links
@@ -617,12 +611,12 @@ spacing: 50
 
 --- ftd.text:
 text: $copyright-text
-size: 13
+/size: 13
 padding-vertical: 20
 text-align: center
 width: fill
-color: $neutral-800
-color if $dark-mode: $neutral
+/color: $neutral-800
+/color if $dark-mode: $neutral
 
 
 -- ftd.column post-summary:
@@ -649,28 +643,28 @@ height: 260
 --- container: info
 
 --- ftd.text: $title
-size: 32
-line-height: 40
-style: medium
-color: #595959
-color if $dark-mode: $neutral
-font: Inter
+/size: 32
+/line-height: 40
+/style: medium
+/color: #595959
+/color if $dark-mode: $neutral
+/font: Inter
 padding-top: 20
 link: $link
 
 --- ftd.text: $published-date
-size: 14
-line-height: 24
-color: #9D9D9D
-color if $dark-mode: $neutral
-font: Inter
+/size: 14
+/line-height: 24
+/color: #9D9D9D
+/color if $dark-mode: $neutral
+/font: Inter
 
 --- ftd.text: $body
-size: 16
-line-height: 24
-color: #3A3A3A
-color if $dark-mode: $neutral-200
-font: Inter
+/size: 16
+/line-height: 24
+/color: #3A3A3A
+/color if $dark-mode: $neutral-200
+/font: Inter
 
 
 -- ftd.column content:
@@ -685,7 +679,7 @@ open: true
 
 
 -- ftd.image cover-section:
-string src:
+ftd.image-src src:
 width: fill
 height: auto
 src: $src

@@ -14,20 +14,20 @@ db: db.sqlite
 SELECT * FROM user;
 
 -- ftd.text: How to add more person in record?
-size: 30
-color: #0C3C26
-style: bold
+/size: 30
+/color: #0C3C26
+/style: bold
 padding-bottom: 12
 padding-top: 12
-font-url: https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,300&display=swap
-font: Roboto
+/font-url: https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,300&display=swap
+/font: Roboto
 
 -- ftd.text:
-size: 15
-color: #4d4d4d
+/size: 15
+/color: #4d4d4d
 padding-bottom: 34
-font-url: https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,300&display=swap
-font: Roboto
+/font-url: https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,300&display=swap
+/font: Roboto
 
 Enter the following commands:
 

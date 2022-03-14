@@ -3,6 +3,6 @@
 
 -- ftd.column:
 width: fill
-background-color: #f3f3f3
+/background-color: #f3f3f3
 
 -- fpm-lib.message:

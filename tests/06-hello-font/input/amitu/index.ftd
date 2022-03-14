@@ -1,15 +1,32 @@
 -- import: www.amitu.com/assets
 -- import: one.fpm.local/assets as theme-assets
 
-
--- ftd.text: hello
+-- ftd.type roboto:
 font: $assets.fonts.Roboto
+size: 10
+line-height: 10
+weight: 100
+
+-- ftd.type myFirstFont:
+font: $assets.fonts.myFirstFont
+size: 10
+line-height: 10
+weight: 100
+
+-- ftd.type themeFont:
+font: $theme-assets.fonts.themeFont
+size: 10
+line-height: 10
+weight: 100
 
 -- ftd.text: hello
-font: $assets.fonts.myFirstFont
+font: $roboto
+
+-- ftd.text: hello
+font: $myFirstFont
 
 -- ftd.text: World
-font: $theme-assets.fonts.themeFont
+font: $themeFont
 
 -- ftd.text:
 text: $assets.files.index.jpg.dark

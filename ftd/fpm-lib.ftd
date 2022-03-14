@@ -5,7 +5,7 @@ width: fill
 spacing: space-between
 padding: 10
 /background-color: #dddcdc
-background-color: #f3f3f3
+/background-color: #f3f3f3
 
 
 --- ftd.column:
@@ -17,10 +17,10 @@ default: $fpm.i18n.never-synced
 
 --- ftd.text: $fpm.i18n.show-translation-status
 link: $fpm.translation-status-url
-background-color: #d27355
+/background-color: #d27355
 border-radius: 13
-color: white
-border-color: #26644f
+/color: white
+/border-color: #26644f
 padding: 8
 
 --- container: ftd.main
@@ -85,7 +85,7 @@ align: center
 
 --- ftd.text: $fpm.language
 border-width: 1
-border-color: #adaeb3
+/border-color: #adaeb3
 margin-top: 5
 margin-bottom: 5
 margin-left: 5
@@ -93,7 +93,7 @@ margin-right: 5
 $on-click$: toggle $show-menu
 padding-left: 5
 padding-right: 50
-background-color: white
+/background-color: white
 
 --- container: ftd.main
 
@@ -104,7 +104,7 @@ width: fill
 --- ftd.column:
 if: $show-menu
 anchor: parent
-background-color: #f1f1f1
+/background-color: #f1f1f1
 min-width: 160
 shadow-offset-x: 0
 shadow-offset-y: 8
@@ -120,7 +120,7 @@ link: $obj.url
 padding: 10
 width: fill
 border-bottom: 1
-border-color: #e3e1e1
+/border-color: #e3e1e1
 
 
 
@@ -134,11 +134,10 @@ region: h0
 --- ftd.text:
 text: $title
 region: title
-size: 40
-color: black
-style: bold
+/size: 40
+/color: black
+/style: bold
 padding-bottom: 24
-font: apple-system
 
 --- container: ftd.main
 
@@ -151,9 +150,8 @@ body: $body
 -- ftd.text markdown:
 body body:
 text: $body
-size: 19
-line-height: 30
-color: #4d4d4d
+/size: 19
+/line-height: 30
+/color: #4d4d4d
 padding-bottom: 34
 padding-top: 50
-font: apple-system
