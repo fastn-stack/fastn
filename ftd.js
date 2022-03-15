@@ -816,6 +816,56 @@ function console_print(id, data) {
     const COOKIE_DARK_MODE = "dark";
     const COOKIE_LIGHT_MODE = "light";
     const DARK_MODE_CLASS = "fpm-dark";
+    const FTD_DEVICE = "ftd#device";
+    const FTD_MOBILE_BREAKPOINT = "ftd#mobile-breakpoint";
+    const FTD_DESKTOP_BREAKPOINT = "ftd#desktop-breakpoint";
+
+    let last_device;
+
+    function initialise_device() {
+        last_device = get_device();
+        console.log("last_device", last_device);
+        window.ftd.set_bool_for_all(FTD_DEVICE, last_device);
+    }
+
+    window.onresize = function () {
+        let current = get_device();
+        if (current === last_device) {
+            return;
+        }
+
+        window.ftd.set_string_for_all(FTD_DEVICE, current);
+        last_device = current;
+        console.log("last_device", last_device);
+    }
+
+    function get_device() {
+        // not at all sure about this functions logic.
+        let width = window.innerWidth;
+
+        // in future we may want to have more than one break points, and then
+        // we may also want the theme builders to decide where the breakpoints
+        // should go. we should be able to fetch fpm variables here, or maybe
+        // simply pass the width, user agent etc to fpm and let people put the
+        // checks on width user agent etc, but it would be good if we can
+        // standardize few breakpoints. or maybe we should do both, some
+        // standard breakpoints and pass the raw data.
+
+        // we would then rename this function to detect_device() which will
+        // return one of "desktop", "tablet", "mobile". and also maybe have
+        // another function detect_orientation(), "landscape" and "portrait" etc,
+        // and instead of setting `fpm#mobile: boolean` we set `fpm-ui#device`
+        // and `fpm#view-port-orientation` etc.
+        let mobile_breakpoint = window.ftd.get_value("main", FTD_MOBILE_BREAKPOINT);
+        let desktop_breakpoint = window.ftd.get_value("main", FTD_DESKTOP_BREAKPOINT);
+        if (width <= mobile_breakpoint) {
+            return "mobile";
+        }
+        if (width > desktop_breakpoint) {
+            return "xxl";
+        }
+        return "desktop";
+    }
 
     window.enable_dark_mode = function () {
         // TODO: coalesce the two set_bool-s into one so there is only one DOM
@@ -902,4 +952,5 @@ function console_print(id, data) {
         );
     }
     initialise_dark_mode();
+    initialise_device();
 })();

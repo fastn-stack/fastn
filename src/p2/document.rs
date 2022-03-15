@@ -86,6 +86,12 @@ impl Document {
                         value_fields
                             .insert("$kind$".to_string(), serde_json::to_value("light").unwrap());
                     }
+                    if ["ftd#type"].contains(&name.as_str()) {
+                        value_fields.insert(
+                            "$kind$".to_string(),
+                            serde_json::to_value("desktop").unwrap(),
+                        );
+                    }
                     for (k, v) in fields {
                         if let Ok(val) = v.resolve(0, doc) {
                             if let Some(val) = get_value(&val, doc) {
@@ -113,9 +119,11 @@ impl Document {
                 },
             );
         }
-        ftd::Element::get_image_variable(self, &mut data);
-        ftd::Element::get_color_event_dependencies(&self.main.container.children, &mut data);
+        ftd::Element::get_device_dependencies(self, &mut data);
+        ftd::Element::get_dark_mode_dependencies(self, &mut data);
         ftd::Element::get_variable_dependencies(self, &mut data);
+        // ftd::Element::get_font_event_dependencies(&self.main.container.children, &mut data);
+        ftd::Element::get_color_event_dependencies(&self.main.container.children, &mut data);
         ftd::Element::get_visible_event_dependencies(&self.main.container.children, &mut data);
         ftd::Element::get_value_event_dependencies(&self.main.container.children, &mut data);
         ftd::Element::get_style_event_dependencies(&self.main.container.children, &mut data);

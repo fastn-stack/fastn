@@ -1,0 +1,24 @@
+-- ftd.font-size dsize:
+line-height: 14
+size: 14
+tracking: 0.1
+
+-- ftd.font-size msize:
+line-height: 12
+size: 12
+tracking: 0
+
+-- ftd.font-size xlsize:
+line-height: 16
+size: 16
+tracking: 0.15
+
+-- ftd.type font: cursive
+desktop: $dsize
+mobile: $msize
+xl: $xlsize
+weight: 400
+style: italic
+
+-- ftd.text: Hello World
+font: $font
