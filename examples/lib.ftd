@@ -67,5 +67,5 @@ weight: 400
 style: italic
 
 -- ftd.text: Hello There
-font: $cursive-font
+role: $cursive-font
 

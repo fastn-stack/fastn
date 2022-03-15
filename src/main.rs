@@ -22,7 +22,7 @@ padding-horizontal: 40
 padding-vertical: 20
 
 -- ftd.text: FTD Examples
-font: $heading
+role: $heading
 padding-bottom: 20
 
 "

@@ -27,7 +27,7 @@ You have typed: {value}
 
 --- ftd.text value: $query
 color: $green
-font: $lib.cursive-font
+role: $lib.cursive-font
 
 
 -- ftd.image-src foo: hello.png
