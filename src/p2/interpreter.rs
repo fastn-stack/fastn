@@ -1020,6 +1020,90 @@ pub fn default_bag() -> std::collections::BTreeMap<String, ftd::p2::Thing> {
                 ],
             }),
         ),
+        (
+            "ftd#colors".to_string(),
+            ftd::p2::Thing::Record(ftd::p2::Record {
+                name: "ftd#colors".to_string(),
+                fields: std::array::IntoIter::new([
+                    (
+                        "region".to_string(),
+                        ftd::p2::Kind::Record {
+                            name: "ftd#color".to_string(),
+                            default: None,
+                        },
+                    ),
+                    (
+                        "on-region".to_string(),
+                        ftd::p2::Kind::Record {
+                            name: "ftd#color".to_string(),
+                            default: None,
+                        },
+                    ),
+                    (
+                        "action-primary".to_string(),
+                        ftd::p2::Kind::Record {
+                            name: "ftd#color".to_string(),
+                            default: None,
+                        },
+                    ),
+                    (
+                        "on-action-primary".to_string(),
+                        ftd::p2::Kind::Record {
+                            name: "ftd#color".to_string(),
+                            default: None,
+                        },
+                    ),
+                    (
+                        "action-secondary".to_string(),
+                        ftd::p2::Kind::Record {
+                            name: "ftd#color".to_string(),
+                            default: None,
+                        },
+                    ),
+                    (
+                        "on-action-secondary".to_string(),
+                        ftd::p2::Kind::Record {
+                            name: "ftd#color".to_string(),
+                            default: None,
+                        },
+                    ),
+                    (
+                        "error".to_string(),
+                        ftd::p2::Kind::Record {
+                            name: "ftd#color".to_string(),
+                            default: None,
+                        },
+                    ),
+                    (
+                        "success".to_string(),
+                        ftd::p2::Kind::Record {
+                            name: "ftd#color".to_string(),
+                            default: None,
+                        },
+                    ),
+                    (
+                        "warning".to_string(),
+                        ftd::p2::Kind::Record {
+                            name: "ftd#color".to_string(),
+                            default: None,
+                        },
+                    ),
+                ])
+                .collect(),
+                instances: Default::default(),
+                order: vec![
+                    "region".to_string(),
+                    "on-region".to_string(),
+                    "action-primary".to_string(),
+                    "on-action-primary".to_string(),
+                    "action-secondary".to_string(),
+                    "on-action-secondary".to_string(),
+                    "error".to_string(),
+                    "success".to_string(),
+                    "warning".to_string(),
+                ],
+            }),
+        ),
     ])
     .collect()
 }
