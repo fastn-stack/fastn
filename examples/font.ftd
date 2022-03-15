@@ -1,6 +1,6 @@
 -- ftd.font-size dsize:
-line-height: 14
-size: 14
+line-height: 1
+size: 40
 tracking: 0.1
 
 -- ftd.font-size msize:
