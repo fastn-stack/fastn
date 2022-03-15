@@ -1596,7 +1596,6 @@ pub fn markup_from_properties(
         font_reference =
             ftd::p2::utils::record_and_ref(0, "font", unresolved_properties, doc, condition)?.1;
     }
-    dbg!(&font_reference);
     let font = font_str.map_or(Ok(None), |v| {
         ftd::Type::from(&v, doc, 0, font_reference).map(Some)
     })?;

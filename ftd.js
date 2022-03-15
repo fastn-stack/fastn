@@ -307,6 +307,7 @@ let ftd_utils = {
     },
 
     handle_action: function (id, target, value, data, ftd_external_children) {
+        console.log("handle_action",data[target], value, ftd_external_children);
         data[target].value = value.toString();
         let new_value = data[target].value;
         if (ftd_utils.isJson(data[target].value)) {
@@ -315,6 +316,7 @@ let ftd_utils = {
                 new_value = json[json["$kind$"]];
             }
         }
+        console.log("new_value...", new_value);
 
         let dependencies = data[target].dependencies;
         for (const dependency in dependencies) {
@@ -393,6 +395,7 @@ let ftd_utils = {
                                     new_value["$kind$"] = value;
                                     value = JSON.stringify(new_value);
                                 }
+                                console.log("inside..", parameter, json_dependency.parameters);
                                 ftd_utils.handle_action(id, parameter, value, data, ftd_external_children)
                             }
                         }
@@ -439,10 +442,20 @@ let ftd_utils = {
                             if (parameter === "dependents") {
                                 continue;
                             }
+
                             let important = json_dependency.parameters[parameter].value.important;
-                            ftd_utils.set_style(parameter, `${dependency}:${id}`, new_value, important);
-                            if (!styles_edited.includes(parameter)) {
-                                styles_edited.push(parameter);
+                            if (new_value instanceof Object) {
+                                for (const parameter in new_value) {
+                                    ftd_utils.set_style(parameter, `${dependency}:${id}`, new_value[parameter], important);
+                                    if (!styles_edited.includes(parameter)) {
+                                        styles_edited.push(parameter);
+                                    }
+                                }
+                            } else {
+                                ftd_utils.set_style(parameter, `${dependency}:${id}`, new_value, important);
+                                if (!styles_edited.includes(parameter)) {
+                                    styles_edited.push(parameter);
+                                }
                             }
                         }
                     } else if (ftd_utils.is_equal_condition(data[target].value, json_dependency.condition)) {
@@ -749,7 +762,7 @@ window.ftd = (function () {
             return;
         }
 
-        ftd_utils.handle_action(id, variable, value, data);
+        ftd_utils.handle_action(id, variable, value, data, ftd_external_children);
     }
 
     exports.get_value = function (id, variable) {
@@ -775,8 +788,9 @@ window.ftd = (function () {
     }
 
     exports.init = function (id, data, external_children) {
-        ftd_data[id] = data;
-        ftd_external_children[id] = external_children;
+        ftd_data[id] = JSON.parse(document.getElementById(data).innerText);
+        ftd_external_children[id] = JSON.parse(document.getElementById(external_children).innerText);
+        window.ftd.post_init();
     }
 
     exports.set_bool_for_all = function (variable, value) {
@@ -806,7 +820,7 @@ function console_print(id, data) {
     console.log(data);
 }
 
-(function () {
+window.ftd.post_init = function () {
     const DARK_MODE = "ftd#dark-mode";
     const SYSTEM_DARK_MODE = "ftd#system-dark-mode";
     const FOLLOW_SYSTEM_DARK_MODE = "ftd#follow-system-dark-mode";
@@ -953,4 +967,4 @@ function console_print(id, data) {
     }
     initialise_dark_mode();
     initialise_device();
-})();
+};

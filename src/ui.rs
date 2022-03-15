@@ -718,27 +718,19 @@ impl Element {
         }
     }
 
-    /*pub fn get_font_event_dependencies(
+    pub fn get_font_event_dependencies(
         children: &[ftd::Element],
         data: &mut ftd::DataDependenciesMap,
     ) {
         for child in children {
-            let (common, font, id) = match child {
-                ftd::Element::Column(ftd::Column {
-                    common, container, ..
-                })
-                | ftd::Element::Row(ftd::Row {
-                    common, container, ..
-                })
-                | ftd::Element::Scene(ftd::Scene {
-                    common, container, ..
-                })
-                | ftd::Element::Grid(ftd::Grid {
-                    common, container, ..
-                }) => {
-                    ftd::Element::get_color_event_dependencies(&container.children, data);
+            let (font, id) = match child {
+                ftd::Element::Column(ftd::Column { container, .. })
+                | ftd::Element::Row(ftd::Row { container, .. })
+                | ftd::Element::Scene(ftd::Scene { container, .. })
+                | ftd::Element::Grid(ftd::Grid { container, .. }) => {
+                    ftd::Element::get_font_event_dependencies(&container.children, data);
                     if let Some((_, _, external_children)) = &container.external_children {
-                        ftd::Element::get_color_event_dependencies(external_children, data);
+                        ftd::Element::get_font_event_dependencies(external_children, data);
                     }
                     continue;
                 }
@@ -748,99 +740,74 @@ impl Element {
                     children,
                     ..
                 }) => {
-                    markup_get_color_event_dependencies(children, data);
-                    (common, font, &common.data_id)
+                    markup_get_font_event_dependencies(children, data);
+                    (font, &common.data_id)
                 }
                 ftd::Element::Text(ftd::Text { common, font, .. })
-                | ftd::Element::TextBlock(ftd::TextBlock { common, font, .. })
                 | ftd::Element::Code(ftd::Code { common, font, .. })
                 | ftd::Element::Integer(ftd::Text { common, font, .. })
                 | ftd::Element::Boolean(ftd::Text { common, font, .. })
-                | ftd::Element::Decimal(ftd::Text { common, font, .. }) => {
-                    (common, font, &common.data_id)
-                }
+                | ftd::Element::Decimal(ftd::Text { common, font, .. }) => (font, &common.data_id),
                 _ => continue,
             };
-            value_condition(common, id, data, font);
+            value_condition(id, data, font);
         }
 
-        fn markup_get_color_event_dependencies(
+        fn markup_get_font_event_dependencies(
             children: &[ftd::Markup],
             data: &mut ftd::DataDependenciesMap,
         ) {
             for child in children {
-                let (common, font, id) = match child.itext {
+                let (font, id) = match child.itext {
                     IText::Text(ref t)
                     | IText::Integer(ref t)
                     | IText::Boolean(ref t)
-                    | IText::Decimal(ref t) => (&t.common, &t.font, &t.common.data_id),
-                    IText::TextBlock(ref t) => (&t.common, &t.font, &t.common.data_id),
+                    | IText::Decimal(ref t) => (&t.font, &t.common.data_id),
                     IText::Markup(ref t) => {
-                        markup_get_color_event_dependencies(&t.children, data);
-                        (&t.common, &t.font, &t.common.data_id)
+                        markup_get_font_event_dependencies(&t.children, data);
+                        (&t.font, &t.common.data_id)
                     }
+                    _ => continue,
                 };
-                markup_get_color_event_dependencies(&child.children, data);
-                value_condition(common, id, data, font);
+                markup_get_font_event_dependencies(&child.children, data);
+                value_condition(id, data, font);
             }
         }
 
         fn value_condition(
-            common: &ftd::Common,
             id: &Option<String>,
             data: &mut ftd::DataDependenciesMap,
             font: &Option<Type>,
         ) {
             let id = id.clone().expect("universal id should be present");
             if let Some(ref type_) = font {
-                font_condition(type_, id.as_str(), data, &common.conditional_attribute);
+                font_condition(type_, id.as_str(), data);
             }
 
-            fn font_condition(
-                type_: &ftd::Type,
-                id: &str,
-                data: &mut ftd::DataDependenciesMap,
-                conditional_attribute: &std::collections::BTreeMap<
-                    String,
-                    ftd::ConditionalAttribute,
-                >,
-            ) {
-                if let Some(ref reference) = type_.reference {
-                    (reference.to_string(),  serde_json::to_string(
-                        &serde_json::json!({ "light": ftd::html::color(&color.light), "dark": ftd::html::color(&color.dark), "$kind$": "light" }),
-                    ).unwrap())
+            fn font_condition(type_: &ftd::Type, id: &str, data: &mut ftd::DataDependenciesMap) {
+                let (reference, value) = if let Some(ref reference) = type_.reference {
+                    let desktop = serde_json::to_value(&type_.desktop).unwrap();
+                    let mobile = serde_json::to_value(&type_.mobile).unwrap();
+                    let xl = serde_json::to_value(&type_.xl).unwrap();
+                    (
+                        reference.to_string(),
+                        serde_json::to_string(&serde_json::json!({ "desktop": desktop,
+                            "mobile": mobile,
+                            "xl": xl,
+                            "$kind$": "desktop"
+                        }))
+                        .unwrap(),
+                    )
                 } else {
                     return;
                 };
                 let parameters = {
                     let mut parameters = std::collections::BTreeMap::new();
                     parameters.insert(
-                        style.to_string(),
+                        "font".to_string(),
                         ftd::ConditionalValueWithDefault {
                             value: ConditionalValue {
                                 value,
-                                important: false,
-                                reference: None,
-                            },
-                            default: None,
-                        },
-                    );
-                    let dependents = conditional_attribute
-                        .get(style)
-                        .unwrap_or(&ConditionalAttribute {
-                            attribute_type: AttributeType::Style,
-                            conditions_with_value: vec![],
-                            default: None,
-                        })
-                        .conditions_with_value
-                        .iter()
-                        .map(|(v, _)| v.variable.to_string())
-                        .collect::<Vec<String>>();
-                    parameters.insert(
-                        "dependents".to_string(),
-                        ftd::ConditionalValueWithDefault {
-                            value: ConditionalValue {
-                                value: serde_json::to_string(&dependents).unwrap(),
                                 important: false,
                                 reference: None,
                             },
@@ -867,7 +834,7 @@ impl Element {
                 }
             }
         }
-    }*/
+    }
 
     pub fn get_color_event_dependencies(
         children: &[ftd::Element],
@@ -1183,11 +1150,7 @@ impl Element {
                             important: false,
                             reference: None,
                         },
-                        default: Some(ConditionalValue {
-                            value: "desktop".to_string(),
-                            important: false,
-                            reference: None,
-                        }),
+                        default: None,
                     },
                 )])
                 .collect(),
@@ -1204,11 +1167,24 @@ impl Element {
                             important: false,
                             reference: None,
                         },
-                        default: Some(ConditionalValue {
+                        default: None,
+                    },
+                )])
+                .collect(),
+            };
+
+            let desktop_json = ftd::Dependencies {
+                dependency_type: ftd::DependencyType::Variable,
+                condition: Some("desktop".to_string()),
+                parameters: std::array::IntoIter::new([(
+                    k.to_string(),
+                    ftd::ConditionalValueWithDefault {
+                        value: ConditionalValue {
                             value: "desktop".to_string(),
                             important: false,
                             reference: None,
-                        }),
+                        },
+                        default: None,
                     },
                 )])
                 .collect(),
@@ -1218,11 +1194,12 @@ impl Element {
                 let mut d = serde_json::from_str::<Vec<ftd::Dependencies>>(dependencies).unwrap();
                 d.push(mobile_json);
                 d.push(xl_json);
+                d.push(desktop_json);
                 *dependencies = serde_json::to_string(&d).unwrap();
             } else {
                 dependencies.insert(
                     "$value#kind$".to_string(),
-                    serde_json::to_string(&vec![mobile_json, xl_json]).unwrap(),
+                    serde_json::to_string(&vec![mobile_json, xl_json, desktop_json]).unwrap(),
                 );
             }
         }
@@ -2386,6 +2363,7 @@ impl ImageSrc {
 #[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
 pub struct FontSize {
     pub line_height: i64,
+    #[serde(rename = "font-size")]
     pub size: i64,
     pub tracking: f64,
     pub reference: Option<String>,
@@ -2471,12 +2449,7 @@ impl Type {
                 }
                 reference
             };
-            Ok(FontSize::from(
-                &property_value,
-                doc,
-                line_number,
-                reference,
-            )?)
+            FontSize::from(&property_value, doc, line_number, reference)
         }
     }
 }

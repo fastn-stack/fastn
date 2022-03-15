@@ -95,9 +95,20 @@ impl Document {
                     for (k, v) in fields {
                         if let Ok(val) = v.resolve(0, doc) {
                             if let Some(val) = get_value(&val, doc) {
-                                value_fields.insert(k, val);
+                                value_fields.insert(
+                                    if k.eq("size") {
+                                        "font-size".to_string()
+                                    } else {
+                                        k
+                                    },
+                                    val,
+                                );
                             }
                         }
+                    }
+                    if let Some(val) = value_fields.get_mut("font-size") {
+                        let size = serde_json::to_string(val).unwrap();
+                        *val = serde_json::to_value(format!("{}px", size)).unwrap();
                     }
                     serde_json::to_value(value_fields).ok()
                 }
@@ -122,7 +133,7 @@ impl Document {
         ftd::Element::get_device_dependencies(self, &mut data);
         ftd::Element::get_dark_mode_dependencies(self, &mut data);
         ftd::Element::get_variable_dependencies(self, &mut data);
-        // ftd::Element::get_font_event_dependencies(&self.main.container.children, &mut data);
+        ftd::Element::get_font_event_dependencies(&self.main.container.children, &mut data);
         ftd::Element::get_color_event_dependencies(&self.main.container.children, &mut data);
         ftd::Element::get_visible_event_dependencies(&self.main.container.children, &mut data);
         ftd::Element::get_value_event_dependencies(&self.main.container.children, &mut data);
