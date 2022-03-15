@@ -2,20 +2,25 @@
 
 -- ftd.text: hello
 
--- ftd.type body-large: sans-serif
+-- ftd.font-size body-large-size:
 line-height: 25
 size: 16
+
+-- ftd.type body-large: sans-serif
+desktop: $body-large-size
+mobile: $body-large-size
+xl: $body-large-size
 weight: 400
 
 -- ftd.text: hello_h2
 region: h2
-font: $body-large
+role: $body-large
 
 -- ftd.text: hello_h1
 region: h1
-font: $fpm.design.type.body-medium
+role: $fpm.design.type.body-medium
 color: $fpm.design.color.brand.on-region
 
 -- ftd.text: hello_h0
 region: h0
-font: $fpm.design.type.body-small
+role: $fpm.design.type.body-small
