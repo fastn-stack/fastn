@@ -5,11 +5,17 @@ pub fn main() {
 
     let mut write_doc = indoc::indoc!(
         "
--- ftd.type heading: cursive
+-- ftd.font-size dsize:
 line-height: 40
-weight: 800
 size: 40
+tracking: 0.0
+
+-- ftd.type heading: cursive
+weight: 800
 style: italic
+desktop: $dsize
+mobile: $dsize
+xl: $dsize
 
 -- ftd.column:
 padding-horizontal: 40

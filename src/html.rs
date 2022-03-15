@@ -670,9 +670,10 @@ impl ftd::Text {
         if let Some(ref font) = self.font {
             n.style.insert(s("font-family"), font.font.to_string());
             n.style
-                .insert(s("line-height"), format!("{}px", font.line_height));
-            n.style.insert(s("font-size"), format!("{}px", font.size));
-            n.style.insert(s("font-weight"), font.size.to_string());
+                .insert(s("line-height"), format!("{}px", font.desktop.line_height));
+            n.style
+                .insert(s("font-size"), format!("{}px", font.desktop.size));
+            n.style.insert(s("font-weight"), font.weight.to_string());
             if font.style.italic {
                 n.style.insert(s("font-style"), s("italic"));
             }
@@ -785,9 +786,10 @@ impl ftd::Code {
         if let Some(ref font) = self.font {
             n.style.insert(s("font-family"), font.font.to_string());
             n.style
-                .insert(s("line-height"), format!("{}px", font.line_height));
-            n.style.insert(s("font-size"), format!("{}px", font.size));
-            n.style.insert(s("font-weight"), font.size.to_string());
+                .insert(s("line-height"), format!("{}px", font.desktop.line_height));
+            n.style
+                .insert(s("font-size"), format!("{}px", font.desktop.size));
+            n.style.insert(s("font-weight"), font.weight.to_string());
             if font.style.italic {
                 n.style.insert(s("font-style"), s("italic"));
             }
@@ -896,9 +898,10 @@ impl ftd::Markups {
         if let Some(ref font) = self.font {
             n.style.insert(s("font-family"), font.font.to_string());
             n.style
-                .insert(s("line-height"), format!("{}px", font.line_height));
-            n.style.insert(s("font-size"), format!("{}px", font.size));
-            n.style.insert(s("font-weight"), font.size.to_string());
+                .insert(s("line-height"), format!("{}px", font.desktop.line_height));
+            n.style
+                .insert(s("font-size"), format!("{}px", font.desktop.size));
+            n.style.insert(s("font-weight"), font.weight.to_string());
             if font.style.italic {
                 n.style.insert(s("font-style"), s("italic"));
             }

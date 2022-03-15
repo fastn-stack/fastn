@@ -718,6 +718,157 @@ impl Element {
         }
     }
 
+    /*pub fn get_font_event_dependencies(
+        children: &[ftd::Element],
+        data: &mut ftd::DataDependenciesMap,
+    ) {
+        for child in children {
+            let (common, font, id) = match child {
+                ftd::Element::Column(ftd::Column {
+                    common, container, ..
+                })
+                | ftd::Element::Row(ftd::Row {
+                    common, container, ..
+                })
+                | ftd::Element::Scene(ftd::Scene {
+                    common, container, ..
+                })
+                | ftd::Element::Grid(ftd::Grid {
+                    common, container, ..
+                }) => {
+                    ftd::Element::get_color_event_dependencies(&container.children, data);
+                    if let Some((_, _, external_children)) = &container.external_children {
+                        ftd::Element::get_color_event_dependencies(external_children, data);
+                    }
+                    continue;
+                }
+                ftd::Element::Markup(ftd::Markups {
+                    common,
+                    font,
+                    children,
+                    ..
+                }) => {
+                    markup_get_color_event_dependencies(children, data);
+                    (common, font, &common.data_id)
+                }
+                ftd::Element::Text(ftd::Text { common, font, .. })
+                | ftd::Element::TextBlock(ftd::TextBlock { common, font, .. })
+                | ftd::Element::Code(ftd::Code { common, font, .. })
+                | ftd::Element::Integer(ftd::Text { common, font, .. })
+                | ftd::Element::Boolean(ftd::Text { common, font, .. })
+                | ftd::Element::Decimal(ftd::Text { common, font, .. }) => {
+                    (common, font, &common.data_id)
+                }
+                _ => continue,
+            };
+            value_condition(common, id, data, font);
+        }
+
+        fn markup_get_color_event_dependencies(
+            children: &[ftd::Markup],
+            data: &mut ftd::DataDependenciesMap,
+        ) {
+            for child in children {
+                let (common, font, id) = match child.itext {
+                    IText::Text(ref t)
+                    | IText::Integer(ref t)
+                    | IText::Boolean(ref t)
+                    | IText::Decimal(ref t) => (&t.common, &t.font, &t.common.data_id),
+                    IText::TextBlock(ref t) => (&t.common, &t.font, &t.common.data_id),
+                    IText::Markup(ref t) => {
+                        markup_get_color_event_dependencies(&t.children, data);
+                        (&t.common, &t.font, &t.common.data_id)
+                    }
+                };
+                markup_get_color_event_dependencies(&child.children, data);
+                value_condition(common, id, data, font);
+            }
+        }
+
+        fn value_condition(
+            common: &ftd::Common,
+            id: &Option<String>,
+            data: &mut ftd::DataDependenciesMap,
+            font: &Option<Type>,
+        ) {
+            let id = id.clone().expect("universal id should be present");
+            if let Some(ref type_) = font {
+                font_condition(type_, id.as_str(), data, &common.conditional_attribute);
+            }
+
+            fn font_condition(
+                type_: &ftd::Type,
+                id: &str,
+                data: &mut ftd::DataDependenciesMap,
+                conditional_attribute: &std::collections::BTreeMap<
+                    String,
+                    ftd::ConditionalAttribute,
+                >,
+            ) {
+                if let Some(ref reference) = type_.reference {
+                    (reference.to_string(),  serde_json::to_string(
+                        &serde_json::json!({ "light": ftd::html::color(&color.light), "dark": ftd::html::color(&color.dark), "$kind$": "light" }),
+                    ).unwrap())
+                } else {
+                    return;
+                };
+                let parameters = {
+                    let mut parameters = std::collections::BTreeMap::new();
+                    parameters.insert(
+                        style.to_string(),
+                        ftd::ConditionalValueWithDefault {
+                            value: ConditionalValue {
+                                value,
+                                important: false,
+                                reference: None,
+                            },
+                            default: None,
+                        },
+                    );
+                    let dependents = conditional_attribute
+                        .get(style)
+                        .unwrap_or(&ConditionalAttribute {
+                            attribute_type: AttributeType::Style,
+                            conditions_with_value: vec![],
+                            default: None,
+                        })
+                        .conditions_with_value
+                        .iter()
+                        .map(|(v, _)| v.variable.to_string())
+                        .collect::<Vec<String>>();
+                    parameters.insert(
+                        "dependents".to_string(),
+                        ftd::ConditionalValueWithDefault {
+                            value: ConditionalValue {
+                                value: serde_json::to_string(&dependents).unwrap(),
+                                important: false,
+                                reference: None,
+                            },
+                            default: None,
+                        },
+                    );
+                    parameters
+                };
+                if let Some(ftd::Data { dependencies, .. }) = data.get_mut(&reference) {
+                    let json = ftd::Dependencies {
+                        dependency_type: ftd::DependencyType::Style,
+                        condition: None,
+                        parameters,
+                    };
+                    if let Some(dependencies) = dependencies.get_mut(id) {
+                        let mut d =
+                            serde_json::from_str::<Vec<ftd::Dependencies>>(dependencies).unwrap();
+                        d.push(json);
+                        *dependencies = serde_json::to_string(&d).unwrap();
+                    } else {
+                        dependencies
+                            .insert(id.to_string(), serde_json::to_string(&vec![json]).unwrap());
+                    }
+                }
+            }
+        }
+    }*/
+
     pub fn get_color_event_dependencies(
         children: &[ftd::Element],
         data: &mut ftd::DataDependenciesMap,
@@ -996,7 +1147,91 @@ impl Element {
         }
     }
 
-    pub fn get_image_variable(document: &ftd::p2::Document, data: &mut ftd::DataDependenciesMap) {
+    pub fn get_device_dependencies(
+        document: &ftd::p2::Document,
+        data: &mut ftd::DataDependenciesMap,
+    ) {
+        for (k, v) in document.data.iter() {
+            if !data.contains_key(k) {
+                continue;
+            }
+            if let ftd::p2::Thing::Variable(ftd::Variable { value: default, .. }) = v {
+                match default.kind() {
+                    ftd::p2::Kind::Record { name, .. } if ["ftd#type"].contains(&name.as_str()) => {
+                    }
+                    _ => {
+                        continue;
+                    }
+                }
+            } else {
+                continue;
+            };
+            let dependencies =
+                if let Some(ftd::Data { dependencies, .. }) = data.get_mut("ftd#device") {
+                    dependencies
+                } else {
+                    continue;
+                };
+            let mobile_json = ftd::Dependencies {
+                dependency_type: ftd::DependencyType::Variable,
+                condition: Some("mobile".to_string()),
+                parameters: std::array::IntoIter::new([(
+                    k.to_string(),
+                    ftd::ConditionalValueWithDefault {
+                        value: ConditionalValue {
+                            value: "mobile".to_string(),
+                            important: false,
+                            reference: None,
+                        },
+                        default: Some(ConditionalValue {
+                            value: "desktop".to_string(),
+                            important: false,
+                            reference: None,
+                        }),
+                    },
+                )])
+                .collect(),
+            };
+
+            let xl_json = ftd::Dependencies {
+                dependency_type: ftd::DependencyType::Variable,
+                condition: Some("xl".to_string()),
+                parameters: std::array::IntoIter::new([(
+                    k.to_string(),
+                    ftd::ConditionalValueWithDefault {
+                        value: ConditionalValue {
+                            value: "xl".to_string(),
+                            important: false,
+                            reference: None,
+                        },
+                        default: Some(ConditionalValue {
+                            value: "desktop".to_string(),
+                            important: false,
+                            reference: None,
+                        }),
+                    },
+                )])
+                .collect(),
+            };
+
+            if let Some(dependencies) = dependencies.get_mut("$value#kind$") {
+                let mut d = serde_json::from_str::<Vec<ftd::Dependencies>>(dependencies).unwrap();
+                d.push(mobile_json);
+                d.push(xl_json);
+                *dependencies = serde_json::to_string(&d).unwrap();
+            } else {
+                dependencies.insert(
+                    "$value#kind$".to_string(),
+                    serde_json::to_string(&vec![mobile_json, xl_json]).unwrap(),
+                );
+            }
+        }
+    }
+
+    pub fn get_dark_mode_dependencies(
+        document: &ftd::p2::Document,
+        data: &mut ftd::DataDependenciesMap,
+    ) {
         for (k, v) in document.data.iter() {
             if !data.contains_key(k) {
                 continue;
@@ -2149,12 +2384,42 @@ impl ImageSrc {
 }
 
 #[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
-pub struct Type {
-    pub font: String,
+pub struct FontSize {
     pub line_height: i64,
     pub size: i64,
+    pub tracking: f64,
+    pub reference: Option<String>,
+}
+
+impl FontSize {
+    pub fn from(
+        l: &std::collections::BTreeMap<String, ftd::PropertyValue>,
+        doc: &ftd::p2::TDoc,
+        line_number: usize,
+        reference: Option<String>,
+    ) -> ftd::p1::Result<FontSize> {
+        let properties = l
+            .iter()
+            .map(|(k, v)| v.resolve(line_number, doc).map(|v| (k.to_string(), v)))
+            .collect::<ftd::p1::Result<std::collections::BTreeMap<String, ftd::Value>>>()?;
+        Ok(FontSize {
+            line_height: ftd::p2::utils::int("line-height", &properties, doc.name, 0)?,
+            size: ftd::p2::utils::int("size", &properties, doc.name, 0)?,
+            tracking: ftd::p2::utils::decimal("tracking", &properties, doc.name, 0)?,
+            reference,
+        })
+    }
+}
+
+#[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
+pub struct Type {
+    pub font: String,
+    pub desktop: FontSize,
+    pub mobile: FontSize,
+    pub xl: FontSize,
     pub weight: i64,
     pub style: Style,
+    pub reference: Option<String>,
 }
 
 impl Type {
@@ -2162,21 +2427,57 @@ impl Type {
         l: &std::collections::BTreeMap<String, ftd::PropertyValue>,
         doc: &ftd::p2::TDoc,
         line_number: usize,
+        reference: Option<String>,
     ) -> ftd::p1::Result<Type> {
         let properties = l
             .iter()
             .map(|(k, v)| v.resolve(line_number, doc).map(|v| (k.to_string(), v)))
             .collect::<ftd::p1::Result<std::collections::BTreeMap<String, ftd::Value>>>()?;
-        Ok(Type {
+        return Ok(Type {
             font: ftd::p2::utils::string("font", &properties, doc.name, 0)?,
-            line_height: ftd::p2::utils::int("line-height", &properties, doc.name, 0)?,
-            size: ftd::p2::utils::int("size", &properties, doc.name, 0)?,
+            desktop: get_font_size(l, doc, line_number, "desktop")?,
+            mobile: get_font_size(l, doc, line_number, "mobile")?,
+            xl: get_font_size(l, doc, line_number, "xl")?,
             weight: ftd::p2::utils::int("weight", &properties, doc.name, 0)?,
             style: ftd::Style::from(
                 ftd::p2::utils::string_optional("style", &properties, doc.name, 0)?,
                 doc.name,
             )?,
-        })
+            reference,
+        });
+
+        fn get_font_size(
+            l: &std::collections::BTreeMap<String, ftd::PropertyValue>,
+            doc: &ftd::p2::TDoc,
+            line_number: usize,
+            name: &str,
+        ) -> ftd::p1::Result<FontSize> {
+            let properties = l
+                .iter()
+                .map(|(k, v)| v.resolve(line_number, doc).map(|v| (k.to_string(), v)))
+                .collect::<ftd::p1::Result<std::collections::BTreeMap<String, ftd::Value>>>()?;
+
+            let property_value = ftd::p2::utils::record_optional(name, &properties, doc.name, 0)?
+                .ok_or_else(|| ftd::p1::Error::ParseError {
+                message: format!("expected record, for: `{}` found: `None`", name),
+                doc_id: doc.name.to_string(),
+                line_number,
+            })?;
+
+            let reference = {
+                let mut reference = None;
+                if let Some(val) = l.get(name) {
+                    reference = val.get_reference();
+                }
+                reference
+            };
+            Ok(FontSize::from(
+                &property_value,
+                doc,
+                line_number,
+                reference,
+            )?)
+        }
     }
 }
 

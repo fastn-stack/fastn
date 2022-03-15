@@ -440,7 +440,7 @@ impl<'a> Interpreter<'a> {
         Ok(instructions)
     }
 
-    #[cfg(not(feature = "async"))]
+    // #[cfg(not(feature = "async"))]
     fn interpret_(
         &mut self,
         name: &str,
@@ -973,6 +973,48 @@ pub fn default_bag() -> std::collections::BTreeMap<String, ftd::p2::Thing> {
             }),
         ),
         (
+            "ftd#device".to_string(),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: "ftd#device".to_string(),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::String {
+                        text: "desktop".to_string(),
+                        source: ftd::TextSource::Header,
+                    },
+                },
+                conditions: vec![],
+                flags: ftd::VariableFlags {
+                    always_include: Some(true),
+                },
+            }),
+        ),
+        (
+            "ftd#mobile-breakpoint".to_string(),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: "ftd#mobile-breakpoint".to_string(),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Integer { value: 768 },
+                },
+                conditions: vec![],
+                flags: ftd::VariableFlags {
+                    always_include: Some(true),
+                },
+            }),
+        ),
+        (
+            "ftd#desktop-breakpoint".to_string(),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: "ftd#desktop-breakpoint".to_string(),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Integer { value: 1440 },
+                },
+                conditions: vec![],
+                flags: ftd::VariableFlags {
+                    always_include: Some(true),
+                },
+            }),
+        ),
+        (
             "ftd#image-src".to_string(),
             ftd::p2::Thing::Record(ftd::p2::Record {
                 name: "ftd#image-src".to_string(),
@@ -999,13 +1041,50 @@ pub fn default_bag() -> std::collections::BTreeMap<String, ftd::p2::Thing> {
             }),
         ),
         (
+            "ftd#font-size".to_string(),
+            ftd::p2::Thing::Record(ftd::p2::Record {
+                name: "ftd#font-size".to_string(),
+                fields: std::array::IntoIter::new([
+                    ("line-height".to_string(), ftd::p2::Kind::integer()),
+                    ("size".to_string(), ftd::p2::Kind::integer()),
+                    ("tracking".to_string(), ftd::p2::Kind::decimal()),
+                ])
+                .collect(),
+                instances: Default::default(),
+                order: vec![
+                    "line-height".to_string(),
+                    "size".to_string(),
+                    "tracking".to_string(),
+                ],
+            }),
+        ),
+        (
             "ftd#type".to_string(),
             ftd::p2::Thing::Record(ftd::p2::Record {
                 name: "ftd#type".to_string(),
                 fields: std::array::IntoIter::new([
                     ("font".to_string(), ftd::p2::Kind::caption()),
-                    ("line-height".to_string(), ftd::p2::Kind::integer()),
-                    ("size".to_string(), ftd::p2::Kind::integer()),
+                    (
+                        "desktop".to_string(),
+                        ftd::p2::Kind::Record {
+                            name: "ftd#font-size".to_string(),
+                            default: None,
+                        },
+                    ),
+                    (
+                        "mobile".to_string(),
+                        ftd::p2::Kind::Record {
+                            name: "ftd#font-size".to_string(),
+                            default: None,
+                        },
+                    ),
+                    (
+                        "xl".to_string(),
+                        ftd::p2::Kind::Record {
+                            name: "ftd#font-size".to_string(),
+                            default: None,
+                        },
+                    ),
                     ("weight".to_string(), ftd::p2::Kind::integer()),
                     ("style".to_string(), ftd::p2::Kind::string().into_optional()),
                 ])
@@ -1013,8 +1092,9 @@ pub fn default_bag() -> std::collections::BTreeMap<String, ftd::p2::Thing> {
                 instances: Default::default(),
                 order: vec![
                     "font".to_string(),
-                    "line-height".to_string(),
-                    "size".to_string(),
+                    "desktop".to_string(),
+                    "mobile".to_string(),
+                    "xl".to_string(),
                     "weight".to_string(),
                     "style".to_string(),
                 ],
