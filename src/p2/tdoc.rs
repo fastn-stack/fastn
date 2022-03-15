@@ -973,6 +973,81 @@ impl<'a> TDoc<'a> {
         }
     }
     // name = foo | alias.foo | a/b#foo
+
+    pub fn get_initial_thing(
+        &'a self,
+        line_number: usize,
+        name: &'a str,
+    ) -> ftd::p1::Result<(ftd::p2::Thing, Option<String>)> {
+        if name.contains('#') {
+            let (name, remaining_value) = {
+                let mut full_name = (name.to_string(), None);
+                if let Some((s, n)) = name.split_once('#') {
+                    if let Some((v, remaining_value)) = n.split_once('.') {
+                        full_name.0 = format!("{}#{}", s, v);
+                        full_name.1 = Some(remaining_value.to_string());
+                    }
+                }
+                full_name
+            };
+            return match self.bag.get(name.as_str()) {
+                Some(a) => Ok((a.to_owned(), remaining_value)),
+                None => match self.local_variables.get(name.as_str()) {
+                    Some(a) => Ok((a.to_owned(), remaining_value)),
+                    None => self.err("not found", name, "get_thing", line_number),
+                },
+            };
+        }
+        return Ok(match get_initial_thing_(self, None, self.name, name) {
+            Some(a) => a,
+            None => {
+                if let Some((m, v)) = name.split_once('.') {
+                    match get_initial_thing_(self, Some(m), m, v) {
+                        None => return self.err("not found", name, "get_thing", line_number),
+                        Some(a) => a,
+                    }
+                } else {
+                    return self.err("not found", name, "get_thing", line_number);
+                }
+            }
+        });
+
+        fn get_initial_thing_(
+            doc: &ftd::p2::TDoc,
+            root_name: Option<&str>,
+            doc_name: &str,
+            name: &str,
+        ) -> Option<(ftd::p2::Thing, Option<String>)> {
+            let (name, remaining_value) = if let Some((v, remaining_value)) = name.split_once('.') {
+                (v, Some(remaining_value.to_string()))
+            } else {
+                (name, None)
+            };
+
+            match doc
+                .bag
+                .get(format!("{}#{}", doc_name, name).as_str())
+                .or_else(|| {
+                    doc.local_variables
+                        .get(format!("{}#{}", doc_name, name).as_str())
+                })
+                .map(ToOwned::to_owned)
+            {
+                Some(a) => Some((a, remaining_value)),
+                None => match root_name {
+                    Some(doc_name) => match doc.aliases.get(doc_name) {
+                        Some(g) => doc
+                            .bag
+                            .get(format!("{}#{}", g, name).as_str())
+                            .map(|v| (v.clone(), remaining_value)),
+                        None => None,
+                    },
+                    None => None,
+                },
+            }
+        }
+    }
+
     pub fn get_thing(
         &'a self,
         line_number: usize,
@@ -984,87 +1059,12 @@ impl<'a> TDoc<'a> {
             name
         };
 
-        let (initial_thing, name) = get_initial_thing(self, line_number, name)?;
+        let (initial_thing, name) = self.get_initial_thing(line_number, name)?;
 
         if let Some(remaining) = name {
             return get_thing(self, line_number, remaining.as_str(), &initial_thing);
         }
         return Ok(initial_thing);
-
-        fn get_initial_thing(
-            doc: &ftd::p2::TDoc,
-            line_number: usize,
-            name: &str,
-        ) -> ftd::p1::Result<(ftd::p2::Thing, Option<String>)> {
-            if name.contains('#') {
-                let (name, remaining_value) = {
-                    let mut full_name = (name.to_string(), None);
-                    if let Some((s, n)) = name.split_once('#') {
-                        if let Some((v, remaining_value)) = n.split_once('.') {
-                            full_name.0 = format!("{}#{}", s, v);
-                            full_name.1 = Some(remaining_value.to_string());
-                        }
-                    }
-                    full_name
-                };
-                return match doc.bag.get(name.as_str()) {
-                    Some(a) => Ok((a.to_owned(), remaining_value)),
-                    None => match doc.local_variables.get(name.as_str()) {
-                        Some(a) => Ok((a.to_owned(), remaining_value)),
-                        None => doc.err("not found", name, "get_thing", line_number),
-                    },
-                };
-            }
-            return Ok(match get_initial_thing_(doc, None, doc.name, name) {
-                Some(a) => a,
-                None => {
-                    if let Some((m, v)) = name.split_once('.') {
-                        match get_initial_thing_(doc, Some(m), m, v) {
-                            None => return doc.err("not found", name, "get_thing", line_number),
-                            Some(a) => a,
-                        }
-                    } else {
-                        return doc.err("not found", name, "get_thing", line_number);
-                    }
-                }
-            });
-
-            fn get_initial_thing_(
-                doc: &ftd::p2::TDoc,
-                root_name: Option<&str>,
-                doc_name: &str,
-                name: &str,
-            ) -> Option<(ftd::p2::Thing, Option<String>)> {
-                let (name, remaining_value) =
-                    if let Some((v, remaining_value)) = name.split_once('.') {
-                        (v, Some(remaining_value.to_string()))
-                    } else {
-                        (name, None)
-                    };
-
-                match doc
-                    .bag
-                    .get(format!("{}#{}", doc_name, name).as_str())
-                    .or_else(|| {
-                        doc.local_variables
-                            .get(format!("{}#{}", doc_name, name).as_str())
-                    })
-                    .map(ToOwned::to_owned)
-                {
-                    Some(a) => Some((a, remaining_value)),
-                    None => match root_name {
-                        Some(doc_name) => match doc.aliases.get(doc_name) {
-                            Some(g) => doc
-                                .bag
-                                .get(format!("{}#{}", g, name).as_str())
-                                .map(|v| (v.clone(), remaining_value)),
-                            None => None,
-                        },
-                        None => None,
-                    },
-                }
-            }
-        }
 
         fn get_thing(
             doc: &ftd::p2::TDoc,
@@ -1108,7 +1108,7 @@ impl<'a> TDoc<'a> {
                             flags: ftd::VariableFlags::default(),
                         })
                     } else if let Some(ftd::PropertyValue::Reference { name, .. }) = fields.get(v) {
-                        get_initial_thing(doc, line_number, name)?.0
+                        doc.get_initial_thing(line_number, name)?.0
                     } else {
                         thing.clone()
                     }
