@@ -21,4 +21,4 @@ weight: 400
 style: italic
 
 -- ftd.text: Hello World
-font: $font
+role: $font

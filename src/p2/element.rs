@@ -859,7 +859,7 @@ pub fn text_block_from_properties(
         condition,
     )?;
     let properties = &ftd::component::resolve_properties(0, unresolved_properties, doc)?;
-    let font_str = ftd::p2::utils::string_optional("font", properties, doc.name, 0)?;
+    let font_str = ftd::p2::utils::string_optional("role", properties, doc.name, 0)?;
 
     let font: Vec<ftd::NamedFont> = match font_str {
         Some(f) => f
@@ -913,11 +913,11 @@ pub fn code_from_properties(
         condition,
     )?;
     let properties = &ftd::component::resolve_properties(0, unresolved_properties, doc)?;
-    let font_str = ftd::p2::utils::record_optional("font", properties, doc.name, 0)?;
+    let font_str = ftd::p2::utils::record_optional("role", properties, doc.name, 0)?;
     let mut font_reference = None;
     if font_str.is_some() {
         font_reference =
-            ftd::p2::utils::record_and_ref(0, "font", unresolved_properties, doc, condition)?.1;
+            ftd::p2::utils::record_and_ref(0, "role", unresolved_properties, doc, condition)?.1;
     }
     let font = font_str.map_or(Ok(None), |v| {
         ftd::Type::from(&v, doc, 0, font_reference).map(Some)
@@ -979,11 +979,11 @@ pub fn integer_from_properties(
         None => ftd::p2::utils::int("value", properties, doc.name, 0)?.to_string(),
     };
 
-    let font_str = ftd::p2::utils::record_optional("font", properties, doc.name, 0)?;
+    let font_str = ftd::p2::utils::record_optional("role", properties, doc.name, 0)?;
     let mut font_reference = None;
     if font_str.is_some() {
         font_reference =
-            ftd::p2::utils::record_and_ref(0, "font", unresolved_properties, doc, condition)?.1;
+            ftd::p2::utils::record_and_ref(0, "role", unresolved_properties, doc, condition)?.1;
     }
     let font = font_str.map_or(Ok(None), |v| {
         ftd::Type::from(&v, doc, 0, font_reference).map(Some)
@@ -1032,11 +1032,11 @@ pub fn decimal_from_properties(
         None => ftd::p2::utils::decimal("value", properties, doc.name, 0)?.to_string(),
     };
 
-    let font_str = ftd::p2::utils::record_optional("font", properties, doc.name, 0)?;
+    let font_str = ftd::p2::utils::record_optional("role", properties, doc.name, 0)?;
     let mut font_reference = None;
     if font_str.is_some() {
         font_reference =
-            ftd::p2::utils::record_and_ref(0, "font", unresolved_properties, doc, condition)?.1;
+            ftd::p2::utils::record_and_ref(0, "role", unresolved_properties, doc, condition)?.1;
     }
     let font = font_str.map_or(Ok(None), |v| {
         ftd::Type::from(&v, doc, 0, font_reference).map(Some)
@@ -1101,11 +1101,11 @@ pub fn boolean_from_properties(
         ftd::p2::utils::string_with_default("false", "false", properties, doc.name, 0)?
     };
 
-    let font_str = ftd::p2::utils::record_optional("font", properties, doc.name, 0)?;
+    let font_str = ftd::p2::utils::record_optional("role", properties, doc.name, 0)?;
     let mut font_reference = None;
     if font_str.is_some() {
         font_reference =
-            ftd::p2::utils::record_and_ref(0, "font", unresolved_properties, doc, condition)?.1;
+            ftd::p2::utils::record_and_ref(0, "role", unresolved_properties, doc, condition)?.1;
     }
     let font = font_str.map_or(Ok(None), |v| {
         ftd::Type::from(&v, doc, 0, font_reference).map(Some)
@@ -1147,7 +1147,7 @@ pub fn text_function() -> ftd::Component {
                 ("align".to_string(), ftd::p2::Kind::string().into_optional()),
                 ("style".to_string(), ftd::p2::Kind::string().into_optional()),
                 (
-                    "font".to_string(),
+                    "role".to_string(),
                     ftd::p2::Kind::Record {
                         name: "ftd#type".to_string(),
                         default: None,
@@ -1191,7 +1191,7 @@ pub fn code_function() -> ftd::Component {
                 ("lang".to_string(), ftd::p2::Kind::string().into_optional()),
                 ("theme".to_string(), ftd::p2::Kind::string().into_optional()),
                 (
-                    "font".to_string(),
+                    "role".to_string(),
                     ftd::p2::Kind::Record {
                         name: "ftd#type".to_string(),
                         default: None,
@@ -1237,7 +1237,7 @@ pub fn integer_function() -> ftd::Component {
                     ftd::p2::Kind::string().into_optional(),
                 ),
                 (
-                    "font".to_string(),
+                    "role".to_string(),
                     ftd::p2::Kind::Record {
                         name: "ftd#type".to_string(),
                         default: None,
@@ -1279,7 +1279,7 @@ pub fn decimal_function() -> ftd::Component {
                     ftd::p2::Kind::string().into_optional(),
                 ),
                 (
-                    "font".to_string(),
+                    "role".to_string(),
                     ftd::p2::Kind::Record {
                         name: "ftd#type".to_string(),
                         default: None,
@@ -1350,7 +1350,7 @@ pub fn markup_function() -> ftd::Component {
                 ("align".to_string(), ftd::p2::Kind::string().into_optional()),
                 ("style".to_string(), ftd::p2::Kind::string().into_optional()),
                 (
-                    "font".to_string(),
+                    "role".to_string(),
                     ftd::p2::Kind::Record {
                         name: "ftd#type".to_string(),
                         default: None,
@@ -1439,7 +1439,7 @@ pub fn boolean_function() -> ftd::Component {
                     ftd::p2::Kind::string().into_optional(),
                 ),
                 (
-                    "font".to_string(),
+                    "role".to_string(),
                     ftd::p2::Kind::Record {
                         name: "ftd#type".to_string(),
                         default: None,
@@ -1590,11 +1590,11 @@ pub fn markup_from_properties(
         condition,
     )?;
     let properties = &ftd::component::resolve_properties(0, unresolved_properties, doc)?;
-    let font_str = ftd::p2::utils::record_optional("font", properties, doc.name, 0)?;
+    let font_str = ftd::p2::utils::record_optional("role", properties, doc.name, 0)?;
     let mut font_reference = None;
     if font_str.is_some() {
         font_reference =
-            ftd::p2::utils::record_and_ref(0, "font", unresolved_properties, doc, condition)?.1;
+            ftd::p2::utils::record_and_ref(0, "role", unresolved_properties, doc, condition)?.1;
     }
     let font = font_str.map_or(Ok(None), |v| {
         ftd::Type::from(&v, doc, 0, font_reference).map(Some)
