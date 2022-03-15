@@ -1,0 +1,170 @@
+-- ftd.type display-large: sans-serif
+line-height: 64
+size: 57
+weight: 400
+
+-- ftd.type display-medium: sans-serif
+line-height: 20
+size: 14
+weight: 400
+
+-- ftd.type display-small: sans-serif
+line-height: 16
+size: 12
+weight: 400
+
+-- ftd.type headline-large: sans-serif
+line-height: 40
+size: 32
+weight: 400
+
+-- ftd.type headline-medium: sans-serif
+line-height: 36
+size: 28
+weight: 400
+
+-- ftd.type headline-small: sans-serif
+line-height: 32
+size: 24
+weight: 400
+
+-- ftd.type title-large: sans-serif
+line-height: 28
+size: 22
+weight: 400
+
+-- ftd.type title-medium: sans-serif
+line-height: 24
+size: 16
+weight: 400
+
+-- ftd.type title-small: sans-serif
+line-height: 20
+size: 14
+weight: 400
+
+-- ftd.type label-large: sans-serif
+line-height: 20
+size: 14
+weight: 400
+
+-- ftd.type label-medium: sans-serif
+line-height: 16
+size: 12
+weight: 400
+
+-- ftd.type label-small: sans-serif
+line-height: 16
+size: 11
+weight: 400
+
+-- ftd.type body-large: sans-serif
+line-height: 24
+size: 16
+weight: 400
+
+-- ftd.type body-medium: sans-serif
+line-height: 20
+size: 14
+weight: 400
+
+-- ftd.type body-small: sans-serif
+line-height: 16
+size: 12
+weight: 400
+
+-- record type-data:
+ftd.type display-large:
+ftd.type display-medium:
+ftd.type display-small:
+ftd.type headline-large:
+ftd.type headline-medium:
+ftd.type headline-small:
+ftd.type title-large:
+ftd.type title-medium:
+ftd.type title-small:
+ftd.type label-large:
+ftd.type label-medium:
+ftd.type label-small:
+ftd.type body-large:
+ftd.type body-medium:
+ftd.type body-small:
+
+-- type-data fd:
+display-large: $display-large
+display-medium: $display-medium
+display-small: $display-small
+headline-large: $headline-large
+headline-medium: $headline-medium
+headline-small: $headline-small
+title-large: $title-large
+title-medium: $title-medium
+title-small: $title-small
+label-large: $label-large
+label-medium: $label-medium
+label-small: $label-small
+body-large: $body-large
+body-medium: $body-medium
+body-small: $body-small
+
+
+
+
+
+
+
+
+
+
+
+
+-- ftd.color background:
+light: #FFFBFE
+dark: #1C1B1F
+
+-- record color-data:
+ftd.color background:
+/ftd.color error:
+/ftd.color error-container:
+/ftd.color inverse-on-surface:
+/ftd.color inverse-surface:
+/ftd.color on-background:
+/ftd.color on-error:
+/ftd.color on-error-container:
+/ftd.color on-primary:
+/ftd.color on-primary-container:
+/ftd.color on-secondary:
+/ftd.color on-secondary-container:
+/ftd.color on-surface:
+/ftd.color on-surface-variant:
+/ftd.color on-tertiary:
+/ftd.color on-tertiary-container:
+/ftd.color outline:
+/ftd.color primary:
+/ftd.color primary-container:
+/ftd.color secondary:
+/ftd.color secondary-container:
+/ftd.color surface:
+/ftd.color surface-variant:
+/ftd.color tertiary:
+/ftd.color tertiary-container:
+
+-- color-data cd:
+background: $background
+
+
+
+
+
+
+
+
+
+
+-- record design-data:
+type-data type:
+color-data color:
+
+-- design-data design:
+type: $fd
+color: $cd

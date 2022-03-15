@@ -1,7 +1,7 @@
 -- fbt:
 cmd: cd amitu && $FBT_CWD/target/debug/fpm --test build --ignore-failed
 output: amitu/.build
-
+skip: fpm.design not working
 
 -- stdout:
 

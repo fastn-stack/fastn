@@ -50,6 +50,10 @@ fn fpm_ftd() -> &'static str {
     include_str!("../ftd/fpm.ftd")
 }
 
+fn design_ftd() -> &'static str {
+    include_str!("../ftd/design.ftd")
+}
+
 fn fpm_js() -> &'static str {
     if fpm::utils::is_test() {
         return "FPM_JS";

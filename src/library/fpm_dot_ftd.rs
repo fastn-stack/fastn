@@ -240,7 +240,7 @@ pub(crate) fn get(lib: &fpm::Library) -> String {
     let mut fpm_base = format!(
         indoc::indoc! {"
             {fpm_base}
-
+            {design_ftd}
             {capital_fpm}
 
             {i18n_data}
@@ -254,6 +254,7 @@ pub(crate) fn get(lib: &fpm::Library) -> String {
             -- string home-url: {home_url}
         "},
         fpm_base = fpm::fpm_ftd(),
+        design_ftd = fpm::design_ftd(),
         capital_fpm = capital_fpm(lib),
         i18n_data = i18n_data(lib),
         build_info = construct_fpm_cli_variables(lib),

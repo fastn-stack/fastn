@@ -9,13 +9,13 @@ weight: 400
 
 -- ftd.text: hello_h2
 region: h2
-type: $body-large
+font: $body-large
 
 -- ftd.text: hello_h1
 region: h1
-type: $fpm.type.body-medium
-color: $fpm.color.primary
+font: $fpm.design.type.body-medium
+/color: $fpm.design.color.background
 
 -- ftd.text: hello_h0
 region: h0
-type: $fpm.type.body-small
+font: $fpm.design.type.body-small
