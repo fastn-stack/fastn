@@ -122,35 +122,64 @@ body-small: $body-small
 light: #FFFBFE
 dark: #1C1B1F
 
+-- ftd.color region:
+light: #EADDFF
+dark: #4F378B
+
+-- ftd.color on-region:
+light: #21005E
+dark: #EADDFF
+
+-- ftd.color primary:
+light: #6750A4
+dark: #D0BCFF
+
+-- ftd.color on-primary:
+light: #FFFFFF
+dark: #371E73
+
+-- ftd.color secondary:
+light: #625B71
+dark: #CCC2DC
+
+-- ftd.color on-secondary:
+light: #FFFFFF
+dark: #332D41
+
+-- ftd.color error:
+light: #B3261E
+dark: #F2B8B5
+
+-- ftd.color success:
+light: #FFFFFF
+dark: #332D41
+
+-- ftd.color warning:
+light: #FFFFFF
+dark: #332D41
+
+-- ftd.colors brand:
+region: $region
+on-region: $on-region
+action-primary: $primary
+on-action-primary: $on-primary
+action-secondary: $secondary
+on-action-secondary: $on-secondary
+error: $error
+success: $success
+warning: $warning
+
 -- record color-data:
-ftd.color background:
-/ftd.color error:
-/ftd.color error-container:
-/ftd.color inverse-on-surface:
-/ftd.color inverse-surface:
-/ftd.color on-background:
-/ftd.color on-error:
-/ftd.color on-error-container:
-/ftd.color on-primary:
-/ftd.color on-primary-container:
-/ftd.color on-secondary:
-/ftd.color on-secondary-container:
-/ftd.color on-surface:
-/ftd.color on-surface-variant:
-/ftd.color on-tertiary:
-/ftd.color on-tertiary-container:
-/ftd.color outline:
-/ftd.color primary:
-/ftd.color primary-container:
-/ftd.color secondary:
-/ftd.color secondary-container:
-/ftd.color surface:
-/ftd.color surface-variant:
-/ftd.color tertiary:
-/ftd.color tertiary-container:
+ftd.colors brand:
+ftd.colors accent-1:
+ftd.colors accent-2:
+ftd.colors accent-3:
 
 -- color-data cd:
-background: $background
+brand: $brand
+accent-1: $brand
+accent-2: $brand
+accent-3: $brand
 
 
 

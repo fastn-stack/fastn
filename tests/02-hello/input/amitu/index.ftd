@@ -14,7 +14,7 @@ font: $body-large
 -- ftd.text: hello_h1
 region: h1
 font: $fpm.design.type.body-medium
-/color: $fpm.design.color.background
+color: $fpm.design.color.brand.on-region
 
 -- ftd.text: hello_h0
 region: h0
