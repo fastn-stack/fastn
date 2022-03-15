@@ -161,13 +161,16 @@ dark: #332D41
 -- ftd.colors brand:
 region: $region
 on-region: $on-region
-action-primary: $primary
-on-action-primary: $on-primary
-action-secondary: $secondary
-on-action-secondary: $on-secondary
+primary-action: $primary
+on-primary-action: $on-primary
+secondary-action: $secondary
+on-secondary-action: $on-secondary
 error: $error
+on-error: $error
 success: $success
+on-success: $success
 warning: $warning
+on-warning: $warning
 
 -- record color-data:
 ftd.colors brand:
