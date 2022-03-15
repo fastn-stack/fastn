@@ -30,6 +30,10 @@ pub enum Kind {
     OrType {
         name: String,
     }, // the full name of the or-type
+    OrTypeWithVariant {
+        name: String,
+        variant: String,
+    },
     Map {
         kind: Box<Kind>,
     }, // map of String to Kind

@@ -53,7 +53,10 @@ impl Record {
                         kind: list_kind, ..
                     },
                 ) => match list_kind.as_ref() {
-                    ftd::p2::Kind::OrType { name: or_type_name } => {
+                    ftd::p2::Kind::OrType { name: or_type_name }
+                    | ftd::p2::Kind::OrTypeWithVariant {
+                        name: or_type_name, ..
+                    } => {
                         let e = doc.get_or_type(p1.line_number, or_type_name)?;
                         let mut values: Vec<ftd::PropertyValue> = vec![];
                         for s in p1.sub_sections.0.iter() {

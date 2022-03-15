@@ -73,7 +73,7 @@ impl PropertyValue {
                     line_number,
                 );
             }
-            let (name, _caption) = ftd::p2::utils::split(value.to_string(), ":")?;
+            let name = ftd::p2::utils::split(value.to_string(), ":")?.0;
             PropertyType::Component { name }
         } else {
             let value = if let Some(value) = value.strip_prefix('\\') {
@@ -84,7 +84,8 @@ impl PropertyValue {
             PropertyType::Value(value)
         };
 
-        let (part1, part2) = ftd::p2::utils::get_doc_name_and_remaining(&property_type.string())?;
+        let (part1, mut part2) =
+            ftd::p2::utils::get_doc_name_and_remaining(&property_type.string())?;
 
         return Ok(match property_type {
             PropertyType::Variable(ref string)
@@ -98,9 +99,13 @@ impl PropertyValue {
                         },
                         false,
                     ),
-                    None => match doc.get_thing(line_number, string) {
-                        Ok(ftd::p2::Thing::Variable(v)) => (v.value.kind(), true),
-                        Ok(ftd::p2::Thing::Component(_)) => {
+                    None => match doc.get_initial_thing(line_number, string) {
+                        Ok((ftd::p2::Thing::Variable(v), name)) => {
+                            part2 = name;
+                            (v.value.kind(), true)
+                        }
+                        Ok((ftd::p2::Thing::Component(_), name)) => {
+                            part2 = name;
                             (ftd::p2::Kind::UI { default: None }, true)
                         }
                         e => {
@@ -214,20 +219,54 @@ impl PropertyValue {
             expected_kind: &Option<ftd::p2::Kind>,
         ) -> ftd::p1::Result<ftd::p2::Kind> {
             let mut found_kind = kind.to_owned();
-            if let ftd::p2::Kind::Record { ref name, .. } = kind {
-                if let Some(p2) = p2 {
-                    let rec = doc.get_record(line_number, &doc.resolve_name(line_number, name)?)?;
-                    found_kind = match rec.fields.get(p2.as_str()) {
-                        Some(kind) => kind.to_owned(),
-                        _ => {
-                            return ftd::e2(
-                                format!("{} is not present in {} of type {:?}", p2, name, rec),
-                                doc.name,
-                                line_number,
-                            );
-                        }
-                    };
+            if let Some(ref p2) = p2 {
+                let (name, fields) = match kind {
+                    ftd::p2::Kind::Record { ref name, .. } => (
+                        name.to_string(),
+                        doc.get_record(line_number, &doc.resolve_name(line_number, name)?)?
+                            .fields,
+                    ),
+                    ftd::p2::Kind::OrTypeWithVariant { ref name, variant } => {
+                        let name = doc.resolve_name(line_number, name)?;
+                        (
+                            name.to_string(),
+                            doc.get_or_type(line_number, &name)?
+                                .variants
+                                .into_iter()
+                                .find(|v| v.name.eq(&format!("{}.{}", name, variant)))
+                                .ok_or_else(|| ftd::p1::Error::ParseError {
+                                    message: format!(
+                                        "expected variant `{}` in or_type `{}`",
+                                        variant, name
+                                    ),
+                                    doc_id: doc.name.to_string(),
+                                    line_number,
+                                })?
+                                .fields,
+                        )
+                    }
+                    _ => Default::default(),
+                };
+                let mut p1 = p2.to_string();
+                let mut p2 = None;
+                if p1.contains('.') {
+                    let split_txt = ftd::p2::utils::split(p1.to_string(), ".")?;
+                    p1 = split_txt.0;
+                    p2 = Some(split_txt.1);
                 }
+                found_kind = match fields.get(p1.as_str()) {
+                    Some(kind) if p2.is_some() => {
+                        get_kind(line_number, kind, p2, doc, expected_kind)?
+                    }
+                    Some(kind) => kind.to_owned(),
+                    _ => {
+                        return ftd::e2(
+                            format!("{} is not present in {} of type {:?}", p1, name, fields),
+                            doc.name,
+                            line_number,
+                        );
+                    }
+                };
             }
             if let Some(e_kind) = expected_kind {
                 if !e_kind.is_same_as(&found_kind) {
@@ -453,8 +492,11 @@ impl Value {
                 name: id.to_string(),
                 default: None,
             },
-            Value::OrType { name: id, .. } => ftd::p2::Kind::OrType {
+            Value::OrType {
+                name: id, variant, ..
+            } => ftd::p2::Kind::OrTypeWithVariant {
                 name: id.to_string(),
+                variant: variant.to_string(),
             },
             Value::List { kind, .. } => ftd::p2::Kind::List {
                 kind: Box::new(kind.to_owned()),
@@ -781,14 +823,16 @@ impl Variable {
                     p1.line_number,
                 ),
             },
-            ftd::p2::Kind::OrType { name } => match doc.get_thing(p1.line_number, name)? {
-                ftd::p2::Thing::OrTypeWithVariant { e, variant } => e.create(p1, variant, doc),
-                t => ftd::e2(
-                    format!("expected or-type type, found: {:?}", t),
-                    doc.name,
-                    p1.line_number,
-                ),
-            },
+            ftd::p2::Kind::OrType { name } | ftd::p2::Kind::OrTypeWithVariant { name, .. } => {
+                match doc.get_thing(p1.line_number, name)? {
+                    ftd::p2::Thing::OrTypeWithVariant { e, variant } => e.create(p1, variant, doc),
+                    t => ftd::e2(
+                        format!("expected or-type type, found: {:?}", t),
+                        doc.name,
+                        p1.line_number,
+                    ),
+                }
+            }
             t => ftd::e2(
                 format!("unexpected type found: {:?}", t),
                 doc.name,
