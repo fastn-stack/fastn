@@ -1040,28 +1040,28 @@ pub fn default_bag() -> std::collections::BTreeMap<String, ftd::p2::Thing> {
                         },
                     ),
                     (
-                        "action-primary".to_string(),
+                        "primary-action".to_string(),
                         ftd::p2::Kind::Record {
                             name: "ftd#color".to_string(),
                             default: None,
                         },
                     ),
                     (
-                        "on-action-primary".to_string(),
+                        "on-primary-action".to_string(),
                         ftd::p2::Kind::Record {
                             name: "ftd#color".to_string(),
                             default: None,
                         },
                     ),
                     (
-                        "action-secondary".to_string(),
+                        "secondary-action".to_string(),
                         ftd::p2::Kind::Record {
                             name: "ftd#color".to_string(),
                             default: None,
                         },
                     ),
                     (
-                        "on-action-secondary".to_string(),
+                        "on-secondary-action".to_string(),
                         ftd::p2::Kind::Record {
                             name: "ftd#color".to_string(),
                             default: None,
@@ -1075,7 +1075,21 @@ pub fn default_bag() -> std::collections::BTreeMap<String, ftd::p2::Thing> {
                         },
                     ),
                     (
+                        "on-error".to_string(),
+                        ftd::p2::Kind::Record {
+                            name: "ftd#color".to_string(),
+                            default: None,
+                        },
+                    ),
+                    (
                         "success".to_string(),
+                        ftd::p2::Kind::Record {
+                            name: "ftd#color".to_string(),
+                            default: None,
+                        },
+                    ),
+                    (
+                        "on-success".to_string(),
                         ftd::p2::Kind::Record {
                             name: "ftd#color".to_string(),
                             default: None,
@@ -1088,19 +1102,29 @@ pub fn default_bag() -> std::collections::BTreeMap<String, ftd::p2::Thing> {
                             default: None,
                         },
                     ),
+                    (
+                        "on-warning".to_string(),
+                        ftd::p2::Kind::Record {
+                            name: "ftd#color".to_string(),
+                            default: None,
+                        },
+                    ),
                 ])
                 .collect(),
                 instances: Default::default(),
                 order: vec![
                     "region".to_string(),
                     "on-region".to_string(),
-                    "action-primary".to_string(),
-                    "on-action-primary".to_string(),
-                    "action-secondary".to_string(),
-                    "on-action-secondary".to_string(),
+                    "primary-action".to_string(),
+                    "on-primary-action".to_string(),
+                    "secondary-action".to_string(),
+                    "on-secondary-action".to_string(),
                     "error".to_string(),
+                    "on-error".to_string(),
                     "success".to_string(),
+                    "on-success".to_string(),
                     "warning".to_string(),
+                    "on-warning".to_string(),
                 ],
             }),
         ),
