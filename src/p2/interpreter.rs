@@ -1085,7 +1085,7 @@ pub fn default_bag() -> std::collections::BTreeMap<String, ftd::p2::Thing> {
                             default: None,
                         },
                     ),
-                    ("weight".to_string(), ftd::p2::Kind::integer()),
+                    ("weight".to_string(), ftd::p2::Kind::integer().set_default(Some("400".to_string()))),
                     ("style".to_string(), ftd::p2::Kind::string().into_optional()),
                 ])
                 .collect(),
