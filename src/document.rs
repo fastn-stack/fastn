@@ -180,12 +180,6 @@ pub(crate) async fn get_file(
             content: tokio::fs::read_to_string(&doc_path).await?,
             parent_path: base_path.to_string(),
         }),
-        Some((_, ext)) if ftd::render::KNOWN_EXTENSIONS.contains(ext) => File::Code(Document {
-            package_name: package_name.to_string(),
-            id: id.to_string(),
-            content: tokio::fs::read_to_string(&doc_path).await?,
-            parent_path: base_path.to_string(),
-        }),
         Some((_, ext))
             if mime_guess::MimeGuess::from_ext(ext)
                 .first_or_octet_stream()
@@ -197,6 +191,12 @@ pub(crate) async fn get_file(
                 base_path: base_path.to_path_buf(),
             })
         }
+        Some((_, ext)) if ftd::render::KNOWN_EXTENSIONS.contains(ext) => File::Code(Document {
+            package_name: package_name.to_string(),
+            id: id.to_string(),
+            content: tokio::fs::read_to_string(&doc_path).await?,
+            parent_path: base_path.to_string(),
+        }),
         _ => File::Static(Static {
             id: id.to_string(),
             base_path: base_path.to_path_buf(),
