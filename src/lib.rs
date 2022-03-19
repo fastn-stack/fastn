@@ -109,6 +109,7 @@ pub struct Dependencies {
     pub dependency_type: DependencyType,
     pub condition: Option<String>,
     pub parameters: std::collections::BTreeMap<String, ConditionalValueWithDefault>,
+    pub remaining: Option<String>,
 }
 
 #[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize, Default)]

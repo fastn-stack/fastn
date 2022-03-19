@@ -110,6 +110,10 @@ impl Document {
                         let size = serde_json::to_string(val).unwrap();
                         *val = serde_json::to_value(format!("{}px", size)).unwrap();
                     }
+                    if let Some(val) = value_fields.get_mut("line-height") {
+                        let size = serde_json::to_string(val).unwrap();
+                        *val = serde_json::to_value(format!("{}px", size)).unwrap();
+                    }
                     serde_json::to_value(value_fields).ok()
                 }
                 _ => None,

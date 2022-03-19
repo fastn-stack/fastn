@@ -647,9 +647,10 @@ impl Element {
                 {
                     for (condition, value) in conditions_with_value {
                         let id = id.clone().expect("universal id should be present");
-                        if let Some(ftd::Data { dependencies, .. }) =
-                            data.get_mut(&condition.variable)
-                        {
+                        let (variable, remaining) =
+                            ftd::p2::utils::get_doc_name_and_remaining(&condition.variable)
+                                .unwrap();
+                        if let Some(ftd::Data { dependencies, .. }) = data.get_mut(&variable) {
                             let json = ftd::Dependencies {
                                 dependency_type: ftd::DependencyType::Style,
                                 condition: Some(condition.value.to_string()),
@@ -661,6 +662,7 @@ impl Element {
                                     },
                                 )])
                                 .collect(),
+                                remaining,
                             };
                             if let Some(dependencies) = dependencies.get_mut(&id) {
                                 let mut d =
@@ -678,10 +680,13 @@ impl Element {
                             panic!("{} should be declared", condition.variable)
                         }
                         if let Some(ref reference) = value.reference {
-                            if let Some(ftd::Data { dependencies, .. }) = data.get_mut(reference) {
+                            let (variable, remaining) =
+                                ftd::p2::utils::get_doc_name_and_remaining(&reference).unwrap();
+                            if let Some(ftd::Data { dependencies, .. }) = data.get_mut(&variable) {
                                 let json = ftd::Dependencies {
                                     dependency_type: ftd::DependencyType::Variable,
                                     condition: None,
+                                    remaining,
                                     parameters: std::array::IntoIter::new([(
                                         k.to_string(),
                                         ftd::ConditionalValueWithDefault {
@@ -816,11 +821,16 @@ impl Element {
                     );
                     parameters
                 };
-                if let Some(ftd::Data { dependencies, .. }) = data.get_mut(&reference) {
+
+                let (variable, remaining) =
+                    ftd::p2::utils::get_doc_name_and_remaining(&reference).unwrap();
+
+                if let Some(ftd::Data { dependencies, .. }) = data.get_mut(&variable) {
                     let json = ftd::Dependencies {
                         dependency_type: ftd::DependencyType::Style,
                         condition: None,
                         parameters,
+                        remaining,
                     };
                     if let Some(dependencies) = dependencies.get_mut(id) {
                         let mut d =
@@ -1000,11 +1010,14 @@ impl Element {
                     );
                     parameters
                 };
-                if let Some(ftd::Data { dependencies, .. }) = data.get_mut(&reference) {
+                let (variable, remaining) =
+                    ftd::p2::utils::get_doc_name_and_remaining(&reference).unwrap();
+                if let Some(ftd::Data { dependencies, .. }) = data.get_mut(&variable) {
                     let json = ftd::Dependencies {
                         dependency_type: ftd::DependencyType::Style,
                         condition: None,
                         parameters,
+                        remaining,
                     };
                     if let Some(dependencies) = dependencies.get_mut(id) {
                         let mut d =
@@ -1095,11 +1108,14 @@ impl Element {
             if let Some(reference) = reference {
                 let id = id.clone().expect("universal id should be present");
 
-                if let Some(ftd::Data { dependencies, .. }) = data.get_mut(reference) {
+                let (variable, remaining) =
+                    ftd::p2::utils::get_doc_name_and_remaining(&reference).unwrap();
+                if let Some(ftd::Data { dependencies, .. }) = data.get_mut(&variable) {
                     let json = ftd::Dependencies {
                         dependency_type: ftd::DependencyType::Value,
                         condition: None,
                         parameters: Default::default(),
+                        remaining,
                     };
                     if let Some(dependencies) = dependencies.get_mut(&id) {
                         let mut d =
@@ -1118,21 +1134,26 @@ impl Element {
         document: &ftd::p2::Document,
         data: &mut ftd::DataDependenciesMap,
     ) {
+        let doc = ftd::p2::TDoc {
+            name: document.name.as_str(),
+            aliases: &document.aliases,
+            bag: &document.data,
+            local_variables: &mut Default::default(),
+        };
         for (k, v) in document.data.iter() {
             if !data.contains_key(k) {
                 continue;
             }
-            if let ftd::p2::Thing::Variable(ftd::Variable { value: default, .. }) = v {
-                match default.kind() {
-                    ftd::p2::Kind::Record { name, .. } if ["ftd#type"].contains(&name.as_str()) => {
-                    }
-                    _ => {
-                        continue;
-                    }
+            let mut k = k.to_string();
+            if let ftd::p2::Thing::Variable(ftd::Variable { value, .. }) = v {
+                let (is_ftd_type, remaining) = is_ftd_type(value, &doc);
+                if !is_ftd_type {
+                    continue;
                 }
-            } else {
-                continue;
-            };
+                if let Some(remaining) = remaining {
+                    k = format!("{}.{}", k, remaining);
+                }
+            }
             let dependencies =
                 if let Some(ftd::Data { dependencies, .. }) = data.get_mut("ftd#device") {
                     dependencies
@@ -1142,6 +1163,7 @@ impl Element {
             let mobile_json = ftd::Dependencies {
                 dependency_type: ftd::DependencyType::Variable,
                 condition: Some("mobile".to_string()),
+                remaining: None,
                 parameters: std::array::IntoIter::new([(
                     k.to_string(),
                     ftd::ConditionalValueWithDefault {
@@ -1159,6 +1181,7 @@ impl Element {
             let xl_json = ftd::Dependencies {
                 dependency_type: ftd::DependencyType::Variable,
                 condition: Some("xl".to_string()),
+                remaining: None,
                 parameters: std::array::IntoIter::new([(
                     k.to_string(),
                     ftd::ConditionalValueWithDefault {
@@ -1176,6 +1199,7 @@ impl Element {
             let desktop_json = ftd::Dependencies {
                 dependency_type: ftd::DependencyType::Variable,
                 condition: Some("desktop".to_string()),
+                remaining: None,
                 parameters: std::array::IntoIter::new([(
                     k.to_string(),
                     ftd::ConditionalValueWithDefault {
@@ -1202,6 +1226,32 @@ impl Element {
                     serde_json::to_string(&vec![mobile_json, xl_json, desktop_json]).unwrap(),
                 );
             }
+        }
+
+        fn is_ftd_type(
+            property_value: &ftd::PropertyValue,
+            doc: &ftd::p2::TDoc,
+        ) -> (bool, Option<String>) {
+            match property_value.kind() {
+                ftd::p2::Kind::Record { name, .. } if ["ftd#type"].contains(&name.as_str()) => {
+                    return (true, None);
+                }
+                ftd::p2::Kind::Record { .. } => {
+                    if let Ok(ftd::Value::Record { fields, .. }) = property_value.resolve(0, &doc) {
+                        for (k, field) in fields.iter() {
+                            let (is_ftd_type, reference) = is_ftd_type(field, doc);
+                            if is_ftd_type {
+                                if let Some(get) = reference {
+                                    return (true, Some(format!("{}.{}", k, get)));
+                                }
+                                return (true, Some(k.to_string()));
+                            }
+                        }
+                    }
+                }
+                _ => {}
+            }
+            (false, None)
         }
     }
 
@@ -1233,6 +1283,7 @@ impl Element {
             let json = ftd::Dependencies {
                 dependency_type: ftd::DependencyType::Variable,
                 condition: Some("true".to_string()),
+                remaining: None,
                 parameters: std::array::IntoIter::new([(
                     k.to_string(),
                     ftd::ConditionalValueWithDefault {
@@ -1314,9 +1365,8 @@ impl Element {
                     _ => continue,
                 };
 
-                let variable = ftd::p2::utils::get_doc_name_and_remaining(&condition.variable)
-                    .unwrap()
-                    .0;
+                let (variable, remaining) =
+                    ftd::p2::utils::get_doc_name_and_remaining(&condition.variable).unwrap();
                 let dependencies =
                     if let Some(ftd::Data { dependencies, .. }) = data.get_mut(&variable) {
                         dependencies
@@ -1326,6 +1376,7 @@ impl Element {
                 let json = ftd::Dependencies {
                     dependency_type: ftd::DependencyType::Variable,
                     condition: Some(condition.value.to_string()),
+                    remaining,
                     parameters: std::array::IntoIter::new([(
                         k.to_string(),
                         ftd::ConditionalValueWithDefault {
@@ -1432,15 +1483,14 @@ impl Element {
         ) {
             if let Some(condition) = condition {
                 let id = id.clone().expect("universal id should be present");
-
-                let variable = ftd::p2::utils::get_doc_name_and_remaining(&condition.variable)
-                    .unwrap()
-                    .0;
+                let (variable, remaining) =
+                    ftd::p2::utils::get_doc_name_and_remaining(&condition.variable).unwrap();
                 if let Some(ftd::Data { dependencies, .. }) = data.get_mut(&variable) {
                     let json = ftd::Dependencies {
                         dependency_type: ftd::DependencyType::Visible,
                         condition: Some(condition.value.to_string()),
                         parameters: Default::default(),
+                        remaining,
                     };
                     if let Some(dependencies) = dependencies.get_mut(&id) {
                         let mut d =

@@ -1,5 +1,5 @@
 -- ftd.font-size dsize:
-line-height: 1
+line-height: 60
 size: 40
 tracking: 0.1
 
@@ -20,5 +20,14 @@ xl: $xlsize
 weight: 400
 style: italic
 
+-- record font-rec:
+ftd.type font:
+
+-- font-rec font-init:
+font: $font
+
 -- ftd.text: Hello World
+role: $font-init.font
+
+-- ftd.text: Hello World Again
 role: $font
