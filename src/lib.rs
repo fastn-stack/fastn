@@ -124,9 +124,12 @@ fn package_info_image(
             {body_prefix}
     
             -- import: {package_info_package}/image as pi 
+
+            -- ftd.image-src src: {src}
+            dark: {src}
     
             -- pi.image-page: {file_name}
-            src: {src}
+            src: $src
         ",
         body_prefix = body_prefix,
         file_name = doc.id,
