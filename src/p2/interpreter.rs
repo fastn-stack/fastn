@@ -1047,7 +1047,10 @@ pub fn default_bag() -> std::collections::BTreeMap<String, ftd::p2::Thing> {
                 fields: std::array::IntoIter::new([
                     ("line-height".to_string(), ftd::p2::Kind::integer()),
                     ("size".to_string(), ftd::p2::Kind::integer()),
-                    ("tracking".to_string(), ftd::p2::Kind::decimal()),
+                    (
+                        "tracking".to_string(),
+                        ftd::p2::Kind::decimal().set_default(Some("0".to_string())),
+                    ),
                 ])
                 .collect(),
                 instances: Default::default(),
@@ -1085,7 +1088,10 @@ pub fn default_bag() -> std::collections::BTreeMap<String, ftd::p2::Thing> {
                             default: None,
                         },
                     ),
-                    ("weight".to_string(), ftd::p2::Kind::integer()),
+                    (
+                        "weight".to_string(),
+                        ftd::p2::Kind::integer().set_default(Some("400".to_string())),
+                    ),
                     ("style".to_string(), ftd::p2::Kind::string().into_optional()),
                 ])
                 .collect(),
