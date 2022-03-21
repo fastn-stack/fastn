@@ -1,0 +1,26 @@
+-- import: lib
+
+-- record person-detail:
+caption name:
+integer age:
+
+-- person-detail tom: Tom
+age: 30
+
+-- tom.age: 40
+
+-- lib.amitu.address.first-line: Hill Crest Bengaluru
+
+-- ftd.text: $lib.amitu.name
+
+-- ftd.text: $lib.amitu.address.first-line
+
+-- print-person:
+person: $tom
+
+-- ftd.column print-person:
+person-detail person:
+
+--- ftd.text: $person.name
+
+--- ftd.integer: $person.age

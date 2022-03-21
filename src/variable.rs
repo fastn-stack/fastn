@@ -467,6 +467,13 @@ impl Value {
         false
     }
 
+    pub fn is_optional(&self) -> bool {
+        if matches!(self, Self::Optional { .. }) {
+            return true;
+        }
+        false
+    }
+
     pub fn is_empty(&self) -> bool {
         if let Self::List { data, .. } = self {
             if data.is_empty() {

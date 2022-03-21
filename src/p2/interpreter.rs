@@ -279,6 +279,21 @@ impl<'a> Interpreter<'a> {
                             .str_optional(doc.name, p1.line_number, "$processor$")?
                             .is_some())
                 );
+                let (doc_name, remaining) = ftd::p2::utils::get_doc_name_and_remaining(
+                    doc.resolve_name(p1.line_number, p1.name.as_str())?.as_str(),
+                )?;
+                if remaining.is_some()
+                    && p1
+                        .header
+                        .str_optional(doc.name, p1.line_number, "if")?
+                        .is_some()
+                {
+                    return ftd::e2(
+                        "Currently not supporting `if` for field value update.",
+                        doc.name,
+                        p1.line_number,
+                    );
+                }
                 if let Some(expr) = p1.header.str_optional(doc.name, p1.line_number, "if")? {
                     let val = v.get_value(p1, &doc)?;
                     v.conditions.push((
@@ -304,8 +319,8 @@ impl<'a> Interpreter<'a> {
                     v.update_from_p1(p1, &doc)?;
                 }
                 thing.push((
-                    doc.resolve_name(p1.line_number, &p1.name.to_string())?,
-                    ftd::p2::Thing::Variable(v),
+                    doc.resolve_name(p1.line_number, doc_name.as_str())?,
+                    ftd::p2::Thing::Variable(doc.set_value(p1.line_number, p1.name.as_str(), v)?),
                 ));
             } else {
                 // cloning because https://github.com/rust-lang/rust/issues/59159
@@ -440,7 +455,7 @@ impl<'a> Interpreter<'a> {
         Ok(instructions)
     }
 
-    #[cfg(not(feature = "async"))]
+    // #[cfg(not(feature = "async"))]
     fn interpret_(
         &mut self,
         name: &str,
@@ -648,6 +663,21 @@ impl<'a> Interpreter<'a> {
                             .str_optional(doc.name, p1.line_number, "$processor$")?
                             .is_some())
                 );
+                let (doc_name, remaining) = ftd::p2::utils::get_doc_name_and_remaining(
+                    doc.resolve_name(p1.line_number, p1.name.as_str())?.as_str(),
+                )?;
+                if remaining.is_some()
+                    && p1
+                        .header
+                        .str_optional(doc.name, p1.line_number, "if")?
+                        .is_some()
+                {
+                    return ftd::e2(
+                        "Currently not supporting `if` for field value update.",
+                        doc.name,
+                        p1.line_number,
+                    );
+                }
                 if let Some(expr) = p1.header.str_optional(doc.name, p1.line_number, "if")? {
                     let val = v.get_value(p1, &doc)?;
                     v.conditions.push((
@@ -673,8 +703,8 @@ impl<'a> Interpreter<'a> {
                     v.update_from_p1(p1, &doc)?;
                 }
                 thing.push((
-                    doc.resolve_name(p1.line_number, &p1.name.to_string())?,
-                    ftd::p2::Thing::Variable(v),
+                    doc.resolve_name(p1.line_number, doc_name.as_str())?,
+                    ftd::p2::Thing::Variable(doc.set_value(p1.line_number, p1.name.as_str(), v)?),
                 ));
             } else {
                 // cloning because https://github.com/rust-lang/rust/issues/59159

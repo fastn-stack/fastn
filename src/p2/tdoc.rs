@@ -1048,6 +1048,90 @@ impl<'a> TDoc<'a> {
         }
     }
 
+    pub fn set_value(
+        &'a self,
+        line_number: usize,
+        name: &'a str,
+        value: ftd::Variable,
+    ) -> ftd::p1::Result<ftd::Variable> {
+        let (initial_thing, remaining) = self.get_initial_thing(line_number, name)?;
+
+        let remaining = if let Some(remaining) = remaining {
+            remaining
+        } else {
+            return Ok(value);
+        };
+
+        let mut variable = if let ftd::p2::Thing::Variable(variable) = initial_thing {
+            variable
+        } else {
+            return ftd::e2(
+                format!("Expected variable, found: `{:#?}`", initial_thing),
+                self.name,
+                line_number,
+            );
+        };
+
+        variable.value = set_value_(
+            self,
+            line_number,
+            remaining.as_str(),
+            &variable.value,
+            value.value,
+        )?;
+
+        return Ok(variable);
+
+        fn set_value_(
+            doc: &ftd::p2::TDoc,
+            line_number: usize,
+            name: &str,
+            var_value: &ftd::PropertyValue,
+            set_value: ftd::PropertyValue,
+        ) -> ftd::p1::Result<ftd::PropertyValue> {
+            let (v, remaining) = name
+                .split_once('.')
+                .map(|(v, n)| (v, Some(n)))
+                .unwrap_or((name, None));
+            let value = var_value.resolve(line_number, doc)?;
+            let mut inner_value = if let Some(val) = value.to_owned().inner() {
+                val
+            } else {
+                return doc.err(
+                    "Need value for optional variable",
+                    value,
+                    "set_variable",
+                    line_number,
+                );
+            };
+            let fields = match &mut inner_value {
+                ftd::Value::Record { fields, .. } => fields,
+                ftd::Value::OrType { fields, .. } => fields,
+                ftd::Value::Object { values } => values,
+                _ => return doc.err("not an record or or-type", value, "set_thing", line_number),
+            };
+
+            if let Some(data) = fields.get_mut(v) {
+                if let Some(remaining) = remaining {
+                    *data = set_value_(doc, line_number, remaining, data, set_value)?;
+                } else {
+                    *data = set_value;
+                }
+            }
+
+            Ok(ftd::PropertyValue::Value {
+                value: if value.is_optional() {
+                    ftd::Value::Optional {
+                        data: Box::new(Some(inner_value.to_owned())),
+                        kind: inner_value.kind(),
+                    }
+                } else {
+                    inner_value
+                },
+            })
+        }
+    }
+
     pub fn get_thing(
         &'a self,
         line_number: usize,
