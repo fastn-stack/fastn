@@ -958,6 +958,42 @@ window.ftd.post_init = function () {
         return "desktop";
     }
 
+    /*
+        ftd.dark-mode behaviour:
+
+        ftd.dark-mode is a boolean, default false, it tells the UI to show
+        the UI in dark or light mode. Themes should use this variable to decide
+        which mode to show in UI.
+
+        ftd.follow-system-dark-mode, boolean, default true, keeps track if
+        we are reading the value of `dark-mode` from system preference, or user
+        has overridden the system preference.
+
+        These two variables must not be set by ftd code directly, but they must
+        use `$on-click$: message-host enable-dark-mode`, to ignore system
+        preference and use dark mode. `$on-click$: message-host
+        disable-dark-mode` to ignore system preference and use light mode and
+        `$on-click$: message-host follow-system-dark-mode` to ignore user
+        preference and start following system preference.
+
+        we use a cookie: `ftd-dark-mode` to store the preference. The cookie can
+        have three values:
+
+           cookie missing /          user wants us to honour system preference
+               system-light          and currently its light.
+
+           system-dark               follow system and currently its dark.
+
+           light:                    user prefers light
+
+           dark:                     user prefers light
+
+        We use cookie instead of localstorage so in future `fpm-repo` can see
+        users preferences up front and renders the HTML on service wide
+        following user's preference.
+
+     */
+
     window.enable_dark_mode = function () {
         // TODO: coalesce the two set_bool-s into one so there is only one DOM
         //       update
