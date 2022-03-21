@@ -280,7 +280,6 @@ let ftd_utils = {
     create_dom: function (value,  node) {
         let dom_ids = [];
         let parent_node = node.parentElement;
-        console.log("create_dom", value, value instanceof Object);
         if (value instanceof Object) {
             for (const idx in value) {
                 var new_node = node.cloneNode(true);
