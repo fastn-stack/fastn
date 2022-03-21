@@ -1314,7 +1314,7 @@ fn get_conditional_attributes(
         Ok(if style_integer.contains(&name) {
             match value {
                 ftd::Value::Integer { value: v } => ftd::ConditionalValue {
-                    value: format!("{}px", v),
+                    value: serde_json::Value::String(format!("{}px", v)),
                     important: false,
                     reference,
                 },
@@ -1329,7 +1329,7 @@ fn get_conditional_attributes(
         } else if style_integer_important.contains(&name) {
             match value {
                 ftd::Value::Integer { value: v } => ftd::ConditionalValue {
-                    value: format!("{}px", v),
+                    value: serde_json::Value::String(format!("{}px", v)),
                     important: true,
                     reference,
                 },
@@ -1344,7 +1344,9 @@ fn get_conditional_attributes(
         } else if style_length.contains(&name) {
             match value {
                 ftd::Value::String { text: v, .. } => ftd::ConditionalValue {
-                    value: ftd::length(&ftd::Length::from(Some(v), doc.name)?.unwrap(), name).1,
+                    value: serde_json::Value::String(
+                        ftd::length(&ftd::Length::from(Some(v), doc.name)?.unwrap(), name).1,
+                    ),
                     important: false,
                     reference,
                 },
@@ -1382,9 +1384,7 @@ fn get_conditional_attributes(
                     };
 
                     ftd::ConditionalValue {
-                        value: serde_json::to_string(
-                            &serde_json::json!({ "light": light, "dark": dark, "$kind$": "light" }),
-                        )?,
+                        value: serde_json::json!({ "light": light, "dark": dark, "$kind$": "light" }),
                         important: false,
                         reference,
                     }
@@ -1400,7 +1400,9 @@ fn get_conditional_attributes(
         } else if style_overflow.contains(&name) {
             match value {
                 ftd::Value::String { text: v, .. } => ftd::ConditionalValue {
-                    value: ftd::overflow(&ftd::Overflow::from(Some(v), doc.name)?.unwrap(), name).1,
+                    value: serde_json::Value::String(
+                        ftd::overflow(&ftd::Overflow::from(Some(v), doc.name)?.unwrap(), name).1,
+                    ),
                     important: false,
                     reference,
                 },
@@ -1415,7 +1417,7 @@ fn get_conditional_attributes(
         } else if style_string.contains(&name) {
             match value {
                 ftd::Value::String { text: v, .. } => ftd::ConditionalValue {
-                    value: v,
+                    value: serde_json::Value::String(v),
                     important: false,
                     reference,
                 },
@@ -1430,7 +1432,7 @@ fn get_conditional_attributes(
         } else if style_boolean.contains(&name) {
             match value {
                 ftd::Value::Boolean { value: v } => ftd::ConditionalValue {
-                    value: v.to_string(),
+                    value: serde_json::Value::Bool(v),
                     important: false,
                     reference,
                 },
@@ -1445,7 +1447,9 @@ fn get_conditional_attributes(
         } else if name.eq("sticky") {
             match value {
                 ftd::Value::Boolean { value: v } => ftd::ConditionalValue {
-                    value: { if v { "sticky" } else { "inherit" }.to_string() },
+                    value: serde_json::Value::String({
+                        if v { "sticky" } else { "inherit" }.to_string()
+                    }),
                     important: false,
                     reference,
                 },
@@ -1460,7 +1464,9 @@ fn get_conditional_attributes(
         } else if name.eq("background-attachment") {
             match value {
                 ftd::Value::Boolean { value: v } => ftd::ConditionalValue {
-                    value: { if v { "fixed" } else { "inherit" }.to_string() },
+                    value: serde_json::Value::String({
+                        if v { "fixed" } else { "inherit" }.to_string()
+                    }),
                     important: false,
                     reference,
                 },
@@ -1475,7 +1481,7 @@ fn get_conditional_attributes(
         } else if name.eq("line-clamp") {
             match value {
                 ftd::Value::Integer { value: v } => ftd::ConditionalValue {
-                    value: v.to_string(),
+                    value: serde_json::json!(v),
                     important: false,
                     reference,
                 },
@@ -1496,7 +1502,7 @@ fn get_conditional_attributes(
                         css_areas = format!("{}'{}'", css_areas, area);
                     }
                     ftd::ConditionalValue {
-                        value: css_areas,
+                        value: serde_json::Value::String(css_areas),
                         important: false,
                         reference,
                     }

@@ -83,8 +83,8 @@ pub type DataDependenciesMap = std::collections::BTreeMap<String, Data>;
 
 #[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize, Default)]
 pub struct Data {
-    pub value: String,
-    pub dependencies: Map,
+    pub value: serde_json::Value,
+    pub dependencies: std::collections::BTreeMap<String, serde_json::Value>,
 }
 
 pub type ExternalChildrenDependenciesMap =
@@ -107,7 +107,7 @@ pub enum DependencyType {
 #[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
 pub struct Dependencies {
     pub dependency_type: DependencyType,
-    pub condition: Option<String>,
+    pub condition: Option<serde_json::Value>,
     pub parameters: std::collections::BTreeMap<String, ConditionalValueWithDefault>,
     pub remaining: Option<String>,
 }

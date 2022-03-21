@@ -653,7 +653,7 @@ impl Element {
                         if let Some(ftd::Data { dependencies, .. }) = data.get_mut(&variable) {
                             let json = ftd::Dependencies {
                                 dependency_type: ftd::DependencyType::Style,
-                                condition: Some(condition.value.to_string()),
+                                condition: Some(condition.value.to_owned()),
                                 parameters: std::array::IntoIter::new([(
                                     k.to_string(),
                                     ftd::ConditionalValueWithDefault {
@@ -665,15 +665,16 @@ impl Element {
                                 remaining,
                             };
                             if let Some(dependencies) = dependencies.get_mut(&id) {
-                                let mut d =
-                                    serde_json::from_str::<Vec<ftd::Dependencies>>(dependencies)
-                                        .unwrap();
+                                let mut d = serde_json::from_value::<Vec<ftd::Dependencies>>(
+                                    dependencies.to_owned(),
+                                )
+                                .unwrap();
                                 d.push(json);
-                                *dependencies = serde_json::to_string(&d).unwrap();
+                                *dependencies = serde_json::to_value(&d).unwrap();
                             } else {
                                 dependencies.insert(
                                     id.to_string(),
-                                    serde_json::to_string(&vec![json]).unwrap(),
+                                    serde_json::to_value(&vec![json]).unwrap(),
                                 );
                             }
                         } else {
@@ -691,9 +692,7 @@ impl Element {
                                         k.to_string(),
                                         ftd::ConditionalValueWithDefault {
                                             value: ftd::ConditionalValue {
-                                                value: serde_json::to_string(
-                                                    &serde_json::json!({ "$variable$": condition.variable, "$node$": id}),
-                                                ).unwrap(),
+                                                value: serde_json::json!({ "$variable$": condition.variable, "$node$": id}),
                                                 important: false,
                                                 reference: None,
                                             },
@@ -703,16 +702,16 @@ impl Element {
                                     .collect(),
                                 };
                                 if let Some(dependencies) = dependencies.get_mut("$style$") {
-                                    let mut d = serde_json::from_str::<Vec<ftd::Dependencies>>(
-                                        dependencies,
+                                    let mut d = serde_json::from_value::<Vec<ftd::Dependencies>>(
+                                        dependencies.to_owned(),
                                     )
                                     .unwrap();
                                     d.push(json);
-                                    *dependencies = serde_json::to_string(&d).unwrap();
+                                    *dependencies = serde_json::to_value(&d).unwrap();
                                 } else {
                                     dependencies.insert(
                                         "$style$".to_string(),
-                                        serde_json::to_string(&vec![json]).unwrap(),
+                                        serde_json::to_value(&vec![json]).unwrap(),
                                     );
                                 }
                             }
@@ -796,12 +795,11 @@ impl Element {
                     let xl = serde_json::to_value(&type_.xl).unwrap();
                     (
                         reference.to_string(),
-                        serde_json::to_string(&serde_json::json!({ "desktop": desktop,
+                        serde_json::json!({ "desktop": desktop,
                             "mobile": mobile,
                             "xl": xl,
                             "$kind$": "desktop"
-                        }))
-                        .unwrap(),
+                        }),
                     )
                 } else {
                     return;
@@ -833,13 +831,15 @@ impl Element {
                         remaining,
                     };
                     if let Some(dependencies) = dependencies.get_mut(id) {
-                        let mut d =
-                            serde_json::from_str::<Vec<ftd::Dependencies>>(dependencies).unwrap();
+                        let mut d = serde_json::from_value::<Vec<ftd::Dependencies>>(
+                            dependencies.to_owned(),
+                        )
+                        .unwrap();
                         d.push(json);
-                        *dependencies = serde_json::to_string(&d).unwrap();
+                        *dependencies = serde_json::to_value(&d).unwrap();
                     } else {
                         dependencies
-                            .insert(id.to_string(), serde_json::to_string(&vec![json]).unwrap());
+                            .insert(id.to_string(), serde_json::to_value(&vec![json]).unwrap());
                     }
                 }
             }
@@ -965,11 +965,12 @@ impl Element {
                     ..
                 }) = conditional_attribute.get(style)
                 {
-                    (reference.to_string(), value.to_string())
+                    (reference.to_string(), value.to_owned())
                 } else if let Some(ref reference) = color.reference {
-                    (reference.to_string(),  serde_json::to_string(
-                        &serde_json::json!({ "light": ftd::html::color(&color.light), "dark": ftd::html::color(&color.dark), "$kind$": "light" }),
-                    ).unwrap())
+                    (
+                        reference.to_string(),
+                        serde_json::json!({ "light": ftd::html::color(&color.light), "dark": ftd::html::color(&color.dark), "$kind$": "light" }),
+                    )
                 } else {
                     return;
                 };
@@ -1001,7 +1002,7 @@ impl Element {
                         "dependents".to_string(),
                         ftd::ConditionalValueWithDefault {
                             value: ConditionalValue {
-                                value: serde_json::to_string(&dependents).unwrap(),
+                                value: serde_json::to_value(dependents).unwrap(),
                                 important: false,
                                 reference: None,
                             },
@@ -1020,13 +1021,15 @@ impl Element {
                         remaining,
                     };
                     if let Some(dependencies) = dependencies.get_mut(id) {
-                        let mut d =
-                            serde_json::from_str::<Vec<ftd::Dependencies>>(dependencies).unwrap();
+                        let mut d = serde_json::from_value::<Vec<ftd::Dependencies>>(
+                            dependencies.to_owned(),
+                        )
+                        .unwrap();
                         d.push(json);
-                        *dependencies = serde_json::to_string(&d).unwrap();
+                        *dependencies = serde_json::to_value(&d).unwrap();
                     } else {
                         dependencies
-                            .insert(id.to_string(), serde_json::to_string(&vec![json]).unwrap());
+                            .insert(id.to_string(), serde_json::to_value(&vec![json]).unwrap());
                     }
                 }
             }
@@ -1118,12 +1121,14 @@ impl Element {
                         remaining,
                     };
                     if let Some(dependencies) = dependencies.get_mut(&id) {
-                        let mut d =
-                            serde_json::from_str::<Vec<ftd::Dependencies>>(dependencies).unwrap();
+                        let mut d = serde_json::from_value::<Vec<ftd::Dependencies>>(
+                            dependencies.to_owned(),
+                        )
+                        .unwrap();
                         d.push(json);
-                        *dependencies = serde_json::to_string(&d).unwrap();
+                        *dependencies = serde_json::to_value(&d).unwrap();
                     } else {
-                        dependencies.insert(id, serde_json::to_string(&vec![json]).unwrap());
+                        dependencies.insert(id, serde_json::to_value(&vec![json]).unwrap());
                     }
                 }
             }
@@ -1162,13 +1167,13 @@ impl Element {
                 };
             let mobile_json = ftd::Dependencies {
                 dependency_type: ftd::DependencyType::Variable,
-                condition: Some("mobile".to_string()),
+                condition: Some(serde_json::Value::String("mobile".to_string())),
                 remaining: None,
                 parameters: std::array::IntoIter::new([(
                     k.to_string(),
                     ftd::ConditionalValueWithDefault {
                         value: ConditionalValue {
-                            value: "mobile".to_string(),
+                            value: serde_json::Value::String("mobile".to_string()),
                             important: false,
                             reference: None,
                         },
@@ -1180,13 +1185,13 @@ impl Element {
 
             let xl_json = ftd::Dependencies {
                 dependency_type: ftd::DependencyType::Variable,
-                condition: Some("xl".to_string()),
+                condition: Some(serde_json::Value::String("xl".to_string())),
                 remaining: None,
                 parameters: std::array::IntoIter::new([(
                     k.to_string(),
                     ftd::ConditionalValueWithDefault {
                         value: ConditionalValue {
-                            value: "xl".to_string(),
+                            value: serde_json::Value::String("xl".to_string()),
                             important: false,
                             reference: None,
                         },
@@ -1198,13 +1203,13 @@ impl Element {
 
             let desktop_json = ftd::Dependencies {
                 dependency_type: ftd::DependencyType::Variable,
-                condition: Some("desktop".to_string()),
+                condition: Some(serde_json::Value::String("desktop".to_string())),
                 remaining: None,
                 parameters: std::array::IntoIter::new([(
                     k.to_string(),
                     ftd::ConditionalValueWithDefault {
                         value: ConditionalValue {
-                            value: "desktop".to_string(),
+                            value: serde_json::Value::String("desktop".to_string()),
                             important: false,
                             reference: None,
                         },
@@ -1215,15 +1220,17 @@ impl Element {
             };
 
             if let Some(dependencies) = dependencies.get_mut("$value#kind$") {
-                let mut d = serde_json::from_str::<Vec<ftd::Dependencies>>(dependencies).unwrap();
+                let mut d =
+                    serde_json::from_value::<Vec<ftd::Dependencies>>(dependencies.to_owned())
+                        .unwrap();
                 d.push(mobile_json);
                 d.push(xl_json);
                 d.push(desktop_json);
-                *dependencies = serde_json::to_string(&d).unwrap();
+                *dependencies = serde_json::to_value(&d).unwrap();
             } else {
                 dependencies.insert(
                     "$value#kind$".to_string(),
-                    serde_json::to_string(&vec![mobile_json, xl_json, desktop_json]).unwrap(),
+                    serde_json::to_value(&vec![mobile_json, xl_json, desktop_json]).unwrap(),
                 );
             }
         }
@@ -1282,18 +1289,18 @@ impl Element {
                 };
             let json = ftd::Dependencies {
                 dependency_type: ftd::DependencyType::Variable,
-                condition: Some("true".to_string()),
+                condition: Some(serde_json::Value::Bool(true)),
                 remaining: None,
                 parameters: std::array::IntoIter::new([(
                     k.to_string(),
                     ftd::ConditionalValueWithDefault {
                         value: ConditionalValue {
-                            value: "dark".to_string(),
+                            value: serde_json::Value::String("dark".to_string()),
                             important: false,
                             reference: None,
                         },
                         default: Some(ConditionalValue {
-                            value: "light".to_string(),
+                            value: serde_json::Value::String("light".to_string()),
                             important: false,
                             reference: None,
                         }),
@@ -1303,13 +1310,15 @@ impl Element {
             };
 
             if let Some(dependencies) = dependencies.get_mut("$value#kind$") {
-                let mut d = serde_json::from_str::<Vec<ftd::Dependencies>>(dependencies).unwrap();
+                let mut d =
+                    serde_json::from_value::<Vec<ftd::Dependencies>>(dependencies.to_owned())
+                        .unwrap();
                 d.push(json);
-                *dependencies = serde_json::to_string(&d).unwrap();
+                *dependencies = serde_json::to_value(&d).unwrap();
             } else {
                 dependencies.insert(
                     "$value#kind$".to_string(),
-                    serde_json::to_string(&vec![json]).unwrap(),
+                    serde_json::to_value(&vec![json]).unwrap(),
                 );
             }
         }
@@ -1359,7 +1368,7 @@ impl Element {
                 };
                 let value = match value.resolve(0, &doc) {
                     Ok(value) => match value.to_string() {
-                        Some(v) => v,
+                        Some(v) => serde_json::Value::String(v),
                         None => continue,
                     },
                     _ => continue,
@@ -1375,7 +1384,7 @@ impl Element {
                     };
                 let json = ftd::Dependencies {
                     dependency_type: ftd::DependencyType::Variable,
-                    condition: Some(condition.value.to_string()),
+                    condition: Some(condition.value.to_owned()),
                     remaining,
                     parameters: std::array::IntoIter::new([(
                         k.to_string(),
@@ -1385,7 +1394,7 @@ impl Element {
                                 important: false,
                                 reference: None,
                             },
-                            default: default.to_string().map(|value| ConditionalValue {
+                            default: default.to_serde_value().map(|value| ConditionalValue {
                                 value,
                                 important: false,
                                 reference: None,
@@ -1396,13 +1405,14 @@ impl Element {
                 };
                 if let Some(dependencies) = dependencies.get_mut("$value$") {
                     let mut d =
-                        serde_json::from_str::<Vec<ftd::Dependencies>>(dependencies).unwrap();
+                        serde_json::from_value::<Vec<ftd::Dependencies>>(dependencies.to_owned())
+                            .unwrap();
                     d.push(json);
-                    *dependencies = serde_json::to_string(&d).unwrap();
+                    *dependencies = serde_json::to_value(&d).unwrap();
                 } else {
                     dependencies.insert(
                         "$value$".to_string(),
-                        serde_json::to_string(&vec![json]).unwrap(),
+                        serde_json::to_value(&vec![json]).unwrap(),
                     );
                 }
             }
@@ -1488,17 +1498,19 @@ impl Element {
                 if let Some(ftd::Data { dependencies, .. }) = data.get_mut(&variable) {
                     let json = ftd::Dependencies {
                         dependency_type: ftd::DependencyType::Visible,
-                        condition: Some(condition.value.to_string()),
+                        condition: Some(condition.value.to_owned()),
                         parameters: Default::default(),
                         remaining,
                     };
                     if let Some(dependencies) = dependencies.get_mut(&id) {
-                        let mut d =
-                            serde_json::from_str::<Vec<ftd::Dependencies>>(dependencies).unwrap();
+                        let mut d = serde_json::from_value::<Vec<ftd::Dependencies>>(
+                            dependencies.to_owned(),
+                        )
+                        .unwrap();
                         d.push(json);
-                        *dependencies = serde_json::to_string(&d).unwrap();
+                        *dependencies = serde_json::to_value(&d).unwrap();
                     } else {
-                        dependencies.insert(id, serde_json::to_string(&vec![json]).unwrap());
+                        dependencies.insert(id, serde_json::to_value(&vec![json]).unwrap());
                     }
                 } else {
                     panic!("{} should be declared 2", condition.variable)
@@ -2162,7 +2174,7 @@ pub struct ConditionalAttribute {
 
 #[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize, Default)]
 pub struct ConditionalValue {
-    pub value: String,
+    pub value: serde_json::Value,
     pub important: bool,
     pub reference: Option<String>,
 }
