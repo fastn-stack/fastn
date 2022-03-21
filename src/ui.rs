@@ -681,7 +681,7 @@ impl Element {
                         }
                         if let Some(ref reference) = value.reference {
                             let (variable, remaining) =
-                                ftd::p2::utils::get_doc_name_and_remaining(&reference).unwrap();
+                                ftd::p2::utils::get_doc_name_and_remaining(reference).unwrap();
                             if let Some(ftd::Data { dependencies, .. }) = data.get_mut(&variable) {
                                 let json = ftd::Dependencies {
                                     dependency_type: ftd::DependencyType::Variable,
@@ -1109,7 +1109,7 @@ impl Element {
                 let id = id.clone().expect("universal id should be present");
 
                 let (variable, remaining) =
-                    ftd::p2::utils::get_doc_name_and_remaining(&reference).unwrap();
+                    ftd::p2::utils::get_doc_name_and_remaining(reference).unwrap();
                 if let Some(ftd::Data { dependencies, .. }) = data.get_mut(&variable) {
                     let json = ftd::Dependencies {
                         dependency_type: ftd::DependencyType::Value,
@@ -1237,7 +1237,7 @@ impl Element {
                     return (true, None);
                 }
                 ftd::p2::Kind::Record { .. } => {
-                    if let Ok(ftd::Value::Record { fields, .. }) = property_value.resolve(0, &doc) {
+                    if let Ok(ftd::Value::Record { fields, .. }) = property_value.resolve(0, doc) {
                         for (k, field) in fields.iter() {
                             let (is_ftd_type, reference) = is_ftd_type(field, doc);
                             if is_ftd_type {
