@@ -1555,10 +1555,10 @@ mod test {
                                 (
                                     ftd::Condition {
                                         variable: s("foo/bar#present"),
-                                        value: s("true"),
+                                        value: serde_json::Value::Bool(true),
                                     },
                                     ftd::ConditionalValue {
-                                        value: s("{\"$kind$\":\"light\",\"dark\":\"rgba(0,128,0,1)\",\"light\":\"rgba(0,128,0,1)\"}"),
+                                        value: serde_json::from_str("{\"$kind$\":\"light\",\"dark\":\"rgba(0,128,0,1)\",\"light\":\"rgba(0,128,0,1)\"}").unwrap(),
                                         important: false,
                                         reference: Some(s("foo/bar#green")),
                                     },
@@ -1566,17 +1566,17 @@ mod test {
                                 (
                                     ftd::Condition {
                                         variable: s("foo/bar#present"),
-                                        value: s("false"),
+                                        value: serde_json::Value::Bool(false),
                                     },
                                     ftd::ConditionalValue {
-                                        value: s("{\"$kind$\":\"light\",\"dark\":\"rgba(255,0,0,1)\",\"light\":\"rgba(255,0,0,1)\"}"),
+                                        value: serde_json::from_str("{\"$kind$\":\"light\",\"dark\":\"rgba(255,0,0,1)\",\"light\":\"rgba(255,0,0,1)\"}").unwrap(),
                                         important: false,
                                         reference: Some(s("foo/bar#red")),
                                     },
                                 ),
                             ],
                             default: Some(ftd::ConditionalValue {
-                                value: s("{\"$kind$\":\"light\",\"dark\":\"rgba(255,255,255,1)\",\"light\":\"rgba(255,255,255,1)\"}"),
+                                value: serde_json::from_str("{\"$kind$\":\"light\",\"dark\":\"rgba(255,255,255,1)\",\"light\":\"rgba(255,255,255,1)\"}").unwrap(),
                                 important: false,
                                 reference: Some(s("foo/bar#white")),
                             }),
@@ -2339,7 +2339,7 @@ mod test {
                     reference: Some(s("foo/bar#name@0,0,0")),
                     condition: Some(ftd::Condition {
                         variable: s("foo/bar#active@0,0,0"),
-                        value: s("$IsNotNull$"),
+                        value: serde_json::Value::String(s("$IsNotNull$")),
                     }),
                     ..Default::default()
                 },
@@ -2367,7 +2367,7 @@ mod test {
                     reference: Some(s("foo/bar#name@0,0,0")),
                     condition: Some(ftd::Condition {
                         variable: s("foo/bar#active@0,0,0"),
-                        value: s("$IsNull$"),
+                        value: serde_json::Value::String(s("$IsNull$")),
                     }),
                     is_not_visible: true,
                     ..Default::default()
@@ -2400,7 +2400,7 @@ mod test {
                                 reference: Some(s("foo/bar#name@0,0,0,2")),
                                 condition: Some(ftd::Condition {
                                     variable: s("foo/bar#active@0,0,0,2"),
-                                    value: s("$IsNotNull$"),
+                                    value: serde_json::Value::String(s("$IsNotNull$")),
                                 }),
                                 is_not_visible: true,
                                 ..Default::default()
@@ -2429,7 +2429,7 @@ mod test {
                                 reference: Some(s("foo/bar#name@0,0,0,2")),
                                 condition: Some(ftd::Condition {
                                     variable: s("foo/bar#active@0,0,0,2"),
-                                    value: s("$IsNull$"),
+                                    value: serde_json::Value::String(s("$IsNull$")),
                                 }),
                                 ..Default::default()
                             },
@@ -2462,7 +2462,7 @@ mod test {
                                             reference: Some(s("foo/bar#name@0,0,0,0,2")),
                                             condition: Some(ftd::Condition {
                                                 variable: s("foo/bar#active@0,0,0,0,2"),
-                                                value: s("$IsNotNull$"),
+                                                value: serde_json::Value::String(s("$IsNotNull$")),
                                             }),
                                             is_not_visible: true,
                                             ..Default::default()
@@ -2491,7 +2491,7 @@ mod test {
                                             reference: Some(s("foo/bar#name@0,0,0,0,2")),
                                             condition: Some(ftd::Condition {
                                                 variable: s("foo/bar#active@0,0,0,0,2"),
-                                                value: s("$IsNull$"),
+                                                value: serde_json::Value::String(s("$IsNull$")),
                                             }),
                                             ..Default::default()
                                         },
@@ -2545,7 +2545,7 @@ mod test {
                                 reference: Some(s("foo/bar#name@0,0,0,3")),
                                 condition: Some(ftd::Condition {
                                     variable: s("foo/bar#active@0,0,0,3"),
-                                    value: s("$IsNotNull$"),
+                                    value: serde_json::Value::String(s("$IsNotNull$")),
                                 }),
                                 is_not_visible: true,
                                 ..Default::default()
@@ -2574,7 +2574,7 @@ mod test {
                                 reference: Some(s("foo/bar#name@0,0,0,3")),
                                 condition: Some(ftd::Condition {
                                     variable: s("foo/bar#active@0,0,0,3"),
-                                    value: s("$IsNull$"),
+                                    value: serde_json::Value::String(s("$IsNull$")),
                                 }),
                                 ..Default::default()
                             },
@@ -3409,7 +3409,7 @@ mod test {
                     reference: Some(s("foo/bar#name@0,0,0")),
                     condition: Some(ftd::Condition {
                         variable: s("foo/bar#active@0,0,0"),
-                        value: s("$IsNotNull$"),
+                        value: serde_json::Value::String(s("$IsNotNull$")),
                     }),
                     ..Default::default()
                 },
@@ -3437,7 +3437,7 @@ mod test {
                     reference: Some(s("foo/bar#name@0,0,0")),
                     condition: Some(ftd::Condition {
                         variable: s("foo/bar#active@0,0,0"),
-                        value: s("$IsNull$"),
+                        value: serde_json::Value::String(s("$IsNull$")),
                     }),
                     is_not_visible: true,
                     ..Default::default()
@@ -3470,7 +3470,7 @@ mod test {
                                 reference: Some(s("foo/bar#name@0,0,0,2")),
                                 condition: Some(ftd::Condition {
                                     variable: s("foo/bar#active@0,0,0,2"),
-                                    value: s("$IsNotNull$"),
+                                    value: serde_json::Value::String(s("$IsNotNull$")),
                                 }),
                                 is_not_visible: true,
                                 ..Default::default()
@@ -3499,7 +3499,7 @@ mod test {
                                 reference: Some(s("foo/bar#name@0,0,0,2")),
                                 condition: Some(ftd::Condition {
                                     variable: s("foo/bar#active@0,0,0,2"),
-                                    value: s("$IsNull$"),
+                                    value: serde_json::Value::String(s("$IsNull$")),
                                 }),
                                 ..Default::default()
                             },
@@ -3532,7 +3532,7 @@ mod test {
                                             reference: Some(s("foo/bar#name@0,0,0,0,2")),
                                             condition: Some(ftd::Condition {
                                                 variable: s("foo/bar#active@0,0,0,0,2"),
-                                                value: s("$IsNotNull$"),
+                                                value: serde_json::Value::String(s("$IsNotNull$")),
                                             }),
                                             is_not_visible: true,
                                             ..Default::default()
@@ -3561,7 +3561,7 @@ mod test {
                                             reference: Some(s("foo/bar#name@0,0,0,0,2")),
                                             condition: Some(ftd::Condition {
                                                 variable: s("foo/bar#active@0,0,0,0,2"),
-                                                value: s("$IsNull$"),
+                                                value: serde_json::Value::String(s("$IsNull$")),
                                             }),
                                             ..Default::default()
                                         },
@@ -3615,7 +3615,7 @@ mod test {
                                 reference: Some(s("foo/bar#name@0,0,0,3")),
                                 condition: Some(ftd::Condition {
                                     variable: s("foo/bar#active@0,0,0,3"),
-                                    value: s("$IsNotNull$"),
+                                    value: serde_json::Value::String(s("$IsNotNull$")),
                                 }),
                                 is_not_visible: true,
                                 ..Default::default()
@@ -3644,7 +3644,7 @@ mod test {
                                 reference: Some(s("foo/bar#name@0,0,0,3")),
                                 condition: Some(ftd::Condition {
                                     variable: s("foo/bar#active@0,0,0,3"),
-                                    value: s("$IsNull$"),
+                                    value: serde_json::Value::String(s("$IsNull$")),
                                 }),
                                 ..Default::default()
                             },
@@ -4743,7 +4743,7 @@ mod test {
                 reference: Some(s("foo/bar#about@0")),
                 condition: Some(ftd::Condition {
                     variable: s("foo/bar#about@0"),
-                    value: s("$IsNotNull$"),
+                    value: serde_json::Value::String(s("$IsNotNull$")),
                 }),
                 ..Default::default()
             },
@@ -4756,7 +4756,7 @@ mod test {
                 reference: Some(s("foo/bar#about@1")),
                 condition: Some(ftd::Condition {
                     variable: s("foo/bar#about@1"),
-                    value: s("$IsNotNull$"),
+                    value: serde_json::Value::String(s("$IsNotNull$")),
                 }),
                 is_not_visible: true,
                 ..Default::default()
@@ -4770,7 +4770,7 @@ mod test {
                 reference: Some(s("foo/bar#src@0")),
                 condition: Some(ftd::Condition {
                     variable: s("foo/bar#src@0"),
-                    value: s("$IsNotNull$"),
+                    value: serde_json::Value::String(s("$IsNotNull$")),
                 }),
                 ..Default::default()
             },
@@ -4782,7 +4782,7 @@ mod test {
                 reference: Some(s("foo/bar#src@1")),
                 condition: Some(ftd::Condition {
                     variable: s("foo/bar#src@1"),
-                    value: s("$IsNotNull$"),
+                    value: serde_json::Value::String(s("$IsNotNull$")),
                 }),
                 ..Default::default()
             },
@@ -5074,7 +5074,7 @@ mod test {
             common: ftd::Common {
                 condition: Some(ftd::Condition {
                     variable: s("foo/bar#about@0"),
-                    value: s("$IsNotNull$"),
+                    value: serde_json::Value::String(s("$IsNotNull$")),
                 }),
                 reference: Some(s("foo/bar#about@0")),
                 ..Default::default()
@@ -5087,7 +5087,7 @@ mod test {
             common: ftd::Common {
                 condition: Some(ftd::Condition {
                     variable: s("foo/bar#about@1"),
-                    value: s("$IsNotNull$"),
+                    value: serde_json::Value::String(s("$IsNotNull$")),
                 }),
                 reference: Some(s("foo/bar#about@1")),
                 is_not_visible: true,
@@ -5101,7 +5101,7 @@ mod test {
             common: ftd::Common {
                 condition: Some(ftd::Condition {
                     variable: s("foo/bar#about@2"),
-                    value: s("$IsNotNull$"),
+                    value: serde_json::Value::String(s("$IsNotNull$")),
                 }),
                 reference: Some(s("foo/bar#about@2")),
                 is_not_visible: true,
@@ -5116,7 +5116,7 @@ mod test {
                 reference: Some(s("foo/bar#src@0")),
                 condition: Some(ftd::Condition {
                     variable: s("foo/bar#src@0"),
-                    value: s("$IsNotNull$"),
+                    value: serde_json::Value::String(s("$IsNotNull$")),
                 }),
                 ..Default::default()
             },
@@ -5128,7 +5128,7 @@ mod test {
                 reference: Some(s("foo/bar#src@1")),
                 condition: Some(ftd::Condition {
                     variable: s("foo/bar#src@1"),
-                    value: s("$IsNotNull$"),
+                    value: serde_json::Value::String(s("$IsNotNull$")),
                 }),
                 ..Default::default()
             },
@@ -5140,7 +5140,7 @@ mod test {
                 reference: Some(s("foo/bar#src@2")),
                 condition: Some(ftd::Condition {
                     variable: s("foo/bar#src@2"),
-                    value: s("$IsNotNull$"),
+                    value: serde_json::Value::String(s("$IsNotNull$")),
                 }),
                 is_not_visible: true,
                 ..Default::default()
@@ -5664,7 +5664,7 @@ mod test {
                             common: ftd::Common {
                                 condition: Some(ftd::Condition {
                                     variable: s("foo/bar#body@0"),
-                                    value: s("$IsNotNull$"),
+                                    value: serde_json::Value::String(s("$IsNotNull$")),
                                 }),
                                 reference: Some(s("foo/bar#body@0,1")),
                                 ..Default::default()
@@ -5697,7 +5697,7 @@ mod test {
                             common: ftd::Common {
                                 condition: Some(ftd::Condition {
                                     variable: s("foo/bar#body@1"),
-                                    value: s("$IsNotNull$"),
+                                    value: serde_json::Value::String(s("$IsNotNull$")),
                                 }),
                                 reference: Some(s("foo/bar#body@1,1")),
                                 is_not_visible: true,
@@ -6403,7 +6403,7 @@ mod test {
                 common: ftd::Common {
                     condition: Some(ftd::Condition {
                         variable: "foo/bar#present".to_string(),
-                        value: "true".to_string(),
+                        value: serde_json::Value::Bool(true),
                     }),
                     ..Default::default()
                 },
@@ -6418,7 +6418,7 @@ mod test {
                 common: ftd::Common {
                     condition: Some(ftd::Condition {
                         variable: "foo/bar#present".to_string(),
-                        value: "false".to_string(),
+                        value: serde_json::Value::Bool(false),
                     }),
                     is_not_visible: true,
                     ..Default::default()
@@ -6434,7 +6434,7 @@ mod test {
                 common: ftd::Common {
                     condition: Some(ftd::Condition {
                         variable: "fifthtry/ft#dark-mode".to_string(),
-                        value: "true".to_string(),
+                        value: serde_json::Value::Bool(true),
                     }),
                     ..Default::default()
                 },
@@ -6449,7 +6449,7 @@ mod test {
                 common: ftd::Common {
                     condition: Some(ftd::Condition {
                         variable: "fifthtry/ft#dark-mode".to_string(),
-                        value: "false".to_string(),
+                        value: serde_json::Value::Bool(false),
                     }),
                     is_not_visible: true,
                     ..Default::default()
@@ -6467,7 +6467,7 @@ mod test {
                 common: ftd::Common {
                     condition: Some(ftd::Condition {
                         variable: "foo/bar#present".to_string(),
-                        value: "false".to_string(),
+                        value: serde_json::Value::Bool(false),
                     }),
                     is_not_visible: true,
                     ..Default::default()
@@ -6484,7 +6484,7 @@ mod test {
                 common: ftd::Common {
                     condition: Some(ftd::Condition {
                         variable: "foo/bar#present".to_string(),
-                        value: "true".to_string(),
+                        value: serde_json::Value::Bool(true),
                     }),
                     ..Default::default()
                 },
@@ -6503,7 +6503,7 @@ mod test {
                 common: ftd::Common {
                     condition: Some(ftd::Condition {
                         variable: s("foo/bar#present@5"),
-                        value: s("false"),
+                        value: serde_json::Value::Bool(false),
                     }),
                     ..Default::default()
                 },
@@ -6518,7 +6518,7 @@ mod test {
                 common: ftd::Common {
                     condition: Some(ftd::Condition {
                         variable: s("foo/bar#present@5"),
-                        value: s("true"),
+                        value: serde_json::Value::Bool(true),
                     }),
                     is_not_visible: true,
                     ..Default::default()
@@ -6538,7 +6538,7 @@ mod test {
                 common: ftd::Common {
                     condition: Some(ftd::Condition {
                         variable: s("foo/bar#present@6"),
-                        value: s("false"),
+                        value: serde_json::Value::Bool(false),
                     }),
                     is_not_visible: true,
                     ..Default::default()
@@ -6554,7 +6554,7 @@ mod test {
                 common: ftd::Common {
                     condition: Some(ftd::Condition {
                         variable: s("foo/bar#present@6"),
-                        value: s("true"),
+                        value: serde_json::Value::Bool(true),
                     }),
                     ..Default::default()
                 },
@@ -6573,7 +6573,7 @@ mod test {
                 common: ftd::Common {
                     condition: Some(ftd::Condition {
                         variable: "fifthtry/ft#dark-mode".to_string(),
-                        value: "true".to_string(),
+                        value: serde_json::Value::Bool(true),
                     }),
                     ..Default::default()
                 },
@@ -6589,7 +6589,7 @@ mod test {
                 common: ftd::Common {
                     condition: Some(ftd::Condition {
                         variable: "fifthtry/ft#dark-mode".to_string(),
-                        value: "false".to_string(),
+                        value: serde_json::Value::Bool(false),
                     }),
                     is_not_visible: true,
                     ..Default::default()
@@ -7175,7 +7175,7 @@ mod test {
                                             common: ftd::Common {
                                                 condition: Some(ftd::Condition {
                                                     variable: s("foo/bar#mobile"),
-                                                    value: s("true"),
+                                                    value: serde_json::Value::Bool(true),
                                                 }),
                                                 data_id: Some(s("some-child")),
                                                 id: Some(s("foo-id:some-child")),
@@ -7197,7 +7197,7 @@ mod test {
                                             common: ftd::Common {
                                                 condition: Some(ftd::Condition {
                                                     variable: s("foo/bar#mobile"),
-                                                    value: s("false"),
+                                                    value: serde_json::Value::Bool(false),
                                                 }),
                                                 is_not_visible: true,
                                                 data_id: Some(s("some-child")),
@@ -7597,7 +7597,7 @@ mod test {
                                     common: ftd::Common {
                                         condition: Some(ftd::Condition {
                                             variable: s("foo/bar#is-mobile"),
-                                            value: s("false"),
+                                            value: serde_json::Value::Bool(false),
                                         }),
                                         is_not_visible: true,
                                         data_id: Some(s("main-container")),
@@ -7627,7 +7627,7 @@ mod test {
                                     common: ftd::Common {
                                         condition: Some(ftd::Condition {
                                             variable: s("foo/bar#is-mobile"),
-                                            value: s("true"),
+                                            value: serde_json::Value::Bool(true),
                                         }),
                                         data_id: Some(s("main-container")),
                                         ..Default::default()
@@ -7744,7 +7744,7 @@ mod test {
                             common: ftd::Common {
                                 condition: Some(ftd::Condition {
                                     variable: s("foo/bar#is-mobile"),
-                                    value: s("false"),
+                                    value: serde_json::Value::Bool(false),
                                 }),
                                 is_not_visible: true,
                                 data_id: Some(s("main-container")),
@@ -7767,7 +7767,7 @@ mod test {
                             common: ftd::Common {
                                 condition: Some(ftd::Condition {
                                     variable: s("foo/bar#is-mobile"),
-                                    value: s("true"),
+                                    value: serde_json::Value::Bool(true),
                                 }),
                                 data_id: Some(s("main-container")),
                                 ..Default::default()
@@ -7922,7 +7922,7 @@ mod test {
                             common: ftd::Common {
                                 condition: Some(ftd::Condition {
                                     variable: s("foo/bar#is-mobile"),
-                                    value: s("false"),
+                                    value: serde_json::Value::Bool(false),
                                 }),
                                 data_id: Some(s("main-container")),
                                 ..Default::default()
@@ -7962,7 +7962,7 @@ mod test {
                             common: ftd::Common {
                                 condition: Some(ftd::Condition {
                                     variable: s("foo/bar#is-mobile"),
-                                    value: s("true"),
+                                    value: serde_json::Value::Bool(true),
                                 }),
                                 is_not_visible: true,
                                 data_id: Some(s("main-container")),
@@ -8104,7 +8104,7 @@ mod test {
                                     common: ftd::Common {
                                         condition: Some(ftd::Condition {
                                             variable: s("foo/bar#is-mobile"),
-                                            value: s("false"),
+                                            value: serde_json::Value::Bool(false),
                                         }),
                                         is_not_visible: true,
                                         ..Default::default()
@@ -8126,7 +8126,7 @@ mod test {
                                     common: ftd::Common {
                                         condition: Some(ftd::Condition {
                                             variable: s("foo/bar#is-mobile"),
-                                            value: s("true"),
+                                            value: serde_json::Value::Bool(true),
                                         }),
                                         ..Default::default()
                                     },
@@ -8783,7 +8783,7 @@ mod test {
                 reference: Some(s("foo/bar#people")),
                 condition: Some(ftd::Condition {
                     variable: s("foo/bar#$loop$@0.ceo"),
-                    value: s("true"),
+                    value: serde_json::Value::Bool(true),
                 }),
                 is_not_visible: true,
                 ..Default::default()
@@ -8819,7 +8819,7 @@ mod test {
             common: ftd::Common {
                 condition: Some(ftd::Condition {
                     variable: s("foo/bar#$loop$@1.ceo"),
-                    value: s("true"),
+                    value: serde_json::Value::Bool(true),
                 }),
                 reference: Some(s("foo/bar#people")),
                 ..Default::default()
@@ -12467,7 +12467,7 @@ mod test {
                             common: ftd::Common {
                                 condition: Some(ftd::Condition {
                                     variable: s("foo/bar#mobile"),
-                                    value: s("true"),
+                                    value: serde_json::Value::Bool(true),
                                 }),
                                 ..Default::default()
                             },
@@ -12479,7 +12479,7 @@ mod test {
                             common: ftd::Common {
                                 condition: Some(ftd::Condition {
                                     variable: s("foo/bar#mobile"),
-                                    value: s("false"),
+                                    value: serde_json::Value::Bool(false),
                                 }),
                                 is_not_visible: true,
                                 ..Default::default()
@@ -12550,7 +12550,7 @@ mod test {
                     reference: Some(s("foo/bar#name@0")),
                     condition: Some(ftd::Condition {
                         variable: s("foo/bar#open@0"),
-                        value: s("true"),
+                        value: serde_json::Value::Bool(true),
                     }),
                     events: vec![ftd::Event {
                         name: s("onclick"),
@@ -12710,7 +12710,7 @@ mod test {
                             common: ftd::Common {
                                 condition: Some(ftd::Condition {
                                     variable: s("foo/bar#open@0"),
-                                    value: s("true"),
+                                    value: serde_json::Value::Bool(true),
                                 }),
                                 ..Default::default()
                             },
@@ -12722,7 +12722,7 @@ mod test {
                             common: ftd::Common {
                                 condition: Some(ftd::Condition {
                                     variable: s("foo/bar#open@0"),
-                                    value: s("false"),
+                                    value: serde_json::Value::Bool(false),
                                 }),
                                 is_not_visible: true,
                                 ..Default::default()
@@ -12812,7 +12812,7 @@ mod test {
                             common: ftd::Common {
                                 condition: Some(ftd::Condition {
                                     variable: s("foo/bar#open@0"),
-                                    value: s("true"),
+                                    value: serde_json::Value::Bool(true),
                                 }),
                                 ..Default::default()
                             },
@@ -12842,7 +12842,7 @@ mod test {
                             common: ftd::Common {
                                 condition: Some(ftd::Condition {
                                     variable: s("foo/bar#open@0"),
-                                    value: s("true"),
+                                    value: serde_json::Value::Bool(true),
                                 }),
                                 ..Default::default()
                             },
@@ -12957,7 +12957,7 @@ mod test {
                                     common: ftd::Common {
                                         condition: Some(ftd::Condition {
                                             variable: s("foo/bar#open@0"),
-                                            value: s("true"),
+                                            value: serde_json::Value::Bool(true),
                                         }),
                                         ..Default::default()
                                     },
@@ -13367,7 +13367,7 @@ mod test {
                 common: ftd::Common {
                     condition: Some(ftd::Condition {
                         variable: s("foo/bar#count"),
-                        value: s("8"),
+                        value: serde_json::json!(8),
                     }),
                     is_not_visible: true,
                     ..Default::default()
@@ -13700,7 +13700,7 @@ mod test {
                     condition: Some(
                         ftd::Condition {
                             variable: s("foo/bar#count"),
-                            value: s("0"),
+                            value: serde_json::json!(0),
                         },
                     ),
                     is_not_visible: false,
@@ -13734,7 +13734,7 @@ mod test {
                 common: ftd::Common {
                     condition: Some(ftd::Condition {
                         variable: s("foo/bar#count"),
-                        value: s("1"),
+                        value: serde_json::json!(1),
                     }),
                     is_not_visible: true,
                     events: vec![ftd::Event {
@@ -13905,7 +13905,7 @@ mod test {
                                     common: ftd::Common {
                                         condition: Some(ftd::Condition {
                                             variable: s("foo/bar#visible@0,0,2"),
-                                            value: s("true"),
+                                            value: serde_json::Value::Bool(true),
                                         }),
                                         data_id: Some(s("some-child")),
                                         ..Default::default()
@@ -13946,7 +13946,7 @@ mod test {
                                     common: ftd::Common {
                                         condition: Some(ftd::Condition {
                                             variable: s("foo/bar#visible@0,0,3"),
-                                            value: s("true"),
+                                            value: serde_json::Value::Bool(true),
                                         }),
                                         data_id: Some(s("some-child")),
                                         ..Default::default()
@@ -13992,7 +13992,9 @@ mod test {
                                                                 variable: s(
                                                                     "foo/bar#visible@0,0,1,2",
                                                                 ),
-                                                                value: s("true"),
+                                                                value: serde_json::Value::Bool(
+                                                                    true,
+                                                                ),
                                                             }),
                                                             data_id: Some(s("some-child")),
                                                             ..Default::default()
@@ -14069,7 +14071,7 @@ mod test {
                                     common: ftd::Common {
                                         condition: Some(ftd::Condition {
                                             variable: s("foo/bar#visible@0,0"),
-                                            value: s("true"),
+                                            value: serde_json::Value::Bool(true),
                                         }),
                                         data_id: Some(s("some-child")),
                                         id: Some(s("beverage:some-child")),
@@ -14286,7 +14288,7 @@ mod test {
                                 reference: Some(s("foo/bar#body@0,1")),
                                 condition: Some(ftd::Condition {
                                     variable: s("foo/bar#body@0"),
-                                    value: s("$IsNotNull$"),
+                                    value: serde_json::Value::String(s("$IsNotNull$")),
                                 }),
                                 ..Default::default()
                             },
@@ -14326,7 +14328,7 @@ mod test {
                                 data_id: Some(s("markdown-id")),
                                 condition: Some(ftd::Condition {
                                     variable: s("foo/bar#body@1"),
-                                    value: s("$IsNotNull$"),
+                                    value: serde_json::Value::String(s("$IsNotNull$")),
                                 }),
                                 reference: Some(s("foo/bar#body@1,1")),
                                 ..Default::default()
@@ -14914,7 +14916,7 @@ mod test {
                 common: ftd::Common {
                     condition: Some(ftd::Condition {
                         variable: s("foo/bar#current"),
-                        value: s("some value"),
+                        value: serde_json::Value::String(s("some value")),
                     }),
                     ..Default::default()
                 },
@@ -15182,10 +15184,10 @@ mod test {
                             conditions_with_value: vec![(
                                 ftd::Condition {
                                     variable: s("foo/bar#MOUSE-IN@0"),
-                                    value: s("true"),
+                                    value: serde_json::Value::Bool(true),
                                 },
                                 ftd::ConditionalValue {
-                                    value: s("{\"$kind$\":\"light\",\"dark\":\"rgba(255,0,0,1)\",\"light\":\"rgba(255,0,0,1)\"}"),
+                                    value: serde_json::from_str("{\"$kind$\":\"light\",\"dark\":\"rgba(255,0,0,1)\",\"light\":\"rgba(255,0,0,1)\"}").unwrap(),
                                     important: false,
                                     reference: Some(s("foo/bar#red")),
                                 },
@@ -15278,7 +15280,7 @@ mod test {
                             common: ftd::Common {
                                 condition: Some(ftd::Condition {
                                     variable: s("foo/bar#open@0"),
-                                    value: s("true"),
+                                    value: serde_json::Value::Bool(true),
                                 }),
                                 ..Default::default()
                             },
@@ -15293,7 +15295,7 @@ mod test {
                                     common: ftd::Common {
                                         condition: Some(ftd::Condition {
                                             variable: s("foo/bar#open@0,1"),
-                                            value: s("true"),
+                                            value: serde_json::Value::Bool(true),
                                         }),
                                         ..Default::default()
                                     },
@@ -15388,10 +15390,10 @@ mod test {
                                     (
                                         ftd::Condition {
                                             variable: s("foo/bar#b@0"),
-                                            value: s("true"),
+                                            value: serde_json::Value::Bool(true),
                                         },
                                         ftd::ConditionalValue {
-                                            value: s("{\"$kind$\":\"light\",\"dark\":\"rgba(0,0,0,1)\",\"light\":\"rgba(0,0,0,1)\"}"),
+                                            value: serde_json::from_str("{\"$kind$\":\"light\",\"dark\":\"rgba(0,0,0,1)\",\"light\":\"rgba(0,0,0,1)\"}").unwrap(),
                                             important: false,
                                             reference: Some(s("foo/bar#black")),
                                         },
@@ -15399,10 +15401,10 @@ mod test {
                                     (
                                         ftd::Condition {
                                             variable: s("foo/bar#a@0"),
-                                            value: s("30"),
+                                            value: serde_json::json!(30),
                                         },
                                         ftd::ConditionalValue {
-                                            value: s("{\"$kind$\":\"light\",\"dark\":\"rgba(255,0,0,1)\",\"light\":\"rgba(255,0,0,1)\"}"),
+                                            value: serde_json::from_str("{\"$kind$\":\"light\",\"dark\":\"rgba(255,0,0,1)\",\"light\":\"rgba(255,0,0,1)\"}").unwrap(),
                                             important: false,
                                             reference: Some(s("foo/bar#red")),
                                         },
@@ -15495,7 +15497,7 @@ mod test {
                             common: ftd::Common {
                                 condition: Some(ftd::Condition {
                                     variable: s("foo/bar#b@0,0"),
-                                    value: s("true"),
+                                    value: serde_json::Value::Bool(true),
                                 }),
                                 is_not_visible: true,
                                 ..Default::default()
@@ -15507,7 +15509,7 @@ mod test {
                     common: ftd::Common {
                         condition: Some(ftd::Condition {
                             variable: s("foo/bar#b@0"),
-                            value: s("true"),
+                            value: serde_json::Value::Bool(true),
                         }),
                         ..Default::default()
                     },
@@ -15565,10 +15567,10 @@ mod test {
                                         conditions_with_value: vec![(
                                             ftd::Condition {
                                                 variable: s("foo/bar#b@0"),
-                                                value: s("true"),
+                                                value: serde_json::Value::Bool(true),
                                             },
                                             ftd::ConditionalValue {
-                                                value: s("{\"$kind$\":\"light\",\"dark\":\"rgba(0,0,0,1)\",\"light\":\"rgba(0,0,0,1)\"}"),
+                                                value: serde_json::from_str("{\"$kind$\":\"light\",\"dark\":\"rgba(0,0,0,1)\",\"light\":\"rgba(0,0,0,1)\"}").unwrap(),
                                                 important: false,
                                                 reference: Some(s("foo/bar#black")),
                                             },
@@ -15652,10 +15654,10 @@ mod test {
                                 conditions_with_value: vec![(
                                     ftd::Condition {
                                         variable: s("foo/bar#foo@1"),
-                                        value: s("true"),
+                                        value: serde_json::Value::Bool(true),
                                     },
                                     ftd::ConditionalValue {
-                                        value: s("{\"$kind$\":\"light\",\"dark\":\"rgba(255,0,0,1)\",\"light\":\"rgba(255,0,0,1)\"}"),
+                                        value: serde_json::from_str("{\"$kind$\":\"light\",\"dark\":\"rgba(255,0,0,1)\",\"light\":\"rgba(255,0,0,1)\"}").unwrap(),
                                         important: false,
                                         reference: Some(s("foo/bar#red")),
                                     },
@@ -15743,10 +15745,10 @@ mod test {
                             conditions_with_value: vec![(
                                 ftd::Condition {
                                     variable: s("foo/bar#t@0"),
-                                    value: s("true"),
+                                    value: serde_json::Value::Bool(true),
                                 },
                                 ftd::ConditionalValue {
-                                    value: s("{\"$kind$\":\"light\",\"dark\":\"rgba(255,0,0,1)\",\"light\":\"rgba(255,0,0,1)\"}"),
+                                    value: serde_json::from_str("{\"$kind$\":\"light\",\"dark\":\"rgba(255,0,0,1)\",\"light\":\"rgba(255,0,0,1)\"}").unwrap(),
                                     important: false,
                                     reference: Some(s("foo/bar#red")),
                                 },
@@ -16079,7 +16081,7 @@ mod test {
                     reference: Some(s("foo/bar#active")),
                     condition: Some(ftd::Condition {
                         variable: s("foo/bar#active"),
-                        value: s("$IsNotNull$"),
+                        value: serde_json::Value::String(s("$IsNotNull$")),
                     }),
                     ..Default::default()
                 },
@@ -16093,7 +16095,7 @@ mod test {
                 common: ftd::Common {
                     condition: Some(ftd::Condition {
                         variable: s("foo/bar#active"),
-                        value: s("$IsNull$"),
+                        value: serde_json::Value::String(s("$IsNull$")),
                     }),
                     is_not_visible: true,
                     ..Default::default()
@@ -16109,7 +16111,7 @@ mod test {
                     reference: Some(s("foo/bar#flags")),
                     condition: Some(ftd::Condition {
                         variable: s("foo/bar#flags"),
-                        value: s("$IsNotNull$"),
+                        value: serde_json::Value::String(s("$IsNotNull$")),
                     }),
                     is_not_visible: true,
                     ..Default::default()
@@ -16124,7 +16126,7 @@ mod test {
                 common: ftd::Common {
                     condition: Some(ftd::Condition {
                         variable: s("foo/bar#flags"),
-                        value: s("$IsNull$"),
+                        value: serde_json::Value::String(s("$IsNull$")),
                     }),
                     ..Default::default()
                 },
@@ -17309,7 +17311,7 @@ mod test {
                     scale: Some(1.2),
                     condition: Some(ftd::Condition {
                         variable: s("foo/bar#active"),
-                        value: s("true"),
+                        value: serde_json::Value::Bool(true),
                     }),
                     ..Default::default()
                 },
@@ -17459,7 +17461,7 @@ mod test {
                 common: ftd::Common {
                     condition: Some(ftd::Condition {
                         variable: s("foo/bar#bar"),
-                        value: s("Something"),
+                        value: serde_json::Value::String(s("Something")),
                     }),
                     reference: Some(s("foo/bar#bar")),
                     ..Default::default()
