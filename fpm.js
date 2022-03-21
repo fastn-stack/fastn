@@ -1,60 +1,10 @@
 (function () {
-    const FPM_MOBILE = "fpm#mobile";
-    const FPM_MOBILE_BREAKPOINT = "fpm#mobile-breakpoint";
     const FPM_THEME_COLOR = "fpm#theme-color";
     const FPM_IS_FALLBACK = "fpm#is-fallback";
     const FPM_TRANSLATION_DIFF_OPEN = "fpm#translation-diff-open";
-    const FPM_DARK_MODE = "fpm#dark-mode"
-    const SYSTEM_DARK_MODE = "fpm#system-dark-mode"
-    const FPM_FOLLOW_SYSTEM_DARK_MODE = "fpm#follow-system-dark-mode"
-    const DARK_MODE_COOKIE = "fpm-dark-mode";
-    const COOKIE_SYSTEM_LIGHT = "system-light";
-    const COOKIE_SYSTEM_DARK = "system-dark";
-    const COOKIE_DARK_MODE = "dark";
-    const COOKIE_LIGHT_MODE = "light";
-    const DARK_MODE_CLASS = "fpm-dark";
     const THEME_COLOR_META = "theme-color";
 
-    let last_device;
     var translation_diff_open = false;
-
-    function initialise_device() {
-        last_device = is_mobile();
-        console.log("is_mobile", last_device);
-        window.ftd.set_bool_for_all(FPM_MOBILE, last_device);
-    }
-
-    window.onresize = function () {
-        let current = is_mobile();
-        if (current === last_device) {
-            return;
-        }
-
-        window.ftd.set_bool_for_all(FPM_MOBILE, current);
-        last_device = current;
-        console.log("is_mobile", last_device);
-    }
-
-    function is_mobile() {
-        // not at all sure about this functions logic.
-        let width = window.innerWidth;
-
-        // in future we may want to have more than one break points, and then
-        // we may also want the theme builders to decide where the breakpoints
-        // should go. we should be able to fetch fpm variables here, or maybe
-        // simply pass the width, user agent etc to fpm and let people put the
-        // checks on width user agent etc, but it would be good if we can
-        // standardize few breakpoints. or maybe we should do both, some
-        // standard breakpoints and pass the raw data.
-
-        // we would then rename this function to detect_device() which will
-        // return one of "desktop", "tablet", "mobile". and also maybe have
-        // another function detect_orientation(), "landscape" and "portrait" etc,
-        // and instead of setting `fpm#mobile: boolean` we set `fpm-ui#device`
-        // and `fpm#view-port-orientation` etc.
-        let breakpoint = window.ftd.get_value("main", FPM_MOBILE_BREAKPOINT);
-        return width <= breakpoint;
-    }
 
     window.show_main = function () {
         document.getElementById("main").style.display = "block";
@@ -73,82 +23,7 @@
         window.ftd.set_bool_for_all(FPM_TRANSLATION_DIFF_OPEN, translation_diff_open);
     }
 
-    /*
-        fpm.dark-mode behaviour:
-
-        fpm.dark-mode is a boolean, default false, it tells the UI to show
-        the UI in dark or light mode. Themes should use this variable to decide
-        which mode to show in UI.
-
-        fpm.dark-mode-follow-system, boolean, default true, keeps track if
-        we are reading the value of `dark-mode` from system preference, or user
-        has overridden the system preference.
-
-        These two variables must not be set by ftd code directly, but they must
-        use `$on-click$: message-host enable-dark-mode`, to ignore system
-        preference and use dark mode. `$on-click$: message-host
-        disable-dark-mode` to ignore system preference and use light mode and
-        `$on-click$: message-host follow-system-dark-mode` to ignore user
-        preference and start following system preference.
-
-        we use a cookie: `fpm-dark-mode` to store the preference. The cookie can
-        have three values:
-
-           cookie missing /          user wants us to honour system preference
-               system-light          and currently its light.
-
-           system-dark               follow system and currently its dark.
-
-           light:                    user prefers light
-
-           dark:                     user prefers light
-
-        We use cookie instead of localstorage so in future `fpm-repo` can see
-        users preferences up front and renders the HTML on service wide
-        following user's preference.
-
-     */
-
-
-    window.enable_dark_mode = function () {
-        // TODO: coalesce the two set_bool-s into one so there is only one DOM
-        //       update
-        window.ftd.set_bool_for_all(FPM_DARK_MODE, true);
-        window.ftd.set_bool_for_all(FPM_FOLLOW_SYSTEM_DARK_MODE, false);
-        window.ftd.set_bool_for_all(SYSTEM_DARK_MODE, system_dark_mode());
-        document.body.classList.add(DARK_MODE_CLASS);
-        set_cookie(DARK_MODE_COOKIE, COOKIE_DARK_MODE);
-        update_theme_color();
-    }
-
-    window.enable_light_mode = function () {
-        // TODO: coalesce the two set_bool-s into one so there is only one DOM
-        //       update
-        window.ftd.set_bool_for_all(FPM_DARK_MODE, false);
-        window.ftd.set_bool_for_all(FPM_FOLLOW_SYSTEM_DARK_MODE, false);
-        window.ftd.set_bool_for_all(SYSTEM_DARK_MODE, system_dark_mode());
-        document.body.classList.remove(DARK_MODE_CLASS);
-        set_cookie(DARK_MODE_COOKIE, COOKIE_LIGHT_MODE);
-        update_theme_color();
-    }
-
-    window.enable_system_mode = function () {
-        // TODO: coalesce the two set_bool-s into one so there is only one DOM
-        //       update
-        window.ftd.set_bool_for_all(FPM_FOLLOW_SYSTEM_DARK_MODE, true);
-        window.ftd.set_bool_for_all(SYSTEM_DARK_MODE, system_dark_mode());
-        if (system_dark_mode()) {
-            window.ftd.set_bool_for_all(FPM_DARK_MODE, true);
-            document.body.classList.add(DARK_MODE_CLASS);
-            set_cookie(DARK_MODE_COOKIE, COOKIE_SYSTEM_DARK)
-        } else {
-            window.ftd.set_bool_for_all(FPM_DARK_MODE, false);
-            document.body.classList.remove(DARK_MODE_CLASS);
-            set_cookie(DARK_MODE_COOKIE, COOKIE_SYSTEM_LIGHT)
-        }
-        update_theme_color();
-    }
-
+    // todo: call update_theme_color() on the event for ftd.dark-mode change
     function update_theme_color() {
         let theme_color = window.ftd.get_value("main", FPM_THEME_COLOR);
         if (!!theme_color) {
@@ -176,55 +51,6 @@
             meta.remove();
         }
     }
-
-
-    function initialise_dark_mode() {
-        update_dark_mode();
-        start_watching_dark_mode_system_preference();
-    }
-
-    function update_dark_mode() {
-        let current_dark_mode_cookie = get_cookie(DARK_MODE_COOKIE, COOKIE_SYSTEM_LIGHT);
-
-        switch (current_dark_mode_cookie) {
-            case COOKIE_SYSTEM_LIGHT:
-            case COOKIE_SYSTEM_DARK:
-                window.enable_system_mode();
-                break;
-            case COOKIE_LIGHT_MODE:
-                window.enable_light_mode();
-                break;
-            case COOKIE_DARK_MODE:
-                window.enable_dark_mode();
-                break;
-            default:
-                console.log("cookie value is wrong", current_dark_mode_cookie);
-                window.enable_system_mode();
-        }
-    }
-
-    function get_cookie(name, def) {
-        // source: https://stackoverflow.com/questions/5639346/
-        let regex = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
-        return regex !== null ? regex.pop() : def;
-    }
-
-    function set_cookie(name, value) {
-        document.cookie = name + "=" + value + "; path=/";
-    }
-
-    function system_dark_mode() {
-        return !!(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)
-    }
-
-    function start_watching_dark_mode_system_preference() {
-        window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').addEventListener(
-            "change", update_dark_mode
-        );
-    }
-
-    initialise_device();
-    initialise_dark_mode();
 })();
 
 /*! instant.page v5.1.0 - (C) 2019-2020 Alexandre Dieulot - https://instant.page/license */
