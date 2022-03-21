@@ -703,6 +703,8 @@ impl Package {
             package_name: &str,
             base_url: &str,
         ) -> (String, String) {
+            // Strip base url's end slashes. The code takes care of the URL evaluation
+            let base_url = base_url.trim_end_matches('/');
             let mut resp_records = String::new();
             let mut resp_values = String::new();
             let mut root_record = String::from("-- record all-files:");
