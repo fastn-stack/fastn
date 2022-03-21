@@ -843,6 +843,11 @@ impl ftd::Image {
                 text: None,
                 null: false,
             };
+            if let Some(ref id) = self.common.data_id {
+                img.attrs.insert(s("data-id"), escape(id));
+                n.attrs
+                    .insert(s("data-id"), escape(format!("{}:parent", id).as_str()));
+            }
             img.style.insert(s("width"), s("100%"));
             img.attrs.insert(s("src"), escape(self.src.light.as_str()));
             img.attrs
