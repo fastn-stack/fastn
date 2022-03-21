@@ -15,8 +15,13 @@ impl ToString for Document {
 }
 
 impl Document {
-    fn get_data(&self) -> (ftd::Map, Vec<String>) {
-        let mut d: ftd::Map = Default::default();
+    fn get_data(
+        &self,
+    ) -> (
+        std::collections::BTreeMap<String, serde_json::Value>,
+        Vec<String>,
+    ) {
+        let mut d: std::collections::BTreeMap<String, serde_json::Value> = Default::default();
         let mut always_include = vec![];
         let doc = ftd::p2::TDoc {
             name: self.name.as_str(),
@@ -35,7 +40,7 @@ impl Document {
                     continue;
                 };
                 if let Some(value) = get_value(&val, &doc) {
-                    d.insert(k.to_string(), value.to_string());
+                    d.insert(k.to_string(), value);
                 }
                 if let ftd::variable::VariableFlags {
                     always_include: Some(f),
@@ -129,7 +134,7 @@ impl Document {
             data.insert(
                 k.to_string(),
                 ftd::Data {
-                    value: v.to_string(),
+                    value: v,
                     dependencies: Default::default(),
                 },
             );

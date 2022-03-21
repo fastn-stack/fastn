@@ -21,3 +21,9 @@ $on-click$: message-host enable-system-mode
 
 -- ftd.text: Change a
 $on-click$: toggle $a
+
+-- ftd.text: a is true
+if: $a
+
+-- ftd.text: a is false
+if: not $a
