@@ -27,7 +27,17 @@ let ftd_utils = {
     },
 
     is_visible: function (id, affected_id) {
-        return (document.querySelector(`[data-id="${affected_id}:${id}"]`).style.display !== "none");
+        let node = document.querySelector(`[data-id="${affected_id}:${id}"]`);
+        while (!!node) {
+            if (!node.style) {
+                return true;
+            }
+            if (node.style.display === "none") {
+                return false;
+            }
+            node = node.parentNode;
+        }
+        return true;
     },
 
     box_shadow_value_null: function (value) {
@@ -363,205 +373,214 @@ let ftd_utils = {
     },
 
     handle_action: function (id, target_variable, value, data, ftd_external_children) {
-        ftd_utils.set_data_value(data, target_variable, value);
-        let new_value = ftd_utils.get_data_value(data, target_variable);
-        if (ftd_utils.isJson(new_value)) {
-            new_value = JSON.parse(new_value);
-        }
-        if (!!new_value && !!new_value["$kind$"]) {
-            new_value = new_value[new_value["$kind$"]];
-        }
-        let target = ftd_utils.get_name_and_remaining(target_variable)[0];
+        var styles_edited = [];
+        handle_action_(id, target_variable, value, data, ftd_external_children, styles_edited);
 
-        let dependencies = data[target].dependencies;
-        for (const dependency in dependencies) {
-            if (!dependencies.hasOwnProperty(dependency)) {
-                continue;
+        function handle_action_(id, target_variable, value, data, ftd_external_children, styles_edited) {
+            ftd_utils.set_data_value(data, target_variable, value);
+            let new_value = ftd_utils.get_data_value(data, target_variable);
+            if (ftd_utils.isJson(new_value)) {
+                new_value = JSON.parse(new_value);
             }
-            let json_dependencies = dependencies[dependency];
-            var styles_edited = [];
-            for (const index in json_dependencies) {
-                let json_dependency = json_dependencies[index];
-                if (json_dependency.dependency_type === "Value") {
-                    if (dependency.endsWith(':dummy')) {
-                        let dummy_node = document.querySelector(`[data-id="${dependency}:${id}"]`);
-                        let dom_ids = ftd_utils.create_dom(data[target].value, dummy_node);
-                        ftd_utils.remove_nodes(Object.keys(dependencies).filter(s => !s.endsWith(':dummy')), id);
-                        let deps = {};
-                        for (const dom_id in dom_ids) {
-                            let id_without_main = dom_ids[dom_id].substring(0, dom_ids[dom_id].length - `:${id}`.length )
-                            deps[id_without_main] = dependencies[dependency];
-                        }
-                        deps[dependency] = dependencies[dependency];
-                        data[target].dependencies = deps;
-                    } else {
-                        let doc = document.querySelector(`[data-id="${dependency}:${id}"]`);
-                        if (doc.src !== undefined) {
-                            doc.src = new_value;
-                        } else {
-                            doc.innerText = new_value;
-                        }
-                    }
-                } else if (json_dependency.dependency_type === "Visible") {
-                    let display = "none";
-                    if (ftd_utils.is_equal_condition(data[target].value, json_dependency.condition)) {
-                        let is_flex = !!document.querySelector(`[data-id="${dependency}:${id}"]`).style.flexDirection.length;
-                        let is_grid = !!document.querySelector(`[data-id="${dependency}:${id}"]`).style.gridTemplateAreas.length;
-                        let is_webkit = !!document.querySelector(`[data-id="${dependency}:${id}"]`).style.webkitLineClamp.length;
-                        if (is_flex) {
-                            display = "flex";
-                        } else if (is_webkit) {
-                            display = "-webkit-box";
-                        } else if (is_grid) {
-                            display = "grid";
-                        } else {
-                            display = "block";
-                        }
-                    }
-                    document.querySelector(`[data-id="${dependency}:${id}"]`).style.display = display;
-                    ftd_utils.first_child_styling(`${dependency}:${id}`);
+            if (!!new_value && !!new_value["$kind$"]) {
+                new_value = new_value[new_value["$kind$"]];
+            }
+            let target = ftd_utils.get_name_and_remaining(target_variable)[0];
 
-                } else if (json_dependency.dependency_type === "Variable") {
-                    if (!json_dependency.condition) {
-                        if (dependency === "$style$") {
+            let dependencies = data[target].dependencies;
+            for (const dependency in dependencies) {
+                if (!dependencies.hasOwnProperty(dependency)) {
+                    continue;
+                }
+                let json_dependencies = dependencies[dependency];
+                for (const index in json_dependencies) {
+                    let json_dependency = json_dependencies[index];
+                    if (json_dependency.dependency_type === "Value") {
+                        if (dependency.endsWith(':dummy')) {
+                            let dummy_node = document.querySelector(`[data-id="${dependency}:${id}"]`);
+                            let dom_ids = ftd_utils.create_dom(data[target].value, dummy_node);
+                            ftd_utils.remove_nodes(Object.keys(dependencies).filter(s => !s.endsWith(':dummy')), id);
+                            let deps = {};
+                            for (const dom_id in dom_ids) {
+                                let id_without_main = dom_ids[dom_id].substring(0, dom_ids[dom_id].length - `:${id}`.length)
+                                deps[id_without_main] = dependencies[dependency];
+                            }
+                            deps[dependency] = dependencies[dependency];
+                            data[target].dependencies = deps;
+                        } else {
+                            let doc = document.querySelector(`[data-id="${dependency}:${id}"]`);
+                            if (doc.src !== undefined) {
+                                doc.src = new_value;
+                            } else {
+                                doc.innerText = new_value;
+                            }
+                        }
+                    } else if (json_dependency.dependency_type === "Visible") {
+                        let display = "none";
+                        if (ftd_utils.is_equal_condition(data[target].value, json_dependency.condition)) {
+                            let is_flex = !!document.querySelector(`[data-id="${dependency}:${id}"]`).style.flexDirection.length;
+                            let is_grid = !!document.querySelector(`[data-id="${dependency}:${id}"]`).style.gridTemplateAreas.length;
+                            let is_webkit = !!document.querySelector(`[data-id="${dependency}:${id}"]`).style.webkitLineClamp.length;
+                            if (is_flex) {
+                                display = "flex";
+                            } else if (is_webkit) {
+                                display = "-webkit-box";
+                            } else if (is_grid) {
+                                display = "grid";
+                            } else {
+                                display = "block";
+                            }
+                        }
+                        document.querySelector(`[data-id="${dependency}:${id}"]`).style.display = display;
+                        ftd_utils.first_child_styling(`${dependency}:${id}`);
+
+                    } else if (json_dependency.dependency_type === "Variable") {
+                        if (!json_dependency.condition) {
+                            if (dependency === "$style$") {
+                                for (const parameter in json_dependency.parameters) {
+                                    let param_val = json_dependency.parameters[parameter].value.value;
+                                    let node = param_val["$node$"];
+                                    let variable = param_val["$variable$"];
+                                    let dependent = data[variable].value;
+                                    let dependent_dependencies = data[variable].dependencies[node];
+                                    for (const d in dependent_dependencies) {
+                                        if (dependent_dependencies[d].dependency_type !== "Style"
+                                            || !dependent_dependencies[d].parameters[parameter]) {
+                                            continue;
+                                        }
+                                        if (dependent_dependencies[d].parameters[parameter].value.reference === target) {
+                                            dependent_dependencies[d].parameters[parameter].value.value = data[target].value;
+                                        }
+                                        if (!!dependent_dependencies[d].parameters[parameter].default && dependent_dependencies[d].parameters[parameter].default.reference === target) {
+                                            dependent_dependencies[d].parameters[parameter].default.value = data[target].value;
+                                        }
+                                    }
+                                    data[variable].dependencies[node] = dependent_dependencies;
+                                    handle_action_(id, variable, dependent, data, ftd_external_children, styles_edited);
+                                }
+                            }
+                        } else if (ftd_utils.is_equal_condition(data[target].value, json_dependency.condition)) {
+
                             for (const parameter in json_dependency.parameters) {
-                                let param_val = json_dependency.parameters[parameter].value.value;
-                                let node = param_val["$node$"];
-                                let variable = param_val["$variable$"];
-                                let dependent = data[variable].value;
-                                let dependent_dependencies = data[variable].dependencies[node];
-                                for (const d in dependent_dependencies) {
-                                    if (dependent_dependencies[d].dependency_type !== "Style"
-                                        || !dependent_dependencies[d].parameters[parameter]) {
+                                let parent = ftd_utils.get_name_and_remaining(parameter)[0];
+                                if (data[parent] !== undefined) {
+                                    let value = json_dependency.parameters[parameter].value.value;
+                                    if (dependency === "$value#kind$") {
+                                        ftd_utils.set_data_value(data, parameter + ".$kind$", value);
+                                    }
+                                    let parameter_value = ftd_utils.get_data_value(data, parameter);
+                                    handle_action_(id, parameter, parameter_value, data, ftd_external_children, styles_edited)
+                                }
+                            }
+                        } else {
+                            for (const parameter in json_dependency.parameters) {
+                                if (data[parameter] !== undefined) {
+                                    let default_value = json_dependency.parameters[parameter].default;
+                                    if (default_value === null) {
                                         continue;
                                     }
-                                    dependent_dependencies[d].parameters[parameter].value.value = data[target].value;
-                                }
-                                data[variable].dependencies[node] = dependent_dependencies;
-                                ftd_utils.handle_action(id, variable, dependent, data, ftd_external_children);
-                            }
-                        }
-                    } else if (ftd_utils.is_equal_condition(data[target].value, json_dependency.condition)) {
-
-                        for (const parameter in json_dependency.parameters) {
-                            let parent = ftd_utils.get_name_and_remaining(parameter)[0];
-                            if (data[parent] !== undefined) {
-                                let value = json_dependency.parameters[parameter].value.value;
-                                if (dependency === "$value#kind$") {
-                                    ftd_utils.set_data_value(data, parameter + ".$kind$", value);
-                                }
-                                let parameter_value = ftd_utils.get_data_value(data, parameter);
-                                ftd_utils.handle_action(id, parameter, parameter_value, data, ftd_external_children)
-                            }
-                        }
-                    } else {
-                        for (const parameter in json_dependency.parameters) {
-                            if (data[parameter] !== undefined) {
-                                let default_value = json_dependency.parameters[parameter].default;
-                                if (default_value === null) {
-                                    continue;
-                                }
-                                if (dependency === "$value#kind$") {
-                                    ftd_utils.set_data_value(data, parameter + ".$kind$", default_value.value);
-                                }
-                                let parameter_value = ftd_utils.get_data_value(data, parameter);
-                                ftd_utils.handle_action(id, parameter, parameter_value, data, ftd_external_children)
-                            }
-                        }
-                    }
-                } else if (json_dependency.dependency_type === "Style") {
-                    if (!json_dependency.condition) {
-                        let set = [];
-                        if (!!json_dependency.parameters["dependents"]) {
-                            set = json_dependency.parameters["dependents"].value.value;
-                        }
-                        if (!!set.length) {
-                            let style_attr = Object.keys(json_dependency.parameters).filter(w => w !== "dependents")[0];
-                            for (const idx in set) {
-                                let dependent = data[set[idx]].value;
-                                let dependent_dependencies = data[set[idx]].dependencies[dependency];
-                                for (const d in dependent_dependencies) {
-                                    if (dependent_dependencies[d].dependency_type !== "Style"
-                                        || !dependent_dependencies[d].parameters[style_attr]) {
-                                        continue;
+                                    if (dependency === "$value#kind$") {
+                                        ftd_utils.set_data_value(data, parameter + ".$kind$", default_value.value);
                                     }
-                                    dependent_dependencies[d].parameters[style_attr].default.value = data[target].value;
+                                    let parameter_value = ftd_utils.get_data_value(data, parameter);
+                                    handle_action_(id, parameter, parameter_value, data, ftd_external_children, styles_edited)
                                 }
-                                data[set[idx]].dependencies[dependency] = dependent_dependencies;
-                                ftd_utils.handle_action(id, set[idx], dependent, data, ftd_external_children);
                             }
-                            continue;
                         }
-                        for (const parameter in json_dependency.parameters) {
-                            if (parameter === "dependents") {
+                    } else if (json_dependency.dependency_type === "Style") {
+                        if (json_dependency.condition === null || json_dependency.condition === undefined) {
+                            let set = [];
+                            if (!!json_dependency.parameters["dependents"]) {
+                                set = json_dependency.parameters["dependents"].value.value;
+                            }
+                            if (!!set.length) {
+                                let style_attr = Object.keys(json_dependency.parameters).filter(w => w !== "dependents")[0];
+                                for (const idx in set) {
+                                    let dependent = data[set[idx]].value;
+                                    let dependent_dependencies = data[set[idx]].dependencies[dependency];
+                                    for (const d in dependent_dependencies) {
+                                        if (dependent_dependencies[d].dependency_type !== "Style"
+                                            || !dependent_dependencies[d].parameters[style_attr]) {
+                                            continue;
+                                        }
+                                        dependent_dependencies[d].parameters[style_attr].default.value = data[target].value;
+                                    }
+                                    data[set[idx]].dependencies[dependency] = dependent_dependencies;
+                                    handle_action_(id, set[idx], dependent, data, ftd_external_children, styles_edited);
+                                }
                                 continue;
                             }
+                            for (const parameter in json_dependency.parameters) {
+                                if (parameter === "dependents") {
+                                    continue;
+                                }
 
-                            let important = json_dependency.parameters[parameter].value.important;
-                            if (new_value instanceof Object) {
-                                for (const parameter in new_value) {
-                                    ftd_utils.set_style(parameter, `${dependency}:${id}`, new_value[parameter], important);
-                                    if (!styles_edited.includes(parameter)) {
-                                        styles_edited.push(parameter);
-                                    }
-                                }
-                            } else {
-                                ftd_utils.set_style(parameter, `${dependency}:${id}`, new_value, important);
-                                if (!styles_edited.includes(parameter)) {
-                                    styles_edited.push(parameter);
-                                }
-                            }
-                        }
-                    } else if (ftd_utils.is_equal_condition(data[target].value, json_dependency.condition)) {
-                        for (const parameter in json_dependency.parameters) {
-                            let value = json_dependency.parameters[parameter].value.value;
-                            // if (ftd_utils.isJson(value)) {
-                            //     value = JSON.parse(value);
-                            // }
-                            if (!!value && !!value["$kind$"]) {
-                                value = value[value["$kind$"]];
-                            }
-                            let important = json_dependency.parameters[parameter].value.important;
-                            ftd_utils.set_style(parameter, `${dependency}:${id}`, value, important);
-                            if (!styles_edited.includes(parameter)) {
-                                styles_edited.push(parameter);
-                            }
-                        }
-                    } else {
-                        for (const parameter in json_dependency.parameters) {
-                            let default_value = json_dependency.parameters[parameter].default;
-                            // if (ftd_utils.isJson(default_value)) {
-                            //     default_value = JSON.parse(default_value);
-                            // }
-                            if (!!default_value && !!default_value["$kind$"]) {
-                                default_value = default_value[default_value["$kind$"]];
-                            }
-                            if (!styles_edited.includes(parameter)) {
-                                if (default_value === null) {
-                                    if (["border-left-width", "border-right-width", "border-top-width", "border-bottom-width"].includes(parameter)) {
-                                        default_value = "0px";
-                                        document.querySelector(`[data-id="${dependency}:${id}"]`).style[`${parameter}`] = default_value;
-                                    } else {
-                                        ftd_utils.set_style(parameter, `${dependency}:${id}`, default_value, false);
+                                let important = json_dependency.parameters[parameter].value.important;
+                                if (new_value instanceof Object) {
+                                    for (const parameter in new_value) {
+                                        ftd_utils.set_style(parameter, `${dependency}:${id}`, new_value[parameter], important);
+                                        if (!styles_edited.includes(`${parameter}::${dependency}`)) {
+                                            styles_edited.push(`${parameter}::${dependency}`);
+                                        }
                                     }
                                 } else {
-                                    let value = default_value.value;
-                                    // if (ftd_utils.isJson(value)) {
-                                    //     value = JSON.parse(value);
-                                    // }
-                                    if (!!value && !!value["$kind$"]) {
-                                        value = value[value["$kind$"]];
+                                    ftd_utils.set_style(parameter, `${dependency}:${id}`, new_value, important);
+                                    if (!styles_edited.includes(`${parameter}::${dependency}`)) {
+                                        styles_edited.push(`${parameter}::${dependency}`);
                                     }
-                                    let important = default_value.important;
-                                    ftd_utils.set_style(parameter, `${dependency}:${id}`, value, important);
+                                }
+                            }
+                        } else if (ftd_utils.is_equal_condition(data[target].value, json_dependency.condition)) {
+                            for (const parameter in json_dependency.parameters) {
+                                let value = json_dependency.parameters[parameter].value.value;
+                                // if (ftd_utils.isJson(value)) {
+                                //     value = JSON.parse(value);
+                                // }
+                                if (!!value && !!value["$kind$"]) {
+                                    value = value[value["$kind$"]];
+                                }
+                                let important = json_dependency.parameters[parameter].value.important;
+                                ftd_utils.set_style(parameter, `${dependency}:${id}`, value, important);
+                                if (!styles_edited.includes(`${parameter}::${dependency}`)) {
+                                    styles_edited.push(`${parameter}::${dependency}`);
+                                }
+                            }
+                        } else {
+                            for (const parameter in json_dependency.parameters) {
+                                let default_value = json_dependency.parameters[parameter].default;
+                                // if (ftd_utils.isJson(default_value)) {
+                                //     default_value = JSON.parse(default_value);
+                                // }
+                                if (!!default_value && !!default_value["$kind$"]) {
+                                    default_value = default_value[default_value["$kind$"]];
+                                }
+                                if (!styles_edited.includes(`${parameter}::${dependency}`)) {
+                                    if (default_value === null) {
+                                        if (["border-left-width", "border-right-width", "border-top-width", "border-bottom-width"].includes(parameter)) {
+                                            default_value = "0px";
+                                            document.querySelector(`[data-id="${dependency}:${id}"]`).style[`${parameter}`] = default_value;
+                                        } else {
+                                            ftd_utils.set_style(parameter, `${dependency}:${id}`, default_value, false);
+                                        }
+                                    } else {
+                                        let value = default_value.value;
+                                        // if (ftd_utils.isJson(value)) {
+                                        //     value = JSON.parse(value);
+                                        // }
+                                        if (!!value && !!value["$kind$"]) {
+                                            value = value[value["$kind$"]];
+                                        }
+                                        let important = default_value.important;
+                                        ftd_utils.set_style(parameter, `${dependency}:${id}`, value, important);
+                                    }
                                 }
                             }
                         }
                     }
                 }
             }
+            ftd_utils.external_children_replace(id, ftd_external_children);
         }
-        this.external_children_replace(id, ftd_external_children)
     },
 
     external_children_replace: function (id, ftd_external_children) {
@@ -589,7 +608,7 @@ let ftd_utils = {
                         continue;
                     }
 
-                    display &= ftd_utils.is_visible(id, conditions[idx].condition[i])
+                    display &= ftd_utils.is_visible(id, condition[i]);
                     if (!display) {
                         break;
                     }

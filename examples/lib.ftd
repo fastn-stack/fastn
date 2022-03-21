@@ -55,7 +55,7 @@ contact: John Doe
 fax: +1-234-567890
 
 -- ftd.font-size dsize:
-line-height: 1
+line-height: 60
 size: 40
 tracking: 0.1
 
