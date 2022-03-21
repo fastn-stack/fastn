@@ -379,9 +379,6 @@ let ftd_utils = {
         function handle_action_(id, target_variable, value, data, ftd_external_children, styles_edited) {
             ftd_utils.set_data_value(data, target_variable, value);
             let new_value = ftd_utils.get_data_value(data, target_variable);
-            if (ftd_utils.isJson(new_value)) {
-                new_value = JSON.parse(new_value);
-            }
             if (!!new_value && !!new_value["$kind$"]) {
                 new_value = new_value[new_value["$kind$"]];
             }
@@ -435,7 +432,7 @@ let ftd_utils = {
                         ftd_utils.first_child_styling(`${dependency}:${id}`);
 
                     } else if (json_dependency.dependency_type === "Variable") {
-                        if (!json_dependency.condition) {
+                        if (json_dependency.condition === null) {
                             if (dependency === "$style$") {
                                 for (const parameter in json_dependency.parameters) {
                                     let param_val = json_dependency.parameters[parameter].value.value;
@@ -460,13 +457,15 @@ let ftd_utils = {
                                 }
                             }
                         } else if (ftd_utils.is_equal_condition(data[target].value, json_dependency.condition)) {
-
                             for (const parameter in json_dependency.parameters) {
                                 let parent = ftd_utils.get_name_and_remaining(parameter)[0];
                                 if (data[parent] !== undefined) {
                                     let value = json_dependency.parameters[parameter].value.value;
                                     if (dependency === "$value#kind$") {
                                         ftd_utils.set_data_value(data, parameter + ".$kind$", value);
+                                    }
+                                    if (dependency === "$value$") {
+                                        ftd_utils.set_data_value(data, parameter, value);
                                     }
                                     let parameter_value = ftd_utils.get_data_value(data, parameter);
                                     handle_action_(id, parameter, parameter_value, data, ftd_external_children, styles_edited)
@@ -481,6 +480,9 @@ let ftd_utils = {
                                     }
                                     if (dependency === "$value#kind$") {
                                         ftd_utils.set_data_value(data, parameter + ".$kind$", default_value.value);
+                                    }
+                                    if (dependency === "$value$") {
+                                        ftd_utils.set_data_value(data, parameter, default_value.value);
                                     }
                                     let parameter_value = ftd_utils.get_data_value(data, parameter);
                                     handle_action_(id, parameter, parameter_value, data, ftd_external_children, styles_edited)
