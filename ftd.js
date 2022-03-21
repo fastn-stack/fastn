@@ -280,15 +280,15 @@ let ftd_utils = {
     create_dom: function (value,  node) {
         let dom_ids = [];
         let parent_node = node.parentElement;
-        if (ftd_utils.isJson(value)) {
-            let object = JSON.parse(value);
-            for (const idx in object) {
+        console.log("create_dom", value, value instanceof Object);
+        if (value instanceof Object) {
+            for (const idx in value) {
                 var new_node = node.cloneNode(true);
                 new_node.style.display = null;
                 let id = new_node.getAttribute("data-id").replace(":dummy", ",".concat(idx, ":new"));
                 new_node.setAttribute("data-id", id);
                 dom_ids.push(id);
-                parent_node.innerHTML += ftd_utils.getString(new_node).replace("$loop$", object[idx]);
+                parent_node.innerHTML += ftd_utils.getString(new_node).replace("$loop$", value[idx]);
             }
         } else {
             var new_node = node.cloneNode(true);
@@ -744,7 +744,7 @@ window.ftd = (function () {
             let target = action["target"];
             let data = ftd_data[id];
             let value = "";
-            if (ftd_utils.isJson(data[target].value)) {
+            if (data[target].value instanceof Object) {
                 let list = [];
                 value = list;
             }
@@ -799,9 +799,8 @@ window.ftd = (function () {
         }
 
         let list = data[target].value;
-        if (ftd_utils.isJson(list)) {
-            list = JSON.parse(list);
-        } else {
+
+        if (!(list instanceof Object)) {
             console.log(list, "is not list, ignoring");
             return;
         }
