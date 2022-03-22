@@ -3,30 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-    <title>Once upon a time...</title>
+    <title>Hello World</title>
     <script type="ftd" id="ftd-data">
         {
-  "comic_scene_crop_scale.ftd#bg-src": {
+  "font.ftd#font": {
     "value": {
-      "$kind$": "light",
-      "dark": "https://image.shutterstock.com/z/stock-&lt;!&ndash;&ndash;&gt;vector-vector-illustration-of-a-beautiful-summer-landscape-143054302.jpg",
-      "light": "https://image.shutterstock.com/z/stock-&lt;!&ndash;&ndash;&gt;vector-vector-illustration-of-a-beautiful-summer-landscape-143054302.jpg"
+      "$kind$": "desktop",
+      "desktop": {
+        "font-size": "40px",
+        "line-height": "60px"
+      },
+      "font": "cursive",
+      "mobile": {
+        "font-size": "12px",
+        "line-height": "12px"
+      },
+      "style": "italic",
+      "weight": 400,
+      "xl": {
+        "font-size": "16px",
+        "line-height": "16px"
+      }
     },
     "dependencies": {
-      "0,2": [
+      "1": [
         {
           "condition": null,
           "dependency_type": "Style",
           "parameters": {
-            "background-image": {
+            "font": {
               "default": null,
               "value": {
                 "important": false,
                 "reference": null,
                 "value": {
-                  "$kind$": "light",
-                  "dark": "url(https://image.shutterstock.com/z/stock-&lt;!&ndash;&ndash;&gt;vector-vector-illustration-of-a-beautiful-summer-landscape-143054302.jpg)",
-                  "light": "url(https://image.shutterstock.com/z/stock-&lt;!&ndash;&ndash;&gt;vector-vector-illustration-of-a-beautiful-summer-landscape-143054302.jpg)"
+                  "$kind$": "desktop",
+                  "desktop": {
+                    "font-size": 40,
+                    "line_height": 60,
+                    "reference": "font.ftd#dsize",
+                    "tracking": 0.1
+                  },
+                  "mobile": {
+                    "font-size": 12,
+                    "line_height": 12,
+                    "reference": "font.ftd#msize",
+                    "tracking": 0.0
+                  },
+                  "xl": {
+                    "font-size": 16,
+                    "line_height": 16,
+                    "reference": "font.ftd#xlsize",
+                    "tracking": 0.15
+                  }
                 }
               }
             }
@@ -36,467 +65,70 @@
       ]
     }
   },
-  "comic_scene_crop_scale.ftd#body1@0": {
-    "value": null,
-    "dependencies": {
-      "0,1": [
-        {
-          "condition": "$IsNotNull$",
-          "dependency_type": "Visible",
-          "parameters": {},
-          "remaining": null
-        }
-      ]
-    }
-  },
-  "comic_scene_crop_scale.ftd#body@0,1": {
-    "value": null,
-    "dependencies": {
-      "0,1": [
-        {
-          "condition": null,
-          "dependency_type": "Value",
-          "parameters": {},
-          "remaining": null
-        }
-      ]
-    }
-  },
-  "comic_scene_crop_scale.ftd#body@2": {
-    "value": null,
-    "dependencies": {
-      "0,3,1": [
-        {
-          "condition": "$IsNotNull$",
-          "dependency_type": "Visible",
-          "parameters": {},
-          "remaining": null
-        }
-      ]
-    }
-  },
-  "comic_scene_crop_scale.ftd#body@2,1": {
-    "value": null,
-    "dependencies": {
-      "0,3,1": [
-        {
-          "condition": null,
-          "dependency_type": "Value",
-          "parameters": {},
-          "remaining": null
-        }
-      ]
-    }
-  },
-  "comic_scene_crop_scale.ftd#src0": {
+  "font.ftd#font-init": {
     "value": {
-      "$kind$": "light",
-      "dark": "https://media.githubusercontent.com/media/gramener/comicgen/v1/svg/aryan/pose/handsfolded.svg",
-      "light": "https://media.githubusercontent.com/media/gramener/comicgen/v1/svg/aryan/pose/handsfolded.svg"
+      "font": {
+        "$kind$": "desktop",
+        "desktop": {
+          "font-size": "40px",
+          "line-height": "60px"
+        },
+        "font": "cursive",
+        "mobile": {
+          "font-size": "12px",
+          "line-height": "12px"
+        },
+        "style": "italic",
+        "weight": 400,
+        "xl": {
+          "font-size": "16px",
+          "line-height": "16px"
+        }
+      }
     },
     "dependencies": {
-      "0,2,0,1,0": [
-        {
-          "condition": null,
-          "dependency_type": "Value",
-          "parameters": {},
-          "remaining": null
-        }
-      ]
-    }
-  },
-  "comic_scene_crop_scale.ftd#src1": {
-    "value": {
-      "$kind$": "light",
-      "dark": "https://media.githubusercontent.com/media/gramener/comicgen/v1/svg/aryan/emotion/smile.svg",
-      "light": "https://media.githubusercontent.com/media/gramener/comicgen/v1/svg/aryan/emotion/smile.svg"
-    },
-    "dependencies": {
-      "0,2,0,1,1": [
-        {
-          "condition": null,
-          "dependency_type": "Value",
-          "parameters": {},
-          "remaining": null
-        }
-      ]
-    }
-  },
-  "comic_scene_crop_scale.ftd#title@0": {
-    "value": "Once upon a time...",
-    "dependencies": {
-      "0,0": [
-        {
-          "condition": null,
-          "dependency_type": "Value",
-          "parameters": {},
-          "remaining": null
-        }
-      ]
-    }
-  },
-  "comic_scene_crop_scale.ftd#title@2": {
-    "value": "The End!!",
-    "dependencies": {
-      "0,3,0": [
-        {
-          "condition": null,
-          "dependency_type": "Value",
-          "parameters": {},
-          "remaining": null
-        }
-      ]
-    }
-  },
-  "comic_scene_crop_scale.ftd#white": {
-    "value": {
-      "$kind$": "light",
-      "dark": "white",
-      "light": "white"
-    },
-    "dependencies": {
-      "0,2,0,0": [
+      "0": [
         {
           "condition": null,
           "dependency_type": "Style",
           "parameters": {
-            "background-color": {
+            "font": {
               "default": null,
               "value": {
                 "important": false,
                 "reference": null,
                 "value": {
-                  "$kind$": "light",
-                  "dark": "rgba(255,255,255,1)",
-                  "light": "rgba(255,255,255,1)"
+                  "$kind$": "desktop",
+                  "desktop": {
+                    "font-size": 40,
+                    "line_height": 60,
+                    "reference": "font.ftd#dsize",
+                    "tracking": 0.1
+                  },
+                  "mobile": {
+                    "font-size": 12,
+                    "line_height": 12,
+                    "reference": "font.ftd#msize",
+                    "tracking": 0.0
+                  },
+                  "xl": {
+                    "font-size": 16,
+                    "line_height": 16,
+                    "reference": "font.ftd#xlsize",
+                    "tracking": 0.15
+                  }
                 }
-              }
-            },
-            "dependents": {
-              "default": null,
-              "value": {
-                "important": false,
-                "reference": null,
-                "value": []
               }
             }
           },
-          "remaining": null
-        }
-      ]
-    }
-  },
-  "ft#code-color": {
-    "value": {
-      "$kind$": "light",
-      "dark": "#4D4D4D",
-      "light": "#4D4D4D"
-    },
-    "dependencies": {
-      "0,1": [
-        {
-          "condition": null,
-          "dependency_type": "Style",
-          "parameters": {
-            "color": {
-              "default": null,
-              "value": {
-                "important": false,
-                "reference": null,
-                "value": {
-                  "$kind$": "light",
-                  "dark": "rgba(77,77,77,1)",
-                  "light": "rgba(77,77,77,1)"
-                }
-              }
-            },
-            "dependents": {
-              "default": null,
-              "value": {
-                "important": false,
-                "reference": null,
-                "value": []
-              }
-            }
-          },
-          "remaining": null
-        }
-      ],
-      "0,3,1": [
-        {
-          "condition": null,
-          "dependency_type": "Style",
-          "parameters": {
-            "color": {
-              "default": null,
-              "value": {
-                "important": false,
-                "reference": null,
-                "value": {
-                  "$kind$": "light",
-                  "dark": "rgba(77,77,77,1)",
-                  "light": "rgba(77,77,77,1)"
-                }
-              }
-            },
-            "dependents": {
-              "default": null,
-              "value": {
-                "important": false,
-                "reference": null,
-                "value": []
-              }
-            }
-          },
-          "remaining": null
-        }
-      ]
-    }
-  },
-  "ft#color-black": {
-    "value": {
-      "$kind$": "light",
-      "dark": "black",
-      "light": "black"
-    },
-    "dependencies": {
-      "0,0": [
-        {
-          "condition": null,
-          "dependency_type": "Style",
-          "parameters": {
-            "color": {
-              "default": null,
-              "value": {
-                "important": false,
-                "reference": null,
-                "value": {
-                  "$kind$": "light",
-                  "dark": "rgba(0,0,0,1)",
-                  "light": "rgba(0,0,0,1)"
-                }
-              }
-            },
-            "dependents": {
-              "default": null,
-              "value": {
-                "important": false,
-                "reference": null,
-                "value": []
-              }
-            }
-          },
-          "remaining": null
-        }
-      ],
-      "0,3,0": [
-        {
-          "condition": null,
-          "dependency_type": "Style",
-          "parameters": {
-            "color": {
-              "default": null,
-              "value": {
-                "important": false,
-                "reference": null,
-                "value": {
-                  "$kind$": "light",
-                  "dark": "rgba(0,0,0,1)",
-                  "light": "rgba(0,0,0,1)"
-                }
-              }
-            },
-            "dependents": {
-              "default": null,
-              "value": {
-                "important": false,
-                "reference": null,
-                "value": []
-              }
-            }
-          },
-          "remaining": null
+          "remaining": "font"
         }
       ]
     }
   },
   "ftd#dark-mode": {
     "value": false,
-    "dependencies": {
-      "$value#kind$": [
-        {
-          "condition": true,
-          "dependency_type": "Variable",
-          "parameters": {
-            "comic_scene_crop_scale.ftd#bg-src": {
-              "default": {
-                "important": false,
-                "reference": null,
-                "value": "light"
-              },
-              "value": {
-                "important": false,
-                "reference": null,
-                "value": "dark"
-              }
-            }
-          },
-          "remaining": null
-        },
-        {
-          "condition": true,
-          "dependency_type": "Variable",
-          "parameters": {
-            "comic_scene_crop_scale.ftd#src0": {
-              "default": {
-                "important": false,
-                "reference": null,
-                "value": "light"
-              },
-              "value": {
-                "important": false,
-                "reference": null,
-                "value": "dark"
-              }
-            }
-          },
-          "remaining": null
-        },
-        {
-          "condition": true,
-          "dependency_type": "Variable",
-          "parameters": {
-            "comic_scene_crop_scale.ftd#src1": {
-              "default": {
-                "important": false,
-                "reference": null,
-                "value": "light"
-              },
-              "value": {
-                "important": false,
-                "reference": null,
-                "value": "dark"
-              }
-            }
-          },
-          "remaining": null
-        },
-        {
-          "condition": true,
-          "dependency_type": "Variable",
-          "parameters": {
-            "comic_scene_crop_scale.ftd#white": {
-              "default": {
-                "important": false,
-                "reference": null,
-                "value": "light"
-              },
-              "value": {
-                "important": false,
-                "reference": null,
-                "value": "dark"
-              }
-            }
-          },
-          "remaining": null
-        },
-        {
-          "condition": true,
-          "dependency_type": "Variable",
-          "parameters": {
-            "ft#code-bg": {
-              "default": {
-                "important": false,
-                "reference": null,
-                "value": "light"
-              },
-              "value": {
-                "important": false,
-                "reference": null,
-                "value": "dark"
-              }
-            }
-          },
-          "remaining": null
-        },
-        {
-          "condition": true,
-          "dependency_type": "Variable",
-          "parameters": {
-            "ft#code-bg-title": {
-              "default": {
-                "important": false,
-                "reference": null,
-                "value": "light"
-              },
-              "value": {
-                "important": false,
-                "reference": null,
-                "value": "dark"
-              }
-            }
-          },
-          "remaining": null
-        },
-        {
-          "condition": true,
-          "dependency_type": "Variable",
-          "parameters": {
-            "ft#code-color": {
-              "default": {
-                "important": false,
-                "reference": null,
-                "value": "light"
-              },
-              "value": {
-                "important": false,
-                "reference": null,
-                "value": "dark"
-              }
-            }
-          },
-          "remaining": null
-        },
-        {
-          "condition": true,
-          "dependency_type": "Variable",
-          "parameters": {
-            "ft#code-title": {
-              "default": {
-                "important": false,
-                "reference": null,
-                "value": "light"
-              },
-              "value": {
-                "important": false,
-                "reference": null,
-                "value": "dark"
-              }
-            }
-          },
-          "remaining": null
-        },
-        {
-          "condition": true,
-          "dependency_type": "Variable",
-          "parameters": {
-            "ft#color-black": {
-              "default": {
-                "important": false,
-                "reference": null,
-                "value": "light"
-              },
-              "value": {
-                "important": false,
-                "reference": null,
-                "value": "dark"
-              }
-            }
-          },
-          "remaining": null
-        }
-      ]
-    }
+    "dependencies": {}
   },
   "ftd#desktop-breakpoint": {
     "value": 1440,
@@ -504,7 +136,100 @@
   },
   "ftd#device": {
     "value": "desktop",
-    "dependencies": {}
+    "dependencies": {
+      "$value#kind$": [
+        {
+          "condition": "mobile",
+          "dependency_type": "Variable",
+          "parameters": {
+            "font.ftd#font": {
+              "default": null,
+              "value": {
+                "important": false,
+                "reference": null,
+                "value": "mobile"
+              }
+            }
+          },
+          "remaining": null
+        },
+        {
+          "condition": "xl",
+          "dependency_type": "Variable",
+          "parameters": {
+            "font.ftd#font": {
+              "default": null,
+              "value": {
+                "important": false,
+                "reference": null,
+                "value": "xl"
+              }
+            }
+          },
+          "remaining": null
+        },
+        {
+          "condition": "desktop",
+          "dependency_type": "Variable",
+          "parameters": {
+            "font.ftd#font": {
+              "default": null,
+              "value": {
+                "important": false,
+                "reference": null,
+                "value": "desktop"
+              }
+            }
+          },
+          "remaining": null
+        },
+        {
+          "condition": "mobile",
+          "dependency_type": "Variable",
+          "parameters": {
+            "font.ftd#font-init.font": {
+              "default": null,
+              "value": {
+                "important": false,
+                "reference": null,
+                "value": "mobile"
+              }
+            }
+          },
+          "remaining": null
+        },
+        {
+          "condition": "xl",
+          "dependency_type": "Variable",
+          "parameters": {
+            "font.ftd#font-init.font": {
+              "default": null,
+              "value": {
+                "important": false,
+                "reference": null,
+                "value": "xl"
+              }
+            }
+          },
+          "remaining": null
+        },
+        {
+          "condition": "desktop",
+          "dependency_type": "Variable",
+          "parameters": {
+            "font.ftd#font-init.font": {
+              "default": null,
+              "value": {
+                "important": false,
+                "reference": null,
+                "value": "desktop"
+              }
+            }
+          },
+          "remaining": null
+        }
+      ]
+    }
   },
   "ftd#follow-system-dark-mode": {
     "value": true,
@@ -694,16 +419,8 @@ body.fpm-dark .ft_md a:visited code {
 </head>
     <body style="height: 100%;">
 
-        <div data-id="main:root" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; height: 100%; justify-content: flex-start; white-space: initial; width: 100%" class="ft_md"><div data-id="0:main" id="once-upon-a-time" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; white-space: initial; width: 100%" class="ft_md"><div data-id="0,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(0,0,0,1); padding-bottom: 12px; text-align: left; white-space: initial" class="ft_md">Once upon a time…</div>
-<div data-id="0,1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(77,77,77,1); display: none; padding-bottom: 8px; text-align: left; white-space: initial" class="ft_md"></div>
-<div data-id="0,2:main" style="align-self: center; background-image: url(https://image.shutterstock.com/z/stock-\u0026lt;!\u0026ndash;\u0026ndash;\u0026gt;vector-vector-illustration-of-a-beautiful-summer-landscape-143054302.jpg); background-position: center; background-size: cover; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; margin-left: auto; margin-right: auto; white-space: initial; width: 1000px" class="ft_md"><div data-id="0,2:scene:main" style="position: relative" class=""><img alt="Scene" data-id="0,2:scene-bg:main" src="https://image.shutterstock.com/z/stock-&lt;!&ndash;&ndash;&gt;vector-vector-illustration-of-a-beautiful-summer-landscape-143054302.jpg" style="display: block; height: auto; width: 100%">
-<div data-id="0,2,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; left: 0px; position: absolute; top: 0px; white-space: initial; width: 1000px" class="ft_md"><div data-id="0,2,0:scene:main" style="position: relative" class=""><div data-id="0,2,0:scene-bg:main" style="display: block; height: auto; width: 100%" class=""></div>
-<div data-id="0,2,0,0:main" style="background-color: rgba(255,255,255,1); border-radius: 150px; border-style: solid; border-width: 0px; box-sizing: border-box; left: 250px; padding: 10px; position: absolute; text-align: left; top: 70px; white-space: initial" class="ft_md">Hello Everyone! I am Ethan</div>
-<div data-id="0,2,0,1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; left: 0px; position: absolute; top: 0px; transform: scale(1.2); white-space: initial; width: 1000px" class="ft_md"><div data-id="0,2,0,1:scene:main" style="position: relative" class=""><div data-id="0,2,0,1:scene-bg:main" style="display: block; height: auto; width: 100%" class=""></div>
-<img alt="" data-id="0,2,0,1,0:main" src="https://media.githubusercontent.com/media/gramener/comicgen/v1/svg/aryan/pose/handsfolded.svg" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; height: 560px; left: 0px; object-fit: cover; object-position: 0 0; position: absolute; top: 0px; white-space: initial; width: 100%">
-<img alt="" data-id="0,2,0,1,1:main" src="https://media.githubusercontent.com/media/gramener/comicgen/v1/svg/aryan/emotion/smile.svg" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; left: 0px; position: absolute; top: 0px; white-space: initial"></div></div></div></div></div></div>
-<div data-id="0,3:main" id="the-end" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; white-space: initial; width: 100%" class="ft_md"><div data-id="0,3,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(0,0,0,1); padding-bottom: 12px; padding-top: 34px; text-align: left; white-space: initial" class="ft_md">The End!!</div>
-<div data-id="0,3,1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(77,77,77,1); display: none; padding-bottom: 8px; text-align: left; white-space: initial" class="ft_md"></div></div></div></div>
+        <div data-id="main:root" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; height: 100%; justify-content: flex-start; white-space: initial; width: 100%" class="ft_md"><div data-id="0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-family: cursive; font-size: 40px; font-style: italic; font-weight: 400; line-height: 60px; text-align: left; white-space: initial" class="ft_md">Hello World</div>
+<div data-id="1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; font-family: cursive; font-size: 40px; font-style: italic; font-weight: 400; line-height: 60px; text-align: left; white-space: initial" class="ft_md">Hello World Again</div></div>
 
 
     <script>
