@@ -258,7 +258,7 @@ impl ftd::Element {
             Self::TextBlock(i) => (i.to_node(doc_id)),
             Self::Code(i) => (i.to_node(doc_id)),
             Self::Image(i) => (i.to_node(doc_id)),
-            Self::Column(i) => (i.to_node(doc_id)),
+            Self::Column(i) => (i.to_node(doc_id, true)),
             Self::IFrame(i) => (i.to_node(doc_id)),
             Self::Input(i) => (i.to_node(doc_id)),
             Self::Integer(i) => (i.to_node(doc_id)),
@@ -345,11 +345,7 @@ impl Node {
             classes,
             children_style,
             text: None,
-            children: container
-                .children
-                .iter()
-                .map(|v| v.to_node(doc_id))
-                .collect(),
+            children: Default::default(),
             external_children,
             open_id: id,
             external_children_container,
@@ -593,7 +589,7 @@ impl ftd::Row {
 }
 
 impl ftd::Column {
-    pub fn to_node(&self, doc_id: &str) -> Node {
+    pub fn to_node(&self, doc_id: &str, evaluate_children: bool) -> Node {
         let mut n = Node::from_container(&self.common, &self.container, doc_id);
         if !self.common.is_not_visible {
             n.style.insert(s("display"), s("flex"));
@@ -620,29 +616,31 @@ impl ftd::Column {
             };
         }
 
-        n.children = {
-            let mut children = vec![];
-            for child in self.container.children.iter() {
-                let mut child_node = child.to_node(doc_id);
-                let common = if let Some(common) = child.get_common() {
-                    common
-                } else {
-                    children.push(child_node);
-                    continue;
-                };
-                if common.anchor.is_some() {
-                    children.push(child_node);
-                    continue;
-                }
-                if let Some(ref position) = common.position {
-                    for (key, value) in column_align(position) {
-                        child_node.style.insert(s(key.as_str()), value);
+        if evaluate_children {
+            n.children = {
+                let mut children = vec![];
+                for child in self.container.children.iter() {
+                    let mut child_node = child.to_node(doc_id);
+                    let common = if let Some(common) = child.get_common() {
+                        common
+                    } else {
+                        children.push(child_node);
+                        continue;
+                    };
+                    if common.anchor.is_some() {
+                        children.push(child_node);
+                        continue;
                     }
+                    if let Some(ref position) = common.position {
+                        for (key, value) in column_align(position) {
+                            child_node.style.insert(s(key.as_str()), value);
+                        }
+                    }
+                    children.push(child_node);
                 }
-                children.push(child_node);
-            }
-            children
-        };
+                children
+            };
+        }
 
         n
     }
