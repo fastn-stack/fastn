@@ -310,7 +310,7 @@ impl Document {
     }
 
     pub fn html(&self, id: &str, doc_id: &str) -> String {
-        let mut node = self.main.to_node(doc_id);
+        let mut node = self.main.to_node(doc_id, false);
         node.children = {
             let mut children = vec![];
             for child in self.main.container.children.iter() {
