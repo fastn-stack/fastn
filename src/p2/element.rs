@@ -237,12 +237,17 @@ pub fn common_from_properties(
         )?,
         anchor,
         gradient_colors,
-        background_image: ftd::p2::utils::string_optional(
-            "background-image",
-            properties,
-            doc.name,
-            0,
-        )?,
+        background_image: {
+            let (src, reference) = ftd::p2::utils::record_optional_with_ref(
+                "background-image",
+                unresolved_properties,
+                doc,
+                0,
+            )?;
+            src.map_or(Ok(None), |r| {
+                ftd::ImageSrc::from(&r, doc, 0, reference).map(Some)
+            })?
+        },
         background_repeat: ftd::p2::utils::bool_with_default(
             "background-repeat",
             false,
@@ -491,7 +496,11 @@ fn common_arguments() -> Vec<(String, ftd::p2::Kind)> {
         ),
         (
             "background-image".to_string(),
-            ftd::p2::Kind::string().into_optional(),
+            ftd::p2::Kind::Record {
+                name: "ftd#image-src".to_string(),
+                default: None,
+            }
+            .into_optional(),
         ),
         (
             "background-repeat".to_string(),
@@ -644,7 +653,7 @@ pub fn image_from_properties(
 ) -> ftd::p1::Result<ftd::Image> {
     let (src, reference) =
         ftd::p2::utils::record_and_ref(0, "src", unresolved_properties, doc, condition)?;
-    let src_record = ftd::ImageSrc::from(&src, doc, 0)?;
+    let src_record = ftd::ImageSrc::from(&src, doc, 0, reference.clone())?;
     let properties = &ftd::component::resolve_properties(0, unresolved_properties, doc)?;
     Ok(ftd::Image {
         src: src_record,

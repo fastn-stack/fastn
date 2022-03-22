@@ -722,6 +722,138 @@ impl Element {
         }
     }
 
+    pub fn get_image_event_dependencies(
+        children: &[ftd::Element],
+        data: &mut ftd::DataDependenciesMap,
+    ) {
+        for child in children {
+            let (background_image, id) = match child {
+                ftd::Element::Column(ftd::Column {
+                    container, common, ..
+                })
+                | ftd::Element::Row(ftd::Row {
+                    container, common, ..
+                })
+                | ftd::Element::Scene(ftd::Scene {
+                    container, common, ..
+                })
+                | ftd::Element::Grid(ftd::Grid {
+                    container, common, ..
+                }) => {
+                    ftd::Element::get_image_event_dependencies(&container.children, data);
+                    if let Some((_, _, external_children)) = &container.external_children {
+                        ftd::Element::get_image_event_dependencies(external_children, data);
+                    }
+                    (&common.background_image, &common.data_id)
+                }
+                ftd::Element::Markup(ftd::Markups {
+                    common, children, ..
+                }) => {
+                    markup_get_image_event_dependencies(children, data);
+                    (&common.background_image, &common.data_id)
+                }
+                ftd::Element::Text(ftd::Text { common, .. })
+                | ftd::Element::Code(ftd::Code { common, .. })
+                | ftd::Element::Integer(ftd::Text { common, .. })
+                | ftd::Element::Boolean(ftd::Text { common, .. })
+                | ftd::Element::Decimal(ftd::Text { common, .. }) => {
+                    (&common.background_image, &common.data_id)
+                }
+                _ => continue,
+            };
+            value_condition(id, data, background_image);
+        }
+
+        fn markup_get_image_event_dependencies(
+            children: &[ftd::Markup],
+            data: &mut ftd::DataDependenciesMap,
+        ) {
+            for child in children {
+                let (background_image, id) = match child.itext {
+                    IText::Text(ref t)
+                    | IText::Integer(ref t)
+                    | IText::Boolean(ref t)
+                    | IText::Decimal(ref t) => (&t.common.background_image, &t.common.data_id),
+                    IText::Markup(ref t) => {
+                        markup_get_image_event_dependencies(&t.children, data);
+                        (&t.common.background_image, &t.common.data_id)
+                    }
+                    _ => continue,
+                };
+                markup_get_image_event_dependencies(&child.children, data);
+                value_condition(id, data, background_image);
+            }
+        }
+
+        fn value_condition(
+            id: &Option<String>,
+            data: &mut ftd::DataDependenciesMap,
+            background_image: &Option<ImageSrc>,
+        ) {
+            let id = id.clone().expect("universal id should be present");
+            if let Some(ref image_src) = background_image {
+                image_condition(image_src, id.as_str(), data);
+            }
+
+            fn image_condition(
+                image_src: &ftd::ImageSrc,
+                id: &str,
+                data: &mut ftd::DataDependenciesMap,
+            ) {
+                let (reference, value) = if let Some(ref reference) = image_src.reference {
+                    (
+                        reference.to_string(),
+                        serde_json::json!({ "light": format!("url({})", image_src.light),
+                            "dark": format!("url({})", image_src.light),
+                            "$kind$": "light"
+                        }),
+                    )
+                } else {
+                    return;
+                };
+
+                let parameters = {
+                    let mut parameters = std::collections::BTreeMap::new();
+                    parameters.insert(
+                        "background-image".to_string(),
+                        ftd::ConditionalValueWithDefault {
+                            value: ConditionalValue {
+                                value,
+                                important: false,
+                                reference: None,
+                            },
+                            default: None,
+                        },
+                    );
+                    parameters
+                };
+
+                let (variable, remaining) =
+                    ftd::p2::utils::get_doc_name_and_remaining(&reference).unwrap();
+
+                if let Some(ftd::Data { dependencies, .. }) = data.get_mut(&variable) {
+                    let json = ftd::Dependencies {
+                        dependency_type: ftd::DependencyType::Style,
+                        condition: None,
+                        parameters,
+                        remaining,
+                    };
+                    if let Some(dependencies) = dependencies.get_mut(id) {
+                        let mut d = serde_json::from_value::<Vec<ftd::Dependencies>>(
+                            dependencies.to_owned(),
+                        )
+                        .unwrap();
+                        d.push(json);
+                        *dependencies = serde_json::to_value(&d).unwrap();
+                    } else {
+                        dependencies
+                            .insert(id.to_string(), serde_json::to_value(&vec![json]).unwrap());
+                    }
+                }
+            }
+        }
+    }
+
     pub fn get_font_event_dependencies(
         children: &[ftd::Element],
         data: &mut ftd::DataDependenciesMap,
@@ -2239,7 +2371,7 @@ pub struct Common {
     pub anchor: Option<ftd::Anchor>,
     pub gradient_direction: Option<GradientDirection>,
     pub gradient_colors: Vec<ColorValue>,
-    pub background_image: Option<String>,
+    pub background_image: Option<ImageSrc>,
     pub background_repeat: bool,
     pub background_parallax: bool,
     pub scale: Option<f64>,
@@ -2401,6 +2533,7 @@ impl FontDisplay {
 pub struct ImageSrc {
     pub light: String,
     pub dark: String,
+    pub reference: Option<String>,
 }
 
 impl ImageSrc {
@@ -2408,6 +2541,7 @@ impl ImageSrc {
         l: &std::collections::BTreeMap<String, ftd::PropertyValue>,
         doc: &ftd::p2::TDoc,
         line_number: usize,
+        reference: Option<String>,
     ) -> ftd::p1::Result<ImageSrc> {
         let properties = l
             .iter()
@@ -2418,6 +2552,7 @@ impl ImageSrc {
                 .unwrap_or_else(|| "".to_string()),
             dark: ftd::p2::utils::string_optional("dark", &properties, doc.name, 0)?
                 .unwrap_or_else(|| "".to_string()),
+            reference,
         })
     }
 }
