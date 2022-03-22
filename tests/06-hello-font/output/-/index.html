@@ -170,11 +170,7 @@ font-family: one-fpm-local-themeFont }
         <script>
             FTD_JS
 
-            window.ftd.init(
-                "main",
-                JSON.parse(document.getElementById("ftd-data").innerText),
-                JSON.parse(document.getElementById("ftd-external-children").innerText)
-            );
+            window.ftd.init("main", "ftd-data", "ftd-external-children");
 
             FPM_JS
         </script>
