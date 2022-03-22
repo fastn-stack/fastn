@@ -15,6 +15,9 @@ dark: #6b223a
 -- ftd.color white: white
 dark: white
 
+-- ftd.image-src src: https://www.w3schools.com/cssref/img_tree.gif
+dark: https://www.w3schools.com/cssref/img_tree.gif
+
 -- ftd.text foo:
 body name:
 color if $present: $red
@@ -34,7 +37,7 @@ shadow-color: $green
 shadow-color if $present: $6b223a
 shadow-size if $present: 5
 text: $name
-background-image: https://www.w3schools.com/cssref/img_tree.gif
+background-image: $src
 background-repeat if $present: true
 background-parallax if $present: true
 
