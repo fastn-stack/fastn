@@ -624,7 +624,7 @@ caption title:
 body body:
 string published-date:
 string link:
-string cover-image:
+ftd.image-src cover-image:
 width: fill
 max-width: 700
 position: center
