@@ -147,6 +147,7 @@ impl Document {
         ftd::Element::get_visible_event_dependencies(&self.main.container.children, &mut data);
         ftd::Element::get_value_event_dependencies(&self.main.container.children, &mut data);
         ftd::Element::get_style_event_dependencies(&self.main.container.children, &mut data);
+        ftd::Element::get_image_event_dependencies(&self.main.container.children, &mut data);
 
         data.into_iter()
             .filter(|(k, v)| (!v.dependencies.is_empty() || always_include.contains(k)))

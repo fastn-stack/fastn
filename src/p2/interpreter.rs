@@ -4597,7 +4597,10 @@ mod test {
         };
 
         let image = ftd::Image {
-            src: i("/static/home/document-type-min.png"),
+            src: i(
+                "/static/home/document-type-min.png",
+                Some(s("foo/bar#src@0")),
+            ),
             common: ftd::Common {
                 reference: Some(s("foo/bar#src@0")),
                 ..Default::default()
@@ -4795,7 +4798,10 @@ mod test {
             ..Default::default()
         };
         let image = ftd::Image {
-            src: i("/static/home/document-type-min.png"),
+            src: i(
+                "/static/home/document-type-min.png",
+                Some(s("foo/bar#src@0")),
+            ),
             common: ftd::Common {
                 reference: Some(s("foo/bar#src@0")),
                 condition: Some(ftd::Condition {
@@ -4807,7 +4813,7 @@ mod test {
             ..Default::default()
         };
         let second_image = ftd::Image {
-            src: i("second-image.png"),
+            src: i("second-image.png", Some(s("foo/bar#src@1"))),
             common: ftd::Common {
                 reference: Some(s("foo/bar#src@1")),
                 condition: Some(ftd::Condition {
@@ -5141,7 +5147,10 @@ mod test {
             ..Default::default()
         };
         let image = ftd::Image {
-            src: i("/static/home/document-type-min.png"),
+            src: i(
+                "/static/home/document-type-min.png",
+                Some(s("foo/bar#src@0")),
+            ),
             common: ftd::Common {
                 reference: Some(s("foo/bar#src@0")),
                 condition: Some(ftd::Condition {
@@ -5153,7 +5162,7 @@ mod test {
             ..Default::default()
         };
         let second_image = ftd::Image {
-            src: i("second-image.png"),
+            src: i("second-image.png", Some(s("foo/bar#src@1"))),
             common: ftd::Common {
                 reference: Some(s("foo/bar#src@1")),
                 condition: Some(ftd::Condition {
@@ -5165,7 +5174,7 @@ mod test {
             ..Default::default()
         };
         let third_image = ftd::Image {
-            src: i(""),
+            src: i("", Some(s("foo/bar#src@2"))),
             common: ftd::Common {
                 reference: Some(s("foo/bar#src@2")),
                 condition: Some(ftd::Condition {
@@ -5963,7 +5972,7 @@ mod test {
                 spacing: None,
                 container: ftd::Container {
                     children: vec![ftd::Element::Image(ftd::Image {
-                        src: i("foo.png"),
+                        src: i("foo.png", Some(s("foo/bar#src@0"))),
                         common: ftd::Common {
                             reference: Some(s("foo/bar#src@0")),
                             ..Default::default()
@@ -5980,7 +5989,7 @@ mod test {
                 spacing: None,
                 container: ftd::Container {
                     children: vec![ftd::Element::Image(ftd::Image {
-                        src: i("bar.png"),
+                        src: i("bar.png", Some(s("foo/bar#src@1"))),
                         common: ftd::Common {
                             reference: Some(s("foo/bar#src@1")),
                             width: Some(ftd::Length::Px { value: 300 }),
@@ -13725,7 +13734,7 @@ mod test {
         main.container
             .children
             .push(ftd::Element::Image(ftd::Image {
-                src: i("https://www.liveabout.com/thmb/YCJmu1khSJo8kMYM090QCd9W78U=/1250x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/powerpuff_girls-56a00bc45f9b58eba4aea61d.jpg"),
+                src: i("https://www.liveabout.com/thmb/YCJmu1khSJo8kMYM090QCd9W78U=/1250x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/powerpuff_girls-56a00bc45f9b58eba4aea61d.jpg", Some(s("foo/bar#src@0"))),
                 common: ftd::Common {
                     condition: Some(
                         ftd::Condition {
@@ -13760,7 +13769,10 @@ mod test {
         main.container
             .children
             .push(ftd::Element::Image(ftd::Image {
-                src: i("https://upload.wikimedia.org/wikipedia/en/d/d4/Mickey_Mouse.png"),
+                src: i(
+                    "https://upload.wikimedia.org/wikipedia/en/d/d4/Mickey_Mouse.png",
+                    Some(s("foo/bar#src@1")),
+                ),
                 common: ftd::Common {
                     condition: Some(ftd::Condition {
                         variable: s("foo/bar#count"),
@@ -14899,7 +14911,7 @@ mod test {
                         },
                     ),
                     background_image: Some(
-                        s("https://image.shutterstock.com/z/stock-&lt;!&ndash;&ndash;&gt;vector-vector-illustration-of-a-beautiful-summer-landscape-143054302.jpg"),
+                        i("https://image.shutterstock.com/z/stock-&lt;!&ndash;&ndash;&gt;vector-vector-illustration-of-a-beautiful-summer-landscape-143054302.jpg", Some(s("foo/bar#bg-src"))),
                     ),
                     ..Default::default()
                 }
@@ -14909,8 +14921,11 @@ mod test {
             "foo/bar",
             indoc::indoc!(
                 "
+                -- ftd.image-src bg-src: https://image.shutterstock.com/z/stock-&lt;!&ndash;&ndash;&gt;vector-vector-illustration-of-a-beautiful-summer-landscape-143054302.jpg
+                dark: https://image.shutterstock.com/z/stock-&lt;!&ndash;&ndash;&gt;vector-vector-illustration-of-a-beautiful-summer-landscape-143054302.jpg
+
                 -- ftd.scene:
-                background-image: https://image.shutterstock.com/z/stock-&lt;!&ndash;&ndash;&gt;vector-vector-illustration-of-a-beautiful-summer-landscape-143054302.jpg
+                background-image: $bg-src
                 width: 1000
 
                 --- ftd.text: Hello
@@ -15138,7 +15153,10 @@ mod test {
                     container: ftd::Container {
                         children: vec![
                             ftd::Element::Image(ftd::Image {
-                                src: i("https://www.nilinswap.com/static/img/dp.jpeg"),
+                                src: i(
+                                    "https://www.nilinswap.com/static/img/dp.jpeg",
+                                    Some(s("foo/bar#src0")),
+                                ),
                                 common: ftd::Common {
                                     reference: Some(s("foo/bar#src0")),
                                     ..Default::default()

@@ -380,7 +380,7 @@ impl ftd::Scene {
                             node: s("img"),
                             ..Default::default()
                         };
-                        n.attrs.insert(s("src"), s(img));
+                        n.attrs.insert(s("src"), img.light.to_string());
                         n.attrs.insert(s("alt"), escape("Scene"));
                         n
                     } else {
@@ -1203,7 +1203,7 @@ impl ftd::Common {
             d.insert(s("background-image"), gradient(p, &self.gradient_colors));
         }
         if let Some(p) = &self.background_image {
-            d.insert(s("background-image"), format!("url({})", p));
+            d.insert(s("background-image"), format!("url({})", p.light));
             if self.background_repeat {
                 d.insert(s("background-repeat"), s("repeat"));
             } else {

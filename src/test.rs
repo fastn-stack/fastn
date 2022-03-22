@@ -32,10 +32,11 @@ pub fn s(s: &str) -> String {
     s.to_string()
 }
 
-pub fn i(p: &str) -> ftd::ImageSrc {
+pub fn i(p: &str, reference: Option<String>) -> ftd::ImageSrc {
     ftd::ImageSrc {
         light: s(p),
         dark: s(p),
+        reference,
     }
 }
 

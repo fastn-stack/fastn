@@ -9,11 +9,14 @@ dark: https://media.githubusercontent.com/media/gramener/comicgen/v1/svg/aryan/p
 -- ftd.image-src src1: https://media.githubusercontent.com/media/gramener/comicgen/v1/svg/aryan/emotion/smile.svg
 dark: https://media.githubusercontent.com/media/gramener/comicgen/v1/svg/aryan/emotion/smile.svg
 
+-- ftd.image-src bg-src: https://image.shutterstock.com/z/stock-&lt;!&ndash;&ndash;&gt;vector-vector-illustration-of-a-beautiful-summer-landscape-143054302.jpg
+dark: https://image.shutterstock.com/z/stock-&lt;!&ndash;&ndash;&gt;vector-vector-illustration-of-a-beautiful-summer-landscape-143054302.jpg
+
 -- ft.h0: Once upon a time...
 
 -- ftd.scene:
 align: center
-background-image: https://image.shutterstock.com/z/stock-&lt;!&ndash;&ndash;&gt;vector-vector-illustration-of-a-beautiful-summer-landscape-143054302.jpg
+background-image: $bg-src
 
 --- ethan_says:
 

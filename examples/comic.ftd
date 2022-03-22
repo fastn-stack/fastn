@@ -37,6 +37,12 @@ dark: https://media.githubusercontent.com/media/gramener/comicgen/v1/svg/priyanu
 -- ftd.image-src src9: https://media.githubusercontent.com/media/gramener/comicgen/v1/svg/priyanuova/straight/emotion/laugh.svg
 dark: https://media.githubusercontent.com/media/gramener/comicgen/v1/svg/priyanuova/straight/emotion/laugh.svg
 
+-- ftd.image-src bg-src: https://previews.123rf.com/images/blackspring/blackspring1512/blackspring151200008/49429469-cartoon-forest-background.jpg
+dark: https://previews.123rf.com/images/blackspring/blackspring1512/blackspring151200008/49429469-cartoon-forest-background.jpg
+
+-- ftd.image-src bg-src1: https://image.shutterstock.com/z/stock-&lt;!&ndash;&ndash;&gt;vector-vector-illustration-of-a-beautiful-summer-landscape-143054302.jpg
+dark: https://image.shutterstock.com/z/stock-&lt;!&ndash;&ndash;&gt;vector-vector-illustration-of-a-beautiful-summer-landscape-143054302.jpg
+
 -- ft.h0: Once upon a time...
 
 -- ftd.scene:
@@ -99,7 +105,7 @@ top: 10
 
 
 -- ftd.scene sophie_and_ethan_says:
-background-image: https://previews.123rf.com/images/blackspring/blackspring1512/blackspring151200008/49429469-cartoon-forest-background.jpg
+background-image: $bg-src
 width: 500
 left: 20
 top: 386
@@ -187,7 +193,7 @@ left: 0
 -- ftd.scene import-ethan-scene:
 left: 0
 top: 590
-background-image: https://image.shutterstock.com/z/stock-&lt;!&ndash;&ndash;&gt;vector-vector-illustration-of-a-beautiful-summer-landscape-143054302.jpg
+background-image: $bg-src1
 scale: 0.5
 
 --- comic1.ethan_says:

@@ -1,0 +1,41 @@
+-- ftd.image-src src: https://blog.earlymoments.com/wp-content/uploads/2016/03/Mickey_Mouse_group_700x493.jpg
+dark: https://blog.ipleaders.in/wp-content/uploads/2021/07/751589-mickey-mouse.jpg
+
+-- ftd.font-size dsize:
+line-height: 40
+size: 40
+tracking: 0.0
+
+-- ftd.type heading: cursive
+weight: 800
+style: italic
+desktop: $dsize
+mobile: $dsize
+xl: $dsize
+
+-- ftd.color text-color: white
+dark: blue
+
+-- ftd.column:
+padding: 50
+
+-- ftd.text: Responsive Background Image
+role: $heading
+padding-bottom: 20
+
+-- ftd.column:
+background-image: $src
+padding: 100
+
+--- ftd.text: Background Image
+color: $text-color
+
+
+-- ftd.text: Dark Mode
+$on-click$: message-host enable-dark-mode
+
+-- ftd.text: Light Mode
+$on-click$: message-host enable-light-mode
+
+-- ftd.text: System Mode
+$on-click$: message-host enable-system-mode
