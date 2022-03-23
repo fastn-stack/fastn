@@ -1,8 +1,5 @@
--- ft.doc-page:
+-- ft.page-with-toc: File System Organization
 toc: $ft.toc
-
-
--- ft.h0: File System Organization
 
 
 -- ft.h1: Package

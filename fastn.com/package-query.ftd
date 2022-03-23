@@ -1,8 +1,8 @@
--- ft.doc-page:
+-- ft.page-with-toc: `$processor$: package-query`
 toc: $ft.toc
 
 
--- ft.h0: `$processor$: package-query`
+-- ft.markdown: 
 
 `package-query` processor allows you to execute SQL queries against SQLite files
 present in your `fpm` package.

@@ -1,7 +1,7 @@
--- ft.doc-page:
+-- ft.page-with-toc: Upgrade `fpm`
 toc: $ft.toc
 
--- ft.h0: Upgrade `fpm`
+-- ft.markdown: 
 
 
 As of Rust 1.41.0, `cargo install fpm` does an auto upgrade of eg `fpm` if it

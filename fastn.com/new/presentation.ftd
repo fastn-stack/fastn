@@ -1,4 +1,5 @@
 -- import: fpm.dev/lib
+-- import: fpm.dev/assets
 
 -- ft.page:
 
@@ -15,17 +16,17 @@ link: /
 
 --- lib.theme: Giggle
 link: https://github.com/FifthTry/giggle-presentation-template/generate
-image: images/giggle.png
+image: $assets.files.static.images.giggle.png
 live_preview: https://fifthtry.github.io/Giggle-Presentation-Template/
 
 --- lib.theme: Crispy
 link: https://github.com/FifthTry/crispy-presentation-template/generate
-image: images/crispy.png
+image: $assets.files.static.images.crispy.png
 live_preview: https://fifthtry.github.io/Crispy-Presentation-Template/
 
 --- lib.theme: Rotary
 link: https://github.com/FifthTry/rotary-presentation-template/generate
-image: images/rotary.png
+image: $assets.files.static.images.rotary.png
 live_preview: https://fifthtry.github.io/Rotary-Presentation-Template/
 
 

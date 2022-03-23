@@ -1,8 +1,8 @@
--- ft.doc-page:
+-- ft.page-with-toc: Theme Configuration
 toc: $config.themes-toc
 
 
--- ft.h0: Theme Configuration
+-- ft.markdown: 
 
 Themes should be designed with configuration in mind. Every theme should have
 a documented variables exposed that can be used to pass data to the theme.

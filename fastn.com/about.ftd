@@ -1,7 +1,7 @@
--- ft.doc-page:
+-- ft.page-with-toc: About `fpm`
 toc: $ft.toc
 
--- ft.h0: About `fpm`
+-- ft.markdown: 
 
 [`ftd`](https://ftd.dev) is a {language} to create web pages or documents for
 publishing on the web. It starts with Markdown, but adds features to create full
@@ -20,8 +20,7 @@ files on github pages, S3 etc static site hosting sites.
 
 
 -- ftd.text language: This is the language
-background-color if not $fpm.dark-mode: yellow
-color if $fpm.dark-mode: yellow
+background-color if not $ftd.dark-mode: $fpm.design.color.brand.region
 
 
 -- ft.h1: `fpm-repo`

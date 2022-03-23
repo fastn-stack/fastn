@@ -1,8 +1,8 @@
--- ft.doc-page:
+-- ft.page-with-toc: `fpm build`
 toc: $ft.toc
 
 
--- ft.h0: `fpm build`
+-- ft.markdown: 
 
 `fpm build` is used to convert `.ftd` files in a fpm package into static HTML
 files. The generated HTML files can be uploaded on github-pages, S3 etc to publish

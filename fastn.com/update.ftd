@@ -1,8 +1,8 @@
--- ft.doc-page:
+-- ft.page-with-toc: `fpm update`
 toc: $ft.toc
 
 
--- ft.h0: `fpm update`
+-- ft.markdown: 
 
 `fpm update` updates all the dependencies of the package.
 

@@ -1,7 +1,7 @@
--- ft.doc-page:
+-- ft.page-with-toc: Translation Philosphy
 toc: $ft.toc
 
--- ft.h0: Translation Philosphy
+-- ft.markdown: 
 
 Translation is not an objective comparison, but rather a subjective evaluation. 
 We believe that a every incremental change in a package should propogate changes

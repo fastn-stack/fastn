@@ -1,8 +1,5 @@
--- ft.doc-page:
+-- ft.page-with-toc: `import: fpm`
 toc: $ft.toc
-
-
--- ft.h0: `import: fpm`
 
 
 -- ft.h1: `document-id: String`

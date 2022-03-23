@@ -1,7 +1,7 @@
--- ft.doc-page:
+-- ft.page-with-toc: Responsive Themes
 toc: $config.themes-toc
 
--- ft.h0: Responsive Themes
+-- ft.markdown: 
 
 Good quality themes should be "responsive", they should look good on a wide
 variety of devices, laptops to mobiles.

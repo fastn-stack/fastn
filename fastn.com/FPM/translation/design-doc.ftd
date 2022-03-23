@@ -1,43 +1,36 @@
--- import: ft
 -- import: fpm
--- import: fpm.dev/FPM/config
+-- import: fifthtry.github.io/code-block as cb
+-- import: fpm.dev/assets
 
 
 
--- header-sticky-title  uptodate: Upto date
-boolean icon: true
-optional string light-icon-path: -/fpm.dev/images/translation-icons/light/large/translations-success.png
-optional string dark-icon-path: -/fpm.dev/images/translation-icons/dark/large/translations-sucess.png
-
-
-
-
-
-
-
--- header-sticky-title  missing: Missing
-boolean icon: true
-optional string light-icon-path: -/fpm.dev/images/translation-icons/light/large/translations-missing.png
-optional string dark-icon-path: -/fpm.dev/images/translation-icons/dark/large/translations-missing.png
-
-
-English version of this document was last updated on 21st Mar 2021, but you are 
-viewing Hindi version that was updated on 10th Feb 2021.
+-- header-sticky-title uptodate: $fpm.i18n.upto-date
+icon: true
+light-icon-path: $assets.files.static.translation-icons.large.translations-success.png
 
 
 
 
 
--- header-sticky-title  nevermarked: Never marked
-boolean icon: true
-optional string button-text: View out of date Hindi version
-optional string button-link: /hi
-optional string light-icon-path: -/fpm.dev/images/translation-icons/light/large/translations-info.png
-optional string dark-icon-path: -/fpm.dev/images/translation-icons/dark/large/translations-info.png
+-- header-sticky-title missing: $fpm.i18n.missing
+icon: true
+light-icon-path: $assets.files.static.translation-icons.large.translations-missing.png
 
 
-English version of this document was last updated on 21st Mar 2021, but you are 
-viewing Hindi version that was updated on 10th Feb 2021.
+$fpm.i18n.translation-not-available
+
+
+
+
+
+-- header-sticky-title nevermarked: $fpm.i18n.never-marked
+icon: true
+button-text-main: $fpm.i18n.show-unapproved-version
+button-text-fallback: $fpm.i18n.show-latest-version
+light-icon-path: $assets.files.static.translation-icons.large.translations-info.png
+
+
+$fpm.i18n.unapproved-heading
 
 
 
@@ -47,37 +40,21 @@ viewing Hindi version that was updated on 10th Feb 2021.
 
 
 
--- header-sticky-title outdated: Outdated
-boolean icon: true
-boolean open: false
-optional string button-text: View out of date Hindi version
-optional string button-link: /hi
-optional string link-text: View changes
-optional string green-title: You are currently viewing updated English version.
-optional string light-icon-path: -/fpm.dev/images/translation-icons/light/large/translations-title-default.png
-optional string dark-icon-path: -/fpm.dev/images/translation-icons/dark/large/translations-title-default.png
+-- header-sticky-title outdated: $fpm.i18n.out-dated
+icon: true
+button-text-main: $fpm.i18n.show-latest-version
+button-text-fallback: $fpm.i18n.show-outdated-version
+link-text: View changes
+green-title: $fpm.i18n.out-dated-heading
+light-icon-path: $assets.files.static.translation-icons.large.translations-title-default.png
 
-English version of this document was last updated on 21st Mar 2021, but you are 
-viewing Hindi version that was updated on 10th Feb 2021.
+$fpm.i18n.out-dated-body
 
 --- code-block: The following changes has been made in English edition since last modification
-if: $open
+if: $fpm.translation-diff-open
 
-\-- fpm.toc-item list empty-toc:
+$fpm.diff
 
-\-- fpm.toc-item list toc-top-right:
-$processor$: toc
-
-- Roadmap: /roadmap/
-- Journal: 
-  - Home Index: /index/
-  - Docs: /index/
-  - Articles: /index/
-  - Home Pictures: /index/
-
-/-- never-marked: 
-/-- missing:
-/-- upto-date:
 
 
 
@@ -96,28 +73,37 @@ caption title:
 body body:
 width: fill
 border-top: 1
-border-color: #5A6E75
+border-color: $fpm.design.color.brand.on-region
 margin-top: 20
 boolean open: false
 
-
-
 --- ftd.text: $title
 padding-vertical: 10
-font: apple-system
-size: 16
-color: #FFFFFF
-color $fpm.dark-mode: #FFFFFF
+role: $fpm.design.type.body-medium
+color: $fpm.design.color.brand.on-region
 
-
---- ft.code:
-lang: ftd
+--- code:
+lang: diff
 
 $body
 
 
 
 
+
+
+
+
+
+
+-- cb.code code:
+optional caption caption:
+body body:
+string lang:
+caption: $caption
+lang: $lang
+
+$body
 
 
 
@@ -132,22 +118,19 @@ $body
 caption title:
 boolean icon: true
 optional body body:
-optional string button-text:
-optional string button-link:
+optional string button-text-main:
+optional string button-text-fallback:
 optional string green-title:
-optional string light-icon-path:
-optional string dark-icon-path:
+ftd.image-src light-icon-path:
 optional string link-text:
 optional string code-body:
 width: fill
 padding-vertical: 20
 padding-horizontal: 50
 border-bottom-radius: 20
-margin-top: -20 
+margin-top: -20
 margin-bottom: 20
-background-color: #C5C5C5
-background-color if $fpm.dark-mode: #3B4B50
-boolean open: false
+background-color: $fpm.design.color.brand.region
 
 --- ftd.row:
 
@@ -155,30 +138,16 @@ boolean open: false
 if: $icon
 
 --- ftd.image:
-if: not $fpm.dark-mode
 src: $light-icon-path
 width: 60
 margin-right: 20
 margin-top: 4
 
---- ftd.image:
-if: $fpm.dark-mode
-src: $dark-icon-path
-width: 60
-margin-right: 20
-margin-top: 4
 
 --- ftd.text: $title
-link: $button-link
-text: $title
-caption $title:
 region: title
-text: $title
-color: #000000
-color if $fpm.dark-mode: #FFFFFF
-font: apple-system
-style: bold
-size: 30
+color: $fpm.design.color.brand.on-region
+role: $fpm.design.type.headline-medium
 
 --- container: ftd.main
 
@@ -194,48 +163,53 @@ body: $body
 --- container: ftd.main
 
 --- ftd.text: $green-title
-color: #3B4B50
-color if $fpm.dark-mode: #35CC00
 margin-top: -10
-size: 19
-line-height: 30
-font: apple-system
+color: $fpm.design.color.brand.on-region
+role: $fpm.design.type.headline-small
 
 
 --- container: ftd.main
 
 --- ftd.row:
-if: $button-text is not null
+if: $button-text-main is not null
 width: fill
 spacing: 40
 margin-top: 20
 
---- ftd.text: $button-text
+--- ftd.text: $button-text-main
+if: not $fpm.is-fallback
+$on-click$: message-host show_fallback
+$on-click$: stop-propagation
+$on-click$: prevent-default
 border-width: 1
 border-radius: 6
-border-color: #F09523
 padding-vertical: 10
 padding-horizontal: 25
-size: 19
-style: bold
-line-height: 22
-font: apple-system
-color: #FFFFFF
-color if $fpm.dark-mode: #FFFFFF
-background-color: #3B4B50
-background-color $fpm.dark-mode: #3B4B50
-link: $button-link
+border-color: $fpm.design.color.brand.primary-action
+role: $fpm.design.type.label-medium
+color: $fpm.design.color.brand.on-primary-action
+background-color: $fpm.design.color.brand.primary-action
+
+--- ftd.text: $button-text-fallback
+if: $fpm.is-fallback
+$on-click$: message-host show_main
+$on-click$: stop-propagation
+$on-click$: prevent-default
+border-width: 1
+border-radius: 6
+padding-vertical: 10
+padding-horizontal: 25
+border-color: $fpm.design.color.brand.secondary-action
+role: $fpm.design.type.label-medium
+color: $fpm.design.color.brand.on-secondary-action
+background-color: $fpm.design.color.brand.secondary-action
 
 
 --- ftd.text: $link-text
-size: 19
-style: bold
-line-height: 22
-font: apple-system
+role: $fpm.design.type.label-large
 padding-top: 10
-color: #000000
-color if $fpm.dark-mode: #F09523
-$on-click$: toggle $open
+color: $fpm.design.color.brand.on-region
+$on-click$: message-host toggle-translation-diff
 
 
 
@@ -253,12 +227,11 @@ $on-click$: toggle $open
 caption title:
 optional body body:
 boolean icon: true 
-optional string light-icon-path:
-optional string dark-icon-path:
+optional ftd.image-src light-icon-path:
 width: fill
 padding-bottom: 10
 border-bottom: 1
-border-color: #414F53
+border-color: $fpm.design.color.brand.on-region
 margin-bottom: 20
 
 --- ftd.row:
@@ -267,30 +240,17 @@ margin-bottom: 20
 if: $icon
 
 --- ftd.image:
-if: not $fpm.dark-mode
 src: $light-icon-path
 width: 60
 margin-right: 20
 margin-top: 4
-
---- ftd.image:
-if: $fpm.dark-mode
-src: $dark-icon-path
-width: 60
-margin-right: 20
-margin-top: 4
-
 
 --- ftd.text: $title
 text: $title
 caption $title:
 region: title
 text: $title
-color: #000000
-color if $fpm.dark-mode: #FFFFFF
-font: apple-system
-style: bold
-size: 46
+role: $fpm.design.type.display-medium
 
 --- container: ftd.main
 
@@ -302,11 +262,7 @@ text: $title
 caption $title:
 region: title
 text: $title
-color: #000000
-color if $fpm.dark-mode: #FFFFFF
-font: apple-system
-style: bold
-size: 46
+role: $fpm.design.type.display-medium
 
 
 
@@ -323,22 +279,18 @@ margin-bottom: 25
 spacing: 2
 
 --- ftd.text: $key
-color: #000000
-color if $fpm.dark-mode: #D0CFCF
-font: apple-system
+role: $fpm.design.type.body-medium
+color: $fpm.design.color.brand.on-region
 
 --- ftd.text: $value
 if: $value is not null
-color: #3EC5FF
-color if $fpm.dark-mode: #3EC5FF
-font: apple-system
-style: bold
+role: $fpm.design.type.body-medium
+color: $fpm.design.color.brand.on-region
 
 --- ftd.text: $default
 if: $value is null
-color: #3EC5FF
-color if $fpm.dark-mode: #3EC5FF
-font: apple-system
+role: $fpm.design.type.body-medium
+color: $fpm.design.color.brand.on-region
 
 
 
@@ -361,28 +313,21 @@ width: fill
 
 
 --- ftd.text: $key
-color: #000000
-color if $fpm.dark-mode: #D0CFCF
-font: apple-system
-size: 12
+role: $fpm.design.type.body-small
+color: $fpm.design.color.brand.on-region
 
 --- ftd.column:
 width: fill
 
 --- ftd.text: $value
 if: $value is not null
-color: #3EC5FF
-color if $fpm.dark-mode: #3EC5FF
-font: apple-system
-style: bold
-size: 14
+role: $fpm.design.type.body-small
+color: $fpm.design.color.brand.on-region
 
 --- ftd.text: $default
 if: $value is null
-color: #3EC5FF
-color if $fpm.dark-mode: #3EC5FF
-font: apple-system
-size: 14
+role: $fpm.design.type.body-small
+color: $fpm.design.color.brand.on-region
 
 
 
@@ -404,11 +349,8 @@ width: fill
 
 --- ftd.text: $title
 region: title
-size: 30
-color: #000000
-color if $fpm.dark-mode: #E9E9E9
-style: bold
-font: apple-system
+role: $fpm.design.type.headline-medium
+color: $fpm.design.color.brand.on-region
 align: center
 link: $fpm.home-url
 white-space: nowrap
@@ -416,15 +358,12 @@ white-space: nowrap
 --- ftd.text: $fpm.language
 if: $fpm.language is not null
 border-radius: 4
-background-color: #F2F2F2
-background-color if $fpm.dark-mode: #2C3639
 padding-vertical: 5
 padding-horizontal: 10
-color: #D2882C
-color if $fpm.dark-mode: #DBB484
 align: center
-size: 14
-font: apple-system
+background-color: $fpm.design.color.brand.region
+role: $fpm.design.type.headline-medium
+color: $fpm.design.color.brand.on-region
 
 
 --- ftd.column:
@@ -461,11 +400,10 @@ region: h0
 --- ftd.text:
 text: $title
 region: title
-size: 40
-color: black
-style: bold
+role: $fpm.design.type.headline-large
+text: $title
+color: $fpm.design.color.brand.on-region
 padding-bottom: 24
-font: apple-system
 
 --- container: ftd.main
 
@@ -489,40 +427,39 @@ body: $body
 fpm.all-language-status-data data:
 width: fill
 padding: 10
-color: #316777
-color if $fpm.dark-mode: #ffffff 
+color: $fpm.design.color.brand.on-region
+
 
 --- ftd.text: $data.language
 link: $data.url
 width: percent 15
 padding: 5
-style: bold
 text-align: left
-font: apple-system
+role: $fpm.design.type.body-small
 
 --- ftd.integer:  $data.missing
 width: percent 15
 padding: 5
 text-align: center
-font: apple-system
+role: $fpm.design.type.body-small
 
 --- ftd.integer: $data.never-marked
 width: percent 22
 padding: 5
 text-align: center
-font: apple-system
+role: $fpm.design.type.body-small
 
 --- ftd.integer: $data.out-dated
 width: percent 20
 padding: 5
 text-align: center
-font: apple-system
+role: $fpm.design.type.body-small
 
 --- ftd.integer: $data.upto-date
 width: percent 20
 padding: 5
 text-align: center
-font: apple-system
+role: $fpm.design.type.body-small
 
 --- ftd.text: $data.last-modified-on
 if: $data.last-modified-on is not null
@@ -530,8 +467,7 @@ link: $data.url
 width: percent 20
 padding: 5
 text-align: center
-font: apple-system
-size: 12
+role: $fpm.design.type.body-small
 
 --- ftd.text: Never Synced
 if: $data.last-modified-on is null
@@ -539,7 +475,7 @@ link: $data.url
 width: percent 20
 padding: 5
 text-align: center
-font: apple-system
+role: $fpm.design.type.body-small
 
 
 
@@ -551,13 +487,11 @@ font: apple-system
 
 
 -- ftd.column translation-status:
-background-color: #E8E8E8
-background-color if $fpm.dark-mode: #1D2C30
+background-color: $fpm.design.color.brand.region
 width: fill
 max-width: 1000
 border-radius: 5
-color: #316777
-color if $fpm.dark-mode: #A9A9A9
+color: $fpm.design.color.brand.on-region
 padding: 10
 border-radius: 5
 
@@ -572,31 +506,27 @@ column-width: percent 15
 --- icon-title-cell: 
 title: Missing
 icon: true
-icon-path-light: -/fpm.dev/images/translation-icons/light/translations-missing.png
-icon-path-dark: -/fpm.dev/images/translation-icons/dark/translations-missing.png
+icon-path-light: $assets.files.static.translation-icons.translations-missing.png
 column-width: percent 15
 
 --- icon-title-cell: 
 title: Never marked
 icon: true
-icon-path-light: -/fpm.dev/images/translation-icons/light/translations-info.png 
-icon-path-dark: -/fpm.dev/images/translation-icons/dark/translations-info.png 
+icon-path-light: $assets.files.static.translation-icons.translations-info.png
 column-width: percent 22
 
 
 --- icon-title-cell: 
 title: Out-dated
 icon: true
-icon-path-light: -/fpm.dev/images/translation-icons/light/translations-time.png 
-icon-path-dark: -/fpm.dev/images/translation-icons/dark/translations-time.png 
+icon-path-light: $assets.files.static.translation-icons.translations-time.png
 column-width: percent 20
 
 
 --- icon-title-cell: 
 title: Up-to Date
 icon: true
-icon-path-light: -/fpm.dev/images/translation-icons/light/translations-success.png 
-icon-path-dark: -/fpm.dev/images/translation-icons/dark/translations-success.png 
+icon-path-light: $assets.files.static.translation-icons.translations-success.png
 column-width: percent 20
 
 
@@ -623,8 +553,7 @@ data: $obj
 -- ftd.row icon-title-cell:
 boolean icon: true 
 caption title:
-optional string icon-path-light:
-optional string icon-path-dark:
+optional ftd.image-src icon-path-light:
 optional integer font-size:
 optional integer margin-right:
 optional string column-width: fill
@@ -637,15 +566,7 @@ width: $column-width
 if: $icon
 
 --- ftd.image:
-if: not $fpm.dark-mode
 src: $icon-path-light
-move-down: 7
-move-left: 2
-margin-right: $margin-right
-
---- ftd.image:
-if: $fpm.dark-mode
-src: $icon-path-dark
 move-down: 7
 move-left: 2
 margin-right: $margin-right
@@ -655,10 +576,8 @@ margin-right: $margin-right
 --- ftd.text: $title
 padding: 5
 text-align: left
-font: apple-system
-size: $font-size
-color: #153B46
-color if $fpm.dark-mode: #FFFFFF
+role: $fpm.design.type.body-small
+color: $fpm.design.color.brand.on-region
 
 
 
@@ -667,9 +586,8 @@ color if $fpm.dark-mode: #FFFFFF
 -- ftd.row icon-title-cell-home:
 boolean icon: true 
 caption title:
-optional string icon-path-light:
-optional string icon-path-dark:
-optional integer font-size:
+optional ftd.image-src icon-path-light:
+optional ftd.image-src icon-path-dark:
 optional integer margin-right:
 optional string column-width: fill
 width: $column-width
@@ -681,14 +599,14 @@ width: $column-width
 if: $icon
 
 --- ftd.image:
-if: not $fpm.dark-mode
+if: not $ftd.dark-mode
 src: $icon-path-light
 move-down: 7
 move-left: 2
 margin-right: $margin-right
 
 --- ftd.image:
-if: $fpm.dark-mode
+if: $ftd.dark-mode
 src: $icon-path-dark
 move-down: 7
 move-left: 2
@@ -699,10 +617,8 @@ margin-right: $margin-right
 --- ftd.text: $title
 padding: 5
 text-align: left
-font: apple-system
-size: $font-size
-color: #FFFFFF
-color if $fpm.dark-mode: #FFFFFF
+role: $fpm.design.type.body-small
+color: $fpm.design.color.brand.on-region
 
 
 
@@ -717,84 +633,61 @@ color if $fpm.dark-mode: #FFFFFF
 boolean icon: true 
 caption title:
 optional string count:
-optional string icon-path:
 optional integer font-size:
 optional integer margin-right:
-optional string icon-path-light:
-optional string icon-path-dark:
-string title-color: #FA6C6C
+optional ftd.image-src icon-path-light:
+ftd.color title-color: #FA6C6C
 boolean open: false
 width: fill
 
-
 --- ftd.row:
-if: $count is not null
 position: left
 width: fill
-
 
 --- ftd.row:
 if: $icon
 
 --- ftd.image:
-if: not $fpm.dark-mode
 src: $icon-path-light
 move-down: 7
 move-left: 2
 margin-right: $margin-right
 
---- ftd.image:
-if: $fpm.dark-mode
-src: $icon-path-dark
-move-down: 7
-move-left: 2
-margin-right: $margin-right
-
-
 --- ftd.text: $title
 padding: 5
 padding if $count is not null: 0
 text-align: left
-font: apple-system
-size: $font-size
+role: $fpm.design.type.label-large
 color: $title-color
 
 --- ftd.text: $count
 if: $count is not null
-style: bold
 text-align: left
-font: apple-system
-size: $font-size
-color: #153B46
-color if $fpm.dark-mode: #D0CFCF
+role: $fpm.design.type.body-medium
+color: $fpm.design.color.brand.on-region
 margin-left: 15
 
 --- container: ftd.main
 
 --- ftd.row:
-if: $count is not null
 position: right
 width: percent 20
 
 --- ftd.text: ﹀
 text-align: right
 width: fill
-size: 24
-style: bold
 margin-top: 5
 margin-right: 10
-color: #153B46
-color if $fpm.dark-mode: #FFFFFF
+role: $fpm.design.type.body-medium
+color: $fpm.design.color.brand.on-region
 
 /--- ftd.text: ︿
 text-align: right
 width: fill
-size: 24
-style: bold
 margin-top: 5
 margin-right: 10
-color: #153B46
-color if $fpm.dark-mode: #FFFFFF
+role: $fpm.design.type.body-medium
+color: $fpm.design.color.brand.on-region
 
 
 
@@ -814,10 +707,8 @@ width: fill
 padding-vertical: 10
 
 --- ftd.text: $title
-color: #153B46
-color if $fpm.dark-mode: #FFFFFF
-font: apple-system
-size: 14
+role: $fpm.design.type.body-medium
+color: $fpm.design.color.brand.on-region
 
 
 
@@ -834,7 +725,7 @@ size: 14
 width: fill
 max-width: 1000
 border-radius: 5
-border-color: #9A5454
+border-color: $fpm.design.color.brand.on-region
 border-style: dashed
 border-width: 2
 padding: 15
@@ -842,15 +733,13 @@ border-radius: 5
 margin-top: 20
 boolean open: false
 optional string group-type:
+if: $fpm.missing-files is not empty
 
---- icon-title: 
-title: इन दस्तावेज का अनुवाद उपलब्ध नहीं हैं :
-title-color: #FA6C6C
-count: 6
+--- icon-title:
+title: $fpm.i18n.missing
+title-color: $fpm.design.color.brand.on-region
 icon: true
-icon-path-light: -/fpm.dev/images/translation-icons/light/35x26/translations-missing.png
-icon-path-dark: -/fpm.dev/images/translation-icons/dark/35x26/translations-missing.png
-font-size: 24
+icon-path-light: $assets.files.static.translation-icons.35x26.translations-missing.png
 margin-right: 20
 open: $open
 $on-click$: toggle $open
@@ -860,15 +749,8 @@ $on-click$: toggle $open
 width: fill
 if: $open
 
---- key-item: address-at-the-final-session.ftd
-
---- key-item: common-component.ftd
-
---- key-item: lib.ftd
-
---- key-item: paper-on-hinduism.ftd
-
---- key-item: religion-not-the-crying-need-of-india.ftd
+--- key-item: $obj
+$loop$: $fpm.missing-files as $obj
 
 
 
@@ -884,7 +766,7 @@ if: $open
 width: fill
 max-width: 1000
 border-radius: 5
-border-color: #9A5454
+border-color: $fpm.design.color.brand.on-region
 border-style: dashed
 border-width: 2
 padding: 15
@@ -892,17 +774,15 @@ border-radius: 5
 margin-top: 20
 boolean open: false
 optional string group-type:
+if: $fpm.never-marked-files is not empty
 
 
---- icon-title: 
+--- icon-title:
 /if: $group-type 'nevermarked'
-title: इन दस्तावेज का अनुवाद उपलब्ध हैं, पर जाँच बाक़ी हैं :
-title-color: #F48D0C
-count: 4
+title: $fpm.i18n.never-marked
+title-color: $fpm.design.color.brand.on-region
 icon: true
-icon-path-light: -/fpm.dev/images/translation-icons/light/35x26/translations-info.png
-icon-path-dark: -/fpm.dev/images/translation-icons/dark/35x26/translations-info.png
-font-size: 24
+icon-path-light: $assets.files.static.translation-icons.35x26.translations-info.png
 margin-right: 20
 open: $open
 $on-click$: toggle $open
@@ -912,17 +792,8 @@ $on-click$: toggle $open
 width: fill
 if: $open
 
---- key-item: address-at-the-final-session.ftd
-
---- key-item: common-component.ftd
-
---- key-item: lib.ftd
-
---- key-item: paper-on-hinduism.ftd
-
---- key-item: religion-not-the-crying-need-of-india.ftd
-
-
+--- key-item: $obj
+$loop$: $fpm.never-marked-files as $obj
 
 
 
@@ -935,7 +806,7 @@ if: $open
 width: fill
 max-width: 1000
 border-radius: 5
-border-color: #9A5454
+border-color: $fpm.design.color.brand.on-region
 border-style: dashed
 border-width: 2
 padding: 15
@@ -943,35 +814,27 @@ border-radius: 5
 margin-top: 20
 boolean open: false
 optional string group-type:
+if: $fpm.outdated-files is not empty
 
 
---- icon-title: 
+--- icon-title:
 /if: $group-type 'outdated'
-title: इन दस्तावेज का अनुवाद पुराना हैं :
-title-color: #FAD345
-count: 2
+title: $fpm.i18n.out-dated
+title-color: $fpm.design.color.brand.on-region
 icon: true
-icon-path-light: -/fpm.dev/images/translation-icons/light/35x26/translations-time.png
-icon-path-dark: -/fpm.dev/images/translation-icons/dark/35x26/translations-time.png
-font-size: 24
+icon-path-light: $assets.files.static.translation-icons.35x26.translations-time.png
 margin-right: 20
 open: $open
 $on-click$: toggle $open
 /$on-click-outside$: $open = false
 
+
 --- ftd.column:
 width: fill
 if: $open
 
---- key-item: address-at-the-final-session.ftd
-
---- key-item: common-component.ftd
-
---- key-item: lib.ftd
-
---- key-item: paper-on-hinduism.ftd
-
---- key-item: religion-not-the-crying-need-of-india.ftd
+--- key-item: $obj
+$loop$: $fpm.outdated-files as $obj
 
 
 
@@ -986,7 +849,7 @@ if: $open
 width: fill
 max-width: 1000
 border-radius: 5
-border-color: #9A5454
+border-color: $fpm.design.color.brand.on-region
 border-style: dashed
 border-width: 2
 padding: 15
@@ -994,17 +857,15 @@ border-radius: 5
 margin-top: 20
 boolean open: false
 optional string group-type:
+if: $fpm.upto-date-files is not empty
 
 
---- icon-title: 
+--- icon-title:
 /if: $group-type 'uptodate'
-title: इन दस्तावेज का अनुवाद उपलब्ध हैं :
-title-color: #58C802
-count: 1
+title: $fpm.i18n.upto-date
+title-color: $fpm.design.color.brand.on-region
 icon: true
-icon-path-light: -/fpm.dev/images/translation-icons/light/35x26/translations-success.png
-icon-path-dark: -/fpm.dev/images/translation-icons/dark/35x26/translations-success.png
-font-size: 24
+icon-path-light: $assets.files.static.translation-icons.35x26.translations-success.png
 margin-right: 20
 open: $open
 $on-click$: toggle $open
@@ -1014,16 +875,8 @@ $on-click$: toggle $open
 width: fill
 if: $open
 
---- key-item: address-at-the-final-session.ftd
-
---- key-item: common-component.ftd
-
---- key-item: lib.ftd
-
---- key-item: paper-on-hinduism.ftd
-
---- key-item: religion-not-the-crying-need-of-india.ftd
-
+--- key-item: $obj
+$loop$: $fpm.upto-date-files as $obj
 
 
 
@@ -1038,14 +891,10 @@ if: $open
 -- ftd.text markdown:
 body body:
 text: $body
-size: 19
-line-height: 30
-color: #000000
-color if $fpm.dark-mode: #E9E9E9
 padding-bottom: 10
 padding-top: 50
-font: apple-system
-
+role: $fpm.design.type.body-large
+color: $fpm.design.color.brand.on-region
 
 
 
@@ -1065,7 +914,7 @@ string size: 14
 string lightcolor: #000000
 string darkcolor: #FFFFFF
 color: $lightcolor
-color if $fpm.dark-mode: $darkcolor
+color if $ftd.dark-mode: $darkcolor
 size: $size
 width: fill
 
@@ -1092,17 +941,15 @@ $body
 
 
 -- ftd.column language-status:
-background-color: #f3f3f3
+background-color: $fpm.design.color.brand.region
 width: fill
 max-width: 1000
 border-radius: 5
 
 --- ftd.row:
 width: fill
-background-color: #153B46
-background-color if $fpm.dark-mode: #153B46
-color: #FFFFFF
-color if $fpm.dark-mode: #FFFFFF
+background-color: $fpm.design.color.brand.region
+color: $fpm.design.color.brand.on-region
 padding: 10
 border-top-radius: 5
 
@@ -1114,31 +961,27 @@ column-width: percent 15
 --- icon-title-cell-home: 
 title: Missing
 icon: true
-icon-path-light: -/fpm.dev/images/translation-icons/dark/translations-missing.png
-icon-path-dark: -/fpm.dev/images/translation-icons/dark/translations-missing.png
+icon-path-light: $assets.files.static.translation-icons.translations-missing.png
 column-width: percent 15
 
 --- icon-title-cell-home: 
 title: Never marked
 icon: true
-icon-path-light: -/fpm.dev/images/translation-icons/dark/translations-info.png 
-icon-path-dark: -/fpm.dev/images/translation-icons/dark/translations-info.png 
+icon-path-light: $assets.files.static.translation-icons.translations-info.png
 column-width: percent 22
 
 
 --- icon-title-cell-home: 
 title: Out-dated
 icon: true
-icon-path-light: -/fpm.dev/images/translation-icons/dark/translations-time.png 
-icon-path-dark: -/fpm.dev/images/translation-icons/dark/translations-time.png 
+icon-path-light: $assets.files.static.translation-icons.translations-time.png
 column-width: percent 20
 
 
 --- icon-title-cell-home: 
 title: Up-to Date
 icon: true
-icon-path-light: -/fpm.dev/images/translation-icons/dark/translations-success.png 
-icon-path-dark: -/fpm.dev/images/translation-icons/dark/translations-success.png 
+icon-path-light: $assets.files.static.translation-icons.translations-success.png
 column-width: percent 20
 
 
@@ -1171,43 +1014,42 @@ data: $obj
 fpm.all-language-status-data data:
 width: fill
 border-bottom: 1
-border-color: white
+border-color: $fpm.design.color.brand.on-region
 padding: 10
-color: #000000
-background-color: #D9DBDC
+color: $fpm.design.color.brand.on-region
+background-color: $fpm.design.color.brand.region
 
 
 --- ftd.text: $data.language
 link: $data.url
 width: percent 15
 padding: 5
-style: bold
 text-align: left
-font: apple-system
+role: $fpm.design.type.body-small
 
 --- ftd.integer:  $data.missing
 width: percent 15
 padding: 5
 text-align: center
-font: apple-system
+role: $fpm.design.type.body-small
 
 --- ftd.integer: $data.never-marked
 width: percent 22
 padding: 5
 text-align: center
-font: apple-system
+role: $fpm.design.type.body-small
 
 --- ftd.integer: $data.out-dated
 width: percent 20
 padding: 5
 text-align: center
-font: apple-system
+role: $fpm.design.type.body-small
 
 --- ftd.integer: $data.upto-date
 width: percent 20
 padding: 5
 text-align: center
-font: apple-system
+role: $fpm.design.type.body-small
 
 --- ftd.text: $data.last-modified-on
 if: $data.last-modified-on is not null
@@ -1215,16 +1057,36 @@ link: $data.url
 width: percent 20
 padding: 5
 text-align: center
-font: apple-system
-size: 12
+role: $fpm.design.type.body-small
 
 --- ftd.text: Never Synced
 if: $data.last-modified-on is null
 link: $data.url
 width: percent 20
 padding: 5
-text-align: center
-font: apple-system
+role: $fpm.design.type.body-small
+
+
+
+
+
+
+-- ftd.column translation-banner:
+width: fill
+height: fill
+if: $fpm.translation-status is not null
+
+--- uptodate:
+if: $fpm.translation-status == UptoDate
+
+--- missing:
+if: $fpm.translation-status == Missing
+
+--- nevermarked:
+if: $fpm.translation-status == NeverMarked
+
+--- outdated:
+if: $fpm.translation-status == Outdated
 
 
 
@@ -1234,8 +1096,76 @@ font: apple-system
 
 
 
+-- ftd.column translation-never-marked:
+width: fill
+max-width: 1000
+border-radius: 5
+border-color: $fpm.design.color.brand.on-region
+border-style: dashed
+border-width: 2
+padding: 15
+border-radius: 5
+margin-top: 20
+boolean open: false
+optional string group-type:
+if: $fpm.never-marked-files is not empty
+
+
+--- icon-title:
+/if: $group-type 'nevermarked'
+title: $fpm.i18n.never-marked
+title-color: $fpm.design.color.brand.on-region
+icon: true
+icon-path-light: $assets.files.static.translation-icons.35x26.translations-info.png
+margin-right: 20
+open: $open
+$on-click$: toggle $open
+/$on-click-outside$: $open = false
+
+--- ftd.column:
+width: fill
+if: $open
+
+--- key-item: $obj
+$loop$: $fpm.never-marked-files as $obj
 
 
 
 
 
+
+
+
+
+-- ftd.column translation-upto-date:
+width: fill
+max-width: 1000
+border-radius: 5
+border-color: $fpm.design.color.brand.on-region
+border-style: dashed
+border-width: 2
+padding: 15
+border-radius: 5
+margin-top: 20
+boolean open: false
+optional string group-type:
+if: $fpm.upto-date-files is not empty
+
+
+--- icon-title:
+/if: $group-type 'uptodate'
+title: $fpm.i18n.upto-date
+title-color: $fpm.design.color.brand.on-region
+icon: true
+icon-path-light: $assets.files.static.translation-icons.35x26.translations-success.png
+margin-right: 20
+open: $open
+$on-click$: toggle $open
+/$on-click-outside$: $open = false
+
+--- ftd.column:
+width: fill
+if: $open
+
+--- key-item: $obj
+$loop$: $fpm.upto-date-files as $obj

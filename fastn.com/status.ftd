@@ -1,9 +1,9 @@
--- ft.doc-page:
+-- ft.doc-page: `fpm status`
 toc: $ft.toc
 
 
 
--- ft.h0: `fpm status`
+-- ft.markdown: 
 
 Status: Planned
 

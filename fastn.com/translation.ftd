@@ -1,7 +1,7 @@
--- ft.doc-page:
+-- ft.page-with-toc: Step by Step guide to setup translation with `fpm`
 toc: $ft.toc
 
--- ft.h0: Step by Step guide to setup translation with `fpm`
+-- ft.markdown: 
 
 FPM provides a first class support for translations of the documents. A particular
 package can either be a translation or have translations pointing to other 

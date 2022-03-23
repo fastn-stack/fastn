@@ -1,7 +1,7 @@
--- ft.doc-page:
+-- ft.page-with-toc: Why not to use `fpm`?
 toc: $ft.toc
 
--- ft.h0: Why not to use `fpm`?
+-- ft.markdown: 
 
 While we love `fpm`, it is this `fpm` not the right tool for you. We document
 some of the reasons here. If you come across any other reasons why FPM should

@@ -1,11 +1,5 @@
--- ft.doc-page:
+-- ft.page-with-toc: `fpm` Variables
 toc: $config.themes-toc
-
-
-
-
--- ft.h0: `fpm` Variables
-
 
 
 
@@ -223,35 +217,35 @@ width: fill
 
 --- ftd.row:
 border-width: 1
-border-color if $fpm.dark-mode: white
+border-color if $ftd.dark-mode: white
 padding: 20
 spacing: 5
 width: fill
 
 --- ftd.text: Type
 style: bold
-color if $fpm.dark-mode: white
+color if $ftd.dark-mode: white
 
 --- ftd.text: $type
-color if $fpm.dark-mode: white
+color if $ftd.dark-mode: white
 
 --- container: ftd.main
 
 --- ftd.row:
 width: fill
 border-width: 1
-border-color if $fpm.dark-mode: white
+border-color if $ftd.dark-mode: white
 padding: 20
 spacing: 5
 if: $default is not null
 
 --- ftd.text: Default Value
 style: bold
-color if $fpm.dark-mode: white
+color if $ftd.dark-mode: white
 
 --- ftd.text: $default
 if: $default is not null
-color if $fpm.dark-mode: white
+color if $ftd.dark-mode: white
 
 --- container: ftd.main
 

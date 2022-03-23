@@ -1,7 +1,7 @@
--- ft.doc-page:
+-- ft.page-with-toc: Dark Mode Support
 toc: $config.themes-toc
 
--- ft.h0: Dark Mode Support
+-- ft.markdown: 
 
 Modern operating systems come with Dark Mode support. Readers have started to get
 used to support for dark mode on more and more web sites. Dark mode is not just
@@ -71,12 +71,12 @@ lang: ftd
 
 \-- ftd.text highlight: $title
 caption title:
-color if $fpm.dark-mode: yellow
-background-color if not $fpm.dark-mode: yellow
+color if $ftd.dark-mode: yellow
+background-color if not $ftd.dark-mode: yellow
 
 -- ft.markdown:
 
-We have used `$fpm.dark-mode` to change color and background colors here.
+We have used `$ftd.dark-mode` to change color and background colors here.
 
 
 -- ft.h1: `fpm.follow-system-dark-mode` and `fpm.system-dark-mode`

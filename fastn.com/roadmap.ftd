@@ -1,8 +1,5 @@
--- ft.doc-page:
+-- ft.page-with-toc: Roadmap
 toc: $config.dev-toc
-
-
--- ft.h0: Roadmap
 
 
 -- ft.h1: FPM as kick-ass SSG tool

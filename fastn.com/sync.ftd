@@ -1,8 +1,8 @@
--- ft.doc-page:
+-- ft.page-with-toc: `fpm sync`
 toc: $ft.toc
 
 
--- ft.h0: `fpm sync`
+-- ft.markdown: 
 
 `fpm sync` operates in two modes. If the package is hosted on `fpm-repo` then it
 syncs the content of local folder with remote [not yet implemented]. If the package

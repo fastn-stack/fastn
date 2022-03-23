@@ -1,7 +1,7 @@
--- ft.doc-page:
+-- ft.page-with-toc: Available `$processor$`s
 toc: $ft.toc
 
--- ft.h0: Available `$processor$`s
+-- ft.markdown: 
 
 FPM comes with following built in `ftd` `$processor$`s.
 

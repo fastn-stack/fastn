@@ -1,3 +1,5 @@
+-- import: fpm.dev/assets
+
 -- boolean dark-mode: false
 -- boolean sidebar-open: false
 
@@ -14,7 +16,7 @@
 -- integer max-width: 1000
 -- string github: NA
 -- string site-name: NA
--- string site-icon: NA
+-- optional ftd.image-src site-icon: 
 -- string site-url: NA
 
 
@@ -37,8 +39,7 @@ toc-item list children:
 
 -- ftd.column page:
 width: fill
-background-color: $neutral
-background-color if $fpm.dark-mode: $neutral-700
+background-color: $fpm.design.color.brand.region
 open: true
 append-at: content-container
 
@@ -49,7 +50,7 @@ top: 0
 bottom: 0
 left: 0
 right: 0
-background-color:  rgba (0, 0, 0, 0.5)
+background-color:  $fpm.design.color.brand.region
 z-index: 1
 $on-click$: toggle $sidebar-open
 
@@ -149,8 +150,7 @@ toc-item list toc: $toc
 width: fill
 open: true
 append-at: main-container
-background-color: $neutral
-background-color if $fpm.dark-mode: $neutral-700
+background-color: $fpm.design.color.brand.region
 
 
 --- header:
@@ -181,8 +181,7 @@ toc-item list toc: $toc
 width: fill
 open: true
 append-at: main-container
-background-color: $neutral
-background-color if $fpm.dark-mode: $neutral-700
+background-color: $fpm.design.color.brand.region
 
 
 --- ftd.column:
@@ -192,7 +191,7 @@ top: 0
 bottom: 0
 left: 0
 right: 0
-background-color:  rgba (0, 0, 0, 0.5)
+background-color:  $fpm.design.color.brand.region
 z-index: 1
 $on-click$: toggle $sidebar-open
 
@@ -225,38 +224,29 @@ footer-toc: $footer-toc
 
 -- ftd.text site-link:
 caption title:
-size: 16
-style: semi-bold
-font: apple-system
-color: black
-color if $fpm.dark-mode: $neutral
+color: $fpm.design.color.brand.on-region
 text: $title
-line-height: 22
+role: $fpm.design.type.label-large
 position: center
 
 -- ftd.text header-link:
 caption title:
 string link:
-size: 16
-font: apple-system
-color: black
-color if $fpm.dark-mode: $neutral
+role: $fpm.design.type.label-large
+color: $fpm.design.color.brand.on-region
 text: $title
 link: $link
-line-height: 22
 position: center
 
 
 
 -- ftd.row header:
 width: fill
-background-color: white
-background-color if $fpm.dark-mode: $neutral-700
+background-color: $fpm.design.color.brand.region
 padding-horizontal: 20
 padding-vertical: 10
 border-bottom: 1
-border-color: #e1e1e1
-border-color if $fpm.dark-mode: #343434
+border-color: $fpm.design.color.brand.on-region
 
 --- ftd.row:
 position: left
@@ -295,8 +285,7 @@ width: auto
 id: action-container
 
 --- ftd.image:
-if: not $fpm.dark-mode
-src: https://res.cloudinary.com/dphj6havg/image/upload/v1640938143/github-dark_xeu6ot.svg
+src: $assets.files.static.icon-github.svg
 width: 20
 min-width: 20
 link: $github
@@ -305,43 +294,30 @@ align: center
 --- container: action-container
 
 --- ftd.image:
-if:  $fpm.dark-mode
-src: https://res.cloudinary.com/dphj6havg/image/upload/v1640938143/github-light_thra25.svg
-width: 20
-min-width: 20
-link: $github
-align: center
-
---- container: action-container
-
---- ftd.image:
-if: not $fpm.dark-mode
-src: https://res.cloudinary.com/dphj6havg/image/upload/v1640938217/dark-mode_mfy9hd.svg
+if: not $ftd.dark-mode
+src: $assets.files.static.icon-mode.svg
 height: 18
 $on-click$: message-host enable-dark-mode
 align: center
 
 --- container: action-container
 
---- ftd.image:
-if:  $fpm.dark-mode
-src: https://res.cloudinary.com/dphj6havg/image/upload/v1641367492/light-mode_o0zne7.svg
-height: 18
-$on-click$: message-host enable-light-mode
-align: center
+
+
+
+
+
+
 
 
 
 -- ftd.row header-mobile:
 width: fill
-background-color: white
-background-color if $fpm.dark-mode: $neutral-700
+background-color: $fpm.design.color.brand.region
 padding-horizontal: 20
 padding-vertical: 10
 border-bottom: 1
-border-color: #e1e1e1
-border-color if $fpm.dark-mode: #343434
-
+border-color: $fpm.design.color.brand.on-region
 
 --- ftd.row:
 position: left
@@ -349,7 +325,7 @@ spacing: 25
 id: left-side
 
 --- ftd.image:
-src: https://res.cloudinary.com/dphj6havg/image/upload/v1641205689/Vector_3_uzxoow.svg
+src: $assets.files.static.hamburger.svg
 width: 24
 height: auto
 $on-click$: toggle $sidebar-open
@@ -377,15 +353,15 @@ spacing: 30
 width: auto
 
 --- ftd.image:
-src: https://res.cloudinary.com/dphj6havg/image/upload/v1640938143/github-dark_xeu6ot.svg
+src: $assets.files.static.icon-github.svg
 width: 20
 min-width: 20
 link: $github
 
 --- ftd.image:
-src: https://res.cloudinary.com/dphj6havg/image/upload/v1640938217/dark-mode_mfy9hd.svg
+src: $assets.files.static.icon-github.svg
 height: 18
-$on-click$: toggle $fpm.dark-mode
+$on-click$: toggle $ftd.dark-mode
 
 
 -- ftd.text footer-link:
@@ -393,29 +369,24 @@ string url:
 caption title:
 link: $url
 text: $title
-size: 15
-line-height: 22
 min-width: fit-content
 padding-left: 10
 padding-top: 6
 padding-bottom: 6
-font: apple-system
-color: $neutral
+color: $fpm.design.color.brand.on-region
+role: $fpm.design.type.label-large
 
 -- ftd.column footer-instance:
 footer-item footer-toc:
 min-width: portion 1
 
 --- ftd.text: $footer-toc.label
-size: 15
-line-height: 40
 min-width: fit-content
 padding-left: 10
 padding-top: 3
 padding-bottom: 8
-font: apple-system
-color: $neutral
-style: semi-bold
+color: $fpm.design.color.brand.on-region
+role: $fpm.design.type.label-large
 
 --- footer-link: $obj.title
 $loop$: $footer-toc.children as $obj
@@ -440,7 +411,7 @@ footer-toc: $footer-toc
 -- ftd.row footer-desktop:
 footer-item list footer-toc:
 width: fill
-background-color: #2b3136
+background-color: $fpm.design.color.brand.region
 padding-horizontal: 150
 padding-vertical: 50
 spacing: space-between
@@ -452,7 +423,7 @@ footer-toc: $obj
 -- ftd.column footer-mobile:
 footer-item list footer-toc:
 width: fill
-background-color: #2b3136
+background-color: $fpm.design.color.brand.region
 padding-horizontal: 20
 padding-vertical: 50
 position: left
@@ -464,7 +435,7 @@ footer-toc: $obj
 
 -- ftd.column hero:
 caption title:
-string image:
+ftd.image-src image:
 open: true
 append-at: main-container
 
@@ -486,9 +457,9 @@ image: $image
 
 -- ftd.column hero-desktop:
 caption title:
-string image:
+ftd.image-src image:
 width: fill
-background-color: #2b3136
+background-color: $fpm.design.color.brand.region
 padding-horizontal: $content-padding
 padding-vertical: 50
 spacing: 40
@@ -499,13 +470,10 @@ append-at: desktop-action-container
 width: fill
 
 --- ftd.text: $title
-size: 56
-line-height: 80
-style: bold
-color: $neutral
+color: $fpm.design.color.brand.on-region
 width: percent 75
 position: center
-font: apple-system
+role: $fpm.design.type.display-large
 
 --- ftd.image:
 src: $image
@@ -521,13 +489,19 @@ spacing: 40
 
 
 
+
+
+
+
+
+
 -- ftd.column hero-mobile:
 caption title:
-string image:
+ftd.image-src image:
 optional string id:
 id: $id
 width: fill
-background-color: #2b3136
+background-color: $fpm.design.color.brand.region
 padding-horizontal: 20
 padding-vertical: 50
 spacing: 30
@@ -541,14 +515,11 @@ height: auto
 position: center
 
 --- ftd.text: $title
-size: 36
-line-height: 50
-style: bold
-color: $neutral
+color: $fpm.design.color.brand.on-region
 padding-horizontal: 20
 position: center
 text-align: center
-font: apple-system
+role: $fpm.design.type.display-large
 
 --- container: ftd.main
 
@@ -560,11 +531,17 @@ spacing: 30
 
 
 
+
+
+
+
+
+
 -- ftd.text action-button:
 caption title:
 string url:
-optional string color: white
-optional string background-color: #25c19f
+optional ftd.color color: $fpm.design.color.brand.on-region
+optional ftd.color background-color: $fpm.design.color.brand.region
 text: $title
 link: $url
 background-color: $background-color
@@ -572,22 +549,32 @@ color: $color
 border-radius: 6
 padding-vertical: 15
 padding-horizontal: 40
-font: apple-system
-size: 20
-style: semi-bold
+role: $fpm.design.type.label-large
+
+
+
+
+
+
+
 
 
 -- ftd.text banner:
 caption title:
 text: $title
-size: 24
-style: semi-bold
 padding: 45
 text-align: center
-color: #25c19f
-background-color: #20232a
+color: $fpm.design.color.brand.on-region
+background-color: $fpm.design.color.brand.region
 width: fill
-font: apple-system
+role: $fpm.design.type.title-large
+
+
+
+
+
+
+
 
 
 
@@ -601,19 +588,25 @@ padding-bottom: 2
 toc-item toc:
 link: $toc.url
 text: $toc.title
-size: 15
-line-height: 22
 min-width: fit-content
 padding-left: 10
 padding-top: 3
 padding-bottom: 3
-font: apple-system
-color: $neutral-700
-color if $fpm.dark-mode: $neutral-200
+color: $fpm.design.color.brand.on-region
+role: $fpm.design.type.label-large
 
 --- toc-instance:
 $loop$: $toc.children as $obj
 toc: $obj
+
+
+
+
+
+
+
+
+
 
 -- ftd.column render-toc:
 toc-item list toc-obj:
@@ -628,12 +621,19 @@ padding-top: 15
 padding-right: 20
 padding-bottom: 40
 border-right: 1
-border-color: #ebedef
-border-color if $fpm.dark-mode: #343434
+border-color: $fpm.design.color.brand.on-region
 
 --- toc-instance:
 $loop$: $toc-obj as $obj
 toc: $obj
+
+
+
+
+
+
+
+
 
 
 -- ftd.column render-toc-mobile:
@@ -648,23 +648,28 @@ padding-top: 15
 padding-right: 20
 padding-bottom: 40
 border-right: 1
-border-color: #ebedef
-border-color if $fpm.dark-mode: $neutral-700
+border-color: $fpm.design.color.brand.on-region
 anchor: window
 left: 0
 top: 0
-background-color: white
-background-color if $fpm.dark-mode: $neutral-700
+background-color: $fpm.design.color.brand.region
 shadow-offset-x: 3
 shadow-offset-y: 0
 shadow-size: 1
 shadow-blur: 10
-shadow-color: rgba (0, 0, 0, 0.05)
+/shadow-color: rgba (0, 0, 0, 0.05)
 z-index: 4
 
 --- toc-instance:
 $loop$: $toc-obj as $obj
 toc: $obj
+
+
+
+
+
+
+
 
 
 -- ftd.text markdown:
@@ -673,12 +678,12 @@ optional boolean collapsed:
 optional caption title:
 optional boolean two_columns:
 text: $body
-size: 15
-line-height: 24
-color: $neutral-700
-color if $fpm.dark-mode: $neutral-200
+color: $fpm.design.color.brand.on-region
 padding-bottom: 8
-font: apple-system
+role: $fpm.design.type.body-large
+
+
+
 
 
 
@@ -688,74 +693,96 @@ optional body body:
 width: fill
 region: h0
 padding-bottom: 12
+boolean open: true
+append-at: inner
 
 --- ftd.text:
 text: $title
 caption $title:
 region: title
+role: $fpm.design.type.headline-large
 text: $title
-size: 46
-line-height: 46
-color: $neutral-800
-color if $fpm.dark-mode: $neutral
-style: bold
+color: $fpm.design.color.brand.on-region
 padding-bottom: 16
 padding-top: 8
-font: apple-system
+$on-click$ if $open: toggle $open
 
---- markdown:
-if: $body is not null
-body: $body
-
--- ftd.column subtitle:
-caption title:
-optional body body:
+--- ftd.column:
+id: inner
+if: $open
 width: fill
-region: h1
-padding-bottom: 12
-
---- ftd.text:
-text: $title
-caption $title:
-region: title
-text: $title
-size: 19
-line-height: 24
-color: $neutral-800
-color if $fpm.dark-mode: $neutral
-style: italic
-padding-bottom: 8
-padding-top: 16
-font: apple-system
 
 --- markdown:
 if: $body is not null
 body: $body
+
+
+
+
+
+
+
+
 
 
 -- ftd.column h1:
 caption title:
 optional body body:
+boolean open: true
+append-at: inner
 width: fill
 region: h1
-padding-bottom: 12
+padding-left: 20
+border-left: 5
+border-color: $fpm.design.color.brand.on-secondary-action
+move-left: 25
+margin-bottom: 30
+$on-click$: toggle $open
+
+--- ftd.row:
+width: fill
+spacing: 20
 
 --- ftd.text:
 caption $title:
 text: $title
 region: title
-size: 30
-line-height: 40
-color: $neutral-800
-color if $fpm.dark-mode: $neutral
-style: bold
+role: $fpm.design.type.headline-medium
+color: $fpm.design.color.brand.on-region
 padding-bottom: 8
-padding-top: 16
-font: apple-system
+
+--- ftd.text: Click To Expand
+if: not $open
+role: $fpm.design.type.label-medium
+color: $fpm.design.color.brand.on-secondary-action
+background-color: $fpm.design.color.brand.secondary-action
+border-radius: 3
+padding: 3
+align: center
+text-align: center
+move-up: 2
+
+--- container: ftd.main
+
+--- ftd.column:
+id: inner
+if: $open
+width: fill
+$on-click$: stop-propagation
+cursor: default
+spacing: 20
 
 --- markdown:
 if: $body is not null
 body: $body
+
+
+
+
+
+
+
+
 
 
 -- ftd.column h2:
@@ -764,23 +791,35 @@ optional body body:
 width: fill
 region: h2
 padding-bottom: 12
+boolean open: true
+append-at: inner
 
 --- ftd.text:
 caption $title:
 text: $title
 region: title
-size: 26
-line-height: 32
-color: $neutral-800
-color if $fpm.dark-mode: $neutral
-style: bold
+role: $fpm.design.type.headline-small
+color: $fpm.design.color.brand.on-region
 padding-bottom: 8
 padding-top: 16
-font: apple-system
+$on-click$: toggle $open
+
+--- ftd.column:
+id: inner
+if: $open
+width: fill
 
 --- markdown:
 if: $body is not null
 body: $body
+
+
+
+
+
+
+
+
 
 
 -- ftd.column h3:
@@ -789,71 +828,33 @@ optional body body:
 width: fill
 region: h3
 padding-bottom: 12
+boolean open: true
+append-at: inner
 
 --- ftd.text:
 caption $title:
 text: $title
 region: title
-size: 21
-line-height: 30
-color: $neutral-800
-color if $fpm.dark-mode: $neutral
-style: bold
+role: $fpm.design.type.headline-small
+color: $fpm.design.color.brand.on-region
 padding-bottom: 8
 padding-top: 16
-font: apple-system
+$on-click$: toggle $open
 
-
---- markdown:
-if: $body is not null
-body: $body
-
-
--- ftd.column h4:
-caption title:
-optional body body:
+--- ftd.column:
+id: inner
+if: $open
 width: fill
-region: h4
 
---- ftd.text:
-caption $title:
-text: $title
-region: title
-size: 18
-line-height: 24
-color: $neutral-800
-color if $fpm.dark-mode: $neutral
-style: bold
-padding-bottom: 12
-padding-top: 34
-font: apple-system
 
 --- markdown:
 if: $body is not null
 body: $body
 
--- ftd.column h5:
-caption title:
-optional body body:
-width: fill
-region: h5
 
---- ftd.text:
-caption $title:
-text: $title
-region: title
-size: 16
-line-height: 22
-color: $neutral-800
-color if $fpm.dark-mode: $neutral
-style: bold
-padding-bottom: 12
-padding-top: 34
-font: apple-system
 
---- markdown:
-if: $body is not null
-body: $body
+
+
 
 
 
@@ -861,8 +862,6 @@ body: $body
 optional caption caption:
 body body:
 string lang:
-optional string $filename:
-optional string $full:
 padding-bottom: 12
 padding-top: 12
 width: fill
@@ -870,49 +869,58 @@ width: fill
 --- ftd.text:
 text: $caption
 if: $caption is not null
-color: #DCDCDC
+role: $fpm.design.type.body-medium
+color: $fpm.design.color.brand.on-region
 width: fill
-size: 14
-background-color: #3a404e
+background-color: $fpm.design.color.brand.region
 padding-top: 10
 padding-bottom: 10
 padding-left: 20
 padding-right: 20
 border-top-radius: 4
-font: Open sans
 
 --- ftd.code:
-if: $caption is not null
+if: $ftd.dark-mode
 text: $body
 lang: $lang
-color: #4D4D4D
 width: fill
-size: 17
-line-height: 25
+role: $fpm.design.type.body-medium
+color: $fpm.design.color.brand.on-region
 padding-top: 10
 padding-left: 20
 padding-bottom: 10
 padding-right: 20
-background-color: #2b303b
+background-color: $fpm.design.color.brand.region
+border-top-radius if $caption is null: 4
 border-bottom-radius: 4
+border-width: 1
 overflow-x: auto
 
 --- ftd.code:
-if: $caption is null
+if: not $ftd.dark-mode
+theme: InspiredGitHub
 text: $body
 lang: $lang
-color: #4D4D4D
 width: fill
-size: 17
-line-height: 25
+role: $fpm.design.type.body-medium
+color: $fpm.design.color.brand.on-region
 padding-top: 10
 padding-left: 20
 padding-bottom: 10
 padding-right: 20
-background-color: #2b303b
-border-bottom-radius: 4
-border-top-radius: 4
+background-color: $fpm.design.color.brand.region
+border-top-radius if $caption is null: 4
+border-bottom-radius if $caption is null: 4
+border-color: $fpm.design.color.brand.on-region
+border-width: 1
 overflow-x: auto
+
+
+
+
+
+
+
 
 
 -- ftd.row feature-list:
@@ -941,16 +949,22 @@ padding-bottom: 40
 id: main-container
 
 
+
+
+
+
+
+
+
 -- ftd.column feature:
 caption title:
-string image:
+ftd.image-src image:
 body body:
 width: percent 30
 width if $fpm.mobile: fill
 spacing: 15
 padding-top: 60
 align: left
-
 
 --- ftd.image:
 src: $image
@@ -961,28 +975,29 @@ align: center
 
 --- ftd.text: $title
 width: fill
-size: 22
-font: apple-system
 width: fill
 text-align: center
-style: bold
-color if $fpm.dark-mode: $neutral
-
+color: $fpm.design.color.brand.on-region
+role: $fpm.design.type.label-large
 
 --- ftd.text:
 text: $body
 width: fill
-size: 15
-line-height: 26
-font: apple-system
-width: fill
 text-align: center
-color if $fpm.dark-mode: $neutral
+color: $fpm.design.color.brand.on-region
+role: $fpm.design.type.label-large
+
+
+
+
+
+
+
+
 
 -- ftd.row testimony-list:
 width: fill
-background-color: #f5f6f7
-background-color if $fpm.dark-mode: #2b3136
+background-color: $fpm.design.color.brand.region
 open: true
 append-at: main-container
 
@@ -1006,9 +1021,17 @@ wrap: true
 padding-bottom: 40
 id: main-container
 
+
+
+
+
+
+
+
+
 -- ftd.column testimony:
 caption title:
-string image:
+ftd.image-src image:
 string designation:
 body body:
 width: percent 30
@@ -1024,38 +1047,48 @@ align: center
 
 --- ftd.text: $title
 width: fill
-size: 20
-font: apple-system
 width: fill
 text-align: center
-style: bold
-color if $fpm.dark-mode: $neutral
+color: $fpm.design.color.brand.on-region
+role: $fpm.design.type.title-large
 
 --- ftd.text: $designation
 width: fill
-size: 14
-font: apple-system
 width: fill
 text-align: center
-color if $fpm.dark-mode: $neutral
+color: $fpm.design.color.brand.on-region
+role: $fpm.design.type.title-medium
 
 --- ftd.text:
 text: $body
 width: fill
-size: 15
-line-height: 26
-font: apple-system
 width: fill
 text-align: center
-color if $fpm.dark-mode: $neutral
+color: $fpm.design.color.brand.on-region
+role: $fpm.design.type.title-medium
+
+
+
+
+
+
+
+
 
 
 -- ftd.iframe iframe:
-string src:
+string src: 
 src: $src
 height: 400
 width: fill
 margin-bottom: 34
+
+
+
+
+
+
+
 
 
 -- ftd.iframe youtube:
@@ -1064,6 +1097,14 @@ youtube: $id
 height: 400
 width: fill
 margin-bottom: 34
+
+
+
+
+
+
+
+
 
 -- ftd.column container:
 optional string id:
@@ -1075,6 +1116,14 @@ padding-left: 100
 padding-bottom: 60
 align: top
 
+
+
+
+
+
+
+
+
 -- ftd.column output:
 caption caption: Output
 width: fill
@@ -1083,19 +1132,18 @@ append-at: output-container
 padding-top: 12
 
 --- ftd.text: $caption
-color: white
-background-color: #aed581
+color: $fpm.design.color.brand.on-region
+role: $fpm.design.type.body-large
+background-color: $fpm.design.color.brand.region
 border-top-radius: 2
 padding-top: 3
 padding-bottom: 3
 padding-left: 10
 padding-right: 10
-size: 12
-font: Open sans
 
 --- ftd.column:
 border-width: 1
-border-color: #ddedff
+border-color: $fpm.design.color.brand.on-region
 width: fill
 id: output-container
 padding-top: 30
@@ -1103,11 +1151,19 @@ padding-bottom: 30
 padding-left: 20
 padding-right: 20
 border-radius: 2
-background-color: #f6faff
+background-color: $fpm.design.color.brand.region
+
+
+
+
+
+
+
+
 
 
 -- ftd.column image:
-string src:
+ftd.image-src src:
 optional caption caption:
 optional body body:
 optional string link:
@@ -1128,17 +1184,21 @@ align: $align
 --- ftd.text:
 if: $caption is not null
 text: $caption
-color: $neutral-800
-color if $fpm.dark-mode: $neutral
 align: center
 width: fill
-size: 17
-style: italic
-font: Open sans
+color: $fpm.design.color.brand.on-region
+role: $fpm.design.type.label-large
 
 --- markdown:
 if: $body is not null
 body: $body
+
+
+
+
+
+
+
 
 
 -- ftd.column template-list:
@@ -1171,9 +1231,16 @@ padding-bottom: 40
 id: main-container
 
 
+
+
+
+
+
+
+
+
 -- ftd.column template:
 caption title:
-string image:
 optional string link: /
 boolean active:
 string cta-text:
@@ -1181,55 +1248,59 @@ width: 400
 height: 225
 width if $fpm.mobile: fill
 spacing: 15
+string image:
 background-image: $image
 border-radius: 4
 border-width: 1
-border-color: #d9d9d9
+border-color: $fpm.design.color.brand.on-region
 margin-bottom: 50
 
 --- ftd.text: $title
-size: 20
-style: semi-bold
 anchor: parent
 top: 5
 left: 0
-font: apple-system
-background-color: #919191
+background-color: $fpm.design.color.brand.region
 padding-horizontal: 20
 padding-vertical: 5
 min-width: 200
-color: white
+color: $fpm.design.color.brand.on-region
+role: $fpm.design.type.title-large
 
 --- ftd.text: $cta-text
 if: $active
-size: 15
-font: apple-system
 text-align: center
 link: $link
 anchor: parent
 bottom: 30
 right: 40
-color: white
-background-color: #2db7f5
+background-color: $fpm.design.color.brand.region
 border-radius: 20
 padding-vertical: 5
 padding-horizontal: 20
+color: $fpm.design.color.brand.on-region
+role: $fpm.design.type.title-large
 
 --- container: ftd.main
 
 --- ftd.text: $cta-text
 if: not $active
-size: 15
-font: apple-system
 text-align: center
 anchor: parent
 bottom: 30
 right: 40
-color: white
-background-color: gray
+background-color: $fpm.design.color.brand.region
 border-radius: 20
 padding-vertical: 5
 padding-horizontal: 20
+color: $fpm.design.color.brand.on-region
+role: $fpm.design.type.title-large
+
+
+
+
+
+
+
 
 
 -- ftd.column theme:
@@ -1243,35 +1314,39 @@ spacing: 15
 background-image: $image
 border-radius: 4
 border-width: 1
-border-color: #d9d9d9
+border-color: $fpm.design.color.brand.on-region
 margin-bottom: 50
 
 --- ftd.text: $title
-size: 20
-style: semi-bold
 anchor: parent
 top: 5
 left: 0
-font: apple-system
-background-color: #919191
+background-color: $fpm.design.color.brand.region
 padding-horizontal: 20
 padding-vertical: 5
 min-width: 200
-color: white
+color: $fpm.design.color.brand.on-region
+role: $fpm.design.type.title-large
 
 --- ftd.text: Create
-size: 15
-font: apple-system
 text-align: center
 link: $link
 anchor: parent
 bottom: 30
 right: 40
-color: white
-background-color: #2db7f5
+color: $fpm.design.color.brand.on-region
+role: $fpm.design.type.title-medium
+background-color: $fpm.design.color.brand.region
 border-radius: 20
 padding-vertical: 5
 padding-horizontal: 20
+
+
+
+
+
+
+
 
 
 -- ftd.row bread-crumb:
@@ -1292,22 +1367,19 @@ optional string link:
 --- ftd.text: $title
 if: $link is not null
 link: $link
-size: 16
-color: $neutral-700
-font: apple-system
-style: medium
+color: $fpm.design.color.brand.on-region
+role: $fpm.design.type.label-large
 
 --- ftd.image:
 if: $link is not null
-src: /images/arrow.svg
+src: $assets.files.static.images.arrow.svg
 width: 16
 
 --- container: ftd.main
 
 --- ftd.text: $title
 if: $link is null
-color: $neutral-600
-font: apple-system
-style: medium
+color: $fpm.design.color.brand.on-region
+role: $fpm.design.type.label-large
 
 

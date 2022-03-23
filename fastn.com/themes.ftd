@@ -1,8 +1,8 @@
--- ft.doc-page:
+-- ft.page-with-toc: About FPM Themes
 toc: $config.themes-toc
 
 
--- ft.h0: About FPM Themes
+-- ft.markdown: 
 
 When authoring content using FPM, we maintain a {ft.highlight: separation of
 content from presentation}. FTD comes with a few "kernel" UI components, using

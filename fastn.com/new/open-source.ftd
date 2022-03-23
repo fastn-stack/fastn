@@ -1,4 +1,5 @@
 -- import: fpm.dev/lib
+-- import: fpm.dev/assets
 
 -- ft.page:
 
@@ -14,25 +15,25 @@ link: /
 -- lib.template-list:
 
 --- lib.theme: Forest FOSS
-if: not $fpm.dark-mode
+if: not $ftd.dark-mode
 link: https://github.com/FifthTry/Forest-FOSS-Template/generate
-image: images/forest-foss.png
+image: $assets.files.static.images.forest-foss.png
 live_preview: https://fifthtry.github.io/Forest-FOSS-Template/
 
 --- lib.theme: Forest FOSS
-if: $fpm.dark-mode
+if: $ftd.dark-mode
 link: https://github.com/FifthTry/Forest-FOSS-Template/generate
-image: images/dark-forest-foss.png
+image: $assets.files.static.images.dark-forest-foss.png
 live_preview: https://fifthtry.github.io/Forest-FOSS-Template/
 
 --- lib.theme: Jupiter FOSS
-if: not $fpm.dark-mode
+if: not $ftd.dark-mode
 link: https://github.com/FifthTry/jupiter-foss-template/generate
-image: images/open-source.png
+image: $assets.files.static.images.open-source.png
 live_preview: https://fifthtry.github.io/jupiter-foss-template/
 
 --- lib.theme: Jupiter FOSS
-if: $fpm.dark-mode
+if: $ftd.dark-mode
 link: https://github.com/FifthTry/jupiter-foss-template/generate
-image: images/dark-jupiter-foss.png
+image: $assets.files.static.images.dark-jupiter-foss.png
 live_preview: https://fifthtry.github.io/jupiter-foss-template/

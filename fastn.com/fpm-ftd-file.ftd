@@ -1,8 +1,8 @@
--- ft.doc-page:
+-- ft.page-with-toc: `FPM.ftd`
 toc: $ft.toc
 
 
--- ft.h0: `FPM.ftd`
+-- ft.markdown: 
 
 In every [FPM package](/fpm/fs/) there must be a file named `FPM.ftd`.
 

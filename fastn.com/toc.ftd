@@ -1,9 +1,9 @@
--- ft.doc-page:
+-- ft.page-with-toc: `$processor$: toc`
 toc: $ft.toc
 
 
 
--- ft.h0: `$processor$: toc`
+-- ft.markdown: 
 
 This is "table of content processor". It has the following data type:
 

@@ -1,8 +1,8 @@
--- ft.doc-page:
+-- ft.page-with-toc: Install `fpm`
 toc: $ft.toc
 
 
--- ft.h0: Install `fpm`
+-- ft.markdown: 
 
 You can download `fpm` in multiple ways. The easiest way being just download the
 binary and install it in your local system.

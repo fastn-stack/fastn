@@ -1,7 +1,7 @@
--- ft.doc-page:
+-- ft.page-with-toc: FPM Package Interface
 toc: $config.themes-toc
 
 
--- ft.h0: FPM Package Interface
+-- ft.markdown: 
 
 Theme packages are [designed to be interchangeable](/themes/).

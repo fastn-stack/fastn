@@ -1,4 +1,6 @@
 -- import: fpm.dev/lib
+-- import: fpm.dev/assets
+
 
 -- ft.page:
 
@@ -14,39 +16,39 @@ link: /
 -- lib.template-list:
 
 --- lib.theme: Forest
-if: not $fpm.dark-mode
+if: not $ftd.dark-mode
 link: https://github.com/FifthTry/Forest-Template/generate
-image: images/forest-light.jpg
+image: $assets.files.static.images.forest-light.jpg
 live_preview: https://fifthtry.github.io/Forest-Template/
 
 --- lib.theme: Forest
-if: $fpm.dark-mode
+if: $ftd.dark-mode
 link: https://github.com/FifthTry/Forest-Template/generate
-image: images/forest-dark.jpg
+image: $assets.files.static.images.forest-dark.jpg
 live_preview: https://fifthtry.github.io/Forest-Template/
 
 --- lib.theme: Jupiter
-if: not $fpm.dark-mode
+if: not $ftd.dark-mode
 link: https://github.com/FifthTry/fpm-book/generate
-image: images/jupiter-light.jpg
+image: $assets.files.static.images.jupiter-light.jpg
 live_preview: https://fifthtry.github.io/fpm-book/
 
 --- lib.theme: Jupiter
-if: $fpm.dark-mode
+if: $ftd.dark-mode
 link: https://github.com/FifthTry/fpm-book/generate
-image: images/jupiter-dark.jpg
+image: $assets.files.static.images.jupiter-dark.jpg
 live_preview: https://fifthtry.github.io/fpm-book/
 
 
 --- lib.theme: Blue Sapphire
-if: not $fpm.dark-mode
+if: not $ftd.dark-mode
 link: https://github.com/FifthTry/Blue-Sapphire-Template/generate
-image: images/blue-sapphire-light.jpg
+image: $assets.files.static.images.blue-sapphire-light.jpg
 live_preview: https://fifthtry.github.io/Blue-Sapphire-Template/
 
 --- lib.theme: Blue Sapphire
-if: $fpm.dark-mode
+if: $ftd.dark-mode
 link: https://github.com/FifthTry/Blue-Sapphire-Template/generate
-image: images/blue-sapphire-dark.jpg
+image: $assets.files.static.images.blue-sapphire-dark.jpg
 live_preview: https://fifthtry.github.io/Blue-Sapphire-Template/
 

@@ -1,8 +1,8 @@
--- ft.doc-page:
+-- ft.page-with-toc: `fpm` Usage
 toc: $ft.toc
 
 
--- ft.h0: `fpm` Usage
+-- ft.markdown: 
 
 `fpm` CLI uses a few sub-commands to do different things:
 

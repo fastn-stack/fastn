@@ -1,4 +1,6 @@
 -- import: ft
+-- import: fpm.dev/assets
+
 
 -- ftd.column create-section:
 width: fill
@@ -26,7 +28,7 @@ id:  content-container
 
 -- ftd.column hero:
 caption title:
-string image:
+ftd.image-src image:
 open: true
 append-at: main-container
 
@@ -50,9 +52,9 @@ image: $image
 
 -- ftd.column hero-desktop:
 caption title:
-string image:
+ftd.image-src image:
 width: fill
-background-color: #2b3136
+background-color: $fpm.design.color.brand.region
 padding-horizontal: $ft.content-padding
 padding-vertical: 50
 spacing: 40
@@ -63,13 +65,10 @@ append-at: desktop-action-container
 width: fill
 
 --- ftd.text: $title
-size: 56
-line-height: 80
-style: bold
-color: $ft.neutral
+color: $fpm.design.color.brand.on-region
 width: percent 75
 position: center
-font: Roboto
+role: $fpm.design.type.display-large
 
 --- ftd.image:
 src: $image
@@ -90,11 +89,11 @@ spacing: 40
 
 -- ftd.column hero-mobile:
 caption title:
-string image:
+ftd.image-src image:
 optional string id:
 id: $id
 width: fill
-background-color: #2b3136
+background-color: $fpm.design.color.brand.region
 padding-horizontal: 20
 padding-vertical: 50
 spacing: 30
@@ -108,14 +107,11 @@ height: auto
 position: center
 
 --- ftd.text: $title
-size: 36
-line-height: 50
-style: bold
-color: $ft.neutral
+color: $fpm.design.color.brand.on-region
 padding-horizontal: 20
 position: center
 text-align: center
-font: Roboto
+role: $fpm.design.type.display-large
 
 --- container: ftd.main
 
@@ -132,8 +128,8 @@ spacing: 30
 -- ftd.text action-button:
 caption title:
 string url:
-optional string color: white
-optional string background-color: #25c19f
+optional ftd.color color: $fpm.design.color.brand.on-region
+optional ftd.color background-color: $fpm.design.color.brand.region
 text: $title
 link: $url
 background-color: $background-color
@@ -141,10 +137,7 @@ color: $color
 border-radius: 6
 padding-vertical: 15
 padding-horizontal: 40
-font: Roboto
-size: 20
-style: semi-bold
-
+role: $fpm.design.type.label-large
 
 
 
@@ -152,15 +145,12 @@ style: semi-bold
 -- ftd.text banner:
 caption title:
 text: $title
-size: 24
-style: semi-bold
 padding: 45
 text-align: center
-color: #25c19f
-background-color: #20232a
+color: $fpm.design.color.brand.on-region
+background-color: $fpm.design.color.brand.region
 width: fill
-font: Roboto
-
+role: $fpm.design.type.title-large
 
 
 
@@ -198,7 +188,7 @@ id: main-container
 
 -- ftd.column feature:
 caption title:
-string image:
+ftd.image-src image:
 body body:
 width: percent 30
 width if $fpm.mobile: fill
@@ -215,27 +205,22 @@ align: center
 
 --- ftd.text: $title
 width: fill
-size: 22
-font: Roboto
 width: fill
 text-align: center
-style: bold
-color if $fpm.dark-mode: $ft.neutral
+color if $ftd.dark-mode: $fpm.design.color.brand.on-region
+role: $fpm.design.type.label-large
 
 --- ftd.text:
 text: $body
 width: fill
-size: 15
-line-height: 26
-font: Roboto
+role: $fpm.design.type.label-large
 width: fill
 text-align: center
-color if $fpm.dark-mode: $ft.neutral
+color if $ftd.dark-mode: $fpm.design.color.brand.on-region
 
 -- ftd.row testimony-list:
 width: fill
-background-color: #f5f6f7
-background-color if $fpm.dark-mode: #2b3136
+background-color: $fpm.design.color.brand.region
 open: true
 append-at: main-container
 
@@ -267,7 +252,7 @@ id: main-container
 
 -- ftd.column testimony:
 caption title:
-string image:
+ftd.image-src image:
 string designation:
 body body:
 width: percent 30
@@ -283,30 +268,24 @@ align: center
 
 --- ftd.text: $title
 width: fill
-size: 20
-font: Roboto
 width: fill
 text-align: center
-style: bold
-color if $fpm.dark-mode: $ft.neutral
+role: $fpm.design.type.label-large
+color: $fpm.design.color.brand.on-region
 
 --- ftd.text: $designation
 width: fill
-size: 14
-font: Roboto
+role: $fpm.design.type.label-medium
 width: fill
 text-align: center
-color if $fpm.dark-mode: $ft.neutral
+color: $fpm.design.color.brand.on-region
 
 --- ftd.text:
 text: $body
 width: fill
-size: 15
-line-height: 26
-font: Roboto
-width: fill
+role: $fpm.design.type.label-medium
 text-align: center
-color if $fpm.dark-mode: $ft.neutral
+color: $fpm.design.color.brand.on-region
 
 
 
@@ -361,33 +340,30 @@ spacing: 15
 background-image: $image
 border-radius: 4
 border-width: 1
-border-color: #d9d9d9
+border-color: $fpm.design.color.brand.on-region
 margin-bottom: 50
 
 --- ftd.text: $title
-size: 20
-style: semi-bold
+role: $fpm.design.type.title-large
 anchor: parent
 top: 5
 left: 0
-font: Roboto
-background-color: #919191
+background-color: $fpm.design.color.brand.region
 padding-horizontal: 20
 padding-vertical: 5
 min-width: 200
-color: white
+color: $fpm.design.color.brand.on-region
 
 --- ftd.text: $cta-text
 if: $active
-size: 15
-font: Roboto
+role: $fpm.design.type.label-large
 text-align: center
 link: $link
 anchor: parent
 bottom: 30
 right: 40
-color: white
-background-color: #2db7f5
+color: $fpm.design.color.brand.on-region
+background-color: $fpm.design.color.brand.region
 border-radius: 20
 padding-vertical: 5
 padding-horizontal: 20
@@ -396,17 +372,16 @@ padding-horizontal: 20
 
 --- ftd.text: $cta-text
 if: not $active
-size: 15
-font: Roboto
 text-align: center
 anchor: parent
 bottom: 30
 right: 40
-color: white
-background-color: gray
+color: $fpm.design.color.brand.on-region
+background-color: $fpm.design.color.brand.region
 border-radius: 20
 padding-vertical: 5
 padding-horizontal: 20
+role: $fpm.design.type.label-large
 
 
 
@@ -429,21 +404,19 @@ spacing: 15
 background-image: $image
 border-radius: 4
 border-width: 1
-border-color: #d9d9d9
+border-color: $fpm.design.color.brand.on-region
 margin-bottom: 50
 
 --- ftd.text: $title
-size: 20
-style: semi-bold
 anchor: parent
 top: 5
 left: 0
-font: Roboto
-background-color: #919191
+background-color: $fpm.design.color.brand.region
 padding-horizontal: 20
 padding-vertical: 5
 min-width: 200
-color: white
+color: $fpm.design.color.brand.on-region
+role: $fpm.design.type.title-large
 
 --- ftd.row:
 anchor: parent
@@ -454,28 +427,26 @@ id: link-row
 --- container: link-row
 
 --- ftd.text: Live Preview
-size: 15
 if: $live_preview is not null
-font: Roboto
 text-align: center
 link: $live_preview
-color: white
-background-color: #2db7f5
+color: $fpm.design.color.brand.on-region
+background-color: $fpm.design.color.brand.region
 border-radius: 20
 padding-vertical: 5
 padding-horizontal: 20
 margin-right: 5
+role: $fpm.design.type.label-large
 
 --- ftd.text: Create
-size: 15
-font: Roboto
 text-align: center
 link: $link
-color: white
-background-color: #2db7f5
+color: $fpm.design.color.brand.on-region
+background-color: $fpm.design.color.brand.region
 border-radius: 20
 padding-vertical: 5
 padding-horizontal: 20
+role: $fpm.design.type.label-large
 
 
 
@@ -512,24 +483,18 @@ optional string link:
 --- ftd.text: $title
 if: $link is not null
 link: $link
-size: 16
-color: $ft.neutral-700
-color if $fpm.dark-mode: white
-font: Roboto
-style: medium
+color: $fpm.design.color.brand.on-region
+role: $fpm.design.type.label-large
 
 --- ftd.image:
 if: $link is not null
-src: /images/arrow.svg
+src: $assets.files.static.images.arrow.svg
 width: 16
 
 --- container: ftd.main
 
 --- ftd.text: $title
 if: $link is null
-color: $ft.neutral-600
-color if $fpm.dark-mode: white
-font: Roboto
-style: medium
-
+color: $fpm.design.color.brand.on-region
+role: $fpm.design.type.label-medium
 

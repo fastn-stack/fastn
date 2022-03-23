@@ -1,11 +1,12 @@
--- ft.doc-page:
+-- ft.page-with-toc: `fpm diff`
 toc: $ft.toc
 
 
--- ft.h0: `fpm diff`
+-- ft.markdown: 
 
 `fpm diff` shows the changes in the package, compared with what was last synced
 using `fpm sync`.
+
 
 -- ft.code: fpm diff
 lang: diff
