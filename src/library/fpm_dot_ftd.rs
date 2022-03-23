@@ -453,6 +453,17 @@ pub(crate) fn get(lib: &fpm::Library) -> String {
     }
 
     if let Ok(original_path) = lib.config.original_path() {
+        let base_url = lib
+            .base_url
+            .as_str()
+            .trim_end_matches('/')
+            .trim_start_matches('/')
+            .to_string();
+        let base_url = if !base_url.is_empty() {
+            format!("/{base_url}/")
+        } else {
+            String::from("/")
+        };
         if let Ok(original_snapshots) =
             futures::executor::block_on(fpm::snapshot::get_latest_snapshots(&original_path))
         {
@@ -481,6 +492,22 @@ pub(crate) fn get(lib: &fpm::Library) -> String {
                         file = file,
                         status = status.as_str()
                     );
+                    let url = match file.as_str().rsplit_once('.') {
+                        Some(("index", "ftd")) => {
+                            // Index.ftd found. Return index.html
+                            format!("{base_url}index.html")
+                        }
+                        Some((file_path, "ftd")) | Some((file_path, "md")) => {
+                            format!("{base_url}{file_path}/index.html")
+                        }
+                        Some(_) | None => {
+                            // Unknown file found, create URL
+                            format!(
+                                "{base_url}{file_path}/index.html",
+                                file_path = file.as_str()
+                            )
+                        }
+                    };
 
                     match status {
                         fpm::commands::translation_status::TranslationStatus::Missing => {
@@ -488,10 +515,13 @@ pub(crate) fn get(lib: &fpm::Library) -> String {
                                 indoc::indoc! {"
                                     {list}
                                     
-                                    -- missing-files: {file}                                            
+                                    -- missing-files:
+                                    path: {file}
+                                    url: {url}
                                 "},
                                 list = missing_files,
                                 file = file,
+                                url = url,
                             );
                         }
                         fpm::commands::translation_status::TranslationStatus::NeverMarked => {
@@ -499,11 +529,14 @@ pub(crate) fn get(lib: &fpm::Library) -> String {
                                 indoc::indoc! {"
                                     {list}
                                     
-                                    -- never-marked-files: {file}
+                                    -- never-marked-files:
+                                    path: {file}
+                                    url: {url}
                                     
                                 "},
                                 list = never_marked_files,
                                 file = file,
+                                url = url,
                             );
                         }
                         fpm::commands::translation_status::TranslationStatus::Outdated => {
@@ -511,11 +544,14 @@ pub(crate) fn get(lib: &fpm::Library) -> String {
                                 indoc::indoc! {"
                                     {list}
                                     
-                                    -- outdated-files: {file}
+                                    -- outdated-files:
+                                    path: {file}
+                                    url: {url}
                                     
                                 "},
                                 list = outdated_files,
                                 file = file,
+                                url = url,
                             );
                         }
                         fpm::commands::translation_status::TranslationStatus::UptoDate => {
@@ -523,11 +559,14 @@ pub(crate) fn get(lib: &fpm::Library) -> String {
                                 indoc::indoc! {"
                                     {list}
                                     
-                                    -- upto-date-files: {file}
+                                    -- upto-date-files:
+                                    path: {file}
+                                    url: {url}
                                     
                                 "},
                                 list = upto_date_files,
                                 file = file,
+                                url = url,
                             );
                         }
                     }

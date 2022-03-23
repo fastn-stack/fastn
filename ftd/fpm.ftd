@@ -167,11 +167,14 @@ string cli-created-on:
 string build-created-on:
 string ftd-version:
 
+-- record translation-file:
+string path:
+string url:
 
--- string list missing-files:
--- string list never-marked-files:
--- string list outdated-files:
--- string list upto-date-files:
+-- translation-file list missing-files:
+-- translation-file list never-marked-files:
+-- translation-file list outdated-files:
+-- translation-file list upto-date-files:
 
 
 \ Translation status for the original language package

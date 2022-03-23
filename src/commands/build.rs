@@ -271,7 +271,6 @@ async fn build_with_original(
             parent_path: config.root.as_str().to_string(),
             package_name: config.package.name.clone(),
         };
-
         print!("Processing translation-status.ftd ... ");
         let start = std::time::Instant::now();
         std::io::stdout().flush()?;
@@ -978,6 +977,7 @@ async fn process_ftd(
             document_id: main.id.clone(),
             translated_data: Default::default(),
             asset_documents: asset_documents.to_owned(),
+            base_url: base_url.to_string(),
         };
 
         let main_ftd_doc = match ftd::p2::Document::from(
@@ -1031,6 +1031,7 @@ async fn process_ftd(
             document_id: main.id.clone(),
             translated_data,
             asset_documents: asset_documents.to_owned(),
+            base_url: base_url.to_string(),
         };
 
         let main_ftd_doc = match ftd::p2::Document::from(
@@ -1113,6 +1114,7 @@ async fn process_ftd(
             document_id: main.id.clone(),
             translated_data,
             asset_documents: asset_documents.to_owned(),
+            base_url: base_url.to_string(),
         };
 
         let main_ftd_doc = match ftd::p2::Document::from(

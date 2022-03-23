@@ -13,6 +13,8 @@ pub struct Library {
     /// Hashmap that contains the information about the assets document for the current build
     /// It'll contain a map of <package_name> corresponding to the asset doc for that package
     pub asset_documents: std::collections::HashMap<String, String>,
+
+    pub base_url: String,
 }
 
 impl ftd::p2::Library for Library {
