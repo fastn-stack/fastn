@@ -1,7 +1,7 @@
 -- import: ft
 
--- ft.site-icon: -/ftd.dev/images/ftd-logo-desktop.png
--- ft.site-icon-mobile: -/ftd.dev/images/ftd-logo-mobile.png
+\-- ft.site-icon: -/ftd.dev/images/ftd-logo-desktop.png
+\-- ft.site-icon-mobile: -/ftd.dev/images/ftd-logo-mobile.png
 -- ft.github: https://github.com/fifthtry/ftd/
 -- ft.site-url: /
 

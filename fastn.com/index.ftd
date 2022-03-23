@@ -1,5 +1,6 @@
 -- ft.page:
 
+
 -- ft.content:
 
 -- ft.h0: FTD: Programming Language For Prose
@@ -42,13 +43,15 @@ spacing: 15
 lang: ftd
 slot: left
 
-\-- ftd.text: Hello World!
-boolean current: false
+\--- ftd.text: Hello World!
+align: center
+slot: right
 $on-click$: toggle $current
-color if $current: red
-color: white
-background-color: black
 padding: 20
+text-align: center
+color if $current: $fpm.design.color.brand.on-region
+color: $fpm.design.color.brand.error
+background-color: $fpm.design.color.brand.region
 
 --- ftd.text: Hello World!
 align: center
@@ -56,9 +59,9 @@ slot: right
 $on-click$: toggle $current
 padding: 20
 text-align: center
-color if $current: red
-color: white
-background-color: black
+color if $current: $fpm.design.color.brand.on-region
+color: $fpm.design.color.brand.error
+background-color: $fpm.design.color.brand.region
 
 
 
@@ -86,8 +89,8 @@ boolean current: false
 caption title:
 $on-click$: toggle $current
 text-align: center
-color if $current: red
-color: white
+color if $current: $fpm.design.color.brand.on-region
+color: $fpm.design.color.brand.on-region
 background-color: black
 padding: 20
 
@@ -102,9 +105,9 @@ caption title:
 align: center
 text-align: center
 $on-click$: toggle $current
-color if $current: red
-color: white
-background-color: black
+color if $current: $fpm.design.color.brand.on-region
+color: $fpm.design.color.brand.error
+background-color: $fpm.design.color.brand.region
 padding: 20
 
 
