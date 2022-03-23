@@ -1,6 +1,13 @@
 // all ftd_utils are meant to be pure functions only: they can only depend on the
 // input passed, not on closures or global data etc
 
+function console_log(...message) {
+    if (true) { // false
+        console.log(...message);
+    }
+}
+
+
 let ftd_utils = {
     resolve_reference: function (value, reference, data, obj) {
         if (value instanceof Object) {
@@ -303,7 +310,7 @@ let ftd_utils = {
 
     remove_nodes: function (nodes, id) {
         for (const node in nodes) {
-            console.log(`${nodes[node]}:${id}`);
+            console_log(`${nodes[node]}:${id}`);
             document.querySelector(`[data-id="${nodes[node]}:${id}"]`).remove();
         }
     },
@@ -647,7 +654,7 @@ let ftd_utils = {
                     }
                 }
                 if (display && !external_children_placed.includes(object)) {
-                    console.log(`${object}:${id}::: ${set_at}:${id}`);
+                    console_log(`${object}:${id}::: ${set_at}:${id}`);
                     let get_element_set_at = document.querySelector(`[data-id="${set_at}:${id}"]`);
                     let objects_to_set = document.querySelectorAll(`[data-ext-id="${object}:${id}"]`);
                     for (let i = 0; i < objects_to_set.length; i++) {
@@ -756,12 +763,12 @@ window.ftd = (function () {
 
             let var_name = ftd_utils.get_name_and_remaining(target)[0];
             if (!data[var_name]) {
-                console.log(target, " is not in data, ignoring");
+                console_log(target, " is not in data, ignoring");
                 return;
             }
             let old_value = ftd_utils.get_data_value(data, target);
             if (ftd_utils.deepEqual(old_value, value) && !target.includes("MOUSE-IN")) {
-                console.log(target, " value is same as current, ignoring");
+                console_log(target, " value is same as current, ignoring");
                 return;
             }
             ftd_utils.handle_action(id, target, value, data, ftd_external_children);
@@ -793,7 +800,7 @@ window.ftd = (function () {
             }
             ftd_utils.handle_action(id, target, value, data, ftd_external_children);
         } else {
-            console.log("unknown action:", act);
+            console_log("unknown action:", act);
             return;
         }
 
@@ -802,7 +809,7 @@ window.ftd = (function () {
     let exports = {};
 
     exports.handle_event = function (evt, id, event, obj) {
-        console.log(id, event);
+        console_log(id, event);
         let actions = JSON.parse(event);
         for (const action in actions) {
             handle_event(evt, id, actions[action], obj)
@@ -813,7 +820,7 @@ window.ftd = (function () {
         let data = ftd_data[id];
 
         if (!data[variable]) {
-            console.log(variable, "is not in data, ignoring");
+            console_log(variable, "is not in data, ignoring");
             return;
         }
 
@@ -837,19 +844,19 @@ window.ftd = (function () {
         let data = ftd_data[id];
 
         if (!data[target]) {
-            console.log(target, "is not in data, ignoring");
+            console_log(target, "is not in data, ignoring");
             return;
         }
 
         let list = data[target].value;
 
         if (!(list instanceof Object)) {
-            console.log(list, "is not list, ignoring");
+            console_log(list, "is not list, ignoring");
             return;
         }
 
         if (value === undefined || value.trim() === "") {
-            console.log("Nothing to insert in ", list);
+            console_log("Nothing to insert in ", list);
             return;
         }
 
@@ -868,7 +875,7 @@ window.ftd = (function () {
         let data = ftd_data[id];
 
         if (!data[variable]) {
-            console.log(variable, "is not in data, ignoring");
+            console_log(variable, "is not in data, ignoring");
             return;
         }
 
@@ -879,7 +886,7 @@ window.ftd = (function () {
         let data = ftd_data[id];
 
         if (!data[variable]) {
-            console.log(variable, "is not in data, ignoring");
+            console_log(variable, "is not in data, ignoring");
             return;
         }
 
@@ -890,7 +897,7 @@ window.ftd = (function () {
         let data = ftd_data[id];
 
         if (!data[variable]) {
-            console.log(variable, "is not in data, ignoring");
+            console_log(variable, "is not in data, ignoring");
             return;
         }
         return data[variable].value;
@@ -959,7 +966,7 @@ window.ftd.post_init = function () {
 
     function initialise_device() {
         last_device = get_device();
-        console.log("last_device", last_device);
+        console_log("last_device", last_device);
         window.ftd.set_bool_for_all(FTD_DEVICE, last_device);
     }
 
@@ -971,7 +978,7 @@ window.ftd.post_init = function () {
 
         window.ftd.set_string_for_all(FTD_DEVICE, current);
         last_device = current;
-        console.log("last_device", last_device);
+        console_log("last_device", last_device);
     }
 
     function get_device() {
@@ -1112,7 +1119,7 @@ window.ftd.post_init = function () {
                 window.enable_dark_mode();
                 break;
             default:
-                console.log("cookie value is wrong", current_dark_mode_cookie);
+                console_log("cookie value is wrong", current_dark_mode_cookie);
                 window.enable_system_mode();
         }
     }
