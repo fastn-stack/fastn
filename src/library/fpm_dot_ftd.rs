@@ -508,6 +508,9 @@ pub(crate) fn get(lib: &fpm::Library) -> String {
                             )
                         }
                     };
+                    let static_attrs = indoc::indoc! {"
+                    is-disabled: false
+                    is-heading: false"};
 
                     match status {
                         fpm::commands::translation_status::TranslationStatus::Missing => {
@@ -516,12 +519,14 @@ pub(crate) fn get(lib: &fpm::Library) -> String {
                                     {list}
                                     
                                     -- missing-files:
-                                    path: {file}
+                                    title: {file}
                                     url: {url}
+                                    {static_attrs}
                                 "},
                                 list = missing_files,
                                 file = file,
                                 url = url,
+                                static_attrs = static_attrs,
                             );
                         }
                         fpm::commands::translation_status::TranslationStatus::NeverMarked => {
@@ -530,13 +535,15 @@ pub(crate) fn get(lib: &fpm::Library) -> String {
                                     {list}
                                     
                                     -- never-marked-files:
-                                    path: {file}
+                                    title: {file}
                                     url: {url}
+                                    {static_attrs}
                                     
                                 "},
                                 list = never_marked_files,
                                 file = file,
                                 url = url,
+                                static_attrs = static_attrs,
                             );
                         }
                         fpm::commands::translation_status::TranslationStatus::Outdated => {
@@ -545,13 +552,15 @@ pub(crate) fn get(lib: &fpm::Library) -> String {
                                     {list}
                                     
                                     -- outdated-files:
-                                    path: {file}
+                                    title: {file}
                                     url: {url}
+                                    {static_attrs}
                                     
                                 "},
                                 list = outdated_files,
                                 file = file,
                                 url = url,
+                                static_attrs = static_attrs,
                             );
                         }
                         fpm::commands::translation_status::TranslationStatus::UptoDate => {
@@ -560,13 +569,15 @@ pub(crate) fn get(lib: &fpm::Library) -> String {
                                     {list}
                                     
                                     -- upto-date-files:
-                                    path: {file}
+                                    title: {file}
                                     url: {url}
+                                    {static_attrs}
                                     
                                 "},
                                 list = upto_date_files,
                                 file = file,
                                 url = url,
+                                static_attrs = static_attrs,
                             );
                         }
                     }
