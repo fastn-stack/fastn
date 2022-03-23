@@ -1,5 +1,6 @@
 // all ftd_utils are meant to be pure functions only: they can only depend on the
 // input passed, not on closures or global data etc
+
 let ftd_utils = {
     resolve_reference: function (value, reference, data, obj) {
         if (value instanceof Object) {
@@ -338,6 +339,30 @@ let ftd_utils = {
         return [name.slice(0, i), name.slice(i + 1)];
     },
 
+    deepEqual: function (object1, object2) {
+        const keys1 = Object.keys(object1);
+        const keys2 = Object.keys(object2);
+        if (keys1.length !== keys2.length) {
+            return false;
+        }
+        for (const key of keys1) {
+            const val1 = object1[key];
+            const val2 = object2[key];
+            const areObjects = ftd_utils.isObject(val1) && ftd_utils.isObject(val2);
+            if (
+                areObjects && !ftd_utils.deepEqual(val1, val2) ||
+                !areObjects && val1 !== val2
+            ) {
+                return false;
+            }
+        }
+        return true;
+    },
+
+    isObject: function (object) {
+        return object != null && typeof object === 'object';
+    },
+
     get_data_value: function (data, name) {
         let [var_name, remaining] = ftd_utils.get_name_and_remaining(name);
         let initial_value = data[var_name].value;
@@ -373,9 +398,10 @@ let ftd_utils = {
 
     handle_action: function (id, target_variable, value, data, ftd_external_children) {
         var styles_edited = [];
-        handle_action_(id, target_variable, value, data, ftd_external_children, styles_edited);
+        let visibility_change = false;
+        handle_action_(id, target_variable, value, data, ftd_external_children, styles_edited, visibility_change);
 
-        function handle_action_(id, target_variable, value, data, ftd_external_children, styles_edited) {
+        function handle_action_(id, target_variable, value, data, ftd_external_children, styles_edited, visibility_change) {
             ftd_utils.set_data_value(data, target_variable, value);
             let new_value = ftd_utils.get_data_value(data, target_variable);
             if (!!new_value && !!new_value["$kind$"]) {
@@ -427,6 +453,10 @@ let ftd_utils = {
                                 display = "block";
                             }
                         }
+                        let node = document.querySelector(`[data-id="${dependency}:${id}"]`);
+                        if (node.style.display !== display) {
+                            visibility_change = true;
+                        }
                         document.querySelector(`[data-id="${dependency}:${id}"]`).style.display = display;
                         ftd_utils.first_child_styling(`${dependency}:${id}`);
 
@@ -452,7 +482,7 @@ let ftd_utils = {
                                         }
                                     }
                                     data[variable].dependencies[node] = dependent_dependencies;
-                                    handle_action_(id, variable, dependent, data, ftd_external_children, styles_edited);
+                                    handle_action_(id, variable, dependent, data, ftd_external_children, styles_edited, visibility_change);
                                 }
                             }
                         } else if (ftd_utils.is_equal_condition(data[target].value, json_dependency.condition)) {
@@ -467,7 +497,7 @@ let ftd_utils = {
                                         ftd_utils.set_data_value(data, parameter, value);
                                     }
                                     let parameter_value = ftd_utils.get_data_value(data, parameter);
-                                    handle_action_(id, parameter, parameter_value, data, ftd_external_children, styles_edited)
+                                    handle_action_(id, parameter, parameter_value, data, ftd_external_children, styles_edited, visibility_change)
                                 }
                             }
                         } else {
@@ -484,7 +514,7 @@ let ftd_utils = {
                                         ftd_utils.set_data_value(data, parameter, default_value.value);
                                     }
                                     let parameter_value = ftd_utils.get_data_value(data, parameter);
-                                    handle_action_(id, parameter, parameter_value, data, ftd_external_children, styles_edited)
+                                    handle_action_(id, parameter, parameter_value, data, ftd_external_children, styles_edited, visibility_change)
                                 }
                             }
                         }
@@ -507,7 +537,7 @@ let ftd_utils = {
                                         dependent_dependencies[d].parameters[style_attr].default.value = data[target].value;
                                     }
                                     data[set[idx]].dependencies[dependency] = dependent_dependencies;
-                                    handle_action_(id, set[idx], dependent, data, ftd_external_children, styles_edited);
+                                    handle_action_(id, set[idx], dependent, data, ftd_external_children, styles_edited, visibility_change);
                                 }
                                 continue;
                             }
@@ -580,7 +610,9 @@ let ftd_utils = {
                     }
                 }
             }
-            ftd_utils.external_children_replace(id, ftd_external_children);
+            if (visibility_change) {
+                ftd_utils.external_children_replace(id, ftd_external_children);
+            }
         }
     },
 
@@ -646,7 +678,8 @@ window.ftd = (function () {
             evt.preventDefault();
         } else if (act === "toggle") {
             let target = action["target"];
-            let value = data[target].value;
+            let var_name = ftd_utils.get_name_and_remaining(target)[0];
+            let value = data[var_name].value;
             if (typeof value === "string" || value instanceof String) {
                 value = value === 'true';
             }
@@ -655,7 +688,7 @@ window.ftd = (function () {
             if (action["parameters"].data !== undefined) {
                 let value = JSON.parse(action["parameters"].data[0].value);
                 let reference = JSON.parse(action["parameters"].data[0].reference);
-                let data = ftd_utils.resolve_reference(value, reference, ftd_data[id], obj);
+                let data = ftd_utils.resolve_reference(value, reference, data, obj);
                 let func = data.function.trim().replaceAll("-", "_");
                 window[func](id, data, reference);
             } else {
@@ -668,18 +701,18 @@ window.ftd = (function () {
             if (action["parameters"].by !== undefined) {
                 let by_value = action["parameters"].by[0].value;
                 let by_reference = action["parameters"].by[0].reference;
-                increment = parseInt(ftd_utils.resolve_reference(by_value, by_reference, ftd_data[id], obj));
+                increment = parseInt(ftd_utils.resolve_reference(by_value, by_reference, data, obj));
             }
             let clamp_max = undefined;
             let clamp_min = undefined;
             if (action["parameters"]["clamp"] !== undefined) {
                 let clamp_value = action["parameters"]["clamp"];
                 if (clamp_value.length === 1) {
-                    clamp_max = parseInt(ftd_utils.resolve_reference(clamp_value[0].value, clamp_value[0].reference, ftd_data[id], obj));
+                    clamp_max = parseInt(ftd_utils.resolve_reference(clamp_value[0].value, clamp_value[0].reference, data, obj));
                 }
                 if (clamp_value.length === 2) {
-                    clamp_min = parseInt(ftd_utils.resolve_reference(clamp_value[0].value, clamp_value[0].reference, ftd_data[id], obj));
-                    clamp_max = parseInt(ftd_utils.resolve_reference(clamp_value[1].value, clamp_value[1].reference, ftd_data[id], obj));
+                    clamp_min = parseInt(ftd_utils.resolve_reference(clamp_value[0].value, clamp_value[0].reference, data, obj));
+                    clamp_max = parseInt(ftd_utils.resolve_reference(clamp_value[1].value, clamp_value[1].reference, data, obj));
                 }
             }
             exports.increment_decrement_value(id, target, increment, clamp_min, clamp_max);
@@ -690,7 +723,7 @@ window.ftd = (function () {
             if (action["parameters"].by !== undefined) {
                 let by_value = action["parameters"].by[0].value;
                 let by_reference = action["parameters"].by[0].reference;
-                decrement = -parseInt(ftd_utils.resolve_reference(by_value, by_reference, ftd_data[id], obj));
+                decrement = -parseInt(ftd_utils.resolve_reference(by_value, by_reference, data, obj));
             }
 
             let clamp_max = undefined;
@@ -698,11 +731,11 @@ window.ftd = (function () {
             if (action["parameters"]["clamp"] !== undefined) {
                 let clamp_value = action["parameters"]["clamp"];
                 if (clamp_value.length === 1) {
-                    clamp_max = parseInt(ftd_utils.resolve_reference(clamp_value[0].value, clamp_value[0].reference, ftd_data[id], obj));
+                    clamp_max = parseInt(ftd_utils.resolve_reference(clamp_value[0].value, clamp_value[0].reference, data, obj));
                 }
                 if (clamp_value.length === 2) {
-                    clamp_min = parseInt(ftd_utils.resolve_reference(clamp_value[0].value, clamp_value[0].reference, ftd_data[id], obj));
-                    clamp_max = parseInt(ftd_utils.resolve_reference(clamp_value[1].value, clamp_value[1].reference, ftd_data[id], obj));
+                    clamp_min = parseInt(ftd_utils.resolve_reference(clamp_value[0].value, clamp_value[0].reference, data, obj));
+                    clamp_max = parseInt(ftd_utils.resolve_reference(clamp_value[1].value, clamp_value[1].reference, data, obj));
                 }
             }
 
@@ -710,16 +743,27 @@ window.ftd = (function () {
         } else if (act === "set-value") {
             let target = action["target"];
             let value_data = action["parameters"].value[0];
-            let value = ftd_utils.resolve_reference(value_data.value, value_data.reference, ftd_data[id], obj)
+            let value = ftd_utils.resolve_reference(value_data.value, value_data.reference, data, obj)
             if (action["parameters"].value[1].value === "integer") {
                 value = parseInt(value);
             } else if (action["parameters"].value[1].value === "decimal") {
                 value = parseFloat(value);
             } else if (action["parameters"].value[1].value === "boolean") {
                 value = (value === "true");
+            } else if (ftd_utils.isJson(value)) {
+                value = JSON.parse(value)
             }
 
-            let data = ftd_data[id];
+            let var_name = ftd_utils.get_name_and_remaining(target)[0];
+            if (!data[var_name]) {
+                console.log(target, " is not in data, ignoring");
+                return;
+            }
+            let old_value = ftd_utils.get_data_value(data, target);
+            if (ftd_utils.deepEqual(old_value, value) && !target.includes("MOUSE-IN")) {
+                console.log(target, " value is same as current, ignoring");
+                return;
+            }
             ftd_utils.handle_action(id, target, value, data, ftd_external_children);
 
         } else if (act === "insert") {
@@ -728,22 +772,22 @@ window.ftd = (function () {
             if (action["parameters"].value !== undefined) {
                 let insert_value = action["parameters"].value[0].value;
                 let insert_reference = action["parameters"].value[0].reference;
-                value = ftd_utils.resolve_reference(insert_value, insert_reference, ftd_data[id], obj);
+                value = ftd_utils.resolve_reference(insert_value, insert_reference, data, obj);
             }
             let at = undefined;
             if (action["parameters"].at !== undefined) {
                 let at_value = action["parameters"].at[0].value;
                 let at_reference = action["parameters"].at[0].reference;
-                at = ftd_utils.resolve_reference(at_value, at_reference, ftd_data[id], obj);
+                at = ftd_utils.resolve_reference(at_value, at_reference, data, obj);
             }
 
             exports.insert_value(id, target, value, at);
 
         } else if (act === "clear") {
             let target = action["target"];
-            let data = ftd_data[id];
             let value = "";
-            if (data[target].value instanceof Object) {
+            let var_name = ftd_utils.get_name_and_remaining(target)[0];
+            if (data[var_name].value instanceof Object) {
                 let list = [];
                 value = list;
             }
