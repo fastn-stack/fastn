@@ -1088,14 +1088,14 @@ $on-click$: clear $strings
 
 -- ftd.text:
 if: $query is not null
-color if $fpm.dark-mode: white
+color if $ftd.dark-mode: white
 
 You have typed: {value}
 
 --- ftd.text value: $query
 color: green
-color if $fpm.dark-mode: white
-background-color if $fpm.dark-mode: green
+color if $ftd.dark-mode: white
+background-color if $ftd.dark-mode: green
 padding if $query is not null: 5
 size: 20
 
@@ -1107,7 +1107,7 @@ $loop$: $strings as $obj
 -- ftd.column show-data:
 caption text:
 padding: 10
-/background-color if $fpm.dark-mode: white
+/background-color if $ftd.dark-mode: white
 background-color: yellow
 color: red
 

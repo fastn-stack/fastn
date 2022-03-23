@@ -138,13 +138,13 @@ padding-left: 10
 open: true
 
 --- ftd.text: $name
-color if $fpm.dark-mode: white
+color if $ftd.dark-mode: white
 
 -- ftd.column:
 spacing: 20
 border-width: 1
 border-radius: 5
-border-color if $fpm.dark-mode: white
+border-color if $ftd.dark-mode: white
 padding: 10
 width: fill
 
@@ -271,7 +271,7 @@ Output
 spacing: 20
 border-width: 1
 border-radius: 5
-border-color if $fpm.dark-mode: white
+border-color if $ftd.dark-mode: white
 padding: 10
 width: fill
 
@@ -280,14 +280,14 @@ width: fill
 string name:
 padding-left: 10
 open: true
-color if $fpm.dark-mode: white
+color if $ftd.dark-mode: white
 
 --- ftd.row:
 
 --- ftd.text: ✌️
 
 --- ftd.text: $name
-color if $fpm.dark-mode: white
+color if $ftd.dark-mode: white
 
 -- ftd.column:
 
@@ -479,14 +479,14 @@ Output
 spacing: 20
 border-width: 1
 border-radius: 5
-border-color if $fpm.dark-mode: white
+border-color if $ftd.dark-mode: white
 padding: 10
 width: fill
 
 
 -- ftd.column display-item1:
 string name:
-color if $fpm.dark-mode: white
+color if $ftd.dark-mode: white
 padding-left: 10
 open: true
 append-at: some-child
@@ -498,7 +498,7 @@ $on-click$: toggle $visible
 --- ftd.text: ✌️
 
 --- ftd.text: $name
-color if $fpm.dark-mode: white
+color if $ftd.dark-mode: white
 
 --- container: ftd.main
 

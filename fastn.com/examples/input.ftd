@@ -26,7 +26,7 @@ $on-input$: $query=$VALUE
 $on-change$: message-host $obj
 
 -- ftd.text:
-color if $fpm.dark-mode: white
+color if $ftd.dark-mode: white
 
 You have typed: {value}
 

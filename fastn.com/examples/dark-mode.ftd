@@ -70,13 +70,13 @@ ideally not exist at all}. Every site that supports dark mode should simply
 honor the operating system preferences set by the user.
 
 -- ft.image:
-if: $fpm.dark-mode
+if: $ftd.dark-mode
 src: -/ftd.dev/images/dark-mode/dark-mode-preferences.png
 width: 600
 align: center
 
 -- ft.image:
-if: not $fpm.dark-mode
+if: not $ftd.dark-mode
 src: -/ftd.dev/images/dark-mode/light-mode-preferences.png
 width: 600
 align: center
