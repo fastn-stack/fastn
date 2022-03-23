@@ -1,3 +1,5 @@
+-- import: fpm.dev/assets
+
 -- ft.page-with-toc: Common Header Component
 toc: $config.themes-toc
 
@@ -7,7 +9,7 @@ This component is used by most themes as the header of the site. The package
 interace for this component is called `fpm.dev/header`.
 
 -- ft.image: header
-src: -/fpm.dev/images/theme/header.png
+src: $assets.files.static.images.theme.header.png
 
 
 -- ft.code: include the header using this

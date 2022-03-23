@@ -1,3 +1,5 @@
+-- import: fpm.dev/assets
+
 -- ft.page-with-toc: Dark Mode Support
 toc: $config.themes-toc
 
@@ -51,7 +53,7 @@ This two state switcher should be considered an anti pattern.
 This kind of UI is preferred today:
 
 -- ft.image: Dark Mode Switcher
-src: -/fpm.dev/theme/dark-mode-switcher.png
+src: $assets.files.static.images.theme.dark-mode-switcher.png
 align: center
 
 In the collapsed state it should show the icon showing the mode that is currently

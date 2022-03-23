@@ -1,4 +1,5 @@
 -- import: fpm.dev/lib
+-- import: fpm.dev/assets
 
 -- ft.page:
 id: main-page
@@ -12,24 +13,24 @@ id: main-page
 
 --- lib.template: An Online Book
 link: /new/book/
-image: -/fpm.dev/images/document.png
+image: $assets.files.static.images.document.png
 active: true
 cta-text: Select Theme
 
 --- lib.template: An Open Source Project Site
 link: /new/open-source/
-image: -/fpm.dev/images/open-source.png
+image: $assets.files.static.images.open-source.png
 active: true
 cta-text: Select Theme
 
 --- lib.template: A Presentation
 link: /new/presentation/
-image: -/fpm.dev/images/giggle.png
+image: $assets.files.static.images.giggle.png
 active: true
 cta-text: Select Theme
 
 --- lib.template: A Diagram
-image: -/fpm.dev/images/no-data.jpg
+image: $assets.files.static.images.no-data.jpg
 active: false
 cta-text: Coming Soon
 

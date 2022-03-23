@@ -9,7 +9,7 @@ append-at: content-container
 padding-vertical: 30
 
 --- ftd.column:
-if: not $fpm.mobile
+if: not $ft.is-mobile
 max-width: 1000
 width: fill
 align: center
@@ -18,10 +18,10 @@ id:  content-container
 --- container: ftd.main
 
 --- ftd.column:
-if: $fpm.mobile
+if: $ft.is-mobile
 width: fill
 align: center
-padding-horizontal if $fpm.mobile: 20
+padding-horizontal if $ft.is-mobile: 20
 id:  content-container
 
 
@@ -33,14 +33,14 @@ open: true
 append-at: main-container
 
 --- hero-desktop: $title
-if: not $fpm.mobile
+if: not $ft.is-mobile
 id: main-container
 image: $image
 
 --- container: ftd.main
 
 --- hero-mobile: $title
-if: $fpm.mobile
+if: $ft.is-mobile
 id: main-container
 image: $image
 
@@ -161,7 +161,7 @@ append-at: main-container
 
 --- ftd.row:
 width: fill
-if: not $fpm.mobile
+if: not $ft.is-mobile
 padding-horizontal: $ft.content-padding
 spacing: space-between
 wrap: true
@@ -171,7 +171,7 @@ id: main-container
 --- container: ftd.main
 
 --- ftd.column:
-if: $fpm.mobile
+if: $ft.is-mobile
 width: fill
 padding-horizontal: 20
 spacing: space-around
@@ -191,7 +191,7 @@ caption title:
 ftd.image-src image:
 body body:
 width: percent 30
-width if $fpm.mobile: fill
+width if $ft.is-mobile: fill
 spacing: 15
 padding-top: 60
 align: left
@@ -226,7 +226,7 @@ append-at: main-container
 
 --- ftd.row:
 width: fill
-if: not $fpm.mobile
+if: not $ft.is-mobile
 padding-horizontal: $ft.content-padding
 spacing: space-between
 wrap: true
@@ -236,7 +236,7 @@ id: main-container
 --- container: ftd.main
 
 --- ftd.column:
-if: $fpm.mobile
+if: $ft.is-mobile
 width: fill
 padding-horizontal: 20
 spacing: space-around
@@ -256,7 +256,7 @@ ftd.image-src image:
 string designation:
 body body:
 width: percent 30
-width if $fpm.mobile: fill
+width if $ft.is-mobile: fill
 spacing: 15
 padding-top: 60
 
@@ -302,7 +302,7 @@ align: center
 
 --- ftd.row:
 width: fill
-if: not $fpm.mobile
+if: not $ft.is-mobile
 spacing: space-between
 wrap: true
 padding-bottom: 60
@@ -311,7 +311,7 @@ id: main-container
 --- container: ftd.main
 
 --- ftd.column:
-if: $fpm.mobile
+if: $ft.is-mobile
 width: fill
 padding-horizontal: 20
 spacing: space-between
@@ -329,13 +329,13 @@ id: main-container
 
 -- ftd.column template:
 caption title:
-string image:
+ftd.image-src image:
 optional string link: /
 boolean active:
 string cta-text:
 width: 400
 height: 225
-width if $fpm.mobile: fill
+width if $ft.is-mobile: fill
 spacing: 15
 background-image: $image
 border-radius: 4
@@ -394,12 +394,12 @@ role: $fpm.design.type.label-large
 
 -- ftd.column theme:
 caption title:
-string image:
+ftd.image-src image:
 optional string link: /
 optional string live_preview:
 width: 400
 height: 225
-width if $fpm.mobile: fill
+width if $ft.is-mobile: fill
 spacing: 15
 background-image: $image
 border-radius: 4

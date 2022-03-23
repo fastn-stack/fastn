@@ -26,7 +26,7 @@ lang: ftd
 
 \-- ftd.text heading:
 size: 48
-size if $fpm.mobile: 32
+size if $ft.is-mobile: 32
 
 -- ft.markdown:
 
@@ -38,7 +38,7 @@ on mobile, this is how we would set it up.
 Sometimes this is not enough, maybe you want to have two column presentation on
 desktop and single column on mobile. Or maybe the amount of changes you are doing
 based on `fpm.mobile` flag is large, and the code is getting hard to maintain
-because of too many `foo if $fpm.mobile: value` calls.
+because of too many `foo if $ft.is-mobile: value` calls.
 
 In such cases it is recommended to have two different components, and create a
 wrapper component that will call the device specific component based on
@@ -53,10 +53,10 @@ lang: ftd
 caption title:
 
 \--- heading-desktop: $title
-if: not $fpm.mobile
+if: not $ft.is-mobile
 
 \--- heading-mobile: $title
-if: $fpm.mobile
+if: $ft.is-mobile
 
 -- ft.markdown:
 
