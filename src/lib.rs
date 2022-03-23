@@ -36,12 +36,8 @@ pub use ui::{
 };
 pub use variable::{PropertyValue, TextSource, Value, Variable, VariableFlags};
 
-pub fn js() -> &'static str {
-    Box::leak(
-        include_str!("../ftd.js")
-            .replace("if (true) { // false", "if (false) { // false")
-            .into_boxed_str(),
-    )
+pub fn js() -> String {
+    include_str!("../ftd.js").replace("if (true) { // false", "if (false) { // false")
 }
 
 pub fn css() -> &'static str {

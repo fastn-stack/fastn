@@ -347,6 +347,10 @@ let ftd_utils = {
     },
 
     deepEqual: function (object1, object2) {
+        const areObjects = ftd_utils.isObject(object1) && ftd_utils.isObject(object2);
+        if (!areObjects && object1 !== object2) {
+            return false;
+        }
         const keys1 = Object.keys(object1);
         const keys2 = Object.keys(object2);
         if (keys1.length !== keys2.length) {
@@ -355,11 +359,7 @@ let ftd_utils = {
         for (const key of keys1) {
             const val1 = object1[key];
             const val2 = object2[key];
-            const areObjects = ftd_utils.isObject(val1) && ftd_utils.isObject(val2);
-            if (
-                areObjects && !ftd_utils.deepEqual(val1, val2) ||
-                !areObjects && val1 !== val2
-            ) {
+            if (!ftd_utils.deepEqual(val1, val2)) {
                 return false;
             }
         }
