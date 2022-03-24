@@ -139,7 +139,6 @@ impl Document {
                 },
             );
         }
-        ftd::Element::get_device_dependencies(self, &mut data);
         ftd::Element::get_variable_dependencies(self, &mut data);
         ftd::Element::get_event_dependencies(&self.main.container.children, &mut data);
         let mut data_dependencies = data
@@ -147,6 +146,7 @@ impl Document {
             .filter(|(k, v)| (!v.dependencies.is_empty() || always_include.contains(k)))
             .collect::<ftd::DataDependenciesMap>();
         ftd::Element::get_dark_mode_dependencies(self, &mut data_dependencies);
+        ftd::Element::get_device_dependencies(self, &mut data_dependencies);
 
         data_dependencies
     }
