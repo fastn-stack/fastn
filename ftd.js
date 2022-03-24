@@ -495,35 +495,36 @@ let ftd_utils = {
                             }
                         } else if (ftd_utils.is_equal_condition(full_value, json_dependency.condition)) {
                             for (const parameter in json_dependency.parameters) {
-                                let parent = ftd_utils.get_name_and_remaining(parameter)[0];
-                                if (data[parent] !== undefined) {
-                                    let value = json_dependency.parameters[parameter].value.value;
-                                    if (dependency === "$value#kind$") {
-                                        ftd_utils.set_data_value(data, parameter + ".$kind$", value);
-                                    }
-                                    if (dependency === "$value$") {
-                                        ftd_utils.set_data_value(data, parameter, value);
-                                    }
-                                    let parameter_value = ftd_utils.get_data_value(data, parameter);
-                                    handle_action_(id, parameter, parameter_value, data, ftd_external_children, styles_edited, visibility_change)
+                                if (data[ftd_utils.get_name_and_remaining(parameter)[0]] === undefined) {
+                                    continue;
                                 }
+                                let value = json_dependency.parameters[parameter].value.value;
+                                if (dependency === "$value#kind$") {
+                                    ftd_utils.set_data_value(data, parameter + ".$kind$", value);
+                                }
+                                if (dependency === "$value$") {
+                                    ftd_utils.set_data_value(data, parameter, value);
+                                }
+                                let parameter_value = ftd_utils.get_data_value(data, parameter);
+                                handle_action_(id, parameter, parameter_value, data, ftd_external_children, styles_edited, visibility_change)
                             }
                         } else {
                             for (const parameter in json_dependency.parameters) {
-                                if (data[parameter] !== undefined) {
-                                    let default_value = json_dependency.parameters[parameter].default;
-                                    if (default_value === null) {
-                                        continue;
-                                    }
-                                    if (dependency === "$value#kind$") {
-                                        ftd_utils.set_data_value(data, parameter + ".$kind$", default_value.value);
-                                    }
-                                    if (dependency === "$value$") {
-                                        ftd_utils.set_data_value(data, parameter, default_value.value);
-                                    }
-                                    let parameter_value = ftd_utils.get_data_value(data, parameter);
-                                    handle_action_(id, parameter, parameter_value, data, ftd_external_children, styles_edited, visibility_change)
+                                if (data[ftd_utils.get_name_and_remaining(parameter)[0]] === undefined) {
+                                    continue;
                                 }
+                                let default_value = json_dependency.parameters[parameter].default;
+                                if (default_value === null) {
+                                    continue;
+                                }
+                                if (dependency === "$value#kind$") {
+                                    ftd_utils.set_data_value(data, parameter + ".$kind$", default_value.value);
+                                }
+                                if (dependency === "$value$") {
+                                    ftd_utils.set_data_value(data, parameter, default_value.value);
+                                }
+                                let parameter_value = ftd_utils.get_data_value(data, parameter);
+                                handle_action_(id, parameter, parameter_value, data, ftd_external_children, styles_edited, visibility_change)
                             }
                         }
                     } else if (json_dependency.dependency_type === "Style") {
