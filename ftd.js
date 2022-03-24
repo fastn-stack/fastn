@@ -495,8 +495,7 @@ let ftd_utils = {
                             }
                         } else if (ftd_utils.is_equal_condition(full_value, json_dependency.condition)) {
                             for (const parameter in json_dependency.parameters) {
-                                let parent = ftd_utils.get_name_and_remaining(parameter)[0];
-                                if (data[parent] !== undefined) {
+                                if (data[ftd_utils.get_name_and_remaining(parameter)[0]] !== undefined) {
                                     let value = json_dependency.parameters[parameter].value.value;
                                     if (dependency === "$value#kind$") {
                                         ftd_utils.set_data_value(data, parameter + ".$kind$", value);
@@ -510,7 +509,7 @@ let ftd_utils = {
                             }
                         } else {
                             for (const parameter in json_dependency.parameters) {
-                                if (data[parameter] !== undefined) {
+                                if (data[ftd_utils.get_name_and_remaining(parameter)[0]] !== undefined) {
                                     let default_value = json_dependency.parameters[parameter].default;
                                     if (default_value === null) {
                                         continue;
