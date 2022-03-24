@@ -1281,116 +1281,116 @@ impl Element {
             if !data.contains_key(k) {
                 continue;
             }
-            let mut k = k.to_string();
-            if let ftd::p2::Thing::Variable(ftd::Variable { value, .. }) = v {
-                let (is_ftd_type, remaining) = is_ftd_type(value, &doc);
-                if !is_ftd_type {
-                    continue;
-                }
-                if let Some(remaining) = remaining {
-                    k = format!("{}.{}", k, remaining);
-                }
-            }
+            let keys = if let ftd::p2::Thing::Variable(ftd::Variable { value, .. }) = v {
+                get_ftd_type_variables(value, &doc, k)
+            } else {
+                continue;
+            };
             let dependencies =
                 if let Some(ftd::Data { dependencies, .. }) = data.get_mut("ftd#device") {
                     dependencies
                 } else {
                     continue;
                 };
-            let mobile_json = ftd::Dependencies {
-                dependency_type: ftd::DependencyType::Variable,
-                condition: Some(serde_json::Value::String("mobile".to_string())),
-                remaining: None,
-                parameters: std::array::IntoIter::new([(
-                    k.to_string(),
-                    ftd::ConditionalValueWithDefault {
-                        value: ConditionalValue {
-                            value: serde_json::Value::String("mobile".to_string()),
-                            important: false,
-                            reference: None,
+            let mut device_json = vec![];
+            for k in keys {
+                let mobile_json = ftd::Dependencies {
+                    dependency_type: ftd::DependencyType::Variable,
+                    condition: Some(serde_json::Value::String("mobile".to_string())),
+                    remaining: None,
+                    parameters: std::array::IntoIter::new([(
+                        k.to_string(),
+                        ftd::ConditionalValueWithDefault {
+                            value: ConditionalValue {
+                                value: serde_json::Value::String("mobile".to_string()),
+                                important: false,
+                                reference: None,
+                            },
+                            default: None,
                         },
-                        default: None,
-                    },
-                )])
-                .collect(),
-            };
+                    )])
+                    .collect(),
+                };
 
-            let xl_json = ftd::Dependencies {
-                dependency_type: ftd::DependencyType::Variable,
-                condition: Some(serde_json::Value::String("xl".to_string())),
-                remaining: None,
-                parameters: std::array::IntoIter::new([(
-                    k.to_string(),
-                    ftd::ConditionalValueWithDefault {
-                        value: ConditionalValue {
-                            value: serde_json::Value::String("xl".to_string()),
-                            important: false,
-                            reference: None,
+                let xl_json = ftd::Dependencies {
+                    dependency_type: ftd::DependencyType::Variable,
+                    condition: Some(serde_json::Value::String("xl".to_string())),
+                    remaining: None,
+                    parameters: std::array::IntoIter::new([(
+                        k.to_string(),
+                        ftd::ConditionalValueWithDefault {
+                            value: ConditionalValue {
+                                value: serde_json::Value::String("xl".to_string()),
+                                important: false,
+                                reference: None,
+                            },
+                            default: None,
                         },
-                        default: None,
-                    },
-                )])
-                .collect(),
-            };
+                    )])
+                    .collect(),
+                };
 
-            let desktop_json = ftd::Dependencies {
-                dependency_type: ftd::DependencyType::Variable,
-                condition: Some(serde_json::Value::String("desktop".to_string())),
-                remaining: None,
-                parameters: std::array::IntoIter::new([(
-                    k.to_string(),
-                    ftd::ConditionalValueWithDefault {
-                        value: ConditionalValue {
-                            value: serde_json::Value::String("desktop".to_string()),
-                            important: false,
-                            reference: None,
+                let desktop_json = ftd::Dependencies {
+                    dependency_type: ftd::DependencyType::Variable,
+                    condition: Some(serde_json::Value::String("desktop".to_string())),
+                    remaining: None,
+                    parameters: std::array::IntoIter::new([(
+                        k.to_string(),
+                        ftd::ConditionalValueWithDefault {
+                            value: ConditionalValue {
+                                value: serde_json::Value::String("desktop".to_string()),
+                                important: false,
+                                reference: None,
+                            },
+                            default: None,
                         },
-                        default: None,
-                    },
-                )])
-                .collect(),
-            };
+                    )])
+                    .collect(),
+                };
+
+                device_json.push(mobile_json);
+                device_json.push(xl_json);
+                device_json.push(desktop_json);
+            }
 
             if let Some(dependencies) = dependencies.get_mut("$value#kind$") {
                 let mut d =
                     serde_json::from_value::<Vec<ftd::Dependencies>>(dependencies.to_owned())
                         .unwrap();
-                d.push(mobile_json);
-                d.push(xl_json);
-                d.push(desktop_json);
+                d.extend(device_json);
                 *dependencies = serde_json::to_value(&d).unwrap();
             } else {
                 dependencies.insert(
                     "$value#kind$".to_string(),
-                    serde_json::to_value(&vec![mobile_json, xl_json, desktop_json]).unwrap(),
+                    serde_json::to_value(&device_json).unwrap(),
                 );
             }
         }
 
-        fn is_ftd_type(
+        fn get_ftd_type_variables(
             property_value: &ftd::PropertyValue,
             doc: &ftd::p2::TDoc,
-        ) -> (bool, Option<String>) {
+            key: &str,
+        ) -> Vec<String> {
             match property_value.kind() {
                 ftd::p2::Kind::Record { name, .. } if ["ftd#type"].contains(&name.as_str()) => {
-                    return (true, None);
+                    return vec![key.to_string()];
                 }
                 ftd::p2::Kind::Record { .. } => {
                     if let Ok(ftd::Value::Record { fields, .. }) = property_value.resolve(0, doc) {
+                        let mut reference = vec![];
                         for (k, field) in fields.iter() {
-                            let (is_ftd_type, reference) = is_ftd_type(field, doc);
-                            if is_ftd_type {
-                                if let Some(get) = reference {
-                                    return (true, Some(format!("{}.{}", k, get)));
-                                }
-                                return (true, Some(k.to_string()));
-                            }
+                            reference.extend(get_ftd_type_variables(field, doc, k));
                         }
+                        return reference
+                            .into_iter()
+                            .map(|v| format!("{}.{}", key, v))
+                            .collect();
                     }
                 }
                 _ => {}
             }
-            (false, None)
+            vec![]
         }
     }
 
@@ -1398,18 +1398,18 @@ impl Element {
         document: &ftd::p2::Document,
         data: &mut ftd::DataDependenciesMap,
     ) {
+        let doc = ftd::p2::TDoc {
+            name: document.name.as_str(),
+            aliases: &document.aliases,
+            bag: &document.data,
+            local_variables: &mut Default::default(),
+        };
         for (k, v) in document.data.iter() {
             if !data.contains_key(k) {
                 continue;
             }
-            if let ftd::p2::Thing::Variable(ftd::Variable { value: default, .. }) = v {
-                match default.kind() {
-                    ftd::p2::Kind::Record { name, .. }
-                        if ["ftd#image-src", "ftd#color"].contains(&name.as_str()) => {}
-                    _ => {
-                        continue;
-                    }
-                }
+            let keys = if let ftd::p2::Thing::Variable(ftd::Variable { value, .. }) = v {
+                get_ftd_type_variables(value, &doc, k)
             } else {
                 continue;
             };
@@ -1419,40 +1419,71 @@ impl Element {
                 } else {
                     continue;
                 };
-            let json = ftd::Dependencies {
-                dependency_type: ftd::DependencyType::Variable,
-                condition: Some(serde_json::Value::Bool(true)),
-                remaining: None,
-                parameters: std::array::IntoIter::new([(
-                    k.to_string(),
-                    ftd::ConditionalValueWithDefault {
-                        value: ConditionalValue {
-                            value: serde_json::Value::String("dark".to_string()),
-                            important: false,
-                            reference: None,
+            let dark_mode_json = keys
+                .iter()
+                .map(|k| ftd::Dependencies {
+                    dependency_type: ftd::DependencyType::Variable,
+                    condition: Some(serde_json::Value::Bool(true)),
+                    remaining: None,
+                    parameters: std::array::IntoIter::new([(
+                        k.to_string(),
+                        ftd::ConditionalValueWithDefault {
+                            value: ConditionalValue {
+                                value: serde_json::Value::String("dark".to_string()),
+                                important: false,
+                                reference: None,
+                            },
+                            default: Some(ConditionalValue {
+                                value: serde_json::Value::String("light".to_string()),
+                                important: false,
+                                reference: None,
+                            }),
                         },
-                        default: Some(ConditionalValue {
-                            value: serde_json::Value::String("light".to_string()),
-                            important: false,
-                            reference: None,
-                        }),
-                    },
-                )])
-                .collect(),
-            };
+                    )])
+                    .collect(),
+                })
+                .collect::<Vec<ftd::Dependencies>>();
 
             if let Some(dependencies) = dependencies.get_mut("$value#kind$") {
                 let mut d =
                     serde_json::from_value::<Vec<ftd::Dependencies>>(dependencies.to_owned())
                         .unwrap();
-                d.push(json);
+                d.extend(dark_mode_json);
                 *dependencies = serde_json::to_value(&d).unwrap();
             } else {
                 dependencies.insert(
                     "$value#kind$".to_string(),
-                    serde_json::to_value(&vec![json]).unwrap(),
+                    serde_json::to_value(&dark_mode_json).unwrap(),
                 );
             }
+        }
+
+        fn get_ftd_type_variables(
+            property_value: &ftd::PropertyValue,
+            doc: &ftd::p2::TDoc,
+            key: &str,
+        ) -> Vec<String> {
+            match property_value.kind() {
+                ftd::p2::Kind::Record { name, .. }
+                    if ["ftd#image-src", "ftd#color"].contains(&name.as_str()) =>
+                {
+                    return vec![key.to_string()];
+                }
+                ftd::p2::Kind::Record { .. } => {
+                    if let Ok(ftd::Value::Record { fields, .. }) = property_value.resolve(0, doc) {
+                        let mut reference = vec![];
+                        for (k, field) in fields.iter() {
+                            reference.extend(get_ftd_type_variables(field, doc, k));
+                        }
+                        return reference
+                            .into_iter()
+                            .map(|v| format!("{}.{}", key, v))
+                            .collect();
+                    }
+                }
+                _ => {}
+            }
+            vec![]
         }
     }
 

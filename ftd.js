@@ -407,6 +407,9 @@ let ftd_utils = {
         var styles_edited = [];
         let visibility_change = false;
         handle_action_(id, target_variable, value, data, ftd_external_children, styles_edited, visibility_change);
+        if (visibility_change) {
+            ftd_utils.external_children_replace(id, ftd_external_children);
+        }
 
         function handle_action_(id, target_variable, value, data, ftd_external_children, styles_edited, visibility_change) {
             ftd_utils.set_data_value(data, target_variable, value);
@@ -414,7 +417,7 @@ let ftd_utils = {
             if (!!new_value && !!new_value["$kind$"]) {
                 new_value = new_value[new_value["$kind$"]];
             }
-            let target = ftd_utils.get_name_and_remaining(target_variable)[0];
+            let [target, target_remaining] = ftd_utils.get_name_and_remaining(target_variable);
 
             let dependencies = data[target].dependencies;
             for (const dependency in dependencies) {
@@ -552,6 +555,10 @@ let ftd_utils = {
                                 if (parameter === "dependents") {
                                     continue;
                                 }
+                                if ((!!json_dependency.remaining)
+                                    && (json_dependency.remaining !== target_remaining)) {
+                                    continue;
+                                }
 
                                 let important = json_dependency.parameters[parameter].value.important;
                                 if (new_value instanceof Object) {
@@ -616,9 +623,6 @@ let ftd_utils = {
                         }
                     }
                 }
-            }
-            if (visibility_change) {
-                ftd_utils.external_children_replace(id, ftd_external_children);
             }
         }
     },
