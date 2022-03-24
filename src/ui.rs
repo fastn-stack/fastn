@@ -1316,8 +1316,8 @@ impl Element {
                     continue;
                 };
                 let value = match value.resolve(0, &doc) {
-                    Ok(value) => match value.to_string() {
-                        Some(v) => serde_json::Value::String(v),
+                    Ok(value) => match value.to_serde_value() {
+                        Some(v) => v,
                         None => continue,
                     },
                     _ => continue,
