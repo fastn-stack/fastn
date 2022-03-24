@@ -104,7 +104,7 @@ fn write(id: &str, doc: String) {
                     .expect("failed to convert document to json")
                     .as_str(),
             )
-            .replace("__ftd__", b.html("main", id).as_str())
+            .replace("__ftd__", doc.html.as_str())
             .replace("__ftd_js__", ftd_js.as_str())
             .replace("__ftd_body_events__", doc.body_events.as_str())
             .replace("__ftd_css__", ftd::css())
