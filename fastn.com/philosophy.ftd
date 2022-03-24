@@ -1,12 +1,12 @@
 \-- ft-core.concept:
 
 
--- ft.doc-page:
+-- ft.page-with-toc: Philosophy Behind `ftd`
 toc: $config.why-toc
 header-left: $config.why-header
 
 
--- ft.h0: Philosophy Behind `ftd`
+-- ft.markdown: 
 
 FTD is being designed as language for human beings. We believe all humans should
 be able to own the digital work they produce. Today that work is lost in

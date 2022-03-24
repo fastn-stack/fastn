@@ -1,10 +1,10 @@
 /-- ft-core.concept:
 
--- ft.doc-page:
+-- ft.page-with-toc: `$loop$`: Looping Over Lists
 toc: $config.api-toc
 header-left: $config.doc-header
     
--- ft.h0: `$loop$`: Looping Over Lists
+-- ft.markdown: 
 
 `ftd` supports [`list`](list/) data type, and we can render each
 element of a list using `$loop$` construct.

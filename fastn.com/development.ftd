@@ -1,9 +1,9 @@
--- ft.doc-page:
+-- ft.page-with-toc: `ftd` Development
 toc: $config.dev-toc
 header-left: $config.doc-header
 
 
--- ft.h0: `ftd` Development
+-- ft.markdown: 
 
 `ftd` is an open source project and is being developed on
 [`github.com/FifthTry/ftd`](https://github.com/FifthTry/ftd). To report issues

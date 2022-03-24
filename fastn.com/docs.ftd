@@ -1,9 +1,9 @@
--- ft.doc-page:
+-- ft.page-with-toc: FTD Documentation
 toc: $config.doc-toc
 header-left: $config.doc-header
 
 
--- ft.h0: FTD Documentation
+-- ft.markdown: 
 
 Everything you need to know about FTD.
 

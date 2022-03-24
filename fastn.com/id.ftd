@@ -1,9 +1,9 @@
--- ft.doc-page:
+-- import: ftd.dev/assets
+-- import: fpm
+
+-- ft.page-with-toc: ID in `ftd`
 toc: $config.api-toc
 header-left: $config.doc-header
-
-
--- ft.h0: ID in `ftd`
 
 
 -- ft.h1: What is `id`?
@@ -90,7 +90,7 @@ these.
 
 
 -- ft.image:
-src: https://i.imgur.com/VosBhcR.png
+src: $assets.files.images.ask-id-to-ftd.png
 
 
 -- ft.h2: What are the `id`s present in DOM node?
@@ -132,7 +132,7 @@ which becomes `id` for DOM node of `ftd.text`element. 😊 )
 
 
 -- ft.image:
-src: https://i.imgur.com/q6YyMZc.png
+src: $assets.files.images.ftd-give-me-id-yes-got-it.png
 
 
 -- ft.h2: More Complex example
@@ -206,4 +206,4 @@ id available for element which you want to refer to.
 
 
 -- ft.image:
-src: https://i.imgur.com/HUNH2Jm.png
+src: $assets.files.images.ftd-give-me-an-element-with-id.png

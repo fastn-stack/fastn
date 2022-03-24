@@ -1,10 +1,10 @@
 /-- ft-core.concept:
 
--- ft.doc-page:
+-- ft.page-with-toc: `if`: Conditional Components
 toc: $config.api-toc
 header-left: $config.doc-header
     
--- ft.h0: `if`: Conditional Components
+-- ft.markdown: 
 
 `ftd` supports an `if` expression to decide if the component should be visible or 
 not, based on the arguments, or global variables.
@@ -15,10 +15,10 @@ lang: ftd
 \-- boolean dark-mode: true
 
 \-- ftd.text: we are in dark mode
-if: $dark-mode
+if: $ftd.dark-mode
 
 \-- ftd.text: light mode rules
-if: not $dark-mode
+if: not $ftd.dark-mode
 
 -- ft.markdown:
 

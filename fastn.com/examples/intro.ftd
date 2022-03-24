@@ -1,3 +1,5 @@
+-- import: fpm
+
 -- intro:
 
 -- ftd.grid intro:
@@ -8,27 +10,27 @@ width: fill
 height: fill
 
 --- ftd.text: Future Of Writing
-size: 48
 slot: left
 align: center
+role: $fpm.design.type.title-large
 
 --- ftd.text: FTD & FPM
 slot: right
 align: center
-size: 56
+role: $fpm.design.type.headline-large
 
 
 --- ftd.text:
 slot: bottom
 align: center
-size: 24
+role: $fpm.design.type.title-large
 
 By Amit Upadhyay
 
 CEO, Founder: FifthTry.com
 
 -- ftd.text ftd-text: FTD
-color: yellow
+color: $fpm.design.color.brand.on-region
 link: https://ftd.dev
 
 -- ftd.text fpm: FPM

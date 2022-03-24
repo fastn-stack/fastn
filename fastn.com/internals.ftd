@@ -1,9 +1,6 @@
--- ft.doc-page:
+-- ft.page-with-toc: Internals
 toc: $config.dev-toc
 header-left: $config.doc-header
-
-
--- ft.h0: Internals
 
 
 -- ft.h1: FTD Original Source Location

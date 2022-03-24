@@ -1,7 +1,10 @@
+-- import: ftd.dev/assets
+-- import: fpm
+
 \-- ft-core.concept:
 
 
--- ft.doc-page:
+-- ft.page-with-toc: `component`
 toc: $config.api-toc
 header-left: $config.doc-header
 
@@ -10,7 +13,7 @@ header-left: $config.doc-header
 id: foo
 
 
--- ft.h0: `component`
+-- ft.markdown: 
 
 A `component` in `ftd` is similar to "react component", `components` have 
 "arguments", this the data that must be passed to them, and using `component`s we 
@@ -28,8 +31,8 @@ lang: ftd
 \-- ftd.text heading:
 caption title:
 text: $title
-size: 35
-color: red
+role: $fpm.design.type.headline-large
+color: $fpm.design.color.brand.on-region
 
 
 -- ft.markdown:
@@ -136,7 +139,6 @@ body value:
 spacing: 5
 
 \--- ftd.text:
-style: bold
 text: $name
 
 \--- ftd.text:
@@ -205,8 +207,8 @@ This is how it looks like:
 -- ftd.text heading:
 caption title:
 text: $title
-size: 35
-color: red
+role: $fpm.design.type.title-large
+color: $fpm.design.color.brand.on-region
 
 
 -- ftd.row label: 
@@ -216,7 +218,6 @@ width: fill
 spacing: 5
 
 --- ftd.text: $name
-style: bold
 
 --- ftd.text: $value
 width: fill
@@ -274,10 +275,10 @@ lang: ftd
 \-- boolean dark-mode: true
 
 \-- ftd.text: we are in dark mode
-if: $dark-mode
+if: $ftd.dark-mode
 
 \-- ftd.text: light mode rules
-if: not $dark-mode
+if: not $ftd.dark-mode
 
 
 -- ft.markdown:

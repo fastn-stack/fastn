@@ -1,8 +1,8 @@
--- ft.doc-page:
+-- ft.page-with-toc: Changelog
 toc: $config.news-toc
 header-left: $config.doc-header
 
--- ft.h0: Changelog
+-- ft.markdown: 
 
 Since things are too much in flux right now we are not updating the Changelog.
 

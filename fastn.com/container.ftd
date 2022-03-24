@@ -1,9 +1,9 @@
--- ft.doc-page:
+-- ft.page-with-toc: Container Attributes
 toc: $config.api-toc
 header-left: $config.doc-header
 
     
--- ft.h0: Container Attributes
+-- ft.markdown: 
 
 - `spacing`
 - `align` 

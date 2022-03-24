@@ -1,8 +1,10 @@
--- ft.doc-page:
+-- import: fpm
+
+-- ft.page-with-toc: Input Example
 toc: $config.examples-toc
 
 
--- ft.h1: Input Example
+-- ft.markdown: 
 
 In this example we see an input field. If you type anything it's value is stored
 in a ftd variable, and the value of variable is used in the message below the
@@ -26,10 +28,10 @@ $on-input$: $query=$VALUE
 $on-change$: message-host $obj
 
 -- ftd.text:
-color if $ftd.dark-mode: white
+color if $ftd.dark-mode: $fpm.design.color.brand.on-region
 
 You have typed: {value}
 
 --- ftd.text value: $query
-color: green
-size: 20
+color: $fpm.design.color.brand.on-region
+role: $fpm.design.type.label-large

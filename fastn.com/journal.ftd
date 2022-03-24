@@ -1,11 +1,9 @@
--- ft.doc-page:
+-- import: ftd.dev/assets
+
+-- ft.page-with-toc: FTD Journal
 toc: $config.dev-toc
 header-left: $config.doc-header
 id: page
-
-
--- ft.h0: FTD Journal
-
 
 
 
@@ -1071,16 +1069,16 @@ $on-input$: $query=$VALUE
 
 --- ftd.text: Add
 if: $query is not null
-color: white
-background-color: green
+color: $fpm.design.color.brand.on-region
+background-color: $fpm.design.color.brand.region
 move-down: 4
 padding: 5
 $on-click$: insert into $strings value $query at end
 $on-click$: clear $query
 
 --- ftd.text: Clear
-color: white
-background-color: red
+color: $fpm.design.color.brand.on-region
+background-color: $fpm.design.color.brand.region
 move-down: 4
 padding: 5
 $on-click$: clear $strings
@@ -1088,16 +1086,16 @@ $on-click$: clear $strings
 
 -- ftd.text:
 if: $query is not null
-color if $ftd.dark-mode: white
+color if $ftd.dark-mode: $fpm.design.color.brand.on-region
 
 You have typed: {value}
 
 --- ftd.text value: $query
-color: green
-color if $ftd.dark-mode: white
-background-color if $ftd.dark-mode: green
+color: $fpm.design.color.brand.on-success
+color if $ftd.dark-mode: $fpm.design.color.brand.on-region
+background-color if $ftd.dark-mode: $fpm.design.color.brand.region
 padding if $query is not null: 5
-size: 20
+role: $fpm.design.type.body-large
 
 
 -- show-data: $obj
@@ -1107,9 +1105,9 @@ $loop$: $strings as $obj
 -- ftd.column show-data:
 caption text:
 padding: 10
-/background-color if $ftd.dark-mode: white
-background-color: yellow
-color: red
+/background-color if $ftd.dark-mode: $fpm.design.color.brand.region
+background-color: $fpm.design.color.brand.region
+color: $fpm.design.color.brand.on-region
 
 --- ftd.column:
 padding: 20
@@ -2328,7 +2326,7 @@ Jay has created a logo for FTD that we like:
 
 
 -- ft.image:
-src: https://i.imgur.com/eaxBC1d.jpg
+src: $assets.files.images.ftd-language.jpg
 width: 300
 align: center
 
@@ -2584,7 +2582,7 @@ And this is how it used to look like:
 
 
 -- ft.image:
-src: https://i.imgur.com/7vypfBR.jpg
+src: $assets.files.images.7vypfBR.jpg
 width: 130
 
 

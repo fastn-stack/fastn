@@ -1,3 +1,5 @@
+-- import: ftd.dev/assets
+-- import: fpm
 
 
 
@@ -12,14 +14,14 @@ padding-top: 20
 padding-bottom: 20
 padding-left: 100
 padding-right: 100
-background-color: black
+background-color: $fpm.design.color.brand.region
 id: nav-bar
 
 id: nav-bar
 
 
 -- ftd.image:
-src: https://i.imgur.com/4cd9QmI.png
+src: $assets.files.images.fpm-logo-1.png
 link: https://www.fifthtry.com/ftd/new/
 width: 130
 
@@ -34,36 +36,36 @@ align: right
 
 -- ftd.text: HOME
 link: https://www.fifthtry.com/ftd/new/
-color: white
-size: 15
+color: $fpm.design.color.brand.on-region
+role: $fpm.design.type.body-large
 padding-top: 10
 
 
 -- ftd.text: DOCS
 link: https://www.fifthtry.com/ftd/new/docs/
-color: white
-size: 15
+color: $fpm.design.color.brand.on-region
+role: $fpm.design.type.body-large
 padding-top: 10
 
 
 -- ftd.text: RESOURCES
 link: https://www.fifthtry.com/ftd/new/resources/
-color: white
-size: 15
+color: $fpm.design.color.brand.on-region
+role: $fpm.design.type.body-large
 padding-top: 10
 
 
 -- ftd.text: SHOWCASE
 link: https://www.fifthtry.com/ftd/new/showcase/
-color: white
-size: 15
+color: $fpm.design.color.brand.on-region
+role: $fpm.design.type.body-large
 padding-top: 10
 
 
 -- ftd.text: NEWS
 link: https://www.fifthtry.com/ftd/new/news/
-color: white
-size: 15
+color: $fpm.design.color.brand.on-region
+role: $fpm.design.type.body-large
 padding-top: 10
 
 
@@ -81,17 +83,15 @@ id: subject
 width: 850
 padding: 100
 align: center
-background-color: lightgrey
+background-color: $fpm.design.color.brand.region
 border-radius: 15
 
 
 -- ftd.text: News
-size: 45
+role: $fpm.design.type.headline-medium
 
 
 -- ftd.text:
-style: light
-size: 24
-line-height: 40
+role: $fpm.design.type.body-large
 
 Lorem ipsum is the demo text generator

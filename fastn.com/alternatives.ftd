@@ -1,8 +1,8 @@
--- ft.doc-page:
+-- ft.page-with-toc: Alternatives
 toc: $config.alternatives-toc
 header-left: $config.why-header
 
--- ft.h0: Alternatives
+-- ft.markdown: 
 
 - [MDX](/why/not-mdx/)
 

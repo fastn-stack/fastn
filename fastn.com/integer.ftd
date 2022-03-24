@@ -1,9 +1,9 @@
--- ft.doc-page:
+-- ft.page-with-toc: Integer
 toc: $config.api-toc
 header-left: $config.doc-header
 
 
--- ft.h0: Integer
+-- ft.markdown: 
 
 Renders an integer value.
 

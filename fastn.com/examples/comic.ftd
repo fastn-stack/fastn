@@ -1,13 +1,16 @@
--- ft.doc-page:
+-- import: ftd.dev/assets
+-- import: fpm
+
+
+-- ft.page-with-toc: Once upon a time...
 toc: $config.examples-toc
 
--- ft.h0: Once upon a time...
 
 -- comic:
 
 
 -- ftd.scene comic:
-background-color: cadetblue
+background-color: $fpm.design.color.brand.region
 width: 1070
 height: 1137
 scale: 0.8
@@ -30,12 +33,10 @@ left: 0
 --- ftd.text: The End!!
 top: 800
 left: 320
-size: 50
-line-height: 32
 cursor: default
-style: bold
-background-color: #f7ea61
+background-color: $fpm.design.color.brand.region
 padding: 80
+role: $fpm.design.type.title-large
 
 
 
@@ -45,14 +46,14 @@ left: 20
 top: 20
 
 --- ftd.image:
-src: https://assets.teenvogue.com/photos/5beb340b368e21796e2d8b85/16:9/w_2560%2Cc_limit/ppg2016_keyart_horizontal_nologos_final.jpg
+src: $assets.files.images.ppg2016_keyart_horizontal_nologos_final.jpg
 top: 0
 left: 0
 width: 500
 
 --- ftd.text: Hello Everyone! We are PowerPuff Girls
 border-radius: 150
-background-color: white
+background-color: $fpm.design.color.brand.region
 padding: 10
 left: 10
 top: 10
@@ -64,21 +65,21 @@ left: 540
 top: 20
 
 --- ftd.image:
-src: https://www.clementoni.com/media/prod/en/20157/disney-mickey-mouse-104-pcs-puzzle-104-3d-model_GT4iLTt.jpg
+src: $assets.files.images.disney-mickey-mouse-104-pcs-puzzle-104-3d-model_GT4iLTt.jpg
 top: 0
 left: 0
 width: 500
 
 --- ftd.text: Hello Everyone! I am Mickey Mouse
 border-radius: 150
-background-color: white
+background-color: $fpm.design.color.brand.region
 padding: 10
 left: 10
 top: 10
 
 
 -- ftd.scene sophie-and-ethan-say:
-background-image: https://previews.123rf.com/images/blackspring/blackspring1512/blackspring151200008/49429469-cartoon-forest-background.jpg
+background-image: $assets.files.images.49429469-cartoon-forest-background.jpg
 width: 500
 left: 20
 top: 386
@@ -97,7 +98,7 @@ top: 0
 
 --- ftd.text: Hi! I am Ethan
 border-radius: 150
-background-color: white
+background-color: $fpm.design.color.brand.region
 padding: 10
 left: 0
 top: 5
@@ -112,14 +113,14 @@ width: 200
 scale: 2.3
 
 --- ftd.image:
-src: https://media.githubusercontent.com/media/gramener/comicgen/v1/svg/aryan/pose/handsfolded.svg
+src: $assets.files.images.handsfolded.svg
 top: 0
 left: 0
 height: 123
 crop: true
 
 --- ftd.image:
-src: https://media.githubusercontent.com/media/gramener/comicgen/v1/svg/aryan/emotion/smile.svg
+src: $assets.files.images.smile.svg
 top: 0
 left: 0
 
@@ -135,7 +136,7 @@ top: 0
 
 --- ftd.text: Nice to meet you Ethan. I am Sophie
 border-radius: 150
-background-color: white
+background-color: $fpm.design.color.brand.region
 padding: 10
 left: 0
 top: 5
@@ -150,14 +151,14 @@ width: 200
 scale: 1.5
 
 --- ftd.image:
-src: https://media.githubusercontent.com/media/gramener/comicgen/v1/svg/sophie/pose/holdingumbrella.svg
+src: $assets.files.images.holdingumbrella.svg
 top: 0
 left: 0
 height: 140
 crop: true
 
 --- ftd.image:
-src: https://media.githubusercontent.com/media/gramener/comicgen/v1/svg/sophie/emotion/excited.svg
+src: $assets.files.images.excited.svg
 top: 0
 left: 0
 
@@ -166,7 +167,7 @@ left: 0
 /-- ftd.scene import-ethan-scene:
 left: 0
 top: 590
-background-image: https://image.shutterstock.com/z/stock-&lt;!&ndash;&ndash;&gt;vector-vector-illustration-of-a-beautiful-summer-landscape-143054302.jpg
+background-image: $assets.files.images.vector-illustration-of-a-beautiful-summer-landscape-143054302
 scale: 0.5
 
 /--- comic1.ethan_says:
@@ -179,12 +180,12 @@ width: 200
 scale: 1.8
 
 --- ftd.image:
-src: https://media.githubusercontent.com/media/gramener/comicgen/v1/svg/priyanuova/straight/pose/yuhoo.svg
+src: $assets.files.images.yuhoo.svg
 top: 0
 left: 0
 
 --- ftd.image:
-src: https://media.githubusercontent.com/media/gramener/comicgen/v1/svg/priyanuova/straight/emotion/laugh.svg
+src: $assets.files.images.laugh.svg
 top: 0
 left: 0
 
@@ -197,11 +198,11 @@ scale: 1.8
 scale-x: -1
 
 --- ftd.image:
-src: https://media.githubusercontent.com/media/gramener/comicgen/v1/svg/priyanuova/straight/pose/yuhoo.svg
+src: $assets.files.images.yuhoo.svg
 top: 0
 left: 0
 
 --- ftd.image:
-src: https://media.githubusercontent.com/media/gramener/comicgen/v1/svg/priyanuova/straight/emotion/laugh.svg
+src: $assets.files.images.laugh.svg
 top: 0
 left: 0

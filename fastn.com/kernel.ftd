@@ -1,8 +1,8 @@
--- ft.doc-page:
+-- ft.page-with-toc: Kernel Components
 toc: $config.api-toc
 header-left: $config.doc-header
     
--- ft.h0: Kernel Components
+-- ft.markdown: 
 
 `ftd` comes with a few "kernel" components, these components are the building 
 blocks for building all other components.

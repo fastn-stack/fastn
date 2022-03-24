@@ -1,7 +1,7 @@
--- ft.doc-page:
+-- ft.page-with-toc: React Bangalore - Jan 2022
 toc: $config.news-toc
 header-left: $config.news-header
 
--- ft.h0: React Bangalore - Jan 2022
+-- ft.markdown: 
 
 [Slides](/examples/react-banglore-22-01-2022/)

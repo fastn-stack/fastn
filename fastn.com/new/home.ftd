@@ -1,3 +1,5 @@
+-- import: ftd.dev/assets
+-- import: fpm
 
 
 
@@ -12,14 +14,14 @@ padding-left: 100
 padding-right: 100
 padding-top: 20
 padding-bottom: 20
-background-color: black
+background-color: $fpm.design.color.brand.region
 id: nav-bar
 
 id: nav-bar
 
 
 -- ftd.image:
-src: https://i.imgur.com/4cd9QmI.png
+src: $assets.files.images.fpm-logo-1.png
 width: 130
 
 
@@ -32,35 +34,35 @@ align: right
 
 
 -- ftd.text: HOME
-color: white
-size: 15
+color: $fpm.design.color.brand.on-region
 padding-top: 10
+role: $fpm.design.type.body-large
 
 
 -- ftd.text: DOCS
 link: https://www.fifthtry.com/ftd/new/docs/
-color: white
-size: 15
+color: $fpm.design.color.brand.on-region
+role: $fpm.design.type.body-large
 padding-top: 10
 
 
 -- ftd.text: RESOURCES
 link: https://www.fifthtry.com/ftd/new/resources/
-color: white
-size: 15
+color: $fpm.design.color.brand.on-region
+role: $fpm.design.type.body-large
 padding-top: 10
 
 
 -- ftd.text: SHOWCASE
 link: https://www.fifthtry.com/ftd/new/showcase/
-color: white
-size: 15
+color: $fpm.design.color.brand.on-region
+role: $fpm.design.type.body-large
 padding-top: 10
 
 
 -- ftd.text: NEWS
-color: white
-size: 15
+color: $fpm.design.color.brand.on-region
+role: $fpm.design.type.body-large
 padding-top: 10
 
 
@@ -82,9 +84,8 @@ id: middle-left
 
 -- ftd.text:
 width: 580
-size: 60
+role: $fpm.design.type.headline-large
 padding-top: 40
-line-height: 80
 padding-bottom: 50
 
 Create amazing sites quickly & store data as well
@@ -95,7 +96,7 @@ Create amazing sites quickly & store data as well
 
 -- ftd.row:
 width: 300
-background-color: blue
+background-color: $fpm.design.color.brand.region
 border-radius: 50
 padding-top: 12
 padding-bottom: 15
@@ -103,8 +104,7 @@ padding-bottom: 15
 
 -- ftd.text:
 width: fill
-color: white
-style: bold
+color: $fpm.design.color.brand.on-region
 text-align: center
 
 Create your website
@@ -119,5 +119,5 @@ align: right
 
 
 -- ftd.image:
-src: https://i.imgur.com/IwSE554.png
+src: $assets.files.images.IwSE554.png
 width: 660

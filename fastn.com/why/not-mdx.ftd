@@ -1,8 +1,8 @@
--- ft.doc-page:
+-- ft.page-with-toc: Why Not MDX?
 toc: $config.alternatives-toc
 header-left: $config.why-header
 
--- ft.h0: Why Not MDX?
+-- ft.markdown: 
 
 FTD is often compared with [MDX](https://mdxjs.com/playground/),
 [mdsvex](https://mdsvex.com/playground).

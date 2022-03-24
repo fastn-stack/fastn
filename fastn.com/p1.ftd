@@ -1,8 +1,7 @@
--- ft.doc-page:
+-- ft.page-with-toc: `ftd::p1`: A JSON/YML Replacement
 toc: $config.api-toc
 header-left: $config.doc-header
 
--- ft.h0: `ftd::p1`: A JSON/YML Replacement
 
 -- ft.markdown:
 

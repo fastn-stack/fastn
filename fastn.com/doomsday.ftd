@@ -1,7 +1,7 @@
--- ft.doc-page:
+-- ft.page-with-toc: Doomsday
 toc: $ft.toc
 
--- ft.h0: Doomsday
+-- ft.markdown: 
 
 FTD comes with a create, `doomsday`, which can serve a FTD file over http.
 

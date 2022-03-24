@@ -1,4 +1,7 @@
--- ft.doc-page:
+-- import: ftd.dev/assets
+-- import: fpm
+
+-- ft.page-with-toc: Common Attributes
 toc: $config.api-toc
 header-left: $config.doc-header
 
@@ -7,7 +10,7 @@ header-left: $config.doc-header
 id: outer
 
 
--- ft.h0: Common Attributes
+-- ft.markdown: 
 
 These attributes are available to all `ftd` "kernel" components.
 
@@ -20,7 +23,7 @@ You can set the cursor to be shown over any element by using `cursor` attribute:
 -- ftd.row:
 width: fill
 border-width: 5
-border-color: yellow
+border-color: $fpm.design.color.brand.on-region
 padding: 10
 cursor: pointer
 
@@ -39,7 +42,7 @@ lang: ftd
 \-- ftd.row:
 width: fill
 border-width: 5
-border-color: yellow
+border-color: $fpm.design.color.brand.on-region
 padding: 10
 cursor: pointer
 
@@ -376,9 +379,9 @@ height: 300
 background-image: https://imgur.com/oCHWQQF.jpg
 
 \-- ftd.text: Sample Text
-size: 30
+role: $fpm.design.type.title-large
 align: center
-color: white
+color: $fpm.design.color.brand.on-region
 
 
 -- ft.output:
@@ -387,13 +390,13 @@ color: white
 -- ftd.row:
 width: fill
 height: 300
-background-image: https://imgur.com/oCHWQQF.jpg
+background-image: $assets.files.images.oCHWQQF.jpg
 
 
 -- ftd.text: Sample Text
-size: 30
+role: $fpm.design.type.title-large
 align: center
-color: white
+color: $fpm.design.color.brand.on-region
 width: fill
 height: fill
 
@@ -421,9 +424,9 @@ background-repeat: true
 
 
 \-- ftd.text: Sample Text
-size: 30
+role: $fpm.design.type.title-large
 align: center
-color: white
+color: $fpm.design.color.brand.on-region
 width: fill
 height: fill
 
@@ -434,14 +437,14 @@ height: fill
 -- ftd.row:
 width: fill
 height: 300
-background-image: https://imgur.com/LnJ4ziC.png
+background-image: $assets.files.images.LnJ4ziC.png
 background-repeat: true
 
 
 -- ftd.text: Sample Text
-size: 30
+role: $fpm.design.type.title-large
 align: center
-color: white
+color: $fpm.design.color.brand.on-region
 width: fill
 height: fill
 
@@ -465,9 +468,9 @@ background-image: https://imgur.com/oCHWQQF.jpg
 background-parallax: true
 
 \-- ftd.text: Sample Text
-size: 30
+role: $fpm.design.type.title-large
 align: center
-color: white
+color: $fpm.design.color.brand.on-region
 
 
 -- ft.output:
@@ -476,13 +479,13 @@ color: white
 -- ftd.row:
 width: fill
 height: 300
-background-image: https://imgur.com/oCHWQQF.jpg
+background-image: $assets.files.images.oCHWQQF.jpg
 background-parallax: true
 
 
 -- ftd.text: Sample Text
-size: 30
+role: $fpm.design.type.title-large
 align: center
-color: white
+color: $fpm.design.color.brand.on-region
 width: fill
 height: fill

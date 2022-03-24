@@ -1,8 +1,10 @@
--- ft.doc-page:
+-- import: fpm
+
+-- ft.page-with-toc:
 toc: $config.examples-toc
 
 
--- string color-bg: green
+/-- ftd.color color-bg: $fpm.design.color.brand.region
 
 
 -- ftd.column:
@@ -21,13 +23,13 @@ align: center
 
 -- ftd.text: toggle
 $on-click$: toggle $open
-color if $ftd.dark-mode: white
+color if $ftd.dark-mode: $fpm.design.color.brand.on-region
 
 
 -- ftd.column gate-pass:
 width: 400
 align: center
-border-color: yellow
+border-color: $fpm.design.color.brand.on-region
 border-width: 5
 caption title:
 body body:
@@ -35,7 +37,7 @@ integer code:
 boolean open: true
 
 --- ftd.column:
-background-color: $color-bg
+background-color: $fpm.design.color.brand.region
 width: fill
 padding-top: 40
 
@@ -44,16 +46,16 @@ align: center
 width: 100
 
 --- ftd.text: $title
-color: red
+color: $fpm.design.color.brand.on-region
 width: 100
-background-color: white
-color if $ftd.dark-mode: black
+background-color: $fpm.design.color.brand.region
+color if $ftd.dark-mode: $fpm.design.color.brand.on-region
 border-top: 4
 border-left: 4
 border-right: 4
 align: center
 padding: 5
-color if $ftd.dark-mode: white
+color if $ftd.dark-mode: $fpm.design.color.brand.on-region
 $on-click$: toggle $open
 
 --- container: ftd.main
@@ -61,7 +63,7 @@ $on-click$: toggle $open
 --- ftd.row:
 align: center
 width: 100
-border-color: red
+border-color: $fpm.design.color.brand.on-region
 border-bottom: 4
 border-left: 4
 border-right: 4
@@ -72,7 +74,7 @@ open: false
 align: center
 padding-top: 20
 padding-bottom: 20
-color if $ftd.dark-mode: white
+color if $ftd.dark-mode: $fpm.design.color.brand.on-region
 
 $body
 
@@ -80,20 +82,19 @@ $body
 align: center
 width: fill
 padding: 20
-color if $ftd.dark-mode: white
+color if $ftd.dark-mode: $fpm.design.color.brand.on-region
 
 --- ftd.row:
 align: center
-background-color: orange
+background-color: $fpm.design.color.brand.on-region
 padding: 20
 if: $open
 
 --- ftd.integer:
 value: $code
-size: 50
 align: center
-color: white
-style: bold
+color: $fpm.design.color.brand.on-region
+role: $fpm.design.type.title-large
 
 --- container: ftd.main
 
@@ -105,8 +106,8 @@ width: fill
 align: center
 width: fill
 padding: 10
-style: italic
-color if $ftd.dark-mode: white
+role: $fpm.design.type.title-medium
+color if $ftd.dark-mode: $fpm.design.color.brand.on-region
 
 --- container: ftd.main
 
@@ -117,13 +118,13 @@ height: 20
 
 --- ftd.row:
 width: fill
-background-color: $color-bg
+background-color: $fpm.design.color.brand.region
 padding: 20
 
 --- ftd.text: www-mygate-com
 align: center
 width: fill
-color: white
+color: $fpm.design.color.brand.on-region
 
 
 -- gate-pass: Invitation

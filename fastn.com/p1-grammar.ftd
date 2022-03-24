@@ -1,10 +1,10 @@
 /-- ft-core.concept:
 
--- ft.doc-page:
+-- ft.page-with-toc: `ftd::p1` grammar
 toc: $config.doc-toc
 header-left: $config.doc-header
 
--- ft.h0: `ftd::p1` grammar
+-- ft.markdown: 
 
 `ftd` is based on a low-level grammar called `ftd::p1` grammar.
 

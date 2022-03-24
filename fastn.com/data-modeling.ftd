@@ -1,8 +1,8 @@
--- ft.doc-page:
+-- ft.page-with-toc: Data Modeling With `ftd`
 toc: $config.data-toc
 header-left: $config.doc-header
 
--- ft.h0: Data Modeling With `ftd`
+-- ft.markdown: 
 
 `ftd` is an alternative to XML/JSON for storing data.
 

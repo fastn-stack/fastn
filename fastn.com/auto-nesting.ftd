@@ -1,8 +1,8 @@
--- ft.doc-page:
+-- ft.page-with-toc: Auto Nesting
 toc: $config.api-toc
 header-left: $config.doc-header
 
--- ft.h0: Auto Nesting
+-- ft.markdown: 
 
 FTD has a feature that takes a structure like this:
 

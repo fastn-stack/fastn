@@ -1,10 +1,10 @@
 \-- ft-core.concept:
 
--- ft.doc-page:
+-- ft.page-with-toc: Built-in Types
 toc: $config.data-toc
 header-left: $config.doc-header
 
--- ft.h0: Built-in Types
+-- ft.markdown: 
 
 `ftd` comes with some built-in types. These types can be used to construct more
 complex types like [`record`](/record/) and

@@ -1,12 +1,12 @@
 \-- ft-core.concept:
 
 
--- ft.doc-page:
+-- ft.page-with-toc: Variables
 toc: $config.data-toc
 header-left: $config.doc-header
 
 
--- ft.h0: Variables
+-- ft.markdown: 
 
 `ftd` has support for [rich data modelling](data-modelling/), and it
 supports declaring variables.

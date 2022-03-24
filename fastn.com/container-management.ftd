@@ -1,10 +1,10 @@
 \-- ft-core.concept:
 
--- ft.doc-page:
+-- ft.page-with-toc: Container Management
 toc: $config.api-toc
 header-left: $config.doc-header
 
--- ft.h0: Container Management
+-- ft.markdown: 
 
 Every `ftd` document is rendered in the context of a "main container".
 

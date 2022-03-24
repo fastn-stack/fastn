@@ -1,10 +1,10 @@
 /-- ft-core.concept:
 
--- ft.doc-page:
+-- ft.page-with-toc: `or-type`
 toc: $config.data-toc
 header-left: $config.doc-header
     
--- ft.h0: `or-type`
+-- ft.markdown: 
 
 `ftd` supports `or-type`, which is loosely equivalent of `enum` in Rust, and is 
 otherwise known as ["algebraic data 

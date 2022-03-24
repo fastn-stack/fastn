@@ -1,7 +1,9 @@
--- ft.doc-page:
+-- import: fpm
+
+-- ft.page-with-toc: An Architecture Diagram
 toc: $config.examples-toc
 
--- ft.h1: An Architecture Diagram
+-- ft.markdown: 
 
 In this example you can see an architecture diagram created using FTD.
 
@@ -14,13 +16,13 @@ we will be updating the example to make it mobile optimized/responsive soon.
 
 
 -- ftd.column diagram:
-background-color: #efefef
+background-color: $fpm.design.color.brand.region
 width: fill
 height: fill
 padding: 40
 
 --- ftd.scene:
-background-color: white
+background-color: $fpm.design.color.brand.region
 width: 1350
 height: 540
 $on-click$: $info = kubernetes-info
@@ -65,7 +67,7 @@ right: 506
 --- container: ftd.main
 
 --- ftd.column:
-background-color: #ebe2ce
+background-color: $fpm.design.color.brand.region
 width: fill
 padding: 10
 margin-top: -60
@@ -78,8 +80,7 @@ border-radius: 4
 spacing: 5
 
 --- ftd.text: Notes:
-style: bold
-size: 20
+role: $fpm.design.type.body-large
 
 --- start-info:
 if: $info == start-info
@@ -139,8 +140,8 @@ if: $info == container-runtime-info
 
 
 -- ftd.scene control-panel:
-background-color: #d9e7f8
-border-color if $MOUSE-IN: yellow
+background-color: $fpm.design.color.brand.region
+border-color if $MOUSE-IN: $fpm.design.color.brand.on-region
 border-width: 2
 width: 600
 height: 460
@@ -150,7 +151,7 @@ border-radius: 4
 --- ftd.text: Control Panel
 top: 5
 left: 5
-size: 25
+role: $fpm.design.type.body-large
 
 --- kube-controller-manager:
 top: 50
@@ -199,8 +200,8 @@ left: 304
 padding: 20
 border-width: 2
 border-radius: 10
-background-color: white
-border-color if $MOUSE-IN: yellow
+background-color: $fpm.design.color.brand.region
+border-color if $MOUSE-IN: $fpm.design.color.brand.on-region
 $on-click$: $info = etcd-info
 $on-click$: stop-propagation
 $on-click$: prevent-default
@@ -210,7 +211,7 @@ $on-click$: prevent-default
 -- ftd.column kube-controller-manager:
 
 --- box:
-background-color: #dc9eb3
+background-color: $fpm.design.color.brand.region
 title: Kube Controller Manager
 
 --- text-block: Node Controller
@@ -238,7 +239,7 @@ $on-click$: prevent-default
 -- ftd.column cloud-controller-manager:
 
 --- box:
-background-color: #76c2c4
+background-color: $fpm.design.color.brand.region
 title: Cloud Controller Manager
 
 --- text-block: Node Controller
@@ -263,11 +264,11 @@ $on-click$: prevent-default
 -- ftd.row kube-api-server:
 width: 100
 height: 270
-background-color: #fce251
+background-color: $fpm.design.color.brand.region
 border-width: 2
 padding: 20
-border-color if $MOUSE-IN: yellow
-/border-color if $info == $kube-api-server-info: yellow
+border-color if $MOUSE-IN: $fpm.design.color.brand.on-region
+/border-color if $info == $kube-api-server-info: $fpm.design.color.brand.on-region
 
 --- ftd.text: Kube Api Server
 align: center
@@ -278,23 +279,23 @@ align: center
 
 
 -- ftd.scene nodes:
-background-color: #d2d2ce
+background-color: $fpm.design.color.brand.region
 border-width: 2
 border-radius: 4
 width: 600
 height: 460
 align: center
-border-color if $MOUSE-IN: yellow
+border-color if $MOUSE-IN: $fpm.design.color.brand.on-region
 
 --- ftd.text: Nodes
 top: 5
 left: 5
-size: 25
+role: $fpm.design.type.body-large
 
 --- ftd.column:
 top: 50
 left: 90
-background-color: #f09483
+background-color: $fpm.design.color.brand.region
 width: 400
 height: 300
 border-width: 2
@@ -310,7 +311,7 @@ left: 115
 
 
 -- ftd.scene worker-node:
-background-color: #f09483
+background-color: $fpm.design.color.brand.region
 width: 400
 height: 300
 border-width: 2
@@ -344,7 +345,7 @@ $on-click$: prevent-default
 
 
 -- ftd.column box:
-optional string background-color:
+optional ftd.color background-color:
 string title:
 background-color: $background-color
 border-width: 2
@@ -354,13 +355,13 @@ align: center
 open: true
 append-at: box-id
 padding: 15
-border-color if $MOUSE-IN: yellow
+border-color if $MOUSE-IN: $fpm.design.color.brand.on-region
 border-radius: 4
 
 --- ftd.text: $title
 top: 5
 left: 5
-size: 20
+role: $fpm.design.type.body-large
 
 --- ftd.row:
 spacing: space-around
@@ -373,12 +374,12 @@ id: box-id
 
 -- ftd.text text-block: $text
 caption text:
-background-color: white
+background-color: $fpm.design.color.brand.region
 width: 80
 padding: 5
 align: center
 border-width: 2
-border-color if $MOUSE-IN: yellow
+border-color if $MOUSE-IN: $fpm.design.color.brand.on-region
 border-radius: 4
 
 -- ftd.row vertical-line:

@@ -1,9 +1,9 @@
--- ft.doc-page:
+-- ft.page-with-toc: Building UIs with `ftd`
 toc: $config.ui-toc
 header-left: $config.doc-header
 
 
--- ft.h0: Building UIs with `ftd`
+-- ft.markdown: 
 
 `ftd` is an alternative to HTML/CSS for building UIs. `ftd` uses HTML/CSS 
 internally for rendering on the web, but its planning to support more backends like

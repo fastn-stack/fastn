@@ -1,4 +1,4 @@
--- ft.doc-page:
+-- ft.page-with-toc: Text
 toc: $config.api-toc
 header-left: $config.doc-header
 
@@ -7,7 +7,7 @@ header-left: $config.doc-header
 id: main
 
 
--- ft.h0: Text
+-- ft.markdown: 
 
 Renders a text block.
 
@@ -47,7 +47,7 @@ This will be render like this:
 
 
 -- ftd.text: FTD example
-color if $ftd.dark-mode: white
+color if $ftd.dark-mode: $fpm.design.color.brand.on-region
 
 
 -- ft.code:
@@ -64,7 +64,7 @@ This will be render like this:
 
 -- ftd.text:
 text: This is an example of how to use ftd.text.
-color if $ftd.dark-mode: white
+color if $ftd.dark-mode: $fpm.design.color.brand.on-region
 
 
 -- ft.markdown:
@@ -135,43 +135,6 @@ lang: ftd
 
 \-- ftd.text: this is some center aligned text
 align: center
-
-
--- ft.h1: `style`
-
-`style` is used to change the text style. Possible values are:
-
-- `italic`
-- `underline`
-- `strike`
-- `heavy`
-- `extra-bold`
-- `bold`
-- `semi-bold`
-- `medium`
-- `regular`
-- `light`
-- `extra-light`
-- `hairline`
-
-First three properties, `italic`, `underline` and `strike` can be all applied
-together, along with one of the next properties.
-
-
--- ft.code:
-lang: ftd
-
-\-- ftd.text: italic strike semi-bold
-style: italic strike semi-bold
-
-
--- ft.markdown:
-
-Which looks like this:
-
-
--- ftd.text: italic strike semi-bold
-style: italic strike semi-bold
 
 
 -- ft.h1: `format`
@@ -282,13 +245,13 @@ The supported values of themes are:
 
 -- ftd.text: View Themes
 if: not $show-theme-demos
-color if $ftd.dark-mode: white
+color if $ftd.dark-mode: $fpm.design.color.brand.on-region
 $on-click$: toggle $show-theme-demos
 
 
 -- ftd.text: Hide Themes
 if: $show-theme-demos
-color if $ftd.dark-mode: white
+color if $ftd.dark-mode: $fpm.design.color.brand.on-region
 $on-click$: toggle $show-theme-demos
 
 
@@ -324,7 +287,7 @@ print("hello world")
 
 -- ftd.text: Hide Themes
 if: $show-theme-demos
-color if $ftd.dark-mode: white
+color if $ftd.dark-mode: $fpm.design.color.brand.on-region
 $on-click$: toggle $show-theme-demos
 
 
@@ -368,7 +331,7 @@ print("hello world")
 
 -- ftd.text: Hide Themes
 if: $show-theme-demos
-color if $ftd.dark-mode: white
+color if $ftd.dark-mode: $fpm.design.color.brand.on-region
 $on-click$: toggle $show-theme-demos
 
 
@@ -428,29 +391,8 @@ print("hello world")
 
 -- ftd.text: Hide Themes
 if: $show-theme-demos
-color if $ftd.dark-mode: white
+color if $ftd.dark-mode: $fpm.design.color.brand.on-region
 $on-click$: toggle $show-theme-demos
 
 
 -- container: main
-
-
--- ft.h1: `size: integer`
-
-`size` controls the font size of the text.
-
-
--- ft.code:
-lang: ftd
-
-\-- ftd.text: hello there
-size: 40
-
-
--- ft.markdown:
-
-Renders as:
-
-
--- ftd.text: hello there
-size: 40

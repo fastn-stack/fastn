@@ -1,10 +1,10 @@
 \-- ft-core.concept:
 
--- ft.doc-page:
+-- ft.page-with-toc: `record`
 toc: $config.data-toc
 header-left: $config.doc-header
 
--- ft.h0: `record`
+-- ft.markdown: 
 
 `ftd` supports `record` types. These are also called `struct` in some languages.
 

@@ -1,10 +1,10 @@
 /-- ft-core.concept:
 
--- ft.doc-page:
+-- ft.page-with-toc: Reading FTD Files
 toc: $config.api-toc
 header-left: $config.doc-header
     
--- ft.h0: Reading FTD Files
+-- ft.markdown: 
 
 A FTD file can be parsed from Rust using the [`ftd` 
 crate](https://crates.io/crates/ftd):

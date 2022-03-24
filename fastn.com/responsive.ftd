@@ -1,4 +1,4 @@
--- ft.doc-page:
+-- ft.page-with-toc: Responsive
 toc: $ft.toc
     
--- ft.h0: Responsive
+

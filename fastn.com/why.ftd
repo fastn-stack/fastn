@@ -1,8 +1,7 @@
--- ft.doc-page:
+-- ft.page-with-toc: Why FTD
 toc: $config.why-toc
 header-left: $config.why-header
 
--- ft.h0: Why FTD
 
 -- ft.h1: FTD Is Easy To Learn
 

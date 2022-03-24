@@ -1,6 +1,9 @@
 -- import: ftd.dev/examples/diagram
 -- import: ftd.dev/examples/comic
 -- import: ftd.dev/examples/intro
+-- import: ftd.dev/assets
+-- import: fpm
+
 
 -- integer count: 0
 -- integer total: 4
@@ -14,23 +17,23 @@ height: fill
 
 -- ftd.text: FTD Slideshow
 slot: left
-background-color: black
+background-color: $fpm.design.color.brand.region
 padding: 20
-color: white
+color: $fpm.design.color.brand.on-region
 width: fill
 
 -- ftd.text: Previous
 slot: right-1
-color: white
+color: $fpm.design.color.brand.on-region
 padding: 20
-background-color: black
+background-color: $fpm.design.color.brand.region
 $on-click$: decrement $count clamp 0 $total
 
 -- ftd.text: Next
 slot: right-2
 padding: 20
-background-color: black
-color: white
+background-color: $fpm.design.color.brand.region
+color: $fpm.design.color.brand.on-region
 $on-click$: increment $count clamp 0 $total
 
 -- ftd.column:
@@ -62,18 +65,18 @@ if: $count == 1
 width: 300
 
 -- slide:
-src: https://sketchok.com/images/articles/01-cartoons/000-va/21/17.jpg
+src: $assets.files.images.17.jpg
 if: $count == 3
 width: 400
 
 -- slide:
-src: https://i.pinimg.com/originals/e3/b9/3a/e3b93ab29b709d82ed393253b1ff781a.jpg
+src: $assets.files.images.18-18.jpg
 if: $count == 4
 width: 300
 
 
 -- ftd.image slide:
-string src:
+ftd.image-src src:
 optional string width:
 src: $src
 align: center

@@ -1,9 +1,12 @@
--- ft.doc-page:
+-- import: ftd.dev/assets
+-- import: fpm
+
+-- ft.page-with-toc: How to create a tree using `ftd`?
 toc: $config.examples-toc
 id: main
 
 
--- ft.h0: How to create a tree using `ftd`?
+-- ft.markdown: 
 
 A tree view represents a hierarchical form of items where each item can have 
 subitems and so on. In this tutorial, we will learn how to create a tree using 
@@ -24,7 +27,7 @@ lang: ftd
 
 
 -- ft.image:
-src: -/ftd.dev/images/tree/first.jpeg
+src: $assets.files.images.tree.first.jpeg
 width: fill
 
 
@@ -44,7 +47,7 @@ name: Beverage
 
 
 -- ft.image:
-src: -/ftd.dev/images/tree/second.jpeg
+src: $assets.files.images.tree.second.jpeg
 width: fill
 
 
@@ -70,7 +73,7 @@ open: true
 
 
 -- ft.image:
-src: -/ftd.dev/images/tree/third.jpeg
+src: $assets.files.images.tree.third.jpeg
 width: fill
 
 
@@ -103,7 +106,7 @@ open: true
 
 
 -- ft.image:
-src: -/ftd.dev/images/tree/fourth.jpeg
+src: $assets.files.images.tree.fourth.jpeg
 width: fill
 
 
@@ -123,7 +126,7 @@ name: Beverage
 
 
 -- ft.image:
-src: -/ftd.dev/images/tree/fifth.jpeg
+src: $assets.files.images.tree.fifth.jpeg
 width: fill
 
 
@@ -138,13 +141,13 @@ padding-left: 10
 open: true
 
 --- ftd.text: $name
-color if $ftd.dark-mode: white
+color if $ftd.dark-mode: $fpm.design.color.brand.on-region
 
 -- ftd.column:
 spacing: 20
 border-width: 1
 border-radius: 5
-border-color if $ftd.dark-mode: white
+border-color if $ftd.dark-mode: $fpm.design.color.brand.on-region
 padding: 10
 width: fill
 
@@ -195,27 +198,27 @@ and now this becomes an open container. At last, we have inserted item `Mango Ju
 
 
 -- ft.image:
-src: -/ftd.dev/images/tree/sixth.jpeg
+src: $assets.files.images.tree.sixth.jpeg
 width: fill
 
 
 -- ft.image:
-src: -/ftd.dev/images/tree/seventh.jpeg
+src: $assets.files.images.tree.seventh.jpeg
 width: fill
 
 
 -- ft.image:
-src: -/ftd.dev/images/tree/eighth.jpeg
+src: $assets.files.images.tree.eighth.jpeg
 width: fill
 
 
 -- ft.image:
-src: -/ftd.dev/images/tree/ninth.jpeg
+src: $assets.files.images.tree.ninth.jpeg
 width: fill
 
 
 -- ft.image:
-src: -/ftd.dev/images/tree/tenth.jpeg
+src: $assets.files.images.tree.tenth.jpeg
 width: fill
 
 
@@ -271,7 +274,7 @@ Output
 spacing: 20
 border-width: 1
 border-radius: 5
-border-color if $ftd.dark-mode: white
+border-color if $ftd.dark-mode: $fpm.design.color.brand.on-region
 padding: 10
 width: fill
 
@@ -280,14 +283,14 @@ width: fill
 string name:
 padding-left: 10
 open: true
-color if $ftd.dark-mode: white
+color if $ftd.dark-mode: $fpm.design.color.brand.on-region
 
 --- ftd.row:
 
 --- ftd.text: ✌️
 
 --- ftd.text: $name
-color if $ftd.dark-mode: white
+color if $ftd.dark-mode: $fpm.design.color.brand.on-region
 
 -- ftd.column:
 
@@ -479,14 +482,14 @@ Output
 spacing: 20
 border-width: 1
 border-radius: 5
-border-color if $ftd.dark-mode: white
+border-color if $ftd.dark-mode: $fpm.design.color.brand.on-region
 padding: 10
 width: fill
 
 
 -- ftd.column display-item1:
 string name:
-color if $ftd.dark-mode: white
+color if $ftd.dark-mode: $fpm.design.color.brand.on-region
 padding-left: 10
 open: true
 append-at: some-child
@@ -498,7 +501,7 @@ $on-click$: toggle $visible
 --- ftd.text: ✌️
 
 --- ftd.text: $name
-color if $ftd.dark-mode: white
+color if $ftd.dark-mode: $fpm.design.color.brand.on-region
 
 --- container: ftd.main
 

@@ -1,8 +1,8 @@
--- ft.doc-page:
+-- ft.page-with-toc: How To Run `ftd` Locally
 toc: $ft.toc
 
 
--- ft.h0: How To Run `ftd` Locally
+-- ft.markdown: 
 
 `ftd` is open source, and you can checkout the code and try the examples.
 

@@ -1,3 +1,6 @@
+-- import: ftd.dev/assets
+-- import: fpm
+
 \-- component page:
 component: ftd.column
 open: m
@@ -37,13 +40,13 @@ padding-left: 100
 padding-right: 100
 padding-top: 20
 padding-bottom: 20
-background-color: black
+background-color: $fpm.design.color.brand.region
 id: nav-bar
 
 id: nav-bar
 
 --- ftd.image:
-src: https://i.imgur.com/4cd9QmI.png
+src: $assets.files.images.fpm-logo-1.png
 link: https://www.fifthtry.com/ftd/new/
 width: 130
 
@@ -55,32 +58,32 @@ align: right
 
 --- ftd.text: HOME
 link: https://www.fifthtry.com/ftd/new/
-color: white
-size: 15
+color: $fpm.design.color.brand.on-region
+role: $fpm.design.type.body-large
 padding-top: 10
 
 --- ftd.text: DOCS
 link: https://www.fifthtry.com/ftd/new/docs/
-color: white
-size: 15
+color: $fpm.design.color.brand.on-region
+role: $fpm.design.type.body-large
 padding-top: 10
 
 --- ftd.text: RESOURCES
 link: https://www.fifthtry.com/ftd/new/resources/
-color: white
-size: 15
+color: $fpm.design.color.brand.on-region
+role: $fpm.design.type.body-large
 padding-top: 10
 
 --- ftd.text: SHOWCASE
 link: https://www.fifthtry.com/ftd/new/showcase/
-color: white
-size: 15
+color: $fpm.design.color.brand.on-region
+role: $fpm.design.type.body-large
 padding-top: 10
 
 --- ftd.text: NEWS
 link: https://www.fifthtry.com/ftd/new/news/
-color: white
-size: 15
+color: $fpm.design.color.brand.on-region
+role: $fpm.design.type.body-large
 padding-top: 10
 
 
@@ -101,7 +104,7 @@ lang: ftd
 \-- component ftd-footer:
 component: ftd.column
 width: fill
-background-color: black
+background-color: $fpm.design.color.brand.region
 padding-left: 100
 padding-right: 100
 padding-top: 50
@@ -112,8 +115,7 @@ width: fill
 
 --- ftd.text:
 width: 350
-color: lightgrey
-style: light
+color: $fpm.design.color.brand.on-region
 
 FTD is lovingly maintained by the core team of volunteers
 
@@ -122,16 +124,14 @@ width: 400
 align: right
 
 --- ftd.text:
-color: lightgrey
-style: light
+color: $fpm.design.color.brand.on-region
 
 Proudly hosted by
 
 --- ftd.text: FifthTry
 link: https://www.fifthtry.com/
-size: 50
-color: lightgrey
-style: bold
+role: $fpm.design.type.headline-large
+color: $fpm.design.color.brand.on-region
 padding-left: 20
 
 \--- container: ftd.main
@@ -141,8 +141,7 @@ width: fill
 
 --- ftd.text:
 width: 500
-style: light
-color: lightgrey
+color: $fpm.design.color.brand.on-region
 
 The contents of this website are
 © 2021 under the terms of the BSE License.
@@ -152,7 +151,6 @@ width: 400
 align: right
 
 --- ftd.text:
-color: lightgrey
-style: light
+color: $fpm.design.color.brand.on-region
 
 FTD is funded, thanks to its sponsors!

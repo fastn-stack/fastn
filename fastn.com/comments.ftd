@@ -1,8 +1,8 @@
--- ft.doc-page:
+-- ft.page-with-toc: Comments In `ftd` Files
 toc: $config.doc-toc
 header-left: $config.doc-header
 
--- ft.h0: Comments In `ftd` Files
+-- ft.markdown: 
 
 Writing `/` before any section or subsection will "comment out" the entire section
 or sub-section.

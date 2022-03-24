@@ -1,9 +1,9 @@
--- ft.doc-page:
+-- ft.page-with-toc: Event Handling
 toc: $config.api-toc
 header-left: $config.doc-header
 
 
--- ft.h0: Event Handling
+-- ft.markdown: 
 
 FTD supports event handling using `$on-<event-name>$` header.
 

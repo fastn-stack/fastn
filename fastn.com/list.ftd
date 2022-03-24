@@ -1,10 +1,10 @@
 /-- ft-core.concept:
 
--- ft.doc-page:
+-- ft.page-with-toc: `list`
 toc: $config.data-toc
 header-left: $config.doc-header
 
--- ft.h0: `list`
+-- ft.markdown: 
 
 `list` keyword can be used to create a list or an array in `ftd`.
 

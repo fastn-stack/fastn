@@ -1,14 +1,14 @@
--- ft.doc-page:
+-- ft.page-with-toc: Examples
 toc: $config.examples-toc
 
 
--- ft.h0: Examples
+-- ft.markdown: 
 
 Checkout few of FTD examples here:
 
 -- ftd.text: $o.title
 $loop$: $config.examples-toc as $o
 link: $o.url
-size: 24
+role: $fpm.design.type.body-large
 padding: 5
 

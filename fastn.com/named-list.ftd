@@ -1,5 +1,4 @@
--- ft.doc-page:
+-- ft.page-with-toc: `named-list`
 toc: $config.data-toc
 header-left: $config.doc-header
     
--- ft.h0: `named-list`
