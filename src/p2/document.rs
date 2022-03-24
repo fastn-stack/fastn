@@ -140,18 +140,15 @@ impl Document {
             );
         }
         ftd::Element::get_device_dependencies(self, &mut data);
-        ftd::Element::get_dark_mode_dependencies(self, &mut data);
         ftd::Element::get_variable_dependencies(self, &mut data);
-        ftd::Element::get_font_event_dependencies(&self.main.container.children, &mut data);
-        ftd::Element::get_color_event_dependencies(&self.main.container.children, &mut data);
-        ftd::Element::get_visible_event_dependencies(&self.main.container.children, &mut data);
-        ftd::Element::get_value_event_dependencies(&self.main.container.children, &mut data);
-        ftd::Element::get_style_event_dependencies(&self.main.container.children, &mut data);
-        ftd::Element::get_image_event_dependencies(&self.main.container.children, &mut data);
-
-        data.into_iter()
+        ftd::Element::get_event_dependencies(&self.main.container.children, &mut data);
+        let mut data_dependencies = data
+            .into_iter()
             .filter(|(k, v)| (!v.dependencies.is_empty() || always_include.contains(k)))
-            .collect()
+            .collect::<ftd::DataDependenciesMap>();
+        ftd::Element::get_dark_mode_dependencies(self, &mut data_dependencies);
+
+        data_dependencies
     }
 
     pub fn rerender(&mut self, id: &str, doc_id: &str) -> ftd::p1::Result<ftd::Document> {
@@ -165,8 +162,8 @@ impl Document {
         self.data.extend(rt.bag);
         let data = self.rt_data();
         Ok(ftd::Document {
+            html: self.html(id, doc_id, &data),
             data,
-            html: self.html(id, doc_id),
             external_children: ftd::Element::get_external_children_dependencies(
                 &self.main.container.children,
             ),
@@ -177,10 +174,10 @@ impl Document {
     pub fn to_rt(&self, id: &str, doc_id: &str) -> ftd::Document {
         let external_children =
             ftd::Element::get_external_children_dependencies(&self.main.container.children);
-
+        let rt_data = self.rt_data();
         ftd::Document {
-            data: self.rt_data(),
-            html: self.html(id, doc_id),
+            html: self.html(id, doc_id, &rt_data),
+            data: rt_data,
             external_children,
             body_events: self.body_events(id),
         }
@@ -309,7 +306,7 @@ impl Document {
         }
     }
 
-    pub fn html(&self, id: &str, doc_id: &str) -> String {
+    pub fn html(&self, id: &str, doc_id: &str, rt_data: &ftd::DataDependenciesMap) -> String {
         let mut node = self.main.to_node(doc_id, false);
         node.children = {
             let mut children = vec![];
@@ -334,7 +331,7 @@ impl Document {
             }
             children
         };
-        node.to_html(&Default::default(), &self.rt_data(), id)
+        node.to_html(&Default::default(), rt_data, id)
     }
 
     pub fn alias(&self, doc: &str) -> Option<&str> {

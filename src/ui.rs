@@ -567,12 +567,9 @@ impl Element {
         d
     }
 
-    pub fn get_style_event_dependencies(
-        children: &[ftd::Element],
-        data: &mut ftd::DataDependenciesMap,
-    ) {
+    pub fn get_event_dependencies(children: &[ftd::Element], data: &mut ftd::DataDependenciesMap) {
         for child in children {
-            let (conditional_attributes, id) = match child {
+            let (font, common) = match child {
                 ftd::Element::Column(ftd::Column {
                     common, container, ..
                 })
@@ -585,384 +582,84 @@ impl Element {
                 | ftd::Element::Grid(ftd::Grid {
                     common, container, ..
                 }) => {
-                    ftd::Element::get_style_event_dependencies(&container.children, data);
+                    ftd::Element::get_event_dependencies(&container.children, data);
                     if let Some((_, _, external_children)) = &container.external_children {
-                        ftd::Element::get_style_event_dependencies(external_children, data);
+                        ftd::Element::get_event_dependencies(external_children, data);
                     }
-                    (&common.conditional_attribute, &common.data_id)
+                    (&None, common)
                 }
                 ftd::Element::Markup(ftd::Markups {
-                    common, children, ..
-                }) => {
-                    markup_get_style_event_dependencies(children, data);
-                    (&common.conditional_attribute, &common.data_id)
-                }
-                ftd::Element::Image(ftd::Image { common, .. })
-                | ftd::Element::Text(ftd::Text { common, .. })
-                | ftd::Element::TextBlock(ftd::TextBlock { common, .. })
-                | ftd::Element::Code(ftd::Code { common, .. })
-                | ftd::Element::IFrame(ftd::IFrame { common, .. })
-                | ftd::Element::Input(ftd::Input { common, .. })
-                | ftd::Element::Integer(ftd::Text { common, .. })
-                | ftd::Element::Boolean(ftd::Text { common, .. })
-                | ftd::Element::Decimal(ftd::Text { common, .. }) => {
-                    (&common.conditional_attribute, &common.data_id)
-                }
-                ftd::Element::Null => continue,
-            };
-            style_condition(conditional_attributes, id, data);
-        }
-
-        fn markup_get_style_event_dependencies(
-            children: &[ftd::Markup],
-            data: &mut ftd::DataDependenciesMap,
-        ) {
-            for child in children {
-                let (conditional_attributes, id) = match child.itext {
-                    IText::Text(ref t)
-                    | IText::Integer(ref t)
-                    | IText::Boolean(ref t)
-                    | IText::Decimal(ref t) => (&t.common.conditional_attribute, &t.common.data_id),
-                    IText::TextBlock(ref t) => (&t.common.conditional_attribute, &t.common.data_id),
-                    IText::Markup(ref t) => {
-                        markup_get_style_event_dependencies(&t.children, data);
-                        (&t.common.conditional_attribute, &t.common.data_id)
-                    }
-                };
-                markup_get_style_event_dependencies(&child.children, data);
-                style_condition(conditional_attributes, id, data);
-            }
-        }
-        fn style_condition(
-            conditional_attributes: &std::collections::BTreeMap<String, ConditionalAttribute>,
-            id: &Option<String>,
-            data: &mut ftd::DataDependenciesMap,
-        ) {
-            for (k, v) in conditional_attributes {
-                if let ftd::ConditionalAttribute {
-                    attribute_type: ftd::AttributeType::Style,
-                    conditions_with_value,
-                    default,
-                } = v
-                {
-                    for (condition, value) in conditions_with_value {
-                        let id = id.clone().expect("universal id should be present");
-                        let (variable, remaining) =
-                            ftd::p2::utils::get_doc_name_and_remaining(&condition.variable)
-                                .unwrap();
-                        if let Some(ftd::Data { dependencies, .. }) = data.get_mut(&variable) {
-                            let json = ftd::Dependencies {
-                                dependency_type: ftd::DependencyType::Style,
-                                condition: Some(condition.value.to_owned()),
-                                parameters: std::array::IntoIter::new([(
-                                    k.to_string(),
-                                    ftd::ConditionalValueWithDefault {
-                                        value: value.clone(),
-                                        default: default.clone(),
-                                    },
-                                )])
-                                .collect(),
-                                remaining,
-                            };
-                            if let Some(dependencies) = dependencies.get_mut(&id) {
-                                let mut d = serde_json::from_value::<Vec<ftd::Dependencies>>(
-                                    dependencies.to_owned(),
-                                )
-                                .unwrap();
-                                d.push(json);
-                                *dependencies = serde_json::to_value(&d).unwrap();
-                            } else {
-                                dependencies.insert(
-                                    id.to_string(),
-                                    serde_json::to_value(&vec![json]).unwrap(),
-                                );
-                            }
-                        } else {
-                            panic!("{} should be declared", condition.variable)
-                        }
-                        if let Some(ref reference) = value.reference {
-                            let (variable, remaining) =
-                                ftd::p2::utils::get_doc_name_and_remaining(reference).unwrap();
-                            if let Some(ftd::Data { dependencies, .. }) = data.get_mut(&variable) {
-                                let json = ftd::Dependencies {
-                                    dependency_type: ftd::DependencyType::Variable,
-                                    condition: None,
-                                    remaining,
-                                    parameters: std::array::IntoIter::new([(
-                                        k.to_string(),
-                                        ftd::ConditionalValueWithDefault {
-                                            value: ftd::ConditionalValue {
-                                                value: serde_json::json!({ "$variable$": condition.variable, "$node$": id}),
-                                                important: false,
-                                                reference: None,
-                                            },
-                                            default: None,
-                                        },
-                                    )])
-                                    .collect(),
-                                };
-                                if let Some(dependencies) = dependencies.get_mut("$style$") {
-                                    let mut d = serde_json::from_value::<Vec<ftd::Dependencies>>(
-                                        dependencies.to_owned(),
-                                    )
-                                    .unwrap();
-                                    d.push(json);
-                                    *dependencies = serde_json::to_value(&d).unwrap();
-                                } else {
-                                    dependencies.insert(
-                                        "$style$".to_string(),
-                                        serde_json::to_value(&vec![json]).unwrap(),
-                                    );
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    pub fn get_image_event_dependencies(
-        children: &[ftd::Element],
-        data: &mut ftd::DataDependenciesMap,
-    ) {
-        for child in children {
-            let (background_image, id) = match child {
-                ftd::Element::Column(ftd::Column {
-                    container, common, ..
-                })
-                | ftd::Element::Row(ftd::Row {
-                    container, common, ..
-                })
-                | ftd::Element::Scene(ftd::Scene {
-                    container, common, ..
-                })
-                | ftd::Element::Grid(ftd::Grid {
-                    container, common, ..
-                }) => {
-                    ftd::Element::get_image_event_dependencies(&container.children, data);
-                    if let Some((_, _, external_children)) = &container.external_children {
-                        ftd::Element::get_image_event_dependencies(external_children, data);
-                    }
-                    (&common.background_image, &common.data_id)
-                }
-                ftd::Element::Markup(ftd::Markups {
-                    common, children, ..
-                }) => {
-                    markup_get_image_event_dependencies(children, data);
-                    (&common.background_image, &common.data_id)
-                }
-                ftd::Element::Text(ftd::Text { common, .. })
-                | ftd::Element::Code(ftd::Code { common, .. })
-                | ftd::Element::Integer(ftd::Text { common, .. })
-                | ftd::Element::Boolean(ftd::Text { common, .. })
-                | ftd::Element::Decimal(ftd::Text { common, .. }) => {
-                    (&common.background_image, &common.data_id)
-                }
-                _ => continue,
-            };
-            value_condition(id, data, background_image);
-        }
-
-        fn markup_get_image_event_dependencies(
-            children: &[ftd::Markup],
-            data: &mut ftd::DataDependenciesMap,
-        ) {
-            for child in children {
-                let (background_image, id) = match child.itext {
-                    IText::Text(ref t)
-                    | IText::Integer(ref t)
-                    | IText::Boolean(ref t)
-                    | IText::Decimal(ref t) => (&t.common.background_image, &t.common.data_id),
-                    IText::Markup(ref t) => {
-                        markup_get_image_event_dependencies(&t.children, data);
-                        (&t.common.background_image, &t.common.data_id)
-                    }
-                    _ => continue,
-                };
-                markup_get_image_event_dependencies(&child.children, data);
-                value_condition(id, data, background_image);
-            }
-        }
-
-        fn value_condition(
-            id: &Option<String>,
-            data: &mut ftd::DataDependenciesMap,
-            background_image: &Option<ImageSrc>,
-        ) {
-            let id = id.clone().expect("universal id should be present");
-            if let Some(ref image_src) = background_image {
-                image_condition(image_src, id.as_str(), data);
-            }
-
-            fn image_condition(
-                image_src: &ftd::ImageSrc,
-                id: &str,
-                data: &mut ftd::DataDependenciesMap,
-            ) {
-                let (reference, value) = if let Some(ref reference) = image_src.reference {
-                    (
-                        reference.to_string(),
-                        serde_json::json!({ "light": format!("url({})", image_src.light),
-                            "dark": format!("url({})", image_src.light),
-                            "$kind$": "light"
-                        }),
-                    )
-                } else {
-                    return;
-                };
-
-                let parameters = {
-                    let mut parameters = std::collections::BTreeMap::new();
-                    parameters.insert(
-                        "background-image".to_string(),
-                        ftd::ConditionalValueWithDefault {
-                            value: ConditionalValue {
-                                value,
-                                important: false,
-                                reference: None,
-                            },
-                            default: None,
-                        },
-                    );
-                    parameters
-                };
-
-                let (variable, remaining) =
-                    ftd::p2::utils::get_doc_name_and_remaining(&reference).unwrap();
-
-                if let Some(ftd::Data { dependencies, .. }) = data.get_mut(&variable) {
-                    let json = ftd::Dependencies {
-                        dependency_type: ftd::DependencyType::Style,
-                        condition: None,
-                        parameters,
-                        remaining,
-                    };
-                    if let Some(dependencies) = dependencies.get_mut(id) {
-                        let mut d = serde_json::from_value::<Vec<ftd::Dependencies>>(
-                            dependencies.to_owned(),
-                        )
-                        .unwrap();
-                        d.push(json);
-                        *dependencies = serde_json::to_value(&d).unwrap();
-                    } else {
-                        dependencies
-                            .insert(id.to_string(), serde_json::to_value(&vec![json]).unwrap());
-                    }
-                }
-            }
-        }
-    }
-
-    pub fn get_font_event_dependencies(
-        children: &[ftd::Element],
-        data: &mut ftd::DataDependenciesMap,
-    ) {
-        for child in children {
-            let (font, id) = match child {
-                ftd::Element::Column(ftd::Column { container, .. })
-                | ftd::Element::Row(ftd::Row { container, .. })
-                | ftd::Element::Scene(ftd::Scene { container, .. })
-                | ftd::Element::Grid(ftd::Grid { container, .. }) => {
-                    ftd::Element::get_font_event_dependencies(&container.children, data);
-                    if let Some((_, _, external_children)) = &container.external_children {
-                        ftd::Element::get_font_event_dependencies(external_children, data);
-                    }
-                    continue;
-                }
-                ftd::Element::Markup(ftd::Markups {
-                    common,
                     font,
+                    common,
                     children,
                     ..
                 }) => {
-                    markup_get_font_event_dependencies(children, data);
-                    (font, &common.data_id)
+                    markup_get_event_dependencies(children, data);
+                    (font, common)
                 }
-                ftd::Element::Text(ftd::Text { common, font, .. })
-                | ftd::Element::Code(ftd::Code { common, font, .. })
-                | ftd::Element::Integer(ftd::Text { common, font, .. })
-                | ftd::Element::Boolean(ftd::Text { common, font, .. })
-                | ftd::Element::Decimal(ftd::Text { common, font, .. }) => (font, &common.data_id),
-                _ => continue,
+                ftd::Element::Text(ftd::Text { font, common, .. })
+                | ftd::Element::Code(ftd::Code { font, common, .. })
+                | ftd::Element::Integer(ftd::Text { font, common, .. })
+                | ftd::Element::Boolean(ftd::Text { font, common, .. })
+                | ftd::Element::Decimal(ftd::Text { font, common, .. }) => (font, common),
+                ftd::Element::IFrame(ftd::IFrame { common, .. })
+                | ftd::Element::Input(ftd::Input { common, .. })
+                | ftd::Element::TextBlock(ftd::TextBlock { common, .. })
+                | ftd::Element::Image(ftd::Image { common, .. }) => (&None, common),
+                ftd::Element::Null => continue,
             };
-            value_condition(id, data, font);
+            value_condition(&common.reference, &common.data_id, data);
+            color_condition(common, &common.data_id, data);
+            font_condition(&common.data_id, data, font);
+            image_condition(&common.data_id, data, &common.background_image);
+            style_condition(&common.conditional_attribute, &common.data_id, data);
+            visibility_condition(&common.condition, &common.data_id, data);
         }
 
-        fn markup_get_font_event_dependencies(
+        fn markup_get_event_dependencies(
             children: &[ftd::Markup],
             data: &mut ftd::DataDependenciesMap,
         ) {
             for child in children {
-                let (font, id) = match child.itext {
+                let (font, common) = match child.itext {
                     IText::Text(ref t)
                     | IText::Integer(ref t)
                     | IText::Boolean(ref t)
-                    | IText::Decimal(ref t) => (&t.font, &t.common.data_id),
+                    | IText::Decimal(ref t) => (&t.font, &t.common),
+                    IText::TextBlock(ref t) => (&None, &t.common),
                     IText::Markup(ref t) => {
-                        markup_get_font_event_dependencies(&t.children, data);
-                        (&t.font, &t.common.data_id)
+                        markup_get_event_dependencies(&t.children, data);
+                        (&t.font, &t.common)
                     }
-                    _ => continue,
                 };
-                markup_get_font_event_dependencies(&child.children, data);
-                value_condition(id, data, font);
+                markup_get_event_dependencies(&child.children, data);
+                value_condition(&common.reference, &common.data_id, data);
+                color_condition(common, &common.data_id, data);
+                font_condition(&common.data_id, data, font);
+                image_condition(&common.data_id, data, &common.background_image);
+                style_condition(&common.conditional_attribute, &common.data_id, data);
+                visibility_condition(&common.condition, &common.data_id, data);
             }
         }
 
         fn value_condition(
+            reference: &Option<String>,
             id: &Option<String>,
             data: &mut ftd::DataDependenciesMap,
-            font: &Option<Type>,
         ) {
-            let id = id.clone().expect("universal id should be present");
-            if let Some(ref type_) = font {
-                font_condition(type_, id.as_str(), data);
-            }
-
-            fn font_condition(type_: &ftd::Type, id: &str, data: &mut ftd::DataDependenciesMap) {
-                let (reference, value) = if let Some(ref reference) = type_.reference {
-                    let desktop = serde_json::to_value(&type_.desktop).unwrap();
-                    let mobile = serde_json::to_value(&type_.mobile).unwrap();
-                    let xl = serde_json::to_value(&type_.xl).unwrap();
-                    (
-                        reference.to_string(),
-                        serde_json::json!({ "desktop": desktop,
-                            "mobile": mobile,
-                            "xl": xl,
-                            "$kind$": "desktop"
-                        }),
-                    )
-                } else {
-                    return;
-                };
-                let parameters = {
-                    let mut parameters = std::collections::BTreeMap::new();
-                    parameters.insert(
-                        "font".to_string(),
-                        ftd::ConditionalValueWithDefault {
-                            value: ConditionalValue {
-                                value,
-                                important: false,
-                                reference: None,
-                            },
-                            default: None,
-                        },
-                    );
-                    parameters
-                };
+            if let Some(reference) = reference {
+                let id = id.clone().expect("universal id should be present");
 
                 let (variable, remaining) =
-                    ftd::p2::utils::get_doc_name_and_remaining(&reference).unwrap();
-
+                    ftd::p2::utils::get_doc_name_and_remaining(reference).unwrap();
                 if let Some(ftd::Data { dependencies, .. }) = data.get_mut(&variable) {
                     let json = ftd::Dependencies {
-                        dependency_type: ftd::DependencyType::Style,
+                        dependency_type: ftd::DependencyType::Value,
                         condition: None,
-                        parameters,
+                        parameters: Default::default(),
                         remaining,
                     };
-                    if let Some(dependencies) = dependencies.get_mut(id) {
+                    if let Some(dependencies) = dependencies.get_mut(&id) {
                         let mut d = serde_json::from_value::<Vec<ftd::Dependencies>>(
                             dependencies.to_owned(),
                         )
@@ -970,80 +667,13 @@ impl Element {
                         d.push(json);
                         *dependencies = serde_json::to_value(&d).unwrap();
                     } else {
-                        dependencies
-                            .insert(id.to_string(), serde_json::to_value(&vec![json]).unwrap());
+                        dependencies.insert(id, serde_json::to_value(&vec![json]).unwrap());
                     }
                 }
             }
         }
-    }
 
-    pub fn get_color_event_dependencies(
-        children: &[ftd::Element],
-        data: &mut ftd::DataDependenciesMap,
-    ) {
-        for child in children {
-            let (reference, id) = match child {
-                ftd::Element::Column(ftd::Column {
-                    common, container, ..
-                })
-                | ftd::Element::Row(ftd::Row {
-                    common, container, ..
-                })
-                | ftd::Element::Scene(ftd::Scene {
-                    common, container, ..
-                })
-                | ftd::Element::Grid(ftd::Grid {
-                    common, container, ..
-                }) => {
-                    ftd::Element::get_color_event_dependencies(&container.children, data);
-                    if let Some((_, _, external_children)) = &container.external_children {
-                        ftd::Element::get_color_event_dependencies(external_children, data);
-                    }
-                    (common, &common.data_id)
-                }
-                ftd::Element::Markup(ftd::Markups {
-                    common, children, ..
-                }) => {
-                    markup_get_color_event_dependencies(children, data);
-                    (common, &common.data_id)
-                }
-                ftd::Element::Image(ftd::Image { common, .. })
-                | ftd::Element::Text(ftd::Text { common, .. })
-                | ftd::Element::TextBlock(ftd::TextBlock { common, .. })
-                | ftd::Element::Code(ftd::Code { common, .. })
-                | ftd::Element::IFrame(ftd::IFrame { common, .. })
-                | ftd::Element::Input(ftd::Input { common, .. })
-                | ftd::Element::Integer(ftd::Text { common, .. })
-                | ftd::Element::Boolean(ftd::Text { common, .. })
-                | ftd::Element::Decimal(ftd::Text { common, .. }) => (common, &common.data_id),
-                ftd::Element::Null => continue,
-            };
-            value_condition(reference, id, data);
-        }
-
-        fn markup_get_color_event_dependencies(
-            children: &[ftd::Markup],
-            data: &mut ftd::DataDependenciesMap,
-        ) {
-            for child in children {
-                let (reference, id) = match child.itext {
-                    IText::Text(ref t)
-                    | IText::Integer(ref t)
-                    | IText::Boolean(ref t)
-                    | IText::Decimal(ref t) => (&t.common, &t.common.data_id),
-                    IText::TextBlock(ref t) => (&t.common, &t.common.data_id),
-                    IText::Markup(ref t) => {
-                        markup_get_color_event_dependencies(&t.children, data);
-                        (&t.common, &t.common.data_id)
-                    }
-                };
-                markup_get_color_event_dependencies(&child.children, data);
-                value_condition(reference, id, data);
-            }
-        }
-
-        fn value_condition(
+        fn color_condition(
             common: &ftd::Common,
             id: &Option<String>,
             data: &mut ftd::DataDependenciesMap,
@@ -1166,89 +796,243 @@ impl Element {
                 }
             }
         }
-    }
 
-    pub fn get_value_event_dependencies(
-        children: &[ftd::Element],
-        data: &mut ftd::DataDependenciesMap,
-    ) {
-        for child in children {
-            let (reference, id) = match child {
-                ftd::Element::Column(ftd::Column {
-                    common, container, ..
-                })
-                | ftd::Element::Row(ftd::Row {
-                    common, container, ..
-                })
-                | ftd::Element::Scene(ftd::Scene {
-                    common, container, ..
-                })
-                | ftd::Element::Grid(ftd::Grid {
-                    common, container, ..
-                }) => {
-                    ftd::Element::get_value_event_dependencies(&container.children, data);
-                    if let Some((_, _, external_children)) = &container.external_children {
-                        ftd::Element::get_value_event_dependencies(external_children, data);
-                    }
-                    (&common.reference, &common.data_id)
-                }
-                ftd::Element::Markup(ftd::Markups {
-                    common, children, ..
-                }) => {
-                    markup_get_value_event_dependencies(children, data);
-                    (&common.reference, &common.data_id)
-                }
-                ftd::Element::Image(ftd::Image { common, .. })
-                | ftd::Element::Text(ftd::Text { common, .. })
-                | ftd::Element::TextBlock(ftd::TextBlock { common, .. })
-                | ftd::Element::Code(ftd::Code { common, .. })
-                | ftd::Element::IFrame(ftd::IFrame { common, .. })
-                | ftd::Element::Input(ftd::Input { common, .. })
-                | ftd::Element::Integer(ftd::Text { common, .. })
-                | ftd::Element::Boolean(ftd::Text { common, .. })
-                | ftd::Element::Decimal(ftd::Text { common, .. }) => {
-                    (&common.reference, &common.data_id)
-                }
-                ftd::Element::Null => continue,
-            };
-            value_condition(reference, id, data);
-        }
-
-        fn markup_get_value_event_dependencies(
-            children: &[ftd::Markup],
+        fn font_condition(
+            id: &Option<String>,
             data: &mut ftd::DataDependenciesMap,
+            font: &Option<Type>,
         ) {
-            for child in children {
-                let (reference, id) = match child.itext {
-                    IText::Text(ref t)
-                    | IText::Integer(ref t)
-                    | IText::Boolean(ref t)
-                    | IText::Decimal(ref t) => (&t.common.reference, &t.common.data_id),
-                    IText::TextBlock(ref t) => (&t.common.reference, &t.common.data_id),
-                    IText::Markup(ref t) => {
-                        markup_get_value_event_dependencies(&t.children, data);
-                        (&t.common.reference, &t.common.data_id)
-                    }
+            let id = id.clone().expect("universal id should be present");
+            if let Some(ref type_) = font {
+                font_condition(type_, id.as_str(), data);
+            }
+
+            fn font_condition(type_: &ftd::Type, id: &str, data: &mut ftd::DataDependenciesMap) {
+                let (reference, value) = if let Some(ref reference) = type_.reference {
+                    let desktop = serde_json::to_value(&type_.desktop).unwrap();
+                    let mobile = serde_json::to_value(&type_.mobile).unwrap();
+                    let xl = serde_json::to_value(&type_.xl).unwrap();
+                    (
+                        reference.to_string(),
+                        serde_json::json!({ "desktop": desktop,
+                            "mobile": mobile,
+                            "xl": xl,
+                            "$kind$": "desktop"
+                        }),
+                    )
+                } else {
+                    return;
                 };
-                markup_get_value_event_dependencies(&child.children, data);
-                value_condition(reference, id, data);
+                let parameters = {
+                    let mut parameters = std::collections::BTreeMap::new();
+                    parameters.insert(
+                        "font".to_string(),
+                        ftd::ConditionalValueWithDefault {
+                            value: ConditionalValue {
+                                value,
+                                important: false,
+                                reference: None,
+                            },
+                            default: None,
+                        },
+                    );
+                    parameters
+                };
+
+                let (variable, remaining) =
+                    ftd::p2::utils::get_doc_name_and_remaining(&reference).unwrap();
+
+                if let Some(ftd::Data { dependencies, .. }) = data.get_mut(&variable) {
+                    let json = ftd::Dependencies {
+                        dependency_type: ftd::DependencyType::Style,
+                        condition: None,
+                        parameters,
+                        remaining,
+                    };
+                    if let Some(dependencies) = dependencies.get_mut(id) {
+                        let mut d = serde_json::from_value::<Vec<ftd::Dependencies>>(
+                            dependencies.to_owned(),
+                        )
+                        .unwrap();
+                        d.push(json);
+                        *dependencies = serde_json::to_value(&d).unwrap();
+                    } else {
+                        dependencies
+                            .insert(id.to_string(), serde_json::to_value(&vec![json]).unwrap());
+                    }
+                }
             }
         }
 
-        fn value_condition(
-            reference: &Option<String>,
+        fn image_condition(
+            id: &Option<String>,
+            data: &mut ftd::DataDependenciesMap,
+            background_image: &Option<ImageSrc>,
+        ) {
+            let id = id.clone().expect("universal id should be present");
+            if let Some(ref image_src) = background_image {
+                image_condition(image_src, id.as_str(), data);
+            }
+
+            fn image_condition(
+                image_src: &ftd::ImageSrc,
+                id: &str,
+                data: &mut ftd::DataDependenciesMap,
+            ) {
+                let (reference, value) = if let Some(ref reference) = image_src.reference {
+                    (
+                        reference.to_string(),
+                        serde_json::json!({ "light": format!("url({})", image_src.light),
+                            "dark": format!("url({})", image_src.light),
+                            "$kind$": "light"
+                        }),
+                    )
+                } else {
+                    return;
+                };
+
+                let parameters = {
+                    let mut parameters = std::collections::BTreeMap::new();
+                    parameters.insert(
+                        "background-image".to_string(),
+                        ftd::ConditionalValueWithDefault {
+                            value: ConditionalValue {
+                                value,
+                                important: false,
+                                reference: None,
+                            },
+                            default: None,
+                        },
+                    );
+                    parameters
+                };
+
+                let (variable, remaining) =
+                    ftd::p2::utils::get_doc_name_and_remaining(&reference).unwrap();
+
+                if let Some(ftd::Data { dependencies, .. }) = data.get_mut(&variable) {
+                    let json = ftd::Dependencies {
+                        dependency_type: ftd::DependencyType::Style,
+                        condition: None,
+                        parameters,
+                        remaining,
+                    };
+                    if let Some(dependencies) = dependencies.get_mut(id) {
+                        let mut d = serde_json::from_value::<Vec<ftd::Dependencies>>(
+                            dependencies.to_owned(),
+                        )
+                        .unwrap();
+                        d.push(json);
+                        *dependencies = serde_json::to_value(&d).unwrap();
+                    } else {
+                        dependencies
+                            .insert(id.to_string(), serde_json::to_value(&vec![json]).unwrap());
+                    }
+                }
+            }
+        }
+
+        fn style_condition(
+            conditional_attributes: &std::collections::BTreeMap<String, ConditionalAttribute>,
             id: &Option<String>,
             data: &mut ftd::DataDependenciesMap,
         ) {
-            if let Some(reference) = reference {
-                let id = id.clone().expect("universal id should be present");
+            for (k, v) in conditional_attributes {
+                if let ftd::ConditionalAttribute {
+                    attribute_type: ftd::AttributeType::Style,
+                    conditions_with_value,
+                    default,
+                } = v
+                {
+                    for (condition, value) in conditions_with_value {
+                        let id = id.clone().expect("universal id should be present");
+                        let (variable, remaining) =
+                            ftd::p2::utils::get_doc_name_and_remaining(&condition.variable)
+                                .unwrap();
+                        if let Some(ftd::Data { dependencies, .. }) = data.get_mut(&variable) {
+                            let json = ftd::Dependencies {
+                                dependency_type: ftd::DependencyType::Style,
+                                condition: Some(condition.value.to_owned()),
+                                parameters: std::array::IntoIter::new([(
+                                    k.to_string(),
+                                    ftd::ConditionalValueWithDefault {
+                                        value: value.clone(),
+                                        default: default.clone(),
+                                    },
+                                )])
+                                .collect(),
+                                remaining,
+                            };
+                            if let Some(dependencies) = dependencies.get_mut(&id) {
+                                let mut d = serde_json::from_value::<Vec<ftd::Dependencies>>(
+                                    dependencies.to_owned(),
+                                )
+                                .unwrap();
+                                d.push(json);
+                                *dependencies = serde_json::to_value(&d).unwrap();
+                            } else {
+                                dependencies.insert(
+                                    id.to_string(),
+                                    serde_json::to_value(&vec![json]).unwrap(),
+                                );
+                            }
+                        } else {
+                            panic!("{} should be declared", condition.variable)
+                        }
+                        if let Some(ref reference) = value.reference {
+                            let (variable, remaining) =
+                                ftd::p2::utils::get_doc_name_and_remaining(reference).unwrap();
+                            if let Some(ftd::Data { dependencies, .. }) = data.get_mut(&variable) {
+                                let json = ftd::Dependencies {
+                                    dependency_type: ftd::DependencyType::Variable,
+                                    condition: None,
+                                    remaining,
+                                    parameters: std::array::IntoIter::new([(
+                                        k.to_string(),
+                                        ftd::ConditionalValueWithDefault {
+                                            value: ftd::ConditionalValue {
+                                                value: serde_json::json!({ "$variable$": condition.variable, "$node$": id}),
+                                                important: false,
+                                                reference: None,
+                                            },
+                                            default: None,
+                                        },
+                                    )])
+                                        .collect(),
+                                };
+                                if let Some(dependencies) = dependencies.get_mut("$style$") {
+                                    let mut d = serde_json::from_value::<Vec<ftd::Dependencies>>(
+                                        dependencies.to_owned(),
+                                    )
+                                    .unwrap();
+                                    d.push(json);
+                                    *dependencies = serde_json::to_value(&d).unwrap();
+                                } else {
+                                    dependencies.insert(
+                                        "$style$".to_string(),
+                                        serde_json::to_value(&vec![json]).unwrap(),
+                                    );
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
+        fn visibility_condition(
+            condition: &Option<ftd::Condition>,
+            id: &Option<String>,
+            data: &mut ftd::DataDependenciesMap,
+        ) {
+            if let Some(condition) = condition {
+                let id = id.clone().expect("universal id should be present");
                 let (variable, remaining) =
-                    ftd::p2::utils::get_doc_name_and_remaining(reference).unwrap();
+                    ftd::p2::utils::get_doc_name_and_remaining(&condition.variable).unwrap();
                 if let Some(ftd::Data { dependencies, .. }) = data.get_mut(&variable) {
                     let json = ftd::Dependencies {
-                        dependency_type: ftd::DependencyType::Value,
-                        condition: None,
+                        dependency_type: ftd::DependencyType::Visible,
+                        condition: Some(condition.value.to_owned()),
                         parameters: Default::default(),
                         remaining,
                     };
@@ -1262,6 +1046,8 @@ impl Element {
                     } else {
                         dependencies.insert(id, serde_json::to_value(&vec![json]).unwrap());
                     }
+                } else {
+                    panic!("{} should be declared 2", condition.variable)
                 }
             }
         }
@@ -1577,106 +1363,6 @@ impl Element {
                         "$value$".to_string(),
                         serde_json::to_value(&vec![json]).unwrap(),
                     );
-                }
-            }
-        }
-    }
-
-    pub fn get_visible_event_dependencies(
-        children: &[ftd::Element],
-        data: &mut ftd::DataDependenciesMap,
-    ) {
-        for child in children {
-            let (condition, id) = match child {
-                ftd::Element::Column(ftd::Column {
-                    common, container, ..
-                })
-                | ftd::Element::Row(ftd::Row {
-                    common, container, ..
-                })
-                | ftd::Element::Scene(ftd::Scene {
-                    common, container, ..
-                })
-                | ftd::Element::Grid(ftd::Grid {
-                    common, container, ..
-                }) => {
-                    ftd::Element::get_visible_event_dependencies(&container.children, data);
-                    if let Some((_, _, external_children)) = &container.external_children {
-                        ftd::Element::get_visible_event_dependencies(external_children, data);
-                    }
-                    (&common.condition, &common.data_id)
-                }
-                ftd::Element::Markup(ftd::Markups {
-                    common, children, ..
-                }) => {
-                    markup_get_visible_event_dependencies(children, data);
-                    (&common.condition, &common.data_id)
-                }
-                ftd::Element::Image(ftd::Image { common, .. })
-                | ftd::Element::Text(ftd::Text { common, .. })
-                | ftd::Element::TextBlock(ftd::TextBlock { common, .. })
-                | ftd::Element::Code(ftd::Code { common, .. })
-                | ftd::Element::IFrame(ftd::IFrame { common, .. })
-                | ftd::Element::Input(ftd::Input { common, .. })
-                | ftd::Element::Integer(ftd::Text { common, .. })
-                | ftd::Element::Boolean(ftd::Text { common, .. })
-                | ftd::Element::Decimal(ftd::Text { common, .. }) => {
-                    (&common.condition, &common.data_id)
-                }
-                ftd::Element::Null => continue,
-            };
-            visibility_condition(condition, id, data);
-        }
-
-        fn markup_get_visible_event_dependencies(
-            children: &[ftd::Markup],
-            data: &mut ftd::DataDependenciesMap,
-        ) {
-            for child in children {
-                let (condition, id) = match child.itext {
-                    IText::Text(ref t)
-                    | IText::Integer(ref t)
-                    | IText::Boolean(ref t)
-                    | IText::Decimal(ref t) => (&t.common.condition, &t.common.data_id),
-                    IText::TextBlock(ref t) => (&t.common.condition, &t.common.data_id),
-                    IText::Markup(ref t) => {
-                        markup_get_visible_event_dependencies(&t.children, data);
-                        (&t.common.condition, &t.common.data_id)
-                    }
-                };
-                markup_get_visible_event_dependencies(&child.children, data);
-                visibility_condition(condition, id, data);
-            }
-        }
-
-        fn visibility_condition(
-            condition: &Option<ftd::Condition>,
-            id: &Option<String>,
-            data: &mut ftd::DataDependenciesMap,
-        ) {
-            if let Some(condition) = condition {
-                let id = id.clone().expect("universal id should be present");
-                let (variable, remaining) =
-                    ftd::p2::utils::get_doc_name_and_remaining(&condition.variable).unwrap();
-                if let Some(ftd::Data { dependencies, .. }) = data.get_mut(&variable) {
-                    let json = ftd::Dependencies {
-                        dependency_type: ftd::DependencyType::Visible,
-                        condition: Some(condition.value.to_owned()),
-                        parameters: Default::default(),
-                        remaining,
-                    };
-                    if let Some(dependencies) = dependencies.get_mut(&id) {
-                        let mut d = serde_json::from_value::<Vec<ftd::Dependencies>>(
-                            dependencies.to_owned(),
-                        )
-                        .unwrap();
-                        d.push(json);
-                        *dependencies = serde_json::to_value(&d).unwrap();
-                    } else {
-                        dependencies.insert(id, serde_json::to_value(&vec![json]).unwrap());
-                    }
-                } else {
-                    panic!("{} should be declared 2", condition.variable)
                 }
             }
         }
