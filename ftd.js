@@ -407,13 +407,11 @@ let ftd_utils = {
         var styles_edited = [];
         let visibility_change = false;
         handle_action_(id, target_variable, value, data, ftd_external_children, styles_edited, visibility_change);
-        if (visibility_change) {
-            ftd_utils.external_children_replace(id, ftd_external_children);
-        }
 
         function handle_action_(id, target_variable, value, data, ftd_external_children, styles_edited, visibility_change) {
             ftd_utils.set_data_value(data, target_variable, value);
-            let new_value = ftd_utils.get_data_value(data, target_variable);
+            let full_value = ftd_utils.get_data_value(data, target_variable);
+            let new_value = full_value;
             if (!!new_value && !!new_value["$kind$"]) {
                 new_value = new_value[new_value["$kind$"]];
             }
@@ -430,7 +428,7 @@ let ftd_utils = {
                     if (json_dependency.dependency_type === "Value") {
                         if (dependency.endsWith(':dummy')) {
                             let dummy_node = document.querySelector(`[data-id="${dependency}:${id}"]`);
-                            let dom_ids = ftd_utils.create_dom(data[target].value, dummy_node);
+                            let dom_ids = ftd_utils.create_dom(full_value, dummy_node);
                             ftd_utils.remove_nodes(Object.keys(dependencies).filter(s => !s.endsWith(':dummy')), id);
                             let deps = {};
                             for (const dom_id in dom_ids) {
@@ -449,7 +447,7 @@ let ftd_utils = {
                         }
                     } else if (json_dependency.dependency_type === "Visible") {
                         let display = "none";
-                        if (ftd_utils.is_equal_condition(data[target].value, json_dependency.condition)) {
+                        if (ftd_utils.is_equal_condition(full_value, json_dependency.condition)) {
                             let is_flex = !!document.querySelector(`[data-id="${dependency}:${id}"]`).style.flexDirection.length;
                             let is_grid = !!document.querySelector(`[data-id="${dependency}:${id}"]`).style.gridTemplateAreas.length;
                             let is_webkit = !!document.querySelector(`[data-id="${dependency}:${id}"]`).style.webkitLineClamp.length;
@@ -485,17 +483,17 @@ let ftd_utils = {
                                             continue;
                                         }
                                         if (dependent_dependencies[d].parameters[parameter].value.reference === target) {
-                                            dependent_dependencies[d].parameters[parameter].value.value = data[target].value;
+                                            dependent_dependencies[d].parameters[parameter].value.value = full_value;
                                         }
                                         if (!!dependent_dependencies[d].parameters[parameter].default && dependent_dependencies[d].parameters[parameter].default.reference === target) {
-                                            dependent_dependencies[d].parameters[parameter].default.value = data[target].value;
+                                            dependent_dependencies[d].parameters[parameter].default.value = full_value;
                                         }
                                     }
                                     data[variable].dependencies[node] = dependent_dependencies;
                                     handle_action_(id, variable, dependent, data, ftd_external_children, styles_edited, visibility_change);
                                 }
                             }
-                        } else if (ftd_utils.is_equal_condition(data[target].value, json_dependency.condition)) {
+                        } else if (ftd_utils.is_equal_condition(full_value, json_dependency.condition)) {
                             for (const parameter in json_dependency.parameters) {
                                 let parent = ftd_utils.get_name_and_remaining(parameter)[0];
                                 if (data[parent] !== undefined) {
@@ -534,6 +532,10 @@ let ftd_utils = {
                             if (!!json_dependency.parameters["dependents"]) {
                                 set = json_dependency.parameters["dependents"].value.value;
                             }
+                            if ((!!json_dependency.remaining)
+                                && (json_dependency.remaining !== target_remaining)) {
+                                continue;
+                            }
                             if (!!set.length) {
                                 let style_attr = Object.keys(json_dependency.parameters).filter(w => w !== "dependents")[0];
                                 for (const idx in set) {
@@ -544,7 +546,7 @@ let ftd_utils = {
                                             || !dependent_dependencies[d].parameters[style_attr]) {
                                             continue;
                                         }
-                                        dependent_dependencies[d].parameters[style_attr].default.value = data[target].value;
+                                        dependent_dependencies[d].parameters[style_attr].default.value = full_value;
                                     }
                                     data[set[idx]].dependencies[dependency] = dependent_dependencies;
                                     handle_action_(id, set[idx], dependent, data, ftd_external_children, styles_edited, visibility_change);
@@ -555,11 +557,6 @@ let ftd_utils = {
                                 if (parameter === "dependents") {
                                     continue;
                                 }
-                                if ((!!json_dependency.remaining)
-                                    && (json_dependency.remaining !== target_remaining)) {
-                                    continue;
-                                }
-
                                 let important = json_dependency.parameters[parameter].value.important;
                                 if (new_value instanceof Object) {
                                     for (const parameter in new_value) {
@@ -575,7 +572,7 @@ let ftd_utils = {
                                     }
                                 }
                             }
-                        } else if (ftd_utils.is_equal_condition(data[target].value, json_dependency.condition)) {
+                        } else if (ftd_utils.is_equal_condition(full_value, json_dependency.condition)) {
                             for (const parameter in json_dependency.parameters) {
                                 let value = json_dependency.parameters[parameter].value.value;
                                 // if (ftd_utils.isJson(value)) {
@@ -623,6 +620,9 @@ let ftd_utils = {
                         }
                     }
                 }
+            }
+            if (visibility_change) {
+                ftd_utils.external_children_replace(id, ftd_external_children);
             }
         }
     },
@@ -847,12 +847,13 @@ window.ftd = (function () {
     exports.insert_value = function (id, target, value, at) {
         let data = ftd_data[id];
 
-        if (!data[target]) {
+
+        if (!data[ftd_utils.get_name_and_remaining(target)[0]]) {
             console_log(target, "is not in data, ignoring");
             return;
         }
 
-        let list = data[target].value;
+        let list = ftd_utils.get_data_value(data, target);
 
         if (!(list instanceof Object)) {
             console_log(list, "is not list, ignoring");
