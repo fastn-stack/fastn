@@ -586,7 +586,11 @@ impl Package {
         impl Path {
             pub fn new(path: &str) -> Path {
                 Path {
-                    parts: path.to_string().split('/').map(|s| s.to_string()).collect(),
+                    parts: path
+                        .to_string()
+                        .split(std::path::MAIN_SEPARATOR)
+                        .map(|s| s.to_string())
+                        .collect(),
                 }
             }
         }
@@ -656,6 +660,7 @@ impl Package {
             path.chars()
                 .map(|x| match x {
                     '/' => '-',
+                    '\\' => '-',
                     '.' => '-',
                     '_' => '-',
                     _ => x,
