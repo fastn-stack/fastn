@@ -1207,7 +1207,9 @@ pub fn default_bag() -> std::collections::BTreeMap<String, ftd::p2::Thing> {
             ftd::p2::Thing::Record(ftd::p2::Record {
                 name: "ftd#colors".to_string(),
                 fields: std::array::IntoIter::new([
-                    color("background"),
+                    color("base"),
+                    color("baser"),
+                    color("basest"),
                     color("border"),
                     color("border-strong"),
                     color("text"),
@@ -1218,15 +1220,20 @@ pub fn default_bag() -> std::collections::BTreeMap<String, ftd::p2::Thing> {
                     record("cta-tertiary", "ftd#cta-colors"),
                     record("cta-danger", "ftd#cta-colors"),
                     record("accent", "ftd#pst"),
+
+                    record("error", "ftd#btb"),
                     record("success", "ftd#btb"),
                     record("info", "ftd#btb"),
                     record("warning", "ftd#btb"),
+
                     record("custom", "ftd#custom-colors"),
                 ])
                 .collect(),
                 instances: Default::default(),
                 order: vec![
-                    "background".to_string(),
+                    "base".to_string(),
+                    "baser".to_string(),
+                    "basest".to_string(),
                     "border".to_string(),
                     "border-strong".to_string(),
                     "text".to_string(),
@@ -1237,6 +1244,7 @@ pub fn default_bag() -> std::collections::BTreeMap<String, ftd::p2::Thing> {
                     "cta-tertiary".to_string(),
                     "cta-danger".to_string(),
                     "accent".to_string(),
+                    "error".to_string(),
                     "success".to_string(),
                     "info".to_string(),
                     "warning".to_string(),
