@@ -682,7 +682,13 @@ impl Package {
                             full_path.as_str(),
                             dir_path.as_str(),
                             if let Some(f) = file_ins.clone() {
-                                if full_path.as_str().eq(f.get_id().as_str()) {
+                                if full_path.as_str().eq(f
+                                    .get_id()
+                                    .as_str()
+                                    .replace(std::path::MAIN_SEPARATOR, "/")
+                                    .to_string()
+                                    .as_str())
+                                {
                                     Some(f)
                                 } else {
                                     None
