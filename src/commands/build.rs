@@ -1260,7 +1260,7 @@ fn replace_markers(
                 .generate_canonical_url(main.id_to_path().as_str())
                 .as_str(),
         )
-        .replace("__ftd_js__", fpm::ftd_js().as_str())
+        .replace("__ftd_js__", fpm::ftd_js())
         .replace("__ftd_body_events__", main_rt.body_events.as_str())
         .replace("__ftd_css__", fpm::ftd_css())
         .replace("__fpm_js__", fpm::fpm_js())
