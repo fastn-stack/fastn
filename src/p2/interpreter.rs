@@ -1175,6 +1175,24 @@ pub fn default_bag() -> std::collections::BTreeMap<String, ftd::p2::Thing> {
             }),
         ),
         (
+            "ftd#background-colors".to_string(),
+            ftd::p2::Thing::Record(ftd::p2::Record {
+                name: "ftd#background-colors".to_string(),
+                fields: std::array::IntoIter::new([
+                    color("base"),
+                    color("step-1"),
+                    color("step-2"),
+                ])
+                .collect(),
+                instances: Default::default(),
+                order: vec![
+                    "base".to_string(),
+                    "step-1".to_string(),
+                    "step-2".to_string(),
+                ],
+            }),
+        ),
+        (
             "ftd#custom-colors".to_string(),
             ftd::p2::Thing::Record(ftd::p2::Record {
                 name: "ftd#custom-colors".to_string(),
@@ -1215,7 +1233,7 @@ pub fn default_bag() -> std::collections::BTreeMap<String, ftd::p2::Thing> {
                     color("hover"),
                     color("pressed"),
                     color("disabled"),
-                    color("focussed"),
+                    color("focused"),
                     color("border"),
                     color("text"),
                 ])
@@ -1226,7 +1244,7 @@ pub fn default_bag() -> std::collections::BTreeMap<String, ftd::p2::Thing> {
                     "hover".to_string(),
                     "pressed".to_string(),
                     "disabled".to_string(),
-                    "focussed".to_string(),
+                    "focused".to_string(),
                     "border".to_string(),
                     "text".to_string(),
                 ],
@@ -1237,12 +1255,11 @@ pub fn default_bag() -> std::collections::BTreeMap<String, ftd::p2::Thing> {
             ftd::p2::Thing::Record(ftd::p2::Record {
                 name: "ftd#color-scheme".to_string(),
                 fields: std::array::IntoIter::new([
-                    color("base"),
-                    color("baser"),
-                    color("basest"),
+                    record("background", "ftd#background-colors"),
                     color("border"),
                     color("border-strong"),
                     color("text"),
+                    color("text-strong"),
                     color("shadow"),
                     color("scrim"),
                     record("cta-primary", "ftd#cta-colors"),
@@ -1259,12 +1276,11 @@ pub fn default_bag() -> std::collections::BTreeMap<String, ftd::p2::Thing> {
                 .collect(),
                 instances: Default::default(),
                 order: vec![
-                    "base".to_string(),
-                    "baser".to_string(),
-                    "basest".to_string(),
+                    "background".to_string(),
                     "border".to_string(),
                     "border-strong".to_string(),
                     "text".to_string(),
+                    "text-strong".to_string(),
                     "shadow".to_string(),
                     "scrim".to_string(),
                     "cta-primary".to_string(),
