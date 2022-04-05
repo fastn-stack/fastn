@@ -1137,9 +1137,9 @@ pub fn default_bag() -> std::collections::BTreeMap<String, ftd::p2::Thing> {
             }),
         ),
         (
-            "ftd#colors".to_string(),
+            "ftd#color-scheme".to_string(),
             ftd::p2::Thing::Record(ftd::p2::Record {
-                name: "ftd#colors".to_string(),
+                name: "ftd#color-scheme".to_string(),
                 fields: std::array::IntoIter::new([
                     (
                         "region".to_string(),
