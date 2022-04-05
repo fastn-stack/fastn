@@ -61,9 +61,9 @@ fn fpm_js() -> &'static str {
     include_str!("../fpm.js")
 }
 
-fn ftd_js() -> &'static str {
+fn ftd_js() -> String {
     if fpm::utils::is_test() {
-        return "FTD_JS";
+        return "FTD_JS".to_string();
     }
     ftd::js()
 }

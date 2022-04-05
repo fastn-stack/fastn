@@ -218,20 +218,22 @@ body-small: $body-small
 
 
 
-
-
-
 -- ftd.color base-:
 light: #FFFBFE
 dark: #1C1B1F
 
--- ftd.color baser-:
+-- ftd.color step-1-:
 light: #FFFBFE
 dark: #1C1B1F
 
--- ftd.color basest-:
+-- ftd.color step-2-:
 light: #FFFBFE
 dark: #1C1B1F
+
+-- ftd.background-colors background-:
+base: $base-
+step-1: $step-1-
+step-2: $step-2-
 
 -- ftd.color border-:
 light: #FFFBFE
@@ -242,6 +244,10 @@ light: #FFFBFE
 dark: #1C1B1F
 
 -- ftd.color text-:
+light: #FFFBFE
+dark: #1C1B1F
+
+-- ftd.color text-strong-:
 light: #FFFBFE
 dark: #1C1B1F
 
@@ -270,7 +276,7 @@ dark: #1C1B1F
 light: #FFFBFE
 dark: #1C1B1F
 
--- ftd.color cta-primary-focussed-:
+-- ftd.color cta-primary-focused-:
 light: #FFFBFE
 dark: #1C1B1F
 
@@ -287,7 +293,7 @@ base: $cta-primary-base-
 hover: $cta-primary-hover-
 pressed: $cta-primary-pressed-
 disabled: $cta-primary-disabled-
-focussed: $cta-primary-focussed-
+focused: $cta-primary-focused-
 border: $cta-primary-border-
 text: $cta-primary-text-
 
@@ -307,7 +313,7 @@ dark: #1C1B1F
 light: #FFFBFE
 dark: #1C1B1F
 
--- ftd.color cta-secondary-focussed-:
+-- ftd.color cta-secondary-focused-:
 light: #FFFBFE
 dark: #1C1B1F
 
@@ -324,7 +330,7 @@ base: $cta-secondary-base-
 hover: $cta-secondary-hover-
 pressed: $cta-secondary-pressed-
 disabled: $cta-secondary-disabled-
-focussed: $cta-secondary-focussed-
+focused: $cta-secondary-focused-
 border: $cta-secondary-border-
 text: $cta-secondary-text-
 
@@ -344,7 +350,7 @@ dark: #1C1B1F
 light: #FFFBFE
 dark: #1C1B1F
 
--- ftd.color cta-tertiary-focussed-:
+-- ftd.color cta-tertiary-focused-:
 light: #FFFBFE
 dark: #1C1B1F
 
@@ -361,7 +367,7 @@ base: $cta-tertiary-base-
 hover: $cta-tertiary-hover-
 pressed: $cta-tertiary-pressed-
 disabled: $cta-tertiary-disabled-
-focussed: $cta-tertiary-focussed-
+focused: $cta-tertiary-focused-
 border: $cta-tertiary-border-
 text: $cta-tertiary-text-
 
@@ -381,7 +387,7 @@ dark: #1C1B1F
 light: #FFFBFE
 dark: #1C1B1F
 
--- ftd.color cta-danger-focussed-:
+-- ftd.color cta-danger-focused-:
 light: #FFFBFE
 dark: #1C1B1F
 
@@ -398,7 +404,7 @@ base: $cta-danger-base-
 hover: $cta-danger-hover-
 pressed: $cta-danger-pressed-
 disabled: $cta-danger-disabled-
-focussed: $cta-danger-focussed-
+focused: $cta-danger-focused-
 border: $cta-danger-border-
 text: $cta-danger-text-
 
@@ -539,13 +545,12 @@ eight: $custom-eight-
 nine: $custom-nine-
 ten: $custom-ten-
 
--- ftd.colors main:
-base: $base-
-baser: $baser-
-basest: $basest-
+-- ftd.color-scheme main:
+background: $background-
 border: $border-
 border-strong: $border-strong-
 text: $text-
+text-strong: $text-strong-
 shadow: $shadow-
 scrim: $scrim-
 cta-primary: $cta-primary-
@@ -560,14 +565,14 @@ warning: $warning-btb-
 custom: $custom-
 
 -- record color-data:
-ftd.colors main:
-ftd.colors alt:
-ftd.colors primary:
-ftd.colors secondary:
-ftd.colors tertiary:
-ftd.colors surface:
-ftd.colors surface-alt:
-ftd.colors glass:
+ftd.color-scheme main:
+ftd.color-scheme alt:
+ftd.color-scheme primary:
+ftd.color-scheme secondary:
+ftd.color-scheme tertiary:
+ftd.color-scheme surface:
+ftd.color-scheme surface-alt:
+ftd.color-scheme glass:
 
 -- color-data color:
 main: $main
