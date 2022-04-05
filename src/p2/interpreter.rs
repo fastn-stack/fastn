@@ -902,6 +902,16 @@ pub enum Thing {
 }
 
 pub fn default_bag() -> std::collections::BTreeMap<String, ftd::p2::Thing> {
+    let record = |n: &str, r: &str| {
+        (
+            n.to_string(),
+            ftd::p2::Kind::Record {
+                name: r.to_string(),
+                default: None,
+            },
+        )
+    };
+    let color = |n: &str| record(n, "ftd#color");
     std::array::IntoIter::new([
         (
             "ftd#row".to_string(),
@@ -1137,110 +1147,136 @@ pub fn default_bag() -> std::collections::BTreeMap<String, ftd::p2::Thing> {
             }),
         ),
         (
-            "ftd#color-scheme".to_string(),
+            "ftd#btb".to_string(),
             ftd::p2::Thing::Record(ftd::p2::Record {
-                name: "ftd#color-scheme".to_string(),
+                name: "ftd#btb".to_string(),
+                fields: std::array::IntoIter::new([color("base"), color("text"), color("border")])
+                    .collect(),
+                instances: Default::default(),
+                order: vec!["base".to_string(), "text".to_string(), "border".to_string()],
+            }),
+        ),
+        (
+            "ftd#pst".to_string(),
+            ftd::p2::Thing::Record(ftd::p2::Record {
+                name: "ftd#pst".to_string(),
                 fields: std::array::IntoIter::new([
-                    (
-                        "region".to_string(),
-                        ftd::p2::Kind::Record {
-                            name: "ftd#color".to_string(),
-                            default: None,
-                        },
-                    ),
-                    (
-                        "on-region".to_string(),
-                        ftd::p2::Kind::Record {
-                            name: "ftd#color".to_string(),
-                            default: None,
-                        },
-                    ),
-                    (
-                        "primary-action".to_string(),
-                        ftd::p2::Kind::Record {
-                            name: "ftd#color".to_string(),
-                            default: None,
-                        },
-                    ),
-                    (
-                        "on-primary-action".to_string(),
-                        ftd::p2::Kind::Record {
-                            name: "ftd#color".to_string(),
-                            default: None,
-                        },
-                    ),
-                    (
-                        "secondary-action".to_string(),
-                        ftd::p2::Kind::Record {
-                            name: "ftd#color".to_string(),
-                            default: None,
-                        },
-                    ),
-                    (
-                        "on-secondary-action".to_string(),
-                        ftd::p2::Kind::Record {
-                            name: "ftd#color".to_string(),
-                            default: None,
-                        },
-                    ),
-                    (
-                        "error".to_string(),
-                        ftd::p2::Kind::Record {
-                            name: "ftd#color".to_string(),
-                            default: None,
-                        },
-                    ),
-                    (
-                        "on-error".to_string(),
-                        ftd::p2::Kind::Record {
-                            name: "ftd#color".to_string(),
-                            default: None,
-                        },
-                    ),
-                    (
-                        "success".to_string(),
-                        ftd::p2::Kind::Record {
-                            name: "ftd#color".to_string(),
-                            default: None,
-                        },
-                    ),
-                    (
-                        "on-success".to_string(),
-                        ftd::p2::Kind::Record {
-                            name: "ftd#color".to_string(),
-                            default: None,
-                        },
-                    ),
-                    (
-                        "warning".to_string(),
-                        ftd::p2::Kind::Record {
-                            name: "ftd#color".to_string(),
-                            default: None,
-                        },
-                    ),
-                    (
-                        "on-warning".to_string(),
-                        ftd::p2::Kind::Record {
-                            name: "ftd#color".to_string(),
-                            default: None,
-                        },
-                    ),
+                    color("primary"),
+                    color("secondary"),
+                    color("tertiary"),
                 ])
                 .collect(),
                 instances: Default::default(),
                 order: vec![
-                    "region".to_string(),
-                    "on-region".to_string(),
-                    "primary-action".to_string(),
-                    "on-primary-action".to_string(),
-                    "secondary-action".to_string(),
-                    "on-secondary-action".to_string(),
+                    "primary".to_string(),
+                    "secondary".to_string(),
+                    "tertiary".to_string(),
+                ],
+            }),
+        ),
+        (
+            "ftd#custom-colors".to_string(),
+            ftd::p2::Thing::Record(ftd::p2::Record {
+                name: "ftd#custom-colors".to_string(),
+                fields: std::array::IntoIter::new([
+                    color("one"),
+                    color("two"),
+                    color("three"),
+                    color("four"),
+                    color("five"),
+                    color("six"),
+                    color("seven"),
+                    color("eight"),
+                    color("nine"),
+                    color("ten"),
+                ])
+                .collect(),
+                instances: Default::default(),
+                order: vec![
+                    "one".to_string(),
+                    "two".to_string(),
+                    "three".to_string(),
+                    "four".to_string(),
+                    "five".to_string(),
+                    "six".to_string(),
+                    "seven".to_string(),
+                    "eight".to_string(),
+                    "nine".to_string(),
+                    "ten".to_string(),
+                ],
+            }),
+        ),
+        (
+            "ftd#cta-colors".to_string(),
+            ftd::p2::Thing::Record(ftd::p2::Record {
+                name: "ftd#cta-colors".to_string(),
+                fields: std::array::IntoIter::new([
+                    color("base"),
+                    color("hover"),
+                    color("pressed"),
+                    color("disabled"),
+                    color("focussed"),
+                    color("border"),
+                    color("text"),
+                ])
+                .collect(),
+                instances: Default::default(),
+                order: vec![
+                    "base".to_string(),
+                    "hover".to_string(),
+                    "pressed".to_string(),
+                    "disabled".to_string(),
+                    "focussed".to_string(),
+                    "border".to_string(),
+                    "text".to_string(),
+                ],
+            }),
+        ),
+        (
+            "ftd#color-scheme".to_string(),
+            ftd::p2::Thing::Record(ftd::p2::Record {
+                name: "ftd#color-scheme".to_string(),
+                fields: std::array::IntoIter::new([
+                    color("base"),
+                    color("baser"),
+                    color("basest"),
+                    color("border"),
+                    color("border-strong"),
+                    color("text"),
+                    color("shadow"),
+                    color("scrim"),
+                    record("cta-primary", "ftd#cta-colors"),
+                    record("cta-secondary", "ftd#cta-colors"),
+                    record("cta-tertiary", "ftd#cta-colors"),
+                    record("cta-danger", "ftd#cta-colors"),
+                    record("accent", "ftd#pst"),
+                    record("error", "ftd#btb"),
+                    record("success", "ftd#btb"),
+                    record("info", "ftd#btb"),
+                    record("warning", "ftd#btb"),
+                    record("custom", "ftd#custom-colors"),
+                ])
+                .collect(),
+                instances: Default::default(),
+                order: vec![
+                    "base".to_string(),
+                    "baser".to_string(),
+                    "basest".to_string(),
+                    "border".to_string(),
+                    "border-strong".to_string(),
+                    "text".to_string(),
+                    "shadow".to_string(),
+                    "scrim".to_string(),
+                    "cta-primary".to_string(),
+                    "cta-secondary".to_string(),
+                    "cta-tertiary".to_string(),
+                    "cta-danger".to_string(),
+                    "accent".to_string(),
                     "error".to_string(),
-                    "on-error".to_string(),
                     "success".to_string(),
-                    "on-success".to_string(),
+                    "info".to_string(),
                     "warning".to_string(),
-                    "on-warning".to_string(),
+                    "custom".to_string(),
                 ],
             }),
         ),
