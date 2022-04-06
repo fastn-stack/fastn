@@ -1069,16 +1069,16 @@ $on-input$: $query=$VALUE
 
 --- ftd.text: Add
 if: $query is not null
-color: $fpm.design.color.brand.on-region
-background-color: $fpm.design.color.brand.region
+color: $fpm.color.main.text
+background-color: $fpm.color.main.background.base
 move-down: 4
 padding: 5
 $on-click$: insert into $strings value $query at end
 $on-click$: clear $query
 
 --- ftd.text: Clear
-color: $fpm.design.color.brand.on-region
-background-color: $fpm.design.color.brand.region
+color: $fpm.color.main.text
+background-color: $fpm.color.main.background.base
 move-down: 4
 padding: 5
 $on-click$: clear $strings
@@ -1086,16 +1086,16 @@ $on-click$: clear $strings
 
 -- ftd.text:
 if: $query is not null
-color if $ftd.dark-mode: $fpm.design.color.brand.on-region
+color if $ftd.dark-mode: $fpm.color.main.text
 
 You have typed: {value}
 
 --- ftd.text value: $query
-color: $fpm.design.color.brand.on-success
-color if $ftd.dark-mode: $fpm.design.color.brand.on-region
-background-color if $ftd.dark-mode: $fpm.design.color.brand.region
+color: $fpm.color.main.success.text
+color if $ftd.dark-mode: $fpm.color.main.text
+background-color if $ftd.dark-mode: $fpm.color.main.background.base
 padding if $query is not null: 5
-role: $fpm.design.type.body-large
+role: $fpm.type.body-large
 
 
 -- show-data: $obj
@@ -1105,9 +1105,9 @@ $loop$: $strings as $obj
 -- ftd.column show-data:
 caption text:
 padding: 10
-/background-color if $ftd.dark-mode: $fpm.design.color.brand.region
-background-color: $fpm.design.color.brand.region
-color: $fpm.design.color.brand.on-region
+/background-color if $ftd.dark-mode: $fpm.color.main.background.base
+background-color: $fpm.color.main.background.base
+color: $fpm.color.main.text
 
 --- ftd.column:
 padding: 20

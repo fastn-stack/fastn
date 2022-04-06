@@ -155,13 +155,13 @@ margin-bottom: 20
 
 -- ftd.row:
 width: fill
-background-color: $fpm.design.color.brand.region
+background-color: $fpm.color.main.background.base
 padding: 10
 
 
 -- ftd.text: $msg
 width: fill
-color: $fpm.design.color.brand.on-region
+color: $fpm.color.main.text
 
 
 -- ftd.row:
@@ -171,7 +171,7 @@ width: fill
 -- ftd.text: $msg
 width: fill
 align: right
-color: $fpm.design.color.brand.on-region
+color: $fpm.color.main.text
 
 
 -- container: outer
@@ -185,8 +185,8 @@ width: fill
 
 -- ftd.text:
 width: fill
-color: $fpm.design.color.brand.on-region
-color if $ftd.dark-mode: $fpm.design.color.brand.on-region
+color: $fpm.color.main.text
+color if $ftd.dark-mode: $fpm.color.main.text
 
 
 We support **markdown** as well.

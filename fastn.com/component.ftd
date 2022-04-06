@@ -31,8 +31,8 @@ lang: ftd
 \-- ftd.text heading:
 caption title:
 text: $title
-role: $fpm.design.type.headline-large
-color: $fpm.design.color.brand.on-region
+role: $fpm.type.headline-large
+color: $fpm.color.main.text
 
 
 -- ft.markdown:
@@ -207,8 +207,8 @@ This is how it looks like:
 -- ftd.text heading:
 caption title:
 text: $title
-role: $fpm.design.type.title-large
-color: $fpm.design.color.brand.on-region
+role: $fpm.type.title-large
+color: $fpm.color.main.text
 
 
 -- ftd.row label: 

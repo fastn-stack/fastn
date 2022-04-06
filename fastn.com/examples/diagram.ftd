@@ -16,13 +16,13 @@ we will be updating the example to make it mobile optimized/responsive soon.
 
 
 -- ftd.column diagram:
-background-color: $fpm.design.color.brand.region
+background-color: $fpm.color.main.background.base
 width: fill
 height: fill
 padding: 40
 
 --- ftd.scene:
-background-color: $fpm.design.color.brand.region
+background-color: $fpm.color.main.background.base
 width: 1350
 height: 540
 $on-click$: $info = kubernetes-info
@@ -67,7 +67,7 @@ right: 506
 --- container: ftd.main
 
 --- ftd.column:
-background-color: $fpm.design.color.brand.region
+background-color: $fpm.color.main.background.base
 width: fill
 padding: 10
 margin-top: -60
@@ -80,7 +80,7 @@ border-radius: 4
 spacing: 5
 
 --- ftd.text: Notes:
-role: $fpm.design.type.body-large
+role: $fpm.type.body-large
 
 --- start-info:
 if: $info == start-info
@@ -140,8 +140,8 @@ if: $info == container-runtime-info
 
 
 -- ftd.scene control-panel:
-background-color: $fpm.design.color.brand.region
-border-color if $MOUSE-IN: $fpm.design.color.brand.on-region
+background-color: $fpm.color.main.background.base
+border-color if $MOUSE-IN: $fpm.color.main.text
 border-width: 2
 width: 600
 height: 460
@@ -151,7 +151,7 @@ border-radius: 4
 --- ftd.text: Control Panel
 top: 5
 left: 5
-role: $fpm.design.type.body-large
+role: $fpm.type.body-large
 
 --- kube-controller-manager:
 top: 50
@@ -200,8 +200,8 @@ left: 304
 padding: 20
 border-width: 2
 border-radius: 10
-background-color: $fpm.design.color.brand.region
-border-color if $MOUSE-IN: $fpm.design.color.brand.on-region
+background-color: $fpm.color.main.background.base
+border-color if $MOUSE-IN: $fpm.color.main.text
 $on-click$: $info = etcd-info
 $on-click$: stop-propagation
 $on-click$: prevent-default
@@ -211,7 +211,7 @@ $on-click$: prevent-default
 -- ftd.column kube-controller-manager:
 
 --- box:
-background-color: $fpm.design.color.brand.region
+background-color: $fpm.color.main.background.base
 title: Kube Controller Manager
 
 --- text-block: Node Controller
@@ -239,7 +239,7 @@ $on-click$: prevent-default
 -- ftd.column cloud-controller-manager:
 
 --- box:
-background-color: $fpm.design.color.brand.region
+background-color: $fpm.color.main.background.base
 title: Cloud Controller Manager
 
 --- text-block: Node Controller
@@ -264,11 +264,11 @@ $on-click$: prevent-default
 -- ftd.row kube-api-server:
 width: 100
 height: 270
-background-color: $fpm.design.color.brand.region
+background-color: $fpm.color.main.background.base
 border-width: 2
 padding: 20
-border-color if $MOUSE-IN: $fpm.design.color.brand.on-region
-/border-color if $info == $kube-api-server-info: $fpm.design.color.brand.on-region
+border-color if $MOUSE-IN: $fpm.color.main.text
+/border-color if $info == $kube-api-server-info: $fpm.color.main.text
 
 --- ftd.text: Kube Api Server
 align: center
@@ -279,23 +279,23 @@ align: center
 
 
 -- ftd.scene nodes:
-background-color: $fpm.design.color.brand.region
+background-color: $fpm.color.main.background.base
 border-width: 2
 border-radius: 4
 width: 600
 height: 460
 align: center
-border-color if $MOUSE-IN: $fpm.design.color.brand.on-region
+border-color if $MOUSE-IN: $fpm.color.main.text
 
 --- ftd.text: Nodes
 top: 5
 left: 5
-role: $fpm.design.type.body-large
+role: $fpm.type.body-large
 
 --- ftd.column:
 top: 50
 left: 90
-background-color: $fpm.design.color.brand.region
+background-color: $fpm.color.main.background.base
 width: 400
 height: 300
 border-width: 2
@@ -311,7 +311,7 @@ left: 115
 
 
 -- ftd.scene worker-node:
-background-color: $fpm.design.color.brand.region
+background-color: $fpm.color.main.background.base
 width: 400
 height: 300
 border-width: 2
@@ -355,13 +355,13 @@ align: center
 open: true
 append-at: box-id
 padding: 15
-border-color if $MOUSE-IN: $fpm.design.color.brand.on-region
+border-color if $MOUSE-IN: $fpm.color.main.text
 border-radius: 4
 
 --- ftd.text: $title
 top: 5
 left: 5
-role: $fpm.design.type.body-large
+role: $fpm.type.body-large
 
 --- ftd.row:
 spacing: space-around
@@ -374,12 +374,12 @@ id: box-id
 
 -- ftd.text text-block: $text
 caption text:
-background-color: $fpm.design.color.brand.region
+background-color: $fpm.color.main.background.base
 width: 80
 padding: 5
 align: center
 border-width: 2
-border-color if $MOUSE-IN: $fpm.design.color.brand.on-region
+border-color if $MOUSE-IN: $fpm.color.main.text
 border-radius: 4
 
 -- ftd.row vertical-line:

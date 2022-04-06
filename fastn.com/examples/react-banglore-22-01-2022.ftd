@@ -16,26 +16,26 @@ height: fill
 -- ftd.text: ftd: Programming Language For Human Beings _by_ @amitu
 $on-click$: $count = 0
 slot: left
-background-color: $fpm.design.color.brand.region
+background-color: $fpm.color.main.background.base
 padding: 20
-role: $fpm.design.type.body-large
-color: $fpm.design.color.brand.on-region
+role: $fpm.type.body-large
+color: $fpm.color.main.text
 width: fill
 
 -- ftd.text: Previous
 slot: right-1
-role: $fpm.design.type.body-large
-color: $fpm.design.color.brand.on-region
+role: $fpm.type.body-large
+color: $fpm.color.main.text
 padding: 20
-background-color: $fpm.design.color.brand.region
+background-color: $fpm.color.main.background.base
 $on-click$: decrement $count clamp 0 $total
 
 -- ftd.text: Next
 slot: right-2
-role: $fpm.design.type.body-large
+role: $fpm.type.body-large
 padding: 20
-background-color: $fpm.design.color.brand.on-region
-color: $fpm.design.color.brand.region
+background-color: $fpm.color.main.text
+color: $fpm.color.main.background.base
 $on-click$: increment $count clamp 0 $total
 
 -- ftd.column:
@@ -154,7 +154,7 @@ width: 800
 --- ftd.text: Let's Look At MDX
 top: 80
 left: 300
-role: $fpm.design.type.title-large
+role: $fpm.type.title-large
 
 --- ft.code:
 top: 150
@@ -185,7 +185,7 @@ width: 800
 --- ftd.text: Let's Look At MDX
 top: 80
 left: 300
-role: $fpm.design.type.title-large
+role: $fpm.type.title-large
 
 --- ft.code:
 top: 150
@@ -204,7 +204,7 @@ flood conditions in many of the nearby rivers.
 <Chart year={year} color="#fcb32c" />
 
 --- ftd.text: How to show `year` in {yellow}?
-role: $fpm.design.type.title-medium
+role: $fpm.type.title-medium
 left: 300
 top: 500
 
@@ -225,7 +225,7 @@ width: 800
 --- ftd.text: Let's Look At MDX
 top: 80
 left: 300
-role: $fpm.design.type.title-large
+role: $fpm.type.title-large
 
 --- ft.code:
 top: 150
@@ -250,7 +250,7 @@ flood conditions in many of the nearby rivers.
 --- ftd.text: What If `Chart` Needed A `title` And `description`?
 left: 300
 top: 600
-role: $fpm.design.type.title-medium
+role: $fpm.type.title-medium
 
 
 
@@ -314,7 +314,7 @@ spacing: 10
 \--- ftd.text: Hello,
 
 \--- ftd.text: $who
-background-color: $fpm.design.color.brand.region
+background-color: $fpm.color.main.background.base
 
 
 --- ftd.text: Hello, {yellow: World!}
@@ -354,7 +354,7 @@ spacing: 10
 \--- ftd.text: Hello,
 
 \--- ftd.text: $who
-background-color: $fpm.design.color.brand.region
+background-color: $fpm.color.main.background.base
 
 
 --- ftd.text: Hello, {yellow: World!}
@@ -397,7 +397,7 @@ size: $size
 --- ftd.text: Hello React Bangalore!
 left: 300
 top: 500
-role: $fpm.design.type.title-large
+role: $fpm.type.title-large
 
 
 
@@ -576,8 +576,8 @@ top: 100
 \-- boolean funky: false
 
 \-- ftd.text: Some Text
-color if $funky: $fpm.design.color.brand.on-region
-background-color if $funky: $fpm.design.color.brand.region
+color if $funky: $fpm.color.main.text
+background-color if $funky: $fpm.color.main.background.base
 
 \-- ftd.text: Toggle
 $on-click$: toggle $funky
@@ -585,11 +585,11 @@ $on-click$: toggle $funky
 -- boolean on-2-funky: false
 
 --- ftd.text: Some Text
-color if $on-2-funky: $fpm.design.color.brand.on-region
-background-color if $on-2-funky: $fpm.design.color.brand.region
+color if $on-2-funky: $fpm.color.main.text
+background-color if $on-2-funky: $fpm.color.main.background.base
 left: 300
 top: 440
-role: $fpm.design.type.title-medium
+role: $fpm.type.title-medium
 
 --- ftd.text: Toggle
 left: 300
@@ -621,11 +621,11 @@ background-color if $MOUSE-IN: yellow
 
 
 --- ftd.text: Some Text
-color if $MOUSE-IN: $fpm.design.color.brand.on-region
-background-color if $MOUSE-IN: $fpm.design.color.brand.region
+color if $MOUSE-IN: $fpm.color.main.text
+background-color if $MOUSE-IN: $fpm.color.main.background.base
 left: 300
 top: 440
-role: $fpm.design.type.title-medium
+role: $fpm.type.title-medium
 
 
 -- ftd.scene theme-1:
@@ -683,7 +683,7 @@ live_preview: https://fifthtry.github.io/Forest-Template/
 
 
 -- ftd.text yellow: yellow
-background-color: $fpm.design.color.brand.region
+background-color: $fpm.color.main.background.base
 
 
 -- ftd.scene markdown-is-great:
@@ -691,17 +691,17 @@ width: fill
 height: fill
 
 --- ftd.text: Markdown Is Great!
-role: $fpm.design.type.title-large
+role: $fpm.type.title-large
 left: 400
 top: 200
 
 --- ftd.text: Soon every text input will support markdown.
-role: $fpm.design.type.title-medium
+role: $fpm.type.title-medium
 left: 400
 top: 300
 
 --- ftd.text: ... but!
-role: $fpm.design.type.title-medium
+role: $fpm.type.title-medium
 left: 800
 top: 350
 
@@ -732,16 +732,16 @@ $on-input$: $query=$VALUE
 
 --- ftd.text: Add
 if: $query is not null
-color: $fpm.design.color.brand.on-region
-background-color: $fpm.design.color.brand.region
+color: $fpm.color.main.text
+background-color: $fpm.color.main.background.base
 move-down: 4
 padding: 5
 $on-click$: insert into $strings value $query at end
 $on-click$: clear $query
 
 --- ftd.text: Clear
-color: $fpm.design.color.brand.on-region
-background-color: $fpm.design.color.brand.region
+color: $fpm.color.main.text
+background-color: $fpm.color.main.background.base
 move-down: 4
 padding: 5
 $on-click$: clear $strings
@@ -764,11 +764,11 @@ $loop$: $strings as $obj
 
 
 -- ftd.text value: $query
-color: $fpm.design.color.brand.on-region
-color if $ftd.dark-mode: $fpm.design.color.brand.on-region
-background-color if $ftd.dark-mode: $fpm.design.color.brand.on-region
+color: $fpm.color.main.text
+color if $ftd.dark-mode: $fpm.color.main.text
+background-color if $ftd.dark-mode: $fpm.color.main.text
 padding if $query is not null: 5
-role: $fpm.design.type.label-large
+role: $fpm.type.label-large
 
 
 
@@ -776,9 +776,9 @@ role: $fpm.design.type.label-large
 -- ftd.column show-data:
 caption text:
 padding: 10
-/background-color if $ftd.dark-mode: $fpm.design.color.brand.region
-background-color: $fpm.design.color.brand.region
-color: $fpm.design.color.brand.on-region
+/background-color if $ftd.dark-mode: $fpm.color.main.background.base
+background-color: $fpm.color.main.background.base
+color: $fpm.color.main.text
 
 --- ftd.column:
 padding: 20
@@ -808,11 +808,11 @@ spacing: 60
 
 --- ftd.text: FTD: Programming Language For Human Beings
 text-align: center
-role: $fpm.design.type.title-large
+role: $fpm.type.title-large
 
 
 --- ftd.text:
-role: $fpm.design.type.body-large
+role: $fpm.type.body-large
 width: fill
 text-align: center
 
@@ -829,13 +829,13 @@ height: fill
 --- ftd.text: Thank You!
 top: 150
 left: 500
-role: $fpm.design.type.title-medium
+role: $fpm.type.title-medium
 
 --- ftd.text:
 top: 250
 left: 500
 width: fill
-role: $fpm.design.type.body-large
+role: $fpm.type.body-large
 
 Amit Upadhyay
 

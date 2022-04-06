@@ -28,10 +28,10 @@ $on-input$: $query=$VALUE
 $on-change$: message-host $obj
 
 -- ftd.text:
-color if $ftd.dark-mode: $fpm.design.color.brand.on-region
+color if $ftd.dark-mode: $fpm.color.main.text
 
 You have typed: {value}
 
 --- ftd.text value: $query
-color: $fpm.design.color.brand.on-region
-role: $fpm.design.type.label-large
+color: $fpm.color.main.text
+role: $fpm.type.label-large

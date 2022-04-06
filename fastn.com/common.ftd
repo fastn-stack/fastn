@@ -23,7 +23,7 @@ You can set the cursor to be shown over any element by using `cursor` attribute:
 -- ftd.row:
 width: fill
 border-width: 5
-border-color: $fpm.design.color.brand.on-region
+border-color: $fpm.color.main.text
 padding: 10
 cursor: pointer
 
@@ -42,7 +42,7 @@ lang: ftd
 \-- ftd.row:
 width: fill
 border-width: 5
-border-color: $fpm.design.color.brand.on-region
+border-color: $fpm.color.main.text
 padding: 10
 cursor: pointer
 
@@ -379,9 +379,9 @@ height: 300
 background-image: https://imgur.com/oCHWQQF.jpg
 
 \-- ftd.text: Sample Text
-role: $fpm.design.type.title-large
+role: $fpm.type.title-large
 align: center
-color: $fpm.design.color.brand.on-region
+color: $fpm.color.main.text
 
 
 -- ft.output:
@@ -394,9 +394,9 @@ background-image: $assets.files.images.oCHWQQF.jpg
 
 
 -- ftd.text: Sample Text
-role: $fpm.design.type.title-large
+role: $fpm.type.title-large
 align: center
-color: $fpm.design.color.brand.on-region
+color: $fpm.color.main.text
 width: fill
 height: fill
 
@@ -424,9 +424,9 @@ background-repeat: true
 
 
 \-- ftd.text: Sample Text
-role: $fpm.design.type.title-large
+role: $fpm.type.title-large
 align: center
-color: $fpm.design.color.brand.on-region
+color: $fpm.color.main.text
 width: fill
 height: fill
 
@@ -442,9 +442,9 @@ background-repeat: true
 
 
 -- ftd.text: Sample Text
-role: $fpm.design.type.title-large
+role: $fpm.type.title-large
 align: center
-color: $fpm.design.color.brand.on-region
+color: $fpm.color.main.text
 width: fill
 height: fill
 
@@ -468,9 +468,9 @@ background-image: https://imgur.com/oCHWQQF.jpg
 background-parallax: true
 
 \-- ftd.text: Sample Text
-role: $fpm.design.type.title-large
+role: $fpm.type.title-large
 align: center
-color: $fpm.design.color.brand.on-region
+color: $fpm.color.main.text
 
 
 -- ft.output:
@@ -484,8 +484,8 @@ background-parallax: true
 
 
 -- ftd.text: Sample Text
-role: $fpm.design.type.title-large
+role: $fpm.type.title-large
 align: center
-color: $fpm.design.color.brand.on-region
+color: $fpm.color.main.text
 width: fill
 height: fill

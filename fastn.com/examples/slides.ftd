@@ -17,23 +17,23 @@ height: fill
 
 -- ftd.text: FTD Slideshow
 slot: left
-background-color: $fpm.design.color.brand.region
+background-color: $fpm.color.main.background.base
 padding: 20
-color: $fpm.design.color.brand.on-region
+color: $fpm.color.main.text
 width: fill
 
 -- ftd.text: Previous
 slot: right-1
-color: $fpm.design.color.brand.on-region
+color: $fpm.color.main.text
 padding: 20
-background-color: $fpm.design.color.brand.region
+background-color: $fpm.color.main.background.base
 $on-click$: decrement $count clamp 0 $total
 
 -- ftd.text: Next
 slot: right-2
 padding: 20
-background-color: $fpm.design.color.brand.region
-color: $fpm.design.color.brand.on-region
+background-color: $fpm.color.main.background.base
+color: $fpm.color.main.text
 $on-click$: increment $count clamp 0 $total
 
 -- ftd.column:

@@ -23,16 +23,16 @@ margin-bottom: 15
 padding: 10
 border-width: 1
 border-radius: 5
-background-color if $ftd.dark-mode: $fpm.design.color.brand.region
-background-color: $fpm.design.color.brand.region
+background-color if $ftd.dark-mode: $fpm.color.main.background.base
+background-color: $fpm.color.main.background.base
 
 --- ftd.row:
 spacing: 5
 align: right
 
 --- ftd.text: Dark Mode:
-color if $ftd.dark-mode: $fpm.design.color.brand.on-region
-color: $fpm.design.color.brand.on-region
+color if $ftd.dark-mode: $fpm.color.main.text
+color: $fpm.color.main.text
 move-down: 5
 $on-click$: toggle $ftd.dark-mode
 
@@ -54,8 +54,8 @@ border-bottom-radius: 5
 width: fill
 
 --- ftd.text:
-color if $ftd.dark-mode: $fpm.design.color.brand.on-region
-color: $fpm.design.color.brand.on-region
+color if $ftd.dark-mode: $fpm.color.main.text
+color: $fpm.color.main.text
 
 This is some text to show you dark mode. Try clicking on the 🌙 / 🌞 above.
 

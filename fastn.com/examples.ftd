@@ -9,6 +9,6 @@ Checkout few of FTD examples here:
 -- ftd.text: $o.title
 $loop$: $config.examples-toc as $o
 link: $o.url
-role: $fpm.design.type.body-large
+role: $fpm.type.body-large
 padding: 5
 

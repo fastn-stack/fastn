@@ -38,17 +38,17 @@ lang: ftd
 
 \-- ftd.text foo:
 caption name:
-color: $fpm.design.color.brand.on-region
-color if $present: $fpm.design.color.brand.on-primary-action
-color if not $present: $fpm.design.color.brand.on-secondary-action
+color: $fpm.color.main.text
+color if $present: $fpm.color.main.cta-primary.text
+color if not $present: $fpm.color.main.cta-secondary.text
 text: $name
 
 \-- foo: hello
 
 
 -- ftd.text:
-color: $fpm.design.color.brand.on-region
-role: $fpm.design.type.body-large
+color: $fpm.color.main.text
+role: $fpm.type.body-large
 
 Output:
 
@@ -58,7 +58,7 @@ Output:
 
 -- ftd.row:
 border-width: 1
-border-color: $fpm.design.color.brand.on-region
+border-color: $fpm.color.main.text
 padding: 10
 width: fill
 
@@ -68,9 +68,9 @@ width: fill
 
 -- ftd.text foo1:
 caption name:
-color: $fpm.design.color.brand.on-region
-color if $present: $fpm.design.color.brand.on-region
-color if not $present: $fpm.design.color.brand.on-region
+color: $fpm.color.main.text
+color if $present: $fpm.color.main.text
+color if not $present: $fpm.color.main.text
 text: $name
 
 
@@ -99,16 +99,16 @@ lang: ftd
 \-- component foo:
 caption name:
 component: ftd.text
-color: $fpm.design.color.brand.on-region
-color if $present: $fpm.design.color.brand.on-region
+color: $fpm.color.main.text
+color if $present: $fpm.color.main.text
 text: $name
 
 \-- foo: hello
 
 
 -- ftd.text:
-color: $fpm.design.color.brand.on-region
-role: $fpm.design.type.body-large
+color: $fpm.color.main.text
+role: $fpm.type.body-large
 
 Output:
 
@@ -118,15 +118,15 @@ Output:
 
 -- ftd.row:
 border-width: 1
-border-color: $fpm.design.color.brand.on-region
+border-color: $fpm.color.main.text
 padding: 10
 width: fill
 
 
 -- ftd.text foo2:
 caption name:
-color: $fpm.design.color.brand.on-region
-color if $present: $fpm.design.color.brand.on-region
+color: $fpm.color.main.text
+color if $present: $fpm.color.main.text
 text: $name
 
 
@@ -151,8 +151,8 @@ lang: ftd
 \-- ftd.text foo:
 caption name:
 optional string yes:
-color: $fpm.design.color.brand.on-region
-color if $yes is not null: $fpm.design.color.brand.on-region
+color: $fpm.color.main.text
+color if $yes is not null: $fpm.color.main.text
 text: $name
 
 \-- foo: hello
@@ -160,8 +160,8 @@ yes: world
 
 
 -- ftd.text:
-color: $fpm.design.color.brand.on-region
-role: $fpm.design.type.body-large
+color: $fpm.color.main.text
+role: $fpm.type.body-large
 
 Output:
 
@@ -171,7 +171,7 @@ Output:
 
 -- ftd.row:
 border-width: 1
-border-color: $fpm.design.color.brand.on-region
+border-color: $fpm.color.main.text
 padding: 10
 width: fill
 
@@ -179,8 +179,8 @@ width: fill
 -- ftd.text foo3:
 caption name:
 optional string yes:
-color: $fpm.design.color.brand.on-region
-color if $yes is not null: $fpm.design.color.brand.on-region
+color: $fpm.color.main.text
+color if $yes is not null: $fpm.color.main.text
 text: $name
 
 
@@ -209,10 +209,10 @@ lang: ftd
 \-- ftd.text foo:
 caption name:
 optional string yes:
-color: $fpm.design.color.brand.on-region
-color if $present: $fpm.design.color.brand.on-primary-action
-color if not $present: $fpm.design.color.brand.on-secondary-action
-color if $yes is not null: $fpm.design.color.brand.on-success
+color: $fpm.color.main.text
+color if $present: $fpm.color.main.cta-primary.text
+color if not $present: $fpm.color.main.cta-secondary.text
+color if $yes is not null: $fpm.color.main.success.text
 text: $name
 
 \-- foo: hello
@@ -220,8 +220,8 @@ yes: world
 
 
 -- ftd.text:
-color: $fpm.design.color.brand.on-region
-role: $fpm.design.type.body-large
+color: $fpm.color.main.text
+role: $fpm.type.body-large
 
 Output:
 
@@ -231,7 +231,7 @@ Output:
 
 -- ftd.row:
 border-width: 1
-border-color: $fpm.design.color.brand.on-region
+border-color: $fpm.color.main.text
 padding: 10
 width: fill
 
@@ -239,10 +239,10 @@ width: fill
 -- ftd.text foo4:
 caption name:
 optional string yes:
-color: $fpm.design.color.brand.on-region
-color if $present: $fpm.design.color.brand.on-primary-action
-color if not $present: $fpm.design.color.brand.on-secondary-action
-color if $yes is not null: $fpm.design.color.brand.on-success
+color: $fpm.color.main.text
+color if $present: $fpm.color.main.cta-primary.text
+color if not $present: $fpm.color.main.cta-secondary.text
+color if $yes is not null: $fpm.color.main.success.text
 text: $name
 
 

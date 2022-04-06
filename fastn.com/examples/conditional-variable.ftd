@@ -19,29 +19,29 @@ if: $arpita
 padding: 40
 
 -- ftd.text: $foo
-role: $fpm.design.type.title-large
-color: $fpm.design.color.brand.on-region
+role: $fpm.type.title-large
+color: $fpm.color.main.text
 
 
 -- ftd.text: Click arpita true 💡
 if: $arpita
 $on-click$: toggle $arpita
-color if $ftd.dark-mode: $fpm.design.color.brand.on-region
+color if $ftd.dark-mode: $fpm.color.main.text
 
 -- ftd.text: Click arpita false 💡
 if: not $arpita
 $on-click$: toggle $arpita
-color if $ftd.dark-mode: $fpm.design.color.brand.on-region
+color if $ftd.dark-mode: $fpm.color.main.text
 
 -- ftd.text: Click ayushi true 💡
 if: $ayushi
 $on-click$: toggle $ayushi
-color if $ftd.dark-mode: $fpm.design.color.brand.on-region
+color if $ftd.dark-mode: $fpm.color.main.text
 
 -- ftd.text: Click ayushi false 💡
 if: not $ayushi
 $on-click$: toggle $ayushi
-color if $ftd.dark-mode: $fpm.design.color.brand.on-region
+color if $ftd.dark-mode: $fpm.color.main.text
 
 -- ft.code:
 lang: ftd

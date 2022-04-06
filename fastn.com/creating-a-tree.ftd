@@ -141,13 +141,13 @@ padding-left: 10
 open: true
 
 --- ftd.text: $name
-color if $ftd.dark-mode: $fpm.design.color.brand.on-region
+color if $ftd.dark-mode: $fpm.color.main.text
 
 -- ftd.column:
 spacing: 20
 border-width: 1
 border-radius: 5
-border-color if $ftd.dark-mode: $fpm.design.color.brand.on-region
+border-color if $ftd.dark-mode: $fpm.color.main.text
 padding: 10
 width: fill
 
@@ -274,7 +274,7 @@ Output
 spacing: 20
 border-width: 1
 border-radius: 5
-border-color if $ftd.dark-mode: $fpm.design.color.brand.on-region
+border-color if $ftd.dark-mode: $fpm.color.main.text
 padding: 10
 width: fill
 
@@ -283,14 +283,14 @@ width: fill
 string name:
 padding-left: 10
 open: true
-color if $ftd.dark-mode: $fpm.design.color.brand.on-region
+color if $ftd.dark-mode: $fpm.color.main.text
 
 --- ftd.row:
 
 --- ftd.text: ✌️
 
 --- ftd.text: $name
-color if $ftd.dark-mode: $fpm.design.color.brand.on-region
+color if $ftd.dark-mode: $fpm.color.main.text
 
 -- ftd.column:
 
@@ -482,14 +482,14 @@ Output
 spacing: 20
 border-width: 1
 border-radius: 5
-border-color if $ftd.dark-mode: $fpm.design.color.brand.on-region
+border-color if $ftd.dark-mode: $fpm.color.main.text
 padding: 10
 width: fill
 
 
 -- ftd.column display-item1:
 string name:
-color if $ftd.dark-mode: $fpm.design.color.brand.on-region
+color if $ftd.dark-mode: $fpm.color.main.text
 padding-left: 10
 open: true
 append-at: some-child
@@ -501,7 +501,7 @@ $on-click$: toggle $visible
 --- ftd.text: ✌️
 
 --- ftd.text: $name
-color if $ftd.dark-mode: $fpm.design.color.brand.on-region
+color if $ftd.dark-mode: $fpm.color.main.text
 
 --- container: ftd.main
 
