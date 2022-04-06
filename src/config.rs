@@ -29,6 +29,7 @@ pub struct Config {
     /// When printing filenames for users consumption we want to print the paths relative to the
     /// `original_directory`, so we keep track of the original directory.
     pub original_directory: camino::Utf8PathBuf,
+    pub extra_data: serde_json::Value,
 }
 
 impl Config {
@@ -286,6 +287,7 @@ impl Config {
             packages_root: root.clone().join(".packages"),
             root,
             original_directory,
+            extra_data: Default::default(),
         })
     }
 }

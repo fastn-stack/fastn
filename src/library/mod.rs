@@ -1,4 +1,5 @@
 mod fpm_dot_ftd;
+mod get_data;
 mod http;
 mod include;
 mod sqlite;
@@ -209,6 +210,7 @@ impl ftd::p2::Library for Library {
             "package-query" => fpm::library::sqlite::processor(section, doc, &self.config),
             "toc" => fpm::library::toc::processor(section, doc, &self.config),
             "include" => fpm::library::include::processor(section, doc, &self.config),
+            "get-data" => fpm::library::get_data::processor(section, doc, &self.config),
             t => unimplemented!("$processor$: {} is not implemented yet", t),
         }
     }
