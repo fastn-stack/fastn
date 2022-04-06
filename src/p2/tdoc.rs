@@ -447,6 +447,16 @@ impl<'a> TDoc<'a> {
         if let Ok(var) = ftd::Variable::from_p1(section, self) {
             return self.from_json_(section.line_number, &json, var.value.kind());
         }
+        if let Ok(kind) = ftd::p2::Kind::for_variable(
+            section.line_number,
+            &section.name,
+            None,
+            self,
+            None,
+            &Default::default(),
+        ) {
+            return self.from_json_(section.line_number, &json, kind);
+        }
 
         ftd::e2(
             "component should be var or list",
