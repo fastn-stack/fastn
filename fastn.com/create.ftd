@@ -9,8 +9,8 @@ image: $assets.files.static.images.github-light.svg
 --- lib.action-button: Get Started
 slot: cta-1
 url: /install/
-background-color: $fpm.design.color.brand.region
-color: $fpm.design.color.brand.on-region
+background-color: $fpm.color.main.background.base
+color: $fpm.color.main.text
 
 
 -- ft.content:

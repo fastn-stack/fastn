@@ -217,33 +217,33 @@ width: fill
 
 --- ftd.row:
 border-width: 1
-border-color if $ftd.dark-mode: $fpm.design.color.brand.on-region
+border-color if $ftd.dark-mode: $fpm.color.main.text
 padding: 20
 spacing: 5
 width: fill
 
 --- ftd.text: Type
-color if $ftd.dark-mode: $fpm.design.color.brand.on-region
+color if $ftd.dark-mode: $fpm.color.main.text
 
 --- ftd.text: $type
-color if $ftd.dark-mode: $fpm.design.color.brand.on-region
+color if $ftd.dark-mode: $fpm.color.main.text
 
 --- container: ftd.main
 
 --- ftd.row:
 width: fill
 border-width: 1
-border-color if $ftd.dark-mode: $fpm.design.color.brand.on-region
+border-color if $ftd.dark-mode: $fpm.color.main.text
 padding: 20
 spacing: 5
 if: $default is not null
 
 --- ftd.text: Default Value
-color if $ftd.dark-mode: $fpm.design.color.brand.on-region
+color if $ftd.dark-mode: $fpm.color.main.text
 
 --- ftd.text: $default
 if: $default is not null
-color if $ftd.dark-mode: $fpm.design.color.brand.on-region
+color if $ftd.dark-mode: $fpm.color.main.text
 
 --- container: ftd.main
 

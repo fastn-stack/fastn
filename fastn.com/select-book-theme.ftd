@@ -39,7 +39,7 @@ toc-item list children:
 
 -- ftd.column page:
 width: fill
-background-color: $fpm.design.color.brand.region
+background-color: $fpm.color.main.background.base
 open: true
 append-at: content-container
 
@@ -50,7 +50,7 @@ top: 0
 bottom: 0
 left: 0
 right: 0
-background-color:  $fpm.design.color.brand.region
+background-color:  $fpm.color.main.background.base
 z-index: 1
 $on-click$: toggle $sidebar-open
 
@@ -150,7 +150,7 @@ toc-item list toc: $toc
 width: fill
 open: true
 append-at: main-container
-background-color: $fpm.design.color.brand.region
+background-color: $fpm.color.main.background.base
 
 
 --- header:
@@ -181,7 +181,7 @@ toc-item list toc: $toc
 width: fill
 open: true
 append-at: main-container
-background-color: $fpm.design.color.brand.region
+background-color: $fpm.color.main.background.base
 
 
 --- ftd.column:
@@ -191,7 +191,7 @@ top: 0
 bottom: 0
 left: 0
 right: 0
-background-color:  $fpm.design.color.brand.region
+background-color:  $fpm.color.main.background.base
 z-index: 1
 $on-click$: toggle $sidebar-open
 
@@ -224,16 +224,16 @@ footer-toc: $footer-toc
 
 -- ftd.text site-link:
 caption title:
-color: $fpm.design.color.brand.on-region
+color: $fpm.color.main.text
 text: $title
-role: $fpm.design.type.label-large
+role: $fpm.type.label-large
 position: center
 
 -- ftd.text header-link:
 caption title:
 string link:
-role: $fpm.design.type.label-large
-color: $fpm.design.color.brand.on-region
+role: $fpm.type.label-large
+color: $fpm.color.main.text
 text: $title
 link: $link
 position: center
@@ -242,11 +242,11 @@ position: center
 
 -- ftd.row header:
 width: fill
-background-color: $fpm.design.color.brand.region
+background-color: $fpm.color.main.background.base
 padding-horizontal: 20
 padding-vertical: 10
 border-bottom: 1
-border-color: $fpm.design.color.brand.on-region
+border-color: $fpm.color.main.text
 
 --- ftd.row:
 position: left
@@ -313,11 +313,11 @@ align: center
 
 -- ftd.row header-mobile:
 width: fill
-background-color: $fpm.design.color.brand.region
+background-color: $fpm.color.main.background.base
 padding-horizontal: 20
 padding-vertical: 10
 border-bottom: 1
-border-color: $fpm.design.color.brand.on-region
+border-color: $fpm.color.main.text
 
 --- ftd.row:
 position: left
@@ -373,8 +373,8 @@ min-width: fit-content
 padding-left: 10
 padding-top: 6
 padding-bottom: 6
-color: $fpm.design.color.brand.on-region
-role: $fpm.design.type.label-large
+color: $fpm.color.main.text
+role: $fpm.type.label-large
 
 -- ftd.column footer-instance:
 footer-item footer-toc:
@@ -385,8 +385,8 @@ min-width: fit-content
 padding-left: 10
 padding-top: 3
 padding-bottom: 8
-color: $fpm.design.color.brand.on-region
-role: $fpm.design.type.label-large
+color: $fpm.color.main.text
+role: $fpm.type.label-large
 
 --- footer-link: $obj.title
 $loop$: $footer-toc.children as $obj
@@ -411,7 +411,7 @@ footer-toc: $footer-toc
 -- ftd.row footer-desktop:
 footer-item list footer-toc:
 width: fill
-background-color: $fpm.design.color.brand.region
+background-color: $fpm.color.main.background.base
 padding-horizontal: 150
 padding-vertical: 50
 spacing: space-between
@@ -423,7 +423,7 @@ footer-toc: $obj
 -- ftd.column footer-mobile:
 footer-item list footer-toc:
 width: fill
-background-color: $fpm.design.color.brand.region
+background-color: $fpm.color.main.background.base
 padding-horizontal: 20
 padding-vertical: 50
 position: left
@@ -459,7 +459,7 @@ image: $image
 caption title:
 ftd.image-src image:
 width: fill
-background-color: $fpm.design.color.brand.region
+background-color: $fpm.color.main.background.base
 padding-horizontal: $content-padding
 padding-vertical: 50
 spacing: 40
@@ -470,10 +470,10 @@ append-at: desktop-action-container
 width: fill
 
 --- ftd.text: $title
-color: $fpm.design.color.brand.on-region
+color: $fpm.color.main.text
 width: percent 75
 position: center
-role: $fpm.design.type.display-large
+role: $fpm.type.display-large
 
 --- ftd.image:
 src: $image
@@ -501,7 +501,7 @@ ftd.image-src image:
 optional string id:
 id: $id
 width: fill
-background-color: $fpm.design.color.brand.region
+background-color: $fpm.color.main.background.base
 padding-horizontal: 20
 padding-vertical: 50
 spacing: 30
@@ -515,11 +515,11 @@ height: auto
 position: center
 
 --- ftd.text: $title
-color: $fpm.design.color.brand.on-region
+color: $fpm.color.main.text
 padding-horizontal: 20
 position: center
 text-align: center
-role: $fpm.design.type.display-large
+role: $fpm.type.display-large
 
 --- container: ftd.main
 
@@ -540,8 +540,8 @@ spacing: 30
 -- ftd.text action-button:
 caption title:
 string url:
-optional ftd.color color: $fpm.design.color.brand.on-region
-optional ftd.color background-color: $fpm.design.color.brand.region
+optional ftd.color color: $fpm.color.main.text
+optional ftd.color background-color: $fpm.color.main.background.base
 text: $title
 link: $url
 background-color: $background-color
@@ -549,7 +549,7 @@ color: $color
 border-radius: 6
 padding-vertical: 15
 padding-horizontal: 40
-role: $fpm.design.type.label-large
+role: $fpm.type.label-large
 
 
 
@@ -564,10 +564,10 @@ caption title:
 text: $title
 padding: 45
 text-align: center
-color: $fpm.design.color.brand.on-region
-background-color: $fpm.design.color.brand.region
+color: $fpm.color.main.text
+background-color: $fpm.color.main.background.base
 width: fill
-role: $fpm.design.type.title-large
+role: $fpm.type.title-large
 
 
 
@@ -592,8 +592,8 @@ min-width: fit-content
 padding-left: 10
 padding-top: 3
 padding-bottom: 3
-color: $fpm.design.color.brand.on-region
-role: $fpm.design.type.label-large
+color: $fpm.color.main.text
+role: $fpm.type.label-large
 
 --- toc-instance:
 $loop$: $toc.children as $obj
@@ -621,7 +621,7 @@ padding-top: 15
 padding-right: 20
 padding-bottom: 40
 border-right: 1
-border-color: $fpm.design.color.brand.on-region
+border-color: $fpm.color.main.text
 
 --- toc-instance:
 $loop$: $toc-obj as $obj
@@ -648,11 +648,11 @@ padding-top: 15
 padding-right: 20
 padding-bottom: 40
 border-right: 1
-border-color: $fpm.design.color.brand.on-region
+border-color: $fpm.color.main.text
 anchor: window
 left: 0
 top: 0
-background-color: $fpm.design.color.brand.region
+background-color: $fpm.color.main.background.base
 shadow-offset-x: 3
 shadow-offset-y: 0
 shadow-size: 1
@@ -678,9 +678,9 @@ optional boolean collapsed:
 optional caption title:
 optional boolean two_columns:
 text: $body
-color: $fpm.design.color.brand.on-region
+color: $fpm.color.main.text
 padding-bottom: 8
-role: $fpm.design.type.body-large
+role: $fpm.type.body-large
 
 
 
@@ -700,9 +700,9 @@ append-at: inner
 text: $title
 caption $title:
 region: title
-role: $fpm.design.type.headline-large
+role: $fpm.type.headline-large
 text: $title
-color: $fpm.design.color.brand.on-region
+color: $fpm.color.main.text
 padding-bottom: 16
 padding-top: 8
 $on-click$ if $open: toggle $open
@@ -734,7 +734,7 @@ width: fill
 region: h1
 padding-left: 20
 border-left: 5
-border-color: $fpm.design.color.brand.on-secondary-action
+border-color: $fpm.color.main.cta-secondary.text
 move-left: 25
 margin-bottom: 30
 $on-click$: toggle $open
@@ -747,15 +747,15 @@ spacing: 20
 caption $title:
 text: $title
 region: title
-role: $fpm.design.type.headline-medium
-color: $fpm.design.color.brand.on-region
+role: $fpm.type.headline-medium
+color: $fpm.color.main.text
 padding-bottom: 8
 
 --- ftd.text: Click To Expand
 if: not $open
-role: $fpm.design.type.label-medium
-color: $fpm.design.color.brand.on-secondary-action
-background-color: $fpm.design.color.brand.secondary-action
+role: $fpm.type.label-medium
+color: $fpm.color.main.cta-secondary.text
+background-color: $fpm.color.main.cta-secondary.base
 border-radius: 3
 padding: 3
 align: center
@@ -798,8 +798,8 @@ append-at: inner
 caption $title:
 text: $title
 region: title
-role: $fpm.design.type.headline-small
-color: $fpm.design.color.brand.on-region
+role: $fpm.type.headline-small
+color: $fpm.color.main.text
 padding-bottom: 8
 padding-top: 16
 $on-click$: toggle $open
@@ -835,8 +835,8 @@ append-at: inner
 caption $title:
 text: $title
 region: title
-role: $fpm.design.type.headline-small
-color: $fpm.design.color.brand.on-region
+role: $fpm.type.headline-small
+color: $fpm.color.main.text
 padding-bottom: 8
 padding-top: 16
 $on-click$: toggle $open
@@ -869,10 +869,10 @@ width: fill
 --- ftd.text:
 text: $caption
 if: $caption is not null
-role: $fpm.design.type.body-medium
-color: $fpm.design.color.brand.on-region
+role: $fpm.type.body-medium
+color: $fpm.color.main.text
 width: fill
-background-color: $fpm.design.color.brand.region
+background-color: $fpm.color.main.background.base
 padding-top: 10
 padding-bottom: 10
 padding-left: 20
@@ -884,13 +884,13 @@ if: $ftd.dark-mode
 text: $body
 lang: $lang
 width: fill
-role: $fpm.design.type.body-medium
-color: $fpm.design.color.brand.on-region
+role: $fpm.type.body-medium
+color: $fpm.color.main.text
 padding-top: 10
 padding-left: 20
 padding-bottom: 10
 padding-right: 20
-background-color: $fpm.design.color.brand.region
+background-color: $fpm.color.main.background.base
 border-top-radius if $caption is null: 4
 border-bottom-radius: 4
 border-width: 1
@@ -902,16 +902,16 @@ theme: InspiredGitHub
 text: $body
 lang: $lang
 width: fill
-role: $fpm.design.type.body-medium
-color: $fpm.design.color.brand.on-region
+role: $fpm.type.body-medium
+color: $fpm.color.main.text
 padding-top: 10
 padding-left: 20
 padding-bottom: 10
 padding-right: 20
-background-color: $fpm.design.color.brand.region
+background-color: $fpm.color.main.background.base
 border-top-radius if $caption is null: 4
 border-bottom-radius if $caption is null: 4
-border-color: $fpm.design.color.brand.on-region
+border-color: $fpm.color.main.text
 border-width: 1
 overflow-x: auto
 
@@ -977,15 +977,15 @@ align: center
 width: fill
 width: fill
 text-align: center
-color: $fpm.design.color.brand.on-region
-role: $fpm.design.type.label-large
+color: $fpm.color.main.text
+role: $fpm.type.label-large
 
 --- ftd.text:
 text: $body
 width: fill
 text-align: center
-color: $fpm.design.color.brand.on-region
-role: $fpm.design.type.label-large
+color: $fpm.color.main.text
+role: $fpm.type.label-large
 
 
 
@@ -997,7 +997,7 @@ role: $fpm.design.type.label-large
 
 -- ftd.row testimony-list:
 width: fill
-background-color: $fpm.design.color.brand.region
+background-color: $fpm.color.main.background.base
 open: true
 append-at: main-container
 
@@ -1049,23 +1049,23 @@ align: center
 width: fill
 width: fill
 text-align: center
-color: $fpm.design.color.brand.on-region
-role: $fpm.design.type.title-large
+color: $fpm.color.main.text
+role: $fpm.type.title-large
 
 --- ftd.text: $designation
 width: fill
 width: fill
 text-align: center
-color: $fpm.design.color.brand.on-region
-role: $fpm.design.type.title-medium
+color: $fpm.color.main.text
+role: $fpm.type.title-medium
 
 --- ftd.text:
 text: $body
 width: fill
 width: fill
 text-align: center
-color: $fpm.design.color.brand.on-region
-role: $fpm.design.type.title-medium
+color: $fpm.color.main.text
+role: $fpm.type.title-medium
 
 
 
@@ -1132,9 +1132,9 @@ append-at: output-container
 padding-top: 12
 
 --- ftd.text: $caption
-color: $fpm.design.color.brand.on-region
-role: $fpm.design.type.body-large
-background-color: $fpm.design.color.brand.region
+color: $fpm.color.main.text
+role: $fpm.type.body-large
+background-color: $fpm.color.main.background.base
 border-top-radius: 2
 padding-top: 3
 padding-bottom: 3
@@ -1143,7 +1143,7 @@ padding-right: 10
 
 --- ftd.column:
 border-width: 1
-border-color: $fpm.design.color.brand.on-region
+border-color: $fpm.color.main.text
 width: fill
 id: output-container
 padding-top: 30
@@ -1151,7 +1151,7 @@ padding-bottom: 30
 padding-left: 20
 padding-right: 20
 border-radius: 2
-background-color: $fpm.design.color.brand.region
+background-color: $fpm.color.main.background.base
 
 
 
@@ -1186,8 +1186,8 @@ if: $caption is not null
 text: $caption
 align: center
 width: fill
-color: $fpm.design.color.brand.on-region
-role: $fpm.design.type.label-large
+color: $fpm.color.main.text
+role: $fpm.type.label-large
 
 --- markdown:
 if: $body is not null
@@ -1252,19 +1252,19 @@ ftd.image-src image:
 background-image: $image
 border-radius: 4
 border-width: 1
-border-color: $fpm.design.color.brand.on-region
+border-color: $fpm.color.main.text
 margin-bottom: 50
 
 --- ftd.text: $title
 anchor: parent
 top: 5
 left: 0
-background-color: $fpm.design.color.brand.region
+background-color: $fpm.color.main.background.base
 padding-horizontal: 20
 padding-vertical: 5
 min-width: 200
-color: $fpm.design.color.brand.on-region
-role: $fpm.design.type.title-large
+color: $fpm.color.main.text
+role: $fpm.type.title-large
 
 --- ftd.text: $cta-text
 if: $active
@@ -1273,12 +1273,12 @@ link: $link
 anchor: parent
 bottom: 30
 right: 40
-background-color: $fpm.design.color.brand.region
+background-color: $fpm.color.main.background.base
 border-radius: 20
 padding-vertical: 5
 padding-horizontal: 20
-color: $fpm.design.color.brand.on-region
-role: $fpm.design.type.title-large
+color: $fpm.color.main.text
+role: $fpm.type.title-large
 
 --- container: ftd.main
 
@@ -1288,12 +1288,12 @@ text-align: center
 anchor: parent
 bottom: 30
 right: 40
-background-color: $fpm.design.color.brand.region
+background-color: $fpm.color.main.background.base
 border-radius: 20
 padding-vertical: 5
 padding-horizontal: 20
-color: $fpm.design.color.brand.on-region
-role: $fpm.design.type.title-large
+color: $fpm.color.main.text
+role: $fpm.type.title-large
 
 
 
@@ -1314,19 +1314,19 @@ spacing: 15
 background-image: $image
 border-radius: 4
 border-width: 1
-border-color: $fpm.design.color.brand.on-region
+border-color: $fpm.color.main.text
 margin-bottom: 50
 
 --- ftd.text: $title
 anchor: parent
 top: 5
 left: 0
-background-color: $fpm.design.color.brand.region
+background-color: $fpm.color.main.background.base
 padding-horizontal: 20
 padding-vertical: 5
 min-width: 200
-color: $fpm.design.color.brand.on-region
-role: $fpm.design.type.title-large
+color: $fpm.color.main.text
+role: $fpm.type.title-large
 
 --- ftd.text: Create
 text-align: center
@@ -1334,9 +1334,9 @@ link: $link
 anchor: parent
 bottom: 30
 right: 40
-color: $fpm.design.color.brand.on-region
-role: $fpm.design.type.title-medium
-background-color: $fpm.design.color.brand.region
+color: $fpm.color.main.text
+role: $fpm.type.title-medium
+background-color: $fpm.color.main.background.base
 border-radius: 20
 padding-vertical: 5
 padding-horizontal: 20
@@ -1367,8 +1367,8 @@ optional string link:
 --- ftd.text: $title
 if: $link is not null
 link: $link
-color: $fpm.design.color.brand.on-region
-role: $fpm.design.type.label-large
+color: $fpm.color.main.text
+role: $fpm.type.label-large
 
 --- ftd.image:
 if: $link is not null
@@ -1379,7 +1379,7 @@ width: 16
 
 --- ftd.text: $title
 if: $link is null
-color: $fpm.design.color.brand.on-region
-role: $fpm.design.type.label-large
+color: $fpm.color.main.text
+role: $fpm.type.label-large
 
 

@@ -20,7 +20,7 @@ files on github pages, S3 etc static site hosting sites.
 
 
 -- ftd.text language: This is the language
-background-color if not $ftd.dark-mode: $fpm.design.color.brand.region
+background-color if not $ftd.dark-mode: $fpm.color.main.background.base
 
 
 -- ft.h1: `fpm-repo`
