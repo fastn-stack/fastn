@@ -273,8 +273,8 @@ light: #2cc9b5
 dark: #2cc9b5
 
 -- ftd.color cta-primary-disabled-:
-light: #2cc9b51a
-dark: #2cc9b51a
+light: rgba(44,201,181,0.1)
+dark: rgba(44,201,181,0.1)
 
 -- ftd.color cta-primary-focused-:
 light: #2cbfac
@@ -310,8 +310,8 @@ light: #4fb2df
 dark: #4fb2df
 
 -- ftd.color cta-secondary-disabled-:
-light: #4fb2df1a
-dark: #4fb2df1a
+light: rgba(79,178,223,0.1)
+dark: rgba(79,178,223,0.1)
 
 -- ftd.color cta-secondary-focused-:
 light: #4fb1df
@@ -343,12 +343,12 @@ light: #c7cbd1
 dark: #c7cbd1
 
 -- ftd.color cta-tertiary-pressed-:
-light:#3b4047
+light: #3b4047
 dark: #3b4047
 
 -- ftd.color cta-tertiary-disabled-:
-light: #5563751a
-dark: #5563751a
+light: rgba(85,99,117,0.1)
+dark: rgba(85,99,117,0.1)
 
 -- ftd.color cta-tertiary-focused-:
 light: #e0e2e6
