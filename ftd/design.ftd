@@ -9,6 +9,7 @@ Colors: https://m3.material.io/styles/color/the-color-system/tokens
 We are not using Roboto as that would put a dependency on Roboto package
 on every fpm package.
 
+-- string font-family: sans-serif
 
 
 -- ftd.font-size display-large-desktop:
@@ -16,7 +17,7 @@ line-height: 64
 size: 57
 tracking: 0
 
--- ftd.type display-large: sans-serif
+-- ftd.type display-large: $font-family
 desktop: $display-large-desktop
 mobile: $display-large-desktop
 xl: $display-large-desktop
@@ -27,7 +28,7 @@ line-height: 52
 size: 45
 tracking: 0
 
--- ftd.type display-medium: sans-serif
+-- ftd.type display-medium: $font-family
 desktop: $display-medium-desktop
 mobile: $display-medium-desktop
 xl: $display-medium-desktop
@@ -38,7 +39,7 @@ line-height: 44
 size: 36
 tracking: 0
 
--- ftd.type display-small: sans-serif
+-- ftd.type display-small: $font-family
 desktop: $display-small-desktop
 mobile: $display-small-desktop
 xl: $display-small-desktop
@@ -49,7 +50,7 @@ line-height: 40
 size: 32
 tracking: 0
 
--- ftd.type headline-large: sans-serif
+-- ftd.type headline-large: $font-family
 desktop: $headline-large-desktop
 mobile: $headline-large-desktop
 xl: $headline-large-desktop
@@ -60,7 +61,7 @@ line-height: 36
 size: 28
 tracking: 0
 
--- ftd.type headline-medium: sans-serif
+-- ftd.type headline-medium: $font-family
 desktop: $headline-medium-desktop
 mobile: $headline-medium-desktop
 xl: $headline-medium-desktop
@@ -71,7 +72,7 @@ line-height: 32
 size: 24
 tracking: 0
 
--- ftd.type headline-small: sans-serif
+-- ftd.type headline-small: $font-family
 desktop: $headline-small-desktop
 mobile: $headline-small-desktop
 xl: $headline-small-desktop
@@ -82,7 +83,7 @@ line-height: 28
 size: 22
 tracking: 0
 
--- ftd.type title-large: sans-serif
+-- ftd.type title-large: $font-family
 desktop: $title-large-desktop
 mobile: $title-large-desktop
 xl: $title-large-desktop
@@ -93,7 +94,7 @@ line-height: 24
 size: 16
 tracking: 0.15
 
--- ftd.type title-medium: sans-serif
+-- ftd.type title-medium: $font-family
 desktop: $title-medium-desktop
 mobile: $title-medium-desktop
 xl: $title-medium-desktop
@@ -104,7 +105,7 @@ line-height: 20
 size: 14
 tracking: 0.1
 
--- ftd.type title-small: sans-serif
+-- ftd.type title-small: $font-family
 desktop: $title-small-desktop
 mobile: $title-small-desktop
 xl: $title-small-desktop
@@ -115,7 +116,7 @@ line-height: 20
 size: 14
 tracking: 0.1
 
--- ftd.type label-large: sans-serif
+-- ftd.type label-large: $font-family
 desktop: $label-large-desktop
 mobile: $label-large-desktop
 xl: $label-large-desktop
@@ -126,7 +127,7 @@ line-height: 16
 size: 12
 tracking: 0.5
 
--- ftd.type label-medium: sans-serif
+-- ftd.type label-medium: $font-family
 desktop: $label-medium-desktop
 mobile: $label-medium-desktop
 xl: $label-medium-desktop
@@ -137,7 +138,7 @@ line-height: 16
 size: 11
 tracking: 0.5
 
--- ftd.type label-small: sans-serif
+-- ftd.type label-small: $font-family
 desktop: $label-small-desktop
 mobile: $label-small-desktop
 xl: $label-small-desktop
@@ -148,7 +149,7 @@ line-height: 24
 size: 16
 tracking: 0.15
 
--- ftd.type body-large: sans-serif
+-- ftd.type body-large: $font-family
 desktop: $body-large-desktop
 mobile: $body-large-desktop
 xl: $body-large-desktop
@@ -159,7 +160,7 @@ line-height: 20
 size: 14
 tracking: 0.25
 
--- ftd.type body-medium: sans-serif
+-- ftd.type body-medium: $font-family
 desktop: $body-medium-desktop
 mobile: $body-medium-desktop
 xl: $body-medium-desktop
@@ -170,7 +171,7 @@ line-height: 16
 size: 12
 tracking: 0.4
 
--- ftd.type body-small: sans-serif
+-- ftd.type body-small: $font-family
 desktop: $body-small-desktop
 mobile: $body-small-desktop
 xl: $body-small-desktop
