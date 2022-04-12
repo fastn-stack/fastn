@@ -2,7 +2,7 @@
 -- import: fpm.dev/assets
 
 
--- ft.site-name: FPM
+-- ft.site-title: FPM
 
 -- ft.github: https://github.com/fifthtry/fpm
 -- ft.site-url: /
@@ -68,6 +68,7 @@ $processor$: toc
 - Components: /theme/components/
   - Dark Mode: /theme/header/
 - FPM Variables: /vars/
+- How to use Google Font: /theme/google-font-how-to-use/
 
 -- fpm.toc-item list learn:
 $processor$: toc

@@ -10,6 +10,7 @@ interace for this component is called `fpm.dev/header`.
 
 -- ft.image: header
 src: $assets.files.static.images.theme.header.png
+width: fill
 
 
 -- ft.code: include the header using this
