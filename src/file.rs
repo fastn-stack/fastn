@@ -49,6 +49,7 @@ pub struct Document {
 impl Document {
     pub fn id_to_path(&self) -> String {
         self.id
+            .replace("index.ftd", "")
             .replace(".ftd", std::path::MAIN_SEPARATOR.to_string().as_str())
     }
 

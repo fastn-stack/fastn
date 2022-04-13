@@ -372,7 +372,18 @@ impl Config {
             if let Some(i) = id.strip_prefix('/') {
                 id = i;
             }
-            Ok(format!("{}.ftd", id))
+            if camino::Utf8PathBuf::from(format!("{}.ftd", id)).exists() {
+                return Ok(format!("{}.ftd", id));
+            }
+            if camino::Utf8PathBuf::from(format!("{}/index.ftd", id)).exists() {
+                return Ok(format!("{}/index.ftd", id));
+            }
+            if camino::Utf8PathBuf::from(format!("{}/README.md", id)).exists() {
+                return Ok(format!("{}/README.md", id));
+            }
+            Err(fpm::Error::UsageError {
+                message: "File not found".to_string(),
+            })
         }
     }
 

@@ -893,11 +893,10 @@ async fn process_ftd(
         main
     };
 
-    if !main.id.eq("index.ftd") {
-        std::fs::create_dir_all(config.root.join(".build").join(main.id_to_path()))?;
-    }
-    let file_rel_path = if main.id.eq("index.ftd") {
-        "index.html".to_string()
+    std::fs::create_dir_all(config.root.join(".build").join(main.id_to_path()))?;
+
+    let file_rel_path = if main.id.contains("index.ftd") {
+        main.id.replace("index.ftd", "index.html")
     } else {
         main.id.replace(
             ".ftd",
