@@ -438,6 +438,10 @@ let ftd_utils = {
                             deps[dependency] = dependencies[dependency];
                             data[target].dependencies = deps;
                         } else {
+                            if ((!!json_dependency.remaining)
+                                && (json_dependency.remaining !== target_remaining)) {
+                                continue;
+                            }
                             let doc = document.querySelector(`[data-id="${dependency}:${id}"]`);
                             if (doc.src !== undefined) {
                                 doc.src = new_value;
