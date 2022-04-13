@@ -87,3 +87,35 @@ impl fpm::Config {
 
 Note this implements fallback feature in case this is a translated package.
 
+
+
+-- ft.h1: `fpm::Config.get_files()`
+
+`fpm::Config.get_files()` returns all the ["files"](crate/file/) in a package.
+
+-- ft.code:
+lang: rs
+
+pub(crate) async fn get_files(&self, package: &fpm::Package)
+    -> fpm::Result<Vec<fpm::File>>
+
+
+
+-- ft.h1: `fpm::Config.get_assets()`
+
+`fpm::Config.get_assets()` returns the "assets" automagic module for each
+package.
+
+-- ft.code:
+lang: rs
+
+pub(crate) async fn get_assets(
+    &self,
+    base_url: &str,
+) -> fpm::Result<std::collections::HashMap<String, String>>
+
+-- ft.markdown:
+
+Key is the package name, and value is FTD source of generated assets module.
+
+

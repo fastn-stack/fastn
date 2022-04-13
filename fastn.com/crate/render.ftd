@@ -13,7 +13,7 @@ lang: rs
 
 pub async fn fpm::render(
     config: &fpm::Config,
-    file: &str,  // eg index.ftd
+    id: &str,  // eg "/foo/"
     base_url: &str,
 ) -> fpm::Result<String>
 
