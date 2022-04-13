@@ -28,6 +28,41 @@ So links never break (and original author can keep updating document URL at whim
 (on how having article.page allows us to get just the content of a page, without
 header/sidebar/footer etc).
 
+-- ft.h1: Implementing `continuous documentation` for `fpm`
+
+13th Apr 2022
+
+We are now trying to implement continuous documentation for our repository. Any
+code change will only be merged after the documentaiton has been written and
+approved.
+
+We are not yet using `cdoc` for this, will activate it once `cdoc` becomes
+usable internally.
+
+Let's see how it goes.
+
+
+
+
+-- ft.h1: `get-data` `$processor$`
+
+We just implemented a new processor called `get-data`. This is mainly so we can
+start using `fpm` from django templates. Checkout out [get-data processor's
+documentaiton](processors/get-data/).
+
+
+
+
+-- ft.h1: `fpm::render()`
+
+We are exposing a function [`fpm::render()`](crate/render/) from our fpm crate.
+Primary use case is our [ftd Python package](https://pypi.org/project/ftd/),
+which wraps `fpm` and `ftd`.
+
+
+
+
+
 -- ft.h1: Special Packages
 
 21st Feb 2022
