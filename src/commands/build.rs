@@ -76,7 +76,8 @@ pub async fn build(
 
     for dep in dependencies {
         let static_files = std::collections::BTreeMap::from_iter(
-            fpm::get_documents(config, &dep.package)
+            config
+                .get_files(&dep.package)
                 .await?
                 .into_iter()
                 .filter(|file_instance| {
@@ -110,7 +111,8 @@ async fn build_simple(
     asset_documents: &std::collections::HashMap<String, String>,
 ) -> fpm::Result<()> {
     let documents = std::collections::BTreeMap::from_iter(
-        fpm::get_documents(config, &config.package)
+        config
+            .get_files(&config.package)
             .await?
             .into_iter()
             .map(|v| (v.get_id(), v)),
@@ -137,7 +139,8 @@ async fn build_with_translations(
     use std::io::Write;
 
     let documents = std::collections::BTreeMap::from_iter(
-        fpm::get_documents(config, &config.package)
+        config
+            .get_files(&config.package)
             .await?
             .into_iter()
             .map(|v| (v.get_id(), v)),
@@ -226,7 +229,8 @@ async fn build_with_original(
     // Overwrite the files having same name/id
 
     let translated_documents = std::collections::BTreeMap::from_iter(
-        fpm::get_documents(config, &config.package)
+        config
+            .get_files(&config.package)
             .await?
             .into_iter()
             .filter(|x| original_snapshots.contains_key(x.get_id().as_str()))
@@ -792,67 +796,6 @@ async fn process_markdown(
     }
 }
 
-// todo: place this function with its dependent function in different file.
-pub(crate) async fn get_ftd(
-    config: &fpm::Config,
-    main: &fpm::Document,
-    base_url: &str,
-    asset_documents: &std::collections::HashMap<String, String>,
-) -> fpm::Result<String> {
-    let new_main = fpm::Document {
-        content: config
-            .package
-            .get_prefixed_body(main.content.as_str(), &main.id, true),
-        id: main.id.to_owned(),
-        parent_path: main.parent_path.to_owned(),
-        package_name: main.package_name.to_owned(),
-    };
-
-    return get_html(config, &new_main, base_url, asset_documents).await;
-
-    async fn get_html(
-        config: &fpm::Config,
-        main: &fpm::Document,
-        base_url: &str,
-        asset_documents: &std::collections::HashMap<String, String>,
-    ) -> fpm::Result<String> {
-        let lib = fpm::Library {
-            config: config.clone(),
-            markdown: None,
-            document_id: main.id.clone(),
-            translated_data: Default::default(),
-            asset_documents: asset_documents.to_owned(),
-            base_url: base_url.to_string(),
-        };
-
-        let main_ftd_doc = match ftd::p2::Document::from(
-            main.id_with_package().as_str(),
-            main.content.as_str(),
-            &lib,
-        ) {
-            Ok(v) => v,
-            Err(e) => {
-                return Err(fpm::Error::PackageError {
-                    message: format!("failed to parse {:?}", &e),
-                });
-            }
-        };
-        let doc_title = match &main_ftd_doc.title() {
-            Some(x) => x.original.clone(),
-            _ => main.id.as_str().to_string(),
-        };
-        let ftd_doc = main_ftd_doc.to_rt("main", &main.id);
-        Ok(replace_markers(
-            fpm::ftd_html(),
-            config,
-            main,
-            doc_title.as_str(),
-            base_url,
-            &ftd_doc,
-        ))
-    }
-}
-
 async fn process_ftd(
     config: &fpm::Config,
     main: &fpm::Document,
@@ -1061,10 +1004,10 @@ async fn process_ftd(
 
         let mut f = tokio::fs::File::create(new_file_path).await?;
         f.write_all(
-            replace_markers(
+            fpm::utils::replace_markers(
                 fpm::ftd_html(),
                 config,
-                main,
+                main.id_to_path().as_str(),
                 doc_title.as_str(),
                 base_url,
                 &ftd_doc,
@@ -1127,7 +1070,7 @@ async fn process_ftd(
         let mut f = tokio::fs::File::create(new_file_path).await?;
 
         f.write_all(
-            replace_markers(
+            fpm::utils::replace_markers(
                 fpm::with_message()
                     .replace(
                         "__ftd_data_message__",
@@ -1147,7 +1090,7 @@ async fn process_ftd(
                     )
                     .as_str(),
                 config,
-                main,
+                main.id_to_path().as_str(),
                 doc_title.as_str(),
                 base_url,
                 &main_rt_doc,
@@ -1224,7 +1167,7 @@ async fn process_ftd(
         let mut f = tokio::fs::File::create(new_file_path).await?;
 
         f.write_all(
-            replace_markers(
+            fpm::utils::replace_markers(
                 fpm::with_fallback()
                     .replace(
                         "__ftd_data_message__",
@@ -1260,7 +1203,7 @@ async fn process_ftd(
                     )
                     .as_str(),
                 config,
-                main,
+                main.id_to_path().as_str(),
                 doc_title.as_str(),
                 base_url,
                 &main_rt_doc,
@@ -1303,49 +1246,4 @@ async fn process_static(
 
         Ok(())
     }
-}
-
-fn replace_markers(
-    s: &str,
-    config: &fpm::Config,
-    main: &fpm::Document,
-    title: &str,
-    base_url: &str,
-    main_rt: &ftd::Document,
-) -> String {
-    s.replace("__ftd_doc_title__", title)
-        .replace(
-            "__ftd_canonical_url__",
-            config
-                .package
-                .generate_canonical_url(main.id_to_path().as_str())
-                .as_str(),
-        )
-        .replace("__ftd_js__", fpm::ftd_js().as_str())
-        .replace("__ftd_body_events__", main_rt.body_events.as_str())
-        .replace("__ftd_css__", fpm::ftd_css())
-        .replace("__fpm_js__", fpm::fpm_js())
-        .replace(
-            "__ftd_data_main__",
-            fpm::font::escape(
-                serde_json::to_string_pretty(&main_rt.data)
-                    .expect("failed to convert document to json")
-                    .as_str(),
-            )
-            .as_str(),
-        )
-        .replace(
-            "__ftd_external_children_main__",
-            fpm::font::escape(
-                serde_json::to_string_pretty(&main_rt.external_children)
-                    .expect("failed to convert document to json")
-                    .as_str(),
-            )
-            .as_str(),
-        )
-        .replace(
-            "__main__",
-            format!("{}{}", main_rt.html, config.get_font_style(),).as_str(),
-        )
-        .replace("__base_url__", base_url)
 }

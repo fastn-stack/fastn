@@ -311,6 +311,87 @@ impl Config {
         self.extra_data = data;
         Ok(())
     }
+
+    pub(crate) async fn get_files(&self, package: &fpm::Package) -> fpm::Result<Vec<fpm::File>> {
+        let path = if let Some(package_fpm_path) = &package.fpm_path {
+            // TODO: Unwrap?
+            package_fpm_path.parent().unwrap().to_owned()
+        } else if package.name.eq(&self.package.name) {
+            self.root.clone()
+        } else {
+            self.packages_root.clone().join(package.name.as_str())
+        };
+        let mut ignore_paths = ignore::WalkBuilder::new(&path);
+        // ignore_paths.hidden(false); // Allow the linux hidden files to be evaluated
+        ignore_paths.overrides(fpm::file::package_ignores(package, &path)?);
+        let all_files = ignore_paths
+            .build()
+            .into_iter()
+            .flatten()
+            .map(|x| camino::Utf8PathBuf::from_path_buf(x.into_path()).unwrap()) //todo: improve error message
+            .collect::<Vec<camino::Utf8PathBuf>>();
+
+        // TODO: Unwrap?
+        let mut documents = fpm::paths_to_files(package.name.as_str(), all_files, &path).await?;
+        documents.sort_by_key(|v| v.get_id());
+
+        Ok(documents)
+    }
+
+    pub(crate) async fn get_file_by_id(
+        &self,
+        id: &str,
+        package: &fpm::Package,
+    ) -> fpm::Result<fpm::File> {
+        self.get_files(package)
+            .await?
+            .into_iter()
+            .find(|v| v.get_id().eq(id))
+            .ok_or_else(|| fpm::Error::UsageError {
+                message: format!("No such file found: {}", id),
+            })
+    }
+
+    pub(crate) async fn get_assets(
+        &self,
+        base_url: &str,
+    ) -> fpm::Result<std::collections::HashMap<String, String>> {
+        use itertools::Itertools;
+
+        let mut asset_documents = std::collections::HashMap::new();
+        asset_documents.insert(
+            self.package.name.clone(),
+            self.package.get_assets_doc(self, base_url).await?,
+        );
+
+        let dependencies = if let Some(package) = self.package.translation_of.as_ref() {
+            let mut deps = package
+                .get_flattened_dependencies()
+                .into_iter()
+                .unique_by(|dep| dep.package.name.clone())
+                .collect_vec();
+            deps.extend(
+                self.package
+                    .get_flattened_dependencies()
+                    .into_iter()
+                    .unique_by(|dep| dep.package.name.clone()),
+            );
+            deps
+        } else {
+            self.package
+                .get_flattened_dependencies()
+                .into_iter()
+                .unique_by(|dep| dep.package.name.clone())
+                .collect_vec()
+        };
+        for dep in &dependencies {
+            asset_documents.insert(
+                dep.package.name.clone(),
+                dep.package.get_assets_doc(self, base_url).await?,
+            );
+        }
+        Ok(asset_documents)
+    }
 }
 
 /// `find_root_for_file()` starts with the given path, which is the current directory where the
@@ -546,7 +627,7 @@ impl Package {
     ) -> fpm::Result<String> {
         // Virtual document that contains the asset information about the package
         use itertools::Itertools;
-        let all_docs = fpm::get_documents(config, self).await?;
+        let all_docs = config.get_files(self).await?;
         let all_files = all_docs.into_iter().filter_map(|file_instance| {
             let id = file_instance.get_id();
             if id.eq("FPM.ftd") {

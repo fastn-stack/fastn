@@ -9,7 +9,7 @@ pub async fn diff(config: &fpm::Config, files: Option<Vec<String>>, all: bool) -
             .collect::<Vec<camino::Utf8PathBuf>>();
         fpm::paths_to_files(config.package.name.as_str(), files, config.root.as_path()).await?
     } else {
-        fpm::get_documents(config, &config.package).await?
+        config.get_files(&config.package).await?
     };
     for doc in documents {
         if let Some(diff) = get_diffy(&doc, &snapshots).await? {

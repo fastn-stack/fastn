@@ -11,7 +11,7 @@ mod auto_import;
 mod commands;
 mod config;
 mod dependency;
-mod document;
+mod file;
 mod font;
 mod i18n;
 mod library;
@@ -30,7 +30,7 @@ pub use commands::{
 pub use config::Config;
 pub(crate) use config::Package;
 pub(crate) use dependency::Dependency;
-pub(crate) use document::{get_documents, get_file, paths_to_files, Document, File, Static};
+pub(crate) use file::{get_file, paths_to_files, Document, File, Static};
 pub(crate) use font::Font;
 pub(crate) use library::{FPMLibrary, Library};
 pub use render::render;

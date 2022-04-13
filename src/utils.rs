@@ -205,6 +205,48 @@ pub(crate) fn validate_zip_url(package: &fpm::Package) -> fpm::Result<()> {
     Ok(())
 }
 
+pub(crate) fn replace_markers(
+    s: &str,
+    config: &fpm::Config,
+    main_id: &str,
+    title: &str,
+    base_url: &str,
+    main_rt: &ftd::Document,
+) -> String {
+    s.replace("__ftd_doc_title__", title)
+        .replace(
+            "__ftd_canonical_url__",
+            config.package.generate_canonical_url(main_id).as_str(),
+        )
+        .replace("__ftd_js__", fpm::ftd_js().as_str())
+        .replace("__ftd_body_events__", main_rt.body_events.as_str())
+        .replace("__ftd_css__", fpm::ftd_css())
+        .replace("__fpm_js__", fpm::fpm_js())
+        .replace(
+            "__ftd_data_main__",
+            fpm::font::escape(
+                serde_json::to_string_pretty(&main_rt.data)
+                    .expect("failed to convert document to json")
+                    .as_str(),
+            )
+            .as_str(),
+        )
+        .replace(
+            "__ftd_external_children_main__",
+            fpm::font::escape(
+                serde_json::to_string_pretty(&main_rt.external_children)
+                    .expect("failed to convert document to json")
+                    .as_str(),
+            )
+            .as_str(),
+        )
+        .replace(
+            "__main__",
+            format!("{}{}", main_rt.html, config.get_font_style(),).as_str(),
+        )
+        .replace("__base_url__", base_url)
+}
+
 pub fn is_test() -> bool {
     std::env::args().any(|e| e == "--test")
 }
