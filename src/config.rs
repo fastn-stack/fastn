@@ -343,13 +343,22 @@ impl Config {
         id: &str,
         package: &fpm::Package,
     ) -> fpm::Result<fpm::File> {
-        self.get_files(package)
+        let file_name = get_file_name(id);
+        return self
+            .get_files(package)
             .await?
             .into_iter()
-            .find(|v| v.get_id().eq(id))
+            .find(|v| v.get_id().eq(file_name.as_str()))
             .ok_or_else(|| fpm::Error::UsageError {
                 message: format!("No such file found: {}", id),
-            })
+            });
+
+        fn get_file_name(id: &str) -> String {
+            if id.eq("/") {
+                return "index.ftd".to_string();
+            }
+            format!("{}.ftd", &id[1..id.len() - 1])
+        }
     }
 
     pub(crate) async fn get_assets(
