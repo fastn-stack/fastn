@@ -85,6 +85,9 @@ $processor$: toc
   url: crate/result/
 - `fpm::StaticFile`
   url: crate/static-file/
+- Private Stuff
+  - `fpm::utils`
+    url: crate/utils/
 - Dependencies
   - `ftd`: crate/deps/ftd/
   - `camino`: crate/deps/camino/

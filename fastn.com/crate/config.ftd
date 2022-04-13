@@ -31,7 +31,7 @@ impl fpm::Config {
 
 
 
--- ft.h1: `fpm::Config::attach_data_string()`
+-- ft.h1: `fpm::Config.attach_data_string()`
 
 This function can be used to attach json data to Config. This JSON data is
 available to every ftd file that uses [`get-data`
@@ -51,7 +51,7 @@ This should be called before [`fpm::render()`](crate/render/).
 Implementaiton note: This function internally calls `fpm::Config::attach_data()`.
 
 
--- ft.h1: `fpm::Config::attach_data()`
+-- ft.h1: `fpm::Config.attach_data()`
 
 This function can be used to attach json data to Config. This JSON data is
 available to every ftd file that uses [`get-data`
@@ -69,7 +69,7 @@ impl fpm::Config {
 This should be called before [`fpm::render()`](crate/render/).
 
 
--- ft.h1: `fpm::Config::get_file_by_id(&fpm::Package)`
+-- ft.h1: `fpm::Config.get_file_by_id(&fpm::Package)`
 
 Given the `id` of a document, this function returns the FTD source of the
 document.

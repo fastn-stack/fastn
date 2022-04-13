@@ -36,3 +36,20 @@ pub struct Package {
 -- ft.markdown:
 
 [`fpm::Font`](crate/font/).
+
+
+-- ft.h1: `fpm::Package::generate_canonical_url()`
+
+`FPM.ftd` file can contain `canonical-url` key in `fpm.package` declaration. If
+this key is present this function returns the canonical-url, else it returns
+empty string.
+
+-- ft.code:
+lang: rs
+
+pub fn fpm::Package::generate_canonical_url(&self, id: &str) -> String
+
+-- ft.markdown:
+
+`id` is the identifier of the document for which we want the canonical-url. `id`
+is appended to `canonical-url` found in `FPM.ftd` file.
