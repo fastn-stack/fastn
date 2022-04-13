@@ -7,7 +7,7 @@ pub async fn render(config: &fpm::Config, id: &str, base_url: &str) -> fpm::Resu
 
     let main = match file {
         fpm::File::Ftd(f) => f,
-        _ => unimplemented!(),
+        _ => unreachable!(),
     };
 
     let new_main = fpm::Document {
