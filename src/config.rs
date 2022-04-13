@@ -343,7 +343,7 @@ impl Config {
         id: &str,
         package: &fpm::Package,
     ) -> fpm::Result<fpm::File> {
-        let file_name = get_file_name(id);
+        let file_name = get_file_name(id)?;
         return self
             .get_files(package)
             .await?
@@ -353,11 +353,26 @@ impl Config {
                 message: format!("No such file found: {}", id),
             });
 
-        fn get_file_name(id: &str) -> String {
+        fn get_file_name(id: &str) -> fpm::Result<String> {
             if id.eq("/") {
-                return "index.ftd".to_string();
+                if camino::Utf8PathBuf::from("index.ftd".to_string()).exists() {
+                    return Ok("index.ftd".to_string());
+                }
+                if camino::Utf8PathBuf::from("README.md".to_string()).exists() {
+                    return Ok("README.md".to_string());
+                }
+                return Err(fpm::Error::UsageError {
+                    message: "File not found".to_string(),
+                });
             }
-            format!("{}.ftd", &id[1..id.len() - 1])
+            let mut id = id;
+            if let Some(i) = id.strip_suffix('/') {
+                id = i;
+            }
+            if let Some(i) = id.strip_prefix('/') {
+                id = i;
+            }
+            Ok(format!("{}.ftd", id))
         }
     }
 
