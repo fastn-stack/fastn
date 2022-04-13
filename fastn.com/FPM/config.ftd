@@ -11,7 +11,7 @@
 $processor$: toc
 
 - Docs: about/
-- `fpm` CLI Manual: usage/
+- `fpm` User Manual: usage/
 - Development: journal/
 - Themes: themes/
 
@@ -30,6 +30,8 @@ $processor$: toc
     url: /toc/
   - `$processor$: package-query`
     url: /package-query/
+  - `$processor$: get-data`
+    url: processors/get-data/
   - `import: fpm`
     url: /fpm-vars/
 - How To: /how-to/
@@ -47,11 +49,32 @@ $processor$: toc
 - Known Issues: /known-issues/
 
 
+-- fpm.toc-item list empty:
+
+-- fpm.toc-item list dev-section:
+$processor$: toc
+
+- Overview: journal/
+- Using `fpm` Crate: crate/
+
 -- fpm.toc-item list dev-toc:
 $processor$: toc
 
 - Roadmap: /roadmap/
 - Journal: /journal/
+
+-- fpm.toc-item list crate-toc:
+$processor$: toc
+
+- Overview: crate/
+- `fpm::Config`
+  url: crate/config/
+- `fpm::render`
+  url: crate/render/
+- `fpm::Result`
+  url: crate/result/
+- `fpm::Error`
+  url: crate/error/
 
 -- fpm.toc-item list themes-toc:
 $processor$: toc

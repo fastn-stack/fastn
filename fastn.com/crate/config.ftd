@@ -1,0 +1,69 @@
+-- ft.page-with-toc: `fpm::Config`
+toc: $config.crate-toc
+header-left: $config.dev-section
+header-right: $config.empty
+
+`fpm::Config` struct keeps track of configuration for a FPM package. In order
+to perform any operation on a package, this struct should be first created.
+
+`fpm::Config::read()` can be used to construct `fpm::Config` struct.
+
+
+
+
+-- ft.h1: `fpm::Config::read()`
+
+Currently `fpm::Config::read()` takes no parameters and assumes the current
+directory contains the `FPM.ftd` file.
+
+-- ft.code:
+lang: rs
+
+impl fpm::Config {
+    pub async fn read() -> fpm::Result<fpm::Config>
+}
+
+-- ft.markdown:
+
+`fpm::Config::read()` returns a [`fpm::Result`](crate/result/) of `fpm::Config`.
+
+
+
+
+
+-- ft.h1: `fpm::Config::attach_data_string()`
+
+This function can be used to attach json data to Config. This JSON data is
+available to every ftd file that uses [`get-data`
+processor](processors/get-data/).
+
+-- ft.code:
+lang: rs
+
+impl fpm::Config {
+    pub fn attach_data_string(&mut self, json: &str) -> fpm::Result<()>
+}
+
+-- ft.markdown:
+
+This should be called before [`fpm::render()`](crate/render/).
+
+Implementaiton note: This function internally calls `fpm::Config::attach_data()`.
+
+
+-- ft.h1: `fpm::Config::attach_json()`
+
+This function can be used to attach json data to Config. This JSON data is
+available to every ftd file that uses [`get-data`
+processor](processors/get-data/).
+
+-- ft.code:
+lang: rs
+
+impl fpm::Config {
+    pub fn attach_data(&mut self, data: &serde_json::Value) -> fpm::Result<()>
+}
+
+-- ft.markdown:
+
+This should be called before [`fpm::render()`](crate/render/).

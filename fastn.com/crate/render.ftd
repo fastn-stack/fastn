@@ -1,0 +1,20 @@
+-- ft.page-with-toc: `fpm::render`
+toc: $config.crate-toc
+header-left: $config.dev-section
+header-right: $config.empty
+
+
+`fpm::render()` renders a single ftd file that is part of current FPM package.
+
+-- ft.code:
+lang: rs
+
+pub async fn fpm::render(
+    config: &fpm::Config,
+    file: &str,  // eg index.ftd
+    base_url: &str,
+) -> fpm::Result<String>
+
+-- ft.markdown:
+
+`fpm::render()` returns `fpm::Result` of rendered HTML as `String`.
