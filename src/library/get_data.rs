@@ -27,7 +27,7 @@ pub fn processor(
     }
 
     if let Some((_, ref b)) = section.body {
-        return doc.from_json(&serde_json::from_str::<serde_json::Value>(&b)?, section);
+        return doc.from_json(&serde_json::from_str::<serde_json::Value>(b)?, section);
     }
 
     let caption = match section.caption {
@@ -53,5 +53,5 @@ pub fn processor(
         return doc.from_json(&serde_json::json!(val), section);
     }
 
-    return doc.from_json(&serde_json::json!(caption), section);
+    doc.from_json(&serde_json::json!(caption), section)
 }
