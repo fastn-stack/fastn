@@ -1,0 +1,22 @@
+-- ft.page-with-toc: `fpm::File`
+toc: $config.crate-toc
+header-left: $config.dev-section
+header-right: $config.empty
+
+`fpm::File` enum represents a file found in fpm package.
+
+-- ft.code:
+lang: rs
+
+#[derive(Debug, Clone)]
+pub enum fpm::File {
+    Ftd(fpm::Document),
+    Static(fpm::Static),
+    Markdown(fpm::Document),
+    Code(fpm::Document),
+    Image(fpm::Static),
+}
+
+-- ft.markdown:
+
+[`fpm::Document`](crate/document/). [`fpm::StaticFile`](crate/static-file/).

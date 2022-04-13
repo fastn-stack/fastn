@@ -1,0 +1,28 @@
+-- ft.page-with-toc: `fpm::Font`
+toc: $config.crate-toc
+header-left: $config.dev-section
+header-right: $config.empty
+
+`fpm::Font` struct keeps track of a font. Fonts are defined in `FPM.ftd` file
+and are stored in [`fpm::Package`](crate/package/) struct after parsing.
+
+-- ft.code:
+lang: rs
+
+#[derive(serde::Deserialize, Debug, Clone)]
+pub struct Font {
+    pub name: String,
+    woff: Option<String>,
+    woff2: Option<String>,
+    truetype: Option<String>,
+    opentype: Option<String>,
+    #[serde(rename = "embedded-opentype")]
+    embedded_opentype: Option<String>,
+    svg: Option<String>,
+    #[serde(rename = "unicode-range")]
+    unicode_range: Option<String>,
+    display: Option<String>,
+    style: Option<String>,
+    weight: Option<String>,
+    stretch: Option<String>,
+}

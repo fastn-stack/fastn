@@ -9,17 +9,14 @@ header-right: $config.empty
 lang: rs
 
 pub enum Error {
-    HttpError(Error),
-    IoError(Error),
-    ZipError(ZipError),
-    FTDError(Error),
-    PackageError {
-        message: String,
-    },
-    UsageError {
-        message: String,
-    },
-    IgnoreError(Error),
-    FromPathBufError(FromPathBufError),
+    HttpError(reqwest::Error),
+    IoError(std::io::Error),
+    ZipError(zip::result::ZipError),
+    FTDError(ftd::p1::Error),
+    PackageError { message: String },
+    UsageError { message: String },
+    IgnoreError(ignore::Error),
+    FromPathBufError(camino::FromPathBufError),
+    SerdeJsonError(serde_json::Error),
 }
 

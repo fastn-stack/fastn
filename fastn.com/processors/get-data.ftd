@@ -1,1 +1,72 @@
-get-
+-- ft.page-with-toc: `$processor$: get-data`
+toc: $ft.toc
+
+`get-data` processor is used to get data from
+["data"](crate/config/#fpm-config-attach-data-string).
+
+-- ft.code:
+lang: ftd
+
+\-- string foo:
+$processor$: get-data
+
+-- ft.markdown:
+
+Assuming `foo: "hello"` is part of "data", the variable `foo` will be get
+"hello" as the value.
+
+
+
+
+-- ft.h1: Key
+
+By default, the name of the variable or list where the data is being store is
+used as the key. You can overwrite the key using `key` attribute:
+
+-- ft.code:
+lang: ftd
+
+\-- string foo:
+$processor$: get-data
+key: some-other-key-instead-of-foo
+
+
+
+
+
+-- ft.h1: Default Value
+
+If the data is not found, we use the body as default value if body is available.
+
+-- ft.code:
+lang: ftd
+
+\-- string foo:
+$processor$: get-data
+
+"hello world"
+
+-- ft.markdown:
+
+The body must be valid json, compatible with the data type on which we are
+using the `get-data` processor.
+
+
+
+
+
+-- ft.h1: Default Value in Caption For Basic Types
+
+For basic types like `integer`, `boolean` etc, the default value can also be
+provided in the caption. E.g.
+
+-- ft.code:
+lang: ftd
+
+\-- string foo: hello world
+$processor$: get-data
+
+
+-- ft.markdown:
+
+Providing both `body` and `caption` when using `get-data` is an error.

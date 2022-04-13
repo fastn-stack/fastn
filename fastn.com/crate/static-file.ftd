@@ -1,0 +1,29 @@
+-- ft.page-with-toc: `fpm::StaticFile`
+toc: $config.crate-toc
+header-left: $config.dev-section
+header-right: $config.empty
+
+`fpm::StaticFile` struct keeps track of "static files".
+
+-- ft.code:
+lang: rs
+
+pub struct StaticFile {
+    pub id: String,
+    pub base_path: camino::Utf8PathBuf,
+}
+
+
+-- ft.markdown:
+
+- [camino](crate/deps/camino/)
+
+
+
+-- ft.h1: What is a "static file"?
+
+Static file is a file that is not ftd file nor code file. Code file is any file
+for which we have syntax highlighting support by.
+
+We detect this by finding the extension of the file and checking in
+`ftd::render::KNOWN_EXTENSIONS.contains(ext)`.

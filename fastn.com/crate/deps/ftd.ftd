@@ -1,0 +1,8 @@
+-- ft.page-with-toc: Dependency: `ftd`
+toc: $config.crate-toc
+header-left: $config.dev-section
+header-right: $config.empty
+
+
+We use [`ftd`](https://docs.rs/ftd/) crate which handles ftd grammer and
+compilation of ftd files in HTML etc.

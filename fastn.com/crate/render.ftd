@@ -6,6 +6,8 @@ header-right: $config.empty
 
 `fpm::render()` renders a single ftd file that is part of current FPM package.
 
+Implementation Note: This function is implemented in `src/render.rs`.
+
 -- ft.code:
 lang: rs
 

@@ -1,0 +1,8 @@
+-- ft.page-with-toc: Dependency: `camino`
+toc: $config.crate-toc
+header-left: $config.dev-section
+header-right: $config.empty
+
+
+We use [`camino`](https://docs.rs/camino/) crate which provides us "UTF-8
+encoded paths".

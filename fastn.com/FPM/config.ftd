@@ -69,12 +69,26 @@ $processor$: toc
 - Overview: crate/
 - `fpm::Config`
   url: crate/config/
+- `fpm::Document`
+  url: crate/document/
+- `fpm::Error`
+  url: crate/error/
+- `fpm::File`
+  url: crate/file/
+- `fpm::Font`
+  url: crate/font/
+- `fpm::Package`
+  url: crate/package/
 - `fpm::render`
   url: crate/render/
 - `fpm::Result`
   url: crate/result/
-- `fpm::Error`
-  url: crate/error/
+- `fpm::StaticFile`
+  url: crate/static-file/
+- Dependencies
+  - `ftd`: crate/deps/ftd/
+  - `camino`: crate/deps/camino/
+
 
 -- fpm.toc-item list themes-toc:
 $processor$: toc

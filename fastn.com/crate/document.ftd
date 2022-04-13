@@ -1,0 +1,19 @@
+-- ft.page-with-toc: `fpm::Document`
+toc: $config.crate-toc
+header-left: $config.dev-section
+header-right: $config.empty
+
+`fpm::Document` struct keeps track of a "document". Document is a [`file` in fpm
+package](crate/file/), which is either a ftd file, a markdown file, or a code
+file.
+
+-- ft.code:
+lang: rs
+
+#[derive(Debug, Clone)]
+pub struct Document {
+    pub package_name: String,
+    pub id: String,
+    pub content: String,
+    pub parent_path: String,
+}

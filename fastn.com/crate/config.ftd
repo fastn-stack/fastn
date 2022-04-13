@@ -51,7 +51,7 @@ This should be called before [`fpm::render()`](crate/render/).
 Implementaiton note: This function internally calls `fpm::Config::attach_data()`.
 
 
--- ft.h1: `fpm::Config::attach_json()`
+-- ft.h1: `fpm::Config::attach_data()`
 
 This function can be used to attach json data to Config. This JSON data is
 available to every ftd file that uses [`get-data`
@@ -67,3 +67,23 @@ impl fpm::Config {
 -- ft.markdown:
 
 This should be called before [`fpm::render()`](crate/render/).
+
+
+-- ft.h1: `fpm::Config::get_file_by_id(&fpm::Package)`
+
+Given the `id` of a document, this function returns the FTD source of the
+document.
+
+
+-- ft.code:
+lang: rs
+
+impl fpm::Config {
+    pub fn get_file_by_id(&self, id: &str) -> fpm::Result<fpm::File>
+}
+
+
+-- ft.markdown:
+
+Note this implements fallback feature in case this is a translated package.
+
