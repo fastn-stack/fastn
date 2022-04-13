@@ -15,6 +15,7 @@ mod document;
 mod font;
 mod i18n;
 mod library;
+mod render;
 mod snapshot;
 mod tracker;
 mod translation;
@@ -32,6 +33,7 @@ pub(crate) use dependency::Dependency;
 pub(crate) use document::{get_documents, get_file, paths_to_files, Document, File, Static};
 pub(crate) use font::Font;
 pub(crate) use library::{FPMLibrary, Library};
+pub use render::render;
 pub(crate) use snapshot::Snapshot;
 pub(crate) use tracker::Track;
 pub(crate) use translation::{TranslatedDocument, TranslationData};
@@ -388,6 +390,9 @@ pub enum Error {
 
     #[error("IoError: {}", _0)]
     ZipError(#[from] zip::result::ZipError),
+
+    #[error("SerdeJsonError: {}", _0)]
+    SerdeJsonError(#[from] serde_json::Error),
 
     #[error("FTDError: {}", _0)]
     FTDError(#[from] ftd::p1::Error),

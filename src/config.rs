@@ -1,6 +1,6 @@
 use std::convert::TryInto;
 
-/// `Config` struct keeps track of a few configuration parameters that is shared with the entire
+/// `Config` struct keeps track of configuration parameters that is shared with the entire
 /// program. It is constructed from the content of `FPM.ftd` file for the package.
 ///
 /// `Config` is created using `Config::read()` method, and should be constructed only once in the
@@ -157,7 +157,7 @@ impl Config {
     }
 
     /// `read()` is the way to read a Config.
-    pub async fn read() -> fpm::Result<Config> {
+    pub async fn read() -> fpm::Result<fpm::Config> {
         let original_directory: camino::Utf8PathBuf =
             std::env::current_dir()?.canonicalize()?.try_into()?;
         let root = match find_root_for_file(&original_directory, "FPM.ftd") {
@@ -289,6 +289,19 @@ impl Config {
             original_directory,
             extra_data: Default::default(),
         })
+    }
+
+    /// `attach_data_string()` sets the value of extra data in fpm::Config,
+    /// provided as `data` paramater of type `&str`
+    pub fn attach_data_string(&mut self, data: &str) -> fpm::Result<()> {
+        self.attach_data(serde_json::from_str(data)?)
+    }
+
+    /// `attach_data()` sets the value of extra data in fpm::Config,
+    /// provided as `data` paramater of type `serde_json::Value`
+    pub fn attach_data(&mut self, data: serde_json::Value) -> fpm::Result<()> {
+        self.extra_data = data;
+        Ok(())
     }
 }
 
