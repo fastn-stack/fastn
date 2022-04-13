@@ -29,7 +29,7 @@ pub struct Config {
     /// When printing filenames for users consumption we want to print the paths relative to the
     /// `original_directory`, so we keep track of the original directory.
     pub original_directory: camino::Utf8PathBuf,
-    pub extra_data: serde_json::Value,
+    pub extra_data: serde_json::Map<String, serde_json::Value>,
 }
 
 impl Config {
@@ -300,6 +300,14 @@ impl Config {
     /// `attach_data()` sets the value of extra data in fpm::Config,
     /// provided as `data` paramater of type `serde_json::Value`
     pub fn attach_data(&mut self, data: serde_json::Value) -> fpm::Result<()> {
+        let data = match data {
+            serde_json::Value::Object(o) => o,
+            t => {
+                return Err(fpm::Error::UsageError {
+                    message: format!("Expected object type, found: `{:?}`", t),
+                })
+            }
+        };
         self.extra_data = data;
         Ok(())
     }

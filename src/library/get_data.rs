@@ -8,14 +8,17 @@ pub fn processor(
     } else {
         section.name.to_string()
     };
-    if let serde_json::Value::Object(o) = &config.extra_data {
-        if let Some(data) = o.get(name.as_str()) {
-            return doc.from_json(data, section);
-        }
+    match config.extra_data.get(name.as_str()) {
+        Some(data) => doc.from_json(data, section),
+        _ => match section.body {
+            Some(ref b) => {
+                doc.from_json(&serde_json::from_str::<serde_json::Value>(&b.1)?, section)
+            }
+            _ => Err(ftd::p1::Error::ParseError {
+                message: format!("Value is not passed for {}", name),
+                doc_id: doc.name.to_string(),
+                line_number: section.line_number,
+            }),
+        },
     }
-    Err(ftd::p1::Error::ParseError {
-        message: format!("Value is not passed for {}", name),
-        doc_id: doc.name.to_string(),
-        line_number: section.line_number,
-    })
 }
