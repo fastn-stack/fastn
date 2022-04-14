@@ -13,14 +13,13 @@ to perform any operation on a package, this struct should be first created.
 
 -- ft.h1: `fpm::Config::read()`
 
-Currently `fpm::Config::read()` takes no parameters and assumes the current
-directory contains the `FPM.ftd` file.
+`fpm::Config::read()` finds the `FPM.ftd` and creates `fpm::Config` struct.
 
 -- ft.code:
 lang: rs
 
 impl fpm::Config {
-    pub async fn read() -> fpm::Result<fpm::Config>
+    pub async fn read(root: Option<camino::Utf8PathBuf>) -> fpm::Result<fpm::Config>
 }
 
 -- ft.markdown:
@@ -28,7 +27,14 @@ impl fpm::Config {
 `fpm::Config::read()` returns a [`fpm::Result`](crate/result/) of `fpm::Config`.
 
 
+-- ft.h2: `root`
 
+If `root` is passed as `None`, `fpm::Config::read()` looks for `FPM.ftd` file
+in the current directory, and if not found keeps searching for it in it's
+ancestors till it finds it.
+
+If `root` is passed, it is assumed to be the root of the fpm package, and
+`FPM.ftd` file must be present in this folder.
 
 
 -- ft.h1: `fpm::Config.attach_data_string()`
