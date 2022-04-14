@@ -157,53 +157,69 @@ impl Config {
     }
 
     /// `read()` is the way to read a Config.
-    pub async fn read() -> fpm::Result<fpm::Config> {
-        let original_directory: camino::Utf8PathBuf =
-            std::env::current_dir()?.canonicalize()?.try_into()?;
-        let root = match find_root_for_file(&original_directory, "FPM.ftd") {
-            Some(fpm_ftd_root) => fpm_ftd_root,
+    pub async fn read(root: Option<camino::Utf8PathBuf>) -> fpm::Result<fpm::Config> {
+        let (root, original_directory) = match root {
+            Some(r) => (r.clone(), r),
             None => {
-                // Look for FPM manifest
-                match find_root_for_file(&original_directory, "FPM.manifest.ftd") {
-                    Some(fpm_manifest_path) => {
-                        let doc =
-                            tokio::fs::read_to_string(fpm_manifest_path.join("FPM.manifest.ftd"));
-                        let lib = fpm::FPMLibrary::default();
-                        match ftd::p2::Document::from("FPM.manifest", doc.await?.as_str(), &lib) {
-                            Ok(fpm_manifest_processed) => {
-                                let k: String =
-                                    fpm_manifest_processed.get("FPM.manifest#package-root")?;
-                                let new_package_root = k
-                                    .as_str()
-                                    .split('/')
-                                    .fold(fpm_manifest_path, |accumulator, part| {
-                                        accumulator.join(part)
-                                    });
-                                if new_package_root.join("FPM.ftd").exists() {
-                                    new_package_root
-                                } else {
-                                    return Err(fpm::Error::PackageError {
-                                        message: "Can't find FPM.ftd. The path specified in FPM.manifest.ftd doesn't contain the FPM.ftd file".to_string(),
-                                    });
+                let original_directory: camino::Utf8PathBuf =
+                    std::env::current_dir()?.canonicalize()?.try_into()?;
+                (
+                    match find_root_for_file(&original_directory, "FPM.ftd") {
+                        Some(fpm_ftd_root) => fpm_ftd_root,
+                        None => {
+                            // Look for FPM manifest
+                            match find_root_for_file(&original_directory, "FPM.manifest.ftd") {
+                                Some(fpm_manifest_path) => {
+                                    let doc = tokio::fs::read_to_string(
+                                        fpm_manifest_path.join("FPM.manifest.ftd"),
+                                    );
+                                    let lib = fpm::FPMLibrary::default();
+                                    match ftd::p2::Document::from(
+                                        "FPM.manifest",
+                                        doc.await?.as_str(),
+                                        &lib,
+                                    ) {
+                                        Ok(fpm_manifest_processed) => {
+                                            let k: String = fpm_manifest_processed
+                                                .get("FPM.manifest#package-root")?;
+                                            let new_package_root =
+                                                k.as_str().split('/').fold(
+                                                    fpm_manifest_path,
+                                                    |accumulator, part| accumulator.join(part),
+                                                );
+                                            if new_package_root.join("FPM.ftd").exists() {
+                                                new_package_root
+                                            } else {
+                                                return Err(fpm::Error::PackageError {
+                                                message: "Can't find FPM.ftd. The path specified in FPM.manifest.ftd doesn't contain the FPM.ftd file".to_string(),
+                                            });
+                                            }
+                                        }
+                                        Err(e) => {
+                                            return Err(fpm::Error::PackageError {
+                                                message: format!(
+                                                    "failed to parse FPM.manifest.ftd: {:?}",
+                                                    &e
+                                                ),
+                                            });
+                                        }
+                                    }
+                                }
+                                None => {
+                                    return Err(fpm::Error::UsageError {
+                                    message:
+                                    "FPM.ftd or FPM.manifest.ftd not found in any parent directory"
+                                        .to_string(),
+                                });
                                 }
                             }
-                            Err(e) => {
-                                return Err(fpm::Error::PackageError {
-                                    message: format!("failed to parse FPM.manifest.ftd: {:?}", &e),
-                                });
-                            }
                         }
-                    }
-                    None => {
-                        return Err(fpm::Error::UsageError {
-                            message:
-                                "FPM.ftd or FPM.manifest.ftd not found in any parent directory"
-                                    .to_string(),
-                        });
-                    }
-                }
+                    },
+                    original_directory,
+                )
             }
         };
+
         let b = {
             let doc = tokio::fs::read_to_string(root.join("FPM.ftd"));
             let lib = fpm::FPMLibrary::default();

@@ -2,7 +2,7 @@
 async fn main() -> fpm::Result<()> {
     let matches = app(authors(), version()).get_matches();
 
-    let config = fpm::Config::read().await?;
+    let config = fpm::Config::read(None).await?;
 
     if matches.subcommand_matches("update").is_some() {
         fpm::update(&config).await?;
