@@ -19,7 +19,7 @@ to perform any operation on a package, this struct should be first created.
 lang: rs
 
 impl fpm::Config {
-    pub async fn read(root: Option<camino::Utf8PathBuf>) -> fpm::Result<fpm::Config>
+    pub async fn read(root: Option<String>) -> fpm::Result<fpm::Config>
 }
 
 -- ft.markdown:

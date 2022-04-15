@@ -28,16 +28,30 @@ So links never break (and original author can keep updating document URL at whim
 (on how having article.page allows us to get just the content of a page, without
 header/sidebar/footer etc).
 
+-- ft.h1: `fpm::Config::read()`'s `root` should be `String`
+
+15th Apr 2022
+
+Earlier it was `camino::Utf8PathBuf`. Since `read()` is a public method, anyone
+calling `read()` must take a dependency on `camino`. So we changed the type of
+`root` to `Option<String>`.
+
+`ftd_django`, the first external user of `fpm::Config::read()` will have
+`String` to begin with.
+
+[Doc PR](). [Code PR](https://github.com/FifthTry/fpm/pull/158).
+
 -- ft.h1: `fpm::Config::read()` now accepts optional root
 
 14th Apr 2022
 
-In ftd-py's `ftd_django` we want the fpm package to be configurable, and stored
-in arbitrary named folder. So far `fpm` worked from a directory inside a FPM
-package. In `ftd_django` use case, the fpm package would be in some other
-folder.
+In [ftd-py](https://fifthtry.github.io/python.ftd.dev/)'s `ftd_django` we want
+the fpm package to be configurable, and stored in arbitrary named folder. So
+far `fpm` worked from a directory inside a FPM package. In `ftd_django` use
+case, the fpm package would be in some other folder.
 
-To handle this [the code we tried was](https://github.com/FifthTry/ftd-py/blob/4054c3b3b4b5eeacce3a682e571bba6d6f154b75/ftd_django/src/library.py#L10-L16):
+To handle this [the code we tried
+was](https://github.com/FifthTry/ftd-py/blob/4054c3b3b4b5eeacce3a682e571bba6d6f154b75/ftd_django/src/library.py#L10-L16):
 
 -- ft.code:
 lang: py
