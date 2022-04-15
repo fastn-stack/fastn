@@ -157,9 +157,12 @@ impl Config {
     }
 
     /// `read()` is the way to read a Config.
-    pub async fn read(root: Option<camino::Utf8PathBuf>) -> fpm::Result<fpm::Config> {
+    pub async fn read(root: Option<String>) -> fpm::Result<fpm::Config> {
         let (root, original_directory) = match root {
-            Some(r) => (r.clone(), r),
+            Some(r) => {
+                let r: camino::Utf8PathBuf = r.into();
+                (r.clone(), r)
+            }
             None => {
                 let original_directory: camino::Utf8PathBuf =
                     std::env::current_dir()?.canonicalize()?.try_into()?;
