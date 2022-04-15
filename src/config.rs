@@ -362,7 +362,7 @@ impl Config {
         id: &str,
         package: &fpm::Package,
     ) -> fpm::Result<fpm::File> {
-        let file_name = get_file_name(id)?;
+        let file_name = get_file_name(&self.root, id)?;
         return self
             .get_files(package)
             .await?
@@ -372,12 +372,12 @@ impl Config {
                 message: format!("No such file found: {}", id),
             });
 
-        fn get_file_name(id: &str) -> fpm::Result<String> {
+        fn get_file_name(root: &camino::Utf8PathBuf, id: &str) -> fpm::Result<String> {
             if id.eq("/") {
-                if camino::Utf8PathBuf::from("index.ftd".to_string()).exists() {
+                if root.join("index.ftd".to_string()).exists() {
                     return Ok("index.ftd".to_string());
                 }
-                if camino::Utf8PathBuf::from("README.md".to_string()).exists() {
+                if root.join("README.md".to_string()).exists() {
                     return Ok("README.md".to_string());
                 }
                 return Err(fpm::Error::UsageError {
@@ -391,13 +391,13 @@ impl Config {
             if let Some(i) = id.strip_prefix('/') {
                 id = i;
             }
-            if camino::Utf8PathBuf::from(format!("{}.ftd", id)).exists() {
+            if root.join(format!("{}.ftd", id)).exists() {
                 return Ok(format!("{}.ftd", id));
             }
-            if camino::Utf8PathBuf::from(format!("{}/index.ftd", id)).exists() {
+            if root.join(format!("{}/index.ftd", id)).exists() {
                 return Ok(format!("{}/index.ftd", id));
             }
-            if camino::Utf8PathBuf::from(format!("{}/README.md", id)).exists() {
+            if root.join(format!("{}/README.md", id)).exists() {
                 return Ok(format!("{}/README.md", id));
             }
             Err(fpm::Error::UsageError {
