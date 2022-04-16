@@ -160,7 +160,10 @@ impl Config {
     pub async fn read(root: Option<String>) -> fpm::Result<fpm::Config> {
         let (root, original_directory) = match root {
             Some(r) => {
-                let r: camino::Utf8PathBuf = r.into();
+                let r: camino::Utf8PathBuf = std::fs::canonicalize(r.as_str())?
+                    .to_str()
+                    .map_or_else(|| r, |r| r.to_string())
+                    .into();
                 (r.clone(), r)
             }
             None => {
