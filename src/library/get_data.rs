@@ -26,32 +26,33 @@ pub fn processor(
         return doc.from_json(data, section);
     }
 
-    if let Some((_, ref b)) = section.body {
-        return doc.from_json(&serde_json::from_str::<serde_json::Value>(b)?, section);
-    }
-
-    let caption = match section.caption {
-        Some(ref caption) => caption,
-        None => {
-            return Err(ftd::p1::Error::ParseError {
-                message: format!("Value is not passed for {}", name),
-                doc_id: doc.name.to_string(),
-                line_number: section.line_number,
-            })
-        }
+    let data = if let Some((_, ref body)) = section.body {
+        body
+    } else if let Some(ref caption) = section.caption {
+        caption
+    } else {
+        return Err(ftd::p1::Error::ParseError {
+            message: format!("Value is not passed for {}", name),
+            doc_id: doc.name.to_string(),
+            line_number: section.line_number,
+        });
     };
 
-    if let Ok(val) = caption.parse::<bool>() {
+    if let Ok(val) = data.parse::<bool>() {
         return doc.from_json(&serde_json::json!(val), section);
     }
 
-    if let Ok(val) = caption.parse::<i64>() {
+    if let Ok(val) = data.parse::<i64>() {
         return doc.from_json(&serde_json::json!(val), section);
     }
 
-    if let Ok(val) = caption.parse::<f64>() {
+    if let Ok(val) = data.parse::<f64>() {
         return doc.from_json(&serde_json::json!(val), section);
     }
 
-    doc.from_json(&serde_json::json!(caption), section)
+    if let Ok(val) = serde_json::from_str::<serde_json::Value>(data) {
+        return doc.from_json(&val, section);
+    }
+
+    doc.from_json(&serde_json::json!(data), section)
 }
