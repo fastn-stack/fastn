@@ -20,3 +20,6 @@ pub async fn fpm::render(
 -- ft.markdown:
 
 `fpm::render()` returns `fpm::Result` of rendered HTML as `String`.
+
+`fpm::render()` gets ["data" for `get-data`](processors/get-data/) via
+[`fpm::Config`](crate/config/#fpm-config-attach-data).
