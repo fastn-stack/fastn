@@ -401,15 +401,11 @@ impl Config {
                     });
                 }
             };
-            if id.eq("FPM.ftd") {
-                return Ok(None);
-            }
             let v = if let Some((v, _)) = id.split_once('/') {
                 v
             } else {
-                return Err(fpm::Error::UsageError {
-                    message: format!("{:?} should be inside version folder", x),
-                });
+                // ignoring the files not present in version folder
+                return Ok(None);
             };
 
             let number = if let Some(d) = v.strip_prefix('v') {
