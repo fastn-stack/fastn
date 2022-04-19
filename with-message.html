@@ -16,16 +16,8 @@
         <script>
             __ftd_js____ftd_body_events__
 
-            window.ftd.init(
-                "message",
-                JSON.parse(document.getElementById("ftd-data-message").innerText),
-                JSON.parse(document.getElementById("ftd-external-children-message").innerText)
-            );
-            window.ftd.init(
-                "main",
-                JSON.parse(document.getElementById("ftd-data-main").innerText),
-                JSON.parse(document.getElementById("ftd-external-children-main").innerText)
-            );
+            window.ftd.init("main", "ftd-data-main", "ftd-external-children-main");
+            window.ftd.init("message", "ftd-data-message", "ftd-external-children-message");
 
             __fpm_js__
         </script>
