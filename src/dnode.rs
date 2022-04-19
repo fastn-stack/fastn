@@ -71,7 +71,7 @@ impl DNode {
                 .iter()
                 .map(|v| v.to_html(id))
                 .collect::<Vec<String>>()
-                .join("\n"),
+                .join(""),
         };
 
         // TODO: indent things properly

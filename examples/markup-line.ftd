@@ -3,7 +3,7 @@ dark: green
 
 -- ftd.text:
 
-hello {world}.
+hello "{world}" {world} {world}.
 
 -- ftd.text world: World
 color: $green
