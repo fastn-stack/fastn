@@ -1,7 +1,7 @@
 -- ft.page-with-toc: `fpm::utils`
 toc: $config.crate-toc
-header-left: $config.dev-section
-header-right: $config.empty
+sub-sections: $config.dev-section
+extra: $config.empty
 
 `fpm::utils` is a bunch of private helper functions.
 
