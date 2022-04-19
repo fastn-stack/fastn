@@ -337,7 +337,7 @@ impl Config {
     pub(crate) async fn get_versions(
         &self,
         package: &fpm::Package,
-    ) -> fpm::Result<std::collections::HashMap<i64, Vec<fpm::File>>> {
+    ) -> fpm::Result<std::collections::HashMap<i32, Vec<fpm::File>>> {
         let path = if let Some(package_fpm_path) = &package.fpm_path {
             // TODO: Unwrap?
             package_fpm_path.parent().unwrap().to_owned()
@@ -349,7 +349,7 @@ impl Config {
         let mut ignore_paths = ignore::WalkBuilder::new(&path);
         ignore_paths.overrides(fpm::file::package_ignores(package, &path)?);
 
-        let mut hash: std::collections::HashMap<i64, Vec<fpm::File>> =
+        let mut hash: std::collections::HashMap<i32, Vec<fpm::File>> =
             std::collections::HashMap::new();
 
         let all_files = ignore_paths
@@ -368,7 +368,12 @@ impl Config {
             } else {
                 continue;
             };
-            let file = fpm::get_file(package.name.to_string(), &file, &path).await?;
+            let file = fpm::get_file(
+                package.name.to_string(),
+                &file,
+                &path.join(format!("v{}", version)),
+            )
+            .await?;
             if let Some(files) = hash.get_mut(&version) {
                 files.push(file)
             } else {
@@ -380,7 +385,7 @@ impl Config {
         fn get_version(
             x: &camino::Utf8PathBuf,
             path: &camino::Utf8PathBuf,
-        ) -> fpm::Result<Option<i64>> {
+        ) -> fpm::Result<Option<i32>> {
             let id = match std::fs::canonicalize(x)?.to_str().unwrap().rsplit_once(
                 if path.as_str().ends_with(std::path::MAIN_SEPARATOR) {
                     path.as_str().to_string()
@@ -415,7 +420,7 @@ impl Config {
                 });
             };
             number
-                .parse::<i64>()
+                .parse::<i32>()
                 .map(|v| Some(v))
                 .map_err(|_| fpm::Error::UsageError {
                     message: format!(

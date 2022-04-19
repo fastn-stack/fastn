@@ -17,6 +17,15 @@ impl File {
             Self::Image(a) => a.id.clone(),
         }
     }
+    pub fn set_id(&mut self, new_id: &str) {
+        *(match self {
+            Self::Ftd(a) => &mut a.id,
+            Self::Static(a) => &mut a.id,
+            Self::Markdown(a) => &mut a.id,
+            Self::Code(a) => &mut a.id,
+            Self::Image(a) => &mut a.id,
+        }) = new_id.to_string();
+    }
     pub fn get_base_path(&self) -> String {
         match self {
             Self::Ftd(a) => a.parent_path.to_string(),

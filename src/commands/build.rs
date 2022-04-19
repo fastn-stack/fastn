@@ -49,35 +49,36 @@ pub async fn build(
     if config.package.versioned {
         fpm::version::build_version(config, file, base_url, ignore_failed, &asset_documents)
             .await?;
+    } else {
+        match (
+            config.package.translation_of.as_ref(),
+            config.package.translations.has_elements(),
+        ) {
+            (Some(_), true) => {
+                // No package can be both a translation of something and has its own
+                // translations, when building `config` we ensured this was rejected
+                unreachable!()
+            }
+            (Some(original), false) => {
+                build_with_original(
+                    config,
+                    original,
+                    file,
+                    base_url,
+                    ignore_failed,
+                    &asset_documents,
+                )
+                .await
+            }
+            (None, false) => {
+                build_simple(config, file, base_url, ignore_failed, &asset_documents).await
+            }
+            (None, true) => {
+                build_with_translations(config, file, base_url, ignore_failed, &asset_documents)
+                    .await
+            }
+        }?;
     }
-
-    match (
-        config.package.translation_of.as_ref(),
-        config.package.translations.has_elements(),
-    ) {
-        (Some(_), true) => {
-            // No package can be both a translation of something and has its own
-            // translations, when building `config` we ensured this was rejected
-            unreachable!()
-        }
-        (Some(original), false) => {
-            build_with_original(
-                config,
-                original,
-                file,
-                base_url,
-                ignore_failed,
-                &asset_documents,
-            )
-            .await
-        }
-        (None, false) => {
-            build_simple(config, file, base_url, ignore_failed, &asset_documents).await
-        }
-        (None, true) => {
-            build_with_translations(config, file, base_url, ignore_failed, &asset_documents).await
-        }
-    }?;
 
     for dep in dependencies {
         let static_files = std::collections::BTreeMap::from_iter(
