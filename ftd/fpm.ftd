@@ -1,5 +1,6 @@
 -- record package-data:
 caption name:
+boolean versioned: false
 optional body about:
 optional string zip:
 optional string language:

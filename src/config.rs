@@ -334,6 +334,98 @@ impl Config {
         Ok(())
     }
 
+    pub(crate) async fn get_versions(
+        &self,
+        package: &fpm::Package,
+    ) -> fpm::Result<std::collections::HashMap<i64, Vec<fpm::File>>> {
+        let path = if let Some(package_fpm_path) = &package.fpm_path {
+            // TODO: Unwrap?
+            package_fpm_path.parent().unwrap().to_owned()
+        } else if package.name.eq(&self.package.name) {
+            self.root.clone()
+        } else {
+            self.packages_root.clone().join(package.name.as_str())
+        };
+        let mut ignore_paths = ignore::WalkBuilder::new(&path);
+        ignore_paths.overrides(fpm::file::package_ignores(package, &path)?);
+
+        let mut hash: std::collections::HashMap<i64, Vec<fpm::File>> =
+            std::collections::HashMap::new();
+
+        let all_files = ignore_paths
+            .build()
+            .into_iter()
+            .flatten()
+            .map(|x| camino::Utf8PathBuf::from_path_buf(x.into_path()).unwrap()) //todo: improve error message
+            .collect::<Vec<camino::Utf8PathBuf>>();
+
+        for file in all_files {
+            if file.is_dir() {
+                continue;
+            }
+            let version = if let Some(v) = get_version(&file, &path)? {
+                v
+            } else {
+                continue;
+            };
+            let file = fpm::get_file(package.name.to_string(), &file, &path).await?;
+            if let Some(files) = hash.get_mut(&version) {
+                files.push(file)
+            } else {
+                hash.insert(version, vec![file]);
+            }
+        }
+        return Ok(hash);
+
+        fn get_version(
+            x: &camino::Utf8PathBuf,
+            path: &camino::Utf8PathBuf,
+        ) -> fpm::Result<Option<i64>> {
+            let id = match std::fs::canonicalize(x)?.to_str().unwrap().rsplit_once(
+                if path.as_str().ends_with(std::path::MAIN_SEPARATOR) {
+                    path.as_str().to_string()
+                } else {
+                    format!("{}{}", path, std::path::MAIN_SEPARATOR)
+                }
+                .as_str(),
+            ) {
+                Some((_, id)) => id.to_string(),
+                None => {
+                    return Err(fpm::Error::UsageError {
+                        message: format!("{:?} should be a file", x),
+                    });
+                }
+            };
+            if id.eq("FPM.ftd") {
+                return Ok(None);
+            }
+            let v = if let Some((v, _)) = id.split_once('/') {
+                v
+            } else {
+                return Err(fpm::Error::UsageError {
+                    message: format!("{:?} should be inside version folder", x),
+                });
+            };
+
+            let number = if let Some(d) = v.strip_prefix('v') {
+                d
+            } else {
+                return Err(fpm::Error::UsageError {
+                    message: format!("{:?} should be inside version folder", x),
+                });
+            };
+            number
+                .parse::<i64>()
+                .map(|v| Some(v))
+                .map_err(|_| fpm::Error::UsageError {
+                    message: format!(
+                        "Folder should be structured as `v<integer>`, found: `{:?}`",
+                        x
+                    ),
+                })
+        }
+    }
+
     pub(crate) async fn get_files(&self, package: &fpm::Package) -> fpm::Result<Vec<fpm::File>> {
         let path = if let Some(package_fpm_path) = &package.fpm_path {
             // TODO: Unwrap?
@@ -473,6 +565,7 @@ pub(crate) fn find_root_for_file(
 #[derive(serde::Deserialize, Debug, Clone)]
 pub(crate) struct PackageTemp {
     pub name: String,
+    pub versioned: bool,
     #[serde(rename = "translation-of")]
     pub translation_of: Option<String>,
     #[serde(rename = "translation")]
@@ -502,6 +595,7 @@ impl PackageTemp {
 
         fpm::Package {
             name: self.name,
+            versioned: self.versioned,
             translation_of: Box::new(translation_of),
             translations,
             language: self.language,
@@ -522,6 +616,7 @@ impl PackageTemp {
 #[derive(Debug, Clone)]
 pub struct Package {
     pub name: String,
+    pub versioned: bool,
     pub translation_of: Box<Option<Package>>,
     pub translations: Vec<Package>,
     pub language: Option<String>,
@@ -541,7 +636,6 @@ pub struct Package {
     ///
     /// Note that this too is kind of bad design, we will move fonts to `fpm::Package` struct soon.
     pub fonts: Vec<fpm::Font>,
-
     pub import_auto_imports_from_original: bool,
 }
 
@@ -549,6 +643,7 @@ impl Package {
     pub fn new(name: &str) -> fpm::Package {
         fpm::Package {
             name: name.to_string(),
+            versioned: false,
             translation_of: Box::new(None),
             translations: vec![],
             language: None,

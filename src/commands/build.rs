@@ -46,6 +46,11 @@ pub async fn build(
         );
     }
 
+    if config.package.versioned {
+        fpm::version::build_version(config, file, base_url, ignore_failed, &asset_documents)
+            .await?;
+    }
+
     match (
         config.package.translation_of.as_ref(),
         config.package.translations.has_elements(),

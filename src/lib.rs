@@ -19,6 +19,7 @@ mod render;
 mod snapshot;
 mod tracker;
 mod translation;
+mod version;
 
 pub(crate) use auto_import::AutoImport;
 pub(crate) use commands::build::process_file;
