@@ -168,6 +168,7 @@ async fn build_with_translations(
             base_url,
             skip_failed,
             asset_documents,
+            None,
         )
         .await?;
     }
@@ -322,6 +323,7 @@ async fn process_files(
             base_url,
             skip_failed,
             asset_documents,
+            None,
         )
         .await?
     }
@@ -339,6 +341,7 @@ pub(crate) async fn process_file(
     base_url: &str,
     skip_failed: bool,
     asset_documents: &std::collections::HashMap<String, String>,
+    original_id: Option<String>,
 ) -> fpm::Result<()> {
     use std::io::Write;
 
@@ -374,7 +377,7 @@ pub(crate) async fn process_file(
                 }
             }
             (fpm::File::Static(main_sa), fpm::File::Static(_)) => {
-                process_static(main_sa, &config.root, package).await?
+                process_static(main_sa, &config.root, package, original_id).await?
             }
             (fpm::File::Code(main_doc), fpm::File::Code(fallback_doc)) => {
                 process_static(
@@ -384,6 +387,7 @@ pub(crate) async fn process_file(
                     },
                     &config.root,
                     package,
+                    original_id,
                 )
                 .await?;
                 let resp = process_code(
@@ -408,7 +412,7 @@ pub(crate) async fn process_file(
                 }
             }
             (fpm::File::Image(main_doc), fpm::File::Image(fallback_doc)) => {
-                process_static(main_doc, &config.root, package).await?;
+                process_static(main_doc, &config.root, package, original_id).await?;
                 let resp = process_image(
                     config,
                     main_doc,
@@ -497,7 +501,7 @@ pub(crate) async fn process_file(
                 }
             }
         }
-        fpm::File::Static(sa) => process_static(sa, &config.root, package).await?,
+        fpm::File::Static(sa) => process_static(sa, &config.root, package, original_id).await?,
         fpm::File::Markdown(doc) => {
             let resp = process_markdown(
                 config,
@@ -521,7 +525,7 @@ pub(crate) async fn process_file(
             }
         }
         fpm::File::Image(main_doc) => {
-            process_static(main_doc, &config.root, package).await?;
+            process_static(main_doc, &config.root, package, original_id).await?;
             let resp = process_image(
                 config,
                 main_doc,
@@ -552,6 +556,7 @@ pub(crate) async fn process_file(
                 },
                 &config.root,
                 package,
+                original_id,
             )
             .await?;
             let resp = process_code(
@@ -1224,10 +1229,11 @@ async fn process_static(
     sa: &fpm::Static,
     base_path: &camino::Utf8Path,
     package: &fpm::Package,
+    original_id: Option<String>,
 ) -> fpm::Result<()> {
-    copy_to_build(sa, base_path, package)?;
+    copy_to_build(sa, base_path, package, &original_id)?;
     if let Some(original_package) = package.translation_of.as_ref() {
-        copy_to_build(sa, base_path, original_package)?;
+        copy_to_build(sa, base_path, original_package, &original_id)?;
     }
     return Ok(());
 
@@ -1235,17 +1241,24 @@ async fn process_static(
         sa: &fpm::Static,
         base_path: &camino::Utf8Path,
         package: &fpm::Package,
+        original_id: &Option<String>,
     ) -> fpm::Result<()> {
         let build_path = base_path
             .join(".build")
             .join("-")
             .join(package.name.as_str());
+        let original_id = if let Some(id) = original_id {
+            id.as_str()
+        } else {
+            sa.id.as_str()
+        };
+
         std::fs::create_dir_all(&build_path)?;
         if let Some((dir, _)) = sa.id.rsplit_once(std::path::MAIN_SEPARATOR) {
             std::fs::create_dir_all(&build_path.join(dir))?;
         }
         std::fs::copy(
-            sa.base_path.join(sa.id.as_str()),
+            sa.base_path.join(original_id),
             build_path.join(sa.id.as_str()),
         )?;
 

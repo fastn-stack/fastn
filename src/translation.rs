@@ -96,6 +96,7 @@ impl TranslatedDocument {
             base_url,
             skip_failed,
             asset_documents,
+            None,
         )
         .await?;
         return Ok(());

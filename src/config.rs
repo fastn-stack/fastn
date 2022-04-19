@@ -363,15 +363,15 @@ impl Config {
             if file.is_dir() {
                 continue;
             }
-            let version = if let Some(v) = get_version(&file, &path)? {
-                v
-            } else {
-                continue;
-            };
+            let version = get_version(&file, &path)?;
             let file = fpm::get_file(
                 package.name.to_string(),
                 &file,
-                &path.join(format!("v{}", version)),
+                &(if version.eq(&0) {
+                    path.to_owned()
+                } else {
+                    path.join(format!("v{}", version))
+                }),
             )
             .await?;
             if let Some(files) = hash.get_mut(&version) {
@@ -382,10 +382,7 @@ impl Config {
         }
         return Ok(hash);
 
-        fn get_version(
-            x: &camino::Utf8PathBuf,
-            path: &camino::Utf8PathBuf,
-        ) -> fpm::Result<Option<i32>> {
+        fn get_version(x: &camino::Utf8PathBuf, path: &camino::Utf8PathBuf) -> fpm::Result<i32> {
             let id = match std::fs::canonicalize(x)?.to_str().unwrap().rsplit_once(
                 if path.as_str().ends_with(std::path::MAIN_SEPARATOR) {
                     path.as_str().to_string()
@@ -401,29 +398,22 @@ impl Config {
                     });
                 }
             };
-            let v = if let Some((v, _)) = id.split_once('/') {
-                v
+            let number = if let Some(number) = id
+                .split_once('/')
+                .map(|(v, _)| v.strip_prefix('v'))
+                .flatten()
+            {
+                number
             } else {
-                // ignoring the files not present in version folder
-                return Ok(None);
+                // 0 is base version
+                return Ok(0);
             };
-
-            let number = if let Some(d) = v.strip_prefix('v') {
-                d
-            } else {
-                return Err(fpm::Error::UsageError {
-                    message: format!("{:?} should be inside version folder", x),
-                });
-            };
-            number
-                .parse::<i32>()
-                .map(|v| Some(v))
-                .map_err(|_| fpm::Error::UsageError {
-                    message: format!(
-                        "Folder should be structured as `v<integer>`, found: `{:?}`",
-                        x
-                    ),
-                })
+            number.parse::<i32>().map_err(|_| fpm::Error::UsageError {
+                message: format!(
+                    "Folder should be structured as `v<integer>`, found: `{:?}`",
+                    x
+                ),
+            })
         }
     }
 

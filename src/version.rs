@@ -6,7 +6,7 @@ pub(crate) async fn build_version(
     asset_documents: &std::collections::HashMap<String, String>,
 ) -> fpm::Result<()> {
     let versioned_documents = config.get_versions(&config.package).await?;
-    let mut index = 1;
+    let mut index = 0;
     let mut documents = std::collections::BTreeMap::new();
     loop {
         if let Some(doc) = versioned_documents.get(&index) {
@@ -14,9 +14,16 @@ pub(crate) async fn build_version(
         } else {
             break;
         }
+        if index.eq(&0) {
+            index += 1;
+            continue;
+        }
         for doc in documents.values() {
             let mut doc = doc.clone();
             let id = doc.get_id();
+            if id.eq("FPM.ftd") {
+                continue;
+            }
             doc.set_id(format!("v{}/{}", index, id).as_str());
             fpm::process_file(
                 config,
@@ -28,6 +35,7 @@ pub(crate) async fn build_version(
                 base_url,
                 skip_failed,
                 asset_documents,
+                Some(id),
             )
             .await?;
         }
@@ -44,6 +52,7 @@ pub(crate) async fn build_version(
             base_url,
             skip_failed,
             asset_documents,
+            None,
         )
         .await?;
     }
