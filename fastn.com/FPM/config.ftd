@@ -7,7 +7,7 @@
 -- ft.github: https://github.com/fifthtry/fpm
 -- ft.site-url: /
 
--- ft.header-toc:
+-- ft.sections:
 $processor$: toc
 
 - Docs: about/

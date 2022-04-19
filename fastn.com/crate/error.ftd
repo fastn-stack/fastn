@@ -1,7 +1,7 @@
 -- ft.page-with-toc: `fpm::Error`
 toc: $config.crate-toc
-header-left: $config.dev-section
-header-right: $config.empty
+sub-sections: $config.dev-section
+extra: $config.empty
 
 `fpm::Error` is the main Error enum that is returned by most of our functions.
 

@@ -2,8 +2,8 @@
 
 -- ft.page-with-toc: FPM Journal
 toc: $config.dev-toc
-header-left: $config.dev-section
-header-right: $config.empty
+sub-sections: $config.dev-section
+extra: $config.empty
 
 
 -- ft.h1: Thoughts: Browsing History
