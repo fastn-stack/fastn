@@ -1,6 +1,6 @@
 -- ft.page-with-toc: Why Not MDX?
 toc: $config.alternatives-toc
-header-left: $config.why-header
+sub-sections: $config.why-header
 
 -- ft.markdown: 
 

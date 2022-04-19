@@ -5,7 +5,7 @@
 -- ft.site-name: FTD
 
 
--- ft.header-toc:
+-- ft.sections:
 $processor$: toc
 
 - Why FTD?: /why/
@@ -62,7 +62,7 @@ $processor$: toc
 
 - Start Here: /docs/
 - Data Modeling: /data-modeling/
-- UI Components: /ui/
+- UI: /ui/
 - API: /reading-data/
 - Development: /development/
 

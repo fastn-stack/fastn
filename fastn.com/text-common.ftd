@@ -1,5 +1,5 @@
 -- ft.page-with-toc: Common Text Attributes
 toc: $config.api-toc
-header-left: $config.doc-header
+sub-sections: $config.doc-header
 
 

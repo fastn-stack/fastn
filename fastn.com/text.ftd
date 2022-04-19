@@ -1,6 +1,6 @@
 -- ft.page-with-toc: Text
 toc: $config.api-toc
-header-left: $config.doc-header
+sub-sections: $config.doc-header
 
 
 -- ftd.column:

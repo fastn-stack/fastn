@@ -2,7 +2,7 @@
 
 -- ft.page-with-toc: `$loop$`: Looping Over Lists
 toc: $config.api-toc
-header-left: $config.doc-header
+sub-sections: $config.doc-header
     
 -- ft.markdown: 
 

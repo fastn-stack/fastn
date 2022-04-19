@@ -1,6 +1,6 @@
 -- ft.page-with-toc: React Bangalore - Jan 2022
 toc: $config.news-toc
-header-left: $config.news-header
+sub-sections: $config.news-header
 
 -- ft.markdown: 
 

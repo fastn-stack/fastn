@@ -1,6 +1,6 @@
 -- ft.page-with-toc: Decimal
 toc: $config.api-toc
-header-left: $config.doc-header
+sub-sections: $config.doc-header
 
 -- ft.markdown: 
 
