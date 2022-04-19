@@ -61,7 +61,7 @@ $processor$: toc
 $processor$: toc
 
 - Start Here: /docs/
-- Data Modeling: /data-modeling/
+- Data Modelling: /data-modelling/
 - UI: /ui/
 - API: /reading-data/
 - Development: /development/
