@@ -2007,25 +2007,6 @@
           "condition": true,
           "dependency_type": "Variable",
           "parameters": {
-            "architecture-diagram.ftd#76c2c4": {
-              "default": {
-                "important": false,
-                "reference": null,
-                "value": "light"
-              },
-              "value": {
-                "important": false,
-                "reference": null,
-                "value": "dark"
-              }
-            }
-          },
-          "remaining": null
-        },
-        {
-          "condition": true,
-          "dependency_type": "Variable",
-          "parameters": {
             "architecture-diagram.ftd#d2d2ce": {
               "default": {
                 "important": false,
@@ -2046,25 +2027,6 @@
           "dependency_type": "Variable",
           "parameters": {
             "architecture-diagram.ftd#d9e7f8": {
-              "default": {
-                "important": false,
-                "reference": null,
-                "value": "light"
-              },
-              "value": {
-                "important": false,
-                "reference": null,
-                "value": "dark"
-              }
-            }
-          },
-          "remaining": null
-        },
-        {
-          "condition": true,
-          "dependency_type": "Variable",
-          "parameters": {
-            "architecture-diagram.ftd#dc9eb3": {
               "default": {
                 "important": false,
                 "reference": null,
@@ -2197,64 +2159,7 @@
           "condition": true,
           "dependency_type": "Variable",
           "parameters": {
-            "ft#code-bg": {
-              "default": {
-                "important": false,
-                "reference": null,
-                "value": "light"
-              },
-              "value": {
-                "important": false,
-                "reference": null,
-                "value": "dark"
-              }
-            }
-          },
-          "remaining": null
-        },
-        {
-          "condition": true,
-          "dependency_type": "Variable",
-          "parameters": {
-            "ft#code-bg-title": {
-              "default": {
-                "important": false,
-                "reference": null,
-                "value": "light"
-              },
-              "value": {
-                "important": false,
-                "reference": null,
-                "value": "dark"
-              }
-            }
-          },
-          "remaining": null
-        },
-        {
-          "condition": true,
-          "dependency_type": "Variable",
-          "parameters": {
             "ft#code-color": {
-              "default": {
-                "important": false,
-                "reference": null,
-                "value": "light"
-              },
-              "value": {
-                "important": false,
-                "reference": null,
-                "value": "dark"
-              }
-            }
-          },
-          "remaining": null
-        },
-        {
-          "condition": true,
-          "dependency_type": "Variable",
-          "parameters": {
-            "ft#code-title": {
               "default": {
                 "important": false,
                 "reference": null,
@@ -2297,7 +2202,9 @@
   },
   "ftd#device": {
     "value": "desktop",
-    "dependencies": {}
+    "dependencies": {
+      "$value#kind$": []
+    }
   },
   "ftd#follow-system-dark-mode": {
     "value": true,
@@ -2507,29 +2414,29 @@ body.fpm-dark .ft_md a:visited code {
         <div data-id="main:root" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; height: 100%; justify-content: flex-start; white-space: initial; width: 100%" class="ft_md"><div data-id="0:main" style="align-items: flex-start; background-color: rgba(239,239,239,1); border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; height: 100%; justify-content: flex-start; padding: 40px; white-space: initial; width: 100%" class="ft_md"><div data-id="0,0:main" id="architectural-diagram" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; white-space: initial; width: 100%" class="ft_md"><div data-id="0,0,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(0,0,0,1); padding-bottom: 12px; text-align: left; white-space: initial" class="ft_md">Architectural Diagram</div>
 <div data-id="0,0,1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(77,77,77,1); display: none; padding-bottom: 8px; text-align: left; white-space: initial" class="ft_md"></div>
 <div data-id="0,0,2:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#info&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;Kubernetes: A Kubernetes cluster consists of a set of worker machines, called nodes, that run containerized applications. Every cluster has at least one worker node.\\n\\nThe worker node(s) host the Pods that are the components of the application workload. The control plane manages the worker nodes and the Pods in the cluster. In production environments, the control plane usually runs across multiple computers and a cluster usually runs multiple nodes, providing fault-tolerance and high availability.&quot;,&quot;reference&quot;:&quot;architecture-diagram.ftd#kubernetes-info&quot;},{&quot;value&quot;:&quot;string&quot;,&quot;reference&quot;:null}]}}]', this)" style="align-self: center; background-color: rgba(255,255,255,1); border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; height: 540px; margin-left: auto; margin-right: auto; white-space: initial; width: 1350px" class="ft_md"><div data-id="0,0,2:scene:main" style="position: relative" class=""><div data-id="0,0,2:scene-bg:main" style="display: block; height: 540px; width: 100%" class=""></div>
-<div data-id="0,0,2,0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#info&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;Control Panel: The control planes components make global decisions about the cluster (for example, scheduling), as well as detecting and responding to cluster events (for example, starting up a new pod when a deployments replicas field is unsatisfied).\\n\\nControl plane components can be run on any machine in the cluster. However, for simplicity, set up scripts typically start all control plane components on the same machine, and do not run user containers on this machine. See Creating Highly Available clusters with kubeadm for an example control plane setup that runs across multiple VMs.&quot;,&quot;reference&quot;:&quot;architecture-diagram.ftd#control-panel-info&quot;},{&quot;value&quot;:&quot;string&quot;,&quot;reference&quot;:null}]}},{&quot;action&quot;:&quot;stop-propagation&quot;,&quot;target&quot;:&quot;&quot;,&quot;parameters&quot;:{}},{&quot;action&quot;:&quot;prevent-default&quot;,&quot;target&quot;:&quot;&quot;,&quot;parameters&quot;:{}}]', this)" onmouseleave="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#MOUSE-IN@0,1,0&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;false&quot;,&quot;reference&quot;:null},{&quot;value&quot;:&quot;boolean&quot;,&quot;reference&quot;:null}]}}]', this)" onmouseenter="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#MOUSE-IN@0,1,0&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;true&quot;,&quot;reference&quot;:null},{&quot;value&quot;:&quot;boolean&quot;,&quot;reference&quot;:null}]}}]', this)" style="background-color: rgba(217,231,248,1); border-radius: 0px; border-style: solid; border-width: 2px; box-sizing: border-box; cursor: pointer; height: 460px; left: 50px; position: absolute; top: 20px; white-space: initial; width: 600px" class="ft_md"><div data-id="0,0,2,0:scene:main" style="position: relative" class=""><div data-id="0,0,2,0:scene-bg:main" style="display: block; height: 460px; width: 100%" class=""></div>
+<div data-id="0,0,2,0:main" onmouseleave="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#MOUSE-IN@0,1,0&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;false&quot;,&quot;reference&quot;:null},{&quot;value&quot;:&quot;boolean&quot;,&quot;reference&quot;:null}]}}]', this)" onmouseenter="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#MOUSE-IN@0,1,0&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;true&quot;,&quot;reference&quot;:null},{&quot;value&quot;:&quot;boolean&quot;,&quot;reference&quot;:null}]}}]', this)" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#info&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;Control Panel: The control planes components make global decisions about the cluster (for example, scheduling), as well as detecting and responding to cluster events (for example, starting up a new pod when a deployments replicas field is unsatisfied).\\n\\nControl plane components can be run on any machine in the cluster. However, for simplicity, set up scripts typically start all control plane components on the same machine, and do not run user containers on this machine. See Creating Highly Available clusters with kubeadm for an example control plane setup that runs across multiple VMs.&quot;,&quot;reference&quot;:&quot;architecture-diagram.ftd#control-panel-info&quot;},{&quot;value&quot;:&quot;string&quot;,&quot;reference&quot;:null}]}},{&quot;action&quot;:&quot;stop-propagation&quot;,&quot;target&quot;:&quot;&quot;,&quot;parameters&quot;:{}},{&quot;action&quot;:&quot;prevent-default&quot;,&quot;target&quot;:&quot;&quot;,&quot;parameters&quot;:{}}]', this)" style="background-color: rgba(217,231,248,1); border-radius: 0px; border-style: solid; border-width: 2px; box-sizing: border-box; cursor: pointer; height: 460px; left: 50px; position: absolute; top: 20px; white-space: initial; width: 600px" class="ft_md"><div data-id="0,0,2,0:scene:main" style="position: relative" class=""><div data-id="0,0,2,0:scene-bg:main" style="display: block; height: 460px; width: 100%" class=""></div>
 <div data-id="0,0,2,0,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; left: 5px; position: absolute; text-align: left; top: 5px; white-space: initial" class="ft_md">Control Panel</div>
-<div data-id="0,0,2,0,1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#info&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;Kube Controller Manager: Control plane component that runs controller processes.\\n\\nLogically, each controller is a separate process, but to reduce complexity, they are all compiled into a single binary and run in a single process.&quot;,&quot;reference&quot;:&quot;architecture-diagram.ftd#kube-controller-manager-info&quot;},{&quot;value&quot;:&quot;string&quot;,&quot;reference&quot;:null}]}},{&quot;action&quot;:&quot;stop-propagation&quot;,&quot;target&quot;:&quot;&quot;,&quot;parameters&quot;:{}},{&quot;action&quot;:&quot;prevent-default&quot;,&quot;target&quot;:&quot;&quot;,&quot;parameters&quot;:{}}]', this)" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; left: 20px; position: absolute; top: 50px; white-space: initial" class="ft_md"><div data-id="0,0,2,0,1,0:main" data-spacing="margin-top:20px" onmouseleave="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#MOUSE-IN@0,1,0,1,0&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;false&quot;,&quot;reference&quot;:null},{&quot;value&quot;:&quot;boolean&quot;,&quot;reference&quot;:null}]}}]', this)" onmouseenter="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#MOUSE-IN@0,1,0,1,0&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;true&quot;,&quot;reference&quot;:null},{&quot;value&quot;:&quot;boolean&quot;,&quot;reference&quot;:null}]}}]', this)" style="align-items: flex-start; align-self: center; background-color: rgba(220,158,179,1); border-radius: 0px; border-style: solid; border-width: 1px; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; margin-left: auto; margin-right: auto; padding: 15px; white-space: initial; width: 400px" class="ft_md"><div data-id="0,0,2,0,1,0,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; left: 5px; text-align: left; top: 5px; white-space: initial" class="ft_md">Kube Controller Manager</div>
+<div data-id="0,0,2,0,1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#info&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;Kube Controller Manager: Control plane component that runs controller processes.\\n\\nLogically, each controller is a separate process, but to reduce complexity, they are all compiled into a single binary and run in a single process.&quot;,&quot;reference&quot;:&quot;architecture-diagram.ftd#kube-controller-manager-info&quot;},{&quot;value&quot;:&quot;string&quot;,&quot;reference&quot;:null}]}},{&quot;action&quot;:&quot;stop-propagation&quot;,&quot;target&quot;:&quot;&quot;,&quot;parameters&quot;:{}},{&quot;action&quot;:&quot;prevent-default&quot;,&quot;target&quot;:&quot;&quot;,&quot;parameters&quot;:{}}]', this)" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; left: 20px; position: absolute; top: 50px; white-space: initial" class="ft_md"><div data-id="0,0,2,0,1,0:main" data-spacing="margin-top:20px" onmouseenter="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#MOUSE-IN@0,1,0,1,0&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;true&quot;,&quot;reference&quot;:null},{&quot;value&quot;:&quot;boolean&quot;,&quot;reference&quot;:null}]}}]', this)" onmouseleave="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#MOUSE-IN@0,1,0,1,0&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;false&quot;,&quot;reference&quot;:null},{&quot;value&quot;:&quot;boolean&quot;,&quot;reference&quot;:null}]}}]', this)" style="align-items: flex-start; align-self: center; background-color: rgba(220,158,179,1); border-radius: 0px; border-style: solid; border-width: 1px; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; margin-left: auto; margin-right: auto; padding: 15px; white-space: initial; width: 400px" class="ft_md"><div data-id="0,0,2,0,1,0,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; left: 5px; text-align: left; top: 5px; white-space: initial" class="ft_md">Kube Controller Manager</div>
 <div data-id="box-id:0,0,2,0,1,0,1:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-around; left: 0px; margin-top: 20px; top: 40px; white-space: initial; width: 100%" class="ft_md"><div data-ext-id="box-id-external:0,0,2,0,1,0:main" data-id="0,0,2,0,1,0,1,0:box-id-external:0,0,2,0,1,0:main" onmouseleave="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#MOUSE-IN@0,1,0,1,0,2&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;false&quot;,&quot;reference&quot;:null},{&quot;value&quot;:&quot;boolean&quot;,&quot;reference&quot;:null}]}}]', this)" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#info&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;Node controller: Responsible for noticing and responding when nodes go down.&quot;,&quot;reference&quot;:&quot;architecture-diagram.ftd#node-controller-info&quot;},{&quot;value&quot;:&quot;string&quot;,&quot;reference&quot;:null}]}},{&quot;action&quot;:&quot;stop-propagation&quot;,&quot;target&quot;:&quot;&quot;,&quot;parameters&quot;:{}},{&quot;action&quot;:&quot;prevent-default&quot;,&quot;target&quot;:&quot;&quot;,&quot;parameters&quot;:{}}]', this)" onmouseenter="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#MOUSE-IN@0,1,0,1,0,2&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;true&quot;,&quot;reference&quot;:null},{&quot;value&quot;:&quot;boolean&quot;,&quot;reference&quot;:null}]}}]', this)" style="align-self: center; background-color: rgba(255,255,255,1); border-radius: 0px; border-style: solid; border-width: 1px; box-sizing: border-box; cursor: pointer; margin-left: auto; margin-right: auto; padding: 5px; text-align: left; white-space: initial; width: 80px" class="ft_md">Node Controller</div>
 <div data-ext-id="box-id-external:0,0,2,0,1,0:main" data-id="0,0,2,0,1,0,1,1:box-id-external:0,0,2,0,1,0:main" onmouseenter="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#MOUSE-IN@0,1,0,1,0,3&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;true&quot;,&quot;reference&quot;:null},{&quot;value&quot;:&quot;boolean&quot;,&quot;reference&quot;:null}]}}]', this)" onmouseleave="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#MOUSE-IN@0,1,0,1,0,3&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;false&quot;,&quot;reference&quot;:null},{&quot;value&quot;:&quot;boolean&quot;,&quot;reference&quot;:null}]}}]', this)" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#info&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;Replication Controller: Watches for Job objects that represent one-off tasks, then creates Pods to run those tasks to completion.&quot;,&quot;reference&quot;:&quot;architecture-diagram.ftd#replication-controller-info&quot;},{&quot;value&quot;:&quot;string&quot;,&quot;reference&quot;:null}]}},{&quot;action&quot;:&quot;stop-propagation&quot;,&quot;target&quot;:&quot;&quot;,&quot;parameters&quot;:{}},{&quot;action&quot;:&quot;prevent-default&quot;,&quot;target&quot;:&quot;&quot;,&quot;parameters&quot;:{}}]', this)" style="align-self: center; background-color: rgba(255,255,255,1); border-radius: 0px; border-style: solid; border-width: 1px; box-sizing: border-box; cursor: pointer; margin-left: auto; margin-right: auto; padding: 5px; text-align: left; white-space: initial; width: 80px" class="ft_md">Replication Controller</div>
-<div data-ext-id="box-id-external:0,0,2,0,1,0:main" data-id="0,0,2,0,1,0,1,2:box-id-external:0,0,2,0,1,0:main" onmouseenter="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#MOUSE-IN@0,1,0,1,0,4&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;true&quot;,&quot;reference&quot;:null},{&quot;value&quot;:&quot;boolean&quot;,&quot;reference&quot;:null}]}}]', this)" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#info&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;Endpoints controller: Populates the Endpoints object (that is, joins Services & Pods).&quot;,&quot;reference&quot;:&quot;architecture-diagram.ftd#endpoints-controller-info&quot;},{&quot;value&quot;:&quot;string&quot;,&quot;reference&quot;:null}]}},{&quot;action&quot;:&quot;stop-propagation&quot;,&quot;target&quot;:&quot;&quot;,&quot;parameters&quot;:{}},{&quot;action&quot;:&quot;prevent-default&quot;,&quot;target&quot;:&quot;&quot;,&quot;parameters&quot;:{}}]', this)" onmouseleave="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#MOUSE-IN@0,1,0,1,0,4&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;false&quot;,&quot;reference&quot;:null},{&quot;value&quot;:&quot;boolean&quot;,&quot;reference&quot;:null}]}}]', this)" style="align-self: center; background-color: rgba(255,255,255,1); border-radius: 0px; border-style: solid; border-width: 1px; box-sizing: border-box; cursor: pointer; margin-left: auto; margin-right: auto; padding: 5px; text-align: left; white-space: initial; width: 80px" class="ft_md">Endpoints Controller</div>
-<div data-ext-id="box-id-external:0,0,2,0,1,0:main" data-id="0,0,2,0,1,0,1,3:box-id-external:0,0,2,0,1,0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#info&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;Service Account & Token controllers: Create default accounts and API access tokens for new namespaces.&quot;,&quot;reference&quot;:&quot;architecture-diagram.ftd#service-account-token-controller-info&quot;},{&quot;value&quot;:&quot;string&quot;,&quot;reference&quot;:null}]}},{&quot;action&quot;:&quot;stop-propagation&quot;,&quot;target&quot;:&quot;&quot;,&quot;parameters&quot;:{}},{&quot;action&quot;:&quot;prevent-default&quot;,&quot;target&quot;:&quot;&quot;,&quot;parameters&quot;:{}}]', this)" onmouseenter="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#MOUSE-IN@0,1,0,1,0,5&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;true&quot;,&quot;reference&quot;:null},{&quot;value&quot;:&quot;boolean&quot;,&quot;reference&quot;:null}]}}]', this)" onmouseleave="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#MOUSE-IN@0,1,0,1,0,5&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;false&quot;,&quot;reference&quot;:null},{&quot;value&quot;:&quot;boolean&quot;,&quot;reference&quot;:null}]}}]', this)" style="align-self: center; background-color: rgba(255,255,255,1); border-radius: 0px; border-style: solid; border-width: 1px; box-sizing: border-box; cursor: pointer; margin-left: auto; margin-right: auto; padding: 5px; text-align: left; white-space: initial; width: 80px" class="ft_md">Service Account &amp; Token Controller</div></div></div></div>
-<div data-id="0,0,2,0,2:main" onmouseenter="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#MOUSE-IN@0,1,0,2&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;true&quot;,&quot;reference&quot;:null},{&quot;value&quot;:&quot;boolean&quot;,&quot;reference&quot;:null}]}}]', this)" onmouseleave="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#MOUSE-IN@0,1,0,2&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;false&quot;,&quot;reference&quot;:null},{&quot;value&quot;:&quot;boolean&quot;,&quot;reference&quot;:null}]}}]', this)" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#info&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;Kube Api Server: The API server is a component of the Kubernetes control plane that exposes the Kubernetes API. The API server is the front end for the Kubernetes control plane.\\n\\nThe main implementation of a Kubernetes API server is kube-apiserver. kube-apiserver is designed to scale horizontally—that is, it scales by deploying more instances. You can run several instances of kube-apiserver and balance traffic between those instances.&quot;,&quot;reference&quot;:&quot;architecture-diagram.ftd#kube-apiserver-info&quot;},{&quot;value&quot;:&quot;string&quot;,&quot;reference&quot;:null}]}},{&quot;action&quot;:&quot;stop-propagation&quot;,&quot;target&quot;:&quot;&quot;,&quot;parameters&quot;:{}},{&quot;action&quot;:&quot;prevent-default&quot;,&quot;target&quot;:&quot;&quot;,&quot;parameters&quot;:{}}]', this)" style="align-items: flex-start; background-color: rgba(252,226,81,1); border-radius: 0px; border-style: solid; border-width: 1px; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: row; flex-wrap: nowrap; height: 270px; justify-content: flex-start; padding: 20px; position: absolute; right: 35px; top: 50px; white-space: initial; width: 100px" class="ft_md"><div data-id="0,0,2,0,2,0:main" style="align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; margin-bottom: auto; margin-top: auto; text-align: left; white-space: initial" class="ft_md">Kube Api Server</div></div>
-<div data-id="0,0,2,0,3:main" onmouseleave="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#MOUSE-IN@0,1,0,3&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;false&quot;,&quot;reference&quot;:null},{&quot;value&quot;:&quot;boolean&quot;,&quot;reference&quot;:null}]}}]', this)" onmouseenter="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#MOUSE-IN@0,1,0,3&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;true&quot;,&quot;reference&quot;:null},{&quot;value&quot;:&quot;boolean&quot;,&quot;reference&quot;:null}]}}]', this)" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#info&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;etcd: Consistent and highly-available key value store used as Kubernetes backing store for all cluster data.\\n\\nIf your Kubernetes cluster uses etcd as its backing store, make sure you have a back up plan for those data.&quot;,&quot;reference&quot;:&quot;architecture-diagram.ftd#etcd-info&quot;},{&quot;value&quot;:&quot;string&quot;,&quot;reference&quot;:null}]}},{&quot;action&quot;:&quot;stop-propagation&quot;,&quot;target&quot;:&quot;&quot;,&quot;parameters&quot;:{}},{&quot;action&quot;:&quot;prevent-default&quot;,&quot;target&quot;:&quot;&quot;,&quot;parameters&quot;:{}}]', this)" style="background-color: rgba(255,255,255,1); border-radius: 30px; border-style: solid; border-width: 1px; box-sizing: border-box; cursor: pointer; left: 40px; padding: 20px; position: absolute; text-align: left; top: 220px; white-space: initial" class="ft_md">etcd</div>
+<div data-ext-id="box-id-external:0,0,2,0,1,0:main" data-id="0,0,2,0,1,0,1,2:box-id-external:0,0,2,0,1,0:main" onmouseleave="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#MOUSE-IN@0,1,0,1,0,4&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;false&quot;,&quot;reference&quot;:null},{&quot;value&quot;:&quot;boolean&quot;,&quot;reference&quot;:null}]}}]', this)" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#info&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;Endpoints controller: Populates the Endpoints object (that is, joins Services & Pods).&quot;,&quot;reference&quot;:&quot;architecture-diagram.ftd#endpoints-controller-info&quot;},{&quot;value&quot;:&quot;string&quot;,&quot;reference&quot;:null}]}},{&quot;action&quot;:&quot;stop-propagation&quot;,&quot;target&quot;:&quot;&quot;,&quot;parameters&quot;:{}},{&quot;action&quot;:&quot;prevent-default&quot;,&quot;target&quot;:&quot;&quot;,&quot;parameters&quot;:{}}]', this)" onmouseenter="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#MOUSE-IN@0,1,0,1,0,4&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;true&quot;,&quot;reference&quot;:null},{&quot;value&quot;:&quot;boolean&quot;,&quot;reference&quot;:null}]}}]', this)" style="align-self: center; background-color: rgba(255,255,255,1); border-radius: 0px; border-style: solid; border-width: 1px; box-sizing: border-box; cursor: pointer; margin-left: auto; margin-right: auto; padding: 5px; text-align: left; white-space: initial; width: 80px" class="ft_md">Endpoints Controller</div>
+<div data-ext-id="box-id-external:0,0,2,0,1,0:main" data-id="0,0,2,0,1,0,1,3:box-id-external:0,0,2,0,1,0:main" onmouseenter="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#MOUSE-IN@0,1,0,1,0,5&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;true&quot;,&quot;reference&quot;:null},{&quot;value&quot;:&quot;boolean&quot;,&quot;reference&quot;:null}]}}]', this)" onmouseleave="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#MOUSE-IN@0,1,0,1,0,5&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;false&quot;,&quot;reference&quot;:null},{&quot;value&quot;:&quot;boolean&quot;,&quot;reference&quot;:null}]}}]', this)" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#info&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;Service Account & Token controllers: Create default accounts and API access tokens for new namespaces.&quot;,&quot;reference&quot;:&quot;architecture-diagram.ftd#service-account-token-controller-info&quot;},{&quot;value&quot;:&quot;string&quot;,&quot;reference&quot;:null}]}},{&quot;action&quot;:&quot;stop-propagation&quot;,&quot;target&quot;:&quot;&quot;,&quot;parameters&quot;:{}},{&quot;action&quot;:&quot;prevent-default&quot;,&quot;target&quot;:&quot;&quot;,&quot;parameters&quot;:{}}]', this)" style="align-self: center; background-color: rgba(255,255,255,1); border-radius: 0px; border-style: solid; border-width: 1px; box-sizing: border-box; cursor: pointer; margin-left: auto; margin-right: auto; padding: 5px; text-align: left; white-space: initial; width: 80px" class="ft_md">Service Account &amp; Token Controller</div></div></div></div>
+<div data-id="0,0,2,0,2:main" onmouseleave="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#MOUSE-IN@0,1,0,2&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;false&quot;,&quot;reference&quot;:null},{&quot;value&quot;:&quot;boolean&quot;,&quot;reference&quot;:null}]}}]', this)" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#info&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;Kube Api Server: The API server is a component of the Kubernetes control plane that exposes the Kubernetes API. The API server is the front end for the Kubernetes control plane.\\n\\nThe main implementation of a Kubernetes API server is kube-apiserver. kube-apiserver is designed to scale horizontally—that is, it scales by deploying more instances. You can run several instances of kube-apiserver and balance traffic between those instances.&quot;,&quot;reference&quot;:&quot;architecture-diagram.ftd#kube-apiserver-info&quot;},{&quot;value&quot;:&quot;string&quot;,&quot;reference&quot;:null}]}},{&quot;action&quot;:&quot;stop-propagation&quot;,&quot;target&quot;:&quot;&quot;,&quot;parameters&quot;:{}},{&quot;action&quot;:&quot;prevent-default&quot;,&quot;target&quot;:&quot;&quot;,&quot;parameters&quot;:{}}]', this)" onmouseenter="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#MOUSE-IN@0,1,0,2&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;true&quot;,&quot;reference&quot;:null},{&quot;value&quot;:&quot;boolean&quot;,&quot;reference&quot;:null}]}}]', this)" style="align-items: flex-start; background-color: rgba(252,226,81,1); border-radius: 0px; border-style: solid; border-width: 1px; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: row; flex-wrap: nowrap; height: 270px; justify-content: flex-start; padding: 20px; position: absolute; right: 35px; top: 50px; white-space: initial; width: 100px" class="ft_md"><div data-id="0,0,2,0,2,0:main" style="align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; margin-bottom: auto; margin-top: auto; text-align: left; white-space: initial" class="ft_md">Kube Api Server</div></div>
+<div data-id="0,0,2,0,3:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#info&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;etcd: Consistent and highly-available key value store used as Kubernetes backing store for all cluster data.\\n\\nIf your Kubernetes cluster uses etcd as its backing store, make sure you have a back up plan for those data.&quot;,&quot;reference&quot;:&quot;architecture-diagram.ftd#etcd-info&quot;},{&quot;value&quot;:&quot;string&quot;,&quot;reference&quot;:null}]}},{&quot;action&quot;:&quot;stop-propagation&quot;,&quot;target&quot;:&quot;&quot;,&quot;parameters&quot;:{}},{&quot;action&quot;:&quot;prevent-default&quot;,&quot;target&quot;:&quot;&quot;,&quot;parameters&quot;:{}}]', this)" onmouseleave="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#MOUSE-IN@0,1,0,3&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;false&quot;,&quot;reference&quot;:null},{&quot;value&quot;:&quot;boolean&quot;,&quot;reference&quot;:null}]}}]', this)" onmouseenter="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#MOUSE-IN@0,1,0,3&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;true&quot;,&quot;reference&quot;:null},{&quot;value&quot;:&quot;boolean&quot;,&quot;reference&quot;:null}]}}]', this)" style="background-color: rgba(255,255,255,1); border-radius: 30px; border-style: solid; border-width: 1px; box-sizing: border-box; cursor: pointer; left: 40px; padding: 20px; position: absolute; text-align: left; top: 220px; white-space: initial" class="ft_md">etcd</div>
 <div data-id="0,0,2,0,4:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#info&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;Cloud controller manager: A Kubernetes control plane component that embeds cloud-specific control logic. The cloud controller manager lets you link your cluster into your cloud providers API, and separates out the components that interact with that cloud platform from components that only interact with your cluster.\\nThe cloud-controller-manager only runs controllers that are specific to your cloud provider. If you are running Kubernetes on your own premises, or in a learning environment inside your own PC, the cluster does not have a cloud controller manager.\\n\\nAs with the kube-controller-manager, the cloud-controller-manager combines several logically independent control loops into a single binary that you run as a single process. You can scale horizontally (run more than one copy) to improve performance or to help tolerate failures.&quot;,&quot;reference&quot;:&quot;architecture-diagram.ftd#cloud-controller-manager-info&quot;},{&quot;value&quot;:&quot;string&quot;,&quot;reference&quot;:null}]}},{&quot;action&quot;:&quot;stop-propagation&quot;,&quot;target&quot;:&quot;&quot;,&quot;parameters&quot;:{}},{&quot;action&quot;:&quot;prevent-default&quot;,&quot;target&quot;:&quot;&quot;,&quot;parameters&quot;:{}}]', this)" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; left: 20px; position: absolute; top: 300px; white-space: initial" class="ft_md"><div data-id="0,0,2,0,4,0:main" data-spacing="margin-top:20px" onmouseenter="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#MOUSE-IN@0,1,0,4,0&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;true&quot;,&quot;reference&quot;:null},{&quot;value&quot;:&quot;boolean&quot;,&quot;reference&quot;:null}]}}]', this)" onmouseleave="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#MOUSE-IN@0,1,0,4,0&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;false&quot;,&quot;reference&quot;:null},{&quot;value&quot;:&quot;boolean&quot;,&quot;reference&quot;:null}]}}]', this)" style="align-items: flex-start; align-self: center; background-color: rgba(118,194,196,1); border-radius: 0px; border-style: solid; border-width: 1px; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; margin-left: auto; margin-right: auto; padding: 15px; white-space: initial; width: 400px" class="ft_md"><div data-id="0,0,2,0,4,0,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; left: 5px; text-align: left; top: 5px; white-space: initial" class="ft_md">Cloud Controller Manager</div>
-<div data-id="box-id:0,0,2,0,4,0,1:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-around; left: 0px; margin-top: 20px; top: 40px; white-space: initial; width: 100%" class="ft_md"><div data-ext-id="box-id-external:0,0,2,0,4,0:main" data-id="0,0,2,0,4,0,1,0:box-id-external:0,0,2,0,4,0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#info&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;Node controller: For checking the cloud provider to determine if a node has been deleted in the cloud after it stops responding&quot;,&quot;reference&quot;:&quot;architecture-diagram.ftd#cloud-node-controller-info&quot;},{&quot;value&quot;:&quot;string&quot;,&quot;reference&quot;:null}]}},{&quot;action&quot;:&quot;stop-propagation&quot;,&quot;target&quot;:&quot;&quot;,&quot;parameters&quot;:{}},{&quot;action&quot;:&quot;prevent-default&quot;,&quot;target&quot;:&quot;&quot;,&quot;parameters&quot;:{}}]', this)" onmouseleave="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#MOUSE-IN@0,1,0,4,0,2&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;false&quot;,&quot;reference&quot;:null},{&quot;value&quot;:&quot;boolean&quot;,&quot;reference&quot;:null}]}}]', this)" onmouseenter="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#MOUSE-IN@0,1,0,4,0,2&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;true&quot;,&quot;reference&quot;:null},{&quot;value&quot;:&quot;boolean&quot;,&quot;reference&quot;:null}]}}]', this)" style="align-self: center; background-color: rgba(255,255,255,1); border-radius: 0px; border-style: solid; border-width: 1px; box-sizing: border-box; cursor: pointer; margin-left: auto; margin-right: auto; padding: 5px; text-align: left; white-space: initial; width: 80px" class="ft_md">Node Controller</div>
-<div data-ext-id="box-id-external:0,0,2,0,4,0:main" data-id="0,0,2,0,4,0,1,1:box-id-external:0,0,2,0,4,0:main" onmouseleave="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#MOUSE-IN@0,1,0,4,0,3&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;false&quot;,&quot;reference&quot;:null},{&quot;value&quot;:&quot;boolean&quot;,&quot;reference&quot;:null}]}}]', this)" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#info&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;Route controller: For setting up routes in the underlying cloud infrastructure&quot;,&quot;reference&quot;:&quot;architecture-diagram.ftd#cloud-route-controller-info&quot;},{&quot;value&quot;:&quot;string&quot;,&quot;reference&quot;:null}]}},{&quot;action&quot;:&quot;stop-propagation&quot;,&quot;target&quot;:&quot;&quot;,&quot;parameters&quot;:{}},{&quot;action&quot;:&quot;prevent-default&quot;,&quot;target&quot;:&quot;&quot;,&quot;parameters&quot;:{}}]', this)" onmouseenter="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#MOUSE-IN@0,1,0,4,0,3&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;true&quot;,&quot;reference&quot;:null},{&quot;value&quot;:&quot;boolean&quot;,&quot;reference&quot;:null}]}}]', this)" style="align-self: center; background-color: rgba(255,255,255,1); border-radius: 0px; border-style: solid; border-width: 1px; box-sizing: border-box; cursor: pointer; margin-left: auto; margin-right: auto; padding: 5px; text-align: left; white-space: initial; width: 80px" class="ft_md">Route Controller</div>
-<div data-ext-id="box-id-external:0,0,2,0,4,0:main" data-id="0,0,2,0,4,0,1,2:box-id-external:0,0,2,0,4,0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#info&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;Service controller: For creating, updating and deleting cloud provider load balancers&quot;,&quot;reference&quot;:&quot;architecture-diagram.ftd#cloud-service-controller-info&quot;},{&quot;value&quot;:&quot;string&quot;,&quot;reference&quot;:null}]}},{&quot;action&quot;:&quot;stop-propagation&quot;,&quot;target&quot;:&quot;&quot;,&quot;parameters&quot;:{}},{&quot;action&quot;:&quot;prevent-default&quot;,&quot;target&quot;:&quot;&quot;,&quot;parameters&quot;:{}}]', this)" onmouseleave="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#MOUSE-IN@0,1,0,4,0,4&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;false&quot;,&quot;reference&quot;:null},{&quot;value&quot;:&quot;boolean&quot;,&quot;reference&quot;:null}]}}]', this)" onmouseenter="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#MOUSE-IN@0,1,0,4,0,4&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;true&quot;,&quot;reference&quot;:null},{&quot;value&quot;:&quot;boolean&quot;,&quot;reference&quot;:null}]}}]', this)" style="align-self: center; background-color: rgba(255,255,255,1); border-radius: 0px; border-style: solid; border-width: 1px; box-sizing: border-box; cursor: pointer; margin-left: auto; margin-right: auto; padding: 5px; text-align: left; white-space: initial; width: 80px" class="ft_md">Service Controller</div></div></div></div>
+<div data-id="box-id:0,0,2,0,4,0,1:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-around; left: 0px; margin-top: 20px; top: 40px; white-space: initial; width: 100%" class="ft_md"><div data-ext-id="box-id-external:0,0,2,0,4,0:main" data-id="0,0,2,0,4,0,1,0:box-id-external:0,0,2,0,4,0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#info&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;Node controller: For checking the cloud provider to determine if a node has been deleted in the cloud after it stops responding&quot;,&quot;reference&quot;:&quot;architecture-diagram.ftd#cloud-node-controller-info&quot;},{&quot;value&quot;:&quot;string&quot;,&quot;reference&quot;:null}]}},{&quot;action&quot;:&quot;stop-propagation&quot;,&quot;target&quot;:&quot;&quot;,&quot;parameters&quot;:{}},{&quot;action&quot;:&quot;prevent-default&quot;,&quot;target&quot;:&quot;&quot;,&quot;parameters&quot;:{}}]', this)" onmouseenter="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#MOUSE-IN@0,1,0,4,0,2&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;true&quot;,&quot;reference&quot;:null},{&quot;value&quot;:&quot;boolean&quot;,&quot;reference&quot;:null}]}}]', this)" onmouseleave="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#MOUSE-IN@0,1,0,4,0,2&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;false&quot;,&quot;reference&quot;:null},{&quot;value&quot;:&quot;boolean&quot;,&quot;reference&quot;:null}]}}]', this)" style="align-self: center; background-color: rgba(255,255,255,1); border-radius: 0px; border-style: solid; border-width: 1px; box-sizing: border-box; cursor: pointer; margin-left: auto; margin-right: auto; padding: 5px; text-align: left; white-space: initial; width: 80px" class="ft_md">Node Controller</div>
+<div data-ext-id="box-id-external:0,0,2,0,4,0:main" data-id="0,0,2,0,4,0,1,1:box-id-external:0,0,2,0,4,0:main" onmouseenter="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#MOUSE-IN@0,1,0,4,0,3&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;true&quot;,&quot;reference&quot;:null},{&quot;value&quot;:&quot;boolean&quot;,&quot;reference&quot;:null}]}}]', this)" onmouseleave="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#MOUSE-IN@0,1,0,4,0,3&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;false&quot;,&quot;reference&quot;:null},{&quot;value&quot;:&quot;boolean&quot;,&quot;reference&quot;:null}]}}]', this)" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#info&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;Route controller: For setting up routes in the underlying cloud infrastructure&quot;,&quot;reference&quot;:&quot;architecture-diagram.ftd#cloud-route-controller-info&quot;},{&quot;value&quot;:&quot;string&quot;,&quot;reference&quot;:null}]}},{&quot;action&quot;:&quot;stop-propagation&quot;,&quot;target&quot;:&quot;&quot;,&quot;parameters&quot;:{}},{&quot;action&quot;:&quot;prevent-default&quot;,&quot;target&quot;:&quot;&quot;,&quot;parameters&quot;:{}}]', this)" style="align-self: center; background-color: rgba(255,255,255,1); border-radius: 0px; border-style: solid; border-width: 1px; box-sizing: border-box; cursor: pointer; margin-left: auto; margin-right: auto; padding: 5px; text-align: left; white-space: initial; width: 80px" class="ft_md">Route Controller</div>
+<div data-ext-id="box-id-external:0,0,2,0,4,0:main" data-id="0,0,2,0,4,0,1,2:box-id-external:0,0,2,0,4,0:main" onmouseenter="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#MOUSE-IN@0,1,0,4,0,4&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;true&quot;,&quot;reference&quot;:null},{&quot;value&quot;:&quot;boolean&quot;,&quot;reference&quot;:null}]}}]', this)" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#info&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;Service controller: For creating, updating and deleting cloud provider load balancers&quot;,&quot;reference&quot;:&quot;architecture-diagram.ftd#cloud-service-controller-info&quot;},{&quot;value&quot;:&quot;string&quot;,&quot;reference&quot;:null}]}},{&quot;action&quot;:&quot;stop-propagation&quot;,&quot;target&quot;:&quot;&quot;,&quot;parameters&quot;:{}},{&quot;action&quot;:&quot;prevent-default&quot;,&quot;target&quot;:&quot;&quot;,&quot;parameters&quot;:{}}]', this)" onmouseleave="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#MOUSE-IN@0,1,0,4,0,4&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;false&quot;,&quot;reference&quot;:null},{&quot;value&quot;:&quot;boolean&quot;,&quot;reference&quot;:null}]}}]', this)" style="align-self: center; background-color: rgba(255,255,255,1); border-radius: 0px; border-style: solid; border-width: 1px; box-sizing: border-box; cursor: pointer; margin-left: auto; margin-right: auto; padding: 5px; text-align: left; white-space: initial; width: 80px" class="ft_md">Service Controller</div></div></div></div>
 <div data-id="0,0,2,0,5:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 1px; box-sizing: border-box; display: flex; flex-direction: row; flex-wrap: nowrap; height: 1px; justify-content: flex-start; position: absolute; right: 135px; top: 100px; white-space: initial; width: 42px" class="ft_md"></div>
 <div data-id="0,0,2,0,6:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 1px; box-sizing: border-box; display: flex; flex-direction: row; flex-wrap: nowrap; height: 1px; justify-content: flex-start; left: 108px; position: absolute; top: 250px; white-space: initial; width: 353px" class="ft_md"></div>
 <div data-id="0,0,2,0,7:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 1px; box-sizing: border-box; display: flex; flex-direction: row; flex-wrap: nowrap; height: 50px; justify-content: flex-start; left: 304px; position: absolute; top: 251px; white-space: initial; width: 1px" class="ft_md"></div></div></div>
-<div data-id="0,0,2,1:main" onmouseenter="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#MOUSE-IN@0,1,1&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;true&quot;,&quot;reference&quot;:null},{&quot;value&quot;:&quot;boolean&quot;,&quot;reference&quot;:null}]}}]', this)" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#info&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;Node Components: Node components run on every node, maintaining running pods and providing the Kubernetes runtime environment.&quot;,&quot;reference&quot;:&quot;architecture-diagram.ftd#nodes-info&quot;},{&quot;value&quot;:&quot;string&quot;,&quot;reference&quot;:null}]}},{&quot;action&quot;:&quot;stop-propagation&quot;,&quot;target&quot;:&quot;&quot;,&quot;parameters&quot;:{}},{&quot;action&quot;:&quot;prevent-default&quot;,&quot;target&quot;:&quot;&quot;,&quot;parameters&quot;:{}}]', this)" onmouseleave="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#MOUSE-IN@0,1,1&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;false&quot;,&quot;reference&quot;:null},{&quot;value&quot;:&quot;boolean&quot;,&quot;reference&quot;:null}]}}]', this)" style="background-color: rgba(210,210,206,1); border-radius: 0px; border-style: solid; border-width: 2px; box-sizing: border-box; cursor: pointer; height: 460px; position: absolute; right: 50px; top: 20px; white-space: initial; width: 600px" class="ft_md"><div data-id="0,0,2,1:scene:main" style="position: relative" class=""><div data-id="0,0,2,1:scene-bg:main" style="display: block; height: 460px; width: 100%" class=""></div>
+<div data-id="0,0,2,1:main" onmouseenter="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#MOUSE-IN@0,1,1&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;true&quot;,&quot;reference&quot;:null},{&quot;value&quot;:&quot;boolean&quot;,&quot;reference&quot;:null}]}}]', this)" onmouseleave="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#MOUSE-IN@0,1,1&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;false&quot;,&quot;reference&quot;:null},{&quot;value&quot;:&quot;boolean&quot;,&quot;reference&quot;:null}]}}]', this)" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#info&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;Node Components: Node components run on every node, maintaining running pods and providing the Kubernetes runtime environment.&quot;,&quot;reference&quot;:&quot;architecture-diagram.ftd#nodes-info&quot;},{&quot;value&quot;:&quot;string&quot;,&quot;reference&quot;:null}]}},{&quot;action&quot;:&quot;stop-propagation&quot;,&quot;target&quot;:&quot;&quot;,&quot;parameters&quot;:{}},{&quot;action&quot;:&quot;prevent-default&quot;,&quot;target&quot;:&quot;&quot;,&quot;parameters&quot;:{}}]', this)" style="background-color: rgba(210,210,206,1); border-radius: 0px; border-style: solid; border-width: 2px; box-sizing: border-box; cursor: pointer; height: 460px; position: absolute; right: 50px; top: 20px; white-space: initial; width: 600px" class="ft_md"><div data-id="0,0,2,1:scene:main" style="position: relative" class=""><div data-id="0,0,2,1:scene-bg:main" style="display: block; height: 460px; width: 100%" class=""></div>
 <div data-id="0,0,2,1,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; left: 5px; position: absolute; text-align: left; top: 5px; white-space: initial" class="ft_md">Nodes</div>
 <div data-id="0,0,2,1,1:main" style="align-items: flex-start; background-color: rgba(240,148,131,1); border-radius: 0px; border-style: solid; border-width: 1px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; height: 300px; justify-content: flex-start; left: 90px; position: absolute; top: 50px; white-space: initial; width: 400px" class="ft_md"></div>
 <div data-id="0,0,2,1,2:main" style="background-color: rgba(240,148,131,1); border-radius: 0px; border-style: solid; border-width: 1px; box-sizing: border-box; height: 300px; left: 115px; position: absolute; top: 70px; white-space: initial; width: 400px" class="ft_md"><div data-id="0,0,2,1,2:scene:main" style="position: relative" class=""><div data-id="0,0,2,1,2:scene-bg:main" style="display: block; height: 300px; width: 100%" class=""></div>
 <div data-id="0,0,2,1,2,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; left: 5px; position: absolute; text-align: left; top: 5px; white-space: initial" class="ft_md">Worker Node</div>
-<div data-id="0,0,2,1,2,1:main" onmouseleave="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#MOUSE-IN@0,1,1,2,1&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;false&quot;,&quot;reference&quot;:null},{&quot;value&quot;:&quot;boolean&quot;,&quot;reference&quot;:null}]}}]', this)" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#info&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;Kubelet: An agent that runs on each node in the cluster. It makes sure that containers are running in a Pod.\\n\\nThe kubelet takes a set of PodSpecs that are provided through various mechanisms and ensures that the containers described in those PodSpecs are running and healthy. The kubelet doesnt manage containers which were not created by Kubernetes.&quot;,&quot;reference&quot;:&quot;architecture-diagram.ftd#kubelet-info&quot;},{&quot;value&quot;:&quot;string&quot;,&quot;reference&quot;:null}]}},{&quot;action&quot;:&quot;stop-propagation&quot;,&quot;target&quot;:&quot;&quot;,&quot;parameters&quot;:{}},{&quot;action&quot;:&quot;prevent-default&quot;,&quot;target&quot;:&quot;&quot;,&quot;parameters&quot;:{}}]', this)" onmouseenter="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#MOUSE-IN@0,1,1,2,1&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;true&quot;,&quot;reference&quot;:null},{&quot;value&quot;:&quot;boolean&quot;,&quot;reference&quot;:null}]}}]', this)" style="background-color: rgba(255,255,255,1); border-radius: 0px; border-style: solid; border-width: 1px; box-sizing: border-box; cursor: pointer; left: 70px; padding: 5px; position: absolute; text-align: left; top: 50px; white-space: initial; width: 80px" class="ft_md">Kubelet</div>
-<div data-id="0,0,2,1,2,2:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#info&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;Kube-proxy: kube-proxy is a network proxy that runs on each node in your cluster, implementing part of the Kubernetes Service concept.\\n\\nkube-proxy maintains network rules on nodes. These network rules allow network communication to your Pods from network sessions inside or outside of your cluster.\\n\\nkube-proxy uses the operating system packet filtering layer if there is one and its available. Otherwise, kube-proxy forwards the traffic itself.&quot;,&quot;reference&quot;:&quot;architecture-diagram.ftd#kube-proxy-info&quot;},{&quot;value&quot;:&quot;string&quot;,&quot;reference&quot;:null}]}},{&quot;action&quot;:&quot;stop-propagation&quot;,&quot;target&quot;:&quot;&quot;,&quot;parameters&quot;:{}},{&quot;action&quot;:&quot;prevent-default&quot;,&quot;target&quot;:&quot;&quot;,&quot;parameters&quot;:{}}]', this)" onmouseleave="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#MOUSE-IN@0,1,1,2,2&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;false&quot;,&quot;reference&quot;:null},{&quot;value&quot;:&quot;boolean&quot;,&quot;reference&quot;:null}]}}]', this)" onmouseenter="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#MOUSE-IN@0,1,1,2,2&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;true&quot;,&quot;reference&quot;:null},{&quot;value&quot;:&quot;boolean&quot;,&quot;reference&quot;:null}]}}]', this)" style="background-color: rgba(255,255,255,1); border-radius: 0px; border-style: solid; border-width: 1px; box-sizing: border-box; cursor: pointer; left: 70px; padding: 5px; position: absolute; text-align: left; top: 150px; white-space: initial; width: 80px" class="ft_md">Kube Proxy</div>
+<div data-id="0,0,2,1,2,1:main" onmouseenter="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#MOUSE-IN@0,1,1,2,1&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;true&quot;,&quot;reference&quot;:null},{&quot;value&quot;:&quot;boolean&quot;,&quot;reference&quot;:null}]}}]', this)" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#info&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;Kubelet: An agent that runs on each node in the cluster. It makes sure that containers are running in a Pod.\\n\\nThe kubelet takes a set of PodSpecs that are provided through various mechanisms and ensures that the containers described in those PodSpecs are running and healthy. The kubelet doesnt manage containers which were not created by Kubernetes.&quot;,&quot;reference&quot;:&quot;architecture-diagram.ftd#kubelet-info&quot;},{&quot;value&quot;:&quot;string&quot;,&quot;reference&quot;:null}]}},{&quot;action&quot;:&quot;stop-propagation&quot;,&quot;target&quot;:&quot;&quot;,&quot;parameters&quot;:{}},{&quot;action&quot;:&quot;prevent-default&quot;,&quot;target&quot;:&quot;&quot;,&quot;parameters&quot;:{}}]', this)" onmouseleave="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#MOUSE-IN@0,1,1,2,1&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;false&quot;,&quot;reference&quot;:null},{&quot;value&quot;:&quot;boolean&quot;,&quot;reference&quot;:null}]}}]', this)" style="background-color: rgba(255,255,255,1); border-radius: 0px; border-style: solid; border-width: 1px; box-sizing: border-box; cursor: pointer; left: 70px; padding: 5px; position: absolute; text-align: left; top: 50px; white-space: initial; width: 80px" class="ft_md">Kubelet</div>
+<div data-id="0,0,2,1,2,2:main" onmouseleave="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#MOUSE-IN@0,1,1,2,2&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;false&quot;,&quot;reference&quot;:null},{&quot;value&quot;:&quot;boolean&quot;,&quot;reference&quot;:null}]}}]', this)" onmouseenter="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#MOUSE-IN@0,1,1,2,2&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;true&quot;,&quot;reference&quot;:null},{&quot;value&quot;:&quot;boolean&quot;,&quot;reference&quot;:null}]}}]', this)" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#info&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;Kube-proxy: kube-proxy is a network proxy that runs on each node in your cluster, implementing part of the Kubernetes Service concept.\\n\\nkube-proxy maintains network rules on nodes. These network rules allow network communication to your Pods from network sessions inside or outside of your cluster.\\n\\nkube-proxy uses the operating system packet filtering layer if there is one and its available. Otherwise, kube-proxy forwards the traffic itself.&quot;,&quot;reference&quot;:&quot;architecture-diagram.ftd#kube-proxy-info&quot;},{&quot;value&quot;:&quot;string&quot;,&quot;reference&quot;:null}]}},{&quot;action&quot;:&quot;stop-propagation&quot;,&quot;target&quot;:&quot;&quot;,&quot;parameters&quot;:{}},{&quot;action&quot;:&quot;prevent-default&quot;,&quot;target&quot;:&quot;&quot;,&quot;parameters&quot;:{}}]', this)" style="background-color: rgba(255,255,255,1); border-radius: 0px; border-style: solid; border-width: 1px; box-sizing: border-box; cursor: pointer; left: 70px; padding: 5px; position: absolute; text-align: left; top: 150px; white-space: initial; width: 80px" class="ft_md">Kube Proxy</div>
 <div data-id="0,0,2,1,2,3:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#info&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;Container runtime: The container runtime is the software that is responsible for running containers.\\n\\nKubernetes supports several container runtimes: Docker, containerd, CRI-O, and any implementation of the Kubernetes CRI (Container Runtime Interface).&quot;,&quot;reference&quot;:&quot;architecture-diagram.ftd#container-runtime-info&quot;},{&quot;value&quot;:&quot;string&quot;,&quot;reference&quot;:null}]}},{&quot;action&quot;:&quot;stop-propagation&quot;,&quot;target&quot;:&quot;&quot;,&quot;parameters&quot;:{}},{&quot;action&quot;:&quot;prevent-default&quot;,&quot;target&quot;:&quot;&quot;,&quot;parameters&quot;:{}}]', this)" onmouseenter="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#MOUSE-IN@0,1,1,2,3&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;true&quot;,&quot;reference&quot;:null},{&quot;value&quot;:&quot;boolean&quot;,&quot;reference&quot;:null}]}}]', this)" onmouseleave="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;set-value&quot;,&quot;target&quot;:&quot;architecture-diagram.ftd#MOUSE-IN@0,1,1,2,3&quot;,&quot;parameters&quot;:{&quot;value&quot;:[{&quot;value&quot;:&quot;false&quot;,&quot;reference&quot;:null},{&quot;value&quot;:&quot;boolean&quot;,&quot;reference&quot;:null}]}}]', this)" style="background-color: rgba(255,255,255,1); border-radius: 0px; border-style: solid; border-width: 1px; box-sizing: border-box; cursor: pointer; left: 180px; padding: 5px; position: absolute; text-align: left; top: 100px; white-space: initial; width: 80px" class="ft_md">Container Runtime</div></div></div></div></div>
 <div data-id="0,0,2,2:main" style="border-radius: 0px; border-style: solid; border-width: 0px; bottom: 10px; box-sizing: border-box; left: 10px; position: absolute; text-align: left; white-space: initial" class="ft_md">Kubernetes Architecture</div>
 <div data-id="0,0,2,3:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 1px; box-sizing: border-box; display: flex; flex-direction: row; flex-wrap: nowrap; height: 1px; justify-content: flex-start; left: 612px; position: absolute; top: 207px; white-space: initial; width: 231px" class="ft_md"></div>
@@ -2543,6 +2450,14 @@ body.fpm-dark .ft_md a:visited code {
     <script>
         // all ftd_utils are meant to be pure functions only: they can only depend on the
 // input passed, not on closures or global data etc
+
+function console_log(...message) {
+    if (true) { // false
+        console.log(...message);
+    }
+}
+
+
 let ftd_utils = {
     resolve_reference: function (value, reference, data, obj) {
         if (value instanceof Object) {
@@ -2845,7 +2760,7 @@ let ftd_utils = {
 
     remove_nodes: function (nodes, id) {
         for (const node in nodes) {
-            console.log(`${nodes[node]}:${id}`);
+            console_log(`${nodes[node]}:${id}`);
             document.querySelector(`[data-id="${nodes[node]}:${id}"]`).remove();
         }
     },
@@ -2879,6 +2794,30 @@ let ftd_utils = {
             return [name];
         }
         return [name.slice(0, i), name.slice(i + 1)];
+    },
+
+    deepEqual: function (object1, object2) {
+        const areObjects = ftd_utils.isObject(object1) && ftd_utils.isObject(object2);
+        if (!areObjects && object1 !== object2) {
+            return false;
+        }
+        const keys1 = Object.keys(object1);
+        const keys2 = Object.keys(object2);
+        if (keys1.length !== keys2.length) {
+            return false;
+        }
+        for (const key of keys1) {
+            const val1 = object1[key];
+            const val2 = object2[key];
+            if (!ftd_utils.deepEqual(val1, val2)) {
+                return false;
+            }
+        }
+        return true;
+    },
+
+    isObject: function (object) {
+        return object != null && typeof object === 'object';
     },
 
     get_data_value: function (data, name) {
@@ -2916,15 +2855,17 @@ let ftd_utils = {
 
     handle_action: function (id, target_variable, value, data, ftd_external_children) {
         var styles_edited = [];
-        handle_action_(id, target_variable, value, data, ftd_external_children, styles_edited);
+        let visibility_change = false;
+        handle_action_(id, target_variable, value, data, ftd_external_children, styles_edited, visibility_change);
 
-        function handle_action_(id, target_variable, value, data, ftd_external_children, styles_edited) {
+        function handle_action_(id, target_variable, value, data, ftd_external_children, styles_edited, visibility_change) {
             ftd_utils.set_data_value(data, target_variable, value);
-            let new_value = ftd_utils.get_data_value(data, target_variable);
+            let full_value = ftd_utils.get_data_value(data, target_variable);
+            let new_value = full_value;
             if (!!new_value && !!new_value["$kind$"]) {
                 new_value = new_value[new_value["$kind$"]];
             }
-            let target = ftd_utils.get_name_and_remaining(target_variable)[0];
+            let [target, target_remaining] = ftd_utils.get_name_and_remaining(target_variable);
 
             let dependencies = data[target].dependencies;
             for (const dependency in dependencies) {
@@ -2937,7 +2878,7 @@ let ftd_utils = {
                     if (json_dependency.dependency_type === "Value") {
                         if (dependency.endsWith(':dummy')) {
                             let dummy_node = document.querySelector(`[data-id="${dependency}:${id}"]`);
-                            let dom_ids = ftd_utils.create_dom(data[target].value, dummy_node);
+                            let dom_ids = ftd_utils.create_dom(full_value, dummy_node);
                             ftd_utils.remove_nodes(Object.keys(dependencies).filter(s => !s.endsWith(':dummy')), id);
                             let deps = {};
                             for (const dom_id in dom_ids) {
@@ -2947,6 +2888,10 @@ let ftd_utils = {
                             deps[dependency] = dependencies[dependency];
                             data[target].dependencies = deps;
                         } else {
+                            if ((!!json_dependency.remaining)
+                                && (json_dependency.remaining !== target_remaining)) {
+                                continue;
+                            }
                             let doc = document.querySelector(`[data-id="${dependency}:${id}"]`);
                             if (doc.src !== undefined) {
                                 doc.src = new_value;
@@ -2956,7 +2901,7 @@ let ftd_utils = {
                         }
                     } else if (json_dependency.dependency_type === "Visible") {
                         let display = "none";
-                        if (ftd_utils.is_equal_condition(data[target].value, json_dependency.condition)) {
+                        if (ftd_utils.is_equal_condition(full_value, json_dependency.condition)) {
                             let is_flex = !!document.querySelector(`[data-id="${dependency}:${id}"]`).style.flexDirection.length;
                             let is_grid = !!document.querySelector(`[data-id="${dependency}:${id}"]`).style.gridTemplateAreas.length;
                             let is_webkit = !!document.querySelector(`[data-id="${dependency}:${id}"]`).style.webkitLineClamp.length;
@@ -2969,6 +2914,10 @@ let ftd_utils = {
                             } else {
                                 display = "block";
                             }
+                        }
+                        let node = document.querySelector(`[data-id="${dependency}:${id}"]`);
+                        if (node.style.display !== display) {
+                            visibility_change = true;
                         }
                         document.querySelector(`[data-id="${dependency}:${id}"]`).style.display = display;
                         ftd_utils.first_child_styling(`${dependency}:${id}`);
@@ -2988,47 +2937,48 @@ let ftd_utils = {
                                             continue;
                                         }
                                         if (dependent_dependencies[d].parameters[parameter].value.reference === target) {
-                                            dependent_dependencies[d].parameters[parameter].value.value = data[target].value;
+                                            dependent_dependencies[d].parameters[parameter].value.value = full_value;
                                         }
                                         if (!!dependent_dependencies[d].parameters[parameter].default && dependent_dependencies[d].parameters[parameter].default.reference === target) {
-                                            dependent_dependencies[d].parameters[parameter].default.value = data[target].value;
+                                            dependent_dependencies[d].parameters[parameter].default.value = full_value;
                                         }
                                     }
                                     data[variable].dependencies[node] = dependent_dependencies;
-                                    handle_action_(id, variable, dependent, data, ftd_external_children, styles_edited);
+                                    handle_action_(id, variable, dependent, data, ftd_external_children, styles_edited, visibility_change);
                                 }
                             }
-                        } else if (ftd_utils.is_equal_condition(data[target].value, json_dependency.condition)) {
+                        } else if (ftd_utils.is_equal_condition(full_value, json_dependency.condition)) {
                             for (const parameter in json_dependency.parameters) {
-                                let parent = ftd_utils.get_name_and_remaining(parameter)[0];
-                                if (data[parent] !== undefined) {
-                                    let value = json_dependency.parameters[parameter].value.value;
-                                    if (dependency === "$value#kind$") {
-                                        ftd_utils.set_data_value(data, parameter + ".$kind$", value);
-                                    }
-                                    if (dependency === "$value$") {
-                                        ftd_utils.set_data_value(data, parameter, value);
-                                    }
-                                    let parameter_value = ftd_utils.get_data_value(data, parameter);
-                                    handle_action_(id, parameter, parameter_value, data, ftd_external_children, styles_edited)
+                                if (data[ftd_utils.get_name_and_remaining(parameter)[0]] === undefined) {
+                                    continue;
                                 }
+                                let value = json_dependency.parameters[parameter].value.value;
+                                if (dependency === "$value#kind$") {
+                                    ftd_utils.set_data_value(data, parameter + ".$kind$", value);
+                                }
+                                if (dependency === "$value$") {
+                                    ftd_utils.set_data_value(data, parameter, value);
+                                }
+                                let parameter_value = ftd_utils.get_data_value(data, parameter);
+                                handle_action_(id, parameter, parameter_value, data, ftd_external_children, styles_edited, visibility_change)
                             }
                         } else {
                             for (const parameter in json_dependency.parameters) {
-                                if (data[parameter] !== undefined) {
-                                    let default_value = json_dependency.parameters[parameter].default;
-                                    if (default_value === null) {
-                                        continue;
-                                    }
-                                    if (dependency === "$value#kind$") {
-                                        ftd_utils.set_data_value(data, parameter + ".$kind$", default_value.value);
-                                    }
-                                    if (dependency === "$value$") {
-                                        ftd_utils.set_data_value(data, parameter, default_value.value);
-                                    }
-                                    let parameter_value = ftd_utils.get_data_value(data, parameter);
-                                    handle_action_(id, parameter, parameter_value, data, ftd_external_children, styles_edited)
+                                if (data[ftd_utils.get_name_and_remaining(parameter)[0]] === undefined) {
+                                    continue;
                                 }
+                                let default_value = json_dependency.parameters[parameter].default;
+                                if (default_value === null) {
+                                    continue;
+                                }
+                                if (dependency === "$value#kind$") {
+                                    ftd_utils.set_data_value(data, parameter + ".$kind$", default_value.value);
+                                }
+                                if (dependency === "$value$") {
+                                    ftd_utils.set_data_value(data, parameter, default_value.value);
+                                }
+                                let parameter_value = ftd_utils.get_data_value(data, parameter);
+                                handle_action_(id, parameter, parameter_value, data, ftd_external_children, styles_edited, visibility_change)
                             }
                         }
                     } else if (json_dependency.dependency_type === "Style") {
@@ -3036,6 +2986,10 @@ let ftd_utils = {
                             let set = [];
                             if (!!json_dependency.parameters["dependents"]) {
                                 set = json_dependency.parameters["dependents"].value.value;
+                            }
+                            if ((!!json_dependency.remaining)
+                                && (json_dependency.remaining !== target_remaining)) {
+                                continue;
                             }
                             if (!!set.length) {
                                 let style_attr = Object.keys(json_dependency.parameters).filter(w => w !== "dependents")[0];
@@ -3047,10 +3001,10 @@ let ftd_utils = {
                                             || !dependent_dependencies[d].parameters[style_attr]) {
                                             continue;
                                         }
-                                        dependent_dependencies[d].parameters[style_attr].default.value = data[target].value;
+                                        dependent_dependencies[d].parameters[style_attr].default.value = full_value;
                                     }
                                     data[set[idx]].dependencies[dependency] = dependent_dependencies;
-                                    handle_action_(id, set[idx], dependent, data, ftd_external_children, styles_edited);
+                                    handle_action_(id, set[idx], dependent, data, ftd_external_children, styles_edited, visibility_change);
                                 }
                                 continue;
                             }
@@ -3058,7 +3012,6 @@ let ftd_utils = {
                                 if (parameter === "dependents") {
                                     continue;
                                 }
-
                                 let important = json_dependency.parameters[parameter].value.important;
                                 if (new_value instanceof Object) {
                                     for (const parameter in new_value) {
@@ -3074,7 +3027,7 @@ let ftd_utils = {
                                     }
                                 }
                             }
-                        } else if (ftd_utils.is_equal_condition(data[target].value, json_dependency.condition)) {
+                        } else if (ftd_utils.is_equal_condition(full_value, json_dependency.condition)) {
                             for (const parameter in json_dependency.parameters) {
                                 let value = json_dependency.parameters[parameter].value.value;
                                 // if (ftd_utils.isJson(value)) {
@@ -3123,7 +3076,9 @@ let ftd_utils = {
                     }
                 }
             }
-            ftd_utils.external_children_replace(id, ftd_external_children);
+            if (visibility_change) {
+                ftd_utils.external_children_replace(id, ftd_external_children);
+            }
         }
     },
 
@@ -3158,7 +3113,7 @@ let ftd_utils = {
                     }
                 }
                 if (display && !external_children_placed.includes(object)) {
-                    console.log(`${object}:${id}::: ${set_at}:${id}`);
+                    console_log(`${object}:${id}::: ${set_at}:${id}`);
                     let get_element_set_at = document.querySelector(`[data-id="${set_at}:${id}"]`);
                     let objects_to_set = document.querySelectorAll(`[data-ext-id="${object}:${id}"]`);
                     for (let i = 0; i < objects_to_set.length; i++) {
@@ -3189,7 +3144,8 @@ window.ftd = (function () {
             evt.preventDefault();
         } else if (act === "toggle") {
             let target = action["target"];
-            let value = data[target].value;
+            let var_name = ftd_utils.get_name_and_remaining(target)[0];
+            let value = data[var_name].value;
             if (typeof value === "string" || value instanceof String) {
                 value = value === 'true';
             }
@@ -3198,7 +3154,7 @@ window.ftd = (function () {
             if (action["parameters"].data !== undefined) {
                 let value = JSON.parse(action["parameters"].data[0].value);
                 let reference = JSON.parse(action["parameters"].data[0].reference);
-                let data = ftd_utils.resolve_reference(value, reference, ftd_data[id], obj);
+                let data = ftd_utils.resolve_reference(value, reference, data, obj);
                 let func = data.function.trim().replaceAll("-", "_");
                 window[func](id, data, reference);
             } else {
@@ -3211,18 +3167,18 @@ window.ftd = (function () {
             if (action["parameters"].by !== undefined) {
                 let by_value = action["parameters"].by[0].value;
                 let by_reference = action["parameters"].by[0].reference;
-                increment = parseInt(ftd_utils.resolve_reference(by_value, by_reference, ftd_data[id], obj));
+                increment = parseInt(ftd_utils.resolve_reference(by_value, by_reference, data, obj));
             }
             let clamp_max = undefined;
             let clamp_min = undefined;
             if (action["parameters"]["clamp"] !== undefined) {
                 let clamp_value = action["parameters"]["clamp"];
                 if (clamp_value.length === 1) {
-                    clamp_max = parseInt(ftd_utils.resolve_reference(clamp_value[0].value, clamp_value[0].reference, ftd_data[id], obj));
+                    clamp_max = parseInt(ftd_utils.resolve_reference(clamp_value[0].value, clamp_value[0].reference, data, obj));
                 }
                 if (clamp_value.length === 2) {
-                    clamp_min = parseInt(ftd_utils.resolve_reference(clamp_value[0].value, clamp_value[0].reference, ftd_data[id], obj));
-                    clamp_max = parseInt(ftd_utils.resolve_reference(clamp_value[1].value, clamp_value[1].reference, ftd_data[id], obj));
+                    clamp_min = parseInt(ftd_utils.resolve_reference(clamp_value[0].value, clamp_value[0].reference, data, obj));
+                    clamp_max = parseInt(ftd_utils.resolve_reference(clamp_value[1].value, clamp_value[1].reference, data, obj));
                 }
             }
             exports.increment_decrement_value(id, target, increment, clamp_min, clamp_max);
@@ -3233,7 +3189,7 @@ window.ftd = (function () {
             if (action["parameters"].by !== undefined) {
                 let by_value = action["parameters"].by[0].value;
                 let by_reference = action["parameters"].by[0].reference;
-                decrement = -parseInt(ftd_utils.resolve_reference(by_value, by_reference, ftd_data[id], obj));
+                decrement = -parseInt(ftd_utils.resolve_reference(by_value, by_reference, data, obj));
             }
 
             let clamp_max = undefined;
@@ -3241,11 +3197,11 @@ window.ftd = (function () {
             if (action["parameters"]["clamp"] !== undefined) {
                 let clamp_value = action["parameters"]["clamp"];
                 if (clamp_value.length === 1) {
-                    clamp_max = parseInt(ftd_utils.resolve_reference(clamp_value[0].value, clamp_value[0].reference, ftd_data[id], obj));
+                    clamp_max = parseInt(ftd_utils.resolve_reference(clamp_value[0].value, clamp_value[0].reference, data, obj));
                 }
                 if (clamp_value.length === 2) {
-                    clamp_min = parseInt(ftd_utils.resolve_reference(clamp_value[0].value, clamp_value[0].reference, ftd_data[id], obj));
-                    clamp_max = parseInt(ftd_utils.resolve_reference(clamp_value[1].value, clamp_value[1].reference, ftd_data[id], obj));
+                    clamp_min = parseInt(ftd_utils.resolve_reference(clamp_value[0].value, clamp_value[0].reference, data, obj));
+                    clamp_max = parseInt(ftd_utils.resolve_reference(clamp_value[1].value, clamp_value[1].reference, data, obj));
                 }
             }
 
@@ -3253,16 +3209,27 @@ window.ftd = (function () {
         } else if (act === "set-value") {
             let target = action["target"];
             let value_data = action["parameters"].value[0];
-            let value = ftd_utils.resolve_reference(value_data.value, value_data.reference, ftd_data[id], obj)
+            let value = ftd_utils.resolve_reference(value_data.value, value_data.reference, data, obj)
             if (action["parameters"].value[1].value === "integer") {
                 value = parseInt(value);
             } else if (action["parameters"].value[1].value === "decimal") {
                 value = parseFloat(value);
             } else if (action["parameters"].value[1].value === "boolean") {
                 value = (value === "true");
+            } else if (ftd_utils.isJson(value)) {
+                value = JSON.parse(value)
             }
 
-            let data = ftd_data[id];
+            let var_name = ftd_utils.get_name_and_remaining(target)[0];
+            if (!data[var_name]) {
+                console_log(target, " is not in data, ignoring");
+                return;
+            }
+            let old_value = ftd_utils.get_data_value(data, target);
+            if (ftd_utils.deepEqual(old_value, value) && !target.includes("MOUSE-IN")) {
+                console_log(target, " value is same as current, ignoring");
+                return;
+            }
             ftd_utils.handle_action(id, target, value, data, ftd_external_children);
 
         } else if (act === "insert") {
@@ -3271,28 +3238,28 @@ window.ftd = (function () {
             if (action["parameters"].value !== undefined) {
                 let insert_value = action["parameters"].value[0].value;
                 let insert_reference = action["parameters"].value[0].reference;
-                value = ftd_utils.resolve_reference(insert_value, insert_reference, ftd_data[id], obj);
+                value = ftd_utils.resolve_reference(insert_value, insert_reference, data, obj);
             }
             let at = undefined;
             if (action["parameters"].at !== undefined) {
                 let at_value = action["parameters"].at[0].value;
                 let at_reference = action["parameters"].at[0].reference;
-                at = ftd_utils.resolve_reference(at_value, at_reference, ftd_data[id], obj);
+                at = ftd_utils.resolve_reference(at_value, at_reference, data, obj);
             }
 
             exports.insert_value(id, target, value, at);
 
         } else if (act === "clear") {
             let target = action["target"];
-            let data = ftd_data[id];
             let value = "";
-            if (data[target].value instanceof Object) {
+            let var_name = ftd_utils.get_name_and_remaining(target)[0];
+            if (data[var_name].value instanceof Object) {
                 let list = [];
                 value = list;
             }
             ftd_utils.handle_action(id, target, value, data, ftd_external_children);
         } else {
-            console.log("unknown action:", act);
+            console_log("unknown action:", act);
             return;
         }
 
@@ -3301,7 +3268,7 @@ window.ftd = (function () {
     let exports = {};
 
     exports.handle_event = function (evt, id, event, obj) {
-        console.log(id, event);
+        console_log(id, event);
         let actions = JSON.parse(event);
         for (const action in actions) {
             handle_event(evt, id, actions[action], obj)
@@ -3312,7 +3279,7 @@ window.ftd = (function () {
         let data = ftd_data[id];
 
         if (!data[variable]) {
-            console.log(variable, "is not in data, ignoring");
+            console_log(variable, "is not in data, ignoring");
             return;
         }
 
@@ -3335,20 +3302,21 @@ window.ftd = (function () {
     exports.insert_value = function (id, target, value, at) {
         let data = ftd_data[id];
 
-        if (!data[target]) {
-            console.log(target, "is not in data, ignoring");
+
+        if (!data[ftd_utils.get_name_and_remaining(target)[0]]) {
+            console_log(target, "is not in data, ignoring");
             return;
         }
 
-        let list = data[target].value;
+        let list = ftd_utils.get_data_value(data, target);
 
         if (!(list instanceof Object)) {
-            console.log(list, "is not list, ignoring");
+            console_log(list, "is not list, ignoring");
             return;
         }
 
         if (value === undefined || value.trim() === "") {
-            console.log("Nothing to insert in ", list);
+            console_log("Nothing to insert in ", list);
             return;
         }
 
@@ -3367,7 +3335,7 @@ window.ftd = (function () {
         let data = ftd_data[id];
 
         if (!data[variable]) {
-            console.log(variable, "is not in data, ignoring");
+            console_log(variable, "is not in data, ignoring");
             return;
         }
 
@@ -3378,7 +3346,7 @@ window.ftd = (function () {
         let data = ftd_data[id];
 
         if (!data[variable]) {
-            console.log(variable, "is not in data, ignoring");
+            console_log(variable, "is not in data, ignoring");
             return;
         }
 
@@ -3389,7 +3357,7 @@ window.ftd = (function () {
         let data = ftd_data[id];
 
         if (!data[variable]) {
-            console.log(variable, "is not in data, ignoring");
+            console_log(variable, "is not in data, ignoring");
             return;
         }
         return data[variable].value;
@@ -3458,7 +3426,7 @@ window.ftd.post_init = function () {
 
     function initialise_device() {
         last_device = get_device();
-        console.log("last_device", last_device);
+        console_log("last_device", last_device);
         window.ftd.set_bool_for_all(FTD_DEVICE, last_device);
     }
 
@@ -3470,7 +3438,7 @@ window.ftd.post_init = function () {
 
         window.ftd.set_string_for_all(FTD_DEVICE, current);
         last_device = current;
-        console.log("last_device", last_device);
+        console_log("last_device", last_device);
     }
 
     function get_device() {
@@ -3611,7 +3579,7 @@ window.ftd.post_init = function () {
                 window.enable_dark_mode();
                 break;
             default:
-                console.log("cookie value is wrong", current_dark_mode_cookie);
+                console_log("cookie value is wrong", current_dark_mode_cookie);
                 window.enable_system_mode();
         }
     }
