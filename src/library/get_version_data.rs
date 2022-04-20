@@ -70,11 +70,7 @@ pub fn processor(
         if [version, 0].contains(&k) {
             continue;
         }
-        if v.iter()
-            .map(|v| v.get_id())
-            .collect::<Vec<String>>()
-            .contains(&doc_id)
-        {
+        if v.iter().map(|v| v.get_id()).any(|x| x == doc_id) {
             version_toc = format!("{}- v{}: v{}{}", version_toc, k, k, url);
         }
     }
