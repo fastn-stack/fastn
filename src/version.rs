@@ -8,12 +8,8 @@ pub(crate) async fn build_version(
     let versioned_documents = config.get_versions(&config.package).await?;
     let mut index = 0;
     let mut documents = std::collections::BTreeMap::new();
-    loop {
-        if let Some(doc) = versioned_documents.get(&index) {
-            documents.extend(doc.into_iter().map(|v| (v.get_id(), v.to_owned())));
-        } else {
-            break;
-        }
+    while let Some(doc) = versioned_documents.get(&index) {
+        documents.extend(doc.iter().map(|v| (v.get_id(), v.to_owned())));
         if index.eq(&0) {
             index += 1;
             continue;

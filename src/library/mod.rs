@@ -1,5 +1,6 @@
 mod fpm_dot_ftd;
 mod get_data;
+mod get_version_data;
 mod http;
 mod include;
 mod sqlite;
@@ -14,7 +15,6 @@ pub struct Library {
     /// Hashmap that contains the information about the assets document for the current build
     /// It'll contain a map of <package_name> corresponding to the asset doc for that package
     pub asset_documents: std::collections::HashMap<String, String>,
-
     pub base_url: String,
 }
 
@@ -211,6 +211,13 @@ impl ftd::p2::Library for Library {
             "toc" => fpm::library::toc::processor(section, doc, &self.config),
             "include" => fpm::library::include::processor(section, doc, &self.config),
             "get-data" => fpm::library::get_data::processor(section, doc, &self.config),
+            "get-version-data" => fpm::library::get_version_data::processor(
+                section,
+                doc,
+                &self.config,
+                self.document_id.as_str(),
+                self.base_url.as_str(),
+            ),
             t => unimplemented!("$processor$: {} is not implemented yet", t),
         }
     }
