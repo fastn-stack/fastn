@@ -14,7 +14,7 @@ pub fn processor(
             }
         })?;
 
-    let version = if let Some(number) = document_id
+    /*let version = if let Some(number) = document_id
         .split_once('/')
         .map(|(v, _)| v.strip_prefix('v'))
         .flatten()
@@ -29,7 +29,7 @@ pub fn processor(
     } else {
         // 0 is base version
         0
-    };
+    };*/
 
     let doc_id = if let Some(doc) = document_id.split_once('/').map(|(_, v)| v) {
         doc
@@ -51,28 +51,33 @@ pub fn processor(
     let url = match doc_id.as_str().rsplit_once('.') {
         Some(("index", "ftd")) => {
             // Index.ftd found. Return index.html
-            format!("{base_url}index.html")
+            format!("{base_url}")
         }
         Some((file_path, "ftd")) | Some((file_path, "md")) => {
-            format!("{base_url}{file_path}/index.html")
+            format!("{base_url}{file_path}/")
         }
         Some(_) | None => {
             // Unknown file found, create URL
-            format!(
-                "{base_url}{file_path}/index.html",
-                file_path = doc_id.as_str()
-            )
+            format!("{base_url}{file_path}/", file_path = doc_id.as_str())
         }
     };
 
     let mut version_toc = "".to_string();
-    for (k, v) in versions {
-        if [version, 0].contains(&k) {
+    let mut index = 0;
+    while let Some(v) = versions.get(&index) {
+        if v.iter().map(|v| v.get_id()).any(|x| x == doc_id) {
+            break;
+        }
+        index += 1;
+    }
+
+    while versions.contains_key(&index) {
+        if index.eq(&0) {
+            index += 1;
             continue;
         }
-        if v.iter().map(|v| v.get_id()).any(|x| x == doc_id) {
-            version_toc = format!("{}- v{}: v{}{}", version_toc, k, k, url);
-        }
+        version_toc = format!("{}- v{}: v{}{}\n", version_toc, index, index, url);
+        index += 1;
     }
 
     let toc_items = fpm::library::toc::ToC::parse(version_toc.as_str(), doc.name)
