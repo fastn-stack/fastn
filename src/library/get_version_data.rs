@@ -14,7 +14,7 @@ pub fn processor(
             }
         })?;
 
-    /*let version = if let Some(number) = document_id
+    let version = if let Some(number) = document_id
         .split_once('/')
         .map(|(v, _)| v.strip_prefix('v'))
         .flatten()
@@ -29,7 +29,7 @@ pub fn processor(
     } else {
         // 0 is base version
         0
-    };*/
+    };
 
     let doc_id = if let Some(doc) = document_id.split_once('/').map(|(_, v)| v) {
         doc
@@ -62,7 +62,6 @@ pub fn processor(
         }
     };
 
-    let mut version_toc = "".to_string();
     let mut index = 0;
     while let Some(v) = versions.get(&index) {
         if v.iter().map(|v| v.get_id()).any(|x| x == doc_id) {
@@ -71,22 +70,27 @@ pub fn processor(
         index += 1;
     }
 
+    let mut version_toc = vec![];
     while versions.contains_key(&index) {
         if index.eq(&0) {
             index += 1;
             continue;
         }
-        version_toc = format!("{}- v{}: v{}{}\n", version_toc, index, index, url);
+        version_toc.push(fpm::library::toc::TocItem {
+            id: None,
+            title: Some(format!("v{}", index)),
+            url: Some(format!("v{}{}", index, url)),
+            number: vec![],
+            is_heading: if version.eq(&index) { true } else { false },
+            is_disabled: false,
+            img_src: None,
+            font_icon: None,
+            children: vec![],
+        });
         index += 1;
     }
 
-    let toc_items = fpm::library::toc::ToC::parse(version_toc.as_str(), doc.name)
-        .map_err(|e| ftd::p1::Error::ParseError {
-            message: format!("Cannot parse body: {:?}", e),
-            doc_id: doc.name.to_string(),
-            line_number: section.line_number,
-        })?
-        .items
+    let toc_items = version_toc
         .iter()
         .map(|item| item.to_toc_item_compat())
         .collect::<Vec<fpm::library::toc::TocItemCompat>>();
