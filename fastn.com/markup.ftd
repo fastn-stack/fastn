@@ -1,0 +1,121 @@
+-- ft.page-with-toc: FTD markup syntax
+toc: $config.api-toc
+sub-sections: $config.doc-header
+
+Text in FTD support Markdown syntax. We also support, what we call "ftd markup"
+syntax.
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.text: hello, {yellow: world}
+
+\-- ftd.color yellow-color:
+light: yellow
+dark: yellow
+
+\-- ftd.text yellow: This One Gives Yellow Background
+background-color: $yellow-color
+border-radius: 2
+padding: 3
+
+-- ft.markdown:
+
+Which looks like this:
+
+-- ftd.text: hello, {yellow: world}
+color: $fpm.color.main.text
+
+-- ftd.color yellow-color:
+light: yellow
+dark: yellow
+
+-- ftd.text yellow: This One Gives Yellow Background
+background-color: $yellow-color
+border-radius: 2
+padding: 3
+color: $fpm.color.main.border
+
+-- ft.h1: Markup Supports Nesting
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.text: {yellow: this is {red: important}}
+
+-- ft.markdown:
+
+Which looks like this:
+
+-- ftd.text: {yellow: this is {red: important}}
+color: $fpm.color.main.text
+
+-- ftd.color red-color:
+light: red
+dark: red
+
+-- ftd.text red: This One Gives Red Background
+background-color: $red-color
+border-radius: 2
+padding: 3
+color: $fpm.color.main.text-strong
+
+
+
+-- ft.h1: Value Is Optional
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.text: check us out on {github}
+
+\-- ftd.text: FTD On Github
+link: https://github.com/FifthTry/ftd
+
+-- ft.markdown:
+
+If value is not provided, the caption of the `ftd.text` is used.
+
+-- ftd.text: check us out on {github}
+color: $fpm.color.main.text
+
+
+-- ftd.text github: FTD On Github
+link: https://github.com/FifthTry/ftd
+border-radius: 2
+padding: 3
+
+-- ft.h1: Event Handling
+
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.text: Click {orange: me}
+
+\-- boolean shown: true
+
+\-- ftd.text orange: Show/Hide orange background color
+background-color if $shown: $orange-color
+$on-click$: toggle $shown
+
+-- ft.markdown:
+
+Markup can be used to implement event handling as well.
+
+-- boolean shown: true
+
+-- ftd.text: Click {orange: me}
+color: $fpm.color.main.text
+
+-- ftd.color orange-color:
+light: orange
+dark: orange
+
+-- ftd.text orange: Show/Hide orange background color
+background-color if $shown: $orange-color
+color if $shown: $fpm.color.main.text-strong
+$on-click$: toggle $shown
+border-radius: 2
+padding: 3
+
