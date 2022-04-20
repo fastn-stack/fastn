@@ -315,6 +315,7 @@ impl<'a> ExecuteDoc<'a> {
                             vec![ftd::Element::Column(main)]
                         }
                     };
+
                     if let Some((_, _, ref mut e)) = c.external_children {
                         e.extend(external_children);
                     } else {

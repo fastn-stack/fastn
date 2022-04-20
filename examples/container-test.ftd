@@ -1,0 +1,26 @@
+-- ftd.column:
+
+--- foo:
+
+--- ftd.text: Hello
+
+
+
+
+-- ftd.column foo:
+append-at: col-id
+open: true
+boolean open-1: false
+
+--- ftd.text: Click
+$on-click$: toggle $open-1
+
+--- ftd.column:
+if: $open-1
+
+--- ftd.column:
+
+--- ftd.column:
+
+--- ftd.column:
+id: col-id

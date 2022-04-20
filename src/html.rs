@@ -150,7 +150,7 @@ impl Node {
                         index += 1;
                     }
                     let is_last = {
-                        let mut last = external_container.is_empty()
+                        let mut last = external_container.len() <= 1
                             && (index >= external_children_container.len()
                                 || !is_other_sibling_visible(
                                     i,
