@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-    <title>hello {world}.</title>
+    <title>hello "{world}" {world} {world}.</title>
     <script type="ftd" id="ftd-data">
         {
   "ftd#dark-mode": {
@@ -62,6 +62,64 @@
     },
     "dependencies": {
       "0,1": [
+        {
+          "condition": null,
+          "dependency_type": "Style",
+          "parameters": {
+            "color": {
+              "default": null,
+              "value": {
+                "important": false,
+                "reference": null,
+                "value": {
+                  "$kind$": "light",
+                  "dark": "rgba(0,128,0,1)",
+                  "light": "rgba(0,128,0,1)"
+                }
+              }
+            },
+            "dependents": {
+              "default": null,
+              "value": {
+                "important": false,
+                "reference": null,
+                "value": []
+              }
+            }
+          },
+          "remaining": null
+        }
+      ],
+      "0,3": [
+        {
+          "condition": null,
+          "dependency_type": "Style",
+          "parameters": {
+            "color": {
+              "default": null,
+              "value": {
+                "important": false,
+                "reference": null,
+                "value": {
+                  "$kind$": "light",
+                  "dark": "rgba(0,128,0,1)",
+                  "light": "rgba(0,128,0,1)"
+                }
+              }
+            },
+            "dependents": {
+              "default": null,
+              "value": {
+                "important": false,
+                "reference": null,
+                "value": []
+              }
+            }
+          },
+          "remaining": null
+        }
+      ],
+      "0,5": [
         {
           "condition": null,
           "dependency_type": "Style",
@@ -268,9 +326,7 @@ body.fpm-dark .ft_md a:visited code {
 </head>
     <body style="height: 100%;">
 
-        <div data-id="main:root" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; height: 100%; justify-content: flex-start; white-space: initial; width: 100%" class="ft_md"><div data-id="0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; white-space: initial" class="ft_md"><span data-id="0,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; white-space: initial" class="ft_md">hello</span>
-<span data-id="0,1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(0,128,0,1); text-align: left; white-space: initial" class="ft_md">World</span>
-<span data-id="0,2:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; white-space: initial" class="ft_md">.</span></div></div>
+        <div data-id="main:root" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; height: 100%; justify-content: flex-start; white-space: initial; width: 100%" class="ft_md"><div data-id="0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; white-space: initial" class="ft_md"><span data-id="0,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; white-space: initial" class="ft_md">hello “</span><span data-id="0,1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(0,128,0,1); text-align: left; white-space: initial" class="ft_md">World</span><span data-id="0,2:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; white-space: initial" class="ft_md">“ </span><span data-id="0,3:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(0,128,0,1); text-align: left; white-space: initial" class="ft_md">World</span><span data-id="0,4:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; white-space: initial" class="ft_md"> </span><span data-id="0,5:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(0,128,0,1); text-align: left; white-space: initial" class="ft_md">World</span><span data-id="0,6:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; white-space: initial" class="ft_md">.</span></div></div>
 
 
     <script>
