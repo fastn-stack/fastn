@@ -1,0 +1,11 @@
+-- ft.page-with-toc: Dependency: `fbt-lib`
+toc: $config.crate-toc
+sub-sections: $config.dev-section
+extra: $config.empty
+
+
+We use [`fbt-lib`](https://docs.rs/fbt-lib/) in development mode for testing.
+Tests are present in [tests folder](https://github.com/FifthTry/fpm/tree/main/tests).
+
+Version: [0.1.18](https://crates.io/crates/fbt-lib/0.1.18)
+

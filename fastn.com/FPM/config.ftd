@@ -88,8 +88,12 @@ $processor$: toc
 - Private Stuff
   - `fpm::utils`
     url: crate/utils/
+- Day To Day
+  - How To Run Tests: day-to-day/how-to-run-tests/
+  - How To Update Failing Snapshot Tests:  day-to-day/how-to-fix-tests/
 - Dependencies
   - `ftd`: crate/deps/ftd/
+  - `fbt-lib`: crate/deps/fbt-lib/
   - `camino`: crate/deps/camino/
 
 

@@ -1,0 +1,20 @@
+-- ft.page-with-toc: How To Update Failing Snapshot Tests
+toc: $config.crate-toc
+sub-sections: $config.dev-section
+extra: $config.empty
+
+We can fix the failing tests which is due to snapshot mismatch in output folder.
+
+-- ft.code:
+lang: sh
+
+fbt --fix
+
+-- ft.markdown:
+
+This will update the snapshots of all the tests
+
+Prerequisite: Read this [How To Run Tests](day-to-day/how-to-run-tests/)
+
+
+
