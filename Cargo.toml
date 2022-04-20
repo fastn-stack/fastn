@@ -46,7 +46,7 @@ itertools = "0.10.3"
 mime_guess = "2"
 
 [dev-dependencies]
-fbt-lib = "0.1.17"
+fbt-lib = "0.1.18"
 indoc = "1"
 pretty_assertions = "1"
 rusty-hook = "^0.11.2"
