@@ -1,0 +1,105 @@
+-- ft.page-with-toc: How Versioning Works
+toc: $config.dev-toc
+
+FPM uses fallback based file tracking technique to implement versioning.
+
+-- ft.h1: Versioning Happens At Project Level
+
+Currently a package will either implement versioning or it will not.
+
+If a project implements versioning, the top level of the project there would be
+version folders.
+
+Normal layout looks like this:
+
+-- ft.code: Project Without Versioning
+lang: txt
+
+- package-folder
+  - FPM.ftd
+  - index.ftd
+  - foo.ftd
+
+-- ft.markdown:
+
+For a project with versioning enabled:
+
+-- ft.code: Project With Versioning (foo.com package's content)
+lang: txt
+
+- package-folder
+  - FPM.ftd
+  - v1/
+    - index.ftd
+    - foo.ftd
+  - v2/
+    - index.ftd
+
+-- ft.markdown:
+
+Notice that `foo.ftd` does not exist in `v2` folder, since it has not been
+edited in v2.
+
+-- ft.h2: `fpm.package`
+
+`fpm.package` includes one more field `versioned` of boolean type with
+default value as false. Set this field to true to enable versioning.
+
+-- ft.code:
+lang: ftd
+
+-- fpm.package: <package-name>
+versioned: true
+
+
+
+-- ft.h2: Versioning FPM.ftd
+
+No FPM versioning. All versions will use same dependencies etc.
+
+
+-- ft.h1: Package URLs
+
+If foo.com implements versioning, and have content as shown above, we will have
+URLs for each version, eg `foo.com/v1/` (corresponding to index.ftd),
+`foo.com/v1/foo/, `foo.com/v2/` and `foo.com/v2/foo/` (even though there is no
+`foo.ftd` in `v2` folder).
+
+-- ft.h2: Top level URLs
+
+Further the latest version's content would be reflected on top level, so we
+have `foo.com/` and `foo.com/foo/`.
+
+Top level URLs would use latest version as the canonical URL. NOT SURE ABOUT IT.
+
+
+-- ft.h1: `base` URL
+
+All urls in markdown etc should use only be partial urls, so eg if `index.ftd`
+is talking about `foo.com/foo/` it should link to it using `foo/`.
+
+If the project was `foo.com/bar`, the base URL is `/bar/`, and full URLs of the
+files mentioned above would be `foo.com/bar/v1/`, `foo.com/bar/v1/foo/` and so
+on, so when linking we `index.ftd` will continue to use `foo/` as path, and base
+URL would be set to `/bar/v1/` etc, based on which file being built.
+
+
+-- ft.h1: Version Dropdown
+
+Version dropdown will show all versions. Latest version would be linked against
+the version number, eg `foo.com/v2/` not `foo.com/` even though the two have
+same content.
+
+
+-- ft.h1: FPM Variables
+
+To assist themes with versioning we have the following fpm variables:
+
+
+
+-- ft.h2: `ftd.toc-item list fpm.versions`
+
+All version prefixes, eg `v1`, `v2`, and so on. The link will point to the
+current document's URL in that version. If the current document is not present
+in that version the link is not set.
+

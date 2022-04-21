@@ -60,8 +60,9 @@ $processor$: toc
 -- fpm.toc-item list dev-toc:
 $processor$: toc
 
-- Roadmap: /roadmap/
-- Journal: /journal/
+- Roadmap: roadmap/
+- Journal: journal/
+- How Versioning Works: dev/versioning/
 
 -- fpm.toc-item list crate-toc:
 $processor$: toc
