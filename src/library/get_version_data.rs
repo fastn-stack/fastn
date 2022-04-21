@@ -44,10 +44,7 @@ pub fn processor(
     };
 
     let url = match doc_id.as_str().rsplit_once('.') {
-        Some(("index", "ftd")) => {
-            // Index.ftd found. Return index.html
-            format!("{base_url}")
-        }
+        Some(("index", "ftd")) => base_url,
         Some((file_path, "ftd")) | Some((file_path, "md")) => {
             format!("{base_url}{file_path}/")
         }
@@ -77,10 +74,10 @@ pub fn processor(
         }
         version_toc.push(fpm::library::toc::TocItem {
             id: None,
-            title: Some(format!("{}", key.original)),
+            title: Some(key.original.to_string()),
             url: Some(format!("{}{}", key.original, url)),
             number: vec![],
-            is_heading: if version.eq(key) { true } else { false },
+            is_heading: version.eq(key),
             is_disabled: false,
             img_src: None,
             font_icon: None,
