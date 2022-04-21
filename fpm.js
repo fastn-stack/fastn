@@ -1,8 +1,6 @@
 (function () {
-    const FPM_THEME_COLOR = "fpm#theme-color";
     const FPM_IS_FALLBACK = "fpm#is-fallback";
     const FPM_TRANSLATION_DIFF_OPEN = "fpm#translation-diff-open";
-    const THEME_COLOR_META = "theme-color";
 
     var translation_diff_open = false;
 
@@ -21,35 +19,6 @@
     window.toggle_translation_diff = function () {
         translation_diff_open = !translation_diff_open;
         window.ftd.set_bool_for_all(FPM_TRANSLATION_DIFF_OPEN, translation_diff_open);
-    }
-
-    // todo: call update_theme_color() on the event for ftd.dark-mode change
-    function update_theme_color() {
-        let theme_color = window.ftd.get_value("main", FPM_THEME_COLOR);
-        if (!!theme_color) {
-            set_meta(THEME_COLOR_META, theme_color);
-        } else {
-            delete_meta(THEME_COLOR_META);
-        }
-    }
-
-    function set_meta(name, value) {
-        let meta = document.querySelector("meta[name=" + name + "]");
-        if (!!meta) {
-            meta.content = value;
-        } else {
-            meta = document.createElement('meta');
-            meta.name = name;
-            meta.content = value;
-            document.getElementsByTagName('head')[0].appendChild(meta);
-        }
-    }
-
-    function delete_meta(name) {
-        let meta = document.querySelector("meta[name=" + name + "]")
-        if (!!meta) {
-            meta.remove();
-        }
     }
 })();
 
