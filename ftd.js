@@ -971,6 +971,8 @@ window.ftd.post_init = function () {
     const FTD_DEVICE = "ftd#device";
     const FTD_MOBILE_BREAKPOINT = "ftd#mobile-breakpoint";
     const FTD_DESKTOP_BREAKPOINT = "ftd#desktop-breakpoint";
+    const FTD_THEME_COLOR = "ftd#theme-color";
+    const THEME_COLOR_META = "theme-color";
 
     let last_device;
 
@@ -1063,6 +1065,7 @@ window.ftd.post_init = function () {
         window.ftd.set_bool_for_all(SYSTEM_DARK_MODE, system_dark_mode());
         document.body.classList.add(DARK_MODE_CLASS);
         set_cookie(DARK_MODE_COOKIE, COOKIE_DARK_MODE);
+        update_theme_color();
     }
 
     window.enable_light_mode = function () {
@@ -1075,6 +1078,7 @@ window.ftd.post_init = function () {
             document.body.classList.remove(DARK_MODE_CLASS);
         }
         set_cookie(DARK_MODE_COOKIE, COOKIE_LIGHT_MODE);
+        update_theme_color();
     }
 
     window.enable_system_mode = function () {
@@ -1092,6 +1096,37 @@ window.ftd.post_init = function () {
                 document.body.classList.remove(DARK_MODE_CLASS);
             }
             set_cookie(DARK_MODE_COOKIE, COOKIE_SYSTEM_LIGHT)
+        }
+        update_theme_color();
+    }
+
+    function update_theme_color() {
+        let theme_color = window.ftd.get_value("main", FTD_THEME_COLOR);
+        if (!!theme_color) {
+            document.body.style.backgroundColor = FTD_THEME_COLOR;
+            set_meta(THEME_COLOR_META, theme_color);
+        } else {
+            document.html.style.backgroundColor = FTD_THEME_COLOR;
+            delete_meta(THEME_COLOR_META);
+        }
+    }
+
+    function set_meta(name, value) {
+        let meta = document.querySelector("meta[name=" + name + "]");
+        if (!!meta) {
+            meta.content = value;
+        } else {
+            meta = document.createElement('meta');
+            meta.name = name;
+            meta.content = value;
+            document.getElementsByTagName('head')[0].appendChild(meta);
+        }
+    }
+
+    function delete_meta(name) {
+        let meta = document.querySelector("meta[name=" + name + "]")
+        if (!!meta) {
+            meta.remove();
         }
     }
 
