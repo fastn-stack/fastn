@@ -1,5 +1,6 @@
 use itertools::Itertools;
 use std::cmp::Ordering;
+use std::io::Write;
 
 #[derive(Clone, Eq, PartialEq, Hash, Debug)]
 pub struct Version {
@@ -74,17 +75,56 @@ pub(crate) async fn build_version(
     let mut documents = std::collections::BTreeMap::new();
     for key in versioned_documents.keys().sorted() {
         let doc = versioned_documents[key].to_owned();
-        documents.extend(doc.iter().map(|v| (v.get_id(), v.to_owned())));
+        documents.extend(
+            doc.iter()
+                .map(|v| (v.get_id(), (key.original.to_string(), v.to_owned()))),
+        );
         if key.eq(&fpm::Version::base()) {
             continue;
         }
-        for doc in documents.values() {
+        for (version, doc) in documents.values() {
             let mut doc = doc.clone();
             let id = doc.get_id();
             if id.eq("FPM.ftd") {
                 continue;
             }
-            doc.set_id(format!("{}/{}", key.original, id).as_str());
+            let new_id = format!("{}/{}", key.original, id);
+            if !key.original.eq(version) && !fpm::Version::base().original.eq(version) {
+                if let fpm::File::Ftd(_) = doc {
+                    let original_id = format!("{}/{}", version, id);
+                    let original_file_rel_path = if original_id.contains("index.ftd") {
+                        original_id.replace("index.ftd", "index.html")
+                    } else {
+                        original_id.replace(
+                            ".ftd",
+                            format!("{}index.html", std::path::MAIN_SEPARATOR).as_str(),
+                        )
+                    };
+                    let original_file_path =
+                        config.root.join(".build").join(original_file_rel_path);
+                    let file_rel_path = if new_id.contains("index.ftd") {
+                        new_id.replace("index.ftd", "index.html")
+                    } else {
+                        new_id.replace(
+                            ".ftd",
+                            format!("{}index.html", std::path::MAIN_SEPARATOR).as_str(),
+                        )
+                    };
+                    let new_file_path = config.root.join(".build").join(file_rel_path);
+                    let original_content = std::fs::read_to_string(&original_file_path)?;
+                    std::fs::create_dir_all(&new_file_path.as_str().replace("index.html", ""))?;
+                    let mut f = std::fs::File::create(&new_file_path)?;
+                    let from_pattern = format!("<base href=\"{}{}/\">", base_url, version);
+                    let to_pattern = format!("<base href=\"{}{}/\">", base_url, key.original);
+                    f.write_all(
+                        original_content
+                            .replace(from_pattern.as_str(), to_pattern.as_str())
+                            .as_bytes(),
+                    )?;
+                    continue;
+                }
+            }
+            doc.set_id(new_id.as_str());
             fpm::process_file(
                 config,
                 &config.package,
@@ -92,7 +132,7 @@ pub(crate) async fn build_version(
                 None,
                 None,
                 Default::default(),
-                base_url,
+                format!("{}{}/", base_url, key.original).as_str(),
                 skip_failed,
                 asset_documents,
                 Some(id),
@@ -101,7 +141,7 @@ pub(crate) async fn build_version(
         }
     }
 
-    for doc in documents.values() {
+    for (_, doc) in documents.values() {
         fpm::process_file(
             config,
             &config.package,
