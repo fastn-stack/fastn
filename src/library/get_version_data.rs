@@ -80,7 +80,7 @@ pub fn processor(
             title: Some(format!("{}", key.original)),
             url: Some(format!("{}{}", key.original, url)),
             number: vec![],
-            is_heading: if version.eq(&key) { true } else { false },
+            is_heading: if version.eq(key) { true } else { false },
             is_disabled: false,
             img_src: None,
             font_icon: None,
