@@ -337,12 +337,12 @@ impl Config {
     pub(crate) async fn get_versions(
         &self,
         package: &fpm::Package,
-    ) -> fpm::Result<std::collections::HashMap<semver::Version, (String, Vec<fpm::File>)>> {
+    ) -> fpm::Result<std::collections::HashMap<fpm::Version, Vec<fpm::File>>> {
         let path = self.get_root_for_package(package);
         let mut ignore_paths = ignore::WalkBuilder::new(&path);
         ignore_paths.overrides(fpm::file::package_ignores(package, &path)?);
 
-        let mut hash: std::collections::HashMap<semver::Version, (String, Vec<fpm::File>)> =
+        let mut hash: std::collections::HashMap<fpm::Version, Vec<fpm::File>> =
             std::collections::HashMap::new();
 
         let all_files = ignore_paths
@@ -356,21 +356,21 @@ impl Config {
             if file.is_dir() {
                 continue;
             }
-            let (version_str, version) = get_version(&file, &path)?;
+            let version = get_version(&file, &path)?;
             let file = fpm::get_file(
                 package.name.to_string(),
                 &file,
-                &(if version_str.eq("BASE_VERSION") {
+                &(if version.original.eq("BASE_VERSION") {
                     path.to_owned()
                 } else {
-                    path.join(&version_str)
+                    path.join(&version.original)
                 }),
             )
             .await?;
-            if let Some((_, files)) = hash.get_mut(&version) {
+            if let Some(files) = hash.get_mut(&version) {
                 files.push(file)
             } else {
-                hash.insert(version, (version_str, vec![file]));
+                hash.insert(version, vec![file]);
             }
         }
         return Ok(hash);
@@ -378,7 +378,7 @@ impl Config {
         fn get_version(
             x: &camino::Utf8PathBuf,
             path: &camino::Utf8PathBuf,
-        ) -> fpm::Result<(String, semver::Version)> {
+        ) -> fpm::Result<fpm::Version> {
             let id = match std::fs::canonicalize(x)?.to_str().unwrap().rsplit_once(
                 if path.as_str().ends_with(std::path::MAIN_SEPARATOR) {
                     path.as_str().to_string()
@@ -394,18 +394,11 @@ impl Config {
                     });
                 }
             };
-            Ok(if let Some((v, _)) = id.split_once('/') {
-                (
-                    v.to_string(),
-                    semver::Version::parse(v.strip_prefix('v').unwrap_or_else(|| v)).map_err(
-                        |e| fpm::Error::UsageError {
-                            message: format!("Invalid version number: `{}` Error:`{:?}`", v, e),
-                        },
-                    )?,
-                )
+            if let Some((v, _)) = id.split_once('/') {
+                fpm::Version::parse(v)
             } else {
-                ("BASE_VERSION".to_string(), semver::Version::new(0, 0, 0))
-            })
+                Ok(fpm::Version::base())
+            }
         }
     }
 

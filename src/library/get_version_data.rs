@@ -17,14 +17,13 @@ pub fn processor(
         })?;
 
     let version = if let Some((v, _)) = document_id.split_once('/') {
-        let v = v.strip_prefix('v').unwrap_or_else(|| v);
-        semver::Version::parse(v).map_err(|e| ftd::p1::Error::ParseError {
-            message: format!("Invalid version number: `{}` Error:`{:?}`", v, e),
+        fpm::Version::parse(v).map_err(|e| ftd::p1::Error::ParseError {
+            message: format!("{:?}", e),
             doc_id: doc.name.to_string(),
             line_number: section.line_number,
         })?
     } else {
-        semver::Version::new(0, 0, 0)
+        fpm::Version::base()
     };
 
     let doc_id = if let Some(doc) = document_id.split_once('/').map(|(_, v)| v) {
@@ -58,7 +57,7 @@ pub fn processor(
         }
     };
     let mut found = false;
-    if let Some((_, doc)) = versions.get(&semver::Version::new(0, 0, 0)) {
+    if let Some(doc) = versions.get(&fpm::Version::base()) {
         if doc.iter().map(|v| v.get_id()).any(|x| x == doc_id) {
             found = true;
         }
@@ -66,10 +65,10 @@ pub fn processor(
 
     let mut version_toc = vec![];
     for key in versions.keys().sorted() {
-        if key.eq(&semver::Version::new(0, 0, 0)) {
+        if key.eq(&fpm::Version::base()) {
             continue;
         }
-        let (version_str, doc) = versions[key].to_owned();
+        let doc = versions[key].to_owned();
         if !found {
             if !doc.iter().map(|v| v.get_id()).any(|x| x == doc_id) {
                 continue;
@@ -78,8 +77,8 @@ pub fn processor(
         }
         version_toc.push(fpm::library::toc::TocItem {
             id: None,
-            title: Some(format!("{}", version_str)),
-            url: Some(format!("{}{}", version_str, url)),
+            title: Some(format!("{}", key.original)),
+            url: Some(format!("{}{}", key.original, url)),
             number: vec![],
             is_heading: if version.eq(&key) { true } else { false },
             is_disabled: false,
