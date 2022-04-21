@@ -170,13 +170,7 @@ impl ftd::p2::Library for Library {
             package: &fpm::Package,
             lib: &Library,
         ) -> Option<String> {
-            let path = if let Some(package_fpm_path) = &package.fpm_path {
-                package_fpm_path.parent()?.to_owned()
-            } else if package.name.eq(&lib.config.package.name) {
-                lib.config.root.clone()
-            } else {
-                lib.config.packages_root.clone().join(package.name.as_str())
-            };
+            let path = lib.config.get_root_for_package(package);
             // Explicit check for the current package.
             if name.starts_with(&package.name.as_str()) {
                 let new_name = name.replacen(&package.name.as_str(), "", 1);

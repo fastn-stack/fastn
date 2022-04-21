@@ -337,19 +337,12 @@ impl Config {
     pub(crate) async fn get_versions(
         &self,
         package: &fpm::Package,
-    ) -> fpm::Result<std::collections::HashMap<i32, Vec<fpm::File>>> {
-        let path = if let Some(package_fpm_path) = &package.fpm_path {
-            // TODO: Unwrap?
-            package_fpm_path.parent().unwrap().to_owned()
-        } else if package.name.eq(&self.package.name) {
-            self.root.clone()
-        } else {
-            self.packages_root.clone().join(package.name.as_str())
-        };
+    ) -> fpm::Result<std::collections::HashMap<semver::Version, (String, Vec<fpm::File>)>> {
+        let path = self.get_root_for_package(package);
         let mut ignore_paths = ignore::WalkBuilder::new(&path);
         ignore_paths.overrides(fpm::file::package_ignores(package, &path)?);
 
-        let mut hash: std::collections::HashMap<i32, Vec<fpm::File>> =
+        let mut hash: std::collections::HashMap<semver::Version, (String, Vec<fpm::File>)> =
             std::collections::HashMap::new();
 
         let all_files = ignore_paths
@@ -363,26 +356,29 @@ impl Config {
             if file.is_dir() {
                 continue;
             }
-            let version = get_version(&file, &path)?;
+            let (version_str, version) = get_version(&file, &path)?;
             let file = fpm::get_file(
                 package.name.to_string(),
                 &file,
-                &(if version.eq(&0) {
+                &(if version_str.eq("BASE_VERSION") {
                     path.to_owned()
                 } else {
-                    path.join(format!("v{}", version))
+                    path.join(&version_str)
                 }),
             )
             .await?;
-            if let Some(files) = hash.get_mut(&version) {
+            if let Some((_, files)) = hash.get_mut(&version) {
                 files.push(file)
             } else {
-                hash.insert(version, vec![file]);
+                hash.insert(version, (version_str, vec![file]));
             }
         }
         return Ok(hash);
 
-        fn get_version(x: &camino::Utf8PathBuf, path: &camino::Utf8PathBuf) -> fpm::Result<i32> {
+        fn get_version(
+            x: &camino::Utf8PathBuf,
+            path: &camino::Utf8PathBuf,
+        ) -> fpm::Result<(String, semver::Version)> {
             let id = match std::fs::canonicalize(x)?.to_str().unwrap().rsplit_once(
                 if path.as_str().ends_with(std::path::MAIN_SEPARATOR) {
                     path.as_str().to_string()
@@ -398,34 +394,34 @@ impl Config {
                     });
                 }
             };
-            let number = if let Some(number) = id
-                .split_once('/')
-                .map(|(v, _)| v.strip_prefix('v'))
-                .flatten()
-            {
-                number
+            Ok(if let Some((v, _)) = id.split_once('/') {
+                (
+                    v.to_string(),
+                    semver::Version::parse(v.strip_prefix('v').unwrap_or_else(|| v)).map_err(
+                        |e| fpm::Error::UsageError {
+                            message: format!("Invalid version number: `{}` Error:`{:?}`", v, e),
+                        },
+                    )?,
+                )
             } else {
-                // 0 is base version
-                return Ok(0);
-            };
-            number.parse::<i32>().map_err(|_| fpm::Error::UsageError {
-                message: format!(
-                    "Folder should be structured as `v<integer>`, found: `{:?}`",
-                    x
-                ),
+                ("BASE_VERSION".to_string(), semver::Version::new(0, 0, 0))
             })
         }
     }
 
-    pub(crate) async fn get_files(&self, package: &fpm::Package) -> fpm::Result<Vec<fpm::File>> {
-        let path = if let Some(package_fpm_path) = &package.fpm_path {
+    pub(crate) fn get_root_for_package(&self, package: &fpm::Package) -> camino::Utf8PathBuf {
+        if let Some(package_fpm_path) = &package.fpm_path {
             // TODO: Unwrap?
             package_fpm_path.parent().unwrap().to_owned()
         } else if package.name.eq(&self.package.name) {
             self.root.clone()
         } else {
             self.packages_root.clone().join(package.name.as_str())
-        };
+        }
+    }
+
+    pub(crate) async fn get_files(&self, package: &fpm::Package) -> fpm::Result<Vec<fpm::File>> {
+        let path = self.get_root_for_package(package);
         let mut ignore_paths = ignore::WalkBuilder::new(&path);
         // ignore_paths.hidden(false); // Allow the linux hidden files to be evaluated
         ignore_paths.overrides(fpm::file::package_ignores(package, &path)?);

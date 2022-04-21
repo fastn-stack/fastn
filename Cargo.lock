@@ -800,6 +800,7 @@ dependencies = [
  "reqwest",
  "rusqlite",
  "rusty-hook",
+ "semver 1.0.7",
  "serde",
  "serde_derive",
  "serde_json",

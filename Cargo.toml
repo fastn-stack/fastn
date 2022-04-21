@@ -44,6 +44,7 @@ intl-memoizer = "0.5.1"
 sha2 = "0.10"
 itertools = "0.10.3"
 mime_guess = "2"
+semver = "1.0.7"
 
 [dev-dependencies]
 fbt-lib = "0.1.18"

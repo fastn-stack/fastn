@@ -1,3 +1,5 @@
+use itertools::Itertools;
+
 pub fn processor(
     section: &ftd::p1::Section,
     doc: &ftd::p2::TDoc,
@@ -14,21 +16,15 @@ pub fn processor(
             }
         })?;
 
-    let version = if let Some(number) = document_id
-        .split_once('/')
-        .map(|(v, _)| v.strip_prefix('v'))
-        .flatten()
-    {
-        number
-            .parse::<i32>()
-            .map_err(|_| ftd::p1::Error::ParseError {
-                message: format!("Incorrect version `{:?}` in `{:?}`", number, document_id),
-                doc_id: doc.name.to_string(),
-                line_number: section.line_number,
-            })?
+    let version = if let Some((v, _)) = document_id.split_once('/') {
+        let v = v.strip_prefix('v').unwrap_or_else(|| v);
+        semver::Version::parse(v).map_err(|e| ftd::p1::Error::ParseError {
+            message: format!("Invalid version number: `{}` Error:`{:?}`", v, e),
+            doc_id: doc.name.to_string(),
+            line_number: section.line_number,
+        })?
     } else {
-        // 0 is base version
-        0
+        semver::Version::new(0, 0, 0)
     };
 
     let doc_id = if let Some(doc) = document_id.split_once('/').map(|(_, v)| v) {
@@ -61,33 +57,36 @@ pub fn processor(
             format!("{base_url}{file_path}/", file_path = doc_id.as_str())
         }
     };
-
-    let mut index = 0;
-    while let Some(v) = versions.get(&index) {
-        if v.iter().map(|v| v.get_id()).any(|x| x == doc_id) {
-            break;
+    let mut found = false;
+    if let Some((_, doc)) = versions.get(&semver::Version::new(0, 0, 0)) {
+        if doc.iter().map(|v| v.get_id()).any(|x| x == doc_id) {
+            found = true;
         }
-        index += 1;
     }
 
     let mut version_toc = vec![];
-    while versions.contains_key(&index) {
-        if index.eq(&0) {
-            index += 1;
+    for key in versions.keys().sorted() {
+        if key.eq(&semver::Version::new(0, 0, 0)) {
             continue;
+        }
+        let (version_str, doc) = versions[key].to_owned();
+        if !found {
+            if !doc.iter().map(|v| v.get_id()).any(|x| x == doc_id) {
+                continue;
+            }
+            found = true;
         }
         version_toc.push(fpm::library::toc::TocItem {
             id: None,
-            title: Some(format!("v{}", index)),
-            url: Some(format!("v{}{}", index, url)),
+            title: Some(format!("{}", version_str)),
+            url: Some(format!("{}{}", version_str, url)),
             number: vec![],
-            is_heading: if version.eq(&index) { true } else { false },
+            is_heading: if version.eq(&key) { true } else { false },
             is_disabled: false,
             img_src: None,
             font_icon: None,
             children: vec![],
         });
-        index += 1;
     }
 
     let toc_items = version_toc
