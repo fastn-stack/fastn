@@ -33,16 +33,22 @@ impl DNode {
     }
 
     pub fn class_to_html(&self) -> String {
-        self.classes
-            .iter()
-            .map(|k| k.to_string())
-            .collect::<Vec<String>>()
-            .join(" ")
+        if self.classes.is_empty() {
+            return "".to_string();
+        }
+        format!(
+            "class=\"{}\"",
+            self.classes
+                .iter()
+                .map(|k| k.to_string())
+                .collect::<Vec<String>>()
+                .join(" ")
+        )
     }
 
     pub fn to_html(&self, id: &str) -> String {
         let style = format!("style=\"{}\"", self.style_to_html(self.visible));
-        let classes = format!("class=\"{}\"", self.class_to_html());
+        let classes = self.class_to_html();
 
         let attrs = {
             let mut attr = self.attrs_to_html();

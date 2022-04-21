@@ -301,7 +301,7 @@ impl Node {
             external_children_container: vec![],
             children_style: common.children_style(),
             text: None,
-            classes: common.add_class(),
+            classes: vec![],
             null: common.is_dummy,
             events: common.events.clone(),
         }
@@ -312,8 +312,7 @@ impl Node {
         attrs.extend(container.attrs());
         let mut style = common.style(doc_id);
         style.extend(container.style());
-        let mut classes = common.add_class();
-        classes.extend(container.add_class());
+        let classes = container.add_class();
 
         let mut children_style = common.children_style();
         children_style.extend(container.children_style());
@@ -658,6 +657,7 @@ impl ftd::Text {
             },
         };
         let mut n = Node::from_common(node, &self.common, doc_id);
+        n.classes = self.common.add_class();
         n.text = Some(self.text.rendered.clone());
         let (key, value) = text_align(&self.text_align);
         n.style.insert(s(key.as_str()), value);
@@ -718,6 +718,7 @@ impl ftd::TextBlock {
             },
         };
         let mut n = Node::from_common(node, &self.common, doc_id);
+        n.classes = self.common.add_class();
         n.text = Some(self.text.rendered.clone());
         let (key, value) = text_align(&self.text_align);
         n.style.insert(s(key.as_str()), value);
@@ -891,6 +892,7 @@ impl ftd::Markups {
             },
         };
         let mut n = Node::from_common(node, &self.common, doc_id);
+        n.classes = self.common.add_class();
         let (key, value) = text_align(&self.text_align);
         n.style.insert(s(key.as_str()), value);
 
@@ -980,6 +982,7 @@ impl ftd::Markup {
 impl ftd::Input {
     pub fn to_node(&self, doc_id: &str) -> Node {
         let mut n = Node::from_common("input", &self.common, doc_id);
+        n.classes = self.common.add_class();
         if let Some(ref p) = self.placeholder {
             n.attrs.insert(s("placeholder"), escape(p));
         }
