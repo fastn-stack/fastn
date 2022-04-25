@@ -479,6 +479,88 @@ color: $fpm.color.main.text
 border-width: 2
 
 
+-- ft.h1: `width: String`
+
+The width property sets the width of an element.
+
+The width of an element does not include padding, borders, or margins.
+It takes the [length values](/built-in-types/#length-string)
+
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.text: FifthTry
+width: 200
+
+
+-- ft.markdown:
+
+This will render like this:
+
+
+-- ftd.text: FifthTry
+width: 200
+color: $fpm.color.main.text
+border-width: 2
+
+
+-- ft.h1: `min-width: String`
+
+The min-width property defines the minimum width of an element.
+It takes the [length values](/built-in-types/#length-string)
+
+If the content is smaller than the minimum width, the minimum width will be applied.
+
+If the content is larger than the minimum width, the min-width property has no effect.
+
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.text: FifthTry
+min-width: 200
+
+
+-- ft.markdown:
+
+This will render like this:
+
+
+-- ftd.text: FifthTry
+min-width: 200
+color: $fpm.color.main.text
+border-width: 2
+
+
+-- ft.h1: `max-width: String`
+
+The max-width property defines the maximum width of an element.
+It takes the [length values](/built-in-types/#length-string)
+
+If the content is larger than the maximum width, it will automatically change the height of the element.
+
+If the content is smaller than the maximum width, the max-width property has no effect.
+
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.text: FifthTry
+max-width: 40
+
+
+-- ft.markdown:
+
+This will render like this:
+
+
+-- ftd.text: FifthTry
+max-width: 40
+color: $fpm.color.main.text
+border-width: 2
+
+
 -- ft.h1: `cursor: String`
 
 You can set the cursor to be shown over any element by using `cursor` attribute:
