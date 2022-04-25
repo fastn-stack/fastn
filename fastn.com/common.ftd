@@ -38,62 +38,6 @@ border-width: 2
 color: $fpm.color.main.text
 
 
--- ft.h1: `border-radius: Integer`
-
-The border-radius property defines the radius of the element's corners.
-
-
--- ft.code:
-lang: ftd
-
-\-- ftd.text: FifthTry
-border-width: 2
-border-radius: 50
-
-
--- ft.markdown:
-
-This will render like this:
-
-
--- ftd.text: FifthTry
-border-width: 2
-color: $fpm.color.main.text
-border-radius: 50
-
-
--- ft.h1: `border-color:` [`ftd.color`](/built-in-types/#ftd-color)
-
-The border-color property sets the color of an element's four borders. It takes
-input of [`ftd.color`](/built-in-types/#ftd-color) type.
-
-
--- ft.code:
-lang: ftd
-
-\-- ftd.color red:
-light: red
-dark: red
-
-\-- ftd.text: FifthTry
-border-width: 2
-border-color: $red
-
-
--- ft.markdown:
-
-This will render like this:
-
--- ftd.color red:
-light: red
-dark: red
-
--- ftd.text: FifthTry
-border-width: 2
-color: $fpm.color.main.text
-border-color: $red
-
-
 
 -- ft.h1: `border-top: Integer`
 
@@ -185,6 +129,186 @@ This will render like this:
 -- ftd.text: FifthTry
 border-right: 2
 color: $fpm.color.main.text
+
+
+
+-- ft.h1: `border-style: String`
+
+The border-style property sets the style of an element's borders.
+
+
+-- ft.code: specifying border width
+lang: ftd
+
+\-- ftd.text: FifthTry
+border-style: dashed
+border-width: 2
+
+
+-- ft.markdown:
+
+This will render like this:
+
+
+-- ftd.text: FifthTry
+border-style: dashed
+border-width: 2
+color: $fpm.color.main.text
+
+
+
+-- ft.h1: `border-color:` [`ftd.color`](/built-in-types/#ftd-color)
+
+The border-color property sets the color of an element's four borders. It takes
+input of [`ftd.color`](/built-in-types/#ftd-color) type.
+
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.color red:
+light: red
+dark: red
+
+\-- ftd.text: FifthTry
+border-width: 2
+border-color: $red
+
+
+-- ft.markdown:
+
+This will render like this:
+
+-- ftd.color red:
+light: red
+dark: red
+
+-- ftd.text: FifthTry
+border-width: 2
+color: $fpm.color.main.text
+border-color: $red
+
+
+-- ft.h1: `border-radius: Integer`
+
+The border-radius property defines the radius of the element's corners.
+
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.text: FifthTry
+border-width: 2
+border-radius: 50
+
+
+-- ft.markdown:
+
+This will render like this:
+
+
+-- ftd.text: FifthTry
+border-width: 2
+color: $fpm.color.main.text
+border-radius: 50
+
+
+-- ft.h1: `border-top-radius: Integer`
+
+The border-top-radius property defines the radius of the top corner.
+
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.text: FifthTry
+border-width: 2
+border-top-radius: 50
+
+
+-- ft.markdown:
+
+This will render like this:
+
+
+-- ftd.text: FifthTry
+border-width: 2
+color: $fpm.color.main.text
+border-top-radius: 50
+
+
+
+-- ft.h1: `border-bottom-radius: Integer`
+
+The border-bottom-radius property defines the radius of the bottom corner.
+
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.text: FifthTry
+border-width: 2
+border-bottom-radius: 50
+
+
+-- ft.markdown:
+
+This will render like this:
+
+
+-- ftd.text: FifthTry
+border-width: 2
+color: $fpm.color.main.text
+border-bottom-radius: 50
+
+
+-- ft.h1: `border-left-radius: Integer`
+
+The border-left-radius property defines the radius of the left corner.
+
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.text: FifthTry
+border-width: 2
+border-left-radius: 50
+
+
+-- ft.markdown:
+
+This will render like this:
+
+
+-- ftd.text: FifthTry
+border-width: 2
+color: $fpm.color.main.text
+border-left-radius: 50
+
+
+
+-- ft.h1: `border-right-radius: Integer`
+
+The border-right-radius property defines the radius of the right corner.
+
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.text: FifthTry
+border-width: 2
+border-right-radius: 50
+
+
+-- ft.markdown:
+
+This will render like this:
+
+
+-- ftd.text: FifthTry
+border-width: 2
+color: $fpm.color.main.text
+border-right-radius: 50
 
 
 
