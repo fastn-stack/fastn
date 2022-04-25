@@ -15,6 +15,259 @@ id: outer
 These attributes are available to all `ftd` "kernel" components.
 
 
+-- ft.h1: `border-width: Integer`
+
+Use this property to specify the width of the border. By default the `border-width`
+is zero, and is not visible.
+
+
+-- ft.code: specifying border width
+lang: ftd
+
+\-- ftd.text: FifthTry
+border-width: 2
+
+
+-- ft.markdown:
+
+This will render like this:
+
+
+-- ftd.text: FifthTry
+border-width: 2
+color: $fpm.color.main.text
+
+
+-- ft.h1: `border-radius: Integer`
+
+The border-radius property defines the radius of the element's corners.
+
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.text: FifthTry
+border-width: 2
+border-radius: 50
+
+
+-- ft.markdown:
+
+This will render like this:
+
+
+-- ftd.text: FifthTry
+border-width: 2
+color: $fpm.color.main.text
+border-radius: 50
+
+
+-- ft.h1: `border-color:` [`ftd.color`](/built-in-types/#ftd-color)
+
+The border-color property sets the color of an element's four borders. It takes
+input of [`ftd.color`](/built-in-types/#ftd-color) type.
+
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.color red:
+light: red
+dark: red
+
+\-- ftd.text: FifthTry
+border-width: 2
+border-color: $red
+
+
+-- ft.markdown:
+
+This will render like this:
+
+-- ftd.color red:
+light: red
+dark: red
+
+-- ftd.text: FifthTry
+border-width: 2
+color: $fpm.color.main.text
+border-color: $red
+
+
+
+
+
+
+
+
+
+
+-- ft.h1: `padding: Integer`
+
+Padding is used to create space around an element's content, inside of any defined borders.
+
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.text: FifthTry
+padding: 60
+border-width: 2
+
+
+-- ft.markdown:
+
+This will render like this:
+
+
+-- ftd.text: FifthTry
+padding: 60
+color: $fpm.color.main.text
+border-width: 2
+
+
+
+-- ft.h1: `padding-vertical: Integer`
+
+This gives top and bottom padding.
+
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.text: FifthTry
+padding-vertical: 60
+
+
+-- ft.markdown:
+
+This will render like this:
+
+
+-- ftd.text: FifthTry
+padding-vertical: 60
+color: $fpm.color.main.text
+border-width: 2
+
+
+
+-- ft.h1: `padding-horizontal: Integer`
+
+This gives left and right padding.
+
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.text: FifthTry
+padding-horizontal: 60
+
+
+-- ft.markdown:
+
+This will render like this:
+
+
+-- ftd.text: FifthTry
+padding-horizontal: 60
+color: $fpm.color.main.text
+border-width: 2
+
+
+-- ft.h1: `padding-left: Integer`
+
+This gives left padding.
+
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.text: FifthTry
+padding-left: 60
+
+
+-- ft.markdown:
+
+This will render like this:
+
+
+-- ftd.text: FifthTry
+padding-left: 60
+color: $fpm.color.main.text
+border-width: 2
+
+
+
+-- ft.h1: `padding-right: Integer`
+
+This gives right padding.
+
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.text: FifthTry
+padding-right: 60
+
+
+-- ft.markdown:
+
+This will render like this:
+
+
+-- ftd.text: FifthTry
+padding-right: 60
+color: $fpm.color.main.text
+border-width: 2
+
+
+
+-- ft.h1: `padding-top: Integer`
+
+This gives top padding.
+
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.text: FifthTry
+padding-top: 60
+
+
+-- ft.markdown:
+
+This will render like this:
+
+
+-- ftd.text: FifthTry
+padding-top: 60
+color: $fpm.color.main.text
+border-width: 2
+
+
+-- ft.h1: `padding-bottom: Integer`
+
+This gives bottom padding.
+
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.text: FifthTry
+padding-bottom: 60
+
+
+-- ft.markdown:
+
+This will render like this:
+
+
+-- ftd.text: FifthTry
+padding-bottom: 60
+color: $fpm.color.main.text
+border-width: 2
+
+
 -- ft.h1: `cursor: String`
 
 You can set the cursor to be shown over any element by using `cursor` attribute:
@@ -31,6 +284,7 @@ cursor: pointer
 -- ftd.text: this row has pointer as cursor
 align: center
 width: fill
+color: $fpm.color.main.text
 
 
 -- container: outer
@@ -150,24 +404,6 @@ region: h1
 -- ft.markdown:
 
 This tells this is a heading with the given level.
-
-
--- ft.h1: `border-width`
-
-Use this property to specify the width of the border. By default the `border-width`
-is zero, and is not visible.
-
-
--- ft.code: specifying border width
-lang: ftd
-
-\-- ftd.text: hello
-border-width: 1
-
-
--- ft.markdown:
-
-We can also set border of individual edges.
 
 
 -- ft.h1: `background-gradient`
