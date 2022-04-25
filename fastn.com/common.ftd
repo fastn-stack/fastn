@@ -2,7 +2,7 @@
 -- import: fpm
 
 -- ft.page-with-toc: Common Attributes
-toc: $config.api-toc
+toc: $config.ui-toc
 sub-sections: $config.doc-header
 
 
@@ -13,6 +13,61 @@ id: outer
 -- ft.markdown: 
 
 These attributes are available to all `ftd` "kernel" components.
+
+
+-- ft.h1: `color:` [`ftd.color`](/built-in-types/#ftd-color)
+
+-- ft.markdown:
+
+The color property sets the color of an element. It takes
+input of [`ftd.color`](/built-in-types/#ftd-color) type.
+
+
+-- ft.code: specifying color
+lang: ftd
+
+\-- ftd.color red:
+light: red
+dark: red
+
+\-- ftd.text: FifthTry
+color: $red
+
+
+-- ft.markdown:
+
+This will render like this:
+
+-- ftd.color red:
+light: red
+dark: red
+
+-- ftd.text: FifthTry
+color: $red
+
+
+-- ft.h1: `background-color:` [`ftd.color`](/built-in-types/#ftd-color)
+
+The background-color property sets the background color of an element. It takes
+input of [`ftd.color`](/built-in-types/#ftd-color) type.
+
+
+-- ft.code: specifying background-color
+lang: ftd
+
+\-- ftd.text: FifthTry
+background-color: $red
+
+
+-- ft.markdown:
+
+This will render like this:
+
+
+-- ftd.text: FifthTry
+color: $fpm.color.main.text-strong
+background-color: $red
+
 
 
 -- ft.h1: `border-width: Integer`
@@ -178,10 +233,6 @@ border-color: $red
 -- ft.markdown:
 
 This will render like this:
-
--- ftd.color red:
-light: red
-dark: red
 
 -- ftd.text: FifthTry
 border-width: 2
@@ -557,6 +608,88 @@ This will render like this:
 
 -- ftd.text: FifthTry
 max-width: 40
+color: $fpm.color.main.text
+border-width: 2
+
+
+-- ft.h1: `height: String`
+
+The height property sets the height of an element.
+
+The height of an element does not include padding, borders, or margins.
+It takes the [length values](/built-in-types/#length-string)
+
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.text: FifthTry
+height: 60
+
+
+-- ft.markdown:
+
+This will render like this:
+
+
+-- ftd.text: FifthTry
+height: 60
+color: $fpm.color.main.text
+border-width: 2
+
+
+-- ft.h1: `min-height: String`
+
+The min-height property defines the minimum height of an element.
+It takes the [length values](/built-in-types/#length-string)
+
+If the content is smaller than the minimum height, the minimum height will be applied.
+
+If the content is larger than the minimum height, the min-width property has no effect.
+
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.text: FifthTry
+min-height: 70
+
+
+-- ft.markdown:
+
+This will render like this:
+
+
+-- ftd.text: FifthTry
+min-height: 70
+color: $fpm.color.main.text
+border-width: 2
+
+
+-- ft.h1: `max-height: String`
+
+The max-height property defines the maximum height of an element.
+It takes the [length values](/built-in-types/#length-string)
+
+If the content is larger than the maximum height, it will automatically change the height of the element.
+
+If the content is smaller than the maximum height, the max-height property has no effect.
+
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.text: FifthTry
+max-height: 10
+
+
+-- ft.markdown:
+
+This will render like this:
+
+
+-- ftd.text: FifthTry
+max-height: 10
 color: $fpm.color.main.text
 border-width: 2
 
