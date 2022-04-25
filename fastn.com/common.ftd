@@ -95,9 +95,96 @@ border-color: $red
 
 
 
+-- ft.h1: `border-top: Integer`
+
+The border-top property sets the width of an element's top border.
+
+
+-- ft.code: specifying border width
+lang: ftd
+
+\-- ftd.text: FifthTry
+border-top: 2
+
+
+-- ft.markdown:
+
+This will render like this:
+
+
+-- ftd.text: FifthTry
+border-top: 2
+color: $fpm.color.main.text
 
 
 
+
+-- ft.h1: `border-bottom: Integer`
+
+The border-bottom property sets the width of an element's bottom border.
+
+
+-- ft.code: specifying border width
+lang: ftd
+
+\-- ftd.text: FifthTry
+border-bottom: 2
+
+
+-- ft.markdown:
+
+This will render like this:
+
+
+-- ftd.text: FifthTry
+border-bottom: 2
+color: $fpm.color.main.text
+
+
+
+-- ft.h1: `border-left: Integer`
+
+The border-left property sets the width of an element's left border.
+
+
+-- ft.code: specifying border width
+lang: ftd
+
+\-- ftd.text: FifthTry
+border-left: 2
+
+
+-- ft.markdown:
+
+This will render like this:
+
+
+-- ftd.text: FifthTry
+border-left: 2
+color: $fpm.color.main.text
+
+
+
+-- ft.h1: `border-right: Integer`
+
+The border-right property sets the width of an element's right border.
+
+
+-- ft.code: specifying border width
+lang: ftd
+
+\-- ftd.text: FifthTry
+border-right: 2
+
+
+-- ft.markdown:
+
+This will render like this:
+
+
+-- ftd.text: FifthTry
+border-right: 2
+color: $fpm.color.main.text
 
 
 
