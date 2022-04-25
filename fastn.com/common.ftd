@@ -1238,3 +1238,83 @@ align: center
 color: $fpm.color.main.text
 width: fill
 height: fill
+
+
+-- container: outer
+
+
+-- ft.h1: `sticky: bool`
+
+An element with sticky; is positioned based on the user's scroll position.
+
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.text: FifthTry
+sticky: true
+
+
+
+-- ft.h1: `top: Integer`
+
+The top property affects the vertical position of a positioned element.
+
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.text: FifthTry
+top: 1
+
+
+-- ft.h1: `top: Integer`
+
+The top property affects the vertical position of a positioned element
+relative to top.
+
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.text: FifthTry
+top: 1
+
+
+-- ft.h1: `bottom: Integer`
+
+The bottom property affects the vertical position of a positioned element
+relative to bottom.
+
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.text: FifthTry
+bottom: 1
+
+
+-- ft.h1: `left: Integer`
+
+The left property affects the horizontal position of a positioned element
+relative to left.
+
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.text: FifthTry
+left: 1
+
+
+-- ft.h1: `right: Integer`
+
+The right property affects the horizontal position of a positioned element
+relative to right.
+
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.text: FifthTry
+right: 1
