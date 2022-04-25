@@ -694,6 +694,93 @@ color: $fpm.color.main.text
 border-width: 2
 
 
+
+-- ft.h1: `overflow-x: String`
+
+The overflow-x property specifies whether to clip the content, add a scroll bar,
+or display overflow content of a block-level element, when it overflows at the
+left and right edges. It takes the following values:
+
+- hidden
+- visible
+- auto
+- scroll
+
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.text:
+background-color: $red
+width: 150
+height: 100
+overflow-x: scroll
+
+Lorem ipsum dolor sit amet, and a veryveryveryveryveryverylong
+word consectetuer adipiscing elit, sed diam nonummy nibh euismod
+tincidunt ut laoreet dolore magna aliquam erat
+
+
+-- ft.markdown:
+
+This will render like this:
+
+
+-- ftd.text:
+color: $fpm.color.main.text-strong
+background-color: $red
+width: 150
+height: 100
+overflow-x: scroll
+
+Lorem ipsum dolor sit amet, and a veryveryveryveryveryverylong
+word consectetuer adipiscing elit, sed diam nonummy nibh euismod
+tincidunt ut laoreet dolore magna aliquam erat
+
+
+-- ft.h1: `overflow-y: String`
+
+The overflow-y property specifies whether to clip the content,
+add a scroll bar, or display overflow content of a block-level element,
+when it overflows at the top and bottom edges. It takes the following values:
+
+- hidden
+- visible
+- auto
+- scroll
+
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.text:
+background-color: $red
+width: 150
+height: 100
+overflow-y: scroll
+
+Lorem ipsum dolor sit amet, and a veryveryveryveryveryverylong
+word consectetuer adipiscing elit, sed diam nonummy nibh euismod
+tincidunt ut laoreet dolore magna aliquam erat
+
+
+-- ft.markdown:
+
+This will render like this:
+
+
+-- ftd.text:
+color: $fpm.color.main.text-strong
+background-color: $red
+width: 150
+height: 100
+overflow-y: scroll
+
+Lorem ipsum dolor sit amet, and a veryveryveryveryveryverylong
+word consectetuer adipiscing elit, sed diam nonummy nibh euismod
+tincidunt ut laoreet dolore magna aliquam erat
+
+
 -- ft.h1: `cursor: String`
 
 You can set the cursor to be shown over any element by using `cursor` attribute:
