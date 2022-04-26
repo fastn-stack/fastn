@@ -48,7 +48,7 @@ default value as false. Set this field to true to enable versioning.
 -- ft.code:
 lang: ftd
 
--- fpm.package: <package-name>
+\-- fpm.package: <package-name>
 versioned: true
 
 
