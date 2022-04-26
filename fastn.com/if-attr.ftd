@@ -48,7 +48,7 @@ text: $name
 
 -- ftd.text:
 color: $fpm.color.main.text
-role: $fpm.type.body-large
+role: $fpm.type.copy-large
 
 Output:
 
@@ -108,7 +108,7 @@ text: $name
 
 -- ftd.text:
 color: $fpm.color.main.text
-role: $fpm.type.body-large
+role: $fpm.type.copy-large
 
 Output:
 
@@ -161,7 +161,7 @@ yes: world
 
 -- ftd.text:
 color: $fpm.color.main.text
-role: $fpm.type.body-large
+role: $fpm.type.copy-large
 
 Output:
 
@@ -221,7 +221,7 @@ yes: world
 
 -- ftd.text:
 color: $fpm.color.main.text
-role: $fpm.type.body-large
+role: $fpm.type.copy-large
 
 Output:
 

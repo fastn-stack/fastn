@@ -38,35 +38,35 @@ align: right
 link: https://www.fifthtry.com/ftd/new/
 color: $fpm.color.main.text
 padding-top: 10
-role: $fpm.type.body-large
+role: $fpm.type.copy-large
 
 
 -- ftd.text: DOCS
 link: https://www.fifthtry.com/ftd/new/docs/
 color: $fpm.color.main.text
 padding-top: 10
-role: $fpm.type.body-large
+role: $fpm.type.copy-large
 
 
 -- ftd.text: RESOURCES
 link: https://www.fifthtry.com/ftd/new/resources/
 color: $fpm.color.main.text
 padding-top: 10
-role: $fpm.type.body-large
+role: $fpm.type.copy-large
 
 
 -- ftd.text: SHOWCASE
 link: https://www.fifthtry.com/ftd/new/showcase/
 color: $fpm.color.main.text
 padding-top: 10
-role: $fpm.type.body-large
+role: $fpm.type.copy-large
 
 
 -- ftd.text: NEWS
 link: https://www.fifthtry.com/ftd/new/news/
 color: $fpm.color.main.text
 padding-top: 10
-role: $fpm.type.body-large
+role: $fpm.type.copy-large
 
 
 -- container: outer
@@ -89,11 +89,11 @@ border-radius: 15
 
 
 -- ftd.text: Quickstart
-role: $fpm.type.headline-large
+role: $fpm.type.heading-large
 
 
 -- ftd.text:
-role: $fpm.type.body-large
+role: $fpm.type.copy-large
 
 
 Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry’s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it
@@ -101,11 +101,11 @@ Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
 
 -- ftd.text: Instructions
 padding-top: 50
-role: $fpm.type.headline-large
+role: $fpm.type.heading-large
 
 
 -- ftd.text:
-role: $fpm.type.body-large
+role: $fpm.type.copy-large
 
 Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
 

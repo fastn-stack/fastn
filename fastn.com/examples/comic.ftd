@@ -36,7 +36,7 @@ left: 320
 cursor: default
 background-color: $fpm.color.main.background.base
 padding: 80
-role: $fpm.type.title-large
+role: $fpm.type.heading-large
 
 
 

@@ -94,7 +94,7 @@ if: $open
 value: $code
 align: center
 color: $fpm.color.main.text
-role: $fpm.type.title-large
+role: $fpm.type.heading-large
 
 --- container: ftd.main
 
@@ -106,7 +106,7 @@ width: fill
 align: center
 width: fill
 padding: 10
-role: $fpm.type.title-medium
+role: $fpm.type.heading-medium
 color if $ftd.dark-mode: $fpm.color.main.text
 
 --- container: ftd.main

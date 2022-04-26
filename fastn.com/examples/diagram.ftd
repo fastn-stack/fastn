@@ -80,7 +80,7 @@ border-radius: 4
 spacing: 5
 
 --- ftd.text: Notes:
-role: $fpm.type.body-large
+role: $fpm.type.copy-large
 
 --- start-info:
 if: $info == start-info
@@ -151,7 +151,7 @@ border-radius: 4
 --- ftd.text: Control Panel
 top: 5
 left: 5
-role: $fpm.type.body-large
+role: $fpm.type.copy-large
 
 --- kube-controller-manager:
 top: 50
@@ -290,7 +290,7 @@ border-color if $MOUSE-IN: $fpm.color.main.text
 --- ftd.text: Nodes
 top: 5
 left: 5
-role: $fpm.type.body-large
+role: $fpm.type.copy-large
 
 --- ftd.column:
 top: 50
@@ -361,7 +361,7 @@ border-radius: 4
 --- ftd.text: $title
 top: 5
 left: 5
-role: $fpm.type.body-large
+role: $fpm.type.copy-large
 
 --- ftd.row:
 spacing: space-around

@@ -34,4 +34,4 @@ You have typed: {value}
 
 --- ftd.text value: $query
 color: $fpm.color.main.text
-role: $fpm.type.label-large
+role: $fpm.type.label-big

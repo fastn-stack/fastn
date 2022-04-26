@@ -59,31 +59,31 @@ align: right
 --- ftd.text: HOME
 link: https://www.fifthtry.com/ftd/new/
 color: $fpm.color.main.text
-role: $fpm.type.body-large
+role: $fpm.type.copy-large
 padding-top: 10
 
 --- ftd.text: DOCS
 link: https://www.fifthtry.com/ftd/new/docs/
 color: $fpm.color.main.text
-role: $fpm.type.body-large
+role: $fpm.type.copy-large
 padding-top: 10
 
 --- ftd.text: RESOURCES
 link: https://www.fifthtry.com/ftd/new/resources/
 color: $fpm.color.main.text
-role: $fpm.type.body-large
+role: $fpm.type.copy-large
 padding-top: 10
 
 --- ftd.text: SHOWCASE
 link: https://www.fifthtry.com/ftd/new/showcase/
 color: $fpm.color.main.text
-role: $fpm.type.body-large
+role: $fpm.type.copy-large
 padding-top: 10
 
 --- ftd.text: NEWS
 link: https://www.fifthtry.com/ftd/new/news/
 color: $fpm.color.main.text
-role: $fpm.type.body-large
+role: $fpm.type.copy-large
 padding-top: 10
 
 
@@ -130,7 +130,7 @@ Proudly hosted by
 
 --- ftd.text: FifthTry
 link: https://www.fifthtry.com/
-role: $fpm.type.headline-large
+role: $fpm.type.heading-large
 color: $fpm.color.main.text
 padding-left: 20
 

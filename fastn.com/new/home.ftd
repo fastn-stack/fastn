@@ -36,33 +36,33 @@ align: right
 -- ftd.text: HOME
 color: $fpm.color.main.text
 padding-top: 10
-role: $fpm.type.body-large
+role: $fpm.type.copy-large
 
 
 -- ftd.text: DOCS
 link: https://www.fifthtry.com/ftd/new/docs/
 color: $fpm.color.main.text
-role: $fpm.type.body-large
+role: $fpm.type.copy-large
 padding-top: 10
 
 
 -- ftd.text: RESOURCES
 link: https://www.fifthtry.com/ftd/new/resources/
 color: $fpm.color.main.text
-role: $fpm.type.body-large
+role: $fpm.type.copy-large
 padding-top: 10
 
 
 -- ftd.text: SHOWCASE
 link: https://www.fifthtry.com/ftd/new/showcase/
 color: $fpm.color.main.text
-role: $fpm.type.body-large
+role: $fpm.type.copy-large
 padding-top: 10
 
 
 -- ftd.text: NEWS
 color: $fpm.color.main.text
-role: $fpm.type.body-large
+role: $fpm.type.copy-large
 padding-top: 10
 
 
@@ -84,7 +84,7 @@ id: middle-left
 
 -- ftd.text:
 width: 580
-role: $fpm.type.headline-large
+role: $fpm.type.heading-large
 padding-top: 40
 padding-bottom: 50
 

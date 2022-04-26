@@ -29,7 +29,7 @@ slot: header
 background-color: $fpm.color.main.background.base
 text-align: center
 padding-vertical: 20
-role: $fpm.type.title-large
+role: $fpm.type.heading-large
 
 --- ftd.text: Menu
 slot: menu
@@ -37,28 +37,28 @@ background-color: $fpm.color.main.background.base
 text-align: center
 padding-vertical: 20
 height: fill
-role: $fpm.type.title-large
+role: $fpm.type.heading-large
 
 --- ftd.text: Main
 slot: main
 background-color: $fpm.color.main.background.base
 text-align: center
 padding-vertical: 20
-role: $fpm.type.title-large
+role: $fpm.type.heading-large
 
 --- ftd.text: Right
 slot: right
 background-color: $fpm.color.main.background.base
 text-align: center
 padding-vertical: 20
-role: $fpm.type.title-large
+role: $fpm.type.heading-large
 
 --- ftd.text: Footer
 slot: footer
 background-color: $fpm.color.main.background.base
 text-align: center
 padding-vertical: 20
-role: $fpm.type.title-large
+role: $fpm.type.heading-large
 
 
 
@@ -81,7 +81,7 @@ grid-row: 1 / 2
 background-color: $fpm.color.main.background.base
 text-align: center
 padding-vertical: 20
-role: $fpm.type.title-large
+role: $fpm.type.heading-large
 
 --- ftd.text: 12
 grid-column: 2 / 3
@@ -90,7 +90,7 @@ background-color: $fpm.color.main.background.base
 text-align: center
 padding-vertical: 20
 height: fill
-role: $fpm.type.title-large
+role: $fpm.type.heading-large
 
 --- ftd.text: 13
 grid-column: 3 / 4
@@ -98,7 +98,7 @@ grid-row: 1 / 2
 background-color: $fpm.color.main.background.base
 text-align: center
 padding-vertical: 20
-role: $fpm.type.title-large
+role: $fpm.type.heading-large
 
 --- ftd.text: 21
 grid-column: 1 / 2
@@ -106,7 +106,7 @@ grid-row: 2 / 3
 background-color: $fpm.color.main.background.base
 text-align: center
 padding-vertical: 20
-role: $fpm.type.title-large
+role: $fpm.type.heading-large
 
 --- ftd.text: 22
 grid-column: 2 / 3
@@ -114,7 +114,7 @@ grid-row: 2 / 3
 background-color: $fpm.color.main.background.base
 text-align: center
 padding-vertical: 20
-role: $fpm.type.title-large
+role: $fpm.type.heading-large
 
 --- ftd.text: 23
 grid-column: 3 / 4
@@ -122,7 +122,7 @@ grid-row: 2 / 3
 background-color: $fpm.color.main.background.base
 text-align: center
 padding-vertical: 20
-role: $fpm.type.title-large
+role: $fpm.type.heading-large
 
 -- ft.h1: Grid Using Area With An Empty Grid Cell
 
@@ -141,28 +141,28 @@ slot: header
 background-color: $fpm.color.main.background.base
 text-align: center
 padding-vertical: 20
-role: $fpm.type.title-large
+role: $fpm.type.heading-large
 
 --- ftd.text: Main
 slot: main
 background-color: $fpm.color.main.background.base
 text-align: center
 padding-vertical: 20
-role: $fpm.type.title-large
+role: $fpm.type.heading-large
 
 --- ftd.text: Sidebar
 slot: sidebar
 background-color: $fpm.color.main.background.base
 text-align: center
 padding-vertical: 20
-role: $fpm.type.title-large
+role: $fpm.type.heading-large
 
 --- ftd.text: Footer
 slot: footer
 background-color: $fpm.color.main.background.base
 text-align: center
 padding-vertical: 20
-role: $fpm.type.title-large
+role: $fpm.type.heading-large
 
 
 
@@ -187,28 +187,28 @@ background-color: $fpm.color.main.background.base
 text-align: center
 height: fill
 overflow-y: auto
-role: $fpm.type.title-large
+role: $fpm.type.heading-large
 
 --- ftd.text: 12
 background-color: $fpm.color.main.background.base
 text-align: center
 height: fill
 overflow-y: auto
-role: $fpm.type.title-large
+role: $fpm.type.heading-large
 
 --- ftd.text: 13
 background-color: $fpm.color.main.background.base
 text-align: center
 height: fill
 overflow-y: auto
-role: $fpm.type.title-large
+role: $fpm.type.heading-large
 
 --- ftd.text: 14
 background-color: $fpm.color.main.background.base
 text-align: center
 height: fill
 overflow-y: auto
-role: $fpm.type.title-large
+role: $fpm.type.heading-large
 
 --- ftd.text: 15
 grid-column: 5
@@ -217,7 +217,7 @@ background-color: $fpm.color.main.background.base
 text-align: center
 height: fill
 overflow-y: auto
-role: $fpm.type.title-large
+role: $fpm.type.heading-large
 
 
 /-- ft.h1: Grid Column Auto Flow
@@ -241,28 +241,28 @@ background-color: $fpm.color.main.background.base
 text-align: center
 height: fill
 overflow-y: auto
-role: $fpm.type.title-large
+role: $fpm.type.heading-large
 
 --- ftd.text: 12
 background-color: $fpm.color.main.background.base
 text-align: center
 height: fill
 overflow-y: auto
-role: $fpm.type.title-large
+role: $fpm.type.heading-large
 
 --- ftd.text: 13
 background-color: $fpm.color.main.background.base
 text-align: center
 height: fill
 overflow-y: auto
-role: $fpm.type.title-large
+role: $fpm.type.heading-large
 
 --- ftd.text: 14
 background-color: $fpm.color.main.background.base
 text-align: center
 height: fill
 overflow-y: auto
-role: $fpm.type.title-large
+role: $fpm.type.heading-large
 
 --- ftd.text: 15
 grid-column: 5
@@ -271,7 +271,7 @@ background-color: $fpm.color.main.background.base
 text-align: center
 height: fill
 overflow-y: auto
-role: $fpm.type.title-large
+role: $fpm.type.heading-large
 
 -- ft.h1: Grid Areas with slot-widths and slot-heights
 

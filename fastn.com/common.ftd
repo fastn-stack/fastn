@@ -1128,7 +1128,7 @@ height: 300
 background-image: https://imgur.com/oCHWQQF.jpg
 
 \-- ftd.text: Sample Text
-role: $fpm.type.title-large
+role: $fpm.type.heading-large
 align: center
 color: $fpm.color.main.text
 
@@ -1143,7 +1143,7 @@ background-image: $assets.files.images.oCHWQQF.jpg
 
 
 -- ftd.text: Sample Text
-role: $fpm.type.title-large
+role: $fpm.type.heading-large
 align: center
 color: $fpm.color.main.text
 width: fill
@@ -1173,7 +1173,7 @@ background-repeat: true
 
 
 \-- ftd.text: Sample Text
-role: $fpm.type.title-large
+role: $fpm.type.heading-large
 align: center
 color: $fpm.color.main.text
 width: fill
@@ -1191,7 +1191,7 @@ background-repeat: true
 
 
 -- ftd.text: Sample Text
-role: $fpm.type.title-large
+role: $fpm.type.heading-large
 align: center
 color: $fpm.color.main.text
 width: fill
@@ -1217,7 +1217,7 @@ background-image: https://imgur.com/oCHWQQF.jpg
 background-parallax: true
 
 \-- ftd.text: Sample Text
-role: $fpm.type.title-large
+role: $fpm.type.heading-large
 align: center
 color: $fpm.color.main.text
 
@@ -1233,7 +1233,7 @@ background-parallax: true
 
 
 -- ftd.text: Sample Text
-role: $fpm.type.title-large
+role: $fpm.type.heading-large
 align: center
 color: $fpm.color.main.text
 width: fill

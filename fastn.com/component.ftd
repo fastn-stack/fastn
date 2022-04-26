@@ -31,7 +31,7 @@ lang: ftd
 \-- ftd.text heading:
 caption title:
 text: $title
-role: $fpm.type.headline-large
+role: $fpm.type.heading-large
 color: $fpm.color.main.text
 
 
@@ -207,7 +207,7 @@ This is how it looks like:
 -- ftd.text heading:
 caption title:
 text: $title
-role: $fpm.type.title-large
+role: $fpm.type.heading-large
 color: $fpm.color.main.text
 
 

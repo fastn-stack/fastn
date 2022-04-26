@@ -37,35 +37,35 @@ align: right
 -- ftd.text: HOME
 link: https://www.fifthtry.com/ftd/new/
 color: $fpm.color.main.text
-role: $fpm.type.body-large
+role: $fpm.type.copy-large
 padding-top: 10
 
 
 -- ftd.text: DOCS
 link: https://www.fifthtry.com/ftd/new/docs/
 color: $fpm.color.main.text
-role: $fpm.type.body-large
+role: $fpm.type.copy-large
 padding-top: 10
 
 
 -- ftd.text: RESOURCES
 link: https://www.fifthtry.com/ftd/new/resources/
 color: $fpm.color.main.text
-role: $fpm.type.body-large
+role: $fpm.type.copy-large
 padding-top: 10
 
 
 -- ftd.text: SHOWCASE
 link: https://www.fifthtry.com/ftd/new/showcase/
 color: $fpm.color.main.text
-role: $fpm.type.body-large
+role: $fpm.type.copy-large
 padding-top: 10
 
 
 -- ftd.text: NEWS
 link: https://www.fifthtry.com/ftd/new/news/
 color: $fpm.color.main.text
-role: $fpm.type.body-large
+role: $fpm.type.copy-large
 padding-top: 10
 
 
@@ -88,10 +88,10 @@ border-radius: 15
 
 
 -- ftd.text: Showcase
-role: $fpm.type.headline-medium
+role: $fpm.type.heading-medium
 
 
 -- ftd.text:
-role: $fpm.type.body-large
+role: $fpm.type.copy-large
 
 Fifthtry powers some company websites, here are some examples:

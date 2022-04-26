@@ -12,18 +12,18 @@ height: fill
 --- ftd.text: Future Of Writing
 slot: left
 align: center
-role: $fpm.type.title-large
+role: $fpm.type.heading-large
 
 --- ftd.text: FTD & FPM
 slot: right
 align: center
-role: $fpm.type.headline-large
+role: $fpm.type.heading-large
 
 
 --- ftd.text:
 slot: bottom
 align: center
-role: $fpm.type.title-large
+role: $fpm.type.heading-large
 
 By Amit Upadhyay
 

@@ -19,7 +19,7 @@ if: $arpita
 padding: 40
 
 -- ftd.text: $foo
-role: $fpm.type.title-large
+role: $fpm.type.heading-large
 color: $fpm.color.main.text
 
 

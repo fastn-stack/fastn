@@ -1095,7 +1095,7 @@ color: $fpm.color.main.success.text
 color if $ftd.dark-mode: $fpm.color.main.text
 background-color if $ftd.dark-mode: $fpm.color.main.background.base
 padding if $query is not null: 5
-role: $fpm.type.body-large
+role: $fpm.type.copy-large
 
 
 -- show-data: $obj
