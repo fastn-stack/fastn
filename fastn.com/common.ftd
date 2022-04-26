@@ -1256,9 +1256,19 @@ sticky: true
 
 
 
--- ft.h1: `top: Integer`
+-- ft.h1: `anchor: String`
 
-The top property affects the vertical position of a positioned element.
+It specifies type of positioning of the element relative to it's
+parent/ancestor or window
+
+It accepts two values:
+
+- `parent`: The element is positioned relative to the immediate ancestor.
+- `window`: The element is positioned relative to the viewport, which means
+   it always stays in the same place even if the page is scrolled.
+
+The top, right, bottom, and left properties are used to position the element.
+These properties are described later.
 
 
 -- ft.code:
@@ -1533,7 +1543,7 @@ The `move-up` property moves an element up from its current position.
 
 The following example moves the element up by 20
 
--- ft.code: specifying rotate
+-- ft.code: specifying move-up
 lang: ftd
 
 \-- ftd.text: FifthTry
@@ -1558,7 +1568,7 @@ The `move-down` property moves an element down from its current position.
 
 The following example moves the element down by 20
 
--- ft.code: specifying rotate
+-- ft.code: specifying move-down
 lang: ftd
 
 \-- ftd.text: FifthTry
@@ -1582,7 +1592,7 @@ The `move-left` property moves an element left from its current position.
 
 The following example moves the element left by 20
 
--- ft.code: specifying rotate
+-- ft.code: specifying move-left
 lang: ftd
 
 \-- ftd.text: FifthTry
@@ -1606,7 +1616,7 @@ The `move-right` property moves an element right from its current position.
 
 The following example moves the element right by 20
 
--- ft.code: specifying rotate
+-- ft.code: specifying move-right
 lang: ftd
 
 \-- ftd.text: FifthTry
@@ -1621,5 +1631,483 @@ padding: 5
 move-right: 20
 background-color: $yellow
 padding: 5
+
+-- container: outer
+
+-- ft.h1: `z-index: Integer`
+
+The z-index property specifies the stack order of an element.
+
+An element with greater stack order is always in front of an
+element with a lower stack order.
+
+[Read more](https://developer.mozilla.org/en-US/docs/Web/CSS/z-index)
+
+
+-- ft.code: specifying z-index
+lang: ftd
+
+\-- ftd.column:
+padding: 80
+
+\-- ftd.text: FifthTry Red
+z-index: 1
+background-color: $red
+left: 20
+top: 20
+padding: 40
+anchor: parent
+
+\-- ftd.text: FifthTry Yellow
+z-index: 2
+background-color: $yellow
+left: 40
+top: 40
+padding: 40
+anchor: parent
+
+
+-- ft.output:
+
+-- ftd.column:
+padding: 80
+
+-- ftd.text: FifthTry Red
+z-index: 1
+background-color: $red
+left: 20
+top: 20
+padding: 40
+anchor: parent
+
+-- ftd.text: FifthTry Yellow
+z-index: 2
+background-color: $yellow
+left: 40
+top: 40
+padding: 40
+anchor: parent
+
+-- container: outer
+
+-- ft.h1: `align: String`
+
+The `align` property aligns the element relative to it's parent.
+It supports following inputs:
+
+- `center`
+- `top`
+- `bottom`
+- `left`
+- `right`
+- `top-left`
+- `top-right`
+- `bottom-left`
+- `bottom-right`
+- `inner center`
+- `inner top`
+- `inner bottom`
+- `inner left`
+- `inner right`
+- `inner top-left`
+- `inner top-right`
+- `inner bottom-left`
+- `inner bottom-right`
+
+If the parent is a `ftd.column` then only three values are supported for the element
+`left`, `center` and `right`
+
+If the parent is a `ftd.row` then only three values are supported for the element
+`top`, `center` and `bottom`
+
+If the parent is a `ftd.grid` then all non-inner values are supported
+- `center`
+- `top`
+- `bottom`
+- `left`
+- `right`
+- `top-left`
+- `top-right`
+- `bottom-left`
+- `bottom-right`
+
+In case if `anchor` property is set, all the values are supported
+
+
+-- ft.code: specifying align for anchor
+lang: ftd
+
+\-- ftd.color green: green
+dark: green
+
+\-- ftd.color orange: orange
+dark: orange
+
+\-- ftd.column:
+height: 400
+width: 400
+
+\-- ftd.column:
+height: 200
+width: 200
+position: center
+background-color: $red
+anchor: parent
+
+\--- ftd.column:
+height: 20
+width: 20
+anchor: parent
+position: inner top
+background-color: $green
+open: false
+
+\--- ftd.column:
+height: 20
+width: 20
+anchor: parent
+position: inner center
+background-color: $green
+open: false
+
+\--- ftd.column:
+height: 20
+width: 20
+anchor: parent
+position: top
+background-color: $orange
+open: false
+
+\--- ftd.column:
+height: 20
+width: 20
+anchor: parent
+position: inner top-left
+background-color: $green
+open: false
+
+\--- ftd.column:
+height: 20
+width: 20
+anchor: parent
+position: top-left
+background-color: $orange
+open: false
+
+\--- ftd.column:
+height: 20
+width: 20
+anchor: parent
+position: inner top-right
+background-color: $green
+open: false
+
+\--- ftd.column:
+height: 20
+width: 20
+anchor: parent
+position: top-right
+background-color: $orange
+open: false
+
+\--- ftd.column:
+height: 20
+width: 20
+anchor: parent
+position: inner left
+background-color: $green
+open: false
+
+\--- ftd.column:
+height: 20
+width: 20
+anchor: parent
+position: left
+background-color: $orange
+open: false
+
+\--- ftd.column:
+height: 20
+width: 20
+anchor: parent
+position: inner bottom-right
+background-color: $green
+open: false
+
+\--- ftd.column:
+height: 20
+width: 20
+anchor: parent
+position: bottom-right
+background-color: $orange
+open: false
+
+\--- ftd.column:
+height: 20
+width: 20
+anchor: parent
+position: inner bottom
+background-color: $green
+open: false
+
+\--- ftd.column:
+height: 20
+width: 20
+anchor: parent
+position: bottom
+background-color: $orange
+open: false
+
+\--- ftd.column:
+height: 20
+width: 20
+anchor: parent
+position: inner bottom-left
+background-color: $green
+open: false
+
+\--- ftd.column:
+height: 20
+width: 20
+anchor: parent
+position: bottom-left
+background-color: $orange
+open: false
+
+\--- ftd.column:
+height: 20
+width: 20
+anchor: parent
+position: inner right
+background-color: $green
+open: false
+
+\--- ftd.column:
+height: 20
+width: 20
+anchor: parent
+position: right
+background-color: $orange
+open: false
+
+-- ft.output:
+
+-- ftd.color green: green
+dark: green
+
+-- ftd.color orange: orange
+dark: orange
+
+-- ftd.column:
+height: 400
+width: 400
+
+-- ftd.column:
+height: 200
+width: 200
+position: center
+background-color: $red
+anchor: parent
+
+--- ftd.column:
+height: 20
+width: 20
+anchor: parent
+position: inner top
+background-color: $green
+open: false
+
+--- ftd.column:
+height: 20
+width: 20
+anchor: parent
+position: inner center
+background-color: $green
+open: false
+
+--- ftd.column:
+height: 20
+width: 20
+anchor: parent
+position: top
+background-color: $orange
+open: false
+
+--- ftd.column:
+height: 20
+width: 20
+anchor: parent
+position: inner top-left
+background-color: $green
+open: false
+
+--- ftd.column:
+height: 20
+width: 20
+anchor: parent
+position: top-left
+background-color: $orange
+open: false
+
+--- ftd.column:
+height: 20
+width: 20
+anchor: parent
+position: inner top-right
+background-color: $green
+open: false
+
+--- ftd.column:
+height: 20
+width: 20
+anchor: parent
+position: top-right
+background-color: $orange
+open: false
+
+--- ftd.column:
+height: 20
+width: 20
+anchor: parent
+position: inner left
+background-color: $green
+open: false
+
+--- ftd.column:
+height: 20
+width: 20
+anchor: parent
+position: left
+background-color: $orange
+open: false
+
+--- ftd.column:
+height: 20
+width: 20
+anchor: parent
+position: inner bottom-right
+background-color: $green
+open: false
+
+--- ftd.column:
+height: 20
+width: 20
+anchor: parent
+position: bottom-right
+background-color: $orange
+open: false
+
+--- ftd.column:
+height: 20
+width: 20
+anchor: parent
+position: inner bottom
+background-color: $green
+open: false
+
+--- ftd.column:
+height: 20
+width: 20
+anchor: parent
+position: bottom
+background-color: $orange
+open: false
+
+--- ftd.column:
+height: 20
+width: 20
+anchor: parent
+position: inner bottom-left
+background-color: $green
+open: false
+
+--- ftd.column:
+height: 20
+width: 20
+anchor: parent
+position: bottom-left
+background-color: $orange
+open: false
+
+--- ftd.column:
+height: 20
+width: 20
+anchor: parent
+position: inner right
+background-color: $green
+open: false
+
+--- ftd.column:
+height: 20
+width: 20
+anchor: parent
+position: right
+background-color: $orange
+open: false
+
+-- container: outer
+
+
+-- ft.h1: `white-space: String`
+
+The white-space CSS property sets how white space inside an
+element is handled.
+
+[Read more](https://developer.mozilla.org/en-US/docs/Web/CSS/white-space)
+
+
+-- ft.code: specifying white-space
+lang: ftd
+
+\-- ftd.text:
+white-space: pre-wrap
+
+But ere she from the church-door stepped She smiled and told us why:
+'It was a wicked woman's curse,' Quoth she, 'and what care I?' She smiled,
+and smiled, and passed it off Ere from the door she stept—
+
+
+-- ft.output:
+
+-- ftd.text:
+white-space: pre-wrap
+color: $fpm.color.main.text
+
+But ere she from the church-door stepped She smiled and told us why:
+'It was a wicked woman's curse,' Quoth she, 'and what care I?' She smiled,
+and smiled, and passed it off Ere from the door she stept—
+
+-- container: outer
+
+
+-- ft.h1: `text-transform: String`
+
+The text-transform CSS property specifies how to capitalize an element's
+text. It can be used to make text appear in all-uppercase or all-lowercase,
+or with each word capitalized. It also can help improve legibility for ruby.
+
+[Read more](https://developer.mozilla.org/en-US/docs/Web/CSS/text-transform)
+
+
+-- ft.code: specifying text-transform
+lang: ftd
+
+\-- ftd.text:
+text-transform: capitalize
+
+But ere she from the church-door stepped She smiled and told us why:
+'It was a wicked woman's curse,' Quoth she, 'and what care I?' She smiled,
+and smiled, and passed it off Ere from the door she stept—
+
+
+-- ft.output:
+
+-- ftd.text:
+text-transform: capitalize
+color: $fpm.color.main.text
+
+But ere she from the church-door stepped She smiled and told us why:
+'It was a wicked woman's curse,' Quoth she, 'and what care I?' She smiled,
+and smiled, and passed it off Ere from the door she stept—
 
 -- container: outer
