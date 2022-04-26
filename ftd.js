@@ -1106,7 +1106,7 @@ window.ftd.post_init = function () {
             document.body.style.backgroundColor = FTD_THEME_COLOR;
             set_meta(THEME_COLOR_META, theme_color);
         } else {
-            document.html.style.backgroundColor = FTD_THEME_COLOR;
+            document.body.style.backgroundColor = FTD_THEME_COLOR;
             delete_meta(THEME_COLOR_META);
         }
     }
