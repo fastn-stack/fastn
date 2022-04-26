@@ -1387,7 +1387,7 @@ shadow-color: $red
 
 -- ft.markdown:
 
-Let's combine all shadow property and see the output.
+Let's combine all shadow properties and see the output.
 
 
 -- ft.code:
@@ -1420,5 +1420,133 @@ padding: 20
 background-color: $red
 color: $fpm.color.main.text-strong
 
+
+-- container: outer
+
+
+-- ft.h1: `scale: Decimal`
+
+The `scale` property increases or decreases the size of an element
+by number of times given.
+
+The following example increases the size of element by 1.5 times
+
+-- ft.code: specifying scale
+lang: ftd
+
+\-- ftd.text: FifthTry
+scale: 1.5
+background-color: $yellow
+padding: 5
+
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+scale: 1.5
+background-color: $yellow
+padding: 5
+
+-- container: outer
+
+
+-- ft.h1: `scale-x: Decimal`
+
+The `scale-x` property increases or decreases the width of an element
+by number of times given.
+
+The following example decrease element to be half of its original width
+
+-- ft.code: specifying scale-x
+lang: ftd
+
+\-- ftd.text: FifthTry
+scale-x: 0.5
+background-color: $yellow
+padding: 5
+
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+scale-x: 0.5
+background-color: $yellow
+padding: 5
+
+-- container: outer
+
+-- ft.h1: `scale-y: Decimal`
+
+The `scale-y` property increases or decreases the height of an element
+by number of times given.
+
+The following example increases the height of element by two times
+
+-- ft.code: specifying scale-y
+lang: ftd
+
+\-- ftd.text: FifthTry
+scale-y: 2
+background-color: $yellow
+padding: 5
+
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+scale-y: 2
+background-color: $yellow
+padding: 5
+
+-- container: outer
+
+
+-- ft.h1: `rotate: Integer`
+
+The `rotate` property rotates an element clockwise or
+counter-clockwise according to a given degree.
+
+The following example rotates the element clockwise with 20 degrees
+
+-- ft.code: specifying rotate
+lang: ftd
+
+\-- ftd.text: FifthTry
+rotate: 20
+background-color: $yellow
+padding: 5
+
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+rotate: 20
+background-color: $yellow
+padding: 5
+
+-- container: outer
+
+
+-- ft.h1: `move-up: Integer`
+
+The `move-up` property moves an element up from its current position.
+
+The following example moves the element up by 20
+
+-- ft.code: specifying rotate
+lang: ftd
+
+\-- ftd.text: FifthTry
+move-up: 20
+background-color: $yellow
+padding: 5
+
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+move-up: 20
+background-color: $yellow
+padding: 5
 
 -- container: outer
