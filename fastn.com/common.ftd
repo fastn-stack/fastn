@@ -2,7 +2,7 @@
 -- import: fpm
 
 -- ft.page-with-toc: Common Attributes
-toc: $config.api-toc
+toc: $config.ui-toc
 sub-sections: $config.doc-header
 
 
@@ -13,6 +13,772 @@ id: outer
 -- ft.markdown: 
 
 These attributes are available to all `ftd` "kernel" components.
+
+
+-- ft.h1: `color:` [`ftd.color`](/built-in-types/#ftd-color)
+
+-- ft.markdown:
+
+The color property sets the color of an element. It takes
+input of [`ftd.color`](/built-in-types/#ftd-color) type.
+
+
+-- ft.code: specifying color
+lang: ftd
+
+\-- ftd.color red:
+light: red
+dark: red
+
+\-- ftd.text: FifthTry
+color: $red
+
+
+-- ft.markdown:
+
+This will render like this:
+
+-- ftd.color red:
+light: red
+dark: red
+
+-- ftd.text: FifthTry
+color: $red
+
+
+-- ft.h1: `background-color:` [`ftd.color`](/built-in-types/#ftd-color)
+
+The background-color property sets the background color of an element. It takes
+input of [`ftd.color`](/built-in-types/#ftd-color) type.
+
+
+-- ft.code: specifying background-color
+lang: ftd
+
+\-- ftd.text: FifthTry
+background-color: $red
+
+
+-- ft.markdown:
+
+This will render like this:
+
+
+-- ftd.text: FifthTry
+color: $fpm.color.main.text-strong
+background-color: $red
+
+
+
+-- ft.h1: `border-width: Integer`
+
+Use this property to specify the width of the border. By default the `border-width`
+is zero, and is not visible.
+
+
+-- ft.code: specifying border width
+lang: ftd
+
+\-- ftd.text: FifthTry
+border-width: 2
+
+
+-- ft.markdown:
+
+This will render like this:
+
+
+-- ftd.text: FifthTry
+border-width: 2
+color: $fpm.color.main.text
+
+
+
+-- ft.h1: `border-top: Integer`
+
+The border-top property sets the width of an element's top border.
+
+
+-- ft.code: specifying border width
+lang: ftd
+
+\-- ftd.text: FifthTry
+border-top: 2
+
+
+-- ft.markdown:
+
+This will render like this:
+
+
+-- ftd.text: FifthTry
+border-top: 2
+color: $fpm.color.main.text
+
+
+
+
+-- ft.h1: `border-bottom: Integer`
+
+The border-bottom property sets the width of an element's bottom border.
+
+
+-- ft.code: specifying border width
+lang: ftd
+
+\-- ftd.text: FifthTry
+border-bottom: 2
+
+
+-- ft.markdown:
+
+This will render like this:
+
+
+-- ftd.text: FifthTry
+border-bottom: 2
+color: $fpm.color.main.text
+
+
+
+-- ft.h1: `border-left: Integer`
+
+The border-left property sets the width of an element's left border.
+
+
+-- ft.code: specifying border width
+lang: ftd
+
+\-- ftd.text: FifthTry
+border-left: 2
+
+
+-- ft.markdown:
+
+This will render like this:
+
+
+-- ftd.text: FifthTry
+border-left: 2
+color: $fpm.color.main.text
+
+
+
+-- ft.h1: `border-right: Integer`
+
+The border-right property sets the width of an element's right border.
+
+
+-- ft.code: specifying border width
+lang: ftd
+
+\-- ftd.text: FifthTry
+border-right: 2
+
+
+-- ft.markdown:
+
+This will render like this:
+
+
+-- ftd.text: FifthTry
+border-right: 2
+color: $fpm.color.main.text
+
+
+
+-- ft.h1: `border-style: String`
+
+The border-style property sets the style of an element's borders.
+
+
+-- ft.code: specifying border width
+lang: ftd
+
+\-- ftd.text: FifthTry
+border-style: dashed
+border-width: 2
+
+
+-- ft.markdown:
+
+This will render like this:
+
+
+-- ftd.text: FifthTry
+border-style: dashed
+border-width: 2
+color: $fpm.color.main.text
+
+
+
+-- ft.h1: `border-color:` [`ftd.color`](/built-in-types/#ftd-color)
+
+The border-color property sets the color of an element's four borders. It takes
+input of [`ftd.color`](/built-in-types/#ftd-color) type.
+
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.color red:
+light: red
+dark: red
+
+\-- ftd.text: FifthTry
+border-width: 2
+border-color: $red
+
+
+-- ft.markdown:
+
+This will render like this:
+
+-- ftd.text: FifthTry
+border-width: 2
+color: $fpm.color.main.text
+border-color: $red
+
+
+-- ft.h1: `border-radius: Integer`
+
+The border-radius property defines the radius of the element's corners.
+
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.text: FifthTry
+border-width: 2
+border-radius: 50
+
+
+-- ft.markdown:
+
+This will render like this:
+
+
+-- ftd.text: FifthTry
+border-width: 2
+color: $fpm.color.main.text
+border-radius: 50
+
+
+-- ft.h1: `border-top-radius: Integer`
+
+The border-top-radius property defines the radius of the top corner.
+
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.text: FifthTry
+border-width: 2
+border-top-radius: 50
+
+
+-- ft.markdown:
+
+This will render like this:
+
+
+-- ftd.text: FifthTry
+border-width: 2
+color: $fpm.color.main.text
+border-top-radius: 50
+
+
+
+-- ft.h1: `border-bottom-radius: Integer`
+
+The border-bottom-radius property defines the radius of the bottom corner.
+
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.text: FifthTry
+border-width: 2
+border-bottom-radius: 50
+
+
+-- ft.markdown:
+
+This will render like this:
+
+
+-- ftd.text: FifthTry
+border-width: 2
+color: $fpm.color.main.text
+border-bottom-radius: 50
+
+
+-- ft.h1: `border-left-radius: Integer`
+
+The border-left-radius property defines the radius of the left corner.
+
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.text: FifthTry
+border-width: 2
+border-left-radius: 50
+
+
+-- ft.markdown:
+
+This will render like this:
+
+
+-- ftd.text: FifthTry
+border-width: 2
+color: $fpm.color.main.text
+border-left-radius: 50
+
+
+
+-- ft.h1: `border-right-radius: Integer`
+
+The border-right-radius property defines the radius of the right corner.
+
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.text: FifthTry
+border-width: 2
+border-right-radius: 50
+
+
+-- ft.markdown:
+
+This will render like this:
+
+
+-- ftd.text: FifthTry
+border-width: 2
+color: $fpm.color.main.text
+border-right-radius: 50
+
+
+
+
+-- ft.h1: `padding: Integer`
+
+Padding is used to create space around an element's content, inside of any defined borders.
+
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.text: FifthTry
+padding: 60
+border-width: 2
+
+
+-- ft.markdown:
+
+This will render like this:
+
+
+-- ftd.text: FifthTry
+padding: 60
+color: $fpm.color.main.text
+border-width: 2
+
+
+
+-- ft.h1: `padding-vertical: Integer`
+
+This gives top and bottom padding.
+
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.text: FifthTry
+padding-vertical: 60
+
+
+-- ft.markdown:
+
+This will render like this:
+
+
+-- ftd.text: FifthTry
+padding-vertical: 60
+color: $fpm.color.main.text
+border-width: 2
+
+
+
+-- ft.h1: `padding-horizontal: Integer`
+
+This gives left and right padding.
+
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.text: FifthTry
+padding-horizontal: 60
+
+
+-- ft.markdown:
+
+This will render like this:
+
+
+-- ftd.text: FifthTry
+padding-horizontal: 60
+color: $fpm.color.main.text
+border-width: 2
+
+
+-- ft.h1: `padding-left: Integer`
+
+This gives left padding.
+
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.text: FifthTry
+padding-left: 60
+
+
+-- ft.markdown:
+
+This will render like this:
+
+
+-- ftd.text: FifthTry
+padding-left: 60
+color: $fpm.color.main.text
+border-width: 2
+
+
+
+-- ft.h1: `padding-right: Integer`
+
+This gives right padding.
+
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.text: FifthTry
+padding-right: 60
+
+
+-- ft.markdown:
+
+This will render like this:
+
+
+-- ftd.text: FifthTry
+padding-right: 60
+color: $fpm.color.main.text
+border-width: 2
+
+
+
+-- ft.h1: `padding-top: Integer`
+
+This gives top padding.
+
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.text: FifthTry
+padding-top: 60
+
+
+-- ft.markdown:
+
+This will render like this:
+
+
+-- ftd.text: FifthTry
+padding-top: 60
+color: $fpm.color.main.text
+border-width: 2
+
+
+-- ft.h1: `padding-bottom: Integer`
+
+This gives bottom padding.
+
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.text: FifthTry
+padding-bottom: 60
+
+
+-- ft.markdown:
+
+This will render like this:
+
+
+-- ftd.text: FifthTry
+padding-bottom: 60
+color: $fpm.color.main.text
+border-width: 2
+
+
+-- ft.h1: `width: String`
+
+The width property sets the width of an element.
+
+The width of an element does not include padding, borders, or margins.
+It takes the [length values](/built-in-types/#length-string)
+
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.text: FifthTry
+width: 200
+
+
+-- ft.markdown:
+
+This will render like this:
+
+
+-- ftd.text: FifthTry
+width: 200
+color: $fpm.color.main.text
+border-width: 2
+
+
+-- ft.h1: `min-width: String`
+
+The min-width property defines the minimum width of an element.
+It takes the [length values](/built-in-types/#length-string)
+
+If the content is smaller than the minimum width, the minimum width will be applied.
+
+If the content is larger than the minimum width, the min-width property has no effect.
+
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.text: FifthTry
+min-width: 200
+
+
+-- ft.markdown:
+
+This will render like this:
+
+
+-- ftd.text: FifthTry
+min-width: 200
+color: $fpm.color.main.text
+border-width: 2
+
+
+-- ft.h1: `max-width: String`
+
+The max-width property defines the maximum width of an element.
+It takes the [length values](/built-in-types/#length-string)
+
+If the content is larger than the maximum width, it will automatically change the height of the element.
+
+If the content is smaller than the maximum width, the max-width property has no effect.
+
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.text: FifthTry
+max-width: 40
+
+
+-- ft.markdown:
+
+This will render like this:
+
+
+-- ftd.text: FifthTry
+max-width: 40
+color: $fpm.color.main.text
+border-width: 2
+
+
+-- ft.h1: `height: String`
+
+The height property sets the height of an element.
+
+The height of an element does not include padding, borders, or margins.
+It takes the [length values](/built-in-types/#length-string)
+
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.text: FifthTry
+height: 60
+
+
+-- ft.markdown:
+
+This will render like this:
+
+
+-- ftd.text: FifthTry
+height: 60
+color: $fpm.color.main.text
+border-width: 2
+
+
+-- ft.h1: `min-height: String`
+
+The min-height property defines the minimum height of an element.
+It takes the [length values](/built-in-types/#length-string)
+
+If the content is smaller than the minimum height, the minimum height will be applied.
+
+If the content is larger than the minimum height, the min-width property has no effect.
+
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.text: FifthTry
+min-height: 70
+
+
+-- ft.markdown:
+
+This will render like this:
+
+
+-- ftd.text: FifthTry
+min-height: 70
+color: $fpm.color.main.text
+border-width: 2
+
+
+-- ft.h1: `max-height: String`
+
+The max-height property defines the maximum height of an element.
+It takes the [length values](/built-in-types/#length-string)
+
+If the content is larger than the maximum height, it will automatically change the height of the element.
+
+If the content is smaller than the maximum height, the max-height property has no effect.
+
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.text: FifthTry
+max-height: 10
+
+
+-- ft.markdown:
+
+This will render like this:
+
+
+-- ftd.text: FifthTry
+max-height: 10
+color: $fpm.color.main.text
+border-width: 2
+
+
+
+-- ft.h1: `overflow-x: String`
+
+The overflow-x property specifies whether to clip the content, add a scroll bar,
+or display overflow content of a block-level element, when it overflows at the
+left and right edges. It takes the following values:
+
+- hidden
+- visible
+- auto
+- scroll
+
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.text:
+background-color: $red
+width: 150
+height: 100
+overflow-x: scroll
+
+Lorem ipsum dolor sit amet, and a veryveryveryveryveryverylong
+word consectetuer adipiscing elit, sed diam nonummy nibh euismod
+tincidunt ut laoreet dolore magna aliquam erat
+
+
+-- ft.markdown:
+
+This will render like this:
+
+
+-- ftd.text:
+color: $fpm.color.main.text-strong
+background-color: $red
+width: 150
+height: 100
+overflow-x: scroll
+
+Lorem ipsum dolor sit amet, and a veryveryveryveryveryverylong
+word consectetuer adipiscing elit, sed diam nonummy nibh euismod
+tincidunt ut laoreet dolore magna aliquam erat
+
+
+-- ft.h1: `overflow-y: String`
+
+The overflow-y property specifies whether to clip the content,
+add a scroll bar, or display overflow content of a block-level element,
+when it overflows at the top and bottom edges. It takes the following values:
+
+- hidden
+- visible
+- auto
+- scroll
+
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.text:
+background-color: $red
+width: 150
+height: 100
+overflow-y: scroll
+
+Lorem ipsum dolor sit amet, and a veryveryveryveryveryverylong
+word consectetuer adipiscing elit, sed diam nonummy nibh euismod
+tincidunt ut laoreet dolore magna aliquam erat
+
+
+-- ft.markdown:
+
+This will render like this:
+
+
+-- ftd.text:
+color: $fpm.color.main.text-strong
+background-color: $red
+width: 150
+height: 100
+overflow-y: scroll
+
+Lorem ipsum dolor sit amet, and a veryveryveryveryveryverylong
+word consectetuer adipiscing elit, sed diam nonummy nibh euismod
+tincidunt ut laoreet dolore magna aliquam erat
 
 
 -- ft.h1: `cursor: String`
@@ -31,6 +797,7 @@ cursor: pointer
 -- ftd.text: this row has pointer as cursor
 align: center
 width: fill
+color: $fpm.color.main.text
 
 
 -- container: outer
@@ -150,24 +917,6 @@ region: h1
 -- ft.markdown:
 
 This tells this is a heading with the given level.
-
-
--- ft.h1: `border-width`
-
-Use this property to specify the width of the border. By default the `border-width`
-is zero, and is not visible.
-
-
--- ft.code: specifying border width
-lang: ftd
-
-\-- ftd.text: hello
-border-width: 1
-
-
--- ft.markdown:
-
-We can also set border of individual edges.
 
 
 -- ft.h1: `background-gradient`
@@ -489,3 +1238,315 @@ align: center
 color: $fpm.color.main.text
 width: fill
 height: fill
+
+
+-- container: outer
+
+
+-- ft.h1: `sticky: bool`
+
+An element with sticky; is positioned based on the user's scroll position.
+
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.text: FifthTry
+sticky: true
+
+
+
+-- ft.h1: `top: Integer`
+
+The top property affects the vertical position of a positioned element.
+
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.text: FifthTry
+top: 1
+
+
+-- ft.h1: `top: Integer`
+
+The top property affects the vertical position of a positioned element
+relative to top.
+
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.text: FifthTry
+top: 1
+
+
+-- ft.h1: `bottom: Integer`
+
+The bottom property affects the vertical position of a positioned element
+relative to bottom.
+
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.text: FifthTry
+bottom: 1
+
+
+-- ft.h1: `left: Integer`
+
+The left property affects the horizontal position of a positioned element
+relative to left.
+
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.text: FifthTry
+left: 1
+
+
+-- ft.h1: `right: Integer`
+
+The right property affects the horizontal position of a positioned element
+relative to right.
+
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.text: FifthTry
+right: 1
+
+
+-- ft.h1: `shadow-offset-x: Integer`
+
+It is one of the shadow property. It is length value to set the shadow offset.
+`shadow-offset-x` specifies the horizontal distance. Negative values place the
+shadow to the left of the element.
+
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.text: FifthTry
+shadow-offset-x: 1
+
+
+-- ft.h1: `shadow-offset-y: Integer`
+
+It is one of the shadow property. It is length value to set the shadow offset.
+`shadow-offset-y` specifies the vertical distance. Negative values place the
+shadow above the element.
+
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.text: FifthTry
+shadow-offset-y: 1
+
+
+-- ft.h1: `shadow-blur: Integer`
+
+It adds blur in shadow. The larger the value of `shadow-blur`, the bigger
+the blur, so the shadow becomes bigger and lighter. Negative values are
+not allowed.
+
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.text: FifthTry
+shadow-blur: 4
+
+
+-- ft.h1: `shadow-size: Integer`
+
+It specifies the size of shadow. Positive values will cause the shadow to
+expand and grow bigger, negative values will cause the shadow to shrink.
+
+
+-- ft.h1: `shadow-color:` [`ftd.color`](/built-in-types/#ftd-color)
+
+The shadow-color property sets the shadow color of an element. It takes
+input of [`ftd.color`](/built-in-types/#ftd-color) type.
+
+
+-- ft.code: specifying color
+lang: ftd
+
+\-- ftd.color yellow:
+light: yellow
+dark: yellow
+
+\-- ftd.text: FifthTry
+shadow-color: $red
+
+
+-- ft.markdown:
+
+Let's combine all shadow properties and see the output.
+
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.text: FifthTry
+shadow-offset-x: 14
+shadow-offset-y: 10
+shadow-blur: 5
+shadow-size: 4
+shadow-color: $yellow
+padding: 20
+background-color: $red
+
+
+
+-- ft.output:
+
+-- ftd.color yellow:
+light: yellow
+dark: yellow
+
+-- ftd.text: FifthTry
+shadow-offset-x: 14
+shadow-offset-y: 10
+shadow-blur: 5
+shadow-size: 4
+shadow-color: $yellow
+padding: 20
+background-color: $red
+color: $fpm.color.main.text-strong
+
+
+-- container: outer
+
+
+-- ft.h1: `scale: Decimal`
+
+The `scale` property increases or decreases the size of an element
+by number of times given.
+
+The following example increases the size of element by 1.5 times
+
+-- ft.code: specifying scale
+lang: ftd
+
+\-- ftd.text: FifthTry
+scale: 1.5
+background-color: $yellow
+padding: 5
+
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+scale: 1.5
+background-color: $yellow
+padding: 5
+
+-- container: outer
+
+
+-- ft.h1: `scale-x: Decimal`
+
+The `scale-x` property increases or decreases the width of an element
+by number of times given.
+
+The following example decrease element to be half of its original width
+
+-- ft.code: specifying scale-x
+lang: ftd
+
+\-- ftd.text: FifthTry
+scale-x: 0.5
+background-color: $yellow
+padding: 5
+
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+scale-x: 0.5
+background-color: $yellow
+padding: 5
+
+-- container: outer
+
+-- ft.h1: `scale-y: Decimal`
+
+The `scale-y` property increases or decreases the height of an element
+by number of times given.
+
+The following example increases the height of element by two times
+
+-- ft.code: specifying scale-y
+lang: ftd
+
+\-- ftd.text: FifthTry
+scale-y: 2
+background-color: $yellow
+padding: 5
+
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+scale-y: 2
+background-color: $yellow
+padding: 5
+
+-- container: outer
+
+
+-- ft.h1: `rotate: Integer`
+
+The `rotate` property rotates an element clockwise or
+counter-clockwise according to a given degree.
+
+The following example rotates the element clockwise with 20 degrees
+
+-- ft.code: specifying rotate
+lang: ftd
+
+\-- ftd.text: FifthTry
+rotate: 20
+background-color: $yellow
+padding: 5
+
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+rotate: 20
+background-color: $yellow
+padding: 5
+
+-- container: outer
+
+
+-- ft.h1: `move-up: Integer`
+
+The `move-up` property moves an element up from its current position.
+
+The following example moves the element up by 20
+
+-- ft.code: specifying rotate
+lang: ftd
+
+\-- ftd.text: FifthTry
+move-up: 20
+background-color: $yellow
+padding: 5
+
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+move-up: 20
+background-color: $yellow
+padding: 5
+
+-- container: outer

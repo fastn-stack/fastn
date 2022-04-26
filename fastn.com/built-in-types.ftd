@@ -87,7 +87,7 @@ it can be passed in the "caption" location in `ftd::p1` "section".
 lang: ftd
 
 \-- record person:
-name: caption
+caption name:
 
 \-- person amitu: Amit Upadhyay
 
@@ -148,7 +148,7 @@ or body`, it can be passed in either the "caption" or "body" location in
 lang: ftd
 
 \-- record person:
-name: caption or body
+caption or body name:
 
 \-- person amitu: Amit Upadhyay
 
@@ -164,3 +164,49 @@ Abrar Khan
 If something is specified as `caption or body`, it can come in the "caption"
 location, eg in case of `amitu` var, or it can come as an explicit key, as in
 the declaration of `shobhit` variable, or in "body" location, eg for `abrar`.
+
+
+-- ft.h1: `ftd.color`
+
+It is record type with the following fields.
+
+-- ft.code: `ftd.color` record
+lang: ftd
+
+\-- record ftd.color:
+caption light:
+string dark:
+
+-- ft.markdown:
+
+It shows color in light field in light mode and color in dark field in dark mode.
+Consider the following example:
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.color red-orange:
+light: red
+dark: orange
+
+-- ft.markdown:
+
+This would return `red` color in light mode and `orange` color in dark mode.
+
+
+-- ft.h1: length: String
+
+This accepts following set of string:
+
+- `fill`: This gives 100% space
+- `auto`: This gives auto space (read more about it in `auto` css property value)
+- `calc <some-value>`: It takes a single expression as its parameter, with the
+   expression's result used as the value. Example: `width: calc 100% - 80px`
+- `fit-content`: the element will use the available space, but never more than max-content.
+   Example: `width: fit-content`
+- `portion <integer>`: It specifies how much the item will grow relative to the
+   rest of the items inside the same container.
+- `percent <integer>`: This gives <integer>% space
+- `vh <integer>`: Relative to 1% of the height of the viewport
+- `vw <integer>`: Relative to 1% of the width of the viewport
+- `<integer>`: Gives <integer>px unit space.
