@@ -1,0 +1,1076 @@
+-- ft.page-with-toc: FPM Color
+toc: $config.themes-toc
+
+-- ftd.column:
+id: outer
+
+-- ft.markdown: 
+
+FPM Color
+
+-- ft.h1: `fpm.color.main.background.base`
+
+
+-- ft.code:
+lang: ftd
+
+\-- import: fpm
+
+\-- ftd.text: FifthTry
+color: $fpm.color.main.background.base
+
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+color: $fpm.color.main.background.base
+
+-- container: outer
+
+
+-- ft.h1: `fpm.color.main.background.step-1`
+
+
+-- ft.code:
+lang: ftd
+
+
+\-- ftd.text: FifthTry
+color: $fpm.color.main.background.step-1
+
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+color: $fpm.color.main.background.step-1
+
+-- container: outer
+
+
+-- ft.h1: `fpm.color.main.background.step-2`
+
+
+-- ft.code:
+lang: ftd
+
+
+\-- ftd.text: FifthTry
+color: $fpm.color.main.background.step-2
+
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+color: $fpm.color.main.background.step-2
+
+-- container: outer
+
+
+
+
+-- ft.h1: `fpm.color.main.border`
+
+
+-- ft.code:
+lang: ftd
+
+
+\-- ftd.text: FifthTry
+color: $fpm.color.main.border
+
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+color: $fpm.color.main.border
+
+-- container: outer
+
+
+-- ft.h1: `fpm.color.main.border-strong`
+
+
+-- ft.code:
+lang: ftd
+
+
+\-- ftd.text: FifthTry
+color: $fpm.color.main.border-strong
+
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+color: $fpm.color.main.border-strong
+
+-- container: outer
+
+
+-- ft.h1: `fpm.color.main.text`
+
+
+-- ft.code:
+lang: ftd
+
+
+\-- ftd.text: FifthTry
+color: $fpm.color.main.text
+
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+color: $fpm.color.main.text
+
+-- container: outer
+
+
+-- ft.h1: `fpm.color.main.text-strong`
+
+
+-- ft.code:
+lang: ftd
+
+
+\-- ftd.text: FifthTry
+color: $fpm.color.main.text-strong
+
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+color: $fpm.color.main.text-strong
+
+-- container: outer
+
+
+-- ft.h1: `fpm.color.main.shadow`
+
+
+-- ft.code:
+lang: ftd
+
+
+\-- ftd.text: FifthTry
+color: $fpm.color.main.shadow
+
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+color: $fpm.color.main.shadow
+
+-- container: outer
+
+
+-- ft.h1: `fpm.color.main.scrim`
+
+
+-- ft.code:
+lang: ftd
+
+
+\-- ftd.text: FifthTry
+color: $fpm.color.main.scrim
+
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+color: $fpm.color.main.scrim
+
+-- container: outer
+
+
+-- ft.h1: `fpm.color.main.cta-primary.base`
+
+
+-- ft.code:
+lang: ftd
+
+
+\-- ftd.text: FifthTry
+color: $fpm.color.main.cta-primary.base
+
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+color: $fpm.color.main.cta-primary.base
+
+-- container: outer
+
+
+-- ft.h1: `fpm.color.main.cta-primary.hover`
+
+
+-- ft.code:
+lang: ftd
+
+
+\-- ftd.text: FifthTry
+color: $fpm.color.main.cta-primary.hover
+
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+color: $fpm.color.main.cta-primary.hover
+
+-- container: outer
+
+
+-- ft.h1: `fpm.color.main.cta-primary.pressed`
+
+
+-- ft.code:
+lang: ftd
+
+
+\-- ftd.text: FifthTry
+color: $fpm.color.main.cta-primary.pressed
+
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+color: $fpm.color.main.cta-primary.pressed
+
+-- container: outer
+
+
+
+-- ft.h1: `fpm.color.main.cta-primary.disabled`
+
+
+-- ft.code:
+lang: ftd
+
+
+\-- ftd.text: FifthTry
+color: $fpm.color.main.cta-primary.disabled
+
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+color: $fpm.color.main.cta-primary.disabled
+
+-- container: outer
+
+
+
+-- ft.h1: `fpm.color.main.cta-primary.focused`
+
+
+-- ft.code:
+lang: ftd
+
+
+\-- ftd.text: FifthTry
+color: $fpm.color.main.cta-primary.focused
+
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+color: $fpm.color.main.cta-primary.focused
+
+-- container: outer
+
+
+
+-- ft.h1: `fpm.color.main.cta-primary.border`
+
+
+-- ft.code:
+lang: ftd
+
+
+\-- ftd.text: FifthTry
+color: $fpm.color.main.cta-primary.border
+
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+color: $fpm.color.main.cta-primary.border
+
+-- container: outer
+
+
+-- ft.h1: `fpm.color.main.cta-primary.text`
+
+
+-- ft.code:
+lang: ftd
+
+
+\-- ftd.text: FifthTry
+color: $fpm.color.main.cta-primary.text
+
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+color: $fpm.color.main.cta-primary.text
+
+-- container: outer
+
+
+-- ft.h1: `fpm.color.main.cta-secondary.base`
+
+
+-- ft.code:
+lang: ftd
+
+
+\-- ftd.text: FifthTry
+color: $fpm.color.main.cta-secondary.base
+
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+color: $fpm.color.main.cta-secondary.base
+
+-- container: outer
+
+
+-- ft.h1: `fpm.color.main.cta-secondary.hover`
+
+
+-- ft.code:
+lang: ftd
+
+
+\-- ftd.text: FifthTry
+color: $fpm.color.main.cta-secondary.hover
+
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+color: $fpm.color.main.cta-secondary.hover
+
+-- container: outer
+
+
+-- ft.h1: `fpm.color.main.cta-secondary.pressed`
+
+
+-- ft.code:
+lang: ftd
+
+
+\-- ftd.text: FifthTry
+color: $fpm.color.main.cta-secondary.pressed
+
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+color: $fpm.color.main.cta-secondary.pressed
+
+-- container: outer
+
+
+
+-- ft.h1: `fpm.color.main.cta-secondary.disabled`
+
+
+-- ft.code:
+lang: ftd
+
+
+\-- ftd.text: FifthTry
+color: $fpm.color.main.cta-secondary.disabled
+
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+color: $fpm.color.main.cta-secondary.disabled
+
+-- container: outer
+
+
+
+-- ft.h1: `fpm.color.main.cta-secondary.focused`
+
+
+-- ft.code:
+lang: ftd
+
+
+\-- ftd.text: FifthTry
+color: $fpm.color.main.cta-secondary.focused
+
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+color: $fpm.color.main.cta-secondary.focused
+
+-- container: outer
+
+
+
+-- ft.h1: `fpm.color.main.cta-secondary.border`
+
+
+-- ft.code:
+lang: ftd
+
+
+\-- ftd.text: FifthTry
+color: $fpm.color.main.cta-secondary.border
+
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+color: $fpm.color.main.cta-secondary.border
+
+-- container: outer
+
+
+-- ft.h1: `fpm.color.main.cta-secondary.text`
+
+
+-- ft.code:
+lang: ftd
+
+
+\-- ftd.text: FifthTry
+color: $fpm.color.main.cta-secondary.text
+
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+color: $fpm.color.main.cta-secondary.text
+
+-- container: outer
+
+-- ft.h1: `fpm.color.main.cta-tertiary.base`
+
+
+-- ft.code:
+lang: ftd
+
+
+\-- ftd.text: FifthTry
+color: $fpm.color.main.cta-tertiary.base
+
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+color: $fpm.color.main.cta-tertiary.base
+
+-- container: outer
+
+
+-- ft.h1: `fpm.color.main.cta-tertiary.hover`
+
+
+-- ft.code:
+lang: ftd
+
+
+\-- ftd.text: FifthTry
+color: $fpm.color.main.cta-tertiary.hover
+
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+color: $fpm.color.main.cta-tertiary.hover
+
+-- container: outer
+
+
+-- ft.h1: `fpm.color.main.cta-tertiary.pressed`
+
+
+-- ft.code:
+lang: ftd
+
+
+\-- ftd.text: FifthTry
+color: $fpm.color.main.cta-tertiary.pressed
+
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+color: $fpm.color.main.cta-tertiary.pressed
+
+-- container: outer
+
+
+
+-- ft.h1: `fpm.color.main.cta-tertiary.disabled`
+
+
+-- ft.code:
+lang: ftd
+
+
+\-- ftd.text: FifthTry
+color: $fpm.color.main.cta-tertiary.disabled
+
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+color: $fpm.color.main.cta-tertiary.disabled
+
+-- container: outer
+
+
+
+-- ft.h1: `fpm.color.main.cta-tertiary.focused`
+
+
+-- ft.code:
+lang: ftd
+
+
+\-- ftd.text: FifthTry
+color: $fpm.color.main.cta-tertiary.focused
+
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+color: $fpm.color.main.cta-tertiary.focused
+
+-- container: outer
+
+
+
+-- ft.h1: `fpm.color.main.cta-tertiary.border`
+
+
+-- ft.code:
+lang: ftd
+
+
+\-- ftd.text: FifthTry
+color: $fpm.color.main.cta-tertiary.border
+
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+color: $fpm.color.main.cta-tertiary.border
+
+-- container: outer
+
+
+-- ft.h1: `fpm.color.main.cta-tertiary.text`
+
+
+-- ft.code:
+lang: ftd
+
+
+\-- ftd.text: FifthTry
+color: $fpm.color.main.cta-tertiary.text
+
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+color: $fpm.color.main.cta-tertiary.text
+
+-- container: outer
+
+
+
+
+-- ft.h1: `fpm.color.main.accent.primary`
+
+
+-- ft.code:
+lang: ftd
+
+
+\-- ftd.text: FifthTry
+color: $fpm.color.main.accent.primary
+
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+color: $fpm.color.main.accent.primary
+
+-- container: outer
+
+
+
+-- ft.h1: `fpm.color.main.accent.secondary`
+
+
+-- ft.code:
+lang: ftd
+
+
+\-- ftd.text: FifthTry
+color: $fpm.color.main.accent.secondary
+
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+color: $fpm.color.main.accent.secondary
+
+-- container: outer
+
+
+-- ft.h1: `fpm.color.main.accent.tertiary`
+
+
+-- ft.code:
+lang: ftd
+
+
+\-- ftd.text: FifthTry
+color: $fpm.color.main.accent.tertiary
+
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+color: $fpm.color.main.accent.tertiary
+
+-- container: outer
+
+
+
+-- ft.h1: `fpm.color.main.error.base`
+
+
+-- ft.code:
+lang: ftd
+
+
+\-- ftd.text: FifthTry
+color: $fpm.color.main.error.base
+
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+color: $fpm.color.main.error.base
+
+-- container: outer
+
+
+
+-- ft.h1: `fpm.color.main.error.text`
+
+
+-- ft.code:
+lang: ftd
+
+
+\-- ftd.text: FifthTry
+color: $fpm.color.main.error.text
+
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+color: $fpm.color.main.error.text
+
+-- container: outer
+
+
+-- ft.h1: `fpm.color.main.error.border`
+
+
+-- ft.code:
+lang: ftd
+
+
+\-- ftd.text: FifthTry
+color: $fpm.color.main.error.border
+
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+color: $fpm.color.main.error.border
+
+-- container: outer
+
+
+
+-- ft.h1: `fpm.color.main.success.base`
+
+
+-- ft.code:
+lang: ftd
+
+
+\-- ftd.text: FifthTry
+color: $fpm.color.main.success.base
+
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+color: $fpm.color.main.success.base
+
+-- container: outer
+
+
+
+-- ft.h1: `fpm.color.main.success.text`
+
+
+-- ft.code:
+lang: ftd
+
+
+\-- ftd.text: FifthTry
+color: $fpm.color.main.success.text
+
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+color: $fpm.color.main.success.text
+
+-- container: outer
+
+
+-- ft.h1: `fpm.color.main.success.border`
+
+
+-- ft.code:
+lang: ftd
+
+
+\-- ftd.text: FifthTry
+color: $fpm.color.main.success.border
+
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+color: $fpm.color.main.success.border
+
+
+-- container: outer
+
+
+
+-- ft.h1: `fpm.color.main.info.base`
+
+
+-- ft.code:
+lang: ftd
+
+
+\-- ftd.text: FifthTry
+color: $fpm.color.main.info.base
+
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+color: $fpm.color.main.info.base
+
+-- container: outer
+
+
+
+-- ft.h1: `fpm.color.main.info.text`
+
+
+-- ft.code:
+lang: ftd
+
+
+\-- ftd.text: FifthTry
+color: $fpm.color.main.info.text
+
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+color: $fpm.color.main.info.text
+
+-- container: outer
+
+
+-- ft.h1: `fpm.color.main.info.border`
+
+
+-- ft.code:
+lang: ftd
+
+
+\-- ftd.text: FifthTry
+color: $fpm.color.main.info.border
+
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+color: $fpm.color.main.info.border
+
+-- container: outer
+
+
+
+-- ft.h1: `fpm.color.main.warning.base`
+
+
+-- ft.code:
+lang: ftd
+
+
+\-- ftd.text: FifthTry
+color: $fpm.color.main.warning.base
+
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+color: $fpm.color.main.warning.base
+
+-- container: outer
+
+
+
+-- ft.h1: `fpm.color.main.warning.text`
+
+
+-- ft.code:
+lang: ftd
+
+
+\-- ftd.text: FifthTry
+color: $fpm.color.main.warning.text
+
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+color: $fpm.color.main.warning.text
+
+-- container: outer
+
+
+-- ft.h1: `fpm.color.main.warning.border`
+
+
+-- ft.code:
+lang: ftd
+
+
+\-- ftd.text: FifthTry
+color: $fpm.color.main.warning.border
+
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+color: $fpm.color.main.warning.border
+
+-- container: outer
+
+
+-- ft.h1: `fpm.color.main.custom.one`
+
+
+-- ft.code:
+lang: ftd
+
+
+\-- ftd.text: FifthTry
+color: $fpm.color.main.custom.one
+
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+color: $fpm.color.main.custom.one
+
+-- container: outer
+
+
+-- ft.h1: `fpm.color.main.custom.two`
+
+
+-- ft.code:
+lang: ftd
+
+
+\-- ftd.text: FifthTry
+color: $fpm.color.main.custom.two
+
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+color: $fpm.color.main.custom.two
+
+
+-- container: outer
+
+
+-- ft.h1: `fpm.color.main.custom.three`
+
+
+-- ft.code:
+lang: ftd
+
+
+\-- ftd.text: FifthTry
+color: $fpm.color.main.custom.three
+
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+color: $fpm.color.main.custom.three
+
+-- container: outer
+
+
+-- ft.h1: `fpm.color.main.custom.four`
+
+
+-- ft.code:
+lang: ftd
+
+
+\-- ftd.text: FifthTry
+color: $fpm.color.main.custom.four
+
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+color: $fpm.color.main.custom.four
+
+-- container: outer
+
+
+-- ft.h1: `fpm.color.main.custom.five`
+
+
+-- ft.code:
+lang: ftd
+
+
+\-- ftd.text: FifthTry
+color: $fpm.color.main.custom.five
+
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+color: $fpm.color.main.custom.five
+
+-- container: outer
+
+
+-- ft.h1: `fpm.color.main.custom.six`
+
+
+-- ft.code:
+lang: ftd
+
+
+\-- ftd.text: FifthTry
+color: $fpm.color.main.custom.six
+
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+color: $fpm.color.main.custom.six
+
+-- container: outer
+
+
+-- ft.h1: `fpm.color.main.custom.seven`
+
+
+-- ft.code:
+lang: ftd
+
+
+\-- ftd.text: FifthTry
+color: $fpm.color.main.custom.seven
+
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+color: $fpm.color.main.custom.seven
+
+-- container: outer
+
+
+-- ft.h1: `fpm.color.main.custom.eight`
+
+
+-- ft.code:
+lang: ftd
+
+
+\-- ftd.text: FifthTry
+color: $fpm.color.main.custom.eight
+
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+color: $fpm.color.main.custom.eight
+
+-- container: outer
+
+
+-- ft.h1: `fpm.color.main.custom.nine`
+
+
+-- ft.code:
+lang: ftd
+
+
+\-- ftd.text: FifthTry
+color: $fpm.color.main.custom.nine
+
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+color: $fpm.color.main.custom.nine
+
+-- container: outer
+
+
+-- ft.h1: `fpm.color.main.custom.ten`
+
+
+-- ft.code:
+lang: ftd
+
+
+\-- ftd.text: FifthTry
+color: $fpm.color.main.custom.ten
+
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+color: $fpm.color.main.custom.ten
+
