@@ -87,12 +87,12 @@ border-style: dashed
 The `open` property opens the container element. i.e. The succeeding elements
 become the children.
 
-To understand it better, refer to [container management](/container-management/)
+To understand it better, refer to [container management](container-management/)
 
 
 -- ft.h1: `append-at: String`
 
 The `append-at` property places the children inside the container having the same id.
 
-To understand it better, refer to [container management](/container-management/)
+To understand it better, refer to [container management](container-management/)
 

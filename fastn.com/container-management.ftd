@@ -10,9 +10,9 @@ Every `ftd` document is rendered in the context of a "main container".
 
 -- ft.h1: `ftd.main`: the main container
 
-`ftd` has two container components: [`ftd.column`](column/) and 
-[`ftd.row`](row/). These two components can store zero or more 
-components as children.
+`ftd` has several container components. This includes [`ftd.column`](column/),
+[`ftd.row`](row/), [`ftd.grid`](grid/) and [`ftd.scene`](scene/). These
+components can store zero or more components as children.
 
 The main container for the document is an `ftd.column`. It is created when we start
 rendering and is set as the "current container".
@@ -34,8 +34,8 @@ placed into the current container.
 
 -- ft.h1: An Open Container
 
-If a container, say `ftd.row` or `ftd.column`, is created, and it has zero 
-children, it is considered an "open container"
+If a container, say `ftd.row`, is created, and it has zero children, it is
+considered an "open container"
 
 -- ft.code:
 lang: ftd
@@ -60,7 +60,7 @@ lang: ftd
 
 -- ft.markdown:
 
-In this example we created a row with two children. In this case since the 
+In this example we created a row with two children. In this case since the
 container is not empty, it is not made the current container. 
 
 We can force a container to be open or closed by using the `open` attribute:
@@ -90,18 +90,36 @@ The second row, on the other hand, has a child, "hello" text, and it would have
 normally been considered closed, but we kept it open using the `open` attribute,
 which means the third row is placed inside the second row.
 
--- ft.h2: `open` can take an `id`
+-- ft.h2: `append-at` takes an `id`
 
-An open container can set the value of `open` to the `id` of one of its children,
+A container can set the value of `append-at` to the `id` of one of its children,
 when that is done, the `id`ed child is made the container in which all subsequent 
-components will be placed:
+components will be placed, if it is open (when `open` is set) or all direct
+child components (or components in subsection) will be placed, if it's not open
+(when `open` is not set)
 
--- ft.code:
+-- ft.code: `append-at` with `open` not set
 lang: ftd
 
-\-- component foo:
-open: some-child
-component: ftd.column
+\-- ftd.column foo:
+append-at: some-child
+
+\--- ftd.row:
+id: some-child
+
+\--- ftd.row:
+
+\-- foo:
+
+\--- ftd.text: hello
+
+
+-- ft.code: `append-at` with `open` set
+lang: ftd
+
+\-- ftd.column foo:
+open: true
+append-at: some-child
 
 \--- ftd.row:
 id: some-child
@@ -114,7 +132,7 @@ id: some-child
 
 -- ft.markdown:
 
-In this case `foo` has designated the first `row` inside it as the container which
+In both cases, `foo` has designated the first `row` inside it as the container which
 will receive children.
 
 `hello` text will go inside the row with id: `some-child`.
@@ -122,8 +140,8 @@ will receive children.
 -- ft.h1: `container` keywords and container id
 
 In the last example we left a row inside another row as the current container.
-Anything new will be placed inside the row-inside-the-row. If we want to get back
-to the "main container", we use the container keyword:
+Anything new will be placed inside the row-inside-the-row container. If we want to
+get back to the "main container", we use the container keyword:
 
 -- ft.code:
 lang: ftd
@@ -172,8 +190,7 @@ being defined.
 -- ft.code:
 lang: ftd
 
-\-- component foo:
-component: ftd.row
+\-- ftd.row foo:
 
 \--- ftd.row:
 id: first-in-foo
@@ -201,8 +218,7 @@ Consider this component:
 -- ft.code:
 lang: ftd
 
-\-- component foo:
-component: ftd.column
+\-- ftd.column foo:
 
 \--- ftd.column:
 id: c1
