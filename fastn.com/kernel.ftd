@@ -1,5 +1,5 @@
 -- ft.page-with-toc: Kernel Components
-toc: $config.api-toc
+toc: $config.ui-toc
 sub-sections: $config.doc-header
     
 -- ft.markdown: 
@@ -39,3 +39,6 @@ the text "hello world" in the UI.
 - [`ftd.integer`](integer/)
 - [`ftd.decimal`](decimal/)
 - [`ftd.boolean`](boolean/)
+- [`ftd.code`](code/)
+- [`ftd.scene`](scene/)
+- [`ftd.grid`](grid/)

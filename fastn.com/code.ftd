@@ -1,0 +1,116 @@
+-- ft.page-with-toc: Code
+toc: $config.ui-toc
+sub-sections: $config.doc-header
+
+-- ftd.column:
+width: fill
+id: outer
+
+-- ft.markdown:
+
+It renders the code component.
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.code:
+
+print("hello world")
+
+-- ft.output:
+
+-- ftd.code:
+
+print("hello world")
+
+-- container: outer
+
+-- ft.markdown:
+
+The `ftd.code` component accepts the below attributes along with the
+[common attributes](common/).
+
+
+-- ft.h1: `text: String`
+
+This is the text or code to show. It accepts the value both in caption
+or body besides in header.
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.code:
+text: print("hello world")
+
+-- ft.output:
+
+-- ftd.code:
+text: print("hello world")
+
+-- container: outer
+
+
+-- ft.h1: `lang: String`
+
+The `lang` property defines the language of the code. It is an
+optional field. In case if the value is not provided, this
+will take `txt` as default value.
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.code:
+lang: py
+
+value = "hello world"
+print(value)
+
+-- ft.output:
+
+-- ftd.code:
+lang: py
+
+value = "hello world"
+print(value)
+
+-- container: outer
+
+
+-- ft.h1: `theme: String`
+
+The `theme` property defines the theme for the code block.
+It is an optional field with default value `base16-ocean.dark`.
+
+The available themes are:
+
+- base16-ocean.dark
+- base16-eighties.dark
+- base16-mocha.dark
+- base16-ocean.light
+- InspiredGitHub
+- Solarized (dark)
+- Solarized (light)
+
+Refer [this](https://docs.rs/syntect/latest/syntect/highlighting/struct.ThemeSet.html#method.load_defaults)
+for the list of themes available
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.code:
+lang: py
+theme: Solarized (dark)
+
+value = "hello world"
+print(value)
+
+-- ft.output:
+
+-- ftd.code:
+lang: py
+theme: Solarized (dark)
+
+value = "hello world"
+print(value)
+
+-- container: outer

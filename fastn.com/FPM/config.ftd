@@ -101,17 +101,18 @@ $processor$: toc
 - UI: /ui/
 - `component`: /component/
 - Kernel Components: /kernel/
-  - `ftd.row`: /row/
-  - `ftd.column`: /column/
-  - `ftd.text`: /text/
-  - `ftd.image`: /image/
-  - `ftd.iframe`: /iframe/
-  - `ftd.integer`: /integer/
-  - `ftd.decimal`: /decimal/
-  - `ftd.boolean`: /boolean/
-  - `ftd.input`: /input/
-  - `ftd.scene`: /scene/
-  - `ftd.grid`: /grid/
+  - `ftd.row`: row/
+  - `ftd.column`: column/
+  - `ftd.text`: text/
+  - `ftd.image`: image/
+  - `ftd.iframe`: iframe/
+  - `ftd.integer`: integer/
+  - `ftd.decimal`: decimal/
+  - `ftd.boolean`: boolean/
+  - `ftd.code`: code/
+  - `ftd.input`: input/
+  - `ftd.scene`: scene/
+  - `ftd.grid`: grid/
 - Common Attributes: /common/
 - Common Text Attributes: /text-common/
 - FTD "markup": /markup/
