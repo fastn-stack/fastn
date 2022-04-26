@@ -18,9 +18,9 @@ role: $body-large
 
 -- ftd.text: hello_h1
 region: h1
-role: $fpm.type.body-medium
+role: $fpm.type.copy-relaxed
 color: $fpm.color.main.text
 
 -- ftd.text: hello_h0
 region: h0
-role: $fpm.type.body-small
+role: $fpm.type.copy-tight

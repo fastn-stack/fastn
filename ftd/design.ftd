@@ -14,130 +14,110 @@ on every fpm package.
 -- string font-code: sans-serif
 
 
--- ftd.font-size display-large-desktop:
-line-height: 64
-size: 57
+
+-- ftd.font-size heading-large-desktop:
+line-height: 48
+size: 40
 tracking: 0
 
--- ftd.type display-large: $font-display
-desktop: $display-large-desktop
-mobile: $display-large-desktop
-xl: $display-large-desktop
+-- ftd.type heading-large: $font-display
+desktop: $heading-large-desktop
+mobile: $heading-large-desktop
+xl: $heading-large-desktop
 weight: 400
 
--- ftd.font-size display-medium-desktop:
-line-height: 52
-size: 45
-tracking: 0
 
--- ftd.type display-medium: $font-display
-desktop: $display-medium-desktop
-mobile: $display-medium-desktop
-xl: $display-medium-desktop
-weight: 400
 
--- ftd.font-size display-small-desktop:
+-- ftd.font-size heading-medium-desktop:
 line-height: 44
-size: 36
-tracking: 0
-
--- ftd.type display-small: $font-display
-desktop: $display-small-desktop
-mobile: $display-small-desktop
-xl: $display-small-desktop
-weight: 400
-
--- ftd.font-size headline-large-desktop:
-line-height: 40
 size: 32
 tracking: 0
 
--- ftd.type headline-large: $font-display
-desktop: $headline-large-desktop
-mobile: $headline-large-desktop
-xl: $headline-large-desktop
+-- ftd.type heading-medium: $font-display
+desktop: $heading-medium-desktop
+mobile: $heading-medium-desktop
+xl: $heading-medium-desktop
 weight: 400
 
--- ftd.font-size headline-medium-desktop:
+
+
+-- ftd.font-size heading-small-desktop:
 line-height: 36
-size: 28
-tracking: 0
-
--- ftd.type headline-medium: $font-display
-desktop: $headline-medium-desktop
-mobile: $headline-medium-desktop
-xl: $headline-medium-desktop
-weight: 400
-
--- ftd.font-size headline-small-desktop:
-line-height: 32
 size: 24
 tracking: 0
 
--- ftd.type headline-small: $font-display
-desktop: $headline-small-desktop
-mobile: $headline-small-desktop
-xl: $headline-small-desktop
+-- ftd.type heading-small: $font-display
+desktop: $heading-small-desktop
+mobile: $heading-small-desktop
+xl: $heading-small-desktop
 weight: 400
 
--- ftd.font-size title-large-desktop:
-line-height: 28
-size: 22
+
+
+-- ftd.font-size heading-hero-desktop:
+line-height: 52
+size: 48
 tracking: 0
 
--- ftd.type title-large: $font-display
-desktop: $title-large-desktop
-mobile: $title-large-desktop
-xl: $title-large-desktop
+-- ftd.type heading-hero: $font-display
+desktop: $heading-hero-desktop
+mobile: $heading-hero-desktop
+xl: $heading-hero-desktop
 weight: 400
 
--- ftd.font-size title-medium-desktop:
+
+-- ftd.font-size copy-tight-desktop:
+line-height: 20
+size: 16
+tracking: 0
+
+-- ftd.type copy-tight: $font-copy
+desktop: $copy-tight-desktop
+mobile: $copy-tight-desktop
+xl: $copy-tight-desktop
+weight: 400
+
+
+-- ftd.font-size copy-relaxed-desktop:
 line-height: 24
 size: 16
-tracking: 0.15
+tracking: 0
 
--- ftd.type title-medium: $font-display
-desktop: $title-medium-desktop
-mobile: $title-medium-desktop
-xl: $title-medium-desktop
-weight: 500
+-- ftd.type copy-relaxed: $font-copy
+desktop: $copy-relaxed-desktop
+mobile: $copy-relaxed-desktop
+xl: $copy-relaxed-desktop
+weight: 400
 
--- ftd.font-size title-small-desktop:
-line-height: 20
-size: 14
-tracking: 0.1
 
--- ftd.type title-small: $font-display
-desktop: $title-small-desktop
-mobile: $title-small-desktop
-xl: $title-small-desktop
-weight: 500
 
--- ftd.font-size label-large-desktop:
-line-height: 20
-size: 14
-tracking: 0.1
+-- ftd.font-size copy-large-desktop:
+line-height: 24
+size: 20
+tracking: 0
 
--- ftd.type label-large: $font-display
-desktop: $label-large-desktop
-mobile: $label-large-desktop
-xl: $label-large-desktop
-weight: 500
+-- ftd.type copy-large: $font-copy
+desktop: $copy-large-desktop
+mobile: $copy-large-desktop
+xl: $copy-large-desktop
+weight: 400
 
--- ftd.font-size label-medium-desktop:
+
+
+-- ftd.font-size label-big-desktop:
 line-height: 16
-size: 12
-tracking: 0.5
+size: 16
+tracking: 0
 
--- ftd.type label-medium: $font-display
-desktop: $label-medium-desktop
-mobile: $label-medium-desktop
-xl: $label-medium-desktop
-weight: 500
+-- ftd.type label-big: $font-display
+desktop: $label-big-desktop
+mobile: $label-big-desktop
+xl: $label-big-desktop
+weight: 400
 
 -- ftd.font-size label-small-desktop:
 line-height: 16
-size: 11
+size: 14
 tracking: 0.5
 
 -- ftd.type label-small: $font-display
@@ -146,72 +126,60 @@ mobile: $label-small-desktop
 xl: $label-small-desktop
 weight: 500
 
--- ftd.font-size body-large-desktop:
-line-height: 24
-size: 16
-tracking: 0.15
-
--- ftd.type body-large: $font-copy
-desktop: $body-large-desktop
-mobile: $body-large-desktop
-xl: $body-large-desktop
-weight: 400
-
--- ftd.font-size body-medium-desktop:
-line-height: 20
-size: 14
-tracking: 0.25
-
--- ftd.type body-medium: $font-copy
-desktop: $body-medium-desktop
-mobile: $body-medium-desktop
-xl: $body-medium-desktop
-weight: 400
-
--- ftd.font-size body-small-desktop:
+-- ftd.font-size fine-print-desktop:
 line-height: 16
-size: 12
-tracking: 0.4
+size: 14
+tracking: 0
 
--- ftd.type body-small: $font-copy
-desktop: $body-small-desktop
-mobile: $body-small-desktop
-xl: $body-small-desktop
+-- ftd.type fine-print: $font-code
+desktop: $fine-print-desktop
+mobile: $fine-print-desktop
+xl: $fine-print-desktop
 weight: 400
+
+
+
+-- ftd.font-size blockquote-desktop:
+line-height: 16
+size: 14
+tracking: 0
+
+-- ftd.type blockquote: $font-code
+desktop: $blockquote-desktop
+mobile: $blockquote-desktop
+xl: $blockquote-desktop
+weight: 400
+
+
 
 -- record type-data:
-ftd.type display-large:
-ftd.type display-medium:
-ftd.type display-small:
-ftd.type headline-large:
-ftd.type headline-medium:
-ftd.type headline-small:
-ftd.type title-large:
-ftd.type title-medium:
-ftd.type title-small:
-ftd.type label-large:
-ftd.type label-medium:
+ftd.type heading-large:
+ftd.type heading-medium:
+ftd.type heading-small:
+ftd.type heading-hero:
+ftd.type copy-tight:
+ftd.type copy-relaxed:
+ftd.type copy-large:
+ftd.type fine-print:
+ftd.type blockquote:
+ftd.type label-big:
 ftd.type label-small:
-ftd.type body-large:
-ftd.type body-medium:
-ftd.type body-small:
+
 
 -- type-data type:
-display-large: $display-large
-display-medium: $display-medium
-display-small: $display-small
-headline-large: $headline-large
-headline-medium: $headline-medium
-headline-small: $headline-small
-title-large: $title-large
-title-medium: $title-medium
-title-small: $title-small
-label-large: $label-large
-label-medium: $label-medium
+heading-hero: $heading-hero
+heading-large: $heading-large
+heading-medium: $heading-medium
+heading-small: $heading-small
+copy-tight: $copy-tight
+copy-relaxed: $copy-relaxed
+copy-large: $copy-large
+label-big: $label-big
 label-small: $label-small
-body-large: $body-large
-body-medium: $body-medium
-body-small: $body-small
+fine-print: $fine-print
+blockquote: $blockquote
+
+
 
 
 
