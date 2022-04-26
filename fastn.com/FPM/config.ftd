@@ -110,6 +110,7 @@ $processor$: toc
   - `ftd.decimal`: /decimal/
   - `ftd.boolean`: /boolean/
   - `ftd.input`: /input/
+  - `ftd.scene`: /scene/
 - Common Attributes: /common/
 - Common Text Attributes: /text-common/
 - FTD "markup": /markup/

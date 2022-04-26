@@ -1,5 +1,35 @@
 -- import: fpm
 
+-- ftd.color efefef: #efefef
+dark: #efefef
+
+-- ftd.color white: white
+dark: white
+
+-- ftd.color ebe2ce: #ebe2ce
+dark: #ebe2ce
+
+-- ftd.color d9e7f8: #d9e7f8
+dark: #d9e7f8
+
+-- ftd.color dc9eb3: #dc9eb3
+dark: #dc9eb3
+
+-- ftd.color 76c2c4: #76c2c4
+dark: #76c2c4
+
+-- ftd.color fce251: #fce251
+dark: #fce251
+
+-- ftd.color d2d2ce: #d2d2ce
+dark: #d2d2ce
+
+-- ftd.color f09483: #f09483
+dark: #f09483
+
+-- ftd.color yellow: yellow
+dark: yellow
+
 -- ft.page-with-toc: An Architecture Diagram
 toc: $config.examples-toc
 
@@ -16,13 +46,13 @@ we will be updating the example to make it mobile optimized/responsive soon.
 
 
 -- ftd.column diagram:
-background-color: $fpm.color.main.background.base
+background-color: $efefef
 width: fill
 height: fill
 padding: 40
 
 --- ftd.scene:
-background-color: $fpm.color.main.background.base
+background-color: $white
 width: 1350
 height: 540
 $on-click$: $info = kubernetes-info
@@ -67,7 +97,7 @@ right: 506
 --- container: ftd.main
 
 --- ftd.column:
-background-color: $fpm.color.main.background.base
+background-color: $ebe2ce
 width: fill
 padding: 10
 margin-top: -60
@@ -140,7 +170,7 @@ if: $info == container-runtime-info
 
 
 -- ftd.scene control-panel:
-background-color: $fpm.color.main.background.base
+background-color: $d9e7f8
 border-color if $MOUSE-IN: $fpm.color.main.text
 border-width: 2
 width: 600
@@ -200,7 +230,7 @@ left: 304
 padding: 20
 border-width: 2
 border-radius: 10
-background-color: $fpm.color.main.background.base
+background-color: $white
 border-color if $MOUSE-IN: $fpm.color.main.text
 $on-click$: $info = etcd-info
 $on-click$: stop-propagation
@@ -211,7 +241,7 @@ $on-click$: prevent-default
 -- ftd.column kube-controller-manager:
 
 --- box:
-background-color: $fpm.color.main.background.base
+background-color: $dc9eb3
 title: Kube Controller Manager
 
 --- text-block: Node Controller
@@ -239,7 +269,7 @@ $on-click$: prevent-default
 -- ftd.column cloud-controller-manager:
 
 --- box:
-background-color: $fpm.color.main.background.base
+background-color: $76c2c4
 title: Cloud Controller Manager
 
 --- text-block: Node Controller
@@ -264,7 +294,7 @@ $on-click$: prevent-default
 -- ftd.row kube-api-server:
 width: 100
 height: 270
-background-color: $fpm.color.main.background.base
+background-color: $fce251
 border-width: 2
 padding: 20
 border-color if $MOUSE-IN: $fpm.color.main.text
@@ -279,7 +309,7 @@ align: center
 
 
 -- ftd.scene nodes:
-background-color: $fpm.color.main.background.base
+background-color: $d2d2ce
 border-width: 2
 border-radius: 4
 width: 600
@@ -295,7 +325,7 @@ role: $fpm.type.copy-large
 --- ftd.column:
 top: 50
 left: 90
-background-color: $fpm.color.main.background.base
+background-color: $f09483
 width: 400
 height: 300
 border-width: 2
@@ -311,7 +341,7 @@ left: 115
 
 
 -- ftd.scene worker-node:
-background-color: $fpm.color.main.background.base
+background-color: $f09483
 width: 400
 height: 300
 border-width: 2
@@ -374,7 +404,7 @@ id: box-id
 
 -- ftd.text text-block: $text
 caption text:
-background-color: $fpm.color.main.background.base
+background-color: $white
 width: 80
 padding: 5
 align: center

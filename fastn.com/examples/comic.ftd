@@ -1,6 +1,11 @@
 -- import: ftd.dev/assets
 -- import: fpm
 
+-- ftd.color cadetblue: cadetblue
+dark: cadetblue
+
+-- ftd.color white: white
+dark: white
 
 -- ft.page-with-toc: Once upon a time...
 toc: $config.examples-toc
@@ -10,7 +15,7 @@ toc: $config.examples-toc
 
 
 -- ftd.scene comic:
-background-color: $fpm.color.main.background.base
+background-color: $cadetblue
 width: 1070
 height: 1137
 scale: 0.8
@@ -34,7 +39,7 @@ left: 0
 top: 800
 left: 320
 cursor: default
-background-color: $fpm.color.main.background.base
+background-color: $white
 padding: 80
 role: $fpm.type.heading-large
 
@@ -53,7 +58,7 @@ width: 500
 
 --- ftd.text: Hello Everyone! We are PowerPuff Girls
 border-radius: 150
-background-color: $fpm.color.main.background.base
+background-color: $white
 padding: 10
 left: 10
 top: 10
@@ -72,7 +77,7 @@ width: 500
 
 --- ftd.text: Hello Everyone! I am Mickey Mouse
 border-radius: 150
-background-color: $fpm.color.main.background.base
+background-color: $white
 padding: 10
 left: 10
 top: 10
@@ -98,7 +103,7 @@ top: 0
 
 --- ftd.text: Hi! I am Ethan
 border-radius: 150
-background-color: $fpm.color.main.background.base
+background-color: $white
 padding: 10
 left: 0
 top: 5
@@ -136,7 +141,7 @@ top: 0
 
 --- ftd.text: Nice to meet you Ethan. I am Sophie
 border-radius: 150
-background-color: $fpm.color.main.background.base
+background-color: $white
 padding: 10
 left: 0
 top: 5
