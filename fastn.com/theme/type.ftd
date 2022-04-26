@@ -1,0 +1,291 @@
+-- ft.page-with-toc: FPM Typography
+toc: $config.themes-toc
+
+-- ftd.column:
+id: outer
+
+-- ft.markdown: 
+
+FPM Typography
+
+-- ft.h1: `fpm.type.heading-large`
+
+line-height: 48
+
+size: 40
+
+weight: 400
+
+-- ft.code:
+lang: ftd
+
+\-- import: fpm
+
+\-- ftd.text: FifthTry
+role: $fpm.type.heading-large
+
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+role: $fpm.type.heading-large
+color: $fpm.color.main.text
+
+-- container: outer
+
+-- ft.h1: `fpm.type.heading-medium`
+
+line-height: 44
+
+size: 32
+
+weight: 400
+
+-- ft.code:
+lang: ftd
+
+
+\-- ftd.text: FifthTry
+role: $fpm.type.heading-medium
+
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+role: $fpm.type.heading-medium
+color: $fpm.color.main.text
+
+
+
+
+-- container: outer
+
+-- ft.h1: `fpm.type.heading-small`
+
+line-height: 36
+
+size: 24
+
+weight: 400
+
+-- ft.code:
+lang: ftd
+
+
+\-- ftd.text: FifthTry
+role: $fpm.type.heading-small
+
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+role: $fpm.type.heading-small
+color: $fpm.color.main.text
+
+
+
+
+-- container: outer
+
+-- ft.h1: `fpm.type.heading-hero`
+
+line-height: 52
+
+size: 48
+
+weight: 400
+
+-- ft.code:
+lang: ftd
+
+
+\-- ftd.text: FifthTry
+role: $fpm.type.heading-hero
+
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+role: $fpm.type.heading-hero
+color: $fpm.color.main.text
+
+
+
+
+
+-- container: outer
+
+-- ft.h1: `fpm.type.copy-tight`
+
+line-height: 20
+
+size: 16
+
+weight: 400
+
+-- ft.code:
+lang: ftd
+
+
+\-- ftd.text: FifthTry
+role: $fpm.type.copy-tight
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+role: $fpm.type.copy-tight
+color: $fpm.color.main.text
+
+
+
+
+
+-- container: outer
+
+-- ft.h1: `fpm.type.copy-relaxed`
+
+line-height: 24
+
+size: 16
+
+weight: 400
+
+-- ft.code:
+lang: ftd
+
+
+\-- ftd.text: FifthTry
+role: $fpm.type.copy-relaxed
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+role: $fpm.type.copy-relaxed
+color: $fpm.color.main.text
+
+
+
+
+-- container: outer
+
+-- ft.h1: `fpm.type.copy-large`
+
+line-height: 24
+
+size: 20
+
+weight: 400
+
+-- ft.code:
+lang: ftd
+
+
+\-- ftd.text: FifthTry
+role: $fpm.type.copy-large
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+role: $fpm.type.copy-large
+color: $fpm.color.main.text
+
+
+
+-- container: outer
+
+-- ft.h1: `fpm.type.label-big`
+
+line-height: 16
+
+size: 16
+
+weight: 400
+
+-- ft.code:
+lang: ftd
+
+
+\-- ftd.text: FifthTry
+role: $fpm.type.label-big
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+role: $fpm.type.label-big
+color: $fpm.color.main.text
+
+
+
+
+-- container: outer
+
+-- ft.h1: `fpm.type.label-small`
+
+line-height: 16
+
+size: 14
+
+weight: 400
+
+-- ft.code:
+lang: ftd
+
+
+\-- ftd.text: FifthTry
+role: $fpm.type.label-small
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+role: $fpm.type.label-small
+color: $fpm.color.main.text
+
+
+
+-- container: outer
+
+-- ft.h1: `fpm.type.fine-print`
+
+line-height: 16
+
+size: 14
+
+weight: 400
+
+-- ft.code:
+lang: ftd
+
+
+\-- ftd.text: FifthTry
+role: $fpm.type.fine-print
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+role: $fpm.type.fine-print
+color: $fpm.color.main.text
+
+
+
+-- container: outer
+
+-- ft.h1: `fpm.type.blockquote`
+
+line-height: 16
+
+size: 14
+
+weight: 400
+
+-- ft.code:
+lang: ftd
+
+
+\-- ftd.text: FifthTry
+role: $fpm.type.blockquote
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+role: $fpm.type.blockquote
+color: $fpm.color.main.text
