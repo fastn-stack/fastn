@@ -1550,3 +1550,76 @@ background-color: $yellow
 padding: 5
 
 -- container: outer
+
+
+-- ft.h1: `move-down: Integer`
+
+The `move-down` property moves an element down from its current position.
+
+The following example moves the element down by 20
+
+-- ft.code: specifying rotate
+lang: ftd
+
+\-- ftd.text: FifthTry
+move-down: 20
+background-color: $yellow
+padding: 5
+
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+move-down: 20
+background-color: $yellow
+padding: 5
+
+-- container: outer
+
+-- ft.h1: `move-left: Integer`
+
+The `move-left` property moves an element left from its current position.
+
+The following example moves the element left by 20
+
+-- ft.code: specifying rotate
+lang: ftd
+
+\-- ftd.text: FifthTry
+move-left: 20
+background-color: $yellow
+padding: 5
+
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+move-left: 20
+background-color: $yellow
+padding: 5
+
+-- container: outer
+
+-- ft.h1: `move-right: Integer`
+
+The `move-right` property moves an element right from its current position.
+
+The following example moves the element right by 20
+
+-- ft.code: specifying rotate
+lang: ftd
+
+\-- ftd.text: FifthTry
+move-right: 20
+background-color: $yellow
+padding: 5
+
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+move-right: 20
+background-color: $yellow
+padding: 5
+
+-- container: outer
