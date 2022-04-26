@@ -68,7 +68,7 @@ width: fill
 color: $fpm.color.main.text
 width: percent 75
 position: center
-role: $fpm.type.display-large
+role: $fpm.type.heading-large
 
 --- ftd.image:
 src: $image
@@ -111,7 +111,7 @@ color: $fpm.color.main.text
 padding-horizontal: 20
 position: center
 text-align: center
-role: $fpm.type.display-large
+role: $fpm.type.heading-large
 
 --- container: ftd.main
 
@@ -137,7 +137,7 @@ color: $color
 border-radius: 6
 padding-vertical: 15
 padding-horizontal: 40
-role: $fpm.type.label-large
+role: $fpm.type.label-big
 
 
 
@@ -150,7 +150,7 @@ text-align: center
 color: $fpm.color.main.text
 background-color: $fpm.color.main.background.base
 width: fill
-role: $fpm.type.title-large
+role: $fpm.type.heading-large
 
 
 
@@ -208,12 +208,12 @@ width: fill
 width: fill
 text-align: center
 color if $ftd.dark-mode: $fpm.color.main.text
-role: $fpm.type.label-large
+role: $fpm.type.label-big
 
 --- ftd.text:
 text: $body
 width: fill
-role: $fpm.type.label-large
+role: $fpm.type.label-big
 width: fill
 text-align: center
 color if $ftd.dark-mode: $fpm.color.main.text
@@ -270,12 +270,12 @@ align: center
 width: fill
 width: fill
 text-align: center
-role: $fpm.type.label-large
+role: $fpm.type.label-big
 color: $fpm.color.main.text
 
 --- ftd.text: $designation
 width: fill
-role: $fpm.type.label-medium
+role: $fpm.type.label-small
 width: fill
 text-align: center
 color: $fpm.color.main.text
@@ -283,7 +283,7 @@ color: $fpm.color.main.text
 --- ftd.text:
 text: $body
 width: fill
-role: $fpm.type.label-medium
+role: $fpm.type.label-small
 text-align: center
 color: $fpm.color.main.text
 
@@ -344,7 +344,7 @@ border-color: $fpm.color.main.text
 margin-bottom: 50
 
 --- ftd.text: $title
-role: $fpm.type.title-large
+role: $fpm.type.heading-large
 anchor: parent
 top: 5
 left: 0
@@ -356,7 +356,7 @@ color: $fpm.color.main.text
 
 --- ftd.text: $cta-text
 if: $active
-role: $fpm.type.label-large
+role: $fpm.type.label-big
 text-align: center
 link: $link
 anchor: parent
@@ -381,7 +381,7 @@ background-color: $fpm.color.main.background.base
 border-radius: 20
 padding-vertical: 5
 padding-horizontal: 20
-role: $fpm.type.label-large
+role: $fpm.type.label-big
 
 
 
@@ -416,7 +416,7 @@ padding-horizontal: 20
 padding-vertical: 5
 min-width: 200
 color: $fpm.color.main.text
-role: $fpm.type.title-large
+role: $fpm.type.heading-large
 
 --- ftd.row:
 anchor: parent
@@ -436,7 +436,7 @@ border-radius: 20
 padding-vertical: 5
 padding-horizontal: 20
 margin-right: 5
-role: $fpm.type.label-large
+role: $fpm.type.label-big
 
 --- ftd.text: Create
 text-align: center
@@ -446,7 +446,7 @@ background-color: $fpm.color.main.background.base
 border-radius: 20
 padding-vertical: 5
 padding-horizontal: 20
-role: $fpm.type.label-large
+role: $fpm.type.label-big
 
 
 
@@ -484,7 +484,7 @@ optional string link:
 if: $link is not null
 link: $link
 color: $fpm.color.main.text
-role: $fpm.type.label-large
+role: $fpm.type.label-big
 
 --- ftd.image:
 if: $link is not null
@@ -496,5 +496,5 @@ width: 16
 --- ftd.text: $title
 if: $link is null
 color: $fpm.color.main.text
-role: $fpm.type.label-medium
+role: $fpm.type.label-small
 

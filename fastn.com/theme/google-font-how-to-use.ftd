@@ -40,7 +40,7 @@ lang: ftd
 \-- fpm.type.headline-small.font: $inter.fonts.Inter
 
 \-- ftd.text:
-role: $fpm.type.headline-small
+role: $fpm.type.heading-small
 
 
 
@@ -147,7 +147,7 @@ width: fill
 spacing: 10
 
 --- ftd.text: $name
-role: $fpm.type.title-medium
+role: $fpm.type.heading-medium
 color: $fpm.color.main.text-strong
 
 --- kv: Google:
@@ -166,9 +166,9 @@ width: fill
 spacing: 5
 
 --- ftd.text: $key
-role: $fpm.type.title-medium
+role: $fpm.type.heading-medium
 color: $fpm.color.main.text
 
 --- ftd.text: $value
-role: $fpm.type.title-medium
+role: $fpm.type.heading-medium
 color: $fpm.color.main.text-strong
