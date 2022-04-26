@@ -1318,3 +1318,107 @@ lang: ftd
 
 \-- ftd.text: FifthTry
 right: 1
+
+
+-- ft.h1: `shadow-offset-x: Integer`
+
+It is one of the shadow property. It is length value to set the shadow offset.
+`shadow-offset-x` specifies the horizontal distance. Negative values place the
+shadow to the left of the element.
+
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.text: FifthTry
+shadow-offset-x: 1
+
+
+-- ft.h1: `shadow-offset-y: Integer`
+
+It is one of the shadow property. It is length value to set the shadow offset.
+`shadow-offset-y` specifies the vertical distance. Negative values place the
+shadow above the element.
+
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.text: FifthTry
+shadow-offset-y: 1
+
+
+-- ft.h1: `shadow-blur: Integer`
+
+It adds blur in shadow. The larger the value of `shadow-blur`, the bigger
+the blur, so the shadow becomes bigger and lighter. Negative values are
+not allowed.
+
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.text: FifthTry
+shadow-blur: 4
+
+
+-- ft.h1: `shadow-size: Integer`
+
+It specifies the size of shadow. Positive values will cause the shadow to
+expand and grow bigger, negative values will cause the shadow to shrink.
+
+
+-- ft.h1: `shadow-color:` [`ftd.color`](/built-in-types/#ftd-color)
+
+The shadow-color property sets the shadow color of an element. It takes
+input of [`ftd.color`](/built-in-types/#ftd-color) type.
+
+
+-- ft.code: specifying color
+lang: ftd
+
+\-- ftd.color yellow:
+light: yellow
+dark: yellow
+
+\-- ftd.text: FifthTry
+shadow-color: $red
+
+
+-- ft.markdown:
+
+Let's combine all shadow property and see the output.
+
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.text: FifthTry
+shadow-offset-x: 14
+shadow-offset-y: 10
+shadow-blur: 5
+shadow-size: 4
+shadow-color: $yellow
+padding: 20
+background-color: $red
+
+
+
+-- ft.output:
+
+-- ftd.color yellow:
+light: yellow
+dark: yellow
+
+-- ftd.text: FifthTry
+shadow-offset-x: 14
+shadow-offset-y: 10
+shadow-blur: 5
+shadow-size: 4
+shadow-color: $yellow
+padding: 20
+background-color: $red
+color: $fpm.color.main.text-strong
+
+
+-- container: outer
