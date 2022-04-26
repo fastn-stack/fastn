@@ -2119,3 +2119,11 @@ But ere she from the church-door stepped She smiled and told us why:
 and smiled, and passed it off Ere from the door she stept—
 
 -- container: outer
+
+
+-- ft.h1: `slot: String`
+
+The `slot` property specifies a grid item's location within a grid. This
+should be assign to the child component.
+
+Refer: [ftd.grid](grid/)
