@@ -38,12 +38,16 @@ color: $red
 
 This will render like this:
 
+-- ft.output:
+
 -- ftd.color red:
 light: red
 dark: red
 
 -- ftd.text: FifthTry
 color: $red
+
+-- container: outer
 
 
 -- ft.h1: `background-color:` [`ftd.color`](/built-in-types/#ftd-color)
@@ -64,9 +68,13 @@ background-color: $red
 This will render like this:
 
 
+-- ft.output:
+
 -- ftd.text: FifthTry
 color: $fpm.color.main.text-strong
 background-color: $red
+
+-- container: outer
 
 
 
@@ -845,7 +853,7 @@ This will render like this:
 link: https://www.google.com
 
 
--- ft.h1: `open-in-new-tab: bool, default=False`
+-- ft.h1: `open-in-new-tab: boolean, default=False`
 
 If `link` is provided, this attribute can also be set to open the link in new
 tab instead of current tab.
@@ -1243,7 +1251,7 @@ height: fill
 -- container: outer
 
 
--- ft.h1: `sticky: bool`
+-- ft.h1: `sticky: boolean`
 
 An element with sticky; is positioned based on the user's scroll position.
 

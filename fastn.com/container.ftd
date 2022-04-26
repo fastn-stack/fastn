@@ -3,9 +3,96 @@ toc: $config.api-toc
 sub-sections: $config.doc-header
 
     
--- ft.markdown: 
+-- ftd.column:
+id: outer
 
-- `spacing`
-- `align` 
-- `wrap`
-- `open`
+
+-- ft.markdown:
+
+These attributes are available to all `ftd` "container" components.
+
+-- ft.h1: `wrap: boolean`
+
+If `wrap` property sets the items wrap onto multiple lines.
+
+
+-- ft.code: specifying wrap
+lang: ftd
+
+\-- ftd.column:
+width: 200
+height: 200
+border-width: 2
+padding: 20
+wrap: true
+
+\--- items: 1
+
+\--- items: 2
+
+\--- items: 3
+
+\--- items: 4
+
+\--- items: 5
+
+\--- items: 6
+
+\-- ftd.text items: $title
+caption title:
+width: 50
+height: 50
+border-width: 1
+border-style: dashed
+
+
+-- ft.markdown:
+
+This will render like this:
+
+-- ft.output:
+
+-- ftd.column:
+width: 200
+height: 200
+border-width: 2
+color: $fpm.color.main.text
+padding: 20
+wrap: true
+
+--- items: 1
+
+--- items: 2
+
+--- items: 3
+
+--- items: 4
+
+--- items: 5
+
+--- items: 6
+
+-- ftd.text items: $title
+caption title:
+width: 50
+height: 50
+border-width: 1
+border-style: dashed
+
+-- container: outer
+
+
+-- ft.h1: `open: boolean`
+
+The `open` property opens the container element. i.e. The succeeding elements
+become the children.
+
+To understand it better, refer to [container management](/container-management/)
+
+
+-- ft.h1: `append-at: String`
+
+The `append-at` property places the children inside the container having the same id.
+
+To understand it better, refer to [container management](/container-management/)
+
