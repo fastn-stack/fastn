@@ -18,7 +18,7 @@ on every fpm package.
 -- ftd.font-size heading-large-desktop:
 line-height: 48
 size: 40
-tracking: 0
+letter-spacing: 0
 
 -- ftd.type heading-large: $font-display
 desktop: $heading-large-desktop
@@ -31,7 +31,7 @@ weight: 400
 -- ftd.font-size heading-medium-desktop:
 line-height: 44
 size: 32
-tracking: 0
+letter-spacing: 0
 
 -- ftd.type heading-medium: $font-display
 desktop: $heading-medium-desktop
@@ -44,7 +44,7 @@ weight: 400
 -- ftd.font-size heading-small-desktop:
 line-height: 36
 size: 24
-tracking: 0
+letter-spacing: 0
 
 -- ftd.type heading-small: $font-display
 desktop: $heading-small-desktop
@@ -57,7 +57,7 @@ weight: 400
 -- ftd.font-size heading-hero-desktop:
 line-height: 52
 size: 48
-tracking: 0
+letter-spacing: 0
 
 -- ftd.type heading-hero: $font-display
 desktop: $heading-hero-desktop
@@ -69,7 +69,7 @@ weight: 400
 -- ftd.font-size copy-tight-desktop:
 line-height: 20
 size: 16
-tracking: 0
+letter-spacing: 0
 
 -- ftd.type copy-tight: $font-copy
 desktop: $copy-tight-desktop
@@ -81,7 +81,7 @@ weight: 400
 -- ftd.font-size copy-relaxed-desktop:
 line-height: 24
 size: 16
-tracking: 0
+letter-spacing: 0
 
 -- ftd.type copy-relaxed: $font-copy
 desktop: $copy-relaxed-desktop
@@ -94,7 +94,7 @@ weight: 400
 -- ftd.font-size copy-large-desktop:
 line-height: 24
 size: 20
-tracking: 0
+letter-spacing: 0
 
 -- ftd.type copy-large: $font-copy
 desktop: $copy-large-desktop
@@ -107,7 +107,7 @@ weight: 400
 -- ftd.font-size label-big-desktop:
 line-height: 16
 size: 16
-tracking: 0
+letter-spacing: 0
 
 -- ftd.type label-big: $font-display
 desktop: $label-big-desktop
@@ -118,7 +118,7 @@ weight: 400
 -- ftd.font-size label-small-desktop:
 line-height: 16
 size: 14
-tracking: 0
+letter-spacing: 0
 
 -- ftd.type label-small: $font-display
 desktop: $label-small-desktop
@@ -129,7 +129,7 @@ weight: 400
 -- ftd.font-size fine-print-desktop:
 line-height: 16
 size: 14
-tracking: 0
+letter-spacing: 0
 
 -- ftd.type fine-print: $font-code
 desktop: $fine-print-desktop
@@ -142,7 +142,7 @@ weight: 400
 -- ftd.font-size blockquote-desktop:
 line-height: 16
 size: 14
-tracking: 0
+letter-spacing: 0
 
 -- ftd.type blockquote: $font-code
 desktop: $blockquote-desktop
