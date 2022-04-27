@@ -557,6 +557,15 @@ glass: $main
 
 
 
+-- record space-data:
+integer space-1:
+
+
+-- space-data space:
+space-1: 4
+
+
+
 
 
 
