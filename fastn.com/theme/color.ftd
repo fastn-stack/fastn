@@ -28,20 +28,7 @@ lang: ftd
 
 \-- import: fpm
 
-<<<<<<< Updated upstream
-\-- ftd.row: 
-width: fill
-height: 100
-color: $fpm.color.main.background.base
 
-
--- ft.output:
-
--- ftd.row: 
-width: fill
-height: 100
-background-color: $fpm.color.main.background.base
-=======
 
 -- box-container:
 bg-color: $fpm.color.main.background.base
@@ -52,28 +39,7 @@ bg-color: $fpm.color.main.background.base
 
 -- ft.h1: `fpm.color.main.background.step-1`
 
-<<<<<<< Updated upstream
-Hex value:  #141414
 
-
--- ft.code:
-lang: ftd
-
-\-- ftd.row: 
-width: fill
-height: 100
-color: $fpm.color.main.background.step-1
-
-
--- ft.output:
-
--- ftd.row: 
-width: fill
-height: 100
-background-color: $fpm.color.main.background.step-1
-
-
-=======
 -- box-container:
 bg-color: $fpm.color.main.background.step-1
 
@@ -84,28 +50,6 @@ bg-color: $fpm.color.main.background.step-1
 
 -- ft.h1: `fpm.color.main.background.step-2`
 
-<<<<<<< Updated upstream
-Hex value:  #585656
-
-
--- ft.code:
-lang: ftd
-
-
-\-- ftd.row: 
-width: fill
-height: 100
-background-color: $fpm.color.main.background.step-2
-
-
--- ft.output:
-
--- ftd.row: 
-width: fill
-height: 100
-background-color: $fpm.color.main.background.step-2
-
-=======
 -- box-container:
 bg-color: $fpm.color.main.background.step-2
 
@@ -118,34 +62,7 @@ bg-color: $fpm.color.main.background.step-2
 
 -- ft.h1: `fpm.color.main.border`
 
-<<<<<<< Updated upstream
-Hex value:  #434547
 
-
--- ft.code:
-lang: ftd
-
-
-\-- ftd.text: FifthTry
-padding-vertical: 16
-padding-horizontal: 8
-border-width: 1
-border-color: $fpm.color.main.border
-color: $fpm.color.main.text
-
-
-
--- ft.output:
-
--- ftd.text: FifthTry
-padding-vertical: 16
-padding-horizontal: 8
-border-width: 1
-border-color: $fpm.color.main.border
-color: $fpm.color.main.text
-
-
-=======
 -- box-container:
 bg-color: $fpm.color.main.border
 
@@ -157,32 +74,7 @@ bg-color: $fpm.color.main.border
 
 -- ft.h1: `fpm.color.main.border-strong`
 
-<<<<<<< Updated upstream
-Hex value:  #919192
 
-
--- ft.code:
-lang: ftd
-
-
-\-- ftd.text: FifthTry
-padding-vertical: 16
-padding-horizontal: 8
-border-width: 1
-border-color: $fpm.color.main.border-strong
-color: $fpm.color.main.text
-
-
--- ft.output:
-
-
--- ftd.text: FifthTry
-padding-vertical: 16
-padding-horizontal: 8
-border-width: 1
-border-color: $fpm.color.main.border-strong
-color: $fpm.color.main.text
-=======
 -- box-container:
 bg-color: $fpm.color.main.border-strong
 
@@ -205,26 +97,7 @@ bg-color: $fpm.color.main.text
 
 -- ft.h1: `fpm.color.main.text-strong`
 
-<<<<<<< Updated upstream
-Hex value:  #ffffff
 
-
--- ft.code:
-lang: ftd
-
-
-\-- ftd.text: FifthTry
-color: $fpm.color.main.text-strong
-
-
--- ft.output:
-
--- ftd.text: FifthTry
-color: $fpm.color.main.text-strong
-
-
-
-=======
 -- box-container:
 bg-color: $fpm.color.main.text-strong
 
@@ -235,47 +108,7 @@ bg-color: $fpm.color.main.text-strong
 
 -- ft.h1: `fpm.color.main.shadow`
 
-<<<<<<< Updated upstream
-Hex value:  #007f9b
 
-
--- ft.code:
-lang: ftd
-
-
-\-- ftd.row: 
-padding-vertical: 20
-padding-horizontal: 20
-border-width: 1
-shadow-offset-x: 3
-shadow-offset-y: 4
-shadow-size: 0
-shadow-blur: 4
-border-color: $fpm.color.main.border
-shadow-color: $fpm.color.main.shadow
---- ftd.text: FifthTry
-color: $fpm.color.main.text
-
-
--- ft.output:
-
-
--- ftd.row: 
-padding-vertical: 20
-padding-horizontal: 20
-border-width: 1
-shadow-offset-x: 3
-shadow-offset-y: 4
-shadow-size: 0
-shadow-blur: 4
-border-color: $fpm.color.main.shadow
-shadow-color: $fpm.color.main.shadow
-
-
---- ftd.text: FifthTry
-color: $fpm.color.main.text
-
-=======
 -- box-container:
 bg-color: $fpm.color.main.shadow
 
@@ -285,10 +118,6 @@ bg-color: $fpm.color.main.shadow
 
 -- ft.h1: `fpm.color.main.scrim`
 
-<<<<<<< Updated upstream
-Hex value:  #007f9b
-
-=======
 -- box-container:
 bg-color: $fpm.color.main.scrim
 
@@ -300,29 +129,6 @@ bg-color: $fpm.color.main.scrim
 
 -- ft.h1: `fpm.color.main.cta-primary.base`
 
-<<<<<<< Updated upstream
-Hex value:  #2dd4bf
-
-
--- ft.code:
-lang: ftd
-
-
-\-- ftd.text: FifthTry
-color: $fpm.color.main.text-strong
-padding-vertical:8
-padding-horizontal: 16
-background-color: $fpm.color.main.cta-primary.base
-
-
--- ft.output:
-
--- ftd.text: FifthTry
-color: $fpm.color.main.text-strong
-padding-vertical:8
-padding-horizontal: 16
-background-color: $fpm.color.main.cta-primary.base
-=======
 -- box-container:
 bg-color: $fpm.color.main.cta-primary.base
 
@@ -332,29 +138,7 @@ bg-color: $fpm.color.main.cta-primary.base
 
 -- ft.h1: `fpm.color.main.cta-primary.hover`
 
-<<<<<<< Updated upstream
-Hex value:  #2c9f90
 
-
--- ft.code:
-lang: ftd
-
-
-\-- ftd.text: FifthTry
-color: $fpm.color.main.text-strong
-padding-vertical:8
-padding-horizontal: 16
-background-color: $fpm.color.main.cta-primary.hover
-
-
--- ft.output:
-
--- ftd.text: FifthTry
-color: $fpm.color.main.text-strong
-padding-vertical:8
-padding-horizontal: 16
-background-color: $fpm.color.main.cta-primary.hover
-=======
 -- box-container:
 bg-color: $fpm.color.main.cta-primary.hover
 
@@ -364,29 +148,7 @@ bg-color: $fpm.color.main.cta-primary.hover
 
 -- ft.h1: `fpm.color.main.cta-primary.pressed`
 
-<<<<<<< Updated upstream
-Hex value:  #2cc9b5
 
-
--- ft.code:
-lang: ftd
-
-
-\-- ftd.text: FifthTry
-color: $fpm.color.main.text-strong
-padding-vertical:8
-padding-horizontal: 16
-background-color: $fpm.color.main.cta-primary.pressed
-
-
--- ft.output:
-
--- ftd.text: FifthTry
-color: $fpm.color.main.text-strong
-padding-vertical:8
-padding-horizontal: 16
-background-color: $fpm.color.main.cta-primary.pressed
-=======
 -- box-container:
 bg-color: $fpm.color.main.cta-primary.pressed
 
@@ -396,30 +158,7 @@ bg-color: $fpm.color.main.cta-primary.pressed
 
 -- ft.h1: `fpm.color.main.cta-primary.disabled`
 
-Hex value:  rgba(44,201,181,0.1)
 
-
-<<<<<<< Updated upstream
--- ft.code:
-lang: ftd
-
-
-\-- ftd.text: FifthTry
-color: $fpm.color.main.text
-padding-vertical:8
-padding-horizontal: 16
-background-color: $fpm.color.main.cta-primary.disabled
-
-
-
--- ft.output:
-
--- ftd.text: FifthTry
-color: $fpm.color.main.text
-padding-vertical:8
-padding-horizontal: 16
-background-color: $fpm.color.main.cta-primary.disabled
-=======
 -- box-container:
 bg-color: $fpm.color.main.cta-primary.disabled
 
