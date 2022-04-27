@@ -20,8 +20,6 @@ FPM Color
 
 -- ft.h1: `fpm.color.main.background.base`
 
-Hex value: #18181b
-
 
 -- ft.code:
 lang: ftd
@@ -86,7 +84,6 @@ bg-color: $fpm.color.main.border-strong
 
 -- ft.h1: `fpm.color.main.text`
 
-Hex value:  #a8a29e
 
 
 -- box-container:
@@ -206,7 +203,6 @@ bg-color: $fpm.color.main.cta-secondary.base
 
 -- ft.h1: `fpm.color.main.cta-secondary.hover`
 
-=======
 -- box-container:
 bg-color: $fpm.color.main.cta-secondary.hover
 
@@ -324,8 +320,6 @@ bg-color: $fpm.color.main.cta-tertiary.border
 
 -- ft.h1: `fpm.color.main.cta-tertiary.text`
 
-Hex value:  #ffffff
-
 
 -- box-container:
 bg-color: $fpm.color.main.cta-tertiary.text
@@ -357,7 +351,6 @@ bg-color: $fpm.color.main.accent.secondary
 
 -- ft.h1: `fpm.color.main.accent.tertiary`
 
-Hex value:  #c5cbd7
 
 
 -- box-container:
