@@ -115,6 +115,7 @@ $processor$: toc
 - FPM Variables: /vars/
 - FPM Typography: /theme/type/
 - FPM Color: /theme/color/
+- FPM Space: /theme/space/
 - How to use Google Font: /theme/google-font-how-to-use/
 
 -- fpm.toc-item list learn:
