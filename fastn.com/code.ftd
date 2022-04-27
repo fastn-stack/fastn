@@ -114,3 +114,54 @@ value = "hello world"
 print(value)
 
 -- container: outer
+
+
+-- ft.h1: `role: ftd.type`
+
+It defines the font typography.
+Refer [built-in types](built-in-types/#ftd-type) for more detail
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.code:
+lang: py
+role: $font-type
+
+value = "hello world"
+print(value)
+
+-- ft.output:
+
+
+-- ftd.font-size desktop-fs:
+line-height: 30
+size: 24
+tracking: 0.5
+
+-- ftd.font-size mobile-fs:
+line-height: 20
+size: 16
+tracking: 0
+
+-- ftd.font-size xl-fs:
+line-height: 50
+size: 46
+tracking: 0.7
+
+-- ftd.type font-type:
+font: serif
+desktop: $desktop-fs
+mobile: $mobile-fs
+xl: $xl-fs
+weight: 400
+style: italic
+
+-- ftd.code:
+lang: py
+role: $font-type
+
+value = "hello world"
+print(value)
+
+-- container: outer

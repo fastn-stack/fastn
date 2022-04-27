@@ -194,6 +194,96 @@ dark: orange
 This would return `red` color in light mode and `orange` color in dark mode.
 
 
+
+
+-- ft.h1: `ftd.font-size`
+
+It is record font-size with the following fields.
+
+-- ft.code: `ftd.font-size` record
+lang: ftd
+
+\-- record ftd.font-size:
+integer line-height:
+integer size:
+decimal tracking:
+
+-- ft.markdown:
+
+It defines the line-height (the height of a line box), size (the size of the font)
+and tracking
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.font-size fs:
+line-height: 30
+size: 24
+tracking: 0.5
+
+
+-- ft.h1: `ftd.type`
+
+It defines the typography of the font.
+It is record type with the following fields.
+
+-- ft.code: `ftd.type` record
+lang: ftd
+
+\-- record ftd.type:
+string font:
+ftd.font-size desktop:
+ftd.font-size mobile:
+ftd.font-size xl:
+integer weight:
+optional string style:
+
+
+-- ft.markdown:
+
+It defines the
+- `font`: A prioritized list of one or more font family
+  names and/or generic family names for the selected element.
+- `desktop`, `mobile` and `xl`: These are of ftd.font-size type. These
+   are responsive. So only one of these will be applicable depending on device.
+- `weight`: The weight (or boldness) of the font.
+- `style`: The appearance of decorative lines on text or styling of font. It is
+   an optional field. It takes the following values: `italic`, `underline` and
+   `strike`. More than one of these values can be using space separation.
+   Example: `style: italic underline`
+
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.font-size desktop-fs:
+line-height: 30
+size: 24
+tracking: 0.5
+
+\-- ftd.font-size mobile-fs:
+line-height: 20
+size: 16
+tracking: 0
+
+\-- ftd.font-size xl-fs:
+line-height: 50
+size: 46
+tracking: 0.7
+
+\-- ftd.type font-type:
+font: serif
+desktop: $desktop-fs
+mobile: $mobile-fs
+xl: $xl-fs
+weight: 400
+style: italic
+
+-- ft.markdown:
+
+This would return `red` color in light mode and `orange` color in dark mode.
+
+
 -- ft.h1: length: String
 
 This accepts following set of string:
