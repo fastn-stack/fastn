@@ -92,7 +92,7 @@ weight: 400
 
 
 -- ftd.font-size copy-large-desktop:
-line-height: 24
+line-height: 28
 size: 20
 letter-spacing: 0
 
@@ -105,7 +105,7 @@ weight: 400
 
 
 -- ftd.font-size label-big-desktop:
-line-height: 16
+line-height: 22
 size: 16
 letter-spacing: 0
 
