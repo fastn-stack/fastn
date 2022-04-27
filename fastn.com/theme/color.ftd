@@ -1,8 +1,18 @@
 -- ft.page-with-toc: FPM Color
 toc: $config.themes-toc
 
+
+-- ftd.row box-container: 
+ftd.color bg-color: $fpm.color.main.background.base
+width: fill
+height: 100
+margin-bottom: 20
+background-color: $bg-color
+
+
 -- ftd.column:
 id: outer
+
 
 -- ft.markdown: 
 
@@ -18,6 +28,7 @@ lang: ftd
 
 \-- import: fpm
 
+<<<<<<< Updated upstream
 \-- ftd.row: 
 width: fill
 height: 100
@@ -30,12 +41,18 @@ color: $fpm.color.main.background.base
 width: fill
 height: 100
 background-color: $fpm.color.main.background.base
+=======
+
+-- box-container:
+bg-color: $fpm.color.main.background.base
+
 
 -- container: outer
 
 
 -- ft.h1: `fpm.color.main.background.step-1`
 
+<<<<<<< Updated upstream
 Hex value:  #141414
 
 
@@ -56,12 +73,18 @@ height: 100
 background-color: $fpm.color.main.background.step-1
 
 
+=======
+-- box-container:
+bg-color: $fpm.color.main.background.step-1
+
+
+
 
 -- container: outer
 
-
 -- ft.h1: `fpm.color.main.background.step-2`
 
+<<<<<<< Updated upstream
 Hex value:  #585656
 
 
@@ -82,6 +105,12 @@ width: fill
 height: 100
 background-color: $fpm.color.main.background.step-2
 
+=======
+-- box-container:
+bg-color: $fpm.color.main.background.step-2
+
+
+
 -- container: outer
 
 
@@ -89,6 +118,7 @@ background-color: $fpm.color.main.background.step-2
 
 -- ft.h1: `fpm.color.main.border`
 
+<<<<<<< Updated upstream
 Hex value:  #434547
 
 
@@ -115,11 +145,19 @@ border-color: $fpm.color.main.border
 color: $fpm.color.main.text
 
 
+=======
+-- box-container:
+bg-color: $fpm.color.main.border
+
+
+
+
 -- container: outer
 
 
 -- ft.h1: `fpm.color.main.border-strong`
 
+<<<<<<< Updated upstream
 Hex value:  #919192
 
 
@@ -144,6 +182,12 @@ padding-horizontal: 8
 border-width: 1
 border-color: $fpm.color.main.border-strong
 color: $fpm.color.main.text
+=======
+-- box-container:
+bg-color: $fpm.color.main.border-strong
+
+
+
 
 -- container: outer
 
@@ -153,24 +197,15 @@ color: $fpm.color.main.text
 Hex value:  #a8a29e
 
 
--- ft.code:
-lang: ftd
-
-
-\-- ftd.text: FifthTry
-color: $fpm.color.main.text
-
-
--- ft.output:
-
--- ftd.text: FifthTry
-color: $fpm.color.main.text
+-- box-container:
+bg-color: $fpm.color.main.text
 
 -- container: outer
 
 
 -- ft.h1: `fpm.color.main.text-strong`
 
+<<<<<<< Updated upstream
 Hex value:  #ffffff
 
 
@@ -189,11 +224,18 @@ color: $fpm.color.main.text-strong
 
 
 
+=======
+-- box-container:
+bg-color: $fpm.color.main.text-strong
+
+
+
 -- container: outer
 
 
 -- ft.h1: `fpm.color.main.shadow`
 
+<<<<<<< Updated upstream
 Hex value:  #007f9b
 
 
@@ -233,33 +275,32 @@ shadow-color: $fpm.color.main.shadow
 --- ftd.text: FifthTry
 color: $fpm.color.main.text
 
+=======
+-- box-container:
+bg-color: $fpm.color.main.shadow
+
 
 -- container: outer
 
 
 -- ft.h1: `fpm.color.main.scrim`
 
+<<<<<<< Updated upstream
 Hex value:  #007f9b
 
-
--- ft.code:
-lang: ftd
-
-
-\-- ftd.text: FifthTry
-color: $fpm.color.main.scrim
+=======
+-- box-container:
+bg-color: $fpm.color.main.scrim
 
 
--- ft.output:
 
--- ftd.text: FifthTry
-color: $fpm.color.main.scrim
 
 -- container: outer
 
 
 -- ft.h1: `fpm.color.main.cta-primary.base`
 
+<<<<<<< Updated upstream
 Hex value:  #2dd4bf
 
 
@@ -281,12 +322,17 @@ color: $fpm.color.main.text-strong
 padding-vertical:8
 padding-horizontal: 16
 background-color: $fpm.color.main.cta-primary.base
+=======
+-- box-container:
+bg-color: $fpm.color.main.cta-primary.base
+
 
 -- container: outer
 
 
 -- ft.h1: `fpm.color.main.cta-primary.hover`
 
+<<<<<<< Updated upstream
 Hex value:  #2c9f90
 
 
@@ -308,12 +354,17 @@ color: $fpm.color.main.text-strong
 padding-vertical:8
 padding-horizontal: 16
 background-color: $fpm.color.main.cta-primary.hover
+=======
+-- box-container:
+bg-color: $fpm.color.main.cta-primary.hover
+
 
 -- container: outer
 
 
 -- ft.h1: `fpm.color.main.cta-primary.pressed`
 
+<<<<<<< Updated upstream
 Hex value:  #2cc9b5
 
 
@@ -335,16 +386,20 @@ color: $fpm.color.main.text-strong
 padding-vertical:8
 padding-horizontal: 16
 background-color: $fpm.color.main.cta-primary.pressed
+=======
+-- box-container:
+bg-color: $fpm.color.main.cta-primary.pressed
+
+
 
 -- container: outer
-
-
 
 -- ft.h1: `fpm.color.main.cta-primary.disabled`
 
 Hex value:  rgba(44,201,181,0.1)
 
 
+<<<<<<< Updated upstream
 -- ft.code:
 lang: ftd
 
@@ -364,6 +419,10 @@ color: $fpm.color.main.text
 padding-vertical:8
 padding-horizontal: 16
 background-color: $fpm.color.main.cta-primary.disabled
+=======
+-- box-container:
+bg-color: $fpm.color.main.cta-primary.disabled
+
 
 -- container: outer
 
@@ -371,160 +430,56 @@ background-color: $fpm.color.main.cta-primary.disabled
 
 -- ft.h1: `fpm.color.main.cta-primary.focused`
 
-Hex value:  #2cbfac
 
+-- box-container:
+bg-color: $fpm.color.main.cta-primary.focused
 
--- ft.code:
-lang: ftd
-
-
-\-- ftd.text: FifthTry
-color: $fpm.color.main.text-strong
-padding-vertical:8
-padding-horizontal: 16
-background-color: $fpm.color.main.cta-primary.focused
-
-
--- ft.output:
-
--- ftd.text: FifthTry
-color: $fpm.color.main.text-strong
-padding-vertical:8
-padding-horizontal: 16
-background-color: $fpm.color.main.cta-primary.focused
 
 -- container: outer
-
-
 
 -- ft.h1: `fpm.color.main.cta-primary.border`
 
-Hex value: #2b8074
-
-
--- ft.code:
-lang: ftd
-
-
-\-- ftd.text: FifthTry
-color: $fpm.color.main.text-strong
-padding-vertical:8
-padding-horizontal: 16
-border-width: 1
-border-color: $fpm.color.main.cta-primary.border
-
-
--- ft.output:
-
--- ftd.text: FifthTry
-color: $fpm.color.main.text-strong
-padding-vertical:8
-padding-horizontal: 16
-border-width: 1
-border-color: $fpm.color.main.cta-primary.border
+-- box-container:
+bg-color: $fpm.color.main.cta-primary.border
 
 
 -- container: outer
 
-
 -- ft.h1: `fpm.color.main.cta-primary.text`
 
-Hex value: #feffff
+
+-- box-container:
+bg-color: $fpm.color.main.cta-primary.text
 
 
--- ft.code:
-lang: ftd
-
-
-\-- ftd.text: FifthTry
-color: $fpm.color.main.cta-primary.text
-
-
--- ft.output:
-
--- ftd.text: FifthTry
-color: $fpm.color.main.cta-primary.text
 
 -- container: outer
 
 
 -- ft.h1: `fpm.color.main.cta-secondary.base`
 
-Hex value: #4fb2df
+-- box-container:
+bg-color: $fpm.color.main.cta-secondary.base
 
-
--- ft.code:
-lang: ftd
-
-
-\-- ftd.text: FifthTry
-color: $fpm.color.main.text-strong
-padding-vertical:8
-padding-horizontal: 16
-background-color: $fpm.color.main.cta-secondary.base
-
-
--- ft.output:
-
--- ftd.text: FifthTry
-color: $fpm.color.main.text-strong
-padding-vertical:8
-padding-horizontal: 16
-background-color: $fpm.color.main.cta-secondary.base
 
 -- container: outer
 
 
 -- ft.h1: `fpm.color.main.cta-secondary.hover`
 
-Hex value:  #40afe1
-
-
--- ft.code:
-lang: ftd
-
-
-\-- ftd.text: FifthTry
-color: $fpm.color.main.text-strong
-padding-vertical:8
-padding-horizontal: 16
-background-color: $fpm.color.main.cta-secondary.hover
-
-
--- ft.output:
-
--- ftd.text: FifthTry
-color: $fpm.color.main.text-strong
-padding-vertical:8
-padding-horizontal: 16
-background-color: $fpm.color.main.cta-secondary.hover
+=======
+-- box-container:
+bg-color: $fpm.color.main.cta-secondary.hover
 
 -- container: outer
 
 
 -- ft.h1: `fpm.color.main.cta-secondary.pressed`
 
-Hex value:  #4fb2df
 
+-- box-container:
+bg-color: $fpm.color.main.cta-secondary.pressed
 
--- ft.code:
-lang: ftd
-
-
-\-- ftd.text: FifthTry
-color: $fpm.color.main.text-strong
-padding-vertical:8
-padding-horizontal: 16
-background-color: $fpm.color.main.cta-secondary.pressed
-
-
--- ft.output:
-
--- ftd.text: FifthTry
-color: $fpm.color.main.text-strong
-padding-vertical:8
-padding-horizontal: 16
-background-color: $fpm.color.main.cta-secondary.pressed
 
 -- container: outer
 
@@ -532,27 +487,9 @@ background-color: $fpm.color.main.cta-secondary.pressed
 
 -- ft.h1: `fpm.color.main.cta-secondary.disabled`
 
-Hex value:  rgba(79,178,223,0.1)
+-- box-container:
+bg-color: $fpm.color.main.cta-secondary.disabled
 
-
--- ft.code:
-lang: ftd
-
-
-\-- ftd.text: FifthTry
-color: $fpm.color.main.text
-padding-vertical:8
-padding-horizontal: 16
-background-color: $fpm.color.main.cta-secondary.disabled
-
-
--- ft.output:
-
--- ftd.text: FifthTry
-color: $fpm.color.main.text
-padding-vertical:8
-padding-horizontal: 16
-background-color: $fpm.color.main.cta-secondary.disabled
 
 -- container: outer
 
@@ -560,27 +497,9 @@ background-color: $fpm.color.main.cta-secondary.disabled
 
 -- ft.h1: `fpm.color.main.cta-secondary.focused`
 
-Hex value:  #4fb1df
+-- box-container:
+bg-color: $fpm.color.main.cta-secondary.focused
 
-
--- ft.code:
-lang: ftd
-
-
-\-- ftd.text: FifthTry
-color: $fpm.color.main.text
-padding-vertical:8
-padding-horizontal: 16
-background-color: $fpm.color.main.cta-secondary.focused
-
-
--- ft.output:
-
--- ftd.text: FifthTry
-color: $fpm.color.main.text
-padding-vertical:8
-padding-horizontal: 16
-background-color: $fpm.color.main.cta-secondary.focused
 
 -- container: outer
 
@@ -588,130 +507,47 @@ background-color: $fpm.color.main.cta-secondary.focused
 
 -- ft.h1: `fpm.color.main.cta-secondary.border`
 
-Hex value:  #209fdb
+-- box-container:
+bg-color: $fpm.color.main.cta-secondary.border
 
-
--- ft.code:
-lang: ftd
-
-
-\-- ftd.text: FifthTry
-color: $fpm.color.main.text-strong
-padding-vertical:8
-padding-horizontal: 16
-border-width: 1
-border-color: $fpm.color.main.cta-secondary.border
-
-
--- ft.output:
-
--- ftd.text: FifthTry
-color: $fpm.color.main.text-strong
-padding-vertical:8
-padding-horizontal: 16
-border-width: 1
-border-color: $fpm.color.main.cta-secondary.border
 
 -- container: outer
 
 
 -- ft.h1: `fpm.color.main.cta-secondary.text`
 
-Hex value:  #ffffff
 
+-- box-container:
+bg-color: $fpm.color.main.cta-secondary.text
 
--- ft.code:
-lang: ftd
-
-
-\-- ftd.text: FifthTry
-color: $fpm.color.main.cta-secondary.text
-
-
--- ft.output:
-
--- ftd.text: FifthTry
-color: $fpm.color.main.cta-secondary.text
 
 -- container: outer
 
 -- ft.h1: `fpm.color.main.cta-tertiary.base`
 
-Hex value:  #556375
 
+-- box-container:
+bg-color: $fpm.color.main.cta-tertiary.base
 
--- ft.code:
-lang: ftd
-
-
-\-- ftd.text: FifthTry
-color: $fpm.color.main.text-strong
-padding-vertical:8
-padding-horizontal: 16
-background-color: $fpm.color.main.cta-tertiary.base
-
-
--- ft.output:
-
--- ftd.text: FifthTry
-color: $fpm.color.main.text-strong
-padding-vertical:8
-padding-horizontal: 16
-background-color: $fpm.color.main.cta-tertiary.base
 
 -- container: outer
 
 
 -- ft.h1: `fpm.color.main.cta-tertiary.hover`
 
-Hex value:  #c7cbd1
+-- box-container:
+bg-color: $fpm.color.main.cta-tertiary.hover
 
-
--- ft.code:
-lang: ftd
-
-
-\-- ftd.text: FifthTry
-color: $fpm.color.main.text-strong
-padding-vertical:8
-padding-horizontal: 16
-background-color: $fpm.color.main.cta-tertiary.hover
-
-
--- ft.output:
-
--- ftd.text: FifthTry
-color: $fpm.color.main.text-strong
-padding-vertical:8
-padding-horizontal: 16
-background-color: $fpm.color.main.cta-tertiary.hover
 
 -- container: outer
 
 
 -- ft.h1: `fpm.color.main.cta-tertiary.pressed`
 
-Hex value: #3b4047
 
+-- box-container:
+bg-color: $fpm.color.main.cta-tertiary.pressed
 
--- ft.code:
-lang: ftd
-
-
-\-- ftd.text: FifthTry
-color: $fpm.color.main.text-strong
-padding-vertical:8
-padding-horizontal: 16
-background-color: $fpm.color.main.cta-tertiary.pressed
-
-
--- ft.output:
-
--- ftd.text: FifthTry
-color: $fpm.color.main.text-strong
-padding-vertical:8
-padding-horizontal: 16
-background-color: $fpm.color.main.cta-tertiary.pressed
 
 -- container: outer
 
@@ -719,27 +555,10 @@ background-color: $fpm.color.main.cta-tertiary.pressed
 
 -- ft.h1: `fpm.color.main.cta-tertiary.disabled`
 
-Hex value:  rgba(85,99,117,0.1)
 
+-- box-container:
+bg-color: $fpm.color.main.cta-tertiary.disabled
 
--- ft.code:
-lang: ftd
-
-
-\-- ftd.text: FifthTry
-color: $fpm.color.main.text
-padding-vertical:8
-padding-horizontal: 16
-background-color: $fpm.color.main.cta-tertiary.disabled
-
-
--- ft.output:
-
--- ftd.text: FifthTry
-color: $fpm.color.main.text
-padding-vertical:8
-padding-horizontal: 16
-background-color: $fpm.color.main.cta-tertiary.disabled
 
 -- container: outer
 
@@ -747,26 +566,9 @@ background-color: $fpm.color.main.cta-tertiary.disabled
 
 -- ft.h1: `fpm.color.main.cta-tertiary.focused`
 
-Hex value:  #e0e2e6
+-- box-container:
+bg-color: $fpm.color.main.cta-tertiary.focused
 
--- ft.code:
-lang: ftd
-
-
-\-- ftd.text: FifthTry
-color: $fpm.color.main.text
-padding-vertical:8
-padding-horizontal: 16
-background-color: $fpm.color.main.cta-tertiary.focused
-
-
--- ft.output:
-
--- ftd.text: FifthTry
-color: $fpm.color.main.text
-padding-vertical:8
-padding-horizontal: 16
-background-color: $fpm.color.main.cta-tertiary.focused
 
 -- container: outer
 
@@ -774,29 +576,9 @@ background-color: $fpm.color.main.cta-tertiary.focused
 
 -- ft.h1: `fpm.color.main.cta-tertiary.border`
 
-Hex value:  #e2e4e7
+-- box-container:
+bg-color: $fpm.color.main.cta-tertiary.border
 
-
--- ft.code:
-lang: ftd
-
-
-\-- ftd.text: FifthTry
-color: $fpm.color.main.text-strong
-padding-vertical:8
-padding-horizontal: 16
-border-width: 1
-border-color: $fpm.color.main.cta-tertiary.border
-
-
--- ft.output:
-
--- ftd.text: FifthTry
-color: $fpm.color.main.text-strong
-padding-vertical:8
-padding-horizontal: 16
-border-width: 1
-border-color: $fpm.color.main.cta-tertiary.border
 
 -- container: outer
 
@@ -806,18 +588,8 @@ border-color: $fpm.color.main.cta-tertiary.border
 Hex value:  #ffffff
 
 
--- ft.code:
-lang: ftd
-
-
-\-- ftd.text: FifthTry
-color: $fpm.color.main.cta-tertiary.text
-
-
--- ft.output:
-
--- ftd.text: FifthTry
-color: $fpm.color.main.cta-tertiary.text
+-- box-container:
+bg-color: $fpm.color.main.cta-tertiary.text
 
 -- container: outer
 
@@ -826,21 +598,10 @@ color: $fpm.color.main.cta-tertiary.text
 
 -- ft.h1: `fpm.color.main.accent.primary`
 
-Hex value:  #2dd4bf
 
+-- box-container:
+bg-color: $fpm.color.main.accent.primary
 
--- ft.code:
-lang: ftd
-
-
-\-- ftd.text: FifthTry
-color: $fpm.color.main.accent.primary
-
-
--- ft.output:
-
--- ftd.text: FifthTry
-color: $fpm.color.main.accent.primary
 
 -- container: outer
 
@@ -848,21 +609,9 @@ color: $fpm.color.main.accent.primary
 
 -- ft.h1: `fpm.color.main.accent.secondary`
 
-Hex value:  #4fb2df
+-- box-container:
+bg-color: $fpm.color.main.accent.secondary
 
-
--- ft.code:
-lang: ftd
-
-
-\-- ftd.text: FifthTry
-color: $fpm.color.main.accent.secondary
-
-
--- ft.output:
-
--- ftd.text: FifthTry
-color: $fpm.color.main.accent.secondary
 
 -- container: outer
 
@@ -872,18 +621,8 @@ color: $fpm.color.main.accent.secondary
 Hex value:  #c5cbd7
 
 
--- ft.code:
-lang: ftd
-
-
-\-- ftd.text: FifthTry
-color: $fpm.color.main.accent.tertiary
-
-
--- ft.output:
-
--- ftd.text: FifthTry
-color: $fpm.color.main.accent.tertiary
+-- box-container:
+bg-color: $fpm.color.main.accent.tertiary
 
 -- container: outer
 
@@ -891,21 +630,11 @@ color: $fpm.color.main.accent.tertiary
 
 -- ft.h1: `fpm.color.main.error.base`
 
-Hex value: #f5bdbb
+-- box-container:
+bg-color: $fpm.color.main.error.base
 
 
--- ft.code:
-lang: ftd
 
-
-\-- ftd.text: FifthTry
-color: $fpm.color.main.error.base
-
-
--- ft.output:
-
--- ftd.text: FifthTry
-color: $fpm.color.main.error.base
 
 -- container: outer
 
@@ -913,50 +642,22 @@ color: $fpm.color.main.error.base
 
 -- ft.h1: `fpm.color.main.error.text`
 
-Hex value: #c62a21
+
+-- box-container:
+bg-color: $fpm.color.main.error.text
 
 
--- ft.code:
-lang: ftd
-
-
-\-- ftd.text: FifthTry
-color: $fpm.color.main.error.text
-
-
--- ft.output:
-
--- ftd.text: FifthTry
-color: $fpm.color.main.error.text
 
 -- container: outer
 
 
 -- ft.h1: `fpm.color.main.error.border`
 
-Hex value:  #df2b2b
+
+-- box-container:
+bg-color: $fpm.color.main.error.border
 
 
--- ft.code:
-lang: ftd
-
-
-\-- ftd.text: FifthTry
-color: $fpm.color.main.text
-padding-vertical:8
-padding-horizontal: 16
-border-width: 1
-border-color: $fpm.color.main.error.border
-
-
--- ft.output:
-
--- ftd.text: FifthTry
-color: $fpm.color.main.text
-padding-vertical:8
-padding-horizontal: 16
-border-width: 1
-border-color: $fpm.color.main.error.border
 
 -- container: outer
 
@@ -964,21 +665,9 @@ border-color: $fpm.color.main.error.border
 
 -- ft.h1: `fpm.color.main.success.base`
 
-Hex value:  #e3f0c4
+-- box-container:
+bg-color: $fpm.color.main.success.base
 
-
--- ft.code:
-lang: ftd
-
-
-\-- ftd.text: FifthTry
-color: $fpm.color.main.success.base
-
-
--- ft.output:
-
--- ftd.text: FifthTry
-color: $fpm.color.main.success.base
 
 -- container: outer
 
@@ -986,50 +675,21 @@ color: $fpm.color.main.success.base
 
 -- ft.h1: `fpm.color.main.success.text`
 
-Hex value: #467b28
+-- box-container:
+bg-color: $fpm.color.main.success.text
 
-
--- ft.code:
-lang: ftd
-
-
-\-- ftd.text: FifthTry
-color: $fpm.color.main.success.text
-
-
--- ft.output:
-
--- ftd.text: FifthTry
-color: $fpm.color.main.success.text
 
 -- container: outer
 
 
 -- ft.h1: `fpm.color.main.success.border`
 
-Hex value: #3d741f
+
+-- box-container:
+bg-color: $fpm.color.main.success.border
 
 
--- ft.code:
-lang: ftd
 
-
-\-- ftd.text: FifthTry
-color: $fpm.color.main.text
-padding-vertical:8
-padding-horizontal: 16
-border-width: 1
-border-color: $fpm.color.main.success.border
-
-
--- ft.output:
-
--- ftd.text: FifthTry
-color: $fpm.color.main.text
-padding-vertical:8
-padding-horizontal: 16
-border-width: 1
-border-color: $fpm.color.main.success.border
 
 
 -- container: outer
@@ -1038,21 +698,10 @@ border-color: $fpm.color.main.success.border
 
 -- ft.h1: `fpm.color.main.info.base`
 
-Hex value: #c4edfd
 
+-- box-container:
+bg-color: $fpm.color.main.info.base
 
--- ft.code:
-lang: ftd
-
-
-\-- ftd.text: FifthTry
-color: $fpm.color.main.info.base
-
-
--- ft.output:
-
--- ftd.text: FifthTry
-color: $fpm.color.main.info.base
 
 -- container: outer
 
@@ -1060,50 +709,19 @@ color: $fpm.color.main.info.base
 
 -- ft.h1: `fpm.color.main.info.text`
 
-Hex value: #205694
 
+-- box-container:
+bg-color: $fpm.color.main.info.text
 
--- ft.code:
-lang: ftd
-
-
-\-- ftd.text: FifthTry
-color: $fpm.color.main.info.text
-
-
--- ft.output:
-
--- ftd.text: FifthTry
-color: $fpm.color.main.info.text
 
 -- container: outer
 
 
 -- ft.h1: `fpm.color.main.info.border`
 
-Hex value: #205694
+-- box-container:
+bg-color: $fpm.color.main.info.border
 
-
--- ft.code:
-lang: ftd
-
-
-\-- ftd.text: FifthTry
-color: $fpm.color.main.text
-padding-vertical:8
-padding-horizontal: 16
-border-width: 1
-border-color: $fpm.color.main.info.border
-
-
--- ft.output:
-
--- ftd.text: FifthTry
-color: $fpm.color.main.text
-padding-vertical:8
-padding-horizontal: 16
-border-width: 1
-border-color: $fpm.color.main.info.border
 
 -- container: outer
 
@@ -1111,21 +729,10 @@ border-color: $fpm.color.main.info.border
 
 -- ft.h1: `fpm.color.main.warning.base`
 
-Hex value: #fbefba
 
+-- box-container:
+bg-color: $fpm.color.main.warning.base
 
--- ft.code:
-lang: ftd
-
-
-\-- ftd.text: FifthTry
-color: $fpm.color.main.warning.base
-
-
--- ft.output:
-
--- ftd.text: FifthTry
-color: $fpm.color.main.warning.base
 
 -- container: outer
 
@@ -1133,70 +740,31 @@ color: $fpm.color.main.warning.base
 
 -- ft.h1: `fpm.color.main.warning.text`
 
-Hex value: #966220
 
+-- box-container:
+bg-color: $fpm.color.main.warning.text
 
--- ft.code:
-lang: ftd
-
-
-\-- ftd.text: FifthTry
-color: $fpm.color.main.warning.text
-
-
--- ft.output:
-
--- ftd.text: FifthTry
-color: $fpm.color.main.warning.text
 
 -- container: outer
 
 
 -- ft.h1: `fpm.color.main.warning.border`
 
-Hex value:  #966220
 
+-- box-container:
+bg-color: $fpm.color.main.warning.border
 
--- ft.code:
-lang: ftd
-
-
-\-- ftd.text: FifthTry
-color: $fpm.color.main.text
-padding-vertical:8
-padding-horizontal: 16
-border-width: 1
-border-color: $fpm.color.main.warning.border
-
-
--- ft.output:
-
--- ftd.text: FifthTry
-color: $fpm.color.main.text
-padding-vertical:8
-padding-horizontal: 16
-border-width: 1
-border-color: $fpm.color.main.warning.border
 
 -- container: outer
 
 
 -- ft.h1: `fpm.color.main.custom.one`
 
-Hex value: #ed753a
 
--- ft.code:
-lang: ftd
-
-
-\-- ftd.text: FifthTry
-color: $fpm.color.main.custom.one
+-- box-container:
+bg-color: $fpm.color.main.custom.one
 
 
--- ft.output:
-
--- ftd.text: FifthTry
-color: $fpm.color.main.custom.one
 
 
 -- container: outer
@@ -1204,21 +772,9 @@ color: $fpm.color.main.custom.one
 
 -- ft.h1: `fpm.color.main.custom.two`
 
-Hex value:  #f3db5f
+-- box-container:
+bg-color: $fpm.color.main.custom.two
 
-
--- ft.code:
-lang: ftd
-
-
-\-- ftd.text: FifthTry
-color: $fpm.color.main.custom.two
-
-
--- ft.output:
-
--- ftd.text: FifthTry
-color: $fpm.color.main.custom.two
 
 
 -- container: outer
@@ -1226,166 +782,77 @@ color: $fpm.color.main.custom.two
 
 -- ft.h1: `fpm.color.main.custom.three`
 
-Hex value:  #8fdcf8
 
+-- box-container:
+bg-color: $fpm.color.main.custom.three
 
--- ft.code:
-lang: ftd
-
-
-\-- ftd.text: FifthTry
-color: $fpm.color.main.custom.three
-
-
--- ft.output:
-
--- ftd.text: FifthTry
-color: $fpm.color.main.custom.three
 
 -- container: outer
 
 
 -- ft.h1: `fpm.color.main.custom.four`
 
-Hex value:  #7a65c7
+-- box-container:
+bg-color: $fpm.color.main.custom.four
 
-
--- ft.code:
-lang: ftd
-
-
-\-- ftd.text: FifthTry
-color: $fpm.color.main.custom.four
-
-
--- ft.output:
-
--- ftd.text: FifthTry
-color: $fpm.color.main.custom.four
 
 -- container: outer
 
 
 -- ft.h1: `fpm.color.main.custom.five`
 
-Hex value:  #eb57be
+-- box-container:
+bg-color: $fpm.color.main.custom.five
 
-
--- ft.code:
-lang: ftd
-
-
-\-- ftd.text: FifthTry
-color: $fpm.color.main.custom.five
-
-
--- ft.output:
-
--- ftd.text: FifthTry
-color: $fpm.color.main.custom.five
 
 -- container: outer
 
 
 -- ft.h1: `fpm.color.main.custom.six`
 
-Hex value:  #ef8dd6
 
+-- box-container:
+bg-color: $fpm.color.main.custom.six
 
--- ft.code:
-lang: ftd
-
-
-\-- ftd.text: FifthTry
-color: $fpm.color.main.custom.six
-
-
--- ft.output:
-
--- ftd.text: FifthTry
-color: $fpm.color.main.custom.six
 
 -- container: outer
 
 
 -- ft.h1: `fpm.color.main.custom.seven`
 
-Hex value:  #7564be
 
+-- box-container:
+bg-color: $fpm.color.main.custom.seven
 
--- ft.code:
-lang: ftd
-
-
-\-- ftd.text: FifthTry
-color: $fpm.color.main.custom.seven
-
-
--- ft.output:
-
--- ftd.text: FifthTry
-color: $fpm.color.main.custom.seven
 
 -- container: outer
 
 
 -- ft.h1: `fpm.color.main.custom.eight`
 
-Hex value:  #d554b3
+-- box-container:
+bg-color: $fpm.color.main.custom.eight
 
 
--- ft.code:
-lang: ftd
 
-
-\-- ftd.text: FifthTry
-color: $fpm.color.main.custom.eight
-
-
--- ft.output:
-
--- ftd.text: FifthTry
-color: $fpm.color.main.custom.eight
 
 -- container: outer
 
 
 -- ft.h1: `fpm.color.main.custom.nine`
 
-Hex value:  #ec8943
 
+-- box-container:
+bg-color: $fpm.color.main.custom.nine
 
--- ft.code:
-lang: ftd
-
-
-\-- ftd.text: FifthTry
-color: $fpm.color.main.custom.nine
-
-
--- ft.output:
-
--- ftd.text: FifthTry
-color: $fpm.color.main.custom.nine
 
 -- container: outer
 
 
 -- ft.h1: `fpm.color.main.custom.ten`
 
-Hex value:  #da7a4a
 
+-- box-container:
+bg-color: $fpm.color.main.custom.ten
 
--- ft.code:
-lang: ftd
-
-
-\-- ftd.text: FifthTry
-color: $fpm.color.main.custom.ten
-
-
--- ft.output:
-
--- ftd.text: FifthTry
-color: $fpm.color.main.custom.ten
 
