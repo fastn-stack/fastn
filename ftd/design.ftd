@@ -118,13 +118,13 @@ weight: 400
 -- ftd.font-size label-small-desktop:
 line-height: 16
 size: 14
-tracking: 0.5
+tracking: 0
 
 -- ftd.type label-small: $font-display
 desktop: $label-small-desktop
 mobile: $label-small-desktop
 xl: $label-small-desktop
-weight: 500
+weight: 400
 
 -- ftd.font-size fine-print-desktop:
 line-height: 16
@@ -558,11 +558,42 @@ glass: $main
 
 
 -- record space-data:
+integer space-0:
 integer space-1:
+integer space-2:
+integer space-3:
+integer space-4:
+integer space-5:
+integer space-6:
+integer space-7:
+integer space-8:
+integer space-9:
+integer space-10:
+integer space-11:
+integer space-12:
+integer space-13:
+integer space-14:
+integer space-15:
+
 
 
 -- space-data space:
+space-0: 0
 space-1: 4
+space-2: 8
+space-3: 12
+space-4: 16
+space-5: 20
+space-6: 24
+space-7: 32
+space-8: 40
+space-9: 48
+space-10: 56
+space-11: 64
+space-12: 72
+space-13: 80
+space-14: 96
+space-15: 120
 
 
 
