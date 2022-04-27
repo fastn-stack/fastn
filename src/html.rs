@@ -669,6 +669,10 @@ impl ftd::Text {
             n.style.insert(s("font-family"), font.font.to_string());
             n.style
                 .insert(s("line-height"), format!("{}px", font.desktop.line_height));
+            n.style.insert(
+                s("letter-spacing"),
+                format!("{}px", font.desktop.letter_spacing),
+            );
             n.style
                 .insert(s("font-size"), format!("{}px", font.desktop.size));
             n.style.insert(s("font-weight"), font.weight.to_string());
@@ -786,6 +790,10 @@ impl ftd::Code {
             n.style.insert(s("font-family"), font.font.to_string());
             n.style
                 .insert(s("line-height"), format!("{}px", font.desktop.line_height));
+            n.style.insert(
+                s("letter-spacing"),
+                format!("{}px", font.desktop.letter_spacing),
+            );
             n.style
                 .insert(s("font-size"), format!("{}px", font.desktop.size));
             n.style.insert(s("font-weight"), font.weight.to_string());
@@ -904,6 +912,10 @@ impl ftd::Markups {
             n.style.insert(s("font-family"), font.font.to_string());
             n.style
                 .insert(s("line-height"), format!("{}px", font.desktop.line_height));
+            n.style.insert(
+                s("letter-spacing"),
+                format!("{}px", font.desktop.letter_spacing),
+            );
             n.style
                 .insert(s("font-size"), format!("{}px", font.desktop.size));
             n.style.insert(s("font-weight"), font.weight.to_string());

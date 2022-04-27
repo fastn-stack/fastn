@@ -1088,8 +1088,8 @@ pub fn default_bag() -> std::collections::BTreeMap<String, ftd::p2::Thing> {
                     ("line-height".to_string(), ftd::p2::Kind::integer()),
                     ("size".to_string(), ftd::p2::Kind::integer()),
                     (
-                        "tracking".to_string(),
-                        ftd::p2::Kind::decimal().set_default(Some("0".to_string())),
+                        "letter-spacing".to_string(),
+                        ftd::p2::Kind::integer().set_default(Some("0".to_string())),
                     ),
                 ])
                 .collect(),
@@ -1097,7 +1097,7 @@ pub fn default_bag() -> std::collections::BTreeMap<String, ftd::p2::Thing> {
                 order: vec![
                     "line-height".to_string(),
                     "size".to_string(),
-                    "tracking".to_string(),
+                    "letter-spacing".to_string(),
                 ],
             }),
         ),

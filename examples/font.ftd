@@ -1,17 +1,17 @@
 -- ftd.font-size dsize:
 line-height: 60
 size: 40
-tracking: 0.1
+letter-spacing: 1
 
 -- ftd.font-size msize:
 line-height: 12
 size: 12
-tracking: 0
+letter-spacing: 0
 
 -- ftd.font-size xlsize:
 line-height: 16
 size: 16
-tracking: 0.15
+letter-spacing: 2
 
 -- ftd.type font: cursive
 desktop: $dsize

@@ -4,7 +4,7 @@ dark: https://blog.ipleaders.in/wp-content/uploads/2021/07/751589-mickey-mouse.j
 -- ftd.font-size dsize:
 line-height: 40
 size: 40
-tracking: 0.0
+letter-spacing: 0
 
 -- ftd.type heading: cursive
 weight: 800

@@ -8,7 +8,7 @@ pub fn main() {
 -- ftd.font-size dsize:
 line-height: 40
 size: 40
-tracking: 0.0
+letter-spacing: 0
 
 -- ftd.type heading: cursive
 weight: 800

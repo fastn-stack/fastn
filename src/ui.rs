@@ -2279,7 +2279,7 @@ pub struct FontSize {
     pub line_height: i64,
     #[serde(rename = "font-size")]
     pub size: i64,
-    pub tracking: f64,
+    pub letter_spacing: i64,
     pub reference: Option<String>,
 }
 
@@ -2297,7 +2297,7 @@ impl FontSize {
         Ok(FontSize {
             line_height: ftd::p2::utils::int("line-height", &properties, doc.name, 0)?,
             size: ftd::p2::utils::int("size", &properties, doc.name, 0)?,
-            tracking: ftd::p2::utils::decimal("tracking", &properties, doc.name, 0)?,
+            letter_spacing: ftd::p2::utils::int("letter-spacing", &properties, doc.name, 0)?,
             reference,
         })
     }

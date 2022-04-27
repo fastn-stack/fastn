@@ -57,7 +57,7 @@ fax: +1-234-567890
 -- ftd.font-size dsize:
 line-height: 60
 size: 40
-tracking: 0.1
+letter-spacing: 1
 
 -- ftd.type cursive-font: cursive
 desktop: $dsize
