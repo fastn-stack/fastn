@@ -465,44 +465,44 @@ text: $warning-text-
 border: $warning-border-
 
 -- ftd.color custom-one-:
-light: #FFFBFE
-dark: #1C1B1F
+light: #ed753a
+dark: #ed753a
 
 -- ftd.color custom-two-:
-light: #FFFBFE
-dark: #1C1B1F
+light: #f3db5f
+dark: #f3db5f
 
 -- ftd.color custom-three-:
-light: #FFFBFE
-dark: #1C1B1F
+light: #8fdcf8
+dark: #8fdcf8
 
 -- ftd.color custom-four-:
-light: #FFFBFE
-dark: #1C1B1F
+light: #7a65c7
+dark: #7a65c7
 
 -- ftd.color custom-five-:
-light: #FFFBFE
-dark: #1C1B1F
+light: #eb57be
+dark: #eb57be
 
 -- ftd.color custom-six-:
-light: #FFFBFE
-dark: #1C1B1F
+light: #ef8dd6
+dark: #ef8dd6
 
 -- ftd.color custom-seven-:
-light: #FFFBFE
-dark: #1C1B1F
+light: #7564be
+dark: #7564be
 
 -- ftd.color custom-eight-:
-light: #FFFBFE
-dark: #1C1B1F
+light: #d554b3
+dark: #d554b3
 
 -- ftd.color custom-nine-:
-light: #FFFBFE
-dark: #1C1B1F
+light: #ec8943
+dark: #ec8943
 
 -- ftd.color custom-ten-:
-light: #FFFBFE
-dark: #1C1B1F
+light: #da7a4a
+dark: #da7a4a
 
 -- ftd.custom-colors custom-:
 one: $custom-one-
