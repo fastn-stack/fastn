@@ -170,10 +170,10 @@ the declaration of `shobhit` variable, or in "body" location, eg for `abrar`.
 
 It is record type with the following fields.
 
--- ft.code: `ftd.color` record
+-- ft.code: `ftd.color` record (ftd.ftd)
 lang: ftd
 
-\-- record ftd.color:
+\-- record color:
 caption light:
 string dark:
 
@@ -200,18 +200,34 @@ This would return `red` color in light mode and `orange` color in dark mode.
 
 It is record font-size with the following fields.
 
--- ft.code: `ftd.font-size` record
+-- ft.code: `ftd.font-size` record (ftd.ftd)
 lang: ftd
 
-\-- record ftd.font-size:
+\-- record font-size:
 integer line-height:
 integer size:
-decimal tracking:
+integer letter-spacing:
 
 -- ft.markdown:
 
-It defines the line-height (the height of a line box), size (the size of the font)
-and tracking
+It defines the line-height, size and letter-spacing.
+
+-- ft.h2: `line-height`
+
+The `line-height` field sets the height of a line box. It's commonly
+used to set the distance between lines of text.
+
+-- ft.h2: `size`
+
+The `size` field sets the size of the font.
+
+-- ft.h2: `letter-spacing`
+
+The `letter-spacing` sets the horizontal spacing behavior between text
+characters. This value is added to the natural spacing between characters
+while rendering the text. Positive values of letter-spacing causes
+characters to spread farther apart, while negative values of letter-spacing
+bring characters closer together.
 
 -- ft.code:
 lang: ftd
@@ -227,10 +243,10 @@ tracking: 0.5
 It defines the typography of the font.
 It is record type with the following fields.
 
--- ft.code: `ftd.type` record
+-- ft.code: `ftd.type` record (ftd.ftd)
 lang: ftd
 
-\-- record ftd.type:
+\-- record type:
 string font:
 ftd.font-size desktop:
 ftd.font-size mobile:
