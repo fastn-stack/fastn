@@ -1015,6 +1015,7 @@ impl ftd::Common {
     fn style(&self, doc_id: &str) -> ftd::Map {
         let mut d: ftd::Map = Default::default();
 
+        d.insert(s("text-decoration"), s("none"));
         if !self.events.is_empty() && self.cursor.is_none() {
             d.insert(s("cursor"), s("pointer"));
         }

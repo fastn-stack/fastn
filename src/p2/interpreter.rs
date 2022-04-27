@@ -921,10 +921,6 @@ pub fn default_bag() -> std::collections::BTreeMap<String, ftd::p2::Thing> {
             "ftd#column".to_string(),
             ftd::p2::Thing::Component(ftd::p2::element::column_function()),
         ),
-        /*(
-            "ftd#text".to_string(),
-            ftd::p2::Thing::Component(ftd::p2::element::text_function(false)),
-        ),*/
         (
             "ftd#text-block".to_string(),
             ftd::p2::Thing::Component(ftd::p2::element::text_function()),
