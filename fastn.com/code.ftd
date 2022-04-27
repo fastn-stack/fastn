@@ -165,3 +165,157 @@ value = "hello world"
 print(value)
 
 -- container: outer
+
+
+
+-- ft.h1: `line-clamp: Integer`
+
+The `line-clamp` property allows limiting of the contents to the specified number of lines.
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.code:
+lang: py
+line-clamp: 1
+
+value = "hello world"
+print(value)
+
+-- ft.output:
+
+
+-- ftd.code:
+lang: py
+line-clamp: 1
+
+value = "hello world"
+print(value)
+
+-- container: outer
+
+
+-- ft.h1: `text-align: String`
+
+The `text-align` property sets the horizontal alignment of the content.
+It accepts the following values:
+
+- center
+- left
+- right
+- justify
+
+-- ft.h2: `center`
+
+The inline contents are centered within the line box.
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.code:
+lang: py
+width: 400
+text-align: center
+
+value = "hello world"
+print(value)
+
+-- ft.output:
+
+
+-- ftd.code:
+lang: py
+width: 400
+text-align: center
+
+value = "hello world"
+print(value)
+
+-- container: outer
+
+-- ft.h2: `left`
+
+The inline contents are aligned to the left edge of the line box.
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.code:
+lang: py
+width: 400
+text-align: left
+
+value = "hello world"
+print(value)
+
+-- ft.output:
+
+
+-- ftd.code:
+lang: py
+width: 400
+text-align: left
+
+value = "hello world"
+print(value)
+
+-- container: outer
+
+
+-- ft.h2: `right`
+
+The inline contents are aligned to the right edge of the line box.
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.code:
+lang: py
+width: 400
+text-align: right
+
+value = "hello world"
+print(value)
+
+-- ft.output:
+
+
+-- ftd.code:
+lang: py
+width: 400
+text-align: right
+
+value = "hello world"
+print(value)
+
+-- container: outer
+
+-- ft.h2: `justify`
+
+The inline contents are justified. Text should be spaced to line up
+its left and right edges to the left and right edges of the line box,
+except for the last line.
+
+-- ft.code:
+lang: ftd
+
+\-- ftd.code:
+lang: py
+width: 400
+text-align: justify
+
+value = "hello world"
+print(value)
+
+-- ft.output:
+
+
+-- ftd.code:
+lang: py
+width: 400
+text-align: justify
+
+value = "hello world"
+print(value)
+
+-- container: outer
