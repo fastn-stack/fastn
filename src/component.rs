@@ -1797,9 +1797,6 @@ impl Component {
             .push(resolve_properties(0, arguments, doc)?);
         if self.root == "ftd.kernel" {
             let element = match self.full_name.as_str() {
-                /*"ftd#text" => ftd::Element::Text(ftd::p2::element::text_from_properties(
-                    arguments, doc, condition, is_child, events, all_locals, root_name,
-                )?),*/
                 "ftd#text-block" => {
                     ftd::Element::TextBlock(ftd::p2::element::text_block_from_properties(
                         arguments, doc, condition, is_child, events,

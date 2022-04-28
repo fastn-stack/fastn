@@ -863,7 +863,7 @@ impl<'a> TDoc<'a> {
             },
             (Some(m), v, Some(c)) => match self.aliases.get(m) {
                 Some(m) => format!("{}#{}.{}", m, v, c),
-                None => format!("{}#{}.{}", self.name, v, c),
+                None => format!("{}#{}.{}.{}", self.name, m, v, c),
             },
             (None, v, None) => format!("{}#{}", self.name, v),
             _ => unimplemented!(),
@@ -1204,9 +1204,10 @@ impl<'a> TDoc<'a> {
                     } else if let Some(ftd::PropertyValue::Reference { name, .. }) = fields.get(v) {
                         let (initial_thing, name) = doc.get_initial_thing(line_number, name)?;
                         if let Some(remaining) = name {
-                            return get_thing(doc, line_number, remaining.as_str(), &initial_thing);
+                            get_thing(doc, line_number, remaining.as_str(), &initial_thing)?
+                        } else {
+                            initial_thing
                         }
-                        initial_thing
                     } else {
                         thing.clone()
                     }
