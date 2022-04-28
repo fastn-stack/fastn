@@ -840,6 +840,9 @@ impl<'a> TDoc<'a> {
         name: &str,
         container: &str,
     ) -> ftd::p1::Result<String> {
+        if name.contains('@') {
+            return Ok(name.to_string());
+        }
         let (part1, part2) = ftd::p2::utils::get_doc_name_and_remaining(name)?;
         Ok(if let Some(ref p2) = part2 {
             self.resolve_name(

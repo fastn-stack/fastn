@@ -1,0 +1,33 @@
+-- record c2d:
+ftd.color c:
+
+-- record c1d:
+c2d c2:
+
+-- ftd.color red:
+light: red
+dark: red
+
+-- c2d c2v:
+c: $red
+
+-- c1d c1v:
+c2: $c2v
+
+
+-- foo:
+c1: $c1v
+
+
+-- ftd.column foo:
+c1d c1:
+
+--- bar:
+bar-c: $c1.c2.c
+
+
+-- ftd.row bar:
+ftd.color bar-c:
+
+--- ftd.text: BAR
+color: $bar-c
