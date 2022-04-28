@@ -170,7 +170,7 @@ color: $fpm.color.main.text
 
 -- ft.h1: `fpm.type.copy-large`
 
-line-height: 24
+line-height: 28
 
 size: 20
 
@@ -195,7 +195,7 @@ color: $fpm.color.main.text
 
 -- ft.h1: `fpm.type.label-big`
 
-line-height: 16
+line-height: 22
 
 size: 16
 
