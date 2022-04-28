@@ -1202,7 +1202,11 @@ impl<'a> TDoc<'a> {
                             flags: ftd::VariableFlags::default(),
                         })
                     } else if let Some(ftd::PropertyValue::Reference { name, .. }) = fields.get(v) {
-                        doc.get_initial_thing(line_number, name)?.0
+                        let (initial_thing, name) = doc.get_initial_thing(line_number, name)?;
+                        if let Some(remaining) = name {
+                            return get_thing(doc, line_number, remaining.as_str(), &initial_thing);
+                        }
+                        initial_thing
                     } else {
                         thing.clone()
                     }
