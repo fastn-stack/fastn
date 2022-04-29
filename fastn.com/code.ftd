@@ -137,17 +137,17 @@ print(value)
 -- ftd.font-size desktop-fs:
 line-height: 30
 size: 24
-tracking: 0.5
+letter-spacing: 0
 
 -- ftd.font-size mobile-fs:
 line-height: 20
 size: 16
-tracking: 0
+letter-spacing: 0
 
 -- ftd.font-size xl-fs:
 line-height: 50
 size: 46
-tracking: 0.7
+letter-spacing: 0
 
 -- ftd.type font-type:
 font: serif
