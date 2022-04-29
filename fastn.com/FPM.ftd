@@ -8,6 +8,8 @@ translation: hi.fpm.dev
 -- fpm.dependency: fifthtry.github.io/doc-site as ft
 implements: fifthtry.github.io/theme
 
+-- fpm.dependency: fifthtry.github.io/brand-switcher as bs
+
 -- fpm.dependency: fifthtry.github.io/color-doc as cd
 
 
