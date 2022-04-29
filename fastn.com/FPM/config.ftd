@@ -8,7 +8,11 @@
 -- bs.current-brand: 3
 
 
--- ft.site-name: FPM
+/-- ft.site-name: FPM
+
+-- ft.site-logo:
+light: $assets.files.images.fifthtry-logo.png.light
+dark: $assets.files.images.fifthtry-logo.png.dark
 
 -- ft.github: https://github.com/fifthtry/fpm
 -- ft.site-url: /
