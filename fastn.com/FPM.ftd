@@ -5,6 +5,7 @@ zip: github.com/fifthtry/ftd.dev/archive/refs/heads/main.zip
 language: en
 
 -- fpm.dependency: fifthtry.github.io/doc-site as ft
+-- fpm.dependency: fifthtry.github.io/brand-switcher as bs
 
 -- fpm.dependency: fifthtry.github.io/dark-mode-switcher as dms
 

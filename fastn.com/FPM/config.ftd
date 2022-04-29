@@ -1,8 +1,13 @@
 -- import: ft
+-- import: bs
 
 -- ft.github: https://github.com/fifthtry/ftd/
 -- ft.site-url: /
 -- ft.site-name: FTD
+
+-- ft.show-brand: true
+
+-- bs.current-brand: 2
 
 
 -- ft.sections:
