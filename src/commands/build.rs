@@ -303,6 +303,7 @@ async fn build_with_original(
     Ok(())
 }
 
+#[allow(clippy::too_many_arguments)]
 async fn process_files(
     config: &fpm::Config,
     package: &fpm::Package,
