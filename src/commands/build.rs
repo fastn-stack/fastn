@@ -103,6 +103,7 @@ pub async fn build(
             base_url,
             ignore_failed,
             &asset_documents,
+            true,
         )
         .await?;
     }
@@ -131,6 +132,7 @@ async fn build_simple(
         base_url,
         skip_failed,
         asset_documents,
+        false,
     )
     .await
 }
@@ -169,6 +171,7 @@ async fn build_with_translations(
             skip_failed,
             asset_documents,
             None,
+            false,
         )
         .await?;
     }
@@ -308,6 +311,7 @@ async fn process_files(
     base_url: &str,
     skip_failed: bool,
     asset_documents: &std::collections::HashMap<String, String>,
+    copy_only: bool,
 ) -> fpm::Result<()> {
     for f in documents.values() {
         if file.is_some() && file != Some(f.get_id().as_str()) {
@@ -324,6 +328,7 @@ async fn process_files(
             skip_failed,
             asset_documents,
             None,
+            copy_only,
         )
         .await?
     }
@@ -342,6 +347,7 @@ pub(crate) async fn process_file(
     skip_failed: bool,
     asset_documents: &std::collections::HashMap<String, String>,
     original_id: Option<String>,
+    copy_only: bool,
 ) -> fpm::Result<()> {
     use std::io::Write;
 
@@ -390,48 +396,52 @@ pub(crate) async fn process_file(
                     original_id,
                 )
                 .await?;
-                let resp = process_code(
-                    config,
-                    main_doc,
-                    Some(fallback_doc),
-                    message,
-                    translated_data,
-                    base_url,
-                    asset_documents,
-                )
-                .await;
-                match (resp, skip_failed) {
-                    (Ok(r), _) => r,
-                    (_, true) => {
-                        println!("Failed");
-                        return Ok(());
-                    }
-                    (e, _) => {
-                        return e;
+                if !copy_only {
+                    let resp = process_code(
+                        config,
+                        main_doc,
+                        Some(fallback_doc),
+                        message,
+                        translated_data,
+                        base_url,
+                        asset_documents,
+                    )
+                    .await;
+                    match (resp, skip_failed) {
+                        (Ok(r), _) => r,
+                        (_, true) => {
+                            println!("Failed");
+                            return Ok(());
+                        }
+                        (e, _) => {
+                            return e;
+                        }
                     }
                 }
             }
             (fpm::File::Image(main_doc), fpm::File::Image(fallback_doc)) => {
                 process_static(main_doc, &config.root, package, original_id).await?;
-                let resp = process_image(
-                    config,
-                    main_doc,
-                    Some(fallback_doc),
-                    message,
-                    translated_data,
-                    base_url,
-                    package,
-                    asset_documents,
-                )
-                .await;
-                match (resp, skip_failed) {
-                    (Ok(r), _) => r,
-                    (_, true) => {
-                        println!("Failed");
-                        return Ok(());
-                    }
-                    (e, _) => {
-                        return e;
+                if !copy_only {
+                    let resp = process_image(
+                        config,
+                        main_doc,
+                        Some(fallback_doc),
+                        message,
+                        translated_data,
+                        base_url,
+                        package,
+                        asset_documents,
+                    )
+                    .await;
+                    match (resp, skip_failed) {
+                        (Ok(r), _) => r,
+                        (_, true) => {
+                            println!("Failed");
+                            return Ok(());
+                        }
+                        (e, _) => {
+                            return e;
+                        }
                     }
                 }
             }
@@ -526,25 +536,27 @@ pub(crate) async fn process_file(
         }
         fpm::File::Image(main_doc) => {
             process_static(main_doc, &config.root, package, original_id).await?;
-            let resp = process_image(
-                config,
-                main_doc,
-                None,
-                message,
-                translated_data,
-                base_url,
-                package,
-                asset_documents,
-            )
-            .await;
-            match (resp, skip_failed) {
-                (Ok(r), _) => r,
-                (_, true) => {
-                    println!("Failed");
-                    return Ok(());
-                }
-                (e, _) => {
-                    return e;
+            if !copy_only {
+                let resp = process_image(
+                    config,
+                    main_doc,
+                    None,
+                    message,
+                    translated_data,
+                    base_url,
+                    package,
+                    asset_documents,
+                )
+                .await;
+                match (resp, skip_failed) {
+                    (Ok(r), _) => r,
+                    (_, true) => {
+                        println!("Failed");
+                        return Ok(());
+                    }
+                    (e, _) => {
+                        return e;
+                    }
                 }
             }
         }
@@ -559,24 +571,26 @@ pub(crate) async fn process_file(
                 original_id,
             )
             .await?;
-            let resp = process_code(
-                config,
-                doc,
-                None,
-                message,
-                translated_data,
-                base_url,
-                asset_documents,
-            )
-            .await;
-            match (resp, skip_failed) {
-                (Ok(r), _) => r,
-                (_, true) => {
-                    println!("Failed");
-                    return Ok(());
-                }
-                (e, _) => {
-                    return e;
+            if !copy_only {
+                let resp = process_code(
+                    config,
+                    doc,
+                    None,
+                    message,
+                    translated_data,
+                    base_url,
+                    asset_documents,
+                )
+                .await;
+                match (resp, skip_failed) {
+                    (Ok(r), _) => r,
+                    (_, true) => {
+                        println!("Failed");
+                        return Ok(());
+                    }
+                    (e, _) => {
+                        return e;
+                    }
                 }
             }
         }

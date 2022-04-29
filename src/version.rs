@@ -136,6 +136,7 @@ pub(crate) async fn build_version(
                 skip_failed,
                 asset_documents,
                 Some(id),
+                false,
             )
             .await?;
         }
@@ -153,6 +154,7 @@ pub(crate) async fn build_version(
             skip_failed,
             asset_documents,
             None,
+            false,
         )
         .await?;
     }
