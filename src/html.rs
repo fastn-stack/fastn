@@ -856,6 +856,7 @@ impl ftd::Image {
                     .insert(s("data-id"), escape(format!("{}:parent", id).as_str()));
             }
             img.style.insert(s("width"), s("100%"));
+            img.style.insert(s("height"), s("100%"));
             img.attrs.insert(s("src"), escape(self.src.light.as_str()));
             img.attrs
                 .insert(s("alt"), escape(self.description.as_str()));
