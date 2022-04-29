@@ -1,9 +1,14 @@
 -- import: ft
 -- import: bs
+-- import: ftd.dev/assets
 
 -- ft.github: https://github.com/fifthtry/ftd/
 -- ft.site-url: /
--- ft.site-name: FTD
+/-- ft.site-name: FTD
+
+-- ft.site-logo:
+light: $assets.files.images.fifthtry-logo.png.light
+dark: $assets.files.images.fifthtry-logo.png.dark
 
 -- ft.show-brand: true
 
