@@ -289,19 +289,25 @@ impl ftd::Element {
 }
 
 impl Node {
-    fn from_common(node: &str, common: &ftd::Common, doc_id: &str) -> Self {
+    fn from_common(
+        node: &str,
+        common: &ftd::Common,
+        doc_id: &str,
+        collector: &mut ftd::Collector,
+    ) -> Self {
+        let mut classes = vec![];
         Node {
             condition: common.condition.clone(),
             node: s(node),
             attrs: common.attrs(),
-            style: common.style(doc_id),
+            style: common.style(doc_id, collector, &mut classes),
             children: vec![],
             external_children: Default::default(),
             open_id: None,
             external_children_container: vec![],
             children_style: common.children_style(),
             text: None,
-            classes: vec![],
+            classes,
             null: common.is_dummy,
             events: common.events.clone(),
         }
@@ -315,9 +321,9 @@ impl Node {
     ) -> Self {
         let mut attrs = common.attrs();
         attrs.extend(container.attrs());
-        let mut style = common.style(doc_id);
+        let mut classes = container.add_class();
+        let mut style = common.style(doc_id, collector, &mut classes);
         style.extend(container.style());
-        let classes = container.add_class();
 
         let mut children_style = common.children_style();
         children_style.extend(container.children_style());
@@ -447,7 +453,7 @@ impl ftd::Scene {
             node
         };
 
-        let mut main_node = Node::from_common("div", &self.common, doc_id);
+        let mut main_node = Node::from_common("div", &self.common, doc_id, collector);
         if self.common.width.is_none() {
             main_node.style.insert(s("width"), s("1000px"));
         }
@@ -766,8 +772,8 @@ impl ftd::Text {
                 _ => "div",
             },
         };
-        let mut n = Node::from_common(node, &self.common, doc_id);
-        n.classes = self.common.add_class();
+        let mut n = Node::from_common(node, &self.common, doc_id, collector);
+        n.classes.extend(self.common.add_class());
         n.text = Some(self.text.rendered.clone());
         let (key, value) = text_align(&self.text_align);
         n.style.insert(s(key.as_str()), value);
@@ -837,7 +843,7 @@ impl ftd::Text {
 }
 
 impl ftd::TextBlock {
-    pub fn to_node(&self, doc_id: &str, _collector: &mut ftd::Collector) -> Node {
+    pub fn to_node(&self, doc_id: &str, collector: &mut ftd::Collector) -> Node {
         // TODO: proper tag based on self.common.region
         // TODO: if format is not markdown use pre
         let node = match &self.common.link {
@@ -847,8 +853,8 @@ impl ftd::TextBlock {
                 _ => "div",
             },
         };
-        let mut n = Node::from_common(node, &self.common, doc_id);
-        n.classes = self.common.add_class();
+        let mut n = Node::from_common(node, &self.common, doc_id, collector);
+        n.classes.extend(self.common.add_class());
         n.text = Some(self.text.rendered.clone());
         let (key, value) = text_align(&self.text_align);
         n.style.insert(s(key.as_str()), value);
@@ -903,7 +909,7 @@ impl ftd::Code {
                 _ => "div",
             },
         };
-        let mut n = Node::from_common(node, &self.common, doc_id);
+        let mut n = Node::from_common(node, &self.common, doc_id, collector);
         n.text = Some(self.text.rendered.clone());
         let (key, value) = text_align(&self.text_align);
         n.style.insert(s(key.as_str()), value);
@@ -969,8 +975,8 @@ impl ftd::Code {
 }
 
 impl ftd::Image {
-    pub fn to_node(&self, doc_id: &str, _collector: &mut ftd::Collector) -> Node {
-        let mut n = Node::from_common("img", &self.common, doc_id);
+    pub fn to_node(&self, doc_id: &str, collector: &mut ftd::Collector) -> Node {
+        let mut n = Node::from_common("img", &self.common, doc_id, collector);
         if self.common.link.is_some() {
             n.node = s("a");
             let mut img = Node {
@@ -1020,8 +1026,8 @@ impl ftd::Image {
 }
 
 impl ftd::IFrame {
-    pub fn to_node(&self, doc_id: &str, _collector: &mut ftd::Collector) -> Node {
-        let mut n = Node::from_common("iframe", &self.common, doc_id);
+    pub fn to_node(&self, doc_id: &str, collector: &mut ftd::Collector) -> Node {
+        let mut n = Node::from_common("iframe", &self.common, doc_id, collector);
         n.attrs.insert(s("src"), escape(self.src.as_str()));
         n.attrs.insert(s("allow"), s("fullscreen"));
         n.attrs.insert(s("allowfullscreen"), s("allowfullscreen"));
@@ -1038,8 +1044,8 @@ impl ftd::Markups {
                 _ => "div",
             },
         };
-        let mut n = Node::from_common(node, &self.common, doc_id);
-        n.classes = self.common.add_class();
+        let mut n = Node::from_common(node, &self.common, doc_id, collector);
+        n.classes.extend(self.common.add_class());
         let (key, value) = text_align(&self.text_align);
         n.style.insert(s(key.as_str()), value);
 
@@ -1148,9 +1154,9 @@ impl ftd::Markup {
 }
 
 impl ftd::Input {
-    pub fn to_node(&self, doc_id: &str, _collector: &mut ftd::Collector) -> Node {
-        let mut n = Node::from_common("input", &self.common, doc_id);
-        n.classes = self.common.add_class();
+    pub fn to_node(&self, doc_id: &str, collector: &mut ftd::Collector) -> Node {
+        let mut n = Node::from_common("input", &self.common, doc_id, collector);
+        n.classes.extend(self.common.add_class());
         if let Some(ref p) = self.placeholder {
             n.attrs.insert(s("placeholder"), escape(p));
         }
@@ -1168,7 +1174,12 @@ impl ftd::Common {
         d
     }
 
-    fn style(&self, doc_id: &str) -> ftd::Map {
+    fn style(
+        &self,
+        doc_id: &str,
+        collector: &mut ftd::Collector,
+        classes: &mut Vec<String>,
+    ) -> ftd::Map {
         let mut d: ftd::Map = Default::default();
 
         d.insert(s("text-decoration"), s("none"));
@@ -1287,13 +1298,40 @@ impl ftd::Common {
             d.insert(s("margin-bottom"), format!("{}px", p));
         }
         if let Some(p) = &self.background_color {
-            d.insert(s("background-color"), color(&p.light));
+            if self.conditional_attribute.contains_key("background-color") {
+                d.insert(s("background-color"), color(&p.light));
+            } else {
+                let mut styles: std::collections::BTreeMap<String, String> = Default::default();
+                styles.insert(s("background-color"), color(&p.light));
+                let class = collector.insert_class(styles.clone(), None);
+                styles.insert(s("background-color"), color(&p.dark));
+                collector.insert_class(styles.clone(), Some(format!("body.fpm-dark .{}", class)));
+                classes.push(class);
+            }
         }
         if let Some(p) = &self.color {
-            d.insert(s("color"), color(&p.light));
+            if self.conditional_attribute.contains_key("color") {
+                d.insert(s("color"), color(&p.light));
+            } else {
+                let mut styles: std::collections::BTreeMap<String, String> = Default::default();
+                styles.insert(s("color"), color(&p.light));
+                let class = collector.insert_class(styles.clone(), None);
+                styles.insert(s("color"), color(&p.dark));
+                collector.insert_class(styles.clone(), Some(format!("body.fpm-dark .{}", class)));
+                classes.push(class);
+            }
         }
         if let Some(p) = &self.border_color {
-            d.insert(s("border-color"), color(&p.light));
+            if self.conditional_attribute.contains_key("border-color") {
+                d.insert(s("border-color"), color(&p.light));
+            } else {
+                let mut styles: std::collections::BTreeMap<String, String> = Default::default();
+                styles.insert(s("border-color"), color(&p.light));
+                let class = collector.insert_class(styles.clone(), None);
+                styles.insert(s("border-color"), color(&p.dark));
+                collector.insert_class(styles.clone(), Some(format!("body.fpm-dark .{}", class)));
+                classes.push(class);
+            }
         }
         if let Some(p) = &self.overflow_x {
             let (key, value) = overflow(p, "overflow-x");
