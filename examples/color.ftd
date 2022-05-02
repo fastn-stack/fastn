@@ -4,11 +4,17 @@ dark: green
 -- ftd.color b: orange
 dark: purple
 
+-- ftd.color d: pink
+dark: blue
+
 -- boolean a: true
 
 -- ftd.text: Hello
 color: $c
 color if $a: $b
+
+-- ftd.text: Just color
+color: $d
 
 -- ftd.text: Dark Mode
 $on-click$: message-host enable-dark-mode

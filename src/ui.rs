@@ -708,7 +708,7 @@ impl Element {
             }
 
             fn color_condition(
-                color: &ftd::Color,
+                _color: &ftd::Color,
                 id: &str,
                 data: &mut ftd::DataDependenciesMap,
                 style: &str,
@@ -728,11 +728,11 @@ impl Element {
                 }) = conditional_attribute.get(style)
                 {
                     (reference.to_string(), value.to_owned())
-                } else if let Some(ref reference) = color.reference {
-                    (
-                        reference.to_string(),
-                        serde_json::json!({ "light": ftd::html::color(&color.light), "dark": ftd::html::color(&color.dark), "$kind$": "light" }),
-                    )
+                // } else if let Some(ref reference) = color.reference {
+                //     (
+                //         reference.to_string(),
+                //         serde_json::json!({ "light": ftd::html::color(&color.light), "dark": ftd::html::color(&color.dark), "$kind$": "light" }),
+                //     )
                 } else {
                     return;
                 };
