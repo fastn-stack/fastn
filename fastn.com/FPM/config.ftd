@@ -11,8 +11,8 @@
 /-- ft.site-name: FPM
 
 -- ft.site-logo:
-light: $assets.files.images.fifthtry-logo.png.light
-dark: $assets.files.images.fifthtry-logo.png.dark
+light: $assets.files.static.images.fifthtry-logo.png.light
+dark: $assets.files.static.images.fifthtry-logo.png.dark
 
 -- ft.github: https://github.com/fifthtry/fpm
 -- ft.site-url: /
