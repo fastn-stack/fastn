@@ -32,97 +32,10 @@
       ]
     }
   },
-  "event-on-click-outside.ftd#orange": {
-    "value": {
-      "$kind$": "light",
-      "dark": "orange",
-      "light": "orange"
-    },
-    "dependencies": {
-      "0,0": [
-        {
-          "condition": null,
-          "dependency_type": "Style",
-          "parameters": {
-            "background-color": {
-              "default": null,
-              "value": {
-                "important": false,
-                "reference": null,
-                "value": {
-                  "$kind$": "light",
-                  "dark": "rgba(255,165,0,1)",
-                  "light": "rgba(255,165,0,1)"
-                }
-              }
-            },
-            "dependents": {
-              "default": null,
-              "value": {
-                "important": false,
-                "reference": null,
-                "value": []
-              }
-            }
-          },
-          "remaining": null
-        }
-      ],
-      "0,1": [
-        {
-          "condition": null,
-          "dependency_type": "Style",
-          "parameters": {
-            "background-color": {
-              "default": null,
-              "value": {
-                "important": false,
-                "reference": null,
-                "value": {
-                  "$kind$": "light",
-                  "dark": "rgba(255,165,0,1)",
-                  "light": "rgba(255,165,0,1)"
-                }
-              }
-            },
-            "dependents": {
-              "default": null,
-              "value": {
-                "important": false,
-                "reference": null,
-                "value": []
-              }
-            }
-          },
-          "remaining": null
-        }
-      ]
-    }
-  },
   "ftd#dark-mode": {
     "value": false,
     "dependencies": {
-      "$value#kind$": [
-        {
-          "condition": true,
-          "dependency_type": "Variable",
-          "parameters": {
-            "event-on-click-outside.ftd#orange": {
-              "default": {
-                "important": false,
-                "reference": null,
-                "value": "light"
-              },
-              "value": {
-                "important": false,
-                "reference": null,
-                "value": "dark"
-              }
-            }
-          },
-          "remaining": null
-        }
-      ]
+      "$value#kind$": []
     }
   },
   "ftd#desktop-breakpoint": {
@@ -131,9 +44,7 @@
   },
   "ftd#device": {
     "value": "desktop",
-    "dependencies": {
-      "$value#kind$": []
-    }
+    "dependencies": {}
   },
   "ftd#follow-system-dark-mode": {
     "value": true,
@@ -326,12 +237,19 @@ body.fpm-dark .ft_md a code {
 body.fpm-dark .ft_md a:visited code {
     color: #a27de7;
 }
+        
+
+.b_1 {
+    background-color: rgba(255,165,0,1)
+}
+
+
     </style>
 
 </head>
     <body style="height: 100%;">
 
-        <div data-id="main:root" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; height: 100%; justify-content: flex-start; text-decoration: none; white-space: initial; width: 100%" ><div data-id="0:main" data-spacing="margin-top:30px" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; padding: 40px; text-decoration: none; white-space: initial" ><div data-id="0,0:main" style="align-items: flex-start; background-color: rgba(255,165,0,1); border-radius: 0px; border-style: solid; border-width: 2px; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; padding: 10px; text-decoration: none; white-space: initial" ><div data-id="0,0,0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;toggle&quot;,&quot;target&quot;:&quot;event-on-click-outside.ftd#open@0,0&quot;,&quot;parameters&quot;:{}}]', this)" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Click here!</div><div data-id="0,0,1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: none; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Great Job!</div></div><div data-id="0,1:main" style="align-items: flex-start; background-color: rgba(255,165,0,1); border-radius: 0px; border-style: solid; border-width: 2px; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; margin-top: 30px; padding: 10px; text-decoration: none; white-space: initial" ><div data-id="0,1,0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;toggle&quot;,&quot;target&quot;:&quot;event-on-click-outside.ftd#open@0,1&quot;,&quot;parameters&quot;:{}}]', this)" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Click here!</div><div data-id="0,1,1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: none; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Great Job!</div></div></div></div>
+        <div data-id="main:root" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; height: 100%; justify-content: flex-start; text-decoration: none; white-space: initial; width: 100%" ><div data-id="0:main" data-spacing="margin-top:30px" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; padding: 40px; text-decoration: none; white-space: initial" ><div data-id="0,0:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 2px; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; padding: 10px; text-decoration: none; white-space: initial" class="b_1"><div data-id="0,0,0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;toggle&quot;,&quot;target&quot;:&quot;event-on-click-outside.ftd#open@0,0&quot;,&quot;parameters&quot;:{}}]', this)" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Click here!</div><div data-id="0,0,1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: none; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Great Job!</div></div><div data-id="0,1:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 2px; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; margin-top: 30px; padding: 10px; text-decoration: none; white-space: initial" class="b_1"><div data-id="0,1,0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;toggle&quot;,&quot;target&quot;:&quot;event-on-click-outside.ftd#open@0,1&quot;,&quot;parameters&quot;:{}}]', this)" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Click here!</div><div data-id="0,1,1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: none; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Great Job!</div></div></div></div>
 
 
     <script>
@@ -743,6 +661,9 @@ let ftd_utils = {
     handle_action: function (id, target_variable, value, data, ftd_external_children) {
         var styles_edited = [];
         let visibility_change = false;
+        if (ftd_utils.get_data_value(data, target_variable) === value) {
+            return;
+        }
         handle_action_(id, target_variable, value, data, ftd_external_children, styles_edited, visibility_change);
 
         function handle_action_(id, target_variable, value, data, ftd_external_children, styles_edited, visibility_change) {
@@ -1305,6 +1226,8 @@ window.ftd.post_init = function () {
     const COOKIE_DARK_MODE = "dark";
     const COOKIE_LIGHT_MODE = "light";
     const DARK_MODE_CLASS = "fpm-dark";
+    const MOBILE_CLASS = "ftd-mobile";
+    const XL_CLASS = "ftd-xl";
     const FTD_DEVICE = "ftd#device";
     const FTD_MOBILE_BREAKPOINT = "ftd#mobile-breakpoint";
     const FTD_DESKTOP_BREAKPOINT = "ftd#desktop-breakpoint";
@@ -1350,10 +1273,24 @@ window.ftd.post_init = function () {
         let mobile_breakpoint = window.ftd.get_value("main", FTD_MOBILE_BREAKPOINT);
         let desktop_breakpoint = window.ftd.get_value("main", FTD_DESKTOP_BREAKPOINT);
         if (width <= mobile_breakpoint) {
+            document.body.classList.add(MOBILE_CLASS);
+            if (document.body.classList.contains(XL_CLASS)) {
+                document.body.classList.remove(XL_CLASS);
+            }
             return "mobile";
         }
         if (width > desktop_breakpoint) {
-            return "xxl";
+            document.body.classList.add(XL_CLASS);
+            if (document.body.classList.contains(MOBILE_CLASS)) {
+                document.body.classList.remove(MOBILE_CLASS);
+            }
+            return "xl";
+        }
+        if (document.body.classList.contains(MOBILE_CLASS)) {
+            document.body.classList.remove(MOBILE_CLASS);
+        }
+        if (document.body.classList.contains(XL_CLASS)) {
+            document.body.classList.remove(XL_CLASS);
         }
         return "desktop";
     }

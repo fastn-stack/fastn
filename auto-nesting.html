@@ -6,82 +6,6 @@
     <title>Heading 1</title>
     <script type="ftd" id="ftd-data">
         {
-  "auto-nesting.ftd#blue": {
-    "value": {
-      "$kind$": "light",
-      "dark": "blue",
-      "light": "blue"
-    },
-    "dependencies": {
-      "page-id:0,1": [
-        {
-          "condition": null,
-          "dependency_type": "Style",
-          "parameters": {
-            "color": {
-              "default": null,
-              "value": {
-                "important": false,
-                "reference": null,
-                "value": {
-                  "$kind$": "light",
-                  "dark": "rgba(0,0,255,1)",
-                  "light": "rgba(0,0,255,1)"
-                }
-              }
-            },
-            "dependents": {
-              "default": null,
-              "value": {
-                "important": false,
-                "reference": null,
-                "value": []
-              }
-            }
-          },
-          "remaining": null
-        }
-      ]
-    }
-  },
-  "auto-nesting.ftd#green": {
-    "value": {
-      "$kind$": "light",
-      "dark": "green",
-      "light": "green"
-    },
-    "dependencies": {
-      "0": [
-        {
-          "condition": null,
-          "dependency_type": "Style",
-          "parameters": {
-            "color": {
-              "default": null,
-              "value": {
-                "important": false,
-                "reference": null,
-                "value": {
-                  "$kind$": "light",
-                  "dark": "rgba(0,128,0,1)",
-                  "light": "rgba(0,128,0,1)"
-                }
-              }
-            },
-            "dependents": {
-              "default": null,
-              "value": {
-                "important": false,
-                "reference": null,
-                "value": []
-              }
-            }
-          },
-          "remaining": null
-        }
-      ]
-    }
-  },
   "auto-nesting.ftd#open@0,11": {
     "value": true,
     "dependencies": {
@@ -194,102 +118,6 @@
           "condition": true,
           "dependency_type": "Visible",
           "parameters": {},
-          "remaining": null
-        }
-      ]
-    }
-  },
-  "auto-nesting.ftd#red": {
-    "value": {
-      "$kind$": "light",
-      "dark": "red",
-      "light": "red"
-    },
-    "dependencies": {
-      "0,1,2,1,1,1,1,1,0:page-id-external:0.h1-id-external:0,1,2.h2-id-external:0,1,2,1,1.h3-id-external:0,1,2,1,1,1,1": [
-        {
-          "condition": null,
-          "dependency_type": "Style",
-          "parameters": {
-            "color": {
-              "default": null,
-              "value": {
-                "important": false,
-                "reference": null,
-                "value": {
-                  "$kind$": "light",
-                  "dark": "rgba(255,0,0,1)",
-                  "light": "rgba(255,0,0,1)"
-                }
-              }
-            },
-            "dependents": {
-              "default": null,
-              "value": {
-                "important": false,
-                "reference": null,
-                "value": []
-              }
-            }
-          },
-          "remaining": null
-        }
-      ],
-      "0,1,3,1,0,1,0:page-id-external:0.h1-id-external:0,1,3.h3-id-external:0,1,3,1,0": [
-        {
-          "condition": null,
-          "dependency_type": "Style",
-          "parameters": {
-            "color": {
-              "default": null,
-              "value": {
-                "important": false,
-                "reference": null,
-                "value": {
-                  "$kind$": "light",
-                  "dark": "rgba(255,0,0,1)",
-                  "light": "rgba(255,0,0,1)"
-                }
-              }
-            },
-            "dependents": {
-              "default": null,
-              "value": {
-                "important": false,
-                "reference": null,
-                "value": []
-              }
-            }
-          },
-          "remaining": null
-        }
-      ],
-      "0,1,3,1,1,1,1:page-id-external:0.h1-id-external:0,1,3.h2-id-external:0,1,3,1,1": [
-        {
-          "condition": null,
-          "dependency_type": "Style",
-          "parameters": {
-            "color": {
-              "default": null,
-              "value": {
-                "important": false,
-                "reference": null,
-                "value": {
-                  "$kind$": "light",
-                  "dark": "rgba(255,0,0,1)",
-                  "light": "rgba(255,0,0,1)"
-                }
-              }
-            },
-            "dependents": {
-              "default": null,
-              "value": {
-                "important": false,
-                "reference": null,
-                "value": []
-              }
-            }
-          },
           "remaining": null
         }
       ]
@@ -415,65 +243,7 @@
   "ftd#dark-mode": {
     "value": false,
     "dependencies": {
-      "$value#kind$": [
-        {
-          "condition": true,
-          "dependency_type": "Variable",
-          "parameters": {
-            "auto-nesting.ftd#blue": {
-              "default": {
-                "important": false,
-                "reference": null,
-                "value": "light"
-              },
-              "value": {
-                "important": false,
-                "reference": null,
-                "value": "dark"
-              }
-            }
-          },
-          "remaining": null
-        },
-        {
-          "condition": true,
-          "dependency_type": "Variable",
-          "parameters": {
-            "auto-nesting.ftd#green": {
-              "default": {
-                "important": false,
-                "reference": null,
-                "value": "light"
-              },
-              "value": {
-                "important": false,
-                "reference": null,
-                "value": "dark"
-              }
-            }
-          },
-          "remaining": null
-        },
-        {
-          "condition": true,
-          "dependency_type": "Variable",
-          "parameters": {
-            "auto-nesting.ftd#red": {
-              "default": {
-                "important": false,
-                "reference": null,
-                "value": "light"
-              },
-              "value": {
-                "important": false,
-                "reference": null,
-                "value": "dark"
-              }
-            }
-          },
-          "remaining": null
-        }
-      ]
+      "$value#kind$": []
     }
   },
   "ftd#desktop-breakpoint": {
@@ -482,9 +252,7 @@
   },
   "ftd#device": {
     "value": "desktop",
-    "dependencies": {
-      "$value#kind$": []
-    }
+    "dependencies": {}
   },
   "ftd#follow-system-dark-mode": {
     "value": true,
@@ -742,12 +510,31 @@ body.fpm-dark .ft_md a code {
 body.fpm-dark .ft_md a:visited code {
     color: #a27de7;
 }
+        
+
+.c_1 {
+    color: rgba(0,128,0,1)
+}
+
+
+
+.c_2 {
+    color: rgba(255,0,0,1)
+}
+
+
+
+.c_3 {
+    color: rgba(0,0,255,1)
+}
+
+
     </style>
 
 </head>
     <body style="height: 100%;">
 
-        <div data-id="main:root" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; height: 100%; justify-content: flex-start; text-decoration: none; white-space: initial; width: 100%" ><div data-id="0:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(0,128,0,1); display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial" ><div data-id="0,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Page</div><div data-id="page-id:0,1:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(0,0,255,1); display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; padding-left: 10px; text-decoration: none; white-space: initial" ><div data-ext-id="page-id-external:0:main" data-id="0,1,0:page-id-external:0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Page start</div><div data-ext-id="page-id-external:0:main" data-id="0,1,1:page-id-external:0:main" id="heading-3" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; padding-left: 10px; text-decoration: none; white-space: initial" ><div data-id="0,1,1,0:page-id-external:0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;toggle&quot;,&quot;target&quot;:&quot;auto-nesting.ftd#open@0,4&quot;,&quot;parameters&quot;:{}}]', this)" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Heading 3</div><div data-id="h3-id:0,1,1,1:page-id-external:0:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial" ></div></div><div data-ext-id="page-id-external:0:main" data-id="0,1,2:page-id-external:0:main" id="heading-1" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; padding-left: 10px; text-decoration: none; white-space: initial" ><div data-id="0,1,2,0:page-id-external:0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;toggle&quot;,&quot;target&quot;:&quot;auto-nesting.ftd#open@0,5&quot;,&quot;parameters&quot;:{}}]', this)" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Heading 1</div><div data-id="h1-id:0,1,2,1:page-id-external:0:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial" ><div data-ext-id="page-id-external:0.h1-id-external:0,1,2:main" data-id="0,1,2,1,0:page-id-external:0.h1-id-external:0,1,2:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="ft_md">The Great Western Railway War Memorial is a First World War memorial by Charles Sargeant Jagger and Thomas S. Tait. It stands on platform 1 at London Paddington station, commemorating the 2,500 Great Western Railway (GWR) employees killed in the conflict. A third of the GWR’s workforce of almost 80,000 left to fight in the war, the company guaranteeing their jobs. The memorial consists of a bronze statue of a soldier in heavy winter clothing, reading a letter from home. The statue stands on a polished granite plinth, within a white stone surround. The names of the dead are on a roll buried in the plinth. GWR chairman Viscount Churchill unveiled the memorial on 11 November 1922 in front of over 6,000 people, including the Archbishop of Canterbury, GWR officials, and relatives of the dead. When public gatherings were restricted during the COVID-19 pandemic, local communities on the GWR network laid wreaths on trains that carried them to</div><div data-ext-id="page-id-external:0.h1-id-external:0,1,2:main" data-id="0,1,2,1,1:page-id-external:0.h1-id-external:0,1,2:main" id="heading-2" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; padding-left: 10px; text-decoration: none; white-space: initial" ><div data-id="0,1,2,1,1,0:page-id-external:0.h1-id-external:0,1,2:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;toggle&quot;,&quot;target&quot;:&quot;auto-nesting.ftd#open@0,7&quot;,&quot;parameters&quot;:{}}]', this)" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Heading 2</div><div data-id="h2-id:0,1,2,1,1,1:page-id-external:0.h1-id-external:0,1,2:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial" ><div data-ext-id="page-id-external:0.h1-id-external:0,1,2.h2-id-external:0,1,2,1,1:main" data-id="0,1,2,1,1,1,0:page-id-external:0.h1-id-external:0,1,2.h2-id-external:0,1,2,1,1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="ft_md">The Great Western Railway War Memorial is a First World War memorial by Charles Sargeant Jagger and Thomas S. Tait. It stands on platform 1 at London Paddington station, commemorating the 2,500 Great Western Railway (GWR) employees killed in the conflict. A third of the GWR’s workforce of almost 80,000 left to fight in the war, the company guaranteeing their jobs. The memorial consists of a bronze statue of a soldier in heavy winter clothing, reading a letter from home. The statue stands on a polished granite plinth, within a white stone surround. The names of the dead are on a roll buried in the plinth. GWR chairman Viscount Churchill unveiled the memorial on 11 November 1922 in front of over 6,000 people, including the Archbishop of Canterbury, GWR officials, and relatives of the dead. When public gatherings were restricted during the COVID-19 pandemic, local communities on the GWR network laid wreaths on trains that carried them to</div><div data-ext-id="page-id-external:0.h1-id-external:0,1,2.h2-id-external:0,1,2,1,1:main" data-id="0,1,2,1,1,1,1:page-id-external:0.h1-id-external:0,1,2.h2-id-external:0,1,2,1,1:main" id="heading-3" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; padding-left: 10px; text-decoration: none; white-space: initial" ><div data-id="0,1,2,1,1,1,1,0:page-id-external:0.h1-id-external:0,1,2.h2-id-external:0,1,2,1,1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;toggle&quot;,&quot;target&quot;:&quot;auto-nesting.ftd#open@0,9&quot;,&quot;parameters&quot;:{}}]', this)" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Heading 3</div><div data-id="h3-id:0,1,2,1,1,1,1,1:page-id-external:0.h1-id-external:0,1,2.h2-id-external:0,1,2,1,1:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial" ><div data-ext-id="page-id-external:0.h1-id-external:0,1,2.h2-id-external:0,1,2,1,1.h3-id-external:0,1,2,1,1,1,1:main" data-id="0,1,2,1,1,1,1,1,0:page-id-external:0.h1-id-external:0,1,2.h2-id-external:0,1,2,1,1.h3-id-external:0,1,2,1,1,1,1:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(255,0,0,1); display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial" ><div data-id="0,1,2,1,1,1,1,1,0,0:page-id-external:0.h1-id-external:0,1,2.h2-id-external:0,1,2,1,1.h3-id-external:0,1,2,1,1,1,1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="ft_md">foo says hello</div></div></div></div></div></div><div data-ext-id="page-id-external:0.h1-id-external:0,1,2:main" data-id="0,1,2,1,2:page-id-external:0.h1-id-external:0,1,2:main" id="heading-2" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; padding-left: 10px; text-decoration: none; white-space: initial" ><div data-id="0,1,2,1,2,0:page-id-external:0.h1-id-external:0,1,2:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;toggle&quot;,&quot;target&quot;:&quot;auto-nesting.ftd#open@0,11&quot;,&quot;parameters&quot;:{}}]', this)" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Heading 2</div><div data-id="h2-id:0,1,2,1,2,1:page-id-external:0.h1-id-external:0,1,2:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial" ><div data-ext-id="page-id-external:0.h1-id-external:0,1,2.h2-id-external:0,1,2,1,2:main" data-id="0,1,2,1,2,1,0:page-id-external:0.h1-id-external:0,1,2.h2-id-external:0,1,2,1,2:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="ft_md">The Great Western Railway War Memorial is a First World War memorial by Charles Sargeant Jagger and Thomas S. Tait. It stands on platform 1 at London Paddington station, commemorating the 2,500 Great Western Railway (GWR) employees killed in the conflict. A third of the GWR’s workforce of almost 80,000 left to fight in the war, the company guaranteeing their jobs. The memorial consists of a bronze statue of a soldier in heavy winter clothing, reading a letter from home. The statue stands on a polished granite plinth, within a white stone surround. The names of the dead are on a roll buried in the plinth. GWR chairman Viscount Churchill unveiled the memorial on 11 November 1922 in front of over 6,000 people, including the Archbishop of Canterbury, GWR officials, and relatives of the dead. When public gatherings were restricted during the COVID-19 pandemic, local communities on the GWR network laid wreaths on trains that carried them to</div></div></div><div data-ext-id="page-id-external:0.h1-id-external:0,1,2:main" data-id="0,1,2,1,3:page-id-external:0.h1-id-external:0,1,2:main" id="heading-2" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; padding-left: 10px; text-decoration: none; white-space: initial" ><div data-id="0,1,2,1,3,0:page-id-external:0.h1-id-external:0,1,2:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;toggle&quot;,&quot;target&quot;:&quot;auto-nesting.ftd#open@0,13&quot;,&quot;parameters&quot;:{}}]', this)" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Heading 2</div><div data-id="h2-id:0,1,2,1,3,1:page-id-external:0.h1-id-external:0,1,2:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial" ><div data-ext-id="page-id-external:0.h1-id-external:0,1,2.h2-id-external:0,1,2,1,3:main" data-id="0,1,2,1,3,1,0:page-id-external:0.h1-id-external:0,1,2.h2-id-external:0,1,2,1,3:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="ft_md">The Great Western Railway War Memorial is a First World War memorial by Charles Sargeant Jagger and Thomas S. Tait. It stands on platform 1 at London Paddington station, commemorating the 2,500 Great Western Railway (GWR) employees killed in the conflict. A third of the GWR’s workforce of almost 80,000 left to fight in the war, the company guaranteeing their jobs. The memorial consists of a bronze statue of a soldier in heavy winter clothing, reading a letter from home. The statue stands on a polished granite plinth, within a white stone surround. The names of the dead are on a roll buried in the plinth. GWR chairman Viscount Churchill unveiled the memorial on 11 November 1922 in front of over 6,000 people, including the Archbishop of Canterbury, GWR officials, and relatives of the dead. When public gatherings were restricted during the COVID-19 pandemic, local communities on the GWR network laid wreaths on trains that carried them to</div></div></div></div></div><div data-ext-id="page-id-external:0:main" data-id="0,1,3:page-id-external:0:main" id="heading-1" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; padding-left: 10px; text-decoration: none; white-space: initial" ><div data-id="0,1,3,0:page-id-external:0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;toggle&quot;,&quot;target&quot;:&quot;auto-nesting.ftd#open@0,15&quot;,&quot;parameters&quot;:{}}]', this)" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Heading 1</div><div data-id="h1-id:0,1,3,1:page-id-external:0:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial" ><div data-ext-id="page-id-external:0.h1-id-external:0,1,3:main" data-id="0,1,3,1,0:page-id-external:0.h1-id-external:0,1,3:main" id="heading-3" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; padding-left: 10px; text-decoration: none; white-space: initial" ><div data-id="0,1,3,1,0,0:page-id-external:0.h1-id-external:0,1,3:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;toggle&quot;,&quot;target&quot;:&quot;auto-nesting.ftd#open@0,16&quot;,&quot;parameters&quot;:{}}]', this)" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Heading 3</div><div data-id="h3-id:0,1,3,1,0,1:page-id-external:0.h1-id-external:0,1,3:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial" ><div data-ext-id="page-id-external:0.h1-id-external:0,1,3.h3-id-external:0,1,3,1,0:main" data-id="0,1,3,1,0,1,0:page-id-external:0.h1-id-external:0,1,3.h3-id-external:0,1,3,1,0:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(255,0,0,1); display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial" ><div data-id="0,1,3,1,0,1,0,0:page-id-external:0.h1-id-external:0,1,3.h3-id-external:0,1,3,1,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="ft_md">foo says hello</div></div><div data-ext-id="page-id-external:0.h1-id-external:0,1,3.h3-id-external:0,1,3,1,0:main" data-id="0,1,3,1,0,1,1:page-id-external:0.h1-id-external:0,1,3.h3-id-external:0,1,3,1,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="ft_md">The Great Western Railway War Memorial is a First World War memorial by Charles Sargeant Jagger and Thomas S. Tait. It stands on platform 1 at London Paddington station, commemorating the 2,500 Great Western Railway (GWR) employees killed in the conflict. A third of the GWR’s workforce of almost 80,000 left to fight in the war, the company guaranteeing their jobs. The memorial consists of a bronze statue of a soldier in heavy winter clothing, reading a letter from home. The statue stands on a polished granite plinth, within a white stone surround. The names of the dead are on a roll buried in the plinth. GWR chairman Viscount Churchill unveiled the memorial on 11 November 1922 in front of over 6,000 people, including the Archbishop of Canterbury, GWR officials, and relatives of the dead. When public gatherings were restricted during the COVID-19 pandemic, local communities on the GWR network laid wreaths on trains that carried them to</div></div></div><div data-ext-id="page-id-external:0.h1-id-external:0,1,3:main" data-id="0,1,3,1,1:page-id-external:0.h1-id-external:0,1,3:main" id="heading-2" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; padding-left: 10px; text-decoration: none; white-space: initial" ><div data-id="0,1,3,1,1,0:page-id-external:0.h1-id-external:0,1,3:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;toggle&quot;,&quot;target&quot;:&quot;auto-nesting.ftd#open@0,19&quot;,&quot;parameters&quot;:{}}]', this)" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Heading 2</div><div data-id="h2-id:0,1,3,1,1,1:page-id-external:0.h1-id-external:0,1,3:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial" ><div data-ext-id="page-id-external:0.h1-id-external:0,1,3.h2-id-external:0,1,3,1,1:main" data-id="0,1,3,1,1,1,0:page-id-external:0.h1-id-external:0,1,3.h2-id-external:0,1,3,1,1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Heading</div><div data-ext-id="page-id-external:0.h1-id-external:0,1,3.h2-id-external:0,1,3,1,1:main" data-id="0,1,3,1,1,1,1:page-id-external:0.h1-id-external:0,1,3.h2-id-external:0,1,3,1,1:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(255,0,0,1); display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial" ><div data-id="0,1,3,1,1,1,1,0:page-id-external:0.h1-id-external:0,1,3.h2-id-external:0,1,3,1,1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="ft_md">foo says hello</div></div></div></div></div></div></div><div data-id="0,2:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Page End</div></div></div>
+        <div data-id="main:root" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; height: 100%; justify-content: flex-start; text-decoration: none; white-space: initial; width: 100%" ><div data-id="0:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial" class="c_1"><div data-id="0,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Page</div><div data-id="page-id:0,1:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; padding-left: 10px; text-decoration: none; white-space: initial" class="c_3"><div data-ext-id="page-id-external:0:main" data-id="0,1,0:page-id-external:0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Page start</div><div data-ext-id="page-id-external:0:main" data-id="0,1,1:page-id-external:0:main" id="heading-3" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; padding-left: 10px; text-decoration: none; white-space: initial" ><div data-id="0,1,1,0:page-id-external:0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;toggle&quot;,&quot;target&quot;:&quot;auto-nesting.ftd#open@0,4&quot;,&quot;parameters&quot;:{}}]', this)" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Heading 3</div><div data-id="h3-id:0,1,1,1:page-id-external:0:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial" ></div></div><div data-ext-id="page-id-external:0:main" data-id="0,1,2:page-id-external:0:main" id="heading-1" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; padding-left: 10px; text-decoration: none; white-space: initial" ><div data-id="0,1,2,0:page-id-external:0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;toggle&quot;,&quot;target&quot;:&quot;auto-nesting.ftd#open@0,5&quot;,&quot;parameters&quot;:{}}]', this)" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Heading 1</div><div data-id="h1-id:0,1,2,1:page-id-external:0:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial" ><div data-ext-id="page-id-external:0.h1-id-external:0,1,2:main" data-id="0,1,2,1,0:page-id-external:0.h1-id-external:0,1,2:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="ft_md">The Great Western Railway War Memorial is a First World War memorial by Charles Sargeant Jagger and Thomas S. Tait. It stands on platform 1 at London Paddington station, commemorating the 2,500 Great Western Railway (GWR) employees killed in the conflict. A third of the GWR’s workforce of almost 80,000 left to fight in the war, the company guaranteeing their jobs. The memorial consists of a bronze statue of a soldier in heavy winter clothing, reading a letter from home. The statue stands on a polished granite plinth, within a white stone surround. The names of the dead are on a roll buried in the plinth. GWR chairman Viscount Churchill unveiled the memorial on 11 November 1922 in front of over 6,000 people, including the Archbishop of Canterbury, GWR officials, and relatives of the dead. When public gatherings were restricted during the COVID-19 pandemic, local communities on the GWR network laid wreaths on trains that carried them to</div><div data-ext-id="page-id-external:0.h1-id-external:0,1,2:main" data-id="0,1,2,1,1:page-id-external:0.h1-id-external:0,1,2:main" id="heading-2" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; padding-left: 10px; text-decoration: none; white-space: initial" ><div data-id="0,1,2,1,1,0:page-id-external:0.h1-id-external:0,1,2:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;toggle&quot;,&quot;target&quot;:&quot;auto-nesting.ftd#open@0,7&quot;,&quot;parameters&quot;:{}}]', this)" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Heading 2</div><div data-id="h2-id:0,1,2,1,1,1:page-id-external:0.h1-id-external:0,1,2:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial" ><div data-ext-id="page-id-external:0.h1-id-external:0,1,2.h2-id-external:0,1,2,1,1:main" data-id="0,1,2,1,1,1,0:page-id-external:0.h1-id-external:0,1,2.h2-id-external:0,1,2,1,1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="ft_md">The Great Western Railway War Memorial is a First World War memorial by Charles Sargeant Jagger and Thomas S. Tait. It stands on platform 1 at London Paddington station, commemorating the 2,500 Great Western Railway (GWR) employees killed in the conflict. A third of the GWR’s workforce of almost 80,000 left to fight in the war, the company guaranteeing their jobs. The memorial consists of a bronze statue of a soldier in heavy winter clothing, reading a letter from home. The statue stands on a polished granite plinth, within a white stone surround. The names of the dead are on a roll buried in the plinth. GWR chairman Viscount Churchill unveiled the memorial on 11 November 1922 in front of over 6,000 people, including the Archbishop of Canterbury, GWR officials, and relatives of the dead. When public gatherings were restricted during the COVID-19 pandemic, local communities on the GWR network laid wreaths on trains that carried them to</div><div data-ext-id="page-id-external:0.h1-id-external:0,1,2.h2-id-external:0,1,2,1,1:main" data-id="0,1,2,1,1,1,1:page-id-external:0.h1-id-external:0,1,2.h2-id-external:0,1,2,1,1:main" id="heading-3" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; padding-left: 10px; text-decoration: none; white-space: initial" ><div data-id="0,1,2,1,1,1,1,0:page-id-external:0.h1-id-external:0,1,2.h2-id-external:0,1,2,1,1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;toggle&quot;,&quot;target&quot;:&quot;auto-nesting.ftd#open@0,9&quot;,&quot;parameters&quot;:{}}]', this)" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Heading 3</div><div data-id="h3-id:0,1,2,1,1,1,1,1:page-id-external:0.h1-id-external:0,1,2.h2-id-external:0,1,2,1,1:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial" ><div data-ext-id="page-id-external:0.h1-id-external:0,1,2.h2-id-external:0,1,2,1,1.h3-id-external:0,1,2,1,1,1,1:main" data-id="0,1,2,1,1,1,1,1,0:page-id-external:0.h1-id-external:0,1,2.h2-id-external:0,1,2,1,1.h3-id-external:0,1,2,1,1,1,1:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial" class="c_2"><div data-id="0,1,2,1,1,1,1,1,0,0:page-id-external:0.h1-id-external:0,1,2.h2-id-external:0,1,2,1,1.h3-id-external:0,1,2,1,1,1,1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="ft_md">foo says hello</div></div></div></div></div></div><div data-ext-id="page-id-external:0.h1-id-external:0,1,2:main" data-id="0,1,2,1,2:page-id-external:0.h1-id-external:0,1,2:main" id="heading-2" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; padding-left: 10px; text-decoration: none; white-space: initial" ><div data-id="0,1,2,1,2,0:page-id-external:0.h1-id-external:0,1,2:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;toggle&quot;,&quot;target&quot;:&quot;auto-nesting.ftd#open@0,11&quot;,&quot;parameters&quot;:{}}]', this)" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Heading 2</div><div data-id="h2-id:0,1,2,1,2,1:page-id-external:0.h1-id-external:0,1,2:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial" ><div data-ext-id="page-id-external:0.h1-id-external:0,1,2.h2-id-external:0,1,2,1,2:main" data-id="0,1,2,1,2,1,0:page-id-external:0.h1-id-external:0,1,2.h2-id-external:0,1,2,1,2:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="ft_md">The Great Western Railway War Memorial is a First World War memorial by Charles Sargeant Jagger and Thomas S. Tait. It stands on platform 1 at London Paddington station, commemorating the 2,500 Great Western Railway (GWR) employees killed in the conflict. A third of the GWR’s workforce of almost 80,000 left to fight in the war, the company guaranteeing their jobs. The memorial consists of a bronze statue of a soldier in heavy winter clothing, reading a letter from home. The statue stands on a polished granite plinth, within a white stone surround. The names of the dead are on a roll buried in the plinth. GWR chairman Viscount Churchill unveiled the memorial on 11 November 1922 in front of over 6,000 people, including the Archbishop of Canterbury, GWR officials, and relatives of the dead. When public gatherings were restricted during the COVID-19 pandemic, local communities on the GWR network laid wreaths on trains that carried them to</div></div></div><div data-ext-id="page-id-external:0.h1-id-external:0,1,2:main" data-id="0,1,2,1,3:page-id-external:0.h1-id-external:0,1,2:main" id="heading-2" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; padding-left: 10px; text-decoration: none; white-space: initial" ><div data-id="0,1,2,1,3,0:page-id-external:0.h1-id-external:0,1,2:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;toggle&quot;,&quot;target&quot;:&quot;auto-nesting.ftd#open@0,13&quot;,&quot;parameters&quot;:{}}]', this)" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Heading 2</div><div data-id="h2-id:0,1,2,1,3,1:page-id-external:0.h1-id-external:0,1,2:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial" ><div data-ext-id="page-id-external:0.h1-id-external:0,1,2.h2-id-external:0,1,2,1,3:main" data-id="0,1,2,1,3,1,0:page-id-external:0.h1-id-external:0,1,2.h2-id-external:0,1,2,1,3:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="ft_md">The Great Western Railway War Memorial is a First World War memorial by Charles Sargeant Jagger and Thomas S. Tait. It stands on platform 1 at London Paddington station, commemorating the 2,500 Great Western Railway (GWR) employees killed in the conflict. A third of the GWR’s workforce of almost 80,000 left to fight in the war, the company guaranteeing their jobs. The memorial consists of a bronze statue of a soldier in heavy winter clothing, reading a letter from home. The statue stands on a polished granite plinth, within a white stone surround. The names of the dead are on a roll buried in the plinth. GWR chairman Viscount Churchill unveiled the memorial on 11 November 1922 in front of over 6,000 people, including the Archbishop of Canterbury, GWR officials, and relatives of the dead. When public gatherings were restricted during the COVID-19 pandemic, local communities on the GWR network laid wreaths on trains that carried them to</div></div></div></div></div><div data-ext-id="page-id-external:0:main" data-id="0,1,3:page-id-external:0:main" id="heading-1" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; padding-left: 10px; text-decoration: none; white-space: initial" ><div data-id="0,1,3,0:page-id-external:0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;toggle&quot;,&quot;target&quot;:&quot;auto-nesting.ftd#open@0,15&quot;,&quot;parameters&quot;:{}}]', this)" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Heading 1</div><div data-id="h1-id:0,1,3,1:page-id-external:0:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial" ><div data-ext-id="page-id-external:0.h1-id-external:0,1,3:main" data-id="0,1,3,1,0:page-id-external:0.h1-id-external:0,1,3:main" id="heading-3" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; padding-left: 10px; text-decoration: none; white-space: initial" ><div data-id="0,1,3,1,0,0:page-id-external:0.h1-id-external:0,1,3:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;toggle&quot;,&quot;target&quot;:&quot;auto-nesting.ftd#open@0,16&quot;,&quot;parameters&quot;:{}}]', this)" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Heading 3</div><div data-id="h3-id:0,1,3,1,0,1:page-id-external:0.h1-id-external:0,1,3:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial" ><div data-ext-id="page-id-external:0.h1-id-external:0,1,3.h3-id-external:0,1,3,1,0:main" data-id="0,1,3,1,0,1,0:page-id-external:0.h1-id-external:0,1,3.h3-id-external:0,1,3,1,0:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial" class="c_2"><div data-id="0,1,3,1,0,1,0,0:page-id-external:0.h1-id-external:0,1,3.h3-id-external:0,1,3,1,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="ft_md">foo says hello</div></div><div data-ext-id="page-id-external:0.h1-id-external:0,1,3.h3-id-external:0,1,3,1,0:main" data-id="0,1,3,1,0,1,1:page-id-external:0.h1-id-external:0,1,3.h3-id-external:0,1,3,1,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="ft_md">The Great Western Railway War Memorial is a First World War memorial by Charles Sargeant Jagger and Thomas S. Tait. It stands on platform 1 at London Paddington station, commemorating the 2,500 Great Western Railway (GWR) employees killed in the conflict. A third of the GWR’s workforce of almost 80,000 left to fight in the war, the company guaranteeing their jobs. The memorial consists of a bronze statue of a soldier in heavy winter clothing, reading a letter from home. The statue stands on a polished granite plinth, within a white stone surround. The names of the dead are on a roll buried in the plinth. GWR chairman Viscount Churchill unveiled the memorial on 11 November 1922 in front of over 6,000 people, including the Archbishop of Canterbury, GWR officials, and relatives of the dead. When public gatherings were restricted during the COVID-19 pandemic, local communities on the GWR network laid wreaths on trains that carried them to</div></div></div><div data-ext-id="page-id-external:0.h1-id-external:0,1,3:main" data-id="0,1,3,1,1:page-id-external:0.h1-id-external:0,1,3:main" id="heading-2" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; padding-left: 10px; text-decoration: none; white-space: initial" ><div data-id="0,1,3,1,1,0:page-id-external:0.h1-id-external:0,1,3:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;action&quot;:&quot;toggle&quot;,&quot;target&quot;:&quot;auto-nesting.ftd#open@0,19&quot;,&quot;parameters&quot;:{}}]', this)" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Heading 2</div><div data-id="h2-id:0,1,3,1,1,1:page-id-external:0.h1-id-external:0,1,3:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial" ><div data-ext-id="page-id-external:0.h1-id-external:0,1,3.h2-id-external:0,1,3,1,1:main" data-id="0,1,3,1,1,1,0:page-id-external:0.h1-id-external:0,1,3.h2-id-external:0,1,3,1,1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Heading</div><div data-ext-id="page-id-external:0.h1-id-external:0,1,3.h2-id-external:0,1,3,1,1:main" data-id="0,1,3,1,1,1,1:page-id-external:0.h1-id-external:0,1,3.h2-id-external:0,1,3,1,1:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial" class="c_2"><div data-id="0,1,3,1,1,1,1,0:page-id-external:0.h1-id-external:0,1,3.h2-id-external:0,1,3,1,1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="ft_md">foo says hello</div></div></div></div></div></div></div><div data-id="0,2:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Page End</div></div></div>
 
 
     <script>
@@ -1159,6 +946,9 @@ let ftd_utils = {
     handle_action: function (id, target_variable, value, data, ftd_external_children) {
         var styles_edited = [];
         let visibility_change = false;
+        if (ftd_utils.get_data_value(data, target_variable) === value) {
+            return;
+        }
         handle_action_(id, target_variable, value, data, ftd_external_children, styles_edited, visibility_change);
 
         function handle_action_(id, target_variable, value, data, ftd_external_children, styles_edited, visibility_change) {
@@ -1721,6 +1511,8 @@ window.ftd.post_init = function () {
     const COOKIE_DARK_MODE = "dark";
     const COOKIE_LIGHT_MODE = "light";
     const DARK_MODE_CLASS = "fpm-dark";
+    const MOBILE_CLASS = "ftd-mobile";
+    const XL_CLASS = "ftd-xl";
     const FTD_DEVICE = "ftd#device";
     const FTD_MOBILE_BREAKPOINT = "ftd#mobile-breakpoint";
     const FTD_DESKTOP_BREAKPOINT = "ftd#desktop-breakpoint";
@@ -1766,10 +1558,24 @@ window.ftd.post_init = function () {
         let mobile_breakpoint = window.ftd.get_value("main", FTD_MOBILE_BREAKPOINT);
         let desktop_breakpoint = window.ftd.get_value("main", FTD_DESKTOP_BREAKPOINT);
         if (width <= mobile_breakpoint) {
+            document.body.classList.add(MOBILE_CLASS);
+            if (document.body.classList.contains(XL_CLASS)) {
+                document.body.classList.remove(XL_CLASS);
+            }
             return "mobile";
         }
         if (width > desktop_breakpoint) {
-            return "xxl";
+            document.body.classList.add(XL_CLASS);
+            if (document.body.classList.contains(MOBILE_CLASS)) {
+                document.body.classList.remove(MOBILE_CLASS);
+            }
+            return "xl";
+        }
+        if (document.body.classList.contains(MOBILE_CLASS)) {
+            document.body.classList.remove(MOBILE_CLASS);
+        }
+        if (document.body.classList.contains(XL_CLASS)) {
+            document.body.classList.remove(XL_CLASS);
         }
         return "desktop";
     }

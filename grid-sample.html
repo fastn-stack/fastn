@@ -6,200 +6,10 @@
     <title>FTD Journal</title>
     <script type="ftd" id="ftd-data">
         {
-  "ft#code-color": {
-    "value": {
-      "$kind$": "light",
-      "dark": "#4D4D4D",
-      "light": "#4D4D4D"
-    },
-    "dependencies": {
-      "0,2,0,1": [
-        {
-          "condition": null,
-          "dependency_type": "Style",
-          "parameters": {
-            "color": {
-              "default": null,
-              "value": {
-                "important": false,
-                "reference": null,
-                "value": {
-                  "$kind$": "light",
-                  "dark": "rgba(77,77,77,1)",
-                  "light": "rgba(77,77,77,1)"
-                }
-              }
-            },
-            "dependents": {
-              "default": null,
-              "value": {
-                "important": false,
-                "reference": null,
-                "value": []
-              }
-            }
-          },
-          "remaining": null
-        }
-      ]
-    }
-  },
-  "ft#color-black": {
-    "value": {
-      "$kind$": "light",
-      "dark": "black",
-      "light": "black"
-    },
-    "dependencies": {
-      "0,2,0,0": [
-        {
-          "condition": null,
-          "dependency_type": "Style",
-          "parameters": {
-            "color": {
-              "default": null,
-              "value": {
-                "important": false,
-                "reference": null,
-                "value": {
-                  "$kind$": "light",
-                  "dark": "rgba(0,0,0,1)",
-                  "light": "rgba(0,0,0,1)"
-                }
-              }
-            },
-            "dependents": {
-              "default": null,
-              "value": {
-                "important": false,
-                "reference": null,
-                "value": []
-              }
-            }
-          },
-          "remaining": null
-        }
-      ]
-    }
-  },
   "ftd#dark-mode": {
     "value": false,
     "dependencies": {
       "$value#kind$": [
-        {
-          "condition": true,
-          "dependency_type": "Variable",
-          "parameters": {
-            "ft#code-color": {
-              "default": {
-                "important": false,
-                "reference": null,
-                "value": "light"
-              },
-              "value": {
-                "important": false,
-                "reference": null,
-                "value": "dark"
-              }
-            }
-          },
-          "remaining": null
-        },
-        {
-          "condition": true,
-          "dependency_type": "Variable",
-          "parameters": {
-            "ft#color-black": {
-              "default": {
-                "important": false,
-                "reference": null,
-                "value": "light"
-              },
-              "value": {
-                "important": false,
-                "reference": null,
-                "value": "dark"
-              }
-            }
-          },
-          "remaining": null
-        },
-        {
-          "condition": true,
-          "dependency_type": "Variable",
-          "parameters": {
-            "grid-sample.ftd#2196F3": {
-              "default": {
-                "important": false,
-                "reference": null,
-                "value": "light"
-              },
-              "value": {
-                "important": false,
-                "reference": null,
-                "value": "dark"
-              }
-            }
-          },
-          "remaining": null
-        },
-        {
-          "condition": true,
-          "dependency_type": "Variable",
-          "parameters": {
-            "grid-sample.ftd#color1": {
-              "default": {
-                "important": false,
-                "reference": null,
-                "value": "light"
-              },
-              "value": {
-                "important": false,
-                "reference": null,
-                "value": "dark"
-              }
-            }
-          },
-          "remaining": null
-        },
-        {
-          "condition": true,
-          "dependency_type": "Variable",
-          "parameters": {
-            "grid-sample.ftd#color2": {
-              "default": {
-                "important": false,
-                "reference": null,
-                "value": "light"
-              },
-              "value": {
-                "important": false,
-                "reference": null,
-                "value": "dark"
-              }
-            }
-          },
-          "remaining": null
-        },
-        {
-          "condition": true,
-          "dependency_type": "Variable",
-          "parameters": {
-            "grid-sample.ftd#color3": {
-              "default": {
-                "important": false,
-                "reference": null,
-                "value": "light"
-              },
-              "value": {
-                "important": false,
-                "reference": null,
-                "value": "dark"
-              }
-            }
-          },
-          "remaining": null
-        },
         {
           "condition": true,
           "dependency_type": "Variable",
@@ -247,9 +57,7 @@
   },
   "ftd#device": {
     "value": "desktop",
-    "dependencies": {
-      "$value#kind$": []
-    }
+    "dependencies": {}
   },
   "ftd#follow-system-dark-mode": {
     "value": true,
@@ -262,44 +70,6 @@
   "ftd#system-dark-mode": {
     "value": false,
     "dependencies": {}
-  },
-  "grid-sample.ftd#2196F3": {
-    "value": {
-      "$kind$": "light",
-      "dark": "#2196F3",
-      "light": "#2196F3"
-    },
-    "dependencies": {
-      "0,1,2": [
-        {
-          "condition": null,
-          "dependency_type": "Style",
-          "parameters": {
-            "color": {
-              "default": null,
-              "value": {
-                "important": false,
-                "reference": null,
-                "value": {
-                  "$kind$": "light",
-                  "dark": "rgba(33,150,243,1)",
-                  "light": "rgba(33,150,243,1)"
-                }
-              }
-            },
-            "dependents": {
-              "default": null,
-              "value": {
-                "important": false,
-                "reference": null,
-                "value": []
-              }
-            }
-          },
-          "remaining": null
-        }
-      ]
-    }
   },
   "grid-sample.ftd#body@0,2,0": {
     "value": "Thoughts: Browsing History\nReadership Tracking\nLinking Using Package Dependency\nSo links never break (and original author can keep updating document URL at whim).\n\nGit Tracking\nMore than one fpm package per git repo\nArticle Out\n(on how having article.page allows us to get just the content of a page, without header/sidebar/footer etc).\n\nThought: Package Identity\n2nd Jan 2022\n\nStill can’t believe 22 is here! So I have been thinking about fpm update recently and came across nostr that\nimplements something very close to what I had in mind.\n\nI kind of consider nostr design the right design, good balance between centralised (prone to attacks, censorship etc)\nand “pure” peer to peer (complex, less reliable etc). Maybe there are issues, but to me it sounds good.\n\nSo we know how to distribute packages. What is missing is package identity. Package names depend on DNS if you buy\nyour own domain, and with others, eg github if you host on <username>.github.io etc. So how do we ensure you really own the package identity? That you can move from .github.io to something else without losing people who may be interested in your content.\n\nTraditional way requires you to do a redirect from old to new. But this relies on old service still running, often companies come and go, domain can expire or sold to someone with no interest in honouring the old contracts.\n\nIf not domain name then what? One candidate is cryptographic keys. But they are too hard, at least when you are targeting billions of publishers, like Twitter and Facebook does. Eventually your FPM packages should be your twitter/Facebook profile, but how do you manage identity?\n\nWhatsApp etc, E2E, End To End-Encryption systems rely on some shared identity, eg a phone number of email address as a convenience, and then they generate some keys behind the scenes, you can see the fingerprint of your keys in whatsapp for example, and verify each others identity (phone number appears to be the identity from the layman’s perspective, but its backed by strong cryptographic foundations).\n\nSo let me repeat, when you are sending a message on WhatsApp, you think you are sending it to a phone number, but WhatsApp has internally exchanged some encryption keys with that contact, and its going to that key.\n\nLet me say it in a more formal way, in PKI, whatever that might be, anyone can generate a key pair, a private key and a public key. This key pair can be considered an identity. When you send a message it goes to someone, that someone needs to be identified, and how we identify them can be considered their identity. What you can do is encrypt the message with the public key of the recipient, and only the corresponding private key can de-crypt the message.\n\nSo in this sense, a key pair can be your identity. But key pairs are just numbers, and unlike phone numbers, they are much bigger. So exchanging these numbers is not fun, it’s opaque, no one can remember them, nor can see what they are referring to if we see a huge number representing a public key in someone’s FPM.ftd file as a dependency.\n\nSo we need a way for the key pair to get an alias. The domain name is a good alias. If we tread DNS as alias, not the source of truth, things are much better. Identity moves are rare, but they do happen. People switch providers, people may want to move from Github Pages to another service, and back. Once someone starts following someone, such moves should not affect them, the followers should continue to get updates despite name changes. So how do we achieve this with PKI and aliases?\n\nImagine Github Pages implemented our protocol, this is how it could work. They generate a key pair for you when you sign up. This is important if we want billions of people to use services. Most people are not going to want to bother with all this. This is what WhatsApp/Telegram do to deliver strong cryptographic guarantees (at least by design/promise, implementation is another matter) to masses.\n\nSo when you create an account on any of these services, they create a new unique identity (key pair) for you. You start using that service, you gain followers, and say you get serious. This is the point you will bother with all this identity business details. Now you have say 100s of followers and you want to move to a different provider, without losing the followers (without breaking 100s/thousands of packages that depend on breaking).\n\nAt this point you will now claim your identity. You install another app, offline only for strictest guarantees, and generate your real identity, real key pair.\n\nNow if Github Pages etc are acting in good faith, they will let everyone know that they are temporary guardians of your identity, that you have not yet claimed your identity, and the moment you do so they will cooperate. If they chose to act in bad faith, charge you money for you to claim your identity or not let you do it while initially promising that they will, then you could lose follower, but hopefully word will spread and people will shun such services.\n\nSo the temporary guardian of your identity can accept your real identity keys, and everyone who is following your via <username>.github.io now learns of your true identity as well (and that Github is an intermediary working for you for now, via you signing the Github generated keypair with your real identity).\n\nSo real identity has always been the keypair, but we would be using the domain name. We need a distributed store of keypair to DNS mapping, so you can switch the domain for your keypair. Some sort of “key server” is needed. Your followers where initially thinking that the Github generated keypair was the true identity, but since you update your identity, github will notify them about the true identity and your FPM will now store the true identity of what you are following.\n\nWe also will have to allow for “key revocation”, say one of the guardians went rogue, got bought out, hacked etc, and starts sending updates on your behalf to your followers, you had signed that key-pair with your key, so now you have to revoke that key-pair. The key-server can do that as well.\n\nSo the protocol is: in FPM.ftd you see domains. You keep a cache of domain to keypair id on your file system. Periodically you check with key-server if the domain for any keypair has changed, if so fpm commands start reporting warnings that domain entries are out of date, please update ASAP. fpm can now chose to, if you so want, start using the latest entries from key-server for the identities, so say if dependencies say you are publishing on <username>.github.io, but since key-server says domain moved to <username>.com, fpm will start fetching from <username>.com.",
@@ -322,120 +92,6 @@
           "condition": null,
           "dependency_type": "Value",
           "parameters": {},
-          "remaining": null
-        }
-      ]
-    }
-  },
-  "grid-sample.ftd#color1": {
-    "value": {
-      "$kind$": "light",
-      "dark": "rgba(153, 148, 148, 0.3)",
-      "light": "rgba(153, 148, 148, 0.3)"
-    },
-    "dependencies": {
-      "0,3": [
-        {
-          "condition": null,
-          "dependency_type": "Style",
-          "parameters": {
-            "background-color": {
-              "default": null,
-              "value": {
-                "important": false,
-                "reference": null,
-                "value": {
-                  "$kind$": "light",
-                  "dark": "rgba(153,148,148,0.3)",
-                  "light": "rgba(153,148,148,0.3)"
-                }
-              }
-            },
-            "dependents": {
-              "default": null,
-              "value": {
-                "important": false,
-                "reference": null,
-                "value": []
-              }
-            }
-          },
-          "remaining": null
-        }
-      ]
-    }
-  },
-  "grid-sample.ftd#color2": {
-    "value": {
-      "$kind$": "light",
-      "dark": "rgba(13, 131, 225, 0.23)",
-      "light": "rgba(13, 131, 225, 0.23)"
-    },
-    "dependencies": {
-      "0,1": [
-        {
-          "condition": null,
-          "dependency_type": "Style",
-          "parameters": {
-            "background-color": {
-              "default": null,
-              "value": {
-                "important": false,
-                "reference": null,
-                "value": {
-                  "$kind$": "light",
-                  "dark": "rgba(13,131,225,0.23)",
-                  "light": "rgba(13,131,225,0.23)"
-                }
-              }
-            },
-            "dependents": {
-              "default": null,
-              "value": {
-                "important": false,
-                "reference": null,
-                "value": []
-              }
-            }
-          },
-          "remaining": null
-        }
-      ]
-    }
-  },
-  "grid-sample.ftd#color3": {
-    "value": {
-      "$kind$": "light",
-      "dark": "rgba(255, 255, 255, 0.8)",
-      "light": "rgba(255, 255, 255, 0.8)"
-    },
-    "dependencies": {
-      "0,1,2": [
-        {
-          "condition": null,
-          "dependency_type": "Style",
-          "parameters": {
-            "background-color": {
-              "default": null,
-              "value": {
-                "important": false,
-                "reference": null,
-                "value": {
-                  "$kind$": "light",
-                  "dark": "rgba(255,255,255,0.8)",
-                  "light": "rgba(255,255,255,0.8)"
-                }
-              }
-            },
-            "dependents": {
-              "default": null,
-              "value": {
-                "important": false,
-                "reference": null,
-                "value": []
-              }
-            }
-          },
           "remaining": null
         }
       ]
@@ -659,12 +315,49 @@ body.fpm-dark .ft_md a code {
 body.fpm-dark .ft_md a:visited code {
     color: #a27de7;
 }
+        
+
+.b_1 {
+    background-color: rgba(13,131,225,0.23)
+}
+
+
+
+.b_2 {
+    background-color: rgba(255,255,255,0.8)
+}
+
+
+
+.c_3 {
+    color: rgba(33,150,243,1)
+}
+
+
+
+.c_4 {
+    color: rgba(0,0,0,1)
+}
+
+
+
+.c_5 {
+    color: rgba(77,77,77,1)
+}
+
+
+
+.b_6 {
+    background-color: rgba(153,148,148,0.3)
+}
+
+
     </style>
 
 </head>
     <body style="height: 100%;">
 
-        <div data-id="main:root" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; height: 100%; justify-content: flex-start; text-decoration: none; white-space: initial; width: 100%" ><div data-id="0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: grid; grid-template-areas: 'header header''sidebar main''sidebar footer'; grid-template-columns: 20% 80%; grid-template-rows: 10% 81% 9%; height: 100%; text-decoration: none; white-space: initial; width: 100%" ><div data-id="0,0:main" data-spacing="margin-left:20px" style="align-items: flex-start; border-bottom-width: 2px !important; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; flex-wrap: nowrap; grid-area: header; height: 100%; justify-content: flex-start; padding: 10px; text-decoration: none; white-space: initial; width: 100%" ><img alt="" data-id="0,0,0:main" src="https://ftd.dev/static/images/logo.svg" style="align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; height: 32px; margin-bottom: auto; margin-top: auto; text-decoration: none; white-space: initial"><div data-id="0,0,1:main" style="align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; margin-bottom: auto; margin-left: 20px; margin-top: auto; text-align: left; text-decoration: none; white-space: initial" class="ft_md">FTD Journal</div></div><div data-id="0,1:main" style="background-color: rgba(13,131,225,0.23); border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: grid; grid-area: sidebar; grid-template-areas: 'header''main''footer'; grid-template-rows: 10% 80% 10%; height: 100%; text-decoration: none; white-space: initial; width: 100%" ><div data-id="0,1,0:main" style="align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; grid-area: header; justify-self: center; text-align: left; text-decoration: none; white-space: initial" class="ft_md">About AmitU</div><div data-id="0,1,1:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; grid-area: main; height: 100%; justify-content: flex-start; overflow-y: auto; padding: 20px; text-decoration: none; white-space: initial; width: 100%" ><img alt="" data-id="0,1,1,0:main" src="https://ca.slack-edge.com/T016XLVEW4W-U0174K0BDB5-gecc6caf7069-512" style="align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; height: 50px; margin-left: auto; margin-right: auto; text-decoration: none; white-space: initial"><div data-id="0,1,1,1:main" style="align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; margin-bottom: 40px; margin-left: auto; margin-right: auto; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Amit Upadhyay (CEO fifthtry)</div><div data-id="0,1,1,2:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md"><p data-id="0,1,1,2,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md"><p>Amit Upadhyay is the Founder and CEO of FifthTry.com, an IIT-Bombay graduate, and
+        <div data-id="main:root" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; height: 100%; justify-content: flex-start; text-decoration: none; white-space: initial; width: 100%" ><div data-id="0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: grid; grid-template-areas: 'header header''sidebar main''sidebar footer'; grid-template-columns: 20% 80%; grid-template-rows: 10% 81% 9%; height: 100%; text-decoration: none; white-space: initial; width: 100%" ><div data-id="0,0:main" data-spacing="margin-left:20px" style="align-items: flex-start; border-bottom-width: 2px !important; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; flex-wrap: nowrap; grid-area: header; height: 100%; justify-content: flex-start; padding: 10px; text-decoration: none; white-space: initial; width: 100%" ><img alt="" data-id="0,0,0:main" src="https://ftd.dev/static/images/logo.svg" style="align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; height: 32px; margin-bottom: auto; margin-top: auto; text-decoration: none; white-space: initial"><div data-id="0,0,1:main" style="align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; margin-bottom: auto; margin-left: 20px; margin-top: auto; text-align: left; text-decoration: none; white-space: initial" class="ft_md">FTD Journal</div></div><div data-id="0,1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: grid; grid-area: sidebar; grid-template-areas: 'header''main''footer'; grid-template-rows: 10% 80% 10%; height: 100%; text-decoration: none; white-space: initial; width: 100%" class="b_1"><div data-id="0,1,0:main" style="align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; grid-area: header; justify-self: center; text-align: left; text-decoration: none; white-space: initial" class="ft_md">About AmitU</div><div data-id="0,1,1:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; grid-area: main; height: 100%; justify-content: flex-start; overflow-y: auto; padding: 20px; text-decoration: none; white-space: initial; width: 100%" ><img alt="" data-id="0,1,1,0:main" src="https://ca.slack-edge.com/T016XLVEW4W-U0174K0BDB5-gecc6caf7069-512" style="align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; height: 50px; margin-left: auto; margin-right: auto; text-decoration: none; white-space: initial"><div data-id="0,1,1,1:main" style="align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; margin-bottom: 40px; margin-left: auto; margin-right: auto; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Amit Upadhyay (CEO fifthtry)</div><div data-id="0,1,1,2:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md"><p data-id="0,1,1,2,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md"><p>Amit Upadhyay is the Founder and CEO of FifthTry.com, an IIT-Bombay graduate, and
 open source contributor. This is his personal blog.</p>
 </p><p data-id="0,1,1,2,1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md"><p>Take up one idea. Make that one idea your life.</p>
 </p><p data-id="0,1,1,2,2:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md"><p>Think of it, dream of it, <a href="http://www.paulgraham.com/top.html">live on that
@@ -677,7 +370,7 @@ idea, and just leave every other idea alone.</p>
 <p>My name is Ozymandias, look at on my works ye mighty and despair.</p>
 </blockquote>
 </p><p data-id="0,1,1,2,7:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md"><p>First, master fundamentals. Then, play infinite games. — James Stuber</p>
-</p></div></div><div data-id="0,1,2:main" style="align-items: flex-start; background-color: rgba(255,255,255,0.8); border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(33,150,243,1); display: flex; flex-direction: row; flex-wrap: nowrap; grid-area: footer; height: 100%; justify-content: space-between; padding: 20px; text-decoration: none; white-space: initial; width: 100%" ><div data-id="0,1,2,0:main" style="align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; margin-bottom: auto; margin-top: auto; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Live Well!! Eat Well!!</div></div></div><div data-id="0,2:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; grid-area: main; height: 100%; justify-content: flex-start; overflow-y: auto; padding: 40px; text-decoration: none; white-space: initial; width: 100%" ><div data-id="0,2,0:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial; width: 100%" ><div data-id="0,2,0,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(0,0,0,1); padding-bottom: 12px; padding-top: 34px; text-align: left; text-decoration: none; white-space: initial" class="ft_md">FTD Journal</div><div data-id="0,2,0,1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(77,77,77,1); line-height: 26px; padding-bottom: 8px; text-align: left; text-decoration: none; white-space: initial" class="ft_md"><p data-id="0,2,0,1,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md"><p>Thoughts: Browsing History
+</p></div></div><div data-id="0,1,2:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; flex-wrap: nowrap; grid-area: footer; height: 100%; justify-content: space-between; padding: 20px; text-decoration: none; white-space: initial; width: 100%" class="b_2 c_3"><div data-id="0,1,2,0:main" style="align-self: center; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; margin-bottom: auto; margin-top: auto; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Live Well!! Eat Well!!</div></div></div><div data-id="0,2:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; grid-area: main; height: 100%; justify-content: flex-start; overflow-y: auto; padding: 40px; text-decoration: none; white-space: initial; width: 100%" ><div data-id="0,2,0:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial; width: 100%" ><div data-id="0,2,0,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; padding-bottom: 12px; padding-top: 34px; text-align: left; text-decoration: none; white-space: initial" class="c_4 ft_md">FTD Journal</div><div data-id="0,2,0,1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; padding-bottom: 8px; text-align: left; text-decoration: none; white-space: initial" class="c_5 ft_md"><p data-id="0,2,0,1,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md"><p>Thoughts: Browsing History
 Readership Tracking
 Linking Using Package Dependency
 So links never break (and original author can keep updating document URL at whim).</p>
@@ -708,7 +401,7 @@ your own domain, and with others, eg github if you host on <!-- raw HTML omitted
 </p><p data-id="0,2,0,1,18:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md"><p>So real identity has always been the keypair, but we would be using the domain name. We need a distributed store of keypair to DNS mapping, so you can switch the domain for your keypair. Some sort of “key server” is needed. Your followers where initially thinking that the Github generated keypair was the true identity, but since you update your identity, github will notify them about the true identity and your FPM will now store the true identity of what you are following.</p>
 </p><p data-id="0,2,0,1,19:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md"><p>We also will have to allow for “key revocation”, say one of the guardians went rogue, got bought out, hacked etc, and starts sending updates on your behalf to your followers, you had signed that key-pair with your key, so now you have to revoke that key-pair. The key-server can do that as well.</p>
 </p><p data-id="0,2,0,1,20:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; line-height: 26px; text-align: left; text-decoration: none; white-space: initial" class="ft_md"><p>So the protocol is: in FPM.ftd you see domains. You keep a cache of domain to keypair id on your file system. Periodically you check with key-server if the domain for any keypair has changed, if so fpm commands start reporting warnings that domain entries are out of date, please update ASAP. fpm can now chose to, if you so want, start using the latest entries from key-server for the identities, so say if dependencies say you are publishing on <!-- raw HTML omitted -->.github.io, but since key-server says domain moved to <!-- raw HTML omitted -->.com, fpm will start fetching from <!-- raw HTML omitted -->.com.</p>
-</p></div></div></div><div data-id="0,3:main" style="align-items: flex-start; background-color: rgba(153,148,148,0.3); border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; flex-wrap: nowrap; grid-area: footer; height: 100%; justify-content: space-between; padding: 20px; text-decoration: none; white-space: initial; width: 100%" ><div data-id="0,3,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="ft_md">LinkedIn</div><div data-id="0,3,1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Facebook</div><div data-id="0,3,2:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Gmail</div></div></div></div>
+</p></div></div></div><div data-id="0,3:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; flex-wrap: nowrap; grid-area: footer; height: 100%; justify-content: space-between; padding: 20px; text-decoration: none; white-space: initial; width: 100%" class="b_6"><div data-id="0,3,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="ft_md">LinkedIn</div><div data-id="0,3,1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Facebook</div><div data-id="0,3,2:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Gmail</div></div></div></div>
 
 
     <script>
@@ -1120,6 +813,9 @@ let ftd_utils = {
     handle_action: function (id, target_variable, value, data, ftd_external_children) {
         var styles_edited = [];
         let visibility_change = false;
+        if (ftd_utils.get_data_value(data, target_variable) === value) {
+            return;
+        }
         handle_action_(id, target_variable, value, data, ftd_external_children, styles_edited, visibility_change);
 
         function handle_action_(id, target_variable, value, data, ftd_external_children, styles_edited, visibility_change) {
@@ -1682,6 +1378,8 @@ window.ftd.post_init = function () {
     const COOKIE_DARK_MODE = "dark";
     const COOKIE_LIGHT_MODE = "light";
     const DARK_MODE_CLASS = "fpm-dark";
+    const MOBILE_CLASS = "ftd-mobile";
+    const XL_CLASS = "ftd-xl";
     const FTD_DEVICE = "ftd#device";
     const FTD_MOBILE_BREAKPOINT = "ftd#mobile-breakpoint";
     const FTD_DESKTOP_BREAKPOINT = "ftd#desktop-breakpoint";
@@ -1727,10 +1425,24 @@ window.ftd.post_init = function () {
         let mobile_breakpoint = window.ftd.get_value("main", FTD_MOBILE_BREAKPOINT);
         let desktop_breakpoint = window.ftd.get_value("main", FTD_DESKTOP_BREAKPOINT);
         if (width <= mobile_breakpoint) {
+            document.body.classList.add(MOBILE_CLASS);
+            if (document.body.classList.contains(XL_CLASS)) {
+                document.body.classList.remove(XL_CLASS);
+            }
             return "mobile";
         }
         if (width > desktop_breakpoint) {
-            return "xxl";
+            document.body.classList.add(XL_CLASS);
+            if (document.body.classList.contains(MOBILE_CLASS)) {
+                document.body.classList.remove(MOBILE_CLASS);
+            }
+            return "xl";
+        }
+        if (document.body.classList.contains(MOBILE_CLASS)) {
+            document.body.classList.remove(MOBILE_CLASS);
+        }
+        if (document.body.classList.contains(XL_CLASS)) {
+            document.body.classList.remove(XL_CLASS);
         }
         return "desktop";
     }

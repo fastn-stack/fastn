@@ -9,46 +9,7 @@
   "ftd#dark-mode": {
     "value": false,
     "dependencies": {
-      "$value#kind$": [
-        {
-          "condition": true,
-          "dependency_type": "Variable",
-          "parameters": {
-            "variable-component.ftd#green": {
-              "default": {
-                "important": false,
-                "reference": null,
-                "value": "light"
-              },
-              "value": {
-                "important": false,
-                "reference": null,
-                "value": "dark"
-              }
-            }
-          },
-          "remaining": null
-        },
-        {
-          "condition": true,
-          "dependency_type": "Variable",
-          "parameters": {
-            "variable-component.ftd#red": {
-              "default": {
-                "important": false,
-                "reference": null,
-                "value": "light"
-              },
-              "value": {
-                "important": false,
-                "reference": null,
-                "value": "dark"
-              }
-            }
-          },
-          "remaining": null
-        }
-      ]
+      "$value#kind$": []
     }
   },
   "ftd#desktop-breakpoint": {
@@ -57,9 +18,7 @@
   },
   "ftd#device": {
     "value": "desktop",
-    "dependencies": {
-      "$value#kind$": []
-    }
+    "dependencies": {}
   },
   "ftd#follow-system-dark-mode": {
     "value": true,
@@ -72,44 +31,6 @@
   "ftd#system-dark-mode": {
     "value": false,
     "dependencies": {}
-  },
-  "variable-component.ftd#green": {
-    "value": {
-      "$kind$": "light",
-      "dark": "green",
-      "light": "green"
-    },
-    "dependencies": {
-      "0,2,3": [
-        {
-          "condition": null,
-          "dependency_type": "Style",
-          "parameters": {
-            "color": {
-              "default": null,
-              "value": {
-                "important": false,
-                "reference": null,
-                "value": {
-                  "$kind$": "light",
-                  "dark": "rgba(0,128,0,1)",
-                  "light": "rgba(0,128,0,1)"
-                }
-              }
-            },
-            "dependents": {
-              "default": null,
-              "value": {
-                "important": false,
-                "reference": null,
-                "value": []
-              }
-            }
-          },
-          "remaining": null
-        }
-      ]
-    }
   },
   "variable-component.ftd#msg@0,2": {
     "value": "hello again",
@@ -132,73 +53,6 @@
           "condition": null,
           "dependency_type": "Value",
           "parameters": {},
-          "remaining": null
-        }
-      ]
-    }
-  },
-  "variable-component.ftd#red": {
-    "value": {
-      "$kind$": "light",
-      "dark": "red",
-      "light": "red"
-    },
-    "dependencies": {
-      "0,1": [
-        {
-          "condition": null,
-          "dependency_type": "Style",
-          "parameters": {
-            "color": {
-              "default": null,
-              "value": {
-                "important": false,
-                "reference": null,
-                "value": {
-                  "$kind$": "light",
-                  "dark": "rgba(255,0,0,1)",
-                  "light": "rgba(255,0,0,1)"
-                }
-              }
-            },
-            "dependents": {
-              "default": null,
-              "value": {
-                "important": false,
-                "reference": null,
-                "value": []
-              }
-            }
-          },
-          "remaining": null
-        }
-      ],
-      "0,2,2": [
-        {
-          "condition": null,
-          "dependency_type": "Style",
-          "parameters": {
-            "color": {
-              "default": null,
-              "value": {
-                "important": false,
-                "reference": null,
-                "value": {
-                  "$kind$": "light",
-                  "dark": "rgba(255,0,0,1)",
-                  "light": "rgba(255,0,0,1)"
-                }
-              }
-            },
-            "dependents": {
-              "default": null,
-              "value": {
-                "important": false,
-                "reference": null,
-                "value": []
-              }
-            }
-          },
           "remaining": null
         }
       ]
@@ -375,12 +229,25 @@ body.fpm-dark .ft_md a code {
 body.fpm-dark .ft_md a:visited code {
     color: #a27de7;
 }
+        
+
+.c_1 {
+    color: rgba(255,0,0,1)
+}
+
+
+
+.c_2 {
+    color: rgba(0,128,0,1)
+}
+
+
     </style>
 
 </head>
     <body style="height: 100%;">
 
-        <div data-id="main:root" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; height: 100%; justify-content: flex-start; text-decoration: none; white-space: initial; width: 100%" ><div data-id="0:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial" ><div data-id="0,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="ft_md">amitu</div><div data-id="0,1:main" style="border-radius: 0px; border-style: solid; border-width: 10px; box-sizing: border-box; color: rgba(255,0,0,1); text-align: left; text-decoration: none; white-space: initial" class="ft_md">hello</div><div data-id="0,2:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial" ><div data-id="0,2,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="ft_md">hello again</div><div data-id="0,2,1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="ft_md">hello world!</div><div data-id="0,2,2:main" style="border-radius: 0px; border-style: solid; border-width: 20px; box-sizing: border-box; color: rgba(255,0,0,1); text-align: left; text-decoration: none; white-space: initial" class="ft_md">hello</div><div data-id="0,2,3:main" style="border-radius: 0px; border-style: solid; border-width: 10px; box-sizing: border-box; color: rgba(0,128,0,1); text-align: left; text-decoration: none; white-space: initial" class="ft_md">hello amitu!</div></div></div></div>
+        <div data-id="main:root" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; height: 100%; justify-content: flex-start; text-decoration: none; white-space: initial; width: 100%" ><div data-id="0:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial" ><div data-id="0,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="ft_md">amitu</div><div data-id="0,1:main" style="border-radius: 0px; border-style: solid; border-width: 10px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="c_1 ft_md">hello</div><div data-id="0,2:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial" ><div data-id="0,2,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="ft_md">hello again</div><div data-id="0,2,1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="ft_md">hello world!</div><div data-id="0,2,2:main" style="border-radius: 0px; border-style: solid; border-width: 20px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="c_1 ft_md">hello</div><div data-id="0,2,3:main" style="border-radius: 0px; border-style: solid; border-width: 10px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="c_2 ft_md">hello amitu!</div></div></div></div>
 
 
     <script>
@@ -792,6 +659,9 @@ let ftd_utils = {
     handle_action: function (id, target_variable, value, data, ftd_external_children) {
         var styles_edited = [];
         let visibility_change = false;
+        if (ftd_utils.get_data_value(data, target_variable) === value) {
+            return;
+        }
         handle_action_(id, target_variable, value, data, ftd_external_children, styles_edited, visibility_change);
 
         function handle_action_(id, target_variable, value, data, ftd_external_children, styles_edited, visibility_change) {
@@ -1354,6 +1224,8 @@ window.ftd.post_init = function () {
     const COOKIE_DARK_MODE = "dark";
     const COOKIE_LIGHT_MODE = "light";
     const DARK_MODE_CLASS = "fpm-dark";
+    const MOBILE_CLASS = "ftd-mobile";
+    const XL_CLASS = "ftd-xl";
     const FTD_DEVICE = "ftd#device";
     const FTD_MOBILE_BREAKPOINT = "ftd#mobile-breakpoint";
     const FTD_DESKTOP_BREAKPOINT = "ftd#desktop-breakpoint";
@@ -1399,10 +1271,24 @@ window.ftd.post_init = function () {
         let mobile_breakpoint = window.ftd.get_value("main", FTD_MOBILE_BREAKPOINT);
         let desktop_breakpoint = window.ftd.get_value("main", FTD_DESKTOP_BREAKPOINT);
         if (width <= mobile_breakpoint) {
+            document.body.classList.add(MOBILE_CLASS);
+            if (document.body.classList.contains(XL_CLASS)) {
+                document.body.classList.remove(XL_CLASS);
+            }
             return "mobile";
         }
         if (width > desktop_breakpoint) {
-            return "xxl";
+            document.body.classList.add(XL_CLASS);
+            if (document.body.classList.contains(MOBILE_CLASS)) {
+                document.body.classList.remove(MOBILE_CLASS);
+            }
+            return "xl";
+        }
+        if (document.body.classList.contains(MOBILE_CLASS)) {
+            document.body.classList.remove(MOBILE_CLASS);
+        }
+        if (document.body.classList.contains(XL_CLASS)) {
+            document.body.classList.remove(XL_CLASS);
         }
         return "desktop";
     }
