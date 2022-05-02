@@ -25,7 +25,7 @@ pub use component::{ChildComponent, Component, Instruction};
 pub use condition::Condition;
 pub use event::{Action, Event};
 pub use ftd::value_with_default::ValueWithDefault;
-pub use html::{anchor, color, length, overflow, Node};
+pub use html::{anchor, color, length, overflow, Collector, Node, StyleSpec};
 pub use or_type::OrType;
 pub use rt::RT;
 pub use ui::{
@@ -61,6 +61,7 @@ pub struct Document {
     pub data: ftd::DataDependenciesMap,
     pub external_children: ExternalChildrenDependenciesMap,
     pub body_events: String,
+    pub css_collector: String,
 }
 
 pub fn get_name<'a, 'b>(prefix: &'a str, s: &'b str, doc_id: &str) -> ftd::p1::Result<&'b str> {

@@ -146,7 +146,7 @@ impl Document {
             .filter(|(k, v)| (!v.dependencies.is_empty() || always_include.contains(k)))
             .collect::<ftd::DataDependenciesMap>();
         ftd::Element::get_dark_mode_dependencies(self, &mut data_dependencies);
-        ftd::Element::get_device_dependencies(self, &mut data_dependencies);
+        // ftd::Element::get_device_dependencies(self, &mut data_dependencies);
 
         data_dependencies
     }
@@ -161,13 +161,15 @@ impl Document {
         self.main = rt.render()?;
         self.data.extend(rt.bag);
         let data = self.rt_data();
+        let mut collector: ftd::Collector = Default::default();
         Ok(ftd::Document {
-            html: self.html(id, doc_id, &data),
+            html: self.html(id, doc_id, &data, &mut collector),
             data,
             external_children: ftd::Element::get_external_children_dependencies(
                 &self.main.container.children,
             ),
             body_events: self.body_events(id),
+            css_collector: collector.to_css(),
         })
     }
 
@@ -175,11 +177,13 @@ impl Document {
         let external_children =
             ftd::Element::get_external_children_dependencies(&self.main.container.children);
         let rt_data = self.rt_data();
+        let mut collector: ftd::Collector = Default::default();
         ftd::Document {
-            html: self.html(id, doc_id, &rt_data),
+            html: self.html(id, doc_id, &rt_data, &mut collector),
             data: rt_data,
             external_children,
             body_events: self.body_events(id),
+            css_collector: collector.to_css(),
         }
     }
 
@@ -306,12 +310,18 @@ impl Document {
         }
     }
 
-    pub fn html(&self, id: &str, doc_id: &str, rt_data: &ftd::DataDependenciesMap) -> String {
-        let mut node = self.main.to_node(doc_id, false);
+    pub fn html(
+        &self,
+        id: &str,
+        doc_id: &str,
+        rt_data: &ftd::DataDependenciesMap,
+        collector: &mut ftd::Collector,
+    ) -> String {
+        let mut node = self.main.to_node(doc_id, false, collector);
         node.children = {
             let mut children = vec![];
             for child in self.main.container.children.iter() {
-                let mut child_node = child.to_node(doc_id);
+                let mut child_node = child.to_node(doc_id, collector);
                 let common = if let Some(common) = child.get_common() {
                     common
                 } else {
