@@ -248,22 +248,22 @@ impl Node {
 }
 
 impl ftd::Element {
-    pub fn to_node(&self, doc_id: &str) -> Node {
+    pub fn to_node(&self, doc_id: &str, collector: &mut ftd::Collector) -> Node {
         match self {
-            Self::Row(i) => (i.to_node(doc_id)),
-            Self::Scene(i) => (i.to_node(doc_id)),
-            Self::Grid(i) => (i.to_node(doc_id)),
-            Self::Markup(i) => (i.to_node(doc_id)),
-            Self::Text(i) => (i.to_node(doc_id)),
-            Self::TextBlock(i) => (i.to_node(doc_id)),
-            Self::Code(i) => (i.to_node(doc_id)),
-            Self::Image(i) => (i.to_node(doc_id)),
-            Self::Column(i) => (i.to_node(doc_id, true)),
-            Self::IFrame(i) => (i.to_node(doc_id)),
-            Self::Input(i) => (i.to_node(doc_id)),
-            Self::Integer(i) => (i.to_node(doc_id)),
-            Self::Boolean(i) => (i.to_node(doc_id)),
-            Self::Decimal(i) => (i.to_node(doc_id)),
+            Self::Row(i) => (i.to_node(doc_id, collector)),
+            Self::Scene(i) => (i.to_node(doc_id, collector)),
+            Self::Grid(i) => (i.to_node(doc_id, collector)),
+            Self::Markup(i) => (i.to_node(doc_id, collector)),
+            Self::Text(i) => (i.to_node(doc_id, collector)),
+            Self::TextBlock(i) => (i.to_node(doc_id, collector)),
+            Self::Code(i) => (i.to_node(doc_id, collector)),
+            Self::Image(i) => (i.to_node(doc_id, collector)),
+            Self::Column(i) => (i.to_node(doc_id, true, collector)),
+            Self::IFrame(i) => (i.to_node(doc_id, collector)),
+            Self::Input(i) => (i.to_node(doc_id, collector)),
+            Self::Integer(i) => (i.to_node(doc_id, collector)),
+            Self::Boolean(i) => (i.to_node(doc_id, collector)),
+            Self::Decimal(i) => (i.to_node(doc_id, collector)),
             Self::Null => Node {
                 condition: None,
                 events: vec![],
@@ -307,7 +307,12 @@ impl Node {
         }
     }
 
-    fn from_container(common: &ftd::Common, container: &ftd::Container, doc_id: &str) -> Self {
+    fn from_container(
+        common: &ftd::Common,
+        container: &ftd::Container,
+        doc_id: &str,
+        collector: &mut ftd::Collector,
+    ) -> Self {
         let mut attrs = common.attrs();
         attrs.extend(container.attrs());
         let mut style = common.style(doc_id);
@@ -329,7 +334,7 @@ impl Node {
                 (
                     Some(id.to_string()),
                     external_children_container.clone(),
-                    child.iter().map(|v| v.to_node(doc_id)).collect(),
+                    child.iter().map(|v| v.to_node(doc_id, collector)).collect(),
                 )
             } else {
                 (None, vec![], vec![])
@@ -355,7 +360,7 @@ impl Node {
 }
 
 impl ftd::Scene {
-    pub fn to_node(&self, doc_id: &str) -> Node {
+    pub fn to_node(&self, doc_id: &str, collector: &mut ftd::Collector) -> Node {
         let node = {
             let mut node = Node {
                 node: s("div"),
@@ -405,7 +410,7 @@ impl ftd::Scene {
                     .children
                     .iter()
                     .map(|v| {
-                        let mut n = v.to_node(doc_id);
+                        let mut n = v.to_node(doc_id, collector);
                         n.style.insert(s("position"), s("absolute"));
                         n
                     })
@@ -424,7 +429,7 @@ impl ftd::Scene {
                         child
                             .iter()
                             .map(|v| {
-                                let mut n = v.to_node(doc_id);
+                                let mut n = v.to_node(doc_id, collector);
                                 n.style.insert(s("position"), s("absolute"));
                                 n
                             })
@@ -464,8 +469,8 @@ impl ftd::Scene {
 }
 
 impl ftd::Grid {
-    pub fn to_node(&self, doc_id: &str) -> Node {
-        let mut n = Node::from_container(&self.common, &self.container, doc_id);
+    pub fn to_node(&self, doc_id: &str, collector: &mut ftd::Collector) -> Node {
+        let mut n = Node::from_container(&self.common, &self.container, doc_id, collector);
         if self.inline {
             n.style.insert(s("display"), s("inline-grid"));
         } else {
@@ -505,7 +510,7 @@ impl ftd::Grid {
         n.children = {
             let mut children = vec![];
             for child in self.container.children.iter() {
-                let mut child_node = child.to_node(doc_id);
+                let mut child_node = child.to_node(doc_id, collector);
                 let common = if let Some(common) = child.get_common() {
                     common
                 } else {
@@ -531,8 +536,8 @@ impl ftd::Grid {
 }
 
 impl ftd::Row {
-    pub fn to_node(&self, doc_id: &str) -> Node {
-        let mut n = Node::from_container(&self.common, &self.container, doc_id);
+    pub fn to_node(&self, doc_id: &str, collector: &mut ftd::Collector) -> Node {
+        let mut n = Node::from_container(&self.common, &self.container, doc_id, collector);
         if !self.common.is_not_visible {
             n.style.insert(s("display"), s("flex"));
         }
@@ -562,7 +567,7 @@ impl ftd::Row {
         n.children = {
             let mut children = vec![];
             for child in self.container.children.iter() {
-                let mut child_node = child.to_node(doc_id);
+                let mut child_node = child.to_node(doc_id, collector);
                 let common = if let Some(common) = child.get_common() {
                     common
                 } else {
@@ -588,8 +593,13 @@ impl ftd::Row {
 }
 
 impl ftd::Column {
-    pub fn to_node(&self, doc_id: &str, evaluate_children: bool) -> Node {
-        let mut n = Node::from_container(&self.common, &self.container, doc_id);
+    pub fn to_node(
+        &self,
+        doc_id: &str,
+        evaluate_children: bool,
+        collector: &mut ftd::Collector,
+    ) -> Node {
+        let mut n = Node::from_container(&self.common, &self.container, doc_id, collector);
         if !self.common.is_not_visible {
             n.style.insert(s("display"), s("flex"));
         }
@@ -619,7 +629,7 @@ impl ftd::Column {
             n.children = {
                 let mut children = vec![];
                 for child in self.container.children.iter() {
-                    let mut child_node = child.to_node(doc_id);
+                    let mut child_node = child.to_node(doc_id, collector);
                     let common = if let Some(common) = child.get_common() {
                         common
                     } else {
@@ -645,8 +655,108 @@ impl ftd::Column {
     }
 }
 
+/// One instance of Collector is created during entire page render. It collects
+/// all the classes needed, and all the fonts needed to render the page. At the
+/// end of Node generation, values collected in this struct is included in
+/// generated HTML.
+#[derive(Debug, PartialEq, Clone, Default)]
+pub struct Collector {
+    /// this stores all the classes in the document
+    pub classes: std::collections::BTreeMap<i32, StyleSpec>,
+}
+
+#[derive(Debug, PartialEq, Clone, Default)]
+pub struct StyleSpec {
+    pub class_name: String,
+    pub prefix: Option<String>,
+    pub styles: std::collections::BTreeMap<String, String>,
+}
+
+impl ftd::Collector {
+    fn insert_class(
+        &mut self,
+        styles: std::collections::BTreeMap<String, String>,
+        prefix: Option<String>,
+    ) -> String {
+        let mut key_id = 0;
+        for (key, values) in self.classes.iter() {
+            if values.styles.eq(&styles) {
+                return values.class_name.to_string();
+            }
+            if key.ge(&key_id) {
+                key_id = key.to_owned();
+            }
+        }
+        key_id += 1;
+        let class_name = get_full_class_name(&key_id, &styles);
+        self.classes.insert(
+            key_id,
+            ftd::StyleSpec {
+                prefix,
+                class_name: class_name.clone(),
+                styles,
+            },
+        );
+        return class_name;
+
+        fn get_full_class_name(
+            key: &i32,
+            styles: &std::collections::BTreeMap<String, String>,
+        ) -> String {
+            let styles = styles
+                .keys()
+                .filter_map(|v| v.get(0..1))
+                .collect::<Vec<&str>>()
+                .join("");
+            format!("{}_{}", styles, key)
+        }
+    }
+
+    pub(crate) fn to_css(&self) -> String {
+        let mut styles = "".to_string();
+        for v in self.classes.values() {
+            let current_styles = v
+                .styles
+                .iter()
+                .map(|(k, v)| format!("{}: {}", *k, ftd::html::escape(v))) // TODO: escape needed?
+                .collect::<Vec<String>>()
+                .join(";\n");
+            if let Some(ref prefix) = v.prefix {
+                styles = format!(
+                    indoc::indoc! {"
+                        {styles}
+    
+                        {prefix} {{
+                            {current_styles}
+                        }}
+    
+                    "},
+                    styles = styles,
+                    prefix = prefix,
+                    current_styles = current_styles
+                );
+                continue;
+            }
+            styles = format!(
+                indoc::indoc! {"
+                    {styles}
+
+                    .{class_name} {{
+                        {current_styles}
+                    }}
+
+                "},
+                styles = styles,
+                class_name = v.class_name,
+                current_styles = current_styles
+            );
+        }
+        styles
+    }
+}
+
 impl ftd::Text {
-    pub fn to_node(&self, doc_id: &str) -> Node {
+    pub fn to_node(&self, doc_id: &str, collector: &mut ftd::Collector) -> Node {
         // TODO: proper tag based on self.common.region
         // TODO: if format is not markdown use pre
         let node = match &self.common.link {
@@ -666,25 +776,41 @@ impl ftd::Text {
         }
 
         if let Some(ref font) = self.font {
-            n.style.insert(s("font-family"), font.font.to_string());
-            n.style
-                .insert(s("line-height"), format!("{}px", font.desktop.line_height));
-            n.style.insert(
+            let mut styles: std::collections::BTreeMap<String, String> = Default::default();
+            styles.insert(s("font-family"), font.font.to_string());
+            styles.insert(s("line-height"), format!("{}px", font.desktop.line_height));
+            styles.insert(
                 s("letter-spacing"),
                 format!("{}px", font.desktop.letter_spacing),
             );
-            n.style
-                .insert(s("font-size"), format!("{}px", font.desktop.size));
-            n.style.insert(s("font-weight"), font.weight.to_string());
+            styles.insert(s("font-size"), format!("{}px", font.desktop.size));
+            styles.insert(s("font-weight"), font.weight.to_string());
             if font.style.italic {
-                n.style.insert(s("font-style"), s("italic"));
+                styles.insert(s("font-style"), s("italic"));
             }
             if font.style.underline {
-                n.style.insert(s("text-decoration"), s("underline"));
+                styles.insert(s("text-decoration"), s("underline"));
             }
             if font.style.strike {
-                n.style.insert(s("text-decoration"), s("line-through"));
+                styles.insert(s("text-decoration"), s("line-through"));
             }
+            // if self.common.conditional_attribute.keys().any(|x| styles.keys().contains(&x)) {
+            //     // todo: then don't make class
+            //     // since font is not a conditional attribute this is not yet needed
+            // }
+            let class = collector.insert_class(styles.clone(), None);
+            styles.insert(s("line-height"), format!("{}px", font.mobile.line_height));
+            styles.insert(
+                s("letter-spacing"),
+                format!("{}px", font.mobile.letter_spacing),
+            );
+            styles.insert(s("font-size"), format!("{}px", font.mobile.size));
+            collector.insert_class(styles.clone(), Some(format!("body.ftd-mobile .{}", class)));
+            styles.insert(s("line-height"), format!("{}px", font.xl.line_height));
+            styles.insert(s("letter-spacing"), format!("{}px", font.xl.letter_spacing));
+            styles.insert(s("font-size"), format!("{}px", font.xl.size));
+            collector.insert_class(styles.clone(), Some(format!("body.ftd-xl .{}", class)));
+            n.classes.push(class);
         }
 
         if self.style.italic {
@@ -711,7 +837,7 @@ impl ftd::Text {
 }
 
 impl ftd::TextBlock {
-    pub fn to_node(&self, doc_id: &str) -> Node {
+    pub fn to_node(&self, doc_id: &str, _collector: &mut ftd::Collector) -> Node {
         // TODO: proper tag based on self.common.region
         // TODO: if format is not markdown use pre
         let node = match &self.common.link {
@@ -769,7 +895,7 @@ impl ftd::TextBlock {
 }
 
 impl ftd::Code {
-    pub fn to_node(&self, doc_id: &str) -> Node {
+    pub fn to_node(&self, doc_id: &str, collector: &mut ftd::Collector) -> Node {
         let node = match &self.common.link {
             Some(_) => "a",
             None => match &self.common.submit {
@@ -787,25 +913,37 @@ impl ftd::Code {
         }
 
         if let Some(ref font) = self.font {
-            n.style.insert(s("font-family"), font.font.to_string());
-            n.style
-                .insert(s("line-height"), format!("{}px", font.desktop.line_height));
-            n.style.insert(
+            let mut styles: std::collections::BTreeMap<String, String> = Default::default();
+            styles.insert(s("font-family"), font.font.to_string());
+            styles.insert(s("line-height"), format!("{}px", font.desktop.line_height));
+            styles.insert(
                 s("letter-spacing"),
                 format!("{}px", font.desktop.letter_spacing),
             );
-            n.style
-                .insert(s("font-size"), format!("{}px", font.desktop.size));
-            n.style.insert(s("font-weight"), font.weight.to_string());
+            styles.insert(s("font-size"), format!("{}px", font.desktop.size));
+            styles.insert(s("font-weight"), font.weight.to_string());
             if font.style.italic {
-                n.style.insert(s("font-style"), s("italic"));
+                styles.insert(s("font-style"), s("italic"));
             }
             if font.style.underline {
-                n.style.insert(s("text-decoration"), s("underline"));
+                styles.insert(s("text-decoration"), s("underline"));
             }
             if font.style.strike {
-                n.style.insert(s("text-decoration"), s("line-through"));
+                styles.insert(s("text-decoration"), s("line-through"));
             }
+            let class = collector.insert_class(styles.clone(), None);
+            styles.insert(s("line-height"), format!("{}px", font.mobile.line_height));
+            styles.insert(
+                s("letter-spacing"),
+                format!("{}px", font.mobile.letter_spacing),
+            );
+            styles.insert(s("font-size"), format!("{}px", font.mobile.size));
+            collector.insert_class(styles.clone(), Some(format!("body.ftd-mobile .{}", class)));
+            styles.insert(s("line-height"), format!("{}px", font.xl.line_height));
+            styles.insert(s("letter-spacing"), format!("{}px", font.xl.letter_spacing));
+            styles.insert(s("font-size"), format!("{}px", font.xl.size));
+            collector.insert_class(styles.clone(), Some(format!("body.ftd-xl .{}", class)));
+            n.classes.push(class);
         }
 
         if self.style.italic {
@@ -831,7 +969,7 @@ impl ftd::Code {
 }
 
 impl ftd::Image {
-    pub fn to_node(&self, doc_id: &str) -> Node {
+    pub fn to_node(&self, doc_id: &str, _collector: &mut ftd::Collector) -> Node {
         let mut n = Node::from_common("img", &self.common, doc_id);
         if self.common.link.is_some() {
             n.node = s("a");
@@ -882,7 +1020,7 @@ impl ftd::Image {
 }
 
 impl ftd::IFrame {
-    pub fn to_node(&self, doc_id: &str) -> Node {
+    pub fn to_node(&self, doc_id: &str, _collector: &mut ftd::Collector) -> Node {
         let mut n = Node::from_common("iframe", &self.common, doc_id);
         n.attrs.insert(s("src"), escape(self.src.as_str()));
         n.attrs.insert(s("allow"), s("fullscreen"));
@@ -892,7 +1030,7 @@ impl ftd::IFrame {
 }
 
 impl ftd::Markups {
-    pub fn to_node(&self, doc_id: &str) -> Node {
+    pub fn to_node(&self, doc_id: &str, collector: &mut ftd::Collector) -> Node {
         let node = match &self.common.link {
             Some(_) => "a",
             None => match &self.common.submit {
@@ -910,25 +1048,37 @@ impl ftd::Markups {
         }
 
         if let Some(ref font) = self.font {
-            n.style.insert(s("font-family"), font.font.to_string());
-            n.style
-                .insert(s("line-height"), format!("{}px", font.desktop.line_height));
-            n.style.insert(
+            let mut styles: std::collections::BTreeMap<String, String> = Default::default();
+            styles.insert(s("font-family"), font.font.to_string());
+            styles.insert(s("line-height"), format!("{}px", font.desktop.line_height));
+            styles.insert(
                 s("letter-spacing"),
                 format!("{}px", font.desktop.letter_spacing),
             );
-            n.style
-                .insert(s("font-size"), format!("{}px", font.desktop.size));
-            n.style.insert(s("font-weight"), font.weight.to_string());
+            styles.insert(s("font-size"), format!("{}px", font.desktop.size));
+            styles.insert(s("font-weight"), font.weight.to_string());
             if font.style.italic {
-                n.style.insert(s("font-style"), s("italic"));
+                styles.insert(s("font-style"), s("italic"));
             }
             if font.style.underline {
-                n.style.insert(s("text-decoration"), s("underline"));
+                styles.insert(s("text-decoration"), s("underline"));
             }
             if font.style.strike {
-                n.style.insert(s("text-decoration"), s("line-through"));
+                styles.insert(s("text-decoration"), s("line-through"));
             }
+            let class = collector.insert_class(styles.clone(), None);
+            styles.insert(s("line-height"), format!("{}px", font.mobile.line_height));
+            styles.insert(
+                s("letter-spacing"),
+                format!("{}px", font.mobile.letter_spacing),
+            );
+            styles.insert(s("font-size"), format!("{}px", font.mobile.size));
+            collector.insert_class(styles.clone(), Some(format!("body.ftd-mobile .{}", class)));
+            styles.insert(s("line-height"), format!("{}px", font.xl.line_height));
+            styles.insert(s("letter-spacing"), format!("{}px", font.xl.letter_spacing));
+            styles.insert(s("font-size"), format!("{}px", font.xl.size));
+            collector.insert_class(styles.clone(), Some(format!("body.ftd-xl .{}", class)));
+            n.classes.push(class);
         }
 
         if self.style.italic {
@@ -955,21 +1105,26 @@ impl ftd::Markups {
         n.children = self
             .children
             .iter()
-            .map(|v| v.to_node(doc_id, !self.line))
+            .map(|v| v.to_node(doc_id, !self.line, collector))
             .collect();
         n
     }
 }
 
 impl ftd::Markup {
-    pub fn to_node(&self, doc_id: &str, is_paragraph: bool) -> Node {
+    pub fn to_node(
+        &self,
+        doc_id: &str,
+        is_paragraph: bool,
+        collector: &mut ftd::Collector,
+    ) -> Node {
         let mut n = match self.itext {
             ftd::IText::Text(ref t)
             | ftd::IText::Integer(ref t)
             | ftd::IText::Boolean(ref t)
-            | ftd::IText::Decimal(ref t) => t.to_node(doc_id),
-            ftd::IText::TextBlock(ref t) => t.to_node(doc_id),
-            IText::Markup(ref t) => t.to_node(doc_id),
+            | ftd::IText::Decimal(ref t) => t.to_node(doc_id, collector),
+            ftd::IText::TextBlock(ref t) => t.to_node(doc_id, collector),
+            IText::Markup(ref t) => t.to_node(doc_id, collector),
         };
         if n.node.eq("div") {
             if is_paragraph {
@@ -986,14 +1141,14 @@ impl ftd::Markup {
         n.children = self
             .children
             .iter()
-            .map(|v| v.to_node(doc_id, false))
+            .map(|v| v.to_node(doc_id, false, collector))
             .collect();
         n
     }
 }
 
 impl ftd::Input {
-    pub fn to_node(&self, doc_id: &str) -> Node {
+    pub fn to_node(&self, doc_id: &str, _collector: &mut ftd::Collector) -> Node {
         let mut n = Node::from_common("input", &self.common, doc_id);
         n.classes = self.common.add_class();
         if let Some(ref p) = self.placeholder {

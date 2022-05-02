@@ -108,6 +108,7 @@ fn write(id: &str, doc: String) {
             .replace("__ftd_js__", ftd_js.as_str())
             .replace("__ftd_body_events__", doc.body_events.as_str())
             .replace("__ftd_css__", ftd::css())
+            .replace("__ftd_element_css__", doc.css_collector.as_str())
             .as_bytes(),
     )
     .expect("failed to write to .html file");

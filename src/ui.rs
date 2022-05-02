@@ -610,7 +610,7 @@ impl Element {
             };
             value_condition(&common.reference, &common.data_id, data);
             color_condition(common, &common.data_id, data);
-            font_condition(&common.data_id, data, font);
+            font_condition(&common.data_id, data, font, &common.conditional_attribute);
             image_condition(&common.data_id, data, &common.background_image);
             style_condition(&common.conditional_attribute, &common.data_id, data);
             visibility_condition(&common.condition, &common.data_id, data);
@@ -635,7 +635,7 @@ impl Element {
                 markup_get_event_dependencies(&child.children, data);
                 value_condition(&common.reference, &common.data_id, data);
                 color_condition(common, &common.data_id, data);
-                font_condition(&common.data_id, data, font);
+                font_condition(&common.data_id, data, font, &common.conditional_attribute);
                 image_condition(&common.data_id, data, &common.background_image);
                 style_condition(&common.conditional_attribute, &common.data_id, data);
                 visibility_condition(&common.condition, &common.data_id, data);
@@ -801,8 +801,17 @@ impl Element {
             id: &Option<String>,
             data: &mut ftd::DataDependenciesMap,
             font: &Option<Type>,
+            conditions: &std::collections::BTreeMap<String, ConditionalAttribute>,
         ) {
             let id = id.clone().expect("universal id should be present");
+            if !conditions
+                .keys()
+                .any(|x| ["line-height", "font-size"].contains(&x.as_str()))
+            {
+                //mention all font attributes.
+                // since font is not conditional attribute yet so this will always pass
+                return;
+            }
             if let Some(ref type_) = font {
                 font_condition(type_, id.as_str(), data);
             }

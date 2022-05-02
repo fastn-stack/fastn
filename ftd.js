@@ -968,6 +968,8 @@ window.ftd.post_init = function () {
     const COOKIE_DARK_MODE = "dark";
     const COOKIE_LIGHT_MODE = "light";
     const DARK_MODE_CLASS = "fpm-dark";
+    const MOBILE_CLASS = "ftd-mobile";
+    const XL_CLASS = "ftd-xl";
     const FTD_DEVICE = "ftd#device";
     const FTD_MOBILE_BREAKPOINT = "ftd#mobile-breakpoint";
     const FTD_DESKTOP_BREAKPOINT = "ftd#desktop-breakpoint";
@@ -1013,10 +1015,24 @@ window.ftd.post_init = function () {
         let mobile_breakpoint = window.ftd.get_value("main", FTD_MOBILE_BREAKPOINT);
         let desktop_breakpoint = window.ftd.get_value("main", FTD_DESKTOP_BREAKPOINT);
         if (width <= mobile_breakpoint) {
+            document.body.classList.add(MOBILE_CLASS);
+            if (document.body.classList.contains(XL_CLASS)) {
+                document.body.classList.remove(XL_CLASS);
+            }
             return "mobile";
         }
         if (width > desktop_breakpoint) {
-            return "xxl";
+            document.body.classList.add(XL_CLASS);
+            if (document.body.classList.contains(MOBILE_CLASS)) {
+                document.body.classList.remove(MOBILE_CLASS);
+            }
+            return "xl";
+        }
+        if (document.body.classList.contains(MOBILE_CLASS)) {
+            document.body.classList.remove(MOBILE_CLASS);
+        }
+        if (document.body.classList.contains(XL_CLASS)) {
+            document.body.classList.remove(XL_CLASS);
         }
         return "desktop";
     }
