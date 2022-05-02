@@ -406,6 +406,9 @@ let ftd_utils = {
     handle_action: function (id, target_variable, value, data, ftd_external_children) {
         var styles_edited = [];
         let visibility_change = false;
+        if (ftd_utils.get_data_value(data, target_variable) === value) {
+            return;
+        }
         handle_action_(id, target_variable, value, data, ftd_external_children, styles_edited, visibility_change);
 
         function handle_action_(id, target_variable, value, data, ftd_external_children, styles_edited, visibility_change) {
