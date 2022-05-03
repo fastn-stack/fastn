@@ -221,6 +221,7 @@ pub(crate) fn replace_markers(
         .replace("__ftd_js__", fpm::ftd_js().as_str())
         .replace("__ftd_body_events__", main_rt.body_events.as_str())
         .replace("__ftd_css__", fpm::ftd_css())
+        .replace("__ftd_element_css__", main_rt.css_collector.as_str())
         .replace("__fpm_js__", fpm::fpm_js())
         .replace(
             "__ftd_data_main__",
