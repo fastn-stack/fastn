@@ -69,7 +69,8 @@ fn ftd_js() -> String {
     if fpm::utils::is_test() {
         return "FTD_JS".to_string();
     }
-    ftd::js()
+    // ftd::js()  // Temporarily using a copy till ftd is fixed
+    include_str!("../ftd.js").into()
 }
 
 fn ftd_css() -> &'static str {
