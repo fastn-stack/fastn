@@ -161,7 +161,7 @@ impl Document {
         self.main = rt.render()?;
         self.data.extend(rt.bag);
         let data = self.rt_data();
-        let mut collector: ftd::Collector = Default::default();
+        let mut collector = ftd::Collector::new();
         Ok(ftd::Document {
             html: self.html(id, doc_id, &data, &mut collector),
             data,
@@ -177,7 +177,7 @@ impl Document {
         let external_children =
             ftd::Element::get_external_children_dependencies(&self.main.container.children);
         let rt_data = self.rt_data();
-        let mut collector: ftd::Collector = Default::default();
+        let mut collector = ftd::Collector::new();
         ftd::Document {
             html: self.html(id, doc_id, &rt_data, &mut collector),
             data: rt_data,

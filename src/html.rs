@@ -668,41 +668,147 @@ impl ftd::Column {
 #[derive(Debug, PartialEq, Clone, Default)]
 pub struct Collector {
     /// this stores all the classes in the document
-    pub classes: std::collections::BTreeMap<i32, StyleSpec>,
+    pub classes: std::collections::BTreeMap<String, StyleSpec>,
+    pub key: i32,
 }
 
 #[derive(Debug, PartialEq, Clone, Default)]
 pub struct StyleSpec {
-    pub class_name: String,
     pub prefix: Option<String>,
     pub styles: std::collections::BTreeMap<String, String>,
 }
 
 impl ftd::Collector {
+    pub(crate) fn new() -> ftd::Collector {
+        ftd::Collector {
+            classes: Default::default(),
+            key: -1,
+        }
+    }
+
+    fn get_classes(&mut self, styles: std::collections::BTreeMap<String, String>) -> Vec<String> {
+        self.classes
+            .iter()
+            .filter(|(_, values)| values.styles.eq(&styles))
+            .map(|(k, _)| k.to_string())
+            .collect()
+    }
+
+    fn insert_class_font(&mut self, font: &ftd::Type) -> String {
+        let mut styles: std::collections::BTreeMap<String, String> = Default::default();
+        styles.insert(s("font-family"), font.font.to_string());
+        styles.insert(s("line-height"), format!("{}px", font.desktop.line_height));
+        styles.insert(
+            s("letter-spacing"),
+            format!("{}px", font.desktop.letter_spacing),
+        );
+        styles.insert(s("font-size"), format!("{}px", font.desktop.size));
+        styles.insert(s("font-weight"), font.weight.to_string());
+        if font.style.italic {
+            styles.insert(s("font-style"), s("italic"));
+        }
+        if font.style.underline {
+            styles.insert(s("text-decoration"), s("underline"));
+        }
+        if font.style.strike {
+            styles.insert(s("text-decoration"), s("line-through"));
+        }
+        // if self.common.conditional_attribute.keys().any(|x| styles.keys().contains(&x)) {
+        //     // todo: then don't make class
+        //     // since font is not a conditional attribute this is not yet needed
+        // }
+        let desktop_style = styles.clone();
+
+        styles.insert(s("line-height"), format!("{}px", font.mobile.line_height));
+        styles.insert(
+            s("letter-spacing"),
+            format!("{}px", font.mobile.letter_spacing),
+        );
+        styles.insert(s("font-size"), format!("{}px", font.mobile.size));
+        let mobile_style = styles.clone();
+
+        styles.insert(s("line-height"), format!("{}px", font.xl.line_height));
+        styles.insert(s("letter-spacing"), format!("{}px", font.xl.letter_spacing));
+        styles.insert(s("font-size"), format!("{}px", font.xl.size));
+        let xl_style = styles;
+
+        let classes = self.get_classes(desktop_style.clone());
+
+        for class in classes {
+            let mobile_class = format!("body.ftd-mobile .{}", class);
+            let mobile_style_spec = if let Some(mobile_style_spec) = self.classes.get(&mobile_class)
+            {
+                mobile_style_spec
+            } else {
+                continue;
+            };
+
+            let xl_class = format!("body.ftd-xl .{}", class);
+            let xl_style_spec = if let Some(xl_style_spec) = self.classes.get(&xl_class) {
+                xl_style_spec
+            } else {
+                continue;
+            };
+
+            if mobile_style_spec.styles.eq(&mobile_style) && xl_style_spec.styles.eq(&xl_style) {
+                return class;
+            }
+        }
+        let class = self.insert_class(desktop_style, None);
+        self.insert_class(mobile_style, Some(format!("body.ftd-mobile .{}", class)));
+        self.insert_class(xl_style, Some(format!("body.ftd-xl .{}", class)));
+        class
+    }
+
+    fn insert_class_color(&mut self, col: &ftd::Color, key: &str) -> String {
+        let mut styles: std::collections::BTreeMap<String, String> = Default::default();
+        styles.insert(s(key), color(&col.light));
+        let light_style = styles.clone();
+
+        styles.insert(s(key), color(&col.dark));
+        let dark_style = styles;
+
+        let classes = self.get_classes(light_style.clone());
+
+        for class in classes {
+            let dark_class = format!("body.fpm-dark .{}", class);
+            let dark_style_spec = if let Some(dark_style_spec) = self.classes.get(&dark_class) {
+                dark_style_spec
+            } else {
+                continue;
+            };
+
+            if dark_style_spec.styles.eq(&dark_style) {
+                return class;
+            }
+        }
+        let class = self.insert_class(light_style, None);
+        self.insert_class(dark_style, Some(format!("body.fpm-dark .{}", class)));
+        class
+    }
+
     fn insert_class(
         &mut self,
         styles: std::collections::BTreeMap<String, String>,
         prefix: Option<String>,
     ) -> String {
-        let mut key_id = 0;
-        for (key, values) in self.classes.iter() {
-            if values.styles.eq(&styles) {
-                return values.class_name.to_string();
+        if let Some(ref prefix) = prefix {
+            if self.classes.get(prefix).is_some() {
+                return prefix.to_owned();
             }
-            if key.ge(&key_id) {
-                key_id = key.to_owned();
-            }
+            self.classes.insert(
+                prefix.to_string(),
+                ftd::StyleSpec {
+                    prefix: Some(prefix.to_string()),
+                    styles,
+                },
+            );
+            return prefix.to_string();
         }
-        key_id += 1;
-        let class_name = get_full_class_name(&key_id, &styles);
-        self.classes.insert(
-            key_id,
-            ftd::StyleSpec {
-                prefix,
-                class_name: class_name.clone(),
-                styles,
-            },
-        );
+        self.key += 1;
+        let class_name = get_full_class_name(&self.key, &styles);
+        self.classes
+            .insert(class_name.to_string(), ftd::StyleSpec { prefix, styles });
         return class_name;
 
         fn get_full_class_name(
@@ -720,7 +826,7 @@ impl ftd::Collector {
 
     pub(crate) fn to_css(&self) -> String {
         let mut styles = "".to_string();
-        for v in self.classes.values() {
+        for (k, v) in self.classes.iter() {
             let current_styles = v
                 .styles
                 .iter()
@@ -753,7 +859,7 @@ impl ftd::Collector {
 
                 "},
                 styles = styles,
-                class_name = v.class_name,
+                class_name = k,
                 current_styles = current_styles
             );
         }
@@ -782,41 +888,7 @@ impl ftd::Text {
         }
 
         if let Some(ref font) = self.font {
-            let mut styles: std::collections::BTreeMap<String, String> = Default::default();
-            styles.insert(s("font-family"), font.font.to_string());
-            styles.insert(s("line-height"), format!("{}px", font.desktop.line_height));
-            styles.insert(
-                s("letter-spacing"),
-                format!("{}px", font.desktop.letter_spacing),
-            );
-            styles.insert(s("font-size"), format!("{}px", font.desktop.size));
-            styles.insert(s("font-weight"), font.weight.to_string());
-            if font.style.italic {
-                styles.insert(s("font-style"), s("italic"));
-            }
-            if font.style.underline {
-                styles.insert(s("text-decoration"), s("underline"));
-            }
-            if font.style.strike {
-                styles.insert(s("text-decoration"), s("line-through"));
-            }
-            // if self.common.conditional_attribute.keys().any(|x| styles.keys().contains(&x)) {
-            //     // todo: then don't make class
-            //     // since font is not a conditional attribute this is not yet needed
-            // }
-            let class = collector.insert_class(styles.clone(), None);
-            styles.insert(s("line-height"), format!("{}px", font.mobile.line_height));
-            styles.insert(
-                s("letter-spacing"),
-                format!("{}px", font.mobile.letter_spacing),
-            );
-            styles.insert(s("font-size"), format!("{}px", font.mobile.size));
-            collector.insert_class(styles.clone(), Some(format!("body.ftd-mobile .{}", class)));
-            styles.insert(s("line-height"), format!("{}px", font.xl.line_height));
-            styles.insert(s("letter-spacing"), format!("{}px", font.xl.letter_spacing));
-            styles.insert(s("font-size"), format!("{}px", font.xl.size));
-            collector.insert_class(styles.clone(), Some(format!("body.ftd-xl .{}", class)));
-            n.classes.push(class);
+            n.classes.push(collector.insert_class_font(font));
         }
 
         if self.style.italic {
@@ -919,37 +991,7 @@ impl ftd::Code {
         }
 
         if let Some(ref font) = self.font {
-            let mut styles: std::collections::BTreeMap<String, String> = Default::default();
-            styles.insert(s("font-family"), font.font.to_string());
-            styles.insert(s("line-height"), format!("{}px", font.desktop.line_height));
-            styles.insert(
-                s("letter-spacing"),
-                format!("{}px", font.desktop.letter_spacing),
-            );
-            styles.insert(s("font-size"), format!("{}px", font.desktop.size));
-            styles.insert(s("font-weight"), font.weight.to_string());
-            if font.style.italic {
-                styles.insert(s("font-style"), s("italic"));
-            }
-            if font.style.underline {
-                styles.insert(s("text-decoration"), s("underline"));
-            }
-            if font.style.strike {
-                styles.insert(s("text-decoration"), s("line-through"));
-            }
-            let class = collector.insert_class(styles.clone(), None);
-            styles.insert(s("line-height"), format!("{}px", font.mobile.line_height));
-            styles.insert(
-                s("letter-spacing"),
-                format!("{}px", font.mobile.letter_spacing),
-            );
-            styles.insert(s("font-size"), format!("{}px", font.mobile.size));
-            collector.insert_class(styles.clone(), Some(format!("body.ftd-mobile .{}", class)));
-            styles.insert(s("line-height"), format!("{}px", font.xl.line_height));
-            styles.insert(s("letter-spacing"), format!("{}px", font.xl.letter_spacing));
-            styles.insert(s("font-size"), format!("{}px", font.xl.size));
-            collector.insert_class(styles.clone(), Some(format!("body.ftd-xl .{}", class)));
-            n.classes.push(class);
+            n.classes.push(collector.insert_class_font(font));
         }
 
         if self.style.italic {
@@ -1054,37 +1096,7 @@ impl ftd::Markups {
         }
 
         if let Some(ref font) = self.font {
-            let mut styles: std::collections::BTreeMap<String, String> = Default::default();
-            styles.insert(s("font-family"), font.font.to_string());
-            styles.insert(s("line-height"), format!("{}px", font.desktop.line_height));
-            styles.insert(
-                s("letter-spacing"),
-                format!("{}px", font.desktop.letter_spacing),
-            );
-            styles.insert(s("font-size"), format!("{}px", font.desktop.size));
-            styles.insert(s("font-weight"), font.weight.to_string());
-            if font.style.italic {
-                styles.insert(s("font-style"), s("italic"));
-            }
-            if font.style.underline {
-                styles.insert(s("text-decoration"), s("underline"));
-            }
-            if font.style.strike {
-                styles.insert(s("text-decoration"), s("line-through"));
-            }
-            let class = collector.insert_class(styles.clone(), None);
-            styles.insert(s("line-height"), format!("{}px", font.mobile.line_height));
-            styles.insert(
-                s("letter-spacing"),
-                format!("{}px", font.mobile.letter_spacing),
-            );
-            styles.insert(s("font-size"), format!("{}px", font.mobile.size));
-            collector.insert_class(styles.clone(), Some(format!("body.ftd-mobile .{}", class)));
-            styles.insert(s("line-height"), format!("{}px", font.xl.line_height));
-            styles.insert(s("letter-spacing"), format!("{}px", font.xl.letter_spacing));
-            styles.insert(s("font-size"), format!("{}px", font.xl.size));
-            collector.insert_class(styles.clone(), Some(format!("body.ftd-xl .{}", class)));
-            n.classes.push(class);
+            n.classes.push(collector.insert_class_font(font));
         }
 
         if self.style.italic {
@@ -1301,36 +1313,21 @@ impl ftd::Common {
             if self.conditional_attribute.contains_key("background-color") {
                 d.insert(s("background-color"), color(&p.light));
             } else {
-                let mut styles: std::collections::BTreeMap<String, String> = Default::default();
-                styles.insert(s("background-color"), color(&p.light));
-                let class = collector.insert_class(styles.clone(), None);
-                styles.insert(s("background-color"), color(&p.dark));
-                collector.insert_class(styles.clone(), Some(format!("body.fpm-dark .{}", class)));
-                classes.push(class);
+                classes.push(collector.insert_class_color(&p, "background-color"));
             }
         }
         if let Some(p) = &self.color {
             if self.conditional_attribute.contains_key("color") {
                 d.insert(s("color"), color(&p.light));
             } else {
-                let mut styles: std::collections::BTreeMap<String, String> = Default::default();
-                styles.insert(s("color"), color(&p.light));
-                let class = collector.insert_class(styles.clone(), None);
-                styles.insert(s("color"), color(&p.dark));
-                collector.insert_class(styles.clone(), Some(format!("body.fpm-dark .{}", class)));
-                classes.push(class);
+                classes.push(collector.insert_class_color(&p, "color"));
             }
         }
         if let Some(p) = &self.border_color {
             if self.conditional_attribute.contains_key("border-color") {
                 d.insert(s("border-color"), color(&p.light));
             } else {
-                let mut styles: std::collections::BTreeMap<String, String> = Default::default();
-                styles.insert(s("border-color"), color(&p.light));
-                let class = collector.insert_class(styles.clone(), None);
-                styles.insert(s("border-color"), color(&p.dark));
-                collector.insert_class(styles.clone(), Some(format!("body.fpm-dark .{}", class)));
-                classes.push(class);
+                classes.push(collector.insert_class_color(&p, "border-color"));
             }
         }
         if let Some(p) = &self.overflow_x {
