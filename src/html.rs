@@ -1313,21 +1313,21 @@ impl ftd::Common {
             if self.conditional_attribute.contains_key("background-color") {
                 d.insert(s("background-color"), color(&p.light));
             } else {
-                classes.push(collector.insert_class_color(&p, "background-color"));
+                classes.push(collector.insert_class_color(p, "background-color"));
             }
         }
         if let Some(p) = &self.color {
             if self.conditional_attribute.contains_key("color") {
                 d.insert(s("color"), color(&p.light));
             } else {
-                classes.push(collector.insert_class_color(&p, "color"));
+                classes.push(collector.insert_class_color(p, "color"));
             }
         }
         if let Some(p) = &self.border_color {
             if self.conditional_attribute.contains_key("border-color") {
                 d.insert(s("border-color"), color(&p.light));
             } else {
-                classes.push(collector.insert_class_color(&p, "border-color"));
+                classes.push(collector.insert_class_color(p, "border-color"));
             }
         }
         if let Some(p) = &self.overflow_x {
