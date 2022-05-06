@@ -44,7 +44,7 @@ $processor$: toc
     url: processors/get-data/
   - `import: fpm`
     url: /fpm-vars/
-- How To: /how-to/
+- How To: 
   - Install `fpm`: /how-to/install/
   - Update `fpm`: /how-to/update/
   - Get started with Github pages: /how-to/get-started-github-pages/
@@ -113,14 +113,10 @@ $processor$: toc
 
 - About Themes: /themes/
 - Package Interface: /package-interface/
-  - Theme Documentation: /theme/docs/
-  - Article PI: /theme/article/
-  - Book PI: /theme/book/
-  - Presentation PI: /theme/presentation/
 - Theme Config: /theme/config/
 - Responsive Themes: /theme/responsive/
 - Dark Mode: /theme/dark-mode/
-- Components: /theme/components/
+- Components: /theme/header/
   - Dark Mode: /theme/header/
 - FPM Variables: /vars/
 - FPM Typography: /theme/type/
