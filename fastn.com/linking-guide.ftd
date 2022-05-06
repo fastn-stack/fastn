@@ -1,0 +1,9 @@
+-- ft.page-with-toc: `ftd` linking guide
+
+-- ft.markdown:
+
+We put all links without slash in front. And we always put slash in end.
+
+Example:
+
+Instead of using `[fpm build](/build/)` or `[fpm build](/build)`, use like `[fpm build](build/)`
