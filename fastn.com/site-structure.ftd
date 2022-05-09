@@ -1,0 +1,154 @@
+-- ft.page-with-toc: FPM Site Structure
+toc: $config.themes-toc
+
+"FPM Site Structure" is the name of a structure we recommend for sites. It is
+optional, you can create any site structure you want for your sites. FPM has
+built in support for FPM Site Structure.
+
+-- ds.h1: The Structure
+
+A site should have "sections" on top level. Each section should ideally be
+listed in the header of the site.
+
+Each section should have one or more sub-sections. Sub-section should be listed
+as second level navigation in the header of the site. Each sub-section has one
+or more documents organised in a "table of content", and TOC should be shown
+on the left.
+
+In the UI we also have "Section/Sub Section" Nav. It automatically will show the
+section name and sub-section name.
+
+-- ds.h1: Site Structure "Language" And `$processor$`
+
+FPM comes with a `$processor$` called "site-structure", which parses the site
+structure as a string.
+
+-- ds.code: Site Structure Example
+lang: txt
+
+# Section: section/url/
+
+# If Section: Has A Colon In The Name
+url: sectionURL
+
+## Sub Section: sub/url/
+
+## If Sub:
+url: whatever
+
+- ToC Item: toc/
+
+-- ds.markdown:
+
+The TOC parser is already written, we will reuse it.
+
+-- ds.code: `$processor$` usage
+lang: ftd
+
+\-- fpm.site-structure:
+$processor$: site-structure
+
+# Section: section/url/
+
+-- ds.h1: Missing Sub Section
+
+If a TOC comes directly in a section the section would have a single anonymous
+sub-section, and this sub-section would not be shown in UI. In UI people will
+just see the section header and toc on left, no sub-section line.
+
+-- ds.h1: SubSection Header Overrides
+
+-- ds.code: `$processor$` usage
+lang: ftd
+
+\-- fpm.site-structure:
+$processor$: site-structure
+
+# Section: section/url/
+heading: Heading To Be Shown In Side
+
+-- ds.markdown:
+
+In this case "Section" would be shown in the header, but "Heading To Be Shown
+In Side" would be shown in the left side.
+
+`heading` works for both section and sub-section.
+
+-- ds.h1: URL Can Be A Reference
+
+Any URL referred in the text could start with `$` and if so it is a variable
+reference.
+
+-- ds.h1: FPM Build Behaviour
+
+If a document is not part of site-structure, it will be built as is built right
+now. All documents that are part of site-strcucture are built in a special way.
+
+FPM build will first parse the site-structure and build all the URLs that are
+not part of it, and then in another pass build all the ones that are in it.
+
+A document can appear in multiple places in site-structure, in that case we will
+build one HTML file for each time a ftd document appears in site-structure.
+
+Note: A document can appear only once in a single TOC?
+
+FPM Special Variables: `current-section`, `current-sub-section` etc would be
+set. Further, whicheve TOC the document is being built for, whereever the
+document appears in toc, the `toc-item.selected` is set to `true`.
+
+-- ds.h1: Canonical URL
+
+If a ftd document appears multiple times in site-structure, one of them would
+be the canonical, the "main" URL. Eg if `foo.ftd` appears in s1 and s2, one of
+them would have the URL `/foo/` and other will be `/foo/-/s1/`. Which one?
+
+By default the canonical is picked based on first appearence. But in the
+site-structure, at the bottom we can pick the canonical.
+
+-- ds.code: `$processor$` usage
+lang: ftd
+
+\-- fpm.site-structure:
+$processor$: site-structure
+
+# Section 1: section/url/
+
+- foo: foo/
+
+# Section 2: section-2/url/
+
+- foo: foo/
+  canonical: true
+
+
+-- ds.markdown:
+
+We have declared that `foo/` listed under `section-2/url/` is the canonical,
+and the URL would not be "mangled". The url for `foo/` in "section/url/" would
+be mangled to "foo/-/section/url/".
+
+If `canonical` is not used, the first entry is considered canonical.
+
+-- ds.h1: How Would Document Look Like With Site-Structure
+
+When not using site-structure, the `sections`, `sub-sections`, `toc` etc has
+to be added to a document. Eg if document is `foo.ftd` it contains:
+
+-- ds.code:
+lang: ftd
+
+\-- ft.page-with-toc: FPM Site Structure
+toc: $config.themes-toc
+
+-- ds.markdown:
+
+With site structure, these parameters have to be omitted:
+
+-- ds.code:
+lang: ftd
+
+\-- ft.page-with-toc: FPM Site Structure
+
+-- ds.markdown:
+
+In this case the `fpm.site-structure` is be used from `config.ftd` file.

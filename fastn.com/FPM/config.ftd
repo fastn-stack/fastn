@@ -112,18 +112,19 @@ $processor$: toc
 -- fpm.toc-item list themes-toc:
 $processor$: toc
 
-- About Themes: /themes/
-- Package Interface: /package-interface/
-- Theme Config: /theme/config/
-- Responsive Themes: /theme/responsive/
-- Dark Mode: /theme/dark-mode/
-- Components: /theme/header/
-  - Dark Mode: /theme/header/
-- FPM Variables: /vars/
-- FPM Typography: /theme/type/
-- FPM Color: /theme/color/
-- FPM Space: /theme/space/
-- How to use Google Font: /theme/google-font-how-to-use/
+- About Themes: themes/
+- Package Interface: package-interface/
+- Theme Config: theme/config/
+- Responsive Themes: theme/responsive/
+- Dark Mode: theme/dark-mode/
+- Components: theme/header/
+  - Dark Mode: theme/header/
+- FPM Variables: vars/
+- FPM Typography: theme/type/
+- FPM Color: theme/color/
+- FPM Space: theme/space/
+- How to use Google Font: theme/google-font-how-to-use/
+- FPM Site Structure: site-structure/
 
 -- fpm.toc-item list learn:
 $processor$: toc
