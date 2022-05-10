@@ -27,6 +27,10 @@ string list implements:
 
 
 
+-- optional string sitemap:
+
+
+
 -- record font-data:
 caption name:
 optional string woff:

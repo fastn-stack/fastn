@@ -29,6 +29,9 @@ pub struct Config {
     /// When printing filenames for users consumption we want to print the paths relative to the
     /// `original_directory`, so we keep track of the original directory.
     pub original_directory: camino::Utf8PathBuf,
+    /// The extra_data stores the data passed for variables in ftd files as context.
+    ///
+    /// This data is processed by `get-data` processor.
     pub extra_data: serde_json::Map<String, serde_json::Value>,
 }
 
@@ -278,6 +281,7 @@ impl Config {
             package.dependencies = deps;
 
             let auto_imports: Vec<String> = b.get("fpm#auto-import")?;
+
             // let mut aliases = std::collections::HashMap::<String, String>::new();
             let auto_import = auto_imports
                 .iter()
@@ -287,6 +291,7 @@ impl Config {
 
             package.ignored_paths = b.get::<Vec<String>>("fpm#ignore")?;
             package.fonts = b.get("fpm#font")?;
+            package.sitemap = b.get("fpm#sitemap")?;
             package
         };
 
@@ -589,6 +594,7 @@ impl PackageTemp {
             ignored_paths: vec![],
             fonts: vec![],
             import_auto_imports_from_original: self.import_auto_imports_from_original,
+            sitemap: None,
         }
     }
 }
@@ -596,6 +602,7 @@ impl PackageTemp {
 #[derive(Debug, Clone)]
 pub struct Package {
     pub name: String,
+    /// The `versioned` stores the boolean value storing of the fpm package is versioned or not
     pub versioned: bool,
     pub translation_of: Box<Option<Package>>,
     pub translations: Vec<Package>,
@@ -609,6 +616,8 @@ pub struct Package {
     pub dependencies: Vec<fpm::Dependency>,
     /// `auto_import` keeps track of the global auto imports in the package.
     pub auto_import: Vec<fpm::AutoImport>,
+    /// `fpm_path` contains the fpm package root. This value is found in `FPM.ftd` or
+    /// `FPM.manifest.ftd` file.
     pub fpm_path: Option<camino::Utf8PathBuf>,
     /// `ignored` keeps track of files that are to be ignored by `fpm build`, `fpm sync` etc.
     pub ignored_paths: Vec<String>,
@@ -617,6 +626,10 @@ pub struct Package {
     /// Note that this too is kind of bad design, we will move fonts to `fpm::Package` struct soon.
     pub fonts: Vec<fpm::Font>,
     pub import_auto_imports_from_original: bool,
+    /// sitemap stores the structure of the package. The structure includes sections, subsections
+    /// and table of content (`toc`). This automatically converts the documents in package into the
+    /// corresponding to structure.
+    pub sitemap: Option<String>,
 }
 
 impl Package {
@@ -637,6 +650,7 @@ impl Package {
             ignored_paths: vec![],
             fonts: vec![],
             import_auto_imports_from_original: true,
+            sitemap: None,
         }
     }
 
