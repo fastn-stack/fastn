@@ -73,6 +73,7 @@ $processor$: toc
 - Roadmap: roadmap/
 - Journal: journal/
 - How Versioning Works: dev/versioning/
+- What is `FPM.manifest.ftd`?: dev/fpm-manifest/
 
 -- fpm.toc-item list crate-toc:
 $processor$: toc
