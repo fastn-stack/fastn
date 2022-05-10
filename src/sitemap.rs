@@ -116,7 +116,7 @@ impl SitemapParser {
                     // Heading can not have any attributes. Append the item and look for the next input
                     rest = iter.collect::<String>();
                     self.state = ParsingState::ParsingSection;
-                    if let Some(content) = rest.strip_prefix("#") {
+                    if let Some(content) = rest.strip_prefix('#') {
                         if !ParsingState::ParsingSection.eq(&self.state) {
                             return Err(ParseError::InvalidTOCItem {
                                 doc_id: self.doc_name.clone(),
