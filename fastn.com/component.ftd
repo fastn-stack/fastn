@@ -218,9 +218,13 @@ width: fill
 spacing: 5
 
 --- ftd.text: $name
+color: $fpm.color.main.text
+role: $fpm.type.label-small
 
 --- ftd.text: $value
 width: fill
+color: $fpm.color.main.text
+role: $fpm.type.label-small
 
 
 -- ftd.column:
@@ -233,11 +237,11 @@ padding: 10
 -- heading: hello there! This is my heading
 
 
--- label: Name
+-- label: Name: 
 value: Amit Upadhyay
 
 
--- label: Location
+-- label: Location: 
 value: Banglore, India
 
 
