@@ -374,7 +374,15 @@ impl fpm::Package {
             .collect();
         package.auto_import = auto_import;
         package.fonts = ftd_document.get("fpm#font")?;
-        package.sitemap = ftd_document.get("fpm#sitemap")?;
+        let sitemap: Option<String> = ftd_document.get("fpm#sitemap")?;
+        package.sitemap = if let Some(sitemap) = sitemap {
+            Some(fpm::sitemap::Sitemap::parse(
+                sitemap.as_str(),
+                package.name.as_str(),
+            )?)
+        } else {
+            None
+        };
 
         if download_dependencies {
             for dep in package.dependencies.iter_mut() {

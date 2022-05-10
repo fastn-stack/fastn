@@ -16,6 +16,7 @@ mod font;
 mod i18n;
 mod library;
 mod render;
+mod sitemap;
 mod snapshot;
 mod tracker;
 mod translation;
@@ -410,6 +411,9 @@ pub enum Error {
 
     #[error("FromPathBufError: {}", _0)]
     FromPathBufError(#[from] camino::FromPathBufError),
+
+    #[error("SitemapParseError: {}", _0)]
+    SitemapParseError(#[from] fpm::sitemap::ParseError),
 }
 
 pub type Result<T> = std::result::Result<T, Error>;

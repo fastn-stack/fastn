@@ -1,3 +1,4 @@
+use crate::sitemap::Sitemap;
 use std::convert::TryInto;
 
 /// `Config` struct keeps track of configuration parameters that is shared with the entire
@@ -291,7 +292,15 @@ impl Config {
 
             package.ignored_paths = b.get::<Vec<String>>("fpm#ignore")?;
             package.fonts = b.get("fpm#font")?;
-            package.sitemap = b.get("fpm#sitemap")?;
+            let sitemap: Option<String> = b.get("fpm#sitemap")?;
+            package.sitemap = if let Some(sitemap) = sitemap {
+                Some(fpm::sitemap::Sitemap::parse(
+                    sitemap.as_str(),
+                    package.name.as_str(),
+                )?)
+            } else {
+                None
+            };
             package
         };
 
@@ -442,7 +451,7 @@ impl Config {
         id: &str,
         package: &fpm::Package,
     ) -> fpm::Result<fpm::File> {
-        let file_name = get_file_name(&self.root, id)?;
+        let file_name = fpm::Config::get_file_name(&self.root, id)?;
         return self
             .get_files(package)
             .await?
@@ -451,39 +460,39 @@ impl Config {
             .ok_or_else(|| fpm::Error::UsageError {
                 message: format!("No such file found: {}", id),
             });
+    }
 
-        fn get_file_name(root: &camino::Utf8PathBuf, id: &str) -> fpm::Result<String> {
-            if id.eq("/") {
-                if root.join("index.ftd".to_string()).exists() {
-                    return Ok("index.ftd".to_string());
-                }
-                if root.join("README.md".to_string()).exists() {
-                    return Ok("README.md".to_string());
-                }
-                return Err(fpm::Error::UsageError {
-                    message: "File not found".to_string(),
-                });
+    fn get_file_name(root: &camino::Utf8PathBuf, id: &str) -> fpm::Result<String> {
+        if id.eq("/") {
+            if root.join("index.ftd".to_string()).exists() {
+                return Ok("index.ftd".to_string());
             }
-            let mut id = id;
-            if let Some(i) = id.strip_suffix('/') {
-                id = i;
+            if root.join("README.md".to_string()).exists() {
+                return Ok("README.md".to_string());
             }
-            if let Some(i) = id.strip_prefix('/') {
-                id = i;
-            }
-            if root.join(format!("{}.ftd", id)).exists() {
-                return Ok(format!("{}.ftd", id));
-            }
-            if root.join(format!("{}/index.ftd", id)).exists() {
-                return Ok(format!("{}/index.ftd", id));
-            }
-            if root.join(format!("{}/README.md", id)).exists() {
-                return Ok(format!("{}/README.md", id));
-            }
-            Err(fpm::Error::UsageError {
+            return Err(fpm::Error::UsageError {
                 message: "File not found".to_string(),
-            })
+            });
         }
+        let mut id = id;
+        if let Some(i) = id.strip_suffix('/') {
+            id = i;
+        }
+        if let Some(i) = id.strip_prefix('/') {
+            id = i;
+        }
+        if root.join(format!("{}.ftd", id)).exists() {
+            return Ok(format!("{}.ftd", id));
+        }
+        if root.join(format!("{}/index.ftd", id)).exists() {
+            return Ok(format!("{}/index.ftd", id));
+        }
+        if root.join(format!("{}/README.md", id)).exists() {
+            return Ok(format!("{}/README.md", id));
+        }
+        Err(fpm::Error::UsageError {
+            message: "File not found".to_string(),
+        })
     }
 
     pub(crate) async fn get_assets(
@@ -629,7 +638,7 @@ pub struct Package {
     /// sitemap stores the structure of the package. The structure includes sections, subsections
     /// and table of content (`toc`). This automatically converts the documents in package into the
     /// corresponding to structure.
-    pub sitemap: Option<String>,
+    pub sitemap: Option<Sitemap>,
 }
 
 impl Package {
