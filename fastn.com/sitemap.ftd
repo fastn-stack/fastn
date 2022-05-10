@@ -1,0 +1,259 @@
+-- ft.page-with-toc: FPM Sitemap
+toc: $config.themes-toc
+
+"FPM Sitemap" is the name of a structure we recommend for sites. It is
+optional, you can create any sitemap you want for your sites. FPM has
+built in support for FPM Sitemap.
+
+-- ds.h1: The Structure
+
+A site should have "sections" on top level. Each section should ideally be
+listed in the header of the site.
+
+Each section should have one or more sub-sections. Sub-section should be listed
+as second level navigation in the header of the site. Each sub-section has one
+or more documents organised in a "table of content", and TOC should be shown
+on the left.
+
+In the UI we also have "Section/Sub Section" Nav. It automatically will show the
+section name and sub-section name.
+
+-- ds.h1: Sitemap "Language" And `$processor$`
+
+FPM comes with a `$processor$` called "sitemap", which parses the site
+structure as a string.
+
+-- ds.code: Sitemap Example
+lang: txt
+
+# Section: section/url/
+
+# If Section: Has A Colon In The Name
+url: sectionURL
+
+## Sub Section: sub/url/
+
+## If Sub:
+url: whatever
+
+- ToC Item: toc/
+
+-- ds.markdown:
+
+The TOC parser is already written, we will reuse it.
+
+-- ds.code: `$processor$` usage
+lang: ftd
+
+\-- fpm.sitemap:
+$processor$: sitemap
+
+# Section: section/url/
+
+-- ds.h1: Missing Sub Section
+
+If a TOC comes directly in a section the section would have a single anonymous
+sub-section, and this sub-section would not be shown in UI. In UI people will
+just see the section header and toc on left, no sub-section line.
+
+-- ds.h1: SubSection Header Overrides
+
+-- ds.code: `$processor$` usage
+lang: ftd
+
+\-- fpm.sitemap:
+$processor$: sitemap
+
+# Section: section/url/
+heading: Heading To Be Shown In Side
+
+-- ds.markdown:
+
+In this case "Section" would be shown in the header, but "Heading To Be Shown
+In Side" would be shown in the left side.
+
+`heading` works for both section and sub-section.
+
+-- ds.h1: URL Can Be A Reference
+
+Any URL referred in the text could start with `$` and if so it is a variable
+reference.
+
+-- ds.h1: FPM Build Behaviour
+
+If a document is not part of sitemap, it will be built as is built right
+now. All documents that are part of sitemap are built in a special way.
+
+FPM build will first parse the sitemap and build all the URLs that are
+not part of it, and then in another pass build all the ones that are in it.
+
+A document can appear in multiple places in sitemap, in that case we will
+build one HTML file for each time a ftd document appears in sitemap.
+
+Note: A document can appear only once in a single TOC?
+
+FPM Special Variables: `current-section`, `current-sub-section` etc would be
+set. Further, whichever TOC the document is being built for, wherever the
+document appears in toc, the `toc-item.selected` is set to `true`.
+
+-- ds.h1: Canonical URL
+
+If a ftd document appears multiple times in sitemap, one of them would
+be the canonical, the "main" URL. Eg if `foo.ftd` appears in s1 and s2, one of
+them would have the URL `/foo/` and other will be `/foo/-/s1/`. Which one?
+
+By default the canonical is picked based on first appearance. But in the
+sitemap, at the bottom we can pick the canonical.
+
+-- ds.code: `$processor$` usage
+lang: ftd
+
+\-- fpm.sitemap:
+
+# section/url/
+key: value
+
+- foo/
+  key: vale
+- bar/
+  - z/
+    k: v
+
+# Section 2: section-2/url/
+
+- foo: foo/
+  canonical: true
+
+
+-- ds.markdown:
+
+We have declared that `foo/` listed under `section-2/url/` is the canonical,
+and the URL would not be "mangled". The url for `foo/` in "section/url/" would
+be mangled to "foo/-/section/url/".
+
+If `canonical` is not used, the first entry is considered canonical.
+
+-- ds.h1: How Would Document Look Like With Sitemap
+
+When not using sitemap, the `sections`, `sub-sections`, `toc` etc has
+to be added to a document. Eg if document is `foo.ftd` it contains:
+
+-- ds.code:
+lang: ftd
+
+\-- ft.page-with-toc: FPM Sitemap
+toc: $config.themes-toc
+
+-- ds.markdown:
+
+With sitemap, these parameters have to be omitted:
+
+-- ds.code:
+lang: ftd
+
+\-- ft.page-with-toc: FPM Sitemap
+
+-- ds.markdown:
+
+In this case the `fpm.sitemap` is be used from `config.ftd` file.
+
+-- ds.h1: Special Variables
+
+-- ds.h2: `fpm.info` record
+
+The `fpm.info` record contains the metadata. This includes:
+`page-title`, `section-title`, `subsection-title` and `toc-title`. Besides
+this will also contains other metadata.
+
+The record looks like this
+
+-- ds.code: `info` record (fpm.ftd)
+lang: ftd
+
+-- record info:
+optional string page-title:
+optional string section-title:
+optional string subsection-title:
+optional string toc-title:
+
+
+If `page-title` is specified, this will be use as the title of the page.
+If `section-title` is specified, this will be use in section.
+If `subsection-title` is specified, this will be use in subsection.
+If `toc-title` is specified, this will be use in TOC.
+
+-- ds.h1: Key Value Data in Sitemap
+
+Document can use `get-data` processor to get value of any key specified in
+the sitemap. Since a document would get rendered once for each occurrence
+of the document in the sitemap, each occurrence can have different data
+and the occurrence specific data would be returned by `get-data`.
+
+The key value pair supports inheritance. This means that the key-value pair data
+presents in section get passed to it's subsection and TOCs. Similarly, subsection
+key value data get passed to TOCs. And also the parent TOC-item's key value data
+get passed to its children TOC.
+
+-- ds.code:
+lang: ftd
+
+# section/url/
+key1: value1
+key2: value2
+
+## subsection/url/
+key3: value3
+
+- toc/url/
+key4: value4
+    - childtoc/url/
+    key5: value5
+
+-- ds.markdown:
+
+In the above example, the `section/url/` section have two key value data
+`key1: value1` and `key2: value2`
+The `subsection/url/` subsection have three key value data where two are
+inherited from section. i.e. `key1: value1`, `key2: value2` and `key3:
+value3`
+The `toc/url/` toc item have four key value data, where three are inherited
+from section and subsection. i.e. `key1: value1`, `key2: value2`, `key3: value3`
+and `key4: value4`
+The `childtoc/url/` toc item have five key value data, where four are inherited
+from section, subsection and it's parent TOC. i.e. `key1: value1`, `key2: value2`,
+`key3: value3`, `key4: value4` and `key5: value5`
+
+
+-- ds.h1: `page-title` etc can be changed based on where they are in sitemap
+
+Using the `get-data`, the title can be different:
+
+-- ds.code:
+lang: ftd
+
+\-- boolean show-dev-info:
+$processor$: get-data
+
+\-- string page-title: The Normal Title
+
+\-- page-title: The Dev Title
+if: $show-dev-info
+
+\-- ds.h0: $page-title
+
+-- ds.code: sitemap
+lang: ftd
+
+\-- fpm.sitemap:
+
+# Overview
+
+- foo/
+
+# Development
+
+- foo/
+show-dev-info: true
+
+
+
