@@ -166,9 +166,9 @@ width: fill
 spacing: 5
 
 --- ftd.text: $key
-role: $fpm.type.heading-medium
+role: $fpm.type.copy-large
 color: $fpm.color.main.text
 
 --- ftd.text: $value
-role: $fpm.type.heading-medium
+role: $fpm.type.copy-large
 color: $fpm.color.main.text-strong
