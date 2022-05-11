@@ -1,18 +1,107 @@
-#[derive(Debug, Clone, Default, serde::Serialize)]
+/// `Sitemap` stores the sitemap for the fpm package defines in the FPM.ftd
+///
+/// ```ftd
+/// -- fpm.sitemap:
+///
+/// # foo/
+/// ## bar/
+/// - doc-1/
+///   - childdoc-1/
+/// - doc-2/
+/// ```
+///
+/// In above example, the id starts with `#` becomes the section. Similarly the id
+/// starts with `##` becomes the subsection and then the id starts with `-` becomes
+/// the table od content (TOC).
+#[derive(Debug, Clone, Default)]
 pub struct Sitemap {
     pub sections: Vec<Section>,
 }
 
-#[derive(Debug, Clone, Default, serde::Serialize)]
+#[derive(Debug, Clone, Default)]
 pub struct Section {
-    pub subsections: Vec<Subsection>,
+    /// `id` is the document id (or url) provided in the section
+    /// Example:
+    ///
+    /// # foo/
+    ///
+    /// Here foo/ is store as `id`
+    pub id: Option<String>,
+
+    /// 'url' stores the url created for the corresponding file
+    /// This could differ from the `id` if the same document id present
+    /// in the sitemap for more than once.
+    /// Example:
+    ///
+    /// # foo/
+    ///
+    /// # foo/
+    ///
+    /// Here foo/ is called twice. So the other one gets different url.
     pub url: Option<String>,
-    pub is_active: bool,
+
+    /// `title` contains the title of the document. This can be specified inside
+    /// document itself.
+    ///
+    /// Example: In the foo.ftd document
+    ///
+    /// ```ftd
+    /// -- fpm.info DOCUMENT_INFO:
+    /// title: Foo Title
+    /// ```
+    ///
+    /// In above example the `title` stores `Foo Title`.
+    ///
+    /// In the case where the title is not defined as above, the title would be
+    /// according to heading priority
+    ///
+    /// Example: In the foo.ftd document
+    ///
+    /// ```ftd
+    ///
+    /// -- ft.h0: Foo Heading Title
+    /// ```
+    /// In above example, the `title` stores `Foo Heading Title`.
     pub title: Option<String>,
+
+    /// `file_location` stores the location of the document in the
+    /// file system
+    pub file_location: Option<camino::Utf8PathBuf>,
+
+    /// `extra_data` stores the key value data provided in the section.
+    /// This is passed as context and consumes by processors like `get-data`.
+    ///
+    /// Example:
+    ///
+    /// In `FPM.ftd`
+    ///
+    /// ```fpm
+    /// -- fpm.sitemap:
+    ///
+    /// # foo/
+    /// show: true
+    /// message: Hello World
+    /// ```
+    ///
+    /// In `foo.ftd`
+    ///
+    /// ```ftd
+    ///
+    /// -- boolean show:
+    /// $processor$: get-data
+    ///
+    /// -- string message:
+    /// $processor$: get-data
+    /// ```
+    ///
+    /// The above example injects the value `true` and `Hello World`
+    /// to the variables `show` and `message` respectively in foo.ftd
+    /// and then renders it.
     pub extra_data: std::collections::BTreeMap<String, String>,
+    pub subsections: Vec<Subsection>,
 }
 
-#[derive(Debug, Clone, Default, serde::Serialize)]
+#[derive(Debug, Clone, Default)]
 pub struct Subsection {
     pub toc: Vec<TocItem>,
     pub url: Option<String>,
@@ -22,7 +111,7 @@ pub struct Subsection {
     pub extra_data: std::collections::BTreeMap<String, String>,
 }
 
-#[derive(Debug, Clone, Default, serde::Serialize)]
+#[derive(Debug, Clone, Default)]
 pub struct TocItem {
     pub children: Vec<TocItem>,
     pub url: Option<String>,
@@ -146,11 +235,11 @@ impl SitemapParser {
         // The complete string, postprocess if url doesn't exist
         let sitemapelement = match self.state {
             ParsingState::WaitingForSection => SitemapElement::Section(Section {
-                url: Some(rest.as_str().trim().to_string()),
+                id: Some(rest.as_str().trim().to_string()),
                 ..Default::default()
             }),
             ParsingState::ParsingSection => SitemapElement::Section(Section {
-                url: Some(rest.as_str().trim().to_string()),
+                id: Some(rest.as_str().trim().to_string()),
                 ..Default::default()
             }),
             ParsingState::ParsingSubsection => SitemapElement::Subsection(Subsection {

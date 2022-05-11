@@ -1,4 +1,3 @@
-use crate::sitemap::Sitemap;
 use std::convert::TryInto;
 
 /// `Config` struct keeps track of configuration parameters that is shared with the entire
@@ -52,7 +51,7 @@ impl Config {
     /// we will be able to say download the history also for some package.
     ///
     /// ```ftd
-    /// -- ftp.dependency: django
+    /// -- fpm.dependency: django
     ///  with-history: true
     /// ```
     ///     
@@ -638,7 +637,7 @@ pub struct Package {
     /// sitemap stores the structure of the package. The structure includes sections, subsections
     /// and table of content (`toc`). This automatically converts the documents in package into the
     /// corresponding to structure.
-    pub sitemap: Option<Sitemap>,
+    pub sitemap: Option<fpm::sitemap::Sitemap>,
 }
 
 impl Package {
