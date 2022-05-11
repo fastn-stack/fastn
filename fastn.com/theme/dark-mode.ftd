@@ -55,6 +55,7 @@ This kind of UI is preferred today:
 -- ft.image: Dark Mode Switcher
 src: $assets.files.static.images.theme.dark-mode-switcher.png
 align: center
+width: 400
 
 In the collapsed state it should show the icon showing the mode that is currently
 being used based on combination of user and system preference. Unlike the image

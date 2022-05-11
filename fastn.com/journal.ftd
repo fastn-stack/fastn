@@ -6,21 +6,21 @@ sub-sections: $config.dev-section
 extra: $config.empty
 
 
--- ft.h1: Thoughts: Browsing History
+-- ft.h2: Thoughts: Browsing History
 
 
--- ft.h1: Readership Tracking
+-- ft.h2: Readership Tracking
 
 
--- ft.h1: Linking Using Package Dependency
+-- ft.h2: Linking Using Package Dependency
 
 So links never break (and original author can keep updating document URL at whim).
 
 
--- ft.h1: Git Tracking
+-- ft.h2: Git Tracking
 
 
--- ft.h1: More than one fpm package per git repo
+-- ft.h2: More than one fpm package per git repo
 
 
 -- ft.h1: Article Out
@@ -1720,6 +1720,8 @@ We decide and removed this prelude feature {recently}.
 
 -- ftd.text recently: recently
 link: https://github.com/FifthTry/fpm/pull/57
+color: $fpm.color.main.text
+role: $fpm.type.copy-relaxed
 
 -- ft.h2: The Second Try
 
@@ -4745,11 +4747,15 @@ wc -l tags
 -- ftd.text: Hide `t.py`
 if: $show-t-py
 $on-click$: toggle $show-t-py
+color: $fpm.color.main.text
+role: $fpm.type.copy-relaxed
 
 
 -- ftd.text: Show `t.py`
 if: not $show-t-py
 $on-click$: toggle $show-t-py
+color: $fpm.color.main.text
+role: $fpm.type.copy-relaxed
 
 
 -- ft.code:
