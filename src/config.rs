@@ -33,6 +33,10 @@ pub struct Config {
     ///
     /// This data is processed by `get-data` processor.
     pub extra_data: serde_json::Map<String, serde_json::Value>,
+    /// sitemap stores the structure of the package. The structure includes sections, subsections
+    /// and table of content (`toc`). This automatically converts the documents in package into the
+    /// corresponding to structure.
+    pub sitemap: Option<fpm::sitemap::Sitemap>,
 }
 
 impl Config {
@@ -291,15 +295,7 @@ impl Config {
 
             package.ignored_paths = b.get::<Vec<String>>("fpm#ignore")?;
             package.fonts = b.get("fpm#font")?;
-            let sitemap: Option<String> = b.get("fpm#sitemap")?;
-            package.sitemap = if let Some(sitemap) = sitemap {
-                Some(fpm::sitemap::Sitemap::parse(
-                    sitemap.as_str(),
-                    package.name.as_str(),
-                )?)
-            } else {
-                None
-            };
+            package.sitemap = b.get("fpm#sitemap")?;
             package
         };
 
@@ -317,13 +313,32 @@ impl Config {
                 }
             }
         }
-        Ok(Config {
-            package,
+
+        let mut config = Config {
+            package: package.clone(),
             packages_root: root.clone().join(".packages"),
             root,
             original_directory,
             extra_data: Default::default(),
-        })
+            sitemap: None,
+        };
+
+        config.sitemap = match package.translation_of.as_ref() {
+            Some(translation) => translation,
+            None => &package,
+        }
+        .sitemap
+        .as_ref()
+        .map_or(Ok(None), |v| {
+            dbg!(fpm::sitemap::Sitemap::parse(
+                dbg!(v).as_str(),
+                &package,
+                &config
+            ))
+            .map(Some)
+        })?;
+
+        Ok(config)
     }
 
     /// `attach_data_string()` sets the value of extra data in fpm::Config,
@@ -461,7 +476,7 @@ impl Config {
             });
     }
 
-    fn get_file_name(root: &camino::Utf8PathBuf, id: &str) -> fpm::Result<String> {
+    pub(crate) fn get_file_name(root: &camino::Utf8PathBuf, id: &str) -> fpm::Result<String> {
         if id.eq("/") {
             if root.join("index.ftd".to_string()).exists() {
                 return Ok("index.ftd".to_string());
@@ -637,7 +652,7 @@ pub struct Package {
     /// sitemap stores the structure of the package. The structure includes sections, subsections
     /// and table of content (`toc`). This automatically converts the documents in package into the
     /// corresponding to structure.
-    pub sitemap: Option<fpm::sitemap::Sitemap>,
+    pub sitemap: Option<String>,
 }
 
 impl Package {

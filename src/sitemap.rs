@@ -30,7 +30,7 @@ pub struct Section {
     /// ```
     ///
     /// Here foo/ is store as `id`
-    pub id: Option<String>,
+    pub id: String,
 
     /// `url` stores the url created for the corresponding file
     /// This could differ from the `id` if the same document id present
@@ -104,26 +104,31 @@ pub struct Section {
     /// to the variables `show` and `message` respectively in foo.ftd
     /// and then renders it.
     pub extra_data: std::collections::BTreeMap<String, String>,
+    pub is_active: bool,
     pub subsections: Vec<Subsection>,
 }
 
 #[derive(Debug, Clone, Default)]
 pub struct Subsection {
-    pub toc: Vec<TocItem>,
+    pub id: Option<String>,
     pub url: Option<String>,
-    pub is_active: bool,
     pub title: Option<String>,
+    pub file_location: Option<camino::Utf8PathBuf>,
     pub visible: bool,
     pub extra_data: std::collections::BTreeMap<String, String>,
+    pub is_active: bool,
+    pub toc: Vec<TocItem>,
 }
 
 #[derive(Debug, Clone, Default)]
 pub struct TocItem {
-    pub children: Vec<TocItem>,
+    pub id: String,
     pub url: Option<String>,
-    pub is_active: bool,
     pub title: Option<String>,
+    pub file_location: Option<camino::Utf8PathBuf>,
     pub extra_data: std::collections::BTreeMap<String, String>,
+    pub is_active: bool,
+    pub children: Vec<TocItem>,
 }
 
 #[derive(Debug, Clone)]
@@ -241,19 +246,19 @@ impl SitemapParser {
         // The complete string, postprocess if url doesn't exist
         let sitemapelement = match self.state {
             ParsingState::WaitingForSection => SitemapElement::Section(Section {
-                id: Some(rest.as_str().trim().to_string()),
+                id: rest.as_str().trim().to_string(),
                 ..Default::default()
             }),
             ParsingState::ParsingSection => SitemapElement::Section(Section {
-                id: Some(rest.as_str().trim().to_string()),
+                id: rest.as_str().trim().to_string(),
                 ..Default::default()
             }),
             ParsingState::ParsingSubsection => SitemapElement::Subsection(Subsection {
-                url: Some(rest.as_str().trim().to_string()),
+                id: Some(rest.as_str().trim().to_string()),
                 ..Default::default()
             }),
             ParsingState::ParsingTOC => SitemapElement::TocItem(TocItem {
-                url: Some(rest.as_str().trim().to_string()),
+                id: rest.as_str().trim().to_string(),
                 ..Default::default()
             }),
         };
@@ -291,12 +296,16 @@ impl SitemapParser {
 }
 
 impl Sitemap {
-    pub fn parse(s: &str, doc_name: &str) -> Result<Self, ParseError> {
+    pub fn parse(
+        s: &str,
+        package: &fpm::Package,
+        config: &fpm::Config,
+    ) -> Result<Self, ParseError> {
         let mut parser = SitemapParser {
             state: ParsingState::WaitingForSection,
             sections: vec![],
             temp_item: None,
-            doc_name: doc_name.to_string(),
+            doc_name: package.name.to_string(),
         };
         for line in s.split('\n') {
             parser.read_line(line)?;
@@ -304,9 +313,109 @@ impl Sitemap {
         if parser.temp_item.is_some() {
             parser.eval_temp_item();
         }
-        Ok(Sitemap {
+        let mut sitemap = Sitemap {
             sections: construct_tree_util(parser.finalize()?),
-        })
+        };
+        dbg!(&sitemap);
+
+        sitemap
+            .resolve(package, config)
+            .map_err(|e| ParseError::InvalidTOCItem {
+                doc_id: package.name.to_string(),
+                message: e.to_string(),
+                row_content: "".to_string(),
+            })?;
+
+        Ok(sitemap)
+    }
+
+    fn resolve(&mut self, package: &fpm::Package, config: &fpm::Config) -> fpm::Result<()> {
+        let package_root = config.get_root_for_package(package);
+        let current_package_root = config.root.to_owned();
+        for section in self.sections.iter_mut() {
+            resolve_section(section, &package_root, &current_package_root)?;
+        }
+        return Ok(());
+
+        fn resolve_section(
+            section: &mut fpm::sitemap::Section,
+            package_root: &camino::Utf8PathBuf,
+            current_package_root: &camino::Utf8PathBuf,
+        ) -> fpm::Result<()> {
+            let file_path = match fpm::Config::get_file_name(package_root, section.id.as_str()) {
+                Ok(name) => package_root.join(name),
+                Err(_) => current_package_root.join(
+                    fpm::Config::get_file_name(current_package_root, section.id.as_str()).map_err(
+                        |e| fpm::Error::UsageError {
+                            message: format!(
+                                "`{}` not found, fix fpm.sitemap in FPM.ftd. Error: {:?}",
+                                section.id, e
+                            ),
+                        },
+                    )?,
+                ),
+            };
+            section.file_location = Some(file_path);
+
+            for subsection in section.subsections.iter_mut() {
+                resolve_subsection(subsection, package_root, current_package_root)?;
+            }
+            Ok(())
+        }
+
+        fn resolve_subsection(
+            subsection: &mut fpm::sitemap::Subsection,
+            package_root: &camino::Utf8PathBuf,
+            current_package_root: &camino::Utf8PathBuf,
+        ) -> fpm::Result<()> {
+            if let Some(ref id) = subsection.id {
+                let file_path = match fpm::Config::get_file_name(package_root, id) {
+                    Ok(name) => package_root.join(name),
+                    Err(_) => current_package_root.join(
+                        fpm::Config::get_file_name(current_package_root, id).map_err(|e| {
+                            fpm::Error::UsageError {
+                                message: format!(
+                                    "`{}` not found, fix fpm.sitemap in FPM.ftd. Error: {:?}",
+                                    id, e
+                                ),
+                            }
+                        })?,
+                    ),
+                };
+                subsection.file_location = Some(file_path);
+            }
+
+            for toc in subsection.toc.iter_mut() {
+                resolve_toc(toc, package_root, current_package_root)?;
+            }
+            Ok(())
+        }
+
+        fn resolve_toc(
+            toc: &mut fpm::sitemap::TocItem,
+            package_root: &camino::Utf8PathBuf,
+            current_package_root: &camino::Utf8PathBuf,
+        ) -> fpm::Result<()> {
+            let file_path = match fpm::Config::get_file_name(package_root, toc.id.as_str()) {
+                Ok(name) => package_root.join(name),
+                Err(_) => current_package_root.join(
+                    fpm::Config::get_file_name(current_package_root, toc.id.as_str()).map_err(
+                        |e| fpm::Error::UsageError {
+                            message: format!(
+                                "`{}` not found, fix fpm.sitemap in FPM.ftd. Error: {:?}",
+                                toc.id, e
+                            ),
+                        },
+                    )?,
+                ),
+            };
+            toc.file_location = Some(file_path);
+
+            for toc in toc.children.iter_mut() {
+                resolve_toc(toc, package_root, current_package_root)?;
+            }
+            Ok(())
+        }
     }
 }
 
