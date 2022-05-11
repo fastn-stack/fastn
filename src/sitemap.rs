@@ -23,19 +23,25 @@ pub struct Section {
     /// `id` is the document id (or url) provided in the section
     /// Example:
     ///
+    /// ```ftd
+    ///
     /// # foo/
+    ///
+    /// ```
     ///
     /// Here foo/ is store as `id`
     pub id: Option<String>,
 
-    /// 'url' stores the url created for the corresponding file
+    /// `url` stores the url created for the corresponding file
     /// This could differ from the `id` if the same document id present
     /// in the sitemap for more than once.
     /// Example:
     ///
-    /// # foo/
     ///
-    /// # foo/
+    /// \# foo/
+    ///
+    /// \# foo/
+    ///
     ///
     /// Here foo/ is called twice. So the other one gets different url.
     pub url: Option<String>,
@@ -78,7 +84,7 @@ pub struct Section {
     /// ```fpm
     /// -- fpm.sitemap:
     ///
-    /// # foo/
+    /// \# foo/
     /// show: true
     /// message: Hello World
     /// ```
