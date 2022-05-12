@@ -330,12 +330,7 @@ impl Config {
         .sitemap
         .as_ref()
         .map_or(Ok(None), |v| {
-            dbg!(fpm::sitemap::Sitemap::parse(
-                dbg!(v).as_str(),
-                &package,
-                &config
-            ))
-            .map(Some)
+            fpm::sitemap::Sitemap::parse(v.as_str(), &package, &config).map(Some)
         })?;
 
         Ok(config)

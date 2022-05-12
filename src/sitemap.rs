@@ -72,7 +72,11 @@ pub struct Section {
 
     /// `file_location` stores the location of the document in the
     /// file system
-    pub file_location: Option<camino::Utf8PathBuf>,
+    pub file_location: camino::Utf8PathBuf,
+
+    /// `base` stores the location of the package in which the document
+    /// exists
+    pub base: camino::Utf8PathBuf,
 
     /// `extra_data` stores the key value data provided in the section.
     /// This is passed as context and consumes by processors like `get-data`.
@@ -108,16 +112,33 @@ pub struct Section {
     pub subsections: Vec<Subsection>,
 }
 
-#[derive(Debug, Clone, Default)]
+#[derive(Debug, Clone)]
 pub struct Subsection {
     pub id: Option<String>,
     pub url: Option<String>,
     pub title: Option<String>,
-    pub file_location: Option<camino::Utf8PathBuf>,
+    pub file_location: camino::Utf8PathBuf,
+    pub base: camino::Utf8PathBuf,
     pub visible: bool,
     pub extra_data: std::collections::BTreeMap<String, String>,
     pub is_active: bool,
     pub toc: Vec<TocItem>,
+}
+
+impl Default for Subsection {
+    fn default() -> Self {
+        Subsection {
+            id: None,
+            url: None,
+            title: None,
+            file_location: Default::default(),
+            base: Default::default(),
+            visible: true,
+            extra_data: Default::default(),
+            is_active: false,
+            toc: vec![],
+        }
+    }
 }
 
 #[derive(Debug, Clone, Default)]
@@ -125,7 +146,8 @@ pub struct TocItem {
     pub id: String,
     pub url: Option<String>,
     pub title: Option<String>,
-    pub file_location: Option<camino::Utf8PathBuf>,
+    pub file_location: camino::Utf8PathBuf,
+    pub base: camino::Utf8PathBuf,
     pub extra_data: std::collections::BTreeMap<String, String>,
     pub is_active: bool,
     pub children: Vec<TocItem>,
@@ -145,7 +167,7 @@ impl SitemapElement {
             SitemapElement::Subsection(s) => &mut s.extra_data,
             SitemapElement::TocItem(s) => &mut s.extra_data,
         };
-        element_title.insert(key.to_string(), value.to_string());
+        element_title.insert(key.to_string(), value.trim().to_string());
     }
 }
 
@@ -316,7 +338,6 @@ impl Sitemap {
         let mut sitemap = Sitemap {
             sections: construct_tree_util(parser.finalize()?),
         };
-        dbg!(&sitemap);
 
         sitemap
             .resolve(package, config)
@@ -332,8 +353,14 @@ impl Sitemap {
     fn resolve(&mut self, package: &fpm::Package, config: &fpm::Config) -> fpm::Result<()> {
         let package_root = config.get_root_for_package(package);
         let current_package_root = config.root.to_owned();
+        let mut file_count: std::collections::BTreeMap<String, i32> = Default::default();
         for section in self.sections.iter_mut() {
-            resolve_section(section, &package_root, &current_package_root)?;
+            resolve_section(
+                section,
+                &package_root,
+                &current_package_root,
+                &mut file_count,
+            )?;
         }
         return Ok(());
 
@@ -341,24 +368,37 @@ impl Sitemap {
             section: &mut fpm::sitemap::Section,
             package_root: &camino::Utf8PathBuf,
             current_package_root: &camino::Utf8PathBuf,
+            file_count: &mut std::collections::BTreeMap<String, i32>,
         ) -> fpm::Result<()> {
-            let file_path = match fpm::Config::get_file_name(package_root, section.id.as_str()) {
-                Ok(name) => package_root.join(name),
-                Err(_) => current_package_root.join(
-                    fpm::Config::get_file_name(current_package_root, section.id.as_str()).map_err(
-                        |e| fpm::Error::UsageError {
-                            message: format!(
-                                "`{}` not found, fix fpm.sitemap in FPM.ftd. Error: {:?}",
-                                section.id, e
-                            ),
-                        },
-                    )?,
-                ),
-            };
-            section.file_location = Some(file_path);
+            if let Some(count) = file_count.get_mut(section.id.as_str()) {
+                *count += 1;
+                section.url = Some(format!(
+                    "{}~{}/",
+                    section.id.strip_suffix('/').unwrap_or(section.id.as_str()),
+                    count
+                ));
+            } else {
+                file_count.insert(section.id.clone(), 0);
+            }
+
+            let file_path =
+                match fpm::Config::get_file_name(current_package_root, section.id.as_str()) {
+                    Ok(name) => current_package_root.join(name),
+                    Err(_) => package_root.join(
+                        fpm::Config::get_file_name(package_root, section.id.as_str()).map_err(
+                            |e| fpm::Error::UsageError {
+                                message: format!(
+                                    "`{}` not found, fix fpm.sitemap in FPM.ftd. Error: {:?}",
+                                    section.id, e
+                                ),
+                            },
+                        )?,
+                    ),
+                };
+            section.file_location = file_path;
 
             for subsection in section.subsections.iter_mut() {
-                resolve_subsection(subsection, package_root, current_package_root)?;
+                resolve_subsection(subsection, package_root, current_package_root, file_count)?;
             }
             Ok(())
         }
@@ -367,26 +407,38 @@ impl Sitemap {
             subsection: &mut fpm::sitemap::Subsection,
             package_root: &camino::Utf8PathBuf,
             current_package_root: &camino::Utf8PathBuf,
+            file_count: &mut std::collections::BTreeMap<String, i32>,
         ) -> fpm::Result<()> {
             if let Some(ref id) = subsection.id {
-                let file_path = match fpm::Config::get_file_name(package_root, id) {
-                    Ok(name) => package_root.join(name),
-                    Err(_) => current_package_root.join(
-                        fpm::Config::get_file_name(current_package_root, id).map_err(|e| {
-                            fpm::Error::UsageError {
+                if let Some(count) = file_count.get_mut(id.as_str()) {
+                    *count += 1;
+                    subsection.url = Some(format!(
+                        "{}~{}/",
+                        id.strip_suffix('/').unwrap_or(id.as_str()),
+                        count
+                    ));
+                } else {
+                    file_count.insert(id.clone(), 0);
+                }
+
+                let file_path = match fpm::Config::get_file_name(current_package_root, id) {
+                    Ok(name) => current_package_root.join(name),
+                    Err(_) => {
+                        package_root.join(fpm::Config::get_file_name(package_root, id).map_err(
+                            |e| fpm::Error::UsageError {
                                 message: format!(
                                     "`{}` not found, fix fpm.sitemap in FPM.ftd. Error: {:?}",
                                     id, e
                                 ),
-                            }
-                        })?,
-                    ),
+                            },
+                        )?)
+                    }
                 };
-                subsection.file_location = Some(file_path);
+                subsection.file_location = file_path;
             }
 
             for toc in subsection.toc.iter_mut() {
-                resolve_toc(toc, package_root, current_package_root)?;
+                resolve_toc(toc, package_root, current_package_root, file_count)?;
             }
             Ok(())
         }
@@ -395,26 +447,133 @@ impl Sitemap {
             toc: &mut fpm::sitemap::TocItem,
             package_root: &camino::Utf8PathBuf,
             current_package_root: &camino::Utf8PathBuf,
+            file_count: &mut std::collections::BTreeMap<String, i32>,
         ) -> fpm::Result<()> {
-            let file_path = match fpm::Config::get_file_name(package_root, toc.id.as_str()) {
-                Ok(name) => package_root.join(name),
-                Err(_) => current_package_root.join(
-                    fpm::Config::get_file_name(current_package_root, toc.id.as_str()).map_err(
-                        |e| fpm::Error::UsageError {
+            if let Some(count) = file_count.get_mut(toc.id.as_str()) {
+                *count += 1;
+                toc.url = Some(format!(
+                    "{}~{}/",
+                    toc.id.strip_suffix('/').unwrap_or(toc.id.as_str()),
+                    count
+                ));
+            } else {
+                file_count.insert(toc.id.clone(), 0);
+            }
+
+            let file_path = match fpm::Config::get_file_name(current_package_root, toc.id.as_str())
+            {
+                Ok(name) => current_package_root.join(name),
+                Err(_) => package_root.join(
+                    fpm::Config::get_file_name(package_root, toc.id.as_str()).map_err(|e| {
+                        fpm::Error::UsageError {
                             message: format!(
                                 "`{}` not found, fix fpm.sitemap in FPM.ftd. Error: {:?}",
                                 toc.id, e
                             ),
-                        },
-                    )?,
+                        }
+                    })?,
                 ),
             };
-            toc.file_location = Some(file_path);
+            toc.file_location = file_path;
 
             for toc in toc.children.iter_mut() {
-                resolve_toc(toc, package_root, current_package_root)?;
+                resolve_toc(toc, package_root, current_package_root, file_count)?;
             }
             Ok(())
+        }
+    }
+
+    /// `get_all_locations` returns the list of tuple containing the following values:
+    /// (
+    ///     file_location: &camino::Utf8PathBuf, // The location of the document in the file system
+    ///     base: &camino::Utf8PathBuf // The base location of the fpm package where the document exists
+    ///     url: &Option<String> // expected url for the document.
+    /// )
+    pub(crate) fn get_all_locations<'a>(
+        &'a self,
+    ) -> Vec<(
+        &'a camino::Utf8PathBuf,
+        &'a camino::Utf8PathBuf,
+        &'a Option<String>,
+    )> {
+        let mut locations = vec![];
+        for section in self.sections.iter() {
+            locations.push((&section.file_location, &section.base, &section.url));
+            for subsection in section.subsections.iter() {
+                if subsection.visible {
+                    locations.push((&subsection.file_location, &subsection.base, &subsection.url));
+                }
+                for toc in subsection.toc.iter() {
+                    locations.push((&toc.file_location, &toc.base, &toc.url));
+                    locations.extend(get_toc_locations(&toc));
+                }
+            }
+        }
+        return locations;
+
+        fn get_toc_locations(
+            toc: &fpm::sitemap::TocItem,
+        ) -> Vec<(&camino::Utf8PathBuf, &camino::Utf8PathBuf, &Option<String>)> {
+            let mut locations = vec![];
+            for child in toc.children.iter() {
+                locations.push((&child.file_location, &child.base, &child.url));
+                locations.extend(get_toc_locations(&child));
+            }
+            locations
+        }
+    }
+
+    pub(crate) fn get_extra_data_by_id(
+        &self,
+        id: &str,
+    ) -> Option<std::collections::BTreeMap<String, String>> {
+        for section in self.sections.iter() {
+            if section.url.as_ref().unwrap_or(&section.id).eq(id) {
+                return Some(section.extra_data.to_owned());
+            }
+            if let Some(mut data) = get_extra_data_from_subsections(id, &section.subsections) {
+                data.extend(section.extra_data.clone());
+                return Some(data);
+            }
+        }
+        return None;
+
+        fn get_extra_data_from_subsections(
+            id: &str,
+            subsections: &Vec<Subsection>,
+        ) -> Option<std::collections::BTreeMap<String, String>> {
+            for subsection in subsections {
+                if subsection.visible
+                    && subsection
+                        .url
+                        .as_ref()
+                        .unwrap_or(subsection.id.as_ref().unwrap_or(&"".to_string()))
+                        .eq(id)
+                {
+                    return Some(subsection.extra_data.to_owned());
+                }
+                if let Some(mut data) = get_extra_data_from_toc(id, &subsection.toc) {
+                    data.extend(subsection.extra_data.clone());
+                    return Some(data);
+                }
+            }
+            None
+        }
+
+        fn get_extra_data_from_toc(
+            id: &str,
+            toc: &Vec<TocItem>,
+        ) -> Option<std::collections::BTreeMap<String, String>> {
+            for toc_item in toc {
+                if toc_item.url.as_ref().unwrap_or(&toc_item.id).eq(id) {
+                    return Some(toc_item.extra_data.to_owned());
+                }
+                if let Some(mut data) = get_extra_data_from_toc(id, &toc_item.children) {
+                    data.extend(toc_item.extra_data.clone());
+                    return Some(data);
+                }
+            }
+            None
         }
     }
 }

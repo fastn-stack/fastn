@@ -117,13 +117,37 @@ async fn build_simple(
     skip_failed: bool,
     asset_documents: &std::collections::HashMap<String, String>,
 ) -> fpm::Result<()> {
-    let documents = std::collections::BTreeMap::from_iter(
-        config
-            .get_files(&config.package)
-            .await?
-            .into_iter()
-            .map(|v| (v.get_id(), v)),
-    );
+    let files = if let Some(ref sitemap) = config.sitemap {
+        let get_all_locations = sitemap.get_all_locations();
+        let mut files: Vec<fpm::File> = vec![];
+        for (doc_path, base_path, url) in get_all_locations {
+            files.push({
+                let mut file =
+                    fpm::get_file(config.package.name.to_string(), doc_path, base_path).await?;
+                if let Some(url) = url {
+                    file.set_id(format!("{}index.ftd", url).as_str());
+                }
+                file
+            });
+        }
+        files.extend(
+            config
+                .get_files(&config.package)
+                .await?
+                .into_iter()
+                .filter(|file_instance| {
+                    matches!(file_instance, fpm::File::Static(_))
+                        || matches!(file_instance, fpm::File::Code(_))
+                        || matches!(file_instance, fpm::File::Image(_))
+                })
+                .collect::<Vec<fpm::File>>(),
+        );
+        files
+    } else {
+        config.get_files(&config.package).await?
+    };
+    let documents =
+        std::collections::BTreeMap::from_iter(files.into_iter().map(|v| (v.get_id(), v)));
     process_files(
         config,
         &config.package,

@@ -26,6 +26,18 @@ pub fn processor(
         return doc.from_json(data, section);
     }
 
+    if let Some(ref sitemap) = config.sitemap {
+        let doc_id = doc
+            .name
+            .to_string()
+            .replace(config.package.name.as_str(), "");
+        if let Some(extra_data) = sitemap.get_extra_data_by_id(doc_id.trim_start_matches('/')) {
+            if let Some(data) = extra_data.get(name.as_str()) {
+                return doc.from_json(data, section);
+            }
+        }
+    }
+
     if let Some((_, ref b)) = section.body {
         return doc.from_json(&serde_json::from_str::<serde_json::Value>(b)?, section);
     }

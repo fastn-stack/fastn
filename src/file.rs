@@ -66,7 +66,10 @@ impl Document {
         format!(
             "{}/{}",
             self.package_name.as_str(),
-            self.id.trim_end_matches(".ftd")
+            self.id
+                .replace("/index.ftd", "/")
+                .replace("index.ftd", "")
+                .replace(".ftd", "/")
         )
     }
 }
