@@ -335,6 +335,8 @@ impl Config {
 
         config.resolve_sitemap_title()?;
 
+        dbg!(&config.sitemap);
+
         Ok(config)
     }
 
@@ -420,7 +422,9 @@ impl Config {
                             });
                         }
                     };
-                    let title = ftd_doc.get(key).unwrap_or(None);
+                    let title = ftd_doc
+                        .get(key)
+                        .unwrap_or(ftd_doc.title().map(|v| v.original));
                     title
                 }
                 _ => None,
