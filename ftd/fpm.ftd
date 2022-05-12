@@ -158,6 +158,7 @@ optional string font-icon:
 optional string img-src:
 boolean is-heading:
 boolean is-disabled:
+boolean is-active: false
 toc-item list children:
 
 
@@ -200,3 +201,11 @@ optional string last-modified-on:
 -- optional string section-title:
 -- optional string subsection-title:
 -- optional string toc-title:
+
+
+-- record sitemap-data:
+toc-item list sections:
+toc-item list subsections:
+toc-item list toc:
+
+

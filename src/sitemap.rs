@@ -152,6 +152,47 @@ pub struct TocItem {
     pub is_active: bool,
     pub children: Vec<TocItem>,
 }
+#[derive(Debug, Default, serde::Serialize)]
+pub struct SiteMapCompat {
+    pub sections: Vec<TocItemCompat>,
+    pub subsections: Vec<TocItemCompat>,
+    pub toc: Vec<TocItemCompat>,
+}
+
+#[derive(Debug, Default, serde::Serialize)]
+pub struct TocItemCompat {
+    pub url: Option<String>,
+    pub number: Option<String>,
+    pub title: Option<String>,
+    #[serde(rename = "is-heading")]
+    pub is_heading: bool,
+    // TODO: Font icon mapping to html?
+    #[serde(rename = "font-icon")]
+    pub font_icon: Option<String>,
+    #[serde(rename = "is-disabled")]
+    pub is_disabled: bool,
+    #[serde(rename = "is-active")]
+    pub is_active: bool,
+    #[serde(rename = "img-src")]
+    pub image_src: Option<String>,
+    pub children: Vec<TocItemCompat>,
+}
+
+impl TocItemCompat {
+    fn new(url: Option<String>, title: Option<String>, is_active: bool) -> TocItemCompat {
+        TocItemCompat {
+            url,
+            number: None,
+            title,
+            is_heading: false,
+            font_icon: None,
+            is_disabled: false,
+            is_active,
+            image_src: None,
+            children: vec![],
+        }
+    }
+}
 
 #[derive(Debug, Clone)]
 pub enum SitemapElement {
@@ -523,6 +564,175 @@ impl Sitemap {
         }
     }
 
+    pub(crate) fn get_sitemap_by_id(&self, id: &str) -> Option<SiteMapCompat> {
+        let mut sections = vec![];
+        let mut subsections = vec![];
+        let mut toc = vec![];
+        let mut index = 0;
+        let mut found = false;
+        for (idx, section) in self.sections.iter().enumerate() {
+            index = idx;
+            let url = section.url.as_ref().unwrap_or(&section.id);
+            if url.eq(id) {
+                subsections = section
+                    .subsections
+                    .iter()
+                    .filter(|v| v.visible)
+                    .map(|v| {
+                        TocItemCompat::new(v.url.clone().or(v.id.clone()), v.title.clone(), false)
+                    })
+                    .collect();
+                if let Some(sub) = section.subsections.first() {
+                    toc = get_all_toc(&sub.toc);
+                }
+                sections.push(TocItemCompat::new(
+                    Some(url.to_string()),
+                    section.title.clone(),
+                    true,
+                ));
+                found = true;
+                break;
+            }
+
+            if let Some((subsection_list, toc_list)) =
+                get_subsection_by_id(id, &section.subsections)
+            {
+                subsections.extend(subsection_list);
+                toc.extend(toc_list);
+                sections.push(TocItemCompat::new(
+                    Some(url.to_string()),
+                    section.title.clone(),
+                    true,
+                ));
+                found = true;
+                break;
+            }
+
+            sections.push(TocItemCompat::new(
+                Some(url.to_string()),
+                section.title.clone(),
+                false,
+            ));
+        }
+        if found {
+            sections.extend(self.sections[index + 1..].iter().map(|v| {
+                TocItemCompat::new(
+                    Some(v.url.clone().unwrap_or(v.id.to_string())),
+                    v.title.clone(),
+                    false,
+                )
+            }));
+            return Some(SiteMapCompat {
+                sections,
+                subsections,
+                toc,
+            });
+        }
+
+        return None;
+
+        fn get_all_toc(toc: &Vec<TocItem>) -> Vec<TocItemCompat> {
+            toc.iter()
+                .map(|v| {
+                    let mut toc = TocItemCompat::new(
+                        Some(v.url.clone().unwrap_or(v.id.to_string())),
+                        v.title.clone(),
+                        false,
+                    );
+                    toc.children = get_all_toc(&v.children);
+                    toc
+                })
+                .collect()
+        }
+
+        fn get_subsection_by_id(
+            id: &str,
+            subsections: &Vec<Subsection>,
+        ) -> Option<(Vec<TocItemCompat>, Vec<TocItemCompat>)> {
+            let mut subsection_list = vec![];
+            let mut toc = vec![];
+            let mut index = 0;
+            let mut found = false;
+            for (idx, subsection) in subsections.iter().enumerate() {
+                index = idx;
+                let subsection_id = subsection.url.clone().or(subsection.id.clone());
+                if subsection.visible && subsection_id.as_ref().map(|v| v.eq(id)).unwrap_or(false) {
+                    toc = get_all_toc(&subsection.toc);
+                    subsection_list.push(TocItemCompat::new(
+                        subsection_id,
+                        subsection.title.clone(),
+                        true,
+                    ));
+                    found = true;
+                    break;
+                }
+
+                if let Some(toc_list) = get_toc_by_id(id, &subsection.toc) {
+                    toc.extend(toc_list);
+                    subsection_list.push(TocItemCompat::new(
+                        subsection_id,
+                        subsection.title.clone(),
+                        true,
+                    ));
+                    found = true;
+                    break;
+                }
+
+                subsection_list.push(TocItemCompat::new(
+                    subsection_id,
+                    subsection.title.clone(),
+                    false,
+                ));
+            }
+            if found {
+                subsection_list.extend(subsections[index + 1..].iter().map(|v| {
+                    TocItemCompat::new(v.url.clone().or(v.id.clone()), v.title.clone(), false)
+                }));
+                return Some((subsection_list, toc));
+            }
+            None
+        }
+
+        fn get_toc_by_id(id: &str, toc: &Vec<TocItem>) -> Option<Vec<TocItemCompat>> {
+            let mut found = false;
+            let toc_list = get_toc_by_id_(id, toc, &mut found).1;
+            if found {
+                return Some(toc_list);
+            }
+            return None;
+
+            fn get_toc_by_id_(
+                id: &str,
+                toc: &Vec<TocItem>,
+                found: &mut bool,
+            ) -> (bool, Vec<TocItemCompat>) {
+                let mut toc_list = vec![];
+                let mut found_here = false;
+                for toc_item in toc.iter() {
+                    let url = toc_item.url.as_ref().unwrap_or(&toc_item.id);
+                    toc_list.push({
+                        let (is_active, children) = get_toc_by_id_(id, &toc_item.children, found);
+                        let mut current_toc = TocItemCompat::new(
+                            Some(url.to_string()),
+                            toc_item.title.clone(),
+                            url.eq(id) || is_active,
+                        );
+                        current_toc.children = children;
+                        if is_active {
+                            found_here = true;
+                        }
+                        current_toc
+                    });
+                    if !*found {
+                        *found = url.eq(id);
+                        found_here = *found;
+                    }
+                }
+                (found_here, toc_list)
+            }
+        }
+    }
+
     pub(crate) fn get_extra_data_by_id(
         &self,
         id: &str,
@@ -531,9 +741,10 @@ impl Sitemap {
             if section.url.as_ref().unwrap_or(&section.id).eq(id) {
                 return Some(section.extra_data.to_owned());
             }
-            if let Some(mut data) = get_extra_data_from_subsections(id, &section.subsections) {
-                data.extend(section.extra_data.clone());
-                return Some(data);
+            if let Some(data) = get_extra_data_from_subsections(id, &section.subsections) {
+                let mut all_data = section.extra_data.clone();
+                all_data.extend(data);
+                return Some(all_data);
             }
         }
         return None;
@@ -552,9 +763,10 @@ impl Sitemap {
                 {
                     return Some(subsection.extra_data.to_owned());
                 }
-                if let Some(mut data) = get_extra_data_from_toc(id, &subsection.toc) {
-                    data.extend(subsection.extra_data.clone());
-                    return Some(data);
+                if let Some(data) = get_extra_data_from_toc(id, &subsection.toc) {
+                    let mut all_data = subsection.extra_data.clone();
+                    all_data.extend(data);
+                    return Some(all_data);
                 }
             }
             None
@@ -568,9 +780,10 @@ impl Sitemap {
                 if toc_item.url.as_ref().unwrap_or(&toc_item.id).eq(id) {
                     return Some(toc_item.extra_data.to_owned());
                 }
-                if let Some(mut data) = get_extra_data_from_toc(id, &toc_item.children) {
-                    data.extend(toc_item.extra_data.clone());
-                    return Some(data);
+                if let Some(data) = get_extra_data_from_toc(id, &toc_item.children) {
+                    let mut all_data = toc_item.extra_data.clone();
+                    all_data.extend(data);
+                    return Some(all_data);
                 }
             }
             None

@@ -323,7 +323,7 @@ impl Config {
             sitemap: None,
         };
 
-        config.sitemap = match package.translation_of.as_ref() {
+        let sitemap = match package.translation_of.as_ref() {
             Some(translation) => translation,
             None => &package,
         }
@@ -333,15 +333,13 @@ impl Config {
             fpm::sitemap::Sitemap::parse(v.as_str(), &package, &config).map(Some)
         })?;
 
-        config.resolve_sitemap_title()?;
-
-        dbg!(&config.sitemap);
+        config.resolve_sitemap_title(sitemap)?;
 
         Ok(config)
     }
 
-    fn resolve_sitemap_title(&mut self) -> fpm::Result<()> {
-        let mut sitemap = if let Some(sitemap) = self.sitemap.clone() {
+    fn resolve_sitemap_title(&mut self, sitemap: Option<fpm::sitemap::Sitemap>) -> fpm::Result<()> {
+        let mut sitemap = if let Some(sitemap) = sitemap {
             sitemap
         } else {
             return Ok(());
@@ -383,13 +381,14 @@ impl Config {
             config: &mut fpm::Config,
             toc_item: &mut fpm::sitemap::TocItem,
         ) -> fpm::Result<()> {
-            toc_item.title = get_title(
+            dbg!(&toc_item);
+            toc_item.title = dbg!(get_title(
                 config,
                 toc_item.id.as_str(),
                 &toc_item.base,
                 &toc_item.file_location,
                 "fpm#toc-title",
-            )?;
+            ))?;
             for toc_item in toc_item.children.iter_mut() {
                 resolve_toc_title(config, toc_item)?;
             }
