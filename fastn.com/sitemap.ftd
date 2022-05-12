@@ -206,8 +206,8 @@ key3: value3
 
 - toc/url/
 key4: value4
-    - childtoc/url/
-    key5: value5
+  - childtoc/url/
+  key5: value5
 
 -- ds.markdown:
 
