@@ -333,7 +333,99 @@ impl Config {
             fpm::sitemap::Sitemap::parse(v.as_str(), &package, &config).map(Some)
         })?;
 
+        config.resolve_sitemap_title()?;
+
         Ok(config)
+    }
+
+    fn resolve_sitemap_title(&mut self) -> fpm::Result<()> {
+        let mut sitemap = if let Some(sitemap) = self.sitemap.clone() {
+            sitemap
+        } else {
+            return Ok(());
+        };
+
+        for section in sitemap.sections.iter_mut() {
+            section.title = get_title(
+                self,
+                section.id.as_str(),
+                &section.base,
+                &section.file_location,
+                "fpm#section-title",
+            )?;
+            for subsection in section.subsections.iter_mut() {
+                let id = if let Some(ref id) = subsection.id {
+                    id
+                } else {
+                    continue;
+                };
+
+                if subsection.visible {
+                    subsection.title = get_title(
+                        self,
+                        id.as_str(),
+                        &subsection.base,
+                        &subsection.file_location,
+                        "fpm#subsection-title",
+                    )?;
+                }
+                for toc_item in subsection.toc.iter_mut() {
+                    resolve_toc_title(self, toc_item)?;
+                }
+            }
+        }
+        self.sitemap = Some(sitemap);
+        return Ok(());
+
+        fn resolve_toc_title(
+            config: &mut fpm::Config,
+            toc_item: &mut fpm::sitemap::TocItem,
+        ) -> fpm::Result<()> {
+            toc_item.title = get_title(
+                config,
+                toc_item.id.as_str(),
+                &toc_item.base,
+                &toc_item.file_location,
+                "fpm#toc-title",
+            )?;
+            for toc_item in toc_item.children.iter_mut() {
+                resolve_toc_title(config, toc_item)?;
+            }
+            Ok(())
+        }
+
+        fn get_title(
+            config: &mut fpm::Config,
+            id: &str,
+            base: &camino::Utf8PathBuf,
+            file_location: &camino::Utf8PathBuf,
+            key: &str,
+        ) -> fpm::Result<Option<String>> {
+            Ok(match file_location.extension() {
+                Some(extension) if extension.eq("ftd") => {
+                    let content = std::fs::read_to_string(&file_location)?;
+                    let lib = fpm::Library {
+                        config: config.clone(),
+                        markdown: None,
+                        document_id: id.to_string(),
+                        translated_data: Default::default(),
+                        asset_documents: Default::default(),
+                        base_url: base.to_string(),
+                    };
+                    let ftd_doc = match ftd::p2::Document::from(id, content.as_str(), &lib) {
+                        Ok(v) => v,
+                        Err(e) => {
+                            return Err(fpm::Error::PackageError {
+                                message: format!("failed to parse {:?}", &e),
+                            });
+                        }
+                    };
+                    let title = ftd_doc.get(key).unwrap_or(None);
+                    title
+                }
+                _ => None,
+            })
+        }
     }
 
     /// `attach_data_string()` sets the value of extra data in fpm::Config,

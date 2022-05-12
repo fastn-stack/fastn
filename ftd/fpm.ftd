@@ -195,3 +195,8 @@ integer upto-date:
 optional string last-modified-on:
 
 -- all-language-status-data list all-language-translation-status:
+
+
+-- optional string section-title:
+-- optional string subsection-title:
+-- optional string toc-title:
