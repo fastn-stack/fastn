@@ -373,7 +373,7 @@ impl Sitemap {
             if let Some(count) = file_count.get_mut(section.id.as_str()) {
                 *count += 1;
                 section.url = Some(format!(
-                    "{}~{}/",
+                    "{}/-/{}/",
                     section.id.strip_suffix('/').unwrap_or(section.id.as_str()),
                     count
                 ));
@@ -413,7 +413,7 @@ impl Sitemap {
                 if let Some(count) = file_count.get_mut(id.as_str()) {
                     *count += 1;
                     subsection.url = Some(format!(
-                        "{}~{}/",
+                        "{}/-/{}/",
                         id.strip_suffix('/').unwrap_or(id.as_str()),
                         count
                     ));
@@ -452,7 +452,7 @@ impl Sitemap {
             if let Some(count) = file_count.get_mut(toc.id.as_str()) {
                 *count += 1;
                 toc.url = Some(format!(
-                    "{}~{}/",
+                    "{}/-/{}/",
                     toc.id.strip_suffix('/').unwrap_or(toc.id.as_str()),
                     count
                 ));
