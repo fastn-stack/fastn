@@ -1,7 +1,10 @@
 async fn serve_static(req: actix_web::HttpRequest) -> actix_web::Result<actix_files::NamedFile> {
     // TODO: It should ideally fallback to index file if not found than an error file or directory listing
+    // TODO:
+    // .build directory should come from config
     let path: std::path::PathBuf = req.match_info().query("path").parse().unwrap();
     let file_path = std::path::PathBuf::new().join(".build").join(path);
+
     let file_path = if file_path.is_file() {
         file_path
     } else {
@@ -12,13 +15,13 @@ async fn serve_static(req: actix_web::HttpRequest) -> actix_web::Result<actix_fi
 }
 
 #[actix_web::main]
-pub async fn serve() -> std::io::Result<()> {
+pub async fn serve(port: &str) -> std::io::Result<()> {
     println!("### Server Started ###");
-    println!("Go to: {}", "http://127.0.0.1:8000");
+    println!("Go to: http://127.0.0.1:{}", port);
     actix_web::HttpServer::new(|| {
         actix_web::App::new().route("/{path:.*}", actix_web::web::get().to(serve_static))
     })
-    .bind(("127.0.0.1", 8000))?
+    .bind(format!("127.0.0.1:{}", port))?
     .run()
     .await
 }

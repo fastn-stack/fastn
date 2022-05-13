@@ -62,9 +62,10 @@ async fn main() -> fpm::Result<()> {
         let target = mark.value_of("target");
         fpm::stop_tracking(&config, source, target).await?;
     }
-    if let Some(_) = matches.subcommand_matches("serve") {
-        tokio::task::spawn_blocking(|| {
-            fpm::serve().expect("http service error");
+    if let Some(mark) = matches.subcommand_matches("serve") {
+        let port = mark.value_of("port").unwrap_or("8000").to_string();
+        tokio::task::spawn_blocking(move || {
+            fpm::serve(port.as_str()).expect("http service error");
         })
         .await
         .expect("Thread spawn error");
@@ -187,6 +188,7 @@ fn app(authors: &'static str, version: &'static str) -> clap::App<'static, 'stat
         )
         .subcommand(
             clap::SubCommand::with_name("serve")
+                .arg(clap::Arg::with_name("port").required(false))
                 .about("Create an http server and serves static files")
                 .version(env!("CARGO_PKG_VERSION")),
         )
