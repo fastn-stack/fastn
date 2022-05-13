@@ -22,7 +22,7 @@ entry point for this package.
 
 This is how the file looks like:
 
--- ds.code:
+-- ft.code:
 lang: ftd
 
 \-- string package-root: a/
