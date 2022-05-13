@@ -119,29 +119,29 @@ async fn build_simple(
 ) -> fpm::Result<()> {
     let files = if let Some(ref sitemap) = config.sitemap {
         let get_all_locations = sitemap.get_all_locations();
-        let mut files: Vec<fpm::File> = vec![];
+        let mut files: std::collections::HashMap<String, fpm::File> = Default::default();
         for (doc_path, base_path, url) in get_all_locations {
-            files.push({
+            let file = {
                 let mut file =
                     fpm::get_file(config.package.name.to_string(), doc_path, base_path).await?;
                 if let Some(url) = url {
                     file.set_id(format!("{}index.ftd", url).as_str());
                 }
                 file
-            });
+            };
+            files.insert(file.get_id(), file);
         }
-        files.extend(
-            config
-                .get_files(&config.package)
-                .await?
-                .into_iter()
-                .filter(|file_instance| {
-                    matches!(file_instance, fpm::File::Static(_))
-                        || matches!(file_instance, fpm::File::Code(_))
-                        || matches!(file_instance, fpm::File::Image(_))
-                })
-                .collect::<Vec<fpm::File>>(),
-        );
+        let mut files = files
+            .into_iter()
+            .map(|(_, v)| v)
+            .collect::<Vec<fpm::File>>();
+        files.extend(config.get_files(&config.package).await?.into_iter().filter(
+            |file_instance| {
+                matches!(file_instance, fpm::File::Static(_))
+                    || matches!(file_instance, fpm::File::Code(_))
+                    || matches!(file_instance, fpm::File::Image(_))
+            },
+        ));
         files
     } else {
         config.get_files(&config.package).await?
