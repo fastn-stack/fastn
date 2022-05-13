@@ -190,8 +190,7 @@ fn app(authors: &'static str, version: &'static str) -> clap::App<'static, 'stat
         )
         .subcommand(
             clap::SubCommand::with_name("serve")
-                .args(&[])
-                .about("Serves static files")
+                .about("Create an http server and serves static files")
                 .version(env!("CARGO_PKG_VERSION")),
         )
 }
