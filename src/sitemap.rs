@@ -366,7 +366,7 @@ impl SitemapParser {
             // Split the line by `:`. title = 0, url = Option<1>
             let resp_item = if toc_item.get_title().is_none() && toc_item.get_id().is_some() {
                 // URL not defined, Try splitting the title to evaluate the URL
-                let current_title = toc_item.get_id().clone().unwrap();
+                let current_title = toc_item.get_id().unwrap();
                 let (title, url) = match current_title.as_str().matches(':').count() {
                     1 | 0 => {
                         if let Some((first, second)) = current_title.rsplit_once(":") {
@@ -622,11 +622,11 @@ impl Sitemap {
     ///                         The location of the document in the current/translation package
     ///     url: &Option<String> // expected url for the document.
     /// )
-    pub(crate) fn get_all_locations<'a>(
-        &'a self,
+    pub(crate) fn get_all_locations(
+        &self,
     ) -> Vec<(
-        &'a camino::Utf8PathBuf,
-        &'a Option<camino::Utf8PathBuf>,
+        &camino::Utf8PathBuf,
+        &Option<camino::Utf8PathBuf>,
         Option<String>,
     )> {
         let mut locations = vec![];
@@ -650,7 +650,7 @@ impl Sitemap {
                         &toc.translation_file_location,
                         get_id(toc.id.as_str()),
                     ));
-                    locations.extend(get_toc_locations(&toc));
+                    locations.extend(get_toc_locations(toc));
                 }
             }
         }
@@ -677,7 +677,7 @@ impl Sitemap {
                     &child.translation_file_location,
                     get_id(child.id.as_str()),
                 ));
-                locations.extend(get_toc_locations(&child));
+                locations.extend(get_toc_locations(child));
             }
             locations
         }
@@ -699,7 +699,7 @@ impl Sitemap {
                     .map(|v| TocItemCompat::new(v.id.clone(), v.title.clone(), false))
                     .collect();
                 if let Some(sub) = section.subsections.first() {
-                    toc = get_all_toc(&sub.toc);
+                    toc = get_all_toc(sub.toc.as_slice());
                 }
                 sections.push(TocItemCompat::new(
                     Some(section.id.to_string()),
@@ -711,7 +711,7 @@ impl Sitemap {
             }
 
             if let Some((subsection_list, toc_list)) =
-                get_subsection_by_id(id, &section.subsections)
+                get_subsection_by_id(id, section.subsections.as_slice())
             {
                 subsections.extend(subsection_list);
                 toc.extend(toc_list);
@@ -745,11 +745,11 @@ impl Sitemap {
 
         return None;
 
-        fn get_all_toc(toc: &Vec<TocItem>) -> Vec<TocItemCompat> {
+        fn get_all_toc(toc: &[TocItem]) -> Vec<TocItemCompat> {
             toc.iter()
                 .map(|v| {
                     let mut toc = TocItemCompat::new(Some(v.id.clone()), v.title.clone(), false);
-                    toc.children = get_all_toc(&v.children);
+                    toc.children = get_all_toc(v.children.as_slice());
                     toc
                 })
                 .collect()
@@ -757,7 +757,7 @@ impl Sitemap {
 
         fn get_subsection_by_id(
             id: &str,
-            subsections: &Vec<Subsection>,
+            subsections: &[Subsection],
         ) -> Option<(Vec<TocItemCompat>, Vec<TocItemCompat>)> {
             let mut subsection_list = vec![];
             let mut toc = vec![];
@@ -766,7 +766,7 @@ impl Sitemap {
             for (idx, subsection) in subsections.iter().enumerate() {
                 index = idx;
                 if subsection.visible && subsection.id.as_ref().map(|v| v.eq(id)).unwrap_or(false) {
-                    toc = get_all_toc(&subsection.toc);
+                    toc = get_all_toc(subsection.toc.as_slice());
                     subsection_list.push(TocItemCompat::new(
                         subsection.id.clone(),
                         subsection.title.clone(),
@@ -776,7 +776,7 @@ impl Sitemap {
                     break;
                 }
 
-                if let Some(toc_list) = get_toc_by_id(id, &subsection.toc) {
+                if let Some(toc_list) = get_toc_by_id(id, subsection.toc.as_slice()) {
                     toc.extend(toc_list);
                     subsection_list.push(TocItemCompat::new(
                         subsection.id.clone(),
@@ -804,7 +804,7 @@ impl Sitemap {
             None
         }
 
-        fn get_toc_by_id(id: &str, toc: &Vec<TocItem>) -> Option<Vec<TocItemCompat>> {
+        fn get_toc_by_id(id: &str, toc: &[TocItem]) -> Option<Vec<TocItemCompat>> {
             let mut found = false;
             let toc_list = get_toc_by_id_(id, toc, &mut found).1;
             if found {
@@ -814,14 +814,15 @@ impl Sitemap {
 
             fn get_toc_by_id_(
                 id: &str,
-                toc: &Vec<TocItem>,
+                toc: &[TocItem],
                 found: &mut bool,
             ) -> (bool, Vec<TocItemCompat>) {
                 let mut toc_list = vec![];
                 let mut found_here = false;
                 for toc_item in toc.iter() {
                     toc_list.push({
-                        let (is_active, children) = get_toc_by_id_(id, &toc_item.children, found);
+                        let (is_active, children) =
+                            get_toc_by_id_(id, toc_item.children.as_slice(), found);
                         let mut current_toc = TocItemCompat::new(
                             Some(toc_item.id.to_string()),
                             toc_item.title.clone(),
@@ -851,7 +852,8 @@ impl Sitemap {
             if section.id.as_str().eq(id) {
                 return Some(section.extra_data.to_owned());
             }
-            if let Some(data) = get_extra_data_from_subsections(id, &section.subsections) {
+            if let Some(data) = get_extra_data_from_subsections(id, section.subsections.as_slice())
+            {
                 let mut all_data = section.extra_data.clone();
                 all_data.extend(data);
                 return Some(all_data);
@@ -861,13 +863,13 @@ impl Sitemap {
 
         fn get_extra_data_from_subsections(
             id: &str,
-            subsections: &Vec<Subsection>,
+            subsections: &[Subsection],
         ) -> Option<std::collections::BTreeMap<String, String>> {
             for subsection in subsections {
                 if subsection.visible && subsection.id.as_ref().unwrap_or(&"".to_string()).eq(id) {
                     return Some(subsection.extra_data.to_owned());
                 }
-                if let Some(data) = get_extra_data_from_toc(id, &subsection.toc) {
+                if let Some(data) = get_extra_data_from_toc(id, subsection.toc.as_slice()) {
                     let mut all_data = subsection.extra_data.clone();
                     all_data.extend(data);
                     return Some(all_data);
@@ -878,13 +880,13 @@ impl Sitemap {
 
         fn get_extra_data_from_toc(
             id: &str,
-            toc: &Vec<TocItem>,
+            toc: &[TocItem],
         ) -> Option<std::collections::BTreeMap<String, String>> {
             for toc_item in toc {
                 if toc_item.id.as_str().eq(id) {
                     return Some(toc_item.extra_data.to_owned());
                 }
-                if let Some(data) = get_extra_data_from_toc(id, &toc_item.children) {
+                if let Some(data) = get_extra_data_from_toc(id, toc_item.children.as_slice()) {
                     let mut all_data = toc_item.extra_data.clone();
                     all_data.extend(data);
                     return Some(all_data);

@@ -764,7 +764,11 @@ impl Package {
             .map(|(v, _)| {
                 (
                     v,
-                    Some(self.canonical_url.clone().unwrap_or(self.name.to_string())),
+                    Some(
+                        self.canonical_url
+                            .clone()
+                            .unwrap_or_else(|| self.name.to_string()),
+                    ),
                 )
             })
             .unwrap_or((path, self.canonical_url.clone()));
