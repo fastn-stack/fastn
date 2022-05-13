@@ -32,20 +32,6 @@ pub struct Section {
     /// Here foo/ is store as `id`
     pub id: String,
 
-    /// `url` stores the url created for the corresponding file
-    /// This could differ from the `id` if the same document id present
-    /// in the sitemap for more than once.
-    /// Example:
-    ///
-    ///
-    /// \# foo/
-    ///
-    /// \# foo/
-    ///
-    ///
-    /// Here foo/ is called twice. So the other one gets different url.
-    pub url: Option<String>,
-
     /// `title` contains the title of the document. This can be specified inside
     /// document itself.
     ///
@@ -115,7 +101,6 @@ pub struct Section {
 #[derive(Debug, Clone)]
 pub struct Subsection {
     pub id: Option<String>,
-    pub url: Option<String>,
     pub title: Option<String>,
     pub file_location: camino::Utf8PathBuf,
     pub base: camino::Utf8PathBuf,
@@ -129,7 +114,6 @@ impl Default for Subsection {
     fn default() -> Self {
         Subsection {
             id: None,
-            url: None,
             title: None,
             file_location: Default::default(),
             base: Default::default(),
@@ -144,7 +128,6 @@ impl Default for Subsection {
 #[derive(Debug, Clone, Default)]
 pub struct TocItem {
     pub id: String,
-    pub url: Option<String>,
     pub title: Option<String>,
     pub file_location: camino::Utf8PathBuf,
     pub base: camino::Utf8PathBuf,
@@ -209,6 +192,51 @@ impl SitemapElement {
             SitemapElement::TocItem(s) => &mut s.extra_data,
         };
         element_title.insert(key.to_string(), value.trim().to_string());
+    }
+
+    pub(crate) fn set_title(&mut self, title: Option<String>) {
+        let element_title = match self {
+            SitemapElement::Section(s) => &mut s.title,
+            SitemapElement::Subsection(s) => &mut s.title,
+            SitemapElement::TocItem(s) => &mut s.title,
+        };
+        *element_title = title;
+    }
+
+    pub(crate) fn set_id(&mut self, id: Option<String>) {
+        let id = if let Some(id) = id {
+            id
+        } else {
+            return;
+        };
+        match self {
+            SitemapElement::Section(s) => {
+                s.id = id;
+            }
+            SitemapElement::Subsection(s) => {
+                s.id = Some(id);
+            }
+            SitemapElement::TocItem(s) => {
+                s.id = id;
+            }
+        };
+    }
+
+    pub(crate) fn get_title(&self) -> Option<String> {
+        match self {
+            SitemapElement::Section(s) => &s.title,
+            SitemapElement::Subsection(s) => &s.title,
+            SitemapElement::TocItem(s) => &s.title,
+        }
+        .clone()
+    }
+
+    pub(crate) fn get_id(&self) -> Option<String> {
+        match self {
+            SitemapElement::Section(s) => Some(s.id.clone()),
+            SitemapElement::Subsection(s) => s.id.clone(),
+            SitemapElement::TocItem(s) => Some(s.id.clone()),
+        }
     }
 }
 
@@ -303,7 +331,7 @@ impl SitemapParser {
                 }
             }
         }
-        self.eval_temp_item();
+        self.eval_temp_item()?;
 
         // Stop eager checking, Instead of split and evaluate URL/title, first push
         // The complete string, postprocess if url doesn't exist
@@ -329,20 +357,80 @@ impl SitemapParser {
         Ok(())
     }
 
-    fn eval_temp_item(&mut self) {
+    fn eval_temp_item(&mut self) -> Result<(), ParseError> {
         if let Some((ref toc_item, depth)) = self.temp_item {
-            self.sections.push((toc_item.clone(), depth))
+            // Split the line by `:`. title = 0, url = Option<1>
+            let resp_item = if toc_item.get_title().is_none() && toc_item.get_id().is_some() {
+                // URL not defined, Try splitting the title to evaluate the URL
+                let current_title = toc_item.get_id().clone().unwrap();
+                let (title, url) = match current_title.as_str().matches(':').count() {
+                    1 | 0 => {
+                        if let Some((first, second)) = current_title.rsplit_once(":") {
+                            (
+                                Some(first.trim().to_string()),
+                                Some(second.trim().to_string()),
+                            )
+                        } else {
+                            // No matches, i.e. return the current string as title, url as none
+                            (Some(current_title), None)
+                        }
+                    }
+                    _ => {
+                        // The URL can have its own colons. So match the URL first
+                        let url_regex = regex::Regex::new(
+                            r#":[ ]?(?P<url>(?:https?)?://(?:[a-zA-Z0-9]+\.)?(?:[A-z0-9]+\.)(?:[A-z0-9]+)(?:[/A-Za-z0-9\?:\&%]+))"#
+                        ).unwrap();
+                        if let Some(regex_match) = url_regex.find(current_title.as_str()) {
+                            let curr_title = current_title.as_str();
+                            (
+                                Some(curr_title[..regex_match.start()].trim().to_string()),
+                                Some(
+                                    curr_title[regex_match.start()..regex_match.end()]
+                                        .trim_start_matches(':')
+                                        .trim()
+                                        .to_string(),
+                                ),
+                            )
+                        } else {
+                            return Err(ParseError::InvalidTOCItem {
+                                doc_id: self.doc_name.clone(),
+                                message: "Ambiguous <title>: <URL> evaluation. Multiple colons found. Either specify the complete URL or specify the url as an attribute".to_string(),
+                                row_content: current_title.as_str().to_string(),
+                            });
+                        }
+                    }
+                };
+
+                {
+                    let mut toc_item = toc_item.clone();
+                    toc_item.set_id(url);
+                    toc_item.set_title(title);
+                    toc_item
+                }
+            } else {
+                toc_item.clone()
+            };
+            self.sections.push((resp_item, depth))
         }
         self.temp_item = None;
+        Ok(())
     }
     fn read_attrs(&mut self, line: &str) -> Result<(), ParseError> {
         if line.trim().is_empty() {
             // Empty line found. Process the temp_item
-            self.eval_temp_item();
+            self.eval_temp_item()?;
         } else {
+            // let id = self.temp_item.unwrap().0.get_id();
             match &mut self.temp_item {
                 Some((i, _)) => match line.split_once(":") {
                     Some((k, v)) => {
+                        let id = i.get_id();
+                        if k.eq("url") {
+                            i.set_id(Some(v.to_string()));
+                            if i.get_title().is_none() {
+                                i.set_title(id);
+                            }
+                        }
                         i.insert_key_value(k, v);
                     }
                     _ => todo!(),
@@ -374,7 +462,7 @@ impl Sitemap {
             parser.read_line(line)?;
         }
         if parser.temp_item.is_some() {
-            parser.eval_temp_item();
+            parser.eval_temp_item()?;
         }
         let mut sitemap = Sitemap {
             sections: construct_tree_util(parser.finalize()?),
@@ -411,17 +499,6 @@ impl Sitemap {
             current_package_root: &camino::Utf8PathBuf,
             file_count: &mut std::collections::BTreeMap<String, i32>,
         ) -> fpm::Result<()> {
-            if let Some(count) = file_count.get_mut(section.id.as_str()) {
-                *count += 1;
-                section.url = Some(format!(
-                    "{}/-/{}/",
-                    section.id.strip_suffix('/').unwrap_or(section.id.as_str()),
-                    count
-                ));
-            } else {
-                file_count.insert(section.id.clone(), 0);
-            }
-
             let file_path =
                 match fpm::Config::get_file_name(current_package_root, section.id.as_str()) {
                     Ok(name) => current_package_root.join(name),
@@ -451,17 +528,6 @@ impl Sitemap {
             file_count: &mut std::collections::BTreeMap<String, i32>,
         ) -> fpm::Result<()> {
             if let Some(ref id) = subsection.id {
-                if let Some(count) = file_count.get_mut(id.as_str()) {
-                    *count += 1;
-                    subsection.url = Some(format!(
-                        "{}/-/{}/",
-                        id.strip_suffix('/').unwrap_or(id.as_str()),
-                        count
-                    ));
-                } else {
-                    file_count.insert(id.clone(), 0);
-                }
-
                 let file_path = match fpm::Config::get_file_name(current_package_root, id) {
                     Ok(name) => current_package_root.join(name),
                     Err(_) => {
@@ -490,17 +556,6 @@ impl Sitemap {
             current_package_root: &camino::Utf8PathBuf,
             file_count: &mut std::collections::BTreeMap<String, i32>,
         ) -> fpm::Result<()> {
-            if let Some(count) = file_count.get_mut(toc.id.as_str()) {
-                *count += 1;
-                toc.url = Some(format!(
-                    "{}/-/{}/",
-                    toc.id.strip_suffix('/').unwrap_or(toc.id.as_str()),
-                    count
-                ));
-            } else {
-                file_count.insert(toc.id.clone(), 0);
-            }
-
             let file_path = match fpm::Config::get_file_name(current_package_root, toc.id.as_str())
             {
                 Ok(name) => current_package_root.join(name),
@@ -528,36 +583,50 @@ impl Sitemap {
     /// (
     ///     file_location: &camino::Utf8PathBuf, // The location of the document in the file system
     ///     base: &camino::Utf8PathBuf // The base location of the fpm package where the document exists
-    ///     url: &Option<String> // expected url for the document.
     /// )
     pub(crate) fn get_all_locations<'a>(
         &'a self,
     ) -> Vec<(
         &'a camino::Utf8PathBuf,
         &'a camino::Utf8PathBuf,
-        &'a Option<String>,
+        Option<String>,
     )> {
         let mut locations = vec![];
         for section in self.sections.iter() {
-            locations.push((&section.file_location, &section.base, &section.url));
+            locations.push((
+                &section.file_location,
+                &section.base,
+                get_id(section.id.as_str()),
+            ));
             for subsection in section.subsections.iter() {
                 if subsection.visible {
-                    locations.push((&subsection.file_location, &subsection.base, &subsection.url));
+                    locations.push((
+                        &subsection.file_location,
+                        &subsection.base,
+                        subsection.id.as_ref().map(|v| get_id(v.as_str())).flatten(),
+                    ));
                 }
                 for toc in subsection.toc.iter() {
-                    locations.push((&toc.file_location, &toc.base, &toc.url));
+                    locations.push((&toc.file_location, &toc.base, get_id(toc.id.as_str())));
                     locations.extend(get_toc_locations(&toc));
                 }
             }
         }
         return locations;
 
+        fn get_id(id: &str) -> Option<String> {
+            if id.contains("-/") {
+                return Some(id.to_string());
+            }
+            None
+        }
+
         fn get_toc_locations(
             toc: &fpm::sitemap::TocItem,
-        ) -> Vec<(&camino::Utf8PathBuf, &camino::Utf8PathBuf, &Option<String>)> {
+        ) -> Vec<(&camino::Utf8PathBuf, &camino::Utf8PathBuf, Option<String>)> {
             let mut locations = vec![];
             for child in toc.children.iter() {
-                locations.push((&child.file_location, &child.base, &child.url));
+                locations.push((&child.file_location, &child.base, get_id(child.id.as_str())));
                 locations.extend(get_toc_locations(&child));
             }
             locations
@@ -572,21 +641,18 @@ impl Sitemap {
         let mut found = false;
         for (idx, section) in self.sections.iter().enumerate() {
             index = idx;
-            let url = section.url.as_ref().unwrap_or(&section.id);
-            if url.eq(id) {
+            if section.id.as_str().eq(id) {
                 subsections = section
                     .subsections
                     .iter()
                     .filter(|v| v.visible)
-                    .map(|v| {
-                        TocItemCompat::new(v.url.clone().or(v.id.clone()), v.title.clone(), false)
-                    })
+                    .map(|v| TocItemCompat::new(v.id.clone(), v.title.clone(), false))
                     .collect();
                 if let Some(sub) = section.subsections.first() {
                     toc = get_all_toc(&sub.toc);
                 }
                 sections.push(TocItemCompat::new(
-                    Some(url.to_string()),
+                    Some(section.id.to_string()),
                     section.title.clone(),
                     true,
                 ));
@@ -600,7 +666,7 @@ impl Sitemap {
                 subsections.extend(subsection_list);
                 toc.extend(toc_list);
                 sections.push(TocItemCompat::new(
-                    Some(url.to_string()),
+                    Some(section.id.to_string()),
                     section.title.clone(),
                     true,
                 ));
@@ -609,19 +675,17 @@ impl Sitemap {
             }
 
             sections.push(TocItemCompat::new(
-                Some(url.to_string()),
+                Some(section.id.to_string()),
                 section.title.clone(),
                 false,
             ));
         }
         if found {
-            sections.extend(self.sections[index + 1..].iter().map(|v| {
-                TocItemCompat::new(
-                    Some(v.url.clone().unwrap_or(v.id.to_string())),
-                    v.title.clone(),
-                    false,
-                )
-            }));
+            sections.extend(
+                self.sections[index + 1..]
+                    .iter()
+                    .map(|v| TocItemCompat::new(Some(v.id.to_string()), v.title.clone(), false)),
+            );
             return Some(SiteMapCompat {
                 sections,
                 subsections,
@@ -634,11 +698,7 @@ impl Sitemap {
         fn get_all_toc(toc: &Vec<TocItem>) -> Vec<TocItemCompat> {
             toc.iter()
                 .map(|v| {
-                    let mut toc = TocItemCompat::new(
-                        Some(v.url.clone().unwrap_or(v.id.to_string())),
-                        v.title.clone(),
-                        false,
-                    );
+                    let mut toc = TocItemCompat::new(Some(v.id.clone()), v.title.clone(), false);
                     toc.children = get_all_toc(&v.children);
                     toc
                 })
@@ -655,11 +715,10 @@ impl Sitemap {
             let mut found = false;
             for (idx, subsection) in subsections.iter().enumerate() {
                 index = idx;
-                let subsection_id = subsection.url.clone().or(subsection.id.clone());
-                if subsection.visible && subsection_id.as_ref().map(|v| v.eq(id)).unwrap_or(false) {
+                if subsection.visible && subsection.id.as_ref().map(|v| v.eq(id)).unwrap_or(false) {
                     toc = get_all_toc(&subsection.toc);
                     subsection_list.push(TocItemCompat::new(
-                        subsection_id,
+                        subsection.id.clone(),
                         subsection.title.clone(),
                         true,
                     ));
@@ -670,7 +729,7 @@ impl Sitemap {
                 if let Some(toc_list) = get_toc_by_id(id, &subsection.toc) {
                     toc.extend(toc_list);
                     subsection_list.push(TocItemCompat::new(
-                        subsection_id,
+                        subsection.id.clone(),
                         subsection.title.clone(),
                         true,
                     ));
@@ -679,15 +738,17 @@ impl Sitemap {
                 }
 
                 subsection_list.push(TocItemCompat::new(
-                    subsection_id,
+                    subsection.id.clone(),
                     subsection.title.clone(),
                     false,
                 ));
             }
             if found {
-                subsection_list.extend(subsections[index + 1..].iter().map(|v| {
-                    TocItemCompat::new(v.url.clone().or(v.id.clone()), v.title.clone(), false)
-                }));
+                subsection_list.extend(
+                    subsections[index + 1..]
+                        .iter()
+                        .map(|v| TocItemCompat::new(v.id.clone(), v.title.clone(), false)),
+                );
                 return Some((subsection_list, toc));
             }
             None
@@ -709,13 +770,12 @@ impl Sitemap {
                 let mut toc_list = vec![];
                 let mut found_here = false;
                 for toc_item in toc.iter() {
-                    let url = toc_item.url.as_ref().unwrap_or(&toc_item.id);
                     toc_list.push({
                         let (is_active, children) = get_toc_by_id_(id, &toc_item.children, found);
                         let mut current_toc = TocItemCompat::new(
-                            Some(url.to_string()),
+                            Some(toc_item.id.to_string()),
                             toc_item.title.clone(),
-                            url.eq(id) || is_active,
+                            toc_item.id.as_str().eq(id) || is_active,
                         );
                         current_toc.children = children;
                         if is_active {
@@ -724,7 +784,7 @@ impl Sitemap {
                         current_toc
                     });
                     if !*found {
-                        *found = url.eq(id);
+                        *found = toc_item.id.as_str().eq(id);
                         found_here = *found;
                     }
                 }
@@ -738,7 +798,7 @@ impl Sitemap {
         id: &str,
     ) -> Option<std::collections::BTreeMap<String, String>> {
         for section in self.sections.iter() {
-            if section.url.as_ref().unwrap_or(&section.id).eq(id) {
+            if section.id.as_str().eq(id) {
                 return Some(section.extra_data.to_owned());
             }
             if let Some(data) = get_extra_data_from_subsections(id, &section.subsections) {
@@ -754,13 +814,7 @@ impl Sitemap {
             subsections: &Vec<Subsection>,
         ) -> Option<std::collections::BTreeMap<String, String>> {
             for subsection in subsections {
-                if subsection.visible
-                    && subsection
-                        .url
-                        .as_ref()
-                        .unwrap_or(subsection.id.as_ref().unwrap_or(&"".to_string()))
-                        .eq(id)
-                {
+                if subsection.visible && subsection.id.as_ref().unwrap_or(&"".to_string()).eq(id) {
                     return Some(subsection.extra_data.to_owned());
                 }
                 if let Some(data) = get_extra_data_from_toc(id, &subsection.toc) {
@@ -777,7 +831,7 @@ impl Sitemap {
             toc: &Vec<TocItem>,
         ) -> Option<std::collections::BTreeMap<String, String>> {
             for toc_item in toc {
-                if toc_item.url.as_ref().unwrap_or(&toc_item.id).eq(id) {
+                if toc_item.id.as_str().eq(id) {
                     return Some(toc_item.extra_data.to_owned());
                 }
                 if let Some(data) = get_extra_data_from_toc(id, &toc_item.children) {
