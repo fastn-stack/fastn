@@ -64,10 +64,7 @@ async fn main() -> fpm::Result<()> {
     }
     if let Some(_) = matches.subcommand_matches("serve") {
         tokio::task::spawn_blocking(|| {
-            match fpm::serve() {
-                Ok(_) => {}
-                Err(_) => {}
-            };
+            fpm::serve().expect("http service error");
         })
         .await
         .expect("Thread spawn error");
