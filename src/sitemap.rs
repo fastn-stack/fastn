@@ -482,14 +482,8 @@ impl Sitemap {
     fn resolve(&mut self, package: &fpm::Package, config: &fpm::Config) -> fpm::Result<()> {
         let package_root = config.get_root_for_package(package);
         let current_package_root = config.root.to_owned();
-        let mut file_count: std::collections::BTreeMap<String, i32> = Default::default();
         for section in self.sections.iter_mut() {
-            resolve_section(
-                section,
-                &package_root,
-                &current_package_root,
-                &mut file_count,
-            )?;
+            resolve_section(section, &package_root, &current_package_root)?;
         }
         return Ok(());
 
@@ -497,7 +491,6 @@ impl Sitemap {
             section: &mut fpm::sitemap::Section,
             package_root: &camino::Utf8PathBuf,
             current_package_root: &camino::Utf8PathBuf,
-            file_count: &mut std::collections::BTreeMap<String, i32>,
         ) -> fpm::Result<()> {
             let file_path =
                 match fpm::Config::get_file_name(current_package_root, section.id.as_str()) {
@@ -516,7 +509,7 @@ impl Sitemap {
             section.file_location = file_path;
 
             for subsection in section.subsections.iter_mut() {
-                resolve_subsection(subsection, package_root, current_package_root, file_count)?;
+                resolve_subsection(subsection, package_root, current_package_root)?;
             }
             Ok(())
         }
@@ -525,7 +518,6 @@ impl Sitemap {
             subsection: &mut fpm::sitemap::Subsection,
             package_root: &camino::Utf8PathBuf,
             current_package_root: &camino::Utf8PathBuf,
-            file_count: &mut std::collections::BTreeMap<String, i32>,
         ) -> fpm::Result<()> {
             if let Some(ref id) = subsection.id {
                 let file_path = match fpm::Config::get_file_name(current_package_root, id) {
@@ -545,7 +537,7 @@ impl Sitemap {
             }
 
             for toc in subsection.toc.iter_mut() {
-                resolve_toc(toc, package_root, current_package_root, file_count)?;
+                resolve_toc(toc, package_root, current_package_root)?;
             }
             Ok(())
         }
@@ -554,7 +546,6 @@ impl Sitemap {
             toc: &mut fpm::sitemap::TocItem,
             package_root: &camino::Utf8PathBuf,
             current_package_root: &camino::Utf8PathBuf,
-            file_count: &mut std::collections::BTreeMap<String, i32>,
         ) -> fpm::Result<()> {
             let file_path = match fpm::Config::get_file_name(current_package_root, toc.id.as_str())
             {
@@ -573,7 +564,7 @@ impl Sitemap {
             toc.file_location = file_path;
 
             for toc in toc.children.iter_mut() {
-                resolve_toc(toc, package_root, current_package_root, file_count)?;
+                resolve_toc(toc, package_root, current_package_root)?;
             }
             Ok(())
         }
