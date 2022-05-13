@@ -120,10 +120,14 @@ async fn build_simple(
     let files = if let Some(ref sitemap) = config.sitemap {
         let get_all_locations = sitemap.get_all_locations();
         let mut files: std::collections::HashMap<String, fpm::File> = Default::default();
-        for (doc_path, base_path, url) in get_all_locations {
+        for (doc_path, _, url) in get_all_locations {
             let file = {
-                let mut file =
-                    fpm::get_file(config.package.name.to_string(), doc_path, base_path).await?;
+                let mut file = fpm::get_file(
+                    config.package.name.to_string(),
+                    doc_path,
+                    config.root.as_path(),
+                )
+                .await?;
                 if let Some(url) = url {
                     file.set_id(format!("{}index.ftd", url).as_str());
                 }
@@ -251,18 +255,14 @@ async fn build_with_original(
         .map(|v| original_path.join(v))
         .collect::<Vec<camino::Utf8PathBuf>>();
     // documents contains all the files in original package
-    let original_documents = std::collections::BTreeMap::from_iter(
+    let mut original_documents = std::collections::BTreeMap::from_iter(
         fpm::paths_to_files(config.package.name.as_str(), files, original_path.as_path())
             .await?
             .into_iter()
             .map(|v| (v.get_id(), v)),
     );
 
-    // Fetch all files from the current package
-    // ignore all those documents/files which is not in original package
-    // Overwrite the files having same name/id
-
-    let translated_documents = std::collections::BTreeMap::from_iter(
+    let mut translated_documents = std::collections::BTreeMap::from_iter(
         config
             .get_files(&config.package)
             .await?
@@ -270,6 +270,50 @@ async fn build_with_original(
             .filter(|x| original_snapshots.contains_key(x.get_id().as_str()))
             .map(|v| (v.get_id(), v)),
     );
+
+    if let Some(ref sitemap) = config.sitemap {
+        let get_all_locations = sitemap.get_all_locations();
+        let mut files: std::collections::HashMap<String, fpm::File> = Default::default();
+        let mut translation_files: std::collections::HashMap<String, fpm::File> =
+            Default::default();
+        for (doc_path, translation_doc_path, url) in get_all_locations {
+            let file = {
+                let mut file = fpm::get_file(
+                    config.package.name.to_string(),
+                    doc_path,
+                    config.root.as_path(),
+                )
+                .await?;
+                if let Some(ref url) = url {
+                    file.set_id(format!("{}index.ftd", url).as_str());
+                }
+                file
+            };
+            files.insert(file.get_id(), file);
+            if let Some(translation_doc_path) = translation_doc_path {
+                let file = {
+                    let mut file = fpm::get_file(
+                        config.package.name.to_string(),
+                        translation_doc_path,
+                        config.root.as_path(),
+                    )
+                    .await?;
+                    if let Some(ref url) = url {
+                        file.set_id(format!("{}index.ftd", url).as_str());
+                    }
+                    file
+                };
+                translation_files.insert(file.get_id(), file);
+            }
+        }
+
+        original_documents.extend(files);
+        translated_documents.extend(translation_files);
+    }
+
+    // Fetch all files from the current package
+    // ignore all those documents/files which is not in original package
+    // Overwrite the files having same name/id
 
     let translated_documents = fpm::TranslatedDocument::get_translated_document(
         config,

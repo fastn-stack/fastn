@@ -58,11 +58,15 @@ pub struct Section {
 
     /// `file_location` stores the location of the document in the
     /// file system
+    ///
+    /// In case of translation package, it stores the location in original
+    /// package
     pub file_location: camino::Utf8PathBuf,
 
-    /// `base` stores the location of the package in which the document
-    /// exists
-    pub base: camino::Utf8PathBuf,
+    /// `translation_file_location` has value in case of translation package.
+    /// It stores the location of the document in the
+    /// file system in the translation package.
+    pub translation_file_location: Option<camino::Utf8PathBuf>,
 
     /// `extra_data` stores the key value data provided in the section.
     /// This is passed as context and consumes by processors like `get-data`.
@@ -103,7 +107,7 @@ pub struct Subsection {
     pub id: Option<String>,
     pub title: Option<String>,
     pub file_location: camino::Utf8PathBuf,
-    pub base: camino::Utf8PathBuf,
+    pub translation_file_location: Option<camino::Utf8PathBuf>,
     pub visible: bool,
     pub extra_data: std::collections::BTreeMap<String, String>,
     pub is_active: bool,
@@ -116,7 +120,7 @@ impl Default for Subsection {
             id: None,
             title: None,
             file_location: Default::default(),
-            base: Default::default(),
+            translation_file_location: None,
             visible: true,
             extra_data: Default::default(),
             is_active: false,
@@ -130,7 +134,7 @@ pub struct TocItem {
     pub id: String,
     pub title: Option<String>,
     pub file_location: camino::Utf8PathBuf,
-    pub base: camino::Utf8PathBuf,
+    pub translation_file_location: Option<camino::Utf8PathBuf>,
     pub extra_data: std::collections::BTreeMap<String, String>,
     pub is_active: bool,
     pub children: Vec<TocItem>,
@@ -492,21 +496,34 @@ impl Sitemap {
             package_root: &camino::Utf8PathBuf,
             current_package_root: &camino::Utf8PathBuf,
         ) -> fpm::Result<()> {
-            let file_path =
+            let (file_location, translation_file_location) =
                 match fpm::Config::get_file_name(current_package_root, section.id.as_str()) {
-                    Ok(name) => current_package_root.join(name),
-                    Err(_) => package_root.join(
-                        fpm::Config::get_file_name(package_root, section.id.as_str()).map_err(
-                            |e| fpm::Error::UsageError {
-                                message: format!(
-                                    "`{}` not found, fix fpm.sitemap in FPM.ftd. Error: {:?}",
-                                    section.id, e
-                                ),
-                            },
-                        )?,
+                    Ok(name) => {
+                        if current_package_root.eq(package_root) {
+                            (current_package_root.join(name), None)
+                        } else {
+                            (
+                                package_root.join(name.as_str()),
+                                Some(current_package_root.join(name)),
+                            )
+                        }
+                    }
+                    Err(_) => (
+                        package_root.join(
+                            fpm::Config::get_file_name(package_root, section.id.as_str()).map_err(
+                                |e| fpm::Error::UsageError {
+                                    message: format!(
+                                        "`{}` not found, fix fpm.sitemap in FPM.ftd. Error: {:?}",
+                                        section.id, e
+                                    ),
+                                },
+                            )?,
+                        ),
+                        None,
                     ),
                 };
-            section.file_location = file_path;
+            section.file_location = file_location;
+            section.translation_file_location = translation_file_location;
 
             for subsection in section.subsections.iter_mut() {
                 resolve_subsection(subsection, package_root, current_package_root)?;
@@ -520,20 +537,34 @@ impl Sitemap {
             current_package_root: &camino::Utf8PathBuf,
         ) -> fpm::Result<()> {
             if let Some(ref id) = subsection.id {
-                let file_path = match fpm::Config::get_file_name(current_package_root, id) {
-                    Ok(name) => current_package_root.join(name),
-                    Err(_) => {
-                        package_root.join(fpm::Config::get_file_name(package_root, id).map_err(
-                            |e| fpm::Error::UsageError {
-                                message: format!(
-                                    "`{}` not found, fix fpm.sitemap in FPM.ftd. Error: {:?}",
-                                    id, e
-                                ),
-                            },
-                        )?)
-                    }
-                };
-                subsection.file_location = file_path;
+                let (file_location, translation_file_location) =
+                    match fpm::Config::get_file_name(current_package_root, id.as_str()) {
+                        Ok(name) => {
+                            if current_package_root.eq(package_root) {
+                                (current_package_root.join(name), None)
+                            } else {
+                                (
+                                    package_root.join(name.as_str()),
+                                    Some(current_package_root.join(name)),
+                                )
+                            }
+                        }
+                        Err(_) => (
+                            package_root.join(
+                                fpm::Config::get_file_name(package_root, id.as_str()).map_err(
+                                    |e| fpm::Error::UsageError {
+                                        message: format!(
+                                        "`{}` not found, fix fpm.sitemap in FPM.ftd. Error: {:?}",
+                                        id, e
+                                    ),
+                                    },
+                                )?,
+                            ),
+                            None,
+                        ),
+                    };
+                subsection.file_location = file_location;
+                subsection.translation_file_location = translation_file_location;
             }
 
             for toc in subsection.toc.iter_mut() {
@@ -547,21 +578,34 @@ impl Sitemap {
             package_root: &camino::Utf8PathBuf,
             current_package_root: &camino::Utf8PathBuf,
         ) -> fpm::Result<()> {
-            let file_path = match fpm::Config::get_file_name(current_package_root, toc.id.as_str())
-            {
-                Ok(name) => current_package_root.join(name),
-                Err(_) => package_root.join(
-                    fpm::Config::get_file_name(package_root, toc.id.as_str()).map_err(|e| {
-                        fpm::Error::UsageError {
-                            message: format!(
-                                "`{}` not found, fix fpm.sitemap in FPM.ftd. Error: {:?}",
-                                toc.id, e
-                            ),
+            let (file_location, translation_file_location) =
+                match fpm::Config::get_file_name(current_package_root, toc.id.as_str()) {
+                    Ok(name) => {
+                        if current_package_root.eq(package_root) {
+                            (current_package_root.join(name), None)
+                        } else {
+                            (
+                                package_root.join(name.as_str()),
+                                Some(current_package_root.join(name)),
+                            )
                         }
-                    })?,
-                ),
-            };
-            toc.file_location = file_path;
+                    }
+                    Err(_) => (
+                        package_root.join(
+                            fpm::Config::get_file_name(package_root, toc.id.as_str()).map_err(
+                                |e| fpm::Error::UsageError {
+                                    message: format!(
+                                        "`{}` not found, fix fpm.sitemap in FPM.ftd. Error: {:?}",
+                                        toc.id, e
+                                    ),
+                                },
+                            )?,
+                        ),
+                        None,
+                    ),
+                };
+            toc.file_location = file_location;
+            toc.translation_file_location = translation_file_location;
 
             for toc in toc.children.iter_mut() {
                 resolve_toc(toc, package_root, current_package_root)?;
@@ -572,33 +616,40 @@ impl Sitemap {
 
     /// `get_all_locations` returns the list of tuple containing the following values:
     /// (
-    ///     file_location: &camino::Utf8PathBuf, // The location of the document in the file system
-    ///     base: &camino::Utf8PathBuf // The base location of the fpm package where the document exists
+    ///     file_location: &camino::Utf8PathBuf, // The location of the document in the file system.
+    ///                     In case of translation package, the location in the original package
+    ///     translation_file_location: &Option<camino::Utf8PathBuf> // In case of the translation package,
+    ///                         The location of the document in the current/translation package
+    ///     url: &Option<String> // expected url for the document.
     /// )
     pub(crate) fn get_all_locations<'a>(
         &'a self,
     ) -> Vec<(
         &'a camino::Utf8PathBuf,
-        &'a camino::Utf8PathBuf,
+        &'a Option<camino::Utf8PathBuf>,
         Option<String>,
     )> {
         let mut locations = vec![];
         for section in self.sections.iter() {
             locations.push((
                 &section.file_location,
-                &section.base,
+                &section.translation_file_location,
                 get_id(section.id.as_str()),
             ));
             for subsection in section.subsections.iter() {
                 if subsection.visible {
                     locations.push((
                         &subsection.file_location,
-                        &subsection.base,
+                        &subsection.translation_file_location,
                         subsection.id.as_ref().map(|v| get_id(v.as_str())).flatten(),
                     ));
                 }
                 for toc in subsection.toc.iter() {
-                    locations.push((&toc.file_location, &toc.base, get_id(toc.id.as_str())));
+                    locations.push((
+                        &toc.file_location,
+                        &toc.translation_file_location,
+                        get_id(toc.id.as_str()),
+                    ));
                     locations.extend(get_toc_locations(&toc));
                 }
             }
@@ -614,10 +665,18 @@ impl Sitemap {
 
         fn get_toc_locations(
             toc: &fpm::sitemap::TocItem,
-        ) -> Vec<(&camino::Utf8PathBuf, &camino::Utf8PathBuf, Option<String>)> {
+        ) -> Vec<(
+            &camino::Utf8PathBuf,
+            &Option<camino::Utf8PathBuf>,
+            Option<String>,
+        )> {
             let mut locations = vec![];
             for child in toc.children.iter() {
-                locations.push((&child.file_location, &child.base, get_id(child.id.as_str())));
+                locations.push((
+                    &child.file_location,
+                    &child.translation_file_location,
+                    get_id(child.id.as_str()),
+                ));
                 locations.extend(get_toc_locations(&child));
             }
             locations
