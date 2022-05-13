@@ -638,7 +638,15 @@ impl Document {
         };
 
         match thing {
-            ftd::p2::Thing::Variable(v) => self.value_to_json(&v.value.resolve(0, &doc)?),
+            ftd::p2::Thing::Variable(v) => {
+                let mut property_value = &v.value;
+                for (boolean, pv) in v.conditions.iter() {
+                    if boolean.eval(0, &doc)? {
+                        property_value = pv;
+                    }
+                }
+                self.value_to_json(&property_value.resolve(0, &doc)?)
+            }
             t => panic!("{:?} is not a variable", t),
         }
     }
