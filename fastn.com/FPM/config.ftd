@@ -161,3 +161,29 @@ children: $more
 
 /-- ft.footer-toc: Legal
 children: $legal
+
+
+-- fpm.toc-item list author-section:
+$processor$: toc
+
+
+- How to create new fpm project using template `fpm-template`
+  - on github
+  - on gitlab
+  - on bitbucket
+  - from scratch
+- How to install fpm on local machine
+- Build fpm site locally
+- Article on sitemap
+  - What is sitemap
+  - How to use it?
+- How to change common site property like site logo and site name?
+- How to change color-scheme?
+- component that can be used with your fpm site
+  - code-block
+  - slideshow (rename it to feature_display)
+  - featured-article (copy from dotcom/blog/index.ftd to a new repo)
+  - post-list (copy from dotcom/blog/index.ftd to a new repo)
+- how to use fpm site as a blog
+- Competitor
+  - swimm.io
