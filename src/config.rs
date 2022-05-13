@@ -756,18 +756,31 @@ impl Package {
     }
 
     pub fn generate_canonical_url(&self, path: &str) -> String {
-        match &self.canonical_url {
+        if path.starts_with("-/") {
+            return "".to_string();
+        }
+        let (path, canonical_url) = path
+            .split_once("-/")
+            .map(|(v, _)| {
+                (
+                    v,
+                    Some(self.canonical_url.clone().unwrap_or(self.name.to_string())),
+                )
+            })
+            .unwrap_or((path, self.canonical_url.clone()));
+        match canonical_url {
             Some(url) => {
-                // Ignore the FPM document as that path won't exist in the reference website
-                if !path.starts_with("-/") {
-                    format!(
-                        "\n<link rel=\"canonical\" href=\"{canonical_base}{path}\" />",
-                        canonical_base = url,
-                        path = path
-                    )
+                let url = if !url.ends_with('/') {
+                    format!("{}/", url)
                 } else {
-                    "".to_string()
-                }
+                    url
+                };
+                // Ignore the FPM document as that path won't exist in the reference website
+                format!(
+                    "\n<link rel=\"canonical\" href=\"{canonical_base}{path}\" />",
+                    canonical_base = url,
+                    path = path
+                )
             }
             None => "".to_string(),
         }
