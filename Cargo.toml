@@ -45,6 +45,8 @@ sha2 = "0.10"
 itertools = "0.10.3"
 mime_guess = "2"
 semver = "1.0.7"
+actix-web = "4.0.1"
+actix-files = "0.6.0"
 
 [dev-dependencies]
 fbt-lib = "0.1.18"

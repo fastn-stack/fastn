@@ -62,6 +62,16 @@ async fn main() -> fpm::Result<()> {
         let target = mark.value_of("target");
         fpm::stop_tracking(&config, source, target).await?;
     }
+    if let Some(_) = matches.subcommand_matches("serve") {
+        tokio::task::spawn_blocking(|| {
+            match fpm::serve() {
+                Ok(_) => {}
+                Err(_) => {}
+            };
+        })
+        .await
+        .expect("Thread spawn error");
+    }
     Ok(())
 }
 
@@ -176,6 +186,12 @@ fn app(authors: &'static str, version: &'static str) -> clap::App<'static, 'stat
                         .takes_value(true),
                 ])
                 .about("Remove a tracking relation between two files")
+                .version(env!("CARGO_PKG_VERSION")),
+        )
+        .subcommand(
+            clap::SubCommand::with_name("serve")
+                .args(&[])
+                .about("Serves static files")
                 .version(env!("CARGO_PKG_VERSION")),
         )
 }
