@@ -3,9 +3,7 @@ pub fn processor(
     doc: &ftd::p2::TDoc,
     config: &fpm::Config,
 ) -> ftd::p1::Result<ftd::Value> {
-    dbg!("processooor", &config.sitemap.is_some());
     if let Some(ref sitemap) = config.sitemap {
-        dbg!(&sitemap);
         let doc_id = doc
             .name
             .to_string()

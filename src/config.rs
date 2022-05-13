@@ -323,7 +323,7 @@ impl Config {
             sitemap: None,
         };
 
-        let sitemap = match package.translation_of.as_ref() {
+        config.sitemap = match package.translation_of.as_ref() {
             Some(translation) => translation,
             None => &package,
         }
@@ -333,13 +333,13 @@ impl Config {
             fpm::sitemap::Sitemap::parse(v.as_str(), &package, &config).map(Some)
         })?;
 
-        config.resolve_sitemap_title(sitemap)?;
+        config.resolve_sitemap_title()?;
 
         Ok(config)
     }
 
-    fn resolve_sitemap_title(&mut self, sitemap: Option<fpm::sitemap::Sitemap>) -> fpm::Result<()> {
-        let mut sitemap = if let Some(sitemap) = sitemap {
+    fn resolve_sitemap_title(&mut self) -> fpm::Result<()> {
+        let mut sitemap = if let Some(sitemap) = self.sitemap.clone() {
             sitemap
         } else {
             return Ok(());
@@ -348,13 +348,17 @@ impl Config {
         for section in sitemap.sections.iter_mut() {
             section.title = get_title(
                 self,
-                section.id.as_str(),
+                section
+                    .url
+                    .clone()
+                    .unwrap_or(section.id.to_string())
+                    .as_str(),
                 &section.base,
                 &section.file_location,
                 "fpm#section-title",
             )?;
             for subsection in section.subsections.iter_mut() {
-                let id = if let Some(ref id) = subsection.id {
+                let id = if let Some(id) = subsection.url.clone().or(subsection.id.clone()) {
                     id
                 } else {
                     continue;
@@ -381,14 +385,17 @@ impl Config {
             config: &mut fpm::Config,
             toc_item: &mut fpm::sitemap::TocItem,
         ) -> fpm::Result<()> {
-            dbg!(&toc_item);
-            toc_item.title = dbg!(get_title(
+            toc_item.title = get_title(
                 config,
-                toc_item.id.as_str(),
+                toc_item
+                    .url
+                    .clone()
+                    .unwrap_or(toc_item.id.to_string())
+                    .as_str(),
                 &toc_item.base,
                 &toc_item.file_location,
                 "fpm#toc-title",
-            ))?;
+            )?;
             for toc_item in toc_item.children.iter_mut() {
                 resolve_toc_title(config, toc_item)?;
             }
@@ -421,10 +428,11 @@ impl Config {
                             });
                         }
                     };
-                    let title = ftd_doc
-                        .get(key)
-                        .unwrap_or(ftd_doc.title().map(|v| v.original));
-                    title
+
+                    match ftd_doc.get::<Option<String>>(key) {
+                        Ok(title) => title.or_else(|| ftd_doc.title().map(|v| v.original)),
+                        _ => ftd_doc.title().map(|v| v.original),
+                    }
                 }
                 _ => None,
             })
