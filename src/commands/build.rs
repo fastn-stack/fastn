@@ -117,7 +117,15 @@ async fn build_simple(
     skip_failed: bool,
     asset_documents: &std::collections::HashMap<String, String>,
 ) -> fpm::Result<()> {
-    let files = if let Some(ref sitemap) = config.sitemap {
+    let mut documents = std::collections::BTreeMap::from_iter(
+        config
+            .get_files(&config.package)
+            .await?
+            .into_iter()
+            .map(|v| (v.get_id(), v)),
+    );
+
+    if let Some(ref sitemap) = config.sitemap {
         let get_all_locations = sitemap.get_all_locations();
         let mut files: std::collections::HashMap<String, fpm::File> = Default::default();
         for (doc_path, _, url) in get_all_locations {
@@ -128,30 +136,17 @@ async fn build_simple(
                     config.root.as_path(),
                 )
                 .await?;
-                if let Some(url) = url {
+                if let Some(ref url) = url {
                     file.set_id(format!("{}index.ftd", url).as_str());
                 }
                 file
             };
             files.insert(file.get_id(), file);
         }
-        let mut files = files
-            .into_iter()
-            .map(|(_, v)| v)
-            .collect::<Vec<fpm::File>>();
-        files.extend(config.get_files(&config.package).await?.into_iter().filter(
-            |file_instance| {
-                matches!(file_instance, fpm::File::Static(_))
-                    || matches!(file_instance, fpm::File::Code(_))
-                    || matches!(file_instance, fpm::File::Image(_))
-            },
-        ));
-        files
-    } else {
-        config.get_files(&config.package).await?
-    };
-    let documents =
-        std::collections::BTreeMap::from_iter(files.into_iter().map(|v| (v.get_id(), v)));
+
+        documents.extend(files);
+    }
+
     process_files(
         config,
         &config.package,
@@ -174,13 +169,35 @@ async fn build_with_translations(
 ) -> fpm::Result<()> {
     use std::io::Write;
 
-    let documents = std::collections::BTreeMap::from_iter(
+    let mut documents = std::collections::BTreeMap::from_iter(
         config
             .get_files(&config.package)
             .await?
             .into_iter()
             .map(|v| (v.get_id(), v)),
     );
+
+    if let Some(ref sitemap) = config.sitemap {
+        let get_all_locations = sitemap.get_all_locations();
+        let mut files: std::collections::HashMap<String, fpm::File> = Default::default();
+        for (doc_path, _, url) in get_all_locations {
+            let file = {
+                let mut file = fpm::get_file(
+                    config.package.name.to_string(),
+                    doc_path,
+                    config.root.as_path(),
+                )
+                .await?;
+                if let Some(ref url) = url {
+                    file.set_id(format!("{}index.ftd", url).as_str());
+                }
+                file
+            };
+            files.insert(file.get_id(), file);
+        }
+
+        documents.extend(files);
+    }
 
     let message = fpm::available_languages(config)?;
 
