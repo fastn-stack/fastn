@@ -479,12 +479,7 @@ impl Config {
     }
 
     pub(crate) fn get_file_name(root: &camino::Utf8PathBuf, id: &str) -> fpm::Result<String> {
-        let id = id
-            .split_once("-/")
-            .map(|(id, _)| id)
-            .unwrap_or(id)
-            .trim()
-            .trim_matches('/');
+        let mut id = id.split_once("-/").map(|(id, _)| id).unwrap_or(id).trim();
         if id.eq("/") {
             if root.join("index.ftd".to_string()).exists() {
                 return Ok("index.ftd".to_string());
@@ -496,6 +491,7 @@ impl Config {
                 message: "File not found".to_string(),
             });
         }
+        id = id.trim_matches('/');
         if root.join(format!("{}.ftd", id)).exists() {
             return Ok(format!("{}.ftd", id));
         }
