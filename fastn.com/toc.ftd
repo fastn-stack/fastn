@@ -1,5 +1,8 @@
+-- fpm.sitemap-data sitemap:
+$processor$: get-sitemap
+
 -- ft.page-with-toc: `$processor$: toc`
-toc: $ft.toc
+toc: $sitemap.toc
 
 
 

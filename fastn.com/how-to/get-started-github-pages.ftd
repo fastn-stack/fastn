@@ -1,7 +1,10 @@
 -- import: fpm.dev/assets
 
+-- fpm.sitemap-data sitemap:
+$processor$: get-sitemap
+
 -- ft.page-with-toc: Getting started with github pages
-toc: $ft.toc
+toc: $sitemap.toc
 
 -- ft.markdown: 
 

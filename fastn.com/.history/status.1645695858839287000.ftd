@@ -1,5 +1,5 @@
 -- ft.doc-page:
-toc: $ft.toc
+toc: $sitemap.toc
 
 
 

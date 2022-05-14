@@ -1,7 +1,10 @@
 -- import: fpm.dev/assets
 
+-- fpm.sitemap-data sitemap:
+$processor$: get-sitemap
+
 -- ft.page-with-toc: Common Header Component
-toc: $config.themes-toc
+toc: $sitemap.toc
 
 -- ft.markdown: 
 

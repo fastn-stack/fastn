@@ -1,5 +1,8 @@
+-- fpm.sitemap-data sitemap:
+$processor$: get-sitemap
+
 -- ft.page-with-toc: `fpm` Variables
-toc: $config.themes-toc
+toc: $sitemap.toc
 
 
 

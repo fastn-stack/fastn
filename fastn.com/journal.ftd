@@ -1,8 +1,11 @@
 -- import: fpm.dev/assets
 
+-- fpm.sitemap-data sitemap:
+$processor$: get-sitemap
+
 -- ft.page-with-toc: FPM Journal
-toc: $config.dev-toc
-sub-sections: $config.dev-section
+toc: $sitemap.toc
+sub-sections: $sitemap.subsections
 extra: $config.empty
 
 

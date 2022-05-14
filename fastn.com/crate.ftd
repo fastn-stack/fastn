@@ -1,6 +1,9 @@
+-- fpm.sitemap-data sitemap:
+$processor$: get-sitemap
+
 -- ft.page-with-toc: Using `fpm` Crate
-toc: $config.crate-toc
-sub-sections: $config.dev-section
+toc: $sitemap.toc
+sub-sections: $sitemap.subsections
 extra: $config.empty
 
 `fpm` is available as a Rust crate.

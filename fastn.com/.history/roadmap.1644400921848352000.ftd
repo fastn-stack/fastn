@@ -3,7 +3,7 @@
 
 
 -- ft.doc-page:
-toc: $config.dev-toc
+toc: $sitemap.toc
 
 
 -- ft.h0: Roadmap

@@ -1,5 +1,8 @@
+-- fpm.sitemap-data sitemap:
+$processor$: get-sitemap
+
 -- ft.page-with-toc: File System Organization
-toc: $ft.toc
+toc: $sitemap.toc
 
 
 -- ft.h1: Package

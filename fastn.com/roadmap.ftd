@@ -1,5 +1,9 @@
+-- fpm.sitemap-data sitemap:
+$processor$: get-sitemap
+
 -- ft.page-with-toc: Roadmap
-toc: $config.dev-toc
+toc: $sitemap.toc
+sub-sections: $sitemap.subsections
 
 
 -- ft.h1: FPM as kick-ass SSG tool

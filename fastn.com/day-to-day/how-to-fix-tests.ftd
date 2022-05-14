@@ -1,6 +1,9 @@
+-- fpm.sitemap-data sitemap:
+$processor$: get-sitemap
+
 -- ft.page-with-toc: How To Update Failing Snapshot Tests
-toc: $config.crate-toc
-sub-sections: $config.dev-section
+toc: $sitemap.toc
+sub-sections: $sitemap.subsections
 extra: $config.empty
 
 We can fix the failing tests which is due to snapshot mismatch in output folder.

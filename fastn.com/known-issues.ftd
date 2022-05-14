@@ -1,8 +1,11 @@
 -- import: fpm.dev/assets
 
 
+-- fpm.sitemap-data sitemap:
+$processor$: get-sitemap
+
 -- ft.page-with-toc: Known Issues
-toc: $ft.toc
+toc: $sitemap.toc
 
 
 -- ft.h1: Translation Can Not Be Added Unless Original Package Has Been Published

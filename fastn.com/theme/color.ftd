@@ -2,8 +2,11 @@
 
 
 
+-- fpm.sitemap-data sitemap:
+$processor$: get-sitemap
+
 -- ft.page-with-toc: FPM Color
-toc: $config.themes-toc
+toc: $sitemap.toc
 
 -- cd.color-display:
 color: $fpm.color

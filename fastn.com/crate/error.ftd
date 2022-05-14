@@ -1,6 +1,9 @@
+-- fpm.sitemap-data sitemap:
+$processor$: get-sitemap
+
 -- ft.page-with-toc: `fpm::Error`
-toc: $config.crate-toc
-sub-sections: $config.dev-section
+toc: $sitemap.toc
+sub-sections: $sitemap.subsections
 extra: $config.empty
 
 `fpm::Error` is the main Error enum that is returned by most of our functions.

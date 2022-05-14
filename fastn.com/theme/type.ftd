@@ -1,5 +1,8 @@
+-- fpm.sitemap-data sitemap:
+$processor$: get-sitemap
+
 -- ft.page-with-toc: FPM Typography
-toc: $config.themes-toc
+toc: $sitemap.toc
 
 -- ftd.column:
 id: outer

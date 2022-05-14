@@ -2,7 +2,7 @@
 -- import: fpm.dev/config
 
 -- ft.doc-page:
-toc: $config.themes-toc
+toc: $sitemap.toc
 
 
 -- ft.h0: FPM Package Interface

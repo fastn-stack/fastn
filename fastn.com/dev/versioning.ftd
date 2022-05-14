@@ -1,5 +1,9 @@
+-- fpm.sitemap-data sitemap:
+$processor$: get-sitemap
+
 -- ft.page-with-toc: How Versioning Works
-toc: $config.dev-toc
+toc: $sitemap.toc
+sub-sections: $sitemap.subsections
 
 FPM uses fallback based file tracking technique to implement versioning.
 

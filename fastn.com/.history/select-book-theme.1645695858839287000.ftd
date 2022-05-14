@@ -76,7 +76,7 @@ width: fill
 --- container: ftd.main
 
 --- footer:
-footer-toc: $footer-toc
+footer-toc: $sitemap.toc
 
 
 -- ftd.column create-section:
@@ -126,7 +126,7 @@ id:  content-container
 
 
 -- ftd.column doc-page:
-toc-item list toc: $toc
+toc-item list toc: $sitemap.toc
 width: fill
 open: true
 append-at: main-container
@@ -135,17 +135,17 @@ append-at: main-container
 --- doc-page-desktop:
 if: not $fpm.mobile
 id: main-container
-toc: $toc
+toc: $sitemap.toc
 
 --- container: ftd.main
 
 --- doc-page-mobile:
 if: $fpm.mobile
 id: main-container
-toc: $toc
+toc: $sitemap.toc
 
 -- ftd.column doc-page-desktop:
-toc-item list toc: $toc
+toc-item list toc: $sitemap.toc
 width: fill
 open: true
 append-at: main-container
@@ -174,10 +174,10 @@ padding-vertical: 20
 --- container: ftd.main
 
 --- footer:
-footer-toc: $footer-toc
+footer-toc: $sitemap.toc
 
 -- ftd.column doc-page-mobile:
-toc-item list toc: $toc
+toc-item list toc: $sitemap.toc
 width: fill
 open: true
 append-at: main-container
@@ -221,7 +221,7 @@ padding-vertical: 20
 --- container: ftd.main
 
 --- footer:
-footer-toc: $footer-toc
+footer-toc: $sitemap.toc
 
 -- ftd.text site-link:
 caption title:
@@ -428,13 +428,13 @@ width: fill
 
 --- footer-desktop:
 if: not $fpm.mobile
-footer-toc: $footer-toc
+footer-toc: $sitemap.toc
 
 container: ftd.main
 
 --- footer-mobile:
 if: $fpm.mobile
-footer-toc: $footer-toc
+footer-toc: $sitemap.toc
 
 
 -- ftd.row footer-desktop:
@@ -447,7 +447,7 @@ spacing: space-between
 
 --- footer-instance:
 $loop$: $footer-toc as $obj
-footer-toc: $obj
+footer-toc: $sitemap.toc
 
 -- ftd.column footer-mobile:
 footer-item list footer-toc:
@@ -459,7 +459,7 @@ position: left
 
 --- footer-instance:
 $loop$: $footer-toc as $obj
-footer-toc: $obj
+footer-toc: $sitemap.toc
 
 
 -- ftd.column hero:
@@ -613,7 +613,7 @@ color if $fpm.dark-mode: $neutral-200
 
 --- toc-instance:
 $loop$: $toc.children as $obj
-toc: $obj
+toc: $sitemap.toc
 
 -- ftd.column render-toc:
 toc-item list toc-obj:
@@ -633,7 +633,7 @@ border-color if $fpm.dark-mode: #343434
 
 --- toc-instance:
 $loop$: $toc-obj as $obj
-toc: $obj
+toc: $sitemap.toc
 
 
 -- ftd.column render-toc-mobile:
@@ -664,7 +664,7 @@ z-index: 4
 
 --- toc-instance:
 $loop$: $toc-obj as $obj
-toc: $obj
+toc: $sitemap.toc
 
 
 -- ftd.text markdown:

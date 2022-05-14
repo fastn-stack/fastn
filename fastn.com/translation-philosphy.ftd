@@ -1,5 +1,8 @@
+-- fpm.sitemap-data sitemap:
+$processor$: get-sitemap
+
 -- ft.page-with-toc: Translation Philosphy
-toc: $ft.toc
+toc: $sitemap.toc
 
 -- ft.markdown: 
 

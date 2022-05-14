@@ -2,7 +2,7 @@
 -- import: fpm.dev/config
 
 -- ft.doc-page:
-toc: $ft.toc
+toc: $sitemap.toc
 
 -- ft.h0: Getting started with Vercel
 

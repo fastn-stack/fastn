@@ -1,5 +1,8 @@
+-- fpm.sitemap-data sitemap:
+$processor$: get-sitemap
+
 -- ft.page-with-toc: FPM Sitemap
-toc: $config.themes-toc
+toc: $sitemap.toc
 
 "FPM Sitemap" is the name of a structure we recommend for sites. It is
 optional, you can create any sitemap you want for your sites. FPM has

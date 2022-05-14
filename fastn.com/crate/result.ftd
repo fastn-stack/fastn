@@ -1,6 +1,9 @@
+-- fpm.sitemap-data sitemap:
+$processor$: get-sitemap
+
 -- ft.page-with-toc: `fpm::Result`
-toc: $config.crate-toc
-sub-sections: $config.dev-section
+toc: $sitemap.toc
+sub-sections: $sitemap.subsections
 extra: $config.empty
 
 Most `fpm` operations return `fpm::Result<T>`.
