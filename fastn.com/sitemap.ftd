@@ -18,10 +18,10 @@ on the left.
 In the UI we also have "Section/Sub Section" Nav. It automatically will show the
 section name and sub-section name.
 
--- ds.h1: Sitemap "Language" And `$processor$`
+-- ds.h1: Sitemap "Language"
 
-FPM comes with a `$processor$` called "sitemap", which parses the site
-structure as a string.
+FPM comes with a variable called "sitemap", which contains the sitemap structure
+and later this structure get parses.
 
 -- ds.code: Sitemap Example
 lang: txt
@@ -33,22 +33,73 @@ url: sectionURL
 
 ## Sub Section: sub/url/
 
-## If Sub:
+## If Sub Section: Has A Colon In The Name
 url: whatever
 
 - ToC Item: toc/
 
+
+-- ds.h1: Sitemap `$processor$`
+
+The sitemap get parse into a record `sitemap-data`. This record is present in `fpm`
+The record looks like this
+
+-- ds.code: record `sitemap-data` (fpm.ftd)
+lang: ftd
+
+\-- record sitemap-data:
+toc-item list sections:
+toc-item list subsections:
+toc-item list toc:
+
+
+\-- record toc-item:
+optional string title:
+optional string url:
+optional string font-icon:
+optional string img-src:
+boolean is-heading:
+boolean is-disabled:
+boolean is-active: false
+toc-item list children:
+
 -- ds.markdown:
 
-The TOC parser is already written, we will reuse it.
+The record `sitemap-data` contains sections, subsections and toc. For different document
+these values would be different. We can get this values by calling the `get-sitemap`
+processor which returns the value of `sitemap-data` type.
 
--- ds.code: `$processor$` usage
+-- ds.code:
+lang: ftd
+
+\-- fpm.sitemap-data sitemap:
+$processor$: get-sitemap
+
+
+
+-- ds.markdown:
+
+Consider a package contains the following sitemap
+
+-- ds.code:
 lang: ftd
 
 \-- fpm.sitemap:
-$processor$: sitemap
 
-# Section: section/url/
+# Section Title: /
+
+
+## Subsection Title: /
+
+- Toc Title: /
+- Toc Title 1: foo/
+  - Bar Title: bar/
+
+
+## Subsection Title 2: subsection2/
+
+- Other Toc Title: subsection2/foo/
+
 
 -- ds.h1: Missing Sub Section
 
@@ -56,28 +107,76 @@ If a TOC comes directly in a section the section would have a single anonymous
 sub-section, and this sub-section would not be shown in UI. In UI people will
 just see the section header and toc on left, no sub-section line.
 
--- ds.h1: SubSection Header Overrides
 
--- ds.code: `$processor$` usage
-lang: ftd
 
-\-- fpm.sitemap:
-$processor$: sitemap
 
-# Section: section/url/
-heading: Heading To Be Shown In Side
+
+
+
+# Second Section Title: section/
+
+## Second Subsection Title: second-subsection/
+
+- Second Toc Title: second-toc/
+
 
 -- ds.markdown:
 
-In this case "Section" would be shown in the header, but "Heading To Be Shown
-In Side" would be shown in the left side.
+Now, for the `get-sitemap` processor in the document with id `bar/`
+would return the value
 
-`heading` works for both section and sub-section.
 
--- ds.h1: URL Can Be A Reference
+-- ds.code:
+lang: json
 
-Any URL referred in the text could start with `$` and if so it is a variable
-reference.
+{
+  "sitemap": {
+    "sections": [
+      {
+        "title": "Section Title",
+        "url": "/",
+        "is-active": true,
+        "children": []
+      }
+    ],
+    "subsections": [
+      {
+        "title": "Subsection Title",
+        "url": "/",
+        "is-active": true,
+        "children": []
+      },
+      {
+        "title": "Subsection Title 2",
+        "url": "subsection2",
+        "is-active": false,
+        "children": []
+      }
+    ],
+    "toc": [
+      {
+        "title": "Toc Title",
+        "url": "",
+        "is-active": false,
+        "children": []
+      },
+      {
+        "title": "Toc Title 1",
+        "url": "foo/",
+        "is-active": true,
+        "children": [
+          {
+            "title": "Bar Title",
+            "url": "bar/",
+            "is-active": true,
+            "children": []
+          }
+        ]
+      }
+    ]
+  }
+}
+
 
 -- ds.h1: FPM Build Behaviour
 
@@ -87,100 +186,29 @@ now. All documents that are part of sitemap are built in a special way.
 FPM build will first parse the sitemap and build all the URLs that are
 not part of it, and then in another pass build all the ones that are in it.
 
-A document can appear in multiple places in sitemap, in that case we will
-build one HTML file for each time a ftd document appears in sitemap.
+A document can appear in multiple places in sitemap, in that case FPM
+builds one HTML file for each time a ftd document appears in sitemap.
 
 Note: A document can appear only once in a single TOC?
 
-FPM Special Variables: `current-section`, `current-sub-section` etc would be
-set. Further, whichever TOC the document is being built for, wherever the
-document appears in toc, the `toc-item.selected` is set to `true`.
 
 -- ds.h1: Canonical URL
 
 If a ftd document appears multiple times in sitemap, one of them would
-be the canonical, the "main" URL. Eg if `foo.ftd` appears in s1 and s2, one of
-them would have the URL `/foo/` and other will be `/foo/-/s1/`. Which one?
+be the canonical, the "main" URL.
 
-By default the canonical is picked based on first appearance. But in the
-sitemap, at the bottom we can pick the canonical.
+Consider the following example:
 
--- ds.code: `$processor$` usage
-lang: ftd
-
-\-- fpm.sitemap:
-
-# section/url/
-key: value
-
-- foo/
-  key: vale
-- bar/
-  - z/
-    k: v
-
-# Section 2: section-2/url/
-
-- foo: foo/
-  canonical: true
+Suppose `foo.ftd` has to be appeared more than once in the sitemap.
+The sitemap can include this document as `foo/`, this is the "main" URL.
+The other way to include it is by passing url something like this.
+`foo/-/<something>`. The `-/` is the pointer to get the document. Anything
+preceding `-/` would be the document id. The generated html of this document
+will include the canonical url pointing to `foo/`.
 
 
--- ds.markdown:
-
-We have declared that `foo/` listed under `section-2/url/` is the canonical,
-and the URL would not be "mangled". The url for `foo/` in "section/url/" would
-be mangled to "foo/-/section/url/".
-
-If `canonical` is not used, the first entry is considered canonical.
-
--- ds.h1: How Would Document Look Like With Sitemap
-
-When not using sitemap, the `sections`, `sub-sections`, `toc` etc has
-to be added to a document. Eg if document is `foo.ftd` it contains:
-
--- ds.code:
-lang: ftd
-
-\-- ft.page-with-toc: FPM Sitemap
-toc: $config.themes-toc
-
--- ds.markdown:
-
-With sitemap, these parameters have to be omitted:
-
--- ds.code:
-lang: ftd
-
-\-- ft.page-with-toc: FPM Sitemap
-
--- ds.markdown:
-
-In this case the `fpm.sitemap` is be used from `config.ftd` file.
-
--- ds.h1: Special Variables
-
--- ds.h2: `fpm.info` record
-
-The `fpm.info` record contains the metadata. This includes:
-`page-title`, `section-title`, `subsection-title` and `toc-title`. Besides
-this will also contains other metadata.
-
-The record looks like this
-
--- ds.code: `info` record (fpm.ftd)
-lang: ftd
-
--- record info:
-optional string page-title:
-optional string section-title:
-optional string subsection-title:
-optional string toc-title:
 
 
-If `page-title` is specified, this will be use as the title of the page.
-If `section-title` is specified, this will be use in section.
-If `subsection-title` is specified, this will be use in subsection.
-If `toc-title` is specified, this will be use in TOC.
 
 -- ds.h1: Key Value Data in Sitemap
 
@@ -224,6 +252,8 @@ from section, subsection and it's parent TOC. i.e. `key1: value1`, `key2: value2
 `key3: value3`, `key4: value4` and `key5: value5`
 
 
+
+
 -- ds.h1: `page-title` etc can be changed based on where they are in sitemap
 
 Using the `get-data`, the title can be different:
@@ -254,6 +284,3 @@ lang: ftd
 
 - foo/
 show-dev-info: true
-
-
-
