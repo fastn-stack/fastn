@@ -5,7 +5,7 @@ toc: $config.themes-toc
 optional, you can create any sitemap you want for your sites. FPM has
 built in support for FPM Sitemap.
 
--- ds.h1: The Structure
+-- ft.h1: The Structure
 
 A site should have "sections" on top level. Each section should ideally be
 listed in the header of the site.
@@ -18,12 +18,12 @@ on the left.
 In the UI we also have "Section/Sub Section" Nav. It automatically will show the
 section name and sub-section name.
 
--- ds.h1: Sitemap "Language"
+-- ft.h1: Sitemap "Language"
 
 FPM comes with a variable called "sitemap", which contains the sitemap structure
 and later this structure get parses.
 
--- ds.code: Sitemap Example
+-- ft.code: Sitemap Example
 lang: txt
 
 # Section: section/url/
@@ -39,12 +39,12 @@ url: whatever
 - ToC Item: toc/
 
 
--- ds.h1: Sitemap `$processor$`
+-- ft.h1: Sitemap `$processor$`
 
 The sitemap get parse into a record `sitemap-data`. This record is present in `fpm`
 The record looks like this
 
--- ds.code: record `sitemap-data` (fpm.ftd)
+-- ft.code: record `sitemap-data` (fpm.ftd)
 lang: ftd
 
 \-- record sitemap-data:
@@ -63,13 +63,13 @@ boolean is-disabled:
 boolean is-active: false
 toc-item list children:
 
--- ds.markdown:
+-- ft.markdown:
 
 The record `sitemap-data` contains sections, subsections and toc. For different document
 these values would be different. We can get this values by calling the `get-sitemap`
 processor which returns the value of `sitemap-data` type.
 
--- ds.code:
+-- ft.code:
 lang: ftd
 
 \-- fpm.sitemap-data sitemap:
@@ -77,11 +77,11 @@ $processor$: get-sitemap
 
 
 
--- ds.markdown:
+-- ft.markdown:
 
 Consider a package contains the following sitemap
 
--- ds.code:
+-- ft.code:
 lang: ftd
 
 \-- fpm.sitemap:
@@ -101,7 +101,7 @@ lang: ftd
 - Other Toc Title: subsection2/foo/
 
 
--- ds.h1: Missing Sub Section
+-- ft.h1: Missing Sub Section
 
 If a TOC comes directly in a section the section would have a single anonymous
 sub-section, and this sub-section would not be shown in UI. In UI people will
@@ -120,13 +120,13 @@ just see the section header and toc on left, no sub-section line.
 - Second Toc Title: second-toc/
 
 
--- ds.markdown:
+-- ft.markdown:
 
 Now, for the `get-sitemap` processor in the document with id `bar/`
 would return the value
 
 
--- ds.code:
+-- ft.code:
 lang: json
 
 {
@@ -178,7 +178,7 @@ lang: json
 }
 
 
--- ds.h1: FPM Build Behaviour
+-- ft.h1: FPM Build Behaviour
 
 If a document is not part of sitemap, it will be built as is built right
 now. All documents that are part of sitemap are built in a special way.
@@ -192,7 +192,7 @@ builds one HTML file for each time a ftd document appears in sitemap.
 Note: A document can appear only once in a single TOC?
 
 
--- ds.h1: Canonical URL
+-- ft.h1: Canonical URL
 
 If a ftd document appears multiple times in sitemap, one of them would
 be the canonical, the "main" URL.
@@ -210,7 +210,7 @@ will include the canonical url pointing to `foo/`.
 
 
 
--- ds.h1: Key Value Data in Sitemap
+-- ft.h1: Key Value Data in Sitemap
 
 Document can use `get-data` processor to get value of any key specified in
 the sitemap. Since a document would get rendered once for each occurrence
@@ -222,7 +222,7 @@ presents in section get passed to it's subsection and TOCs. Similarly, subsectio
 key value data get passed to TOCs. And also the parent TOC-item's key value data
 get passed to its children TOC.
 
--- ds.code:
+-- ft.code:
 lang: ftd
 
 # section/url/
@@ -237,7 +237,7 @@ key4: value4
   - childtoc/url/
   key5: value5
 
--- ds.markdown:
+-- ft.markdown:
 
 In the above example, the `section/url/` section have two key value data
 `key1: value1` and `key2: value2`
@@ -254,11 +254,11 @@ from section, subsection and it's parent TOC. i.e. `key1: value1`, `key2: value2
 
 
 
--- ds.h1: `page-title` etc can be changed based on where they are in sitemap
+-- ft.h1: `page-title` etc can be changed based on where they are in sitemap
 
 Using the `get-data`, the title can be different:
 
--- ds.code:
+-- ft.code:
 lang: ftd
 
 \-- boolean show-dev-info:
@@ -269,9 +269,9 @@ $processor$: get-data
 \-- page-title: The Dev Title
 if: $show-dev-info
 
-\-- ds.h0: $page-title
+\-- ft.h0: $page-title
 
--- ds.code: sitemap
+-- ft.code: sitemap
 lang: ftd
 
 \-- fpm.sitemap:
