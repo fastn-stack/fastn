@@ -428,6 +428,7 @@ impl SitemapParser {
             match &mut self.temp_item {
                 Some((i, _)) => match line.split_once(":") {
                     Some((k, v)) => {
+                        let v = v.trim();
                         let id = i.get_id();
                         if k.eq("url") {
                             i.set_id(Some(v.to_string()));
