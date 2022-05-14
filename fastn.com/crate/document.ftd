@@ -1,9 +1,6 @@
--- fpm.sitemap-data sitemap:
-$processor$: get-sitemap
-
 -- ft.page-with-toc: `fpm::Document`
-toc: $sitemap.toc
-sub-sections: $sitemap.subsections
+toc: $config.sitemap.toc
+sub-sections: $config.sitemap.subsections
 extra: $config.empty
 
 `fpm::Document` struct keeps track of a "document". Document is a [`file` in fpm

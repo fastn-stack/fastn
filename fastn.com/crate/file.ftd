@@ -1,9 +1,6 @@
--- fpm.sitemap-data sitemap:
-$processor$: get-sitemap
-
 -- ft.page-with-toc: `fpm::File`
-toc: $sitemap.toc
-sub-sections: $sitemap.subsections
+toc: $config.sitemap.toc
+sub-sections: $config.sitemap.subsections
 extra: $config.empty
 
 `fpm::File` enum represents a file found in fpm package.

@@ -1,10 +1,7 @@
 -- import: fpm.dev/assets
 
--- fpm.sitemap-data sitemap:
-$processor$: get-sitemap
-
 -- ft.page-with-toc: Dark Mode Support
-toc: $sitemap.toc
+toc: $config.sitemap.toc
 
 -- ft.markdown: 
 

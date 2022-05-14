@@ -1,8 +1,5 @@
--- fpm.sitemap-data sitemap:
-$processor$: get-sitemap
-
 -- ft.page-with-toc: `import: fpm`
-toc: $sitemap.toc
+toc: $config.sitemap.toc
 
 
 -- ft.h1: `document-id: String`

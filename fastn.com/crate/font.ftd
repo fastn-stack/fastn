@@ -1,9 +1,6 @@
--- fpm.sitemap-data sitemap:
-$processor$: get-sitemap
-
 -- ft.page-with-toc: `fpm::Font`
-toc: $sitemap.toc
-sub-sections: $sitemap.subsections
+toc: $config.sitemap.toc
+sub-sections: $config.sitemap.subsections
 extra: $config.empty
 
 `fpm::Font` struct keeps track of a font. Fonts are defined in `FPM.ftd` file

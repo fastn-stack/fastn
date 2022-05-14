@@ -1,5 +1,5 @@
 -- ft.doc-page:
-toc: $sitemap.toc
+toc: $config.themes-toc
 
 
 -- ft.h0: FPM Package Interface

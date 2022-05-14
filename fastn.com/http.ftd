@@ -1,8 +1,5 @@
--- fpm.sitemap-data sitemap:
-$processor$: get-sitemap
-
 -- ft.page-with-toc: `$processor$: http`
-toc: $sitemap.toc
+toc: $config.sitemap.toc
 
 This processor is used to initialise some FTD variable with content of JSON fetched
 from HTTP.

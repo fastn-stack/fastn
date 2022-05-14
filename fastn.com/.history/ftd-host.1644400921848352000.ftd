@@ -2,7 +2,7 @@
 -- import: fpm.dev/config
 
 -- ft.doc-page:
-toc: $sitemap.toc
+toc: $ft.toc
 
 -- ft.h0: Available `$processor$`s
 

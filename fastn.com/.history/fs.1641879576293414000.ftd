@@ -1,7 +1,7 @@
 
 
 -- ft.doc-page:
-toc: $sitemap.toc
+toc: $ft.toc
 
 
 -- ft.h0: File System Organization

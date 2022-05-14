@@ -1,9 +1,6 @@
--- fpm.sitemap-data sitemap:
-$processor$: get-sitemap
-
 -- ft.page-with-toc: `fpm::utils`
-toc: $sitemap.toc
-sub-sections: $sitemap.subsections
+toc: $config.sitemap.toc
+sub-sections: $config.sitemap.subsections
 extra: $config.empty
 
 `fpm::utils` is a bunch of private helper functions.

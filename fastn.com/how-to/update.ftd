@@ -1,8 +1,5 @@
--- fpm.sitemap-data sitemap:
-$processor$: get-sitemap
-
 -- ft.page-with-toc: Upgrade `fpm`
-toc: $sitemap.toc
+toc: $config.sitemap.toc
 
 -- ft.markdown: 
 

@@ -1,6 +1,3 @@
--- fpm.sitemap-data sitemap:
-$processor$: get-sitemap
-
 -- ft.page-with-toc: `ftd` linking guide
 
 -- ft.markdown:

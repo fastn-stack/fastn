@@ -2,7 +2,7 @@
 
 
 -- ft.doc-page:
-toc: $sitemap.toc
+toc: $ft.toc
 
 
 -- ft.h0: `fpm diff`

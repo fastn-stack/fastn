@@ -1,7 +1,7 @@
 -- import: fpm-ui
 
 -- ft.doc-page:
-toc: $sitemap.toc
+toc: $ft.toc
 
 -- ft.h0: About `fpm`
 

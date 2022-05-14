@@ -7,6 +7,10 @@
 
 -- bs.current-brand: 3
 
+-- fpm.sitemap-data sitemap:
+$processor$: get-sitemap
+
+
 
 /-- ft.site-name: FPM
 

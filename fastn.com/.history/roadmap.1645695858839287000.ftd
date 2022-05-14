@@ -1,5 +1,5 @@
 -- ft.doc-page:
-toc: $sitemap.toc
+toc: $config.dev-toc
 
 
 -- ft.h0: Roadmap
