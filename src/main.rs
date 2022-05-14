@@ -2,7 +2,7 @@
 async fn main() -> fpm::Result<()> {
     let matches = app(authors(), version()).get_matches();
 
-    let config = fpm::Config::read(None).await?;
+    let mut config = fpm::Config::read(None).await?;
 
     if matches.subcommand_matches("update").is_some() {
         fpm::update(&config).await?;
@@ -15,7 +15,7 @@ async fn main() -> fpm::Result<()> {
             println!("{}", fpm::debug_env_vars());
         }
         fpm::build(
-            &config,
+            &mut config,
             build.value_of("file"),
             build.value_of("base").unwrap(), // unwrap okay because base is required
             build.is_present("ignore-failed"),

@@ -205,6 +205,12 @@ pub(crate) fn validate_zip_url(package: &fpm::Package) -> fpm::Result<()> {
     Ok(())
 }
 
+pub(crate) fn id_to_path(id: &str) -> String {
+    id.replace("/index.ftd", "/")
+        .replace("index.ftd", "/")
+        .replace(".ftd", std::path::MAIN_SEPARATOR.to_string().as_str())
+}
+
 pub(crate) fn replace_markers(
     s: &str,
     config: &fpm::Config,

@@ -209,7 +209,7 @@ impl SitemapElement {
 
     pub(crate) fn set_id(&mut self, id: Option<String>) {
         let id = if let Some(id) = id {
-            id
+            id.trim().trim_matches('/').to_string()
         } else {
             return;
         };
@@ -341,19 +341,19 @@ impl SitemapParser {
         // The complete string, postprocess if url doesn't exist
         let sitemapelement = match self.state {
             ParsingState::WaitingForSection => SitemapElement::Section(Section {
-                id: rest.as_str().trim().to_string(),
+                id: rest.as_str().trim().trim_matches('/').to_string(),
                 ..Default::default()
             }),
             ParsingState::ParsingSection => SitemapElement::Section(Section {
-                id: rest.as_str().trim().to_string(),
+                id: rest.as_str().trim().trim_matches('/').to_string(),
                 ..Default::default()
             }),
             ParsingState::ParsingSubsection => SitemapElement::Subsection(Subsection {
-                id: Some(rest.as_str().trim().to_string()),
+                id: Some(rest.as_str().trim().trim_matches('/').to_string()),
                 ..Default::default()
             }),
             ParsingState::ParsingTOC => SitemapElement::TocItem(TocItem {
-                id: rest.as_str().trim().to_string(),
+                id: rest.as_str().trim().trim_matches('/').to_string(),
                 ..Default::default()
             }),
         };

@@ -1,7 +1,7 @@
 use std::iter::FromIterator;
 
 pub async fn build(
-    config: &fpm::Config,
+    config: &mut fpm::Config,
     file: Option<&str>,
     base_url: &str,
     ignore_failed: bool,
@@ -51,29 +51,21 @@ pub async fn build(
             .await?;
     } else {
         match (
-            config.package.translation_of.as_ref(),
+            config.package.translation_of.is_some(),
             config.package.translations.has_elements(),
         ) {
-            (Some(_), true) => {
+            (true, true) => {
                 // No package can be both a translation of something and has its own
                 // translations, when building `config` we ensured this was rejected
                 unreachable!()
             }
-            (Some(original), false) => {
-                build_with_original(
-                    config,
-                    original,
-                    file,
-                    base_url,
-                    ignore_failed,
-                    &asset_documents,
-                )
-                .await
+            (true, false) => {
+                build_with_original(config, file, base_url, ignore_failed, &asset_documents).await
             }
-            (None, false) => {
+            (false, false) => {
                 build_simple(config, file, base_url, ignore_failed, &asset_documents).await
             }
-            (None, true) => {
+            (false, true) => {
                 build_with_translations(config, file, base_url, ignore_failed, &asset_documents)
                     .await
             }
@@ -111,7 +103,7 @@ pub async fn build(
 }
 
 async fn build_simple(
-    config: &fpm::Config,
+    config: &mut fpm::Config,
     file: Option<&str>,
     base_url: &str,
     skip_failed: bool,
@@ -149,7 +141,7 @@ async fn build_simple(
 
     process_files(
         config,
-        &config.package,
+        &config.package.clone(),
         &documents,
         file,
         base_url,
@@ -161,7 +153,7 @@ async fn build_simple(
 }
 
 async fn build_with_translations(
-    config: &fpm::Config,
+    config: &mut fpm::Config,
     process_file: Option<&str>,
     base_url: &str,
     skip_failed: bool,
@@ -205,6 +197,7 @@ async fn build_with_translations(
         if process_file.is_some() && process_file != Some(file.get_id().as_str()) {
             continue;
         }
+        config.current_document = Some(file.get_id());
         fpm::process_file(
             config,
             &config.package,
@@ -253,8 +246,7 @@ async fn build_with_translations(
 /// Then overwrite it with file in root package having same name/id as in original package
 /// ignore all those documents/files which is not in original package
 async fn build_with_original(
-    config: &fpm::Config,
-    _original: &fpm::Package,
+    config: &mut fpm::Config,
     file: Option<&str>,
     base_url: &str,
     skip_failed: bool,
@@ -341,22 +333,16 @@ async fn build_with_original(
 
     // Process all the files collected from original and root package
     for translated_document in translated_documents.values() {
-        if file.is_some()
-            && file
-                != Some(
-                    match &translated_document {
-                        fpm::TranslatedDocument::Missing { original } => original.get_id(),
-                        fpm::TranslatedDocument::NeverMarked { translated, .. } => {
-                            translated.get_id()
-                        }
-                        fpm::TranslatedDocument::Outdated { translated, .. } => translated.get_id(),
-                        fpm::TranslatedDocument::UptoDate { translated, .. } => translated.get_id(),
-                    }
-                    .as_str(),
-                )
-        {
+        let id = match translated_document {
+            fpm::TranslatedDocument::Missing { ref original } => original.get_id(),
+            fpm::TranslatedDocument::NeverMarked { ref translated, .. } => translated.get_id(),
+            fpm::TranslatedDocument::Outdated { ref translated, .. } => translated.get_id(),
+            fpm::TranslatedDocument::UptoDate { ref translated, .. } => translated.get_id(),
+        };
+        if file.is_some() && file != Some(id.as_str()) {
             continue;
         }
+        config.current_document = Some(id);
         translated_document
             .html(config, base_url, skip_failed, asset_documents)
             .await?;
@@ -390,7 +376,7 @@ async fn build_with_original(
 
 #[allow(clippy::too_many_arguments)]
 async fn process_files(
-    config: &fpm::Config,
+    config: &mut fpm::Config,
     package: &fpm::Package,
     documents: &std::collections::BTreeMap<String, fpm::File>,
     file: Option<&str>,
@@ -403,6 +389,7 @@ async fn process_files(
         if file.is_some() && file != Some(f.get_id().as_str()) {
             continue;
         }
+        config.current_document = Some(f.get_id());
         process_file(
             config,
             package,

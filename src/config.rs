@@ -37,6 +37,12 @@ pub struct Config {
     /// and table of content (`toc`). This automatically converts the documents in package into the
     /// corresponding to structure.
     pub sitemap: Option<fpm::sitemap::Sitemap>,
+    /// `current_document` stores the document id (Eg: `foo.ftd` or `bar/foo.ftd`) which is
+    /// currently in building process.
+    /// It's value is injected by `fpm::build()` function according to the currently processing
+    /// document.
+    /// It is consumed by the `get-sitemap` processor.
+    pub current_document: Option<String>,
 }
 
 impl Config {
@@ -321,6 +327,7 @@ impl Config {
             original_directory,
             extra_data: Default::default(),
             sitemap: None,
+            current_document: None,
         };
 
         config.sitemap = match package.translation_of.as_ref() {
@@ -472,7 +479,12 @@ impl Config {
     }
 
     pub(crate) fn get_file_name(root: &camino::Utf8PathBuf, id: &str) -> fpm::Result<String> {
-        let id = id.split_once("-/").map(|(id, _)| id).unwrap_or(id).trim();
+        let id = id
+            .split_once("-/")
+            .map(|(id, _)| id)
+            .unwrap_or(id)
+            .trim()
+            .trim_matches('/');
         if id.eq("/") {
             if root.join("index.ftd".to_string()).exists() {
                 return Ok("index.ftd".to_string());
@@ -483,13 +495,6 @@ impl Config {
             return Err(fpm::Error::UsageError {
                 message: "File not found".to_string(),
             });
-        }
-        let mut id = id;
-        if let Some(i) = id.strip_suffix('/') {
-            id = i;
-        }
-        if let Some(i) = id.strip_prefix('/') {
-            id = i;
         }
         if root.join(format!("{}.ftd", id)).exists() {
             return Ok(format!("{}.ftd", id));
@@ -763,7 +768,7 @@ impl Package {
             .split_once("-/")
             .map(|(v, _)| {
                 (
-                    v,
+                    v.trim_matches('/'),
                     Some(
                         self.canonical_url
                             .clone()
@@ -771,7 +776,7 @@ impl Package {
                     ),
                 )
             })
-            .unwrap_or((path, self.canonical_url.clone()));
+            .unwrap_or((path.trim_matches('/'), self.canonical_url.clone()));
         match canonical_url {
             Some(url) => {
                 let url = if !url.ends_with('/') {

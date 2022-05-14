@@ -4,11 +4,16 @@ pub fn processor(
     config: &fpm::Config,
 ) -> ftd::p1::Result<ftd::Value> {
     if let Some(ref sitemap) = config.sitemap {
-        let doc_id = doc
-            .name
-            .to_string()
-            .replace(config.package.name.as_str(), "");
-        if let Some(sitemap) = sitemap.get_sitemap_by_id(doc_id.trim_start_matches('/')) {
+        let doc_id = config
+            .current_document
+            .clone()
+            .map(|v| fpm::utils::id_to_path(v.as_str()))
+            .unwrap_or(
+                doc.name
+                    .to_string()
+                    .replace(config.package.name.as_str(), ""),
+            );
+        if let Some(sitemap) = sitemap.get_sitemap_by_id(doc_id.trim_matches('/')) {
             return doc.from_json(&sitemap, section);
         }
     }
