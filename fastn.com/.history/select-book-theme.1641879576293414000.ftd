@@ -217,7 +217,7 @@ padding-vertical: 20
 --- container: ftd.main
 
 --- footer:
-footer-toc: $ft.toc
+footer-toc: $footer-toc
 
 -- ftd.text site-link:
 caption title:
@@ -625,7 +625,7 @@ color if $fpm-ui.dark-mode: $neutral-200
 
 --- toc-instance:
 $loop$: $toc.children as $obj
-toc: $ft.toc
+toc: $obj
 
 -- ftd.column render-toc:
 toc-item list toc-obj:
@@ -645,7 +645,7 @@ border-color if $fpm-ui.dark-mode: #343434
 
 --- toc-instance:
 $loop$: $toc-obj as $obj
-toc: $ft.toc
+toc: $obj
 
 
 -- ftd.column render-toc-mobile:
@@ -676,7 +676,7 @@ z-index: 4
 
 --- toc-instance:
 $loop$: $toc-obj as $obj
-toc: $ft.toc
+toc: $obj
 
 
 -- ftd.text markdown:

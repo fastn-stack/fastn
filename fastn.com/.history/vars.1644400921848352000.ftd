@@ -3,7 +3,7 @@
 -- import: fpm.dev/config
 
 -- ft.doc-page:
-toc: $ft.toc
+toc: $config.themes-toc
 
 -- ft.h0: `fpm` Variables
 

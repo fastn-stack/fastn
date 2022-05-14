@@ -1,5 +1,5 @@
 -- ft.doc-page:
-toc: $ft.toc
+toc: $config.themes-toc
 
 
 -- ft.h0: About FPM Themes
