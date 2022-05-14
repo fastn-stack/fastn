@@ -133,7 +133,7 @@ impl Default for Subsection {
 pub struct TocItem {
     pub id: String,
     pub title: Option<String>,
-    pub file_location: camino::Utf8PathBuf,
+    pub file_location: Option<camino::Utf8PathBuf>,
     pub translation_file_location: Option<camino::Utf8PathBuf>,
     pub extra_data: std::collections::BTreeMap<String, String>,
     pub is_active: bool,
@@ -579,20 +579,22 @@ impl Sitemap {
             package_root: &camino::Utf8PathBuf,
             current_package_root: &camino::Utf8PathBuf,
         ) -> fpm::Result<()> {
-            let (file_location, translation_file_location) =
+            let (file_location, translation_file_location) = if toc.id.trim().is_empty() {
+                (None, None)
+            } else {
                 match fpm::Config::get_file_name(current_package_root, toc.id.as_str()) {
                     Ok(name) => {
                         if current_package_root.eq(package_root) {
-                            (current_package_root.join(name), None)
+                            (Some(current_package_root.join(name)), None)
                         } else {
                             (
-                                package_root.join(name.as_str()),
+                                Some(package_root.join(name.as_str())),
                                 Some(current_package_root.join(name)),
                             )
                         }
                     }
                     Err(_) => (
-                        package_root.join(
+                        Some(package_root.join(
                             fpm::Config::get_file_name(package_root, toc.id.as_str()).map_err(
                                 |e| fpm::Error::UsageError {
                                     message: format!(
@@ -601,10 +603,11 @@ impl Sitemap {
                                     ),
                                 },
                             )?,
-                        ),
+                        )),
                         None,
                     ),
-                };
+                }
+            };
             toc.file_location = file_location;
             toc.translation_file_location = translation_file_location;
 
@@ -646,11 +649,13 @@ impl Sitemap {
                     ));
                 }
                 for toc in subsection.toc.iter() {
-                    locations.push((
-                        &toc.file_location,
-                        &toc.translation_file_location,
-                        get_id(toc.id.as_str()),
-                    ));
+                    if let Some(ref file_location) = toc.file_location {
+                        locations.push((
+                            file_location,
+                            &toc.translation_file_location,
+                            get_id(toc.id.as_str()),
+                        ));
+                    }
                     locations.extend(get_toc_locations(toc));
                 }
             }
@@ -673,11 +678,13 @@ impl Sitemap {
         )> {
             let mut locations = vec![];
             for child in toc.children.iter() {
-                locations.push((
-                    &child.file_location,
-                    &child.translation_file_location,
-                    get_id(child.id.as_str()),
-                ));
+                if let Some(ref file_location) = child.file_location {
+                    locations.push((
+                        file_location,
+                        &child.translation_file_location,
+                        get_id(child.id.as_str()),
+                    ));
+                }
                 locations.extend(get_toc_locations(child));
             }
             locations
