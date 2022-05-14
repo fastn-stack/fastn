@@ -8,11 +8,11 @@ pub fn processor(
             .current_document
             .clone()
             .map(|v| fpm::utils::id_to_path(v.as_str()))
-            .unwrap_or(
+            .unwrap_or_else(|| {
                 doc.name
                     .to_string()
-                    .replace(config.package.name.as_str(), ""),
-            );
+                    .replace(config.package.name.as_str(), "")
+            });
         if let Some(sitemap) = sitemap.get_sitemap_by_id(doc_id.trim_matches('/')) {
             return doc.from_json(&sitemap, section);
         }
