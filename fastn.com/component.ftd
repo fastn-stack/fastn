@@ -5,8 +5,8 @@
 
 
 -- ft.page-with-toc: `component`
-toc: $config.api-toc
-sub-sections: $config.doc-header
+toc: $config.sitemap.toc
+sub-sections: $config.sitemap.subsections
 
 
 -- ftd.column:

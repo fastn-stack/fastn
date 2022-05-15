@@ -31,7 +31,7 @@ dark: #f09483
 dark: yellow
 
 -- ft.page-with-toc: An Architecture Diagram
-toc: $config.examples-toc
+toc: $config.sitemap.toc
 
 -- ft.markdown: 
 

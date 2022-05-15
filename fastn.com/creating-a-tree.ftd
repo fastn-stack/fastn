@@ -2,7 +2,7 @@
 -- import: fpm
 
 -- ft.page-with-toc: How to create a tree using `ftd`?
-toc: $config.examples-toc
+toc: $config.sitemap.toc
 id: main
 
 

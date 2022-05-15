@@ -2,6 +2,13 @@
 -- import: bs
 -- import: ftd.dev/assets
 
+
+
+-- fpm.sitemap-data sitemap:
+$processor$: get-sitemap
+
+
+
 -- ft.github: https://github.com/fifthtry/ftd/
 -- ft.site-url: /
 /-- ft.site-name: FTD

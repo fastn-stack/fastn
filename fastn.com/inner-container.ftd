@@ -1,6 +1,6 @@
 -- ft.page-with-toc: Inner Container
-toc: $config.ui-toc
-sub-sections: $config.doc-header
+toc: $config.sitemap.toc
+sub-sections: $config.sitemap.subsections
 
 
 -- ftd.column:

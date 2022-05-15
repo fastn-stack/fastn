@@ -1,7 +1,7 @@
 -- import: fpm
 
 -- ft.page-with-toc: Input Example
-toc: $config.examples-toc
+toc: $config.sitemap.toc
 
 
 -- ft.markdown: 

@@ -8,7 +8,7 @@ dark: cadetblue
 dark: white
 
 -- ft.page-with-toc: Once upon a time...
-toc: $config.examples-toc
+toc: $config.sitemap.toc
 
 
 -- comic:

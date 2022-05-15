@@ -1,6 +1,6 @@
 -- ft.page-with-toc: Why Not MDX?
-toc: $config.alternatives-toc
-sub-sections: $config.why-header
+toc: $config.sitemap.toc
+sub-sections: $config.sitemap.subsections
 
 -- ft.markdown: 
 

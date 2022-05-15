@@ -1,6 +1,6 @@
 -- ft.page-with-toc: Alternatives
-toc: $config.alternatives-toc
-sub-sections: $config.why-header
+toc: $config.sitemap.toc
+sub-sections: $config.sitemap.subsections
 
 -- ft.markdown: 
 

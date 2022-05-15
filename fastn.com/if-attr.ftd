@@ -2,8 +2,8 @@
 
 
 -- ft.page-with-toc: Conditional Attributes
-toc: $config.api-toc
-sub-sections: $config.doc-header
+toc: $config.sitemap.toc
+sub-sections: $config.sitemap.subsections
 
 
 -- ftd.column:

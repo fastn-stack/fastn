@@ -1,6 +1,6 @@
 -- ft.page-with-toc: Internals
-toc: $config.dev-toc
-sub-sections: $config.doc-header
+toc: $config.sitemap.toc
+sub-sections: $config.sitemap.subsections
 
 
 -- ft.h1: FTD Original Source Location

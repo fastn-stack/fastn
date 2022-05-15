@@ -1,6 +1,6 @@
 -- ft.page-with-toc: FTD markup syntax
-toc: $config.api-toc
-sub-sections: $config.doc-header
+toc: $config.sitemap.toc
+sub-sections: $config.sitemap.subsections
 
 Text in FTD support Markdown syntax. We also support, what we call "ftd markup"
 syntax.

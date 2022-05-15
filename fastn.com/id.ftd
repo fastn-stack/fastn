@@ -2,8 +2,8 @@
 -- import: fpm
 
 -- ft.page-with-toc: ID in `ftd`
-toc: $config.api-toc
-sub-sections: $config.doc-header
+toc: $config.sitemap.toc
+sub-sections: $config.sitemap.subsections
 
 
 -- ft.h1: What is `id`?

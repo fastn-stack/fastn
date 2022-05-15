@@ -2,7 +2,7 @@
 -- import: fpm
 
 -- ft.page-with-toc: Building Dark-Mode Switcher Using FTD
-toc: $config.examples-toc
+toc: $config.sitemap.toc
 
 -- ft.markdown: 
 

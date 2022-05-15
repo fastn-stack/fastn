@@ -1,7 +1,7 @@
 -- import: fpm
 
 -- ft.page-with-toc:
-toc: $config.examples-toc
+toc: $config.sitemap.toc
 
 
 /-- ftd.color color-bg: $fpm.color.main.background.base

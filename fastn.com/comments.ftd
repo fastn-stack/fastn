@@ -1,6 +1,6 @@
 -- ft.page-with-toc: Comments In `ftd` Files
-toc: $config.doc-toc
-sub-sections: $config.doc-header
+toc: $config.sitemap.toc
+sub-sections: $config.sitemap.subsections
 
 -- ft.markdown: 
 

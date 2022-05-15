@@ -1,6 +1,6 @@
 -- ft.page-with-toc: FTD News
-toc: $config.news-toc
-sub-sections: $config.news-header
+toc: $config.sitemap.toc
+sub-sections: $config.sitemap.subsections
 
 
 -- ft.markdown: 

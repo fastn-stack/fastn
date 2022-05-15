@@ -1,8 +1,8 @@
 -- import: ftd.dev/assets
 
 -- ft.page-with-toc: FTD Journal
-toc: $config.dev-toc
-sub-sections: $config.doc-header
+toc: $config.sitemap.toc
+sub-sections: $config.sitemap.subsections
 id: page
 
 

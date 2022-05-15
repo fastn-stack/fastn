@@ -1,0 +1,7 @@
+-- ft.page-with-toc: Upcoming Events
+toc: $config.sitemap.toc
+sub-sections: $config.sitemap.subsections
+
+-- ft.markdown:
+
+This includes the upcoming events related to the FTD.

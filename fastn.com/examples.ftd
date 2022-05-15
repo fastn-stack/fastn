@@ -1,5 +1,5 @@
 -- ft.page-with-toc: Examples
-toc: $config.examples-toc
+toc: $config.sitemap.toc
 
 
 -- ft.markdown: 
