@@ -21,7 +21,8 @@ section name and sub-section name.
 -- ft.h1: Sitemap "Language"
 
 FPM comes with a variable called "sitemap", which contains the sitemap structure
-and later this structure get parses.
+and later this structure get parses. The sitemap should be included in FPM.ftd
+file.
 
 -- ft.code: Sitemap Example
 lang: txt
@@ -81,7 +82,7 @@ $processor$: get-sitemap
 
 Consider a package contains the following sitemap
 
--- ft.code:
+-- ft.code: In FPM.ftd
 lang: ftd
 
 \-- fpm.sitemap:
