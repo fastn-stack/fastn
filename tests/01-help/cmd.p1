@@ -22,6 +22,7 @@ SUBCOMMANDS:
     diff                  Show un-synced changes to files in this fpm package
     help                  Prints this message or the help of the given subcommand(s)
     mark-upto-date        Marks file as up to date.
+    serve                 Create an http server and serves static files
     start-tracking        Add a tracking relation between two files
     status                Show the status of files in this fpm package
     stop-tracking         Remove a tracking relation between two files
