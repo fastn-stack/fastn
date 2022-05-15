@@ -101,15 +101,6 @@ lang: ftd
 - Other Toc Title: subsection2/foo/
 
 
--- ft.h1: Missing Sub Section
-
-If a TOC comes directly in a section the section would have a single anonymous
-sub-section, and this sub-section would not be shown in UI. In UI people will
-just see the section header and toc on left, no sub-section line.
-
-
--- ft.code:
-lang: ftd
 
 # Second Section Title: section/
 
@@ -176,6 +167,23 @@ lang: json
 }
 
 
+-- ft.h1: Missing Sub Section
+
+If a TOC comes directly in a section the section would have a single anonymous
+sub-section, and this sub-section would not be shown in UI. In UI people will
+just see the section header and toc on left, no sub-section line.
+
+
+-- ft.code:
+lang: ftd
+
+
+# Section Title: section/
+
+- Toc 1: toc/
+  - Toc 2: toc2/
+
+
 -- ft.h1: FPM Build Behaviour
 
 If a document is not part of sitemap, it will be built as is built right
@@ -231,9 +239,9 @@ key2: value2
 key3: value3
 
 - toc/url/
-key4: value4
+  key4: value4
   - childtoc/url/
-  key5: value5
+    key5: value5
 
 -- ft.markdown:
 
@@ -252,7 +260,7 @@ from section, subsection and it's parent TOC. i.e. `key1: value1`, `key2: value2
 
 
 
--- ft.h1: `page-title` etc can be changed based on where they are in sitemap
+-- ft.h1: Variable can be changed based on key value data
 
 Using the `get-data`, the title can be different:
 
@@ -280,5 +288,5 @@ lang: ftd
 
 # Development
 
-- foo/
+- foo/-/1
 show-dev-info: true
