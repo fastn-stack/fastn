@@ -108,10 +108,8 @@ sub-section, and this sub-section would not be shown in UI. In UI people will
 just see the section header and toc on left, no sub-section line.
 
 
-
-
-
-
+-- ft.code:
+lang: ftd
 
 # Second Section Title: section/
 
