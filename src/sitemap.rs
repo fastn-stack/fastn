@@ -61,7 +61,13 @@ pub struct Section {
     ///
     /// In case of translation package, it stores the location in original
     /// package
-    pub file_location: camino::Utf8PathBuf,
+    /// It is an optional field as the id provided could be an url to a website.
+    /// Eg:
+    /// ```ftd
+    /// # Fifthtry: https://fifthtry.com/
+    /// ````
+    /// In that case it store `None`
+    pub file_location: Option<camino::Utf8PathBuf>,
 
     /// `translation_file_location` has value in case of translation package.
     /// It stores the location of the document in the
@@ -106,7 +112,7 @@ pub struct Section {
 pub struct Subsection {
     pub id: Option<String>,
     pub title: Option<String>,
-    pub file_location: camino::Utf8PathBuf,
+    pub file_location: Option<camino::Utf8PathBuf>,
     pub translation_file_location: Option<camino::Utf8PathBuf>,
     pub visible: bool,
     pub extra_data: std::collections::BTreeMap<String, String>,
@@ -385,9 +391,7 @@ impl SitemapParser {
                     }
                     _ => {
                         // The URL can have its own colons. So match the URL first
-                        let url_regex = regex::Regex::new(
-                            r#":[ ]?(?P<url>(?:https?)?://(?:[a-zA-Z0-9]+\.)?(?:[A-z0-9]+\.)(?:[A-z0-9]+)(?:[/A-Za-z0-9\?:\&%]+))"#
-                        ).unwrap();
+                        let url_regex = fpm::utils::url_regex();
                         if let Some(regex_match) = url_regex.find(current_title.as_str()) {
                             let curr_title = current_title.as_str();
                             (
@@ -505,30 +509,35 @@ impl Sitemap {
             current_package_root: &camino::Utf8PathBuf,
         ) -> fpm::Result<()> {
             let (file_location, translation_file_location) =
-                match fpm::Config::get_file_name(current_package_root, section.id.as_str()) {
-                    Ok(name) => {
-                        if current_package_root.eq(package_root) {
-                            (current_package_root.join(name), None)
-                        } else {
-                            (
-                                package_root.join(name.as_str()),
-                                Some(current_package_root.join(name)),
-                            )
+                if fpm::utils::url_regex().find(section.id.as_str()).is_some() {
+                    (None, None)
+                } else {
+                    match fpm::Config::get_file_name(current_package_root, section.id.as_str()) {
+                        Ok(name) => {
+                            if current_package_root.eq(package_root) {
+                                (Some(current_package_root.join(name)), None)
+                            } else {
+                                (
+                                    Some(package_root.join(name.as_str())),
+                                    Some(current_package_root.join(name)),
+                                )
+                            }
                         }
-                    }
-                    Err(_) => (
-                        package_root.join(
-                            fpm::Config::get_file_name(package_root, section.id.as_str()).map_err(
-                                |e| fpm::Error::UsageError {
-                                    message: format!(
+                        Err(_) => (
+                            Some(
+                                package_root.join(
+                                    fpm::Config::get_file_name(package_root, section.id.as_str())
+                                        .map_err(|e| fpm::Error::UsageError {
+                                        message: format!(
                                         "`{}` not found, fix fpm.sitemap in FPM.ftd. Error: {:?}",
                                         section.id, e
                                     ),
-                                },
-                            )?,
+                                    })?,
+                                ),
+                            ),
+                            None,
                         ),
-                        None,
-                    ),
+                    }
                 };
             section.file_location = file_location;
             section.translation_file_location = translation_file_location;
@@ -545,32 +554,38 @@ impl Sitemap {
             current_package_root: &camino::Utf8PathBuf,
         ) -> fpm::Result<()> {
             if let Some(ref id) = subsection.id {
-                let (file_location, translation_file_location) =
+                let (file_location, translation_file_location) = if fpm::utils::url_regex()
+                    .find(id.as_str())
+                    .is_some()
+                {
+                    (None, None)
+                } else {
                     match fpm::Config::get_file_name(current_package_root, id.as_str()) {
-                        Ok(name) => {
-                            if current_package_root.eq(package_root) {
-                                (current_package_root.join(name), None)
-                            } else {
-                                (
-                                    package_root.join(name.as_str()),
-                                    Some(current_package_root.join(name)),
-                                )
+                            Ok(name) => {
+                                if current_package_root.eq(package_root) {
+                                    (Some(current_package_root.join(name)), None)
+                                } else {
+                                    (
+                                        Some(package_root.join(name.as_str())),
+                                        Some(current_package_root.join(name)),
+                                    )
+                                }
                             }
-                        }
-                        Err(_) => (
-                            package_root.join(
-                                fpm::Config::get_file_name(package_root, id.as_str()).map_err(
-                                    |e| fpm::Error::UsageError {
-                                        message: format!(
-                                        "`{}` not found, fix fpm.sitemap in FPM.ftd. Error: {:?}",
-                                        id, e
-                                    ),
-                                    },
-                                )?,
+                            Err(_) => (
+                                Some(package_root.join(
+                                    fpm::Config::get_file_name(package_root, id.as_str()).map_err(
+                                        |e| fpm::Error::UsageError {
+                                            message: format!(
+                                                "`{}` not found, fix fpm.sitemap in FPM.ftd. Error: {:?}",
+                                                id, e
+                                            ),
+                                        },
+                                    )?,
+                                )),
+                                None,
                             ),
-                            None,
-                        ),
-                    };
+                        }
+                };
                 subsection.file_location = file_location;
                 subsection.translation_file_location = translation_file_location;
             }
@@ -586,7 +601,9 @@ impl Sitemap {
             package_root: &camino::Utf8PathBuf,
             current_package_root: &camino::Utf8PathBuf,
         ) -> fpm::Result<()> {
-            let (file_location, translation_file_location) = if toc.id.trim().is_empty() {
+            let (file_location, translation_file_location) = if toc.id.trim().is_empty()
+                || fpm::utils::url_regex().find(toc.id.as_str()).is_some()
+            {
                 (None, None)
             } else {
                 match fpm::Config::get_file_name(current_package_root, toc.id.as_str()) {
@@ -642,18 +659,22 @@ impl Sitemap {
     )> {
         let mut locations = vec![];
         for section in self.sections.iter() {
-            locations.push((
-                &section.file_location,
-                &section.translation_file_location,
-                get_id(section.id.as_str()),
-            ));
+            if let Some(ref file_location) = section.file_location {
+                locations.push((
+                    file_location,
+                    &section.translation_file_location,
+                    get_id(section.id.as_str()),
+                ));
+            }
             for subsection in section.subsections.iter() {
                 if subsection.visible {
-                    locations.push((
-                        &subsection.file_location,
-                        &subsection.translation_file_location,
-                        subsection.id.as_ref().map(|v| get_id(v.as_str())).flatten(),
-                    ));
+                    if let Some(ref file_location) = subsection.file_location {
+                        locations.push((
+                            file_location,
+                            &subsection.translation_file_location,
+                            subsection.id.as_ref().map(|v| get_id(v.as_str())).flatten(),
+                        ));
+                    }
                 }
                 for toc in subsection.toc.iter() {
                     if let Some(ref file_location) = toc.file_location {

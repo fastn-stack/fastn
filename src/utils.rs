@@ -257,3 +257,9 @@ pub(crate) fn replace_markers(
 pub fn is_test() -> bool {
     std::env::args().any(|e| e == "--test")
 }
+
+pub(crate) fn url_regex() -> regex::Regex {
+    regex::Regex::new(
+        r#"((([A-Za-z]{3,9}:(?://)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:/[\+~%/.\w_]*)?\??(?:[-\+=&;%@.\w_]*)\#?(?:[\w]*))?)"#
+    ).unwrap()
+}
