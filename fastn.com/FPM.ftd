@@ -54,6 +54,7 @@ implements: fifthtry.github.io/theme
   - `fpm status`: status/
   - `fpm diff`: diff/
   - `fpm update`: update/
+  - `fpm serve`: serve/
 - Known Issues: known-issues/
 
 

@@ -11,6 +11,7 @@ toc: $config.sitemap.toc
 - [`fpm sync`](sync/)
 - [`fpm status`](status/)
 - [`fpm diff`](diff/)
+- [`fpm serve`](serve/)
 
 Running `fpm` without any argument prints the help-text, which lists all available
 subcommands and general instructions on how to use `fpm`.

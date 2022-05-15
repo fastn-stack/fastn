@@ -1,0 +1,15 @@
+-- ft.page-with-toc: `fpm serve`
+toc: $config.sitemap.toc
+
+
+`fpm serve [<port>]` creates an `http` server, which serves static files from `.build` directory.
+
+-- ft.h1: Usage
+
+- `fpm serve`, It will create and run server at default port `8000`
+- `fpm serve 8080`, It will create and run server at port `8080`
+
+-- ft.h2: TODO
+
+- static directory should be configurable
+- default error page or list the directory in case of file not found
