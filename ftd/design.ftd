@@ -190,16 +190,16 @@ blockquote: $blockquote
 
 
 -- ftd.color base-:
-light: #131a13
-dark: #131a13
+light: #18181b
+dark: #18181b
 
 -- ftd.color step-1-:
-light: #182517
-dark: #182517
+light: #141414
+dark: #141414
 
 -- ftd.color step-2-:
-light: #233221
-dark: #233221
+light: #585656
+dark: #585656
 
 -- ftd.background-colors background-:
 base: $base-
@@ -215,8 +215,8 @@ light: #919192
 dark: #919192
 
 -- ftd.color text-:
-light: #9ea89e
-dark: #9ea89e
+light: #a8a29e
+dark: #a8a29e
 
 -- ftd.color text-strong-:
 light: #ffffff
@@ -231,8 +231,8 @@ light: #007f9b
 dark: #007f9b
 
 -- ftd.color cta-primary-base-:
-light: #0d712c
-dark: #0d712c
+light: #2dd4bf
+dark: #2dd4bf
 
 -- ftd.color cta-primary-hover-:
 light: #2c9f90
@@ -379,8 +379,8 @@ border: $cta-danger-border-
 text: $cta-danger-text-
 
 -- ftd.color accent-primary-:
-light: #4ed42d
-dark: #4ed42d
+light: #2dd4bf
+dark: #2dd4bf
 
 -- ftd.color accent-secondary-:
 light: #4fb2df
