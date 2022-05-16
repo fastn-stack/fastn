@@ -26,17 +26,24 @@ file.
 -- ft.code: Sitemap Example
 lang: txt
 
-# Section: section/url/
+# Section: /section/url/
 
 # If Section: Has A Colon In The Name
 url: sectionURL
 
-## Sub Section: sub/url/
+## Sub Section: /sub/url/
 
 ## If Sub Section: Has A Colon In The Name
 url: whatever
 
 - ToC Item: toc/
+
+-- ds.markdown:
+
+Note: The URLs in sitemap start with slash, but we remove the first slash. We do
+this because some projects may deploy FPM package on a base URL eg, `foo.com/bar/`,
+so all reference to /x/ is actually a reference to `foo.com/bar/x/`. We also
+convert `/` to `index.html` for the same reason.
 
 
 -- ft.h1: Sitemap `$processor$`
