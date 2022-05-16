@@ -49,6 +49,9 @@ toc-item list children:
 
 -- ft.markdown:
 
-The record `sitemap-data` contains sections, subsections and toc. For different document
-these values would be different. We can get this values by calling the `get-sitemap`
-processor which returns the value of `sitemap-data` type.
+The record `sitemap-data` contains sections, subsections and toc. For different
+document these values would be different. We can get this values by calling the
+`get-sitemap` processor which returns the value of `sitemap-data` type.
+
+Note: nav-title override for any page can be specified in sitemap, if
+specified, the `current-*` will use the overriden titles.

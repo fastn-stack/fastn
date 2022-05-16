@@ -30,16 +30,19 @@ file.
 lang: txt
 
 # Section: /section/url/
+nav-title: Optional Longer Section
 
 # If Section: Has A Colon In The Name
 url: sectionURL
 
 ## Sub Section: /sub/url/
+nav-title: Longer Sub Section
 
 ## If Sub Section: Has A Colon In The Name
 url: whatever
 
 - ToC Item: toc/
+  nav-title: Shorter title
 
 -- ds.markdown:
 
