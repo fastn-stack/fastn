@@ -1,3 +1,5 @@
+use itertools::Itertools;
+
 /// `Sitemap` stores the sitemap for the fpm package defines in the FPM.ftd
 ///
 /// ```ftd
@@ -105,6 +107,7 @@ pub struct Section {
     /// and then renders it.
     pub extra_data: std::collections::BTreeMap<String, String>,
     pub is_active: bool,
+    pub nav_title: Option<String>,
     pub subsections: Vec<Subsection>,
 }
 
@@ -117,6 +120,7 @@ pub struct Subsection {
     pub visible: bool,
     pub extra_data: std::collections::BTreeMap<String, String>,
     pub is_active: bool,
+    pub nav_title: Option<String>,
     pub toc: Vec<TocItem>,
 }
 
@@ -130,6 +134,7 @@ impl Default for Subsection {
             visible: true,
             extra_data: Default::default(),
             is_active: false,
+            nav_title: None,
             toc: vec![],
         }
     }
@@ -143,16 +148,24 @@ pub struct TocItem {
     pub translation_file_location: Option<camino::Utf8PathBuf>,
     pub extra_data: std::collections::BTreeMap<String, String>,
     pub is_active: bool,
+    pub nav_title: Option<String>,
     pub children: Vec<TocItem>,
 }
+
 #[derive(Debug, Default, serde::Serialize)]
 pub struct SiteMapCompat {
     pub sections: Vec<TocItemCompat>,
     pub subsections: Vec<TocItemCompat>,
     pub toc: Vec<TocItemCompat>,
+    #[serde(rename = "current-section")]
+    pub current_section: Option<TocItemCompat>,
+    #[serde(rename = "current-subsection")]
+    pub current_subsection: Option<TocItemCompat>,
+    #[serde(rename = "current-page")]
+    pub current_page: Option<TocItemCompat>,
 }
 
-#[derive(Debug, Default, serde::Serialize)]
+#[derive(Debug, Default, Clone, serde::Serialize)]
 pub struct TocItemCompat {
     pub url: Option<String>,
     pub number: Option<String>,
@@ -234,6 +247,15 @@ impl SitemapElement {
                 s.id = id;
             }
         };
+    }
+
+    pub(crate) fn set_nav_title(&mut self, nav_title: Option<String>) {
+        let nav = match self {
+            SitemapElement::Section(s) => &mut s.nav_title,
+            SitemapElement::Subsection(s) => &mut s.nav_title,
+            SitemapElement::TocItem(s) => &mut s.nav_title,
+        };
+        *nav = nav_title;
     }
 
     pub(crate) fn get_title(&self) -> Option<String> {
@@ -446,6 +468,9 @@ impl SitemapParser {
                             if i.get_title().is_none() {
                                 i.set_title(id);
                             }
+                        }
+                        if k.eq("nav-title") {
+                            i.set_nav_title(Some(v.to_string()));
                         }
                         i.insert_key_value(k, v);
                     }
@@ -724,41 +749,76 @@ impl Sitemap {
         let mut subsections = vec![];
         let mut toc = vec![];
         let mut index = 0;
+        let mut current_section = None;
+        let mut current_subsection = None;
+        let mut current_page = None;
         for (idx, section) in self.sections.iter().enumerate() {
             index = idx;
+
             if section.id.as_str().eq(id) {
                 subsections = section
                     .subsections
                     .iter()
                     .filter(|v| v.visible)
-                    .map(|v| TocItemCompat::new(v.id.clone(), v.title.clone(), false))
+                    .map(|v| {
+                        let active = v.id.as_ref().map(|v| v.eq(id)).unwrap_or(false);
+                        let toc = TocItemCompat::new(v.id.clone(), v.title.clone(), active);
+                        if active {
+                            let mut curr_subsection = toc.clone();
+                            if let Some(ref title) = v.nav_title {
+                                curr_subsection.title = Some(title.to_string());
+                            }
+                            current_subsection = Some(curr_subsection);
+                        }
+                        toc
+                    })
                     .collect();
-                if let Some(sub) = section.subsections.first() {
-                    toc = get_all_toc(sub.toc.as_slice());
+
+                if let Some(sub) = section
+                    .subsections
+                    .iter()
+                    .find_or_first(|v| v.id.as_ref().map(|v| v.eq(id)).unwrap_or(false))
+                    .or_else(|| section.subsections.first())
+                {
+                    let (toc_list, current_toc) = get_all_toc(sub.toc.as_slice(), id);
+                    toc.extend(toc_list);
+                    current_page = current_toc;
                 }
-                sections.push(TocItemCompat::new(
-                    Some(section.id.to_string()),
+                let mut section_toc = TocItemCompat::new(
+                    Some(get_url(section.id.as_str())),
                     section.title.clone(),
                     true,
-                ));
+                );
+                sections.push(section_toc.clone());
+                if let Some(ref title) = section.nav_title {
+                    section_toc.title = Some(title.to_string());
+                }
+                current_section = Some(section_toc);
                 break;
             }
 
-            if let Some((subsection_list, toc_list)) =
+            if let Some((subsection_list, toc_list, curr_subsection, curr_toc)) =
                 get_subsection_by_id(id, section.subsections.as_slice())
             {
                 subsections.extend(subsection_list);
                 toc.extend(toc_list);
-                sections.push(TocItemCompat::new(
-                    Some(section.id.to_string()),
+                current_subsection = curr_subsection;
+                current_page = curr_toc;
+                let mut section_toc = TocItemCompat::new(
+                    Some(get_url(section.id.as_str())),
                     section.title.clone(),
                     true,
-                ));
+                );
+                sections.push(section_toc.clone());
+                if let Some(ref title) = section.nav_title {
+                    section_toc.title = Some(title.to_string());
+                }
+                current_section = Some(section_toc);
                 break;
             }
 
             sections.push(TocItemCompat::new(
-                Some(section.id.to_string()),
+                Some(get_url(section.id.as_str())),
                 section.title.clone(),
                 false,
             ));
@@ -766,112 +826,151 @@ impl Sitemap {
         sections.extend(
             self.sections[index + 1..]
                 .iter()
-                .map(|v| TocItemCompat::new(Some(v.id.to_string()), v.title.clone(), false)),
+                .map(|v| TocItemCompat::new(Some(get_url(v.id.as_str())), v.title.clone(), false)),
         );
         return Some(SiteMapCompat {
             sections,
             subsections,
             toc,
+            current_section,
+            current_subsection,
+            current_page,
         });
 
-        fn get_all_toc(toc: &[TocItem]) -> Vec<TocItemCompat> {
-            toc.iter()
-                .map(|v| {
-                    let mut toc = TocItemCompat::new(Some(v.id.clone()), v.title.clone(), false);
-                    toc.children = get_all_toc(v.children.as_slice());
-                    toc
-                })
-                .collect()
-        }
-
+        #[allow(clippy::type_complexity)]
         fn get_subsection_by_id(
             id: &str,
             subsections: &[Subsection],
-        ) -> Option<(Vec<TocItemCompat>, Vec<TocItemCompat>)> {
+        ) -> Option<(
+            Vec<TocItemCompat>,
+            Vec<TocItemCompat>,
+            Option<TocItemCompat>,
+            Option<TocItemCompat>,
+        )> {
             let mut subsection_list = vec![];
             let mut toc = vec![];
             let mut index = 0;
             let mut found = false;
+            let mut current_subsection = None;
+            let mut current_page = None;
+
             for (idx, subsection) in subsections.iter().enumerate() {
                 index = idx;
                 if subsection.visible && subsection.id.as_ref().map(|v| v.eq(id)).unwrap_or(false) {
-                    toc = get_all_toc(subsection.toc.as_slice());
-                    subsection_list.push(TocItemCompat::new(
-                        subsection.id.clone(),
+                    let (toc_list, current_toc) = get_all_toc(subsection.toc.as_slice(), id);
+                    toc.extend(toc_list);
+                    current_page = current_toc;
+                    let mut subsection_toc = TocItemCompat::new(
+                        subsection.id.as_ref().map(|v| get_url(v.as_str())),
                         subsection.title.clone(),
                         true,
-                    ));
+                    );
+                    subsection_list.push(subsection_toc.clone());
+                    if let Some(ref title) = subsection.nav_title {
+                        subsection_toc.title = Some(title.to_string());
+                    }
+                    current_subsection = Some(subsection_toc);
                     found = true;
                     break;
                 }
 
-                if let Some(toc_list) = get_toc_by_id(id, subsection.toc.as_slice()) {
+                if let Some((toc_list, current_toc)) = get_toc_by_id(id, subsection.toc.as_slice())
+                {
                     toc.extend(toc_list);
+                    current_page = Some(current_toc);
                     if subsection.visible {
-                        subsection_list.push(TocItemCompat::new(
-                            subsection.id.clone(),
+                        let mut subsection_toc = TocItemCompat::new(
+                            subsection.id.as_ref().map(|v| get_url(v.as_str())),
                             subsection.title.clone(),
                             true,
-                        ));
+                        );
+                        subsection_list.push(subsection_toc.clone());
+                        if let Some(ref title) = subsection.nav_title {
+                            subsection_toc.title = Some(title.to_string());
+                        }
+                        current_subsection = Some(subsection_toc);
                     }
                     found = true;
                     break;
                 }
 
                 subsection_list.push(TocItemCompat::new(
-                    subsection.id.clone(),
+                    subsection.id.as_ref().map(|v| get_url(v.as_str())),
                     subsection.title.clone(),
                     false,
                 ));
             }
+
             if found {
                 subsection_list.extend(
                     subsections[index + 1..]
                         .iter()
                         .map(|v| TocItemCompat::new(v.id.clone(), v.title.clone(), false)),
                 );
-                return Some((subsection_list, toc));
+                return Some((subsection_list, toc, current_subsection, current_page));
             }
             None
         }
 
-        fn get_toc_by_id(id: &str, toc: &[TocItem]) -> Option<Vec<TocItemCompat>> {
-            let mut found = false;
-            let toc_list = get_toc_by_id_(id, toc, &mut found).1;
-            if found {
-                return Some(toc_list);
-            }
-            return None;
+        fn get_all_toc(toc: &[TocItem], id: &str) -> (Vec<TocItemCompat>, Option<TocItemCompat>) {
+            let mut current_page = None;
+            let toc = get_toc_by_id_(id, toc, &mut current_page).1;
+            (toc, current_page)
+        }
 
-            fn get_toc_by_id_(
-                id: &str,
-                toc: &[TocItem],
-                found: &mut bool,
-            ) -> (bool, Vec<TocItemCompat>) {
-                let mut toc_list = vec![];
-                let mut found_here = false;
-                for toc_item in toc.iter() {
-                    toc_list.push({
-                        let (is_active, children) =
-                            get_toc_by_id_(id, toc_item.children.as_slice(), found);
-                        let mut current_toc = TocItemCompat::new(
-                            Some(toc_item.id.to_string()),
-                            toc_item.title.clone(),
-                            toc_item.id.as_str().eq(id) || is_active,
-                        );
-                        current_toc.children = children;
-                        if is_active {
-                            found_here = true;
+        fn get_toc_by_id(id: &str, toc: &[TocItem]) -> Option<(Vec<TocItemCompat>, TocItemCompat)> {
+            let mut current_page = None;
+            let toc_list = get_toc_by_id_(id, toc, &mut current_page).1;
+            if let Some(current_page) = current_page {
+                return Some((toc_list, current_page));
+            }
+            None
+        }
+
+        fn get_toc_by_id_(
+            id: &str,
+            toc: &[TocItem],
+            current_page: &mut Option<TocItemCompat>,
+        ) -> (bool, Vec<TocItemCompat>) {
+            let mut toc_list = vec![];
+            let mut found_here = false;
+
+            for toc_item in toc.iter() {
+                let mut current_toc = {
+                    let (is_active, children) =
+                        get_toc_by_id_(id, toc_item.children.as_slice(), current_page);
+                    let mut current_toc = TocItemCompat::new(
+                        Some(get_url(toc_item.id.as_str()).to_string()),
+                        toc_item.title.clone(),
+                        toc_item.id.as_str().eq(id) || is_active,
+                    );
+                    current_toc.children = children;
+                    if is_active {
+                        found_here = true;
+                    }
+                    current_toc
+                };
+
+                toc_list.push(current_toc.clone());
+
+                if current_page.is_none() {
+                    found_here = toc_item.id.as_str().eq(id);
+                    if found_here {
+                        if let Some(ref title) = toc_item.nav_title {
+                            current_toc.title = Some(title.to_string());
                         }
-                        current_toc
-                    });
-                    if !*found {
-                        *found = toc_item.id.as_str().eq(id);
-                        found_here = *found;
+                        *current_page = Some(current_toc);
                     }
                 }
-                (found_here, toc_list)
             }
+            (found_here, toc_list)
+        }
+
+        fn get_url(id: &str) -> String {
+            if id.ends_with('/') {
+                return id.to_string();
+            }
+            format!("{}/", id)
         }
     }
 

@@ -207,5 +207,8 @@ optional string last-modified-on:
 toc-item list sections:
 toc-item list subsections:
 toc-item list toc:
+optional toc-item current-section:
+optional toc-item current-subsection:
+optional toc-item current-page:
 
 
