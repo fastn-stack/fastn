@@ -724,7 +724,6 @@ impl Sitemap {
         let mut subsections = vec![];
         let mut toc = vec![];
         let mut index = 0;
-        let mut found = false;
         for (idx, section) in self.sections.iter().enumerate() {
             index = idx;
             if section.id.as_str().eq(id) {
@@ -742,7 +741,6 @@ impl Sitemap {
                     section.title.clone(),
                     true,
                 ));
-                found = true;
                 break;
             }
 
@@ -756,7 +754,6 @@ impl Sitemap {
                     section.title.clone(),
                     true,
                 ));
-                found = true;
                 break;
             }
 
@@ -766,20 +763,16 @@ impl Sitemap {
                 false,
             ));
         }
-        if found {
-            sections.extend(
-                self.sections[index + 1..]
-                    .iter()
-                    .map(|v| TocItemCompat::new(Some(v.id.to_string()), v.title.clone(), false)),
-            );
-            return Some(SiteMapCompat {
-                sections,
-                subsections,
-                toc,
-            });
-        }
-
-        return None;
+        sections.extend(
+            self.sections[index + 1..]
+                .iter()
+                .map(|v| TocItemCompat::new(Some(v.id.to_string()), v.title.clone(), false)),
+        );
+        return Some(SiteMapCompat {
+            sections,
+            subsections,
+            toc,
+        });
 
         fn get_all_toc(toc: &[TocItem]) -> Vec<TocItemCompat> {
             toc.iter()
@@ -814,11 +807,13 @@ impl Sitemap {
 
                 if let Some(toc_list) = get_toc_by_id(id, subsection.toc.as_slice()) {
                     toc.extend(toc_list);
-                    subsection_list.push(TocItemCompat::new(
-                        subsection.id.clone(),
-                        subsection.title.clone(),
-                        true,
-                    ));
+                    if subsection.visible {
+                        subsection_list.push(TocItemCompat::new(
+                            subsection.id.clone(),
+                            subsection.title.clone(),
+                            true,
+                        ));
+                    }
                     found = true;
                     break;
                 }
