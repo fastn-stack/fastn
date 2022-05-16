@@ -1,5 +1,4 @@
--- ft.page-with-toc: `$processor$: toc`
-toc: $config.sitemap.toc
+-- ft.page: `$processor$: toc`
 
 
 

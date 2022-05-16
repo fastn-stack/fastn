@@ -1,7 +1,4 @@
--- ft.page-with-toc: Dependency: `camino`
-toc: $config.sitemap.toc
-sub-sections: $config.sitemap.subsections
-extra: $config.empty
+-- ft.page: Dependency: `camino`
 
 
 We use [`camino`](https://docs.rs/camino/) crate which provides us "UTF-8

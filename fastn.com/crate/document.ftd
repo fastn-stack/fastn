@@ -1,7 +1,4 @@
--- ft.page-with-toc: `fpm::Document`
-toc: $config.sitemap.toc
-sub-sections: $config.sitemap.subsections
-extra: $config.empty
+-- ft.page: `fpm::Document`
 
 `fpm::Document` struct keeps track of a "document". Document is a [`file` in fpm
 package](crate/file/), which is either a ftd file, a markdown file, or a code

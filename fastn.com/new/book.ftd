@@ -3,6 +3,7 @@
 
 
 -- ft.page:
+toc: $config.empty-toc
 
 -- lib.create-section:
 

@@ -1,7 +1,4 @@
--- ft.page-with-toc: `fpm::Package`
-toc: $config.sitemap.toc
-sub-sections: $config.sitemap.subsections
-extra: $config.empty
+-- ft.page: `fpm::Package`
 
 `fpm::Package` struct keeps track of a single fpm package.
 

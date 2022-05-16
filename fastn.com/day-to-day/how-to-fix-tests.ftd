@@ -1,7 +1,4 @@
--- ft.page-with-toc: How To Update Failing Snapshot Tests
-toc: $config.sitemap.toc
-sub-sections: $config.sitemap.subsections
-extra: $config.empty
+-- ft.page: How To Update Failing Snapshot Tests
 
 We can fix the failing tests which is due to snapshot mismatch in output folder.
 

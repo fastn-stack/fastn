@@ -1,9 +1,6 @@
 -- import: fpm.dev/assets
 
--- ft.page-with-toc: FPM Journal
-toc: $config.sitemap.toc
-sub-sections: $config.sitemap.subsections
-extra: $config.empty
+-- ft.page: FPM Journal
 
 
 -- ft.h2: Thoughts: Browsing History

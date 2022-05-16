@@ -1,7 +1,4 @@
--- ft.page-with-toc: `fpm::StaticFile`
-toc: $config.sitemap.toc
-sub-sections: $config.sitemap.subsections
-extra: $config.empty
+-- ft.page: `fpm::StaticFile`
 
 `fpm::StaticFile` struct keeps track of "static files".
 

@@ -1,7 +1,4 @@
--- ft.page-with-toc: `fpm::utils`
-toc: $config.sitemap.toc
-sub-sections: $config.sitemap.subsections
-extra: $config.empty
+-- ft.page: `fpm::utils`
 
 `fpm::utils` is a bunch of private helper functions.
 

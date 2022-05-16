@@ -3,6 +3,7 @@
 
 
 -- ft.page:
+toc: $config.empty-toc
 id: main-page
 
 

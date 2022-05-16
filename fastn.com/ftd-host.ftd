@@ -1,5 +1,4 @@
--- ft.page-with-toc: Available `$processor$`s
-toc: $config.sitemap.toc
+-- ft.page: Available `$processor$`s
 
 -- ft.markdown: 
 

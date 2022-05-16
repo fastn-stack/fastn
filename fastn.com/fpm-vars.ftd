@@ -1,5 +1,4 @@
--- ft.page-with-toc: `import: fpm`
-toc: $config.sitemap.toc
+-- ft.page: `import: fpm`
 
 
 -- ft.h1: `document-id: String`

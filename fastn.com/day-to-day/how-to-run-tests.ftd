@@ -1,7 +1,4 @@
--- ft.page-with-toc: How To Run Tests
-toc: $config.sitemap.toc
-sub-sections: $config.sitemap.subsections
-extra: $config.empty
+-- ft.page: How To Run Tests
 
 
 Steps:

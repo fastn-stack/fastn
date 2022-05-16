@@ -1,5 +1,4 @@
--- ft.page-with-toc: `$processor$: http`
-toc: $config.sitemap.toc
+-- ft.page: `$processor$: http`
 
 This processor is used to initialise some FTD variable with content of JSON fetched
 from HTTP.

@@ -1,7 +1,4 @@
--- ft.page-with-toc: Dependency: `ftd`
-toc: $config.sitemap.toc
-sub-sections: $config.sitemap.subsections
-extra: $config.empty
+-- ft.page: Dependency: `ftd`
 
 
 We use [`ftd`](https://docs.rs/ftd/) crate which handles ftd grammer and

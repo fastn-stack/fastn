@@ -1,5 +1,4 @@
--- ft.page-with-toc: FPM Typography
-toc: $config.sitemap.toc
+-- ft.page: FPM Typography
 
 -- ftd.column:
 id: outer

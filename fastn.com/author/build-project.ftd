@@ -1,7 +1,4 @@
--- ft.page-with-toc: Build fpm project locally
-toc: $config.sitemap.toc
-sub-sections: $config.sitemap.subsections
-extra: $config.empty
+-- ft.page: Build fpm project locally
 
 
 To build the fpm project, Change the current working directory to the

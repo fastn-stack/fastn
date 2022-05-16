@@ -1,5 +1,4 @@
--- ft.page-with-toc: `fpm sync`
-toc: $config.sitemap.toc
+-- ft.page: `fpm sync`
 
 
 -- ft.markdown: 

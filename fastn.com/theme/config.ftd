@@ -1,5 +1,4 @@
--- ft.page-with-toc: Theme Configuration
-toc: $config.sitemap.toc
+-- ft.page: Theme Configuration
 
 
 -- ft.markdown: 

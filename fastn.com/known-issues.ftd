@@ -1,8 +1,7 @@
 -- import: fpm.dev/assets
 
 
--- ft.page-with-toc: Known Issues
-toc: $config.sitemap.toc
+-- ft.page: Known Issues
 
 
 -- ft.h1: Translation Can Not Be Added Unless Original Package Has Been Published

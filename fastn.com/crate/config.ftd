@@ -1,7 +1,4 @@
--- ft.page-with-toc: `fpm::Config`
-toc: $config.sitemap.toc
-sub-sections: $config.sitemap.subsections
-extra: $config.empty
+-- ft.page: `fpm::Config`
 
 `fpm::Config` struct keeps track of configuration for a FPM package. In order
 to perform any operation on a package, this struct should be first created.

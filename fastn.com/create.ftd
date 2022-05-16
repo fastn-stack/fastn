@@ -2,6 +2,7 @@
 -- import: fpm.dev/assets
 
 -- ft.page:
+toc: $config.empty-toc
 
 -- lib.hero: Build optimized websites quickly, focus on your content
 image: $assets.files.static.images.github-light.svg

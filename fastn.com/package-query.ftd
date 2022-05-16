@@ -1,5 +1,4 @@
--- ft.page-with-toc: `$processor$: package-query`
-toc: $config.sitemap.toc
+-- ft.page: `$processor$: package-query`
 
 
 -- ft.markdown: 

@@ -24,6 +24,8 @@ implements: fifthtry.github.io/theme
 
 -- fpm.sitemap:
 
+# Home: /
+
 # Docs: about/
 
 - About `fpm`: about/

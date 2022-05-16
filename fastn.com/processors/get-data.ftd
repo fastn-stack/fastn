@@ -1,5 +1,4 @@
--- ft.page-with-toc: `$processor$: get-data`
-toc: $config.sitemap.toc
+-- ft.page: `$processor$: get-data`
 
 `get-data` processor is used to get data from
 ["data"](crate/config/#fpm-config-attach-data-string).

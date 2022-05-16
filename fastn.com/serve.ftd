@@ -1,5 +1,4 @@
--- ft.page-with-toc: `fpm serve`
-toc: $config.sitemap.toc
+-- ft.page: `fpm serve`
 
 
 `fpm serve [<port>]` creates an `http` server, which serves static files from `.build` directory.

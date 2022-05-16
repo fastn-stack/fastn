@@ -1,7 +1,4 @@
--- ft.page-with-toc: Using `fpm` Crate
-toc: $config.sitemap.toc
-sub-sections: $config.sitemap.subsections
-extra: $config.empty
+-- ft.page: Using `fpm` Crate
 
 `fpm` is available as a Rust crate.
 

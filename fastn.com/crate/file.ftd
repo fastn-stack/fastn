@@ -1,7 +1,4 @@
--- ft.page-with-toc: `fpm::File`
-toc: $config.sitemap.toc
-sub-sections: $config.sitemap.subsections
-extra: $config.empty
+-- ft.page: `fpm::File`
 
 `fpm::File` enum represents a file found in fpm package.
 

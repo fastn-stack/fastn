@@ -1,9 +1,6 @@
 -- import: fpm.dev/assets
 
--- ft.page-with-toc: How to create new fpm project using template `fpm-template` on github?
-toc: $config.sitemap.toc
-sub-sections: $config.sitemap.subsections
-extra: $config.empty
+-- ft.page: How to create new fpm project using template `fpm-template` on github?
 
 We can create a new fpm project on github. This can be done by creating a github
 repository using [`fpm-template`](https://github.com/FifthTry/fpm-template)

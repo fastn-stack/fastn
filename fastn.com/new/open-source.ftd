@@ -2,6 +2,7 @@
 -- import: fpm.dev/assets
 
 -- ft.page:
+toc: $config.empty-toc
 
 -- lib.create-section:
 

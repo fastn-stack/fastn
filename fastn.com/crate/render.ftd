@@ -1,7 +1,4 @@
--- ft.page-with-toc: `fpm::render`
-toc: $config.sitemap.toc
-sub-sections: $config.sitemap.subsections
-extra: $config.empty
+-- ft.page: `fpm::render`
 
 
 `fpm::render()` renders a single ftd file that is part of current FPM package.

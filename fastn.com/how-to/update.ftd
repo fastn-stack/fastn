@@ -1,5 +1,4 @@
--- ft.page-with-toc: Upgrade `fpm`
-toc: $config.sitemap.toc
+-- ft.page: Upgrade `fpm`
 
 -- ft.markdown: 
 

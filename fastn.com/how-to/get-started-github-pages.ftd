@@ -1,7 +1,6 @@
 -- import: fpm.dev/assets
 
--- ft.page-with-toc: Getting started with github pages
-toc: $config.sitemap.toc
+-- ft.page: Getting started with github pages
 
 -- ft.markdown: 
 

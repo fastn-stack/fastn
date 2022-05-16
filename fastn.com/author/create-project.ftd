@@ -1,7 +1,4 @@
--- ft.page-with-toc: Create new fpm project
-toc: $config.sitemap.toc
-sub-sections: $config.sitemap.subsections
-extra: $config.empty
+-- ft.page: Create new fpm project
 
 
 There are several ways to create a new fpm project. This can be done using

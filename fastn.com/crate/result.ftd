@@ -1,7 +1,4 @@
--- ft.page-with-toc: `fpm::Result`
-toc: $config.sitemap.toc
-sub-sections: $config.sitemap.subsections
-extra: $config.empty
+-- ft.page: `fpm::Result`
 
 Most `fpm` operations return `fpm::Result<T>`.
 

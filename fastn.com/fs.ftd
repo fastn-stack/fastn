@@ -1,5 +1,4 @@
--- ft.page-with-toc: File System Organization
-toc: $config.sitemap.toc
+-- ft.page: File System Organization
 
 
 -- ft.h1: Package

@@ -1,7 +1,6 @@
 -- import: fpm.dev/assets
 
--- ft.page-with-toc: Common Header Component
-toc: $config.sitemap.toc
+-- ft.page: Common Header Component
 
 -- ft.markdown: 
 

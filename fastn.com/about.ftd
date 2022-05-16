@@ -1,5 +1,4 @@
--- ft.page-with-toc: About `fpm`
-toc: $config.sitemap.toc
+-- ft.page: About `fpm`
 
 -- ft.markdown: 
 
