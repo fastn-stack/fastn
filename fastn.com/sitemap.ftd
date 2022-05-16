@@ -209,7 +209,7 @@ Consider the following example:
 Suppose `foo.ftd` has to be appeared more than once in the sitemap.
 The sitemap can include this document as `foo/`, this is the "main" URL.
 The other way to include it is by passing url something like this.
-`foo/-/<something>`. The `-/` is the pointer to get the document. Anything
+`foo/-/<something>/`. The `-/` is the pointer to get the document. Anything
 preceding `-/` would be the document id. The generated html of this document
 will include the canonical url pointing to `foo/`.
 
@@ -232,11 +232,11 @@ get passed to its children TOC.
 -- ft.code:
 lang: ftd
 
-# section/url/
+# name: section/url/
 key1: value1
 key2: value2
 
-## subsection/url/
+## sub name: subsection/url/
 key3: value3
 
 - toc/url/
@@ -290,4 +290,4 @@ lang: ftd
 # Development
 
 - foo/-/1
-show-dev-info: true
+  show-dev-info: true
