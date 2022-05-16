@@ -1,0 +1,36 @@
+-- ft.page-with-toc: Build fpm project locally
+toc: $config.sitemap.toc
+sub-sections: $config.sitemap.subsections
+extra: $config.empty
+
+
+To build the fpm project, Change the current working directory to the
+fpm project and run the following command in terminal
+
+-- ft.code:
+lang: sh
+
+fpm build
+
+-- ft.markdown:
+
+`fpm build` command builds the whole project. It converts the ftd files
+into the corresponding html file and stores them in `.build` folder.
+
+
+-- ft.h1: Build an individual file
+
+We can only build certain ftd file. This can be done using the following
+command
+
+-- ft.code:
+lang: sh
+
+fpm build <file-name>
+
+-- ft.markdown:
+
+`fpm build <file-name>` command builds only the <file-name> file.
+Eg: if we want to build `foo.ftd` only, then run `fpm build foo.ftd` in the
+terminal.
+

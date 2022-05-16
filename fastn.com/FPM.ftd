@@ -159,3 +159,10 @@ implements: fifthtry.github.io/theme
 - How to use Google Font: theme/google-font-how-to-use/
 - FPM Sitemap: sitemap/
 
+
+# Author Manual: author/
+
+- Create new fpm project: author/create-project/
+  - Create new fpm project on github: author/create-on-github/
+- How to install fpm on local machine: how-to/install/-/author/
+- Build fpm project locally: author/build-project/

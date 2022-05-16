@@ -1,0 +1,9 @@
+-- ft.page-with-toc: Author Manual
+toc: $config.sitemap.toc
+sub-sections: $config.sitemap.subsections
+extra: $config.empty
+
+
+Everything related to hows and whats related to FPM usage are covered in this
+section. This is the manual for the author to design their page using
+FPM.

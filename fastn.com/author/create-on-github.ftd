@@ -1,0 +1,82 @@
+-- import: fpm.dev/assets
+
+-- ft.page-with-toc: How to create new fpm project using template `fpm-template` on github?
+toc: $config.sitemap.toc
+sub-sections: $config.sitemap.subsections
+extra: $config.empty
+
+We can create a new fpm project on github. This can be done by creating a github
+repository using [`fpm-template`](https://github.com/FifthTry/fpm-template)
+
+Follow the following steps to achieve this
+
+
+-- ft.h1: Create a new github repository
+
+Go to [this url](https://github.com/FifthTry/fpm-template/generate) and create a new repository.
+
+
+
+
+
+-- ft.h1: Rewrite file
+
+In the FPM.ftd file, rewrite the package name and zip
+
+-- ft.code:
+lang: ftd
+
+\-- fpm.package: <package-name>
+zip: <url-where-repo-is-available>
+
+
+-- ft.markdown:
+
+As this is github repo, the `<package-name>` should be
+`<github organisation/username>.github.io/<repository name>`. In case if the organisation/user
+name is `Fifthtry` and repository is `forest-cs`, then the `<package-name>` would be
+`fifthtry.github.io/forest-cs`.
+
+The `<url-where-repo-is-available>` should be `github.com/fifthtry/forest-cs/archive/refs/heads/main.zip`
+
+
+-- ft.h1: Push Changes and Github Workflow
+
+Now, push these changes in the github repository. The pushing would run the github
+workflow.
+
+-- ft.image: Running github workflow
+src: $assets.files.static.images.author.workflow-running.png
+width: fill
+
+
+On successful execution of workflow, the `gh-pages` branch would be created.
+
+-- ft.image: Successful github workflow
+src: $assets.files.static.images.author.successful-workflow.png
+width: fill
+
+-- ft.image: Branch `gh-pages`
+src: $assets.files.static.images.author.gh-pages.png
+width: fill
+
+
+-- ft.h1: Publish Site (Github Pages)
+
+In github, Go to the `Settings` and then in TOC, go to `Pages`
+
+In the `Source`, select the `gh-pages` branch and then select the `/(root)`
+and then click on `Save`.
+
+This publish the site `https://fifthtry.github.io/forest-cs/`
+
+-- ft.image: Publish site
+src: $assets.files.static.images.author.publish-site.png
+width: fill
+
+
+
+
+
+
+
