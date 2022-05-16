@@ -42,41 +42,14 @@ url: whatever
 
 -- ft.h1: Sitemap `$processor$`
 
-The sitemap get parse into a record `sitemap-data`. This record is present in `fpm`
-The record looks like this
-
--- ft.code: record `sitemap-data` (fpm.ftd)
-lang: ftd
-
-\-- record sitemap-data:
-toc-item list sections:
-toc-item list subsections:
-toc-item list toc:
-
-
-\-- record toc-item:
-optional string title:
-optional string url:
-optional string font-icon:
-optional string img-src:
-boolean is-heading:
-boolean is-disabled:
-boolean is-active: false
-toc-item list children:
-
--- ft.markdown:
-
-The record `sitemap-data` contains sections, subsections and toc. For different document
-these values would be different. We can get this values by calling the `get-sitemap`
-processor which returns the value of `sitemap-data` type.
+We have `$processor$` called [`get-sitemap`](processors/get-sitemap/), which
+can be used to get sitemap data:
 
 -- ft.code:
 lang: ftd
 
 \-- fpm.sitemap-data sitemap:
 $processor$: get-sitemap
-
-
 
 -- ft.markdown:
 

@@ -126,3 +126,7 @@ lang: ftd
 -- ft.markdown:
 
 Any number of patterns can be specified.
+
+-- ft.h1: `fpm.sitemap`
+
+You can add a sitemap in FPM.ftd file. Details in [sitemap docs](sitemap/).
