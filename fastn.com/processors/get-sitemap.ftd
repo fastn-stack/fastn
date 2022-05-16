@@ -31,9 +31,9 @@ lang: ftd
 toc-item list sections:
 toc-item list subsections:
 toc-item list toc:
-toc-item current-section:
+optional toc-item current-section:
 optional toc-item current-subsection:
-toc-item current-page:
+optional toc-item current-page:
 
 
 \-- record toc-item:
