@@ -1,8 +1,6 @@
 /-- ft-core.concept:
 
--- ft.page-with-toc: `list`
-toc: $config.sitemap.toc
-sub-sections: $config.sitemap.subsections
+-- ft.page: `list`
 
 -- ft.markdown: 
 

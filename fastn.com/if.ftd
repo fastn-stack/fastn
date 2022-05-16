@@ -1,8 +1,6 @@
 /-- ft-core.concept:
 
--- ft.page-with-toc: `if`: Conditional Components
-toc: $config.sitemap.toc
-sub-sections: $config.sitemap.subsections
+-- ft.page: `if`: Conditional Components
     
 -- ft.markdown: 
 

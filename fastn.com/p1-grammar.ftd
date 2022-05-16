@@ -1,8 +1,6 @@
 /-- ft-core.concept:
 
--- ft.page-with-toc: `ftd::p1` grammar
-toc: $config.sitemap.toc
-sub-sections: $config.sitemap.subsections
+-- ft.page: `ftd::p1` grammar
 
 -- ft.markdown: 
 

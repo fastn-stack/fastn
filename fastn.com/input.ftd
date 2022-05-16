@@ -1,4 +1,2 @@
--- ft.page-with-toc: Input
-toc: $config.sitemap.toc
-sub-sections: $config.sitemap.subsections
+-- ft.page: Input
     

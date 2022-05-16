@@ -1,8 +1,6 @@
 /-- ft-core.concept:
 
--- ft.page-with-toc: Reading FTD Files
-toc: $config.sitemap.toc
-sub-sections: $config.sitemap.subsections
+-- ft.page: Reading FTD Files
     
 -- ft.markdown: 
 

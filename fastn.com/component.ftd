@@ -4,9 +4,7 @@
 \-- ft-core.concept:
 
 
--- ft.page-with-toc: `component`
-toc: $config.sitemap.toc
-sub-sections: $config.sitemap.subsections
+-- ft.page: `component`
 
 
 -- ftd.column:

@@ -1,6 +1,4 @@
--- ft.page-with-toc: React Bangalore - Jan 2022
-toc: $config.sitemap.toc
-sub-sections: $config.sitemap.subsections
+-- ft.page: React Bangalore - Jan 2022
 
 -- ft.markdown: 
 

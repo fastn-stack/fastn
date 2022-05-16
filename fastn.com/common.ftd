@@ -1,9 +1,7 @@
 -- import: ftd.dev/assets
 -- import: fpm
 
--- ft.page-with-toc: Common Attributes
-toc: $config.sitemap.toc
-sub-sections: $config.sitemap.subsections
+-- ft.page: Common Attributes
 
 
 -- ftd.column:

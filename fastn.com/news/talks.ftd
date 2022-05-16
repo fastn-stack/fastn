@@ -1,6 +1,4 @@
--- ft.page-with-toc: Talks & Videos
-toc: $config.sitemap.toc
-sub-sections: $config.sitemap.subsections
+-- ft.page: Talks & Videos
 
 -- ft.markdown:
 

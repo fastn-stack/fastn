@@ -1,8 +1,6 @@
 -- import: ftd.dev/assets
 
--- ft.page-with-toc: FTD Journal
-toc: $config.sitemap.toc
-sub-sections: $config.sitemap.subsections
+-- ft.page: FTD Journal
 id: page
 
 

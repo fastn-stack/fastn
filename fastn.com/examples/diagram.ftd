@@ -30,8 +30,7 @@ dark: #f09483
 -- ftd.color yellow: yellow
 dark: yellow
 
--- ft.page-with-toc: An Architecture Diagram
-toc: $config.sitemap.toc
+-- ft.page: An Architecture Diagram
 
 -- ft.markdown: 
 

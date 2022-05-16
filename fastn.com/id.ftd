@@ -1,9 +1,7 @@
 -- import: ftd.dev/assets
 -- import: fpm
 
--- ft.page-with-toc: ID in `ftd`
-toc: $config.sitemap.toc
-sub-sections: $config.sitemap.subsections
+-- ft.page: ID in `ftd`
 
 
 -- ft.h1: What is `id`?

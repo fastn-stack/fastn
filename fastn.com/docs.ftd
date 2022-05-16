@@ -1,6 +1,4 @@
--- ft.page-with-toc: FTD Documentation
-toc: $config.sitemap.toc
-sub-sections: $config.sitemap.subsections
+-- ft.page: FTD Documentation
 
 
 -- ft.markdown: 

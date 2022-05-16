@@ -1,9 +1,7 @@
 \-- ft-core.concept:
 
 
--- ft.page-with-toc: Variables
-toc: $config.sitemap.toc
-sub-sections: $config.sitemap.subsections
+-- ft.page: Variables
 
 
 -- ft.markdown: 

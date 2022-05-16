@@ -650,6 +650,7 @@ lang: ftd
 \-- import: fpm
 
 \-- ft.page:
+toc: $config.empty-toc
 
 \-- ft.create-section:
 

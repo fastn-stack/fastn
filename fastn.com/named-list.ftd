@@ -1,4 +1,2 @@
--- ft.page-with-toc: `named-list`
-toc: $config.sitemap.toc
-sub-sections: $config.sitemap.subsections
+-- ft.page: `named-list`
     

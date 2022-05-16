@@ -1,6 +1,4 @@
--- ft.page-with-toc: Upcoming Events
-toc: $config.sitemap.toc
-sub-sections: $config.sitemap.subsections
+-- ft.page: Upcoming Events
 
 -- ft.markdown:
 

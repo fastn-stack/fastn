@@ -1,8 +1,7 @@
 -- import: ftd.dev/assets
 -- import: fpm
 
--- ft.page-with-toc: How to create a tree using `ftd`?
-toc: $config.sitemap.toc
+-- ft.page: How to create a tree using `ftd`?
 id: main
 
 

@@ -1,9 +1,7 @@
 \-- ft-core.concept:
 
 
--- ft.page-with-toc: Philosophy Behind `ftd`
-toc: $config.sitemap.toc
-sub-sections: $config.sitemap.subsections
+-- ft.page: Philosophy Behind `ftd`
 
 
 -- ft.markdown: 

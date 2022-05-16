@@ -1,6 +1,4 @@
--- ft.page-with-toc: Row
-toc: $config.sitemap.toc
-sub-sections: $config.sitemap.subsections
+-- ft.page: Row
     
 -- ft.markdown: 
 

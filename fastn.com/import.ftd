@@ -1,5 +1,3 @@
--- ft.page-with-toc: `import`
-toc: $config.sitemap.toc
-sub-sections: $config.sitemap.subsections
+-- ft.page: `import`
 
 

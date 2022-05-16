@@ -1,9 +1,7 @@
 /-- ft-core.concept:
 
 
--- ft.page-with-toc: Conditional Attributes
-toc: $config.sitemap.toc
-sub-sections: $config.sitemap.subsections
+-- ft.page: Conditional Attributes
 
 
 -- ftd.column:

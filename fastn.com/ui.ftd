@@ -1,6 +1,4 @@
--- ft.page-with-toc: Building UIs with `ftd`
-toc: $config.sitemap.toc
-sub-sections: $config.sitemap.subsections
+-- ft.page: Building UIs with `ftd`
 
 
 -- ft.markdown: 

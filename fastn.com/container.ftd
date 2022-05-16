@@ -1,6 +1,4 @@
--- ft.page-with-toc: Container Attributes
-toc: $config.sitemap.toc
-sub-sections: $config.sitemap.subsections
+-- ft.page: Container Attributes
 
     
 -- ftd.column:

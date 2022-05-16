@@ -1,6 +1,4 @@
--- ft.page-with-toc: Data Modelling With `ftd`
-toc: $config.sitemap.toc
-sub-sections: $config.sitemap.subsections
+-- ft.page: Data Modelling With `ftd`
 
 -- ft.markdown: 
 

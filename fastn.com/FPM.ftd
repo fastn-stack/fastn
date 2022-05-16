@@ -17,45 +17,47 @@ language: en
 
 -- fpm.sitemap:
 
-# Why FTD?: /why/
+# Home: /
 
-## Overview: /why/
+# Why FTD?: why/
 
-- Why FTD?: /why/
-- Philosophy: /philosophy/
+## Overview: why/
 
-## Alternatives: /alternatives/
+- Why FTD?: why/
+- Philosophy: philosophy/
 
-- Why not MDX?: /why/not-mdx/
+## Alternatives: alternatives/
+
+- Why not MDX?: why/not-mdx/
 
 
 
 
 
-# Docs: /docs/
+# Docs: docs/
 
-## Start Here: /docs/
+## Start Here: docs/
 
-- Start Here: /docs/
-- `ftd p1` grammar: /p1-grammar/
-- `import`: /import/
-- `ftd Library`: /library/
-- Comments In `ftd` Files: /comments/
+- Start Here: docs/
+- `ftd p1` grammar: p1-grammar/
+- `import`: import/
+- `ftd Library`: library/
+- Comments In `ftd` Files: comments/
 
-## Data Modelling: /data-modelling/
+## Data Modelling: data-modelling/
 
-- Overview: /data-modelling/
-- Variables: /variables/
-- Built-in Types: /built-in-types/
-- `record`: /record/
-- `or-type`: /or-type/
-- `list`: /list/
+- Overview: data-modelling/
+- Variables: variables/
+- Built-in Types: built-in-types/
+- `record`: record/
+- `or-type`: or-type/
+- `list`: list/
 
-## UI: /ui/
+## UI: ui/
 
-- UI: /ui/
-- `component`: /component/
-- Kernel Components: /kernel/
+- UI: ui/
+- `component`: component/
+- Kernel Components: kernel/
   - `ftd.row`: row/
   - `ftd.column`: column/
   - `ftd.text`: text/
@@ -68,62 +70,62 @@ language: en
   - `ftd.input`: input/
   - `ftd.scene`: scene/
   - `ftd.grid`: grid/
-- Common Attributes: /common/
-- Common Text Attributes: /text-common/
-- FTD "markup": /markup/
-- Container Attributes: /container/
-- Container Management: /container-management/
-- Inner Container: /inner-container/
+- Common Attributes: common/
+- Common Text Attributes: text-common/
+- FTD "markup": markup/
+- Container Attributes: container/
+- Container Management: container-management/
+- Inner Container: inner-container/
 - `if` Conditional Components
-  url: /if/
-- Conditional Attributes: /if-attr/
+  url: if/
+- Conditional Attributes: if-attr/
 - `$loop$`: Looping Over Lists
-  url: /loop/
-- ID: /id/
+  url: loop/
+- ID: id/
 - `$on-<event-name>$`: Event Handling
-  url: /event-handling/
-- Auto Nesting: /auto-nesting/
+  url: event-handling/
+- Auto Nesting: auto-nesting/
 
 
-## API: /reading-data/
+## API: reading-data/
 
-- Reading FTD Files: /reading-data/
+- Reading FTD Files: reading-data/
 - `ftd::p1`: A JSON/YML Replacement
-  url: /p1/
+  url: p1/
 
 
-## Development: /development/
+## Development: development/
 
-- Roadmap & RFCs: /roadmap/
-- Journal: /journal/
-- Changelog: /changelog/
-- Internals: /internals/
-
-
-
+- Roadmap & RFCs: roadmap/
+- Journal: journal/
+- Changelog: changelog/
+- Internals: internals/
 
 
 
-# News: /news/
-
-## Blog: /news/
-
-- Latest News: /news/
-- React Bangalore Feb 2022: /news/react-banglore-22-01-2022/
-
-
-## Changelog: /changelog/
-
-- Latest News: /news/
-- React Bangalore Feb 2022: /news/react-banglore-22-01-2022/
 
 
 
-## Talks & Videos: /news/talks/
+# News: news/
+
+## Blog: news/
+
+- Latest News: news/
+- React Bangalore Feb 2022: news/react-banglore-22-01-2022/
+
+
+## Changelog: changelog/
+
+- Latest News: news/
+- React Bangalore Feb 2022: news/react-banglore-22-01-2022/
 
 
 
-## Upcoming Events: /news/upcoming/
+## Talks & Videos: news/talks/
+
+
+
+## Upcoming Events: news/upcoming/
 
 
 

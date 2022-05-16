@@ -1,4 +1,2 @@
--- ft.page-with-toc: Enums
-toc: $config.sitemap.toc
-sub-sections: $config.sitemap.subsections
+-- ft.page: Enums
 

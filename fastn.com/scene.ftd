@@ -1,6 +1,4 @@
--- ft.page-with-toc: Scene
-toc: $config.sitemap.toc
-sub-sections: $config.sitemap.subsections
+-- ft.page: Scene
 
 -- ftd.column:
 width: fill

@@ -1,8 +1,6 @@
 \-- ft-core.concept:
 
--- ft.page-with-toc: Container Management
-toc: $config.sitemap.toc
-sub-sections: $config.sitemap.subsections
+-- ft.page: Container Management
 
 -- ft.markdown: 
 

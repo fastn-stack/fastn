@@ -1,7 +1,6 @@
 -- import: fpm
 
--- ft.page-with-toc: Grid Layout
-toc: $config.sitemap.toc
+-- ft.page: Grid Layout
 
 
 -- boolean mobile: false

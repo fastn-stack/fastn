@@ -1,6 +1,4 @@
--- ft.page-with-toc: Why Not MDX?
-toc: $config.sitemap.toc
-sub-sections: $config.sitemap.subsections
+-- ft.page: Why Not MDX?
 
 -- ft.markdown: 
 

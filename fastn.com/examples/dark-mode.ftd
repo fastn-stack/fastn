@@ -1,8 +1,7 @@
 -- import: ftd.dev/assets
 -- import: fpm
 
--- ft.page-with-toc: Building Dark-Mode Switcher Using FTD
-toc: $config.sitemap.toc
+-- ft.page: Building Dark-Mode Switcher Using FTD
 
 -- ft.markdown: 
 

@@ -1,7 +1,6 @@
 -- import: fpm
 
--- ft.page-with-toc: Conditional Variable
-toc: $config.sitemap.toc
+-- ft.page: Conditional Variable
 
 -- boolean ayushi: false
 

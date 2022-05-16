@@ -1,8 +1,6 @@
 /-- ft-core.concept:
 
--- ft.page-with-toc: `or-type`
-toc: $config.sitemap.toc
-sub-sections: $config.sitemap.subsections
+-- ft.page: `or-type`
     
 -- ft.markdown: 
 
