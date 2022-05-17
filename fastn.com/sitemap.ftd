@@ -13,6 +13,7 @@ listed in the header of the site.
 
 -- ft.image:
 src: $assets.files.static.images.sitemap.png
+width: fill
 
 Each section should have one or more sub-sections. Sub-section should be listed
 as second level navigation in the header of the site. Each sub-section has one
