@@ -1,5 +1,4 @@
--- ft.page-with-toc: `get-sitemap` `$processor$`
-toc: $config.sitemap.toc
+-- ft.page: `$processor$: get-sitemap`
 
 
 -- ft.code: Sitemap in `FPM.ftd`

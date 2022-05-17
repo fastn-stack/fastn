@@ -42,6 +42,8 @@ implements: fifthtry.github.io/theme
     url: package-query/
   - `$processor$: get-data`
     url: processors/get-data/
+  - `$processor$: get-sitemap`
+    url: processors/get-sitemap/
   - `import: fpm`
     url: fpm-vars/
 - How To:
@@ -77,6 +79,8 @@ implements: fifthtry.github.io/theme
     url: package-query/
   - `$processor$: get-data`
     url: processors/get-data/
+  - `$processor$: get-sitemap`
+      url: processors/get-sitemap/
   - `import: fpm`
     url: fpm-vars/
 - How To:
