@@ -479,7 +479,6 @@ impl Config {
     }
 
     pub(crate) fn get_file_name(root: &camino::Utf8PathBuf, id: &str) -> fpm::Result<String> {
-        // dbg!("get_file_name", &id);
         let mut id = id
             .split_once("-/")
             .map(|(id, _)| id)
@@ -487,7 +486,6 @@ impl Config {
             .trim()
             .replace("/index.html", "/")
             .replace("index.html", "/");
-        // dbg!("1", &id);
         if id.eq("/") {
             if root.join("index.ftd".to_string()).exists() {
                 return Ok("index.ftd".to_string());

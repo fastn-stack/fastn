@@ -504,7 +504,6 @@ impl Sitemap {
         let mut sitemap = Sitemap {
             sections: construct_tree_util(parser.finalize()?),
         };
-        // dbg!(&sitemap);
 
         sitemap
             .resolve(package, config)
@@ -844,9 +843,6 @@ impl Sitemap {
                     .replace("index.html", "/");
                 if id.eq("/") {
                     return id;
-                }
-                if id.starts_with("/-/") {
-                    return id.trim_end_matches('/').to_string();
                 }
                 id.trim_matches('/').to_string()
             }
