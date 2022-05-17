@@ -428,6 +428,26 @@ impl<'a> TDoc<'a> {
         Ok(())
     }
 
+    pub fn get_variable_kind(&self, section: &ftd::p1::Section) -> ftd::p1::Result<ftd::p2::Kind> {
+        if let Ok(v) = self.get_value(0, section.name.as_str()) {
+            return Ok(v.kind());
+        }
+        if let Ok(list) = ftd::Variable::list_from_p1(section, self) {
+            return Ok(list.value.kind());
+        }
+        if let Ok(var) = ftd::Variable::from_p1(section, self) {
+            return Ok(var.value.kind());
+        }
+        ftd::p2::Kind::for_variable(
+            section.line_number,
+            &section.name,
+            None,
+            self,
+            None,
+            &Default::default(),
+        )
+    }
+
     pub fn from_json<T>(&self, json: &T, section: &ftd::p1::Section) -> ftd::p1::Result<ftd::Value>
     where
         T: serde::Serialize + std::fmt::Debug,
