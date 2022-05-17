@@ -1,3 +1,5 @@
+-- import: fpm.dev/assets
+
 -- ft.page: FPM Sitemap
 
 "FPM Sitemap" is the name of a structure we recommend for sites. It is
@@ -44,7 +46,7 @@ url: whatever
 - ToC Item: toc/
   nav-title: Shorter title
 
--- ds.markdown:
+-- ft.markdown:
 
 Note: The URLs in sitemap start with slash, but we remove the first slash. We do
 this because some projects may deploy FPM package on a base URL eg, `foo.com/bar/`,
