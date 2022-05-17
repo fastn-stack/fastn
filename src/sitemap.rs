@@ -228,11 +228,7 @@ impl SitemapElement {
 
     pub(crate) fn set_id(&mut self, id: Option<String>) {
         let id = if let Some(id) = id {
-            let mut id = id.trim();
-            if !id.eq("/") {
-                id = id.trim_matches('/');
-            }
-            id.to_string()
+            id
         } else {
             return;
         };
@@ -508,6 +504,7 @@ impl Sitemap {
         let mut sitemap = Sitemap {
             sections: construct_tree_util(parser.finalize()?),
         };
+        // dbg!(&sitemap);
 
         sitemap
             .resolve(package, config)
@@ -755,7 +752,7 @@ impl Sitemap {
         for (idx, section) in self.sections.iter().enumerate() {
             index = idx;
 
-            if section.id.as_str().eq(id) {
+            if ids_matches(section.id.as_str(), id) {
                 subsections = section
                     .subsections
                     .iter()
@@ -837,6 +834,24 @@ impl Sitemap {
             current_page,
         });
 
+        fn ids_matches(id1: &str, id2: &str) -> bool {
+            return strip_id(id1).eq(&strip_id(id2));
+
+            fn strip_id(id: &str) -> String {
+                let id = id
+                    .trim()
+                    .replace("/index.html", "/")
+                    .replace("index.html", "/");
+                if id.eq("/") {
+                    return id;
+                }
+                if id.starts_with("/-/") {
+                    return id.trim_end_matches('/').to_string();
+                }
+                id.trim_matches('/').to_string()
+            }
+        }
+
         #[allow(clippy::type_complexity)]
         fn get_subsection_by_id(
             id: &str,
@@ -856,7 +871,13 @@ impl Sitemap {
 
             for (idx, subsection) in subsections.iter().enumerate() {
                 index = idx;
-                if subsection.visible && subsection.id.as_ref().map(|v| v.eq(id)).unwrap_or(false) {
+                if subsection.visible
+                    && subsection
+                        .id
+                        .as_ref()
+                        .map(|v| ids_matches(v, id))
+                        .unwrap_or(false)
+                {
                     let (toc_list, current_toc) = get_all_toc(subsection.toc.as_slice(), id);
                     toc.extend(toc_list);
                     current_page = current_toc;
@@ -942,7 +963,7 @@ impl Sitemap {
                     let mut current_toc = TocItemCompat::new(
                         Some(get_url(toc_item.id.as_str()).to_string()),
                         toc_item.title.clone(),
-                        toc_item.id.as_str().eq(id) || is_active,
+                        ids_matches(toc_item.id.as_str(), id) || is_active,
                     );
                     current_toc.children = children;
                     if is_active {
@@ -954,7 +975,7 @@ impl Sitemap {
                 toc_list.push(current_toc.clone());
 
                 if current_page.is_none() {
-                    found_here = toc_item.id.as_str().eq(id);
+                    found_here = ids_matches(toc_item.id.as_str(), id);
                     if found_here {
                         if let Some(ref title) = toc_item.nav_title {
                             current_toc.title = Some(title.to_string());
@@ -967,7 +988,11 @@ impl Sitemap {
         }
 
         fn get_url(id: &str) -> String {
-            if id.ends_with('/') {
+            if id.eq("/") {
+                return id.to_string();
+            }
+            let id = id.trim_start_matches('/');
+            if id.ends_with('/') || id.ends_with("index.html") {
                 return id.to_string();
             }
             format!("{}/", id)

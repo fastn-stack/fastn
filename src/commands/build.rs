@@ -129,7 +129,8 @@ async fn build_simple(
                 )
                 .await?;
                 if let Some(ref url) = url {
-                    file.set_id(format!("{}/index.ftd", url).as_str());
+                    let url = url.replace("/index.html", "");
+                    file.set_id(format!("{}/index.ftd", url.trim_matches('/')).as_str());
                 }
                 file
             };
@@ -181,6 +182,7 @@ async fn build_with_translations(
                 )
                 .await?;
                 if let Some(ref url) = url {
+                    let url = url.replace("/index.html", "");
                     file.set_id(format!("{}/index.ftd", url).as_str());
                 }
                 file
@@ -294,6 +296,7 @@ async fn build_with_original(
                 )
                 .await?;
                 if let Some(ref url) = url {
+                    let url = url.replace("/index.html", "");
                     file.set_id(format!("{}/index.ftd", url).as_str());
                 }
                 file
@@ -308,6 +311,7 @@ async fn build_with_original(
                     )
                     .await?;
                     if let Some(ref url) = url {
+                        let url = url.replace("/index.html", "");
                         file.set_id(format!("{}/index.ftd", url).as_str());
                     }
                     file

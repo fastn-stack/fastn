@@ -36,7 +36,40 @@ pub fn processor(
         }
         if let Some(extra_data) = sitemap.get_extra_data_by_id(doc_id.as_str()) {
             if let Some(data) = extra_data.get(name.as_str()) {
-                return doc.from_json(data, section);
+                let kind = doc.get_variable_kind(section)?;
+                return match kind {
+                    ftd::p2::Kind::Integer { .. } => {
+                        let value =
+                            data.parse::<i64>()
+                                .map_err(|e| ftd::p1::Error::ParseError {
+                                    message: e.to_string(),
+                                    doc_id: doc.name.to_string(),
+                                    line_number: section.line_number,
+                                })?;
+                        doc.from_json(&value, section)
+                    }
+                    ftd::p2::Kind::Decimal { .. } => {
+                        let value =
+                            data.parse::<f64>()
+                                .map_err(|e| ftd::p1::Error::ParseError {
+                                    message: e.to_string(),
+                                    doc_id: doc.name.to_string(),
+                                    line_number: section.line_number,
+                                })?;
+                        doc.from_json(&value, section)
+                    }
+                    ftd::p2::Kind::Boolean { .. } => {
+                        let value =
+                            data.parse::<bool>()
+                                .map_err(|e| ftd::p1::Error::ParseError {
+                                    message: e.to_string(),
+                                    doc_id: doc.name.to_string(),
+                                    line_number: section.line_number,
+                                })?;
+                        doc.from_json(&value, section)
+                    }
+                    _ => doc.from_json(data, section),
+                };
             }
         }
     }
