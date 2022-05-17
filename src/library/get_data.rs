@@ -27,11 +27,14 @@ pub fn processor(
     }
 
     if let Some(ref sitemap) = config.sitemap {
-        let doc_id = doc
+        let mut doc_id = doc
             .name
             .to_string()
             .replace(config.package.name.as_str(), "");
-        if let Some(extra_data) = sitemap.get_extra_data_by_id(doc_id.trim_start_matches('/')) {
+        if !doc_id.eq("/") {
+            doc_id = doc_id.trim_matches('/').to_string();
+        }
+        if let Some(extra_data) = sitemap.get_extra_data_by_id(doc_id.as_str()) {
             if let Some(data) = extra_data.get(name.as_str()) {
                 return doc.from_json(data, section);
             }
