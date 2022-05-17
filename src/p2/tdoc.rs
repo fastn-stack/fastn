@@ -1176,14 +1176,14 @@ impl<'a> TDoc<'a> {
             name
         };
 
-        let (initial_thing, name) = self.get_initial_thing(line_number, name)?;
+        let (initial_thing, remaining) = self.get_initial_thing(line_number, name)?;
 
-        if let Some(remaining) = name {
-            return get_thing(self, line_number, remaining.as_str(), &initial_thing);
+        if let Some(remaining) = remaining {
+            return get_thing_(self, line_number, remaining.as_str(), &initial_thing);
         }
         return Ok(initial_thing);
 
-        fn get_thing(
+        fn get_thing_(
             doc: &ftd::p2::TDoc,
             line_number: usize,
             name: &str,
@@ -1204,10 +1204,54 @@ impl<'a> TDoc<'a> {
                     conditions,
                     ..
                 }) => {
-                    let fields = match value.resolve(line_number, doc)?.inner() {
-                        Some(ftd::Value::Record { fields, .. }) => fields,
-                        Some(ftd::Value::OrType { fields, .. }) => fields,
-                        Some(ftd::Value::Object { values }) => values,
+                    let fields = match value.resolve(line_number, doc)?.inner_with_none() {
+                        ftd::Value::Record { fields, .. } => fields,
+                        ftd::Value::OrType { fields, .. } => fields,
+                        ftd::Value::Object { values } => values,
+                        ftd::Value::None { kind } => {
+                            let kind_name = match kind {
+                                ftd::p2::Kind::Record { ref name, .. } => name,
+                                ftd::p2::Kind::OrType { ref name, .. } => name,
+                                ftd::p2::Kind::OrTypeWithVariant { ref name, .. } => name,
+                                _ => {
+                                    return doc.err(
+                                        "not an record or or-type",
+                                        thing,
+                                        "get_thing",
+                                        line_number,
+                                    );
+                                }
+                            };
+                            let kind_thing = doc.get_thing(line_number, kind_name)?;
+                            let kind = if let Some(fields_kind) = match kind_thing {
+                                ftd::p2::Thing::Record(ftd::p2::Record { fields, .. }) => {
+                                    fields.get(v).map(|v| v.clone())
+                                }
+                                _ => None,
+                            } {
+                                fields_kind
+                            } else {
+                                return doc.err(
+                                    "not an record or or-type",
+                                    thing,
+                                    "get_thing",
+                                    line_number,
+                                );
+                            }
+                            .to_owned();
+                            let thing = ftd::p2::Thing::Variable(ftd::Variable {
+                                name,
+                                value: ftd::PropertyValue::Value {
+                                    value: ftd::Value::None { kind },
+                                },
+                                conditions,
+                                flags: ftd::VariableFlags::default(),
+                            });
+                            if let Some(remaining) = remaining {
+                                return get_thing_(doc, line_number, remaining, &thing);
+                            }
+                            return Ok(thing);
+                        }
                         _ => {
                             return doc.err(
                                 "not an record or or-type",
@@ -1227,7 +1271,7 @@ impl<'a> TDoc<'a> {
                     } else if let Some(ftd::PropertyValue::Reference { name, .. }) = fields.get(v) {
                         let (initial_thing, name) = doc.get_initial_thing(line_number, name)?;
                         if let Some(remaining) = name {
-                            get_thing(doc, line_number, remaining.as_str(), &initial_thing)?
+                            get_thing_(doc, line_number, remaining.as_str(), &initial_thing)?
                         } else {
                             initial_thing
                         }
@@ -1240,7 +1284,7 @@ impl<'a> TDoc<'a> {
                 }
             };
             if let Some(remaining) = remaining {
-                return get_thing(doc, line_number, remaining, &thing);
+                return get_thing_(doc, line_number, remaining, &thing);
             }
             Ok(thing)
         }

@@ -1064,10 +1064,24 @@ pub fn resolve_properties(
     self_properties: &std::collections::BTreeMap<String, Property>,
     doc: &ftd::p2::TDoc,
 ) -> ftd::p1::Result<std::collections::BTreeMap<String, ftd::Value>> {
+    resolve_properties_by_id(line_number, self_properties, doc, None)
+}
+
+pub fn resolve_properties_by_id(
+    line_number: usize,
+    self_properties: &std::collections::BTreeMap<String, Property>,
+    doc: &ftd::p2::TDoc,
+    id: Option<String>,
+) -> ftd::p1::Result<std::collections::BTreeMap<String, ftd::Value>> {
     let mut properties: std::collections::BTreeMap<String, ftd::Value> = Default::default();
     for (name, value) in self_properties.iter() {
         if name == "$loop$" {
             continue;
+        }
+        if let Some(ref id) = id {
+            if !id.eq(name) {
+                continue;
+            }
         }
         if let Ok(property_value) = value.eval(line_number, name, doc) {
             properties.insert(name.to_string(), property_value.resolve(line_number, doc)?);

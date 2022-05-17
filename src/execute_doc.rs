@@ -149,10 +149,11 @@ impl<'a> ExecuteDoc<'a> {
                         } else {
                             let new_id = ftd::p2::utils::string_optional(
                                 "id",
-                                &ftd::component::resolve_properties(
+                                &ftd::component::resolve_properties_by_id(
                                     f.line_number,
                                     &f.properties,
                                     &doc,
+                                    Some("id".to_string()),
                                 )?,
                                 doc.name,
                                 f.line_number,
