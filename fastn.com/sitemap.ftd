@@ -281,12 +281,12 @@ lang: ftd
   show-dev-info: true
 
 
--- ds.h1: Using `$assets` In Sitemap
+-- ft.h1: Using `$assets` In Sitemap
 
 In sitemap referring the URL is not too great, as it can lead to 404s if you
 rename a ftd file or folder.
 
--- ds.h2: `assets` special module
+-- ft.h2: `assets` special module
 
 So we auto create `assets` module in every FPM package, which contains
 `$assets.pages.foo.ftd` and `$assets.files.foo.ftd`. The value of two are
@@ -295,29 +295,29 @@ different in case of image file etc, where `$assets.pages.foo.png` is
 image. `$assets.files.foo.png` on the other hand contains `-/foo.png`,
 which points to the PNG file itself.
 
--- ds.h2: Using `$assets`
+-- ft.h2: Using `$assets`
 
 We can use to variable reference when creating sitemap:
 
--- ds.code:
+-- ft.code:
 lang: ftd
 
 \-- fpm.sitemap:
 
 - Hello: $assets.files.foo.ftd
 
--- ds.markdown:
+-- ft.markdown:
 
 `$foo` is evaluated. For this to work `assets` have to be added to `auto-import`
 section.
 
 
--- ds.h1: Including Documents From Other FPM Packages In Sitemap
+-- ft.h1: Including Documents From Other FPM Packages In Sitemap
 
 A package `foo.com` can chose to include a document in `bar.com` by including
 it in sitemap.
 
--- ds.code:
+-- ft.code:
 lang: ftd
 
 \-- fpm.sitemap:
@@ -325,7 +325,7 @@ lang: ftd
 - Hello: $assets.files.index.ftd
 - Intro: $bar-assets.files.intro.ftd
 
--- ds.markdown:
+-- ft.markdown:
 
 In this case the file would get copied over, and the url of intro would be
 `https://foo.com/-/bar.com/intro/`.
