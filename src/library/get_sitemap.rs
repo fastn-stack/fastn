@@ -14,7 +14,7 @@ pub fn processor(
                     .replace(config.package.name.as_str(), "")
             })
             .trim()
-            .to_string();
+            .replace(std::path::MAIN_SEPARATOR, "/");
 
         if let Some(sitemap) = sitemap.get_sitemap_by_id(doc_id.as_str()) {
             return doc.from_json(&sitemap, section);
