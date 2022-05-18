@@ -1020,6 +1020,8 @@ impl Package {
             let mut resp_values = String::new();
             let mut root_record = String::from("-- record all-files:");
             let mut root_record_instance = String::from("-- all-files files:");
+            let mut root_record_page = String::from("-- record all-pages:");
+            let mut root_record_instance_page = String::from("-- all-pages pages:");
             // First combine all the children by name
             let mut named_children: std::collections::HashMap<String, Vec<Dir>> =
                 std::collections::HashMap::new();
@@ -1049,10 +1051,18 @@ impl Package {
                 let mut named_child_record = format!("-- record file-record-{key_name}:");
                 let mut named_child_instance =
                     format!("-- file-record-{key_name} file-record-instance-{key_name}:");
+                let mut named_child_record_page = format!("-- record page-record-{key_name}:");
+                let mut named_child_instance_page =
+                    format!("-- page-record-{key_name} page-record-instance-{key_name}:");
                 if node.name.as_str().eq("root") {
                     root_record = format!("{root_record}\nfile-record-{key_name} {key_name}:");
                     root_record_instance = format!(
                         "{root_record_instance}\n{key_name}: $file-record-instance-{key_name}"
+                    );
+                    root_record_page =
+                        format!("{root_record_page}\npage-record-{key_name} {key_name}:");
+                    root_record_instance_page = format!(
+                        "{root_record_instance_page}\n{key_name}: $page-record-instance-{key_name}"
                     );
                 }
                 for child in children {
@@ -1121,10 +1131,24 @@ impl Package {
                             );
                         }
 
+                        resp_values = format!(
+                            "-- string page-leaf-instance-{child_record_instance}: {base_url}/{static_dir_prefix}{child_instance_path}\n{resp_values}",
+                            static_dir_prefix = if !package_name.eq(current_package_name){format!("{package_name}/")} else {String::new()},
+                            child_record_instance = child.full_path_to_key(),
+                            child_instance_path = child.full_path
+                        );
+
                         named_child_record =
                             format!("{named_child_record}\n{attribute_type} {attribute_name}:");
                         named_child_instance = format!(
                             "{named_child_instance}\n{attribute_name}: $file-leaf-instance-{child_record_instance}",
+                            child_record_instance = child.full_path_to_key()
+                        );
+
+                        named_child_record_page =
+                            format!("{named_child_record_page}\nstring {attribute_name}:");
+                        named_child_instance_page = format!(
+                            "{named_child_instance_page}\n{attribute_name}: $page-leaf-instance-{child_record_instance}",
                             child_record_instance = child.full_path_to_key()
                         );
                     } else {
@@ -1158,16 +1182,25 @@ impl Package {
                             );
                             named_child_instance = format!(
                                 "{named_child_instance}\n{sub_child_name}: $file-record-instance-{sub_child_key}",
-                            )
+                            );
+                            named_child_record_page = format!(
+                                "{named_child_record_page}\npage-record-{sub_child_key} {sub_child_name}:",
+                            );
+                            named_child_instance_page = format!(
+                                "{named_child_instance_page}\n{sub_child_name}: $page-record-instance-{sub_child_key}",
+                            );
                         }
                     }
                 }
-                resp_records = format!("{resp_records}\n{named_child_record}");
-                resp_values = format!("{resp_values}\n{named_child_instance}");
+                resp_records =
+                    format!("{resp_records}\n{named_child_record}\n{named_child_record_page}");
+                resp_values =
+                    format!("{resp_values}\n{named_child_instance}\n{named_child_instance_page}");
             }
             if node.name.as_str().eq("root") {
-                resp_records = format!("{resp_records}\n{root_record}");
-                resp_values = format!("{resp_values}\n{root_record_instance}");
+                resp_records = format!("{resp_records}\n{root_record}\n{root_record_page}");
+                resp_values =
+                    format!("{resp_values}\n{root_record_instance}\n{root_record_instance_page}");
             }
             (resp_records, resp_values)
         }
