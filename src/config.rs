@@ -330,6 +330,8 @@ impl Config {
             current_document: None,
         };
 
+        let asset_documents = config.get_assets("/").await?;
+
         config.sitemap = match package.translation_of.as_ref() {
             Some(translation) => translation,
             None => &package,
@@ -337,7 +339,8 @@ impl Config {
         .sitemap
         .as_ref()
         .map_or(Ok(None), |v| {
-            fpm::sitemap::Sitemap::parse(v.as_str(), &package, &config).map(Some)
+            fpm::sitemap::Sitemap::parse(v.as_str(), &package, &config, &asset_documents, "/")
+                .map(Some)
         })?;
 
         Ok(config)
@@ -830,8 +833,13 @@ impl Package {
             build_tree(&mut top, &path.parts, 0, Some(file_ins));
         }
         let mut all_extensions: Vec<String> = vec![];
-        let (generated_records, generated_values) =
-            build_record_values(&top, &mut all_extensions, self.name.as_str(), base_url);
+        let (generated_records, generated_values) = build_record_values(
+            &top,
+            &mut all_extensions,
+            self.name.as_str(),
+            config.package.name.as_str(),
+            base_url,
+        );
         let (font_record, fonts) = self
             .fonts
             .iter()
@@ -1003,6 +1011,7 @@ impl Package {
             node: &Dir,
             found_extensions: &mut Vec<String>,
             package_name: &str,
+            current_package_name: &str,
             base_url: &str,
         ) -> (String, String) {
             // Strip base url's end slashes. The code takes care of the URL evaluation
@@ -1106,7 +1115,7 @@ impl Package {
                         } else {
                             resp_values = format!(
                                 "-- {attribute_type} file-leaf-instance-{child_record_instance}: {base_url}/{static_dir_prefix}{child_instance_path}\n{resp_values}",
-                                static_dir_prefix = if is_static_copied { format!("-/{package_name}/")} else {String::new()},
+                                static_dir_prefix = if is_static_copied { format!("-/{package_name}/")} else if !package_name.eq(current_package_name){format!("{package_name}/")} else {String::new()},
                                 child_record_instance = child.full_path_to_key(),
                                 child_instance_path = child.full_path
                             );
@@ -1119,8 +1128,13 @@ impl Package {
                             child_record_instance = child.full_path_to_key()
                         );
                     } else {
-                        let (child_records, child_values) =
-                            build_record_values(child, found_extensions, package_name, base_url);
+                        let (child_records, child_values) = build_record_values(
+                            child,
+                            found_extensions,
+                            package_name,
+                            current_package_name,
+                            base_url,
+                        );
                         resp_records = format!("{child_records}\n{resp_records}");
                         resp_values = format!("{child_values}\n{resp_values}");
 
