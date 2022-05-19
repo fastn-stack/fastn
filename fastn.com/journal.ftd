@@ -105,7 +105,7 @@ lang: ftd
 
 -- ft.markdown:
 
-We are will build `ftd.clone` in due time.
+We will build `ftd.clone` in due time.
 
 Any attempt to modify anything would be governed by the `mutable-by` rules. The
 exact syntax of mutable-by is not fixed but concept is.

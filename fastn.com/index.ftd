@@ -211,7 +211,7 @@ FTD has a sister project, [fpm](https://fpm.dev), a package manager for FTD.
 
 -- ft.h1: Getting Involved
 
-We are trying to create the language for human beings and we do not belive it
+We are trying to create the language for human beings and we do not believe it
 would be possible without your support. We would love to hear from you.
 
 Github: https://github.com/FifthTry/ftd
@@ -220,7 +220,7 @@ Discord: Join our [`ftd` channel](https://discord.gg/xN3uD8P7WA).
 
 License: BSD
 
-Checkout the [Journal](/Journal/) and [Roadmap](/roadmap/).
+Checkout the [Journal](journal/) and [Roadmap](roadmap/).
 
 
 -- ft.h1: Videos
