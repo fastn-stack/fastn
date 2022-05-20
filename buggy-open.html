@@ -647,7 +647,8 @@ let ftd_utils = {
     handle_action: function (id, target_variable, value, data, ftd_external_children) {
         var styles_edited = [];
         let visibility_change = false;
-        if (ftd_utils.get_data_value(data, target_variable) === value) {
+        let current_value = ftd_utils.get_data_value(data, target_variable);
+        if (current_value === value) {
             return;
         }
         handle_action_(id, target_variable, value, data, ftd_external_children, styles_edited, visibility_change);
@@ -725,20 +726,31 @@ let ftd_utils = {
                                     let variable = param_val["$variable$"];
                                     let dependent = data[variable].value;
                                     let dependent_dependencies = data[variable].dependencies[node];
+                                    let call = false;
                                     for (const d in dependent_dependencies) {
                                         if (dependent_dependencies[d].dependency_type !== "Style"
                                             || !dependent_dependencies[d].parameters[parameter]) {
                                             continue;
                                         }
                                         if (dependent_dependencies[d].parameters[parameter].value.reference === target) {
+                                            if (ftd_utils.is_equal_condition(dependent, dependent_dependencies[d].condition)
+                                                && !ftd_utils.deepEqual(dependent_dependencies[d].parameters[parameter].value.value, full_value)) {
+                                                call = true;
+                                            }
                                             dependent_dependencies[d].parameters[parameter].value.value = full_value;
                                         }
                                         if (!!dependent_dependencies[d].parameters[parameter].default && dependent_dependencies[d].parameters[parameter].default.reference === target) {
+                                            if (ftd_utils.is_equal_condition(dependent, dependent_dependencies[d].condition)
+                                                && !ftd_utils.deepEqual(dependent_dependencies[d].parameters[parameter].default.value, full_value)) {
+                                                call = true;
+                                            }
                                             dependent_dependencies[d].parameters[parameter].default.value = full_value;
                                         }
                                     }
                                     data[variable].dependencies[node] = dependent_dependencies;
-                                    handle_action_(id, variable, dependent, data, ftd_external_children, styles_edited, visibility_change);
+                                    if (call) {
+                                        handle_action_(id, variable, dependent, data, ftd_external_children, styles_edited, visibility_change);
+                                    }
                                 }
                             }
                         } else if (ftd_utils.is_equal_condition(full_value, json_dependency.condition)) {
@@ -747,14 +759,25 @@ let ftd_utils = {
                                     continue;
                                 }
                                 let value = json_dependency.parameters[parameter].value.value;
+                                let call = false;
                                 if (dependency === "$value#kind$") {
+                                    let get_value = ftd_utils.get_data_value(data, parameter + ".$kind$");
+                                    if (!ftd_utils.deepEqual(value, get_value)) {
+                                        call = true;
+                                    }
                                     ftd_utils.set_data_value(data, parameter + ".$kind$", value);
                                 }
                                 if (dependency === "$value$") {
+                                    let get_value = ftd_utils.get_data_value(data, parameter);
+                                    if (!ftd_utils.deepEqual(value, get_value)) {
+                                        call = true;
+                                    }
                                     ftd_utils.set_data_value(data, parameter, value);
                                 }
                                 let parameter_value = ftd_utils.get_data_value(data, parameter);
-                                handle_action_(id, parameter, parameter_value, data, ftd_external_children, styles_edited, visibility_change)
+                                if (call) {
+                                    handle_action_(id, parameter, parameter_value, data, ftd_external_children, styles_edited, visibility_change);
+                                }
                             }
                         } else {
                             for (const parameter in json_dependency.parameters) {
@@ -762,17 +785,28 @@ let ftd_utils = {
                                     continue;
                                 }
                                 let default_value = json_dependency.parameters[parameter].default;
+                                let call = false;
                                 if (default_value === null) {
                                     continue;
                                 }
                                 if (dependency === "$value#kind$") {
+                                    let get_value = ftd_utils.get_data_value(data, parameter + ".$kind$");
+                                    if (!ftd_utils.deepEqual(default_value.value, get_value)) {
+                                        call = true;
+                                    }
                                     ftd_utils.set_data_value(data, parameter + ".$kind$", default_value.value);
                                 }
                                 if (dependency === "$value$") {
+                                    let get_value = ftd_utils.get_data_value(data, parameter);
+                                    if (!ftd_utils.deepEqual(default_value.value, get_value)) {
+                                        call = true;
+                                    }
                                     ftd_utils.set_data_value(data, parameter, default_value.value);
                                 }
                                 let parameter_value = ftd_utils.get_data_value(data, parameter);
-                                handle_action_(id, parameter, parameter_value, data, ftd_external_children, styles_edited, visibility_change)
+                                if (call) {
+                                    handle_action_(id, parameter, parameter_value, data, ftd_external_children, styles_edited, visibility_change);
+                                }
                             }
                         }
                     } else if (json_dependency.dependency_type === "Style") {
@@ -787,6 +821,7 @@ let ftd_utils = {
                             }
                             if (!!set.length) {
                                 let style_attr = Object.keys(json_dependency.parameters).filter(w => w !== "dependents")[0];
+                                let call = false;
                                 for (const idx in set) {
                                     let dependent = data[set[idx]].value;
                                     let dependent_dependencies = data[set[idx]].dependencies[dependency];
@@ -795,10 +830,17 @@ let ftd_utils = {
                                             || !dependent_dependencies[d].parameters[style_attr]) {
                                             continue;
                                         }
+                                        let current_value = dependent_dependencies[d].parameters[style_attr].default.value;
+                                        if (ftd_utils.is_equal_condition(dependent, dependent_dependencies[d].condition)
+                                            && !ftd_utils.deepEqual(current_value, full_value)) {
+                                            call = true;
+                                        }
                                         dependent_dependencies[d].parameters[style_attr].default.value = full_value;
                                     }
                                     data[set[idx]].dependencies[dependency] = dependent_dependencies;
-                                    handle_action_(id, set[idx], dependent, data, ftd_external_children, styles_edited, visibility_change);
+                                    if (call) {
+                                        handle_action_(id, set[idx], dependent, data, ftd_external_children, styles_edited, visibility_change);
+                                    }
                                 }
                                 continue;
                             }
@@ -1410,7 +1452,7 @@ window.ftd.post_init = function () {
     }
 
     function update_dark_mode() {
-        let current_dark_mode_cookie = get_cookie(DARK_MODE_COOKIE, COOKIE_SYSTEM_LIGHT);
+        let current_dark_mode_cookie = get_cookie(DARK_MODE_COOKIE, COOKIE_LIGHT_MODE);
 
         switch (current_dark_mode_cookie) {
             case COOKIE_SYSTEM_LIGHT:
