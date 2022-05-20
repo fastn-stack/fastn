@@ -482,33 +482,45 @@ impl Config {
     }
 
     pub(crate) fn get_file_name(root: &camino::Utf8PathBuf, id: &str) -> fpm::Result<String> {
+        let mut id = id.to_string();
+        let mut add_packages = "".to_string();
+        if let Some(new_id) = id.strip_prefix("-/") {
+            id = new_id.to_string();
+            add_packages = ".packages/".to_string()
+        }
         let mut id = id
             .split_once("-/")
             .map(|(id, _)| id)
-            .unwrap_or(id)
+            .unwrap_or_else(|| id.as_str())
             .trim()
             .replace("/index.html", "/")
             .replace("index.html", "/");
         if id.eq("/") {
-            if root.join("index.ftd".to_string()).exists() {
-                return Ok("index.ftd".to_string());
+            if root.join(format!("{}index.ftd", add_packages)).exists() {
+                return Ok(format!("{}index.ftd", add_packages));
             }
-            if root.join("README.md".to_string()).exists() {
-                return Ok("README.md".to_string());
+            if root.join(format!("{}README.md", add_packages)).exists() {
+                return Ok(format!("{}README.md", add_packages));
             }
             return Err(fpm::Error::UsageError {
                 message: "File not found".to_string(),
             });
         }
         id = id.trim_matches('/').to_string();
-        if root.join(format!("{}.ftd", id)).exists() {
-            return Ok(format!("{}.ftd", id));
+        if root.join(format!("{}{}.ftd", add_packages, id)).exists() {
+            return Ok(format!("{}{}.ftd", add_packages, id));
         }
-        if root.join(format!("{}/index.ftd", id)).exists() {
-            return Ok(format!("{}/index.ftd", id));
+        if root
+            .join(format!("{}{}/index.ftd", add_packages, id))
+            .exists()
+        {
+            return Ok(format!("{}{}/index.ftd", add_packages, id));
         }
-        if root.join(format!("{}/README.md", id)).exists() {
-            return Ok(format!("{}/README.md", id));
+        if root
+            .join(format!("{}{}/README.md", add_packages, id))
+            .exists()
+        {
+            return Ok(format!("{}{}/README.md", add_packages, id));
         }
         Err(fpm::Error::UsageError {
             message: "File not found".to_string(),
@@ -766,6 +778,19 @@ impl Package {
     }
 
     pub fn generate_canonical_url(&self, path: &str) -> String {
+        if let Some(path) = path.strip_prefix("-/") {
+            let mut url = path
+                .split_once("-/")
+                .map(|(v, _)| v.trim_matches('/'))
+                .unwrap_or_else(|| path.trim_matches('/'))
+                .to_string();
+            if !url.ends_with(".html") {
+                url = format!("{}/", url);
+            }
+
+            return format!("\n<link rel=\"canonical\" href=\"{url}\" />", url = url);
+        }
+
         if path.starts_with("-/") {
             return "".to_string();
         }

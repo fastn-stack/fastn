@@ -1,9 +1,9 @@
 mod fpm_dot_ftd;
 mod get_data;
-mod get_sitemap;
 mod get_version_data;
 mod http;
 mod include;
+mod sitemap;
 mod sqlite;
 mod toc;
 
@@ -206,7 +206,7 @@ impl ftd::p2::Library for Library {
             "toc" => fpm::library::toc::processor(section, doc, &self.config),
             "include" => fpm::library::include::processor(section, doc, &self.config),
             "get-data" => fpm::library::get_data::processor(section, doc, &self.config),
-            "get-sitemap" => fpm::library::get_sitemap::processor(section, doc, &self.config),
+            "sitemap" => fpm::library::sitemap::processor(section, doc, &self.config),
             "get-version-data" => fpm::library::get_version_data::processor(
                 section,
                 doc,

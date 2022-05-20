@@ -106,6 +106,24 @@
             }
           },
           "remaining": null
+        },
+        {
+          "condition": null,
+          "dependency_type": "Variable",
+          "parameters": {
+            "color": {
+              "default": null,
+              "value": {
+                "important": false,
+                "reference": null,
+                "value": {
+                  "$node$": "1,1,0,5,0",
+                  "$variable$": "fpm-sitemap/section/#item@1,1,0,5.is-active"
+                }
+              }
+            }
+          },
+          "remaining": null
         }
       ]
     }
@@ -118,6 +136,7 @@
       "is-active": true,
       "is-disabled": false,
       "is-heading": false,
+      "is-open": true,
       "title": "This is nav title of section 2",
       "url": "section/index.html"
     },
@@ -184,6 +203,7 @@
       "is-active": false,
       "is-disabled": false,
       "is-heading": false,
+      "is-open": false,
       "title": "other",
       "url": "-/other-package/inside/foo/"
     },
@@ -225,8 +245,9 @@
       "is-active": false,
       "is-disabled": false,
       "is-heading": false,
-      "title": "Section Title",
-      "url": "/"
+      "is-open": false,
+      "title": "other foo with main",
+      "url": "-/other-package/inside/foo/-/main/"
     },
     "dependencies": {
       "1,1,0,1,0": [
@@ -263,11 +284,12 @@
       "children": [],
       "font-icon": null,
       "img-src": null,
-      "is-active": true,
+      "is-active": false,
       "is-disabled": false,
       "is-heading": false,
-      "title": "Section Title 2",
-      "url": "section/index.html"
+      "is-open": false,
+      "title": "Section Title",
+      "url": "/"
     },
     "dependencies": {
       "1,1,0,2,0": [
@@ -304,11 +326,12 @@
       "children": [],
       "font-icon": null,
       "img-src": null,
-      "is-active": false,
+      "is-active": true,
       "is-disabled": false,
       "is-heading": false,
-      "title": "Section Title 3",
-      "url": "-/index-alias/"
+      "is-open": true,
+      "title": "Section Title 2",
+      "url": "section/index.html"
     },
     "dependencies": {
       "1,1,0,3,0": [
@@ -348,11 +371,54 @@
       "is-active": false,
       "is-disabled": false,
       "is-heading": false,
+      "is-open": false,
+      "title": "Section Title 3",
+      "url": "-/index-alias/"
+    },
+    "dependencies": {
+      "1,1,0,4,0": [
+        {
+          "condition": null,
+          "dependency_type": "Value",
+          "parameters": {},
+          "remaining": "title"
+        },
+        {
+          "condition": true,
+          "dependency_type": "Style",
+          "parameters": {
+            "color": {
+              "default": null,
+              "value": {
+                "important": false,
+                "reference": "fpm-sitemap/FPM/config#red",
+                "value": {
+                  "$kind$": "light",
+                  "dark": "rgba(255,0,0,1)",
+                  "light": "rgba(255,0,0,1)"
+                }
+              }
+            }
+          },
+          "remaining": "is-active"
+        }
+      ]
+    }
+  },
+  "fpm-sitemap/section/#item@1,1,0,5": {
+    "value": {
+      "children": [],
+      "font-icon": null,
+      "img-src": null,
+      "is-active": false,
+      "is-disabled": false,
+      "is-heading": false,
+      "is-open": false,
       "title": "Section Title 4",
       "url": "index.html"
     },
     "dependencies": {
-      "1,1,0,4,0": [
+      "1,1,0,5,0": [
         {
           "condition": null,
           "dependency_type": "Value",
@@ -391,6 +457,7 @@
         "is-active": true,
         "is-disabled": false,
         "is-heading": false,
+        "is-open": true,
         "title": "This is nav title of section 2",
         "url": "section/index.html"
       },
@@ -403,6 +470,7 @@
           "is-active": false,
           "is-disabled": false,
           "is-heading": false,
+          "is-open": false,
           "title": "other",
           "url": "-/other-package/inside/foo/"
         },
@@ -413,6 +481,18 @@
           "is-active": false,
           "is-disabled": false,
           "is-heading": false,
+          "is-open": false,
+          "title": "other foo with main",
+          "url": "-/other-package/inside/foo/-/main/"
+        },
+        {
+          "children": [],
+          "font-icon": null,
+          "img-src": null,
+          "is-active": false,
+          "is-disabled": false,
+          "is-heading": false,
+          "is-open": false,
           "title": "Section Title",
           "url": "/"
         },
@@ -423,6 +503,7 @@
           "is-active": true,
           "is-disabled": false,
           "is-heading": false,
+          "is-open": true,
           "title": "Section Title 2",
           "url": "section/index.html"
         },
@@ -433,6 +514,7 @@
           "is-active": false,
           "is-disabled": false,
           "is-heading": false,
+          "is-open": false,
           "title": "Section Title 3",
           "url": "-/index-alias/"
         },
@@ -443,6 +525,7 @@
           "is-active": false,
           "is-disabled": false,
           "is-heading": false,
+          "is-open": false,
           "title": "Section Title 4",
           "url": "index.html"
         }
@@ -528,7 +611,7 @@
         <style>FTD_CSS</style>
     </head>
     <body>
-        <div data-id="main:root" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; height: 100%; justify-content: flex-start; text-decoration: none; white-space: initial; width: 100%" ><div data-id="0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Hello from section again</div><div data-id="1:main" data-spacing="margin-top:20px" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial" ><div data-id="1,0:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial" ><div data-id="1,0,0:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial" ><div data-id="1,0,0,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="ft_md">This is nav title of section 2</div></div><div data-id="1,0,1:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: none; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial" ><div data-id="1,0,1,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: none; text-align: left; text-decoration: none; white-space: initial" class="ft_md"></div></div><div data-id="1,0,2:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: none; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial" ><div data-id="1,0,2,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: none; text-align: left; text-decoration: none; white-space: initial" class="ft_md"></div></div></div><div data-id="1,1:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start; margin-top: 20px; text-decoration: none; white-space: initial" ><div data-id="1,1,0:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial" ><div data-id="1,1,0,0:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; margin-left: 8px; text-decoration: none; white-space: initial" ><a data-id="1,1,0,0,0:main" href="-/other-package/inside/foo/" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; text-align: left; text-decoration: none; white-space: initial" class="ft_md">other</a></div><div data-id="1,1,0,1:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; margin-left: 8px; text-decoration: none; white-space: initial" ><a data-id="1,1,0,1,0:main" href="/" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Section Title</a></div><div data-id="1,1,0,2:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; margin-left: 8px; text-decoration: none; white-space: initial" ><a data-id="1,1,0,2,0:main" href="section/index.html" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(255,0,0,1); cursor: pointer; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Section Title 2</a></div><div data-id="1,1,0,3:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; margin-left: 8px; text-decoration: none; white-space: initial" ><a data-id="1,1,0,3,0:main" href="-/index-alias/" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Section Title 3</a></div><div data-id="1,1,0,4:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; margin-left: 8px; text-decoration: none; white-space: initial" ><a data-id="1,1,0,4,0:main" href="index.html" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Section Title 4</a></div></div><div data-id="1,1,1:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial" ><div data-id="1,1,1,0:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial" ></div></div></div></div></div>
+        <div data-id="main:root" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; height: 100%; justify-content: flex-start; text-decoration: none; white-space: initial; width: 100%" ><div data-id="0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Hello from section again</div><div data-id="1:main" data-spacing="margin-top:20px" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial" ><div data-id="1,0:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial" ><div data-id="1,0,0:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial" ><div data-id="1,0,0,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="ft_md">This is nav title of section 2</div></div><div data-id="1,0,1:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: none; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial" ><div data-id="1,0,1,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: none; text-align: left; text-decoration: none; white-space: initial" class="ft_md"></div></div><div data-id="1,0,2:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: none; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial" ><div data-id="1,0,2,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: none; text-align: left; text-decoration: none; white-space: initial" class="ft_md"></div></div></div><div data-id="1,1:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start; margin-top: 20px; text-decoration: none; white-space: initial" ><div data-id="1,1,0:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial" ><div data-id="1,1,0,0:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; margin-left: 8px; text-decoration: none; white-space: initial" ><a data-id="1,1,0,0,0:main" href="-/other-package/inside/foo/" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; text-align: left; text-decoration: none; white-space: initial" class="ft_md">other</a></div><div data-id="1,1,0,1:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; margin-left: 8px; text-decoration: none; white-space: initial" ><a data-id="1,1,0,1,0:main" href="-/other-package/inside/foo/-/main/" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; text-align: left; text-decoration: none; white-space: initial" class="ft_md">other foo with main</a></div><div data-id="1,1,0,2:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; margin-left: 8px; text-decoration: none; white-space: initial" ><a data-id="1,1,0,2,0:main" href="/" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Section Title</a></div><div data-id="1,1,0,3:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; margin-left: 8px; text-decoration: none; white-space: initial" ><a data-id="1,1,0,3,0:main" href="section/index.html" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(255,0,0,1); cursor: pointer; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Section Title 2</a></div><div data-id="1,1,0,4:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; margin-left: 8px; text-decoration: none; white-space: initial" ><a data-id="1,1,0,4,0:main" href="-/index-alias/" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Section Title 3</a></div><div data-id="1,1,0,5:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; margin-left: 8px; text-decoration: none; white-space: initial" ><a data-id="1,1,0,5,0:main" href="index.html" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Section Title 4</a></div></div><div data-id="1,1,1:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial" ><div data-id="1,1,1,0:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial" ></div></div></div></div></div>
         <script>
             FTD_JS
 

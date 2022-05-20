@@ -159,6 +159,7 @@ optional string img-src:
 boolean is-heading:
 boolean is-disabled:
 boolean is-active: false
+boolean is-open: false
 toc-item list children:
 
 

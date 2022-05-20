@@ -12,7 +12,11 @@ zip: github.com/fifthtry/fpm-sitemap/archive/refs/heads/main.zip
 
 -- fpm.sitemap:
 
-# other: $o-asset.pages.inside.foo.ftd
+# other: -/other-package/inside/foo/
+
+
+# other foo with main: -/other-package/inside/foo/-/main/
+data: Other package foo calling main
 
 
 # Section Title: /
@@ -36,15 +40,14 @@ nav-title: This is nav title of Subsection
   - Child Toc: childtoc/index.html
     key: value
     nav-title: This is nav title of Child Toc
-  - Other info: $o-asset.pages.info.ftd
+  - Other info: -/other-package/info/
 
 
 ## Subsection Title 2: subsection/-/arpita/
-variant: arpita
 name: Arpita
 
 
-## Other index: $o-asset.pages.index.ftd
+## Other index: -/other-package/
 
 
 

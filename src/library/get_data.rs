@@ -27,13 +27,18 @@ pub fn processor(
     }
 
     if let Some(ref sitemap) = config.sitemap {
-        let mut doc_id = doc
-            .name
-            .to_string()
-            .replace(config.package.name.as_str(), "");
-        if !doc_id.eq("/") {
-            doc_id = doc_id.trim_matches('/').to_string();
-        }
+        let doc_id = config
+            .current_document
+            .clone()
+            .map(|v| fpm::utils::id_to_path(v.as_str()))
+            .unwrap_or_else(|| {
+                doc.name
+                    .to_string()
+                    .replace(config.package.name.as_str(), "")
+            })
+            .trim()
+            .replace(std::path::MAIN_SEPARATOR, "/");
+
         if let Some(extra_data) = sitemap.get_extra_data_by_id(doc_id.as_str()) {
             if let Some(data) = extra_data.get(name.as_str()) {
                 let kind = doc.get_variable_kind(section)?;

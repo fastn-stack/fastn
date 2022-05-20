@@ -33,6 +33,8 @@ pub struct TocItemCompat {
     pub is_disabled: bool,
     #[serde(rename = "is-active")]
     pub is_active: bool,
+    #[serde(rename = "is-open")]
+    pub is_open: bool,
     #[serde(rename = "img-src")]
     pub image_src: Option<String>,
     pub children: Vec<TocItemCompat>,
@@ -68,6 +70,7 @@ impl TocItem {
             image_src: self.img_src.clone(),
             is_disabled: self.is_disabled,
             is_active: false,
+            is_open: false,
         }
     }
 }

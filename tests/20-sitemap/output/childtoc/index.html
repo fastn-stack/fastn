@@ -117,6 +117,24 @@
                 "important": false,
                 "reference": null,
                 "value": {
+                  "$node$": "2,1,0,5,0",
+                  "$variable$": "fpm-sitemap/childtoc/#item@2,1,0,5.is-active"
+                }
+              }
+            }
+          },
+          "remaining": null
+        },
+        {
+          "condition": null,
+          "dependency_type": "Variable",
+          "parameters": {
+            "color": {
+              "default": null,
+              "value": {
+                "important": false,
+                "reference": null,
+                "value": {
                   "$node$": "2,1,1,0,0",
                   "$variable$": "fpm-sitemap/childtoc/#item@2,1,1,0.is-active"
                 }
@@ -244,6 +262,7 @@
       "is-active": true,
       "is-disabled": false,
       "is-heading": false,
+      "is-open": true,
       "title": "Section Title",
       "url": "/"
     },
@@ -272,6 +291,7 @@
       "is-active": true,
       "is-disabled": false,
       "is-heading": false,
+      "is-open": true,
       "title": "This is nav title of Subsection",
       "url": "subsection/"
     },
@@ -300,6 +320,7 @@
       "is-active": true,
       "is-disabled": false,
       "is-heading": false,
+      "is-open": true,
       "title": "This is nav title of Child Toc",
       "url": "childtoc/index.html"
     },
@@ -328,6 +349,7 @@
       "is-active": false,
       "is-disabled": false,
       "is-heading": false,
+      "is-open": false,
       "title": "other",
       "url": "-/other-package/inside/foo/"
     },
@@ -366,11 +388,12 @@
       "children": [],
       "font-icon": null,
       "img-src": null,
-      "is-active": true,
+      "is-active": false,
       "is-disabled": false,
       "is-heading": false,
-      "title": "Section Title",
-      "url": "/"
+      "is-open": false,
+      "title": "other foo with main",
+      "url": "-/other-package/inside/foo/-/main/"
     },
     "dependencies": {
       "2,1,0,1,0": [
@@ -407,11 +430,12 @@
       "children": [],
       "font-icon": null,
       "img-src": null,
-      "is-active": false,
+      "is-active": true,
       "is-disabled": false,
       "is-heading": false,
-      "title": "Section Title 2",
-      "url": "section/index.html"
+      "is-open": true,
+      "title": "Section Title",
+      "url": "/"
     },
     "dependencies": {
       "2,1,0,2,0": [
@@ -451,8 +475,9 @@
       "is-active": false,
       "is-disabled": false,
       "is-heading": false,
-      "title": "Section Title 3",
-      "url": "-/index-alias/"
+      "is-open": false,
+      "title": "Section Title 2",
+      "url": "section/index.html"
     },
     "dependencies": {
       "2,1,0,3,0": [
@@ -492,11 +517,54 @@
       "is-active": false,
       "is-disabled": false,
       "is-heading": false,
+      "is-open": false,
+      "title": "Section Title 3",
+      "url": "-/index-alias/"
+    },
+    "dependencies": {
+      "2,1,0,4,0": [
+        {
+          "condition": null,
+          "dependency_type": "Value",
+          "parameters": {},
+          "remaining": "title"
+        },
+        {
+          "condition": true,
+          "dependency_type": "Style",
+          "parameters": {
+            "color": {
+              "default": null,
+              "value": {
+                "important": false,
+                "reference": "fpm-sitemap/FPM/config#red",
+                "value": {
+                  "$kind$": "light",
+                  "dark": "rgba(255,0,0,1)",
+                  "light": "rgba(255,0,0,1)"
+                }
+              }
+            }
+          },
+          "remaining": "is-active"
+        }
+      ]
+    }
+  },
+  "fpm-sitemap/childtoc/#item@2,1,0,5": {
+    "value": {
+      "children": [],
+      "font-icon": null,
+      "img-src": null,
+      "is-active": false,
+      "is-disabled": false,
+      "is-heading": false,
+      "is-open": false,
       "title": "Section Title 4",
       "url": "index.html"
     },
     "dependencies": {
-      "2,1,0,4,0": [
+      "2,1,0,5,0": [
         {
           "condition": null,
           "dependency_type": "Value",
@@ -533,6 +601,7 @@
       "is-active": false,
       "is-disabled": false,
       "is-heading": false,
+      "is-open": false,
       "title": "First Subsection",
       "url": "/"
     },
@@ -574,6 +643,7 @@
       "is-active": true,
       "is-disabled": false,
       "is-heading": false,
+      "is-open": true,
       "title": "Subsection Title",
       "url": "subsection/"
     },
@@ -615,6 +685,7 @@
       "is-active": false,
       "is-disabled": false,
       "is-heading": false,
+      "is-open": false,
       "title": "Subsection Title 2",
       "url": "subsection/-/arpita/"
     },
@@ -656,6 +727,7 @@
       "is-active": false,
       "is-disabled": false,
       "is-heading": false,
+      "is-open": false,
       "title": "Other index",
       "url": "-/other-package/"
     },
@@ -699,6 +771,7 @@
           "is-active": true,
           "is-disabled": false,
           "is-heading": false,
+          "is-open": true,
           "title": "Child Toc",
           "url": "childtoc/index.html"
         },
@@ -709,15 +782,17 @@
           "is-active": false,
           "is-disabled": false,
           "is-heading": false,
+          "is-open": false,
           "title": "Other info",
           "url": "-/other-package/info/"
         }
       ],
       "font-icon": null,
       "img-src": null,
-      "is-active": true,
+      "is-active": false,
       "is-disabled": false,
       "is-heading": false,
+      "is-open": true,
       "title": "Toc Title",
       "url": "toc/"
     },
@@ -759,6 +834,7 @@
       "is-active": true,
       "is-disabled": false,
       "is-heading": false,
+      "is-open": true,
       "title": "Child Toc",
       "url": "childtoc/index.html"
     },
@@ -800,6 +876,7 @@
       "is-active": false,
       "is-disabled": false,
       "is-heading": false,
+      "is-open": false,
       "title": "Other info",
       "url": "-/other-package/info/"
     },
@@ -834,7 +911,7 @@
     }
   },
   "fpm-sitemap/childtoc/#key": {
-    "value": "Childtoc Key",
+    "value": "value",
     "dependencies": {
       "1": [
         {
@@ -855,6 +932,7 @@
         "is-active": true,
         "is-disabled": false,
         "is-heading": false,
+        "is-open": true,
         "title": "This is nav title of Child Toc",
         "url": "childtoc/index.html"
       },
@@ -865,6 +943,7 @@
         "is-active": true,
         "is-disabled": false,
         "is-heading": false,
+        "is-open": true,
         "title": "Section Title",
         "url": "/"
       },
@@ -875,6 +954,7 @@
         "is-active": true,
         "is-disabled": false,
         "is-heading": false,
+        "is-open": true,
         "title": "This is nav title of Subsection",
         "url": "subsection/"
       },
@@ -886,8 +966,20 @@
           "is-active": false,
           "is-disabled": false,
           "is-heading": false,
+          "is-open": false,
           "title": "other",
           "url": "-/other-package/inside/foo/"
+        },
+        {
+          "children": [],
+          "font-icon": null,
+          "img-src": null,
+          "is-active": false,
+          "is-disabled": false,
+          "is-heading": false,
+          "is-open": false,
+          "title": "other foo with main",
+          "url": "-/other-package/inside/foo/-/main/"
         },
         {
           "children": [],
@@ -896,6 +988,7 @@
           "is-active": true,
           "is-disabled": false,
           "is-heading": false,
+          "is-open": true,
           "title": "Section Title",
           "url": "/"
         },
@@ -906,6 +999,7 @@
           "is-active": false,
           "is-disabled": false,
           "is-heading": false,
+          "is-open": false,
           "title": "Section Title 2",
           "url": "section/index.html"
         },
@@ -916,6 +1010,7 @@
           "is-active": false,
           "is-disabled": false,
           "is-heading": false,
+          "is-open": false,
           "title": "Section Title 3",
           "url": "-/index-alias/"
         },
@@ -926,6 +1021,7 @@
           "is-active": false,
           "is-disabled": false,
           "is-heading": false,
+          "is-open": false,
           "title": "Section Title 4",
           "url": "index.html"
         }
@@ -938,6 +1034,7 @@
           "is-active": false,
           "is-disabled": false,
           "is-heading": false,
+          "is-open": false,
           "title": "First Subsection",
           "url": "/"
         },
@@ -948,6 +1045,7 @@
           "is-active": true,
           "is-disabled": false,
           "is-heading": false,
+          "is-open": true,
           "title": "Subsection Title",
           "url": "subsection/"
         },
@@ -958,6 +1056,7 @@
           "is-active": false,
           "is-disabled": false,
           "is-heading": false,
+          "is-open": false,
           "title": "Subsection Title 2",
           "url": "subsection/-/arpita/"
         },
@@ -968,6 +1067,7 @@
           "is-active": false,
           "is-disabled": false,
           "is-heading": false,
+          "is-open": false,
           "title": "Other index",
           "url": "-/other-package/"
         }
@@ -982,6 +1082,7 @@
               "is-active": true,
               "is-disabled": false,
               "is-heading": false,
+              "is-open": true,
               "title": "Child Toc",
               "url": "childtoc/index.html"
             },
@@ -992,15 +1093,17 @@
               "is-active": false,
               "is-disabled": false,
               "is-heading": false,
+              "is-open": false,
               "title": "Other info",
               "url": "-/other-package/info/"
             }
           ],
           "font-icon": null,
           "img-src": null,
-          "is-active": true,
+          "is-active": false,
           "is-disabled": false,
           "is-heading": false,
+          "is-open": true,
           "title": "Toc Title",
           "url": "toc/"
         }
@@ -1084,7 +1187,7 @@
         <style>FTD_CSS</style>
     </head>
     <body>
-        <div data-id="main:root" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; height: 100%; justify-content: flex-start; text-decoration: none; white-space: initial; width: 100%" ><div data-id="0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Hello from childtoc</div><div data-id="1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Childtoc Key</div><div data-id="2:main" data-spacing="margin-top:20px" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial" ><div data-id="2,0:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial" ><div data-id="2,0,0:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial" ><div data-id="2,0,0,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Section Title</div></div><div data-id="2,0,1:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial" ><div data-id="2,0,1,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="ft_md">This is nav title of Subsection</div></div><div data-id="2,0,2:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial" ><div data-id="2,0,2,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="ft_md">This is nav title of Child Toc</div></div></div><div data-id="2,1:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start; margin-top: 20px; text-decoration: none; white-space: initial" ><div data-id="2,1,0:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial" ><div data-id="2,1,0,0:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; margin-left: 8px; text-decoration: none; white-space: initial" ><a data-id="2,1,0,0,0:main" href="-/other-package/inside/foo/" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; text-align: left; text-decoration: none; white-space: initial" class="ft_md">other</a></div><div data-id="2,1,0,1:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; margin-left: 8px; text-decoration: none; white-space: initial" ><a data-id="2,1,0,1,0:main" href="/" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(255,0,0,1); cursor: pointer; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Section Title</a></div><div data-id="2,1,0,2:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; margin-left: 8px; text-decoration: none; white-space: initial" ><a data-id="2,1,0,2,0:main" href="section/index.html" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Section Title 2</a></div><div data-id="2,1,0,3:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; margin-left: 8px; text-decoration: none; white-space: initial" ><a data-id="2,1,0,3,0:main" href="-/index-alias/" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Section Title 3</a></div><div data-id="2,1,0,4:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; margin-left: 8px; text-decoration: none; white-space: initial" ><a data-id="2,1,0,4,0:main" href="index.html" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Section Title 4</a></div></div><div data-id="2,1,1:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial" ><div data-id="2,1,1,0:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; margin-left: 8px; text-decoration: none; white-space: initial" ><a data-id="2,1,1,0,0:main" href="/" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; text-align: left; text-decoration: none; white-space: initial" class="ft_md">First Subsection</a></div><div data-id="2,1,1,1:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; margin-left: 8px; text-decoration: none; white-space: initial" ><a data-id="2,1,1,1,0:main" href="subsection/" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(255,0,0,1); cursor: pointer; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Subsection Title</a></div><div data-id="2,1,1,2:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; margin-left: 8px; text-decoration: none; white-space: initial" ><a data-id="2,1,1,2,0:main" href="subsection/-/arpita/" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Subsection Title 2</a></div><div data-id="2,1,1,3:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; margin-left: 8px; text-decoration: none; white-space: initial" ><a data-id="2,1,1,3,0:main" href="-/other-package/" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Other index</a></div></div><div data-id="2,1,2:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial" ><div data-id="2,1,2,0:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; margin-left: 8px; text-decoration: none; white-space: initial" ><a data-id="2,1,2,0,0:main" href="toc/" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(255,0,0,1); cursor: pointer; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Toc Title</a><div data-id="2,1,2,0,1:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; margin-left: 8px; text-decoration: none; white-space: initial" ><a data-id="2,1,2,0,1,0:main" href="childtoc/index.html" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(255,0,0,1); cursor: pointer; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Child Toc</a></div><div data-id="2,1,2,0,2:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; margin-left: 8px; text-decoration: none; white-space: initial" ><a data-id="2,1,2,0,2,0:main" href="-/other-package/info/" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Other info</a></div></div></div></div></div></div>
+        <div data-id="main:root" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; height: 100%; justify-content: flex-start; text-decoration: none; white-space: initial; width: 100%" ><div data-id="0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Hello from childtoc</div><div data-id="1:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="ft_md">value</div><div data-id="2:main" data-spacing="margin-top:20px" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial" ><div data-id="2,0:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial" ><div data-id="2,0,0:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial" ><div data-id="2,0,0,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Section Title</div></div><div data-id="2,0,1:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial" ><div data-id="2,0,1,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="ft_md">This is nav title of Subsection</div></div><div data-id="2,0,2:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial" ><div data-id="2,0,2,0:main" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; text-align: left; text-decoration: none; white-space: initial" class="ft_md">This is nav title of Child Toc</div></div></div><div data-id="2,1:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start; margin-top: 20px; text-decoration: none; white-space: initial" ><div data-id="2,1,0:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial" ><div data-id="2,1,0,0:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; margin-left: 8px; text-decoration: none; white-space: initial" ><a data-id="2,1,0,0,0:main" href="-/other-package/inside/foo/" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; text-align: left; text-decoration: none; white-space: initial" class="ft_md">other</a></div><div data-id="2,1,0,1:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; margin-left: 8px; text-decoration: none; white-space: initial" ><a data-id="2,1,0,1,0:main" href="-/other-package/inside/foo/-/main/" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; text-align: left; text-decoration: none; white-space: initial" class="ft_md">other foo with main</a></div><div data-id="2,1,0,2:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; margin-left: 8px; text-decoration: none; white-space: initial" ><a data-id="2,1,0,2,0:main" href="/" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(255,0,0,1); cursor: pointer; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Section Title</a></div><div data-id="2,1,0,3:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; margin-left: 8px; text-decoration: none; white-space: initial" ><a data-id="2,1,0,3,0:main" href="section/index.html" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Section Title 2</a></div><div data-id="2,1,0,4:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; margin-left: 8px; text-decoration: none; white-space: initial" ><a data-id="2,1,0,4,0:main" href="-/index-alias/" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Section Title 3</a></div><div data-id="2,1,0,5:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; margin-left: 8px; text-decoration: none; white-space: initial" ><a data-id="2,1,0,5,0:main" href="index.html" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Section Title 4</a></div></div><div data-id="2,1,1:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial" ><div data-id="2,1,1,0:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; margin-left: 8px; text-decoration: none; white-space: initial" ><a data-id="2,1,1,0,0:main" href="/" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; text-align: left; text-decoration: none; white-space: initial" class="ft_md">First Subsection</a></div><div data-id="2,1,1,1:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; margin-left: 8px; text-decoration: none; white-space: initial" ><a data-id="2,1,1,1,0:main" href="subsection/" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(255,0,0,1); cursor: pointer; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Subsection Title</a></div><div data-id="2,1,1,2:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; margin-left: 8px; text-decoration: none; white-space: initial" ><a data-id="2,1,1,2,0:main" href="subsection/-/arpita/" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Subsection Title 2</a></div><div data-id="2,1,1,3:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; margin-left: 8px; text-decoration: none; white-space: initial" ><a data-id="2,1,1,3,0:main" href="-/other-package/" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Other index</a></div></div><div data-id="2,1,2:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; text-decoration: none; white-space: initial" ><div data-id="2,1,2,0:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; margin-left: 8px; text-decoration: none; white-space: initial" ><a data-id="2,1,2,0,0:main" href="toc/" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Toc Title</a><div data-id="2,1,2,0,1:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; margin-left: 8px; text-decoration: none; white-space: initial" ><a data-id="2,1,2,0,1,0:main" href="childtoc/index.html" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; color: rgba(255,0,0,1); cursor: pointer; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Child Toc</a></div><div data-id="2,1,2,0,2:main" style="align-items: flex-start; border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; display: flex; flex-direction: column; flex-wrap: nowrap; justify-content: flex-start; margin-left: 8px; text-decoration: none; white-space: initial" ><a data-id="2,1,2,0,2,0:main" href="-/other-package/info/" style="border-radius: 0px; border-style: solid; border-width: 0px; box-sizing: border-box; cursor: pointer; text-align: left; text-decoration: none; white-space: initial" class="ft_md">Other info</a></div></div></div></div></div></div>
         <script>
             FTD_JS
 
