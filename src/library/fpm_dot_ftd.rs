@@ -436,7 +436,7 @@ pub(crate) fn get(lib: &fpm::Library) -> String {
             rfc3339 = rfc3339,
         );
     }
-    if let Some((filename, content)) = lib.markdown.as_ref() {
+    if let Some((ref filename, ref content)) = lib.markdown {
         fpm_base = format!(
             indoc::indoc! {"
                 {fpm_base}

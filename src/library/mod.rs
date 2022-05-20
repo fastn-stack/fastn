@@ -10,6 +10,8 @@ mod toc;
 #[derive(Debug)]
 pub struct Library {
     pub config: fpm::Config,
+    /// If the current module being parsed is a markdown file, `.markdown` contains the name and
+    /// content of that file
     pub markdown: Option<(String, String)>,
     pub document_id: String,
     pub translated_data: fpm::TranslationData,
@@ -21,7 +23,6 @@ pub struct Library {
 
 impl ftd::p2::Library for Library {
     fn get(&self, name: &str, doc: &ftd::p2::TDoc) -> Option<String> {
-        // Standard libraries
         if name == "fpm" {
             return Some(fpm_dot_ftd::get(self));
         }
@@ -53,8 +54,9 @@ impl ftd::p2::Library for Library {
             // Root package evaluation
             if package.name == lib.config.package.name {
                 if let Some(translation_of_package) = lib.config.package.translation_of.as_ref() {
-                    // Index document can be accessed from the package name directly. For others `/` is required to be certain.
-                    // vivekanand-hi -> vivekanand-hi-hi This is wrong. That's why we ensure a strict `/` check or a full name match
+                    // Index document can be accessed from the package name directly. For others
+                    // `/` is required to be certain. foo-hi -> foo-hi-hi This is wrong. That's why
+                    // we ensure a strict `/` check or a full name match
                     let new_name = if translation_of_package.name.as_str().eq(name) {
                         package.name.clone()
                     } else {
@@ -214,7 +216,7 @@ impl ftd::p2::Library for Library {
                 self.document_id.as_str(),
                 self.base_url.as_str(),
             ),
-            t => unimplemented!("$processor$: {} is not implemented yet", t),
+            t => unimplemented!("No such processor: {}", t),
         }
     }
 }
@@ -230,7 +232,9 @@ impl ftd::p2::Library for FPMLibrary {
                 fpm::fpm_ftd()
             ));
         } else {
-            std::fs::read_to_string(format!("./{}.ftd", name)).ok()
+            // Note: currently we do not allow users to import other modules from FPM.ftd
+            eprintln!("FPM.ftd can only import `fpm` module");
+            None
         }
     }
 }
