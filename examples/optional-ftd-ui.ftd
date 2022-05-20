@@ -1,0 +1,29 @@
+; sage
+; gfvhgvdjgsejdh
+
+
+-- foo:
+icon: ftd.text: Hello world
+
+
+
+-- foo:
+
+
+
+-- ftd.column foo:
+optional ftd.ui icon:
+
+
+
+
+--- ftd.text: Inside foo
+
+
+
+
+--- icon:
+if: $icon is not null
+
+
+

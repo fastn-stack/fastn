@@ -270,6 +270,13 @@ impl Kind {
         }
     }
 
+    pub fn mut_inner(&mut self) -> &mut Self {
+        match self {
+            Kind::Optional { kind } => kind,
+            _ => self,
+        }
+    }
+
     pub fn list_kind(&self) -> &Self {
         match self {
             Kind::List { kind, .. } => kind,

@@ -65,7 +65,7 @@ impl PropertyValue {
     ) -> ftd::p1::Result<ftd::PropertyValue> {
         let property_type = if let Some(arg) = value.strip_prefix('$') {
             PropertyType::Variable(arg.to_string())
-        } else if let Some(ftd::p2::Kind::UI { .. }) = expected_kind {
+        } else if let Some(ftd::p2::Kind::UI { .. }) = expected_kind.as_ref().map(|v| v.inner()) {
             if !value.contains(':') {
                 return ftd::e2(
                     format!("expected `:`, found: `{}`", value),

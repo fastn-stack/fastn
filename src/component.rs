@@ -525,29 +525,30 @@ impl ChildComponent {
         arguments: &std::collections::BTreeMap<String, ftd::p2::Kind>,
     ) -> ftd::p1::Result<Self> {
         let mut reference = None;
-        let root = if let Some(ftd::p2::Kind::UI { default }) = arguments.get(name) {
-            reference = Some((
-                name.to_string(),
-                ftd::p2::Kind::UI {
-                    default: default.clone(),
-                },
-            ));
-            ftd::Component {
-                root: "ftd.kernel".to_string(),
-                full_name: "ftd#ui".to_string(),
-                arguments: Default::default(),
-                locals: Default::default(),
-                properties: Default::default(),
-                instructions: vec![],
-                events: vec![],
-                condition: None,
-                kernel: false,
-                invocations: vec![],
-                line_number,
-            }
-        } else {
-            doc.get_component(line_number, name)?
-        };
+        let root =
+            if let Some(ftd::p2::Kind::UI { default }) = arguments.get(name).map(|v| v.inner()) {
+                reference = Some((
+                    name.to_string(),
+                    ftd::p2::Kind::UI {
+                        default: default.clone(),
+                    },
+                ));
+                ftd::Component {
+                    root: "ftd.kernel".to_string(),
+                    full_name: "ftd#ui".to_string(),
+                    arguments: Default::default(),
+                    locals: Default::default(),
+                    properties: Default::default(),
+                    instructions: vec![],
+                    events: vec![],
+                    condition: None,
+                    kernel: false,
+                    invocations: vec![],
+                    line_number,
+                }
+            } else {
+                doc.get_component(line_number, name)?
+            };
 
         assert_no_extra_properties(
             line_number,
@@ -1632,7 +1633,46 @@ impl Component {
                             reference: None,
                         };
                     }
-                    Err(e) => return ftd::e2(format!("{:?}", e), doc.name, line_number),
+                    Err(e) => {
+                        match doc.get_value(line_number, &c.0) {
+                            Ok(ftd::Value::Optional { kind, .. })
+                            | Ok(ftd::Value::None { kind })
+                                if matches!(kind, ftd::p2::Kind::UI { .. }) =>
+                            {
+                                if let Some(ftd::p2::Boolean::IsNotNull { ref value }) =
+                                    child.condition
+                                {
+                                    match value {
+                                        ftd::PropertyValue::Reference { name, .. }
+                                        | ftd::PropertyValue::Variable { name, .. } => {
+                                            if name.eq({
+                                                if let Some(reference) = c.0.strip_prefix('@') {
+                                                    reference
+                                                } else {
+                                                    c.0.as_str()
+                                                }
+                                            }) {
+                                                *child = ChildComponent {
+                                                    root: "ftd#null".to_string(),
+                                                    condition: None,
+                                                    properties: Default::default(),
+                                                    arguments: Default::default(),
+                                                    events: vec![],
+                                                    is_recursive: false,
+                                                    line_number,
+                                                    reference: None,
+                                                };
+                                                return Ok(());
+                                            }
+                                        }
+                                        _ => {}
+                                    }
+                                }
+                            }
+                            _ => {}
+                        }
+                        return ftd::e2(format!("{:?}", e), doc.name, line_number);
+                    }
                 }
             }
             Ok(())
@@ -1852,6 +1892,7 @@ impl Component {
                 "ftd#text" => ftd::Element::Markup(ftd::p2::element::markup_from_properties(
                     arguments, doc, condition, is_child, events,
                 )?),
+                "ftd#null" => ftd::Element::Null,
                 _ => unreachable!(),
             };
             Ok(ElementWithContainer {
@@ -2100,7 +2141,9 @@ pub fn recursive_child_component(
             root_component.get_caption(),
         ),
         _ => {
-            let root = if let Some(ftd::p2::Kind::UI { default }) = arguments.get(&sub.name) {
+            let root = if let Some(ftd::p2::Kind::UI { default }) =
+                arguments.get(&sub.name).map(|v| v.inner())
+            {
                 reference = Some((
                     sub.name.to_string(),
                     ftd::p2::Kind::UI {
@@ -2414,44 +2457,43 @@ pub fn read_properties(
                 Err(e) => return Err(e),
             };
 
-            let nested_properties = if let ftd::PropertyValue::Reference {
-                kind: ftd::p2::Kind::UI { .. },
-                ..
-            } = &property_value
-            {
-                let headers = if source.eq(&ftd::TextSource::Default) {
-                    let mut headers = Default::default();
-                    if let ftd::p2::Kind::UI {
-                        default: Some((_, h)),
-                    } = kind
-                    {
-                        headers = h.clone();
-                    }
-                    headers
-                } else {
-                    let mut headers = vec![];
-                    if let Some(idx) = idx {
-                        let p1 = &p1.0;
-                        for i in idx + 1..p1.len() {
-                            let p1 = p1.get(i).unwrap();
-                            if let Some(k) = p1.1.strip_prefix('>') {
-                                headers.push((p1.0, k.trim().to_string(), p1.2.to_string()));
-                            } else {
-                                break;
+            let nested_properties = match property_value {
+                ftd::PropertyValue::Reference { ref kind, .. }
+                    if matches!(kind.inner(), ftd::p2::Kind::UI { .. }) =>
+                {
+                    let headers = if source.eq(&ftd::TextSource::Default) {
+                        let mut headers = Default::default();
+                        if let ftd::p2::Kind::UI {
+                            default: Some((_, h)),
+                        } = kind.inner()
+                        {
+                            headers = h.clone();
+                        }
+                        headers
+                    } else {
+                        let mut headers = vec![];
+                        if let Some(idx) = idx {
+                            let p1 = &p1.0;
+                            for i in idx + 1..p1.len() {
+                                let p1 = p1.get(i).unwrap();
+                                if let Some(k) = p1.1.strip_prefix('>') {
+                                    headers.push((p1.0, k.trim().to_string(), p1.2.to_string()));
+                                } else {
+                                    break;
+                                }
                             }
                         }
-                    }
-                    ftd::p1::Header(headers)
-                };
-                ftd::p2::utils::structure_header_to_properties(
-                    &value,
-                    arguments,
-                    doc,
-                    line_number,
-                    &headers,
-                )?
-            } else {
-                Default::default()
+                        ftd::p1::Header(headers)
+                    };
+                    ftd::p2::utils::structure_header_to_properties(
+                        &value,
+                        arguments,
+                        doc,
+                        line_number,
+                        &headers,
+                    )?
+                }
+                _ => Default::default(),
             };
 
             let (condition_value, default_value) = if let Some(attribute) = conditional_attribute {
@@ -2633,7 +2675,7 @@ fn read_arguments(
         };
         if let ftd::p2::Kind::UI {
             default: Some((_, h)),
-        } = &mut kind
+        } = &mut kind.mut_inner()
         {
             let headers = {
                 let mut headers = vec![];

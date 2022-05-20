@@ -275,13 +275,13 @@ pub fn parse(s: &str, doc_id: &str) -> Result<Vec<Section>> {
     };
 
     for (line_number, mut line) in s.split('\n').enumerate() {
+        let line_number = line_number + 1;
         if line.starts_with(';') {
             continue;
         }
         if line.starts_with("\\;") {
             line = &line[1..];
         }
-        let line_number = line_number + 1;
         match state.state {
             ParsingState::WaitingForSection => {
                 state.waiting_for_section(line_number, line, doc_id)?

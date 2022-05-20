@@ -30,22 +30,26 @@ impl<'a> TDoc<'a> {
                         0,
                     );
                 };
-                if matches!(default.kind(), ftd::p2::Kind::UI { .. }) {
+                if matches!(default.kind().inner(), ftd::p2::Kind::UI { .. }) {
                     let root = match &default {
                         ftd::PropertyValue::Value {
                             value: ftd::Value::UI { name, .. },
                         }
                         | ftd::PropertyValue::Reference { name, .. }
-                        | ftd::PropertyValue::Variable { name, .. } => name,
+                        | ftd::PropertyValue::Variable { name, .. } => name.to_string(),
                         ftd::PropertyValue::Value { value } => {
-                            return ftd::e2(
-                                format!(
-                                    "expected UI for local variable {}: {:?} in {}, found: `{:?}`",
-                                    k, arg, root, value
-                                ),
-                                self.name,
-                                0,
-                            )
+                            if let Some(ftd::Value::UI { name, .. }) = value.to_owned().inner() {
+                                name
+                            } else {
+                                return ftd::e2(
+                                    format!(
+                                        "expected UI for local variable {}: {:?} in {}, found: `{:?}`",
+                                        k, arg, root, value
+                                    ),
+                                    self.name,
+                                    0,
+                                );
+                            }
                         }
                     }
                     .to_string();
@@ -1225,7 +1229,7 @@ impl<'a> TDoc<'a> {
                             let kind_thing = doc.get_thing(line_number, kind_name)?;
                             let kind = if let Some(fields_kind) = match kind_thing {
                                 ftd::p2::Thing::Record(ftd::p2::Record { fields, .. }) => {
-                                    fields.get(v).map(|v| v.clone())
+                                    fields.get(v).cloned()
                                 }
                                 _ => None,
                             } {
@@ -1237,8 +1241,7 @@ impl<'a> TDoc<'a> {
                                     "get_thing",
                                     line_number,
                                 );
-                            }
-                            .to_owned();
+                            };
                             let thing = ftd::p2::Thing::Variable(ftd::Variable {
                                 name,
                                 value: ftd::PropertyValue::Value {
