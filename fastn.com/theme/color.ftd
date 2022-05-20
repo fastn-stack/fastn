@@ -6,3 +6,6 @@
 
 -- cd.color-display:
 color: $fpm.color
+minimize: true
+
+
