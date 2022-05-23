@@ -8,7 +8,7 @@
 -- bs.current-brand: 3
 
 -- fpm.sitemap-data sitemap:
-$processor$: get-sitemap
+$processor$: sitemap
 
 
 -- fpm.toc-item list empty-toc:
