@@ -41,7 +41,7 @@ pub struct Config {
     /// currently in building process.
     /// It's value is injected by `fpm::build()` function according to the currently processing
     /// document.
-    /// It is consumed by the `get-sitemap` processor.
+    /// It is consumed by the `sitemap` processor.
     pub current_document: Option<String>,
 }
 

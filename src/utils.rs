@@ -209,6 +209,11 @@ pub(crate) fn id_to_path(id: &str) -> String {
     id.replace("/index.ftd", "/")
         .replace("index.ftd", "/")
         .replace(".ftd", std::path::MAIN_SEPARATOR.to_string().as_str())
+        .replace("/index.md", "/")
+        .replace("/README.md", "/")
+        .replace("index.md", "/")
+        .replace("README.md", "/")
+        .replace(".md", std::path::MAIN_SEPARATOR.to_string().as_str())
 }
 
 pub(crate) fn replace_markers(
