@@ -130,7 +130,13 @@ async fn build_simple(
                 .await?;
                 if let Some(ref url) = url {
                     let url = url.replace("/index.html", "");
-                    file.set_id(format!("{}/index.ftd", url.trim_matches('/')).as_str());
+                    let extension = if matches!(file, fpm::File::Markdown(_)) {
+                        "index.md".to_string()
+                    } else {
+                        "index.ftd".to_string()
+                    };
+
+                    file.set_id(format!("{}/{}", url.trim_matches('/'), extension).as_str());
                 }
                 file
             };

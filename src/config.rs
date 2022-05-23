@@ -516,6 +516,9 @@ impl Config {
         {
             return Ok(format!("{}{}/index.ftd", add_packages, id));
         }
+        if root.join(format!("{}{}.md", add_packages, id)).exists() {
+            return Ok(format!("{}{}.md", add_packages, id));
+        }
         if root
             .join(format!("{}{}/README.md", add_packages, id))
             .exists()
