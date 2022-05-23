@@ -327,13 +327,7 @@ impl Node {
 
         let mut children_style = common.children_style();
         children_style.extend(container.children_style());
-        let node = match common.link {
-            Some(_) => "a",
-            None => match common.submit {
-                Some(_) => "form",
-                None => "div",
-            },
-        };
+        let node = common.node();
 
         let (id, external_children_container, external_children) = {
             if let Some((id, external_children_container, child)) = &container.external_children {
@@ -349,7 +343,7 @@ impl Node {
 
         Node {
             condition: common.condition.clone(),
-            node: s(node), // TODO: use better tags based on common.region
+            node: s(node.as_str()), // TODO: use better tags based on common.region
             attrs,
             style,
             classes,
@@ -871,14 +865,8 @@ impl ftd::Text {
     pub fn to_node(&self, doc_id: &str, collector: &mut ftd::Collector) -> Node {
         // TODO: proper tag based on self.common.region
         // TODO: if format is not markdown use pre
-        let node = match &self.common.link {
-            Some(_) => "a",
-            None => match &self.common.submit {
-                Some(_) => "form",
-                _ => "div",
-            },
-        };
-        let mut n = Node::from_common(node, &self.common, doc_id, collector);
+        let node = self.common.node();
+        let mut n = Node::from_common(node.as_str(), &self.common, doc_id, collector);
         n.classes.extend(self.common.add_class());
         n.text = Some(self.text.rendered.clone());
         let (key, value) = text_align(&self.text_align);
@@ -918,14 +906,8 @@ impl ftd::TextBlock {
     pub fn to_node(&self, doc_id: &str, collector: &mut ftd::Collector) -> Node {
         // TODO: proper tag based on self.common.region
         // TODO: if format is not markdown use pre
-        let node = match &self.common.link {
-            Some(_) => "a",
-            None => match &self.common.submit {
-                Some(_) => "form",
-                _ => "div",
-            },
-        };
-        let mut n = Node::from_common(node, &self.common, doc_id, collector);
+        let node = self.common.node();
+        let mut n = Node::from_common(node.as_str(), &self.common, doc_id, collector);
         n.classes.extend(self.common.add_class());
         n.text = Some(self.text.rendered.clone());
         let (key, value) = text_align(&self.text_align);
@@ -974,14 +956,8 @@ impl ftd::TextBlock {
 
 impl ftd::Code {
     pub fn to_node(&self, doc_id: &str, collector: &mut ftd::Collector) -> Node {
-        let node = match &self.common.link {
-            Some(_) => "a",
-            None => match &self.common.submit {
-                Some(_) => "form",
-                _ => "div",
-            },
-        };
-        let mut n = Node::from_common(node, &self.common, doc_id, collector);
+        let node = self.common.node();
+        let mut n = Node::from_common(node.as_str(), &self.common, doc_id, collector);
         n.text = Some(self.text.rendered.clone());
         let (key, value) = text_align(&self.text_align);
         n.style.insert(s(key.as_str()), value);
@@ -1079,14 +1055,8 @@ impl ftd::IFrame {
 
 impl ftd::Markups {
     pub fn to_node(&self, doc_id: &str, collector: &mut ftd::Collector) -> Node {
-        let node = match &self.common.link {
-            Some(_) => "a",
-            None => match &self.common.submit {
-                Some(_) => "form",
-                _ => "div",
-            },
-        };
-        let mut n = Node::from_common(node, &self.common, doc_id, collector);
+        let node = self.common.node();
+        let mut n = Node::from_common(node.as_str(), &self.common, doc_id, collector);
         n.classes.extend(self.common.add_class());
         let (key, value) = text_align(&self.text_align);
         n.style.insert(s(key.as_str()), value);
@@ -1177,6 +1147,25 @@ impl ftd::Input {
 }
 
 impl ftd::Common {
+    fn node(&self) -> String {
+        match &self.link {
+            Some(_) => "a",
+            None => match &self.submit {
+                Some(_) => "form",
+                _ => match self.region.as_ref() {
+                    Some(ftd::Region::H0) => "h1",
+                    Some(ftd::Region::H1) => "h2",
+                    Some(ftd::Region::H2) => "h3",
+                    Some(ftd::Region::H3) => "h4",
+                    Some(ftd::Region::H4) => "h5",
+                    Some(ftd::Region::H5) => "h6",
+                    Some(ftd::Region::H6) => "h7",
+                    _ => "div",
+                },
+            },
+        }
+        .to_string()
+    }
     fn add_class(&self) -> Vec<String> {
         let d: Vec<String> = vec![s("ft_md")];
         d

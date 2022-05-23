@@ -38,33 +38,28 @@ ul {
     font-size: 48px;
     font-weight: 400;
     line-height: 52px;
-    color: #ffffff;
 }
 
 .ft_md h2 {
     font-size: 40px;
     font-weight: 400;
     line-height: 48px;
-    color: #ffffff;
 }
 
 .ft_md h3 {
     font-size: 32px;
     font-weight: 400;
     line-height: 44px;
-    color: #ffffff;
 }
 
 .ft_md h4 {
     font-size: 24px;
     font-weight: 400;
     line-height: 36px;
-    color: #ffffff;
 }
 
 .ft_md h5 {
     line-height: 1.2em;
-    color: #ffffff;
 }
 
 .ft_md ul ul,
