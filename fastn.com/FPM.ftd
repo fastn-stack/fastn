@@ -21,135 +21,44 @@ implements: fifthtry.github.io/theme
 
 
 
-
 -- fpm.sitemap:
 
 # Home: /
 
-# Docs: about/
+- Why `fpm`?: /about/
+  - Remixing Sites: /remixing/
+- Why Not To Use `fpm`?: /why-not/
+- Known Issues: /known-issues/
 
-- About `fpm`: about/
-  - Why Not `fpm`?: why-not/
-  - Translation philosphy?: translation-philosphy/
-- File System Organization: fs/
-  - `FPM.ftd`: fpm-ftd-file/
-- FTD Host Features: ftd-host/
-  - `$processor$: http`
-    url: http/
-  - `$processor$: toc`
-    url: toc/
-  - `$processor$: package-query`
-    url: package-query/
-  - `$processor$: get-data`
-    url: processors/get-data/
-  - `$processor$: sitemap`
-    url: processors/sitemap/
-  - `import: fpm`
-    url: fpm-vars/
+
+
+# Author Manual: /author/
+
+- Create new fpm project: /author/create-project/
+  - Create new fpm project on github: /author/create-on-github/
+- How to install fpm on local machine: /how-to/install/
+- Build fpm project locally: /author/build-project/
 - How To:
-  - Install `fpm`: how-to/install/
-  - Update `fpm`: how-to/update/
-  - Get started with Github pages: how-to/get-started-github-pages/
-  - Get started with Vercel: how-to/get-started-vercel/
-  - Enable Translations: translation/
-- `fpm` Usage: usage/
-  - `fpm build`: build/
-  - `fpm sync`: sync/
-  - `fpm status`: status/
-  - `fpm diff`: diff/
-  - `fpm update`: update/
-  - `fpm serve`: serve/
-- Known Issues: known-issues/
-
-
-
-# `fpm` User Manual: usage/
-
-- About `fpm`: about/
-  - Why Not `fpm`?: why-not/
-  - Translation philosphy?: translation-philosphy/
-- File System Organization: fs/
-  - `FPM.ftd`: fpm-ftd-file/
-- FTD Host Features: ftd-host/
-  - `$processor$: http`
-    url: http/
-  - `$processor$: toc`
-    url: toc/
-  - `$processor$: package-query`
-    url: package-query/
-  - `$processor$: get-data`
-    url: processors/get-data/
-  - `$processor$: sitemap`
-      url: processors/sitemap/
-  - `import: fpm`
-    url: fpm-vars/
-- How To:
-  - Install `fpm`: how-to/install/
-  - Update `fpm`: how-to/update/
-  - Get started with Github pages: how-to/get-started-github-pages/
-  - Get started with Vercel: how-to/get-started-vercel/
-  - Enable Translations: translation/
-- `fpm` Usage: usage/
-  - `fpm build`: build/
-  - `fpm sync`: sync/
-  - `fpm status`: status/
-  - `fpm diff`: diff/
-  - `fpm update`: update/
-- Known Issues: known-issues/
+  - Install `fpm`: /how-to/install/
+  - Update `fpm`: /how-to/update/
+  - Get started with Github pages: /how-to/get-started-github-pages/
+  - Get started with Vercel: /how-to/get-started-vercel/
+  - Enable Translations: /translation/
+- `fpm` Usage: /usage/
+  - `fpm build`: /build/
+  - `fpm sync`: /sync/
+  - `fpm status`: /status/
+  - `fpm diff`: /diff/
+  - `fpm update`: /update/
+  - `fpm serve`: /serve/
 
 
 
 
 
 
-# Development: journal/
 
-## Overview: journal/
-
-- Roadmap: roadmap/
-- Journal: journal/
-- How Versioning Works: dev/versioning/
-- What is `FPM.manifest.ftd`?: dev/fpm-manifest/
-
-
-## Using `fpm` Crate: crate/
-
-- Overview: crate/
-- `fpm::Config`
-  url: crate/config/
-- `fpm::Document`
-  url: crate/document/
-- `fpm::Error`
-  url: crate/error/
-- `fpm::File`
-  url: crate/file/
-- `fpm::Font`
-  url: crate/font/
-- `fpm::Package`
-  url: crate/package/
-- `fpm::render`
-  url: crate/render/
-- `fpm::Result`
-  url: crate/result/
-- `fpm::StaticFile`
-  url: crate/static-file/
-- Private Stuff:
-  - `fpm::utils`
-    url: crate/utils/
-- Day To Day:
-  - How To Run Tests: day-to-day/how-to-run-tests/
-  - How To Update Failing Snapshot Tests:  day-to-day/how-to-fix-tests/
-- Dependencies:
-  - `ftd`: crate/deps/ftd/
-  - `fbt-lib`: crate/deps/fbt-lib/
-  - `camino`: crate/deps/camino/
-
-
-
-
-
-
-# Themes: themes/
+# Themes Guide: themes/
 
 - About Themes: themes/
 - Package Interface: package-interface/
@@ -164,11 +73,85 @@ implements: fifthtry.github.io/theme
 - FPM Space: theme/space/
 - How to use Google Font: theme/google-font-how-to-use/
 - FPM Sitemap: sitemap/
+- FTD Host Features: /ftd-host/
+  - `$processor$: http`
+    url: /http/
+  - `$processor$: toc`
+    url: /toc/
+  - `$processor$: package-query`
+    url: /package-query/
+  - `$processor$: get-data`
+    url: /processors/get-data/
+  - `$processor$: sitemap`
+    url: /processors/sitemap/
+  - `import: fpm`
+    url: /fpm-vars/
 
 
-# Author Manual: author/
+# Development: /journal/
 
-- Create new fpm project: author/create-project/
-  - Create new fpm project on github: author/create-on-github/
-- How to install fpm on local machine: how-to/install/-/author/
-- Build fpm project locally: author/build-project/
+## Overview: /journal/
+
+- Roadmap: /roadmap/
+- Journal: /journal/
+- How Versioning Works: /dev/versioning/
+- What is `FPM.manifest.ftd`?: /dev/fpm-manifest/
+- File System Organization: /fs/
+  - `FPM.ftd`: /fpm-ftd-file/
+- Day To Day:
+  - How To Run Tests: /day-to-day/how-to-run-tests/
+  - How To Update Failing Snapshot Tests: /day-to-day/how-to-fix-tests/
+
+
+## Using `fpm` Crate: crate/
+
+- Overview: /crate/
+- `fpm::Config`
+  url: /crate/config/
+- `fpm::Document`
+  url: /crate/document/
+- `fpm::Error`
+  url: /crate/error/
+- `fpm::File`
+  url: /crate/file/
+- `fpm::Font`
+  url: /crate/font/
+- `fpm::Package`
+  url: /crate/package/
+- `fpm::render`
+  url: /crate/render/
+- `fpm::Result`
+  url: /crate/result/
+- `fpm::StaticFile`
+  url: /crate/static-file/
+- Private Stuff:
+  - `fpm::utils`
+    url: /crate/utils/
+- Dependencies:
+  - `ftd`: /crate/deps/ftd/
+  - `fbt-lib`: /crate/deps/fbt-lib/
+  - `camino`: /crate/deps/camino/
+
+
+/-- fpm.toc-item list author-section:
+
+- How to create new fpm project using template `fpm-template`
+  - on github
+  - on gitlab
+  - on bitbucket
+  - from scratch
+- How to install fpm on local machine
+- Build fpm site locally
+- Article on sitemap
+  - What is sitemap
+  - How to use it?
+- How to change common site property like site logo and site name?
+- How to change color-scheme?
+- component that can be used with your fpm site
+  - code-block
+  - slideshow (rename it to feature_display)
+  - featured-article (copy from dotcom/blog/index.ftd to a new repo)
+  - post-list (copy from dotcom/blog/index.ftd to a new repo)
+- how to use fpm site as a blog
+- Competitor
+  - swimm.io

@@ -1,0 +1,15 @@
+-- ft.page: Remixing Static Site Generator
+
+A lot of books and blogs are hosted on Github and other such places, that have
+permissive licenses. It is today not easy to create a "remixed or curated
+documentaiton", which includes content from one or more of such books to create
+a custom documentation site for you.
+
+Currently you can copy the markdown files from those repositories, as one time
+thing, or create a script to keep the copied markdown files up to date when the
+upstream content changes.
+
+Compare this with the way we add depndencies in Node or Python etc to other
+code, you do not have to download the packages, the package manager downloads
+your dependencies. Your package manage can also check if the packages have been
+updated.

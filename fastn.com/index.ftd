@@ -1,45 +1,5 @@
--- import: fpm.dev/lib
--- import: fpm.dev/assets
+-- ft.page: fpm: FTD Package Manager & Static Site Generator
 
-
--- ft.page:
-toc: $config.empty-toc
-id: main-page
-
-
--- lib.create-section:
-
---- ft.h2: Create
-
---- lib.template-list:
-
---- lib.template: An Online Book
-link: /new/book/
-image: $assets.files.static.images.document.png
-active: true
-cta-text: Select Theme
-
---- lib.template: An Open Source Project Site
-link: /new/open-source/
-image: $assets.files.static.images.open-source.png
-active: true
-cta-text: Select Theme
-
---- lib.template: A Presentation
-link: /new/presentation/
-image: $assets.files.static.images.giggle.png
-active: true
-cta-text: Select Theme
-
---- lib.template: A Diagram
-image: $assets.files.static.images.no-data.jpg
-active: false
-cta-text: Coming Soon
-
-
--- ft.content:
-
--- ft.h1: fpm: FTD Package Manager & Static Site Generator
 
 FPM is a command line tool written in Rust that acts as both package manager for
 [FTD](https://ftd.dev/) programs as well as static site generator that converts
