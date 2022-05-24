@@ -1,4 +1,4 @@
--- ft.page: `$processor$: get-sitemap`
+-- ft.page: `$processor$: sitemap`
 
 
 -- ft.code: Sitemap in `FPM.ftd`
@@ -50,7 +50,7 @@ toc-item list children:
 
 The record `sitemap-data` contains sections, subsections and toc. For different
 document these values would be different. We can get this values by calling the
-`get-sitemap` processor which returns the value of `sitemap-data` type.
+`sitemap` processor which returns the value of `sitemap-data` type.
 
 Note: nav-title override for any page can be specified in sitemap, if
 specified, the `current-*` will use the overriden titles.
