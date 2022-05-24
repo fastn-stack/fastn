@@ -6,10 +6,6 @@
 -- fpm.toc-item list empty-toc:
 
 
--- fpm.sitemap-data sitemap:
-$processor$: get-sitemap
-
-
 
 -- ft.github: https://github.com/fifthtry/ftd/
 -- ft.site-url: /
