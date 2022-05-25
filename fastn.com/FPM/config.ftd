@@ -8,8 +8,22 @@
 
 
 -- ft.site-logo:
-light: $assets.files.static.images.fifthtry-logo.png.light
-dark: $assets.files.static.images.fifthtry-logo.png.dark
+light: $assets.files.static.logo-fifthtry-dark.svg.light
+dark: $assets.files.static.logo-fifthtry-dark.svg.dark
+
+
+
+
+-- ft.parent-brand: false
+
+-- ft.brand-caption: FPM is made by
+
+-- ft.brand-site-name: FPM
+
+
+-- ft.brand-site-logo:
+light: $assets.files.static.images.fpm.png.light
+dark: $assets.files.static.images.fpm.png.dark
 
 -- ft.github: https://github.com/fifthtry/fpm
 
