@@ -17,7 +17,7 @@ light: $assets.files.images.fifthtry-logo.png.light
 dark: $assets.files.images.fifthtry-logo.png.dark
 
 
--- ps.current-brand: 2
+-- ps.current-product: 2
 
 
 -- ft.sections:
