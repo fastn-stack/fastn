@@ -55,7 +55,7 @@ weight: 400
 
 
 -- ftd.font-size heading-hero-desktop:
-line-height: 52
+line-height: 60
 size: 48
 letter-spacing: 0
 
