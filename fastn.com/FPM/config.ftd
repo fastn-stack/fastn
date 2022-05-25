@@ -1,10 +1,10 @@
 -- import: ft
--- import: bs
+-- import: ps
+-- import: fbs
 -- import: fpm.dev/assets
 
 
--- ft.show-brand: true
--- bs.current-brand: 3
+-- ps.current-brand: 3
 
 
 -- ft.site-logo:
