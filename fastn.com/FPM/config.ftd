@@ -1,5 +1,6 @@
 -- import: ft
--- import: bs
+-- import: ps
+-- import: fbs
 -- import: ftd.dev/assets
 
 
@@ -15,9 +16,8 @@
 light: $assets.files.images.fifthtry-logo.png.light
 dark: $assets.files.images.fifthtry-logo.png.dark
 
--- ft.show-brand: true
 
--- bs.current-brand: 2
+-- ps.current-brand: 2
 
 
 -- ft.sections:
