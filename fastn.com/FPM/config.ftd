@@ -6,17 +6,16 @@
 
 -- ps.current-product: 3
 
+-- ft.site-url: /
 
 -- ft.site-logo:
 light: $assets.files.static.logo-fifthtry-dark.svg.light
 dark: $assets.files.static.logo-fifthtry-dark.svg.dark
 
 
-
-
 -- ft.parent-brand: false
 
--- ft.brand-caption: FPM is made by
+-- ft.brand-caption: Created by
 
 -- ft.brand-site-name: FPM
 

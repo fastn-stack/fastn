@@ -1,6 +1,12 @@
--- ft.page: FPM Package Interface
+-- ft.page: Fungible Packages - Package Interface
 
+An FPM package contains one or more "ftd modules", and the modules export one or
+more "symbols", eg [records](https://ftd.dev/record/),
+[variables](https://ftd.dev/variables/), [components](https://ftd.dev/component/)
+and so on.
 
--- ft.markdown: 
-
-Theme packages are [designed to be interchangeable](/themes/).
+The set of modules and symbols exported by a package is called "package
+interface" of that package. FPM lets one package declare that it is
+"implementing" another package. All packages that implement a common package
+are interchangeable without chaning any code, and only updating the dependency
+in `FPM.ftd` file.

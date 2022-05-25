@@ -26,9 +26,12 @@ implements: fifthtry.github.io/theme
 
 # Home: /
 
-- Why `fpm`?: /about/
+- Features: /about/
+  - Package Manager: /package-manager/
   - Remixing Sites: /remixing/
+- Open Source: /open-source/
 - Why Not To Use `fpm`?: /why-not/
+- Open Source: /open-source/
 - Known Issues: /known-issues/
 
 
@@ -44,7 +47,6 @@ implements: fifthtry.github.io/theme
   - Update `fpm`: /how-to/update/
   - Get started with Github pages: /how-to/get-started-github-pages/
   - Get started with Vercel: /how-to/get-started-vercel/
-  - Enable Translations: /translation/
 - `fpm` Usage: /usage/
   - `fpm build`: /build/
   - `fpm sync`: /sync/
@@ -95,6 +97,7 @@ implements: fifthtry.github.io/theme
 
 - Roadmap: /roadmap/
 - Journal: /journal/
+- Contribution Guide: /dev/contribute/
 - How Versioning Works: /dev/versioning/
 - What is `FPM.manifest.ftd`?: /dev/fpm-manifest/
 - File System Organization: /fs/

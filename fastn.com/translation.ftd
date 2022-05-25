@@ -1,213 +1,62 @@
--- ft.page: Step by Step guide to setup translation with `fpm`
+-- ft.h1: Translation Tracking
 
--- ft.markdown: 
-
-FPM provides a first class support for translations of the documents. A particular
-package can either be a translation or have translations pointing to other 
-packages. At the build time, we process your translations and generate metadata
-for each and every page in the corresponding package to ensure you as the project
-maintainer, have a complete idea about what is going on in your project.
-
-A translation package keeps track of your documents and helps you keep the documents
-in sync with each other.
-
-A translation is a two way agreement between two packages.
-
--- ft.h1: Prerequisites
-
-You'll need to set up two `fpm` packages to enable translation across the two of
-them.
-
-For this example, we'll be using `foo.com` and `bar.com` where `bar.com` is the 
-translation of `foo.com`
-
-`foo.com` = master
-`bar.com` = translation
-
-Please familiarize yourself with our [Translation Philosphy](translation-philosphy/)
-to get acquainted with the terminologies used in the document
-
--- ft.h1: Setting up the `master` package
-
-The `master` package needs to specify the language it's targetting. At the very
-core, this is the bare minimum setting you'll require to enable the translations
-for your `master` package
-
--- ft.code: foo.com/FPM.ftd
-lang: ftd
-
-\-- import: fpm
-
-\-- fpm.package: foo.com
-language: English
-
--- ft.markdown:
-
-Let's create a few documents in this package which we're supposed to be translated.
+FPM has a unique translation tracking feature. An FPM package can declare it can
+be translated by adding a language key:
 
 -- ft.code:
-lang: shell
-
-\$/foo.com/> touch example{01..05}.ftd
-
--- ft.h2: `fpm sync`
-
-`fpm sync` command allows you to synchronize your changes and create a snapshot
-of the package at the current timestamp in the `.history` folder in the root 
-directory of your package.
-
--- ft.code: `fpm sync` output
-lang: shell
-
-\$ /foo.com/> fpm sync
-
-Repo for foo.com is github, directly syncing with .history.
-FPM.ftd
-example01.ftd
-example02.ftd
-example03.ftd
-example04.ftd
-example05.ftd
-
--- ft.markdown:
-
-We can now push the code and deploy our package.
-
--- ft.h1: Setting up the `translation` package
-
-The `translation` package must specify the `translation-of` package. Specifying 
-this marks the current package as the `translation-of` of another package.
-
--- ft.code: bar.com/FPM.ftd
 lang: ftd
 
 \-- import: fpm
 
-\-- fpm.package: bar.com
-translation-of: foo.com
-language: hi
-
--- ft.h2: Translate documents
-
-Let's start by creating a few counter part documents in the `bar.com` package.
-
--- ft.code: Translation documents
-lang: shell
-
-\$/bar.com/> touch example{01..03}.ftd
-
--- ft.code: Translation status
-lang: shell
-
-\$/bar.com/> fpm translation-status
-
-Never marked: FPM.ftd
-Never marked: example01.md
-Never marked: example02.ftd
-Never marked: example03.ftd
-Missing: example04.ftd
-Missing: example05.ftd
-
--- ft.markdown:
-
-The `fpm translation-status` command will give you a complete overview of the 
-documents in the current package.
-
--- ft.h2: `fpm mark-upto-date`
-
-You can invoke this command along with a module path to mark that particular 
-document as `upto date` in the translation tree. Doing so will create a `track`
-of your document at the current timestamp.
-
--- ft.code: Mark up to date
-lang: shell
-
-\$/bar.com/> fpm mark-upto-date example01.ftd
-
-example01.ftd is now marked upto date
-
-\$/bar.com/> fpm mark-upto-date example02.ftd
-
-example02.ftd is now marked upto date
-
-\$/bar.com/> fpm translation-status
-
-Never marked: FPM.ftd
-Up to date: example01.md
-Up to date: example02.ftd
-Never marked: example03.ftd
-Missing: example04.ftd
-Missing: example05.ftd
-
--- ft.h1: Accept official translations
-
-While anyone can start a package as a translation candidate to your `master` package,
-you get to decide what all packages act as **official** for your package.
-
-The translation candidate repository(bar.com) can be marked an official 
-translation of `foo.com` by mapping the the same in `foo.com/FPM.ftd` file along
-with providing the name of the language the current package belongs to.
-
-The translation
-
--- ft.code: foo.com/FPM.ftd
-lang: ftd
-
-
-\-- import: fpm
-
-\-- fpm.package: foo.com
+\-- fpm.package: fpm.dev
+zip: github.com/fifthtry/fpm.dev/archive/refs/heads/main.zip
 language: English
-translation: bar.com
-
--- ft.h2: Checking translation status of the master package
-
-You can check the translation status of the various `official` translations of 
-your package by using the `fpm translation-status` command. For a `master` 
-package, it returns a global view across all the translations
-
--- ft.code: `master` fpm translation-status
-lang: shell
-
-\$/foo.com/> fpm translation-status
-
-Status for `bar.com` package:
-Never marked: 2
-Missing: 2
-Out-dated: 0
-Up to date: 2
-
--- ft.h2: Making further changes in your `master` package
-
-Making any changes in your master repo once the translation package has been 
-synchronized will lead to that particular document in the `translation` package
-getting downgraded to `Out-dated`.
-
--- ft.code: Make some changes
-lang: shell
-
-\$/foo.com/> echo "\n-- ftd.text: Hello World" >> example01.ftd
-
-\$/foo.com/> fpm sync
-
-Repo for foo.com is github, directly syncing with .history.
-example01.ftd
+translation: hi.fpm.dev
 
 -- ft.markdown:
 
-Once this package is deployed, the next time we run `fpm translation-status` in 
-context of the `translation` package(/bar.com/), we should see the `Out-dated`
-document status
+Here we have declared that this package supports translation by adding the
+language key. Also we have already got one "accepted translation",
+[`hi.fpm.dev`](https://hi.fpm.dev).
 
--- ft.code: `bar.com` translation-status
-lang: shell
+Once you have enabled translation, you can create a new fpm package, here
+`hi.fpm.dev`, and give it a FPM.ftd file:
 
-\$/bar.com/> fpm translation-status
+-- ft.code:
+lang: ftd
 
-Never marked: FPM.ftd
-Out-dated: example01.md
-Up to date: example02.ftd
-Never marked: example03.ftd
-Missing: example04.ftd
-Missing: example05.ftd
+\-- import: fpm
 
+\-- fpm.package: hi.fpm.dev
+zip: github.com/fifthtry/fpm.dev-hi/archive/refs/heads/main.zip
+language: hi
+translation-of: fpm.dev
+
+-- ft.markdown:
+
+This can be your entire package when you create a new translation. When you
+build a translated FPM package, FPM is aware it is a translation, and it builds
+all the files in the original, which if `fpm.dev`, so you do not have to copy
+any files.
+
+FPM uses a fallback based logic, for every missing file, it builds the
+corresponding file from original package. So say if `index.ftd` is missing in
+Hindi translation, because it is not yet translated, FPM will pick the
+`index.ftd` from the English/original version and `hi.fpm.dev` will be a
+"complete website".
+
+Once a file has been created in translation package, it can be in other of three
+states: a. file exists but has never been accepted, meaning translation has
+started but not yet finished, b. file is upto date with the original, and c. file
+was once up to date, but since then English version has changed.
+
+In a and c we show a warning on the genrated pages so readers can see that either
+the translation is not complete or out of date, and we give quick option to switch
+to the English/original version. In case if things are out of date, we also show
+since how long is it out of date and what is the diff in the Enlish version from
+when Hindi version was last marked up to date, to current English version.
+
+-- ft.h2: Translation Status
+
+We also create a translation status page that shows a summary information for
+all languages how many documents are upto date, missing etc.

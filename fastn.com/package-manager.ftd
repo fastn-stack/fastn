@@ -1,0 +1,69 @@
+-- ft.page: FPM: Package Manager
+
+`ftd` is a ["programming language for prose"](https://ftd.dev), and `fpm` is the
+package manager for `ftd`.
+
+-- ft.h1: FPM.ftd
+
+To create a "fpm package", create a `FPM.ftd` file in any folder:
+
+-- ft.code: `FPM.ftd` marks a folder as `fpm` package
+lang: ftd
+
+\-- import: fpm
+
+\-- fpm.package: foo.com
+zip: github.com/fifthtry/fpm.dev/archive/refs/heads/main.zip
+
+-- ft.markdown:
+
+We have created a package named `foo.com`. Packages in FPM are named after the
+domain where they would be published. {ft.highlight: Every FPM package is a
+website.}
+
+Learn more about using FPM as a [package manager](/package-manager/).
+
+
+
+
+-- ft.h1: Dependencies
+
+FPM support package dependencies. To add a dependency add it in `FPM.ftd` file:
+
+-- ft.code:
+lang: ftd
+
+\-- import: fpm
+
+\-- fpm.package: fpm.dev
+zip: github.com/fifthtry/fpm.dev/archive/refs/heads/main.zip
+
+\-- fpm.dependency: fifthtry.github.io/doc-site as ds
+
+-- ft.markdown:
+
+Here `fpm.dev` has a dependency on [`fifthtry.github.io/doc-site`](https://fifthtry.github.io/doc-site).
+
+We have also used "alias" feature to bind the name of this dependency to `ds`,
+so FTD files can write `-- import: ds` instead of having to use the full path,
+e.g. `-- import: fifthtry.github.io/doc-site`.
+
+
+
+-- ft.h1: Distributed Package Manager
+
+Unlike other package managers like pypi, npm and crates, there is no central
+package repository in FPM. Since every FPM package is a website, that website
+acts as the package repository.
+
+What this means is when `fpm` sees `fifthtry.github.io/doc-site` as a
+dependency, it fetches the content of `fifthtry.github.io/doc-site/FPM.ftd`
+file which acts as the meta data for the package, and the meta data includes the
+URL from where the package ZIP can be downloaded.
+
+In our examples we use Github's zip serving feature to let Github generate and
+distribute our .zip file. If you are not using `Github`, you can store the zip
+file containing entire package in some other location, like S3, or a server you
+control, and `fpm` will work with that.
+
+
