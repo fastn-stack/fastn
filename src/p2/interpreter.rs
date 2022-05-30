@@ -1,9 +1,14 @@
 pub(crate) struct InterpreterState {
     pub bag: std::collections::BTreeMap<String, ftd::p2::Thing>,
-    pub p1: Vec<ftd::p1::Section>,
+    pub p1: Vec<ParsedDocument>,
     pub aliases: std::collections::BTreeMap<String, String>,
     pub parsed_libs: Vec<String>,
-    pub stuck_on: Option<usize>
+}
+
+pub struct ParsedDocument {
+    name: String,
+    sections: Vec<ftd::p1::Section>,
+    start_from: usize,
 }
 
 /// InterpreterState enum define the different states of Interpreter
@@ -1279,9 +1284,8 @@ impl Interpreter {
         Ok(instructions)
     }
 
-    pub(crate) fn new(lib: &'a dyn ftd::p2::Library) -> Self {
+    pub(crate) fn new() -> Self {
         Self {
-            lib,
             bag: default_bag(),
             p1: Default::default(),
             aliases: Default::default(),
@@ -1322,7 +1326,7 @@ pub fn interpret(
     std::collections::BTreeMap<String, ftd::p2::Thing>,
     ftd::Column,
 )> {
-    let mut interpreter = Interpreter::new(lib);
+    let mut interpreter = Interpreter::new();
     let instructions = interpreter.interpret(name, source)?;
     let mut rt = ftd::RT::from(name, interpreter.aliases, interpreter.bag, instructions);
     let main = rt.render_()?;
