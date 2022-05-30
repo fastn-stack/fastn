@@ -6,6 +6,10 @@ pub struct InterpreterState {
 }
 
 impl InterpreterState {
+    fn tdoc(&self) -> ftd::p2::TDoc {
+        todo!()
+    }
+
     fn continue_(mut self) -> ftd::p1::Result<Interpreter> {
         if self.document_stack.is_empty() {
             panic!()
@@ -369,9 +373,12 @@ impl InterpreterState {
         //     self.aliases = aliases;
         // }
 
-        // Ok(instructions)
+        Ok(Interpreter::Done {
+            state: self,
+            instructions,
+        })
 
-        todo!()
+        // todo!()
     }
 
     fn process_imports(mut self) -> ftd::p1::Result<(Self, Option<String>)> {
@@ -414,6 +421,7 @@ impl InterpreterState {
     }
 }
 
+#[derive(Clone)]
 pub struct ParsedDocument {
     name: String,
     sections: Vec<ftd::p1::Section>,
@@ -461,4 +469,97 @@ pub fn interpret(id: &str, source: &str) -> ftd::p1::Result<Interpreter> {
     let mut s = InterpreterState::default();
     s.document_stack.push(ParsedDocument::parse(id, source)?);
     s.continue_()
+}
+
+pub fn interpret_helper(
+    name: &str,
+    source: &str,
+    lib: &dyn ftd::p2::Library,
+) -> ftd::p1::Result<(
+    std::collections::BTreeMap<String, ftd::p2::Thing>,
+    ftd::Column,
+)> {
+    let mut s = interpret(name, source)?;
+    let mut instructions: Vec<ftd::Instruction> = vec![];
+    let mut state = InterpreterState::default();
+    loop {
+        match s {
+            Interpreter::Done {
+                instructions: i,
+                state: s,
+            } => {
+                instructions = i;
+                state = s;
+                break;
+            }
+            Interpreter::StuckOnImport { module, state: st } => {
+                let source = lib.get_with_result(module.as_str(), &st.tdoc())?;
+                s = st.continue_after_import(module.as_str(), source.as_str())?;
+            }
+            _ => todo!(),
+        }
+    }
+
+    let mut rt = ftd::RT::from(
+        name,
+        state.document_stack[0].clone().doc_aliases,
+        state.bag,
+        instructions,
+    );
+    let main = rt.render_()?;
+    Ok((rt.bag, main))
+}
+
+#[cfg(test)]
+mod test {
+    use ftd::test::*;
+    use ftd::{markdown_line, Instruction};
+
+    #[test]
+    fn basic_1() {
+        let mut bag = ftd::p2::interpreter::default_bag();
+        bag.insert(
+            "foo/bar#foo".to_string(),
+            ftd::p2::Thing::Component(ftd::Component {
+                root: "ftd#text".to_string(),
+                full_name: s("foo/bar#foo"),
+                properties: std::array::IntoIter::new([(
+                    s("text"),
+                    ftd::component::Property {
+                        default: Some(ftd::PropertyValue::Value {
+                            value: ftd::Value::String {
+                                text: s("hello"),
+                                source: ftd::TextSource::Header,
+                            },
+                        }),
+                        conditions: vec![],
+                        ..Default::default()
+                    },
+                )])
+                .collect(),
+                ..Default::default()
+            }),
+        );
+        bag.insert(
+            "foo/bar#x".to_string(),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                flags: ftd::VariableFlags::default(),
+                name: "x".to_string(),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Integer { value: 10 },
+                },
+                conditions: vec![],
+            }),
+        );
+
+        p2!(
+            "
+            -- ftd.text foo:
+            text: hello
+
+            -- integer x: 10
+            ",
+            (bag, ftd::p2::interpreter::default_column()),
+        );
+    }
 }
