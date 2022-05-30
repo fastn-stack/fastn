@@ -94,9 +94,13 @@ border-width: 2
 This will render like this:
 
 
+-- ft.output:
+
 -- ftd.text: FifthTry
 border-width: 2
 color: $fpm.color.main.text
+
+-- container: outer
 
 
 
@@ -116,12 +120,13 @@ border-top: 2
 
 This will render like this:
 
+-- ft.output:
 
 -- ftd.text: FifthTry
 border-top: 2
 color: $fpm.color.main.text
 
-
+-- container: outer
 
 
 -- ft.h1: `border-bottom: Integer`
@@ -140,12 +145,13 @@ border-bottom: 2
 
 This will render like this:
 
+-- ft.output:
 
 -- ftd.text: FifthTry
 border-bottom: 2
 color: $fpm.color.main.text
 
-
+-- container: outer
 
 -- ft.h1: `border-left: Integer`
 
@@ -163,12 +169,13 @@ border-left: 2
 
 This will render like this:
 
+-- ft.output:
 
 -- ftd.text: FifthTry
 border-left: 2
 color: $fpm.color.main.text
 
-
+-- container: outer
 
 -- ft.h1: `border-right: Integer`
 
@@ -186,12 +193,13 @@ border-right: 2
 
 This will render like this:
 
+-- ft.output:
 
 -- ftd.text: FifthTry
 border-right: 2
 color: $fpm.color.main.text
 
-
+-- container: outer
 
 -- ft.h1: `border-style: String`
 
@@ -210,13 +218,14 @@ border-width: 2
 
 This will render like this:
 
+-- ft.output:
 
 -- ftd.text: FifthTry
 border-style: dashed
 border-width: 2
 color: $fpm.color.main.text
 
-
+-- container: outer
 
 -- ft.h1: `border-color:` [`ftd.color`](/built-in-types/#ftd-color)
 
@@ -240,11 +249,14 @@ border-color: $red
 
 This will render like this:
 
+-- ft.output:
+
 -- ftd.text: FifthTry
 border-width: 2
 color: $fpm.color.main.text
 border-color: $red
 
+-- container: outer
 
 -- ft.h1: `border-radius: Integer`
 
@@ -263,12 +275,14 @@ border-radius: 50
 
 This will render like this:
 
+-- ft.output:
 
 -- ftd.text: FifthTry
 border-width: 2
 color: $fpm.color.main.text
 border-radius: 50
 
+-- container: outer
 
 -- ft.h1: `border-top-radius: Integer`
 
@@ -287,13 +301,14 @@ border-top-radius: 50
 
 This will render like this:
 
+-- ft.output:
 
 -- ftd.text: FifthTry
 border-width: 2
 color: $fpm.color.main.text
 border-top-radius: 50
 
-
+-- container: outer
 
 -- ft.h1: `border-bottom-radius: Integer`
 
@@ -312,12 +327,14 @@ border-bottom-radius: 50
 
 This will render like this:
 
+-- ft.output:
 
 -- ftd.text: FifthTry
 border-width: 2
 color: $fpm.color.main.text
 border-bottom-radius: 50
 
+-- container: outer
 
 -- ft.h1: `border-left-radius: Integer`
 
@@ -336,13 +353,14 @@ border-left-radius: 50
 
 This will render like this:
 
+-- ft.output:
 
 -- ftd.text: FifthTry
 border-width: 2
 color: $fpm.color.main.text
 border-left-radius: 50
 
-
+-- container: outer
 
 -- ft.h1: `border-right-radius: Integer`
 
@@ -361,13 +379,14 @@ border-right-radius: 50
 
 This will render like this:
 
+-- ft.output:
 
 -- ftd.text: FifthTry
 border-width: 2
 color: $fpm.color.main.text
 border-right-radius: 50
 
-
+-- container: outer
 
 
 -- ft.h1: `padding: Integer`
@@ -387,13 +406,14 @@ border-width: 2
 
 This will render like this:
 
+-- ft.output:
 
 -- ftd.text: FifthTry
 padding: 60
 color: $fpm.color.main.text
 border-width: 2
 
-
+-- container: outer
 
 -- ft.h1: `padding-vertical: Integer`
 
@@ -411,13 +431,14 @@ padding-vertical: 60
 
 This will render like this:
 
+-- ft.output:
 
 -- ftd.text: FifthTry
 padding-vertical: 60
 color: $fpm.color.main.text
 border-width: 2
 
-
+-- container: outer
 
 -- ft.h1: `padding-horizontal: Integer`
 
@@ -435,12 +456,14 @@ padding-horizontal: 60
 
 This will render like this:
 
+-- ft.output:
 
 -- ftd.text: FifthTry
 padding-horizontal: 60
 color: $fpm.color.main.text
 border-width: 2
 
+-- container: outer
 
 -- ft.h1: `padding-left: Integer`
 
@@ -458,13 +481,14 @@ padding-left: 60
 
 This will render like this:
 
+-- ft.output:
 
 -- ftd.text: FifthTry
 padding-left: 60
 color: $fpm.color.main.text
 border-width: 2
 
-
+-- container: outer
 
 -- ft.h1: `padding-right: Integer`
 
@@ -482,12 +506,14 @@ padding-right: 60
 
 This will render like this:
 
+-- ft.output:
 
 -- ftd.text: FifthTry
 padding-right: 60
 color: $fpm.color.main.text
 border-width: 2
 
+-- container: outer
 
 
 -- ft.h1: `padding-top: Integer`
@@ -506,12 +532,14 @@ padding-top: 60
 
 This will render like this:
 
+-- ft.output:
 
 -- ftd.text: FifthTry
 padding-top: 60
 color: $fpm.color.main.text
 border-width: 2
 
+-- container: outer
 
 -- ft.h1: `padding-bottom: Integer`
 
@@ -529,12 +557,14 @@ padding-bottom: 60
 
 This will render like this:
 
+-- ft.output:
 
 -- ftd.text: FifthTry
 padding-bottom: 60
 color: $fpm.color.main.text
 border-width: 2
 
+-- container: outer
 
 -- ft.h1: `width: String`
 
@@ -555,12 +585,14 @@ width: 200
 
 This will render like this:
 
+-- ft.output:
 
 -- ftd.text: FifthTry
 width: 200
 color: $fpm.color.main.text
 border-width: 2
 
+-- container: outer
 
 -- ft.h1: `min-width: String`
 
@@ -583,12 +615,14 @@ min-width: 200
 
 This will render like this:
 
+-- ft.output:
 
 -- ftd.text: FifthTry
 min-width: 200
 color: $fpm.color.main.text
 border-width: 2
 
+-- container: outer
 
 -- ft.h1: `max-width: String`
 
@@ -611,12 +645,14 @@ max-width: 40
 
 This will render like this:
 
+-- ft.output:
 
 -- ftd.text: FifthTry
 max-width: 40
 color: $fpm.color.main.text
 border-width: 2
 
+-- container: outer
 
 -- ft.h1: `height: String`
 
@@ -637,12 +673,14 @@ height: 60
 
 This will render like this:
 
+-- ft.output:
 
 -- ftd.text: FifthTry
 height: 60
 color: $fpm.color.main.text
 border-width: 2
 
+-- container: outer
 
 -- ft.h1: `min-height: String`
 
@@ -665,12 +703,14 @@ min-height: 70
 
 This will render like this:
 
+-- ft.output:
 
 -- ftd.text: FifthTry
 min-height: 70
 color: $fpm.color.main.text
 border-width: 2
 
+-- container: outer
 
 -- ft.h1: `max-height: String`
 
@@ -693,13 +733,14 @@ max-height: 10
 
 This will render like this:
 
+-- ft.output:
 
 -- ftd.text: FifthTry
 max-height: 10
 color: $fpm.color.main.text
 border-width: 2
 
-
+-- container: outer
 
 -- ft.h1: `overflow-x: String`
 
@@ -731,6 +772,7 @@ tincidunt ut laoreet dolore magna aliquam erat
 
 This will render like this:
 
+-- ft.output:
 
 -- ftd.text:
 color: $fpm.color.main.text-strong
@@ -742,6 +784,8 @@ overflow-x: scroll
 Lorem ipsum dolor sit amet, and a veryveryveryveryveryverylong
 word consectetuer adipiscing elit, sed diam nonummy nibh euismod
 tincidunt ut laoreet dolore magna aliquam erat
+
+-- container: outer
 
 
 -- ft.h1: `overflow-y: String`
@@ -774,6 +818,7 @@ tincidunt ut laoreet dolore magna aliquam erat
 
 This will render like this:
 
+-- ft.output:
 
 -- ftd.text:
 color: $fpm.color.main.text-strong
@@ -786,27 +831,11 @@ Lorem ipsum dolor sit amet, and a veryveryveryveryveryverylong
 word consectetuer adipiscing elit, sed diam nonummy nibh euismod
 tincidunt ut laoreet dolore magna aliquam erat
 
+-- container: outer
 
 -- ft.h1: `cursor: String`
 
 You can set the cursor to be shown over any element by using `cursor` attribute:
-
-
--- ftd.row:
-width: fill
-border-width: 5
-border-color: $fpm.color.main.text
-padding: 10
-cursor: pointer
-
-
--- ftd.text: this row has pointer as cursor
-align: center
-width: fill
-color: $fpm.color.main.text
-
-
--- container: outer
 
 
 -- ft.code:
@@ -825,9 +854,32 @@ align: center
 width: fill
 
 
+
 -- ft.markdown:
 
 We support the same format as [CSS cursor](https://developer.mozilla.org/en-US/docs/Web/CSS/cursor).
+
+-- ft.markdown:
+
+This will render like this:
+
+-- ft.output:
+
+-- ftd.row:
+width: fill
+border-width: 5
+border-color: $fpm.color.main.text
+padding: 10
+cursor: pointer
+
+
+-- ftd.text: this row has pointer as cursor
+align: center
+width: fill
+color: $fpm.color.main.text
+
+
+-- container: outer
 
 
 -- ft.h1: `link: String`
@@ -846,10 +898,12 @@ link: https://www.google.com
 
 This will render like this:
 
+-- ft.output:
 
 -- ftd.text: google
 link: https://www.google.com
 
+-- container: outer
 
 -- ft.h1: `open-in-new-tab: boolean, default=False`
 
@@ -869,11 +923,13 @@ open-in-new-tab: true
 
 Which will render like this:
 
+-- ft.output:
 
 -- ftd.text: google (opens in new tab)
 link: https://www.google.com
 open-in-new-tab: true
 
+-- container: outer
 
 -- ft.h1: `submit: Option<String>`
 
@@ -891,10 +947,13 @@ submit: https://httpbin.org/post?x=10
 
 Renders as:
 
+-- ft.output:
 
 -- ftd.text: test post
 submit: https://httpbin.org/post?x=10
+color: $fpm.color.main.text
 
+-- container: outer
 
 -- ft.markdown:
 

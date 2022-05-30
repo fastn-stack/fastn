@@ -70,3 +70,27 @@ print "hello world"
 -- ft.markdown:
 
 In this case the body would be: `/import os\n\nprint "hello world"`.
+
+
+-- ft.markdown:
+
+Similarly any attribute can be commented out by following with `;`:
+
+-- ft.code:
+lang: ftd
+
+
+\-- ft.code:
+lang: ftd
+\;color: red
+
+
+-- ft.markdown:
+
+Here we have commented out the `color: red` header.
+
+we can put `;` anywhere between section and header follows by it.
+
+
+
+
