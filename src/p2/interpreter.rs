@@ -495,6 +495,7 @@ impl<'a> Interpreter<'a> {
             }
             iteration_index += 1;
         }
+
         let (new_p1, var_types) = ftd::p2::utils::reorder(
             &p1[iteration_index..],
             &ftd::p2::TDoc {
