@@ -46,6 +46,7 @@ This will be render like this:
 
 -- ftd.text: FTD example
 color if $ftd.dark-mode: $fpm.color.main.text
+color: $fpm.color.main.text-strong
 
 
 -- ft.code:
@@ -63,6 +64,7 @@ This will be render like this:
 -- ftd.text:
 text: This is an example of how to use ftd.text.
 color if $ftd.dark-mode: $fpm.color.main.text
+color: $fpm.color.main.text-strong
 
 
 -- ft.markdown:
@@ -94,6 +96,7 @@ text-align: center
 border-width: 1
 border-radius: 3
 padding: 5
+color: $fpm.color.main.text-strong
 
 this is **text-align: center** text. a bit longer text so you can see what's going on.
 
@@ -103,6 +106,7 @@ align: left
 border-width: 1
 border-radius: 3
 padding: 5
+color: $fpm.color.main.text-strong
 
 this is **text-align: left** text. typing dummy text for examples is so boring.
 
@@ -112,6 +116,7 @@ text-align: right
 border-width: 1
 border-radius: 3
 padding: 5
+color: $fpm.color.main.text-strong
 
 this is **text-align: right** aligned text. but then you got to do what you go to do.
 
@@ -121,6 +126,7 @@ text-align: justify
 border-width: 1
 border-radius: 3
 padding: 5
+color: $fpm.color.main.text-strong
 
 this is **text-align: justify** text. or not. whatever works. I mean maybe it matters.
 
@@ -161,6 +167,7 @@ Which renders like this:
 
 
 -- ftd.text:
+color: $fpm.color.main.text-strong
 
 This is **markdown** formatted text.
 
@@ -244,12 +251,14 @@ The supported values of themes are:
 -- ftd.text: View Themes
 if: not $show-theme-demos
 color if $ftd.dark-mode: $fpm.color.main.text
+color: $fpm.color.main.text-strong
 $on-click$: toggle $show-theme-demos
 
 
 -- ftd.text: Hide Themes
 if: $show-theme-demos
 color if $ftd.dark-mode: $fpm.color.main.text
+color: $fpm.color.main.text-strong
 $on-click$: toggle $show-theme-demos
 
 
@@ -286,6 +295,7 @@ print("hello world")
 -- ftd.text: Hide Themes
 if: $show-theme-demos
 color if $ftd.dark-mode: $fpm.color.main.text
+color: $fpm.color.main.text-strong
 $on-click$: toggle $show-theme-demos
 
 
@@ -330,6 +340,7 @@ print("hello world")
 -- ftd.text: Hide Themes
 if: $show-theme-demos
 color if $ftd.dark-mode: $fpm.color.main.text
+color: $fpm.color.main.text-strong
 $on-click$: toggle $show-theme-demos
 
 
@@ -390,6 +401,7 @@ print("hello world")
 -- ftd.text: Hide Themes
 if: $show-theme-demos
 color if $ftd.dark-mode: $fpm.color.main.text
+color: $fpm.color.main.text-strong
 $on-click$: toggle $show-theme-demos
 
 

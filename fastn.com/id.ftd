@@ -89,6 +89,7 @@ these.
 
 -- ft.image:
 src: $assets.files.images.ask-id-to-ftd.png
+width: fill
 
 
 -- ft.h2: What are the `id`s present in DOM node?
@@ -131,6 +132,7 @@ which becomes `id` for DOM node of `ftd.text`element. 😊 )
 
 -- ft.image:
 src: $assets.files.images.ftd-give-me-id-yes-got-it.png
+width: fill
 
 
 -- ft.h2: More Complex example
@@ -205,3 +207,4 @@ id available for element which you want to refer to.
 
 -- ft.image:
 src: $assets.files.images.ftd-give-me-an-element-with-id.png
+width: fill
