@@ -8,6 +8,7 @@ pub(crate) mod library;
 pub(crate) mod record;
 pub(crate) mod tdoc;
 pub(crate) mod utils;
+pub(crate) mod interpreter2;
 
 pub use document::Document;
 pub use event::{Action, ActionKind, Event, EventName};
