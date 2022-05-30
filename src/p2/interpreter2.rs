@@ -1,10 +1,8 @@
 #[derive(Default)]
-pub(crate) struct InterpreterState {
-    pub bag: std::collections::BTreeMap<String, ftd::p2::Thing>,
-    pub document_stack: Vec<ParsedDocument>,
-    pub aliases: std::collections::BTreeMap<String, String>,
-    pub current_doc_aliases: std::collections::BTreeMap<String, String>,
-    pub parsed_libs: Vec<String>,
+pub struct InterpreterState {
+    pub(crate) bag: std::collections::BTreeMap<String, ftd::p2::Thing>,
+    pub(crate) document_stack: Vec<ParsedDocument>,
+    pub(crate) parsed_libs: Vec<String>,
 }
 
 impl InterpreterState {
@@ -13,21 +11,25 @@ impl InterpreterState {
             panic!()
         }
 
-        if (&self.document_stack[self.document_stack.len()-1]).processing_imports {
+        if (&self.document_stack[self.document_stack.len() - 1]).processing_imports {
             let (state, module) = self.process_imports()?;
-            if let Some(module) =  module {
-                return Ok(Interpreter::StuckOnImport {state, module})
+            if let Some(module) = module {
+                return Ok(Interpreter::StuckOnImport { state, module });
             }
             self = state;
-            let l = self.document_stack.len() - 1; // Get the top of the stack
-            self.document_stack[l].done_processing_imports()
         }
+
+        let l = self.document_stack.len() - 1; // Get the top of the stack
+        self.document_stack[l].done_processing_imports();
+
+        // Ok(instructions)
 
         todo!()
     }
 
     fn process_imports(mut self) -> ftd::p1::Result<(Self, Option<String>)> {
-        let top = &self.document_stack[self.document_stack.len()-1];
+        let last = self.document_stack.len() - 1;
+        let top: &mut ParsedDocument = &mut self.document_stack[last];
         let p1 = &top.sections;
 
         let mut iteration_index = top.start_from;
@@ -42,20 +44,26 @@ impl InterpreterState {
                 p1[iteration_index].line_number,
             )?;
 
-            self.current_doc_aliases.insert(alias, library_name.clone());
+            top.doc_aliases.insert(alias, library_name.clone());
 
             if self.bag.contains_key(library_name.as_str()) {
                 iteration_index += 1;
-                continue
+                continue;
             }
 
-            let last = self.document_stack.len()-1;
+            let last = self.document_stack.len() - 1;
             self.document_stack[last].update_start_from(iteration_index);
-
             return Ok((self, Some(library_name)));
         }
 
         Ok((self, None))
+    }
+
+    pub fn continue_after_import(mut self, id: &str, source: &str) -> ftd::p1::Result<Interpreter> {
+        self.document_stack.push(ParsedDocument::parse(id, source)?);
+        self.continue_()
+        // interpret then
+        // handle top / start_from
     }
 }
 
@@ -63,7 +71,8 @@ pub struct ParsedDocument {
     name: String,
     sections: Vec<ftd::p1::Section>,
     start_from: usize,
-    processing_imports: bool
+    processing_imports: bool,
+    doc_aliases: std::collections::BTreeMap<String, String>,
 }
 
 impl ParsedDocument {
@@ -72,7 +81,8 @@ impl ParsedDocument {
             name: id.to_string(),
             sections: ftd::p1::parse(source, id)?,
             start_from: 0,
-            processing_imports: true
+            processing_imports: true,
+            doc_aliases: std::collections::BTreeMap::default(),
         })
     }
 
@@ -85,14 +95,7 @@ impl ParsedDocument {
     }
 }
 
-pub fn create() -> ParsedState {
-    ParsedState::default()
-}
-
-#[derive(Default)]
-pub struct ParsedState(InterpreterState);
-
-enum Interpreter {
+pub enum Interpreter {
     StuckOnImport {
         module: String,
         state: InterpreterState,
@@ -107,13 +110,8 @@ enum Interpreter {
     },
 }
 
-
-impl ParsedState {
-    fn interpret(mut self, id: &str, source: &str) -> ftd::p1::Result<Interpreter> {
-        self.0.current_doc_aliases = ftd::p2::interpreter::default_aliases();
-        self.0.document_stack.push(ParsedDocument::parse(id, source)?);
-        self.0.continue_()
-    }
+pub fn interpret(id: &str, source: &str) -> ftd::p1::Result<Interpreter> {
+    let mut s = InterpreterState::default();
+    s.document_stack.push(ParsedDocument::parse(id, source)?);
+    s.continue_()
 }
-
-
