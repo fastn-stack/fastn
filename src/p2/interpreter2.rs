@@ -6,8 +6,17 @@ pub struct InterpreterState {
 }
 
 impl InterpreterState {
-    fn tdoc(&self) -> ftd::p2::TDoc {
-        todo!()
+    fn tdoc<'a>(
+        &'a self,
+        local_variables: &'a mut std::collections::BTreeMap<String, ftd::p2::Thing>,
+    ) -> ftd::p2::TDoc<'a> {
+        let l = self.document_stack.len() - 1;
+        ftd::p2::TDoc {
+            name: &self.document_stack[l].name,
+            aliases: &self.document_stack[l].doc_aliases,
+            bag: &self.bag,
+            local_variables,
+        }
     }
 
     fn continue_(mut self) -> ftd::p1::Result<Interpreter> {
@@ -493,7 +502,9 @@ pub fn interpret_helper(
                 break;
             }
             Interpreter::StuckOnImport { module, state: st } => {
-                let source = lib.get_with_result(module.as_str(), &st.tdoc())?;
+                let mut bt: std::collections::BTreeMap<String, ftd::p2::Thing> =
+                    std::collections::BTreeMap::new();
+                let source = lib.get_with_result(module.as_str(), &st.tdoc(&mut bt))?;
                 s = st.continue_after_import(module.as_str(), source.as_str())?;
             }
             _ => todo!(),
