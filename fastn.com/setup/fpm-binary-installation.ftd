@@ -1,0 +1,40 @@
+-- import: fpm.dev/assets
+-- ft.page:
+
+-- ft.h1: FPM binary Installation Using Windows
+
+-- ft.markdown:
+
+download the latest version [fpm binary installation](https://github.com/FifthTry/fpm/releases)
+
+-- ft.image:
+src: $assets.files.static.images.setup.fpm.png
+scale: 1
+width: fill
+
+
+
+
+-- ft.markdown:
+
+Make a folder and added fpm release on it.
+
+-- ft.image:
+src: $assets.files.static.images.setup.fpm-folder.png
+scale: 1
+width: fill
+
+
+-- ft.markdown:
+
+Go to Menu Bar
+- advanced settings -> environment-variables -> edit path varaible -> set path 
+
+
+-- ft.image:
+src: $assets.files.static.images.setup.setup-fpm.png
+scale: 1
+width: fill
+
+
+
