@@ -3,6 +3,7 @@ pub(crate) struct InterpreterState {
     pub bag: std::collections::BTreeMap<String, ftd::p2::Thing>,
     pub document_stack: Vec<ParsedDocument>,
     pub aliases: std::collections::BTreeMap<String, String>,
+    pub current_doc_aliases: std::collections::BTreeMap<String, String>,
     pub parsed_libs: Vec<String>,
 }
 
@@ -26,7 +27,6 @@ impl InterpreterState {
     }
 
     fn process_imports(mut self) -> ftd::p1::Result<(Self, Option<String>)> {
-        let mut aliases = ftd::p2::interpreter::default_aliases();
         let top = &self.document_stack[self.document_stack.len()-1];
         let p1 = &top.sections;
 
@@ -36,29 +36,26 @@ impl InterpreterState {
                 iteration_index += 1;
                 continue;
             }
-            // let (library_name, alias) = ftd::p2::utils::parse_import(
-            //     &p1[iteration_index].caption,
-            //     name,
-            //     p1[iteration_index].line_number,
-            // )?;
-            // aliases.insert(alias, library_name.clone());
-            // let start = std::time::Instant::now();
-            // let doc = ftd::p2::TDoc {
-            //     name,
-            //     aliases: &aliases,
-            //     bag: &self.bag,
-            //     local_variables: &mut Default::default(),
-            // };
-            // let s = self.lib.get_with_result(library_name.as_str(), &doc)?;
-            // *d_get = d_get.saturating_add(std::time::Instant::now() - start);
-            // if !self.library_in_the_bag(library_name.as_str()) {
-            //     self.interpret_(library_name.as_str(), s.as_str(), false, d_get, d_processor)?;
-            //     self.add_library_to_bag(library_name.as_str())
-            // }
-            // iteration_index += 1;
+            let (library_name, alias) = ftd::p2::utils::parse_import(
+                &p1[iteration_index].caption,
+                top.name.as_str(),
+                p1[iteration_index].line_number,
+            )?;
+
+            self.current_doc_aliases.insert(alias, library_name.clone());
+
+            if self.bag.contains_key(library_name.as_str()) {
+                iteration_index += 1;
+                continue
+            }
+
+            let last = self.document_stack.len()-1;
+            self.document_stack[last].update_start_from(iteration_index);
+
+            return Ok((self, Some(library_name)));
         }
 
-        todo!()
+        Ok((self, None))
     }
 }
 
@@ -81,6 +78,10 @@ impl ParsedDocument {
 
     fn done_processing_imports(&mut self) {
         self.processing_imports = false;
+    }
+
+    fn update_start_from(&mut self, start_from: usize) {
+        self.start_from = start_from;
     }
 }
 
@@ -109,6 +110,7 @@ enum Interpreter {
 
 impl ParsedState {
     fn interpret(mut self, id: &str, source: &str) -> ftd::p1::Result<Interpreter> {
+        self.0.current_doc_aliases = ftd::p2::interpreter::default_aliases();
         self.0.document_stack.push(ParsedDocument::parse(id, source)?);
         self.0.continue_()
     }
