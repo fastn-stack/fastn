@@ -51,6 +51,8 @@ lang: sh
   page.
 - Use the reference to `fpm.exe` in your terminal to invoke ftd.
 
+  [Read more](setup/fpm-binary-installation)
+
 
 -- ft.h1: `Cargo install` the latest version
 
