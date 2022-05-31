@@ -9,6 +9,8 @@ language: en
 -- fpm.dependency: fifthtry.github.io/fifthtry-brand-switcher as fbs
 
 -- fpm.dependency: fifthtry.github.io/dark-mode-switcher as dms
+-- fpm.dependency: arjaupashak.com
+-- fpm.dependency: fpm.dev
 
 -- fpm.auto-import: ft
 -- fpm.auto-import: fpm
@@ -104,6 +106,17 @@ language: en
 
 
 
+
+# Course: /c1/
+
+- Chapter 1: FPM Intro
+  url: -/arjaupashak.com/c1/intro/
+  - Installation Instruction: -/fpm.dev/how-to/install/
+- Chapter 2: P1 Grammar
+  url: -/arjaupashak.com/c1/p1/
+  - P1 Grammar Docs: /p1-grammar/-/c1/
+- Chapter 3: Adding dependencies
+  url: -/arjaupashak.com/c1/deps/
 
 
 
