@@ -400,18 +400,19 @@ impl InterpreterState {
     fn process_imports(mut self) -> ftd::p1::Result<(Self, Option<String>)> {
         let last = self.document_stack.len() - 1;
         let top: &mut ParsedDocument = &mut self.document_stack[last];
-        let p1 = &top.sections;
 
         let mut iteration_index = top.start_from;
-        while iteration_index < p1.len() && p1[iteration_index].name == "import" {
-            if p1[iteration_index].is_commented {
+        while iteration_index < top.sections.len() {
+            if top.sections[iteration_index].is_commented
+                || top.sections[iteration_index].name != "import"
+            {
                 iteration_index += 1;
                 continue;
             }
             let (library_name, alias) = ftd::p2::utils::parse_import(
-                &p1[iteration_index].caption,
+                &top.sections[iteration_index].caption,
                 top.name.as_str(),
-                p1[iteration_index].line_number,
+                top.sections[iteration_index].line_number,
             )?;
 
             top.doc_aliases.insert(alias, library_name.clone());
@@ -421,8 +422,7 @@ impl InterpreterState {
                 continue;
             }
 
-            let last = self.document_stack.len() - 1;
-            self.document_stack[last].update_start_from(iteration_index);
+            top.sections.remove(iteration_index);
             return Ok((self, Some(library_name)));
         }
 
@@ -431,6 +431,13 @@ impl InterpreterState {
 
     pub fn continue_after_import(mut self, id: &str, source: &str) -> ftd::p1::Result<Interpreter> {
         self.document_stack.push(ParsedDocument::parse(id, source)?);
+        self.continue_()
+        // interpret then
+        // handle top / start_from
+    }
+
+    pub fn continue_after_pop(mut self) -> ftd::p1::Result<Interpreter> {
+        self.document_stack.pop();
         self.continue_()
         // interpret then
         // handle top / start_from
@@ -502,11 +509,15 @@ pub fn interpret_helper(
         match s {
             Interpreter::Done {
                 instructions: i,
-                state: s,
+                state: st,
             } => {
-                instructions = i;
-                state = s;
-                break;
+                if st.document_stack.len() > 1 {
+                    s = st.continue_after_pop()?;
+                } else {
+                    instructions = i;
+                    state = st;
+                    break;
+                }
             }
             Interpreter::StuckOnImport { module, state: st } => {
                 let mut bt: std::collections::BTreeMap<String, ftd::p2::Thing> =
@@ -570,7 +581,7 @@ mod test {
             }),
         );
 
-        p2!(
+        p!(
             "
             -- ftd.text foo:
             text: hello
