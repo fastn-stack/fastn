@@ -1,8 +1,7 @@
-#[derive(Default)]
+#[derive(Debug, Default)]
 pub struct InterpreterState {
     pub(crate) bag: std::collections::BTreeMap<String, ftd::p2::Thing>,
     pub(crate) document_stack: Vec<ParsedDocument>,
-    pub(crate) parsed_libs: Vec<String>,
 }
 
 impl InterpreterState {
@@ -31,7 +30,9 @@ impl InterpreterState {
             panic!()
         }
 
-        if (&self.document_stack[self.document_stack.len() - 1]).processing_imports {
+        let l = self.document_stack.len() - 1; // Get the top of the stack
+
+        if self.document_stack[l].processing_imports {
             let (state, module) = self.process_imports()?;
             if let Some(module) = module {
                 return Ok(Interpreter::StuckOnImport { state, module });
@@ -39,52 +40,28 @@ impl InterpreterState {
             self = state;
         }
 
-        let l = self.document_stack.len() - 1; // Get the top of the stack
         self.document_stack[l].done_processing_imports();
+        self.document_stack[l].reorder(&self.bag)?;
+        self.process_p1()
+    }
 
-        let (new_p1, var_types) = ftd::p2::utils::reorder(
-            &self.document_stack[l].sections,
-            &ftd::p2::TDoc {
-                name: &self.document_stack[l].name,
-                aliases: &self.document_stack[l].doc_aliases,
-                bag: &self.bag,
-                local_variables: &mut Default::default(),
-            },
-        )?;
+    fn process_p1(mut self) -> ftd::p1::Result<Interpreter> {
+        let l = self.document_stack.len() - 1;
 
         let mut instructions: Vec<ftd::Instruction> = Default::default();
+        let parsed_document = &mut self.document_stack[l];
 
-        for p1 in new_p1.iter() {
+        while let Some(p1) = parsed_document.sections.pop() {
             if p1.is_commented {
                 continue;
             }
-
-            // if p1.name == "import" {
-            //     let (library_name, alias) =
-            //         ftd::p2::utils::parse_import(&p1.caption, name, p1.line_number)?;
-            //     aliases.insert(alias, library_name.clone());
-            //     let start = std::time::Instant::now();
-            //     let doc = ftd::p2::TDoc {
-            //         name,
-            //         aliases: &aliases,
-            //         bag: &self.bag,
-            //         local_variables: &mut Default::default(),
-            //     };
-            //     let s = self.lib.get_with_result(library_name.as_str(), &doc)?;
-            //     *d_get = d_get.saturating_add(std::time::Instant::now() - start);
-            //     if !self.library_in_the_bag(library_name.as_str()) {
-            //         self.interpret_(library_name.as_str(), s.as_str(), false, d_get, d_processor)?;
-            //         self.add_library_to_bag(library_name.as_str())
-            //     }
-            //     continue;
-            // }
 
             // while this is a specific to entire document, we are still creating it in a loop
             // because otherwise the self.interpret() call won't compile.
 
             let doc = ftd::p2::TDoc {
-                name: &self.document_stack[l].name,
-                aliases: &self.document_stack[l].doc_aliases,
+                name: &parsed_document.name,
+                aliases: &parsed_document.doc_aliases,
                 bag: &self.bag,
                 local_variables: &mut Default::default(),
             };
@@ -93,7 +70,7 @@ impl InterpreterState {
                 &p1.name,
                 &doc,
                 p1.line_number,
-                &var_types,
+                &parsed_document.var_types,
             );
 
             let mut thing = vec![];
@@ -113,7 +90,7 @@ impl InterpreterState {
                 thing.push((name, ftd::p2::Thing::Record(d)));
             } else if p1.name.starts_with("or-type ") {
                 // declare a record
-                let d = ftd::OrType::from_p1(p1, &doc)?;
+                let d = ftd::OrType::from_p1(&p1, &doc)?;
                 let name = doc.resolve_name(p1.line_number, &d.name.to_string())?;
                 if self.bag.contains_key(name.as_str()) {
                     return ftd::e2(
@@ -124,7 +101,7 @@ impl InterpreterState {
                 }
                 thing.push((name, ftd::p2::Thing::OrType(d)));
             } else if p1.name.starts_with("map ") {
-                let d = ftd::Variable::map_from_p1(p1, &doc)?;
+                let d = ftd::Variable::map_from_p1(&p1, &doc)?;
                 let name = doc.resolve_name(p1.line_number, &d.name.to_string())?;
                 if self.bag.contains_key(name.as_str()) {
                     return ftd::e2(
@@ -152,7 +129,7 @@ impl InterpreterState {
             }) = var_data
             {
                 // declare a function
-                let d = ftd::Component::from_p1(p1, &doc)?;
+                let d = ftd::Component::from_p1(&p1, &doc)?;
                 let name = doc.resolve_name(p1.line_number, &d.full_name.to_string())?;
                 if self.bag.contains_key(name.as_str()) {
                     return ftd::e2(
@@ -169,30 +146,17 @@ impl InterpreterState {
                     .str(doc.name, p1.line_number, "$processor$")
                     .is_ok()
                 {
-                    let name = doc.resolve_name(p1.line_number, &var_data.name)?;
-                    let start = std::time::Instant::now();
-
-                    // let value = self.lib.process(p1, &doc)?;
-                    // *d_processor = d_processor.saturating_add(std::time::Instant::now() - start);
-
-                    ftd::Variable {
-                        name,
-                        value: ftd::PropertyValue::Value {
-                            value: ftd::Value::Integer { value: 0 }, /*value*/
-                        },
-                        conditions: vec![],
-                        flags: ftd::variable::VariableFlags::from_p1(
-                            &p1.header,
-                            doc.name,
-                            p1.line_number,
-                        )?,
-                    }
+                    // processor case: 1
+                    return Ok(Interpreter::StuckOnProcessor {
+                        state: self,
+                        section: p1,
+                    });
                 } else if var_data.is_none() || var_data.is_optional() {
                     // declare and instantiate a variable
-                    ftd::Variable::from_p1(p1, &doc)?
+                    ftd::Variable::from_p1(&p1, &doc)?
                 } else {
                     // declare and instantiate a list
-                    ftd::Variable::list_from_p1(p1, &doc)?
+                    ftd::Variable::list_from_p1(&p1, &doc)?
                 };
                 let name = doc.resolve_name(p1.line_number, &d.name.to_string())?;
                 if self.bag.contains_key(name.as_str()) {
@@ -231,7 +195,7 @@ impl InterpreterState {
                     );
                 }
                 if let Some(expr) = p1.header.str_optional(doc.name, p1.line_number, "if")? {
-                    let val = v.get_value(p1, &doc)?;
+                    let val = v.get_value(&p1, &doc)?;
                     v.conditions.push((
                         ftd::p2::Boolean::from_expression(
                             expr,
@@ -247,12 +211,17 @@ impl InterpreterState {
                     .str_optional(doc.name, p1.line_number, "$processor$")?
                     .is_some()
                 {
+                    // processor case: 2
+                    return Ok(Interpreter::StuckOnProcessor {
+                        state: self,
+                        section: p1.to_owned(),
+                    });
                     // let start = std::time::Instant::now();
                     // let value = self.lib.process(p1, &doc)?;
                     // *d_processor = d_processor.saturating_add(std::time::Instant::now() - start);
                     // v.value = ftd::PropertyValue::Value { value };
                 } else {
-                    v.update_from_p1(p1, &doc)?;
+                    v.update_from_p1(&p1, &doc)?;
                 }
                 thing.push((
                     doc.resolve_name(p1.line_number, doc_name.as_str())?,
@@ -269,18 +238,17 @@ impl InterpreterState {
                         );
                     }
                     ftd::p2::Thing::Component(_) => {
-                        let p1 = {
-                            let mut p1 = p1.clone();
-                            if p1
-                                .header
-                                .str_optional(doc.name, p1.line_number, "$processor$")?
-                                .is_some()
-                            {
-                                // let value = self.lib.process(&p1, &doc)?;
-                                // Self::p1_from_processor(&mut p1, value);
-                            }
-                            p1
-                        };
+                        if p1
+                            .header
+                            .str_optional(doc.name, p1.line_number, "$processor$")?
+                            .is_some()
+                        {
+                            // processor case: 3
+                            return Ok(Interpreter::StuckOnProcessor {
+                                state: self,
+                                section: p1.to_owned(),
+                            });
+                        }
                         if let Ok(loop_data) = p1.header.str(doc.name, p1.line_number, "$loop$") {
                             let section_to_subsection = ftd::p1::SubSection {
                                 name: p1.name.to_string(),
@@ -357,7 +325,7 @@ impl InterpreterState {
                         }
                     }
                     ftd::p2::Thing::Record(mut r) => {
-                        r.add_instance(p1, &doc)?;
+                        r.add_instance(&p1, &doc)?;
                         thing.push((
                             doc.resolve_name(p1.line_number, &p1.name.to_string())?,
                             ftd::p2::Thing::Record(r),
@@ -384,24 +352,17 @@ impl InterpreterState {
             self.bag.extend(thing);
         }
 
-        // if is_main {
-        //     self.p1 = p1;
-        //     self.aliases = aliases;
-        // }
-
         Ok(Interpreter::Done {
             state: self,
             instructions,
         })
-
-        // todo!()
     }
 
     fn process_imports(mut self) -> ftd::p1::Result<(Self, Option<String>)> {
         let last = self.document_stack.len() - 1;
         let top: &mut ParsedDocument = &mut self.document_stack[last];
 
-        let mut iteration_index = top.start_from;
+        let mut iteration_index = 0;
         while iteration_index < top.sections.len() {
             if top.sections[iteration_index].is_commented
                 || top.sections[iteration_index].name != "import"
@@ -442,15 +403,110 @@ impl InterpreterState {
         // interpret then
         // handle top / start_from
     }
+
+    pub fn continue_after_processor(
+        mut self,
+        p1: &ftd::p1::Section,
+        lib: &dyn ftd::p2::Library,
+    ) -> ftd::p1::Result<Interpreter> {
+        let l = self.document_stack.len() - 1;
+        let parsed_document = &mut self.document_stack[l];
+        let doc = ftd::p2::TDoc {
+            name: &parsed_document.name,
+            aliases: &parsed_document.doc_aliases,
+            bag: &self.bag,
+            local_variables: &mut Default::default(),
+        };
+        let value = lib.process(p1, &doc)?;
+
+        let var_data = ftd::variable::VariableData::get_name_kind(
+            &p1.name,
+            &doc,
+            p1.line_number,
+            &parsed_document.var_types,
+        );
+
+        if let Ok(ftd::variable::VariableData {
+            type_: ftd::variable::Type::Variable,
+            name,
+            ..
+        }) = var_data
+        {
+            let name = doc.resolve_name(p1.line_number, &name)?;
+            let variable = ftd::p2::Thing::Variable(ftd::Variable {
+                name: name.clone(),
+                value: ftd::PropertyValue::Value { value },
+                conditions: vec![],
+                flags: ftd::variable::VariableFlags::from_p1(&p1.header, doc.name, p1.line_number)?,
+            });
+            self.bag.insert(name, variable);
+            return self.process_p1();
+        }
+
+        match doc.get_thing(p1.line_number, p1.name.as_str())? {
+            ftd::p2::Thing::Variable(mut v) => {
+                // for case: 2
+                let doc_name = ftd::p2::utils::get_doc_name_and_remaining(
+                    doc.resolve_name(p1.line_number, p1.name.as_str())?.as_str(),
+                )?
+                .0;
+                v.value = ftd::PropertyValue::Value { value };
+                let key = doc.resolve_name(p1.line_number, doc_name.as_str())?;
+                let variable =
+                    ftd::p2::Thing::Variable(doc.set_value(p1.line_number, p1.name.as_str(), v)?);
+                self.bag.insert(key, variable);
+            }
+            ftd::p2::Thing::Component(_) => {
+                // for case: 3
+                let mut p1 = p1.clone();
+                Self::p1_from_processor(&mut p1, value);
+                parsed_document.sections.push(p1.to_owned());
+            }
+            _ => todo!(), // throw error
+        }
+        self.process_p1()
+        // interpret then
+        // handle top / start_from
+    }
+
+    pub(crate) fn p1_from_processor(p1: &mut ftd::p1::Section, value: ftd::Value) {
+        for (idx, (_, k, _)) in p1.header.0.iter().enumerate() {
+            if k.eq("$processor$") {
+                p1.header.0.remove(idx);
+                break;
+            }
+        }
+        if let ftd::Value::Object { values } = value {
+            for (k, v) in values {
+                let v = if let ftd::PropertyValue::Value { value } = v {
+                    if let Some(v) = value.to_string() {
+                        v
+                    } else {
+                        continue;
+                    }
+                } else {
+                    continue;
+                };
+
+                if k.eq("$body$") {
+                    p1.body = Some((p1.line_number, v));
+                } else if k.eq("$caption$") {
+                    p1.caption = Some(v);
+                } else {
+                    p1.header.0.push((p1.line_number, k, v));
+                }
+            }
+        }
+    }
 }
 
-#[derive(Clone)]
+#[derive(Debug, Clone)]
 pub struct ParsedDocument {
     name: String,
     sections: Vec<ftd::p1::Section>,
-    start_from: usize,
     processing_imports: bool,
     doc_aliases: std::collections::BTreeMap<String, String>,
+    var_types: Vec<String>,
 }
 
 impl ParsedDocument {
@@ -458,9 +514,9 @@ impl ParsedDocument {
         Ok(ParsedDocument {
             name: id.to_string(),
             sections: ftd::p1::parse(source, id)?,
-            start_from: 0,
             processing_imports: true,
             doc_aliases: ftd::p2::interpreter::default_aliases(),
+            var_types: Default::default(),
         })
     }
 
@@ -468,11 +524,27 @@ impl ParsedDocument {
         self.processing_imports = false;
     }
 
-    fn update_start_from(&mut self, start_from: usize) {
-        self.start_from = start_from;
+    fn reorder(
+        &mut self,
+        bag: &std::collections::BTreeMap<String, ftd::p2::Thing>,
+    ) -> ftd::p1::Result<()> {
+        let (mut new_p1, var_types) = ftd::p2::utils::reorder(
+            &self.sections,
+            &ftd::p2::TDoc {
+                name: &self.name,
+                aliases: &self.doc_aliases,
+                bag,
+                local_variables: &mut Default::default(),
+            },
+        )?;
+        new_p1.reverse();
+        self.sections = new_p1;
+        self.var_types = var_types;
+        Ok(())
     }
 }
 
+#[derive(Debug)]
 pub enum Interpreter {
     StuckOnImport {
         module: String,
@@ -503,8 +575,8 @@ pub fn interpret_helper(
     ftd::Column,
 )> {
     let mut s = interpret(name, source)?;
-    let mut instructions: Vec<ftd::Instruction> = vec![];
-    let mut state = InterpreterState::default();
+    let instructions: Vec<ftd::Instruction>;
+    let state;
     loop {
         match s {
             Interpreter::Done {
@@ -519,13 +591,15 @@ pub fn interpret_helper(
                     break;
                 }
             }
+            Interpreter::StuckOnProcessor { state, section } => {
+                s = state.continue_after_processor(&section, lib)?;
+            }
             Interpreter::StuckOnImport { module, state: st } => {
                 let mut bt: std::collections::BTreeMap<String, ftd::p2::Thing> =
                     std::collections::BTreeMap::new();
                 let source = lib.get_with_result(module.as_str(), &st.tdoc(&mut bt))?;
                 s = st.continue_after_import(module.as_str(), source.as_str())?;
             }
-            _ => todo!(),
         }
     }
 
@@ -542,7 +616,6 @@ pub fn interpret_helper(
 #[cfg(test)]
 mod test {
     use ftd::test::*;
-    use ftd::{markdown_line, Instruction};
 
     #[test]
     fn basic_1() {
