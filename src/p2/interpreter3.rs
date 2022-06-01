@@ -25,8 +25,8 @@ Points to consider
  3. We will push items into global stack after when we will start interpreting it
  4. Now question is who will pop the items from stack and when do we start interpreting ancestor
  file again.
- 5. Before returning at Stuck* interpreter need to store at it's state and need to make sure it
- will start again from where it got stopped last.
+ 5. Before returning at Stuck* interpreter need to store at it's current state and need to make
+ sure it will start again from where it stopped.
 
 
 Method Signature
@@ -41,7 +41,8 @@ InterpreterState:-
         stuckOnImport
             - save state of file into stack
             - return with current state
-        pop element from stack(ancestor files)(No need for a loop)
+        pop element last document from stack(ancestor files) and continue interpreting (No need
+        for a loop)
             - recursive call to continue_
 
     continue_after_import(source of file)
