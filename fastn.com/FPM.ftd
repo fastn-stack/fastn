@@ -16,6 +16,7 @@ language: en
 -- fpm.auto-import: fpm
 -- fpm.auto-import: ftd.dev/FPM/config
 -- fpm.auto-import: dms
+-- fpm.auto-import: ft as ds
 
 
 -- fpm.sitemap:
