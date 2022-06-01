@@ -6,6 +6,13 @@ pub struct InterpreterState {
 }
 
 impl InterpreterState {
+    fn new() -> InterpreterState {
+        InterpreterState {
+            bag: ftd::p2::interpreter::default_bag(),
+            ..Default::default()
+        }
+    }
+
     fn tdoc<'a>(
         &'a self,
         local_variables: &'a mut std::collections::BTreeMap<String, ftd::p2::Thing>,
@@ -446,7 +453,7 @@ impl ParsedDocument {
             sections: ftd::p1::parse(source, id)?,
             start_from: 0,
             processing_imports: true,
-            doc_aliases: std::collections::BTreeMap::default(),
+            doc_aliases: ftd::p2::interpreter::default_aliases(),
         })
     }
 
@@ -475,7 +482,7 @@ pub enum Interpreter {
 }
 
 pub fn interpret(id: &str, source: &str) -> ftd::p1::Result<Interpreter> {
-    let mut s = InterpreterState::default();
+    let mut s = InterpreterState::new();
     s.document_stack.push(ParsedDocument::parse(id, source)?);
     s.continue_()
 }
