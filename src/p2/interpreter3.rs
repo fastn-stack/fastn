@@ -41,8 +41,8 @@ InterpreterState:-
         stuckOnImport
             - save state of file into stack
             - return with current state
-        pop element last document from stack(ancestor files) and continue interpreting (No need
-        for a loop)
+        pop element last document from stack(ancestor files) and continue interpreting (loop not
+        required)
             - recursive call to continue_
 
     continue_after_import(source of file)
