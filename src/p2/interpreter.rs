@@ -12266,6 +12266,7 @@ mod test {
     }
 
     #[test]
+    #[ignore]
     fn region_h1() {
         let mut main = super::default_column();
 
@@ -16027,7 +16028,7 @@ mod test {
                                 }),
                                 ..Default::default()
                             },
-                            line_clamp: Some(30),
+                            line_clamp: Some(10),
                             ..Default::default()
                         }),
                         ftd::Element::Column(ftd::Column {
