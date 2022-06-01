@@ -9,31 +9,6 @@ macro_rules! p {
     };
     ($s:expr, $t: expr) => {
         let (ebag, ecol): (std::collections::BTreeMap<String, ftd::p2::Thing>, _) = $t;
-        let (mut bag, col) =
-            ftd::p2::interpreter::interpret("foo/bar", indoc::indoc!($s), &ftd::p2::TestLibrary {})
-                .expect("found error");
-        for v in bag.values_mut() {
-            if let ftd::p2::Thing::Component(c) = v {
-                c.invocations.clear();
-                c.line_number = 0;
-                for instruction in &mut c.instructions {
-                    instruction.without_line_number()
-                }
-            }
-        }
-        if !ebag.is_empty() {
-            pretty_assertions::assert_eq!(bag, ebag);
-        }
-        pretty_assertions::assert_eq!(col, ecol);
-    };
-}
-
-macro_rules! p2 {
-    ($s:expr, $t: expr,) => {
-        p2!($s, $t)
-    };
-    ($s:expr, $t: expr) => {
-        let (ebag, ecol): (std::collections::BTreeMap<String, ftd::p2::Thing>, _) = $t;
         let (mut bag, col) = ftd::p2::interpreter2::interpret_helper(
             "foo/bar",
             indoc::indoc!($s),
