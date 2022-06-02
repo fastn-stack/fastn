@@ -71,7 +71,8 @@ fn write(id: &str, doc: String) {
     let start = std::time::Instant::now();
     print!("Processing: {} ... ", id);
     let lib = ftd::ExampleLibrary {};
-    let b = match ftd::p2::Document::from(id, &*doc, &lib) {
+
+    let b = match interpret_helper(id, &*doc, &lib) {
         Ok(v) => v,
         Err(e) => {
             eprintln!("failed to parse {}: {:?}", id, &e);
@@ -117,4 +118,31 @@ fn write(id: &str, doc: String) {
     .expect("failed to write to .html file");
     let duration = start.elapsed();
     println!("Done {:?}", duration);
+}
+
+pub fn interpret_helper(
+    name: &str,
+    source: &str,
+    lib: &dyn ftd::p2::Library,
+) -> ftd::p1::Result<ftd::p2::Document> {
+    let mut s = ftd::interpret(name, source)?;
+    let document;
+    loop {
+        match s {
+            ftd::Interpreter::Done { document: doc } => {
+                document = doc;
+                break;
+            }
+            ftd::Interpreter::StuckOnProcessor { state, section } => {
+                s = state.continue_after_processor(&section, lib)?;
+            }
+            ftd::Interpreter::StuckOnImport { module, state: st } => {
+                let mut bt: std::collections::BTreeMap<String, ftd::p2::Thing> =
+                    std::collections::BTreeMap::new();
+                let source = lib.get_with_result(module.as_str(), &st.tdoc(&mut bt))?;
+                s = st.continue_after_import(module.as_str(), source.as_str())?;
+            }
+        }
+    }
+    Ok(document)
 }

@@ -7,18 +7,13 @@ pub fn interpret_helper(
     name: &str,
     source: &str,
     lib: &dyn ftd::p2::Library,
-) -> ftd::p1::Result<ftd::RT> {
+) -> ftd::p1::Result<ftd::p2::Document> {
     let mut s = ftd::p2::interpreter::interpret(name, source)?;
-    let instructions: Vec<ftd::Instruction>;
-    let state;
+    let document;
     loop {
         match s {
-            ftd::p2::interpreter::Interpreter::Done {
-                instructions: i,
-                state: st,
-            } => {
-                instructions = i;
-                state = st;
+            ftd::p2::interpreter::Interpreter::Done { document: doc } => {
+                document = doc;
                 break;
             }
             ftd::p2::interpreter::Interpreter::StuckOnProcessor { state, section } => {
@@ -32,13 +27,7 @@ pub fn interpret_helper(
             }
         }
     }
-
-    Ok(ftd::RT::from(
-        name,
-        state.document_stack[0].get_doc_aliases(),
-        state.bag,
-        instructions,
-    ))
+    Ok(document)
 }
 
 pub fn interpret(
@@ -49,9 +38,8 @@ pub fn interpret(
     std::collections::BTreeMap<String, ftd::p2::Thing>,
     ftd::Column,
 )> {
-    let mut rt = ftd::test::interpret_helper(name, source, lib)?;
-    let main = rt.render_()?;
-    Ok((rt.bag, main))
+    let doc = ftd::test::interpret_helper(name, source, lib)?;
+    Ok((doc.data, doc.main))
 }
 
 macro_rules! p {

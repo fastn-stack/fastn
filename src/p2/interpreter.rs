@@ -1,13 +1,15 @@
 #[derive(Debug, Default)]
 pub struct InterpreterState {
+    pub id: String,
     pub(crate) bag: std::collections::BTreeMap<String, ftd::p2::Thing>,
     pub(crate) document_stack: Vec<ParsedDocument>,
     pub(crate) parsed_libs: Vec<String>,
 }
 
 impl InterpreterState {
-    fn new() -> InterpreterState {
+    fn new(id: String) -> InterpreterState {
         InterpreterState {
+            id,
             bag: ftd::p2::interpreter::default_bag(),
             ..Default::default()
         }
@@ -366,10 +368,27 @@ impl InterpreterState {
             return self.continue_after_pop();
         }
 
-        Ok(Interpreter::Done {
-            state: self,
+        let mut rt = ftd::RT::from(
+            &self.id,
+            self.document_stack[0].get_doc_aliases(),
+            self.bag,
             instructions,
-        })
+        );
+
+        let mut d = ftd::p2::document::Document {
+            main: rt.render()?,
+            name: rt.name,
+            data: rt.bag.clone(),
+            aliases: rt.aliases,
+            instructions: rt.instructions,
+        };
+
+        d.data.extend(rt.bag);
+
+        // d.main = rt.render()?;
+        // d.data.extend(rt.bag);
+
+        Ok(Interpreter::Done { document: d })
     }
 
     fn process_imports(
@@ -573,13 +592,12 @@ pub enum Interpreter {
         section: ftd::p1::Section,
     },
     Done {
-        state: InterpreterState,
-        instructions: Vec<ftd::Instruction>,
+        document: ftd::p2::Document,
     },
 }
 
 pub fn interpret(id: &str, source: &str) -> ftd::p1::Result<Interpreter> {
-    let mut s = InterpreterState::new();
+    let mut s = InterpreterState::new(id.to_string());
     s.document_stack.push(ParsedDocument::parse(id, source)?);
     s.continue_()
 }

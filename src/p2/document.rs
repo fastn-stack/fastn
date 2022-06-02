@@ -411,37 +411,6 @@ impl Document {
         })
     }
 
-    pub fn without_render(
-        name: &str,
-        source: &str,
-        lib: &dyn ftd::p2::Library,
-    ) -> ftd::p1::Result<Document> {
-        let rt = ftd::test::interpret_helper(name, source, lib)?;
-
-        Ok(Document {
-            main: Default::default(),
-            data: rt.bag,
-            instructions: rt.instructions,
-            aliases: rt.aliases,
-            name: name.to_string(),
-        })
-    }
-
-    pub fn from(name: &str, source: &str, lib: &dyn ftd::p2::Library) -> ftd::p1::Result<Document> {
-        let mut d = Self::without_render(name, source, lib)?;
-
-        let mut rt = ftd::RT::from(
-            d.name.as_str(),
-            d.aliases.clone(),
-            d.data.clone(),
-            d.instructions.clone(),
-        );
-
-        d.main = rt.render()?;
-        d.data.extend(rt.bag);
-        Ok(d)
-    }
-
     pub fn get_heading<F>(children: &[ftd::Element], f: &F) -> Option<ftd::Rendered>
     where
         F: Fn(&ftd::Region) -> bool,
@@ -810,7 +779,7 @@ mod test {
 
     #[test]
     fn variable_from_other_doc() {
-        let bag = super::Document::from(
+        let bag = ftd::test::interpret_helper(
             "foo/bar",
             indoc::indoc!(
                 "
@@ -846,7 +815,7 @@ mod test {
             reader: Vec<Someone>,
         }
 
-        let bag = super::Document::from(
+        let bag = ftd::test::interpret_helper(
             "foo/bar",
             indoc::indoc!(
                 "
@@ -941,7 +910,7 @@ mod test {
             title: String,
         }
 
-        let bag = super::Document::from(
+        let bag = ftd::test::interpret_helper(
             "foo/bar",
             indoc::indoc!(
                 "
