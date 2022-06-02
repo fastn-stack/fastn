@@ -24,7 +24,10 @@ mod youtube_id;
 pub use component::{ChildComponent, Component, Instruction};
 pub use condition::Condition;
 pub use event::{Action, Event};
-pub use ftd::value_with_default::ValueWithDefault;
+pub use ftd::{
+    ftd::p2::interpreter::{interpret, Interpreter, InterpreterState},
+    value_with_default::ValueWithDefault,
+};
 pub use html::{anchor, color, length, overflow, Collector, Node, StyleSpec};
 pub use or_type::OrType;
 pub use rt::RT;
