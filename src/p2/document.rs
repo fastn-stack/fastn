@@ -825,6 +825,8 @@ mod test {
         )
         .unwrap();
 
+        println!("Bag {:?}", bag.get::<String>("fifthtry/ft#toc"));
+
         pretty_assertions::assert_eq!(
             bag.get::<String>("fifthtry/ft#toc").unwrap(),
             "foo is the toc"

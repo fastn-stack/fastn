@@ -41,14 +41,18 @@ padding-bottom: 20
             id.replace(".ftd", ".html"),
         );
     } else if dir.is_dir() {
-        for entry in std::fs::read_dir(dir).expect("./examples is not a directory") {
+        for entry in
+            std::fs::read_dir(dir).expect(&format!("{:?} is not a directory", dir.to_str()))
+        {
             let path = entry.expect("no files inside ./examples").path();
             let source = path
                 .to_str()
                 .unwrap_or_else(|| panic!("Path {:?} cannot be convert to string", path));
             let split: Vec<_> = source.split('/').collect();
             let id = split.last().expect("Filename should be present");
-            if id.contains(".ftd") {
+
+            if id.contains(".ftd") && id.eq(&"comic.ftd") {
+                println!("document id: {}", id);
                 let doc = std::fs::read_to_string(source).expect("cant read file");
                 write(id, doc);
                 write_doc = format!(
