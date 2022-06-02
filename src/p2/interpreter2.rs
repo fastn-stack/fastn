@@ -38,19 +38,12 @@ impl InterpreterState {
                 return Ok(Interpreter::StuckOnImport { state, module });
             }
             self = state;
+            self.document_stack[l].done_processing_imports();
+            self.document_stack[l].reorder(&self.bag)?;
         }
-
-        self.document_stack[l].done_processing_imports();
-        self.document_stack[l].reorder(&self.bag)?;
-        self.process_p1()
-    }
-
-    fn process_p1(mut self) -> ftd::p1::Result<Interpreter> {
-        let l = self.document_stack.len() - 1;
-
-        let mut instructions: Vec<ftd::Instruction> = Default::default();
         let parsed_document = &mut self.document_stack[l];
 
+        let mut instructions: Vec<ftd::Instruction> = Default::default();
         while let Some(p1) = parsed_document.sections.pop() {
             if p1.is_commented {
                 continue;
@@ -440,7 +433,7 @@ impl InterpreterState {
                 flags: ftd::variable::VariableFlags::from_p1(&p1.header, doc.name, p1.line_number)?,
             });
             self.bag.insert(name, variable);
-            return self.process_p1();
+            return self.continue_();
         }
 
         match doc.get_thing(p1.line_number, p1.name.as_str())? {
@@ -464,7 +457,7 @@ impl InterpreterState {
             }
             _ => todo!(), // throw error
         }
-        self.process_p1()
+        self.continue_()
         // interpret then
         // handle top / start_from
     }
