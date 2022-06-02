@@ -3,6 +3,19 @@ fn get_name() {
     assert_eq!(ftd::get_name("fn", "fn foo", "test").unwrap(), "foo")
 }
 
+pub fn interpret(
+    name: &str,
+    source: &str,
+    lib: &dyn ftd::p2::Library,
+) -> ftd::p1::Result<(
+    std::collections::BTreeMap<String, ftd::p2::Thing>,
+    ftd::Column,
+)> {
+    let mut rt = ftd::p2::interpreter::interpret_helper(name, source, lib)?;
+    let main = rt.render_()?;
+    Ok((rt.bag, main))
+}
+
 macro_rules! p {
     ($s:expr, $t: expr,) => {
         p!($s, $t)
@@ -10,7 +23,7 @@ macro_rules! p {
     ($s:expr, $t: expr) => {
         let (ebag, ecol): (std::collections::BTreeMap<String, ftd::p2::Thing>, _) = $t;
         let (mut bag, col) =
-            ftd::p2::interpreter::interpret("foo/bar", indoc::indoc!($s), &ftd::p2::TestLibrary {})
+            ftd::test::interpret("foo/bar", indoc::indoc!($s), &ftd::p2::TestLibrary {})
                 .expect("found error");
         for v in bag.values_mut() {
             if let ftd::p2::Thing::Component(c) = v {

@@ -416,7 +416,7 @@ impl Document {
         source: &str,
         lib: &dyn ftd::p2::Library,
     ) -> ftd::p1::Result<Document> {
-        let rt = ftd::p2::interpreter2::interpret_helper(name, source, lib)?;
+        let rt = ftd::p2::interpreter::interpret_helper(name, source, lib)?;
 
         Ok(Document {
             main: Default::default(),
@@ -824,8 +824,6 @@ mod test {
             &ftd::p2::TestLibrary {},
         )
         .unwrap();
-
-        println!("Bag {:?}", bag.get::<String>("fifthtry/ft#toc"));
 
         pretty_assertions::assert_eq!(
             bag.get::<String>("fifthtry/ft#toc").unwrap(),

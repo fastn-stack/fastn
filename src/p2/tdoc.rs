@@ -1354,9 +1354,8 @@ mod test {
         )
         .to_string();
 
-        let (g_bag, _g_col) =
-            ftd::p2::interpreter::interpret("foo/bar", &source, &ftd::p2::TestLibrary {})
-                .expect("found error");
+        let (g_bag, _g_col) = ftd::test::interpret("foo/bar", &source, &ftd::p2::TestLibrary {})
+            .expect("found error");
         let data: Vec<Vec<serde_json::Value>> = vec![
             vec![
                 serde_json::json!("Amitu"),
