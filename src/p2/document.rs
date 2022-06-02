@@ -416,7 +416,7 @@ impl Document {
         source: &str,
         lib: &dyn ftd::p2::Library,
     ) -> ftd::p1::Result<Document> {
-        let rt = ftd::p2::interpreter::interpret_helper(name, source, lib)?;
+        let rt = ftd::test::interpret_helper(name, source, lib)?;
 
         Ok(Document {
             main: Default::default(),

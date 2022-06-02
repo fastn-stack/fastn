@@ -3,6 +3,44 @@ fn get_name() {
     assert_eq!(ftd::get_name("fn", "fn foo", "test").unwrap(), "foo")
 }
 
+pub fn interpret_helper(
+    name: &str,
+    source: &str,
+    lib: &dyn ftd::p2::Library,
+) -> ftd::p1::Result<ftd::RT> {
+    let mut s = ftd::p2::interpreter::interpret(name, source)?;
+    let instructions: Vec<ftd::Instruction>;
+    let state;
+    loop {
+        match s {
+            ftd::p2::interpreter::Interpreter::Done {
+                instructions: i,
+                state: st,
+            } => {
+                instructions = i;
+                state = st;
+                break;
+            }
+            ftd::p2::interpreter::Interpreter::StuckOnProcessor { state, section } => {
+                s = state.continue_after_processor(&section, lib)?;
+            }
+            ftd::p2::interpreter::Interpreter::StuckOnImport { module, state: st } => {
+                let mut bt: std::collections::BTreeMap<String, ftd::p2::Thing> =
+                    std::collections::BTreeMap::new();
+                let source = lib.get_with_result(module.as_str(), &st.tdoc(&mut bt))?;
+                s = st.continue_after_import(module.as_str(), source.as_str())?;
+            }
+        }
+    }
+
+    Ok(ftd::RT::from(
+        name,
+        state.document_stack[0].get_doc_aliases(),
+        state.bag,
+        instructions,
+    ))
+}
+
 pub fn interpret(
     name: &str,
     source: &str,
@@ -11,7 +49,7 @@ pub fn interpret(
     std::collections::BTreeMap<String, ftd::p2::Thing>,
     ftd::Column,
 )> {
-    let mut rt = ftd::p2::interpreter::interpret_helper(name, source, lib)?;
+    let mut rt = ftd::test::interpret_helper(name, source, lib)?;
     let main = rt.render_()?;
     Ok((rt.bag, main))
 }
