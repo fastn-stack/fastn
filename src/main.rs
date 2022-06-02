@@ -51,8 +51,7 @@ padding-bottom: 20
             let split: Vec<_> = source.split('/').collect();
             let id = split.last().expect("Filename should be present");
 
-            if id.contains(".ftd") && id.eq(&"comic.ftd") {
-                println!("document id: {}", id);
+            if id.contains(".ftd") {
                 let doc = std::fs::read_to_string(source).expect("cant read file");
                 write(id, doc);
                 write_doc = format!(

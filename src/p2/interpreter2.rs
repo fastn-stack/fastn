@@ -44,14 +44,17 @@ impl InterpreterState {
         let l = self.document_stack.len() - 1; // Get the top of the stack
 
         if self.document_stack[l].processing_imports {
-            let (mut state, module) = self.process_imports()?;
+            let mut top = &mut self.document_stack[l];
+            let module = Self::process_imports(top, &self.bag)?;
             if let Some(module) = module {
-                if !state.library_in_the_bag(module.as_str()) {
-                    state.add_library_to_bag(module.as_str())
+                if !self.library_in_the_bag(module.as_str()) {
+                    self.add_library_to_bag(module.as_str());
+                    return Ok(Interpreter::StuckOnImport {
+                        state: self,
+                        module,
+                    });
                 }
-                return Ok(Interpreter::StuckOnImport { state, module });
             }
-            self = state;
             self.document_stack[l].done_processing_imports();
             self.document_stack[l].reorder(&self.bag)?;
         }
@@ -369,10 +372,10 @@ impl InterpreterState {
         })
     }
 
-    fn process_imports(mut self) -> ftd::p1::Result<(Self, Option<String>)> {
-        let last = self.document_stack.len() - 1;
-        let top: &mut ParsedDocument = &mut self.document_stack[last];
-
+    fn process_imports(
+        top: &mut ParsedDocument,
+        bag: &std::collections::BTreeMap<String, ftd::p2::Thing>,
+    ) -> ftd::p1::Result<Option<String>> {
         let mut iteration_index = 0;
         while iteration_index < top.sections.len() {
             if top.sections[iteration_index].is_commented
@@ -389,16 +392,16 @@ impl InterpreterState {
 
             top.doc_aliases.insert(alias, library_name.clone());
 
-            if self.bag.contains_key(library_name.as_str()) {
+            if bag.contains_key(library_name.as_str()) {
                 iteration_index += 1;
                 continue;
             }
 
             top.sections.remove(iteration_index);
-            return Ok((self, Some(library_name)));
+            return Ok(Some(library_name));
         }
 
-        Ok((self, None))
+        Ok(None)
     }
 
     pub fn continue_after_import(mut self, id: &str, source: &str) -> ftd::p1::Result<Interpreter> {
@@ -522,7 +525,6 @@ pub struct ParsedDocument {
 
 impl ParsedDocument {
     fn parse(id: &str, source: &str) -> ftd::p1::Result<ParsedDocument> {
-        println!("parsing document: {}", id);
         Ok(ParsedDocument {
             name: id.to_string(),
             sections: ftd::p1::parse(source, id)?,
@@ -607,8 +609,6 @@ pub fn interpret_helper(
             }
         }
     }
-
-    println!("Bag length: {}", state.document_stack.len());
 
     Ok(ftd::RT::from(
         name,
