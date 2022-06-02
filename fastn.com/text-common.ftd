@@ -1,3 +1,163 @@
+-- import: fpm
+
+
 -- ft.page: Common Text Attributes
 
+-- ftd.column:
+id: outer
 
+-- ft.markdown:
+
+These attributes are available to all `ftd` "kernel" components.
+
+-- ft.h1: `text-align: string`
+
+-- ft.markdown:
+
+This `text-align` property sets the alignment of text. It takes input like this:
+
+-- ft.code: specifying alignment of text
+lang: ftd
+
+\-- ftd.text: FifthTry
+text-align: center
+
+-- ft.markdown:
+
+This will render like this:
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+width: 400
+text-align: center
+color: $fpm.color.main.text-strong
+
+-- container: outer
+
+-- ft.code: specifying alignment of text
+lang: ftd
+
+\-- ftd.text: FifthTry
+text-align: left
+
+-- ft.markdown:
+
+This will render like this:
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+width: 400
+text-align: left
+color: $fpm.color.main.text-strong
+
+-- container: outer
+
+-- ft.h1: `style: string`
+
+-- ft.markdown:
+
+This `style` property takes input like this:
+
+-- ft.code: specifying style
+lang: ftd
+
+\-- ftd.text: FifthTry
+style: underline
+
+-- ft.markdown:
+
+This will render like this:
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+style: underline
+color: $fpm.color.main.text-strong
+
+-- container: outer
+
+-- ft.code: specifying style
+lang: ftd
+
+\-- ftd.text: FifthTry
+style: strike
+
+-- ft.markdown:
+
+This will render like this:
+
+-- ft.output:
+
+-- ftd.text: FifthTry
+style: strike
+color: $fpm.color.main.text-strong
+
+-- container: outer
+
+-- ft.h1: `line-clamp:`
+
+-- ft.markdown:
+
+This `line-clamp` property takes input like this:
+
+-- ft.code: specifying line-clamp
+lang: ftd
+
+\-- ftd.column card:
+body text:
+width: 300
+min-height: 300
+boolean read_more: true
+integer max_lines:
+
+\--- ftd.text: $text
+line-clamp if $read_more: $max_lines
+
+
+\--- ftd.text: Read More
+$on-click$: toggle $read_more
+if: $read_more
+
+\--- ftd.text: Read Less
+$on-click$: toggle $read_more
+if: not $read_more
+
+
+\-- card:
+max_lines: 1
+
+this is amplepr asd askfjkjsdfkjasdjkasd asdjaskdjaksjd kajsd kasjd askjdkasjd kasjd kasjd kasjdkasjd kasjd
+
+-- ft.markdown:
+
+This will render like this:
+
+-- ft.output:
+
+-- ftd.column card:
+body text:
+width: 300
+min-height: 300
+boolean read_more: true
+integer max_lines:
+color: $fpm.color.main.text-strong
+
+--- ftd.text: $text
+line-clamp if $read_more: $max_lines
+
+
+--- ftd.text: Read More
+$on-click$: toggle $read_more
+if: $read_more
+
+--- ftd.text: Read Less
+$on-click$: toggle $read_more
+if: not $read_more
+
+
+-- card:
+max_lines: 1
+
+this is amplepr asd askfjkjsdfkjasdjkasd asdjaskdjaksjd kajsd kasjd askjdkasjd kasjd kasjd kasjdkasjd kasjd
