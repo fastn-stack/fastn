@@ -563,10 +563,7 @@ pub fn interpret_helper(
     name: &str,
     source: &str,
     lib: &dyn ftd::p2::Library,
-) -> ftd::p1::Result<(
-    std::collections::BTreeMap<String, ftd::p2::Thing>,
-    ftd::Column,
-)> {
+) -> ftd::p1::Result<ftd::RT> {
     let mut s = interpret(name, source)?;
     let instructions: Vec<ftd::Instruction>;
     let state;
@@ -596,14 +593,12 @@ pub fn interpret_helper(
         }
     }
 
-    let mut rt = ftd::RT::from(
+    Ok(ftd::RT::from(
         name,
         state.document_stack[0].clone().doc_aliases,
         state.bag,
         instructions,
-    );
-    let main = rt.render_()?;
-    Ok((rt.bag, main))
+    ))
 }
 
 #[cfg(test)]

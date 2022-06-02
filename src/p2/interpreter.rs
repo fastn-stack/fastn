@@ -883,9 +883,7 @@ pub fn interpret(
     std::collections::BTreeMap<String, ftd::p2::Thing>,
     ftd::Column,
 )> {
-    let mut interpreter = Interpreter::new(lib);
-    let instructions = interpreter.interpret(name, source)?;
-    let mut rt = ftd::RT::from(name, interpreter.aliases, interpreter.bag, instructions);
+    let mut rt = ftd::p2::interpreter2::interpret_helper(name, source, lib)?;
     let main = rt.render_()?;
     Ok((rt.bag, main))
 }
