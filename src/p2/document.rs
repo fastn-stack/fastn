@@ -4,14 +4,7 @@ pub struct Document {
     pub name: String,
     pub instructions: Vec<ftd::Instruction>,
     pub main: ftd::Column,
-    pub p1: Vec<ftd::p1::Section>,
     pub aliases: std::collections::BTreeMap<String, String>,
-}
-
-impl ToString for Document {
-    fn to_string(&self) -> String {
-        ftd::p1::to_string(&self.p1)
-    }
 }
 
 impl Document {
@@ -423,15 +416,12 @@ impl Document {
         source: &str,
         lib: &dyn ftd::p2::Library,
     ) -> ftd::p1::Result<Document> {
-        let mut interpreter = ftd::p2::interpreter::Interpreter::new(lib);
-        let instructions = interpreter.interpret(name, source)?;
-        let rt = ftd::RT::from(name, interpreter.aliases, interpreter.bag, instructions);
+        let rt = ftd::p2::interpreter2::interpret_helper(name, source, lib)?;
 
         Ok(Document {
             main: Default::default(),
             data: rt.bag,
             instructions: rt.instructions,
-            p1: interpreter.p1,
             aliases: rt.aliases,
             name: name.to_string(),
         })
