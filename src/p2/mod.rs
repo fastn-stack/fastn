@@ -3,7 +3,6 @@ pub(crate) mod element;
 pub(crate) mod event;
 pub(crate) mod expression;
 pub(crate) mod interpreter;
-pub mod interpreter3;
 pub(crate) mod kind;
 pub(crate) mod library;
 pub(crate) mod record;
