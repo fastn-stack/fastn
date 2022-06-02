@@ -624,7 +624,7 @@ mod test {
 
     #[test]
     fn basic_1() {
-        let mut bag = ftd::p2::interpreter::default_bag();
+        let mut bag = default_bag();
         bag.insert(
             "foo/bar#foo".to_string(),
             ftd::p2::Thing::Component(ftd::Component {
