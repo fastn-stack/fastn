@@ -2,6 +2,7 @@
 pub struct InterpreterState {
     pub(crate) bag: std::collections::BTreeMap<String, ftd::p2::Thing>,
     pub(crate) document_stack: Vec<ParsedDocument>,
+    pub(crate) parsed_libs: Vec<String>,
 }
 
 impl InterpreterState {
@@ -25,6 +26,16 @@ impl InterpreterState {
         }
     }
 
+    fn library_in_the_bag(&self, name: &str) -> bool {
+        self.parsed_libs.contains(&name.to_string())
+    }
+
+    fn add_library_to_bag(&mut self, name: &str) {
+        if !self.library_in_the_bag(name) {
+            self.parsed_libs.push(name.to_string());
+        }
+    }
+
     fn continue_(mut self) -> ftd::p1::Result<Interpreter> {
         if self.document_stack.is_empty() {
             panic!()
@@ -33,8 +44,11 @@ impl InterpreterState {
         let l = self.document_stack.len() - 1; // Get the top of the stack
 
         if self.document_stack[l].processing_imports {
-            let (state, module) = self.process_imports()?;
+            let (mut state, module) = self.process_imports()?;
             if let Some(module) = module {
+                if !state.library_in_the_bag(module.as_str()) {
+                    state.add_library_to_bag(module.as_str())
+                }
                 return Ok(Interpreter::StuckOnImport { state, module });
             }
             self = state;
@@ -345,6 +359,10 @@ impl InterpreterState {
             self.bag.extend(thing);
         }
 
+        if self.document_stack.len() > 1 {
+            return self.continue_after_pop();
+        }
+
         Ok(Interpreter::Done {
             state: self,
             instructions,
@@ -504,6 +522,7 @@ pub struct ParsedDocument {
 
 impl ParsedDocument {
     fn parse(id: &str, source: &str) -> ftd::p1::Result<ParsedDocument> {
+        println!("parsing document: {}", id);
         Ok(ParsedDocument {
             name: id.to_string(),
             sections: ftd::p1::parse(source, id)?,
@@ -573,13 +592,9 @@ pub fn interpret_helper(
                 instructions: i,
                 state: st,
             } => {
-                if st.document_stack.len() > 1 {
-                    s = st.continue_after_pop()?;
-                } else {
-                    instructions = i;
-                    state = st;
-                    break;
-                }
+                instructions = i;
+                state = st;
+                break;
             }
             Interpreter::StuckOnProcessor { state, section } => {
                 s = state.continue_after_processor(&section, lib)?;
@@ -592,6 +607,8 @@ pub fn interpret_helper(
             }
         }
     }
+
+    println!("Bag length: {}", state.document_stack.len());
 
     Ok(ftd::RT::from(
         name,
