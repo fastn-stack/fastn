@@ -12,11 +12,6 @@ license = "MIT"
 repository = "https://github.com/FifthTry/ftd"
 homepage = "https://ftd.dev"
 
-[features]
-default = []
-calls = []
-async = ["async-recursion", "async-trait", "futures"]
-
 [dependencies]
 css-color-parser = { version = "0.1.2" }
 serde = { version = "1", features = ["derive"] }
@@ -29,9 +24,6 @@ regex = { version = "1.5.4" }
 format_num = { version = "0.1.0" }
 failure = "0.1"
 slug = { version = "0.1.4" }
-futures = { version = "0.3", optional = true }
-async-recursion = { version = "0.3.2", optional = true }
-async-trait = { version = "0.1.51", optional = true }
 include_dir = "0.7.2"
 indoc = "1.0"
 

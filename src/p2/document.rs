@@ -552,31 +552,6 @@ impl Document {
         Ok(serde_json::from_value(json)?)
     }
 
-    #[cfg(calls)]
-    pub fn calls<T: serde::de::DeserializeOwned>(
-        &self,
-        component: &str,
-    ) -> ftd::p1::Result<Vec<T>> {
-        let component = self.name(component);
-        let thing = match self.data.get(component.as_str()) {
-            Some(t) => t,
-            None => return Ok(vec![]),
-        };
-
-        let json = match thing {
-            ftd::p2::Thing::Component(c) => {
-                let mut a = vec![];
-                for c in c.invocations.iter() {
-                    a.push(self.object2_to_json(c)?);
-                }
-                serde_json::Value::Array(a)
-            }
-            t => panic!("{:?} is not a component", t),
-        };
-
-        Ok(serde_json::from_value(json)?)
-    }
-
     pub fn json(&self, key: &str) -> ftd::p1::Result<serde_json::Value> {
         let key = self.name(key);
         let thing = match self.data.get(key.as_str()) {

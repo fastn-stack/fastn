@@ -57,20 +57,6 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           command: test
-      - name: testing async ftd
-        id: ftd-async
-        continue-on-error: true
-        uses: actions-rs/cargo@v1
-        with:
-          command: test
-          args: --features async
-      - name: clippy async ftd
-        id: ftd-clippy-async
-        continue-on-error: true
-        uses: actions-rs/cargo@v1
-        with:
-          command: clippy
-          args: --features async
       - name: Check on failure fmt
         if: steps.fmt.outcome != 'success'
         run: exit 1
@@ -80,10 +66,3 @@ jobs:
       - name: Check on failure ftd
         if: steps.ftd.outcome != 'success'
         run: exit 1
-      - name: Check on failure of async ftd
-        if: steps.ftd-async.outcome != 'success'
-        run: exit 1
-      - name: Check clippy of async ftd
-        if: steps.ftd-clippy-async.outcome != 'success'
-        run: exit 1
-
