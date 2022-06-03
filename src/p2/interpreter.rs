@@ -46,8 +46,8 @@ impl InterpreterState {
         let l = self.document_stack.len() - 1; // Get the top of the stack
 
         if self.document_stack[l].processing_imports {
-            /// Check for all the imports
-            /// break the loop only when there's no more `import` statement
+            // Check for all the imports
+            // break the loop only when there's no more `import` statement
             loop {
                 let top = &mut self.document_stack[l];
                 let module = Self::process_imports(top, &self.bag)?;
