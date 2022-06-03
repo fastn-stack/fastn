@@ -193,7 +193,7 @@ impl Config {
                                         fpm_manifest_path.join("FPM.manifest.ftd"),
                                     );
                                     let lib = fpm::FPMLibrary::default();
-                                    match ftd::p2::Document::from(
+                                    match fpm::doc::parse_ftd(
                                         "FPM.manifest",
                                         doc.await?.as_str(),
                                         &lib,
@@ -242,7 +242,7 @@ impl Config {
         let b = {
             let doc = tokio::fs::read_to_string(root.join("FPM.ftd"));
             let lib = fpm::FPMLibrary::default();
-            match ftd::p2::Document::from("FPM", doc.await?.as_str(), &lib) {
+            match fpm::doc::parse_ftd("FPM", doc.await?.as_str(), &lib) {
                 Ok(v) => v,
                 Err(e) => {
                     return Err(fpm::Error::PackageError {

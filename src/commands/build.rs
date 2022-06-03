@@ -1091,18 +1091,15 @@ async fn process_ftd(
             base_url: base_url.to_string(),
         };
 
-        let main_ftd_doc = match ftd::p2::Document::from(
-            main.id_with_package().as_str(),
-            main.content.as_str(),
-            &lib,
-        ) {
-            Ok(v) => v,
-            Err(e) => {
-                return Err(fpm::Error::PackageError {
-                    message: format!("failed to parse {:?}", &e),
-                });
-            }
-        };
+        let main_ftd_doc =
+            match fpm::doc::parse(main.id_with_package().as_str(), main.content.as_str(), &lib) {
+                Ok(v) => v,
+                Err(e) => {
+                    return Err(fpm::Error::PackageError {
+                        message: format!("failed to parse {:?}", &e),
+                    });
+                }
+            };
         let doc_title = match &main_ftd_doc.title() {
             Some(x) => x.original.clone(),
             _ => main.id.as_str().to_string(),
@@ -1145,18 +1142,15 @@ async fn process_ftd(
             base_url: base_url.to_string(),
         };
 
-        let main_ftd_doc = match ftd::p2::Document::from(
-            main.id_with_package().as_str(),
-            main.content.as_str(),
-            &lib,
-        ) {
-            Ok(v) => v,
-            Err(e) => {
-                return Err(fpm::Error::PackageError {
-                    message: format!("failed to parse {:?}", &e),
-                });
-            }
-        };
+        let main_ftd_doc =
+            match fpm::doc::parse(main.id_with_package().as_str(), main.content.as_str(), &lib) {
+                Ok(v) => v,
+                Err(e) => {
+                    return Err(fpm::Error::PackageError {
+                        message: format!("failed to parse {:?}", &e),
+                    });
+                }
+            };
 
         let doc_title = match &main_ftd_doc.title() {
             Some(x) => x.original.clone(),
@@ -1164,7 +1158,7 @@ async fn process_ftd(
         };
         let main_rt_doc = main_ftd_doc.to_rt("main", &main.id);
 
-        let message_ftd_doc = match ftd::p2::Document::from("message", message, &lib) {
+        let message_ftd_doc = match fpm::doc::parse("message", message, &lib) {
             Ok(v) => v,
             Err(e) => {
                 return Err(fpm::Error::PackageError {
@@ -1228,21 +1222,18 @@ async fn process_ftd(
             base_url: base_url.to_string(),
         };
 
-        let main_ftd_doc = match ftd::p2::Document::from(
-            main.id_with_package().as_str(),
-            main.content.as_str(),
-            &lib,
-        ) {
-            Ok(v) => v,
-            Err(e) => {
-                return Err(fpm::Error::PackageError {
-                    message: format!("failed to parse {:?}", &e),
-                });
-            }
-        };
+        let main_ftd_doc =
+            match fpm::doc::parse(main.id_with_package().as_str(), main.content.as_str(), &lib) {
+                Ok(v) => v,
+                Err(e) => {
+                    return Err(fpm::Error::PackageError {
+                        message: format!("failed to parse {:?}", &e),
+                    });
+                }
+            };
         let main_rt_doc = main_ftd_doc.to_rt("main", &main.id);
 
-        let message_ftd_doc = match ftd::p2::Document::from("message", message, &lib) {
+        let message_ftd_doc = match fpm::doc::parse("message", message, &lib) {
             Ok(v) => v,
             Err(e) => {
                 return Err(fpm::Error::PackageError {
@@ -1257,7 +1248,7 @@ async fn process_ftd(
         };
         let message_rt_doc = message_ftd_doc.to_rt("message", &main.id);
 
-        let fallback_ftd_doc = match ftd::p2::Document::from(
+        let fallback_ftd_doc = match fpm::doc::parse(
             main.id_with_package().as_str(),
             fallback.content.as_str(),
             &lib,

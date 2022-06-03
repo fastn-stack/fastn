@@ -21,8 +21,15 @@ pub struct Library {
     pub base_url: String,
 }
 
-impl ftd::p2::Library for Library {
-    fn get(&self, name: &str, doc: &ftd::p2::TDoc) -> Option<String> {
+impl Library {
+    pub fn get_with_result(&self, name: &str, doc: &ftd::p2::TDoc) -> ftd::p1::Result<String> {
+        match self.get(name, doc) {
+            Some(v) => Ok(v),
+            None => ftd::e2(format!("library not found: {}", name), "", 0),
+        }
+    }
+
+    pub fn get(&self, name: &str, doc: &ftd::p2::TDoc) -> Option<String> {
         if name == "fpm" {
             return Some(fpm_dot_ftd::get(self));
         }
@@ -193,7 +200,7 @@ impl ftd::p2::Library for Library {
         }
     }
 
-    fn process(
+    pub fn process(
         &self,
         section: &ftd::p1::Section,
         doc: &ftd::p2::TDoc,
@@ -224,8 +231,8 @@ impl ftd::p2::Library for Library {
 #[derive(Default)]
 pub struct FPMLibrary {}
 
-impl ftd::p2::Library for FPMLibrary {
-    fn get(&self, name: &str, _doc: &ftd::p2::TDoc) -> Option<String> {
+impl FPMLibrary {
+    pub fn get(&self, name: &str, _doc: &ftd::p2::TDoc) -> Option<String> {
         if name == "fpm" {
             return Some(format!(
                 "{}\n\n-- optional package-data package:\n",
@@ -235,6 +242,25 @@ impl ftd::p2::Library for FPMLibrary {
             // Note: currently we do not allow users to import other modules from FPM.ftd
             eprintln!("FPM.ftd can only import `fpm` module");
             None
+        }
+    }
+
+    pub fn process(
+        &self,
+        section: &ftd::p1::Section,
+        doc: &ftd::p2::TDoc,
+    ) -> ftd::p1::Result<ftd::Value> {
+        ftd::unknown_processor_error(
+            format!("unimplemented for section {:?} and doc {:?}", section, doc),
+            doc.name.to_string(),
+            section.line_number,
+        )
+    }
+
+    pub fn get_with_result(&self, name: &str, doc: &ftd::p2::TDoc) -> ftd::p1::Result<String> {
+        match self.get(name, doc) {
+            Some(v) => Ok(v),
+            None => ftd::e2(format!("library not found: {}", name), "", 0),
         }
     }
 }

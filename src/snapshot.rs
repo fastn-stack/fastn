@@ -16,7 +16,7 @@ pub(crate) async fn get_latest_snapshots(
 
     let lib = fpm::FPMLibrary::default();
     let doc = std::fs::read_to_string(&latest_file_path)?;
-    let b = match ftd::p2::Document::from(".latest.ftd", doc.as_str(), &lib) {
+    let b = match fpm::doc::parse_ftd(".latest.ftd", doc.as_str(), &lib) {
         Ok(v) => v,
         Err(e) => {
             eprintln!("failed to parse {}: {:?}", latest_file_path, &e);

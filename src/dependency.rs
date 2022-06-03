@@ -169,7 +169,7 @@ impl fpm::Package {
             // Read FPM.ftd and get download zip url from `zip` argument
             let download_url = {
                 let lib = fpm::FPMLibrary::default();
-                let ftd_document = match ftd::p2::Document::from("FPM", fpm_string.as_str(), &lib) {
+                let ftd_document = match fpm::doc::parse_ftd("FPM", fpm_string.as_str(), &lib) {
                     Ok(v) => v,
                     Err(e) => {
                         return Err(fpm::Error::PackageError {
@@ -248,7 +248,7 @@ impl fpm::Package {
         } else {
             let doc = std::fs::read_to_string(&root.join("FPM.manifest.ftd"));
             let lib = fpm::FPMLibrary::default();
-            match ftd::p2::Document::from("FPM.manifest", doc?.as_str(), &lib) {
+            match fpm::doc::parse_ftd("FPM.manifest", doc?.as_str(), &lib) {
                 Ok(fpm_manifest_processed) => {
                     let k: String = fpm_manifest_processed.get("FPM.manifest#package-root")?;
                     let new_package_root = k
@@ -337,7 +337,7 @@ impl fpm::Package {
         let ftd_document = {
             let doc = std::fs::read_to_string(fpm_path)?;
             let lib = fpm::FPMLibrary::default();
-            match ftd::p2::Document::from("FPM", doc.as_str(), &lib) {
+            match fpm::doc::parse_ftd("FPM", doc.as_str(), &lib) {
                 Ok(v) => v,
                 Err(e) => {
                     return Err(fpm::Error::PackageError {

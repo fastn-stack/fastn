@@ -11,6 +11,7 @@ mod auto_import;
 mod commands;
 mod config;
 mod dependency;
+mod doc;
 mod file;
 mod font;
 mod i18n;
