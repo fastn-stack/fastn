@@ -42,7 +42,7 @@ padding-bottom: 20
         );
     } else if dir.is_dir() {
         for entry in
-            std::fs::read_dir(dir).expect(&format!("{:?} is not a directory", dir.to_str()))
+            std::fs::read_dir(dir).unwrap_or_else(|_| panic!("{:?} is not a directory", dir.to_str()))
         {
             let path = entry.expect("no files inside ./examples").path();
             let source = path

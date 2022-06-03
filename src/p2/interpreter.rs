@@ -593,6 +593,7 @@ impl ParsedDocument {
     }
 }
 
+#[allow(clippy::large_enum_variant)]
 #[derive(Debug)]
 pub enum Interpreter {
     StuckOnImport {
