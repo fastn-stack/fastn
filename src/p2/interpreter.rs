@@ -56,6 +56,54 @@ impl<'a> Interpreter<'a> {
             self.parsed_libs.push(name.to_string());
         }
     }
+    
+    register_diagnostics! {
+    E0747, // Appears when a property is declared again, thus becoming redundant.
+}
+
+#[derive(SessionDiagnostic)]
+#[error(code = "E0747", slug = "Redundant-property")]
+#[cfg(feature = "async")]
+
+pub(crate) struct AlreadyDeclared {
+    pub field_name: Ident,
+    #[primary_span]
+    #[label]
+    pub span: Span,
+    #[label = "already-declared-label"]
+    pub prev_span: Span,
+}
+
+Redundant-property =
+    field `{$field_name}` is already declared
+    .label = field already declared
+    .already-declared-label = `{$field_name}` was first declared here
+
+impl SessionDiagnostic for AlreadyDeclared {
+    fn into_diagnostic(self, sess: &'_ rustc_session::Session) -> DiagnosticBuilder<'_> {
+        let mut diag = sess.struct_err_with_code(
+            rustc_errors::DiagnosticMessage::fluent("Redundant-property"),
+            rustc_errors::DiagnosticId::Error("E0747")
+        );
+        diag.set_span(self.span);
+        diag.span_label(
+            self.span,
+            rustc_errors::DiagnosticMessage::fluent_attr("Redundant-property", "label")
+        );
+        diag.span_label(
+            self.prev_span,
+            rustc_errors::DiagnosticMessage::fluent_attr("Redundant-property", "already-declared-label")
+        );
+        diag
+    }
+}
+
+tcx.sess.emit_err(AlreadyDeclared {
+    field_name: f.ident,
+    span: f.span,
+    prev_span,
+});
+
 
     #[cfg(feature = "async")]
     #[async_recursion::async_recursion(?Send)]
