@@ -134,15 +134,12 @@ pub fn interpret_helper(
                 break;
             }
             ftd::Interpreter::StuckOnProcessor { state, section } => {
-                let l = state.document_stack.len() - 1;
-                let parsed_document = &state.document_stack[l];
-                let value = lib.process(p1, &parsed_document.to_tdoc(&state.bag))?;
+                let value = lib.process(&section, &state.tdoc(&mut Default::default()))?;
                 s = state.continue_after_processor(&section, value)?;
             }
             ftd::Interpreter::StuckOnImport { module, state: st } => {
-                let mut bt: std::collections::BTreeMap<String, ftd::p2::Thing> =
-                    std::collections::BTreeMap::new();
-                let source = lib.get_with_result(module.as_str(), &st.tdoc(&mut bt))?;
+                let source =
+                    lib.get_with_result(module.as_str(), &st.tdoc(&mut Default::default()))?;
                 s = st.continue_after_import(module.as_str(), source.as_str())?;
             }
         }

@@ -450,7 +450,13 @@ impl InterpreterState {
     ) -> ftd::p1::Result<Interpreter> {
         let l = self.document_stack.len() - 1;
         let parsed_document = &mut self.document_stack[l];
-        let doc = parsed_document.to_tdoc(&self.bag);
+
+        let doc = ftd::p2::TDoc {
+            name: &parsed_document.name,
+            aliases: &parsed_document.doc_aliases,
+            bag: &self.bag,
+            local_variables: &mut Default::default(),
+        };
 
         let var_data = ftd::variable::VariableData::get_name_kind(
             &p1.name,
@@ -578,18 +584,6 @@ impl ParsedDocument {
 
     pub fn get_doc_aliases(&self) -> std::collections::BTreeMap<String, String> {
         self.doc_aliases.clone()
-    }
-
-    pub fn to_tdoc(
-        &self,
-        bag: &std::collections::BTreeMap<String, ftd::p2::Thing>,
-    ) -> ftd::p2::TDoc {
-        ftd::p2::TDoc {
-            name: &self.name,
-            aliases: &self.doc_aliases,
-            bag,
-            local_variables: &mut Default::default(),
-        }
     }
 }
 
