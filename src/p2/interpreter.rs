@@ -375,8 +375,14 @@ impl InterpreterState {
             instructions,
         );
 
+        let main = if cfg!(test) {
+            rt.render_()?
+        } else {
+            rt.render()?
+        };
+
         let mut d = ftd::p2::document::Document {
-            main: rt.render()?,
+            main,
             name: rt.name,
             data: rt.bag.clone(),
             aliases: rt.aliases,
