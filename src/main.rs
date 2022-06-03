@@ -123,7 +123,7 @@ fn write(id: &str, doc: String) {
 pub fn interpret_helper(
     name: &str,
     source: &str,
-    lib: &dyn ftd::p2::Library,
+    lib: &ftd::ExampleLibrary,
 ) -> ftd::p1::Result<ftd::p2::Document> {
     let mut s = ftd::interpret(name, source)?;
     let document;

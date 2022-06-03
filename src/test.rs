@@ -6,7 +6,7 @@ fn get_name() {
 pub fn interpret_helper(
     name: &str,
     source: &str,
-    lib: &dyn ftd::p2::Library,
+    lib: &ftd::p2::TestLibrary,
 ) -> ftd::p1::Result<ftd::p2::Document> {
     let mut s = ftd::p2::interpreter::interpret(name, source)?;
     let document;
@@ -33,7 +33,7 @@ pub fn interpret_helper(
 pub fn interpret(
     name: &str,
     source: &str,
-    lib: &dyn ftd::p2::Library,
+    lib: &ftd::p2::TestLibrary,
 ) -> ftd::p1::Result<(
     std::collections::BTreeMap<String, ftd::p2::Thing>,
     ftd::Column,

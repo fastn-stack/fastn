@@ -14,6 +14,6 @@ pub use event::{Action, ActionKind, Event, EventName};
 pub use expression::Boolean;
 pub use interpreter::{default_column, interpret, Thing};
 pub use kind::Kind;
-pub use library::{Library, TestLibrary};
+pub use library::TestLibrary;
 pub use record::Record;
 pub use tdoc::TDoc;
