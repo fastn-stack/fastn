@@ -46,15 +46,21 @@ impl InterpreterState {
         let l = self.document_stack.len() - 1; // Get the top of the stack
 
         if self.document_stack[l].processing_imports {
-            let top = &mut self.document_stack[l];
-            let module = Self::process_imports(top, &self.bag)?;
-            if let Some(module) = module {
-                if !self.library_in_the_bag(module.as_str()) {
-                    self.add_library_to_bag(module.as_str());
-                    return Ok(Interpreter::StuckOnImport {
-                        state: self,
-                        module,
-                    });
+            /// Check for all the imports
+            /// break the loop only when there's no more `import` statement
+            loop {
+                let top = &mut self.document_stack[l];
+                let module = Self::process_imports(top, &self.bag)?;
+                if let Some(module) = module {
+                    if !self.library_in_the_bag(module.as_str()) {
+                        self.add_library_to_bag(module.as_str());
+                        return Ok(Interpreter::StuckOnImport {
+                            state: self,
+                            module,
+                        });
+                    }
+                } else {
+                    break;
                 }
             }
             self.document_stack[l].done_processing_imports();
