@@ -128,8 +128,11 @@ if: not $read_more
 \-- card:
 max_lines: 1
 
-this is amplepr asd askfjkjsdfkjasdjkasd asdjaskdjaksjd kajsd kasjd askjdkasjd 
-kasjd kasjd kasjdkasjd kasjd
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod 
+tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, 
+quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo 
+consequat.Duis aute irure dolor in reprehenderit in voluptate velit esse 
+cillum dolore eu fugiat nulla pariatur.
 
 -- ft.markdown:
 
@@ -161,5 +164,8 @@ if: not $read_more
 -- card:
 max_lines: 1
 
-this is amplepr asd askfjkjsdfkjasdjkasd asdjaskdjaksjd kajsd kasjd askjdkasjd
- kasjd kasjd kasjdkasjd kasjd
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod 
+tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, 
+quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo 
+consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse 
+cillum dolore eu fugiat nulla pariatur.
