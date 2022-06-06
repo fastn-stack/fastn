@@ -1,3 +1,57 @@
+-- import: fpm
+
 -- ft.page: `import`
 
+-- ftd.column:
+id: outer
 
+-- ft.markdown:
+
+`ftd` code in one page/component gains access to the code in another page by the process of importing it. In `ftd` language the uses of `import` are two typed :
+
+-- ft.h1: `import: string`
+
+-- ft.markdown:
+
+Suppose you are gonna use some properties like `color: $fpm.color.main.border` or 
+`padding: $fpm.space.space-4` then you have to write the following piece of code at the top on that particular `ftd page` as well as `FPM.ftd` page :
+
+-- ft.code: use of import
+lang: ftd
+
+\-- import: fpm 
+
+-- ft.markdown:
+
+If you want to call a page/component to another page or you want to use some properties like images etc then `ftd` and `fpm` gives you two options for this. Either you can use the following piece of code on that particular `ftd page` : 
+
+-- ft.code: use of import
+lang: ftd
+
+\-- import: fifthtry.github.io/footer/assets
+
+-- ft.markdown: 
+
+Or you can use the following option on `FPM.ftd` page
+
+-- ft.h1: `auto-import: string`
+
+-- ft.markdown: 
+
+One can use `auto-import` by using the following piece of code on `FPM.ftd` page :
+
+-- ft.code: use of auto-import on FPM.ftd
+lang: ftd
+
+\-- fpm.dependency: fifthtry.github.io/doc-site as ds
+\-- fpm.auto-import: ds
+
+-- ft.markdown: 
+
+If you use `auto-import` then you don't need to import `ds` on each `.ftd page`. This piece of code will import `doc-site` page at every page of that project automatically. 
+Now you can use the `doc-site` page at any `.ftd page` of that project by using the following code on that particular page :
+
+-- ft.code: calling auto-imported page or component
+lang: ftd
+
+\-- ds.page: 
