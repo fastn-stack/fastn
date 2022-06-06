@@ -128,7 +128,8 @@ if: not $read_more
 \-- card:
 max_lines: 1
 
-this is amplepr asd askfjkjsdfkjasdjkasd asdjaskdjaksjd kajsd kasjd askjdkasjd kasjd kasjd kasjdkasjd kasjd
+this is amplepr asd askfjkjsdfkjasdjkasd asdjaskdjaksjd kajsd kasjd askjdkasjd 
+kasjd kasjd kasjdkasjd kasjd
 
 -- ft.markdown:
 
@@ -160,4 +161,5 @@ if: not $read_more
 -- card:
 max_lines: 1
 
-this is amplepr asd askfjkjsdfkjasdjkasd asdjaskdjaksjd kajsd kasjd askjdkasjd kasjd kasjd kasjdkasjd kasjd
+this is amplepr asd askfjkjsdfkjasdjkasd asdjaskdjaksjd kajsd kasjd askjdkasjd
+ kasjd kasjd kasjdkasjd kasjd
