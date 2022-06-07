@@ -203,13 +203,11 @@ impl fpm::Package {
             std::io::stdout().flush()?;
             // Download the zip folder
             {
-
-
                 let mut response =
                     if download_url[1..].contains("://") || download_url.starts_with("//") {
                         reqwest::get(download_url.as_str())?
                     } else if let Ok(response) =
-                    reqwest::get(format!("https://{}", download_url).as_str())
+                        reqwest::get(format!("https://{}", download_url).as_str())
                     {
                         response
                     } else {
