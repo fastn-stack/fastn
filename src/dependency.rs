@@ -53,12 +53,15 @@ pub async fn ensure(base_dir: &camino::Utf8PathBuf, package: &mut fpm::Package) 
                 message: "Translation package needs to declare the language".to_string(),
             });
         }
-        translation_of.process(base_dir, &mut downloaded_package, true, true).await?;
+        translation_of
+            .process(base_dir, &mut downloaded_package, true, true)
+            .await?;
     }
 
     for dep in package.dependencies.iter_mut() {
         dep.package
-            .process(base_dir, &mut downloaded_package, false, true).await?;
+            .process(base_dir, &mut downloaded_package, false, true)
+            .await?;
     }
 
     if package.translations.has_elements() && package.translation_of.is_some() {
@@ -75,7 +78,9 @@ pub async fn ensure(base_dir: &camino::Utf8PathBuf, package: &mut fpm::Package) 
                 message: "Package needs to declare the language".to_string(),
             });
         }
-        translation.process(base_dir, &mut downloaded_package, false, false).await?;
+        translation
+            .process(base_dir, &mut downloaded_package, false, false)
+            .await?;
     }
     Ok(())
 }
@@ -158,7 +163,8 @@ impl fpm::Package {
                 download_translations,
                 download_dependencies,
                 &file_extract_path,
-            ).await;
+            )
+            .await;
         }
 
         // Download everything of dependent package
@@ -281,7 +287,8 @@ impl fpm::Package {
             download_translations,
             download_dependencies,
             &fpm_ftd_path,
-        ).await;
+        )
+        .await;
 
         async fn get_fpm(name: &str) -> fpm::Result<String> {
             let response_fpm = if let Ok(response_fpm) =
@@ -395,10 +402,12 @@ impl fpm::Package {
                         false,
                         true,
                         &dst.join("FPM.ftd"),
-                    ).await?;
+                    )
+                    .await?;
                 }
                 dep.package
-                    .process(base_path, downloaded_package, false, true).await?;
+                    .process(base_path, downloaded_package, false, true)
+                    .await?;
             }
         }
 
@@ -431,9 +440,12 @@ impl fpm::Package {
                         false,
                         false,
                         &dst.join("FPM.ftd"),
-                    ).await?;
+                    )
+                    .await?;
                 } else {
-                    translation.process(base_path, downloaded_package, false, false).await?;
+                    translation
+                        .process(base_path, downloaded_package, false, false)
+                        .await?;
                 }
             }
         }
