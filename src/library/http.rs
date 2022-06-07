@@ -55,7 +55,7 @@ async fn get(
     doc_id: &str,
     line_number: usize,
 ) -> ftd::p1::Result<serde_json::Value> {
-    let t = match _get(url) {
+    let t = match _get(url).await {
         Ok(v) => v,
         Err(e) => {
             return ftd::e2(
@@ -75,7 +75,7 @@ async fn get(
     }
 }
 
-fn _get(url: url::Url) -> reqwest::Result<String> {
+async fn _get(url: url::Url) -> reqwest::Result<String> {
     let mut headers = reqwest::header::HeaderMap::new();
     headers.insert(
         reqwest::header::USER_AGENT,
@@ -84,5 +84,5 @@ fn _get(url: url::Url) -> reqwest::Result<String> {
     let c = reqwest::Client::builder()
         .default_headers(headers)
         .build()?;
-    c.get(url.to_string().as_str()).send()?.text()
+    c.get(url.to_string().as_str()).send().await?.text().await
 }

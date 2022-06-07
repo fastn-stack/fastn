@@ -31,7 +31,7 @@ impl Dependency {
     }
 }
 
-pub fn ensure(base_dir: &camino::Utf8PathBuf, package: &mut fpm::Package) -> fpm::Result<()> {
+pub async fn ensure(base_dir: &camino::Utf8PathBuf, package: &mut fpm::Package) -> fpm::Result<()> {
     /*futures::future::join_all(
         deps.into_iter()
             .map(|x| (x, base_dir.clone()))
@@ -53,12 +53,12 @@ pub fn ensure(base_dir: &camino::Utf8PathBuf, package: &mut fpm::Package) -> fpm
                 message: "Translation package needs to declare the language".to_string(),
             });
         }
-        translation_of.process(base_dir, &mut downloaded_package, true, true)?;
+        translation_of.process(base_dir, &mut downloaded_package, true, true).await?;
     }
 
     for dep in package.dependencies.iter_mut() {
         dep.package
-            .process(base_dir, &mut downloaded_package, false, true)?;
+            .process(base_dir, &mut downloaded_package, false, true).await?;
     }
 
     if package.translations.has_elements() && package.translation_of.is_some() {
@@ -75,7 +75,7 @@ pub fn ensure(base_dir: &camino::Utf8PathBuf, package: &mut fpm::Package) -> fpm
                 message: "Package needs to declare the language".to_string(),
             });
         }
-        translation.process(base_dir, &mut downloaded_package, false, false)?;
+        translation.process(base_dir, &mut downloaded_package, false, false).await?;
     }
     Ok(())
 }
@@ -115,7 +115,7 @@ impl fpm::Package {
     ///
     /// It then calls `process_fpm()` which checks the dependencies of the downloaded packages and
     /// then again call `process()` if dependent package is not downloaded or available
-    pub fn process(
+    pub async fn process(
         &mut self,
         base_dir: &camino::Utf8PathBuf,
         downloaded_package: &mut Vec<String>,
@@ -146,7 +146,7 @@ impl fpm::Package {
             let file_extract_path = path.join(format!("{}.ftd", name));
             if !file_extract_path.exists() {
                 std::fs::create_dir_all(&path)?;
-                let fpm_string = get_fpm(self.name.as_str())?;
+                let fpm_string = get_fpm(self.name.as_str()).await?;
                 let mut f = std::fs::File::create(&file_extract_path)?;
                 f.write_all(fpm_string.as_bytes())?;
             }
@@ -158,13 +158,13 @@ impl fpm::Package {
                 download_translations,
                 download_dependencies,
                 &file_extract_path,
-            );
+            ).await;
         }
 
         // Download everything of dependent package
         if !root.exists() {
             // Download the FPM.ftd file first for the package to download.
-            let fpm_string = get_fpm(self.name.as_str())?;
+            let fpm_string = get_fpm(self.name.as_str()).await?;
 
             // Read FPM.ftd and get download zip url from `zip` argument
             let download_url = {
@@ -197,21 +197,21 @@ impl fpm::Package {
             std::io::stdout().flush()?;
             // Download the zip folder
             {
-                let mut response =
+                let response =
                     if download_url[1..].contains("://") || download_url.starts_with("//") {
-                        reqwest::get(download_url.as_str())?
+                        reqwest::get(download_url.as_str()).await?
                     } else if let Ok(response) =
-                        reqwest::get(format!("https://{}", download_url).as_str())
+                        reqwest::get(format!("https://{}", download_url).as_str()).await
                     {
                         response
                     } else {
-                        reqwest::get(format!("http://{}", download_url).as_str())?
+                        reqwest::get(format!("http://{}", download_url).as_str()).await?
                     };
                 let mut file = std::fs::File::create(&path)?;
                 // TODO: instead of reading the whole thing in memory use tokio::io::copy() somehow?
-                let mut buf: Vec<u8> = vec![];
-                response.copy_to(&mut buf)?;
-                file.write_all(&buf)?;
+                // let mut buf: Vec<u8> = vec![];
+                // response.copy_to(&mut buf)?;
+                file.write_all(response.text().await?.as_bytes())?;
             }
 
             let file = std::fs::File::open(&path)?;
@@ -281,11 +281,11 @@ impl fpm::Package {
             download_translations,
             download_dependencies,
             &fpm_ftd_path,
-        );
+        ).await;
 
-        fn get_fpm(name: &str) -> fpm::Result<String> {
+        async fn get_fpm(name: &str) -> fpm::Result<String> {
             let response_fpm = if let Ok(response_fpm) =
-                reqwest::get(format!("https://{}/FPM.ftd", name).as_str())
+                reqwest::get(format!("https://{}/FPM.ftd", name).as_str()).await
             {
                 if response_fpm.status().is_success() {
                     Some(response_fpm)
@@ -293,7 +293,7 @@ impl fpm::Package {
                     None
                 }
             } else if let Ok(response_fpm) =
-                reqwest::get(format!("http://{}/FPM.ftd", name).as_str())
+                reqwest::get(format!("http://{}/FPM.ftd", name).as_str()).await
             {
                 if response_fpm.status().is_success() {
                     Some(response_fpm)
@@ -304,7 +304,7 @@ impl fpm::Package {
                 None
             };
             match response_fpm {
-                Some(mut response_fpm) => Ok(response_fpm.text()?),
+                Some(response_fpm) => Ok(response_fpm.text().await?),
                 None => Err(fpm::Error::UsageError {
                     message: format!(
                         "Unable to find the FPM.ftd for the dependency package: {}",
@@ -324,8 +324,8 @@ impl fpm::Package {
     /// `process_fpm()`, together with `process()`, recursively make dependency packages available inside
     /// `.packages` directory
     ///
-    // #[async_recursion::async_recursion]
-    fn process_fpm(
+    #[async_recursion::async_recursion]
+    async fn process_fpm(
         root: &camino::Utf8PathBuf,
         base_path: &camino::Utf8PathBuf,
         downloaded_package: &mut Vec<String>,
@@ -395,10 +395,10 @@ impl fpm::Package {
                         false,
                         true,
                         &dst.join("FPM.ftd"),
-                    )?;
+                    ).await?;
                 }
                 dep.package
-                    .process(base_path, downloaded_package, false, true)?;
+                    .process(base_path, downloaded_package, false, true).await?;
             }
         }
 
@@ -431,9 +431,9 @@ impl fpm::Package {
                         false,
                         false,
                         &dst.join("FPM.ftd"),
-                    )?;
+                    ).await?;
                 } else {
-                    translation.process(base_path, downloaded_package, false, false)?;
+                    translation.process(base_path, downloaded_package, false, false).await?;
                 }
             }
         }

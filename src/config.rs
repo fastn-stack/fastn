@@ -307,7 +307,7 @@ impl Config {
 
         fpm::utils::validate_zip_url(&package)?;
 
-        fpm::dependency::ensure(&root, &mut package)?;
+        fpm::dependency::ensure(&root, &mut package).await?;
         if package.import_auto_imports_from_original {
             if let Some(ref original_package) = *package.translation_of {
                 if !package.auto_import.is_empty() {
