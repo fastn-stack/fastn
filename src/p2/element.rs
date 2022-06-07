@@ -1100,10 +1100,10 @@ pub fn color_from(l: Option<String>, doc_id: &str) -> ftd::p1::Result<Option<ftd
         }
 
         return dbg!(Ok(Some(ftd::ColorValue {
-            r: ((iv & 0xff000000) >> 32) as u8,
+            r: ((iv & 0xff000000) >> 24) as u8,
             g: ((iv & 0xff0000) >> 16) as u8,
             b: ((iv & 0xff00) >> 8) as u8,
-            alpha: (iv & 0x1a) as f32,
+            alpha: (iv & 0xff) as f32,
         })));
     } else {
         match css_color_parser::Color::from_str(v.as_str()) {
