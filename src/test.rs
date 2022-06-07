@@ -3,6 +3,45 @@ fn get_name() {
     assert_eq!(ftd::get_name("fn", "fn foo", "test").unwrap(), "foo")
 }
 
+pub fn interpret_helper(
+    name: &str,
+    source: &str,
+    lib: &ftd::p2::TestLibrary,
+) -> ftd::p1::Result<ftd::p2::Document> {
+    let mut s = ftd::p2::interpreter::interpret(name, source)?;
+    let document;
+    loop {
+        match s {
+            ftd::p2::interpreter::Interpreter::Done { document: doc } => {
+                document = doc;
+                break;
+            }
+            ftd::p2::interpreter::Interpreter::StuckOnProcessor { state, section } => {
+                let value = lib.process(&section, &state.tdoc(&mut Default::default()))?;
+                s = state.continue_after_processor(&section, value)?;
+            }
+            ftd::p2::interpreter::Interpreter::StuckOnImport { module, state: st } => {
+                let source =
+                    lib.get_with_result(module.as_str(), &st.tdoc(&mut Default::default()))?;
+                s = st.continue_after_import(module.as_str(), source.as_str())?;
+            }
+        }
+    }
+    Ok(document)
+}
+
+pub fn interpret(
+    name: &str,
+    source: &str,
+    lib: &ftd::p2::TestLibrary,
+) -> ftd::p1::Result<(
+    std::collections::BTreeMap<String, ftd::p2::Thing>,
+    ftd::Column,
+)> {
+    let doc = ftd::test::interpret_helper(name, source, lib)?;
+    Ok((doc.data, doc.main))
+}
+
 macro_rules! p {
     ($s:expr, $t: expr,) => {
         p!($s, $t)
@@ -10,7 +49,7 @@ macro_rules! p {
     ($s:expr, $t: expr) => {
         let (ebag, ecol): (std::collections::BTreeMap<String, ftd::p2::Thing>, _) = $t;
         let (mut bag, col) =
-            ftd::p2::interpreter::interpret("foo/bar", indoc::indoc!($s), &ftd::p2::TestLibrary {})
+            ftd::test::interpret("foo/bar", indoc::indoc!($s), &ftd::p2::TestLibrary {})
                 .expect("found error");
         for v in bag.values_mut() {
             if let ftd::p2::Thing::Component(c) = v {

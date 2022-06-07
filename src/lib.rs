@@ -24,7 +24,10 @@ mod youtube_id;
 pub use component::{ChildComponent, Component, Instruction};
 pub use condition::Condition;
 pub use event::{Action, Event};
-pub use ftd::value_with_default::ValueWithDefault;
+pub use ftd::{
+    ftd::p2::interpreter::{interpret, Interpreter, InterpreterState},
+    value_with_default::ValueWithDefault,
+};
 pub use html::{anchor, color, length, overflow, Collector, Node, StyleSpec};
 pub use or_type::OrType;
 pub use rt::RT;
@@ -224,20 +227,27 @@ pub fn split_module<'a>(
 
 pub struct ExampleLibrary {}
 
-#[cfg(feature = "async")]
-use async_trait::async_trait;
-
-#[cfg(feature = "async")]
-#[async_trait]
-impl ftd::p2::Library for ExampleLibrary {
-    async fn get(&self, name: &str, _doc: &ftd::p2::TDoc) -> Option<String> {
+impl ExampleLibrary {
+    pub fn get(&self, name: &str, _doc: &ftd::p2::TDoc) -> Option<String> {
         std::fs::read_to_string(format!("./examples/{}.ftd", name)).ok()
     }
-}
 
-#[cfg(not(feature = "async"))]
-impl ftd::p2::Library for ExampleLibrary {
-    fn get(&self, name: &str, _doc: &ftd::p2::TDoc) -> Option<String> {
-        std::fs::read_to_string(format!("./examples/{}.ftd", name)).ok()
+    pub fn process(
+        &self,
+        section: &ftd::p1::Section,
+        doc: &ftd::p2::TDoc,
+    ) -> ftd::p1::Result<ftd::Value> {
+        ftd::unknown_processor_error(
+            format!("unimplemented for section {:?} and doc {:?}", section, doc),
+            doc.name.to_string(),
+            section.line_number,
+        )
+    }
+
+    pub fn get_with_result(&self, name: &str, doc: &ftd::p2::TDoc) -> ftd::p1::Result<String> {
+        match self.get(name, doc) {
+            Some(v) => Ok(v),
+            None => ftd::e2(format!("library not found: {}", name), "", 0),
+        }
     }
 }

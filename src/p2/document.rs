@@ -4,14 +4,7 @@ pub struct Document {
     pub name: String,
     pub instructions: Vec<ftd::Instruction>,
     pub main: ftd::Column,
-    pub p1: Vec<ftd::p1::Section>,
     pub aliases: std::collections::BTreeMap<String, String>,
-}
-
-impl ToString for Document {
-    fn to_string(&self) -> String {
-        ftd::p1::to_string(&self.p1)
-    }
 }
 
 impl Document {
@@ -418,40 +411,6 @@ impl Document {
         })
     }
 
-    pub fn without_render(
-        name: &str,
-        source: &str,
-        lib: &dyn ftd::p2::Library,
-    ) -> ftd::p1::Result<Document> {
-        let mut interpreter = ftd::p2::interpreter::Interpreter::new(lib);
-        let instructions = interpreter.interpret(name, source)?;
-        let rt = ftd::RT::from(name, interpreter.aliases, interpreter.bag, instructions);
-
-        Ok(Document {
-            main: Default::default(),
-            data: rt.bag,
-            instructions: rt.instructions,
-            p1: interpreter.p1,
-            aliases: rt.aliases,
-            name: name.to_string(),
-        })
-    }
-
-    pub fn from(name: &str, source: &str, lib: &dyn ftd::p2::Library) -> ftd::p1::Result<Document> {
-        let mut d = Self::without_render(name, source, lib)?;
-
-        let mut rt = ftd::RT::from(
-            d.name.as_str(),
-            d.aliases.clone(),
-            d.data.clone(),
-            d.instructions.clone(),
-        );
-
-        d.main = rt.render()?;
-        d.data.extend(rt.bag);
-        Ok(d)
-    }
-
     pub fn get_heading<F>(children: &[ftd::Element], f: &F) -> Option<ftd::Rendered>
     where
         F: Fn(&ftd::Region) -> bool,
@@ -588,31 +547,6 @@ impl Document {
                 serde_json::Value::Array(a)
             }
             t => return ftd::e2(format!("not a record: {:?}", t), self.name.as_str(), 0),
-        };
-
-        Ok(serde_json::from_value(json)?)
-    }
-
-    #[cfg(calls)]
-    pub fn calls<T: serde::de::DeserializeOwned>(
-        &self,
-        component: &str,
-    ) -> ftd::p1::Result<Vec<T>> {
-        let component = self.name(component);
-        let thing = match self.data.get(component.as_str()) {
-            Some(t) => t,
-            None => return Ok(vec![]),
-        };
-
-        let json = match thing {
-            ftd::p2::Thing::Component(c) => {
-                let mut a = vec![];
-                for c in c.invocations.iter() {
-                    a.push(self.object2_to_json(c)?);
-                }
-                serde_json::Value::Array(a)
-            }
-            t => panic!("{:?} is not a component", t),
         };
 
         Ok(serde_json::from_value(json)?)
@@ -820,7 +754,7 @@ mod test {
 
     #[test]
     fn variable_from_other_doc() {
-        let bag = super::Document::from(
+        let bag = ftd::test::interpret_helper(
             "foo/bar",
             indoc::indoc!(
                 "
@@ -856,7 +790,7 @@ mod test {
             reader: Vec<Someone>,
         }
 
-        let bag = super::Document::from(
+        let bag = ftd::test::interpret_helper(
             "foo/bar",
             indoc::indoc!(
                 "
@@ -951,7 +885,7 @@ mod test {
             title: String,
         }
 
-        let bag = super::Document::from(
+        let bag = ftd::test::interpret_helper(
             "foo/bar",
             indoc::indoc!(
                 "

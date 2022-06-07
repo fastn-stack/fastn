@@ -41,13 +41,16 @@ padding-bottom: 20
             id.replace(".ftd", ".html"),
         );
     } else if dir.is_dir() {
-        for entry in std::fs::read_dir(dir).expect("./examples is not a directory") {
+        for entry in
+            std::fs::read_dir(dir).unwrap_or_else(|_| panic!("{:?} is not a directory", dir.to_str()))
+        {
             let path = entry.expect("no files inside ./examples").path();
             let source = path
                 .to_str()
                 .unwrap_or_else(|| panic!("Path {:?} cannot be convert to string", path));
             let split: Vec<_> = source.split('/').collect();
             let id = split.last().expect("Filename should be present");
+
             if id.contains(".ftd") {
                 let doc = std::fs::read_to_string(source).expect("cant read file");
                 write(id, doc);
@@ -68,7 +71,8 @@ fn write(id: &str, doc: String) {
     let start = std::time::Instant::now();
     print!("Processing: {} ... ", id);
     let lib = ftd::ExampleLibrary {};
-    let b = match ftd::p2::Document::from(id, &*doc, &lib) {
+
+    let b = match interpret_helper(id, &*doc, &lib) {
         Ok(v) => v,
         Err(e) => {
             eprintln!("failed to parse {}: {:?}", id, &e);
@@ -114,4 +118,31 @@ fn write(id: &str, doc: String) {
     .expect("failed to write to .html file");
     let duration = start.elapsed();
     println!("Done {:?}", duration);
+}
+
+pub fn interpret_helper(
+    name: &str,
+    source: &str,
+    lib: &ftd::ExampleLibrary,
+) -> ftd::p1::Result<ftd::p2::Document> {
+    let mut s = ftd::interpret(name, source)?;
+    let document;
+    loop {
+        match s {
+            ftd::Interpreter::Done { document: doc } => {
+                document = doc;
+                break;
+            }
+            ftd::Interpreter::StuckOnProcessor { state, section } => {
+                let value = lib.process(&section, &state.tdoc(&mut Default::default()))?;
+                s = state.continue_after_processor(&section, value)?;
+            }
+            ftd::Interpreter::StuckOnImport { module, state: st } => {
+                let source =
+                    lib.get_with_result(module.as_str(), &st.tdoc(&mut Default::default()))?;
+                s = st.continue_after_import(module.as_str(), source.as_str())?;
+            }
+        }
+    }
+    Ok(document)
 }
