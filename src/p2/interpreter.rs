@@ -17347,6 +17347,32 @@ mod test {
 
         let mut main = super::default_column();
 
+        main.container
+            .children
+            .push(ftd::Element::Markup(ftd::Markups {
+                text: ftd::markup_line("Hello"),
+                line: true,
+                common: ftd::Common {
+                    color: Some(ftd::Color {
+                        light: ftd::ColorValue {
+                            r: 44,
+                            g: 201,
+                            b: 181,
+                            alpha: 0.1,
+                        },
+                        dark: ftd::ColorValue {
+                            r: 44,
+                            g: 201,
+                            b: 181,
+                            alpha: 0.1,
+                        },
+                        reference: Some(s("foo/bar#hex-color")),
+                    }),
+                    ..Default::default()
+                },
+                ..Default::default()
+            }));
+
         p!(
             "
             -- ftd.color hex-color:
@@ -17499,6 +17525,3 @@ mod test {
         //                 toc: $t
     }*/
 }
--- ftd.color cta-primary-disabled-:
-light: #2cc9b51a
-dark: #2cc9b51a
