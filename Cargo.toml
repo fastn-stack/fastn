@@ -25,7 +25,8 @@ home = "0.5.3"
 ignore = "0.4.18"
 indoc = "1.0"
 regex = "1.5.5"
-reqwest = "0.11.10"
+#reqwest = { version = "0.11.10", features = ["blocking"] }
+reqwest = { version = "0.9.18"}
 rusqlite = { version = "0.26.3", features = ["bundled"] }
 serde = { version = "1", features = ["derive"] }
 serde_derive = "1.0"

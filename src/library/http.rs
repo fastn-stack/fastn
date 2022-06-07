@@ -84,5 +84,5 @@ async fn _get(url: url::Url) -> reqwest::Result<String> {
     let c = reqwest::Client::builder()
         .default_headers(headers)
         .build()?;
-    c.get(url.to_string().as_str()).send().await?.text().await
+    c.get(url.to_string().as_str()).send()?.text()
 }
