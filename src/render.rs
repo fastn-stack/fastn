@@ -37,7 +37,9 @@ pub async fn render(config: &fpm::Config, id: &str, base_url: &str) -> fpm::Resu
         };
 
         let main_ftd_doc =
-            match fpm::doc::parse(main.id_with_package().as_str(), main.content.as_str(), &lib) {
+            match fpm::doc::parse(main.id_with_package().as_str(), main.content.as_str(), &lib)
+                .await
+            {
                 Ok(v) => v,
                 Err(e) => {
                     return Err(fpm::Error::PackageError {

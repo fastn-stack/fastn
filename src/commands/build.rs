@@ -242,6 +242,7 @@ async fn build_with_translations(
             Default::default(),
             base_url,
             asset_documents,
+            true,
         )
         .await?;
         fpm::utils::print_end("Processed translation-status.ftd", start);
@@ -377,6 +378,7 @@ async fn build_with_original(
             Default::default(),
             base_url,
             asset_documents,
+            true,
         )
         .await?;
         fpm::utils::print_end("Processed translation-status.ftd", start);
@@ -452,16 +454,17 @@ pub(crate) async fn process_file(
                     translated_data,
                     base_url,
                     asset_documents,
+                    true,
                 )
                 .await;
                 match (resp, skip_failed) {
-                    (Ok(r), _) => r,
+                    (Ok(_), _) => (),
                     (_, true) => {
                         println!("Failed");
                         return Ok(());
                     }
-                    (e, _) => {
-                        return e;
+                    (Err(e), _) => {
+                        return Err(e);
                     }
                 }
             }
@@ -581,16 +584,17 @@ pub(crate) async fn process_file(
                 translated_data,
                 base_url,
                 asset_documents,
+                true,
             )
             .await;
             match (resp, skip_failed) {
-                (Ok(r), _) => r,
+                (Ok(_), _) => (),
                 (_, true) => {
                     println!("Failed");
                     return Ok(());
                 }
-                (e, _) => {
-                    return e;
+                (Err(e), _) => {
+                    return Err(e);
                 }
             }
         }
@@ -706,8 +710,10 @@ async fn process_image(
             translated_data,
             base_url,
             asset_documents,
+            true,
         )
-        .await;
+        .await
+        .map(|_| ());
     }
 
     return process_ftd(
@@ -718,8 +724,10 @@ async fn process_image(
         translated_data,
         base_url,
         asset_documents,
+        true,
     )
-    .await;
+    .await
+    .map(|_| ());
 
     fn convert_to_ftd(
         config: &fpm::Config,
@@ -764,8 +772,10 @@ async fn process_code(
                     translated_data,
                     base_url,
                     asset_documents,
+                    true,
                 )
-                .await;
+                .await
+                .map(|_| ());
             }
             None => {
                 return Ok(());
@@ -781,8 +791,10 @@ async fn process_code(
         translated_data,
         base_url,
         asset_documents,
+        true,
     )
-    .await;
+    .await
+    .map(|_| ());
 
     fn convert_to_ftd(
         config: &fpm::Config,
@@ -833,8 +845,10 @@ async fn process_markdown(
                     translated_data,
                     base_url,
                     asset_documents,
+                    true,
                 )
-                .await;
+                .await
+                .map(|_| ());
             }
             None => {
                 return Ok(());
@@ -850,8 +864,10 @@ async fn process_markdown(
         translated_data,
         base_url,
         asset_documents,
+        true,
     )
-    .await;
+    .await
+    .map(|_| ());
 
     fn convert_md_to_ftd(
         config: &fpm::Config,
@@ -904,7 +920,8 @@ async fn process_markdown(
     }
 }
 
-async fn process_ftd(
+#[allow(clippy::too_many_arguments)]
+pub(crate) async fn process_ftd(
     config: &fpm::Config,
     main: &fpm::Document,
     fallback: Option<&fpm::Document>,
@@ -912,7 +929,8 @@ async fn process_ftd(
     translated_data: fpm::TranslationData,
     base_url: &str,
     asset_documents: &std::collections::HashMap<String, String>,
-) -> fpm::Result<()> {
+    do_write: bool,
+) -> fpm::Result<Vec<u8>> {
     if main.id.eq("FPM.ftd") {
         if config.is_translation_package() {
             use std::io::Write;
@@ -968,6 +986,7 @@ async fn process_ftd(
             )?;
         }
     }
+
     let main = {
         let mut main = main.to_owned();
         if main.id.eq("FPM.ftd") {
@@ -1035,7 +1054,7 @@ async fn process_ftd(
     };
     match (fallback, message) {
         (Some(fallback), Some(message)) => {
-            write_with_fallback(
+            return write_with_fallback(
                 config,
                 &final_main,
                 fallback,
@@ -1044,11 +1063,12 @@ async fn process_ftd(
                 translated_data,
                 base_url,
                 asset_documents,
+                do_write,
             )
-            .await?
+            .await
         }
         (None, Some(message)) => {
-            write_with_message(
+            return write_with_message(
                 config,
                 &final_main,
                 new_file_path.as_str(),
@@ -1057,21 +1077,19 @@ async fn process_ftd(
                 base_url,
                 asset_documents,
             )
-            .await?
+            .await
         }
         _ => {
-            write_default(
+            return write_default(
                 config,
                 &final_main,
                 new_file_path.as_str(),
                 base_url,
                 asset_documents,
             )
-            .await?
+            .await
         }
     }
-
-    return Ok(());
 
     async fn write_default(
         config: &fpm::Config,
@@ -1079,7 +1097,7 @@ async fn process_ftd(
         new_file_path: &str,
         base_url: &str,
         asset_documents: &std::collections::HashMap<String, String>,
-    ) -> fpm::Result<()> {
+    ) -> fpm::Result<Vec<u8>> {
         use tokio::io::AsyncWriteExt;
 
         let lib = fpm::Library {
@@ -1092,7 +1110,9 @@ async fn process_ftd(
         };
 
         let main_ftd_doc =
-            match fpm::doc::parse(main.id_with_package().as_str(), main.content.as_str(), &lib) {
+            match fpm::doc::parse(main.id_with_package().as_str(), main.content.as_str(), &lib)
+                .await
+            {
                 Ok(v) => v,
                 Err(e) => {
                     return Err(fpm::Error::PackageError {
@@ -1107,19 +1127,18 @@ async fn process_ftd(
         let ftd_doc = main_ftd_doc.to_rt("main", &main.id);
 
         let mut f = tokio::fs::File::create(new_file_path).await?;
-        f.write_all(
-            fpm::utils::replace_markers(
-                fpm::ftd_html(),
-                config,
-                main.id_to_path().as_str(),
-                doc_title.as_str(),
-                base_url,
-                &ftd_doc,
-            )
-            .as_bytes(),
-        )
-        .await?;
-        Ok(())
+        // TODO: return Document
+        let file_content = fpm::utils::replace_markers(
+            fpm::ftd_html(),
+            config,
+            main.id_to_path().as_str(),
+            doc_title.as_str(),
+            base_url,
+            &ftd_doc,
+        );
+
+        f.write_all(file_content.as_bytes()).await?;
+        Ok(file_content.into())
     }
 
     async fn write_with_message(
@@ -1130,7 +1149,7 @@ async fn process_ftd(
         translated_data: fpm::TranslationData,
         base_url: &str,
         asset_documents: &std::collections::HashMap<String, String>,
-    ) -> fpm::Result<()> {
+    ) -> fpm::Result<Vec<u8>> {
         use tokio::io::AsyncWriteExt;
 
         let lib = fpm::Library {
@@ -1143,7 +1162,9 @@ async fn process_ftd(
         };
 
         let main_ftd_doc =
-            match fpm::doc::parse(main.id_with_package().as_str(), main.content.as_str(), &lib) {
+            match fpm::doc::parse(main.id_with_package().as_str(), main.content.as_str(), &lib)
+                .await
+            {
                 Ok(v) => v,
                 Err(e) => {
                     return Err(fpm::Error::PackageError {
@@ -1158,7 +1179,7 @@ async fn process_ftd(
         };
         let main_rt_doc = main_ftd_doc.to_rt("main", &main.id);
 
-        let message_ftd_doc = match fpm::doc::parse("message", message, &lib) {
+        let message_ftd_doc = match fpm::doc::parse("message", message, &lib).await {
             Ok(v) => v,
             Err(e) => {
                 return Err(fpm::Error::PackageError {
@@ -1170,36 +1191,34 @@ async fn process_ftd(
 
         let mut f = tokio::fs::File::create(new_file_path).await?;
 
-        f.write_all(
-            fpm::utils::replace_markers(
-                fpm::with_message()
-                    .replace(
-                        "__ftd_data_message__",
-                        serde_json::to_string_pretty(&message_rt_doc.data)
-                            .expect("failed to convert document to json")
-                            .as_str(),
-                    )
-                    .replace(
-                        "__ftd_external_children_message__",
-                        serde_json::to_string_pretty(&message_rt_doc.external_children)
-                            .expect("failed to convert document to json")
-                            .as_str(),
-                    )
-                    .replace(
-                        "__message__",
-                        format!("{}{}", message_rt_doc.html, config.get_font_style(),).as_str(),
-                    )
-                    .as_str(),
-                config,
-                main.id_to_path().as_str(),
-                doc_title.as_str(),
-                base_url,
-                &main_rt_doc,
-            )
-            .as_bytes(),
-        )
-        .await?;
-        Ok(())
+        let file_content = fpm::utils::replace_markers(
+            fpm::with_message()
+                .replace(
+                    "__ftd_data_message__",
+                    serde_json::to_string_pretty(&message_rt_doc.data)
+                        .expect("failed to convert document to json")
+                        .as_str(),
+                )
+                .replace(
+                    "__ftd_external_children_message__",
+                    serde_json::to_string_pretty(&message_rt_doc.external_children)
+                        .expect("failed to convert document to json")
+                        .as_str(),
+                )
+                .replace(
+                    "__message__",
+                    format!("{}{}", message_rt_doc.html, config.get_font_style(),).as_str(),
+                )
+                .as_str(),
+            config,
+            main.id_to_path().as_str(),
+            doc_title.as_str(),
+            base_url,
+            &main_rt_doc,
+        );
+
+        f.write_all(file_content.as_bytes()).await?;
+        Ok(file_content.into())
     }
     #[allow(clippy::too_many_arguments)]
     async fn write_with_fallback(
@@ -1211,7 +1230,8 @@ async fn process_ftd(
         translated_data: fpm::TranslationData,
         base_url: &str,
         asset_documents: &std::collections::HashMap<String, String>,
-    ) -> fpm::Result<()> {
+        _do_write: bool, // TODO: Do it later
+    ) -> fpm::Result<Vec<u8>> {
         use tokio::io::AsyncWriteExt;
         let lib = fpm::Library {
             config: config.clone(),
@@ -1223,7 +1243,9 @@ async fn process_ftd(
         };
 
         let main_ftd_doc =
-            match fpm::doc::parse(main.id_with_package().as_str(), main.content.as_str(), &lib) {
+            match fpm::doc::parse(main.id_with_package().as_str(), main.content.as_str(), &lib)
+                .await
+            {
                 Ok(v) => v,
                 Err(e) => {
                     return Err(fpm::Error::PackageError {
@@ -1233,7 +1255,7 @@ async fn process_ftd(
             };
         let main_rt_doc = main_ftd_doc.to_rt("main", &main.id);
 
-        let message_ftd_doc = match fpm::doc::parse("message", message, &lib) {
+        let message_ftd_doc = match fpm::doc::parse("message", message, &lib).await {
             Ok(v) => v,
             Err(e) => {
                 return Err(fpm::Error::PackageError {
@@ -1252,7 +1274,9 @@ async fn process_ftd(
             main.id_with_package().as_str(),
             fallback.content.as_str(),
             &lib,
-        ) {
+        )
+        .await
+        {
             Ok(v) => v,
             Err(e) => {
                 return Err(fpm::Error::PackageError {
@@ -1264,52 +1288,50 @@ async fn process_ftd(
 
         let mut f = tokio::fs::File::create(new_file_path).await?;
 
-        f.write_all(
-            fpm::utils::replace_markers(
-                fpm::with_fallback()
-                    .replace(
-                        "__ftd_data_message__",
-                        serde_json::to_string_pretty(&message_rt_doc.data)
-                            .expect("failed to convert document to json")
-                            .as_str(),
-                    )
-                    .replace(
-                        "__ftd_external_children_message__",
-                        serde_json::to_string_pretty(&message_rt_doc.external_children)
-                            .expect("failed to convert document to json")
-                            .as_str(),
-                    )
-                    .replace(
-                        "__message__",
-                        format!("{}{}", message_rt_doc.html, config.get_font_style(),).as_str(),
-                    )
-                    .replace(
-                        "__ftd_data_fallback__",
-                        serde_json::to_string_pretty(&fallback_rt_doc.data)
-                            .expect("failed to convert document to json")
-                            .as_str(),
-                    )
-                    .replace(
-                        "__ftd_external_children_fallback__",
-                        serde_json::to_string_pretty(&fallback_rt_doc.external_children)
-                            .expect("failed to convert document to json")
-                            .as_str(),
-                    )
-                    .replace(
-                        "__fallback__",
-                        format!("{}{}", fallback_rt_doc.html, config.get_font_style(),).as_str(),
-                    )
-                    .as_str(),
-                config,
-                main.id_to_path().as_str(),
-                doc_title.as_str(),
-                base_url,
-                &main_rt_doc,
-            )
-            .as_bytes(),
-        )
-        .await?;
-        Ok(())
+        let file_content = fpm::utils::replace_markers(
+            fpm::with_fallback()
+                .replace(
+                    "__ftd_data_message__",
+                    serde_json::to_string_pretty(&message_rt_doc.data)
+                        .expect("failed to convert document to json")
+                        .as_str(),
+                )
+                .replace(
+                    "__ftd_external_children_message__",
+                    serde_json::to_string_pretty(&message_rt_doc.external_children)
+                        .expect("failed to convert document to json")
+                        .as_str(),
+                )
+                .replace(
+                    "__message__",
+                    format!("{}{}", message_rt_doc.html, config.get_font_style(),).as_str(),
+                )
+                .replace(
+                    "__ftd_data_fallback__",
+                    serde_json::to_string_pretty(&fallback_rt_doc.data)
+                        .expect("failed to convert document to json")
+                        .as_str(),
+                )
+                .replace(
+                    "__ftd_external_children_fallback__",
+                    serde_json::to_string_pretty(&fallback_rt_doc.external_children)
+                        .expect("failed to convert document to json")
+                        .as_str(),
+                )
+                .replace(
+                    "__fallback__",
+                    format!("{}{}", fallback_rt_doc.html, config.get_font_style(),).as_str(),
+                )
+                .as_str(),
+            config,
+            main.id_to_path().as_str(),
+            doc_title.as_str(),
+            base_url,
+            &main_rt_doc,
+        );
+
+        f.write_all(file_content.as_bytes()).await?;
+        Ok(file_content.into())
     }
 }
 

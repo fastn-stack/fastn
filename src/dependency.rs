@@ -32,18 +32,13 @@ impl Dependency {
 }
 
 pub async fn ensure(base_dir: &camino::Utf8PathBuf, package: &mut fpm::Package) -> fpm::Result<()> {
-    /*futures::future::join_all(
-        deps.into_iter()
-            .map(|x| (x, base_dir.clone()))
-            .map(|(x, base_dir)| {
-                tokio::spawn(async move { x.package.process(base_dir, x.repo.as_str()).await })
-            })
-            .collect::<Vec<tokio::task::JoinHandle<_>>>(),
-    )
-    .await;*/
-    // TODO: To convert it back to async. Not sure we can or should do it as `downloaded_package` would be
-    //  referred and updated by all the dep.package.process. To make it async we have change this
-    //  function to unsafe and downloaded_package as global static variable to have longer lifetime
+    if package.translations.has_elements() && package.translation_of.is_some() {
+        return Err(fpm::Error::UsageError {
+            message: "Package cannot be both original and translation package. \
+            suggestion: Remove either `translation-of` or `translation` from FPM.ftd"
+                .to_string(),
+        });
+    }
 
     let mut downloaded_package = vec![package.name.clone()];
 
@@ -64,14 +59,6 @@ pub async fn ensure(base_dir: &camino::Utf8PathBuf, package: &mut fpm::Package) 
             .await?;
     }
 
-    if package.translations.has_elements() && package.translation_of.is_some() {
-        return Err(fpm::Error::UsageError {
-            message: "Package cannot be both original and translation package. \
-            suggestion: Remove either `translation-of` or `translation` from FPM.ftd"
-                .to_string(),
-        });
-    }
-
     for translation in package.translations.iter_mut() {
         if package.language.is_none() {
             return Err(fpm::Error::UsageError {
@@ -82,6 +69,7 @@ pub async fn ensure(base_dir: &camino::Utf8PathBuf, package: &mut fpm::Package) 
             .process(base_dir, &mut downloaded_package, false, false)
             .await?;
     }
+
     Ok(())
 }
 
@@ -387,6 +375,7 @@ impl fpm::Package {
         if download_dependencies {
             for dep in package.dependencies.iter_mut() {
                 let dep_path = root.join(".packages").join(dep.package.name.as_str());
+
                 if downloaded_package.contains(&dep.package.name) {
                     continue;
                 }

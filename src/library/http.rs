@@ -1,4 +1,7 @@
-pub fn processor(section: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Result<ftd::Value> {
+pub async fn processor<'a>(
+    section: &ftd::p1::Section,
+    doc: &ftd::p2::TDoc<'a>,
+) -> ftd::p1::Result<ftd::Value> {
     {
         let method = section
             .header
@@ -46,7 +49,7 @@ pub fn processor(section: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Re
         url.query_pairs_mut().append_pair(k, v);
     }
 
-    let json = futures::executor::block_on(get(url, doc.name, section.line_number))?;
+    let json = get(url, doc.name, section.line_number).await?;
     doc.from_json(&json, section)
 }
 
