@@ -1101,7 +1101,7 @@ pub fn color_from(l: Option<String>, doc_id: &str) -> ftd::p1::Result<Option<ftd
             r: ((iv & 0xff000000) >> 24) as u8,
             g: ((iv & 0xff0000) >> 16) as u8,
             b: ((iv & 0xff00) >> 8) as u8,
-            alpha: (iv & 0xff) as f32,
+            alpha: dbg!(math::round::floor((iv & 0xff) as f64 / 255_f64, 1)) as f32,
         }));
     } else {
         match css_color_parser::Color::from_str(v.as_str()) {
