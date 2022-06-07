@@ -1,0 +1,71 @@
+name: Deploy Site
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+    - '**.ftd'
+    - '**.md'
+  workflow_dispatch:
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main branch
+        uses: actions/checkout@v2
+      - uses: FranzDiebold/github-env-vars-action@v2
+      - name: Install fpm
+        id: install_fpm
+        continue-on-error: false
+        run: sh -c "$(curl -fsSL https://raw.githubusercontent.com/FifthTry/fpm/main/install-fpm.sh)"
+      - name: Build the pages with fpm
+        id: build
+        continue-on-error: false
+        run: |
+          echo "Using '$CI_REPOSITORY_NAME_SLUG/' as the base while building"
+          fpm build --base=/$CI_REPOSITORY_NAME/
+      - uses: actions/upload-artifact@master
+        with:
+          name: GH_PAGES_BUILD
+          path: .build/
+  deploy-gh-pages:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Prepare `gh-pages` branch creation
+        id: clone_main
+        uses: actions/checkout@v2
+      - name: Check if `gh-pages` branch exists
+        id: branch_exists
+        continue-on-error: true
+        run: /usr/bin/git ls-remote --heads origin gh-pages | grep ""
+      - name: Create branch if not exists
+        id: create_branch
+        if: steps.branch_exists.outcome != 'success'
+        run: |
+          git config --global user.email "actions-user@users.noreply.github.com"
+          git config --global user.name "actions-user"
+          git checkout --orphan gh-pages
+          git reset --hard
+          git commit --allow-empty -m "Initializing gh-pages branch"
+          git push origin gh-pages
+      - name: Checkout gh-pages branch
+        uses: actions/checkout@v2
+        if: steps.branch_exists.outcome == 'success'
+        with:
+          ref: gh-pages
+      - run: /bin/rm -rf *
+      - uses: actions/download-artifact@master
+        with:
+          name: GH_PAGES_BUILD
+          path: .
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        name: Commit changes to build branch
+        with:
+          commit_message: SSR build
+          branch: gh-pages
+          commit_options: '--no-verify --signoff'
+          repository: .
