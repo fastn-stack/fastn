@@ -17717,3 +17717,6 @@ mod test {
         //                 toc: $t
     }*/
 }
+-- ftd.color cta-primary-disabled-:
+light: #2cc9b51a
+dark: #2cc9b51a
