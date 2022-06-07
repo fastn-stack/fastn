@@ -1087,22 +1087,24 @@ pub fn color_from(l: Option<String>, doc_id: &str) -> ftd::p1::Result<Option<ftd
     // Remove all whitespace, not compliant, but should just be more accepting.
     let mut string = v.replace(' ', "");
     string.make_ascii_lowercase();
-    if v.starts_with("#") && v.len() == 9 {
+    dbg!("v***", &v, &v.chars().count());
+    if v.starts_with("#") && v.chars().count() == 9 {
+        dbg!("insiide***");
         let (_, value_string) = string.split_at(1);
 
         let iv = u64::from_str_radix(value_string, 16).unwrap();
 
         // (7thSigil) unlike original js code, NaN is impossible
-        if !(iv <= 0xffffff) {
+        if !(iv <= 0xffffffff) {
             return ftd::e2(format!("{} is not a valid color", v), doc_id, 0);
         }
 
-        return Ok(Some(ftd::ColorValue {
-            r: ((iv & 0xff0000) >> 16) as u8,
-            g: ((iv & 0xff00) >> 8) as u8,
-            b: (iv & 0xff) as u8,
-            alpha: (iv & Ox1a) as u8,
-        }));
+        return dbg!(Ok(Some(ftd::ColorValue {
+            r: ((iv & 0xff000000) >> 32) as u8,
+            g: ((iv & 0xff0000) >> 16) as u8,
+            b: ((iv & 0xff00) >> 8) as u8,
+            alpha: (iv & 0x1a) as f32,
+        })));
     } else {
         match css_color_parser::Color::from_str(v.as_str()) {
             Ok(v) => Ok(Some(ftd::ColorValue {
