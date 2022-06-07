@@ -2674,7 +2674,7 @@ fn read_arguments(
             ftd::p2::Kind::for_variable(i.to_owned(), k, option_v, doc, None, &all_args)?
         };
         if let ftd::p2::Kind::UI {
-            default: Some((_, h)),
+            default: Some((ui_id, h)),
         } = &mut kind.mut_inner()
         {
             let headers = {
@@ -2691,6 +2691,7 @@ fn read_arguments(
                 ftd::p1::Header(headers)
             };
             *h = headers;
+            *ui_id = doc.resolve_name(i.clone(), ui_id.as_str())?;
         }
         args.insert(var_data.name.to_string(), kind.clone());
         all_args.insert(var_data.name.to_string(), kind);
