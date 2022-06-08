@@ -1090,7 +1090,11 @@ pub fn color_from(l: Option<String>, doc_id: &str) -> ftd::p1::Result<Option<ftd
     if v.starts_with("#") && v.len() == 9 {
         let (_, value_string) = string.split_at(1);
 
-        let iv = u64::from_str_radix(value_string, 16).unwrap();
+        let iv = u64::from_str_radix(value_string, 16).map_err(|e| ftd::p1::Error::ParseError {
+            message: e.to_string(),
+            doc_id: doc_id.to_string(),
+            line_number: 0,
+        })?;
 
         // (7thSigil) unlike original js code, NaN is impossible
         if !(iv <= 0xffffffff) {
