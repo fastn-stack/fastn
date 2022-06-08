@@ -17305,6 +17305,102 @@ mod test {
             (bag, main),
         );
     }
+    
+    #[test]
+    fn duplicate_headers() {
+        let mut bag = super::default_bag();
+        bag.insert(
+            s("foo/bar#msg"),
+            ftd::p2::Thing::Component(ftd::Component {
+                root: "".to_string(),
+                full_name: "".to_string(),
+                arguments: Default::default(),
+                locals: Default::default(),
+                properties: Default::default(),
+                instructions: vec![],
+                events: vec![],
+                condition: None,
+                kernel: false,
+                invocations: vec![],
+                line_number: 0
+            }),
+        );
+
+        let mut main = super::default_column();
+
+        use super::HeaderValue;
+        use super::name::{HeaderName, HdrName, InvalidHeaderName};
+
+        pub use self::as_header_name::AsHeaderName;
+        pub use self::into_header_name::IntoHeaderName;
+
+        pub struct HeaderMap<T = HeaderValue> {
+            mask: Size,
+            indices: Vec<Pos>,
+            entries: Vec<Bucket<T>>,
+            extra_values: Vec<ExtraValue<T>>,
+            danger: Danger,
+        }
+
+
+        pub fn with_capacity(capacity: usize) -> HeaderMap<T> {
+            assert!(capacity <= MAX_SIZE, "requested capacity too large");
+
+            if capacity == 0 {
+                HeaderMap {
+                    mask: 0,
+                    indices: Vec::new(),
+                    entries: Vec::new(),
+                    extra_values: Vec::new(),
+                    danger: Danger::Green,
+                }
+            }
+            else {
+
+                let entries_cap = to_raw_capacity(capacity).next_power_of_two();
+                let indices_cap = if entries_cap > SEQ_SEARCH_THRESHOLD {
+                    entries_cap
+                } else {
+                    0
+                };
+
+                HeaderMap {
+                    mask: entries_cap.wrapping_sub(1) as Size,
+                    indices: vec![Pos::none(); indices_cap],
+                    entries: Vec::with_capacity(entries_cap),
+                    extra_values: Vec::new(),
+                    danger: Danger::Green,
+                }
+            }
+        }
+
+
+        p!(
+            "
+            -- ftd.text msg:
+            caption title:
+            text: $title
+            text: $title
+
+            ",
+
+            (bag, main),
+
+        );
+
+        let mut map: HeaderMap<u32> = HeaderMap::default();
+
+        let headers = &p;
+
+        for &header in headers {
+            let counter = map.entry(header).unwrap().or_insert(0);
+            *counter += 1;
+            if *counter==2 {
+                panic!("Declared property is repeated again");
+            }
+        };
+    }
+    
     /*#[test]
     fn optional_condition_on_record() {
         let (_g_bag, g_col) = crate::p2::interpreter::interpret(
