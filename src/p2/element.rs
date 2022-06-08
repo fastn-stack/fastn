@@ -1105,7 +1105,7 @@ pub fn color_from(l: Option<String>, doc_id: &str) -> ftd::p1::Result<Option<ftd
             r: ((iv & 0xff000000) >> 24) as u8,
             g: ((iv & 0xff0000) >> 16) as u8,
             b: ((iv & 0xff00) >> 8) as u8,
-            alpha: dbg!(math::round::floor((iv & 0xff) as f64 / 255_f64, 1)) as f32,
+            alpha: round_1p((iv & 0xff) as f32 / 255_f32) as f32,
         }));
     } else {
         match css_color_parser::Color::from_str(v.as_str()) {
@@ -1118,6 +1118,14 @@ pub fn color_from(l: Option<String>, doc_id: &str) -> ftd::p1::Result<Option<ftd
             Err(e) => return ftd::e2(format!("{} is not a valid color: {:?}", v, e), doc_id, 0),
         }
     }
+}
+fn round_1p(n: f32) -> f32 {
+    // 1234.56
+    let temp = (n * 10_f32) as u32;
+    let last = (temp % 10) as f32;
+    let front = n as u32;
+
+    return front as f32 + (last / 10_f32);
 }
 
 pub fn boolean_from_properties(
