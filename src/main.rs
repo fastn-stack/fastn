@@ -2,6 +2,16 @@
 async fn main() -> fpm::Result<()> {
     let matches = app(authors(), version()).get_matches();
 
+    // Block of code to run when start-project subcommand is used
+    if let Some(project) = matches.subcommand_matches("start-project") {
+        // project-name => required field (any package Url or standard project name)
+        let name = project.value_of("package-name").unwrap();
+        // project-path is optional
+        let path = project.value_of("package-path");
+        fpm::start_project(name, path).await?;
+        return Ok(());
+    }
+
     let mut config = fpm::Config::read(None).await?;
 
     if matches.subcommand_matches("update").is_some() {
@@ -89,6 +99,30 @@ fn app(authors: &'static str, version: &'static str) -> clap::App<'static, 'stat
                 .long("--test")
                 .help("Runs the command in test mode")
                 .hidden(true),
+        )
+        .subcommand(
+            // Initial subcommand format
+            // fpm start-project <project-name> [project-path]
+            //                   -n or --name   -p or --path
+            // Necessary <project-name> with Optional [project-path]
+            clap::SubCommand::with_name("start-project")
+                .about("Creates a template ftd project at the target location with the given project name")
+                .arg(
+                    clap::Arg::with_name("package-name")
+                        .short("n")
+                        .long("name")
+                        .required(true)
+                        .takes_value(true)
+                        .help("Package name")
+                )
+                .arg(
+                    clap::Arg::with_name("package-path")
+                        .short("p")
+                        .long("path")
+                        .takes_value(true)
+                        .help("Package path (relative)")
+                )
+                .version(env!("CARGO_PKG_VERSION")),
         )
         .subcommand(
             clap::SubCommand::with_name("build")
