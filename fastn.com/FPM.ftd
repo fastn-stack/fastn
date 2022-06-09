@@ -48,13 +48,13 @@ implements: fifthtry.github.io/theme
   - Get started with Github pages: /how-to/get-started-github-pages/
   - Get started with Vercel: /how-to/get-started-vercel/
 - `fpm` Usage: /usage/
+  - `fpm start-project`: /start-project/
   - `fpm build`: /build/
   - `fpm sync`: /sync/
   - `fpm status`: /status/
   - `fpm diff`: /diff/
   - `fpm update`: /update/
   - `fpm serve`: /serve/
-
 
 
 

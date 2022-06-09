@@ -11,6 +11,7 @@
 - [`fpm status`](status/)
 - [`fpm diff`](diff/)
 - [`fpm serve`](serve/)
+- [`fpm start-project`](start-project/)
 
 Running `fpm` without any argument prints the help-text, which lists all available
 subcommands and general instructions on how to use `fpm`.
