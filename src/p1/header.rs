@@ -175,6 +175,22 @@ impl Header {
             key: name.to_string(),
         })
     }
+    pub fn duplicate(&self, _doc_id: &str, _line_number: usize, name: &str) {
+        for (_, k, _v) in self.0.iter() {
+            let mut count=0;
+            if k.starts_with('/') {
+                continue;
+            }
+            if k == name {
+                count=count + 1;
+                if count==2 {
+                    dbg!(&k);
+                    panic!("Same property declared twice!");
+                }
+                return ();
+            }
+        }
+    }
 
     pub fn f64_optional(
         &self,
