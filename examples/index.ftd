@@ -1,7 +1,0 @@
--- ftd.color cta-primary-disabled-:
-light: rgba(44, 201, 181, 0.1)
-dark: rgba(44, 201, 181, 0.1)
-
--- ftd.color main-text-color:
-light: #2cc9b566
-dark: #2cc9b566fp
