@@ -184,7 +184,6 @@ impl Header {
             if k == name {
                 count=count + 1;
                 if count==2 {
-                    dbg!(&k);
                     panic!("Same property declared twice!");
                 }
                 return ();
