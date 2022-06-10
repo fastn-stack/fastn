@@ -442,6 +442,10 @@ impl InterpreterState {
         // handle top / start_from
     }
 
+    pub fn continue_after_variable(mut self, value: ftd::Value) -> ftd::p1::Result<Interpreter> {
+        self.continue_()
+    }
+
     pub fn continue_after_pop(mut self) -> ftd::p1::Result<Interpreter> {
         self.document_stack.pop();
         self.continue_()
@@ -603,6 +607,10 @@ pub enum Interpreter {
     StuckOnProcessor {
         state: InterpreterState,
         section: ftd::p1::Section,
+    },
+    StuckOnForeignVariable {
+        module: String,
+        state: InterpreterState,
     },
     Done {
         document: ftd::p2::Document,
