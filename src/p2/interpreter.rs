@@ -71,10 +71,17 @@ impl InterpreterState {
 
         while let Some(p1) = parsed_document.sections.last_mut() {
             // first resolve the foreign_variables in the section before proceeding further
+            let doc = ftd::p2::TDoc {
+                name: &parsed_document.name,
+                aliases: &parsed_document.doc_aliases,
+                bag: &self.bag,
+                local_variables: &mut Default::default(),
+            };
+
             if let Some(variable) = Self::resolve_foreign_variable(
                 p1,
                 parsed_document.foreign_variables.as_slice(),
-                &parsed_document.doc_aliases,
+                &doc,
             )? {
                 return Ok(Interpreter::StuckOnForeignVariable {
                     variable,
@@ -92,13 +99,6 @@ impl InterpreterState {
 
             // while this is a specific to entire document, we are still creating it in a loop
             // because otherwise the self.interpret() call won't compile.
-
-            let doc = ftd::p2::TDoc {
-                name: &parsed_document.name,
-                aliases: &parsed_document.doc_aliases,
-                bag: &self.bag,
-                local_variables: &mut Default::default(),
-            };
 
             let var_data = ftd::variable::VariableData::get_name_kind(
                 &p1.name,
@@ -422,66 +422,84 @@ impl InterpreterState {
     fn resolve_foreign_variable(
         section: &mut ftd::p1::Section,
         foreign_variables: &[String],
-        doc_aliases: &std::collections::BTreeMap<String, String>,
+        doc: &ftd::p2::TDoc,
     ) -> ftd::p1::Result<Option<String>> {
-        dbg!(&foreign_variables);
-        if let Some(ref mut caption) = section.caption {
-            if let Some(cap) = caption.clone().strip_prefix('$') {
-                if is_foreign_variable(cap, foreign_variables, doc_aliases)? {
-                    *caption = format!("${}", Self::fv_name_after_resolve(cap));
-                    return Ok(Some(cap.to_string()));
-                }
-            }
-        }
-
-        for (_, _, header) in section.header.0.iter_mut() {
-            if let Some(h) = header.clone().strip_prefix('$') {
-                if is_foreign_variable(h, foreign_variables, doc_aliases)? {
-                    *header = format!("${}", Self::fv_name_after_resolve(h));
-                    return Ok(Some(h.to_string()));
-                }
-            }
-        }
-
-        if let Some((_, ref mut body)) = section.body {
-            if let Some(b) = body.clone().strip_prefix('$') {
-                if is_foreign_variable(b, foreign_variables, doc_aliases)? {
-                    *body = dbg!(format!("${}", Self::fv_name_after_resolve(b)));
-                    return Ok(Some(b.to_string()));
-                }
-            }
+        if let Some(variable) = resolve_all_properties(
+            &mut section.caption,
+            &mut section.header,
+            &mut section.body,
+            section.line_number,
+            foreign_variables,
+            doc,
+        )? {
+            return Ok(Some(variable));
         }
 
         for subsection in section.sub_sections.0.iter_mut() {
-            if let Some(ref mut caption) = subsection.caption {
-                if let Some(cap) = caption.clone().strip_prefix('$') {
-                    if is_foreign_variable(cap, foreign_variables, doc_aliases)? {
-                        *caption = dbg!(format!("${}", Self::fv_name_after_resolve(cap)));
-                        return Ok(Some(cap.to_string()));
-                    }
-                }
-            }
-
-            for (_, _, header) in subsection.header.0.iter_mut() {
-                if let Some(h) = header.clone().strip_prefix('$') {
-                    if is_foreign_variable(h, foreign_variables, doc_aliases)? {
-                        *header = dbg!(format!("${}", Self::fv_name_after_resolve(h)));
-                        return Ok(Some(h.to_string()));
-                    }
-                }
-            }
-
-            if let Some((_, ref mut body)) = subsection.body {
-                if let Some(b) = body.clone().strip_prefix('$') {
-                    if is_foreign_variable(b, foreign_variables, doc_aliases)? {
-                        *body = dbg!(format!("${}", Self::fv_name_after_resolve(b)));
-                        return Ok(Some(b.to_string()));
-                    }
-                }
+            if let Some(variable) = resolve_all_properties(
+                &mut subsection.caption,
+                &mut subsection.header,
+                &mut subsection.body,
+                subsection.line_number,
+                foreign_variables,
+                doc,
+            )? {
+                return Ok(Some(variable));
             }
         }
 
         return Ok(None);
+
+        fn resolve_all_properties(
+            caption: &mut Option<String>,
+            header: &mut ftd::p1::Header,
+            body: &mut Option<(usize, String)>,
+            line_number: usize,
+            foreign_variables: &[String],
+            doc: &ftd::p2::TDoc,
+        ) -> ftd::p1::Result<Option<String>> {
+            if let Some(ref mut caption) = caption {
+                if let Some(cap) =
+                    set_value_for_foreign_variable(caption, foreign_variables, doc, line_number)?
+                {
+                    return Ok(Some(cap));
+                }
+            }
+
+            for (line_number, _, header) in header.0.iter_mut() {
+                if let Some(h) =
+                    set_value_for_foreign_variable(header, foreign_variables, doc, *line_number)?
+                {
+                    return Ok(Some(h));
+                }
+            }
+
+            if let Some((line_number, ref mut body)) = body {
+                if let Some(b) =
+                    set_value_for_foreign_variable(body, foreign_variables, doc, *line_number)?
+                {
+                    return Ok(Some(b));
+                }
+            }
+
+            Ok(None)
+        }
+
+        fn set_value_for_foreign_variable(
+            value: &mut String,
+            foreign_variables: &[String],
+            doc: &ftd::p2::TDoc,
+            line_number: usize,
+        ) -> ftd::p1::Result<Option<String>> {
+            if let Some(val) = value.clone().strip_prefix('$') {
+                if is_foreign_variable(val, foreign_variables, doc.aliases)? {
+                    let val = doc.resolve_name(line_number, val)?;
+                    *value = format!("${}", InterpreterState::fv_name_after_resolve(val.as_str()));
+                    return Ok(Some(val.to_string()));
+                }
+            }
+            Ok(None)
+        }
 
         fn is_foreign_variable(
             variable: &str,
