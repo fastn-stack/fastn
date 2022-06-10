@@ -140,12 +140,18 @@ pub fn interpret_helper(
             ftd::Interpreter::StuckOnImport { module, state: st } => {
                 let source =
                     lib.get_with_result(module.as_str(), &st.tdoc(&mut Default::default()))?;
-                s = st.continue_after_import(module.as_str(), source.as_str())?;
+                s = st.continue_after_import(module.as_str(), Some(source.as_str()), None)?;
             }
-            ftd::Interpreter::StuckOnForeignVariable { state: st, .. } => {
-                s = st.continue_after_variable(ftd::Value::None {
-                    kind: ftd::p2::Kind::Object { default: None },
-                })?;
+            ftd::Interpreter::StuckOnForeignVariable {
+                state: st,
+                variable,
+            } => {
+                s = st.continue_after_variable(
+                    variable.as_str(),
+                    ftd::Value::None {
+                        kind: ftd::p2::Kind::Object { default: None },
+                    },
+                )?;
             }
         }
     }
