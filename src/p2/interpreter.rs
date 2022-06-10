@@ -1,9 +1,9 @@
 #[derive(Debug, Default)]
 pub struct InterpreterState {
     pub id: String,
-    pub(crate) bag: std::collections::BTreeMap<String, ftd::p2::Thing>,
-    pub(crate) document_stack: Vec<ParsedDocument>,
-    pub(crate) parsed_libs: Vec<String>,
+    pub bag: std::collections::BTreeMap<String, ftd::p2::Thing>,
+    pub document_stack: Vec<ParsedDocument>,
+    pub parsed_libs: Vec<String>,
 }
 
 impl InterpreterState {
@@ -69,15 +69,18 @@ impl InterpreterState {
 
         {
             let foreign_variables = self.document_stack[l].foreign_variables.clone();
+            let aliases = self.document_stack[l].doc_aliases.clone();
             if let Some(section) = self.document_stack[l].sections.last_mut() {
                 if let Some(variable) =
-                    Self::resolve_foreign_variable(section, foreign_variables.as_slice())?
+                    Self::resolve_foreign_variable(section, foreign_variables.as_slice(), aliases)?
                 {
+                    dbg!(&variable);
                     return Ok(Interpreter::StuckOnForeignVariable {
                         variable,
                         state: self,
                     });
                 }
+                dbg!(&section);
             }
         }
 
@@ -421,23 +424,27 @@ impl InterpreterState {
     fn resolve_foreign_variable(
         section: &mut ftd::p1::Section,
         foreign_variables: &[String],
+        doc_aliases: std::collections::BTreeMap<String, String>,
     ) -> ftd::p1::Result<Option<String>> {
+        dbg!(&foreign_variables);
         if let Some(ref mut caption) = section.caption {
-            if let Some(var) = resolve(caption.as_str(), foreign_variables)? {
-                *caption = Self::fv_name_after_resolve(caption.as_str());
-                return Ok(Some(var));
+            if let Some(cap) = caption.strip_prefix('$') {
+                if let Some(var) = resolve(cap, foreign_variables, &doc_aliases)? {
+                    *caption = dbg!(format!("${}", Self::fv_name_after_resolve(cap)));
+                    return Ok(Some(var));
+                }
             }
         }
 
         for (_, _, header) in section.header.0.iter_mut() {
-            if let Some(var) = resolve(header.as_str(), foreign_variables)? {
+            if let Some(var) = resolve(header.as_str(), foreign_variables, &doc_aliases)? {
                 *header = Self::fv_name_after_resolve(header.as_str());
                 return Ok(Some(var));
             }
         }
 
         if let Some((_, ref mut body)) = section.body {
-            if let Some(var) = resolve(body.as_str(), foreign_variables)? {
+            if let Some(var) = resolve(body.as_str(), foreign_variables, &doc_aliases)? {
                 *body = Self::fv_name_after_resolve(body.as_str());
                 return Ok(Some(var));
             }
@@ -445,21 +452,21 @@ impl InterpreterState {
 
         for subsection in section.sub_sections.0.iter_mut() {
             if let Some(ref mut caption) = subsection.caption {
-                if let Some(var) = resolve(caption.as_str(), foreign_variables)? {
+                if let Some(var) = resolve(caption.as_str(), foreign_variables, &doc_aliases)? {
                     *caption = Self::fv_name_after_resolve(caption.as_str());
                     return Ok(Some(var));
                 }
             }
 
             for (_, _, header) in subsection.header.0.iter_mut() {
-                if let Some(var) = resolve(header.as_str(), foreign_variables)? {
+                if let Some(var) = resolve(header.as_str(), foreign_variables, &doc_aliases)? {
                     *header = Self::fv_name_after_resolve(header.as_str());
                     return Ok(Some(var));
                 }
             }
 
             if let Some((_, ref mut body)) = subsection.body {
-                if let Some(var) = resolve(body.as_str(), foreign_variables)? {
+                if let Some(var) = resolve(body.as_str(), foreign_variables, &doc_aliases)? {
                     *body = Self::fv_name_after_resolve(body.as_str());
                     return Ok(Some(var));
                 }
@@ -471,14 +478,16 @@ impl InterpreterState {
         fn resolve(
             variable: &str,
             foreign_variables: &[String],
+            doc_aliases: &std::collections::BTreeMap<String, String>,
         ) -> ftd::p1::Result<Option<String>> {
-            let variable = if let Some(variable) = variable.strip_prefix('$') {
-                variable
-            } else {
-                return Ok(None);
+            let var_name = {
+                let mut var_name = ftd::p2::utils::get_doc_name_and_remaining(variable)?.0;
+                if let Some(val) = doc_aliases.get(var_name.as_str()) {
+                    var_name = val.to_string();
+                }
+                var_name
             };
 
-            let var_name = ftd::p2::utils::get_doc_name_and_remaining(variable)?.0;
             if foreign_variables.contains(&var_name) {
                 return Ok(Some(variable.to_string()));
             }
@@ -487,7 +496,7 @@ impl InterpreterState {
     }
 
     fn fv_name_after_resolve(variable: &str) -> String {
-        return variable.replace('.', "-").to_string();
+        return format!("__{}__", variable.replace('.', "-"));
     }
 
     fn process_imports(
@@ -555,7 +564,15 @@ impl InterpreterState {
         variable: &str,
         value: ftd::Value,
     ) -> ftd::p1::Result<Interpreter> {
-        let var_name = Self::fv_name_after_resolve(variable);
+        let l = self.document_stack.len() - 1;
+        let doc = ftd::p2::TDoc {
+            name: &self.document_stack[l].name,
+            aliases: &self.document_stack[l].doc_aliases,
+            bag: &self.bag,
+            local_variables: &mut Default::default(),
+        };
+        let var_name = doc.resolve_name(0, Self::fv_name_after_resolve(variable).as_str())?;
+        dbg!("continue_after_variable", &var_name);
         self.bag.insert(
             var_name.clone(),
             ftd::p2::Thing::Variable(ftd::Variable {

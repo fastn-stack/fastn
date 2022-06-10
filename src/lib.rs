@@ -25,7 +25,7 @@ pub use component::{ChildComponent, Component, Instruction};
 pub use condition::Condition;
 pub use event::{Action, Event};
 pub use ftd::{
-    ftd::p2::interpreter::{interpret, Interpreter, InterpreterState},
+    ftd::p2::interpreter::{interpret, Interpreter, InterpreterState, ParsedDocument},
     value_with_default::ValueWithDefault,
 };
 pub use html::{anchor, color, length, overflow, Collector, Node, StyleSpec};
