@@ -295,6 +295,21 @@ impl Header {
             key: format!("`{}` header is missing", name),
         })
     }
+    
+    pub fn duplicate_header(&self, doc_id: &str, line_number: usize) -> Result<()> {
+        let mut hm = std::collections::HashMap::new();
+        for (_, k, _) in self.0.iter().filter(|(_, y, _)| !y.eq("/")) {
+            if hm.contains_key(k) {
+                return Err(Error::ParseError {
+                    doc_id: doc_id.to_string(),
+                    line_number,
+                    message: format!("`{}` header is repeated", k),
+                });
+            }
+            hm.insert(k, true);
+        }
+        Ok(())
+    }
 
     pub fn string(&self, doc_id: &str, line_number: usize, name: &str) -> Result<String> {
         self.str(doc_id, line_number, name).map(ToString::to_string)
