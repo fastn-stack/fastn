@@ -1082,15 +1082,50 @@ pub fn color_from(l: Option<String>, doc_id: &str) -> ftd::p1::Result<Option<ftd
         None => return Ok(None),
     };
 
-    match css_color_parser::Color::from_str(v.as_str()) {
-        Ok(v) => Ok(Some(ftd::ColorValue {
-            r: v.r,
-            g: v.g,
-            b: v.b,
-            alpha: v.a,
-        })),
-        Err(e) => return ftd::e2(format!("{} is not a valid color: {:?}", v, e), doc_id, 0),
+    let v = v.trim().to_string();
+
+    // Remove all whitespace, not compliant, but should just be more accepting.
+    let mut string = v.replace(' ', "");
+    string.make_ascii_lowercase();
+    if v.starts_with("#") && v.len() == 9 {
+        let (_, value_string) = string.split_at(1);
+
+        let iv = u64::from_str_radix(value_string, 16).map_err(|e| ftd::p1::Error::ParseError {
+            message: e.to_string(),
+            doc_id: doc_id.to_string(),
+            line_number: 0,
+        })?;
+
+        // (7thSigil) unlike original js code, NaN is impossible
+        if !(iv <= 0xffffffff) {
+            return ftd::e2(format!("{} is not a valid color", v), doc_id, 0);
+        }
+
+        return Ok(Some(ftd::ColorValue {
+            r: ((iv & 0xff000000) >> 24) as u8,
+            g: ((iv & 0xff0000) >> 16) as u8,
+            b: ((iv & 0xff00) >> 8) as u8,
+            alpha: round_1p((iv & 0xff) as f32 / 255_f32) as f32,
+        }));
+    } else {
+        match css_color_parser::Color::from_str(v.as_str()) {
+            Ok(v) => Ok(Some(ftd::ColorValue {
+                r: v.r,
+                g: v.g,
+                b: v.b,
+                alpha: v.a,
+            })),
+            Err(e) => return ftd::e2(format!("{} is not a valid color: {:?}", v, e), doc_id, 0),
+        }
     }
+}
+fn round_1p(n: f32) -> f32 {
+    // 1234.56
+    let temp = (n * 10_f32) as u32;
+    let last = (temp % 10) as f32;
+    let front = n as u32;
+
+    return front as f32 + (last / 10_f32);
 }
 
 pub fn boolean_from_properties(

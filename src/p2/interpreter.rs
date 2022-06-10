@@ -17305,6 +17305,87 @@ mod test {
             (bag, main),
         );
     }
+
+    #[test]
+    fn hex_color_code() {
+        let mut bag = super::default_bag();
+
+        bag.insert(
+            s("foo/bar#hex-color"),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("hex-color"),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Record {
+                        name: "ftd#color".to_string(),
+                        fields: std::array::IntoIter::new([
+                            (
+                                "light".to_string(),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::String {
+                                        text: "#2cc9b51a".to_string(),
+                                        source: ftd::TextSource::Header,
+                                    },
+                                },
+                            ),
+                            (
+                                "dark".to_string(),
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::String {
+                                        text: "#2cc9b51a".to_string(),
+                                        source: ftd::TextSource::Header,
+                                    },
+                                },
+                            ),
+                        ])
+                        .collect(),
+                    },
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            }),
+        );
+
+        let mut main = super::default_column();
+
+        main.container
+            .children
+            .push(ftd::Element::Markup(ftd::Markups {
+                text: ftd::markup_line("Hello"),
+                line: true,
+                common: ftd::Common {
+                    color: Some(ftd::Color {
+                        light: ftd::ColorValue {
+                            r: 44,
+                            g: 201,
+                            b: 181,
+                            alpha: 0.1,
+                        },
+                        dark: ftd::ColorValue {
+                            r: 44,
+                            g: 201,
+                            b: 181,
+                            alpha: 0.1,
+                        },
+                        reference: Some(s("foo/bar#hex-color")),
+                    }),
+                    ..Default::default()
+                },
+                ..Default::default()
+            }));
+
+        p!(
+            "
+            -- ftd.color hex-color:
+            light: #2cc9b51a
+            dark: #2cc9b51a
+
+            -- ftd.text: Hello
+            color: $hex-color
+            ",
+            (bag, main),
+        );
+    }
+
     /*#[test]
     fn optional_condition_on_record() {
         let (_g_bag, g_col) = crate::p2::interpreter::interpret(
