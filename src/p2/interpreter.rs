@@ -66,28 +66,26 @@ impl InterpreterState {
             self.document_stack[l].done_processing_imports();
             self.document_stack[l].reorder(&self.bag)?;
         }
-
-        {
-            let foreign_variables = self.document_stack[l].foreign_variables.clone();
-            let aliases = self.document_stack[l].doc_aliases.clone();
-            if let Some(section) = self.document_stack[l].sections.last_mut() {
-                if let Some(variable) =
-                    Self::resolve_foreign_variable(section, foreign_variables.as_slice(), aliases)?
-                {
-                    dbg!(&variable);
-                    return Ok(Interpreter::StuckOnForeignVariable {
-                        variable,
-                        state: self,
-                    });
-                }
-                dbg!(&section);
-            }
-        }
-
         let parsed_document = &mut self.document_stack[l];
         let mut instructions: Vec<ftd::Instruction> = Default::default();
 
-        while let Some(p1) = parsed_document.sections.pop() {
+        while let Some(p1) = parsed_document.sections.last_mut() {
+            // first resolve the foreign_variables in the section before proceeding further
+            if let Some(variable) = Self::resolve_foreign_variable(
+                p1,
+                parsed_document.foreign_variables.as_slice(),
+                &parsed_document.doc_aliases,
+            )? {
+                return Ok(Interpreter::StuckOnForeignVariable {
+                    variable,
+                    state: self,
+                });
+            }
+
+            // Once the foreign_variables are resolved for the section, then pop and evaluate it.
+            // This ensures that a section is evaluated once only.
+            let p1 = parsed_document.sections.pop().unwrap();
+
             if p1.is_commented {
                 continue;
             }
@@ -424,12 +422,12 @@ impl InterpreterState {
     fn resolve_foreign_variable(
         section: &mut ftd::p1::Section,
         foreign_variables: &[String],
-        doc_aliases: std::collections::BTreeMap<String, String>,
+        doc_aliases: &std::collections::BTreeMap<String, String>,
     ) -> ftd::p1::Result<Option<String>> {
         dbg!(&foreign_variables);
         if let Some(ref mut caption) = section.caption {
             if let Some(cap) = caption.clone().strip_prefix('$') {
-                if is_foreign_variable(cap, foreign_variables, &doc_aliases)? {
+                if is_foreign_variable(cap, foreign_variables, doc_aliases)? {
                     *caption = format!("${}", Self::fv_name_after_resolve(cap));
                     return Ok(Some(cap.to_string()));
                 }
@@ -438,7 +436,7 @@ impl InterpreterState {
 
         for (_, _, header) in section.header.0.iter_mut() {
             if let Some(h) = header.clone().strip_prefix('$') {
-                if is_foreign_variable(h, foreign_variables, &doc_aliases)? {
+                if is_foreign_variable(h, foreign_variables, doc_aliases)? {
                     *header = format!("${}", Self::fv_name_after_resolve(h));
                     return Ok(Some(h.to_string()));
                 }
@@ -447,7 +445,7 @@ impl InterpreterState {
 
         if let Some((_, ref mut body)) = section.body {
             if let Some(b) = body.clone().strip_prefix('$') {
-                if is_foreign_variable(b, foreign_variables, &doc_aliases)? {
+                if is_foreign_variable(b, foreign_variables, doc_aliases)? {
                     *body = dbg!(format!("${}", Self::fv_name_after_resolve(b)));
                     return Ok(Some(b.to_string()));
                 }
@@ -457,7 +455,7 @@ impl InterpreterState {
         for subsection in section.sub_sections.0.iter_mut() {
             if let Some(ref mut caption) = subsection.caption {
                 if let Some(cap) = caption.clone().strip_prefix('$') {
-                    if is_foreign_variable(cap, foreign_variables, &doc_aliases)? {
+                    if is_foreign_variable(cap, foreign_variables, doc_aliases)? {
                         *caption = dbg!(format!("${}", Self::fv_name_after_resolve(cap)));
                         return Ok(Some(cap.to_string()));
                     }
@@ -466,7 +464,7 @@ impl InterpreterState {
 
             for (_, _, header) in subsection.header.0.iter_mut() {
                 if let Some(h) = header.clone().strip_prefix('$') {
-                    if is_foreign_variable(h, foreign_variables, &doc_aliases)? {
+                    if is_foreign_variable(h, foreign_variables, doc_aliases)? {
                         *header = dbg!(format!("${}", Self::fv_name_after_resolve(h)));
                         return Ok(Some(h.to_string()));
                     }
@@ -475,7 +473,7 @@ impl InterpreterState {
 
             if let Some((_, ref mut body)) = subsection.body {
                 if let Some(b) = body.clone().strip_prefix('$') {
-                    if is_foreign_variable(b, foreign_variables, &doc_aliases)? {
+                    if is_foreign_variable(b, foreign_variables, doc_aliases)? {
                         *body = dbg!(format!("${}", Self::fv_name_after_resolve(b)));
                         return Ok(Some(b.to_string()));
                     }
