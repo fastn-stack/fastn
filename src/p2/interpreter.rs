@@ -17385,7 +17385,7 @@ mod test {
             (bag, main),
         );
     }
-    #[test]
+#[test]
 fn duplicate_header() {
     let mut bag = super::default_bag();
     bag.insert(
@@ -17394,18 +17394,6 @@ fn duplicate_header() {
             full_name: s("foo/bar#foo"),
             root: "ftd#text".to_string(),
             arguments: std::array::IntoIter::new([(s("name"), ftd::p2::Kind::caption())])
-                .collect(),
-            properties: std::array::IntoIter::new(
-                    s("text"),
-                    ftd::component::Property {
-                        default: Some(ftd::PropertyValue::Variable {
-                            name: "name".to_string(),
-                            kind: ftd::p2::Kind::caption_or_body(),
-                        }),
-                        conditions: vec![],
-                        ..Default::default()
-                    },
-                )
                 .collect(),
             ..Default::default()
         }),
