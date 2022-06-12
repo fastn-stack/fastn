@@ -17385,6 +17385,75 @@ mod test {
             (bag, main),
         );
     }
+    #[test]
+fn duplicate_header() {
+    let mut bag = super::default_bag();
+    bag.insert(
+        "foo/bar#foo".to_string(),
+        ftd::p2::Thing::Component(ftd::Component {
+            full_name: s("foo/bar#foo"),
+            root: "ftd#text".to_string(),
+            arguments: std::array::IntoIter::new([(s("name"), ftd::p2::Kind::caption())])
+                .collect(),
+            properties: std::array::IntoIter::new(
+                    s("text"),
+                    ftd::component::Property {
+                        default: Some(ftd::PropertyValue::Variable {
+                            name: "name".to_string(),
+                            kind: ftd::p2::Kind::caption_or_body(),
+                        }),
+                        conditions: vec![],
+                        ..Default::default()
+                    },
+                )
+                .collect(),
+            ..Default::default()
+        }),
+    );
+
+    bag.insert(
+        "foo/bar#name@0".to_string(),
+        ftd::p2::Thing::Variable(ftd::Variable {
+            flags: ftd::VariableFlags::default(),
+            name: "name".to_string(),
+            value: ftd::PropertyValue::Value {
+                value: ftd::Value::String {
+                    text: s("hello"),
+                    source: ftd::TextSource::Caption,
+                },
+            },
+            conditions: vec![],
+        }),
+    );
+
+    let mut main = super::default_column();
+    main.container
+        .children
+        .push(ftd::Element::Markup(ftd::Markups {
+            text: ftd::markdown_line("hello"),
+            line: true,
+            ..Default::default()
+        }));
+    main.container
+        .children
+        .push(ftd::Element::Markup(ftd::Markups {
+            text: ftd::markdown_line("hello"),
+            line: true,
+            ..Default::default()
+        }));
+
+    p!(
+            "
+            -- foo: hello
+            -- ftd.text foo:
+            caption name:
+            text: $name
+            text: $name
+            ",
+            (bag, main),
+        panic!("Header is repeated again");
+        );
+}
 
     /*#[test]
     fn optional_condition_on_record() {
