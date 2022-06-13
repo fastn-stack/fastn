@@ -460,7 +460,7 @@ impl InterpreterState {
         ) -> ftd::p1::Result<Option<String>> {
             if let Some(ref mut caption) = caption {
                 if let Some(cap) =
-                    set_value_for_foreign_variable(caption, foreign_variables, doc, line_number)?
+                    process_foreign_variables(caption, foreign_variables, doc, line_number)?
                 {
                     return Ok(Some(cap));
                 }
@@ -468,7 +468,7 @@ impl InterpreterState {
 
             for (line_number, _, header) in header.0.iter_mut() {
                 if let Some(h) =
-                    set_value_for_foreign_variable(header, foreign_variables, doc, *line_number)?
+                    process_foreign_variables(header, foreign_variables, doc, *line_number)?
                 {
                     return Ok(Some(h));
                 }
@@ -476,7 +476,7 @@ impl InterpreterState {
 
             if let Some((line_number, ref mut body)) = body {
                 if let Some(b) =
-                    set_value_for_foreign_variable(body, foreign_variables, doc, *line_number)?
+                    process_foreign_variables(body, foreign_variables, doc, *line_number)?
                 {
                     return Ok(Some(b));
                 }
@@ -485,7 +485,7 @@ impl InterpreterState {
             Ok(None)
         }
 
-        fn set_value_for_foreign_variable(
+        fn process_foreign_variables(
             value: &mut String,
             foreign_variables: &[String],
             doc: &ftd::p2::TDoc,
