@@ -25,6 +25,15 @@ pub fn interpret_helper(
                     lib.get_with_result(module.as_str(), &st.tdoc(&mut Default::default()))?;
                 s = st.continue_after_import(module.as_str(), source.as_str())?;
             }
+            ftd::p2::interpreter::Interpreter::StuckOnForeignVariable { state, .. } => {
+                s = state.continue_after_variable(
+                    "foo",
+                    ftd::Value::String {
+                        text: "This is a test".to_string(),
+                        source: ftd::TextSource::Header,
+                    },
+                )?;
+            }
         }
     }
     Ok(document)

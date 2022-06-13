@@ -498,7 +498,7 @@ impl InterpreterState {
                 if is_foreign_variable(val, foreign_variables, doc.aliases)? {
                     let val = doc.resolve_name(line_number, val)?;
                     *value = format!("${}", val.as_str());
-                    return Ok(Some(val.to_string()));
+                    return Ok(Some(val));
                 }
             }
             Ok(None)
