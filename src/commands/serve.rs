@@ -70,7 +70,7 @@ async fn handle_ftd(config: &mut fpm::Config, path: std::path::PathBuf) -> actix
             .await
             {
                 Ok(r) => actix_web::HttpResponse::Ok().body(r),
-                Err(_e) => actix_web::HttpResponse::InternalServerError().body("TODO".as_bytes()),
+                Err(e) => actix_web::HttpResponse::InternalServerError().body(e.to_string()),
             };
         }
         _ => actix_web::HttpResponse::InternalServerError().body("".as_bytes()),
