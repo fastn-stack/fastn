@@ -41,8 +41,8 @@ padding-bottom: 20
             id.replace(".ftd", ".html"),
         );
     } else if dir.is_dir() {
-        for entry in
-            std::fs::read_dir(dir).unwrap_or_else(|_| panic!("{:?} is not a directory", dir.to_str()))
+        for entry in std::fs::read_dir(dir)
+            .unwrap_or_else(|_| panic!("{:?} is not a directory", dir.to_str()))
         {
             let path = entry.expect("no files inside ./examples").path();
             let source = path
@@ -141,6 +141,17 @@ pub fn interpret_helper(
                 let source =
                     lib.get_with_result(module.as_str(), &st.tdoc(&mut Default::default()))?;
                 s = st.continue_after_import(module.as_str(), source.as_str())?;
+            }
+            ftd::Interpreter::StuckOnForeignVariable {
+                state: st,
+                variable,
+            } => {
+                s = st.continue_after_variable(
+                    variable.as_str(),
+                    ftd::Value::None {
+                        kind: ftd::p2::Kind::Object { default: None },
+                    },
+                )?;
             }
         }
     }

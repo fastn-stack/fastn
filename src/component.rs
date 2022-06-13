@@ -2691,7 +2691,7 @@ fn read_arguments(
                 ftd::p1::Header(headers)
             };
             *h = headers;
-            *ui_id = doc.resolve_name(i.clone(), ui_id.as_str())?;
+            *ui_id = doc.resolve_name(*i, ui_id.as_str())?;
         }
         args.insert(var_data.name.to_string(), kind.clone());
         all_args.insert(var_data.name.to_string(), kind);
