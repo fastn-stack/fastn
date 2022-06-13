@@ -322,3 +322,116 @@ So the document `intro.ftd` in the package `bar.com` is included in the sitemap
 with the variant `main`.
 The generated HTML includes the canonical url with value as `bar.com/intro`
 
+
+-- ft.h1: Skip Header
+
+`skip: true`
+
+-- ft.h2: Motivation Behind `skip` Header
+
+If people want to draft something and don't want to publish any section, sub
+section or toc, they can use `skip` in section, sub-section and toc header.
+
+The skipped section, sub-section or toc would not be available in [processor
+sitemap](processors/sitemap/) till it is not the active opened page.
+
+
+-- ft.h2: `skip` in Section
+
+We have header called `skip`(by default `false`), using this header we can skip
+the whole section.
+
+-- ft.code:
+lang: ftd
+
+\-- fpm.sitemap:
+
+# Section 1: /
+
+## Section 1 Subsection 1: /subsection1
+
+## Section 1 Subsection 2: /subsection2
+
+# Section 2: /
+skip: true
+
+## Section 2 Subsection 1: /subsection1
+
+## Section 2 Subsection 2: /subsection2
+
+
+-- ft.markdown:
+move-down: 15
+
+In this case, Whole Section 2 will be skipped and will not displayed.
+
+
+-- ft.image: Page without `skip` header
+move-down: 15
+src: $assets.files.static.images.sitemap.without_skip_header.png
+width: 725
+
+-- ft.image: Page with `skip` header
+move-down: 15
+src: $assets.files.static.images.sitemap.with_skip_header.png
+width: 725
+
+
+-- ft.h2: `skip` in Subsection
+
+We have header called `skip`(by default `false`), using this header we can skip
+the whole subsection.
+
+In the below example `Subsection 1` of `Section 1` and `Subsection 2` of
+`Section 2` will be skipped
+
+-- ft.code:
+lang: ftd
+
+\-- fpm.sitemap:
+
+# Section 1: /
+
+## Subsection 1: /subsection1
+skip: true
+
+## Subsection 2: /subsection2
+
+# Section 2: /
+
+## Subsection 1: /subsection1
+skip: true
+
+## Subsection 2: /subsection2
+
+
+-- ft.h2: `skip` in ToC
+
+We have header called `skip`(by default `false`), using this header we can skip
+the whole toc.
+
+In the below example, ToC 3 and ToC 5 will be skipped.
+
+-- ft.code:
+lang: ftd
+
+\-- fpm.sitemap:
+
+# Section: /
+
+## Subsection : /subsection
+
+- ToC 1: /page1
+- ToC 2: /page2
+  - ToC 3: /page3
+  skip: true
+  - ToC 4: /page4
+- ToC 5: /page5
+skip: true
+- ToC 6: /page6
+
+
+-- ft.image: `skip` ToC Header
+move-down: 15
+src: $assets.files.static.images.sitemap.toc_with_skip_header.png
+width: 725
