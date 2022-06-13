@@ -99,6 +99,7 @@ implements: fifthtry.github.io/theme
 - Journal: /journal/
 - Contribution Guide: /dev/contribute/
 - How Versioning Works: /dev/versioning/
+- Foreign Variables: /dev/foreign-variables/
 - What is `FPM.manifest.ftd`?: /dev/fpm-manifest/
 - File System Organization: /fs/
   - `FPM.ftd`: /fpm-ftd-file/

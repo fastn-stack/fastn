@@ -8,5 +8,5 @@ and so on.
 The set of modules and symbols exported by a package is called "package
 interface" of that package. FPM lets one package declare that it is
 "implementing" another package. All packages that implement a common package
-are interchangeable without chaning any code, and only updating the dependency
+are interchangeable without changing any code, and only updating the dependency
 in `FPM.ftd` file.
