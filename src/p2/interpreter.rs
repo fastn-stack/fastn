@@ -80,7 +80,7 @@ impl InterpreterState {
 
             if let Some(variable) = Self::resolve_foreign_variable(
                 p1,
-                parsed_document.foreign_variables.as_slice(),
+                parsed_document.foreign_variable_prefix.as_slice(),
                 &doc,
             )? {
                 return Ok(Interpreter::StuckOnForeignVariable {
@@ -491,10 +491,13 @@ impl InterpreterState {
             doc: &ftd::p2::TDoc,
             line_number: usize,
         ) -> ftd::p1::Result<Option<String>> {
+            if value.contains('#') {
+                return Ok(None);
+            }
             if let Some(val) = value.clone().strip_prefix('$') {
                 if is_foreign_variable(val, foreign_variables, doc.aliases)? {
                     let val = doc.resolve_name(line_number, val)?;
-                    *value = format!("${}", InterpreterState::fv_name_after_resolve(val.as_str()));
+                    *value = format!("${}", val.as_str());
                     return Ok(Some(val.to_string()));
                 }
             }
@@ -519,10 +522,6 @@ impl InterpreterState {
             }
             Ok(false)
         }
-    }
-
-    fn fv_name_after_resolve(variable: &str) -> String {
-        return format!("__{}__", variable.replace('.', "-"));
     }
 
     fn process_imports(
@@ -557,29 +556,14 @@ impl InterpreterState {
         Ok(None)
     }
 
-    pub fn continue_after_import(
-        mut self,
-        id: &str,
-        source: Option<&str>,
-        foreign_variable: Option<&str>,
-    ) -> ftd::p1::Result<Interpreter> {
-        if source.is_some() && foreign_variable.is_some() {
-            return ftd::e2(
-                "kuch bhi: stated by Abrar. because I am proud of telling this",
-                self.id.as_str(),
-                0,
-            );
+    pub fn add_foreign_variable_prefix(&mut self, prefix: &str) {
+        if let Some(document) = self.document_stack.last_mut() {
+            document.foreign_variable_prefix.push(prefix.to_string());
         }
-        if let Some(foreign_variable) = foreign_variable {
-            if let Some(document) = self.document_stack.last_mut() {
-                document
-                    .foreign_variables
-                    .push(foreign_variable.to_string());
-            }
-        }
-        if let Some(source) = source {
-            self.document_stack.push(ParsedDocument::parse(id, source)?);
-        }
+    }
+
+    pub fn continue_after_import(mut self, id: &str, source: &str) -> ftd::p1::Result<Interpreter> {
+        self.document_stack.push(ParsedDocument::parse(id, source)?);
         self.continue_()
         // interpret then
         // handle top / start_from
@@ -597,8 +581,7 @@ impl InterpreterState {
             bag: &self.bag,
             local_variables: &mut Default::default(),
         };
-        let var_name = doc.resolve_name(0, Self::fv_name_after_resolve(variable).as_str())?;
-        dbg!("continue_after_variable", &var_name);
+        let var_name = doc.resolve_name(0, variable)?;
         self.bag.insert(
             var_name.clone(),
             ftd::p2::Thing::Variable(ftd::Variable {
@@ -721,7 +704,7 @@ pub struct ParsedDocument {
     processing_imports: bool,
     doc_aliases: std::collections::BTreeMap<String, String>,
     var_types: Vec<String>,
-    foreign_variables: Vec<String>,
+    foreign_variable_prefix: Vec<String>,
 }
 
 impl ParsedDocument {
@@ -732,7 +715,7 @@ impl ParsedDocument {
             processing_imports: true,
             doc_aliases: ftd::p2::interpreter::default_aliases(),
             var_types: Default::default(),
-            foreign_variables: vec![],
+            foreign_variable_prefix: vec![],
         })
     }
 

@@ -140,7 +140,7 @@ pub fn interpret_helper(
             ftd::Interpreter::StuckOnImport { module, state: st } => {
                 let source =
                     lib.get_with_result(module.as_str(), &st.tdoc(&mut Default::default()))?;
-                s = st.continue_after_import(module.as_str(), Some(source.as_str()), None)?;
+                s = st.continue_after_import(module.as_str(), source.as_str())?;
             }
             ftd::Interpreter::StuckOnForeignVariable {
                 state: st,
