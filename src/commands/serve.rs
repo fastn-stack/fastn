@@ -144,13 +144,13 @@ async fn serve_static(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
 }
 
 #[actix_web::main]
-pub async fn serve(port: &str) -> std::io::Result<()> {
+pub async fn serve(bind_address: &str, port: &str) -> std::io::Result<()> {
     println!("### Server Started ###");
-    println!("Go to: http://127.0.0.1:{}", port);
+    println!("Go to: http://{}:{}", bind_address, port);
     actix_web::HttpServer::new(|| {
         actix_web::App::new().route("/{path:.*}", actix_web::web::get().to(serve_static))
     })
-    .bind(format!("127.0.0.1:{}", port))?
+    .bind(format!("{}:{}", bind_address, port))?
     .run()
     .await
 }
