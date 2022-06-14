@@ -89,6 +89,7 @@ pub type DataDependenciesMap = std::collections::BTreeMap<String, Data>;
 #[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize, Default)]
 pub struct Data {
     pub value: serde_json::Value,
+    pub dependent_value: Option<serde_json::Value>,
     pub dependencies: std::collections::BTreeMap<String, serde_json::Value>,
 }
 

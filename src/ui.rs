@@ -652,7 +652,13 @@ impl Element {
 
                 let (variable, remaining) =
                     ftd::p2::utils::get_doc_name_and_remaining(reference).unwrap();
-                if let Some(ftd::Data { dependencies, .. }) = data.get_mut(&variable) {
+                if let Some(ftd::Data {
+                    value,
+                    dependent_value,
+                    dependencies,
+                }) = data.get_mut(&variable)
+                {
+                    Self::resolve_dependent_value(dependent_value, value, &remaining);
                     let json = ftd::Dependencies {
                         dependency_type: ftd::DependencyType::Value,
                         condition: None,
@@ -775,7 +781,13 @@ impl Element {
                 };
                 let (variable, remaining) =
                     ftd::p2::utils::get_doc_name_and_remaining(&reference).unwrap();
-                if let Some(ftd::Data { dependencies, .. }) = data.get_mut(&variable) {
+                if let Some(ftd::Data {
+                    value,
+                    dependent_value,
+                    dependencies,
+                }) = data.get_mut(&variable)
+                {
+                    Self::resolve_dependent_value(dependent_value, value, &remaining);
                     let json = ftd::Dependencies {
                         dependency_type: ftd::DependencyType::Style,
                         condition: None,
@@ -851,7 +863,13 @@ impl Element {
                 let (variable, remaining) =
                     ftd::p2::utils::get_doc_name_and_remaining(&reference).unwrap();
 
-                if let Some(ftd::Data { dependencies, .. }) = data.get_mut(&variable) {
+                if let Some(ftd::Data {
+                    value,
+                    dependent_value,
+                    dependencies,
+                }) = data.get_mut(&variable)
+                {
+                    Self::resolve_dependent_value(dependent_value, value, &remaining);
                     let json = ftd::Dependencies {
                         dependency_type: ftd::DependencyType::Style,
                         condition: None,
@@ -919,7 +937,13 @@ impl Element {
                 let (variable, remaining) =
                     ftd::p2::utils::get_doc_name_and_remaining(&reference).unwrap();
 
-                if let Some(ftd::Data { dependencies, .. }) = data.get_mut(&variable) {
+                if let Some(ftd::Data {
+                    value,
+                    dependent_value,
+                    dependencies,
+                }) = data.get_mut(&variable)
+                {
+                    Self::resolve_dependent_value(dependent_value, value, &remaining);
                     let json = ftd::Dependencies {
                         dependency_type: ftd::DependencyType::Style,
                         condition: None,
@@ -958,7 +982,13 @@ impl Element {
                         let (variable, remaining) =
                             ftd::p2::utils::get_doc_name_and_remaining(&condition.variable)
                                 .unwrap();
-                        if let Some(ftd::Data { dependencies, .. }) = data.get_mut(&variable) {
+                        if let Some(ftd::Data {
+                            value: v,
+                            dependent_value,
+                            dependencies,
+                        }) = data.get_mut(&variable)
+                        {
+                            Self::resolve_dependent_value(dependent_value, v, &remaining);
                             let json = ftd::Dependencies {
                                 dependency_type: ftd::DependencyType::Style,
                                 condition: Some(condition.value.to_owned()),
@@ -991,7 +1021,13 @@ impl Element {
                         if let Some(ref reference) = value.reference {
                             let (variable, remaining) =
                                 ftd::p2::utils::get_doc_name_and_remaining(reference).unwrap();
-                            if let Some(ftd::Data { dependencies, .. }) = data.get_mut(&variable) {
+                            if let Some(ftd::Data {
+                                value,
+                                dependent_value,
+                                dependencies,
+                            }) = data.get_mut(&variable)
+                            {
+                                Self::resolve_dependent_value(dependent_value, value, &remaining);
                                 let json = ftd::Dependencies {
                                     dependency_type: ftd::DependencyType::Variable,
                                     condition: None,
@@ -1038,7 +1074,13 @@ impl Element {
                 let id = id.clone().expect("universal id should be present");
                 let (variable, remaining) =
                     ftd::p2::utils::get_doc_name_and_remaining(&condition.variable).unwrap();
-                if let Some(ftd::Data { dependencies, .. }) = data.get_mut(&variable) {
+                if let Some(ftd::Data {
+                    dependencies,
+                    dependent_value,
+                    value,
+                }) = data.get_mut(&variable)
+                {
+                    Self::resolve_dependent_value(dependent_value, value, &remaining);
                     let json = ftd::Dependencies {
                         dependency_type: ftd::DependencyType::Visible,
                         condition: Some(condition.value.to_owned()),
@@ -1199,21 +1241,55 @@ impl Element {
             bag: &document.data,
             local_variables: &mut Default::default(),
         };
-        for (k, v) in document.data.iter() {
-            if !data.contains_key(k) {
-                continue;
-            }
+        let document_data = document
+            .data
+            .iter()
+            .filter_map(|(k, v)| {
+                data.get(k)
+                    .map(|val| (k, v, val.dependencies.clone(), val.value.clone()))
+            })
+            .collect::<Vec<(
+                &String,
+                &ftd::p2::Thing,
+                std::collections::BTreeMap<String, serde_json::Value>,
+                serde_json::Value,
+            )>>();
+
+        let dark_mode_dependencies =
+            if let Some(ftd::Data { dependencies, .. }) = data.get_mut("ftd#dark-mode") {
+                dependencies
+            } else {
+                return;
+            };
+
+        for (k, v, dependencies, value) in document_data.iter() {
             let keys = if let ftd::p2::Thing::Variable(ftd::Variable { value, .. }) = v {
                 get_ftd_type_variables(value, &doc, k)
             } else {
                 continue;
             };
-            let dependencies =
-                if let Some(ftd::Data { dependencies, .. }) = data.get_mut("ftd#dark-mode") {
-                    dependencies
-                } else {
-                    continue;
-                };
+
+            if keys.is_empty() {
+                continue;
+            }
+
+            let deps = dependencies
+                .iter()
+                .map(|(_, v)| {
+                    serde_json::from_value::<Vec<ftd::Dependencies>>(v.to_owned()).unwrap()
+                })
+                .flatten()
+                .collect::<Vec<ftd::Dependencies>>();
+            dbg!(
+                &k,
+                &v,
+                &value,
+                &deps
+                    .iter()
+                    .map(|v| v.remaining.clone().unwrap_or("".to_string()))
+                    .collect::<Vec<String>>()
+            );
+
             let dark_mode_json = keys
                 .iter()
                 .map(|k| ftd::Dependencies {
@@ -1239,14 +1315,14 @@ impl Element {
                 })
                 .collect::<Vec<ftd::Dependencies>>();
 
-            if let Some(dependencies) = dependencies.get_mut("$value#kind$") {
+            if let Some(dependencies) = dark_mode_dependencies.get_mut("$value#kind$") {
                 let mut d =
                     serde_json::from_value::<Vec<ftd::Dependencies>>(dependencies.to_owned())
                         .unwrap();
                 d.extend(dark_mode_json);
                 *dependencies = serde_json::to_value(&d).unwrap();
             } else {
-                dependencies.insert(
+                dark_mode_dependencies.insert(
                     "$value#kind$".to_string(),
                     serde_json::to_value(&dark_mode_json).unwrap(),
                 );
@@ -1334,12 +1410,19 @@ impl Element {
 
                 let (variable, remaining) =
                     ftd::p2::utils::get_doc_name_and_remaining(&condition.variable).unwrap();
-                let dependencies =
-                    if let Some(ftd::Data { dependencies, .. }) = data.get_mut(&variable) {
-                        dependencies
-                    } else {
-                        continue;
-                    };
+                let (dependencies, dependent_value, val) = if let Some(ftd::Data {
+                    dependencies,
+                    dependent_value,
+                    value,
+                }) = data.get_mut(&variable)
+                {
+                    (dependencies, dependent_value, value)
+                } else {
+                    continue;
+                };
+
+                Self::resolve_dependent_value(dependent_value, val, &remaining);
+
                 let json = ftd::Dependencies {
                     dependency_type: ftd::DependencyType::Variable,
                     condition: Some(condition.value.to_owned()),
@@ -1373,6 +1456,76 @@ impl Element {
                         serde_json::to_value(&vec![json]).unwrap(),
                     );
                 }
+            }
+        }
+    }
+
+    pub fn resolve_dependent_value(
+        dependent_value: &mut Option<serde_json::Value>,
+        value: &serde_json::Value,
+        remaining: &Option<String>,
+    ) {
+        let remaining = if let Some(remaining) = remaining {
+            remaining
+        } else {
+            *dependent_value = Some(value.to_owned());
+            return;
+        };
+
+        if dependent_value.is_none() {
+            *dependent_value = Some(serde_json::Value::Null);
+        }
+
+        let dependent_value = if let Some(dependent_value) = dependent_value {
+            dependent_value
+        } else {
+            return;
+        };
+
+        resolve_name(dependent_value, value, remaining);
+
+        fn resolve_name(
+            dependent_value: &mut serde_json::Value,
+            value: &serde_json::Value,
+            remaining: &str,
+        ) {
+            let (name, remaining) = if let Some((name, remaining)) = remaining.split_once('.') {
+                (name, Some(remaining))
+            } else {
+                (remaining, None)
+            };
+
+            let value = if let serde_json::Value::Object(value) = value {
+                if let Some(value) = value.get(name) {
+                    value
+                } else {
+                    return;
+                }
+            } else {
+                // TODO: throw error
+                return;
+            };
+
+            if !matches!(dependent_value, serde_json::Value::Object(_)) {
+                *dependent_value = serde_json::Value::Object(Default::default());
+            }
+
+            let object = if let serde_json::Value::Object(object) = dependent_value {
+                object
+            } else {
+                return;
+            };
+
+            if let Some(remaining) = remaining {
+                if !object.contains_key(name) {
+                    object.insert(name.to_string(), Default::default());
+                }
+                if let Some(json) = object.get_mut(name) {
+                    resolve_name(json, value, remaining);
+                }
+            } else {
+                object.insert(name.to_string(), value.to_owned());
+                return;
             }
         }
     }

@@ -128,6 +128,7 @@ impl Document {
                 k.to_string(),
                 ftd::Data {
                     value: v,
+                    dependent_value: None,
                     dependencies: Default::default(),
                 },
             );
