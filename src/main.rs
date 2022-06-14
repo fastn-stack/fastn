@@ -75,7 +75,7 @@ async fn main() -> fpm::Result<()> {
     if let Some(mark) = matches.subcommand_matches("serve") {
         let port = mark
             .value_of("port")
-            .unwrap_or(mark.value_of("positional_port").unwrap_or("8000"))
+            .unwrap_or_else(|| mark.value_of("positional_port").unwrap_or("8000"))
             .to_string();
         let bind = mark.value_of("bind").unwrap_or("127.0.0.1").to_string();
         tokio::task::spawn_blocking(move || {
