@@ -104,8 +104,7 @@ language: en
 - Journal: journal/
 - Changelog: changelog/
 - Internals: internals/
-
-
+- How to add `foreign-variables`: foreign-variable/
 
 
 # Course: /c1/
