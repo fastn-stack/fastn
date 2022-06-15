@@ -53,7 +53,7 @@ pub async fn processor<'a>(
     doc.from_json(&json, section)
 }
 
-async fn get(
+pub(crate) async fn get(
     url: url::Url,
     doc_id: &str,
     line_number: usize,
@@ -88,4 +88,24 @@ async fn _get(url: url::Url) -> reqwest::Result<String> {
         .default_headers(headers)
         .build()?;
     c.get(url.to_string().as_str()).send()?.text()
+}
+
+pub async fn get_with_type<T: serde::de::DeserializeOwned>(
+    url: url::Url,
+    headers: reqwest::header::HeaderMap,
+) -> fpm::Result<T> {
+    let c = reqwest::Client::builder()
+        .default_headers(headers)
+        .build()?;
+
+    let mut resp = c.get(url.to_string().as_str()).send()?;
+    if !resp.status().eq(&reqwest::StatusCode::OK) {
+        return Err(fpm::Error::APIResponseError(format!(
+            "url: {}, response_status: {}, response: {:?}",
+            url,
+            resp.status(),
+            resp.text()
+        )));
+    }
+    Ok(resp.json()?)
 }

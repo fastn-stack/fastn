@@ -13,6 +13,9 @@ repository = "https://github.com/FifthTry/fpm"
 homepage = "https://fpm.dev"
 build = "build.rs"
 
+[features]
+controller = []
+
 [dependencies]
 async-recursion = "0.3.2"
 camino = "1.0.5"

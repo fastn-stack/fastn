@@ -311,6 +311,74 @@ impl fpm::Package {
         }
     }
 
+    pub(crate) async fn unzip_package(&self) -> fpm::Result<()> {
+        use std::convert::TryInto;
+        use std::io::Write;
+
+        let download_url = if let Some(ref url) = self.zip {
+            url
+        } else {
+            return Ok(());
+        };
+
+        let path = std::env::temp_dir().join(format!("{}.zip", self.name.replace("/", "__")));
+
+        let start = std::time::Instant::now();
+        print!("Downloading {} ... ", self.name.as_str());
+        std::io::stdout().flush()?;
+        // Download the zip folder
+        {
+            let mut response = if download_url[1..].contains("://")
+                || download_url.starts_with("//")
+            {
+                reqwest::get(download_url.as_str())?
+            } else if let Ok(response) = reqwest::get(format!("https://{}", download_url).as_str())
+            {
+                response
+            } else {
+                reqwest::get(format!("http://{}", download_url).as_str())?
+            };
+            let mut file = std::fs::File::create(&path)?;
+            // TODO: instead of reading the whole thing in memory use tokio::io::copy() somehow?
+            let mut buf: Vec<u8> = vec![];
+            response.copy_to(&mut buf)?;
+            file.write_all(&buf)?;
+            // file.write_all(response.text().await?.as_bytes())?;
+        }
+
+        let file = std::fs::File::open(&path)?;
+        // TODO: switch to async_zip crate
+        let mut archive = zip::ZipArchive::new(file)?;
+        for i in 0..archive.len() {
+            let mut c_file = archive.by_index(i).unwrap();
+            let out_path = match c_file.enclosed_name() {
+                Some(path) => path.to_owned(),
+                None => continue,
+            };
+            let out_path_without_folder = out_path.to_str().unwrap().split_once("/").unwrap().1;
+            let file_extract_path = {
+                let mut file_extract_path: camino::Utf8PathBuf =
+                    std::env::current_dir()?.canonicalize()?.try_into()?;
+                file_extract_path = file_extract_path.join(out_path_without_folder);
+                file_extract_path
+            };
+            if (&*c_file.name()).ends_with('/') {
+                std::fs::create_dir_all(&file_extract_path)?;
+            } else {
+                if let Some(p) = file_extract_path.parent() {
+                    if !p.exists() {
+                        std::fs::create_dir_all(p)?;
+                    }
+                }
+                // Note: we will be able to use tokio::io::copy() with async_zip
+                let mut outfile = std::fs::File::create(file_extract_path)?;
+                std::io::copy(&mut c_file, &mut outfile)?;
+            }
+        }
+        fpm::utils::print_end(format!("Downloaded {}", self.name.as_str()).as_str(), start);
+        Ok(())
+    }
+
     /// This function is called by `process()` or recursively called by itself.
     /// It checks the `FPM.ftd` file of dependent package and find out all the dependency packages.
     /// If dependent package is not available, it calls `process()` to download it inside `.packages` directory

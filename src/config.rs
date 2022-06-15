@@ -705,6 +705,11 @@ impl Package {
         }
     }
 
+    pub fn with_zip(mut self, zip: String) -> fpm::Package {
+        self.zip = Some(zip);
+        self
+    }
+
     pub fn get_dependency_for_interface(&self, interface: &str) -> Option<&fpm::Dependency> {
         self.dependencies
             .iter()

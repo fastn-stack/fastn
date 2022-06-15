@@ -1,7 +1,7 @@
 mod fpm_dot_ftd;
 mod get_data;
 mod get_version_data;
-mod http;
+pub(crate) mod http;
 mod include;
 mod sitemap;
 mod sqlite;
