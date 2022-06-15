@@ -97,6 +97,8 @@ impl InterpreterState {
                 continue;
             }
 
+            p1.header.duplicate_header(&p1.name.as_str(), p1.line_number)?;
+
             // while this is a specific to entire document, we are still creating it in a loop
             // because otherwise the self.interpret() call won't compile.
 
@@ -111,8 +113,7 @@ impl InterpreterState {
 
             if p1.name.starts_with("record ") {
                 // declare a record
-                let d =
-                    ftd::p2::Record::from_p1(p1.name.as_str(), &p1.header, &doc, p1.line_number)?;
+                let d = ftd::p2::Record::from_p1(p1.name.as_str(), &p1.header, &doc, p1.line_number)?;
                 let name = doc.resolve_name(p1.line_number, &d.name.to_string())?;
                 if self.bag.contains_key(name.as_str()) {
                     return ftd::e2(
@@ -122,7 +123,9 @@ impl InterpreterState {
                     );
                 }
                 thing.push((name, ftd::p2::Thing::Record(d)));
-            } else if p1.name.starts_with("or-type ") {
+            }
+
+            else if p1.name.starts_with("or-type ") {
                 // declare a record
                 let d = ftd::OrType::from_p1(&p1, &doc)?;
                 let name = doc.resolve_name(p1.line_number, &d.name.to_string())?;
@@ -17543,6 +17546,7 @@ mod test {
             (bag, main),
         );
     }
+
 
     /*#[test]
     fn optional_condition_on_record() {

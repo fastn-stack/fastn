@@ -1,0 +1,8 @@
+-- foo: hello
+
+-- ftd.text foo:
+caption name:
+text: $name
+text: $name
+
+/The third line gives parse error because it gets repeated in the headers.
