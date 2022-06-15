@@ -10,7 +10,7 @@ on:
       - 'rust-toolchain'
   pull_request:
     branches:
-      - master
+      - main
     paths:
       - '**.rs'
       - 'Cargo.*'
