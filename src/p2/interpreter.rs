@@ -97,6 +97,9 @@ impl InterpreterState {
                 continue;
             }
 
+            p1.header
+                .duplicate_header(p1.name.as_str(), p1.line_number)?;
+
             // while this is a specific to entire document, we are still creating it in a loop
             // because otherwise the self.interpret() call won't compile.
 
@@ -1544,7 +1547,7 @@ mod test {
                             }),
                         },
                     )])
-                    .collect(),
+                        .collect(),
                     reference: Some(s("foo/bar#name@0")),
                     ..Default::default()
                 },
@@ -2595,7 +2598,7 @@ mod test {
             r"
             -- ftd.color white: white
             dark: white
-            
+
             -- ftd.color 4D4D4D: #4D4D4D
             dark: #4D4D4D
 
@@ -4640,7 +4643,7 @@ mod test {
 
         p!(
             "
-            -- ftd.image-src src0: 
+            -- ftd.image-src src0:
             light: /static/home/document-type-min.png
             dark: /static/home/document-type-min.png
 
@@ -4956,14 +4959,14 @@ mod test {
 
         p!(
             "
-            -- ftd.image-src src0: 
+            -- ftd.image-src src0:
             light: /static/home/document-type-min.png
             dark: /static/home/document-type-min.png
 
-            -- ftd.image-src src1: 
+            -- ftd.image-src src1:
             light: second-image.png
             dark: second-image.png
-            
+
             -- ftd.column white-two-image:
             caption title:
             optional body about:
@@ -5378,11 +5381,11 @@ mod test {
         );
         p!(
             "
-            -- ftd.image-src src0: 
+            -- ftd.image-src src0:
             light: /static/home/document-type-min.png
             dark: /static/home/document-type-min.png
 
-            -- ftd.image-src src1: 
+            -- ftd.image-src src1:
             light: second-image.png
             dark: second-image.png
 
@@ -5936,11 +5939,11 @@ mod test {
 
         p!(
             "
-            -- ftd.image-src src0: 
+            -- ftd.image-src src0:
             light: foo.png
             dark: foo.png
 
-            -- ftd.image-src src1: 
+            -- ftd.image-src src1:
             light: bar.png
             dark: bar.png
 
@@ -10578,18 +10581,18 @@ mod test {
                 -- ftd.row foo:
                 caption name:
                 string body:
-    
+
                 --- ftd.text: $name
-    
+
                 --- ftd.text: $body
-    
+
                 -- record data:
                 string title:
                 string description:
-    
+
                 -- data list test:
                 $processor$: read_package_records_from_cargo_toml
-    
+
                 -- foo: $obj.title
                 $loop$: $test as $obj
                 body: $obj.description
@@ -10876,7 +10879,7 @@ mod test {
                                                                 },
                                                             ),
                                                         ])
-                                                        .collect(),
+                                                            .collect(),
                                                     }},
                                                     ftd::PropertyValue::Value {value: ftd::Value::Record {
                                                         name: s("foo/bar#toc-record"),
@@ -10912,7 +10915,7 @@ mod test {
                                                                 },
                                                             ),
                                                         ])
-                                                        .collect(),
+                                                            .collect(),
                                                     }},
                                                 ],
                                                 kind: ftd::p2::Kind::Record {
@@ -10941,7 +10944,7 @@ mod test {
                                         },
                                     ),
                                 ])
-                                .collect(),
+                                    .collect(),
                             },
                         }],
                         kind: ftd::p2::Kind::Record {
@@ -13182,10 +13185,10 @@ mod test {
                 r"
                 -- ftd.color red: red
                 dark: red
-                
+
                 -- ftd.color green: green
                 dark: green
-                
+
                 /-- ftd.text:
                 cursor: pointer
 
@@ -13745,11 +13748,11 @@ mod test {
                 "
                 -- integer count: 0
 
-                -- ftd.image-src src0: 
+                -- ftd.image-src src0:
                 light: https://www.liveabout.com/thmb/YCJmu1khSJo8kMYM090QCd9W78U=/1250x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/powerpuff_girls-56a00bc45f9b58eba4aea61d.jpg
                 dark: https://www.liveabout.com/thmb/YCJmu1khSJo8kMYM090QCd9W78U=/1250x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/powerpuff_girls-56a00bc45f9b58eba4aea61d.jpg
 
-                -- ftd.image-src src1: 
+                -- ftd.image-src src1:
                 light: https://upload.wikimedia.org/wikipedia/en/d/d4/Mickey_Mouse.png
                 dark: https://upload.wikimedia.org/wikipedia/en/d/d4/Mickey_Mouse.png
 
@@ -13771,7 +13774,7 @@ mod test {
             ),
             &ftd::p2::TestLibrary {},
         )
-        .expect("found error");
+            .expect("found error");
 
         pretty_assertions::assert_eq!(g_col, main);
     }
@@ -15117,7 +15120,7 @@ mod test {
             "foo/bar",
             indoc::indoc!(
                 "
-                -- ftd.image-src src0: 
+                -- ftd.image-src src0:
                 light: https://www.nilinswap.com/static/img/dp.jpeg
                 dark: https://www.nilinswap.com/static/img/dp.jpeg
 
@@ -15176,7 +15179,7 @@ mod test {
                             default: None,
                         },
                     )])
-                    .collect(),
+                        .collect(),
                     events: vec![
                         ftd::Event {
                             name: s("onmouseenter"),
@@ -15196,7 +15199,7 @@ mod test {
                                         },
                                     ],
                                 )])
-                                .collect(),
+                                    .collect(),
                             },
                         },
                         ftd::Event {
@@ -15217,7 +15220,7 @@ mod test {
                                         },
                                     ],
                                 )])
-                                .collect(),
+                                    .collect(),
                             },
                         },
                     ],
@@ -15394,7 +15397,7 @@ mod test {
                                 default: None,
                             },
                         )])
-                        .collect(),
+                            .collect(),
                         reference: Some(s("foo/bar#a@0")),
                         ..Default::default()
                     },
@@ -15424,7 +15427,7 @@ mod test {
                                     reference: None,
                                 }],
                             )])
-                            .collect(),
+                                .collect(),
                         },
                     },
                 ],
@@ -15559,7 +15562,7 @@ mod test {
                                         default: None,
                                     },
                                 )])
-                                .collect(),
+                                    .collect(),
                                 reference: Some(s("foo/bar#a@0")),
                                 ..Default::default()
                             },
@@ -15613,7 +15616,7 @@ mod test {
                                         },
                                     ],
                                 )])
-                                .collect(),
+                                    .collect(),
                             },
                         },
                     ],
@@ -15646,7 +15649,7 @@ mod test {
                                 default: None,
                             },
                         )])
-                        .collect(),
+                            .collect(),
                         ..Default::default()
                     },
                     ..Default::default()
@@ -15737,7 +15740,7 @@ mod test {
                             default: None,
                         },
                     )])
-                    .collect(),
+                        .collect(),
                     reference: Some(s("foo/bar#bar")),
                     color: Some(ftd::Color {
                         light: ftd::ColorValue {
@@ -16009,12 +16012,12 @@ mod test {
                 color: $red
                 line-clamp: $line-clamp
 
-                -- ftd.column moo: 
+                -- ftd.column moo:
                 caption msg: world
                 string other-msg: world again
                 ftd.ui t:
                 ftd.ui k:
-                
+
                 --- ftd.text: $msg
 
                 --- ftd.text: $other-msg
@@ -16121,7 +16124,7 @@ mod test {
                 -- optional string active:
 
                 -- active: hello
-                
+
                 -- ftd.text: $active
                 if: $active is not null
 
@@ -16129,7 +16132,7 @@ mod test {
                 if: $active is null
 
                 -- optional string flags:
-                
+
                 -- ftd.text: $flags
                 if: $flags is not null
 
@@ -16262,7 +16265,7 @@ mod test {
 
             -- ftd.column foo:
             object o:
-        
+
             --- ftd.text: Data
 
             -- foo:
@@ -16330,51 +16333,51 @@ mod test {
         main.container
             .children
             .push(ftd::Element::Input(ftd::Input {
-                common: ftd::Common {
-                    events: vec![
-                        ftd::Event {
-                            name: s("onchange"),
-                            action: ftd::Action {
-                                action: s("set-value"),
-                                target: s("foo/bar#input-data"),
-                                parameters: std::array::IntoIter::new([(
-                                    s("value"),
-                                    vec![
-                                        ftd::event::ParameterData {
-                                            value: s("$VALUE"),
-                                            reference: None,
-                                        },
-                                        ftd::event::ParameterData {
-                                            value: s("string"),
-                                            reference: None,
-                                        },
-                                    ],
-                                )])
-                                .collect(),
-                            },
+            common: ftd::Common {
+                events: vec![
+                    ftd::Event {
+                        name: s("onchange"),
+                        action: ftd::Action {
+                            action: s("set-value"),
+                            target: s("foo/bar#input-data"),
+                            parameters: std::array::IntoIter::new([(
+                                s("value"),
+                                vec![
+                                    ftd::event::ParameterData {
+                                        value: s("$VALUE"),
+                                        reference: None,
+                                    },
+                                    ftd::event::ParameterData {
+                                        value: s("string"),
+                                        reference: None,
+                                    },
+                                ],
+                            )])
+                            .collect(),
                         },
-                        ftd::Event {
-                            name: s("onchange"),
-                            action: ftd::Action {
-                                action: s("message-host"),
-                                target: s("$obj"),
-                                parameters: std::array::IntoIter::new([(
-                                    "data".to_string(),
-                                    vec![ftd::event::ParameterData {
+                    },
+                    ftd::Event {
+                        name: s("onchange"),
+                        action: ftd::Action {
+                            action: s("message-host"),
+                            target: s("$obj"),
+                            parameters: std::array::IntoIter::new([(
+                                "data".to_string(),
+                                vec![ftd::event::ParameterData {
                                     value: s(
                                         "{\"function\":\"some-function\",\"value\":\"Nothing\"}",
                                     ),
                                     reference: Some(s("{\"value\":\"foo/bar#input-data\"}")),
                                 }],
-                                )])
-                                .collect(),
-                            },
+                            )])
+                            .collect(),
                         },
-                    ],
-                    ..Default::default()
-                },
-                placeholder: None,
-            }));
+                    },
+                ],
+                ..Default::default()
+            },
+            placeholder: None,
+        }));
 
         p!(
             "
@@ -17400,14 +17403,14 @@ mod test {
             integer w:
             color: $green
             border-width: $w
-            
+
             --- ftd.text: $title
 
             --- ftd.text: $subtitle
 
             --- ftd.text: $bio
-            
-            --- ftd.boolean: $active 
+
+            --- ftd.boolean: $active
             ",
             (bag, main),
         );
@@ -17456,7 +17459,7 @@ mod test {
             -- optional string bar:
 
             -- bar: Something
-            
+
             -- ftd.text: $bar
             if: $bar == Something
             ",

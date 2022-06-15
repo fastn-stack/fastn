@@ -1,5 +1,3 @@
-pub use ftd::p1::{Error, Result};
-
 #[derive(Debug, PartialEq, Default, Clone, serde::Serialize, serde::Deserialize)]
 pub struct Header(pub Vec<(usize, String, String)>);
 
@@ -10,6 +8,20 @@ impl Header {
             header.add(&0, k, v);
         }
         header
+    }
+    pub fn duplicate_header(&self, doc_id: &str, line_number: usize) -> ftd::p1::Result<()> {
+        let mut hs = std::collections::HashSet::new();
+        for (_, k, _) in self.0.iter().filter(|(_, y, _)| !y.starts_with('/')) {
+            if hs.contains(k) {
+                return Err(ftd::p1::Error::ParseError {
+                    doc_id: doc_id.to_string(),
+                    line_number,
+                    message: format!("`{}` header is repeated", k),
+                });
+            }
+            hs.insert(k);
+        }
+        Ok(())
     }
 
     pub fn add(&mut self, line_number: &usize, name: &str, value: &str) {
@@ -23,10 +35,10 @@ impl Header {
         line_number: usize,
         name: &str,
         def: bool,
-    ) -> Result<bool> {
+    ) -> ftd::p1::Result<bool> {
         match self.bool(doc_id, line_number, name) {
             Ok(b) => Ok(b),
-            Err(Error::NotFound { .. }) => Ok(def),
+            Err(ftd::p1::Error::NotFound { .. }) => Ok(def),
             e => e,
         }
     }
@@ -36,15 +48,15 @@ impl Header {
         doc_id: &str,
         line_number: usize,
         name: &str,
-    ) -> Result<Option<bool>> {
+    ) -> ftd::p1::Result<Option<bool>> {
         match self.bool(doc_id, line_number, name) {
             Ok(b) => Ok(Some(b)),
-            Err(Error::NotFound { .. }) => Ok(None),
+            Err(ftd::p1::Error::NotFound { .. }) => Ok(None),
             Err(e) => Err(e),
         }
     }
 
-    pub fn bool(&self, doc_id: &str, line_number: usize, name: &str) -> Result<bool> {
+    pub fn bool(&self, doc_id: &str, line_number: usize, name: &str) -> ftd::p1::Result<bool> {
         for (l, k, v) in self.0.iter() {
             if k.starts_with('/') {
                 continue;
@@ -61,7 +73,7 @@ impl Header {
                 };
             }
         }
-        Err(Error::NotFound {
+        Err(ftd::p1::Error::NotFound {
             doc_id: doc_id.to_string(),
             line_number,
             key: name.to_string(),
@@ -74,10 +86,10 @@ impl Header {
         line_number: usize,
         name: &str,
         def: i32,
-    ) -> Result<i32> {
+    ) -> ftd::p1::Result<i32> {
         match self.i32(doc_id, line_number, name) {
             Ok(b) => Ok(b),
-            Err(Error::NotFound { .. }) => Ok(def),
+            Err(ftd::p1::Error::NotFound { .. }) => Ok(def),
             e => e,
         }
     }
@@ -87,15 +99,15 @@ impl Header {
         doc_id: &str,
         line_number: usize,
         name: &str,
-    ) -> Result<Option<i32>> {
+    ) -> ftd::p1::Result<Option<i32>> {
         match self.i32(doc_id, line_number, name) {
             Ok(b) => Ok(Some(b)),
-            Err(Error::NotFound { .. }) => Ok(None),
+            Err(ftd::p1::Error::NotFound { .. }) => Ok(None),
             Err(e) => Err(e),
         }
     }
 
-    pub fn i32(&self, doc_id: &str, line_number: usize, name: &str) -> Result<i32> {
+    pub fn i32(&self, doc_id: &str, line_number: usize, name: &str) -> ftd::p1::Result<i32> {
         for (l, k, v) in self.0.iter() {
             if k.starts_with('/') {
                 continue;
@@ -110,14 +122,14 @@ impl Header {
                 });
             }
         }
-        Err(Error::NotFound {
+        Err(ftd::p1::Error::NotFound {
             doc_id: doc_id.to_string(),
             line_number,
             key: name.to_string(),
         })
     }
 
-    pub fn i64(&self, doc_id: &str, line_number: usize, name: &str) -> Result<i64> {
+    pub fn i64(&self, doc_id: &str, line_number: usize, name: &str) -> ftd::p1::Result<i64> {
         for (l, k, v) in self.0.iter() {
             if k.starts_with('/') {
                 continue;
@@ -133,7 +145,7 @@ impl Header {
                 });
             }
         }
-        Err(Error::NotFound {
+        Err(ftd::p1::Error::NotFound {
             doc_id: doc_id.to_string(),
             line_number,
             key: name.to_string(),
@@ -145,15 +157,15 @@ impl Header {
         doc_id: &str,
         line_number: usize,
         name: &str,
-    ) -> Result<Option<i64>> {
+    ) -> ftd::p1::Result<Option<i64>> {
         match self.i64(doc_id, line_number, name) {
             Ok(b) => Ok(Some(b)),
-            Err(Error::NotFound { .. }) => Ok(None),
+            Err(ftd::p1::Error::NotFound { .. }) => Ok(None),
             Err(e) => Err(e),
         }
     }
 
-    pub fn f64(&self, doc_id: &str, line_number: usize, name: &str) -> Result<f64> {
+    pub fn f64(&self, doc_id: &str, line_number: usize, name: &str) -> ftd::p1::Result<f64> {
         for (l, k, v) in self.0.iter() {
             if k.starts_with('/') {
                 continue;
@@ -169,7 +181,7 @@ impl Header {
                 });
             }
         }
-        Err(Error::NotFound {
+        Err(ftd::p1::Error::NotFound {
             doc_id: doc_id.to_string(),
             line_number,
             key: name.to_string(),
@@ -181,10 +193,10 @@ impl Header {
         doc_id: &str,
         line_number: usize,
         name: &str,
-    ) -> Result<Option<f64>> {
+    ) -> ftd::p1::Result<Option<f64>> {
         match self.f64(doc_id, line_number, name) {
             Ok(b) => Ok(Some(b)),
-            Err(Error::NotFound { .. }) => Ok(None),
+            Err(ftd::p1::Error::NotFound { .. }) => Ok(None),
             Err(e) => Err(e),
         }
     }
@@ -195,10 +207,10 @@ impl Header {
         line_number: usize,
         name: &str,
         def: &'a str,
-    ) -> Result<&'a str> {
+    ) -> ftd::p1::Result<&'a str> {
         match self.str(doc_id, line_number, name) {
             Ok(b) => Ok(b),
-            Err(Error::NotFound { .. }) => Ok(def),
+            Err(ftd::p1::Error::NotFound { .. }) => Ok(def),
             e => e,
         }
     }
@@ -238,10 +250,10 @@ impl Header {
         doc_id: &str,
         line_number: usize,
         name: &str,
-    ) -> Result<Option<&str>> {
+    ) -> ftd::p1::Result<Option<&str>> {
         match self.str(doc_id, line_number, name) {
             Ok(b) => Ok(Some(b)),
-            Err(Error::NotFound { .. }) => Ok(None),
+            Err(ftd::p1::Error::NotFound { .. }) => Ok(None),
             Err(e) => Err(e),
         }
     }
@@ -252,7 +264,7 @@ impl Header {
         line_number: usize,
         name: &str,
         arguments: &std::collections::BTreeMap<String, ftd::p2::Kind>,
-    ) -> Result<Vec<(usize, String, Option<&str>)>> {
+    ) -> ftd::p1::Result<Vec<(usize, String, Option<&str>)>> {
         let mut conditional_vector = vec![];
         for (idx, (_, k, v)) in self.0.iter().enumerate() {
             let v = doc.resolve_reference_name(line_number, v, arguments)?;
@@ -269,7 +281,7 @@ impl Header {
             }
         }
         if conditional_vector.is_empty() {
-            Err(Error::NotFound {
+            Err(ftd::p1::Error::NotFound {
                 doc_id: doc.name.to_string(),
                 line_number,
                 key: format!("`{}` header is missing", name),
@@ -279,7 +291,7 @@ impl Header {
         }
     }
 
-    pub fn str(&self, doc_id: &str, line_number: usize, name: &str) -> Result<&str> {
+    pub fn str(&self, doc_id: &str, line_number: usize, name: &str) -> ftd::p1::Result<&str> {
         for (_, k, v) in self.0.iter() {
             if k.starts_with('/') {
                 continue;
@@ -289,14 +301,14 @@ impl Header {
             }
         }
 
-        Err(Error::NotFound {
+        Err(ftd::p1::Error::NotFound {
             doc_id: doc_id.to_string(),
             line_number,
             key: format!("`{}` header is missing", name),
         })
     }
 
-    pub fn string(&self, doc_id: &str, line_number: usize, name: &str) -> Result<String> {
+    pub fn string(&self, doc_id: &str, line_number: usize, name: &str) -> ftd::p1::Result<String> {
         self.str(doc_id, line_number, name).map(ToString::to_string)
     }
 
@@ -305,7 +317,7 @@ impl Header {
         doc_id: &str,
         line_number: usize,
         name: &str,
-    ) -> Result<Option<String>> {
+    ) -> ftd::p1::Result<Option<String>> {
         Ok(self
             .str_optional(doc_id, line_number, name)?
             .map(ToString::to_string))
@@ -317,7 +329,7 @@ impl Header {
         line_number: usize,
         name: &str,
         def: &str,
-    ) -> Result<String> {
+    ) -> ftd::p1::Result<String> {
         self.str_with_default(doc_id, line_number, name, def)
             .map(ToString::to_string)
     }
