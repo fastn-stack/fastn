@@ -11,16 +11,16 @@ impl Header {
         header
     }
     pub fn duplicate_header(&self, doc_id: &str, line_number: usize) -> ftd::p1::Result<()> {
-        let mut hm = std::collections::HashMap::new();
-        for (_, k, _) in self.0.iter().filter(|(_, y, _)| !y.eq("/")) {
-            if hm.contains_key(k) {
+        let mut hs = std::collections::HashMap::new();
+        for (_, k, _) in self.0.iter().filter(|(_, y, _)| !y.starts_with('/')) {
+            if hs.contains(k) {
                 return Err(ftd::p1::Error::ParseError {
                     doc_id: doc_id.to_string(),
                     line_number,
                     message: format!("`{}` header is repeated", k),
                 });
             }
-            hm.insert(k, true);
+            hs.insert(k, true);
         }
         Ok(())
     }
