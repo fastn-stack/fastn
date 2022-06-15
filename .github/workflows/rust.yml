@@ -3,7 +3,7 @@ name: Rust Checks
 on:
   push:
     branches:
-      - master
+      - main
     paths:
       - '**.rs'
       - 'Cargo.*'
