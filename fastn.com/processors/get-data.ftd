@@ -69,3 +69,57 @@ $processor$: get-data
 -- ft.markdown:
 
 Providing both `body` and `caption` when using `get-data` is an error.
+
+-- ft.h1: Reading data from JSON File
+
+We will be reading the data from JSON file and injecting the value to the caller of the processor (caller could be variable or component).
+
+Step - 1 : We need to make two files i.e. one file should be .ftd and another file should be .json
+
+Step - 2 : Creating .ftd (for example, record.ftd)
+
+-- ft.code:
+lang: ftd
+
+\-- record person:
+caption name:
+integer age:
+string gender:
+
+\-- person arpita:
+$processor$: get-data
+file: foo.json
+
+\-- ftd.text: $foo.name
+\-- ftd.text: $foo.age
+\-- ftd.text: $foo.gender
+
+
+-- ft.markdown:
+
+
+Step - 3 : Creating .json (for example, foo.json)
+-- ft.code:
+lang: ftd
+
+{
+  "name": "arpita",
+  "age": 12 ,
+  "gender": "female"
+}
+
+-- ft.markdown:
+
+
+Step - 4 : Output
+
+-- ft.code:
+lang: ftd
+
+arpita
+12
+female
+
+-- ft.markdown:
+
+NOTE : It will throw an error if other than .json file is used.
