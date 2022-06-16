@@ -136,7 +136,27 @@ fn resolve_foreign_variable(
         base_url: &str,
     ) -> ftd::p1::Result<ftd::Value> {
         let base_url = base_url.trim_end_matches('/');
+        let mut files = files.to_string();
         let path = lib.config.get_root_for_package(package);
+        let light = {
+            if let Some(f) = files.strip_suffix(".light") {
+                files = f.to_string();
+                true
+            } else {
+                false
+            }
+        };
+        let dark = {
+            if light {
+                false
+            } else if let Some(f) = files.strip_suffix(".dark") {
+                files = f.to_string();
+                true
+            } else {
+                false
+            }
+        };
+
         match files.rsplit_once(".") {
             Some((file, ext))
                 if mime_guess::MimeGuess::from_ext(ext)
@@ -153,6 +173,12 @@ fn resolve_foreign_variable(
                     file.replace('.', "/"),
                     ext
                 );
+                if light {
+                    return Ok(ftd::Value::String {
+                        text: light_mode,
+                        source: ftd::TextSource::Header,
+                    });
+                }
                 let dark_mode = if path
                     .join(format!("{}-dark.{}", file.replace('.', "/"), ext))
                     .exists()
@@ -166,6 +192,13 @@ fn resolve_foreign_variable(
                 } else {
                     light_mode.clone()
                 };
+
+                if dark {
+                    return Ok(ftd::Value::String {
+                        text: dark_mode,
+                        source: ftd::TextSource::Header,
+                    });
+                }
                 Ok(ftd::Value::Record {
                     name: "ftd#image-src".to_string(),
                     fields: std::array::IntoIter::new([
@@ -201,7 +234,7 @@ fn resolve_foreign_variable(
                     source: ftd::TextSource::Header,
                 })
             }
-            None if path.join(files).exists() => Ok(ftd::Value::String {
+            None if path.join(&files).exists() => Ok(ftd::Value::String {
                 text: format!("/-/{}/{}", package.name, files),
                 source: ftd::TextSource::Header,
             }),
