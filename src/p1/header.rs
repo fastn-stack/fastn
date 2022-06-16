@@ -9,17 +9,21 @@ impl Header {
         }
         header
     }
-    pub fn duplicate_header(&self, doc_id: &str, line_number: usize) -> ftd::p1::Result<()> {
-        let mut hs = std::collections::HashSet::new();
-        for (_, k, _) in self.0.iter().filter(|(_, y, _)| !y.starts_with('/')) {
-            if hs.contains(k) {
-                return Err(ftd::p1::Error::ParseError {
-                    doc_id: doc_id.to_string(),
-                    line_number,
-                    message: format!("`{}` header is repeated", k),
-                });
+   pub fn duplicate_header(&self) -> ftd::p1::Result<()> {
+        let mut hm = std::collections::HashMap::new();
+        for (ln, k, v) in self.0.iter().filter(|(_, y, _)| !y.starts_with('/')) {
+            if hm.contains_key(k) {
+                let old_value = hm[k];
+                let new_value = v;
+                if old_value == new_value {
+                    return Err(ftd::p1::Error::ParseError {
+                        doc_id: k.to_string(),
+                        line_number: *ln,
+                        message: format!("header is repeated for {}", old_value),
+                    });
+                }
             }
-            hs.insert(k);
+            hm.insert(k, v);
         }
         Ok(())
     }
