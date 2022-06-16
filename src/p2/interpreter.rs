@@ -72,7 +72,6 @@ impl InterpreterState {
             self.document_stack[l].reorder(&self.bag)?;
         }
         let parsed_document = &mut self.document_stack[l];
-        let mut instructions: Vec<ftd::Instruction> = Default::default();
 
         while let Some(p1) = parsed_document.sections.last_mut() {
             // first resolve the foreign_variables in the section before proceeding further
@@ -155,13 +154,15 @@ impl InterpreterState {
                 //         Not sure if its a good idea tho.
                 // }
             } else if p1.name == "container" {
-                instructions.push(ftd::Instruction::ChangeContainer {
-                    name: doc.resolve_name_with_instruction(
-                        p1.line_number,
-                        p1.caption(p1.line_number, doc.name)?.as_str(),
-                        &instructions,
-                    )?,
-                });
+                parsed_document
+                    .instructions
+                    .push(ftd::Instruction::ChangeContainer {
+                        name: doc.resolve_name_with_instruction(
+                            p1.line_number,
+                            p1.caption(p1.line_number, doc.name)?.as_str(),
+                            &parsed_document.instructions,
+                        )?,
+                    });
             } else if let Ok(ftd::variable::VariableData {
                 type_: ftd::variable::Type::Component,
                 ..
@@ -297,15 +298,17 @@ impl InterpreterState {
                                 is_commented: p1.is_commented,
                                 line_number: p1.line_number,
                             };
-                            instructions.push(ftd::Instruction::RecursiveChildComponent {
-                                child: ftd::component::recursive_child_component(
-                                    loop_data,
-                                    &section_to_subsection,
-                                    &doc,
-                                    &Default::default(),
-                                    None,
-                                )?,
-                            });
+                            parsed_document.instructions.push(
+                                ftd::Instruction::RecursiveChildComponent {
+                                    child: ftd::component::recursive_child_component(
+                                        loop_data,
+                                        &section_to_subsection,
+                                        &doc,
+                                        &Default::default(),
+                                        None,
+                                    )?,
+                                },
+                            );
                         } else {
                             let parent = ftd::ChildComponent::from_p1(
                                 p1.line_number,
@@ -360,7 +363,9 @@ impl InterpreterState {
                                 }
                             }
 
-                            instructions.push(ftd::Instruction::Component { children, parent })
+                            parsed_document
+                                .instructions
+                                .push(ftd::Instruction::Component { children, parent })
                         }
                     }
                     ftd::p2::Thing::Record(mut r) => {
@@ -399,7 +404,7 @@ impl InterpreterState {
             &self.id,
             self.document_stack[0].get_doc_aliases(),
             self.bag,
-            instructions,
+            self.document_stack[0].instructions.clone(),
         );
 
         let main = if cfg!(test) {
@@ -716,6 +721,7 @@ pub struct ParsedDocument {
     doc_aliases: std::collections::BTreeMap<String, String>,
     var_types: Vec<String>,
     foreign_variable_prefix: Vec<String>,
+    instructions: Vec<ftd::Instruction>,
 }
 
 impl ParsedDocument {
@@ -727,6 +733,7 @@ impl ParsedDocument {
             doc_aliases: ftd::p2::interpreter::default_aliases(),
             var_types: Default::default(),
             foreign_variable_prefix: vec![],
+            instructions: vec![],
         })
     }
 
