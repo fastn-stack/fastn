@@ -3,7 +3,7 @@ pub struct InterpreterState {
     pub id: String,
     pub bag: std::collections::BTreeMap<String, ftd::p2::Thing>,
     pub document_stack: Vec<ParsedDocument>,
-    pub parsed_libs: Vec<String>,
+    pub parsed_libs: std::collections::BTreeMap<String, Vec<String>>,
 }
 
 impl InterpreterState {
@@ -29,12 +29,12 @@ impl InterpreterState {
     }
 
     fn library_in_the_bag(&self, name: &str) -> bool {
-        self.parsed_libs.contains(&name.to_string())
+        self.parsed_libs.contains_key(name)
     }
 
     fn add_library_to_bag(&mut self, name: &str) {
         if !self.library_in_the_bag(name) {
-            self.parsed_libs.push(name.to_string());
+            self.parsed_libs.insert(name.to_string(), vec![]);
         }
     }
 
@@ -58,6 +58,11 @@ impl InterpreterState {
                             state: self,
                             module,
                         });
+                    }
+                    if let Some(foreign_var_prefix) = self.parsed_libs.get(module.as_str()) {
+                        self.document_stack[l]
+                            .foreign_variable_prefix
+                            .extend_from_slice(foreign_var_prefix.as_slice());
                     }
                 } else {
                     break;
@@ -419,6 +424,10 @@ impl InterpreterState {
         Ok(Interpreter::Done { document: d })
     }
 
+    fn resolve_foreign_variable_name(name: &str) -> String {
+        name.replace('.', "-")
+    }
+
     fn resolve_foreign_variable(
         section: &mut ftd::p1::Section,
         foreign_variables: &[String],
@@ -495,9 +504,11 @@ impl InterpreterState {
                 return Ok(None);
             }
             if let Some(val) = value.clone().strip_prefix('$') {
-                if is_foreign_variable(val, foreign_variables, doc.aliases)? {
+                if is_foreign_variable(val, foreign_variables, doc, line_number)? {
                     let val = doc.resolve_name(line_number, val)?;
-                    *value = format!("${}", val.as_str());
+                    *value = ftd::InterpreterState::resolve_foreign_variable_name(
+                        format!("${}", val.as_str()).as_str(),
+                    );
                     return Ok(Some(val));
                 }
             }
@@ -507,17 +518,12 @@ impl InterpreterState {
         fn is_foreign_variable(
             variable: &str,
             foreign_variables: &[String],
-            doc_aliases: &std::collections::BTreeMap<String, String>,
+            doc: &ftd::p2::TDoc,
+            line_number: usize,
         ) -> ftd::p1::Result<bool> {
-            let var_name = {
-                let mut var_name = ftd::p2::utils::get_doc_name_and_remaining(variable)?.0;
-                if let Some(val) = doc_aliases.get(var_name.as_str()) {
-                    var_name = val.to_string();
-                }
-                var_name
-            };
+            let var_name = doc.resolve_name(line_number, variable)?;
 
-            if foreign_variables.contains(&var_name) {
+            if foreign_variables.iter().any(|v| var_name.starts_with(v)) {
                 return Ok(true);
             }
             Ok(false)
@@ -556,10 +562,13 @@ impl InterpreterState {
         Ok(None)
     }
 
-    pub fn add_foreign_variable_prefix(&mut self, prefix: &str) {
+    pub fn add_foreign_variable_prefix(&mut self, module: &str, prefix: Vec<String>) {
         if let Some(document) = self.document_stack.last_mut() {
-            document.foreign_variable_prefix.push(prefix.to_string());
+            document
+                .foreign_variable_prefix
+                .extend_from_slice(prefix.as_slice());
         }
+        self.parsed_libs.insert(module.to_string(), prefix);
     }
 
     pub fn continue_after_import(mut self, id: &str, source: &str) -> ftd::p1::Result<Interpreter> {
@@ -581,7 +590,9 @@ impl InterpreterState {
             bag: &self.bag,
             local_variables: &mut Default::default(),
         };
-        let var_name = doc.resolve_name(0, variable)?;
+        let var_name = ftd::InterpreterState::resolve_foreign_variable_name(
+            doc.resolve_name(0, variable)?.as_str(),
+        );
         self.bag.insert(
             var_name.clone(),
             ftd::p2::Thing::Variable(ftd::Variable {
