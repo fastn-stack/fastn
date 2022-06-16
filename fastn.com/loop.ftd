@@ -12,8 +12,7 @@ Consider this list:
 -- ft.code:
 lang: ftd
 
-\-- list people:
-type: string
+\-- string list people:
 
 \-- people: Arpita
 
@@ -29,8 +28,8 @@ display each of them:
 -- ft.code:
 lang: ftd
 
-\-- ftd.text: ref obj
-$loop$: people as obj
+\-- ftd.text: $obj
+$loop$: $people as $obj
 
 -- ft.markdown:
 
@@ -50,9 +49,9 @@ that meet some criteria:
 -- ft.code:
 lang: ftd
 
-\-- foo: ref $o.name
-$loop$: employee as o
-if: o.is-permanent
+\-- foo: $o.name
+$loop$: $employee as $o
+if: $o.is-permanent
 
 -- ft.markdown:
 
@@ -69,6 +68,6 @@ lang: ftd
 
 \-- ftd.column:
 
-\--- foo: ref obj.name
-$loop$: people as obj
-body: ref obj.bio
+\--- foo: $obj.name
+$loop$: $people as $obj
+body: $obj.bio
