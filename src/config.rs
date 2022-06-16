@@ -841,7 +841,7 @@ impl Package {
     }
 
     /// aliases() returns the list of the available aliases at the package level.
-    pub fn aliases(&self) -> fpm::Result<std::collections::BTreeMap<&str, &fpm::Package>> {
+    pub fn aliases(&self) -> std::collections::BTreeMap<&str, &fpm::Package> {
         let mut resp = std::collections::BTreeMap::new();
         for d in &self.dependencies {
             if let Some(a) = &d.alias {
@@ -849,7 +849,7 @@ impl Package {
             }
             resp.insert(&d.package.name, &d.package);
         }
-        Ok(resp)
+        resp
     }
 
     pub async fn get_assets_doc(

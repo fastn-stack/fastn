@@ -23,142 +23,78 @@ pub struct Library {
 
 impl Library {
     // TODO: async
-    pub fn get_with_result(&self, name: &str, doc: &ftd::p2::TDoc) -> ftd::p1::Result<String> {
-        match self.get(name, doc) {
+    pub fn get_with_result(
+        &self,
+        name: &str,
+        packages: &mut Vec<&fpm::Package>,
+    ) -> ftd::p1::Result<String> {
+        match self.get(name, packages) {
             Some(v) => Ok(v),
             None => ftd::e2(format!("library not found: {}", name), "", 0),
         }
     }
 
-    pub fn get(&self, name: &str, doc: &ftd::p2::TDoc) -> Option<String> {
+    pub fn get(&self, name: &str, packages: &mut Vec<&fpm::Package>) -> Option<String> {
         if name == "fpm" {
+            packages.push(packages.last()?);
             return Some(fpm_dot_ftd::get(self));
         }
         if name == "fpm-lib" {
+            packages.push(packages.last()?);
             return Some(fpm::fpm_lib_ftd().to_string());
         }
-        return if let Some(r) = get_for_package_config(name, &self.config.package, self) {
-            Some(r)
-        } else {
-            for package in &get_root_package_for_path(doc.name, &self.config.package, false) {
-                if let Some(resp) = get_for_package_config(name, package, self) {
-                    return Some(resp);
-                };
-            }
-            None
-        };
 
-        fn get_for_package_config(
+        return get_for_package(name, packages, self);
+
+        fn get_for_package(
             name: &str,
-            package: &fpm::Package,
+            packages: &mut Vec<&fpm::Package>,
             lib: &fpm::Library,
         ) -> Option<String> {
+            let package = packages.last()?;
             if name.starts_with(package.name.as_str()) {
                 if let Some(r) = get_data_from_package(name, package, lib) {
+                    packages.push(packages.last()?);
                     return Some(r);
                 }
             }
-            // If package == lib.config.package => Current iteration for the top most package
-            // Root package evaluation
-            if package.name == lib.config.package.name {
-                if let Some(translation_of_package) = lib.config.package.translation_of.as_ref() {
-                    // Index document can be accessed from the package name directly. For others
-                    // `/` is required to be certain. foo-hi -> foo-hi-hi This is wrong. That's why
-                    // we ensure a strict `/` check or a full name match
-                    let new_name = if translation_of_package.name.as_str().eq(name) {
-                        package.name.clone()
-                    } else {
-                        name.replacen(
-                            format!("{}/", translation_of_package.name.as_str()).as_str(),
-                            format!("{}/", package.name.as_str()).as_str(),
-                            1,
-                        )
-                    };
 
-                    if let Some(resp) = get_data_from_package(new_name.as_str(), package, lib) {
-                        return Some(resp);
+            for (alias, package) in package.aliases() {
+                if name.starts_with(alias) {
+                    if let Some(r) = get_data_from_package(
+                        name.replacen(&alias, &package.name, 1).as_str(),
+                        package,
+                        lib,
+                    ) {
+                        packages.push(package);
+                        return Some(r);
                     }
                 }
             }
 
-            // Check the translation of the package
-            if let Some(translation_of_package) = package.translation_of.as_ref() {
-                if let Some(resp) = get_for_package_config(
-                    name.replacen(
-                        package.name.as_str(),
-                        translation_of_package.name.as_str(),
-                        1,
-                    )
-                    .as_str(),
-                    translation_of_package,
-                    lib,
-                ) {
-                    return Some(resp);
-                }
-            }
-
-            if let Some(r) = get_from_all_dependencies(name, package, lib) {
-                return Some(r);
-            }
-            None
-        }
-        fn get_root_package_for_path(
-            name: &str,
-            package: &fpm::Package,
-            include_self: bool,
-        ) -> Vec<fpm::Package> {
-            if name.starts_with(package.name.as_str()) {
-                if include_self {
-                    vec![package.to_owned()]
-                } else {
-                    vec![]
-                }
-            } else {
-                let mut resp = vec![];
-                for dep in &package.dependencies {
-                    if let Some(unaliased_name) = dep.unaliased_name(name) {
-                        resp.extend(get_root_package_for_path(
-                            unaliased_name.as_str(),
-                            &dep.package,
-                            false,
-                        ));
-                        resp.push(dep.package.clone())
+            if let Some(translation_of) = package.translation_of.as_ref() {
+                let name = name.replacen(package.name.as_str(), translation_of.name.as_str(), 1);
+                if name.starts_with(translation_of.name.as_str()) {
+                    if let Some(r) = get_data_from_package(name.as_str(), translation_of, lib) {
+                        packages.push(packages.last()?);
+                        return Some(r);
                     }
                 }
-                resp
-            }
-        }
 
-        fn get_from_all_dependencies(
-            name: &str,
-            package: &fpm::Package,
-            lib: &fpm::Library,
-            // evaluated_packages: &mut Vec<String>,
-        ) -> Option<String> {
-            for dep in &package.get_flattened_dependencies() {
-                if let Some(non_aliased_name) = dep.unaliased_name(name) {
-                    if non_aliased_name.starts_with(dep.package.name.as_str()) {
-                        if let Some(resp) =
-                            get_from_dependency(non_aliased_name.as_str(), &dep.package, lib)
-                        {
-                            return Some(resp);
-                        };
+                for (alias, package) in translation_of.aliases() {
+                    if name.starts_with(alias) {
+                        if let Some(r) = get_data_from_package(
+                            name.replacen(&alias, &package.name, 1).as_str(),
+                            package,
+                            lib,
+                        ) {
+                            packages.push(package);
+                            return Some(r);
+                        }
                     }
                 }
             }
-            None
-        }
-        fn get_from_dependency(
-            name: &str,
-            from_package: &fpm::Package,
-            lib: &fpm::Library,
-        ) -> Option<String> {
-            // TODO: Here the library needs to be evaluated for this particular package
-            // Right now the solution works by recursively looking for the package in the dependency tree
-            // Ideally we should also know the library definition of a particular package
-            if let Some(resp_body) = get_data_from_package(name, from_package, lib) {
-                return Some(resp_body);
-            }
+
             None
         }
 
@@ -194,7 +130,7 @@ impl Library {
                     }
                     // return Some(package.get_assets_doc());
                 } else if let Some(body) = get_file_from_location(&path, new_name.as_str()) {
-                    return Some(package.get_prefixed_body(body.as_str(), name, false));
+                    return Some(package.get_prefixed_body(body.as_str(), name, true));
                 }
             }
             None

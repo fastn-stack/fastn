@@ -5,6 +5,7 @@ pub async fn parse<'a>(
     lib: &'a fpm::Library,
 ) -> ftd::p1::Result<ftd::p2::Document> {
     let mut s = ftd::interpret(name, source)?;
+    let mut packages_under_process = vec![&lib.config.package];
     let document;
     loop {
         match s {
@@ -22,11 +23,19 @@ pub async fn parse<'a>(
                 module,
                 state: mut st,
             } => {
+                packages_under_process.truncate(st.document_stack.len());
                 let source = if module.eq("fpm/time") {
                     st.add_foreign_variable_prefix(module.as_str());
+                    packages_under_process.push(packages_under_process.last().ok_or_else(
+                        || ftd::p1::Error::ParseError {
+                            message: "The processing document stack is empty".to_string(),
+                            doc_id: "".to_string(),
+                            line_number: 0,
+                        },
+                    )?);
                     "".to_string()
                 } else {
-                    lib.get_with_result(module.as_str(), &st.tdoc(&mut Default::default()))?
+                    lib.get_with_result(module.as_str(), &mut packages_under_process)?
                 };
                 s = st.continue_after_import(module.as_str(), source.as_str())?;
             }

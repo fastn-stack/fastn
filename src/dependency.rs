@@ -444,9 +444,6 @@ impl fpm::Package {
             for dep in package.dependencies.iter_mut() {
                 let dep_path = root.join(".packages").join(dep.package.name.as_str());
 
-                if downloaded_package.contains(&dep.package.name) {
-                    continue;
-                }
                 if dep_path.exists() {
                     let dst = base_path.join(".packages").join(dep.package.name.as_str());
                     if !dst.exists() {
@@ -462,10 +459,11 @@ impl fpm::Package {
                         &dst.join("FPM.ftd"),
                     )
                     .await?;
+                } else {
+                    dep.package
+                        .process(base_path, downloaded_package, false, true)
+                        .await?;
                 }
-                dep.package
-                    .process(base_path, downloaded_package, false, true)
-                    .await?;
             }
         }
 
@@ -482,9 +480,6 @@ impl fpm::Package {
             }
             for translation in package.translations.iter_mut() {
                 let original_path = root.join(".packages").join(translation.name.as_str());
-                if downloaded_package.contains(&translation.name) {
-                    continue;
-                }
                 if original_path.exists() {
                     let dst = base_path.join(".packages").join(translation.name.as_str());
                     if !dst.exists() {
