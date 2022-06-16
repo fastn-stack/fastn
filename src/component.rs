@@ -2362,6 +2362,18 @@ pub fn read_properties(
         root_arguments
     };
 
+    dbg!("hello", &root_arguments);
+
+    // Creating examples/testing.ftd
+    // Added dbg!()
+    // cargo run testing
+    // 1. Add lots of dbg!()
+    // 2. Check that if there's any argument in root_arguments that expects caption or body,
+    // 3. if caption is not expected and caption is passed:
+    //      then: throw error
+    // 3. if body is not expected and body is passed:
+    //      then: throw error
+
     for (name, kind) in root_arguments.iter() {
         if let Some(prop) = root_properties.get(name) {
             properties.insert(name.to_string(), prop.clone());
