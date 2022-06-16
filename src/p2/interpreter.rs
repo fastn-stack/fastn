@@ -97,8 +97,7 @@ impl InterpreterState {
                 continue;
             }
 
-            p1.header
-                .duplicate_header(p1.name.as_str(), p1.line_number)?;
+            p1.header.duplicate_header()?;
 
             // while this is a specific to entire document, we are still creating it in a loop
             // because otherwise the self.interpret() call won't compile.
