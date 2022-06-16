@@ -705,6 +705,49 @@ impl Package {
         }
     }
 
+    pub fn get_font_ftd(&self) -> Option<String> {
+        use itertools::Itertools;
+        if self.fonts.is_empty() {
+            None
+        } else {
+            let (font_record, fonts) = self
+                .fonts
+                .iter()
+                .unique_by(|font| font.name.as_str())
+                .collect_vec()
+                .iter()
+                .fold(
+                    (
+                        String::from("-- record font:"),
+                        String::from("-- font fonts:"),
+                    ),
+                    |(record_accumulator, instance_accumulator), font| {
+                        (
+                            format!(
+                                "{pre}\nstring {font_var_name}:",
+                                pre = record_accumulator,
+                                font_var_name = font.name.as_str(),
+                            ),
+                            format!(
+                                "{pre}\n{font_var_name}: {font_var_val}",
+                                pre = instance_accumulator,
+                                font_var_name = font.name.as_str(),
+                                font_var_val = font.html_name(self.name.as_str())
+                            ),
+                        )
+                    },
+                );
+            Some(format!(
+                indoc::indoc! {"
+                            {font_record}
+                            {fonts}
+                        "},
+                font_record = font_record,
+                fonts = fonts
+            ))
+        }
+    }
+
     pub fn with_zip(mut self, zip: String) -> fpm::Package {
         self.zip = Some(zip);
         self
