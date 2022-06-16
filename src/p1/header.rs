@@ -9,7 +9,8 @@ impl Header {
         }
         header
     }
-   pub fn duplicate_header(&self) -> ftd::p1::Result<()> {
+
+    pub fn duplicate_header(&self) -> ftd::p1::Result<()> {
         let mut hm = std::collections::HashMap::new();
         for (ln, k, v) in self.0.iter().filter(|(_, y, _)| !y.starts_with('/')) {
             if hm.contains_key(k) {
