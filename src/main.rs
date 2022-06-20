@@ -16,11 +16,15 @@ async fn main() -> fpm::Result<()> {
     if let Some(mark) = matches.subcommand_matches("serve") {
         let port = mark
             .value_of("port")
-            .unwrap_or_else(|| mark.value_of("positional_port").unwrap_or("8000"))
-            .to_string();
+            .map_or(mark.value_of("positional_port"), Some)
+            .map(|p| {
+                p.parse::<u16>()
+                    .unwrap_or_else(|_| panic!("provided port {} is wrong", p))
+            });
+
         let bind = mark.value_of("bind").unwrap_or("127.0.0.1").to_string();
         tokio::task::spawn_blocking(move || {
-            fpm::serve(bind.as_str(), port.as_str()).expect("http service error");
+            fpm::serve(bind.as_str(), port).expect("http service error");
         })
         .await
         .expect("Thread spawn error");
