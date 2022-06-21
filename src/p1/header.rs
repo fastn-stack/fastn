@@ -4,6 +4,33 @@ pub use ftd::p1::{Error, Result};
 pub struct Header(pub Vec<(usize, String, String)>);
 
 impl Header {
+
+    pub fn normal_dup_header_check(&self, id: &str) -> ftd::p1::Result<()> {
+        let mut header_set: std::collections::HashSet<String> = std::collections::HashSet::new();
+        for (ln, key, _) in self.0.iter() {
+            // Ignore commented headers and lines starting with << or >>
+            if key.starts_with('/') || key.starts_with('>') || key.starts_with('<') {
+                continue;
+            }
+            // Ignore processor keywords
+            else if key.starts_with('$') && key.ends_with('$') {
+                continue;
+            }
+
+            // If header found again throw error
+            if header_set.contains(key) {
+                return Err(ftd::p1::Error::ParseError {
+                    message: format!("Header {} is already defined ", key),
+                    doc_id: id.to_string(),
+                    line_number: *ln,
+                });
+            }
+            // Else insert it in the header set
+            header_set.insert(key.to_string());
+        }
+        Ok(())
+    }
+
     pub fn without_line_number(&self) -> Self {
         let mut header: Header = Default::default();
         for (_, k, v) in self.0.iter() {
