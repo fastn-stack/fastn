@@ -564,7 +564,10 @@ impl Config {
     }
 
     /// Return (package name or alias, package)
-    async fn find_package_by_id(&mut self, id: &str) -> fpm::Result<(String, fpm::Package)> {
+    pub(crate) async fn find_package_by_id(
+        &mut self,
+        id: &str,
+    ) -> fpm::Result<(String, fpm::Package)> {
         let id = if let Some(id) = id.strip_prefix("-/") {
             id
         } else {

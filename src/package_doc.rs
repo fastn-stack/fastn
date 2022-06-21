@@ -349,6 +349,11 @@ pub(crate) async fn process_ftd(
     main: &fpm::Document,
     base_url: &str,
 ) -> fpm::Result<Vec<u8>> {
+    let current_package = config
+        .all_packages
+        .get(main.package_name.as_str())
+        .unwrap_or(&config.package);
+
     if main.id.eq("FPM.ftd") {
         std::fs::copy(
             config.root.join(main.id.as_str()),
@@ -386,9 +391,7 @@ pub(crate) async fn process_ftd(
                 )
             }
         } else {
-            main.content = config
-                .package
-                .get_prefixed_body(main.content.as_str(), &main.id, true);
+            main.content = current_package.get_prefixed_body(main.content.as_str(), &main.id, true);
         }
         main
     };

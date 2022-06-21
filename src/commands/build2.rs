@@ -111,16 +111,17 @@ async fn get_documents_for_current_package(
     );
 
     if let Some(ref sitemap) = config.sitemap {
+        let mut new_config = config.clone();
         let get_all_locations = sitemap.get_all_locations();
         let mut files: std::collections::HashMap<String, fpm::File> = Default::default();
         for (doc_path, _, url) in get_all_locations {
             let file = {
-                let mut file = fpm::get_file(
-                    config.package.name.to_string(),
-                    doc_path,
-                    config.root.as_path(),
-                )
-                .await?;
+                let package_name = if let Some(ref url) = url {
+                    new_config.find_package_by_id(url).await?.1.name
+                } else {
+                    config.package.name.to_string()
+                };
+                let mut file = fpm::get_file(package_name, doc_path, config.root.as_path()).await?;
                 if let Some(ref url) = url {
                     let url = url.replace("/index.html", "");
                     let extension = if matches!(file, fpm::File::Markdown(_)) {
@@ -135,7 +136,7 @@ async fn get_documents_for_current_package(
             };
             files.insert(file.get_id(), file);
         }
-
+        config.all_packages.extend(new_config.all_packages);
         documents.extend(files);
     }
 
