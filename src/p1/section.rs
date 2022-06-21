@@ -77,6 +77,15 @@ impl Section {
                         continue;
                     }
 
+                    // Ignore commented headers and lines starting with << or >>
+                    if key.starts_with('/') || key.starts_with('>') || key.starts_with('<') {
+                        continue;
+                    }
+                    // Ignore processor keywords
+                    else if key.starts_with('$') && key.ends_with('$') {
+                        continue;
+                    }
+
                     // Otherwise function normally for other headers
                     if header_set.contains(key) {
                         return Err(ftd::p1::Error::ParseError {
