@@ -28,6 +28,86 @@ impl Section {
         }
     }
 
+    pub fn var_dup_header_check(
+        &self,
+        id: &str,
+        bag: &std::collections::BTreeMap<String, ftd::p2::Thing>,
+        var_data: &ftd::variable::VariableData,
+    ) -> ftd::p1::Result<()> {
+        // VariableData attributes
+        // println!("ID = {}",id);
+        let _name = var_data.name.to_string();
+        let kind = var_data.kind.to_string();
+
+        if kind.eq("string") || kind.eq("object") {
+            return Ok(());
+        }
+
+        // dbg!(&id, &_name, &kind);
+
+        let mut header_set: std::collections::HashSet<String> = std::collections::HashSet::new();
+
+        // Bag = Map( String -> Thing )
+        // Key Entry in bag = [file_name/id]#[kind]
+        let bag_entry = {
+            if id.eq("index.ftd") {
+                let tokens: Vec<&str> = kind.split('.').collect();
+                format!("ftd#{}", tokens[tokens.len() - 1])
+            } else if id.eq("foo/bar") {
+                let tokens: Vec<&str> = kind.split('.').collect();
+                let std_type_key = format!("ftd#{}", tokens[tokens.len() - 1]);
+                if bag.contains_key(&std_type_key) {
+                    std_type_key
+                } else {
+                    format!("{}#{}", id, tokens[0])
+                }
+            } else {
+                format!("{}#{}", id, kind)
+            }
+        };
+
+        // dbg!(&bag.keys());
+
+        if bag.contains_key(&bag_entry) {
+            // Check if the thing (section) is record then evaluate its headers for duplicates
+            let thing: &ftd::p2::Thing = &bag[&bag_entry];
+
+            if let ftd::p2::Thing::Record(ref rec) = thing {
+                // println!("filtering for record!!");
+                let header_list = &self.header;
+                for (ln, key, _) in header_list.0.iter() {
+                    // Record.fields: Map( String -> Kind ) or Map( Headers -> Kind )
+                    // Allow repeated use of list inside record variables
+                    if rec.fields[key].is_list() {
+                        continue;
+                    }
+
+                    // Otherwise function normally for other headers
+                    if header_set.contains(key) {
+                        return Err(ftd::p1::Error::ParseError {
+                            message: format!(
+                                "Repeated Header {} in record {} not allowed !!",
+                                key, kind
+                            ),
+                            doc_id: id.to_string(),
+                            line_number: *ln,
+                        });
+                    }
+                    header_set.insert(key.to_string());
+                }
+            }
+        } else {
+            // Bag Entry not found
+            return Err(ftd::p1::Error::NotFound {
+                key: bag_entry,
+                doc_id: id.to_string(),
+                line_number: self.line_number,
+            });
+        }
+
+        Ok(())
+    }
+
     pub fn remove_comments(&self) -> Section {
         let mut headers = vec![];
         for (i, k, v) in self.header.0.iter() {

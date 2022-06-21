@@ -12,17 +12,19 @@ impl Header {
 
     pub fn duplicate_header(&self) -> ftd::p1::Result<()> {
         let mut hm = std::collections::HashMap::new();
-        for (ln, k, v) in self.0.iter().filter(|(_, y, _)| !y.starts_with('/')) {
+        for (ln, k, v) in self
+            .0
+            .iter()
+            .filter(|(_, y, _)| !y.starts_with('/'))
+            .filter(|(_, y, _)| !y.starts_with('$'))
+            .filter(|(_, y, _)| !y.starts_with('>'))
+        {
             if hm.contains_key(k) {
-                let old_value = hm[k];
-                let new_value = v;
-                if old_value == new_value {
-                    return Err(ftd::p1::Error::ParseError {
-                        doc_id: k.to_string(),
-                        line_number: *ln,
-                        message: format!("header is repeated for {}", old_value),
-                    });
-                }
+                return Err(ftd::p1::Error::ParseError {
+                    doc_id: k.to_string(),
+                    line_number: *ln,
+                    message: format!("{} header is repeated for {}", k, v),
+                });
             }
             hm.insert(k, v);
         }
