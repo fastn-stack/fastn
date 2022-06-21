@@ -114,6 +114,7 @@ impl InterpreterState {
             let mut thing = vec![];
 
             if p1.name.starts_with("record ") {
+                p1.header.normal_dup_header_check(self.id.as_str())?;
                 // declare a record
                 let d =
                     ftd::p2::Record::from_p1(p1.name.as_str(), &p1.header, &doc, p1.line_number)?;
@@ -168,6 +169,7 @@ impl InterpreterState {
                 ..
             }) = var_data
             {
+                p1.header.normal_dup_header_check(self.id.as_str())?;
                 // declare a function
                 let d = ftd::Component::from_p1(&p1, &doc)?;
                 let name = doc.resolve_name(p1.line_number, &d.full_name.to_string())?;
@@ -192,6 +194,7 @@ impl InterpreterState {
                         section: p1,
                     });
                 } else if var_data.is_none() || var_data.is_optional() {
+                    p1.var_dup_header_check(self.id.as_str(), &self.bag, &var_data)?;
                     // declare and instantiate a variable
                     ftd::Variable::from_p1(&p1, &doc)?
                 } else {
@@ -268,6 +271,7 @@ impl InterpreterState {
                     ftd::p2::Thing::Variable(doc.set_value(p1.line_number, p1.name.as_str(), v)?),
                 ));
             } else {
+                p1.header.normal_dup_header_check(self.id.as_str())?;
                 // cloning because https://github.com/rust-lang/rust/issues/59159
                 match (doc.get_thing(p1.line_number, p1.name.as_str())?).clone() {
                     ftd::p2::Thing::Variable(_) => {
