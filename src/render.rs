@@ -41,6 +41,7 @@ pub async fn render(config: &fpm::Config, id: &str, base_url: &str) -> fpm::Resu
             main.content.as_str(),
             &lib,
             base_url,
+            None,
         )
         .await
         {

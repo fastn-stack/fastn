@@ -5,7 +5,7 @@ output: amitu/.history
 
 -- stdout:
 
-Downloading fifthtry.github.io/package-info ... done in <omitted>
+
 Repo for amitu is github, directly syncing with .history.
 index.ftd
 nested/document.ftd

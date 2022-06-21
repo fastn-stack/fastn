@@ -4,7 +4,6 @@ output: .build
 
 -- stdout:
 
-Downloading fifthtry.github.io/package-info ... done in <omitted>
 Processing fpm-sitemap/-/index-alias/index.ftd ... done in <omitted>
 Processing fpm-sitemap/-/other-package/index.ftd ... done in <omitted>
 Processing fpm-sitemap/-/other-package/info/index.ftd ... done in <omitted>
@@ -17,4 +16,3 @@ Processing fpm-sitemap/section.ftd ... done in <omitted>
 Processing fpm-sitemap/subsection.ftd ... done in <omitted>
 Processing fpm-sitemap/subsection/-/arpita/index.ftd ... done in <omitted>
 Processing fpm-sitemap/toc.ftd ... done in <omitted>
-Processing other-package/image.png ... done in <omitted>

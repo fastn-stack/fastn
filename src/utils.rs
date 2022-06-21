@@ -197,9 +197,9 @@ pub(crate) fn seconds_to_human(s: u64) -> String {
     }
 }
 
-pub(crate) fn validate_zip_url(package: &fpm::Package) -> fpm::Result<()> {
-    if package.zip.is_none() {
-        warning!("expected zip in fpm.package");
+pub(crate) fn validate_base_url(package: &fpm::Package) -> fpm::Result<()> {
+    if package.base.is_none() {
+        warning!("expected base in fpm.package");
     }
 
     Ok(())
@@ -267,4 +267,101 @@ pub(crate) fn url_regex() -> regex::Regex {
     regex::Regex::new(
         r#"((([A-Za-z]{3,9}:(?://)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:/[\+~%/.\w_]*)?\??(?:[-\+=&;%@.\w_]*)\#?(?:[\w]*))?)"#
     ).unwrap()
+}
+
+pub(crate) async fn construct_url_and_get_str(url: &str) -> fpm::Result<String> {
+    construct_url_and_return_response(url.to_string(), |f| async move {
+        http_get_str(f.as_str()).await
+    })
+    .await
+}
+
+pub(crate) async fn construct_url_and_get(url: &str) -> fpm::Result<Vec<u8>> {
+    construct_url_and_return_response(
+        url.to_string(),
+        |f| async move { http_get(f.as_str()).await },
+    )
+    .await
+}
+
+pub(crate) async fn construct_url_and_return_response<T, F, D>(url: String, f: F) -> fpm::Result<D>
+where
+    F: FnOnce(String) -> T + Copy,
+    T: futures::Future<Output = std::result::Result<D, fpm::Error>> + Send + 'static,
+{
+    if url[1..].contains("://") || url.starts_with("//") {
+        f(url).await
+    } else if let Ok(response) = f(format!("https://{}", url)).await {
+        Ok(response)
+    } else {
+        f(format!("http://{}", url)).await
+    }
+}
+
+pub(crate) async fn http_get<T: reqwest::IntoUrl + std::fmt::Debug>(
+    url: T,
+) -> fpm::Result<Vec<u8>> {
+    let mut headers = reqwest::header::HeaderMap::new();
+    headers.insert(
+        reqwest::header::USER_AGENT,
+        reqwest::header::HeaderValue::from_static("fpm"),
+    );
+    let c = reqwest::Client::builder()
+        .default_headers(headers)
+        .build()?;
+    let url_f = format!("{:?}", url);
+    let mut res = c.get(url).send()?;
+    if !res.status().eq(&reqwest::StatusCode::OK) {
+        return Err(fpm::Error::APIResponseError(format!(
+            "url: {}, response_status: {}, response: {:?}",
+            url_f,
+            res.status(),
+            res.text()
+        )));
+    }
+    let mut buf: Vec<u8> = vec![];
+    res.copy_to(&mut buf)?;
+    Ok(buf)
+}
+
+pub(crate) async fn http_get_str<T: reqwest::IntoUrl + std::fmt::Debug>(
+    url: T,
+) -> fpm::Result<String> {
+    let url_f = format!("{:?}", url);
+    match http_get(url).await {
+        Ok(bytes) => String::from_utf8(bytes).map_err(|e| fpm::Error::UsageError {
+            message: format!(
+                "Cannot convert the response to string: URL: {:?}, ERROR: {}",
+                url_f, e
+            ),
+        }),
+        Err(e) => Err(e),
+    }
+}
+
+pub(crate) async fn write(
+    root: &camino::Utf8PathBuf,
+    file_path: &str,
+    data: &[u8],
+) -> fpm::Result<()> {
+    use tokio::io::AsyncWriteExt;
+
+    if root.join(file_path).exists() {
+        return Ok(());
+    }
+
+    let (file_root, file_name) = if let Some((file_root, file_name)) = file_path.rsplit_once('/') {
+        (file_root.to_string(), file_name.to_string())
+    } else {
+        ("".to_string(), file_path.to_string())
+    };
+
+    tokio::fs::create_dir_all(root.join(&file_root)).await?;
+
+    Ok(
+        tokio::fs::File::create(root.join(file_root).join(file_name))
+            .await?
+            .write_all(data)
+            .await?,
+    )
 }

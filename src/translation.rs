@@ -19,7 +19,7 @@ pub(crate) enum TranslatedDocument {
     },
 }
 
-#[derive(Debug, Default)]
+#[derive(Debug, Default, Clone)]
 pub struct TranslationData {
     pub diff: Option<String>,
     pub last_marked_on: Option<u128>,

@@ -75,6 +75,7 @@ impl Document {
 #[derive(Debug, Clone)]
 pub struct Static {
     pub id: String,
+    pub content: Vec<u8>,
     pub base_path: camino::Utf8PathBuf,
 }
 
@@ -170,6 +171,7 @@ pub(crate) async fn get_file(
         {
             File::Image(Static {
                 id: id.to_string(),
+                content: tokio::fs::read(&doc_path).await?,
                 base_path: base_path.to_path_buf(),
             })
         }
@@ -181,6 +183,7 @@ pub(crate) async fn get_file(
         }),
         _ => File::Static(Static {
             id: id.to_string(),
+            content: tokio::fs::read(&doc_path).await?,
             base_path: base_path.to_path_buf(),
         }),
     })

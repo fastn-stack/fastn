@@ -1,5 +1,5 @@
 -- import: fpm
 
 -- fpm.package: www.amitu.com
-zip: amitu
+base: amitu
 canonical-url: https://some-other-site.com/

@@ -34,7 +34,7 @@ struct ApiResponse<T> {
 #[derive(serde::Deserialize, Debug)]
 struct PackageResult {
     package: String,
-    git: String,
+    base: String,
 }
 
 pub async fn resolve_dependencies(fpm_instance: String, fpm_controller: String) -> fpm::Result<()> {
@@ -48,7 +48,7 @@ pub async fn resolve_dependencies(fpm_instance: String, fpm_controller: String) 
     // git_url https format: https://github.com/<user>/<repo>.git
 
     let package =
-        fpm::Package::new(package_response.package.as_str()).with_zip(package_response.git);
+        fpm::Package::new(package_response.package.as_str()).with_base(package_response.base);
 
     package.unzip_package().await?;
     fpm::Config::read(None).await?;

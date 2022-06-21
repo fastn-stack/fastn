@@ -16,7 +16,6 @@ pub struct Config {
     ///
     /// A utility that returns camino version of `current_dir()` may be used in future.
     pub root: camino::Utf8PathBuf,
-
     /// Keeps a track of the package root for a particular config. For a dep2 of a dep1,
     /// this could point to the <original_root>/.packages/
     /// whereas the project root could be at <original_root>/.packages/<dep1_root>
@@ -43,6 +42,12 @@ pub struct Config {
     /// document.
     /// It is consumed by the `sitemap` processor.
     pub current_document: Option<String>,
+    /// `all_packages` stores the package data for all the packages that are dependencies
+    /// of current package directly or indirectly. It also includes current package,
+    /// translation packages, original package (of which the current package is translation)
+    /// The key store the name of the package and value stores corresponding package data
+    pub all_packages: std::collections::BTreeMap<String, fpm::Package>,
+    pub downloaded_assets: std::collections::BTreeMap<String, String>,
 }
 
 impl Config {
@@ -307,7 +312,7 @@ impl Config {
             package
         };
 
-        fpm::utils::validate_zip_url(&package)?;
+        fpm::utils::validate_base_url(&package)?;
 
         fpm::dependency::ensure(&root, &mut package).await?;
         if package.import_auto_imports_from_original {
@@ -330,20 +335,35 @@ impl Config {
             extra_data: Default::default(),
             sitemap: None,
             current_document: None,
+            all_packages: Default::default(),
+            downloaded_assets: Default::default(),
         };
 
         let asset_documents = config.get_assets("/").await?;
 
-        config.sitemap = match package.translation_of.as_ref() {
-            Some(translation) => translation,
-            None => &package,
-        }
-        .sitemap
-        .as_ref()
-        .map_or(Ok(None), |v| {
-            fpm::sitemap::Sitemap::parse(v.as_str(), &package, &config, &asset_documents, "/")
-                .map(Some)
-        })?;
+        config.sitemap = {
+            let sitemap = match package.translation_of.as_ref() {
+                Some(translation) => translation,
+                None => &package,
+            }
+            .sitemap
+            .as_ref();
+            let sitemap = match sitemap {
+                Some(data) => Some(
+                    fpm::sitemap::Sitemap::parse(
+                        data.as_str(),
+                        &package,
+                        &mut config,
+                        &asset_documents,
+                        "/",
+                        true,
+                    )
+                    .await?,
+                ),
+                None => None,
+            };
+            sitemap
+        };
 
         Ok(config)
     }
@@ -487,6 +507,209 @@ impl Config {
             });
     }
 
+    pub(crate) async fn get_file_and_package_by_id(&mut self, id: &str) -> fpm::Result<fpm::File> {
+        let file_name = self.get_file_path_and_resolve(id).await?;
+        let package = self.find_package_by_id(id).await?.1;
+        let mut file = fpm::get_file(
+            package.name.to_string(),
+            &self.root.join(file_name),
+            &self.get_root_for_package(&package),
+        )
+        .await?;
+        if id.contains("-/") {
+            let url = id.trim_end_matches("/index.html").trim_matches('/');
+            let extension = if matches!(file, fpm::File::Markdown(_)) {
+                "index.md".to_string()
+            } else {
+                "index.ftd".to_string()
+            };
+            file.set_id(format!("{}/{}", url, extension).as_str());
+        }
+        Ok(file)
+    }
+
+    pub(crate) async fn get_file_path_and_resolve(&mut self, id: &str) -> fpm::Result<String> {
+        let (package_name, package) = self.find_package_by_id(id).await?;
+        let package = self.resolve_package(&package).await?;
+        self.add_package(&package);
+        let mut id = id.to_string();
+        let mut add_packages = "".to_string();
+        if let Some(new_id) = id.strip_prefix("-/") {
+            // Check if the id is alias for index.ftd. eg: `/-/bar/`
+            if new_id.starts_with(&package_name) || !package.name.eq(self.package.name.as_str()) {
+                id = new_id.to_string();
+            }
+            if !package.name.eq(self.package.name.as_str()) {
+                add_packages = format!(".packages/{}/", package.name);
+            }
+        }
+        let id = {
+            let mut id = id
+                .split_once("-/")
+                .map(|(id, _)| id)
+                .unwrap_or_else(|| id.as_str())
+                .trim()
+                .trim_start_matches(package_name.as_str());
+            if id.is_empty() {
+                id = "/";
+            }
+            id
+        };
+
+        Ok(format!(
+            "{}{}",
+            add_packages,
+            package.resolve_by_id(id, None).await?.0
+        ))
+    }
+
+    /// Return (package name or alias, package)
+    async fn find_package_by_id(&mut self, id: &str) -> fpm::Result<(String, fpm::Package)> {
+        let id = if let Some(id) = id.strip_prefix("-/") {
+            id
+        } else {
+            return Ok((self.package.name.to_string(), self.package.to_owned()));
+        };
+
+        if let Some(package) = self.package.aliases().iter().find_map(|(alias, d)| {
+            if id.starts_with(alias) {
+                Some((alias.to_string(), (*d).to_owned()))
+            } else {
+                None
+            }
+        }) {
+            return Ok(package);
+        }
+
+        for (package_name, package) in self.all_packages.iter() {
+            if id.starts_with(package_name) {
+                return Ok((package_name.to_string(), package.to_owned()));
+            }
+        }
+
+        if let Some(package_root) = find_root_for_file(&self.packages_root.join(id), "FPM.ftd") {
+            let mut package = fpm::Package::new("unknown-package");
+            package.resolve(&package_root.join("FPM.ftd")).await?;
+            self.all_packages
+                .insert(package.name.to_string(), package.clone());
+            return Ok((package.name.to_string(), package));
+        }
+
+        Ok((self.package.name.to_string(), self.package.to_owned()))
+    }
+
+    pub(crate) async fn download_required_file(
+        root: &camino::Utf8PathBuf,
+        id: &str,
+        package: &fpm::Package,
+    ) -> fpm::Result<String> {
+        use tokio::io::AsyncWriteExt;
+
+        let id = id.trim_start_matches(package.name.as_str());
+
+        let base = package
+            .base
+            .clone()
+            .ok_or_else(|| fpm::Error::PackageError {
+                message: "package base not found".to_string(),
+            })?;
+
+        if id.eq("/") {
+            if let Ok(string) = fpm::utils::http_get_str(
+                format!("{}/index.ftd", base.trim_end_matches('/')).as_str(),
+            )
+            .await
+            {
+                let base = root.join(".packages").join(package.name.as_str());
+                tokio::fs::create_dir_all(&base).await?;
+                tokio::fs::File::create(base.join("index.ftd"))
+                    .await?
+                    .write_all(string.as_bytes())
+                    .await?;
+                return Ok(format!(".packages/{}/index.ftd", package.name));
+            }
+            if let Ok(string) = fpm::utils::http_get_str(
+                format!("{}/README.md", base.trim_end_matches('/')).as_str(),
+            )
+            .await
+            {
+                let base = root.join(".packages").join(package.name.as_str());
+                tokio::fs::create_dir_all(&base).await?;
+                tokio::fs::File::create(base.join("README.md"))
+                    .await?
+                    .write_all(string.as_bytes())
+                    .await?;
+                return Ok(format!(".packages/{}/README.md", package.name));
+            }
+            return Err(fpm::Error::UsageError {
+                message: "File not found".to_string(),
+            });
+        }
+
+        let id = id.trim_matches('/').to_string();
+        if let Ok(string) =
+            fpm::utils::http_get_str(format!("{}/{}.ftd", base.trim_end_matches('/'), id).as_str())
+                .await
+        {
+            let (prefix, id) = match id.rsplit_once('/') {
+                Some((prefix, id)) => (format!("/{}", prefix), id.to_string()),
+                None => ("".to_string(), id),
+            };
+            let base = root
+                .join(".packages")
+                .join(format!("{}{}", package.name.as_str(), prefix));
+            tokio::fs::create_dir_all(&base).await?;
+            let file_path = base.join(format!("{}.ftd", id));
+            tokio::fs::File::create(&file_path)
+                .await?
+                .write_all(string.as_bytes())
+                .await?;
+            return Ok(file_path.to_string());
+        }
+        if let Ok(string) = fpm::utils::http_get_str(
+            format!("{}/{}/index.ftd", base.trim_end_matches('/'), id).as_str(),
+        )
+        .await
+        {
+            let base = root.join(".packages").join(package.name.as_str()).join(id);
+            tokio::fs::create_dir_all(&base).await?;
+            let file_path = base.join("index.ftd");
+            tokio::fs::File::create(&file_path)
+                .await?
+                .write_all(string.as_bytes())
+                .await?;
+            return Ok(file_path.to_string());
+        }
+        if let Ok(string) =
+            fpm::utils::http_get_str(format!("{}/{}.md", base.trim_end_matches('/'), id).as_str())
+                .await
+        {
+            let base = root.join(".packages").join(package.name.as_str());
+            tokio::fs::create_dir_all(&base).await?;
+            tokio::fs::File::create(base.join(format!("{}.md", id)))
+                .await?
+                .write_all(string.as_bytes())
+                .await?;
+            return Ok(format!(".packages/{}/{}.md", package.name, id));
+        }
+        if let Ok(string) = fpm::utils::http_get_str(
+            format!("{}/{}/README.md", base.trim_end_matches('/'), id).as_str(),
+        )
+        .await
+        {
+            let base = root.join(".packages").join(package.name.as_str());
+            tokio::fs::create_dir_all(&base).await?;
+            tokio::fs::File::create(base.join(format!("{}/README.md", id)))
+                .await?
+                .write_all(string.as_bytes())
+                .await?;
+            return Ok(format!(".packages/{}/{}/README.md", package.name, id));
+        }
+        Err(fpm::Error::UsageError {
+            message: "File not found".to_string(),
+        })
+    }
+
     pub(crate) fn get_file_name(root: &camino::Utf8PathBuf, id: &str) -> fpm::Result<String> {
         let mut id = id.to_string();
         let mut add_packages = "".to_string();
@@ -576,6 +799,214 @@ impl Config {
         }
         Ok(asset_documents)
     }
+
+    async fn get_root_path(directory: &camino::Utf8PathBuf) -> fpm::Result<camino::Utf8PathBuf> {
+        if let Some(fpm_ftd_root) = find_root_for_file(directory, "FPM.ftd") {
+            return Ok(fpm_ftd_root);
+        }
+        let fpm_manifest_path = match find_root_for_file(directory, "FPM.manifest.ftd") {
+            Some(fpm_manifest_path) => fpm_manifest_path,
+            None => {
+                return Err(fpm::Error::UsageError {
+                    message: "FPM.ftd or FPM.manifest.ftd not found in any parent directory"
+                        .to_string(),
+                });
+            }
+        };
+
+        let doc = tokio::fs::read_to_string(fpm_manifest_path.join("FPM.manifest.ftd"));
+        let lib = fpm::FPMLibrary::default();
+        let fpm_manifest_processed =
+            match fpm::doc::parse_ftd("FPM.manifest", doc.await?.as_str(), &lib) {
+                Ok(fpm_manifest_processed) => fpm_manifest_processed,
+                Err(e) => {
+                    return Err(fpm::Error::PackageError {
+                        message: format!("failed to parse FPM.manifest.ftd: {:?}", &e),
+                    });
+                }
+            };
+
+        let new_package_root = fpm_manifest_processed
+            .get::<String>("FPM.manifest#package-root")?
+            .as_str()
+            .split('/')
+            .fold(fpm_manifest_path, |accumulator, part| {
+                accumulator.join(part)
+            });
+
+        if new_package_root.join("FPM.ftd").exists() {
+            Ok(new_package_root)
+        } else {
+            Err(fpm::Error::PackageError {
+                message: "Can't find FPM.ftd. The path specified in FPM.manifest.ftd doesn't contain the FPM.ftd file".to_string(),
+            })
+        }
+    }
+
+    /// `read()` is the way to read a Config.
+    pub async fn read2(root: Option<String>, resolve_sitemap: bool) -> fpm::Result<fpm::Config> {
+        let (root, original_directory) = match root {
+            Some(r) => {
+                let root: camino::Utf8PathBuf = tokio::fs::canonicalize(r.as_str())
+                    .await?
+                    .to_str()
+                    .map_or_else(|| r, |r| r.to_string())
+                    .into();
+                (root.clone(), root)
+            }
+            None => {
+                let original_directory: camino::Utf8PathBuf = // TODO: make async
+                    std::env::current_dir()?.canonicalize()?.try_into()?;
+                (
+                    fpm::Config::get_root_path(&original_directory).await?,
+                    original_directory,
+                )
+            }
+        };
+
+        let fpm_doc = {
+            let doc = tokio::fs::read_to_string(root.join("FPM.ftd"));
+            let lib = fpm::FPMLibrary::default();
+            match fpm::doc::parse_ftd("FPM", doc.await?.as_str(), &lib) {
+                Ok(v) => v,
+                Err(e) => {
+                    return Err(fpm::Error::PackageError {
+                        message: format!("failed to parse FPM.ftd 3: {:?}", &e),
+                    });
+                }
+            }
+        };
+
+        let mut deps = {
+            let temp_deps: Vec<fpm::dependency::DependencyTemp> = fpm_doc.get("fpm#dependency")?;
+            temp_deps
+                .into_iter()
+                .map(|v| v.into_dependency())
+                .collect::<Vec<fpm::Result<fpm::Dependency>>>()
+                .into_iter()
+                .collect::<fpm::Result<Vec<fpm::Dependency>>>()?
+        };
+
+        let mut package = {
+            let temp_package: Option<PackageTemp> = fpm_doc.get("fpm#package")?;
+            let mut package = match temp_package {
+                Some(v) => v.into_package(),
+                None => {
+                    return Err(fpm::Error::PackageError {
+                        message: "FPM.ftd does not contain package definition".to_string(),
+                    })
+                }
+            };
+
+            if package.name != fpm::PACKAGE_INFO_INTERFACE
+                && !deps.iter().any(|dep| {
+                    dep.implements
+                        .contains(&fpm::PACKAGE_INFO_INTERFACE.to_string())
+                })
+            {
+                deps.push(fpm::Dependency {
+                    package: fpm::Package::new(fpm::PACKAGE_INFO_INTERFACE),
+                    version: None,
+                    notes: None,
+                    alias: None,
+                    implements: Vec::new(),
+                });
+            };
+            package.fpm_path = Some(root.join("FPM.ftd"));
+
+            package.dependencies = deps;
+
+            let auto_imports: Vec<String> = fpm_doc.get("fpm#auto-import")?;
+
+            // let mut aliases = std::collections::HashMap::<String, String>::new();
+            let auto_import = auto_imports
+                .iter()
+                .map(|f| fpm::AutoImport::from_string(f.as_str()))
+                .collect();
+            package.auto_import = auto_import;
+
+            package.ignored_paths = fpm_doc.get::<Vec<String>>("fpm#ignore")?;
+            package.fonts = fpm_doc.get("fpm#font")?;
+            package.sitemap = fpm_doc.get("fpm#sitemap")?;
+            package
+        };
+
+        fpm::utils::validate_base_url(&package)?;
+
+        if package.import_auto_imports_from_original {
+            if let Some(ref original_package) = *package.translation_of {
+                if !package.auto_import.is_empty() {
+                    return Err(fpm::Error::PackageError {
+                        message: format!("Can't use `inherit-auto-imports-from-original` along with auto-imports defined for the translation package. Either set `inherit-auto-imports-from-original` to false or remove `fpm.auto-import` from the {package_name}/FPM.ftd file", package_name=package.name.as_str()),
+                    });
+                } else {
+                    package.auto_import = original_package.auto_import.clone()
+                }
+            }
+        }
+
+        let mut config = Config {
+            package: package.clone(),
+            packages_root: root.clone().join(".packages"),
+            root,
+            original_directory,
+            extra_data: Default::default(),
+            sitemap: None,
+            current_document: None,
+            all_packages: Default::default(),
+            downloaded_assets: Default::default(),
+        };
+
+        let asset_documents = config.get_assets("/").await?;
+
+        config.sitemap = {
+            let sitemap = match package.translation_of.as_ref() {
+                Some(translation) => translation,
+                None => &package,
+            }
+            .sitemap
+            .as_ref();
+            let sitemap = match sitemap {
+                Some(data) => Some(
+                    fpm::sitemap::Sitemap::parse(
+                        data.as_str(),
+                        &package,
+                        &mut config,
+                        &asset_documents,
+                        "/",
+                        resolve_sitemap,
+                    )
+                    .await?,
+                ),
+                None => None,
+            };
+            sitemap
+        };
+
+        config.add_package(&package);
+
+        Ok(config)
+    }
+
+    pub(crate) async fn resolve_package(
+        &self,
+        package: &fpm::Package,
+    ) -> fpm::Result<fpm::Package> {
+        if self.package.name.eq(package.name.as_str()) {
+            return Ok(self.package.clone());
+        }
+        if let Some(package) = self.all_packages.get(package.name.as_str()) {
+            return Ok(package.clone());
+        }
+        package
+            .get_and_resolve(&self.get_root_for_package(package))
+            .await
+    }
+
+    pub(crate) fn add_package(&mut self, package: &fpm::Package) {
+        self.all_packages
+            .insert(package.name.to_string(), package.to_owned());
+    }
 }
 
 /// `find_root_for_file()` starts with the given path, which is the current directory where the
@@ -610,6 +1041,7 @@ pub(crate) struct PackageTemp {
     pub language: Option<String>,
     pub about: Option<String>,
     pub zip: Option<String>,
+    pub base: Option<String>,
     #[serde(rename = "canonical-url")]
     pub canonical_url: Option<String>,
     #[serde(rename = "inherit-auto-imports-from-original")]
@@ -637,6 +1069,7 @@ impl PackageTemp {
             language: self.language,
             about: self.about,
             zip: self.zip,
+            base: self.base,
             translation_status_summary: None,
             canonical_url: self.canonical_url,
             dependencies: vec![],
@@ -660,6 +1093,7 @@ pub struct Package {
     pub language: Option<String>,
     pub about: Option<String>,
     pub zip: Option<String>,
+    pub base: Option<String>,
     pub translation_status_summary: Option<fpm::translation::TranslationStatusSummary>,
     pub canonical_url: Option<String>,
     /// `dependencies` keeps track of direct dependencies of a given package. This too should be
@@ -693,6 +1127,7 @@ impl Package {
             language: None,
             about: None,
             zip: None,
+            base: None,
             translation_status_summary: None,
             canonical_url: None,
             dependencies: vec![],
@@ -748,8 +1183,8 @@ impl Package {
         }
     }
 
-    pub fn with_zip(mut self, zip: String) -> fpm::Package {
-        self.zip = Some(zip);
+    pub fn with_base(mut self, base: String) -> fpm::Package {
+        self.base = Some(base);
         self
     }
 
@@ -1287,5 +1722,68 @@ impl Package {
             }
             (resp_records, resp_values)
         }
+    }
+
+    pub(crate) async fn get_fpm(&self) -> fpm::Result<String> {
+        fpm::utils::construct_url_and_get_str(format!("{}/FPM.ftd", self.name).as_str()).await
+    }
+
+    pub(crate) async fn resolve(&mut self, fpm_path: &camino::Utf8PathBuf) -> fpm::Result<()> {
+        let ftd_document = {
+            let doc = tokio::fs::read_to_string(fpm_path).await?;
+            let lib = fpm::FPMLibrary::default();
+            match fpm::doc::parse_ftd("FPM", doc.as_str(), &lib) {
+                Ok(v) => v,
+                Err(e) => {
+                    return Err(fpm::Error::PackageError {
+                        message: format!("failed to parse FPM.ftd 2: {:?}", &e),
+                    });
+                }
+            }
+        };
+        let mut package = {
+            let temp_package: fpm::config::PackageTemp = ftd_document.get("fpm#package")?;
+            temp_package.into_package()
+        };
+        package.translation_status_summary = ftd_document.get("fpm#translation-status-summary")?;
+        package.fpm_path = Some(fpm_path.to_owned());
+        package.dependencies = ftd_document
+            .get::<Vec<fpm::dependency::DependencyTemp>>("fpm#dependency")?
+            .into_iter()
+            .map(|v| v.into_dependency())
+            .collect::<Vec<fpm::Result<fpm::Dependency>>>()
+            .into_iter()
+            .collect::<fpm::Result<Vec<fpm::Dependency>>>()?;
+
+        package.auto_import = ftd_document
+            .get::<Vec<String>>("fpm#auto-import")?
+            .iter()
+            .map(|f| fpm::AutoImport::from_string(f.as_str()))
+            .collect();
+        package.fonts = ftd_document.get("fpm#font")?;
+        package.sitemap = ftd_document.get("fpm#sitemap")?;
+        *self = package;
+        Ok(())
+    }
+
+    pub(crate) async fn get_and_resolve(
+        &self,
+        package_root: &camino::Utf8PathBuf,
+    ) -> fpm::Result<fpm::Package> {
+        use tokio::io::AsyncWriteExt;
+
+        let file_extract_path = package_root.join("FPM.ftd");
+        if !file_extract_path.exists() {
+            std::fs::create_dir_all(&package_root)?;
+            let fpm_string = self.get_fpm().await?;
+            tokio::fs::File::create(&file_extract_path)
+                .await?
+                .write_all(fpm_string.as_bytes())
+                .await?;
+        }
+
+        let mut package = self.clone();
+        package.resolve(&file_extract_path).await?;
+        Ok(package)
     }
 }

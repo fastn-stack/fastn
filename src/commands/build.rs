@@ -243,6 +243,7 @@ async fn build_with_translations(
             base_url,
             asset_documents,
             true,
+            None,
         )
         .await?;
         fpm::utils::print_end("Processed translation-status.ftd", start);
@@ -379,6 +380,7 @@ async fn build_with_original(
             base_url,
             asset_documents,
             true,
+            None,
         )
         .await?;
         fpm::utils::print_end("Processed translation-status.ftd", start);
@@ -455,6 +457,7 @@ pub(crate) async fn process_file(
                     base_url,
                     asset_documents,
                     true,
+                    None,
                 )
                 .await;
                 match (resp, skip_failed) {
@@ -475,6 +478,7 @@ pub(crate) async fn process_file(
                 process_static(
                     &fpm::Static {
                         id: main_doc.id.to_string(),
+                        content: vec![],
                         base_path: camino::Utf8PathBuf::from(main_doc.parent_path.as_str()),
                     },
                     &config.root,
@@ -585,6 +589,7 @@ pub(crate) async fn process_file(
                 base_url,
                 asset_documents,
                 true,
+                None,
             )
             .await;
             match (resp, skip_failed) {
@@ -651,6 +656,7 @@ pub(crate) async fn process_file(
             process_static(
                 &fpm::Static {
                     id: doc.id.to_string(),
+                    content: vec![],
                     base_path: camino::Utf8PathBuf::from(doc.parent_path.as_str()),
                 },
                 &config.root,
@@ -711,6 +717,7 @@ async fn process_image(
             base_url,
             asset_documents,
             true,
+            None,
         )
         .await
         .map(|_| ());
@@ -725,6 +732,7 @@ async fn process_image(
         base_url,
         asset_documents,
         true,
+        None,
     )
     .await
     .map(|_| ());
@@ -773,6 +781,7 @@ async fn process_code(
                     base_url,
                     asset_documents,
                     true,
+                    None,
                 )
                 .await
                 .map(|_| ());
@@ -792,6 +801,7 @@ async fn process_code(
         base_url,
         asset_documents,
         true,
+        None,
     )
     .await
     .map(|_| ());
@@ -846,6 +856,7 @@ async fn process_markdown(
                     base_url,
                     asset_documents,
                     true,
+                    None,
                 )
                 .await
                 .map(|_| ());
@@ -865,6 +876,7 @@ async fn process_markdown(
         base_url,
         asset_documents,
         true,
+        None,
     )
     .await
     .map(|_| ());
@@ -930,6 +942,7 @@ pub(crate) async fn process_ftd(
     base_url: &str,
     asset_documents: &std::collections::HashMap<String, String>,
     do_write: bool,
+    current_package: Option<&fpm::Package>,
 ) -> fpm::Result<Vec<u8>> {
     if main.id.eq("FPM.ftd") {
         if config.is_translation_package() {
@@ -1037,8 +1050,8 @@ pub(crate) async fn process_ftd(
         (None, None, main)
     } else {
         let new_main = fpm::Document {
-            content: config
-                .package
+            content: current_package
+                .unwrap_or(&config.package)
                 .get_prefixed_body(main.content.as_str(), &main.id, true),
             id: main.id,
             parent_path: main.parent_path,
@@ -1064,6 +1077,7 @@ pub(crate) async fn process_ftd(
                 base_url,
                 asset_documents,
                 do_write,
+                current_package,
             )
             .await
         }
@@ -1076,6 +1090,7 @@ pub(crate) async fn process_ftd(
                 translated_data,
                 base_url,
                 asset_documents,
+                current_package,
             )
             .await
         }
@@ -1086,6 +1101,7 @@ pub(crate) async fn process_ftd(
                 new_file_path.as_str(),
                 base_url,
                 asset_documents,
+                current_package,
             )
             .await
         }
@@ -1097,6 +1113,7 @@ pub(crate) async fn process_ftd(
         new_file_path: &str,
         base_url: &str,
         asset_documents: &std::collections::HashMap<String, String>,
+        current_package: Option<&fpm::Package>,
     ) -> fpm::Result<Vec<u8>> {
         use tokio::io::AsyncWriteExt;
 
@@ -1114,6 +1131,7 @@ pub(crate) async fn process_ftd(
             main.content.as_str(),
             &lib,
             base_url,
+            current_package,
         )
         .await
         {
@@ -1153,6 +1171,7 @@ pub(crate) async fn process_ftd(
         translated_data: fpm::TranslationData,
         base_url: &str,
         asset_documents: &std::collections::HashMap<String, String>,
+        current_package: Option<&fpm::Package>,
     ) -> fpm::Result<Vec<u8>> {
         use tokio::io::AsyncWriteExt;
 
@@ -1170,6 +1189,7 @@ pub(crate) async fn process_ftd(
             main.content.as_str(),
             &lib,
             base_url,
+            current_package,
         )
         .await
         {
@@ -1187,14 +1207,15 @@ pub(crate) async fn process_ftd(
         };
         let main_rt_doc = main_ftd_doc.to_rt("main", &main.id);
 
-        let message_ftd_doc = match fpm::doc::parse("message", message, &lib, base_url).await {
-            Ok(v) => v,
-            Err(e) => {
-                return Err(fpm::Error::PackageError {
-                    message: format!("failed to parse {:?}", &e),
-                });
-            }
-        };
+        let message_ftd_doc =
+            match fpm::doc::parse("message", message, &lib, base_url, current_package).await {
+                Ok(v) => v,
+                Err(e) => {
+                    return Err(fpm::Error::PackageError {
+                        message: format!("failed to parse {:?}", &e),
+                    });
+                }
+            };
         let message_rt_doc = message_ftd_doc.to_rt("message", &main.id);
 
         let mut f = tokio::fs::File::create(new_file_path).await?;
@@ -1239,6 +1260,7 @@ pub(crate) async fn process_ftd(
         base_url: &str,
         asset_documents: &std::collections::HashMap<String, String>,
         _do_write: bool, // TODO: Do it later
+        current_package: Option<&fpm::Package>,
     ) -> fpm::Result<Vec<u8>> {
         use tokio::io::AsyncWriteExt;
         let lib = fpm::Library {
@@ -1255,6 +1277,7 @@ pub(crate) async fn process_ftd(
             main.content.as_str(),
             &lib,
             base_url,
+            current_package,
         )
         .await
         {
@@ -1267,14 +1290,15 @@ pub(crate) async fn process_ftd(
         };
         let main_rt_doc = main_ftd_doc.to_rt("main", &main.id);
 
-        let message_ftd_doc = match fpm::doc::parse("message", message, &lib, base_url).await {
-            Ok(v) => v,
-            Err(e) => {
-                return Err(fpm::Error::PackageError {
-                    message: format!("failed to parse {:?}", &e),
-                });
-            }
-        };
+        let message_ftd_doc =
+            match fpm::doc::parse("message", message, &lib, base_url, current_package).await {
+                Ok(v) => v,
+                Err(e) => {
+                    return Err(fpm::Error::PackageError {
+                        message: format!("failed to parse {:?}", &e),
+                    });
+                }
+            };
 
         let doc_title = match &main_ftd_doc.title() {
             Some(x) => x.original.clone(),
@@ -1287,6 +1311,7 @@ pub(crate) async fn process_ftd(
             fallback.content.as_str(),
             &lib,
             base_url,
+            current_package,
         )
         .await
         {

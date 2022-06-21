@@ -1,10 +1,10 @@
 -- fbt:
 cmd: cd amitu && $FBT_CWD/target/debug/fpm --test mark-upto-date lib.ftd && $FBT_CWD/target/debug/fpm --test translation-status
 output: amitu/.tracks
+skip: translation is not implemented yet
 
 -- stdout:
 
-Downloading fifthtry.github.io/package-info ... done in <omitted>
 lib.ftd is now marked upto date
 Never marked: FPM.ftd
 Missing: index.ftd

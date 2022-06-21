@@ -742,6 +742,18 @@ pub(crate) fn get(lib: &fpm::Library) -> String {
     fpm_base
 }
 
+pub(crate) fn get2(lib: &fpm::Library2) -> String {
+    let lib = fpm::Library {
+        config: lib.config.clone(),
+        markdown: lib.markdown.clone(),
+        document_id: lib.document_id.clone(),
+        translated_data: lib.translated_data.clone(),
+        asset_documents: Default::default(),
+        base_url: lib.base_url.clone(),
+    };
+    get(&lib)
+}
+
 fn capital_fpm(lib: &fpm::Library) -> String {
     let mut s = format!(
         indoc::indoc! {"

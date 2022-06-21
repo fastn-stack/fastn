@@ -526,12 +526,13 @@ impl SitemapParser {
 }
 
 impl Sitemap {
-    pub fn parse(
+    pub async fn parse(
         s: &str,
         package: &fpm::Package,
-        config: &fpm::Config,
+        config: &mut fpm::Config,
         asset_documents: &std::collections::HashMap<String, String>,
         base_url: &str,
+        resolve_sitemap: bool,
     ) -> Result<Self, ParseError> {
         let mut parser = SitemapParser {
             state: ParsingState::WaitingForSection,
@@ -549,21 +550,23 @@ impl Sitemap {
             sections: construct_tree_util(parser.finalize()?),
         };
 
-        sitemap
-            .resolve(package, config, asset_documents, base_url)
-            .map_err(|e| ParseError::InvalidTOCItem {
-                doc_id: package.name.to_string(),
-                message: e.to_string(),
-                row_content: "".to_string(),
-            })?;
-
+        if resolve_sitemap {
+            sitemap
+                .resolve(package, config, asset_documents, base_url)
+                .await
+                .map_err(|e| ParseError::InvalidTOCItem {
+                    doc_id: package.name.to_string(),
+                    message: e.to_string(),
+                    row_content: "".to_string(),
+                })?;
+        }
         Ok(sitemap)
     }
 
-    fn resolve(
+    async fn resolve(
         &mut self,
         package: &fpm::Package,
-        config: &fpm::Config,
+        config: &mut fpm::Config,
         asset_documents: &std::collections::HashMap<String, String>,
         base_url: &str,
     ) -> fpm::Result<()> {
@@ -577,49 +580,55 @@ impl Sitemap {
                 asset_documents,
                 base_url,
                 config,
-            )?;
+            )
+            .await?;
         }
         return Ok(());
 
-        fn resolve_section(
+        async fn resolve_section(
             section: &mut fpm::sitemap::Section,
             package_root: &camino::Utf8PathBuf,
             current_package_root: &camino::Utf8PathBuf,
             asset_documents: &std::collections::HashMap<String, String>,
             base_url: &str,
-            config: &fpm::Config,
+            config: &mut fpm::Config,
         ) -> fpm::Result<()> {
-            let (file_location, translation_file_location) =
-                if fpm::utils::url_regex().find(section.id.as_str()).is_some() {
-                    (None, None)
-                } else {
-                    match fpm::Config::get_file_name(current_package_root, section.id.as_str()) {
-                        Ok(name) => {
-                            if current_package_root.eq(package_root) {
-                                (Some(current_package_root.join(name)), None)
-                            } else {
-                                (
-                                    Some(package_root.join(name.as_str())),
-                                    Some(current_package_root.join(name)),
-                                )
-                            }
+            let (file_location, translation_file_location) = if let Ok(file_name) =
+                config.get_file_path_and_resolve(&section.id).await
+            {
+                (
+                    Some(config.root.join(file_name.as_str())),
+                    Some(config.root.join(file_name.as_str())),
+                )
+            } else if fpm::utils::url_regex().find(section.id.as_str()).is_some() {
+                (None, None)
+            } else {
+                match fpm::Config::get_file_name(current_package_root, section.id.as_str()) {
+                    Ok(name) => {
+                        if current_package_root.eq(package_root) {
+                            (Some(current_package_root.join(name)), None)
+                        } else {
+                            (
+                                Some(package_root.join(name.as_str())),
+                                Some(current_package_root.join(name)),
+                            )
                         }
-                        Err(_) => (
-                            Some(
-                                package_root.join(
-                                    fpm::Config::get_file_name(package_root, section.id.as_str())
-                                        .map_err(|e| fpm::Error::UsageError {
-                                        message: format!(
+                    }
+                    Err(_) => (
+                        Some(package_root.join(
+                            fpm::Config::get_file_name(package_root, section.id.as_str()).map_err(
+                                |e| fpm::Error::UsageError {
+                                    message: format!(
                                         "`{}` not found, fix fpm.sitemap in FPM.ftd. Error: {:?}",
                                         section.id, e
                                     ),
-                                    })?,
-                                ),
-                            ),
-                            None,
-                        ),
-                    }
-                };
+                                },
+                            )?,
+                        )),
+                        None,
+                    ),
+                }
+            };
             section.file_location = file_location;
             section.translation_file_location = translation_file_location;
 
@@ -631,24 +640,29 @@ impl Sitemap {
                     asset_documents,
                     base_url,
                     config,
-                )?;
+                )
+                .await?;
             }
             Ok(())
         }
 
-        fn resolve_subsection(
+        async fn resolve_subsection(
             subsection: &mut fpm::sitemap::Subsection,
             package_root: &camino::Utf8PathBuf,
             current_package_root: &camino::Utf8PathBuf,
             asset_documents: &std::collections::HashMap<String, String>,
             base_url: &str,
-            config: &fpm::Config,
+            config: &mut fpm::Config,
         ) -> fpm::Result<()> {
             if let Some(ref id) = subsection.id {
-                let (file_location, translation_file_location) = if fpm::utils::url_regex()
-                    .find(id.as_str())
-                    .is_some()
+                let (file_location, translation_file_location) = if let Ok(file_name) =
+                    config.get_file_path_and_resolve(id).await
                 {
+                    (
+                        Some(config.root.join(file_name.as_str())),
+                        Some(config.root.join(file_name.as_str())),
+                    )
+                } else if fpm::utils::url_regex().find(id.as_str()).is_some() {
                     (None, None)
                 } else {
                     match fpm::Config::get_file_name(current_package_root, id.as_str()) {
@@ -689,50 +703,58 @@ impl Sitemap {
                     asset_documents,
                     base_url,
                     config,
-                )?;
+                )
+                .await?;
             }
             Ok(())
         }
 
-        fn resolve_toc(
+        #[async_recursion::async_recursion(?Send)]
+        async fn resolve_toc(
             toc: &mut fpm::sitemap::TocItem,
             package_root: &camino::Utf8PathBuf,
             current_package_root: &camino::Utf8PathBuf,
             asset_documents: &std::collections::HashMap<String, String>,
             base_url: &str,
-            config: &fpm::Config,
+            config: &mut fpm::Config,
         ) -> fpm::Result<()> {
-            let (file_location, translation_file_location) = if toc.id.trim().is_empty()
-                || fpm::utils::url_regex().find(toc.id.as_str()).is_some()
-            {
-                (None, None)
-            } else {
-                match fpm::Config::get_file_name(current_package_root, toc.id.as_str()) {
-                    Ok(name) => {
-                        if current_package_root.eq(package_root) {
-                            (Some(current_package_root.join(name)), None)
-                        } else {
-                            (
-                                Some(package_root.join(name.as_str())),
-                                Some(current_package_root.join(name)),
-                            )
+            let (file_location, translation_file_location) =
+                if let Ok(file_name) = config.get_file_path_and_resolve(&toc.id).await {
+                    (
+                        Some(config.root.join(file_name.as_str())),
+                        Some(config.root.join(file_name.as_str())),
+                    )
+                } else if toc.id.trim().is_empty()
+                    || fpm::utils::url_regex().find(toc.id.as_str()).is_some()
+                {
+                    (None, None)
+                } else {
+                    match fpm::Config::get_file_name(current_package_root, toc.id.as_str()) {
+                        Ok(name) => {
+                            if current_package_root.eq(package_root) {
+                                (Some(current_package_root.join(name)), None)
+                            } else {
+                                (
+                                    Some(package_root.join(name.as_str())),
+                                    Some(current_package_root.join(name)),
+                                )
+                            }
                         }
-                    }
-                    Err(_) => (
-                        Some(package_root.join(
-                            fpm::Config::get_file_name(package_root, toc.id.as_str()).map_err(
-                                |e| fpm::Error::UsageError {
-                                    message: format!(
+                        Err(_) => (
+                            Some(package_root.join(
+                                fpm::Config::get_file_name(package_root, toc.id.as_str()).map_err(
+                                    |e| fpm::Error::UsageError {
+                                        message: format!(
                                         "`{}` not found, fix fpm.sitemap in FPM.ftd. Error: {:?}",
                                         toc.id, e
                                     ),
-                                },
-                            )?,
-                        )),
-                        None,
-                    ),
-                }
-            };
+                                    },
+                                )?,
+                            )),
+                            None,
+                        ),
+                    }
+                };
             toc.file_location = file_location;
             toc.translation_file_location = translation_file_location;
 
@@ -744,7 +766,8 @@ impl Sitemap {
                     asset_documents,
                     base_url,
                     config,
-                )?;
+                )
+                .await?;
             }
             Ok(())
         }

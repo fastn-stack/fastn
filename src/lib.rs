@@ -17,6 +17,7 @@ mod file;
 mod font;
 mod i18n;
 mod library;
+mod package_doc;
 mod render;
 mod sitemap;
 mod snapshot;
@@ -27,8 +28,8 @@ mod version;
 pub(crate) use auto_import::AutoImport;
 pub(crate) use commands::build::process_file;
 pub use commands::{
-    build::build, diff::diff, mark_upto_date::mark_upto_date, serve::serve,
-    start_project::start_project, start_tracking::start_tracking, status::status,
+    build::build, build2::build2, diff::diff, mark_upto_date::mark_upto_date, serve::serve,
+    serve2::serve2, start_project::start_project, start_tracking::start_tracking, status::status,
     stop_tracking::stop_tracking, sync::sync, translation_status::translation_status,
     update::update,
 };
@@ -37,7 +38,7 @@ pub(crate) use config::Package;
 pub(crate) use dependency::Dependency;
 pub(crate) use file::{get_file, paths_to_files, Document, File, Static};
 pub(crate) use font::Font;
-pub(crate) use library::{FPMLibrary, Library};
+pub(crate) use library::{FPMLibrary, Library, Library2};
 pub use render::render;
 pub(crate) use snapshot::Snapshot;
 pub(crate) use tracker::Track;

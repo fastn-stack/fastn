@@ -1,6 +1,7 @@
 -- fbt:
 cmd: $FBT_CWD/target/debug/fpm --test build
 output: .build
+skip: FPM-mainfest.ftd not implemented in current version
 
 -- stdout:
 

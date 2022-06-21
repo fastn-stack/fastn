@@ -24,13 +24,14 @@ async fn main() -> fpm::Result<()> {
 
         let bind = mark.value_of("bind").unwrap_or("127.0.0.1").to_string();
         tokio::task::spawn_blocking(move || {
-            fpm::serve(bind.as_str(), port).expect("http service error");
+            fpm::serve2(bind.as_str(), port).expect("http service error");
         })
         .await
         .expect("Thread spawn error");
+        return Ok(());
     }
 
-    let mut config = fpm::Config::read(None).await?;
+    let mut config = fpm::Config::read2(None, true).await?;
 
     if matches.subcommand_matches("update").is_some() {
         fpm::update(&config).await?;
@@ -42,7 +43,7 @@ async fn main() -> fpm::Result<()> {
         if build.is_present("verbose") {
             println!("{}", fpm::debug_env_vars());
         }
-        fpm::build(
+        fpm::build2(
             &mut config,
             build.value_of("file"),
             build.value_of("base").unwrap(), // unwrap okay because base is required
