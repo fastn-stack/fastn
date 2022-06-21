@@ -2,6 +2,7 @@
 
 -- fpm.package: ftd.dev
 zip: github.com/fifthtry/ftd.dev/archive/refs/heads/main.zip
+base: https://raw.githubusercontent.com/fifthtry/ftd.dev/main
 language: en
 
 -- fpm.dependency: fifthtry.github.io/doc-site as ft
