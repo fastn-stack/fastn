@@ -198,6 +198,16 @@ pub fn common_from_properties(
         border_left: ftd::p2::utils::int_optional("border-left", properties, doc.name, 0)?,
         border_right: ftd::p2::utils::int_optional("border-right", properties, doc.name, 0)?,
         border_bottom: ftd::p2::utils::int_optional("border-bottom", properties, doc.name, 0)?,
+        border_top_color: ftd::Color::from(
+            ftd::p2::utils::record_optional_with_ref(
+                "border-top-color",
+                unresolved_properties,
+                doc,
+                0,
+            )?,
+            doc,
+            0,
+        )?,
         margin_top: ftd::p2::utils::int_optional("margin-top", properties, doc.name, 0)?,
         margin_bottom: ftd::p2::utils::int_optional("margin-bottom", properties, doc.name, 0)?,
         margin_left: ftd::p2::utils::int_optional("margin-left", properties, doc.name, 0)?,
@@ -414,6 +424,14 @@ fn common_arguments() -> Vec<(String, ftd::p2::Kind)> {
         (
             "border-right".to_string(),
             ftd::p2::Kind::integer().into_optional(),
+        ),
+        (
+            "border-top-color".to_string(),
+            ftd::p2::Kind::Record {
+                name: "ftd#color".to_string(),
+                default: None,
+            }
+            .into_optional(),
         ),
         (
             "margin-top".to_string(),

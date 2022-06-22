@@ -1305,6 +1305,13 @@ impl ftd::Common {
                 classes.push(collector.insert_class_color(p, "background-color"));
             }
         }
+        if let Some(p) = &self.border_top_color {
+            if self.conditional_attribute.contains_key("border-top-color") {
+                d.insert(s("border-top-color"), color(&p.light));
+            } else {
+                classes.push(collector.insert_class_color(p, "border-top-color"));
+            }
+        }
         if let Some(p) = &self.color {
             if self.conditional_attribute.contains_key("color") {
                 d.insert(s("color"), color(&p.light));

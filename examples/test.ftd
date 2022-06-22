@@ -4,3 +4,17 @@
 -- record.foo:
 
 -- test.bar:
+
+-- ftd.color red: red
+dark: red
+
+-- ftd.color yellow: yellow
+dark: yellow
+
+
+-- ftd.column:
+width: 100
+height: 100
+background-color: $red
+border-top-color: $yellow
+border-width: 10
