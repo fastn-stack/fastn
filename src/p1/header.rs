@@ -19,11 +19,8 @@ impl Header {
     pub fn component_dup_header_check(
         &self,
         id: &str,
-        _name: &str,
-        bag: &std::collections::BTreeMap<String, ftd::p2::Thing>,
         doc: &ftd::p2::TDoc,
         sub_sections: Option<&ftd::p1::SubSections>,
-        _p1_line_number: usize,
         var_types: &[String],
         mode: HeaderCheck,
     ) -> ftd::p1::Result<()> {
@@ -31,11 +28,12 @@ impl Header {
         let mut header_set: std::collections::HashSet<String> = std::collections::HashSet::new();
         for (ln, key, _) in self.0.iter() {
             // Ignore commented headers and lines starting with << or >>
-            if key.starts_with('/') || key.starts_with('>') || key.starts_with('<') {
-                continue;
-            }
             // Ignore processor keywords
-            else if key.starts_with('$') && key.ends_with('$') {
+            if key.starts_with('/')
+                || key.starts_with('>')
+                || key.starts_with('<')
+                || (key.starts_with('$') && key.ends_with('$'))
+            {
                 continue;
             }
 
@@ -54,15 +52,7 @@ impl Header {
         // If mode is section then check its subsections if available
         // since sub-sections dont have any further nesting i.e no sub-sub-sections
         if mode == HeaderCheck::CheckSection {
-            self.check_sub_sections(
-                id,
-                sub_sections,
-                doc,
-                var_types,
-                bag,
-                None,
-                CheckType::Component,
-            )?;
+            self.check_sub_sections(id, sub_sections, doc, var_types, None, CheckType::Component)?;
         }
 
         Ok(())
@@ -71,8 +61,6 @@ impl Header {
     pub fn var_dup_header_check(
         &self,
         id: &str,
-        _name: &str,
-        bag: &std::collections::BTreeMap<String, ftd::p2::Thing>,
         var_data: &ftd::variable::VariableData,
         doc: &ftd::p2::TDoc,
         p1_line_number: usize,
@@ -81,7 +69,7 @@ impl Header {
         mode: HeaderCheck,
     ) -> ftd::p1::Result<()> {
         // VariableData attributes
-        let _name = var_data.name.to_string();
+        let bag = doc.bag;
         let kind = var_data.kind.to_string();
 
         // Ignoring those kinds whose bag entry is not there
@@ -103,10 +91,10 @@ impl Header {
             // foo/bar#[kind only including the parent kind] if the kind is not std kind
             // For other files bag entry = [file_name/id]#[kind]
             if id.eq("index.ftd") {
-                let tokens: Vec<&str> = kind.split(".").collect();
+                let tokens: Vec<&str> = kind.split('.').collect();
                 format!("ftd#{}", tokens[tokens.len() - 1])
             } else if id.eq("foo/bar") {
-                let tokens: Vec<&str> = kind.split(".").collect();
+                let tokens: Vec<&str> = kind.split('.').collect();
                 let std_type_key = format!("ftd#{}", tokens[tokens.len() - 1]);
                 if bag.contains_key(&std_type_key) {
                     std_type_key
@@ -128,11 +116,12 @@ impl Header {
                 let header_list = self;
                 for (ln, key, _) in header_list.0.iter() {
                     // Ignore commented headers and lines starting with << or >>
-                    if key.starts_with('/') || key.starts_with('>') || key.starts_with('<') {
-                        continue;
-                    }
                     // Ignore processor keywords
-                    else if key.starts_with('$') && key.ends_with('$') {
+                    if key.starts_with('/')
+                        || key.starts_with('>')
+                        || key.starts_with('<')
+                        || (key.starts_with('$') && key.ends_with('$'))
+                    {
                         continue;
                     }
 
@@ -171,7 +160,6 @@ impl Header {
                         sub_sections,
                         doc,
                         var_types,
-                        bag,
                         Some(&rec.fields),
                         CheckType::Variable,
                     )?;
@@ -214,14 +202,12 @@ impl Header {
                         if let ftd::p2::Thing::Record(ref rec) = thing {
                             for (ln, key, _val) in header_list.iter() {
                                 // Ignore commented headers and lines starting with << or >>
+                                // Ignore processor keywords
                                 if key.starts_with('/')
                                     || key.starts_with('>')
                                     || key.starts_with('<')
+                                    || (key.starts_with('$') && key.ends_with('$'))
                                 {
-                                    continue;
-                                }
-                                // Ignore processor keywords
-                                else if key.starts_with('$') && key.ends_with('$') {
                                     continue;
                                 }
 
@@ -278,10 +264,10 @@ impl Header {
         sub_sections: Option<&ftd::p1::SubSections>,
         doc: &ftd::p2::TDoc,
         var_types: &[String],
-        bag: &std::collections::BTreeMap<String, ftd::p2::Thing>,
         fields: Option<&std::collections::BTreeMap<String, ftd::p2::Kind>>,
         check_type: CheckType,
     ) -> ftd::p1::Result<()> {
+        let bag = doc.bag;
         // Make header checks for rest of the subsections if available
         if let Some(sub_sections) = sub_sections {
             let sub_sections_list = &sub_sections.0;
@@ -300,20 +286,16 @@ impl Header {
                     if let Ok(ref _s) = sub_var_data {
                         sub.header.component_dup_header_check(
                             id,
-                            sub_name,
-                            bag,
                             doc,
                             None,
-                            sub.line_number,
                             var_types,
                             HeaderCheck::CheckSubSection,
                         )?;
                     }
-                } else if sub_name.starts_with("or-type ") {
-                    // No checks for now
-                } else if sub_name.starts_with("map ") {
-                    // No checks for now
-                } else if sub_name == "container" {
+                } else if sub_name.starts_with("or-type ")
+                    || sub_name.starts_with("map ")
+                    || sub_name == "container"
+                {
                     // No checks for now
                 } else if let Ok(ftd::variable::VariableData {
                     type_: ftd::variable::Type::Component,
@@ -324,11 +306,8 @@ impl Header {
                     if let Ok(ref _s) = sub_var_data {
                         sub.header.component_dup_header_check(
                             id,
-                            sub_name,
-                            bag,
                             doc,
                             None,
-                            sub.line_number,
                             var_types,
                             HeaderCheck::CheckSubSection,
                         )?;
@@ -349,11 +328,8 @@ impl Header {
                     if check_type == CheckType::Component {
                         sub.header.component_dup_header_check(
                             id,
-                            sub_name,
-                            bag,
                             doc,
                             None,
-                            sub.line_number,
                             var_types,
                             HeaderCheck::CheckSubSection,
                         )?;
@@ -363,9 +339,7 @@ impl Header {
                             id,
                             sub_name,
                             bag,
-                            doc,
                             sub.line_number,
-                            HeaderCheck::CheckSubSection,
                             fields,
                         )?;
                     }

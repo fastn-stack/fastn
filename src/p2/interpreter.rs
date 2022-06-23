@@ -117,11 +117,8 @@ impl InterpreterState {
                 // Dup header check
                 p1.header.component_dup_header_check(
                     self.id.as_str(),
-                    p1.name.as_str(),
-                    &self.bag,
                     &doc,
                     Some(&p1.sub_sections),
-                    p1.line_number,
                     &parsed_document.var_types,
                     ftd::p1::HeaderCheck::CheckSection,
                 )?;
@@ -183,11 +180,8 @@ impl InterpreterState {
                 // Dup header check
                 p1.header.component_dup_header_check(
                     self.id.as_str(),
-                    p1.name.as_str(),
-                    &self.bag,
                     &doc,
                     Some(&p1.sub_sections),
-                    p1.line_number,
                     &parsed_document.var_types,
                     ftd::p1::HeaderCheck::CheckSection,
                 )?;
@@ -219,8 +213,6 @@ impl InterpreterState {
                     // Dup header check
                     p1.header.var_dup_header_check(
                         self.id.as_str(),
-                        p1.name.as_str(),
-                        &self.bag,
                         var_data,
                         &doc,
                         p1.line_number,
@@ -307,11 +299,8 @@ impl InterpreterState {
                 // Dup header check
                 p1.header.component_dup_header_check(
                     self.id.as_str(),
-                    p1.name.as_str(),
-                    &self.bag,
                     &doc,
                     Some(&p1.sub_sections),
-                    p1.line_number,
                     &parsed_document.var_types,
                     ftd::p1::HeaderCheck::CheckSection,
                 )?;
