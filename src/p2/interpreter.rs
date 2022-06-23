@@ -114,7 +114,7 @@ impl InterpreterState {
             let mut thing = vec![];
 
             if p1.name.starts_with("record ") {
-                println!("ITS a record (normal check)");
+                // Dup header check
                 p1.header.component_dup_header_check(
                     self.id.as_str(),
                     p1.name.as_str(),
@@ -180,7 +180,7 @@ impl InterpreterState {
                 ..
             }) = var_data
             {
-                println!("ITS a var component (normal check)");
+                // Dup header check
                 p1.header.component_dup_header_check(
                     self.id.as_str(),
                     p1.name.as_str(),
@@ -216,7 +216,7 @@ impl InterpreterState {
                         section: p1,
                     });
                 } else if var_data.is_none() || var_data.is_optional() {
-                    println!("ITS a variable record/element (normal check)");
+                    // Dup header check
                     p1.header.var_dup_header_check(
                         self.id.as_str(),
                         p1.name.as_str(),
@@ -246,18 +246,6 @@ impl InterpreterState {
             } else if let ftd::p2::Thing::Variable(mut v) =
                 doc.get_thing(p1.line_number, p1.name.as_str())?
             {
-                println!("Here it is ");
-                p1.header.component_dup_header_check(
-                    self.id.as_str(),
-                    p1.name.as_str(),
-                    &self.bag,
-                    &doc,
-                    Some(&p1.sub_sections),
-                    p1.line_number,
-                    &parsed_document.var_types,
-                    ftd::p1::HeaderCheck::CheckSection,
-                )?;
-
                 assert!(
                     !(p1.header
                         .str_optional(doc.name, p1.line_number, "if")?
@@ -316,7 +304,8 @@ impl InterpreterState {
                     ftd::p2::Thing::Variable(doc.set_value(p1.line_number, p1.name.as_str(), v)?),
                 ));
             } else {
-                println!("ITS invocation (normal check)");
+
+                // Dup header check
                 p1.header.component_dup_header_check(
                     self.id.as_str(),
                     p1.name.as_str(),

@@ -65,7 +65,7 @@ impl Header {
     pub fn var_dup_header_check(
         &self,
         id: &str,
-        name: &str,
+        _name: &str,
         bag: &std::collections::BTreeMap<String, ftd::p2::Thing>,
         var_data: &ftd::variable::VariableData,
         doc: &ftd::p2::TDoc,
@@ -143,7 +143,7 @@ impl Header {
                     }
                     else {
                         return Err(ftd::p1::Error::ParseError {
-                            message: format!("Invalid header {} not found!!",key),
+                            message: format!("Invalid header '{}' not found !!",key),
                             doc_id: id.to_string(),
                             line_number: *ln
                         });
@@ -195,7 +195,7 @@ impl Header {
         bag: &std::collections::BTreeMap<String, ftd::p2::Thing>,
         _doc: &ftd::p2::TDoc,
         _p1_line_number: usize,
-        mode: HeaderCheck,
+        _mode: HeaderCheck,
         fields: Option<&std::collections::BTreeMap<String, ftd::p2::Kind>>,
     ) -> ftd::p1::Result<()>
     {
@@ -239,7 +239,7 @@ impl Header {
                                 }
                                 else {
                                     return Err(ftd::p1::Error::ParseError {
-                                        message: format!("Invalid header {} not found!!",key),
+                                        message: format!("Invalid header '{}' not found !!",key),
                                         doc_id: id.to_string(),
                                         line_number: *ln
                                     });
