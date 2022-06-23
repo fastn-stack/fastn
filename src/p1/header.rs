@@ -37,16 +37,23 @@ impl Header {
                 continue;
             }
 
+            // [Key_Type] [Identifier] = Header Key (eg. boolean flag)
+            // No Key_Type during invocation
+
+            // key_tokens = [ <Identfier> , [Key_Type] ]
+            let key_tokens: Vec<&str> = key.as_str().rsplit(' ').collect();
+            let identifier = key_tokens[0];
+
             // If header found again throw error
-            if header_set.contains(key) {
+            if header_set.contains(identifier) {
                 return Err(ftd::p1::Error::ParseError {
-                    message: format!("Header {} is already defined ", key),
+                    message: format!("Header {} is already defined ", identifier),
                     doc_id: id.to_string(),
                     line_number: *ln,
                 });
             }
             // Else insert it in the header set
-            header_set.insert(key.to_string());
+            header_set.insert(identifier.to_string());
         }
 
         // If mode is section then check its subsections if available
@@ -81,30 +88,30 @@ impl Header {
 
         // Bag = Map( String -> Thing )
         // General Key Entry in bag = [file_name/id]#[kind]
-        let _root = doc.resolve_name(p1_line_number, var_data.kind.as_str())?;
+        let bag_entry = doc.resolve_name(p1_line_number, var_data.kind.as_str())?;
 
-        let bag_entry = {
-            // For index.ftd bag entry format = ftd#[kind ignoring the 'ftd.' part]
-            // For foo/bar (used in test units), bag entry can be
-            // ftd#[kind ignoring the 'ftd.' part] if the kind is a std kind
-            // or
-            // foo/bar#[kind only including the parent kind] if the kind is not std kind
-            // For other files bag entry = [file_name/id]#[kind]
-            if id.eq("index.ftd") {
-                let tokens: Vec<&str> = kind.split('.').collect();
-                format!("ftd#{}", tokens[tokens.len() - 1])
-            } else if id.eq("foo/bar") {
-                let tokens: Vec<&str> = kind.split('.').collect();
-                let std_type_key = format!("ftd#{}", tokens[tokens.len() - 1]);
-                if bag.contains_key(&std_type_key) {
-                    std_type_key
-                } else {
-                    format!("{}#{}", id, tokens[0])
-                }
-            } else {
-                format!("{}#{}", id, kind)
-            }
-        };
+        // let bag_entry = {
+        //     // For index.ftd bag entry format = ftd#[kind ignoring the 'ftd.' part]
+        //     // For foo/bar (used in test units), bag entry can be
+        //     // ftd#[kind ignoring the 'ftd.' part] if the kind is a std kind
+        //     // or
+        //     // foo/bar#[kind only including the parent kind] if the kind is not std kind
+        //     // For other files bag entry = [file_name/id]#[kind]
+        //     if id.eq("index.ftd") {
+        //         let tokens: Vec<&str> = kind.split('.').collect();
+        //         format!("ftd#{}", tokens[tokens.len() - 1])
+        //     } else if id.eq("foo/bar") {
+        //         let tokens: Vec<&str> = kind.split('.').collect();
+        //         let std_type_key = format!("ftd#{}", tokens[tokens.len() - 1]);
+        //         if bag.contains_key(&std_type_key) {
+        //             std_type_key
+        //         } else {
+        //             format!("{}#{}", id, tokens[0])
+        //         }
+        //     } else {
+        //         format!("{}#{}", id, kind)
+        //     }
+        // };
 
         if bag.contains_key(&bag_entry) {
             // Check if the thing (section) is record then evaluate its headers for duplicates
