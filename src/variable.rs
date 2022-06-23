@@ -220,8 +220,6 @@ impl PropertyValue {
         ) -> ftd::p1::Result<ftd::p2::Kind> {
             let mut found_kind = kind.to_owned();
 
-            println!("kind = {:?}, p2 = {:?}", kind , p2);
-
             if let Some(ref p2) = p2 {
                 let (name, fields) = match kind.inner() {
                     ftd::p2::Kind::Record { ref name, .. } => (

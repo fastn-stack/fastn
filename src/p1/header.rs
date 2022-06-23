@@ -4,12 +4,6 @@ pub use ftd::p1::{Error, Result};
 pub struct Header(pub Vec<(usize, String, String)>);
 
 #[derive(PartialEq)]
-pub enum HeaderCheck {
-    CheckSection,
-    CheckSubSection,
-}
-
-#[derive(PartialEq)]
 pub enum CheckType {
     Component,
     Variable,
@@ -22,7 +16,6 @@ impl Header {
         doc: &ftd::p2::TDoc,
         sub_sections: Option<&ftd::p1::SubSections>,
         var_types: &[String],
-        mode: HeaderCheck,
     ) -> ftd::p1::Result<()> {
         // id = file_name, name = section name
         let mut header_set: std::collections::HashSet<String> = std::collections::HashSet::new();
@@ -58,7 +51,7 @@ impl Header {
 
         // If mode is section then check its subsections if available
         // since sub-sections dont have any further nesting i.e no sub-sub-sections
-        if mode == HeaderCheck::CheckSection {
+        if sub_sections != None {
             self.check_sub_sections(id, sub_sections, doc, var_types, None, CheckType::Component)?;
         }
 
@@ -73,7 +66,6 @@ impl Header {
         p1_line_number: usize,
         sub_sections: Option<&ftd::p1::SubSections>,
         var_types: &[String],
-        mode: HeaderCheck,
     ) -> ftd::p1::Result<()> {
         // VariableData attributes
         let bag = doc.bag;
@@ -89,29 +81,6 @@ impl Header {
         // Bag = Map( String -> Thing )
         // General Key Entry in bag = [file_name/id]#[kind]
         let bag_entry = doc.resolve_name(p1_line_number, var_data.kind.as_str())?;
-
-        // let bag_entry = {
-        //     // For index.ftd bag entry format = ftd#[kind ignoring the 'ftd.' part]
-        //     // For foo/bar (used in test units), bag entry can be
-        //     // ftd#[kind ignoring the 'ftd.' part] if the kind is a std kind
-        //     // or
-        //     // foo/bar#[kind only including the parent kind] if the kind is not std kind
-        //     // For other files bag entry = [file_name/id]#[kind]
-        //     if id.eq("index.ftd") {
-        //         let tokens: Vec<&str> = kind.split('.').collect();
-        //         format!("ftd#{}", tokens[tokens.len() - 1])
-        //     } else if id.eq("foo/bar") {
-        //         let tokens: Vec<&str> = kind.split('.').collect();
-        //         let std_type_key = format!("ftd#{}", tokens[tokens.len() - 1]);
-        //         if bag.contains_key(&std_type_key) {
-        //             std_type_key
-        //         } else {
-        //             format!("{}#{}", id, tokens[0])
-        //         }
-        //     } else {
-        //         format!("{}#{}", id, kind)
-        //     }
-        // };
 
         if bag.contains_key(&bag_entry) {
             // Check if the thing (section) is record then evaluate its headers for duplicates
@@ -160,8 +129,7 @@ impl Header {
                     header_set.insert(key.to_string());
                 }
 
-                if mode == HeaderCheck::CheckSection && matches!(thing, ftd::p2::Thing::Record(..))
-                {
+                if sub_sections != None {
                     self.check_sub_sections(
                         id,
                         sub_sections,
@@ -192,11 +160,17 @@ impl Header {
         p1_line_number: usize,
         fields: Option<&std::collections::BTreeMap<String, ftd::p2::Kind>>,
     ) -> ftd::p1::Result<()> {
+
         let mut header_set: std::collections::HashSet<String> = std::collections::HashSet::new();
         if let Some(f) = fields {
-            if f.contains_key(name) {
+
+            let name_tokens: Vec<&str>  = name.split('.').collect();
+            let header_key = name_tokens[0];
+            println!("key = {}", header_key);
+            if f.contains_key(header_key) {
                 // Determine the kind of the sub-section (inside var)
-                let kind = &f[name];
+                let kind = &f[header_key];
+                println!("kind = {:?}", kind);
 
                 match kind {
                     ftd::p2::Kind::Record { name, .. } => {
@@ -247,6 +221,9 @@ impl Header {
                             }
                         }
                     }
+                    ftd::p2::Kind::OrType { .. } => {
+                        println!("Or type found");
+                    }
                     _ => {
                         // TODO: Case for list of records
                         // TODO: Or_type
@@ -254,8 +231,9 @@ impl Header {
                     }
                 }
             } else {
+                println!("BAG = {:?}", bag.keys() );
                 return Err(ftd::p1::Error::ParseError {
-                    message: format!("{} is not a valid sub_section !!", name),
+                    message: format!("{} is not a valid sub_section !!", header_key),
                     doc_id: id.to_string(),
                     line_number: p1_line_number,
                 });
@@ -296,7 +274,6 @@ impl Header {
                             doc,
                             None,
                             var_types,
-                            HeaderCheck::CheckSubSection,
                         )?;
                     }
                 } else if sub_name.starts_with("or-type ")
@@ -316,7 +293,6 @@ impl Header {
                             doc,
                             None,
                             var_types,
-                            HeaderCheck::CheckSubSection,
                         )?;
                     }
                 } else if let Ok(ref sub_var_data) = sub_var_data {
@@ -338,7 +314,6 @@ impl Header {
                             doc,
                             None,
                             var_types,
-                            HeaderCheck::CheckSubSection,
                         )?;
                     } else if check_type == CheckType::Variable {
                         // Sub-section is invoked inside variable on the defined parameters

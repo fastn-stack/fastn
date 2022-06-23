@@ -120,7 +120,6 @@ impl InterpreterState {
                     &doc,
                     Some(&p1.sub_sections),
                     &parsed_document.var_types,
-                    ftd::p1::HeaderCheck::CheckSection,
                 )?;
 
                 // declare a record
@@ -183,7 +182,6 @@ impl InterpreterState {
                     &doc,
                     Some(&p1.sub_sections),
                     &parsed_document.var_types,
-                    ftd::p1::HeaderCheck::CheckSection,
                 )?;
 
                 // declare a function
@@ -218,7 +216,6 @@ impl InterpreterState {
                         p1.line_number,
                         Some(&p1.sub_sections),
                         &parsed_document.var_types,
-                        ftd::p1::HeaderCheck::CheckSection,
                     )?;
                     // declare and instantiate a variable
                     ftd::Variable::from_p1(&p1, &doc)?
@@ -302,7 +299,6 @@ impl InterpreterState {
                     &doc,
                     Some(&p1.sub_sections),
                     &parsed_document.var_types,
-                    ftd::p1::HeaderCheck::CheckSection,
                 )?;
 
                 // cloning because https://github.com/rust-lang/rust/issues/59159
