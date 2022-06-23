@@ -219,6 +219,9 @@ impl PropertyValue {
             expected_kind: &Option<ftd::p2::Kind>,
         ) -> ftd::p1::Result<ftd::p2::Kind> {
             let mut found_kind = kind.to_owned();
+
+            println!("kind = {:?}, p2 = {:?}", kind , p2);
+
             if let Some(ref p2) = p2 {
                 let (name, fields) = match kind.inner() {
                     ftd::p2::Kind::Record { ref name, .. } => (
@@ -271,7 +274,7 @@ impl PropertyValue {
             if let Some(e_kind) = expected_kind {
                 if !e_kind.is_same_as(&found_kind) {
                     return ftd::e2(
-                        format!("expected {:?} found {:?}", found_kind, e_kind),
+                        format!("expected {:?} found {:?}", e_kind, found_kind),
                         doc.name,
                         line_number,
                     );
