@@ -304,7 +304,6 @@ impl InterpreterState {
                     ftd::p2::Thing::Variable(doc.set_value(p1.line_number, p1.name.as_str(), v)?),
                 ));
             } else {
-
                 // Dup header check
                 p1.header.component_dup_header_check(
                     self.id.as_str(),
