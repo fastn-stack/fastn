@@ -160,7 +160,6 @@ impl Header {
         p1_line_number: usize,
         fields: Option<&std::collections::BTreeMap<String, ftd::p2::Kind>>,
     ) -> ftd::p1::Result<()> {
-
         let mut header_set: std::collections::HashSet<String> = std::collections::HashSet::new();
         if let Some(f) = fields {
             if f.contains_key(name) {
@@ -263,12 +262,8 @@ impl Header {
                 if sub_name.starts_with("record ") {
                     // For record declaration
                     if let Ok(ref _s) = sub_var_data {
-                        sub.header.component_dup_header_check(
-                            id,
-                            doc,
-                            None,
-                            var_types,
-                        )?;
+                        sub.header
+                            .component_dup_header_check(id, doc, None, var_types)?;
                     }
                 } else if sub_name.starts_with("or-type ")
                     || sub_name.starts_with("map ")
@@ -282,12 +277,8 @@ impl Header {
                 {
                     // For variable component
                     if let Ok(ref _s) = sub_var_data {
-                        sub.header.component_dup_header_check(
-                            id,
-                            doc,
-                            None,
-                            var_types,
-                        )?;
+                        sub.header
+                            .component_dup_header_check(id, doc, None, var_types)?;
                     }
                 } else if let Ok(ref sub_var_data) = sub_var_data {
                     if sub_var_data.is_none() || sub_var_data.is_optional() {
@@ -303,12 +294,8 @@ impl Header {
                 } else {
                     // For invocation
                     if check_type == CheckType::Component {
-                        sub.header.component_dup_header_check(
-                            id,
-                            doc,
-                            None,
-                            var_types,
-                        )?;
+                        sub.header
+                            .component_dup_header_check(id, doc, None, var_types)?;
                     } else if check_type == CheckType::Variable {
                         // Sub-section is invoked inside variable on the defined parameters
                         sub.header.var_dup_header_check_sub_section(
