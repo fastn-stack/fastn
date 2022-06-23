@@ -30,13 +30,6 @@ impl Header {
     ) -> ftd::p1::Result<()>
     {
         // id = file_name, name = section name
-        // println!("Normal check start ID = {}", id);
-        // if mode == HeaderCheck::CheckSection {
-        //     println!("Section name: {}", name);
-        // } else {
-        //     println!("Sub-Section name: {}", name);
-        // }
-
         let mut header_set: std::collections::HashSet<String> = std::collections::HashSet::new();
         for (ln, key, _) in self.0.iter() {
             // Ignore commented headers and lines starting with << or >>
@@ -82,12 +75,6 @@ impl Header {
         mode: HeaderCheck,
     ) -> ftd::p1::Result<()>
     {
-        println!("Var check start ID = {}", id);
-        if mode == HeaderCheck::CheckSection {
-            println!("Section name: {}", name);
-        } else {
-            println!("Sub-Section name: {}", name);
-        }
 
         // VariableData attributes
         let _name = var_data.name.to_string();
@@ -102,7 +89,7 @@ impl Header {
 
         // Bag = Map( String -> Thing )
         // General Key Entry in bag = [file_name/id]#[kind]
-        let root = doc.resolve_name(p1_line_number, var_data.kind.as_str())?;
+        let _root = doc.resolve_name(p1_line_number, var_data.kind.as_str())?;
 
         let bag_entry = {
             // For index.ftd bag entry format = ftd#[kind ignoring the 'ftd.' part]
@@ -126,8 +113,6 @@ impl Header {
                 format!("{}#{}", id, kind)
             }
         };
-
-        println!("root = {}, bag_entry = {}", root, bag_entry);
 
         if bag.contains_key(&bag_entry) {
             // Check if the thing (section) is record then evaluate its headers for duplicates
@@ -214,23 +199,18 @@ impl Header {
         fields: Option<&std::collections::BTreeMap<String, ftd::p2::Kind>>,
     ) -> ftd::p1::Result<()>
     {
-        println!("Var check start ID = {}", id);
-        if mode == HeaderCheck::CheckSection {
-            println!("Section name: {}", name);
-        } else {
-            println!("Sub-Section name: {}", name);
-        }
 
         let mut header_set: std::collections::HashSet<String> = std::collections::HashSet::new();
         if let Some(f) = fields{
             if f.contains_key(name)
             {
+                // Determine the kind of the sub-section (inside var)
                 let kind = &f[name];
-                println!("name = {}, kind {:?}",name, kind);
 
                 match kind {
                     ftd::p2::Kind::Record {name,..} => {
 
+                        // Determine the record name entry for the sub-section (inside var)
                         let bag_entry = name;
                         let thing: &ftd::p2::Thing = &bag[bag_entry];
 
@@ -249,6 +229,8 @@ impl Header {
                                     continue;
                                 }
 
+                                // Check if the header is valid and if valid ignore its
+                                // dups if the header is list type
                                 if rec.fields.contains_key(key)
                                 {
                                     if rec.fields[key].is_list() {
@@ -279,7 +261,7 @@ impl Header {
 
                         }
 
-                    }
+                    },
                     _ => {
                         // TODO: Case for list of records
                         // No other cases handled for now
@@ -348,7 +330,6 @@ impl Header {
                     ..
                 }) = sub_var_data
                 {
-                    // println!("sub name 3: {}",sub_name);
                     // For variable component
                     if let Ok(ref _s) = sub_var_data {
                         sub.header.component_dup_header_check(
@@ -365,7 +346,6 @@ impl Header {
                 } else if let Ok(ref sub_var_data) = sub_var_data {
                     if sub_var_data.is_none() || sub_var_data.is_optional() {
                         // For variables
-                        // println!("sub name 2: {}",sub_name);
                         sub.header.var_dup_header_check_sub_section(
                             id,
                             sub_name,
@@ -379,9 +359,7 @@ impl Header {
                 }
                 else {
                     // For invocation
-                    // println!("sub name 1: {}",sub_name);
                     if check_type == CheckType::Component {
-                        // println!("NORMAL");
                         sub.header.component_dup_header_check(
                             id,
                             sub_name,
@@ -392,10 +370,9 @@ impl Header {
                             var_types,
                             HeaderCheck::CheckSubSection,
                         )?;
-
                     }
                     else if check_type == CheckType::Variable{
-                        {
+                        // Sub-section is invoked inside variable on the defined parameters
                             sub.header.var_dup_header_check_sub_section(
                                 id,
                                 sub_name,
@@ -405,9 +382,8 @@ impl Header {
                                 HeaderCheck::CheckSubSection,
                                 fields,
                             )?;
-                        }
-                    }
 
+                    }
                 }
             }
         }
