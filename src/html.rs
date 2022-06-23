@@ -1312,6 +1312,27 @@ impl ftd::Common {
                 classes.push(collector.insert_class_color(p, "border-top-color"));
             }
         }
+        if let Some(p) = &self.border_bottom_color {
+            if self.conditional_attribute.contains_key("border-bottom-color") {
+                d.insert(s("border-bottom-color"), color(&p.light));
+            } else {
+                classes.push(collector.insert_class_color(p, "border-bottom-color"));
+            }
+        }
+        if let Some(p) = &self.border_right_color {
+            if self.conditional_attribute.contains_key("border-right-color") {
+                d.insert(s("border-right-color"), color(&p.light));
+            } else {
+                classes.push(collector.insert_class_color(p, "border-right-color"));
+            }
+        }
+        if let Some(p) = &self.border_left_color {
+            if self.conditional_attribute.contains_key("border-left-color") {
+                d.insert(s("border-left-color"), color(&p.light));
+            } else {
+                classes.push(collector.insert_class_color(p, "border-left-color"));
+            }
+        }
         if let Some(p) = &self.color {
             if self.conditional_attribute.contains_key("color") {
                 d.insert(s("color"), color(&p.light));
