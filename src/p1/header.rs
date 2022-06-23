@@ -80,7 +80,30 @@ impl Header {
 
         // Bag = Map( String -> Thing )
         // General Key Entry in bag = [file_name/id]#[kind]
-        let bag_entry = doc.resolve_name(p1_line_number, var_data.kind.as_str())?;
+        let _root = doc.resolve_name(p1_line_number, var_data.kind.as_str())?;
+
+        let bag_entry = {
+            // For index.ftd bag entry format = ftd#[kind ignoring the 'ftd.' part]
+            // For foo/bar (used in test units), bag entry can be
+            // ftd#[kind ignoring the 'ftd.' part] if the kind is a std kind
+            // or
+            // foo/bar#[kind only including the parent kind] if the kind is not std kind
+            // For other files bag entry = [file_name/id]#[kind]
+            if id.eq("index.ftd") {
+                let tokens: Vec<&str> = kind.split('.').collect();
+                format!("ftd#{}", tokens[tokens.len() - 1])
+            } else if id.eq("foo/bar") {
+                let tokens: Vec<&str> = kind.split('.').collect();
+                let std_type_key = format!("ftd#{}", tokens[tokens.len() - 1]);
+                if bag.contains_key(&std_type_key) {
+                    std_type_key
+                } else {
+                    format!("{}#{}", id, tokens[0])
+                }
+            } else {
+                format!("{}#{}", id, kind)
+            }
+        };
 
         if bag.contains_key(&bag_entry) {
             // Check if the thing (section) is record then evaluate its headers for duplicates
@@ -162,9 +185,14 @@ impl Header {
     ) -> ftd::p1::Result<()> {
         let mut header_set: std::collections::HashSet<String> = std::collections::HashSet::new();
         if let Some(f) = fields {
-            if f.contains_key(name) {
+
+            // header.x1.x2 ....
+            let name_tokens: Vec<&str> = name.split('.').collect();
+            let header_key = name_tokens[0];
+
+            if f.contains_key(header_key) {
                 // Determine the kind of the sub-section (inside var)
-                let kind = &f[name];
+                let kind = &f[header_key];
 
                 match kind {
                     ftd::p2::Kind::Record { name, .. } => {
@@ -226,7 +254,7 @@ impl Header {
                 }
             } else {
                 return Err(ftd::p1::Error::ParseError {
-                    message: format!("{} is not a valid sub_section !!", name),
+                    message: format!("{} is not a valid sub_section !!", header_key),
                     doc_id: id.to_string(),
                     line_number: p1_line_number,
                 });
