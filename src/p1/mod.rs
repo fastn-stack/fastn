@@ -4,7 +4,7 @@ mod section;
 mod sub_section;
 mod to_string;
 
-pub use header::Header;
+pub use header::{Header,HeaderCheck};
 pub use parser::parse;
 pub use section::Section;
 pub use sub_section::{SubSection, SubSections};
