@@ -19,7 +19,7 @@ impl Header {
     ) -> ftd::p1::Result<()> {
         // id = file_name, name = section name
         let mut header_set: std::collections::HashSet<String> = std::collections::HashSet::new();
-        for (ln, key, val) in self.0.iter() {
+        for (ln, key, val) in self.0 {
             // Ignore commented headers and lines starting with << or >>
             // Ignore processors
             // Ignore headers with conditional if's
@@ -42,7 +42,7 @@ impl Header {
             // If header found again throw error
             if header_set.contains(identifier) {
                 if key_tokens.len() == 1 {
-                    if val == "" {
+                    if val.is_empty() {
                         return Err(ftd::p1::Error::ParseError {
                             message: format!("Value not defined for Header '{}'", identifier),
                             doc_id: id.to_string(),
@@ -207,7 +207,6 @@ impl Header {
             if f.contains_key(header_key) {
                 // Determine the kind of the sub-section (inside var)
                 let kind = &f[header_key];
-                println!("kind = {:?}", kind);
 
                 match kind {
                     ftd::p2::Kind::Record { name, .. } => {
