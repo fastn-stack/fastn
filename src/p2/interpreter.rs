@@ -114,7 +114,18 @@ impl InterpreterState {
             let mut thing = vec![];
 
             if p1.name.starts_with("record ") {
-                p1.header.normal_dup_header_check(self.id.as_str())?;
+                println!("ITS a record (normal check)");
+                p1.header.component_dup_header_check(
+                    self.id.as_str(),
+                    p1.name.as_str(),
+                    &self.bag,
+                    &doc,
+                    Some(&p1.sub_sections),
+                    p1.line_number,
+                    &parsed_document.var_types,
+                    ftd::p1::HeaderCheck::CheckSection,
+                )?;
+
                 // declare a record
                 let d =
                     ftd::p2::Record::from_p1(p1.name.as_str(), &p1.header, &doc, p1.line_number)?;
@@ -169,7 +180,18 @@ impl InterpreterState {
                 ..
             }) = var_data
             {
-                p1.header.normal_dup_header_check(self.id.as_str())?;
+                println!("ITS a var component (normal check)");
+                p1.header.component_dup_header_check(
+                    self.id.as_str(),
+                    p1.name.as_str(),
+                    &self.bag,
+                    &doc,
+                    Some(&p1.sub_sections),
+                    p1.line_number,
+                    &parsed_document.var_types,
+                    ftd::p1::HeaderCheck::CheckSection,
+                )?;
+
                 // declare a function
                 let d = ftd::Component::from_p1(&p1, &doc)?;
                 let name = doc.resolve_name(p1.line_number, &d.full_name.to_string())?;
@@ -194,7 +216,18 @@ impl InterpreterState {
                         section: p1,
                     });
                 } else if var_data.is_none() || var_data.is_optional() {
-                    p1.var_dup_header_check(self.id.as_str(), &self.bag, &var_data)?;
+                    println!("ITS a variable record/element (normal check)");
+                    p1.header.var_dup_header_check(
+                        self.id.as_str(),
+                        p1.name.as_str(),
+                        &self.bag,
+                        var_data,
+                        &doc,
+                        p1.line_number,
+                        Some(&p1.sub_sections),
+                        &parsed_document.var_types,
+                        ftd::p1::HeaderCheck::CheckSection,
+                    )?;
                     // declare and instantiate a variable
                     ftd::Variable::from_p1(&p1, &doc)?
                 } else {
@@ -213,6 +246,18 @@ impl InterpreterState {
             } else if let ftd::p2::Thing::Variable(mut v) =
                 doc.get_thing(p1.line_number, p1.name.as_str())?
             {
+                println!("Here it is ");
+                p1.header.component_dup_header_check(
+                    self.id.as_str(),
+                    p1.name.as_str(),
+                    &self.bag,
+                    &doc,
+                    Some(&p1.sub_sections),
+                    p1.line_number,
+                    &parsed_document.var_types,
+                    ftd::p1::HeaderCheck::CheckSection,
+                )?;
+
                 assert!(
                     !(p1.header
                         .str_optional(doc.name, p1.line_number, "if")?
@@ -271,7 +316,18 @@ impl InterpreterState {
                     ftd::p2::Thing::Variable(doc.set_value(p1.line_number, p1.name.as_str(), v)?),
                 ));
             } else {
-                p1.header.normal_dup_header_check(self.id.as_str())?;
+                println!("ITS invocation (normal check)");
+                p1.header.component_dup_header_check(
+                    self.id.as_str(),
+                    p1.name.as_str(),
+                    &self.bag,
+                    &doc,
+                    Some(&p1.sub_sections),
+                    p1.line_number,
+                    &parsed_document.var_types,
+                    ftd::p1::HeaderCheck::CheckSection,
+                )?;
+
                 // cloning because https://github.com/rust-lang/rust/issues/59159
                 match (doc.get_thing(p1.line_number, p1.name.as_str())?).clone() {
                     ftd::p2::Thing::Variable(_) => {
