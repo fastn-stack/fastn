@@ -19,10 +19,12 @@ impl Header {
     ) -> ftd::p1::Result<()> {
         // id = file_name, name = section name
         let mut header_set: std::collections::HashSet<String> = std::collections::HashSet::new();
-        for (ln, key, _) in self.0.iter() {
+        for (ln, key, val) in self.0.iter() {
             // Ignore commented headers and lines starting with << or >>
-            // Ignore processor keywords
-            if key.starts_with('/')
+            // Ignore processors
+            // Ignore headers with conditional if's
+            if key.contains(" if ")
+                || key.starts_with('/')
                 || key.starts_with('>')
                 || key.starts_with('<')
                 || (key.starts_with('$') && key.ends_with('$'))
@@ -39,6 +41,16 @@ impl Header {
 
             // If header found again throw error
             if header_set.contains(identifier) {
+                if key_tokens.len() == 1 {
+                    if val == "" {
+                        return Err(ftd::p1::Error::ParseError {
+                            message: format!("Value not defined for Header '{}'", identifier),
+                            doc_id: id.to_string(),
+                            line_number: *ln,
+                        });
+                    }
+                    continue;
+                }
                 return Err(ftd::p1::Error::ParseError {
                     message: format!("Header {} is already defined ", identifier),
                     doc_id: id.to_string(),
@@ -95,13 +107,16 @@ impl Header {
             } else if id.eq("foo/bar") {
                 let tokens: Vec<&str> = kind.split('.').collect();
                 let std_type_key = format!("ftd#{}", tokens[tokens.len() - 1]);
-                if bag.contains_key(&std_type_key) {
-                    std_type_key
-                } else {
-                    format!("{}#{}", id, tokens[0])
+                println!("std key = {}", &std_type_key);
+                match bag.contains_key(&std_type_key) {
+                    true => std_type_key,
+                    false => format!("{}#{}", id, tokens[0]),
                 }
             } else {
-                format!("{}#{}", id, kind)
+                match kind.starts_with("ftd") {
+                    true => kind.replace(".", "#"),
+                    false => format!("{}#{}", id, kind),
+                }
             }
         };
 
@@ -185,7 +200,6 @@ impl Header {
     ) -> ftd::p1::Result<()> {
         let mut header_set: std::collections::HashSet<String> = std::collections::HashSet::new();
         if let Some(f) = fields {
-
             // header.x1.x2 ....
             let name_tokens: Vec<&str> = name.split('.').collect();
             let header_key = name_tokens[0];
@@ -193,6 +207,7 @@ impl Header {
             if f.contains_key(header_key) {
                 // Determine the kind of the sub-section (inside var)
                 let kind = &f[header_key];
+                println!("kind = {:?}", kind);
 
                 match kind {
                     ftd::p2::Kind::Record { name, .. } => {
