@@ -706,6 +706,33 @@ impl Element {
                     &common.conditional_attribute,
                 );
             }
+            if let Some(ref color) = common.border_right_color {
+                color_condition(
+                    color,
+                    id.as_str(),
+                    data,
+                    "background-color",
+                    &common.conditional_attribute,
+                );
+            }
+            if let Some(ref color) = common.border_bottom_color {
+                color_condition(
+                    color,
+                    id.as_str(),
+                    data,
+                    "background-color",
+                    &common.conditional_attribute,
+                );
+            }
+            if let Some(ref color) = common.border_left_color {
+                color_condition(
+                    color,
+                    id.as_str(),
+                    data,
+                    "background-color",
+                    &common.conditional_attribute,
+                );
+            }
             if let Some(ref color) = common.border_color {
                 color_condition(
                     color,
@@ -2086,6 +2113,9 @@ pub struct Common {
     pub border_right: Option<i64>,
     pub border_bottom: Option<i64>,
     pub border_top_color: Option<Color>,
+    pub border_bottom_color: Option<Color>,
+    pub border_left_color: Option<Color>,
+    pub border_right_color: Option<Color>,
     pub margin_top: Option<i64>,
     pub margin_left: Option<i64>,
     pub margin_right: Option<i64>,

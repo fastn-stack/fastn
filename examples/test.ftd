@@ -11,10 +11,20 @@ dark: red
 -- ftd.color yellow: yellow
 dark: yellow
 
+-- ftd.color white: white
+dark: white
+
+
+
+
 
 -- ftd.column:
-width: 100
-height: 100
-background-color: $red
+width: 0
+height: 0
+border-left: 25
 border-top-color: $yellow
-border-width: 10
+border-left-color: $white
+border-bottom-color: $white
+border-top: 25
+border-bottom: 25
+
