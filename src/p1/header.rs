@@ -163,14 +163,9 @@ impl Header {
 
         let mut header_set: std::collections::HashSet<String> = std::collections::HashSet::new();
         if let Some(f) = fields {
-
-            let name_tokens: Vec<&str>  = name.split('.').collect();
-            let header_key = name_tokens[0];
-            println!("key = {}", header_key);
-            if f.contains_key(header_key) {
+            if f.contains_key(name) {
                 // Determine the kind of the sub-section (inside var)
-                let kind = &f[header_key];
-                println!("kind = {:?}", kind);
+                let kind = &f[name];
 
                 match kind {
                     ftd::p2::Kind::Record { name, .. } => {
@@ -222,7 +217,7 @@ impl Header {
                         }
                     }
                     ftd::p2::Kind::OrType { .. } => {
-                        println!("Or type found");
+                        // Need to work on this
                     }
                     _ => {
                         // TODO: Case for list of records
@@ -231,9 +226,8 @@ impl Header {
                     }
                 }
             } else {
-                println!("BAG = {:?}", bag.keys() );
                 return Err(ftd::p1::Error::ParseError {
-                    message: format!("{} is not a valid sub_section !!", header_key),
+                    message: format!("{} is not a valid sub_section !!", name),
                     doc_id: id.to_string(),
                     line_number: p1_line_number,
                 });
