@@ -3,9 +3,40 @@ pub use ftd::p1::{Error, Result};
 #[derive(Debug, PartialEq, Default, Clone, serde::Serialize, serde::Deserialize)]
 pub struct Header(pub Vec<(usize, String, String)>);
 
+#[derive(PartialEq)]
+pub enum HeaderCheck {
+    CheckSection,
+    CheckSubSection,
+}
+
+#[derive(PartialEq)]
+pub enum CheckType {
+    Component,
+    Variable,
+}
+
 impl Header {
 
-    pub fn normal_dup_header_check(&self, id: &str) -> ftd::p1::Result<()> {
+    pub fn component_dup_header_check(
+        &self,
+        id: &str,
+        _name: &str,
+        bag: &std::collections::BTreeMap<String, ftd::p2::Thing>,
+        doc: &ftd::p2::TDoc,
+        sub_sections: Option<&ftd::p1::SubSections>,
+        _p1_line_number: usize,
+        var_types: &[String],
+        mode: HeaderCheck,
+    ) -> ftd::p1::Result<()>
+    {
+        // id = file_name, name = section name
+        // println!("Normal check start ID = {}", id);
+        // if mode == HeaderCheck::CheckSection {
+        //     println!("Section name: {}", name);
+        // } else {
+        //     println!("Sub-Section name: {}", name);
+        // }
+
         let mut header_set: std::collections::HashSet<String> = std::collections::HashSet::new();
         for (ln, key, _) in self.0.iter() {
             // Ignore commented headers and lines starting with << or >>
@@ -28,6 +59,359 @@ impl Header {
             // Else insert it in the header set
             header_set.insert(key.to_string());
         }
+
+        // If mode is section then check its subsections if available
+        // since sub-sections dont have any further nesting i.e no sub-sub-sections
+        if mode == HeaderCheck::CheckSection {
+            self.check_sub_sections(id, sub_sections, doc, var_types, bag, None, CheckType::Component)?;
+        }
+
+        Ok(())
+    }
+
+    pub fn var_dup_header_check(
+        &self,
+        id: &str,
+        name: &str,
+        bag: &std::collections::BTreeMap<String, ftd::p2::Thing>,
+        var_data: &ftd::variable::VariableData,
+        doc: &ftd::p2::TDoc,
+        p1_line_number: usize,
+        sub_sections: Option<&ftd::p1::SubSections>,
+        var_types: &[String],
+        mode: HeaderCheck,
+    ) -> ftd::p1::Result<()>
+    {
+        println!("Var check start ID = {}", id);
+        if mode == HeaderCheck::CheckSection {
+            println!("Section name: {}", name);
+        } else {
+            println!("Sub-Section name: {}", name);
+        }
+
+        // VariableData attributes
+        let _name = var_data.name.to_string();
+        let kind = var_data.kind.to_string();
+
+        // Ignoring those kinds whose bag entry is not there
+        if kind.eq("string") || kind.eq("object") || kind.eq("integer") {
+            return Ok(());
+        }
+
+        let mut header_set: std::collections::HashSet<String> = std::collections::HashSet::new();
+
+        // Bag = Map( String -> Thing )
+        // General Key Entry in bag = [file_name/id]#[kind]
+        let root = doc.resolve_name(p1_line_number, var_data.kind.as_str())?;
+
+        let bag_entry = {
+            // For index.ftd bag entry format = ftd#[kind ignoring the 'ftd.' part]
+            // For foo/bar (used in test units), bag entry can be
+            // ftd#[kind ignoring the 'ftd.' part] if the kind is a std kind
+            // or
+            // foo/bar#[kind only including the parent kind] if the kind is not std kind
+            // For other files bag entry = [file_name/id]#[kind]
+            if id.eq("index.ftd") {
+                let tokens: Vec<&str> = kind.split(".").collect();
+                format!("ftd#{}", tokens[tokens.len() - 1])
+            } else if id.eq("foo/bar") {
+                let tokens: Vec<&str> = kind.split(".").collect();
+                let std_type_key = format!("ftd#{}", tokens[tokens.len() - 1]);
+                if bag.contains_key(&std_type_key) {
+                    std_type_key
+                } else {
+                    format!("{}#{}", id, tokens[0])
+                }
+            } else {
+                format!("{}#{}", id, kind)
+            }
+        };
+
+        println!("root = {}, bag_entry = {}", root, bag_entry);
+
+        if bag.contains_key(&bag_entry) {
+            // Check if the thing (section) is record then evaluate its headers for duplicates
+            let thing: &ftd::p2::Thing = &bag[&bag_entry];
+            // println!("thing = {:?}", thing);
+
+            // Currently handling only for record variables
+            if let ftd::p2::Thing::Record(ref rec) = thing {
+                let header_list = self;
+                for (ln, key, _) in header_list.0.iter() {
+
+                    // Ignore commented headers and lines starting with << or >>
+                    if key.starts_with('/') || key.starts_with('>') || key.starts_with('<') {
+                        continue;
+                    }
+                    // Ignore processor keywords
+                    else if key.starts_with('$') && key.ends_with('$') {
+                        continue;
+                    }
+
+                    // Record.fields: Map( String -> Kind ) or Map( Headers -> Kind )
+                    // Allow repeated use of list inside record variables
+                    if rec.fields.contains_key(key)
+                    {
+                        if rec.fields[key].is_list() {
+                            continue;
+                        }
+                    }
+                    else {
+                        return Err(ftd::p1::Error::ParseError {
+                            message: format!("Invalid header {} not found!!",key),
+                            doc_id: id.to_string(),
+                            line_number: *ln
+                        });
+                    }
+
+                    // Otherwise function normally for other headers
+                    if header_set.contains(key) {
+                        return Err(ftd::p1::Error::ParseError {
+                            message: format!(
+                                "repeated use of header '{}' in record {} not allowed !!",
+                                key, kind
+                            ),
+                            doc_id: id.to_string(),
+                            line_number: *ln,
+                        });
+                    }
+                    header_set.insert(key.to_string());
+                }
+
+                if mode == HeaderCheck::CheckSection && matches!(thing, ftd::p2::Thing::Record(..))
+                {
+                    self.check_sub_sections(
+                        id,
+                        sub_sections,
+                        doc,
+                        var_types,
+                        bag,
+                        Some(&rec.fields),
+                        CheckType::Variable
+                    )?;
+                }
+            }
+        } else {
+            // Bag Entry not found
+            return Err(ftd::p1::Error::NotFound {
+                key: bag_entry,
+                doc_id: id.to_string(),
+                line_number: p1_line_number,
+            });
+        }
+
+        Ok(())
+    }
+
+    pub fn var_dup_header_check_sub_section(
+        &self,
+        id: &str,
+        name: &str,
+        bag: &std::collections::BTreeMap<String, ftd::p2::Thing>,
+        _doc: &ftd::p2::TDoc,
+        _p1_line_number: usize,
+        mode: HeaderCheck,
+        fields: Option<&std::collections::BTreeMap<String, ftd::p2::Kind>>,
+    ) -> ftd::p1::Result<()>
+    {
+        println!("Var check start ID = {}", id);
+        if mode == HeaderCheck::CheckSection {
+            println!("Section name: {}", name);
+        } else {
+            println!("Sub-Section name: {}", name);
+        }
+
+        let mut header_set: std::collections::HashSet<String> = std::collections::HashSet::new();
+        if let Some(f) = fields{
+            if f.contains_key(name)
+            {
+                let kind = &f[name];
+                println!("name = {}, kind {:?}",name, kind);
+
+                match kind {
+                    ftd::p2::Kind::Record {name,..} => {
+
+                        let bag_entry = name;
+                        let thing: &ftd::p2::Thing = &bag[bag_entry];
+
+                        let header_list = &self.0;
+
+                        if let ftd::p2::Thing::Record(ref rec) = thing
+                        {
+                            for (ln, key, _val) in header_list.iter(){
+
+                                // Ignore commented headers and lines starting with << or >>
+                                if key.starts_with('/') || key.starts_with('>') || key.starts_with('<') {
+                                    continue;
+                                }
+                                // Ignore processor keywords
+                                else if key.starts_with('$') && key.ends_with('$') {
+                                    continue;
+                                }
+
+                                if rec.fields.contains_key(key)
+                                {
+                                    if rec.fields[key].is_list() {
+                                        continue;
+                                    }
+                                }
+                                else {
+                                    return Err(ftd::p1::Error::ParseError {
+                                        message: format!("Invalid header {} not found!!",key),
+                                        doc_id: id.to_string(),
+                                        line_number: *ln
+                                    });
+                                }
+
+                                // Otherwise function normally for other headers
+                                if header_set.contains(key) {
+                                    return Err(ftd::p1::Error::ParseError {
+                                        message: format!(
+                                            "repeated use of header '{}' not allowed !!",
+                                            key
+                                        ),
+                                        doc_id: id.to_string(),
+                                        line_number: *ln,
+                                    });
+                                }
+                                header_set.insert(key.to_string());
+                            }
+
+                        }
+
+                    }
+                    _ => {
+                        // TODO: Case for list of records
+                        // No other cases handled for now
+                    }
+                }
+            }
+            else {
+                return Err(ftd::p1::Error::ParseError {
+                    message: format!("{} is not a valid header!!", name),
+                    doc_id: id.to_string(),
+                    line_number: 0
+                });
+            }
+
+        }
+
+        Ok(())
+    }
+
+    pub fn check_sub_sections(
+        &self,
+        id: &str,
+        sub_sections: Option<&ftd::p1::SubSections>,
+        doc: &ftd::p2::TDoc,
+        var_types: &[String],
+        bag: &std::collections::BTreeMap<String, ftd::p2::Thing>,
+        fields: Option<&std::collections::BTreeMap<String, ftd::p2::Kind>>,
+        check_type: CheckType,
+    ) -> ftd::p1::Result<()>
+    {
+        // Make header checks for rest of the subsections if available
+        if let Some(sub_sections) = sub_sections {
+            let sub_sections_list = &sub_sections.0;
+            for sub in sub_sections_list {
+                let sub_name = &sub.name;
+                let sub_var_data = ftd::variable::VariableData::get_name_kind(
+                    sub_name,
+                    doc,
+                    sub.line_number,
+                    var_types,
+                );
+
+                // Separate checks for different sub-section types
+                if sub_name.starts_with("record ") {
+                    // For record declaration
+                    if let Ok(ref _s) = sub_var_data {
+                        sub.header.component_dup_header_check(
+                            id,
+                            sub_name,
+                            bag,
+                            doc,
+                            None,
+                            sub.line_number,
+                            var_types,
+                            HeaderCheck::CheckSubSection,
+                        )?;
+                    }
+                } else if sub_name.starts_with("or-type ") {
+                    // No checks for now
+                } else if sub_name.starts_with("map ") {
+                    // No checks for now
+                } else if sub_name == "container" {
+                    // No checks for now
+                } else if let Ok(ftd::variable::VariableData {
+                    type_: ftd::variable::Type::Component,
+                    ..
+                }) = sub_var_data
+                {
+                    // println!("sub name 3: {}",sub_name);
+                    // For variable component
+                    if let Ok(ref _s) = sub_var_data {
+                        sub.header.component_dup_header_check(
+                            id,
+                            sub_name,
+                            bag,
+                            doc,
+                            None,
+                            sub.line_number,
+                            var_types,
+                            HeaderCheck::CheckSubSection,
+                        )?;
+                    }
+                } else if let Ok(ref sub_var_data) = sub_var_data {
+                    if sub_var_data.is_none() || sub_var_data.is_optional() {
+                        // For variables
+                        // println!("sub name 2: {}",sub_name);
+                        sub.header.var_dup_header_check_sub_section(
+                            id,
+                            sub_name,
+                            bag,
+                            doc,
+                            sub.line_number,
+                            HeaderCheck::CheckSubSection,
+                            fields,
+                        )?;
+                    }
+                }
+                else {
+                    // For invocation
+                    // println!("sub name 1: {}",sub_name);
+                    if check_type == CheckType::Component {
+                        // println!("NORMAL");
+                        sub.header.component_dup_header_check(
+                            id,
+                            sub_name,
+                            bag,
+                            doc,
+                            None,
+                            sub.line_number,
+                            var_types,
+                            HeaderCheck::CheckSubSection,
+                        )?;
+
+                    }
+                    else if check_type == CheckType::Variable{
+                        {
+                            sub.header.var_dup_header_check_sub_section(
+                                id,
+                                sub_name,
+                                bag,
+                                doc,
+                                sub.line_number,
+                                HeaderCheck::CheckSubSection,
+                                fields,
+                            )?;
+                        }
+                    }
+
+                }
+            }
+        }
+
         Ok(())
     }
 
