@@ -200,7 +200,6 @@ impl Header {
     ) -> ftd::p1::Result<()> {
         let mut header_set: std::collections::HashSet<String> = std::collections::HashSet::new();
         if let Some(f) = fields {
-            // header.x1.x2 ....
             let name_tokens: Vec<&str> = name.split('.').collect();
             let header_key = name_tokens[0];
 
@@ -257,8 +256,192 @@ impl Header {
                             }
                         }
                     }
-                    ftd::p2::Kind::OrType { .. } => {
+                    ftd::p2::Kind::OrType { name } => {
                         // Need to work on this
+                        println!("OrType 2 name = {}", name);
+                        let thing = &bag[name];
+                        println!("thing 2 = {:?}", thing);
+
+                        if let ftd::p2::Thing::OrType(ref or_type) = thing {
+                            let variants = &or_type.variants;
+                            let record_type = name_tokens[1];
+                            // or_type entry        = [file_name]#[or_type_name]
+                            // or-type record entry = [file_name]#[or_type_name].[record_name]
+                            let target_record = format!("{}.{}", &or_type.name, record_type)
+                                .trim()
+                                .to_string();
+
+                            // println!("target record entry = {}", target_record);
+                            let mut rec: Option<&ftd::p2::Record> = None;
+
+                            for v in variants.iter() {
+                                if v.name.eq(target_record.as_str()) {
+                                    rec = Some(v);
+                                }
+                            }
+
+                            if let Some(rec) = rec {
+                                let header_list = &self.0;
+
+                                for (ln, key, _val) in header_list.iter() {
+                                    // Ignore commented headers and lines starting with << or >>
+                                    // Ignore processor keywords
+                                    if key.starts_with('/')
+                                        || key.starts_with('>')
+                                        || key.starts_with('<')
+                                        || (key.starts_with('$') && key.ends_with('$'))
+                                    {
+                                        continue;
+                                    }
+
+                                    // Check if the header is valid and if valid ignore its
+                                    // dups if the header is list type
+                                    if rec.fields.contains_key(key) {
+                                        if rec.fields[key].is_list() {
+                                            continue;
+                                        }
+                                    } else {
+                                        return Err(ftd::p1::Error::ParseError {
+                                            message: format!(
+                                                "Invalid header '{}' not found !!",
+                                                key
+                                            ),
+                                            doc_id: id.to_string(),
+                                            line_number: *ln,
+                                        });
+                                    }
+
+                                    // Otherwise function normally for other headers
+                                    if header_set.contains(key) {
+                                        return Err(ftd::p1::Error::ParseError {
+                                            message: format!(
+                                                "repeated use of header '{}' not allowed !!",
+                                                key
+                                            ),
+                                            doc_id: id.to_string(),
+                                            line_number: *ln,
+                                        });
+                                    }
+                                    header_set.insert(key.to_string());
+                                }
+                            }
+                        }
+                    }
+                    ftd::p2::Kind::List { kind, .. } => {
+                        if let ftd::p2::Kind::OrType { name } = kind.as_ref() {
+                            let thing = &bag[name];
+
+                            if let ftd::p2::Thing::OrType(ref or_type) = thing {
+                                let variants = &or_type.variants;
+                                let record_type = name_tokens[1];
+                                // or_type entry        = [file_name]#[or_type_name]
+                                // or-type record entry = [file_name]#[or_type_name].[record_name]
+                                let target_record = format!("{}.{}", &or_type.name, record_type)
+                                    .trim()
+                                    .to_string();
+
+                                // println!("target record entry = {}", target_record);
+                                let mut rec: Option<&ftd::p2::Record> = None;
+
+                                for v in variants.iter() {
+                                    if v.name.eq(target_record.as_str()) {
+                                        rec = Some(v);
+                                    }
+                                }
+
+                                if let Some(rec) = rec {
+                                    let header_list = &self.0;
+
+                                    for (ln, key, _val) in header_list.iter() {
+                                        // Ignore commented headers and lines starting with << or >>
+                                        // Ignore processor keywords
+                                        if key.starts_with('/')
+                                            || key.starts_with('>')
+                                            || key.starts_with('<')
+                                            || (key.starts_with('$') && key.ends_with('$'))
+                                        {
+                                            continue;
+                                        }
+
+                                        // Check if the header is valid and if valid ignore its
+                                        // dups if the header is list type
+                                        if rec.fields.contains_key(key) {
+                                            if rec.fields[key].is_list() {
+                                                continue;
+                                            }
+                                        } else {
+                                            return Err(ftd::p1::Error::ParseError {
+                                                message: format!(
+                                                    "Invalid header '{}' not found !!",
+                                                    key
+                                                ),
+                                                doc_id: id.to_string(),
+                                                line_number: *ln,
+                                            });
+                                        }
+
+                                        // Otherwise function normally for other headers
+                                        if header_set.contains(key) {
+                                            return Err(ftd::p1::Error::ParseError {
+                                                message: format!(
+                                                    "repeated use of header '{}' not allowed !!",
+                                                    key
+                                                ),
+                                                doc_id: id.to_string(),
+                                                line_number: *ln,
+                                            });
+                                        }
+                                        header_set.insert(key.to_string());
+                                    }
+                                }
+                            }
+                        } else if let ftd::p2::Kind::Record { name, .. } = kind.as_ref() {
+                            let thing = &bag[name];
+                            if let ftd::p2::Thing::Record(ref rec) = thing {
+                                let header_list = &self.0;
+                                for (ln, key, _val) in header_list.iter() {
+                                    // Ignore commented headers and lines starting with << or >>
+                                    // Ignore processor keywords
+                                    if key.starts_with('/')
+                                        || key.starts_with('>')
+                                        || key.starts_with('<')
+                                        || (key.starts_with('$') && key.ends_with('$'))
+                                    {
+                                        continue;
+                                    }
+
+                                    // Check if the header is valid and if valid ignore its
+                                    // dups if the header is list type
+                                    if rec.fields.contains_key(key) {
+                                        if rec.fields[key].is_list() {
+                                            continue;
+                                        }
+                                    } else {
+                                        return Err(ftd::p1::Error::ParseError {
+                                            message: format!(
+                                                "Invalid header '{}' not found !!",
+                                                key
+                                            ),
+                                            doc_id: id.to_string(),
+                                            line_number: *ln,
+                                        });
+                                    }
+
+                                    // Otherwise function normally for other headers
+                                    if header_set.contains(key) {
+                                        return Err(ftd::p1::Error::ParseError {
+                                            message: format!(
+                                                "repeated use of header '{}' not allowed !!",
+                                                key
+                                            ),
+                                            doc_id: id.to_string(),
+                                            line_number: *ln,
+                                        });
+                                    }
+                                    header_set.insert(key.to_string());
+                                }
+                            }
+                        }
                     }
                     _ => {
                         // TODO: Case for list of records
