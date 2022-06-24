@@ -5,8 +5,10 @@ pub struct Header(pub Vec<(usize, String, String)>);
 
 #[derive(PartialEq)]
 pub enum CheckType {
+    Record,
     Component,
     Variable,
+    Invocation,
 }
 
 impl Header {
@@ -16,6 +18,7 @@ impl Header {
         doc: &ftd::p2::TDoc,
         sub_sections: Option<&ftd::p1::SubSections>,
         var_types: &[String],
+        check_type: CheckType,
     ) -> ftd::p1::Result<()> {
         // id = file_name, name = section name
         let mut header_set: std::collections::HashSet<String> = std::collections::HashSet::new();
@@ -41,7 +44,7 @@ impl Header {
 
             // If header found again throw error
             if header_set.contains(identifier) {
-                if key_tokens.len() == 1 {
+                if key_tokens.len() == 1 && matches!(check_type, CheckType::Component) {
                     if val.is_empty() {
                         return Err(ftd::p1::Error::ParseError {
                             message: format!("Value not defined for Header '{}'", identifier),
@@ -487,8 +490,13 @@ impl Header {
                 if sub_name.starts_with("record ") {
                     // For record declaration
                     if let Ok(ref _s) = sub_var_data {
-                        sub.header
-                            .component_dup_header_check(id, doc, None, var_types)?;
+                        sub.header.component_dup_header_check(
+                            id,
+                            doc,
+                            None,
+                            var_types,
+                            CheckType::Record,
+                        )?;
                     }
                 } else if sub_name.starts_with("or-type ")
                     || sub_name.starts_with("map ")
@@ -502,8 +510,13 @@ impl Header {
                 {
                     // For variable component
                     if let Ok(ref _s) = sub_var_data {
-                        sub.header
-                            .component_dup_header_check(id, doc, None, var_types)?;
+                        sub.header.component_dup_header_check(
+                            id,
+                            doc,
+                            None,
+                            var_types,
+                            CheckType::Component,
+                        )?;
                     }
                 } else if let Ok(ref sub_var_data) = sub_var_data {
                     if sub_var_data.is_none() || sub_var_data.is_optional() {
@@ -519,8 +532,13 @@ impl Header {
                 } else {
                     // For invocation
                     if check_type == CheckType::Component {
-                        sub.header
-                            .component_dup_header_check(id, doc, None, var_types)?;
+                        sub.header.component_dup_header_check(
+                            id,
+                            doc,
+                            None,
+                            var_types,
+                            CheckType::Invocation,
+                        )?;
                     } else if check_type == CheckType::Variable {
                         // Sub-section is invoked inside variable on the defined parameters
                         sub.header.var_dup_header_check_sub_section(

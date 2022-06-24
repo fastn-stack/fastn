@@ -1,3 +1,5 @@
+use ftd::p1::CheckType;
+
 #[derive(Debug, Default)]
 pub struct InterpreterState {
     pub id: String,
@@ -120,6 +122,7 @@ impl InterpreterState {
                     &doc,
                     Some(&p1.sub_sections),
                     &parsed_document.var_types,
+                    CheckType::Record,
                 )?;
 
                 // declare a record
@@ -182,6 +185,7 @@ impl InterpreterState {
                     &doc,
                     Some(&p1.sub_sections),
                     &parsed_document.var_types,
+                    CheckType::Component,
                 )?;
 
                 // declare a function
@@ -299,6 +303,7 @@ impl InterpreterState {
                     &doc,
                     Some(&p1.sub_sections),
                     &parsed_document.var_types,
+                    CheckType::Invocation,
                 )?;
 
                 // cloning because https://github.com/rust-lang/rust/issues/59159
