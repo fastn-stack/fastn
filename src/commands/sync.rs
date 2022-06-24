@@ -1,4 +1,13 @@
+use crate::apis::sync::SyncResponseFile;
+
 pub async fn sync(config: &fpm::Config, files: Option<Vec<String>>) -> fpm::Result<()> {
+    // Read All the Document
+    // Get all the updated, added and deleted files
+    // Get Updated Files -> If content differs from latest snapshot
+    // Get Added Files -> If files does not present in latest snapshot
+    // Get Deleted Files -> If file present in latest.ftd and not present in directory
+    // Send to fpm server
+
     let documents = if let Some(ref files) = files {
         let files = files
             .to_vec()
@@ -14,54 +23,124 @@ pub async fn sync(config: &fpm::Config, files: Option<Vec<String>>) -> fpm::Resu
 
     let snapshots = fpm::snapshot::get_latest_snapshots(&config.root).await?;
 
-    let timestamp = fpm::get_timestamp_nanosecond();
-    let mut modified_files = vec![];
-    let mut new_snapshots = vec![];
-    for doc in documents {
-        let (snapshot, is_modified) = write(&doc, timestamp, &snapshots).await?;
-        if is_modified {
-            modified_files.push(snapshot.filename.to_string());
-        }
-        new_snapshots.push(snapshot);
-    }
+    let latest_ftd = tokio::fs::read_to_string(config.history_dir().join(".latest.ftd"))
+        .await
+        .unwrap_or_else(|_| "".to_string());
 
-    if let Some(file) = files {
-        let snapshot_id = new_snapshots
-            .iter()
-            .map(|v| v.filename.to_string())
-            .collect::<Vec<String>>();
-        for (k, timestamp) in snapshots.iter() {
-            if !snapshot_id.contains(k) && file.contains(k) {
-                continue;
+    let changed_files = get_changed_files(&documents, &snapshots).await?;
+    let request = fpm::apis::sync::SyncRequest {
+        files: changed_files,
+        package_name: config.package.name.to_string(),
+        latest_ftd,
+    };
+    let response = send_to_fpm_serve(request).await?;
+    update_current_directory(config, &response.files).await?;
+    update_history(config, &response.dot_history, &response.latest_ftd).await?;
+
+    // Tumhe nahi chalana hai mujhe to, koi aur chalaye to chalaye
+    if false {
+        let timestamp = fpm::timestamp_nanosecond();
+        let mut modified_files = vec![];
+        let mut new_snapshots = vec![];
+        for doc in documents {
+            let (snapshot, is_modified) = write(&doc, timestamp, &snapshots).await?;
+            if is_modified {
+                modified_files.push(snapshot.filename.to_string());
             }
-            if !snapshot_id.contains(k) {
-                new_snapshots.push(fpm::Snapshot {
-                    filename: k.clone(),
-                    timestamp: *timestamp,
-                })
+            new_snapshots.push(snapshot);
+        }
+
+        if let Some(file) = files {
+            let snapshot_id = new_snapshots
+                .iter()
+                .map(|v| v.filename.to_string())
+                .collect::<Vec<String>>();
+            for (k, timestamp) in snapshots.iter() {
+                if !snapshot_id.contains(k) && file.contains(k) {
+                    continue;
+                }
+                if !snapshot_id.contains(k) {
+                    new_snapshots.push(fpm::Snapshot {
+                        filename: k.clone(),
+                        timestamp: *timestamp,
+                    })
+                }
             }
         }
-    }
 
-    for key in snapshots.keys() {
-        if new_snapshots.iter().filter(|v| v.filename.eq(key)).count() == 0 {
-            modified_files.push(key.clone());
+        for key in snapshots.keys() {
+            if new_snapshots.iter().filter(|v| v.filename.eq(key)).count() == 0 {
+                modified_files.push(key.clone());
+            }
         }
-    }
 
-    if modified_files.is_empty() {
-        println!("Everything is upto date.");
-    } else {
-        fpm::snapshot::create_latest_snapshots(config, &new_snapshots).await?;
-        println!(
-            "Repo for {} is github, directly syncing with .history.",
-            config.package.name
-        );
-        for file in modified_files {
-            println!("{}", file);
+        if modified_files.is_empty() {
+            println!("Everything is upto date.");
+        } else {
+            fpm::snapshot::create_latest_snapshots(config, &new_snapshots).await?;
+            println!(
+                "Repo for {} is github, directly syncing with .history.",
+                config.package.name
+            );
+            for file in modified_files {
+                println!("{}", file);
+            }
         }
     }
     Ok(())
+}
+
+async fn get_changed_files(
+    files: &[fpm::File],
+    snapshots: &std::collections::BTreeMap<String, u128>,
+) -> fpm::Result<Vec<fpm::apis::sync::SyncRequestFile>> {
+    use sha2::Digest;
+    // Get all the updated, added and deleted files
+    // Get Updated Files -> If content differs from latest snapshot
+    // Get Added Files -> If files does not present in latest snapshot
+    // Get Deleted Files -> If file present in latest.ftd and not present in files directory
+
+    let mut changed_files = Vec::new();
+    for document in files.iter() {
+        if let Some(timestamp) = snapshots.get(&document.get_id()) {
+            let snapshot_file_path =
+                fpm::utils::history_path(&document.get_id(), &document.get_base_path(), timestamp);
+            let snapshot_file_content = tokio::fs::read(&snapshot_file_path).await?;
+            // Update
+            let current_file_content = document.get_content();
+            if sha2::Sha256::digest(&snapshot_file_content)
+                .eq(&sha2::Sha256::digest(&current_file_content))
+            {
+                continue;
+            }
+
+            changed_files.push(fpm::apis::sync::SyncRequestFile::Update {
+                path: document.get_id(),
+                content: current_file_content,
+            });
+        } else {
+            // Added
+            changed_files.push(fpm::apis::sync::SyncRequestFile::Add {
+                path: document.get_id(),
+                content: document.get_content(),
+            });
+        }
+    }
+    let files_path = files
+        .iter()
+        .map(|f| f.get_id())
+        .collect::<std::collections::HashSet<String>>();
+
+    let deleted_files = snapshots
+        .keys()
+        .filter(|x| !files_path.contains(*x))
+        .map(|f| fpm::apis::sync::SyncRequestFile::Delete {
+            path: f.to_string(),
+        });
+
+    changed_files.extend(deleted_files);
+
+    Ok(changed_files)
 }
 
 async fn write(
@@ -107,4 +186,73 @@ async fn write(
         },
         true,
     ))
+}
+
+async fn send_to_fpm_serve(
+    data: fpm::apis::sync::SyncRequest,
+) -> fpm::Result<fpm::apis::sync::SyncResponse> {
+    #[derive(serde::Deserialize, std::fmt::Debug)]
+    struct ApiResponse {
+        message: Option<String>,
+        data: Option<fpm::apis::sync::SyncResponse>,
+        success: bool,
+    }
+
+    // println!("Data send {:#?}", data);
+    let data = serde_json::to_string(&data)?;
+    let mut response = reqwest::Client::new()
+        .post("http://127.0.0.1:8000/-/sync/")
+        .header(reqwest::header::CONTENT_TYPE, "application/json")
+        .body(data)
+        .send()?;
+
+    let response = response.json::<ApiResponse>()?;
+    if !response.success {
+        return Err(fpm::Error::APIResponseError(
+            response
+                .message
+                .unwrap_or_else(|| "Some Error occurred".to_string()),
+        ));
+    }
+
+    match response.data {
+        Some(data) => Ok(data),
+        None => Err(fpm::Error::APIResponseError(
+            "Unexpected API behaviour".to_string(),
+        )),
+    }
+}
+
+async fn update_current_directory(
+    config: &fpm::Config,
+    files: &[fpm::apis::sync::SyncResponseFile],
+) -> fpm::Result<()> {
+    for file in files {
+        match file {
+            SyncResponseFile::Add { path, content, .. } => {
+                fpm::utils::update(&config.root, path, content).await?;
+            }
+            SyncResponseFile::Update { path, content, .. } => {
+                fpm::utils::update(&config.root, path, content).await?;
+            }
+            SyncResponseFile::Delete { path, .. } => {
+                if config.root.join(path).exists() {
+                    tokio::fs::remove_file(config.root.join(path)).await?;
+                }
+            }
+        }
+    }
+    Ok(())
+}
+
+async fn update_history(
+    config: &fpm::Config,
+    files: &[fpm::apis::sync::File],
+    latest_ftd: &str,
+) -> fpm::Result<()> {
+    for file in files {
+        fpm::utils::update(&config.history_dir(), file.path.as_str(), &file.content).await?;
+    }
+    fpm::utils::update(&config.history_dir(), ".latest.ftd", latest_ftd.as_bytes()).await?;
+    Ok(())
 }

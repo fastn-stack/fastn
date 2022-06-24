@@ -15,6 +15,9 @@ build = "build.rs"
 
 [features]
 controller = []
+remote = []
+local = []
+
 
 [dependencies]
 async-recursion = "0.3.2"
@@ -50,7 +53,7 @@ itertools = "0.10.3"
 mime_guess = "2"
 infer = "0.8"
 semver = "1.0.7"
-actix-web = "4.0.1"
+actix-web = "4.1.0"
 actix-files = "0.6.0"
 
 [dev-dependencies]

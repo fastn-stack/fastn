@@ -45,6 +45,16 @@ impl File {
         };
         camino::Utf8PathBuf::from(base_path).join(id)
     }
+
+    pub(crate) fn get_content(&self) -> Vec<u8> {
+        match self {
+            Self::Ftd(ref a) => a.content.as_bytes().to_vec(),
+            Self::Static(ref a) => a.content.clone(),
+            Self::Markdown(ref a) => a.content.as_bytes().to_vec(),
+            Self::Code(ref a) => a.content.as_bytes().to_vec(),
+            Self::Image(ref a) => a.content.clone(),
+        }
+    }
 }
 
 #[derive(Debug, Clone)]

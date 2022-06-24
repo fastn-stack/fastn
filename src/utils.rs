@@ -32,7 +32,7 @@ impl<T> HasElements for Vec<T> {
     }
 }
 
-pub(crate) fn get_timestamp_nanosecond() -> u128 {
+pub(crate) fn timestamp_nanosecond() -> u128 {
     match std::time::SystemTime::now().duration_since(std::time::SystemTime::UNIX_EPOCH) {
         Ok(n) => n.as_nanos(),
         Err(_) => panic!("SystemTime before UNIX EPOCH!"),
@@ -51,13 +51,17 @@ pub(crate) fn nanos_to_rfc3339(nanos: &u128) -> String {
 }
 
 pub(crate) fn history_path(id: &str, base_path: &str, timestamp: &u128) -> camino::Utf8PathBuf {
-    let id_with_timestamp_extension = if let Some((id, ext)) = id.rsplit_once('.') {
-        format!("{}.{}.{}", id, timestamp, ext)
-    } else {
-        format!("{}.{}", id, timestamp)
-    };
+    let id_with_timestamp_extension = snapshot_id(id, timestamp);
     let base_path = camino::Utf8PathBuf::from(base_path);
     base_path.join(".history").join(id_with_timestamp_extension)
+}
+
+pub(crate) fn snapshot_id(path: &str, timestamp: &u128) -> String {
+    if let Some((id, ext)) = path.rsplit_once('.') {
+        format!("{}.{}.{}", id, timestamp, ext)
+    } else {
+        format!("{}.{}", path, timestamp)
+    }
 }
 
 pub(crate) fn track_path(id: &str, base_path: &str) -> camino::Utf8PathBuf {
@@ -344,11 +348,18 @@ pub(crate) async fn write(
     file_path: &str,
     data: &[u8],
 ) -> fpm::Result<()> {
-    use tokio::io::AsyncWriteExt;
-
     if root.join(file_path).exists() {
         return Ok(());
     }
+    update(root, file_path, data).await
+}
+
+pub(crate) async fn update(
+    root: &camino::Utf8PathBuf,
+    file_path: &str,
+    data: &[u8],
+) -> fpm::Result<()> {
+    use tokio::io::AsyncWriteExt;
 
     let (file_root, file_name) = if let Some((file_root, file_name)) = file_path.rsplit_once('/') {
         (file_root.to_string(), file_name.to_string())
@@ -356,7 +367,9 @@ pub(crate) async fn write(
         ("".to_string(), file_path.to_string())
     };
 
-    tokio::fs::create_dir_all(root.join(&file_root)).await?;
+    if !root.join(&file_root).exists() {
+        tokio::fs::create_dir_all(root.join(&file_root)).await?;
+    }
 
     Ok(
         tokio::fs::File::create(root.join(file_root).join(file_name))

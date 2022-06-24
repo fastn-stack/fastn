@@ -144,6 +144,8 @@ async fn serve_static(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
     }
 }
 
+// async fn serve_static(req: actix_web::HttpRequest) -> actix_web::HttpResponse {}
+
 #[actix_web::main]
 pub async fn serve(bind_address: &str, port: Option<u16>) -> std::io::Result<()> {
     if cfg!(feature = "controller") {
@@ -203,10 +205,17 @@ You can try without providing port, it will automatically pick unused port"#,
         bind_address,
         tcp_listener.local_addr()?.port()
     );
-    actix_web::HttpServer::new(|| {
-        actix_web::App::new().route("/{path:.*}", actix_web::web::get().to(serve_static))
-    })
-    .listen(tcp_listener)?
-    .run()
-    .await
+
+    let app = || {
+        if cfg!(feature = "remote") {
+            actix_web::App::new().route("/-/sync/", actix_web::web::post().to(crate::apis::sync))
+        } else {
+            actix_web::App::new().route("/{path:.*}", actix_web::web::get().to(serve_static))
+        }
+    };
+
+    actix_web::HttpServer::new(app)
+        .listen(tcp_listener)?
+        .run()
+        .await
 }

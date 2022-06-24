@@ -163,16 +163,35 @@ You can try without providing port, it will automatically pick unused port"#,
         }
     };
 
+    let app = || {
+        if cfg!(feature = "remote") {
+            let json_cfg = actix_web::web::JsonConfig::default()
+                .content_type(|mime| mime == mime_guess::mime::APPLICATION_JSON)
+                .limit(9862416400);
+            // .error_handler(|err, req| {
+            //     actix_web::error::InternalError::from_response(
+            //         err,
+            //         actix_web::HttpResponse::Conflict().into(),
+            //     )
+            //     .into()
+            // });
+
+            actix_web::App::new()
+                .app_data(json_cfg)
+                .route("/-/sync/", actix_web::web::post().to(crate::apis::sync))
+        } else {
+            actix_web::App::new().route("/{path:.*}", actix_web::web::get().to(serve_static))
+        }
+    };
+
     println!("### Server Started ###");
     println!(
         "Go to: http://{}:{}",
         bind_address,
         tcp_listener.local_addr()?.port()
     );
-    actix_web::HttpServer::new(|| {
-        actix_web::App::new().route("/{path:.*}", actix_web::web::get().to(serve_static))
-    })
-    .listen(tcp_listener)?
-    .run()
-    .await
+    actix_web::HttpServer::new(app)
+        .listen(tcp_listener)?
+        .run()
+        .await
 }

@@ -7,6 +7,7 @@ extern crate lazy_static;
 pub(crate) mod utils;
 
 // Temp comment
+mod apis;
 mod auto_import;
 mod commands;
 mod config;
@@ -43,7 +44,7 @@ pub use render::render;
 pub(crate) use snapshot::Snapshot;
 pub(crate) use tracker::Track;
 pub(crate) use translation::{TranslatedDocument, TranslationData};
-pub(crate) use utils::{copy_dir_all, get_timestamp_nanosecond};
+pub(crate) use utils::{copy_dir_all, timestamp_nanosecond};
 pub(crate) use version::Version;
 
 pub const PACKAGE_INFO_INTERFACE: &str = "fifthtry.github.io/package-info";

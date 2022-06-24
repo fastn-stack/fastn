@@ -4,30 +4,35 @@ pub struct Snapshot {
     pub timestamp: u128,
 }
 
-pub(crate) async fn get_latest_snapshots(
-    path: &camino::Utf8PathBuf,
+pub(crate) async fn resolve_snapshots(
+    content: &str,
 ) -> fpm::Result<std::collections::BTreeMap<String, u128>> {
-    let mut snapshots = std::collections::BTreeMap::new();
-    let latest_file_path = path.join(".history/.latest.ftd");
-    if !latest_file_path.exists() {
-        // TODO: should we error out here?
-        return Ok(snapshots);
-    }
-
     let lib = fpm::FPMLibrary::default();
-    let doc = std::fs::read_to_string(&latest_file_path)?;
-    let b = match fpm::doc::parse_ftd(".latest.ftd", doc.as_str(), &lib) {
+    let b = match fpm::doc::parse_ftd(".latest.ftd", content, &lib) {
         Ok(v) => v,
         Err(e) => {
-            eprintln!("failed to parse {}: {:?}", latest_file_path, &e);
+            eprintln!("failed to parse .latest.ftd: {:?}", &e);
             todo!();
         }
     };
-    let snapshot_list: Vec<fpm::Snapshot> = b.get("fpm#snapshot")?;
-    for snapshot in snapshot_list {
-        snapshots.insert(snapshot.filename, snapshot.timestamp);
+    let snapshots: Vec<fpm::Snapshot> = b.get("fpm#snapshot")?;
+    Ok(snapshots
+        .into_iter()
+        .map(|v| (v.filename, v.timestamp))
+        .collect())
+}
+
+pub(crate) async fn get_latest_snapshots(
+    path: &camino::Utf8PathBuf,
+) -> fpm::Result<std::collections::BTreeMap<String, u128>> {
+    let latest_file_path = path.join(".history/.latest.ftd");
+    if !latest_file_path.exists() {
+        // TODO: should we error out here?
+        return Ok(Default::default());
     }
-    Ok(snapshots)
+
+    let doc = std::fs::read_to_string(&latest_file_path)?;
+    resolve_snapshots(&doc).await
 }
 
 pub(crate) async fn create_latest_snapshots(

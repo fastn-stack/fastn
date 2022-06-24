@@ -355,10 +355,11 @@ pub(crate) async fn process_ftd(
         .unwrap_or(&config.package);
 
     if main.id.eq("FPM.ftd") {
-        std::fs::copy(
+        tokio::fs::copy(
             config.root.join(main.id.as_str()),
             config.root.join(".build").join(main.id.as_str()),
-        )?;
+        )
+        .await?;
     }
 
     let main = {
