@@ -2338,6 +2338,220 @@ fn assert_no_extra_properties(
     Ok(())
 }
 
+pub fn takes_caption(arg: &std::collections::BTreeMap<String, ftd::p2::Kind>) -> bool {
+    for (name, kind) in arg.iter() {
+        let mut inner_kind = kind.list_kind();
+        inner_kind = inner_kind.inner();
+
+        if name.eq("value") {
+            return true;
+        }
+
+        if let ftd::p2::Kind::String { caption, .. } = inner_kind {
+            if *caption {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+pub fn takes_body(arg: &std::collections::BTreeMap<String, ftd::p2::Kind>) -> bool {
+    for (name, kind) in arg.iter() {
+        let mut inner_kind = kind.list_kind();
+        inner_kind = inner_kind.inner();
+
+        if name.eq("body") {
+            return true;
+        }
+
+        if let ftd::p2::Kind::String { caption, body, .. } = inner_kind {
+            if *body {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+pub fn check_caption_body(
+    thing: &ftd::p2::Thing,
+    doc: &ftd::p2::TDoc,
+    root_arguments: &std::collections::BTreeMap<String, ftd::p2::Kind>,
+    arguments: &std::collections::BTreeMap<String, ftd::p2::Kind>,
+    header: &ftd::p1::Header,
+    caption: &Option<String>,
+    body: &Option<(usize, String)>,
+    line_number: usize,
+) -> ftd::p1::Result<()> {
+    let mut body_pass = false;
+    let mut caption_pass = false;
+
+    let mut body_ln: Option<usize> = None;
+    let has_caption: bool = caption.is_some();
+    let has_body: bool = body.is_some();
+
+    match body {
+        Some(b) => body_ln = Some(b.0),
+        None => {}
+    }
+
+    if let ftd::p2::Thing::Component(c) = thing {
+        let header_list = &header.0;
+
+        let mut all_arguments = std::collections::BTreeMap::new();
+        all_arguments.extend(arguments.clone());
+        all_arguments.extend(c.arguments.clone());
+        all_arguments.extend(root_arguments.clone());
+
+        // println!("arguments = {:?}", arguments.keys());
+        // println!("root arg = {:?}", root_arguments.keys());
+        // println!("comp arg = {:?}", c.arguments.keys());
+
+        for (ln, key, val) in header_list.iter() {
+            if key.contains("if")
+                || (key.starts_with('$') && key.ends_with('$'))
+                || key.starts_with('/')
+                || key.starts_with('>')
+            {
+                continue;
+            }
+
+            let has_value = !val.is_empty();
+            let key_tokens: Vec<&str> = key.rsplit(' ').collect();
+            let identifier = key_tokens[0];
+
+            //println!("key = {}, identifier = {},  val = {}", key, identifier, val);
+
+            let kind = &all_arguments[identifier];
+
+            if let ftd::p2::Kind::String { caption, body, .. } = kind {
+                if *caption && *body {
+                    // (caption or body) or (body or caption) same
+                    // (check if only one of (caption/body/header_value) is passed)
+
+                    // check cases (caption & body) | (body & header) | (caption & header)
+                    if (has_caption && has_body)
+                        || (has_caption && has_value)
+                        || (has_body && has_value)
+                    {
+                        return Err(ftd::p1::Error::ParseError {
+                            message: format!(
+                                "Pass either body or caption or header value for header {}",
+                                key
+                            ),
+                            doc_id: doc.name.to_string(),
+                            line_number: *ln,
+                        });
+                    }
+
+                    if !(has_caption || has_body || has_value) {
+                        return Err(ftd::p1::Error::ParseError {
+                            message: format!(
+                                "body or caption none of them are passed for header {}",
+                                key
+                            ),
+                            doc_id: doc.name.to_string(),
+                            line_number: *ln,
+                        });
+                    }
+
+                    if has_caption {
+                        caption_pass = true;
+                    }
+
+                    if has_body {
+                        body_pass = true;
+                    }
+                }
+
+                if *caption && !*body {
+                    // (caption)
+                    // (check if only one of (caption/header_value) is passed)
+
+                    if has_caption && has_value {
+                        return Err(ftd::p1::Error::ParseError {
+                            message: format!(
+                                "Pass either caption or header value for header {}",
+                                key
+                            ),
+                            doc_id: doc.name.to_string(),
+                            line_number: *ln,
+                        });
+                    }
+
+                    if !(has_caption || has_value) {
+                        return Err(ftd::p1::Error::ParseError {
+                            message: format!(
+                                "caption or header value none of them are passed for header {}",
+                                key
+                            ),
+                            doc_id: doc.name.to_string(),
+                            line_number: *ln,
+                        });
+                    }
+
+                    if has_caption {
+                        caption_pass = true;
+                    }
+                }
+
+                if *body && !*caption {
+                    // (body)
+                    // (check if only one of (body/header_value) is passed)
+
+                    if has_body && has_value {
+                        return Err(ftd::p1::Error::ParseError {
+                            message: format!("Pass either body or header value for header {}", key),
+                            doc_id: doc.name.to_string(),
+                            line_number: *ln,
+                        });
+                    }
+
+                    if !(has_body || has_value) {
+                        return Err(ftd::p1::Error::ParseError {
+                            message: format!(
+                                "body or header value none of them are passed for header {}",
+                                key
+                            ),
+                            doc_id: doc.name.to_string(),
+                            line_number: *ln,
+                        });
+                    }
+
+                    if has_body {
+                        body_pass = true;
+                    }
+                }
+            }
+
+            if caption_pass && body_pass {
+                break;
+            }
+        }
+
+        if !(caption_pass && body_pass) {
+            if has_body && !body_pass && !takes_body(root_arguments) {
+                return Err(ftd::p1::Error::ParseError {
+                    message: "body passed with no header accepting it !!".to_string(),
+                    doc_id: doc.name.to_string(),
+                    line_number: body_ln.unwrap() as usize,
+                });
+            }
+
+            if has_caption && !caption_pass && !takes_caption(root_arguments) {
+                return Err(ftd::p1::Error::ParseError {
+                    message: "caption passed with no header accepting it !!".to_string(),
+                    doc_id: doc.name.to_string(),
+                    line_number,
+                });
+            }
+        }
+    }
+
+    Ok(())
+}
+
 #[allow(clippy::too_many_arguments)]
 pub fn read_properties(
     line_number: usize,
@@ -2362,17 +2576,28 @@ pub fn read_properties(
         root_arguments
     };
 
-    dbg!("hello", &root_arguments);
+    //println!("root = {}", root);
+    //println!("caption = {:?}", caption);
+    //println!("body = {:?}", body);
 
-    // Creating examples/testing.ftd
-    // Added dbg!()
-    // cargo run testing
-    // 1. Add lots of dbg!()
-    // 2. Check that if there's any argument in root_arguments that expects caption or body,
-    // 3. if caption is not expected and caption is passed:
-    //      then: throw error
-    // 3. if body is not expected and body is passed:
-    //      then: throw error
+    // println!("arguments = {:?}", arguments.keys());
+    // println!("root arg = {:?}", &root_arguments.keys());
+
+    if doc.bag.contains_key(root) {
+        let thing = &doc.bag[root];
+
+        // println!("IGI {:?}", thing);
+        check_caption_body(
+            thing,
+            doc,
+            &root_arguments,
+            arguments,
+            p1,
+            caption,
+            body,
+            line_number,
+        )?;
+    }
 
     for (name, kind) in root_arguments.iter() {
         if let Some(prop) = root_properties.get(name) {
