@@ -27,6 +27,7 @@ pub struct Markups {
     pub style: Style,
     pub font: Option<Type>,
     pub line_clamp: Option<i64>,
+    pub text_indent: Option<Length>,
     pub children: Vec<Markup>,
 }
 
@@ -40,6 +41,7 @@ impl Markups {
             style: self.style.to_owned(),
             font: self.font.to_owned(),
             line_clamp: self.line_clamp,
+            text_indent: self.text_indent.to_owned(),
         }
     }
 }
@@ -2535,6 +2537,7 @@ pub struct Text {
     pub line: bool,
     pub common: Common,
     pub text_align: TextAlign,
+    pub text_indent: Option<Length>,
     pub style: Style,
     pub font: Option<Type>,
     pub line_clamp: Option<i64>,
@@ -2569,6 +2572,7 @@ pub struct Code {
     pub style: Style,
     pub font: Option<Type>,
     pub line_clamp: Option<i64>,
+    pub text_indent: Option<Length>,
 }
 
 #[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
