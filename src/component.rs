@@ -2419,9 +2419,6 @@ pub fn check_caption_body(
     let has_caption: bool = caption.is_some();
     let has_body: bool = body.is_some();
 
-    // println!("has caption = {}", has_caption);
-    // println!("has body = {}", has_body);
-
     match body {
         Some(b) => body_ln = Some(b.0),
         None => {}
@@ -2435,10 +2432,6 @@ pub fn check_caption_body(
         all_arguments.extend(c.arguments.clone());
         all_arguments.extend(root_arguments.clone());
 
-        // println!("arguments = {:?}", arguments.keys());
-        // println!("root arg = {:?}", root_arguments.keys());
-        // println!("comp arg = {:?}", c.arguments.keys());
-
         for (ln, key, val) in header_list.iter() {
             if key.contains("if")
                 || (key.starts_with('$') && key.ends_with('$'))
@@ -2451,8 +2444,6 @@ pub fn check_caption_body(
             let has_value = !val.is_empty();
             let key_tokens: Vec<&str> = key.rsplit(' ').collect();
             let identifier = key_tokens[0];
-
-            // println!("key = {}, identifier = {},  val = {}", key, identifier, val);
 
             let kind = &all_arguments[identifier];
 
@@ -2564,9 +2555,6 @@ pub fn check_caption_body(
             }
         }
 
-        // println!("caption pass = {}", caption_pass);
-        // println!("body pass = {}", body_pass);
-
         if !(caption_pass && body_pass) {
             if has_caption
                 && !caption_pass
@@ -2621,18 +2609,9 @@ pub fn read_properties(
         root_arguments
     };
 
-    // println!("root = {}", root);
-    // println!("caption = {:?}", caption);
-    // println!("body = {:?}", body);
-    // println!("fn name = {}", fn_name);
-
-    // println!("arguments = {:?}", arguments.keys());
-    // println!("root arg = {:?}", &root_arguments.keys());
-
     if doc.bag.contains_key(root) && root.ends_with(fn_name) {
         let thing = &doc.bag[root];
 
-        // println!("Checking root = {}", root);
         check_caption_body(
             thing,
             doc,
@@ -2644,6 +2623,7 @@ pub fn read_properties(
             line_number,
         )?;
     }
+
     for (name, kind) in root_arguments.iter() {
         if let Some(prop) = root_properties.get(name) {
             properties.insert(name.to_string(), prop.clone());
