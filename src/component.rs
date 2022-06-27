@@ -2354,11 +2354,12 @@ pub fn takes_caption(
 
         if let ftd::p2::Kind::String { caption, body, .. } = inner_kind {
             if *caption {
-                return if (*body && !has_body) || (!*body) {
+                // (*body && !has_body) || (!*body)
+                return if !*body || !has_body {
                     Ok(true)
                 } else {
                     return Err(ftd::p1::Error::ParseError {
-                        message: format!("pass either caption or body"),
+                        message: "pass either caption or body".to_string(),
                         doc_id: doc.name.to_string(),
                         line_number: line_number.unwrap(),
                     });
@@ -2366,7 +2367,7 @@ pub fn takes_caption(
             }
         }
     }
-    return Ok(false);
+    Ok(false)
 }
 
 pub fn takes_body(
@@ -2385,11 +2386,11 @@ pub fn takes_body(
 
         if let ftd::p2::Kind::String { caption, body, .. } = inner_kind {
             if *body {
-                return if (*caption && !has_caption) || (!*caption) {
+                return if !has_caption || !*caption {
                     Ok(true)
                 } else {
                     return Err(ftd::p1::Error::ParseError {
-                        message: format!("pass either caption or body"),
+                        message: "pass either caption or body".to_string(),
                         doc_id: doc.name.to_string(),
                         line_number,
                     });
@@ -2397,7 +2398,7 @@ pub fn takes_body(
             }
         }
     }
-    return Ok(false);
+    Ok(false)
 }
 
 #[allow(clippy::too_many_arguments)]
@@ -2440,9 +2441,9 @@ pub fn check_caption_body(
 
         for (ln, key, val) in header_list.iter() {
             if key.contains("if")
-                || (key.starts_with("$") && key.ends_with("$"))
-                || key.starts_with("/")
-                || key.starts_with(">")
+                || (key.starts_with('$') && key.ends_with('$'))
+                || key.starts_with('/')
+                || key.starts_with('>')
             {
                 continue;
             }
@@ -2585,7 +2586,7 @@ pub fn check_caption_body(
                 && !takes_body(arguments, has_caption, doc, line_number)?
             {
                 return Err(ftd::p1::Error::ParseError {
-                    message: format!("body passed with no header accepting it !!"),
+                    message: "body passed with no header accepting it !!".to_string(),
                     doc_id: doc.name.to_string(),
                     line_number: body_ln.unwrap() as usize,
                 });
