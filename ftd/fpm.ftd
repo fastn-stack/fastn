@@ -61,6 +61,16 @@ integer timestamp:
 -- snapshot-data list snapshot:
 
 
+-- record workspace-data:
+caption filename:
+integer base:
+integer conflicted:
+string workspace:
+
+
+-- workspace-data list workspace:
+
+
 
 -- record track-data:
 caption filename:

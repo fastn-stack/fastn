@@ -22,6 +22,7 @@ pub(crate) async fn resolve_snapshots(
         .collect())
 }
 
+// TODO: replace path with config
 pub(crate) async fn get_latest_snapshots(
     path: &camino::Utf8PathBuf,
 ) -> fpm::Result<std::collections::BTreeMap<String, u128>> {
@@ -56,4 +57,81 @@ pub(crate) async fn create_latest_snapshots(
     f.write_all(snapshot_data.as_bytes()).await?;
 
     Ok(())
+}
+
+/// Related to workspace
+
+#[derive(serde::Deserialize, Debug)]
+pub struct Workspace {
+    pub filename: String,
+    pub base: u128,
+    pub conflicted: u128,
+    pub workspace: String, // workspace type ours/theirs/conflicted
+}
+
+impl Workspace {
+    pub(crate) fn is_conflicted(&self) -> bool {
+        self.workspace.eq("conflicted")
+    }
+
+    pub(crate) fn set_abort(&mut self) {
+        self.workspace = "abort".to_string()
+    }
+
+    pub(crate) fn set_revert(&mut self) {
+        self.workspace = "revert".to_string()
+    }
+}
+
+pub(crate) async fn resolve_workspace(
+    content: &str,
+) -> fpm::Result<std::collections::BTreeMap<String, Workspace>> {
+    let lib = fpm::FPMLibrary::default();
+    let b = match fpm::doc::parse_ftd("workspace.ftd", content, &lib) {
+        Ok(v) => v,
+        Err(e) => {
+            eprintln!("failed to parse .latest.ftd: {:?}", &e);
+            todo!();
+        }
+    };
+    let snapshots: Vec<fpm::snapshot::Workspace> = b.get("fpm#workspace")?;
+    Ok(snapshots
+        .into_iter()
+        .map(|v| (v.filename.to_string(), v))
+        .collect())
+}
+
+pub(crate) async fn create_workspace(
+    config: &fpm::Config,
+    workspaces: &[Workspace],
+) -> fpm::Result<()> {
+    let mut data = vec!["-- import: fpm".to_string()];
+
+    for workspace in workspaces {
+        data.push(format!(
+            "-- fpm.workspace: {}\nbase: {}\nconflicted: {}\nworkspace: {}\n",
+            workspace.filename, workspace.base, workspace.conflicted, workspace.workspace
+        ));
+    }
+
+    fpm::utils::update(
+        &config.root.join(".fpm"),
+        "workspace.ftd",
+        data.join("\n\n").as_bytes(),
+    )
+    .await?;
+    Ok(())
+}
+
+pub(crate) async fn get_workspace(
+    config: &fpm::Config,
+) -> fpm::Result<std::collections::BTreeMap<String, Workspace>> {
+    let latest_file_path = config.root.join(".fpm").join("workspace.ftd");
+    if !latest_file_path.exists() {
+        // TODO: should we error out here?
+        return Ok(Default::default());
+    }
+
+    let doc = tokio::fs::read_to_string(&latest_file_path).await?;
+    resolve_workspace(&doc).await
 }

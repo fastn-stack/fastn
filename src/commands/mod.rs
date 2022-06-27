@@ -1,7 +1,10 @@
+pub(crate) mod abort_merge;
 pub(crate) mod build;
 pub(crate) mod build2;
 pub(crate) mod diff;
+pub(crate) mod mark_resolve;
 pub(crate) mod mark_upto_date;
+pub(crate) mod revert;
 pub(crate) mod serve;
 pub(crate) mod serve2;
 pub(crate) mod start_project;

@@ -17,11 +17,14 @@ FLAGS:
     -v               Sets the level of verbosity
 
 SUBCOMMANDS:
+    abort-merge           Aborts the remote changes
     build                 Build static site from this fpm package
     check                 Check if everything is fine with current fpm package
     diff                  Show un-synced changes to files in this fpm package
     help                  Prints this message or the help of the given subcommand(s)
+    mark-resolve          Marks the conflicted file as resolved
     mark-upto-date        Marks file as up to date.
+    revert                Reverts the local changes
     serve                 Create an http server and serves static files
     start-project         Creates a template ftd project at the target location with the given project name
     start-tracking        Add a tracking relation between two files

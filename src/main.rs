@@ -52,6 +52,18 @@ async fn main() -> fpm::Result<()> {
         .await?;
     }
 
+    if let Some(mark_resolve) = matches.subcommand_matches("mark-resolve") {
+        fpm::mark_resolve(&config, mark_resolve.value_of("path").unwrap()).await?;
+    }
+
+    if let Some(abort_merge) = matches.subcommand_matches("abort-merge") {
+        fpm::abort_merge(&config, abort_merge.value_of("path").unwrap()).await?;
+    }
+
+    if let Some(revert) = matches.subcommand_matches("revert") {
+        fpm::revert(&config, revert.value_of("path").unwrap()).await?;
+    }
+
     if let Some(sync) = matches.subcommand_matches("sync") {
         if let Some(source) = sync.values_of("source") {
             let sources = source.map(|v| v.to_string()).collect();
@@ -159,6 +171,24 @@ fn app(authors: &'static str, version: &'static str) -> clap::App<'static, 'stat
                         .takes_value(false)
                         .required(false),
                 )
+                .version(env!("CARGO_PKG_VERSION")),
+        )
+        .subcommand(
+        clap::SubCommand::with_name("mark-resolve")
+            .about("Marks the conflicted file as resolved")
+            .arg(clap::Arg::with_name("path").required(true))
+            .version(env!("CARGO_PKG_VERSION")),
+        )
+        .subcommand(
+            clap::SubCommand::with_name("abort-merge")
+                .about("Aborts the remote changes")
+                .arg(clap::Arg::with_name("path").required(true))
+                .version(env!("CARGO_PKG_VERSION")),
+        )
+        .subcommand(
+            clap::SubCommand::with_name("revert")
+                .about("Reverts the local changes")
+                .arg(clap::Arg::with_name("path").required(true))
                 .version(env!("CARGO_PKG_VERSION")),
         )
         .subcommand(

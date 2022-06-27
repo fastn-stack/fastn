@@ -1,7 +1,7 @@
 use fpm::Snapshot;
 use itertools::Itertools;
 
-#[derive(serde::Serialize, serde::Deserialize, std::fmt::Debug)]
+#[derive(serde::Serialize, serde::Deserialize, std::fmt::Debug, PartialEq)]
 pub enum SyncStatus {
     Conflict,
     NoConflict,
@@ -192,6 +192,14 @@ pub(crate) async fn sync_worker(request: SyncRequest) -> fpm::Result<SyncRespons
                                 fpm::utils::history_path(path, config.root.as_str(), &timestamp);
                             tokio::fs::copy(config.root.join(path), snapshot_path).await?;
                             snapshots.insert(path.to_string(), timestamp);
+                            synced_files.insert(
+                                path.to_string(),
+                                SyncResponseFile::Update {
+                                    path: path.to_string(),
+                                    status: SyncStatus::NoConflict,
+                                    content: data.as_bytes().to_vec(),
+                                },
+                            );
                         }
                         Err(data) => {
                             // Return conflicted content
@@ -293,11 +301,11 @@ async fn client_current_files(
     // Deleted files
 
     let diff = client_snapshot
-        .keys()
-        .filter(|path| !server_snapshot.contains_key(path.as_str()));
+        .iter()
+        .filter(|(path, _)| !server_snapshot.contains_key(path.as_str()));
 
     // If already in synced files need to handle that case
-    for path in diff {
+    for (path, _) in diff {
         if !synced_files.contains_key(path) {
             synced_files.insert(
                 path.clone(),

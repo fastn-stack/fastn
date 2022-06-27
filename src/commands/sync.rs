@@ -1,4 +1,6 @@
 use crate::apis::sync::SyncResponseFile;
+use fpm::Config;
+use itertools::Itertools;
 
 pub async fn sync(config: &fpm::Config, files: Option<Vec<String>>) -> fpm::Result<()> {
     // Read All the Document
@@ -27,17 +29,19 @@ pub async fn sync(config: &fpm::Config, files: Option<Vec<String>>) -> fpm::Resu
         .await
         .unwrap_or_else(|_| "".to_string());
 
-    let changed_files = get_changed_files(&documents, &snapshots).await?;
+    let changed_files = get_changed_files(config, &documents, &snapshots).await?;
     let request = fpm::apis::sync::SyncRequest {
         files: changed_files,
         package_name: config.package.name.to_string(),
         latest_ftd,
     };
-    let response = send_to_fpm_serve(request).await?;
+    let response = send_to_fpm_serve(&request).await?;
     update_current_directory(config, &response.files).await?;
     update_history(config, &response.dot_history, &response.latest_ftd).await?;
+    on_conflict(config, &response, &request).await?;
+    collect_garbage(config).await?;
 
-    // Tumhe nahi chalana hai mujhe to, koi aur chalaye to chalaye
+    // Tumhe chalana hi nahi chahte hai hum, koi aur chalaye to chalaye
     if false {
         let timestamp = fpm::timestamp_nanosecond();
         let mut modified_files = vec![];
@@ -91,6 +95,7 @@ pub async fn sync(config: &fpm::Config, files: Option<Vec<String>>) -> fpm::Resu
 }
 
 async fn get_changed_files(
+    config: &fpm::Config,
     files: &[fpm::File],
     snapshots: &std::collections::BTreeMap<String, u128>,
 ) -> fpm::Result<Vec<fpm::apis::sync::SyncRequestFile>> {
@@ -100,8 +105,13 @@ async fn get_changed_files(
     // Get Added Files -> If files does not present in latest snapshot
     // Get Deleted Files -> If file present in latest.ftd and not present in files directory
 
+    let workspace = fpm::snapshot::get_workspace(config).await?;
     let mut changed_files = Vec::new();
     for document in files.iter() {
+        match workspace.get(&document.get_id()) {
+            Some(workspace) if workspace.is_conflicted() => continue,
+            _ => {}
+        }
         if let Some(timestamp) = snapshots.get(&document.get_id()) {
             let snapshot_file_path =
                 fpm::utils::history_path(&document.get_id(), &document.get_base_path(), timestamp);
@@ -189,7 +199,7 @@ async fn write(
 }
 
 async fn send_to_fpm_serve(
-    data: fpm::apis::sync::SyncRequest,
+    data: &fpm::apis::sync::SyncRequest,
 ) -> fpm::Result<fpm::apis::sync::SyncResponse> {
     #[derive(serde::Deserialize, std::fmt::Debug)]
     struct ApiResponse {
@@ -254,5 +264,100 @@ async fn update_history(
         fpm::utils::update(&config.history_dir(), file.path.as_str(), &file.content).await?;
     }
     fpm::utils::update(&config.history_dir(), ".latest.ftd", latest_ftd.as_bytes()).await?;
+    Ok(())
+}
+
+// Steps
+// create .fpm/workspace.ftd
+// create .fpm/conflict directory
+// If conflict occur
+// - In file content will be with conflict markers
+// - In conflict/<file.ftd> will contain client's content
+// - In .fpm/workspace.ftd will have entry of index.ftd with data
+// - name: file_name
+// - base: last successful merge version from request `latest.ftd`
+// - conflicted_version: from response `latest.ftd`
+// - workspace: ours/theirs/conflicted
+
+fn get_file_content<'a>(
+    file_path: &'a str,
+    files: &'a [fpm::apis::sync::SyncRequestFile],
+) -> Option<&'a Vec<u8>> {
+    for file in files {
+        match file {
+            fpm::apis::sync::SyncRequestFile::Add { path, content }
+            | fpm::apis::sync::SyncRequestFile::Update { path, content } => {
+                if file_path.eq(path) {
+                    return Some(content);
+                }
+            }
+            _ => {}
+        }
+    }
+    None
+}
+
+async fn on_conflict(
+    config: &fpm::Config,
+    response: &fpm::apis::sync::SyncResponse,
+    request: &fpm::apis::sync::SyncRequest,
+) -> fpm::Result<()> {
+    let server_snapshot = fpm::snapshot::resolve_snapshots(&response.latest_ftd).await?;
+    let client_snapshot = fpm::snapshot::resolve_snapshots(&request.latest_ftd).await?;
+    let mut workspace = fpm::snapshot::get_workspace(config).await?;
+
+    fn error(msg: &str) -> fpm::Error {
+        fpm::Error::APIResponseError(msg.to_string())
+    }
+
+    for file in response.files.iter() {
+        match file {
+            SyncResponseFile::Update { path, status, .. }
+            | SyncResponseFile::Add { path, status, .. }
+            | SyncResponseFile::Delete { path, status, .. } => {
+                if fpm::apis::sync::SyncStatus::Conflict.eq(status) {
+                    let content = get_file_content(path, request.files.as_slice())
+                        .ok_or_else(|| error("File should be available in request file"))?;
+                    fpm::utils::update(&config.conflicted_dir(), path, content).await?;
+                    workspace.insert(
+                        path.to_string(),
+                        fpm::snapshot::Workspace {
+                            filename: path.to_string(),
+                            base: *client_snapshot
+                                .get(path)
+                                .ok_or_else(|| error("File should be available in request file"))?,
+                            conflicted: *server_snapshot
+                                .get(path)
+                                .ok_or_else(|| error("File should be available in request file"))?,
+                            workspace: "conflicted".to_string(),
+                        },
+                    );
+                }
+            }
+        }
+    }
+
+    fpm::snapshot::create_workspace(config, workspace.into_values().collect_vec().as_slice())
+        .await?;
+
+    Ok(())
+}
+
+async fn collect_garbage(config: &Config) -> fpm::Result<()> {
+    let mut workspaces = fpm::snapshot::get_workspace(config).await?;
+
+    let paths = workspaces
+        .iter()
+        .filter(|(_, workspace)| !workspace.is_conflicted())
+        .map(|(path, _)| path.to_string())
+        .collect_vec();
+
+    for path in paths {
+        tokio::fs::remove_file(config.conflicted_dir().join(&path)).await?;
+        workspaces.remove(&path);
+    }
+
+    fpm::snapshot::create_workspace(config, workspaces.into_values().collect_vec().as_slice())
+        .await?;
     Ok(())
 }

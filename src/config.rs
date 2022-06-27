@@ -76,6 +76,14 @@ impl Config {
         self.root.join(".history")
     }
 
+    pub fn fpm_dir(&self) -> camino::Utf8PathBuf {
+        self.root.join(".fpm")
+    }
+
+    pub fn conflicted_dir(&self) -> camino::Utf8PathBuf {
+        self.fpm_dir().join("conflicted")
+    }
+
     /// every package's `.history` contains a file `.latest.ftd`. It looks a bit linke this:
     ///
     /// ```ftd
