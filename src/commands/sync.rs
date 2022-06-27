@@ -1,4 +1,5 @@
 use crate::apis::sync::SyncResponseFile;
+use fpm::apis::sync::SyncStatus;
 use fpm::Config;
 use itertools::Itertools;
 
@@ -242,7 +243,20 @@ async fn update_current_directory(
             SyncResponseFile::Add { path, content, .. } => {
                 fpm::utils::update(&config.root, path, content).await?;
             }
-            SyncResponseFile::Update { path, content, .. } => {
+            SyncResponseFile::Update {
+                path,
+                content,
+                status,
+            } => {
+                if SyncStatus::ClientDeletedServerEdit.eq(status) {
+                    println!("ClientDeletedServerEdit: {}", path);
+                }
+                if SyncStatus::ClientEditedServerDelete.eq(status) {
+                    println!("ClientEditedServerDelete: {}", path);
+                }
+                if SyncStatus::Conflict.eq(status) {
+                    println!("Conflict: {}", path);
+                }
                 fpm::utils::update(&config.root, path, content).await?;
             }
             SyncResponseFile::Delete { path, .. } => {
