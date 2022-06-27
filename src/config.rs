@@ -527,11 +527,13 @@ impl Config {
         if id.contains("-/") {
             let url = id.trim_end_matches("/index.html").trim_matches('/');
             let extension = if matches!(file, fpm::File::Markdown(_)) {
-                "index.md".to_string()
+                "/index.md".to_string()
+            } else if matches!(file, fpm::File::Ftd(_)) {
+                "/index.ftd".to_string()
             } else {
-                "index.ftd".to_string()
+                "".to_string()
             };
-            file.set_id(format!("{}/{}", url, extension).as_str());
+            file.set_id(format!("{}{}", url, extension).as_str());
         }
         Ok(file)
     }
