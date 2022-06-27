@@ -179,8 +179,7 @@ pub(crate) async fn sync_worker(request: SyncRequest) -> fpm::Result<SyncRespons
                     let ours_path =
                         fpm::utils::history_path(path, config.root.as_str(), snapshot_timestamp);
                     let theirs_content = tokio::fs::read_to_string(ours_path).await?;
-                    let ours_content = String::from_utf8(content.clone())
-                        .map_err(|e| fpm::Error::APIResponseError(e.to_string()))?;
+                    let ours_content = String::from_utf8(content.clone())?;
 
                     match diffy::MergeOptions::new()
                         .set_conflict_style(diffy::ConflictStyle::Merge)

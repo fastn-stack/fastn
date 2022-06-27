@@ -196,3 +196,6 @@ You can try without providing port, it will automatically pick unused port"#,
         .run()
         .await
 }
+
+// cargo install --features controller --path=.
+// FPM_CONTROLLER=http://127.0.0.1:8000 FPM_INSTANCE_ID=12345 fpm serve 8001

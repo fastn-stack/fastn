@@ -34,6 +34,7 @@ struct ApiResponse<T> {
 #[derive(serde::Deserialize, Debug)]
 struct PackageResult {
     package: String,
+    #[allow(dead_code)]
     base: String,
     git: String,
 }
@@ -48,31 +49,46 @@ pub async fn resolve_dependencies(fpm_instance: String, fpm_controller: String) 
     // Need to execute shell commands from rust
     // git_url https format: https://github.com/<user>/<repo>.git
 
-    let package =
-        fpm::Package::new(package_response.package.as_str()).with_base(package_response.base);
+    // let package =
+    //     fpm::Package::new(package_response.package.as_str()).with_base(package_response.base);
+    //
+    // package.unzip_package().await?;
 
-    package.unzip_package().await?;
-    fpm::Config::read(None).await?;
-
-    /*let out = std::process::Command::new("git")
-           .arg("clone")
-           .arg(git_url)
-           .output()
-           .expect("unable to execute git clone command");
+    println!("Cloning git repository...");
+    let out = match std::process::Command::new("git")
+        .arg("clone")
+        .args(["--depth", "1"])
+        .arg(package_response.git)
+        .arg(".")
+        .output()
+    {
+        Ok(output) => output,
+        Err(e) => return Err(fpm::Error::APIResponseError(e.to_string())),
+    };
 
     if out.status.success() {
-    // By this time the cloned repo should be available in the current directory
-    println!("Git cloning successful for the package {}", package_name);
-    // Resolve dependencies by reading the FPM.ftd using config.read()
-    // Assuming package_name and repo name are identical
-    let _config = fpm::Config::read(Some(package_name.to_string())).await?;
-    }*/
+        // By this time the cloned repo should be available in the current directory
+        println!(
+            "Git cloning successful for the package {}",
+            package_response.package
+        );
+        // Resolve dependencies by reading the FPM.ftd using config.read()
+        // Assuming package_name and repo name are identical
+        fpm::Config::read2(None, false).await?;
+    } else {
+        return Err(fpm::Error::APIResponseError(format!(
+            "Package {} Cloning failed: {}",
+            package_response.package,
+            String::from_utf8(out.stderr)?
+        )));
+    }
 
     // Once the dependencies are resolved for the package
     // then call fpm_ready API to ensure that the controller service is now ready
 
     // response from fpm_ready API
 
+    println!("calling fpm ready");
     fpm_ready(fpm_instance.as_str(), fpm_controller.as_str()).await?;
 
     Ok(())
@@ -126,11 +142,30 @@ async fn get_package(fpm_instance: &str, fpm_controller: &str) -> fpm::Result<Pa
 
 /// Git commit hash needs to be computed before making a call to the fpm_ready API
 async fn fpm_ready(fpm_instance: &str, fpm_controller: &str) -> fpm::Result<()> {
-    let git_commit = "<dummy-git-commit-hash-xxx123>";
+    let latest_commit = || -> fpm::Result<String> {
+        let out = match std::process::Command::new("git")
+            .arg("rev-parse")
+            .arg("HEAD")
+            .output()
+        {
+            Ok(output) => output,
+            Err(e) => return Err(fpm::Error::APIResponseError(e.to_string())),
+        };
+
+        if !out.status.success() {
+            // By this time the cloned repo should be available in the current directory
+            println!("Git cloning successful for the package",);
+            return Err(fpm::Error::APIResponseError(String::from_utf8(out.stderr)?));
+        }
+
+        Ok(String::from_utf8(out.stdout)?.trim().to_string())
+    };
 
     let controller_api = format!(
         "{}/v1/fpm/fpm-ready?ec2_instance_id={}&hash={}",
-        fpm_controller, fpm_instance, git_commit
+        fpm_controller,
+        fpm_instance,
+        latest_commit()?
     );
 
     let url = url::Url::parse(controller_api.as_str())?;

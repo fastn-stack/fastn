@@ -426,6 +426,9 @@ pub enum Error {
 
     #[error("URLParseError: {}", _0)]
     UrlParseError(#[from] url::ParseError),
+
+    #[error("UTF8Error: {}", _0)]
+    UTF8Error(#[from] std::string::FromUtf8Error),
 }
 
 pub type Result<T> = std::result::Result<T, Error>;

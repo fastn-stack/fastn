@@ -347,8 +347,6 @@ impl Config {
             downloaded_assets: Default::default(),
         };
 
-        let asset_documents = config.get_assets("/").await?;
-
         config.sitemap = {
             let sitemap = match package.translation_of.as_ref() {
                 Some(translation) => translation,
@@ -362,7 +360,7 @@ impl Config {
                         data.as_str(),
                         &package,
                         &mut config,
-                        &asset_documents,
+                        &Default::default(),
                         "/",
                         true,
                     )
