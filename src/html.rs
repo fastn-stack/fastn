@@ -948,8 +948,10 @@ impl ftd::TextBlock {
             n.style
                 .insert(s("-webkit-box-orient"), "vertical".to_string());
         }
-
-        // TODO: text styles
+        if let Some(indent) = &self.text_indent {
+            let (key, value) = length(indent, "text-indent");
+            n.style.insert(s(key.as_str()), value);
+        }
         n
     }
 }

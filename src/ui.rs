@@ -2558,6 +2558,7 @@ pub struct TextBlock {
     pub font: Vec<NamedFont>,
     pub line_height: Option<i64>,
     pub line_clamp: Option<i64>,
+    pub text_indent: Option<Length>,
 }
 
 #[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
