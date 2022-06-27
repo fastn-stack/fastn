@@ -35,6 +35,7 @@ struct ApiResponse<T> {
 struct PackageResult {
     package: String,
     base: String,
+    git: String,
 }
 
 pub async fn resolve_dependencies(fpm_instance: String, fpm_controller: String) -> fpm::Result<()> {
@@ -89,7 +90,7 @@ pub async fn resolve_dependencies(fpm_instance: String, fpm_controller: String) 
 /// }
 async fn get_package(fpm_instance: &str, fpm_controller: &str) -> fpm::Result<PackageResult> {
     let controller_api = format!(
-        "{}/v1/fpm/get-package?ec2_reservation={}",
+        "{}/v1/fpm/get-package?ec2_instance_id={}",
         fpm_controller, fpm_instance
     );
 
@@ -128,7 +129,7 @@ async fn fpm_ready(fpm_instance: &str, fpm_controller: &str) -> fpm::Result<()> 
     let git_commit = "<dummy-git-commit-hash-xxx123>";
 
     let controller_api = format!(
-        "{}/v1/fpm/fpm-ready?ec2_reservation={}&hash={}",
+        "{}/v1/fpm/fpm-ready?ec2_instance_id={}&hash={}",
         fpm_controller, fpm_instance, git_commit
     );
 
