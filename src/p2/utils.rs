@@ -1232,6 +1232,9 @@ pub fn reorder(
     let mut list_or_var = vec![];
     let mut var_types = vec![];
     for (idx, p1) in p1.iter().enumerate() {
+        if p1.is_commented {
+            continue;
+        }
         let var_data =
             ftd::variable::VariableData::get_name_kind(&p1.name, doc, p1.line_number, &var_types);
         if p1.name == "import"

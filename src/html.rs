@@ -948,8 +948,10 @@ impl ftd::TextBlock {
             n.style
                 .insert(s("-webkit-box-orient"), "vertical".to_string());
         }
-
-        // TODO: text styles
+        if let Some(indent) = &self.text_indent {
+            let (key, value) = length(indent, "text-indent");
+            n.style.insert(s(key.as_str()), value);
+        }
         n
     }
 }
@@ -986,6 +988,11 @@ impl ftd::Code {
             n.style.insert(s("-webkit-line-clamp"), format!("{}", p));
             n.style
                 .insert(s("-webkit-box-orient"), "vertical".to_string());
+        }
+
+        if let Some(p) = &self.text_indent {
+            let (key, value) = length(p, "text-indent");
+            n.style.insert(s(key.as_str()), value);
         }
 
         n
@@ -1085,6 +1092,11 @@ impl ftd::Markups {
             n.style.insert(s("-webkit-line-clamp"), format!("{}", p));
             n.style
                 .insert(s("-webkit-box-orient"), "vertical".to_string());
+        }
+
+        if let Some(p) = &self.text_indent {
+            let (key, value) = length(p, "text-indent");
+            n.style.insert(s(key.as_str()), value);
         }
 
         if self.children.is_empty() {
