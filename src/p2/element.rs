@@ -976,6 +976,10 @@ pub fn text_block_from_properties(
         font,
         line_height: ftd::p2::utils::int_optional("line-height", properties, doc.name, 0)?,
         line_clamp: ftd::p2::utils::int_optional("line-clamp", properties, doc.name, 0)?,
+        text_indent: ftd::Length::from(
+            ftd::p2::utils::string_optional("text-indent", properties, doc.name, 0)?,
+            doc.name,
+        )?,
     })
 }
 
@@ -1038,6 +1042,10 @@ pub fn code_from_properties(
         )?,
         font,
         line_clamp: ftd::p2::utils::int_optional("line-clamp", properties, doc.name, 0)?,
+        text_indent: ftd::Length::from(
+            ftd::p2::utils::string_optional("text-indent", properties, doc.name, 0)?,
+            doc.name,
+        )?,
     })
 }
 
@@ -1091,6 +1099,10 @@ pub fn integer_from_properties(
         )?,
         font,
         line_clamp: ftd::p2::utils::int_optional("line-clamp", properties, doc.name, 0)?,
+        text_indent: ftd::Length::from(
+            ftd::p2::utils::string_optional("text-indent", properties, doc.name, 0)?,
+            doc.name,
+        )?,
     })
 }
 
@@ -1143,6 +1155,10 @@ pub fn decimal_from_properties(
         )?,
         font,
         line_clamp: ftd::p2::utils::int_optional("line-clamp", properties, doc.name, 0)?,
+        text_indent: ftd::Length::from(
+            ftd::p2::utils::string_optional("text-indent", properties, doc.name, 0)?,
+            doc.name,
+        )?,
     })
 }
 
@@ -1248,6 +1264,10 @@ pub fn boolean_from_properties(
         )?,
         font,
         line_clamp: ftd::p2::utils::int_optional("line-clamp", properties, doc.name, 0)?,
+        text_indent: ftd::Length::from(
+            ftd::p2::utils::string_optional("text-indent", properties, doc.name, 0)?,
+            doc.name,
+        )?,
     })
 }
 
@@ -1272,6 +1292,10 @@ pub fn text_function() -> ftd::Component {
                 ),
                 (
                     "line-clamp".to_string(),
+                    ftd::p2::Kind::integer().into_optional(),
+                ),
+                (
+                    "text-indent".to_string(),
                     ftd::p2::Kind::integer().into_optional(),
                 ),
                 (
@@ -1317,6 +1341,10 @@ pub fn code_function() -> ftd::Component {
                 (
                     "line-clamp".to_string(),
                     ftd::p2::Kind::integer().into_optional(),
+                ),
+                (
+                    "text-indent".to_string(),
+                    ftd::p2::Kind::string().into_optional(),
                 ),
                 (
                     "text-align".to_string(),
@@ -1476,6 +1504,10 @@ pub fn markup_function() -> ftd::Component {
                 (
                     "line-clamp".to_string(),
                     ftd::p2::Kind::integer().into_optional(),
+                ),
+                (
+                    "text-indent".to_string(),
+                    ftd::p2::Kind::string().into_optional(),
                 ),
                 (
                     "text-align".to_string(),
@@ -1738,5 +1770,9 @@ pub fn markup_from_properties(
         )?,
         font,
         line_clamp: ftd::p2::utils::int_optional("line-clamp", properties, doc.name, 0)?,
+        text_indent: ftd::Length::from(
+            ftd::p2::utils::string_optional("text-indent", properties, doc.name, 0)?,
+            doc.name,
+        )?,
     })
 }
