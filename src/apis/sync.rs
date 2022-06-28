@@ -5,6 +5,8 @@ use itertools::Itertools;
 pub enum SyncStatus {
     Conflict,
     NoConflict,
+    ClientEditedServerDelete,
+    ClientDeletedServerEdit,
 }
 
 #[derive(serde::Serialize, serde::Deserialize, std::fmt::Debug)]
@@ -142,10 +144,39 @@ pub(crate) async fn sync_worker(request: SyncRequest) -> fpm::Result<SyncRespons
                 // Update version in latest.ftd
             }
             SyncRequestFile::Delete { path } => {
-                if config.root.join(path).exists() {
-                    tokio::fs::remove_file(config.root.join(path)).await?;
+                // Case: Need to handle the where client says delete but serve says modified
+                // If the value of server's snapshot is greater than client snapshot
+                let remote_timestamp = snapshots
+                    .get(path.as_str())
+                    .ok_or_else(|| fpm::Error::APIResponseError("".to_string()))?;
+                let client_timestamp = client_snapshots
+                    .get(path.as_str())
+                    .ok_or_else(|| fpm::Error::APIResponseError("".to_string()))?;
+
+                let snapshot_path =
+                    fpm::utils::history_path(path, config.root.as_str(), remote_timestamp);
+
+                let data = tokio::fs::read(snapshot_path).await?;
+
+                // if: Client Says Deleted and server says modified
+                // that means Remote timestamp is greater than client timestamp
+                if remote_timestamp.gt(client_timestamp) {
+                    synced_files.insert(
+                        path.to_string(),
+                        SyncResponseFile::Update {
+                            path: path.to_string(),
+                            status: SyncStatus::ClientDeletedServerEdit,
+                            content: data,
+                        },
+                    );
+                } else {
+                    // else: both should have same version,
+                    // client version(timestamp) can never be greater than server's version
+                    if config.root.join(path).exists() {
+                        tokio::fs::remove_file(config.root.join(path)).await?;
+                    }
+                    snapshots.remove(path);
                 }
-                snapshots.remove(path);
             }
             SyncRequestFile::Update { path, content } => {
                 let client_snapshot_timestamp = client_snapshots.get(path).ok_or_else(|| {
@@ -154,64 +185,81 @@ pub(crate) async fn sync_worker(request: SyncRequest) -> fpm::Result<SyncRespons
                         path
                     ))
                 })?;
-                // TODO: It may have been deleted
-                let snapshot_timestamp = snapshots.get(path).ok_or_else(|| {
-                    fpm::Error::APIResponseError(format!(
-                        "path should be available in latest.ftd {}",
-                        path
-                    ))
-                })?;
-                // No conflict case
-                if client_snapshot_timestamp.eq(snapshot_timestamp) {
-                    fpm::utils::update(&config.root, path, content).await?;
-                    let snapshot_path =
-                        fpm::utils::history_path(path, config.root.as_str(), &timestamp);
-                    tokio::fs::copy(config.root.join(path), snapshot_path).await?;
-                    snapshots.insert(path.to_string(), timestamp);
-                } else {
-                    // TODO: Need to handle static files like images, don't require merging
-                    let ancestor_path = fpm::utils::history_path(
-                        path,
-                        config.root.as_str(),
-                        client_snapshot_timestamp,
-                    );
-                    let ancestor_content = tokio::fs::read_to_string(ancestor_path).await?;
-                    let ours_path =
-                        fpm::utils::history_path(path, config.root.as_str(), snapshot_timestamp);
-                    let theirs_content = tokio::fs::read_to_string(ours_path).await?;
-                    let ours_content = String::from_utf8(content.clone())?;
 
-                    match diffy::MergeOptions::new()
-                        .set_conflict_style(diffy::ConflictStyle::Merge)
-                        .merge(&ancestor_content, &ours_content, &theirs_content)
-                    {
-                        Ok(data) => {
-                            fpm::utils::update(&config.root, path, data.as_bytes()).await?;
-                            let snapshot_path =
-                                fpm::utils::history_path(path, config.root.as_str(), &timestamp);
-                            tokio::fs::copy(config.root.join(path), snapshot_path).await?;
-                            snapshots.insert(path.to_string(), timestamp);
-                            synced_files.insert(
-                                path.to_string(),
-                                SyncResponseFile::Update {
-                                    path: path.to_string(),
-                                    status: SyncStatus::NoConflict,
-                                    content: data.as_bytes().to_vec(),
-                                },
-                            );
-                        }
-                        Err(data) => {
-                            // Return conflicted content
-                            synced_files.insert(
-                                path.to_string(),
-                                SyncResponseFile::Update {
-                                    path: path.to_string(),
-                                    status: SyncStatus::Conflict,
-                                    content: data.as_bytes().to_vec(),
-                                },
-                            );
+                // if: Server has that file
+                if let Some(snapshot_timestamp) = snapshots.get(path) {
+                    // No conflict case, Only client modified the file
+                    if client_snapshot_timestamp.eq(snapshot_timestamp) {
+                        fpm::utils::update(&config.root, path, content).await?;
+                        let snapshot_path =
+                            fpm::utils::history_path(path, config.root.as_str(), &timestamp);
+                        tokio::fs::copy(config.root.join(path), snapshot_path).await?;
+                        snapshots.insert(path.to_string(), timestamp);
+                    } else {
+                        // else: Both has modified the same file
+                        // TODO: Need to handle static files like images, don't require merging
+                        let ancestor_path = fpm::utils::history_path(
+                            path,
+                            config.root.as_str(),
+                            client_snapshot_timestamp,
+                        );
+                        let ancestor_content = tokio::fs::read_to_string(ancestor_path).await?;
+                        let ours_path = fpm::utils::history_path(
+                            path,
+                            config.root.as_str(),
+                            snapshot_timestamp,
+                        );
+                        let theirs_content = tokio::fs::read_to_string(ours_path).await?;
+                        let ours_content = String::from_utf8(content.clone())
+                            .map_err(|e| fpm::Error::APIResponseError(e.to_string()))?;
+
+                        match diffy::MergeOptions::new()
+                            .set_conflict_style(diffy::ConflictStyle::Merge)
+                            .merge(&ancestor_content, &ours_content, &theirs_content)
+                        {
+                            Ok(data) => {
+                                fpm::utils::update(&config.root, path, data.as_bytes()).await?;
+                                let snapshot_path = fpm::utils::history_path(
+                                    path,
+                                    config.root.as_str(),
+                                    &timestamp,
+                                );
+                                tokio::fs::copy(config.root.join(path), snapshot_path).await?;
+                                snapshots.insert(path.to_string(), timestamp);
+                                synced_files.insert(
+                                    path.to_string(),
+                                    SyncResponseFile::Update {
+                                        path: path.to_string(),
+                                        status: SyncStatus::NoConflict,
+                                        content: data.as_bytes().to_vec(),
+                                    },
+                                );
+                            }
+                            Err(data) => {
+                                // Return conflicted content
+                                synced_files.insert(
+                                    path.to_string(),
+                                    SyncResponseFile::Update {
+                                        path: path.to_string(),
+                                        status: SyncStatus::Conflict,
+                                        content: data.as_bytes().to_vec(),
+                                    },
+                                );
+                            }
                         }
                     }
+                } else {
+                    // else: Server don't have that file
+                    // If client says edited and server says deleted
+                    // That means at server side there will not any entry in latest.ftd
+                    synced_files.insert(
+                        path.to_string(),
+                        SyncResponseFile::Update {
+                            path: path.to_string(),
+                            status: SyncStatus::ClientEditedServerDelete,
+                            content: content.clone(),
+                        },
+                    );
                 }
             }
         }
