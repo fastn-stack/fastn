@@ -747,20 +747,11 @@ impl ParsedDocument {
 
     fn ignore_comments(&mut self) -> ftd::p1::Result<()> {
         let mut processed_sections: Vec<ftd::p1::Section> = Vec::new();
-        println!("\nFiltering comments  !!");
         for section in self.sections.iter() {
             // Ignore entire section if it is commented out
             if section.is_commented {
-                println!(
-                    "-----------------------------Ignored section = {}",
-                    section.name
-                );
                 continue;
             }
-            println!(
-                "-----------------------------Filtering section = {}",
-                section.name
-            );
 
             let mut filtered_section: ftd::p1::Section = Default::default();
             filtered_section.name = section.name.clone();
@@ -771,10 +762,8 @@ impl ParsedDocument {
             let mut header_list: ftd::p1::Header = Default::default();
             for (ln, key, val) in section.header.0.iter() {
                 if key.starts_with('/') {
-                    println!("Header {} ignored !!", key);
                     continue;
                 }
-                println!("key = {}, val = {}, ln = {}", key, val, ln);
                 header_list.0.push((*ln, key.to_string(), val.to_string()));
             }
 
@@ -785,10 +774,7 @@ impl ParsedDocument {
             filtered_section.body = {
                 match section.body {
                     Some(ref b) if b.1.trim().is_empty() => None,
-                    Some(ref b) if b.1.trim().starts_with('/') => {
-                        println!("Body ignored for section = {}", section.name);
-                        None
-                    }
+                    Some(ref b) if b.1.trim().starts_with('/') => None,
                     Some(ref b) => Some((b.0, b.1.trim_end().to_string())),
                     None => None,
                 }
@@ -800,16 +786,8 @@ impl ParsedDocument {
 
             for sub in sub_list.0.iter() {
                 if sub.is_commented {
-                    println!(
-                        "-----------------------------Ignored subsection = {}",
-                        sub.name
-                    );
                     continue;
                 }
-                println!(
-                    "-----------------------------Filtering subsection = {}",
-                    sub.name
-                );
 
                 let mut filtered_sub_section: ftd::p1::SubSection = Default::default();
                 filtered_sub_section.name = sub.name.clone();
@@ -820,10 +798,8 @@ impl ParsedDocument {
                 let mut sub_header_list: ftd::p1::Header = Default::default();
                 for (ln, key, val) in sub.header.0.iter() {
                     if key.starts_with('/') {
-                        println!("Header {} ignored !!", key);
                         continue;
                     }
-                    println!("subsection key = {}, val = {}, ln = {}", key, val, ln);
                     sub_header_list
                         .0
                         .push((*ln, key.to_string(), val.to_string()));
@@ -836,10 +812,7 @@ impl ParsedDocument {
                 filtered_sub_section.body = {
                     match sub.body {
                         Some(ref b) if b.1.trim().is_empty() => None,
-                        Some(ref b) if b.1.trim().starts_with('/') => {
-                            println!("Body ignored for subsection = {}", sub.name);
-                            None
-                        }
+                        Some(ref b) if b.1.trim().starts_with('/') => None,
                         Some(ref b) => Some((b.0, b.1.trim_end().to_string())),
                         None => None,
                     }
