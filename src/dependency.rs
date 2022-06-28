@@ -444,7 +444,7 @@ impl fpm::Package {
         }
     }
 
-    pub(crate) async fn unzip_package(&self) -> fpm::Result<()> {
+    pub(crate) async fn _unzip_package(&self) -> fpm::Result<()> {
         use std::convert::TryInto;
         use std::io::Write;
 

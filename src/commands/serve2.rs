@@ -97,8 +97,11 @@ async fn server_static_file(
     }
 }
 async fn serve_static(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
+    // TODO: Need to remove unwrap
     let mut config = fpm::Config::read2(None, false).await.unwrap();
     let path: std::path::PathBuf = req.match_info().query("path").parse().unwrap();
+
+    println!("request for path: {:?}", path);
 
     let favicon = std::path::PathBuf::new().join("favicon.ico");
     /*if path.starts_with("-/") {
@@ -124,6 +127,7 @@ pub async fn serve2(bind_address: &str, port: Option<u16>) -> std::io::Result<()
         let fpm_instance: String =
             std::env::var("FPM_INSTANCE_ID").expect("FPM_INSTANCE_ID is required");
 
+        println!("Resolving dependency");
         match crate::controller::resolve_dependencies(fpm_instance, fpm_controller).await {
             Ok(_) => println!("Dependencies resolved"),
             Err(e) => panic!("Error resolving dependencies using controller!!: {:?}", e),
@@ -201,3 +205,6 @@ You can try without providing port, it will automatically pick unused port"#,
         .run()
         .await
 }
+
+// cargo install --features controller --path=.
+// FPM_CONTROLLER=http://127.0.0.1:8000 FPM_INSTANCE_ID=12345 fpm serve 8001
