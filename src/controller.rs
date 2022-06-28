@@ -43,6 +43,7 @@ pub async fn resolve_dependencies(fpm_instance: String, fpm_controller: String) 
     // First call get_package API to get package details and resolve dependencies
 
     // response from get-package API
+    println!("getting package from fpm controller");
     let package_response = get_package(fpm_instance.as_str(), fpm_controller.as_str()).await?;
 
     // Clone the git package into the current directory
