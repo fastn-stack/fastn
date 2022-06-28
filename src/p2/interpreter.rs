@@ -753,11 +753,15 @@ impl ParsedDocument {
                 continue;
             }
 
-            let mut filtered_section: ftd::p1::Section = Default::default();
-            filtered_section.name = section.name.clone();
-            filtered_section.caption = section.caption.clone();
-            filtered_section.is_commented = section.is_commented;
-            filtered_section.line_number = section.line_number;
+            let mut filtered_section = ftd::p1::Section {
+                name: section.name.clone(),
+                caption: section.caption.clone(),
+                header: Default::default(),
+                body: None,
+                sub_sections: Default::default(),
+                is_commented: section.is_commented,
+                line_number: section.line_number,
+            };
 
             let mut header_list: ftd::p1::Header = Default::default();
             for (ln, key, val) in section.header.0.iter() {
@@ -789,11 +793,14 @@ impl ParsedDocument {
                     continue;
                 }
 
-                let mut filtered_sub_section: ftd::p1::SubSection = Default::default();
-                filtered_sub_section.name = sub.name.clone();
-                filtered_sub_section.caption = sub.caption.clone();
-                filtered_sub_section.is_commented = sub.is_commented;
-                filtered_sub_section.line_number = sub.line_number;
+                let mut filtered_sub_section = ftd::p1::SubSection {
+                    name: sub.name.clone(),
+                    caption: sub.caption.clone(),
+                    header: Default::default(),
+                    body: None,
+                    is_commented: sub.is_commented,
+                    line_number: sub.line_number,
+                };
 
                 let mut sub_header_list: ftd::p1::Header = Default::default();
                 for (ln, key, val) in sub.header.0.iter() {
