@@ -69,6 +69,10 @@ impl InterpreterState {
                 }
             }
             self.document_stack[l].done_processing_imports();
+
+            self.document_stack[l].ignore_comments()?;
+            // beyond this point commented things will no longer exist in the parsed document
+
             self.document_stack[l].reorder(&self.bag)?;
         }
         let parsed_document = &mut self.document_stack[l];
@@ -739,6 +743,122 @@ impl ParsedDocument {
 
     fn done_processing_imports(&mut self) {
         self.processing_imports = false;
+    }
+
+    fn ignore_comments(&mut self) -> ftd::p1::Result<()> {
+        let mut processed_sections: Vec<ftd::p1::Section> = Vec::new();
+        println!("\nFiltering comments  !!");
+        for section in self.sections.iter() {
+            // Ignore entire section if it is commented out
+            if section.is_commented {
+                println!(
+                    "-----------------------------Ignored section = {}",
+                    section.name
+                );
+                continue;
+            }
+            println!(
+                "-----------------------------Filtering section = {}",
+                section.name
+            );
+
+            let mut filtered_section: ftd::p1::Section = Default::default();
+            filtered_section.name = section.name.clone();
+            filtered_section.caption = section.caption.clone();
+            filtered_section.is_commented = section.is_commented;
+            filtered_section.line_number = section.line_number;
+
+            let mut header_list: ftd::p1::Header = Default::default();
+            for (ln, key, val) in section.header.0.iter() {
+                if key.starts_with('/') {
+                    println!("Header {} ignored !!", key);
+                    continue;
+                }
+                println!("key = {}, val = {}, ln = {}", key, val, ln);
+                header_list.0.push((*ln, key.to_string(), val.to_string()));
+            }
+
+            // Filtered header
+            filtered_section.header = header_list;
+
+            // Filter section body
+            filtered_section.body = {
+                match section.body {
+                    Some(ref b) if b.1.trim().is_empty() => None,
+                    Some(ref b) if b.1.trim().starts_with('/') => {
+                        println!("Body ignored for section = {}", section.name);
+                        None
+                    }
+                    Some(ref b) => Some((b.0, b.1.trim_end().to_string())),
+                    None => None,
+                }
+            };
+
+            // Filtering subsections
+            let mut filtered_sub_sections: ftd::p1::SubSections = Default::default();
+            let sub_list = &section.sub_sections;
+
+            for sub in sub_list.0.iter() {
+                if sub.is_commented {
+                    println!(
+                        "-----------------------------Ignored subsection = {}",
+                        sub.name
+                    );
+                    continue;
+                }
+                println!(
+                    "-----------------------------Filtering subsection = {}",
+                    sub.name
+                );
+
+                let mut filtered_sub_section: ftd::p1::SubSection = Default::default();
+                filtered_sub_section.name = sub.name.clone();
+                filtered_sub_section.caption = sub.caption.clone();
+                filtered_sub_section.is_commented = sub.is_commented;
+                filtered_sub_section.line_number = sub.line_number;
+
+                let mut sub_header_list: ftd::p1::Header = Default::default();
+                for (ln, key, val) in sub.header.0.iter() {
+                    if key.starts_with('/') {
+                        println!("Header {} ignored !!", key);
+                        continue;
+                    }
+                    println!("subsection key = {}, val = {}, ln = {}", key, val, ln);
+                    sub_header_list
+                        .0
+                        .push((*ln, key.to_string(), val.to_string()));
+                }
+
+                // Filtered sub header list
+                filtered_sub_section.header = sub_header_list;
+
+                // Filter subsection body
+                filtered_sub_section.body = {
+                    match sub.body {
+                        Some(ref b) if b.1.trim().is_empty() => None,
+                        Some(ref b) if b.1.trim().starts_with('/') => {
+                            println!("Body ignored for subsection = {}", sub.name);
+                            None
+                        }
+                        Some(ref b) => Some((b.0, b.1.trim_end().to_string())),
+                        None => None,
+                    }
+                };
+
+                filtered_sub_sections.0.push(filtered_sub_section);
+            }
+
+            // Filtered sub-sections
+            filtered_section.sub_sections = filtered_sub_sections;
+
+            // Section added in processed list
+            processed_sections.push(filtered_section);
+        }
+
+        // Filtered sections of the entire document
+        self.sections = processed_sections;
+
+        Ok(())
     }
 
     fn reorder(
