@@ -23,15 +23,12 @@
 
     document.addEventListener('keypress', (event) => {
         var name = event.key;
-        var code = event.code;
         let url = window.location.href;
         let source = document.baseURI.endsWith("/") ? "-/view-src/" : "/-/view-src/";
         let newurl = document.baseURI + source + url.replace(document.baseURI, "");
         if (name === '.') {
-            console.log(`inside Key pressed ${name} \r\n Key code value: ${code} ${url} ${newurl}`);
             window.location.href = newurl;
         }
-        console.log(`Key pressed ${name} \r\n Key code value: ${code} ${url} ${newurl}`);
     }, false);
 })();
 

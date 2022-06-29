@@ -1,0 +1,84 @@
+-- import: fpm
+
+-- fpm.toc-item list fs:
+$processor$: package-tree
+
+
+-- optional string query:
+$always-include$: true
+
+
+-- optional string path:
+$always-include$: true
+
+
+-- string url: -/edit/
+
+
+-- object obj:
+function: post
+url: $url
+value: $query
+path: $path
+
+
+
+
+-- ftd.column editor:
+width: fill
+height: fill
+background-color: $fpm.color.main.background.base
+color: $fpm.color.main.text-strong
+spacing: 20
+padding: 20
+
+--- ftd.text: $path
+role: $fpm.type.heading-large
+align: center
+
+--- ftd.row:
+width: fill
+height: fill
+spacing: 20
+overflow-y: auto
+
+--- print-toc:
+toc: $fs
+
+--- ftd.input:
+width: fill
+height: fill
+multiline: true
+placeholder: Type Something Here...
+value: $query
+border-width: 2
+$on-input$: $query=$VALUE
+$on-input$: message-host $obj
+padding: 20
+
+
+
+
+-- ftd.column print-toc:
+fpm.toc-item list toc:
+
+--- print-toc-item:
+$loop$: $toc as $obj
+toc: $obj
+
+
+-- ftd.column print-toc-item:
+fpm.toc-item toc:
+margin-left: 20
+
+--- ftd.text: $toc.title
+if: $toc.url is not null
+link: $toc.url
+
+--- ftd.text: $toc.title
+if: $toc.url is null
+
+--- print-toc-item:
+$loop$: $toc.children as $obj
+toc: $obj
+

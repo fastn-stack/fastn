@@ -1,4 +1,5 @@
 use colorize::AnsiColor;
+use itertools::Itertools;
 
 macro_rules! warning {
     ($s:expr,) => {
@@ -207,6 +208,18 @@ pub(crate) fn validate_base_url(package: &fpm::Package) -> fpm::Result<()> {
     }
 
     Ok(())
+}
+
+pub(crate) fn escape_ftd(file: &str) -> String {
+    file.split('\n')
+        .map(|v| {
+            if v.starts_with("-- ") || v.starts_with("--- ") {
+                format!("\\{}", v)
+            } else {
+                v.to_string()
+            }
+        })
+        .join("\n")
 }
 
 pub(crate) fn id_to_path(id: &str) -> String {

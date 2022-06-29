@@ -202,7 +202,7 @@ pub struct TocItemCompat {
 }
 
 impl TocItemCompat {
-    fn new(
+    pub(crate) fn new(
         url: Option<String>,
         title: Option<String>,
         is_active: bool,
