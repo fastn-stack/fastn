@@ -20,6 +20,19 @@
         translation_diff_open = !translation_diff_open;
         window.ftd.set_bool_for_all(FPM_TRANSLATION_DIFF_OPEN, translation_diff_open);
     }
+
+    document.addEventListener('keypress', (event) => {
+        var name = event.key;
+        var code = event.code;
+        let url = window.location.href;
+        let source = document.baseURI.endsWith("/") ? "-/view-src/" : "/-/view-src/";
+        let newurl = document.baseURI + source + url.replace(document.baseURI, "");
+        if (name === '.') {
+            console.log(`inside Key pressed ${name} \r\n Key code value: ${code} ${url} ${newurl}`);
+            window.location.href = newurl;
+        }
+        console.log(`Key pressed ${name} \r\n Key code value: ${code} ${url} ${newurl}`);
+    }, false);
 })();
 
 /*! instant.page v5.1.0 - (C) 2019-2020 Alexandre Dieulot - https://instant.page/license */
