@@ -60,26 +60,37 @@ pub(crate) async fn create_latest_snapshots(
 }
 
 /// Related to workspace
+#[derive(PartialEq, Debug, serde::Deserialize)]
+pub enum WorkspaceType {
+    AbortMerge,
+    Revert,
+    Conflicted,
+    ClientEditedServerDeleted,
+    ClientDeletedServerEdited,
+}
 
 #[derive(serde::Deserialize, Debug)]
 pub struct Workspace {
     pub filename: String,
     pub base: u128,
     pub conflicted: u128,
-    pub workspace: String, // workspace type ours/theirs/conflicted
+    pub workspace: WorkspaceType, // workspace type ours/theirs/conflicted
 }
 
 impl Workspace {
-    pub(crate) fn is_conflicted(&self) -> bool {
-        self.workspace.eq("conflicted")
+    pub(crate) fn is_resolved(&self) -> bool {
+        matches!(
+            self.workspace,
+            WorkspaceType::AbortMerge | WorkspaceType::Revert
+        )
     }
 
     pub(crate) fn set_abort(&mut self) {
-        self.workspace = "abort".to_string()
+        self.workspace = WorkspaceType::AbortMerge;
     }
 
     pub(crate) fn set_revert(&mut self) {
-        self.workspace = "revert".to_string()
+        self.workspace = WorkspaceType::Revert;
     }
 }
 
@@ -109,7 +120,7 @@ pub(crate) async fn create_workspace(
 
     for workspace in workspaces {
         data.push(format!(
-            "-- fpm.workspace: {}\nbase: {}\nconflicted: {}\nworkspace: {}\n",
+            "-- fpm.workspace: {}\nbase: {}\nconflicted: {}\nworkspace: {:?}\n",
             workspace.filename, workspace.base, workspace.conflicted, workspace.workspace
         ));
     }

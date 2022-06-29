@@ -1,5 +1,8 @@
+use itertools::Itertools;
+
 pub async fn status(config: &fpm::Config, source: Option<&str>) -> fpm::Result<()> {
     let snapshots = fpm::snapshot::get_latest_snapshots(&config.root).await?;
+    let workspaces = fpm::snapshot::get_workspace(config).await?;
     match source {
         Some(source) => {
             file_status(
@@ -7,10 +10,11 @@ pub async fn status(config: &fpm::Config, source: Option<&str>) -> fpm::Result<(
                 &config.root,
                 source,
                 &snapshots,
+                &workspaces,
             )
             .await
         }
-        None => all_status(config, &snapshots).await,
+        None => all_status(config, &snapshots, &workspaces).await,
     }
 }
 
@@ -19,6 +23,7 @@ async fn file_status(
     base_path: &camino::Utf8PathBuf,
     source: &str,
     snapshots: &std::collections::BTreeMap<String, u128>,
+    workspaces: &std::collections::BTreeMap<String, fpm::snapshot::Workspace>,
 ) -> fpm::Result<()> {
     let path = base_path.join(source);
     if !path.exists() {
@@ -32,7 +37,7 @@ async fn file_status(
 
     let file = fpm::get_file(package_name, &path, base_path).await?;
 
-    let file_status = get_file_status(&file, snapshots).await?;
+    let file_status = get_file_status(&file, snapshots, workspaces).await?;
     let track_status = get_track_status(&file, snapshots, base_path.as_str())?;
 
     let mut clean = true;
@@ -53,11 +58,12 @@ async fn file_status(
 async fn all_status(
     config: &fpm::Config,
     snapshots: &std::collections::BTreeMap<String, u128>,
+    workspaces: &std::collections::BTreeMap<String, fpm::snapshot::Workspace>,
 ) -> fpm::Result<()> {
     let mut file_status = std::collections::BTreeMap::new();
     let mut track_status = std::collections::BTreeMap::new();
     for doc in config.get_files(&config.package).await? {
-        let status = get_file_status(&doc, snapshots).await?;
+        let status = get_file_status(&doc, snapshots, workspaces).await?;
         let track = get_track_status(&doc, snapshots, config.root.as_str())?;
         if !track.is_empty() {
             track_status.insert(doc.get_id(), track);
@@ -65,9 +71,20 @@ async fn all_status(
         file_status.insert(doc.get_id(), status);
     }
 
-    let clean_file_status = print_file_status(snapshots, &file_status);
+    let deleted_files = snapshots
+        .keys()
+        .filter(|v| !file_status.contains_key(v.as_str()))
+        .collect_vec();
+
+    file_status.extend(
+        deleted_files
+            .into_iter()
+            .map(|v| (v.to_string(), FileStatus::Deleted)),
+    );
+
+    let clean_file_status = print_file_status(&file_status);
     let clean_track_status = print_track_status(&track_status);
-    if clean_file_status && clean_track_status {
+    if !clean_file_status && clean_track_status {
         println!("Nothing to sync, clean working tree");
     }
     Ok(())
@@ -76,8 +93,37 @@ async fn all_status(
 async fn get_file_status(
     doc: &fpm::File,
     snapshots: &std::collections::BTreeMap<String, u128>,
+    workspaces: &std::collections::BTreeMap<String, fpm::snapshot::Workspace>,
 ) -> fpm::Result<FileStatus> {
     use sha2::Digest;
+    // Added
+    // 1. if file do not present in `latest.ftd`
+    // NP: If server deleted and client modified so in that case `latest.ftd` won't contain entry
+    // For that in that entry will be present in workspace.ftd
+    // Added: If file do not present in `latest.ftd` and also do not present in .fpm/workspace.ftd
+
+    if let Some(workspace) = workspaces.get(&doc.get_id()) {
+        return Ok(match workspace.workspace {
+            fpm::snapshot::WorkspaceType::Conflicted
+            | fpm::snapshot::WorkspaceType::Revert
+            | fpm::snapshot::WorkspaceType::AbortMerge => {
+                let conflicted_version = workspace.conflicted;
+                match snapshots.get(&doc.get_id()) {
+                    Some(latest_version) if conflicted_version.lt(latest_version) => {
+                        FileStatus::Outdated
+                    }
+                    _ => FileStatus::Conflicted,
+                }
+            }
+            fpm::snapshot::WorkspaceType::ClientEditedServerDeleted => {
+                FileStatus::ClientEditedServerDeleted
+            }
+            fpm::snapshot::WorkspaceType::ClientDeletedServerEdited => {
+                FileStatus::ClientDeletedServerEdited
+            }
+        });
+    }
+
     if let Some(timestamp) = snapshots.get(&doc.get_id()) {
         let path = fpm::utils::history_path(&doc.get_id(), &doc.get_base_path(), timestamp);
 
@@ -153,40 +199,18 @@ fn print_track_status(
     status
 }
 
-fn print_file_status(
-    snapshots: &std::collections::BTreeMap<String, u128>,
-    file_status: &std::collections::BTreeMap<String, FileStatus>,
-) -> bool {
-    let mut any_file_removed = false;
-    for id in snapshots.keys() {
-        if let Some(status) = file_status.get(id) {
-            if status.eq(&FileStatus::Untracked) {
-                continue;
-            }
-            println!("{:?}: {}", status, id);
-        } else {
-            any_file_removed = true;
-            println!("{:?}: {}", FileStatus::Deleted, id);
-        }
-    }
+fn print_file_status(file_status: &std::collections::BTreeMap<String, FileStatus>) -> bool {
+    let mut any_modification = false;
 
     for (id, status) in file_status
         .iter()
-        .filter(|(_, f)| f.eq(&&FileStatus::Added))
-        .collect::<Vec<(&String, &FileStatus)>>()
+        .filter(|(_, f)| !f.eq(&&FileStatus::Untracked))
     {
+        any_modification = true;
         println!("{:?}: {}", status, id);
     }
 
-    if !(file_status
-        .iter()
-        .any(|(_, f)| !f.eq(&FileStatus::Untracked))
-        || any_file_removed)
-    {
-        return true;
-    }
-
-    false
+    any_modification
 }
 
 #[derive(Debug, PartialEq)]
@@ -195,6 +219,10 @@ enum FileStatus {
     Added,
     Deleted,
     Untracked,
+    Conflicted,
+    Outdated,
+    ClientEditedServerDeleted,
+    ClientDeletedServerEdited,
 }
 
 #[derive(Debug, PartialEq)]

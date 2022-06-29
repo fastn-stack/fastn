@@ -1,12 +1,11 @@
-use fpm::Snapshot;
 use itertools::Itertools;
 
 #[derive(serde::Serialize, serde::Deserialize, std::fmt::Debug, PartialEq)]
 pub enum SyncStatus {
     Conflict,
     NoConflict,
-    ClientEditedServerDelete,
-    ClientDeletedServerEdit,
+    ClientEditedServerDeleted,
+    ClientDeletedServerEdited,
 }
 
 #[derive(serde::Serialize, serde::Deserialize, std::fmt::Debug)]
@@ -165,7 +164,7 @@ pub(crate) async fn sync_worker(request: SyncRequest) -> fpm::Result<SyncRespons
                         path.to_string(),
                         SyncResponseFile::Update {
                             path: path.to_string(),
-                            status: SyncStatus::ClientDeletedServerEdit,
+                            status: SyncStatus::ClientDeletedServerEdited,
                             content: data,
                         },
                     );
@@ -256,7 +255,7 @@ pub(crate) async fn sync_worker(request: SyncRequest) -> fpm::Result<SyncRespons
                         path.to_string(),
                         SyncResponseFile::Update {
                             path: path.to_string(),
-                            status: SyncStatus::ClientEditedServerDelete,
+                            status: SyncStatus::ClientEditedServerDeleted,
                             content: content.clone(),
                         },
                     );
@@ -273,7 +272,7 @@ pub(crate) async fn sync_worker(request: SyncRequest) -> fpm::Result<SyncRespons
         &config,
         &snapshots
             .into_iter()
-            .map(|(filename, timestamp)| Snapshot {
+            .map(|(filename, timestamp)| fpm::Snapshot {
                 filename,
                 timestamp,
             })
