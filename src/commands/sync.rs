@@ -209,7 +209,6 @@ async fn send_to_fpm_serve(
         success: bool,
     }
 
-    // println!("Data send {:#?}", data);
     let data = serde_json::to_string(&data)?;
     let mut response = reqwest::Client::new()
         .post("http://127.0.0.1:8000/-/sync/")

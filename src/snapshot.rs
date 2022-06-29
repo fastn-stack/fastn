@@ -7,6 +7,9 @@ pub struct Snapshot {
 pub(crate) async fn resolve_snapshots(
     content: &str,
 ) -> fpm::Result<std::collections::BTreeMap<String, u128>> {
+    if content.trim().is_empty() {
+        return Ok(Default::default());
+    }
     let lib = fpm::FPMLibrary::default();
     let b = match fpm::doc::parse_ftd(".latest.ftd", content, &lib) {
         Ok(v) => v,

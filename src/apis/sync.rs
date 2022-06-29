@@ -56,45 +56,6 @@ pub struct SyncRequest {
     pub latest_ftd: String,
 }
 
-fn success(data: impl serde::Serialize) -> actix_web::Result<actix_web::HttpResponse> {
-    #[derive(serde::Serialize)]
-    struct SuccessResponse<T: serde::Serialize> {
-        data: T,
-        success: bool,
-    }
-
-    let data = serde_json::to_string(&SuccessResponse {
-        data,
-        success: true,
-    })?;
-
-    Ok(actix_web::HttpResponse::Ok()
-        .content_type(actix_web::http::header::ContentType::json())
-        .status(actix_web::http::StatusCode::OK)
-        .body(data))
-}
-
-fn error<T: Into<String>>(
-    message: T,
-    status: actix_web::http::StatusCode,
-) -> actix_web::Result<actix_web::HttpResponse> {
-    #[derive(serde::Serialize, Debug)]
-    struct ErrorResponse {
-        message: String,
-        success: bool,
-    }
-
-    let resp = ErrorResponse {
-        message: message.into(),
-        success: false,
-    };
-
-    Ok(actix_web::HttpResponse::Ok()
-        .content_type(actix_web::http::header::ContentType::json())
-        .status(status)
-        .body(serde_json::to_string(&resp)?))
-}
-
 /// Steps
 /// Read latest.ftd and create snapshot version
 /// Iterate over Added files, create them and update new version in latest.ftd
@@ -107,8 +68,8 @@ pub async fn sync(
     req: actix_web::web::Json<SyncRequest>,
 ) -> actix_web::Result<actix_web::HttpResponse> {
     match sync_worker(req.0).await {
-        Ok(data) => success(data),
-        Err(err) => error(
+        Ok(data) => fpm::apis::success(data),
+        Err(err) => fpm::apis::error(
             err.to_string(),
             actix_web::http::StatusCode::INTERNAL_SERVER_ERROR,
         ),

@@ -31,6 +31,11 @@ async fn main() -> fpm::Result<()> {
         return Ok(());
     }
 
+    if let Some(clone) = matches.subcommand_matches("clone") {
+        fpm::clone(clone.value_of("source").unwrap()).await?;
+        return Ok(());
+    }
+
     let mut config = fpm::Config::read2(None, true).await?;
 
     if matches.subcommand_matches("update").is_some() {
@@ -183,6 +188,12 @@ fn app(authors: &'static str, version: &'static str) -> clap::App<'static, 'stat
             clap::SubCommand::with_name("abort-merge")
                 .about("Aborts the remote changes")
                 .arg(clap::Arg::with_name("path").required(true))
+                .version(env!("CARGO_PKG_VERSION")),
+        )
+        .subcommand(
+            clap::SubCommand::with_name("clone")
+                .about("Clone a package into a new directory")
+                .arg(clap::Arg::with_name("source").required(true))
                 .version(env!("CARGO_PKG_VERSION")),
         )
         .subcommand(

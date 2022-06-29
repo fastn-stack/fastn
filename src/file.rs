@@ -112,13 +112,15 @@ pub(crate) async fn paths_to_files(
     .collect::<Vec<fpm::File>>())
 }
 
-// TODO: Shoud be package instad of config
 pub fn package_ignores(
     package: &fpm::Package,
     root_path: &camino::Utf8PathBuf,
+    ignore_history: bool,
 ) -> Result<ignore::overrides::Override, ignore::Error> {
     let mut overrides = ignore::overrides::OverrideBuilder::new(root_path);
-    overrides.add("!.history")?;
+    if ignore_history {
+        overrides.add("!.history")?;
+    }
     overrides.add("!.packages")?;
     overrides.add("!.tracks")?;
     overrides.add("!FPM")?;

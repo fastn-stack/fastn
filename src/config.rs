@@ -400,18 +400,10 @@ impl Config {
         package: &fpm::Package,
     ) -> fpm::Result<std::collections::HashMap<fpm::Version, Vec<fpm::File>>> {
         let path = self.get_root_for_package(package);
-        let mut ignore_paths = ignore::WalkBuilder::new(&path);
-        ignore_paths.overrides(fpm::file::package_ignores(package, &path)?);
-
         let mut hash: std::collections::HashMap<fpm::Version, Vec<fpm::File>> =
             std::collections::HashMap::new();
 
-        let all_files = ignore_paths
-            .build()
-            .into_iter()
-            .flatten()
-            .map(|x| camino::Utf8PathBuf::from_path_buf(x.into_path()).unwrap()) //todo: improve error message
-            .collect::<Vec<camino::Utf8PathBuf>>();
+        let all_files = self.get_all_file_paths(package, true)?;
 
         for file in all_files {
             if file.is_dir() {
@@ -480,21 +472,29 @@ impl Config {
 
     pub(crate) async fn get_files(&self, package: &fpm::Package) -> fpm::Result<Vec<fpm::File>> {
         let path = self.get_root_for_package(package);
-        let mut ignore_paths = ignore::WalkBuilder::new(&path);
-        // ignore_paths.hidden(false); // Allow the linux hidden files to be evaluated
-        ignore_paths.overrides(fpm::file::package_ignores(package, &path)?);
-        let all_files = ignore_paths
-            .build()
-            .into_iter()
-            .flatten()
-            .map(|x| camino::Utf8PathBuf::from_path_buf(x.into_path()).unwrap()) //todo: improve error message
-            .collect::<Vec<camino::Utf8PathBuf>>();
-
+        let all_files = self.get_all_file_paths(package, true)?;
         // TODO: Unwrap?
         let mut documents = fpm::paths_to_files(package.name.as_str(), all_files, &path).await?;
         documents.sort_by_key(|v| v.get_id());
 
         Ok(documents)
+    }
+
+    pub(crate) fn get_all_file_paths(
+        &self,
+        package: &fpm::Package,
+        ignore_history: bool,
+    ) -> fpm::Result<Vec<camino::Utf8PathBuf>> {
+        let path = self.get_root_for_package(package);
+        let mut ignore_paths = ignore::WalkBuilder::new(&path);
+        // ignore_paths.hidden(false); // Allow the linux hidden files to be evaluated
+        ignore_paths.overrides(fpm::file::package_ignores(package, &path, ignore_history)?);
+        Ok(ignore_paths
+            .build()
+            .into_iter()
+            .flatten()
+            .map(|x| camino::Utf8PathBuf::from_path_buf(x.into_path()).unwrap()) //todo: improve error message
+            .collect::<Vec<camino::Utf8PathBuf>>())
     }
 
     pub(crate) async fn get_file_by_id(

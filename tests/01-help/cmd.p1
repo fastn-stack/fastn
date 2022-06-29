@@ -20,6 +20,7 @@ SUBCOMMANDS:
     abort-merge           Aborts the remote changes
     build                 Build static site from this fpm package
     check                 Check if everything is fine with current fpm package
+    clone                 Clone a package into a new directory
     diff                  Show un-synced changes to files in this fpm package
     help                  Prints this message or the help of the given subcommand(s)
     mark-resolve          Marks the conflicted file as resolved
