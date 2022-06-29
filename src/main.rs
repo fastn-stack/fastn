@@ -48,6 +48,7 @@ async fn main() -> fpm::Result<()> {
         if build.is_present("verbose") {
             println!("{}", fpm::debug_env_vars());
         }
+
         fpm::build2(
             &mut config,
             build.value_of("file"),

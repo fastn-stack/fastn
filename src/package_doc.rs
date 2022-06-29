@@ -348,6 +348,7 @@ pub(crate) async fn process_ftd(
     config: &mut fpm::Config,
     main: &fpm::Document,
     base_url: &str,
+    no_static: bool,
 ) -> fpm::Result<Vec<u8>> {
     let current_package = config
         .all_packages
@@ -406,7 +407,7 @@ pub(crate) async fn process_ftd(
         )
     };
 
-    let response = read_ftd(config, &main, base_url, true).await?;
+    let response = read_ftd(config, &main, base_url, !no_static).await?;
     fpm::utils::write(
         &config.build_dir(),
         file_rel_path.as_str(),
