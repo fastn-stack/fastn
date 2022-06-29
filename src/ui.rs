@@ -2630,4 +2630,6 @@ pub struct ColorValue {
 pub struct Input {
     pub common: Common,
     pub placeholder: Option<String>,
+    pub value: Option<String>,
+    pub multiline: bool,
 }

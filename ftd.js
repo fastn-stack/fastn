@@ -749,9 +749,9 @@ window.ftd = (function () {
             if (action["parameters"].data !== undefined) {
                 let value = JSON.parse(action["parameters"].data[0].value);
                 let reference = JSON.parse(action["parameters"].data[0].reference);
-                let data = ftd_utils.resolve_reference(value, reference, data, obj);
-                let func = data.function.trim().replaceAll("-", "_");
-                window[func](id, data, reference);
+                let resolved_data = ftd_utils.resolve_reference(value, reference, data, obj);
+                let func = resolved_data.function.trim().replaceAll("-", "_");
+                window[func](id, resolved_data, reference);
             } else {
                 let target = action["target"].trim().replaceAll("-", "_");
                 window[target](id);
@@ -1000,7 +1000,22 @@ window.ftd = (function () {
 })();
 
 function console_print(id, data) {
-    console.log(data);
+    console.log("console_print",data);
+}
+
+function post(id, data) {
+    let xhr = new XMLHttpRequest();
+    xhr.open("POST", data.url);
+    xhr.setRequestHeader("Accept", "application/json");
+    xhr.setRequestHeader("Content-Type", "application/json");
+
+    // xhr.onreadystatechange = function () {
+    //     if (xhr.readyState === 4) {
+    //         console.log(xhr.status);
+    //         console.log(xhr.responseText);
+    //     }};
+
+    xhr.send(JSON.stringify(data));
 }
 
 window.ftd.post_init = function () {

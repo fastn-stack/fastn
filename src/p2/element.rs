@@ -1618,10 +1618,17 @@ pub fn input_function() -> ftd::Component {
         root: "ftd.kernel".to_string(),
         full_name: "ftd#input".to_string(),
         arguments: [
-            vec![(
-                "placeholder".to_string(),
-                ftd::p2::Kind::string().into_optional(),
-            )],
+            vec![
+                (
+                    "placeholder".to_string(),
+                    ftd::p2::Kind::string().into_optional(),
+                ),
+                ("value".to_string(), ftd::p2::Kind::string().into_optional()),
+                (
+                    "multiline".to_string(),
+                    ftd::p2::Kind::boolean().set_default(Some("false".to_string())),
+                ),
+            ],
             common_arguments(),
         ]
         .concat()
@@ -1654,6 +1661,8 @@ pub fn input_from_properties(
             None,
         )?,
         placeholder: ftd::p2::utils::string_optional("placeholder", properties, doc.name, 0)?,
+        multiline: ftd::p2::utils::bool("multiline", properties, doc.name, 0)?,
+        value: ftd::p2::utils::string_optional("value", properties, doc.name, 0)?,
     })
 }
 

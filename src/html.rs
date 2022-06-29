@@ -1149,10 +1149,19 @@ impl ftd::Markup {
 
 impl ftd::Input {
     pub fn to_node(&self, doc_id: &str, collector: &mut ftd::Collector) -> Node {
-        let mut n = Node::from_common("input", &self.common, doc_id, collector);
+        let node = if self.multiline { "textarea" } else { "input" };
+
+        let mut n = Node::from_common(node, &self.common, doc_id, collector);
         n.classes.extend(self.common.add_class());
         if let Some(ref p) = self.placeholder {
             n.attrs.insert(s("placeholder"), escape(p));
+        }
+        if let Some(ref p) = self.value {
+            if self.multiline {
+                n.text = Some(p.to_string());
+            } else {
+                n.attrs.insert(s("value"), escape(p));
+            }
         }
         n
     }

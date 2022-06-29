@@ -16392,6 +16392,7 @@ mod test {
                     ..Default::default()
                 },
                 placeholder: None,
+                ..Default::default()
             }));
 
         p!(
