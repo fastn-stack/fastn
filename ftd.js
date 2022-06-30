@@ -1012,8 +1012,8 @@ function post(id, data) {
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) {
             let response = JSON.parse(xhr.response);
-            if (response.data.refresh) {
-                window.location.reload();
+            if (!!response.data.url) {
+                window.location.href = response.data.url;
             }
         }};
 
