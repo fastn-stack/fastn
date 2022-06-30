@@ -4,7 +4,7 @@
 $processor$: package-tree
 
 
--- optional string query:
+-- optional string source:
 $always-include$: true
 
 
@@ -18,7 +18,7 @@ $always-include$: true
 -- object obj:
 function: post
 url: $url
-value: $query
+value: $source
 path: $path
 
 
@@ -49,10 +49,10 @@ toc: $fs
 width: fill
 height: fill
 multiline: true
-placeholder: Type Something Here...
-value: $query
+placeholder: -- ft.h1: hello world
+value: $source
 border-width: 2
-$on-input$: $query=$VALUE
+$on-input$: $source=$VALUE
 $on-input$: message-host $obj
 padding: 20
 

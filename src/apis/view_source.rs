@@ -16,7 +16,7 @@ pub(crate) async fn view_source(req: actix_web::HttpRequest) -> actix_web::HttpR
         }
     };
 
-    match view_source_worker(path).await {
+    match handle_view_source(path).await {
         Ok(body) => actix_web::HttpResponse::Ok().body(body),
         Err(e) => {
             println!("new_path: {}, Error: {:?}", path, e);
@@ -25,17 +25,17 @@ pub(crate) async fn view_source(req: actix_web::HttpRequest) -> actix_web::HttpR
     }
 }
 
-async fn view_source_worker(path: &str) -> fpm::Result<Vec<u8>> {
+async fn handle_view_source(path: &str) -> fpm::Result<Vec<u8>> {
     let mut config = fpm::Config::read2(None, false).await?;
     let file_name = config.get_file_path_and_resolve(path).await?;
     let file = config.get_file_and_package_by_id(path).await?;
     match file {
         fpm::File::Ftd(file) | fpm::File::Markdown(file) | fpm::File::Code(file) => {
-            let file = fpm::utils::escape_ftd(file.content.as_str());
+            let file_content = fpm::utils::escape_ftd(file.content.as_str());
             let editor_content = format!(
-                "{}\n\n-- query:\n\n{}\n\n-- path: {}\n\n-- editor:",
+                "{}\n\n-- source:\n\n{}\n\n-- path: {}\n\n-- editor:",
                 fpm::editor_ftd(),
-                file,
+                file_content,
                 file_name,
             );
             let main_document = fpm::Document {
