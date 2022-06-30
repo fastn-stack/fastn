@@ -1009,11 +1009,13 @@ function post(id, data) {
     xhr.setRequestHeader("Accept", "application/json");
     xhr.setRequestHeader("Content-Type", "application/json");
 
-    // xhr.onreadystatechange = function () {
-    //     if (xhr.readyState === 4) {
-    //         console.log(xhr.status);
-    //         console.log(xhr.responseText);
-    //     }};
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+            let response = JSON.parse(xhr.response);
+            if (response.data.refresh) {
+                window.location.reload();
+            }
+        }};
 
     xhr.send(JSON.stringify(data));
 }
