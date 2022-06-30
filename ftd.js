@@ -1003,6 +1003,15 @@ function console_print(id, data) {
     console.log("console_print",data);
 }
 
+function get(id, data) {
+    let xhr = new XMLHttpRequest();
+    xhr.open("GET", data.url);
+    xhr.setRequestHeader("Accept", "application/json");
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.send();
+}
+
+
 function post(id, data) {
     let xhr = new XMLHttpRequest();
     xhr.open("POST", data.url);
