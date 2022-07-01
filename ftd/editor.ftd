@@ -40,7 +40,7 @@ $always-include$: true
 
 
 
-
+-- boolean show-diff: false
 
 
 
@@ -77,12 +77,26 @@ spacing: 10
 
 --- view:
 
+--- ftd.text: Diff
+if: $diff is not null
+padding: 10
+position: center
+border-radius: 8
+color: $fpm.color.main.cta-secondary.text
+background-color: $fpm.color.main.cta-secondary.base
+$on-click$: toggle $show-diff
+
+
 --- container: row-id
 
 --- create:
 align: right
 
 --- container: ftd.main
+
+--- ftd.row:
+width: fill
+if: $show-diff
 
 --- ftd.code:
 padding: 10
@@ -92,6 +106,9 @@ if: $diff is not null
 lang: diff
 
 $diff
+
+
+--- container: ftd.main
 
 
 --- ftd.row:
