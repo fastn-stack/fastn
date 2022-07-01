@@ -29,13 +29,17 @@ async fn handle_view_source(path: &str) -> fpm::Result<Vec<u8>> {
     let mut config = fpm::Config::read2(None, false).await?;
     let file_name = config.get_file_path_and_resolve(path).await?;
     let file = config.get_file_and_package_by_id(path).await?;
+    let editor_ftd = if config.root.join("e.ftd").exists() {
+        tokio::fs::read_to_string(config.root.join("e.ftd")).await?
+    } else {
+        fpm::editor_ftd().to_string()
+    };
+
     match file {
         fpm::File::Ftd(_) | fpm::File::Markdown(_) | fpm::File::Code(_) => {
             let editor_content = format!(
                 "{}\n\n-- source:\n$processor$: fetch-file\npath:{}\n\n-- path: {}\n\n",
-                fpm::editor_ftd(),
-                file_name,
-                file_name,
+                editor_ftd, file_name, file_name,
             );
             let main_document = fpm::Document {
                 id: "editor.ftd".to_string(),
