@@ -1010,14 +1010,17 @@ function get(id, data) {
     xhr.setRequestHeader("Content-Type", "application/json");
 
     xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4) {
+        if (xhr.readyState === 4 && xhr.status === 200) {
             let response = JSON.parse(xhr.response);
             if (!!response.data.url) {
                 window.location.href = response.data.url;
             } else if (!!response.data.reload) {
                 window.location.reload();
             }
-        }};
+        } else if (xhr.readyState === 4) {
+            console.log("Error in calling url: ", data.url, xhr.responseText);
+        }
+    };
 
     xhr.send();
 }
@@ -1030,14 +1033,17 @@ function post(id, data) {
     xhr.setRequestHeader("Content-Type", "application/json");
 
     xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4) {
+        if (xhr.readyState === 4 && xhr.status === 200) {
             let response = JSON.parse(xhr.response);
             if (!!response.data.url) {
                 window.location.href = response.data.url;
             } else if (!!response.data.reload) {
                 window.location.reload();
             }
-        }};
+        } else if (xhr.readyState === 4) {
+            console.log("Error in calling url: ", data.url, xhr.responseText);
+        }
+    };
 
     xhr.send(JSON.stringify(data));
 }
