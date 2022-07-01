@@ -35,7 +35,8 @@ path: $path
 
 
 
-
+-- optional string diff:
+$always-include$: true
 
 
 
@@ -82,6 +83,15 @@ spacing: 10
 align: right
 
 --- container: ftd.main
+
+--- ftd.code:
+padding: 10
+width: fill
+background-color: $2b303b
+if: $diff is not null
+lang: diff
+
+$diff
 
 
 --- ftd.row:
@@ -580,3 +590,8 @@ dark: grey
 -- ftd.color orange:
 light: orange
 dark: orange
+
+-- ftd.color 2b303b:
+light: #2b303b
+dark: #2b303b
+

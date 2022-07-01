@@ -37,10 +37,14 @@ async fn handle_view_source(path: &str) -> fpm::Result<Vec<u8>> {
 
     match file {
         fpm::File::Ftd(_) | fpm::File::Markdown(_) | fpm::File::Code(_) => {
-            let editor_content = format!(
+            let snapshots = fpm::snapshot::get_latest_snapshots(&config.root).await?;
+            let mut editor_content = format!(
                 "{}\n\n-- source:\n$processor$: fetch-file\npath:{}\n\n-- path: {}\n\n",
                 editor_ftd, file_name, file_name,
             );
+            if let Ok(Some(diff)) = get_diff(&file, &snapshots).await {
+                editor_content = format!("{}\n\n\n-- diff:\n\n{}", editor_content, diff);
+            }
             let main_document = fpm::Document {
                 id: "editor.ftd".to_string(),
                 content: editor_content,
@@ -49,6 +53,25 @@ async fn handle_view_source(path: &str) -> fpm::Result<Vec<u8>> {
             };
             fpm::package_doc::read_ftd(&mut config, &main_document, "/", false).await
         }
-        fpm::File::Static(file) | fpm::File::Image(file) => Ok(file.content),
+        fpm::File::Static(ref file) | fpm::File::Image(ref file) => Ok(file.content.to_owned()),
     }
+}
+
+pub(crate) async fn get_diff(
+    doc: &fpm::File,
+    snapshots: &std::collections::BTreeMap<String, u128>,
+) -> fpm::Result<Option<String>> {
+    if let Some(timestamp) = snapshots.get(&doc.get_id()) {
+        let path = fpm::utils::history_path(&doc.get_id(), &doc.get_base_path(), timestamp);
+        let content = tokio::fs::read_to_string(&doc.get_full_path()).await?;
+
+        let existing_doc = tokio::fs::read_to_string(&path).await?;
+        if content.eq(&existing_doc) {
+            return Ok(None);
+        }
+        let patch = diffy::create_patch(&existing_doc, &content);
+
+        return Ok(Some(patch.to_string().replace("---", "\\---")));
+    }
+    Ok(None)
 }
