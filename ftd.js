@@ -1014,7 +1014,7 @@ function get(id, data) {
             let response = JSON.parse(xhr.response);
             if (!!response.data.url) {
                 window.location.href = response.data.url;
-            } else if(!!response.data.reload) {
+            } else if (!!response.data.reload) {
                 window.location.reload();
             }
         }};
@@ -1034,7 +1034,7 @@ function post(id, data) {
             let response = JSON.parse(xhr.response);
             if (!!response.data.url) {
                 window.location.href = response.data.url;
-            } else if(!!response.data.reload) {
+            } else if (!!response.data.reload) {
                 window.location.reload();
             }
         }};
