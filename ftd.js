@@ -1003,19 +1003,47 @@ function console_print(id, data) {
     console.log("console_print",data);
 }
 
+function get(id, data) {
+    let xhr = new XMLHttpRequest();
+    xhr.open("GET", data.url);
+    xhr.setRequestHeader("Accept", "application/json");
+    xhr.setRequestHeader("Content-Type", "application/json");
+
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+            let response = JSON.parse(xhr.response);
+            if (!!response.data.url) {
+                window.location.href = response.data.url;
+            } else if (!!response.data.reload) {
+                window.location.reload();
+            }
+        }};
+
+    xhr.send();
+}
+
+
 function post(id, data) {
     let xhr = new XMLHttpRequest();
     xhr.open("POST", data.url);
     xhr.setRequestHeader("Accept", "application/json");
     xhr.setRequestHeader("Content-Type", "application/json");
 
-    // xhr.onreadystatechange = function () {
-    //     if (xhr.readyState === 4) {
-    //         console.log(xhr.status);
-    //         console.log(xhr.responseText);
-    //     }};
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+            let response = JSON.parse(xhr.response);
+            if (!!response.data.url) {
+                window.location.href = response.data.url;
+            } else if (!!response.data.reload) {
+                window.location.reload();
+            }
+        }};
 
     xhr.send(JSON.stringify(data));
+}
+
+function redirect(id, data) {
+    window.location.href = data.url;
 }
 
 window.ftd.post_init = function () {
