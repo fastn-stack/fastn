@@ -1042,6 +1042,10 @@ function post(id, data) {
     xhr.send(JSON.stringify(data));
 }
 
+function redirect(id, data) {
+    window.location.href = data.url;
+}
+
 window.ftd.post_init = function () {
     const DARK_MODE = "ftd#dark-mode";
     const SYSTEM_DARK_MODE = "ftd#system-dark-mode";
