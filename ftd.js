@@ -1008,6 +1008,17 @@ function get(id, data) {
     xhr.open("GET", data.url);
     xhr.setRequestHeader("Accept", "application/json");
     xhr.setRequestHeader("Content-Type", "application/json");
+
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+            let response = JSON.parse(xhr.response);
+            if (!!response.data.url) {
+                window.location.href = response.data.url;
+            } else if(!!response.data.reload) {
+                window.location.reload();
+            }
+        }};
+
     xhr.send();
 }
 
@@ -1023,6 +1034,8 @@ function post(id, data) {
             let response = JSON.parse(xhr.response);
             if (!!response.data.url) {
                 window.location.href = response.data.url;
+            } else if(!!response.data.reload) {
+                window.location.reload();
             }
         }};
 
