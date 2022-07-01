@@ -1,24 +1,39 @@
 use itertools::Itertools;
 
-pub fn processor(
+pub async fn processor<'a>(
     section: &ftd::p1::Section,
-    doc: &ftd::p2::TDoc,
+    doc: &ftd::p2::TDoc<'a>,
     config: &fpm::Config,
 ) -> ftd::p1::Result<ftd::Value> {
-    processor_(section, doc, config).map_err(|e| ftd::p1::Error::ParseError {
-        message: e.to_string(),
-        doc_id: doc.name.to_string(),
-        line_number: section.line_number,
-    })
+    processor_(section, doc, config)
+        .await
+        .map_err(|e| ftd::p1::Error::ParseError {
+            message: e.to_string(),
+            doc_id: doc.name.to_string(),
+            line_number: section.line_number,
+        })
 }
 
-pub fn processor_(
+pub async fn processor_<'a>(
     section: &ftd::p1::Section,
-    doc: &ftd::p2::TDoc,
+    doc: &ftd::p2::TDoc<'a>,
     config: &fpm::Config,
 ) -> fpm::Result<ftd::Value> {
     let root = config.get_root_for_package(&config.package);
-    let files = config
+    let snapshots = fpm::snapshot::get_latest_snapshots(&config.root).await?;
+    let workspaces = fpm::snapshot::get_workspace(config).await?;
+    let all_files = config
+        .get_files(&config.package)
+        .await?
+        .into_iter()
+        .map(|v| v.get_id())
+        .collect_vec();
+    let deleted_files = snapshots
+        .keys()
+        .filter(|v| !all_files.contains(v))
+        .map(|v| v.to_string());
+
+    let mut files = config
         .get_all_file_paths(&config.package, true)?
         .into_iter()
         .filter(|v| v.is_file())
@@ -29,23 +44,44 @@ pub fn processor_(
                 .replace(std::path::MAIN_SEPARATOR.to_string().as_str(), "/")
         })
         .collect_vec();
-    let tree = construct_tree(files.as_slice())?;
+    files.extend(deleted_files);
+
+    let tree = construct_tree(config, files.as_slice(), &snapshots, &workspaces).await?;
     Ok(doc.from_json(&tree, section)?)
 }
 
-fn construct_tree(files: &[String]) -> fpm::Result<Vec<fpm::sitemap::TocItemCompat>> {
+async fn construct_tree(
+    config: &fpm::Config,
+    files: &[String],
+    snapshots: &std::collections::BTreeMap<String, u128>,
+    workspaces: &std::collections::BTreeMap<String, fpm::snapshot::Workspace>,
+) -> fpm::Result<Vec<fpm::sitemap::TocItemCompat>> {
     let mut tree = vec![];
     for file in files {
         insert(
+            config,
             &mut tree,
             file,
             format!("-/view-src/{}", file.trim_start_matches('/')).as_str(),
-        );
+            file,
+            snapshots,
+            workspaces,
+        )
+        .await?;
     }
     Ok(tree)
 }
 
-fn insert(tree: &mut Vec<fpm::sitemap::TocItemCompat>, path: &str, url: &str) {
+#[async_recursion::async_recursion(?Send)]
+async fn insert(
+    config: &fpm::Config,
+    tree: &mut Vec<fpm::sitemap::TocItemCompat>,
+    path: &str,
+    url: &str,
+    full_path: &str,
+    snapshots: &std::collections::BTreeMap<String, u128>,
+    workspaces: &std::collections::BTreeMap<String, fpm::snapshot::Workspace>,
+) -> fpm::Result<()> {
     let (path, rest) = if let Some((path, rest)) = path.split_once('/') {
         (path, Some(rest))
     } else {
@@ -58,18 +94,40 @@ fn insert(tree: &mut Vec<fpm::sitemap::TocItemCompat>, path: &str, url: &str) {
     {
         node
     } else {
-        tree.push(fpm::sitemap::TocItemCompat::new(
-            None,
-            Some(path.to_string()),
-            false,
-            false,
-        ));
+        let full_path = rest
+            .map(|v| full_path.trim_end_matches(v))
+            .unwrap_or(full_path);
+        tree.push(
+            fpm::sitemap::TocItemCompat::new(None, Some(path.to_string()), false, false)
+                .add_path(full_path),
+        );
         tree.last_mut().unwrap()
     };
 
     if let Some(rest) = rest {
-        insert(&mut node.children, rest, url);
-    } else {
+        insert(
+            config,
+            &mut node.children,
+            rest,
+            url,
+            full_path,
+            snapshots,
+            workspaces,
+        )
+        .await?;
+    } else if let Ok(file) = fpm::get_file(
+        config.package.name.to_string(),
+        &config.root.join(full_path),
+        &config.root,
+    )
+    .await
+    {
+        let status = fpm::commands::status::get_file_status(&file, snapshots, workspaces).await?;
         node.url = Some(url.to_string());
+        node.number = Some(format!("{:?}", status))
+    } else {
+        node.number = Some(format!("{:?}", fpm::commands::status::FileStatus::Deleted))
     }
+
+    Ok(())
 }

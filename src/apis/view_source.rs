@@ -30,12 +30,11 @@ async fn handle_view_source(path: &str) -> fpm::Result<Vec<u8>> {
     let file_name = config.get_file_path_and_resolve(path).await?;
     let file = config.get_file_and_package_by_id(path).await?;
     match file {
-        fpm::File::Ftd(file) | fpm::File::Markdown(file) | fpm::File::Code(file) => {
-            let file_content = fpm::utils::escape_ftd(file.content.as_str());
+        fpm::File::Ftd(_) | fpm::File::Markdown(_) | fpm::File::Code(_) => {
             let editor_content = format!(
-                "{}\n\n-- source:\n\n{}\n\n-- path: {}\n\n-- editor:",
+                "{}\n\n-- source:\n$processor$: fetch-file\npath:{}\n\n-- path: {}\n\n",
                 fpm::editor_ftd(),
-                file_content,
+                file_name,
                 file_name,
             );
             let main_document = fpm::Document {

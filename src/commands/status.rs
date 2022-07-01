@@ -90,7 +90,7 @@ async fn all_status(
     Ok(())
 }
 
-async fn get_file_status(
+pub(crate) async fn get_file_status(
     doc: &fpm::File,
     snapshots: &std::collections::BTreeMap<String, u128>,
     workspaces: &std::collections::BTreeMap<String, fpm::snapshot::Workspace>,
@@ -214,7 +214,7 @@ fn print_file_status(file_status: &std::collections::BTreeMap<String, FileStatus
 }
 
 #[derive(Debug, PartialEq)]
-enum FileStatus {
+pub(crate) enum FileStatus {
     Modified,
     Added,
     Deleted,

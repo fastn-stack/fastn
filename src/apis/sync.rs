@@ -67,6 +67,8 @@ pub struct SyncRequest {
 pub async fn sync(
     req: actix_web::web::Json<SyncRequest>,
 ) -> actix_web::Result<actix_web::HttpResponse> {
+    dbg!("remote server call", &req.0.package_name);
+
     match sync_worker(req.0).await {
         Ok(data) => fpm::apis::success(data),
         Err(err) => fpm::apis::error(

@@ -77,6 +77,7 @@ pub async fn processor<'a>(
             id: None,
             title: Some(key.original.to_string()),
             url: Some(format!("{}{}", key.original, url)),
+            path: None,
             number: vec![],
             is_heading: version.eq(key),
             is_disabled: false,

@@ -215,6 +215,7 @@ async fn send_to_fpm_serve(
         .header(reqwest::header::CONTENT_TYPE, "application/json")
         .body(data)
         .send()?;
+    dbg!("send_to_fpm_serve", &response.status());
 
     let response = response.json::<ApiResponse>()?;
     if !response.success {
