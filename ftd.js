@@ -10,25 +10,29 @@ function console_log(...message) {
 
 let ftd_utils = {
     resolve_reference: function (value, reference, data, obj) {
+        let data_value_ref = (reference !== null && !(value instanceof Object)) ?
+            ftd_utils.get_data_value(data, reference) : null;
         if (value instanceof Object) {
             let result = value instanceof Array ? [] : {};
             for (var key of Object.keys(value)) {
                 if (((typeof value[key]) === "object") && (reference[key] !== undefined)) {
                     result[key] = ftd_utils.resolve_reference(value[key], reference[key], data);
                 } else if (reference[key] !== undefined && reference[key] !== null) {
-                    result[key] = (data[reference[key]] !== undefined && data[reference[key]].value !== undefined) ? data[reference[key]].value : value[key];
+                    let data_value = ftd_utils.get_data_value(data, reference[key])
+                    result[key] = (data_value !== undefined) ? data_value : value[key];
                 } else {
                     result[key] = (value[key] === "$VALUE" && obj.value !== undefined) ? obj.value : value[key];
                 }
             }
             for (var key of Object.keys(reference)) {
-                if (value[key] === undefined && data[reference[key]] !== undefined && data[reference[key]].value !== undefined) {
-                    result[key] = data[reference[key]].value;
+                let data_value = ftd_utils.get_data_value(data, reference[key])
+                if (value[key] === undefined && data_value !== undefined) {
+                    result[key] = data_value;
                 }
             }
             return result;
-        } else if (reference !== null && reference !== undefined && data[reference] !== undefined && data[reference].value !== undefined) {
-            return data[reference]["value"];
+        } else if (reference !== null && reference !== undefined && data_value_ref !== undefined) {
+            return data_value_ref;
         } else {
             return (value === "$VALUE" && obj.value !== undefined) ? obj.value : value;
         }
@@ -747,7 +751,7 @@ window.ftd = (function () {
             exports.set_bool(id, target, !value);
         } else if (act === "message-host") {
             if (action["parameters"].data !== undefined) {
-                let value = JSON.parse(action["parameters"].data[0].value);
+                let value = action["parameters"].data[0].value;
                 let reference = JSON.parse(action["parameters"].data[0].reference);
                 let resolved_data = ftd_utils.resolve_reference(value, reference, data, obj);
                 let func = resolved_data.function.trim().replaceAll("-", "_");

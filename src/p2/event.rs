@@ -21,7 +21,7 @@ impl Event {
             for property_value in property_values {
                 let value = property_value.resolve(line_number, doc)?;
                 let reference = get_reference(property_value, doc, line_number)?;
-                if let Some(value) = value.to_string() {
+                if let Some(value) = value.to_serde_value() {
                     property_values_string.push(ftd::event::ParameterData { value, reference });
                 } else {
                     return ftd::e2(
@@ -101,11 +101,11 @@ impl Event {
                         "value".to_string(),
                         vec![
                             ftd::event::ParameterData {
-                                value: "true".to_string(),
+                                value: serde_json::Value::Bool(true),
                                 reference: None,
                             },
                             ftd::event::ParameterData {
-                                value: "boolean".to_string(),
+                                value: serde_json::json!("boolean"),
                                 reference: None,
                             },
                         ],
@@ -122,11 +122,11 @@ impl Event {
                         "value".to_string(),
                         vec![
                             ftd::event::ParameterData {
-                                value: "false".to_string(),
+                                value: serde_json::Value::Bool(false),
                                 reference: None,
                             },
                             ftd::event::ParameterData {
-                                value: "boolean".to_string(),
+                                value: serde_json::json!("boolean"),
                                 reference: None,
                             },
                         ],

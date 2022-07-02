@@ -33,6 +33,6 @@ pub struct Action {
 
 #[derive(serde::Deserialize, Clone, Debug, serde::Serialize, PartialEq, Default)]
 pub struct ParameterData {
-    pub value: String,
+    pub value: serde_json::Value,
     pub reference: Option<String>,
 }
