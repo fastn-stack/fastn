@@ -810,11 +810,11 @@ window.ftd = (function () {
             let value_data = action["parameters"].value[0];
             let value = ftd_utils.resolve_reference(value_data.value, value_data.reference, data, obj)
             if (action["parameters"].value[1].value === "integer") {
-                value = parseInt(value);
+                value = parseInt(value.toString());
             } else if (action["parameters"].value[1].value === "decimal") {
-                value = parseFloat(value);
+                value = parseFloat(value.toString());
             } else if (action["parameters"].value[1].value === "boolean") {
-                value = (value === "true");
+                value = (value === "true") || value;
             } else if (ftd_utils.isJson(value)) {
                 value = JSON.parse(value)
             }
