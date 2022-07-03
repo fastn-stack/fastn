@@ -1,5 +1,18 @@
 -- import: ft
 -- import: fpm.dev/assets
+-- import: fifthtry.github.io/bling/assets as b-assets
+-- import: fifthtry.github.io/bling/chat
+
+
+-- chat.message-right amitu: $title
+caption or body title:
+avatar: $b-assets.files.amitu.jpg
+round-avatar: true
+
+-- chat.message-left ganesh: $title
+caption or body title:
+avatar: $b-assets.files.ganeshs.jpeg
+round-avatar: true
 
 
 -- ftd.column create-section:

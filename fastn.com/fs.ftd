@@ -1,84 +1,90 @@
--- ft.page: File System Organization
+-- import: fpm.dev/lib
+-- import: fifthtry.github.io/bling/tip
+-- import: fifthtry.github.io/admonitions as cbox
+
+-- ft.page: `fpm package` File System Organization
 
 
 -- ft.h1: Package
 
-FPM organizes [`ftd`](https://ftd.dev) files in "packages".
+`fpm` organizes [`ftd`](https://ftd.dev) files in "packages". Any folder is a
+`fpm package` if it contains a valid `FPM.ftd` file.
 
+-- ft.h1: `FPM.ftd`
+
+Every package folder has a file [`FPM.ftd`](/fpm-ftd-file/).
 
 -- ft.h2: Package Name
 
-Each package has a name. The name of the package can be either just `foo` or
-`foo/bar`. The former is usually the "account name", eg the username or the org
+Each package has a name. The name of the package can be either just `foo.com` or
+`foo.com/bar`. The former is usually the "account name", eg the username or the org
 that owns that package, and the latter is a namespace package.
 
+-- cbox.tip: Package Name
 
--- ft.h1: `FPM Home`
+The name of package should be a valid URL (without the protocol part, we always
+assume `https`).
 
-It is common for people to work on more than one package at a time. In Git, every
-repo is checked on a folder on its own, with no relationship between folders
-corresponding to different git repos.
+-- ft.h1: `.build` folder
 
-Documents in FPM package can refer to other FPM packages. So if you are working
-on both packages `amitu` and `amitu/realm` for example, it is handy to checkout
-`amitu` in a folder named `amitu` and the package `amitu/realm` in `amitu/realm`.
-
-All packages in FPM should be checked out in "fpm home" folder. You can have more
-than one `fpm home` if you so desire for whatever reason.
-
-
--- ft.h2: `fpm home` discovery
-
-`fpm` tool expects the `.fpm.ftd` in a `fpm home`, and traverses up the folder
-tree till it finds it, that folder is called `fpm home`.
-
-Note: `fpm home` is optional. If `.fpm.ftd` file is not found in the expected
-location it is assumed that the package is in standalone mode.
-
-
--- ft.h1: Package Folder
-
-A package with name `x/y` is check-out/expected to be in `$FPM_HOME/x/y`.
-
-
--- ft.h2: `FPM.ftd`
-
-Every package folder has a file [`FPM.ftd`](/fpm/FPM/).
-
-
--- ft.h2: `.build` dir
-
-When a package is built using `fpm build`, the generated `.html` etc files are
-stored in `.build` folder in the package root, next to `FPM.ftd` file.
+`fpm` can be used as a static site generator, [`fpm build`](/build/) will
+convert all `ftd`, `markdown` files to `html` and store them in `.build` folder.
 
 If you are using static site hosting solution, eg Github Pages, Vercel,
 Cloudflare Pages etc, the content of `.build` folder has to be uploaded to your
 static site host.
 
+-- tip.tip: `.build` Is Ignore-able Folder
 
--- ft.h2: `.packages` dir
+`.build` folder should be added to `.gitignore` if you are storing fpm package
+in a git repository.
 
-If the package has a dependency on another package, the dependencies are downloaded
-and stored in `.packages` folder.
+-- ft.h1: `.packages` folder
 
+If the package has a dependency on another package, the dependencies are
+downloaded and stored in `.packages` folder.
 
--- ft.h2: `.history` dir
+-- cbox.tip: `.packages` Is Ignore-able Folder
 
-FPM implements `history tracking`, and creates a snapshot of every file that is
-modified in `.history` folder.
+`.packages` folder should also be added to `.gitignore`.
 
-You can create a new history snapshot by using `fpm sync`. If this package uses
-`fpm-repo`, content of local system would be synced and history snapshots would be
-created on `fpm-repo` server. If other repo like `github` etc are being used, then
-all files that have changed in package directory that have changed since last
-`sync` will be stored in the `.history` folder.
+-- ft.h1: `.packages/<package-name.ftd>` file
 
+When a fpm package is translated, a source package needs information about all
+the translation packages, to show on the translation status page. But we do not
+need the entire content of the translation packages.
 
--- ft.h2: `.history/.latest.ftd` file
+To avoid downloading entire package, we just download the `FPM.ftd` for the
+translation packages in this case.
+
+-- ft.h1: `.history` folder
+
+`fpm` is also a version control system and can be used instead of say `git`.
+History of all edits are kept in `history tracking`, and creates a snapshot of
+every file that is modified in `.history` folder.
+
+You can create a new history snapshot by using `fpm sync`.
+
+If this package uses `fpm` as the respository, `.history` folder is managed by
+the `fpm server`. If the package is stored in `git` repository, then `fpm sync`
+creates local snapshots.
+
+-- lib.ganesh: But amitu!
+-- lib.ganesh: Why Do We Need `.history` When We Using `git`?
+-- lib.amitu: `fpm` supports translation and ad-hoc tracking features.
+
+-- lib.amitu:
+
+These features require support for accessing historical versions of files.
+
+-- lib.amitu:
+
+Currently they are powered by snapshots stored in the `.history` folder.
+
+-- ft.h1: `.history/.latest.ftd` file
 
 This file keeps track of latest timestamp of all files in `.history` folder. It
 looks like this:
-
 
 -- ft.code:
 lang: ftd
@@ -86,7 +92,8 @@ lang: ftd
 \-- import: fpm
 
 \-- fpm.snapshot: FPM.ftd
-timestamp: 1638625721072234000
+timestamp: 1646494343706523000
 
 \-- fpm.snapshot: foo/index.ftd
 timestamp: 1638625721072234000
+

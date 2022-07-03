@@ -1,9 +1,10 @@
+-- import: fifthtry.github.io/admonitions as cbox
 -- ft.page: `FPM.ftd`
 
 
 -- ft.markdown: 
 
-In every [FPM package](/fpm/fs/) there must be a file named `FPM.ftd`.
+In every [FPM package](/fs/) there must be a file named `FPM.ftd`.
 
 
 -- ft.code:

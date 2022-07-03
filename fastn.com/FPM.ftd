@@ -11,16 +11,14 @@ implements: fifthtry.github.io/theme
 
 -- fpm.dependency: fifthtry.github.io/product-switcher as ps
 -- fpm.dependency: fifthtry.github.io/fifthtry-brand-switcher as fbs
-
+-- fpm.dependency: fifthtry.github.io/bling
 -- fpm.dependency: fifthtry.github.io/color-doc as cd
-
-
+-- fpm.dependency: fifthtry.github.io/admonitions
 
 
 -- fpm.auto-import: ft
 -- fpm.auto-import: fpm.dev/FPM/config
 -- fpm.auto-import: fpm
-
 
 
 -- fpm.sitemap:
