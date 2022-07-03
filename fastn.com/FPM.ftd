@@ -11,10 +11,9 @@ implements: fifthtry.github.io/theme
 
 -- fpm.dependency: fifthtry.github.io/product-switcher as ps
 -- fpm.dependency: fifthtry.github.io/fifthtry-brand-switcher as fbs
-
+-- fpm.dependency: fifthtry.github.io/bling
 -- fpm.dependency: fifthtry.github.io/color-doc as cd
-
-
+-- fpm.dependency: fifthtry.github.io/admonitions
 
 
 -- fpm.auto-import: ft
@@ -106,7 +105,13 @@ implements: fifthtry.github.io/theme
 - Day To Day:
   - How To Run Tests: /day-to-day/how-to-run-tests/
   - How To Update Failing Snapshot Tests: /day-to-day/how-to-fix-tests/
-
+- Sitemap:
+  - `serve`: Serve FTD Files
+    url: /sitemap/serve/
+  - `static`: Serve Static Files
+    url: /sitemap/static/
+  - `favicon.ico`: /sitemap/favicon/
+  - `sync` API: /sitemap/sync/
 
 ## Using `fpm` Crate: crate/
 
@@ -136,7 +141,7 @@ implements: fifthtry.github.io/theme
   - `ftd`: /crate/deps/ftd/
   - `fbt-lib`: /crate/deps/fbt-lib/
   - `camino`: /crate/deps/camino/
-
+  - `infer`: /crate/deps/infer/
 
 /-- fpm.toc-item list author-section:
 
