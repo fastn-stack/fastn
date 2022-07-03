@@ -22,7 +22,6 @@ implements: fifthtry.github.io/theme
 -- fpm.auto-import: fpm
 
 
-
 -- fpm.sitemap:
 
 # Home: /
@@ -43,6 +42,7 @@ implements: fifthtry.github.io/theme
   - Create new fpm project on github: /author/create-on-github/
 - How to install fpm on local machine: /how-to/install/
 - Build fpm project locally: /author/build-project/
+- Featured Components: /featured/
 - How To:
   - Install `fpm`: /how-to/install/
   - Update `fpm`: /how-to/update/
