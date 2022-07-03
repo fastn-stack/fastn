@@ -1,0 +1,4 @@
+-- ft.page: `infer` crate
+
+We are using the [infer](https://crates.io/crates/infer) crate to infer the mime
+type of a file.
