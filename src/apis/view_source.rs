@@ -29,15 +29,22 @@ async fn handle_view_source(path: &str) -> fpm::Result<Vec<u8>> {
     let mut config = fpm::Config::read2(None, false).await?;
     let file_name = config.get_file_path_and_resolve(path).await?;
     let file = config.get_file_and_package_by_id(path).await?;
+    let editor_ftd = if config.root.join("e.ftd").exists() {
+        tokio::fs::read_to_string(config.root.join("e.ftd")).await?
+    } else {
+        fpm::editor_ftd().to_string()
+    };
+
     match file {
-        fpm::File::Ftd(file) | fpm::File::Markdown(file) | fpm::File::Code(file) => {
-            let file_content = fpm::utils::escape_ftd(file.content.as_str());
-            let editor_content = format!(
-                "{}\n\n-- source:\n\n{}\n\n-- path: {}\n\n-- editor:",
-                fpm::editor_ftd(),
-                file_content,
-                file_name,
+        fpm::File::Ftd(_) | fpm::File::Markdown(_) | fpm::File::Code(_) => {
+            let snapshots = fpm::snapshot::get_latest_snapshots(&config.root).await?;
+            let mut editor_content = format!(
+                "{}\n\n-- source:\n$processor$: fetch-file\npath:{}\n\n-- path: {}\n\n",
+                editor_ftd, file_name, file_name,
             );
+            if let Ok(Some(diff)) = get_diff(&file, &snapshots).await {
+                editor_content = format!("{}\n\n\n-- diff:\n\n{}", editor_content, diff);
+            }
             let main_document = fpm::Document {
                 id: "editor.ftd".to_string(),
                 content: editor_content,
@@ -46,6 +53,25 @@ async fn handle_view_source(path: &str) -> fpm::Result<Vec<u8>> {
             };
             fpm::package_doc::read_ftd(&mut config, &main_document, "/", false).await
         }
-        fpm::File::Static(file) | fpm::File::Image(file) => Ok(file.content),
+        fpm::File::Static(ref file) | fpm::File::Image(ref file) => Ok(file.content.to_owned()),
     }
+}
+
+pub(crate) async fn get_diff(
+    doc: &fpm::File,
+    snapshots: &std::collections::BTreeMap<String, u128>,
+) -> fpm::Result<Option<String>> {
+    if let Some(timestamp) = snapshots.get(&doc.get_id()) {
+        let path = fpm::utils::history_path(&doc.get_id(), &doc.get_base_path(), timestamp);
+        let content = tokio::fs::read_to_string(&doc.get_full_path()).await?;
+
+        let existing_doc = tokio::fs::read_to_string(&path).await?;
+        if content.eq(&existing_doc) {
+            return Ok(None);
+        }
+        let patch = diffy::create_patch(&existing_doc, &content);
+
+        return Ok(Some(patch.to_string().replace("---", "\\---")));
+    }
+    Ok(None)
 }

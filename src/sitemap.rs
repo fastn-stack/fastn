@@ -185,6 +185,7 @@ pub struct TocItemCompat {
     pub url: Option<String>,
     pub number: Option<String>,
     pub title: Option<String>,
+    pub path: Option<String>,
     #[serde(rename = "is-heading")]
     pub is_heading: bool,
     // TODO: Font icon mapping to html?
@@ -212,6 +213,7 @@ impl TocItemCompat {
             url,
             number: None,
             title,
+            path: None,
             is_heading: false,
             font_icon: None,
             is_disabled: false,
@@ -220,6 +222,11 @@ impl TocItemCompat {
             image_src: None,
             children: vec![],
         }
+    }
+
+    pub(crate) fn add_path(mut self, path: &str) -> Self {
+        self.path = Some(path.to_string());
+        self
     }
 }
 

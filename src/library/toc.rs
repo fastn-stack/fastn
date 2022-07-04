@@ -24,6 +24,7 @@ pub struct TocItemCompat {
     pub url: Option<String>,
     pub number: Option<String>,
     pub title: Option<String>,
+    pub path: Option<String>,
     #[serde(rename = "is-heading")]
     pub is_heading: bool,
     // TODO: Font icon mapping to html?
@@ -45,6 +46,7 @@ pub struct TocItem {
     pub id: Option<String>,
     pub title: Option<String>,
     pub url: Option<String>,
+    pub path: Option<String>,
     pub number: Vec<u8>,
     pub is_heading: bool,
     pub is_disabled: bool,
@@ -60,6 +62,7 @@ impl TocItem {
             url: self.url.clone(),
             number: Some(self.number.iter().map(|x| format!("{}.", x)).collect()),
             title: self.title.clone(),
+            path: self.path.clone(),
             is_heading: self.is_heading,
             children: self
                 .children
@@ -455,7 +458,8 @@ mod test {
                         img_src: None,
                         is_heading: true,
                         font_icon: None,
-                        children: vec![]
+                        children: vec![],
+                        path: None
                     },
                     super::TocItem {
                         title: Some(format!("Test Page")),
@@ -466,7 +470,8 @@ mod test {
                         is_disabled: false,
                         img_src: None,
                         font_icon: None,
-                        children: vec![]
+                        children: vec![],
+                        path: None
                     },
                     super::TocItem {
                         title: Some(format!("Title One")),
@@ -477,7 +482,8 @@ mod test {
                         is_heading: true,
                         img_src: None,
                         font_icon: None,
-                        children: vec![]
+                        children: vec![],
+                        path: None
                     },
                     super::TocItem {
                         title: Some(format!("Home Page")),
@@ -488,6 +494,7 @@ mod test {
                         is_heading: false,
                         img_src: None,
                         font_icon: None,
+                        path: None,
                         children: vec![
                             super::TocItem {
                                 title: Some(format!("Nested Title")),
@@ -498,7 +505,8 @@ mod test {
                                 is_disabled: false,
                                 img_src: None,
                                 font_icon: None,
-                                children: vec![]
+                                children: vec![],
+                                path: None
                             },
                             super::TocItem {
                                 id: None,
@@ -510,6 +518,7 @@ mod test {
                                 img_src: None,
                                 font_icon: None,
                                 children: vec![],
+                                path: None
                             },
                             super::TocItem {
                                 title: Some(format!("Nested Title 2")),
@@ -520,7 +529,8 @@ mod test {
                                 is_disabled: false,
                                 img_src: None,
                                 font_icon: None,
-                                children: vec![]
+                                children: vec![],
+                                path: None
                             },
                             super::TocItem {
                                 id: None,
@@ -531,6 +541,7 @@ mod test {
                                 is_disabled: false,
                                 img_src: None,
                                 font_icon: None,
+                                path: None,
                                 children: vec![super::TocItem {
                                     id: None,
                                     title: Some(format!("Further Nesting")),
@@ -541,6 +552,7 @@ mod test {
                                     img_src: None,
                                     font_icon: None,
                                     children: vec![],
+                                    path: None
                                 },],
                             },
                             super::TocItem {
@@ -553,6 +565,7 @@ mod test {
                                 img_src: None,
                                 font_icon: None,
                                 children: vec![],
+                                path: None
                             },
                         ],
                     }
@@ -579,7 +592,8 @@ mod test {
                     is_heading: true,
                     img_src: None,
                     font_icon: None,
-                    children: vec![]
+                    children: vec![],
+                    path: None
                 }]
             }
         );
@@ -605,7 +619,8 @@ mod test {
                         is_disabled: false,
                         img_src: None,
                         font_icon: None,
-                        children: vec![]
+                        children: vec![],
+                        path: None
                     },
                     super::TocItem {
                         title: Some(format!("Hindi")),
@@ -616,7 +631,8 @@ mod test {
                         is_disabled: false,
                         img_src: None,
                         font_icon: None,
-                        children: vec![]
+                        children: vec![],
+                        path: None
                     }
                 ]
             }

@@ -165,6 +165,8 @@ $always-include$: true
 -- record toc-item:
 optional string title:
 optional string url:
+optional string path:
+optional string number:
 optional string font-icon:
 optional string img-src:
 boolean is-heading:

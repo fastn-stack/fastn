@@ -1,3 +1,4 @@
+mod fetch_file;
 mod fpm_dot_ftd;
 mod get_data;
 mod get_version_data;
@@ -166,7 +167,10 @@ impl Library {
             "include" => fpm::library::include::processor(section, doc, &self.config),
             "get-data" => fpm::library::get_data::processor(section, doc, &self.config),
             "sitemap" => fpm::library::sitemap::processor(section, doc, &self.config),
-            "package-tree" => fpm::library::package_tree::processor(section, doc, &self.config),
+            "package-tree" => {
+                fpm::library::package_tree::processor(section, doc, &self.config).await
+            }
+            "fetch-file" => fpm::library::fetch_file::processor(section, doc, &self.config).await,
             "get-version-data" => {
                 fpm::library::get_version_data::processor(
                     section,
@@ -351,7 +355,10 @@ impl Library2 {
             "include" => fpm::library::include::processor(section, doc, &self.config),
             "get-data" => fpm::library::get_data::processor(section, doc, &self.config),
             "sitemap" => fpm::library::sitemap::processor(section, doc, &self.config),
-            "package-tree" => fpm::library::package_tree::processor(section, doc, &self.config),
+            "package-tree" => {
+                fpm::library::package_tree::processor(section, doc, &self.config).await
+            }
+            "fetch-file" => fpm::library::fetch_file::processor(section, doc, &self.config).await,
             "get-version-data" => {
                 fpm::library::get_version_data::processor(
                     section,

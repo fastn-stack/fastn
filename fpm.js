@@ -22,14 +22,20 @@
     }
 
     document.addEventListener('keypress', (event) => {
-        var name = event.key;
+        let key = event.key;
         let url = window.location.href;
         let source = document.baseURI.endsWith("/") ? "-/view-src/" : "/-/view-src/";
-        let newurl = document.baseURI + source + url.replace(document.baseURI, "");
-        if (name === '.') {
-            window.location.href = newurl;
+        let new_url = document.baseURI + source + url.replace(document.baseURI, "");
+        if (url.includes("-/view-src/")) {
+            new_url = url.replace("-/view-src/", "");
         }
-    }, false);
+        if (key === '.' &&
+            ((event.target.nodeName !== "INPUT" && event.target.nodeName !== "TEXTAREA") || event.ctrlKey)) {
+                window.location.href = new_url;
+            }
+        }, false);
+
+
 })();
 
 /*! instant.page v5.1.0 - (C) 2019-2020 Alexandre Dieulot - https://instant.page/license */
