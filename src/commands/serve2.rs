@@ -1,11 +1,11 @@
 async fn serve_files(
     config: &mut fpm::Config,
-    path: std::path::PathBuf,
+    path: &std::path::PathBuf,
 ) -> actix_web::HttpResponse {
     let path = match path.to_str() {
         Some(s) => s,
         None => {
-            println!("handle_ftd: Not able to convert path");
+            eprintln!("handle_ftd: Not able to convert path");
             return actix_web::HttpResponse::InternalServerError().body("".as_bytes());
         }
     };
@@ -13,7 +13,7 @@ async fn serve_files(
     let f = match config.get_file_and_package_by_id(path).await {
         Ok(f) => f,
         Err(e) => {
-            println!("new_path: {}, Error: {:?}", path, e);
+            eprintln!("FPM-Error: path: {}, {:?}", path, e);
             return actix_web::HttpResponse::InternalServerError().body(e.to_string());
         }
     };
@@ -23,7 +23,10 @@ async fn serve_files(
         fpm::File::Ftd(main_document) => {
             return match fpm::package_doc::read_ftd(config, &main_document, "/", false).await {
                 Ok(r) => actix_web::HttpResponse::Ok().body(r),
-                Err(e) => actix_web::HttpResponse::InternalServerError().body(e.to_string()),
+                Err(e) => {
+                    eprintln!("FPM-Error: path: {}, {:?}", path, e);
+                    actix_web::HttpResponse::InternalServerError().body(e.to_string())
+                }
             };
         }
         fpm::File::Image(image) => {
@@ -42,7 +45,10 @@ async fn serve_files(
                 })
                 .body(image.content);
         }
-        _ => actix_web::HttpResponse::InternalServerError().body("".as_bytes()),
+        _ => {
+            eprintln!("FPM unknown handler");
+            actix_web::HttpResponse::InternalServerError().body("".as_bytes())
+        }
     };
 }
 
@@ -76,7 +82,10 @@ async fn server_fpm_file(config: &fpm::Config) -> actix_web::HttpResponse {
     let response =
         match tokio::fs::read(config.get_root_for_package(&config.package).join("FPM.ftd")).await {
             Ok(res) => res,
-            Err(e) => return actix_web::HttpResponse::NotFound().body(e.to_string()),
+            Err(e) => {
+                eprintln!("FPM-Error: path: {} error: {:?}", "FPM.ftd", e);
+                return actix_web::HttpResponse::NotFound().body(e.to_string());
+            }
         };
     actix_web::HttpResponse::Ok()
         .content_type("application/octet-stream")
@@ -91,31 +100,33 @@ async fn server_static_file(
         return actix_web::HttpResponse::NotFound().body("".as_bytes());
     }
 
-    match actix_files::NamedFile::open_async(file_path).await {
+    match actix_files::NamedFile::open_async(&file_path).await {
         Ok(r) => r.into_response(req),
-        Err(_e) => actix_web::HttpResponse::NotFound().body("TODO".as_bytes()),
+        Err(e) => {
+            eprintln!("FPM-Error: path: {:?}, error: {:?}", file_path, e);
+            actix_web::HttpResponse::NotFound().body(e.to_string())
+        }
     }
 }
-async fn serve_static(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
+async fn serve(req: actix_web::HttpRequest) -> actix_web::HttpResponse {
     // TODO: Need to remove unwrap
     let mut config = fpm::Config::read2(None, false).await.unwrap();
     let path: std::path::PathBuf = req.match_info().query("path").parse().unwrap();
 
     println!("request for path: {:?}", path);
-
+    let time = std::time::Instant::now();
     let favicon = std::path::PathBuf::new().join("favicon.ico");
-    /*if path.starts_with("-/") {
-        handle_dash(&req, &config, path).await
-    } else*/
-    if path.eq(&favicon) {
+    let response = if path.eq(&favicon) {
         server_static_file(&req, favicon).await
     } else if path.eq(&std::path::PathBuf::new().join("FPM.ftd")) {
         server_fpm_file(&config).await
     } else if path.eq(&std::path::PathBuf::new().join("")) {
-        serve_files(&mut config, path.join("/")).await
+        serve_files(&mut config, &path.join("/")).await
     } else {
-        serve_files(&mut config, path).await
-    }
+        serve_files(&mut config, &path).await
+    };
+    println!("response time: {:?} for path: {:?}", time.elapsed(), path);
+    response
 }
 
 #[actix_web::main]
@@ -200,7 +211,7 @@ You can try without providing port, it will automatically pick unused port"#,
             "/-/editor-sync/",
             actix_web::web::get().to(fpm::apis::edit::sync),
         )
-        .route("/{path:.*}", actix_web::web::get().to(serve_static))
+        .route("/{path:.*}", actix_web::web::get().to(serve))
     };
 
     println!("### Server Started ###");
