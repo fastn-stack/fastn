@@ -58,8 +58,10 @@ optional string package-name:
 optional body body:
 optional string package-url:
 optional string licence-url:
+margin-bottom: $fpm.space.space-8
 
 --- ftd.row:
+if: not $ft.is-mobile
 width: fill
 spacing: 16
 
@@ -72,7 +74,6 @@ link: $package-url
 margin-top: $fpm.space.space-2
 open-in-new-tab: true
 
-
 --- ftd.column:
 width: fill
 id: right-side
@@ -83,14 +84,12 @@ color: $fpm.color.main.text-strong
 link: $package-url
 open-in-new-tab: true
 
-
 --- ftd.text: 
 text: $body
 role: $fpm.type.copy-large
 color: $fpm.color.main.text
 link: $package-url
 open-in-new-tab: true
-
 
 --- container: right-side
 
@@ -110,13 +109,87 @@ link: $package-url
 align: center
 open-in-new-tab: true
 
-
 --- ftd.text: GitHub
 role: $fpm.type.copy-tight
 color: $fpm.color.main.text
 link: $package-url
 open-in-new-tab: true
 
+--- ftd.row:
+if: $licence-url is not null
+spacing: 6
+
+--- ftd.image:
+src: $assets.files.static.mit-icon.svg
+width: 16
+height: 16
+link: $licence-url
+align: center
+margin-left: $fpm.space.space-3
+open-in-new-tab: true
+
+--- ftd.text: License
+role: $fpm.type.copy-tight
+color: $fpm.color.main.text
+link: $licence-url
+open-in-new-tab: true
+
+--- container: ftd.main
+
+--- ftd.column:
+if: $ft.is-mobile
+width: fill
+spacing: 16
+
+--- ftd.image:
+src: $assets.files.static.doc-site.png
+width: fill
+height: auto
+border-radius: 6
+link: $package-url
+margin-top: $fpm.space.space-2
+open-in-new-tab: true
+
+--- ftd.column:
+width: fill
+id: right-side
+
+--- ftd.text: $package-name
+role: $fpm.type.heading-small
+color: $fpm.color.main.text-strong
+link: $package-url
+open-in-new-tab: true
+
+--- ftd.text: 
+text: $body
+role: $fpm.type.copy-large
+color: $fpm.color.main.text
+link: $package-url
+open-in-new-tab: true
+
+--- container: right-side
+
+--- ftd.row:
+spacing: 16
+margin-top: $fpm.space.space-2
+align: right
+
+--- ftd.row:
+spacing: 6
+
+--- ftd.image:
+src: $assets.files.static.icon-github.svg
+width: 16
+height: 16
+link: $package-url
+align: center
+open-in-new-tab: true
+
+--- ftd.text: GitHub
+role: $fpm.type.copy-tight
+color: $fpm.color.main.text
+link: $package-url
+open-in-new-tab: true
 
 --- ftd.row:
 if: $licence-url is not null
@@ -167,8 +240,24 @@ padding-horizontal: $fpm.space.space-3
 padding-vertical: $fpm.space.space-3
 width: fill
 spacing: 24
+margin-bottom: $fpm.space.space-8
 
---- scheme-loop: $obj.title
+
+--- scheme-loop-desktop: $obj.title
+if: not $ft.is-mobile
+$loop$: $schemes as $obj
+scheme-url: $obj.scheme-url
+screenshot: $obj.screenshot
+
+--- container: ftd.main
+
+--- ftd.column:
+if: $ft.is-mobile
+width: fill
+margin-bottom: -38
+
+
+--- scheme-loop-mobile: $obj.title
 $loop$: $schemes as $obj
 scheme-url: $obj.scheme-url
 screenshot: $obj.screenshot
@@ -181,8 +270,7 @@ screenshot: $obj.screenshot
 
 
 
-
--- ftd.row scheme-loop:
+-- ftd.row scheme-loop-desktop:
 caption title:
 string scheme-url:
 ftd.image-src screenshot: 
@@ -205,6 +293,38 @@ link: $scheme-url
 align: center
 open-in-new-tab: true
 
+
+
+
+
+
+
+
+
+
+-- ftd.column scheme-loop-mobile:
+caption title:
+string scheme-url:
+ftd.image-src screenshot: 
+width: fill
+margin-bottom: $fpm.space.space-8
+
+--- ftd.column:
+spacing: 12
+width: fill
+
+--- ftd.image:
+src: $screenshot
+link: $scheme-url
+width: fill
+open-in-new-tab: true
+
+--- ftd.text: $title
+role: $fpm.type.heading-small
+color: $fpm.color.main.text
+link: $scheme-url
+align: center
+open-in-new-tab: true
 
 
 
@@ -286,7 +406,19 @@ template list templates:
 width: fill
 spacing: 24
 
---- theme-loop: $obj.title
+--- theme-loop-desktop: $obj.title
+if: not $ft.is-mobile 
+$loop$: $templates as $obj
+template-url: $obj.template-url
+screenshot: $obj.screenshot
+
+--- container: ftd.main
+
+--- ftd.column:
+if: $ft.is-mobile 
+width: fill
+
+--- theme-loop-mobile: $obj.title
 $loop$: $templates as $obj
 template-url: $obj.template-url
 screenshot: $obj.screenshot
@@ -299,8 +431,7 @@ screenshot: $obj.screenshot
 
 
 
-
--- ftd.row theme-loop:
+-- ftd.row theme-loop-desktop:
 caption title:
 string template-url:
 ftd.image-src screenshot: 
@@ -319,6 +450,57 @@ link: $template-url
 open-in-new-tab: true
 width: 200
 min-height: 220
+
+--- ftd.text: $title
+role: $fpm.type.heading-small
+color: $fpm.color.main.text
+link: $template-url
+open-in-new-tab: true
+align: center
+
+--- ftd.text: Preview Theme
+role: $fpm.type.copy-tight
+color: $fpm.color.main.border
+anchor: parent
+bottom: 80
+left: 45
+border-width: 1
+border-color: $fpm.color.main.border
+align: center
+padding: $fpm.space.space-2
+link: $template-url
+border-radius: 4
+open-in-new-tab: true
+background-color: $fpm.color.main.text
+
+
+
+
+
+
+
+
+
+
+-- ftd.column theme-loop-mobile:
+caption title:
+string template-url:
+ftd.image-src screenshot: 
+margin-bottom: $fpm.space.space-8
+
+--- ftd.column:
+spacing: 12
+padding-horizontal: $fpm.space.space-3
+padding-vertical: $fpm.space.space-3
+border-width: 1
+border-color: $fpm.color.main.border-strong
+border-radius: 4
+
+--- ftd.image:
+src: $screenshot
+link: $template-url
+open-in-new-tab: true
+width: fill
 
 --- ftd.text: $title
 role: $fpm.type.heading-small
