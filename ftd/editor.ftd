@@ -1,6 +1,65 @@
 -- import: fpm
 
 
+-- ftd.image-src downarrow: https://res.cloudinary.com/dh79l3hex/image/upload/v1656915977/editor/downarrow_vtavl8.svg
+dark: https://res.cloudinary.com/dh79l3hex/image/upload/v1656915977/editor/downarrow_vtavl8.svg
+
+-- ftd.image-src edit: https://res.cloudinary.com/dh79l3hex/image/upload/v1656915977/editor/edit_vaptkk.svg
+dark: https://res.cloudinary.com/dh79l3hex/image/upload/v1656915977/editor/edit_vaptkk.svg
+
+-- ftd.image-src file: https://res.cloudinary.com/dh79l3hex/image/upload/v1656915977/editor/file_w2amiw.svg
+dark: https://res.cloudinary.com/dh79l3hex/image/upload/v1656915977/editor/file_w2amiw.svg
+
+-- ftd.image-src refresh: https://res.cloudinary.com/dh79l3hex/image/upload/v1656915975/editor/refresh_ogh23c.svg
+dark: https://res.cloudinary.com/dh79l3hex/image/upload/v1656915975/editor/refresh_ogh23c.svg
+
+-- ftd.image-src mobile-active: https://res.cloudinary.com/dh79l3hex/image/upload/v1656915975/editor/Mobile-active_to6wt3.svg
+dark: https://res.cloudinary.com/dh79l3hex/image/upload/v1656915975/editor/Mobile-active_to6wt3.svg
+
+-- ftd.image-src mobile: https://res.cloudinary.com/dh79l3hex/image/upload/v1656915975/editor/Mobile_mdfrex.svg
+dark: https://res.cloudinary.com/dh79l3hex/image/upload/v1656915975/editor/Mobile_mdfrex.svg
+
+-- ftd.image-src right-arrow: https://res.cloudinary.com/dh79l3hex/image/upload/v1656915975/editor/rightarrow_yq70bi.svg
+dark: https://res.cloudinary.com/dh79l3hex/image/upload/v1656915975/editor/rightarrow_yq70bi.svg
+
+-- ftd.image-src desktop: https://res.cloudinary.com/dh79l3hex/image/upload/v1656915975/editor/Desktop_sduphx.svg
+dark: https://res.cloudinary.com/dh79l3hex/image/upload/v1656915975/editor/Desktop_sduphx.svg
+
+-- ftd.image-src desktop-active: https://res.cloudinary.com/dh79l3hex/image/upload/v1656915975/editor/Desktop-active_mtf2qq.svg
+dark: https://res.cloudinary.com/dh79l3hex/image/upload/v1656915975/editor/Desktop-active_mtf2qq.svg
+
+-- ftd.image-src mobile-frame: https://res.cloudinary.com/dh79l3hex/image/upload/v1656919425/mobile-frame-new_nynvqo.png
+dark: https://res.cloudinary.com/dh79l3hex/image/upload/v1656919425/mobile-frame-new_nynvqo.png
+
+-- ftd.image-src sync-img: https://res.cloudinary.com/dh79l3hex/image/upload/v1656916714/editor/sync_czqyfh.svg
+dark: https://res.cloudinary.com/dh79l3hex/image/upload/v1656916714/editor/sync_czqyfh.svg
+
+-- ftd.image-src showbar: https://res.cloudinary.com/dh79l3hex/image/upload/v1656916714/editor/showbar_zt0iuu.svg
+dark: https://res.cloudinary.com/dh79l3hex/image/upload/v1656916714/editor/showbar_zt0iuu.svg
+
+
+-- ftd.font-size fine-print-bold-desktop:
+line-height: 18
+size: 14
+letter-spacing: 0
+
+-- ftd.type fine-print-bold: $fpm.font-display
+desktop: $fine-print-bold-desktop
+mobile: $fine-print-bold-desktop
+xl: $fine-print-bold-desktop
+weight: 700
+
+-- ftd.font-size copy-print-bold-desktop:
+line-height: 16
+size: 20
+letter-spacing: 0
+
+-- ftd.type copy-print-bold: $fpm.font-display
+desktop: $copy-print-bold-desktop
+mobile: $copy-print-bold-desktop
+xl: $copy-print-bold-desktop
+weight: 700
+
 
 -- editor:
 
@@ -51,98 +110,274 @@ $always-include$: true
 
 
 
--- ftd.column editor:
+-- ftd.row editor:
 width: fill
 height: fill
-background-color: $fpm.color.main.background.base
+boolean open: false
+boolean open-1: false
+boolean open-2: false
+boolean edits: true
+background-color: $fpm.color.main.background.step-2
 color: $fpm.color.main.text-strong
-spacing: 20
-padding: 20
 
---- ftd.text: $path
-role: $fpm.type.heading-large
-align: center
+--- ftd.column:
+id: right-side
+width: percent 0
+width if not $open: percent 20
+height: fill
+background-color: $fpm.color.main.background.base
+
+
 
 --- ftd.row:
-spacing: 10
+background-color: $grey-dark
+padding-vertical: $fpm.space.space-6
+padding-horizontal: $fpm.space.space-6
 width: fill
-id: row-id
-spacing: space-between
+
+--- ftd.text: FOLDER NAME 
+role: $copy-print-bold
+color: $fpm.color.main.text-strong
+width: fill
 
 --- ftd.row:
-align: right
-spacing: 10
-
---- sync:
-
---- view:
-
---- ftd.text: Diff
-if: $diff is not null
-padding: 10
-position: center
-border-radius: 8
-color: $fpm.color.main.cta-secondary.text
-background-color: $fpm.color.main.cta-secondary.base
-$on-click$: toggle $show-diff
-
-
---- container: row-id
-
---- create:
+spacing: 12
 align: right
 
---- container: ftd.main
+--- ftd.image:
+src: $sync-img
+$on-click$: message-host $sync-obj
 
---- ftd.row:
-width: fill
-if: $show-diff
+--- ftd.image:
+src: $refresh
 
---- ftd.code:
-padding: 10
-width: fill
-background-color: $2b303b
-if: $diff is not null
-lang: diff
-
-$diff
-
-
---- container: ftd.main
-
+--- container:  right-side
 
 --- ftd.row:
 width: fill
 height: fill
 spacing: 20
 overflow-y: auto
+padding-top if not $open: 12
+padding-left if not $open: 12
+padding-right if not $open: 28
 
 --- print-toc:
 toc: $fs
 
---- ftd.input:
-width: fill
+--- container: ftd.main
+
+--- ftd.row:
+id: left-side
+width: percent 80
+width if $open: percent 100
 height: fill
+background-color: $fpm.color.main.background.base
+
+
+--- ftd.column:
+width: calc 100% - 53px
+id: switch-container
+spacing: 14
+padding-left: 16
+
+--- ftd.row:
+width: fill
+id: show-container
+spacing: 18
+padding-vertical: 24
+
+--- ftd.image:
+src: $showbar
+width: 20
+height: auto
+$on-click$: toggle $open
+
+--- container: show-container
+
+--- ftd.row:
+spacing: 8
+
+--- ftd.text: $path
+role: $fine-print-bold
+color: $fpm.color.main.cta-primary.base
+
+--- ftd.text: (Preview)
+role: $fine-print-bold
+color: $fpm.color.main.cta-primary.base
+white-space: nowrap
+
+--- container: switch-container
+
+--- ftd.input:
+if: $edits
+width: fill
+min-width: percent 100
+min-height: calc 100vh - 82px
 multiline: true
 placeholder: -- ftd.text: hello world
 value: $source
-border-width: 2
 $on-input$: $source=$VALUE
 $on-input$: message-host $edit-obj
-padding: 20
+color: $fpm.color.main.text
+background-color: $fpm.color.main.background.base
+
+--- container: switch-container
+
+--- ftd.column:
+if: $open-1
+width: fill
+height: fill
+background-color: $fpm.color.main.text-strong
+
+--- ftd.iframe:
+src: $path
+width: fill
+min-width: percent 100
+min-height: calc 100vh - 82px
+background-color: $fpm.color.main.text-strong
+
+--- container: switch-container
+
+--- ftd.row:
+if: $open-2
+id: mobile-container
+align: center
+
+--- ftd.column:
+align: center
+width: 305
+height: 620
+background-image: $mobile-frame
+background-repeat: false
+
+--- ftd.column:
+anchor: parent
+left: 21
+top: 64
+width: 300
+height: 540
+
+--- ftd.iframe:
+src: $path
+height: 471
+width: 260
+
+--- container: mobile-container
+
+--- ftd.column:
+margin-left: 134
+align: center
+
+--- ftd.text: iphone X
+role: $fpm.type.fine-print
+color: $fpm.color.main.cta-primary.base
+
+--- ftd.text: Iphone SE
+role: $fpm.type.fine-print
+color: $fpm.color.main.text
+
+--- ftd.text: Samsung Note
+role: $fpm.type.fine-print
+color: $fpm.color.main.text
+
+--- ftd.text: Samsung Galaxy
+role: $fpm.type.fine-print
+color: $fpm.color.main.text
 
 
 
+--- container: left-side
+
+--- ftd.column:
+width: 53
+height: fill
+padding-top: 29
+padding-bottom: 21
+id: main-sidebar
+background-color: $fpm.color.main.background.step-1
+
+--- ftd.column:
+width: fill
+height: fill
+spacing: 32
+id: sidebar
+
+--- ftd.text: M
+color: $fpm.color.main.text
+color if $MOUSE-IN: $fpm.color.main.cta-primary.base
+align: center
+width: fill
+border-right: 5
+padding-horizontal: 16
+height: 30
+border-color: $fpm.color.main.background.step-1
+border-color if $MOUSE-IN: $fpm.color.main.cta-primary.base
 
 
+--- container: sidebar
+
+--- ftd.text: E
+color: $fpm.color.main.text
+color if $MOUSE-IN: $fpm.color.main.cta-primary.base
+align: center
+width: fill
+border-right: 5
+padding-horizontal: 16
+height: 30
+border-color: $fpm.color.main.background.step-1
+border-color if $MOUSE-IN: $fpm.color.main.cta-primary.base
+
+--- container: main-sidebar
+
+--- ftd.column:
+width: fill
+id: image
+padding-horizontal:  12
+spacing: 32
 
 
+--- ftd.image:
+src: $edit
+width: 20
+height: auto
+$on-click$: $open-1 = false
+$on-click$: $open-2 = false
+$on-click$: $edits = true
+
+--- container: image
+
+--- ftd.image:
+if: not $open-1
+src: $desktop
+width: 20
+height: auto
+$on-click$: toggle $open-1
+$on-click$: $open-2 = false
+$on-click$: $edits = false
+--- ftd.image:
+if: $open-1
+src: $desktop-active
+width: 20
+height: auto
 
 
+--- container: image
 
+--- ftd.image:
+if: not $open-2
+src: $mobile
+width: 20
+height: auto
+$on-click$: toggle $open-2
+$on-click$: $open-1= false
+$on-click$: $edits = false
 
-
-
+--- ftd.image:
+if: $open-2
+src: $mobile-active
+width: 20
+height: auto
 
 -- object sync-obj:
 function: get
@@ -288,6 +523,39 @@ data: $new-name
 
 -- ftd.column print-toc:
 fpm.toc-item list toc:
+boolean open: true
+width: fill
+
+--- ftd.row:
+width: fill
+spacing: 4
+
+--- ftd.image:
+if: $open
+align: center
+src: $downarrow
+$on-click$: toggle $open
+
+
+--- ftd.image:
+if: not $open
+align: center
+src: $right-arrow
+$on-click$: toggle $open
+
+--- ftd.text: All files
+color: $blue
+role: $fine-print-bold
+width: fill
+align: center
+
+
+--- container: ftd.main
+
+--- ftd.column:
+width: fill
+if: $open
+margin-top: $fpm.space.space-2
 
 --- print-toc-item:
 $loop$: $toc as $obj
@@ -324,11 +592,26 @@ fpm.toc-item toc:
 boolean is-first: false
 margin-left if not $is-first: 20
 boolean show-actions: false
-margin-bottom: 5
+margin-bottom: $fpm.space.space-2
 boolean show: false
+padding-left: 24
+width: fill
+background-color if $MOUSE-IN: $light-green
+border-radius: 2
+padding-bottom: 2
+padding-top: 2
 
 --- ftd.row:
 spacing: 5
+width: fill
+
+--- ftd.image:
+src: $file
+width: auto
+height: 16
+
+--- ftd.row:
+width: fill
 $on-mouse-enter$: $show-actions = true
 $on-mouse-leave$: $show-actions = false
 $on-mouse-leave$: $show = false
@@ -336,6 +619,7 @@ $on-mouse-leave$: $show = false
 --- show-item: $toc.title
 link: $toc.url
 status: $toc.number
+
 
 --- ftd.row:
 spacing: 5
@@ -347,21 +631,22 @@ spacing: 5
 if: $show-action-on-status
 
 --- ftd.text: Delete
+role: $fpm.type.fine-print
 background-color: $red
 color: $fpm.color.main.text-strong
-padding: 2
 if: $toc.path is not null
 $on-click$: $delete-file-path=$toc.path
 $on-click$: message-host $delete-obj
-border-radius: 8
+padding-horizontal: 2
+
 
 --- ftd.text: Rename
 if: not $show
+role: $fpm.type.fine-print
 $on-click$: $show = true
 color: $fpm.color.main.cta-secondary.text
 background-color: $fpm.color.main.cta-secondary.base
-padding: 2
-border-radius: 8
+padding-horizontal: 2
 
 --- ftd.row:
 if: $show
@@ -371,26 +656,25 @@ spacing: 5
 placeholder: Enter new name
 $on-input$: $new-name=$VALUE
 $on-input$: $rename-file-path=$toc.path
-padding: 2
+padding-horizontal: 2
 
 --- ftd.text: Rename
 if: $rename-file-path == $toc.path
 $on-click$: message-host $rename-obj
 color: $fpm.color.main.cta-secondary.text
 background-color: $fpm.color.main.cta-secondary.base
-padding: 2
-border-radius: 8
+padding-horizontal: 2
 
 --- container: row-id
 
 --- ftd.text: Revert
 background-color: $red
 color: $fpm.color.main.text-strong
-padding: 2
+padding-horizontal: 2
 if: $show-revert
 $on-click$: $revert-file-path=$toc.path
 $on-click$: message-host $revert-obj
-border-radius: 8
+
 
 --- container: ftd.main
 
@@ -409,7 +693,8 @@ toc: $obj
 caption title:
 optional string link:
 optional string status:
-padding: 2
+padding-horizontal: 2
+width: fill
 
 
 --- ftd.row:
@@ -421,30 +706,48 @@ $on-mouse-enter$: $show-revert = false
 --- ftd.text: $title
 if: $link is not null
 link: $link
+role: $fpm.type.fine-print
+width: fill
 
 --- ftd.text: $title
 if: $link is null
-
+color: $fpm.color.main.text-strong
+role: $fpm.type.fine-print
+width: fill
 
 --- container: ftd.main
 
 
 --- ftd.row:
-spacing: 10
+id: added-container
 if: $status == Added
 color: $green
+width: fill
+
+--- ftd.column:
+width: percent 90
 $on-mouse-enter$: $show-action-on-status = true
 $on-mouse-enter$: $show-revert = false
 
 --- ftd.text: $title
 if: $link is not null
 link: $link
-color: $green
+color: $fpm.color.main.text-strong
+role: $fpm.type.fine-print
+white-space: nowrap
+
 
 --- ftd.text: $title
 if: $link is null
+color: $fpm.color.main.text-strong
+role: $fpm.type.fine-print
+
+--- container: added-container
 
 --- ftd.text: A
+color: $green
+role: $fpm.type.fine-print
+
 
 --- container: ftd.main
 
@@ -459,13 +762,17 @@ color: $purple
 --- ftd.text: $title
 if: $link is not null
 link: $link
-color: $purple
+color: $fpm.color.main.text-strong
+role: $fpm.type.fine-print
 
 --- ftd.text: $title
 if: $link is null
+color: $fpm.color.main.text-strong
+role: $fpm.type.fine-print
 
 --- ftd.text: M
-
+color: $purple
+role: $fpm.type.fine-print
 --- container: ftd.main
 
 
@@ -479,13 +786,17 @@ $on-mouse-enter$: $show-action-on-status = false
 --- ftd.text: $title
 if: $link is not null
 link: $link
-color: $red
+color: $fpm.color.main.text-strong
+role: $fpm.type.fine-print
 
 --- ftd.text: $title
 if: $link is null
+color: $fpm.color.main.text-strong
+role: $fpm.type.fine-print
 
 --- ftd.text: D
-
+color: $red
+role: $fpm.type.fine-print
 --- container: ftd.main
 
 
@@ -499,13 +810,16 @@ color: $grey
 --- ftd.text: $title
 if: $link is not null
 link: $link
-color: $grey
-
+color: $fpm.color.main.text-strong
+role: $fpm.type.fine-print
 --- ftd.text: $title
 if: $link is null
+color: $fpm.color.main.text-strong
+role: $fpm.type.fine-print
 
 --- ftd.text: C
-
+color: $grey
+role: $fpm.type.fine-print
 --- container: ftd.main
 
 
@@ -519,12 +833,17 @@ color: $orange
 --- ftd.text: $title
 if: $link is not null
 link: $link
-color: $orange
+color: $fpm.color.main.text-strong
+role: $fpm.type.fine-print
 
 --- ftd.text: $title
 if: $link is null
+color: $fpm.color.main.text-strong
+role: $fpm.type.fine-print
 
 --- ftd.text: O
+color: $orange
+role: $fpm.type.fine-print
 
 --- container: ftd.main
 
@@ -539,12 +858,17 @@ color: $orange
 --- ftd.text: $title
 if: $link is not null
 link: $link
-color: $orange
+color: $fpm.color.main.text-strong
+role: $fpm.type.fine-print
 
 --- ftd.text: $title
 if: $link is null
+color: $fpm.color.main.text-strong
+role: $fpm.type.fine-print
 
 --- ftd.text: Cˆ
+color: $orange
+role: $fpm.type.fine-print
 
 --- container: ftd.main
 
@@ -559,12 +883,17 @@ color: $orange
 --- ftd.text: $title
 if: $link is not null
 link: $link
-color: $orange
+color: $fpm.color.main.text-strong
+role: $fpm.type.fine-print
 
 --- ftd.text: $title
 if: $link is null
+color: $fpm.color.main.text-strong
+role: $fpm.type.fine-print
 
 --- ftd.text: C˘
+color: $orange
+role: $fpm.type.fine-print
 
 --- container: ftd.main
 
@@ -578,9 +907,13 @@ $on-mouse-enter$: $show-action-on-status = true
 --- ftd.text: $title
 if: $link is not null
 link: $link
+color: $fpm.color.main.text-strong
+role: $fpm.type.fine-print
 
 --- ftd.text: $title
 if: $link is null
+color: $fpm.color.main.text-strong
+role: $fpm.type.fine-print
 
 
 
@@ -612,3 +945,14 @@ dark: orange
 light: #2b303b
 dark: #2b303b
 
+-- ftd.color blue:
+light: #81AACE
+dark: #81AACE
+
+-- ftd.color grey-dark:
+light: #2B2A2A
+dark: #2B2A2A
+
+-- ftd.color light-green:
+light:rgba(73, 236, 70, 0.1)
+dark:rgba(73, 236, 70, 0.1)
