@@ -1,41 +1,41 @@
 -- import: fpm
 
 
--- ftd.image-src downarrow: https://res.cloudinary.com/dh79l3hex/image/upload/v1656915977/editor/downarrow_vtavl8.svg
-dark: https://res.cloudinary.com/dh79l3hex/image/upload/v1656915977/editor/downarrow_vtavl8.svg
+-- ftd.image-src downarrow: https://fifthtry.github.io/fpm-editor/-/fifthtry.github.io/fpm-editor/downarrow.svg
+dark: https://fifthtry.github.io/fpm-editor/-/fifthtry.github.io/fpm-editor/downarrow.svg
 
--- ftd.image-src edit: https://res.cloudinary.com/dh79l3hex/image/upload/v1656915977/editor/edit_vaptkk.svg
-dark: https://res.cloudinary.com/dh79l3hex/image/upload/v1656915977/editor/edit_vaptkk.svg
+-- ftd.image-src edit: https://fifthtry.github.io/fpm-editor/-/fifthtry.github.io/fpm-editor/edit.svg
+dark: https://fifthtry.github.io/fpm-editor/-/fifthtry.github.io/fpm-editor/edit.svg
 
--- ftd.image-src file: https://res.cloudinary.com/dh79l3hex/image/upload/v1656915977/editor/file_w2amiw.svg
-dark: https://res.cloudinary.com/dh79l3hex/image/upload/v1656915977/editor/file_w2amiw.svg
+-- ftd.image-src file: https://fifthtry.github.io/fpm-editor/-/fifthtry.github.io/fpm-editor/file.svg
+dark: https://fifthtry.github.io/fpm-editor/-/fifthtry.github.io/fpm-editor/file.svg
 
--- ftd.image-src refresh: https://res.cloudinary.com/dh79l3hex/image/upload/v1656915975/editor/refresh_ogh23c.svg
-dark: https://res.cloudinary.com/dh79l3hex/image/upload/v1656915975/editor/refresh_ogh23c.svg
+-- ftd.image-src refresh: https://fifthtry.github.io/fpm-editor/-/fifthtry.github.io/fpm-editor/refresh.svg
+dark: https://fifthtry.github.io/fpm-editor/-/fifthtry.github.io/fpm-editor/refresh.svg
 
--- ftd.image-src mobile-active: https://res.cloudinary.com/dh79l3hex/image/upload/v1656915975/editor/Mobile-active_to6wt3.svg
-dark: https://res.cloudinary.com/dh79l3hex/image/upload/v1656915975/editor/Mobile-active_to6wt3.svg
+-- ftd.image-src mobile-active: https://fifthtry.github.io/fpm-editor/-/fifthtry.github.io/fpm-editor/mobile-active.svg
+dark: https://fifthtry.github.io/fpm-editor/-/fifthtry.github.io/fpm-editor/mobile-active.svg
 
--- ftd.image-src mobile: https://res.cloudinary.com/dh79l3hex/image/upload/v1656915975/editor/Mobile_mdfrex.svg
-dark: https://res.cloudinary.com/dh79l3hex/image/upload/v1656915975/editor/Mobile_mdfrex.svg
+-- ftd.image-src mobile: https://fifthtry.github.io/fpm-editor/-/fifthtry.github.io/fpm-editor/mobile.svg
+dark: https://fifthtry.github.io/fpm-editor/-/fifthtry.github.io/fpm-editor/mobile.svg
 
--- ftd.image-src right-arrow: https://res.cloudinary.com/dh79l3hex/image/upload/v1656915975/editor/rightarrow_yq70bi.svg
-dark: https://res.cloudinary.com/dh79l3hex/image/upload/v1656915975/editor/rightarrow_yq70bi.svg
+-- ftd.image-src right-arrow: https://fifthtry.github.io/fpm-editor/-/fifthtry.github.io/fpm-editor/right-arrow.svg
+dark: https://fifthtry.github.io/fpm-editor/-/fifthtry.github.io/fpm-editor/right-arrow.svg
 
--- ftd.image-src desktop: https://res.cloudinary.com/dh79l3hex/image/upload/v1656915975/editor/Desktop_sduphx.svg
-dark: https://res.cloudinary.com/dh79l3hex/image/upload/v1656915975/editor/Desktop_sduphx.svg
+-- ftd.image-src desktop: https://fifthtry.github.io/fpm-editor/-/fifthtry.github.io/fpm-editor/desktop.svg
+dark: https://fifthtry.github.io/fpm-editor/-/fifthtry.github.io/fpm-editor/desktop.svg
 
--- ftd.image-src desktop-active: https://res.cloudinary.com/dh79l3hex/image/upload/v1656915975/editor/Desktop-active_mtf2qq.svg
-dark: https://res.cloudinary.com/dh79l3hex/image/upload/v1656915975/editor/Desktop-active_mtf2qq.svg
+-- ftd.image-src desktop-active: https://fifthtry.github.io/fpm-editor/-/fifthtry.github.io/fpm-editor/desktop-active.svg
+dark: https://fifthtry.github.io/fpm-editor/-/fifthtry.github.io/fpm-editor/desktop-active.svg
 
--- ftd.image-src mobile-frame: https://res.cloudinary.com/dh79l3hex/image/upload/v1656919425/mobile-frame-new_nynvqo.png
-dark: https://res.cloudinary.com/dh79l3hex/image/upload/v1656919425/mobile-frame-new_nynvqo.png
+-- ftd.image-src mobile-frame: https://fifthtry.github.io/fpm-editor/-/fifthtry.github.io/fpm-editor/mobile-frame.png
+dark: https://fifthtry.github.io/fpm-editor/-/fifthtry.github.io/fpm-editor/mobile-frame.png
 
--- ftd.image-src sync-img: https://res.cloudinary.com/dh79l3hex/image/upload/v1656916714/editor/sync_czqyfh.svg
-dark: https://res.cloudinary.com/dh79l3hex/image/upload/v1656916714/editor/sync_czqyfh.svg
+-- ftd.image-src sync-img: https://fifthtry.github.io/fpm-editor/-/fifthtry.github.io/fpm-editor/sync.svg
+dark: https://fifthtry.github.io/fpm-editor/-/fifthtry.github.io/fpm-editor/sync.svg
 
--- ftd.image-src showbar: https://res.cloudinary.com/dh79l3hex/image/upload/v1656916714/editor/showbar_zt0iuu.svg
-dark: https://res.cloudinary.com/dh79l3hex/image/upload/v1656916714/editor/showbar_zt0iuu.svg
+-- ftd.image-src showbar: https://fifthtry.github.io/fpm-editor/-/fifthtry.github.io/fpm-editor/showbar.svg
+dark: https://fifthtry.github.io/fpm-editor/-/fifthtry.github.io/fpm-editor/showbar.svg
 
 
 -- ftd.font-size fine-print-bold-desktop:
