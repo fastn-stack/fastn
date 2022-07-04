@@ -1,7 +1,4 @@
-async fn serve_files(
-    config: &mut fpm::Config,
-    path: &std::path::PathBuf,
-) -> actix_web::HttpResponse {
+async fn serve_files(config: &mut fpm::Config, path: &std::path::Path) -> actix_web::HttpResponse {
     let path = match path.to_str() {
         Some(s) => s,
         None => {
@@ -83,7 +80,7 @@ async fn server_fpm_file(config: &fpm::Config) -> actix_web::HttpResponse {
         match tokio::fs::read(config.get_root_for_package(&config.package).join("FPM.ftd")).await {
             Ok(res) => res,
             Err(e) => {
-                eprintln!("FPM-Error: path: {} error: {:?}", "FPM.ftd", e);
+                eprintln!("FPM-Error: path: FPM.ftd error: {:?}", e);
                 return actix_web::HttpResponse::NotFound().body(e.to_string());
             }
         };
