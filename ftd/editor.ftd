@@ -592,23 +592,57 @@ fpm.toc-item toc:
 boolean is-first: false
 margin-left if not $is-first: 20
 boolean show-actions: false
-margin-bottom: $fpm.space.space-2
 boolean show: false
-padding-left: 24
 width: fill
-background-color if $MOUSE-IN: $light-green
 border-radius: 2
 padding-bottom: 2
 padding-top: 2
+boolean open-1: false
+boolean open-2: false
+
 
 --- ftd.row:
-spacing: 5
 width: fill
+id: ghhh
+background-color if $MOUSE-IN: $light-green
+padding-left: 24
+margin-bottom: 4
+align: center
+
+
+--- ftd.row:
+width: fill
+id: switch-container
+
+
+
+
 
 --- ftd.image:
+if: $toc.children is not empty
+if: not $open-1
+src: $right-arrow
+$on-click$: toggle $open-1
+align: center
+padding-right: $fpm.space.space-1
+
+
+
+--- container: switch-container
+
+--- ftd.image:
+if: $toc.children is empty
 src: $file
 width: auto
 height: 16
+align: center
+padding-right: $fpm.space.space-1
+
+
+
+
+
+
 
 --- ftd.row:
 width: fill
@@ -677,6 +711,10 @@ $on-click$: message-host $revert-obj
 
 
 --- container: ftd.main
+
+--- ftd.column:
+if: $open-1
+width: fill
 
 
 --- print-toc-item:
