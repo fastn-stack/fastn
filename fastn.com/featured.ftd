@@ -11,12 +11,19 @@ Below are page level components, designed and developed via using `FTD` language
 
 
 -- page-level:
-package-name: fifthtry.github.io/doc-site/
-package-url: https://github.com/FifthTry/doc-site
+package-name: fifthtry.github.io/doc-site
+package-url: https://fifthtry.github.io/doc-site/
 licence-url: https://github.com/FifthTry/doc-site/blob/main/LICENSE
 
 Use doc-site to create documentation pages, books etc using doc-site component.
 
+
+-- ft.h3: Resume Themes
+
+Resume themes can be used for showing your resume in FTD sites.
+
+-- template-list:
+templates: $templates
 
 -- ft.h1: Color Schemes
 
@@ -35,12 +42,7 @@ Using FTD we have designed various reusable in-page components.
 libraries-list: $libraries-list
 
 
--- ft.h1: Resume Themes
 
-Resume themes can be used for showing your resume in FTD sites.
-
--- template-list:
-templates: $templates
 
 
 
@@ -67,8 +69,8 @@ spacing: 16
 
 --- ftd.image:
 src: $assets.files.static.doc-site.png
-width: 150
-height: 100
+width: 300
+height: auto
 border-radius: 6
 link: $package-url
 margin-top: $fpm.space.space-2
@@ -79,14 +81,14 @@ width: fill
 id: right-side
 
 --- ftd.text: $package-name
-role: $fpm.type.heading-small
+role: $fpm.type.heading-medium
 color: $fpm.color.main.text-strong
 link: $package-url
 open-in-new-tab: true
 
 --- ftd.text: 
 text: $body
-role: $fpm.type.copy-large
+role: $fpm.type.heading-small
 color: $fpm.color.main.text
 link: $package-url
 open-in-new-tab: true
@@ -120,7 +122,7 @@ if: $licence-url is not null
 spacing: 6
 
 --- ftd.image:
-src: $assets.files.static.mit-icon.svg
+src: $assets.files.static.icon-github.svg
 width: 16
 height: 16
 link: $licence-url
@@ -128,7 +130,7 @@ align: center
 margin-left: $fpm.space.space-3
 open-in-new-tab: true
 
---- ftd.text: License
+--- ftd.text: License: BSD
 role: $fpm.type.copy-tight
 color: $fpm.color.main.text
 link: $licence-url
@@ -282,8 +284,8 @@ spacing: 12
 --- ftd.image:
 src: $screenshot
 link: $scheme-url
-width: 200
-min-height: 140
+width: 340
+height: 200
 open-in-new-tab: true
 
 --- ftd.text: $title
@@ -403,8 +405,13 @@ screenshot: $assets.files.static.elegant-sample.png
 
 -- ftd.row template-list:
 template list templates:
+background-color: $fpm.color.main.background.step-2
+border-radius: 6
+padding-horizontal: $fpm.space.space-3
+padding-vertical: $fpm.space.space-3
 width: fill
 spacing: 24
+margin-bottom: $fpm.space.space-8
 
 --- theme-loop-desktop: $obj.title
 if: not $ft.is-mobile 
@@ -417,6 +424,7 @@ screenshot: $obj.screenshot
 --- ftd.column:
 if: $ft.is-mobile 
 width: fill
+margin-bottom: -24
 
 --- theme-loop-mobile: $obj.title
 $loop$: $templates as $obj
@@ -438,18 +446,14 @@ ftd.image-src screenshot:
 
 --- ftd.column:
 spacing: 12
-padding-horizontal: $fpm.space.space-3
-padding-vertical: $fpm.space.space-3
-border-width: 1
-border-color: $fpm.color.main.border-strong
-border-radius: 4
+padding: 9
 
 --- ftd.image:
 src: $screenshot
 link: $template-url
 open-in-new-tab: true
 width: 200
-min-height: 220
+height: 200
 
 --- ftd.text: $title
 role: $fpm.type.heading-small
@@ -458,7 +462,7 @@ link: $template-url
 open-in-new-tab: true
 align: center
 
---- ftd.text: Preview Theme
+\--- ftd.text: Preview Theme
 role: $fpm.type.copy-tight
 color: $fpm.color.main.border
 anchor: parent
@@ -486,15 +490,10 @@ background-color: $fpm.color.main.text
 caption title:
 string template-url:
 ftd.image-src screenshot: 
-margin-bottom: $fpm.space.space-8
+margin-bottom: $fpm.space.space-6
 
 --- ftd.column:
 spacing: 12
-padding-horizontal: $fpm.space.space-3
-padding-vertical: $fpm.space.space-3
-border-width: 1
-border-color: $fpm.color.main.border-strong
-border-radius: 4
 
 --- ftd.image:
 src: $screenshot
@@ -509,7 +508,7 @@ link: $template-url
 open-in-new-tab: true
 align: center
 
---- ftd.text: Preview Theme
+\--- ftd.text: Preview Theme
 role: $fpm.type.copy-tight
 color: $fpm.color.main.border
 anchor: parent
