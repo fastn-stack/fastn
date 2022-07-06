@@ -162,7 +162,7 @@ pub(crate) async fn get_file(
         }
     };
 
-    Ok(match id.rsplit_once(".") {
+    Ok(match id.rsplit_once('.') {
         Some((_, "ftd")) => File::Ftd(Document {
             package_name: package_name.to_string(),
             id: id.to_string(),

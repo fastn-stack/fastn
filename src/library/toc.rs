@@ -277,7 +277,7 @@ impl TocParser {
                 let current_title = toc_item.title.clone().unwrap();
                 let (title, url) = match current_title.as_str().matches(':').count() {
                     1 | 0 => {
-                        if let Some((first, second)) = current_title.rsplit_once(":") {
+                        if let Some((first, second)) = current_title.rsplit_once(':') {
                             (
                                 Some(first.trim().to_string()),
                                 Some(second.trim().to_string()),
@@ -331,7 +331,7 @@ impl TocParser {
             self.eval_temp_item()?;
         } else {
             match self.temp_item.clone() {
-                Some((i, d)) => match line.split_once(":") {
+                Some((i, d)) => match line.split_once(':') {
                     Some(("url", v)) => {
                         self.temp_item = Some((
                             TocItem {

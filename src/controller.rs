@@ -128,6 +128,7 @@ async fn get_package(fpm_instance: &str, fpm_controller: &str) -> fpm::Result<Pa
         )));
     }
 
+    #[allow(clippy::or_fun_call)]
     resp.result.ok_or({
         fpm::Error::APIResponseError(format!("get_package api error: {:?}", &resp.message))
     })

@@ -63,7 +63,7 @@ pub(crate) async fn edit_worker(request: EditRequest) -> fpm::Result<EditRespons
             }
         };
 
-        let new_path = if let Some((p, _)) = request.path.trim_end_matches('/').rsplit_once("/") {
+        let new_path = if let Some((p, _)) = request.path.trim_end_matches('/').rsplit_once('/') {
             format!("{}/{}", p, rename)
         } else {
             rename

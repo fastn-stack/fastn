@@ -45,11 +45,11 @@ setup_colors() {
 
 
 setup() {
-
     # Parse arguments
     while [ $# -gt 0 ]; do
         case $1 in
             --pre-release) PRE_RELEASE=true ;;
+            --controller) CONTROLLER=true;;
         esac
     shift
     done
@@ -70,8 +70,12 @@ setup() {
         DESTINATION_PATH="${HOME}/.fpm/bin"
         mkdir -p $DESTINATION_PATH
     fi
-    
-    if [[ "$OSTYPE" == "darwin"* ]]; then
+
+    if [[ $CONTROLLER ]]; then 
+        curl -s $URL | grep ".*\/releases\/download\/.*\/fpm_controller_linux.*" | head -2 | cut -d : -f 2,3 | tee /dev/tty | xargs -I % curl -O -J -L %
+        mv fpm_controller_linux_musl_x86_64 "${DESTINATION_PATH}/fpm"
+        mv fpm_controller_linux_musl_x86_64.d "${DESTINATION_PATH}/fpm.d"
+    elif [[ "$OSTYPE" == "darwin"* ]]; then
         curl -s $URL | grep ".*\/releases\/download\/.*\/fpm_macos.*" | head -1 | cut -d : -f 2,3 | tee /dev/tty | xargs -I % curl -O -J -L %
         mv fpm_macos_x86_64 "${DESTINATION_PATH}/fpm"
     else
