@@ -221,6 +221,7 @@ $on-input$: $source=$VALUE
 $on-input$: message-host $edit-obj
 color: $fpm.color.main.text
 background-color: $fpm.color.main.background.base
+white-space: pre
 
 --- container: switch-container
 
