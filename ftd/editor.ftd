@@ -22,6 +22,15 @@ dark: https://fifthtry.github.io/fpm-ui/-/fifthtry.github.io/fpm-ui/mobile.svg
 -- ftd.image-src right-arrow: https://fifthtry.github.io/fpm-ui/-/fifthtry.github.io/fpm-ui/right-arrow.svg
 dark: https://fifthtry.github.io/fpm-ui/-/fifthtry.github.io/fpm-ui/right-arrow.svg
 
+-- ftd.image-src rename-icon: https://fifthtry.github.io/fpm-ui/-/fifthtry.github.io/fpm-ui/rename.png
+dark: https://fifthtry.github.io/fpm-ui/-/fifthtry.github.io/fpm-ui/rename.png
+
+-- ftd.image-src delete-icon: https://fifthtry.github.io/fpm-ui/-/fifthtry.github.io/fpm-ui/delete.png
+dark: https://fifthtry.github.io/fpm-ui/-/fifthtry.github.io/fpm-ui/delete.png
+
+-- ftd.image-src arrow-right: https://fifthtry.github.io/fpm-ui/-/fifthtry.github.io/fpm-ui/arrow-right.png
+dark: https://fifthtry.github.io/fpm-ui/-/fifthtry.github.io/fpm-ui/arrow-right.png
+
 -- ftd.image-src desktop: https://fifthtry.github.io/fpm-ui/-/fifthtry.github.io/fpm-ui/desktop.svg
 dark: https://fifthtry.github.io/fpm-ui/-/fifthtry.github.io/fpm-ui/desktop.svg
 
@@ -48,6 +57,19 @@ desktop: $fine-print-bold-desktop
 mobile: $fine-print-bold-desktop
 xl: $fine-print-bold-desktop
 weight: 700
+
+
+-- ftd.font-size tiny-font:
+line-height: 16
+size: 13
+letter-spacing: 0
+
+-- ftd.type tiny: $fpm.font-display
+desktop: $tiny-font
+mobile: $tiny-font
+xl: $tiny-font
+weight: 300
+
 
 -- ftd.font-size copy-print-bold-desktop:
 line-height: 16
@@ -123,7 +145,7 @@ color: $fpm.color.main.text-strong
 --- ftd.column:
 id: right-side
 width: percent 0
-width if not $open: percent 20
+width if not $open: percent 25
 height: fill
 background-color: $fpm.color.main.background.base
 
@@ -169,7 +191,7 @@ toc: $fs
 
 --- ftd.row:
 id: left-side
-width: percent 80
+width: percent 75
 width if $open: percent 100
 height: fill
 background-color: $fpm.color.main.background.base
@@ -593,6 +615,7 @@ fpm.toc-item toc:
 boolean is-first: false
 margin-left if not $is-first: 20
 boolean show-actions: false
+boolean show-rename: false
 boolean show: false
 width: fill
 border-radius: 2
@@ -600,7 +623,6 @@ padding-bottom: 2
 padding-top: 2
 boolean open-1: false
 boolean open-2: false
-
 
 --- ftd.row:
 width: fill
@@ -610,14 +632,9 @@ padding-left: 24
 margin-bottom: 4
 align: center
 
-
 --- ftd.row:
 width: fill
 id: switch-container
-
-
-
-
 
 --- ftd.image:
 if: $toc.children is not empty
@@ -626,8 +643,6 @@ src: $right-arrow
 $on-click$: toggle $open-1
 align: center
 padding-right: $fpm.space.space-1
-
-
 
 --- container: switch-container
 
@@ -639,12 +654,6 @@ height: 16
 align: center
 padding-right: $fpm.space.space-1
 
-
-
-
-
-
-
 --- ftd.row:
 width: fill
 $on-mouse-enter$: $show-actions = true
@@ -655,50 +664,100 @@ $on-mouse-leave$: $show = false
 link: $toc.url
 status: $toc.number
 
-
 --- ftd.row:
+width: fill
 spacing: 5
 if: $show-actions
 id: row-id
 
 --- ftd.row:
+width: fill
 spacing: 5
 if: $show-action-on-status
 
---- ftd.text: Delete
-role: $fpm.type.fine-print
-background-color: $red
-color: $fpm.color.main.text-strong
+--- ftd.row:
+width: fill
+id: hanging-rename
+anchor: parent
+right: 25
+top: 5
+width: 34
+height: 34
+z-index: 1000
+id: actions
+background-color: $fpm.color.main.cta-primary.base
+
+--- ftd.image:
 if: $toc.path is not null
 $on-click$: $delete-file-path=$toc.path
 $on-click$: message-host $delete-obj
-padding-horizontal: 2
-
-
---- ftd.text: Rename
-if: not $show
-role: $fpm.type.fine-print
+src: $delete-icon
 $on-click$: $show = true
-color: $fpm.color.main.cta-secondary.text
-background-color: $fpm.color.main.cta-secondary.base
+id: rename-area
+margin-right: $fpm.space.space-2
+
+\--- ftd.text: Delete
+role: $fpm.type.fine-print
+background-color: $red
+color: $fpm.color.main.text-strong
 padding-horizontal: 2
+
+--- ftd.image:
+src: $rename-icon
+if: not $show
+$on-click$: $show-rename = true
+id: rename-area
+
+--- container: row-id
 
 --- ftd.row:
-if: $show
-spacing: 5
+if: $show-rename
+anchor: parent
+width: 285
+height: 30
+right: -20
+top: 0
+z-index: 10000
+background-color: $fpm.color.main.background.step-2
+id: rename-row
+border-radius: 4
+$on-mouse-leave$: $show-rename = false
+
+--- ftd.row:
+width: fill
+background-color: $fpm.color.main.background.step-2
+padding-left: 10 
+padding-right: 5
+padding-vertical: 3
+
+--- ftd.text: Rename
+role: $tiny
+color: $fpm.color.main.cta-primary.base
+margin-right: $fpm.space.space-2
+align: center
+
+--- ftd.row:
+width: fill
+background-color: $fpm.color.main.background.step-1
+
 
 --- ftd.input:
+width: fill
 placeholder: Enter new name
 $on-input$: $new-name=$VALUE
 $on-input$: $rename-file-path=$toc.path
-padding-horizontal: 2
+padding-horizontal: 10
+padding-vertical: $fpm.space.space-2
+background-color: $fpm.color.main.background.step-1
+color: $fpm.color.main.text-strong
+border-width: 0
+cursor: text
 
---- ftd.text: Rename
-if: $rename-file-path == $toc.path
+--- ftd.image: 
+src: $arrow-right
 $on-click$: message-host $rename-obj
-color: $fpm.color.main.cta-secondary.text
-background-color: $fpm.color.main.cta-secondary.base
-padding-horizontal: 2
+align: center
+margin-right: 10
 
 --- container: row-id
 
@@ -710,13 +769,11 @@ if: $show-revert
 $on-click$: $revert-file-path=$toc.path
 $on-click$: message-host $revert-obj
 
-
 --- container: ftd.main
 
 --- ftd.column:
 if: $open-1
 width: fill
-
 
 --- print-toc-item:
 $loop$: $toc.children as $obj
