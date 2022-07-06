@@ -186,7 +186,7 @@ impl fpm::Package {
                     })?
             };
 
-            let path = std::env::temp_dir().join(format!("{}.zip", self.name.replace("/", "__")));
+            let path = std::env::temp_dir().join(format!("{}.zip", self.name.replace('/', "__")));
 
             let start = std::time::Instant::now();
             print!("Downloading {} ... ", self.name.as_str());
@@ -220,7 +220,7 @@ impl fpm::Package {
                     Some(path) => path.to_owned(),
                     None => continue,
                 };
-                let out_path_without_folder = out_path.to_str().unwrap().split_once("/").unwrap().1;
+                let out_path_without_folder = out_path.to_str().unwrap().split_once('/').unwrap().1;
                 let file_extract_path = base_dir
                     .join(".packages")
                     .join(self.name.as_str())
@@ -454,7 +454,7 @@ impl fpm::Package {
             return Ok(());
         };
 
-        let path = std::env::temp_dir().join(format!("{}.zip", self.name.replace("/", "__")));
+        let path = std::env::temp_dir().join(format!("{}.zip", self.name.replace('/', "__")));
 
         let start = std::time::Instant::now();
         print!("Downloading {} ... ", self.name.as_str());
@@ -488,7 +488,7 @@ impl fpm::Package {
                 Some(path) => path.to_owned(),
                 None => continue,
             };
-            let out_path_without_folder = out_path.to_str().unwrap().split_once("/").unwrap().1;
+            let out_path_without_folder = out_path.to_str().unwrap().split_once('/').unwrap().1;
             let file_extract_path = {
                 let mut file_extract_path: camino::Utf8PathBuf =
                     std::env::current_dir()?.canonicalize()?.try_into()?;

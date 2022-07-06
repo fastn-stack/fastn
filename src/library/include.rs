@@ -79,7 +79,7 @@ pub struct IncludeDocument {
 
 impl IncludeDocument {
     pub fn parse(s: &str) -> Result<Self, ParseError> {
-        match s.split_once(":") {
+        match s.split_once(':') {
             None => {
                 // No `:` found. Include full file
                 Ok(IncludeDocument {
@@ -88,7 +88,7 @@ impl IncludeDocument {
                 })
             }
             Some((doc_path, range_or_anchor)) => {
-                match range_or_anchor.split_once(":") {
+                match range_or_anchor.split_once(':') {
                     None => {
                         // Can either be an anchor or an individual line
                         let test = range_or_anchor.parse::<i32>();
@@ -180,7 +180,7 @@ pub fn sanitize_anchored_lines(s: &str) -> String {
 impl IncludeCode {
     pub fn parse(s: &str, config: &fpm::Config) -> Result<Self, ParseError> {
         let doc = IncludeDocument::parse(s)?;
-        let extension = match &doc.path.rsplit_once(".") {
+        let extension = match &doc.path.rsplit_once('.') {
             Some((_, ex)) => ex,
             None => "txt",
         };

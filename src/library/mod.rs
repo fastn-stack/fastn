@@ -112,7 +112,7 @@ impl Library {
             let os_name = name
                 .trim_start_matches('/')
                 .trim_end_matches('/')
-                .replace("/", std::path::MAIN_SEPARATOR.to_string().as_str());
+                .replace('/', std::path::MAIN_SEPARATOR.to_string().as_str());
             if let Ok(v) = std::fs::read_to_string(base_path.join(format!("{}.ftd", os_name))) {
                 return Some(v);
             }

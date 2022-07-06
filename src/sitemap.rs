@@ -436,7 +436,7 @@ impl SitemapParser {
                 let current_title = toc_item.get_id().unwrap();
                 let (title, url) = match current_title.as_str().matches(':').count() {
                     1 | 0 => {
-                        if let Some((first, second)) = current_title.rsplit_once(":") {
+                        if let Some((first, second)) = current_title.rsplit_once(':') {
                             (
                                 Some(first.trim().to_string()),
                                 Some(second.trim().to_string()),
@@ -495,7 +495,7 @@ impl SitemapParser {
             // let id = self.temp_item.unwrap().0.get_id();
             let doc_id = self.doc_name.to_string();
             match &mut self.temp_item {
-                Some((i, _)) => match line.split_once(":") {
+                Some((i, _)) => match line.split_once(':') {
                     Some((k, v)) => {
                         let v = v.trim();
                         let id = i.get_id();
@@ -810,7 +810,7 @@ impl Sitemap {
                         locations.push((
                             file_location,
                             &subsection.translation_file_location,
-                            subsection.id.as_ref().map(|v| get_id(v.as_str())).flatten(),
+                            subsection.id.as_ref().and_then(|v| get_id(v.as_str())),
                         ));
                     }
                 }

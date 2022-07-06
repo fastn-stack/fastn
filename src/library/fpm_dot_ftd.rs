@@ -237,6 +237,7 @@ fn construct_fpm_cli_variables(_lib: &fpm::Library) -> String {
 }
 
 pub(crate) fn get(lib: &fpm::Library) -> String {
+    #[allow(clippy::format_in_format_args)]
     let mut fpm_base = format!(
         indoc::indoc! {"
             {fpm_base}

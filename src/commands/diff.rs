@@ -3,8 +3,7 @@ pub async fn diff(config: &fpm::Config, files: Option<Vec<String>>, all: bool) -
     let all = all || files.is_some();
     let documents = if let Some(ref files) = files {
         let files = files
-            .to_vec()
-            .into_iter()
+            .iter()
             .map(|x| config.root.join(x))
             .collect::<Vec<camino::Utf8PathBuf>>();
         fpm::paths_to_files(config.package.name.as_str(), files, config.root.as_path()).await?
