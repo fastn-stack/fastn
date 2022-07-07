@@ -1,0 +1,14 @@
+-- ft.page: `view-src` API
+
+`view-src` is called from FPM Editor to view source code of the `ftd` and
+`markdown` files inside the editor.
+
+-- ft.h1: API
+
+-- ft.h2: URL
+
+The URL of the API is: `/-/view-src/<file-path>/`
+
+-- ft.h2: Request Method
+
+Request Method of this API is `GET`
