@@ -204,7 +204,7 @@ pub(crate) fn seconds_to_human(s: u64) -> String {
 
 pub(crate) fn validate_base_url(package: &fpm::Package) -> fpm::Result<()> {
     if package.base.is_none() {
-        warning!("expected base in fpm.package");
+        warning!(format!("expected base in fpm.package: {:?}", package.name));
     }
 
     Ok(())
