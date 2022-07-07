@@ -1091,7 +1091,7 @@ if: $show-rename
 anchor: parent
 width: 285
 height: 30
-right: -20
+right: 10
 top: 0
 z-index: 10000
 background-color: $fpm.color.main.background.step-2
@@ -1143,11 +1143,13 @@ if: $show-revert
 $on-click$: $revert-file-path=$toc.path
 $on-click$: message-host $revert-obj
 
---- container: switch-container
+--- container: ftd.main
+
 
 --- ftd.column:
 if: $open-1
 width: fill
+
 
 --- print-toc-item:
 $loop$: $toc.children as $obj
@@ -1177,6 +1179,7 @@ width: fill
 --- ftd.text: $title
 if: $link is not null
 link: $link
+color: $fpm.color.main.text-strong
 role: $file-font
 width: fill
 
@@ -1185,6 +1188,11 @@ if: $link is null
 color: $fpm.color.main.text-strong
 role: $file-font
 width: fill
+
+--- ftd.text: C
+color: $changed
+role: $status-font
+align: right
 
 --- container: ftd.main
 
