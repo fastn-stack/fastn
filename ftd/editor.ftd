@@ -1,6 +1,11 @@
 -- import: fpm
 
 
+-- boolean is-mobile: false
+
+-- is-mobile: true
+if: $ftd.device == mobile
+
 -- ftd.image-src downarrow: https://fifthtry.github.io/fpm-ui/-/fifthtry.github.io/fpm-ui/downarrow.svg
 dark: https://fifthtry.github.io/fpm-ui/-/fifthtry.github.io/fpm-ui/downarrow.svg
 
@@ -138,18 +143,20 @@ height: fill
 boolean open: false
 boolean open-1: false
 boolean open-2: false
+boolean open-3: false
 boolean edits: true
 background-color: $fpm.color.main.background.step-2
 color: $fpm.color.main.text-strong
 
 --- ftd.column:
-id: right-side
+if: not $is-mobile
+id: mobile-side
 width: percent 0
 width if not $open: percent 25
+min-width if not $open: 300
+overflow-x: auto
 height: fill
 background-color: $fpm.color.main.background.base
-
-
 
 --- ftd.row:
 background-color: $grey-dark
@@ -173,7 +180,7 @@ $on-click$: message-host $sync-obj
 --- ftd.image:
 src: $refresh
 
---- container:  right-side
+--- container:  mobile-side
 
 --- ftd.row:
 width: fill
@@ -189,13 +196,305 @@ toc: $fs
 
 --- container: ftd.main
 
---- ftd.row:
-id: left-side
-width: percent 75
+--- ftd.column:
+if: $is-mobile
+width: percent 0
 width if $open: percent 100
+id: mobile-frame
+
+--- ftd.column:
+if: $open
+width: percent 90
+anchor: window
+background-color: $fpm.color.main.background.base
+height: fill
+id: right-side
+
+--- ftd.row:
+background-color: $grey-dark
+padding-vertical: $fpm.space.space-6
+padding-horizontal: $fpm.space.space-6
+width: fill
+
+--- ftd.text: FOLDER NAME 
+role: $copy-print-bold
+color: $fpm.color.main.text-strong
+width: fill
+
+--- ftd.row:
+spacing: 12
+align: right
+
+--- ftd.image:
+src: $sync-img
+$on-click$: message-host $sync-obj
+
+--- ftd.image:
+src: $refresh
+
+
+--- ftd.column:
+anchor: window
+right: 0
+top: 0
+height: fill
+background-color: $fpm.color.main.background.step-1
+width: 53
+padding-top: 20
+padding-left: 20
+
+--- ftd.image:
+src: $showbar
+width: 20
+height: auto
+$on-click$: toggle $open
+$on-click$: $open-3 = true 
+
+--- container:  right-side
+
+
+--- ftd.row:
+width: fill
+height: fill
+spacing: 20
+overflow-y: auto
+padding-top: 12
+padding-left: 12
+padding-right: 28
+
+--- print-toc:
+toc: $fs
+
+--- container: ftd.main
+
+--- ftd.row:
+if: $is-mobile
+id: left-side
+width if not $is-mobile: percent 75
+width if $open: percent 100
+width if not $open: percent 100
+width if $is-mobile: fill
+width if $open-3: fill
 height: fill
 background-color: $fpm.color.main.background.base
 
+--- ftd.column:
+width: calc 100% - 53px
+id: switch-container
+spacing: 14
+padding-left: 16
+
+--- ftd.row:
+width: fill
+id: show-container
+spacing: 18
+padding-vertical: 24
+
+--- ftd.image:
+src: $showbar
+width: 20
+height: auto
+$on-click$: toggle $open
+
+--- container: show-container
+
+--- ftd.row:
+spacing: 8
+
+--- ftd.text: $path
+role: $fine-print-bold
+color: $fpm.color.main.cta-primary.base
+
+--- ftd.text: (Preview)
+role: $fine-print-bold
+color: $fpm.color.main.cta-primary.base
+white-space: nowrap
+
+--- container: switch-container
+
+--- ftd.input:
+if: $edits
+width: fill
+min-width: percent 100
+min-height: calc 100vh - 82px
+multiline: true
+placeholder: -- ftd.text: hello world
+value: $source
+$on-input$: $source=$VALUE
+$on-input$: message-host $edit-obj
+color: $fpm.color.main.text
+background-color: $fpm.color.main.background.base
+white-space: pre
+
+--- container: switch-container
+
+--- ftd.column:
+if: $open-1
+width: fill
+height: fill
+background-color: $fpm.color.main.text-strong
+
+--- ftd.iframe:
+src: $path
+width: fill
+min-width: percent 100
+min-height: calc 100vh - 82px
+background-color: $fpm.color.main.text-strong
+
+--- container: switch-container
+
+--- ftd.row:
+if: $open-2
+id: mobile-container
+align: center
+
+--- ftd.column:
+align: center
+width: 305
+height: 620
+background-image: $mobile-frame
+background-repeat: false
+
+--- ftd.column:
+anchor: parent
+left: 21
+top: 64
+width: 300
+height: 540
+
+--- ftd.iframe:
+src: $path
+height: 471
+width: 260
+
+--- container: mobile-container
+
+--- ftd.column:
+if: not $is-mobile
+margin-left: 134
+align: center
+
+--- ftd.text: iphone X
+role: $fpm.type.fine-print
+color: $fpm.color.main.cta-primary.base
+
+\--- ftd.text: Iphone SE
+role: $fpm.type.fine-print
+color: $fpm.color.main.text
+
+\--- ftd.text: Samsung Note
+role: $fpm.type.fine-print
+color: $fpm.color.main.text
+
+\--- ftd.text: Samsung Galaxy
+role: $fpm.type.fine-print
+color: $fpm.color.main.text
+
+
+--- container: left-side
+
+--- ftd.column:
+width: 53
+height: fill
+padding-top: 29
+padding-bottom: 21
+id: main-sidebar
+background-color: $fpm.color.main.background.step-1
+
+--- ftd.column:
+width: fill
+height: fill
+spacing: 32
+id: sidebar
+
+--- ftd.text: M
+color: $fpm.color.main.text
+color if $MOUSE-IN: $fpm.color.main.cta-primary.base
+align: center
+width: fill
+border-right: 5
+padding-horizontal: 16
+height: 30
+border-color: $fpm.color.main.background.step-1
+border-color if $MOUSE-IN: $fpm.color.main.cta-primary.base
+
+--- container: sidebar
+
+--- ftd.text: E
+color: $fpm.color.main.text
+color if $MOUSE-IN: $fpm.color.main.cta-primary.base
+align: center
+width: fill
+border-right: 5
+padding-horizontal: 16
+height: 30
+border-color: $fpm.color.main.background.step-1
+border-color if $MOUSE-IN: $fpm.color.main.cta-primary.base
+
+--- container: main-sidebar
+
+--- ftd.column:
+width: fill
+id: image
+padding-horizontal:  12
+spacing: 32
+
+--- ftd.image:
+src: $edit
+width: 20
+height: auto
+$on-click$: $open-1 = false
+$on-click$: $open-2 = false
+$on-click$: $edits = true
+
+--- container: image
+
+--- ftd.column:
+if: not $is-mobile
+
+--- ftd.image:
+if: not $open-1
+src: $desktop
+width: 20
+height: auto
+$on-click$: toggle $open-1
+$on-click$: $open-2 = false
+$on-click$: $edits = false
+
+--- ftd.image:
+if: $open-1
+src: $desktop-active
+width: 20
+height: auto
+
+--- container: image
+
+--- ftd.image:
+if: not $open-2
+src: $mobile
+width: 20
+height: auto
+$on-click$: toggle $open-2
+$on-click$: $open-1= false
+$on-click$: $edits = false
+
+--- ftd.image:
+if: $open-2
+src: $mobile-active
+width: 20
+height: auto
+
+--- container: ftd.main
+
+--- ftd.row:
+if: not $is-mobile
+id: left-side
+width if not $is-mobile: percent 75
+width if $open: percent 100
+width if not $open: percent 75
+width if $is-mobile: fill
+height: fill
+background-color: $fpm.color.main.background.base
 
 --- ftd.column:
 width: calc 100% - 53px
@@ -296,18 +595,17 @@ align: center
 role: $fpm.type.fine-print
 color: $fpm.color.main.cta-primary.base
 
---- ftd.text: Iphone SE
+\--- ftd.text: Iphone SE
 role: $fpm.type.fine-print
 color: $fpm.color.main.text
 
---- ftd.text: Samsung Note
+\--- ftd.text: Samsung Note
 role: $fpm.type.fine-print
 color: $fpm.color.main.text
 
---- ftd.text: Samsung Galaxy
+\--- ftd.text: Samsung Galaxy
 role: $fpm.type.fine-print
 color: $fpm.color.main.text
-
 
 
 --- container: left-side
@@ -337,7 +635,6 @@ height: 30
 border-color: $fpm.color.main.background.step-1
 border-color if $MOUSE-IN: $fpm.color.main.cta-primary.base
 
-
 --- container: sidebar
 
 --- ftd.text: E
@@ -359,7 +656,6 @@ id: image
 padding-horizontal:  12
 spacing: 32
 
-
 --- ftd.image:
 src: $edit
 width: 20
@@ -378,12 +674,12 @@ height: auto
 $on-click$: toggle $open-1
 $on-click$: $open-2 = false
 $on-click$: $edits = false
+
 --- ftd.image:
 if: $open-1
 src: $desktop-active
 width: 20
 height: auto
-
 
 --- container: image
 
@@ -402,10 +698,18 @@ src: $mobile-active
 width: 20
 height: auto
 
+
+
+
+
+
+
+
+
+
 -- object sync-obj:
 function: get
 url: /-/editor-sync/
-
 
 -- ftd.row sync:
 spacing: 10
@@ -417,6 +721,8 @@ border-radius: 8
 color: $fpm.color.main.cta-secondary.text
 background-color: $fpm.color.main.cta-secondary.base
 $on-click$: message-host $sync-obj
+
+
 
 
 
@@ -681,17 +987,16 @@ id: hanging-rename
 anchor: parent
 right: 25
 top: 5
-width: 34
-height: 34
+width: 36
+height: 36
 z-index: 1000
 id: actions
-background-color: $fpm.color.main.cta-primary.base
 
 --- ftd.image:
+src: $delete-icon
 if: $toc.path is not null
 $on-click$: $delete-file-path=$toc.path
 $on-click$: message-host $delete-obj
-src: $delete-icon
 $on-click$: $show = true
 id: rename-area
 margin-right: $fpm.space.space-2
@@ -719,8 +1024,8 @@ right: -20
 top: 0
 z-index: 10000
 background-color: $fpm.color.main.background.step-2
-id: rename-row
 border-radius: 4
+id: rename-row
 $on-mouse-leave$: $show-rename = false
 
 --- ftd.row:
@@ -729,6 +1034,7 @@ background-color: $fpm.color.main.background.step-2
 padding-left: 10 
 padding-right: 5
 padding-vertical: 3
+border-radius: 4
 
 --- ftd.text: Rename
 role: $tiny
