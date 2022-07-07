@@ -1,0 +1,37 @@
+-- ft.page: `edit` API
+
+`edit` API is called by the `fpm editor` to update  the local content of fpm
+package where `fpm serve` is running.
+
+-- ft.h1: URL and Parameters
+
+The URL is `/-/edit/`
+
+-- ft.h2: Input
+
+The input of this API is:
+
+-- ft.code:
+lang: rs
+
+pub struct EditRequest {
+    pub url: String,
+    pub value: Option<String>,
+    pub path: String,
+    pub operation: Option<String>,
+    pub data: Option<String>,
+}
+
+
+-- ft.h2: Response
+
+The output of this API is:
+
+-- ft.code:
+lang: rs
+
+pub struct EditResponse {
+    pub path: String,
+    pub url: Option<String>,
+    pub reload: bool,
+}

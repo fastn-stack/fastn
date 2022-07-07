@@ -113,6 +113,8 @@ implements: fifthtry.github.io/theme
   - `favicon.ico`: /sitemap/favicon/
   - `sync` API: /sitemap/sync/
   - `view-src` API: /sitemap/view-src/
+  - `edit` API: /sitemap/edit/
+  - `editor-sync`: /sitemap/editor-sync/
 
 ## Using `fpm` Crate: crate/
 
