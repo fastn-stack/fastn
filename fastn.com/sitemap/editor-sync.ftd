@@ -5,4 +5,8 @@ remote server. It worked same as [`fpm sync`](/sitemap/sync/) worked.
 
 -- ft.h1: URL and Parameters
 
-The URL is /-/editor-sync/` with HTTP GET method.
+The URL of the API is: `/-/editor-sync/`
+
+-- ft.h2: Request Method
+
+Request Method of this API is `GET`

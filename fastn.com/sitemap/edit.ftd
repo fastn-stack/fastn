@@ -3,9 +3,16 @@
 `edit` API is called by the `fpm editor` to update  the local content of fpm
 package where `fpm serve` is running.
 
--- ft.h1: URL and Parameters
+-- ft.h1: API
+
+-- ft.h2: URL and Parameters
 
 The URL is `/-/edit/`
+
+-- ft.h2: Request Method
+
+Request Method of this API is `POST`
+
 
 -- ft.h2: Input
 

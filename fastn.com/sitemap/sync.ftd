@@ -1,7 +1,7 @@
 -- ft.page: `sync` API
 
 `sync` API is called by the `fpm cli` to sync the local content of fpm package
-with the remote server.
+with the remote server. It is available only in FPM `remote` feature.
 
 
 -- ft.h1: URL And Parameters
