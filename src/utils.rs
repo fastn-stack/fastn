@@ -241,7 +241,7 @@ fn resolve_favicon(config: &fpm::Config, favicon: Option<String>) -> Option<Stri
     /// returns html tag for using favicon.
     fn favicon_html(favicon_path: &str, content_type: &str) -> String {
         let favicon_html = format!(
-            "<link rel=\"shortcut icon\" href=\"{}\" type=\"{}\">",
+            "\n<link rel=\"shortcut icon\" href=\"{}\" type=\"{}\">",
             favicon_path, content_type
         );
         favicon_html
@@ -321,8 +321,9 @@ pub(crate) fn replace_markers(
     let favicon_html_tag: Option<String> = resolve_favicon(config, config.package.favicon.clone());
 
     // Add favicon tag in the final html file (if available)
-    if let Some(fav_html) = favicon_html_tag {
-        html = html.replace("__favicon_html_tag__", fav_html.as_str());
+    match favicon_html_tag {
+        Some(fav_html) => html = html.replace("__favicon_html_tag__", fav_html.as_str()),
+        None => html = html.replace("__favicon_html_tag__", ""),
     }
 
     html.replace("__ftd_doc_title__", title)
