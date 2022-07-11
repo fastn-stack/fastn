@@ -238,7 +238,6 @@ pub(crate) fn id_to_path(id: &str) -> String {
 /// (if favicon is passed as header in fpm.package or if any favicon.* file is present in the root package folder)
 /// otherwise returns None
 fn resolve_favicon(config: &fpm::Config, favicon: Option<String>) -> Option<String> {
-
     /// returns html tag for using favicon.
     fn favicon_html(favicon_path: &str, content_type: &str) -> String {
         let favicon_html = format!(
@@ -301,7 +300,7 @@ fn resolve_favicon(config: &fpm::Config, favicon: Option<String>) -> Option<Stri
         }
     }
     // Will use some favicon
-    return Some(favicon_html(&full_fav_path, &fav_mime_content_type));
+    Some(favicon_html(&full_fav_path, &fav_mime_content_type))
 }
 
 pub(crate) fn replace_markers(
