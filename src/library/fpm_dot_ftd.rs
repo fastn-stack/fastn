@@ -767,5 +767,9 @@ fn capital_fpm(lib: &fpm::Library) -> String {
         s.push_str(format!("zip: {}", zip).as_str());
     }
 
+    if let Some(ref favicon) = lib.config.package.favicon {
+        s.push_str(format!("\nfavicon: {}", favicon).as_str());
+    }
+
     s
 }

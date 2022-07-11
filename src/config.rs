@@ -1057,6 +1057,8 @@ pub(crate) struct PackageTemp {
     pub canonical_url: Option<String>,
     #[serde(rename = "inherit-auto-imports-from-original")]
     pub import_auto_imports_from_original: bool,
+    #[serde(rename = "favicon")]
+    pub favicon: Option<String>,
 }
 
 impl PackageTemp {
@@ -1090,6 +1092,7 @@ impl PackageTemp {
             fonts: vec![],
             import_auto_imports_from_original: self.import_auto_imports_from_original,
             sitemap: None,
+            favicon: self.favicon,
         }
     }
 }
@@ -1126,6 +1129,14 @@ pub struct Package {
     /// and table of content (`toc`). This automatically converts the documents in package into the
     /// corresponding to structure.
     pub sitemap: Option<String>,
+    /// Optional path for favicon icon to be used.
+    ///
+    /// By default if any file favicon.* is present in package and favicon is not specified
+    /// in FPM.ftd, that file will be used.
+    ///
+    /// If more than one favicon.* file is present, we will use them
+    /// in following priority: .ico > .svg > .png > .jpg.
+    pub favicon: Option<String>,
 }
 
 impl Package {
@@ -1148,6 +1159,7 @@ impl Package {
             fonts: vec![],
             import_auto_imports_from_original: true,
             sitemap: None,
+            favicon: None,
         }
     }
 

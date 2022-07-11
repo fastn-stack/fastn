@@ -234,6 +234,75 @@ pub(crate) fn id_to_path(id: &str) -> String {
         .replace(".md", std::path::MAIN_SEPARATOR.to_string().as_str())
 }
 
+/// returns favicon html tag as string
+/// (if favicon is passed as header in fpm.package or if any favicon.* file is present in the root package folder)
+/// otherwise returns None
+fn resolve_favicon(config: &fpm::Config, favicon: Option<String>) -> Option<String> {
+    /// returns html tag for using favicon.
+    fn favicon_html(favicon_path: &str, content_type: &str) -> String {
+        let favicon_html = format!(
+            "<link rel=\"shortcut icon\" href=\"{}\" type=\"{}\">",
+            favicon_path, content_type
+        );
+        favicon_html
+    }
+
+    /// returns favicon path with package name and its mime content type
+    fn get_favicon_path_and_type(package_name: &str, favicon_path: &str) -> (String, String) {
+        // full path of favicon with package
+        let path = camino::Utf8PathBuf::from(package_name).join(favicon_path);
+        // mime content type of the favicon
+        let content_type = mime_guess::from_path(path.as_str()).first_or_octet_stream();
+
+        (path.to_string(), content_type.to_string())
+    }
+
+    // favicon image path from fpm.package if provided
+    let fav_path = favicon;
+    let package_name = config.package.name.as_str();
+    let mut full_fav_path: String = String::new();
+    let mut fav_mime_content_type: String = String::new();
+
+    match fav_path {
+        Some(ref path) => {
+            // In this case, favicon is provided with fpm.package in FPM.ftd
+            (full_fav_path, fav_mime_content_type) = get_favicon_path_and_type(package_name, path);
+        }
+        None => {
+            // TODO:: If favicon not provided so we will look for favicon in the package directory
+            // By default if any file favicon.* is present we will use that file instead
+            // In case of favicon.* conflict priority will be: .ico > .svg > .png > .jpg.
+
+            // Default searching directory being the root folder of the package
+            let root_path = config.root.as_str();
+            let ico_favicon = camino::Utf8PathBuf::from(root_path.to_string()).join("favicon.ico");
+            let svg_favicon = camino::Utf8PathBuf::from(root_path.to_string()).join("favicon.svg");
+            let png_favicon = camino::Utf8PathBuf::from(root_path.to_string()).join("favicon.png");
+            let jpg_favicon = camino::Utf8PathBuf::from(root_path.to_string()).join("favicon.jpg");
+
+            // Just check if any favicon exists in the root package directory
+            // in the above mentioned priority order
+            let fav_path: &str;
+            if ico_favicon.exists() {
+                fav_path = "favicon.ico";
+            } else if svg_favicon.exists() {
+                fav_path = "favicon.svg";
+            } else if png_favicon.exists() {
+                fav_path = "favicon.png";
+            } else if jpg_favicon.exists() {
+                fav_path = "favicon.jpg";
+            } else {
+                // Not using any favicon :(
+                return None;
+            }
+            (full_fav_path, fav_mime_content_type) =
+                get_favicon_path_and_type(package_name, fav_path);
+        }
+    }
+    // Will use some favicon :)
+    return Some(favicon_html(&full_fav_path, &fav_mime_content_type));
+}
+
 pub(crate) fn replace_markers(
     s: &str,
     config: &fpm::Config,
@@ -242,7 +311,15 @@ pub(crate) fn replace_markers(
     base_url: &str,
     main_rt: &ftd::Document,
 ) -> String {
-    s.replace("__ftd_doc_title__", title)
+    let mut html = s.to_string();
+    let favicon_html_tag: Option<String> = resolve_favicon(config, config.package.favicon.clone());
+
+    // Add favicon tag in the final html file (if available)
+    if let Some(fav_html) = favicon_html_tag {
+        html = html.replace("__favicon_html_tag__", fav_html.as_str());
+    }
+
+    html.replace("__ftd_doc_title__", title)
         .replace(
             "__ftd_canonical_url__",
             config.package.generate_canonical_url(main_id).as_str(),

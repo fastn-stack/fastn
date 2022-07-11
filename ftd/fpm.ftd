@@ -4,6 +4,7 @@ boolean versioned: false
 optional body about:
 optional string zip:
 optional string base:
+optional string favicon:
 optional string language:
 optional string translation-of:
 string list translation:
