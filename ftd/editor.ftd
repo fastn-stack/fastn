@@ -229,7 +229,7 @@ padding-vertical: $fpm.space.space-6
 padding-horizontal: $fpm.space.space-6
 width: fill
 
---- ftd.text: FOLDER NAME 
+--- ftd.text: $fpm.package-name
 role: $copy-print-bold
 color: $fpm.color.main.text-strong
 width: fill
@@ -281,7 +281,7 @@ padding-vertical: $fpm.space.space-6
 padding-horizontal: $fpm.space.space-6
 width: fill
 
---- ftd.text: FOLDER NAME 
+--- ftd.text: $fpm.package-name
 role: $copy-print-bold
 color: $fpm.color.main.text-strong
 width: fill
@@ -966,7 +966,6 @@ operation: delete
 -- ftd.column print-toc-item:
 fpm.toc-item toc:
 boolean is-first: false
-margin-left if not $is-first: 20
 boolean show-actions: false
 boolean show-rename: false
 boolean show: false
@@ -986,6 +985,7 @@ if: $show-delete-dialog
 file: $toc.path
 
 --- container: ftd.main
+
 
 --- ftd.row:
 width: fill
@@ -1046,6 +1046,7 @@ id: rename-area
 --- ftd.row:
 width: fill
 id: switch-container
+padding-left if not $is-first: $fpm.space.space-3
 
 \--- ftd.row:
 if: $is-first
@@ -1088,16 +1089,16 @@ status: $toc.number
 
 --- ftd.row:
 if: $show-rename
-anchor: parent
+anchor: window
 width: 285
 height: 30
-right: 10
-top: 0
+left: 390
+top: 84
 z-index: 10000
 background-color: $fpm.color.main.background.step-2
 border-radius: 4
 id: rename-row
-$on-mouse-leave$: $show-rename = false
+/$on-mouse-leave$: $show-rename = false
 
 --- ftd.row:
 width: fill
@@ -1119,7 +1120,7 @@ background-color: $fpm.color.main.background.step-1
 
 --- ftd.input:
 width: fill
-placeholder: Enter new name
+value: $toc.path
 $on-input$: $new-name=$VALUE
 $on-input$: $rename-file-path=$toc.path
 padding-horizontal: 10
@@ -1135,7 +1136,7 @@ $on-click$: message-host $rename-obj
 align: center
 margin-right: 10
 
---- ftd.text: Revert
+/--- ftd.text: Revert
 background-color: $red
 color: $fpm.color.main.text-strong
 padding-horizontal: 2
