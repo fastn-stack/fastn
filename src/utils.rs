@@ -238,6 +238,7 @@ pub(crate) fn id_to_path(id: &str) -> String {
 /// (if favicon is passed as header in fpm.package or if any favicon.* file is present in the root package folder)
 /// otherwise returns None
 fn resolve_favicon(config: &fpm::Config, favicon: Option<String>) -> Option<String> {
+
     /// returns html tag for using favicon.
     fn favicon_html(favicon_path: &str, content_type: &str) -> String {
         let favicon_html = format!(
@@ -269,7 +270,7 @@ fn resolve_favicon(config: &fpm::Config, favicon: Option<String>) -> Option<Stri
             (full_fav_path, fav_mime_content_type) = get_favicon_path_and_type(package_name, path);
         }
         None => {
-            // TODO:: If favicon not provided so we will look for favicon in the package directory
+            // If favicon not provided so we will look for favicon in the package directory
             // By default if any file favicon.* is present we will use that file instead
             // In case of favicon.* conflict priority will be: .ico > .svg > .png > .jpg.
 
@@ -292,14 +293,14 @@ fn resolve_favicon(config: &fpm::Config, favicon: Option<String>) -> Option<Stri
             } else if jpg_favicon.exists() {
                 fav_path = "favicon.jpg";
             } else {
-                // Not using any favicon :(
+                // Not using any favicon
                 return None;
             }
             (full_fav_path, fav_mime_content_type) =
                 get_favicon_path_and_type(package_name, fav_path);
         }
     }
-    // Will use some favicon :)
+    // Will use some favicon
     return Some(favicon_html(&full_fav_path, &fav_mime_content_type));
 }
 
