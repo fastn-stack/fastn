@@ -28,18 +28,7 @@ async fn serve_files(config: &mut fpm::Config, path: &std::path::Path) -> actix_
         }
         fpm::File::Image(image) => {
             return actix_web::HttpResponse::Ok()
-                .content_type(if image.id.ends_with(".svg") {
-                    // infer is guessing wrong mime type in case of svg
-                    "image/svg+xml"
-                } else {
-                    infer::get(image.content.as_slice())
-                        .map(|v| v.mime_type())
-                        .unwrap_or(if image.id.ends_with(".svg") {
-                            "image/svg+xml"
-                        } else {
-                            "image/jpeg"
-                        })
-                })
+                .content_type(guess_mime_type(image.id.as_str()))
                 .body(image.content);
         }
         _ => {
@@ -49,6 +38,9 @@ async fn serve_files(config: &mut fpm::Config, path: &std::path::Path) -> actix_
     };
 }
 
+fn guess_mime_type(path: &str) -> mime_guess::Mime {
+    mime_guess::from_path(path).first_or_octet_stream()
+}
 /*async fn handle_dash(
     req: &actix_web::HttpRequest,
     config: &fpm::Config,
@@ -168,7 +160,7 @@ pub async fn serve2(bind_address: &str, port: Option<u16>) -> std::io::Result<()
             eprintln!(
                 "{}",
                 port.map(|x| format!(
-                    r#"provided port {} is not available, 
+                    r#"provided port {} is not available,
 You can try without providing port, it will automatically pick unused port"#,
                     x
                 ))
