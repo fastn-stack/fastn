@@ -1150,6 +1150,7 @@ $on-click$: message-host $revert-obj
 --- ftd.column:
 if: $open-1
 width: fill
+padding-left if not $is-first: $fpm.space.space-3
 
 
 --- print-toc-item:
