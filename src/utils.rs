@@ -260,45 +260,51 @@ fn resolve_favicon(config: &fpm::Config, favicon: Option<String>) -> Option<Stri
     // favicon image path from fpm.package if provided
     let fav_path = favicon;
     let package_name = config.package.name.as_str();
-    let mut full_fav_path: String = String::new();
-    let mut fav_mime_content_type: String = String::new();
+    // let mut full_fav_path: String = String::new();
+    // let mut fav_mime_content_type: String = String::new();
 
-    match fav_path {
-        Some(ref path) => {
-            // In this case, favicon is provided with fpm.package in FPM.ftd
-            (full_fav_path, fav_mime_content_type) = get_favicon_path_and_type(package_name, path);
-        }
-        None => {
-            // If favicon not provided so we will look for favicon in the package directory
-            // By default if any file favicon.* is present we will use that file instead
-            // In case of favicon.* conflict priority will be: .ico > .svg > .png > .jpg.
-
-            // Default searching directory being the root folder of the package
-            let root_path = config.root.as_str();
-            let ico_favicon = camino::Utf8PathBuf::from(root_path.to_string()).join("favicon.ico");
-            let svg_favicon = camino::Utf8PathBuf::from(root_path.to_string()).join("favicon.svg");
-            let png_favicon = camino::Utf8PathBuf::from(root_path.to_string()).join("favicon.png");
-            let jpg_favicon = camino::Utf8PathBuf::from(root_path.to_string()).join("favicon.jpg");
-
-            // Just check if any favicon exists in the root package directory
-            // in the above mentioned priority order
-            let fav_path: &str;
-            if ico_favicon.exists() {
-                fav_path = "favicon.ico";
-            } else if svg_favicon.exists() {
-                fav_path = "favicon.svg";
-            } else if png_favicon.exists() {
-                fav_path = "favicon.png";
-            } else if jpg_favicon.exists() {
-                fav_path = "favicon.jpg";
-            } else {
-                // Not using any favicon
-                return None;
+    let (full_fav_path, fav_mime_content_type): (String, String) = {
+        match fav_path {
+            Some(ref path) => {
+                // In this case, favicon is provided with fpm.package in FPM.ftd
+                get_favicon_path_and_type(package_name, path)
             }
-            (full_fav_path, fav_mime_content_type) =
-                get_favicon_path_and_type(package_name, fav_path);
+            None => {
+                // If favicon not provided so we will look for favicon in the package directory
+                // By default if any file favicon.* is present we will use that file instead
+                // In case of favicon.* conflict priority will be: .ico > .svg > .png > .jpg.
+
+                // Default searching directory being the root folder of the package
+                let root_path = config.root.as_str();
+                let ico_favicon =
+                    camino::Utf8PathBuf::from(root_path.to_string()).join("favicon.ico");
+                let svg_favicon =
+                    camino::Utf8PathBuf::from(root_path.to_string()).join("favicon.svg");
+                let png_favicon =
+                    camino::Utf8PathBuf::from(root_path.to_string()).join("favicon.png");
+                let jpg_favicon =
+                    camino::Utf8PathBuf::from(root_path.to_string()).join("favicon.jpg");
+
+                // Just check if any favicon exists in the root package directory
+                // in the above mentioned priority order
+                let fav_path: &str;
+                if ico_favicon.exists() {
+                    fav_path = "favicon.ico";
+                } else if svg_favicon.exists() {
+                    fav_path = "favicon.svg";
+                } else if png_favicon.exists() {
+                    fav_path = "favicon.png";
+                } else if jpg_favicon.exists() {
+                    fav_path = "favicon.jpg";
+                } else {
+                    // Not using any favicon
+                    return None;
+                }
+                get_favicon_path_and_type(package_name, fav_path)
+            }
         }
-    }
+    };
+
     // Will use some favicon
     Some(favicon_html(&full_fav_path, &fav_mime_content_type))
 }
