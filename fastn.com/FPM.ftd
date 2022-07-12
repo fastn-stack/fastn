@@ -47,6 +47,7 @@ implements: fifthtry.github.io/theme
   - Update `fpm`: /how-to/update/
   - Get started with Github pages: /how-to/get-started-github-pages/
   - Get started with Vercel: /how-to/get-started-vercel/
+  - Use Favicon: /favicon/
 - `fpm` Usage: /usage/
   - `fpm start-project`: /start-project/
   - `fpm build`: /build/
@@ -55,6 +56,7 @@ implements: fifthtry.github.io/theme
   - `fpm diff`: /diff/
   - `fpm update`: /update/
   - `fpm serve`: /serve/
+- How to use Favicon: /favicon/
 
 
 

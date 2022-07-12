@@ -1,0 +1,25 @@
+-- ft.page: How to Use Favicon
+
+There are two ways by which we can use favicon:
+
+-- ft.h2: Using favicon header under fpm.package
+
+Pass the path to your favicon file as header under fpm.package in FPM.ftd.
+This favicon path should be relative to the root package folder.
+
+-- ft.code:
+lang: ftd
+
+\-- import: fpm
+\-- fpm.package: amitu.com
+favicon: assets/favicon.ico
+
+-- ft.h2: Using default favicon
+
+If any favicon.* file is present in the root package folder it will be picked up by default assuming that no favicon is specified under
+fpm.package in FPM.ftd.
+
+-- ft.h1: Favicon.* conflict
+
+In case of multiple favicon.* files in the same package folder,
+then the favicon file will be selected in the priority order `ico > svg > png > jpg`.
