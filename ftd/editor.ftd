@@ -433,8 +433,8 @@ height: 540
 
 --- ftd.iframe:
 src: $path
-height: 471
-width: 260
+height: calc 100vh
+width: fill
 
 --- container: mobile-container
 
