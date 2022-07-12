@@ -348,16 +348,17 @@ height: fill
 background-color: $fpm.color.main.background.base
 
 --- ftd.column:
-width: calc 100% - 53px
+width: fill
 id: switch-container
 spacing: 14
-padding-left: 16
+
 
 --- ftd.row:
 width: fill
 id: show-container
 spacing: 18
 padding-vertical: 12
+padding-left: 16
 
 --- ftd.image:
 src: $showbar
@@ -384,6 +385,7 @@ white-space: nowrap
 --- ftd.input:
 if: $edits
 width: fill
+padding-horizontal: 16
 min-width: percent 100
 min-height: calc 100vh - 82px
 multiline: true
@@ -414,6 +416,7 @@ background-color: $fpm.color.main.text-strong
 
 --- ftd.row:
 if: $open-2
+width: fill
 id: mobile-container
 align: center
 
@@ -461,13 +464,66 @@ color: $fpm.color.main.text
 
 --- container: left-side
 
+
 --- ftd.column:
+if: not $edits
+anchor: window
+background-color: $fpm.color.main.background.step-1
+right: 0
+bottom: 0
+width: 46
+id: image
+padding-top: $fpm.space.space-3
+padding-bottom: 21
+padding-horizontal: 12
+spacing: 32
+
+--- ftd.image:
+if: $edits
+src: $edit
+width: 20
+height: auto
+$on-click$: $open-1 = false
+$on-click$: $open-2 = false
+$on-click$: $edits = true
+
+--- ftd.image:
+if: not $edits
+src: $edit-default
+width: 20
+height: auto
+$on-click$: $open-1 = false
+$on-click$: $open-2 = false
+$on-click$: $edits = true
+
+--- container: image
+
+--- ftd.image:
+if: not $open-2
+src: $mobile
+width: 20
+height: auto
+$on-click$: toggle $open-2
+$on-click$: $open-1= false
+$on-click$: $edits = false
+
+--- ftd.image:
+if: $open-2
+src: $mobile-active
+width: 20
+height: auto
+
+--- container: left-side
+
+--- ftd.column:
+if: $edits
 width: 53
 height: fill
 padding-top: 16
 padding-bottom: 21
 id: main-sidebar
 background-color: $fpm.color.main.background.step-1
+margin-left: 16
 
 --- ftd.column:
 width: fill
@@ -1103,7 +1159,7 @@ $on-mouse-leave$: $show = false
 if: $show-actions
 anchor: parent
 left: 248
-left if $is-mobile: 148
+left if $is-mobile: 210
 top: 5
 height: 36
 z-index: 99
@@ -1626,4 +1682,4 @@ dark: rgba(0, 0, 0, 0.1)
 
 -- ftd.color code-bg:
 light: rgba(44, 48, 58, 1)
-dark: rgba(44, 48, 58, 1)
+dark: rgba(44, 48, 58, 1) 
