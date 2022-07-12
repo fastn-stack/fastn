@@ -1010,7 +1010,7 @@ if: $show-rename
 anchor: window
 width: 285
 height: 30
-left: 390
+left: 370
 left if $is-mobile: 12
 top: 84
 z-index: 10000
