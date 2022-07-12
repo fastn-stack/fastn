@@ -284,19 +284,19 @@ fn resolve_favicon(
 
                 // Just check if any favicon exists in the root package directory
                 // in the above mentioned priority order
-                let found_favicon_id: &str;
-                if is_file_in_root(root_path, "favicon.png") {
-                    found_favicon_id = "favicon.ico";
+                let found_favicon_id = if is_file_in_root(root_path, "favicon.ico") {
+                    "favicon.ico"
                 } else if is_file_in_root(root_path, "favicon.svg") {
-                    found_favicon_id = "favicon.svg";
+                    "favicon.svg"
                 } else if is_file_in_root(root_path, "favicon.png") {
-                    found_favicon_id = "favicon.png";
+                    "favicon.png"
                 } else if is_file_in_root(root_path, "favicon.jpg") {
-                    found_favicon_id = "favicon.jpg";
+                    "favicon.jpg"
                 } else {
                     // Not using any favicon
                     return None;
-                }
+                };
+
                 get_favicon_path_and_type(package_name, found_favicon_id)
             }
         }
