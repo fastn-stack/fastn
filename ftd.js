@@ -355,6 +355,9 @@ let ftd_utils = {
         if (!areObjects && object1 !== object2) {
             return false;
         }
+        if (!areObjects) {
+            return true;
+        }
         const keys1 = Object.keys(object1);
         const keys2 = Object.keys(object2);
         if (keys1.length !== keys2.length) {
@@ -374,6 +377,13 @@ let ftd_utils = {
         return object != null && typeof object === 'object';
     },
 
+    deepCopy: function (object) {
+        if (ftd_utils.isObject(object)) {
+            return JSON.parse(JSON.stringify(object));
+        }
+        return object;
+    },
+
     get_data_value: function (data, name) {
         let [var_name, remaining] = ftd_utils.get_name_and_remaining(name);
         let initial_value = data[var_name].value;
@@ -386,7 +396,7 @@ let ftd_utils = {
             }
             remaining = p2;
         }
-        return initial_value;
+        return ftd_utils.deepCopy(initial_value);
     },
 
     set_data_value: function (data, name, value) {
@@ -395,7 +405,7 @@ let ftd_utils = {
         if (ftd_utils.isJson(initial_value)) {
             initial_value = JSON.parse(initial_value);
         }
-        data[var_name].value = set(initial_value, remaining, value);
+        data[var_name].value = ftd_utils.deepCopy(set(initial_value, remaining, value));
 
         function set(initial_value, remaining, value) {
             if (!remaining) {
@@ -547,24 +557,25 @@ let ftd_utils = {
                                 if (data[ftd_utils.get_name_and_remaining(parameter)[0]] === undefined) {
                                     continue;
                                 }
-                                let default_value = json_dependency.parameters[parameter].default;
+                                let dep_default = json_dependency.parameters[parameter].default;
                                 let call = false;
-                                if (default_value === null) {
+                                if (dep_default === null) {
                                     continue;
                                 }
+                                let value = dep_default.value;
                                 if (dependency === "$value#kind$") {
                                     let get_value = ftd_utils.get_data_value(data, parameter + ".$kind$");
-                                    if (!ftd_utils.deepEqual(default_value.value, get_value)) {
+                                    if (!ftd_utils.deepEqual(value, get_value)) {
                                         call = true;
                                     }
-                                    ftd_utils.set_data_value(data, parameter + ".$kind$", default_value.value);
+                                    ftd_utils.set_data_value(data, parameter + ".$kind$", value);
                                 }
                                 if (dependency === "$value$") {
                                     let get_value = ftd_utils.get_data_value(data, parameter);
-                                    if (!ftd_utils.deepEqual(default_value.value, get_value)) {
+                                    if (!ftd_utils.deepEqual(value, get_value)) {
                                         call = true;
                                     }
-                                    ftd_utils.set_data_value(data, parameter, default_value.value);
+                                    ftd_utils.set_data_value(data, parameter, value);
                                 }
                                 let parameter_value = ftd_utils.get_data_value(data, parameter);
                                 if (call) {
