@@ -146,6 +146,7 @@ pub enum EventName {
     OnMouseEnter,
     OnMouseLeave,
     OnClickOutside,
+    OnFocus,
 }
 
 impl EventName {
@@ -157,6 +158,7 @@ impl EventName {
             Self::OnMouseEnter => "onmouseenter",
             Self::OnMouseLeave => "onmouseleave",
             Self::OnClickOutside => "onclickoutside",
+            Self::OnFocus => "onfocus",
         }
     }
 
@@ -168,6 +170,7 @@ impl EventName {
             "mouse-enter" => Ok(Self::OnMouseEnter),
             "mouse-leave" => Ok(Self::OnMouseLeave),
             "click-outside" => Ok(Self::OnClickOutside),
+            "focus" => Ok(Self::OnFocus),
             t => return ftd::e2(format!("{} is not a valid event", t), doc_id, 0),
         }
     }
