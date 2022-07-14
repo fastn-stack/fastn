@@ -1,0 +1,33 @@
+-- ftd.color black:
+light: black
+dark: black
+
+-- ftd.color red:
+light: red
+dark: red
+
+-- ftd.color white:
+light: white
+dark: white
+
+-- ftd.color yellow:
+light: yellow
+dark: yellow
+
+-- ftd.input text-field:
+boolean is-focus: false
+placeholder: Type something Here...
+min-width: 150
+min-height: 50
+$on-focus$: $is-focus = true
+$on-blur$: $is-focus = false
+color if $is-focus: $red
+color if not $is-focus: $white
+background-color if $is-focus: $yellow
+background-color if not $is-focus: $black
+
+; EVENTS --------------------------------------------------------
+; on-focus => text-field {bg color -> yellow, text color -> red}
+; on-blur => text-field {bg color -> white, text color -> black}
+
+-- text-field:
