@@ -16348,53 +16348,53 @@ mod test {
         main.container
             .children
             .push(ftd::Element::Input(ftd::Input {
-            common: ftd::Common {
-                events: vec![
-                    ftd::Event {
-                        name: s("onchange"),
-                        action: ftd::Action {
-                            action: s("set-value"),
-                            target: s("foo/bar#input-data"),
-                            parameters: std::array::IntoIter::new([(
-                                s("value"),
-                                vec![
-                                    ftd::event::ParameterData {
-                                        value: serde_json::Value::String(s("$VALUE")),
-                                        reference: None,
-                                    },
-                                    ftd::event::ParameterData {
-                                        value: serde_json::Value::String(s("string")),
-                                        reference: None,
-                                    },
-                                ],
-                            )])
-                            .collect(),
+                common: ftd::Common {
+                    events: vec![
+                        ftd::Event {
+                            name: s("onchange"),
+                            action: ftd::Action {
+                                action: s("set-value"),
+                                target: s("foo/bar#input-data"),
+                                parameters: std::array::IntoIter::new([(
+                                    s("value"),
+                                    vec![
+                                        ftd::event::ParameterData {
+                                            value: serde_json::Value::String(s("$VALUE")),
+                                            reference: None,
+                                        },
+                                        ftd::event::ParameterData {
+                                            value: serde_json::Value::String(s("string")),
+                                            reference: None,
+                                        },
+                                    ],
+                                )])
+                                .collect(),
+                            },
                         },
-                    },
-                    ftd::Event {
-                        name: s("onchange"),
-                        action: ftd::Action {
-                            action: s("message-host"),
-                            target: s("$obj"),
-                            parameters: std::array::IntoIter::new([(
-                                "data".to_string(),
-                                vec![ftd::event::ParameterData {
+                        ftd::Event {
+                            name: s("onchange"),
+                            action: ftd::Action {
+                                action: s("message-host"),
+                                target: s("$obj"),
+                                parameters: std::array::IntoIter::new([(
+                                    "data".to_string(),
+                                    vec![ftd::event::ParameterData {
                                     value: serde_json::from_str(
                                         "{\"function\":\"some-function\",\"value\":\"Nothing\"}",
                                     )
                                     .unwrap(),
                                     reference: Some(s("{\"value\":\"foo/bar#input-data\"}")),
                                 }],
-                            )])
-                            .collect(),
+                                )])
+                                .collect(),
+                            },
                         },
-                    },
-                ],
+                    ],
+                    ..Default::default()
+                },
+                placeholder: None,
                 ..Default::default()
-            },
-            placeholder: None,
-            ..Default::default()
-        }));
+            }));
 
         p!(
             "
