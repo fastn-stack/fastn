@@ -12,6 +12,20 @@ pub async fn processor<'a>(
         })
 }
 
+pub fn processor_sync<'a>(
+    section: &ftd::p1::Section,
+    doc: &ftd::p2::TDoc<'a>,
+    config: &fpm::Config,
+) -> ftd::p1::Result<ftd::Value> {
+    let f = futures::executor::block_on(processor_(section, doc, config));
+
+    f.map_err(|e| ftd::p1::Error::ParseError {
+        message: e.to_string(),
+        doc_id: doc.name.to_string(),
+        line_number: section.line_number,
+    })
+}
+
 pub async fn processor_<'a>(
     section: &ftd::p1::Section,
     doc: &ftd::p2::TDoc<'a>,

@@ -138,51 +138,14 @@ pub async fn parse2<'a>(
                 module,
                 state: mut st,
             } => {
-                lib.packages_under_process.truncate(st.document_stack.len());
-                let current_package = lib.get_current_package()?.to_owned();
-                let source = if module.eq("fpm/time") {
-                    st.add_foreign_variable_prefix(module.as_str(), vec![module.to_string()]);
-                    lib.push_package_under_process(&current_package).await?;
-                    "".to_string()
-                } else if module.ends_with("assets") {
-                    st.add_foreign_variable_prefix(
-                        module.as_str(),
-                        vec![format!("{}#files", module)],
-                    );
-
-                    if module.starts_with(current_package.name.as_str()) {
-                        lib.push_package_under_process(&current_package).await?;
-                        lib.get_current_package()?
-                            .get_font_ftd()
-                            .unwrap_or_else(|| "".to_string())
-                    } else {
-                        let mut font_ftd = "".to_string();
-                        for (alias, package) in current_package.aliases() {
-                            if module.starts_with(alias) {
-                                lib.push_package_under_process(package).await?;
-                                font_ftd = lib
-                                    .config
-                                    .all_packages
-                                    .get(package.name.as_str())
-                                    .unwrap()
-                                    .get_font_ftd()
-                                    .unwrap_or_else(|| "".to_string());
-                                break;
-                            }
-                        }
-                        font_ftd
-                    }
-                } else {
-                    lib.get_with_result(module.as_str()).await?
-                };
+                let source = resolve_import(lib, &mut st, module.as_str()).await?;
                 s = st.continue_after_import(module.as_str(), source.as_str())?;
             }
             ftd::Interpreter::StuckOnForeignVariable { variable, state } => {
-                lib.packages_under_process
-                    .truncate(state.document_stack.len());
                 let value = resolve_foreign_variable2(
                     variable.as_str(),
                     name,
+                    &state,
                     lib,
                     base_url,
                     download_assets,
@@ -195,13 +158,60 @@ pub async fn parse2<'a>(
     Ok(document)
 }
 
-async fn resolve_foreign_variable2(
+pub async fn resolve_import<'a>(
+    lib: &'a mut fpm::Library2,
+    state: &mut ftd::InterpreterState,
+    module: &str,
+) -> ftd::p1::Result<String> {
+    lib.packages_under_process
+        .truncate(state.document_stack.len());
+    let current_package = lib.get_current_package()?.to_owned();
+    let source = if module.eq("fpm/time") {
+        state.add_foreign_variable_prefix(module, vec![module.to_string()]);
+        lib.push_package_under_process(&current_package).await?;
+        "".to_string()
+    } else if module.ends_with("assets") {
+        state.add_foreign_variable_prefix(module, vec![format!("{}#files", module)]);
+
+        if module.starts_with(current_package.name.as_str()) {
+            lib.push_package_under_process(&current_package).await?;
+            lib.get_current_package()?
+                .get_font_ftd()
+                .unwrap_or_else(|| "".to_string())
+        } else {
+            let mut font_ftd = "".to_string();
+            for (alias, package) in current_package.aliases() {
+                if module.starts_with(alias) {
+                    lib.push_package_under_process(package).await?;
+                    font_ftd = lib
+                        .config
+                        .all_packages
+                        .get(package.name.as_str())
+                        .unwrap()
+                        .get_font_ftd()
+                        .unwrap_or_else(|| "".to_string());
+                    break;
+                }
+            }
+            font_ftd
+        }
+    } else {
+        lib.get_with_result(module).await?
+    };
+
+    Ok(source)
+}
+
+pub async fn resolve_foreign_variable2(
     variable: &str,
     doc_name: &str,
+    state: &ftd::InterpreterState,
     lib: &mut fpm::Library2,
     base_url: &str,
     download_assets: bool,
 ) -> ftd::p1::Result<ftd::Value> {
+    lib.packages_under_process
+        .truncate(state.document_stack.len());
     let package = lib.get_current_package()?.to_owned();
     if let Ok(value) = resolve_ftd_foreign_variable(variable, doc_name) {
         return Ok(value);

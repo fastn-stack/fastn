@@ -4,7 +4,7 @@ extern crate self as fpm;
 extern crate lazy_static;
 
 #[macro_use]
-pub(crate) mod utils;
+pub mod utils;
 
 // Temp comment
 mod apis;
@@ -17,7 +17,7 @@ mod doc;
 mod file;
 mod font;
 mod i18n;
-mod library;
+pub mod library;
 mod package_doc;
 mod render;
 mod sitemap;
@@ -38,22 +38,24 @@ pub use commands::{
 pub use config::Config;
 pub(crate) use config::Package;
 pub(crate) use dependency::Dependency;
-pub(crate) use file::{get_file, paths_to_files, Document, File, Static};
+pub use file::File;
+pub(crate) use file::{get_file, paths_to_files, Document, Static};
 pub(crate) use font::Font;
-pub(crate) use library::{FPMLibrary, Library, Library2};
+pub use library::{FPMLibrary, Library, Library2};
 pub use render::render;
 pub(crate) use snapshot::Snapshot;
 pub(crate) use tracker::Track;
 pub(crate) use translation::{TranslatedDocument, TranslationData};
 pub(crate) use utils::{copy_dir_all, timestamp_nanosecond};
 pub(crate) use version::Version;
+pub use {doc::resolve_foreign_variable2, doc::resolve_import};
 
 pub const PACKAGE_INFO_INTERFACE: &str = "fifthtry.github.io/package-info";
 pub const PACKAGE_THEME_INTERFACE: &str = "fifthtry.github.io/theme";
 
 pub const IMAGE_EXT: &[&str] = &["jpg", "png", "svg"];
 
-fn ftd_html() -> &'static str {
+pub fn ftd_html() -> &'static str {
     include_str!("../ftd.html")
 }
 
