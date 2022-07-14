@@ -461,7 +461,9 @@ let ftd_utils = {
                                 continue;
                             }
                             let doc = document.querySelector(`[data-id="${dependency}:${id}"]`);
-                            if (doc.src !== undefined) {
+                            if (doc.nodeName === "INPUT") {
+                                doc.value = new_value;
+                            } else if (doc.src !== undefined) {
                                 doc.src = new_value;
                             } else {
                                 doc.innerText = new_value;

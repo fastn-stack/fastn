@@ -1650,6 +1650,14 @@ pub fn input_from_properties(
     is_child: bool,
     events: &[ftd::p2::Event],
 ) -> ftd::p1::Result<ftd::Input> {
+    let reference = ftd::p2::utils::string_and_source_and_ref(
+        0,
+        "value",
+        unresolved_properties,
+        doc,
+        condition,
+    )?
+    .2;
     let properties = &ftd::component::resolve_properties(0, unresolved_properties, doc)?;
     Ok(ftd::Input {
         common: common_from_properties(
@@ -1658,7 +1666,7 @@ pub fn input_from_properties(
             condition,
             is_child,
             events,
-            None,
+            reference,
         )?,
         placeholder: ftd::p2::utils::string_optional("placeholder", properties, doc.name, 0)?,
         multiline: ftd::p2::utils::bool("multiline", properties, doc.name, 0)?,
