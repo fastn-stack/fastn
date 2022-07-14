@@ -306,7 +306,7 @@ fn resolve_favicon(
     Some(favicon_html(&full_fav_path, &fav_mime_content_type))
 }
 
-pub(crate) fn replace_markers(
+pub fn replace_markers(
     s: &str,
     config: &fpm::Config,
     main_id: &str,
