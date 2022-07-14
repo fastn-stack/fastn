@@ -13357,7 +13357,7 @@ mod test {
                 common: ftd::Common {
                     condition: Some(ftd::Condition {
                         variable: s("foo/bar#count"),
-                        value: serde_json::json!(8),
+                        value: serde_json::Value::from(8),
                     }),
                     is_not_visible: true,
                     ..Default::default()
@@ -13417,7 +13417,7 @@ mod test {
                             parameters: std::array::IntoIter::new([(
                                 s("by"),
                                 vec![ftd::event::ParameterData {
-                                    value: "2".to_string(),
+                                    value: serde_json::Value::from(2),
                                     reference: None,
                                 }],
                             )])
@@ -13444,7 +13444,7 @@ mod test {
                                 (
                                     s("by"),
                                     vec![ftd::event::ParameterData {
-                                        value: "2".to_string(),
+                                        value: serde_json::Value::from(2),
                                         reference: None,
                                     }],
                                 ),
@@ -13452,11 +13452,11 @@ mod test {
                                     s("clamp"),
                                     vec![
                                         ftd::event::ParameterData {
-                                            value: "2".to_string(),
+                                            value: serde_json::Value::from(2),
                                             reference: None,
                                         },
                                         ftd::event::ParameterData {
-                                            value: "10".to_string(),
+                                            value: serde_json::Value::from(10),
                                             reference: None,
                                         },
                                     ],
@@ -13485,11 +13485,11 @@ mod test {
                                 s("clamp"),
                                 vec![
                                     ftd::event::ParameterData {
-                                        value: "2".to_string(),
+                                        value: serde_json::Value::from(2),
                                         reference: None,
                                     },
                                     ftd::event::ParameterData {
-                                        value: "10".to_string(),
+                                        value: serde_json::Value::from(10),
                                         reference: None,
                                     },
                                 ],
@@ -13565,7 +13565,7 @@ mod test {
                                         parameters: std::array::IntoIter::new([(
                                             s("by"),
                                             vec![ftd::event::ParameterData {
-                                                value: "3".to_string(),
+                                                value: serde_json::Value::from(3),
                                                 reference: None,
                                             }],
                                         )])
@@ -13588,7 +13588,7 @@ mod test {
                                         parameters: std::array::IntoIter::new([(
                                             s("by"),
                                             vec![ftd::event::ParameterData {
-                                                value: "2".to_string(),
+                                                value: serde_json::Value::from(2),
                                                 reference: Some(s("foo/bar#decrement-by")),
                                             }],
                                         )])
@@ -13690,7 +13690,7 @@ mod test {
                     condition: Some(
                         ftd::Condition {
                             variable: s("foo/bar#count"),
-                            value: serde_json::json!(0),
+                            value: serde_json::Value::from(0),
                         },
                     ),
                     is_not_visible: false,
@@ -13701,10 +13701,10 @@ mod test {
                                 action: s("increment"),
                                 target: s("foo/bar#count"),
                                 parameters: std::array::IntoIter::new([(s("clamp"), vec![ftd::event::ParameterData {
-                                    value: "0".to_string(),
+                                    value: serde_json::Value::from(0),
                                     reference: None,
                                 }, ftd::event::ParameterData {
-                                    value: "1".to_string(),
+                                    value: serde_json::Value::from(1),
                                     reference: None,
                                 }])])
                                     .collect(),
@@ -13727,7 +13727,7 @@ mod test {
                 common: ftd::Common {
                     condition: Some(ftd::Condition {
                         variable: s("foo/bar#count"),
-                        value: serde_json::json!(1),
+                        value: serde_json::Value::from(1),
                     }),
                     is_not_visible: true,
                     events: vec![ftd::Event {
@@ -13739,11 +13739,11 @@ mod test {
                                 s("clamp"),
                                 vec![
                                     ftd::event::ParameterData {
-                                        value: "0".to_string(),
+                                        value: serde_json::Value::from(0),
                                         reference: None,
                                     },
                                     ftd::event::ParameterData {
-                                        value: "1".to_string(),
+                                        value: serde_json::Value::from(1),
                                         reference: None,
                                     },
                                 ],
@@ -14946,11 +14946,11 @@ mod test {
                                 s("value"),
                                 vec![
                                     ftd::event::ParameterData {
-                                        value: s("hello world"),
+                                        value: serde_json::Value::String(s("hello world")),
                                         reference: None,
                                     },
                                     ftd::event::ParameterData {
-                                        value: s("string"),
+                                        value: serde_json::Value::String(s("string")),
                                         reference: None,
                                     },
                                 ],
@@ -14978,11 +14978,11 @@ mod test {
                                 s("value"),
                                 vec![
                                     ftd::event::ParameterData {
-                                        value: s("good bye"),
+                                        value: serde_json::Value::String(s("good bye")),
                                         reference: Some(s("foo/bar#msg")),
                                     },
                                     ftd::event::ParameterData {
-                                        value: s("string"),
+                                        value: serde_json::Value::String(s("string")),
                                         reference: None,
                                     },
                                 ],
@@ -15205,11 +15205,11 @@ mod test {
                                     s("value"),
                                     vec![
                                         ftd::event::ParameterData {
-                                            value: s("true"),
+                                            value: serde_json::Value::from(true),
                                             reference: None,
                                         },
                                         ftd::event::ParameterData {
-                                            value: s("boolean"),
+                                            value: serde_json::Value::String(s("boolean")),
                                             reference: None,
                                         },
                                     ],
@@ -15226,11 +15226,11 @@ mod test {
                                     s("value"),
                                     vec![
                                         ftd::event::ParameterData {
-                                            value: s("false"),
+                                            value: serde_json::Value::from(false),
                                             reference: None,
                                         },
                                         ftd::event::ParameterData {
-                                            value: s("boolean"),
+                                            value: serde_json::Value::String(s("boolean")),
                                             reference: None,
                                         },
                                     ],
@@ -15400,7 +15400,7 @@ mod test {
                                     (
                                         ftd::Condition {
                                             variable: s("foo/bar#a@0"),
-                                            value: serde_json::json!(30),
+                                            value: serde_json::Value::from(30),
                                         },
                                         ftd::ConditionalValue {
                                             value: serde_json::from_str("{\"$kind$\":\"light\",\"dark\":\"rgba(255,0,0,1)\",\"light\":\"rgba(255,0,0,1)\"}").unwrap(),
@@ -15438,7 +15438,7 @@ mod test {
                             parameters: std::array::IntoIter::new([(
                                 s("by"),
                                 vec![ftd::event::ParameterData {
-                                    value: s("2"),
+                                    value: serde_json::Value::from(2),
                                     reference: None,
                                 }],
                             )])
@@ -15622,11 +15622,11 @@ mod test {
                                     "value".to_string(),
                                     vec![
                                         ftd::event::ParameterData {
-                                            value: s("hello"),
+                                            value: serde_json::Value::String(s("hello")),
                                             reference: Some(s("foo/bar#current")),
                                         },
                                         ftd::event::ParameterData {
-                                            value: s("string"),
+                                            value: serde_json::Value::String(s("string")),
                                             reference: None,
                                         },
                                     ],
@@ -16359,11 +16359,11 @@ mod test {
                                     s("value"),
                                     vec![
                                         ftd::event::ParameterData {
-                                            value: s("$VALUE"),
+                                            value: serde_json::Value::String(s("$VALUE")),
                                             reference: None,
                                         },
                                         ftd::event::ParameterData {
-                                            value: s("string"),
+                                            value: serde_json::Value::String(s("string")),
                                             reference: None,
                                         },
                                     ],
@@ -16379,9 +16379,10 @@ mod test {
                                 parameters: std::array::IntoIter::new([(
                                     "data".to_string(),
                                     vec![ftd::event::ParameterData {
-                                    value: s(
+                                    value: serde_json::from_str(
                                         "{\"function\":\"some-function\",\"value\":\"Nothing\"}",
-                                    ),
+                                    )
+                                    .unwrap(),
                                     reference: Some(s("{\"value\":\"foo/bar#input-data\"}")),
                                 }],
                                 )])
