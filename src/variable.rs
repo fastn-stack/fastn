@@ -271,7 +271,7 @@ impl PropertyValue {
             if let Some(e_kind) = expected_kind {
                 if !e_kind.is_same_as(&found_kind) {
                     return ftd::e2(
-                        format!("expected {:?} found {:?}", found_kind, e_kind),
+                        format!("expected {:?} found {:?}", e_kind, found_kind),
                         doc.name,
                         line_number,
                     );
