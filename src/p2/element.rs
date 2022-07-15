@@ -1628,6 +1628,14 @@ pub fn input_function() -> ftd::Component {
                     "multiline".to_string(),
                     ftd::p2::Kind::boolean().set_default(Some("false".to_string())),
                 ),
+                (
+                    "role".to_string(),
+                    ftd::p2::Kind::Record {
+                        name: "ftd#type".to_string(),
+                        default: None,
+                    }
+                    .into_optional(),
+                ),
             ],
             common_arguments(),
         ]
@@ -1656,8 +1664,21 @@ pub fn input_from_properties(
         unresolved_properties,
         doc,
         condition,
-    )?
-    .2;
+    )
+    .map(|v| v.2)
+    .unwrap_or(None);
+
+    let properties = &ftd::component::resolve_properties(0, unresolved_properties, doc)?;
+    let font_str = ftd::p2::utils::record_optional("role", properties, doc.name, 0)?;
+    let mut font_reference = None;
+    if font_str.is_some() {
+        font_reference =
+            ftd::p2::utils::record_and_ref(0, "role", unresolved_properties, doc, condition)?.1;
+    }
+    let font = font_str.map_or(Ok(None), |v| {
+        ftd::Type::from(&v, doc, 0, font_reference).map(Some)
+    })?;
+
     let properties = &ftd::component::resolve_properties(0, unresolved_properties, doc)?;
     Ok(ftd::Input {
         common: common_from_properties(
@@ -1671,6 +1692,7 @@ pub fn input_from_properties(
         placeholder: ftd::p2::utils::string_optional("placeholder", properties, doc.name, 0)?,
         multiline: ftd::p2::utils::bool("multiline", properties, doc.name, 0)?,
         value: ftd::p2::utils::string_optional("value", properties, doc.name, 0)?,
+        font,
     })
 }
 

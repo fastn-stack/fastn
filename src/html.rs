@@ -1152,6 +1152,11 @@ impl ftd::Input {
         let node = if self.multiline { "textarea" } else { "input" };
 
         let mut n = Node::from_common(node, &self.common, doc_id, collector);
+
+        if let Some(ref font) = self.font {
+            n.classes.push(collector.insert_class_font(font));
+        }
+
         n.classes.extend(self.common.add_class());
         if let Some(ref p) = self.placeholder {
             n.attrs.insert(s("placeholder"), escape(p));
