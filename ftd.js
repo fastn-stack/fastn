@@ -1029,7 +1029,7 @@ function get(id, data) {
 
 function http(id, method="GET", data, reference, ftd_data, external_children) {
     let xhr = new XMLHttpRequest();
-    xhr.open(method, data.url);
+    xhr.open(method.toUpperCase(), data.url);
     xhr.setRequestHeader("Accept", "application/json");
     xhr.setRequestHeader("Content-Type", "application/json");
 
