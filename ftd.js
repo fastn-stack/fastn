@@ -752,7 +752,7 @@ window.ftd = (function () {
                 let resolved_data = ftd_utils.resolve_reference(value, reference, data, obj);
                 let func = resolved_data.function? resolved_data.function.trim().replaceAll("-", "_").toLowerCase(): "http";
                 let method = resolved_data.method? resolved_data.method.trim().toUpperCase(): "GET";
-                window[func](id, method, resolved_data, reference, data, ftd_external_children);
+                window[func](id, method, resolved_data, reference);
             } else {
                 let target = action["target"].trim().replaceAll("-", "_");
                 window[target](id);
@@ -997,6 +997,15 @@ window.ftd = (function () {
         }
     }
 
+    exports.set_value = function (id, variable, value) {
+        let data = ftd_data[id];
+        if (!data[variable]) {
+            console_log(variable, "is not in data, ignoring");
+            return;
+        }
+        ftd_utils.handle_action(id, variable, value, data, ftd_external_children);
+    }
+
     return exports;
 })();
 
@@ -1004,30 +1013,7 @@ function console_print(id, data) {
     console.log("console_print",data);
 }
 
-function get(id, data) {
-    let xhr = new XMLHttpRequest();
-    xhr.open("GET", data.url);
-    xhr.setRequestHeader("Accept", "application/json");
-    xhr.setRequestHeader("Content-Type", "application/json");
-
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            let response = JSON.parse(xhr.response);
-            if (!!response.data.url) {
-                window.location.href = response.data.url;
-            } else if (!!response.data.reload) {
-                window.location.reload();
-            }
-        } else if (xhr.readyState === 4) {
-            console.log("Error in calling url: ", data.url, xhr.responseText);
-        }
-    };
-
-    xhr.send();
-}
-
-
-function http(id, method="GET", data, reference, ftd_data, external_children) {
+function http(id, method="GET", data, reference) {
     let xhr = new XMLHttpRequest();
     xhr.open(method.toUpperCase(), data.url);
     xhr.setRequestHeader("Accept", "application/json");
@@ -1038,18 +1024,18 @@ function http(id, method="GET", data, reference, ftd_data, external_children) {
             console.log("Error in calling url: ", data.url, xhr.responseText);
             return;
         }
+        if (xhr.readyState !== 4) {
+            return;
+        }
         let response = JSON.parse(xhr.response);
         console_log("API response", data.url, xhr.response)
-        if (!!response.data.url) {
+        if (!!response.data && !!response.data.url) {
             window.location.href = response.data.url;
-        } else if (!!response.data.reload) {
+        } else if (!!response.data && !!response.data.reload) {
             window.location.reload();
         } else {
             for (const key of Object.keys(response.data)) {
-                // TODO:
-                // Need to use set_data_value
-                //ftd_utils.set_data_value(id, key, response.data[key], ftd_data, external_children)
-                ftd_utils.set_data_value(ftd_data, key, response.data[key])
+                ftd.set_value(id, key, response.data[key])
             }
         }
     };
