@@ -24,7 +24,7 @@ url: /api/v1/get-data
 function: http
 method: get
 url: /api/v1/post-data
-value: {"a": "value"}
+value: asdas
 name: Abrar Khan
 age: 28
 
