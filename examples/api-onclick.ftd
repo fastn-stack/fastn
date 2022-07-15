@@ -1,0 +1,31 @@
+-- ftd.column foo:
+integer count: 0
+
+--- ftd.integer:
+value: $count
+
+--- ftd.text: increment counter
+$on-click$: increment $count
+
+
+--- ftd.text: Click to GET Data
+$on-click$: message-host $get-api
+
+--- ftd.text: Click to POST Data
+$on-click$: message-host $post-api
+
+
+-- object get-api:
+function: http
+method: get
+url: /api/v1/get-data
+
+-- object post-api:
+function: http
+method: get
+url: /api/v1/post-data
+value: {"a": "value"}
+name: Abrar Khan
+age: 28
+
+-- foo:
