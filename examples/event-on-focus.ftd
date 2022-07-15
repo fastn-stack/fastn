@@ -1,0 +1,19 @@
+-- asd:
+
+
+-- ftd.color yellow:
+light: yellow
+dark: red
+
+-- ftd.input asd:
+boolean is-focus: false
+placeholder: Type Something Here...
+$on-focus$: $is-focus = true
+background-color: $yellow
+
+
+-- ftd.text: Dark Mode
+$on-click$: message-host enable-dark-mode
+
+-- ftd.text: Light Mode
+$on-click$: message-host enable-light-mode
