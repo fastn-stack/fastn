@@ -1,0 +1,42 @@
+-- ftd.text: Hello
+
+-- ftd.row row1:
+
+--- ftd.text: $source
+
+--- ftd.input:
+width: fill
+padding-horizontal: 16
+min-width: percent 100
+min-height: 82
+multiline: true
+placeholder: -- ftd.text: hello world
+value: $source
+$on-input$: $source=$VALUE
+$on-input$: message-host $edit-obj
+white-space: pre
+
+
+/-- object api-get-data:
+function: get
+url: /api/v1/get-data
+value: ""
+
+/-- api-get-data:
+
+-- optional string source:
+$always-include$: true
+
+-- optional string path:
+$always-include$: true
+
+-- string url: https://www.7timer.info/bin/astro.php?lon=113.2&lat=23.1&ac=0&unit=metric&output=json&tzshift=0
+
+-- object edit-obj:
+function: post
+url: $url
+value: $source
+path: $path
+
+
+-- row1:

@@ -751,7 +751,7 @@ window.ftd = (function () {
                 let reference = JSON.parse(action["parameters"].data[0].reference);
                 let resolved_data = ftd_utils.resolve_reference(value, reference, data, obj);
                 let func = resolved_data.function.trim().replaceAll("-", "_");
-                window[func](id, resolved_data, reference);
+                window[func](id, resolved_data, reference, data, ftd_external_children);
             } else {
                 let target = action["target"].trim().replaceAll("-", "_");
                 window[target](id);
@@ -1026,11 +1026,13 @@ function get(id, data) {
 }
 
 
-function post(id, data) {
+function post(id, data, ftd_data, external_children) {
     let xhr = new XMLHttpRequest();
     xhr.open("POST", data.url);
     xhr.setRequestHeader("Accept", "application/json");
     xhr.setRequestHeader("Content-Type", "application/json");
+    // xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
+    // xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
@@ -1039,6 +1041,12 @@ function post(id, data) {
                 window.location.href = response.data.url;
             } else if (!!response.data.reload) {
                 window.location.reload();
+            } else {
+                if (!!response.data && typeof response.data === "object") {
+                    for (const key of response.data) {
+                        ftd_utils.handle_action(id, key, response.data[key], ftd_data, external_children)
+                    }
+                }
             }
         } else if (xhr.readyState === 4) {
             console.log("Error in calling url: ", data.url, xhr.responseText);
