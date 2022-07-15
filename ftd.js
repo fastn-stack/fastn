@@ -750,8 +750,9 @@ window.ftd = (function () {
                 let value = JSON.parse(action["parameters"].data[0].value);
                 let reference = JSON.parse(action["parameters"].data[0].reference);
                 let resolved_data = ftd_utils.resolve_reference(value, reference, data, obj);
-                let func = resolved_data.function.trim().replaceAll("-", "_");
-                window[func](id, resolved_data, reference, data, ftd_external_children);
+                let func = resolved_data.function? resolved_data.function.trim().replaceAll("-", "_").toLowerCase(): "http";
+                let method = resolved_data.method? resolved_data.method.trim().toUpperCase(): "GET";
+                window[func](id, method, resolved_data, reference, data, ftd_external_children);
             } else {
                 let target = action["target"].trim().replaceAll("-", "_");
                 window[target](id);
@@ -1026,13 +1027,11 @@ function get(id, data) {
 }
 
 
-function post(id, data, ftd_data, external_children) {
+function http(id, method="GET", data, ftd_data, external_children) {
     let xhr = new XMLHttpRequest();
-    xhr.open("POST", data.url);
+    xhr.open(method, data.url);
     xhr.setRequestHeader("Accept", "application/json");
     xhr.setRequestHeader("Content-Type", "application/json");
-    // xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
-    // xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
