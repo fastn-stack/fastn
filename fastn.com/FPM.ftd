@@ -90,6 +90,7 @@ language: en
 - `$on-<event-name>$`: Event Handling
   url: event-handling/
 - Auto Nesting: auto-nesting/
+- Ajax Call: ajax-call/
 
 
 ## API: reading-data/
