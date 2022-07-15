@@ -162,20 +162,33 @@ impl Config {
         // TODO: fetch fonts from package dependencies as well (ideally this function should fail
         //       if one of the fonts used by any ftd document is not found
 
-        let generated_style = self
-            .package
-            .get_flattened_dependencies()
-            .into_iter()
-            .unique_by(|dep| dep.package.name.clone())
-            .collect_vec()
-            .iter()
-            .fold(self.package.get_font_html(), |accumulator, dep| {
-                format!(
-                    "{pre}\n{new}",
-                    pre = accumulator,
-                    new = dep.package.get_font_html()
-                )
-            });
+        let generated_style = {
+            let mut generated_style = self
+                .package
+                .get_flattened_dependencies()
+                .into_iter()
+                .unique_by(|dep| dep.package.name.clone())
+                .collect_vec()
+                .iter()
+                .fold(self.package.get_font_html(), |accumulator, dep| {
+                    format!(
+                        "{pre}\n{new}",
+                        pre = accumulator,
+                        new = dep.package.get_font_html()
+                    )
+                });
+            generated_style =
+                self.all_packages
+                    .values()
+                    .fold(generated_style, |accumulator, package| {
+                        format!(
+                            "{pre}\n{new}",
+                            pre = accumulator,
+                            new = package.get_font_html()
+                        )
+                    });
+            generated_style
+        };
         return match generated_style.trim().is_empty() {
             false => format!("<style>{}</style>", generated_style),
             _ => "".to_string(),

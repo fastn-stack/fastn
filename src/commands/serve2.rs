@@ -31,6 +31,9 @@ async fn serve_files(config: &mut fpm::Config, path: &std::path::Path) -> actix_
                 .content_type(guess_mime_type(image.id.as_str()))
                 .body(image.content);
         }
+        fpm::File::Static(s) => {
+            return actix_web::HttpResponse::Ok().body(s.content);
+        }
         _ => {
             eprintln!("FPM unknown handler");
             actix_web::HttpResponse::InternalServerError().body("".as_bytes())
