@@ -205,6 +205,8 @@ impl Document {
                 "right" => "ArrowRight",
                 "left" => "ArrowLeft",
                 "esc" => "Escape",
+                "dash" => "-",
+                "space" => " ",
                 t => t,
             }
             .to_string()
@@ -218,8 +220,20 @@ impl Document {
             let global_variables =
                 "let global_keys = {};\nlet buffer = [];\nlet lastKeyTime = Date.now();"
                     .to_string();
-            let mut add_key_events = false;
             let mut keydown_seq_event = "".to_string();
+            let mut keydown_events = indoc::indoc! {"
+                document.addEventListener(\"keydown\", function(event) {
+                    global_keys[event.key] = true;
+                    const currentTime = Date.now();
+                    if (currentTime - lastKeyTime > 1000) {{
+                        buffer = [];
+                    }}
+                    buffer.push(event.key);
+                    lastKeyTime = currentTime;
+                    if (event.target.nodeName === \"INPUT\" || event.target.nodeName === \"TEXTAREA\") {
+                        return;
+                    }
+            "}.to_string();
 
             for (keys, actions) in events.iter().filter_map(|e| {
                 if let Some(keys) = e.name.strip_prefix("onglobalkeyseq[") {
@@ -233,12 +247,13 @@ impl Document {
                     None
                 }
             }) {
-                add_key_events = true;
                 keydown_seq_event = format!(
                     indoc::indoc! {"
                         {string}
                         if (buffer.join(',').includes(\"{sequence}\")) {{
                            {actions}
+                            buffer = [];
+                            global_keys[event.key] = false;
                         }}
                     "},
                     string = keydown_seq_event,
@@ -247,24 +262,6 @@ impl Document {
                 );
             }
 
-            if !keydown_seq_event.is_empty() {
-                keydown_seq_event = format!(
-                    indoc::indoc! {"
-                        const currentTime = Date.now();
-                        if (currentTime - lastKeyTime > 1000) {{
-                            buffer = [];
-                        }}
-                        buffer.push(event.key);
-                        lastKeyTime = currentTime;
-                        {string}
-                    "},
-                    string = keydown_seq_event,
-                );
-            }
-
-            let mut keydown_events =
-                "\n\ndocument.addEventListener(\"keydown\", function(event) {\n global_keys[event.key] = true;"
-                    .to_string();
             let keyup_events =
                 "document.addEventListener(\"keyup\", function(event) { global_keys[event.key] = false; })".to_string();
 
@@ -280,25 +277,29 @@ impl Document {
                     None
                 }
             }) {
-                add_key_events = true;
                 let all_keys = keys
                     .iter()
                     .map(|v| format!("global_keys[\"{}\"]", v))
                     .join(" && ");
-                keydown_events = format!(
+                keydown_seq_event = format!(
                     indoc::indoc! {"
                         {string}
-                        if ({all_keys}) {{
+                        if ({all_keys} && buffer.join(',').includes(\"{sequence}\")) {{
                             {actions}
+                            buffer = [];
+                            global_keys[event.key] = false;
                         }}
                     "},
-                    string = keydown_events,
+                    string = keydown_seq_event,
                     all_keys = all_keys,
+                    sequence = keys.join(","),
                     actions = actions,
                 );
             }
 
-            keydown_events = format!("{}\n\n{}}});", keydown_events, keydown_seq_event);
+            if !keydown_seq_event.is_empty() {
+                keydown_events = format!("{}\n\n{}}});", keydown_events, keydown_seq_event);
+            }
 
             let mut string = "document.addEventListener(\"click\", function(event) {".to_string();
             for event in events.iter().filter(|e| e.name.eq("onclickoutside")) {
@@ -316,7 +317,7 @@ impl Document {
             }
             string = format!("{}}});", string);
 
-            if add_key_events {
+            if !keydown_seq_event.is_empty() {
                 format!(
                     "{}\n\n\n{}\n\n\n{}\n\n\n{}",
                     string, global_variables, keydown_events, keyup_events
