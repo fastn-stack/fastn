@@ -59,30 +59,43 @@ let buffer = [];
 let lastKeyTime = Date.now();
 
 
-
-
 document.addEventListener("keydown", function(event) {
- global_keys[event.key] = true;
-if (global_keys["Control"] && global_keys["s"]) {
-    window.ftd.handle_event(event, 'main', '[{"action":"set-value","target":"global-key-event.ftd#name","parameters":{"value":[{"value":"Ayushi","reference":null},{"value":"string","reference":null}]}}]', this);
-}
+    global_keys[event.key] = true;
+    const currentTime = Date.now();
+    if (currentTime - lastKeyTime > 1000) {{
+        buffer = [];
+    }}
+    buffer.push(event.key);
+    lastKeyTime = currentTime;
+    if (event.target.nodeName === "INPUT" || event.target.nodeName === "TEXTAREA") {
+        return;
+    }
 
-if (global_keys["Control"] && global_keys["a"]) {
-    window.ftd.handle_event(event, 'main', '[{"action":"set-value","target":"global-key-event.ftd#name","parameters":{"value":[{"value":"Arpita","reference":null},{"value":"string","reference":null}]}}]', this);
-}
 
 
-const currentTime = Date.now();
-if (currentTime - lastKeyTime > 1000) {
+if (buffer.join(',').includes(" ,-")) {
+   window.ftd.handle_event(event, 'main', '[{"action":"set-value","target":"global-key-event.ftd#name","parameters":{"value":[{"value":"Jatinderjit","reference":null},{"value":"string","reference":null}]}}]', this);
     buffer = [];
+    global_keys[event.key] = false;
 }
-buffer.push(event.key);
-lastKeyTime = currentTime;
 
 if (buffer.join(',').includes("Shift,Shift")) {
-   window.ftd.handle_event(event, 'main', '[{"action":"set-value","target":"global-key-event.ftd#name","parameters":{"value":[{"value":"Puja","reference":null},{"value":"string","reference":null}]}}]', this);
+   window.ftd.handle_event(event, 'main', '[{"action":"set-value","target":"global-key-event.ftd#name","parameters":{"value":[{"value":"Rajshri","reference":null},{"value":"string","reference":null}]}}]', this);
+    buffer = [];
+    global_keys[event.key] = false;
 }
 
+if (global_keys["Control"] && global_keys["a"] && buffer.join(',').includes("Control,a")) {
+    window.ftd.handle_event(event, 'main', '[{"action":"set-value","target":"global-key-event.ftd#name","parameters":{"value":[{"value":"Arpita","reference":null},{"value":"string","reference":null}]}}]', this);
+    buffer = [];
+    global_keys[event.key] = false;
+}
+
+if (global_keys["Control"] && global_keys["s"] && buffer.join(',').includes("Control,s")) {
+    window.ftd.handle_event(event, 'main', '[{"action":"set-value","target":"global-key-event.ftd#name","parameters":{"value":[{"value":"Ayushi","reference":null},{"value":"string","reference":null}]}}]', this);
+    buffer = [];
+    global_keys[event.key] = false;
+}
 });
 
 
