@@ -1625,6 +1625,10 @@ pub fn input_function() -> ftd::Component {
                 ),
                 ("value".to_string(), ftd::p2::Kind::string().into_optional()),
                 (
+                    "default-value".to_string(),
+                    ftd::p2::Kind::string().into_optional(),
+                ),
+                (
                     "multiline".to_string(),
                     ftd::p2::Kind::boolean().set_default(Some("false".to_string())),
                 ),
@@ -1680,6 +1684,8 @@ pub fn input_from_properties(
     })?;
 
     let properties = &ftd::component::resolve_properties(0, unresolved_properties, doc)?;
+    let value = ftd::p2::utils::string_optional("value", properties, doc.name, 0)?;
+    let default_value = ftd::p2::utils::string_optional("default-value", properties, doc.name, 0)?;
     Ok(ftd::Input {
         common: common_from_properties(
             unresolved_properties,
@@ -1691,7 +1697,16 @@ pub fn input_from_properties(
         )?,
         placeholder: ftd::p2::utils::string_optional("placeholder", properties, doc.name, 0)?,
         multiline: ftd::p2::utils::bool("multiline", properties, doc.name, 0)?,
-        value: ftd::p2::utils::string_optional("value", properties, doc.name, 0)?,
+        value: {
+            // if value is unchanged then
+            // value = default-value
+            // otherwise retain the changed value
+            match value {
+                Some(v) => Some(v),
+                None => default_value.clone(),
+            }
+        },
+        defaultvalue: default_value,
         font,
     })
 }

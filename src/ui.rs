@@ -2633,4 +2633,5 @@ pub struct Input {
     pub value: Option<String>,
     pub multiline: bool,
     pub font: Option<Type>,
+    pub defaultvalue: Option<String>,
 }
