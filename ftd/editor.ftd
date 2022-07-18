@@ -1,5 +1,7 @@
 -- import: fpm
 
+-- import: fifthtry.github.io/roboto-mono/assets as mono
+
 -- boolean show-create-new-folder: false
 
 -- boolean show-create-new-file: false
@@ -298,6 +300,16 @@ dark: https://fifthtry.github.io/fpm-ui/-/fifthtry.github.io/fpm-ui/e-active.svg
 
 
 
+-- ftd.font-size editor-font:
+line-height: 16
+size: 13
+letter-spacing: 0
+
+-- ftd.type monospace: $mono.fonts.Mono
+desktop: $editor-font
+mobile: $editor-font
+xl: $editor-font
+weight: 400
 
 -- ftd.font-size small-desktop:
 line-height: 14
@@ -351,17 +363,6 @@ mobile: $copy-print-bold-desktop
 xl: $copy-print-bold-desktop
 weight: 700
 
--- ftd.font-size status-bold:
-line-height: 16
-size: 13
-letter-spacing: 0
-
--- ftd.type status-font: $fpm.font-display
-desktop: $status-bold
-mobile: $status-bold
-xl: $status-bold
-weight: 700
-
 -- ftd.font-size dialog-title-bold:
 line-height: 20
 size: 14
@@ -372,17 +373,6 @@ desktop: $dialog-title-bold
 mobile: $dialog-title-bold
 xl: $dialog-title-bold
 weight: 600
-
--- ftd.font-size filename:
-line-height: 16
-size: 13
-letter-spacing: 0
-
--- ftd.type file-font: $fpm.font-display
-desktop: $filename
-mobile: $filename
-xl: $filename
-weight: 400
 
 
 
@@ -425,8 +415,6 @@ if: $show-create-new-folder
 
 
 -- ftd.row editor:
-width: fill
-height: fill
 boolean open: false
 boolean show-desktop: false
 boolean show-mobile: false
@@ -434,6 +422,8 @@ boolean show-fullscreen: false
 boolean edits: true
 background-color: $fpm.color.main.background.step-2
 color: $fpm.color.main.text-strong
+width: fill
+height: fill
 open: true
 append-at: toc-id
 
@@ -591,8 +581,9 @@ placeholder: -- ftd.text: hello world
 value: $source
 $on-input$: $source=$VALUE
 $on-input$: message-host $edit-obj
-$on-input$: $show-guide = true
+$on-click$: $show-guide = true
 color: $fpm.color.main.text
+role: $monospace
 background-color: $fpm.color.main.background.base
 white-space: pre
 
@@ -768,7 +759,7 @@ height: auto
 
 --- ftd.column:
 if: $is-mobile
-id: good
+id: mobile-side
 height: fill
 width: fill
 
@@ -875,7 +866,7 @@ align: center
 id: toc-id
 width: fill
 
---- container: good
+--- container: mobile-side
 
 --- ftd.row:
 id: left-side
@@ -1730,37 +1721,37 @@ padding-horizontal: 2
 width: fill
 
 --- ftd.row:
-spacing: 10
 if: $status == Untracked
+spacing: 10
+width: fill
 $on-mouse-enter$: $show-action-on-status = true
 $on-mouse-enter$: $show-revert = false
-width: fill
 
 --- ftd.text: $title
 if: $link is not null
 link: $link
 color: $fpm.color.main.text-strong
-role: $file-font
+role: $monospace
 width: fill
 
 --- ftd.text: $title
 if: $link is null
 color: $fpm.color.main.text-strong
-role: $file-font
+role: $monospace
 width: fill
 
 /--- ftd.text: C -- dont show any text in-case of status is untracked
 color: $changed
-role: $status-font
+role: $monospace
 align: right
 
 --- container: ftd.main
 
 --- ftd.row:
-id: added-container
 if: $status == Added
 color: $added
 width: fill
+id: added-container
 $on-mouse-enter$: $show-action-on-status = true
 $on-mouse-enter$: $show-revert = false
 
@@ -1768,210 +1759,210 @@ $on-mouse-enter$: $show-revert = false
 if: $link is not null
 link: $link
 color: $fpm.color.main.text-strong
-role: $file-font
+role: $monospace
 white-space: nowrap
 width: fill
 
 --- ftd.text: $title
 if: $link is null
 color: $fpm.color.main.text-strong
-role: $file-font
+role: $monospace
 width: fill
 
 --- ftd.text: A
 color: $added
-role: $status-font
+role: $monospace
 align: right
 
 --- container: ftd.main
 
 --- ftd.row:
+if: $status == Modified
 width: fill
 spacing: 10
-if: $status == Modified
 $on-mouse-enter$: $show-action-on-status = true
 $on-mouse-enter$: $show-revert = true
 color: $merge
 
 --- ftd.text: $title
-width: fill
 if: $link is not null
 link: $link
+width: fill
 color: $fpm.color.main.text-strong
-role: $file-font
+role: $monospace
 
 --- ftd.text: $title
-width: fill
 if: $link is null
+width: fill
 color: $fpm.color.main.text-strong
-role: $file-font
+role: $monospace
 
 --- ftd.text: M
 color: $merge
-role: $status-font
+role: $monospace
 align: right
 
 --- container: ftd.main
 
 --- ftd.row:
+if: $status == Deleted
 width: fill
 spacing: 10
-if: $status == Deleted
 color: $red
 $on-mouse-enter$: $show-revert = true
 $on-mouse-enter$: $show-action-on-status = false
 
 --- ftd.text: $title
-width: fill
 if: $link is not null
 link: $link
+width: fill
 color: $fpm.color.main.text-strong
-role: $file-font
+role: $monospace
 
 --- ftd.text: $title
-width: fill
 if: $link is null
+width: fill
 color: $fpm.color.main.text-strong
-role: $file-font
+role: $monospace
 
 --- ftd.text: D
 color: $deleted
-role: $status-font
+role: $monospace
 align: right
 
 --- container: ftd.main
 
 --- ftd.row:
+if: $status == Conflicted
 width: fill
 spacing: 10
-if: $status == Conflicted
+color: $grey
 $on-mouse-enter$: $show-revert = true
 $on-mouse-enter$: $show-action-on-status = true
-color: $grey
 
 --- ftd.text: $title
-width: fill
 if: $link is not null
 link: $link
+width: fill
 color: $fpm.color.main.text-strong
-role: $file-font
+role: $monospace
 
 --- ftd.text: $title
-width: fill
 if: $link is null
+width: fill
 color: $fpm.color.main.text-strong
-role: $file-font
+role: $monospace
 
 --- ftd.text: C
 color: $changed
-role: $status-font
+role: $monospace
 align: right
 
 --- container: ftd.main
 
 --- ftd.row:
+if: $status == Outdated
 width: fill
 spacing: 10
-if: $status == Outdated
+color: $orange
 $on-mouse-enter$: $show-revert = true
 $on-mouse-enter$: $show-action-on-status = true
-color: $orange
 
 --- ftd.text: $title
-width: fill
 if: $link is not null
 link: $link
+width: fill
 color: $fpm.color.main.text-strong
-role: $file-font
+role: $monospace
 
 --- ftd.text: $title
-width: fill
 if: $link is null
+width: fill
 color: $fpm.color.main.text-strong
-role: $file-font
+role: $monospace
 
 --- ftd.text: O
 color: $outdated
-role: $status-font
+role: $monospace
 align: right
 
 --- container: ftd.main
 
 --- ftd.row:
+if: $status == ClientEditedServerDeleted
 width: fill
 spacing: 10
-if: $status == ClientEditedServerDeleted
+color: $orange
 $on-mouse-enter$: $show-revert = true
 $on-mouse-enter$: $show-action-on-status = true
-color: $orange
 
 --- ftd.text: $title
-width: fill
 if: $link is not null
 link: $link
+width: fill
 color: $fpm.color.main.text-strong
-role: $file-font
+role: $monospace
 
 --- ftd.text: $title
-width: fill
 if: $link is null
+width: fill
 color: $fpm.color.main.text-strong
-role: $file-font
+role: $monospace
 
 --- ftd.text: Cˆ
 color: $changed
-role: $status-font
+role: $monospace
 align: right
 
 --- container: ftd.main
 
 --- ftd.row:
+if: $status == ClientDeletedServerEdited
 width: fill
 spacing: 10
-if: $status == ClientDeletedServerEdited
+color: $orange
 $on-mouse-enter$: $show-revert = true
 $on-mouse-enter$: $show-action-on-status = true
-color: $orange
 
 --- ftd.text: $title
-width: fill
 if: $link is not null
 link: $link
+width: fill
 color: $fpm.color.main.text-strong
-role: $file-font
+role: $monospace
 
 --- ftd.text: $title
-width: fill
 if: $link is null
+width: fill
 color: $fpm.color.main.text-strong
-role: $file-font
+role: $monospace
 
 --- ftd.text: C˘
 color: $changed
-role: $status-font
+role: $monospace
 align: right
 
 --- container: ftd.main
 
 --- ftd.row:
+if: $status is null
 width: fill
 spacing: 10
-if: $status is null
 $on-mouse-enter$: $show-revert = false
 $on-mouse-enter$: $show-action-on-status = true
 
 --- ftd.text: $title
-width: fill
 if: $link is not null
 link: $link
+width: fill
 color: $fpm.color.main.text-strong
-role: $file-font
+role: $monospace
 
 --- ftd.text: $title
 width: fill
 if: $link is null
 color: $fpm.color.main.text-strong
-role: $file-font
+role: $monospace
 
 
 
@@ -2007,9 +1998,9 @@ border-color: $fpm.color.main.border
 height: calc 100vh - 82px
 anchor: parent
 top: 43
-left: 657
+left: 634
 width: 10
-z-index: 10
+z-index: 9999
 
 
 
@@ -2303,13 +2294,13 @@ spacing: 8
 --- ftd.text: $title
 if: $link is not null
 color: $fpm.color.main.text-strong
-role: $file-font
+role: $monospace
 white-space: nowrap
 
 --- ftd.text: $title
 if: $link is null
 color: $fpm.color.main.text-strong
-role: $file-font
+role: $monospace
 white-space: nowrap
 
 --- container: show-tooltip
@@ -2336,7 +2327,7 @@ if: $show-tooltip
 
 --- ftd.text: A
 color: $added
-role: $status-font
+role: $monospace
 align: right
 
 
