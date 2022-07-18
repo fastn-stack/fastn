@@ -228,7 +228,7 @@ optional toc-item current-page:
 
 
 
--- record file-edit:
+-- record file-edit-data:
 caption or body message:
 integer timestamp:
 integer version:
@@ -239,7 +239,7 @@ string operation:
 
 -- record file-history:
 caption filename:
-file-edit list history:
+file-edit-data list file-edit:
 
 
 -- file-history list history:

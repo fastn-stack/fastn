@@ -1,8 +1,9 @@
 use itertools::Itertools;
 
-#[derive(serde::Serialize, serde::Deserialize, std::fmt::Debug, PartialEq)]
+#[derive(serde::Serialize, serde::Deserialize, std::fmt::Debug, PartialEq, Clone)]
 pub struct FileHistory {
     pub filename: String,
+    #[serde(rename = "file-edit")]
     pub file_edit: Vec<FileEdit>,
 }
 
@@ -12,8 +13,30 @@ pub struct FileEdit {
     pub timestamp: u128,
     pub version: i32,
     pub author: Option<String>,
+    #[serde(rename = "src-cr")]
     pub src_cr: Option<i32>,
     pub operation: FileOperation,
+}
+
+#[derive(serde::Serialize, serde::Deserialize, std::fmt::Debug, PartialEq, Clone)]
+pub struct FileEditTemp {
+    pub message: String,
+    pub author: Option<String>,
+    pub src_cr: Option<i32>,
+    pub operation: FileOperation,
+}
+
+impl FileEditTemp {
+    fn to_file_edit(&self, timestamp: u128, version: i32) -> FileEdit {
+        FileEdit {
+            message: self.message.clone(),
+            timestamp,
+            version,
+            author: self.author.clone(),
+            src_cr: self.src_cr,
+            operation: self.operation.clone(),
+        }
+    }
 }
 
 #[derive(serde::Serialize, serde::Deserialize, std::fmt::Debug, PartialEq, Clone)]
@@ -75,4 +98,86 @@ impl FileHistory {
         }
         None
     }
+
+    pub(crate) fn get_ftd(history: &[&fpm::history::FileHistory]) -> String {
+        let mut files_history = vec!["-- import: fpm".to_string()];
+        for file_history in history {
+            let mut file_history_data = format!("-- fpm.history: {}\n", file_history.filename);
+            for file_edit in &file_history.file_edit {
+                let author = file_edit
+                    .author
+                    .as_ref()
+                    .map(|v| format!("author: {}\n", v))
+                    .unwrap_or_else(|| "".to_string());
+                let src_cr = file_edit
+                    .src_cr
+                    .map(|v| format!("src-cr: {}\n", v))
+                    .unwrap_or_else(|| "".to_string());
+                file_history_data = format!(
+                    "{}\n\n--- file-edit:\ntimestamp: {}\nversion: {}\n{}{}\n{}\n",
+                    file_history_data,
+                    file_edit.timestamp,
+                    file_edit.version,
+                    author,
+                    src_cr,
+                    file_edit.message
+                );
+            }
+            files_history.push(file_history_data);
+        }
+        files_history.join("\n\n\n")
+    }
+}
+
+pub(crate) async fn insert_into_history(
+    root: &camino::Utf8PathBuf,
+    file_list: &std::collections::BTreeMap<String, fpm::history::FileEditTemp>,
+    history: &mut Vec<fpm::history::FileHistory>,
+) -> fpm::Result<()> {
+    let mut file_history: std::collections::BTreeMap<String, fpm::history::FileHistory> = history
+        .iter_mut()
+        .map(|v| (v.filename.to_string(), v.clone()))
+        .collect();
+    insert_into_history_(root, file_list, &mut file_history).await?;
+    *history = file_history.into_values().collect_vec();
+    Ok(())
+}
+
+pub(crate) async fn insert_into_history_(
+    root: &camino::Utf8PathBuf,
+    file_list: &std::collections::BTreeMap<String, fpm::history::FileEditTemp>,
+    file_history: &mut std::collections::BTreeMap<String, fpm::history::FileHistory>,
+) -> fpm::Result<()> {
+    let timestamp = fpm::timestamp_nanosecond();
+    for (file, file_op) in file_list {
+        let version =
+            fpm::snapshot::get_new_version(file_history.values().collect_vec().as_slice(), file);
+        if let Some(file_history) = file_history.get_mut(file) {
+            file_history
+                .file_edit
+                .insert(0, file_op.to_file_edit(timestamp, version))
+        } else {
+            file_history.insert(
+                file.to_string(),
+                FileHistory {
+                    filename: file.to_string(),
+                    file_edit: vec![file_op.to_file_edit(timestamp, version)],
+                },
+            );
+        }
+        let new_file_path = root
+            .join(".server-state")
+            .join("history")
+            .join(fpm::utils::snapshot_id(file, &(version as u128)));
+        tokio::fs::copy(root.join(file), new_file_path).await?;
+    }
+
+    let history_ftd = FileHistory::get_ftd(file_history.values().collect_vec().as_slice());
+    tokio::fs::write(
+        root.join(".server-state").join("history.ftd"),
+        history_ftd.as_str(),
+    )
+    .await?;
+
+    Ok(())
 }

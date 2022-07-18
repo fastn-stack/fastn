@@ -70,7 +70,7 @@ impl Config {
     }
 
     pub fn server_history_dir(&self) -> camino::Utf8PathBuf {
-        self.server_dir().join(".history")
+        self.server_dir().join("history")
     }
 
     pub fn history_file(&self) -> camino::Utf8PathBuf {

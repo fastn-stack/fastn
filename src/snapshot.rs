@@ -62,6 +62,15 @@ pub(crate) async fn create_latest_snapshots(
     Ok(())
 }
 
+pub(crate) fn get_new_version(history: &[&fpm::history::FileHistory], file: &str) -> i32 {
+    if let Some(file_history) = history.iter().find(|v| v.filename.eq(file)) {
+        if let Some(file_edit) = file_history.file_edit.first() {
+            return file_edit.version + 1;
+        }
+    }
+    1
+}
+
 /// Related to workspace
 #[derive(PartialEq, Debug, serde::Deserialize)]
 pub enum WorkspaceType {
