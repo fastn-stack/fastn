@@ -40,9 +40,11 @@ $always-include$: true
 $always-include$: true
 
 -- string url: -/edit/
+$always-include$: true
 
 -- object edit-obj:
-function: post
+function: http
+method: post
 url: $url
 value: $source
 path: $path
