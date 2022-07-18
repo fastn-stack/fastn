@@ -1,0 +1,35 @@
+; =========================== Color definitions ==========================================
+
+-- ftd.color black:
+light: black
+dark: black
+
+-- ftd.color white:
+light: white
+dark: white
+
+; ============================== Events on (text-field) ===================================
+; on-input: update foo as text-field value changes
+
+-- string foo: Default foo Text..
+
+-- ftd.input text-field:
+default-value: $foo
+$on-input$: $foo=$VALUE
+min-width: 150
+min-height: 50
+color : $white
+background-color: $black
+
+; =============================== Invocations below ========================================
+
+-- ftd.text: ftd.input Default value
+text-transform: capitalize
+padding-bottom: 10
+
+-- text-field:
+
+-- ftd.text: Foo Text below (changes on-input above)
+padding-bottom: 10
+
+-- ftd.text: $foo
