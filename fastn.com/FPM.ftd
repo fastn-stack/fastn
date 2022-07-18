@@ -12,6 +12,7 @@ language: en
 -- fpm.dependency: fifthtry.github.io/dark-mode-switcher as dms
 -- fpm.dependency: arjaupashak.com
 -- fpm.dependency: fpm.dev
+-- fpm.dependency: fifthtry.github.io/roboto-mono as mono
 
 -- fpm.auto-import: ft
 -- fpm.auto-import: fpm
