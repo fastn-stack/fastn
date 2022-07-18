@@ -1683,7 +1683,6 @@ pub fn input_from_properties(
         ftd::Type::from(&v, doc, 0, font_reference).map(Some)
     })?;
 
-    let properties = &ftd::component::resolve_properties(0, unresolved_properties, doc)?;
     let value = ftd::p2::utils::string_optional("value", properties, doc.name, 0)?;
     let default_value = ftd::p2::utils::string_optional("default-value", properties, doc.name, 0)?;
     Ok(ftd::Input {
