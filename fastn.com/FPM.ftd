@@ -91,6 +91,8 @@ language: en
   url: event-handling/
 - Auto Nesting: auto-nesting/
 - Ajax Call: ajax-call/
+- `$on-global-key[<keys>]$` Global Key Events
+  url: global-key-events/
 
 
 ## API: reading-data/

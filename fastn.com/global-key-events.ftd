@@ -1,0 +1,65 @@
+-- ft.page: Global Key Event Handling
+
+There are two different global events in `ftd`
+`$on-global-key[<keys sequence>]$` and `$on-global-key-seq[<keys sequence>]$`.
+
+-- ft.h1: `$on-global-key[<keys sequence>]$: <event action>`
+
+In this case user has to press keys simultaneously with same sequence, and
+`event action` will get triggered.
+
+
+-- ft.h1: `$on-global-key-seq[<keys sequence>]$: <event action>`
+
+In this case user has to press keys in same sequence, and `event action` will
+get triggered.
+
+
+-- ft.h1: Special Keys Map
+
+`ftd` to Keyboard Mapping
+
+"ctrl" => "Control",
+
+"alt" => "Alt",
+
+"shift" => "Shift",
+
+"up" => "ArrowUp",
+
+"down" => "ArrowDown",
+
+"right" => "ArrowRight",
+
+"left" => "ArrowLeft",
+
+"esc" => "Escape",
+
+"dash" => "-",
+
+"space" => " ",
+
+
+-- ft.code:
+lang: ftd
+
+\-- string name: Foo
+
+\-- ftd.text: $name
+$on-global-key[ctrl-,]$: $name = Arpita
+$on-global-key[ctrl-3]$: $name = Ayushi
+$on-global-key-seq[shift-shift]$: $name = Rajshri
+$on-global-key-seq[space-dash]$: $name = Jatinderjit
+
+
+-- ft.output:
+
+
+-- string name: Foo
+
+-- ftd.text: $name
+color: $fpm.color.main.text-strong
+$on-global-key[ctrl-,]$: $name = Arpita
+$on-global-key[ctrl-3]$: $name = Ayushi
+$on-global-key-seq[shift-shift]$: $name = Rajshri
+$on-global-key-seq[space-dash]$: $name = Jatinderjit
