@@ -228,11 +228,11 @@ impl Document {
                     if (currentTime - lastKeyTime > 1000) {{
                         buffer = [];
                     }}
-                    buffer.push(event.key);
                     lastKeyTime = currentTime;
                     if (event.target.nodeName === \"INPUT\" || event.target.nodeName === \"TEXTAREA\") {
                         return;
-                    }
+                    }          
+                    buffer.push(event.key);
             "}.to_string();
 
             for (keys, actions) in events.iter().filter_map(|e| {
@@ -254,6 +254,7 @@ impl Document {
                            {actions}
                             buffer = [];
                             global_keys[event.key] = false;
+                            return;
                         }}
                     "},
                     string = keydown_seq_event,
@@ -288,6 +289,7 @@ impl Document {
                             {actions}
                             buffer = [];
                             global_keys[event.key] = false;
+                            return;
                         }}
                     "},
                     string = keydown_seq_event,
