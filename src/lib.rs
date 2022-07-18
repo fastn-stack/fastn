@@ -16,6 +16,7 @@ mod dependency;
 mod doc;
 mod file;
 mod font;
+mod history;
 mod i18n;
 pub mod library;
 mod package_doc;
@@ -25,6 +26,7 @@ mod snapshot;
 mod tracker;
 mod translation;
 mod version;
+mod workspace;
 
 pub(crate) use auto_import::AutoImport;
 pub(crate) use commands::build::process_file;

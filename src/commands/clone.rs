@@ -11,10 +11,13 @@ pub async fn clone(source: &str) -> fpm::Result<()> {
     futures::future::join_all(clone_response.files.into_iter().map(|(path, file)| {
         let current_directory = root.clone();
         tokio::spawn(
-            async move { fpm::utils::update(&current_directory, path.as_str(), &file).await },
+            async move { fpm::utils::update1(&current_directory, path.as_str(), &file).await },
         )
     }))
     .await;
+
+    let config = fpm::Config::read2(Some(root.as_str().to_string()), false).await?;
+    config.create_client_workspace().await?;
     Ok(())
 }
 

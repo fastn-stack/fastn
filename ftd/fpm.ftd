@@ -227,3 +227,30 @@ optional toc-item current-subsection:
 optional toc-item current-page:
 
 
+
+-- record file-edit:
+caption or body message:
+integer timestamp:
+integer version:
+optional string author:
+option integer src-cr:
+string operation:
+
+
+-- record file-history:
+caption filename:
+file-edit list history:
+
+
+-- file-history list history:
+
+
+-- record workspace-entry:
+caption filename:
+optional boolean deleted:
+integer version:
+
+
+-- workspace-entry list client-workspace:
+
+

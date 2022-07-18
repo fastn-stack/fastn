@@ -128,7 +128,7 @@ pub(crate) async fn create_workspace(
         ));
     }
 
-    fpm::utils::update(
+    fpm::utils::update1(
         &config.root.join(".fpm"),
         "workspace.ftd",
         data.join("\n\n").as_bytes(),
