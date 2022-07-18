@@ -14,6 +14,7 @@ implements: fifthtry.github.io/theme
 -- fpm.dependency: fifthtry.github.io/bling
 -- fpm.dependency: fifthtry.github.io/color-doc as cd
 -- fpm.dependency: fifthtry.github.io/admonitions
+-- fpm.dependency: fifthtry.github.io/roboto-mono as mono
 
 
 -- fpm.auto-import: ft
