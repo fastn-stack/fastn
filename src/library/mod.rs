@@ -198,10 +198,10 @@ pub fn process_sync<'a>(
         "package-query" => fpm::library::sqlite::processor_(section, doc, config),
         "fetch-file" => fpm::library::fetch_file::processor_sync(section, doc, config),
         "package-tree" => fpm::library::package_tree::processor_sync(section, doc, config),
-        t => Err(ftd::p1::Error::ParseError {
-            message: format!("FPM-Error: No such processor: {}", t),
+        t => Err(ftd::p1::Error::NotFound {
             doc_id: document_id.to_string(),
             line_number: section.line_number,
+            key: format!("FPM-Error: No such processor: {}", t),
         }),
     }
 }
