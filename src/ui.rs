@@ -603,9 +603,9 @@ impl Element {
                 | ftd::Element::Code(ftd::Code { font, common, .. })
                 | ftd::Element::Integer(ftd::Text { font, common, .. })
                 | ftd::Element::Boolean(ftd::Text { font, common, .. })
-                | ftd::Element::Decimal(ftd::Text { font, common, .. }) => (font, common),
+                | ftd::Element::Decimal(ftd::Text { font, common, .. })
+                | ftd::Element::Input(ftd::Input { font, common, .. }) => (font, common),
                 ftd::Element::IFrame(ftd::IFrame { common, .. })
-                | ftd::Element::Input(ftd::Input { common, .. })
                 | ftd::Element::TextBlock(ftd::TextBlock { common, .. })
                 | ftd::Element::Image(ftd::Image { common, .. }) => (&None, common),
                 ftd::Element::Null => continue,
@@ -2630,4 +2630,7 @@ pub struct ColorValue {
 pub struct Input {
     pub common: Common,
     pub placeholder: Option<String>,
+    pub value: Option<String>,
+    pub multiline: bool,
+    pub font: Option<Type>,
 }

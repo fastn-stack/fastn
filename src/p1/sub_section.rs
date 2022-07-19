@@ -86,7 +86,7 @@ impl SubSection {
         match self.body {
             Some(ref body) => Ok(body.1.to_string()),
             None => Err(Error::ParseError {
-                message: format!("caption is missing in {}", self.name),
+                message: format!("body is missing in {}", self.name),
                 doc_id: doc_id.to_string(),
                 line_number: self.line_number,
             }),

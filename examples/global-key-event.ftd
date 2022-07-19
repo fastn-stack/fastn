@@ -1,0 +1,7 @@
+-- string name: Foo
+
+-- ftd.text: $name
+$on-global-key[ctrl-a]$: $name = Arpita
+$on-global-key[ctrl-s]$: $name = Ayushi
+$on-global-key-seq[shift-shift]$: $name = Rajshri
+$on-global-key-seq[space-dash]$: $name = Jatinderjit

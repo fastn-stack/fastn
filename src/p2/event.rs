@@ -1,3 +1,5 @@
+use itertools::Itertools;
+
 #[derive(Debug, PartialEq, Clone, serde::Serialize, serde::Deserialize)]
 pub struct Event {
     // $on-click$: toggle foo
@@ -21,7 +23,7 @@ impl Event {
             for property_value in property_values {
                 let value = property_value.resolve(line_number, doc)?;
                 let reference = get_reference(property_value, doc, line_number)?;
-                if let Some(value) = value.to_string() {
+                if let Some(value) = value.to_serde_value() {
                     property_values_string.push(ftd::event::ParameterData { value, reference });
                 } else {
                     return ftd::e2(
@@ -79,7 +81,7 @@ impl Event {
             };
 
             event.push(ftd::Event {
-                name: e.name.to_str().to_string(),
+                name: e.name.to_string(),
                 action: ftd::Action {
                     action: e.action.action.to_str().to_string(),
                     target,
@@ -101,11 +103,11 @@ impl Event {
                         "value".to_string(),
                         vec![
                             ftd::event::ParameterData {
-                                value: "true".to_string(),
+                                value: serde_json::Value::Bool(true),
                                 reference: None,
                             },
                             ftd::event::ParameterData {
-                                value: "boolean".to_string(),
+                                value: serde_json::json!("boolean"),
                                 reference: None,
                             },
                         ],
@@ -122,11 +124,11 @@ impl Event {
                         "value".to_string(),
                         vec![
                             ftd::event::ParameterData {
-                                value: "false".to_string(),
+                                value: serde_json::Value::Bool(false),
                                 reference: None,
                             },
                             ftd::event::ParameterData {
-                                value: "boolean".to_string(),
+                                value: serde_json::json!("boolean"),
                                 reference: None,
                             },
                         ],
@@ -146,20 +148,31 @@ pub enum EventName {
     OnMouseEnter,
     OnMouseLeave,
     OnClickOutside,
+    OnFocus,
+    OnBlur,
+    OnGlobalKey(Vec<String>),
+    OnGlobalKeySeq(Vec<String>),
+}
+
+impl std::fmt::Display for EventName {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let value = match self {
+            Self::OnClick => "onclick".to_string(),
+            Self::OnChange => "onchange".to_string(),
+            Self::OnInput => "oninput".to_string(),
+            Self::OnMouseEnter => "onmouseenter".to_string(),
+            Self::OnMouseLeave => "onmouseleave".to_string(),
+            Self::OnClickOutside => "onclickoutside".to_string(),
+            Self::OnFocus => "onfocus".to_string(),
+            Self::OnBlur => "onblur".to_string(),
+            Self::OnGlobalKey(keys) => format!("onglobalkey[{}]", keys.join("-")),
+            Self::OnGlobalKeySeq(keys) => format!("onglobalkeyseq[{}]", keys.join("-")),
+        };
+        write!(f, "{}", value)
+    }
 }
 
 impl EventName {
-    pub fn to_str(&self) -> &'static str {
-        match self {
-            Self::OnClick => "onclick",
-            Self::OnChange => "onchange",
-            Self::OnInput => "oninput",
-            Self::OnMouseEnter => "onmouseenter",
-            Self::OnMouseLeave => "onmouseleave",
-            Self::OnClickOutside => "onclickoutside",
-        }
-    }
-
     pub fn from_string(s: &str, doc_id: &str) -> ftd::p1::Result<Self> {
         match s {
             "click" => Ok(Self::OnClick),
@@ -168,6 +181,26 @@ impl EventName {
             "mouse-enter" => Ok(Self::OnMouseEnter),
             "mouse-leave" => Ok(Self::OnMouseLeave),
             "click-outside" => Ok(Self::OnClickOutside),
+            "focus" => Ok(Self::OnFocus),
+            "blur" => Ok(Self::OnBlur),
+            t if t.starts_with("global-key[") && t.ends_with(']') => {
+                let keys = t
+                    .trim_start_matches("global-key[")
+                    .trim_end_matches(']')
+                    .split('-')
+                    .map(|v| v.to_string())
+                    .collect_vec();
+                Ok(Self::OnGlobalKey(keys))
+            }
+            t if t.starts_with("global-key-seq[") && t.ends_with(']') => {
+                let keys = t
+                    .trim_start_matches("global-key-seq[")
+                    .trim_end_matches(']')
+                    .split('-')
+                    .map(|v| v.to_string())
+                    .collect_vec();
+                Ok(Self::OnGlobalKeySeq(keys))
+            }
             t => return ftd::e2(format!("{} is not a valid event", t), doc_id, 0),
         }
     }

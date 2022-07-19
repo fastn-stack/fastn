@@ -54,7 +54,7 @@ impl DNode {
             let mut attr = self.attrs_to_html();
             let events = ftd::event::group_by_js_event(&self.events);
             for (name, actions) in events {
-                if name != "onclickoutside" {
+                if name != "onclickoutside" && !name.starts_with("onglobalkey") {
                     let event = format!(
                         "window.ftd.handle_event(event, '{}', '{}', this)",
                         id,

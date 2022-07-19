@@ -1,3 +1,5 @@
+use itertools::Itertools;
+
 #[derive(Debug, Default, Clone, PartialEq, serde::Serialize, serde::Deserialize)]
 pub struct Document {
     pub data: std::collections::BTreeMap<String, ftd::p2::Thing>,
@@ -186,12 +188,123 @@ impl Document {
 
         return events_to_string(events);
 
-        fn events_to_string(events: Vec<(String, String)>) -> String {
+        #[derive(Debug)]
+        struct EventData {
+            name: String,
+            oid: String,
+            action: String,
+        }
+
+        fn to_key(key: &str) -> String {
+            match key {
+                "ctrl" => "Control",
+                "alt" => "Alt",
+                "shift" => "Shift",
+                "up" => "ArrowUp",
+                "down" => "ArrowDown",
+                "right" => "ArrowRight",
+                "left" => "ArrowLeft",
+                "esc" => "Escape",
+                "dash" => "-",
+                "space" => " ",
+                t => t,
+            }
+            .to_string()
+        }
+
+        fn events_to_string(events: Vec<EventData>) -> String {
             if events.is_empty() {
                 return "".to_string();
             }
+
+            let global_variables =
+                "let global_keys = {};\nlet buffer = [];\nlet lastKeyTime = Date.now();"
+                    .to_string();
+            let mut keydown_seq_event = "".to_string();
+            let mut keydown_events = indoc::indoc! {"
+                document.addEventListener(\"keydown\", function(event) {
+                    global_keys[event.key] = true;
+                    const currentTime = Date.now();
+                    if (currentTime - lastKeyTime > 1000) {{
+                        buffer = [];
+                    }}
+                    lastKeyTime = currentTime;
+                    if (event.target.nodeName === \"INPUT\" || event.target.nodeName === \"TEXTAREA\") {
+                        return;
+                    }          
+                    buffer.push(event.key);
+            "}.to_string();
+
+            for (keys, actions) in events.iter().filter_map(|e| {
+                if let Some(keys) = e.name.strip_prefix("onglobalkeyseq[") {
+                    let keys = keys
+                        .trim_end_matches(']')
+                        .split('-')
+                        .map(to_key)
+                        .collect_vec();
+                    Some((keys, e.action.clone()))
+                } else {
+                    None
+                }
+            }) {
+                keydown_seq_event = format!(
+                    indoc::indoc! {"
+                        {string}
+                        if (buffer.join(',').includes(\"{sequence}\")) {{
+                           {actions}
+                            buffer = [];
+                            global_keys[event.key] = false;
+                            return;
+                        }}
+                    "},
+                    string = keydown_seq_event,
+                    sequence = keys.join(","),
+                    actions = actions,
+                );
+            }
+
+            let keyup_events =
+                "document.addEventListener(\"keyup\", function(event) { global_keys[event.key] = false; })".to_string();
+
+            for (keys, actions) in events.iter().filter_map(|e| {
+                if let Some(keys) = e.name.strip_prefix("onglobalkey[") {
+                    let keys = keys
+                        .trim_end_matches(']')
+                        .split('-')
+                        .map(to_key)
+                        .collect_vec();
+                    Some((keys, e.action.clone()))
+                } else {
+                    None
+                }
+            }) {
+                let all_keys = keys
+                    .iter()
+                    .map(|v| format!("global_keys[\"{}\"]", v))
+                    .join(" && ");
+                keydown_seq_event = format!(
+                    indoc::indoc! {"
+                        {string}
+                        if ({all_keys} && buffer.join(',').includes(\"{sequence}\")) {{
+                            {actions}
+                            buffer = [];
+                            global_keys[event.key] = false;
+                            return;
+                        }}
+                    "},
+                    string = keydown_seq_event,
+                    all_keys = all_keys,
+                    sequence = keys.join(","),
+                    actions = actions,
+                );
+            }
+
+            if !keydown_seq_event.is_empty() {
+                keydown_events = format!("{}\n\n{}}});", keydown_events, keydown_seq_event);
+            }
+
             let mut string = "document.addEventListener(\"click\", function(event) {".to_string();
-            for (data_id, event) in events {
+            for event in events.iter().filter(|e| e.name.eq("onclickoutside")) {
                 string = format!(
                     indoc::indoc! {"
                         {string}
@@ -200,19 +313,23 @@ impl Document {
                         }}
                     "},
                     string = string,
-                    data_id = data_id,
-                    event = event,
+                    data_id = event.oid,
+                    event = event.action,
                 );
             }
             string = format!("{}}});", string);
-            string
+
+            if !keydown_seq_event.is_empty() {
+                format!(
+                    "{}\n\n\n{}\n\n\n{}\n\n\n{}",
+                    string, global_variables, keydown_events, keyup_events
+                )
+            } else {
+                string
+            }
         }
 
-        fn body_events_(
-            children: &[ftd::Element],
-            event_string: &mut Vec<(String, String)>,
-            id: &str,
-        ) {
+        fn body_events_(children: &[ftd::Element], event_string: &mut Vec<EventData>, id: &str) {
             for child in children {
                 let (events, data_id) = match child {
                     ftd::Element::Column(ftd::Column {
@@ -258,7 +375,7 @@ impl Document {
 
         fn markup_body_events_(
             children: &[ftd::Markup],
-            event_string: &mut Vec<(String, String)>,
+            event_string: &mut Vec<EventData>,
             id: &str,
         ) {
             for child in children {
@@ -279,18 +396,18 @@ impl Document {
         }
 
         fn get_events(
-            event_string: &mut Vec<(String, String)>,
+            event_string: &mut Vec<EventData>,
             events: &[ftd::Event],
             id: &str,
             data_id: &Option<String>,
         ) {
             let events = ftd::event::group_by_js_event(events);
             for (name, actions) in events {
-                let event = format!(
+                let action = format!(
                     "window.ftd.handle_event(event, '{}', '{}', this);",
                     id, actions
                 );
-                if name != "onclickoutside" {
+                if name != "onclickoutside" && !name.starts_with("onglobalkey") {
                     continue;
                 }
                 let oid = if let Some(oid) = data_id {
@@ -298,7 +415,7 @@ impl Document {
                 } else {
                     format!("{}:root", id)
                 };
-                event_string.push((oid, event));
+                event_string.push(EventData { oid, name, action });
             }
         }
     }
