@@ -22,10 +22,10 @@ impl fpm::Config {
         )
     }
 
-    pub(crate) async fn create_client_workspace(&self) -> fpm::Result<Vec<WorkspaceEntry>> {
+    pub(crate) async fn create_client_workspace(&self) -> fpm::Result<()> {
         let workspace_list = self.evaluate_client_workspace().await?;
         self.write_workspace(workspace_list.as_slice()).await?;
-        Ok(workspace_list)
+        Ok(())
     }
 
     pub(crate) async fn read_workspace(&self) -> fpm::Result<Vec<WorkspaceEntry>> {

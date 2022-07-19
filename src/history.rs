@@ -58,12 +58,8 @@ pub enum FileOperation1 {
 impl fpm::Config {
     pub async fn get_history(&self) -> fpm::Result<Vec<FileHistory>> {
         let history_file_path = self.history_file();
-        let doc = {
-            let history_content = tokio::fs::read_to_string(history_file_path).await?;
-            let lib = fpm::FPMLibrary::default();
-            fpm::doc::parse_ftd("history.ftd", history_content.as_str(), &lib)?
-        };
-        Ok(doc.get("fpm#history")?)
+        let history_content = tokio::fs::read_to_string(history_file_path).await?;
+        FileHistory::from_ftd(history_content.as_str())
     }
 
     pub async fn get_latest_file_paths(&self) -> fpm::Result<Vec<(String, camino::Utf8PathBuf)>> {
@@ -83,14 +79,16 @@ impl fpm::Config {
 }
 
 impl FileHistory {
-    pub(crate) fn get_latest_file_edits(list: &[Self]) -> fpm::Result<Vec<(String, FileEdit)>> {
+    pub(crate) fn get_latest_file_edits(
+        list: &[FileHistory],
+    ) -> fpm::Result<std::collections::BTreeMap<String, FileEdit>> {
         Ok(list
             .iter()
             .filter_map(|v| {
                 v.get_latest_file_edit()
                     .map(|file_edit| (v.filename.to_string(), file_edit))
             })
-            .collect_vec())
+            .collect())
     }
 
     fn get_latest_file_edit(&self) -> Option<FileEdit> {
@@ -112,7 +110,7 @@ impl FileHistory {
         None
     }
 
-    pub(crate) fn get_ftd(history: &[&fpm::history::FileHistory]) -> String {
+    pub(crate) fn to_ftd(history: &[&fpm::history::FileHistory]) -> String {
         let mut files_history = vec!["-- import: fpm".to_string()];
         for file_history in history {
             let mut file_history_data = format!("-- fpm.history: {}\n", file_history.filename);
@@ -140,6 +138,14 @@ impl FileHistory {
             files_history.push(file_history_data);
         }
         files_history.join("\n\n\n")
+    }
+
+    pub(crate) fn from_ftd(file: &str) -> fpm::Result<Vec<FileHistory>> {
+        let doc = {
+            let lib = fpm::FPMLibrary::default();
+            fpm::doc::parse_ftd("history.ftd", file, &lib)?
+        };
+        Ok(doc.get("fpm#history")?)
     }
 }
 
@@ -189,7 +195,7 @@ pub(crate) async fn insert_into_history_(
         tokio::fs::copy(root.join(file), new_file_path).await?;
     }
 
-    let history_ftd = FileHistory::get_ftd(file_history.values().collect_vec().as_slice());
+    let history_ftd = FileHistory::to_ftd(file_history.values().collect_vec().as_slice());
     tokio::fs::write(
         root.join(".server-state").join("history.ftd"),
         history_ftd.as_str(),
