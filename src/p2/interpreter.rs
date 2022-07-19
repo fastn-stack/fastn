@@ -753,6 +753,7 @@ impl ParsedDocument {
     }
 
     /// prints the parsed document (for debugging purposes)
+    #[allow(dead_code)]
     fn show_document(&self) {
         for section in self.sections.iter() {
             println!(
