@@ -70,8 +70,14 @@ impl InterpreterState {
             }
             self.document_stack[l].done_processing_imports();
 
+            // println!("\nBefore ignoring comments !! ===========================================\n");
+            // self.document_stack[l].show_document();
+
             self.document_stack[l].ignore_comments()?;
             // beyond this point commented things will no longer exist in the parsed document
+
+            // println!("\nAfter ignoring comments !! ===========================================\n");
+            // self.document_stack[l].show_document();
 
             self.document_stack[l].reorder(&self.bag)?;
         }
@@ -101,9 +107,10 @@ impl InterpreterState {
             // This ensures that a section is evaluated once only.
             let p1 = parsed_document.sections.pop().unwrap();
 
-            if p1.is_commented {
-                continue;
-            }
+            // Ignoring this !!
+            // if p1.is_commented {
+            //     continue;
+            // }
 
             // while this is a specific to entire document, we are still creating it in a loop
             // because otherwise the self.interpret() call won't compile.
@@ -745,24 +752,44 @@ impl ParsedDocument {
         self.processing_imports = false;
     }
 
+    /// prints the parsed document (for debugging purposes)
+    fn show_document(&self) {
+        for section in self.sections.iter() {
+            println!(
+                "section name: {}, caption: {:?}, is_commented: {}",
+                &section.name, &section.caption, section.is_commented
+            );
+
+            for (_ln, key, value) in section.header.0.iter() {
+                println!("header: {}, val: {}", key, value);
+            }
+
+            println!("section body: {:?}", section.body);
+
+            for subsection in section.sub_sections.0.iter() {
+                println!(
+                    "subsection name: {}, caption: {:?},  is_commented: {}",
+                    &subsection.name, &subsection.caption, subsection.is_commented
+                );
+
+                for (_ln, key, value) in subsection.header.0.iter() {
+                    println!("header: {}, val: {}", key, value);
+                }
+
+                println!("subsection body: {:?}", subsection.body);
+            }
+        }
+    }
+
     fn ignore_comments(&mut self) -> ftd::p1::Result<()> {
         let mut processed_sections: Vec<ftd::p1::Section> = Vec::new();
-        for section in self.sections.iter() {
+        for section in self.sections.iter_mut() {
             // Ignore entire section if it is commented out
             if section.is_commented {
                 continue;
             }
 
-            let mut filtered_section = ftd::p1::Section {
-                name: section.name.clone(),
-                caption: section.caption.clone(),
-                header: Default::default(),
-                body: None,
-                sub_sections: Default::default(),
-                is_commented: section.is_commented,
-                line_number: section.line_number,
-            };
-
+            // Ignore commented Headers
             let mut header_list: ftd::p1::Header = Default::default();
             for (ln, key, val) in section.header.0.iter() {
                 if key.starts_with('/') {
@@ -772,13 +799,18 @@ impl ParsedDocument {
             }
 
             // Filtered header
-            filtered_section.header = header_list;
+            section.header = header_list;
 
             // Filter section body
-            filtered_section.body = {
+            section.body = {
                 match section.body {
                     Some(ref b) if b.1.trim().is_empty() => None,
                     Some(ref b) if b.1.trim().starts_with('/') => None,
+                    // To allow '/content' in section body, we need to use "\/content"
+                    // while stripping out the initial '\' from this body
+                    Some(ref b) if b.1.trim().starts_with(r"\/") => {
+                        Some((b.0, b.1.trim().replacen(r"\", "", 1)))
+                    }
                     Some(ref b) => Some((b.0, b.1.trim_end().to_string())),
                     None => None,
                 }
@@ -786,24 +818,15 @@ impl ParsedDocument {
 
             // Filtering subsections
             let mut filtered_sub_sections: ftd::p1::SubSections = Default::default();
-            let sub_list = &section.sub_sections;
+            let sub_list = &mut section.sub_sections;
 
-            for sub in sub_list.0.iter() {
-                if sub.is_commented {
+            for sub_section in sub_list.0.iter_mut() {
+                if sub_section.is_commented {
                     continue;
                 }
 
-                let mut filtered_sub_section = ftd::p1::SubSection {
-                    name: sub.name.clone(),
-                    caption: sub.caption.clone(),
-                    header: Default::default(),
-                    body: None,
-                    is_commented: sub.is_commented,
-                    line_number: sub.line_number,
-                };
-
                 let mut sub_header_list: ftd::p1::Header = Default::default();
-                for (ln, key, val) in sub.header.0.iter() {
+                for (ln, key, val) in sub_section.header.0.iter() {
                     if key.starts_with('/') {
                         continue;
                     }
@@ -813,26 +836,31 @@ impl ParsedDocument {
                 }
 
                 // Filtered sub header list
-                filtered_sub_section.header = sub_header_list;
+                sub_section.header = sub_header_list;
 
                 // Filter subsection body
-                filtered_sub_section.body = {
-                    match sub.body {
+                sub_section.body = {
+                    match sub_section.body {
                         Some(ref b) if b.1.trim().is_empty() => None,
                         Some(ref b) if b.1.trim().starts_with('/') => None,
+                        // To allow '/content' in subsection body, we need to use "\/content"
+                        // while stripping out the initial '\' from this body
+                        Some(ref b) if b.1.trim().starts_with(r"\/") => {
+                            Some((b.0, b.1.trim().replacen(r"\", "", 1)))
+                        }
                         Some(ref b) => Some((b.0, b.1.trim_end().to_string())),
                         None => None,
                     }
                 };
 
-                filtered_sub_sections.0.push(filtered_sub_section);
+                filtered_sub_sections.0.push(sub_section.to_owned());
             }
 
             // Filtered sub-sections
-            filtered_section.sub_sections = filtered_sub_sections;
+            section.sub_sections = filtered_sub_sections;
 
             // Section added in processed list
-            processed_sections.push(filtered_section);
+            processed_sections.push(section.to_owned());
         }
 
         // Filtered sections of the entire document
