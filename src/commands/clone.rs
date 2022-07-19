@@ -2,7 +2,6 @@ use std::convert::TryInto;
 
 pub async fn clone(source: &str) -> fpm::Result<()> {
     let clone_response = call_clone_api(source)?;
-    dbg!(&clone_response);
     let package_name = clone_response.package_name;
     let current_directory: camino::Utf8PathBuf =
         std::env::current_dir()?.canonicalize()?.try_into()?;

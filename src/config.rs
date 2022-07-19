@@ -61,7 +61,7 @@ impl Config {
         self.root.join(".client-state")
     }
 
-    pub fn client_workspace_file(&self) -> camino::Utf8PathBuf {
+    pub fn workspace_file(&self) -> camino::Utf8PathBuf {
         self.client_dir().join("workspace.ftd")
     }
 

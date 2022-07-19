@@ -248,7 +248,7 @@ file-edit-data list file-edit:
 -- record workspace-entry:
 caption filename:
 optional boolean deleted:
-integer version:
+optional integer version:
 
 
 -- workspace-entry list client-workspace:

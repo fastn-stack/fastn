@@ -4,7 +4,7 @@ use itertools::Itertools;
 pub struct WorkspaceEntry {
     pub filename: String,
     pub deleted: Option<bool>,
-    pub version: i32,
+    pub version: Option<i32>,
 }
 
 impl fpm::Config {
@@ -16,7 +16,7 @@ impl fpm::Config {
                 .map(|(file_name, file_edit)| WorkspaceEntry {
                     filename: file_name,
                     deleted: None,
-                    version: file_edit.version,
+                    version: Some(file_edit.version),
                 })
                 .collect_vec(),
         )
@@ -24,13 +24,27 @@ impl fpm::Config {
 
     pub(crate) async fn create_client_workspace(&self) -> fpm::Result<Vec<WorkspaceEntry>> {
         let workspace_list = self.evaluate_client_workspace().await?;
-        let workspace_path = self.client_workspace_file();
+        self.write_workspace(workspace_list.as_slice()).await?;
+        Ok(workspace_list)
+    }
+
+    pub(crate) async fn read_workspace(&self) -> fpm::Result<Vec<WorkspaceEntry>> {
+        let workspace = {
+            let workspace = tokio::fs::read_to_string(self.workspace_file());
+            let lib = fpm::FPMLibrary::default();
+            fpm::doc::parse_ftd("FPM", workspace.await?.as_str(), &lib)?
+        };
+        Ok(workspace.get("fpm#client-workspace")?)
+    }
+
+    pub(crate) async fn write_workspace(&self, workspace: &[WorkspaceEntry]) -> fpm::Result<()> {
+        let workspace_path = self.workspace_file();
         fpm::utils::update(
             &workspace_path,
-            WorkspaceEntry::get_ftd_string(workspace_list.as_slice()).as_bytes(),
+            WorkspaceEntry::get_ftd_string(workspace).as_bytes(),
         )
         .await?;
-        Ok(workspace_list)
+        Ok(())
     }
 }
 
@@ -39,15 +53,24 @@ impl WorkspaceEntry {
         let mut workspace_data = "-- import: fpm".to_string();
         for workspace_entry in workspace {
             let deleted = if let Some(deleted) = workspace_entry.deleted {
-                format!("deleted: {}", deleted)
+                format!("deleted: {}\n", deleted)
+            } else {
+                "".to_string()
+            };
+            let version = if let Some(version) = workspace_entry.version {
+                format!("version: {}\n", version)
             } else {
                 "".to_string()
             };
             workspace_data = format!(
-                "{}\n\n-- fpm.client-workspace: {}\nversion: {}\n{}",
-                workspace_data, workspace_entry.filename, workspace_entry.version, deleted
+                "{}\n\n-- fpm.client-workspace: {}\n{}{}",
+                workspace_data, workspace_entry.filename, version, deleted
             );
         }
         workspace_data
+    }
+
+    pub(crate) fn set_deleted(&mut self) {
+        self.deleted = Some(true);
     }
 }

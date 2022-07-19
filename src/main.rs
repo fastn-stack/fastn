@@ -42,6 +42,16 @@ async fn main() -> fpm::Result<()> {
         fpm::update(&config).await?;
     }
 
+    if let Some(add) = matches.subcommand_matches("add") {
+        fpm::add(&config, add.value_of("file").unwrap()).await?;
+        return Ok(());
+    }
+
+    if let Some(rm) = matches.subcommand_matches("rm") {
+        fpm::rm(&config, rm.value_of("file").unwrap()).await?;
+        return Ok(());
+    }
+
     if let Some(build) = matches.subcommand_matches("build") {
         // Evaluate the aliases for the package
         config.package.aliases();
@@ -192,6 +202,18 @@ fn app(authors: &'static str, version: &'static str) -> clap::App<'static, 'stat
             clap::SubCommand::with_name("clone")
                 .about("Clone a package into a new directory")
                 .arg(clap::Arg::with_name("source").required(true))
+                .version(env!("CARGO_PKG_VERSION")),
+        )
+        .subcommand(
+            clap::SubCommand::with_name("add")
+                .about("Adds a file in workspace")
+                .arg(clap::Arg::with_name("file").required(true))
+                .version(env!("CARGO_PKG_VERSION")),
+        )
+        .subcommand(
+            clap::SubCommand::with_name("rm")
+                .about("Removes a file in workspace")
+                .arg(clap::Arg::with_name("file").required(true))
                 .version(env!("CARGO_PKG_VERSION")),
         )
         .subcommand(

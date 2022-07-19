@@ -66,12 +66,17 @@ impl fpm::Config {
         Ok(doc.get("fpm#history")?)
     }
 
-    pub async fn get_latest_file_paths(&self) -> fpm::Result<Vec<camino::Utf8PathBuf>> {
+    pub async fn get_latest_file_paths(&self) -> fpm::Result<Vec<(String, camino::Utf8PathBuf)>> {
         let history_list = self.get_history().await?;
         Ok(
             fpm::history::FileHistory::get_latest_file_edits(history_list.as_slice())?
                 .iter()
-                .map(|(file_name, file_edit)| self.history_path(file_name, file_edit.version))
+                .map(|(file_name, file_edit)| {
+                    (
+                        file_name.to_string(),
+                        self.history_path(file_name, file_edit.version),
+                    )
+                })
                 .collect_vec(),
         )
     }
