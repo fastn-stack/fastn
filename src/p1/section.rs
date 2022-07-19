@@ -192,6 +192,19 @@ impl Section {
         self
     }
 
+    pub fn sub_sections_by_name(&self, name: &str) -> Vec<&ftd::p1::SubSection> {
+        let mut sub_sections = vec![];
+        for s in self.sub_sections.0.iter() {
+            if s.is_commented {
+                continue;
+            }
+            if s.name == name {
+                sub_sections.push(s);
+            }
+        }
+        sub_sections
+    }
+
     pub fn sub_section_by_name(
         &self,
         name: &str,

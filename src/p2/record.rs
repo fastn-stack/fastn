@@ -21,6 +21,7 @@ impl Record {
         let mut fields: std::collections::BTreeMap<String, ftd::PropertyValue> = Default::default();
         self.assert_no_extra_fields(doc.name, &p1.header, &p1.caption, &p1.body)?;
         for (name, kind) in self.fields.iter() {
+            let subsections = p1.sub_sections_by_name(name);
             let value = match (
                 p1.sub_section_by_name(name, doc.name.to_string()),
                 kind.inner(),
@@ -39,13 +40,6 @@ impl Record {
                             fields: record.fields_from_sub_section(v, doc)?,
                         },
                     }
-                }
-                (Ok(_), _) => {
-                    return ftd::e2(
-                        format!("'{:?}' ('{}') can not be a sub-section", kind, name),
-                        doc.name,
-                        p1.line_number,
-                    );
                 }
                 (
                     Err(ftd::p1::Error::NotFound { .. }),
@@ -127,6 +121,95 @@ impl Record {
                         )
                     }
                 },
+                (
+                    _,
+                    ftd::p2::Kind::List {
+                        kind: list_kind, ..
+                    },
+                ) if !subsections.is_empty() => match list_kind.as_ref() {
+                    ftd::p2::Kind::OrType { name: or_type_name }
+                    | ftd::p2::Kind::OrTypeWithVariant {
+                        name: or_type_name, ..
+                    } => {
+                        let e = doc.get_or_type(p1.line_number, or_type_name)?;
+                        let mut values: Vec<ftd::PropertyValue> = vec![];
+                        for s in p1.sub_sections.0.iter() {
+                            if s.is_commented {
+                                continue;
+                            }
+                            for v in e.variants.iter() {
+                                let variant = v.variant_name().expect("record.fields").to_string();
+                                if s.name == format!("{}.{}", name, variant.as_str()) {
+                                    values.push(ftd::PropertyValue::Value {
+                                        value: ftd::Value::OrType {
+                                            variant,
+                                            name: e.name.to_string(),
+                                            fields: v.fields_from_sub_section(s, doc)?,
+                                        },
+                                    })
+                                }
+                            }
+                        }
+                        ftd::PropertyValue::Value {
+                            value: ftd::Value::List {
+                                kind: list_kind.inner().to_owned(),
+                                data: values,
+                            },
+                        }
+                    }
+                    ftd::p2::Kind::Record { name, .. } => {
+                        let mut list = vec![];
+                        for v in subsections {
+                            let record = doc.get_record(p1.line_number, name.as_str())?;
+                            list.push(ftd::PropertyValue::Value {
+                                value: ftd::Value::Record {
+                                    name: doc.resolve_name(p1.line_number, record.name.as_str())?,
+                                    fields: record.fields_from_sub_section(v, doc)?,
+                                },
+                            });
+                        }
+                        ftd::PropertyValue::Value {
+                            value: ftd::Value::List {
+                                kind: list_kind.inner().to_owned(),
+                                data: list,
+                            },
+                        }
+                    }
+                    ftd::p2::Kind::String { .. } => {
+                        let mut list = vec![];
+                        for v in subsections {
+                            list.push(ftd::PropertyValue::Value {
+                                value: ftd::Value::String {
+                                    text: v.body(doc.name)?,
+                                    source: ftd::TextSource::Body,
+                                },
+                            });
+                        }
+                        ftd::PropertyValue::Value {
+                            value: ftd::Value::List {
+                                kind: list_kind.inner().to_owned(),
+                                data: list,
+                            },
+                        }
+                    }
+                    ftd::p2::Kind::Integer { .. } => {
+                        return ftd::e2("unexpected integer", doc.name, p1.line_number);
+                    }
+                    t => {
+                        return ftd::e2(
+                            format!("not yet implemented: {:?}", t),
+                            doc.name,
+                            p1.line_number,
+                        )
+                    }
+                },
+                (Ok(_), _) => {
+                    return ftd::e2(
+                        format!("'{:?}' ('{}') can not be a sub-section", kind, name),
+                        doc.name,
+                        p1.line_number,
+                    );
+                }
                 (Err(ftd::p1::Error::NotFound { .. }), _) => kind.read_section(
                     p1.line_number,
                     &p1.header,
