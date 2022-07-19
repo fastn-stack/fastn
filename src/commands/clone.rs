@@ -2,6 +2,7 @@ use std::convert::TryInto;
 
 pub async fn clone(source: &str) -> fpm::Result<()> {
     let clone_response = call_clone_api(source)?;
+    dbg!(&clone_response);
     let package_name = clone_response.package_name;
     let current_directory: camino::Utf8PathBuf =
         std::env::current_dir()?.canonicalize()?.try_into()?;
@@ -34,8 +35,8 @@ fn call_clone_api(source: &str) -> fpm::Result<fpm::apis::clone::CloneResponse> 
         .get(source_url.as_str())
         .header(reqwest::header::CONTENT_TYPE, "application/json")
         .send()?;
-
-    let response = response.json::<ApiResponse>()?;
+    let text = response.text()?;
+    let response: ApiResponse = serde_json::from_str(text.as_str())?;
 
     if !response.success {
         return Err(fpm::Error::APIResponseError(

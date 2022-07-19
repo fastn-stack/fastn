@@ -47,6 +47,14 @@ pub enum FileOperation {
     Merged,
 }
 
+#[derive(serde::Serialize, serde::Deserialize)]
+pub enum FileOperation1 {
+    Added,
+    Updated,
+    Deleted,
+    Merged,
+}
+
 impl fpm::Config {
     pub async fn get_history(&self) -> fpm::Result<Vec<FileHistory>> {
         let history_file_path = self.history_file();
@@ -114,9 +122,10 @@ impl FileHistory {
                     .map(|v| format!("src-cr: {}\n", v))
                     .unwrap_or_else(|| "".to_string());
                 file_history_data = format!(
-                    "{}\n\n--- file-edit:\ntimestamp: {}\nversion: {}\n{}{}\n{}\n",
+                    "{}\n--- file-edit:\ntimestamp: {}\noperation: {:?}\nversion: {}\n{}{}\n{}\n",
                     file_history_data,
                     file_edit.timestamp,
+                    file_edit.operation,
                     file_edit.version,
                     author,
                     src_cr,
@@ -165,10 +174,13 @@ pub(crate) async fn insert_into_history_(
                 },
             );
         }
-        let new_file_path = root
-            .join(".server-state")
-            .join("history")
-            .join(fpm::utils::snapshot_id(file, &(version as u128)));
+        let server_state = root.join(".server-state").join("history");
+
+        if !server_state.exists() {
+            tokio::fs::create_dir_all(&server_state).await?;
+        }
+
+        let new_file_path = server_state.join(fpm::utils::snapshot_id(file, &(version as u128)));
         tokio::fs::copy(root.join(file), new_file_path).await?;
     }
 

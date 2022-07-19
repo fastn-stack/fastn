@@ -542,6 +542,7 @@ impl Config {
     ) -> fpm::Result<Vec<camino::Utf8PathBuf>> {
         let path = self.get_root_for_package(package);
         let mut ignore_paths_build = ignore::WalkBuilder::new(&path);
+        ignore_paths_build.hidden(false);
         ignore_paths_build.overrides(fpm::file::ignore_path(package, &path, ignore_paths)?);
         Ok(ignore_paths_build
             .build()

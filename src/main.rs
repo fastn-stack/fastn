@@ -138,10 +138,7 @@ fn app(authors: &'static str, version: &'static str) -> clap::App<'static, 'stat
                 .about("Creates a template ftd project at the target location with the given project name")
                 .arg(
                     clap::Arg::with_name("package-name")
-                        .short("n")
-                        .long("name")
                         .required(true)
-                        .takes_value(true)
                         .help("Package name")
                 )
                 .arg(
