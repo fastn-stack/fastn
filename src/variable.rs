@@ -930,7 +930,7 @@ pub fn guess_type(s: &str, is_body: bool) -> ftd::p1::Result<Value> {
 }
 
 fn read_string(p1: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Result<ftd::PropertyValue> {
-    let (text, source, line_number) = match (&p1.caption, &p1.body_without_comment()) {
+    let (text, source, line_number) = match (&p1.caption, &p1.body) {
         (Some(c), Some(b)) => {
             return ftd::e2(
                 format!("both caption: `{}` and body: `{}` present", c, b.1),

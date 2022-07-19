@@ -36,18 +36,7 @@ impl Section {
             }
         }
 
-        let body = match &self.body {
-            None => None,
-            Some(body) => match body {
-                _ if body.1.starts_with(r"\/") =>
-                {
-                    #[allow(clippy::single_char_pattern)]
-                    Some((body.0, body.1.strip_prefix(r"\").expect("").to_string()))
-                }
-                _ if body.1.starts_with('/') => None,
-                _ => self.body.clone(),
-            },
-        };
+        let body = self.body_without_comment();
 
         Section {
             name: self.name.to_string(),
@@ -79,7 +68,7 @@ impl Section {
     }
 
     pub fn body(&self, line_number: usize, doc_id: &str) -> Result<String> {
-        match self.body_without_comment() {
+        match self.body {
             Some(ref v) => Ok(v.1.to_string()),
             None => Err(Error::ParseError {
                 message: format!("body is missing in {}", self.name.as_str(),),

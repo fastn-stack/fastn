@@ -59,18 +59,7 @@ impl SubSection {
             }
         }
 
-        let body = match &self.body {
-            None => None,
-            Some(body) => match body {
-                _ if body.1.starts_with(r"\/") =>
-                {
-                    #[allow(clippy::single_char_pattern)]
-                    Some((body.0, body.1.strip_prefix(r"\").expect("").to_string()))
-                }
-                _ if body.1.starts_with('/') => None,
-                _ => self.body.clone(),
-            },
-        };
+        let body = self.body_without_comment();
 
         SubSection {
             name: self.name.to_string(),

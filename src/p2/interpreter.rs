@@ -45,6 +45,11 @@ impl InterpreterState {
 
         let l = self.document_stack.len() - 1; // Get the top of the stack
 
+        // Any of these two functions can be used to remove comments from parsed document
+        // self.document_stack[l].ignore_all_comments()?;
+        self.document_stack[l].ignore_comments()?;
+        // beyond this point commented things will no longer exist in the parsed document
+
         if self.document_stack[l].processing_imports {
             // Check for all the imports
             // break the loop only when there's no more `import` statement
@@ -69,16 +74,6 @@ impl InterpreterState {
                 }
             }
             self.document_stack[l].done_processing_imports();
-
-            // println!("\nBefore ignoring comments !! ===========================================\n");
-            // self.document_stack[l].show_document();
-
-            self.document_stack[l].ignore_comments()?;
-            // beyond this point commented things will no longer exist in the parsed document
-
-            // println!("\nAfter ignoring comments !! ===========================================\n");
-            // self.document_stack[l].show_document();
-
             self.document_stack[l].reorder(&self.bag)?;
         }
         let parsed_document = &mut self.document_stack[l];
@@ -106,11 +101,6 @@ impl InterpreterState {
             // Once the foreign_variables are resolved for the section, then pop and evaluate it.
             // This ensures that a section is evaluated once only.
             let p1 = parsed_document.sections.pop().unwrap();
-
-            // Ignoring this !!
-            // if p1.is_commented {
-            //     continue;
-            // }
 
             // while this is a specific to entire document, we are still creating it in a loop
             // because otherwise the self.interpret() call won't compile.
@@ -326,7 +316,7 @@ impl InterpreterState {
                                 p1.name.as_str(),
                                 &p1.header,
                                 &p1.caption,
-                                &p1.body_without_comment(),
+                                &p1.body,
                                 &doc,
                                 &Default::default(),
                             )?;
@@ -334,9 +324,6 @@ impl InterpreterState {
                             let mut children = vec![];
 
                             for sub in p1.sub_sections.0.iter() {
-                                if sub.is_commented {
-                                    continue;
-                                }
                                 if let Ok(loop_data) =
                                     sub.header.str(doc.name, p1.line_number, "$loop$")
                                 {
@@ -365,7 +352,7 @@ impl InterpreterState {
                                             sub.name.as_str(),
                                             &sub.header,
                                             &sub.caption,
-                                            &sub.body_without_comment(),
+                                            &sub.body,
                                             &doc,
                                             &parent.arguments,
                                         )?
@@ -552,9 +539,7 @@ impl InterpreterState {
     ) -> ftd::p1::Result<Option<String>> {
         let mut iteration_index = 0;
         while iteration_index < top.sections.len() {
-            if top.sections[iteration_index].is_commented
-                || top.sections[iteration_index].name != "import"
-            {
+            if top.sections[iteration_index].name != "import" {
                 iteration_index += 1;
                 continue;
             }
@@ -756,32 +741,65 @@ impl ParsedDocument {
     #[allow(dead_code)]
     fn show_document(&self) {
         for section in self.sections.iter() {
-            println!(
-                "section name: {}, caption: {:?}, is_commented: {}",
-                &section.name, &section.caption, section.is_commented
-            );
+            dbg!(&section.name, &section.caption, section.is_commented);
 
             for (_ln, key, value) in section.header.0.iter() {
-                println!("header: {}, val: {}", key, value);
+                dbg!(key, value);
             }
 
-            println!("section body: {:?}", section.body);
-
+            dbg!(&section.body);
             for subsection in section.sub_sections.0.iter() {
-                println!(
-                    "subsection name: {}, caption: {:?},  is_commented: {}",
-                    &subsection.name, &subsection.caption, subsection.is_commented
+                dbg!(
+                    &subsection.name,
+                    &subsection.caption,
+                    &subsection.is_commented
                 );
 
                 for (_ln, key, value) in subsection.header.0.iter() {
-                    println!("header: {}, val: {}", key, value);
+                    dbg!(key, value);
                 }
 
-                println!("subsection body: {:?}", subsection.body);
+                dbg!(&subsection.body);
             }
         }
     }
 
+    /// same logic as [`ParsedDocument::ignore_comments()`] but uses the
+    /// already existing [`remove_comments()`] to remove comments.
+    ///
+    /// [`ParsedDocument::ignore_comments()`]: ftd::p2::interpreter::ParsedDocument::ignore_comments
+    /// [`Section::remove_comments()`]: ftd::p1::section::Section::remove_comments
+    #[allow(dead_code)]
+    fn ignore_all_comments(&mut self) -> ftd::p1::Result<()> {
+        self.sections = self
+            .sections
+            .iter()
+            .filter(|s| !s.is_commented)
+            .map(|s| s.remove_comments())
+            .collect::<Vec<ftd::p1::Section>>();
+        Ok(())
+    }
+
+    /// Filters out commented parts from the parsed document.
+    ///
+    /// # Comments are ignored for
+    /// 1.  /-- section: caption
+    ///
+    /// 2.  /section-header: value
+    ///
+    /// 3.  /body
+    ///
+    /// 4.  /--- subsection: caption
+    ///
+    /// 5.  /sub-section-header: value
+    ///
+    /// ## Note: To allow ["/content"] inside body, use ["\\/content"].
+    ///
+    /// Only '/' comments are ignored here.
+    /// ';' comments are ignored inside the [`parser`] itself.
+    ///
+    /// [`parser`]: ftd::p1::parser::parse
+    #[allow(dead_code)]
     fn ignore_comments(&mut self) -> ftd::p1::Result<()> {
         let mut processed_sections: Vec<ftd::p1::Section> = Vec::new();
         for section in self.sections.iter_mut() {

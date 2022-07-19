@@ -127,14 +127,9 @@ impl Record {
                         )
                     }
                 },
-                (Err(ftd::p1::Error::NotFound { .. }), _) => kind.read_section(
-                    p1.line_number,
-                    &p1.header,
-                    &p1.caption,
-                    &p1.body_without_comment(),
-                    name,
-                    doc,
-                )?,
+                (Err(ftd::p1::Error::NotFound { .. }), _) => {
+                    kind.read_section(p1.line_number, &p1.header, &p1.caption, &p1.body, name, doc)?
+                }
                 (
                     Err(ftd::p1::Error::MoreThanOneSubSections { .. }),
                     ftd::p2::Kind::List {
@@ -161,7 +156,7 @@ impl Record {
                                 s.line_number,
                                 &s.header,
                                 &s.caption,
-                                &s.body_without_comment(),
+                                &s.body,
                                 s.name.as_str(),
                                 doc,
                             )?,
@@ -219,14 +214,7 @@ impl Record {
         for (name, kind) in self.fields.iter() {
             fields.insert(
                 name.to_string(),
-                kind.read_section(
-                    p1.line_number,
-                    &p1.header,
-                    &p1.caption,
-                    &p1.body_without_comment(),
-                    name,
-                    doc,
-                )?,
+                kind.read_section(p1.line_number, &p1.header, &p1.caption, &p1.body, name, doc)?,
             );
         }
         Ok(fields)
