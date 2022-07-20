@@ -123,7 +123,7 @@ async fn get_changed_files_wrt_server_latest(
     workspace: &mut std::collections::BTreeMap<String, fpm::workspace::WorkspaceEntry>,
 ) -> fpm::Result<()> {
     let mut remove_files = vec![];
-    let server_latest = config.get_latest_file_edits().await?;
+    let server_latest = config.get_latest_file_edits_with_deleted().await?;
     for (index, file) in files.iter_mut().enumerate() {
         match file {
             fpm::apis::sync2::SyncRequestFile::Add { path, content } => {
@@ -160,6 +160,12 @@ async fn get_changed_files_wrt_server_latest(
                 } else {
                     continue;
                 };
+
+                if server_file_edit.is_deleted() {
+                    // Conflict: ClientEditedServerDeleted
+                    remove_files.push(index);
+                    continue;
+                }
 
                 if server_file_edit.version.eq(version) {
                     continue;

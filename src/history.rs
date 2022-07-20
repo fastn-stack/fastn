@@ -76,11 +76,23 @@ impl fpm::Config {
         FileHistory::from_ftd(history_content.as_str())
     }
 
-    pub async fn get_latest_file_edits(
+    pub async fn get_latest_file_edits_with_deleted(
         &self,
     ) -> fpm::Result<std::collections::BTreeMap<String, FileEdit>> {
         let history_list = self.get_history().await?;
         fpm::history::FileHistory::get_latest_file_edits(history_list.as_slice())
+    }
+
+    pub async fn get_latest_file_edits(
+        &self,
+    ) -> fpm::Result<std::collections::BTreeMap<String, FileEdit>> {
+        let history_list = self.get_history().await?;
+        Ok(
+            fpm::history::FileHistory::get_latest_file_edits(history_list.as_slice())?
+                .into_iter()
+                .filter(|(_, v)| !v.is_deleted())
+                .collect(),
+        )
     }
 
     pub async fn get_latest_file_paths(&self) -> fpm::Result<Vec<(String, camino::Utf8PathBuf)>> {
@@ -117,14 +129,7 @@ impl FileHistory {
                 return Some(file_edit.clone());
             }
             if file_edit.src_cr.is_none() {
-                match file_edit.operation {
-                    FileOperation::Added | FileOperation::Merged | FileOperation::Updated => {
-                        return Some(file_edit.clone());
-                    }
-                    FileOperation::Deleted => {
-                        return None;
-                    }
-                }
+                return Some(file_edit.clone());
             }
         }
         None
