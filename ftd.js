@@ -750,7 +750,7 @@ window.ftd = (function () {
     // Setting up default value on <input>
     const inputElements = document.querySelectorAll('input[data-dv]');
     for (let input_ele of inputElements) {
-        input_ele.defaultValue = input_ele.getAttribute("data-dv");
+        input_ele.defaultValue = input_ele.dataset.dv;
     }
 
     function handle_event(evt, id, action, obj) {
