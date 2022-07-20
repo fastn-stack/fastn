@@ -747,6 +747,12 @@ window.ftd = (function () {
     let ftd_data = {};
     let ftd_external_children = {};
 
+    // Setting up default value on <input>
+    const inputElements = document.querySelectorAll('input[data-dv]');
+    for (let input_ele of inputElements) {
+        input_ele.defaultValue = input_ele.getAttribute("data-dv");
+    }
+
     function handle_event(evt, id, action, obj) {
         let act = action["action"];
         let data = ftd_data[id];
