@@ -1,6 +1,6 @@
 use itertools::Itertools;
 
-#[derive(serde::Deserialize, serde::Serialize, std::fmt::Debug)]
+#[derive(serde::Deserialize, serde::Serialize, std::fmt::Debug, Clone)]
 #[serde(tag = "action")]
 pub enum SyncRequestFile {
     Add {
@@ -67,10 +67,14 @@ impl SyncResponseFile {
             | SyncResponseFile::Update { status, .. }
             | SyncResponseFile::Delete { status, .. } => status,
         };
-        if SyncStatus::Conflict.eq(status) {
+        if SyncStatus::NoConflict.eq(status) {
             return false;
         }
         true
+    }
+
+    pub(crate) fn is_deleted(&self) -> bool {
+        matches!(self, SyncResponseFile::Delete { .. })
     }
 
     pub(crate) fn path(&self) -> String {
@@ -245,8 +249,6 @@ pub(crate) async fn sync_worker(request: SyncRequest) -> fpm::Result<SyncRespons
             }
         }
     }
-
-    dbg!(&file_list, &server_history);
 
     fpm::history::insert_into_history(&config.root, &file_list, &mut server_history).await?;
 

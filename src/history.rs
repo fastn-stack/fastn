@@ -26,6 +26,10 @@ impl FileEdit {
             version: Some(self.version),
         }
     }
+
+    pub(crate) fn is_deleted(&self) -> bool {
+        self.operation.eq(&FileOperation::Deleted)
+    }
 }
 
 #[derive(serde::Serialize, serde::Deserialize, std::fmt::Debug, PartialEq, Clone)]
@@ -72,19 +76,25 @@ impl fpm::Config {
         FileHistory::from_ftd(history_content.as_str())
     }
 
-    pub async fn get_latest_file_paths(&self) -> fpm::Result<Vec<(String, camino::Utf8PathBuf)>> {
+    pub async fn get_latest_file_edits(
+        &self,
+    ) -> fpm::Result<std::collections::BTreeMap<String, FileEdit>> {
         let history_list = self.get_history().await?;
-        Ok(
-            fpm::history::FileHistory::get_latest_file_edits(history_list.as_slice())?
-                .iter()
-                .map(|(file_name, file_edit)| {
-                    (
-                        file_name.to_string(),
-                        self.history_path(file_name, file_edit.version),
-                    )
-                })
-                .collect_vec(),
-        )
+        fpm::history::FileHistory::get_latest_file_edits(history_list.as_slice())
+    }
+
+    pub async fn get_latest_file_paths(&self) -> fpm::Result<Vec<(String, camino::Utf8PathBuf)>> {
+        Ok(self
+            .get_latest_file_edits()
+            .await?
+            .iter()
+            .map(|(file_name, file_edit)| {
+                (
+                    file_name.to_string(),
+                    self.history_path(file_name, file_edit.version),
+                )
+            })
+            .collect_vec())
     }
 }
 
@@ -201,7 +211,6 @@ pub(crate) async fn insert_into_history_(
             tokio::fs::create_dir_all(&server_state).await?;
         }
 
-        dbg!(&file_op, &file);
         if !file_op.operation.eq(&FileOperation::Deleted) {
             let new_file_path =
                 server_state.join(fpm::utils::snapshot_id(file, &(version as u128)));
