@@ -83,9 +83,9 @@ async fn main() -> fpm::Result<()> {
     if let Some(sync) = matches.subcommand_matches("sync") {
         if let Some(source) = sync.values_of("source") {
             let sources = source.map(|v| v.to_string()).collect();
-            fpm::sync(&config, Some(sources)).await?;
+            fpm::sync2(&config, Some(sources)).await?;
         } else {
-            fpm::sync(&config, None).await?;
+            fpm::sync2(&config, None).await?;
         }
     }
     if let Some(status) = matches.subcommand_matches("status") {

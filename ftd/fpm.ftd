@@ -229,7 +229,7 @@ optional toc-item current-page:
 
 
 -- record file-edit-data:
-caption or body message:
+optional body message:
 integer timestamp:
 integer version:
 optional string author:

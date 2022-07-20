@@ -47,7 +47,7 @@ pub async fn start_project(name: &str, path: Option<&str>) -> fpm::Result<()> {
             (
                 "FPM.ftd".to_string(),
                 fpm::history::FileEditTemp {
-                    message: sync_message.to_string(),
+                    message: Some(sync_message.to_string()),
                     author: None,
                     src_cr: None,
                     operation: fpm::history::FileOperation::Added,
@@ -56,7 +56,7 @@ pub async fn start_project(name: &str, path: Option<&str>) -> fpm::Result<()> {
             (
                 "index.ftd".to_string(),
                 fpm::history::FileEditTemp {
-                    message: sync_message.to_string(),
+                    message: Some(sync_message.to_string()),
                     author: None,
                     src_cr: None,
                     operation: fpm::history::FileOperation::Added,

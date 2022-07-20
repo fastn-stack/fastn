@@ -60,6 +60,28 @@ pub enum SyncResponseFile {
     },
 }
 
+impl SyncResponseFile {
+    pub(crate) fn is_conflicted(&self) -> bool {
+        let status = match self {
+            SyncResponseFile::Add { status, .. }
+            | SyncResponseFile::Update { status, .. }
+            | SyncResponseFile::Delete { status, .. } => status,
+        };
+        if SyncStatus::Conflict.eq(status) {
+            return false;
+        }
+        true
+    }
+
+    pub(crate) fn path(&self) -> String {
+        match self {
+            SyncResponseFile::Add { path, .. }
+            | SyncResponseFile::Update { path, .. }
+            | SyncResponseFile::Delete { path, .. } => path.to_string(),
+        }
+    }
+}
+
 #[derive(serde::Serialize, serde::Deserialize, std::fmt::Debug)]
 pub struct File {
     pub path: String,
@@ -98,7 +120,7 @@ pub(crate) async fn sync_worker(request: SyncRequest) -> fpm::Result<SyncRespons
                 file_list.insert(
                     path.to_string(),
                     fpm::history::FileEditTemp {
-                        message: "".to_string(),
+                        message: None,
                         author: None,
                         src_cr: None,
                         operation: fpm::history::FileOperation::Added,
@@ -117,7 +139,7 @@ pub(crate) async fn sync_worker(request: SyncRequest) -> fpm::Result<SyncRespons
                         file_list.insert(
                             path.to_string(),
                             fpm::history::FileEditTemp {
-                                message: "".to_string(),
+                                message: None,
                                 author: None,
                                 src_cr: None,
                                 operation: fpm::history::FileOperation::Updated,
@@ -142,7 +164,7 @@ pub(crate) async fn sync_worker(request: SyncRequest) -> fpm::Result<SyncRespons
                                 file_list.insert(
                                     path.to_string(),
                                     fpm::history::FileEditTemp {
-                                        message: "".to_string(),
+                                        message: None,
                                         author: None,
                                         src_cr: None,
                                         operation: fpm::history::FileOperation::Updated,
@@ -213,7 +235,7 @@ pub(crate) async fn sync_worker(request: SyncRequest) -> fpm::Result<SyncRespons
                     file_list.insert(
                         path.to_string(),
                         fpm::history::FileEditTemp {
-                            message: "".to_string(),
+                            message: None,
                             author: None,
                             src_cr: None,
                             operation: fpm::history::FileOperation::Deleted,
@@ -223,6 +245,8 @@ pub(crate) async fn sync_worker(request: SyncRequest) -> fpm::Result<SyncRespons
             }
         }
     }
+
+    dbg!(&file_list, &server_history);
 
     fpm::history::insert_into_history(&config.root, &file_list, &mut server_history).await?;
 

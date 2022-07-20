@@ -1,6 +1,6 @@
 use itertools::Itertools;
 
-#[derive(serde::Serialize, serde::Deserialize, std::fmt::Debug, PartialEq)]
+#[derive(serde::Serialize, serde::Deserialize, std::fmt::Debug, PartialEq, Clone)]
 pub struct WorkspaceEntry {
     pub filename: String,
     pub deleted: Option<bool>,
@@ -13,11 +13,7 @@ impl fpm::Config {
         Ok(
             fpm::history::FileHistory::get_latest_file_edits(history_list.as_slice())?
                 .into_iter()
-                .map(|(file_name, file_edit)| WorkspaceEntry {
-                    filename: file_name,
-                    deleted: None,
-                    version: Some(file_edit.version),
-                })
+                .map(|(file_name, file_edit)| file_edit.to_workspace(file_name.as_str()))
                 .collect_vec(),
         )
     }

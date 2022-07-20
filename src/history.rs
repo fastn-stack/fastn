@@ -9,7 +9,7 @@ pub struct FileHistory {
 
 #[derive(serde::Serialize, serde::Deserialize, std::fmt::Debug, PartialEq, Clone)]
 pub struct FileEdit {
-    pub message: String,
+    pub message: Option<String>,
     pub timestamp: u128,
     pub version: i32,
     pub author: Option<String>,
@@ -18,9 +18,19 @@ pub struct FileEdit {
     pub operation: FileOperation,
 }
 
+impl FileEdit {
+    pub(crate) fn to_workspace(&self, file_name: &str) -> fpm::workspace::WorkspaceEntry {
+        fpm::workspace::WorkspaceEntry {
+            filename: file_name.to_string(),
+            deleted: Some(self.operation.eq(&FileOperation::Deleted)),
+            version: Some(self.version),
+        }
+    }
+}
+
 #[derive(serde::Serialize, serde::Deserialize, std::fmt::Debug, PartialEq, Clone)]
 pub struct FileEditTemp {
-    pub message: String,
+    pub message: Option<String>,
     pub author: Option<String>,
     pub src_cr: Option<i32>,
     pub operation: FileOperation,
@@ -132,7 +142,7 @@ impl FileHistory {
                     file_edit.version,
                     author,
                     src_cr,
-                    file_edit.message
+                    file_edit.message.as_ref().unwrap_or(&"".to_string())
                 );
             }
             files_history.push(file_history_data);
@@ -191,8 +201,12 @@ pub(crate) async fn insert_into_history_(
             tokio::fs::create_dir_all(&server_state).await?;
         }
 
-        let new_file_path = server_state.join(fpm::utils::snapshot_id(file, &(version as u128)));
-        tokio::fs::copy(root.join(file), new_file_path).await?;
+        dbg!(&file_op, &file);
+        if !file_op.operation.eq(&FileOperation::Deleted) {
+            let new_file_path =
+                server_state.join(fpm::utils::snapshot_id(file, &(version as u128)));
+            tokio::fs::copy(root.join(file), new_file_path).await?;
+        }
     }
 
     let history_ftd = FileHistory::to_ftd(file_history.values().collect_vec().as_slice());

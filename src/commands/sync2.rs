@@ -16,7 +16,93 @@ pub async fn sync2(config: &fpm::Config, files: Option<Vec<String>>) -> fpm::Res
         files: changed_files,
         history,
     };
-    let _response = send_to_fpm_serve(&sync_request).await?;
+    let response = send_to_fpm_serve(&sync_request).await?;
+    update_current_directory(config, &response.files).await?;
+    update_history(config, &response.dot_history, &response.latest_ftd).await?;
+    update_workspace(&response, &mut workspace).await?;
+    Ok(())
+}
+
+async fn update_workspace(
+    response: &fpm::apis::sync2::SyncResponse,
+    workspace: &mut Vec<fpm::workspace::WorkspaceEntry>,
+) -> fpm::Result<()> {
+    let mut new_workspace: std::collections::BTreeMap<String, fpm::workspace::WorkspaceEntry> =
+        workspace
+            .into_iter()
+            .map(|v| (v.filename.to_string(), v.clone()))
+            .collect();
+    let server_history = fpm::history::FileHistory::from_ftd(response.latest_ftd.as_str())?;
+    let server_latest =
+        fpm::history::FileHistory::get_latest_file_edits(server_history.as_slice())?;
+    let conflicted_files = response
+        .files
+        .iter()
+        .filter_map(|v| {
+            if v.is_conflicted() {
+                Some(v.path())
+            } else {
+                None
+            }
+        })
+        .collect_vec();
+    for (file, file_edit) in server_latest.iter() {
+        if conflicted_files.contains(file) {
+            continue;
+        }
+        new_workspace.insert(file.to_string(), file_edit.to_workspace(file));
+    }
+    *workspace = new_workspace.into_values().collect_vec();
+    Ok(())
+}
+
+async fn update_history(
+    config: &fpm::Config,
+    files: &[fpm::apis::sync2::File],
+    latest_ftd: &str,
+) -> fpm::Result<()> {
+    for file in files {
+        fpm::utils::update(
+            &config.server_history_dir().join(file.path.as_str()),
+            &file.content,
+        )
+        .await?;
+    }
+    fpm::utils::update(&config.history_file(), latest_ftd.as_bytes()).await?;
+    Ok(())
+}
+
+async fn update_current_directory(
+    config: &fpm::Config,
+    files: &[fpm::apis::sync2::SyncResponseFile],
+) -> fpm::Result<()> {
+    for file in files {
+        match file {
+            fpm::apis::sync2::SyncResponseFile::Add { path, content, .. } => {
+                fpm::utils::update(&config.root.join(path), content).await?;
+            }
+            fpm::apis::sync2::SyncResponseFile::Update {
+                path,
+                content,
+                status,
+            } => {
+                if fpm::apis::sync2::SyncStatus::ClientDeletedServerEdited.eq(status) {
+                    println!("ClientDeletedServerEdit: {}", path);
+                } else if fpm::apis::sync2::SyncStatus::ClientEditedServerDeleted.eq(status) {
+                    println!("ClientEditedServerDeleted: {}", path);
+                } else if fpm::apis::sync2::SyncStatus::Conflict.eq(status) {
+                    println!("Conflict: {}", path);
+                } else {
+                    fpm::utils::update(&config.root.join(path), content).await?;
+                }
+            }
+            fpm::apis::sync2::SyncResponseFile::Delete { path, .. } => {
+                if config.root.join(path).exists() {
+                    tokio::fs::remove_file(config.root.join(path)).await?;
+                }
+            }
+        }
+    }
     Ok(())
 }
 
