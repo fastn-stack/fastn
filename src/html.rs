@@ -1170,7 +1170,7 @@ impl ftd::Input {
         }
         // add defaultValue attribute if passed
         if let Some(ref def_value) = self.defaultvalue {
-            n.attrs.insert(s("defaultValue"), escape(def_value));
+            n.attrs.insert(s("data-dv"), escape(def_value));
         }
         n
     }
