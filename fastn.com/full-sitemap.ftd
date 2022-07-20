@@ -1,0 +1,67 @@
+-- ft.page: `$processor$: full-sitemap`
+
+
+-- ft.code: Sitemap in `FPM.ftd`
+lang: ftd
+
+\-- fpm.sitemap:
+
+# Section: section/url/
+
+# If Section: Has A Colon In The Name
+url: sectionURL
+
+## Sub Section: sub/url/
+
+## If Sub Section: Has A Colon In The Name
+url: whatever
+
+- ToC Item: toc/
+
+-- ft.markdown:
+
+In `full-sitemap` processor sitemap get parse into a record `sitemap-compat-data`.
+This record is present in `fpm` The record looks like this
+
+-- ft.code: record `sitemap-compat-data` (fpm.ftd)
+lang: ftd
+
+\-- record sitemap-compat-data:
+section-ui-data list sections:
+
+\-- record section-compat-data:
+ string id:
+ optional string title:
+ key-value-data list extra_data:
+ boolean is_active:
+ optional string nav_title:
+ subsection-compat-data list subsections:
+
+\-- record subsection-compat-data:
+ optional string id:
+ optional string title:
+ boolean visible:
+ key-value-data list extra_data:
+ boolean is_active:
+ optional string nav_title:
+ toc-compat-data list toc:
+ boolean skip:
+
+
+\-- record toc-compat-data:
+string id:
+optional string title:
+key-value-data list extra_data:
+boolean is_active:
+optional string nav_title:
+toc-compat-data list children:
+boolean skip:
+
+\-- record key-value-data:
+ string key:
+ string value:
+
+-- ft.markdown:
+The record `sitemap-compat-data` contains sections, section contains
+subsections, subsections contains list of toc, and toc again contains list of
+toc.

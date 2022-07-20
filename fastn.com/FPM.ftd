@@ -93,6 +93,9 @@ implements: fifthtry.github.io/theme
   - `import: fpm`
     url: /fpm-vars/
   - Foreign Variables: /theme/foreign-variables/
+  - `$processor$: full-sitemap`
+    url: /full-sitemap/
+
 
 # Development: /journal/
 
