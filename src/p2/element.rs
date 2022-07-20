@@ -1683,8 +1683,6 @@ pub fn input_from_properties(
         ftd::Type::from(&v, doc, 0, font_reference).map(Some)
     })?;
 
-    let value = ftd::p2::utils::string_optional("value", properties, doc.name, 0)?;
-    let default_value = ftd::p2::utils::string_optional("default-value", properties, doc.name, 0)?;
     Ok(ftd::Input {
         common: common_from_properties(
             unresolved_properties,
@@ -1696,16 +1694,8 @@ pub fn input_from_properties(
         )?,
         placeholder: ftd::p2::utils::string_optional("placeholder", properties, doc.name, 0)?,
         multiline: ftd::p2::utils::bool("multiline", properties, doc.name, 0)?,
-        value: {
-            // if value is unchanged then
-            // value = default-value
-            // otherwise retain the changed value
-            match value {
-                Some(v) => Some(v),
-                None => default_value.clone(),
-            }
-        },
-        defaultvalue: default_value,
+        value: ftd::p2::utils::string_optional("value", properties, doc.name, 0)?,
+        defaultvalue: ftd::p2::utils::string_optional("default-value", properties, doc.name, 0)?,
         font,
     })
 }

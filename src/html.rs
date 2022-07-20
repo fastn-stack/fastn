@@ -1168,6 +1168,10 @@ impl ftd::Input {
                 n.attrs.insert(s("value"), escape(p));
             }
         }
+        // add defaultValue attribute if passed
+        if let Some(ref def_value) = self.defaultValue {
+            n.attrs.insert(s("defaultValue"), escape(def_value));
+        }
         n
     }
 }
