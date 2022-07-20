@@ -2,6 +2,8 @@
 
 -- import: fifthtry.github.io/roboto-mono/assets as mono
 
+-- boolean show-cr-ui: false
+
 -- boolean show-create-new-folder: false
 
 -- boolean show-create-new-file: false
@@ -554,6 +556,7 @@ src: $refresh
 --- container: desktop-container
 
 --- ftd.row:
+if: $show-cr-ui
 id: change-request
 width: fill
 background-color: $dark-grey
@@ -578,6 +581,7 @@ url: /somecrlink
 --- container: desktop-container
 
 --- ftd.row:
+if: $show-cr-ui
 padding-top: 15
 padding-left: 14
 padding-bottom: 14
@@ -592,7 +596,7 @@ sample-list: $sample-toc
 
 --- ftd.column:
 width: fill
-padding-top: 8
+padding-top if $show-cr-ui: 8
  
 --- ftd.row:
 width: fill
@@ -1034,6 +1038,7 @@ $on-click$: $show-fullscreen = true
 --- container: right-side
 
 --- ftd.row:
+if: $show-cr-ui
 id: change-request
 width: fill
 background-color: $dark-grey
@@ -1058,6 +1063,7 @@ url: /somecrlink
 --- container: right-side
 
 --- ftd.row:
+if: $show-cr-ui
 padding-top: 15
 padding-left: 14
 padding-bottom: 14
@@ -1072,7 +1078,7 @@ sample-list: $sample-toc
 
 --- ftd.column:
 width: fill
-padding-top: 8
+padding-top if $show-cr-ui: 8
  
 --- ftd.row:
 width: fill
