@@ -234,9 +234,9 @@ string value:
 -- record toc-compat-data:
 string id:
 optional string title:
-key-value-data list extra_data:
-boolean is_active:
-optional string nav_title:
+key-value-data list extra-data:
+boolean is-active:
+optional string nav-title:
 toc-compat-data list children:
 boolean skip:
 
@@ -245,9 +245,9 @@ boolean skip:
 optional string id:
 optional string title:
 boolean visible:
-key-value-data list extra_data:
-boolean is_active:
-optional string nav_title:
+key-value-data list extra-data:
+boolean is-active:
+optional string nav-title:
 toc-compat-data list toc:
 boolean skip:
 
@@ -255,9 +255,9 @@ boolean skip:
 -- record section-compat-data:
 string id:
 optional string title:
-key-value-data list extra_data:
-boolean is_active:
-optional string nav_title:
+key-value-data list extra-data:
+boolean is-active:
+optional string nav-title:
 subsection-compat-data list subsections:
 
 

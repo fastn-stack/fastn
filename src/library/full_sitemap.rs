@@ -4,8 +4,11 @@ use itertools::Itertools;
 pub struct TocItemCompat {
     pub id: String,
     pub title: Option<String>,
+    #[serde(rename = "extra-data")]
     pub extra_data: Vec<KeyValueData>,
+    #[serde(rename = "is-active")]
     pub is_active: bool,
+    #[serde(rename = "nav-title")]
     pub nav_title: Option<String>,
     pub children: Vec<TocItemCompat>,
     pub skip: bool,
@@ -16,8 +19,11 @@ struct SubSectionCompat {
     pub id: Option<String>,
     pub title: Option<String>,
     pub visible: bool,
+    #[serde(rename = "extra-data")]
     pub extra_data: Vec<KeyValueData>,
+    #[serde(rename = "is-active")]
     pub is_active: bool,
+    #[serde(rename = "nav-title")]
     pub nav_title: Option<String>,
     pub toc: Vec<TocItemCompat>,
     pub skip: bool,
@@ -27,8 +33,11 @@ struct SubSectionCompat {
 struct SectionCompat {
     id: String,
     title: Option<String>,
+    #[serde(rename = "extra-data")]
     extra_data: Vec<KeyValueData>,
+    #[serde(rename = "is-active")]
     is_active: bool,
+    #[serde(rename = "nav-title")]
     nav_title: Option<String>,
     subsections: Vec<SubSectionCompat>,
 }
