@@ -620,7 +620,15 @@ impl Document {
         if k.contains('#') {
             k.to_string()
         } else {
-            format!("{}#{}", self.name.as_str(), k)
+            format!(
+                "{}#{}",
+                if self.name.eq("FPM") {
+                    self.name.to_lowercase()
+                } else {
+                    self.name.to_string()
+                },
+                k
+            )
         }
     }
 
@@ -698,7 +706,17 @@ impl Document {
                 }
                 self.value_to_json(&property_value.resolve(0, &doc)?)
             }
-            t => panic!("{:?} is not a variable", t),
+
+            t => {
+                return Err(ftd::p1::Error::TypeNotCovertible {
+                    doc_id: self.name.to_string(),
+                    line_number: 0,
+                    msg: format!(
+                        "type ftd::Thing is not a Variable, can't convert it to json {:?}",
+                        t
+                    ),
+                });
+            }
         }
     }
 
@@ -783,7 +801,11 @@ impl Document {
         match v {
             ftd::PropertyValue::Value { value, .. } => self.value_to_json(value),
             ftd::PropertyValue::Reference { name, .. } => self.json(name),
-            _ => unreachable!(),
+            ftd::PropertyValue::Variable { .. } => Err(ftd::p1::Error::TypeNotCovertible {
+                doc_id: "".to_string(),
+                line_number: 0,
+                msg: "can't convert PropertyValue to json".to_string(),
+            }),
         }
     }
 }

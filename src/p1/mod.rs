@@ -44,6 +44,12 @@ pub enum Error {
         #[from]
         source: failure::Compat<failure::Error>,
     },
+    #[error("type is not convertible doc: {doc_id}, line number: {line_number}, message: {msg}")]
+    TypeNotCovertible {
+        doc_id: String,
+        line_number: usize,
+        msg: String,
+    },
 }
 
 pub type Result<T> = std::result::Result<T, Error>;
