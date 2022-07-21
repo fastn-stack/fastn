@@ -223,7 +223,7 @@ async fn get_changed_files_wrt_server_latest(
         }
     }
     *files = files
-        .into_iter()
+        .iter_mut()
         .enumerate()
         .filter_map(|(k, v)| {
             if !remove_files.contains(&k) {
