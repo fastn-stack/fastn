@@ -447,10 +447,11 @@ pub(crate) async fn write(
     if root.join(file_path).exists() {
         return Ok(());
     }
-    update(root, file_path, data).await
+    update1(root, file_path, data).await
 }
 
-pub(crate) async fn update(
+// TODO: remove this function use update instead
+pub(crate) async fn update1(
     root: &camino::Utf8PathBuf,
     file_path: &str,
     data: &[u8],
@@ -473,4 +474,25 @@ pub(crate) async fn update(
             .write_all(data)
             .await?,
     )
+}
+
+pub(crate) async fn update(root: &camino::Utf8PathBuf, data: &[u8]) -> fpm::Result<()> {
+    use tokio::io::AsyncWriteExt;
+
+    let (file_root, file_name) = if let Some(file_root) = root.parent() {
+        (file_root, root.file_name().unwrap_or(""))
+    } else {
+        return Err(fpm::Error::UsageError {
+            message: format!("Invalid File Path: file path doesn't have parent: {}", root),
+        });
+    };
+
+    if !file_root.exists() {
+        tokio::fs::create_dir_all(file_root).await?;
+    }
+
+    Ok(tokio::fs::File::create(file_root.join(file_name))
+        .await?
+        .write_all(data)
+        .await?)
 }

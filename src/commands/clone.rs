@@ -11,10 +11,13 @@ pub async fn clone(source: &str) -> fpm::Result<()> {
     futures::future::join_all(clone_response.files.into_iter().map(|(path, file)| {
         let current_directory = root.clone();
         tokio::spawn(
-            async move { fpm::utils::update(&current_directory, path.as_str(), &file).await },
+            async move { fpm::utils::update1(&current_directory, path.as_str(), &file).await },
         )
     }))
     .await;
+
+    let config = fpm::Config::read2(Some(root.as_str().to_string()), false).await?;
+    config.create_client_workspace().await?;
     Ok(())
 }
 
@@ -31,8 +34,8 @@ fn call_clone_api(source: &str) -> fpm::Result<fpm::apis::clone::CloneResponse> 
         .get(source_url.as_str())
         .header(reqwest::header::CONTENT_TYPE, "application/json")
         .send()?;
-
-    let response = response.json::<ApiResponse>()?;
+    let text = response.text()?;
+    let response: ApiResponse = serde_json::from_str(text.as_str())?;
 
     if !response.success {
         return Err(fpm::Error::APIResponseError(

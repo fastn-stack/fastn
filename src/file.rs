@@ -132,6 +132,23 @@ pub fn package_ignores(
     overrides.build()
 }
 
+pub fn ignore_path(
+    package: &fpm::Package,
+    root_path: &camino::Utf8PathBuf,
+    ignore_paths: Vec<String>,
+) -> Result<ignore::overrides::Override, ignore::Error> {
+    let mut overrides = ignore::overrides::OverrideBuilder::new(root_path);
+    overrides.add("!.packages")?;
+    overrides.add("!.build")?;
+    for ignored_path in &package.ignored_paths {
+        overrides.add(format!("!{}", ignored_path).as_str())?;
+    }
+    for ignored_path in ignore_paths {
+        overrides.add(format!("!{}", ignored_path).as_str())?;
+    }
+    overrides.build()
+}
+
 pub(crate) async fn get_file(
     package_name: String,
     doc_path: &camino::Utf8Path,

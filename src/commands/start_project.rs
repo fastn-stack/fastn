@@ -5,14 +5,6 @@ async fn template_contents(project_name: &str) -> (String, String) {
     (ftd, index)
 }
 
-async fn write_file(file_name: &str, dir: &str, content: &str) -> fpm::Result<()> {
-    use tokio::io::AsyncWriteExt;
-    let file_path = format!("{}/{}", dir, file_name);
-    let mut fp = tokio::fs::File::create(file_path).await?;
-    fp.write_all(content.as_bytes()).await?;
-    Ok(())
-}
-
 pub async fn start_project(name: &str, path: Option<&str>) -> fpm::Result<()> {
     let base_path = {
         match std::env::current_dir() {
@@ -46,8 +38,35 @@ pub async fn start_project(name: &str, path: Option<&str>) -> fpm::Result<()> {
     let tmp_fpm = tmp_contents.0;
     let tmp_index = tmp_contents.1;
 
-    write_file("FPM.ftd", final_dir.as_str(), &tmp_fpm).await?;
-    write_file("index.ftd", final_dir.as_str(), &tmp_index).await?;
+    fpm::utils::update(&final_dir.join("FPM.ftd"), tmp_fpm.as_bytes()).await?;
+    fpm::utils::update(&final_dir.join("index.ftd"), tmp_index.as_bytes()).await?;
+
+    let sync_message = "Initial sync".to_string();
+    let file_list: std::collections::BTreeMap<String, fpm::history::FileEditTemp> =
+        IntoIterator::into_iter([
+            (
+                "FPM.ftd".to_string(),
+                fpm::history::FileEditTemp {
+                    message: Some(sync_message.to_string()),
+                    author: None,
+                    src_cr: None,
+                    operation: fpm::history::FileOperation::Added,
+                },
+            ),
+            (
+                "index.ftd".to_string(),
+                fpm::history::FileEditTemp {
+                    message: Some(sync_message.to_string()),
+                    author: None,
+                    src_cr: None,
+                    operation: fpm::history::FileOperation::Added,
+                },
+            ),
+        ])
+        .collect();
+
+    fpm::history::insert_into_history(&final_dir, &file_list, &mut Default::default()).await?;
+
     println!(
         "Template FTD project created - {}\nPath -{}",
         name, final_dir

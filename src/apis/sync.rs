@@ -90,7 +90,7 @@ pub(crate) async fn sync_worker(request: SyncRequest) -> fpm::Result<SyncRespons
         match file {
             SyncRequestFile::Add { path, content } => {
                 // We need to check if, file is already available on server
-                fpm::utils::update(&config.root, path, content).await?;
+                fpm::utils::update1(&config.root, path, content).await?;
 
                 let snapshot_path =
                     fpm::utils::history_path(path, config.root.as_str(), &timestamp);
@@ -152,7 +152,7 @@ pub(crate) async fn sync_worker(request: SyncRequest) -> fpm::Result<SyncRespons
                 if let Some(snapshot_timestamp) = snapshots.get(path) {
                     // No conflict case, Only client modified the file
                     if client_snapshot_timestamp.eq(snapshot_timestamp) {
-                        fpm::utils::update(&config.root, path, content).await?;
+                        fpm::utils::update1(&config.root, path, content).await?;
                         let snapshot_path =
                             fpm::utils::history_path(path, config.root.as_str(), &timestamp);
                         tokio::fs::copy(config.root.join(path), snapshot_path).await?;
@@ -180,7 +180,7 @@ pub(crate) async fn sync_worker(request: SyncRequest) -> fpm::Result<SyncRespons
                             .merge(&ancestor_content, &ours_content, &theirs_content)
                         {
                             Ok(data) => {
-                                fpm::utils::update(&config.root, path, data.as_bytes()).await?;
+                                fpm::utils::update1(&config.root, path, data.as_bytes()).await?;
                                 let snapshot_path = fpm::utils::history_path(
                                     path,
                                     config.root.as_str(),

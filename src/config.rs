@@ -57,6 +57,31 @@ impl Config {
         self.root.join(".build")
     }
 
+    pub fn client_dir(&self) -> camino::Utf8PathBuf {
+        self.root.join(".client-state")
+    }
+
+    pub fn workspace_file(&self) -> camino::Utf8PathBuf {
+        self.client_dir().join("workspace.ftd")
+    }
+
+    pub fn server_dir(&self) -> camino::Utf8PathBuf {
+        self.root.join(".server-state")
+    }
+
+    pub fn server_history_dir(&self) -> camino::Utf8PathBuf {
+        self.server_dir().join("history")
+    }
+
+    pub fn history_file(&self) -> camino::Utf8PathBuf {
+        self.server_dir().join("history.ftd")
+    }
+
+    pub(crate) fn history_path(&self, id: &str, version: i32) -> camino::Utf8PathBuf {
+        let id_with_timestamp_extension = fpm::utils::snapshot_id(id, &(version as u128));
+        self.server_history_dir().join(id_with_timestamp_extension)
+    }
+
     /// history of a fpm package is stored in `.history` folder.
     ///
     /// Current design is wrong, we should move this helper to `fpm::Package` maybe.
@@ -416,7 +441,7 @@ impl Config {
         let mut hash: std::collections::HashMap<fpm::Version, Vec<fpm::File>> =
             std::collections::HashMap::new();
 
-        let all_files = self.get_all_file_paths(package, true)?;
+        let all_files = self.get_all_file_paths1(package, true)?;
 
         for file in all_files {
             if file.is_dir() {
@@ -485,7 +510,7 @@ impl Config {
 
     pub(crate) async fn get_files(&self, package: &fpm::Package) -> fpm::Result<Vec<fpm::File>> {
         let path = self.get_root_for_package(package);
-        let all_files = self.get_all_file_paths(package, true)?;
+        let all_files = self.get_all_file_paths1(package, true)?;
         // TODO: Unwrap?
         let mut documents = fpm::paths_to_files(package.name.as_str(), all_files, &path).await?;
         documents.sort_by_key(|v| v.get_id());
@@ -493,7 +518,7 @@ impl Config {
         Ok(documents)
     }
 
-    pub(crate) fn get_all_file_paths(
+    pub(crate) fn get_all_file_paths1(
         &self,
         package: &fpm::Package,
         ignore_history: bool,
@@ -503,6 +528,23 @@ impl Config {
         // ignore_paths.hidden(false); // Allow the linux hidden files to be evaluated
         ignore_paths.overrides(fpm::file::package_ignores(package, &path, ignore_history)?);
         Ok(ignore_paths
+            .build()
+            .into_iter()
+            .flatten()
+            .map(|x| camino::Utf8PathBuf::from_path_buf(x.into_path()).unwrap()) //todo: improve error message
+            .collect::<Vec<camino::Utf8PathBuf>>())
+    }
+
+    pub(crate) fn get_all_file_path(
+        &self,
+        package: &fpm::Package,
+        ignore_paths: Vec<String>,
+    ) -> fpm::Result<Vec<camino::Utf8PathBuf>> {
+        let path = self.get_root_for_package(package);
+        let mut ignore_paths_build = ignore::WalkBuilder::new(&path);
+        ignore_paths_build.hidden(false);
+        ignore_paths_build.overrides(fpm::file::ignore_path(package, &path, ignore_paths)?);
+        Ok(ignore_paths_build
             .build()
             .into_iter()
             .flatten()

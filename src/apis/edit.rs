@@ -117,7 +117,7 @@ pub(crate) async fn edit_worker(request: EditRequest) -> fpm::Result<EditRespons
         )
     };
 
-    fpm::utils::update(
+    fpm::utils::update1(
         &config.root,
         file_name.as_str(),
         request

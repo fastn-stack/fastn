@@ -21,7 +21,7 @@ pub async fn revert(config: &fpm::Config, path: &str) -> fpm::Result<()> {
         if let Some(timestamp) = snapshots.get(path) {
             let revert_path = fpm::utils::history_path(path, config.root.as_str(), timestamp);
 
-            fpm::utils::update(
+            fpm::utils::update1(
                 &config.root,
                 path,
                 tokio::fs::read(revert_path).await?.as_slice(),

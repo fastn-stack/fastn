@@ -48,7 +48,7 @@ pub async fn processor_<'a>(
         .map(|v| v.to_string());
 
     let mut files = config
-        .get_all_file_paths(&config.package, true)?
+        .get_all_file_paths1(&config.package, true)?
         .into_iter()
         .filter(|v| v.is_file())
         .map(|v| {

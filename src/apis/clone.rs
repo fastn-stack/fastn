@@ -16,7 +16,7 @@ pub async fn clone() -> actix_web::Result<actix_web::HttpResponse> {
 
 async fn clone_worker() -> fpm::Result<CloneResponse> {
     let config = fpm::Config::read2(None, false).await?;
-    let all_files = config.get_all_file_paths(&config.package, false)?;
+    let all_files = config.get_all_file_path(&config.package, Default::default())?;
     let root = config.get_root_for_package(&config.package);
     let files = futures::future::join_all(
         all_files

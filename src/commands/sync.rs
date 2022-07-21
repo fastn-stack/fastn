@@ -240,7 +240,7 @@ async fn update_current_directory(
     for file in files {
         match file {
             SyncResponseFile::Add { path, content, .. } => {
-                fpm::utils::update(&config.root, path, content).await?;
+                fpm::utils::update1(&config.root, path, content).await?;
             }
             SyncResponseFile::Update {
                 path,
@@ -256,7 +256,7 @@ async fn update_current_directory(
                 if SyncStatus::Conflict.eq(status) {
                     println!("Conflict: {}", path);
                 }
-                fpm::utils::update(&config.root, path, content).await?;
+                fpm::utils::update1(&config.root, path, content).await?;
             }
             SyncResponseFile::Delete { path, .. } => {
                 if config.root.join(path).exists() {
@@ -274,9 +274,9 @@ async fn update_history(
     latest_ftd: &str,
 ) -> fpm::Result<()> {
     for file in files {
-        fpm::utils::update(&config.history_dir(), file.path.as_str(), &file.content).await?;
+        fpm::utils::update1(&config.history_dir(), file.path.as_str(), &file.content).await?;
     }
-    fpm::utils::update(&config.history_dir(), ".latest.ftd", latest_ftd.as_bytes()).await?;
+    fpm::utils::update1(&config.history_dir(), ".latest.ftd", latest_ftd.as_bytes()).await?;
     Ok(())
 }
 
@@ -332,7 +332,7 @@ async fn on_conflict(
                         fpm::snapshot::resolve_snapshots(&response.latest_ftd).await?;
                     let content = get_file_content(path, request.files.as_slice())
                         .ok_or_else(|| error("File should be available in request file"))?;
-                    fpm::utils::update(&config.conflicted_dir(), path, content).await?;
+                    fpm::utils::update1(&config.conflicted_dir(), path, content).await?;
                     workspace.insert(
                         path.to_string(),
                         fpm::snapshot::Workspace {
@@ -349,7 +349,7 @@ async fn on_conflict(
                 } else if fpm::apis::sync::SyncStatus::ClientEditedServerDeleted.eq(status) {
                     let content = get_file_content(path, request.files.as_slice())
                         .ok_or_else(|| error("File should be available in request file"))?;
-                    fpm::utils::update(&config.conflicted_dir(), path, content).await?;
+                    fpm::utils::update1(&config.conflicted_dir(), path, content).await?;
                     workspace.insert(
                         path.to_string(),
                         fpm::snapshot::Workspace {
