@@ -1,0 +1,153 @@
+-- ft.page: How Sync Works
+
+We have two states, "server state" and "client state".
+
+-- ft.h1: Server state
+
+The server state is stored inside the `.server-state` folder. It comprises all
+files' history.
+
+-- ft.code: `.server-state/history.ftd`
+lang: ftd
+
+\-- record server-state:
+file-history list history:
+
+
+
+-- ft.h2: History
+
+File history captures every modification to a file. It also included information
+about changes that happened due to merges, if an action happened to the "main
+branch" via merge from a CR, we store the CR where the change came from in the
+`src-cr` field.
+
+
+-- ft.code:
+lang: ftd
+
+\-- record file-history:
+caption filename:
+file-edit list history:
+
+\-- record file-edit:
+caption or body message:
+integer timestamp:
+integer version:
+optional string author:
+option integer src-cr:
+string operation:
+
+
+-- ft.markdown:
+
+Actual content is stored in the file system based on
+`.server-state/<file-name-without-last-extension>.<version>.<extension>`.
+
+Also, the version number starts with 1 for every file, and is incremented by
+one for every change in that file. Delete also increments the version number.
+
+
+
+
+-- ft.h1: Client state
+
+On the client, the state is largely two: workspace content and the unsynced
+tracking information.
+
+
+-- ft.code:
+lang: ftd
+
+\-- record client-state:
+workspace-entry list workspace:
+
+\-- record workspace-entry:
+caption filename:
+optional boolean deleted:
+integer version:
+
+-- ft.markdown:
+
+Client state is stored in `.client-state` folder. Workspace information is
+stored in `.client-state/workspace.ftd`.
+
+
+
+-- ft.h1: Sync Scenarios
+
+Given the current server and client state, a bunch of operations are there,
+which either print some output or update either the client or server state.
+
+-- ft.h2: A file was updated locally, no changes on remote
+
+We detect a file is updated locally by finding the version for every file in
+`workspace.ftd`, and then comparing the local file with the
+`.history/<filename>.<version>.<ext>`. If the content is different file is
+considered modified.
+
+Say file is file.ftd, and its current version on server is v1. On sync server
+will get file.ftd, v1 and new content of file. Server sees their version is also
+v1, so server computes v2, and stored the new content of the file.
+
+Server returns latest `file.v2.ftd` content, and client stores it in
+`.server-state`, and updates the `.client-state/workspace.ftd` and `file.ftd`
+in workspace.
+
+
+-- ft.h2: A file was updated locally, with non conflicting changes on server
+
+If `file.ftd` was modified by someone else in the meanwhile, and the server
+state has already moved to v2, server does a three way merge between v1 version
+of file.ftd as "base", and v2 as "theirs" and the current content as "ours".
+
+In non conflicting state the file content is simply updated. Server computes
+a v3, and returns the merged content to client, client adds it to .server-state
+folder, and updates the workspace.ftd and file.ftd's content in the workspace.
+
+
+-- ft.h2: A file was updated locally with conflicting changes on server
+
+If on server, v2 and our changes do not merge cleanly with v1 version as based,
+server notifies the client that the sync for that file failed. Server sends the
+v2 version of file which client stored in `.server-state` folder. `workspace.ftd`
+and `file.ftd` in workspace are not modified.
+
+
+-- ft.h2: Only a file with no known conflicts are sent to server
+
+Before sending a file we check if the file has known conflict. To do this we
+use the version in `workspace.ftd` and the content of `file.ftd` for that
+version as "base", and the latest version of `file.ftd` in `.server-state` as
+"theirs", and the content of `file.ftd` in the workspace as "ours" and perform
+three way merge, and if the merge fails, we know there is conflict.
+
+
+-- ft.h2: Deleting a file, no edits on server case
+
+If a file is deleted from workspace and if [`fpm rm <file>`](/cli/rm/) command has been run,
+this sets deleted in `workspace.ftd` entry, we send this information to server
+on `fpm sync`, and our version number. Server will see our version numbers match,
+so server will create a new version number to mark deletion of the file, and
+update the `.server-state/history.ftd`. And the client will delete the entry
+from `.client-state/workspace.ftd`.
+
+
+-- ft.h2: Deleted by us, edited on server
+
+If the file we deleted has been updated on server, server will see different
+version number, and return a conflict message along with the latest content of
+the file. Our conflict detector will spot that we have deleted a file
+corresponding to a version number in workspace.ftd that is no longer the latest
+version of that file, and treat is as conflict and not send it to server on next
+fpm sync.
+
+
+
+-- ft.h2: Edited by us, deleted on server
+
+Server again see two different version numbers, on delete we increase the
+version number, and reject the changes, as delete and edit are not cleanly
+merge-abe using three way merge operation.
+
+Client will show the conflict message
