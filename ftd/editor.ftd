@@ -1,5 +1,9 @@
 -- import: fpm
 
+-- import: fifthtry.github.io/roboto-mono/assets as mono
+
+-- boolean show-cr-ui: false
+
 -- boolean show-create-new-folder: false
 
 -- boolean show-create-new-file: false
@@ -7,6 +11,10 @@
 -- boolean toc-show: true
 
 -- boolean sitemap-show: false
+
+-- boolean show-modification: false
+
+-- boolean show-conflict: false
 
 -- boolean dialog-open: false
 
@@ -51,6 +59,38 @@ path: $path
 
 -- optional string diff:
 $always-include$: true
+
+-- fpm.toc-item list sample-toc:
+$processor$: toc
+
+-level:
+-level:
+- level:
+  - item-one: /
+  - item-two: /
+  - level-one: /
+    - item-one: /
+    - item-two: /
+  - item-three: /
+  - item-four: /
+- level:
+  - item-one: /
+  - item-two: /
+  - level-one: 
+    - item-one: /
+    - level-two: 
+      - item-one: /
+    - item-two: /
+  - item-three: /
+  - item-four: /
+- level: 
+  - item-one: /
+  - item-two: /
+  - level-one:
+    - item-one: /
+    - item-two: /
+  - item-three: /
+  - item-four: /
 
 -- fpm.toc-item list sample-list:
 $processor$: toc
@@ -234,6 +274,12 @@ dark: https://fifthtry.github.io/fpm-ui/-/fifthtry.github.io/fpm-ui/cross.svg
 -- ftd.image-src edit: https://fifthtry.github.io/fpm-ui/-/fifthtry.github.io/fpm-ui/edit.svg
 dark: https://fifthtry.github.io/fpm-ui/-/fifthtry.github.io/fpm-ui/edit.svg
 
+-- ftd.image-src e-active: https://fifthtry.github.io/fpm-ui/-/fifthtry.github.io/fpm-ui/e-active.svg
+dark: https://fifthtry.github.io/fpm-ui/-/fifthtry.github.io/fpm-ui/e-active.svg
+
+-- ftd.image-src m-active: https://fifthtry.github.io/fpm-ui/-/fifthtry.github.io/fpm-ui/m-active.svg
+dark: https://fifthtry.github.io/fpm-ui/-/fifthtry.github.io/fpm-ui/m-active.svg
+
 -- ftd.image-src edit-default: https://fifthtry.github.io/fpm-ui/-/fifthtry.github.io/fpm-ui/edit-icon-default.svg
 dark: https://fifthtry.github.io/fpm-ui/-/fifthtry.github.io/fpm-ui/edit-icon-default.svg
 
@@ -261,6 +307,15 @@ dark: https://fifthtry.github.io/fpm-ui/-/fifthtry.github.io/fpm-ui/right-arrow.
 -- ftd.image-src rename-icon: https://fifthtry.github.io/fpm-ui/-/fifthtry.github.io/fpm-ui/edit-icon.svg
 dark: https://fifthtry.github.io/fpm-ui/-/fifthtry.github.io/fpm-ui/edit-icon.svg
 
+-- ftd.image-src server-icon: https://fifthtry.github.io/fpm-ui/-/fifthtry.github.io/fpm-ui/server.svg
+dark: https://fifthtry.github.io/fpm-ui/-/fifthtry.github.io/fpm-ui/server.svg
+
+-- ftd.image-src local-icon: https://fifthtry.github.io/fpm-ui/-/fifthtry.github.io/fpm-ui/local.svg
+dark: https://fifthtry.github.io/fpm-ui/-/fifthtry.github.io/fpm-ui/local.svg
+
+-- ftd.image-src pull-request-icon: https://fifthtry.github.io/fpm-ui/-/fifthtry.github.io/fpm-ui/git-pull-request.svg
+dark: https://fifthtry.github.io/fpm-ui/-/fifthtry.github.io/fpm-ui/git-pull-request.svg
+
 -- ftd.image-src delete-icon: https://fifthtry.github.io/fpm-ui/-/fifthtry.github.io/fpm-ui/delete-icon.svg
 dark: https://fifthtry.github.io/fpm-ui/-/fifthtry.github.io/fpm-ui/delete-icon.svg
 
@@ -285,19 +340,45 @@ dark: https://fifthtry.github.io/fpm-ui/-/fifthtry.github.io/fpm-ui/showbar.svg
 -- ftd.image-src m-default: https://fifthtry.github.io/fpm-ui/-/fifthtry.github.io/fpm-ui/m-default.svg
 dark: https://fifthtry.github.io/fpm-ui/-/fifthtry.github.io/fpm-ui/m-default.svg
 
--- ftd.image-src m-active: https://fifthtry.github.io/fpm-ui/-/fifthtry.github.io/fpm-ui/m-active.svg
-dark: https://fifthtry.github.io/fpm-ui/-/fifthtry.github.io/fpm-ui/m-active.svg
-
 -- ftd.image-src e-default: https://fifthtry.github.io/fpm-ui/-/fifthtry.github.io/fpm-ui/e-default.svg
 dark: https://fifthtry.github.io/fpm-ui/-/fifthtry.github.io/fpm-ui/e-default.svg
 
--- ftd.image-src e-active: https://fifthtry.github.io/fpm-ui/-/fifthtry.github.io/fpm-ui/e-active.svg
-dark: https://fifthtry.github.io/fpm-ui/-/fifthtry.github.io/fpm-ui/e-active.svg
 
 
 
 
+-- ftd.font-size fine-print-desktop:
+line-height: 16
+size: 12
+letter-spacing: 0
 
+-- ftd.type fine-print: $fpm.font-display
+desktop: $fine-print-desktop
+mobile: $fine-print-desktop
+xl: $fine-print-desktop
+weight: 400
+
+-- ftd.font-size copy-print-medium-desktop:
+line-height: 24
+size: 16
+letter-spacing: 0
+
+-- ftd.type copy-print-medium: $fpm.font-display
+desktop: $copy-print-medium-desktop
+mobile: $copy-print-medium-desktop
+xl: $copy-print-medium-desktop
+weight: 600
+
+-- ftd.font-size editor-font:
+line-height: 16
+size: 13
+letter-spacing: 0
+
+-- ftd.type monospace: $mono.fonts.Mono
+desktop: $editor-font
+mobile: $editor-font
+xl: $editor-font
+weight: 400
 
 -- ftd.font-size small-desktop:
 line-height: 14
@@ -309,14 +390,6 @@ desktop: $small-desktop
 mobile: $small-desktop
 xl: $small-desktop
 weight: 400
-
--- ftd.color grey-shade:
-light: #3B404D
-dark: #3B404D
-
--- ftd.color border-line:
-light: #484848
-dark: #484848
 
 -- ftd.font-size fine-print-bold-desktop:
 line-height: 18
@@ -351,17 +424,6 @@ mobile: $copy-print-bold-desktop
 xl: $copy-print-bold-desktop
 weight: 700
 
--- ftd.font-size status-bold:
-line-height: 16
-size: 13
-letter-spacing: 0
-
--- ftd.type status-font: $fpm.font-display
-desktop: $status-bold
-mobile: $status-bold
-xl: $status-bold
-weight: 700
-
 -- ftd.font-size dialog-title-bold:
 line-height: 20
 size: 14
@@ -372,17 +434,6 @@ desktop: $dialog-title-bold
 mobile: $dialog-title-bold
 xl: $dialog-title-bold
 weight: 600
-
--- ftd.font-size filename:
-line-height: 16
-size: 13
-letter-spacing: 0
-
--- ftd.type file-font: $fpm.font-display
-desktop: $filename
-mobile: $filename
-xl: $filename
-weight: 400
 
 
 
@@ -403,17 +454,6 @@ toc: $fs
 if: $sitemap-show
 sample-list: $sample-list
 
--- display-rename:
-if: $show-rename
-
--- delete-confimation:
-if: $show-delete-dialog
-
--- new-file:
-if: $show-create-new-file
-
--- folder:
-if: $show-create-new-folder
 
 
 
@@ -425,8 +465,6 @@ if: $show-create-new-folder
 
 
 -- ftd.row editor:
-width: fill
-height: fill
 boolean open: false
 boolean show-desktop: false
 boolean show-mobile: false
@@ -434,8 +472,31 @@ boolean show-fullscreen: false
 boolean edits: true
 background-color: $fpm.color.main.background.step-2
 color: $fpm.color.main.text-strong
+width: fill
+height: fill
 open: true
 append-at: toc-id
+
+--- display-rename:
+if: $show-rename
+
+--- container: ftd.main
+
+--- delete-confimation:
+if: $show-delete-dialog
+
+--- container: ftd.main
+
+--- new-file:
+if: $show-create-new-file
+
+--- container: ftd.main
+
+--- folder:
+if: $show-create-new-folder
+
+--- container: ftd.main
+
 
 --- overlay:
 if: $show-overlay
@@ -449,12 +510,19 @@ height: fill
 id: mobile-side
 
 --- ftd.column:
-id: desktop-container
 width: percent 0
 width if not $open: percent 25
 min-width if not $open: 300
+
+--- ftd.column:
+width if not $open: percent 25
+min-width if not $open: 300
+id: desktop-container
 overflow-x: auto
-height: fill
+height: calc 100vh
+anchor: window
+left:0
+top:0
 background-color: $fpm.color.main.background.base
 
 --- ftd.row:
@@ -487,17 +555,53 @@ src: $refresh
 
 --- container: desktop-container
 
+--- ftd.row:
+if: $show-cr-ui
+id: change-request
+width: fill
+background-color: $dark-grey
+color: $fpm.color.main.text-strong
+padding-vertical: $fpm.space.space-3
+padding-left: $fpm.space.space-3
+padding-right: 54
+spacing:4
+
+--- ftd.image:
+src: $pull-request-icon
+width: 16
+margin-top: 2
+
+--- container: change-request
+
+--- change-request-text:
+cr-number: #8 
+cr-title: cr-title-it-can-be-short-it-can-be-long-in-that-case-we-do-line-break
+url: /somecrlink
+
+--- container: desktop-container
+
+--- ftd.row:
+if: $show-cr-ui
+padding-top: 15
+padding-left: 14
+padding-bottom: 14
+border-bottom: 4
+border-color: $dark-grey
+width: fill
+
+--- print-cr-toc:
+sample-list: $sample-toc
+
+--- container: desktop-container
+
 --- ftd.column:
 width: fill
-height: fill
-spacing: 8
-overflow-y: auto
-id:toc-id
+padding-top if $show-cr-ui: 8
  
 --- ftd.row:
-id: text-container
 width: fill
- 
+id: text-container
+
 --- ftd.row:
 width: fill
 $on-click$: $toc-show= true
@@ -532,6 +636,15 @@ role: $fine-print-bold
 width: fill
 align: center
 
+--- container: desktop-container
+
+--- ftd.column:
+width: fill
+height: fill
+spacing: 8
+overflow-y: auto
+id:toc-id
+ 
 --- container: toc-id
 
 --- ftd.row:
@@ -545,8 +658,10 @@ id: left-side
 width: percent 75
 width if $open: percent 100
 width if not $open: percent 75
-height: fill
-background-color: $fpm.color.main.background.base
+min-height: calc 100vh
+align: right
+margin-right: 0
+background-color: $fpm.color.main.background.step-1
 
 --- ftd.column:
 width: calc 100% - 53px
@@ -581,25 +696,84 @@ white-space: nowrap
 
 --- container: switch-container
 
+--- ftd.column:
+id: code-container
+width: fill
+
+--- ftd.column:
+margin-bottom: 0
+margin-bottom if $show-modification: 20
+width: fill
+min-height: 0
+min-height if $show-modification: 300
+overflow-y: auto
+
+--- change-card:
+if: $show-modification
+change: MERGE
+
+- While we love `fpm`, it is this `fpm` not the right 
+- tool for you. We document some of the reasons here. If 
+- you come across any other objects, please help us update
+- this page.
+
++ While we love `fpm`, it is this `fpm` not the right 
++ tool for you. We document some of the reasons here. If 
++ you come across any other reasons why FPM should not 
++ be used, please help us update this page.
++ While we love `fpm`, it is this `fpm` not the right 
++ tool for you. We document some of the reasons here. If 
++ you come across any other reasons why FPM should not 
++ be used, please help us update this page.
+
+--- container: code-container
+
+--- ftd.column:
+width: fill
+min-height: 0
+min-height if $show-conflict: 137
+margin-bottom: 0
+margin-bottom if $show-conflict: 20
+overflow-y: auto
+
+
+--- error-card: Unexpected Error
+if: $show-conflict
+
+package base not found. Package: fifthtry.github.io/doc-site, File: filename.png
+234
+package base not found. Package: fifthtry.github.io/doc-site, File: filename.png
+235
+Error: PackageError { message: "failed to parse ParseError { message: \"fifthtry.github.io/doc-site/assets#files.some.png not found 2\", doc_id: \"https://fifthtry.github.io/doc-site/index/\", line_number: 0 }" }
+236
+Error: Process completed with exit code 1.
+package base not found. Package: fifthtry.github.io/doc-site, File: filename.png
+234
+package base not found. Package: fifthtry.github.io/doc-site, File: filename.png
+235
+
+--- container: code-container
+
 --- ftd.input:
 if: $edits
 width: fill
 min-width: percent 100
-min-height: calc 100vh - 82px
+min-height: calc 100vh - 52px 
 multiline: true
 placeholder: -- ftd.text: hello world
 value: $source
 $on-input$: $source=$VALUE
 $on-input$: message-host $edit-obj
-$on-input$: $show-guide = true
+$on-click$: $show-guide = true
 color: $fpm.color.main.text
+role: $monospace
 background-color: $fpm.color.main.background.base
 white-space: pre
 
 --- guide-80chars:
 if: $show-guide
 
---- container: switch-container
+--- container: code-container
 
 --- ftd.column:
 if: $show-desktop
@@ -611,10 +785,10 @@ background-color: $fpm.color.main.text-strong
 src: $path
 width: fill
 min-width: percent 100
-min-height: calc 100vh - 82px
+min-height: calc 100vh - 52px
 background-color: $fpm.color.main.text-strong
 
---- container: switch-container
+--- container: code-container
 
 --- ftd.row:
 if: $show-mobile
@@ -678,27 +852,63 @@ height: fill
 spacing: 32
 id: sidebar
 
+--- ftd.row:
+width: fill
+id: modify-container
+
 --- ftd.image:
+if: not $show-modification
 src: $m-default
 align: center
 width: fill
 height: auto
+$on-click$: toggle $show-modification
+
+--- container: modify-container
+
+--- ftd.image:
+if: $show-modification
+src: $m-active
+align: center
+width: fill
+height: auto
+$on-click$: toggle $show-modification
 
 --- container: sidebar
 
+--- ftd.row:
+width: fill
+id: conflict-container
+
 --- ftd.image:
+if: not $show-conflict
 src: $e-default
 align: center
 width: fill
 height: auto
+$on-click$: toggle $show-conflict
+
+--- container: conflict-container
+
+--- ftd.image:
+if: $show-conflict
+src: $e-active
+align: center
+width: fill
+height: auto
+$on-click$: toggle $show-conflict
 
 --- container: main-sidebar
 
 --- ftd.column:
-width: fill
+width: 53
 id: image
 padding-horizontal:  12
 spacing: 32
+anchor: window
+right: 0
+bottom: 24
+z-index: 9999
 
 \--- ftd.image:
 src: $edit
@@ -768,7 +978,7 @@ height: auto
 
 --- ftd.column:
 if: $is-mobile
-id: good
+id: mobile-side
 height: fill
 width: fill
 
@@ -784,6 +994,7 @@ anchor: window
 background-color: $fpm.color.main.background.base
 height: fill
 id: right-side
+z-index: 99
 
 --- ftd.row:
 background-color: $grey-dark
@@ -824,19 +1035,55 @@ height: auto
 $on-click$: toggle $open
 $on-click$: $show-fullscreen = true 
 
---- container:  right-side
+--- container: right-side
+
+--- ftd.row:
+if: $show-cr-ui
+id: change-request
+width: fill
+background-color: $dark-grey
+color: $fpm.color.main.text-strong
+padding-vertical: $fpm.space.space-3
+padding-left: $fpm.space.space-3
+padding-right: 54
+spacing:4
+
+--- ftd.image:
+src: $pull-request-icon
+width: 16
+margin-top: 2
+
+--- container: change-request
+
+--- change-request-text:
+cr-number: #8 
+cr-title: cr-title-it-can-be-short-it-can-be-long-in-that-case-we-do-line-break
+url: /somecrlink
+
+--- container: right-side
+
+--- ftd.row:
+if: $show-cr-ui
+padding-top: 15
+padding-left: 14
+padding-bottom: 14
+border-bottom: 4
+border-color: $dark-grey
+width: fill
+
+--- print-cr-toc:
+sample-list: $sample-toc
+
+--- container: right-side
 
 --- ftd.column:
 width: fill
-height: fill
-spacing: 8
-overflow-y: auto
-id:toc-id
-
---- ftd.row:
-id: text-container
-width: fill
+padding-top if $show-cr-ui: 8
  
+--- ftd.row:
+width: fill
+id: text-container
+
 --- ftd.row:
 width: fill
 $on-click$: $toc-show= true
@@ -871,11 +1118,22 @@ role: $fine-print-bold
 width: fill
 align: center
 
+--- container: right-side
+
+--- ftd.column:
+width: fill
+height: fill
+spacing: 8
+overflow-y: auto
+id:toc-id
+ 
+--- container: toc-id
+
 --- ftd.row:
 id: toc-id
 width: fill
 
---- container: good
+--- container: mobile-side
 
 --- ftd.row:
 id: left-side
@@ -919,6 +1177,59 @@ white-space: nowrap
 
 --- container: switch-container
 
+--- ftd.column:
+height: calc 100vh - 82px
+id: code-container
+width: fill
+overflow-y: auto
+
+--- ftd.row:
+width: fill
+padding-left: 16
+margin-bottom: 0
+min-height: 0
+min-height if $show-modification: 200
+margin-bottom if $show-modification: 20
+overflow-y: auto
+
+--- change-card:
+if: $show-modification
+change: committed
+
+- While we love `fpm`, it is this `fpm` not the right 
+- tool for you. We document some of the reasons here. If 
+- you come across any other objects, please help us update
+- this page.
+
++ While we love `fpm`, it is this `fpm` not the right 
++ tool for you. We document some of the reasons here. If 
++ you come across any other reasons why FPM should not 
++ be used, please help us update this page.
+
+--- container: code-container
+
+--- ftd.row:
+width: fill
+margin-bottom: 0
+min-height: 0
+min-height if $show-conflict: 200
+margin-bottom if $show-conflict: 20
+padding-left: 16
+overflow-y: auto
+
+--- error-card: Unexpected Error
+if: $show-conflict
+
+package base not found. Package: fifthtry.github.io/doc-site, File: filename.png
+234
+package base not found. Package: fifthtry.github.io/doc-site, File: filename.png
+235
+Error: PackageError { message: "failed to parse ParseError { message: \"fifthtry.github.io/doc-site/assets#files.some.png not found 2\", doc_id: \"https://fifthtry.github.io/doc-site/index/\", line_number: 0 }" }
+236
+Error: Process completed with exit code 1.
+
+--- container: code-container
+
 --- ftd.input:
 if: $edits
 width: fill
@@ -934,7 +1245,7 @@ color: $fpm.color.main.text
 background-color: $fpm.color.main.background.base
 white-space: pre
 
---- container: switch-container
+--- container: code-container
 
 --- ftd.column:
 if: $show-desktop
@@ -949,7 +1260,7 @@ min-width: percent 100
 min-height: calc 100vh - 82px
 background-color: $fpm.color.main.text-strong
 
---- container: switch-container
+--- container: code-container
 
 --- ftd.row:
 if: $show-mobile
@@ -995,9 +1306,63 @@ background-color: $fpm.color.main.background.step-1
 right: 0
 bottom: 0
 width: 46
+height: fill
 id: image
 padding-top: $fpm.space.space-3
 padding-bottom: 21
+spacing: 32
+
+--- ftd.column:
+width: fill
+height: fill
+spacing: 32
+id: sidebar
+
+--- ftd.row:
+width: fill
+id: modify-container
+
+--- ftd.image:
+if: not $show-modification
+src: $m-default
+width: fill
+$on-click$: toggle $show-modification
+
+--- container: modify-container
+
+--- ftd.image:
+if: $show-modification
+src: $m-active
+width: fill
+$on-click$: toggle $show-modification
+
+--- container: sidebar
+
+--- ftd.row:
+width: fill
+id: conflict-container
+
+--- ftd.image:
+if: not $show-conflict
+src: $e-default
+align: center
+width: fill
+$on-click$: toggle $show-conflict
+
+--- container: conflict-container
+
+--- ftd.image:
+if: $show-conflict
+src: $e-active
+align: center
+width: fill
+$on-click$: toggle $show-conflict
+
+--- container: image
+
+--- ftd.column:
+id: bottom-conttainer
+width: fill
 padding-horizontal: 12
 spacing: 32
 
@@ -1017,7 +1382,7 @@ height: auto
 $on-click$: $show-mobile = false
 $on-click$: $edits = true
 
---- container: image
+--- container:  bottom-conttainer
 
 --- ftd.image:
 if: not $show-mobile
@@ -1048,22 +1413,54 @@ margin-left: 16
 --- ftd.column:
 width: fill
 height: fill
-spacing: 12
+spacing: 32
 id: sidebar
 
+--- ftd.row:
+width: fill
+id: modify-container
+
 --- ftd.image:
+if: not $show-modification
 src: $m-default
 align: center
 width: fill
 height: auto
+$on-click$: toggle $show-modification
+
+--- container: modify-container
+
+--- ftd.image:
+if: $show-modification
+src: $m-active
+align: center
+width: fill
+height: auto
+$on-click$: toggle $show-modification
 
 --- container: sidebar
 
+--- ftd.row:
+width: fill
+id: conflict-container
+
 --- ftd.image:
+if: not $show-conflict
 src: $e-default
 align: center
 width: fill
 height: auto
+$on-click$: toggle $show-conflict
+
+--- container: conflict-container
+
+--- ftd.image:
+if: $show-conflict
+src: $e-active
+align: center
+width: fill
+height: auto
+$on-click$: toggle $show-conflict
 
 --- container: main-sidebar
 
@@ -1287,7 +1684,7 @@ height: 30
 left: 370
 left if $is-mobile: 12
 top: 84
-z-index: 10000
+z-index: 99999
 background-color: $fpm.color.main.background.step-2
 border-radius: 4
 id: newfile-row
@@ -1730,37 +2127,37 @@ padding-horizontal: 2
 width: fill
 
 --- ftd.row:
-spacing: 10
 if: $status == Untracked
+spacing: 10
+width: fill
 $on-mouse-enter$: $show-action-on-status = true
 $on-mouse-enter$: $show-revert = false
-width: fill
 
 --- ftd.text: $title
 if: $link is not null
 link: $link
 color: $fpm.color.main.text-strong
-role: $file-font
+role: $monospace
 width: fill
 
 --- ftd.text: $title
 if: $link is null
 color: $fpm.color.main.text-strong
-role: $file-font
+role: $monospace
 width: fill
 
 /--- ftd.text: C -- dont show any text in-case of status is untracked
 color: $changed
-role: $status-font
+role: $monospace
 align: right
 
 --- container: ftd.main
 
 --- ftd.row:
-id: added-container
 if: $status == Added
 color: $added
 width: fill
+id: added-container
 $on-mouse-enter$: $show-action-on-status = true
 $on-mouse-enter$: $show-revert = false
 
@@ -1768,210 +2165,210 @@ $on-mouse-enter$: $show-revert = false
 if: $link is not null
 link: $link
 color: $fpm.color.main.text-strong
-role: $file-font
+role: $monospace
 white-space: nowrap
 width: fill
 
 --- ftd.text: $title
 if: $link is null
 color: $fpm.color.main.text-strong
-role: $file-font
+role: $monospace
 width: fill
 
 --- ftd.text: A
 color: $added
-role: $status-font
+role: $monospace
 align: right
 
 --- container: ftd.main
 
 --- ftd.row:
+if: $status == Modified
 width: fill
 spacing: 10
-if: $status == Modified
 $on-mouse-enter$: $show-action-on-status = true
 $on-mouse-enter$: $show-revert = true
 color: $merge
 
 --- ftd.text: $title
-width: fill
 if: $link is not null
 link: $link
+width: fill
 color: $fpm.color.main.text-strong
-role: $file-font
+role: $monospace
 
 --- ftd.text: $title
-width: fill
 if: $link is null
+width: fill
 color: $fpm.color.main.text-strong
-role: $file-font
+role: $monospace
 
 --- ftd.text: M
 color: $merge
-role: $status-font
+role: $monospace
 align: right
 
 --- container: ftd.main
 
 --- ftd.row:
+if: $status == Deleted
 width: fill
 spacing: 10
-if: $status == Deleted
 color: $red
 $on-mouse-enter$: $show-revert = true
 $on-mouse-enter$: $show-action-on-status = false
 
 --- ftd.text: $title
-width: fill
 if: $link is not null
 link: $link
+width: fill
 color: $fpm.color.main.text-strong
-role: $file-font
+role: $monospace
 
 --- ftd.text: $title
-width: fill
 if: $link is null
+width: fill
 color: $fpm.color.main.text-strong
-role: $file-font
+role: $monospace
 
 --- ftd.text: D
 color: $deleted
-role: $status-font
+role: $monospace
 align: right
 
 --- container: ftd.main
 
 --- ftd.row:
+if: $status == Conflicted
 width: fill
 spacing: 10
-if: $status == Conflicted
+color: $grey
 $on-mouse-enter$: $show-revert = true
 $on-mouse-enter$: $show-action-on-status = true
-color: $grey
 
 --- ftd.text: $title
-width: fill
 if: $link is not null
 link: $link
+width: fill
 color: $fpm.color.main.text-strong
-role: $file-font
+role: $monospace
 
 --- ftd.text: $title
-width: fill
 if: $link is null
+width: fill
 color: $fpm.color.main.text-strong
-role: $file-font
+role: $monospace
 
 --- ftd.text: C
 color: $changed
-role: $status-font
+role: $monospace
 align: right
 
 --- container: ftd.main
 
 --- ftd.row:
+if: $status == Outdated
 width: fill
 spacing: 10
-if: $status == Outdated
+color: $orange
 $on-mouse-enter$: $show-revert = true
 $on-mouse-enter$: $show-action-on-status = true
-color: $orange
 
 --- ftd.text: $title
-width: fill
 if: $link is not null
 link: $link
+width: fill
 color: $fpm.color.main.text-strong
-role: $file-font
+role: $monospace
 
 --- ftd.text: $title
-width: fill
 if: $link is null
+width: fill
 color: $fpm.color.main.text-strong
-role: $file-font
+role: $monospace
 
 --- ftd.text: O
 color: $outdated
-role: $status-font
+role: $monospace
 align: right
 
 --- container: ftd.main
 
 --- ftd.row:
+if: $status == ClientEditedServerDeleted
 width: fill
 spacing: 10
-if: $status == ClientEditedServerDeleted
+color: $orange
 $on-mouse-enter$: $show-revert = true
 $on-mouse-enter$: $show-action-on-status = true
-color: $orange
 
 --- ftd.text: $title
-width: fill
 if: $link is not null
 link: $link
+width: fill
 color: $fpm.color.main.text-strong
-role: $file-font
+role: $monospace
 
 --- ftd.text: $title
-width: fill
 if: $link is null
+width: fill
 color: $fpm.color.main.text-strong
-role: $file-font
+role: $monospace
 
 --- ftd.text: Cˆ
 color: $changed
-role: $status-font
+role: $monospace
 align: right
 
 --- container: ftd.main
 
 --- ftd.row:
+if: $status == ClientDeletedServerEdited
 width: fill
 spacing: 10
-if: $status == ClientDeletedServerEdited
+color: $orange
 $on-mouse-enter$: $show-revert = true
 $on-mouse-enter$: $show-action-on-status = true
-color: $orange
 
 --- ftd.text: $title
-width: fill
 if: $link is not null
 link: $link
+width: fill
 color: $fpm.color.main.text-strong
-role: $file-font
+role: $monospace
 
 --- ftd.text: $title
-width: fill
 if: $link is null
+width: fill
 color: $fpm.color.main.text-strong
-role: $file-font
+role: $monospace
 
 --- ftd.text: C˘
 color: $changed
-role: $status-font
+role: $monospace
 align: right
 
 --- container: ftd.main
 
 --- ftd.row:
+if: $status is null
 width: fill
 spacing: 10
-if: $status is null
 $on-mouse-enter$: $show-revert = false
 $on-mouse-enter$: $show-action-on-status = true
 
 --- ftd.text: $title
-width: fill
 if: $link is not null
 link: $link
+width: fill
 color: $fpm.color.main.text-strong
-role: $file-font
+role: $monospace
 
 --- ftd.text: $title
 width: fill
 if: $link is null
 color: $fpm.color.main.text-strong
-role: $file-font
+role: $monospace
 
 
 
@@ -2007,9 +2404,9 @@ border-color: $fpm.color.main.border
 height: calc 100vh - 82px
 anchor: parent
 top: 43
-left: 657
+left: 634
 width: 10
-z-index: 10
+z-index: 9999
 
 
 
@@ -2097,75 +2494,6 @@ $on-click$: $show-overlay = false
 $on-click$: $dialog-open = false
 $on-click$: $show-delete-dialog = false
 $on-click$: message-host $delete-obj
-
-
-
-
-
-
-
-
-
-
--- ftd.color delete-dialog-bg:
-light: rgba(59, 64, 77, 1)
-dark: rgba(59, 64, 77, 1)
-
--- ftd.color added:
-light: rgba(73, 236, 70, 1)
-dark: rgba(73, 236, 70, 1)
-
--- ftd.color merge:
-light: rgba(19, 227, 240, 1)
-dark: rgba(19, 227, 240, 1)
-
--- ftd.color deleted:
-light: rgba(101, 101, 101, 1)
-dark: rgba(101, 101, 101, 1)
-
--- ftd.color outdated:
-light: rgba(245, 206, 68, 1)
-dark: rgba(245, 206, 68, 1)
-
--- ftd.color changed:
-light: rgba(219, 51, 246, 1)
-dark: rgba(219, 51, 246, 1)
-
--- ftd.color red:
-light: red
-dark: red
-
--- ftd.color grey:
-light: grey
-dark: grey
-
--- ftd.color orange:
-light: rgba(245, 116, 22, 1)
-dark: rgba(245, 116, 22, 1)
-
--- ftd.color 2b303b:
-light: #2b303b
-dark: #2b303b
-
--- ftd.color folder-color:
-light: rgba(129, 170, 206, 1)
-dark: rgba(129, 170, 206, 1)
-
--- ftd.color grey-dark:
-light: #2B2A2A
-dark: #2B2A2A
-
--- ftd.color light-green:
-light: rgba(73, 236, 70, 0.1)
-dark: rgba(73, 236, 70, 0.1)
-
--- ftd.color overlay-bg:
-light: rgba(0, 0, 0, 0.6)
-dark: rgba(0, 0, 0, 0.6)
-
--- ftd.color code-bg:
-light: rgba(44, 48, 58, 1)
-dark: rgba(44, 48, 58, 1) 
 
 
 
@@ -2303,13 +2631,13 @@ spacing: 8
 --- ftd.text: $title
 if: $link is not null
 color: $fpm.color.main.text-strong
-role: $file-font
+role: $monospace
 white-space: nowrap
 
 --- ftd.text: $title
 if: $link is null
 color: $fpm.color.main.text-strong
-role: $file-font
+role: $monospace
 white-space: nowrap
 
 --- container: show-tooltip
@@ -2336,7 +2664,7 @@ if: $show-tooltip
 
 --- ftd.text: A
 color: $added
-role: $status-font
+role: $monospace
 align: right
 
 
@@ -2439,3 +2767,434 @@ color: $fpm.color.main.text-strong
 role: $small-font
 color: $fpm.color.main.text-strong
 width: fill
+
+
+
+
+
+
+
+
+
+-- ftd.column print-cr-toc:
+fpm.toc-item list sample-list:
+width: fill
+boolean open: true
+max-height: 220
+margin-top if $is-mobile: $fpm.space.space-2
+
+--- ftd.row:
+width: fill
+id: modified-container
+align: center
+
+--- ftd.row:
+id: cr-wrap
+spacing: 4
+width: fill
+
+--- ftd.row:
+width if $open: 12
+align: center
+
+--- ftd.image:
+if: $open
+align: center
+src: $downarrow
+$on-click$: toggle $open
+
+--- container: cr-wrap
+
+--- ftd.row:
+width if not $open: 12
+align: center
+
+--- ftd.image:
+if: not $open
+align: center
+src: $right-arrow
+$on-click$: toggle $open
+
+--- container: cr-wrap
+
+--- ftd.text: Modified files
+color: $blue
+role: $fine-print-bold
+width: fill
+align: center
+white-space: nowrap
+
+--- container: modified-container
+
+--- ftd.row:
+align: right
+spacing: 24
+padding-right: 12
+
+--- ftd.image:
+src: $local-icon
+width: 20
+
+--- ftd.image:
+src: $server-icon
+width: 20
+--- container: ftd.main
+
+--- ftd.column:
+if: $open
+width: fill
+overflow-y: auto
+margin-top: $fpm.space.space-2
+
+--- print-cr-toc-item:
+$loop$: $sample-list as $obj
+children: $obj.children
+title: $obj.title
+url: $obj.url
+
+
+
+
+
+
+
+
+
+
+-- ftd.column print-cr-toc-item:
+caption title:
+optional string url:
+fpm.toc-item list children:
+boolean show-actions: false
+boolean show-tooltip: false
+boolean show: false
+width: fill
+border-radius: 2
+padding-bottom: 2
+padding-top: 2
+boolean show-children: false
+id: file-row
+
+--- ftd.row:
+$on-click$: toggle $show-children
+width: fill
+id: file-hover
+background-color if $MOUSE-IN: $light-green
+padding-left: 2
+padding-top: 2
+padding-bottom: 2
+padding-right: 12
+margin-bottom: 1
+
+--- ftd.row:
+width: fill
+id: switch-container
+padding-left: $fpm.space.space-3
+
+--- ftd.row:
+if: $show-children
+align: center
+width if $children is not empty: 12
+width if $children is empty: 0
+
+--- ftd.image:
+if: $children is not empty
+src: $downarrow
+$on-click$ if not $show-children:$show-children = false
+align: center
+padding-right: $fpm.space.space-1
+width: 12
+
+--- container: switch-container
+
+--- ftd.row:
+if: not $show-children
+align: center
+width if $children is empty: 0
+width if $children is not empty: 12
+
+--- ftd.image:
+if: $children is not empty
+src: $right-arrow
+$on-click$ if not $show-children:$show-children = false
+align: center
+padding-right: $fpm.space.space-1
+
+--- container: switch-container
+
+--- ftd.row:
+width: fill
+
+--- show-cr-item: $title
+link: $url
+
+--- container: ftd.main
+
+--- ftd.column:
+if: $show-children
+width: fill
+padding-left: $fpm.space.space-3
+
+--- print-cr-toc-item:
+$loop$: $children as $obj
+children: $obj.children
+title: $obj.title
+url: $obj.url
+
+--- container: ftd.main
+
+
+
+
+
+
+
+
+
+
+-- ftd.row show-cr-item:
+caption title:
+optional string link:
+padding-horizontal: 2
+width: fill
+
+--- ftd.row:
+width: fill
+spacing: 8
+
+--- ftd.text: $title
+if: $link is not null
+color: $fpm.color.main.text-strong
+role: $monospace
+white-space: nowrap
+
+--- ftd.text: $title
+if: $link is null
+color: $fpm.color.main.text-strong
+role: $monospace
+white-space: nowrap
+
+--- container: ftd.main
+
+--- ftd.text: A
+color: $added
+role: $monospace
+align: right
+
+
+
+
+
+
+
+
+
+
+-- ftd.row change-request-text:
+string cr-number:
+string cr-title:
+optional string url:
+width: fill
+spacing: 4
+margin-left: $fpm.space.space-1
+
+--- ftd.text: $cr-number
+if: $url is null
+role: $monospace
+color: $blue
+
+--- container: ftd.main
+
+--- ftd.text: $cr-number
+if: $url is not null
+link: $url
+role: $monospace
+color: $blue
+
+--- container: ftd.main
+
+--- ftd.text: $cr-title
+role: $monospace
+width: fill
+color: $grey-medium
+link: $url
+
+
+
+
+
+
+
+
+
+
+
+-- ftd.column error-card:
+caption title:
+width: fill
+body body:
+padding-vertical: 24
+padding-horizontal: 36
+border-left: 4
+background-color: $code-bg-dark
+border-color : $red-text
+ 
+--- ftd.text: $title
+width: fill
+role: $fpm.type.copy-tight
+color: $red-text
+
+--- ftd.text: 
+text: $body
+width: fill
+role: $fpm.type.copy-tight
+color: $red-text
+
+
+
+
+
+
+
+
+
+
+-- ftd.column change-card:
+caption change:
+body body:
+width: fill
+
+--- ftd.text: $change
+top: 20
+right: 20
+anchor: parent
+role: $copy-print-medium
+color: $sky-blue
+
+--- container: ftd.main
+
+--- ftd.code:
+lang: diff
+text: $body
+width: fill
+role: $fpm.type.copy-tight
+border-left: 4
+padding-vertical: 24
+padding-horizontal: 24
+background-color: $code-bg-dark
+border-color : $sky-blue
+
+
+
+
+
+
+
+
+
+
+
+
+-- ftd.color blue:
+light: #81AACE
+dark: #81AACE
+
+-- ftd.color dark-grey:
+light: #373636
+dark: #373636
+
+-- ftd.color grey-medium:
+light: #D9D9D9
+dark: #D9D9D9
+
+-- ftd.color code-bg-dark:
+light: #2b303b
+dark: #2b303b
+
+-- ftd.color committed:
+light: #50ABEC
+dark: #50ABEC
+
+-- ftd.color merged:
+light: #49EC46
+dark: #49EC46
+
+-- ftd.color conflict:
+light: #F51616
+dark: #F51616
+
+-- ftd.color grey-shade:
+light: #3B404D
+dark: #3B404D
+
+-- ftd.color border-line:
+light: #484848
+dark: #484848
+
+-- ftd.color sky-blue:
+light: #13E3F0
+dark: #13E3F0
+
+-- ftd.color delete-dialog-bg:
+light: rgba(59, 64, 77, 1)
+dark: rgba(59, 64, 77, 1)
+
+-- ftd.color added:
+light: rgba(73, 236, 70, 1)
+dark: rgba(73, 236, 70, 1)
+
+-- ftd.color merge:
+light: rgba(19, 227, 240, 1)
+dark: rgba(19, 227, 240, 1)
+
+-- ftd.color deleted:
+light: rgba(101, 101, 101, 1)
+dark: rgba(101, 101, 101, 1)
+
+-- ftd.color outdated:
+light: rgba(245, 206, 68, 1)
+dark: rgba(245, 206, 68, 1)
+
+-- ftd.color changed:
+light: rgba(219, 51, 246, 1)
+dark: rgba(219, 51, 246, 1)
+
+-- ftd.color red:
+light: red
+dark: red
+
+-- ftd.color red-text:
+light: rgba(191, 97, 106, 1)
+dark: rgba(191, 97, 106, 1)
+
+-- ftd.color grey:
+light: grey
+dark: grey
+
+-- ftd.color orange:
+light: rgba(245, 116, 22, 1)
+dark: rgba(245, 116, 22, 1)
+
+-- ftd.color 2b303b:
+light: #2b303b
+dark: #2b303b
+
+-- ftd.color folder-color:
+light: rgba(129, 170, 206, 1)
+dark: rgba(129, 170, 206, 1)
+
+-- ftd.color grey-dark:
+light: #2B2A2A
+dark: #2B2A2A
+
+-- ftd.color light-green:
+light: rgba(73, 236, 70, 0.1)
+dark: rgba(73, 236, 70, 0.1)
+
+-- ftd.color overlay-bg:
+light: rgba(0, 0, 0, 0.6)
+dark: rgba(0, 0, 0, 0.6)
+
+-- ftd.color code-bg:
+light: rgba(44, 48, 58, 1)
+dark: rgba(44, 48, 58, 1) 

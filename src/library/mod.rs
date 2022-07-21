@@ -1,5 +1,6 @@
 mod fetch_file;
 mod fpm_dot_ftd;
+mod full_sitemap;
 mod get_data;
 mod get_version_data;
 pub(crate) mod http;
@@ -150,7 +151,6 @@ impl Library {
         }
     }
 
-    // TODO: async
     pub async fn process<'a>(
         &'a self,
         section: &ftd::p1::Section,
@@ -195,13 +195,14 @@ pub fn process_sync<'a>(
         "include" => fpm::library::include::processor(section, doc, config),
         "get-data" => fpm::library::get_data::processor(section, doc, config),
         "sitemap" => fpm::library::sitemap::processor(section, doc, config),
+        "full-sitemap" => fpm::library::full_sitemap::processor(section, doc, config),
         "package-query" => fpm::library::sqlite::processor_(section, doc, config),
         "fetch-file" => fpm::library::fetch_file::processor_sync(section, doc, config),
         "package-tree" => fpm::library::package_tree::processor_sync(section, doc, config),
-        t => Err(ftd::p1::Error::ParseError {
-            message: format!("FPM-Error: No such processor: {}", t),
+        t => Err(ftd::p1::Error::NotFound {
             doc_id: document_id.to_string(),
             line_number: section.line_number,
+            key: format!("FPM-Error: No such processor: {}", t),
         }),
     }
 }
@@ -358,7 +359,6 @@ impl Library2 {
         }
     }
 
-    // TODO: async
     pub async fn process<'a>(
         &'a self,
         section: &ftd::p1::Section,
@@ -375,6 +375,7 @@ impl Library2 {
             "include" => fpm::library::include::processor(section, doc, &self.config),
             "get-data" => fpm::library::get_data::processor(section, doc, &self.config),
             "sitemap" => fpm::library::sitemap::processor(section, doc, &self.config),
+            "full-sitemap" => fpm::library::full_sitemap::processor(section, doc, &self.config),
             "package-tree" => {
                 fpm::library::package_tree::processor(section, doc, &self.config).await
             }
@@ -389,7 +390,11 @@ impl Library2 {
                 )
                 .await
             }
-            t => unimplemented!("No such processor: {}", t),
+            t => Err(ftd::p1::Error::NotFound {
+                doc_id: self.document_id.to_string(),
+                line_number: section.line_number,
+                key: format!("FPM-Error: No such processor: {}", t),
+            }),
         }
     }
 }

@@ -1,4 +1,3 @@
-// TODO: make async
 pub async fn parse<'a>(
     name: &str,
     source: &str,
@@ -111,7 +110,6 @@ pub async fn parse<'a>(
     Ok(document)
 }
 
-// TODO: make async
 pub async fn parse2<'a>(
     name: &str,
     source: &str,
