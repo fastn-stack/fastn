@@ -1,0 +1,29 @@
+-- ftd.column presentation:
+open: true
+append-at: col-id
+integer current: 0
+width: fill
+
+--- ftd.text: This is presentation
+
+--- ftd.integer: $current
+
+--- ftd.column:
+id: col-id
+
+
+-- ftd.column slide:
+caption title:
+if: $PARENT.current == $SIBLING-INDEX
+$on-click$: increment $PARENT.current clamp 0 $PARENT.CHILDREN-COUNT
+
+--- ftd.text: $title
+
+
+
+-- presentation:
+
+--- slide: First
+
+--- slide: Second
+

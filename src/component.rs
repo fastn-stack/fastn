@@ -634,7 +634,6 @@ impl ChildComponent {
                         "ftd#decimal" => ftd::p2::Kind::decimal(),
                         _ => return Ok(properties),
                     };
-                    dbg!("1");
                     if let Ok(property_value) = ftd::PropertyValue::resolve_value(
                         line_number,
                         caption,
@@ -2095,7 +2094,6 @@ pub fn recursive_child_component(
         };
     }
 
-    dbg!("2");
     let recursive_property_value = ftd::PropertyValue::resolve_value(
         sub.line_number,
         &loop_on_component,
@@ -2262,7 +2260,6 @@ pub fn recursive_child_component(
     ) -> ftd::p1::Result<Property> {
         let mut arguments: std::collections::BTreeMap<String, ftd::p2::Kind> = Default::default();
         arguments.insert("$loop$".to_string(), recursive_kind.to_owned());
-        dbg!("3");
         let property = ftd::PropertyValue::resolve_value(
             *line_number,
             &format!("${}", reference),
@@ -2465,7 +2462,6 @@ pub fn read_properties(
             }
         };
         for (idx, value, conditional_attribute) in conditional_vector {
-            dbg!("4");
             let property_value = match ftd::PropertyValue::resolve_value(
                 line_number,
                 value.as_str(),
@@ -2475,17 +2471,14 @@ pub fn read_properties(
                 Some(source.clone()),
             ) {
                 Ok(p) => p,
-                _ if source.eq(&ftd::TextSource::Default) => {
-                    dbg!("5");
-                    ftd::PropertyValue::resolve_value(
-                        line_number,
-                        value.as_str(),
-                        Some(kind.to_owned()),
-                        doc,
-                        &root_arguments,
-                        Some(source.clone()),
-                    )?
-                }
+                _ if source.eq(&ftd::TextSource::Default) => ftd::PropertyValue::resolve_value(
+                    line_number,
+                    value.as_str(),
+                    Some(kind.to_owned()),
+                    doc,
+                    &root_arguments,
+                    Some(source.clone()),
+                )?,
                 Err(e) => return Err(e),
             };
 
@@ -2621,7 +2614,6 @@ fn root_properties_from_inherits(
 ) -> ftd::p1::Result<std::collections::BTreeMap<String, Property>> {
     let mut root_properties: std::collections::BTreeMap<String, Property> = Default::default();
     for inherit in inherits {
-        dbg!("6");
         let pv = ftd::PropertyValue::resolve_value(
             line_number,
             &format!("${}", inherit),
