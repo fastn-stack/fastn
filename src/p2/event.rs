@@ -397,6 +397,7 @@ impl Action {
                         Vec<ftd::PropertyValue>,
                     > = Default::default();
                     if let Some(p) = ActionKind::MessageHost.parameters().get("data") {
+                        dbg!("7");
                         parameters.insert(
                             "data".to_string(),
                             vec![ftd::PropertyValue::resolve_value(
@@ -498,6 +499,7 @@ impl Action {
                                     line_number,
                                 );
                             }
+                            dbg!("8");
                             p.push(ftd::PropertyValue::resolve_value(
                                 line_number,
                                 parameter,
@@ -593,6 +595,7 @@ impl Action {
                                     },
                                 }
                             } else {
+                                dbg!("9");
                                 ftd::PropertyValue::resolve_value(
                                     line_number,
                                     parameter,
@@ -662,6 +665,7 @@ impl Action {
                             },
                         }
                     } else {
+                        dbg!("10");
                         ftd::PropertyValue::resolve_value(
                             line_number,
                             &part_2,
@@ -702,6 +706,7 @@ impl Action {
             arguments: &std::collections::BTreeMap<String, ftd::p2::Kind>,
             kind: Option<ftd::p2::Kind>,
         ) -> ftd::p1::Result<ftd::PropertyValue> {
+            dbg!("11");
             ftd::PropertyValue::resolve_value(line_number, &value, kind, doc, arguments, None)
         }
     }

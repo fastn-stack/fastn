@@ -332,13 +332,13 @@ impl<'a> ExecuteDoc<'a> {
                     self.local_variables.insert(
                         ftd::p2::utils::resolve_local_variable_name(
                             0,
-                            "CHILDREN_COUNT",
+                            "CHILDREN-COUNT",
                             string_container.as_str(),
                             self.name,
                             self.aliases,
                         )?,
                         ftd::p2::Thing::Variable(ftd::Variable {
-                            name: "CHILDREN_COUNT".to_string(),
+                            name: "CHILDREN-COUNT".to_string(),
                             value: ftd::PropertyValue::Value {
                                 value: ftd::Value::Integer {
                                     value: child.len() as i64,
@@ -399,7 +399,7 @@ impl<'a> ExecuteDoc<'a> {
                 _ => None,
             };
 
-            if is_open {
+            if is_open && child_count.eq(&0) {
                 current_container.push(len);
                 let mut new_parent_container = parent_container.to_vec();
                 new_parent_container.append(&mut current_container.to_vec());
@@ -436,13 +436,13 @@ impl<'a> ExecuteDoc<'a> {
             self.local_variables.insert(
                 ftd::p2::utils::resolve_local_variable_name(
                     0,
-                    "CHILDREN_COUNT",
+                    "CHILDREN-COUNT",
                     string_container.as_str(),
                     self.name,
                     self.aliases,
                 )?,
                 ftd::p2::Thing::Variable(ftd::Variable {
-                    name: "CHILDREN_COUNT".to_string(),
+                    name: "CHILDREN-COUNT".to_string(),
                     value: ftd::PropertyValue::Value {
                         value: ftd::Value::Integer {
                             value: child_count as i64,

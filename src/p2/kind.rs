@@ -359,6 +359,7 @@ impl Kind {
         };
 
         if v.starts_with('$') {
+            dbg!("13");
             return ftd::PropertyValue::resolve_value(
                 line_number,
                 &v,
