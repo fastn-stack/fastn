@@ -1086,6 +1086,57 @@ pub(crate) fn get_doc_name_and_remaining(s: &str) -> ftd::p1::Result<(String, Op
     })
 }
 
+pub(crate) fn resolve_local_variable_name(
+    line_number: usize,
+    name: &str,
+    container: &str,
+    doc_name: &str,
+    aliases: &std::collections::BTreeMap<String, String>,
+) -> ftd::p1::Result<String> {
+    if name.contains('@') {
+        return Ok(name.to_string());
+    }
+    let (part1, part2) = ftd::p2::utils::get_doc_name_and_remaining(name)?;
+    Ok(if let Some(ref p2) = part2 {
+        ftd::p2::utils::resolve_name(
+            line_number,
+            format!("{}@{}.{}", part1, container, p2).as_str(),
+            doc_name,
+            aliases,
+        )?
+    } else {
+        ftd::p2::utils::resolve_name(
+            line_number,
+            format!("{}@{}", part1, container).as_str(),
+            doc_name,
+            aliases,
+        )?
+    })
+}
+
+pub fn resolve_name(
+    line_number: usize,
+    name: &str,
+    doc_name: &str,
+    aliases: &std::collections::BTreeMap<String, String>,
+) -> ftd::p1::Result<String> {
+    if name.contains('#') {
+        return Ok(name.to_string());
+    }
+    Ok(match ftd::split_module(name, doc_name, line_number)? {
+        (Some(m), v, None) => match aliases.get(m) {
+            Some(m) => format!("{}#{}", m, v),
+            None => format!("{}#{}.{}", doc_name, m, v),
+        },
+        (Some(m), v, Some(c)) => match aliases.get(m) {
+            Some(m) => format!("{}#{}.{}", m, v, c),
+            None => format!("{}#{}.{}.{}", doc_name, m, v, c),
+        },
+        (None, v, None) => format!("{}#{}", doc_name, v),
+        _ => unimplemented!(),
+    })
+}
+
 pub fn split(name: String, split_at: &str) -> ftd::p1::Result<(String, String)> {
     if !name.contains(split_at) {
         return ftd::e2(format!("{} is not found in {}", split_at, name), "", 0);

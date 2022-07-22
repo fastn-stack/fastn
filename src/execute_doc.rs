@@ -304,11 +304,17 @@ impl<'a> ExecuteDoc<'a> {
                     container: ref mut c,
                     ..
                 })) => {
+                    let string_container = {
+                        let mut new_parent_container = parent_container.to_vec();
+                        new_parent_container
+                            .extend(current_container.iter().map(ToOwned::to_owned));
+                        new_parent_container.push(len);
+                        ftd::p2::utils::get_string_container(new_parent_container.as_slice())
+                    };
                     let child = if container_children.is_empty() && is_open {
                         current_container.push(len);
                         let mut new_parent_container = parent_container.to_vec();
                         new_parent_container.append(&mut current_container.to_vec());
-
                         *index += 1;
                         self.execute_(
                             index,
@@ -322,6 +328,26 @@ impl<'a> ExecuteDoc<'a> {
                     } else {
                         container_children
                     };
+
+                    self.local_variables.insert(
+                        ftd::p2::utils::resolve_local_variable_name(
+                            0,
+                            "CHILDREN_COUNT",
+                            string_container.as_str(),
+                            self.name,
+                            self.aliases,
+                        )?,
+                        ftd::p2::Thing::Variable(ftd::Variable {
+                            name: "CHILDREN_COUNT".to_string(),
+                            value: ftd::PropertyValue::Value {
+                                value: ftd::Value::Integer {
+                                    value: child.len() as i64,
+                                },
+                            },
+                            conditions: vec![],
+                            flags: Default::default(),
+                        }),
+                    );
 
                     let external_children = {
                         if child.is_empty() {
@@ -381,6 +407,29 @@ impl<'a> ExecuteDoc<'a> {
                             parent_id.clone(),
                             id,
                         )?;
+                        let string_container =
+                            ftd::p2::utils::get_string_container(new_parent_container.as_slice());
+
+                        self.local_variables.insert(
+                            ftd::p2::utils::resolve_local_variable_name(
+                                0,
+                                "CHILDREN_COUNT",
+                                string_container.as_str(),
+                                self.name,
+                                self.aliases,
+                            )?,
+                            ftd::p2::Thing::Variable(ftd::Variable {
+                                name: "CHILDREN_COUNT".to_string(),
+                                value: ftd::PropertyValue::Value {
+                                    value: ftd::Value::Integer {
+                                        value: child.children.len() as i64,
+                                    },
+                                },
+                                conditions: vec![],
+                                flags: Default::default(),
+                            }),
+                        );
+
                         container.children.extend(child.children);
                         child.child_container
                     }
