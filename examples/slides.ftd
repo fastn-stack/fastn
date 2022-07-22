@@ -24,7 +24,6 @@ value: $MOUSE-IN
 
 -- ftd.column foo:
 open: true
-append-at: col-id
 
 --- ftd.integer: $CHILDREN_COUNT
 
