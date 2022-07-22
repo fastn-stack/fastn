@@ -13,6 +13,8 @@ impl<'a> TDoc<'a> {
         arguments: &mut std::collections::BTreeMap<String, ftd::p2::Kind>,
         properties: &std::collections::BTreeMap<String, ftd::component::Property>,
         string_container: &str,
+        local_container: &[usize],
+        external_children_count: &Option<usize>,
     ) -> ftd::p1::Result<()> {
         // let mut local_variable: std::collections::BTreeMap<String, ftd::p2::Thing> = Default::default();
         for (k, arg) in arguments.iter() {
@@ -109,6 +111,20 @@ impl<'a> TDoc<'a> {
                 .entry(self.resolve_local_variable_name(0, k, string_container)?)
                 .or_insert(local_variable);
         }
+        self.local_variables
+            .entry(self.resolve_local_variable_name(0, "SIBLING-INDEX", string_container)?)
+            .or_insert(ftd::p2::Thing::Variable(ftd::Variable {
+                name: "SIBLING-INDEX".to_string(),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Integer {
+                        value: external_children_count
+                            .unwrap_or(*local_container.last().unwrap_or(&0))
+                            as i64,
+                    },
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            }));
 
         *arguments = Default::default();
         Ok(())
@@ -328,6 +344,7 @@ impl<'a> TDoc<'a> {
         component: &mut ftd::Component,
         child_component_properties: &std::collections::BTreeMap<String, ftd::component::Property>,
         local_container: &[usize],
+        external_children_count: &Option<usize>,
     ) -> ftd::p1::Result<()> {
         let string_container = ftd::p2::utils::get_string_container(local_container);
         if component.root == "ftd.kernel" {
@@ -338,7 +355,23 @@ impl<'a> TDoc<'a> {
             &mut component.arguments,
             child_component_properties,
             string_container.as_str(),
+            local_container,
+            external_children_count,
         )?;
+
+        // self.local_variables.insert(
+        //     "SIBLING-INDEX".to_string(),
+        //     ftd::p2::Thing::Variable(ftd::Variable {
+        //         name: "SIBLING-INDEX".to_string(),
+        //         value: ftd::PropertyValue::Value {
+        //             value: ftd::Value::Integer {
+        //                 value: *local_container.last().unwrap_or(&0) as i64,
+        //             },
+        //         },
+        //         conditions: vec![],
+        //         flags: Default::default(),
+        //     }),
+        // );
         ftd::component::Property::add_default_properties(
             child_component_properties,
             &mut component.properties,
@@ -387,6 +420,7 @@ impl<'a> TDoc<'a> {
         parent: &mut ftd::ChildComponent,
         children: &mut Vec<ftd::ChildComponent>,
         local_container: &[usize],
+        external_children_count: &Option<usize>,
     ) -> ftd::p1::Result<()> {
         let string_container = ftd::p2::utils::get_string_container(local_container);
         if parent.root == "ftd.kernel" {
@@ -397,6 +431,8 @@ impl<'a> TDoc<'a> {
             &mut parent.arguments,
             &Default::default(),
             string_container.as_str(),
+            local_container,
+            external_children_count,
         )?;
         self.update_component_data(
             string_container.as_str(),
@@ -854,7 +890,7 @@ impl<'a> TDoc<'a> {
         });
 
         fn get_special_variable() -> Vec<&'static str> {
-            vec!["MOUSE-IN"]
+            vec!["MOUSE-IN", "SIBLING-INDEX"]
         }
     }
 

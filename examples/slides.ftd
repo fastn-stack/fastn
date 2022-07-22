@@ -1,0 +1,50 @@
+/-- ftd.column foo:
+
+--- ftd.text: Hello
+
+
+/-- foo:
+
+--- child: CHILD 1
+
+
+/-- ftd.boolean child:
+value: $MOUSE-IN
+
+
+-- foo:
+
+-- int:
+
+-- int:
+
+-- child:
+
+
+
+-- ftd.column foo:
+open: true
+append-at: col-id
+
+--- ftd.text: Hello
+
+--- ftd.text: World
+
+--- child:
+
+--- ftd.column:
+border-width: 2
+id: col-id
+
+
+
+-- ftd.integer int:
+value: $SIBLING-INDEX
+
+
+-- ftd.column child:
+string title: Hello World
+
+--- ftd.text: $title
+
+--- ftd.integer: $SIBLING-INDEX

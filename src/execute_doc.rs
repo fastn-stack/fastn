@@ -21,7 +21,7 @@ impl<'a> ExecuteDoc<'a> {
         self.execute_(&mut index, false, parent_container, 0, None, id)
     }
 
-    fn execute_(
+    pub(crate) fn execute_(
         &mut self,
         index: &mut usize,
         is_external: bool,
@@ -34,6 +34,7 @@ impl<'a> ExecuteDoc<'a> {
         let mut named_containers: std::collections::BTreeMap<String, Vec<Vec<usize>>> =
             Default::default();
         let mut children: Vec<ftd::Element> = vec![];
+        let mut external_children_count = if is_external { Some(0 as usize) } else { None };
 
         while *index < self.instructions.len() {
             let mut doc = ftd::p2::TDoc {
@@ -92,7 +93,12 @@ impl<'a> ExecuteDoc<'a> {
                     let (parent, inner) = {
                         let mut parent = parent.clone();
                         let mut inner = inner.clone();
-                        doc.insert_local(&mut parent, &mut inner, local_container.as_slice())?;
+                        doc.insert_local(
+                            &mut parent,
+                            &mut inner,
+                            local_container.as_slice(),
+                            &external_children_count,
+                        )?;
                         (parent, inner)
                     };
 
@@ -100,7 +106,13 @@ impl<'a> ExecuteDoc<'a> {
                         element,
                         children: container_children,
                         child_container,
-                    } = parent.super_call(&inner, &mut doc, self.invocations, &local_container)?;
+                    } = parent.super_call(
+                        &inner,
+                        &mut doc,
+                        self.invocations,
+                        &local_container,
+                        &external_children_count,
+                    )?;
 
                     children = self.add_element(
                         children,
@@ -176,6 +188,7 @@ impl<'a> ExecuteDoc<'a> {
                         true,
                         &local_container,
                         new_id.clone(),
+                        &external_children_count,
                     )?;
                     e.set_element_id(new_id);
                     if !is_visible {
@@ -214,6 +227,9 @@ impl<'a> ExecuteDoc<'a> {
                 }
             }
             *index += 1;
+            if let Some(count) = &mut external_children_count {
+                *count += 1;
+            }
         }
 
         Ok(ftd::component::ElementWithContainer {
