@@ -2379,7 +2379,12 @@ fn check_input_conflicting_values(
     doc: &ftd::p2::TDoc,
     line_number: usize,
 ) -> ftd::p1::Result<()> {
-    fn get_property_default_value(property_name: &str) -> ftd::p1::Result<String> {
+    fn get_property_default_value(
+        property_name: &str,
+        properties: &std::collections::BTreeMap<String, Property>,
+        doc: &ftd::p2::TDoc,
+        line_number: usize,
+    ) -> ftd::p1::Result<String> {
         if let Some(property) = properties.get(property_name) {
             return Ok(property.resolve_default_value_string(doc, line_number)?);
         }
@@ -2395,8 +2400,9 @@ fn check_input_conflicting_values(
 
     match (contains_value, contains_default_value) {
         (true, true) => {
-            let value = get_property_default_value("value")?;
-            let default_value = get_property_default_value("default-value")?;
+            let value = get_property_default_value("value", properties, doc, line_number)?;
+            let default_value =
+                get_property_default_value("default-value", properties, doc, line_number)?;
 
             return Err(ftd::p1::Error::ForbiddenUsage {
                 message: format!(
