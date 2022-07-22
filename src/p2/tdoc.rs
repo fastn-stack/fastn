@@ -126,6 +126,17 @@ impl<'a> TDoc<'a> {
                 flags: Default::default(),
             }));
 
+        self.local_variables
+            .entry(self.resolve_local_variable_name(0, "CHILDREN_COUNT", string_container)?)
+            .or_insert(ftd::p2::Thing::Variable(ftd::Variable {
+                name: "CHILDREN_COUNT".to_string(),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Integer { value: 0 },
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            }));
+
         *arguments = Default::default();
         Ok(())
     }
@@ -890,7 +901,7 @@ impl<'a> TDoc<'a> {
         });
 
         fn get_special_variable() -> Vec<&'static str> {
-            vec!["MOUSE-IN", "SIBLING-INDEX"]
+            vec!["MOUSE-IN", "SIBLING-INDEX", "CHILDREN_COUNT"]
         }
     }
 
@@ -900,37 +911,17 @@ impl<'a> TDoc<'a> {
         name: &str,
         container: &str,
     ) -> ftd::p1::Result<String> {
-        if name.contains('@') {
-            return Ok(name.to_string());
-        }
-        let (part1, part2) = ftd::p2::utils::get_doc_name_and_remaining(name)?;
-        Ok(if let Some(ref p2) = part2 {
-            self.resolve_name(
-                line_number,
-                format!("{}@{}.{}", part1, container, p2).as_str(),
-            )?
-        } else {
-            self.resolve_name(line_number, format!("{}@{}", part1, container).as_str())?
-        })
+        ftd::p2::utils::resolve_local_variable_name(
+            line_number,
+            name,
+            container,
+            self.name,
+            self.aliases,
+        )
     }
 
     pub fn resolve_name(&self, line_number: usize, name: &str) -> ftd::p1::Result<String> {
-        if name.contains('#') {
-            return Ok(name.to_string());
-        }
-
-        Ok(match ftd::split_module(name, self.name, line_number)? {
-            (Some(m), v, None) => match self.aliases.get(m) {
-                Some(m) => format!("{}#{}", m, v),
-                None => format!("{}#{}.{}", self.name, m, v),
-            },
-            (Some(m), v, Some(c)) => match self.aliases.get(m) {
-                Some(m) => format!("{}#{}.{}", m, v, c),
-                None => format!("{}#{}.{}.{}", self.name, m, v, c),
-            },
-            (None, v, None) => format!("{}#{}", self.name, v),
-            _ => unimplemented!(),
-        })
+        ftd::p2::utils::resolve_name(line_number, name, self.name, self.aliases)
     }
 
     pub fn get_record(&self, line_number: usize, name: &str) -> ftd::p1::Result<ftd::p2::Record> {

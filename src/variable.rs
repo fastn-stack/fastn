@@ -102,6 +102,12 @@ impl PropertyValue {
                     _ if part1.eq("SIBLING-INDEX") => {
                         (ftd::p2::Kind::Integer { default: None }, false)
                     }
+                    _ if part1.eq("CHILDREN_COUNT") => (
+                        ftd::p2::Kind::Integer {
+                            default: Some("0".to_string()),
+                        },
+                        false,
+                    ),
                     None => match doc.get_initial_thing(line_number, string) {
                         Ok((ftd::p2::Thing::Variable(v), name)) => {
                             part2 = name;
