@@ -54,7 +54,9 @@ pub fn boolean_and_ref(
             Ok((value.to_owned(), complete_reference(reference)))
         }
         Some((ftd::Value::Optional { data, kind }, reference)) => {
-            if !matches!(kind, ftd::p2::Kind::Boolean { .. }) {
+            if !matches!(kind, ftd::p2::Kind::Boolean { .. })
+                && !matches!(kind, ftd::p2::Kind::Element)
+            {
                 return ftd::e2(
                     format!("expected boolean, found: {:?}", kind),
                     doc.name,
@@ -108,7 +110,9 @@ pub fn boolean_and_ref(
         }
         Some((ftd::Value::None { kind }, reference)) if condition.is_some() => {
             let kind = kind.inner();
-            if !matches!(kind, ftd::p2::Kind::Boolean { .. }) {
+            if !matches!(kind, ftd::p2::Kind::Boolean { .. })
+                && !matches!(kind, ftd::p2::Kind::Element)
+            {
                 return ftd::e2(
                     format!("expected boolean, found: {:?}", kind),
                     doc.name,
@@ -120,7 +124,7 @@ pub fn boolean_and_ref(
                 Some(reference) => reference,
                 None => {
                     return ftd::e2(
-                        format!("expected integer, found: {:?}", kind),
+                        format!("expected integer, found 7: {:?}", kind),
                         doc.name,
                         line_number,
                     )
@@ -171,9 +175,11 @@ pub fn integer_and_ref(
             Ok((value.to_owned(), complete_reference(reference)))
         }
         Some((ftd::Value::Optional { data, kind }, reference)) => {
-            if !matches!(kind, ftd::p2::Kind::Integer { .. }) {
+            if !matches!(kind, ftd::p2::Kind::Integer { .. })
+                && !matches!(kind, ftd::p2::Kind::Element)
+            {
                 return ftd::e2(
-                    format!("expected integer, found: {:?}", kind),
+                    format!("expected integer, found 8: {:?}", kind),
                     doc.name,
                     line_number,
                 );
@@ -184,7 +190,7 @@ pub fn integer_and_ref(
                         Some(reference) => reference,
                         None => {
                             return ftd::e2(
-                                format!("expected integer, found: {:?}", kind),
+                                format!("expected integer, found 9: {:?}", kind),
                                 doc.name,
                                 line_number,
                             )
@@ -216,7 +222,7 @@ pub fn integer_and_ref(
                 }
                 _ => {
                     return ftd::e2(
-                        format!("expected integer, found: {:?}", kind),
+                        format!("expected integer, found 10: {:?}", kind),
                         doc.name,
                         line_number,
                     )
@@ -225,9 +231,11 @@ pub fn integer_and_ref(
         }
         Some((ftd::Value::None { kind }, reference)) if condition.is_some() => {
             let kind = kind.inner();
-            if !matches!(kind, ftd::p2::Kind::Integer { .. }) {
+            if !matches!(kind, ftd::p2::Kind::Integer { .. })
+                && !matches!(kind, ftd::p2::Kind::Element)
+            {
                 return ftd::e2(
-                    format!("expected integer, found: {:?}", kind),
+                    format!("expected integer, found 11: {:?}", kind),
                     doc.name,
                     line_number,
                 );
@@ -237,7 +245,7 @@ pub fn integer_and_ref(
                 Some(reference) => reference,
                 None => {
                     return ftd::e2(
-                        format!("expected integer, found: {:?}", kind),
+                        format!("expected integer, found 1: {:?}", kind),
                         doc.name,
                         line_number,
                     )
@@ -261,13 +269,13 @@ pub fn integer_and_ref(
                 }
             }
             ftd::e2(
-                format!("expected integer, found: {:?}", kind),
+                format!("expected integer, found 2: {:?}", kind),
                 doc.name,
                 line_number,
             )
         }
         Some(v) => ftd::e2(
-            format!("expected integer, found: {:?}", v),
+            format!("expected integer, found 3: {:?}", v),
             doc.name,
             line_number,
         ),
@@ -288,7 +296,9 @@ pub fn decimal_and_ref(
             Ok((value.to_owned(), complete_reference(reference)))
         }
         Some((ftd::Value::Optional { data, kind }, reference)) => {
-            if !matches!(kind, ftd::p2::Kind::Decimal { .. }) {
+            if !matches!(kind, ftd::p2::Kind::Decimal { .. })
+                && !matches!(kind, ftd::p2::Kind::Element)
+            {
                 return ftd::e2(
                     format!("expected decimal, found: {:?}", kind),
                     doc.name,
@@ -342,9 +352,11 @@ pub fn decimal_and_ref(
         }
         Some((ftd::Value::None { kind }, reference)) if condition.is_some() => {
             let kind = kind.inner();
-            if !matches!(kind, ftd::p2::Kind::Decimal { .. }) {
+            if !matches!(kind, ftd::p2::Kind::Decimal { .. })
+                && !matches!(kind, ftd::p2::Kind::Element)
+            {
                 return ftd::e2(
-                    format!("expected integer, found: {:?}", kind),
+                    format!("expected integer, found 4: {:?}", kind),
                     doc.name,
                     line_number,
                 );
@@ -354,7 +366,7 @@ pub fn decimal_and_ref(
                 Some(reference) => reference,
                 None => {
                     return ftd::e2(
-                        format!("expected integer, found: {:?}", kind),
+                        format!("expected integer, found 5: {:?}", kind),
                         doc.name,
                         line_number,
                     )
@@ -406,12 +418,14 @@ pub fn string_and_source_and_ref(
         }
         Some((ftd::Value::Optional { data, kind }, reference)) => {
             let source = match kind {
-                _ if matches!(kind, ftd::p2::Kind::String { .. }) => {
+                _ if matches!(kind, ftd::p2::Kind::String { .. })
+                    || matches!(kind, ftd::p2::Kind::Element) =>
+                {
                     ftd::TextSource::from_kind(kind, doc.name, line_number)?
                 }
                 _ => {
                     return ftd::e2(
-                        format!("expected string, found: {:?}", kind),
+                        format!("expected string, found 1: {:?}", kind),
                         doc.name,
                         line_number,
                     )
@@ -424,7 +438,7 @@ pub fn string_and_source_and_ref(
                         Some(reference) => reference,
                         None => {
                             return ftd::e2(
-                                format!("expected string, found: {:?}", kind),
+                                format!("expected string, found 2: {:?}", kind),
                                 doc.name,
                                 line_number,
                             )
@@ -463,7 +477,7 @@ pub fn string_and_source_and_ref(
                 )),
                 _ => {
                     return ftd::e2(
-                        format!("expected string, found: {:?}", kind),
+                        format!("expected string, found 3: {:?}", kind),
                         doc.name,
                         line_number,
                     )
@@ -473,12 +487,14 @@ pub fn string_and_source_and_ref(
         Some((ftd::Value::None { kind }, reference)) if condition.is_some() => {
             let kind = kind.inner();
             let source = match kind {
-                _ if matches!(kind, ftd::p2::Kind::String { .. }) => {
+                _ if matches!(kind, ftd::p2::Kind::String { .. })
+                    || matches!(kind, ftd::p2::Kind::Element) =>
+                {
                     ftd::TextSource::from_kind(kind, doc.name, line_number)?
                 }
                 _ => {
                     return ftd::e2(
-                        format!("expected string, found: {:?}", kind),
+                        format!("expected string, found 4: {:?}", kind),
                         doc.name,
                         line_number,
                     )
@@ -489,7 +505,7 @@ pub fn string_and_source_and_ref(
                 Some(reference) => reference,
                 None => {
                     return ftd::e2(
-                        format!("expected string, found: {:?}", kind),
+                        format!("expected string, found 5: {:?}", kind),
                         doc.name,
                         line_number,
                     )
@@ -517,13 +533,13 @@ pub fn string_and_source_and_ref(
                 }
             }
             ftd::e2(
-                format!("expected string, found: {:?}", kind),
+                format!("expected string, found 6: {:?}", kind),
                 doc.name,
                 line_number,
             )
         }
         Some(v) => ftd::e2(
-            format!("expected string, found: {:?}", v),
+            format!("expected string, found 7: {:?}", v),
             doc.name,
             line_number,
         ),
@@ -562,7 +578,9 @@ pub fn record_and_ref(
             Ok((fields.to_owned(), reference.to_owned()))
         }
         Some((ftd::Value::Optional { data, kind }, reference)) => {
-            if !matches!(kind, ftd::p2::Kind::Record { .. }) {
+            if !matches!(kind, ftd::p2::Kind::Record { .. })
+                && !matches!(kind, ftd::p2::Kind::Element)
+            {
                 return ftd::e2(
                     format!("expected record, found: {:?}", kind),
                     doc.name,
@@ -620,7 +638,9 @@ pub fn record_and_ref(
         }
         Some((ftd::Value::None { kind }, reference)) if condition.is_some() => {
             let kind = kind.inner();
-            if !matches!(kind, ftd::p2::Kind::Record { .. }) {
+            if !matches!(kind, ftd::p2::Kind::Record { .. })
+                && !matches!(kind, ftd::p2::Kind::Element)
+            {
                 return ftd::e2(
                     format!("expected record, found: {:?}", kind),
                     doc.name,
@@ -878,7 +898,7 @@ pub fn int_optional(
             ),
         },
         Some(v) => ftd::e2(
-            format!("expected integer, found: {:?}", v),
+            format!("expected integer, found 6: {:?}", v),
             doc_id,
             line_number,
         ),
@@ -1461,13 +1481,16 @@ pub fn arguments_on_condition(
                             kind_to_value(kind, line_number, doc.name)?,
                         );
                     }
-                } else {
+                }
+                // TODO: Check if it's parent variable then don't throw error else throw error
+                dbg!("arguments_on_condition", &name);
+                /* else {
                     return ftd::e2(
-                        format!("expected optional kind, found: {:?}", kind),
+                        format!("expected optional kind, found: {} {:?}", name, kind),
                         doc.name,
                         line_number,
                     );
-                }
+                }*/
             }
         }
     }

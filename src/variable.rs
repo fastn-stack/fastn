@@ -102,12 +102,31 @@ impl PropertyValue {
                     _ if part1.eq("SIBLING-INDEX") => {
                         (ftd::p2::Kind::Integer { default: None }, false)
                     }
-                    _ if part1.eq("CHILDREN_COUNT") => (
+                    _ if part1.eq("CHILDREN-COUNT") => (
                         ftd::p2::Kind::Integer {
                             default: Some("0".to_string()),
                         },
                         false,
                     ),
+                    _ if part1.eq("PARENT") => {
+                        dbg!(&part1, &part2, &expected_kind);
+                        let kind = if part2.eq(&Some("CHILDREN-COUNT".to_string())) {
+                            ftd::p2::Kind::Integer {
+                                default: Some("0".to_string()),
+                            }
+                        } else if let Some(ref kind) = expected_kind {
+                            kind.clone()
+                        } else {
+                            return ftd::e2(
+                                format!("{}.{:?} expected kind for parent variable", part1, part2),
+                                doc.name,
+                                line_number,
+                            );
+                        };
+                        part2 = None;
+
+                        (kind, false)
+                    }
                     None => match doc.get_initial_thing(line_number, string) {
                         Ok((ftd::p2::Thing::Variable(v), name)) => {
                             part2 = name;
@@ -380,6 +399,7 @@ impl TextSource {
                     TextSource::Header
                 }
             }
+            ftd::p2::Kind::Element => TextSource::Header,
             t => {
                 return ftd::e2(
                     format!("expected string kind, found: {:?}", t),
@@ -1036,6 +1056,7 @@ fn read_object(p1: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Result<ft
     }
     for (line_number, k, v) in p1.header.0.iter() {
         let line_number = line_number.to_owned();
+        dbg!("15");
         let value = if v.trim().starts_with('$') {
             ftd::PropertyValue::resolve_value(line_number, v, None, doc, &Default::default(), None)?
         } else if let Ok(v) = ftd::PropertyValue::resolve_value(

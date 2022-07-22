@@ -93,7 +93,7 @@ impl Element {
             };
 
             match &common.reference {
-                Some(reference) if reference.contains("CHILDREN_COUNT") => {
+                Some(reference) if reference.contains("CHILDREN-COUNT") => {
                     if let Some(ftd::p2::Thing::Variable(ftd::Variable {
                         value:
                             ftd::PropertyValue::Value {

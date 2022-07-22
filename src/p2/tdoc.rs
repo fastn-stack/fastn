@@ -76,6 +76,7 @@ impl<'a> TDoc<'a> {
                 }
                 default
             } else if let Some(default) = arg.get_default_value_str() {
+                dbg!("14");
                 ftd::PropertyValue::resolve_value(
                     0,
                     default.as_str(),
@@ -127,9 +128,9 @@ impl<'a> TDoc<'a> {
             }));
 
         self.local_variables
-            .entry(self.resolve_local_variable_name(0, "CHILDREN_COUNT", string_container)?)
+            .entry(self.resolve_local_variable_name(0, "CHILDREN-COUNT", string_container)?)
             .or_insert(ftd::p2::Thing::Variable(ftd::Variable {
-                name: "CHILDREN_COUNT".to_string(),
+                name: "CHILDREN-COUNT".to_string(),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Integer { value: 0 },
                 },
@@ -296,7 +297,7 @@ impl<'a> TDoc<'a> {
             ignore_loop: bool,
             ignore_mouse_in: bool,
         ) -> ftd::p1::Result<()> {
-            if let ftd::PropertyValue::Variable { ref mut name, .. } = property_value {
+            if let ftd::PropertyValue::Variable { ref mut name, kind } = property_value {
                 if (ignore_loop && name.contains("$loop$"))
                     || (insert_only && !name.as_str().eq("MOUSE-IN"))
                     || (ignore_mouse_in && name.contains("MOUSE-IN"))
@@ -304,9 +305,46 @@ impl<'a> TDoc<'a> {
                 {
                     return Ok(());
                 }
-                let part1 = ftd::p2::utils::get_doc_name_and_remaining(name)?.0;
+
+                let (part1, part2) = ftd::p2::utils::get_doc_name_and_remaining(name)?;
+                dbg!(
+                    "rename_property_value",
+                    &name,
+                    &part1,
+                    &part2,
+                    &parent_container,
+                    &current_container,
+                    &kind
+                );
                 let key = doc.resolve_local_variable_name(0, name.as_str(), parent_container)?;
-                if name.as_str().eq("MOUSE-IN") {
+                if part1.eq("PARENT") {
+                    if let Some(part2) = part2 {
+                        let parents_parent_container =
+                            parent_container.rsplit_once(",").map(|v| v.0).unwrap_or("");
+                        let key = doc.resolve_local_variable_name(
+                            0,
+                            part2.as_str(),
+                            parents_parent_container,
+                        )?;
+                        if parents_parent_container.is_empty() {
+                            let value =
+                                kind.to_value(0, doc.name).unwrap_or(ftd::Value::Optional {
+                                    data: Box::new(None),
+                                    kind: kind.clone(),
+                                });
+                            let local_variable = ftd::p2::Thing::Variable(ftd::Variable {
+                                name: key.clone(),
+                                value: ftd::PropertyValue::Value { value },
+                                conditions: vec![],
+                                flags: Default::default(),
+                            });
+                            doc.local_variables.insert(key.clone(), local_variable);
+                        }
+                        *name = dbg!(key);
+                    } else {
+                        return ftd::e2("PARENT should have variable", doc.name, 0);
+                    }
+                } else if name.as_str().eq("MOUSE-IN") {
                     let key =
                         doc.resolve_local_variable_name(0, name.as_str(), current_container)?;
                     let local_variable = ftd::p2::Thing::Variable(ftd::Variable {
@@ -370,19 +408,19 @@ impl<'a> TDoc<'a> {
             external_children_count,
         )?;
 
-        // self.local_variables.insert(
-        //     "SIBLING-INDEX".to_string(),
-        //     ftd::p2::Thing::Variable(ftd::Variable {
-        //         name: "SIBLING-INDEX".to_string(),
-        //         value: ftd::PropertyValue::Value {
-        //             value: ftd::Value::Integer {
-        //                 value: *local_container.last().unwrap_or(&0) as i64,
-        //             },
-        //         },
-        //         conditions: vec![],
-        //         flags: Default::default(),
-        //     }),
-        // );
+        /*self.local_variables.insert(
+            "SIBLING-INDEX".to_string(),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: "SIBLING-INDEX".to_string(),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Integer {
+                        value: *local_container.last().unwrap_or(&0) as i64,
+                    },
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            }),
+        );*/
         ftd::component::Property::add_default_properties(
             child_component_properties,
             &mut component.properties,
@@ -890,6 +928,15 @@ impl<'a> TDoc<'a> {
         arguments: &std::collections::BTreeMap<String, ftd::p2::Kind>,
     ) -> ftd::p1::Result<String> {
         return Ok(if let Some(l) = name.strip_prefix('$') {
+            /*let (part1, part2) = ftd::p2::utils::get_doc_name_and_remaining(l)?;
+            if get_special_variable().iter().any(|v| part1.starts_with(v)) {
+                let part2 = part2.map(|v| format!(".{}", v)).unwrap_or("".to_string());
+                return Ok(format!("${}{}", part1, part2));
+            } else if arguments.contains_key(part1.as_str()) {
+                return Ok(format!("${}", l));
+            }
+            let s = self.resolve_name(line_number, l)?;
+            format!("${}", s)*/
             let d = ftd::p2::utils::get_doc_name_and_remaining(l)?.0;
             if arguments.contains_key(d.as_str()) || get_special_variable().contains(&d.as_str()) {
                 return Ok(format!("${}", l));
@@ -901,7 +948,7 @@ impl<'a> TDoc<'a> {
         });
 
         fn get_special_variable() -> Vec<&'static str> {
-            vec!["MOUSE-IN", "SIBLING-INDEX", "CHILDREN_COUNT"]
+            vec!["MOUSE-IN", "SIBLING-INDEX", "CHILDREN-COUNT", "PARENT"]
         }
     }
 

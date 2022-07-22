@@ -174,21 +174,38 @@ impl Boolean {
                 value: left == "true",
             },
             "IsNotNull" | "IsNull" => {
-                let value = property_value(
-                    &left,
-                    None,
-                    doc,
-                    arguments,
-                    left_right_resolved_property.0,
-                    line_number,
-                )?;
-                if !value.kind().is_optional() {
-                    return ftd::e2(
-                        format!("'{}' is not to an optional", left),
-                        doc.name,
+                dbg!("IsNull", &left);
+                let value = if !left.starts_with("$PARENT") {
+                    let value = property_value(
+                        &left,
+                        None,
+                        doc,
+                        arguments,
+                        left_right_resolved_property.0,
                         line_number,
-                    );
-                }
+                    )?;
+                    if !value.kind().is_optional() {
+                        return ftd::e2(
+                            format!("'{}' is not to an optional", left),
+                            doc.name,
+                            line_number,
+                        );
+                    }
+                    value
+                } else {
+                    property_value(
+                        &left,
+                        None,
+                        doc,
+                        arguments,
+                        left_right_resolved_property.0,
+                        line_number,
+                    )
+                    .unwrap_or(ftd::PropertyValue::Variable {
+                        name: left.trim_start_matches('$').to_string(),
+                        kind: ftd::p2::Kind::Element,
+                    })
+                };
                 if boolean.as_str() == "IsNotNull" {
                     Boolean::IsNotNull { value }
                 } else {
@@ -273,6 +290,7 @@ impl Boolean {
             loop_already_resolved_property: Option<ftd::PropertyValue>,
             line_number: usize,
         ) -> ftd::p1::Result<ftd::PropertyValue> {
+            dbg!("12");
             Ok(
                 match ftd::PropertyValue::resolve_value(
                     line_number,
