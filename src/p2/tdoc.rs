@@ -76,7 +76,6 @@ impl<'a> TDoc<'a> {
                 }
                 default
             } else if let Some(default) = arg.get_default_value_str() {
-                dbg!("14");
                 ftd::PropertyValue::resolve_value(
                     0,
                     default.as_str(),
@@ -307,15 +306,6 @@ impl<'a> TDoc<'a> {
                 }
 
                 let (part1, part2) = ftd::p2::utils::get_doc_name_and_remaining(name)?;
-                dbg!(
-                    "rename_property_value",
-                    &name,
-                    &part1,
-                    &part2,
-                    &parent_container,
-                    &current_container,
-                    &kind
-                );
                 let key = doc.resolve_local_variable_name(0, name.as_str(), parent_container)?;
                 if part1.eq("PARENT") {
                     if let Some(part2) = part2 {
@@ -340,7 +330,7 @@ impl<'a> TDoc<'a> {
                             });
                             doc.local_variables.insert(key.clone(), local_variable);
                         }
-                        *name = dbg!(key);
+                        *name = key;
                     } else {
                         return ftd::e2("PARENT should have variable", doc.name, 0);
                     }

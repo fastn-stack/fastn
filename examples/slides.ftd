@@ -1,25 +1,12 @@
-/-- ftd.column foo:
-
---- ftd.text: Hello
-
-
-/-- foo:
-
---- child: CHILD 1
-
-
-/-- ftd.boolean child:
-value: $MOUSE-IN
-
 -- child:
+
+
 
 -- foo:
 
 --- int:
 
 --- int:
-
-
 
 --- child:
 

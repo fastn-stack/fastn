@@ -174,7 +174,6 @@ impl Boolean {
                 value: left == "true",
             },
             "IsNotNull" | "IsNull" => {
-                dbg!("IsNull", &left);
                 let value = if !left.starts_with("$PARENT") {
                     let value = property_value(
                         &left,
@@ -290,7 +289,6 @@ impl Boolean {
             loop_already_resolved_property: Option<ftd::PropertyValue>,
             line_number: usize,
         ) -> ftd::p1::Result<ftd::PropertyValue> {
-            dbg!("12");
             Ok(
                 match ftd::PropertyValue::resolve_value(
                     line_number,
@@ -305,6 +303,10 @@ impl Boolean {
                         Some(ftd::PropertyValue::Variable { .. }) => {
                             loop_already_resolved_property.clone().expect("")
                         }
+                        _ if value.starts_with("$PARENT") => ftd::PropertyValue::Variable {
+                            name: value.trim_start_matches('$').to_string(),
+                            kind: ftd::p2::Kind::Element,
+                        },
                         _ => return Err(e),
                     },
                 },
@@ -377,6 +379,13 @@ impl Boolean {
             self,
             Self::Equal {
                 left: ftd::PropertyValue::Reference { .. },
+                right: ftd::PropertyValue::Variable { .. },
+                ..
+            }
+        ) && !matches!(
+            self,
+            Self::Equal {
+                left: ftd::PropertyValue::Variable { .. },
                 right: ftd::PropertyValue::Variable { .. },
                 ..
             }

@@ -109,7 +109,6 @@ impl PropertyValue {
                         false,
                     ),
                     _ if part1.eq("PARENT") => {
-                        dbg!(&part1, &part2, &expected_kind);
                         let kind = if part2.eq(&Some("CHILDREN-COUNT".to_string())) {
                             ftd::p2::Kind::Integer {
                                 default: Some("0".to_string()),
@@ -297,7 +296,7 @@ impl PropertyValue {
                 };
             }
             if let Some(e_kind) = expected_kind {
-                if !e_kind.is_same_as(&found_kind) {
+                if !e_kind.is_same_as(&found_kind) && !matches!(e_kind, ftd::p2::Kind::Element) {
                     return ftd::e2(
                         format!("expected {:?} found {:?}", e_kind, found_kind),
                         doc.name,
@@ -1056,7 +1055,6 @@ fn read_object(p1: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Result<ft
     }
     for (line_number, k, v) in p1.header.0.iter() {
         let line_number = line_number.to_owned();
-        dbg!("15");
         let value = if v.trim().starts_with('$') {
             ftd::PropertyValue::resolve_value(line_number, v, None, doc, &Default::default(), None)?
         } else if let Ok(v) = ftd::PropertyValue::resolve_value(

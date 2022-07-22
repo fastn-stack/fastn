@@ -1483,7 +1483,6 @@ pub fn arguments_on_condition(
                     }
                 }
                 // TODO: Check if it's parent variable then don't throw error else throw error
-                dbg!("arguments_on_condition", &name);
                 /* else {
                     return ftd::e2(
                         format!("expected optional kind, found: {} {:?}", name, kind),
