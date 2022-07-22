@@ -1683,20 +1683,6 @@ pub fn input_from_properties(
         ftd::Type::from(&v, doc, 0, font_reference).map(Some)
     })?;
 
-    let value = ftd::p2::utils::string_optional("value", properties, doc.name, 0)?;
-    let default_value = ftd::p2::utils::string_optional("default-value", properties, doc.name, 0)?;
-
-    // Throw error in case the user specifies both value and default-value headers in ftd.input
-    if let (Some(val), Some(def_val)) = (&value, &default_value) {
-        return Err(ftd::p1::Error::ForbiddenUsage {
-            message: format!(
-                "value: \'{}\', default-value: \'{}\' both are used in ftd.input",
-                val, def_val
-            ),
-            doc_id: doc.name.to_string(),
-        });
-    }
-
     Ok(ftd::Input {
         common: common_from_properties(
             unresolved_properties,
@@ -1708,8 +1694,8 @@ pub fn input_from_properties(
         )?,
         placeholder: ftd::p2::utils::string_optional("placeholder", properties, doc.name, 0)?,
         multiline: ftd::p2::utils::bool("multiline", properties, doc.name, 0)?,
-        value,
-        default_value,
+        value: ftd::p2::utils::string_optional("value", properties, doc.name, 0)?,
+        default_value: ftd::p2::utils::string_optional("default-value", properties, doc.name, 0)?,
         font,
     })
 }
