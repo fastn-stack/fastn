@@ -12,12 +12,11 @@ width: fill
 id: col-id
 
 
--- ftd.column slide:
+-- ftd.text slide: $title
 caption title:
 if: $PARENT.current == $SIBLING-INDEX
 $on-click$: increment $PARENT.current clamp 0 $PARENT.CHILDREN-COUNT-MINUS-ONE
 
---- ftd.text: $title
 
 
 

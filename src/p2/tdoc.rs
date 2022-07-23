@@ -113,29 +113,33 @@ impl<'a> TDoc<'a> {
         }
         self.local_variables
             .entry(self.resolve_local_variable_name(0, "SIBLING-INDEX", string_container)?)
-            .or_insert(ftd::p2::Thing::Variable(ftd::Variable {
-                name: "SIBLING-INDEX".to_string(),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer {
-                        value: external_children_count
-                            .unwrap_or(*local_container.last().unwrap_or(&0))
-                            as i64,
+            .or_insert_with(|| {
+                ftd::p2::Thing::Variable(ftd::Variable {
+                    name: "SIBLING-INDEX".to_string(),
+                    value: ftd::PropertyValue::Value {
+                        value: ftd::Value::Integer {
+                            value: external_children_count
+                                .unwrap_or(*local_container.last().unwrap_or(&0))
+                                as i64,
+                        },
                     },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }));
+                    conditions: vec![],
+                    flags: Default::default(),
+                })
+            });
 
         self.local_variables
             .entry(self.resolve_local_variable_name(0, "CHILDREN-COUNT", string_container)?)
-            .or_insert(ftd::p2::Thing::Variable(ftd::Variable {
-                name: "CHILDREN-COUNT".to_string(),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 0 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }));
+            .or_insert_with(|| {
+                ftd::p2::Thing::Variable(ftd::Variable {
+                    name: "CHILDREN-COUNT".to_string(),
+                    value: ftd::PropertyValue::Value {
+                        value: ftd::Value::Integer { value: 0 },
+                    },
+                    conditions: vec![],
+                    flags: Default::default(),
+                })
+            });
 
         self.local_variables
             .entry(self.resolve_local_variable_name(
@@ -143,14 +147,16 @@ impl<'a> TDoc<'a> {
                 "CHILDREN-COUNT-MINUS-ONE",
                 string_container,
             )?)
-            .or_insert(ftd::p2::Thing::Variable(ftd::Variable {
-                name: "CHILDREN-COUNT-MINUS-ONE".to_string(),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: -1 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }));
+            .or_insert_with(|| {
+                ftd::p2::Thing::Variable(ftd::Variable {
+                    name: "CHILDREN-COUNT-MINUS-ONE".to_string(),
+                    value: ftd::PropertyValue::Value {
+                        value: ftd::Value::Integer { value: -1 },
+                    },
+                    conditions: vec![],
+                    flags: Default::default(),
+                })
+            });
 
         *arguments = Default::default();
         Ok(())

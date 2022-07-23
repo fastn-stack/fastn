@@ -34,7 +34,7 @@ impl<'a> ExecuteDoc<'a> {
         let mut named_containers: std::collections::BTreeMap<String, Vec<Vec<usize>>> =
             Default::default();
         let mut children: Vec<ftd::Element> = vec![];
-        let mut external_children_count = if is_external { Some(0 as usize) } else { None };
+        let mut external_children_count = if is_external { Some(0_usize) } else { None };
 
         while *index < self.instructions.len() {
             let mut doc = ftd::p2::TDoc {
