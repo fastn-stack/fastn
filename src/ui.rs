@@ -132,7 +132,7 @@ impl Element {
                                     ..
                                 })) = local_variables.get(reference)
                                 {
-                                    parameter_data.value = serde_json::json!(value - 1);
+                                    parameter_data.value = serde_json::json!(value);
                                     remove_reference = true;
                                 }
                             }

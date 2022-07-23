@@ -349,6 +349,26 @@ impl<'a> ExecuteDoc<'a> {
                         }),
                     );
 
+                    self.local_variables.insert(
+                        ftd::p2::utils::resolve_local_variable_name(
+                            0,
+                            "CHILDREN-COUNT-MINUS-ONE",
+                            string_container.as_str(),
+                            self.name,
+                            self.aliases,
+                        )?,
+                        ftd::p2::Thing::Variable(ftd::Variable {
+                            name: "CHILDREN-COUNT-MINUS-ONE".to_string(),
+                            value: ftd::PropertyValue::Value {
+                                value: ftd::Value::Integer {
+                                    value: (child.len() - 1) as i64,
+                                },
+                            },
+                            conditions: vec![],
+                            flags: Default::default(),
+                        }),
+                    );
+
                     let external_children = {
                         if child.is_empty() {
                             vec![]
@@ -446,6 +466,26 @@ impl<'a> ExecuteDoc<'a> {
                     value: ftd::PropertyValue::Value {
                         value: ftd::Value::Integer {
                             value: child_count as i64,
+                        },
+                    },
+                    conditions: vec![],
+                    flags: Default::default(),
+                }),
+            );
+
+            self.local_variables.insert(
+                ftd::p2::utils::resolve_local_variable_name(
+                    0,
+                    "CHILDREN-COUNT-MINUS-ONE",
+                    string_container.as_str(),
+                    self.name,
+                    self.aliases,
+                )?,
+                ftd::p2::Thing::Variable(ftd::Variable {
+                    name: "CHILDREN-COUNT-MINUS-ONE".to_string(),
+                    value: ftd::PropertyValue::Value {
+                        value: ftd::Value::Integer {
+                            value: (child_count as i64) - 1,
                         },
                     },
                     conditions: vec![],

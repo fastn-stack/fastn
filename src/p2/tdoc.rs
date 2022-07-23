@@ -137,6 +137,21 @@ impl<'a> TDoc<'a> {
                 flags: Default::default(),
             }));
 
+        self.local_variables
+            .entry(self.resolve_local_variable_name(
+                0,
+                "CHILDREN-COUNT-MINUS-ONE",
+                string_container,
+            )?)
+            .or_insert(ftd::p2::Thing::Variable(ftd::Variable {
+                name: "CHILDREN-COUNT-MINUS-ONE".to_string(),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Integer { value: -1 },
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            }));
+
         *arguments = Default::default();
         Ok(())
     }
@@ -938,7 +953,13 @@ impl<'a> TDoc<'a> {
         });
 
         fn get_special_variable() -> Vec<&'static str> {
-            vec!["MOUSE-IN", "SIBLING-INDEX", "CHILDREN-COUNT", "PARENT"]
+            vec![
+                "MOUSE-IN",
+                "SIBLING-INDEX",
+                "CHILDREN-COUNT",
+                "CHILDREN-COUNT-MINUS-ONE",
+                "PARENT",
+            ]
         }
     }
 
