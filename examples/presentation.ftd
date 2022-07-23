@@ -1,7 +1,7 @@
 -- ftd.column presentation:
 open: true
 append-at: col-id
-integer current: 0
+integer current: 1
 width: fill
 
 --- ftd.text: This is presentation
@@ -15,7 +15,7 @@ id: col-id
 -- ftd.text slide: $title
 caption title:
 if: $PARENT.current == $SIBLING-INDEX
-$on-click$: increment $PARENT.current clamp 0 $PARENT.CHILDREN-COUNT-MINUS-ONE
+$on-click$: increment $PARENT.current clamp 1 $PARENT.CHILDREN-COUNT
 
 
 

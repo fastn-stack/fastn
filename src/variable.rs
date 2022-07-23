@@ -99,7 +99,7 @@ impl PropertyValue {
                         },
                         false,
                     ),
-                    _ if part1.eq("SIBLING-INDEX") => {
+                    _ if part1.eq("SIBLING-INDEX") || part1.eq("SIBLING-INDEX-0") => {
                         (ftd::p2::Kind::Integer { default: None }, false)
                     }
                     _ if part1.eq("CHILDREN-COUNT") => (

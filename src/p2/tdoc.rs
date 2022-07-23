@@ -111,6 +111,8 @@ impl<'a> TDoc<'a> {
                 .entry(self.resolve_local_variable_name(0, k, string_container)?)
                 .or_insert(local_variable);
         }
+        let sibling_index =
+            external_children_count.unwrap_or(*local_container.last().unwrap_or(&0)) as i64;
         self.local_variables
             .entry(self.resolve_local_variable_name(0, "SIBLING-INDEX", string_container)?)
             .or_insert_with(|| {
@@ -118,9 +120,22 @@ impl<'a> TDoc<'a> {
                     name: "SIBLING-INDEX".to_string(),
                     value: ftd::PropertyValue::Value {
                         value: ftd::Value::Integer {
-                            value: external_children_count
-                                .unwrap_or(*local_container.last().unwrap_or(&0))
-                                as i64,
+                            value: sibling_index + 1,
+                        },
+                    },
+                    conditions: vec![],
+                    flags: Default::default(),
+                })
+            });
+
+        self.local_variables
+            .entry(self.resolve_local_variable_name(0, "SIBLING-INDEX-0", string_container)?)
+            .or_insert_with(|| {
+                ftd::p2::Thing::Variable(ftd::Variable {
+                    name: "SIBLING-INDEX-0".to_string(),
+                    value: ftd::PropertyValue::Value {
+                        value: ftd::Value::Integer {
+                            value: sibling_index,
                         },
                     },
                     conditions: vec![],
@@ -962,6 +977,7 @@ impl<'a> TDoc<'a> {
             vec![
                 "MOUSE-IN",
                 "SIBLING-INDEX",
+                "SIBLING-INDEX-0",
                 "CHILDREN-COUNT",
                 "CHILDREN-COUNT-MINUS-ONE",
                 "PARENT",
