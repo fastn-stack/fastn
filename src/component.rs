@@ -2386,13 +2386,13 @@ fn check_input_conflicting_values(
         line_number: usize,
     ) -> ftd::p1::Result<String> {
         if let Some(property) = properties.get(property_name) {
-            return Ok(property.resolve_default_value_string(doc, line_number)?);
+            return property.resolve_default_value_string(doc, line_number);
         }
-        return Err(ftd::p1::Error::NotFound {
+        Err(ftd::p1::Error::NotFound {
             doc_id: doc.name.to_string(),
             line_number,
             key: property_name.to_string(),
-        });
+        })
     }
 
     let contains_value = properties.contains_key("value");
