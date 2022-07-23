@@ -69,6 +69,14 @@ macro_rules! p {
                 }
             }
         }
+        bag = bag
+            .into_iter()
+            .filter(|(k, _)| {
+                !["SIBLING-INDEX", "CHILDREN-COUNT"]
+                    .iter()
+                    .any(|v| k.contains(v))
+            })
+            .collect();
         if !ebag.is_empty() {
             pretty_assertions::assert_eq!(bag, ebag);
         }
