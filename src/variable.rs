@@ -108,10 +108,20 @@ impl PropertyValue {
                         },
                         false,
                     ),
+                    _ if part1.eq("CHILDREN-COUNT-MINUS-ONE") => (
+                        ftd::p2::Kind::Integer {
+                            default: Some("-1".to_string()),
+                        },
+                        false,
+                    ),
                     _ if part1.eq("PARENT") => {
                         let kind = if part2.eq(&Some("CHILDREN-COUNT".to_string())) {
                             ftd::p2::Kind::Integer {
                                 default: Some("0".to_string()),
+                            }
+                        } else if part2.eq(&Some("CHILDREN-COUNT-MINUS-ONE".to_string())) {
+                            ftd::p2::Kind::Integer {
+                                default: Some("-1".to_string()),
                             }
                         } else if let Some(ref kind) = expected_kind {
                             kind.clone()

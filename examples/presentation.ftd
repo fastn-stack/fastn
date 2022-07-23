@@ -15,7 +15,7 @@ id: col-id
 -- ftd.column slide:
 caption title:
 if: $PARENT.current == $SIBLING-INDEX
-$on-click$: increment $PARENT.current clamp 0 $PARENT.CHILDREN-COUNT
+$on-click$: increment $PARENT.current clamp 0 $PARENT.CHILDREN-COUNT-MINUS-ONE
 
 --- ftd.text: $title
 
@@ -26,4 +26,14 @@ $on-click$: increment $PARENT.current clamp 0 $PARENT.CHILDREN-COUNT
 --- slide: First
 
 --- slide: Second
+
+
+-- presentation:
+
+--- slide: First 1
+
+--- slide: Second 1
+
+--- slide: Third 1
+
 
