@@ -73,7 +73,6 @@ impl RT {
         .children;
 
         ftd::Element::set_children_count_variable(&mut element, &local_variables);
-        dbg!(&element);
         ftd::Element::set_default_locals(&mut element);
         // ftd::Element::renest_on_region(&mut element);
         ftd::p2::document::set_region_id(&mut element);

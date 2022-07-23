@@ -67,68 +67,6 @@ impl Element {
         elements: &mut [ftd::Element],
         local_variables: &std::collections::BTreeMap<String, ftd::p2::Thing>,
     ) {
-        fn set_markup_children_count_variable(
-            elements: &mut [ftd::Markup],
-            local_variables: &std::collections::BTreeMap<String, ftd::p2::Thing>,
-        ) {
-            for child in elements.iter_mut() {
-                let (common, children, text) = match &mut child.itext {
-                    IText::Text(t) | IText::Integer(t) | IText::Boolean(t) | IText::Decimal(t) => {
-                        (&mut t.common, None, &mut t.text)
-                    }
-                    IText::TextBlock(t) => (&mut t.common, None, &mut t.text),
-                    IText::Markup(t) => (&mut t.common, Some(&mut t.children), &mut t.text),
-                };
-
-                match &common.reference {
-                    Some(reference) if reference.contains("CHILDREN-COUNT") => {
-                        if let Some(ftd::p2::Thing::Variable(ftd::Variable {
-                            value:
-                                ftd::PropertyValue::Value {
-                                    value: ftd::Value::Integer { value },
-                                },
-                            ..
-                        })) = local_variables.get(reference)
-                        {
-                            *text = ftd::markup_line(value.to_string().as_str());
-                        }
-                    }
-                    _ => {}
-                }
-
-                for event in common.events.iter_mut() {
-                    for action_value in event.action.parameters.values_mut() {
-                        for parameter_data in action_value.iter_mut() {
-                            let mut remove_reference = false;
-                            match parameter_data.reference {
-                                Some(ref reference) if reference.contains("CHILDREN-COUNT") => {
-                                    if let Some(ftd::p2::Thing::Variable(ftd::Variable {
-                                        value:
-                                            ftd::PropertyValue::Value {
-                                                value: ftd::Value::Integer { value },
-                                            },
-                                        ..
-                                    })) = local_variables.get(reference)
-                                    {
-                                        parameter_data.value = serde_json::json!(value);
-                                        remove_reference = true;
-                                    }
-                                }
-                                _ => {}
-                            }
-                            if remove_reference {
-                                parameter_data.reference = None;
-                            }
-                        }
-                    }
-                }
-
-                if let Some(children) = children {
-                    set_markup_children_count_variable(children, local_variables);
-                }
-            }
-        }
-
         for child in elements.iter_mut() {
             let (text, common) = match child {
                 Element::Text(ftd::Text { text, common, .. })
@@ -213,6 +151,68 @@ impl Element {
                             parameter_data.reference = None;
                         }
                     }
+                }
+            }
+        }
+
+        fn set_markup_children_count_variable(
+            elements: &mut [ftd::Markup],
+            local_variables: &std::collections::BTreeMap<String, ftd::p2::Thing>,
+        ) {
+            for child in elements.iter_mut() {
+                let (common, children, text) = match &mut child.itext {
+                    IText::Text(t) | IText::Integer(t) | IText::Boolean(t) | IText::Decimal(t) => {
+                        (&mut t.common, None, &mut t.text)
+                    }
+                    IText::TextBlock(t) => (&mut t.common, None, &mut t.text),
+                    IText::Markup(t) => (&mut t.common, Some(&mut t.children), &mut t.text),
+                };
+
+                match &common.reference {
+                    Some(reference) if reference.contains("CHILDREN-COUNT") => {
+                        if let Some(ftd::p2::Thing::Variable(ftd::Variable {
+                            value:
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::Integer { value },
+                                },
+                            ..
+                        })) = local_variables.get(reference)
+                        {
+                            *text = ftd::markup_line(value.to_string().as_str());
+                        }
+                    }
+                    _ => {}
+                }
+
+                for event in common.events.iter_mut() {
+                    for action_value in event.action.parameters.values_mut() {
+                        for parameter_data in action_value.iter_mut() {
+                            let mut remove_reference = false;
+                            match parameter_data.reference {
+                                Some(ref reference) if reference.contains("CHILDREN-COUNT") => {
+                                    if let Some(ftd::p2::Thing::Variable(ftd::Variable {
+                                        value:
+                                            ftd::PropertyValue::Value {
+                                                value: ftd::Value::Integer { value },
+                                            },
+                                        ..
+                                    })) = local_variables.get(reference)
+                                    {
+                                        parameter_data.value = serde_json::json!(value);
+                                        remove_reference = true;
+                                    }
+                                }
+                                _ => {}
+                            }
+                            if remove_reference {
+                                parameter_data.reference = None;
+                            }
+                        }
+                    }
+                }
+
+                if let Some(children) = children {
+                    set_markup_children_count_variable(children, local_variables);
                 }
             }
         }
