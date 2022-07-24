@@ -730,8 +730,7 @@ pub fn image_from_properties(
     let properties = &ftd::component::resolve_properties(0, unresolved_properties, doc)?;
     Ok(ftd::Image {
         src: src_record,
-        title: ftd::p2::utils::string_optional("title", properties, doc.name, 0)?
-            .unwrap_or_else(|| "".to_string()),
+        title: ftd::p2::utils::string_optional("title", properties, doc.name, 0)?,
         description: ftd::p2::utils::string_optional("description", properties, doc.name, 0)?,
         common: common_from_properties(
             unresolved_properties,
