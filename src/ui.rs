@@ -2361,6 +2361,7 @@ impl Container {
 #[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
 pub struct Image {
     pub src: ImageSrc,
+    pub title: Option<String>,
     pub description: Option<String>,
     pub common: Common,
     pub crop: bool,

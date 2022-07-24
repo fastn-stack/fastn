@@ -1,0 +1,8 @@
+
+-- ftd.image-src src: https://blog.earlymoments.com/wp-content/uploads/2016/03/Mickey_Mouse_group_700x493.jpg
+dark: https://blog.ipleaders.in/wp-content/uploads/2021/07/751589-mickey-mouse.jpg
+
+
+-- ftd.image:
+src: $src
+title: hello
