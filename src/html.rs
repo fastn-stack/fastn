@@ -1029,6 +1029,8 @@ impl ftd::Image {
             img.attrs.insert(s("src"), escape(self.src.light.as_str()));
             img.attrs
                 .insert(s("alt"), escape(self.description.as_str()));
+            img.attrs
+                .insert(s("title"), escape(self.title.as_str()));
             if self.crop {
                 img.style.insert(s("object-fit"), s("cover"));
                 img.style.insert(s("object-position"), s("0 0"));
@@ -1037,6 +1039,7 @@ impl ftd::Image {
         } else {
             n.attrs.insert(s("src"), escape(self.src.light.as_str()));
             n.attrs.insert(s("alt"), escape(self.description.as_str()));
+            n.attrs.insert(s("title"), escape(self.title.as_str()));
             if self.crop {
                 n.style.insert(s("object-fit"), s("cover"));
                 n.style.insert(s("object-position"), s("0 0"));

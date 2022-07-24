@@ -698,6 +698,10 @@ pub fn image_function() -> ftd::Component {
                     "description".to_string(),
                     ftd::p2::Kind::string().into_optional(),
                 ),
+                (
+                    "title".to_string(),
+                    ftd::p2::Kind::string().into_optional(),
+                ),
                 ("align".to_string(), ftd::p2::Kind::string().into_optional()),
                 ("crop".to_string(), ftd::p2::Kind::boolean().into_optional()),
             ],
@@ -730,6 +734,8 @@ pub fn image_from_properties(
     Ok(ftd::Image {
         src: src_record,
         description: ftd::p2::utils::string_optional("description", properties, doc.name, 0)?
+            .unwrap_or_else(|| "".to_string()),
+        title: ftd::p2::utils::string_optional("title", properties, doc.name, 0)?
             .unwrap_or_else(|| "".to_string()),
         common: common_from_properties(
             unresolved_properties,
