@@ -99,6 +99,43 @@ impl PropertyValue {
                         },
                         false,
                     ),
+                    _ if part1.eq("SIBLING-INDEX") || part1.eq("SIBLING-INDEX-0") => {
+                        (ftd::p2::Kind::Integer { default: None }, false)
+                    }
+                    _ if part1.eq("CHILDREN-COUNT") => (
+                        ftd::p2::Kind::Integer {
+                            default: Some("0".to_string()),
+                        },
+                        false,
+                    ),
+                    _ if part1.eq("CHILDREN-COUNT-MINUS-ONE") => (
+                        ftd::p2::Kind::Integer {
+                            default: Some("-1".to_string()),
+                        },
+                        false,
+                    ),
+                    _ if part1.eq("PARENT") => {
+                        let kind = if part2.eq(&Some("CHILDREN-COUNT".to_string())) {
+                            ftd::p2::Kind::Integer {
+                                default: Some("0".to_string()),
+                            }
+                        } else if part2.eq(&Some("CHILDREN-COUNT-MINUS-ONE".to_string())) {
+                            ftd::p2::Kind::Integer {
+                                default: Some("-1".to_string()),
+                            }
+                        } else if let Some(ref kind) = expected_kind {
+                            kind.clone()
+                        } else {
+                            return ftd::e2(
+                                format!("{}.{:?} expected kind for parent variable", part1, part2),
+                                doc.name,
+                                line_number,
+                            );
+                        };
+                        part2 = None;
+
+                        (kind, false)
+                    }
                     None => match doc.get_initial_thing(line_number, string) {
                         Ok((ftd::p2::Thing::Variable(v), name)) => {
                             part2 = name;
@@ -269,7 +306,7 @@ impl PropertyValue {
                 };
             }
             if let Some(e_kind) = expected_kind {
-                if !e_kind.is_same_as(&found_kind) {
+                if !e_kind.is_same_as(&found_kind) && !matches!(e_kind, ftd::p2::Kind::Element) {
                     return ftd::e2(
                         format!("expected {:?} found {:?}", e_kind, found_kind),
                         doc.name,
@@ -371,6 +408,7 @@ impl TextSource {
                     TextSource::Header
                 }
             }
+            ftd::p2::Kind::Element => TextSource::Header,
             t => {
                 return ftd::e2(
                     format!("expected string kind, found: {:?}", t),

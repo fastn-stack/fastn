@@ -1,0 +1,57 @@
+-- child:
+
+
+
+-- foo:
+
+--- int:
+
+--- int:
+
+--- child:
+
+
+
+-- ftd.column foo:
+open: true
+border-width: 4
+padding: 10
+string msg: Message from foo
+
+--- ftd.text: CHILDREN-COUNT
+
+--- ftd.integer: $CHILDREN-COUNT
+
+--- ftd.text: Hello
+
+--- ftd.text: World
+
+--- child:
+
+--- ftd.column:
+border-width: 2
+id: col-id
+
+
+
+-- ftd.integer int:
+value: $SIBLING-INDEX
+
+
+-- ftd.column child:
+string title: Hello World
+
+--- ftd.text: $title
+
+--- ftd.text: SIBLING-INDEX
+
+--- ftd.integer: $SIBLING-INDEX
+
+--- ftd.text: PARENT.CHILDREN-COUNT
+
+--- ftd.integer:
+value: $PARENT.CHILDREN-COUNT
+if: $PARENT.CHILDREN-COUNT is not null
+
+--- ftd.text: $PARENT.msg
+if: $PARENT.msg is not null

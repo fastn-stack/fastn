@@ -17564,6 +17564,298 @@ mod test {
         );
     }
 
+    #[test]
+    fn special_variables() {
+        let mut bag = super::default_bag();
+
+        bag.insert(
+            "foo/bar#current@0".to_string(),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("current"),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::Integer { value: 1 },
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            }),
+        );
+
+        bag.insert(
+            "foo/bar#presentation".to_string(),
+            ftd::p2::Thing::Component(ftd::Component {
+                root: s("ftd#column"),
+                full_name: s("foo/bar#presentation"),
+                arguments: std::array::IntoIter::new([(
+                    "current".to_string(),
+                    ftd::p2::Kind::integer().set_default(Some(s("1"))),
+                )])
+                .collect(),
+                properties: std::array::IntoIter::new([
+                    (
+                        "append-at".to_string(),
+                        ftd::component::Property {
+                            default: Some(ftd::PropertyValue::Value {
+                                value: ftd::Value::String {
+                                    text: s("col-id"),
+                                    source: ftd::TextSource::Header,
+                                },
+                            }),
+                            ..Default::default()
+                        },
+                    ),
+                    (
+                        "open".to_string(),
+                        ftd::component::Property {
+                            default: Some(ftd::PropertyValue::Value {
+                                value: ftd::Value::Boolean { value: true },
+                            }),
+                            ..Default::default()
+                        },
+                    ),
+                ])
+                .collect(),
+                instructions: vec![ftd::Instruction::ChildComponent {
+                    child: ftd::ChildComponent {
+                        root: s("ftd#column"),
+                        properties: std::array::IntoIter::new([(
+                            "id".to_string(),
+                            ftd::component::Property {
+                                default: Some(ftd::PropertyValue::Value {
+                                    value: ftd::Value::String {
+                                        text: s("col-id"),
+                                        source: ftd::TextSource::Header,
+                                    },
+                                }),
+                                ..Default::default()
+                            },
+                        )])
+                        .collect(),
+                        ..Default::default()
+                    },
+                }],
+                ..Default::default()
+            }),
+        );
+
+        bag.insert(
+            "foo/bar#slide".to_string(),
+            ftd::p2::Thing::Component(ftd::Component {
+                root: s("ftd#text"),
+                full_name: s("foo/bar#slide"),
+                arguments: std::array::IntoIter::new([(s("title"), ftd::p2::Kind::caption())])
+                    .collect(),
+                properties: std::array::IntoIter::new([(
+                    s("text"),
+                    ftd::component::Property {
+                        default: Some(ftd::PropertyValue::Variable {
+                            name: s("title"),
+                            kind: ftd::p2::Kind::caption_or_body(),
+                        }),
+                        ..Default::default()
+                    },
+                )])
+                .collect(),
+                events: vec![ftd::p2::Event {
+                    name: ftd::p2::EventName::OnClick,
+                    action: ftd::p2::Action {
+                        action: ftd::p2::ActionKind::Increment,
+                        target: ftd::PropertyValue::Variable {
+                            name: s("PARENT.current"),
+                            kind: ftd::p2::Kind::integer(),
+                        },
+                        parameters: std::array::IntoIter::new([(
+                            s("clamp"),
+                            vec![
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::Integer { value: 1 },
+                                },
+                                ftd::PropertyValue::Variable {
+                                    name: s("PARENT.CHILDREN-COUNT"),
+                                    kind: ftd::p2::Kind::integer().set_default(Some(s("0"))),
+                                },
+                            ],
+                        )])
+                        .collect(),
+                    },
+                }],
+                condition: Some(ftd::p2::Boolean::Equal {
+                    left: ftd::PropertyValue::Variable {
+                        name: s("PARENT.current"),
+                        kind: ftd::p2::Kind::Element,
+                    },
+                    right: ftd::PropertyValue::Variable {
+                        name: s("SIBLING-INDEX"),
+                        kind: ftd::p2::Kind::Element,
+                    },
+                }),
+                ..Default::default()
+            }),
+        );
+
+        bag.insert(
+            "foo/bar#title@0,0".to_string(),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("title"),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::String {
+                        text: s("First"),
+                        source: ftd::TextSource::Caption,
+                    },
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            }),
+        );
+
+        bag.insert(
+            "foo/bar#title@0,1".to_string(),
+            ftd::p2::Thing::Variable(ftd::Variable {
+                name: s("title"),
+                value: ftd::PropertyValue::Value {
+                    value: ftd::Value::String {
+                        text: s("Second"),
+                        source: ftd::TextSource::Caption,
+                    },
+                },
+                conditions: vec![],
+                flags: Default::default(),
+            }),
+        );
+
+        let mut main = super::default_column();
+        main.container
+            .children
+            .push(ftd::Element::Column(ftd::Column {
+                container: ftd::Container {
+                    children: vec![ftd::Element::Column(ftd::Column {
+                        common: ftd::Common {
+                            data_id: Some(s("col-id")),
+                            ..Default::default()
+                        },
+                        ..Default::default()
+                    })],
+                    external_children: Some((
+                        s("col-id"),
+                        vec![vec![0]],
+                        vec![ftd::Element::Column(ftd::Column {
+                            container: ftd::Container {
+                                children: vec![
+                                    ftd::Element::Markup(ftd::Markups {
+                                        text: ftd::markdown_line("First"),
+                                        common: ftd::Common {
+                                            condition: Some(ftd::Condition {
+                                                variable: s("foo/bar#current@0"),
+                                                value: serde_json::Value::from(1),
+                                            }),
+                                            events: vec![ftd::Event {
+                                                name: s("onclick"),
+                                                action: ftd::Action {
+                                                    action: s("increment"),
+                                                    target: s("foo/bar#current@0"),
+                                                    parameters: std::array::IntoIter::new([(
+                                                        "clamp".to_string(),
+                                                        vec![
+                                                            ftd::event::ParameterData {
+                                                                value: serde_json::json!(1),
+                                                                reference: None,
+                                                            },
+                                                            ftd::event::ParameterData {
+                                                                value: serde_json::json!(2),
+                                                                reference: None,
+                                                            },
+                                                        ],
+                                                    )])
+                                                    .collect(),
+                                                },
+                                            }],
+                                            reference: Some(s("foo/bar#title@0,0")),
+                                            ..Default::default()
+                                        },
+                                        line: true,
+                                        ..Default::default()
+                                    }),
+                                    ftd::Element::Markup(ftd::Markups {
+                                        text: ftd::markdown_line("Second"),
+                                        line: true,
+                                        common: ftd::Common {
+                                            condition: Some(ftd::Condition {
+                                                variable: s("foo/bar#current@0"),
+                                                value: serde_json::json!(2),
+                                            }),
+                                            is_not_visible: true,
+                                            events: vec![ftd::Event {
+                                                name: s("onclick"),
+                                                action: ftd::Action {
+                                                    action: s("increment"),
+                                                    target: s("foo/bar#current@0"),
+                                                    parameters: std::array::IntoIter::new([(
+                                                        "clamp".to_string(),
+                                                        vec![
+                                                            ftd::event::ParameterData {
+                                                                value: serde_json::json!(1),
+                                                                reference: None,
+                                                            },
+                                                            ftd::event::ParameterData {
+                                                                value: serde_json::json!(2),
+                                                                reference: None,
+                                                            },
+                                                        ],
+                                                    )])
+                                                    .collect(),
+                                                },
+                                            }],
+                                            reference: Some(s("foo/bar#title@0,1")),
+                                            ..Default::default()
+                                        },
+                                        ..Default::default()
+                                    }),
+                                ],
+                                ..Default::default()
+                            },
+                            common: ftd::Common {
+                                width: Some(ftd::Length::Fill),
+                                height: Some(ftd::Length::Fill),
+                                position: Some(ftd::Position::Center),
+                                ..Default::default()
+                            },
+                            ..Default::default()
+                        })],
+                    )),
+                    open: Some(true),
+                    append_at: Some(s("col-id")),
+                    ..Default::default()
+                },
+                ..Default::default()
+            }));
+
+        p!(
+            "
+            -- presentation:
+            
+            --- slide: First
+            
+            --- slide: Second
+
+
+            -- ftd.column presentation:
+            open: true
+            append-at: col-id
+            integer current: 1
+            
+            --- ftd.column:
+            id: col-id
+            
+            
+            -- ftd.text slide: $title
+            caption title:
+            if: $PARENT.current == $SIBLING-INDEX
+            $on-click$: increment $PARENT.current clamp 1 $PARENT.CHILDREN-COUNT
+
+            ",
+            (bag, main),
+        );
+    }
+
     /*#[test]
     fn optional_condition_on_record() {
         let (_g_bag, g_col) = crate::p2::interpreter::interpret(

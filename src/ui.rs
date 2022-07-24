@@ -63,6 +63,161 @@ pub enum IText {
 }
 
 impl Element {
+    pub(crate) fn set_children_count_variable(
+        elements: &mut [ftd::Element],
+        local_variables: &std::collections::BTreeMap<String, ftd::p2::Thing>,
+    ) {
+        for child in elements.iter_mut() {
+            let (text, common) = match child {
+                Element::Text(ftd::Text { text, common, .. })
+                | Element::Integer(ftd::Text { text, common, .. })
+                | Element::Boolean(ftd::Text { text, common, .. })
+                | Element::Decimal(ftd::Text { text, common, .. }) => (Some(text), common),
+                Self::Markup(ftd::Markups {
+                    text,
+                    common,
+                    children,
+                    ..
+                }) => {
+                    set_markup_children_count_variable(children, local_variables);
+                    (Some(text), common)
+                }
+                Element::Row(ftd::Row {
+                    container, common, ..
+                })
+                | Element::Column(ftd::Column {
+                    container, common, ..
+                })
+                | Element::Scene(ftd::Scene {
+                    container, common, ..
+                })
+                | Element::Grid(ftd::Grid {
+                    container, common, ..
+                }) => {
+                    ftd::Element::set_children_count_variable(
+                        &mut container.children,
+                        local_variables,
+                    );
+                    if let Some((_, _, external_children)) = &mut container.external_children {
+                        ftd::Element::set_children_count_variable(
+                            external_children,
+                            local_variables,
+                        );
+                    }
+                    (None, common)
+                }
+                _ => continue,
+            };
+
+            match &common.reference {
+                Some(reference) if reference.contains("CHILDREN-COUNT") => {
+                    if let Some(ftd::p2::Thing::Variable(ftd::Variable {
+                        value:
+                            ftd::PropertyValue::Value {
+                                value: ftd::Value::Integer { value },
+                            },
+                        ..
+                    })) = local_variables.get(reference)
+                    {
+                        if let Some(text) = text {
+                            *text = ftd::markup_line(value.to_string().as_str());
+                        }
+                    }
+                }
+                _ => {}
+            }
+
+            for event in common.events.iter_mut() {
+                for action_value in event.action.parameters.values_mut() {
+                    for parameter_data in action_value.iter_mut() {
+                        let mut remove_reference = false;
+                        match parameter_data.reference {
+                            Some(ref reference) if reference.contains("CHILDREN-COUNT") => {
+                                if let Some(ftd::p2::Thing::Variable(ftd::Variable {
+                                    value:
+                                        ftd::PropertyValue::Value {
+                                            value: ftd::Value::Integer { value },
+                                        },
+                                    ..
+                                })) = local_variables.get(reference)
+                                {
+                                    parameter_data.value = serde_json::json!(value);
+                                    remove_reference = true;
+                                }
+                            }
+                            _ => {}
+                        }
+                        if remove_reference {
+                            parameter_data.reference = None;
+                        }
+                    }
+                }
+            }
+        }
+
+        fn set_markup_children_count_variable(
+            elements: &mut [ftd::Markup],
+            local_variables: &std::collections::BTreeMap<String, ftd::p2::Thing>,
+        ) {
+            for child in elements.iter_mut() {
+                let (common, children, text) = match &mut child.itext {
+                    IText::Text(t) | IText::Integer(t) | IText::Boolean(t) | IText::Decimal(t) => {
+                        (&mut t.common, None, &mut t.text)
+                    }
+                    IText::TextBlock(t) => (&mut t.common, None, &mut t.text),
+                    IText::Markup(t) => (&mut t.common, Some(&mut t.children), &mut t.text),
+                };
+
+                match &common.reference {
+                    Some(reference) if reference.contains("CHILDREN-COUNT") => {
+                        if let Some(ftd::p2::Thing::Variable(ftd::Variable {
+                            value:
+                                ftd::PropertyValue::Value {
+                                    value: ftd::Value::Integer { value },
+                                },
+                            ..
+                        })) = local_variables.get(reference)
+                        {
+                            *text = ftd::markup_line(value.to_string().as_str());
+                        }
+                    }
+                    _ => {}
+                }
+
+                for event in common.events.iter_mut() {
+                    for action_value in event.action.parameters.values_mut() {
+                        for parameter_data in action_value.iter_mut() {
+                            let mut remove_reference = false;
+                            match parameter_data.reference {
+                                Some(ref reference) if reference.contains("CHILDREN-COUNT") => {
+                                    if let Some(ftd::p2::Thing::Variable(ftd::Variable {
+                                        value:
+                                            ftd::PropertyValue::Value {
+                                                value: ftd::Value::Integer { value },
+                                            },
+                                        ..
+                                    })) = local_variables.get(reference)
+                                    {
+                                        parameter_data.value = serde_json::json!(value);
+                                        remove_reference = true;
+                                    }
+                                }
+                                _ => {}
+                            }
+                            if remove_reference {
+                                parameter_data.reference = None;
+                            }
+                        }
+                    }
+                }
+
+                if let Some(children) = children {
+                    set_markup_children_count_variable(children, local_variables);
+                }
+            }
+        }
+    }
+
     pub(crate) fn set_default_locals(elements: &mut [ftd::Element]) {
         return set_default_locals_(elements);
         fn set_default_locals_(children: &mut [ftd::Element]) {
@@ -2207,7 +2362,7 @@ impl Container {
 pub struct Image {
     pub src: ImageSrc,
     pub title: String,
-    pub description: String,
+    pub description: Option<String>,
     pub common: Common,
     pub crop: bool,
 }

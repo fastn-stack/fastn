@@ -141,6 +141,7 @@ impl ChildComponent {
             Vec<std::collections::BTreeMap<String, ftd::Value>>,
         >,
         local_container: &[usize],
+        external_children_count: &Option<usize>,
     ) -> ftd::p1::Result<ElementWithContainer> {
         let id = ftd::p2::utils::string_optional(
             "id",
@@ -153,7 +154,14 @@ impl ChildComponent {
             mut element,
             child_container,
             ..
-        } = self.call(doc, invocations, false, local_container, id.clone())?;
+        } = self.call(
+            doc,
+            invocations,
+            false,
+            local_container,
+            id.clone(),
+            external_children_count,
+        )?;
         element.set_container_id(id.clone());
         element.set_element_id(id);
 
@@ -376,6 +384,7 @@ impl ChildComponent {
                 &mut root,
                 &child_component.properties,
                 local_container.as_slice(),
+                &None,
             )?;
             let child_component = {
                 let mut child_component = child_component.clone();
@@ -424,6 +433,7 @@ impl ChildComponent {
                 &child_component.events,
                 local_container.as_slice(),
                 None,
+                &None,
             )?;
 
             if let Some(condition) = &child_component.condition {
@@ -457,6 +467,7 @@ impl ChildComponent {
         is_child: bool,
         local_container: &[usize],
         id: Option<String>,
+        external_children_count: &Option<usize>,
     ) -> ftd::p1::Result<ElementWithContainer> {
         if let Some(ref b) = self.condition {
             if b.is_constant() && !b.eval(self.line_number, doc)? {
@@ -477,7 +488,12 @@ impl ChildComponent {
                 .unwrap()
         };
 
-        doc.insert_local_from_component(&mut root, &self.properties, local_container)?;
+        doc.insert_local_from_component(
+            &mut root,
+            &self.properties,
+            local_container,
+            external_children_count,
+        )?;
 
         let conditional_attribute =
             get_conditional_attributes(self.line_number, &self.properties, doc)?;
@@ -491,6 +507,7 @@ impl ChildComponent {
             &self.events,
             local_container,
             id,
+            external_children_count,
         )?;
 
         if let Some(common) = element.element.get_mut_common() {
@@ -1367,7 +1384,7 @@ fn get_conditional_attributes(
                 },
                 v => {
                     return ftd::e2(
-                        format!("expected string, found: {:?}", v),
+                        format!("expected string, found 8: {:?}", v),
                         doc.name,
                         line_number,
                     )
@@ -1406,7 +1423,7 @@ fn get_conditional_attributes(
                 }
                 v => {
                     return ftd::e2(
-                        format!("expected string, found: {:?}", v),
+                        format!("expected string, found 9: {:?}", v),
                         doc.name,
                         line_number,
                     )
@@ -1423,7 +1440,7 @@ fn get_conditional_attributes(
                 },
                 v => {
                     return ftd::e2(
-                        format!("expected string, found: {:?}", v),
+                        format!("expected string, found 10: {:?}", v),
                         doc.name,
                         line_number,
                     )
@@ -1438,7 +1455,7 @@ fn get_conditional_attributes(
                 },
                 v => {
                     return ftd::e2(
-                        format!("expected string, found: {:?}", v),
+                        format!("expected string, found 11: {:?}", v),
                         doc.name,
                         line_number,
                     )
@@ -1453,7 +1470,7 @@ fn get_conditional_attributes(
                 },
                 v => {
                     return ftd::e2(
-                        format!("expected string, found: {:?}", v),
+                        format!("expected string, found 12: {:?}", v),
                         doc.name,
                         line_number,
                     )
@@ -1524,7 +1541,7 @@ fn get_conditional_attributes(
                 }
                 v => {
                     return ftd::e2(
-                        format!("expected string, found: {:?}", v),
+                        format!("expected string, found 13: {:?}", v),
                         doc.name,
                         line_number,
                     )
@@ -1827,6 +1844,7 @@ impl Component {
             &[],
             &[],
             Default::default(),
+            &None,
         )
     }
 
@@ -1844,6 +1862,7 @@ impl Component {
         events: &[ftd::p2::Event],
         local_container: &[usize],
         id: Option<String>,
+        external_children_count: &Option<usize>,
     ) -> ftd::p1::Result<ElementWithContainer> {
         invocations
             .entry(self.full_name.clone())
@@ -1907,7 +1926,12 @@ impl Component {
                 doc.get_component(self.line_number, self.root.as_str())
                     .unwrap()
             };
-            doc.insert_local_from_component(&mut root, &self.properties, local_container)?;
+            doc.insert_local_from_component(
+                &mut root,
+                &self.properties,
+                local_container,
+                external_children_count,
+            )?;
 
             let (get_condition, is_visible, is_null_element) = match condition {
                 Some(c) => {
@@ -1942,6 +1966,7 @@ impl Component {
                     &self.events,
                     local_container,
                     None,
+                    external_children_count,
                 )?
             } else {
                 ElementWithContainer {
