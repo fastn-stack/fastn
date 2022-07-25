@@ -1,6 +1,6 @@
 mod fetch_file;
 mod fpm_dot_ftd;
-mod full_sitemap;
+pub(crate) mod full_sitemap;
 mod get_data;
 mod get_version_data;
 pub(crate) mod http;
@@ -196,6 +196,8 @@ pub fn process_sync<'a>(
         "get-data" => fpm::library::get_data::processor(section, doc, config),
         "sitemap" => fpm::library::sitemap::processor(section, doc, config),
         "full-sitemap" => fpm::library::full_sitemap::processor(section, doc, config),
+        "user-groups" => fpm::user_group::processor::user_groups(section, doc, config),
+        "user-group-by-id" => fpm::user_group::processor::user_group_by_id(section, doc, config),
         "package-query" => fpm::library::sqlite::processor_(section, doc, config),
         "fetch-file" => fpm::library::fetch_file::processor_sync(section, doc, config),
         "package-tree" => fpm::library::package_tree::processor_sync(section, doc, config),
@@ -376,6 +378,10 @@ impl Library2 {
             "get-data" => fpm::library::get_data::processor(section, doc, &self.config),
             "sitemap" => fpm::library::sitemap::processor(section, doc, &self.config),
             "full-sitemap" => fpm::library::full_sitemap::processor(section, doc, &self.config),
+            "user-groups" => fpm::user_group::processor::user_groups(section, doc, &self.config),
+            "user-group-by-id" => {
+                fpm::user_group::processor::user_group_by_id(section, doc, &self.config)
+            }
             "package-tree" => {
                 fpm::library::package_tree::processor(section, doc, &self.config).await
             }

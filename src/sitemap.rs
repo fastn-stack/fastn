@@ -18,6 +18,8 @@ use itertools::Itertools;
 #[derive(Debug, Clone, Default)]
 pub struct Sitemap {
     pub sections: Vec<Section>,
+    // pub readers: Vec<String>,
+    // pub writers: Vec<String>,
 }
 
 #[derive(Debug, Clone, Default)]
@@ -105,6 +107,7 @@ pub struct Section {
     /// The above example injects the value `true` and `Hello World`
     /// to the variables `show` and `message` respectively in foo.ftd
     /// and then renders it.
+    //    pub extra_data: Vec<(String, String)>,
     pub extra_data: std::collections::BTreeMap<String, String>,
     pub is_active: bool,
     pub nav_title: Option<String>,
@@ -121,6 +124,8 @@ pub struct Section {
     /// ```
     /// default value will be `false`
     pub skip: bool,
+    // pub readers: Vec<String>,
+    // pub writers: Vec<String>,
 }
 
 #[derive(Debug, Clone)]
@@ -315,6 +320,12 @@ impl SitemapElement {
 pub enum ParseError {
     #[error("{doc_id} -> {message} -> Row Content: {row_content}")]
     InvalidTOCItem {
+        doc_id: String,
+        message: String,
+        row_content: String,
+    },
+    #[error("InvalidUserGroup: {doc_id} -> {message} -> Row Content: {row_content}")]
+    InvalidUserGroup {
         doc_id: String,
         message: String,
         row_content: String,

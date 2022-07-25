@@ -25,6 +25,7 @@ mod sitemap;
 mod snapshot;
 mod tracker;
 mod translation;
+mod user_group;
 mod version;
 mod workspace;
 

@@ -36,6 +36,8 @@ pub struct Config {
     /// and table of content (`toc`). This automatically converts the documents in package into the
     /// corresponding to structure.
     pub sitemap: Option<fpm::sitemap::Sitemap>,
+
+    pub groups: std::collections::BTreeMap<String, crate::user_group::UserGroup>,
     /// `current_document` stores the document id (Eg: `foo.ftd` or `bar/foo.ftd`) which is
     /// currently in building process.
     /// It's value is injected by `fpm::build()` function according to the currently processing
@@ -383,6 +385,7 @@ impl Config {
             current_document: None,
             all_packages: Default::default(),
             downloaded_assets: Default::default(),
+            groups: std::default::Default::default(),
         };
 
         config.sitemap = {
@@ -917,8 +920,10 @@ impl Config {
                 (root.clone(), root)
             }
             None => {
-                let original_directory: camino::Utf8PathBuf = // TODO: make async
-                    std::env::current_dir()?.canonicalize()?.try_into()?;
+                let original_directory: camino::Utf8PathBuf =
+                    tokio::fs::canonicalize(std::env::current_dir()?)
+                        .await?
+                        .try_into()?;
                 (
                     fpm::Config::get_root_path(&original_directory).await?,
                     original_directory,
@@ -1007,6 +1012,13 @@ impl Config {
             }
         }
 
+        // TODO: Check all groups have unique identity
+        let user_groups: Vec<crate::user_group::UserGroupTemp> = fpm_doc.get("fpm#user-group")?;
+        let mut groups = std::collections::BTreeMap::new();
+        for group in user_groups.into_iter() {
+            groups.insert(group.id.to_string(), group.to_user_group()?);
+        }
+
         let mut config = Config {
             package: package.clone(),
             packages_root: root.clone().join(".packages"),
@@ -1014,6 +1026,7 @@ impl Config {
             original_directory,
             extra_data: Default::default(),
             sitemap: None,
+            groups,
             current_document: None,
             all_packages: Default::default(),
             downloaded_assets: Default::default(),
@@ -1068,6 +1081,15 @@ impl Config {
     pub(crate) fn add_package(&mut self, package: &fpm::Package) {
         self.all_packages
             .insert(package.name.to_string(), package.to_owned());
+    }
+
+    #[allow(dead_code)]
+    pub(crate) fn get_fpm_document(&self, package_name: &str) -> fpm::Result<ftd::p2::Document> {
+        // TODO: check if self package or imported package
+        let package_fpm_path = self.packages_root.join(package_name).join("FPM.ftd");
+        let doc = std::fs::read_to_string(package_fpm_path)?;
+        let lib = fpm::FPMLibrary::default();
+        Ok(fpm::doc::parse_ftd("FPM", doc.as_str(), &lib)?)
     }
 }
 

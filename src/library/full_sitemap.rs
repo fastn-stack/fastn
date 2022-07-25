@@ -44,8 +44,8 @@ struct SectionCompat {
 
 #[derive(Default, Debug, serde::Serialize)]
 pub struct KeyValueData {
-    key: String,
-    value: String,
+    pub key: String,
+    pub value: String,
 }
 
 #[derive(Default, Debug, serde::Serialize)]

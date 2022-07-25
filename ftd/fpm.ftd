@@ -291,3 +291,32 @@ subsection-compat-data list subsections:
 
 -- record sitemap-compat-data:
 section-compat-data list sections:
+
+
+-- record user-group-compat:
+caption id:
+optional string title:
+optional string description:
+key-value-data list group-members:
+
+; Need to think of a type like object
+-- record user-group-data:
+caption id:
+optional caption title:
+optional body description:
+string list email:
+string list -email:
+string list domain:
+string list -domain:
+string list telegram:
+string list -telegram:
+string list github:
+string list -github:
+string list github-team:
+string list -github-team:
+string list discord:
+string list -discord:
+string list group:
+string list -group:
+
+-- user-group-data list user-group:
