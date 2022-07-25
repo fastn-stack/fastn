@@ -361,7 +361,7 @@ impl<'a> ExecuteDoc<'a> {
                             name: "CHILDREN-COUNT-MINUS-ONE".to_string(),
                             value: ftd::PropertyValue::Value {
                                 value: ftd::Value::Integer {
-                                    value: (child.len() - 1) as i64,
+                                    value: (child.len() as i64 - 1),
                                 },
                             },
                             conditions: vec![],
