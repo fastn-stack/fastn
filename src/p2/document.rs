@@ -620,15 +620,7 @@ impl Document {
         if k.contains('#') {
             k.to_string()
         } else {
-            format!(
-                "{}#{}",
-                if self.name.eq("FPM") {
-                    self.name.to_lowercase()
-                } else {
-                    self.name.to_string()
-                },
-                k
-            )
+            format!("{}#{}", self.name.to_string(), k)
         }
     }
 
