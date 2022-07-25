@@ -305,11 +305,15 @@ pub(crate) async fn read_ftd(
         packages_under_process: vec![current_package.name.to_string()],
     };
 
+    // Get Prefix Body => [AutoImports + Actual Doc content]
+    let mut doc_content =
+        current_package.get_prefixed_body(main.content.as_str(), main.id.as_str(), true);
+    // Fix aliased imports to full path (if any)
+    doc_content = current_package.fix_imports_in_body(doc_content.as_str(), main.id.as_str())?;
+
     let main_ftd_doc = match fpm::doc::parse2(
         main.id_with_package().as_str(),
-        current_package
-            .get_prefixed_body(main.content.as_str(), &main.id, true)
-            .as_str(),
+        doc_content.as_str(),
         &mut lib,
         base_url,
         download_assets,
@@ -353,11 +357,6 @@ pub(crate) async fn process_ftd(
     base_url: &str,
     no_static: bool,
 ) -> fpm::Result<Vec<u8>> {
-    let current_package = config
-        .all_packages
-        .get(main.package_name.as_str())
-        .unwrap_or(&config.package);
-
     if main.id.eq("FPM.ftd") {
         tokio::fs::copy(
             config.root.join(main.id.as_str()),
@@ -385,18 +384,11 @@ pub(crate) async fn process_ftd(
                     Some(dep) => dep.package.name.as_str(),
                     None => fpm::PACKAGE_INFO_INTERFACE,
                 };
-                config.package.get_prefixed_body(
-                    format!(
-                        "-- import: {}/package-info as pi\n\n-- pi.package-info-page:",
-                        package_info_package
-                    )
-                    .as_str(),
-                    &main.id,
-                    true,
+                format!(
+                    "-- import: {}/package-info as pi\n\n-- pi.package-info-page:",
+                    package_info_package
                 )
             }
-        } else {
-            main.content = current_package.get_prefixed_body(main.content.as_str(), &main.id, true);
         }
         main
     };

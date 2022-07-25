@@ -1321,6 +1321,169 @@ impl Package {
         })
     }
 
+    /// returns the full path of the import from its alias if valid
+    /// otherwise returns None
+    pub fn get_full_path_from_alias(&self, alias: &str) -> Option<String> {
+        let mut full_path: Option<String> = None;
+
+        for dependency in &self.dependencies {
+            if let Some(dep_alias) = &dependency.alias {
+                if dep_alias.as_str().eq(alias) {
+                    full_path = Some(dependency.package.name.clone());
+                }
+            }
+        }
+
+        full_path
+    }
+
+    /// returns expanded import path given Type-1 aliased import content
+    pub fn fix_aliased_import_type1(
+        &self,
+        import_content: &str,
+        id: &str,
+        line_number: usize,
+        with_alias: bool,
+    ) -> ftd::p1::Result<String> {
+        let mut parts = import_content.splitn(2, '/');
+        match (parts.next(), parts.next()) {
+            (Some(front), Some(rem)) => {
+                // case 1: -- import alias/x..
+                // front = alias, rem = x..
+
+                let extended_front = self.get_full_path_from_alias(front);
+                match extended_front {
+                    Some(ext_front) => Ok(format!("{}/{}", ext_front, rem)),
+                    None => Ok(format!("{}/{}", front, rem)),
+                }
+            }
+            (Some(front), None) => {
+                // case 2: -- import alias
+                // front = alias
+
+                let extended_front = self.get_full_path_from_alias(front);
+                match extended_front {
+                    Some(ext_front) => match with_alias {
+                        true => Ok(format!("{} as {}", ext_front, front)),
+                        false => Ok(ext_front),
+                    },
+                    None => Ok(front.to_string()),
+                }
+            }
+            _ => {
+                // Throw error for unknown type-1 import
+                Err(ftd::p1::Error::ParseError {
+                    message: "invalid aliased import !! (Type-1)".to_string(),
+                    doc_id: id.to_string(),
+                    line_number,
+                })
+            }
+        }
+    }
+
+    /// returns expanded import path given Type-2 aliased import content
+    pub fn fix_aliased_import_type2(
+        &self,
+        import_content: &str,
+        id: &str,
+        line_number: usize,
+    ) -> ftd::p1::Result<String> {
+        let mut parts = import_content.splitn(2, " as ");
+
+        match (parts.next(), parts.next()) {
+            (Some(front), Some(alias)) => {
+                // case 1: -- import alias/x.. as alias_2
+                // case 2: -- import alias as alias_2
+                // front = alias/x or alias, alias = alias_2
+
+                let extended_front =
+                    self.fix_aliased_import_type1(front, id, line_number, false)?;
+                Ok(format!("{} as {}", extended_front, alias))
+            }
+            _ => {
+                // Throw error for unknown type-2 import
+                Err(ftd::p1::Error::ParseError {
+                    message: "invalid aliased import !! (Type-2)".to_string(),
+                    doc_id: id.to_string(),
+                    line_number,
+                })
+            }
+        }
+    }
+
+    /// will map aliased imports to full path in the actual body of the document
+    /// and return the new document body as string
+    ///
+    /// For ftd files apart from FPM.ftd
+    ///
+    /// If aliased imports of Type-1 and Type-2 are used
+    /// then those will be mapped to its corresponding full import paths
+    ///
+    /// [`Type-1`] aliased imports
+    ///
+    /// case 1: -- import alias
+    ///
+    /// map:    -- import full_path_of_alias as alias
+    ///
+    /// case 2: -- import alias/x..
+    ///
+    /// map:    -- import full_path_of_alias/x..
+    ///
+    /// [`Type-2`] aliased imports
+    ///
+    /// case 1: -- import alias/x.. as alias_2
+    ///
+    /// map:    -- import full_path_of_alias/x.. as alias_2
+    ///
+    /// case 2: -- import alias as alias_2
+    ///
+    /// map:    -- import full_path_of_alias as alias_2
+    ///
+    pub fn fix_imports_in_body(&self, body: &str, id: &str) -> ftd::p1::Result<String> {
+        let mut new_body = String::new();
+        let mut ln = 1;
+
+        for line in body.lines() {
+            let line_string = line.trim();
+
+            let final_line = {
+                if line_string.starts_with("-- import") {
+                    // Split [-- import | content]
+                    let import_tokens: Vec<&str> = line_string.split(':').collect();
+                    if import_tokens.len() <= 1 {
+                        return Err(ftd::p1::Error::ParseError {
+                            message: "Import content missing !!".to_string(),
+                            doc_id: id.to_string(),
+                            line_number: ln,
+                        });
+                    }
+
+                    // Initial import content from the doc
+                    let mut import_content = String::from(import_tokens[1].trim());
+
+                    import_content = match import_content.contains(" as ") {
+                        true => self.fix_aliased_import_type2(import_content.as_str(), id, ln)?,
+                        false => {
+                            self.fix_aliased_import_type1(import_content.as_str(), id, ln, true)?
+                        }
+                    };
+
+                    format!("-- import: {}", &import_content)
+                } else {
+                    // No change in line push as it is
+                    line_string.to_string()
+                }
+            };
+
+            new_body.push_str(&final_line);
+            new_body.push('\n');
+
+            ln += 1;
+        }
+
+        Ok(new_body)
+    }
+
     pub fn get_prefixed_body(&self, body: &str, id: &str, with_alias: bool) -> String {
         if id.contains("FPM/") {
             return body.to_string();
