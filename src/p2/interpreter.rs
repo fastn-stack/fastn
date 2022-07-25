@@ -1240,6 +1240,50 @@ mod test {
     use ftd::test::*;
     use ftd::{markdown_line, Instruction};
 
+    #[allow(dead_code)]
+    fn insert_integer_by_name(
+        doc_id: &str,
+        var_name: &str,
+        level: &str,
+        val: i64,
+        bag: &mut std::collections::BTreeMap<String, ftd::p2::Thing>,
+    ) {
+        // root => [doc_id]#[var_name]@[level]
+        let root = format!("{}#{}&{}", doc_id, var_name, level);
+        let integer_thing = ftd::p2::Thing::Variable(ftd::Variable {
+            name: format!("{}", var_name),
+            value: ftd::PropertyValue::Value {
+                value: ftd::Value::Integer { value: val },
+            },
+            conditions: vec![],
+            flags: Default::default(),
+        });
+
+        bag.insert(root, integer_thing);
+    }
+
+    #[allow(dead_code)]
+    fn insert_integer_by_root(
+        root: &str,
+        val: i64,
+        bag: &mut std::collections::BTreeMap<String, ftd::p2::Thing>,
+    ) {
+        // root => [doc_id]#[var_name]@[level]
+        // parts = [ doc_id , var_name, level ]
+        let parts: Vec<&str> = root.trim().split(|ch| ch == '#' || ch == '@').collect();
+
+        let integer_thing = ftd::p2::Thing::Variable(ftd::Variable {
+            name: format!("{}", parts[1]),
+            value: ftd::PropertyValue::Value {
+                value: ftd::Value::Integer { value: val },
+            },
+            conditions: vec![],
+            flags: Default::default(),
+        });
+
+        bag.insert(root.to_string(), integer_thing);
+    }
+
     #[test]
     fn basic_1() {
         let mut bag = super::default_bag();
@@ -3911,149 +3955,21 @@ mod test {
     fn text() {
         let mut bag = super::default_bag();
 
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT-MINUS-ONE@0"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT-MINUS-ONE"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: -1 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@0", -1, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@1", -1, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@2", -1, &mut bag);
 
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT-MINUS-ONE@1"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT-MINUS-ONE"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: -1 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@0", 0, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@1", 0, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@2", 0, &mut bag);
 
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT-MINUS-ONE@2"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT-MINUS-ONE"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: -1 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
+        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@0", 0, &mut bag);
+        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@1", 1, &mut bag);
+        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@2", 2, &mut bag);
 
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT@0"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 0 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT@1"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 0 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT@2"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 0 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#SIBLING-INDEX-0@0"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("SIBLING-INDEX-0"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 0 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#SIBLING-INDEX-0@1"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("SIBLING-INDEX-0"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 1 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#SIBLING-INDEX-0@2"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("SIBLING-INDEX-0"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 2 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#SIBLING-INDEX@0"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("SIBLING-INDEX"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 1 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#SIBLING-INDEX@1"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("SIBLING-INDEX"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 2 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#SIBLING-INDEX@2"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("SIBLING-INDEX"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 3 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
+        insert_integer_by_root("foo/bar#SIBLING-INDEX@0", 1, &mut bag);
+        insert_integer_by_root("foo/bar#SIBLING-INDEX@1", 2, &mut bag);
+        insert_integer_by_root("foo/bar#SIBLING-INDEX@2", 3, &mut bag);
 
         bag.insert(
             "foo/bar#foo".to_string(),
@@ -8382,173 +8298,23 @@ mod test {
 
         let mut bag = super::default_bag();
 
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT-MINUS-ONE@0"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT-MINUS-ONE"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: -1 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@0", -1, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@1", 0, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@2", -1, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@1,0", -1, &mut bag);
 
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT-MINUS-ONE@1"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT-MINUS-ONE"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 0 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@0", 0, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@1", 1, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@2", 0, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@1,0", 0, &mut bag);
 
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT-MINUS-ONE@1,0"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT-MINUS-ONE"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: -1 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
+        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@0", 0, &mut bag);
+        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@1", 1, &mut bag);
+        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@2", 2, &mut bag);
 
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT-MINUS-ONE@2"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT-MINUS-ONE"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: -1 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT@0"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 0 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT@1"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 1 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT@1,0"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 0 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT@2"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 0 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#SIBLING-INDEX-0@0"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("SIBLING-INDEX-0"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 0 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#SIBLING-INDEX-0@1"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("SIBLING-INDEX-0"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 1 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#SIBLING-INDEX-0@2"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("SIBLING-INDEX-0"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 2 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#SIBLING-INDEX@0"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("SIBLING-INDEX"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 1 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#SIBLING-INDEX@1"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("SIBLING-INDEX"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 2 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#SIBLING-INDEX@2"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("SIBLING-INDEX"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 3 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
+        insert_integer_by_root("foo/bar#SIBLING-INDEX@0", 1, &mut bag);
+        insert_integer_by_root("foo/bar#SIBLING-INDEX@1", 2, &mut bag);
+        insert_integer_by_root("foo/bar#SIBLING-INDEX@2", 3, &mut bag);
 
         let (g_bag, g_col) = ftd::test::interpret(
             "foo/bar",
@@ -8606,53 +8372,10 @@ mod test {
 
         let mut bag = super::default_bag();
 
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT-MINUS-ONE@0"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT-MINUS-ONE"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: -1 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT@0"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 0 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#SIBLING-INDEX-0@0"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("SIBLING-INDEX-0"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 0 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#SIBLING-INDEX@0"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("SIBLING-INDEX"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 1 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@0", -1, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@0", 0, &mut bag);
+        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@0", 0, &mut bag);
+        insert_integer_by_root("foo/bar#SIBLING-INDEX@0", 1, &mut bag);
 
         pretty_assertions::assert_eq!(g_bag, bag);
         pretty_assertions::assert_eq!(g_col, main);
@@ -9621,101 +9344,15 @@ mod test {
             }),
         );
 
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT-MINUS-ONE@0"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT-MINUS-ONE"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: -1 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@0", -1, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@1", -1, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@2", -1, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@3", -1, &mut bag);
 
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT-MINUS-ONE@1"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT-MINUS-ONE"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: -1 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT-MINUS-ONE@2"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT-MINUS-ONE"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: -1 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT-MINUS-ONE@3"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT-MINUS-ONE"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: -1 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT@0"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 0 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT@1"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 0 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT@2"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 0 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT@3"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 0 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@0", 0, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@1", 0, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@2", 0, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@3", 0, &mut bag);
 
         bag.insert(
             "foo/bar#people".to_string(),
@@ -10084,53 +9721,10 @@ mod test {
 
         let mut bag = super::default_bag();
 
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT-MINUS-ONE@0"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT-MINUS-ONE"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: -1 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT@0"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 0 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#SIBLING-INDEX-0@0"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("SIBLING-INDEX-0"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 0 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#SIBLING-INDEX@0"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("SIBLING-INDEX"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 1 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@0", -1, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@0", 0, &mut bag);
+        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@0", 0, &mut bag);
+        insert_integer_by_root("foo/bar#SIBLING-INDEX@0", 1, &mut bag);
 
         bag.insert(
             "foo/bar#test".to_string(),
@@ -10182,59 +9776,10 @@ mod test {
 
         let mut bag = super::default_bag();
 
-        /*
-        LAST CHANGE HERE
-
-
-         */
-
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT-MINUS-ONE@0"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT-MINUS-ONE"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: -1 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT@0"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 0 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#SIBLING-INDEX-0@0"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("SIBLING-INDEX-0"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 0 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#SIBLING-INDEX@0"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("SIBLING-INDEX"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 1 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@0", -1, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@0", 0, &mut bag);
+        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@0", 0, &mut bag);
+        insert_integer_by_root("foo/bar#SIBLING-INDEX@0", 1, &mut bag);
 
         bag.insert(
             "foo/bar#test".to_string(),
@@ -10579,221 +10124,25 @@ mod test {
             }),
         );
 
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT-MINUS-ONE@0"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT-MINUS-ONE"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: -1 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@0", -1, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@1", -1, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@2", -1, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@3", -1, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@4", -1, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@5", -1, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@6", -1, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@7", -1, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@8", -1, &mut bag);
 
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT-MINUS-ONE@1"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT-MINUS-ONE"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: -1 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT-MINUS-ONE@2"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT-MINUS-ONE"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: -1 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT-MINUS-ONE@3"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT-MINUS-ONE"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: -1 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT-MINUS-ONE@4"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT-MINUS-ONE"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: -1 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT-MINUS-ONE@5"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT-MINUS-ONE"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: -1 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT-MINUS-ONE@6"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT-MINUS-ONE"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: -1 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT-MINUS-ONE@7"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT-MINUS-ONE"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: -1 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT-MINUS-ONE@8"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT-MINUS-ONE"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: -1 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT@0"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 0 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT@1"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 0 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT@2"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 0 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT@3"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 0 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT@4"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 0 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT@5"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 0 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT@6"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 0 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT@7"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 0 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT@8"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 0 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@0", 0, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@1", 0, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@2", 0, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@3", 0, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@4", 0, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@5", 0, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@6", 0, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@7", 0, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@8", 0, &mut bag);
 
         let (g_bag, g_col) = ftd::test::interpret(
             "foo/bar",
@@ -12024,149 +11373,21 @@ mod test {
 
         let mut bag = super::default_bag();
 
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT-MINUS-ONE@0"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT-MINUS-ONE"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: -1 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@0", -1, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@1", -1, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@2", -1, &mut bag);
 
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT-MINUS-ONE@1"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT-MINUS-ONE"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: -1 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@0", 0, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@1", 0, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@2", 0, &mut bag);
 
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT-MINUS-ONE@2"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT-MINUS-ONE"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: -1 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
+        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@0", 0, &mut bag);
+        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@1", 1, &mut bag);
+        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@2", 2, &mut bag);
 
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT@0"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 0 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT@1"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 0 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT@2"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 0 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#SIBLING-INDEX-0@0"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("SIBLING-INDEX-0"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 0 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#SIBLING-INDEX-0@1"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("SIBLING-INDEX-0"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 1 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#SIBLING-INDEX-0@2"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("SIBLING-INDEX-0"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 2 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#SIBLING-INDEX@0"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("SIBLING-INDEX"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 1 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#SIBLING-INDEX@1"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("SIBLING-INDEX"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 2 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#SIBLING-INDEX@2"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("SIBLING-INDEX"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 3 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
+        insert_integer_by_root("foo/bar#SIBLING-INDEX@0", 1, &mut bag);
+        insert_integer_by_root("foo/bar#SIBLING-INDEX@1", 2, &mut bag);
+        insert_integer_by_root("foo/bar#SIBLING-INDEX@2", 3, &mut bag);
 
         bag.insert(
             s("foo/bar#foo"),
@@ -12360,53 +11581,10 @@ mod test {
     fn record_with_default_value() {
         let mut bag = super::default_bag();
 
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT-MINUS-ONE@0"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT-MINUS-ONE"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: -1 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT@0"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 0 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#SIBLING-INDEX-0@0"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("SIBLING-INDEX-0"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 0 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#SIBLING-INDEX@0"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("SIBLING-INDEX"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 1 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@0", -1, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@0", 0, &mut bag);
+        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@0", 0, &mut bag);
+        insert_integer_by_root("foo/bar#SIBLING-INDEX@0", 1, &mut bag);
 
         bag.insert(
             s("foo/bar#abrar"),
@@ -12804,149 +11982,21 @@ mod test {
 
         let mut bag = super::default_bag();
 
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT-MINUS-ONE@0"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT-MINUS-ONE"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: -1 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@0", -1, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@1", -1, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@2", -1, &mut bag);
 
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT-MINUS-ONE@1"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT-MINUS-ONE"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: -1 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@0", 0, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@1", 0, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@2", 0, &mut bag);
 
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT-MINUS-ONE@2"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT-MINUS-ONE"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: -1 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
+        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@0", 0, &mut bag);
+        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@1", 1, &mut bag);
+        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@2", 2, &mut bag);
 
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT@0"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 0 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT@1"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 0 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT@2"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 0 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#SIBLING-INDEX-0@0"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("SIBLING-INDEX-0"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 0 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#SIBLING-INDEX-0@1"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("SIBLING-INDEX-0"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 1 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#SIBLING-INDEX-0@2"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("SIBLING-INDEX-0"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 2 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#SIBLING-INDEX@0"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("SIBLING-INDEX"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 1 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#SIBLING-INDEX@1"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("SIBLING-INDEX"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 2 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#SIBLING-INDEX@2"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("SIBLING-INDEX"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 3 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
+        insert_integer_by_root("foo/bar#SIBLING-INDEX@0", 1, &mut bag);
+        insert_integer_by_root("foo/bar#SIBLING-INDEX@1", 2, &mut bag);
+        insert_integer_by_root("foo/bar#SIBLING-INDEX@2", 3, &mut bag);
 
         bag.insert(
             s("foo/bar#acme"),
@@ -13676,53 +12726,10 @@ mod test {
 
         let mut bag = super::default_bag();
 
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT-MINUS-ONE@0"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT-MINUS-ONE"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: -1 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT@0"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 0 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#SIBLING-INDEX-0@0"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("SIBLING-INDEX-0"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 0 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#SIBLING-INDEX@0"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("SIBLING-INDEX"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 1 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@0", -1, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@0", 0, &mut bag);
+        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@0", 0, &mut bag);
+        insert_integer_by_root("foo/bar#SIBLING-INDEX@0", 1, &mut bag);
 
         bag.insert(
             s("foo/bar#foo"),
@@ -17992,341 +16999,37 @@ mod test {
             }),
         );
 
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT-MINUS-ONE@0"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT-MINUS-ONE"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: -1 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@0", -1, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@1", -1, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@2", -1, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@3", -1, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@4", -1, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@5", -1, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@6", -1, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@7", -1, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@8", -1, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@9", -1, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@10", -1, &mut bag);
 
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT-MINUS-ONE@1"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT-MINUS-ONE"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: -1 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@0", 0, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@1", 0, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@2", 0, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@3", 0, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@4", 0, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@5", 0, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@6", 0, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@7", 0, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@8", 0, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@9", 0, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@10", 0, &mut bag);
 
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT-MINUS-ONE@10"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT-MINUS-ONE"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: -1 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
+        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@0", 0, &mut bag);
+        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@1", 1, &mut bag);
+        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@10", 10, &mut bag);
 
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT-MINUS-ONE@2"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT-MINUS-ONE"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: -1 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT-MINUS-ONE@3"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT-MINUS-ONE"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: -1 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT-MINUS-ONE@4"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT-MINUS-ONE"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: -1 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT-MINUS-ONE@5"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT-MINUS-ONE"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: -1 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT-MINUS-ONE@6"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT-MINUS-ONE"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: -1 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT-MINUS-ONE@7"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT-MINUS-ONE"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: -1 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT-MINUS-ONE@8"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT-MINUS-ONE"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: -1 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT-MINUS-ONE@9"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT-MINUS-ONE"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: -1 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT@0"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 0 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT@1"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 0 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT@10"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 0 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT@2"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 0 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT@3"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 0 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT@4"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 0 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT@5"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 0 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT@6"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 0 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT@7"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 0 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT@8"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 0 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#CHILDREN-COUNT@9"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("CHILDREN-COUNT"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 0 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#SIBLING-INDEX-0@0"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("SIBLING-INDEX-0"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 0 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#SIBLING-INDEX-0@1"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("SIBLING-INDEX-0"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 1 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#SIBLING-INDEX-0@10"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("SIBLING-INDEX-0"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 10 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#SIBLING-INDEX@0"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("SIBLING-INDEX"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 1 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#SIBLING-INDEX@1"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("SIBLING-INDEX"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 2 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
-
-        bag.insert(
-            s("foo/bar#SIBLING-INDEX@10"),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: s("SIBLING-INDEX"),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer { value: 11 },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );
+        insert_integer_by_root("foo/bar#SIBLING-INDEX@0", 1, &mut bag);
+        insert_integer_by_root("foo/bar#SIBLING-INDEX@1", 2, &mut bag);
+        insert_integer_by_root("foo/bar#SIBLING-INDEX@10", 11, &mut bag);
 
         let (g_bag, g_col) = ftd::test::interpret(
             "foo/bar",
