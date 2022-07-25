@@ -129,6 +129,22 @@ impl Property {
             }
         }
     }
+
+    /// returns the value as string from property.default
+    ///
+    /// returns empty string in case if it's None
+    fn resolve_default_value_string(
+        &self,
+        doc: &ftd::p2::TDoc,
+        line_number: usize,
+    ) -> ftd::p1::Result<String> {
+        if let Some(property_value) = &self.default {
+            if let Some(val) = property_value.resolve(line_number, doc)?.to_string() {
+                return Ok(val);
+            }
+        }
+        Ok("".to_string())
+    }
 }
 
 impl ChildComponent {
@@ -2363,6 +2379,69 @@ fn assert_no_extra_properties(
     Ok(())
 }
 
+/// Throws error if the user specifies both value and default-value for ftd.input
+/// otherwise returns Ok(())
+///
+/// # No error in these cases
+///
+/// ```markdown
+/// -- ftd.input:
+/// value: v1
+///
+/// -- ftd.input:
+/// default-value: d1
+/// ```
+///
+/// # Error in this case
+///
+/// ```markdown
+/// -- ftd.input:
+/// value: v2
+/// default-value: d2
+/// ```
+fn check_input_conflicting_values(
+    properties: &std::collections::BTreeMap<String, Property>,
+    doc: &ftd::p2::TDoc,
+    line_number: usize,
+) -> ftd::p1::Result<()> {
+    fn get_property_default_value(
+        property_name: &str,
+        properties: &std::collections::BTreeMap<String, Property>,
+        doc: &ftd::p2::TDoc,
+        line_number: usize,
+    ) -> ftd::p1::Result<String> {
+        if let Some(property) = properties.get(property_name) {
+            return property.resolve_default_value_string(doc, line_number);
+        }
+        Err(ftd::p1::Error::NotFound {
+            doc_id: doc.name.to_string(),
+            line_number,
+            key: property_name.to_string(),
+        })
+    }
+
+    let contains_value = properties.contains_key("value");
+    let contains_default_value = properties.contains_key("default-value");
+
+    match (contains_value, contains_default_value) {
+        (true, true) => {
+            let value = get_property_default_value("value", properties, doc, line_number)?;
+            let default_value =
+                get_property_default_value("default-value", properties, doc, line_number)?;
+
+            return Err(ftd::p1::Error::ForbiddenUsage {
+                message: format!(
+                    "value: \'{}\', default-value: \'{}\' both are used in ftd.input",
+                    value, default_value
+                ),
+                doc_id: doc.name.to_string(),
+                line_number,
+            });
+        }
+        (_, _) => Ok(()),
+    }
+}
+
 #[allow(clippy::too_many_arguments)]
 pub fn read_properties(
     line_number: usize,
@@ -2550,6 +2629,12 @@ pub fn read_properties(
             }
         }
     }
+
+    // Checking if the user has entered conflicting values for ftd.input
+    if root.eq("ftd#input") {
+        check_input_conflicting_values(&properties, doc, line_number)?;
+    }
+
     Ok(properties)
 }
 
