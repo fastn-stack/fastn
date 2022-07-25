@@ -180,8 +180,8 @@ impl Record {
                         for v in subsections {
                             list.push(ftd::PropertyValue::Value {
                                 value: ftd::Value::String {
-                                    text: v.body(doc.name)?,
-                                    source: ftd::TextSource::Body,
+                                    text: v.caption(doc.name)?,
+                                    source: ftd::TextSource::Caption,
                                 },
                             });
                         }
