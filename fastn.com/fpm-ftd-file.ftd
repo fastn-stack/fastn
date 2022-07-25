@@ -130,3 +130,18 @@ Any number of patterns can be specified.
 -- ft.h1: `fpm.sitemap`
 
 You can add a sitemap in FPM.ftd file. Details in [sitemap docs](sitemap/).
+
+
+-- ft.h1: User Group
+
+-- ft.code:
+lang: ftd
+
+\-- fpm.user-group: readers
+email: abrark@gmail.com
+email: arpita@gmail.com
+-email: amitu@gmail.com
+github: arpita@gmail.com
+-github: amitu@gmail.com
+-github: amitu1@gmail.com
+group: fifthtry.github.io/doc-site/group_id

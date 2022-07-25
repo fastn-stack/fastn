@@ -1,0 +1,18 @@
+-- ft.page: `user-groups` processor
+
+`user-groups` processor can be used to find all the [groups](/dev/user-group/)
+which are present in the current FPM package.
+
+-- ft.code:
+lang: ftd
+
+\-- fpm.user-group-compat list groups:
+$processor$: user-groups
+
+-- ft.markdown:
+
+This will initialise the list `groups` with the all the groups which are
+present in current FPM package.
+
+
+Check type [user-group-compat](/theme/fpm/)

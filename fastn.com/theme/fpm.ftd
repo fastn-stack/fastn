@@ -1,0 +1,53 @@
+-- ft.page: `import: fpm`
+
+This file contain information about what all things are present in `fpm`
+
+
+-- ft.h1: User Group
+
+-- ft.code:
+lang: ftd
+
+\; Need to think of a type like object, make keys dynamic
+\-- record user-group-data:
+caption id:
+optional caption title:
+optional body description:
+string list email:
+string list -email:
+string list domain:
+string list -domain:
+string list telegram:
+string list -telegram:
+string list github:
+string list -github:
+string list github-team:
+string list -github-team:
+string list discord:
+string list -discord:
+string list group:
+string list -group:
+
+\-- user-group-data list user-group:
+
+
+-- ft.h1: Key Value Data
+
+-- ft.code:
+lang: ftd
+
+\-- record key-value-data:
+string key:
+string value:
+
+
+-- ft.h1: User Group Compat
+
+-- ft.code:
+lang: ftd
+
+\-- record user-group-compat:
+caption id:
+optional string title:
+optional string description:
+key-value-data list group-members:
