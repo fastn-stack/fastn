@@ -1,4 +1,4 @@
-; =========================== Color definitions ==========================================
+;; ------------------------------------[[ COLOR DEFINITIONS ]]-----------------------------------------
 
 -- ftd.color black:
 light: black
@@ -8,28 +8,46 @@ dark: black
 light: white
 dark: white
 
-; ============================== Events on (text-field) ===================================
-; on-input: update foo as text-field value changes
+;; ------------------------------------[[ OTHER DEFINITIONS ]]-----------------------------------------
+-- string foo: Section level ftd.input
 
--- string foo: Default foo Text..
+-- string foo_2: Subsection level ftd.input
 
--- ftd.input text-field:
-default-value: $foo
-$on-input$: $foo=$VALUE
-min-width: 150
-min-height: 50
-color : $white
-background-color: $black
-
-; =============================== Invocations below ========================================
+;; ------------------------------------[[ INVOCATIONS ]]-----------------------------------------
 
 -- ftd.text: ftd.input Default value
 text-transform: capitalize
 padding-bottom: 10
 
--- text-field:
+-- ftd.input:
+default-value: $foo
+; [using value here will cause an error] <-
+/value: some value 1
+$on-input$: $foo=$VALUE
+min-width: 150
+min-height: 50
+color: $white
+background-color: $black
 
 -- ftd.text: Foo Text below (changes on-input above)
 padding-bottom: 10
 
 -- ftd.text: $foo
+
+-- ftd.column:
+padding-vertical: 10
+
+--- ftd.input:
+default-value: $foo_2
+; [using value here will cause an error] <-
+/value: some value 2
+$on-input$: $foo_2=$VALUE
+min-width: 150
+min-height: 50
+color: $white
+background-color: $black
+
+--- ftd.text: Foo2 Text below (changes on input-above)
+padding-bottom: 10
+
+--- ftd.text: $foo_2
