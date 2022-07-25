@@ -620,7 +620,7 @@ impl Document {
         if k.contains('#') {
             k.to_string()
         } else {
-            format!("{}#{}", self.name.to_string(), k)
+            format!("{}#{}", self.name, k)
         }
     }
 
