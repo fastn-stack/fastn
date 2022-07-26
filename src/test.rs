@@ -17,12 +17,17 @@ pub fn interpret_helper(
                 break;
             }
             ftd::p2::interpreter::Interpreter::StuckOnProcessor { state, section } => {
-                let value = lib.process(&section, &state.tdoc(&mut Default::default()))?;
+                let value = lib.process(
+                    &section,
+                    &state.tdoc(&mut Default::default(), &mut Default::default()),
+                )?;
                 s = state.continue_after_processor(&section, value)?;
             }
             ftd::p2::interpreter::Interpreter::StuckOnImport { module, state: st } => {
-                let source =
-                    lib.get_with_result(module.as_str(), &st.tdoc(&mut Default::default()))?;
+                let source = lib.get_with_result(
+                    module.as_str(),
+                    &st.tdoc(&mut Default::default(), &mut Default::default()),
+                )?;
                 s = st.continue_after_import(module.as_str(), source.as_str())?;
             }
             ftd::p2::interpreter::Interpreter::StuckOnForeignVariable { state, .. } => {

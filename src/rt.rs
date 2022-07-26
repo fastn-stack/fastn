@@ -69,7 +69,7 @@ impl RT {
             instructions: &self.instructions,
             invocations: &mut invocations,
         }
-        .execute(&[], None)?
+        .execute(&[], None, &mut Default::default())?
         .children;
 
         ftd::Element::set_children_count_variable(&mut element, &local_variables);

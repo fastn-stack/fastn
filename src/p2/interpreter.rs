@@ -18,6 +18,7 @@ impl InterpreterState {
     pub fn tdoc<'a>(
         &'a self,
         local_variables: &'a mut std::collections::BTreeMap<String, ftd::p2::Thing>,
+        referenced_local_variables: &'a mut std::collections::BTreeMap<String, String>,
     ) -> ftd::p2::TDoc<'a> {
         let l = self.document_stack.len() - 1;
         ftd::p2::TDoc {
@@ -25,6 +26,7 @@ impl InterpreterState {
             aliases: &self.document_stack[l].doc_aliases,
             bag: &self.bag,
             local_variables,
+            referenced_local_variables,
         }
     }
 
@@ -80,6 +82,7 @@ impl InterpreterState {
                 aliases: &parsed_document.doc_aliases,
                 bag: &self.bag,
                 local_variables: &mut Default::default(),
+                referenced_local_variables: &mut Default::default(),
             };
 
             if let Some(variable) = Self::resolve_foreign_variable(
@@ -594,6 +597,7 @@ impl InterpreterState {
             aliases: &self.document_stack[l].doc_aliases,
             bag: &self.bag,
             local_variables: &mut Default::default(),
+            referenced_local_variables: &mut Default::default(),
         };
         let var_name = ftd::InterpreterState::resolve_foreign_variable_name(
             doc.resolve_name(0, variable)?.as_str(),
@@ -630,6 +634,7 @@ impl InterpreterState {
             aliases: &parsed_document.doc_aliases,
             bag: &self.bag,
             local_variables: &mut Default::default(),
+            referenced_local_variables: &mut Default::default(),
         };
 
         let var_data = ftd::variable::VariableData::get_name_kind(
@@ -752,6 +757,7 @@ impl ParsedDocument {
                 aliases: &self.doc_aliases,
                 bag,
                 local_variables: &mut Default::default(),
+                referenced_local_variables: &mut Default::default(),
             },
         )?;
         new_p1.reverse();
@@ -804,15 +810,7 @@ pub enum Thing {
 }
 
 pub fn default_bag() -> std::collections::BTreeMap<String, ftd::p2::Thing> {
-    let record = |n: &str, r: &str| {
-        (
-            n.to_string(),
-            ftd::p2::Kind::Record {
-                name: r.to_string(),
-                default: None,
-            },
-        )
-    };
+    let record = |n: &str, r: &str| (n.to_string(), ftd::p2::Kind::record(r));
     let color = |n: &str| record(n, "ftd#color");
     std::array::IntoIter::new([
         (
@@ -1007,25 +1005,10 @@ pub fn default_bag() -> std::collections::BTreeMap<String, ftd::p2::Thing> {
                     ("font".to_string(), ftd::p2::Kind::caption()),
                     (
                         "desktop".to_string(),
-                        ftd::p2::Kind::Record {
-                            name: "ftd#font-size".to_string(),
-                            default: None,
-                        },
+                        ftd::p2::Kind::record("ftd#font-size"),
                     ),
-                    (
-                        "mobile".to_string(),
-                        ftd::p2::Kind::Record {
-                            name: "ftd#font-size".to_string(),
-                            default: None,
-                        },
-                    ),
-                    (
-                        "xl".to_string(),
-                        ftd::p2::Kind::Record {
-                            name: "ftd#font-size".to_string(),
-                            default: None,
-                        },
-                    ),
+                    ("mobile".to_string(), ftd::p2::Kind::record("ftd#font-size")),
+                    ("xl".to_string(), ftd::p2::Kind::record("ftd#font-size")),
                     (
                         "weight".to_string(),
                         ftd::p2::Kind::integer().set_default(Some("400".to_string())),

@@ -4,9 +4,25 @@ pub struct TDoc<'a> {
     pub aliases: &'a std::collections::BTreeMap<String, String>,
     pub bag: &'a std::collections::BTreeMap<String, ftd::p2::Thing>,
     pub local_variables: &'a mut std::collections::BTreeMap<String, ftd::p2::Thing>,
+    /// string $msg: $message
+    /// then msg is a referenced_variable that is won't become new local_variable
+    pub referenced_local_variables: &'a mut std::collections::BTreeMap<String, String>,
 }
 
 impl<'a> TDoc<'a> {
+    fn get_local_variable<'b>(&'b self, key: &'b str) -> Option<(&'b str, &'b ftd::p2::Thing)> {
+        if let Some(thing) = self.local_variables.get(key) {
+            return Some((key, thing));
+        }
+        if let Some(thing) = self.bag.get(key) {
+            return Some((key, thing));
+        }
+        if let Some(key) = self.referenced_local_variables.get(key) {
+            return self.get_local_variable(key);
+        }
+        None
+    }
+
     fn insert_local_variable(
         &mut self,
         root: &str,
@@ -16,7 +32,6 @@ impl<'a> TDoc<'a> {
         local_container: &[usize],
         external_children_count: &Option<usize>,
     ) -> ftd::p1::Result<()> {
-        // let mut local_variable: std::collections::BTreeMap<String, ftd::p2::Thing> = Default::default();
         for (k, arg) in arguments.iter() {
             let mut default = if let Some(d) = properties.get(k) {
                 let default = if let Some(ref d) = d.default {
@@ -97,19 +112,26 @@ impl<'a> TDoc<'a> {
                 );
             };
             if let ftd::PropertyValue::Variable { ref mut name, .. } = default {
-                if !self.local_variables.contains_key(name) {
+                if !self.local_variables.contains_key(name) && !self.bag.contains_key(name) {
                     *name = self.resolve_local_variable_name(0, name, string_container)?;
                 }
             }
-            let local_variable = ftd::p2::Thing::Variable(ftd::Variable {
-                name: k.to_string(),
-                value: default,
-                conditions: vec![],
-                flags: Default::default(),
-            });
-            self.local_variables
-                .entry(self.resolve_local_variable_name(0, k, string_container)?)
-                .or_insert(local_variable);
+            if let Some(name) = default.get_passed_by_variable() {
+                self.referenced_local_variables.insert(
+                    self.resolve_local_variable_name(0, k, string_container)?,
+                    name,
+                );
+            } else {
+                let local_variable = ftd::p2::Thing::Variable(ftd::Variable {
+                    name: k.to_string(),
+                    value: default,
+                    conditions: vec![],
+                    flags: Default::default(),
+                });
+                self.local_variables
+                    .entry(self.resolve_local_variable_name(0, k, string_container)?)
+                    .or_insert(local_variable);
+            }
         }
         let sibling_index =
             external_children_count.unwrap_or(*local_container.last().unwrap_or(&0)) as i64;
@@ -342,7 +364,6 @@ impl<'a> TDoc<'a> {
                 }
 
                 let (part1, part2) = ftd::p2::utils::get_doc_name_and_remaining(name)?;
-                let key = doc.resolve_local_variable_name(0, name.as_str(), parent_container)?;
                 if part1.eq("PARENT") {
                     if let Some(part2) = part2 {
                         let parents_parent_container =
@@ -383,9 +404,14 @@ impl<'a> TDoc<'a> {
                     });
                     doc.local_variables.insert(key.clone(), local_variable);
                     *name = key;
-                } else if doc.local_variables.contains_key(
+                } else if let Some((key, _)) = doc.get_local_variable(
                     &doc.resolve_name(0, format!("{}@{}", part1, parent_container).as_str())?,
                 ) {
+                    let key = if let Some(part2) = part2 {
+                        format!("{}.{}", key, part2)
+                    } else {
+                        key.to_string()
+                    };
                     *name = key;
                 }
             }
@@ -434,19 +460,6 @@ impl<'a> TDoc<'a> {
             external_children_count,
         )?;
 
-        /*self.local_variables.insert(
-            "SIBLING-INDEX".to_string(),
-            ftd::p2::Thing::Variable(ftd::Variable {
-                name: "SIBLING-INDEX".to_string(),
-                value: ftd::PropertyValue::Value {
-                    value: ftd::Value::Integer {
-                        value: *local_container.last().unwrap_or(&0) as i64,
-                    },
-                },
-                conditions: vec![],
-                flags: Default::default(),
-            }),
-        );*/
         ftd::component::Property::add_default_properties(
             child_component_properties,
             &mut component.properties,
@@ -697,7 +710,7 @@ impl<'a> TDoc<'a> {
                     kind: kind.to_owned(),
                 }
             }
-            ftd::p2::Kind::Optional { kind } => {
+            ftd::p2::Kind::Optional { kind, .. } => {
                 let kind = kind.as_ref().to_owned();
                 match json {
                     serde_json::Value::Null => ftd::Value::Optional {
