@@ -65,36 +65,40 @@ document.addEventListener("keydown", function(event) {
     if (currentTime - lastKeyTime > 1000) {{
         buffer = [];
     }}
-    buffer.push(event.key);
     lastKeyTime = currentTime;
     if (event.target.nodeName === "INPUT" || event.target.nodeName === "TEXTAREA") {
         return;
-    }
+    }          
+    buffer.push(event.key);
 
 
-
-if (buffer.join(',').includes(" ,-")) {
-   window.ftd.handle_event(event, 'main', '[{"action":"set-value","target":"global-key-event.ftd#name","parameters":{"value":[{"value":"Jatinderjit","reference":null},{"value":"string","reference":null}]}}]', this);
-    buffer = [];
-    global_keys[event.key] = false;
-}
 
 if (buffer.join(',').includes("Shift,Shift")) {
    window.ftd.handle_event(event, 'main', '[{"action":"set-value","target":"global-key-event.ftd#name","parameters":{"value":[{"value":"Rajshri","reference":null},{"value":"string","reference":null}]}}]', this);
     buffer = [];
     global_keys[event.key] = false;
+    return;
+}
+
+if (buffer.join(',').includes(" ,-")) {
+   window.ftd.handle_event(event, 'main', '[{"action":"set-value","target":"global-key-event.ftd#name","parameters":{"value":[{"value":"Jatinderjit","reference":null},{"value":"string","reference":null}]}}]', this);
+    buffer = [];
+    global_keys[event.key] = false;
+    return;
 }
 
 if (global_keys["Control"] && global_keys["a"] && buffer.join(',').includes("Control,a")) {
     window.ftd.handle_event(event, 'main', '[{"action":"set-value","target":"global-key-event.ftd#name","parameters":{"value":[{"value":"Arpita","reference":null},{"value":"string","reference":null}]}}]', this);
     buffer = [];
     global_keys[event.key] = false;
+    return;
 }
 
 if (global_keys["Control"] && global_keys["s"] && buffer.join(',').includes("Control,s")) {
     window.ftd.handle_event(event, 'main', '[{"action":"set-value","target":"global-key-event.ftd#name","parameters":{"value":[{"value":"Ayushi","reference":null},{"value":"string","reference":null}]}}]', this);
     buffer = [];
     global_keys[event.key] = false;
+    return;
 }
 });
 
@@ -309,7 +313,7 @@ function console_log(...message) {
 let ftd_utils = {
     resolve_reference: function (value, reference, data, obj) {
         let data_value_ref = (reference !== null && !(value instanceof Object)) ?
-            ftd_utils.get_data_value(data, reference) : null;
+            ftd_utils.get_data_with_default(data, reference) : null;
         if (value instanceof Object) {
             let result = value instanceof Array ? [] : {};
             for (var key of Object.keys(value)) {
@@ -697,6 +701,14 @@ let ftd_utils = {
         return ftd_utils.deepCopy(initial_value);
     },
 
+    get_data_with_default: function (data, name, def) {
+        try {
+            return ftd_utils.get_data_value(data, name);
+        } catch (e) {
+            return def;
+        }
+    },
+
     set_data_value: function (data, name, value) {
         let [var_name, remaining] = ftd_utils.get_name_and_remaining(name);
         let initial_value = data[var_name].value;
@@ -1044,6 +1056,12 @@ let ftd_utils = {
 window.ftd = (function () {
     let ftd_data = {};
     let ftd_external_children = {};
+
+    // Setting up default value on <input>
+    const inputElements = document.querySelectorAll('input[data-dv]');
+    for (let input_ele of inputElements) {
+        input_ele.defaultValue = input_ele.dataset.dv;
+    }
 
     function handle_event(evt, id, action, obj) {
         let act = action["action"];

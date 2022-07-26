@@ -429,7 +429,7 @@ function console_log(...message) {
 let ftd_utils = {
     resolve_reference: function (value, reference, data, obj) {
         let data_value_ref = (reference !== null && !(value instanceof Object)) ?
-            ftd_utils.get_data_value(data, reference) : null;
+            ftd_utils.get_data_with_default(data, reference) : null;
         if (value instanceof Object) {
             let result = value instanceof Array ? [] : {};
             for (var key of Object.keys(value)) {
@@ -817,6 +817,14 @@ let ftd_utils = {
         return ftd_utils.deepCopy(initial_value);
     },
 
+    get_data_with_default: function (data, name, def) {
+        try {
+            return ftd_utils.get_data_value(data, name);
+        } catch (e) {
+            return def;
+        }
+    },
+
     set_data_value: function (data, name, value) {
         let [var_name, remaining] = ftd_utils.get_name_and_remaining(name);
         let initial_value = data[var_name].value;
@@ -1164,6 +1172,12 @@ let ftd_utils = {
 window.ftd = (function () {
     let ftd_data = {};
     let ftd_external_children = {};
+
+    // Setting up default value on <input>
+    const inputElements = document.querySelectorAll('input[data-dv]');
+    for (let input_ele of inputElements) {
+        input_ele.defaultValue = input_ele.dataset.dv;
+    }
 
     function handle_event(evt, id, action, obj) {
         let act = action["action"];
