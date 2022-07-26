@@ -30,6 +30,7 @@ impl<'a> ExecuteDoc<'a> {
         )
     }
 
+    #[allow(clippy::too_many_arguments)]
     pub(crate) fn execute_(
         &mut self,
         index: &mut usize,
