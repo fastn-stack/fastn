@@ -32,6 +32,20 @@ pub enum PropertyValue {
 }
 
 impl PropertyValue {
+    pub fn get_passed_by_variable(&self) -> Option<String> {
+        match self {
+            ftd::PropertyValue::Reference { name, kind }
+            | ftd::PropertyValue::Variable { name, kind } => {
+                if kind.is_reference() {
+                    Some(name.to_string())
+                } else {
+                    None
+                }
+            }
+            _ => None,
+        }
+    }
+
     pub fn get_reference(&self) -> Option<String> {
         match self {
             ftd::PropertyValue::Reference { name, .. } => Some(name.to_string()),
@@ -49,6 +63,7 @@ impl PropertyValue {
             PropertyValue::Reference { kind, .. } | PropertyValue::Variable { kind, .. } => {
                 *kind = ftd::p2::Kind::Optional {
                     kind: Box::new(kind.clone()),
+                    is_reference: false,
                 };
             }
         }
@@ -96,21 +111,28 @@ impl PropertyValue {
                     _ if part1.eq("MOUSE-IN") => (
                         ftd::p2::Kind::Boolean {
                             default: Some("false".to_string()),
+                            is_reference: false,
                         },
                         false,
                     ),
-                    _ if part1.eq("SIBLING-INDEX") || part1.eq("SIBLING-INDEX-0") => {
-                        (ftd::p2::Kind::Integer { default: None }, false)
-                    }
+                    _ if part1.eq("SIBLING-INDEX") || part1.eq("SIBLING-INDEX-0") => (
+                        ftd::p2::Kind::Integer {
+                            default: None,
+                            is_reference: false,
+                        },
+                        false,
+                    ),
                     _ if part1.eq("CHILDREN-COUNT") => (
                         ftd::p2::Kind::Integer {
                             default: Some("0".to_string()),
+                            is_reference: false,
                         },
                         false,
                     ),
                     _ if part1.eq("CHILDREN-COUNT-MINUS-ONE") => (
                         ftd::p2::Kind::Integer {
                             default: Some("-1".to_string()),
+                            is_reference: false,
                         },
                         false,
                     ),
@@ -118,10 +140,12 @@ impl PropertyValue {
                         let kind = if part2.eq(&Some("CHILDREN-COUNT".to_string())) {
                             ftd::p2::Kind::Integer {
                                 default: Some("0".to_string()),
+                                is_reference: false,
                             }
                         } else if part2.eq(&Some("CHILDREN-COUNT-MINUS-ONE".to_string())) {
                             ftd::p2::Kind::Integer {
                                 default: Some("-1".to_string()),
+                                is_reference: false,
                             }
                         } else if let Some(ref kind) = expected_kind {
                             kind.clone()
@@ -263,7 +287,9 @@ impl PropertyValue {
                         doc.get_record(line_number, &doc.resolve_name(line_number, name)?)?
                             .fields,
                     ),
-                    ftd::p2::Kind::OrTypeWithVariant { ref name, variant } => {
+                    ftd::p2::Kind::OrTypeWithVariant {
+                        ref name, variant, ..
+                    } => {
                         let name = doc.resolve_name(line_number, name)?;
                         (
                             name.to_string(),
@@ -539,6 +565,7 @@ impl Value {
                 caption: *source == TextSource::Caption,
                 body: *source == TextSource::Body,
                 default: None,
+                is_reference: false,
             },
             Value::Integer { .. } => ftd::p2::Kind::integer(),
             Value::Decimal { .. } => ftd::p2::Kind::decimal(),
@@ -547,22 +574,27 @@ impl Value {
             Value::Record { name: id, .. } => ftd::p2::Kind::Record {
                 name: id.to_string(),
                 default: None,
+                is_reference: false,
             },
             Value::OrType {
                 name: id, variant, ..
             } => ftd::p2::Kind::OrTypeWithVariant {
                 name: id.to_string(),
                 variant: variant.to_string(),
+                is_reference: false,
             },
             Value::List { kind, .. } => ftd::p2::Kind::List {
                 kind: Box::new(kind.to_owned()),
                 default: None,
+                is_reference: false,
             },
             Value::Optional { kind, .. } => ftd::p2::Kind::Optional {
                 kind: Box::new(kind.to_owned()),
+                is_reference: false,
             },
             Value::Map { kind, .. } => ftd::p2::Kind::Map {
                 kind: Box::new(kind.to_owned()),
+                is_reference: false,
             },
             Value::UI { kind, .. } => kind.to_owned(),
         }
@@ -693,6 +725,7 @@ impl Variable {
                         kind: ftd::p2::Kind::List {
                             kind: Box::new(kind.list_kind().to_owned()),
                             default: None,
+                            is_reference: false,
                         },
                     },
                     conditions: vec![],
@@ -791,7 +824,7 @@ impl Variable {
                     },
                 };
             }
-            (ftd::p2::Kind::Optional { kind }, ftd::Value::Optional { .. }) => {
+            (ftd::p2::Kind::Optional { kind, .. }, ftd::Value::Optional { .. }) => {
                 self.value = read_value(p1.line_number, kind, &p1, doc)
                     .map(|v| v.into_optional())
                     .unwrap_or(ftd::PropertyValue::Value {
@@ -921,7 +954,7 @@ impl Variable {
                     p1.line_number,
                 ),
             },
-            ftd::p2::Kind::OrType { name } | ftd::p2::Kind::OrTypeWithVariant { name, .. } => {
+            ftd::p2::Kind::OrType { name, .. } | ftd::p2::Kind::OrTypeWithVariant { name, .. } => {
                 match doc.get_thing(p1.line_number, name)? {
                     ftd::p2::Thing::OrTypeWithVariant { e, variant } => e.create(p1, variant, doc),
                     t => ftd::e2(
@@ -993,6 +1026,7 @@ fn read_string(p1: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Result<ft
                 caption: source.eq(&ftd::TextSource::Caption),
                 body: source.eq(&ftd::TextSource::Body),
                 default: None,
+                is_reference: false,
             },
         }
     } else {
@@ -1007,7 +1041,10 @@ fn read_integer(p1: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Result<f
     Ok(if let Some(text) = caption.strip_prefix('$') {
         ftd::PropertyValue::Reference {
             name: doc.resolve_name(p1.line_number, text)?,
-            kind: ftd::p2::Kind::Integer { default: None },
+            kind: ftd::p2::Kind::Integer {
+                default: None,
+                is_reference: false,
+            },
         }
     } else {
         if let Ok(v) = caption.parse::<i64>() {
@@ -1024,7 +1061,10 @@ fn read_decimal(p1: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Result<f
     Ok(if let Some(text) = caption.strip_prefix('$') {
         ftd::PropertyValue::Reference {
             name: doc.resolve_name(p1.line_number, text)?,
-            kind: ftd::p2::Kind::Integer { default: None },
+            kind: ftd::p2::Kind::Integer {
+                default: None,
+                is_reference: false,
+            },
         }
     } else {
         if let Ok(v) = caption.parse::<f64>() {
@@ -1041,7 +1081,10 @@ fn read_boolean(p1: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Result<f
     Ok(if let Some(text) = caption.strip_prefix('$') {
         ftd::PropertyValue::Reference {
             name: doc.resolve_name(p1.line_number, text)?,
-            kind: ftd::p2::Kind::Integer { default: None },
+            kind: ftd::p2::Kind::Integer {
+                default: None,
+                is_reference: false,
+            },
         }
     } else {
         if let Ok(v) = caption.parse::<bool>() {
@@ -1059,7 +1102,10 @@ fn read_object(p1: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Result<ft
         if let Some(text) = caption.strip_prefix('$') {
             return Ok(ftd::PropertyValue::Reference {
                 name: doc.resolve_name(p1.line_number, text)?,
-                kind: ftd::p2::Kind::Object { default: None },
+                kind: ftd::p2::Kind::Object {
+                    default: None,
+                    is_reference: false,
+                },
             });
         }
     }
@@ -1118,6 +1164,7 @@ pub struct VariableData {
     pub kind: String,
     pub modifier: VariableModifier,
     pub type_: Type,
+    pub is_reference: bool,
 }
 
 #[derive(Debug, Clone)]
@@ -1210,17 +1257,24 @@ impl VariableData {
             _ => Type::Component,
         };
 
+        let name = name.ok_or(ftd::p1::Error::ParseError {
+            message: format!("name not found `{}`", s),
+            doc_id: doc.name.to_string(),
+            line_number,
+        })?;
+
+        let (name, is_reference) = if let Some(name) = name.strip_prefix('$') {
+            (name.to_string(), true)
+        } else {
+            (name.to_string(), false)
+        };
+
         Ok(VariableData {
-            name: name
-                .ok_or(ftd::p1::Error::ParseError {
-                    message: format!("name not found `{}`", s),
-                    doc_id: doc.name.to_string(),
-                    line_number,
-                })?
-                .to_string(),
+            name,
             kind: var_kind,
             modifier,
             type_,
+            is_reference,
         })
     }
 
@@ -1420,6 +1474,7 @@ mod test {
                         kind: ftd::p2::Kind::Record {
                             name: s("foo/bar#pull-request"),
                             default: None,
+                            is_reference: false,
                         },
                     },
                 },

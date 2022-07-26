@@ -16,9 +16,18 @@ impl<'a> ExecuteDoc<'a> {
         &mut self,
         parent_container: &[usize],
         id: Option<String>,
+        referenced_local_variables: &mut std::collections::BTreeMap<String, String>,
     ) -> ftd::p1::Result<ftd::component::ElementWithContainer> {
         let mut index = 0;
-        self.execute_(&mut index, false, parent_container, 0, None, id)
+        self.execute_(
+            &mut index,
+            false,
+            parent_container,
+            0,
+            None,
+            id,
+            referenced_local_variables,
+        )
     }
 
     pub(crate) fn execute_(
@@ -29,6 +38,7 @@ impl<'a> ExecuteDoc<'a> {
         parent_children_length: usize, // in case of open container send the current length
         parent_id: Option<String>,
         id: Option<String>,
+        referenced_local_variables: &mut std::collections::BTreeMap<String, String>,
     ) -> ftd::p1::Result<ftd::component::ElementWithContainer> {
         let mut current_container: Vec<usize> = Default::default();
         let mut named_containers: std::collections::BTreeMap<String, Vec<Vec<usize>>> =
@@ -42,6 +52,7 @@ impl<'a> ExecuteDoc<'a> {
                 aliases: self.aliases,
                 bag: self.bag,
                 local_variables: self.local_variables,
+                referenced_local_variables,
             };
 
             let local_container = {
@@ -124,6 +135,7 @@ impl<'a> ExecuteDoc<'a> {
                         parent_container,
                         None,
                         container_children,
+                        referenced_local_variables,
                     )?;
                 }
                 ftd::Instruction::ChildComponent { child: f } if !f.is_recursive => {
@@ -205,6 +217,7 @@ impl<'a> ExecuteDoc<'a> {
                         parent_container,
                         id.clone(),
                         vec![],
+                        referenced_local_variables,
                     )?;
                 }
                 ftd::Instruction::RecursiveChildComponent { child: f }
@@ -222,6 +235,7 @@ impl<'a> ExecuteDoc<'a> {
                             parent_container,
                             None,
                             vec![],
+                            referenced_local_variables,
                         )?
                     }
                 }
@@ -251,6 +265,7 @@ impl<'a> ExecuteDoc<'a> {
         parent_container: &[usize],
         id: Option<String>,
         container_children: Vec<ftd::Element>,
+        referenced_local_variables: &mut std::collections::BTreeMap<String, String>,
     ) -> ftd::p1::Result<Vec<ftd::Element>> {
         let mut current = &mut main;
         for i in current_container.iter() {
@@ -323,6 +338,7 @@ impl<'a> ExecuteDoc<'a> {
                             number_of_children,
                             parent_id,
                             None,
+                            referenced_local_variables,
                         )?
                         .children
                     } else {
@@ -361,7 +377,7 @@ impl<'a> ExecuteDoc<'a> {
                             name: "CHILDREN-COUNT-MINUS-ONE".to_string(),
                             value: ftd::PropertyValue::Value {
                                 value: ftd::Value::Integer {
-                                    value: (child.len() as i64 - 1),
+                                    value: child.len() as i64 - 1,
                                 },
                             },
                             conditions: vec![],
@@ -434,6 +450,7 @@ impl<'a> ExecuteDoc<'a> {
                             number_of_children,
                             parent_id.clone(),
                             id,
+                            referenced_local_variables,
                         )?;
                         child_count += child.children.len();
                         container.children.extend(child.children);

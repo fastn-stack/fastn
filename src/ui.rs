@@ -1264,6 +1264,7 @@ impl Element {
             aliases: &document.aliases,
             bag: &document.data,
             local_variables: &mut Default::default(),
+            referenced_local_variables: &mut Default::default(),
         };
         for (k, v) in document.data.iter() {
             if !data.contains_key(k) {
@@ -1391,6 +1392,7 @@ impl Element {
             aliases: &document.aliases,
             bag: &document.data,
             local_variables: &mut Default::default(),
+            referenced_local_variables: &mut Default::default(),
         };
         for (k, v) in document.data.iter() {
             if !data.contains_key(k) {
@@ -1484,6 +1486,7 @@ impl Element {
             aliases: &document.aliases,
             bag: &document.data,
             local_variables: &mut Default::default(),
+            referenced_local_variables: &mut Default::default(),
         };
         for (k, v) in document.data.iter() {
             if !data.contains_key(k) {
@@ -1511,6 +1514,7 @@ impl Element {
                         aliases: &document.aliases,
                         bag: &document.data,
                         local_variables: &mut Default::default(),
+                        referenced_local_variables: &mut Default::default(),
                     },
                 ) {
                     condition

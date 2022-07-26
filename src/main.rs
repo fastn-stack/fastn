@@ -134,12 +134,17 @@ pub fn interpret_helper(
                 break;
             }
             ftd::Interpreter::StuckOnProcessor { state, section } => {
-                let value = lib.process(&section, &state.tdoc(&mut Default::default()))?;
+                let value = lib.process(
+                    &section,
+                    &state.tdoc(&mut Default::default(), &mut Default::default()),
+                )?;
                 s = state.continue_after_processor(&section, value)?;
             }
             ftd::Interpreter::StuckOnImport { module, state: st } => {
-                let source =
-                    lib.get_with_result(module.as_str(), &st.tdoc(&mut Default::default()))?;
+                let source = lib.get_with_result(
+                    module.as_str(),
+                    &st.tdoc(&mut Default::default(), &mut Default::default()),
+                )?;
                 s = st.continue_after_import(module.as_str(), source.as_str())?;
             }
             ftd::Interpreter::StuckOnForeignVariable {
@@ -149,7 +154,10 @@ pub fn interpret_helper(
                 s = st.continue_after_variable(
                     variable.as_str(),
                     ftd::Value::None {
-                        kind: ftd::p2::Kind::Object { default: None },
+                        kind: ftd::p2::Kind::Object {
+                            default: None,
+                            is_reference: false,
+                        },
                     },
                 )?;
             }

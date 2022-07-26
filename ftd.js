@@ -11,7 +11,7 @@ function console_log(...message) {
 let ftd_utils = {
     resolve_reference: function (value, reference, data, obj) {
         let data_value_ref = (reference !== null && !(value instanceof Object)) ?
-            ftd_utils.get_data_value(data, reference) : null;
+            ftd_utils.get_data_with_default(data, reference) : null;
         if (value instanceof Object) {
             let result = value instanceof Array ? [] : {};
             for (var key of Object.keys(value)) {
@@ -397,6 +397,14 @@ let ftd_utils = {
             remaining = p2;
         }
         return ftd_utils.deepCopy(initial_value);
+    },
+
+    get_data_with_default: function (data, name, def) {
+        try {
+            return ftd_utils.get_data_value(data, name);
+        } catch (e) {
+            return def;
+        }
     },
 
     set_data_value: function (data, name, value) {

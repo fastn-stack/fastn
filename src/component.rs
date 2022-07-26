@@ -209,7 +209,7 @@ impl ChildComponent {
                     instructions: &instructions,
                     invocations,
                 }
-                .execute(local_container, None)?
+                .execute(local_container, None, doc.referenced_local_variables)?
                 .children;
                 container_children.extend(elements);
             }
@@ -355,7 +355,7 @@ impl ChildComponent {
                 ftd::p2::Kind::Boolean { .. } => Some(ftd::PropertyValue::Value {
                     value: ftd::Value::Boolean { value: false },
                 }),
-                ftd::p2::Kind::Optional { kind } => {
+                ftd::p2::Kind::Optional { kind, .. } => {
                     construct_tmp_data(kind).map(|v| v.into_optional())
                 }
                 _ => None,
@@ -725,7 +725,7 @@ fn markup_get_named_container(
         instructions: &instructions,
         invocations,
     }
-    .execute(local_container, None)?
+    .execute(local_container, None, doc.referenced_local_variables)?
     .children;
 
     return convert_to_named_container(&container_children, &elements_name, doc);
@@ -1645,7 +1645,7 @@ impl Component {
             instructions: &new_instruction,
             invocations,
         }
-        .execute(call_container, id);
+        .execute(call_container, id, doc.referenced_local_variables);
 
         fn reference_to_child_component(
             child: &mut ChildComponent,
@@ -1972,6 +1972,7 @@ impl Component {
             };
 
             let events = ftd::p2::Event::get_events(self.line_number, events, doc)?;
+
             let mut element = if !is_null_element {
                 root.call(
                     &self.properties,
@@ -2487,6 +2488,7 @@ pub fn read_properties(
                     caption: c,
                     body: b,
                     default: d,
+                    ..
                 },
             ) => {
                 if *c && caption.is_some() {
@@ -2837,6 +2839,7 @@ mod test {
             bag: &mut bag,
             aliases: &aliases,
             local_variables: &mut Default::default(),
+            referenced_local_variables: &mut Default::default(),
         };
         p2!(
             "-- ftd.text foo:
@@ -2882,6 +2885,7 @@ mod test {
             bag: &mut bag,
             aliases: &aliases,
             local_variables: &mut Default::default(),
+            referenced_local_variables: &mut Default::default(),
         };
         p2!(
             "-- ftd.text foo:

@@ -5,18 +5,23 @@ pub enum Kind {
         caption: bool,
         body: bool,
         default: Option<String>,
+        is_reference: bool,
     },
     Object {
         default: Option<String>,
+        is_reference: bool,
     },
     Integer {
         default: Option<String>,
+        is_reference: bool,
     },
     Decimal {
         default: Option<String>,
+        is_reference: bool,
     },
     Boolean {
         default: Option<String>,
+        is_reference: bool,
     },
     Element,
     Elements,
@@ -26,23 +31,29 @@ pub enum Kind {
     Record {
         name: String,
         default: Option<String>,
+        is_reference: bool,
     }, // the full name of the record (full document name.record name)
     OrType {
         name: String,
+        is_reference: bool,
     }, // the full name of the or-type
     OrTypeWithVariant {
         name: String,
         variant: String,
+        is_reference: bool,
     },
     Map {
         kind: Box<Kind>,
+        is_reference: bool,
     }, // map of String to Kind
     List {
         kind: Box<Kind>,
         default: Option<String>,
+        is_reference: bool,
     },
     Optional {
         kind: Box<Kind>,
+        is_reference: bool,
     },
     UI {
         default: Option<(String, ftd::p1::Header)>,
@@ -50,6 +61,22 @@ pub enum Kind {
 }
 
 impl Kind {
+    pub fn is_reference(&self) -> bool {
+        match self {
+            Kind::String { is_reference, .. }
+            | Kind::Object { is_reference, .. }
+            | Kind::Integer { is_reference, .. }
+            | Kind::Decimal { is_reference, .. }
+            | Kind::Boolean { is_reference, .. }
+            | Kind::Record { is_reference, .. }
+            | Kind::OrType { is_reference, .. }
+            | Kind::OrTypeWithVariant { is_reference, .. }
+            | Kind::Map { is_reference, .. }
+            | Kind::List { is_reference, .. }
+            | Kind::Optional { is_reference, .. } => *is_reference,
+            _ => false,
+        }
+    }
     pub fn is_optional(&self) -> bool {
         matches!(self, Kind::Optional { .. })
     }
@@ -77,24 +104,24 @@ impl Kind {
     pub fn to_value(&self, line_number: usize, doc_id: &str) -> ftd::p1::Result<ftd::Value> {
         Ok(match self {
             ftd::p2::Kind::String { default: Some(d), .. } => ftd::Value::String {text: d.to_string(), source: ftd::TextSource::Default} ,
-            ftd::p2::Kind::Integer { default: Some(d) } => ftd::Value::Integer { value: match d.parse::<i64>() {
+            ftd::p2::Kind::Integer { default: Some(d), .. } => ftd::Value::Integer { value: match d.parse::<i64>() {
                     Ok(v) => v,
                     Err(_) => return ftd::e2(format!("{} is not an integer", d), doc_id, line_number),
                 },
             },
-            ftd::p2::Kind::Decimal { default: Some(d) } => ftd::Value::Decimal { value: d.parse::<f64>().map_err(|e| ftd::p1::Error::ParseError {
+            ftd::p2::Kind::Decimal { default: Some(d), .. } => ftd::Value::Decimal { value: d.parse::<f64>().map_err(|e| ftd::p1::Error::ParseError {
                     message: e.to_string(),
                     doc_id: doc_id.to_string(),
                     line_number,
                 })?,
             },
-            ftd::p2::Kind::Boolean { default: Some(d) } => ftd::Value::Boolean { value: d.parse::<bool>().map_err(|e|ftd::p1::Error::ParseError {
+            ftd::p2::Kind::Boolean { default: Some(d), .. } => ftd::Value::Boolean { value: d.parse::<bool>().map_err(|e|ftd::p1::Error::ParseError {
                     message: e.to_string(),
                     doc_id: doc_id.to_string(),
                     line_number,
                 })?,
             },
-            ftd::p2::Kind::Optional {kind} => if let Ok(f) = kind.to_value(line_number, doc_id) {
+            ftd::p2::Kind::Optional {kind, ..} => if let Ok(f) = kind.to_value(line_number, doc_id) {
                 ftd::Value::Optional {data: Box::new(Some(f)), kind: kind.as_ref().to_owned()}
             } else {
                 ftd::Value::Optional {data: Box::new(None), kind: kind.as_ref().to_owned()}
@@ -125,49 +152,79 @@ impl Kind {
         match (self, other) {
             (Self::String { .. }, Self::String { .. }) => matches!(other, Self::String { .. }),
             (Self::UI { .. }, Self::UI { .. }) => matches!(other, Self::UI { .. }),
-            (Self::Optional { kind }, _) => kind.is_same_as(other),
-            (_, Self::Optional { kind: other }) => self.is_same_as(other),
+            (Self::Optional { kind, .. }, _) => kind.is_same_as(other),
+            (_, Self::Optional { kind: other, .. }) => self.is_same_as(other),
             _ => self.without_default() == other.without_default(),
         }
     }
 
     pub fn without_default(&self) -> Self {
         match self {
-            Kind::Integer { .. } => Kind::Integer { default: None },
-            Kind::Boolean { .. } => Kind::Boolean { default: None },
-            Kind::Decimal { .. } => Kind::Decimal { default: None },
+            Kind::Integer { .. } => Kind::Integer {
+                default: None,
+                is_reference: false,
+            },
+            Kind::Boolean { .. } => Kind::Boolean {
+                default: None,
+                is_reference: false,
+            },
+            Kind::Decimal { .. } => Kind::Decimal {
+                default: None,
+                is_reference: false,
+            },
             Kind::String { caption, body, .. } => Kind::String {
                 caption: *caption,
                 body: *body,
                 default: None,
+                is_reference: false,
             },
             Kind::Record { name, .. } => Kind::Record {
                 name: name.clone(),
                 default: None,
+                is_reference: false,
             },
             Kind::List { kind, .. } => Kind::List {
                 kind: kind.clone(),
                 default: None,
+                is_reference: false,
             },
             _ => self.clone(),
         }
     }
 
+    pub fn record(name: &str) -> Self {
+        Kind::Record {
+            name: name.to_string(),
+            default: None,
+            is_reference: false,
+        }
+    }
+
     pub fn integer() -> Self {
-        Kind::Integer { default: None }
+        Kind::Integer {
+            default: None,
+            is_reference: false,
+        }
     }
 
     pub fn decimal() -> Self {
-        Kind::Decimal { default: None }
+        Kind::Decimal {
+            default: None,
+            is_reference: false,
+        }
     }
 
     pub fn boolean() -> Self {
-        Kind::Boolean { default: None }
+        Kind::Boolean {
+            default: None,
+            is_reference: false,
+        }
     }
 
     pub fn object() -> Self {
         Kind::Object {
             default: Default::default(),
+            is_reference: false,
         }
     }
 
@@ -176,40 +233,109 @@ impl Kind {
             caption: false,
             body: false,
             default: None,
+            is_reference: false,
         }
     }
     pub fn get_default_value_str(&self) -> Option<String> {
         match self {
-            Kind::Integer { default }
-            | Kind::Boolean { default }
-            | Kind::Decimal { default }
+            Kind::Integer { default, .. }
+            | Kind::Boolean { default, .. }
+            | Kind::Decimal { default, .. }
             | Kind::Record { default, .. }
             | Kind::List { default, .. }
             | Kind::String { default, .. } => default.clone(),
             Kind::UI { default, .. } => default.as_ref().map(|(v, _)| v.clone()),
-            Kind::Optional { kind } => kind.get_default_value_str(),
+            Kind::Optional { kind, .. } => kind.get_default_value_str(),
             _ => None,
         }
     }
 
     pub fn set_default(self, default: Option<String>) -> Self {
         match self {
-            Kind::String { caption, body, .. } => Kind::String {
+            Kind::String {
+                caption,
+                body,
+                is_reference,
+                ..
+            } => Kind::String {
                 caption,
                 body,
                 default,
+                is_reference,
             },
-            Kind::Record { name, .. } => Kind::Record { name, default },
+            Kind::Record {
+                name, is_reference, ..
+            } => Kind::Record {
+                name,
+                default,
+                is_reference,
+            },
             Kind::UI { .. } => Kind::UI {
                 default: default.map(|v| (v, Default::default())),
             },
-            Kind::Integer { .. } => Kind::Integer { default },
-            Kind::Decimal { .. } => Kind::Decimal { default },
-            Kind::Boolean { .. } => Kind::Boolean { default },
-            Kind::Optional { kind } => Kind::Optional {
-                kind: Box::from(kind.set_default(default)),
+            Kind::Integer { is_reference, .. } => Kind::Integer {
+                default,
+                is_reference,
             },
-            Kind::List { kind, .. } => Kind::List { kind, default },
+            Kind::Decimal { is_reference, .. } => Kind::Decimal {
+                is_reference,
+                default,
+            },
+            Kind::Boolean { is_reference, .. } => Kind::Boolean {
+                is_reference,
+                default,
+            },
+            Kind::Optional { is_reference, kind } => Kind::Optional {
+                kind: Box::from(kind.set_default(default)),
+                is_reference,
+            },
+            Kind::List {
+                is_reference, kind, ..
+            } => Kind::List {
+                is_reference,
+                kind,
+                default,
+            },
+            _ => self,
+        }
+    }
+
+    pub fn set_reference(self, is_reference: bool) -> Self {
+        match self {
+            Kind::String {
+                caption,
+                body,
+                default,
+                ..
+            } => Kind::String {
+                caption,
+                body,
+                default,
+                is_reference,
+            },
+            Kind::Record { name, default, .. } => Kind::Record {
+                name,
+                default,
+                is_reference,
+            },
+            Kind::Integer { default, .. } => Kind::Integer {
+                default,
+                is_reference,
+            },
+            Kind::Decimal { default, .. } => Kind::Decimal {
+                is_reference,
+                default,
+            },
+            Kind::Boolean { default, .. } => Kind::Boolean {
+                is_reference,
+                default,
+            },
+            Kind::Optional { kind, .. } => Kind::Optional { kind, is_reference },
+            Kind::List { default, kind, .. } => Kind::List {
+                is_reference,
+                kind,
+                default,
+            },
             _ => self,
         }
     }
@@ -219,6 +345,7 @@ impl Kind {
             caption: true,
             body: false,
             default: None,
+            is_reference: false,
         }
     }
 
@@ -227,6 +354,7 @@ impl Kind {
             caption: false,
             body: true,
             default: None,
+            is_reference: false,
         }
     }
 
@@ -235,27 +363,36 @@ impl Kind {
             caption: true,
             body: true,
             default: None,
+            is_reference: false,
         }
     }
 
     pub fn optional(k: Self) -> Self {
-        Kind::Optional { kind: Box::new(k) }
+        Kind::Optional {
+            kind: Box::new(k),
+            is_reference: false,
+        }
     }
 
     pub fn list(k: Self) -> Self {
         Kind::List {
             kind: Box::new(k),
             default: None,
+            is_reference: false,
         }
     }
 
     pub fn map(k: Self) -> Self {
-        Kind::Map { kind: Box::new(k) }
+        Kind::Map {
+            kind: Box::new(k),
+            is_reference: false,
+        }
     }
 
     pub fn into_optional(self) -> Self {
         Kind::Optional {
             kind: Box::new(self),
+            is_reference: false,
         }
     }
 
@@ -265,14 +402,14 @@ impl Kind {
 
     pub fn inner(&self) -> &Self {
         match self {
-            Kind::Optional { kind } => kind,
+            Kind::Optional { kind, .. } => kind,
             _ => self,
         }
     }
 
     pub fn mut_inner(&mut self) -> &mut Self {
         match self {
-            Kind::Optional { kind } => kind,
+            Kind::Optional { kind, .. } => kind,
             _ => self,
         }
     }
@@ -290,6 +427,7 @@ impl Kind {
                 caption: true,
                 body: true,
                 default: None,
+                is_reference: false,
             },
             _ => self.to_owned(),
         }
@@ -308,7 +446,7 @@ impl Kind {
             Some(v) => (v.to_string(), ftd::TextSource::Header),
             None => {
                 let optional = match self {
-                    Kind::Optional { kind } => match kind.as_ref() {
+                    Kind::Optional { kind, .. } => match kind.as_ref() {
                         ftd::p2::Kind::String { .. }
                         | ftd::p2::Kind::Integer { .. }
                         | ftd::p2::Kind::Decimal { .. }
@@ -435,6 +573,7 @@ impl Kind {
                     object_kind,
                 )?),
                 default: None,
+                is_reference: false,
             });
         }
 
@@ -474,8 +613,12 @@ impl Kind {
                 ftd::p2::Thing::Record(r) => Kind::Record {
                     name: r.name,
                     default: None,
+                    is_reference: false,
                 },
-                ftd::p2::Thing::OrType(e) => Kind::OrType { name: e.name },
+                ftd::p2::Thing::OrType(e) => Kind::OrType {
+                    name: e.name,
+                    is_reference: false,
+                },
                 t => unimplemented!(
                     "{} is {:?}, line number: {}, doc: {}",
                     k,
@@ -531,8 +674,12 @@ impl Kind {
                     Ok(ftd::p2::Thing::Record(r)) => Kind::Record {
                         name: r.name,
                         default: None,
+                        is_reference: false,
                     },
-                    Ok(ftd::p2::Thing::OrType(e)) => Kind::OrType { name: e.name },
+                    Ok(ftd::p2::Thing::OrType(e)) => Kind::OrType {
+                        name: e.name,
+                        is_reference: false,
+                    },
                     t => match default {
                         None => unimplemented!(
                             "{} is {:?}, line number: {}, doc: {}",
@@ -551,6 +698,7 @@ impl Kind {
             return Ok(Kind::List {
                 kind: Box::new(k),
                 default,
+                is_reference: var_data.is_reference,
             });
         }
 
@@ -558,6 +706,7 @@ impl Kind {
             Self::optional(k.set_default(default))
         } else {
             k.set_default(default)
-        })
+        }
+        .set_reference(var_data.is_reference))
     }
 }
