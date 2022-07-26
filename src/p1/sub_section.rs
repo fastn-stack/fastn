@@ -104,9 +104,13 @@ impl SubSection {
         }
     }
 
-    /// returns tuple (body/caption, is_caption)
+    /// returns tuple (body/caption, from_caption)
     ///
-    /// in case both or none are passed then it throws error  
+    /// i.e it either returns
+    /// * (body, false)
+    /// * (caption, true)
+    ///
+    /// In case both or none are passed then it throws error  
     pub fn body_or_caption(&self, doc_id: &str) -> Result<(String, bool)> {
         let (has_body, has_caption) = (self.body.is_some(), self.caption.is_some());
         match (has_body, has_caption) {

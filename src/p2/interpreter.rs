@@ -1251,11 +1251,12 @@ mod test {
         bag: &mut std::collections::BTreeMap<String, ftd::p2::Thing>,
     ) {
         // root => [doc_id]#[var_name]@[level]
-        // parts = [ doc_id , var_name, level ]
-        let parts: Vec<&str> = root.trim().split(|ch| ch == '#' || ch == '@').collect();
+        // root_parts = [ doc_id , var_name, level ]
+        let root_parts: Vec<&str> = root.trim().split(|ch| ch == '#' || ch == '@').collect();
+        let var_name = root_parts[1];
 
         let integer_thing = ftd::p2::Thing::Variable(ftd::Variable {
-            name: format!("{}", parts[1]),
+            name: format!("{}", var_name),
             value: ftd::PropertyValue::Value {
                 value: ftd::Value::Integer { value: val },
             },
