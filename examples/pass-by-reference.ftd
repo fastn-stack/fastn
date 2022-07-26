@@ -1,0 +1,29 @@
+-- string message: Message from outside
+
+-- foo:
+msg: $message
+
+--- ftd.text: Text from foo's external-children
+
+-- ftd.column foo:
+open: true
+string msg: Message from foo
+width: fill
+
+--- ftd.text: $msg
+
+--- ftd.column:
+
+--- bar:
+msg: $msg
+count: $CHILDREN-COUNT
+
+
+-- ftd.column bar:
+string $msg:
+integer $count:
+
+--- ftd.text: $msg
+$on-click$: $msg = Hello There
+
+--- ftd.integer: $count

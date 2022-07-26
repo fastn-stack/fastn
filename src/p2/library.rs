@@ -36,6 +36,7 @@ fn read_package(section: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Res
                 caption,
                 body,
                 default,
+                is_reference,
             },
         ..
     }) = var.value.resolve(section.line_number, doc)
@@ -63,6 +64,7 @@ fn read_package(section: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Res
                 caption,
                 body,
                 default,
+                is_reference,
             },
         })
     } else {
@@ -105,7 +107,9 @@ fn read_records(section: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Res
         line_number: section.line_number,
     })?;
     if let Ok(ftd::Value::List {
-        kind: ftd::p2::Kind::Record { name, .. },
+        kind: ftd::p2::Kind::Record {
+            name, is_reference, ..
+        },
         ..
     }) = var.value.resolve(section.line_number, doc)
     {
@@ -149,6 +153,7 @@ fn read_records(section: &ftd::p1::Section, doc: &ftd::p2::TDoc) -> ftd::p1::Res
             kind: ftd::p2::Kind::Record {
                 name,
                 default: None,
+                is_reference,
             },
         })
     } else {

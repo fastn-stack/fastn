@@ -209,7 +209,7 @@ impl ChildComponent {
                     instructions: &instructions,
                     invocations,
                 }
-                .execute(local_container, None)?
+                .execute(local_container, None, doc.referenced_local_variables)?
                 .children;
                 container_children.extend(elements);
             }
@@ -355,7 +355,7 @@ impl ChildComponent {
                 ftd::p2::Kind::Boolean { .. } => Some(ftd::PropertyValue::Value {
                     value: ftd::Value::Boolean { value: false },
                 }),
-                ftd::p2::Kind::Optional { kind } => {
+                ftd::p2::Kind::Optional { kind, .. } => {
                     construct_tmp_data(kind).map(|v| v.into_optional())
                 }
                 _ => None,
@@ -514,6 +514,8 @@ impl ChildComponent {
         let conditional_attribute =
             get_conditional_attributes(self.line_number, &self.properties, doc)?;
 
+        dbg!("CALL1", &self, &root);
+
         let mut element = root.call(
             &self.properties,
             doc,
@@ -599,6 +601,8 @@ impl ChildComponent {
 
         let root_property =
             get_root_property(line_number, name, caption, doc, &all_arguments, inherits)?;
+
+        dbg!(&root, &root_property, &local_arguments, &all_arguments,);
 
         return Ok(Self {
             line_number,
@@ -725,7 +729,7 @@ fn markup_get_named_container(
         instructions: &instructions,
         invocations,
     }
-    .execute(local_container, None)?
+    .execute(local_container, None, doc.referenced_local_variables)?
     .children;
 
     return convert_to_named_container(&container_children, &elements_name, doc);
@@ -1645,7 +1649,7 @@ impl Component {
             instructions: &new_instruction,
             invocations,
         }
-        .execute(call_container, id);
+        .execute(call_container, id, doc.referenced_local_variables);
 
         fn reference_to_child_component(
             child: &mut ChildComponent,
@@ -1972,6 +1976,8 @@ impl Component {
             };
 
             let events = ftd::p2::Event::get_events(self.line_number, events, doc)?;
+
+            dbg!("CALL2", &self, &root);
             let mut element = if !is_null_element {
                 root.call(
                     &self.properties,
@@ -2487,6 +2493,7 @@ pub fn read_properties(
                     caption: c,
                     body: b,
                     default: d,
+                    is_reference: r,
                 },
             ) => {
                 if *c && caption.is_some() {
@@ -2837,6 +2844,7 @@ mod test {
             bag: &mut bag,
             aliases: &aliases,
             local_variables: &mut Default::default(),
+            referenced_local_variables: &mut Default::default(),
         };
         p2!(
             "-- ftd.text foo:
@@ -2882,6 +2890,7 @@ mod test {
             bag: &mut bag,
             aliases: &aliases,
             local_variables: &mut Default::default(),
+            referenced_local_variables: &mut Default::default(),
         };
         p2!(
             "-- ftd.text foo:

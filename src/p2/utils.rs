@@ -1473,7 +1473,7 @@ pub fn arguments_on_condition(
             ftd::PropertyValue::Value { .. } => {}
             ftd::PropertyValue::Reference { name, kind }
             | ftd::PropertyValue::Variable { name, kind } => {
-                if let ftd::p2::Kind::Optional { kind } = kind {
+                if let ftd::p2::Kind::Optional { kind, .. } = kind {
                     if doc.get_value(line_number, name).is_err() {
                         is_visible = false;
                         arguments.insert(

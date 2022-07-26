@@ -47,7 +47,9 @@ impl Record {
                         kind: list_kind, ..
                     },
                 ) => match list_kind.as_ref() {
-                    ftd::p2::Kind::OrType { name: or_type_name }
+                    ftd::p2::Kind::OrType {
+                        name: or_type_name, ..
+                    }
                     | ftd::p2::Kind::OrTypeWithVariant {
                         name: or_type_name, ..
                     } => {
@@ -127,7 +129,9 @@ impl Record {
                         kind: list_kind, ..
                     },
                 ) if !subsections.is_empty() => match list_kind.as_ref() {
-                    ftd::p2::Kind::OrType { name: or_type_name }
+                    ftd::p2::Kind::OrType {
+                        name: or_type_name, ..
+                    }
                     | ftd::p2::Kind::OrTypeWithVariant {
                         name: or_type_name, ..
                     } => {
@@ -360,6 +364,7 @@ impl Record {
             ftd::p2::Kind::Record {
                 name: full_name.clone(),
                 default: None,
+                is_reference: false,
             },
         );
         for (i, k, v) in p1_header.0.iter() {
