@@ -1318,7 +1318,9 @@ mod test {
                                     kind: Box::new(ftd::p2::Kind::Record {
                                         name: s("ftd#color"),
                                         default: None,
+                                        is_reference: false,
                                     }),
+                                    is_reference: false,
                                 },
                             }),
                             conditions: vec![
@@ -1338,7 +1340,9 @@ mod test {
                                             kind: Box::new(ftd::p2::Kind::Record {
                                                 name: s("ftd#color"),
                                                 default: None,
+                                                is_reference: false,
                                             }),
+                                            is_reference: false,
                                         },
                                     },
                                 ),
@@ -1358,7 +1362,9 @@ mod test {
                                             kind: Box::new(ftd::p2::Kind::Record {
                                                 name: s("ftd#color"),
                                                 default: None,
+                                                is_reference: false,
                                             }),
+                                            is_reference: false,
                                         },
                                     },
                                 ),
@@ -1822,6 +1828,7 @@ mod test {
                         s("active"),
                         ftd::p2::Kind::Optional {
                             kind: Box::new(ftd::p2::Kind::boolean()),
+                            is_reference: false,
                         },
                     ),
                     (s("id"), ftd::p2::Kind::string()),
@@ -1836,6 +1843,7 @@ mod test {
                                 name: "id".to_string(),
                                 kind: ftd::p2::Kind::Optional {
                                     kind: Box::new(ftd::p2::Kind::string()),
+                                    is_reference: false,
                                 },
                             }),
                             conditions: vec![],
@@ -1878,6 +1886,7 @@ mod test {
                                     name: "active".to_string(),
                                     kind: ftd::p2::Kind::Optional {
                                         kind: Box::new(ftd::p2::Kind::boolean()),
+                                        is_reference: false,
                                     },
                                 },
                             }),
@@ -1891,7 +1900,9 @@ mod test {
                                                 kind: Box::new(ftd::p2::Kind::Record {
                                                     name: s("ftd#color"),
                                                     default: None,
+                                                    is_reference: false,
                                                 }),
+                                                is_reference: false,
                                             },
                                         }),
                                         conditions: vec![],
@@ -1924,6 +1935,7 @@ mod test {
                                     name: "active".to_string(),
                                     kind: ftd::p2::Kind::Optional {
                                         kind: Box::new(ftd::p2::Kind::boolean()),
+                                        is_reference: false,
                                     },
                                 },
                             }),
@@ -1937,7 +1949,9 @@ mod test {
                                                 kind: Box::new(ftd::p2::Kind::Record {
                                                     name: s("ftd#color"),
                                                     default: None,
+                                                    is_reference: false,
                                                 }),
+                                                is_reference: false,
                                             },
                                         }),
                                         conditions: vec![],
@@ -1994,6 +2008,7 @@ mod test {
                                 name: "id".to_string(),
                                 kind: ftd::p2::Kind::Optional {
                                     kind: Box::new(ftd::p2::Kind::string()),
+                                    is_reference: false,
                                 },
                             }),
                             conditions: vec![],
@@ -2906,6 +2921,7 @@ mod test {
                         s("active"),
                         ftd::p2::Kind::Optional {
                             kind: Box::new(ftd::p2::Kind::boolean()),
+                            is_reference: false,
                         },
                     ),
                     (s("id"), ftd::p2::Kind::string()),
@@ -2920,6 +2936,7 @@ mod test {
                                 name: "id".to_string(),
                                 kind: ftd::p2::Kind::Optional {
                                     kind: Box::new(ftd::p2::Kind::string()),
+                                    is_reference: false,
                                 },
                             }),
                             conditions: vec![],
@@ -2962,6 +2979,7 @@ mod test {
                                     name: "active".to_string(),
                                     kind: ftd::p2::Kind::Optional {
                                         kind: Box::new(ftd::p2::Kind::boolean()),
+                                        is_reference: false,
                                     },
                                 },
                             }),
@@ -2975,7 +2993,9 @@ mod test {
                                                 kind: Box::new(ftd::p2::Kind::Record {
                                                     name: s("ftd#color"),
                                                     default: None,
+                                                    is_reference: false,
                                                 }),
+                                                is_reference: false,
                                             },
                                         }),
                                         conditions: vec![],
@@ -3008,6 +3028,7 @@ mod test {
                                     name: "active".to_string(),
                                     kind: ftd::p2::Kind::Optional {
                                         kind: Box::new(ftd::p2::Kind::boolean()),
+                                        is_reference: false,
                                     },
                                 },
                             }),
@@ -3021,7 +3042,9 @@ mod test {
                                                 kind: Box::new(ftd::p2::Kind::Record {
                                                     name: s("ftd#color"),
                                                     default: None,
+                                                    is_reference: false,
                                                 }),
+                                                is_reference: false,
                                             },
                                         }),
                                         conditions: vec![],
@@ -3078,6 +3101,7 @@ mod test {
                                 name: "id".to_string(),
                                 kind: ftd::p2::Kind::Optional {
                                     kind: Box::new(ftd::p2::Kind::string()),
+                                    is_reference: false,
                                 },
                             }),
                             conditions: vec![],
@@ -3820,7 +3844,9 @@ mod test {
                                     kind: Box::new(ftd::p2::Kind::Record {
                                         name: s("ftd#color"),
                                         default: None,
+                                        is_reference: false,
                                     }),
+                                    is_reference: false,
                                 },
                             }),
                             conditions: vec![],
@@ -4308,6 +4334,7 @@ mod test {
                         kind: ftd::p2::Kind::Record {
                             name: s("foo/bar#point"),
                             default: None,
+                            is_reference: false,
                         },
                     },
                 },
@@ -4411,6 +4438,7 @@ mod test {
                         let s = ftd::p2::Kind::Record {
                             name: s("ftd#image-src"),
                             default: None,
+                            is_reference: false,
                         };
                         if about_optional {
                             s.into_optional()
@@ -4508,6 +4536,7 @@ mod test {
                                         kind: ftd::p2::Kind::Record {
                                             name: s("ftd#image-src"),
                                             default: None,
+                                            is_reference: false,
                                         }
                                         .into_optional(),
                                     },
@@ -4524,6 +4553,7 @@ mod test {
                                         kind: ftd::p2::Kind::Record {
                                             name: s("ftd#image-src"),
                                             default: None,
+                                            is_reference: false,
                                         },
                                     }),
                                     conditions: vec![],
@@ -4662,6 +4692,7 @@ mod test {
                     kind: ftd::p2::Kind::Record {
                         name: s("ftd#image-src"),
                         default: None,
+                        is_reference: false,
                     },
                 },
                 conditions: vec![],
@@ -4946,7 +4977,9 @@ mod test {
                         kind: Box::new(ftd::p2::Kind::Record {
                             name: s("ftd#image-src"),
                             default: None,
+                            is_reference: false,
                         }),
+                        is_reference: false,
                     },
                 },
                 conditions: vec![],
@@ -4963,7 +4996,9 @@ mod test {
                         kind: Box::new(ftd::p2::Kind::Record {
                             name: s("ftd#image-src"),
                             default: None,
+                            is_reference: false,
                         }),
+                        is_reference: false,
                     },
                 },
                 conditions: vec![],
@@ -5338,7 +5373,9 @@ mod test {
                         kind: Box::new(ftd::p2::Kind::Record {
                             name: s("ftd#image-src"),
                             default: None,
+                            is_reference: false,
                         }),
+                        is_reference: false,
                     },
                 },
                 conditions: vec![],
@@ -5355,7 +5392,9 @@ mod test {
                         kind: Box::new(ftd::p2::Kind::Record {
                             name: s("ftd#image-src"),
                             default: None,
+                            is_reference: false,
                         }),
+                        is_reference: false,
                     },
                 },
                 conditions: vec![],
@@ -5372,6 +5411,7 @@ mod test {
                         kind: ftd::p2::Kind::Record {
                             name: s("ftd#image-src"),
                             default: None,
+                            is_reference: false,
                         },
                     },
                 },
@@ -5765,6 +5805,7 @@ mod test {
                     kind: ftd::p2::Kind::Record {
                         name: s("ftd#image-src"),
                         default: None,
+                        is_reference: false,
                     },
                 },
                 conditions: vec![],
@@ -5780,6 +5821,7 @@ mod test {
                     kind: ftd::p2::Kind::Record {
                         name: s("ftd#image-src"),
                         default: None,
+                        is_reference: false,
                     },
                 },
                 conditions: vec![],
@@ -5896,6 +5938,7 @@ mod test {
                         ftd::p2::Kind::Record {
                             name: s("ftd#image-src"),
                             default: None,
+                            is_reference: false,
                         },
                     ),
                 ])
@@ -5914,6 +5957,7 @@ mod test {
                                         kind: ftd::p2::Kind::Record {
                                             name: s("ftd#image-src"),
                                             default: None,
+                                            is_reference: false,
                                         },
                                     }),
                                     conditions: vec![],
@@ -7271,6 +7315,7 @@ mod test {
                             name: "id".to_string(),
                             kind: ftd::p2::Kind::Optional {
                                 kind: Box::new(ftd::p2::Kind::string()),
+                                is_reference: false,
                             },
                         }),
                         conditions: vec![],
@@ -7345,7 +7390,10 @@ mod test {
                             condition: Some(ftd::p2::Boolean::Equal {
                                 left: ftd::PropertyValue::Reference {
                                     name: s("foo/bar#mobile"),
-                                    kind: ftd::p2::Kind::Boolean { default: None },
+                                    kind: ftd::p2::Kind::Boolean {
+                                        default: None,
+                                        is_reference: false,
+                                    },
                                 },
                                 right: ftd::PropertyValue::Value {
                                     value: ftd::variable::Value::Boolean { value: true },
@@ -7376,7 +7424,10 @@ mod test {
                             condition: Some(ftd::p2::Boolean::Equal {
                                 left: ftd::PropertyValue::Reference {
                                     name: s("foo/bar#mobile"),
-                                    kind: ftd::p2::Kind::Boolean { default: None },
+                                    kind: ftd::p2::Kind::Boolean {
+                                        default: None,
+                                        is_reference: false,
+                                    },
                                 },
                                 right: ftd::PropertyValue::Value {
                                     value: ftd::variable::Value::Boolean { value: false },
@@ -7433,6 +7484,7 @@ mod test {
                             name: "id".to_string(),
                             kind: ftd::p2::Kind::Optional {
                                 kind: Box::new(ftd::p2::Kind::string()),
+                                is_reference: false,
                             },
                         }),
                         conditions: vec![],
@@ -8593,6 +8645,7 @@ mod test {
                         kind: ftd::p2::Kind::Record {
                             name: "foo/bar#person".to_string(),
                             default: None,
+                            is_reference: false,
                         },
                     },
                 },
@@ -9007,6 +9060,7 @@ mod test {
                         kind: ftd::p2::Kind::Record {
                             name: "foo/bar#person".to_string(),
                             default: None,
+                            is_reference: false,
                         },
                     },
                 },
@@ -9608,6 +9662,7 @@ mod test {
                         kind: ftd::p2::Kind::Record {
                             name: "foo/bar#person".to_string(),
                             default: None,
+                            is_reference: true,
                         },
                     },
                 },
@@ -10864,6 +10919,7 @@ mod test {
                                                     kind: ftd::p2::Kind::Record {
                                                         name: s("foo/bar#toc-record"),
                                                         default: None,
+                                                        is_reference: true,
                                                     },
                                                 },
                                             },
@@ -10902,6 +10958,7 @@ mod test {
                                                     kind: ftd::p2::Kind::Record {
                                                         name: s("foo/bar#toc-record"),
                                                         default: None,
+                                                        is_reference: true,
                                                     },
                                                 },
                                             },
@@ -10932,6 +10989,7 @@ mod test {
                         kind: ftd::p2::Kind::Record {
                             name: s("foo/bar#toc-record"),
                             default: None,
+                            is_reference: true,
                         },
                     },
                 },
@@ -10966,6 +11024,7 @@ mod test {
                                                                         kind: ftd::p2::Kind::Record {
                                                                             name: s("foo/bar#toc-record"),
                                                                             default: None,
+                                                                            is_reference: true,
                                                                         },
                                                                     },
                                                                 },
@@ -11002,6 +11061,7 @@ mod test {
                                                                         kind: ftd::p2::Kind::Record {
                                                                             name: s("foo/bar#toc-record"),
                                                                             default: None,
+                                                                            is_reference: true,
                                                                         },
                                                                     },
                                                                 },
@@ -11031,6 +11091,7 @@ mod test {
                                                 kind: ftd::p2::Kind::Record {
                                                     name: s("foo/bar#toc-record"),
                                                     default: None,
+                                                    is_reference: true,
                                                 },
                                             },
                                         },
@@ -11060,6 +11121,7 @@ mod test {
                         kind: ftd::p2::Kind::Record {
                             name: s("foo/bar#toc-record"),
                             default: None,
+                            is_reference: true,
                         },
                     },
                 },
@@ -11077,6 +11139,7 @@ mod test {
                     ftd::p2::Kind::Record {
                         name: "foo/bar#toc-record".to_string(),
                         default: None,
+                        is_reference: true,
                     },
                 )])
                 .collect(),
@@ -11094,6 +11157,7 @@ mod test {
                                             name: "toc.link".to_string(),
                                             kind: ftd::p2::Kind::Optional {
                                                 kind: Box::new(ftd::p2::Kind::string()),
+                                                is_reference: false,
                                             },
                                         }),
                                         conditions: vec![],
@@ -11107,6 +11171,7 @@ mod test {
                                             name: "toc.title".to_string(),
                                             kind: ftd::p2::Kind::Optional {
                                                 kind: Box::new(ftd::p2::Kind::caption_or_body()),
+                                                is_reference: false,
                                             },
                                         }),
                                         conditions: vec![],
@@ -11133,6 +11198,7 @@ mod test {
                                             kind: ftd::p2::Kind::Record {
                                                 name: s("foo/bar#toc-record"),
                                                 default: None,
+                                                is_reference: true,
                                             },
                                         }),
                                         conditions: vec![],
@@ -11147,6 +11213,7 @@ mod test {
                                             kind: ftd::p2::Kind::Record {
                                                 name: s("foo/bar#toc-record"),
                                                 default: None,
+                                                is_reference: true,
                                             },
                                         }),
                                         conditions: vec![],
@@ -11369,6 +11436,7 @@ mod test {
                         s("line-clamp"),
                         ftd::p2::Kind::Integer {
                             default: Some(s("10")),
+                            is_reference: false,
                         },
                     ),
                 ])
@@ -11382,7 +11450,9 @@ mod test {
                                 kind: ftd::p2::Kind::Optional {
                                     kind: Box::from(ftd::p2::Kind::Integer {
                                         default: Some(s("10")),
+                                        is_reference: false,
                                     }),
+                                    is_reference: false,
                                 },
                             }),
                             conditions: vec![],
@@ -11576,6 +11646,7 @@ mod test {
                                     name: s("foo/bar#default-age"),
                                     kind: ftd::p2::Kind::Integer {
                                         default: Some(s("$foo/bar#default-age")),
+                                        is_reference: false,
                                     },
                                 },
                             ),
@@ -11646,6 +11717,7 @@ mod test {
                         s("age"),
                         ftd::p2::Kind::Integer {
                             default: Some(s("$foo/bar#default-age")),
+                            is_reference: false,
                         },
                     ),
                     (
@@ -11657,6 +11729,7 @@ mod test {
                         s("size"),
                         ftd::p2::Kind::Integer {
                             default: Some(s("10")),
+                            is_reference: false,
                         },
                     ),
                 ])
@@ -11789,6 +11862,7 @@ mod test {
                         s("text-size"),
                         ftd::p2::Kind::Integer {
                             default: Some(s("$foo/bar#default-size")),
+                            is_reference: false,
                         },
                     ),
                 ])
@@ -11807,7 +11881,9 @@ mod test {
                                         kind: ftd::p2::Kind::Optional {
                                             kind: Box::new(ftd::p2::Kind::Integer {
                                                 default: Some(s("$foo/bar#default-size")),
+                                                is_reference: false,
                                             }),
+                                            is_reference: false,
                                         },
                                     }),
                                     conditions: vec![],
@@ -12719,6 +12795,7 @@ mod test {
                                 caption: true,
                                 body: true,
                                 default: None,
+                                is_reference: false,
                             },
                         }),
                         ..Default::default()
@@ -16379,6 +16456,7 @@ mod test {
                                         caption: true,
                                         body: false,
                                         default: None,
+                                        is_reference: false,
                                     },
                                 },
                             ),
@@ -16475,6 +16553,7 @@ mod test {
                                         caption: true,
                                         body: false,
                                         default: None,
+                                        is_reference: false,
                                     },
                                 },
                             ),
@@ -16719,6 +16798,7 @@ mod test {
                                     caption: true,
                                     body: false,
                                     default: None,
+                                    is_reference: false,
                                 },
                             },
                         )])
@@ -16751,6 +16831,7 @@ mod test {
                         caption: true,
                         body: false,
                         default: None,
+                        is_reference: false,
                     },
                 },
                 conditions: vec![],
@@ -16779,7 +16860,10 @@ mod test {
                 name: s("ibar"),
                 value: ftd::PropertyValue::Reference {
                     name: s("foo/bar#ifoo"),
-                    kind: ftd::p2::Kind::Integer { default: None },
+                    kind: ftd::p2::Kind::Integer {
+                        default: None,
+                        is_reference: false,
+                    },
                 },
                 conditions: vec![],
             }),
@@ -16809,8 +16893,10 @@ mod test {
                             caption: false,
                             body: false,
                             default: None,
+                            is_reference: false,
                         }),
                         default: None,
+                        is_reference: false,
                     },
                 },
                 conditions: vec![],
@@ -16831,6 +16917,7 @@ mod test {
                                     caption: true,
                                     body: false,
                                     default: None,
+                                    is_reference: false,
                                 },
                             },
                             ftd::PropertyValue::Reference {
@@ -16839,6 +16926,7 @@ mod test {
                                     caption: true,
                                     body: false,
                                     default: None,
+                                    is_reference: false,
                                 },
                             },
                             ftd::PropertyValue::Value {
@@ -16852,6 +16940,7 @@ mod test {
                             caption: false,
                             body: false,
                             default: None,
+                            is_reference: false,
                         },
                     },
                 },
@@ -17112,6 +17201,7 @@ mod test {
                                 name: s("w"),
                                 kind: ftd::p2::Kind::Optional {
                                     kind: Box::new(ftd::p2::Kind::integer()),
+                                    is_reference: false,
                                 },
                             }),
                             conditions: vec![],
@@ -17127,7 +17217,9 @@ mod test {
                                     kind: Box::new(ftd::p2::Kind::Record {
                                         name: s("ftd#color"),
                                         default: None,
+                                        is_reference: false,
                                     }),
+                                    is_reference: false,
                                 },
                             }),
                             conditions: vec![],

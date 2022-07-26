@@ -555,6 +555,7 @@ mod test {
                         ftd::p2::Kind::Record {
                             name: s("foo/bar#person"),
                             default: None,
+                            is_reference: false,
                         },
                     ),
                 ])
@@ -588,6 +589,7 @@ mod test {
                                     kind: ftd::p2::Kind::Record {
                                         name: s("foo/bar#person"),
                                         default: None,
+                                        is_reference: false,
                                     },
                                 },
                             ),
@@ -710,6 +712,7 @@ mod test {
                             ftd::p2::Kind::List {
                                 kind: Box::new(ftd::p2::Kind::string()),
                                 default: None,
+                                is_reference: false,
                             },
                         ),
                     ])
@@ -835,8 +838,10 @@ mod test {
                             kind: Box::new(ftd::p2::Kind::Record {
                                 name: s("foo/bar#point"),
                                 default: None,
+                                is_reference: false,
                             }),
                             default: None,
+                            is_reference: false,
                         },
                     ),
                 ])
@@ -871,6 +876,7 @@ mod test {
                                         kind: ftd::p2::Kind::Record {
                                             name: s("foo/bar#point"),
                                             default: None,
+                                            is_reference: false,
                                         },
                                         data: vec![
                                             ftd::PropertyValue::Value {
@@ -1000,8 +1006,10 @@ mod test {
                         ftd::p2::Kind::List {
                             kind: Box::new(ftd::p2::Kind::OrType {
                                 name: s("foo/bar#entity"),
+                                is_reference: false,
                             }),
                             default: None,
+                            is_reference: false,
                         },
                     ),
                     (s("value"), ftd::p2::Kind::integer()),
@@ -1032,6 +1040,7 @@ mod test {
                                     value: ftd::Value::List {
                                         kind: ftd::p2::Kind::OrType {
                                             name: s("foo/bar#entity"),
+                                            is_reference: false,
                                         },
                                         data: vec![
                                         ftd::PropertyValue::Value {value: ftd::Value::OrType {
