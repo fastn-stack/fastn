@@ -114,7 +114,7 @@ pub fn inline(s: &str) -> String {
         eprintln!("render_inline called on an input with newlines: {}", s);
     }
     let o = comrak::markdown_to_html(s.as_str(), &MD);
-    let o = o.trim().replace("\n", "");
+    let o = o.trim().replace('\n', "");
     let l1 = o.chars().count();
     let l2 = "<p></p>".len();
     let l = if l1 > l2 { l1 - l2 } else { l1 };
@@ -171,6 +171,6 @@ pub fn code_with_theme(
     // TODO: handle various params
     Ok(
         syntect::html::highlighted_html_for_string(code.as_str(), &SS, syntax, theme)
-            .replacen("\n", "", 1),
+            .replacen('\n', "", 1),
     )
 }

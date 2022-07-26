@@ -2354,7 +2354,7 @@ pub struct Container {
 impl Container {
     pub fn is_open(&self, is_container_children_empty: bool) -> bool {
         self.open
-            .unwrap_or_else(|| (self.children.is_empty() && is_container_children_empty))
+            .unwrap_or((self.children.is_empty() && is_container_children_empty))
     }
 }
 
