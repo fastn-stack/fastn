@@ -104,6 +104,33 @@ impl SubSection {
         }
     }
 
+    /// returns tuple (body/caption, is_caption)
+    ///
+    /// in case both or none are passed then it throws error  
+    pub fn body_or_caption(&self, doc_id: &str) -> Result<(String, bool)> {
+        let (has_body, has_caption) = (self.body.is_some(), self.caption.is_some());
+        match (has_body, has_caption) {
+            (true, true) => Err(ftd::p1::Error::ForbiddenUsage {
+                message: "both body and caption are passed !!".to_string(),
+                doc_id: doc_id.to_string(),
+                line_number: self.line_number,
+            }),
+            (false, false) => Err(ftd::p1::Error::ParseError {
+                message: "no caption or body is passed !!".to_string(),
+                doc_id: doc_id.to_string(),
+                line_number: self.line_number,
+            }),
+            (_, _) => {
+                // Case: (has_body,no_caption)
+                if has_body {
+                    return Ok((self.body(doc_id)?, false));
+                }
+                // Case: (no_body,has_caption)
+                return Ok((self.caption(doc_id)?, true));
+            }
+        }
+    }
+
     pub fn with_name(name: &str) -> Self {
         Self {
             name: name.to_string(),

@@ -1240,29 +1240,14 @@ mod test {
     use ftd::test::*;
     use ftd::{markdown_line, Instruction};
 
-    #[allow(dead_code)]
-    fn insert_integer_by_name(
-        doc_id: &str,
-        var_name: &str,
-        level: &str,
-        val: i64,
-        bag: &mut std::collections::BTreeMap<String, ftd::p2::Thing>,
-    ) {
-        // root => [doc_id]#[var_name]@[level]
-        let root = format!("{}#{}&{}", doc_id, var_name, level);
-        let integer_thing = ftd::p2::Thing::Variable(ftd::Variable {
-            name: format!("{}", var_name),
-            value: ftd::PropertyValue::Value {
-                value: ftd::Value::Integer { value: val },
-            },
-            conditions: vec![],
-            flags: Default::default(),
-        });
-
-        bag.insert(root, integer_thing);
-    }
-
-    #[allow(dead_code)]
+    /// inserts mapping of root_id -> integer variable (thing) in the bag
+    ///
+    /// bag\[root_id\] = integer variable
+    ///
+    /// root_id = \[doc_id\]#\[var_name\]@\[level\]
+    ///
+    ///
+    ///
     fn insert_integer_by_root(
         root: &str,
         val: i64,

@@ -178,10 +178,14 @@ impl Record {
                     ftd::p2::Kind::String { .. } => {
                         let mut list = vec![];
                         for v in subsections {
+                            let (text, from_caption) = v.body_or_caption(doc.name)?;
                             list.push(ftd::PropertyValue::Value {
                                 value: ftd::Value::String {
-                                    text: v.caption(doc.name)?,
-                                    source: ftd::TextSource::Caption,
+                                    text,
+                                    source: match from_caption {
+                                        true => ftd::TextSource::Caption,
+                                        false => ftd::TextSource::Body,
+                                    },
                                 },
                             });
                         }
