@@ -126,7 +126,7 @@ impl SubSection {
                     return Ok((self.body(doc_id)?, false));
                 }
                 // Case: (no_body,has_caption)
-                return Ok((self.caption(doc_id)?, true));
+                Ok((self.caption(doc_id)?, true))
             }
         }
     }

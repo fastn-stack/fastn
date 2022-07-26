@@ -1245,9 +1245,6 @@ mod test {
     /// bag\[root_id\] = integer variable
     ///
     /// root_id = \[doc_id\]#\[var_name\]@\[level\]
-    ///
-    ///
-    ///
     fn insert_integer_by_root(
         root: &str,
         val: i64,
