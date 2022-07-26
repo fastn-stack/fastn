@@ -45,7 +45,7 @@ impl DNode {
                 .join(" ")
         )
     }
-
+    #[cfg_attr(feature = "cargo-clippy", allow(clippy::format_push_string))]
     pub fn to_html(&self, id: &str) -> String {
         let style = format!("style=\"{}\"", self.style_to_html(self.visible));
         let classes = self.class_to_html();
@@ -58,7 +58,7 @@ impl DNode {
                     let event = format!(
                         "window.ftd.handle_event(event, '{}', '{}', this)",
                         id,
-                        actions.replace("\"", "&quot;")
+                        actions.replace('\"', "&quot;")
                     );
                     attr.push(' ');
                     attr.push_str(&format!("{}={}", name, quote(&event)));

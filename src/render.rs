@@ -13,7 +13,7 @@ lazy_static::lazy_static! {
         builder.build()
     };
     pub static ref KNOWN_EXTENSIONS: std::collections::HashSet<String> =
-        SS.syntaxes().iter().map(|v| v.file_extensions.to_vec()).flatten().collect();
+        SS.syntaxes().iter().flat_map(|v| v.file_extensions.to_vec()).collect();
     pub static ref TS: syntect::highlighting::ThemeSet =
         syntect::highlighting::ThemeSet::load_defaults();
     pub static ref MD: comrak::ComrakOptions = {
@@ -51,7 +51,7 @@ pub fn render(s: &str, auto_links: bool, hard_breaks: bool) -> String {
 pub fn markup_inline(string: &str) -> String {
     let s = strip_image(string.trim());
     let o = comrak::markdown_to_html(s.as_str(), &MD);
-    let o = o.trim().replace("\n", " ");
+    let o = o.trim().replace('\n', " ");
     let (space_before, space_after) = spaces(string);
     if o.starts_with("<p>") {
         let l1 = o.chars().count();

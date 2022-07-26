@@ -100,7 +100,7 @@ impl Event {
                 action: ftd::Action {
                     action: "set-value".to_string(),
                     target: val.to_string(),
-                    parameters: std::array::IntoIter::new([(
+                    parameters: std::iter::IntoIterator::into_iter([(
                         "value".to_string(),
                         vec![
                             ftd::event::ParameterData {
@@ -121,7 +121,7 @@ impl Event {
                 action: ftd::Action {
                     action: "set-value".to_string(),
                     target: val.to_string(),
-                    parameters: std::array::IntoIter::new([(
+                    parameters: std::iter::IntoIterator::into_iter([(
                         "value".to_string(),
                         vec![
                             ftd::event::ParameterData {

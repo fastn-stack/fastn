@@ -99,7 +99,7 @@ pub fn i(p: &str, reference: Option<String>) -> ftd::ImageSrc {
 pub use ftd::p2::interpreter::{default_bag, default_column};
 
 pub fn person_fields() -> std::collections::BTreeMap<String, ftd::p2::Kind> {
-    std::array::IntoIter::new([
+    std::iter::IntoIterator::into_iter([
         (s("address"), ftd::p2::Kind::string()),
         (s("bio"), ftd::p2::Kind::body()),
         (s("age"), ftd::p2::Kind::integer()),
@@ -109,7 +109,7 @@ pub fn person_fields() -> std::collections::BTreeMap<String, ftd::p2::Kind> {
 }
 
 pub fn abrar() -> std::collections::BTreeMap<String, ftd::PropertyValue> {
-    std::array::IntoIter::new([
+    std::iter::IntoIterator::into_iter([
         (
             s("name"),
             ftd::PropertyValue::Value {
@@ -160,7 +160,7 @@ pub fn entity() -> ftd::p2::Thing {
             },
             ftd::p2::Record {
                 name: s("foo/bar#entity.company"),
-                fields: std::array::IntoIter::new([
+                fields: std::iter::IntoIterator::into_iter([
                     (s("industry"), ftd::p2::Kind::string()),
                     (s("name"), ftd::p2::Kind::caption()),
                 ])

@@ -185,7 +185,7 @@ impl<'a> TDoc<'a> {
         properties: &mut std::collections::BTreeMap<String, ftd::component::Property>,
         reference: &mut Option<(String, ftd::p2::Kind)>,
         condition: &mut Option<ftd::p2::Boolean>,
-        events: &mut Vec<ftd::p2::Event>,
+        events: &mut [ftd::p2::Event],
         insert_only: bool,
         ignore_loop: bool,
         ignore_mouse_in: bool,
@@ -346,7 +346,7 @@ impl<'a> TDoc<'a> {
                 if part1.eq("PARENT") {
                     if let Some(part2) = part2 {
                         let parents_parent_container =
-                            parent_container.rsplit_once(",").map(|v| v.0).unwrap_or("");
+                            parent_container.rsplit_once(',').map(|v| v.0).unwrap_or("");
                         let key = doc.resolve_local_variable_name(
                             0,
                             part2.as_str(),
@@ -493,7 +493,7 @@ impl<'a> TDoc<'a> {
     pub(crate) fn insert_local(
         &mut self,
         parent: &mut ftd::ChildComponent,
-        children: &mut Vec<ftd::ChildComponent>,
+        children: &mut [ftd::ChildComponent],
         local_container: &[usize],
         external_children_count: &Option<usize>,
     ) -> ftd::p1::Result<()> {
@@ -600,6 +600,7 @@ impl<'a> TDoc<'a> {
         )
     }
 
+    #[cfg_attr(feature = "cargo-clippy", allow(clippy::wrong_self_convention))]
     fn from_json_(
         &self,
         line_number: usize,
@@ -780,6 +781,7 @@ impl<'a> TDoc<'a> {
         )
     }
 
+    #[cfg_attr(feature = "cargo-clippy", allow(clippy::wrong_self_convention))]
     fn from_json_row_(
         &self,
         line_number: usize,
@@ -1046,14 +1048,13 @@ impl<'a> TDoc<'a> {
                 v.value.resolve(line_number, self)?,
                 v.conditions
                     .into_iter()
-                    .map(|(b, v)| {
+                    .flat_map(|(b, v)| {
                         if let Ok(v) = v.resolve(line_number, self) {
                             Some((b, v))
                         } else {
                             None
                         }
                     })
-                    .flatten()
                     .collect(),
             )),
             v => self.err("not a variable", v, "get_value", line_number),
@@ -1498,7 +1499,7 @@ mod test {
                 ftd::PropertyValue::Value {
                     value: ftd::Value::Record {
                         name: "foo/bar#person".to_string(),
-                        fields: std::array::IntoIter::new([
+                        fields: std::iter::IntoIterator::into_iter([
                             (
                                 "name".to_string(),
                                 ftd::PropertyValue::Value {
@@ -1539,7 +1540,7 @@ mod test {
                 ftd::PropertyValue::Value {
                     value: ftd::Value::Record {
                         name: "foo/bar#person".to_string(),
-                        fields: std::array::IntoIter::new([
+                        fields: std::iter::IntoIterator::into_iter([
                             (
                                 "name".to_string(),
                                 ftd::PropertyValue::Value {
