@@ -6,7 +6,7 @@ pub async fn update(config: &fpm::Config) -> fpm::Result<()> {
         }
     };
 
-    let c = fpm::Config::read(None).await?;
+    let c = fpm::Config::read2(None, false).await?;
     if c.package.dependencies.is_empty() {
         println!("No dependencies to update.")
     } else if c.package.dependencies.len() == 1 {

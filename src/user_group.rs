@@ -101,6 +101,7 @@ impl UserGroup {
 }
 
 impl UserGroupTemp {
+    #[allow(clippy::wrong_self_convention)]
     pub fn to_user_group(self) -> fpm::Result<UserGroup> {
         let mut identities = vec![];
         let mut excluded_identities = vec![];

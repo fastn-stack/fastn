@@ -18,8 +18,8 @@ use itertools::Itertools;
 #[derive(Debug, Clone, Default)]
 pub struct Sitemap {
     pub sections: Vec<Section>,
-    // pub readers: Vec<String>,
-    // pub writers: Vec<String>,
+    pub readers: Vec<String>,
+    pub writers: Vec<String>,
 }
 
 #[derive(Debug, Clone, Default)]
@@ -124,8 +124,8 @@ pub struct Section {
     /// ```
     /// default value will be `false`
     pub skip: bool,
-    // pub readers: Vec<String>,
-    // pub writers: Vec<String>,
+    pub readers: Vec<String>,
+    pub writers: Vec<String>,
 }
 
 #[derive(Debug, Clone)]
@@ -140,6 +140,8 @@ pub struct Subsection {
     pub nav_title: Option<String>,
     pub toc: Vec<TocItem>,
     pub skip: bool,
+    pub readers: Vec<String>,
+    pub writers: Vec<String>,
 }
 
 impl Default for Subsection {
@@ -155,6 +157,8 @@ impl Default for Subsection {
             nav_title: None,
             toc: vec![],
             skip: false,
+            readers: vec![],
+            writers: vec![],
         }
     }
 }
@@ -170,6 +174,8 @@ pub struct TocItem {
     pub nav_title: Option<String>,
     pub children: Vec<TocItem>,
     pub skip: bool,
+    pub readers: Vec<String>,
+    pub writers: Vec<String>,
 }
 
 #[derive(Debug, Default, serde::Serialize)]
@@ -566,6 +572,9 @@ impl Sitemap {
         }
         let mut sitemap = Sitemap {
             sections: construct_tree_util(parser.finalize()?),
+
+            readers: vec![],
+            writers: vec![],
         };
 
         if resolve_sitemap {

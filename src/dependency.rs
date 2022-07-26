@@ -1,4 +1,3 @@
-use crate::utils::HasElements;
 use tokio::io::AsyncWriteExt;
 
 #[derive(Debug, Clone)]
@@ -30,49 +29,6 @@ impl Dependency {
             }
         }
     }
-}
-
-pub async fn ensure(base_dir: &camino::Utf8PathBuf, package: &mut fpm::Package) -> fpm::Result<()> {
-    // `translations` and `translation_of` both can't have together
-    if package.translations.has_elements() && package.translation_of.is_some() {
-        return Err(fpm::Error::UsageError {
-            message: "Package cannot be both original and translation package. \
-            suggestion: Remove either `translation-of` or `translation` from FPM.ftd"
-                .to_string(),
-        });
-    }
-
-    let mut downloaded_package = vec![package.name.clone()];
-
-    if let Some(translation_of) = package.translation_of.as_mut() {
-        if package.language.is_none() {
-            return Err(fpm::Error::UsageError {
-                message: "Translation package needs to declare the language".to_string(),
-            });
-        }
-        translation_of
-            .process2(base_dir, &mut downloaded_package, true, true)
-            .await?;
-    }
-
-    for dep in package.dependencies.iter_mut() {
-        dep.package
-            .process2(base_dir, &mut downloaded_package, false, true)
-            .await?;
-    }
-
-    for translation in package.translations.iter_mut() {
-        if package.language.is_none() {
-            return Err(fpm::Error::UsageError {
-                message: "Package needs to declare the language".to_string(),
-            });
-        }
-        translation
-            .process2(base_dir, &mut downloaded_package, false, false)
-            .await?;
-    }
-
-    Ok(())
 }
 
 #[derive(serde::Deserialize, Debug, Clone)]
