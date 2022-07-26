@@ -14,6 +14,9 @@ impl<'a> TDoc<'a> {
         if let Some(thing) = self.local_variables.get(key) {
             return Some((key, thing));
         }
+        if let Some(thing) = self.bag.get(key) {
+            return Some((key, thing));
+        }
         if let Some(key) = self.referenced_local_variables.get(key) {
             return self.get_local_variable(key);
         }
@@ -29,12 +32,6 @@ impl<'a> TDoc<'a> {
         local_container: &[usize],
         external_children_count: &Option<usize>,
     ) -> ftd::p1::Result<()> {
-        dbg!(
-            "insert_local_variable",
-            &arguments,
-            &properties,
-            "end insert_local_variable"
-        );
         for (k, arg) in arguments.iter() {
             let mut default = if let Some(d) = properties.get(k) {
                 let default = if let Some(ref d) = d.default {
@@ -115,7 +112,7 @@ impl<'a> TDoc<'a> {
                 );
             };
             if let ftd::PropertyValue::Variable { ref mut name, .. } = default {
-                if !self.local_variables.contains_key(name) {
+                if !self.local_variables.contains_key(name) && !self.bag.contains_key(name) {
                     *name = self.resolve_local_variable_name(0, name, string_container)?;
                 }
             }
@@ -367,7 +364,6 @@ impl<'a> TDoc<'a> {
                 }
 
                 let (part1, part2) = ftd::p2::utils::get_doc_name_and_remaining(name)?;
-                let key = doc.resolve_local_variable_name(0, name.as_str(), parent_container)?;
                 if part1.eq("PARENT") {
                     if let Some(part2) = part2 {
                         let parents_parent_container =
@@ -411,7 +407,12 @@ impl<'a> TDoc<'a> {
                 } else if let Some((key, _)) = doc.get_local_variable(
                     &doc.resolve_name(0, format!("{}@{}", part1, parent_container).as_str())?,
                 ) {
-                    *name = key.to_string();
+                    let key = if let Some(part2) = part2 {
+                        format!("{}.{}", key, part2)
+                    } else {
+                        key.to_string()
+                    };
+                    *name = key;
                 }
             }
             Ok(())

@@ -1,14 +1,35 @@
--- string message: Message from outside
+-- string message: Message
+
+-- ftd.column:
+padding: 40
+id: main
+spacing: 10
+
+-- ftd.text: $message
+
 
 -- foo:
 msg: $message
+new-msg: Message from foo 1
+
+-- container: main
+
+-- foo:
+msg: $message
+new-msg: Message from foo 2
 
 --- ftd.text: Text from foo's external-children
 
+
+
+
 -- ftd.column foo:
 open: true
-string msg: Message from foo
+string $msg: Message from foo
+string new-msg:
 width: fill
+border-width: 2
+padding: 20
 
 --- ftd.text: $msg
 
@@ -16,14 +37,20 @@ width: fill
 
 --- bar:
 msg: $msg
+new-msg: $new-msg
 count: $CHILDREN-COUNT
+
+
+
 
 
 -- ftd.column bar:
 string $msg:
 integer $count:
+string new-msg:
 
 --- ftd.text: $msg
-$on-click$: $msg = Hello There
+$on-click$: $msg = $new-msg
+
 
 --- ftd.integer: $count

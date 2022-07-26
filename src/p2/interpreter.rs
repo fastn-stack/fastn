@@ -322,7 +322,6 @@ impl InterpreterState {
                                 &doc,
                                 &Default::default(),
                             )?;
-                            dbg!(&parent.properties);
 
                             let mut children = vec![];
 

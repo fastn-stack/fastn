@@ -45,7 +45,6 @@ impl<'a> ExecuteDoc<'a> {
             Default::default();
         let mut children: Vec<ftd::Element> = vec![];
         let mut external_children_count = if is_external { Some(0_usize) } else { None };
-        dbg!(&self.instructions);
 
         while *index < self.instructions.len() {
             let mut doc = ftd::p2::TDoc {

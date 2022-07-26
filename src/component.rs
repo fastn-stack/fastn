@@ -514,8 +514,6 @@ impl ChildComponent {
         let conditional_attribute =
             get_conditional_attributes(self.line_number, &self.properties, doc)?;
 
-        dbg!("CALL1", &self, &root);
-
         let mut element = root.call(
             &self.properties,
             doc,
@@ -601,8 +599,6 @@ impl ChildComponent {
 
         let root_property =
             get_root_property(line_number, name, caption, doc, &all_arguments, inherits)?;
-
-        dbg!(&root, &root_property, &local_arguments, &all_arguments,);
 
         return Ok(Self {
             line_number,
@@ -1977,7 +1973,6 @@ impl Component {
 
             let events = ftd::p2::Event::get_events(self.line_number, events, doc)?;
 
-            dbg!("CALL2", &self, &root);
             let mut element = if !is_null_element {
                 root.call(
                     &self.properties,
@@ -2493,7 +2488,7 @@ pub fn read_properties(
                     caption: c,
                     body: b,
                     default: d,
-                    is_reference: r,
+                    ..
                 },
             ) => {
                 if *c && caption.is_some() {
