@@ -1048,8 +1048,12 @@ pub fn default_bag() -> std::collections::BTreeMap<String, ftd::p2::Thing> {
             "ftd#btb".to_string(),
             ftd::p2::Thing::Record(ftd::p2::Record {
                 name: "ftd#btb".to_string(),
-                fields: std::iter::IntoIterator::into_iter([color("base"), color("text"), color("border")])
-                    .collect(),
+                fields: std::iter::IntoIterator::into_iter([
+                    color("base"),
+                    color("text"),
+                    color("border"),
+                ])
+                .collect(),
                 instances: Default::default(),
                 order: vec!["base".to_string(), "text".to_string(), "border".to_string()],
             }),
@@ -1296,8 +1300,11 @@ mod test {
             ftd::p2::Thing::Component(ftd::Component {
                 full_name: s("foo/bar#foo"),
                 root: "ftd#text".to_string(),
-                arguments: std::iter::IntoIterator::into_iter([(s("name"), ftd::p2::Kind::caption())])
-                    .collect(),
+                arguments: std::iter::IntoIterator::into_iter([(
+                    s("name"),
+                    ftd::p2::Kind::caption(),
+                )])
+                .collect(),
                 properties: std::iter::IntoIterator::into_iter([
                     (
                         s("color"),
@@ -2016,8 +2023,11 @@ mod test {
             ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd#text".to_string(),
                 full_name: "foo/bar#toc-heading".to_string(),
-                arguments: std::iter::IntoIterator::into_iter([(s("text"), ftd::p2::Kind::caption())])
-                    .collect(),
+                arguments: std::iter::IntoIterator::into_iter([(
+                    s("text"),
+                    ftd::p2::Kind::caption(),
+                )])
+                .collect(),
                 properties: std::iter::IntoIterator::into_iter([
                     (
                         s("line-clamp"),
@@ -3100,8 +3110,11 @@ mod test {
             ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd#text".to_string(),
                 full_name: "creating-a-tree#toc-heading".to_string(),
-                arguments: std::iter::IntoIterator::into_iter([(s("text"), ftd::p2::Kind::caption())])
-                    .collect(),
+                arguments: std::iter::IntoIterator::into_iter([(
+                    s("text"),
+                    ftd::p2::Kind::caption(),
+                )])
+                .collect(),
                 properties: std::iter::IntoIterator::into_iter([(
                     s("text"),
                     ftd::component::Property {
@@ -16198,7 +16211,8 @@ mod test {
             ftd::p2::Thing::Component(ftd::Component {
                 root: s("ftd#column"),
                 full_name: s("foo/bar#foo"),
-                arguments: std::iter::IntoIterator::into_iter([(s("o"), ftd::p2::Kind::object())]).collect(),
+                arguments: std::iter::IntoIterator::into_iter([(s("o"), ftd::p2::Kind::object())])
+                    .collect(),
                 instructions: vec![ftd::Instruction::ChildComponent {
                     child: ftd::ChildComponent {
                         root: s("ftd#text"),
@@ -17642,8 +17656,11 @@ mod test {
             ftd::p2::Thing::Component(ftd::Component {
                 root: s("ftd#text"),
                 full_name: s("foo/bar#slide"),
-                arguments: std::iter::IntoIterator::into_iter([(s("title"), ftd::p2::Kind::caption())])
-                    .collect(),
+                arguments: std::iter::IntoIterator::into_iter([(
+                    s("title"),
+                    ftd::p2::Kind::caption(),
+                )])
+                .collect(),
                 properties: std::iter::IntoIterator::into_iter([(
                     s("text"),
                     ftd::component::Property {
@@ -17752,19 +17769,21 @@ mod test {
                                                 action: ftd::Action {
                                                     action: s("increment"),
                                                     target: s("foo/bar#current@0"),
-                                                    parameters: std::iter::IntoIterator::into_iter([(
-                                                        "clamp".to_string(),
-                                                        vec![
-                                                            ftd::event::ParameterData {
-                                                                value: serde_json::json!(1),
-                                                                reference: None,
-                                                            },
-                                                            ftd::event::ParameterData {
-                                                                value: serde_json::json!(2),
-                                                                reference: None,
-                                                            },
-                                                        ],
-                                                    )])
+                                                    parameters: std::iter::IntoIterator::into_iter(
+                                                        [(
+                                                            "clamp".to_string(),
+                                                            vec![
+                                                                ftd::event::ParameterData {
+                                                                    value: serde_json::json!(1),
+                                                                    reference: None,
+                                                                },
+                                                                ftd::event::ParameterData {
+                                                                    value: serde_json::json!(2),
+                                                                    reference: None,
+                                                                },
+                                                            ],
+                                                        )],
+                                                    )
                                                     .collect(),
                                                 },
                                             }],
@@ -17788,19 +17807,21 @@ mod test {
                                                 action: ftd::Action {
                                                     action: s("increment"),
                                                     target: s("foo/bar#current@0"),
-                                                    parameters: std::iter::IntoIterator::into_iter([(
-                                                        "clamp".to_string(),
-                                                        vec![
-                                                            ftd::event::ParameterData {
-                                                                value: serde_json::json!(1),
-                                                                reference: None,
-                                                            },
-                                                            ftd::event::ParameterData {
-                                                                value: serde_json::json!(2),
-                                                                reference: None,
-                                                            },
-                                                        ],
-                                                    )])
+                                                    parameters: std::iter::IntoIterator::into_iter(
+                                                        [(
+                                                            "clamp".to_string(),
+                                                            vec![
+                                                                ftd::event::ParameterData {
+                                                                    value: serde_json::json!(1),
+                                                                    reference: None,
+                                                                },
+                                                                ftd::event::ParameterData {
+                                                                    value: serde_json::json!(2),
+                                                                    reference: None,
+                                                                },
+                                                            ],
+                                                        )],
+                                                    )
                                                     .collect(),
                                                 },
                                             }],
