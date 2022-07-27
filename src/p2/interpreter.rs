@@ -47,6 +47,7 @@ impl InterpreterState {
 
         // Removing commented parts from the parsed document
         self.document_stack[l].ignore_comments();
+        self.document_stack[l].show_document();
         // beyond this point commented things will no longer exist in the parsed document
 
         if self.document_stack[l].processing_imports {
@@ -732,6 +733,33 @@ impl ParsedDocument {
         })
     }
 
+    /// prints the parsed document (for debugging purposes)
+    #[allow(dead_code)]
+    fn show_document(&self) {
+        for section in self.sections.iter() {
+            dbg!(&section.name, &section.caption, section.is_commented);
+
+            for (_ln, key, value) in section.header.0.iter() {
+                dbg!(key, value);
+            }
+
+            dbg!(&section.body);
+            for subsection in section.sub_sections.0.iter() {
+                dbg!(
+                    &subsection.name,
+                    &subsection.caption,
+                    &subsection.is_commented
+                );
+
+                for (_ln, key, value) in subsection.header.0.iter() {
+                    dbg!(key, value);
+                }
+
+                dbg!(&subsection.body);
+            }
+        }
+    }
+
     fn done_processing_imports(&mut self) {
         self.processing_imports = false;
     }
@@ -755,12 +783,11 @@ impl ParsedDocument {
     /// ';' comments are ignored inside the [`parser`] itself.
     ///
     /// uses [`Section::remove_comments()`] and [`Subsection::remove_comments()`] to remove comments
-    /// at section and subsection levels
+    /// in sections and subsections accordingly.
     ///
     /// [`parser`]: ftd::p1::parser::parse
     /// [`Section::remove_comments()`]: ftd::p1::section::Section::remove_comments
     /// [`SubSection::remove_comments()`]: ftd::p1::sub_section::SubSection::remove_comments
-    /// [`Header::uncommented_headers()`]: ftd::p1::header::Header::uncommented_headers
     fn ignore_comments(&mut self) {
         self.sections = self
             .sections

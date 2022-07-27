@@ -10,13 +10,13 @@ impl Header {
     ///
     /// [`SubSection::remove_comments()`]: ftd::p1::sub_section::SubSection::remove_comments
     /// [`Section::remove_comments()`]: ftd::p1::section::Section::remove_comments
-    pub fn uncommented_headers(self) -> Header {
+    pub fn uncommented_headers(&self) -> Header {
         let mut headers: Vec<(usize, String, String)> = vec![];
-        for (ln, key, val) in self.0.iter {
+        for (ln, key, val) in self.0.iter() {
             if !key.trim().starts_with('/') {
                 match key.trim().starts_with(r"\/") {
-                    true => header_list.push((ln, key.trim().replacen(r"\", "", 1), val)),
-                    false => header_list.push((ln, key, val)),
+                    true => headers.push((*ln, key.trim().replacen(r"\", "", 1), val.to_string())),
+                    false => headers.push((*ln, key.to_string(), val.to_string())),
                 }
             }
         }
