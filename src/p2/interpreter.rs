@@ -47,7 +47,6 @@ impl InterpreterState {
 
         // Removing commented parts from the parsed document
         self.document_stack[l].ignore_comments();
-        self.document_stack[l].show_document();
         // beyond this point commented things will no longer exist in the parsed document
 
         if self.document_stack[l].processing_imports {
@@ -731,33 +730,6 @@ impl ParsedDocument {
             foreign_variable_prefix: vec![],
             instructions: vec![],
         })
-    }
-
-    /// prints the parsed document (for debugging purposes)
-    #[allow(dead_code)]
-    fn show_document(&self) {
-        for section in self.sections.iter() {
-            dbg!(&section.name, &section.caption, section.is_commented);
-
-            for (_ln, key, value) in section.header.0.iter() {
-                dbg!(key, value);
-            }
-
-            dbg!(&section.body);
-            for subsection in section.sub_sections.0.iter() {
-                dbg!(
-                    &subsection.name,
-                    &subsection.caption,
-                    &subsection.is_commented
-                );
-
-                for (_ln, key, value) in subsection.header.0.iter() {
-                    dbg!(key, value);
-                }
-
-                dbg!(&subsection.body);
-            }
-        }
     }
 
     fn done_processing_imports(&mut self) {
