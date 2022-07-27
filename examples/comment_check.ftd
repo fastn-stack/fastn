@@ -1,0 +1,47 @@
+-- ftd.color red: red
+dark: red
+
+-- ftd.color green: green
+dark: green
+
+;; [Section Comment] <-
+/-- ftd.text:
+cursor: pointer
+
+hello1
+
+-- ftd.text:
+;; [Section Header Comment] <-
+/color: red
+
+hello2
+
+-- ftd.text:
+color: $red
+
+;; [Body Comment Escaped] <-
+\/hello3
+
+-- ftd.row:
+
+;; [Subsection Comment] <-
+/--- ftd.text: hello4
+
+--- ftd.text: hello5
+color: $green
+;; [Subsection header commented] <-
+/padding-left: 20
+
+-- ftd.row foo:
+align: center
+
+--- ftd.text:
+
+;; [Body Comment] <-
+\/foo says hello there
+
+/--- ftd.text: foo says bye bye
+
+-- foo:
+
+/-- foo:
