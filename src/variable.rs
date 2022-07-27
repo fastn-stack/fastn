@@ -1428,7 +1428,7 @@ mod test {
             s("foo/bar#pull-request"),
             ftd::p2::Thing::Record(ftd::p2::Record {
                 name: s("foo/bar#pull-request"),
-                fields: std::array::IntoIter::new([
+                fields: std::iter::IntoIterator::into_iter([
                     (s("title"), ftd::p2::Kind::caption()),
                     (s("about"), ftd::p2::Kind::body()),
                 ])
@@ -1448,7 +1448,7 @@ mod test {
                         data: vec![ftd::PropertyValue::Value {
                             value: ftd::Value::Record {
                                 name: s("foo/bar#pull-request"),
-                                fields: std::array::IntoIter::new([
+                                fields: std::iter::IntoIterator::into_iter([
                                     (
                                         s("title"),
                                         ftd::PropertyValue::Value {

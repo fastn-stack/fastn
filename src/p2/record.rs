@@ -10,7 +10,7 @@ type Invocation = std::collections::BTreeMap<String, ftd::PropertyValue>;
 
 impl Record {
     pub fn variant_name(&self) -> Option<&str> {
-        self.name.split_once(".").map(|(_, r)| r)
+        self.name.split_once('.').map(|(_, r)| r)
     }
 
     pub fn fields(
@@ -464,7 +464,7 @@ mod test {
 
     #[test]
     fn record() {
-        let sourabh: super::Invocation = std::array::IntoIter::new([
+        let sourabh: super::Invocation = std::iter::IntoIterator::into_iter([
             (
                 s("name"),
                 ftd::PropertyValue::Value {
@@ -521,7 +521,7 @@ mod test {
             ftd::p2::Thing::Record(ftd::p2::Record {
                 name: "foo/bar#person".to_string(),
                 fields: person_fields(),
-                instances: std::array::IntoIter::new([(
+                instances: std::iter::IntoIterator::into_iter([(
                     s("foo/bar"),
                     vec![abrar(), sourabh.clone()],
                 )])
@@ -544,7 +544,7 @@ mod test {
             "foo/bar#employee".to_string(),
             ftd::p2::Thing::Record(ftd::p2::Record {
                 name: "foo/bar#employee".to_string(),
-                fields: std::array::IntoIter::new([
+                fields: std::iter::IntoIterator::into_iter([
                     (s("eid"), ftd::p2::Kind::string()),
                     (
                         s("who"),
@@ -567,7 +567,7 @@ mod test {
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Record {
                         name: "foo/bar#employee".to_string(),
-                        fields: std::array::IntoIter::new([
+                        fields: std::iter::IntoIterator::into_iter([
                             (
                                 s("eid"),
                                 ftd::PropertyValue::Value {
@@ -603,7 +603,7 @@ mod test {
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Record {
                         name: "foo/bar#employee".to_string(),
-                        fields: std::array::IntoIter::new([
+                        fields: std::iter::IntoIterator::into_iter([
                             (
                                 s("eid"),
                                 ftd::PropertyValue::Value {
@@ -699,7 +699,7 @@ mod test {
                 "foo/bar#person".to_string(),
                 ftd::p2::Thing::Record(ftd::p2::Record {
                     name: "foo/bar#person".to_string(),
-                    fields: std::array::IntoIter::new([
+                    fields: std::iter::IntoIterator::into_iter([
                         (s("name"), ftd::p2::Kind::caption()),
                         (
                             s("friends"),
@@ -723,7 +723,7 @@ mod test {
                     value: ftd::PropertyValue::Value {
                         value: ftd::Value::Record {
                             name: "foo/bar#person".to_string(),
-                            fields: std::array::IntoIter::new([
+                            fields: std::iter::IntoIterator::into_iter([
                                 (
                                     s("name"),
                                     ftd::PropertyValue::Value {
@@ -809,7 +809,7 @@ mod test {
             s("foo/bar#point"),
             ftd::p2::Thing::Record(ftd::p2::Record {
                 name: s("foo/bar#point"),
-                fields: std::array::IntoIter::new([
+                fields: std::iter::IntoIterator::into_iter([
                     (s("x"), ftd::p2::Kind::integer()),
                     (s("y"), ftd::p2::Kind::integer()),
                 ])
@@ -823,7 +823,7 @@ mod test {
             "foo/bar#person".to_string(),
             ftd::p2::Thing::Record(ftd::p2::Record {
                 name: s("foo/bar#person"),
-                fields: std::array::IntoIter::new([
+                fields: std::iter::IntoIterator::into_iter([
                     (s("name"), ftd::p2::Kind::caption()),
                     (
                         s("points"),
@@ -850,7 +850,7 @@ mod test {
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Record {
                         name: "foo/bar#person".to_string(),
-                        fields: std::array::IntoIter::new([
+                        fields: std::iter::IntoIterator::into_iter([
                             (
                                 s("name"),
                                 ftd::PropertyValue::Value {
@@ -872,7 +872,7 @@ mod test {
                                             ftd::PropertyValue::Value {
                                                 value: ftd::Value::Record {
                                                     name: "foo/bar#point".to_string(),
-                                                    fields: std::array::IntoIter::new([
+                                                    fields: std::iter::IntoIterator::into_iter([
                                                         (
                                                             s("x"),
                                                             ftd::PropertyValue::Value {
@@ -896,7 +896,7 @@ mod test {
                                             ftd::PropertyValue::Value {
                                                 value: ftd::Value::Record {
                                                     name: "foo/bar#point".to_string(),
-                                                    fields: std::array::IntoIter::new([
+                                                    fields: std::iter::IntoIterator::into_iter([
                                                         (
                                                             s("x"),
                                                             ftd::PropertyValue::Value {
@@ -920,7 +920,7 @@ mod test {
                                             ftd::PropertyValue::Value {
                                                 value: ftd::Value::Record {
                                                     name: "foo/bar#point".to_string(),
-                                                    fields: std::array::IntoIter::new([
+                                                    fields: std::iter::IntoIterator::into_iter([
                                                         (
                                                             s("x"),
                                                             ftd::PropertyValue::Value {
@@ -990,7 +990,7 @@ mod test {
             s("foo/bar#sale"),
             ftd::p2::Thing::Record(ftd::p2::Record {
                 name: s("foo/bar#sale"),
-                fields: std::array::IntoIter::new([
+                fields: std::iter::IntoIterator::into_iter([
                     (
                         s("party"),
                         ftd::p2::Kind::List {
@@ -1015,7 +1015,7 @@ mod test {
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Record {
                         name: s("foo/bar#sale"),
-                        fields: std::array::IntoIter::new([
+                        fields: std::iter::IntoIterator::into_iter([
                             (
                                 s("value"),
                                 ftd::PropertyValue::Value {
@@ -1033,7 +1033,7 @@ mod test {
                                         ftd::PropertyValue::Value {value: ftd::Value::OrType {
                                             name: s("foo/bar#entity"),
                                             variant: s("person"),
-                                            fields: std::array::IntoIter::new([
+                                            fields: std::iter::IntoIterator::into_iter([
                                                 (
                                                     s("address"),
                                                     ftd::PropertyValue::Value {
@@ -1073,7 +1073,7 @@ mod test {
                                         ftd::PropertyValue::Value {value: ftd::Value::OrType {
                                             name: s("foo/bar#entity"),
                                             variant: s("company"),
-                                            fields: std::array::IntoIter::new([
+                                            fields: std::iter::IntoIterator::into_iter([
                                                 (
                                                     s("industry"),
                                                     ftd::PropertyValue::Value {

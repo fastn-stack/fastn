@@ -7,7 +7,7 @@ pub struct Condition {
 impl Condition {
     pub fn is_true(&self, data: &ftd::DataDependenciesMap) -> bool {
         if let Some(ftd::Data { value, .. }) = data.get(self.variable.as_str()) {
-            let v = value.to_string().replace("\"", "");
+            let v = value.to_string().replace('\"', "");
             return if self.value.eq("$IsNull$") {
                 v.is_empty() || value.eq(&serde_json::Value::Null)
             } else if self.value.eq("$IsNotNull$") {

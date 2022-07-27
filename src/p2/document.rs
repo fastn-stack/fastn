@@ -791,7 +791,7 @@ impl Document {
     }
 }
 
-pub fn set_region_id(elements: &mut Vec<ftd::Element>) {
+pub fn set_region_id(elements: &mut [ftd::Element]) {
     let mut map: std::collections::BTreeMap<usize, String> = Default::default();
     for element in elements.iter_mut() {
         match element {

@@ -812,7 +812,7 @@ pub enum Thing {
 pub fn default_bag() -> std::collections::BTreeMap<String, ftd::p2::Thing> {
     let record = |n: &str, r: &str| (n.to_string(), ftd::p2::Kind::record(r));
     let color = |n: &str| record(n, "ftd#color");
-    std::array::IntoIter::new([
+    std::iter::IntoIterator::into_iter([
         (
             "ftd#row".to_string(),
             ftd::p2::Thing::Component(ftd::p2::element::row_function()),
@@ -954,7 +954,7 @@ pub fn default_bag() -> std::collections::BTreeMap<String, ftd::p2::Thing> {
             "ftd#image-src".to_string(),
             ftd::p2::Thing::Record(ftd::p2::Record {
                 name: "ftd#image-src".to_string(),
-                fields: std::array::IntoIter::new([
+                fields: std::iter::IntoIterator::into_iter([
                     ("light".to_string(), ftd::p2::Kind::caption()),
                     ("dark".to_string(), ftd::p2::Kind::string()),
                 ])
@@ -967,7 +967,7 @@ pub fn default_bag() -> std::collections::BTreeMap<String, ftd::p2::Thing> {
             "ftd#color".to_string(),
             ftd::p2::Thing::Record(ftd::p2::Record {
                 name: "ftd#color".to_string(),
-                fields: std::array::IntoIter::new([
+                fields: std::iter::IntoIterator::into_iter([
                     ("light".to_string(), ftd::p2::Kind::caption()),
                     ("dark".to_string(), ftd::p2::Kind::string()),
                 ])
@@ -980,7 +980,7 @@ pub fn default_bag() -> std::collections::BTreeMap<String, ftd::p2::Thing> {
             "ftd#font-size".to_string(),
             ftd::p2::Thing::Record(ftd::p2::Record {
                 name: "ftd#font-size".to_string(),
-                fields: std::array::IntoIter::new([
+                fields: std::iter::IntoIterator::into_iter([
                     ("line-height".to_string(), ftd::p2::Kind::integer()),
                     ("size".to_string(), ftd::p2::Kind::integer()),
                     (
@@ -1001,7 +1001,7 @@ pub fn default_bag() -> std::collections::BTreeMap<String, ftd::p2::Thing> {
             "ftd#type".to_string(),
             ftd::p2::Thing::Record(ftd::p2::Record {
                 name: "ftd#type".to_string(),
-                fields: std::array::IntoIter::new([
+                fields: std::iter::IntoIterator::into_iter([
                     ("font".to_string(), ftd::p2::Kind::caption()),
                     (
                         "desktop".to_string(),
@@ -1031,8 +1031,12 @@ pub fn default_bag() -> std::collections::BTreeMap<String, ftd::p2::Thing> {
             "ftd#btb".to_string(),
             ftd::p2::Thing::Record(ftd::p2::Record {
                 name: "ftd#btb".to_string(),
-                fields: std::array::IntoIter::new([color("base"), color("text"), color("border")])
-                    .collect(),
+                fields: std::iter::IntoIterator::into_iter([
+                    color("base"),
+                    color("text"),
+                    color("border"),
+                ])
+                .collect(),
                 instances: Default::default(),
                 order: vec!["base".to_string(), "text".to_string(), "border".to_string()],
             }),
@@ -1041,7 +1045,7 @@ pub fn default_bag() -> std::collections::BTreeMap<String, ftd::p2::Thing> {
             "ftd#pst".to_string(),
             ftd::p2::Thing::Record(ftd::p2::Record {
                 name: "ftd#pst".to_string(),
-                fields: std::array::IntoIter::new([
+                fields: std::iter::IntoIterator::into_iter([
                     color("primary"),
                     color("secondary"),
                     color("tertiary"),
@@ -1059,7 +1063,7 @@ pub fn default_bag() -> std::collections::BTreeMap<String, ftd::p2::Thing> {
             "ftd#background-colors".to_string(),
             ftd::p2::Thing::Record(ftd::p2::Record {
                 name: "ftd#background-colors".to_string(),
-                fields: std::array::IntoIter::new([
+                fields: std::iter::IntoIterator::into_iter([
                     color("base"),
                     color("step-1"),
                     color("step-2"),
@@ -1077,7 +1081,7 @@ pub fn default_bag() -> std::collections::BTreeMap<String, ftd::p2::Thing> {
             "ftd#custom-colors".to_string(),
             ftd::p2::Thing::Record(ftd::p2::Record {
                 name: "ftd#custom-colors".to_string(),
-                fields: std::array::IntoIter::new([
+                fields: std::iter::IntoIterator::into_iter([
                     color("one"),
                     color("two"),
                     color("three"),
@@ -1109,7 +1113,7 @@ pub fn default_bag() -> std::collections::BTreeMap<String, ftd::p2::Thing> {
             "ftd#cta-colors".to_string(),
             ftd::p2::Thing::Record(ftd::p2::Record {
                 name: "ftd#cta-colors".to_string(),
-                fields: std::array::IntoIter::new([
+                fields: std::iter::IntoIterator::into_iter([
                     color("base"),
                     color("hover"),
                     color("pressed"),
@@ -1135,7 +1139,7 @@ pub fn default_bag() -> std::collections::BTreeMap<String, ftd::p2::Thing> {
             "ftd#color-scheme".to_string(),
             ftd::p2::Thing::Record(ftd::p2::Record {
                 name: "ftd#color-scheme".to_string(),
-                fields: std::array::IntoIter::new([
+                fields: std::iter::IntoIterator::into_iter([
                     record("background", "ftd#background-colors"),
                     color("border"),
                     color("border-strong"),
@@ -1182,7 +1186,7 @@ pub fn default_bag() -> std::collections::BTreeMap<String, ftd::p2::Thing> {
 }
 
 pub fn default_aliases() -> std::collections::BTreeMap<String, String> {
-    std::array::IntoIter::new([("ftd".to_string(), "ftd".to_string())]).collect()
+    std::iter::IntoIterator::into_iter([("ftd".to_string(), "ftd".to_string())]).collect()
 }
 
 pub fn default_column() -> ftd::Column {
@@ -1231,7 +1235,7 @@ mod test {
             ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd#text".to_string(),
                 full_name: s("foo/bar#foo"),
-                properties: std::array::IntoIter::new([(
+                properties: std::iter::IntoIterator::into_iter([(
                     s("text"),
                     ftd::component::Property {
                         default: Some(ftd::PropertyValue::Value {
@@ -1279,9 +1283,12 @@ mod test {
             ftd::p2::Thing::Component(ftd::Component {
                 full_name: s("foo/bar#foo"),
                 root: "ftd#text".to_string(),
-                arguments: std::array::IntoIter::new([(s("name"), ftd::p2::Kind::caption())])
-                    .collect(),
-                properties: std::array::IntoIter::new([
+                arguments: std::iter::IntoIterator::into_iter([(
+                    s("name"),
+                    ftd::p2::Kind::caption(),
+                )])
+                .collect(),
+                properties: std::iter::IntoIterator::into_iter([
                     (
                         s("color"),
                         ftd::component::Property {
@@ -1363,7 +1370,7 @@ mod test {
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Record {
                         name: s("ftd#color"),
-                        fields: std::array::IntoIter::new([
+                        fields: std::iter::IntoIterator::into_iter([
                             (
                                 s("dark"),
                                 ftd::PropertyValue::Value {
@@ -1398,7 +1405,7 @@ mod test {
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Record {
                         name: s("ftd#color"),
-                        fields: std::array::IntoIter::new([
+                        fields: std::iter::IntoIterator::into_iter([
                             (
                                 s("dark"),
                                 ftd::PropertyValue::Value {
@@ -1433,7 +1440,7 @@ mod test {
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Record {
                         name: s("ftd#color"),
-                        fields: std::array::IntoIter::new([
+                        fields: std::iter::IntoIterator::into_iter([
                             (
                                 s("dark"),
                                 ftd::PropertyValue::Value {
@@ -1510,7 +1517,7 @@ mod test {
                         },
                         reference: Some(s("foo/bar#red")),
                     }),
-                    conditional_attribute: std::array::IntoIter::new([(
+                    conditional_attribute: std::iter::IntoIterator::into_iter([(
                         s("color"),
                         ftd::ConditionalAttribute {
                             attribute_type: ftd::AttributeType::Style,
@@ -1595,7 +1602,7 @@ mod test {
                             events: vec![],
                             root: "foo/bar#table-of-content".to_string(),
                             condition: None,
-                            properties: std::array::IntoIter::new([(
+                            properties: std::iter::IntoIterator::into_iter([(
                                 s("id"),
                                 ftd::component::Property {
                                     default: Some(ftd::PropertyValue::Value {
@@ -1620,7 +1627,7 @@ mod test {
                             events: vec![],
                             root: "foo/bar#parent".to_string(),
                             condition: None,
-                            properties: std::array::IntoIter::new([
+                            properties: std::iter::IntoIterator::into_iter([
                                 (
                                     s("active"),
                                     ftd::component::Property {
@@ -1668,7 +1675,7 @@ mod test {
                             events: vec![],
                             root: "foo/bar#parent".to_string(),
                             condition: None,
-                            properties: std::array::IntoIter::new([
+                            properties: std::iter::IntoIterator::into_iter([
                                 (
                                     s("id"),
                                     ftd::component::Property {
@@ -1706,7 +1713,7 @@ mod test {
                             events: vec![],
                             root: "foo/bar#parent".to_string(),
                             condition: None,
-                            properties: std::array::IntoIter::new([
+                            properties: std::iter::IntoIterator::into_iter([
                                 (
                                     s("id"),
                                     ftd::component::Property {
@@ -1747,7 +1754,7 @@ mod test {
                             events: vec![],
                             root: "foo/bar#parent".to_string(),
                             condition: None,
-                            properties: std::array::IntoIter::new([
+                            properties: std::iter::IntoIterator::into_iter([
                                 (
                                     s("id"),
                                     ftd::component::Property {
@@ -1790,7 +1797,7 @@ mod test {
             ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd#column".to_string(),
                 full_name: "foo/bar#parent".to_string(),
-                arguments: std::array::IntoIter::new([
+                arguments: std::iter::IntoIterator::into_iter([
                     (
                         s("active"),
                         ftd::p2::Kind::Optional {
@@ -1801,7 +1808,7 @@ mod test {
                     (s("name"), ftd::p2::Kind::caption()),
                 ])
                 .collect(),
-                properties: std::array::IntoIter::new([
+                properties: std::iter::IntoIterator::into_iter([
                     (
                         s("id"),
                         ftd::component::Property {
@@ -1854,7 +1861,7 @@ mod test {
                                     },
                                 },
                             }),
-                            properties: std::array::IntoIter::new([
+                            properties: std::iter::IntoIterator::into_iter([
                                 (
                                     s("color"),
                                     ftd::component::Property {
@@ -1900,7 +1907,7 @@ mod test {
                                     },
                                 },
                             }),
-                            properties: std::array::IntoIter::new([
+                            properties: std::iter::IntoIterator::into_iter([
                                 (
                                     s("color"),
                                     ftd::component::Property {
@@ -1944,9 +1951,9 @@ mod test {
             ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd#column".to_string(),
                 full_name: "foo/bar#table-of-content".to_string(),
-                arguments: std::array::IntoIter::new([(s("id"), ftd::p2::Kind::string())])
+                arguments: std::iter::IntoIterator::into_iter([(s("id"), ftd::p2::Kind::string())])
                     .collect(),
-                properties: std::array::IntoIter::new([
+                properties: std::iter::IntoIterator::into_iter([
                     (
                         s("height"),
                         ftd::component::Property {
@@ -1999,9 +2006,12 @@ mod test {
             ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd#text".to_string(),
                 full_name: "foo/bar#toc-heading".to_string(),
-                arguments: std::array::IntoIter::new([(s("text"), ftd::p2::Kind::caption())])
-                    .collect(),
-                properties: std::array::IntoIter::new([
+                arguments: std::iter::IntoIterator::into_iter([(
+                    s("text"),
+                    ftd::p2::Kind::caption(),
+                )])
+                .collect(),
+                properties: std::iter::IntoIterator::into_iter([
                     (
                         s("line-clamp"),
                         ftd::component::Property {
@@ -2216,7 +2226,7 @@ mod test {
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Record {
                         name: s("ftd#color"),
-                        fields: std::array::IntoIter::new([
+                        fields: std::iter::IntoIterator::into_iter([
                             (
                                 s("dark"),
                                 ftd::PropertyValue::Value {
@@ -2251,7 +2261,7 @@ mod test {
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Record {
                         name: s("ftd#color"),
-                        fields: std::array::IntoIter::new([
+                        fields: std::iter::IntoIterator::into_iter([
                             (
                                 s("dark"),
                                 ftd::PropertyValue::Value {
@@ -2681,7 +2691,7 @@ mod test {
                             events: vec![],
                             root: "creating-a-tree#table-of-content".to_string(),
                             condition: None,
-                            properties: std::array::IntoIter::new([(
+                            properties: std::iter::IntoIterator::into_iter([(
                                 s("id"),
                                 ftd::component::Property {
                                     default: Some(ftd::PropertyValue::Value {
@@ -2704,7 +2714,7 @@ mod test {
                             events: vec![],
                             root: "creating-a-tree#parent".to_string(),
                             condition: None,
-                            properties: std::array::IntoIter::new([
+                            properties: std::iter::IntoIterator::into_iter([
                                 (
                                     s("active"),
                                     ftd::component::Property {
@@ -2752,7 +2762,7 @@ mod test {
                             events: vec![],
                             root: "creating-a-tree#parent".to_string(),
                             condition: None,
-                            properties: std::array::IntoIter::new([
+                            properties: std::iter::IntoIterator::into_iter([
                                 (
                                     s("id"),
                                     ftd::component::Property {
@@ -2790,7 +2800,7 @@ mod test {
                             events: vec![],
                             root: "creating-a-tree#parent".to_string(),
                             condition: None,
-                            properties: std::array::IntoIter::new([
+                            properties: std::iter::IntoIterator::into_iter([
                                 (
                                     s("id"),
                                     ftd::component::Property {
@@ -2831,7 +2841,7 @@ mod test {
                             events: vec![],
                             root: "creating-a-tree#parent".to_string(),
                             condition: None,
-                            properties: std::array::IntoIter::new([
+                            properties: std::iter::IntoIterator::into_iter([
                                 (
                                     s("id"),
                                     ftd::component::Property {
@@ -2874,7 +2884,7 @@ mod test {
             ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd#column".to_string(),
                 full_name: "creating-a-tree#parent".to_string(),
-                arguments: std::array::IntoIter::new([
+                arguments: std::iter::IntoIterator::into_iter([
                     (
                         s("active"),
                         ftd::p2::Kind::Optional {
@@ -2885,7 +2895,7 @@ mod test {
                     (s("name"), ftd::p2::Kind::caption()),
                 ])
                 .collect(),
-                properties: std::array::IntoIter::new([
+                properties: std::iter::IntoIterator::into_iter([
                     (
                         s("id"),
                         ftd::component::Property {
@@ -2938,7 +2948,7 @@ mod test {
                                     },
                                 },
                             }),
-                            properties: std::array::IntoIter::new([
+                            properties: std::iter::IntoIterator::into_iter([
                                 (
                                     s("color"),
                                     ftd::component::Property {
@@ -2984,7 +2994,7 @@ mod test {
                                     },
                                 },
                             }),
-                            properties: std::array::IntoIter::new([
+                            properties: std::iter::IntoIterator::into_iter([
                                 (
                                     s("color"),
                                     ftd::component::Property {
@@ -3028,9 +3038,9 @@ mod test {
             ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd#column".to_string(),
                 full_name: "creating-a-tree#table-of-content".to_string(),
-                arguments: std::array::IntoIter::new([(s("id"), ftd::p2::Kind::string())])
+                arguments: std::iter::IntoIterator::into_iter([(s("id"), ftd::p2::Kind::string())])
                     .collect(),
-                properties: std::array::IntoIter::new([
+                properties: std::iter::IntoIterator::into_iter([
                     (
                         s("height"),
                         ftd::component::Property {
@@ -3083,9 +3093,12 @@ mod test {
             ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd#text".to_string(),
                 full_name: "creating-a-tree#toc-heading".to_string(),
-                arguments: std::array::IntoIter::new([(s("text"), ftd::p2::Kind::caption())])
-                    .collect(),
-                properties: std::array::IntoIter::new([(
+                arguments: std::iter::IntoIterator::into_iter([(
+                    s("text"),
+                    ftd::p2::Kind::caption(),
+                )])
+                .collect(),
+                properties: std::iter::IntoIterator::into_iter([(
                     s("text"),
                     ftd::component::Property {
                         default: Some(ftd::PropertyValue::Variable {
@@ -3286,7 +3299,7 @@ mod test {
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Record {
                         name: s("ftd#color"),
-                        fields: std::array::IntoIter::new([
+                        fields: std::iter::IntoIterator::into_iter([
                             (
                                 s("dark"),
                                 ftd::PropertyValue::Value {
@@ -3321,7 +3334,7 @@ mod test {
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Record {
                         name: s("ftd#color"),
-                        fields: std::array::IntoIter::new([
+                        fields: std::iter::IntoIterator::into_iter([
                             (
                                 s("dark"),
                                 ftd::PropertyValue::Value {
@@ -3684,7 +3697,7 @@ mod test {
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Record {
                         name: s("ftd#color"),
-                        fields: std::array::IntoIter::new([
+                        fields: std::iter::IntoIterator::into_iter([
                             (
                                 s("dark"),
                                 ftd::PropertyValue::Value {
@@ -3744,9 +3757,9 @@ mod test {
             ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd#text".to_string(),
                 full_name: "fifthtry/ft#markdown".to_string(),
-                arguments: std::array::IntoIter::new([(s("body"), ftd::p2::Kind::body())])
+                arguments: std::iter::IntoIterator::into_iter([(s("body"), ftd::p2::Kind::body())])
                     .collect(),
-                properties: std::array::IntoIter::new([(
+                properties: std::iter::IntoIterator::into_iter([(
                     s("text"),
                     ftd::component::Property {
                         default: Some(ftd::PropertyValue::Variable {
@@ -3783,7 +3796,7 @@ mod test {
                 root: "ftd#column".to_string(),
                 full_name: "reference#test-component".to_string(),
                 arguments: Default::default(),
-                properties: std::array::IntoIter::new([
+                properties: std::iter::IntoIterator::into_iter([
                     (
                         s("background-color"),
                         ftd::component::Property {
@@ -3821,7 +3834,7 @@ mod test {
                         events: vec![],
                         root: "ftd#text".to_string(),
                         condition: None,
-                        properties: std::array::IntoIter::new([(
+                        properties: std::iter::IntoIterator::into_iter([(
                             s("text"),
                             ftd::component::Property {
                                 default: Some(ftd::PropertyValue::Reference {
@@ -3899,12 +3912,12 @@ mod test {
             ftd::p2::Thing::Component(ftd::Component {
                 full_name: s("foo/bar#foo"),
                 root: "ftd#text".to_string(),
-                arguments: std::array::IntoIter::new([(
+                arguments: std::iter::IntoIterator::into_iter([(
                     s("name"),
                     ftd::p2::Kind::caption_or_body(),
                 )])
                 .collect(),
-                properties: std::array::IntoIter::new([(
+                properties: std::iter::IntoIterator::into_iter([(
                     s("text"),
                     ftd::component::Property {
                         default: Some(ftd::PropertyValue::Variable {
@@ -3917,7 +3930,7 @@ mod test {
                 )])
                 .collect(),
                 invocations: vec![
-                    std::array::IntoIter::new([(
+                    std::iter::IntoIterator::into_iter([(
                         s("name"),
                         ftd::Value::String {
                             text: s("hello"),
@@ -3925,7 +3938,7 @@ mod test {
                         },
                     )])
                     .collect(),
-                    std::array::IntoIter::new([(
+                    std::iter::IntoIterator::into_iter([(
                         s("name"),
                         ftd::Value::String {
                             text: s("world"),
@@ -3933,7 +3946,7 @@ mod test {
                         },
                     )])
                     .collect(),
-                    std::array::IntoIter::new([(
+                    std::iter::IntoIterator::into_iter([(
                         s("name"),
                         ftd::Value::String {
                             text: s("yo yo"),
@@ -4203,7 +4216,7 @@ mod test {
             "foo/bar#point".to_string(),
             ftd::p2::Thing::Record(ftd::p2::Record {
                 name: "foo/bar#point".to_string(),
-                fields: std::array::IntoIter::new([
+                fields: std::iter::IntoIterator::into_iter([
                     (s("x"), ftd::p2::Kind::integer()),
                     (s("y"), ftd::p2::Kind::integer()),
                 ])
@@ -4224,7 +4237,7 @@ mod test {
                             ftd::PropertyValue::Value {
                                 value: ftd::Value::Record {
                                     name: s("foo/bar#point"),
-                                    fields: std::array::IntoIter::new([
+                                    fields: std::iter::IntoIterator::into_iter([
                                         (
                                             s("x"),
                                             ftd::PropertyValue::Value {
@@ -4244,7 +4257,7 @@ mod test {
                             ftd::PropertyValue::Value {
                                 value: ftd::Value::Record {
                                     name: s("foo/bar#point"),
-                                    fields: std::array::IntoIter::new([
+                                    fields: std::iter::IntoIterator::into_iter([
                                         (
                                             s("x"),
                                             ftd::PropertyValue::Value {
@@ -4355,7 +4368,7 @@ mod test {
                 invocations: Default::default(),
                 full_name: "foo/bar#white-two-image".to_string(),
                 root: s("ftd#column"),
-                arguments: std::array::IntoIter::new([
+                arguments: std::iter::IntoIterator::into_iter([
                     (s("about"), {
                         let s = ftd::p2::Kind::body();
                         if about_optional {
@@ -4378,7 +4391,7 @@ mod test {
                     (s("title"), ftd::p2::Kind::caption()),
                 ])
                 .collect(),
-                properties: std::array::IntoIter::new([(
+                properties: std::iter::IntoIterator::into_iter([(
                     s("padding"),
                     ftd::component::Property {
                         default: Some(ftd::PropertyValue::Value {
@@ -4396,7 +4409,7 @@ mod test {
                             events: vec![],
                             condition: None,
                             root: s("ftd#text"),
-                            properties: std::array::IntoIter::new([
+                            properties: std::iter::IntoIterator::into_iter([
                                 (
                                     s("text"),
                                     ftd::component::Property {
@@ -4440,7 +4453,7 @@ mod test {
                                 None
                             },
                             root: s("ftd#text"),
-                            properties: std::array::IntoIter::new([(
+                            properties: std::iter::IntoIterator::into_iter([(
                                 s("text"),
                                 ftd::component::Property {
                                     default: Some(ftd::PropertyValue::Variable {
@@ -4473,7 +4486,7 @@ mod test {
                                 None
                             },
                             root: s("ftd#image"),
-                            properties: std::array::IntoIter::new([(
+                            properties: std::iter::IntoIterator::into_iter([(
                                 s("src"),
                                 ftd::component::Property {
                                     default: Some(ftd::PropertyValue::Variable {
@@ -4583,7 +4596,7 @@ mod test {
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Record {
                         name: s("ftd#image-src"),
-                        fields: std::array::IntoIter::new([
+                        fields: std::iter::IntoIterator::into_iter([
                             (
                                 s("dark"),
                                 ftd::PropertyValue::Value {
@@ -4803,7 +4816,7 @@ mod test {
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Record {
                         name: s("ftd#image-src"),
-                        fields: std::array::IntoIter::new([
+                        fields: std::iter::IntoIterator::into_iter([
                             (
                                 s("dark"),
                                 ftd::PropertyValue::Value {
@@ -4837,7 +4850,7 @@ mod test {
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Record {
                         name: s("ftd#image-src"),
-                        fields: std::array::IntoIter::new([
+                        fields: std::iter::IntoIterator::into_iter([
                             (
                                 s("dark"),
                                 ftd::PropertyValue::Value {
@@ -5182,7 +5195,7 @@ mod test {
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Record {
                         name: s("ftd#image-src"),
-                        fields: std::array::IntoIter::new([
+                        fields: std::iter::IntoIterator::into_iter([
                             (
                                 s("dark"),
                                 ftd::PropertyValue::Value {
@@ -5216,7 +5229,7 @@ mod test {
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Record {
                         name: s("ftd#image-src"),
-                        fields: std::array::IntoIter::new([
+                        fields: std::iter::IntoIterator::into_iter([
                             (
                                 s("dark"),
                                 ftd::PropertyValue::Value {
@@ -5430,9 +5443,9 @@ mod test {
                 invocations: Default::default(),
                 full_name: "fifthtry/ft#markdown".to_string(),
                 root: s("ftd#text"),
-                arguments: std::array::IntoIter::new([(s("body"), ftd::p2::Kind::body())])
+                arguments: std::iter::IntoIterator::into_iter([(s("body"), ftd::p2::Kind::body())])
                     .collect(),
-                properties: std::array::IntoIter::new([(
+                properties: std::iter::IntoIterator::into_iter([(
                     s("text"),
                     ftd::component::Property {
                         default: Some(ftd::PropertyValue::Variable {
@@ -5478,7 +5491,7 @@ mod test {
                 invocations: Default::default(),
                 full_name: "foo/bar#h0".to_string(),
                 root: s("ftd#column"),
-                arguments: std::array::IntoIter::new([
+                arguments: std::iter::IntoIterator::into_iter([
                     (s("body"), ftd::p2::Kind::body().into_optional()),
                     (s("title"), ftd::p2::Kind::caption()),
                 ])
@@ -5489,7 +5502,7 @@ mod test {
                             events: vec![],
                             condition: None,
                             root: s("ftd#text"),
-                            properties: std::array::IntoIter::new([(
+                            properties: std::iter::IntoIterator::into_iter([(
                                 s("text"),
                                 ftd::component::Property {
                                     default: Some(ftd::PropertyValue::Variable {
@@ -5514,7 +5527,7 @@ mod test {
                                 },
                             }),
                             root: s("fifthtry/ft#markdown"),
-                            properties: std::array::IntoIter::new([(
+                            properties: std::iter::IntoIterator::into_iter([(
                                 s("body"),
                                 ftd::component::Property {
                                     default: Some(ftd::PropertyValue::Variable {
@@ -5778,7 +5791,7 @@ mod test {
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Record {
                         name: s("ftd#image-src"),
-                        fields: std::array::IntoIter::new([
+                        fields: std::iter::IntoIterator::into_iter([
                             (
                                 s("dark"),
                                 ftd::PropertyValue::Value {
@@ -5813,7 +5826,7 @@ mod test {
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Record {
                         name: s("ftd#image-src"),
-                        fields: std::array::IntoIter::new([
+                        fields: std::iter::IntoIterator::into_iter([
                             (
                                 s("dark"),
                                 ftd::PropertyValue::Value {
@@ -5846,7 +5859,7 @@ mod test {
                 invocations: Default::default(),
                 full_name: "foo/bar#image".to_string(),
                 root: s("ftd#column"),
-                arguments: std::array::IntoIter::new([
+                arguments: std::iter::IntoIterator::into_iter([
                     (s("width"), ftd::p2::Kind::string().into_optional()),
                     (
                         s("src"),
@@ -5862,7 +5875,7 @@ mod test {
                         events: vec![],
                         condition: None,
                         root: s("ftd#image"),
-                        properties: std::array::IntoIter::new([
+                        properties: std::iter::IntoIterator::into_iter([
                             (
                                 s("src"),
                                 ftd::component::Property {
@@ -5979,7 +5992,7 @@ mod test {
                             events: vec![],
                             condition: None,
                             root: s("ftd#decimal"),
-                            properties: std::array::IntoIter::new([
+                            properties: std::iter::IntoIterator::into_iter([
                                 (
                                     s("value"),
                                     ftd::component::Property {
@@ -6013,7 +6026,7 @@ mod test {
                             events: vec![],
                             condition: None,
                             root: s("ftd#decimal"),
-                            properties: std::array::IntoIter::new([(
+                            properties: std::iter::IntoIterator::into_iter([(
                                 s("value"),
                                 ftd::component::Property {
                                     default: Some(ftd::PropertyValue::Value {
@@ -6028,7 +6041,7 @@ mod test {
                         },
                     },
                 ],
-                arguments: std::array::IntoIter::new([(s("x"), ftd::p2::Kind::integer())])
+                arguments: std::iter::IntoIterator::into_iter([(s("x"), ftd::p2::Kind::integer())])
                     .collect(),
                 ..Default::default()
             }),
@@ -6109,7 +6122,7 @@ mod test {
                             events: vec![],
                             condition: None,
                             root: s("ftd#integer"),
-                            properties: std::array::IntoIter::new([
+                            properties: std::iter::IntoIterator::into_iter([
                                 (
                                     s("value"),
                                     ftd::component::Property {
@@ -6143,7 +6156,7 @@ mod test {
                             events: vec![],
                             condition: None,
                             root: s("ftd#integer"),
-                            properties: std::array::IntoIter::new([(
+                            properties: std::iter::IntoIterator::into_iter([(
                                 s("value"),
                                 ftd::component::Property {
                                     default: Some(ftd::PropertyValue::Value {
@@ -6158,7 +6171,7 @@ mod test {
                         },
                     },
                 ],
-                arguments: std::array::IntoIter::new([(s("x"), ftd::p2::Kind::integer())])
+                arguments: std::iter::IntoIterator::into_iter([(s("x"), ftd::p2::Kind::integer())])
                     .collect(),
                 ..Default::default()
             }),
@@ -6217,7 +6230,7 @@ mod test {
                             events: vec![],
                             condition: None,
                             root: s("ftd#boolean"),
-                            properties: std::array::IntoIter::new([
+                            properties: std::iter::IntoIterator::into_iter([
                                 (
                                     s("value"),
                                     ftd::component::Property {
@@ -6264,7 +6277,7 @@ mod test {
                             events: vec![],
                             condition: None,
                             root: s("ftd#boolean"),
-                            properties: std::array::IntoIter::new([
+                            properties: std::iter::IntoIterator::into_iter([
                                 (
                                     s("value"),
                                     ftd::component::Property {
@@ -6307,7 +6320,7 @@ mod test {
                         },
                     },
                 ],
-                arguments: std::array::IntoIter::new([(s("x"), ftd::p2::Kind::integer())])
+                arguments: std::iter::IntoIterator::into_iter([(s("x"), ftd::p2::Kind::integer())])
                     .collect(),
                 ..Default::default()
             }),
@@ -6659,7 +6672,7 @@ mod test {
                             events: vec![],
                             root: "ftd#row".to_string(),
                             condition: None,
-                            properties: std::array::IntoIter::new([(
+                            properties: std::iter::IntoIterator::into_iter([(
                                 s("id"),
                                 ftd::component::Property {
                                     default: Some(ftd::PropertyValue::Value {
@@ -6682,7 +6695,7 @@ mod test {
                             events: vec![],
                             root: "ftd#row".to_string(),
                             condition: None,
-                            properties: std::array::IntoIter::new([(
+                            properties: std::iter::IntoIterator::into_iter([(
                                 s("id"),
                                 ftd::component::Property {
                                     default: Some(ftd::PropertyValue::Value {
@@ -6819,7 +6832,7 @@ mod test {
                             events: vec![],
                             root: "ftd#row".to_string(),
                             condition: None,
-                            properties: std::array::IntoIter::new([(
+                            properties: std::iter::IntoIterator::into_iter([(
                                 s("id"),
                                 ftd::component::Property {
                                     default: Some(ftd::PropertyValue::Value {
@@ -6842,7 +6855,7 @@ mod test {
                             events: vec![],
                             root: "ftd#row".to_string(),
                             condition: None,
-                            properties: std::array::IntoIter::new([(
+                            properties: std::iter::IntoIterator::into_iter([(
                                 s("id"),
                                 ftd::component::Property {
                                     default: Some(ftd::PropertyValue::Value {
@@ -7006,7 +7019,7 @@ mod test {
             ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd#column".to_string(),
                 full_name: s("foo/bar#foo"),
-                properties: std::array::IntoIter::new([
+                properties: std::iter::IntoIterator::into_iter([
                     (
                         s("append-at"),
                         ftd::component::Property {
@@ -7047,7 +7060,7 @@ mod test {
                             events: vec![],
                             root: "ftd#row".to_string(),
                             condition: None,
-                            properties: std::array::IntoIter::new([(
+                            properties: std::iter::IntoIterator::into_iter([(
                                 s("id"),
                                 ftd::component::Property {
                                     default: Some(ftd::PropertyValue::Value {
@@ -7216,12 +7229,12 @@ mod test {
             ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd#column".to_string(),
                 full_name: s("foo/bar#desktop-display"),
-                arguments: std::array::IntoIter::new([(
+                arguments: std::iter::IntoIterator::into_iter([(
                     s("id"),
                     ftd::p2::Kind::optional(ftd::p2::Kind::string()),
                 )])
                 .collect(),
-                properties: std::array::IntoIter::new([(
+                properties: std::iter::IntoIterator::into_iter([(
                     s("id"),
                     ftd::component::Property {
                         default: Some(ftd::PropertyValue::Variable {
@@ -7241,7 +7254,7 @@ mod test {
                         events: vec![],
                         root: "ftd#text".to_string(),
                         condition: None,
-                        properties: std::array::IntoIter::new([(
+                        properties: std::iter::IntoIterator::into_iter([(
                             s("text"),
                             ftd::component::Property {
                                 default: Some(ftd::PropertyValue::Value {
@@ -7267,7 +7280,7 @@ mod test {
             ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd#column".to_string(),
                 full_name: s("foo/bar#foo"),
-                properties: std::array::IntoIter::new([
+                properties: std::iter::IntoIterator::into_iter([
                     (
                         s("append-at"),
                         ftd::component::Property {
@@ -7308,7 +7321,7 @@ mod test {
                                     value: ftd::variable::Value::Boolean { value: true },
                                 },
                             }),
-                            properties: std::array::IntoIter::new([(
+                            properties: std::iter::IntoIterator::into_iter([(
                                 s("id"),
                                 ftd::component::Property {
                                     default: Some(ftd::PropertyValue::Value {
@@ -7339,7 +7352,7 @@ mod test {
                                     value: ftd::variable::Value::Boolean { value: false },
                                 },
                             }),
-                            properties: std::array::IntoIter::new([(
+                            properties: std::iter::IntoIterator::into_iter([(
                                 s("id"),
                                 ftd::component::Property {
                                     default: Some(ftd::PropertyValue::Value {
@@ -7378,12 +7391,12 @@ mod test {
             ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd#column".to_string(),
                 full_name: s("foo/bar#mobile-display"),
-                arguments: std::array::IntoIter::new([(
+                arguments: std::iter::IntoIterator::into_iter([(
                     s("id"),
                     ftd::p2::Kind::optional(ftd::p2::Kind::string()),
                 )])
                 .collect(),
-                properties: std::array::IntoIter::new([(
+                properties: std::iter::IntoIterator::into_iter([(
                     s("id"),
                     ftd::component::Property {
                         default: Some(ftd::PropertyValue::Variable {
@@ -7403,7 +7416,7 @@ mod test {
                         events: vec![],
                         root: "ftd#text".to_string(),
                         condition: None,
-                        properties: std::array::IntoIter::new([
+                        properties: std::iter::IntoIterator::into_iter([
                             (
                                 s("id"),
                                 ftd::component::Property {
@@ -8376,7 +8389,7 @@ mod test {
             ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd#row".to_string(),
                 full_name: s("foo/bar#foo"),
-                arguments: std::array::IntoIter::new([
+                arguments: std::iter::IntoIterator::into_iter([
                     (s("body"), ftd::p2::Kind::string()),
                     (s("name"), ftd::p2::Kind::caption()),
                 ])
@@ -8388,7 +8401,7 @@ mod test {
                             events: vec![],
                             root: "ftd#text".to_string(),
                             condition: None,
-                            properties: std::array::IntoIter::new([(
+                            properties: std::iter::IntoIterator::into_iter([(
                                 s("text"),
                                 ftd::component::Property {
                                     default: Some(ftd::PropertyValue::Variable {
@@ -8409,7 +8422,7 @@ mod test {
                             events: vec![],
                             root: "ftd#text".to_string(),
                             condition: None,
-                            properties: std::array::IntoIter::new([(
+                            properties: std::iter::IntoIterator::into_iter([(
                                 s("text"),
                                 ftd::component::Property {
                                     default: Some(ftd::PropertyValue::Variable {
@@ -8470,7 +8483,7 @@ mod test {
                             ftd::PropertyValue::Value {
                                 value: ftd::Value::Record {
                                     name: "foo/bar#person".to_string(),
-                                    fields: std::array::IntoIter::new([
+                                    fields: std::iter::IntoIterator::into_iter([
                                         (
                                             s("bio"),
                                             ftd::PropertyValue::Value {
@@ -8495,7 +8508,7 @@ mod test {
                             ftd::PropertyValue::Value {
                                 value: ftd::Value::Record {
                                     name: "foo/bar#person".to_string(),
-                                    fields: std::array::IntoIter::new([
+                                    fields: std::iter::IntoIterator::into_iter([
                                         (
                                             s("bio"),
                                             ftd::PropertyValue::Value {
@@ -8537,7 +8550,7 @@ mod test {
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Record {
                         name: "foo/bar#person".to_string(),
-                        fields: std::array::IntoIter::new([
+                        fields: std::iter::IntoIterator::into_iter([
                             (
                                 s("bio"),
                                 ftd::PropertyValue::Value {
@@ -8569,7 +8582,7 @@ mod test {
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Record {
                         name: "foo/bar#person".to_string(),
-                        fields: std::array::IntoIter::new([
+                        fields: std::iter::IntoIterator::into_iter([
                             (
                                 s("bio"),
                                 ftd::PropertyValue::Value {
@@ -8674,7 +8687,7 @@ mod test {
             "foo/bar#person".to_string(),
             ftd::p2::Thing::Record(ftd::p2::Record {
                 name: "foo/bar#person".to_string(),
-                fields: std::array::IntoIter::new([
+                fields: std::iter::IntoIterator::into_iter([
                     (s("bio"), ftd::p2::Kind::body()),
                     (s("name"), ftd::p2::Kind::caption()),
                 ])
@@ -8806,7 +8819,7 @@ mod test {
             ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd#row".to_string(),
                 full_name: s("foo/bar#foo"),
-                arguments: std::array::IntoIter::new([
+                arguments: std::iter::IntoIterator::into_iter([
                     (s("body"), ftd::p2::Kind::string()),
                     (s("name"), ftd::p2::Kind::caption()),
                 ])
@@ -8818,7 +8831,7 @@ mod test {
                             events: vec![],
                             root: "ftd#text".to_string(),
                             condition: None,
-                            properties: std::array::IntoIter::new([(
+                            properties: std::iter::IntoIterator::into_iter([(
                                 s("text"),
                                 ftd::component::Property {
                                     default: Some(ftd::PropertyValue::Variable {
@@ -8839,7 +8852,7 @@ mod test {
                             events: vec![],
                             root: "ftd#text".to_string(),
                             condition: None,
-                            properties: std::array::IntoIter::new([(
+                            properties: std::iter::IntoIterator::into_iter([(
                                 s("text"),
                                 ftd::component::Property {
                                     default: Some(ftd::PropertyValue::Variable {
@@ -8870,7 +8883,7 @@ mod test {
                             ftd::PropertyValue::Value {
                                 value: ftd::Value::Record {
                                     name: "foo/bar#person".to_string(),
-                                    fields: std::array::IntoIter::new([
+                                    fields: std::iter::IntoIterator::into_iter([
                                         (
                                             s("bio"),
                                             ftd::PropertyValue::Value {
@@ -8903,7 +8916,7 @@ mod test {
                             ftd::PropertyValue::Value {
                                 value: ftd::Value::Record {
                                     name: "foo/bar#person".to_string(),
-                                    fields: std::array::IntoIter::new([
+                                    fields: std::iter::IntoIterator::into_iter([
                                         (
                                             s("bio"),
                                             ftd::PropertyValue::Value {
@@ -8947,7 +8960,7 @@ mod test {
             "foo/bar#person".to_string(),
             ftd::p2::Thing::Record(ftd::p2::Record {
                 name: "foo/bar#person".to_string(),
-                fields: std::array::IntoIter::new([
+                fields: std::iter::IntoIterator::into_iter([
                     (s("bio"), ftd::p2::Kind::body()),
                     (s("name"), ftd::p2::Kind::caption()),
                     (s("ceo"), ftd::p2::Kind::boolean()),
@@ -8965,7 +8978,7 @@ mod test {
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Record {
                         name: "foo/bar#person".to_string(),
-                        fields: std::array::IntoIter::new([
+                        fields: std::iter::IntoIterator::into_iter([
                             (
                                 s("bio"),
                                 ftd::PropertyValue::Value {
@@ -9006,7 +9019,7 @@ mod test {
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Record {
                         name: "foo/bar#person".to_string(),
-                        fields: std::array::IntoIter::new([
+                        fields: std::iter::IntoIterator::into_iter([
                             (
                                 s("bio"),
                                 ftd::PropertyValue::Value {
@@ -9372,7 +9385,7 @@ mod test {
             ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd.row".to_string(),
                 full_name: s("foo/bar#foo"),
-                arguments: std::array::IntoIter::new([
+                arguments: std::iter::IntoIterator::into_iter([
                     (s("body"), ftd::p2::Kind::string()),
                     (s("name"), ftd::p2::Kind::caption()),
                 ])
@@ -9384,7 +9397,7 @@ mod test {
                             events: vec![],
                             root: "ftd#text".to_string(),
                             condition: None,
-                            properties: std::array::IntoIter::new([(
+                            properties: std::iter::IntoIterator::into_iter([(
                                 s("text"),
                                 ftd::component::Property {
                                     default: Some(ftd::PropertyValue::Variable {
@@ -9405,7 +9418,7 @@ mod test {
                             events: vec![],
                             root: "ftd#text".to_string(),
                             condition: None,
-                            properties: std::array::IntoIter::new([(
+                            properties: std::iter::IntoIterator::into_iter([(
                                 s("text"),
                                 ftd::component::Property {
                                     default: Some(ftd::PropertyValue::Variable {
@@ -9422,7 +9435,7 @@ mod test {
                     },
                 ],
                 invocations: vec![
-                    std::array::IntoIter::new([
+                    std::iter::IntoIterator::into_iter([
                         (
                             s("body"),
                             ftd::Value::String {
@@ -9439,7 +9452,7 @@ mod test {
                         ),
                     ])
                     .collect(),
-                    std::array::IntoIter::new([
+                    std::iter::IntoIterator::into_iter([
                         (
                             s("body"),
                             ftd::Value::String {
@@ -9472,7 +9485,7 @@ mod test {
                             ftd::PropertyValue::Value {
                                 value: ftd::Value::Record {
                                     name: "foo/bar#person".to_string(),
-                                    fields: std::array::IntoIter::new([
+                                    fields: std::iter::IntoIterator::into_iter([
                                         (
                                             s("bio"),
                                             ftd::PropertyValue::Value {
@@ -9499,7 +9512,7 @@ mod test {
                             ftd::PropertyValue::Value {
                                 value: ftd::Value::Record {
                                     name: "foo/bar#person".to_string(),
-                                    fields: std::array::IntoIter::new([
+                                    fields: std::iter::IntoIterator::into_iter([
                                         (
                                             s("bio"),
                                             ftd::PropertyValue::Value {
@@ -9537,7 +9550,7 @@ mod test {
             "foo/bar#person".to_string(),
             ftd::p2::Thing::Record(ftd::p2::Record {
                 name: "foo/bar#person".to_string(),
-                fields: std::array::IntoIter::new([
+                fields: std::iter::IntoIterator::into_iter([
                     (s("bio"), ftd::p2::Kind::body()),
                     (s("name"), ftd::p2::Kind::caption()),
                 ])
@@ -10275,7 +10288,7 @@ mod test {
             "foo/bar#data".to_string(),
             ftd::p2::Thing::Record(ftd::p2::Record {
                 name: "foo/bar#data".to_string(),
-                fields: std::array::IntoIter::new([
+                fields: std::iter::IntoIterator::into_iter([
                     (s("description"), ftd::p2::Kind::string()),
                     (s("title"), ftd::p2::Kind::string()),
                 ])
@@ -10290,7 +10303,7 @@ mod test {
             ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd.row".to_string(),
                 full_name: "foo/bar#foo".to_string(),
-                arguments: std::array::IntoIter::new([
+                arguments: std::iter::IntoIterator::into_iter([
                     (s("body"), ftd::p2::Kind::string()),
                     (s("name"), ftd::p2::Kind::caption()),
                 ])
@@ -10302,7 +10315,7 @@ mod test {
                             events: vec![],
                             root: "ftd#text".to_string(),
                             condition: None,
-                            properties: std::array::IntoIter::new([(
+                            properties: std::iter::IntoIterator::into_iter([(
                                 s("text"),
                                 ftd::component::Property {
                                     default: Some(ftd::PropertyValue::Variable {
@@ -10323,7 +10336,7 @@ mod test {
                             events: vec![],
                             root: "ftd#text".to_string(),
                             condition: None,
-                            properties: std::array::IntoIter::new([(
+                            properties: std::iter::IntoIterator::into_iter([(
                                 s("text"),
                                 ftd::component::Property {
                                     default: Some(ftd::PropertyValue::Variable {
@@ -10354,7 +10367,7 @@ mod test {
                             ftd::PropertyValue::Value {
                                 value: ftd::Value::Record {
                                     name: "foo/bar#data".to_string(),
-                                    fields: std::array::IntoIter::new([
+                                    fields: std::iter::IntoIterator::into_iter([
                                         (
                                             s("description"),
                                             ftd::PropertyValue::Value {
@@ -10380,7 +10393,7 @@ mod test {
                             ftd::PropertyValue::Value {
                                 value: ftd::Value::Record {
                                     name: "foo/bar#data".to_string(),
-                                    fields: std::array::IntoIter::new([
+                                    fields: std::iter::IntoIterator::into_iter([
                                         (
                                             s("description"),
                                             ftd::PropertyValue::Value {
@@ -10406,7 +10419,7 @@ mod test {
                             ftd::PropertyValue::Value {
                                 value: ftd::Value::Record {
                                     name: "foo/bar#data".to_string(),
-                                    fields: std::array::IntoIter::new([
+                                    fields: std::iter::IntoIterator::into_iter([
                                         (
                                             s("description"),
                                             ftd::PropertyValue::Value {
@@ -10432,7 +10445,7 @@ mod test {
                             ftd::PropertyValue::Value {
                                 value: ftd::Value::Record {
                                     name: "foo/bar#data".to_string(),
-                                    fields: std::array::IntoIter::new([
+                                    fields: std::iter::IntoIterator::into_iter([
                                         (
                                             s("description"),
                                             ftd::PropertyValue::Value {
@@ -10458,7 +10471,7 @@ mod test {
                             ftd::PropertyValue::Value {
                                 value: ftd::Value::Record {
                                     name: "foo/bar#data".to_string(),
-                                    fields: std::array::IntoIter::new([
+                                    fields: std::iter::IntoIterator::into_iter([
                                         (
                                             s("description"),
                                             ftd::PropertyValue::Value {
@@ -10485,7 +10498,7 @@ mod test {
                             ftd::PropertyValue::Value {
                                 value: ftd::Value::Record {
                                     name: "foo/bar#data".to_string(),
-                                    fields: std::array::IntoIter::new([
+                                    fields: std::iter::IntoIterator::into_iter([
                                         (
                                             s("description"),
                                             ftd::PropertyValue::Value {
@@ -10511,7 +10524,7 @@ mod test {
                             ftd::PropertyValue::Value {
                                 value: ftd::Value::Record {
                                     name: "foo/bar#data".to_string(),
-                                    fields: std::array::IntoIter::new([
+                                    fields: std::iter::IntoIterator::into_iter([
                                         (
                                             s("description"),
                                             ftd::PropertyValue::Value {
@@ -10538,7 +10551,7 @@ mod test {
                             ftd::PropertyValue::Value {
                                 value: ftd::Value::Record {
                                     name: "foo/bar#data".to_string(),
-                                    fields: std::array::IntoIter::new([
+                                    fields: std::iter::IntoIterator::into_iter([
                                         (
                                             s("description"),
                                             ftd::PropertyValue::Value {
@@ -10743,7 +10756,7 @@ mod test {
                             ftd::PropertyValue::Value {
                                 value: ftd::Value::Record {
                                     name: s("foo/bar#toc-record"),
-                                    fields: std::array::IntoIter::new([
+                                    fields: std::iter::IntoIterator::into_iter([
                                         (
                                             s("children"),
                                             ftd::PropertyValue::Value {
@@ -10781,7 +10794,7 @@ mod test {
                             ftd::PropertyValue::Value {
                                 value: ftd::Value::Record {
                                     name: s("foo/bar#toc-record"),
-                                    fields: std::array::IntoIter::new([
+                                    fields: std::iter::IntoIterator::into_iter([
                                         (
                                             s("children"),
                                             ftd::PropertyValue::Value {
@@ -10837,7 +10850,7 @@ mod test {
                         data: vec![ftd::PropertyValue::Value {
                             value: ftd::Value::Record {
                                 name: s("foo/bar#toc-record"),
-                                fields: std::array::IntoIter::new([
+                                fields: std::iter::IntoIterator::into_iter([
                                     (
                                         s("children"),
                                         ftd::PropertyValue::Value {
@@ -10845,7 +10858,7 @@ mod test {
                                                 data: vec![
                                                     ftd::PropertyValue::Value {value: ftd::Value::Record {
                                                         name: s("foo/bar#toc-record"),
-                                                        fields: std::array::IntoIter::new([
+                                                        fields: std::iter::IntoIterator::into_iter([
                                                             (
                                                                 s("children"),
                                                                 ftd::PropertyValue::Value {
@@ -10881,7 +10894,7 @@ mod test {
                                                     }},
                                                     ftd::PropertyValue::Value {value: ftd::Value::Record {
                                                         name: s("foo/bar#toc-record"),
-                                                        fields: std::array::IntoIter::new([
+                                                        fields: std::iter::IntoIterator::into_iter([
                                                             (
                                                                 s("children"),
                                                                 ftd::PropertyValue::Value {
@@ -10960,7 +10973,7 @@ mod test {
             ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd.column".to_string(),
                 full_name: "foo/bar#toc-item".to_string(),
-                arguments: std::array::IntoIter::new([(
+                arguments: std::iter::IntoIterator::into_iter([(
                     s("toc"),
                     ftd::p2::Kind::Record {
                         name: "foo/bar#toc-record".to_string(),
@@ -10974,7 +10987,7 @@ mod test {
                             events: vec![],
                             root: "ftd#text".to_string(),
                             condition: None,
-                            properties: std::array::IntoIter::new([
+                            properties: std::iter::IntoIterator::into_iter([
                                 (
                                     s("link"),
                                     ftd::component::Property {
@@ -11012,7 +11025,7 @@ mod test {
                             events: vec![],
                             root: "toc-item".to_string(),
                             condition: None,
-                            properties: std::array::IntoIter::new([
+                            properties: std::iter::IntoIterator::into_iter([
                                 (
                                     s("$loop$"),
                                     ftd::component::Property {
@@ -11139,7 +11152,7 @@ mod test {
                         events: vec![],
                         root: s("ftd#text"),
                         condition: None,
-                        properties: std::array::IntoIter::new([(
+                        properties: std::iter::IntoIterator::into_iter([(
                             s("text"),
                             ftd::component::Property {
                                 default: Some(ftd::PropertyValue::Reference {
@@ -11231,7 +11244,7 @@ mod test {
             ftd::p2::Thing::Component(ftd::Component {
                 root: s("ftd#text"),
                 full_name: s("foo/bar#foo"),
-                arguments: std::array::IntoIter::new([
+                arguments: std::iter::IntoIterator::into_iter([
                     (
                         s("name"),
                         ftd::p2::Kind::caption().set_default(Some(s("hello world"))),
@@ -11244,7 +11257,7 @@ mod test {
                     ),
                 ])
                 .collect(),
-                properties: std::array::IntoIter::new([
+                properties: std::iter::IntoIterator::into_iter([
                     (
                         s("line-clamp"),
                         ftd::component::Property {
@@ -11275,7 +11288,7 @@ mod test {
                 ])
                 .collect(),
                 invocations: vec![
-                    std::array::IntoIter::new([
+                    std::iter::IntoIterator::into_iter([
                         (
                             s("name"),
                             ftd::Value::String {
@@ -11286,7 +11299,7 @@ mod test {
                         (s("line-clamp"), ftd::Value::Integer { value: 10 }),
                     ])
                     .collect(),
-                    std::array::IntoIter::new([
+                    std::iter::IntoIterator::into_iter([
                         (
                             s("name"),
                             ftd::Value::String {
@@ -11297,7 +11310,7 @@ mod test {
                         (s("line-clamp"), ftd::Value::Integer { value: 10 }),
                     ])
                     .collect(),
-                    std::array::IntoIter::new([
+                    std::iter::IntoIterator::into_iter([
                         (
                             s("name"),
                             ftd::Value::String {
@@ -11425,7 +11438,7 @@ mod test {
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Record {
                         name: s("foo/bar#person"),
-                        fields: std::array::IntoIter::new([
+                        fields: std::iter::IntoIterator::into_iter([
                             (
                                 s("address"),
                                 ftd::PropertyValue::Value {
@@ -11502,7 +11515,7 @@ mod test {
             s("foo/bar#person"),
             ftd::p2::Thing::Record(ftd::p2::Record {
                 name: s("foo/bar#person"),
-                fields: std::array::IntoIter::new([
+                fields: std::iter::IntoIterator::into_iter([
                     (
                         s("address"),
                         ftd::p2::Kind::string().set_default(Some(s("Bihar"))),
@@ -11645,7 +11658,7 @@ mod test {
             ftd::p2::Thing::Component(ftd::Component {
                 root: s("ftd#row"),
                 full_name: s("foo/bar#foo"),
-                arguments: std::array::IntoIter::new([
+                arguments: std::iter::IntoIterator::into_iter([
                     (
                         s("name"),
                         ftd::p2::Kind::string().set_default(Some(s("$foo/bar#default-name"))),
@@ -11663,7 +11676,7 @@ mod test {
                         events: vec![],
                         root: s("ftd#text"),
                         condition: None,
-                        properties: std::array::IntoIter::new([
+                        properties: std::iter::IntoIterator::into_iter([
                             (
                                 s("line-clamp"),
                                 ftd::component::Property {
@@ -11821,7 +11834,7 @@ mod test {
                     value: ftd::Value::OrType {
                         name: s("foo/bar#lead"),
                         variant: s("company"),
-                        fields: std::array::IntoIter::new([
+                        fields: std::iter::IntoIterator::into_iter([
                             (
                                 s("contact"),
                                 ftd::PropertyValue::Value {
@@ -11871,7 +11884,7 @@ mod test {
                     value: ftd::Value::OrType {
                         name: s("foo/bar#lead"),
                         variant: s("individual"),
-                        fields: std::array::IntoIter::new([
+                        fields: std::iter::IntoIterator::into_iter([
                             (
                                 s("name"),
                                 ftd::PropertyValue::Value {
@@ -11917,7 +11930,7 @@ mod test {
                 variants: vec![
                     ftd::p2::Record {
                         name: s("foo/bar#lead.individual"),
-                        fields: std::array::IntoIter::new([
+                        fields: std::iter::IntoIterator::into_iter([
                             (s("name"), ftd::p2::Kind::caption()),
                             (
                                 s("phone"),
@@ -11931,7 +11944,7 @@ mod test {
                     },
                     ftd::p2::Record {
                         name: s("foo/bar#lead.company"),
-                        fields: std::array::IntoIter::new([
+                        fields: std::iter::IntoIterator::into_iter([
                             (
                                 s("contact"),
                                 ftd::p2::Kind::string().set_default(Some(s("1001"))),
@@ -12544,7 +12557,7 @@ mod test {
             ftd::p2::Thing::Component(ftd::Component {
                 root: "ftd#text".to_string(),
                 full_name: "foo/bar#foo".to_string(),
-                arguments: std::array::IntoIter::new([
+                arguments: std::iter::IntoIterator::into_iter([
                     (s("name"), ftd::p2::Kind::caption()),
                     (
                         s("open"),
@@ -12552,7 +12565,7 @@ mod test {
                     ),
                 ])
                 .collect(),
-                properties: std::array::IntoIter::new([(
+                properties: std::iter::IntoIterator::into_iter([(
                     s("text"),
                     ftd::component::Property {
                         default: Some(ftd::PropertyValue::Variable {
@@ -12589,7 +12602,7 @@ mod test {
                     },
                 }),
                 kernel: false,
-                invocations: vec![std::array::IntoIter::new([
+                invocations: vec![std::iter::IntoIterator::into_iter([
                     (
                         s("name"),
                         ftd::Value::String {
@@ -13397,7 +13410,7 @@ mod test {
                         action: ftd::Action {
                             action: s("increment"),
                             target: s("foo/bar#count"),
-                            parameters: std::array::IntoIter::new([(
+                            parameters: std::iter::IntoIterator::into_iter([(
                                 s("by"),
                                 vec![ftd::event::ParameterData {
                                     value: serde_json::Value::from(2),
@@ -13423,7 +13436,7 @@ mod test {
                         action: ftd::Action {
                             action: s("increment"),
                             target: s("foo/bar#count"),
-                            parameters: std::array::IntoIter::new([
+                            parameters: std::iter::IntoIterator::into_iter([
                                 (
                                     s("by"),
                                     vec![ftd::event::ParameterData {
@@ -13464,7 +13477,7 @@ mod test {
                         action: ftd::Action {
                             action: s("decrement"),
                             target: s("foo/bar#count"),
-                            parameters: std::array::IntoIter::new([(
+                            parameters: std::iter::IntoIterator::into_iter([(
                                 s("clamp"),
                                 vec![
                                     ftd::event::ParameterData {
@@ -13545,7 +13558,7 @@ mod test {
                                     action: ftd::Action {
                                         action: s("increment"),
                                         target: s("foo/bar#count@0"),
-                                        parameters: std::array::IntoIter::new([(
+                                        parameters: std::iter::IntoIterator::into_iter([(
                                             s("by"),
                                             vec![ftd::event::ParameterData {
                                                 value: serde_json::Value::from(3),
@@ -13568,7 +13581,7 @@ mod test {
                                     action: ftd::Action {
                                         action: s("decrement"),
                                         target: s("foo/bar#count@0"),
-                                        parameters: std::array::IntoIter::new([(
+                                        parameters: std::iter::IntoIterator::into_iter([(
                                             s("by"),
                                             vec![ftd::event::ParameterData {
                                                 value: serde_json::Value::from(2),
@@ -13683,7 +13696,7 @@ mod test {
                             action: ftd::Action {
                                 action: s("increment"),
                                 target: s("foo/bar#count"),
-                                parameters: std::array::IntoIter::new([(s("clamp"), vec![ftd::event::ParameterData {
+                                parameters: std::iter::IntoIterator::into_iter([(s("clamp"), vec![ftd::event::ParameterData {
                                     value: serde_json::Value::from(0),
                                     reference: None,
                                 }, ftd::event::ParameterData {
@@ -13718,7 +13731,7 @@ mod test {
                         action: ftd::Action {
                             action: s("increment"),
                             target: s("foo/bar#count"),
-                            parameters: std::array::IntoIter::new([(
+                            parameters: std::iter::IntoIterator::into_iter([(
                                 s("clamp"),
                                 vec![
                                     ftd::event::ParameterData {
@@ -14925,7 +14938,7 @@ mod test {
                         action: ftd::Action {
                             action: s("set-value"),
                             target: s("foo/bar#current"),
-                            parameters: std::array::IntoIter::new([(
+                            parameters: std::iter::IntoIterator::into_iter([(
                                 s("value"),
                                 vec![
                                     ftd::event::ParameterData {
@@ -14957,7 +14970,7 @@ mod test {
                         action: ftd::Action {
                             action: s("set-value"),
                             target: s("foo/bar#current"),
-                            parameters: std::array::IntoIter::new([(
+                            parameters: std::iter::IntoIterator::into_iter([(
                                 s("value"),
                                 vec![
                                     ftd::event::ParameterData {
@@ -15159,7 +15172,7 @@ mod test {
                 text: ftd::markdown_line("Hello World"),
                 line: true,
                 common: ftd::Common {
-                    conditional_attribute: std::array::IntoIter::new([(
+                    conditional_attribute: std::iter::IntoIterator::into_iter([(
                         s("color"),
                         ftd::ConditionalAttribute {
                             attribute_type: ftd::AttributeType::Style,
@@ -15184,7 +15197,7 @@ mod test {
                             action: ftd::Action {
                                 action: s("set-value"),
                                 target: s("foo/bar#MOUSE-IN@0"),
-                                parameters: std::array::IntoIter::new([(
+                                parameters: std::iter::IntoIterator::into_iter([(
                                     s("value"),
                                     vec![
                                         ftd::event::ParameterData {
@@ -15205,7 +15218,7 @@ mod test {
                             action: ftd::Action {
                                 action: s("set-value"),
                                 target: s("foo/bar#MOUSE-IN@0"),
-                                parameters: std::array::IntoIter::new([(
+                                parameters: std::iter::IntoIterator::into_iter([(
                                     s("value"),
                                     vec![
                                         ftd::event::ParameterData {
@@ -15364,7 +15377,7 @@ mod test {
                 children: vec![ftd::Element::Integer(ftd::Text {
                     text: ftd::markdown_line("20"),
                     common: ftd::Common {
-                        conditional_attribute: std::array::IntoIter::new([(
+                        conditional_attribute: std::iter::IntoIterator::into_iter([(
                             s("color"),
                             ftd::ConditionalAttribute {
                                 attribute_type: ftd::AttributeType::Style,
@@ -15418,7 +15431,7 @@ mod test {
                         action: ftd::Action {
                             action: s("increment"),
                             target: s("foo/bar#a@0"),
-                            parameters: std::array::IntoIter::new([(
+                            parameters: std::iter::IntoIterator::into_iter([(
                                 s("by"),
                                 vec![ftd::event::ParameterData {
                                     value: serde_json::Value::from(2),
@@ -15542,7 +15555,7 @@ mod test {
                         ftd::Element::Integer(ftd::Text {
                             text: ftd::markdown_line("20"),
                             common: ftd::Common {
-                                conditional_attribute: std::array::IntoIter::new([(
+                                conditional_attribute: std::iter::IntoIterator::into_iter([(
                                     s("color"),
                                     ftd::ConditionalAttribute {
                                         attribute_type: ftd::AttributeType::Style,
@@ -15601,7 +15614,7 @@ mod test {
                             action: ftd::Action {
                                 action: s("set-value"),
                                 target: s("foo/bar#some-text@0"),
-                                parameters: std::array::IntoIter::new([(
+                                parameters: std::iter::IntoIterator::into_iter([(
                                     "value".to_string(),
                                     vec![
                                         ftd::event::ParameterData {
@@ -15629,7 +15642,7 @@ mod test {
                     text: ftd::markdown_line("hello"),
                     line: true,
                     common: ftd::Common {
-                        conditional_attribute: std::array::IntoIter::new([(
+                        conditional_attribute: std::iter::IntoIterator::into_iter([(
                             s("color"),
                             ftd::ConditionalAttribute {
                                 attribute_type: ftd::AttributeType::Style,
@@ -15720,7 +15733,7 @@ mod test {
                 line: true,
                 line_clamp: Some(30),
                 common: ftd::Common {
-                    conditional_attribute: std::array::IntoIter::new([(
+                    conditional_attribute: std::iter::IntoIterator::into_iter([(
                         s("color"),
                         ftd::ConditionalAttribute {
                             attribute_type: ftd::AttributeType::Style,
@@ -16181,11 +16194,12 @@ mod test {
             ftd::p2::Thing::Component(ftd::Component {
                 root: s("ftd#column"),
                 full_name: s("foo/bar#foo"),
-                arguments: std::array::IntoIter::new([(s("o"), ftd::p2::Kind::object())]).collect(),
+                arguments: std::iter::IntoIterator::into_iter([(s("o"), ftd::p2::Kind::object())])
+                    .collect(),
                 instructions: vec![ftd::Instruction::ChildComponent {
                     child: ftd::ChildComponent {
                         root: s("ftd#text"),
-                        properties: std::array::IntoIter::new([(
+                        properties: std::iter::IntoIterator::into_iter([(
                             s("text"),
                             ftd::component::Property {
                                 default: Some(ftd::PropertyValue::Value {
@@ -16212,7 +16226,7 @@ mod test {
                 name: s("obj"),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Object {
-                        values: std::array::IntoIter::new([
+                        values: std::iter::IntoIterator::into_iter([
                             (
                                 s("a"),
                                 ftd::PropertyValue::Reference {
@@ -16299,7 +16313,7 @@ mod test {
                 name: s("obj"),
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Object {
-                        values: std::array::IntoIter::new([
+                        values: std::iter::IntoIterator::into_iter([
                             (
                                 s("function"),
                                 ftd::PropertyValue::Value {
@@ -16338,7 +16352,7 @@ mod test {
                             action: ftd::Action {
                                 action: s("set-value"),
                                 target: s("foo/bar#input-data"),
-                                parameters: std::array::IntoIter::new([(
+                                parameters: std::iter::IntoIterator::into_iter([(
                                     s("value"),
                                     vec![
                                         ftd::event::ParameterData {
@@ -16359,7 +16373,7 @@ mod test {
                             action: ftd::Action {
                                 action: s("message-host"),
                                 target: s("$obj"),
-                                parameters: std::array::IntoIter::new([(
+                                parameters: std::iter::IntoIterator::into_iter([(
                                     "data".to_string(),
                                     vec![ftd::event::ParameterData {
                                     value: serde_json::from_str(
@@ -16553,7 +16567,7 @@ mod test {
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Record {
                         name: s("foo/bar#person"),
-                        fields: std::array::IntoIter::new([(
+                        fields: std::iter::IntoIterator::into_iter([(
                             s("name"),
                             ftd::PropertyValue::Reference {
                                 name: s("foo/bar#bar"),
@@ -16575,7 +16589,7 @@ mod test {
             s("foo/bar#person"),
             ftd::p2::Thing::Record(ftd::p2::Record {
                 name: s("foo/bar#person"),
-                fields: std::array::IntoIter::new([(s("name"), ftd::p2::Kind::caption())])
+                fields: std::iter::IntoIterator::into_iter([(s("name"), ftd::p2::Kind::caption())])
                     .collect(),
                 instances: Default::default(),
                 order: vec![s("name")],
@@ -16896,7 +16910,7 @@ mod test {
             ftd::p2::Thing::Component(ftd::Component {
                 root: s("ftd#column"),
                 full_name: s("foo/bar#bar"),
-                arguments: std::array::IntoIter::new([
+                arguments: std::iter::IntoIterator::into_iter([
                     (
                         s("active"),
                         ftd::p2::Kind::boolean().set_default(Some(s("false"))),
@@ -16914,7 +16928,7 @@ mod test {
                 ])
                 .collect(),
                 locals: Default::default(),
-                properties: std::array::IntoIter::new([
+                properties: std::iter::IntoIterator::into_iter([
                     (
                         s("border-width"),
                         ftd::component::Property {
@@ -16951,7 +16965,7 @@ mod test {
                         child: ftd::ChildComponent {
                             root: s("ftd#text"),
                             condition: None,
-                            properties: std::array::IntoIter::new([(
+                            properties: std::iter::IntoIterator::into_iter([(
                                 s("text"),
                                 ftd::component::Property {
                                     default: Some(ftd::PropertyValue::Variable {
@@ -16970,7 +16984,7 @@ mod test {
                         child: ftd::ChildComponent {
                             root: s("ftd#text"),
                             condition: None,
-                            properties: std::array::IntoIter::new([(
+                            properties: std::iter::IntoIterator::into_iter([(
                                 s("text"),
                                 ftd::component::Property {
                                     default: Some(ftd::PropertyValue::Variable {
@@ -16990,7 +17004,7 @@ mod test {
                         child: ftd::ChildComponent {
                             root: s("ftd#text"),
                             condition: None,
-                            properties: std::array::IntoIter::new([(
+                            properties: std::iter::IntoIterator::into_iter([(
                                 s("text"),
                                 ftd::component::Property {
                                     default: Some(ftd::PropertyValue::Variable {
@@ -17010,7 +17024,7 @@ mod test {
                         child: ftd::ChildComponent {
                             root: s("ftd#boolean"),
                             condition: None,
-                            properties: std::array::IntoIter::new([(
+                            properties: std::iter::IntoIterator::into_iter([(
                                 s("value"),
                                 ftd::component::Property {
                                     default: Some(ftd::PropertyValue::Variable {
@@ -17190,7 +17204,7 @@ mod test {
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Record {
                         name: s("ftd#color"),
-                        fields: std::array::IntoIter::new([
+                        fields: std::iter::IntoIterator::into_iter([
                             (
                                 s("dark"),
                                 ftd::PropertyValue::Value {
@@ -17478,7 +17492,7 @@ mod test {
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Record {
                         name: "ftd#color".to_string(),
-                        fields: std::array::IntoIter::new([
+                        fields: std::iter::IntoIterator::into_iter([
                             (
                                 "light".to_string(),
                                 ftd::PropertyValue::Value {
@@ -17568,12 +17582,12 @@ mod test {
             ftd::p2::Thing::Component(ftd::Component {
                 root: s("ftd#column"),
                 full_name: s("foo/bar#presentation"),
-                arguments: std::array::IntoIter::new([(
+                arguments: std::iter::IntoIterator::into_iter([(
                     "current".to_string(),
                     ftd::p2::Kind::integer().set_default(Some(s("1"))),
                 )])
                 .collect(),
-                properties: std::array::IntoIter::new([
+                properties: std::iter::IntoIterator::into_iter([
                     (
                         "append-at".to_string(),
                         ftd::component::Property {
@@ -17600,7 +17614,7 @@ mod test {
                 instructions: vec![ftd::Instruction::ChildComponent {
                     child: ftd::ChildComponent {
                         root: s("ftd#column"),
-                        properties: std::array::IntoIter::new([(
+                        properties: std::iter::IntoIterator::into_iter([(
                             "id".to_string(),
                             ftd::component::Property {
                                 default: Some(ftd::PropertyValue::Value {
@@ -17625,9 +17639,12 @@ mod test {
             ftd::p2::Thing::Component(ftd::Component {
                 root: s("ftd#text"),
                 full_name: s("foo/bar#slide"),
-                arguments: std::array::IntoIter::new([(s("title"), ftd::p2::Kind::caption())])
-                    .collect(),
-                properties: std::array::IntoIter::new([(
+                arguments: std::iter::IntoIterator::into_iter([(
+                    s("title"),
+                    ftd::p2::Kind::caption(),
+                )])
+                .collect(),
+                properties: std::iter::IntoIterator::into_iter([(
                     s("text"),
                     ftd::component::Property {
                         default: Some(ftd::PropertyValue::Variable {
@@ -17646,7 +17663,7 @@ mod test {
                             name: s("PARENT.current"),
                             kind: ftd::p2::Kind::integer(),
                         },
-                        parameters: std::array::IntoIter::new([(
+                        parameters: std::iter::IntoIterator::into_iter([(
                             s("clamp"),
                             vec![
                                 ftd::PropertyValue::Value {
@@ -17735,19 +17752,21 @@ mod test {
                                                 action: ftd::Action {
                                                     action: s("increment"),
                                                     target: s("foo/bar#current@0"),
-                                                    parameters: std::array::IntoIter::new([(
-                                                        "clamp".to_string(),
-                                                        vec![
-                                                            ftd::event::ParameterData {
-                                                                value: serde_json::json!(1),
-                                                                reference: None,
-                                                            },
-                                                            ftd::event::ParameterData {
-                                                                value: serde_json::json!(2),
-                                                                reference: None,
-                                                            },
-                                                        ],
-                                                    )])
+                                                    parameters: std::iter::IntoIterator::into_iter(
+                                                        [(
+                                                            "clamp".to_string(),
+                                                            vec![
+                                                                ftd::event::ParameterData {
+                                                                    value: serde_json::json!(1),
+                                                                    reference: None,
+                                                                },
+                                                                ftd::event::ParameterData {
+                                                                    value: serde_json::json!(2),
+                                                                    reference: None,
+                                                                },
+                                                            ],
+                                                        )],
+                                                    )
                                                     .collect(),
                                                 },
                                             }],
@@ -17771,19 +17790,21 @@ mod test {
                                                 action: ftd::Action {
                                                     action: s("increment"),
                                                     target: s("foo/bar#current@0"),
-                                                    parameters: std::array::IntoIter::new([(
-                                                        "clamp".to_string(),
-                                                        vec![
-                                                            ftd::event::ParameterData {
-                                                                value: serde_json::json!(1),
-                                                                reference: None,
-                                                            },
-                                                            ftd::event::ParameterData {
-                                                                value: serde_json::json!(2),
-                                                                reference: None,
-                                                            },
-                                                        ],
-                                                    )])
+                                                    parameters: std::iter::IntoIterator::into_iter(
+                                                        [(
+                                                            "clamp".to_string(),
+                                                            vec![
+                                                                ftd::event::ParameterData {
+                                                                    value: serde_json::json!(1),
+                                                                    reference: None,
+                                                                },
+                                                                ftd::event::ParameterData {
+                                                                    value: serde_json::json!(2),
+                                                                    reference: None,
+                                                                },
+                                                            ],
+                                                        )],
+                                                    )
                                                     .collect(),
                                                 },
                                             }],
