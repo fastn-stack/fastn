@@ -182,10 +182,14 @@ impl Record {
                     ftd::p2::Kind::String { .. } => {
                         let mut list = vec![];
                         for v in subsections {
+                            let (text, from_caption) = v.body_or_caption(doc.name)?;
                             list.push(ftd::PropertyValue::Value {
                                 value: ftd::Value::String {
-                                    text: v.body(doc.name)?,
-                                    source: ftd::TextSource::Body,
+                                    text,
+                                    source: match from_caption {
+                                        true => ftd::TextSource::Caption,
+                                        false => ftd::TextSource::Body,
+                                    },
                                 },
                             });
                         }
@@ -551,6 +555,7 @@ mod test {
                         ftd::p2::Kind::Record {
                             name: s("foo/bar#person"),
                             default: None,
+                            is_reference: false,
                         },
                     ),
                 ])
@@ -584,6 +589,7 @@ mod test {
                                     kind: ftd::p2::Kind::Record {
                                         name: s("foo/bar#person"),
                                         default: None,
+                                        is_reference: false,
                                     },
                                 },
                             ),
@@ -706,6 +712,7 @@ mod test {
                             ftd::p2::Kind::List {
                                 kind: Box::new(ftd::p2::Kind::string()),
                                 default: None,
+                                is_reference: false,
                             },
                         ),
                     ])
@@ -831,8 +838,10 @@ mod test {
                             kind: Box::new(ftd::p2::Kind::Record {
                                 name: s("foo/bar#point"),
                                 default: None,
+                                is_reference: false,
                             }),
                             default: None,
+                            is_reference: false,
                         },
                     ),
                 ])
@@ -867,6 +876,7 @@ mod test {
                                         kind: ftd::p2::Kind::Record {
                                             name: s("foo/bar#point"),
                                             default: None,
+                                            is_reference: false,
                                         },
                                         data: vec![
                                             ftd::PropertyValue::Value {
@@ -996,8 +1006,10 @@ mod test {
                         ftd::p2::Kind::List {
                             kind: Box::new(ftd::p2::Kind::OrType {
                                 name: s("foo/bar#entity"),
+                                is_reference: false,
                             }),
                             default: None,
+                            is_reference: false,
                         },
                     ),
                     (s("value"), ftd::p2::Kind::integer()),
@@ -1028,6 +1040,7 @@ mod test {
                                     value: ftd::Value::List {
                                         kind: ftd::p2::Kind::OrType {
                                             name: s("foo/bar#entity"),
+                                            is_reference: false,
                                         },
                                         data: vec![
                                         ftd::PropertyValue::Value {value: ftd::Value::OrType {

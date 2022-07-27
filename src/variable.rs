@@ -1311,6 +1311,7 @@ mod test {
                 bag: &mut bag,
                 aliases: &aliases,
                 local_variables: &mut Default::default(),
+                referenced_local_variables: &mut Default::default(),
             };
             pretty_assertions::assert_eq!(
                 super::Variable::from_p1(&p1[0], &mut d).unwrap(),

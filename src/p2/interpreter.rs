@@ -1227,6 +1227,33 @@ mod test {
     use ftd::test::*;
     use ftd::{markdown_line, Instruction};
 
+    /// inserts mapping of root_id -> integer variable (thing) in the bag
+    ///
+    /// bag\[root_id\] = integer variable
+    ///
+    /// root_id = \[doc_id\]#\[var_name\]@\[level\]
+    fn insert_integer_by_root(
+        root: &str,
+        val: i64,
+        bag: &mut std::collections::BTreeMap<String, ftd::p2::Thing>,
+    ) {
+        // root => [doc_id]#[var_name]@[level]
+        // root_parts = [ doc_id , var_name, level ]
+        let root_parts: Vec<&str> = root.trim().split(|ch| ch == '#' || ch == '@').collect();
+        let var_name = root_parts[1];
+
+        let integer_thing = ftd::p2::Thing::Variable(ftd::Variable {
+            name: format!("{}", var_name),
+            value: ftd::PropertyValue::Value {
+                value: ftd::Value::Integer { value: val },
+            },
+            conditions: vec![],
+            flags: Default::default(),
+        });
+
+        bag.insert(root.to_string(), integer_thing);
+    }
+
     #[test]
     fn basic_1() {
         let mut bag = super::default_bag();
@@ -1298,7 +1325,9 @@ mod test {
                                     kind: Box::new(ftd::p2::Kind::Record {
                                         name: s("ftd#color"),
                                         default: None,
+                                        is_reference: false,
                                     }),
+                                    is_reference: false,
                                 },
                             }),
                             conditions: vec![
@@ -1318,7 +1347,9 @@ mod test {
                                             kind: Box::new(ftd::p2::Kind::Record {
                                                 name: s("ftd#color"),
                                                 default: None,
+                                                is_reference: false,
                                             }),
+                                            is_reference: false,
                                         },
                                     },
                                 ),
@@ -1338,7 +1369,9 @@ mod test {
                                             kind: Box::new(ftd::p2::Kind::Record {
                                                 name: s("ftd#color"),
                                                 default: None,
+                                                is_reference: false,
                                             }),
+                                            is_reference: false,
                                         },
                                     },
                                 ),
@@ -1802,6 +1835,7 @@ mod test {
                         s("active"),
                         ftd::p2::Kind::Optional {
                             kind: Box::new(ftd::p2::Kind::boolean()),
+                            is_reference: false,
                         },
                     ),
                     (s("id"), ftd::p2::Kind::string()),
@@ -1816,6 +1850,7 @@ mod test {
                                 name: "id".to_string(),
                                 kind: ftd::p2::Kind::Optional {
                                     kind: Box::new(ftd::p2::Kind::string()),
+                                    is_reference: false,
                                 },
                             }),
                             conditions: vec![],
@@ -1858,6 +1893,7 @@ mod test {
                                     name: "active".to_string(),
                                     kind: ftd::p2::Kind::Optional {
                                         kind: Box::new(ftd::p2::Kind::boolean()),
+                                        is_reference: false,
                                     },
                                 },
                             }),
@@ -1871,7 +1907,9 @@ mod test {
                                                 kind: Box::new(ftd::p2::Kind::Record {
                                                     name: s("ftd#color"),
                                                     default: None,
+                                                    is_reference: false,
                                                 }),
+                                                is_reference: false,
                                             },
                                         }),
                                         conditions: vec![],
@@ -1904,6 +1942,7 @@ mod test {
                                     name: "active".to_string(),
                                     kind: ftd::p2::Kind::Optional {
                                         kind: Box::new(ftd::p2::Kind::boolean()),
+                                        is_reference: false,
                                     },
                                 },
                             }),
@@ -1917,7 +1956,9 @@ mod test {
                                                 kind: Box::new(ftd::p2::Kind::Record {
                                                     name: s("ftd#color"),
                                                     default: None,
+                                                    is_reference: false,
                                                 }),
+                                                is_reference: false,
                                             },
                                         }),
                                         conditions: vec![],
@@ -1974,6 +2015,7 @@ mod test {
                                 name: "id".to_string(),
                                 kind: ftd::p2::Kind::Optional {
                                     kind: Box::new(ftd::p2::Kind::string()),
+                                    is_reference: false,
                                 },
                             }),
                             conditions: vec![],
@@ -2889,6 +2931,7 @@ mod test {
                         s("active"),
                         ftd::p2::Kind::Optional {
                             kind: Box::new(ftd::p2::Kind::boolean()),
+                            is_reference: false,
                         },
                     ),
                     (s("id"), ftd::p2::Kind::string()),
@@ -2903,6 +2946,7 @@ mod test {
                                 name: "id".to_string(),
                                 kind: ftd::p2::Kind::Optional {
                                     kind: Box::new(ftd::p2::Kind::string()),
+                                    is_reference: false,
                                 },
                             }),
                             conditions: vec![],
@@ -2945,6 +2989,7 @@ mod test {
                                     name: "active".to_string(),
                                     kind: ftd::p2::Kind::Optional {
                                         kind: Box::new(ftd::p2::Kind::boolean()),
+                                        is_reference: false,
                                     },
                                 },
                             }),
@@ -2958,7 +3003,9 @@ mod test {
                                                 kind: Box::new(ftd::p2::Kind::Record {
                                                     name: s("ftd#color"),
                                                     default: None,
+                                                    is_reference: false,
                                                 }),
+                                                is_reference: false,
                                             },
                                         }),
                                         conditions: vec![],
@@ -2991,6 +3038,7 @@ mod test {
                                     name: "active".to_string(),
                                     kind: ftd::p2::Kind::Optional {
                                         kind: Box::new(ftd::p2::Kind::boolean()),
+                                        is_reference: false,
                                     },
                                 },
                             }),
@@ -3004,7 +3052,9 @@ mod test {
                                                 kind: Box::new(ftd::p2::Kind::Record {
                                                     name: s("ftd#color"),
                                                     default: None,
+                                                    is_reference: false,
                                                 }),
+                                                is_reference: false,
                                             },
                                         }),
                                         conditions: vec![],
@@ -3061,6 +3111,7 @@ mod test {
                                 name: "id".to_string(),
                                 kind: ftd::p2::Kind::Optional {
                                     kind: Box::new(ftd::p2::Kind::string()),
+                                    is_reference: false,
                                 },
                             }),
                             conditions: vec![],
@@ -3806,7 +3857,9 @@ mod test {
                                     kind: Box::new(ftd::p2::Kind::Record {
                                         name: s("ftd#color"),
                                         default: None,
+                                        is_reference: false,
                                     }),
+                                    is_reference: false,
                                 },
                             }),
                             conditions: vec![],
@@ -3906,6 +3959,22 @@ mod test {
     #[test]
     fn text() {
         let mut bag = super::default_bag();
+
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@0", -1, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@1", -1, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@2", -1, &mut bag);
+
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@0", 0, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@1", 0, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@2", 0, &mut bag);
+
+        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@0", 0, &mut bag);
+        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@1", 1, &mut bag);
+        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@2", 2, &mut bag);
+
+        insert_integer_by_root("foo/bar#SIBLING-INDEX@0", 1, &mut bag);
+        insert_integer_by_root("foo/bar#SIBLING-INDEX@1", 2, &mut bag);
+        insert_integer_by_root("foo/bar#SIBLING-INDEX@2", 3, &mut bag);
 
         bag.insert(
             "foo/bar#foo".to_string(),
@@ -4278,6 +4347,7 @@ mod test {
                         kind: ftd::p2::Kind::Record {
                             name: s("foo/bar#point"),
                             default: None,
+                            is_reference: false,
                         },
                     },
                 },
@@ -4381,6 +4451,7 @@ mod test {
                         let s = ftd::p2::Kind::Record {
                             name: s("ftd#image-src"),
                             default: None,
+                            is_reference: false,
                         };
                         if about_optional {
                             s.into_optional()
@@ -4478,6 +4549,7 @@ mod test {
                                         kind: ftd::p2::Kind::Record {
                                             name: s("ftd#image-src"),
                                             default: None,
+                                            is_reference: false,
                                         }
                                         .into_optional(),
                                     },
@@ -4494,6 +4566,7 @@ mod test {
                                         kind: ftd::p2::Kind::Record {
                                             name: s("ftd#image-src"),
                                             default: None,
+                                            is_reference: false,
                                         },
                                     }),
                                     conditions: vec![],
@@ -4632,6 +4705,7 @@ mod test {
                     kind: ftd::p2::Kind::Record {
                         name: s("ftd#image-src"),
                         default: None,
+                        is_reference: false,
                     },
                 },
                 conditions: vec![],
@@ -4916,7 +4990,9 @@ mod test {
                         kind: Box::new(ftd::p2::Kind::Record {
                             name: s("ftd#image-src"),
                             default: None,
+                            is_reference: false,
                         }),
+                        is_reference: false,
                     },
                 },
                 conditions: vec![],
@@ -4933,7 +5009,9 @@ mod test {
                         kind: Box::new(ftd::p2::Kind::Record {
                             name: s("ftd#image-src"),
                             default: None,
+                            is_reference: false,
                         }),
+                        is_reference: false,
                     },
                 },
                 conditions: vec![],
@@ -5308,7 +5386,9 @@ mod test {
                         kind: Box::new(ftd::p2::Kind::Record {
                             name: s("ftd#image-src"),
                             default: None,
+                            is_reference: false,
                         }),
+                        is_reference: false,
                     },
                 },
                 conditions: vec![],
@@ -5325,7 +5405,9 @@ mod test {
                         kind: Box::new(ftd::p2::Kind::Record {
                             name: s("ftd#image-src"),
                             default: None,
+                            is_reference: false,
                         }),
+                        is_reference: false,
                     },
                 },
                 conditions: vec![],
@@ -5342,6 +5424,7 @@ mod test {
                         kind: ftd::p2::Kind::Record {
                             name: s("ftd#image-src"),
                             default: None,
+                            is_reference: false,
                         },
                     },
                 },
@@ -5735,6 +5818,7 @@ mod test {
                     kind: ftd::p2::Kind::Record {
                         name: s("ftd#image-src"),
                         default: None,
+                        is_reference: false,
                     },
                 },
                 conditions: vec![],
@@ -5750,6 +5834,7 @@ mod test {
                     kind: ftd::p2::Kind::Record {
                         name: s("ftd#image-src"),
                         default: None,
+                        is_reference: false,
                     },
                 },
                 conditions: vec![],
@@ -5866,6 +5951,7 @@ mod test {
                         ftd::p2::Kind::Record {
                             name: s("ftd#image-src"),
                             default: None,
+                            is_reference: false,
                         },
                     ),
                 ])
@@ -5884,6 +5970,7 @@ mod test {
                                         kind: ftd::p2::Kind::Record {
                                             name: s("ftd#image-src"),
                                             default: None,
+                                            is_reference: false,
                                         },
                                     }),
                                     conditions: vec![],
@@ -7241,6 +7328,7 @@ mod test {
                             name: "id".to_string(),
                             kind: ftd::p2::Kind::Optional {
                                 kind: Box::new(ftd::p2::Kind::string()),
+                                is_reference: false,
                             },
                         }),
                         conditions: vec![],
@@ -7315,7 +7403,10 @@ mod test {
                             condition: Some(ftd::p2::Boolean::Equal {
                                 left: ftd::PropertyValue::Reference {
                                     name: s("foo/bar#mobile"),
-                                    kind: ftd::p2::Kind::Boolean { default: None },
+                                    kind: ftd::p2::Kind::Boolean {
+                                        default: None,
+                                        is_reference: false,
+                                    },
                                 },
                                 right: ftd::PropertyValue::Value {
                                     value: ftd::variable::Value::Boolean { value: true },
@@ -7346,7 +7437,10 @@ mod test {
                             condition: Some(ftd::p2::Boolean::Equal {
                                 left: ftd::PropertyValue::Reference {
                                     name: s("foo/bar#mobile"),
-                                    kind: ftd::p2::Kind::Boolean { default: None },
+                                    kind: ftd::p2::Kind::Boolean {
+                                        default: None,
+                                        is_reference: false,
+                                    },
                                 },
                                 right: ftd::PropertyValue::Value {
                                     value: ftd::variable::Value::Boolean { value: false },
@@ -7403,6 +7497,7 @@ mod test {
                             name: "id".to_string(),
                             kind: ftd::p2::Kind::Optional {
                                 kind: Box::new(ftd::p2::Kind::string()),
+                                is_reference: false,
                             },
                         }),
                         conditions: vec![],
@@ -8204,25 +8299,11 @@ mod test {
             spacing: None,
             container: ftd::Container {
                 external_children: Default::default(),
-                children: vec![
-                    ftd::Element::Markup(ftd::Markups {
-                        text: ftd::markdown_line("hello"),
-                        line: true,
-                        ..Default::default()
-                    }),
-                    ftd::Element::Row(ftd::Row {
-                        spacing: None,
-                        container: ftd::Container {
-                            open: Some(false),
-                            ..Default::default()
-                        },
-                        common: ftd::Common {
-                            data_id: Some(s("r3")),
-                            id: Some(s("r3")),
-                            ..Default::default()
-                        },
-                    }),
-                ],
+                children: vec![ftd::Element::Markup(ftd::Markups {
+                    text: ftd::markdown_line("hello"),
+                    line: true,
+                    ..Default::default()
+                })],
                 open: Some(true),
                 ..Default::default()
             },
@@ -8232,6 +8313,40 @@ mod test {
                 ..Default::default()
             },
         }));
+
+        main.container.children.push(ftd::Element::Row(ftd::Row {
+            spacing: None,
+            container: ftd::Container {
+                open: Some(false),
+                ..Default::default()
+            },
+            common: ftd::Common {
+                data_id: Some(s("r3")),
+                id: Some(s("r3")),
+                ..Default::default()
+            },
+        }));
+
+        let mut bag = super::default_bag();
+
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@0", -1, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@1", 0, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@2", -1, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@1,0", -1, &mut bag);
+
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@0", 0, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@1", 1, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@2", 0, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@1,0", 0, &mut bag);
+
+        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@0", 0, &mut bag);
+        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@1", 1, &mut bag);
+        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@2", 2, &mut bag);
+
+        insert_integer_by_root("foo/bar#SIBLING-INDEX@0", 1, &mut bag);
+        insert_integer_by_root("foo/bar#SIBLING-INDEX@1", 2, &mut bag);
+        insert_integer_by_root("foo/bar#SIBLING-INDEX@2", 3, &mut bag);
+
         let (g_bag, g_col) = ftd::test::interpret(
             "foo/bar",
             indoc::indoc!(
@@ -8254,7 +8369,7 @@ mod test {
             &ftd::p2::TestLibrary {},
         )
         .expect("found error");
-        pretty_assertions::assert_eq!(g_bag, super::default_bag());
+        pretty_assertions::assert_eq!(g_bag, bag);
         pretty_assertions::assert_eq!(g_col, main);
     }
 
@@ -8285,7 +8400,15 @@ mod test {
             &ftd::p2::TestLibrary {},
         )
         .expect("found error");
-        pretty_assertions::assert_eq!(g_bag, super::default_bag());
+
+        let mut bag = super::default_bag();
+
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@0", -1, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@0", 0, &mut bag);
+        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@0", 0, &mut bag);
+        insert_integer_by_root("foo/bar#SIBLING-INDEX@0", 1, &mut bag);
+
+        pretty_assertions::assert_eq!(g_bag, bag);
         pretty_assertions::assert_eq!(g_col, main);
     }
 
@@ -8535,6 +8658,7 @@ mod test {
                         kind: ftd::p2::Kind::Record {
                             name: "foo/bar#person".to_string(),
                             default: None,
+                            is_reference: false,
                         },
                     },
                 },
@@ -8949,6 +9073,7 @@ mod test {
                         kind: ftd::p2::Kind::Record {
                             name: "foo/bar#person".to_string(),
                             default: None,
+                            is_reference: false,
                         },
                     },
                 },
@@ -9251,6 +9376,17 @@ mod test {
                 conditions: vec![],
             }),
         );
+
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@0", -1, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@1", -1, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@2", -1, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@3", -1, &mut bag);
+
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@0", 0, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@1", 0, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@2", 0, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@3", 0, &mut bag);
+
         bag.insert(
             "foo/bar#people".to_string(),
             ftd::p2::Thing::Variable(ftd::Variable {
@@ -9539,6 +9675,7 @@ mod test {
                         kind: ftd::p2::Kind::Record {
                             name: "foo/bar#person".to_string(),
                             default: None,
+                            is_reference: true,
                         },
                     },
                 },
@@ -9618,6 +9755,11 @@ mod test {
 
         let mut bag = super::default_bag();
 
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@0", -1, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@0", 0, &mut bag);
+        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@0", 0, &mut bag);
+        insert_integer_by_root("foo/bar#SIBLING-INDEX@0", 1, &mut bag);
+
         bag.insert(
             "foo/bar#test".to_string(),
             ftd::p2::Thing::Variable(ftd::Variable {
@@ -9667,6 +9809,11 @@ mod test {
             }));
 
         let mut bag = super::default_bag();
+
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@0", -1, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@0", 0, &mut bag);
+        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@0", 0, &mut bag);
+        insert_integer_by_root("foo/bar#SIBLING-INDEX@0", 1, &mut bag);
 
         bag.insert(
             "foo/bar#test".to_string(),
@@ -10010,6 +10157,26 @@ mod test {
                 conditions: vec![],
             }),
         );
+
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@0", -1, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@1", -1, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@2", -1, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@3", -1, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@4", -1, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@5", -1, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@6", -1, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@7", -1, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@8", -1, &mut bag);
+
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@0", 0, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@1", 0, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@2", 0, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@3", 0, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@4", 0, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@5", 0, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@6", 0, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@7", 0, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@8", 0, &mut bag);
 
         let (g_bag, g_col) = ftd::test::interpret(
             "foo/bar",
@@ -10765,6 +10932,7 @@ mod test {
                                                     kind: ftd::p2::Kind::Record {
                                                         name: s("foo/bar#toc-record"),
                                                         default: None,
+                                                        is_reference: true,
                                                     },
                                                 },
                                             },
@@ -10803,6 +10971,7 @@ mod test {
                                                     kind: ftd::p2::Kind::Record {
                                                         name: s("foo/bar#toc-record"),
                                                         default: None,
+                                                        is_reference: true,
                                                     },
                                                 },
                                             },
@@ -10833,6 +11002,7 @@ mod test {
                         kind: ftd::p2::Kind::Record {
                             name: s("foo/bar#toc-record"),
                             default: None,
+                            is_reference: true,
                         },
                     },
                 },
@@ -10867,6 +11037,7 @@ mod test {
                                                                         kind: ftd::p2::Kind::Record {
                                                                             name: s("foo/bar#toc-record"),
                                                                             default: None,
+                                                                            is_reference: true,
                                                                         },
                                                                     },
                                                                 },
@@ -10903,6 +11074,7 @@ mod test {
                                                                         kind: ftd::p2::Kind::Record {
                                                                             name: s("foo/bar#toc-record"),
                                                                             default: None,
+                                                                            is_reference: true,
                                                                         },
                                                                     },
                                                                 },
@@ -10932,6 +11104,7 @@ mod test {
                                                 kind: ftd::p2::Kind::Record {
                                                     name: s("foo/bar#toc-record"),
                                                     default: None,
+                                                    is_reference: true,
                                                 },
                                             },
                                         },
@@ -10961,6 +11134,7 @@ mod test {
                         kind: ftd::p2::Kind::Record {
                             name: s("foo/bar#toc-record"),
                             default: None,
+                            is_reference: true,
                         },
                     },
                 },
@@ -10978,6 +11152,7 @@ mod test {
                     ftd::p2::Kind::Record {
                         name: "foo/bar#toc-record".to_string(),
                         default: None,
+                        is_reference: true,
                     },
                 )])
                 .collect(),
@@ -10995,6 +11170,7 @@ mod test {
                                             name: "toc.link".to_string(),
                                             kind: ftd::p2::Kind::Optional {
                                                 kind: Box::new(ftd::p2::Kind::string()),
+                                                is_reference: false,
                                             },
                                         }),
                                         conditions: vec![],
@@ -11008,6 +11184,7 @@ mod test {
                                             name: "toc.title".to_string(),
                                             kind: ftd::p2::Kind::Optional {
                                                 kind: Box::new(ftd::p2::Kind::caption_or_body()),
+                                                is_reference: false,
                                             },
                                         }),
                                         conditions: vec![],
@@ -11034,6 +11211,7 @@ mod test {
                                             kind: ftd::p2::Kind::Record {
                                                 name: s("foo/bar#toc-record"),
                                                 default: None,
+                                                is_reference: true,
                                             },
                                         }),
                                         conditions: vec![],
@@ -11048,6 +11226,7 @@ mod test {
                                             kind: ftd::p2::Kind::Record {
                                                 name: s("foo/bar#toc-record"),
                                                 default: None,
+                                                is_reference: true,
                                             },
                                         }),
                                         conditions: vec![],
@@ -11239,6 +11418,23 @@ mod test {
             }));
 
         let mut bag = super::default_bag();
+
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@0", -1, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@1", -1, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@2", -1, &mut bag);
+
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@0", 0, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@1", 0, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@2", 0, &mut bag);
+
+        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@0", 0, &mut bag);
+        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@1", 1, &mut bag);
+        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@2", 2, &mut bag);
+
+        insert_integer_by_root("foo/bar#SIBLING-INDEX@0", 1, &mut bag);
+        insert_integer_by_root("foo/bar#SIBLING-INDEX@1", 2, &mut bag);
+        insert_integer_by_root("foo/bar#SIBLING-INDEX@2", 3, &mut bag);
+
         bag.insert(
             s("foo/bar#foo"),
             ftd::p2::Thing::Component(ftd::Component {
@@ -11253,6 +11449,7 @@ mod test {
                         s("line-clamp"),
                         ftd::p2::Kind::Integer {
                             default: Some(s("10")),
+                            is_reference: false,
                         },
                     ),
                 ])
@@ -11266,7 +11463,9 @@ mod test {
                                 kind: ftd::p2::Kind::Optional {
                                     kind: Box::from(ftd::p2::Kind::Integer {
                                         default: Some(s("10")),
+                                        is_reference: false,
                                     }),
+                                    is_reference: false,
                                 },
                             }),
                             conditions: vec![],
@@ -11430,6 +11629,12 @@ mod test {
     #[test]
     fn record_with_default_value() {
         let mut bag = super::default_bag();
+
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@0", -1, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@0", 0, &mut bag);
+        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@0", 0, &mut bag);
+        insert_integer_by_root("foo/bar#SIBLING-INDEX@0", 1, &mut bag);
+
         bag.insert(
             s("foo/bar#abrar"),
             ftd::p2::Thing::Variable(ftd::Variable {
@@ -11454,6 +11659,7 @@ mod test {
                                     name: s("foo/bar#default-age"),
                                     kind: ftd::p2::Kind::Integer {
                                         default: Some(s("$foo/bar#default-age")),
+                                        is_reference: false,
                                     },
                                 },
                             ),
@@ -11524,6 +11730,7 @@ mod test {
                         s("age"),
                         ftd::p2::Kind::Integer {
                             default: Some(s("$foo/bar#default-age")),
+                            is_reference: false,
                         },
                     ),
                     (
@@ -11535,6 +11742,7 @@ mod test {
                         s("size"),
                         ftd::p2::Kind::Integer {
                             default: Some(s("10")),
+                            is_reference: false,
                         },
                     ),
                 ])
@@ -11667,6 +11875,7 @@ mod test {
                         s("text-size"),
                         ftd::p2::Kind::Integer {
                             default: Some(s("$foo/bar#default-size")),
+                            is_reference: false,
                         },
                     ),
                 ])
@@ -11685,7 +11894,9 @@ mod test {
                                         kind: ftd::p2::Kind::Optional {
                                             kind: Box::new(ftd::p2::Kind::Integer {
                                                 default: Some(s("$foo/bar#default-size")),
+                                                is_reference: false,
                                             }),
+                                            is_reference: false,
                                         },
                                     }),
                                     conditions: vec![],
@@ -11825,6 +12036,23 @@ mod test {
             }));
 
         let mut bag = super::default_bag();
+
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@0", -1, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@1", -1, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@2", -1, &mut bag);
+
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@0", 0, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@1", 0, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@2", 0, &mut bag);
+
+        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@0", 0, &mut bag);
+        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@1", 1, &mut bag);
+        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@2", 2, &mut bag);
+
+        insert_integer_by_root("foo/bar#SIBLING-INDEX@0", 1, &mut bag);
+        insert_integer_by_root("foo/bar#SIBLING-INDEX@1", 2, &mut bag);
+        insert_integer_by_root("foo/bar#SIBLING-INDEX@2", 3, &mut bag);
+
         bag.insert(
             s("foo/bar#acme"),
             ftd::p2::Thing::Variable(ftd::Variable {
@@ -12552,6 +12780,12 @@ mod test {
             }));
 
         let mut bag = super::default_bag();
+
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@0", -1, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@0", 0, &mut bag);
+        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@0", 0, &mut bag);
+        insert_integer_by_root("foo/bar#SIBLING-INDEX@0", 1, &mut bag);
+
         bag.insert(
             s("foo/bar#foo"),
             ftd::p2::Thing::Component(ftd::Component {
@@ -12574,6 +12808,7 @@ mod test {
                                 caption: true,
                                 body: true,
                                 default: None,
+                                is_reference: false,
                             },
                         }),
                         ..Default::default()
@@ -13562,7 +13797,7 @@ mod test {
                                             s("by"),
                                             vec![ftd::event::ParameterData {
                                                 value: serde_json::Value::from(3),
-                                                reference: None,
+                                                reference: Some(s("foo/bar#by@0")),
                                             }],
                                         )])
                                         .collect(),
@@ -16235,6 +16470,7 @@ mod test {
                                         caption: true,
                                         body: false,
                                         default: None,
+                                        is_reference: false,
                                     },
                                 },
                             ),
@@ -16331,6 +16567,7 @@ mod test {
                                         caption: true,
                                         body: false,
                                         default: None,
+                                        is_reference: false,
                                     },
                                 },
                             ),
@@ -16575,6 +16812,7 @@ mod test {
                                     caption: true,
                                     body: false,
                                     default: None,
+                                    is_reference: false,
                                 },
                             },
                         )])
@@ -16607,6 +16845,7 @@ mod test {
                         caption: true,
                         body: false,
                         default: None,
+                        is_reference: false,
                     },
                 },
                 conditions: vec![],
@@ -16635,7 +16874,10 @@ mod test {
                 name: s("ibar"),
                 value: ftd::PropertyValue::Reference {
                     name: s("foo/bar#ifoo"),
-                    kind: ftd::p2::Kind::Integer { default: None },
+                    kind: ftd::p2::Kind::Integer {
+                        default: None,
+                        is_reference: false,
+                    },
                 },
                 conditions: vec![],
             }),
@@ -16665,8 +16907,10 @@ mod test {
                             caption: false,
                             body: false,
                             default: None,
+                            is_reference: false,
                         }),
                         default: None,
+                        is_reference: false,
                     },
                 },
                 conditions: vec![],
@@ -16687,6 +16931,7 @@ mod test {
                                     caption: true,
                                     body: false,
                                     default: None,
+                                    is_reference: false,
                                 },
                             },
                             ftd::PropertyValue::Reference {
@@ -16695,6 +16940,7 @@ mod test {
                                     caption: true,
                                     body: false,
                                     default: None,
+                                    is_reference: false,
                                 },
                             },
                             ftd::PropertyValue::Value {
@@ -16708,6 +16954,7 @@ mod test {
                             caption: false,
                             body: false,
                             default: None,
+                            is_reference: false,
                         },
                     },
                 },
@@ -16820,6 +17067,38 @@ mod test {
                 flags: Default::default(),
             }),
         );
+
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@0", -1, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@1", -1, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@2", -1, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@3", -1, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@4", -1, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@5", -1, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@6", -1, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@7", -1, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@8", -1, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@9", -1, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@10", -1, &mut bag);
+
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@0", 0, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@1", 0, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@2", 0, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@3", 0, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@4", 0, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@5", 0, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@6", 0, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@7", 0, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@8", 0, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@9", 0, &mut bag);
+        insert_integer_by_root("foo/bar#CHILDREN-COUNT@10", 0, &mut bag);
+
+        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@0", 0, &mut bag);
+        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@1", 1, &mut bag);
+        insert_integer_by_root("foo/bar#SIBLING-INDEX-0@10", 10, &mut bag);
+
+        insert_integer_by_root("foo/bar#SIBLING-INDEX@0", 1, &mut bag);
+        insert_integer_by_root("foo/bar#SIBLING-INDEX@1", 2, &mut bag);
+        insert_integer_by_root("foo/bar#SIBLING-INDEX@10", 11, &mut bag);
 
         let (g_bag, g_col) = ftd::test::interpret(
             "foo/bar",
@@ -16936,6 +17215,7 @@ mod test {
                                 name: s("w"),
                                 kind: ftd::p2::Kind::Optional {
                                     kind: Box::new(ftd::p2::Kind::integer()),
+                                    is_reference: false,
                                 },
                             }),
                             conditions: vec![],
@@ -16951,7 +17231,9 @@ mod test {
                                     kind: Box::new(ftd::p2::Kind::Record {
                                         name: s("ftd#color"),
                                         default: None,
+                                        is_reference: false,
                                     }),
+                                    is_reference: false,
                                 },
                             }),
                             conditions: vec![],

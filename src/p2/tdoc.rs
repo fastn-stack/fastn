@@ -1428,6 +1428,7 @@ mod test {
             aliases: &Default::default(),
             bag: &Default::default(),
             local_variables: &mut Default::default(),
+            referenced_local_variables: &mut Default::default(),
         };
         let section = ftd::p1::parse(
             indoc::indoc!(
@@ -1458,6 +1459,7 @@ mod test {
                 caption: false,
                 body: false,
                 default: None,
+                is_reference: false,
             },
         };
         pretty_assertions::assert_eq!(value_from_json, value);
@@ -1480,13 +1482,13 @@ mod test {
         let data: Vec<Vec<serde_json::Value>> = vec![
             vec![
                 serde_json::json!("Amitu"),
-                serde_json::json!(20),
+                serde_json::json!(20 as i64),
                 serde_json::json!("Bangalore"),
                 serde_json::json!("CEO of fifthTry"),
             ],
             vec![
                 serde_json::json!("Arpita"),
-                serde_json::json!(20),
+                serde_json::json!(20 as i64),
                 serde_json::json!("Varanasi"),
                 serde_json::json!("Software Developer of fifthTry"),
             ],
@@ -1496,6 +1498,7 @@ mod test {
             aliases: &Default::default(),
             bag: &g_bag,
             local_variables: &mut Default::default(),
+            referenced_local_variables: &mut Default::default(),
         };
         let section = ftd::p1::parse(
             indoc::indoc!(
@@ -1595,6 +1598,7 @@ mod test {
             kind: ftd::p2::Kind::Record {
                 name: "foo/bar#person".to_string(),
                 default: None,
+                is_reference: false,
             },
         };
         pretty_assertions::assert_eq!(value_from_json, value);
