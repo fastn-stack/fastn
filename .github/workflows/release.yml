@@ -38,9 +38,7 @@ jobs:
           name: linux_musl_x86_64
           path: target/x86_64-unknown-linux-musl/release/${{ env.BINARY_NAME }}*
       - name: Build-debian
-        continue-on-error: True
-        with:
-          args: cargo deb
+        run: cargo deb
       - uses: actions/upload-artifact@v2
         with:
           name: fpm_debian
