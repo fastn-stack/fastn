@@ -443,8 +443,8 @@ dark: #205694
 
 -- ftd.btb info-btb-:
 base: $info-base-
-text: $info-base-
-border: $info-base-
+text: $info-text-
+border: $info-border-
 
 -- ftd.color warning-base-:
 light: #fbefba
