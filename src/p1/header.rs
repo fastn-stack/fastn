@@ -4,6 +4,14 @@ pub use ftd::p1::{Error, Result};
 pub struct Header(pub Vec<(usize, String, String)>);
 
 impl Header {
+    pub fn uncommented_headers(&self) -> Vec<(usize, String, String)> {
+        self.0
+            .iter()
+            .filter(|h| !h.1.starts_with('/'))
+            .cloned()
+            .collect::<Vec<(usize, String, String)>>()
+    }
+
     pub fn without_line_number(&self) -> Self {
         let mut header: Header = Default::default();
         for (_, k, v) in self.0.iter() {

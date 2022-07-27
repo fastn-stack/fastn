@@ -45,9 +45,8 @@ impl InterpreterState {
 
         let l = self.document_stack.len() - 1; // Get the top of the stack
 
-        // Any of these two functions can be used to remove comments from parsed document
-        // self.document_stack[l].ignore_all_comments()?;
-        self.document_stack[l].ignore_comments()?;
+        // Removing commented parts from the parsed document
+        self.document_stack[l].ignore_comments();
         // beyond this point commented things will no longer exist in the parsed document
 
         if self.document_stack[l].processing_imports {
@@ -737,49 +736,6 @@ impl ParsedDocument {
         self.processing_imports = false;
     }
 
-    /// prints the parsed document (for debugging purposes)
-    #[allow(dead_code)]
-    fn show_document(&self) {
-        for section in self.sections.iter() {
-            dbg!(&section.name, &section.caption, section.is_commented);
-
-            for (_ln, key, value) in section.header.0.iter() {
-                dbg!(key, value);
-            }
-
-            dbg!(&section.body);
-            for subsection in section.sub_sections.0.iter() {
-                dbg!(
-                    &subsection.name,
-                    &subsection.caption,
-                    &subsection.is_commented
-                );
-
-                for (_ln, key, value) in subsection.header.0.iter() {
-                    dbg!(key, value);
-                }
-
-                dbg!(&subsection.body);
-            }
-        }
-    }
-
-    /// same logic as [`ParsedDocument::ignore_comments()`] but uses the
-    /// already existing [`remove_comments()`] to remove comments.
-    ///
-    /// [`ParsedDocument::ignore_comments()`]: ftd::p2::interpreter::ParsedDocument::ignore_comments
-    /// [`Section::remove_comments()`]: ftd::p1::section::Section::remove_comments
-    #[allow(dead_code)]
-    fn ignore_all_comments(&mut self) -> ftd::p1::Result<()> {
-        self.sections = self
-            .sections
-            .iter()
-            .filter(|s| !s.is_commented)
-            .map(|s| s.remove_comments())
-            .collect::<Vec<ftd::p1::Section>>();
-        Ok(())
-    }
-
     /// Filters out commented parts from the parsed document.
     ///
     /// # Comments are ignored for
@@ -798,94 +754,18 @@ impl ParsedDocument {
     /// Only '/' comments are ignored here.
     /// ';' comments are ignored inside the [`parser`] itself.
     ///
+    /// uses [`Section::remove_comments()`] and [`Subsection::remove_comments()`] to remove comments
+    ///
     /// [`parser`]: ftd::p1::parser::parse
-    #[allow(dead_code)]
-    fn ignore_comments(&mut self) -> ftd::p1::Result<()> {
-        let mut processed_sections: Vec<ftd::p1::Section> = Vec::new();
-        for section in self.sections.iter_mut() {
-            // Ignore entire section if it is commented out
-            if section.is_commented {
-                continue;
-            }
-
-            // Ignore commented Headers
-            let mut header_list: ftd::p1::Header = Default::default();
-            for (ln, key, val) in section.header.0.iter() {
-                if key.starts_with('/') {
-                    continue;
-                }
-                header_list.0.push((*ln, key.to_string(), val.to_string()));
-            }
-
-            // Filtered header
-            section.header = header_list;
-
-            // Filter section body
-            section.body = {
-                match section.body {
-                    Some(ref b) if b.1.trim().is_empty() => None,
-                    Some(ref b) if b.1.trim().starts_with('/') => None,
-                    // To allow '/content' in section body, we need to use "\/content"
-                    // while stripping out the initial '\' from this body
-                    Some(ref b) if b.1.trim().starts_with(r"\/") => {
-                        Some((b.0, b.1.trim().replacen(r"\", "", 1)))
-                    }
-                    Some(ref b) => Some((b.0, b.1.trim_end().to_string())),
-                    None => None,
-                }
-            };
-
-            // Filtering subsections
-            let mut filtered_sub_sections: ftd::p1::SubSections = Default::default();
-            let sub_list = &mut section.sub_sections;
-
-            for sub_section in sub_list.0.iter_mut() {
-                if sub_section.is_commented {
-                    continue;
-                }
-
-                let mut sub_header_list: ftd::p1::Header = Default::default();
-                for (ln, key, val) in sub_section.header.0.iter() {
-                    if key.starts_with('/') {
-                        continue;
-                    }
-                    sub_header_list
-                        .0
-                        .push((*ln, key.to_string(), val.to_string()));
-                }
-
-                // Filtered sub header list
-                sub_section.header = sub_header_list;
-
-                // Filter subsection body
-                sub_section.body = {
-                    match sub_section.body {
-                        Some(ref b) if b.1.trim().is_empty() => None,
-                        Some(ref b) if b.1.trim().starts_with('/') => None,
-                        // To allow '/content' in subsection body, we need to use "\/content"
-                        // while stripping out the initial '\' from this body
-                        Some(ref b) if b.1.trim().starts_with(r"\/") => {
-                            Some((b.0, b.1.trim().replacen(r"\", "", 1)))
-                        }
-                        Some(ref b) => Some((b.0, b.1.trim_end().to_string())),
-                        None => None,
-                    }
-                };
-
-                filtered_sub_sections.0.push(sub_section.to_owned());
-            }
-
-            // Filtered sub-sections
-            section.sub_sections = filtered_sub_sections;
-
-            // Section added in processed list
-            processed_sections.push(section.to_owned());
-        }
-
-        // Filtered sections of the entire document
-        self.sections = processed_sections;
-
-        Ok(())
+    /// [`Section::remove_comments()`]: ftd::p1::section::Section::remove_comments
+    /// [`SubSection::remove_comments()`]: ftd::p1::sub_section::SubSection::remove_comments
+    fn ignore_comments(&mut self) {
+        self.sections = self
+            .sections
+            .iter()
+            .filter(|s| !s.is_commented)
+            .map(|s| s.remove_comments())
+            .collect::<Vec<ftd::p1::Section>>();
     }
 
     fn reorder(

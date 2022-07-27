@@ -36,36 +36,26 @@ impl SubSection {
     }
 
     pub fn body_without_comment(&self) -> Option<(usize, String)> {
-        let body = match &self.body {
-            None => return None,
-            Some(b) => b,
-        };
-        match body {
-            _ if body.1.starts_with(r"\/") =>
-            {
-                #[allow(clippy::single_char_pattern)]
-                Some((body.0, body.1.strip_prefix(r"\").expect("").to_string()))
+        match &self.body {
+            Some(ref b) if b.1.trim().is_empty() => None,
+            // If body is commented, ignore body
+            Some(ref b) if b.1.trim().starts_with('/') => None,
+            // To allow '/content' in subsection body, we need to use "\/content"
+            // while stripping out the initial '\' from this body
+            Some(ref b) if b.1.trim().starts_with(r"\/") => {
+                Some((b.0, b.1.trim().replacen(r"\", "", 1)))
             }
-            _ if body.1.starts_with('/') => None,
-            _ => Some((body.0, body.1.to_string())),
+            Some(ref b) => Some((b.0, b.1.trim_end().to_string())),
+            None => None,
         }
     }
 
     pub fn remove_comments(&self) -> SubSection {
-        let mut headers = vec![];
-        for (i, k, v) in self.header.0.iter() {
-            if !k.starts_with('/') {
-                headers.push((i.to_owned(), k.to_string(), v.to_string()));
-            }
-        }
-
-        let body = self.body_without_comment();
-
         SubSection {
             name: self.name.to_string(),
             caption: self.caption.to_owned(),
-            header: Header(headers),
-            body,
+            header: Header(self.header.uncommented_headers()),
+            body: self.body_without_comment(),
             is_commented: false,
             line_number: self.line_number,
         }
