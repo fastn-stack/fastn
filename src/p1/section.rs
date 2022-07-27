@@ -27,7 +27,7 @@ impl Section {
                 // To allow '/content' as section body, we need to use "\/content"
                 // while stripping out the initial '\' from this body
                 Some(ref b) if b.1.trim().starts_with(r"\/") => {
-                    Some((b.0, b.1.trim().replacen(r"\", "", 1)))
+                    Some((b.0, b.1.trim().replacen('\\', "", 1)))
                 }
                 Some(ref b) => Some((b.0, b.1.trim_end().to_string())),
                 None => None,
@@ -42,7 +42,7 @@ impl Section {
                 Some(ref c) if c.trim().starts_with('/') => None,
                 // To allow '/caption' as section caption, we need to use "\/caption"
                 // while stripping out the initial '\' from this caption
-                Some(ref c) if c.trim().starts_with(r"\/") => Some(c.trim().replacen(r"\", "", 1)),
+                Some(ref c) if c.trim().starts_with(r"\/") => Some(c.trim().replacen('\\', "", 1)),
                 Some(ref c) => Some(c.trim().to_string()),
                 None => None,
             }

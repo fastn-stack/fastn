@@ -129,6 +129,22 @@ impl Property {
             }
         }
     }
+
+    /// returns the value as string from property.default
+    ///
+    /// returns empty string in case if it's None
+    fn resolve_default_value_string(
+        &self,
+        doc: &ftd::p2::TDoc,
+        line_number: usize,
+    ) -> ftd::p1::Result<String> {
+        if let Some(property_value) = &self.default {
+            if let Some(val) = property_value.resolve(line_number, doc)?.to_string() {
+                return Ok(val);
+            }
+        }
+        Ok("".to_string())
+    }
 }
 
 impl ChildComponent {
@@ -141,6 +157,7 @@ impl ChildComponent {
             Vec<std::collections::BTreeMap<String, ftd::Value>>,
         >,
         local_container: &[usize],
+        external_children_count: &Option<usize>,
     ) -> ftd::p1::Result<ElementWithContainer> {
         let id = ftd::p2::utils::string_optional(
             "id",
@@ -153,7 +170,14 @@ impl ChildComponent {
             mut element,
             child_container,
             ..
-        } = self.call(doc, invocations, false, local_container, id.clone())?;
+        } = self.call(
+            doc,
+            invocations,
+            false,
+            local_container,
+            id.clone(),
+            external_children_count,
+        )?;
         element.set_container_id(id.clone());
         element.set_element_id(id);
 
@@ -185,7 +209,7 @@ impl ChildComponent {
                     instructions: &instructions,
                     invocations,
                 }
-                .execute(local_container, None)?
+                .execute(local_container, None, doc.referenced_local_variables)?
                 .children;
                 container_children.extend(elements);
             }
@@ -331,7 +355,7 @@ impl ChildComponent {
                 ftd::p2::Kind::Boolean { .. } => Some(ftd::PropertyValue::Value {
                     value: ftd::Value::Boolean { value: false },
                 }),
-                ftd::p2::Kind::Optional { kind } => {
+                ftd::p2::Kind::Optional { kind, .. } => {
                     construct_tmp_data(kind).map(|v| v.into_optional())
                 }
                 _ => None,
@@ -376,6 +400,7 @@ impl ChildComponent {
                 &mut root,
                 &child_component.properties,
                 local_container.as_slice(),
+                &None,
             )?;
             let child_component = {
                 let mut child_component = child_component.clone();
@@ -424,6 +449,7 @@ impl ChildComponent {
                 &child_component.events,
                 local_container.as_slice(),
                 None,
+                &None,
             )?;
 
             if let Some(condition) = &child_component.condition {
@@ -457,6 +483,7 @@ impl ChildComponent {
         is_child: bool,
         local_container: &[usize],
         id: Option<String>,
+        external_children_count: &Option<usize>,
     ) -> ftd::p1::Result<ElementWithContainer> {
         if let Some(ref b) = self.condition {
             if b.is_constant() && !b.eval(self.line_number, doc)? {
@@ -477,7 +504,12 @@ impl ChildComponent {
                 .unwrap()
         };
 
-        doc.insert_local_from_component(&mut root, &self.properties, local_container)?;
+        doc.insert_local_from_component(
+            &mut root,
+            &self.properties,
+            local_container,
+            external_children_count,
+        )?;
 
         let conditional_attribute =
             get_conditional_attributes(self.line_number, &self.properties, doc)?;
@@ -491,6 +523,7 @@ impl ChildComponent {
             &self.events,
             local_container,
             id,
+            external_children_count,
         )?;
 
         if let Some(common) = element.element.get_mut_common() {
@@ -692,7 +725,7 @@ fn markup_get_named_container(
         instructions: &instructions,
         invocations,
     }
-    .execute(local_container, None)?
+    .execute(local_container, None, doc.referenced_local_variables)?
     .children;
 
     return convert_to_named_container(&container_children, &elements_name, doc);
@@ -707,7 +740,7 @@ fn markup_get_named_container(
         elements_name: &mut Vec<String>,
     ) -> ftd::ChildComponent {
         let mut child = child.clone();
-        if let Some((ref c, ref element_name)) = child.root.split_once(" ") {
+        if let Some((ref c, ref element_name)) = child.root.split_once(' ') {
             elements_name.push(element_name.to_string());
             child.root = c.to_string();
         }
@@ -1367,7 +1400,7 @@ fn get_conditional_attributes(
                 },
                 v => {
                     return ftd::e2(
-                        format!("expected string, found: {:?}", v),
+                        format!("expected string, found 8: {:?}", v),
                         doc.name,
                         line_number,
                     )
@@ -1406,7 +1439,7 @@ fn get_conditional_attributes(
                 }
                 v => {
                     return ftd::e2(
-                        format!("expected string, found: {:?}", v),
+                        format!("expected string, found 9: {:?}", v),
                         doc.name,
                         line_number,
                     )
@@ -1423,7 +1456,7 @@ fn get_conditional_attributes(
                 },
                 v => {
                     return ftd::e2(
-                        format!("expected string, found: {:?}", v),
+                        format!("expected string, found 10: {:?}", v),
                         doc.name,
                         line_number,
                     )
@@ -1438,7 +1471,7 @@ fn get_conditional_attributes(
                 },
                 v => {
                     return ftd::e2(
-                        format!("expected string, found: {:?}", v),
+                        format!("expected string, found 11: {:?}", v),
                         doc.name,
                         line_number,
                     )
@@ -1453,7 +1486,7 @@ fn get_conditional_attributes(
                 },
                 v => {
                     return ftd::e2(
-                        format!("expected string, found: {:?}", v),
+                        format!("expected string, found 12: {:?}", v),
                         doc.name,
                         line_number,
                     )
@@ -1524,7 +1557,7 @@ fn get_conditional_attributes(
                 }
                 v => {
                     return ftd::e2(
-                        format!("expected string, found: {:?}", v),
+                        format!("expected string, found 13: {:?}", v),
                         doc.name,
                         line_number,
                     )
@@ -1612,7 +1645,7 @@ impl Component {
             instructions: &new_instruction,
             invocations,
         }
-        .execute(call_container, id);
+        .execute(call_container, id, doc.referenced_local_variables);
 
         fn reference_to_child_component(
             child: &mut ChildComponent,
@@ -1827,6 +1860,7 @@ impl Component {
             &[],
             &[],
             Default::default(),
+            &None,
         )
     }
 
@@ -1844,6 +1878,7 @@ impl Component {
         events: &[ftd::p2::Event],
         local_container: &[usize],
         id: Option<String>,
+        external_children_count: &Option<usize>,
     ) -> ftd::p1::Result<ElementWithContainer> {
         invocations
             .entry(self.full_name.clone())
@@ -1907,7 +1942,12 @@ impl Component {
                 doc.get_component(self.line_number, self.root.as_str())
                     .unwrap()
             };
-            doc.insert_local_from_component(&mut root, &self.properties, local_container)?;
+            doc.insert_local_from_component(
+                &mut root,
+                &self.properties,
+                local_container,
+                external_children_count,
+            )?;
 
             let (get_condition, is_visible, is_null_element) = match condition {
                 Some(c) => {
@@ -1932,6 +1972,7 @@ impl Component {
             };
 
             let events = ftd::p2::Event::get_events(self.line_number, events, doc)?;
+
             let mut element = if !is_null_element {
                 root.call(
                     &self.properties,
@@ -1942,6 +1983,7 @@ impl Component {
                     &self.events,
                     local_container,
                     None,
+                    external_children_count,
                 )?
             } else {
                 ElementWithContainer {
@@ -2003,7 +2045,7 @@ impl Component {
                                 append_at.to_string()
                             };
                             if let Some(c) =
-                                child_container.get(append_at.replace(".", "#").as_str())
+                                child_container.get(append_at.replace('.', "#").as_str())
                             {
                                 container.external_children = Some((id, c.to_owned(), vec![]));
                             }
@@ -2338,6 +2380,69 @@ fn assert_no_extra_properties(
     Ok(())
 }
 
+/// Throws error if the user specifies both value and default-value for ftd.input
+/// otherwise returns Ok(())
+///
+/// # No error in these cases
+///
+/// ```markdown
+/// -- ftd.input:
+/// value: v1
+///
+/// -- ftd.input:
+/// default-value: d1
+/// ```
+///
+/// # Error in this case
+///
+/// ```markdown
+/// -- ftd.input:
+/// value: v2
+/// default-value: d2
+/// ```
+fn check_input_conflicting_values(
+    properties: &std::collections::BTreeMap<String, Property>,
+    doc: &ftd::p2::TDoc,
+    line_number: usize,
+) -> ftd::p1::Result<()> {
+    fn get_property_default_value(
+        property_name: &str,
+        properties: &std::collections::BTreeMap<String, Property>,
+        doc: &ftd::p2::TDoc,
+        line_number: usize,
+    ) -> ftd::p1::Result<String> {
+        if let Some(property) = properties.get(property_name) {
+            return property.resolve_default_value_string(doc, line_number);
+        }
+        Err(ftd::p1::Error::NotFound {
+            doc_id: doc.name.to_string(),
+            line_number,
+            key: property_name.to_string(),
+        })
+    }
+
+    let contains_value = properties.contains_key("value");
+    let contains_default_value = properties.contains_key("default-value");
+
+    match (contains_value, contains_default_value) {
+        (true, true) => {
+            let value = get_property_default_value("value", properties, doc, line_number)?;
+            let default_value =
+                get_property_default_value("default-value", properties, doc, line_number)?;
+
+            return Err(ftd::p1::Error::ForbiddenUsage {
+                message: format!(
+                    "value: \'{}\', default-value: \'{}\' both are used in ftd.input",
+                    value, default_value
+                ),
+                doc_id: doc.name.to_string(),
+                line_number,
+            });
+        }
+        (_, _) => Ok(()),
+    }
+}
+
 #[allow(clippy::too_many_arguments)]
 pub fn read_properties(
     line_number: usize,
@@ -2383,6 +2488,7 @@ pub fn read_properties(
                     caption: c,
                     body: b,
                     default: d,
+                    ..
                 },
             ) => {
                 if *c && caption.is_some() {
@@ -2525,6 +2631,12 @@ pub fn read_properties(
             }
         }
     }
+
+    // Checking if the user has entered conflicting values for ftd.input
+    if root.eq("ftd#input") {
+        check_input_conflicting_values(&properties, doc, line_number)?;
+    }
+
     Ok(properties)
 }
 
@@ -2727,6 +2839,7 @@ mod test {
             bag: &mut bag,
             aliases: &aliases,
             local_variables: &mut Default::default(),
+            referenced_local_variables: &mut Default::default(),
         };
         p2!(
             "-- ftd.text foo:
@@ -2738,12 +2851,12 @@ mod test {
             super::Component {
                 full_name: s("foo#foo"),
                 root: "ftd#text".to_string(),
-                arguments: std::array::IntoIter::new([
+                arguments: std::iter::IntoIterator::into_iter([
                     (s("foo"), ftd::p2::Kind::string()),
                     (s("bar"), ftd::p2::Kind::optional(ftd::p2::Kind::integer()))
                 ])
                 .collect(),
-                properties: std::array::IntoIter::new([(
+                properties: std::iter::IntoIterator::into_iter([(
                     s("text"),
                     ftd::component::Property {
                         default: Some(ftd::PropertyValue::Value {
@@ -2772,6 +2885,7 @@ mod test {
             bag: &mut bag,
             aliases: &aliases,
             local_variables: &mut Default::default(),
+            referenced_local_variables: &mut Default::default(),
         };
         p2!(
             "-- ftd.text foo:
@@ -2781,7 +2895,7 @@ mod test {
             super::Component {
                 root: "ftd#text".to_string(),
                 full_name: s("foo#foo"),
-                properties: std::array::IntoIter::new([(
+                properties: std::iter::IntoIterator::into_iter([(
                     s("text"),
                     ftd::component::Property {
                         default: Some(ftd::PropertyValue::Value {

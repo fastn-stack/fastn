@@ -19,6 +19,13 @@ pub enum Error {
         line_number: usize,
     },
 
+    #[error("forbidden usage: {message}, line_number: {line_number}, doc: {doc_id}")]
+    ForbiddenUsage {
+        message: String,
+        doc_id: String,
+        line_number: usize,
+    },
+
     #[error("key not found: {key}, line number: {line_number}, doc: {doc_id}")]
     NotFound {
         doc_id: String,

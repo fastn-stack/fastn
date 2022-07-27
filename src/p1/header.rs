@@ -15,7 +15,7 @@ impl Header {
         for (ln, key, val) in self.0.iter() {
             if !key.trim().starts_with('/') {
                 match key.trim().starts_with(r"\/") {
-                    true => headers.push((*ln, key.trim().replacen(r"\", "", 1), val.to_string())),
+                    true => headers.push((*ln, key.trim().replacen('\\', "", 1), val.to_string())),
                     false => headers.push((*ln, key.to_string(), val.to_string())),
                 }
             }

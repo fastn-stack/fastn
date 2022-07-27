@@ -4,17 +4,34 @@ pub struct TDoc<'a> {
     pub aliases: &'a std::collections::BTreeMap<String, String>,
     pub bag: &'a std::collections::BTreeMap<String, ftd::p2::Thing>,
     pub local_variables: &'a mut std::collections::BTreeMap<String, ftd::p2::Thing>,
+    /// string $msg: $message
+    /// then msg is a referenced_variable that is won't become new local_variable
+    pub referenced_local_variables: &'a mut std::collections::BTreeMap<String, String>,
 }
 
 impl<'a> TDoc<'a> {
+    fn get_local_variable<'b>(&'b self, key: &'b str) -> Option<(&'b str, &'b ftd::p2::Thing)> {
+        if let Some(thing) = self.local_variables.get(key) {
+            return Some((key, thing));
+        }
+        if let Some(thing) = self.bag.get(key) {
+            return Some((key, thing));
+        }
+        if let Some(key) = self.referenced_local_variables.get(key) {
+            return self.get_local_variable(key);
+        }
+        None
+    }
+
     fn insert_local_variable(
         &mut self,
         root: &str,
         arguments: &mut std::collections::BTreeMap<String, ftd::p2::Kind>,
         properties: &std::collections::BTreeMap<String, ftd::component::Property>,
         string_container: &str,
+        local_container: &[usize],
+        external_children_count: &Option<usize>,
     ) -> ftd::p1::Result<()> {
-        // let mut local_variable: std::collections::BTreeMap<String, ftd::p2::Thing> = Default::default();
         for (k, arg) in arguments.iter() {
             let mut default = if let Some(d) = properties.get(k) {
                 let default = if let Some(ref d) = d.default {
@@ -95,20 +112,88 @@ impl<'a> TDoc<'a> {
                 );
             };
             if let ftd::PropertyValue::Variable { ref mut name, .. } = default {
-                if !self.local_variables.contains_key(name) {
+                if !self.local_variables.contains_key(name) && !self.bag.contains_key(name) {
                     *name = self.resolve_local_variable_name(0, name, string_container)?;
                 }
             }
-            let local_variable = ftd::p2::Thing::Variable(ftd::Variable {
-                name: k.to_string(),
-                value: default,
-                conditions: vec![],
-                flags: Default::default(),
-            });
-            self.local_variables
-                .entry(self.resolve_local_variable_name(0, k, string_container)?)
-                .or_insert(local_variable);
+            if let Some(name) = default.get_passed_by_variable() {
+                self.referenced_local_variables.insert(
+                    self.resolve_local_variable_name(0, k, string_container)?,
+                    name,
+                );
+            } else {
+                let local_variable = ftd::p2::Thing::Variable(ftd::Variable {
+                    name: k.to_string(),
+                    value: default,
+                    conditions: vec![],
+                    flags: Default::default(),
+                });
+                self.local_variables
+                    .entry(self.resolve_local_variable_name(0, k, string_container)?)
+                    .or_insert(local_variable);
+            }
         }
+        let sibling_index =
+            external_children_count.unwrap_or(*local_container.last().unwrap_or(&0)) as i64;
+        self.local_variables
+            .entry(self.resolve_local_variable_name(0, "SIBLING-INDEX", string_container)?)
+            .or_insert_with(|| {
+                ftd::p2::Thing::Variable(ftd::Variable {
+                    name: "SIBLING-INDEX".to_string(),
+                    value: ftd::PropertyValue::Value {
+                        value: ftd::Value::Integer {
+                            value: sibling_index + 1,
+                        },
+                    },
+                    conditions: vec![],
+                    flags: Default::default(),
+                })
+            });
+
+        self.local_variables
+            .entry(self.resolve_local_variable_name(0, "SIBLING-INDEX-0", string_container)?)
+            .or_insert_with(|| {
+                ftd::p2::Thing::Variable(ftd::Variable {
+                    name: "SIBLING-INDEX-0".to_string(),
+                    value: ftd::PropertyValue::Value {
+                        value: ftd::Value::Integer {
+                            value: sibling_index,
+                        },
+                    },
+                    conditions: vec![],
+                    flags: Default::default(),
+                })
+            });
+
+        self.local_variables
+            .entry(self.resolve_local_variable_name(0, "CHILDREN-COUNT", string_container)?)
+            .or_insert_with(|| {
+                ftd::p2::Thing::Variable(ftd::Variable {
+                    name: "CHILDREN-COUNT".to_string(),
+                    value: ftd::PropertyValue::Value {
+                        value: ftd::Value::Integer { value: 0 },
+                    },
+                    conditions: vec![],
+                    flags: Default::default(),
+                })
+            });
+
+        self.local_variables
+            .entry(self.resolve_local_variable_name(
+                0,
+                "CHILDREN-COUNT-MINUS-ONE",
+                string_container,
+            )?)
+            .or_insert_with(|| {
+                ftd::p2::Thing::Variable(ftd::Variable {
+                    name: "CHILDREN-COUNT-MINUS-ONE".to_string(),
+                    value: ftd::PropertyValue::Value {
+                        value: ftd::Value::Integer { value: -1 },
+                    },
+                    conditions: vec![],
+                    flags: Default::default(),
+                })
+            });
 
         *arguments = Default::default();
         Ok(())
@@ -122,7 +207,7 @@ impl<'a> TDoc<'a> {
         properties: &mut std::collections::BTreeMap<String, ftd::component::Property>,
         reference: &mut Option<(String, ftd::p2::Kind)>,
         condition: &mut Option<ftd::p2::Boolean>,
-        events: &mut Vec<ftd::p2::Event>,
+        events: &mut [ftd::p2::Event],
         insert_only: bool,
         ignore_loop: bool,
         ignore_mouse_in: bool,
@@ -269,7 +354,7 @@ impl<'a> TDoc<'a> {
             ignore_loop: bool,
             ignore_mouse_in: bool,
         ) -> ftd::p1::Result<()> {
-            if let ftd::PropertyValue::Variable { ref mut name, .. } = property_value {
+            if let ftd::PropertyValue::Variable { ref mut name, kind } = property_value {
                 if (ignore_loop && name.contains("$loop$"))
                     || (insert_only && !name.as_str().eq("MOUSE-IN"))
                     || (ignore_mouse_in && name.contains("MOUSE-IN"))
@@ -277,9 +362,36 @@ impl<'a> TDoc<'a> {
                 {
                     return Ok(());
                 }
-                let part1 = ftd::p2::utils::get_doc_name_and_remaining(name)?.0;
-                let key = doc.resolve_local_variable_name(0, name.as_str(), parent_container)?;
-                if name.as_str().eq("MOUSE-IN") {
+
+                let (part1, part2) = ftd::p2::utils::get_doc_name_and_remaining(name)?;
+                if part1.eq("PARENT") {
+                    if let Some(part2) = part2 {
+                        let parents_parent_container =
+                            parent_container.rsplit_once(',').map(|v| v.0).unwrap_or("");
+                        let key = doc.resolve_local_variable_name(
+                            0,
+                            part2.as_str(),
+                            parents_parent_container,
+                        )?;
+                        if parents_parent_container.is_empty() {
+                            let value =
+                                kind.to_value(0, doc.name).unwrap_or(ftd::Value::Optional {
+                                    data: Box::new(None),
+                                    kind: kind.clone(),
+                                });
+                            let local_variable = ftd::p2::Thing::Variable(ftd::Variable {
+                                name: key.clone(),
+                                value: ftd::PropertyValue::Value { value },
+                                conditions: vec![],
+                                flags: Default::default(),
+                            });
+                            doc.local_variables.insert(key.clone(), local_variable);
+                        }
+                        *name = key;
+                    } else {
+                        return ftd::e2("PARENT should have variable", doc.name, 0);
+                    }
+                } else if name.as_str().eq("MOUSE-IN") {
                     let key =
                         doc.resolve_local_variable_name(0, name.as_str(), current_container)?;
                     let local_variable = ftd::p2::Thing::Variable(ftd::Variable {
@@ -292,9 +404,14 @@ impl<'a> TDoc<'a> {
                     });
                     doc.local_variables.insert(key.clone(), local_variable);
                     *name = key;
-                } else if doc.local_variables.contains_key(
+                } else if let Some((key, _)) = doc.get_local_variable(
                     &doc.resolve_name(0, format!("{}@{}", part1, parent_container).as_str())?,
                 ) {
+                    let key = if let Some(part2) = part2 {
+                        format!("{}.{}", key, part2)
+                    } else {
+                        key.to_string()
+                    };
                     *name = key;
                 }
             }
@@ -328,6 +445,7 @@ impl<'a> TDoc<'a> {
         component: &mut ftd::Component,
         child_component_properties: &std::collections::BTreeMap<String, ftd::component::Property>,
         local_container: &[usize],
+        external_children_count: &Option<usize>,
     ) -> ftd::p1::Result<()> {
         let string_container = ftd::p2::utils::get_string_container(local_container);
         if component.root == "ftd.kernel" {
@@ -338,7 +456,10 @@ impl<'a> TDoc<'a> {
             &mut component.arguments,
             child_component_properties,
             string_container.as_str(),
+            local_container,
+            external_children_count,
         )?;
+
         ftd::component::Property::add_default_properties(
             child_component_properties,
             &mut component.properties,
@@ -385,8 +506,9 @@ impl<'a> TDoc<'a> {
     pub(crate) fn insert_local(
         &mut self,
         parent: &mut ftd::ChildComponent,
-        children: &mut Vec<ftd::ChildComponent>,
+        children: &mut [ftd::ChildComponent],
         local_container: &[usize],
+        external_children_count: &Option<usize>,
     ) -> ftd::p1::Result<()> {
         let string_container = ftd::p2::utils::get_string_container(local_container);
         if parent.root == "ftd.kernel" {
@@ -397,6 +519,8 @@ impl<'a> TDoc<'a> {
             &mut parent.arguments,
             &Default::default(),
             string_container.as_str(),
+            local_container,
+            external_children_count,
         )?;
         self.update_component_data(
             string_container.as_str(),
@@ -489,6 +613,7 @@ impl<'a> TDoc<'a> {
         )
     }
 
+    #[cfg_attr(feature = "cargo-clippy", allow(clippy::wrong_self_convention))]
     fn from_json_(
         &self,
         line_number: usize,
@@ -586,7 +711,7 @@ impl<'a> TDoc<'a> {
                     kind: kind.to_owned(),
                 }
             }
-            ftd::p2::Kind::Optional { kind } => {
+            ftd::p2::Kind::Optional { kind, .. } => {
                 let kind = kind.as_ref().to_owned();
                 match json {
                     serde_json::Value::Null => ftd::Value::Optional {
@@ -669,6 +794,7 @@ impl<'a> TDoc<'a> {
         )
     }
 
+    #[cfg_attr(feature = "cargo-clippy", allow(clippy::wrong_self_convention))]
     fn from_json_row_(
         &self,
         line_number: usize,
@@ -843,6 +969,15 @@ impl<'a> TDoc<'a> {
         arguments: &std::collections::BTreeMap<String, ftd::p2::Kind>,
     ) -> ftd::p1::Result<String> {
         return Ok(if let Some(l) = name.strip_prefix('$') {
+            /*let (part1, part2) = ftd::p2::utils::get_doc_name_and_remaining(l)?;
+            if get_special_variable().iter().any(|v| part1.starts_with(v)) {
+                let part2 = part2.map(|v| format!(".{}", v)).unwrap_or("".to_string());
+                return Ok(format!("${}{}", part1, part2));
+            } else if arguments.contains_key(part1.as_str()) {
+                return Ok(format!("${}", l));
+            }
+            let s = self.resolve_name(line_number, l)?;
+            format!("${}", s)*/
             let d = ftd::p2::utils::get_doc_name_and_remaining(l)?.0;
             if arguments.contains_key(d.as_str()) || get_special_variable().contains(&d.as_str()) {
                 return Ok(format!("${}", l));
@@ -854,7 +989,14 @@ impl<'a> TDoc<'a> {
         });
 
         fn get_special_variable() -> Vec<&'static str> {
-            vec!["MOUSE-IN"]
+            vec![
+                "MOUSE-IN",
+                "SIBLING-INDEX",
+                "SIBLING-INDEX-0",
+                "CHILDREN-COUNT",
+                "CHILDREN-COUNT-MINUS-ONE",
+                "PARENT",
+            ]
         }
     }
 
@@ -864,37 +1006,17 @@ impl<'a> TDoc<'a> {
         name: &str,
         container: &str,
     ) -> ftd::p1::Result<String> {
-        if name.contains('@') {
-            return Ok(name.to_string());
-        }
-        let (part1, part2) = ftd::p2::utils::get_doc_name_and_remaining(name)?;
-        Ok(if let Some(ref p2) = part2 {
-            self.resolve_name(
-                line_number,
-                format!("{}@{}.{}", part1, container, p2).as_str(),
-            )?
-        } else {
-            self.resolve_name(line_number, format!("{}@{}", part1, container).as_str())?
-        })
+        ftd::p2::utils::resolve_local_variable_name(
+            line_number,
+            name,
+            container,
+            self.name,
+            self.aliases,
+        )
     }
 
     pub fn resolve_name(&self, line_number: usize, name: &str) -> ftd::p1::Result<String> {
-        if name.contains('#') {
-            return Ok(name.to_string());
-        }
-
-        Ok(match ftd::split_module(name, self.name, line_number)? {
-            (Some(m), v, None) => match self.aliases.get(m) {
-                Some(m) => format!("{}#{}", m, v),
-                None => format!("{}#{}.{}", self.name, m, v),
-            },
-            (Some(m), v, Some(c)) => match self.aliases.get(m) {
-                Some(m) => format!("{}#{}.{}", m, v, c),
-                None => format!("{}#{}.{}.{}", self.name, m, v, c),
-            },
-            (None, v, None) => format!("{}#{}", self.name, v),
-            _ => unimplemented!(),
-        })
+        ftd::p2::utils::resolve_name(line_number, name, self.name, self.aliases)
     }
 
     pub fn get_record(&self, line_number: usize, name: &str) -> ftd::p1::Result<ftd::p2::Record> {
@@ -939,14 +1061,13 @@ impl<'a> TDoc<'a> {
                 v.value.resolve(line_number, self)?,
                 v.conditions
                     .into_iter()
-                    .map(|(b, v)| {
+                    .flat_map(|(b, v)| {
                         if let Ok(v) = v.resolve(line_number, self) {
                             Some((b, v))
                         } else {
                             None
                         }
                     })
-                    .flatten()
                     .collect(),
             )),
             v => self.err("not a variable", v, "get_value", line_number),
@@ -1307,6 +1428,7 @@ mod test {
             aliases: &Default::default(),
             bag: &Default::default(),
             local_variables: &mut Default::default(),
+            referenced_local_variables: &mut Default::default(),
         };
         let section = ftd::p1::parse(
             indoc::indoc!(
@@ -1337,6 +1459,7 @@ mod test {
                 caption: false,
                 body: false,
                 default: None,
+                is_reference: false,
             },
         };
         pretty_assertions::assert_eq!(value_from_json, value);
@@ -1359,13 +1482,13 @@ mod test {
         let data: Vec<Vec<serde_json::Value>> = vec![
             vec![
                 serde_json::json!("Amitu"),
-                serde_json::json!(20),
+                serde_json::json!(20 as i64),
                 serde_json::json!("Bangalore"),
                 serde_json::json!("CEO of fifthTry"),
             ],
             vec![
                 serde_json::json!("Arpita"),
-                serde_json::json!(20),
+                serde_json::json!(20 as i64),
                 serde_json::json!("Varanasi"),
                 serde_json::json!("Software Developer of fifthTry"),
             ],
@@ -1375,6 +1498,7 @@ mod test {
             aliases: &Default::default(),
             bag: &g_bag,
             local_variables: &mut Default::default(),
+            referenced_local_variables: &mut Default::default(),
         };
         let section = ftd::p1::parse(
             indoc::indoc!(
@@ -1391,7 +1515,7 @@ mod test {
                 ftd::PropertyValue::Value {
                     value: ftd::Value::Record {
                         name: "foo/bar#person".to_string(),
-                        fields: std::array::IntoIter::new([
+                        fields: std::iter::IntoIterator::into_iter([
                             (
                                 "name".to_string(),
                                 ftd::PropertyValue::Value {
@@ -1432,7 +1556,7 @@ mod test {
                 ftd::PropertyValue::Value {
                     value: ftd::Value::Record {
                         name: "foo/bar#person".to_string(),
-                        fields: std::array::IntoIter::new([
+                        fields: std::iter::IntoIterator::into_iter([
                             (
                                 "name".to_string(),
                                 ftd::PropertyValue::Value {
@@ -1474,6 +1598,7 @@ mod test {
             kind: ftd::p2::Kind::Record {
                 name: "foo/bar#person".to_string(),
                 default: None,
+                is_reference: false,
             },
         };
         pretty_assertions::assert_eq!(value_from_json, value);

@@ -50,7 +50,7 @@ impl SubSection {
                 // To allow '/content' as subsection body, we need to use "\/content"
                 // while stripping out the initial '\' from this body
                 Some(ref b) if b.1.trim().starts_with(r"\/") => {
-                    Some((b.0, b.1.trim().replacen(r"\", "", 1)))
+                    Some((b.0, b.1.trim().replacen('\\', "", 1)))
                 }
                 Some(ref b) => Some((b.0, b.1.trim_end().to_string())),
                 None => None,
@@ -65,7 +65,7 @@ impl SubSection {
                 Some(ref c) if c.trim().starts_with('/') => None,
                 // To allow '/caption' as subsection caption, we need to use "\/caption"
                 // while stripping out the initial '\' from this caption
-                Some(ref c) if c.trim().starts_with(r"\/") => Some(c.trim().replacen(r"\", "", 1)),
+                Some(ref c) if c.trim().starts_with(r"\/") => Some(c.trim().replacen('\\', "", 1)),
                 Some(ref c) => Some(c.trim().to_string()),
                 None => None,
             }
@@ -100,6 +100,37 @@ impl SubSection {
                 doc_id: doc_id.to_string(),
                 line_number: self.line_number,
             }),
+        }
+    }
+
+    /// returns tuple (body/caption, from_caption)
+    ///
+    /// i.e it either returns
+    /// * (body, false)
+    /// * (caption, true)
+    ///
+    /// In case both or none are passed then it throws error  
+    pub fn body_or_caption(&self, doc_id: &str) -> Result<(String, bool)> {
+        let (has_body, has_caption) = (self.body.is_some(), self.caption.is_some());
+        match (has_body, has_caption) {
+            (true, true) => Err(ftd::p1::Error::ForbiddenUsage {
+                message: "both body and caption are passed !!".to_string(),
+                doc_id: doc_id.to_string(),
+                line_number: self.line_number,
+            }),
+            (false, false) => Err(ftd::p1::Error::ParseError {
+                message: "no caption or body is passed !!".to_string(),
+                doc_id: doc_id.to_string(),
+                line_number: self.line_number,
+            }),
+            (_, _) => {
+                // Case: (has_body,no_caption)
+                if has_body {
+                    return Ok((self.body(doc_id)?, false));
+                }
+                // Case: (no_body,has_caption)
+                Ok((self.caption(doc_id)?, true))
+            }
         }
     }
 

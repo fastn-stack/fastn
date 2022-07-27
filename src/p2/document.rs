@@ -23,6 +23,7 @@ impl Document {
             aliases: &self.aliases,
             bag: &self.data,
             local_variables: &mut Default::default(),
+            referenced_local_variables: &mut Default::default(),
         };
         for (k, v) in self.data.iter() {
             if let ftd::p2::Thing::Variable(ftd::Variable {
@@ -686,6 +687,7 @@ impl Document {
             aliases: &self.aliases,
             bag: &self.data,
             local_variables: &mut Default::default(),
+            referenced_local_variables: &mut Default::default(),
         };
 
         match thing {
@@ -708,6 +710,7 @@ impl Document {
             aliases: &self.aliases,
             bag: &self.data,
             local_variables: &mut Default::default(),
+            referenced_local_variables: &mut Default::default(),
         };
         Ok(match v {
             ftd::Value::Integer { value } => {
@@ -788,7 +791,7 @@ impl Document {
     }
 }
 
-pub fn set_region_id(elements: &mut Vec<ftd::Element>) {
+pub fn set_region_id(elements: &mut [ftd::Element]) {
     let mut map: std::collections::BTreeMap<usize, String> = Default::default();
     for element in elements.iter_mut() {
         match element {

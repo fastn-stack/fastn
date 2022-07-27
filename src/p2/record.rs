@@ -10,7 +10,7 @@ type Invocation = std::collections::BTreeMap<String, ftd::PropertyValue>;
 
 impl Record {
     pub fn variant_name(&self) -> Option<&str> {
-        self.name.split_once(".").map(|(_, r)| r)
+        self.name.split_once('.').map(|(_, r)| r)
     }
 
     pub fn fields(
@@ -47,7 +47,9 @@ impl Record {
                         kind: list_kind, ..
                     },
                 ) => match list_kind.as_ref() {
-                    ftd::p2::Kind::OrType { name: or_type_name }
+                    ftd::p2::Kind::OrType {
+                        name: or_type_name, ..
+                    }
                     | ftd::p2::Kind::OrTypeWithVariant {
                         name: or_type_name, ..
                     } => {
@@ -127,7 +129,9 @@ impl Record {
                         kind: list_kind, ..
                     },
                 ) if !subsections.is_empty() => match list_kind.as_ref() {
-                    ftd::p2::Kind::OrType { name: or_type_name }
+                    ftd::p2::Kind::OrType {
+                        name: or_type_name, ..
+                    }
                     | ftd::p2::Kind::OrTypeWithVariant {
                         name: or_type_name, ..
                     } => {
@@ -175,10 +179,14 @@ impl Record {
                     ftd::p2::Kind::String { .. } => {
                         let mut list = vec![];
                         for v in subsections {
+                            let (text, from_caption) = v.body_or_caption(doc.name)?;
                             list.push(ftd::PropertyValue::Value {
                                 value: ftd::Value::String {
-                                    text: v.body(doc.name)?,
-                                    source: ftd::TextSource::Body,
+                                    text,
+                                    source: match from_caption {
+                                        true => ftd::TextSource::Caption,
+                                        false => ftd::TextSource::Body,
+                                    },
                                 },
                             });
                         }
@@ -310,10 +318,6 @@ impl Record {
         // TODO: handle caption
         // TODO: handle body
         for (i, k, _) in p1.0.iter() {
-            if k.starts_with('/') {
-                continue;
-            }
-
             if !self.fields.contains_key(k) && k != "type" && k != "$processor$" {
                 return ftd::e2(
                     format!(
@@ -345,6 +349,7 @@ impl Record {
             ftd::p2::Kind::Record {
                 name: full_name.clone(),
                 default: None,
+                is_reference: false,
             },
         );
         for (i, k, v) in p1_header.0.iter() {
@@ -444,7 +449,7 @@ mod test {
 
     #[test]
     fn record() {
-        let sourabh: super::Invocation = std::array::IntoIter::new([
+        let sourabh: super::Invocation = std::iter::IntoIterator::into_iter([
             (
                 s("name"),
                 ftd::PropertyValue::Value {
@@ -501,7 +506,7 @@ mod test {
             ftd::p2::Thing::Record(ftd::p2::Record {
                 name: "foo/bar#person".to_string(),
                 fields: person_fields(),
-                instances: std::array::IntoIter::new([(
+                instances: std::iter::IntoIterator::into_iter([(
                     s("foo/bar"),
                     vec![abrar(), sourabh.clone()],
                 )])
@@ -524,13 +529,14 @@ mod test {
             "foo/bar#employee".to_string(),
             ftd::p2::Thing::Record(ftd::p2::Record {
                 name: "foo/bar#employee".to_string(),
-                fields: std::array::IntoIter::new([
+                fields: std::iter::IntoIterator::into_iter([
                     (s("eid"), ftd::p2::Kind::string()),
                     (
                         s("who"),
                         ftd::p2::Kind::Record {
                             name: s("foo/bar#person"),
                             default: None,
+                            is_reference: false,
                         },
                     ),
                 ])
@@ -547,7 +553,7 @@ mod test {
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Record {
                         name: "foo/bar#employee".to_string(),
-                        fields: std::array::IntoIter::new([
+                        fields: std::iter::IntoIterator::into_iter([
                             (
                                 s("eid"),
                                 ftd::PropertyValue::Value {
@@ -564,6 +570,7 @@ mod test {
                                     kind: ftd::p2::Kind::Record {
                                         name: s("foo/bar#person"),
                                         default: None,
+                                        is_reference: false,
                                     },
                                 },
                             ),
@@ -583,7 +590,7 @@ mod test {
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Record {
                         name: "foo/bar#employee".to_string(),
-                        fields: std::array::IntoIter::new([
+                        fields: std::iter::IntoIterator::into_iter([
                             (
                                 s("eid"),
                                 ftd::PropertyValue::Value {
@@ -679,13 +686,14 @@ mod test {
                 "foo/bar#person".to_string(),
                 ftd::p2::Thing::Record(ftd::p2::Record {
                     name: "foo/bar#person".to_string(),
-                    fields: std::array::IntoIter::new([
+                    fields: std::iter::IntoIterator::into_iter([
                         (s("name"), ftd::p2::Kind::caption()),
                         (
                             s("friends"),
                             ftd::p2::Kind::List {
                                 kind: Box::new(ftd::p2::Kind::string()),
                                 default: None,
+                                is_reference: false,
                             },
                         ),
                     ])
@@ -703,7 +711,7 @@ mod test {
                     value: ftd::PropertyValue::Value {
                         value: ftd::Value::Record {
                             name: "foo/bar#person".to_string(),
-                            fields: std::array::IntoIter::new([
+                            fields: std::iter::IntoIterator::into_iter([
                                 (
                                     s("name"),
                                     ftd::PropertyValue::Value {
@@ -789,7 +797,7 @@ mod test {
             s("foo/bar#point"),
             ftd::p2::Thing::Record(ftd::p2::Record {
                 name: s("foo/bar#point"),
-                fields: std::array::IntoIter::new([
+                fields: std::iter::IntoIterator::into_iter([
                     (s("x"), ftd::p2::Kind::integer()),
                     (s("y"), ftd::p2::Kind::integer()),
                 ])
@@ -803,7 +811,7 @@ mod test {
             "foo/bar#person".to_string(),
             ftd::p2::Thing::Record(ftd::p2::Record {
                 name: s("foo/bar#person"),
-                fields: std::array::IntoIter::new([
+                fields: std::iter::IntoIterator::into_iter([
                     (s("name"), ftd::p2::Kind::caption()),
                     (
                         s("points"),
@@ -811,8 +819,10 @@ mod test {
                             kind: Box::new(ftd::p2::Kind::Record {
                                 name: s("foo/bar#point"),
                                 default: None,
+                                is_reference: false,
                             }),
                             default: None,
+                            is_reference: false,
                         },
                     ),
                 ])
@@ -830,7 +840,7 @@ mod test {
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Record {
                         name: "foo/bar#person".to_string(),
-                        fields: std::array::IntoIter::new([
+                        fields: std::iter::IntoIterator::into_iter([
                             (
                                 s("name"),
                                 ftd::PropertyValue::Value {
@@ -847,12 +857,13 @@ mod test {
                                         kind: ftd::p2::Kind::Record {
                                             name: s("foo/bar#point"),
                                             default: None,
+                                            is_reference: false,
                                         },
                                         data: vec![
                                             ftd::PropertyValue::Value {
                                                 value: ftd::Value::Record {
                                                     name: "foo/bar#point".to_string(),
-                                                    fields: std::array::IntoIter::new([
+                                                    fields: std::iter::IntoIterator::into_iter([
                                                         (
                                                             s("x"),
                                                             ftd::PropertyValue::Value {
@@ -876,7 +887,7 @@ mod test {
                                             ftd::PropertyValue::Value {
                                                 value: ftd::Value::Record {
                                                     name: "foo/bar#point".to_string(),
-                                                    fields: std::array::IntoIter::new([
+                                                    fields: std::iter::IntoIterator::into_iter([
                                                         (
                                                             s("x"),
                                                             ftd::PropertyValue::Value {
@@ -900,7 +911,7 @@ mod test {
                                             ftd::PropertyValue::Value {
                                                 value: ftd::Value::Record {
                                                     name: "foo/bar#point".to_string(),
-                                                    fields: std::array::IntoIter::new([
+                                                    fields: std::iter::IntoIterator::into_iter([
                                                         (
                                                             s("x"),
                                                             ftd::PropertyValue::Value {
@@ -970,14 +981,16 @@ mod test {
             s("foo/bar#sale"),
             ftd::p2::Thing::Record(ftd::p2::Record {
                 name: s("foo/bar#sale"),
-                fields: std::array::IntoIter::new([
+                fields: std::iter::IntoIterator::into_iter([
                     (
                         s("party"),
                         ftd::p2::Kind::List {
                             kind: Box::new(ftd::p2::Kind::OrType {
                                 name: s("foo/bar#entity"),
+                                is_reference: false,
                             }),
                             default: None,
+                            is_reference: false,
                         },
                     ),
                     (s("value"), ftd::p2::Kind::integer()),
@@ -995,7 +1008,7 @@ mod test {
                 value: ftd::PropertyValue::Value {
                     value: ftd::Value::Record {
                         name: s("foo/bar#sale"),
-                        fields: std::array::IntoIter::new([
+                        fields: std::iter::IntoIterator::into_iter([
                             (
                                 s("value"),
                                 ftd::PropertyValue::Value {
@@ -1008,12 +1021,13 @@ mod test {
                                     value: ftd::Value::List {
                                         kind: ftd::p2::Kind::OrType {
                                             name: s("foo/bar#entity"),
+                                            is_reference: false,
                                         },
                                         data: vec![
                                             ftd::PropertyValue::Value {value: ftd::Value::OrType {
                                                 name: s("foo/bar#entity"),
                                                 variant: s("person"),
-                                                fields: std::array::IntoIter::new([
+                                                fields: std::iter::IntoIterator::into_iter([
                                                     (
                                                         s("address"),
                                                         ftd::PropertyValue::Value {
@@ -1053,7 +1067,7 @@ mod test {
                                             ftd::PropertyValue::Value {value: ftd::Value::OrType {
                                                 name: s("foo/bar#entity"),
                                                 variant: s("company"),
-                                                fields: std::array::IntoIter::new([
+                                                fields: std::iter::IntoIterator::into_iter([
                                                     (
                                                         s("industry"),
                                                         ftd::PropertyValue::Value {

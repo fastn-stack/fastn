@@ -174,21 +174,37 @@ impl Boolean {
                 value: left == "true",
             },
             "IsNotNull" | "IsNull" => {
-                let value = property_value(
-                    &left,
-                    None,
-                    doc,
-                    arguments,
-                    left_right_resolved_property.0,
-                    line_number,
-                )?;
-                if !value.kind().is_optional() {
-                    return ftd::e2(
-                        format!("'{}' is not to an optional", left),
-                        doc.name,
+                let value = if !left.starts_with("$PARENT") {
+                    let value = property_value(
+                        &left,
+                        None,
+                        doc,
+                        arguments,
+                        left_right_resolved_property.0,
                         line_number,
-                    );
-                }
+                    )?;
+                    if !value.kind().is_optional() {
+                        return ftd::e2(
+                            format!("'{}' is not to an optional", left),
+                            doc.name,
+                            line_number,
+                        );
+                    }
+                    value
+                } else {
+                    property_value(
+                        &left,
+                        None,
+                        doc,
+                        arguments,
+                        left_right_resolved_property.0,
+                        line_number,
+                    )
+                    .unwrap_or(ftd::PropertyValue::Variable {
+                        name: left.trim_start_matches('$').to_string(),
+                        kind: ftd::p2::Kind::Element,
+                    })
+                };
                 if boolean.as_str() == "IsNotNull" {
                     Boolean::IsNotNull { value }
                 } else {
@@ -287,6 +303,10 @@ impl Boolean {
                         Some(ftd::PropertyValue::Variable { .. }) => {
                             loop_already_resolved_property.clone().expect("")
                         }
+                        _ if value.starts_with("$PARENT") => ftd::PropertyValue::Variable {
+                            name: value.trim_start_matches('$').to_string(),
+                            kind: ftd::p2::Kind::Element,
+                        },
                         _ => return Err(e),
                     },
                 },
@@ -359,6 +379,13 @@ impl Boolean {
             self,
             Self::Equal {
                 left: ftd::PropertyValue::Reference { .. },
+                right: ftd::PropertyValue::Variable { .. },
+                ..
+            }
+        ) && !matches!(
+            self,
+            Self::Equal {
+                left: ftd::PropertyValue::Variable { .. },
                 right: ftd::PropertyValue::Variable { .. },
                 ..
             }

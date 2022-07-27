@@ -403,6 +403,7 @@ fn common_arguments() -> Vec<(String, ftd::p2::Kind)> {
             ftd::p2::Kind::Record {
                 name: "ftd#color".to_string(),
                 default: None,
+                is_reference: false,
             }
             .into_optional(),
         ),
@@ -411,6 +412,7 @@ fn common_arguments() -> Vec<(String, ftd::p2::Kind)> {
             ftd::p2::Kind::Record {
                 name: "ftd#color".to_string(),
                 default: None,
+                is_reference: false,
             }
             .into_optional(),
         ),
@@ -419,6 +421,7 @@ fn common_arguments() -> Vec<(String, ftd::p2::Kind)> {
             ftd::p2::Kind::Record {
                 name: "ftd#color".to_string(),
                 default: None,
+                is_reference: false,
             }
             .into_optional(),
         ),
@@ -457,35 +460,19 @@ fn common_arguments() -> Vec<(String, ftd::p2::Kind)> {
         ),
         (
             "border-top-color".to_string(),
-            ftd::p2::Kind::Record {
-                name: "ftd#color".to_string(),
-                default: None,
-            }
-            .into_optional(),
+            ftd::p2::Kind::record("ftd#color").into_optional(),
         ),
         (
             "border-left-color".to_string(),
-            ftd::p2::Kind::Record {
-                name: "ftd#color".to_string(),
-                default: None,
-            }
-            .into_optional(),
+            ftd::p2::Kind::record("ftd#color").into_optional(),
         ),
         (
             "border-right-color".to_string(),
-            ftd::p2::Kind::Record {
-                name: "ftd#color".to_string(),
-                default: None,
-            }
-            .into_optional(),
+            ftd::p2::Kind::record("ftd#color").into_optional(),
         ),
         (
             "border-bottom-color".to_string(),
-            ftd::p2::Kind::Record {
-                name: "ftd#color".to_string(),
-                default: None,
-            }
-            .into_optional(),
+            ftd::p2::Kind::record("ftd#color").into_optional(),
         ),
         (
             "margin-top".to_string(),
@@ -560,19 +547,11 @@ fn common_arguments() -> Vec<(String, ftd::p2::Kind)> {
         ),
         (
             "shadow-color".to_string(),
-            ftd::p2::Kind::Record {
-                name: "ftd#color".to_string(),
-                default: None,
-            }
-            .into_optional(),
+            ftd::p2::Kind::record("ftd#color").into_optional(),
         ),
         (
             "background-image".to_string(),
-            ftd::p2::Kind::Record {
-                name: "ftd#image-src".to_string(),
-                default: None,
-            }
-            .into_optional(),
+            ftd::p2::Kind::record("ftd#image-src").into_optional(),
         ),
         (
             "background-repeat".to_string(),
@@ -687,17 +666,12 @@ pub fn image_function() -> ftd::Component {
         root: "ftd.kernel".to_string(),
         arguments: [
             vec![
-                (
-                    "src".to_string(),
-                    ftd::p2::Kind::Record {
-                        name: "ftd#image-src".to_string(),
-                        default: None,
-                    },
-                ),
+                ("src".to_string(), ftd::p2::Kind::record("ftd#image-src")),
                 (
                     "description".to_string(),
                     ftd::p2::Kind::string().into_optional(),
                 ),
+                ("title".to_string(), ftd::p2::Kind::string().into_optional()),
                 ("align".to_string(), ftd::p2::Kind::string().into_optional()),
                 ("crop".to_string(), ftd::p2::Kind::boolean().into_optional()),
             ],
@@ -729,8 +703,8 @@ pub fn image_from_properties(
     let properties = &ftd::component::resolve_properties(0, unresolved_properties, doc)?;
     Ok(ftd::Image {
         src: src_record,
-        description: ftd::p2::utils::string_optional("description", properties, doc.name, 0)?
-            .unwrap_or_else(|| "".to_string()),
+        title: ftd::p2::utils::string_optional("title", properties, doc.name, 0)?,
+        description: ftd::p2::utils::string_optional("description", properties, doc.name, 0)?,
         common: common_from_properties(
             unresolved_properties,
             doc,
@@ -1284,11 +1258,7 @@ pub fn text_function() -> ftd::Component {
                 ("style".to_string(), ftd::p2::Kind::string().into_optional()),
                 (
                     "role".to_string(),
-                    ftd::p2::Kind::Record {
-                        name: "ftd#type".to_string(),
-                        default: None,
-                    }
-                    .into_optional(),
+                    ftd::p2::Kind::record("ftd#type").into_optional(),
                 ),
                 (
                     "line-clamp".to_string(),
@@ -1332,11 +1302,7 @@ pub fn code_function() -> ftd::Component {
                 ("theme".to_string(), ftd::p2::Kind::string().into_optional()),
                 (
                     "role".to_string(),
-                    ftd::p2::Kind::Record {
-                        name: "ftd#type".to_string(),
-                        default: None,
-                    }
-                    .into_optional(),
+                    ftd::p2::Kind::record("ftd#type").into_optional(),
                 ),
                 (
                     "line-clamp".to_string(),
@@ -1382,11 +1348,7 @@ pub fn integer_function() -> ftd::Component {
                 ),
                 (
                     "role".to_string(),
-                    ftd::p2::Kind::Record {
-                        name: "ftd#type".to_string(),
-                        default: None,
-                    }
-                    .into_optional(),
+                    ftd::p2::Kind::record("ftd#type").into_optional(),
                 ),
                 (
                     "text-align".to_string(),
@@ -1424,11 +1386,7 @@ pub fn decimal_function() -> ftd::Component {
                 ),
                 (
                     "role".to_string(),
-                    ftd::p2::Kind::Record {
-                        name: "ftd#type".to_string(),
-                        default: None,
-                    }
-                    .into_optional(),
+                    ftd::p2::Kind::record("ftd#type").into_optional(),
                 ),
                 (
                     "text-align".to_string(),
@@ -1495,11 +1453,7 @@ pub fn markup_function() -> ftd::Component {
                 ("style".to_string(), ftd::p2::Kind::string().into_optional()),
                 (
                     "role".to_string(),
-                    ftd::p2::Kind::Record {
-                        name: "ftd#type".to_string(),
-                        default: None,
-                    }
-                    .into_optional(),
+                    ftd::p2::Kind::record("ftd#type").into_optional(),
                 ),
                 (
                     "line-clamp".to_string(),
@@ -1588,11 +1542,7 @@ pub fn boolean_function() -> ftd::Component {
                 ),
                 (
                     "role".to_string(),
-                    ftd::p2::Kind::Record {
-                        name: "ftd#type".to_string(),
-                        default: None,
-                    }
-                    .into_optional(),
+                    ftd::p2::Kind::record("ftd#type").into_optional(),
                 ),
                 ("true".to_string(), ftd::p2::Kind::string().into_optional()),
                 ("false".to_string(), ftd::p2::Kind::string().into_optional()),
@@ -1625,16 +1575,16 @@ pub fn input_function() -> ftd::Component {
                 ),
                 ("value".to_string(), ftd::p2::Kind::string().into_optional()),
                 (
+                    "default-value".to_string(),
+                    ftd::p2::Kind::string().into_optional(),
+                ),
+                (
                     "multiline".to_string(),
                     ftd::p2::Kind::boolean().set_default(Some("false".to_string())),
                 ),
                 (
                     "role".to_string(),
-                    ftd::p2::Kind::Record {
-                        name: "ftd#type".to_string(),
-                        default: None,
-                    }
-                    .into_optional(),
+                    ftd::p2::Kind::record("ftd#type").into_optional(),
                 ),
             ],
             common_arguments(),
@@ -1679,7 +1629,6 @@ pub fn input_from_properties(
         ftd::Type::from(&v, doc, 0, font_reference).map(Some)
     })?;
 
-    let properties = &ftd::component::resolve_properties(0, unresolved_properties, doc)?;
     Ok(ftd::Input {
         common: common_from_properties(
             unresolved_properties,
@@ -1692,6 +1641,7 @@ pub fn input_from_properties(
         placeholder: ftd::p2::utils::string_optional("placeholder", properties, doc.name, 0)?,
         multiline: ftd::p2::utils::bool("multiline", properties, doc.name, 0)?,
         value: ftd::p2::utils::string_optional("value", properties, doc.name, 0)?,
+        default_value: ftd::p2::utils::string_optional("default-value", properties, doc.name, 0)?,
         font,
     })
 }

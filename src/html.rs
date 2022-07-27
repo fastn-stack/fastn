@@ -1027,8 +1027,12 @@ impl ftd::Image {
             img.style.insert(s("width"), s("100%"));
             img.style.insert(s("height"), s("100%"));
             img.attrs.insert(s("src"), escape(self.src.light.as_str()));
-            img.attrs
-                .insert(s("alt"), escape(self.description.as_str()));
+            if let Some(ref title) = self.title {
+                img.attrs.insert(s("title"), escape(title));
+            }
+            if let Some(ref description) = self.description {
+                img.attrs.insert(s("alt"), escape(description));
+            }
             if self.crop {
                 img.style.insert(s("object-fit"), s("cover"));
                 img.style.insert(s("object-position"), s("0 0"));
@@ -1036,7 +1040,12 @@ impl ftd::Image {
             n.children.push(img);
         } else {
             n.attrs.insert(s("src"), escape(self.src.light.as_str()));
-            n.attrs.insert(s("alt"), escape(self.description.as_str()));
+            if let Some(ref title) = self.title {
+                n.attrs.insert(s("title"), escape(title));
+            }
+            if let Some(ref description) = self.description {
+                n.attrs.insert(s("alt"), escape(description));
+            }
             if self.crop {
                 n.style.insert(s("object-fit"), s("cover"));
                 n.style.insert(s("object-position"), s("0 0"));
@@ -1167,6 +1176,10 @@ impl ftd::Input {
             } else {
                 n.attrs.insert(s("value"), escape(p));
             }
+        }
+        // add defaultValue attribute if passed
+        if let Some(ref def_value) = self.default_value {
+            n.attrs.insert(s("data-dv"), escape(def_value));
         }
         n
     }

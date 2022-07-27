@@ -17,12 +17,17 @@ pub fn interpret_helper(
                 break;
             }
             ftd::p2::interpreter::Interpreter::StuckOnProcessor { state, section } => {
-                let value = lib.process(&section, &state.tdoc(&mut Default::default()))?;
+                let value = lib.process(
+                    &section,
+                    &state.tdoc(&mut Default::default(), &mut Default::default()),
+                )?;
                 s = state.continue_after_processor(&section, value)?;
             }
             ftd::p2::interpreter::Interpreter::StuckOnImport { module, state: st } => {
-                let source =
-                    lib.get_with_result(module.as_str(), &st.tdoc(&mut Default::default()))?;
+                let source = lib.get_with_result(
+                    module.as_str(),
+                    &st.tdoc(&mut Default::default(), &mut Default::default()),
+                )?;
                 s = st.continue_after_import(module.as_str(), source.as_str())?;
             }
             ftd::p2::interpreter::Interpreter::StuckOnForeignVariable { state, .. } => {
@@ -69,6 +74,14 @@ macro_rules! p {
                 }
             }
         }
+        bag = bag
+            .into_iter()
+            .filter(|(k, _)| {
+                !["SIBLING-INDEX", "CHILDREN-COUNT"]
+                    .iter()
+                    .any(|v| k.contains(v))
+            })
+            .collect();
         if !ebag.is_empty() {
             pretty_assertions::assert_eq!(bag, ebag);
         }
@@ -91,7 +104,7 @@ pub fn i(p: &str, reference: Option<String>) -> ftd::ImageSrc {
 pub use ftd::p2::interpreter::{default_bag, default_column};
 
 pub fn person_fields() -> std::collections::BTreeMap<String, ftd::p2::Kind> {
-    std::array::IntoIter::new([
+    std::iter::IntoIterator::into_iter([
         (s("address"), ftd::p2::Kind::string()),
         (s("bio"), ftd::p2::Kind::body()),
         (s("age"), ftd::p2::Kind::integer()),
@@ -101,7 +114,7 @@ pub fn person_fields() -> std::collections::BTreeMap<String, ftd::p2::Kind> {
 }
 
 pub fn abrar() -> std::collections::BTreeMap<String, ftd::PropertyValue> {
-    std::array::IntoIter::new([
+    std::iter::IntoIterator::into_iter([
         (
             s("name"),
             ftd::PropertyValue::Value {
@@ -152,7 +165,7 @@ pub fn entity() -> ftd::p2::Thing {
             },
             ftd::p2::Record {
                 name: s("foo/bar#entity.company"),
-                fields: std::array::IntoIter::new([
+                fields: std::iter::IntoIterator::into_iter([
                     (s("industry"), ftd::p2::Kind::string()),
                     (s("name"), ftd::p2::Kind::caption()),
                 ])

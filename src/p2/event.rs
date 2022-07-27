@@ -45,7 +45,8 @@ impl Event {
             line_number: usize,
         ) -> ftd::p1::Result<Option<String>> {
             Ok(match property_value {
-                ftd::PropertyValue::Reference { name, .. } => {
+                ftd::PropertyValue::Reference { name, .. }
+                | ftd::PropertyValue::Variable { name, .. } => {
                     match doc.get_value(line_number, name)? {
                         ftd::Value::Object { values } => {
                             let mut val: std::collections::BTreeMap<String, String> =
@@ -99,7 +100,7 @@ impl Event {
                 action: ftd::Action {
                     action: "set-value".to_string(),
                     target: val.to_string(),
-                    parameters: std::array::IntoIter::new([(
+                    parameters: std::iter::IntoIterator::into_iter([(
                         "value".to_string(),
                         vec![
                             ftd::event::ParameterData {
@@ -120,7 +121,7 @@ impl Event {
                 action: ftd::Action {
                     action: "set-value".to_string(),
                     target: val.to_string(),
-                    parameters: std::array::IntoIter::new([(
+                    parameters: std::iter::IntoIterator::into_iter([(
                         "value".to_string(),
                         vec![
                             ftd::event::ParameterData {
