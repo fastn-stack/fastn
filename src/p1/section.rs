@@ -12,12 +12,15 @@ pub struct Section {
 }
 
 impl Section {
+    /// returns body after processing comments "/" and escape "\\/" (if any)
+    ///
+    /// only used by [`Section::remove_comments()`]
     pub fn body_without_comment(&self) -> Option<(usize, String)> {
         match &self.body {
             Some(ref b) if b.1.trim().is_empty() => None,
             // If body is commented, ignore body
             Some(ref b) if b.1.trim().starts_with('/') => None,
-            // To allow '/content' in section body, we need to use "\/content"
+            // To allow '/content' as section body, we need to use "\/content"
             // while stripping out the initial '\' from this body
             Some(ref b) if b.1.trim().starts_with(r"\/") => {
                 Some((b.0, b.1.trim().replacen(r"\", "", 1)))
@@ -27,11 +30,40 @@ impl Section {
         }
     }
 
+    /// returns caption after processing comments "/" and escape "\\/" (if any)
+    ///
+    /// only used by [`Section::remove_comments()`]
+    pub fn caption_without_comment(&self) -> Option<String> {
+        match &self.caption {
+            Some(ref c) if c.trim().is_empty() => None,
+            // If caption is commented, ignore it
+            Some(ref c) if c.trim().starts_with('/') => None,
+            // To allow '/caption' as section caption, we need to use "\/caption"
+            // while stripping out the initial '\' from this caption
+            Some(ref c) if c.trim().starts_with(r"\/") => Some(c.trim().replacen(r"\", "", 1)),
+            Some(ref c) => Some(c.trim().to_string()),
+            None => None,
+        }
+    }
+
+    /// returns a copy of Section after processing comments
+    /// from the current instance of Section
+    ///
+    /// makes use of:
+    ///
+    /// * [`Header::uncommented_headers()`],
+    /// * [`Section::caption_without_comment()`],
+    /// * [`Section::body_without_comment()`],
+    /// * [`SubSection::remove_comments()`]
+    ///
+    /// ## NOTE: Also this function is only called by [`ParsedDocument::ignore_comments()`]
+    ///
+    /// [`ParsedDocument::ignore_comments()`]: ftd::p2::interpreter::ParsedDocument::ignore_comments
     pub fn remove_comments(&self) -> Section {
         Section {
             name: self.name.to_string(),
-            caption: self.caption.to_owned(),
-            header: Header(self.header.uncommented_headers()),
+            caption: self.caption_without_comment(),
+            header: self.header.uncommented_headers(),
             body: self.body_without_comment(),
             sub_sections: SubSections(
                 self.sub_sections

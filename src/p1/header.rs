@@ -4,12 +4,23 @@ pub use ftd::p1::{Error, Result};
 pub struct Header(pub Vec<(usize, String, String)>);
 
 impl Header {
-    pub fn uncommented_headers(&self) -> Vec<(usize, String, String)> {
-        self.0
-            .iter()
-            .filter(|h| !h.1.starts_with('/'))
-            .cloned()
-            .collect::<Vec<(usize, String, String)>>()
+    /// returns a copy of Header after processing comments "/" and escape "\\/" (if any)
+    ///
+    /// only used by [`Section::remove_comments()`] and [`SubSection::remove_comments()`]
+    ///
+    /// [`SubSection::remove_comments()`]: ftd::p1::sub_section::SubSection::remove_comments
+    /// [`Section::remove_comments()`]: ftd::p1::section::Section::remove_comments
+    pub fn uncommented_headers(self) -> Header {
+        let mut headers: Vec<(usize, String, String)> = vec![];
+        for (ln, key, val) in self.0.iter {
+            if !key.trim().starts_with('/') {
+                match key.trim().starts_with(r"\/") {
+                    true => header_list.push((ln, key.trim().replacen(r"\", "", 1), val)),
+                    false => header_list.push((ln, key, val)),
+                }
+            }
+        }
+        Header(headers)
     }
 
     pub fn without_line_number(&self) -> Self {

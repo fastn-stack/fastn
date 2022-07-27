@@ -755,10 +755,12 @@ impl ParsedDocument {
     /// ';' comments are ignored inside the [`parser`] itself.
     ///
     /// uses [`Section::remove_comments()`] and [`Subsection::remove_comments()`] to remove comments
+    /// at section and subsection levels
     ///
     /// [`parser`]: ftd::p1::parser::parse
     /// [`Section::remove_comments()`]: ftd::p1::section::Section::remove_comments
     /// [`SubSection::remove_comments()`]: ftd::p1::sub_section::SubSection::remove_comments
+    /// [`Header::uncommented_headers()`]: ftd::p1::header::Header::uncommented_headers
     fn ignore_comments(&mut self) {
         self.sections = self
             .sections
