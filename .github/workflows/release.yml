@@ -142,7 +142,7 @@ jobs:
           mv ~/download/ubuntu/fpm_0.1.10_amd64.deb ~/download/ubuntu_x64_latest/fpm_0.1.10_amd64.deb
       - uses: ncipollo/release-action@v1
         with:
-          artifacts: "~/download/windows/fpm_windows_x86_64.exe,~/download/macos/fpm_macos_x86_64,~/download/linux_musl/fpm_linux_musl_x86_64,~/download/linux_musl/fpm_linux_musl_x86_64.d,~/download/fpm_controller_linux_musl/fpm_controller_linux_musl_x86_64,~/download/fpm_controller_linux_musl/fpm_controller_linux_musl_x86_64.d"
+          artifacts: "~/download/windows/fpm_windows_x86_64.exe,~/download/macos/fpm_macos_x86_64,~/download/linux_musl/fpm_linux_musl_x86_64,~/download/linux_musl/fpm_linux_musl_x86_64.d,~/download/fpm_controller_linux_musl/fpm_controller_linux_musl_x86_64,~/download/fpm_controller_linux_musl/fpm_controller_linux_musl_x86_64.d,~/download/ubuntu_x64_latest/fpm_0.1.10_amd64.deb"
           generateReleaseNotes: true
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ github.event.inputs.releaseTag }}
