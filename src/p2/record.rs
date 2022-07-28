@@ -85,7 +85,7 @@ impl Record {
                             data: vec![],
                         };
                         for (i, k, v) in p1.header.0.iter() {
-                            if *k != *name || k.starts_with('/') {
+                            if *k != *name {
                                 continue;
                             }
                             list = doc.get_value(i.to_owned(), v)?;
@@ -95,7 +95,7 @@ impl Record {
                     ftd::p2::Kind::String { .. } => {
                         let mut values: Vec<ftd::PropertyValue> = vec![];
                         for (_, k, v) in p1.header.0.iter() {
-                            if *k != *name || k.starts_with('/') {
+                            if *k != *name {
                                 continue;
                             }
                             values.push(ftd::PropertyValue::Value {
@@ -353,9 +353,6 @@ impl Record {
             },
         );
         for (i, k, v) in p1_header.0.iter() {
-            if k.starts_with('/') {
-                continue;
-            }
             let var_data = match ftd::variable::VariableData::get_name_kind(
                 k,
                 doc,

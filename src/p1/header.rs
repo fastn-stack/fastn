@@ -65,9 +65,6 @@ impl Header {
 
     pub fn bool(&self, doc_id: &str, line_number: usize, name: &str) -> Result<bool> {
         for (l, k, v) in self.0.iter() {
-            if k.starts_with('/') {
-                continue;
-            }
             if k == name {
                 return if v == "true" || v == "false" {
                     Ok(v == "true")
@@ -116,9 +113,6 @@ impl Header {
 
     pub fn i32(&self, doc_id: &str, line_number: usize, name: &str) -> Result<i32> {
         for (l, k, v) in self.0.iter() {
-            if k.starts_with('/') {
-                continue;
-            }
             if k == name {
                 return v.parse().map_err(|e: std::num::ParseIntError| {
                     ftd::p1::Error::ParseError {
@@ -138,10 +132,6 @@ impl Header {
 
     pub fn i64(&self, doc_id: &str, line_number: usize, name: &str) -> Result<i64> {
         for (l, k, v) in self.0.iter() {
-            if k.starts_with('/') {
-                continue;
-            }
-
             if k == name {
                 return v.parse().map_err(|e: std::num::ParseIntError| {
                     ftd::p1::Error::ParseError {
@@ -174,10 +164,6 @@ impl Header {
 
     pub fn f64(&self, doc_id: &str, line_number: usize, name: &str) -> Result<f64> {
         for (l, k, v) in self.0.iter() {
-            if k.starts_with('/') {
-                continue;
-            }
-
             if k == name {
                 return v.parse().map_err(|e: std::num::ParseFloatError| {
                     ftd::p1::Error::ParseError {
@@ -300,9 +286,6 @@ impl Header {
 
     pub fn str(&self, doc_id: &str, line_number: usize, name: &str) -> Result<&str> {
         for (_, k, v) in self.0.iter() {
-            if k.starts_with('/') {
-                continue;
-            }
             if k == name {
                 return Ok(v.as_str());
             }
