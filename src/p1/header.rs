@@ -246,6 +246,7 @@ impl Header {
         }
     }
 
+    #[allow(clippy::type_complexity)]
     pub fn conditional_str(
         &self,
         doc: &ftd::p2::TDoc,
