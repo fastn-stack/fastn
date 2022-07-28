@@ -246,25 +246,36 @@ impl Header {
         }
     }
 
+    #[allow(clippy::type_complexity)]
     pub fn conditional_str(
         &self,
         doc: &ftd::p2::TDoc,
         line_number: usize,
         name: &str,
         arguments: &std::collections::BTreeMap<String, ftd::p2::Kind>,
-    ) -> Result<Vec<(usize, String, Option<&str>)>> {
+    ) -> Result<Vec<(usize, String, Option<String>, bool)>> {
         let mut conditional_vector = vec![];
         for (idx, (_, k, v)) in self.0.iter().enumerate() {
             let v = doc.resolve_reference_name(line_number, v, arguments)?;
-            if k == name {
-                conditional_vector.push((idx, v.to_string(), None));
+            let (k, is_referenced) = if let Some(k) = k.strip_prefix('$') {
+                (k.to_string(), true)
+            } else {
+                (k.to_string(), false)
+            };
+            if k.eq(name) {
+                conditional_vector.push((idx, v.to_string(), None, is_referenced));
             }
             if k.contains(" if ") {
                 let mut parts = k.splitn(2, " if ");
                 let property_name = parts.next().unwrap().trim();
                 if property_name == name {
                     let conditional_attribute = parts.next().unwrap().trim();
-                    conditional_vector.push((idx, v.to_string(), Some(conditional_attribute)));
+                    conditional_vector.push((
+                        idx,
+                        v.to_string(),
+                        Some(conditional_attribute.to_string()),
+                        is_referenced,
+                    ));
                 }
             }
         }

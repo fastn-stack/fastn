@@ -9,13 +9,13 @@ spacing: 10
 
 
 -- foo:
-msg: $message
+$msg: $message
 new-msg: Message from foo 1
 
 -- container: main
 
 -- foo:
-msg: $message
+$msg: $message
 new-msg: Message from foo 2
 
 --- ftd.text: Text from foo's external-children
@@ -25,7 +25,7 @@ new-msg: Message from foo 2
 
 -- ftd.column foo:
 open: true
-string $msg: Message from foo
+string msg: Message from foo
 string new-msg:
 width: fill
 border-width: 2
@@ -36,9 +36,9 @@ padding: 20
 --- ftd.column:
 
 --- bar:
-msg: $msg
+$msg: $msg
 new-msg: $new-msg
-count: $CHILDREN-COUNT
+$count: $CHILDREN-COUNT
 
 
 

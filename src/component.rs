@@ -2467,6 +2467,8 @@ pub fn read_properties(
         root_arguments
     };
 
+    // dbg!(&root_arguments, &arguments, &root_properties, &p1);
+
     for (name, kind) in root_arguments.iter() {
         if let Some(prop) = root_properties.get(name) {
             properties.insert(name.to_string(), prop.clone());
@@ -2478,8 +2480,8 @@ pub fn read_properties(
         ) {
             (Ok(v), _) => (
                 v.iter()
-                    .map(|(a, b, c)| (Some(a.to_owned()), b.to_owned(), c.to_owned()))
-                    .collect::<Vec<(Option<usize>, String, Option<&str>)>>(),
+                    .map(|(a, b, c, d)| (Some(a.to_owned()), b.to_owned(), c.to_owned(), *d))
+                    .collect::<Vec<(Option<usize>, String, Option<String>, bool)>>(),
                 ftd::TextSource::Header,
             ),
             (
@@ -2488,23 +2490,26 @@ pub fn read_properties(
                     caption: c,
                     body: b,
                     default: d,
-                    ..
+                    is_reference: r,
                 },
             ) => {
                 if *c && caption.is_some() {
                     (
-                        vec![(None, caption.as_ref().unwrap().to_string(), None)],
+                        vec![(None, caption.as_ref().unwrap().to_string(), None, *r)],
                         ftd::TextSource::Caption,
                     )
                 } else if *b && body.is_some() {
                     (
-                        vec![(None, body.as_ref().unwrap().1.to_string(), None)],
+                        vec![(None, body.as_ref().unwrap().1.to_string(), None, *r)],
                         ftd::TextSource::Body,
                     )
                 } else if matches!(kind, ftd::p2::Kind::Optional { .. }) {
                     continue;
                 } else if let Some(d) = d {
-                    (vec![(None, d.to_string(), None)], ftd::TextSource::Default)
+                    (
+                        vec![(None, d.to_string(), None, *r)],
+                        ftd::TextSource::Default,
+                    )
                 } else if is_reference {
                     continue;
                 } else {
@@ -2524,7 +2529,10 @@ pub fn read_properties(
                 }
 
                 if let Some(d) = k.get_default_value_str() {
-                    (vec![(None, d.to_string(), None)], ftd::TextSource::Default)
+                    (
+                        vec![(None, d.to_string(), None, k.is_reference())],
+                        ftd::TextSource::Default,
+                    )
                 } else if is_reference {
                     continue;
                 } else {
@@ -2542,8 +2550,18 @@ pub fn read_properties(
                 return Err(e);
             }
         };
-        for (idx, value, conditional_attribute) in conditional_vector {
-            let property_value = match ftd::PropertyValue::resolve_value(
+        for (idx, value, conditional_attribute, is_referenced) in conditional_vector {
+            if kind.is_reference() && !is_referenced {
+                return ftd::e2(
+                    format!(
+                        "{} is calling {}, without a referenced argument `{}`",
+                        fn_name, root, value
+                    ),
+                    doc.name,
+                    line_number,
+                );
+            }
+            let mut property_value = match ftd::PropertyValue::resolve_value(
                 line_number,
                 value.as_str(),
                 Some(kind.to_owned()),
@@ -2562,6 +2580,10 @@ pub fn read_properties(
                 )?,
                 Err(e) => return Err(e),
             };
+
+            if is_referenced {
+                property_value.set_reference();
+            }
 
             let nested_properties = match property_value {
                 ftd::PropertyValue::Reference { ref kind, .. }
@@ -2602,18 +2624,19 @@ pub fn read_properties(
                 _ => Default::default(),
             };
 
-            let (condition_value, default_value) = if let Some(attribute) = conditional_attribute {
-                let condition = ftd::p2::Boolean::from_expression(
-                    attribute,
-                    doc,
-                    arguments,
-                    (None, None),
-                    line_number,
-                )?;
-                (vec![(condition, property_value)], None)
-            } else {
-                (vec![], Some(property_value))
-            };
+            let (condition_value, default_value) =
+                if let Some(ref attribute) = conditional_attribute {
+                    let condition = ftd::p2::Boolean::from_expression(
+                        attribute,
+                        doc,
+                        arguments,
+                        (None, None),
+                        line_number,
+                    )?;
+                    (vec![(condition, property_value)], None)
+                } else {
+                    (vec![], Some(property_value))
+                };
             if let Some(property) = properties.get_mut(name) {
                 if default_value.is_some() {
                     property.default = default_value;

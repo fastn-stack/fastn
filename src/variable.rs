@@ -46,6 +46,16 @@ impl PropertyValue {
         }
     }
 
+    pub fn set_reference(&mut self) {
+        match self {
+            ftd::PropertyValue::Reference { kind, .. }
+            | ftd::PropertyValue::Variable { kind, .. } => {
+                *kind = kind.clone().set_reference(true);
+            }
+            _ => {}
+        }
+    }
+
     pub fn get_reference(&self) -> Option<String> {
         match self {
             ftd::PropertyValue::Reference { name, .. } => Some(name.to_string()),

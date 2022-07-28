@@ -77,6 +77,7 @@ impl Kind {
             _ => false,
         }
     }
+
     pub fn is_optional(&self) -> bool {
         matches!(self, Kind::Optional { .. })
     }
