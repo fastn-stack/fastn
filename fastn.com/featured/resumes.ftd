@@ -1,0 +1,56 @@
+-- import: fpm.dev/assets
+-- import: fpm.dev/featured/featured as ft-ui
+
+-- ft.page: Resumes
+
+We have designed and developed below resume site themes. You can use them
+for creating online resume site. You can also create your own resume and personal info
+documentation site by using `resumes`.
+
+
+-- ft-ui.grid-view:
+templates: $resumes
+
+
+
+
+
+
+
+
+
+
+-- ft-ui.template list resumes:
+
+-- resumes: Caffeine
+template-url: http://fifthtry.github.io/resume-caffeine/
+screenshot: $assets.files.static.caffiene.png
+licence-url: https://github.com/FifthTry/resume-caffeine/blob/main/LICENSE
+github-url: https://github.com/FifthTry/resume-caffeine/
+
+`fifthtry.github.io/resume-caffeine` is resume theme based on our grey color scheme
+of `fifthtry.github.io/doc-site/`. You can change color-scheme OR site theme using
+it. ex. [Site themes](/featured/doc-site/), [Color Schemes](/featured/color-cs).
+
+
+-- resumes: Paper
+template-url: http://fifthtry.github.io/resume-paper/
+screenshot: $assets.files.static.paper.png
+licence-url: https://github.com/FifthTry/resume-paper/blob/main/LICENSE
+github-url: https://github.com/FifthTry/resume-paper/
+
+`fifthtry.github.io/resume-paper` is resume theme based on our grey color scheme
+of `fifthtry.github.io/doc-site/`. You can change color-scheme OR site theme using
+it. ex. [Site themes](/featured/doc-site/), [Color Schemes](/featured/color-cs).
+
+
+-- resumes: Elegant
+template-url: http://fifthtry.github.io/resume-elegant/
+screenshot: $assets.files.static.elegant.png
+licence-url: https://github.com/FifthTry/resume-elegant/blob/main/LICENSE
+github-url: https://github.com/FifthTry/resume-elegant/
+is-last: true
+
+`fifthtry.github.io/resume-elegant` is resume theme based on our grey color scheme
+of `fifthtry.github.io/doc-site/`. You can change color-scheme OR site theme using
+it. ex. [Site themes](/featured/doc-site/), [Color Schemes](/featured/color-cs).

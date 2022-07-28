@@ -1,0 +1,49 @@
+-- import: fpm.dev/assets
+
+
+
+
+
+
+
+
+
+
+
+
+-- ftd.row image:
+width: 800
+integer index: 0
+id: parent
+
+--- ftd.image:
+if: $index == 0
+src: $assets.files.static.doc-site.png
+width: fill
+height: auto
+
+--- ftd.image:
+if: $index == 1
+src: $assets.files.static.elegant.png
+width: fill
+height: auto
+
+--- container: ftd.main
+
+--- ftd.row: 
+width: 200
+height: 200
+open: false
+background-color: $fpm.color.main.background.step-2
+$on-mouse-enter$: $index = 0
+
+--- ftd.row: 
+width: 200
+height: 200
+background-color: $fpm.color.main.background.step-1
+$on-mouse-enter$: $index = 1
+
+
+-- image:
+
+

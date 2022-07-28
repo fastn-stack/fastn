@@ -1,0 +1,417 @@
+-- import: fpm.dev/assets
+
+-- boolean show-grid: true
+-- boolean show-list: false
+
+
+
+
+
+-- ft.page: Featured components
+
+-- ftd.column:
+margin-top: -44
+width: fill
+
+-- ft.markdown:
+
+We have designed and developed below components using `FTD` and `FPM` package. 
+Use them for writing e-books, blogs, web technical documentation etc. 
+
+These components can be used inside your personal web sites or organizational static 
+web sites developed using `FPM` package.
+
+-- grid-view: Documentation Sites:
+if: $show-grid
+templates: $doc-sites
+more-link: /featured/doc-sites/
+
+-- grid-view: Resumes:
+if: $show-grid
+templates: $resumes
+more-link: /featured/resumes/
+
+-- grid-view: Component Libraries
+if: $show-grid
+templates: $bling
+more-link: /featured/components-library/
+
+-- grid-view: Color Schemes
+if: $show-grid
+templates: $schemes
+more-link: /featured/color-cs/
+
+
+
+
+
+
+
+
+
+
+-- ftd.column grid-view:
+optional caption title:
+template list templates:
+optional string more-link: 
+boolean hover: false
+width: fill
+border-top: 1
+border-color: $fpm.color.main.border
+padding-top: $fpm.space.space-2
+margin-top: $fpm.space.space-4
+
+--- ftd.row:
+width: fill
+
+--- ftd.text: $title
+if: not $ft.is-mobile
+role: $fpm.type.heading-small
+color: $fpm.color.main.text
+width: fill
+margin-top: $fpm.space.space-3
+
+--- ftd.text: $title
+if: $ft.is-mobile
+role: $fpm.type.copy-large
+color: $fpm.color.main.text
+width: fill
+margin-top: $fpm.space.space-3
+
+--- ftd.row:
+align: right
+margin-top: $fpm.space.space-5
+padding-right: $fpm.space.space-5
+padding-right if $ft.is-mobile: $fpm.space.space-0
+
+--- ftd.text: View all
+if: $more-link is not null
+link: $more-link
+role: $fpm.type.fine-print
+color: $fpm.color.main.text
+$on-mouse-enter$: $hover = true
+$on-mouse-leave$: $hover = false
+white-space: nowrap
+border-bottom: 1
+border-color: $fpm.color.main.background.step-1
+border-color if $MOUSE-IN: $fpm.color.main.cta-primary.base
+color if $MOUSE-IN: $fpm.color.main.cta-primary.base
+
+--- container: ftd.main
+
+--- ftd.row:
+if: not $ft.is-mobile
+width: fill
+wrap: true
+spacing: 46
+
+--- grid-of-items: $obj.title
+$loop$: $templates as $obj
+template-url: $obj.template-url
+licence-url: $obj.licence-url
+github-url: $obj.github-url
+screenshot: $obj.screenshot
+body: $obj.body
+is-last: $obj.is-last
+
+--- container: ftd.main
+
+--- ftd.column:
+if: $ft.is-mobile
+width: fill
+
+--- grid-of-items: $obj.title
+$loop$: $templates as $obj
+template-url: $obj.template-url
+licence-url: $obj.licence-url
+github-url: $obj.github-url
+screenshot: $obj.screenshot
+body: $obj.body
+is-last: $obj.is-last
+
+--- container: ftd.main
+
+
+
+
+
+
+
+
+
+
+-- ftd.column grid-of-items:
+caption title: 
+string template-url:
+string licence-url:
+string github-url:
+boolean is-last:
+boolean github-hover: false
+boolean mit-hover: false
+body body:
+ftd.image-src screenshot:
+width if not $ft.is-mobile: percent 46
+margin-top: $fpm.space.space-6
+margin-bottom: $fpm.space.space-6
+width if $ft.is-mobile: fill
+
+--- ftd.column:
+width: fill
+margin-left if $is-last: -44
+margin-left if $ft.is-mobile: 0
+id: parent
+spacing: 16
+
+--- ftd.row:
+id: main-wrapper
+width: fill
+
+--- ftd.row:
+width: fill
+align: center
+
+--- ftd.text: $title
+role: $fpm.type.copy-large
+color: $fpm.color.main.text-strong
+link: $template-url
+open-in-new-tab: true
+border-bottom: 1
+border-color: $fpm.color.main.background.step-1
+border-color if $MOUSE-IN: $fpm.color.main.cta-primary.base
+color if $MOUSE-IN: $fpm.color.main.cta-primary.base
+
+--- container: main-wrapper
+
+--- ftd.row:
+align: right
+spacing: 12
+padding-top: $fpm.space.space-2
+id: icon-pane
+
+--- ftd.row:
+link: $github-url
+open-in-new-tab: true
+id: github-pane
+
+--- ftd.image:
+if: not $github-hover
+src: $assets.files.static.icon-github.svg
+width: 16
+height: 16
+align: center
+margin-right: $fpm.space.space-2
+$on-mouse-enter$: $github-hover = true
+$on-mouse-leave$: $github-hover = false
+
+--- ftd.image:
+if: $github-hover
+src: $assets.files.static.icon-github-grey.svg
+width: 16
+height: 16
+align: center
+margin-right: $fpm.space.space-2
+$on-mouse-enter$: $github-hover = true
+$on-mouse-leave$: $github-hover = false
+
+--- container: icon-pane
+
+--- ftd.row:
+link: $licence-url
+open-in-new-tab: true
+id: github-pane
+
+--- ftd.image:
+if: not $mit-hover
+src: $assets.files.static.mit-icon.svg
+width: 16
+height: 16
+align: center
+$on-mouse-enter$: $mit-hover = true
+$on-mouse-leave$: $mit-hover = false
+
+--- ftd.image:
+if: $mit-hover
+src: $assets.files.static.mit-icon-grey.svg
+width: 16
+height: 16
+align: center
+$on-mouse-enter$: $mit-hover = true
+$on-mouse-leave$: $mit-hover = false
+
+--- container: parent
+
+--- ftd.column:
+width: fill
+border-width: 1
+border-color: $fpm.color.main.text
+border-color if $MOUSE-IN: $fpm.color.main.cta-primary.base
+border-radius: 12
+link: $template-url
+open-in-new-tab: true
+
+--- ftd.image:
+src: $screenshot
+width: fill
+height: auto
+border-radius: 12
+
+--- container: parent
+
+--- ftd.column:
+width: fill
+margin-top: $fpm.space.space-4
+spacing: 24
+
+--- ftd.text:
+text: $body
+role: $copy-print-medium
+color: $fpm.color.main.text
+
+
+
+
+
+
+
+
+
+
+-- record template:
+caption title:
+string template-url: 
+ftd.image-src screenshot:
+string licence-url: 
+string github-url:
+body body: 
+boolean is-last: false
+
+-- template list doc-sites:
+
+-- doc-sites: Doc-site
+template-url: http://fifthtry.github.io/doc-site/
+screenshot: $assets.files.static.doc-site.png
+licence-url: https://github.com/FifthTry/doc-site/blob/main/LICENSE
+github-url: https://github.com/FifthTry/doc-site/
+
+`fifthtry.github.io/doc-site/` is a grey color theme. Most of our websites are
+using `doc-site` as base theme. Click on image OR package name to view it's working 
+demo. 
+
+-- doc-sites: Blue Sapphire
+template-url: https://fifthtry.github.io/Blue-Sapphire-Template/
+screenshot: $assets.files.static.blue-sapphire.png
+licence-url: https://github.com/FifthTry/Blue-Sapphire-Template/blob/main/LICENSE
+github-url: https://fifthtry.github.io/Blue-Sapphire-Template/
+
+`fifthtry.github.io/Blue-Sapphire-Template` is based on Blue Saffire Theme. This is 
+ready to use template for your web packages. Click on image OR package name to see
+it's working demo and usage.
+
+
+
+
+
+
+
+
+
+
+-- template list resumes:
+
+-- resumes: Caffeine
+template-url: http://fifthtry.github.io/resume-caffeine/
+screenshot: $assets.files.static.caffiene.png
+licence-url: https://github.com/FifthTry/resume-caffeine/blob/main/LICENSE
+github-url: https://github.com/FifthTry/resume-caffeine/
+
+`fifthtry.github.io/resume-caffeine` is resume theme based on our grey color scheme
+of `fifthtry.github.io/doc-site/`
+
+-- resumes: Paper
+template-url: http://fifthtry.github.io/resume-paper/
+screenshot: $assets.files.static.paper.png
+licence-url: https://github.com/FifthTry/resume-paper/blob/main/LICENSE
+github-url: https://github.com/FifthTry/resume-paper/
+
+`fifthtry.github.io/resume-paper` is resume theme based on our grey color scheme
+of `fifthtry.github.io/doc-site/`
+
+
+
+
+
+
+
+
+
+
+
+-- template list schemes:
+
+-- schemes: Color Doc
+template-url: https://fifthtry.github.io/color-doc/
+screenshot: $assets.files.static.color-doc.png
+licence-url: https://github.com/FifthTry/color-doc/blob/main/LICENSE
+github-url: https://github.com/FifthTry/color-doc/
+
+`fifthtry.github.io/color-doc` is a grey color scheme. Our web sites are using
+this color scheme. For ex. [`fpm.dev`](https://fpm.dev/), [`ftd.dev`](https://ftd.dev/) etc.
+
+-- schemes: Forest CS
+template-url: https://fifthtry.github.io/forest-cs/
+screenshot: $assets.files.static.forest-cs.png
+licence-url: https://github.com/FifthTry/forest-cs/blob/main/LICENSE
+github-url: https://github.com/FifthTry/forest-cs/
+
+`fifthtry.github.io/forest-cs` is a forest green color scheme. See forest-cs color scheme we using on our [`df.fifthtry.com`](https://df.fifthtry.com/)
+
+
+
+
+
+
+
+
+
+
+
+-- template list bling:
+
+-- bling: Bling
+template-url: https://fifthtry.github.io/bling/
+screenshot: $assets.files.static.bling-components.png
+licence-url: https://github.com/FifthTry/bling/blob/main/LICENSE
+github-url: https://github.com/FifthTry/bling/
+
+`fifthtry.github.io/bling` is develoed and designed with various components which 
+can be used inside `FTD` web packages.
+
+-- bling: Slideshow
+template-url: https://fifthtry.github.io/slideshow/
+screenshot: $assets.files.static.slideshow-demo.png
+licence-url: https://github.com/FifthTry/slideshow/blob/main/LICENSE
+github-url: https://github.com/FifthTry/slideshow/
+
+`fifthtry.github.io/slideshow` is a image gallery component which can be used 
+inside `FTD` web packages.
+
+
+
+
+
+
+
+
+
+
+-- ftd.font-size copy-print-medium-desktop:
+line-height: 20
+size: 13
+letter-spacing: 0
+
+-- ftd.type copy-print-medium: $fpm.font-display
+desktop: $copy-print-medium-desktop
+mobile: $copy-print-medium-desktop
+xl: $copy-print-medium-desktop
+weight: 400
+
