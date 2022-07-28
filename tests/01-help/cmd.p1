@@ -34,5 +34,6 @@ SUBCOMMANDS:
     status                Show the status of files in this fpm package
     stop-tracking         Remove a tracking relation between two files
     sync                  Sync with fpm-repo or .history folder if not using fpm-repo
+    sync-status           Show the sync status of files in this fpm package
     translation-status    Show the translation status of files in this fpm package
     update                Reinstall all the dependency packages

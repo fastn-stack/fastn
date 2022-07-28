@@ -15,5 +15,6 @@ pub(crate) mod status;
 pub(crate) mod stop_tracking;
 pub(crate) mod sync;
 pub(crate) mod sync2;
+pub(crate) mod sync_status;
 pub(crate) mod translation_status;
 pub(crate) mod update;

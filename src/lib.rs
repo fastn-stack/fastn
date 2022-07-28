@@ -23,6 +23,7 @@ mod package_doc;
 mod render;
 mod sitemap;
 mod snapshot;
+mod sync_utils;
 mod tracker;
 mod translation;
 mod user_group;
@@ -35,8 +36,8 @@ pub use commands::{
     abort_merge::abort_merge, add::add, build::build, build2::build2, clone::clone, diff::diff,
     mark_resolve::mark_resolve, mark_upto_date::mark_upto_date, revert::revert, rm::rm,
     serve::fpm_serve, start_project::start_project, start_tracking::start_tracking, status::status,
-    stop_tracking::stop_tracking, sync::sync, sync2::sync2, translation_status::translation_status,
-    update::update,
+    stop_tracking::stop_tracking, sync::sync, sync2::sync2, sync_status::sync_status,
+    translation_status::translation_status, update::update,
 };
 pub use config::Config;
 pub(crate) use config::Package;
