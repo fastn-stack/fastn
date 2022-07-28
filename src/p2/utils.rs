@@ -1403,7 +1403,7 @@ pub(crate) fn get_markup_child(
     doc: &ftd::p2::TDoc,
     arguments: &std::collections::BTreeMap<String, ftd::p2::Kind>,
 ) -> ftd::p1::Result<ftd::ChildComponent> {
-    let (sub_name, ref_name) = match sub.name.split_once(" ") {
+    let (sub_name, ref_name) = match sub.name.split_once(' ') {
         Some((sub_name, ref_name)) => (sub_name.trim(), ref_name.trim()),
         _ => return ftd::e2("the component should have name", doc.name, sub.line_number),
     };

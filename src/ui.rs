@@ -1155,7 +1155,7 @@ impl Element {
                             let json = ftd::Dependencies {
                                 dependency_type: ftd::DependencyType::Style,
                                 condition: Some(condition.value.to_owned()),
-                                parameters: std::array::IntoIter::new([(
+                                parameters: std::iter::IntoIterator::into_iter([(
                                     k.to_string(),
                                     ftd::ConditionalValueWithDefault {
                                         value: value.clone(),
@@ -1189,7 +1189,7 @@ impl Element {
                                     dependency_type: ftd::DependencyType::Variable,
                                     condition: None,
                                     remaining,
-                                    parameters: std::array::IntoIter::new([(
+                                    parameters: std::iter::IntoIterator::into_iter([(
                                         k.to_string(),
                                         ftd::ConditionalValueWithDefault {
                                             value: ftd::ConditionalValue {
@@ -1287,7 +1287,7 @@ impl Element {
                     dependency_type: ftd::DependencyType::Variable,
                     condition: Some(serde_json::Value::String("mobile".to_string())),
                     remaining: None,
-                    parameters: std::array::IntoIter::new([(
+                    parameters: std::iter::IntoIterator::into_iter([(
                         k.to_string(),
                         ftd::ConditionalValueWithDefault {
                             value: ConditionalValue {
@@ -1305,7 +1305,7 @@ impl Element {
                     dependency_type: ftd::DependencyType::Variable,
                     condition: Some(serde_json::Value::String("xl".to_string())),
                     remaining: None,
-                    parameters: std::array::IntoIter::new([(
+                    parameters: std::iter::IntoIterator::into_iter([(
                         k.to_string(),
                         ftd::ConditionalValueWithDefault {
                             value: ConditionalValue {
@@ -1323,7 +1323,7 @@ impl Element {
                     dependency_type: ftd::DependencyType::Variable,
                     condition: Some(serde_json::Value::String("desktop".to_string())),
                     remaining: None,
-                    parameters: std::array::IntoIter::new([(
+                    parameters: std::iter::IntoIterator::into_iter([(
                         k.to_string(),
                         ftd::ConditionalValueWithDefault {
                             value: ConditionalValue {
@@ -1415,7 +1415,7 @@ impl Element {
                     dependency_type: ftd::DependencyType::Variable,
                     condition: Some(serde_json::Value::Bool(true)),
                     remaining: None,
-                    parameters: std::array::IntoIter::new([(
+                    parameters: std::iter::IntoIterator::into_iter([(
                         k.to_string(),
                         ftd::ConditionalValueWithDefault {
                             value: ConditionalValue {
@@ -1541,7 +1541,7 @@ impl Element {
                     dependency_type: ftd::DependencyType::Variable,
                     condition: Some(condition.value.to_owned()),
                     remaining,
-                    parameters: std::array::IntoIter::new([(
+                    parameters: std::iter::IntoIterator::into_iter([(
                         k.to_string(),
                         ftd::ConditionalValueWithDefault {
                             value: ConditionalValue {
@@ -2358,7 +2358,7 @@ pub struct Container {
 impl Container {
     pub fn is_open(&self, is_container_children_empty: bool) -> bool {
         self.open
-            .unwrap_or_else(|| (self.children.is_empty() && is_container_children_empty))
+            .unwrap_or(self.children.is_empty() && is_container_children_empty)
     }
 }
 

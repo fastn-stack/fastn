@@ -740,7 +740,7 @@ fn markup_get_named_container(
         elements_name: &mut Vec<String>,
     ) -> ftd::ChildComponent {
         let mut child = child.clone();
-        if let Some((ref c, ref element_name)) = child.root.split_once(" ") {
+        if let Some((ref c, ref element_name)) = child.root.split_once(' ') {
             elements_name.push(element_name.to_string());
             child.root = c.to_string();
         }
@@ -2045,7 +2045,7 @@ impl Component {
                                 append_at.to_string()
                             };
                             if let Some(c) =
-                                child_container.get(append_at.replace(".", "#").as_str())
+                                child_container.get(append_at.replace('.', "#").as_str())
                             {
                                 container.external_children = Some((id, c.to_owned(), vec![]));
                             }
@@ -2874,12 +2874,12 @@ mod test {
             super::Component {
                 full_name: s("foo#foo"),
                 root: "ftd#text".to_string(),
-                arguments: std::array::IntoIter::new([
+                arguments: std::iter::IntoIterator::into_iter([
                     (s("foo"), ftd::p2::Kind::string()),
                     (s("bar"), ftd::p2::Kind::optional(ftd::p2::Kind::integer()))
                 ])
                 .collect(),
-                properties: std::array::IntoIter::new([(
+                properties: std::iter::IntoIterator::into_iter([(
                     s("text"),
                     ftd::component::Property {
                         default: Some(ftd::PropertyValue::Value {
@@ -2918,7 +2918,7 @@ mod test {
             super::Component {
                 root: "ftd#text".to_string(),
                 full_name: s("foo#foo"),
-                properties: std::array::IntoIter::new([(
+                properties: std::iter::IntoIterator::into_iter([(
                     s("text"),
                     ftd::component::Property {
                         default: Some(ftd::PropertyValue::Value {
