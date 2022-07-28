@@ -35,48 +35,47 @@ impl SubSection {
         }
     }
 
-    pub fn body_without_comment(&self) -> Option<(usize, String)> {
-        let body = match &self.body {
-            None => return None,
-            Some(b) => b,
-        };
-        match body {
-            _ if body.1.starts_with(r"\/") =>
-            {
-                #[allow(clippy::single_char_pattern)]
-                Some((body.0, body.1.strip_prefix(r"\").expect("").to_string()))
-            }
-            _ if body.1.starts_with('/') => None,
-            _ => Some((body.0, body.1.to_string())),
-        }
-    }
-
+    /// returns a copy of SubSection after processing comments
+    ///
+    /// ## NOTE: This function is only used by [`Section::remove_comments()`]
+    ///
+    /// [`Section::remove_comments()`]: ftd::p1::section::Section::remove_comments
     pub fn remove_comments(&self) -> SubSection {
-        let mut headers = vec![];
-        for (i, k, v) in self.header.0.iter() {
-            if !k.starts_with('/') {
-                headers.push((i.to_owned(), k.to_string(), v.to_string()));
+        /// returns body after processing comments "/" and escape "\\/" (if any)
+        pub fn body_without_comment(body: &Option<(usize, String)>) -> Option<(usize, String)> {
+            match body {
+                Some(ref b) if b.1.trim().is_empty() => None,
+                // If body is commented, ignore body
+                Some(ref b) if b.1.trim().starts_with('/') => None,
+                // To allow '/content' as subsection body, we need to use "\/content"
+                // while stripping out the initial '\' from this body
+                Some(ref b) if b.1.trim().starts_with(r"\/") => {
+                    Some((b.0, b.1.trim().replacen('\\', "", 1)))
+                }
+                Some(ref b) => Some((b.0, b.1.trim_end().to_string())),
+                None => None,
             }
         }
 
-        let body = match &self.body {
-            None => None,
-            Some(body) => match body {
-                _ if body.1.starts_with(r"\/") =>
-                {
-                    #[allow(clippy::single_char_pattern)]
-                    Some((body.0, body.1.strip_prefix(r"\").expect("").to_string()))
-                }
-                _ if body.1.starts_with('/') => None,
-                _ => self.body.clone(),
-            },
-        };
+        /// returns caption after processing comments "/" and escape "\\/" (if any)
+        pub fn caption_without_comment(caption: &Option<String>) -> Option<String> {
+            match caption {
+                Some(ref c) if c.trim().is_empty() => None,
+                // If caption is commented, ignore it
+                Some(ref c) if c.trim().starts_with('/') => None,
+                // To allow '/caption' as subsection caption, we need to use "\/caption"
+                // while stripping out the initial '\' from this caption
+                Some(ref c) if c.trim().starts_with(r"\/") => Some(c.trim().replacen('\\', "", 1)),
+                Some(ref c) => Some(c.trim().to_string()),
+                None => None,
+            }
+        }
 
         SubSection {
             name: self.name.to_string(),
-            caption: self.caption.to_owned(),
-            header: Header(headers),
-            body,
+            caption: caption_without_comment(&self.caption),
+            header: self.header.uncommented_headers(),
+            body: body_without_comment(&self.body),
             is_commented: false,
             line_number: self.line_number,
         }

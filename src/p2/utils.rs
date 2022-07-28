@@ -1303,9 +1303,6 @@ pub fn reorder(
     let mut list_or_var = vec![];
     let mut var_types = vec![];
     for (idx, p1) in p1.iter().enumerate() {
-        if p1.is_commented {
-            continue;
-        }
         let var_data =
             ftd::variable::VariableData::get_name_kind(&p1.name, doc, p1.line_number, &var_types);
         if p1.name == "import"
@@ -1407,7 +1404,7 @@ pub(crate) fn get_markup_child(
         Some((sub_name, ref_name)) => (sub_name.trim(), ref_name.trim()),
         _ => return ftd::e2("the component should have name", doc.name, sub.line_number),
     };
-    let sub_caption = if sub.caption.is_none() && sub.body_without_comment().is_none() {
+    let sub_caption = if sub.caption.is_none() && sub.body.is_none() {
         Some(ref_name.to_string())
     } else {
         sub.caption.clone()
@@ -1417,7 +1414,7 @@ pub(crate) fn get_markup_child(
         sub_name,
         &sub.header,
         &sub_caption,
-        &sub.body_without_comment(),
+        &sub.body,
         doc,
         arguments,
     )?;

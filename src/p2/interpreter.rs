@@ -47,6 +47,10 @@ impl InterpreterState {
 
         let l = self.document_stack.len() - 1; // Get the top of the stack
 
+        // Removing commented parts from the parsed document
+        self.document_stack[l].ignore_comments();
+        // beyond this point commented things will no longer exist in the parsed document
+
         if self.document_stack[l].processing_imports {
             // Check for all the imports
             // break the loop only when there's no more `import` statement
@@ -99,10 +103,6 @@ impl InterpreterState {
             // Once the foreign_variables are resolved for the section, then pop and evaluate it.
             // This ensures that a section is evaluated once only.
             let p1 = parsed_document.sections.pop().unwrap();
-
-            if p1.is_commented {
-                continue;
-            }
 
             // while this is a specific to entire document, we are still creating it in a loop
             // because otherwise the self.interpret() call won't compile.
@@ -318,7 +318,7 @@ impl InterpreterState {
                                 p1.name.as_str(),
                                 &p1.header,
                                 &p1.caption,
-                                &p1.body_without_comment(),
+                                &p1.body,
                                 &doc,
                                 &Default::default(),
                             )?;
@@ -326,9 +326,6 @@ impl InterpreterState {
                             let mut children = vec![];
 
                             for sub in p1.sub_sections.0.iter() {
-                                if sub.is_commented {
-                                    continue;
-                                }
                                 if let Ok(loop_data) =
                                     sub.header.str(doc.name, p1.line_number, "$loop$")
                                 {
@@ -357,7 +354,7 @@ impl InterpreterState {
                                             sub.name.as_str(),
                                             &sub.header,
                                             &sub.caption,
-                                            &sub.body_without_comment(),
+                                            &sub.body,
                                             &doc,
                                             &parent.arguments,
                                         )?
@@ -544,9 +541,7 @@ impl InterpreterState {
     ) -> ftd::p1::Result<Option<String>> {
         let mut iteration_index = 0;
         while iteration_index < top.sections.len() {
-            if top.sections[iteration_index].is_commented
-                || top.sections[iteration_index].name != "import"
-            {
+            if top.sections[iteration_index].name != "import" {
                 iteration_index += 1;
                 continue;
             }
@@ -744,6 +739,39 @@ impl ParsedDocument {
 
     fn done_processing_imports(&mut self) {
         self.processing_imports = false;
+    }
+
+    /// Filters out commented parts from the parsed document.
+    ///
+    /// # Comments are ignored for
+    /// 1.  /-- section: caption
+    ///
+    /// 2.  /section-header: value
+    ///
+    /// 3.  /body
+    ///
+    /// 4.  /--- subsection: caption
+    ///
+    /// 5.  /sub-section-header: value
+    ///
+    /// ## Note: To allow ["/content"] inside body, use ["\\/content"].
+    ///
+    /// Only '/' comments are ignored here.
+    /// ';' comments are ignored inside the [`parser`] itself.
+    ///
+    /// uses [`Section::remove_comments()`] and [`Subsection::remove_comments()`] to remove comments
+    /// in sections and subsections accordingly.
+    ///
+    /// [`parser`]: ftd::p1::parser::parse
+    /// [`Section::remove_comments()`]: ftd::p1::section::Section::remove_comments
+    /// [`SubSection::remove_comments()`]: ftd::p1::sub_section::SubSection::remove_comments
+    fn ignore_comments(&mut self) {
+        self.sections = self
+            .sections
+            .iter()
+            .filter(|s| !s.is_commented)
+            .map(|s| s.remove_comments())
+            .collect::<Vec<ftd::p1::Section>>();
     }
 
     fn reorder(
@@ -2702,7 +2730,7 @@ mod test {
             id: /ChildBuilding/
             name: ChildLog
 
-            --- container: /welcome/
+            --- container: \/welcome/
 
             --- parent:
             id: /Building2/

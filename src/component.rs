@@ -1798,7 +1798,7 @@ impl Component {
                         sub.name.as_str(),
                         &sub.header,
                         &sub.caption,
-                        &sub.body_without_comment(),
+                        &sub.body,
                         doc,
                         &arguments,
                     )?
@@ -1826,7 +1826,7 @@ impl Component {
                 p1.line_number,
                 &p1.header,
                 &p1.caption,
-                &p1.body_without_comment(),
+                &p1.body,
                 name.as_str(),
                 root.as_str(),
                 &root_component.arguments,
@@ -2147,7 +2147,7 @@ pub fn recursive_child_component(
     let mut new_header = ftd::p1::Header(vec![]);
     let (mut left_boolean, mut right_boolean) = (None, None);
     for (i, k, v) in &sub.header.0 {
-        if k == "$loop$" || k.starts_with('/') {
+        if k == "$loop$" {
             continue;
         }
 
@@ -2239,7 +2239,7 @@ pub fn recursive_child_component(
         sub.line_number,
         &new_header,
         &new_caption,
-        &sub.body_without_comment(),
+        &sub.body,
         &sub.name,
         full_name.as_str(),
         &root_arguments,
@@ -2344,7 +2344,6 @@ fn assert_no_extra_properties(
         if k == "component"
             || k.starts_with('$')
             || k == "if"
-            || k.starts_with('/')
             || ftd::variable::VariableData::get_name_kind(k, doc, line_number, vec![].as_slice())
                 .is_ok()
         {
@@ -2761,7 +2760,7 @@ fn read_arguments(
     let mut all_args = arguments.clone();
 
     for (idx, (i, k, v)) in p1.0.iter().enumerate() {
-        if (k.starts_with('$') && k.ends_with('$')) || k.starts_with('/') || k.starts_with('>') {
+        if (k.starts_with('$') && k.ends_with('$')) || k.starts_with('>') {
             // event and loop matches
             continue;
         }

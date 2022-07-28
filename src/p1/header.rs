@@ -4,6 +4,25 @@ pub use ftd::p1::{Error, Result};
 pub struct Header(pub Vec<(usize, String, String)>);
 
 impl Header {
+    /// returns a copy of Header after processing comments "/" and escape "\\/" (if any)
+    ///
+    /// only used by [`Section::remove_comments()`] and [`SubSection::remove_comments()`]
+    ///
+    /// [`SubSection::remove_comments()`]: ftd::p1::sub_section::SubSection::remove_comments
+    /// [`Section::remove_comments()`]: ftd::p1::section::Section::remove_comments
+    pub fn uncommented_headers(&self) -> Header {
+        let mut headers: Vec<(usize, String, String)> = vec![];
+        for (ln, key, val) in self.0.iter() {
+            if !key.trim().starts_with('/') {
+                match key.trim().starts_with(r"\/") {
+                    true => headers.push((*ln, key.trim().replacen('\\', "", 1), val.to_string())),
+                    false => headers.push((*ln, key.to_string(), val.to_string())),
+                }
+            }
+        }
+        Header(headers)
+    }
+
     pub fn without_line_number(&self) -> Self {
         let mut header: Header = Default::default();
         for (_, k, v) in self.0.iter() {
@@ -46,9 +65,6 @@ impl Header {
 
     pub fn bool(&self, doc_id: &str, line_number: usize, name: &str) -> Result<bool> {
         for (l, k, v) in self.0.iter() {
-            if k.starts_with('/') {
-                continue;
-            }
             if k == name {
                 return if v == "true" || v == "false" {
                     Ok(v == "true")
@@ -97,9 +113,6 @@ impl Header {
 
     pub fn i32(&self, doc_id: &str, line_number: usize, name: &str) -> Result<i32> {
         for (l, k, v) in self.0.iter() {
-            if k.starts_with('/') {
-                continue;
-            }
             if k == name {
                 return v.parse().map_err(|e: std::num::ParseIntError| {
                     ftd::p1::Error::ParseError {
@@ -119,10 +132,6 @@ impl Header {
 
     pub fn i64(&self, doc_id: &str, line_number: usize, name: &str) -> Result<i64> {
         for (l, k, v) in self.0.iter() {
-            if k.starts_with('/') {
-                continue;
-            }
-
             if k == name {
                 return v.parse().map_err(|e: std::num::ParseIntError| {
                     ftd::p1::Error::ParseError {
@@ -155,10 +164,6 @@ impl Header {
 
     pub fn f64(&self, doc_id: &str, line_number: usize, name: &str) -> Result<f64> {
         for (l, k, v) in self.0.iter() {
-            if k.starts_with('/') {
-                continue;
-            }
-
             if k == name {
                 return v.parse().map_err(|e: std::num::ParseFloatError| {
                     ftd::p1::Error::ParseError {
@@ -292,9 +297,6 @@ impl Header {
 
     pub fn str(&self, doc_id: &str, line_number: usize, name: &str) -> Result<&str> {
         for (_, k, v) in self.0.iter() {
-            if k.starts_with('/') {
-                continue;
-            }
             if k == name {
                 return Ok(v.as_str());
             }

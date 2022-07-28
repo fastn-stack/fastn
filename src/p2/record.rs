@@ -85,7 +85,7 @@ impl Record {
                             data: vec![],
                         };
                         for (i, k, v) in p1.header.0.iter() {
-                            if *k != *name || k.starts_with('/') {
+                            if *k != *name {
                                 continue;
                             }
                             list = doc.get_value(i.to_owned(), v)?;
@@ -95,7 +95,7 @@ impl Record {
                     ftd::p2::Kind::String { .. } => {
                         let mut values: Vec<ftd::PropertyValue> = vec![];
                         for (_, k, v) in p1.header.0.iter() {
-                            if *k != *name || k.starts_with('/') {
+                            if *k != *name {
                                 continue;
                             }
                             values.push(ftd::PropertyValue::Value {
@@ -138,9 +138,6 @@ impl Record {
                         let e = doc.get_or_type(p1.line_number, or_type_name)?;
                         let mut values: Vec<ftd::PropertyValue> = vec![];
                         for s in p1.sub_sections.0.iter() {
-                            if s.is_commented {
-                                continue;
-                            }
                             for v in e.variants.iter() {
                                 let variant = v.variant_name().expect("record.fields").to_string();
                                 if s.name == format!("{}.{}", name, variant.as_str()) {
@@ -218,14 +215,9 @@ impl Record {
                         p1.line_number,
                     );
                 }
-                (Err(ftd::p1::Error::NotFound { .. }), _) => kind.read_section(
-                    p1.line_number,
-                    &p1.header,
-                    &p1.caption,
-                    &p1.body_without_comment(),
-                    name,
-                    doc,
-                )?,
+                (Err(ftd::p1::Error::NotFound { .. }), _) => {
+                    kind.read_section(p1.line_number, &p1.header, &p1.caption, &p1.body, name, doc)?
+                }
                 (
                     Err(ftd::p1::Error::MoreThanOneSubSections { .. }),
                     ftd::p2::Kind::List {
@@ -252,7 +244,7 @@ impl Record {
                                 s.line_number,
                                 &s.header,
                                 &s.caption,
-                                &s.body_without_comment(),
+                                &s.body,
                                 s.name.as_str(),
                                 doc,
                             )?,
@@ -310,14 +302,7 @@ impl Record {
         for (name, kind) in self.fields.iter() {
             fields.insert(
                 name.to_string(),
-                kind.read_section(
-                    p1.line_number,
-                    &p1.header,
-                    &p1.caption,
-                    &p1.body_without_comment(),
-                    name,
-                    doc,
-                )?,
+                kind.read_section(p1.line_number, &p1.header, &p1.caption, &p1.body, name, doc)?,
             );
         }
         Ok(fields)
@@ -333,10 +318,6 @@ impl Record {
         // TODO: handle caption
         // TODO: handle body
         for (i, k, _) in p1.0.iter() {
-            if k.starts_with('/') {
-                continue;
-            }
-
             if !self.fields.contains_key(k) && k != "type" && k != "$processor$" {
                 return ftd::e2(
                     format!(
@@ -372,9 +353,6 @@ impl Record {
             },
         );
         for (i, k, v) in p1_header.0.iter() {
-            if k.starts_with('/') {
-                continue;
-            }
             let var_data = match ftd::variable::VariableData::get_name_kind(
                 k,
                 doc,
@@ -1043,77 +1021,77 @@ mod test {
                                             is_reference: false,
                                         },
                                         data: vec![
-                                        ftd::PropertyValue::Value {value: ftd::Value::OrType {
-                                            name: s("foo/bar#entity"),
-                                            variant: s("person"),
-                                            fields: std::iter::IntoIterator::into_iter([
-                                                (
-                                                    s("address"),
-                                                    ftd::PropertyValue::Value {
-                                                        value: ftd::Value::String {
-                                                            text: s("123 Lane"),
-                                                            source: ftd::TextSource::Header,
+                                            ftd::PropertyValue::Value {value: ftd::Value::OrType {
+                                                name: s("foo/bar#entity"),
+                                                variant: s("person"),
+                                                fields: std::iter::IntoIterator::into_iter([
+                                                    (
+                                                        s("address"),
+                                                        ftd::PropertyValue::Value {
+                                                            value: ftd::Value::String {
+                                                                text: s("123 Lane"),
+                                                                source: ftd::TextSource::Header,
+                                                            },
                                                         },
-                                                    },
-                                                ),
-                                                (
-                                                    s("bio"),
-                                                    ftd::PropertyValue::Value {
-                                                        value: ftd::Value::String {
-                                                            text: s("Owner of Jack Russo\'s Bar"),
-                                                            source: ftd::TextSource::Body,
+                                                    ),
+                                                    (
+                                                        s("bio"),
+                                                        ftd::PropertyValue::Value {
+                                                            value: ftd::Value::String {
+                                                                text: s("Owner of Jack Russo\'s Bar"),
+                                                                source: ftd::TextSource::Body,
+                                                            },
                                                         },
-                                                    },
-                                                ),
-                                                (
-                                                    s("name"),
-                                                    ftd::PropertyValue::Value {
-                                                        value: ftd::Value::String {
-                                                            text: s("Jack Russo"),
-                                                            source: ftd::TextSource::Caption,
+                                                    ),
+                                                    (
+                                                        s("name"),
+                                                        ftd::PropertyValue::Value {
+                                                            value: ftd::Value::String {
+                                                                text: s("Jack Russo"),
+                                                                source: ftd::TextSource::Caption,
+                                                            },
                                                         },
-                                                    },
-                                                ),
-                                                (
-                                                    s("age"),
-                                                    ftd::PropertyValue::Value {
-                                                        value: ftd::Value::Integer { value: 24 },
-                                                    },
-                                                ),
-                                            ])
-                                            .collect(),
-                                        }},
-                                        ftd::PropertyValue::Value {value: ftd::Value::OrType {
-                                            name: s("foo/bar#entity"),
-                                            variant: s("company"),
-                                            fields: std::iter::IntoIterator::into_iter([
-                                                (
-                                                    s("industry"),
-                                                    ftd::PropertyValue::Value {
-                                                        value: ftd::Value::String {
-                                                            text: s("Widgets"),
-                                                            source: ftd::TextSource::Header,
+                                                    ),
+                                                    (
+                                                        s("age"),
+                                                        ftd::PropertyValue::Value {
+                                                            value: ftd::Value::Integer { value: 24 },
                                                         },
-                                                    },
-                                                ),
-                                                (
-                                                    s("name"),
-                                                    ftd::PropertyValue::Value {
-                                                        value: ftd::Value::String {
-                                                            text: s("Acme Inc"),
-                                                            source: ftd::TextSource::Caption,
+                                                    ),
+                                                ])
+                                                    .collect(),
+                                            }},
+                                            ftd::PropertyValue::Value {value: ftd::Value::OrType {
+                                                name: s("foo/bar#entity"),
+                                                variant: s("company"),
+                                                fields: std::iter::IntoIterator::into_iter([
+                                                    (
+                                                        s("industry"),
+                                                        ftd::PropertyValue::Value {
+                                                            value: ftd::Value::String {
+                                                                text: s("Widgets"),
+                                                                source: ftd::TextSource::Header,
+                                                            },
                                                         },
-                                                    },
-                                                ),
-                                            ])
-                                            .collect(),
-                                        }},
-                                    ],
+                                                    ),
+                                                    (
+                                                        s("name"),
+                                                        ftd::PropertyValue::Value {
+                                                            value: ftd::Value::String {
+                                                                text: s("Acme Inc"),
+                                                                source: ftd::TextSource::Caption,
+                                                            },
+                                                        },
+                                                    ),
+                                                ])
+                                                    .collect(),
+                                            }},
+                                        ],
                                     },
                                 },
                             ),
                         ])
-                        .collect(),
+                            .collect(),
                     },
                 },
                 conditions: vec![],
