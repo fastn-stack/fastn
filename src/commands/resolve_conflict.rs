@@ -4,10 +4,11 @@ pub async fn resolve_conflict(
     use_ours: bool,
     use_theirs: bool,
 ) -> fpm::Result<()> {
-    fpm::editor::editor(
+    let new_content = fpm::editor::editor(
         "Hello World\nThis is Arpita\n",
         Some(std::path::PathBuf::from("index.ftd")),
     )?;
+    dbg!(&new_content);
     let get_files_status = fpm::sync_utils::get_files_status(config).await?;
     let file_status =
         if let Some(file_status) = get_files_status.iter().find(|v| v.get_file_path().eq(path)) {

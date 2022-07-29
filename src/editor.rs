@@ -1,3 +1,4 @@
+use itertools::Itertools;
 use std::io::{Read, Write};
 
 const TAB_STOP: usize = 8;
@@ -159,7 +160,7 @@ impl Reader {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default)]
 struct Row {
     row_content: String,
     render: String,
@@ -182,6 +183,7 @@ impl Row {
 struct EditorRows {
     row_contents: Vec<Row>,
     filename: Option<std::path::PathBuf>,
+    saved_contents: String,
 }
 
 impl EditorRows {
@@ -198,8 +200,9 @@ impl EditorRows {
                     Self::render_row(&mut row);
                     row
                 })
-                .collect(),
+                .collect_vec(),
             filename,
+            saved_contents: content.to_string(),
         }
     }
 
@@ -243,6 +246,15 @@ impl EditorRows {
 
     fn number_of_rows(&self) -> usize {
         self.row_contents.len()
+    }
+
+    fn save(&mut self) {
+        self.saved_contents = self
+            .row_contents
+            .iter()
+            .map(|it| it.row_content.as_str())
+            .collect::<Vec<&str>>()
+            .join("\n");
     }
 }
 
@@ -303,7 +315,7 @@ impl Output {
             editor_contents: EditorContents::new(),
             cursor_controller: CursorController::new(win_size),
             editor_rows: EditorRows::new(content, filename),
-            status_message: StatusMessage::new("HELP: Ctrl-Q = Quit".into()),
+            status_message: StatusMessage::new("HELP: Ctrl-S = Save | Ctrl-Q = Quit ".into()),
         }
     }
 
@@ -450,12 +462,12 @@ impl Editor {
         }
     }
 
-    fn process_keypress(&mut self) -> crossterm::Result<bool> {
+    fn process_keypress(&mut self) -> crossterm::Result<Option<String>> {
         match self.reader.read_key()? {
             crossterm::event::KeyEvent {
                 code: crossterm::event::KeyCode::Char('q'),
                 modifiers: crossterm::event::KeyModifiers::CONTROL,
-            } => return Ok(false),
+            } => return Ok(None),
             crossterm::event::KeyEvent {
                 code:
                     direction @ (crossterm::event::KeyCode::Up
@@ -490,6 +502,16 @@ impl Editor {
                 })
             }
             crossterm::event::KeyEvent {
+                code: crossterm::event::KeyCode::Char('s'),
+                modifiers: crossterm::event::KeyModifiers::CONTROL,
+            } => {
+                self.output.editor_rows.save();
+                self.output.status_message.set_message(format!(
+                    "{} bytes is saved",
+                    self.output.editor_rows.saved_contents.as_bytes().len()
+                ));
+            }
+            crossterm::event::KeyEvent {
                 code: code @ (crossterm::event::KeyCode::Char(..) | crossterm::event::KeyCode::Tab),
                 modifiers:
                     crossterm::event::KeyModifiers::NONE | crossterm::event::KeyModifiers::SHIFT,
@@ -500,25 +522,28 @@ impl Editor {
             }),
             _ => {}
         }
-        Ok(true)
+        Ok(Some(self.output.editor_rows.saved_contents.clone()))
     }
 
-    fn run(&mut self) -> crossterm::Result<bool> {
+    fn run(&mut self) -> crossterm::Result<Option<String>> {
         self.output.refresh_screen()?;
         self.process_keypress()
     }
 }
 
-pub(crate) fn editor(content: &str, filename: Option<std::path::PathBuf>) -> fpm::Result<()> {
+pub(crate) fn editor(content: &str, filename: Option<std::path::PathBuf>) -> fpm::Result<String> {
     editor_(content, filename).map_err(|e| fpm::Error::UsageError {
         message: e.to_string(),
     })
 }
 
-fn editor_(content: &str, filename: Option<std::path::PathBuf>) -> crossterm::Result<()> {
+fn editor_(content: &str, filename: Option<std::path::PathBuf>) -> crossterm::Result<String> {
     let _clean_up = CleanUp;
     crossterm::terminal::enable_raw_mode()?;
     let mut editor = Editor::new(content, filename);
-    while editor.run()? {}
-    Ok(())
+    let mut saved_content = String::new();
+    while let Some(content) = editor.run()? {
+        saved_content = content;
+    }
+    Ok(saved_content)
 }
