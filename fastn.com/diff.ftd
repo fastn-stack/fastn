@@ -22,11 +22,11 @@ diff: foo.ftd
  o: $o
  $loop$: $r.items as $o
 
- -- ftd.column show-repo:
--repo o:
- padding: 20
- width: fill
- border-radius: 5
+\-- ftd.column show-repo:
+repo o:
+padding: 20
+width: fill
+border-radius: 5
 
 
 -- ft.h1: Developer Notes
