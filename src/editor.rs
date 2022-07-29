@@ -10,12 +10,6 @@ impl Drop for CleanUp {
     }
 }
 
-pub(crate) fn editor(content: &str) -> fpm::Result<()> {
-    editor_(content).map_err(|e| fpm::Error::UsageError {
-        message: e.to_string(),
-    })
-}
-
 struct CursorController {
     cursor_x: usize,
     cursor_y: usize,
@@ -150,14 +144,15 @@ impl Row {
 
 struct EditorRows {
     row_contents: Vec<Row>,
+    filename: Option<std::path::PathBuf>,
 }
 
 impl EditorRows {
-    fn new(content: &str) -> Self {
-        Self::from_argument(content)
+    fn new(content: &str, filename: Option<std::path::PathBuf>) -> Self {
+        Self::from_argument(content, filename)
     }
 
-    fn from_argument(content: &str) -> Self {
+    fn from_argument(content: &str, filename: Option<std::path::PathBuf>) -> Self {
         Self {
             row_contents: content
                 .lines()
@@ -167,6 +162,7 @@ impl EditorRows {
                     row
                 })
                 .collect(),
+            filename,
         }
     }
 
@@ -205,6 +201,45 @@ impl EditorRows {
     }
 }
 
+struct EditorContents {
+    content: String,
+}
+
+impl EditorContents {
+    fn new() -> Self {
+        Self {
+            content: String::new(),
+        }
+    }
+
+    fn push(&mut self, ch: char) {
+        self.content.push(ch)
+    }
+
+    fn push_str(&mut self, string: &str) {
+        self.content.push_str(string)
+    }
+}
+
+impl std::io::Write for EditorContents {
+    fn write(&mut self, buf: &[u8]) -> std::io::Result<usize> {
+        match std::str::from_utf8(buf) {
+            Ok(s) => {
+                self.content.push_str(s);
+                Ok(s.len())
+            }
+            Err(_) => Err(std::io::ErrorKind::WriteZero.into()),
+        }
+    }
+
+    fn flush(&mut self) -> std::io::Result<()> {
+        let out = write!(std::io::stdout(), "{}", self.content);
+        std::io::stdout().flush()?;
+        self.content.clear();
+        out
+    }
+}
+
 struct Output {
     win_size: (usize, usize),
     editor_contents: EditorContents,
@@ -213,7 +248,7 @@ struct Output {
 }
 
 impl Output {
-    fn new(content: &str) -> Self {
+    fn new(content: &str, filename: Option<std::path::PathBuf>) -> Self {
         let win_size = crossterm::terminal::size()
             .map(|(x, y)| (x as usize, y as usize - 1))
             .unwrap();
@@ -221,8 +256,40 @@ impl Output {
             win_size,
             editor_contents: EditorContents::new(),
             cursor_controller: CursorController::new(win_size),
-            editor_rows: EditorRows::new(content),
+            editor_rows: EditorRows::new(content, filename),
         }
+    }
+
+    fn draw_status_bar(&mut self) {
+        self.editor_contents
+            .push_str(&crossterm::style::Attribute::Reverse.to_string());
+        let info = format!(
+            "{} -- {} lines",
+            self.editor_rows
+                .filename
+                .as_ref()
+                .and_then(|path| path.file_name())
+                .and_then(|name| name.to_str())
+                .unwrap_or("[No Name]"),
+            self.editor_rows.number_of_rows()
+        );
+        let info_len = std::cmp::min(info.len(), self.win_size.0);
+        let line_info = format!(
+            "{}/{}",
+            self.cursor_controller.cursor_y + 1,
+            self.editor_rows.number_of_rows()
+        );
+        self.editor_contents.push_str(&info[..info_len]);
+        for i in info_len..self.win_size.0 {
+            if self.win_size.0 - i == line_info.len() {
+                self.editor_contents.push_str(&line_info);
+                break;
+            } else {
+                self.editor_contents.push(' ')
+            }
+        }
+        self.editor_contents
+            .push_str(&crossterm::style::Attribute::Reset.to_string());
     }
 
     fn clear_screen() -> crossterm::Result<()> {
@@ -278,6 +345,7 @@ impl Output {
             crossterm::cursor::MoveTo(0, 0)
         )?;
         self.draw_rows();
+        self.draw_status_bar();
         let cursor_x = self.cursor_controller.render_x - self.cursor_controller.column_offset;
         let cursor_y = self.cursor_controller.cursor_y - self.cursor_controller.row_offset;
         crossterm::queue!(
@@ -294,55 +362,16 @@ impl Output {
     }
 }
 
-struct EditorContents {
-    content: String,
-}
-
-impl EditorContents {
-    fn new() -> Self {
-        Self {
-            content: String::new(),
-        }
-    }
-
-    fn push(&mut self, ch: char) {
-        self.content.push(ch)
-    }
-
-    fn push_str(&mut self, string: &str) {
-        self.content.push_str(string)
-    }
-}
-
-impl std::io::Write for EditorContents {
-    fn write(&mut self, buf: &[u8]) -> std::io::Result<usize> {
-        match std::str::from_utf8(buf) {
-            Ok(s) => {
-                self.content.push_str(s);
-                Ok(s.len())
-            }
-            Err(_) => Err(std::io::ErrorKind::WriteZero.into()),
-        }
-    }
-
-    fn flush(&mut self) -> std::io::Result<()> {
-        let out = write!(std::io::stdout(), "{}", self.content);
-        std::io::stdout().flush()?;
-        self.content.clear();
-        out
-    }
-}
-
 struct Editor {
     reader: Reader,
     output: Output,
 }
 
 impl Editor {
-    fn new(content: &str) -> Self {
+    fn new(content: &str, filename: Option<std::path::PathBuf>) -> Self {
         Self {
             reader: Reader,
-            output: Output::new(content),
+            output: Output::new(content, filename),
         }
     }
 
@@ -396,10 +425,16 @@ impl Editor {
     }
 }
 
-fn editor_(content: &str) -> crossterm::Result<()> {
+pub(crate) fn editor(content: &str, filename: Option<std::path::PathBuf>) -> fpm::Result<()> {
+    editor_(content, filename).map_err(|e| fpm::Error::UsageError {
+        message: e.to_string(),
+    })
+}
+
+fn editor_(content: &str, filename: Option<std::path::PathBuf>) -> crossterm::Result<()> {
     let _clean_up = CleanUp;
     crossterm::terminal::enable_raw_mode()?;
-    let mut editor = Editor::new(content);
+    let mut editor = Editor::new(content, filename);
     while editor.run()? {}
     Ok(())
 }
